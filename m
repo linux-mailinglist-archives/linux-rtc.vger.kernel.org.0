@@ -2,43 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4DF6319E6
-	for <lists+linux-rtc@lfdr.de>; Mon, 21 Nov 2022 07:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B336319EA
+	for <lists+linux-rtc@lfdr.de>; Mon, 21 Nov 2022 07:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiKUGur (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 21 Nov 2022 01:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S229666AbiKUGuw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 21 Nov 2022 01:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiKUGuq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Nov 2022 01:50:46 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130041.outbound.protection.outlook.com [40.107.13.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADCA13CD7;
-        Sun, 20 Nov 2022 22:50:45 -0800 (PST)
+        with ESMTP id S229475AbiKUGuv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Nov 2022 01:50:51 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2074.outbound.protection.outlook.com [40.107.20.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4650813CD7;
+        Sun, 20 Nov 2022 22:50:50 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZdVhaH65y561fPqGip/qY6eRzZ7KUu555JAarwU1rBTevdkTk38rB0qzeIAV7EDPDFtEiUXqhQ0k5R39v1RHLdocWvKddvW/eVh1hJlJgkQ6Krv+MGmKAxs8MKQexRwOLqsh2CZoqOUPVxcW+LSZp8YQ34m3gDKGNaT6mXXrz4Nu1oqTtXCiUgvxNjH4/CTtn+C/K8XlMRtwK9K6bCwdR/EuczGbWKH834eg2m0jMUxrsize2HwPekMNWW1NoJIep0ohhYX78OBmKH4iFKn6qUfxQSh05aofPffkES7hCjFYLGxXNtroUjHl3r0bgPcQPm+rfLNXzm3pALTfxWgdKw==
+ b=mf/edg9DH/oRZE5oruxhMZSyU+GeAOLrwZTm+xqCi9sQiG2HXNVR8qYdrTZDe3bo/LGTiMXIVCrQGhGDnDhY9G8/8Uno90EHgTpB7pt6Q8vLqBsfa2ecs9QNQAr7zYWvuz3iVfB4EpY14c4eN+jvvCO+HNqi0v6DuC0te/jv63bnCBBqTyq4OyrM7cx8RKO1UrpoN2rG06RvwLwAFDkYTaCveLmPRcd2e4aXvabAbvPnzwuVv8k3qJyUmcCb5mxZcfL1q/8RdiyMvf0IIwZy/kRwRB/po3qaYD6sCVh+0/tu1Si0NWXxBbbBF4dxxpO7+xpjxVAZhxX31UOFPmvgbA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=keftd6s5Q3q3PrBgQ/afVH7e4t3ZzNQJPCEv+VeKoms=;
- b=ZzR6e3RdrexJh+PjTsyFZOkcLCreYafty2jJ7Nwu/Aifrcf7FOZVoOFEIEbTVmPz84yxBfqcbY0T1HeajTd8gMd4WRB+By1n0CORYnMBRnnKno2FYNDGAjrSvVLggEtY9BYNm9fKSOVTP98bAT5may/oESg6wFihpNjNzKA+NDcU7AhixEI9NkY1wruOk5v4qq1knMZmVPMMNCVWuK8cxWCHQlKvxUBa53eRDMZzxIpV5Fdbtkl0IqR7I+g8U7BZR39OJjzCd3IBNiTbEXZjaP4aGHJMM4GJUoy0r4xQksqN4P1e01fDCPjhqeabBxs3MX5xrO2xafSZe4aNHtgqQw==
+ bh=LfgLtaMOasLXkbfsXwk1zYDShrsDH1iqAuvASkFjpU8=;
+ b=Tqyl3/mzcs0ZRxzcO1AcYKUn7e0e9xD0n3BH2exjJZFhyh8n1oF4Nd+vAwm7WykYdQizw8abcCr3aaARXdDuAKP/5VpZO6wQ+T7GINy9+N76o0Pi6m3N/55J2vERwl4lREREINv8AvxtEzC1f7hkC+JwsOg5yXzoVcaaDnH2MQ2gye/ErNNzXfsOOufz3C1bfdbFSCP9kSylzO2E2Z/w5DUMCteDULFIqTPAp4Xbej8fSGTAxw5WcGoM3+yykNme6uQgI7eY3H3FsSHybkkTiWB8tRr1B3YLAtn8dOFdwQR1Yx7WS/8FVGPOVs+oUeayeOHHYqCx7BCJ1Gf3mW6ocQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=keftd6s5Q3q3PrBgQ/afVH7e4t3ZzNQJPCEv+VeKoms=;
- b=AgKHoIjnpMbn9im0p+0SgUw8akZW9KmzehSVRIInJ6hWzsLRyW6TEUNgaV3sAWJlwHMkt+5awS8Qjmarc4A9hp6ajCXZWFxhN81YlWKd1rcF781UAw7XA47Oh2MsdHT03mFJK9AWZmsWfGj0mDIk/WftgRrN5HxjBt6LtTr65Hc=
+ bh=LfgLtaMOasLXkbfsXwk1zYDShrsDH1iqAuvASkFjpU8=;
+ b=SQdacSIsI9884UyGzDHEjXhAx+/BmPLzz6Stf3XK1akTC6+s7iR0WPwO8c4X1feqzy4QFxtFNYOk+uaXbOJiQxtxl/tQ1EAdDcWcnFQOvd3eBUMRmz67tgrR1TNc5d8u8/hpsisixZhyha4ofD1VWy4vSzkEi5wud0ElANo8Msw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
  by AM7PR04MB7142.eurprd04.prod.outlook.com (2603:10a6:20b:113::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Mon, 21 Nov
- 2022 06:50:43 +0000
+ 2022 06:50:48 +0000
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::9ded:65b7:9d51:d37a]) by AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::9ded:65b7:9d51:d37a%8]) with mapi id 15.20.5834.011; Mon, 21 Nov 2022
- 06:50:43 +0000
+ 06:50:48 +0000
 From:   Jacky Bai <ping.bai@nxp.com>
 To:     lee@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
@@ -47,9 +47,9 @@ To:     lee@kernel.org, robh+dt@kernel.org,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
         kernel@pengutronix.de, linux-imx@nxp.com, festevam@gmail.com
-Subject: [PATCH 3/4] rtc: bbnsm: Add the bbnsm rtc support
-Date:   Mon, 21 Nov 2022 14:51:43 +0800
-Message-Id: <20221121065144.3667658-4-ping.bai@nxp.com>
+Subject: [PATCH 4/4] arm64: dts: imx93: Add the bbnsm dts node
+Date:   Mon, 21 Nov 2022 14:51:44 +0800
+Message-Id: <20221121065144.3667658-5-ping.bai@nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20221121065144.3667658-1-ping.bai@nxp.com>
 References: <20221121065144.3667658-1-ping.bai@nxp.com>
@@ -61,50 +61,50 @@ X-ClientProxiedBy: SG2PR02CA0123.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AS8PR04MB8642:EE_|AM7PR04MB7142:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35aa7a1f-0bcd-4972-6f71-08dacb8cb59f
+X-MS-Office365-Filtering-Correlation-Id: 80a0eda4-d7d0-4db7-307f-08dacb8cb8a4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qwVEpscRlKPRSvOYIbbcX0So9e37Y+uDqodhiBry4os53XYNNmJWNscjXsUyv3Xzu5Yi6eP+tzThgJy34MtW8J0zyoQHxfOvHQQHF11UwoX+eXZI5fHzzNNDD+c0RDUAJP2BVCpjk/N1+9YfOostOX3pF11+tZiVk2kI81Sl+lI5cjfp3LAqUAH5HdMuHANTUVUpaZj5BuSPOkOB1av9Y4KcHcr/XZ1JSUOie8gzkwl6D7xfFXMXl9n7jAyGgTP2TS+FtpkBrUP4NZmdlZGMSzpPIvbs3exNC1qLd/+7isyJsy0Ep4HX/YJ9TFrrcjg/IBiCRxo7qLU+9RxLChcNjt/fq8+DraX5Iues4dBQCqJ+EOQuU54UbedVddD47zk0sHIXC9deo5dMPdZ8aI+XwF2r1HcNk5nhjlnTmYe1cpM2sNJiJBJ5Y9LjMbFYtxI1Am/+/KqK6DL/ObIKq/saoeuI7zpbaQCHQdE40USfxNsYXho5H/scCcPQq2cKmdf59G82aKsw0WUtjAgcmXPOTsob43UXiTgSjJWB/MsgfJxxDAiIp4B/4eHYISNVTiUG7opn+hIH/V/ykWdzZmhWwd9fBwMcD539Ox71pZeyBS2O4SoBeH970lwLEKHqKLFakCPdvaQ1RqipDMogzVyWfHaIp7HUvnnt0wH1ikfYtivEsPx7lzVsp6hb+mdE9UCWdZA2nEP4uWBXe8fUGh2GUw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(451199015)(36756003)(38100700002)(38350700002)(41300700001)(2906002)(83380400001)(86362001)(66476007)(8676002)(4326008)(66556008)(316002)(6486002)(66946007)(6512007)(26005)(186003)(1076003)(8936002)(5660300002)(7416002)(478600001)(6506007)(2616005)(52116002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: PidJFgIO/OYYt2ttrDiITZ9J87VVZA5Rt5pVHofV+Cz8l9P2PzGRGidcHTIQhGABtlrC2k0zvf40No4cA+gB5AzAio7B7vb59FZRKO630tPhsxou4rZ+g8XpdIq0fbuqFuSwxBnQFF3swub1PR7DbqWRxvi+hC1FJtSQ8+26moqMBu+skFQGAo0qMrqUh7rIJng7zmXZmrnrw2qvF9LgI8SBzWBWJA+qwMOkCo4gS2QQZwIzb4hotl+8NXQHkmM3vBxu8XlpcAgNS4RSt0wQQJzmfdWzWJfKgthmYt3w7tjwljlEuFzpoDXHDVAhLgXtFnUrvQ+1uT/n/4bWiF3scb0CM4uOqXZg0u3vzRztzngZ9/XnmqJxlJBz2ODg2N0AkJgf4XhB/Prz0O19JYdZ41aG9PpM7RQ5ZsnV6KytCs88oTISmKVcWsI74GY9zglBF4ZH4aMrQqdyWDmkkUViYRHj2kofR93umvRGBH/Vi9X7zKC578QaaCwpgl5FefE5CphwYOw6nv/bkAzyFHGSp4jpMpBLAWounFl6MgCkxzyefMLoHsSFyNWXJzK6NoQW9dPBVWcB+1r969CyJ2QYlk/2tyAN7kM9X444GhLt0RmCoqLQsecAy/b8Wc/W6TWA3D9IrffmSjFqQR0odwhRTWy+utpldbNyWPxNOpY2e5C+NwcuUtTTArnx+KaGsYT31goJcXFWtFkk2kUzZiaiZg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(451199015)(36756003)(38100700002)(38350700002)(41300700001)(2906002)(83380400001)(86362001)(66476007)(8676002)(4326008)(66556008)(316002)(6486002)(66946007)(6512007)(26005)(186003)(1076003)(8936002)(5660300002)(7416002)(478600001)(6506007)(2616005)(52116002)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tNuVaW2q7EaMR1zHRIRC0NcvH1cpi8pUSV75+FF6XuvI6sNWyQyHul5VZ8ps?=
- =?us-ascii?Q?MP7nOalF7fjG2df9ZcDe17I2qoc9oUCFpapu33/M44DiWQSfvp6Be3NRiA0Y?=
- =?us-ascii?Q?yYiyqSBX1pOHoMsuKDjPkofdKuI8nK97BgVa6ZVe9CgYz4Awv3lYRcXo8BQw?=
- =?us-ascii?Q?xE4iPkisUwKFmFhUMGSu3BX1NlMHKpS5Jr6WaaxOyaV1h7xBoq++W/U2uIZ4?=
- =?us-ascii?Q?367XnNCR0FrMxMxq5fl8P5HIJFJMmDi/rxXZiorsSrSVoIxgRraxZ6yk4+j+?=
- =?us-ascii?Q?WhUe363Q2k0BNPLSPmGDLtJDF6fhf91Xu77c6APYIwY76x+HVktw2qBZd9GA?=
- =?us-ascii?Q?RT1FUkDQDkIalW1aY5uPDKegmvrgqT012txdaB3amI+kjS5sTZJOMaN4rCyW?=
- =?us-ascii?Q?/3Y1wTnWIPckyv7cym1CrySmeTIn3rdNISx9tQVMX5PNM+AjgH2oAYBL+YTl?=
- =?us-ascii?Q?Pu1D+MM29RQFxndV9D6Vot2Z1C3/9CQLq654dyItsvyGXKc314YX2kG2AVTH?=
- =?us-ascii?Q?HcdTMS64hgBZ7I1dgTmSfwuF3nClkb7r2kUJlGPrfu2Laiqr/EzbqYLp9O+o?=
- =?us-ascii?Q?Z4Ugkw01ScGyLruT60JgRhQJBIugJDiYQUBP1avqVc4AnPFv0ifsTVHKF3DD?=
- =?us-ascii?Q?5UV4hEFG532Nj+D63QttCCHUwmNLCcGmFHFbvmQzlGn4ELwd3yYId7P5cOhE?=
- =?us-ascii?Q?56qY0CFyKAQ2gx7ukIYWpKEjEKLFD4Lv9oXo6CZXJu6a5cKV+HdkiiccoAeR?=
- =?us-ascii?Q?ajYfjFmulcdKEf7FTtzKu4G5rU2v1Tej0gox/CgZH5OMkjl67VtVfJwWXXkv?=
- =?us-ascii?Q?vquspAh/n9OELn6uFiZZrFKwJLNVLMBJ0bjjolvUDiW33jm7QNPond6jkq4z?=
- =?us-ascii?Q?b2VNKjrDw1FWX7dwOk0Wz1LwYwsz/NOXfR3a1jkZzfpYAMlhVxxjWU8SIw9I?=
- =?us-ascii?Q?50zfKohD6LSPFB65SOD7IdxneQiKzkzvYtgIyNqRbKmsdHHVAH/jXjf6523P?=
- =?us-ascii?Q?OtXj6bW5GXRFtk6x3ObqrGbF+tP/wHBlLm1TTT7RryeO9KqV3Vk2MGpkbBu5?=
- =?us-ascii?Q?pCUqG09ujSByQoBI/Ku9pmUoMidd4dToX3SUVjPCKtARrwBqoY6sqE8TsWXU?=
- =?us-ascii?Q?VZQcPh0MoDGD50pEJensB31nuWz++7j8ovUGwV30jHTiZ0c09fKfhcyi69Uk?=
- =?us-ascii?Q?d1Kd/E2p8AczZnTYQz2e2bnCmXE+3HECQKAiFWOxj9T83hI3TeVHCbbj1gkJ?=
- =?us-ascii?Q?hIcQCNnzaACcHbBZVulBvJIEtAgiLk2uJQ8iuGLtyxRSme+b7HBdLGqiSR6e?=
- =?us-ascii?Q?aSRIrptiWG3Wbg7re+jEgcvpYuyS9RbaOLgoPJv1cmCX0fYTDCEsxfycyqIv?=
- =?us-ascii?Q?VCqojpMcxLMUchHOswzGgHxjMTizrKH5RAObFId5sfQm/k6PS/FKUwoNxTmz?=
- =?us-ascii?Q?RsKDJVvQXf5UV9h785KMB+x8RVP3WaWJeEgCGpOgXzB8VwPiT6XFgWJvCa87?=
- =?us-ascii?Q?rKX4AbwfdJTRbQPxJikD+ggZMw5nCnX5NJr5S89kxQTfH9ue7wWfUVQgknNO?=
- =?us-ascii?Q?JRFfWdu7goW4fLYYh3KJcZNGlLjqPkArOE8J2DOd?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+kj09Ui2pyBr7RdGdXFRz0rd/hC+TWheNB4r6Nrtm1/60A0D+M6kU83mF6oP?=
+ =?us-ascii?Q?/0AiJax1xGpYHIfrBTw2ePfXyN3UUcBKmb+Hsl5oVe2G6UJr/Y6F6nqy/gT/?=
+ =?us-ascii?Q?s7mHs0hajz38QlG9sqKe3DcWh31pLxIEt2lEMV/4w4L2D0y1HABYqkAPH5E4?=
+ =?us-ascii?Q?gA/4bdKr6p9p3u1c9/1Ss8czZS2SiYRnWTPR8LV+d6fdZb/d/2qyB3P701cj?=
+ =?us-ascii?Q?K90BOdUEoD+1aDa1YpuXMgONhlKxPUKFReAs3S7T/QHWvJHFk5owDW6lkYRM?=
+ =?us-ascii?Q?NKr8ud+VtmGqOCfLEYsRfhbBHpNRxJMtmiFX+A0kO8lnlg0OL4IwSSSc1HYS?=
+ =?us-ascii?Q?X1XxP+UPXeKblT2LYNT6qtVeIMRt4jAD70n0xEXvUH8HJY8ERMm2cIUb/4B5?=
+ =?us-ascii?Q?2rw0nNbo//qUPCzfwlgp3Dor1WgQP2qPRXiLJCRA9LeQyeyW9gaqDoFnmIEz?=
+ =?us-ascii?Q?XsRu/ifMNN1WZm7mc7nCFreZi42RkqRO9cEsJTo3M9GfSe1GNXfHNZI5+YDf?=
+ =?us-ascii?Q?pQtdRSJQXdDJ2LmpkRjE8V81XAeV2cp1t2uyWgf5S/oLaMX/r+cGWDKGQnEc?=
+ =?us-ascii?Q?wXzlyj44WqTO0/6lq0afRinRavH/BtY8t46IfpO6tmpIuVflrOuP2WAGIiu2?=
+ =?us-ascii?Q?Aih03XF0CwfPpv0h8zPiEMotBzK6lpWz9B4JdEf+IkXJ43S5wY9/N675+lhG?=
+ =?us-ascii?Q?rxQtGwXTmbWZ5lmLt5FDEvQhcFEQKV9BYVooi718PHzWRgh6Nub5okJ5TZOD?=
+ =?us-ascii?Q?WRKIHO0bLvgIelUm4WPCJE/X1jyiRndl+nAjox+l8JOJicNpMTZHVYTJxGxG?=
+ =?us-ascii?Q?9WUkDu8J/4t9e0YDns53+F7G+5SSr/6e5blT6M1a0brpmZ/lQqCg0bDkflFw?=
+ =?us-ascii?Q?1OfEMsOUMdmu2g3a1zo6XAobqJu0IYRo75xAzcOLV+MQWHH9BAeDIhkRO4AA?=
+ =?us-ascii?Q?YUmOTOAUGFGQT9VZicV6HcewvtV6GqndXX00fzu3E5tz05HKQdq/YZCu/nPw?=
+ =?us-ascii?Q?vMsy5n19Ewqu9MMzfYWRPDXYx4mn71k3wMh1g4tC0esX99cJMCFnuF8KmsfX?=
+ =?us-ascii?Q?cLX41NoadJHiJXJQOdZ5mR7TcCzdfBAl7S8dExCLninuZrA5veecbeAD93yn?=
+ =?us-ascii?Q?OX8Rog0x890VVV8Gq6kXK2GJGOQnnRVbYEH1J6SgAzYDZ/Fui9077ulQqt4A?=
+ =?us-ascii?Q?JMDKsUNki+cRSV6ZUNXpi0N5Mfa76Ml5BNddRjC3mBbnEKpvdF5H61SUNP2m?=
+ =?us-ascii?Q?dyRabg3cPaFHzcaw3mqWF9fPtv+HTjy1gTyol1NJzNlj066GrHi5mVtDaH53?=
+ =?us-ascii?Q?iuUUmmtGLcwAi/C2nh/S0I72nBaPH1pURPk+EXZt5Eygfcidtd+E0aBcEhc4?=
+ =?us-ascii?Q?/CrjFp2ZkPh/faEGd3OsSjc6xGJh0kqVR1Vd/T9GYUgIejEKs5OrdMuD16LX?=
+ =?us-ascii?Q?gqjGo5AF0Z/MN449wcyQDJDzhHS7gOJHmapz6p4d3zZaR+aTpgH57tLKPaYD?=
+ =?us-ascii?Q?tFm3vHsKvbJoVnzEvU9z44xeNWc8Wlu7V3DoyyoDncYbTSr2ZcO8+RkrUJTK?=
+ =?us-ascii?Q?ZN2tSNYGNRABM+Opkweav7kmYpVr64c0VdRvNBzj?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35aa7a1f-0bcd-4972-6f71-08dacb8cb59f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80a0eda4-d7d0-4db7-307f-08dacb8cb8a4
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 06:50:43.1361
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2022 06:50:48.3098
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gjJx4HMe9pEhnCpPjEsWbvglIOP2erg1zukY9h2rnxFe3OCCryzDMZ5Uexc2iCJdJf1t7A5mvkK/9321+qJc9w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: RR7xlF/Y+hA9BtMIjvyGY54QbNjc1gh1fNfvQrZc3aASf4vDAQ1R4nyRoXdk0Ci2wBV0CJQLdF0n8EY/UOgYbw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7142
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -116,282 +116,42 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The BBNSM module includes a real time counter with alarm.
-Add a RTC driver for this function.
+Add the bbnsm node for RTC & ON/OFF button support
 
 Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/rtc/Kconfig     |  12 +++
- drivers/rtc/Makefile    |   1 +
- drivers/rtc/rtc-bbnsm.c | 223 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 236 insertions(+)
- create mode 100644 drivers/rtc/rtc-bbnsm.c
+ arch/arm64/boot/dts/freescale/imx93.dtsi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index ab9a1f814119..0c8534a49c78 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1786,6 +1786,18 @@ config RTC_DRV_SNVS
- 	   This driver can also be built as a module, if so, the module
- 	   will be called "rtc-snvs".
+diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
+index 5d79663b3b84..ffc4f46c4820 100644
+--- a/arch/arm64/boot/dts/freescale/imx93.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
+@@ -229,6 +229,24 @@ iomuxc: pinctrl@443c0000 {
+ 				status = "okay";
+ 			};
  
-+config RTC_DRV_BBNSM
-+	tristate "NXP BBNSM RTC support"
-+	select REGMAP_MMIO
-+	depends on ARCH_MXC || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	depends on OF
-+	help
-+	   If you say yes here you get support for the NXP BBNSM RTC module.
++			bbnsm: bbnsm@44440000 {
++				compatible = "nxp,bbnsm", "syscon", "simple-mfd";
++				reg = <0x44440000 0x10000>;
 +
-+	   This driver can also be built as a module, if so, the module
-+	   will be called "rtc-bbnsm".
++				bbnsm_rtc: rtc {
++					compatible = "nxp,bbnsm-rtc";
++					regmap = <&bbnsm>;
++					interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
++				};
 +
- config RTC_DRV_IMX_SC
- 	depends on IMX_SCU
- 	depends on HAVE_ARM_SMCCC
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index d3c042dcbc73..43bd29b2f42f 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -33,6 +33,7 @@ obj-$(CONFIG_RTC_DRV_ASPEED)	+= rtc-aspeed.o
- obj-$(CONFIG_RTC_DRV_AT91RM9200)+= rtc-at91rm9200.o
- obj-$(CONFIG_RTC_DRV_AT91SAM9)	+= rtc-at91sam9.o
- obj-$(CONFIG_RTC_DRV_AU1XXX)	+= rtc-au1xxx.o
-+obj-$(CONFIG_RTC_DRV_BBNSM)	+= rtc-bbnsm.o
- obj-$(CONFIG_RTC_DRV_BD70528)	+= rtc-bd70528.o
- obj-$(CONFIG_RTC_DRV_BQ32K)	+= rtc-bq32k.o
- obj-$(CONFIG_RTC_DRV_BQ4802)	+= rtc-bq4802.o
-diff --git a/drivers/rtc/rtc-bbnsm.c b/drivers/rtc/rtc-bbnsm.c
-new file mode 100644
-index 000000000000..4157b238ed9a
---- /dev/null
-+++ b/drivers/rtc/rtc-bbnsm.c
-@@ -0,0 +1,223 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+//
-+// Copyright 2022 NXP.
++				bbnsm_pwrkey: pwrkey {
++					compatible = "nxp,bbnsm-pwrkey";
++					regmap = <&bbnsm>;
++					interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
++					linux,code = <KEY_POWER>;
++				};
++			};
 +
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_wakeirq.h>
-+#include <linux/rtc.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/regmap.h>
-+
-+#define BBNSM_CTRL	0x8
-+#define BBNSM_INT_EN	0x10
-+#define BBNSM_EVENTS	0x14
-+#define BBNSM_RTC_LS	0x40
-+#define BBNSM_RTC_MS	0x44
-+#define BBNSM_TA	0x50
-+
-+#define RTC_EN		0x2
-+#define RTC_EN_MSK	0x3
-+#define TA_EN		(0x2 << 2)
-+#define TA_DIS		(0x1 << 2)
-+#define TA_EN_MSK	(0x3 << 2)
-+#define RTC_INT_EN	0x2
-+#define TA_INT_EN	(0x2 << 2)
-+
-+#define BBNSM_EVENT_TA	TA_EN
-+
-+#define CNTR_TO_SECS_SH	15
-+
-+struct bbnsm_rtc {
-+	struct rtc_device *rtc;
-+	struct regmap *regmap;
-+	int irq;
-+	struct clk *clk;
-+};
-+
-+static u32 bbnsm_read_counter(struct bbnsm_rtc *bbnsm)
-+{
-+	u32 rtc_msb, rtc_lsb;
-+	unsigned int timeout = 100;
-+	u32 time;
-+	u32 tmp = 0;
-+
-+	do {
-+		time = tmp;
-+		/* read the msb */
-+		regmap_read(bbnsm->regmap, BBNSM_RTC_MS, &rtc_msb);
-+		/* read the lsb */
-+		regmap_read(bbnsm->regmap, BBNSM_RTC_LS, &rtc_lsb);
-+		/* convert to seconds */
-+		tmp = (rtc_msb << 17) | (rtc_lsb >> 15);
-+	} while (tmp != time && --timeout);
-+
-+	return time;
-+}
-+
-+static int bbnsm_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
-+	unsigned long time;
-+
-+	time = bbnsm_read_counter(bbnsm);
-+	rtc_time64_to_tm(time, tm);
-+
-+	return 0;
-+}
-+
-+static int bbnsm_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
-+	unsigned long time = rtc_tm_to_time64(tm);
-+
-+	/* disable the RTC first */
-+	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, RTC_EN_MSK, 0);
-+
-+	/* write the 32bit sec time to 47 bit timer counter, leaving 15 LSBs blank */
-+	regmap_write(bbnsm->regmap, BBNSM_RTC_LS, time << CNTR_TO_SECS_SH);
-+	regmap_write(bbnsm->regmap, BBNSM_RTC_MS, time >> (32 - CNTR_TO_SECS_SH));
-+
-+	/* Enable the RTC again */
-+	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, RTC_EN_MSK, RTC_EN);
-+
-+	return 0;
-+}
-+
-+static int bbnsm_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
-+	u32 bbnsm_events, bbnsm_ta;
-+
-+	regmap_read(bbnsm->regmap, BBNSM_TA, &bbnsm_ta);
-+	rtc_time64_to_tm(bbnsm_ta, &alrm->time);
-+
-+	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &bbnsm_events);
-+	alrm->pending = (bbnsm_events & BBNSM_EVENT_TA) ? 1 : 0;
-+
-+	return 0;
-+}
-+
-+static int bbnsm_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
-+{
-+	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
-+
-+	/* enable the alarm event */
-+	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, TA_EN_MSK, enable ? TA_EN : TA_DIS);
-+	/* enable the alarm interrupt */
-+	regmap_update_bits(bbnsm->regmap, BBNSM_INT_EN, TA_EN_MSK, enable ? TA_EN : TA_DIS);
-+
-+	return 0;
-+}
-+
-+static int bbnsm_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
-+	unsigned long time = rtc_tm_to_time64(&alrm->time);
-+
-+	/* disable the alarm */
-+	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, TA_EN, TA_EN);
-+
-+	/* write the seconds to TA */
-+	regmap_write(bbnsm->regmap, BBNSM_TA, time);
-+
-+	return bbnsm_rtc_alarm_irq_enable(dev, alrm->enabled);
-+}
-+
-+static const struct rtc_class_ops bbnsm_rtc_ops = {
-+	.read_time = bbnsm_rtc_read_time,
-+	.set_time = bbnsm_rtc_set_time,
-+	.read_alarm = bbnsm_rtc_read_alarm,
-+	.set_alarm = bbnsm_rtc_set_alarm,
-+	.alarm_irq_enable = bbnsm_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t bbnsm_rtc_irq_handler(int irq, void *dev_id)
-+{
-+	struct device *dev = dev_id;
-+	struct bbnsm_rtc  *bbnsm = dev_get_drvdata(dev);
-+	u32 val;
-+	u32 event = 0;
-+
-+	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &val);
-+	if (val & BBNSM_EVENT_TA) {
-+		event |= (RTC_AF | RTC_IRQF);
-+		bbnsm_rtc_alarm_irq_enable(dev, false);
-+		/* clear the alarm event */
-+		regmap_write_bits(bbnsm->regmap, BBNSM_EVENTS, TA_EN_MSK, BBNSM_EVENT_TA);
-+		rtc_update_irq(bbnsm->rtc, 1, event);
-+	}
-+
-+	return event ? IRQ_HANDLED : IRQ_NONE;
-+}
-+
-+static int bbnsm_rtc_probe(struct platform_device *pdev)
-+{
-+	struct bbnsm_rtc *bbnsm;
-+	int ret;
-+
-+	bbnsm = devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
-+	if (!bbnsm)
-+		return -ENOMEM;
-+
-+	bbnsm->rtc = devm_rtc_allocate_device(&pdev->dev);
-+
-+	bbnsm->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "regmap");
-+	if (IS_ERR(bbnsm->regmap)) {
-+		dev_err(&pdev->dev, "bbnsm get regmap failed\n");
-+		return PTR_ERR(bbnsm->regmap);
-+	}
-+
-+	bbnsm->irq = platform_get_irq(pdev, 0);
-+	if (bbnsm->irq < 0)
-+		return bbnsm->irq;
-+
-+	platform_set_drvdata(pdev, bbnsm);
-+
-+	/* clear all the pending events */
-+	regmap_write(bbnsm->regmap, BBNSM_EVENTS, 0x7A);
-+
-+	/* Enable the Real-Time counter */
-+	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, RTC_EN_MSK, RTC_EN);
-+
-+	device_init_wakeup(&pdev->dev, true);
-+	ret = dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
-+	if (ret)
-+		dev_err(&pdev->dev, "Failed to enable the irq wakeup\n");
-+
-+	ret = devm_request_irq(&pdev->dev, bbnsm->irq, bbnsm_rtc_irq_handler,
-+			IRQF_SHARED, "rtc alarm", &pdev->dev);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to request irq %d: %d\n",
-+			bbnsm->irq, ret);
-+		return ret;
-+	}
-+
-+	bbnsm->rtc->ops = &bbnsm_rtc_ops;
-+	bbnsm->rtc->range_max = U32_MAX;
-+
-+	return devm_rtc_register_device(bbnsm->rtc);
-+}
-+
-+static const struct of_device_id bbnsm_dt_ids[] = {
-+	{ .compatible = "nxp,bbnsm-rtc", },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, bbnsm_dt_ids);
-+
-+static struct platform_driver bbnsm_rtc_driver = {
-+	.driver = {
-+		.name = "bbnsm_rtc",
-+		.of_match_table = bbnsm_dt_ids,
-+	},
-+	.probe = bbnsm_rtc_probe,
-+};
-+module_platform_driver(bbnsm_rtc_driver);
-+
-+MODULE_AUTHOR("Jacky Bai <ping.bai@nxp.com>");
-+MODULE_DESCRIPTION("NXP BBNSM RTC Driver");
-+MODULE_LICENSE("GPL");
+ 			clk: clock-controller@44450000 {
+ 				compatible = "fsl,imx93-ccm";
+ 				reg = <0x44450000 0x10000>;
 -- 
 2.37.1
 
