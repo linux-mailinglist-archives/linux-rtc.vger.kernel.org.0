@@ -2,55 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05009631C85
-	for <lists+linux-rtc@lfdr.de>; Mon, 21 Nov 2022 10:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F163631CAE
+	for <lists+linux-rtc@lfdr.de>; Mon, 21 Nov 2022 10:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiKUJKI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 21 Nov 2022 04:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S229706AbiKUJSd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 21 Nov 2022 04:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiKUJJp (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Nov 2022 04:09:45 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABEB8FE46
-        for <linux-rtc@vger.kernel.org>; Mon, 21 Nov 2022 01:09:43 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id a15so13769231ljb.7
-        for <linux-rtc@vger.kernel.org>; Mon, 21 Nov 2022 01:09:43 -0800 (PST)
+        with ESMTP id S229827AbiKUJSa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Nov 2022 04:18:30 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694042F3A1
+        for <linux-rtc@vger.kernel.org>; Mon, 21 Nov 2022 01:18:28 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id c1so17882860lfi.7
+        for <linux-rtc@vger.kernel.org>; Mon, 21 Nov 2022 01:18:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5iEe7fRY9UI3AIlY+2BLLJv3AGvgsuX2GD1a9szCu9I=;
-        b=q7Pr41DBl6rR/A4TtHdH/roj5GaCx8EvAhpS1JRx+Tbe/ThGfLRmzQbrEh3VauzIh0
-         CSEgjoGSGGpzrB3A7mokXemHhqloLKOLbxgtWvAav7It9nhHYOnS2Gpfc0rUJlw7y+dc
-         p8uPnPU0IQumuIROmAsjH1O72Py6JizpXaJVzgXJm0dpr28zHm9xAhFmwxJZ45OAMEK2
-         0v0WWm56qvo3+FjNKL020M0+suQ8Molq682RWRt7JHEtzdbPNo2ikUhb/OZ3TxZAwkzq
-         fvP7od2XrVub1Ec4mFVA0kgNnqhj8bJLED+TslRlCMpvbi4MJ8hkVQ/qTGp1kpGuJjmy
-         Pb9g==
+        bh=UpSTdsDOMig0TNjIkUYB/wrzKSkG9D66w0IJbB6U/L8=;
+        b=bApH5BU/CyiIRvct4YDbvqTVCEV70kdWkmqgMJIk7WUxUqddxTpExh15Jlpbu6cjnW
+         vFKmn2cvtmh/sA1Nsrz9iOlzEMlqShm3hAE/lGxFm+r1oaoq9PgR09XYq32Q3GIRrOft
+         RyksDCeziJJ1CfBjUcWaEvruL6wNuWp/tU1nsruofL5MxJCmk/+zwPw7bhhe9DvWmimC
+         29l/Ldha+zN7XxADJJWKrlmapzGJranuayTniQ5qEjHvxKoJiVjM6FYmCLb5KF5I7Y95
+         v4oW26NDXOzYjVNS0v8gCp1aYxdxiNo4GPMYFsz4Bn9aLyhh7tALdfT8OWoLK8gSNOf3
+         Gkjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iEe7fRY9UI3AIlY+2BLLJv3AGvgsuX2GD1a9szCu9I=;
-        b=eJUo6fNkTM38sIVLjc0o+/9bXesQvStkO+T0HnF+4XHIbZdXNVnwBWdVI2js6emiIy
-         1JOEeKeU/vAHxutepaIDaoVVxlt6ygx62I9B4fIs3Qu6xMxtgkcFEjMDmgE4/xkhBXQB
-         XcydK2+r5aux+ktinoeO8tw7Vh/rbEgrQM1/Q5pkCKKHi+w4bHSrGjwydDiM8NB2fwVv
-         e4d4mJ49Vk83dRGgI2QADQP/RFZRFhCJ+/r/jE/8Ys1HjKl7QRG5cqruRO1701wX/nKv
-         i3erwlrfvzw/ZZv+rguPE6p0SbOx4SGIezN3WWcbSxkB4j1NKXZ/8s1nXyU3/Ov+8Y+N
-         D4Qg==
-X-Gm-Message-State: ANoB5pkzrI8AYwKj6bRNT83NeY2115dRssL5E9cAXJrSwWtekNdGV6gz
-        gQi6kKyjZYGTffcQ0TCJAn0Bfw==
-X-Google-Smtp-Source: AA0mqf65tf5iX3QXgYL+eDW+B/MJ19SGQIBINQ1kkLBTydy+/a8Q+euTpQhHxseu7DMQRo+st/RVMg==
-X-Received: by 2002:a2e:bd17:0:b0:277:50a:bd5c with SMTP id n23-20020a2ebd17000000b00277050abd5cmr5364778ljq.6.1669021782081;
-        Mon, 21 Nov 2022 01:09:42 -0800 (PST)
+        bh=UpSTdsDOMig0TNjIkUYB/wrzKSkG9D66w0IJbB6U/L8=;
+        b=tqTTYE8y8anWJ/Q6/izCjkvijvZ9ScR1fpVheO+3BFG5fnwEwIzdxRb5Wr2huQx6XH
+         oTMesNqiPJcOTJ1Lv04VEr9nDRW6sDRPaSjA6lM8QtDkXgjYn0mu7SFbtQsR9ddSXktK
+         LEidU89KcXrQMHf/WUtsSRblqxHQk3EUUuy3M/65bbU8gKLeebsQ9lI8zSusrJLP4CTg
+         o/yKAMQ73Kj/RwEKRbuP5Fw5/9cP+sKv0eUcAWlf/J7Dx3Q7JbAnmgNdnLUC+WOSVGHy
+         Ugyz6eMMrt2fblyN2flzRbDYK3d3rXLVaAIHZIB3wkL2xfnm0A9wCikqP9ciQc/tD/2W
+         YRjA==
+X-Gm-Message-State: ANoB5pmxm4kZ9QfOrmCuN7p9YEEzcObuYkRySxnx+8NhQwe/8JT+hjRO
+        J4DdiL7yEwdlMwvbtIvJcNR1nQ==
+X-Google-Smtp-Source: AA0mqf5zHNaXnko3gkuaISLPSTETD4rWCwavxCCeqOH2Rj9oIO5q8inPQkwpIu8NTPrYi5Qn9HGi2w==
+X-Received: by 2002:a19:5f0a:0:b0:498:f195:5113 with SMTP id t10-20020a195f0a000000b00498f1955113mr2161735lfb.159.1669022306801;
+        Mon, 21 Nov 2022 01:18:26 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a25-20020a056512021900b004a9b9ccfbe6sm1956656lfo.51.2022.11.21.01.09.41
+        by smtp.gmail.com with ESMTPSA id p7-20020a2eb7c7000000b002770e531535sm1412589ljo.55.2022.11.21.01.18.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 01:09:41 -0800 (PST)
-Message-ID: <2aeb0590-4fd0-5bb4-5e68-0378953a94c3@linaro.org>
-Date:   Mon, 21 Nov 2022 10:09:40 +0100
+        Mon, 21 Nov 2022 01:18:26 -0800 (PST)
+Message-ID: <1d93e843-d7bd-a4f7-bb99-4270d9333fa1@linaro.org>
+Date:   Mon, 21 Nov 2022 10:18:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
@@ -80,8 +80,13 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Also few nits:
+
 On 21/11/2022 07:51, Jacky Bai wrote:
 > Add binding for NXP BBNSM(Battery-Backed Non-Secure Module).
+
+Subject: drop second, redundant "bindings".
+
 > 
 > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 > ---
@@ -102,125 +107,12 @@ On 21/11/2022 07:51, Jacky Bai wrote:
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
 > +title: NXP Battery-Backed Non-Secure Module bindings
+
+Drop "bindings"
+
 > +
 > +maintainers:
 > +  - Jacky Bai <ping.bai@nxp.com>
-> +
-> +description: |
-> +  NXP BBNSM serves as non-volatile logic and storage for the system.
-> +  it Intergrates RTC & ON/OFF control.
-> +  The RTC can retain its state and continues counting even when the
-> +  main chip is power down. A time alarm is generated once the most
-> +  significant 32 bits of the real-time counter match the value in the
-> +  Time Alarm register.
-> +  The ON/OFF logic inside the BBNSM allows for connecting directly to
-> +  a PMIC or other voltage regulator device. both smart PMIC mode and
-> +  Dumb PMIC mode supported.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - nxp,bbnsm
-> +      - const: syscon
-> +      - const: simple-mfd
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  rtc:
-> +    type: object
-> +
-> +    properties:
-> +      compatible:
-> +        const: nxp,bbnsm-rtc
-
-
-Missing ref to rtc.yaml.
-
-> +
-> +      regmap:
-
-Use vendor prefix, descriptive name and description. Where is the type
-of 'regmap' defined?
-
-> +        maxItems: 1
-
-I don't think this is correct. Rob explained the simple-mfd means
-children do not depend on anything from the parent, but taking a regmap
-from its parent contradicts it.
-
-> +
-> +      interrupts:
-> +        maxItems: 1
-
-You have same interrupt and same address space used by two devices.
-
-Both arguments (depending on parent regmap, sharing interrupt) suggests
-that this is one device block, so describing it with simple-mfd is quite
-unflexible.
-
-> +
-> +    required:
-> +      - compatible
-> +      - regmap
-> +      - interrupts
-> +
-> +    additionalProperties: false
-> +
-> +  pwrkey:
-> +    type: object
-> +    $ref: /schemas/input/input.yaml#
-> +
-> +    properties:
-> +      compatible:
-> +        const: nxp,bbnsm-pwrkey
-> +
-> +      regmap:
-> +        maxItems: 1
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      linux,code: true
-> +
-> +    required:
-> +      - compatible
-> +      - regmap
-> +      - interrupts
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - rtc
-> +  - pwrkey
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    bbnsm: bbnsm@44440000 {
-> +      compatible = "nxp,bbnsm", "syscon", "simple-mfd";
-> +      reg = <0x44440000 0x10000>;
-> +
-> +      bbnsm_rtc: rtc {
-> +        compatible = "nxp,bbnsm-rtc";
-
-Use 4 spaces for example indentation.
-
-> +        regmap = <&bbnsm>;
-> +        interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-> +      };
-> +
-> +      bbnsm_pwrkey: pwrkey {
-> +         compatible = "nxp,bbnsm-pwrkey";
-> +         regmap = <&bbnsm>;
-> +         interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-> +         linux,code = <KEY_POWER>;
-> +       };
-> +    };
 
 Best regards,
 Krzysztof
