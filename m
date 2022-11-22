@@ -2,106 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E963634856
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Nov 2022 21:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9CD9634AEE
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 00:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbiKVUiI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 22 Nov 2022 15:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S235066AbiKVXOh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 22 Nov 2022 18:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiKVUiH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Nov 2022 15:38:07 -0500
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA7C1403E;
-        Tue, 22 Nov 2022 12:38:06 -0800 (PST)
-Received: by mail-io1-f54.google.com with SMTP id q21so11832782iod.4;
-        Tue, 22 Nov 2022 12:38:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UhCFvooc16BIm6XAt1bknsHQE1+Xa927vqN9kFtC1RM=;
-        b=SGnij6NAMs/hzxh02j/7dX0fuUlVVuGtLM5HwUuGU6geRPTyEMIN5fVMtlveLgkJoW
-         nRbNDm6Uc/TBwEPKxlHeU4E/5agKY+4tXDg3bnWPKRacG3aiq9UKg6d434yrMlYC8lbM
-         4jL6TIafOUTeDj7EX2bAADDl2vbRLCgJn5oNjf7DoegjbVorfKtTZEU8qlSGhd7iPK7W
-         n2m4qF1AAXydW/3Lz4sHU7j+QkrJYpDLLDczea+RR0UNy9k9yhac/94R7u9ztjiREWHJ
-         SI2/h5EqVvLT3HoqXkNQuqdT31ESXXjd5oINxb4iXDTAnokYmd/ZdVPEW/AHc79iQ0BS
-         UBRA==
-X-Gm-Message-State: ANoB5pmeDeCFkSgA9no69ZjRY9v3EY5NJ0oCIqM1YapH+lEfzoI6dWoa
-        ilxIAQYzCj8iud6msJ2cOw==
-X-Google-Smtp-Source: AA0mqf5Ay2y7CIYKiaOngtptkd+MMRSZuISPu/SzNLmBgZZx+B+T7b2U5bHjPJL26VoWXRItzbQRYQ==
-X-Received: by 2002:a05:6638:328c:b0:375:365:413d with SMTP id f12-20020a056638328c00b003750365413dmr11105719jav.173.1669149485284;
-        Tue, 22 Nov 2022 12:38:05 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id i4-20020a05663815c400b003755a721e98sm5674876jat.107.2022.11.22.12.38.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 12:38:04 -0800 (PST)
-Received: (nullmailer pid 514981 invoked by uid 1000);
-        Tue, 22 Nov 2022 20:28:34 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S234886AbiKVXOe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Nov 2022 18:14:34 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EF1C6541
+        for <linux-rtc@vger.kernel.org>; Tue, 22 Nov 2022 15:14:32 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 176B2FF803;
+        Tue, 22 Nov 2022 23:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669158871;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oY8Tf+PzNwdhBNyzNNE3Xnz0zDGUxa/EDy1tozRtt5c=;
+        b=JY+yfzC9OAD6Z+d235ZYOL2aTfKDQQS0dTI4DCiCo/wxrvYcCspl1mwyVqqejuSX/KifxU
+        0kpedJtGf/8vQVRkvccvvRttBRUtsp8edTJx4TtX8fTprjyOF7JC41xHFXVB/bJKqNktTf
+        wkhtN5UumtRY2duG4F41YqNovNWDFRnJmQHxxM7iE2h+cO0dbHJ0J3t7f9WTyBjBdlCUwz
+        1s/qzDpoF9wouV4ZHX+kakfCI4qiuRnKUhFoYNjxF9NfcNVqRqPpHmGRijwcIScQzGiekr
+        6Gh+GY46un4a3T3DTDAKM9JCKeHbnFtd2ACxUo/YUAok/1MceY9FxD1Peki2vQ==
+Date:   Wed, 23 Nov 2022 00:14:30 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Richard OGrady <Rich_Ogrady@grayhill.com>
+Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
+Subject: Re: Y2038 related bug in rtc subsystem for 32 bit processors
+Message-ID: <Y31X1qOZBkUHfYE6@mail.local>
+References: <BYAPR14MB307829F7F749AAD17473C10BF00D9@BYAPR14MB3078.namprd14.prod.outlook.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jacky Bai <ping.bai@nxp.com>
-Cc:     linux-input@vger.kernel.org, s.hauer@pengutronix.de,
-        a.zummo@towertech.it, kernel@pengutronix.de, shawnguo@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        festevam@gmail.com, dmitry.torokhov@gmail.com
-In-Reply-To: <20221121065144.3667658-2-ping.bai@nxp.com>
-References: <20221121065144.3667658-1-ping.bai@nxp.com>
- <20221121065144.3667658-2-ping.bai@nxp.com>
-Message-Id: <166914594571.442076.9834259216884759566.robh@kernel.org>
-Subject: Re: [PATCH 1/4] dt-bindings: mfd: nxp,bbnsm: Add binding for nxp bbnsm
-Date:   Tue, 22 Nov 2022 14:28:34 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR14MB307829F7F749AAD17473C10BF00D9@BYAPR14MB3078.namprd14.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
-On Mon, 21 Nov 2022 14:51:41 +0800, Jacky Bai wrote:
-> Add binding for NXP BBNSM(Battery-Backed Non-Secure Module).
+On 22/11/2022 22:27:39+0000, Richard OGrady wrote:
+> While testing Y2038 compatibility on a 32 bit arm processor I came across this potential bug?  in drivers/rtc/class.c (line 76 in v6.0.9)
 > 
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> ---
->  .../devicetree/bindings/mfd/nxp,bbnsm.yaml    | 103 ++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml
+> 
+>          tv64<https://elixir.bootlin.com/linux/latest/C/ident/tv64>.tv_sec<https://elixir.bootlin.com/linux/latest/C/ident/tv_sec> = rtc_tm_to_time64<https://elixir.bootlin.com/linux/latest/C/ident/rtc_tm_to_time64>(&tm<https://elixir.bootlin.com/linux/latest/C/ident/tm>);
+> 
+> 
+> 
+> #if BITS_PER_LONG<https://elixir.bootlin.com/linux/latest/C/ident/BITS_PER_LONG> == 32
+> 
+>          if (tv64<https://elixir.bootlin.com/linux/latest/C/ident/tv64>.tv_sec<https://elixir.bootlin.com/linux/latest/C/ident/tv_sec> > INT_MAX<https://elixir.bootlin.com/linux/latest/C/ident/INT_MAX>) {
+> 
+>                  err = -ERANGE<https://elixir.bootlin.com/linux/latest/C/ident/ERANGE>;
+> 
+>                  goto err_read;
+> 
+>          }
+> 
+> #endif
+> 
+> 
+> 
+>          err = do_settimeofday64<https://elixir.bootlin.com/linux/latest/C/ident/do_settimeofday64>(&tv64<https://elixir.bootlin.com/linux/latest/C/ident/tv64>);
+> 
+> 
+> The #if/#endif block above causes the driver to not sync the system clock with the reading from the hwclock once the rtc reading reflects the Y2038 date and later.  I certainly could be wrong but it would seem that the block is over-protective and unnecessary.  We commented the block out and the system syncs fine with the rtc when the rtc is set to the year 2039.
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+You are right and this is a workaround for an issue in systemd.
+Honestly, the solution is to stop relying on rtc_hctosys and set the
+system time from userspace.
 
-yamllint warnings/errors:
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/mfd/nxp,bbnsm.example.dts:28.27-28 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/mfd/nxp,bbnsm.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1492: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221121065144.3667658-2-ping.bai@nxp.com
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command.
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
