@@ -2,221 +2,249 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3091463437D
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Nov 2022 19:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3446343E5
+	for <lists+linux-rtc@lfdr.de>; Tue, 22 Nov 2022 19:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiKVSTF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 22 Nov 2022 13:19:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        id S234552AbiKVSp7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 22 Nov 2022 13:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbiKVSTE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Nov 2022 13:19:04 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6BA663D8;
-        Tue, 22 Nov 2022 10:19:02 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7893B1C000A;
-        Tue, 22 Nov 2022 18:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669141140;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZDNwluvtG1WetRunNnZnkNy7ktuJgRYjHUd4OHQgY8I=;
-        b=L36lKCSi1XfW5DlAarMBCS+HzTxpCvOXlID2bSnYrAmwyRimyeaYmihvCOs9AhjQjDRfrT
-        xGo8ELt/5NimK8Hy3Y5aVa/AOjQ7c31daMRTbwZBTjnOF6yTm1BE5tWt+Zhzm8cqiDqaNh
-        9kyBc7ciuO7UgoKlJxNkpuO1he/FzZaZBM4OLPRIuWjNsw1q41cY8ojU1BB5zBgDOjAnec
-        XLA5e26Q09Gs2WmNNZPE7P0YE1TlVZ9BQX8M0W9M9nIwN/Jke3nVIKfRW1jo5gdibCznoj
-        GS/nlnlt8ZMoBUTq54NT09RZBMdZ553XjybCwtNZs5kdbas0OOPr2cEnDam8Hg==
-Date:   Tue, 22 Nov 2022 19:18:59 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jacky Bai <ping.bai@nxp.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, dmitry.torokhov@gmail.com,
-        a.zummo@towertech.it, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, festevam@gmail.com
-Subject: Re: [PATCH 3/4] rtc: bbnsm: Add the bbnsm rtc support
-Message-ID: <Y30Sk+ftJQ5XJQZF@mail.local>
-References: <20221121065144.3667658-1-ping.bai@nxp.com>
- <20221121065144.3667658-4-ping.bai@nxp.com>
+        with ESMTP id S233356AbiKVSpy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Nov 2022 13:45:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940377FF22;
+        Tue, 22 Nov 2022 10:45:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CFCD6184A;
+        Tue, 22 Nov 2022 18:45:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B47C433C1;
+        Tue, 22 Nov 2022 18:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669142752;
+        bh=fqxt6my1VSa4mXhEYdIoCfXvdzW45n/iFIvfCGSEDwo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hhEERrBRIpsc+q9yO9csAlWHVhCaviR/WcBNWNuioF+tk6pV0ZhL7NiG1rd0mCAxq
+         1szidsMiWWaFcDgeW9EGShTYklszbBWjIUflN4ZPlaCK62nJuyzjDBPZTppOU3jv4N
+         8/hxDxIBUqAHSPgEChU749Xv+EuNTWQcC+6zplPAHN/Izkl+hvR/NDoy/ucWGRSQdw
+         6okmEtteWfpDi+EH50bg96/6ZjPlAMMe5gMT1Fl+eoDaKbHg0REnL4BteXHVhuIHEj
+         P64Js1Mq3YXxz372bDZyRlFZt9w4L3EsyIeqfNpZZSqs+lnqo+Nmvd9aWM/UsJjBvO
+         sa1pYfX2CaTsw==
+Date:   Tue, 22 Nov 2022 18:58:18 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-actions@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Message-ID: <20221122185818.3740200d@jic23-huawei>
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121065144.3667658-4-ping.bai@nxp.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 21/11/2022 14:51:43+0800, Jacky Bai wrote:
-> The BBNSM module includes a real time counter with alarm.
-> Add a RTC driver for this function.
-> 
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/rtc/Kconfig     |  12 +++
->  drivers/rtc/Makefile    |   1 +
->  drivers/rtc/rtc-bbnsm.c | 223 ++++++++++++++++++++++++++++++++++++++++
 
-I'd prefer that filename to include imx or mxc if this is only available
-on those SoCs.
+Queued all of the below:
+with one tweaked as per your suggestion and the highlighted one dropped on basis
+I was already carrying the equivalent - as you pointed out.
 
-> diff --git a/drivers/rtc/rtc-bbnsm.c b/drivers/rtc/rtc-bbnsm.c
-> new file mode 100644
-> index 000000000000..4157b238ed9a
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-bbnsm.c
-> @@ -0,0 +1,223 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +//
-> +// Copyright 2022 NXP.
-> +
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_wakeirq.h>
-> +#include <linux/rtc.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/regmap.h>
+I was already carrying the required dependency.
 
-This list should be sorted alphabetically
+Includes the IIO ones in staging.
+
+Thanks,
+
+Jonathan
+
+p.s. I perhaps foolishly did this in a highly manual way so as to
+also pick up Andy's RB.  So might have dropped one...
+
+Definitely would have been better as one patch per subsystem with
+a cover letter suitable for replies like Andy's to be picked up
+by b4.
 
 
-> +
-> +#define BBNSM_CTRL	0x8
-> +#define BBNSM_INT_EN	0x10
-> +#define BBNSM_EVENTS	0x14
-> +#define BBNSM_RTC_LS	0x40
-> +#define BBNSM_RTC_MS	0x44
-> +#define BBNSM_TA	0x50
-> +
-> +#define RTC_EN		0x2
-> +#define RTC_EN_MSK	0x3
-> +#define TA_EN		(0x2 << 2)
-> +#define TA_DIS		(0x1 << 2)
-> +#define TA_EN_MSK	(0x3 << 2)
-> +#define RTC_INT_EN	0x2
-> +#define TA_INT_EN	(0x2 << 2)
-> +
-> +#define BBNSM_EVENT_TA	TA_EN
-> +
+>   iio: accel: adxl372_i2c: Convert to i2c's .probe_new()
+>   iio: accel: bma180: Convert to i2c's .probe_new()
+>   iio: accel: bma400: Convert to i2c's .probe_new()
+>   iio: accel: bmc150: Convert to i2c's .probe_new()
+>   iio: accel: da280: Convert to i2c's .probe_new()
+>   iio: accel: kxcjk-1013: Convert to i2c's .probe_new()
+>   iio: accel: mma7455_i2c: Convert to i2c's .probe_new()
+>   iio: accel: mma8452: Convert to i2c's .probe_new()
+>   iio: accel: mma9551: Convert to i2c's .probe_new()
+>   iio: accel: mma9553: Convert to i2c's .probe_new()
+>   iio: adc: ad7091r5: Convert to i2c's .probe_new()
+>   iio: adc: ad7291: Convert to i2c's .probe_new()
+>   iio: adc: ad799x: Convert to i2c's .probe_new()
+>   iio: adc: ina2xx-adc: Convert to i2c's .probe_new()
+>   iio: adc: ltc2471: Convert to i2c's .probe_new()
+>   iio: adc: ltc2485: Convert to i2c's .probe_new()
+>   iio: adc: ltc2497: Convert to i2c's .probe_new()
+>   iio: adc: max1363: Convert to i2c's .probe_new()
+>   iio: adc: max9611: Convert to i2c's .probe_new()
+>   iio: adc: mcp3422: Convert to i2c's .probe_new()
+>   iio: adc: ti-adc081c: Convert to i2c's .probe_new()
+>   iio: adc: ti-ads1015: Convert to i2c's .probe_new()
+>   iio: cdc: ad7150: Convert to i2c's .probe_new()
+>   iio: cdc: ad7746: Convert to i2c's .probe_new()
+>   iio: chemical: ams-iaq-core: Convert to i2c's .probe_new()
+>   iio: chemical: atlas-ezo-sensor: Convert to i2c's .probe_new()
+>   iio: chemical: atlas-sensor: Convert to i2c's .probe_new()
+>   iio: chemical: bme680_i2c: Convert to i2c's .probe_new()
+>   iio: chemical: ccs811: Convert to i2c's .probe_new()
+>   iio: chemical: scd4x: Convert to i2c's .probe_new()
+>   iio: chemical: sgp30: Convert to i2c's .probe_new()
+>   iio: chemical: sgp40: Convert to i2c's .probe_new()
+>   iio: chemical: vz89x: Convert to i2c's .probe_new()
+>   iio: dac: ad5064: Convert to i2c's .probe_new()
+>   iio: dac: ad5380: Convert to i2c's .probe_new()
+>   iio: dac: ad5446: Convert to i2c's .probe_new()
+>   iio: dac: ad5593r: Convert to i2c's .probe_new()
+>   iio: dac: ad5696-i2c: Convert to i2c's .probe_new()
+>   iio: dac: ds4424: Convert to i2c's .probe_new()
+>   iio: dac: m62332: Convert to i2c's .probe_new()
+>   iio: dac: max517: Convert to i2c's .probe_new()
+>   iio: dac: max5821: Convert to i2c's .probe_new()
+>   iio: dac: mcp4725: Convert to i2c's .probe_new()
+>   iio: dac: ti-dac5571: Convert to i2c's .probe_new()
+>   iio: gyro: bmg160_i2c: Convert to i2c's .probe_new()
+>   iio: gyro: itg3200_core: Convert to i2c's .probe_new()
+>   iio: gyro: mpu3050-i2c: Convert to i2c's .probe_new()
+>   iio: gyro: st_gyro_i2c: Convert to i2c's .probe_new()
+>   iio: health: afe4404: Convert to i2c's .probe_new()
+>   iio: health: max30100: Convert to i2c's .probe_new()
+>   iio: health: max30102: Convert to i2c's .probe_new()
+>   iio: humidity: am2315: Convert to i2c's .probe_new()
+>   iio: humidity: hdc100x: Convert to i2c's .probe_new()
+>   iio: humidity: hdc2010: Convert to i2c's .probe_new()
+>   iio: humidity: hts221_i2c: Convert to i2c's .probe_new()
+>   iio: humidity: htu21: Convert to i2c's .probe_new()
+>   iio: humidity: si7005: Convert to i2c's .probe_new()
+>   iio: humidity: si7020: Convert to i2c's .probe_new()
+>   iio: imu: bmi160/bmi160_i2c: Convert to i2c's .probe_new()
+>   iio: imu: fxos8700_i2c: Convert to i2c's .probe_new()
+>   iio: imu: inv_mpu6050: Convert to i2c's .probe_new()
+>   iio: imu: kmx61: Convert to i2c's .probe_new()
+>   iio: imu: st_lsm6dsx: Convert to i2c's .probe_new()
+>   iio: light: adjd_s311: Convert to i2c's .probe_new()
+>   iio: light: adux1020: Convert to i2c's .probe_new()
+>   iio: light: al3010: Convert to i2c's .probe_new()
+>   iio: light: al3320a: Convert to i2c's .probe_new()
+>   iio: light: apds9300: Convert to i2c's .probe_new()
+>   iio: light: apds9960: Convert to i2c's .probe_new()
+>   iio: light: bh1750: Convert to i2c's .probe_new()
+>   iio: light: bh1780: Convert to i2c's .probe_new()
+>   iio: light: cm3232: Convert to i2c's .probe_new()
+>   iio: light: cm3323: Convert to i2c's .probe_new()
+>   iio: light: cm36651: Convert to i2c's .probe_new()
+>   iio: light: gp2ap002: Convert to i2c's .probe_new()
+>   iio: light: gp2ap020a00f: Convert to i2c's .probe_new()
+>   iio: light: isl29018: Convert to i2c's .probe_new()
+>   iio: light: isl29028: Convert to i2c's .probe_new()
+>   iio: light: isl29125: Convert to i2c's .probe_new()
+>   iio: light: jsa1212: Convert to i2c's .probe_new()
+>   iio: light: ltr501: Convert to i2c's .probe_new()
+>   iio: light: lv0104cs: Convert to i2c's .probe_new()
+>   iio: light: max44000: Convert to i2c's .probe_new()
+>   iio: light: max44009: Convert to i2c's .probe_new()
+>   iio: light: noa1305: Convert to i2c's .probe_new()
+>   iio: light: opt3001: Convert to i2c's .probe_new()
+>   iio: light: pa12203001: Convert to i2c's .probe_new()
+>   iio: light: rpr0521: Convert to i2c's .probe_new()
+>   iio: light: si1133: Convert to i2c's .probe_new()
+>   iio: light: si1145: Convert to i2c's .probe_new()
+>   iio: light: st_uvis25_i2c: Convert to i2c's .probe_new()
+>   iio: light: stk3310: Convert to i2c's .probe_new()
+>   iio: light: tcs3414: Convert to i2c's .probe_new()
+>   iio: light: tcs3472: Convert to i2c's .probe_new()
+>   iio: light: tsl2563: Convert to i2c's .probe_new()
+>   iio: light: tsl2583: Convert to i2c's .probe_new()
+>   iio: light: tsl2772: Convert to i2c's .probe_new()
+>   iio: light: tsl4531: Convert to i2c's .probe_new()
+>   iio: light: us5182d: Convert to i2c's .probe_new()
+>   iio: light: vcnl4000: Convert to i2c's .probe_new()
+>   iio: light: vcnl4035: Convert to i2c's .probe_new()
+>   iio: light: veml6030: Convert to i2c's .probe_new()
+>   iio: light: veml6070: Convert to i2c's .probe_new()
+>   iio: light: zopt2201: Convert to i2c's .probe_new()
+>   iio: magnetometer: ak8974: Convert to i2c's .probe_new()
+>   iio: magnetometer: ak8975: Convert to i2c's .probe_new()
+>   iio: magnetometer: bmc150_magn_i2c: Convert to i2c's .probe_new()
+>   iio: magnetometer: hmc5843: Convert to i2c's .probe_new()
+>   iio: magnetometer: mag3110: Convert to i2c's .probe_new()
+>   iio: magnetometer: mmc35240: Convert to i2c's .probe_new()
+>   iio: magnetometer: yamaha-yas530: Convert to i2c's .probe_new()
+>   iio: potentiometer: ad5272: Convert to i2c's .probe_new()
+>   iio: potentiometer: ds1803: Convert to i2c's .probe_new()
+>   iio: potentiometer: max5432: Convert to i2c's .probe_new()
+>   iio: potentiometer: tpl0102: Convert to i2c's .probe_new()
+>   iio: potentiostat: lmp91000: Convert to i2c's .probe_new()
+>   iio: pressure: abp060mg: Convert to i2c's .probe_new()
+Not this one > iio: pressure: bmp280-i2c: Convert to i2c's .probe_new()
+>   iio: pressure: dlhl60d: Convert to i2c's .probe_new()
+>   iio: pressure: dps310: Convert to i2c's .probe_new()
+>   iio: pressure: hp03: Convert to i2c's .probe_new()
+>   iio: pressure: hp206c: Convert to i2c's .probe_new()
+>   iio: pressure: icp10100: Convert to i2c's .probe_new()
+>   iio: pressure: mpl115_i2c: Convert to i2c's .probe_new()
+>   iio: pressure: mpl3115: Convert to i2c's .probe_new()
+>   iio: pressure: ms5611_i2c: Convert to i2c's .probe_new()
+>   iio: pressure: ms5637: Convert to i2c's .probe_new()
+>   iio: pressure: st_pressure_i2c: Convert to i2c's .probe_new()
+>   iio: pressure: t5403: Convert to i2c's .probe_new()
+>   iio: pressure: zpa2326_i2c: Convert to i2c's .probe_new()
+>   iio: proximity: isl29501: Convert to i2c's .probe_new()
+>   iio: proximity: mb1232: Convert to i2c's .probe_new()
+>   iio: proximity: pulsedlight-lidar-lite-v2: Convert to i2c's
+>     .probe_new()
+>   iio: proximity: rfd77402: Convert to i2c's .probe_new()
+>   iio: proximity: srf08: Convert to i2c's .probe_new()
+>   iio: proximity: sx9500: Convert to i2c's .probe_new()
+>   iio: temperature: mlx90614: Convert to i2c's .probe_new()
+>   iio: temperature: mlx90632: Convert to i2c's .probe_new()
+>   iio: temperature: tmp006: Convert to i2c's .probe_new()
+>   iio: temperature: tmp007: Convert to i2c's .probe_new()
+>   iio: temperature: tsys01: Convert to i2c's .probe_new()
+>   iio: temperature: tsys02d: Convert to i2c's .probe_new()
+...
 
-I'm not clear why this define is needed
-
-> +static irqreturn_t bbnsm_rtc_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct device *dev = dev_id;
-> +	struct bbnsm_rtc  *bbnsm = dev_get_drvdata(dev);
-> +	u32 val;
-> +	u32 event = 0;
-
-You can rework this function to remove this variable because it is
-either 0 or RTC_AF | RTC_IRQF
-
-> +
-> +	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &val);
-> +	if (val & BBNSM_EVENT_TA) {
-> +		event |= (RTC_AF | RTC_IRQF);
-> +		bbnsm_rtc_alarm_irq_enable(dev, false);
-> +		/* clear the alarm event */
-> +		regmap_write_bits(bbnsm->regmap, BBNSM_EVENTS, TA_EN_MSK, BBNSM_EVENT_TA);
-> +		rtc_update_irq(bbnsm->rtc, 1, event);
-> +	}
-> +
-> +	return event ? IRQ_HANDLED : IRQ_NONE;
-> +}
-> +
-> +static int bbnsm_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct bbnsm_rtc *bbnsm;
-> +	int ret;
-> +
-> +	bbnsm = devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
-> +	if (!bbnsm)
-> +		return -ENOMEM;
-> +
-> +	bbnsm->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +
-> +	bbnsm->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "regmap");
-> +	if (IS_ERR(bbnsm->regmap)) {
-> +		dev_err(&pdev->dev, "bbnsm get regmap failed\n");
-> +		return PTR_ERR(bbnsm->regmap);
-> +	}
-> +
-> +	bbnsm->irq = platform_get_irq(pdev, 0);
-> +	if (bbnsm->irq < 0)
-> +		return bbnsm->irq;
-> +
-> +	platform_set_drvdata(pdev, bbnsm);
-> +
-> +	/* clear all the pending events */
-> +	regmap_write(bbnsm->regmap, BBNSM_EVENTS, 0x7A);
-> +
-> +	/* Enable the Real-Time counter */
-> +	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, RTC_EN_MSK, RTC_EN);
-> +
-
-Please don't do that, this removes an important piece of information.
-Instead, let .set_time enable it and check it in .read_time as if this
-is not set, you now you are out of PoR and the time is invalid
-
-> +	device_init_wakeup(&pdev->dev, true);
-> +	ret = dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "Failed to enable the irq wakeup\n");
-
-dev_err but the function is not failing. Maybe just dev_warn? Also, is
-this message really necessary?
-
-> +
-> +	ret = devm_request_irq(&pdev->dev, bbnsm->irq, bbnsm_rtc_irq_handler,
-> +			IRQF_SHARED, "rtc alarm", &pdev->dev);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "failed to request irq %d: %d\n",
-> +			bbnsm->irq, ret);
-> +		return ret;
-> +	}
-> +
-> +	bbnsm->rtc->ops = &bbnsm_rtc_ops;
-> +	bbnsm->rtc->range_max = U32_MAX;
-> +
-> +	return devm_rtc_register_device(bbnsm->rtc);
-> +}
-> +
-> +static const struct of_device_id bbnsm_dt_ids[] = {
-> +	{ .compatible = "nxp,bbnsm-rtc", },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, bbnsm_dt_ids);
-> +
-> +static struct platform_driver bbnsm_rtc_driver = {
-> +	.driver = {
-> +		.name = "bbnsm_rtc",
-> +		.of_match_table = bbnsm_dt_ids,
-> +	},
-> +	.probe = bbnsm_rtc_probe,
-> +};
-> +module_platform_driver(bbnsm_rtc_driver);
-> +
-> +MODULE_AUTHOR("Jacky Bai <ping.bai@nxp.com>");
-> +MODULE_DESCRIPTION("NXP BBNSM RTC Driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.37.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>   staging: iio: adt7316: Convert to i2c's .probe_new()
+>   staging: iio: ad5933: Convert to i2c's .probe_new()
+>   staging: iio: ade7854: Convert to i2c's .probe_new()
+ 
