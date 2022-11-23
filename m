@@ -2,74 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7158D635716
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 10:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8E7635771
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 10:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238056AbiKWJhz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Nov 2022 04:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S238100AbiKWJmo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Nov 2022 04:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237923AbiKWJhU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Nov 2022 04:37:20 -0500
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2040.outbound.protection.outlook.com [40.107.105.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E80102D;
-        Wed, 23 Nov 2022 01:35:15 -0800 (PST)
+        with ESMTP id S238114AbiKWJl6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Nov 2022 04:41:58 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60043.outbound.protection.outlook.com [40.107.6.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2679AD06D6;
+        Wed, 23 Nov 2022 01:40:00 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jTFbPP5pzitVDUd/+NRFXdyhZqIJQTqQbM32rDO3JXGiM+pw0DMLb9vbg8+Z78xx6M9pv2l0FE4zic3t9qETe1pw0F5g2TejbL980lY2NKUdmQ7YSx4D11hpE4K6Y4iyH2PNdZQaKba7RhbVi1LzArp8DoAvxkXiwwJosmNfomrA8v+UEOFSgkqD9JDVt4pLqJM222CpYSIQ96hhHHhP+DjKUiMErasqubVnRE9VWLkLnhdFE72c6eWHwv8MsjDbd3e/kmFKB4p6Qgbe0M5BQiEo0o+mjK55rtV6+ul4FMCrlJ3NS7s3kpHuLVLAv5MnerrWgTDeXwnVnsFonmPNTg==
+ b=ZQLPYf0ZB6lbnlKH0t4PH1WSwn84bYPSN2eOUerGQhy6Ti35zmkcUo3IVnrxrf90FRT/KCNBlLs8hpHHAexYDR9ICDnkB9A4W7KiWYYGchiV8Er6yiWNWb3CoBrWBLrvaHZhvIeuA4l+Zt8ylWVA3D8tcMk8gWko+w309f6uKzfPPJYxqD+hNMMMnN/9nrHl/bP6e7n/g3NgmfV7wKim4Zejp5Ts7uqtptA+pUQgp/i+YUCDegtdO2y6fIs8m9qGwfrynL9EZ2mxbi5W4dJ203hD7xvlPCerg1Yh9IB2ZXt/EjKxuHvdXiuk81PBSMmimhTtKex/rOh1kXidJTWiOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vmK1H1OHciOkFW31SOQkk39skqNdf6v5AtLfc5mi1GI=;
- b=lstuqMeL3e8plGpWBOu8j57m9FzFi4UgLVP02XYX9T2DAtUgP7MciAy2akb5T2fnceDOwkqtGiv+mwTSyO5wcVxdEf6VY6/qAZvT/Xbu4EG9B6mwJ6aGIvo4a0Klv4rtFFkH07Q+W76k61epIqwQdqr3/YX/DUeoj5JM2WfBZFUQkTlsrtecrt2XS+lMCzOL2Xpv5gHqKvflpenjobkrE2lWa9VCueq53+C+e0pLw1QdZzqdxo4tE2/BClFfx6LSBTmX90+pRvGrl9eYeXio/HuaX94sVcrmmINJpc938Kb6hT4yQyfFmyQ2Vnhr51L5ANLKf47e0Gfs3JfD8ztNBg==
+ bh=jMJa5GLMEkadvJokXwqVB2hGUlSJzyG6O58eLOIWxXE=;
+ b=YwQc3MIAhnr7zdiu8AG13ZTJOovKpDCIGoM1BP202tlSC1277rjT18o7XPrLenz4YmlKiHWNB489RpWl649gZqanEgBNjHLoDRDEcka1LtLwt4lCkm8VH3sOy5M+WOL+6yf6Idhjl09MxoIDcqpWFdvRd60hUMw3RNGv+tNdSaqQASkNfVPc5u0Cb80paMhXvMgEPl9xq8kSfhzyOyNNQrDnBhfUSL5v9ZNXsO+dPVDx2FKhoC3pGSQwPfrYlIRDAkmqmUsaehtMZXsG5XFpV8wf1/X+cJX51+RkeUM/7II39KTHw3/uVp1qOAXdssufOLRku1ovX0P//RVC8TZePQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vmK1H1OHciOkFW31SOQkk39skqNdf6v5AtLfc5mi1GI=;
- b=YGbTFDLAFeJyHZyiBk6FdtIf0GApzbYsw0+ZzmJnJfFluJyz7pGISS6UFpiLOrTQHry/7S/cmLDu+pEcK7ehJh384MAfUr0/V9+vEtY+mQJ/8bqTvaFiMRnxAAvl3UMdr8YnnrEs1bpHBTRY/rIjOwJ0HDJbyujG2z9EMtkVLdo=
+ bh=jMJa5GLMEkadvJokXwqVB2hGUlSJzyG6O58eLOIWxXE=;
+ b=RrJa/QLf1haG+u0qHP5yBxre26Bl/iZyyQq5hacP5kLgbIjh03OMplLIS3LXNDeDKPTsCQjm4Z+ts+3omigG8FUx+CQ8sSt9YfcOsYayFgBUnDR6KDjd2teE9ieYRtV1bVfg2jfHkFJUC5FPm3axqtZ99GzdDHkBtGJgFXSxb5o=
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
- by DB8PR04MB6907.eurprd04.prod.outlook.com (2603:10a6:10:119::10) with
+ by AS4PR04MB9689.eurprd04.prod.outlook.com (2603:10a6:20b:4fc::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Wed, 23 Nov
- 2022 09:35:13 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.11; Wed, 23 Nov
+ 2022 09:39:57 +0000
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::9ded:65b7:9d51:d37a]) by AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::9ded:65b7:9d51:d37a%8]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 09:35:13 +0000
+ 09:39:57 +0000
 From:   Jacky Bai <ping.bai@nxp.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-CC:     "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC:     "lee@kernel.org" <lee@kernel.org>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "krzysztof.kozlowski+dt@linaro.org" 
         <krzysztof.kozlowski+dt@linaro.org>,
-        "lee@kernel.org" <lee@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
         "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
         dl-linux-imx <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>
-Subject: RE: [PATCH 1/4] dt-bindings: mfd: nxp,bbnsm: Add binding for nxp
- bbnsm
-Thread-Topic: [PATCH 1/4] dt-bindings: mfd: nxp,bbnsm: Add binding for nxp
- bbnsm
-Thread-Index: AQHY/XWNECi6akMI70mG4aJ99Q3psa5LZxEAgAC+uoCAABwCgIAAADSQ
-Date:   Wed, 23 Nov 2022 09:35:13 +0000
-Message-ID: <AS8PR04MB86429400FE14124C4D562C98870C9@AS8PR04MB8642.eurprd04.prod.outlook.com>
+        "festevam@gmail.com" <festevam@gmail.com>
+Subject: RE: [PATCH 2/4] input: bbnsm_pwrkey: Add bbnsm power key support
+Thread-Topic: [PATCH 2/4] input: bbnsm_pwrkey: Add bbnsm power key support
+Thread-Index: AQHY/XWQ7kPrYj56Okmc6NwuZ1D1865LmniAgACmGBA=
+Date:   Wed, 23 Nov 2022 09:39:57 +0000
+Message-ID: <AS8PR04MB864238021EE2CA42BF800461870C9@AS8PR04MB8642.eurprd04.prod.outlook.com>
 References: <20221121065144.3667658-1-ping.bai@nxp.com>
- <20221121065144.3667658-2-ping.bai@nxp.com>
- <166914594571.442076.9834259216884759566.robh@kernel.org>
- <AS8PR04MB8642AB09DB82DE58B60421BA870C9@AS8PR04MB8642.eurprd04.prod.outlook.com>
- <6af753e4-cf4d-cfa1-a339-abafdce2d472@linaro.org>
-In-Reply-To: <6af753e4-cf4d-cfa1-a339-abafdce2d472@linaro.org>
+ <20221121065144.3667658-3-ping.bai@nxp.com> <Y31cES4SiUlG4mKd@google.com>
+In-Reply-To: <Y31cES4SiUlG4mKd@google.com>
 Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -77,64 +70,55 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|DB8PR04MB6907:EE_
-x-ms-office365-filtering-correlation-id: 5172bfd1-d97f-4720-3abb-08dacd3605ba
+x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|AS4PR04MB9689:EE_
+x-ms-office365-filtering-correlation-id: a16b9086-f3f4-4b3f-5a10-08dacd36af3d
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1w1S6s4Qn5R/nN9ZeFWTV2Aeum20R9AQ44SLiJqS6TlRFka05fZfUsxeTdXq74DPddXmJpTVS4UOWtUweCt0Lc54Nd0OZc5NY8ydSX0ilJGRMIFkepg5KFdsHqCcoBGNxpfYPi4Y6EO2Gi7SZpmZLrwywftzgoHKbKQTm6zSH41Jp0IcZAqdRqGJhaTfw4BFAMVpekETMBtTijjUW6tvSIWpiDBSDiBecyyVsjjXKfTqsKAGJfWHsPABiBp9qPjKNFi56KnwU3c7z7u3P/QOSU3F+NbkAbhqWiL3jnFBhyakcQv4N/37rF95czX7KjkQ9ivjotap/RzyPCuCark0l1KiMMscXGFV4nxWrgtr0g4EF+X7x48hias7zwaQye6OwINvwVX6SzqJK0Gf0uU7BZmZOEvx2W6i+qzBfFBnSxVVkJxovenMQ1vFgQSBDxlbp2cXGcp2yoshoR3/naGI51AF168kDiUE202qaLcpJ67EsMAKP1bw7vpPMQ89n4b4G+nClAcrNcAmM7Gp7bO2wEuKHg8cUjXQ8GB4CRsiuo35o916KWZqX3PH5Kz32MWGWU/pQ2iUKWsvZ+vbFPY4xXtsInboY7DoYKqvAjrHkINaCy+mRg+Fu2WrfX5LE0uD7aofRyX6pzXHDc0mIU2zux1BE2sahOl6QfPdZsHSzkcBHAU5KM4eWtzZW7tyXJzldd2rBQ98PcAqKy16oYE3yw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(39860400002)(376002)(346002)(396003)(451199015)(26005)(110136005)(54906003)(316002)(8936002)(52536014)(2906002)(83380400001)(5660300002)(7416002)(66476007)(9686003)(76116006)(66446008)(55016003)(66556008)(4326008)(64756008)(66946007)(8676002)(33656002)(186003)(41300700001)(38070700005)(86362001)(7696005)(6506007)(478600001)(38100700002)(53546011)(122000001)(71200400001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: wDaw+h0ExrsXRN2RKUMbTQ5ptWmflupKyIxkVo+am/T3iBZNoJfn5oQ95G75lv45yeDgOm6gf/xqFFftcoPmx0BWSM5dL/zzpvEUCwlDumbyuNEIKoaUVug/vx/4eHBqL/1Q77jFDElaF92Ezk1g2OvMGQGMkpW+z6lQ+N755HVevpu9kek+d8AXcGBYE1D2isJu+efCWN+MENaQRHTQHX8Uj1kAQgDgwmwxf7RKu8x/xrVHQu8c+Ni+b/oC5oaH/+GuZonkcnHoIYcFIfMlcuzamH/obPV0OwdLgQzX4ckTIJ+5ivaoIeJckHEip5Ewnan3HJfmDzBco58TqQogRNcX6rCOdGxMauzGASaHodghjr5Dbe9i439AaJ2U+eifVAN90PC5alkQ79oHpYIL5VN4ChbQYTEdsPIxx8p7o+nlP0Dpyo/OkV0iG5ZrY4MA8MKmLZmv4cz2HpfYVo1NbOcwFhsXdOQ+wnOQixcGGnU+3pFTK0tgTuA25ECOv08PorhjmznstVIEaPFoKt2YyJgKpVM2TX8b0aZTVX3nGu2ZGZmTgt+raCNSZXXNJsqR5zqGTVVyo8554Q+y58gqnMM6iAKaF1RtUz4g1puSOjvsdjk/IvbCv8kxDUNu+LM6Hb1K8yG9qXqofKhyh+z77jwkkIu2cm7vBtGDnbkwoxa50U1lzAxmRGgK38kcq0qlajT5Xk7WE+s/yAQysj9wiA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199015)(66556008)(33656002)(66476007)(66446008)(76116006)(66946007)(64756008)(86362001)(8676002)(5660300002)(4326008)(9686003)(8936002)(41300700001)(7696005)(52536014)(6506007)(26005)(55016003)(71200400001)(38070700005)(54906003)(83380400001)(186003)(316002)(38100700002)(6916009)(122000001)(478600001)(7416002)(2906002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VElqMmh4OEJQU1pLMUVpQUJOalRINVVaa1M4RitwMWgzVEdjZzcyUHcweEVv?=
- =?utf-8?B?VWJ4U0pySmlsdTF1N0dEak03eXNjR1V5NjExTUNMNXMrNnkxUzVCV1ZGenF4?=
- =?utf-8?B?ZXFrK0NjU0F4amN6YlZMN0V4c0UyeUVURUJjbm9RMG1mSnB3UmZWaEhZcWpF?=
- =?utf-8?B?Y1p1V3B1Y0FpZVRPMFdEV2JabHZWT2p0ZkJialV6ZnZvamZadnMxS3Q2Tzg2?=
- =?utf-8?B?REdNalk5OVV3K2YzbzdMTllzbnA4cFhzajhkQTJuREdQR2QvUEkxZm5yUjRV?=
- =?utf-8?B?dFVBYmZBMUJhN2ZDV0RNL0hQNldNdUQwcEFhOFkyWHpOeHhBdDl4SFkvdlkw?=
- =?utf-8?B?SEs4LzVtUU15dHkra09QRys5ZThGYzJVK3JyWktkY1dBS1lWRnIwaHBRKzh4?=
- =?utf-8?B?NG02cUgybWdlWkZTUFFreVBxY2thS0NDd2ZBcWpMZ0NVM1k4aGtybmdtMW1G?=
- =?utf-8?B?L2ZuSUxNL1I5eTRhbzlpcEprNVdraG1WSXZjUkJrWEs1aWRnUCs2SnRaUCt4?=
- =?utf-8?B?eGhHWHZRbUM4UGZ4dk9WbXArMXpoWnVSb0VSVUhwQmplbTVDZjh0NkZOdnd5?=
- =?utf-8?B?UjgyTXJGNndWeE9WMU1CTWI5VDc2d2JCY255dGF2YXdNbG5RWEN6bUdEQ1h2?=
- =?utf-8?B?bDRoNUsyeTZiZlBUdEIrOEhmNVZKUVV2Zkw1UGhLV2RrSXJ6eWxLSlFQSzBa?=
- =?utf-8?B?SENWb0pZdXFQdW9lSkY1SjVJd2oxSCs5Yi83NFBwYjIyWHJaK1NjaEFQaGNZ?=
- =?utf-8?B?MHlBUlI4RkNxL1B2a2JVMkgxbDFZZXUrd0NsZ2VHbFN1RFRyS3g4ZUM3R1Zx?=
- =?utf-8?B?ZFVkeXJPNTlSM3hDd1hsVVFaZmhHZG1rSVJFL2lQODdUNFI5R3NqU0Q1RlRz?=
- =?utf-8?B?T0dNemd2Wk1BR3FPLzhmTXlyaFVONkxkOFhhM0NtU1ZrYTNjalhiYlJtbURF?=
- =?utf-8?B?aU5wb0FmakxvbVhkeUJKdFQ2OFhYbVhFRmI3T3lMcEZuZFp1R2dpSklZamI5?=
- =?utf-8?B?b3dWWkY4Tm9NWGhuMnBiQXRXU0xnMVhKRjZKRzFoZVVXUmFHMWNhKzVsRzlQ?=
- =?utf-8?B?SXVhZDdmQzIreUdhR0llU2JsTkE1THVDbUdBRGRIdnJuVE9FQm9ocVVRRENF?=
- =?utf-8?B?clNNYklNSFkzeDB6YjRNRm9SK3dKNlpTZm1WSCtDdForSzFiZWpTd1RuUlpU?=
- =?utf-8?B?QTA3aXBsbHVaU3JxbEYxU3c2WHBZbUl3bUxvUjBrZHdJZzg4d1Y1WjZCZ3Fx?=
- =?utf-8?B?WE03eDZrZXdpa1pYMTgwUEIwcjBEd1RIbUE1aGNrYTVDUjI2c2hMZWlKYmJk?=
- =?utf-8?B?bjNobG4veEJiZUgvNzFqdHpJd242aHJqU2pTN1ZQSS9ORlJ0QXhGTUVwd096?=
- =?utf-8?B?RnhZZEtYQ0VzaERmRXJBaTc3UDc0SmgyZjF4NUlMdVVhMVFXLytlV2Zadmcr?=
- =?utf-8?B?TVJVM3BqVU5kWWNTNzVvMzM5M1F4Q0lOVkw2OExoRWorUEo3bnlrU3BmeS8x?=
- =?utf-8?B?OUZkcmt4eHRtT0Q5QlFWV0pGQ2x0V2QzSzd3OWFqU3hUKzB0RE1LRDJXdHhU?=
- =?utf-8?B?TGhzaWgxQ1ROWFpRRG9nUW9uNzB0bUQwTHBCcVBoeXN0M2Z1R3dKU0NRRkJw?=
- =?utf-8?B?SEJuUkJiMFg1cW9HaDVORC9nME52TWVmVTFJenBTdVZJZDB4SkRQOXVqaTI3?=
- =?utf-8?B?TVFTTitiTmZwTkxRc2pzWjlISDJtdHc0RXJieVZMUHFnemRQRFljWnJObGEx?=
- =?utf-8?B?Q0w3Q1dmL05CUkRWM09Hb3pzT3NJL085eEF5bEx2TjFJYzhEMXFkU0RHRWJp?=
- =?utf-8?B?YzdJeStDRFBvaW9ncVIvV1h6TnhkQURteVpRVjU5WkNoL0hyMmRTNVU3b1N3?=
- =?utf-8?B?WlVLZzJkNEdxRFFNazBaeXpRY0YzMUxjZ2c2eUtmanp4T2VVNjVzc2RNRFhW?=
- =?utf-8?B?YmZxb1N1OW1BdU10L0o5VzlBLzgwUjZmUlR5RHN6N3NzRzhkTjViUzFxbXdN?=
- =?utf-8?B?MjRvaXlCL1FMM01PMEFuQytJZDhCVUlNRXQzdW81MXdUWUJ1M0UyZTNRcXl3?=
- =?utf-8?B?K3lDcjdOYnJ3TXJhcFdZVEVvWTRJSWZRbmxNRVZVTm8zV1UzaktpbE1EVkJN?=
- =?utf-8?Q?XFVE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?S1N5nc3drsS1vmPlihrN+rSgiynjSjSid3jTAaPArAtzLr1/YRTwO5L0/28B?=
+ =?us-ascii?Q?6W9wm4ZqzHOdVIIWLv2h04gM0HMVDAs56g3ZY9rm4QVlH0POeav37RBJvT+N?=
+ =?us-ascii?Q?d4w4f8lWr784XZOsE19qe8nxcqNRKPLc67R4ERNw89NvywCoYL7mwvCJnhd1?=
+ =?us-ascii?Q?GzzfPTGCDWo/IYxTnk2Pr1jwA8vl6U9QSzPJSj1ZVGQGabl8rxO1Mslioc+I?=
+ =?us-ascii?Q?3SPYIkMrGHrUepvjAJiN3LhMSMONB1FuhA5JAXrkd6GtRWzZzjxIW6JGwLmZ?=
+ =?us-ascii?Q?v8M5fcCmDE6OsWTxAODNKooG2MlR37moxCpbmZRvmCS9SlOOxpGb8Qx6xqBR?=
+ =?us-ascii?Q?lVs4qOfe8+ogZnq4Q/+r5qLzTUIqUIkMZ793vGAelcrHAVRxETednWlZPnTz?=
+ =?us-ascii?Q?AV1/aS/tJZGO0Wbw4b25Zpa3IgB8l1Pbp6KJw8noMaZVaIwH4I5DADWTdKh8?=
+ =?us-ascii?Q?HL5C+F1UQmK8i0jMbd8AjP+PXRuOWkMgYKC62ycPfm4pQqwmf598WRSZjp4F?=
+ =?us-ascii?Q?YOelY+pNrG7+JQJV3usNvuOHgBW6VxUPUbZHhD1O7lItyy34kECAMXdCRGZd?=
+ =?us-ascii?Q?zrFGkn24GkeZ6j49iKtgW77y1caoKcSdV03j15dOXyyYKUTKwZbvTKK44jwY?=
+ =?us-ascii?Q?os1aB7KBxchLyb2zFI9pYQHbVutnXrun71Ekg78qvCviiJcTQvPtroJpXjLU?=
+ =?us-ascii?Q?RYVVco082OXusVbIkmKPzdRiIkGDfplDAtOLhsywoFErDtGpfTkoWZXQG5fD?=
+ =?us-ascii?Q?DMkbOrARZZb5ixBSeVQrmGL8UH6tmdhgeNMtjSwlF7KGiVqzJRBKVUkn+V6G?=
+ =?us-ascii?Q?kQhMG6vtQU88wlE7OlricMaA3Xz+ajzgN28yBkdXqNQSIYPYjUhmphXzWdP9?=
+ =?us-ascii?Q?qq2p4QnI1rc1Yfp2lEYDuXaBGDu4R7d/3rIBjxIdQ9WBnvKjKq8Lat0iDvlX?=
+ =?us-ascii?Q?mL/vaQrmakSPJArb/iGjbMC2ofx7eAoNSqLcYrWMCuXpAZGyk865m1kbK8xS?=
+ =?us-ascii?Q?vAI/sXTshA0bTB4MjsSBq76oaLWjptW/vSxoi2Qfye327dYpCipvAnEEHeRM?=
+ =?us-ascii?Q?6vRE4qLK1bKI9Tse1FB45lelp5XwFV3WCmNSD7cnG9Ru2it4+pzYqevU9KqF?=
+ =?us-ascii?Q?IPH57Qlrs4yXuikaYnx3K3FIcteUXPEF70xSpeZyRl/44O2VOuXVdjyS2Hnu?=
+ =?us-ascii?Q?dzv/NFTUKmpJkWNhpLXPjbmVrCVhy+Po9rWqwTTdOgGxOLgl+tz3UR/yfRPB?=
+ =?us-ascii?Q?BwsOzo3BRtXmcE+ASPIKEUWeCkQgxQZsWyH7h120QK1PdW64ym0heE1k4yKJ?=
+ =?us-ascii?Q?c/qqHJT4/Xwdksqn3rUt83iwOV9N44rVf8T1teaPdSGbHIW0YkEX4BO1Fjsm?=
+ =?us-ascii?Q?DOZhioBb6TPY1ctI7e6CbddXKEK/epEyJ7bnbwY+k/VatYFiJnkHatPDjI2Z?=
+ =?us-ascii?Q?yHsfDDPZJ+LDlg12ojBpAu0GxNR7Pzq+LUgWBzJkZj1dtcNOYa1ErecXbAQG?=
+ =?us-ascii?Q?lL1zrpQJ8xQ/Lz7RgehHfmd0LZL2HGP3ZIyGoSXl4IR7zWxUv992W5JHyllk?=
+ =?us-ascii?Q?MfVOYO8dG6gWVEUWwL0=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5172bfd1-d97f-4720-3abb-08dacd3605ba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 09:35:13.3739
+X-MS-Exchange-CrossTenant-Network-Message-Id: a16b9086-f3f4-4b3f-5a10-08dacd36af3d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 09:39:57.7839
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6rLOGiE9oWIIAZpU+7VUf8Qu3jKQAVQ0JpL9KSE1JaV7TmjBU5THSgMA3cctRwh7SGgZu4j9q1Y5bdGcwLquFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6907
+X-MS-Exchange-CrossTenant-userprincipalname: in0Lg0V7MyvEQ0NxBqNxYCqpiUv/NslKOwN3USZVlNMQFRzVWOmnF7W1mj6myVb4K1A/Uoe4VW57M9OTN7RHZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9689
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -145,32 +129,267 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-PiBTdWJqZWN0OiBSZTogW1BBVENIIDEvNF0gZHQtYmluZGluZ3M6IG1mZDogbnhwLGJibnNtOiBB
-ZGQgYmluZGluZyBmb3IgbnhwDQo+IGJibnNtDQo+IA0KPiBPbiAyMy8xMS8yMDIyIDA4OjU0LCBK
-YWNreSBCYWkgd3JvdGU6DQo+ID4gSGkgUm9iLA0KPiA+DQo+ID4+IFN1YmplY3Q6IFJlOiBbUEFU
-Q0ggMS80XSBkdC1iaW5kaW5nczogbWZkOiBueHAsYmJuc206IEFkZCBiaW5kaW5nIGZvcg0KPiA+
-PiBueHAgYmJuc20NCj4gPj4NCj4gPj4NCj4gPj4gT24gTW9uLCAyMSBOb3YgMjAyMiAxNDo1MTo0
-MSArMDgwMCwgSmFja3kgQmFpIHdyb3RlOg0KPiA+Pj4gQWRkIGJpbmRpbmcgZm9yIE5YUCBCQk5T
-TShCYXR0ZXJ5LUJhY2tlZCBOb24tU2VjdXJlIE1vZHVsZSkuDQo+ID4+Pg0KPiA+Pj4gU2lnbmVk
-LW9mZi1ieTogSmFja3kgQmFpIDxwaW5nLmJhaUBueHAuY29tPg0KPiA+Pj4gLS0tDQo+ID4+PiAg
-Li4uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL254cCxiYm5zbS55YW1sICAgIHwgMTAzDQo+ID4+
-ICsrKysrKysrKysrKysrKysrKw0KPiA+Pj4gIDEgZmlsZSBjaGFuZ2VkLCAxMDMgaW5zZXJ0aW9u
-cygrKQ0KPiA+Pj4gIGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+Pj4gRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL21mZC9ueHAsYmJuc20ueWFtbA0KPiA+Pj4NCj4gPj4NCj4gPj4gTXkg
-Ym90IGZvdW5kIGVycm9ycyBydW5uaW5nICdtYWtlIERUX0NIRUNLRVJfRkxBR1M9LW0NCj4gPj4g
-ZHRfYmluZGluZ19jaGVjaycNCj4gPj4gb24geW91ciBwYXRjaCAoRFRfQ0hFQ0tFUl9GTEFHUyBp
-cyBuZXcgaW4gdjUuMTMpOg0KPiA+Pg0KPiA+PiB5YW1sbGludCB3YXJuaW5ncy9lcnJvcnM6DQo+
-ID4+DQo+ID4+IGR0c2NoZW1hL2R0YyB3YXJuaW5ncy9lcnJvcnM6DQo+ID4+IEVycm9yOg0KPiA+
-Pg0KPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL254cCxiYm5zbS5leGFt
-cGxlLmR0czoyOC4yNy0yOA0KPiA+PiBzeW50YXggZXJyb3IgRkFUQUwgRVJST1I6IFVuYWJsZSB0
-byBwYXJzZSBpbnB1dCB0cmVlDQo+ID4+IG1ha2VbMV06ICoqKiBbc2NyaXB0cy9NYWtlZmlsZS5s
-aWI6NDA2Og0KPiA+PiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL254cCxi
-Ym5zbS5leGFtcGxlLmR0Yl0gRXJyb3IgMQ0KPiA+PiBtYWtlWzFdOiAqKiogV2FpdGluZyBmb3Ig
-dW5maW5pc2hlZCBqb2JzLi4uLg0KPiA+PiBtYWtlOiAqKiogW01ha2VmaWxlOjE0OTI6IGR0X2Jp
-bmRpbmdfY2hlY2tdIEVycm9yIDINCj4gPj4NCj4gPg0KPiA+IFRoaXMgZXJyb3Igc2hvdWxkIGJl
-IHJlbGF0ZWQgdG8gdGhlICdpbnRlcnJ1cHRzID0gPEdJQ19TUEkgNzMNCj4gSVJRX1RZUEVfTEVW
-RUxfSElHSD47Jw0KPiA+IERvIHdlIG5lZWQgdG8gY2hhbmdlIGl0IGEgbWFnaWMgbnVtYmVyIGRl
-ZmluZT8NCj4gDQo+IFlvdSBzaG91bGQgaW5jbHVkZSBhIHByb3BlciBoZWFkZXIuIExvb2sgYXQg
-b3RoZXIgYmluZGluZ3MuDQo+IA0KDQpHcmVhdCB0aHguIEkgbWlzc2VkIHRoZSBoZWFkZXIgZmls
-ZSBpbmNsdWRpbmcgLiBXaWxsIGZpeCBpbiBWMi4gXl9eDQoNCkJSDQo+IEJlc3QgcmVnYXJkcywN
-Cj4gS3J6eXN6dG9mDQoNCg==
+> Subject: Re: [PATCH 2/4] input: bbnsm_pwrkey: Add bbnsm power key
+> support
+>=20
+> Hi Jacky,
+>=20
+> On Mon, Nov 21, 2022 at 02:51:42PM +0800, Jacky Bai wrote:
+> > The ON/OFF logic inside the BBNSM allows for connecting directly into
+> > a PMIC or other voltage regulator device. The module has an button
+> > input signal and a wakeup request input signal. It also has two
+> > interrupts (set_pwr_off_irq and set_pwr_on_irq) and an active-low PMIC
+> > enable (pmic_en_b) output.
+> >
+> > Add the power key support for the ON/OFF button function found in
+> > BBNSM module.
+> >
+> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> > Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >  drivers/input/keyboard/Kconfig        |  11 ++
+> >  drivers/input/keyboard/Makefile       |   1 +
+> >  drivers/input/keyboard/bbnsm_pwrkey.c | 196
+> > ++++++++++++++++++++++++++
+> >  3 files changed, 208 insertions(+)
+> >  create mode 100644 drivers/input/keyboard/bbnsm_pwrkey.c
+> >
+> > diff --git a/drivers/input/keyboard/Kconfig
+> > b/drivers/input/keyboard/Kconfig index 00292118b79b..8efcd95492b3
+> > 100644
+> > --- a/drivers/input/keyboard/Kconfig
+> > +++ b/drivers/input/keyboard/Kconfig
+> > @@ -456,6 +456,17 @@ config KEYBOARD_SNVS_PWRKEY
+> >  	  To compile this driver as a module, choose M here; the
+> >  	  module will be called snvs_pwrkey.
+> >
+> > +config KEYBOARD_BBNSM_PWRKEY
+> > +	tristate "NXP BBNSM Power Key Driver"
+> > +	depends on ARCH_MXC || COMPILE_TEST
+> > +	depends on OF
+> > +	help
+> > +	  This is the bbnsm powerkey driver for the NXP i.MX application
+> > +	  processors.
+> > +
+> > +	  To compile this driver as a module, choose M here; the
+> > +	  module will be called bbnsm_pwrkey.
+> > +
+> >  config KEYBOARD_IMX
+> >  	tristate "IMX keypad support"
+> >  	depends on ARCH_MXC || COMPILE_TEST
+> > diff --git a/drivers/input/keyboard/Makefile
+> > b/drivers/input/keyboard/Makefile index 5f67196bb2c1..0bc101e004ae
+> > 100644
+> > --- a/drivers/input/keyboard/Makefile
+> > +++ b/drivers/input/keyboard/Makefile
+> > @@ -62,6 +62,7 @@ obj-$(CONFIG_KEYBOARD_QT2160)		+=3D
+> qt2160.o
+> >  obj-$(CONFIG_KEYBOARD_SAMSUNG)		+=3D samsung-keypad.o
+> >  obj-$(CONFIG_KEYBOARD_SH_KEYSC)		+=3D sh_keysc.o
+> >  obj-$(CONFIG_KEYBOARD_SNVS_PWRKEY)	+=3D snvs_pwrkey.o
+> > +obj-$(CONFIG_KEYBOARD_BBNSM_PWRKEY)	+=3D bbnsm_pwrkey.o
+> >  obj-$(CONFIG_KEYBOARD_SPEAR)		+=3D spear-keyboard.o
+> >  obj-$(CONFIG_KEYBOARD_STMPE)		+=3D stmpe-keypad.o
+> >  obj-$(CONFIG_KEYBOARD_STOWAWAY)		+=3D stowaway.o
+> > diff --git a/drivers/input/keyboard/bbnsm_pwrkey.c
+> > b/drivers/input/keyboard/bbnsm_pwrkey.c
+> > new file mode 100644
+> > index 000000000000..288ee6844000
+> > --- /dev/null
+> > +++ b/drivers/input/keyboard/bbnsm_pwrkey.c
+
+...
+
+> > +
+> > +static void bbnsm_pwrkey_check_for_events(struct timer_list *t) {
+> > +	struct bbnsm_pwrkey *bbnsm =3D from_timer(bbnsm, t, check_timer);
+> > +	struct input_dev *input =3D bbnsm->input;
+> > +	u32 state;
+> > +
+> > +	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &state);
+>=20
+> Can this fail?
+
+Should no chance to fail. Any more tips?
+
+>=20
+> > +
+> > +	state =3D state & BBNSM_BTN_PRESSED ? 1 : 0;
+> > +
+> > +	/* only report new event if status changed */
+> > +	if (state ^ bbnsm->keystate) {
+> > +		bbnsm->keystate =3D state;
+> > +		input_event(input, EV_KEY, bbnsm->keycode, state);
+> > +		input_sync(input);
+> > +		pm_relax(bbnsm->input->dev.parent);
+> > +	}
+> > +
+> > +	/* repeat check if pressed long */
+> > +	if (state) {
+> > +		mod_timer(&bbnsm->check_timer,
+> > +			  jiffies + msecs_to_jiffies(REPEAT_INTERVAL));
+> > +	}
+>=20
+> So interrupt is only generated once when key is pressed, but not on relea=
+se?
+>=20
+
+Yes, at lease from my test, this interrupt can only be triggered when press=
+ed.
+
+> > +}
+> > +
+> > +static irqreturn_t bbnsm_pwrkey_interrupt(int irq, void *dev_id) {
+> > +	struct platform_device *pdev =3D dev_id;
+> > +	struct bbnsm_pwrkey *bbnsm =3D platform_get_drvdata(pdev);
+> > +	struct input_dev *input =3D bbnsm->input;
+> > +	u32 event;
+> > +
+> > +	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &event);
+> > +	if (event & BBNSM_BTN_OFF)
+> > +		mod_timer(&bbnsm->check_timer, jiffies +
+> msecs_to_jiffies(DEBOUNCE_TIME));
+> > +	else
+> > +		return IRQ_NONE;
+> > +
+> > +	pm_wakeup_event(input->dev.parent, 0);
+> > +
+> > +	/* clear PWR OFF */
+> > +	regmap_write(bbnsm->regmap, BBNSM_EVENTS, BBNSM_BTN_OFF);
+> > +
+> > +	return IRQ_HANDLED;
+> > +}
+> > +
+> > +static void bbnsm_pwrkey_act(void *pdata) {
+> > +	struct bbnsm_pwrkey *bbnsm =3D pdata;
+> > +
+> > +	del_timer_sync(&bbnsm->check_timer);
+> > +}
+> > +
+> > +static int bbnsm_pwrkey_probe(struct platform_device *pdev) {
+> > +	struct bbnsm_pwrkey *bbnsm;
+> > +	struct input_dev *input;
+> > +	struct device_node *np =3D pdev->dev.of_node;
+> > +	int error;
+> > +
+> > +	bbnsm =3D devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
+> > +	if (!bbnsm)
+> > +		return -ENOMEM;
+> > +
+> > +	bbnsm->regmap =3D
+> syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "regmap");
+> > +	if (IS_ERR(bbnsm->regmap)) {
+> > +		dev_err(&pdev->dev, "bbnsm pwerkey get regmap failed\n");
+> > +		return PTR_ERR(bbnsm->regmap);
+> > +	}
+> > +
+> > +	if (of_property_read_u32(np, "linux,code", &bbnsm->keycode)) {
+>=20
+> Please use device_property_read_u32() here.
+
+Ok, will fix in V2.
+
+>=20
+> > +		bbnsm->keycode =3D KEY_POWER;
+> > +		dev_warn(&pdev->dev, "KEY_POWER without setting in dts\n");
+> > +	}
+> > +
+> > +	bbnsm->irq =3D platform_get_irq(pdev, 0);
+> > +	if (bbnsm->irq < 0)
+> > +		return -EINVAL;
+> > +
+> > +	/* config the BBNSM power related register */
+> > +	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, BBNSM_DP_EN,
+> > +BBNSM_DP_EN);
+> > +
+> > +	/* clear the unexpected interrupt before driver ready */
+> > +	regmap_write_bits(bbnsm->regmap, BBNSM_EVENTS,
+> BBNSM_PWRKEY_EVENTS,
+> > +BBNSM_PWRKEY_EVENTS);
+> > +
+> > +	timer_setup(&bbnsm->check_timer, bbnsm_pwrkey_check_for_events,
+> 0);
+> > +
+> > +	input =3D devm_input_allocate_device(&pdev->dev);
+> > +	if (!input) {
+> > +		dev_err(&pdev->dev, "failed to allocate the input device\n");
+> > +		error =3D -ENOMEM;
+> > +		goto error_probe;
+>=20
+> Please return directly here and below, since there is not explicit cleanu=
+p.
+>=20
+
+Thx, will fix in V2.
+
+BR
+
+> > +	}
+> > +
+> > +	input->name =3D pdev->name;
+> > +	input->phys =3D "bbnsm-pwrkey/input0";
+> > +	input->id.bustype =3D BUS_HOST;
+> > +
+> > +	input_set_capability(input, EV_KEY, bbnsm->keycode);
+> > +
+> > +	/* input customer action to cancel release timer */
+> > +	error =3D devm_add_action(&pdev->dev, bbnsm_pwrkey_act, bbnsm);
+> > +	if (error) {
+> > +		dev_err(&pdev->dev, "failed to register remove action\n");
+> > +		goto error_probe;
+> > +	}
+> > +
+> > +	bbnsm->input =3D input;
+> > +	platform_set_drvdata(pdev, bbnsm);
+> > +
+> > +	error =3D devm_request_irq(&pdev->dev, bbnsm->irq,
+> bbnsm_pwrkey_interrupt,
+> > +			       IRQF_SHARED, pdev->name, pdev);
+> > +	if (error) {
+> > +		dev_err(&pdev->dev, "interrupt not available.\n");
+> > +		goto error_probe;
+> > +	}
+> > +
+> > +	error =3D input_register_device(input);
+> > +	if (error < 0) {
+> > +		dev_err(&pdev->dev, "failed to register input device\n");
+> > +		goto error_probe;
+> > +	}
+> > +
+> > +	device_init_wakeup(&pdev->dev, true);
+> > +	error =3D dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
+> > +	if (error)
+> > +		dev_err(&pdev->dev, "irq wake enable failed.\n");
+> > +
+> > +	return 0;
+> > +
+> > +error_probe:
+> > +	return error;
+> > +}
+> > +
+> > +static const struct of_device_id bbnsm_pwrkey_ids[] =3D {
+> > +	{ .compatible =3D "nxp,bbnsm-pwrkey" },
+> > +	{ /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, bbnsm_pwrkey_ids);
+> > +
+> > +static struct platform_driver bbnsm_pwrkey_driver =3D {
+> > +	.driver =3D {
+> > +		.name =3D "bbnsm_pwrkey",
+> > +		.of_match_table =3D bbnsm_pwrkey_ids,
+> > +	},
+> > +	.probe =3D bbnsm_pwrkey_probe,
+> > +};
+> > +module_platform_driver(bbnsm_pwrkey_driver);
+> > +
+> > +MODULE_AUTHOR("Jacky Bai <ping.bai@nxp.com>");
+> > +MODULE_DESCRIPTION("NXP bbnsm power key Driver");
+> > +MODULE_LICENSE("GPL");
+> > --
+> > 2.37.1
+> >
+>=20
+> Thanks.
+>=20
+> --
+> Dmitry
