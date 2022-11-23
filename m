@@ -2,49 +2,78 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFBB6358FD
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 11:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322186360AB
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 14:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236483AbiKWKFD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Nov 2022 05:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
+        id S237085AbiKWN5n (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Nov 2022 08:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236493AbiKWKEM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Nov 2022 05:04:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A517D113723
-        for <linux-rtc@vger.kernel.org>; Wed, 23 Nov 2022 01:55:32 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oxmTa-0005bW-NF; Wed, 23 Nov 2022 10:55:31 +0100
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oxmTZ-0061TM-0p; Wed, 23 Nov 2022 10:55:29 +0100
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oxmTY-00BdPl-UX; Wed, 23 Nov 2022 10:55:28 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-rtc@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel@pengutronix.de, Alessandro Zummo <a.zummo@towertech.it>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: [PATCH 2/2] rtc: rv8803: invalidate date/time if alarm time is invalid
-Date:   Wed, 23 Nov 2022 10:55:27 +0100
-Message-Id: <20221123095527.2771434-3-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221123095527.2771434-1-s.hauer@pengutronix.de>
-References: <20221123095527.2771434-1-s.hauer@pengutronix.de>
+        with ESMTP id S236767AbiKWN4v (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Nov 2022 08:56:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBB3101F;
+        Wed, 23 Nov 2022 05:51:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED9E961CEC;
+        Wed, 23 Nov 2022 13:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B70F3C433D6;
+        Wed, 23 Nov 2022 13:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669211504;
+        bh=yn6IQg9xUUV9CgWL40Zq6y52rg1mn5sa8oD03o5v7Xs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UKfpNKKUztgIyNLf4JyG/Wh9x1SnC70ZZ6CMkTeLD14mkOzGlAm4+qghDz9TTaJEY
+         oavU1DO373ElaIHQhIEpVZi9OKHf+AB7y5AZ3a0QM4K6Mda5mlxZI6uj77Y+34o3+z
+         tC1+zaqNCkF1IRGWjNnvY9xTloZLlUjIwvwDNzzHVs6iAjJgjo18LVCElB+Z+suDGy
+         RWQBO44v5C47KQUPl5LJXsrQ6VqWTj1W9The96h2CM4sfIP1b0DOy3ZhTq1Wp6bXDL
+         C50DRWElKcd6PEaRVrgU5hEWY/A3MmvIZ+aqD+I2bHVUKaydHWSJ+FVF1rDhM8vyJp
+         Av8NqbWSqNyRA==
+Date:   Wed, 23 Nov 2022 13:51:32 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <Y34lZFSBEwuI6G+a@sirena.org.uk>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+ <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sez8m7aAndejrS5d"
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
+X-Cookie: I'm rated PG-34!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,127 +81,31 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-RTC core never calls rv8803_set_alarm with an invalid alarm time,
-so if an invalid alarm time > 0 is set, external factors must have
-corrupted the RTC's alarm time and possibly other registers.
 
-Play it safe by marking the date/time invalid, so all registers are
-reinitialized on a ->set_time.
+--sez8m7aAndejrS5d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This may cause existing setups to lose time if they so far set only
-date/time, but ignored that the alarm registers had an invalid date
-value, e.g.:
+On Mon, Nov 21, 2022 at 12:06:07PM +0100, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
 
-  rtc rtc0: invalid alarm value: 2020-3-27 7:82:0
+Acked-by: Mark Brown <broonie@kernel.org>
 
-These systems will have their ->get_time return -EINVAL till
-->set_time initializes the alarm value (and sets a new time).
+--sez8m7aAndejrS5d
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
----
- drivers/rtc/rtc-rv8803.c | 45 +++++++++++++++++++++++++++++++++-------
- 1 file changed, 38 insertions(+), 7 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-index 3527a0521e9b2..4875728014bed 100644
---- a/drivers/rtc/rtc-rv8803.c
-+++ b/drivers/rtc/rtc-rv8803.c
-@@ -70,6 +70,7 @@ struct rv8803_data {
- 	struct mutex flags_lock;
- 	u8 ctrl;
- 	u8 backup;
-+	u8 alarm_invalid:1;
- 	enum rv8803_type type;
- };
- 
-@@ -165,13 +166,13 @@ static int rv8803_regs_init(struct rv8803_data *rv8803)
- 
- static int rv8803_regs_configure(struct rv8803_data *rv8803);
- 
--static int rv8803_regs_reset(struct rv8803_data *rv8803)
-+static int rv8803_regs_reset(struct rv8803_data *rv8803, bool full)
- {
- 	/*
- 	 * The RV-8803 resets all registers to POR defaults after voltage-loss,
- 	 * the Epson RTCs don't, so we manually reset the remainder here.
- 	 */
--	if (rv8803->type == rx_8803 || rv8803->type == rx_8900) {
-+	if (full || rv8803->type == rx_8803 || rv8803->type == rx_8900) {
- 		int ret = rv8803_regs_init(rv8803);
- 		if (ret)
- 			return ret;
-@@ -238,6 +239,11 @@ static int rv8803_get_time(struct device *dev, struct rtc_time *tm)
- 	u8 *date = date1;
- 	int ret, flags;
- 
-+	if (rv8803->alarm_invalid) {
-+		dev_warn(dev, "Corruption detected, data may be invalid.\n");
-+		return -EINVAL;
-+	}
-+
- 	flags = rv8803_read_reg(rv8803->client, RV8803_FLAG);
- 	if (flags < 0)
- 		return flags;
-@@ -313,12 +319,19 @@ static int rv8803_set_time(struct device *dev, struct rtc_time *tm)
- 		return flags;
- 	}
- 
--	if (flags & RV8803_FLAG_V2F) {
--		ret = rv8803_regs_reset(rv8803);
-+	if ((flags & RV8803_FLAG_V2F) || rv8803->alarm_invalid) {
-+		/*
-+		 * If we sense corruption in the alarm registers, but see no
-+		 * voltage loss flag, we can't rely on other registers having
-+		 * sensible values. Reset them fully.
-+		 */
-+		ret = rv8803_regs_reset(rv8803, rv8803->alarm_invalid);
- 		if (ret) {
- 			mutex_unlock(&rv8803->flags_lock);
- 			return ret;
- 		}
-+
-+		rv8803->alarm_invalid = false;
- 	}
- 
- 	ret = rv8803_write_reg(rv8803->client, RV8803_FLAG,
-@@ -344,15 +357,33 @@ static int rv8803_get_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	if (flags < 0)
- 		return flags;
- 
-+	alarmvals[0] &= 0x7f;
-+	alarmvals[1] &= 0x3f;
-+	alarmvals[2] &= 0x3f;
-+
-+	if (!bcd_is_valid(alarmvals[0]) ||
-+	    !bcd_is_valid(alarmvals[1]) ||
-+	    !bcd_is_valid(alarmvals[2]))
-+		goto err_invalid;
-+
- 	alrm->time.tm_sec  = 0;
--	alrm->time.tm_min  = bcd2bin(alarmvals[0] & 0x7f);
--	alrm->time.tm_hour = bcd2bin(alarmvals[1] & 0x3f);
--	alrm->time.tm_mday = bcd2bin(alarmvals[2] & 0x3f);
-+	alrm->time.tm_min  = bcd2bin(alarmvals[0]);
-+	alrm->time.tm_hour = bcd2bin(alarmvals[1]);
-+	alrm->time.tm_mday = bcd2bin(alarmvals[2]);
- 
- 	alrm->enabled = !!(rv8803->ctrl & RV8803_CTRL_AIE);
- 	alrm->pending = (flags & RV8803_FLAG_AF) && alrm->enabled;
- 
-+	if ((unsigned int)alrm->time.tm_mday > 31 ||
-+	    (unsigned int)alrm->time.tm_hour >= 24 ||
-+	    (unsigned int)alrm->time.tm_min >= 60)
-+		goto err_invalid;
-+
- 	return 0;
-+
-+err_invalid:
-+	rv8803->alarm_invalid = true;
-+	return -EINVAL;
- }
- 
- static int rv8803_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
--- 
-2.30.2
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+JWMACgkQJNaLcl1U
+h9CJ0gf/ajSRpLgN3RoHR7wLxFr99y5vWRywVoOaKU+lLq3UY2O6a9ssY8wOblzx
+J9LbUP4Acep2fofTZCX1Ks2sTUHXNBB95SaeCwpSD/MX2HltHr0QvTGh8Lc9EfRf
+f4l/ayjov4DbVsOJ019O7MKSgyuKezLb6Rj/5S38OrqdREbbzDoFe2ah8rSxpA8m
+OQPEsY4eAbVfELEo/JQ86QYXN8gT6p3qA0+8IxDb0D+iLi3JCIz3GTrn+ZCudWRS
+DkbD00vhGbeEaAbI/ufYp/KUWT0wfIoONENSAdGhmGMd+deqbmOt1Ryt+YoEt49j
+pRMeSDCxuBZIpBjQfw7H+5ofOT8jsg==
+=hoZL
+-----END PGP SIGNATURE-----
 
+--sez8m7aAndejrS5d--
