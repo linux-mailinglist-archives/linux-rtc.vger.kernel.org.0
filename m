@@ -2,191 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1094A63519D
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 08:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDFF6351A8
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 08:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236344AbiKWH4X (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Nov 2022 02:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S236308AbiKWH4h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Nov 2022 02:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236403AbiKWH4G (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Nov 2022 02:56:06 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2058.outbound.protection.outlook.com [40.107.247.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32743FA73B;
-        Tue, 22 Nov 2022 23:54:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eHA0uNBfUuSGJhGLK8IPIaK6NOF0rSXZp/nCTmgu1pJeC03AloQ43kcBmGcVn9Ad0CZbCcMfswhE2cT8c/uG8EEYkKPIx698/xEEBnEs8/hQta90wsTdSwAkglmsfSX5YF4HCFmYG7qQITC2soxR6XPVdKyUpopnS8vJlRqu/PyYzZbV/huu0GcE2XVCYVPruz3iNil965rsmD+ayIwl5KX/bPngML3iixMgMgycg1hLV0tctlRrQHe2MO2ql1K3Yt2kMJPNxgGKLmVBcIkl+Y7K58j4DqAgpqroodaxJ95STyRixqV6DzjZCOFyNlTYyu/oGoBTMPDtKIYelV+luA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PA3Q3BKeKwWTAteWc75SFfLbleKCsx70JyyxVpcFyCM=;
- b=fh/QDjjKyNhuPOiwwdc9GWZDvDv2yiWojXO+r4Niq/0XbNo2XQ7NI9mUb1AtfnM1qw60A98LYgktlluviVdLv1ZvmvYkvtLvnnO6SElpRIvo2kpSNMeF5IvXj74a9A+gmqBB3YCQGbWu69r+jnlba+r9pRMLOa10yjbe01v2+ruLF3BS0mHDmoo4FOTszb9vIvv636T2/X1NG3uWtbxg0uM9OCb+eU3PLL/awa9XVn2FfTXVpwWp2uCwEvqk4sEQ9xxerbxQXQUko2ouWAI6OGgbYqZyWuGlDJAAplRsEWrK17+oeCUaDsExKFU1zzlyZ+51ncdHPfR7o3jKzBWMqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PA3Q3BKeKwWTAteWc75SFfLbleKCsx70JyyxVpcFyCM=;
- b=pYoDB5arvSZtgbs5X1EFgC07OWFzUuQ61hEC7C71EU2J5b+N1DPf+D7b5f+sR1kwk5UrRoJQ+MQQAxpkHk78BzRNFoEBAPcoXDpLm++YCTeruNztmsf/y56NsFKmLp1lux3LC0R26YRVO5oil8k7pZxj6dSVs7w0uw4jsp1CUHk=
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
- by PAXPR04MB8846.eurprd04.prod.outlook.com (2603:10a6:102:20d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Wed, 23 Nov
- 2022 07:54:43 +0000
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::9ded:65b7:9d51:d37a]) by AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::9ded:65b7:9d51:d37a%8]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 07:54:43 +0000
-From:   Jacky Bai <ping.bai@nxp.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>
-Subject: RE: [PATCH 1/4] dt-bindings: mfd: nxp,bbnsm: Add binding for nxp
- bbnsm
-Thread-Topic: [PATCH 1/4] dt-bindings: mfd: nxp,bbnsm: Add binding for nxp
- bbnsm
-Thread-Index: AQHY/XWNECi6akMI70mG4aJ99Q3psa5LZxEAgAC+uoA=
-Date:   Wed, 23 Nov 2022 07:54:43 +0000
-Message-ID: <AS8PR04MB8642AB09DB82DE58B60421BA870C9@AS8PR04MB8642.eurprd04.prod.outlook.com>
-References: <20221121065144.3667658-1-ping.bai@nxp.com>
- <20221121065144.3667658-2-ping.bai@nxp.com>
- <166914594571.442076.9834259216884759566.robh@kernel.org>
-In-Reply-To: <166914594571.442076.9834259216884759566.robh@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|PAXPR04MB8846:EE_
-x-ms-office365-filtering-correlation-id: fa8d4443-d552-4004-f50a-08dacd27fb95
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CABliCBcwVbJgOOTPooOMSJOyD1zTGBawU1j0J8MRoEtJdn4b6VYgL8jmVKBwyVpmFo+4al04EcWAclVkFWq7pAm4jrZgIp+EYSMiAd7jr1witFJb9WD15WkVyusG1lu7PFgIhPzf0pq1KXmFhYFmgyDtNlS30kGjrrfQThI6+1nf1kqwjEccCICKwwrt1jFzhZK+u6tHe58ZQ1qRrf/0OGqt/wSVUjO5P5v2uJ5GjysHhQWBSLD24fLEFISVeSgkeafid+nP6P6PUnTd3L3o00nLy+GkP0ULBf+7L40WPso13prurWSnKhXTyUHTZSCeS2DgTHndZTzbDWxSV9C7Fsew4IfDIn4lWFSng/m2Dd+3cYp2IBx62jLwpLaj5IcB6FKnKKgCJdqy5Ml+YoSDcHytsYdDhYfMrBfL0Yu3eIEWqmrn7beUAJ+gK0DxjN6LsKW2GwrAPrwAieUGSlL0AfrQ8fR9eRkvkV09lQk38wN972H14adGbmFQo0yfzgfbps8QMIaR/1ExfmhXMtbzWnhRIXy1dIZgNyeRs0bT/pAin+OlUjAMQfyHS0pK5NR5aEASg5rmzzZeD9GnTMppuqFORg9LS1pYcCnwzA5+v3Zimjgoyi2WF+Wzh9bUTYNBbRl5EGWWUnNpwhgyoYlzr/Blml16eeydA8QeO5js9kdhwcm4Or1LmyIvh2YRau883zcvSe0p6WerTzmEv36EA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(366004)(376002)(346002)(39860400002)(451199015)(41300700001)(71200400001)(478600001)(9686003)(4326008)(66476007)(33656002)(76116006)(64756008)(8676002)(52536014)(8936002)(186003)(26005)(66556008)(66946007)(66446008)(7416002)(5660300002)(6506007)(316002)(7696005)(54906003)(6916009)(83380400001)(55016003)(2906002)(86362001)(122000001)(38100700002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pO0q4EY5M9ioTilZCUlrXsqmBwyp0za6Y+Y+3qMwj0hu+MJJ8j8Tg6F0MFcq?=
- =?us-ascii?Q?zJai/Yimrw0MOaCYVt55F+8PxKeX6ri0+eY7W/bE6uBxO2esiKdfZPKaLEd5?=
- =?us-ascii?Q?OsIPvW1Xyv+EDIH0GShJCq9I43AMNPXN8Lp/zJ88ePWb7XEASF17FxW72+xk?=
- =?us-ascii?Q?dvsJay8RX2I7TTPshxo7QKzeXdb/SmlVpSDNTx9dMccEQY9/0ePBEHgS78Q2?=
- =?us-ascii?Q?YQh6XFo8868KCALQR4hBMK3cETy6mjDPGajsYfEfqGV3iIiggbxBqcWHQ+m3?=
- =?us-ascii?Q?Xj1xchG3SHFkNRpyLyjJwK9Dkl+Gj+9C3yVSMH0jmU8pQMNgGb1IPeWoSbqA?=
- =?us-ascii?Q?3QqnMO6ZabwkcuicqXps2Pic6TERaMSFs+VJyXZUs+RH8vezkjgfjRaUL3qz?=
- =?us-ascii?Q?5flxri7fxGNvOWIY24Nu4u+cxMug52xgBQiDzR6EV5SDHZ6Pqg262eSLu9Np?=
- =?us-ascii?Q?14gYdyU9g9pOUDOb4+WETfEo5wQRoOHJ9PRin5ccr59UxIwKHfQxUkbkhfEM?=
- =?us-ascii?Q?+phGMmPl1lk9Jm/KaSfIm+2ZLoriNQ4vi7HHuTb+NWrbex/QgVu6CyEu6Z7X?=
- =?us-ascii?Q?Em7upeDit42VTYzCoLSbn6S+ZZJmIB+KlLtWaHa2R0iTdngkeyHYbz3cgkDS?=
- =?us-ascii?Q?8M7Q8c4Ra/FUaKqqTgkilUeFunksRgvmN2aC1jdk9zjPfVlxIRA2w1Tn83GV?=
- =?us-ascii?Q?4uou961ynvpqTXR9JIVY+W/HlxBjsSiRtXb2wEPggREzcj0gdzObKssh1DSs?=
- =?us-ascii?Q?zdYNEAi5pPhI7dcpl/UZE9cv58zg1+EPzgcqXBFgTsy0A6zg60fi3zS/pQzA?=
- =?us-ascii?Q?0lGSFAOgtxE/u9wRhXjeCR4x8AX7yzRyKBDC3kj8cUXaczUoHElUVFmbbEfx?=
- =?us-ascii?Q?F94bcG+aZleVotDbUxHtxdB9zg5WQRuUQvEpEXWZ/RFtyfE7tL8/YoqTopFt?=
- =?us-ascii?Q?CfZzuN47x/w4BqAES1xmDB0IIeOihm8hjlAiSa0Z6xypJcIqOk9pX8ThvrsK?=
- =?us-ascii?Q?/Va1l7yeFJMcXrWhl3hJEqFRhyBp7YbAj4Dbv8yiRxNKIY9BDd8Iqq+K/3CW?=
- =?us-ascii?Q?+VbDf1207aXNW+qpDW/rafaTmuqksRzlDGfuWE+bt6E31by/JVEjeFBj5PMm?=
- =?us-ascii?Q?87qO8PE3+ZP5wk56GLqSDYShi7GqAn5pc2AQnYcebnE1p2XuilMJagZatg7f?=
- =?us-ascii?Q?j0U3VIEkEYktisDsIkE37ruaZTkfJCNd9Q1sh6fXGF1xfCTBWO3jJXB3nkfU?=
- =?us-ascii?Q?j/QRv7HC/xY5hHtE9SI9LGFOGplpK2iQr4tnSeYD/cXjT9sLmUtidWyadogz?=
- =?us-ascii?Q?lO7Mhbt8tYHxeAlmr0ToFH/w7BnoOwHvz3OOknOKYeYqz+d4FENeFqm6uOCe?=
- =?us-ascii?Q?ZI9aLApefZ6KSqSQJg45wT2yJ1+W2FwQ2nQIqgr2x/eZpl6B6C7/4qY2+f8k?=
- =?us-ascii?Q?FMF02lKMuX+xhJ7ZSTmtg4TjFwY9o2sdzQOxwaxE6ErDhsTj+ERcPeJA+zkq?=
- =?us-ascii?Q?zQ+ym3ZvvGI54njxOxGkaX03Tu5iKDLb2PKLuzL4l+2R6wRXQfqvu8LpNEkB?=
- =?us-ascii?Q?IrNENgLFyqOz+P/KXIU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S236375AbiKWH4Q (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Nov 2022 02:56:16 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D23312
+        for <linux-rtc@vger.kernel.org>; Tue, 22 Nov 2022 23:55:35 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id l24so11181040edj.8
+        for <linux-rtc@vger.kernel.org>; Tue, 22 Nov 2022 23:55:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QXVfenqOUGvkDcVYgY1fJsrmESMj2EN+C8xawwYRbqg=;
+        b=GSONFRDtFGziegwWTFEClQCF/LKe/nWX5ILjF0ekcXzb0ia4P/thIuDwNN37Lbl+fd
+         cmlyzBOAIz0t0R5nmsxb0s9614QO8jvKGSpqnqm2nSB59VI3OveWpsz5ZlcsmLPTLWx3
+         Vo46D5fb+jy2iZrsqvOdAQ9XbsdWGcjdil1QZheDYlCs8e5sAuH4oXoMXU7PQWIONrje
+         1I33Hy6SNJF0BnBuzoZMcYgdf4vgOcmpal6bmTDxFBSf7V5v23sctEb1cFr9z/W+X5JC
+         m76zmuy5sJ58h29VstVv57dguBVw9sNwC3/wl6KlryYcuw1gR6UrsvGAUiLw8Dx5I2dc
+         ULsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QXVfenqOUGvkDcVYgY1fJsrmESMj2EN+C8xawwYRbqg=;
+        b=M+zq+hS4jmp18lSUgvxoaz1exmoCfmAwpUxD7MK9eRDwwhkCoORZ9P3vA5B+nOR/A+
+         VArBCJCMK0akZ81fGjTIEDBoiOqBHj8d46OqslO9tdmdyk6MF1Qq9byAHGpmmqXjpry0
+         3quKCdaujPLQPllXxIUxx58JncuzLGA96NYIovUe8VidR8WEcFyQYxbg3SeSSXJ+A9Bj
+         vFoDfe7t547MsIJLglOa/lNmccrMJzgP+vFTvncbOzgues6v4fnUboim0a/RFb4Vt0Vw
+         bTC6Ljr85t1Xg3zcNQnND3fkWpq7TTj39YKCur+eTk79k5hD/NW2HPMLL7cO/JvnuRGx
+         3ylQ==
+X-Gm-Message-State: ANoB5pmpAEAefKk0sQoDw8UePGN8EKbcHCjm5dwVfh6TulzGE0y6Yo31
+        OnbWmjRfGkP0owfNkIrzEYiuaJQmFog6b4Mt96M=
+X-Google-Smtp-Source: AA0mqf6RNsjLhu4unf0H4XYSSKZNW2ozS8ZdX7vO3gTsICPumukQw5EMTVS4VXP7Lsculr2C6R1oHhXZo7WLRAx3QLo=
+X-Received: by 2002:a50:fb89:0:b0:461:ecca:e8a with SMTP id
+ e9-20020a50fb89000000b00461ecca0e8amr25041841edq.139.1669190134180; Tue, 22
+ Nov 2022 23:55:34 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa8d4443-d552-4004-f50a-08dacd27fb95
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 07:54:43.4049
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8simNRVrxdIMUxOiJ3FF93EUMuFQW0A06u7M2eIl2Ed2BkIwzhxbUvbshQnAv8G1P0ZCU/4clILh3A97GXp/xA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8846
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:131b:b0:7b5:2e0e:6ab with HTTP; Tue, 22 Nov 2022
+ 23:55:33 -0800 (PST)
+Reply-To: antoinette_navarro@aol.com
+From:   Antoinette Navarro <a.navarr21@gmail.com>
+Date:   Wed, 23 Nov 2022 08:55:33 +0100
+Message-ID: <CAPZQ7Viyd_ci2eb0W+uNOiWukF72h0e-fYBF_dnoc1RSpE+F0w@mail.gmail.com>
+Subject: Bonjour
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:544 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [a.navarr21[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [a.navarr21[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  3.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Rob,
+--=20
+Bonjour
 
-> Subject: Re: [PATCH 1/4] dt-bindings: mfd: nxp,bbnsm: Add binding for nxp
-> bbnsm
->=20
->=20
-> On Mon, 21 Nov 2022 14:51:41 +0800, Jacky Bai wrote:
-> > Add binding for NXP BBNSM(Battery-Backed Non-Secure Module).
-> >
-> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> > ---
-> >  .../devicetree/bindings/mfd/nxp,bbnsm.yaml    | 103
-> ++++++++++++++++++
-> >  1 file changed, 103 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml
-> >
->=20
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m
-> dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->=20
-> yamllint warnings/errors:
->=20
-> dtschema/dtc warnings/errors:
-> Error:
-> Documentation/devicetree/bindings/mfd/nxp,bbnsm.example.dts:28.27-28
-> syntax error FATAL ERROR: Unable to parse input tree
-> make[1]: *** [scripts/Makefile.lib:406:
-> Documentation/devicetree/bindings/mfd/nxp,bbnsm.example.dtb] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1492: dt_binding_check] Error 2
->=20
+Je sais que mon message sera une grande surprise quand il vous
+parviendra. Donc, je m'excuse aupr=C3=A8s de vous. Je vous =C3=A9cris
+sinc=C3=A8rement afin d'obtenir votre aide et votre confiance qui peuvent
+me permettre de mener une action sociale avec vous. C'est une donation
+de 750.000=E2=82=AC et c'est une proposition tr=C3=A8s sinc=C3=A8re et nobl=
+e que je vous
+fais. Je m'appelle ANTOINETTE NAVARRO, une ressortissante fran=C3=A7aise
+qui poss=C3=A8de une entreprise en R=C3=A9publique du B=C3=A9nin qui =C3=A9=
+tant le pays de
+mon mari d=C3=A9funt Monsieur Delphin ASSOGBA.
 
-This error should be related to the 'interrupts =3D <GIC_SPI 73 IRQ_TYPE_LE=
-VEL_HIGH>;'
-Do we need to change it a magic number define?
+Bref, je vis ces derni=C3=A8res heures a l'h=C3=B4pital CNHU Cotonou B=C3=
+=A9nin =C3=A0
+cause de mon =C3=A9tat de sant=C3=A9. j=E2=80=99ai pris personnellement l=
+=E2=80=99engagement de
+vous l=C3=A9guer avec tout l=E2=80=98amour de Dieu et dont je vous demande =
+de
+garder en confidence, parce que faisant recours au verset: Matthieu
+6:1 de la bible je ne fais pas ce don pour =C3=AAtre bien vu.
 
-BR
-Jacky Bai
-> doc reference errors (make refcheckdocs):
->=20
-...
->=20
-> This check can fail if there are any dependencies. The base for a patch s=
-eries
-> is generally the most recent rc1.
->=20
-> If you already ran 'make dt_binding_check' and didn't see the above error=
-(s),
-> then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->=20
-> pip3 install dtschema --upgrade
->=20
-> Please check and re-submit after running the above command.
+Si je vous ai choisi ceci n'est que l=E2=80=99=C5=93uvre de Dieu et certain=
+ement
+vous =C3=AAtes une personne honn=C3=AAte et int=C3=A8gre. Avant que je ne v=
+ous aie
+envoy=C3=A9 mon message d'appel j'ai veill=C3=A9 la nuit malgr=C3=A9 mon =
+=C3=A9tat de
+sant=C3=A9 en priant Dieu le tout mis=C3=A9ricordieux qu'il puisse me chois=
+ir
+une personne honn=C3=AAte qui saura user de mon argent dans de bonne
+circonstance. Mon l'objectif est d=E2=80=99aider les handicap=C3=A9s, les p=
+auvres,
+les sans-abri et les d=C3=A9munis tout en ouvrant une fondation pour
+orphelins.
 
+Je ne sais pas dans quel domaine vous travaillez, mais j'aimerais que
+vous profitiez des fonds pour les organismes de bienfaisance. J'ai
+d=C3=A9j=C3=A0 discut=C3=A9 de cette action avec mon notaire et si vous acc=
+eptez de
+b=C3=A9n=C3=A9ficier ces fonds et de bien les utiliser, pour plus de d=C3=
+=A9tails,
+veuillez me contacter par mon adresse mail personnel:
+antoinettenavarro09@gmail.com
+
+J=E2=80=99attends votre r=C3=A9ponse.
+
+Mme ANTOINETTE NAVARRO
