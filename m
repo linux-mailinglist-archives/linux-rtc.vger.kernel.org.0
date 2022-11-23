@@ -2,41 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93265634D85
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 02:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68EC634F03
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 05:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiKWB76 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 22 Nov 2022 20:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S235793AbiKWEjD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 22 Nov 2022 23:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiKWB74 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Nov 2022 20:59:56 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C538CB85
-        for <linux-rtc@vger.kernel.org>; Tue, 22 Nov 2022 17:59:55 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NH4463qMWzJnr2;
-        Wed, 23 Nov 2022 09:56:38 +0800 (CST)
-Received: from cgs.huawei.com (10.244.148.83) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 09:59:53 +0800
-From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <cuigaosheng1@huawei.com>
-CC:     <linux-rtc@vger.kernel.org>
-Subject: [PATCH v2] rtc: pic32: Move devm_rtc_allocate_device earlier in pic32_rtc_probe()
-Date:   Wed, 23 Nov 2022 09:59:53 +0800
-Message-ID: <20221123015953.1998521-1-cuigaosheng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235109AbiKWEiy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Nov 2022 23:38:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8989A262;
+        Tue, 22 Nov 2022 20:38:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFD8D61A3D;
+        Wed, 23 Nov 2022 04:38:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41DBDC433C1;
+        Wed, 23 Nov 2022 04:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669178332;
+        bh=QqrDbDLRcAQr4MUv+oZ9PutfTqVkNXwAFQlJXbN9odk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e//Q0Igg0hWRrSaEgwdgmlRQd6QUnoz7COLqfkBnj6LOQdy+G730Ld4a0mtbj4mXF
+         2Ns0fWlqq5UDuwlf9gZi0p759DWrC6wlC8ge0bN3ZHQX7ihQg5stNciFtDWoi+LjF+
+         jWzWEBluurxmktSYXewY3T9nYOayIZyWy4v5xTekb99HPZYHOBbHZT0xSp18BLpDTb
+         NaAioF2pMRU0zHtAQ3RqHqTT9WvlSrvbvq0f834SNj6byw1vq/7zTaiB7b45SOLdS0
+         ZrrsM+AKFkbmsFDsQ5lzS4sSEz1POrgSXaqhxXHOGYxGm3acH0ikOnG+UML9Urblga
+         OhyWc3tcT/vgQ==
+Date:   Wed, 23 Nov 2022 10:08:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <Y32j1+T3bBVTEDxO@matsya>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+ <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.244.148.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,47 +79,22 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The pic32_rtc_enable(pdata, 0) and clk_disable_unprepare(pdata->clk)
-should be called in the error handling of devm_rtc_allocate_device(),
-so we should move devm_rtc_allocate_device earlier in pic32_rtc_probe()
-to fix it.
+On 21-11-22, 12:06, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Guenter Roeck <linux@roeck-us.net> # watchdog
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # IIO
+> Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/dma/dma-common.yaml           | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-controller.yaml       | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-router.yaml           | 2 +-
 
-Fixes: 6515e23b9fde ("rtc: pic32: convert to devm_rtc_allocate_device")
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
----
-v2:
-1. Move devm_rtc_allocate_device earlier in pic32_rtc_probe().
-2. Update the patch title: rtc: "pic32: Add error handling in pic32_rtc_probe()"
-   to "rtc: pic32: Move devm_rtc_allocate_device earlier in pic32_rtc_probe()"
-3. Update the commit message. Thanks!
- drivers/rtc/rtc-pic32.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-diff --git a/drivers/rtc/rtc-pic32.c b/drivers/rtc/rtc-pic32.c
-index 7fb9145c43bd..fa351ac20158 100644
---- a/drivers/rtc/rtc-pic32.c
-+++ b/drivers/rtc/rtc-pic32.c
-@@ -324,16 +324,16 @@ static int pic32_rtc_probe(struct platform_device *pdev)
- 
- 	spin_lock_init(&pdata->alarm_lock);
- 
-+	pdata->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(pdata->rtc))
-+		return PTR_ERR(pdata->rtc);
-+
- 	clk_prepare_enable(pdata->clk);
- 
- 	pic32_rtc_enable(pdata, 1);
- 
- 	device_init_wakeup(&pdev->dev, 1);
- 
--	pdata->rtc = devm_rtc_allocate_device(&pdev->dev);
--	if (IS_ERR(pdata->rtc))
--		return PTR_ERR(pdata->rtc);
--
- 	pdata->rtc->ops = &pic32_rtcops;
- 	pdata->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
- 	pdata->rtc->range_max = RTC_TIMESTAMP_END_2099;
 -- 
-2.25.1
-
+~Vinod
