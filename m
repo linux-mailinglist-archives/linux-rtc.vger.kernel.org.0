@@ -2,182 +2,104 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AE0637B0C
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Nov 2022 15:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58325637B9E
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Nov 2022 15:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiKXOFh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 24 Nov 2022 09:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S229631AbiKXOoG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 24 Nov 2022 09:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiKXOFS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 24 Nov 2022 09:05:18 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8507511C02
-        for <linux-rtc@vger.kernel.org>; Thu, 24 Nov 2022 06:05:07 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id g7so2707837lfv.5
-        for <linux-rtc@vger.kernel.org>; Thu, 24 Nov 2022 06:05:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9xSkgvbeKVsRIQO54MHan2onCSxwrrD+XXDauFHX6PI=;
-        b=P+xZZji/4tykRi30u7V2uwiVkrvWzXBWGMMoHkM4301eJiR/jE5ccK1+Ecc+6t0ZUM
-         4Y0Wdv7M+oFgNT7bIf/IcId35reHixuxppTjBt1Ry+gx0er+Bbc9u4FpxSKa6tz6LSxs
-         JNPCufmert60WDsyliHiruKHfRqHlSFpFxU9CuQK1+ejbIyg90jRInYn6JLW1jXd7N2H
-         3On35QTA0nGIGvHek++EYd+rigB8T7hutawzV6CR0U2PFfAtO+zH+Run0f5lmZIujzJO
-         OP8T+J+jOJR14PIoLbXznCqHnADsIBP6xj8f0ka2YZZVOXaVvxaX4u4ebALdHRrRdXUP
-         C9YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9xSkgvbeKVsRIQO54MHan2onCSxwrrD+XXDauFHX6PI=;
-        b=bVTkQZ8Q4P26jTtskbM6DoPvronB04Vq9fuEPFguwynE7+2c9TusuOcOaMo3RVny9i
-         etUiugonw6nrg++aDNEjMg1l0pje1IOWxeCRntl27tVynRR0hiJoiNNDIA6HQ+JBhrqA
-         TExIp7R1sViIsfOyWWBT+KQm72WlhuQPljFCTRcowat2ikTsX+TO+r276Qf4BLpdPYf9
-         /c4DG1MBqigucRhh2uEnSuurmPuV483VsnlfiSht9tNbx0GsP6B+jwDnNrCaR/ft3B3x
-         R0E1Mo7zw6R5GmqSaZjL92+stvjGF17R/j3Tggb+NWbJhtOY4r/BjIY0y38imIOgG6DP
-         wCKw==
-X-Gm-Message-State: ANoB5pmRqPSyH+FS1iIUnJtEve64e6g1+xoT3FHNKIjsm/N9gXo4msrG
-        t0UIGF/R/xSFhOcboj6VxM60uA==
-X-Google-Smtp-Source: AA0mqf7oXX8it2c2jTo0y8WBHPqGA85ZEeqGBI4LuwDFD9dN4491p2jbDYdj+PZoLvjFuMPo3q1MNA==
-X-Received: by 2002:a05:6512:4029:b0:4b4:e26b:2c28 with SMTP id br41-20020a056512402900b004b4e26b2c28mr4473023lfb.356.1669298705766;
-        Thu, 24 Nov 2022 06:05:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id by37-20020a05651c1a2500b0026ddaf38b0fsm104763ljb.96.2022.11.24.06.05.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 06:05:05 -0800 (PST)
-Message-ID: <86732e73-fb66-0a90-5e64-50049e0f6507@linaro.org>
-Date:   Thu, 24 Nov 2022 15:05:04 +0100
+        with ESMTP id S229508AbiKXOoE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 24 Nov 2022 09:44:04 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E25ECCDC;
+        Thu, 24 Nov 2022 06:44:02 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E5E5021AA9;
+        Thu, 24 Nov 2022 14:44:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669301040; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RSDxCIZj7tP6iDUeSK5bmzG9DBH4ukrgrNleI3RTxE4=;
+        b=laECmwk+hSEsA59l592NOPSYuVa6/2QEtY41YRV6ec4hGKFiawqycHJQ8JkarnS3kdA639
+        LPIRjVQSjEn5ByBYHfXtuDbks6+hYSK+O34nVEffb9wdSS8K4ncai8RxlbChZZAomeqbOz
+        7FWhyUKdmozAxUsvyUo63FuNfFMagoE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669301040;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RSDxCIZj7tP6iDUeSK5bmzG9DBH4ukrgrNleI3RTxE4=;
+        b=tMRinWGU3xkK1Sk9EQfROj8VNADPWQdWoqbiOsBhN2hxBK4nqfbGdc1a3svnJxTlfTYKld
+        SUIRhrYNPEB7c9CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8F4513488;
+        Thu, 24 Nov 2022 14:44:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hUWGKzCDf2OtUAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 24 Nov 2022 14:44:00 +0000
+Date:   Thu, 24 Nov 2022 15:43:59 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH] rtc: isl12026: drop obsolete dependency on COMPILE_TEST
+Message-ID: <20221124154359.039be06c@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 1/4] dt-bindings: mfd: ti,tps6594: add TPS6594 PMIC
- support
-Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>, michael@walle.cc,
-        vigneshr@ti.com, robh@kernel.org, a.zummo@towertech.it,
-        linus.walleij@linaro.org, lee@kernel.org, brgl@bgdev.pl
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20221123053512.1195309-1-mranostay@ti.com>
- <20221123053512.1195309-2-mranostay@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221123053512.1195309-2-mranostay@ti.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 23/11/2022 06:35, Matt Ranostay wrote:
-> Add documentation for the TPS6594 PMIC including its RTC and GPIO
-> functionalities.
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-Back in September I asked to use get_maintainers.pl to CC people. Can
-you please tell me, why you still prefer not to use it's output and
-instead use a bit different email addresses?
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-How many times same feedback should be given?
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> ---
->  .../devicetree/bindings/mfd/ti,tps6594.yaml   | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
-> new file mode 100644
-> index 000000000000..0de0db87dbf7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TPS6594 Power Management Integrated Circuit (PMIC)
-> +
-> +description: |
-> +  TPS6594 Power Management Integrated Circuit (PMIC)
-> +  https://www.ti.com/lit/ds/symlink/tps6594-q1.pdf
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tps6594
-> +
-> +  reg:
-> +    const: 0x48
-> +
-> +  ti,system-power-controller:
-> +    type: boolean
-> +    description: PMIC is controlling the system power.
-> +
-> +  rtc:
-> +    type: object
-> +    $ref: /schemas/rtc/rtc.yaml#
-> +    unevaluatedProperties: false
-> +    properties:
-> +      compatible:
-> +        const: ti,tps6594-rtc
-> +
-> +  gpio:
-> +    type: object
-> +    unevaluatedProperties: false
-> +    properties:
-> +      compatible:
-> +        const: ti,tps6594-gpio
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        pmic: pmic@48 {
-> +            compatible = "ti,tps6594";
-> +            reg = <0x48>;
-> +
-> +            rtc {
-> +                compatible = "ti,tps6594-rtc";
+--- linux-6.0.orig/drivers/rtc/Kconfig
++++ linux-6.0/drivers/rtc/Kconfig
+@@ -432,7 +432,7 @@ config RTC_DRV_ISL12022
+ 
+ config RTC_DRV_ISL12026
+ 	tristate "Intersil ISL12026"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	  If you say yes here you get support for the
+ 	  Intersil ISL12026 RTC chip.
 
-No resources? No properties? Usually such nodes are not useful at all.
-Rob pointed this some times in different cases, but I don't remember if
-we resolved it here.
 
-> +            };
-> +
-> +            gpio {
-> +                compatible = "ti,tps6594-gpio";
-
-Same question.
-
-> +            };
-> +        };
-> +    };
-> +
-> +...
-
-Best regards,
-Krzysztof
-
+-- 
+Jean Delvare
+SUSE L3 Support
