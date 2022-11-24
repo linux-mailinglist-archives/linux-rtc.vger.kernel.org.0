@@ -2,37 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF61E6364D5
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Nov 2022 16:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468036372BB
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Nov 2022 08:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238935AbiKWPxu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Nov 2022 10:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S229747AbiKXHM1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 24 Nov 2022 02:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbiKWPxB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Nov 2022 10:53:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121AC5A6EA;
-        Wed, 23 Nov 2022 07:52:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73E2E61DD9;
-        Wed, 23 Nov 2022 15:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5EEC43144;
-        Wed, 23 Nov 2022 15:52:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669218776;
-        bh=ZtsEDAGH6M1Hm2mKwIp+nkyl3EOfULlsa+PR5Jh+/yY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aCYae1otHmgUnvQhYydPYexYhzz0miYjM4zpf8c2mnxAms5CtVYUfAM7tWuXKgBlL
-         NCzjlOivqXZ6UqIGFo6Q3BntqxLP3hoWG6T432NPpsWDwgRF2tNVlSSreyLi6w5epT
-         5yRu6zDAJOHqLx2PKvtXWr2dbpMJrrYdASELSXDQ7oXGnQVROdJjqD20wCxJmK/TbF
-         LxosEZjoFf2ROozxpxjVeaVFcuzQLwzX93rS2p4/AwotUvzWq5hYJvRgCJVOQBQ8wc
-         Y+r3iBPxcrfDRitsbVrK4soZK4ULKoO7A7tHxHwHfbIwT8fluQgTwO6NOBHUOHbov+
-         PWGuJ73a1veDQ==
-Date:   Wed, 23 Nov 2022 15:52:45 +0000
-From:   Mark Brown <broonie@kernel.org>
+        with ESMTP id S229668AbiKXHMO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 24 Nov 2022 02:12:14 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF07CFB9B
+        for <linux-rtc@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id d192so935144pfd.0
+        for <linux-rtc@vger.kernel.org>; Wed, 23 Nov 2022 23:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
+        b=jN9Iu2JG6Jbf9f/Vtx6/x8W99mbfvmkmA5JpUTuuOhHuX9hE65G+zwT360z98Yxh2l
+         i6PqDF91yJmzwCKNYEVFuLVfqGCqoHx9I7wNV8pa819eMDoiMR27SZF1GHdGnGDHcMWz
+         pqI4i03rsZDpQ60ONyvQHuYR+N3femATVqrSC4hLc3ih0MmJpf23tjAqEmigk+Q4lN5p
+         TjriD73VK+kqD8Wil5LA1NXQ4waHtGM3IZBFIczk95hCWTGki63dLVXFv0wvyqKSahPp
+         nd3iHhwTtHF7fG/CtXcp1E5PNjqsgHvp71L23Lt4pdmYQDMtQS6xnA3gM9hUIGynee9E
+         kaMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9beI1qbDaBEZGBMzOodYXezAJNnkCn943LXJypsps08=;
+        b=qSPqHXVDyr27TVXOcUDCoESUI6Lu80MjXpabIXRNvhbkGZ17eVieUfZqURcrnRTN4T
+         HDhKhCSJsQ8enuBv6tjSmlrlEwfYatCInKTohGXt5QeUC4mbw1HUKW/SuSKaohN04kAy
+         s61Zfg1plVDS3wEBLotzGFB2/R+OkODipdTKaBfrJvX02rGhmT1AeaDpj3LyEjPHJ9Rm
+         ZQWi8/nZTyJbNqGvbq4czAA2Xt2vV0+/HCDUvTVRfBUjaMKNHDuCzDiFRyTc/LHg5aSX
+         YDDNZSHwWUQTqOS3EemAXwwPvf9rh0aKMcB7zFSAmXRREqjcDcv2lJ1gcWNPNCYWIpUb
+         Bm7A==
+X-Gm-Message-State: ANoB5pk4nwPAFVLQAxpIr/KyLVOOyl0cT17/gEMr8nmpXbOUa4hCYtL/
+        +EyCwZ97IQbVCpoifhIT9e37Ww==
+X-Google-Smtp-Source: AA0mqf539xW7yp+XmSaeh7QyKEx/uI4+Px0TRaTKiiPa7cXAYmK2DoSN46/6FwkQRO+vECyNwcPwTg==
+X-Received: by 2002:aa7:8c19:0:b0:573:620a:3b1c with SMTP id c25-20020aa78c19000000b00573620a3b1cmr13160104pfd.50.1669274195379;
+        Wed, 23 Nov 2022 23:16:35 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id k4-20020a170902c40400b001867fdec154sm414181plk.224.2022.11.23.23.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 23:16:34 -0800 (PST)
+Date:   Thu, 24 Nov 2022 12:46:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,53 +75,35 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Viresh Kumar <vireshk@kernel.org>,
         Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 9/9] dt-bindings: drop redundant part of title (manual)
-Message-ID: <Y35BzU80hf36eRyo@sirena.org.uk>
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 0/9] dt-bindings: cleanup titles
+Message-ID: <20221124071632.5cadtc6pbdvdv3xb@vireshk-i7>
 References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
- <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QAOhPtWQs4kr9fZE"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
-X-Cookie: I'm rated PG-34!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On 21-11-22, 12:06, Krzysztof Kozlowski wrote:
+>  .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml        | 2 +-
+>  .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml         | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v1.yaml               | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml          | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml      | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml    | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2.yaml               | 2 +-
 
---QAOhPtWQs4kr9fZE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-On Mon, Nov 21, 2022 at 12:06:15PM +0100, Krzysztof Kozlowski wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding" or a "schema", but instead just describe
-> the hardware.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---QAOhPtWQs4kr9fZE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+QcwACgkQJNaLcl1U
-h9AXjAf8DK+4g+6i+PYcdDNKGnFY/1uo0vNGE7MKgsNgIAMn42Y9Tw++ts0ZwHYw
-EDuQqMblUcsp9NKWMs1LVsvQ2YGAbZUXjgUzWpiImszGWwmUf6DZkjwNojGA5ngh
-GAGhKyUYUGXRb0MKJ1X4O3pobituSQSnz8UWlDrpBOO2OiWnWvdbURWlhNYNqMSm
-70ahwExSo8nv/Dxkvf+GV0FHLToE5K4JZxqRh/Gn0l0206IYzY4jvEbCq0DEuZPH
-Jt7Az6phpVvce86sAHnvukNdIa0EQ/8pR+v9idvZiGVY5NJvdJA54BR+1AoXlMna
-RQueknzjRrsbdQSr0xa/wr8lQW5rpw==
-=Wum3
------END PGP SIGNATURE-----
-
---QAOhPtWQs4kr9fZE--
+-- 
+viresh
