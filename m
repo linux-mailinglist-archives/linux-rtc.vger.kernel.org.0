@@ -2,167 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91393638D37
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Nov 2022 16:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7336391F9
+	for <lists+linux-rtc@lfdr.de>; Sat, 26 Nov 2022 00:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbiKYPME (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Nov 2022 10:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
+        id S229949AbiKYXFE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 25 Nov 2022 18:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiKYPLx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Nov 2022 10:11:53 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076EF442C8
-        for <linux-rtc@vger.kernel.org>; Fri, 25 Nov 2022 07:11:32 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id z4so7203101wrr.3
-        for <linux-rtc@vger.kernel.org>; Fri, 25 Nov 2022 07:11:32 -0800 (PST)
+        with ESMTP id S229805AbiKYXFC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Nov 2022 18:05:02 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C33532F2;
+        Fri, 25 Nov 2022 15:05:01 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id f7so8126174edc.6;
+        Fri, 25 Nov 2022 15:05:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GI9uwBLCvWR3OgOlMBN6oypd3UQ7AbJ0Dp0NjT4lxFo=;
-        b=y5RUebrSosy2L8xvLXYFCns40q1ccZYXsrxL96Zdy/w1f8IUjGbcslxtTTAUCw5Zf2
-         r0oEVT+9EOdOxceHOhesQ5oaAKvUqCaLSKQuoGcwH6Jw+EGfV+nGPnSH6xTlC1mWf8gy
-         yDW4WfBJYb96R3/GYtwHKHOXKheyFVLafNQ0NdY+VwVcc1WmHK7770+jN+oTahL5MQ6b
-         tDgh/a/fsFFR+IZpEksOItlBaWIrlzeNyO3t96xVUd+s/r2ytDD7d8KwyM3uehp2Lydj
-         QfVHXhD0SaFet0Uu4Wl5SDa9ZZNd+Y/nT4bx1peIYjIRRYEWUX1RHJ1/K/vhIjO3tyMe
-         yJbw==
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SrTRFSS/x4t6+IVdYOMgEeoJ308qI/cUd08WWdG+ebA=;
+        b=bsrCkPS7FyV3HCb4+fg+Qg08H/NUS8Fj7Q0hEixpV+cYoGxhfTbZ8MZCtDdquHpioj
+         we7k2tDT7sUow8SX8+UDZ3BHUFOI2RqHFQER+e+NeFQ7wccSpwcvvtvzPTJheDUsRp3l
+         kSzCi2BFiNnjAAGyybdy6ZhCqP4bLeVfsUg2gfqhE9thjPwwCClGF414PEF3gaaaOVHr
+         0DkloM4FXRV7XHh0SMZjYop6Pn2STK64kgXjzEmke6lDts3uSTDombG7A9RTYcDPDX40
+         eFXLCiPrRIZIBHqWlmOvSAPeWTSMrwi/LaZVmnRmTiuAv9Zcxy7+P57twERnlgdvGpNN
+         ls4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GI9uwBLCvWR3OgOlMBN6oypd3UQ7AbJ0Dp0NjT4lxFo=;
-        b=o3U+IgblwjdqTGQkJadv3n3Us61b/v9HHaZt+sqDAnq2MZKJgLAnHBwqbP5sC13pCW
-         9M9u3yLYNlS6SKP8MdJ3MYUYVMW3wbOgX6sBXhrRbrRrWnIuou/m2LolvD83w4naqQxp
-         n8GgN25ryTQPnsYJvHWQfkx40M0eEM1iUWN64g8K5fvfyFaI6BaFYdchyC2NbXC36fqM
-         OLUQsSfyvN3P4oy355fsvuc7yUdg/B6MhnnrdcEM2CK8XPnMDa3Uozy9wMzhi1kYp30F
-         kB3jak0j+OPcfWJQPaAoG74jyiA0dnC7I2SE8CKZeZ0IwliFgCM/Qp5RakhqpXn9nNTx
-         3Wsg==
-X-Gm-Message-State: ANoB5pmmKaEABKdZMJF0jjic/jdb9p86vGRX/hLzwrPl6MDII8GoNnYw
-        SNxCXYrDi2KwKXnhAUV+myyJ5Q==
-X-Google-Smtp-Source: AA0mqf5Sm1CglF3S+zaxYxLdfuEQZuiRkUPKCtH/xR0EmtMQinXAAzyozKSvPKTZfhFOX8ftLYr1qg==
-X-Received: by 2002:a5d:5f04:0:b0:241:e9a6:fb3 with SMTP id cl4-20020a5d5f04000000b00241e9a60fb3mr9087357wrb.462.1669389092434;
-        Fri, 25 Nov 2022 07:11:32 -0800 (PST)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id w10-20020a05600c474a00b003b435c41103sm11565885wmo.0.2022.11.25.07.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 07:11:32 -0800 (PST)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Fri, 25 Nov 2022 16:10:21 +0100
-Subject: [PATCH v6 10/10] Input: mtk-pmic-keys: add MT6357 support
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SrTRFSS/x4t6+IVdYOMgEeoJ308qI/cUd08WWdG+ebA=;
+        b=hq7U+n3I/LC43B7DYSmlIHvvYf3zkmQq5ur0QozLdShv5XVx2aD+GPpRsPz3aJBKLr
+         uVHECEz+fqYtW3npJjdrn0W3XnXnyp7i8NahUS1GzxJ9d/N3PHn19erd6gYxGGxRW//2
+         8yGFxqFlf0Slo+p2ssGXlNpko7fJveR7Cq8QiPRoP8BdLSIpjpr+HR+YOlcPNEGUt7+h
+         Q9ZZsl0PkrbInOaMowjgp/WtuvhqC9E/DEWY4TuUxWz7YJqzNX+woZlm+g/qrPlVZfJh
+         ivMvTHw7VrMMUMuK1i1K5Zvh2YPO76Ao4Vwi3AeF3X/yUay8xkrzX+jUK1C+kZIkl9df
+         tFZw==
+X-Gm-Message-State: ANoB5pnwBOK+bszVSungYYQxeL5DhYLYJdIvFgkRvDdueYkiTJeRp7h6
+        moLwP94zZuM529qelN1y51cCZCBngMTH0w7j8WU=
+X-Google-Smtp-Source: AA0mqf7oYYnOUvxYJelBH+ZCQeIchQJlARoJQwAnQuoPWecqswsfj8HILcbdy2jSsZv7bqLG10yyurKQ2U9QeGAVcvw=
+X-Received: by 2002:a05:6402:2404:b0:467:67e1:ca61 with SMTP id
+ t4-20020a056402240400b0046767e1ca61mr4120477eda.27.1669417499790; Fri, 25 Nov
+ 2022 15:04:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221005-mt6357-support-v6-10-4f589756befa@baylibre.com>
-References: <20221005-mt6357-support-v6-0-4f589756befa@baylibre.com>
-In-Reply-To: <20221005-mt6357-support-v6-0-4f589756befa@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
+References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v1-3-3f025599b968@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-3-3f025599b968@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 26 Nov 2022 00:04:48 +0100
+Message-ID: <CAFBinCANM=AOw1bbGCheFy20mqQ1ym_maK0C1sYpjceoNH-dNQ@mail.gmail.com>
+Subject: Re: [PATCH 03/12] dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt
+ to dt-schema
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-leds@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2028; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=K2/LktiwnSqpYUY/NYDB7cyyBwW4Kzl5Gx1VcVhpHIg=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjgNsXQIa1QEIipiruDB9u/aUJuuWuwrFMsam4SPLK
- 94W6b/+JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY4DbFwAKCRArRkmdfjHURavoEA
- CgtRyRJ2qwmMDOSz6ZGwn/ZANcUmntlsG2vnP8PVpIhZSEpmpPaOC9xB/4cyr6clGsvKNMESMH+Fqc
- rJFK0L9bcHTfUlN0fAGTvsyXEReg4k8e93E8QkPUAyLlgxoAM6Qkkxw9GrQyOShb5yXjyq39X1AFKj
- pGHZCnhO7JtRZkzj9ZUpgs+P2tSXss5FUFGbGco/PHUTrLhoIAU5C43uCE/pn3y9m1jGLPjtJuyV9v
- 6oCV70JLBrYCph2BNCrQdzD3vr1CzWBRTY0Z8ttPDnvTRWiZRb9/vWs+vb6raYU22UYt08uN8hidp9
- oWT/CUu9l3hbh3i0E0a6aMXDNS5kIQBnLYZmfl478RtbxlzmhDA/94aFTLVRC1vEtICMvkfCc3P1z/
- wIczGve0zj0fMM2Qh2YFcJmLk+T5N+cBGkAskB57Cct+9R8qKKyIhTeRT2Ljh/yIZsJB3O4Pem8nh8
- gnFZ9WAyhkTJXlxv73g71vUG6uPiSKTmMw4P6ONR/Jq6szyRXT+3xUeoqpHX0dwrtBxn9CTl1M4gdM
- GbjY6xdJlez1nPoAXb8Y2LPaBIFeYsbbVjPpWhwOA/BXsy04UxEibIbNEfnSzwTb05A8O812vSsJaU
- u/j++N0Vyr0mINa1MQDkFOP4gs/9WWeaKwK7Tf96ZFi53RIYBcVW5VvsulZg==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+Hi Neil,
 
-Add PMIC Keys support on MT6357 SoC.
+thanks for your work on this!
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- drivers/input/keyboard/mtk-pmic-keys.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+On Fri, Nov 18, 2022 at 3:33 PM Neil Armstrong
+<neil.armstrong@linaro.org> wrote:
+[...]
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        sn: sn@14 {
+> +            reg = <0x14 0x10>;
+> +        };
+> +
+> +        eth_mac: mac@34 {
+> +            reg = <0x34 0x10>;
+> +        };
+> +
+> +        bid: bid@46 {
+> +            reg = <0x46 0x30>;
+> +        };
+I assume you took these examples from the newer, GX eFuse?
+Unfortunately on boards with these older SoCs the serial number and
+MAC address are often not stored in the eFuse.
+This is just an example, so I won't be sad if we keep them. To avoid
+confusion I suggest switching to different examples:
+  ethernet_mac_address: mac@1b4 {
+    reg = <0x1b4 0x6>;
+  };
+  temperature_calib: calib@1f4 {
+     reg = <0x1f4 0x4>;
+  };
 
-diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
-index 9b34da0ec260..2a63e0718eb6 100644
---- a/drivers/input/keyboard/mtk-pmic-keys.c
-+++ b/drivers/input/keyboard/mtk-pmic-keys.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/mfd/mt6323/registers.h>
- #include <linux/mfd/mt6331/registers.h>
-+#include <linux/mfd/mt6357/registers.h>
- #include <linux/mfd/mt6358/registers.h>
- #include <linux/mfd/mt6397/core.h>
- #include <linux/mfd/mt6397/registers.h>
-@@ -90,6 +91,19 @@ static const struct mtk_pmic_regs mt6331_regs = {
- 	.rst_lprst_mask = MTK_PMIC_MT6331_RST_DU_MASK,
- };
- 
-+static const struct mtk_pmic_regs mt6357_regs = {
-+	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
-+		MTK_PMIC_KEYS_REGS(MT6357_TOPSTATUS,
-+				   0x2, MT6357_PSC_TOP_INT_CON0, 0x5,
-+				   MTK_PMIC_PWRKEY_RST),
-+	.keys_regs[MTK_PMIC_HOMEKEY_INDEX] =
-+		MTK_PMIC_KEYS_REGS(MT6357_TOPSTATUS,
-+				   0x8, MT6357_PSC_TOP_INT_CON0, 0xa,
-+				   MTK_PMIC_HOMEKEY_INDEX),
-+	.pmic_rst_reg = MT6357_TOP_RST_MISC,
-+	.rst_lprst_mask = MTK_PMIC_RST_DU_MASK,
-+};
-+
- static const struct mtk_pmic_regs mt6358_regs = {
- 	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
- 		MTK_PMIC_KEYS_REGS(MT6358_TOPSTATUS,
-@@ -276,6 +290,9 @@ static const struct of_device_id of_mtk_pmic_keys_match_tbl[] = {
- 	}, {
- 		.compatible = "mediatek,mt6331-keys",
- 		.data = &mt6331_regs,
-+	}, {
-+		.compatible = "mediatek,mt6357-keys",
-+		.data = &mt6357_regs,
- 	}, {
- 		.compatible = "mediatek,mt6358-keys",
- 		.data = &mt6358_regs,
+What do you think?
 
--- 
-b4 0.10.1
+
+Best regards,
+Martin
