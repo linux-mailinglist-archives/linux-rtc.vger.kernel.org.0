@@ -2,56 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A9E63C240
-	for <lists+linux-rtc@lfdr.de>; Tue, 29 Nov 2022 15:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E71063C244
+	for <lists+linux-rtc@lfdr.de>; Tue, 29 Nov 2022 15:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbiK2OSE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 29 Nov 2022 09:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S235133AbiK2OSJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 29 Nov 2022 09:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiK2ORX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Nov 2022 09:17:23 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDDB68C6C
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:15:30 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id l8so17286715ljh.13
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:15:30 -0800 (PST)
+        with ESMTP id S235287AbiK2ORf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Nov 2022 09:17:35 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD2269301
+        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:15:35 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id a7so17304639ljq.12
+        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:15:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hsnckQ+8SFGbO04BpVRnsDtmRSn9Ni4f0qnwe8AiADo=;
-        b=IGhPJ8dX6nb5Z8HsOUNYC5YL8iJKkyqLeGkbHiGxaeoIHpgJyOLHncztlilCAIPeAU
-         aUSrVaGX+5Da0paALXjUFDOBHUJx3ahG+RqzfmLtLWGK3FHqQPg7dlU5vFF+FdTFk52s
-         4B8K0gNzWKLkPxoYmBoONHxuMJi/hx/TompcM=
+        bh=BRpdkJK2Wo92ON846N6eHVIM5x8Sd+GDvvbGsGBzl0k=;
+        b=I+R/M8dE9pmPamxZ3RSuWcocOq1rviSIGC0ap0QPJgzV1OFULdizRcDBcRmhvJ3niN
+         UBLin+dkqj5rdvepvMyFLA7YMrqpuTk0W07CFV4CEBZJdEt7RAkSdIJddwMLHap9qo5a
+         UV1W3K+GE2LD68UDPxWMo/GWAPsiZfcnL8/QY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hsnckQ+8SFGbO04BpVRnsDtmRSn9Ni4f0qnwe8AiADo=;
-        b=Nxy72cb+0KIoyixOuDXUUa65kHRpOC+55uU+41pY199fhwYQD63HH4pxLi2MjA7sNi
-         b/jwlggKWM8Z+S9SHxOI60HY9oor1Ob7w5arOzLzvwkdBmGJULCZj1WissQfnrbRszbY
-         aKlNwf9RbcORBBwMYRrKV7ATUrAyBNHJiRwPW5rb62qmIX+6nY56s/aFtfQwOPlZzTUS
-         2pVJbz3ZpYGrjsUlLJU4Tb9L5ouFsirP8TcViI7zg45ZYkovDHBDYuO5nFQ3Nu9ty27H
-         vsetX8XLvy4puW/mOrUHDJ07VEjN7JbAwuZBpUWWEreSIOnSgzN3dRvorzSbNjkGw+To
-         4AfA==
-X-Gm-Message-State: ANoB5pnjCsRyYo8bv/h/QrZT0IULbBIKwkUlmIFP1kLE6vE30cX/wRkT
-        cGRx5/jPRmNa2WI01MRYuO+iYA5bflbKFA==
-X-Google-Smtp-Source: AA0mqf5wUuCLPqi/+uagh8q9RS0D0xLgknDToqVyGJ4p1/SsKlDQOmUWONg6qrKmZ46fs/ER7PD0pg==
-X-Received: by 2002:ac2:558c:0:b0:4a2:4b78:a8e8 with SMTP id v12-20020ac2558c000000b004a24b78a8e8mr15251964lfg.292.1669731315968;
-        Tue, 29 Nov 2022 06:15:15 -0800 (PST)
+        bh=BRpdkJK2Wo92ON846N6eHVIM5x8Sd+GDvvbGsGBzl0k=;
+        b=IqC08keW1p1sMSyN+gRmr+L2NaeXZ09cPowRRHp+KokXCpTfGqAdJBBhiCclDpsqcU
+         xZy6JAC6DnlK0MkB/LPSTmC0BxNCrT5c8YrYoRnQZ/b0KMx73fagQucl5Q19JG4zpU8H
+         OhdhlHef36NeFVor/h8pJ1bQi/Zv5FtmMvvlF1G/EsV8fdgHsSobPlw7PlsA0qyxRSSU
+         j421FttXdzJ0F79/8DOZFnwnjSojh3R+HOcOW3Axtb230V0b1hj4bCzO/BlIZrvaxbVC
+         KHkMhZho5WTdpCuj/q9/j7MO73asSF+mAlniHDRNfX0tdf353ZAleFd7AJemNgrXjBgW
+         u/GQ==
+X-Gm-Message-State: ANoB5pnSYjyWBz1J3VnPGY9xQH0v3xVtDr5QAEGMZUuUhGidTllPy92j
+        Zh+Is8VfB6yffTJ2kZG+BKvhHg==
+X-Google-Smtp-Source: AA0mqf66BjvHqAMZwEdJBt0dFTt5/SHy1+6HQvcJmTOWZBR9LFU3R1/MSDg9xbs8lvTCdJbqEGsmrQ==
+X-Received: by 2002:a2e:be8b:0:b0:278:ea67:a38c with SMTP id a11-20020a2ebe8b000000b00278ea67a38cmr11889405ljr.63.1669731333470;
+        Tue, 29 Nov 2022 06:15:33 -0800 (PST)
 Received: from [172.21.3.193] ([87.54.42.112])
-        by smtp.gmail.com with ESMTPSA id v3-20020a2e9243000000b002770eafaafbsm1549640ljg.99.2022.11.29.06.15.15
+        by smtp.gmail.com with ESMTPSA id b16-20020a056512071000b004a8b9c68735sm2071805lfs.102.2022.11.29.06.15.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 06:15:15 -0800 (PST)
-Message-ID: <a258befe-8016-4244-346a-12b83012e89d@rasmusvillemoes.dk>
-Date:   Tue, 29 Nov 2022 15:15:14 +0100
+        Tue, 29 Nov 2022 06:15:33 -0800 (PST)
+Message-ID: <05782b6b-4e09-2b13-32c4-4984753dcef0@rasmusvillemoes.dk>
+Date:   Tue, 29 Nov 2022 15:15:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v1 4/5] rtc: isl12022: Join string literals back
+Subject: Re: [PATCH v1 5/5] rtc: isl12022: sort header inclusion
+ alphabetically
 Content-Language: en-US, da
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -61,9 +62,9 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 References: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
- <20221126141806.62205-4-andriy.shevchenko@linux.intel.com>
+ <20221126141806.62205-5-andriy.shevchenko@linux.intel.com>
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221126141806.62205-4-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221126141806.62205-5-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,11 +78,7 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 26/11/2022 15.18, Andy Shevchenko wrote:
-> For easy grepping on debug purposes join string literals back in
-> the messages.
-> 
-> While at it, drop __func__ parameter from unique enough dev_dbg()
-> message as Dynamic Debug can retrieve this at run time.
+> Sort header inclusion alphabetically for better maintenance.
 
 Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
