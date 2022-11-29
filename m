@@ -2,94 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D19B63BC4C
-	for <lists+linux-rtc@lfdr.de>; Tue, 29 Nov 2022 09:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0219463C1EF
+	for <lists+linux-rtc@lfdr.de>; Tue, 29 Nov 2022 15:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbiK2I6F (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 29 Nov 2022 03:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S235153AbiK2OKg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 29 Nov 2022 09:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiK2I6D (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Nov 2022 03:58:03 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1EA4A9CA
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 00:57:59 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id p8so21421755lfu.11
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 00:57:59 -0800 (PST)
+        with ESMTP id S235003AbiK2OKP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Nov 2022 09:10:15 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C1B5C0FE
+        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:10:04 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id h10so561985ljk.11
+        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:10:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=y3Xm8CTKI5pFBGHRduIfFpNiMz/YnZAtfkESDIfrZHU=;
-        b=yAEQ0f7iiBFFT3zCiQNjmihHx5xLZxE6k/IeeXvqExp+xO+DPBKaqaxdKRPjwqjvfm
-         LGiE/88+2dA8GBPDfU5fAaQ3Z/xIyM/1Q2wHRirgQvn4TyBIra65cSP5Se2/qbjCoKGc
-         1Hq557jg8voTc6j/UzZluOPwaXmy4GBopEX26WAIH5FqPhTqu9nz80AjXLac3MJp2C5g
-         10UfdNS/tnkujmQa2TuxvMMrc4swPsf08zlfgj/5oJCSrM8Yrtf/hnZWZFPGy9NRTOg/
-         5H+ub/cqzstKJ9vwyX2QUwyFk6bzIK3YPyrSpYuCCEjZonNp91Y4cV2sIkrx4I/gpKTj
-         /OMg==
+        bh=KqVtLXiq1FYLM+aSPqIKQjsXuT+N9Rkyh7hQ+06pZLY=;
+        b=ImBAr+UZq1NssjtUCaT5+KglRkfc2ennR/CTDF0EEDD+7vb4XjJ3daiFuxAIh1bWJk
+         S0lzrM6ZxlOtfJcAhIJUscNV2WYpjtGZ59FtnKZ+QHyHPyNm88qSzfLobJMgxKL5awo1
+         mpCOG9wJkV8/8wH+g3PttseDFPi9Qs1r9/wT0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y3Xm8CTKI5pFBGHRduIfFpNiMz/YnZAtfkESDIfrZHU=;
-        b=23OJPriezC6zl/rU5SdHLoqxDeUxiwG6sIM9hLZ43B0TFap2qpzhKSuK/MAVtay/3l
-         3oGa2s++KhfI2LQjYQMCnUVd2n6IsKKG+VuYvYx/klS+utAB1hDeaxb41Op0bXDCzrpk
-         Nku57/E+QocG7ojX9x15S+JQnfDEkgSGQmKnQ6CffeCHI3k3Mb/IzgJ1wKIZNeOybqlT
-         +5HuSkkku6zFkztZzlDE8YUrjaU5dmIvIvEsMfKQXivOfV5HzQQz5MfpOjtuPvO+2hSQ
-         E1hYOJnXsKrTR/NUtB2NzsdwNpZUlIGp0smvQDxPDBvcaPTsotlV5oLrgV2MMnE97AcV
-         kXPw==
-X-Gm-Message-State: ANoB5pmkcCPVXMk31ptRHgpbsaSwzLy7LvR5t0aGGx2uVZQVIeJbuOtv
-        /oL9wWKub1lEy0pUl9XfLxeFMA==
-X-Google-Smtp-Source: AA0mqf4sCi5zsBb8QGQDZbosFwGoYJsQ5RMSlu7aY+oTQbrbtNWy43Z7xsQZ8C1sktxc1yAoujDyww==
-X-Received: by 2002:ac2:4919:0:b0:4b5:33d:1215 with SMTP id n25-20020ac24919000000b004b5033d1215mr6449072lfi.419.1669712278173;
-        Tue, 29 Nov 2022 00:57:58 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c13-20020a056512238d00b0049ebc44994fsm2140144lfv.128.2022.11.29.00.57.56
+        bh=KqVtLXiq1FYLM+aSPqIKQjsXuT+N9Rkyh7hQ+06pZLY=;
+        b=qZ/cXIQ/WMq/0ssHjsf73bJjuIsyj2XretiD0CKdxAoeGOpRSg4tgdswKGHfw/K0YF
+         zYaOVemRVptE//USqyJFAncGXN7Sg077J1U67iwtJlBlCLrcEACE9H0v0jQj1uifuWs2
+         Puym5S1J5x+alENf47vEgXV2DadZJHegj2tAyHxScItmqw8pv+bfOrbq2K9YtyTMhLoL
+         2XlV0HHzAI7YPgZZBe998rksAb5QVl4w1P6jd3sWhsoXILWr6dGyvlMSAtOC47wwcnkN
+         3Jgg6LNneF6cnwcnkCrxAOG8dv4XWuYje6pFPQElPLdIVwmdrOwatfqvnGeuFK9lcTrU
+         SDBQ==
+X-Gm-Message-State: ANoB5pm2yAZptivEVoL64bgj6MHl/ogLGHXjcfdkcpw+CJdFVQK76PIM
+        ui+OP/wI1D8j6sLE6xIpJRe1WQ==
+X-Google-Smtp-Source: AA0mqf4ZQckfrXPfumRjMm60OiOaK0PiYODF7ceASbWqXiI3Cb6b2jZNnnbTKUbmWkk4G+ULoTOS/Q==
+X-Received: by 2002:a19:f610:0:b0:4b4:a536:f866 with SMTP id x16-20020a19f610000000b004b4a536f866mr17711021lfe.262.1669731002387;
+        Tue, 29 Nov 2022 06:10:02 -0800 (PST)
+Received: from [172.21.3.193] ([87.54.42.112])
+        by smtp.gmail.com with ESMTPSA id y1-20020a056512044100b004b4bb6286d8sm2233675lfk.84.2022.11.29.06.10.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 00:57:57 -0800 (PST)
-Message-ID: <79651cf2-7efd-b54c-65a0-8986cea071d5@linaro.org>
-Date:   Tue, 29 Nov 2022 09:57:56 +0100
+        Tue, 29 Nov 2022 06:10:01 -0800 (PST)
+Message-ID: <a004a051-2f63-b5a4-bf7b-925850f1f718@rasmusvillemoes.dk>
+Date:   Tue, 29 Nov 2022 15:10:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v6 05/10] dt-bindings: soc: mediatek: convert pwrap
- documentation
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 1/5] rtc: isl12022: Get rid of unneeded private struct
+ isl12022
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-leds@vger.kernel.org
-References: <20221005-mt6357-support-v6-0-4f589756befa@baylibre.com>
- <20221005-mt6357-support-v6-5-4f589756befa@baylibre.com>
- <a9a47e08-1a08-abe5-1dbe-1537d3414af6@linaro.org>
- <c94d15bf-c5ed-b400-abdf-8cca4102b078@linaro.org>
- <CAFGrd9pueans7Z_GHassY7ouGOwDmj4oJHAXS4ZtbYK4KH58Bw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAFGrd9pueans7Z_GHassY7ouGOwDmj4oJHAXS4ZtbYK4KH58Bw@mail.gmail.com>
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US, da
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -100,84 +76,13 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/11/2022 15:03, Alexandre Mergnat wrote:
+On 26/11/2022 15.18, Andy Shevchenko wrote:
+> First of all, the struct rtc_device pointer is kept in the managed
+> resources, no need to keep it outside (no users in the driver).
 > 
->>>> +allOf:
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            const: mediatek,mt8365-pwrap
->>>> +    then:
->>>> +      properties:
->>>> +        clocks:
->>>> +          minItems: 4
->>>> +
->>>> +        clock-names:
->>>> +          minItems: 4
->>>
->>> else:
->>> ???
->>
->> Actually this looks less complete than your previous patch.
->>
->> else:
->>   clocks:
->>     maxItems: 2
->> same for clock-names
->>
-> 
-> I think I’ve followed the feedback done here [1]
-> I’ve declared `minItems: 2` globally and override it to 4 if
-> mediatek,mt8365-pwrap is used. Isn’t it the right way to implement it
-> ?
+> Second, replace private struct isl12022 with a regmap.
 
-Yes, just the other part of comment is missing:
-"If you really want to force a validation error when using
-mediatek,mt8365-pwrap
-and not providing `sys` and `tmr` clocks, you can just override minItems."
+Nice simplification.
 
-but that's fine if this was your intention.
-
-> 
->>>> +            compatible = "mediatek,mt8135-pwrap";
->>>> +            reg = <0 0x1000f000 0 0x1000>,
->>>
->>> This does not match your unit address. No warnings when compile testing?
->>>
-> 
-> There are no warnings when compile testing. I will fix the unit
-> address anyway, sorry.
-> 
->>>> +                  <0 0x11017000 0 0x1000>;
->>>> +            reg-names = "pwrap", "pwrap-bridge";
->>>> +            interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>;
->>>> +            clocks = <&clk26m>, <&clk26m>;
->>>> +            clock-names = "spi", "wrap";
->>>> +            resets = <&infracfg MT8135_INFRA_PMIC_WRAP_RST>,
->>>> +                     <&pericfg MT8135_PERI_PWRAP_BRIDGE_SW_RST>;
->>>> +            reset-names = "pwrap", "pwrap-bridge";
->>>
->>> Missing pmic. Make your example complete.
->>
->> Probably pmic should be skipped, I understand it is described in MFD
->> binding.
->>
-> 
-> Put the pmic in the example have 2 constraints:
-> - The original pmic "mediatek,mt6397" isn’t supported by a yaml
-> schema, so I’ve a dt_binding_check fail: `failed to match any schema
-> with compatible: ['mediatek,mt6397']`
-> - If I put another pmic that supports a yaml schema, I need to put all
-> required properties for the pmic, which I thought was unnecessary
-> since it’s already done in its own schema and can change for another
-> pmic, so less consistent.
-> 
-> Then yes, IMHO, PMIC should be skipped in the example.
-
-
-Yes, you're right.
-
-Best regards,
-Krzysztof
+Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
