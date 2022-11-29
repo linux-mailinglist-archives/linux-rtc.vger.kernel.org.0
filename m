@@ -2,57 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EA163C237
-	for <lists+linux-rtc@lfdr.de>; Tue, 29 Nov 2022 15:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A9E63C240
+	for <lists+linux-rtc@lfdr.de>; Tue, 29 Nov 2022 15:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbiK2OPr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 29 Nov 2022 09:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S235647AbiK2OSE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 29 Nov 2022 09:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbiK2ONq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Nov 2022 09:13:46 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB4B2E2
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:13:23 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id r8so17310573ljn.8
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:13:23 -0800 (PST)
+        with ESMTP id S233682AbiK2ORX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Nov 2022 09:17:23 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDDB68C6C
+        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:15:30 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id l8so17286715ljh.13
+        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 06:15:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=y1FWq0AIq+LAkb7Lpd6SULnTbjNwAPN1aTI19W+HDGY=;
-        b=AGOiAI3FpvAuY8QYtUYdG5jhnr78hvdd90afGBSWKqqv0kb9bBmq/XTtXWF4d2m8Yz
-         fCo2EyYTL69TXxhyvYlROtf6I67o0htkPHyUe4juMF0fAZ7v1SIlxP0tGh0oVH1MJGad
-         RdF4qeZbwg9ob17mPTZXo5U/LQrRcmn8h6HfQ=
+        bh=hsnckQ+8SFGbO04BpVRnsDtmRSn9Ni4f0qnwe8AiADo=;
+        b=IGhPJ8dX6nb5Z8HsOUNYC5YL8iJKkyqLeGkbHiGxaeoIHpgJyOLHncztlilCAIPeAU
+         aUSrVaGX+5Da0paALXjUFDOBHUJx3ahG+RqzfmLtLWGK3FHqQPg7dlU5vFF+FdTFk52s
+         4B8K0gNzWKLkPxoYmBoONHxuMJi/hx/TompcM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y1FWq0AIq+LAkb7Lpd6SULnTbjNwAPN1aTI19W+HDGY=;
-        b=2lYZ/l1z8LY39BwRNmEUdOlF2u18LtUHp7lZkE7XirFB5+2yHegwyGE9/NjaxrAUQC
-         lqCtOc8wPjouTA3W0gP7nkEcI/LlZoWXshHRlPDxFf0LHt2mCvVAI3ITpxqSqv45O5Ah
-         mqT9E3RjlYl52FzIXDZNcUVYVW2QpwW9QWOhBqI4yOsMmSIMsXZADZekoQb+zs1a/9mz
-         qvK3rWEev8kwm9DR1r31H4IwAj+N5aoJVSXm84lG4LZdT53zTPzjTQAQSpozEKXjAN1e
-         bmBITWl4VKu7Zz4oXjBjYhVuBGrrY6nHoyd2oPlXKzSBVnBwT234RPqpAH2tfx7DeAnu
-         Rxiw==
-X-Gm-Message-State: ANoB5pmou/Zf2BLM3aO1mZg4y9zkGY4ufbMkyR65HkMOo2iVGHFYX3k9
-        WTr6024iEqp1i5Di+b5AFHtXsw==
-X-Google-Smtp-Source: AA0mqf4li0aP4WNji+mEe5LTBCyiSTHBCcHhEoJoBobJr3CWlfvPMyvk2Kov4bI8FtZCj2yspic3ag==
-X-Received: by 2002:a05:651c:c99:b0:277:2b10:bf60 with SMTP id bz25-20020a05651c0c9900b002772b10bf60mr19563600ljb.159.1669731201531;
-        Tue, 29 Nov 2022 06:13:21 -0800 (PST)
+        bh=hsnckQ+8SFGbO04BpVRnsDtmRSn9Ni4f0qnwe8AiADo=;
+        b=Nxy72cb+0KIoyixOuDXUUa65kHRpOC+55uU+41pY199fhwYQD63HH4pxLi2MjA7sNi
+         b/jwlggKWM8Z+S9SHxOI60HY9oor1Ob7w5arOzLzvwkdBmGJULCZj1WissQfnrbRszbY
+         aKlNwf9RbcORBBwMYRrKV7ATUrAyBNHJiRwPW5rb62qmIX+6nY56s/aFtfQwOPlZzTUS
+         2pVJbz3ZpYGrjsUlLJU4Tb9L5ouFsirP8TcViI7zg45ZYkovDHBDYuO5nFQ3Nu9ty27H
+         vsetX8XLvy4puW/mOrUHDJ07VEjN7JbAwuZBpUWWEreSIOnSgzN3dRvorzSbNjkGw+To
+         4AfA==
+X-Gm-Message-State: ANoB5pnjCsRyYo8bv/h/QrZT0IULbBIKwkUlmIFP1kLE6vE30cX/wRkT
+        cGRx5/jPRmNa2WI01MRYuO+iYA5bflbKFA==
+X-Google-Smtp-Source: AA0mqf5wUuCLPqi/+uagh8q9RS0D0xLgknDToqVyGJ4p1/SsKlDQOmUWONg6qrKmZ46fs/ER7PD0pg==
+X-Received: by 2002:ac2:558c:0:b0:4a2:4b78:a8e8 with SMTP id v12-20020ac2558c000000b004a24b78a8e8mr15251964lfg.292.1669731315968;
+        Tue, 29 Nov 2022 06:15:15 -0800 (PST)
 Received: from [172.21.3.193] ([87.54.42.112])
-        by smtp.gmail.com with ESMTPSA id u4-20020ac248a4000000b00499aefcf68esm2219224lfg.292.2022.11.29.06.13.20
+        by smtp.gmail.com with ESMTPSA id v3-20020a2e9243000000b002770eafaafbsm1549640ljg.99.2022.11.29.06.15.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 06:13:21 -0800 (PST)
-Message-ID: <046d8bed-c936-32af-d5c0-bf1c90684f39@rasmusvillemoes.dk>
-Date:   Tue, 29 Nov 2022 15:13:20 +0100
+        Tue, 29 Nov 2022 06:15:15 -0800 (PST)
+Message-ID: <a258befe-8016-4244-346a-12b83012e89d@rasmusvillemoes.dk>
+Date:   Tue, 29 Nov 2022 15:15:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/5] rtc: isl12022: Explicitly use __le16 type for
- ISL12022_REG_TEMP_L
+Subject: Re: [PATCH v1 4/5] rtc: isl12022: Join string literals back
 Content-Language: en-US, da
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -62,9 +61,9 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 References: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
- <20221126141806.62205-2-andriy.shevchenko@linux.intel.com>
+ <20221126141806.62205-4-andriy.shevchenko@linux.intel.com>
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221126141806.62205-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221126141806.62205-4-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,51 +77,11 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 26/11/2022 15.18, Andy Shevchenko wrote:
-> We are reading 10-bit value in a 16-bit register in LE format.
-> Make this explicit by using __le16 type for it and corresponding
-> conversion function.
+> For easy grepping on debug purposes join string literals back in
+> the messages.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/rtc/rtc-isl12022.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-> index 44058fa27277..bf1aa6f6560d 100644
-> --- a/drivers/rtc/rtc-isl12022.c
-> +++ b/drivers/rtc/rtc-isl12022.c
-> @@ -19,6 +19,8 @@
->  #include <linux/regmap.h>
->  #include <linux/hwmon.h>
->  
-> +#include <asm/byteorder.h>
-> +
->  /* ISL register offsets */
->  #define ISL12022_REG_SC		0x00
->  #define ISL12022_REG_MN		0x01
-> @@ -63,17 +65,16 @@ static umode_t isl12022_hwmon_is_visible(const void *data,
->  static int isl12022_hwmon_read_temp(struct device *dev, long *mC)
->  {
->  	struct regmap *regmap = dev_get_drvdata(dev);
-> -	u8 temp_buf[2];
->  	int temp, ret;
-> +	__le16 buf;
->  
-> -	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
-> -			       temp_buf, sizeof(temp_buf));
-> +	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L, &buf, sizeof(buf));
->  	if (ret)
->  		return ret;
->  	/*
->  	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
->  	 */
-> -	temp = (temp_buf[1] << 8) | temp_buf[0];
-> +	temp = le16_to_cpu(buf);
-
-Makes sense. Perhaps we should throw in "& 0x3ff" just in case there
-were ever any garbage bits set in the temp_h register.
-
-With or without that,
+> While at it, drop __func__ parameter from unique enough dev_dbg()
+> message as Dynamic Debug can retrieve this at run time.
 
 Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
