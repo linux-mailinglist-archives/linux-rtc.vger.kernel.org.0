@@ -2,220 +2,166 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8BA63D2D0
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Nov 2022 11:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AE663E245
+	for <lists+linux-rtc@lfdr.de>; Wed, 30 Nov 2022 21:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbiK3KIW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 30 Nov 2022 05:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S229468AbiK3Umk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 30 Nov 2022 15:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbiK3KIU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 30 Nov 2022 05:08:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B463B248EB;
-        Wed, 30 Nov 2022 02:08:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BF5261AA2;
-        Wed, 30 Nov 2022 10:08:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7617C433D7;
-        Wed, 30 Nov 2022 10:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669802896;
-        bh=9FvSvVLzySD8LbTfnoYpcK38CCZwnNYjsIckhInqktQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P0Yd5YZnMurOBSMnc+1boBGbX7+HW/x6DAtfPeXD3vOX+NZu9c/rTJbwa3nYtQfC1
-         5jh51yyT0/rdJ4UyhXfKtJHzmPV9i89AaDWJnydAV4vGaKLbcY0Y5LlPeXTqt9cqvP
-         jFQownQSEWgOAUhX3swf4M67FWa8XssUy2yhee7Z2hpva2KCXq/6vWJSqS59m1nf3W
-         Dze7SR7/FcFULDdvElVuJkbbbgDokuz4ek9aJFqaI2NpZ/nXNu7gNbWqdh2W2b+6AS
-         2nDwZOiWdgh8LV5V5V48cKLdEvX2/0sglK4kNObcAoltdrMboWzfzMN0uXeG2yndoH
-         POpULBl8lpocA==
-Date:   Wed, 30 Nov 2022 10:08:07 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v7 4/8] dt-bindings: mfd: mediatek: Add bindings for
- MT6357 PMIC
-Message-ID: <Y4crh0Ob3sz20s5T@google.com>
-References: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
- <20221005-mt6357-support-v7-4-477e60126749@baylibre.com>
+        with ESMTP id S229674AbiK3Umi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 30 Nov 2022 15:42:38 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0912CF45;
+        Wed, 30 Nov 2022 12:42:36 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1322d768ba7so22489100fac.5;
+        Wed, 30 Nov 2022 12:42:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aW4jE10bX9vLP2Ujep7LXrzT0zS8x0AH266cZuINKdo=;
+        b=Qibh5i+NoD7fYyNFDdxEZ8iEuarsckLYyS+PIqqfIj2P9DlLaDDHH/cCdxu5h7A9vw
+         JRu5DU9SlYzZdAk7CazTW/EpnKk8UKmO2lDnetOOuYOcTy/BqF9eZ0Iid5NLdjKhQTtw
+         PdWtGt6xjNd/mSI0Ilo+LY2WV5nv5Giiqb5VgsSB5JMZy+fGhNZxnWtn60EIiigQkITj
+         6c4XSPTZ7gygpf6NjfaKFlGULsUppwIh11SgNLjHDPQqUh6w9oTBi79KrGAVVnS/fhpb
+         BjWgkmB52vbyKXipZr1D2fHS/3LRPr2eOUylcmi2cE+J8augO48/7HY72oYN5bgJe+Mk
+         qXSw==
+X-Gm-Message-State: ANoB5pmhD7PnFAeMVww/Le3TyCVUFX1XVfb+/9+wP118wtKYBt+fCZha
+        3Skv+tgzFBSTGjaqseEZsQ==
+X-Google-Smtp-Source: AA0mqf6yrnJ1ZKt+9YRFNFFmGrY2esG6zANb9VB249O1ygtEP6Vh36HNPW6Wav4gwm3M7X7kGfYBBw==
+X-Received: by 2002:a05:6870:b527:b0:143:7736:806b with SMTP id v39-20020a056870b52700b001437736806bmr15596857oap.222.1669840955914;
+        Wed, 30 Nov 2022 12:42:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m22-20020a056870059600b0013c8ae74a14sm1684710oap.42.2022.11.30.12.42.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 12:42:35 -0800 (PST)
+Received: (nullmailer pid 2891149 invoked by uid 1000);
+        Wed, 30 Nov 2022 20:42:34 -0000
+Date:   Wed, 30 Nov 2022 14:42:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Matt Ranostay <mranostay@ti.com>
+Cc:     michael@walle.cc, vigneshr@ti.com, krzysztof.kozlowski@linaro.org,
+        a.zummo@towertech.it, linus.walleij@linaro.org, lee@kernel.org,
+        brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] dt-bindings: mfd: ti,tps6594: add TPS6594 PMIC
+ support
+Message-ID: <20221130204234.GA2875170-robh@kernel.org>
+References: <20221123053512.1195309-1-mranostay@ti.com>
+ <20221123053512.1195309-2-mranostay@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221005-mt6357-support-v7-4-477e60126749@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123053512.1195309-2-mranostay@ti.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 29 Nov 2022, Alexandre Mergnat wrote:
-
-> Currently, almost all MT63XX PMIC are documented mfd/mt6397.txt.
-> Unfortunately, the PMICs haven't always similar HW sub-features.
-> To have a better human readable schema, I chose to make one PMIC schema
-> to match the exact HW capabilities instead of convert mt6397.txt to
-> mediatek,mt63xx.yaml and put a bunch of properties behind
-> "if contain ... then ..."
+On Tue, Nov 22, 2022 at 09:35:09PM -0800, Matt Ranostay wrote:
+> Add documentation for the TPS6594 PMIC including its RTC and GPIO
+> functionalities.
 > 
-> - add interrupt property
-> - change property refs to match with new yaml documentation
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-
-Acked-by: Lee Jones <lee@kernel.org>
-
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
 > ---
->  .../devicetree/bindings/mfd/mediatek,mt6357.yaml   | 111 +++++++++++++++++++++
->  1 file changed, 111 insertions(+)
+>  .../devicetree/bindings/mfd/ti,tps6594.yaml   | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6357.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6357.yaml
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
 > new file mode 100644
-> index 000000000000..837a77013d57
+> index 000000000000..0de0db87dbf7
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6357.yaml
-> @@ -0,0 +1,111 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/mfd/mediatek,mt6357.yaml#
+> +$id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: MediaTek MT6357 PMIC
-> +
-> +maintainers:
-> +  - Flora Fu <flora.fu@mediatek.com>
-> +  - Alexandre Mergnat <amergnat@baylibre.com>
+> +title: TPS6594 Power Management Integrated Circuit (PMIC)
 > +
 > +description: |
-> +  MT6357 is a power management system chip containing 5 buck
-> +  converters and 29 LDOs. Supported features are audio codec,
-> +  USB battery charging, fuel gauge, RTC
+> +  TPS6594 Power Management Integrated Circuit (PMIC)
+> +  https://www.ti.com/lit/ds/symlink/tps6594-q1.pdf
+
+Normally a PMIC has some regulators...
+
 > +
-> +  This is a multifunction device with the following sub modules:
-> +  - Regulator
-> +  - RTC
-> +  - Keys
-> +
-> +  It is interfaced to host controller using SPI interface by a proprietary hardware
-> +  called PMIC wrapper or pwrap. This MFD is a child device of pwrap.
-> +  See the following for pwrap node definitions:
-> +  Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
+> +maintainers:
+> +  - Keerthy <j-keerthy@ti.com>
 > +
 > +properties:
 > +  compatible:
-> +    const: mediatek,mt6357
+> +    enum:
+> +      - ti,tps6594
 > +
-> +  interrupts:
-> +    maxItems: 1
+> +  reg:
+> +    const: 0x48
 > +
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +
-> +  regulators:
-> +    type: object
-> +    $ref: /schemas/regulator/mediatek,mt6357-regulator.yaml
-> +    description:
-> +      List of MT6357 BUCKs and LDOs regulators.
+> +  ti,system-power-controller:
+> +    type: boolean
+> +    description: PMIC is controlling the system power.
 > +
 > +  rtc:
 > +    type: object
 > +    $ref: /schemas/rtc/rtc.yaml#
-> +    description:
-> +      MT6357 Real Time Clock.
+> +    unevaluatedProperties: false
 > +    properties:
 > +      compatible:
-> +        const: mediatek,mt6357-rtc
-> +      start-year: true
-> +    required:
-> +      - compatible
+> +        const: ti,tps6594-rtc
 > +
-> +  keys:
+> +  gpio:
 > +    type: object
-> +    $ref: /schemas/input/mediatek,pmic-keys.yaml
-> +    description:
-> +      MT6357 power and home keys.
-> +
-> +required:
-> +  - compatible
-> +  - regulators
+> +    unevaluatedProperties: false
+> +    properties:
+> +      compatible:
+> +        const: ti,tps6594-gpio
+
+GPIO, but not using the GPIO binding?
+
+As Krzysztof pointed out, none of this needs child nodes. You have them 
+just for convenience of instantiating Linux drivers.
+
 > +
 > +additionalProperties: false
 > +
+> +required:
+> +  - compatible
+> +  - reg
+> +
 > +examples:
 > +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
 > +
-> +    pwrap {
-> +        pmic {
-> +            compatible = "mediatek,mt6357";
-> +
-> +            interrupt-parent = <&pio>;
-> +            interrupts = <145 IRQ_TYPE_LEVEL_HIGH>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <2>;
-> +
-> +            regulators {
-> +                mt6357_vproc_reg: buck-vproc {
-> +                    regulator-name = "vproc";
-> +                    regulator-min-microvolt = <518750>;
-> +                    regulator-max-microvolt = <1312500>;
-> +                    regulator-ramp-delay = <6250>;
-> +                    regulator-enable-ramp-delay = <220>;
-> +                    regulator-always-on;
-> +                };
-> +
-> +                // ...
-> +
-> +                mt6357_vusb33_reg: ldo-vusb33 {
-> +                    regulator-name = "vusb33";
-> +                    regulator-min-microvolt = <3000000>;
-> +                    regulator-max-microvolt = <3100000>;
-> +                    regulator-enable-ramp-delay = <264>;
-> +                };
-> +            };
+> +        pmic: pmic@48 {
+> +            compatible = "ti,tps6594";
+> +            reg = <0x48>;
 > +
 > +            rtc {
-> +                compatible = "mediatek,mt6357-rtc";
+> +                compatible = "ti,tps6594-rtc";
 > +            };
 > +
-> +            keys {
-> +                compatible = "mediatek,mt6357-keys";
+> +            gpio {
+> +                compatible = "ti,tps6594-gpio";
 > +            };
 > +        };
 > +    };
+> +
+> +...
+> -- 
+> 2.38.GIT
 > 
-
--- 
-Lee Jones [李琼斯]
+> 
