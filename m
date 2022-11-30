@@ -2,167 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C2563C44F
-	for <lists+linux-rtc@lfdr.de>; Tue, 29 Nov 2022 16:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BE363D113
+	for <lists+linux-rtc@lfdr.de>; Wed, 30 Nov 2022 09:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235498AbiK2P5o (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 29 Nov 2022 10:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
+        id S234808AbiK3Iuu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 30 Nov 2022 03:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236058AbiK2P5P (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Nov 2022 10:57:15 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7403F052
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 07:57:14 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so11187309wms.0
-        for <linux-rtc@vger.kernel.org>; Tue, 29 Nov 2022 07:57:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GI9uwBLCvWR3OgOlMBN6oypd3UQ7AbJ0Dp0NjT4lxFo=;
-        b=q5AMfXNq+uEIyJlBR4JMMkREhMsydwCzKt+PI6ZOWnuCDxDC46sM+LhYOuqjwz3EnD
-         MvIvJWH0uX5OqoygLr59MVBrhBGn4zxNvOBAmGOxJCWtvSlfFyAbKjzocozW2irPiXj6
-         R137SUWyTFtJnCd79bN+9OmhsWSWnsZ6V3zvd4pHkctIuP/JE3QjpnroKOi/jLUBKLWE
-         TlK7K35lzOrtnX9XMPQ4vA2AWzPUfT0sgc4WuV/SBrB/XQ5eHfuyi2B2If8p7yqJHTwY
-         qwIRtHF1onChLN7ImTbtjmWCDrVMyCzrh4sRT368ZeiOC2wxS7ftcqYQQ8VoEisKtkOL
-         6EEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GI9uwBLCvWR3OgOlMBN6oypd3UQ7AbJ0Dp0NjT4lxFo=;
-        b=tpxrR8QzKpJz+hj9qwpdXBdcgzjh1Px+tgGxiXZd2TTd3tzv+Tonl0prJI47zavWeM
-         VCyjLzFeDcbjv2MuttSpl4ah/HT6om0+JLK57MAOi1isDzZ3mU3tHTf7GfzjRJ6WggmR
-         WOadII2p0vLmJeiIbs5TtZcM4ai+PTEmHm8jN8sydyvG82sPDpIehAybEg7dBhcWdpzB
-         ctcurC8TqRnHoTgpgQ8Uw7humLEDiWJabdMN+ScAhkv2HxMDagqyqIhxEasPb1WCXc6c
-         MyAUOduQuaARw2E6018/QFGpAIaHFqq5ZduYYKpdqplNXbf0NXwSLXjCZXkyeHg0t4JU
-         WJSQ==
-X-Gm-Message-State: ANoB5pnl2gbfl+a8nXtcXj94v91a/5uP8k/7eqj5WZKDSizDtJKD1CTP
-        XdOKPTT0tVyf7r0NSIgBcWhrxg==
-X-Google-Smtp-Source: AA0mqf7sdZ4IIewi7If1cBDpEQXvuDOrlh8xL7AZnFA8/lhkuWPov7WbfLsNIp8x1bWjFHnFCxtv5A==
-X-Received: by 2002:a05:600c:554d:b0:3cf:af66:e5b9 with SMTP id iz13-20020a05600c554d00b003cfaf66e5b9mr28316339wmb.107.1669737434173;
-        Tue, 29 Nov 2022 07:57:14 -0800 (PST)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id f2-20020a7bc8c2000000b003cfb7c02542sm2601550wml.11.2022.11.29.07.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 07:57:13 -0800 (PST)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 29 Nov 2022 16:57:07 +0100
-Subject: [PATCH v7 8/8] Input: mtk-pmic-keys: add MT6357 support
+        with ESMTP id S234464AbiK3Ius (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 30 Nov 2022 03:50:48 -0500
+Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1C32B252
+        for <linux-rtc@vger.kernel.org>; Wed, 30 Nov 2022 00:50:48 -0800 (PST)
+Received: by mail.ettrick.pl (Postfix, from userid 1002)
+        id 2B33DA34E2; Wed, 30 Nov 2022 08:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
+        t=1669798247; bh=ChRcLNpIfKnVgp03/tSyWuRw1tWSTk/OEiEnuZMWs58=;
+        h=Date:From:To:Subject:From;
+        b=T24AoEs5eYB7VV6TsbfxjgyO0FA+wH//zPvi5N0KuLL53ivjTP/BeOxF5SdttfPYv
+         qrfJqRMCRGkaqDXDZsHjrArKpGLPTf6BHMfwgAHEIPOyb/Hn5jvf9JJRRjX3vL33CT
+         MiiHfqc91bFV9NJ9TQNR6FcZxxRNITy5Lvff5t4ZRRBEXbsenkS3LZWbrbAHutFiVr
+         6Z82RfX8QGkYHfOmZvu7mtFttn8hwOUVC5ogcQBLTZ1/y7Qlglp4L2Ov7u3c67u2dT
+         NiyhWw2RIjkuRu2P6L3sur0n7CG7RkpKEwH9jcSWmtFIYfw1+IfIGBV8FW1wnU6CxO
+         +V1PeLNG5bmig==
+Received: by mail.ettrick.pl for <linux-rtc@vger.kernel.org>; Wed, 30 Nov 2022 08:50:45 GMT
+Message-ID: <20221130074500-0.1.7a.1ym61.0.fyky2r4d64@ettrick.pl>
+Date:   Wed, 30 Nov 2022 08:50:45 GMT
+From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.ettrick.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221005-mt6357-support-v7-8-477e60126749@baylibre.com>
-References: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
-In-Reply-To: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, Lee Jones <lee@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-leds@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2028; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=K2/LktiwnSqpYUY/NYDB7cyyBwW4Kzl5Gx1VcVhpHIg=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjhivPU87+tCEsv9wKvjsTZ/yHirCJ7tdj091I6KFc
- cLYo/HOJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY4YrzwAKCRArRkmdfjHURcWdD/
- 48EXWvZZB8DrLR5D/bQxn+KzLEixITXwKeF9W7VwgXTaLu/tau7GP4Ufn0nxnCLdAsDrpdsvzJq0QK
- /v65pGhFyzpnPLEYjjeTH3EOPNut6s/b3hrBjy6ifTG+FPpGc2Kw5An18Yu3zeyyE/ZNOZ+cRtjzWZ
- mIRgdaQ1A1RBphVGCo/V85j69rx5o4bpiO0lG5/824rP0PL0tIY3fEczhcRMdRkjoZh2N3jifZ8bjo
- ydip/Z9ZRBnxUo60n4aBEOPDt4MyyICRaPZxeJPEJMEazM+Lx6uab+GsJfyPsqcVVSoGxfbJh26cL2
- k1qUigspT56CISzWQLajPdY8qfP3Sq7sdXNh7Dn0RirWU4S2sIR6RYqOUyv3+rUL7scCWnyLNyGDM0
- mvNQcd9sJZUS7YDR1Dv5KvUYicEY85mEQkSrXZgWesitz774zn9kJHwY1hnjoojtNbdWzClYFyTOIE
- ptNZy/QSdq7si5NhnoF8R8KxsjuCvjAfCLKVWrTtbmePCfCF2S6z8aH8DkwN+QUH/IJoG0zBlVwJCs
- poPK2zFmYYl7K2/fDUi1GS92cg+3jyLgNC07KZ/vJV1ucdGnfrVt6ZJDziMbBV8Wygk4aOiidIVOSp
- K1AbxZ1piDeC7nz4xEQxNl09oM/hvoJJvFOpjN1OjWNHEouWgkGFmXtLb2IQ==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL,RCVD_IN_SBL_CSS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,URIBL_ABUSE_SURBL,
+        URIBL_CSS_A,URIBL_DBL_SPAM,URIBL_SBL_A autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: ettrick.pl]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [141.94.21.111 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  0.1 URIBL_SBL_A Contains URL's A record listed in the Spamhaus SBL
+        *      blocklist
+        *      [URIs: ettrick.pl]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: ettrick.pl]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  1.2 URIBL_ABUSE_SURBL Contains an URL listed in the ABUSE SURBL
+        *      blocklist
+        *      [URIs: ettrick.pl]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [141.94.21.111 listed in bl.score.senderscore.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+Dzie=C5=84 dobry,
 
-Add PMIC Keys support on MT6357 SoC.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- drivers/input/keyboard/mtk-pmic-keys.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
-index 9b34da0ec260..2a63e0718eb6 100644
---- a/drivers/input/keyboard/mtk-pmic-keys.c
-+++ b/drivers/input/keyboard/mtk-pmic-keys.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/mfd/mt6323/registers.h>
- #include <linux/mfd/mt6331/registers.h>
-+#include <linux/mfd/mt6357/registers.h>
- #include <linux/mfd/mt6358/registers.h>
- #include <linux/mfd/mt6397/core.h>
- #include <linux/mfd/mt6397/registers.h>
-@@ -90,6 +91,19 @@ static const struct mtk_pmic_regs mt6331_regs = {
- 	.rst_lprst_mask = MTK_PMIC_MT6331_RST_DU_MASK,
- };
- 
-+static const struct mtk_pmic_regs mt6357_regs = {
-+	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
-+		MTK_PMIC_KEYS_REGS(MT6357_TOPSTATUS,
-+				   0x2, MT6357_PSC_TOP_INT_CON0, 0x5,
-+				   MTK_PMIC_PWRKEY_RST),
-+	.keys_regs[MTK_PMIC_HOMEKEY_INDEX] =
-+		MTK_PMIC_KEYS_REGS(MT6357_TOPSTATUS,
-+				   0x8, MT6357_PSC_TOP_INT_CON0, 0xa,
-+				   MTK_PMIC_HOMEKEY_INDEX),
-+	.pmic_rst_reg = MT6357_TOP_RST_MISC,
-+	.rst_lprst_mask = MTK_PMIC_RST_DU_MASK,
-+};
-+
- static const struct mtk_pmic_regs mt6358_regs = {
- 	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
- 		MTK_PMIC_KEYS_REGS(MT6358_TOPSTATUS,
-@@ -276,6 +290,9 @@ static const struct of_device_id of_mtk_pmic_keys_match_tbl[] = {
- 	}, {
- 		.compatible = "mediatek,mt6331-keys",
- 		.data = &mt6331_regs,
-+	}, {
-+		.compatible = "mediatek,mt6357-keys",
-+		.data = &mt6357_regs,
- 	}, {
- 		.compatible = "mediatek,mt6358-keys",
- 		.data = &mt6358_regs,
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
--- 
-b4 0.10.1
+
+Pozdrawiam,
+Norbert Karecki
