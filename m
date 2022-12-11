@@ -2,96 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D25649229
-	for <lists+linux-rtc@lfdr.de>; Sun, 11 Dec 2022 04:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23335649530
+	for <lists+linux-rtc@lfdr.de>; Sun, 11 Dec 2022 18:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiLKDBN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 10 Dec 2022 22:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
+        id S230180AbiLKROs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 11 Dec 2022 12:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLKDBM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 10 Dec 2022 22:01:12 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E83387;
-        Sat, 10 Dec 2022 19:01:09 -0800 (PST)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 0BA3A852FB;
-        Sun, 11 Dec 2022 04:01:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1670727667;
-        bh=aEiouBhBgwLswh3IetEyUPaUNGvXqngdyiSg+pWw1ks=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AW9HFe/YxVJ6hGetSPDRDhlXmfFyX+nkqToY7jayqdM7eF35Q/1HASR7NdQs+oT1n
-         ZBjtUw0i8lWebUzyPnP7TWnXbXpZZ7dBtJbG1XtDmLI5APP6A/dYoNpTQEGcZf6Cve
-         nA0qeCxD/BsmKMdYHDMIYidB3zzKJbbsGU1DOfyfExGbsITUCdP/gTz+La0pA5hWuX
-         e54TYVZMOgf26ndiOGVJevS41a+fYYkZ3xU+Oyzs1SDBQhj7oWk9fEO0MJZLo6XIbW
-         l4sTt/nc2iJyIjav0WsshL7nwH6gfyQnCnaKRUvzZlM1V8rT+zsHou6dYlqk60khhl
-         Y1IfFCV89QRmA==
-From:   Marek Vasut <marex@denx.de>
-To:     devicetree@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S229947AbiLKROq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 11 Dec 2022 12:14:46 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671CDE0A5;
+        Sun, 11 Dec 2022 09:14:45 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id DBE9F100004;
+        Sun, 11 Dec 2022 17:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670778883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rBDims/zkL1hUiQmCOcc4chEh7a5Jbi2KbYlhUI9MIA=;
+        b=memQZf3frHdebnPRjVSe3lRVg/+Xk4rIjKElSq13xvse53ZNtO8mDkF2YZchgSv54YkNFJ
+        09cWmF4OoJldYEJRZyL8fBi46G481IgIVUcueJuvQuKB9aKJ8hgdKUphgZ3+XtEM8AAyJn
+        mLTPkWCk5wdZWKQkJujdDrfFXM7+uyWaGReB7S55b+lMihH33KxXz0p01blA8zw7ZjZ5VM
+        bRR4V4+FpwWvU+ETs71IX9iAPE276ODJgiqDKI5OmDtbVUx7XCWjfzdEyUF8dICds7PsSW
+        Q0DElObMBQXu3FDWNJqruvUwpxqWVQVKTGarZVM0oeSr8Pyt1rS0OKNGeYdD6A==
+Date:   Sun, 11 Dec 2022 18:14:41 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Romain Perier <romain.perier@gmail.com>, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: rtc: m41t80: Mark the clock: subnode as deprecated
-Date:   Sun, 11 Dec 2022 04:00:54 +0100
-Message-Id: <20221211030054.672717-2-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221211030054.672717-1-marex@denx.de>
-References: <20221211030054.672717-1-marex@denx.de>
+        Daniel Palmer <daniel@thingy.jp>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: msc313: Fix function prototype mismatch in
+ msc313_rtc_probe()
+Message-ID: <167077884687.347026.2422549159298910618.b4-ty@bootlin.com>
+References: <20221202184525.gonna.423-kees@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202184525.gonna.423-kees@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The clock {} subnode seems like it is describing an always-on clock
-generated by the PMIC. This should rather be modeled by consumer of
-the clock taking phandle to the RTC node itself, since it already
-does have clock-cells and all. Since there are no users of the clock
-subnode in tree anyway, mark it as deprecated to avoid proliferation
-of this approach.
+On Fri, 2 Dec 2022 10:45:30 -0800, Kees Cook wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed.
+> 
+> msc313_rtc_probe() was passing clk_disable_unprepare() directly, which
+> did not have matching prototypes for devm_add_action_or_reset()'s
+> callback argument. Refactor to use devm_clk_get_enabled() instead.
+> 
+> [...]
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: linux-rtc@vger.kernel.org
-To: devicetree@vger.kernel.org
----
-V2: - Add AB from Krzysztof
----
- Documentation/devicetree/bindings/rtc/st,m41t80.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Applied, thanks!
 
-diff --git a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
-index 9977c8954307e..98a6da4083897 100644
---- a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
-+++ b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
-@@ -40,6 +40,7 @@ properties:
-   clock:
-     type: object
-     $ref: /schemas/clock/fixed-clock.yaml#
-+    deprecated: true
-     properties:
-       clock-frequency:
-         const: 32768
+[1/1] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
+      commit: 21b8a1dd56a163825e5749b303858fb902ebf198
+
+Best regards,
+
 -- 
-2.35.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
