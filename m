@@ -2,164 +2,164 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B113649612
-	for <lists+linux-rtc@lfdr.de>; Sun, 11 Dec 2022 21:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EA664962D
+	for <lists+linux-rtc@lfdr.de>; Sun, 11 Dec 2022 21:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiLKUFw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 11 Dec 2022 15:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S230144AbiLKUVM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 11 Dec 2022 15:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiLKUFv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 11 Dec 2022 15:05:51 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C45BC1B;
-        Sun, 11 Dec 2022 12:05:49 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 842B9E0004;
-        Sun, 11 Dec 2022 20:05:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670789147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aygsMx4TJ8Ez/Ymyikd1YHSRsA4Prw0/zWD81Atj3Ho=;
-        b=cse1r3p5N8JCAGiY00vN1Z2u1JxHXwTaW4MfC3L04Zky1CVDPvXJkU1hXnZieZjv+vxLE7
-        2UoyrEvSYi4nl6OWbm6sGCnj9PV0KJgM9FOkcMt+ER4yH8hgoFwZINT3vZ6yuDGlF8KCyc
-        P/D48Z+T670BnAefUy94JZaw5O8H4HVNMvVJl4FLWH0xB2VytPFTKNXVyKgqwAXrjuCdTX
-        gfhYIx27mkuHrPeqHgG1J1+nPzqnPJ9py/+DatWQea38cBAbSmaIAae071GfKwbsX1tWmH
-        0Uqy/BB+cVqqsBcbD+/zJw6RJ3XIvFqgxCubW3y8yv5I1ZdeNiAhxl/MuesPIA==
-Date:   Sun, 11 Dec 2022 21:05:46 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Matt Ranostay <mranostay@ti.com>
-Cc:     michael@walle.cc, vigneshr@ti.com, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, a.zummo@towertech.it,
-        linus.walleij@linaro.org, lee@kernel.org, brgl@bgdev.pl,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>
-Subject: Re: [PATCH v5 3/4] rtc: rtc-tps6594: Add support for TPS6594 PMIC RTC
-Message-ID: <Y5Y4GlHc0aI6GG2g@mail.local>
-References: <20221123053512.1195309-1-mranostay@ti.com>
- <20221123053512.1195309-4-mranostay@ti.com>
+        with ESMTP id S230085AbiLKUVL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 11 Dec 2022 15:21:11 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3790CE1F
+        for <linux-rtc@vger.kernel.org>; Sun, 11 Dec 2022 12:21:04 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b13so15332004lfo.3
+        for <linux-rtc@vger.kernel.org>; Sun, 11 Dec 2022 12:21:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f7f5NzHuOcAIwmcmsuh5pOa0xk5poE64Ee61v4Fe2d4=;
+        b=kufHZz4lbm+QSHZGTI+kO6SkkXmD1KpjtDE3mNz4C/ZYv4IM5WqwNYQc043cXwZLNJ
+         7g5picfkptV9bNzdOABk439OaSCxEdJt/DTkbilB+XhVd1cM5iK8KXMK4OOwq+Ayo00m
+         904Genl8uhsTUJbjzPRnGYiFvG1Cwqdi7a944ts8YlHgDNgjZJZy+i77aOoGjnqL+6cu
+         JGZyJJA0obc7yWq0FolC5qD6h/9ro/J5HscUpcH+4U/AAhzGKBvOObPDGayyRKORODBw
+         xvrqPf2OUnPzVEhG/a/h5W8TfLKdRY/C/XDQhQ9+dpnk35jLa7fiPRh1Lg2woiDAHTof
+         AhgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f7f5NzHuOcAIwmcmsuh5pOa0xk5poE64Ee61v4Fe2d4=;
+        b=Ko4BVP+6B1LhhBXXrjhOOQGj6BJMZd8ytlt5HpV3un+RpzdDnWB04bQdGisDMHW57a
+         tCU/fIxn4l7xYY06SgvSNGnCICdr34xcXDpcw9MZ5rUmVEeheaTNfkVlC2UdgEOPm44y
+         xNlihvRFforhsKX42B+vTU4Iqvr8w41AbyH5oCyeFOUIPwJyAxYDzPwCBauWLhsm7m8B
+         KHLbisPFsXn5rtK0O43/mf9K63mXH4+TwInopkTzyTqVMsLOc6+7VGF+MS8ZdwhUo7xX
+         c9MUoMmQuqyBNype5P5irrOGzafKXUGAfP2AXmx0ULG7KlGQb3YLSZk9h7yFSIzgXJXW
+         zvaw==
+X-Gm-Message-State: ANoB5pmaWKmzSJvx5gw8oskXjc1Pysi/B10KI/qlvdTMVt3dGG+xBeqX
+        PHIEBJCTMvB4Fh+dWcV2IUPdHg==
+X-Google-Smtp-Source: AA0mqf6HZ8azPjxjMMPyM0g9pFr57Vgn5ZhCH28QMkoCpipMMzlId3AdWm6HadW/bfF4vhe54vE8hQ==
+X-Received: by 2002:a05:6512:104f:b0:4a4:68b8:f4be with SMTP id c15-20020a056512104f00b004a468b8f4bemr4416504lfb.4.1670790063328;
+        Sun, 11 Dec 2022 12:21:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u9-20020ac25bc9000000b004b561202ea2sm1335100lfn.182.2022.12.11.12.21.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Dec 2022 12:21:02 -0800 (PST)
+Message-ID: <da4bc2f0-552b-5c8c-f8b2-97e84c5520d2@linaro.org>
+Date:   Sun, 11 Dec 2022 21:21:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123053512.1195309-4-mranostay@ti.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: m41t80: Convert text schema to
+ YAML one
+Content-Language: en-US
+To:     Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org
+References: <20221211030054.672717-1-marex@denx.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221211030054.672717-1-marex@denx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 22/11/2022 21:35:11-0800, Matt Ranostay wrote:
-> +static int tps6594_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	unsigned char rtc_data[TPS6594_NUM_TIME_REGS];
-> +	struct tps6594 *tps6594 = dev_get_drvdata(dev->parent);
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	rtc_data[0] = bin2bcd(tm->tm_sec);
-> +	rtc_data[1] = bin2bcd(tm->tm_min);
-> +	rtc_data[2] = bin2bcd(tm->tm_hour);
-> +	rtc_data[3] = bin2bcd(tm->tm_mday);
-> +	rtc_data[4] = bin2bcd(tm->tm_mon + 1);
-> +	rtc_data[5] = bin2bcd(tm->tm_year - 100);
-> +
-> +	/* Stop RTC while updating the RTC time registers */
-> +	ret = regmap_update_bits(tps6594->regmap, TPS6594_RTC_CTRL_1,
-> +				 TPS6594_RTC_CTRL_REG_STOP_RTC, 0);
-> +	if (ret < 0) {
-> +		dev_err(dev, "RTC stop failed, err = %d\n", ret);
-
-This function is way too verbose. There is no other action for the user
-than retrying to set the time. You should probably remove all the
-dev_err calls.
-
-> +		return ret;
-> +	}
-> +
-> +	/* Waiting till RTC isn't running */
-> +	ret = regmap_read_poll_timeout(tps6594->regmap, TPS6594_RTC_STATUS,
-> +				       val, !(val & TPS6594_RTC_STATUS_RUN),
-> +				       TPS6594_RTC_POLL, TPS6594_RTC_TIMEOUT);
-> +	if (ret) {
-> +		dev_err(dev, "RTC_STATUS is still RUNNING\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = regmap_bulk_write(tps6594->regmap, TPS6594_RTC_SECONDS,
-> +		rtc_data, TPS6594_NUM_TIME_REGS);
-> +	if (ret < 0) {
-> +		dev_err(dev, "RTC_SECONDS reg write failed, err = %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Start back RTC */
-> +	ret = regmap_update_bits(tps6594->regmap, TPS6594_RTC_CTRL_1,
-> +				 TPS6594_RTC_CTRL_REG_STOP_RTC,
-> +				 TPS6594_RTC_CTRL_REG_STOP_RTC);
-> +	if (ret < 0)
-> +		dev_err(dev, "RTC start failed, err = %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct rtc_class_ops tps6594_rtc_ops = {
-> +	.read_time	= tps6594_rtc_read_time,
-> +	.set_time	= tps6594_rtc_set_time,
-> +};
-> +
-> +static int tps6594_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct tps6594_rtc *tps6594_rtc;
-> +
-> +	tps6594_rtc = devm_kzalloc(&pdev->dev, sizeof(*tps6594_rtc), GFP_KERNEL);
-> +	if (!tps6594_rtc)
-> +		return -ENOMEM;
-> +
-> +	tps6594_rtc->dev = &pdev->dev;
-> +	platform_set_drvdata(pdev, tps6594_rtc);
-> +
-> +	tps6594_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(tps6594_rtc->rtc))
-> +		return PTR_ERR(tps6594_rtc->rtc);
-> +
-> +	tps6594_rtc->rtc->ops = &tps6594_rtc_ops;
-> +
-> +	return devm_rtc_register_device(tps6594_rtc->rtc);
-> +}
-> +
-> +static const struct of_device_id of_tps6594_rtc_match[] = {
-> +	{ .compatible = "ti,tps6594-rtc", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, of_tps6594_rtc_match);
-> +
-> +static struct platform_driver tps6594_rtc_driver = {
-> +	.probe		= tps6594_rtc_probe,
-> +	.driver		= {
-> +		.name	= "tps6594-rtc",
-> +		.of_match_table = of_tps6594_rtc_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(tps6594_rtc_driver);
-> +
-> +MODULE_ALIAS("platform:tps6594-rtc");
-> +MODULE_DESCRIPTION("TI TPS6594 series RTC driver");
-> +MODULE_AUTHOR("Keerthy J <j-keerthy@ti.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.38.GIT
+On 11/12/2022 04:00, Marek Vasut wrote:
+> Convert the m41t80 text schema to YAML schema.
 > 
+> Add "#clock-cells" requirement, which is required by clock-output-names.
+> 
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: linux-rtc@vger.kernel.org
+> To: devicetree@vger.kernel.org
+> ---
+> V2: - Add maxItems:1 to clock-output-names
+>     - Skip wakeup-source property, comes from rtc.yaml
+>     - Mention the new clock-cells requirement coming from
+>       clock-output-names property.
+>     - Rename rtc-m41t80.txt to st,m41t80.yaml
+> ---
+>  .../devicetree/bindings/rtc/rtc-m41t80.txt    | 39 ----------
+>  .../devicetree/bindings/rtc/st,m41t80.yaml    | 73 +++++++++++++++++++
+>  2 files changed, 73 insertions(+), 39 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-m41t80.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc-m41t80.txt b/Documentation/devicetree/bindings/rtc/rtc-m41t80.txt
+> deleted file mode 100644
+> index cdd196b1e9bdb..0000000000000
+> --- a/Documentation/devicetree/bindings/rtc/rtc-m41t80.txt
+> +++ /dev/null
+> @@ -1,39 +0,0 @@
+> -ST M41T80 family of RTC and compatible
+> -
+> -Required properties:
+> -- compatible: should be one of:
+> -	"st,m41t62",
+> -	"st,m41t65",
+> -	"st,m41t80",
+> -	"st,m41t81",
+> -	"st,m41t81s",
+> -	"st,m41t82",
+> -	"st,m41t83",
+> -	"st,m41t84",
+> -	"st,m41t85",
+> -	"st,m41t87",
+> -	"microcrystal,rv4162",
+> -- reg: I2C bus address of the device
+> -
+> -Optional properties:
+> -- interrupts: rtc alarm interrupt.
+> -- clock-output-names: From common clock binding to override the default output
+> -                      clock name
+> -- wakeup-source: Enables wake up of host system on alarm
+> -
+> -Optional child node:
+> -- clock: Provide this if the square wave pin is used as boot-enabled fixed clock.
+> -
+> -Example:
+> -	rtc@68 {
+> -		compatible = "st,m41t80";
+> -		reg = <0x68>;
+> -		interrupt-parent = <&UIC0>;
+> -		interrupts = <0x9 0x8>;
+> -
+> -		clock {
+> -			compatible = "fixed-clock";
+> -			#clock-cells = <0>;
+> -			clock-frequency = <32768>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> new file mode 100644
+> index 0000000000000..9977c8954307e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I missed that one during previous review - why not dual license? I do
+not see here any text (hardware description) being copied. Is it because
+of DTS example?
+
+Best regards,
+Krzysztof
+
