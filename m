@@ -2,40 +2,41 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DA3649692
-	for <lists+linux-rtc@lfdr.de>; Sun, 11 Dec 2022 22:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6886496C8
+	for <lists+linux-rtc@lfdr.de>; Sun, 11 Dec 2022 23:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiLKV6Q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 11 Dec 2022 16:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S230313AbiLKWgE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 11 Dec 2022 17:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKV6P (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 11 Dec 2022 16:58:15 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF0B626B;
-        Sun, 11 Dec 2022 13:58:13 -0800 (PST)
+        with ESMTP id S229656AbiLKWgE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 11 Dec 2022 17:36:04 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A1B647A;
+        Sun, 11 Dec 2022 14:36:00 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 98805240003;
-        Sun, 11 Dec 2022 21:58:10 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id EA8331BF203;
+        Sun, 11 Dec 2022 22:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670795891;
+        t=1670798159;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=Gn2wozbp6UyyW3PSzzTKHcaffuxRTyrivYdS1OSvB80=;
-        b=iiuJJraB2yHN/8rtn9HhMb03Cnahm5piBbrQrTrNZpLD42cKbqtXfviul9U+OC03XKetxG
-        z5tLeAQg9MhrBBXzJO+qf79vf1nJhsgv1qfhgSd9ZrTuhGtWwkedZeZO2C6kjO8QZh1lU+
-        vTGU3tjGlblxEBmlFJchb/adefeVuirqMwEAS7sIvywt+Tutm2fTj50nuSGFgWdbXPmQgu
-        F6rqse6lvXQM9jbng0yVkwMrPcETdNOummMHSg5+TaXj4omqbkM2PbyKZFUk/V/hzS15Vi
-        5vJTylXwK8hdznfmm1bwVCWNbn6wbwb2/AFSDrYcii9RYaYe1ENkLzD+L8GfdA==
+        bh=0KOJ4zXaURWQnHMs6xWhQytHCPi+wcBSN7++KVZzNTo=;
+        b=WsR+8U2YYoaDuVTH9ziqyRgpeTA8yZytk7/aT645Mgxo/vWm5ULpphN7rc/EMia058f0fc
+        o0vr0grLYLQeQAFEjiMoyWyfXfTnzQZE8n+Ms3v9wYsMt0PgPa5In+wySB4cFnlI9UgAge
+        073viXQIRhy/3ZIVmv/e7QTK+CNE9SbbXw7pkIv92W/70JqlAtmq5i+CzhcGEf+9dZ7FNc
+        ao8+ouCN4+tEBTqrWsXvMJe4QDB/Kpi0+pLrEabAXjnXYYwCPYVrW0Y6rOKtdUqH55yW7t
+        1MPam4omzWoarxbYesoXHHulK/64DbtRpLgxrn/WD9905ihN0+LjxVosPZ9noA==
 From:   alexandre.belloni@bootlin.com
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     kernel test robot <lkp@intel.com>, linux-rtc@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Michael McCormick <michael.mccormick@enatel.net>
+Cc:     Janne Terho <janne.terho@ouman.fi>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: rx6110: fix warning with !OF
-Date:   Sun, 11 Dec 2022 22:57:55 +0100
-Message-Id: <20221211215756.54002-1-alexandre.belloni@bootlin.com>
+Subject: [PATCH] rtc: pcf85063: fix pcf85063_clkout_control
+Date:   Sun, 11 Dec 2022 23:35:53 +0100
+Message-Id: <20221211223553.59955-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -50,31 +51,29 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-rx6110_spi_of_match is not used when !OF, leading to a warning:
+pcf85063_clkout_control reads the wrong register but then update the
+correct one.
 
->> drivers/rtc/rtc-rx6110.c:384:34: warning: 'rx6110_spi_of_match' defined but not used [-Wunused-const-variable=]
-     384 | static const struct of_device_id rx6110_spi_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~~
-
-Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Janne Terho <janne.terho@ouman.fi>
+Fixes: 8c229ab6048b ("rtc: pcf85063: Add pcf85063 clkout control to common clock framework")
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-rx6110.c | 2 +-
+ drivers/rtc/rtc-pcf85063.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
-index cc634558b928..76a49838014b 100644
---- a/drivers/rtc/rtc-rx6110.c
-+++ b/drivers/rtc/rtc-rx6110.c
-@@ -376,7 +376,7 @@ static const struct spi_device_id rx6110_spi_id[] = {
- };
- MODULE_DEVICE_TABLE(spi, rx6110_spi_id);
+diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
+index 99f9cc57c7b3..754e03984f98 100644
+--- a/drivers/rtc/rtc-pcf85063.c
++++ b/drivers/rtc/rtc-pcf85063.c
+@@ -424,7 +424,7 @@ static int pcf85063_clkout_control(struct clk_hw *hw, bool enable)
+ 	unsigned int buf;
+ 	int ret;
  
--static const struct of_device_id rx6110_spi_of_match[] = {
-+static const __maybe_unused struct of_device_id rx6110_spi_of_match[] = {
- 	{ .compatible = "epson,rx6110" },
- 	{ },
- };
+-	ret = regmap_read(pcf85063->regmap, PCF85063_REG_OFFSET, &buf);
++	ret = regmap_read(pcf85063->regmap, PCF85063_REG_CTRL2, &buf);
+ 	if (ret < 0)
+ 		return ret;
+ 	buf &= PCF85063_REG_CLKO_F_MASK;
 -- 
 2.38.1
 
