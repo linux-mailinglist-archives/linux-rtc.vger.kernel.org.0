@@ -2,90 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3668264A731
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Dec 2022 19:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2190264ABC6
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Dec 2022 00:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiLLSfR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Dec 2022 13:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S233740AbiLLXtC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 12 Dec 2022 18:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiLLSex (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Dec 2022 13:34:53 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC2E12746;
-        Mon, 12 Dec 2022 10:34:49 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id d2so8777579qvp.12;
-        Mon, 12 Dec 2022 10:34:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fs2Cn6MInWO2Vp6jIz3bcJBYYCuM+2I3Q8E3W6mSSyg=;
-        b=Psz7tDWuxUW004804H2lGxtgTn+fYPKbU0UjpIHSVS3Ek8EgICKe/Vb+2auFVQVeG2
-         z56nuE0WJhljpJwe8TkjaYXmEQVsRYqioqP4XD7oJBembBQfzEgCYeCUoP2dgp5wL6o2
-         BHXQffl8XjX7XKxyw2rIgvFpBxVFLYOLGRi79zhFoQm21UXk/FaPMyVMEQJ7H+3vka3k
-         Zv0lYcr3uXSX5gthSnCAYjiqS97Qx4O6dpUaxFtrkYqLcGAX+T8O5sMS8+gFNtcUqALn
-         j7fZrZ/V0Z0xfEBdOTg/WSqfHJM+eN0LHXEMZlgZWYhamTNOLkWy7XA3koaERWT9/49c
-         AG3Q==
-X-Gm-Message-State: ANoB5pmuJYZ1GfjP7QZH/yM+jsxZ9/qYtiimWwVHzGwHbuHK//8DzvMy
-        MfIXA59qugprw6mkrbbm6cJPoSHHBTQszI5z5NDY/ASv
-X-Google-Smtp-Source: AA0mqf68esnfpSOaYXkl8w5uWtikQbvdjF80wVqyN0PehN87AzTDTMO6p1Li2IYRnU/SCaZyXRGBFCBiM5aFD2lCAJ8=
-X-Received: by 2002:a0c:facd:0:b0:4de:83db:b846 with SMTP id
- p13-20020a0cfacd000000b004de83dbb846mr254614qvo.119.1670870088624; Mon, 12
- Dec 2022 10:34:48 -0800 (PST)
+        with ESMTP id S233957AbiLLXsU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Dec 2022 18:48:20 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC60618340;
+        Mon, 12 Dec 2022 15:47:56 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F049720004;
+        Mon, 12 Dec 2022 23:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670888872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AGtfQjLte51Ra95Qt9Ehjvv/TTAURJR9cA+jiCJJjQ4=;
+        b=FQwtGQrGgppgLpq+FqN66h5uX22r9cdtUbvS76mGD+Jk2ExGYGJoMO5HyHgSrnlWNeHrfc
+        QIqaf/DVK1W9WyzupvdrKAxaFv/oQt5yI5zYA4ajAX/Qb2lXkc7gm82LEqUDuMZUz+Xolg
+        Fykt4m6cxNnK8/YswKltcfOTNRa1uYCmt5DZDwSGxRy6+BBx2lYzya9FpShqAbfEMRP52y
+        RXHO+7nRHLzakgUkO62w4XMHGHypVUCBPrrpR4eTYa1zugMDnvMEVxDTK8Dyouep6hkONf
+        G9uMYtDADmgzLYHlbt/wemjxlz2XYtvdYmTGEJRwpy4k3UoN0HTuHTCrshwcUw==
+Date:   Tue, 13 Dec 2022 00:47:51 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH] rtc: isl12026: drop obsolete dependency on COMPILE_TEST
+Message-ID: <167088884105.311452.6765041987681570335.b4-ty@bootlin.com>
+References: <20221124154359.039be06c@endymion.delvare>
 MIME-Version: 1.0
-References: <20221010141630.zfzi7mk7zvnmclzy@techsingularity.net>
- <CAJZ5v0j9JyDZupNnQUsTUVv0WapGjK7b5S-4ewZ8-b=HOret2Q@mail.gmail.com>
- <20221010174526.3yi7nziokwwpr63s@techsingularity.net> <CAJZ5v0je1dS4xSG46r64s8G5sJHjiziX92GBaKXaxueTim3wJA@mail.gmail.com>
- <20221011092050.gnh3dr5iqdvvrgs5@techsingularity.net> <Y5dx8pskqpaQU8kk@paranoid-android>
-In-Reply-To: <Y5dx8pskqpaQU8kk@paranoid-android>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Dec 2022 19:34:37 +0100
-Message-ID: <CAJZ5v0iJGJ3AU+CLEgA3XTvdb-7xiyKOzzGEEsSO-xc0br_dQw@mail.gmail.com>
-Subject: Re: Intermittent boot failure after 6492fed7d8c9 (v6.0-rc1)
-To:     Mathieu Chouquet-Stringer <me@mathieu.digital>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-rtc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124154359.039be06c@endymion.delvare>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 7:25 PM Mathieu Chouquet-Stringer
-<me@mathieu.digital> wrote:
->
->         Hello Rafael,
->
-> On Tue, Oct 11, 2022 at 10:20:50AM +0100, Mel Gorman wrote:
-> > On Mon, Oct 10, 2022 at 08:29:05PM +0200, Rafael J. Wysocki wrote:
-> > > > That's less than the previous 5/10 failures but I
-> > > > cannot be certain it helped without running a lot more boot tests. The
-> > > > failure happens in the same function as before.
-> > >
-> > > I've overlooked the fact that acpi_install_fixed_event_handler()
-> > > enables the event on success, so it is a bug to call it when the
-> > > handler is not ready.
-> > >
-> > > It should help to only enable the event after running cmos_do_probe()
-> > > where the driver data pointer is set, so please try the attached
-> > > patch.
->
-> I'm hitting this issue on the 6.0 stable releases (aka 6.0.y) and
-> looking at the stable tree I see this hasn't been merged... I just got
-> bitten by this on 6.0.12.
->
-> Greg, if Rafael agrees, I think you should apply 4919d3eb2ec0 and
-> 0782b66ed2fb to the 6.0.y tree.
+On Thu, 24 Nov 2022 15:43:59 +0100, Jean Delvare wrote:
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> is possible to test-build any driver which depends on OF on any
+> architecture by explicitly selecting OF. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
+> 
+> It is actually better to always build such drivers with OF enabled,
+> so that the test builds are closer to how each driver will actually be
+> built on its intended target. Building them without OF may not test
+> much as the compiler will optimize out potentially large parts of the
+> code. In the worst case, this could even pop false positive warnings.
+> Dropping COMPILE_TEST here improves the quality of our testing and
+> avoids wasting time on non-existent issues.
+> 
+> [...]
 
-This is fine with me, please send an inclusion request to Greg and the
-"stable" list.
+Applied, thanks!
+
+[1/1] rtc: isl12026: drop obsolete dependency on COMPILE_TEST
+      commit: 28e93c214af6af9f5a8d5d4d0de0e36668708a4b
+
+Best regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
