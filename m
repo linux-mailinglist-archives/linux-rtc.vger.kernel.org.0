@@ -2,73 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFCE64ABD8
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Dec 2022 00:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4D864B2FB
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Dec 2022 11:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbiLLXze (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Dec 2022 18:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
+        id S235103AbiLMKIk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Dec 2022 05:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiLLXz1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Dec 2022 18:55:27 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D448514D16;
-        Mon, 12 Dec 2022 15:55:26 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB5BA240005;
-        Mon, 12 Dec 2022 23:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670889325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ePabqc+7cC0/UaZKrAYhyBgYRi0kbDxozWzURzMwUw=;
-        b=mmv5VaQMh/vMpCRGByESBoQX2M3D239kNVz4lI1tZgEP+rsEbp+Wiq0ejw7ZrpuyFMZsQ9
-        xNCa1B+RWYZzFAdewbD8yK+JqfiMtqSjSjRHPBtnTfid9nKyPslIO9SxB8XmnMxprjJqmh
-        wLHQRMqdcJAH52szUixa/36HCGBYsHl5gZCEJq5BlVqM+/GoN2P9FUgzvgnsuADpnjKnkp
-        aZE41hbIYr6FsLJQCUF1e42y2C0LbBAi5loOVQRVdumJPwRza6QSl27Hihw74BJ2eDgL/y
-        taR/zZNVaKGblP8CbfotOOQ1pWrYidvWv9j1oHxKz15NvEUURqH58rvh91lYZg==
-Date:   Tue, 13 Dec 2022 00:55:24 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     ye.xingchen@zte.com.cn
-Cc:     a.zummo@towertech.it, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH linux-next] rtc: ds1307: use sysfs_emit() to instead of
- scnprintf()
-Message-ID: <167088930337.313278.11105022204603125591.b4-ty@bootlin.com>
-References: <202212051134455911470@zte.com.cn>
+        with ESMTP id S235104AbiLMKIb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Dec 2022 05:08:31 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5495C63FD
+        for <linux-rtc@vger.kernel.org>; Tue, 13 Dec 2022 02:08:30 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p52D6-0002Iv-2j; Tue, 13 Dec 2022 11:08:28 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7718:f6d6:39bc:6089])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3603813DC49;
+        Tue, 13 Dec 2022 10:08:27 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 11:08:21 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, kernel@pengutronix.de,
+        Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH RESEND 0/2] rtc: rv8803 patches
+Message-ID: <20221213100821.7ho3etmahujdmm3x@pengutronix.de>
+References: <20221123095527.2771434-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bd45thwwgbi5lora"
 Content-Disposition: inline
-In-Reply-To: <202212051134455911470@zte.com.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123095527.2771434-1-s.hauer@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 5 Dec 2022 11:34:45 +0800 (CST), ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
-> 
-> 
-> [...]
 
-Applied, thanks!
+--bd45thwwgbi5lora
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1/1] rtc: ds1307: use sysfs_emit() to instead of scnprintf()
-      commit: 20ff2be9cf5c1951e5a14e570129cf118039a25a
+Hey Alexandre,
 
-Best regards,
+On 23.11.2022 10:55:25, Sascha Hauer wrote:
+> This series has the remainder of
+> https://lore.kernel.org/all/20220426071056.1187235-1-s.hauer@pengutronix.=
+de/
+> which was partly applied.
+>=20
+> Alexandre,
+>=20
+> Last time this series was send you asked if this series fixes a problem
+> we've really seen to which Ahmad answered:
+>=20
+> > The kernel message
+> >=20
+> >   rtc rtc0: invalid alarm value: 2020-3-27 7:82:0
+> >=20
+> > listed in the commit message is something I actually ran into. There
+> > was no v2f set then. The customer has also variously observed bit flips
+> > independently of v2f: During EMC testing, electrostatic discharge at de=
+veloper
+> > desks and even in the field: Suspected causes were lightning strikes in=
+ the
+> > vicinity and the switching of larger inductive loads.
+> > They're very paranoid of logging invalid timestamps, so we'll keep the =
+patch
+> > anyhow at our side, but I think it is generally useful as well: If we c=
+an't
+> > set an invalid alarm time by normal means, but read back an invalid tim=
+e,
+> > something may have corrupted other memory, so treating it as a v2f is s=
+ensible.
+>=20
+> There was no answer to this. I would be glad if you could take this
+> series. I would understand though if you say that this problem is too
+> esoteric to fix it upstream, we would keep the patches locally then.
+> Please just say so, it would help me to get the problem from my desk ;)
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Any news on this, what's the status?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--bd45thwwgbi5lora
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOYTxMACgkQrX5LkNig
+010cWwf/fSF4rpojXwTV4oB0rS1C0tNyhEbPvkViBUbTaNZRcIpDbe2q8hCTDIgq
+QrhgHoC8Ab7ZWfltWbYginagof3r2uoPZZ0weZU7QkSwGKXU8IXSnYt532vhcuSg
+29++WTICPQVjf3dt3MRl2+sb09X5VIFv/BNBZcP8Zgn93FRmZcso8MY3YhowhMpi
+O0qzOFwGI+5XIHut7TA6rD38biK09VmOK7OlNgzZQH1ZOliqtusUv4V0evouceHo
+0aJDBRATm3FnMzLZoCjXbSkspbo8nPK4ZQEbVOx+fkuUYBj++9NNN1LjARPaR+k6
+nDMj2iG/0lfwMJUEitfX5HDPWNYhYw==
+=BSxj
+-----END PGP SIGNATURE-----
+
+--bd45thwwgbi5lora--
