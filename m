@@ -2,124 +2,178 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4D864B2FB
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Dec 2022 11:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAB364B839
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Dec 2022 16:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbiLMKIk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 13 Dec 2022 05:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S236072AbiLMPSY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Dec 2022 10:18:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235104AbiLMKIb (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Dec 2022 05:08:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5495C63FD
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Dec 2022 02:08:30 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p52D6-0002Iv-2j; Tue, 13 Dec 2022 11:08:28 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7718:f6d6:39bc:6089])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3603813DC49;
-        Tue, 13 Dec 2022 10:08:27 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 11:08:21 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, kernel@pengutronix.de,
-        Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH RESEND 0/2] rtc: rv8803 patches
-Message-ID: <20221213100821.7ho3etmahujdmm3x@pengutronix.de>
-References: <20221123095527.2771434-1-s.hauer@pengutronix.de>
+        with ESMTP id S236059AbiLMPSX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Dec 2022 10:18:23 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B70A62F4;
+        Tue, 13 Dec 2022 07:18:21 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 742D910000B;
+        Tue, 13 Dec 2022 15:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670944699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+HWnn08PjLLDbhCwtfb3QzgnentKEZAH00Y/K1KoyXk=;
+        b=lmr66kCX3bSlqTg89RmtNk9FZDsIno3YzQBsQVkx/53C7Rq/hQc32BZxHYT/nEUAAVdNrW
+        oV6JPpORQa+EgVI/SoJOWRq1ohfF6nmSMQ5AqoC+FsGio5tfIUVoCQvpSCcOV8QeU8GNw0
+        adkw+fDmDCLjWZTIWKFKJkWfECdg0qThp3ibitNL/NWecCAIth8C6ENrwJqqc4oc0pITmd
+        p7A/v6mOaNynTRRa3OV38ri4NHoOAv1lXHavO+/pvCgJt5t1TFLnydQVVcM056CdeV/Z+H
+        ftMwulbmQlTGXUI7jnGcZoANvpCQEy/SaxpXpUlPzWjN3l2pea0ax5IVpwfNHQ==
+Date:   Tue, 13 Dec 2022 16:18:19 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: abx80x: Add nvmem support
+Message-ID: <Y5iXu9pZjWiumfcx@mail.local>
+References: <20221205151918.1264917-1-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bd45thwwgbi5lora"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221123095527.2771434-1-s.hauer@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221205151918.1264917-1-sean.anderson@seco.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On 05/12/2022 10:19:18-0500, Sean Anderson wrote:
+> This adds support for the 256-byte internal RAM. There are two windows
+> which can be used to access this RAM: 64 bytes at 0x40 (the "standard"
+> address space) and 128 bytes at 0x80 (the "alternate" address space). We
+> use the standard address space because it is also accessible over SPI
+> (if such a port is ever done). We are limited to 32-byte reads for SMBus
+> compatibility, so there's no advantage to using the alternate address
+> space.
+> 
+> There are some reserved bits in the EXTRAM register, and the datasheet
+> doesn't say what to do with them. I've opted to skip a read/modify/write
+> and just write the whole thing. If this driver is ever converted to
+> regmap, this would be a good place to use regmap_update_bits.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
+> 
+> Changes in v2:
+> - Fix building on non-arm platforms
+> 
+>  drivers/rtc/rtc-abx80x.c | 87 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+> index 9b0138d07232..e606bf126dc3 100644
+> --- a/drivers/rtc/rtc-abx80x.c
+> +++ b/drivers/rtc/rtc-abx80x.c
+> @@ -11,6 +11,7 @@
+>   */
+>  
+>  #include <linux/bcd.h>
+> +#include <linux/bitfield.h>
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> @@ -87,6 +88,16 @@
+>  #define ABX8XX_TRICKLE_STANDARD_DIODE	0x8
+>  #define ABX8XX_TRICKLE_SCHOTTKY_DIODE	0x4
+>  
+> +#define ABX8XX_REG_EXTRAM	0x3f
+> +#define ABX8XX_EXTRAM_XADS	GENMASK(1, 0)
+> +
+> +#define ABX8XX_SRAM_BASE	0x40
+> +#define ABX8XX_SRAM_WIN_SIZE	0x40
+> +#define ABX8XX_RAM_SIZE		256
+> +
+> +#define NVMEM_ADDR_LOWER	GENMASK(5, 0)
+> +#define NVMEM_ADDR_UPPER	GENMASK(7, 6)
+> +
+>  static u8 trickle_resistors[] = {0, 3, 6, 11};
+>  
+>  enum abx80x_chip {AB0801, AB0803, AB0804, AB0805,
+> @@ -673,6 +684,78 @@ static int abx80x_setup_watchdog(struct abx80x_priv *priv)
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_NVMEM
+> +static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
+> +			     void *val, size_t bytes, bool write)
+> +{
+> +	int ret;
+> +
+> +	while (bytes) {
+> +		u8 extram, reg, len, lower, upper;
+> +
+> +		lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
+> +		upper = FIELD_GET(NVMEM_ADDR_UPPER, offset);
+> +		extram = FIELD_PREP(ABX8XX_EXTRAM_XADS, upper);
+> +		reg = ABX8XX_SRAM_BASE + lower;
+> +		len = min(lower + bytes, (size_t)ABX8XX_SRAM_WIN_SIZE) - lower;
+> +		len = min_t(u8, len, I2C_SMBUS_BLOCK_MAX);
+> +
+> +		ret = i2c_smbus_write_byte_data(priv->client, ABX8XX_REG_EXTRAM,
+> +						extram);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (write)
+> +			ret = i2c_smbus_write_i2c_block_data(priv->client, reg,
+> +							     len, val);
+> +		else
+> +			ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
+> +							    len, val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		offset += len;
+> +		val += len;
+> +		bytes -= len;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int abx80x_nvmem_read(void *priv, unsigned int offset, void *val,
+> +			     size_t bytes)
+> +{
+> +	return abx80x_nvmem_xfer(priv, offset, val, bytes, false);
+> +}
+> +
+> +static int abx80x_nvmem_write(void *priv, unsigned int offset, void *val,
+> +			      size_t bytes)
+> +{
+> +	return abx80x_nvmem_xfer(priv, offset, val, bytes, true);
+> +}
+> +
+> +static int abx80x_setup_nvmem(struct abx80x_priv *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct nvmem_config config = {
+> +		.dev = dev,
+> +		.type = NVMEM_TYPE_BATTERY_BACKED,
+> +		.reg_read = abx80x_nvmem_read,
+> +		.reg_write = abx80x_nvmem_write,
+> +		.size = ABX8XX_RAM_SIZE,
+> +		.priv = priv,
+> +	};
+> +
+> +	return PTR_ERR_OR_ZERO(devm_nvmem_register(&priv->client->dev,
+> +						   &config));
 
---bd45thwwgbi5lora
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is there any reason why you are not using devm_rtc_nvmem_register ?
 
-Hey Alexandre,
 
-On 23.11.2022 10:55:25, Sascha Hauer wrote:
-> This series has the remainder of
-> https://lore.kernel.org/all/20220426071056.1187235-1-s.hauer@pengutronix.=
-de/
-> which was partly applied.
->=20
-> Alexandre,
->=20
-> Last time this series was send you asked if this series fixes a problem
-> we've really seen to which Ahmad answered:
->=20
-> > The kernel message
-> >=20
-> >   rtc rtc0: invalid alarm value: 2020-3-27 7:82:0
-> >=20
-> > listed in the commit message is something I actually ran into. There
-> > was no v2f set then. The customer has also variously observed bit flips
-> > independently of v2f: During EMC testing, electrostatic discharge at de=
-veloper
-> > desks and even in the field: Suspected causes were lightning strikes in=
- the
-> > vicinity and the switching of larger inductive loads.
-> > They're very paranoid of logging invalid timestamps, so we'll keep the =
-patch
-> > anyhow at our side, but I think it is generally useful as well: If we c=
-an't
-> > set an invalid alarm time by normal means, but read back an invalid tim=
-e,
-> > something may have corrupted other memory, so treating it as a v2f is s=
-ensible.
->=20
-> There was no answer to this. I would be glad if you could take this
-> series. I would understand though if you say that this problem is too
-> esoteric to fix it upstream, we would keep the patches locally then.
-> Please just say so, it would help me to get the problem from my desk ;)
-
-Any news on this, what's the status?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---bd45thwwgbi5lora
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOYTxMACgkQrX5LkNig
-010cWwf/fSF4rpojXwTV4oB0rS1C0tNyhEbPvkViBUbTaNZRcIpDbe2q8hCTDIgq
-QrhgHoC8Ab7ZWfltWbYginagof3r2uoPZZ0weZU7QkSwGKXU8IXSnYt532vhcuSg
-29++WTICPQVjf3dt3MRl2+sb09X5VIFv/BNBZcP8Zgn93FRmZcso8MY3YhowhMpi
-O0qzOFwGI+5XIHut7TA6rD38biK09VmOK7OlNgzZQH1ZOliqtusUv4V0evouceHo
-0aJDBRATm3FnMzLZoCjXbSkspbo8nPK4ZQEbVOx+fkuUYBj++9NNN1LjARPaR+k6
-nDMj2iG/0lfwMJUEitfX5HDPWNYhYw==
-=BSxj
------END PGP SIGNATURE-----
-
---bd45thwwgbi5lora--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
