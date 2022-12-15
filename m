@@ -2,124 +2,150 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D6164DD83
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Dec 2022 16:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC62564E031
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Dec 2022 19:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiLOPNz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Dec 2022 10:13:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S229847AbiLOSHH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Dec 2022 13:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiLOPN1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Dec 2022 10:13:27 -0500
-X-Greylist: delayed 524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Dec 2022 07:12:44 PST
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA4932B8F;
-        Thu, 15 Dec 2022 07:12:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=3zeWx/VcZJ+nKDoxQSjrPrYjj2F0B/NTv4M2nB0Taxo=; b=XGVRecjPvKN1DiEoK3zrmKwJgf
-        dWEDw4jOTpFgBvU8dBgihUP5XjHpeVRupNcj9IXw94trWULMNnwKW6wd8vZm6vJvGCGOY2VGxY52j
-        vzJ+xy7fEf/F7RUY0ktMDb2XSAVik9jhS46pHut3Gv9K2eA6+iID9ubN+OgosU4QMFZc=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48106 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p5puc-0000OA-0h; Thu, 15 Dec 2022 10:12:42 -0500
-Date:   Thu, 15 Dec 2022 10:12:41 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20221215101241.993999be8b51f133fb11bfba@hugovil.com>
-In-Reply-To: <Yiplnqlz2DSXCvi8@piout.net>
-References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
-        <20220309162301.61679-11-alexandre.belloni@bootlin.com>
-        <20220310110918.41a681474f5a0e11abdedc39@hugovil.com>
-        <Yiplnqlz2DSXCvi8@piout.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        with ESMTP id S229652AbiLOSHG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Dec 2022 13:07:06 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5606B1837C;
+        Thu, 15 Dec 2022 10:07:04 -0800 (PST)
+Received: from mercury (dyndsl-095-033-168-084.ewe-ip-backbone.de [95.33.168.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1B46F6602C74;
+        Thu, 15 Dec 2022 18:07:02 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671127622;
+        bh=dH1RKEdVew6ZLUn/Lg6/y50BwP8UTVQcbVljZOXBe64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QlKhDzWdwXtRrPLm9i1lmRVAsKnqCDi+bv+nnY9xWDeQl5d2i8ct3pSnnmYts4sOG
+         V4dyVbJuj9LvkdONDn0iz2yvDCYsQO1COb9NyxfCecSKcMXtVYEmtJqr3rThG4nJ9m
+         juOmV5/XoT0BfjqABlKit5Dlnv1PMuvhTvpk18dsiMWPXMaU7zIgzfJS+L/FZ4ZtpT
+         gQW4AFtS1/8jVu+ti3GSNddrz78IiVz13lxAMyahOrWbN8FgMWS7bOB9Xwo94gUjaF
+         1WvGvWB5lzjGrTcsdCWbZ7HIhL8dzIc8q5Amy3dJqKKf/2MwWJSfwylJKBgZWrbqif
+         i19laCbLgxvcQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 3ACFF1060F45; Thu, 15 Dec 2022 19:06:59 +0100 (CET)
+Date:   Thu, 15 Dec 2022 19:06:59 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Marek Vasut <marex@denx.de>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] dt-bindings: rtc: m41t80: Mark the clock: subnode
+ as deprecated
+Message-ID: <20221215180659.sa54lkinwxoiz7bb@mercury.elektranox.org>
+References: <20221211205124.23823-1-marex@denx.de>
+ <20221211205124.23823-2-marex@denx.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ulyyuijbxyhtsviv"
+Content-Disposition: inline
+In-Reply-To: <20221211205124.23823-2-marex@denx.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH 11/29] rtc: pcf2127: set RTC_FEATURE_ALARM_RES_2S
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 10 Mar 2022 21:58:49 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-> On 10/03/2022 11:09:18-0500, Hugo Villeneuve wrote:
-> > On Wed,  9 Mar 2022 17:22:42 +0100
-> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > 
-> > > The PCF2127 doesn't support UIE because setting an alarm to fire every
-> > > second confuses the chip and the fastest we can go is an alarm every 2
-> > > seconds.
-> > 
-> > Hi Alexandre,
-> > can you describe what "confuses the chip" means?
-> > 
-> > In my experimental PCF2131 driver, I activated UIE and it seems to be working fine at 1s intervals, but since it is similar to PCF2127, maybe there is still a problem and I just didn't see it.
-> > 
-> 
-> Did you remove uie_unsupported? Else, you may have been using uie
-> emulation. In my tests last year, the pcf2127 was failing to reassert
-> the interrupt if an alarm was set every second. The same happens on
-> other NXP based RTCs (i.e. including microcrystal ones).
-> 
-> I'm going to test again soon (and also reply to your series).
+--ulyyuijbxyhtsviv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexandre,
-after 9 months, I decided to resend my PCF2131 driver serie (V3), rebased on your latest rtc-next branch. I would appreciate if you or someone could take a look at it and comment.
+Hi,
 
-Thank you,
-Hugo Villeneuve
+On Sun, Dec 11, 2022 at 09:51:24PM +0100, Marek Vasut wrote:
+> The clock {} subnode seems like it is describing an always-on clock
+> generated by the PMIC. This should rather be modeled by consumer of
+> the clock taking phandle to the RTC node itself, since it already
+> does have clock-cells and all. Since there are no users of the clock
+> subnode in tree anyway, mark it as deprecated to avoid proliferation
+> of this approach.
+>=20
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: linux-rtc@vger.kernel.org
+> To: devicetree@vger.kernel.org
+> ---
+> V2: - Add AB from Krzysztof
+> V3: - No change
+> ---
 
+I just noticed this by accident. Basically everything in the patch
+description is wrong:
 
-> > > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > ---
-> > >  drivers/rtc/rtc-pcf2127.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > index f8469b134411..63b275b014bd 100644
-> > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > @@ -656,6 +656,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > >  	pcf2127->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> > >  	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> > >  	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
-> > > +	set_bit(RTC_FEATURE_ALARM_RES_2S, pcf2127->rtc->features);
-> > >  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf2127->rtc->features);
-> > >  	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
-> > >  
-> > > -- 
-> > > 2.35.1
-> > > 
-> > 
-> > 
-> > -- 
-> > Hugo Villeneuve <hugo@hugovil.com>
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
+1. There is a in-tree user: arch/arm/boot/dts/imx6dl-qmx6.dtsi
+2. The PMIC has nothing to do with this
+3. Directly referencing the RTC does not work, since that introduces
+   an unsolvable dependency loop on QMX6. This was the solution accepted
+   by Rob and Saravana:
 
+[v1] https://lore.kernel.org/lkml/20210222171247.97609-1-sebastian.reichel@=
+collabora.com/
+[v2] https://lore.kernel.org/all/20210428222953.235280-1-sebastian.reichel@=
+collabora.com/
 
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+-- Sebastian
+
+>  Documentation/devicetree/bindings/rtc/st,m41t80.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml b/Docum=
+entation/devicetree/bindings/rtc/st,m41t80.yaml
+> index fc9c6da6483f5..03ff833f5fe9d 100644
+> --- a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> @@ -40,6 +40,7 @@ properties:
+>    clock:
+>      type: object
+>      $ref: /schemas/clock/fixed-clock.yaml#
+> +    deprecated: true
+>      properties:
+>        clock-frequency:
+>          const: 32768
+> --=20
+> 2.35.1
+>=20
+
+--ulyyuijbxyhtsviv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmObYjoACgkQ2O7X88g7
++ppEEw//VmYXS7L0/Pcf905n7m3B7uPtRM8YGZRwZsgDP1p/1rOHcjOdffGP7TGr
+qr3xZfAEYlDyAF8qmwVYht8Bos8Nq2loREki7pC7OwIwgC38674VwaTcmeCExv+a
+TpQiJiDlcelEU+sp7VuF9YZ904EQ2BlTPJBUlQGECTdgdhp2jTY+1x81xwn9qQFl
+q4Iuv1V8tn157qs6x77J4Ci6OtDIZkJqXtNfe6F2diflXHOD20n/k2FWDph50e9R
+VW6JtmA3X8EowhEg1htD9QZtkD2uIAWmBlTe0dMBESn4WTKRBY3i0icxfLJcKvB0
+XIwAQE13lwv9keZU2QbVE3Qx4c/TXaKah6i9fQU9HEdk+BHk/V83js81hzgvv+7O
+LDPOHfuSOp13Lze0gQ3JG8p5p9mHDn7LCGqe4eukn4HZFEIBfL0VUF6s/J2otQLx
+QJaQqFmtz3jCCh34WUrJy8HM0VQMiNvbWuYd5YpraEFbmw2onH03bdeieo5fI6IC
+V9nq3exVaU5SMKNhE08jHbPqCbaJ4tNZvHD09Aw54jB7YPGluz/qwk0xH+wqeLzh
+wGBfyyB/cOhC05Pzu3PTY3tleTUde8VBhV8/0LvI2A0MoY1JgYjw06wZ6nZvC/tU
+dx6VrH1cOdVp7+L8LttH+R5a+kyB5bzIQ9FS4Lii9M/raQnkYUg=
+=QDl+
+-----END PGP SIGNATURE-----
+
+--ulyyuijbxyhtsviv--
