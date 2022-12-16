@@ -2,40 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F36164ECD2
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Dec 2022 15:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903EF64ECF2
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Dec 2022 15:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiLPOYO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Dec 2022 09:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S229665AbiLPOgW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Dec 2022 09:36:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiLPOYN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Dec 2022 09:24:13 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3842791C;
-        Fri, 16 Dec 2022 06:24:12 -0800 (PST)
-Received: from mercury (dyndsl-095-033-168-084.ewe-ip-backbone.de [95.33.168.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229620AbiLPOgV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Dec 2022 09:36:21 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B2F26571;
+        Fri, 16 Dec 2022 06:36:20 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 103CB6602C94;
-        Fri, 16 Dec 2022 14:24:11 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671200651;
-        bh=LtJZ4czImxmXP/h4E3UX97GAfHCyiEEMsAw12q2feGU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PsVLpLzDkm0EnUor/IiRGr1Xo4AiJzn2gc0llL+ondxkccWA3BcVIwhIrvdZER2FH
-         IUwq+kHGlviR7VVULhyzQ2qM9JAYk7TAt7Me7oRBhMhNVe3MBdvQsoUf62jNvgZmpa
-         3whtJGD8kpaJ5WC5uqdqaeZfTcHua6sPJXHUQUNMdpF4Yg7Q3Yv76JzFm81s9cfqkg
-         SNQNK4cMWUKzIMYbeqZa2AOBjuYTsocRqfeIo0LUlrzxNmeGXqDZOYA6QUoVTHlE5B
-         yOz9rJiq090XHMpRok68bu+8gGa9PWXh96E9m8zDgNuogYfksSXyvqWvVL78aRHfN0
-         AdGtXvJg3ezMg==
-Received: by mercury (Postfix, from userid 1000)
-        id A133A1060F45; Fri, 16 Dec 2022 15:24:08 +0100 (CET)
-Date:   Fri, 16 Dec 2022 15:24:08 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Marek Vasut <marex@denx.de>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 2547F85098;
+        Fri, 16 Dec 2022 15:36:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1671201378;
+        bh=2+1IGwNUrGJM6aop5OG6c33myDUKHVjv1Glh0tsxN1w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sGPbFPmbf/V1gocq+4kpJP0PKoiTg3mOTDIO4Rbm8wUK/RIuRtstCeVOEAKcW9Gf7
+         UdQkLTyk8HOsIb+N3dI4YxHLMxcsphPBu+AMGQnEojmOvkhJ+XdhYyXVdanSIo6iVz
+         mRTz6JPsKOu+PY3J+6BblhuTu31pfvf7kHXDpBBBZ20s1jfAkKHpD10skz5GOm10sg
+         CCyBh3D1ytwVtsgu9U2hrrUwuJN5L6I7Tem/k1DQDXD2ZcxI3YArEfd+BxupWv195U
+         gTsixIgZfHaUK9NkgLZk3VJhmQFt5iIfgvGoC9tQGwuWeZ/2CP3AE/6BOFRyGUuN8G
+         sFmGj8Tp6e5QQ==
+Message-ID: <f65773a2-71a7-6d54-1ac2-9987ed035b16@denx.de>
+Date:   Fri, 16 Dec 2022 15:36:17 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 2/2] dt-bindings: rtc: m41t80: Mark the clock: subnode
+ as deprecated
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
@@ -43,128 +46,92 @@ Cc:     devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: rtc: m41t80: Mark the clock: subnode
- as deprecated
-Message-ID: <20221216142408.6x3e5dhtdvgiewtb@mercury.elektranox.org>
 References: <20221211205124.23823-1-marex@denx.de>
  <20221211205124.23823-2-marex@denx.de>
  <20221215180659.sa54lkinwxoiz7bb@mercury.elektranox.org>
  <d9910a7a-9997-c157-9a71-8ef7ee34be25@denx.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uzdt6lhrhdu6hrgi"
-Content-Disposition: inline
-In-Reply-To: <d9910a7a-9997-c157-9a71-8ef7ee34be25@denx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20221216142408.6x3e5dhtdvgiewtb@mercury.elektranox.org>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20221216142408.6x3e5dhtdvgiewtb@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
---uzdt6lhrhdu6hrgi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12/16/22 15:24, Sebastian Reichel wrote:
+> Hi,
 
 Hi,
 
-On Thu, Dec 15, 2022 at 08:39:47PM +0100, Marek Vasut wrote:
-> On 12/15/22 19:06, Sebastian Reichel wrote:
-> > On Sun, Dec 11, 2022 at 09:51:24PM +0100, Marek Vasut wrote:
-> > > The clock {} subnode seems like it is describing an always-on clock
-> > > generated by the PMIC. This should rather be modeled by consumer of
-> > > the clock taking phandle to the RTC node itself, since it already
-> > > does have clock-cells and all. Since there are no users of the clock
-> > > subnode in tree anyway, mark it as deprecated to avoid proliferation
-> > > of this approach.
-> > >=20
-> > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > Signed-off-by: Marek Vasut <marex@denx.de>
-> > > ---
-> > > Cc: Alessandro Zummo <a.zummo@towertech.it>
-> > > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> > > Cc: linux-rtc@vger.kernel.org
-> > > To: devicetree@vger.kernel.org
-> > > ---
-> > > V2: - Add AB from Krzysztof
-> > > V3: - No change
-> > > ---
-> >=20
-> > I just noticed this by accident. Basically everything in the patch
-> > description is wrong:
-> >=20
-> > 1. There is a in-tree user: arch/arm/boot/dts/imx6dl-qmx6.dtsi
->=20
-> Sorry, I missed this one.
->=20
-> > 2. The PMIC has nothing to do with this
->=20
-> In [3] the commit message claims the PMIC supplies 32kHz clock to i.MX6 C=
-KIL,
-> which per IMX6DQRM rev.6 Table 18-3 row SNVS indirectly supplies SNVS RTC.
-> This reminded me of commit:
+> On Thu, Dec 15, 2022 at 08:39:47PM +0100, Marek Vasut wrote:
+>> On 12/15/22 19:06, Sebastian Reichel wrote:
+>>> On Sun, Dec 11, 2022 at 09:51:24PM +0100, Marek Vasut wrote:
+>>>> The clock {} subnode seems like it is describing an always-on clock
+>>>> generated by the PMIC. This should rather be modeled by consumer of
+>>>> the clock taking phandle to the RTC node itself, since it already
+>>>> does have clock-cells and all. Since there are no users of the clock
+>>>> subnode in tree anyway, mark it as deprecated to avoid proliferation
+>>>> of this approach.
+>>>>
+>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Signed-off-by: Marek Vasut <marex@denx.de>
+>>>> ---
+>>>> Cc: Alessandro Zummo <a.zummo@towertech.it>
+>>>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>>> Cc: Rob Herring <robh+dt@kernel.org>
+>>>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>>>> Cc: linux-rtc@vger.kernel.org
+>>>> To: devicetree@vger.kernel.org
+>>>> ---
+>>>> V2: - Add AB from Krzysztof
+>>>> V3: - No change
+>>>> ---
+>>>
+>>> I just noticed this by accident. Basically everything in the patch
+>>> description is wrong:
+>>>
+>>> 1. There is a in-tree user: arch/arm/boot/dts/imx6dl-qmx6.dtsi
+>>
+>> Sorry, I missed this one.
+>>
+>>> 2. The PMIC has nothing to do with this
+>>
+>> In [3] the commit message claims the PMIC supplies 32kHz clock to i.MX6 CKIL,
+>> which per IMX6DQRM rev.6 Table 18-3 row SNVS indirectly supplies SNVS RTC.
+>> This reminded me of commit:
+> 
+> The word PMIC is not mentioned once in [3].
 
-The word PMIC is not mentioned once in [3]. PMIC is not involved.
-The QMX6 32khz chain is like this:
+s@PMIC@m41t62 RTC@, sorry.
 
-32kHz crystal -> m41t62 crystal input
-m41t62 clock output -> i.MX6 CKIL
+> PMIC is not involved.
+> The QMX6 32khz chain is like this:
+> 
+> 32kHz crystal -> m41t62 crystal input
+> m41t62 clock output -> i.MX6 CKIL
+> 
+>> 9509593f327ac ("arm64: dts: imx8mm: Model PMIC to SNVS RTC clock path on
+>> Data Modul i.MX8M Mini eDM SBC")
+>>
+>> which solves exactly the same problem, system hangs when 32 kHz clock are
+>> stopped, except this time on i.MX8MM, clock are generated by PMIC on I2C
+>> (notice how the PMIC is referenced directly) and the clock are supplied to
+>> the SVNS RTC XTal terminals.
+>>
+>> I wonder if this could be reused on the QMX6 board too?
+> 
+> IIRC On i.MX6 referencing the I2C connected RTC results in boot
+> hanging forever when trying to get the ckil clock in
+> imx6q_clocks_init. At least it used to be the case when I was
+> working on this - I no longer have access to the boards. Of course
+> properly referencing the RTC clock was the first route I tried.
 
-> 9509593f327ac ("arm64: dts: imx8mm: Model PMIC to SNVS RTC clock path on
-> Data Modul i.MX8M Mini eDM SBC")
->=20
-> which solves exactly the same problem, system hangs when 32 kHz clock are
-> stopped, except this time on i.MX8MM, clock are generated by PMIC on I2C
-> (notice how the PMIC is referenced directly) and the clock are supplied to
-> the SVNS RTC XTal terminals.
->=20
-> I wonder if this could be reused on the QMX6 board too?
-
-IIRC On i.MX6 referencing the I2C connected RTC results in boot
-hanging forever when trying to get the ckil clock in
-imx6q_clocks_init. At least it used to be the case when I was
-working on this - I no longer have access to the boards. Of course
-properly referencing the RTC clock was the first route I tried.
-
--- Sebastian
-
-> > 3. Directly referencing the RTC does not work, since that introduces
-> >     an unsolvable dependency loop on QMX6. This was the solution accept=
-ed
-> >     by Rob and Saravana:
-> >=20
-> > [v1] https://lore.kernel.org/lkml/20210222171247.97609-1-sebastian.reic=
-hel@collabora.com/
-> > [v2] https://lore.kernel.org/all/20210428222953.235280-1-sebastian.reic=
-hel@collabora.com/
->=20
-> [3] https://lore.kernel.org/linux-clk/20191108170135.9053-1-sebastian.rei=
-chel@collabora.com/
-
---uzdt6lhrhdu6hrgi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOcf4AACgkQ2O7X88g7
-+pqhbA/+NOluT+IynI3BsvULI8qqwJEiv41CxX6GmixgoiMo0fYimdb7Nyft1m9/
-LM0xhy3mvqLNy19hwLMybOgY9RVZAS7wPKZcFAvynvI6RiHIUrhFREf5DFWuGr5y
-iQTeKcdqQl+nDECZ62UB2qGaUr6m0/DBVTH2oxzXRMd+rFYqnC4mtJhlY0LZai4L
-FSEAKSJHuYNMOIlNBLXrbuov7v4KKVsMpEuGzmMWR2BiowBbScLTCE/KyJgF1ixY
-l30r0kn/fY4btu1PTdR2cSS4uI8xjK5em5QmGoCVd/FIkboj/dSQ2hC0Ds7WTVlp
-ysppCHqGc4cdCfaPOuJG/ShxKusVa9audSMM9+k3lOXejsq/vUFJwEBB9Qa+cctp
-EwGMlv3eyujTHXM3eFlV9WtbMeqYYZGIPXuLrtq5mc4D3SUTQbRSaE25bzSZlaM8
-DIkumotCpMqBXjzCdbT8pf/xY2L92eHQzImVTdW8SNlsEUliy9ZFanoxP7sqs2KX
-Zj23qPfETNr2tE+514cBsUR4ODmWCpjrqzw37aTCaQ9FZ+cuCDI2UTclRb6V3dK4
-apu3MwIaLi63ovKwzNb6JB0P+Q110MgTNzJ4qXifJNgAi8DnYQzAqoYX74jIT+5n
-qCqZhdKA8ZHszKZDc96tCj3CqJx1BE3QCyCM1GZYpyLzWNJiL90=
-=DPm4
------END PGP SIGNATURE-----
-
---uzdt6lhrhdu6hrgi--
+Hmmmmm, what shall we do, un-deprecate the clock sub-node ?
