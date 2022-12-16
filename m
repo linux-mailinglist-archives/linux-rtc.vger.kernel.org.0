@@ -2,96 +2,169 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3169964EC0D
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Dec 2022 14:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F36164ECD2
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Dec 2022 15:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiLPNYY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Dec 2022 08:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        id S230271AbiLPOYO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Dec 2022 09:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiLPNYV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Dec 2022 08:24:21 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D042150D6D
-        for <linux-rtc@vger.kernel.org>; Fri, 16 Dec 2022 05:24:18 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id p36so3407978lfa.12
-        for <linux-rtc@vger.kernel.org>; Fri, 16 Dec 2022 05:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/+mMxOdMAgLCeuwkaZmvxMZlpVOnxVzWHkvJPQHxnRI=;
-        b=ujrJHZZ7vtUjOvUQAW81BfcvxHm/qIXYl8RqOCVYigjm+N2HO3xtQ08VyIyN8pHJ9R
-         Md1d10dAusU9tWOY9DmsIYn9MUsBz1cdpP1u9zUWfuqGmztxmHpgHHAD2Sir3Bcb+Zbl
-         RVUxYE3GdQIJTvGhh1P3zcTTg9ooz+tIZ2ITLHKfKuXcmg4oo7OdBKcPjBaldTtrlR28
-         E+tvzcZaVyPXCLm6F10efIgO/gbnzk6riJr20tkPBk5X6vDkZCJFuf2CYd3uDs7gFrR/
-         zTp+cGBxbAZVdV/Y0VIpiqOYJf5i+09sryUE1BSu7vG7IaNdWjf3DHyizxkBsZTMEeY9
-         ourA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/+mMxOdMAgLCeuwkaZmvxMZlpVOnxVzWHkvJPQHxnRI=;
-        b=DNBQpAfg8dNVDZt6hWZimkjxZjKXXnPZDrj64PnmEslX+5NwaIaHtKQxEnzEQvDnx7
-         U7mfaechomWnXK8L0Yu1ZOa/OhnqgGOWO7Cv4YiGGqT5KxE4nZ61T983rfZLQx8Yp5+r
-         bkjif4tjBJWoB0jXVky9Tib6CKbaWj3ciFMsgSX5FTeSCJ7qK3DJZEXJu00eR6M90Y94
-         JWzSn1fZG8kjLw0vPxBZ7petJplznwCdmA3C609AqfV2YqjJdGdN80LtWBFSn9In5tnF
-         Z8/RD+dOxwCpVNgT/N54EQ9SB9btXfIrXSdtm5V+qQ7P/8YvprBDlhZNDAD2JmTFbBmG
-         CFuQ==
-X-Gm-Message-State: ANoB5pkTdYPZi7Kv9GE4vBNsVACUIskanRMhdmprxGgjxIuVhtpr2+Wz
-        WOBEhxhsmxGjJaImbjsYYBWE4Q==
-X-Google-Smtp-Source: AA0mqf56qsEGhfRMqX+JEjXAuSmBjPtw3+8fmZRoUV93ZUk48rfYhC2KVQXthyFQhi41/i48fWGR7Q==
-X-Received: by 2002:a05:6512:259e:b0:4ab:f3f1:8299 with SMTP id bf30-20020a056512259e00b004abf3f18299mr9923984lfb.6.1671197057217;
-        Fri, 16 Dec 2022 05:24:17 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a8-20020a056512200800b004a2c447598fsm220591lfb.159.2022.12.16.05.24.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 05:24:16 -0800 (PST)
-Message-ID: <07ab1c4d-2e59-6b0d-0d82-24b4772653ea@linaro.org>
-Date:   Fri, 16 Dec 2022 14:24:15 +0100
+        with ESMTP id S229981AbiLPOYN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Dec 2022 09:24:13 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3842791C;
+        Fri, 16 Dec 2022 06:24:12 -0800 (PST)
+Received: from mercury (dyndsl-095-033-168-084.ewe-ip-backbone.de [95.33.168.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 103CB6602C94;
+        Fri, 16 Dec 2022 14:24:11 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671200651;
+        bh=LtJZ4czImxmXP/h4E3UX97GAfHCyiEEMsAw12q2feGU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PsVLpLzDkm0EnUor/IiRGr1Xo4AiJzn2gc0llL+ondxkccWA3BcVIwhIrvdZER2FH
+         IUwq+kHGlviR7VVULhyzQ2qM9JAYk7TAt7Me7oRBhMhNVe3MBdvQsoUf62jNvgZmpa
+         3whtJGD8kpaJ5WC5uqdqaeZfTcHua6sPJXHUQUNMdpF4Yg7Q3Yv76JzFm81s9cfqkg
+         SNQNK4cMWUKzIMYbeqZa2AOBjuYTsocRqfeIo0LUlrzxNmeGXqDZOYA6QUoVTHlE5B
+         yOz9rJiq090XHMpRok68bu+8gGa9PWXh96E9m8zDgNuogYfksSXyvqWvVL78aRHfN0
+         AdGtXvJg3ezMg==
+Received: by mercury (Postfix, from userid 1000)
+        id A133A1060F45; Fri, 16 Dec 2022 15:24:08 +0100 (CET)
+Date:   Fri, 16 Dec 2022 15:24:08 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Marek Vasut <marex@denx.de>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] dt-bindings: rtc: m41t80: Mark the clock: subnode
+ as deprecated
+Message-ID: <20221216142408.6x3e5dhtdvgiewtb@mercury.elektranox.org>
+References: <20221211205124.23823-1-marex@denx.de>
+ <20221211205124.23823-2-marex@denx.de>
+ <20221215180659.sa54lkinwxoiz7bb@mercury.elektranox.org>
+ <d9910a7a-9997-c157-9a71-8ef7ee34be25@denx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 14/14] dt-bindings: rtc: pcf2127: add PCF2131
-Content-Language: en-US
-To:     Hugo Villeneuve <hugo@hugovil.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
- <20221215150214.1109074-15-hugo@hugovil.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221215150214.1109074-15-hugo@hugovil.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uzdt6lhrhdu6hrgi"
+Content-Disposition: inline
+In-Reply-To: <d9910a7a-9997-c157-9a71-8ef7ee34be25@denx.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/12/2022 16:02, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> Add support for new NXP RTC PCF2131.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
 
+--uzdt6lhrhdu6hrgi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-Best regards,
-Krzysztof
+On Thu, Dec 15, 2022 at 08:39:47PM +0100, Marek Vasut wrote:
+> On 12/15/22 19:06, Sebastian Reichel wrote:
+> > On Sun, Dec 11, 2022 at 09:51:24PM +0100, Marek Vasut wrote:
+> > > The clock {} subnode seems like it is describing an always-on clock
+> > > generated by the PMIC. This should rather be modeled by consumer of
+> > > the clock taking phandle to the RTC node itself, since it already
+> > > does have clock-cells and all. Since there are no users of the clock
+> > > subnode in tree anyway, mark it as deprecated to avoid proliferation
+> > > of this approach.
+> > >=20
+> > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > Signed-off-by: Marek Vasut <marex@denx.de>
+> > > ---
+> > > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > > Cc: linux-rtc@vger.kernel.org
+> > > To: devicetree@vger.kernel.org
+> > > ---
+> > > V2: - Add AB from Krzysztof
+> > > V3: - No change
+> > > ---
+> >=20
+> > I just noticed this by accident. Basically everything in the patch
+> > description is wrong:
+> >=20
+> > 1. There is a in-tree user: arch/arm/boot/dts/imx6dl-qmx6.dtsi
+>=20
+> Sorry, I missed this one.
+>=20
+> > 2. The PMIC has nothing to do with this
+>=20
+> In [3] the commit message claims the PMIC supplies 32kHz clock to i.MX6 C=
+KIL,
+> which per IMX6DQRM rev.6 Table 18-3 row SNVS indirectly supplies SNVS RTC.
+> This reminded me of commit:
 
+The word PMIC is not mentioned once in [3]. PMIC is not involved.
+The QMX6 32khz chain is like this:
+
+32kHz crystal -> m41t62 crystal input
+m41t62 clock output -> i.MX6 CKIL
+
+> 9509593f327ac ("arm64: dts: imx8mm: Model PMIC to SNVS RTC clock path on
+> Data Modul i.MX8M Mini eDM SBC")
+>=20
+> which solves exactly the same problem, system hangs when 32 kHz clock are
+> stopped, except this time on i.MX8MM, clock are generated by PMIC on I2C
+> (notice how the PMIC is referenced directly) and the clock are supplied to
+> the SVNS RTC XTal terminals.
+>=20
+> I wonder if this could be reused on the QMX6 board too?
+
+IIRC On i.MX6 referencing the I2C connected RTC results in boot
+hanging forever when trying to get the ckil clock in
+imx6q_clocks_init. At least it used to be the case when I was
+working on this - I no longer have access to the boards. Of course
+properly referencing the RTC clock was the first route I tried.
+
+-- Sebastian
+
+> > 3. Directly referencing the RTC does not work, since that introduces
+> >     an unsolvable dependency loop on QMX6. This was the solution accept=
+ed
+> >     by Rob and Saravana:
+> >=20
+> > [v1] https://lore.kernel.org/lkml/20210222171247.97609-1-sebastian.reic=
+hel@collabora.com/
+> > [v2] https://lore.kernel.org/all/20210428222953.235280-1-sebastian.reic=
+hel@collabora.com/
+>=20
+> [3] https://lore.kernel.org/linux-clk/20191108170135.9053-1-sebastian.rei=
+chel@collabora.com/
+
+--uzdt6lhrhdu6hrgi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOcf4AACgkQ2O7X88g7
++pqhbA/+NOluT+IynI3BsvULI8qqwJEiv41CxX6GmixgoiMo0fYimdb7Nyft1m9/
+LM0xhy3mvqLNy19hwLMybOgY9RVZAS7wPKZcFAvynvI6RiHIUrhFREf5DFWuGr5y
+iQTeKcdqQl+nDECZ62UB2qGaUr6m0/DBVTH2oxzXRMd+rFYqnC4mtJhlY0LZai4L
+FSEAKSJHuYNMOIlNBLXrbuov7v4KKVsMpEuGzmMWR2BiowBbScLTCE/KyJgF1ixY
+l30r0kn/fY4btu1PTdR2cSS4uI8xjK5em5QmGoCVd/FIkboj/dSQ2hC0Ds7WTVlp
+ysppCHqGc4cdCfaPOuJG/ShxKusVa9audSMM9+k3lOXejsq/vUFJwEBB9Qa+cctp
+EwGMlv3eyujTHXM3eFlV9WtbMeqYYZGIPXuLrtq5mc4D3SUTQbRSaE25bzSZlaM8
+DIkumotCpMqBXjzCdbT8pf/xY2L92eHQzImVTdW8SNlsEUliy9ZFanoxP7sqs2KX
+Zj23qPfETNr2tE+514cBsUR4ODmWCpjrqzw37aTCaQ9FZ+cuCDI2UTclRb6V3dK4
+apu3MwIaLi63ovKwzNb6JB0P+Q110MgTNzJ4qXifJNgAi8DnYQzAqoYX74jIT+5n
+qCqZhdKA8ZHszKZDc96tCj3CqJx1BE3QCyCM1GZYpyLzWNJiL90=
+=DPm4
+-----END PGP SIGNATURE-----
+
+--uzdt6lhrhdu6hrgi--
