@@ -2,119 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F25964EB9D
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Dec 2022 13:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3169964EC0D
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Dec 2022 14:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiLPMxH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Dec 2022 07:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S230312AbiLPNYY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Dec 2022 08:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiLPMxG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Dec 2022 07:53:06 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2622496C;
-        Fri, 16 Dec 2022 04:53:05 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id i187-20020a1c3bc4000000b003d1e906ca23so1127802wma.3;
-        Fri, 16 Dec 2022 04:53:05 -0800 (PST)
+        with ESMTP id S230375AbiLPNYV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Dec 2022 08:24:21 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D042150D6D
+        for <linux-rtc@vger.kernel.org>; Fri, 16 Dec 2022 05:24:18 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id p36so3407978lfa.12
+        for <linux-rtc@vger.kernel.org>; Fri, 16 Dec 2022 05:24:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BheHA0Tcwm6n8ymyQljk2z1vC+8TH8hh+YD/X0C4MfE=;
-        b=AKseIkBZZBrqaCfkNwNc+eOqwfrvP1xB5qgAOduMfqvnWa/fl4el+6xifzPzoHdoMu
-         dThO83kul7JlQEUalQSJI9PwHrXOloc9BXy1SaNNYS+GTaohbapvDJ2iA7c17ImUR/pL
-         Uk2j6bXGXuATvNUy2eCZTxPY2QaZYRDXNaKGCW3EXp8C7VYgmqmHT3UDXn5ON4P5VoWj
-         tODxHPhQ6dk0TlV8sn3u7JzozL5n+Gxdh7d+nJQj8+lj0M+EKpOCdv5zjTNYG56tqWzs
-         T9KTGXJaolmbqw9gWZlSp+8ctPAfsp7jDTmRNpJnAxZQmafMXgXusal93noxxC/XvI/j
-         nmKg==
+        bh=/+mMxOdMAgLCeuwkaZmvxMZlpVOnxVzWHkvJPQHxnRI=;
+        b=ujrJHZZ7vtUjOvUQAW81BfcvxHm/qIXYl8RqOCVYigjm+N2HO3xtQ08VyIyN8pHJ9R
+         Md1d10dAusU9tWOY9DmsIYn9MUsBz1cdpP1u9zUWfuqGmztxmHpgHHAD2Sir3Bcb+Zbl
+         RVUxYE3GdQIJTvGhh1P3zcTTg9ooz+tIZ2ITLHKfKuXcmg4oo7OdBKcPjBaldTtrlR28
+         E+tvzcZaVyPXCLm6F10efIgO/gbnzk6riJr20tkPBk5X6vDkZCJFuf2CYd3uDs7gFrR/
+         zTp+cGBxbAZVdV/Y0VIpiqOYJf5i+09sryUE1BSu7vG7IaNdWjf3DHyizxkBsZTMEeY9
+         ourA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BheHA0Tcwm6n8ymyQljk2z1vC+8TH8hh+YD/X0C4MfE=;
-        b=C8iwDwwUVz0aFhDn0LKPLvaTRdXNdHqxulbUiiA7LUQ+XC3IcfNpN4QceKNYoHTuCG
-         rLZ16HAGhkHkwSZQhUdotjr6eIySIuOb6Za4Y75d/N5W0c8ZtDX8Bebsl4dnyR+dggXK
-         frt62kcXb9N5HrHntl+0TC+7z45tZXozy8SCxHJs1fq3LDN7BFIxL7hEobgQBEQCet45
-         QgrThJ86Z1UBthh/9/1Tte4rgscwi0hPkXvcoK1zxj+4Ud6qOoLb3s3VwHgwTrWeBVEd
-         j1VPLgTfAxerb2hJIsvDx2wH/cwMobgD4BZmak9bNcEwKrc4X7FnhangiRtebW2atTDN
-         VVpQ==
-X-Gm-Message-State: ANoB5pmfWuZxqcqEKlXPpfvhK26w6X/4ESvQsE7s2abb0wTUt41/V9f1
-        EPk6xT3xzcn7xzVKTQBEeb0=
-X-Google-Smtp-Source: AA0mqf479L304eL8/K8VJH98TvI/FZlxuU1K4BcjUM7FJGorT7BHd3K5GAGOp5+Y4o4yWCg6c9hDig==
-X-Received: by 2002:a7b:cd17:0:b0:3d2:2d2a:d58f with SMTP id f23-20020a7bcd17000000b003d22d2ad58fmr13121323wmj.2.1671195183537;
-        Fri, 16 Dec 2022 04:53:03 -0800 (PST)
-Received: from [192.168.1.132] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05600c0b4b00b003c5571c27a1sm2870571wmr.32.2022.12.16.04.53.01
+        bh=/+mMxOdMAgLCeuwkaZmvxMZlpVOnxVzWHkvJPQHxnRI=;
+        b=DNBQpAfg8dNVDZt6hWZimkjxZjKXXnPZDrj64PnmEslX+5NwaIaHtKQxEnzEQvDnx7
+         U7mfaechomWnXK8L0Yu1ZOa/OhnqgGOWO7Cv4YiGGqT5KxE4nZ61T983rfZLQx8Yp5+r
+         bkjif4tjBJWoB0jXVky9Tib6CKbaWj3ciFMsgSX5FTeSCJ7qK3DJZEXJu00eR6M90Y94
+         JWzSn1fZG8kjLw0vPxBZ7petJplznwCdmA3C609AqfV2YqjJdGdN80LtWBFSn9In5tnF
+         Z8/RD+dOxwCpVNgT/N54EQ9SB9btXfIrXSdtm5V+qQ7P/8YvprBDlhZNDAD2JmTFbBmG
+         CFuQ==
+X-Gm-Message-State: ANoB5pkTdYPZi7Kv9GE4vBNsVACUIskanRMhdmprxGgjxIuVhtpr2+Wz
+        WOBEhxhsmxGjJaImbjsYYBWE4Q==
+X-Google-Smtp-Source: AA0mqf56qsEGhfRMqX+JEjXAuSmBjPtw3+8fmZRoUV93ZUk48rfYhC2KVQXthyFQhi41/i48fWGR7Q==
+X-Received: by 2002:a05:6512:259e:b0:4ab:f3f1:8299 with SMTP id bf30-20020a056512259e00b004abf3f18299mr9923984lfb.6.1671197057217;
+        Fri, 16 Dec 2022 05:24:17 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a8-20020a056512200800b004a2c447598fsm220591lfb.159.2022.12.16.05.24.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 04:53:02 -0800 (PST)
-Message-ID: <0fc0217e-f1dd-d64c-d43c-cd47a8acbfd4@gmail.com>
-Date:   Fri, 16 Dec 2022 13:53:00 +0100
+        Fri, 16 Dec 2022 05:24:16 -0800 (PST)
+Message-ID: <07ab1c4d-2e59-6b0d-0d82-24b4772653ea@linaro.org>
+Date:   Fri, 16 Dec 2022 14:24:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v7 0/8] Add MediaTek MT6357 PMIC support
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 14/14] dt-bindings: rtc: pcf2127: add PCF2131
 Content-Language: en-US
-To:     Kevin Hilman <khilman@kernel.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, Lee Jones <lee@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-leds@vger.kernel.org
-References: <20221005-mt6357-support-v7-0-477e60126749@baylibre.com>
- <7hr0xe56uf.fsf@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <7hr0xe56uf.fsf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Hugo Villeneuve <hugo@hugovil.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+ <20221215150214.1109074-15-hugo@hugovil.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221215150214.1109074-15-hugo@hugovil.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Kevin,
-Hi Alexandre,
-
-On 05/12/2022 14:16, Kevin Hilman wrote:
-> Matthias,
+On 15/12/2022 16:02, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> Alexandre Mergnat <amergnat@baylibre.com> writes:
+> Add support for new NXP RTC PCF2131.
 > 
->> This patch series adds MFD, PMIC keys, and regulator support for MT6357.
->> MT6357 is a MediaTek PMIC very similar to MT6358.
-> 
-> The regulator driver (and bindings) were merged by Mark.  Could you take
-> the rest of this series via your mediatek tree?  The input driver (and
-> bindings) are ack'd by Dmitry.
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
 
-Yes I can do that but 3/8 does not apply cleanly. Could you please rebase on top 
-of v6.2-tmp/soc?
 
-Thanks
-Matthias
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
