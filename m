@@ -2,128 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A516511F7
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Dec 2022 19:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D7A65125C
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Dec 2022 20:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiLSSc1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 19 Dec 2022 13:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S231693AbiLSTJ1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 19 Dec 2022 14:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232512AbiLSSbp (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Dec 2022 13:31:45 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCE11401A;
-        Mon, 19 Dec 2022 10:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=v4wAWSgxyhaRB7Y8Dgp+aaoh5EMx3BiZ3LpgdRNFuKM=; b=vQcFZ1klU2teUayG3dFn8DvFCV
-        7hk2s9B4vxD/y0qaf5KvKBx82x2sT8SXy6OCIDPziELVb97LUETR2LOh0Ps+XdM28vPF9fkEyk56v
-        Q/DxyhiTI/LvOGkiNXV6ZxOoclIvotqbcjZcQcuu4w4KDb03ruDGzXsGGf3WGPvd8+4s=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48612 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p7Kut-0003U7-JK; Mon, 19 Dec 2022 13:31:12 -0500
-Date:   Mon, 19 Dec 2022 13:31:11 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20221219133111.6d6af8e601ca019f26fcb382@hugovil.com>
-In-Reply-To: <CAH+2xPA0uc8wCtaR7Z48G9SkHWQG=Gb9XtxBCPKUgKfq5EDVQA@mail.gmail.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-15-hugo@hugovil.com>
-        <CAH+2xPAWo=nycQMLrjye8i3a3textJdyYJcWRG3Jq-tbN0a9RA@mail.gmail.com>
-        <20221219112542.fb30929b8b91255dcba5a289@hugovil.com>
-        <CAH+2xPA0uc8wCtaR7Z48G9SkHWQG=Gb9XtxBCPKUgKfq5EDVQA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        with ESMTP id S229624AbiLSTJ0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Dec 2022 14:09:26 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADA065F6
+        for <linux-rtc@vger.kernel.org>; Mon, 19 Dec 2022 11:09:25 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id h26so5242668qtu.2
+        for <linux-rtc@vger.kernel.org>; Mon, 19 Dec 2022 11:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sparkcharge.io; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bt+7Tt3o+8BEAMqMOB9mE5Ei3bYGSWfShEIE2EXWhpo=;
+        b=O5J1MFkjtu2DK19SHsxcO3VrHhhB8EpVDYNdgzjZ0zHbqHMUFfbZQvk08Dy3DgzZVm
+         37ZKzj8XwRFcDuOPGtx1aale3ohpUFIkWjH1lXmMnBgZUZdaJceu0P52qw9ItMISuktB
+         Gbu81ooJyEzMpklfqyM258OjRg8CJZ1cK9zthDBV7sWVWv/DxuKEbaacQp1SvGzq214i
+         OpGYIy7XS5tvowHg4eA8fUkjf/hu2zBLkbvRG03ZOJuXtBDyTgJhg3kKHTJz/BBeKcuq
+         AOsduwgkcJ3vczfR/KZMUI7uAy3o5W+oCRi2xIbkYiwRDOP3HHmPcWv2ocA68gneMNjM
+         t71Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bt+7Tt3o+8BEAMqMOB9mE5Ei3bYGSWfShEIE2EXWhpo=;
+        b=HBbFx7t2YVgfBJYz60nG++R6hjHLRouPyESBVTMODIZrEM1oWJsHMRs/UnvKR7C64V
+         B+VyjJtilAoDVTb4iqqILKVI5trIKGib1LN51PIov99GbC3VMp5IPgNL3Gjyub8nzIP4
+         fxaHZi4h1bkP6HRkkh11AYagAcJPM7qrzDGYnN24gSBCXdukwwZuRmMpxauFpUJF/bSV
+         TSRglcJwTlmHoIDaryowJvKZ8fvMtWaImMzybEl8KThhyWIRHHlxUp/Utm1886GknFjc
+         74AiAL9WYbSH4FMUBkXtZRNBmD9RIdwheazRGuaM9nXMfqwmRdzdH5s04c8p8t6ZB1Oz
+         wz3Q==
+X-Gm-Message-State: AFqh2kqCRFcmL7Y5wj+kAHUaFbPl3t7sT675EKImwi8R3HMOvrC4IUsF
+        cchVz/I/kxs8WNISHLaXaNtwsQ==
+X-Google-Smtp-Source: AMrXdXtqIvJprjFkBeCepzDnuDDIM8nlR+euxdUGloYM4/cmVIT1oBBjJWppDGM+nV9Gmx+hG6Zcfg==
+X-Received: by 2002:ac8:538f:0:b0:3a9:89f1:828 with SMTP id x15-20020ac8538f000000b003a989f10828mr5685143qtp.14.1671476964289;
+        Mon, 19 Dec 2022 11:09:24 -0800 (PST)
+Received: from localhost.localdomain (c-66-31-16-167.hsd1.ma.comcast.net. [66.31.16.167])
+        by smtp.gmail.com with ESMTPSA id i16-20020a05620a249000b006fa9d101775sm7503743qkn.33.2022.12.19.11.09.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 11:09:23 -0800 (PST)
+From:   Dennis Lambe Jr <dennis@sparkcharge.io>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Alexander Bigga <ab@mycable.de>,
+        Dennis Lambe Jr <dennis@sparkcharge.io>
+Subject: [PATCH 0/3] rtc: m41t80: set xtal load capacitance from DT
+Date:   Mon, 19 Dec 2022 19:09:12 +0000
+Message-Id: <20221219190915.3912384-1-dennis@sparkcharge.io>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 14/14] dt-bindings: rtc: pcf2127: add PCF2131
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 19 Dec 2022 18:18:58 +0100
-Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+The m41t82 and m41t83 have an adjustable internal capacitance that 
+defaults to 25 pF per xtal pin. This patch series adds the ability to 
+configure it via the devicetree.
 
-> Den man. 19. dec. 2022 kl. 17.25 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> >
-> > On Mon, 19 Dec 2022 10:14:10 +0100
-> > Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
-> >
-> > > Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> > > >
-> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > >
-> > > > Add support for new NXP RTC PCF2131.
-> > > >
-> > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 4 +++-
-> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > index cde7b1675ead..a8f8c23da4d8 100644
-> > > > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > @@ -14,7 +14,9 @@ maintainers:
-> > > >
-> > > >  properties:
-> > > >    compatible:
-> > > > -    const: nxp,pcf2127
-> > > > +    enum:
-> > > > +      - nxp,pcf2127
-> > > > +      - nxp,pcf2131
-> > >
-> > > The enum is incomplete as pcf2127_of_match struct also contains:
-> > > nxp,pcf2129
-> > > ncp,pca2129
-> > >
-> > > /Bruno
-> >
-> > Hi,
-> > if I understand correctly, this means that the pca2129 and pcf2129 entries are already missing and should be added in a fix or a patch outside the scope of my new driver...
-> >
-> 
-> Correct, I just noticed while doing review.
+Patch 1 just switches the CONFIG_OF-dependent block in m41t80_probe() 
+from an ifdef guard to an if(IS_ENABLED(...)) guard, so that I don't 
+need to use __maybe_used on my new functions and variables.
 
-Hi,
-I will send a separate patch very soon.
+Patch 2 is the DeviceTree YAML changes.
 
-Thank you,
-Hugo. V.
+Patch 3 is the actual added functionality.
 
+The desired capacitance comes from quartz-load-capacitance property, 
+following the example of two other RTC ICs that have adjustable internal 
+load capacitance, the NXP pcf85063 and pcf8523.
 
-> > > >    reg:
-> > > >      maxItems: 1
-> > > > --
-> > > > 2.30.2
-> > > >
-> > >
-> >
-> >
-> > --
-> > Hugo Villeneuve <hugo@hugovil.com>
-> 
+The m41t82 supports much finer-grained control over the capacitance than 
+those chips and calls the feature "analog calibration", but it looks to 
+me like it's essentially the same kind of thing.
 
+My use case for this is:
+
+ST specifies not to add any additional external load capacitance[1], but 
+the MikroElektronika RTC 9 Click board[2] has a 22 pF cap on each xtal 
+pin[3]. The resulting combined capacitance appears to be outside of the 
+operating range of the xtal, because when power is removed from the 
+boards I'm testing with, the RTC reports an Oscillator-Fail flag on the 
+next power on.
+
+I found I could work around the problem by reducing the internal load 
+capacitance as low as it will go.
+
+I have tested on the VersaLogic Zebra, an NXP i.MX6 ARM. I made sure it 
+compiles cleanly on amd64 with CONFIG_OF=no.
+
+References:
+[1] https://www.st.com/resource/en/application_note/an3060-applications-guide-for-serial-realtime-clocks-rtcs-stmicroelectronics.pdf
+[2] https://www.mikroe.com/rtc-9-click
+[3] https://download.mikroe.com/documents/add-on-boards/click/rtc-9/rtc-9-click-schematic-v100.pdf
+
+Dennis Lambe Jr (3):
+  rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
+  dt-bindings: m41t80: add xtal load capacitance
+  rtc: m41t80: set xtal load capacitance from DT
+
+ .../devicetree/bindings/rtc/st,m41t80.yaml    | 18 ++++
+ drivers/rtc/rtc-m41t80.c                      | 84 +++++++++++++++++--
+ 2 files changed, 94 insertions(+), 8 deletions(-)
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+2.25.1
+
