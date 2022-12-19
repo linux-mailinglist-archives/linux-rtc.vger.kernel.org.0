@@ -2,232 +2,342 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC879651063
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Dec 2022 17:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE9B65111F
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Dec 2022 18:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbiLSQ1b (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 19 Dec 2022 11:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S232248AbiLSRSJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 19 Dec 2022 12:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbiLSQ1a (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Dec 2022 11:27:30 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBEEB492;
-        Mon, 19 Dec 2022 08:27:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=yz2My1ZtMOzXmoRi2234/xeBrOI2A4PzXUb5qN8cY8I=; b=RyxWc76gKJW8eM5ZfpkXur2L6u
-        CddUyI2zZSn0PK90LnFRLoHSZ2LZBvMvrd8GwBVVmj0RNHDzevXVcQbp4XgnBaunY5XLrExSMn+Ej
-        AOC60fhacnVb2pkVcYJXmVbSJ5nvYLMRrwrnjKEpPwnRXOesBYlX0EKFoims1wj2iTOI=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48608 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p7Iz6-0001Vy-06; Mon, 19 Dec 2022 11:27:24 -0500
-Date:   Mon, 19 Dec 2022 11:27:23 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+        with ESMTP id S232245AbiLSRSD (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Dec 2022 12:18:03 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87A62FB;
+        Mon, 19 Dec 2022 09:18:02 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id b189so9338862vsc.10;
+        Mon, 19 Dec 2022 09:18:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZLfdm1BtvCyHG1v8uMe+3IlZ4SFe4oPHT1Qg2iY0FVs=;
+        b=Bd2TGgJvMWqHvensFo1itluaqwJyNmOjRl0pSO+/8eXy2t0g5n0wvxBxjNmDrwALht
+         WyiI3avp966UT/JIKUQbnCDRd4cuMDER0Yo1RL9w9MG6c70J3kht7QTQV3LmjAAvlFun
+         WYPfLb1g0Bx08OcPwcbSmRTCf1gQ5T4QNJWCQDh41gy5DW8tVVP6nlrxhP6D8lKsljIN
+         Moe5diP3N63vzAHvEYpAPGU5FVUEjuPysnernjQjFuZLvUEUoOqmEMVL2w9euJQF7rWn
+         16OL1HP5HBnu9Kn0+TUChpfddgQSndJzfiU/yBFBkpjfKNzAVypsXRC50sgC8PZUQ2hm
+         HLIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZLfdm1BtvCyHG1v8uMe+3IlZ4SFe4oPHT1Qg2iY0FVs=;
+        b=CuElGrzRSCYspGvoV4OQiC0xyESAim5AK3+QEdkqW8vfH3wi6OYpQ9keQqdPMJJVpy
+         fxg7ScRRnqVBSg62r+oqIMqO7Dfer2tJUg0Ys0LuqnvguxGcmjOZSDovA8H3Db3/n5Js
+         EIt0MCLGGu401EDrgAAPXGLTVjQJ8RZGPQlKEReAC5cjqIGiMA5eMQ9nAvEmmzAH4VWE
+         CN1cZRBVAVRQWRjYOCoRNfjHjt549vGH8IPKtgX+HDyD0pz8zlD8wZxKbdEu8Ggxrmms
+         nl0dEivdRaicDqJRWA+9Wom2Vh4z7zdb588Blu+zhI0clweG91gnYfyldhdTMJsxDBbZ
+         VOEQ==
+X-Gm-Message-State: ANoB5pkjCVkUsqnvbiIVzrymXLn9kI44ztKi14ESR7oDFjW6dJdEz58w
+        6MeTQiMauGxJJlJbojIBEQRPtWwtqxAACW40m4M=
+X-Google-Smtp-Source: AA0mqf6DGxW13GkyUgc9PYtDeGKN8Wy3EXjEKLk1iOf4yuSYWQI6RF+aM6BWV1FmXLy+pkTVAZZU9d06KPehDJYHhCo=
+X-Received: by 2002:a67:ce8d:0:b0:3b5:1393:28bb with SMTP id
+ c13-20020a67ce8d000000b003b5139328bbmr3405818vse.0.1671470281750; Mon, 19 Dec
+ 2022 09:18:01 -0800 (PST)
+MIME-Version: 1.0
+References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-2-hugo@hugovil.com>
+ <CAH+2xPDW04NKD34RjcLO=HP1_KDxe9dvbLC9B4Rv+i3O8S58qQ@mail.gmail.com> <20221219101526.ab27daa0971e827128d51a15@hugovil.com>
+In-Reply-To: <20221219101526.ab27daa0971e827128d51a15@hugovil.com>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Mon, 19 Dec 2022 18:17:45 +0100
+Message-ID: <CAH+2xPC5MvrAiMOpjm8D2aeJEMmNJghMSg1zoeDb=DO-dBue7w@mail.gmail.com>
+Subject: Re: [PATCH v3 01/14] rtc: pcf2127: add variant-specific configuration structure
+To:     Hugo Villeneuve <hugo@hugovil.com>
 Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20221219112723.ad5caf2b2da9b02a54a9aecb@hugovil.com>
-In-Reply-To: <CAH+2xPAMiQYsAcCDx5Cy3Wo6eVSEJh7ijnZywxD8uHYWP4beFQ@mail.gmail.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-3-hugo@hugovil.com>
-        <CAH+2xPAMiQYsAcCDx5Cy3Wo6eVSEJh7ijnZywxD8uHYWP4beFQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 02/14] rtc: pcf2127: adapt for time/date registers at
- any offset
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 19 Dec 2022 10:34:08 +0100
-Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+Hi Hugo,
 
-> Den tor. 15. dec. 2022 kl. 16.20 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> >
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > This will simplify the implementation of new variants into this driver.
-> >
-> > Some variants (PCF2131) have a 100th seconds register. This register is
-> > currently not supported in this driver.
-> >
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 68 ++++++++++++++++++++++-----------------
-> >  1 file changed, 39 insertions(+), 29 deletions(-)
-> >
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index b9a5d47a439f..fb0caacaabee 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -44,14 +44,17 @@
-> >  #define PCF2127_BIT_CTRL3_BF                   BIT(3)
-> >  #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
-> >  /* Time and date registers */
-> > -#define PCF2127_REG_SC                 0x03
-> > +#define PCF2127_REG_TIME_DATE_BASE     0x03
-> > +/* Time and date registers offsets (starting from base register) */
-> > +#define PCF2127_OFFSET_TD_SC           0
-> > +#define PCF2127_OFFSET_TD_MN           1
-> > +#define PCF2127_OFFSET_TD_HR           2
-> > +#define PCF2127_OFFSET_TD_DM           3
-> > +#define PCF2127_OFFSET_TD_DW           4
-> > +#define PCF2127_OFFSET_TD_MO           5
-> > +#define PCF2127_OFFSET_TD_YR           6
-> > +/* Time and date registers bits */
-> >  #define PCF2127_BIT_SC_OSF                     BIT(7)
-> > -#define PCF2127_REG_MN                 0x04
-> > -#define PCF2127_REG_HR                 0x05
-> > -#define PCF2127_REG_DM                 0x06
-> > -#define PCF2127_REG_DW                 0x07
-> > -#define PCF2127_REG_MO                 0x08
-> > -#define PCF2127_REG_YR                 0x09
-> >  /* Alarm registers */
-> >  #define PCF2127_REG_ALARM_SC           0x0A
-> >  #define PCF2127_REG_ALARM_MN           0x0B
-> > @@ -106,6 +109,7 @@ struct pcf21xx_config {
-> >         int max_register;
-> >         unsigned int has_nvmem:1;
-> >         unsigned int has_bit_wd_ctl_cd0:1;
-> > +       u8 regs_td_base; /* Time/data base registers. */
-> 
-> There is only one base register, so no need to add s.
-> I think td is an odd short, so maybe u8 reg_time_base.
-> 
-> /Bruno
+Looking more into it I think you based it against the right tree,
+but if you use --base= when doing format-patch it's easier to spot :)
+I only use torvalds tree when testing patches on a device.
 
-Hi,
-it makes sense, I will fix it in V4.
+/Bruno
 
-I will also fix the comment "Time/data" -> "Time/date".
-
-Hugo.
-
-
-> >  };
+Den man. 19. dec. 2022 kl. 16.15 skrev Hugo Villeneuve <hugo@hugovil.com>:
+>
+> On Mon, 19 Dec 2022 10:05:53 +0100
+> Bruno Thomsen <bruno.thomsen@gmail.com> wrote:
+>
+> > Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
+> > >
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > >
+> > > Create variant-specific configuration structures to simplify the
+> > > implementation of new variants into this driver. It will also avoid
+> > > to have too many tests for a specific variant, or a list of variants
+> > > for new devices, inside the code itself.
+> > >
+> > > Add configuration options for the support of the NVMEM, bit CD0 in
+> > > register WD_CTL as well as the maximum number of registers for each
+> > > variant, instead of hardcoding the variant (PCF2127) inside the
+> > > i2c_device_id and spi_device_id structures.
+> > >
+> > > Also specify a different maximum number of registers (max_register)
+> > > for the PCF2129.
+> > >
+> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > ---
+> > >  drivers/rtc/rtc-pcf2127.c | 95 +++++++++++++++++++++++++++++++--------
+> > >  1 file changed, 76 insertions(+), 19 deletions(-)
+> > >
+> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > > index 87f4fc9df68b..b9a5d47a439f 100644
+> > > --- a/drivers/rtc/rtc-pcf2127.c
+> > > +++ b/drivers/rtc/rtc-pcf2127.c
+> > > @@ -21,6 +21,7 @@
+> > >  #include <linux/module.h>
+> > >  #include <linux/of.h>
+> > >  #include <linux/of_irq.h>
+> > > +#include <linux/of_device.h>
+> > >  #include <linux/regmap.h>
+> > >  #include <linux/watchdog.h>
+> > >
+> > > @@ -101,10 +102,17 @@
+> > >                 PCF2127_BIT_CTRL2_WDTF | \
+> > >                 PCF2127_BIT_CTRL2_TSF2)
+> > >
+> > > +struct pcf21xx_config {
+> > > +       int max_register;
+> > > +       unsigned int has_nvmem:1;
+> > > +       unsigned int has_bit_wd_ctl_cd0:1;
+> > > +};
+> > > +
+> > >  struct pcf2127 {
+> > >         struct rtc_device *rtc;
+> > >         struct watchdog_device wdd;
+> > >         struct regmap *regmap;
+> > > +       const struct pcf21xx_config *cfg;
+> > >         time64_t ts;
+> > >         bool ts_valid;
+> > >         bool irq_enabled;
+> > > @@ -631,8 +639,27 @@ static const struct attribute_group pcf2127_attr_group = {
+> > >         .attrs  = pcf2127_attrs,
+> > >  };
+> > >
+> > > +enum pcf21xx_type {
+> > > +       PCF2127,
+> > > +       PCF2129,
+> > > +       PCF21XX_LAST_ID
+> > > +};
+> > > +
+> > > +static struct pcf21xx_config pcf21xx_cfg[] = {
+> > > +       [PCF2127] = {
+> > > +               .max_register = 0x1d,
+> > > +               .has_nvmem = 1,
+> > > +               .has_bit_wd_ctl_cd0 = 1,
+> > > +       },
+> > > +       [PCF2129] = {
+> > > +               .max_register = 0x19,
+> > > +               .has_nvmem = 0,
+> > > +               .has_bit_wd_ctl_cd0 = 0,
+> > > +       },
+> > > +};
+> > > +
+> > >  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > > -                        int alarm_irq, const char *name, bool is_pcf2127)
+> > > +                        int alarm_irq, const char *name, const struct pcf21xx_config *config)
+> > >  {
+> > >         struct pcf2127 *pcf2127;
+> > >         int ret = 0;
+> > > @@ -645,6 +672,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > >                 return -ENOMEM;
+> > >
+> > >         pcf2127->regmap = regmap;
+> > > +       pcf2127->cfg = config;
+> > >
+> > >         dev_set_drvdata(dev, pcf2127);
+> > >
+> > > @@ -688,7 +716,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > >                 set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+> > >         }
+> > >
+> > > -       if (is_pcf2127) {
+> > > +       if (pcf2127->cfg->has_nvmem) {
+> > >                 struct nvmem_config nvmem_cfg = {
+> > >                         .priv = pcf2127,
+> > >                         .reg_read = pcf2127_nvmem_read,
+> > > @@ -734,7 +762,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > >                                  PCF2127_BIT_WD_CTL_TF1 |
+> > >                                  PCF2127_BIT_WD_CTL_TF0,
+> > >                                  PCF2127_BIT_WD_CTL_CD1 |
+> > > -                                (is_pcf2127 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
+> > > +                                (pcf2127->cfg->has_bit_wd_ctl_cd0 ? PCF2127_BIT_WD_CTL_CD0 : 0) |
+> > >                                  PCF2127_BIT_WD_CTL_TF1);
+> > >         if (ret) {
+> > >                 dev_err(dev, "%s: watchdog config (wd_ctl) failed\n", __func__);
+> > > @@ -799,9 +827,9 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > >
+> > >  #ifdef CONFIG_OF
+> > >  static const struct of_device_id pcf2127_of_match[] = {
+> > > -       { .compatible = "nxp,pcf2127" },
+> > > -       { .compatible = "nxp,pcf2129" },
+> > > -       { .compatible = "nxp,pca2129" },
+> > > +       { .compatible = "nxp,pcf2127", .data = &pcf21xx_cfg[PCF2127] },
+> > > +       { .compatible = "nxp,pcf2129", .data = &pcf21xx_cfg[PCF2129] },
+> > > +       { .compatible = "nxp,pca2129", .data = &pcf21xx_cfg[PCF2129] },
+> > >         {}
+> > >  };
+> > >  MODULE_DEVICE_TABLE(of, pcf2127_of_match);
+> > > @@ -886,26 +914,40 @@ static const struct regmap_bus pcf2127_i2c_regmap = {
+> > >  static struct i2c_driver pcf2127_i2c_driver;
+> > >
+> > >  static const struct i2c_device_id pcf2127_i2c_id[] = {
+> > > -       { "pcf2127", 1 },
+> > > -       { "pcf2129", 0 },
+> > > -       { "pca2129", 0 },
+> > > +       { "pcf2127", PCF2127 },
+> > > +       { "pcf2129", PCF2129 },
+> > > +       { "pca2129", PCF2129 },
+> > >         { }
+> > >  };
+> > >  MODULE_DEVICE_TABLE(i2c, pcf2127_i2c_id);
+> > >
+> > >  static int pcf2127_i2c_probe(struct i2c_client *client)
+> > >  {
+> > > -       const struct i2c_device_id *id = i2c_match_id(pcf2127_i2c_id, client);
+> > >         struct regmap *regmap;
+> > > -       static const struct regmap_config config = {
+> > > +       static struct regmap_config config = {
+> > >                 .reg_bits = 8,
+> > >                 .val_bits = 8,
+> > > -               .max_register = 0x1d,
+> > >         };
+> > > +       const struct pcf21xx_config *variant;
 > >
-> >  struct pcf2127 {
-> > @@ -125,27 +129,31 @@ struct pcf2127 {
-> >  static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> >  {
-> >         struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> > -       unsigned char buf[10];
-> > +       unsigned char buf[7];
-> > +       unsigned int ctrl3;
-> >         int ret;
+> > Hi Hugo,
 > >
-> >         /*
-> >          * Avoid reading CTRL2 register as it causes WD_VAL register
-> >          * value to reset to 0 which means watchdog is stopped.
-> >          */
-> > -       ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL3,
-> > -                              (buf + PCF2127_REG_CTRL3),
-> > -                              ARRAY_SIZE(buf) - PCF2127_REG_CTRL3);
-> > -       if (ret) {
-> > -               dev_err(dev, "%s: read error\n", __func__);
-> > +       ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &ctrl3);
-> > +       if (ret)
-> >                 return ret;
-> > -       }
+> > Patch series does not apply on 6.1 tree as pcf2127_i2c_probe() call
+> > signature does not match[1].
 > >
-> > -       if (buf[PCF2127_REG_CTRL3] & PCF2127_BIT_CTRL3_BLF)
-> > +       if (ctrl3 & PCF2127_BIT_CTRL3_BLF)
-> >                 dev_info(dev,
-> >                         "low voltage detected, check/replace RTC battery.\n");
+> > static int pcf2127_i2c_probe(struct i2c_client *client,
+> >       const struct i2c_device_id *id)
 > >
-> > +       ret = regmap_bulk_read(pcf2127->regmap, pcf2127->cfg->regs_td_base,
-> > +                              buf, sizeof(buf));
-> > +       if (ret) {
-> > +               dev_err(dev, "%s: read error\n", __func__);
-> > +               return ret;
-> > +       }
-> > +
-> >         /* Clock integrity is not guaranteed when OSF flag is set. */
-> > -       if (buf[PCF2127_REG_SC] & PCF2127_BIT_SC_OSF) {
-> > +       if (buf[PCF2127_OFFSET_TD_SC] & PCF2127_BIT_SC_OSF) {
-> >                 /*
-> >                  * no need clear the flag here,
-> >                  * it will be cleared once the new date is saved
-> > @@ -158,18 +166,18 @@ static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> >         dev_dbg(dev,
-> >                 "%s: raw data is cr3=%02x, sec=%02x, min=%02x, hr=%02x, "
-> >                 "mday=%02x, wday=%02x, mon=%02x, year=%02x\n",
-> > -               __func__, buf[PCF2127_REG_CTRL3], buf[PCF2127_REG_SC],
-> > -               buf[PCF2127_REG_MN], buf[PCF2127_REG_HR],
-> > -               buf[PCF2127_REG_DM], buf[PCF2127_REG_DW],
-> > -               buf[PCF2127_REG_MO], buf[PCF2127_REG_YR]);
-> > -
-> > -       tm->tm_sec = bcd2bin(buf[PCF2127_REG_SC] & 0x7F);
-> > -       tm->tm_min = bcd2bin(buf[PCF2127_REG_MN] & 0x7F);
-> > -       tm->tm_hour = bcd2bin(buf[PCF2127_REG_HR] & 0x3F); /* rtc hr 0-23 */
-> > -       tm->tm_mday = bcd2bin(buf[PCF2127_REG_DM] & 0x3F);
-> > -       tm->tm_wday = buf[PCF2127_REG_DW] & 0x07;
-> > -       tm->tm_mon = bcd2bin(buf[PCF2127_REG_MO] & 0x1F) - 1; /* rtc mn 1-12 */
-> > -       tm->tm_year = bcd2bin(buf[PCF2127_REG_YR]);
-> > +               __func__, ctrl3, buf[PCF2127_OFFSET_TD_SC],
-> > +               buf[PCF2127_OFFSET_TD_MN], buf[PCF2127_OFFSET_TD_HR],
-> > +               buf[PCF2127_OFFSET_TD_DM], buf[PCF2127_OFFSET_TD_DW],
-> > +               buf[PCF2127_OFFSET_TD_MO], buf[PCF2127_OFFSET_TD_YR]);
-> > +
-> > +       tm->tm_sec = bcd2bin(buf[PCF2127_OFFSET_TD_SC] & 0x7F);
-> > +       tm->tm_min = bcd2bin(buf[PCF2127_OFFSET_TD_MN] & 0x7F);
-> > +       tm->tm_hour = bcd2bin(buf[PCF2127_OFFSET_TD_HR] & 0x3F); /* rtc hr 0-23 */
-> > +       tm->tm_mday = bcd2bin(buf[PCF2127_OFFSET_TD_DM] & 0x3F);
-> > +       tm->tm_wday = buf[PCF2127_OFFSET_TD_DW] & 0x07;
-> > +       tm->tm_mon = bcd2bin(buf[PCF2127_OFFSET_TD_MO] & 0x1F) - 1; /* rtc mn 1-12 */
-> > +       tm->tm_year = bcd2bin(buf[PCF2127_OFFSET_TD_YR]);
-> >         tm->tm_year += 100;
 > >
-> >         dev_dbg(dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
-> > @@ -207,7 +215,7 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >         buf[i++] = bin2bcd(tm->tm_year - 100);
+> > [1] https://elixir.bootlin.com/linux/v6.1/source/drivers/rtc/rtc-pcf2127.c#L888
 > >
-> >         /* write register's data */
-> > -       err = regmap_bulk_write(pcf2127->regmap, PCF2127_REG_SC, buf, i);
-> > +       err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
-> >         if (err) {
-> >                 dev_err(dev,
-> >                         "%s: err=%d", __func__, err);
-> > @@ -650,11 +658,13 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >                 .max_register = 0x1d,
-> >                 .has_nvmem = 1,
-> >                 .has_bit_wd_ctl_cd0 = 1,
-> > +               .regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> >         },
-> >         [PCF2129] = {
-> >                 .max_register = 0x19,
-> >                 .has_nvmem = 0,
-> >                 .has_bit_wd_ctl_cd0 = 0,
-> > +               .regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> >         },
-> >  };
+> > /Bruno
+>
+> Hi Bruno,
+> I based my driver on the git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git repo, as indicated in the MAINTAINERS file for the RTC subsystem (T: entry). I used the rtc-next branch on this repo.
+>
+> Can you tell me exactly which repo and branch I need to use to resubmit the driver?
+>
+> Thank you, Hugo.
+>
+>
+> > >         if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+> > >                 return -ENODEV;
+> > >
+> > > +       if (client->dev.of_node) {
+> > > +               variant = of_device_get_match_data(&client->dev);
+> > > +               if (!variant)
+> > > +                       return -ENODEV;
+> > > +       } else {
+> > > +               enum pcf21xx_type type =
+> > > +                       i2c_match_id(pcf2127_i2c_id, client)->driver_data;
+> > > +
+> > > +               if (type >= PCF21XX_LAST_ID)
+> > > +                       return -ENODEV;
+> > > +               variant = &pcf21xx_cfg[type];
+> > > +       }
+> > > +
+> > > +       config.max_register = variant->max_register,
+> > > +
+> > >         regmap = devm_regmap_init(&client->dev, &pcf2127_i2c_regmap,
+> > >                                         &client->dev, &config);
+> > >         if (IS_ERR(regmap)) {
+> > > @@ -915,7 +957,7 @@ static int pcf2127_i2c_probe(struct i2c_client *client)
+> > >         }
+> > >
+> > >         return pcf2127_probe(&client->dev, regmap, client->irq,
+> > > -                            pcf2127_i2c_driver.driver.name, id->driver_data);
+> > > +                            pcf2127_i2c_driver.driver.name, variant);
+> > >  }
+> > >
+> > >  static struct i2c_driver pcf2127_i2c_driver = {
+> > > @@ -953,17 +995,32 @@ static void pcf2127_i2c_unregister_driver(void)
+> > >  #if IS_ENABLED(CONFIG_SPI_MASTER)
+> > >
+> > >  static struct spi_driver pcf2127_spi_driver;
+> > > +static const struct spi_device_id pcf2127_spi_id[];
+> > >
+> > >  static int pcf2127_spi_probe(struct spi_device *spi)
+> > >  {
+> > > -       static const struct regmap_config config = {
+> > > +       static struct regmap_config config = {
+> > >                 .reg_bits = 8,
+> > >                 .val_bits = 8,
+> > >                 .read_flag_mask = 0xa0,
+> > >                 .write_flag_mask = 0x20,
+> > > -               .max_register = 0x1d,
+> > >         };
+> > >         struct regmap *regmap;
+> > > +       const struct pcf21xx_config *variant;
+> > > +
+> > > +       if (spi->dev.of_node) {
+> > > +               variant = of_device_get_match_data(&spi->dev);
+> > > +               if (!variant)
+> > > +                       return -ENODEV;
+> > > +       } else {
+> > > +               enum pcf21xx_type type = spi_get_device_id(spi)->driver_data;
+> > > +
+> > > +               if (type >= PCF21XX_LAST_ID)
+> > > +                       return -ENODEV;
+> > > +               variant = &pcf21xx_cfg[type];
+> > > +       }
+> > > +
+> > > +       config.max_register = variant->max_register,
+> > >
+> > >         regmap = devm_regmap_init_spi(spi, &config);
+> > >         if (IS_ERR(regmap)) {
+> > > @@ -974,13 +1031,13 @@ static int pcf2127_spi_probe(struct spi_device *spi)
+> > >
+> > >         return pcf2127_probe(&spi->dev, regmap, spi->irq,
+> > >                              pcf2127_spi_driver.driver.name,
+> > > -                            spi_get_device_id(spi)->driver_data);
+> > > +                            variant);
+> > >  }
+> > >
+> > >  static const struct spi_device_id pcf2127_spi_id[] = {
+> > > -       { "pcf2127", 1 },
+> > > -       { "pcf2129", 0 },
+> > > -       { "pca2129", 0 },
+> > > +       { "pcf2127", PCF2127 },
+> > > +       { "pcf2129", PCF2129 },
+> > > +       { "pca2129", PCF2129 },
+> > >         { }
+> > >  };
+> > >  MODULE_DEVICE_TABLE(spi, pcf2127_spi_id);
+> > > --
+> > > 2.30.2
+> > >
 > >
-> > --
-> > 2.30.2
-> >
-> 
-
-
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+>
+>
+> --
+> Hugo Villeneuve <hugo@hugovil.com>
