@@ -2,129 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A17651E9F
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Dec 2022 11:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1386D651F3E
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Dec 2022 11:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiLTKRm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Dec 2022 05:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S233421AbiLTKwS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Dec 2022 05:52:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiLTKRl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Dec 2022 05:17:41 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512FFE41
-        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:17:40 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b3so17915694lfv.2
-        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:17:40 -0800 (PST)
+        with ESMTP id S233659AbiLTKwG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Dec 2022 05:52:06 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF45186BD
+        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:52:05 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id cf42so18029883lfb.1
+        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:52:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PrTekWHNOgv+F0e5TC1Fas9u4YJ2h20SGUV3dr9RK5s=;
-        b=k5lmZq21aFLkFdWYS+czsbL4XWEbN/x6AcmMwL0fZ2R2CIrgxj2v7PKCPFRWu8TP8S
-         yKxWhCOcpht8XlLEJYZt0Gz8g10xzmvXP8hIyD4JNs2BtIuESQSJLPRs9cIzYrlA3oe3
-         m3KEEgM40QFNCc/6OjIXWf1yESG0iwPUTcIY4KOR6EYeSBNYSIilnks0woVfKXCI0tHb
-         XTGLsblfV+LvuPZmYvspWVxDq13pSym36OwPFXOWUkqPQTirqGDleMWEDN6rd/u8x9wi
-         sY6gkknnp39imVRDw8njLINuBc0XivtZ6jY92hlzbGOkOPUtr8p8Uuuv1Ll2LG2uDG1w
-         pN0Q==
+        bh=Xhjhk+r4I/urUe50CHvmJaxBj9q3ZzrLGBb8/x9cWjw=;
+        b=N7iPb/8U9sNHulv5n/T/nqtYGRGjrlGEMFOBX/D45ZP8pBDQ4bQn9gpWmqvXZ7SjyA
+         ShmX8Onj+yeLWXIMzWY/slE6G4UgoDzLe5+ETDepQe0pCWjO5t+OZ+dlXQUUPEH1B5pZ
+         lKY2Wk/RbKX1jia06jDA8UsJVXAUCPOozwk3L88tx1JGbt7dsyU4W7mawrqiiECvxWNB
+         4pFvgp9E3+W/Nv9hEcE9c740Af97tL4s2O6Rm0Lv88JbRX2S21A5jJTtgsvAC39cuBuL
+         FI4kTTD7IjvFfo8XATLf8eyKBD2sY/MKDEY2UjDalSHbh/BlEAx0L4vlRxG1RrpdweNU
+         locg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PrTekWHNOgv+F0e5TC1Fas9u4YJ2h20SGUV3dr9RK5s=;
-        b=vfyph2Z25rxliQcrLm89EVR0TeWHzQs2QTb9f/YciuMOUFbky8fBGWNaFQEntZ0978
-         j1UjX2uE9euNlpYoeXoW52ElbZG36MIZNt4zpZMIhIJ0fHyeL0J8glLV2kr9N+AiDv21
-         bvLUEA8Kb42MsVqipgpP2bhINnWleMrxCfSFNaR4v2+ODM4ZpH2DhMz89auBtPDPP+RE
-         RT+16ULwANWo6itDyrk1kYqkswPz6kI/hlcnq7Os5HNyTdfZwE2bFzcVTTIx51Tlz4wr
-         qn3c7lCC6OTc6tsiebqHat2o9mYsooCu6Hr/f2iirN6mH78sz9xj1iBaw/baSnwo9xr+
-         m5/A==
-X-Gm-Message-State: ANoB5plDCwhd08QQE0w5RC591TuXtBjkQQM4aVX/7PXrYS6NBRkV8+/+
-        yYjjmXugd9oZdd8xyxZOhyfnMA==
-X-Google-Smtp-Source: AA0mqf5r7YbEHI6ETMCzYbU4qf7I5s7yu4+AVB4r6z2S3I8dCXcRbmpb04iUEHmo6KtOKcRln81PBQ==
-X-Received: by 2002:a05:6512:468:b0:4b5:5efe:966e with SMTP id x8-20020a056512046800b004b55efe966emr12963990lfd.15.1671531458683;
-        Tue, 20 Dec 2022 02:17:38 -0800 (PST)
+        bh=Xhjhk+r4I/urUe50CHvmJaxBj9q3ZzrLGBb8/x9cWjw=;
+        b=tCAjKQcQO70sAEoQI4q8qnpbwQlPvqxC6JsL0aXSFosVpWj7HkFsNPG2IJVrwfQK7L
+         0z9ZAePYj6n4c9X/uBjvLQ2YJbdD1hR5FrAuepHZPvQ3hIq+P+Tem6FJJF4AB4RF0ALN
+         np9UVGJ8Z4soc/BRaWF9cgHZ3kCiWy84hi9OPbhgyBDWZR3JkOiFLRlZyXo84jPRhSY0
+         UgT94bKlCo26M70u5XLSRhvvY3yhHzuJa5p+sm7HED7IB2w3QzcKDvBbchTOV52y6/+S
+         V6/3cgCe+F2Jue8Z36wi3Qh6Maw0BB9iqFCb+Tfh8urczRq4BLzFcIxjdxMq4sT+yid0
+         WnlA==
+X-Gm-Message-State: ANoB5pnmdOaETCkQBQpGU8iYJ+8grgSS2g/40KQ6nNMCqWB70thn4gZo
+        NbJdAnbs09OYWtZXaIQP3jYfAA==
+X-Google-Smtp-Source: AA0mqf57xGpbOxVQYqGlY6dApDnrR3iSOA73z3w87Bf1ofEDLxMNEwYRikJWL2oK3oz6tOWmIy39Sg==
+X-Received: by 2002:a19:6a0f:0:b0:4b5:6db0:d598 with SMTP id u15-20020a196a0f000000b004b56db0d598mr12785985lfu.20.1671533523447;
+        Tue, 20 Dec 2022 02:52:03 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z11-20020a056512370b00b004b4f1ea713csm1398723lfr.73.2022.12.20.02.17.37
+        by smtp.gmail.com with ESMTPSA id c5-20020a056512074500b004994117b0fdsm1398758lfs.281.2022.12.20.02.52.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 02:17:38 -0800 (PST)
-Message-ID: <8a0a38e2-9907-fa2e-a8a6-4cbc4dceb0a2@linaro.org>
-Date:   Tue, 20 Dec 2022 11:17:37 +0100
+        Tue, 20 Dec 2022 02:52:03 -0800 (PST)
+Message-ID: <a3414477-eb9b-83ee-ab11-b2b629b6d23b@linaro.org>
+Date:   Tue, 20 Dec 2022 11:52:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: add missing pcf/pca2129
- entries
+Subject: Re: [PATCH 2/3] dt-bindings: m41t80: add xtal load capacitance
 Content-Language: en-US
-To:     Hugo Villeneuve <hugo@hugovil.com>, Rob Herring <robh@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+To:     Dennis Lambe Jr <dennis@sparkcharge.io>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        bruno.thomsen@gmail.com,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221219194241.3817250-1-hugo@hugovil.com>
- <20221219220335.GA2400372-robh@kernel.org>
- <20221219175205.2989b6bf86941ec4774dab37@hugovil.com>
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Alexander Bigga <ab@mycable.de>
+References: <20221219190915.3912384-1-dennis@sparkcharge.io>
+ <20221219190915.3912384-3-dennis@sparkcharge.io>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221219175205.2989b6bf86941ec4774dab37@hugovil.com>
+In-Reply-To: <20221219190915.3912384-3-dennis@sparkcharge.io>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 19/12/2022 23:52, Hugo Villeneuve wrote:
-> On Mon, 19 Dec 2022 16:03:35 -0600
-> Rob Herring <robh@kernel.org> wrote:
+On 19/12/2022 20:09, Dennis Lambe Jr wrote:
+> The ST m41t82 and m41t83 support programmable load capacitance from 3.5
+> pF to 17.4 pF. The hardware defaults to 12.5 pF.
 > 
->> On Mon, Dec 19, 2022 at 02:42:40PM -0500, Hugo Villeneuve wrote:
->>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->>>
->>> The pcf2127_of_match structure in drivers/rtc/rtc-pcf2127.c also
->>> contains:
->>>     nxp,pcf2129
->>>     ncp,pca2129
->>>
->>> Add these missing entries.
->>>
->>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->>> ---
->>>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
->>>  1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
->>> index cde7b1675ead..00dbae7e23c2 100644
->>> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
->>> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
->>> @@ -14,7 +14,10 @@ maintainers:
->>>  
->>>  properties:
->>>    compatible:
->>> -    const: nxp,pcf2127
->>> +    enum:
->>> +      - nxp,pcf2127
->>> +      - nxp,pcf2129
->>> +      - ncp,pca2129
->>
->> Check Documentation/devicetree/bindings/rtc/trivial-rtc.yaml.
->>
->> Maybe they aren't trivial after all and should be removed? Or 
->> nxp,pcf2127 is also trivial?
+> The accuracy of the xtal can be calibrated precisely by adjusting the
+> load capacicance.
 > 
-> Hi Rob,
-> the pcf2127, and also the pca/pcf2129, can use the "reset-source" property. Are they still considered "trivial" devices then?
+> Add default, minimum, and maximum for the standard rtc property
+> quartz-load-femtofarads on compatible devices.
+> 
+> Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
+> ---
+>  .../devicetree/bindings/rtc/st,m41t80.yaml     | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> index fc9c6da6483f..6b72580dc031 100644
+> --- a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
+> @@ -33,6 +33,11 @@ properties:
+>    "#clock-cells":
+>      const: 1
+>  
+> +  quartz-load-femtofarads:
+> +    default: 12500
+> +    minimum: 3500
+> +    maximum: 17375
+> +
+>    clock-output-names:
+>      maxItems: 1
+>      description: From common clock binding to override the default output clock name.
+> @@ -44,8 +49,21 @@ properties:
+>        clock-frequency:
+>          const: 32768
+>  
+> +  wakeup-source: true
 
-Then they do not look trivial, so please remove them from trivial-rtc.yaml.
+Why do you need it here? It's already accepted in rtc.yaml. Adding it is
+not explained in commit msg.
 
+> +
+>  allOf:
 
 
 Best regards,
