@@ -2,67 +2,65 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FE46523DD
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Dec 2022 16:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9956524E7
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Dec 2022 17:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiLTPn4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Dec 2022 10:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S233824AbiLTQsd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Dec 2022 11:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbiLTPn4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Dec 2022 10:43:56 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD17515803
-        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 07:43:54 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b13so19218923lfo.3
-        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 07:43:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sparkcharge.io; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XXm3ehVw7jrm3viWPruU6g1/o3468ZLAkGL+jb+KseA=;
-        b=GAvP7CYjU5YZu9KfvJDtO2XdFcK02W9T75Ue1qWCbvvkHjJ4rSng7AFoc66apIkhJl
-         qgHn4Ddi+HeYW9p9x/UNCCttqBUmLXPoDgvy+w8zXkSFFSDkEawh/4NPN9KZmF9pLjMl
-         c165HgVhP9MJuTDxG/YdcMPm8RimvBpBWTy5Nz3Ou+BeRA/YblbkYUrLAkFUSLZnJtgM
-         O/0w5jOKvAcEiDvfCT2icovrwe4aXNJJ6w8JFa2h//sjyOEkS984HaViQf1ML1S5KyG3
-         xOyvM0K7gV8Q008PUE/qn5hioTCaPKJ6X9/hmj/eiVjyrQeugSFbVKnT+4lr44b6QSYc
-         JiAA==
+        with ESMTP id S230058AbiLTQsc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Dec 2022 11:48:32 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79900DF7B;
+        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id l8-20020a056830054800b006705fd35eceso7469708otb.12;
+        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XXm3ehVw7jrm3viWPruU6g1/o3468ZLAkGL+jb+KseA=;
-        b=30FjyZ/tmjAQX3O4cLj47QA1/ed+LCXbhavNSysHUYNKbVgp+na+VlP89i3XHcW3vB
-         ZAdJFXwg6qDNjZLDo9uAjvLZGtz0SzYfz6fvKuP7YNvYOCjHATi7IqAl4g7DRgnOV/6W
-         KW0xFCUKuYsFbaL2WzFVrh5hBHFXOhs3SQHZ89/NhVOAkbcpMzwkcMLKr3l6+ZPFdWAX
-         rGQ0PcWwovneH/Z/Ae1u0wQKbu/2VxRQrCnsjC8WUXoNIh1Rf5sJqj4nSO2xw+dZlFjz
-         AELyJbMFuB0dpS4oPoD2GbKyWLp7YNHW3aq3g1EOU0PgzHiq/5t96nLL0dLatN4g7d5x
-         YZwQ==
-X-Gm-Message-State: ANoB5plzdP+6YXpHPQEPU9djvuHNV7zsNlpHQIjE6nPMxVF43SR11iSA
-        d5WNyuEgoMGlxfE+NKvH23+kfOjoQnCG0GjUwDNn2Q==
-X-Google-Smtp-Source: AA0mqf7ctVcuo3+IQBmTOqNH1YV50lLyDFdhREJWuJeakjXTQIPAz7PpODRrU1Mu3AP68oqP7fRTqZmrFiuRyMVDZ0E=
-X-Received: by 2002:a05:6512:a8c:b0:4b5:a843:58cf with SMTP id
- m12-20020a0565120a8c00b004b5a84358cfmr5381314lfu.531.1671551033206; Tue, 20
- Dec 2022 07:43:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219190915.3912384-1-dennis@sparkcharge.io>
- <20221219190915.3912384-3-dennis@sparkcharge.io> <a3414477-eb9b-83ee-ab11-b2b629b6d23b@linaro.org>
-In-Reply-To: <a3414477-eb9b-83ee-ab11-b2b629b6d23b@linaro.org>
-From:   Dennis Lambe <dennis@sparkcharge.io>
-Date:   Tue, 20 Dec 2022 10:43:42 -0500
-Message-ID: <CAKYiA1C7Gaw3XYYum2VUSxn=qiCzSJQ=KsSa1hx9c1MGGuv6Fw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: m41t80: add xtal load capacitance
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZmWMDsM7gBznInWF119ExXVPhyOUt68trxWCdWxjVKs=;
+        b=ffAowPzaXEW0mkp3KDPjaBpcJ/97DBoaMDfawi7rXzsPOX9n5wRTIfH5RRk/RVzLfq
+         LB3XygoiNhRdMMxjdMDHSQ1HPYDWa6YIBP5yGHR9b5j7TvbpshzwKMHwuNBap18yTDWb
+         ixJzM4fo9XPuZcs8rxAiohXbVtg3NDHnwFRT4mM4INBuoh8SeXfNo03AJleBR06lcMtu
+         xX8IqKEhX8CecA5EpTzLpDcRztIW28deJl1OE6JEwzQg5fXT4u7bER0USWsGhGq1Qxg3
+         lRKkOyVLoveW/oTQFVyN3C695m/8hZncBbc1Mrl+TrNQmIWyTnEl2Ba77Prn7NA/uQmf
+         nhpQ==
+X-Gm-Message-State: ANoB5pl/Pj3zGufnO/+Ce5+84XnO88px26FuntfmkPzz+Me2RIWl3h/N
+        CbA9T0I2anhXulCFKGsczbeSNb9cTQ==
+X-Google-Smtp-Source: AA0mqf5tVUyJtFiNpYpVQp7R2aB336NTL+3o9bQ1N6XYmFOiUby946PPltH3ZKYoBVVoMdlkJn8Icw==
+X-Received: by 2002:a05:6830:144d:b0:670:7c74:2616 with SMTP id w13-20020a056830144d00b006707c742616mr20951968otp.11.1671554910735;
+        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t26-20020a05683022fa00b00661ad8741b4sm5889102otc.24.2022.12.20.08.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
+Received: (nullmailer pid 724855 invoked by uid 1000);
+        Tue, 20 Dec 2022 16:48:29 -0000
+Date:   Tue, 20 Dec 2022 10:48:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     linux-rtc@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Alexander Bigga <ab@mycable.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        bruno.thomsen@gmail.com, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: remove pca/pcf2129 from
+ trivial RTC devices list
+Message-ID: <167155487539.723236.827037175847349918.robh@kernel.org>
+References: <20221220152237.1125178-1-hugo@hugovil.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220152237.1125178-1-hugo@hugovil.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,26 +68,18 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 5:52 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> > +  wakeup-source: true
->
-> Why do you need it here? It's already accepted in rtc.yaml. Adding it is
-> not explained in commit msg.
 
-This shouldn't have been included in the patch, my mistake. In the
-next revision of the patch series I'll take this line out. Sorry about
-that, thanks for catching it.
+On Tue, 20 Dec 2022 10:22:37 -0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> pca/pcf2129 devices can also have the 'reset-source' property, so
+> remove them from the trivial RTC devices list.
+> 
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
+>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 --
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
 
-Aside from that, does this patch look good to you? It passed
-dt_binding_check and reflects my understanding of the logic needed,
-but dt-binding yaml isn't something I'm super familiar with,
-especially the if: not: properties: contains: enum block. The
-intention is to indicate that the `quartz-load-femtofarads` property
-is only applicable to the m41t82 and m41t83, but not the other devices
-supported by the rtc-m41t80 driver.
--- 
-
-Dennis Lambe (He/Him)
-Lead Firmware Engineer
-sparkcharge.io
+Reviewed-by: Rob Herring <robh@kernel.org>
