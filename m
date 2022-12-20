@@ -2,114 +2,130 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D66651E98
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Dec 2022 11:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A17651E9F
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Dec 2022 11:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiLTKQd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Dec 2022 05:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S233488AbiLTKRm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Dec 2022 05:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiLTKQc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Dec 2022 05:16:32 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B68E321
-        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:16:31 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id j4so17948103lfk.0
-        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:16:31 -0800 (PST)
+        with ESMTP id S229719AbiLTKRl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Dec 2022 05:17:41 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512FFE41
+        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:17:40 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id b3so17915694lfv.2
+        for <linux-rtc@vger.kernel.org>; Tue, 20 Dec 2022 02:17:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eC4q4jvQ90KMOVQHs85KxE496/zijPcFgBm5g6Iu/3E=;
-        b=GCU0csYhyLdA1fUP+FjiVmbzah9iH+QaVF0tn15WKsJ4PYEdvpkzSJ3zGxOT+3R558
-         IGlNh3UIZ1KBW7+Cw/2m6Mscqsqfsogrh0bGpCxCD0SVHXwHhCluNtSvNmerctLfgQtY
-         y9+Mn9FGCUVv0IpJzFT+iHURKB0py8fV4V0AJSUoqn/UAUKkfDn2acYf6WUKSuEnJZiE
-         BGeg5YQP3f+Q1itjz4Dp60cl1LxZgXJe9+84PjMV03I1UvD5ro6BPu12F/mziHyVPLSD
-         QYLOnxe7wYkzZBG7fWAxqsfpsvZGnkd0YhC81bUbD+6uG4fVVrsxVpiJz8nCKEzW3vP7
-         8Npg==
+        bh=PrTekWHNOgv+F0e5TC1Fas9u4YJ2h20SGUV3dr9RK5s=;
+        b=k5lmZq21aFLkFdWYS+czsbL4XWEbN/x6AcmMwL0fZ2R2CIrgxj2v7PKCPFRWu8TP8S
+         yKxWhCOcpht8XlLEJYZt0Gz8g10xzmvXP8hIyD4JNs2BtIuESQSJLPRs9cIzYrlA3oe3
+         m3KEEgM40QFNCc/6OjIXWf1yESG0iwPUTcIY4KOR6EYeSBNYSIilnks0woVfKXCI0tHb
+         XTGLsblfV+LvuPZmYvspWVxDq13pSym36OwPFXOWUkqPQTirqGDleMWEDN6rd/u8x9wi
+         sY6gkknnp39imVRDw8njLINuBc0XivtZ6jY92hlzbGOkOPUtr8p8Uuuv1Ll2LG2uDG1w
+         pN0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eC4q4jvQ90KMOVQHs85KxE496/zijPcFgBm5g6Iu/3E=;
-        b=5MTNk9XFWH2ZxYyWfTerkGg7/Q0ArQT0HRqJf1lr2r2/EDtKHkEUJidJVcaN5QUHrQ
-         v8USesB0Lie49ptnlCbIhpABx5IWovHaod0A18zLq4z+C2gB7I5dK4Hys+5dYPNR2qBY
-         IGcGjzPzw+Pc0XVZe8bQqyt7IZR+hBYH/6r0Ux3tCh+yvgfI/E75+1AETXEFeoMHDYIr
-         4sX5RD9Kxp+BLBVkQije0FoEFS4nLr/eNCTffLzKapRr9EUbocnGWP+c9vzE7yCsXpV9
-         y0bxPCvwD0ALGajb/KmM2JWxhFOH6bXTPe6cZXu6ZwFtG/vgUiliJPFMzIoGmUfv221b
-         G0Tg==
-X-Gm-Message-State: ANoB5pnDByFgiiUy3yKSSaGSJYTjI7kUOLqo7xttVPFGPOfx+jEPZ0b8
-        c9vKB44+64ZL+avsXqTp0hVf7A==
-X-Google-Smtp-Source: AA0mqf4WdhFI3RPoXCV33iInsZM3tU7zqqIoK39AHQ/gdV9jF5c3SPV50QDxMOvhX45TBpH7BfPX4w==
-X-Received: by 2002:a05:6512:3e19:b0:4b0:6023:6f6f with SMTP id i25-20020a0565123e1900b004b060236f6fmr17385142lfv.57.1671531389777;
-        Tue, 20 Dec 2022 02:16:29 -0800 (PST)
+        bh=PrTekWHNOgv+F0e5TC1Fas9u4YJ2h20SGUV3dr9RK5s=;
+        b=vfyph2Z25rxliQcrLm89EVR0TeWHzQs2QTb9f/YciuMOUFbky8fBGWNaFQEntZ0978
+         j1UjX2uE9euNlpYoeXoW52ElbZG36MIZNt4zpZMIhIJ0fHyeL0J8glLV2kr9N+AiDv21
+         bvLUEA8Kb42MsVqipgpP2bhINnWleMrxCfSFNaR4v2+ODM4ZpH2DhMz89auBtPDPP+RE
+         RT+16ULwANWo6itDyrk1kYqkswPz6kI/hlcnq7Os5HNyTdfZwE2bFzcVTTIx51Tlz4wr
+         qn3c7lCC6OTc6tsiebqHat2o9mYsooCu6Hr/f2iirN6mH78sz9xj1iBaw/baSnwo9xr+
+         m5/A==
+X-Gm-Message-State: ANoB5plDCwhd08QQE0w5RC591TuXtBjkQQM4aVX/7PXrYS6NBRkV8+/+
+        yYjjmXugd9oZdd8xyxZOhyfnMA==
+X-Google-Smtp-Source: AA0mqf5r7YbEHI6ETMCzYbU4qf7I5s7yu4+AVB4r6z2S3I8dCXcRbmpb04iUEHmo6KtOKcRln81PBQ==
+X-Received: by 2002:a05:6512:468:b0:4b5:5efe:966e with SMTP id x8-20020a056512046800b004b55efe966emr12963990lfd.15.1671531458683;
+        Tue, 20 Dec 2022 02:17:38 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u23-20020a196a17000000b004b5774726dcsm1394418lfu.236.2022.12.20.02.16.28
+        by smtp.gmail.com with ESMTPSA id z11-20020a056512370b00b004b4f1ea713csm1398723lfr.73.2022.12.20.02.17.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 02:16:29 -0800 (PST)
-Message-ID: <c0e89d2b-1b99-4224-9003-c583cf5171e7@linaro.org>
-Date:   Tue, 20 Dec 2022 11:16:27 +0100
+        Tue, 20 Dec 2022 02:17:38 -0800 (PST)
+Message-ID: <8a0a38e2-9907-fa2e-a8a6-4cbc4dceb0a2@linaro.org>
+Date:   Tue, 20 Dec 2022 11:17:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
 Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: add missing pcf/pca2129
  entries
 Content-Language: en-US
-To:     Hugo Villeneuve <hugo@hugovil.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+To:     Hugo Villeneuve <hugo@hugovil.com>, Rob Herring <robh@kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     bruno.thomsen@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        bruno.thomsen@gmail.com,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20221219194241.3817250-1-hugo@hugovil.com>
+ <20221219220335.GA2400372-robh@kernel.org>
+ <20221219175205.2989b6bf86941ec4774dab37@hugovil.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221219194241.3817250-1-hugo@hugovil.com>
+In-Reply-To: <20221219175205.2989b6bf86941ec4774dab37@hugovil.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 19/12/2022 20:42, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On 19/12/2022 23:52, Hugo Villeneuve wrote:
+> On Mon, 19 Dec 2022 16:03:35 -0600
+> Rob Herring <robh@kernel.org> wrote:
 > 
-> The pcf2127_of_match structure in drivers/rtc/rtc-pcf2127.c also
-> contains:
->     nxp,pcf2129
->     ncp,pca2129
+>> On Mon, Dec 19, 2022 at 02:42:40PM -0500, Hugo Villeneuve wrote:
+>>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+>>>
+>>> The pcf2127_of_match structure in drivers/rtc/rtc-pcf2127.c also
+>>> contains:
+>>>     nxp,pcf2129
+>>>     ncp,pca2129
+>>>
+>>> Add these missing entries.
+>>>
+>>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
+>>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+>>> index cde7b1675ead..00dbae7e23c2 100644
+>>> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+>>> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+>>> @@ -14,7 +14,10 @@ maintainers:
+>>>  
+>>>  properties:
+>>>    compatible:
+>>> -    const: nxp,pcf2127
+>>> +    enum:
+>>> +      - nxp,pcf2127
+>>> +      - nxp,pcf2129
+>>> +      - ncp,pca2129
+>>
+>> Check Documentation/devicetree/bindings/rtc/trivial-rtc.yaml.
+>>
+>> Maybe they aren't trivial after all and should be removed? Or 
+>> nxp,pcf2127 is also trivial?
 > 
-> Add these missing entries.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> index cde7b1675ead..00dbae7e23c2 100644
-> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> @@ -14,7 +14,10 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: nxp,pcf2127
-> +    enum:
-> +      - nxp,pcf2127
-> +      - nxp,pcf2129
-> +      - ncp,pca2129
+> Hi Rob,
+> the pcf2127, and also the pca/pcf2129, can use the "reset-source" property. Are they still considered "trivial" devices then?
 
-Keep the entries sorted, e.g. alphabetically.
+Then they do not look trivial, so please remove them from trivial-rtc.yaml.
+
+
 
 Best regards,
 Krzysztof
