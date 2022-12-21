@@ -2,92 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F696533B2
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Dec 2022 16:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9077365360C
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Dec 2022 19:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiLUPx7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 21 Dec 2022 10:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S229844AbiLUSVU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 21 Dec 2022 13:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiLUPx5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Dec 2022 10:53:57 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F571AF11;
-        Wed, 21 Dec 2022 07:53:56 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id k185so15165119vsc.2;
-        Wed, 21 Dec 2022 07:53:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=leprLY9JD3/hXcu+XjENQSWTu9dUrPT/h210JNfsY7I=;
-        b=Yo9YFpUUPfeSzsi52VA89DrS3Gu4vMpE8XGrs//6FMNcq7Fp/Q88KpvI0PCRZJAafQ
-         0lvPg37xG3dp1Yl9gDtCwlXmbGuJNxjYwfrjskPDcDTKHBeGiCDv3mQ5bHDA5AtjTU91
-         hgrXPvNB7YWxUZJfRSqgnO+hxzt65LaTkWGU3LQBl92HwO46R1keIGrFzKniHv5mJmNz
-         5PkJoVkCNgzKTsUjE55zrDkfiVCXMLCQCiho/+0Ws2FBRsirNrIKQ9bCzeqmsW/KcMeV
-         oJAwrsRx0z/Iy3pdGJrBZFocz2Y9AmlKz7x5+QSlzaecVKAgIEVrz3Nrdrkit0AJEuiG
-         gUIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=leprLY9JD3/hXcu+XjENQSWTu9dUrPT/h210JNfsY7I=;
-        b=FqxEplPOTMo7LkQBcDv02bGujlv771b4HlPIaLOJKGl3nqssUI2rgrj49fukA4EerB
-         rPzpkdh5zabuZQKw0N+hdJBSkOQQmriRGjpZ6kh5KT+sPJGnNHElg+wYuXuBFnh9TFVu
-         Eziu1bPFKn0tGdOBX/FhGcWcdCn8silbDReQTao5fdC7uk4wG4nereVci3zACrPtQTwa
-         7YZUFuGW3Usm8f8nLfvJCSoVfiiyHJ8HcM/45Y6lIvMt2YfEdYWR5ytZn9VOZw4eWdjE
-         l6ZqxMktyrRROH3XwXkHbVHsYMivqGmJ/Yi5XqV+u30rfNPhm12ozVx7Gp0f5uRiBbGy
-         sXwA==
-X-Gm-Message-State: AFqh2ko0Mwx4T37SAvyqq9OHVabjYbKPJbYlbllbrPhpDa8+hkpZoiQY
-        SFKGdfUP0gwj7K+LzQT9mwh6K2/jq+V7Yl9TGOY=
-X-Google-Smtp-Source: AMrXdXtY7iB+hlGGOUUTBu75bJP0tWHEsDLn2MDc+7yYHIKKMUhin6llZ7uqIRbIkOtFY9cfcD6tGaCRsSKDkaoZHY8=
-X-Received: by 2002:a05:6102:5d:b0:3b5:32d1:bbb8 with SMTP id
- k29-20020a056102005d00b003b532d1bbb8mr307989vsp.24.1671638035679; Wed, 21 Dec
- 2022 07:53:55 -0800 (PST)
+        with ESMTP id S229728AbiLUSVT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Dec 2022 13:21:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6873B2;
+        Wed, 21 Dec 2022 10:21:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D042661865;
+        Wed, 21 Dec 2022 18:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA442C433D2;
+        Wed, 21 Dec 2022 18:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671646878;
+        bh=udjfPL11jXrQj9nM0neEWSo/2zqyl2x/05MYY3HwOtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BOTMrkqdWXzVeme80PEvYt6+KioA7zwIBMGfOwmdWb1bpZwqAJ2uArN34B6ozdfko
+         hn9XS56erx3oqtJnmxZ6iIL23eZ1br9wiAQl6QuA901pVhiVCAIdXJR3rKPs4jgKcm
+         XW9GGdpEbEvS9UA87B85WcbZdb6Xg+es3MQsSAWY=
+Date:   Wed, 21 Dec 2022 19:21:15 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mathieu Chouquet-Stringer <me@mathieu.digital>
+Cc:     stable@vger.kernel.org, rafael.j.wysocki@intel.com,
+        linux-rtc@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rafael@kernel.org, mgorman@techsingularity.net,
+        alexandre.belloni@bootlin.com
+Subject: Re: Fix for rtc driver boot breakage in 6.0.y
+Message-ID: <Y6NOm7CE03isRJiW@kroah.com>
+References: <Y6D958DeurSuoCuY@paranoid-android>
 MIME-Version: 1.0
-References: <20221220152237.1125178-1-hugo@hugovil.com> <167155487539.723236.827037175847349918.robh@kernel.org>
-In-Reply-To: <167155487539.723236.827037175847349918.robh@kernel.org>
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Wed, 21 Dec 2022 16:53:39 +0100
-Message-ID: <CAH+2xPDbqh5qXALhyNOcEEN0zQGpvm=Crm4GW3NRO3QdPHi6Dg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: remove pca/pcf2129 from
- trivial RTC devices list
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hugo Villeneuve <hugo@hugovil.com>, linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6D958DeurSuoCuY@paranoid-android>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Den tir. 20. dec. 2022 kl. 17.48 skrev Rob Herring <robh@kernel.org>:
->
->
-> On Tue, 20 Dec 2022 10:22:37 -0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > pca/pcf2129 devices can also have the 'reset-source' property, so
-> > remove them from the trivial RTC devices list.
-> >
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
-> >  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 --
-> >  2 files changed, 4 insertions(+), 3 deletions(-)
-> >
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Tue, Dec 20, 2022 at 01:12:23AM +0100, Mathieu Chouquet-Stringer wrote:
+> 	Hello stable team and Greg,
+> 
+> There are 3 commits in Linus' tree for the rtc driver which should be
+> merged against stable 6.0.y (they're already in 6.1 / 6.1.y).
+> 
+> Without the first two, a x86-64 machine might panic during boot (Mel saw
+> a 50% chance of panic at boot - 5 out of 10 tries - and my experience
+> was identical).
+> https://lore.kernel.org/linux-acpi/20221010141630.zfzi7mk7zvnmclzy@techsingularity.net/
+> 
+> And after applying the first two, the kernel will not compile anymore
+> on non ACPI platform, so you need a third one.
+> 
+> The first two commits:
+> 
+> commit 4919d3eb2ec0ee364f7e3cf2d99646c1b224fae8
+> Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Date:   Wed Oct 12 20:07:01 2022 +0200
+> 
+>     rtc: cmos: Fix event handler registration ordering issue
+> 
+> commit 0782b66ed2fbb035dda76111df0954515e417b24
+> Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Date:   Tue Oct 18 18:09:31 2022 +0200
+> 
+>     rtc: cmos: Fix wake alarm breakage
+> 
+> And the third one:
+> 
+> commit db4e955ae333567dea02822624106c0b96a2f84f
+> Author: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Date:   Tue Oct 18 22:35:11 2022 +0200
+> 
+>     rtc: cmos: fix build on non-ACPI platforms
 
-Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+All of these are in 6.0.14, can you test that to verify it all is
+working properly for you?
+
+thanks,
+
+greg k-h
