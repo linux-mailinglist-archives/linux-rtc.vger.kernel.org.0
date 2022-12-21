@@ -2,65 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9956524E7
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Dec 2022 17:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F696533B2
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Dec 2022 16:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbiLTQsd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Dec 2022 11:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S229968AbiLUPx7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 21 Dec 2022 10:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiLTQsc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Dec 2022 11:48:32 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79900DF7B;
-        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id l8-20020a056830054800b006705fd35eceso7469708otb.12;
-        Tue, 20 Dec 2022 08:48:31 -0800 (PST)
+        with ESMTP id S229578AbiLUPx5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Dec 2022 10:53:57 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F571AF11;
+        Wed, 21 Dec 2022 07:53:56 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id k185so15165119vsc.2;
+        Wed, 21 Dec 2022 07:53:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=leprLY9JD3/hXcu+XjENQSWTu9dUrPT/h210JNfsY7I=;
+        b=Yo9YFpUUPfeSzsi52VA89DrS3Gu4vMpE8XGrs//6FMNcq7Fp/Q88KpvI0PCRZJAafQ
+         0lvPg37xG3dp1Yl9gDtCwlXmbGuJNxjYwfrjskPDcDTKHBeGiCDv3mQ5bHDA5AtjTU91
+         hgrXPvNB7YWxUZJfRSqgnO+hxzt65LaTkWGU3LQBl92HwO46R1keIGrFzKniHv5mJmNz
+         5PkJoVkCNgzKTsUjE55zrDkfiVCXMLCQCiho/+0Ws2FBRsirNrIKQ9bCzeqmsW/KcMeV
+         oJAwrsRx0z/Iy3pdGJrBZFocz2Y9AmlKz7x5+QSlzaecVKAgIEVrz3Nrdrkit0AJEuiG
+         gUIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZmWMDsM7gBznInWF119ExXVPhyOUt68trxWCdWxjVKs=;
-        b=ffAowPzaXEW0mkp3KDPjaBpcJ/97DBoaMDfawi7rXzsPOX9n5wRTIfH5RRk/RVzLfq
-         LB3XygoiNhRdMMxjdMDHSQ1HPYDWa6YIBP5yGHR9b5j7TvbpshzwKMHwuNBap18yTDWb
-         ixJzM4fo9XPuZcs8rxAiohXbVtg3NDHnwFRT4mM4INBuoh8SeXfNo03AJleBR06lcMtu
-         xX8IqKEhX8CecA5EpTzLpDcRztIW28deJl1OE6JEwzQg5fXT4u7bER0USWsGhGq1Qxg3
-         lRKkOyVLoveW/oTQFVyN3C695m/8hZncBbc1Mrl+TrNQmIWyTnEl2Ba77Prn7NA/uQmf
-         nhpQ==
-X-Gm-Message-State: ANoB5pl/Pj3zGufnO/+Ce5+84XnO88px26FuntfmkPzz+Me2RIWl3h/N
-        CbA9T0I2anhXulCFKGsczbeSNb9cTQ==
-X-Google-Smtp-Source: AA0mqf5tVUyJtFiNpYpVQp7R2aB336NTL+3o9bQ1N6XYmFOiUby946PPltH3ZKYoBVVoMdlkJn8Icw==
-X-Received: by 2002:a05:6830:144d:b0:670:7c74:2616 with SMTP id w13-20020a056830144d00b006707c742616mr20951968otp.11.1671554910735;
-        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t26-20020a05683022fa00b00661ad8741b4sm5889102otc.24.2022.12.20.08.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 08:48:30 -0800 (PST)
-Received: (nullmailer pid 724855 invoked by uid 1000);
-        Tue, 20 Dec 2022 16:48:29 -0000
-Date:   Tue, 20 Dec 2022 10:48:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     linux-rtc@vger.kernel.org,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=leprLY9JD3/hXcu+XjENQSWTu9dUrPT/h210JNfsY7I=;
+        b=FqxEplPOTMo7LkQBcDv02bGujlv771b4HlPIaLOJKGl3nqssUI2rgrj49fukA4EerB
+         rPzpkdh5zabuZQKw0N+hdJBSkOQQmriRGjpZ6kh5KT+sPJGnNHElg+wYuXuBFnh9TFVu
+         Eziu1bPFKn0tGdOBX/FhGcWcdCn8silbDReQTao5fdC7uk4wG4nereVci3zACrPtQTwa
+         7YZUFuGW3Usm8f8nLfvJCSoVfiiyHJ8HcM/45Y6lIvMt2YfEdYWR5ytZn9VOZw4eWdjE
+         l6ZqxMktyrRROH3XwXkHbVHsYMivqGmJ/Yi5XqV+u30rfNPhm12ozVx7Gp0f5uRiBbGy
+         sXwA==
+X-Gm-Message-State: AFqh2ko0Mwx4T37SAvyqq9OHVabjYbKPJbYlbllbrPhpDa8+hkpZoiQY
+        SFKGdfUP0gwj7K+LzQT9mwh6K2/jq+V7Yl9TGOY=
+X-Google-Smtp-Source: AMrXdXtY7iB+hlGGOUUTBu75bJP0tWHEsDLn2MDc+7yYHIKKMUhin6llZ7uqIRbIkOtFY9cfcD6tGaCRsSKDkaoZHY8=
+X-Received: by 2002:a05:6102:5d:b0:3b5:32d1:bbb8 with SMTP id
+ k29-20020a056102005d00b003b532d1bbb8mr307989vsp.24.1671638035679; Wed, 21 Dec
+ 2022 07:53:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20221220152237.1125178-1-hugo@hugovil.com> <167155487539.723236.827037175847349918.robh@kernel.org>
+In-Reply-To: <167155487539.723236.827037175847349918.robh@kernel.org>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Wed, 21 Dec 2022 16:53:39 +0100
+Message-ID: <CAH+2xPDbqh5qXALhyNOcEEN0zQGpvm=Crm4GW3NRO3QdPHi6Dg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: remove pca/pcf2129 from
+ trivial RTC devices list
+To:     Rob Herring <robh@kernel.org>
+Cc:     Hugo Villeneuve <hugo@hugovil.com>, linux-rtc@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        bruno.thomsen@gmail.com, linux-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] dt-bindings: rtc: pcf2127: remove pca/pcf2129 from
- trivial RTC devices list
-Message-ID: <167155487539.723236.827037175847349918.robh@kernel.org>
-References: <20221220152237.1125178-1-hugo@hugovil.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220152237.1125178-1-hugo@hugovil.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,18 +72,22 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Den tir. 20. dec. 2022 kl. 17.48 skrev Rob Herring <robh@kernel.org>:
+>
+>
+> On Tue, 20 Dec 2022 10:22:37 -0500, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >
+> > pca/pcf2129 devices can also have the 'reset-source' property, so
+> > remove them from the trivial RTC devices list.
+> >
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
+> >  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 --
+> >  2 files changed, 4 insertions(+), 3 deletions(-)
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-On Tue, 20 Dec 2022 10:22:37 -0500, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> pca/pcf2129 devices can also have the 'reset-source' property, so
-> remove them from the trivial RTC devices list.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 5 ++++-
->  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 --
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
