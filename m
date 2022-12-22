@@ -2,107 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814B2654802
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Dec 2022 22:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC981654819
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Dec 2022 22:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiLVVpt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 22 Dec 2022 16:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S229627AbiLVV7R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 22 Dec 2022 16:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiLVVpr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Dec 2022 16:45:47 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2050.outbound.protection.outlook.com [40.107.7.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD2CD99;
-        Thu, 22 Dec 2022 13:45:44 -0800 (PST)
+        with ESMTP id S229475AbiLVV7Q (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Dec 2022 16:59:16 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2058.outbound.protection.outlook.com [40.107.15.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2964DED0;
+        Thu, 22 Dec 2022 13:59:11 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bnyo6uPXNrljfmgzsWfMoytFwUJu9vgvT0IuCTEGWgPmgUSpKmLuY79DOqd+Ont1im9JtXcGmq/SuYce1iixPmsqwar9IsfFDfLvK1HhwdiGQbb5a/pB3YA7Ih2efDX1MDCrpWoFjmyQ8jm8O3XUu/4UUFsR8qwkIY7txWYCrNzijSAxMaWklGxsEZPobRp7+2BUqi53d0KY8Ds7XacelNWd3yuNLg0OeOxc/1vUiVcpqyo13mDf1W4CXvvdUA9azWNS1tmyV4eTjcHoLzWG2NfhrPc7bIit7qfZZ/sRO1+yT5uucZX7pM8Cj0QllycdbYX2pTF4x2EI3pjJDyC0hw==
+ b=ZJzd/IAA+FLlYb/TjgZ1VenCWiA3Ou7BKxfffzhUgB92oAe86E8okxDHNBMlSMI8AbL610A0Tw5RYA9idCoO16K3/mEI+kJmfTIEA0Wt6PQbsfzCCCswzyiLNVwV8vJXFQ/B3cft4r4qYJ/ssfiygJFcKGfHQzbE2ZliUIC/qhw241cCDxXCnudRGxURSJZi31LrZjZLQLs8J2apz/kb/pVI21RpEj6i5ea0B+oWmbHZZ4cgQUoV0b88jWDW9H+QgrLkJKKGut2SBY2ZbtkEU17G6U1PzpjZXE0QwS1rJiUKl5WptAmUYRCeLuOEs8ZTaYcb2YgKXxk/7sAcD4vbOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XHXXpCEuBU/ZtBxZEzGFu5uAa58dHiIP16seXVW8c0U=;
- b=ciqmJF05qzSosVDQnDAxvXEtawxXNfwQNTIJHdGRETZ/Hp6rJDmJSWpGbqMpVCpqeyupk94Ql3zS4sncDC8t0gQ8oIsO7WjSROG7Zs3fX/rtGtumi1gv57QsnjuNMS5uvck1AFVkdGCTw/Tzx4Y3JtFNtUSNuH0Fm+IJG9BVohXNkD32h9agSnIRgSkdW+MfPCTsmWQL2slKWopChh6YjkYQlfIYJorU6YAKtmngaGsSHoYdpqZVdoWEIfU0sm+3l8yQKQbne/kKzegzOGXZ3mt3W7XC/pKG47932GBZVTci3g7YvEnf7JuPy9WEbSJfNmvTIT7bo+vMaqV+RtP/6g==
+ bh=RPLyeyQBsWiu6HT02RqrbFjct+C6eALLBxl08spFg2k=;
+ b=jABD5jn9L5cBhy+vbAjroLE4lFGKMdRcnyX73sQ3qGnXSwLiupUvxzIgDXVTWuXTg2MstQiZGU22AVhHIPpvRKRNLjybcUWprc9oGdQ6G9E2m/qGjkCu4Pz+4uuL9Yt+6txWrZ5GZARQVFAqrGg4tBKNiEudxTUkwzKpd9TIPMuBRjpEPRga602CA+wnztxghDilLOl1TiaPKCqJ3FuV2DiD9K6iCa8bvB42LvAAh/8+WJtNpHoGDit2o6EmB+QNn+pb4GVLWjsnjQN0hXMhwTAtTcugN25wA9+xi9s90k1MGnC1La4a8AphkmA1B14rjb6+j3tNcNsLF2PFJe6qoQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
  dkim=pass header.d=seco.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XHXXpCEuBU/ZtBxZEzGFu5uAa58dHiIP16seXVW8c0U=;
- b=A+MLH+vzVcsY7SD6zUBq6Y4z2eWGJej5oKy477ma44M0U9wAKxX6Tutdc5i4nhzaEbixdvXdFYtRfmp3AV8m4v0JyRYtL1qKpiBn35E1LRAeCfc7m56BbvMSOeeluLQtrqAh3sdYqXEcUUtK25eFtEbVXDXBDFTjb7SwZW/8u4P0benNVKEs9z9WF8btf3r0MC9mdKBmm46p2JWBTePgH+y/uz9AzdDocscyFmSjCGFuED9xjcwKH2WdwIJzEsj/xa3L2pIw57hS1w5g/KZLh/pZ9mYtNPoWocsoYaLr6+wH8bJBfMDXIn31aedi1vhiKFQ2oGIG6ixP+BDDRTdHtA==
+ bh=RPLyeyQBsWiu6HT02RqrbFjct+C6eALLBxl08spFg2k=;
+ b=16e8Wm1wXK9wyEiV9NwNV0b0+x///XFS30dvXHiqP39m0quc7cB2YSHJj6r2xO5O1qdM0AkbmXKbzpof7ZV0xl+lPX5m1X1WYbJ2XA3sGRoo2zndi6kXsjlSkTJIxBZhIZdM9TM0GGgnLTUkCaAbgg99SAysCDQIef9QBfggR4nXJMJfMa5W1ES3TYSUq7wRwfmGpk9MQ9m9KM34EBd/xHeJ3j5XS0kmmNUiU8K4XH6avjXQUrTbaOLKyue52op/D2lb2ZHUxgXdV7cK7fgs4fBvHM6XhTTwgTB+epP6qv06qOt6E9mgp+0h0gx5tLpzeVzeZiqpfhqfJ5jSieLVAQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=seco.com;
 Received: from AS8PR03MB8832.eurprd03.prod.outlook.com (2603:10a6:20b:56e::11)
- by AM9PR03MB7575.eurprd03.prod.outlook.com (2603:10a6:20b:41a::21) with
+ by PAWPR03MB9009.eurprd03.prod.outlook.com (2603:10a6:102:337::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
- 2022 21:45:42 +0000
+ 2022 21:59:09 +0000
 Received: from AS8PR03MB8832.eurprd03.prod.outlook.com
  ([fe80::264c:4825:bcb5:e4ac]) by AS8PR03MB8832.eurprd03.prod.outlook.com
  ([fe80::264c:4825:bcb5:e4ac%9]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
- 21:45:42 +0000
+ 21:59:08 +0000
 From:   Sean Anderson <sean.anderson@seco.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-rtc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH v4] rtc: abx80x: Add nvmem support
-Date:   Thu, 22 Dec 2022 16:45:31 -0500
-Message-Id: <20221222214532.1873718-1-sean.anderson@seco.com>
+Subject: [PATCH v2] rtc: abx80x: Don't warn about oscillator failure after PoR
+Date:   Thu, 22 Dec 2022 16:58:58 -0500
+Message-Id: <20221222215858.1886378-1-sean.anderson@seco.com>
 X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0109.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::24) To AS8PR03MB8832.eurprd03.prod.outlook.com
+X-ClientProxiedBy: BL1PR13CA0146.namprd13.prod.outlook.com
+ (2603:10b6:208:2bb::31) To AS8PR03MB8832.eurprd03.prod.outlook.com
  (2603:10a6:20b:56e::11)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR03MB8832:EE_|AM9PR03MB7575:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21c5287d-f3f3-40d5-cbf4-08dae465dfa1
+X-MS-TrafficTypeDiagnostic: AS8PR03MB8832:EE_|PAWPR03MB9009:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38833d66-ae1f-4f6a-e24f-08dae467c060
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EerUnPAGPXFB+BGzf3vsRH0UGfzu0WPK86wdXiniy8PrdLsDIuwy56pNH42dKPLxIMFgBFEfwm4WV5jwIgzV3vmHaMH+9qm7R5s2S0KBli6dyykZAmxfCEyeCQZAiC8MdTFIIpbwzsxvxB39VNSPGQxkclu1H7/8KRjq2BFfYApVapb4pZ2eGJ7lcda8c/dKTyRYA0YMzWcho1Y8WXELmkOP6a8E14wkTdZo98SYKs+3two3TflZ5RSUpZ+UAjPagGRlifz4KKw4cb8cAYrh2ZqMg/KLsbuvmkO9Cw/vmAXPtzMuxUdwjtidG42HTjdQTAzcYHFAjNr7Ub9S8Xs97Ybzfrtc0F1GkMAxRsXnLaO4cq2gqKJm4kfa5HMl0p2pw8nNHEio2qYr7RohmgGum18zKkuFBEfa+9sPWzClqCG5FzswwWxknJne4mlmVQ0I5EbLDAmy+5iZ7uFxbxBVECRHxAKUcQJurRE1P4nuY11ezRXyFqeziPEh3rhuYJTK2UPNFCPMmE35xUORz5dhsH00jUGNidR36u5TlmfxWThaWQ6J0EoBxmSS9L83jUf3uouzaFl4kll8yEAAqOp2yAdrw01/ztG42lSgje1v4IMWDmG7KoespmVd9LNSO+SjgKWwyr4z5b+YntXeM4wc2lS4hDfWZ18DRiL2o/ATy1eyHiu2DuBzBjXkw7rXz+liNrzqj+L+3TGJwPAkimjrLw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB8832.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39850400004)(346002)(136003)(366004)(396003)(451199015)(41300700001)(8676002)(6506007)(66556008)(4326008)(52116002)(66476007)(110136005)(66946007)(8936002)(5660300002)(316002)(2906002)(86362001)(36756003)(44832011)(6666004)(478600001)(38100700002)(2616005)(26005)(107886003)(6512007)(186003)(38350700002)(6486002)(1076003)(83380400001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: LfE27wWTZjYJU+CBg1149LyvPD+Cc0yj209AdVxmVh+izd+4pcNYNpEULw6jt16CujsoniAlNSqfFNrnK8UbU0kftny0BzHLIA52Znc26qF4bP/ULOpW777kwFxLChgcVLynLpP4cad7zQAAWVi+Ska3PLS65x03zqs5jMTh/m6EPQSh/bhzk2sUFYtws7BrewKqfD7+mMiiHdJOk71rSk9hXZclKZVVv6IPsxLuG9Vg15K7idz7AR3qhAGY6+fEiWrJvShzhltiOK80Kqwe7TC50+cgvz9E2VEaDTXyY6hTpRL/hLpOcoYqrBAXrqbzr5xMezfLD8C4PbtTGivoI/EsLcNDbESfbgQo2x8/as/1SKqSn0rNiqQ/QgNTTChL1XQo08FA9v4C8XmtcMK/vdgtXDzQ2VfWTKw+kU9HEk29so8f3R+EvXimjGKysae2pM894kWrvaZh9f4ZyZlWp49gDuLWCUQ9vQwbVy0TgtVQFuCeuXRVZShqv3enEFnPfcGUgHo/G6fQygpiC3aV2q8e8U/IgpKFXcuCfPagiT+UywXvYhlAmLY1GmvlfjgyVPFTiTG2CIIs/MdRRtGlem3akug1gNLu4g124a6ef6g6/q39usiXQXeulKC9z2LvwiJuoGUg5vT8n95jzdW1vCAJlU6MrEDbBsGd17zvPi4pnASgLIDgG/NfqK65iy1s8tOin5VTMtlGmMGkK/XaOg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB8832.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(346002)(376002)(136003)(366004)(396003)(451199015)(110136005)(1076003)(2616005)(2906002)(26005)(316002)(478600001)(186003)(86362001)(36756003)(38100700002)(38350700002)(6506007)(83380400001)(6512007)(6666004)(66476007)(52116002)(6486002)(8676002)(44832011)(4326008)(8936002)(41300700001)(66556008)(5660300002)(66946007)(107886003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OsDLsqJT99qFRMkMXSwrYPjFmPqJXpj7N21hvwP1Bd2jZg5TdLHvFgBFf0XZ?=
- =?us-ascii?Q?pHgraF4XbmkQtpI2svfN6AX2bMMwqOoL/IFXPMThUe4V41O0Yrqt6wmxvjDm?=
- =?us-ascii?Q?7Gb0E/WOyAfzb/o0Qq/IO9c39HjfxPAPVaYNCzTDi5McLjyaMiIXO/kD4jRB?=
- =?us-ascii?Q?Let7X/UJuIlHyACrpqXQfDnDTP0b8nglnTs8PFEk5zTSlBMQJFE+Dlde5R9a?=
- =?us-ascii?Q?AAA7QfQhoaZPTm+MWq6CNEc0avBM0G5V5XO7YIpyDbiBfPFiy2kWqvc13kPL?=
- =?us-ascii?Q?iLnF6lijQVX9oWOPCll3X/Mp1H0/sSyNuzec8/DOkG+ZPPRrRFkvCzvpNnfT?=
- =?us-ascii?Q?hJo7tpVegN1iZEtN6kYCbvGrNCfS2Qr71G44Hu0dZGRiHKdNgKsytLkbvnTW?=
- =?us-ascii?Q?46LrGFKedBgnGHaQp72ahyRRUyn+WCkPSMx71byKTZgzIvp8Avb+3mgiX0//?=
- =?us-ascii?Q?sqSCzfeMey52VjroemmW9vPFomsghsXIMsDh9Yp6A/QAiPJnnKg+DfOlY/gB?=
- =?us-ascii?Q?XjbSHjktRmQtcOsaCXdWHCG2qI5UaGRzKJ9GoKWWPOywWflxF6ePSsD8cNJm?=
- =?us-ascii?Q?NwGyiQ6DhmFSlWelJDZZmyJWcjtf56AxyARWdw7T5gRmH2D6aey0DYDL3LW8?=
- =?us-ascii?Q?wSZH5+MMBWndx3+wHkDWVY5ZPPWrxrTLwubhkYX/S6v6rraWFxiwE0MGiS8m?=
- =?us-ascii?Q?diRX2iOG2g81zoYcKTQ0Vry9m3xOy3X3yVdoxlZyzskEwobdKAYfczBEJSm5?=
- =?us-ascii?Q?36ed8nsoFgzWnDJ8h4Yj2f39mq+qNFCkd9fLmW3bY3/HoQvWIQ1T1vVqyCKx?=
- =?us-ascii?Q?XsAd6H7oNFXUDHUUti2UfX5DtcndqsQBr59+51/hWFzU8AIsDO5Pka6+v5zu?=
- =?us-ascii?Q?WxBVcs4988t9h+oA2qi+8NivpbewRVRrcfxw0QaQck+km4RP+QmP3qZzxlfD?=
- =?us-ascii?Q?7O/ZGHEvk223INnO5osz6ZHF7oQKhnsI+ACSHSq47XEloUZI4iRDdmF0WnF+?=
- =?us-ascii?Q?+Udzv78jZfAg/8VqFL3fiJcJK59Yh1m9JVHGLQINNdZGNSWZxKPRUEob0Lak?=
- =?us-ascii?Q?x9ZLYeuJP1Vj5rH58hdKNY2AqAX2heugBD6VXm2dncocnmgyzoJ7zcGz4jxM?=
- =?us-ascii?Q?JBwD+JLAOiiC9m8C+lbQHWnRr50tz7yttmpep+nbOxstDxr96O+NidQk+jw8?=
- =?us-ascii?Q?phz9NdTucfOupG2dp1oAz9bLkLhK5dC19EwaASnqhyS+8e8zP9XLVF160Vrp?=
- =?us-ascii?Q?Y0SLtV43pWnbTVl/WhTdDB0WOvcfHeqRwNoqJzukFUoRMUZLrXD/jqUixb2G?=
- =?us-ascii?Q?iETT2iSTPj901cIrQapxGMo07+FKMmW4doQ2BmI7uVEI5rFzD10pBF5p+nPu?=
- =?us-ascii?Q?i6LghplBun6Bv6RHijeA1GpOibRl/YS9f9mkxz959idyzc3m11xYV57qSv6G?=
- =?us-ascii?Q?TkYJfiWMW6K7EcJtAY8VBN0hztFtT6dG4/zjQROQnCMNZuF86LNVNdJ+9yuS?=
- =?us-ascii?Q?V6fcDgkO2F40D9fcijA8XYEPw/qcH6tdvVg2eLgmlyhsgSusb0scZ7Bb1mAY?=
- =?us-ascii?Q?NGl3Xio3vjVnADSVTlQL8oY1e7MqFWfUXxIJYtuJfw5SRdrrN3cmUqRA3dAQ?=
- =?us-ascii?Q?1w=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tAx0rEVYnWrQPCVWT2Gb+rQeCcESAlmR2PTBbIIxMD39DDMzZ8ctOhKJeNSo?=
+ =?us-ascii?Q?QjA8U7eEQR+Ev4smWscP4ogKBZ12MsNM+8bEZA7qJbiTCGrv+L7R0fpJCTYo?=
+ =?us-ascii?Q?Tof16Ipfj/JRoG1jwwtzWjz6MoVQjVMIzj08EtgDq7EfmkbRHb/ycAwIAyQY?=
+ =?us-ascii?Q?/3pu8QxYUKzimh6vXqjdrGgxAKImQtZTuuFsd7+WFLm+Szf2BIWTwzLua+WR?=
+ =?us-ascii?Q?U2FX5l1CPcXxfokO97tDxH5oPmAo62tKFqCqGErjakUFDRLCLplwaaRhdUlz?=
+ =?us-ascii?Q?56aLI1xK+RDEViXLEjmsSGBtiEDSTRGMsIsdrXaJUvP0UO3drMySW4sOzV0o?=
+ =?us-ascii?Q?aZl3V0VWwMYAJlf1ODf3k9Aiz8ZLCsrWsi6XuLzul4UgJTa7aBupTcQtn/8i?=
+ =?us-ascii?Q?IypGsnFDvzJuhwC7QID+gVG2sSQtNE8n7KtqIOSYJjjMKbrJC+oriFQckknL?=
+ =?us-ascii?Q?im19QL8+dgZ7zTGB8wE9OZaNr970s5aTgQzZ3vupvkStYw2owtqFs221qEKo?=
+ =?us-ascii?Q?1d4DF/NYgDpwR/Rq0s67rFEFVNmkm4vdYfyDWRr96hhvPXwyEegJu67xpNIC?=
+ =?us-ascii?Q?kesg0ETCKsIvzPsUTkofMWG57n4NkA5c0NkrwEbKpM7xC2H4I7U1185pfTcq?=
+ =?us-ascii?Q?Jj+mcZM3ADXe5/1UIbuYP0QVdWIZ0e4+uj4dnzg9NSrr4wBshAIheBzNrdy/?=
+ =?us-ascii?Q?XzmdwkromxQszBBx+OlYIFP8sDhVMVJDdyb6qjWJFTGcVHkJQJdwUMHfP+ya?=
+ =?us-ascii?Q?Mc9C9btBt58uBF5/t7u/c4bSkId7xwkVt9WgUyYBWxrdkzWhXg1mZ0SrDKN1?=
+ =?us-ascii?Q?HjxUh26xp3/ZHVgMUKQ4bLuEY6ysIo363iFF8HmBKlnYzqru6VdFiiq/YYyh?=
+ =?us-ascii?Q?N5/XALge3zJDZX0ZccSIf3tdSFNdS0y1Lrhh4T2+Z/9Ht6iavFo6j1eSzXuo?=
+ =?us-ascii?Q?fc5Sq5tgi3Ox7hXMxJ6d10qf3pfFeNYjrkaFIENnlvG1+Wb+KOtTjbC0WPzH?=
+ =?us-ascii?Q?h/IKyDb63Sywg1ZTBjmPq+cHzHDUML+ZGpR67xq6v82zKW/nscfuKobZDmKm?=
+ =?us-ascii?Q?lCew/IJQlpkZ5wtFfJ2TV1qAS7x8mdSAslBK/YlYHAummb7Jx7F5+dt3tgIO?=
+ =?us-ascii?Q?71FQP7i7CZ7/8Z8vf5np0YpwMUsv20mWLM5IBaQMkHA8GHRjtrBOWgzeawH/?=
+ =?us-ascii?Q?EUbEWCD/XzlkTq4SXwHXDL//2nLz0kg0sGyBilNqGnJCFhJaWtEFmz/7up4D?=
+ =?us-ascii?Q?gJt+ualqHCDG/eWWHSYm/8UqzjYh2wyvd8z2OoET/ojUgH4Y5a/KW6teM/zh?=
+ =?us-ascii?Q?nTt0KfJ1mniLE1I2azpW7OlGVVUoU829A4zVTXV5sdo0wVuQDRhApn8gUgL6?=
+ =?us-ascii?Q?ALPhuN2uBHunFKyLnu0YZph/BjYnafjg/LSaDbF/WHxPWUPGR/Oho+2MJSFy?=
+ =?us-ascii?Q?ptU2ksdw4mNam2JO4oSeuKo9+BVMNgmYIUma0/5iTC3VsT9H8SOROlpZMaqn?=
+ =?us-ascii?Q?AOJQW4rUnse3BwWdm+mqTARGWxW7Ncts0Cd3nIkv9drO3TST3AXMAC6ym0Ed?=
+ =?us-ascii?Q?egTwC6bAmvGrG7gAJuGvRFTrlSFPpr2tvZQAEALpdh1DA2dM6Fa7Jv1l9+hQ?=
+ =?us-ascii?Q?mw=3D=3D?=
 X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21c5287d-f3f3-40d5-cbf4-08dae465dfa1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38833d66-ae1f-4f6a-e24f-08dae467c060
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB8832.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 21:45:42.2661
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 21:59:08.8092
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PMl3mN8GujtgzFnBLzVzeYSqbtcd1KRehpOk2VhsdmtIv7DCQwiIgnVNjgZ+kpQ+WpfftGAfAp3afZ9kaUE9tA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB7575
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9iTM66VFsJlMSRwyC5BN0c0LhU8u9n+ebYZY0xXb6oUA33/6oj1hrR2W4u1iGD+di2uWRxuG4DdPnkynlicpjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR03MB9009
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -113,144 +113,103 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This adds support for the 256-byte internal RAM. There are two windows
-which can be used to access this RAM: 64 bytes at 0x40 (the "standard"
-address space) and 128 bytes at 0x80 (the "alternate" address space). We
-use the standard address space because it is also accessible over SPI
-(if such a port is ever done). We are limited to 32-byte reads for SMBus
-compatibility, so there's no advantage to using the alternate address
-space.
+According to the datasheet, the "oscillator failure" bit is set
 
-There are some reserved bits in the EXTRAM register, and the datasheet
-doesn't say what to do with them. I've opted to skip a read/modify/write
-and just write the whole thing. If this driver is ever converted to
-regmap, this would be a good place to use regmap_update_bits.
+> ...on a power on reset, when both the system and battery voltages have
+> dropped below acceptable levels. It is also set if an Oscillator Failure
+> occurs....
+
+From testing, this bit is also set if a software reset is initiated.
+
+This bit has a confusing name; it really tells us whether the time data
+is valid. We clear it when writing the time. If it is still set, that
+means there is a persistent issue (such as an oscillator failure),
+instead of a transient one (such as power loss).
+
+Because there are several other reasons which might cause this bit
+to be set (including booting for the first time or a battery failure),
+do not warn about oscillator failures willy-nilly. This may cause system
+integrators to waste time looking into the wrong line of investigation.
+
+We continue to warn the user if the oscillator actually fails so they
+can e.g. replace the crystal. Additionally, this can help debug failed
+batteries, since you will see "Time data invalid" when enabling
+debugging.
 
 Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 ---
+Note that the following drivers all warn when they detect a problem with
+the oscillator:
 
-Changes in v4:
-- Remove unused variable
+drivers/rtc/rtc-ds1672.c
+drivers/rtc/rtc-pcf*.c
+drivers/rtc/rtc-rs5c*.c
+drivers/rtc/rtc-sc27xx.c
 
-Changes in v3:
-- Use devm_rtc_nvmem_register
-- Remove ifdefs
+So warning about such an error has good precedent.
 
 Changes in v2:
-- Fix building on non-arm platforms
+- Use debug instead of info in the typical case (no battery)
 
- drivers/rtc/rtc-abx80x.c | 77 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ drivers/rtc/rtc-abx80x.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
-index 9b0138d07232..74ff820f5481 100644
+index 9b0138d07232..a8b0fa5565c7 100644
 --- a/drivers/rtc/rtc-abx80x.c
 +++ b/drivers/rtc/rtc-abx80x.c
-@@ -11,6 +11,7 @@
-  */
+@@ -115,6 +115,7 @@ struct abx80x_priv {
+ 	struct rtc_device *rtc;
+ 	struct i2c_client *client;
+ 	struct watchdog_device wdog;
++	bool wrote_time;
+ };
  
- #include <linux/bcd.h>
-+#include <linux/bitfield.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-@@ -87,6 +88,16 @@
- #define ABX8XX_TRICKLE_STANDARD_DIODE	0x8
- #define ABX8XX_TRICKLE_SCHOTTKY_DIODE	0x4
- 
-+#define ABX8XX_REG_EXTRAM	0x3f
-+#define ABX8XX_EXTRAM_XADS	GENMASK(1, 0)
-+
-+#define ABX8XX_SRAM_BASE	0x40
-+#define ABX8XX_SRAM_WIN_SIZE	0x40
-+#define ABX8XX_RAM_SIZE		256
-+
-+#define NVMEM_ADDR_LOWER	GENMASK(5, 0)
-+#define NVMEM_ADDR_UPPER	GENMASK(7, 6)
-+
- static u8 trickle_resistors[] = {0, 3, 6, 11};
- 
- enum abx80x_chip {AB0801, AB0803, AB0804, AB0805,
-@@ -673,6 +684,68 @@ static int abx80x_setup_watchdog(struct abx80x_priv *priv)
- }
- #endif
- 
-+static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
-+			     void *val, size_t bytes, bool write)
-+{
-+	int ret;
-+
-+	while (bytes) {
-+		u8 extram, reg, len, lower, upper;
-+
-+		lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
-+		upper = FIELD_GET(NVMEM_ADDR_UPPER, offset);
-+		extram = FIELD_PREP(ABX8XX_EXTRAM_XADS, upper);
-+		reg = ABX8XX_SRAM_BASE + lower;
-+		len = min(lower + bytes, (size_t)ABX8XX_SRAM_WIN_SIZE) - lower;
-+		len = min_t(u8, len, I2C_SMBUS_BLOCK_MAX);
-+
-+		ret = i2c_smbus_write_byte_data(priv->client, ABX8XX_REG_EXTRAM,
-+						extram);
-+		if (ret)
-+			return ret;
-+
-+		if (write)
-+			ret = i2c_smbus_write_i2c_block_data(priv->client, reg,
-+							     len, val);
-+		else
-+			ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
-+							    len, val);
-+		if (ret)
-+			return ret;
-+
-+		offset += len;
-+		val += len;
-+		bytes -= len;
-+	}
-+
-+	return 0;
-+}
-+
-+static int abx80x_nvmem_read(void *priv, unsigned int offset, void *val,
-+			     size_t bytes)
-+{
-+	return abx80x_nvmem_xfer(priv, offset, val, bytes, false);
-+}
-+
-+static int abx80x_nvmem_write(void *priv, unsigned int offset, void *val,
-+			      size_t bytes)
-+{
-+	return abx80x_nvmem_xfer(priv, offset, val, bytes, true);
-+}
-+
-+static int abx80x_setup_nvmem(struct abx80x_priv *priv)
-+{
-+	struct nvmem_config config = {
-+		.type = NVMEM_TYPE_BATTERY_BACKED,
-+		.reg_read = abx80x_nvmem_read,
-+		.reg_write = abx80x_nvmem_write,
-+		.size = ABX8XX_RAM_SIZE,
-+		.priv = priv,
-+	};
-+
-+	return devm_rtc_nvmem_register(priv->rtc, &config);
-+}
-+
- static int abx80x_probe(struct i2c_client *client,
- 			const struct i2c_device_id *id)
+ static int abx80x_write_config_key(struct i2c_client *client, u8 key)
+@@ -167,6 +168,7 @@ static int abx80x_enable_trickle_charger(struct i2c_client *client,
+ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
  {
-@@ -824,6 +897,10 @@ static int abx80x_probe(struct i2c_client *client,
- 			return err;
- 	}
+ 	struct i2c_client *client = to_i2c_client(dev);
++	struct abx80x_priv *priv = i2c_get_clientdata(client);
+ 	unsigned char buf[8];
+ 	int err, flags, rc_mode = 0;
  
-+	err = abx80x_setup_nvmem(priv);
-+	if (err)
-+		return err;
-+
- 	if (client->irq > 0) {
- 		dev_info(&client->dev, "IRQ %d supplied\n", client->irq);
- 		err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+@@ -181,7 +183,18 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 			return flags;
+ 
+ 		if (flags & ABX8XX_OSS_OF) {
+-			dev_err(dev, "Oscillator failure, data is invalid.\n");
++			/*
++			 * The OF bit can be set either because of a reset
++			 * (PoR/Software reset) or because of an oscillator
++			 * failure. Effectively, it indicates that the stored
++			 * time is invalid. When we write the time, we clear
++			 * this bit. If it stays set, then this indicates an
++			 * oscillator failure.
++			 */
++			if (priv->wrote_time)
++				dev_err(dev, "Oscillator failure\n");
++			else
++				dev_dbg(dev, "Time data invalid\n");
+ 			return -EINVAL;
+ 		}
+ 	}
+@@ -207,6 +220,7 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
++	struct abx80x_priv *priv = i2c_get_clientdata(client);
+ 	unsigned char buf[8];
+ 	int err, flags;
+ 
+@@ -240,6 +254,7 @@ static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 		dev_err(&client->dev, "Unable to write oscillator status register\n");
+ 		return err;
+ 	}
++	priv->wrote_time = true;
+ 
+ 	return 0;
+ }
 -- 
 2.35.1.1320.gc452695387.dirty
 
