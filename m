@@ -2,43 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38225655F35
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Dec 2022 03:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F14655F38
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Dec 2022 03:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiLZCiw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 25 Dec 2022 21:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S231508AbiLZCi5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 25 Dec 2022 21:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLZCiu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 25 Dec 2022 21:38:50 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2080.outbound.protection.outlook.com [40.107.104.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26A926CC;
-        Sun, 25 Dec 2022 18:38:48 -0800 (PST)
+        with ESMTP id S231504AbiLZCi4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 25 Dec 2022 21:38:56 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2052.outbound.protection.outlook.com [40.107.104.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65AF26CF;
+        Sun, 25 Dec 2022 18:38:54 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eyauMDfoEhXTY8PJV2E78F7ApingqAesfUBQmAAjOH/R4hOGZCxVPrL3QWLK5XbixAOOkoQFF5qYm5chL/RNfkavAxNnXygEAR2nik7z5l+H0JmvPR5vzmDHvROOO8Nzmn1jky9KbjgjNJI1yGOrke/3dfoeyRqeL7toCZseRR5Ho3ip+9+6ZOnaFpL3nX5ncWoSJgon6SsC7q7v6r1houYhMuKpefFljJ7xPzoY3oVpMp1uUzCDVzGbErFS49ZdRWzGT7cNMVaSo1oCpg/sePMSaXCHVNLyHJypeSbIgQcv1KuHkSob4zsXkNNGqUzoGrtae91u2GIv8UOFdpGaiQ==
+ b=Xr0V4UQNBiI05ok25bICZQv/sLfFslSkWMMRG5RKawmcxwrlLZb3IoHakL792wJIeuyKIuU49PAOj2y9L6s9OzGOqMPnWyLc1KO8sVLSj6H/ucrmwyhsfPEkXx52uKN+orgqSDoJOQVkpXqiIEMUMVR5vNqNyrnEfNQkrIBMws/Xamzoyu0ZyZ8ftR/YVjgS+mDXgVj3wcavEiIvyyFHrYiD7TyeYApENTcyODVCKQkygZUL/lkqvnCIOAI9c0O2YZCJHW8bA/Z/h2LUhYEX8YQ6iro6pe3vkIfVQosmLog+bDgM7qBxLiqOynoKbCrubgL6WFT+/t0Bcx+HdEarcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZMuD0hrIlmNcv1wJ5/eZiYUAC8zAOTNfwVCXdxF0rRA=;
- b=ZoG1MNqaDDUIbRc33n80QfjH80j5SRit/dmFOBtzA9CnXtJxuILRNV6poev9MYPSNQuYzEiJUtYwI41J8ZsakjIV8LSrTzIpIF+lVgmTi4dpZ/4xBnKf7NvewQjlqS6hZ3zTcw/ZQpx4xo3kNmAxMxE1aKBLmNmCQnYEpGO41Uvl5/KjZSK67elLWbHYOyDkV6RdTe+GV8U/qKgcuEQ5ltfLAJYO1T8fSBJWIscinSuU5JI8pA6q0JDHzZfOF+FEBVx3db6ijzZ2jfUDcb9W0BstH+NWaxJc2c6DodyiZ4ijDoRqXn0RSk8hecBP4tsOzmyQHADfI478xgL7+lF4Fw==
+ bh=k9vT1ilF7EFgAGaLgspeMl9xSWYLglvZYVsb0C7T0XE=;
+ b=HCqKIwa+HapOxtz+H3Q5v7wp01Ch8GAjzQ11Z/01AfLUvqhf5eD1TF6Ep0kYPFhFuNZNm9DrLB2FhSmnsdFoqKHVEgQ4DMECeE65H3/5djPTafRrUIinyg69eHdvoQWIQLnobOggdPI0r8K1mU3zsqC+EtYimau+g4XvUMQ1vuBu44M7M/c/kLn1K4dR+UuUn3lJN8OvRDp6fj6mHHg+9oQkSiuqqGKSTAaksZy0Xf83E7iERoFI6kMFJfEaPHP7y1oZmPvqAhnN8LZ+mC8KzbIfdTH3x4uZFISQ6bAUN8QB3ssMGl4EAFeB9FqgiTnoqKe/YntspqNi3SiuQGAGGQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZMuD0hrIlmNcv1wJ5/eZiYUAC8zAOTNfwVCXdxF0rRA=;
- b=edB6SgHesDFQ1s8gLcKouIGDB31I61ed7RWOS69rsnSTTESZS5zdIUMvpVBZ2Q9GmUzjioL8Oumj6t0ynl2IkOqJ0pFwUZ+JPo1gS5kwTfMTfGgEg4Ogz6m3QTpCvmQixwzPT+SZR6dg6rGokAZ4sqFDXaeVhCt9/VO+LsxAq8A=
+ bh=k9vT1ilF7EFgAGaLgspeMl9xSWYLglvZYVsb0C7T0XE=;
+ b=IyxvxTPYOcjaiQ3F//o1oErNSce0OUwR3cOVn3l/xcQPDjFwqK7tmQyBEb9BAJiuPG0FXi7Lv2EVCH8Y6mOeCHC7aIkpbXV8OymymWTuUl3cCHGe4FDwZItoyy47f40HnBHSoEhl5ZEwbHBIhLz1KAOMH/GpXGCC3Kn6SWiOOyg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
  by VE1PR04MB7328.eurprd04.prod.outlook.com (2603:10a6:800:1a5::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Mon, 26 Dec
- 2022 02:38:46 +0000
+ 2022 02:38:52 +0000
 Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::ebf:5645:b490:166c]) by AS8PR04MB8642.eurprd04.prod.outlook.com
  ([fe80::ebf:5645:b490:166c%7]) with mapi id 15.20.5944.016; Mon, 26 Dec 2022
- 02:38:46 +0000
+ 02:38:52 +0000
 From:   Jacky Bai <ping.bai@nxp.com>
 To:     lee@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
@@ -47,9 +47,9 @@ To:     lee@kernel.org, robh+dt@kernel.org,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
         kernel@pengutronix.de, linux-imx@nxp.com, festevam@gmail.com
-Subject: [PATCH v2 2/4] input: bbnsm_pwrkey: Add bbnsm power key support
-Date:   Mon, 26 Dec 2022 10:39:40 +0800
-Message-Id: <20221226023942.1027270-3-ping.bai@nxp.com>
+Subject: [PATCH v2 3/4] rtc: bbnsm: Add the bbnsm rtc support
+Date:   Mon, 26 Dec 2022 10:39:41 +0800
+Message-Id: <20221226023942.1027270-4-ping.bai@nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20221226023942.1027270-1-ping.bai@nxp.com>
 References: <20221226023942.1027270-1-ping.bai@nxp.com>
@@ -61,50 +61,50 @@ X-ClientProxiedBy: SG2PR01CA0147.apcprd01.prod.exchangelabs.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AS8PR04MB8642:EE_|VE1PR04MB7328:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4213108-e172-407d-499f-08dae6ea4f8d
+X-MS-Office365-Filtering-Correlation-Id: 6dc9a596-0b06-44b5-d7bc-08dae6ea5346
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tCYZoaJI5rI3VZliVd35WwMdqDHyB2QgQloqLQfvEH19GxD3LZhdOYa72OojUQYBlFmX1ApYI94+06YEFKCb8RgtpcuQ3azrZzEfnm46QwGxCeAAhpuXWvhgbd6io2thfEIgEFtqdU+5Z8s8jZlLGR4ajO6Ign5cfct/90sF6fCpCd8veWu55zwAGwhZBrj3FNx51J5d/x6VdIfzvK1MB4wUYfFRviTWyGsIlznwMnVRYALvSLFjn1DRGxa6aQO71RTZcgnz7Rgh89wPGNQv0hkj7RS1K9Lqi5nVj8rEETdqRRhBNfMpDX41stuj0WvCInKMDhl5F5ToWcV5XnuCx3Qr2Znum9CkXzF/zmKSV/RNn0NpJSBqy++PMR0YKK1wfmKQ2giLN6j6abah/v1QHrQexqSEcqHrnLb0cxW4g0xmaXp9nkz1IF4dsEuBgTHQkkeBPEtkIpvTUaaCgVeF8ckB0tuXHVAAuQANwgK8EufBwZ1M0XnN+gXRKuMvOE7962XNeck5CRMOQ6S9qjCJdUdL7MDVbDQTJjur3wIBhJNt8XtJKILOF8/IOqUj3oQ3sKbj3T8rS1Dmz0Dmdoox3UoyYb6OpyAnwMtuaNwaooavTpuCO2igqFr4EIPgZVM3L0XF3ys5/kxWPnrAUqwHs2t6DoN4SJml0JykQHj7whzOFCCD2P2pvmfhxcC4oUUp7nnWyy1SbEaqcsRtyo+FQQ==
+X-Microsoft-Antispam-Message-Info: IFFfnFJEocKQ8MOHYQOvQsF7Zx7EvQrUfBhst1jKs431PJHeJfyZNtAH44PyORQJMfsd+///LvvtyCWvtv1IcYKFaFvon7mntpA6LGLazdr9ZDepauzDfMKNbB3qaayOSL00scbUYzdZWM+aOw1XrdcJ6bmp9cmLQ3FMG0xbGgOtErWp8lMJMnwk8aVsqJQUW/VyubZslm+51whXwYwhBKpvXHCRFhy9fYw3dBM7dRV1QiL7tvNqb5RAS3KnUb/S2pZII/H+fvQOaj/Zg4nalo3ILfJFBsHvcLAS/xU1PYgeHuhPk+DRH7+rVTIMgK3B1PxB6HJ0HGQcGMKpjERvtObdmmQdaIIwuexr7jDe1at1M7fWIkklZxuRZnzFUGen2h7N5hUghleX+Ih4WoNGiAV7MuRctduhENJ4cKq8F6F1+uvc4jRvBKNULeaZRGYHaeVyb9ijwcq/RAivMz5LW9H6pCLVwuS9tFsMFBL55cFS87om7juhGYGL4PHBm3GGz2rotwdhXGPTbtc6rbfowxFR/qsYlWz5iQlg5QX+jwgg/IlYA8A4UHnr6k3Zh5LmFUMQbpj49TEPOaCN0qOXqLuP3f8FaeljDpu7luWpbHwXnA2yb1QKAgp1A1tzwzCnBJ1NVQfPtGD95C0GItbv1TrTO/4AA3pyBaCTb2QK1EZk0b4Uk8NeizZV461KLYnr/QVTC6r28YJWwE1gGlfQqw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(39850400004)(346002)(376002)(451199015)(478600001)(6486002)(6666004)(2906002)(316002)(52116002)(36756003)(38100700002)(83380400001)(38350700002)(1076003)(2616005)(26005)(6506007)(186003)(6512007)(86362001)(5660300002)(7416002)(41300700001)(8676002)(4326008)(66476007)(66556008)(8936002)(66946007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aLU0AwWtWg7YKpb+RoZoruxZvJ5pelgPxk8wgs2jOsN1weFfqszbbhqDLQPM?=
- =?us-ascii?Q?anNTw5Nr7Bv6CTNy5RIdBxyRqFKXK1LkzsVKPqHJJFkoqY7olvJy+rE/0817?=
- =?us-ascii?Q?MYZSfzQzdZDUoz8Od7ZBP4ax5x5b9CCucUa3Bgbj1BRwncnwqiAjfd7S5USn?=
- =?us-ascii?Q?U3EoV1N3P0WWuX27YlYZzfEruzGgHlAHOLvsHvUk2s0EG2Am7VxfqklkXhrd?=
- =?us-ascii?Q?WjdNiyU11WUdMBa4GjkR4QeL44QLt5jbHdTP5h7VYvv6gHtELCHQSi1YchZa?=
- =?us-ascii?Q?2j7pIxdcwGcBJmskxO3GdVI7oZPQR0R1mP6867Vx/ncYddCFX+ZLIHA+vxFx?=
- =?us-ascii?Q?cMZRevIcS+czRdqVaYXINyqZhxHhObRqJsAwdEwu9MuLfl9thZBJWxl2++RD?=
- =?us-ascii?Q?LJHeIZXRetCU2OOhq5qOvCov4SONh/BQ0K0jAc5M+mAapAboHMLhbyrHobj1?=
- =?us-ascii?Q?HpYdO+hTXd8k5Q5LM8+O55xb00Y+pTpjd1QH5CjV+qgT6zRr6w/7M2beOwxo?=
- =?us-ascii?Q?mRBypn0Qs8Ysx7zZSBq74Gfv7qLEIXzPyX4VBHyJ8aokSpVXKi1gDB0nHe3J?=
- =?us-ascii?Q?m5Yk/7yom94ibMBkPfyR1gsUbEiTF7/ySXCWnah7xXEdNfXK/vBrS5lWTY8N?=
- =?us-ascii?Q?HvVX8x964Ypmzjc9B2aoczLui02CH8IqOvM3KMrw+bRggyBr3fNnVujb1ycM?=
- =?us-ascii?Q?N4+ALct0BIkIk84+M5JEHjOv+LY4Af98vzRrPQsmNaderwTDxhnJpyyc0+Qn?=
- =?us-ascii?Q?jZvPLocE1W2UgayShyNghkMOs/Z3exJ9AB6+e2yfaco5sB8g9vvGe7OZc2xU?=
- =?us-ascii?Q?eFJco1D2IuTH2SV56fiGzjGBn8YU7GtU5ZRcGRfQc6y8t6hzNwqF5djatdyJ?=
- =?us-ascii?Q?6FX1+8Ll8CbZF3bFyHUnmPv/NMaQNu7a48KA3HU6UVm+ky1OTtTu87tc5sA9?=
- =?us-ascii?Q?bUbOzetkMAbYCUWmRwvRLzf2U9vXYt2ChQlt7nIN+XbbkHx3T+Xp06T/NXI1?=
- =?us-ascii?Q?siU5bvD06d/jXI+pLdJkwSYgs8Ft6tH2IJYZ1holPPQmO7TrDyAgh1QoRq7o?=
- =?us-ascii?Q?CZoVAQbOId+ViayHbW+Tb+O799IFWuIzLvST6xWAQp2K4jR0GzcH9duNjTc0?=
- =?us-ascii?Q?tzqRG8nu6zddr2r/vd5XEgVh/xTKGtuSFhLbLBWhHgTuRSXnu9BTNlv8A4oH?=
- =?us-ascii?Q?8G+yczNJux8Jwk7sVVXb25ZsLa3MoK4oxCV57cGmNrCu5kktATCilKFTT1fn?=
- =?us-ascii?Q?DQ++w9ntdOgOhAtDD+HiCbvgl8OmYzTo5gKlUMYx1SZjurbaj/E/Xlmvk9/e?=
- =?us-ascii?Q?xLqTUVDcjj3NI4cFe0q711nWWGBGeZooT7wmrM7wxIZ+mRdl8FfEhtWOcLYt?=
- =?us-ascii?Q?ldGOw2A4klTu9lEdRF4qDvvARAMQ8xy0AsP5a5fL6/DudCVUHQYMYS5DHdkv?=
- =?us-ascii?Q?frttcnglS/nO16EdIfQ3diHSh2Z+DeKabEQQ0bvynA8vdj+t/JCXTONDWOPp?=
- =?us-ascii?Q?kvPlGBt/VfdXOeWGMEBThn/FbjAJLOKjcnprYOekqcxfJzRTWoMehSbiH4ko?=
- =?us-ascii?Q?rqXVp0i1MIWcuZo95ELqZXrV3YGqBYlOZwWTf8M0?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zhRptRu5b6ag4cfdmowkUaXJagT2bDpHV/oc/m6UIth1bFJ3E/EL6KeR0J0W?=
+ =?us-ascii?Q?aq8tWOhW5TUfxhkT1bzmdxM5DhSjI1WDkN7F+n1Zlw4jAcNc+uuuKFAHXIj2?=
+ =?us-ascii?Q?AldBP60i1OMmOTgTIfP69YMfq3fY4IagUqbU2vCmpCGhkB978YYXqgddHlAI?=
+ =?us-ascii?Q?HLSxU85oi4Kfe4rBL/vGHg9HfDd9AyMo2Zf26AbkXUe+Mv9cqs+OHasVla/s?=
+ =?us-ascii?Q?5UlOllmWTJkmIZvAxZ1rw/P71Jctzk4LkD0LdhvfNnNQkIAQBJDmi2ppMtei?=
+ =?us-ascii?Q?BMTm9ipDWOGOkPi1ViZgdebD2xU8BNa9e5kV1Jt6Wi/8lu+4CQYow6Nhrk1B?=
+ =?us-ascii?Q?g7gKi//xrl22xkPE49OCyAVWtkWnY4VUvTR3DSbOnUEaV132XGaK7CjIU45s?=
+ =?us-ascii?Q?Mm9jxGt6Y/YU62vM/doEBp9w8M06GVkqLI33pznlELhs3T4vu+yj3wWrme5b?=
+ =?us-ascii?Q?WLq0Gn0rGmFYXw1ttloI1vABigc6NSTeD/Robt4QFwhJOzyYezdNkxsvRHVC?=
+ =?us-ascii?Q?y5lzD8MppHd4RGahPmn0LsbysuaIC0AN7+RW5R2UaZaRzNDbRXtLf7TRBHsy?=
+ =?us-ascii?Q?9sK57DiIlz3OFgGSEchezw+BkTZUTakIkCJ5/2HK9wTaxOUy/UPlDBzuT+pX?=
+ =?us-ascii?Q?UOcMzVphPbxf4IJ1vrKaaTBoGU/no7ZaA3DAKe4qLQdDEFToCT2WQ5npfkG2?=
+ =?us-ascii?Q?QVu6B1tEM35a7Yz2nls5y+F2/DdAnKm9EJcsYm1gHR7+tZTCSisuFg+uKR8J?=
+ =?us-ascii?Q?B4loOWR3A2+rZdS0657kELDdgYOHorJlA8VX4AN87FOhoxLedZ1KyuOSeG3y?=
+ =?us-ascii?Q?kQMNP3WjJPpDXNKRu9I0vEu3z/Y5rM8UXmRJfVWmiwYShtzdiTL2BRTVFogp?=
+ =?us-ascii?Q?h+9sr/ZAxN4/p/k56X33fXphZbBnEIiQw3qHgwjKoQoicPnNaUb59JAK4Zhr?=
+ =?us-ascii?Q?aQKYyUrrsvFMupATlPNd+GHlKTH60xsFJYFJqcznl2GbnXsSLrfCKbIgodrP?=
+ =?us-ascii?Q?RegkCYQZOdhKMVHBpr9evK8cNU0KyKKzvm3DpuMNzmTY9hIcbwoEQd6frAX6?=
+ =?us-ascii?Q?U/RAOERIoAO02Io/i7GxTEt+Faa+lrr+Rz1kSkf9i9BH8YJ6ZNP6hK6+pXel?=
+ =?us-ascii?Q?XtlVLPXj/I4jNeQqdC+jdddPHKI/7RtNPvD0hTVYFt9UU/Ro2i7EOEVbda1q?=
+ =?us-ascii?Q?fS6z88gAs6dFv7s0vulq5i+3t0+Ky+jfq1vwihCuTWzdwlcZaWQJSRfVfT4j?=
+ =?us-ascii?Q?n8q5dxwFb8DdEccAxcFl+KxYS4GbdRvVmkUwtqrIF8kgPag0cWmXDt6OyOf2?=
+ =?us-ascii?Q?gUcMoLXu3nBpskCAAioxjZfeQ6gXRY3Z4Qxo48wpYkpWNrNDRM+UIyvNIMRu?=
+ =?us-ascii?Q?wPItP0KpbH/Q++ZFp255LOXWPzjrDP3zzwZ9AlfAf49MkAxsxGkWotb42H0k?=
+ =?us-ascii?Q?6wDWPuTdxVuEw5LnSChiV+xQUOjJ0Z+ImhOan+afXb59JTb9C7vNBFBfyu3C?=
+ =?us-ascii?Q?gHQw3VAhzX/V29U/ofomsqwz5ij4Frdq1keqX2T6/qA7mOnq/f/dQV/tivCN?=
+ =?us-ascii?Q?LluA7XomVyWmZqWPqqtyJdecgeHiodWG/IguZZ3n?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4213108-e172-407d-499f-08dae6ea4f8d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6dc9a596-0b06-44b5-d7bc-08dae6ea5346
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Dec 2022 02:38:46.1468
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Dec 2022 02:38:52.2577
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5CHIZiXllDUtMXlqishVsD9XTcLE46p/wDKGgyDj40zJlKseUGnEDozkzsIrX9YEdprSy2kVT6r4q2NO8b3HHQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Isd0o8wLN+7JvaKb8gYBay7ELlxlzC2biO+/6EsI1OMEvE2YmW3QzlD3LZqycgYrXYcDYvGEKlsHw++hFUq+Sg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7328
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -116,259 +116,291 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The ON/OFF logic inside the BBNSM allows for connecting directly
-into a PMIC or other voltage regulator device. The module has an
-button input signal and a wakeup request input signal. It also
-has two interrupts (set_pwr_off_irq and set_pwr_on_irq) and an
-active-low PMIC enable (pmic_en_b) output.
-
-Add the power key support for the ON/OFF button function found in
-BBNSM module.
+The BBNSM module includes a real time counter with alarm.
+Add a RTC driver for this function.
 
 Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 Reviewed-by: Peng Fan <peng.fan@nxp.com>
 ---
   - v2 changes:
-    - use device_property_read_u32() to read the property
-    - clean up the goto return, return directly
     - sort the header file alphabetically
     - rename the file to add 'nxp' prefix
+    - refine bbnsm_rtc_irq_handler function, remove the unnecessary
+      event variable
+    - add rtc enable check in .read_time, remove rtc enable in probe function
+    - remove unnecessary dev_err log in probe function
 ---
- drivers/input/keyboard/Kconfig            |  11 ++
- drivers/input/keyboard/Makefile           |   1 +
- drivers/input/keyboard/nxp-bbnsm-pwrkey.c | 190 ++++++++++++++++++++++
- 3 files changed, 202 insertions(+)
- create mode 100644 drivers/input/keyboard/nxp-bbnsm-pwrkey.c
+ drivers/rtc/Kconfig         |  12 ++
+ drivers/rtc/Makefile        |   1 +
+ drivers/rtc/rtc-nxp-bbnsm.c | 225 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 238 insertions(+)
+ create mode 100644 drivers/rtc/rtc-nxp-bbnsm.c
 
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index 00292118b79b..8efcd95492b3 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -456,6 +456,17 @@ config KEYBOARD_SNVS_PWRKEY
- 	  To compile this driver as a module, choose M here; the
- 	  module will be called snvs_pwrkey.
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index ab9a1f814119..0c8534a49c78 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1786,6 +1786,18 @@ config RTC_DRV_SNVS
+ 	   This driver can also be built as a module, if so, the module
+ 	   will be called "rtc-snvs".
  
-+config KEYBOARD_BBNSM_PWRKEY
-+	tristate "NXP BBNSM Power Key Driver"
++config RTC_DRV_BBNSM
++	tristate "NXP BBNSM RTC support"
++	select REGMAP_MMIO
 +	depends on ARCH_MXC || COMPILE_TEST
++	depends on HAS_IOMEM
 +	depends on OF
 +	help
-+	  This is the bbnsm powerkey driver for the NXP i.MX application
-+	  processors.
++	   If you say yes here you get support for the NXP BBNSM RTC module.
 +
-+	  To compile this driver as a module, choose M here; the
-+	  module will be called bbnsm_pwrkey.
++	   This driver can also be built as a module, if so, the module
++	   will be called "rtc-bbnsm".
 +
- config KEYBOARD_IMX
- 	tristate "IMX keypad support"
- 	depends on ARCH_MXC || COMPILE_TEST
-diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-index 5f67196bb2c1..e34dd65a34c3 100644
---- a/drivers/input/keyboard/Makefile
-+++ b/drivers/input/keyboard/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_KEYBOARD_AMIGA)		+= amikbd.o
- obj-$(CONFIG_KEYBOARD_APPLESPI)		+= applespi.o
- obj-$(CONFIG_KEYBOARD_ATARI)		+= atakbd.o
- obj-$(CONFIG_KEYBOARD_ATKBD)		+= atkbd.o
-+obj-$(CONFIG_KEYBOARD_BBNSM_PWRKEY)	+= nxp-bbnsm-pwrkey.o
- obj-$(CONFIG_KEYBOARD_BCM)		+= bcm-keypad.o
- obj-$(CONFIG_KEYBOARD_CAP11XX)		+= cap11xx.o
- obj-$(CONFIG_KEYBOARD_CLPS711X)		+= clps711x-keypad.o
-diff --git a/drivers/input/keyboard/nxp-bbnsm-pwrkey.c b/drivers/input/keyboard/nxp-bbnsm-pwrkey.c
+ config RTC_DRV_IMX_SC
+ 	depends on IMX_SCU
+ 	depends on HAVE_ARM_SMCCC
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index d3c042dcbc73..0f11027a7388 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -33,6 +33,7 @@ obj-$(CONFIG_RTC_DRV_ASPEED)	+= rtc-aspeed.o
+ obj-$(CONFIG_RTC_DRV_AT91RM9200)+= rtc-at91rm9200.o
+ obj-$(CONFIG_RTC_DRV_AT91SAM9)	+= rtc-at91sam9.o
+ obj-$(CONFIG_RTC_DRV_AU1XXX)	+= rtc-au1xxx.o
++obj-$(CONFIG_RTC_DRV_BBNSM)	+= rtc-nxp-bbnsm.o
+ obj-$(CONFIG_RTC_DRV_BD70528)	+= rtc-bd70528.o
+ obj-$(CONFIG_RTC_DRV_BQ32K)	+= rtc-bq32k.o
+ obj-$(CONFIG_RTC_DRV_BQ4802)	+= rtc-bq4802.o
+diff --git a/drivers/rtc/rtc-nxp-bbnsm.c b/drivers/rtc/rtc-nxp-bbnsm.c
 new file mode 100644
-index 000000000000..2aaf44f9354b
+index 000000000000..4704a7901341
 --- /dev/null
-+++ b/drivers/input/keyboard/nxp-bbnsm-pwrkey.c
-@@ -0,0 +1,190 @@
++++ b/drivers/rtc/rtc-nxp-bbnsm.c
+@@ -0,0 +1,225 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +//
 +// Copyright 2022 NXP.
 +
-+#include <linux/device.h>
-+#include <linux/err.h>
 +#include <linux/init.h>
-+#include <linux/input.h>
-+#include <linux/interrupt.h>
 +#include <linux/io.h>
-+#include <linux/jiffies.h>
 +#include <linux/kernel.h>
 +#include <linux/mfd/syscon.h>
 +#include <linux/module.h>
 +#include <linux/of.h>
-+#include <linux/of_address.h>
 +#include <linux/platform_device.h>
 +#include <linux/pm_wakeirq.h>
 +#include <linux/regmap.h>
++#include <linux/rtc.h>
 +
-+#define BBNSM_CTRL		0x8
-+#define BBNSM_INT_EN		0x10
-+#define BBNSM_EVENTS		0x14
-+#define BBNSM_PAD_CTRL		0x24
++#define BBNSM_CTRL	0x8
++#define BBNSM_INT_EN	0x10
++#define BBNSM_EVENTS	0x14
++#define BBNSM_RTC_LS	0x40
++#define BBNSM_RTC_MS	0x44
++#define BBNSM_TA	0x50
 +
-+#define BBNSM_BTN_PRESSED	BIT(7)
-+#define BBNSM_PWR_ON		BIT(6)
-+#define BBNSM_BTN_OFF		BIT(5)
-+#define BBNSM_EMG_OFF		BIT(4)
-+#define BBNSM_PWRKEY_EVENTS	(BBNSM_PWR_ON | BBNSM_BTN_OFF | BBNSM_EMG_OFF)
-+#define BBNSM_DP_EN		BIT(24)
++#define RTC_EN		0x2
++#define RTC_EN_MSK	0x3
++#define TA_EN		(0x2 << 2)
++#define TA_DIS		(0x1 << 2)
++#define TA_EN_MSK	(0x3 << 2)
++#define RTC_INT_EN	0x2
++#define TA_INT_EN	(0x2 << 2)
 +
-+#define DEBOUNCE_TIME		30
-+#define REPEAT_INTERVAL		60
++#define BBNSM_EVENT_TA	(0x2 << 2)
 +
-+struct bbnsm_pwrkey {
++#define CNTR_TO_SECS_SH	15
++
++struct bbnsm_rtc {
++	struct rtc_device *rtc;
 +	struct regmap *regmap;
 +	int irq;
-+	int keycode;
-+	int keystate;  /* 1:pressed */
-+	struct timer_list check_timer;
-+	struct input_dev *input;
++	struct clk *clk;
 +};
 +
-+static void bbnsm_pwrkey_check_for_events(struct timer_list *t)
++static u32 bbnsm_read_counter(struct bbnsm_rtc *bbnsm)
 +{
-+	struct bbnsm_pwrkey *bbnsm = from_timer(bbnsm, t, check_timer);
-+	struct input_dev *input = bbnsm->input;
-+	u32 state;
++	u32 rtc_msb, rtc_lsb;
++	unsigned int timeout = 100;
++	u32 time;
++	u32 tmp = 0;
 +
-+	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &state);
++	do {
++		time = tmp;
++		/* read the msb */
++		regmap_read(bbnsm->regmap, BBNSM_RTC_MS, &rtc_msb);
++		/* read the lsb */
++		regmap_read(bbnsm->regmap, BBNSM_RTC_LS, &rtc_lsb);
++		/* convert to seconds */
++		tmp = (rtc_msb << 17) | (rtc_lsb >> 15);
++	} while (tmp != time && --timeout);
 +
-+	state = state & BBNSM_BTN_PRESSED ? 1 : 0;
++	return time;
++}
 +
-+	/* only report new event if status changed */
-+	if (state ^ bbnsm->keystate) {
-+		bbnsm->keystate = state;
-+		input_event(input, EV_KEY, bbnsm->keycode, state);
-+		input_sync(input);
-+		pm_relax(bbnsm->input->dev.parent);
++static int bbnsm_rtc_read_time(struct device *dev, struct rtc_time *tm)
++{
++	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
++	unsigned long time;
++	u32 val;
++
++	regmap_read(bbnsm->regmap, BBNSM_CTRL, &val);
++	if ((val & RTC_EN_MSK) != RTC_EN) {
++		dev_warn(dev, "RTC is not enabled, time is invalid!\n");
++		return -EINVAL;
 +	}
 +
-+	/* repeat check if pressed long */
-+	if (state) {
-+		mod_timer(&bbnsm->check_timer,
-+			  jiffies + msecs_to_jiffies(REPEAT_INTERVAL));
++	time = bbnsm_read_counter(bbnsm);
++	rtc_time64_to_tm(time, tm);
++
++	return 0;
++}
++
++static int bbnsm_rtc_set_time(struct device *dev, struct rtc_time *tm)
++{
++	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
++	unsigned long time = rtc_tm_to_time64(tm);
++
++	/* disable the RTC first */
++	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, RTC_EN_MSK, 0);
++
++	/* write the 32bit sec time to 47 bit timer counter, leaving 15 LSBs blank */
++	regmap_write(bbnsm->regmap, BBNSM_RTC_LS, time << CNTR_TO_SECS_SH);
++	regmap_write(bbnsm->regmap, BBNSM_RTC_MS, time >> (32 - CNTR_TO_SECS_SH));
++
++	/* Enable the RTC again */
++	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, RTC_EN_MSK, RTC_EN);
++
++	return 0;
++}
++
++static int bbnsm_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
++	u32 bbnsm_events, bbnsm_ta;
++
++	regmap_read(bbnsm->regmap, BBNSM_TA, &bbnsm_ta);
++	rtc_time64_to_tm(bbnsm_ta, &alrm->time);
++
++	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &bbnsm_events);
++	alrm->pending = (bbnsm_events & BBNSM_EVENT_TA) ? 1 : 0;
++
++	return 0;
++}
++
++static int bbnsm_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
++{
++	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
++
++	/* enable the alarm event */
++	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, TA_EN_MSK, enable ? TA_EN : TA_DIS);
++	/* enable the alarm interrupt */
++	regmap_update_bits(bbnsm->regmap, BBNSM_INT_EN, TA_EN_MSK, enable ? TA_EN : TA_DIS);
++
++	return 0;
++}
++
++static int bbnsm_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct bbnsm_rtc *bbnsm = dev_get_drvdata(dev);
++	unsigned long time = rtc_tm_to_time64(&alrm->time);
++
++	/* disable the alarm */
++	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, TA_EN, TA_EN);
++
++	/* write the seconds to TA */
++	regmap_write(bbnsm->regmap, BBNSM_TA, time);
++
++	return bbnsm_rtc_alarm_irq_enable(dev, alrm->enabled);
++}
++
++static const struct rtc_class_ops bbnsm_rtc_ops = {
++	.read_time = bbnsm_rtc_read_time,
++	.set_time = bbnsm_rtc_set_time,
++	.read_alarm = bbnsm_rtc_read_alarm,
++	.set_alarm = bbnsm_rtc_set_alarm,
++	.alarm_irq_enable = bbnsm_rtc_alarm_irq_enable,
++};
++
++static irqreturn_t bbnsm_rtc_irq_handler(int irq, void *dev_id)
++{
++	struct device *dev = dev_id;
++	struct bbnsm_rtc  *bbnsm = dev_get_drvdata(dev);
++	u32 val;
++
++	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &val);
++	if (val & BBNSM_EVENT_TA) {
++		bbnsm_rtc_alarm_irq_enable(dev, false);
++		/* clear the alarm event */
++		regmap_write_bits(bbnsm->regmap, BBNSM_EVENTS, TA_EN_MSK, BBNSM_EVENT_TA);
++		rtc_update_irq(bbnsm->rtc, 1, RTC_AF | RTC_IRQF);
++
++		return IRQ_HANDLED;
 +	}
++
++	return IRQ_NONE;
 +}
 +
-+static irqreturn_t bbnsm_pwrkey_interrupt(int irq, void *dev_id)
++static int bbnsm_rtc_probe(struct platform_device *pdev)
 +{
-+	struct platform_device *pdev = dev_id;
-+	struct bbnsm_pwrkey *bbnsm = platform_get_drvdata(pdev);
-+	struct input_dev *input = bbnsm->input;
-+	u32 event;
-+
-+	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &event);
-+	if (event & BBNSM_BTN_OFF)
-+		mod_timer(&bbnsm->check_timer, jiffies + msecs_to_jiffies(DEBOUNCE_TIME));
-+	else
-+		return IRQ_NONE;
-+
-+	pm_wakeup_event(input->dev.parent, 0);
-+
-+	/* clear PWR OFF */
-+	regmap_write(bbnsm->regmap, BBNSM_EVENTS, BBNSM_BTN_OFF);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void bbnsm_pwrkey_act(void *pdata)
-+{
-+	struct bbnsm_pwrkey *bbnsm = pdata;
-+
-+	del_timer_sync(&bbnsm->check_timer);
-+}
-+
-+static int bbnsm_pwrkey_probe(struct platform_device *pdev)
-+{
-+	struct bbnsm_pwrkey *bbnsm;
-+	struct input_dev *input;
-+	struct device_node *np = pdev->dev.of_node;
-+	int error;
++	struct bbnsm_rtc *bbnsm;
++	int ret;
 +
 +	bbnsm = devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
 +	if (!bbnsm)
 +		return -ENOMEM;
 +
++	bbnsm->rtc = devm_rtc_allocate_device(&pdev->dev);
++
 +	bbnsm->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "nxp,bbnsm-regmap");
 +	if (IS_ERR(bbnsm->regmap)) {
-+		dev_err(&pdev->dev, "bbnsm pwerkey get regmap failed\n");
++		dev_err(&pdev->dev, "bbnsm get regmap failed\n");
 +		return PTR_ERR(bbnsm->regmap);
-+	}
-+
-+	if (of_property_read_u32(np, "linux,code", &bbnsm->keycode)) {
-+		bbnsm->keycode = KEY_POWER;
-+		dev_warn(&pdev->dev, "KEY_POWER without setting in dts\n");
 +	}
 +
 +	bbnsm->irq = platform_get_irq(pdev, 0);
 +	if (bbnsm->irq < 0)
-+		return -EINVAL;
++		return bbnsm->irq;
 +
-+	/* config the BBNSM power related register */
-+	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, BBNSM_DP_EN, BBNSM_DP_EN);
-+
-+	/* clear the unexpected interrupt before driver ready */
-+	regmap_write_bits(bbnsm->regmap, BBNSM_EVENTS, BBNSM_PWRKEY_EVENTS, BBNSM_PWRKEY_EVENTS);
-+
-+	timer_setup(&bbnsm->check_timer, bbnsm_pwrkey_check_for_events, 0);
-+
-+	input = devm_input_allocate_device(&pdev->dev);
-+	if (!input) {
-+		dev_err(&pdev->dev, "failed to allocate the input device\n");
-+		return -ENOMEM;
-+	}
-+
-+	input->name = pdev->name;
-+	input->phys = "bbnsm-pwrkey/input0";
-+	input->id.bustype = BUS_HOST;
-+
-+	input_set_capability(input, EV_KEY, bbnsm->keycode);
-+
-+	/* input customer action to cancel release timer */
-+	error = devm_add_action(&pdev->dev, bbnsm_pwrkey_act, bbnsm);
-+	if (error) {
-+		dev_err(&pdev->dev, "failed to register remove action\n");
-+		return error;
-+	}
-+
-+	bbnsm->input = input;
 +	platform_set_drvdata(pdev, bbnsm);
 +
-+	error = devm_request_irq(&pdev->dev, bbnsm->irq, bbnsm_pwrkey_interrupt,
-+			       IRQF_SHARED, pdev->name, pdev);
-+	if (error) {
-+		dev_err(&pdev->dev, "interrupt not available.\n");
-+		return error;
-+	}
-+
-+	error = input_register_device(input);
-+	if (error < 0) {
-+		dev_err(&pdev->dev, "failed to register input device\n");
-+		return error;
-+	}
++	/* clear all the pending events */
++	regmap_write(bbnsm->regmap, BBNSM_EVENTS, 0x7A);
 +
 +	device_init_wakeup(&pdev->dev, true);
 +	dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
 +
-+	return 0;
++	ret = devm_request_irq(&pdev->dev, bbnsm->irq, bbnsm_rtc_irq_handler,
++			IRQF_SHARED, "rtc alarm", &pdev->dev);
++	if (ret) {
++		dev_err(&pdev->dev, "failed to request irq %d: %d\n",
++			bbnsm->irq, ret);
++		return ret;
++	}
++
++	bbnsm->rtc->ops = &bbnsm_rtc_ops;
++	bbnsm->rtc->range_max = U32_MAX;
++
++	return devm_rtc_register_device(bbnsm->rtc);
 +}
 +
-+static const struct of_device_id bbnsm_pwrkey_ids[] = {
-+	{ .compatible = "nxp,bbnsm-pwrkey" },
-+	{ /* sentinel */ }
++static const struct of_device_id bbnsm_dt_ids[] = {
++	{ .compatible = "nxp,bbnsm-rtc", },
++	{ /* sentinel */ },
 +};
-+MODULE_DEVICE_TABLE(of, bbnsm_pwrkey_ids);
++MODULE_DEVICE_TABLE(of, bbnsm_dt_ids);
 +
-+static struct platform_driver bbnsm_pwrkey_driver = {
++static struct platform_driver bbnsm_rtc_driver = {
 +	.driver = {
-+		.name = "bbnsm_pwrkey",
-+		.of_match_table = bbnsm_pwrkey_ids,
++		.name = "bbnsm_rtc",
++		.of_match_table = bbnsm_dt_ids,
 +	},
-+	.probe = bbnsm_pwrkey_probe,
++	.probe = bbnsm_rtc_probe,
 +};
-+module_platform_driver(bbnsm_pwrkey_driver);
++module_platform_driver(bbnsm_rtc_driver);
 +
 +MODULE_AUTHOR("Jacky Bai <ping.bai@nxp.com>");
-+MODULE_DESCRIPTION("NXP bbnsm power key Driver");
++MODULE_DESCRIPTION("NXP BBNSM RTC Driver");
 +MODULE_LICENSE("GPL");
 -- 
 2.37.1
