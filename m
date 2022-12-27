@@ -2,35 +2,35 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3D3656EC1
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Dec 2022 21:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F20656F10
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Dec 2022 21:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiL0UeE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 27 Dec 2022 15:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S232690AbiL0UjH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 27 Dec 2022 15:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiL0Udc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Dec 2022 15:33:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB0ADEDE;
-        Tue, 27 Dec 2022 12:33:31 -0800 (PST)
+        with ESMTP id S232674AbiL0Uhp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Dec 2022 15:37:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1B8E00A;
+        Tue, 27 Dec 2022 12:34:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D93BCB81200;
-        Tue, 27 Dec 2022 20:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157B1C433F1;
-        Tue, 27 Dec 2022 20:33:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADDE0B811FB;
+        Tue, 27 Dec 2022 20:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EFFC433F1;
+        Tue, 27 Dec 2022 20:34:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672173208;
+        s=k20201202; t=1672173260;
         bh=ox2BEnfMPBNYHHyGMIa+nrsHjfNFzw5LZfghfX3ovzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jeDPFF1HpVhx6lTX2g0zx4lK56eL6YJWpFxslBUWpQhYqpfox8j+7MBYCf66xFhW0
-         G7/pNDg+MK1dopDXrkyUa5QgtzWaCDZ50gTEbXXpbf1HwdFpknh9agsAIeCFn3Rm+j
-         JKP8ztrk+0/D8GmCb3Z5HYfuQ/CWIcFsX3/Jq1R6NE9zsHopH6SJOH9cyPN8IB6A/Y
-         FNheE9WnE0tVvbLmnQrKiifyq1esP8XVa37cRsSxzW1q9FQtYipK+pSbeBTA41Dn/U
-         mJlNtjsejsJmsnGo3jAiy1+eyEpZzpovbLVA32eL9OHymlGdT9Ji33N8rSUHkFDkT0
-         O+0m6Q8eMnhDA==
+        b=iS3gr8U4yU0nJuwimMLUwYxyX179WdPRfWSfBScwDXtdisc80plDwPw2f4HHqqQJR
+         wIeTo0y6lG1s/Gzxg+EL8PBRlYGWrz1W5f8gYWJxAu7rZnxyEtTSsXeLjg2iptxV2j
+         IOFr1CZ1bmHjSGJusOOyFwhg6VKBz6rg/pnAVl5vS6Q8e5LPumvk6lj2nHnupJxJVO
+         7jmxEX9BHbvOHnNbLXI18L3kUzdTveZoxoNjVLwAfuuoVLuh6Pt7+h8g53mrswiPGP
+         d3wKZHhSdbmsyaJH98CjDqYl2E+XIge+ZpOHE6jU/ENG2Ft/ZFYHuAv1iMP5xOux6l
+         IHI77OCnOx8Mw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -43,12 +43,12 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>, nathan@kernel.org,
         ndesaulniers@google.com, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 23/28] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
-Date:   Tue, 27 Dec 2022 15:32:44 -0500
-Message-Id: <20221227203249.1213526-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 23/27] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
+Date:   Tue, 27 Dec 2022 15:33:38 -0500
+Message-Id: <20221227203342.1213918-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221227203249.1213526-1-sashal@kernel.org>
-References: <20221227203249.1213526-1-sashal@kernel.org>
+In-Reply-To: <20221227203342.1213918-1-sashal@kernel.org>
+References: <20221227203342.1213918-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
