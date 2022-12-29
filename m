@@ -2,143 +2,158 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E42B659081
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Dec 2022 19:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD3865924F
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Dec 2022 22:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiL2Skb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 29 Dec 2022 13:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S230195AbiL2Vx0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 29 Dec 2022 16:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbiL2SkR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Dec 2022 13:40:17 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A730D104;
-        Thu, 29 Dec 2022 10:40:17 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 2B459320077A;
-        Thu, 29 Dec 2022 13:40:16 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 29 Dec 2022 13:40:16 -0500
+        with ESMTP id S230160AbiL2VxZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Dec 2022 16:53:25 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBAE1572B;
+        Thu, 29 Dec 2022 13:53:25 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 26EAE32005B5;
+        Thu, 29 Dec 2022 16:53:22 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 29 Dec 2022 16:53:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672339215; x=1672425615; bh=XR
-        9sJUSnhveDvOfDAvp56v1RweLMdB53meAwdF02cGM=; b=N0fNr3t6UvfhplTozx
-        Rbz/dUEf8E2IIcKlF41KO5XnFrBj6L4MGi5ZJ1mAfMpi6MR+mqJ5dPSh+9kG+BfI
-        CA/4AhdUHh66wEM3pxcWyta8ITan+L5tSNReyVXAftD0huvpVqXdt6laDtzzj5gx
-        83vwdiqqUN2ZSuMhGHeiRmf2OV6HO1hvPWcBPGTO0r/3J12aNoSdCtBZVNju0eTM
-        KGor7cTeV6Z4aEl2NpWaUtCTSyJAjQO98T5DoPrtyEIInyR74HhN72d9fYOVIQy4
-        zBng3qD5Nmp+OY65mM1GDScwT7Iyl+7RSqFqIQyDxxHa8Pwb+41kFeYhorkPSkzm
-        bh7Q==
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672350801; x=1672437201; bh=GmZbFK5G8r3n4tr/8fciPGSNC
+        kBT0fjFOydO/VsJtnM=; b=1IFGGQlnjZZHd4CGC3hCJ/2dUcS0HJG0PDg1NIZG3
+        UpZNmfRv32+SeQ+hbVeZmNPh1fc0dITzfjsVIQlE6ScS8vdThM+s75geDG2dJvGe
+        LDRAlVfFfGOAZCp5i89RqF0XP4nXTkzklJ1h/IgEWnUZe5ZFomK5hTu799nWHpph
+        2gzlepUSfOORM439h5lCWz8Mc2SipRF0le86uxx2elSSuGCoNkx+MjU0MOXYmnbL
+        tK1qMMXu2Cjt/tUPAMj0eC/lJJvIF9oUEYrc1ucfK4ylBJULuv3fOTVdDIkEEZ4S
+        dP2C+pBI0T3HTg3TOmS66i7h5OS8c8W6G90ep8nMG04LQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672339215; x=1672425615; bh=XR9sJUSnhveDv
-        OfDAvp56v1RweLMdB53meAwdF02cGM=; b=SVNBHGKcbZ/cWQTSov09qLPC2vaj8
-        lfh04OXhzg90OzEVhjZhmhtIYYAo2aH43w8+LDTIhz3RjQZQV6Hqm1YGwzqbR2Cj
-        pswyHAIglD7NWMK0dHorfvKGaxDnD7B14giTCexe+EFYjQHgSZMgYt6840tsM/Wq
-        i7f+CQBCzk9ZbhCOH+zHJCDO1h7wwZFU65XgRitp57hrW+9pUR9hjRLBoloG+w3Q
-        Uq3OGAh2tWTjRwhZQHQCZQDYtpo9HnQKVY4onivq03ELq05yWcsObpdxOvfmzyYP
-        ZOkXgcVNrO6tbYHhBAez91wI1iiyqMsaNekGz4TdtJjJR8QTGF56zZ0XA==
-X-ME-Sender: <xms:D9-tY3s1Nfnf30l-cajceMvXLYT3vLEJVSSh9N4a2S_SIvKJP-go4Q>
-    <xme:D9-tY4djDikxAL3EmcWo3cM-FVETtlgPjToJmBtWyFcqKEkTG0iVG4FNOVPUX2XdO
-    wh-dGHO1Vvb3YBF4Q>
-X-ME-Received: <xmr:D9-tY6wCYDLnN-228A6PcfJSrRtZlmDGMaqN0hpKdk9O3MQOmULxlTuvqB8wrJCIW32RKFJu3g6ahiBp5JyAbcOxpi3Pqr1dZtuo-i41z3YWOyBxoSzE9pW7y6ZsoxaW46PGYg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduudeiucetufdoteggodetrfdotf
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672350801; x=1672437201; bh=GmZbFK5G8r3n4tr/8fciPGSNCkBT0fjFOyd
+        O/VsJtnM=; b=R4wlBjyS0eWG+v3T4OhIn4vIlyaoUbEWwqlbOG33EBFN+Q4+YQv
+        +BDS6KbSPelxjKCdteUT8WQD8a6fhWY4BeZB2zbH8YZkZMwJoTz61jMC3wfNbGC6
+        WFxDotjrZTYPZCf0bJ/aAA0/RjlDjWKLZsDSpq5LQoYiW6l8yoAf67lfTZjkRuA/
+        9GkQc9JhIV8CndXrP6HFynx+nfum6VLyPhZ60RUwjRzphAlMqo0BcpfoAmvY6Bxr
+        7Cb47dInTzKci0Z1JvWTqtHXWYdFDJ0YpIG7/Ik9t4JI3lQt2mpPNeTCUG9tgX5o
+        8zfe0F4fm+LvjvJtOVdcwpJDCFnjFxSbAJw==
+X-ME-Sender: <xms:UAyuYwkSDzvjMoZmemhcUzxxEdW4nYvOtjGHz_GBURF3JYLeKaWBMA>
+    <xme:UAyuY_3f4GULYIw1le2TsFp8uXavGn2Dt8D6m9S6DkwHEHAnS7T2jhZQHIqyIq5mE
+    2HLLyeGACJa7wOF6A>
+X-ME-Received: <xmr:UAyuY-oEmUR3p4MNEZTd7lajrXQZH2zi3byGKZNEbjZEXLdLu8WO8ykWNKaATTMHNlWjDlfheVk4MdDHzfqJPkerO08nwGZBTVD3-XNj6iKgStGFVIK37eLduXnpFKZ5HF44eg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduheehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:D9-tY2MXu5j4ksFSEX1dTGlaXq9lDikFJRmVKtR7BVAsyLlQ45u1tQ>
-    <xmx:D9-tY3-rM8TY1ZS-EdVmmcw0dQlUnWxmsTIxQ24R9YUw8I8GetCmTg>
-    <xmx:D9-tY2W7DrLMRZUgCoOqA577crKuTlAyDqOwnPLAVdmo0H6FENlTdA>
-    <xmx:D9-tY4PdAzWeNemUnjOM-qrM1XgOJ1X3rHkuaSdAPySATjnqSp1o5Q>
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeehffethedtteffgfefteetjedvfeelueevudffgfeutdejvdehledv
+    vdffhfevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgu
+    rdhorhhg
+X-ME-Proxy: <xmx:UAyuY8m_LGg3ws12hCkqHzVTtf-bgQySISiOAUNoflsOMmkZ8Aij_A>
+    <xmx:UAyuY-0C7OZ8kVxhFYd_lHPBZ7IiE12h1lK7SLmhfc8Eqoq1DKwR8w>
+    <xmx:UAyuYzvJgBaC7pVUVwSRiprpPcGfev2cGF8pL8orO_AAlYsEfHhuEg>
+    <xmx:UQyuY3lj5vDw6tTSDkhmGwJUMVELCLAe_a9tMdI5op1QXVAbQ3LA3Q>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Dec 2022 13:40:15 -0500 (EST)
+ 29 Dec 2022 16:53:20 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 2/2] rtc: sun6i: Drop the unused has_out_clk flag
-Date:   Thu, 29 Dec 2022 12:40:11 -0600
-Message-Id: <20221229184011.62925-2-samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] rtc: sun6i: Always export the internal oscillator
+Date:   Thu, 29 Dec 2022 15:53:19 -0600
+Message-Id: <20221229215319.14145-1-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221229184011.62925-1-samuel@sholland.org>
-References: <20221229184011.62925-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This flag was never used by the driver.
+On all variants of the hardware, the internal oscillator is one possible
+parent for the AR100 clock. It needs to be exported so we can model that
+relationship correctly in the devicetree.
 
+Fixes: c56afc1844d6 ("rtc: sun6i: Expose internal oscillator through device tree")
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
+This patch should be applied before [1] so this patch can be backported.
+[1]: https://lore.kernel.org/linux-rtc/20221229184011.62925-2-samuel@sholland.org/
 
- drivers/rtc/rtc-sun6i.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/rtc/rtc-sun6i.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index a22358a44e32..52049f139474 100644
+index ed5516089e9a..7038f47d77ff 100644
 --- a/drivers/rtc/rtc-sun6i.c
 +++ b/drivers/rtc/rtc-sun6i.c
-@@ -135,7 +135,6 @@ struct sun6i_rtc_clk_data {
- 	unsigned long rc_osc_rate;
+@@ -136,7 +136,6 @@ struct sun6i_rtc_clk_data {
  	unsigned int fixed_prescaler : 16;
  	unsigned int has_prescaler : 1;
--	unsigned int has_out_clk : 1;
- 	unsigned int export_iosc : 1;
+ 	unsigned int has_out_clk : 1;
+-	unsigned int export_iosc : 1;
  	unsigned int has_losc_en : 1;
  	unsigned int has_auto_swt : 1;
-@@ -346,7 +345,6 @@ CLK_OF_DECLARE_DRIVER(sun6i_a31_rtc_clk, "allwinner,sun6i-a31-rtc",
- static const struct sun6i_rtc_clk_data sun8i_a23_rtc_data = {
- 	.rc_osc_rate = 667000, /* datasheet says 600 ~ 700 KHz */
- 	.has_prescaler = 1,
--	.has_out_clk = 1,
  };
+@@ -271,10 +270,8 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 	/* Yes, I know, this is ugly. */
+ 	sun6i_rtc = rtc;
  
- static void __init sun8i_a23_rtc_clk_init(struct device_node *node)
-@@ -360,7 +358,6 @@ static const struct sun6i_rtc_clk_data sun8i_h3_rtc_data = {
- 	.rc_osc_rate = 16000000,
+-	/* Only read IOSC name from device tree if it is exported */
+-	if (rtc->data->export_iosc)
+-		of_property_read_string_index(node, "clock-output-names", 2,
+-					      &iosc_name);
++	of_property_read_string_index(node, "clock-output-names", 2,
++				      &iosc_name);
+ 
+ 	rtc->int_osc = clk_hw_register_fixed_rate_with_accuracy(NULL,
+ 								iosc_name,
+@@ -315,13 +312,10 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 		goto err_register;
+ 	}
+ 
+-	clk_data->num = 2;
++	clk_data->num = 3;
+ 	clk_data->hws[0] = &rtc->hw;
+ 	clk_data->hws[1] = __clk_get_hw(rtc->ext_losc);
+-	if (rtc->data->export_iosc) {
+-		clk_data->hws[2] = rtc->int_osc;
+-		clk_data->num = 3;
+-	}
++	clk_data->hws[2] = rtc->int_osc;
+ 	of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	return;
+ 
+@@ -361,7 +355,6 @@ static const struct sun6i_rtc_clk_data sun8i_h3_rtc_data = {
  	.fixed_prescaler = 32,
  	.has_prescaler = 1,
--	.has_out_clk = 1,
- 	.export_iosc = 1,
+ 	.has_out_clk = 1,
+-	.export_iosc = 1,
  };
  
-@@ -378,7 +375,6 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
- 	.rc_osc_rate = 16000000,
+ static void __init sun8i_h3_rtc_clk_init(struct device_node *node)
+@@ -379,7 +372,6 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
  	.fixed_prescaler = 32,
  	.has_prescaler = 1,
--	.has_out_clk = 1,
- 	.export_iosc = 1,
+ 	.has_out_clk = 1,
+-	.export_iosc = 1,
  	.has_losc_en = 1,
  	.has_auto_swt = 1,
-@@ -409,7 +405,6 @@ CLK_OF_DECLARE_DRIVER(sun8i_r40_rtc_clk, "allwinner,sun8i-r40-rtc",
- 
- static const struct sun6i_rtc_clk_data sun8i_v3_rtc_data = {
- 	.rc_osc_rate = 32000,
--	.has_out_clk = 1,
  };
- 
- static void __init sun8i_v3_rtc_clk_init(struct device_node *node)
 -- 
 2.37.4
 
