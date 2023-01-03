@@ -2,123 +2,108 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3224465B8C8
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Jan 2023 02:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C3265BB5B
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Jan 2023 08:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjACBX6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 Jan 2023 20:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S232985AbjACHqa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 3 Jan 2023 02:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjACBX5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Jan 2023 20:23:57 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2073.outbound.protection.outlook.com [40.107.22.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A9B21A1;
-        Mon,  2 Jan 2023 17:23:56 -0800 (PST)
+        with ESMTP id S229822AbjACHq3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 3 Jan 2023 02:46:29 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2054.outbound.protection.outlook.com [40.107.15.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A705B1A1;
+        Mon,  2 Jan 2023 23:46:28 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ccqMcd91VeAMEachZKJTaXCxdUAIFPLx/UmmT47jJSjwEDBDvz+1cln5Ubm124uU40bqxNxxl/EfPYQv9yFWHGOKRsmc4ghvGA0Mh8Z/uJQFmy+IQ3I/+zmKd1NiGQgSMqyGSfNYbJnjizhj7S8gmtcZiT7dxZhs2BkxyHzh0o4m963JmQUonKoU6r4X2l8b1gRQSbtjAUGtOO6WUNckbG/fQKV4Rn1ZkqeGH6E5PYsU26YmNIyojmTjHVD1UIkYejwSnrMgBANL1M6ahEIhEMLXL6fToI8z2x9HwpcftswjKPu+InxcEQ/H9WnQvaw8XAk7VoMN2jAB8c0n2iXItA==
+ b=WNZZg+C5JYHeKQs/wlUVCf7EkqJeedU/awzDauGc67VbFcj+tDoqCQckA6Pb/k7PlC3rKNPnVA+IW5tDwqe4ZcDPalqjYYLma3TkEHqBaTII2dNknu/kRsiBuC33uYyKKVAh3KIQgolZiJcUI+4Jv+rbgsZpDSgDaDUhEJqfSKFYChTTFy3tNyQCMlab4tAmeyH3gcJnktT/j6XEYzMJ/TbGVPurU0843AlTD+9NVQlHgR4p9t2V74W/A5JAGYWKjOG7iFNHI4/VfJgG57vRdhEbqCYWzMiDV4sNPPX+T0FTpvzlpBXPAcFh/e0EQJMIH7ErKXnzUwDhgg0PcGAEdw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AfPTyyKgH0RggvNIgjv4DBYJRGk2LlHg99K94fGSRXs=;
- b=Vw4C4vZ4mvwFDGp2UpG0VC8d/WyFpcBCrODpS/xeLAl2vEzXlj41GtHLFVgBymXXpmrY8Bo6CxeCMTOnFfjMPT6e8dBxTgdk79kG4/qBbwjqZBv91jSjsltVn6KLlnu4yywQMUz5ujUOZw2cUNM6KyytW5jqumh1rk796Kjck3mJNoDRjrqFYtq7ufZBkv49+OMFsh86+oceiAoq0yu2Y0IP0nGiQWU9K2PuM5utJnegSDDo3RQj19Il3d6WCqODxi3J1FzhwlzrQ2p5OIsLtar80k5PCrtozIkCEZUxBvywOENwlDrs5dOof8D3k1rsiywbDrHse2r2+0V+8vfpUg==
+ bh=nqX7ppI4glqGb8kIhBvVOjWU8QjBLH+7AYFh68ikzaw=;
+ b=V24CaIkUw7kjlnV/DVnL9PTaVRt8DLjj87YfGsFhPK8y4xompsx9Q3fzpQmKhyZeuZjkLlEUML9bBdMNBckdTBxNCCtv+rMqboKDi+c0d393YqK8tur7Amh47KMf8MJgjiTEdjE8jD2vdMAX3ZJefsewDRL7wbCRfsPyf3KVzfBlPQmoh8/vRFgAN+9ToqyfScMAyc4dIOukFkuoFFV+gdmeXeujS/Dp+aGVt2Wgg65UnDGSpjD6L1zMJKU/PU4nqSpJqHoF+EW6+mk9HMhx9dsj/y1TTzdG1Whh+Yv8YC3/yC3xBKmbiH2Te/dN/iQnck1szGRaP95KPSZeiYoupQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AfPTyyKgH0RggvNIgjv4DBYJRGk2LlHg99K94fGSRXs=;
- b=REAMdI5U4Ry7XDqj5luuMe1CvVQ/Ai4N4R70FI1frcB5AwsLAyrVDBd6v1zhqVQaGnLb7NvvCTl4qrdB3owSNJYpwqTqKEEOPm9VcqwCMiK/o7Tmgur+0xeSZj1JbG4XetN1lxxF3/yCJvJC9Fjydj6zbm5JlZNyBYB0ZMIsFVk=
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
- by DB8PR04MB6843.eurprd04.prod.outlook.com (2603:10a6:10:11b::14) with
+ bh=nqX7ppI4glqGb8kIhBvVOjWU8QjBLH+7AYFh68ikzaw=;
+ b=SMQYexMLYPum4qSHfydppa3ax5Qg2JZtPCA4fi/WReKUuOlYX9tszaBCvBdPdne9M5+6wPvKvVY9sqrxiy+AYQH6afSkMsOQxp+qT+8hZWaRS11QKHzN/r+ZeHaGdbLO4myOZP2OLrgWSGaO5Gi9h37w55NRif3CWl4ChwlKYXc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8650.eurprd04.prod.outlook.com (2603:10a6:20b:43d::18)
+ by VI1PR04MB6894.eurprd04.prod.outlook.com (2603:10a6:803:13a::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Tue, 3 Jan
- 2023 01:23:53 +0000
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::d9e7:2c6a:a479:6c4f]) by AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::d9e7:2c6a:a479:6c4f%6]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
- 01:23:53 +0000
+ 2023 07:46:26 +0000
+Received: from AM9PR04MB8650.eurprd04.prod.outlook.com
+ ([fe80::286e:e16f:828f:f4ce]) by AM9PR04MB8650.eurprd04.prod.outlook.com
+ ([fe80::286e:e16f:828f:f4ce%8]) with mapi id 15.20.5944.019; Tue, 3 Jan 2023
+ 07:46:26 +0000
 From:   Jacky Bai <ping.bai@nxp.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     "lee@kernel.org" <lee@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>
-Subject: RE: [PATCH v2 3/4] rtc: bbnsm: Add the bbnsm rtc support
-Thread-Topic: [PATCH v2 3/4] rtc: bbnsm: Add the bbnsm rtc support
-Thread-Index: AQHZGNMw9miq0aOsFUS1aq5HxrzHvK6DKegAgAjIStA=
-Date:   Tue, 3 Jan 2023 01:23:53 +0000
-Message-ID: <AS8PR04MB8642AE9D87FB0ACF883A1CC887F49@AS8PR04MB8642.eurprd04.prod.outlook.com>
-References: <20221226023942.1027270-1-ping.bai@nxp.com>
- <20221226023942.1027270-4-ping.bai@nxp.com> <Y6wldnu6+apmnSxJ@mail.local>
-In-Reply-To: <Y6wldnu6+apmnSxJ@mail.local>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|DB8PR04MB6843:EE_
-x-ms-office365-filtering-correlation-id: ae7342d8-20f1-4d65-774e-08daed292d33
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: e+kcjTVFhC4rrUcvPF3Tr65TxVWKzeWNsLEvanjHB+XlvTdKAI/XrM2gFdUN6fhRJmdLv6JW6iMDz9gcw/hywV7jhZPiWdQe4qDnNHR942Iq6hz8JvHwu7UNhwZ/yQqZLvyvrBUE4zseTqSRG3z4GPp6Q3EhZHQ4HriZTHXahuGXu9bISR6mHWuG2QNzormsTT//KBqSdOWdlWsTE2jh3wN2892byUjCwxWkhML2CUdTAORzMfzBBrPnRyqgn4XvAayAP3EVA0mTCkaoBFyHsYZwOIeNsqRcJxcOSU2wTt6TmWMB35nh8lCJFtWNQmETJQEW1U/jqQdLxA+PoCToFG1b7izU0zUeUtaqD7jwzGzyggMeo46SJbxQNxB2Aap51h18wGV6/k1sYxYGbDg0LAd71dAIKqdaZNPTat2+9DoqBT36JDXtCz+PgW5FgCGUl4Csy7lZ/M98gG+L4rFmwRD31LOn/dlgi4O07zUtwZhQBQ/vkiEdgqqq2XH48ILhC8vfSA4Q1nCzKLrBC1m4jj3YlA2yrk6z757CSCcO+uTldFYehRvUVe/S8hP3VPH2ageSUJepB+fyRp/rF8JSs/LXA4SVR+k/yQqnufgwWRy+HtTxtQbYB5H5nirQIjvgcKqmD/cj8oMeqriuVznSeFuFqGEniZM2BIsuB+5CD4UE99TXKCD3Zt4d4bZndD0UiT5yZyzW34LWzizL1FXk5RrtAq6MkSJtpvQcLbDR/ITKd1FIDe3lvD6rHHm3bADr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(39860400002)(396003)(376002)(451199015)(52536014)(5660300002)(76116006)(7416002)(41300700001)(6916009)(316002)(2906002)(54906003)(66476007)(66556008)(64756008)(66446008)(4326008)(8676002)(8936002)(66946007)(71200400001)(478600001)(6506007)(45080400002)(26005)(33656002)(186003)(9686003)(83380400001)(7696005)(966005)(55016003)(86362001)(122000001)(38100700002)(38070700005)(22166006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2ERpXtGZAELzchSSMGuKw0CdabWKCdQcxoWNNk4PSmuGt+NEc1nDtaoCzW/j?=
- =?us-ascii?Q?KxWJcDunXSWeWEwvCMgXgIzCf0G0vHqX0mxKoeIiMfA3s2pOE4icxNBzWm+B?=
- =?us-ascii?Q?SWmcu0q+1Mnxqq2GY2t8vCktJ1U1adWSCR4DhsnI9mgklhKfhVVF05/gbqUz?=
- =?us-ascii?Q?siEMTdPjmuh19cOycpasml2xJlTvJGov6b2mySGgB+zvXgwfHhuFKVDLyWV8?=
- =?us-ascii?Q?vbP0G1Sy4P/0ylxY9cFCQTJpHdp+L+9kiqQYaKIGPQR8rNvUkiyOs7fUQI2B?=
- =?us-ascii?Q?/Kbkty+gli4CAIpfED4N154NZwriuWqu8rbUklxl2DnFFC8Q+tjYZRWxjSt9?=
- =?us-ascii?Q?uSN779REvJNxiIIutYn30YiSrgphVi14vsYZqEIpPqvWszQvo3dF7SOdYaBu?=
- =?us-ascii?Q?BnEN77VMemSxgVR4US1zRW9EcDo3j7XSg/WQFpmuc/ytW5s+zITC0w42jxJQ?=
- =?us-ascii?Q?8tSFVJmE6C5VUqgiM3R54jh5tcPDLIkS8JZreuqNvDNm2914KKpGoHjsmLsa?=
- =?us-ascii?Q?v3X9hm1SDuQ6oc05caJUzEmDeMjZW7JROt7sHsJ+wdm/kp2tv6L0AYp74E+t?=
- =?us-ascii?Q?j/Y76doUOdZDtf5NuazUC9T/i2NoSyH8NOwiZbT0GgpFbEizh0rXlQoq440k?=
- =?us-ascii?Q?nLoEOrEZPh0l7/XSANPU7STHEYgCQd8PQTfVGcDNIntuxe6Z6Yt9e02f9B56?=
- =?us-ascii?Q?vyBIlWGfMXAgNS6CRNbJe4/vTmBK2ERubzkL3jQLn2k1yTk9gfA6FD3mnL0M?=
- =?us-ascii?Q?tZRU2Z6KcVl23CDXYs2IpiQdEUuX8cLcFQnuyPWbH2WzZ0ZsnA3sW8VW18s/?=
- =?us-ascii?Q?7AcBsKvs8J2r+K1/5z6Jw0ZOKvQrsakbpqIzUVUpSPZYMbbm+5QlDAmqX9kB?=
- =?us-ascii?Q?tHe4gguI7rdHOfw7tyfGiMBSj5HbpoDtRjWjMBJg+joIOqe3CiqslE5Ml6cr?=
- =?us-ascii?Q?Xd+8zkHhglxbj3W8g9xv4PTq6dk5zXtDkrycB6bcmOkT49ZvfvCd9rFrzCaT?=
- =?us-ascii?Q?Ub7lhoSb9czYFzTvWScocnotoO8+LvVpHrDwcwSsv3jG3Dhtev3VO0aFsQCu?=
- =?us-ascii?Q?lDbgSPC+yCOdQydCqwMHk8ctrit/eOaiqscuRg9FLOe0vdrFl1zC97cRlnEC?=
- =?us-ascii?Q?XPqie5Pj5I5nDUh/Z+gs5NnpCL9dKvL7Fum/Cm1jOr01Q9NXKLYtLKte0Gj8?=
- =?us-ascii?Q?ZJcrqB24kzyWK09ZWLrft61PC+Oc9Y+zWmREcwtKkf3nQs/Tl77VYuTX7FV/?=
- =?us-ascii?Q?zIIIfYEOpsA7cruGa5ep71rgWcf8G4wuVlTKXW13AhNNfUEPiiPJV747NrgB?=
- =?us-ascii?Q?Y0kMOiBvVWUwsm6HVQbKfEvr+KRsUoDBvrH9l7Cn+CR5uZXnhA9zuxYs/EFu?=
- =?us-ascii?Q?SJ8uRoZKJ+nI2KYjKOw/VxD4WOmRr5JPbNtoEwGE5BxlOYpqQQDfe/UJ0M9S?=
- =?us-ascii?Q?CGtV+ZcJrKikiWk6IsIIC/IWBliZRu0VntW5aRJGf/y+1ImnrUBzto1dlguS?=
- =?us-ascii?Q?u2Y36AWhpaATF7IebEAV9v/JVPBvs9OxM1hx3t1lvyAHxRFxQoAhDF5CawBb?=
- =?us-ascii?Q?pomrVMFPFJK39NHrzdg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, dmitry.torokhov@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com, festevam@gmail.com
+Subject: [PATCH v3 0/4] Add nxp bbnsm module support
+Date:   Tue,  3 Jan 2023 15:47:38 +0800
+Message-Id: <20230103074742.2324924-1-ping.bai@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0020.apcprd02.prod.outlook.com
+ (2603:1096:3:17::32) To AM9PR04MB8650.eurprd04.prod.outlook.com
+ (2603:10a6:20b:43d::18)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8650:EE_|VI1PR04MB6894:EE_
+X-MS-Office365-Filtering-Correlation-Id: 66013594-44b4-4185-5b76-08daed5e9dcc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Cf6Nn+pPqUoXbUZ0c8b9IyIzDr/rVfJol4MifuCCyoTaDcP+UWLrO0B+ji4aQuk++r5spztr8qaLcIKANmz95X8Cpwlek4wYGYzLyGeVUA18lKxHZExRy/r0CZQlOibDzQu9INDQlE4/9Ix5z2QfthaeK1QwZkZ5SpVZehHzqioJcLX4B7TuHOPeFyMg64rJQvV/2cAd7LhVMdF2OwcQwBibBF62C+IjaDZoy0GNiiAVHANDtRztk0F4+Xtmh9xpSuRm9RIO5Tpsqo5q85j/tICrBGEAFyDwNglgYDUK4D0KLhAF/hjeNq6Ii84iC0pYwMriKouw1pL4Z2ndZ4eAN1qDghWLNJCZCTk0zanryZdo88/FXYIXsznsxSnzA3EW4aRNwcGIP0CjzYoodCYGCeTQ95tHLZpbSvRI8mDZk1Z5LomBGqF+F5UlPNG/BVVF03i8kJhM0YuIXsei/a3EsaFzUthm43aKm4K/v6caY1HI8vUv09ZtkLeSG76UZwiJMQj45KikvzHsMp2xgczncSOnstKqIq7GWsJxZGWE9TMNhi9XeYGHnKgKimz5XphtjRNnXAL1sgGdku6i2zUbq68ndzRnRAMuizQmjuGN9iDRzNb6hy7Vfmckusky4fxsNFM+sCdrLNbamRBN6q1jvXDv94LWUkJS9wgBY+bsKHz31KfigRkn0jJuMxoR0rOmcz/4r47Z90SQ9PibQh59qOQdqaYpAjCvcFfMjTyH818=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8650.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(346002)(366004)(39860400002)(451199015)(8936002)(41300700001)(6666004)(2906002)(8676002)(38100700002)(66946007)(1076003)(38350700002)(7416002)(66476007)(5660300002)(66556008)(4326008)(186003)(478600001)(6512007)(26005)(2616005)(316002)(6486002)(52116002)(36756003)(6506007)(86362001)(22166006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yz9gL4JzHnQfmtqHsYdFmujGbH5GTeWa1yEfVpY6R1gSDzLjKgO3bSnewNHx?=
+ =?us-ascii?Q?MbyMFAr/Gb8Hnf9ItggcrZX7Qh4nVYUxO5Byx7U6aCDMIY4bcwveiyRVnF/g?=
+ =?us-ascii?Q?ZpM1ZWcnl0l6fZEv7xXOY567Ngh0uwttWbVe1ZV95IF5CXqdopJcAN7BVRv8?=
+ =?us-ascii?Q?uoxh83x4OoZjZybBz6f4gN6QLj2UG7hkVTvebGgHIBhq7DYOZ2/jF/Xypk3Y?=
+ =?us-ascii?Q?4+8n2XQHi66DazGak51Cjj9/oCLNzKhYuz59HsaJpXym0y4xKMsCPrU80sVw?=
+ =?us-ascii?Q?Om/FJd5Wvjgo59Gez44Q5/HF5D0dElBovHMFxY9RDQU3Ks61Zbbnd2pmTPgv?=
+ =?us-ascii?Q?bohlfnkkbc8bZAcVwIy/wig4zd+4Mv6z0XVuUgU3bUhpGEFGRNe4nk3d++U/?=
+ =?us-ascii?Q?csQ4tYriHfLD5yO9J0d02lNPHTZ0yk8ll7NMCjE1rk0M6ddhcaxlN0ykWI3A?=
+ =?us-ascii?Q?34IwBaVS7KIC+vgV06eBRdHGlLzgl2/Oa04rlhgJC1x21k+iERyP/wzVBOZJ?=
+ =?us-ascii?Q?VgpjZwjQwFJ5qfYdrF2aHCzR3iBrFe6g81oAl0ZieuKcdrDDOmwcXyFrNN23?=
+ =?us-ascii?Q?1YXE1uoB+aiyXKY0vC9w9LLI3xKJvOw/hBbkFK9GmwHJmtV10vXnJIlP6g4G?=
+ =?us-ascii?Q?Loy1Cw6OvwMxoKFC9faiEpOvQ6/qdnbUh5r8twJlt9KquIbc/KjU6gZ9LGb5?=
+ =?us-ascii?Q?5nTGCTNIa0X8Nxhpp29P+bu3IyGa6HZY/fVIcrjgAkODccvvdBg93bcGE8IS?=
+ =?us-ascii?Q?Y0q3Ml1b36oG5tn/dyQ5KyE3lG14nmGqHE8qEIgU1WGUxxkEfeBETcifgn61?=
+ =?us-ascii?Q?yjBkwiikGV2T1Bq+vwItLioWb1LUVBooHyPfI+/TA2ew7qU+Py6lb9ihjzKY?=
+ =?us-ascii?Q?xk9RGFVoiE9EgpPyNNuHMqkr8kLJYpfN2hZkOrapAnvFdJwDpGSzPY6RhrJ2?=
+ =?us-ascii?Q?uIO7AmuklPG1ca9V2EeYD5PXardXvuDu6UcQHT9WniTEjDghVNaFKTVRc/Vf?=
+ =?us-ascii?Q?yU2SpqRFTNolpg8DC8JUr79fcdCT2Yu9hckCo8HgF4oCntg0p/nffPWT2mUo?=
+ =?us-ascii?Q?vSc8ZzV0NVNtUUgFieO7nyo+JX/Sje5ia7f0JRDTDigEFLK/+mpHBmVbjmsB?=
+ =?us-ascii?Q?uK8tdaDx7dD1Hfnqy3bK0B/s4uiVWQuPdloqR3DZlNSCAtuOwqzIkEiBGkWO?=
+ =?us-ascii?Q?5jWdBIKrNmc/qy2IPATcEgbHdPgE37RkjB0YfRxxSPyl/4glPsvDVO5HpA5q?=
+ =?us-ascii?Q?l49E4qo8Oy39v62kRblkBTmsj+wbsa3zv6iDVjYfemhSDpwMfNYx4Ctih3TZ?=
+ =?us-ascii?Q?9nPa+iYXQWyZru5AVygPhChXPbIAWTSvxVFk3YYlc3b9dkRO43yQAt1JpIXl?=
+ =?us-ascii?Q?ECvj6qaqbW2GG9jeNJs+tdM5wUlKLZqjISGtbKnpeIIPU5wK9U5i22SCvlRx?=
+ =?us-ascii?Q?yCQuiI/JeYrVZByqtAkRRD3Qe8pKKMPLo846EmKHEeW7ljeFVh9hK4gz4SzN?=
+ =?us-ascii?Q?KYhWrUYS479X4sIxeUslWrhUEfLHnLCGavN1I+Z3UtjciwcDFu/jc6rMUlSL?=
+ =?us-ascii?Q?jprUSwTkE9kAv87Yqkij6RJKNLxme1P894z/e9uF?=
 X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66013594-44b4-4185-5b76-08daed5e9dcc
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8650.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae7342d8-20f1-4d65-774e-08daed292d33
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2023 01:23:53.3823
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2023 07:46:25.9907
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: e9fUD/Z9Uzm5U15uqqOSdm+Y5zihqDPQwSOkR4VwD26A37ZbhC6wTW5fHrebrVl93I40UP/RstMArK0TaPY8zA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6843
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UyvFvmT5GzItPj2J76K3MQooCTOqs9MEYWQO9jOvvj4XgIAeDupnmE/5LytBdOuc8bRf8GZU9vk6e2vrDhI+ig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6894
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -129,119 +114,34 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-> Subject: Re: [PATCH v2 3/4] rtc: bbnsm: Add the bbnsm rtc support
->=20
-> On 26/12/2022 10:39:41+0800, Jacky Bai wrote:
-> > +static int bbnsm_rtc_read_time(struct device *dev, struct rtc_time
-> > +*tm) {
-> > +	struct bbnsm_rtc *bbnsm =3D dev_get_drvdata(dev);
-> > +	unsigned long time;
-> > +	u32 val;
-> > +
-> > +	regmap_read(bbnsm->regmap, BBNSM_CTRL, &val);
-> > +	if ((val & RTC_EN_MSK) !=3D RTC_EN) {
-> > +		dev_warn(dev, "RTC is not enabled, time is invalid!\n");
->=20
-> I don't think this message is necessary.
->=20
+NXP BBNSM (Battery-Backed Non-Secure Module) serves as non-volatile
+logic and storage for the system. it provides some similar functions
+like RTC and ON/OFF support as previous SNVS module found on legacy
+i.MX SoCs. The BBNSM is replacement of previous SNVS module, and more
+likely it will be used on all the future i.MX SoC or other SoCs from
+NXP.
 
-Ok, will remove it.
+This patchset add the basic support for BBNSM that found on i.MX93.
 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	time =3D bbnsm_read_counter(bbnsm);
-> > +	rtc_time64_to_tm(time, tm);
-> > +
-> > +	return 0;
-> > +}
-> > +
->=20
-> [...]
->=20
-> > +static int bbnsm_rtc_probe(struct platform_device *pdev) {
-> > +	struct bbnsm_rtc *bbnsm;
-> > +	int ret;
-> > +
-> > +	bbnsm =3D devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
-> > +	if (!bbnsm)
-> > +		return -ENOMEM;
-> > +
-> > +	bbnsm->rtc =3D devm_rtc_allocate_device(&pdev->dev);
-> > +
-> > +	bbnsm->regmap =3D
-> syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
-> "nxp,bbnsm-regmap");
-> > +	if (IS_ERR(bbnsm->regmap)) {
-> > +		dev_err(&pdev->dev, "bbnsm get regmap failed\n");
->=20
-> Maybe this should be a dev_dbg?
+Jacky Bai (4):
+  dt-bindings: mfd: Add nxp bbnsm
+  input: bbnsm_pwrkey: Add bbnsm power key support
+  rtc: bbnsm: Add the bbnsm rtc support
+  arm64: dts: imx93: Add the bbnsm dts node
 
-Fine, will fix in V3.
+ .../devicetree/bindings/mfd/nxp,bbnsm.yaml    |  99 ++++++++
+ arch/arm64/boot/dts/freescale/imx93.dtsi      |  16 ++
+ drivers/input/keyboard/Kconfig                |  11 +
+ drivers/input/keyboard/Makefile               |   1 +
+ drivers/input/keyboard/nxp-bbnsm-pwrkey.c     | 190 +++++++++++++++
+ drivers/rtc/Kconfig                           |  12 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-nxp-bbnsm.c                   | 226 ++++++++++++++++++
+ 8 files changed, 556 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml
+ create mode 100644 drivers/input/keyboard/nxp-bbnsm-pwrkey.c
+ create mode 100644 drivers/rtc/rtc-nxp-bbnsm.c
 
-BR
+-- 
+2.37.1
 
->=20
-> > +		return PTR_ERR(bbnsm->regmap);
-> > +	}
-> > +
-> > +	bbnsm->irq =3D platform_get_irq(pdev, 0);
-> > +	if (bbnsm->irq < 0)
-> > +		return bbnsm->irq;
-> > +
-> > +	platform_set_drvdata(pdev, bbnsm);
-> > +
-> > +	/* clear all the pending events */
-> > +	regmap_write(bbnsm->regmap, BBNSM_EVENTS, 0x7A);
-> > +
-> > +	device_init_wakeup(&pdev->dev, true);
-> > +	dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
-> > +
-> > +	ret =3D devm_request_irq(&pdev->dev, bbnsm->irq,
-> bbnsm_rtc_irq_handler,
-> > +			IRQF_SHARED, "rtc alarm", &pdev->dev);
-> > +	if (ret) {
-> > +		dev_err(&pdev->dev, "failed to request irq %d: %d\n",
-> > +			bbnsm->irq, ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	bbnsm->rtc->ops =3D &bbnsm_rtc_ops;
-> > +	bbnsm->rtc->range_max =3D U32_MAX;
-> > +
-> > +	return devm_rtc_register_device(bbnsm->rtc);
-> > +}
-> > +
-> > +static const struct of_device_id bbnsm_dt_ids[] =3D {
-> > +	{ .compatible =3D "nxp,bbnsm-rtc", },
-> > +	{ /* sentinel */ },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, bbnsm_dt_ids);
-> > +
-> > +static struct platform_driver bbnsm_rtc_driver =3D {
-> > +	.driver =3D {
-> > +		.name =3D "bbnsm_rtc",
-> > +		.of_match_table =3D bbnsm_dt_ids,
-> > +	},
-> > +	.probe =3D bbnsm_rtc_probe,
-> > +};
-> > +module_platform_driver(bbnsm_rtc_driver);
-> > +
-> > +MODULE_AUTHOR("Jacky Bai <ping.bai@nxp.com>");
-> > +MODULE_DESCRIPTION("NXP BBNSM RTC Driver");
-> MODULE_LICENSE("GPL");
-> > --
-> > 2.37.1
-> >
->=20
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbootl=
-in
-> .com%2F&data=3D05%7C01%7Cping.bai%40nxp.com%7C2a4980d832274ceac4
-> e908dae8c4ec12%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6
-> 38078229719156877%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwM
-> DAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%
-> 7C&sdata=3DnfDGoPytTNjULmOzC8IMF8r%2FrHiNJehsEls6m3lPsGc%3D&reser
-> ved=3D0
