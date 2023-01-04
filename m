@@ -2,112 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6411365C417
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Jan 2023 17:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA58265CC91
+	for <lists+linux-rtc@lfdr.de>; Wed,  4 Jan 2023 06:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbjACQh5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 3 Jan 2023 11:37:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S230237AbjADFZZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 4 Jan 2023 00:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbjACQhy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 3 Jan 2023 11:37:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF710FACB;
-        Tue,  3 Jan 2023 08:37:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C80961477;
-        Tue,  3 Jan 2023 16:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56DBC433D2;
-        Tue,  3 Jan 2023 16:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672763871;
-        bh=M4N2f7GfMcCQHVsFF1bmfV3KZYetYk8wN6MzN8veA1g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C+uUqf+Idt5tgEWkA99tiRkqvRg9Q5DqDauno/z2lwnukBcgtFNjZ8MJyLz8+PXIK
-         P8t5xoMiD4Nh7/zJXbUU5o4Wc7T+1IsJ6N9fLvC41046pIIQB61x02hvkZSmEE76Sn
-         //swO2eTz+5SNEVLd5SKy7YL0Nr8hBi4ptt2FuALeaQPDlVJRsi9ScOnV5PAv76BOL
-         zJczIrkw3+x4/F4S4NDqigiqw6e8kIWlMOSStNUG193v63V9Wvy0rlVPBGa0EJGn4l
-         RA/j7aoYtS+83KTNAbiRwFAyLX3QUXzBxRZtiCl54Mjwa+jmkFqnkMromc/pywIYH/
-         SzvkVfU7IWsaQ==
-Received: by mail-lf1-f47.google.com with SMTP id 1so46359446lfz.4;
-        Tue, 03 Jan 2023 08:37:51 -0800 (PST)
-X-Gm-Message-State: AFqh2ko4a4v7wsCrcjU5MEVC6bwBeMTr6KiO2GrJRcQsqw9K0udNTRIQ
-        Q4enO3rRxJz4upwNm5G6wgWCcjHL7M83JBpMVGw=
-X-Google-Smtp-Source: AMrXdXv9gpvRdh9OhvcnDLtuZCB0bUo7F9oYqVO/4CzRni+qsejVAaKMh+42GmDaln8pqok0X0EiheQhmnBp43fAkkE=
-X-Received: by 2002:ac2:5dfa:0:b0:4b7:3a0:45d2 with SMTP id
- z26-20020ac25dfa000000b004b703a045d2mr2308242lfq.228.1672763869799; Tue, 03
- Jan 2023 08:37:49 -0800 (PST)
+        with ESMTP id S229799AbjADFZY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 4 Jan 2023 00:25:24 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284C9167CA
+        for <linux-rtc@vger.kernel.org>; Tue,  3 Jan 2023 21:25:23 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id c11so26452745qtn.11
+        for <linux-rtc@vger.kernel.org>; Tue, 03 Jan 2023 21:25:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sparkcharge.io; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Jhq/pw2LIewMUPxNIRMdD3RgjN1rXiHjc6S0VQdYuE=;
+        b=OkrN5EnZ/2jBeyPq7SPG/utg+QQtvciEVRQq/aRCvQC+o7M6Ms5UNAcOKwqsOnA7/i
+         3ItJyx3nI6HlzJF3XjCf+cFV/TGjqomaaYIjro7kcfYjQnZ1nI798v7d+NNC+RJKnwlZ
+         INspYOxfoGCm+nUnyS/mJc0/IhfSJ7BINaJpaptw9iENqaDgGiRpD4I/LuUdmyuTcSma
+         tyYJ7Q2I8TvXXygQwiVhEolYCfc4ZjaF8hpPK9U8UWU/zwpDgn7tax6yzY1WVbkLUdHj
+         2Bb6y8DjzE184dq/qzsOI157bcdYtkjQgCeljDL2/qg2OlGkSOyDg+MUoE7GTE2NaXeO
+         fbNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7Jhq/pw2LIewMUPxNIRMdD3RgjN1rXiHjc6S0VQdYuE=;
+        b=4Y/5KzFbVCguu0MV2cTrZIyTc6UoE/wc4pnaZ2LaEzo1cPyBI0n/V4em3R5drzzppU
+         Dmk73Q8wFSRuJgEyHSr80yflXYG/aNOAcHeihqqXEEiMPAymUY6YxGTbvYZPh5STyOfb
+         vbX07T1uu0Je91mokfHwgMaotxOfJYS7pDnLa35daJ0e7dbok/7I7mLniy6gVHhML3wM
+         p+KQ7YKsclz7Au8kCEoI6m2p1s8LSukZ+UWfOpZDnQBuyWUp6nWb/JA6f17SicpS0Egn
+         /yeMJr2/vAV2a5odInZ5r/kURv2fZU8G5606TSXjjgvfn5a1b1XUGdOx9joAbx5p5wM2
+         /dsQ==
+X-Gm-Message-State: AFqh2ko+CXRt9hkyv0um9YZdFvSoZUhzIn1y+w50J8N7+sXELQ5q4QCq
+        1TJKsvooZ6LSKdFyughlBv4ObQ==
+X-Google-Smtp-Source: AMrXdXtoZ66bE2K4ikfRccXOKBfpo6VPDZiECNNNR5ExuvMgcwoDpHF933S4rrJP9GcANPv2Xv/ATQ==
+X-Received: by 2002:ac8:4542:0:b0:3a5:467b:c1d0 with SMTP id z2-20020ac84542000000b003a5467bc1d0mr51674485qtn.18.1672809922236;
+        Tue, 03 Jan 2023 21:25:22 -0800 (PST)
+Received: from localhost.localdomain (c-66-31-16-167.hsd1.ma.comcast.net. [66.31.16.167])
+        by smtp.gmail.com with ESMTPSA id t1-20020ac865c1000000b003a7e4129f83sm19425602qto.85.2023.01.03.21.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 21:25:21 -0800 (PST)
+From:   Dennis Lambe Jr <dennis@sparkcharge.io>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Atsushi Nemoto <anemo@mba.ocn.ne.jp>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Dennis Lambe Jr <dennis@sparkcharge.io>
+Subject: [PATCH v2 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance from DT
+Date:   Wed,  4 Jan 2023 05:25:03 +0000
+Message-Id: <20230104052506.575619-1-dennis@sparkcharge.io>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221227040925.1619833-1-sdonthineni@nvidia.com>
- <CAMj1kXG79-MxGJEwvnekqbVyeEMVHBfhNjwZkz91mMwv4-vT3Q@mail.gmail.com>
- <Y7NY+ba2USk7hEAx@mail.local> <CAMj1kXHAYvGdGJN0rfEL2y1jRP8P5YotKMmCmx0h07vJP=YfBA@mail.gmail.com>
- <7608579c-6ee5-f576-aa06-a763c3b6108a@nvidia.com>
-In-Reply-To: <7608579c-6ee5-f576-aa06-a763c3b6108a@nvidia.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 3 Jan 2023 17:37:38 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFDAojDSAUwdSNbD1Wkjo8WH-i4hs3us-uiWt+AYM1OMQ@mail.gmail.com>
-Message-ID: <CAMj1kXFDAojDSAUwdSNbD1Wkjo8WH-i4hs3us-uiWt+AYM1OMQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] efi: rtc: Enable SET/GET WAKEUP services as optional
-To:     Shanker Donthineni <sdonthineni@nvidia.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 3 Jan 2023 at 17:37, Shanker Donthineni <sdonthineni@nvidia.com> wrote:
->
-> Hi Ard Biesheuvel,
->
-> On 1/3/23 03:18, Ard Biesheuvel wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Mon, 2 Jan 2023 at 23:21, Alexandre Belloni
-> > <alexandre.belloni@bootlin.com> wrote:
-> >>
-> >> On 02/01/2023 11:47:11+0100, Ard Biesheuvel wrote:
-> >>> On Tue, 27 Dec 2022 at 05:09, Shanker Donthineni <sdonthineni@nvidia.com> wrote:
-> >>>>
-> >>>> The current implementation of rtc-efi is expecting all the 4
-> >>>> time services GET{SET}_TIME{WAKEUP} must be supported by UEFI
-> >>>> firmware. As per the EFI_RT_PROPERTIES_TABLE, the platform
-> >>>> specific implementations can choose to enable selective time
-> >>>> services based on the RTC device capabilities.
-> >>>>
-> >>>> This patch does the following changes to provide GET/SET RTC
-> >>>> services on platforms that do not support the WAKEUP feature.
-> >>>>
-> >>>> 1) Relax time services cap check when creating a platform device.
-> >>>> 2) Clear RTC_FEATURE_ALARM bit in the absence of WAKEUP services.
-> >>>> 3) Conditional alarm entries in '/proc/driver/rtc'.
-> >>>>
-> >>>> Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
-> >>>
-> >>> Queued as a fix in efi/urgent, thanks.
-> >>
-> >> This rather seems like an rtc heavy patch and the subject line is
-> >> misleading. This should be rtc: efi:
-> >> Also, I'm pretty sure this doesn't qualify as an urgent fix.
-> >>
-> >
-> > I'm happy to drop it from my tree, but please add a cc:stable so it
-> > gets backported to v6.1 at least. Otherwise, EFI compliant systems
-> > that implement get/set_time but not get/set_wakeup_time have no RTC at
-> > all on any LTS kernel until a year from now, and this was never the
-> > intent when we introduced the EFI_RT_PROPERTIES_TABLE.
->
-> Thanks for considering the fix for stable releases, I'll post v3 patch
-> with tag 'CC: <stable@vger.kernel.org> # v6.0+'
+I haven't heard any feedback on this series aside from the dt-bindings,
+but with the holidays I'm not assuming that means they're perfect. I
+don't want to sit on the fixes I've already incorporated any longer
+though, so here's v2.
 
-No please don't resend the patch
+Changes in v2:
+* dt-bindings: remove accidental wakeup-sources line
+    suggested by Krzysztof Kozlowski
+* spelling fixes in changelogs
+
+The m41t82 and m41t83 have an adjustable internal capacitance that
+defaults to 25 pF per xtal pin. This patch series adds the ability to
+configure it via the devicetree.
+
+Patch 1 just changes `#ifdef CONFIG_OF` to `if (IS_ENABLED(CONFIG_OF))`
+in m41t80_probe() so that I don't need to use __maybe_unused on my new
+functions and variables.
+
+Patch 2 is the dt-bindings.
+
+Patch 3 is the actual feature implementation.
+
+The desired capacitance comes from the quartz-load-femtofarads property,
+following the example of two other RTC ICs that have adjustable internal
+load capacitance, the NXP pcf85063 and pcf8523. The m41t82 and m41t83
+support much finer-grained control over the capacitance than those
+chips, and ST calls the feature "analog calibration", but it looks to me
+like it's essentially the same kind of thing.
+
+My use case for this is:
+
+ST specifies not to add any additional external load capacitance[1], but
+the MikroElektronika RTC 9 Click board[2] has a 22 pF cap on each xtal
+pin[3]. The resulting combined capacitance appears to be outside of the
+operating range of the xtal, because when power is removed from the
+boards I'm testing with, the RTC reports an Oscillator-Fail flag on the
+next power on.
+
+I found I could work around the problem by reducing the internal load
+capacitance as low as it will go.
+
+References:
+[1] https://www.st.com/resource/en/application_note/an3060-applications-guide-for-serial-realtime-clocks-rtcs-stmicroelectronics.pdf
+[2] https://www.mikroe.com/rtc-9-click
+[3] https://download.mikroe.com/documents/add-on-boards/click/rtc-9/rtc-9-click-schematic-v100.pdf
+
+Previous versions:
+v1: https://lore.kernel.org/linux-rtc/20221219190915.3912384-1-dennis@sparkcharge.io/T/
+
+Dennis Lambe Jr (3):
+  rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
+  dt-bindings: m41t80: add xtal load capacitance
+  rtc: m41t80: set xtal load capacitance from DT
+
+ .../devicetree/bindings/rtc/st,m41t80.yaml    | 16 ++++
+ drivers/rtc/rtc-m41t80.c                      | 84 +++++++++++++++++--
+ 2 files changed, 92 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
+
