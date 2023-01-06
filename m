@@ -2,118 +2,129 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E0265F2AB
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Jan 2023 18:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FB66605EA
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Jan 2023 18:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbjAER3P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Jan 2023 12:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S235108AbjAFRs5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Jan 2023 12:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235644AbjAER2b (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Jan 2023 12:28:31 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9295BA37;
-        Thu,  5 Jan 2023 09:26:05 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id ja17so28535866wmb.3;
-        Thu, 05 Jan 2023 09:26:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xv1/J8+zyvFNGrZ+RyXIp/dYj2SMtALFrHtwD8fvn5I=;
-        b=mr0SJHApON8ErWUEsLeomS53CPMZKeRZ/isiL8Fa3LIBSyfQZzpLvZKR+gMgSIB6vO
-         1Jog/kL+woXJToJND8xnjVNdHBjoYiKgunDdIjmceN150z6azyXXpi3rGc4tqVYmU6iU
-         4picHVNy8USrpKP8ymXSl+WNeOQahZTjEsHBo5P7WG+yG6qTpU3zkSQOyZa+tszPrAvf
-         7qfL0usDdpKImrBiM0Sb6ncaaCTBTM36BnkT0XMQ4dy02e6EyZ9j9Z7T1LV5JijF2BK+
-         FmeZ93LimVqVM/pfr/IQ36yA5qkSmr5+kXUHgMGxvRZECTXHmrHYzqDxdWO8hI562Nwy
-         /N6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xv1/J8+zyvFNGrZ+RyXIp/dYj2SMtALFrHtwD8fvn5I=;
-        b=pGwx/4ekM3KAHorMjCkxD8O8ur7r+2zu86w45q2Sy/xbXr9sVbg5DrLCKlX+rlXP3S
-         qkOc5B/hKeW+bY571+f3Bb2Jwk8AspZzr/TdWBLemtVk/Txy6+4L5TKBmDe5FW6hpCh7
-         OteivPBqL7XKByZ87mUiXO6Wsnq/DcxbKAUuyWnss0B9GMzlpgKDfzKfpgOvQG8739qR
-         EwOBKj8UqwX5WehcFNloJucvlbp9juj5KD+txQs2xQT1l8YUzUVK0bqpCsfueXS2jQfS
-         okKdgN45274SSnEpweY+Dj/xlhvFhkEPUHnv7F3DvCaVmmesAJ+ah10CYmhgDiFU73f2
-         EzGw==
-X-Gm-Message-State: AFqh2kocAndcVQFm5cCL9EXPznHPtQJrk+ZHIJ4p314PRZbFhnjP8QWL
-        4fkeSzQqzD5N9BzgA5JPa9Y=
-X-Google-Smtp-Source: AMrXdXthnyD4BVhaKgGhlEMZZtcIDvQxKdtHMqQniFI1MNlfYh9kPLZbWBFDF/l2e7SoFmey5Gv3tA==
-X-Received: by 2002:a05:600c:3485:b0:3d1:ee6c:f897 with SMTP id a5-20020a05600c348500b003d1ee6cf897mr36885853wmq.3.1672939564055;
-        Thu, 05 Jan 2023 09:26:04 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003c6bbe910fdsm3692581wmq.9.2023.01.05.09.26.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 09:26:03 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/2] rtc: sun6i: Prevent an out-of-bounds read
-Date:   Thu, 05 Jan 2023 18:26:02 +0100
-Message-ID: <8201852.NyiUUSuA9g@jernej-laptop>
-In-Reply-To: <20221229184011.62925-1-samuel@sholland.org>
-References: <20221229184011.62925-1-samuel@sholland.org>
+        with ESMTP id S230082AbjAFRs4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Jan 2023 12:48:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDA376EE2
+        for <linux-rtc@vger.kernel.org>; Fri,  6 Jan 2023 09:48:54 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqpg-0008Tu-JF; Fri, 06 Jan 2023 18:48:44 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqpf-004FsQ-3J; Fri, 06 Jan 2023 18:48:43 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pDqpd-00Aie3-VY; Fri, 06 Jan 2023 18:48:41 +0100
+Date:   Fri, 6 Jan 2023 18:48:41 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 560/606] rtc: ds1307: Convert to i2c's .probe_new()
+Message-ID: <20230106174841.kqgfnqua4vgd4kwo@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-561-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fw3yxbv2qlboln3r"
+Content-Disposition: inline
+In-Reply-To: <20221118224540.619276-561-uwe@kleine-koenig.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dne =C4=8Detrtek, 29. december 2022 ob 19:40:10 CET je Samuel Holland napis=
-al(a):
-> If there is more than one parent clock in the devicetree, the
-> driver sets .num_parents to a larger value than the number of array
-> elements, which causes an out-of-bounds read in the clock framework.
 
-Is there any DT with more than one parent? I think more fixes are needed if=
-=20
-this is the case.
+--fw3yxbv2qlboln3r
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Jernej
+Hello Alexandre,
 
+On Fri, Nov 18, 2022 at 11:44:54PM +0100, Uwe Kleine-K=F6nig wrote:
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 >=20
-> Fix this by coercing the parent count to a Boolean value, like the
-> driver expects.
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
 >=20
-> Fixes: 3855c2c3e546 ("rtc: sun6i: Expose the 32kHz oscillator")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > ---
+>  drivers/rtc/rtc-ds1307.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >=20
->  drivers/rtc/rtc-sun6i.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> index ed5516089e9a..a22358a44e32 100644
-> --- a/drivers/rtc/rtc-sun6i.c
-> +++ b/drivers/rtc/rtc-sun6i.c
-> @@ -294,7 +294,7 @@ static void __init sun6i_rtc_clk_init(struct device_n=
-ode
-> *node,
->=20
->  	init.parent_names =3D parents;
->  	/* ... number of clock parents will be 1. */
-> -	init.num_parents =3D of_clk_get_parent_count(node) + 1;
-> +	init.num_parents =3D !!of_clk_get_parent_count(node) + 1;
->  	of_property_read_string_index(node, "clock-output-names", 0,
->  				      &init.name);
+> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+> index 7c2276cf5514..b49c02fd78f7 100644
+> --- a/drivers/rtc/rtc-ds1307.c
+> +++ b/drivers/rtc/rtc-ds1307.c
+> @@ -1713,9 +1713,9 @@ static const struct regmap_config regmap_config =3D=
+ {
+>  	.val_bits =3D 8,
+>  };
+> =20
+> -static int ds1307_probe(struct i2c_client *client,
+> -			const struct i2c_device_id *id)
+> +static int ds1307_probe(struct i2c_client *client)
+>  {
+> +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+>  	struct ds1307		*ds1307;
+>  	const void		*match;
+>  	int			err =3D -ENODEV;
+> @@ -2012,7 +2012,7 @@ static struct i2c_driver ds1307_driver =3D {
+>  		.name	=3D "rtc-ds1307",
+>  		.of_match_table =3D ds1307_of_match,
+>  	},
+> -	.probe		=3D ds1307_probe,
+> +	.probe_new	=3D ds1307_probe,
+>  	.id_table	=3D ds1307_id,
+>  };
 
+This is the last remaining rtc patch in my i2c probe_new stack. Would
+you mind to apply it?
 
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--fw3yxbv2qlboln3r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmO4XvcACgkQwfwUeK3K
+7AmakQf+Oo3+DP0Zw3V/BK3WK+JqVLEPAelaiSrfx1ToWpUat8fgoaX3z4fz9gfq
+SWG5IHiiMfXZumdOi5jGUG7A9EW2bHJM2qDM74ctScnThnsB1SThhD0pbJqNh8e2
+JSloiA0vNoxWCsA59Ui1AmRTS6ce2fBcgr1Rg+7Uz4aXqOvDweNuSofuM3GXokYY
+9eIuH8AToIfEHAHZns8rkwyBbN92xE8Qai4EolIluFUWM/fO3VhF0/2q3jyWPQqN
+s+3pW8FuS///F5Ytcu52vGC+yO2IkbLr4iaTJBB2qZhSvkhH6gADPXXTXhkb4Sxp
+4QXHKSbktA6WR83ZyKWO4/D+XbP2iw==
+=2ULL
+-----END PGP SIGNATURE-----
+
+--fw3yxbv2qlboln3r--
