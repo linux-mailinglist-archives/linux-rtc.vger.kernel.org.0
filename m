@@ -2,56 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312766610A9
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Jan 2023 18:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689DA6610BA
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 Jan 2023 19:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjAGR6q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 7 Jan 2023 12:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S229691AbjAGSPV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 7 Jan 2023 13:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjAGR6o (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 7 Jan 2023 12:58:44 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1DE32E9D;
-        Sat,  7 Jan 2023 09:58:43 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id l184so4652838vsc.0;
-        Sat, 07 Jan 2023 09:58:43 -0800 (PST)
+        with ESMTP id S229542AbjAGSPT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 7 Jan 2023 13:15:19 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409B335931;
+        Sat,  7 Jan 2023 10:15:17 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id o63so4629345vsc.10;
+        Sat, 07 Jan 2023 10:15:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sT34ZJyD541zpufhHMrzP2O0u5KYGe3JtqLbKKVmEBQ=;
-        b=X6dS8KTEyrK1NJp7mmoIoIHoROVpVSPoDguCufIvfFZ7OMenki0OsNHf1rSDy7o3TJ
-         DKufsOWR9DfI/eYURXy1F8g7FE+mdDU8DreVXYqY7Y7CQxk3vwQ6QLhohXSAR7RbOnEq
-         AvPPnWXQ+uMubt3Y2JgGBoljGhQWjl/k7t+tOdBtm+TJCI/ZrymzSEYzZHLLQzQeYSIO
-         EbeGthQN+066mg5jBmbadPNo6REB0LDxG5h374OkhA4+LZ7azzGw5L0YI5uVHHkSgt8e
-         j6dQ85J4YHtFkoCvc2YkY6NBwpvKtrcx7O3DH2m3hx4nh+9vBS1NFA2mjOxtZ/rOGSMO
-         dBYg==
+        bh=kYHhzhR3mkt7AE13lp9HAV2GGiv72YEsuWoWRfAIWuc=;
+        b=fiZIKRhtnmcGIRNA2cWuxFBufkzrG4gyFWC0eRCoQfUk9jiwlQhGaoW7KSojxjeBaW
+         MtTQJ8D4gEJXheo0QJPfSlckD1PDR8csHExVlxB8NTAlc2GxZnT5G/9rEt/cD5YKVQYp
+         GkoPm+2cyRKX6INfiyu0/GmmHtxADf6nIDsLxR50dkmKr30/cq75ik4+meVrvcF9+8O4
+         IqV1x04wot9gi9DEoapd7FUpfEUC+3W+uA4nzXKrVl+vc2LVLL78I6bYrzS5KXFmel98
+         3ywf55he0KWZ36BfhGJF1jvB0r1iiIFjDS5L9XLyTY8rJGuxq+Xcb4FhKZAR+JNmD9Lt
+         Hf6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sT34ZJyD541zpufhHMrzP2O0u5KYGe3JtqLbKKVmEBQ=;
-        b=twFl5+VdHjL+hPQB1m9nkr3uibo1gJYtyTMQQLetLuLbYVN3OBpT8JfpFOFdrakkJX
-         8supj1NWfPggRZVj0zKZGUOqg3PmdqhRgUomnh7d+mJKENQwpEV5/EjocYwlxUs1DW8R
-         SGw5SrCnr+n2E73BFal3iBLRgxoRCWClGcGnjZMcNOxMr1e9cOkBBY1ttHFV7m29o4Zw
-         InKw4D7H8ZHRg3OrCl9nIKKYUqMS/cHtgUzFXbo0fTGAudkDOSvxBv3MQQA//6onXNw7
-         BzTWVqfN0CzivTNZq0pIYA223kyt/CkCciVXAYaMKcOxd1cRdTdH8WT9tRkdWOFiDjib
-         D7oQ==
-X-Gm-Message-State: AFqh2kpQilZquGErFHoK112fo7yB6cjnPb4clYo9LxnHHo1+mJUTVWwY
-        BPt3JY8yUeGy0eTrr460wwcUNfJ519ATqArKG2s=
-X-Google-Smtp-Source: AMrXdXuUYYO5oOCnmmXdReIKTl/LyUQokHkQc8Irsbry7v7vSpsTA966/x6T8BH2ocw1UtRdzx7FJHAehKarKDS+64g=
-X-Received: by 2002:a67:edd4:0:b0:3b5:1fe4:f1c2 with SMTP id
- e20-20020a67edd4000000b003b51fe4f1c2mr7456223vsp.0.1673114322217; Sat, 07 Jan
- 2023 09:58:42 -0800 (PST)
+        bh=kYHhzhR3mkt7AE13lp9HAV2GGiv72YEsuWoWRfAIWuc=;
+        b=aQIa09wOYws68EG9yuaR6KRv8+YCRHTCSPhgs2JWlbQ9+LCBqClgsbhSCuMM0J5tdb
+         Fh5tPsOxZb7wv6/negsROE20TgK0fVMJAEFMcafpn4F4bO0TqRUDogjZFdZBcfZ+UWx7
+         fydD2SCOjrz2UHxX3pQF8Rwgn8Kz9Yg1gVnyip2w9wKF0ygei1gGuABx3xm8xJr/ICsn
+         W9v93NgM4RLXnB2mdx7v+S16BHfwhuBQBjvMNCh9YRflTLhgtzudmk1UpvqXEqS6EgYX
+         muAR7WYXg0lTOSzvD/m/sUeBC1/qj2W9mSj+vkK7exHLfIL6Or1KdAje5L3xN2eD3fga
+         9QjA==
+X-Gm-Message-State: AFqh2koXGs7RQBt14/R2mG4f+Otid/bA0T5zaymWOPnoqjK3QcCQL4Xz
+        9omPVwOGmCFyr8skrepbEor3kZAgHGx9OOIvSyI=
+X-Google-Smtp-Source: AMrXdXt/JtgKMxVYPwIGnTIwUw9fHJnr2iBFEo1q4xRNGNcxhhX8eXSaMNSuvTbh8IyMSNMeCaFaRTLkNho/HqaQ+IU=
+X-Received: by 2002:a05:6102:a3a:b0:3ce:927f:3ad0 with SMTP id
+ 26-20020a0561020a3a00b003ce927f3ad0mr3382685vsb.63.1673115316258; Sat, 07 Jan
+ 2023 10:15:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-7-hugo@hugovil.com>
-In-Reply-To: <20221215150214.1109074-7-hugo@hugovil.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-8-hugo@hugovil.com>
+In-Reply-To: <20221215150214.1109074-8-hugo@hugovil.com>
 From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Sat, 7 Jan 2023 18:58:25 +0100
-Message-ID: <CAH+2xPAP1zk+SWLvKHm=sXNfmBtPogS8GMCdmoCvxTEXyJjPSA@mail.gmail.com>
-Subject: Re: [PATCH v3 06/14] rtc: pcf2127: add support for multiple TS functions
+Date:   Sat, 7 Jan 2023 19:15:00 +0100
+Message-ID: <CAH+2xPBHTRLpQRBtGe40bJ3k-wWf5LfXjOhHu2x5uuyvCk84Fw@mail.gmail.com>
+Subject: Re: [PATCH v3 07/14] rtc: pcf2127: add support for PCF2131 RTC
 To:     Hugo Villeneuve <hugo@hugovil.com>
 Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -69,508 +69,454 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Den tor. 15. dec. 2022 kl. 16.48 skrev Hugo Villeneuve <hugo@hugovil.com>:
+Den tor. 15. dec. 2022 kl. 16.20 skrev Hugo Villeneuve <hugo@hugovil.com>:
 >
 > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 >
-> This will simplify the implementation of new variants into this driver.
+> This RTC is very similar in functionality to the PCF2127/29.
+>
+> Basically it:
+>   -supports two new control registers at offsets 4 and 5
+>   -supports a new reset register (not implemented in this driver)
+>   -supports 4 tamper detection functions instead of 1
+>   -has no nvmem (like the PCF2129)
+>   -has two output interrupt pins
+>
+> Because of that, most of the register addresses are very different,
+> although they still follow the same layout. For example, the tamper
+> registers have a different base address, but the offsets are all the same.
 >
 > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > ---
->  drivers/rtc/rtc-pcf2127.c | 303 +++++++++++++++++++++++++++-----------
->  1 file changed, 215 insertions(+), 88 deletions(-)
+>  drivers/rtc/Kconfig       |   4 +-
+>  drivers/rtc/rtc-pcf2127.c | 234 ++++++++++++++++++++++++++++++++++----
+>  2 files changed, 215 insertions(+), 23 deletions(-)
 >
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 2bb640d1521d..3d4043ce0057 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -910,9 +910,9 @@ config RTC_DRV_PCF2127
+>         select REGMAP_SPI if SPI_MASTER
+>         select WATCHDOG_CORE if WATCHDOG
+>         help
+> -         If you say yes here you get support for the NXP PCF2127/29 RTC
+> +         If you say yes here you get support for the NXP PCF2127/29/31 RTC
+>           chips with integrated quartz crystal for industrial applications.
+> -         Both chips also have watchdog timer and tamper switch detection
+> +         These chips also have watchdog timer and tamper switch detection
+>           features.
+>
+>           PCF2127 has an additional feature of 512 bytes battery backed
 > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 38816ad065eb..3265878edc48 100644
+> index 3265878edc48..4148e135f935 100644
 > --- a/drivers/rtc/rtc-pcf2127.c
 > +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -75,16 +75,19 @@
+> @@ -1,16 +1,26 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * An I2C and SPI driver for the NXP PCF2127/29 RTC
+> + * An I2C and SPI driver for the NXP PCF2127/29/31 RTC
+>   * Copyright 2013 Til-Technologies
+> + * Copyright 2021 DimOnOff
+>   *
+>   * Author: Renaud Cerrato <r.cerrato@til-technologies.fr>
+>   *
+>   * Watchdog and tamper functions
+>   * Author: Bruno Thomsen <bruno.thomsen@gmail.com>
+>   *
+> + * PCF2131 support
+> + * Author: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> + *
+>   * based on the other drivers in this same directory.
+>   *
+> - * Datasheet: https://www.nxp.com/docs/en/data-sheet/PCF2127.pdf
+> + * Datasheets: https://www.nxp.com/docs/en/data-sheet/PCF2127.pdf
+> + *             https://www.nxp.com/docs/en/data-sheet/PCF2131DS.pdf
+> + */
+> +
+> +/*
+> + * The following features are not yet implemented for the PCF2131:
+> + *   - support for 1/100th seconds
+>   */
+>
+>  #include <linux/i2c.h>
+> @@ -43,8 +53,30 @@
+>  #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
+>  #define PCF2127_BIT_CTRL3_BF                   BIT(3)
+>  #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
+> +/* Control register 4 */
+> +#define PCF2131_REG_CTRL4              0x03
+> +#define PCF2131_BIT_CTRL4_TSF4                 BIT(4)
+> +#define PCF2131_BIT_CTRL4_TSF3                 BIT(5)
+> +#define PCF2131_BIT_CTRL4_TSF2                 BIT(6)
+> +#define PCF2131_BIT_CTRL4_TSF1                 BIT(7)
+> +/* Control register 5 */
+> +#define PCF2131_REG_CTRL5              0x04
+> +#define PCF2131_BIT_CTRL5_TSIE4                        BIT(4)
+> +#define PCF2131_BIT_CTRL5_TSIE3                        BIT(5)
+> +#define PCF2131_BIT_CTRL5_TSIE2                        BIT(6)
+> +#define PCF2131_BIT_CTRL5_TSIE1                        BIT(7)
+> +/* Software reset register */
+> +#define PCF2131_REG_SR_RESET           0x05
+> +#define PCF2131_SR_RESET_READ_PATTERN  0b00100100 /* Fixed pattern. */
+
+Replace 0b00100100 with (BIT(2) | BIT(5))
+
+> +#define PCF2131_SR_RESET_RESET_CMD     0x2C /* SR is bit 3. */
+
+Replace 0x2C with (BIT(2) | BIT(3) | BIT(5)) or
+(PCF2131_SR_RESET_READ_PATTERN | BIT(3))
+and then drop the comment.
+
+>  /* Time and date registers */
+>  #define PCF2127_REG_TIME_DATE_BASE     0x03
+> +#define PCF2131_REG_TIME_DATE_BASE     0x07 /* Register 0x06 is 100th seconds,
+> +                                             * but we do not support it. By
+> +                                             * using offset 0x07, we can be
+> +                                             * compatible with existing
+> +                                             * time/date functions.
+> +                                             */
+
+I think you should add this rather big comment above
+#define PCF2131_REG_TIME_DATE_BASE 0x07
+
+and rename the define to PCF2131_REG_TIME_BASE.
+
+>  /* Time and date registers offsets (starting from base register) */
+>  #define PCF2127_OFFSET_TD_SC           0
+>  #define PCF2127_OFFSET_TD_MN           1
+> @@ -57,6 +89,7 @@
+>  #define PCF2127_BIT_SC_OSF                     BIT(7)
+>  /* Alarm registers */
+>  #define PCF2127_REG_ALARM_BASE         0x0A
+> +#define PCF2131_REG_ALARM_BASE         0x0E
+>  /* Alarm registers offsets (starting from base register) */
+>  #define PCF2127_OFFSET_ALARM_SC                0
+>  #define PCF2127_OFFSET_ALARM_MN                1
+> @@ -67,16 +100,26 @@
+>  #define PCF2127_BIT_ALARM_AE                   BIT(7)
+>  /* CLKOUT control register */
+>  #define PCF2127_REG_CLKOUT             0x0f
+> +#define PCF2131_REG_CLKOUT             0x13
+>  #define PCF2127_BIT_CLKOUT_OTPR                        BIT(5)
+>  /* Watchdog registers */
+>  #define PCF2127_REG_WD_CTL             0x10
+> +#define PCF2131_REG_WD_CTL             0x35
+>  #define PCF2127_BIT_WD_CTL_TF0                 BIT(0)
+>  #define PCF2127_BIT_WD_CTL_TF1                 BIT(1)
 >  #define PCF2127_BIT_WD_CTL_CD0                 BIT(6)
 >  #define PCF2127_BIT_WD_CTL_CD1                 BIT(7)
 >  #define PCF2127_REG_WD_VAL             0x11
-> -/* Tamper timestamp registers */
-> -#define PCF2127_REG_TS_CTRL            0x12
-> +/* Tamper timestamp1 registers */
-> +#define PCF2127_REG_TS1_BASE           0x12
-> +/* Tamper timestamp registers common offsets (starting from base register) */
-> +#define PCF2127_OFFSET_TS_CTL          0
-> +#define PCF2127_OFFSET_TS_SC           1
-> +#define PCF2127_OFFSET_TS_MN           2
-> +#define PCF2127_OFFSET_TS_HR           3
-> +#define PCF2127_OFFSET_TS_DM           4
-> +#define PCF2127_OFFSET_TS_MO           5
-> +#define PCF2127_OFFSET_TS_YR           6
-> +/* Tamper timestamp registers common bits */
->  #define PCF2127_BIT_TS_CTRL_TSOFF              BIT(6)
->  #define PCF2127_BIT_TS_CTRL_TSM                        BIT(7)
-> -#define PCF2127_REG_TS_SC              0x13
-> -#define PCF2127_REG_TS_MN              0x14
-> -#define PCF2127_REG_TS_HR              0x15
-> -#define PCF2127_REG_TS_DM              0x16
-> -#define PCF2127_REG_TS_MO              0x17
-> -#define PCF2127_REG_TS_YR              0x18
->  /*
+> +#define PCF2131_REG_WD_VAL             0x36
+>  /* Tamper timestamp1 registers */
+>  #define PCF2127_REG_TS1_BASE           0x12
+> +#define PCF2131_REG_TS1_BASE           0x14
+> +/* Tamper timestamp2 registers */
+> +#define PCF2131_REG_TS2_BASE           0x1B
+> +/* Tamper timestamp3 registers */
+> +#define PCF2131_REG_TS3_BASE           0x22
+> +/* Tamper timestamp4 registers */
+> +#define PCF2131_REG_TS4_BASE           0x29
+>  /* Tamper timestamp registers common offsets (starting from base register) */
+>  #define PCF2127_OFFSET_TS_CTL          0
+>  #define PCF2127_OFFSET_TS_SC           1
+> @@ -92,11 +135,22 @@
 >   * RAM registers
 >   * PCF2127 has 512 bytes general-purpose static RAM (SRAM) that is
-> @@ -108,6 +111,20 @@
+>   * battery backed and can survive a power outage.
+> - * PCF2129 doesn't have this feature.
+> + * PCF2129/31 doesn't have this feature.
+>   */
+>  #define PCF2127_REG_RAM_ADDR_MSB       0x1A
+>  #define PCF2127_REG_RAM_WRT_CMD                0x1C
+>  #define PCF2127_REG_RAM_RD_CMD         0x1D
+> +/* Interrupt mask registers */
+> +#define PCF2131_REG_INT_A_MASK1                0x31
+> +#define PCF2131_REG_INT_A_MASK2                0x32
+> +#define PCF2131_REG_INT_B_MASK1                0x33
+> +#define PCF2131_REG_INT_B_MASK2                0x34
+> +#define PCF2131_BIT_INT_BLIE           BIT(0)
+> +#define PCF2131_BIT_INT_BIE            BIT(1)
+> +#define PCF2131_BIT_INT_AIE            BIT(2)
+> +#define PCF2131_BIT_INT_WD_CD          BIT(3)
+> +#define PCF2131_BIT_INT_SI             BIT(4)
+> +#define PCF2131_BIT_INT_MI             BIT(5)
+>
+>  /* Watchdog timer value constants */
+>  #define PCF2127_WD_VAL_STOP            0
+> @@ -110,6 +164,14 @@
+>                 PCF2127_BIT_CTRL2_AF | \
 >                 PCF2127_BIT_CTRL2_WDTF | \
 >                 PCF2127_BIT_CTRL2_TSF2)
+> +#define PCF2131_CTRL2_IRQ_MASK ( \
+> +               PCF2127_BIT_CTRL2_AF | \
+> +               PCF2127_BIT_CTRL2_WDTF)
+> +#define PCF2131_CTRL4_IRQ_MASK ( \
+> +               PCF2131_BIT_CTRL4_TSF4 | \
+> +               PCF2131_BIT_CTRL4_TSF3 | \
+> +               PCF2131_BIT_CTRL4_TSF2 | \
+> +               PCF2131_BIT_CTRL4_TSF1)
 >
-> +struct pcf21xx_ts_config {
-> +       u8 regs_base; /* Base register to read timestamp values. */
-
-reg_base as there is only one.
-
-> +       /* TS input pin driven to GND detection (supported by all variants): */
-> +       u8 low_reg; /* Interrupt control register. */
-> +       u8 low_bit; /* Interrupt flag in low_reg control register. */
-> +       /* TS input pin driven to intermediate level between GND and supply
-> +        * detection (optional feature depending on variant):
-> +        */
-> +       u8 inter_reg; /* Interrupt control register. */
-> +       u8 inter_bit; /* Interrupt flag in inter_reg control register. */
-
-I had to read this a couple of times to understand it :)
-
-Maybe rename variables to low_ctl_reg, low_ctl_bit,
-inter_ctl_reg and inter_ctl_bit.
-
-> +       u8 ie_reg; /* Interrupt enable control register. */
-> +       u8 ie_bit; /* Interrupt enable bit. */
-> +};
-> +
->  struct pcf21xx_config {
->         int max_register;
->         unsigned int has_nvmem:1;
-> @@ -117,6 +134,9 @@ struct pcf21xx_config {
->         u8 reg_wd_ctl; /* Watchdog control register. */
->         u8 reg_wd_val; /* Watchdog value register. */
->         u8 reg_clkout; /* Clkout register. */
-> +       unsigned int ts_count;
-> +       struct pcf21xx_ts_config ts[4];
-
-You should create a driver constant with the maximum number
-of supported timestamps, something like:
-
-#define PCF2127_MAX_TS_SUPPORTED  1
-
-and raise it to 4 when pcf2131 support is added.
-
-> +       struct attribute_group attribute_group;
->  };
->
->  struct pcf2127 {
-> @@ -124,9 +144,9 @@ struct pcf2127 {
->         struct watchdog_device wdd;
->         struct regmap *regmap;
->         const struct pcf21xx_config *cfg;
-> -       time64_t ts;
-> -       bool ts_valid;
->         bool irq_enabled;
-> +       time64_t ts[4]; /* Timestamp values. */
-> +       bool ts_valid[4];  /* Timestamp valid indication. */
->  };
->
->  /*
-> @@ -469,38 +489,39 @@ static int pcf2127_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+>  struct pcf21xx_ts_config {
+>         u8 regs_base; /* Base register to read timestamp values. */
+> @@ -370,7 +432,7 @@ static int pcf2127_wdt_set_timeout(struct watchdog_device *wdd,
 >  }
 >
->  /*
-> - * This function reads ctrl2 register, caller is responsible for calling
-> - * pcf2127_wdt_active_ping()
-> + * This function reads one timestamp function data, caller is responsible for
-> + * calling pcf2127_wdt_active_ping()
->   */
-> -static int pcf2127_rtc_ts_read(struct device *dev, time64_t *ts)
-> +static int pcf2127_rtc_ts_read(struct device *dev, time64_t *ts,
-> +                              int ts_id)
->  {
->         struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
->         struct rtc_time tm;
->         int ret;
-> -       unsigned char data[25];
-> +       unsigned char data[7]; /* To store result of reading 7 consecutive
-> +                               * timestamp registers.
-> +                               */
-
-Remove comment about data variable.
-
->
-> -       ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL1, data,
-> -                              sizeof(data));
-> +       ret = regmap_bulk_read(pcf2127->regmap, pcf2127->cfg->ts[ts_id].regs_base,
-> +                              data, sizeof(data));
->         if (ret) {
-> -               dev_err(dev, "%s: read error ret=%d\n", __func__, ret);
-> +               dev_err(dev, "%s: bulk read error ret=%d\n", __func__, ret);
->                 return ret;
->         }
->
->         dev_dbg(dev,
-> -               "%s: raw data is cr1=%02x, cr2=%02x, cr3=%02x, ts_sc=%02x, ts_mn=%02x, ts_hr=%02x, ts_dm=%02x, ts_mo=%02x, ts_yr=%02x\n",
-> -               __func__, data[PCF2127_REG_CTRL1], data[PCF2127_REG_CTRL2],
-> -               data[PCF2127_REG_CTRL3], data[PCF2127_REG_TS_SC],
-> -               data[PCF2127_REG_TS_MN], data[PCF2127_REG_TS_HR],
-> -               data[PCF2127_REG_TS_DM], data[PCF2127_REG_TS_MO],
-> -               data[PCF2127_REG_TS_YR]);
-> -
-> -       tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
-> -       tm.tm_min = bcd2bin(data[PCF2127_REG_TS_MN] & 0x7F);
-> -       tm.tm_hour = bcd2bin(data[PCF2127_REG_TS_HR] & 0x3F);
-> -       tm.tm_mday = bcd2bin(data[PCF2127_REG_TS_DM] & 0x3F);
-> +               "%s: raw data is ts_sc=%02x, ts_mn=%02x, ts_hr=%02x, ts_dm=%02x, ts_mo=%02x, ts_yr=%02x\n",
-> +               __func__, data[PCF2127_OFFSET_TS_SC], data[PCF2127_OFFSET_TS_MN],
-> +               data[PCF2127_OFFSET_TS_HR], data[PCF2127_OFFSET_TS_DM],
-> +               data[PCF2127_OFFSET_TS_MO], data[PCF2127_OFFSET_TS_YR]);
-> +
-> +       tm.tm_sec = bcd2bin(data[PCF2127_OFFSET_TS_SC] & 0x7F);
-> +       tm.tm_min = bcd2bin(data[PCF2127_OFFSET_TS_MN] & 0x7F);
-> +       tm.tm_hour = bcd2bin(data[PCF2127_OFFSET_TS_HR] & 0x3F);
-> +       tm.tm_mday = bcd2bin(data[PCF2127_OFFSET_TS_DM] & 0x3F);
->         /* TS_MO register (month) value range: 1-12 */
-> -       tm.tm_mon = bcd2bin(data[PCF2127_REG_TS_MO] & 0x1F) - 1;
-> -       tm.tm_year = bcd2bin(data[PCF2127_REG_TS_YR]);
-> +       tm.tm_mon = bcd2bin(data[PCF2127_OFFSET_TS_MO] & 0x1F) - 1;
-> +       tm.tm_year = bcd2bin(data[PCF2127_OFFSET_TS_YR]);
->         if (tm.tm_year < 70)
->                 tm.tm_year += 100; /* assume we are in 1970...2069 */
->
-> @@ -514,18 +535,21 @@ static int pcf2127_rtc_ts_read(struct device *dev, time64_t *ts)
->         return 0;
+>  static const struct watchdog_info pcf2127_wdt_info = {
+> -       .identity = "NXP PCF2127/PCF2129 Watchdog",
+> +       .identity = "NXP PCF2127/29/31 Watchdog",
+>         .options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
 >  };
 >
-> -static void pcf2127_rtc_ts_snapshot(struct device *dev)
-> +static void pcf2127_rtc_ts_snapshot(struct device *dev, int ts_id)
->  {
->         struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
->         int ret;
->
-> +       if (ts_id >= pcf2127->cfg->ts_count)
-> +               return;
-> +
->         /* Let userspace read the first timestamp */
-> -       if (pcf2127->ts_valid)
-> +       if (pcf2127->ts_valid[ts_id])
->                 return;
->
-> -       ret = pcf2127_rtc_ts_read(dev, &pcf2127->ts);
-> +       ret = pcf2127_rtc_ts_read(dev, &pcf2127->ts[ts_id], ts_id);
->         if (!ret)
-> -               pcf2127->ts_valid = true;
-> +               pcf2127->ts_valid[ts_id] = true;
->  }
->
+> @@ -555,30 +617,64 @@ static void pcf2127_rtc_ts_snapshot(struct device *dev, int ts_id)
 >  static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
-> @@ -546,7 +570,7 @@ static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
+>  {
+>         struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> -       unsigned int ctrl1, ctrl2;
+> +       unsigned int ctrl2;
+>         int ret = 0;
+>
+> -       ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL1, &ctrl1);
+> -       if (ret)
+> -               return IRQ_NONE;
+> -
+>         ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
+>         if (ret)
 >                 return IRQ_NONE;
 >
->         if (ctrl1 & PCF2127_BIT_CTRL1_TSF1 || ctrl2 & PCF2127_BIT_CTRL2_TSF2)
-> -               pcf2127_rtc_ts_snapshot(dev);
-> +               pcf2127_rtc_ts_snapshot(dev, 0);
->
->         if (ctrl1 & PCF2127_CTRL1_IRQ_MASK)
->                 regmap_write(pcf2127->regmap, PCF2127_REG_CTRL1,
-> @@ -575,28 +599,40 @@ static const struct rtc_class_ops pcf2127_rtc_ops = {
->
->  /* sysfs interface */
->
-> -static ssize_t timestamp0_store(struct device *dev,
-> -                               struct device_attribute *attr,
-> -                               const char *buf, size_t count)
-> +static ssize_t timestamp_store(struct device *dev,
-> +                              struct device_attribute *attr,
-> +                              const char *buf, size_t count, int ts_id)
->  {
->         struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
->         int ret;
->
-> +       if (ts_id >= pcf2127->cfg->ts_count)
-> +               return 0;
+> -       if (!(ctrl1 & PCF2127_CTRL1_IRQ_MASK || ctrl2 & PCF2127_CTRL2_IRQ_MASK))
+> -               return IRQ_NONE;
+> +       if (pcf2127->cfg->ts_count == 1) {
+> +               /* PCF2127/29 */
+> +               unsigned int ctrl1;
 > +
->         if (pcf2127->irq_enabled) {
-> -               pcf2127->ts_valid = false;
-> +               pcf2127->ts_valid[ts_id] = false;
->         } else {
-> -               ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> -                       PCF2127_BIT_CTRL1_TSF1, 0);
-> +               /* Always clear LOW interrupt bit. */
-> +               ret = regmap_update_bits(pcf2127->regmap,
-> +                                        pcf2127->cfg->ts[ts_id].low_reg,
-> +                                        pcf2127->cfg->ts[ts_id].low_bit,
-> +                                        0);
+> +               ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL1, &ctrl1);
+> +               if (ret)
+> +                       return IRQ_NONE;
 > +
->                 if (ret) {
-> -                       dev_err(dev, "%s: update ctrl1 ret=%d\n", __func__, ret);
-> +                       dev_err(dev, "%s: update TS low ret=%d\n", __func__, ret);
->                         return ret;
->                 }
+> +               if (!(ctrl1 & PCF2127_CTRL1_IRQ_MASK || ctrl2 & PCF2127_CTRL2_IRQ_MASK))
+> +                       return IRQ_NONE;
 >
-> -               ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-> -                       PCF2127_BIT_CTRL2_TSF2, 0);
-> -               if (ret) {
-> -                       dev_err(dev, "%s: update ctrl2 ret=%d\n", __func__, ret);
-> -                       return ret;
-> +               if (pcf2127->cfg->ts[ts_id].inter_bit) {
-> +                       /* Clear INTERMEDIATE interrupt bit if supported. */
-> +                       ret = regmap_update_bits(pcf2127->regmap,
-> +                                                pcf2127->cfg->ts[ts_id].inter_reg,
-> +                                                pcf2127->cfg->ts[ts_id].inter_bit,
-> +                                                0);
-> +                       if (ret) {
-> +                               dev_err(dev, "%s: update TS intermediate ret=%d\n", __func__, ret);
-> +                               return ret;
+> -       if (ctrl1 & PCF2127_BIT_CTRL1_TSF1 || ctrl2 & PCF2127_BIT_CTRL2_TSF2)
+> -               pcf2127_rtc_ts_snapshot(dev, 0);
+> +               if (ctrl1 & PCF2127_BIT_CTRL1_TSF1 || ctrl2 & PCF2127_BIT_CTRL2_TSF2)
+> +                       pcf2127_rtc_ts_snapshot(dev, 0);
+>
+> -       if (ctrl1 & PCF2127_CTRL1_IRQ_MASK)
+> -               regmap_write(pcf2127->regmap, PCF2127_REG_CTRL1,
+> -                       ctrl1 & ~PCF2127_CTRL1_IRQ_MASK);
+> +               if (ctrl1 & PCF2127_CTRL1_IRQ_MASK)
+> +                       regmap_write(pcf2127->regmap, PCF2127_REG_CTRL1,
+> +                                    ctrl1 & ~PCF2127_CTRL1_IRQ_MASK);
+> +
+> +               if (ctrl2 & PCF2127_CTRL2_IRQ_MASK)
+> +                       regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
+> +                                    ctrl2 & ~PCF2127_CTRL2_IRQ_MASK);
+> +       } else {
+> +               /* PCF2131. */
+> +               unsigned int ctrl4;
+> +
+> +               ret = regmap_read(pcf2127->regmap, PCF2131_REG_CTRL4, &ctrl4);
+> +               if (ret)
+> +                       return IRQ_NONE;
+>
+> -       if (ctrl2 & PCF2127_CTRL2_IRQ_MASK)
+> -               regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
+> -                       ctrl2 & ~PCF2127_CTRL2_IRQ_MASK);
+> +               if (!(ctrl4 & PCF2131_CTRL4_IRQ_MASK || ctrl2 & PCF2131_CTRL2_IRQ_MASK))
+> +                       return IRQ_NONE;
+> +
+> +               if (ctrl4 & PCF2131_CTRL4_IRQ_MASK) {
+> +                       int i;
+> +                       int tsf_bit = PCF2131_BIT_CTRL4_TSF1; /* Start at bit 7. */
+> +
+> +                       for (i = 0; i < pcf2127->cfg->ts_count; i++) {
+> +                               if (ctrl4 & tsf_bit)
+> +                                       pcf2127_rtc_ts_snapshot(dev, i);
+> +
+> +                               tsf_bit = tsf_bit >> 1;
 > +                       }
->                 }
->
->                 ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-> @@ -605,34 +641,63 @@ static ssize_t timestamp0_store(struct device *dev,
->         }
->
->         return count;
-> +}
 > +
-> +static ssize_t timestamp0_store(struct device *dev,
+> +                       regmap_write(pcf2127->regmap, PCF2131_REG_CTRL4,
+> +                                    ctrl4 & ~PCF2131_CTRL4_IRQ_MASK);
+> +               }
+> +
+> +               if (ctrl2 & PCF2131_CTRL2_IRQ_MASK)
+> +                       regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
+> +                                    ctrl2 & ~PCF2131_CTRL2_IRQ_MASK);
+> +       }
+>
+>         if (ctrl2 & PCF2127_BIT_CTRL2_AF)
+>                 rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
+> @@ -650,6 +746,27 @@ static ssize_t timestamp0_store(struct device *dev,
+>         return timestamp_store(dev, attr, buf, count, 0);
+>  };
+>
+> +static ssize_t timestamp1_store(struct device *dev,
 > +                               struct device_attribute *attr,
 > +                               const char *buf, size_t count)
 > +{
-> +       return timestamp_store(dev, attr, buf, count, 0);
+> +       return timestamp_store(dev, attr, buf, count, 1);
+> +};
+> +
+> +static ssize_t timestamp2_store(struct device *dev,
+> +                               struct device_attribute *attr,
+> +                               const char *buf, size_t count)
+> +{
+> +       return timestamp_store(dev, attr, buf, count, 2);
+> +};
+> +
+> +static ssize_t timestamp3_store(struct device *dev,
+> +                               struct device_attribute *attr,
+> +                               const char *buf, size_t count)
+> +{
+> +       return timestamp_store(dev, attr, buf, count, 3);
+> +};
+> +
+>  static ssize_t timestamp_show(struct device *dev,
+>                               struct device_attribute *attr, char *buf,
+>                               int ts_id)
+> @@ -714,16 +831,46 @@ static ssize_t timestamp0_show(struct device *dev,
+>         return timestamp_show(dev, attr, buf, 0);
 >  };
 >
-> -static ssize_t timestamp0_show(struct device *dev,
-> -                              struct device_attribute *attr, char *buf)
-> +static ssize_t timestamp_show(struct device *dev,
-> +                             struct device_attribute *attr, char *buf,
-> +                             int ts_id)
->  {
->         struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
-> -       unsigned int ctrl1, ctrl2;
->         int ret;
->         time64_t ts;
->
-> +       if (ts_id >= pcf2127->cfg->ts_count)
-> +               return 0;
-> +
->         if (pcf2127->irq_enabled) {
-> -               if (!pcf2127->ts_valid)
-> +               if (!pcf2127->ts_valid[ts_id])
->                         return 0;
-> -               ts = pcf2127->ts;
-> +               ts = pcf2127->ts[ts_id];
->         } else {
-> -               ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL1, &ctrl1);
-> -               if (ret)
-> -                       return 0;
-> +               u8 valid_low = 0;
-> +               u8 valid_inter = 0;
-> +               unsigned int ctrl;
->
-> -               ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
-> +               /* Check if TS input pin is driven to GND, supported by all
-> +                * variants.
-> +                */
-> +               ret = regmap_read(pcf2127->regmap,
-> +                                 pcf2127->cfg->ts[ts_id].low_reg,
-> +                                 &ctrl);
->                 if (ret)
->                         return 0;
->
-> -               if (!(ctrl1 & PCF2127_BIT_CTRL1_TSF1) &&
-> -                   !(ctrl2 & PCF2127_BIT_CTRL2_TSF2))
-> +               valid_low = ctrl & pcf2127->cfg->ts[ts_id].low_bit;
-> +
-> +               if (pcf2127->cfg->ts[ts_id].inter_bit) {
-> +                       /* Check if TS input pin is driven to intermediate level
-> +                        * between GND and supply, if supported by variant.
-> +                        */
-> +                       ret = regmap_read(pcf2127->regmap,
-> +                                         pcf2127->cfg->ts[ts_id].inter_reg,
-> +                                         &ctrl);
-> +                       if (ret)
-> +                               return 0;
-> +
-> +                       valid_inter = ctrl & pcf2127->cfg->ts[ts_id].inter_bit;
-> +               }
-> +
-> +               if (!valid_low && !valid_inter)
->                         return 0;
->
-> -               ret = pcf2127_rtc_ts_read(dev->parent, &ts);
-> +               ret = pcf2127_rtc_ts_read(dev->parent, &ts, ts_id);
->                 if (ret)
->                         return 0;
->
-> @@ -641,6 +706,12 @@ static ssize_t timestamp0_show(struct device *dev,
->                         return ret;
->         }
->         return sprintf(buf, "%llu\n", (unsigned long long)ts);
-> +}
-> +
-> +static ssize_t timestamp0_show(struct device *dev,
+> +static ssize_t timestamp1_show(struct device *dev,
 > +                              struct device_attribute *attr, char *buf)
 > +{
-> +       return timestamp_show(dev, attr, buf, 0);
->  };
->
+> +       return timestamp_show(dev, attr, buf, 1);
+> +};
+> +
+> +static ssize_t timestamp2_show(struct device *dev,
+> +                              struct device_attribute *attr, char *buf)
+> +{
+> +       return timestamp_show(dev, attr, buf, 2);
+> +};
+> +
+> +static ssize_t timestamp3_show(struct device *dev,
+> +                              struct device_attribute *attr, char *buf)
+> +{
+> +       return timestamp_show(dev, attr, buf, 3);
+> +};
+> +
 >  static DEVICE_ATTR_RW(timestamp0);
-> @@ -650,10 +721,6 @@ static struct attribute *pcf2127_attrs[] = {
+> +static DEVICE_ATTR_RW(timestamp1);
+> +static DEVICE_ATTR_RW(timestamp2);
+> +static DEVICE_ATTR_RW(timestamp3);
+>
+>  static struct attribute *pcf2127_attrs[] = {
+>         &dev_attr_timestamp0.attr,
 >         NULL
 >  };
 >
-> -static const struct attribute_group pcf2127_attr_group = {
-> -       .attrs  = pcf2127_attrs,
-> -};
-> -
+> +static struct attribute *pcf2131_attrs[] = {
+> +       &dev_attr_timestamp0.attr,
+> +       &dev_attr_timestamp1.attr,
+> +       &dev_attr_timestamp2.attr,
+> +       &dev_attr_timestamp3.attr,
+> +       NULL
+> +};
+> +
 >  enum pcf21xx_type {
 >         PCF2127,
 >         PCF2129,
-> @@ -670,6 +737,19 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->                 .reg_wd_ctl = PCF2127_REG_WD_CTL,
->                 .reg_wd_val = PCF2127_REG_WD_VAL,
->                 .reg_clkout = PCF2127_REG_CLKOUT,
-> +               .ts_count = 1,
-> +               .ts[0] = {
-> +                       .regs_base = PCF2127_REG_TS1_BASE,
-> +                       .low_reg   = PCF2127_REG_CTRL1,
-> +                       .low_bit   = PCF2127_BIT_CTRL1_TSF1,
-> +                       .inter_reg = PCF2127_REG_CTRL2,
-> +                       .inter_bit = PCF2127_BIT_CTRL2_TSF2,
-> +                       .ie_reg    = PCF2127_REG_CTRL2,
-> +                       .ie_bit    = PCF2127_BIT_CTRL2_TSIE,
-> +               },
-> +               .attribute_group = {
-> +                       .attrs  = pcf2127_attrs,
-> +               },
->         },
->         [PCF2129] = {
->                 .max_register = 0x19,
-> @@ -680,15 +760,81 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->                 .reg_wd_ctl = PCF2127_REG_WD_CTL,
->                 .reg_wd_val = PCF2127_REG_WD_VAL,
->                 .reg_clkout = PCF2127_REG_CLKOUT,
-> +               .ts_count = 1,
-> +               .ts[0] = {
-> +                       .regs_base = PCF2127_REG_TS1_BASE,
-> +                       .low_reg   = PCF2127_REG_CTRL1,
-> +                       .low_bit   = PCF2127_BIT_CTRL1_TSF1,
-> +                       .inter_reg = PCF2127_REG_CTRL2,
-> +                       .inter_bit = PCF2127_BIT_CTRL2_TSF2,
-> +                       .ie_reg    = PCF2127_REG_CTRL2,
-> +                       .ie_bit    = PCF2127_BIT_CTRL2_TSIE,
-> +               },
-> +               .attribute_group = {
-> +                       .attrs  = pcf2127_attrs,
-> +               },
->         },
+> +       PCF2131,
+>         PCF21XX_LAST_ID
 >  };
 >
-> +/*
-> + * Enable timestamp function and corresponding interrupt(s).
-> + */
-> +static int pcf2127_enable_ts(struct device *dev, int ts_id)
-> +{
-> +       struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> +       int ret;
-> +
-> +       if (ts_id >= pcf2127->cfg->ts_count) {
-> +               dev_err(dev, "%s: invalid tamper detection ID (%d)\n",
-> +                       __func__, ts_id);
-> +               return -EINVAL;
-> +       }
-> +
-> +       /* Enable timestamp function. */
-> +       ret = regmap_update_bits(pcf2127->regmap,
-> +                                pcf2127->cfg->ts[ts_id].regs_base,
-> +                                PCF2127_BIT_TS_CTRL_TSOFF |
-> +                                PCF2127_BIT_TS_CTRL_TSM,
-> +                                PCF2127_BIT_TS_CTRL_TSM);
-> +       if (ret) {
-> +               dev_err(dev, "%s: tamper detection config (ts%d_ctrl) failed\n",
-> +                       __func__, ts_id);
-> +               return ret;
-> +       }
-> +
-> +       /* TS input pin driven to GND detection is supported by all variants.
-> +        * Make sure that low_bit is defined.
-> +        */
-> +       if (pcf2127->cfg->ts[ts_id].low_bit == 0) {
-> +               dev_err(dev, "%s: tamper detection LOW configuration invalid\n",
-> +                       __func__);
-> +               return ret;
-> +       }
-> +
-> +       /*
-> +        * Enable interrupt generation when TSF timestamp flag is set.
-> +        * Interrupt signals are open-drain outputs and can be left floating if
-> +        * unused.
-> +        */
-> +       ret = regmap_update_bits(pcf2127->regmap, pcf2127->cfg->ts[ts_id].ie_reg,
-> +                                pcf2127->cfg->ts[ts_id].ie_bit,
-> +                                pcf2127->cfg->ts[ts_id].ie_bit);
-> +       if (ret) {
-> +               dev_err(dev, "%s: tamper detection TSIE%d config failed\n",
-> +                       __func__, ts_id);
-> +               return ret;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
->  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->                          int alarm_irq, const char *name, const struct pcf21xx_config *config)
->  {
->         struct pcf2127 *pcf2127;
->         int ret = 0;
->         unsigned int val;
-> +       int i;
->
->         dev_dbg(dev, "%s\n", __func__);
->
-> @@ -813,34 +959,15 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->         }
->
->         /*
-> -        * Enable timestamp function and store timestamp of first trigger
-> -        * event until TSF1 and TSF2 interrupt flags are cleared.
-> +        * Enable timestamp functions 1 to 4.
->          */
-> -       ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_TS_CTRL,
-> -                                PCF2127_BIT_TS_CTRL_TSOFF |
-> -                                PCF2127_BIT_TS_CTRL_TSM,
-> -                                PCF2127_BIT_TS_CTRL_TSM);
-> -       if (ret) {
-> -               dev_err(dev, "%s: tamper detection config (ts_ctrl) failed\n",
-> -                       __func__);
-> -               return ret;
-> -       }
-> -
-> -       /*
-> -        * Enable interrupt generation when TSF1 or TSF2 timestamp flags
-> -        * are set. Interrupt signal is an open-drain output and can be
-> -        * left floating if unused.
-> -        */
-> -       ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-> -                                PCF2127_BIT_CTRL2_TSIE,
-> -                                PCF2127_BIT_CTRL2_TSIE);
-> -       if (ret) {
-> -               dev_err(dev, "%s: tamper detection config (ctrl2) failed\n",
-> -                       __func__);
-> -               return ret;
-> +       for (i = 0; i < pcf2127->cfg->ts_count; i++) {
+> @@ -774,6 +921,48 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+>                         .attrs  = pcf2127_attrs,
+>                 },
+>         },
+> +       [PCF2131] = {
+> +               .max_register = 0x36,
+> +               .has_nvmem = 0,
+> +               .has_bit_wd_ctl_cd0 = 0,
+> +               .regs_td_base = PCF2131_REG_TIME_DATE_BASE,
+> +               .regs_alarm_base = PCF2131_REG_ALARM_BASE,
+> +               .reg_wd_ctl = PCF2131_REG_WD_CTL,
+> +               .reg_wd_val = PCF2131_REG_WD_VAL,
+> +               .reg_clkout = PCF2131_REG_CLKOUT,
+> +               .ts_count = 4,
+> +               .ts[0] = {
+> +                       .regs_base = PCF2131_REG_TS1_BASE,
+> +                       .low_reg   = PCF2131_REG_CTRL4,
+> +                       .low_bit   = PCF2131_BIT_CTRL4_TSF1,
 
-Just define the loop counter variable inline.
+Set .inter_bit to 0 as it's used/read in timestamp_store() to
+control flow in if-condition.
 
-for (int i = 0; i < pcf2127->cfg->ts_count; i++) {
-
-> +               ret = pcf2127_enable_ts(dev, i);
-> +               if (ret)
-> +                       return ret;
->         }
+> +                       .ie_reg    = PCF2131_REG_CTRL5,
+> +                       .ie_bit    = PCF2131_BIT_CTRL5_TSIE1,
+> +               },
+> +               .ts[1] = {
+> +                       .regs_base = PCF2131_REG_TS2_BASE,
+> +                       .low_reg   = PCF2131_REG_CTRL4,
+> +                       .low_bit   = PCF2131_BIT_CTRL4_TSF2,
+> +                       .ie_reg    = PCF2131_REG_CTRL5,
+> +                       .ie_bit    = PCF2131_BIT_CTRL5_TSIE2,
+> +               },
+> +               .ts[2] = {
+> +                       .regs_base = PCF2131_REG_TS3_BASE,
+> +                       .low_reg   = PCF2131_REG_CTRL4,
+> +                       .low_bit   = PCF2131_BIT_CTRL4_TSF3,
+> +                       .ie_reg    = PCF2131_REG_CTRL5,
+> +                       .ie_bit    = PCF2131_BIT_CTRL5_TSIE3,
+> +               },
+> +               .ts[3] = {
+> +                       .regs_base = PCF2131_REG_TS4_BASE,
+> +                       .low_reg   = PCF2131_REG_CTRL4,
+> +                       .low_bit   = PCF2131_BIT_CTRL4_TSF4,
+> +                       .ie_reg    = PCF2131_REG_CTRL5,
+> +                       .ie_bit    = PCF2131_BIT_CTRL5_TSIE4,
+> +               },
+> +               .attribute_group = {
+> +                       .attrs  = pcf2131_attrs,
+> +               },
+> +       },
+>  };
 >
-> -       ret = rtc_add_group(pcf2127->rtc, &pcf2127_attr_group);
-> +       ret = rtc_add_group(pcf2127->rtc, &pcf2127->cfg->attribute_group);
->         if (ret) {
->                 dev_err(dev, "%s: tamper sysfs registering failed\n",
->                         __func__);
+>  /*
+> @@ -922,7 +1111,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>          * Watchdog timer enabled and reset pin /RST activated when timed out.
+>          * Select 1Hz clock source for watchdog timer.
+>          * Note: Countdown timer disabled and not available.
+> -        * For pca2129, pcf2129, only bit[7] is for Symbol WD_CD
+> +        * For pca2129, pcf2129 and pcf2131, only bit[7] is for Symbol WD_CD
+>          * of register watchdg_tim_ctl. The bit[6] is labeled
+>          * as T. Bits labeled as T must always be written with
+>          * logic 0.
+> @@ -982,6 +1171,7 @@ static const struct of_device_id pcf2127_of_match[] = {
+>         { .compatible = "nxp,pcf2127", .data = &pcf21xx_cfg[PCF2127] },
+>         { .compatible = "nxp,pcf2129", .data = &pcf21xx_cfg[PCF2129] },
+>         { .compatible = "nxp,pca2129", .data = &pcf21xx_cfg[PCF2129] },
+> +       { .compatible = "nxp,pcf2131", .data = &pcf21xx_cfg[PCF2131] },
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(of, pcf2127_of_match);
+> @@ -1069,6 +1259,7 @@ static const struct i2c_device_id pcf2127_i2c_id[] = {
+>         { "pcf2127", PCF2127 },
+>         { "pcf2129", PCF2129 },
+>         { "pca2129", PCF2129 },
+> +       { "pcf2131", PCF2131 },
+>         { }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, pcf2127_i2c_id);
+> @@ -1190,6 +1381,7 @@ static const struct spi_device_id pcf2127_spi_id[] = {
+>         { "pcf2127", PCF2127 },
+>         { "pcf2129", PCF2129 },
+>         { "pca2129", PCF2129 },
+> +       { "pcf2131", PCF2131 },
+>         { }
+>  };
+>  MODULE_DEVICE_TABLE(spi, pcf2127_spi_id);
+> @@ -1254,5 +1446,5 @@ static void __exit pcf2127_exit(void)
+>  module_exit(pcf2127_exit)
+>
+>  MODULE_AUTHOR("Renaud Cerrato <r.cerrato@til-technologies.fr>");
+> -MODULE_DESCRIPTION("NXP PCF2127/29 RTC driver");
+> +MODULE_DESCRIPTION("NXP PCF2127/29/31 RTC driver");
+>  MODULE_LICENSE("GPL v2");
 > --
 > 2.30.2
 >
