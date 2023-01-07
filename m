@@ -2,57 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C6D6610BE
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Jan 2023 19:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4328C66110F
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 Jan 2023 19:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjAGSSP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 7 Jan 2023 13:18:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S232588AbjAGSg6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 7 Jan 2023 13:36:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAGSSO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 7 Jan 2023 13:18:14 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2991CFF4;
-        Sat,  7 Jan 2023 10:18:13 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id v127so268207vsb.12;
-        Sat, 07 Jan 2023 10:18:13 -0800 (PST)
+        with ESMTP id S230092AbjAGSgY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 7 Jan 2023 13:36:24 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0C941674;
+        Sat,  7 Jan 2023 10:36:23 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id cb7so1075332uab.13;
+        Sat, 07 Jan 2023 10:36:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/GRMjDgT48jRfAFGb2uOibdVksbJjC1KC+OPBUllYg=;
-        b=At+P0MjbS/YAzK02cHZLVHTnCuhC0GvUcA3sK4qi1hWbJ1vMP9JDBKZ6lo7uG9Q0em
-         lOV1ZyRCU2K8dDYXkVpsdnIwJJrjDQF45U0SCMSzWL+ey7SZ7cu2VKJxEAlHxfrlxYBP
-         3LSNS2idXpdzaEPn1Hi3i08C0fp7VDXbpPeYnrhgL6yXpr6P0L7pPWO6A++rQSUrRliT
-         /CqEuXp8tfcYBQzhsApXJ1ruiugOO7QVxZRFGznrzjWCUgtJ9Tu0a/b+7uj4QA+ObZfE
-         PUyAblGUXUBihesc4Rp9rswN4yBtUD5Wmvj+AU6yUpsg0e4SLBZwSRv7B1JoORxdHI7w
-         ASHg==
+        bh=p9+QPgugxjt+ok3jQy5AZsqaB/CBReMof4Vva20JyTw=;
+        b=JgAs1Yi3CAVP25JWaaCq7u7iTwZAQsjjY+fU7RZyEss6GYtV1zx40eKcFrKGqe8zze
+         8e6wmHJeNH7DP3Y7T+CpeHWxoPrYBit1gVLNmwZkX23JFhcBtbJ14wyq8lUs0+efJOYf
+         oKZZJRPpYAAqXY6alikcge/jZEMsH8vAR4UYMchOsZ87+2XR+esXrzzNGYKq7GdDO+SA
+         Ae9hojCyOaV77d8GfqB2g7zmsp6dRNkBMBxC8KiyNLh+gH3FBuSZU7f820lHfr0bHQGJ
+         paWyM0ToYVGGyGnsX1MjU9JxAFxpYq8X7bFy3UOuBrW5XUc66bcd6EBfsea0ecqb3DbY
+         +8qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z/GRMjDgT48jRfAFGb2uOibdVksbJjC1KC+OPBUllYg=;
-        b=syD3wXe+fHbksX+V7YmPU197L9DtDgAmEIboijPgUgkX9ifR1Ja7AE9K9bttZV/84L
-         +rYrKmprnJuC9fzJtUg0+lEh0xgUcF5J4nC9qfzRAZ01j5WfZy/2U1coRvzPX4iPP9J7
-         Ol+yOBuMoLyc+FT8zC6YinZwY7/+Lhy3+QcFiMuweLbYbi8fsj6FKzrKHRtxXjGD430E
-         OfmV8oQjk22TDE2mV2ILyxN/cPczL6jdYK77yEzQ7vr5eeEmgQHujTMwaeNQrv+5W/YP
-         52ZZMdDo1dZPTfLZfmlF0iOtmSJlpl9VFsApwzZwzFP+HzaZpFFeTt/NtTYCKgHO5/8j
-         uN6Q==
-X-Gm-Message-State: AFqh2kp4b1VXx7OEgKkb7UeE0a0I5uIZi8LKpMQUIH301vZfqM/6ZME7
-        35icOv1Ru3kDNh3gGpCn4fab//tIy24wI3ismIU=
-X-Google-Smtp-Source: AMrXdXvVn4Fbql/T7F01FNheMwFDx0tr4F2lGyxduu7CqDBgoSH5+xBdqIlQtG5cbH/0NgMcNL2OQrwcnWExEjDv06Q=
-X-Received: by 2002:a67:fe44:0:b0:3ce:3974:4558 with SMTP id
- m4-20020a67fe44000000b003ce39744558mr3447558vsr.0.1673115493045; Sat, 07 Jan
- 2023 10:18:13 -0800 (PST)
+        bh=p9+QPgugxjt+ok3jQy5AZsqaB/CBReMof4Vva20JyTw=;
+        b=K6U+sx1vc2rDp2hS3je9dGeDIF6+7L2qtKBFe8ShRdwZZ266C6a2+DMxg6qpFMvqgH
+         bPUJDJ1VorD5aS0VcWbPOX+4Zk1a/pHVGsat+yI+LEihiaZWGiCoCcQvKPnihfmMGayz
+         3mOgtfr5DYTHQk+ZEvLE9LusDYSHtdfDkiZBrzcMliUZjpRoscoadEf175fDRhrRBrnk
+         6kdycarEN6GaNTdKzevtnindltxt84euEXSZgatGJpqZ/0wVK4VSncSvk78xt4md9uY2
+         FWRebBskHeE5c+MXYpn/qvPA9D65jOnabnimBS6Vrv4LgHic0duHuCz7atwiwc8Q7sXx
+         ZiLA==
+X-Gm-Message-State: AFqh2kpQHoe+q97NZNvIUfH6ZdqSnDPi6Qsx5RPpsIORVrWqQWPFS9ei
+        1vquT/89G9xRylpwVGTzqe/gFxsFa02IHs0a0hs=
+X-Google-Smtp-Source: AMrXdXsC4+XoFVzdaZzPJ1qw3hDeR5OYKSrynUJf7bTB3YaU4XJL6iExElgiF/9ErIrtj6qDNeuQYZIk0jqip/uUzOs=
+X-Received: by 2002:ab0:49ab:0:b0:54e:2c35:5a4f with SMTP id
+ e40-20020ab049ab000000b0054e2c355a4fmr3479206uad.118.1673116582187; Sat, 07
+ Jan 2023 10:36:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-9-hugo@hugovil.com>
-In-Reply-To: <20221215150214.1109074-9-hugo@hugovil.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com> <20221215150214.1109074-10-hugo@hugovil.com>
+In-Reply-To: <20221215150214.1109074-10-hugo@hugovil.com>
 From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Sat, 7 Jan 2023 19:17:57 +0100
-Message-ID: <CAH+2xPAPysgrZAsUwzRGPnAMxRs7Pz24QML4a3P55WygHpEzTQ@mail.gmail.com>
-Subject: Re: [PATCH v3 08/14] rtc: pcf2127: add support for PCF2131 interrupts
- on output INT_A
+Date:   Sat, 7 Jan 2023 19:36:06 +0100
+Message-ID: <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
+Subject: Re: [PATCH v3 09/14] rtc: pcf2127: set PWRMNG value for PCF2131
 To:     Hugo Villeneuve <hugo@hugovil.com>
 Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -70,108 +69,63 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Den tor. 15. dec. 2022 kl. 16.20 skrev Hugo Villeneuve <hugo@hugovil.com>:
+Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
 >
 > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 >
-> The PCF2127 and PCF2129 have one output interrupt pin. The PCF2131 has
-> two, named INT_A and INT_B. The hardware support that any interrupt
-> source can be routed to either one or both of them.
+> Default PWRMNG[2:0] bits are set to 000b for PCF2127/29, but to
+> 111b for PCF2131.
 >
-> Force all interrupt sources to go to the INT A pin.
->
-> Support to route any interrupt source to INT A/B pins is not supported
-> by this driver at the moment.
+> Set these bits to 000b to select same mode as PCF2127/29.
 >
 > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
 Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
 
+I think it's a good idea[1] but there have been concerns about
+setting default values in the past[2]. In case somebody needs
+a different behaviour they should add a device tree property.
+
+[1] https://lore.kernel.org/linux-rtc/20190910143945.9364-1-bruno.thomsen@gmail.com/
+[2] https://lore.kernel.org/linux-rtc/20191211163354.GC1463890@piout.net/
+
 > ---
->  drivers/rtc/rtc-pcf2127.c | 35 +++++++++++++++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
+>  drivers/rtc/rtc-pcf2127.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 >
 > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 4148e135f935..68af4d0438b8 100644
+> index 68af4d0438b8..241189ee4a05 100644
 > --- a/drivers/rtc/rtc-pcf2127.c
 > +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -191,6 +191,7 @@ struct pcf21xx_config {
->         int max_register;
->         unsigned int has_nvmem:1;
->         unsigned int has_bit_wd_ctl_cd0:1;
-> +       unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
->         u8 regs_td_base; /* Time/data base registers. */
->         u8 regs_alarm_base; /* Alarm function base registers. */
->         u8 reg_wd_ctl; /* Watchdog control register. */
-> @@ -879,6 +880,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->                 .max_register = 0x1d,
->                 .has_nvmem = 1,
->                 .has_bit_wd_ctl_cd0 = 1,
-> +               .has_int_a_b = 0,
->                 .regs_td_base = PCF2127_REG_TIME_DATE_BASE,
->                 .regs_alarm_base = PCF2127_REG_ALARM_BASE,
->                 .reg_wd_ctl = PCF2127_REG_WD_CTL,
-> @@ -902,6 +904,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->                 .max_register = 0x19,
->                 .has_nvmem = 0,
->                 .has_bit_wd_ctl_cd0 = 0,
-> +               .has_int_a_b = 0,
->                 .regs_td_base = PCF2127_REG_TIME_DATE_BASE,
->                 .regs_alarm_base = PCF2127_REG_ALARM_BASE,
->                 .reg_wd_ctl = PCF2127_REG_WD_CTL,
-> @@ -925,6 +928,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->                 .max_register = 0x36,
->                 .has_nvmem = 0,
->                 .has_bit_wd_ctl_cd0 = 0,
-> +               .has_int_a_b = 1,
->                 .regs_td_base = PCF2131_REG_TIME_DATE_BASE,
->                 .regs_alarm_base = PCF2131_REG_ALARM_BASE,
->                 .reg_wd_ctl = PCF2131_REG_WD_CTL,
-> @@ -1017,6 +1021,28 @@ static int pcf2127_enable_ts(struct device *dev, int ts_id)
->         return ret;
->  }
+> @@ -53,6 +53,7 @@
+>  #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
+>  #define PCF2127_BIT_CTRL3_BF                   BIT(3)
+>  #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
+> +#define PCF2127_CTRL3_PWRMNG_MASK              GENMASK(7, 5)
+>  /* Control register 4 */
+>  #define PCF2131_REG_CTRL4              0x03
+>  #define PCF2131_BIT_CTRL4_TSF4                 BIT(4)
+> @@ -1129,6 +1130,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>         regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+>                                 PCF2127_BIT_CTRL1_POR_OVRD);
 >
-> +/* Route all interrupt sources to INT A pin. */
-> +static int pcf2127_configure_interrupt_pins(struct device *dev)
-> +{
-> +       struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> +       int ret;
-> +
-> +       /* Mask bits need to be cleared to enable corresponding
-> +        * interrupt source.
+> +       /* Make sure PWRMNG[2:0] is set to 000b. This is the default for
+> +        * PCF2127/29, but not for PCF2131 (default of 111b).
+> +        *
+> +        * PWRMNG[2:0]  = 000b:
+> +        *   battery switch-over function is enabled in standard mode;
+> +        *   battery low detection function is enabled
 > +        */
-> +       ret = regmap_write(pcf2127->regmap,
-> +                          PCF2131_REG_INT_A_MASK1, 0);
-> +       if (ret)
+> +       ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
+> +                               PCF2127_CTRL3_PWRMNG_MASK);
+> +       if (ret < 0) {
+> +               dev_err(dev, "PWRMNG config failed\n");
 > +               return ret;
-> +
-> +       ret = regmap_write(pcf2127->regmap,
-> +                          PCF2131_REG_INT_A_MASK2, 0);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return ret;
-> +}
-> +
->  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->                          int alarm_irq, const char *name, const struct pcf21xx_config *config)
->  {
-> @@ -1076,6 +1102,15 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->                 set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
->         }
->
-> +       if (pcf2127->cfg->has_int_a_b) {
-> +               /* Configure int A/B pins, independently of alarm_irq. */
-> +               ret = pcf2127_configure_interrupt_pins(dev);
-> +               if (ret) {
-> +                       dev_err(dev, "failed to configure interrupt pins\n");
-> +                       return ret;
-> +               }
 > +       }
 > +
->         if (pcf2127->cfg->has_nvmem) {
->                 struct nvmem_config nvmem_cfg = {
->                         .priv = pcf2127,
+>         ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
+>         if (ret < 0)
+>                 return ret;
 > --
 > 2.30.2
 >
