@@ -2,50 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F346628A6
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Jan 2023 15:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9B0663276
+	for <lists+linux-rtc@lfdr.de>; Mon,  9 Jan 2023 22:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjAIOga (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 9 Jan 2023 09:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S237831AbjAIVMM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 9 Jan 2023 16:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjAIOg3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Jan 2023 09:36:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C120B26FB
-        for <linux-rtc@vger.kernel.org>; Mon,  9 Jan 2023 06:36:23 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pEtG9-0006S6-8R; Mon, 09 Jan 2023 15:36:21 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5712:c65e:d5c2:94c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 762161524E0;
-        Mon,  9 Jan 2023 14:36:20 +0000 (UTC)
-Date:   Mon, 9 Jan 2023 15:36:12 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel@pengutronix.de, Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH RESEND 0/2] rtc: rv8803 patches
-Message-ID: <20230109143612.7gqul6ccsjswvajg@pengutronix.de>
-References: <20221123095527.2771434-1-s.hauer@pengutronix.de>
+        with ESMTP id S237807AbjAIVLx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Jan 2023 16:11:53 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5074943D9B;
+        Mon,  9 Jan 2023 13:06:49 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6760F240009;
+        Mon,  9 Jan 2023 21:06:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1673298407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Eh1DAXyvkuVcNioGYKI2acetOk4JaM6UlDTmzMaklNc=;
+        b=e/qv1HqmcBj4tO/BLNvni6pZbMykXUELMAh10I9uUMQI1/9clCgqL2WySKIwFCYZTIsrgf
+        aCJIXPq3URkqh2BD4ZX8L8b0g+tqGB8nmMRvJgQwyLHYH8Q5YF7j55yRnCGXgCJH0105b5
+        s9bLCIHh5ZGgKX2xVLP5ZvQMILeDwVzeC8Uahd64SO9OpGwTA9Ce++ePFryDUCJa0sCm7i
+        1CMRkXJqCrPxftHZE3EMEEMi5NtpstaL99AGvIF4GnFB2hbbVI6UVyZbzKjRb3ZiB7kleR
+        HWATcpniapxWWJHlZOVrpGxMdIyZq3qL0ru0Fx77OQvDjFOoQ42dsknKsHPi0w==
+Date:   Mon, 9 Jan 2023 22:06:47 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Shanker Donthineni <sdonthineni@nvidia.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: efi: Enable SET/GET WAKEUP services as optional
+Message-ID: <167329838479.48360.11140441883558842706.b4-ty@bootlin.com>
+References: <20230102230630.192911-1-sdonthineni@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x5cjs62lm5zav7pg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221123095527.2771434-1-s.hauer@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230102230630.192911-1-sdonthineni@nvidia.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,48 +52,26 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---x5cjs62lm5zav7pg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 02 Jan 2023 17:06:30 -0600, Shanker Donthineni wrote:
+> The current implementation of rtc-efi is expecting all the 4
+> time services GET{SET}_TIME{WAKEUP} must be supported by UEFI
+> firmware. As per the EFI_RT_PROPERTIES_TABLE, the platform
+> specific implementations can choose to enable selective time
+> services based on the RTC device capabilities.
+> 
+> This patch does the following changes to provide GET/SET RTC
+> services on platforms that do not support the WAKEUP feature.
+> 
+> [...]
 
-On 23.11.2022 10:55:25, Sascha Hauer wrote:
-> This series has the remainder of
-> https://lore.kernel.org/all/20220426071056.1187235-1-s.hauer@pengutronix.=
-de/
-> which was partly applied.
->=20
-> Alexandre,
->=20
-> Last time this series was send you asked if this series fixes a problem
-> we've really seen to which Ahmad answered:
+Applied, thanks!
 
-Happy new Year Alexandre!
+[1/1] rtc: efi: Enable SET/GET WAKEUP services as optional
+      commit: 101ca8d05913b7d1e6e8b9dd792193d4082fff86
 
-What can we do to bring this patch froward?
+Best regards,
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---x5cjs62lm5zav7pg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmO8JlkACgkQrX5LkNig
-0126GQf/ZjalsA6j3wONADHsDlsIZIHFsrcgIb2cp4Mpyj+m8OIrX0UzooB5znng
-CBEIm5TM5cIlhi8Trm0IYdbkIu8Ko3NjxvJ2OIfUjYSV6OcdddjXtdeZMADt0CXG
-bEmB5rLcdWRIp6bTV42+JOVnu3k0+yt8mHTTuYEgcOxDIVTq+RHuFE847nlzHf4A
-QBt6K9soDYA24J6TwuhomWPoMMGqqbt7jqO6KCoU+ap7iG/dwppOxb+fvNvHnYUu
-KwdLjqCwvtVYgolTcWVNnWCeiAnBX9j/daOENpJU0ADVz3LmiHnWFg0861QOeElG
-cWX6VQGmJNaNrsKa76I8wM2AA42gow==
-=xYOl
------END PGP SIGNATURE-----
-
---x5cjs62lm5zav7pg--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
