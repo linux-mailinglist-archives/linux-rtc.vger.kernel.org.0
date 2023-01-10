@@ -2,59 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97033663DAF
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jan 2023 11:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFEF663DB7
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jan 2023 11:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237896AbjAJKOS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Jan 2023 05:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S237965AbjAJKQB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Jan 2023 05:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbjAJKOI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 05:14:08 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7C95132E
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 02:14:07 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id az7so11177762wrb.5
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 02:14:06 -0800 (PST)
+        with ESMTP id S238355AbjAJKPi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 05:15:38 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEC2551E0
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 02:15:11 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso9442878wms.5
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 02:15:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jojCCGfavVKv5imMe2sO0IZFTAm6Qt+UkX8aAOYmM8Q=;
-        b=bbhb/M2Tbo7P6JQFLKz1c0s92pip1LUY/qoQtVnezlvmXlve3kgyeNba8+WtmX4t2D
-         Dqs5HvWz9j8ad8G7zjQAKt2OUhJ5oPpmAugq792ubXvNuvlNgx12r2eNxoiWtfJtAgkc
-         ln8dRvw1xf/0keWdYbSaNriNWp27rABFZucUCHjhkgOSv2oYBu+gDWHpRQmu7nuZYux/
-         Ch1A4NbCcbmL1JAXJRKL58l8adrR3ecbI+lYW+4ObQNnSVJc2XVqhStvYLd1MguXeStw
-         ks3SHXuek07nXLDarhxwAioHsl5xyI708nCoT8Z6Vdq/Uf2JhdoccDoTWgGesRpg8BQ0
-         zb0Q==
+        bh=AOaM9klxyd9oBpbyKATfQLn+xwTyF3728aG0uRNv66U=;
+        b=yoUk4O+00nkGYkYXyiqjTxWK4c7uEc66lLsyapNN3lN4GWq40l5XLLk6lO9MKtmxLQ
+         0mF0Rhs+YcdM7Am20PD9umvFqLKrgIs2WmrZqIoUhClE+yw2sEunnBBIg5tONlN8P8cg
+         T/1xm7p/HoG0u7bVzXhlUjL5p8+Fvq6t2cK3PJCGiI7caXb7zzfRZcI4qprHbjxN3Gal
+         hVatrgn4tWSnEMLt3nvou6IN6lw7QGsWFvZT88CEO87sTEeS8NAtT4PaEbRYqoFH/rKp
+         gsFXYOEShYrosm9/rWZnYkZv6fcSTdHmPOYz9UXe0E+RXWhxZ3TWNIKjLHIFrlUHmJ/e
+         RjHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jojCCGfavVKv5imMe2sO0IZFTAm6Qt+UkX8aAOYmM8Q=;
-        b=kJ9uUtKjiJogJ+0k4HNDZOGqLTOfQCkH13X2CY1D+Aa6bx+TV7wFh7gaMAhB/Hk2dh
-         kG3SkOB+/Qecb726HkCj1IvOaqm4oZ6sKO4B17d7GogJ25j4Fw69NL77hGt8Q1XssnIs
-         0Zsh43CaOmHbadpRCuIwBwvf6admUV7u0fjCnk8EWRx/fVSboYqmfuRDdEtV+vInmdyF
-         s0ys6ghfS0JL1OTEdZuGWJ1e8FljMWxMd9jij2pkwAsQzqWtyxoNSYSrf3Dd+0XwoaWN
-         q+g9+cTugs5cR5s1NFfKLJFZUu6pwYBw5sP/3LGDDrp7oMB4/7Ocs5WDdvHwGx3Y+1/z
-         V0PQ==
-X-Gm-Message-State: AFqh2kqTyrcRM98LK/tOWERMDlJ34axv4EZAG1DLl8DDFjVELnJIszwr
-        2/I3iasqjzR4GxflwwqXl21qMQ==
-X-Google-Smtp-Source: AMrXdXsns+wODkeVA+eyVg6DWDP7h4ZsUK2KoND8WPXo2OLQMg/ZUcoSsqQ0z3Y2wBq+9Yj/x0NG4A==
-X-Received: by 2002:a05:6000:16cb:b0:242:1b0d:9c58 with SMTP id h11-20020a05600016cb00b002421b0d9c58mr50376842wrf.69.1673345645653;
-        Tue, 10 Jan 2023 02:14:05 -0800 (PST)
+        bh=AOaM9klxyd9oBpbyKATfQLn+xwTyF3728aG0uRNv66U=;
+        b=QccPkKVj8n+V6JRazIFZZl8WyENC7H7v6Bf6xhEoyqiEsw0CIg26bgzXU9riohSiOq
+         lGmD7q/XVzedpKcj7I+DE+bY2Tt2yAJoc0MqGfyT/bPJCTiJPV08/qPHUB9QkBVt0qHh
+         mLd4MsOzti9XSgrnc4QafDvnY3wweW7KXlD+v5MeyjRE+bTCqaIbxIlgYJmTd6tXYJEn
+         NqNu25OMPm6oVxqgOeyHp0cLKVdrMDD/iMM0Txbmx5Wwq/h4IvxMFCBGWbF3v8EAvLu/
+         GfugWbl5SbnV0xFg7h1jZ8leJQUs8szlhDGTn0DEnCduKRt+eR8XjTBSUUMLUqsPP95u
+         xBUQ==
+X-Gm-Message-State: AFqh2kr6FBVR+l8vfDkzeKn/B2Mqa0Kln/Q+zhdh37E8/CWsbFu8X6t2
+        XrBP80Oc39s6qvWvznSN+BvndA==
+X-Google-Smtp-Source: AMrXdXstKuMbnF6GLlV2QioeyL83rfUZ/PCM9H9gtVt4kpI2kfbu1FzMUYifSv02GGXMFgTeLR3h+Q==
+X-Received: by 2002:a05:600c:3b02:b0:3c7:18:b339 with SMTP id m2-20020a05600c3b0200b003c70018b339mr58648300wms.37.1673345710203;
+        Tue, 10 Jan 2023 02:15:10 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id a10-20020adfdd0a000000b002bb6b45ab57sm8867372wrm.85.2023.01.10.02.14.02
+        by smtp.gmail.com with ESMTPSA id f19-20020a1c6a13000000b003d9fb04f658sm754592wmc.4.2023.01.10.02.15.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 02:14:04 -0800 (PST)
-Message-ID: <6044f85b-93f2-fe2e-68b5-9912836f4a38@linaro.org>
-Date:   Tue, 10 Jan 2023 11:14:01 +0100
+        Tue, 10 Jan 2023 02:15:09 -0800 (PST)
+Message-ID: <2a0408ab-085b-c104-7e84-ce2fe1e6bea7@linaro.org>
+Date:   Tue, 10 Jan 2023 11:15:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 01/11] dt-bindings: firmware: convert meson_sm.txt to
+Subject: Re: [PATCH v2 02/11] dt-bindings: nvmem: convert amlogic-efuse.txt to
  dt-schema
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
@@ -88,9 +88,9 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
         netdev@vger.kernel.org
 References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v2-1-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-2-36ad050bb625@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-1-36ad050bb625@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-2-36ad050bb625@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -103,11 +103,12 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 09/01/2023 13:53, Neil Armstrong wrote:
-> Convert the Amlogic Secure Monitor bindings to dt-schema.
+> Convert the  Amlogic Meson GX eFuse bindings to dt-schema.
 > 
-> Take in account usage the used variant with amlogic,meson-gx-sm.
+> Take in account the used variant with amlogic,meson-gx-efuse.
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
