@@ -2,61 +2,115 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D055663B69
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jan 2023 09:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97033663DAF
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jan 2023 11:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjAJIku (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Jan 2023 03:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
+        id S237896AbjAJKOS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Jan 2023 05:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238092AbjAJIki (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 03:40:38 -0500
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420161115F
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 00:40:34 -0800 (PST)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id B285682D62; Tue, 10 Jan 2023 08:40:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1673340033; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=KM4wYdOY3KIHfiueQosteU8nXXQEP1U/GuxXBR3KhNdz7N5keDnEMPg+EhPXeZmgK
-         aKmc308WZ3wAQDIBiX685+yJ06S4CVp9CDvWquWQP7udU58mBbg90xw3GpGy+VW6qW
-         FVpMZt2G4DKS+B/n8nwrSMEMllgqIhcxSynvi1j+xRUL9X7cv43aX+2qqL1ut1VBz4
-         TNCc4VqoxYsvykmIv9zkl+/dAC6h3kXAXEqrqree3L7k7GPL/UpcP+9UG+kctFad7A
-         PiICegOoEphvnzMOj6EjBQYWti+w3wXSfRBpmin3z4f6YTvL2aqJnuPIZBAb8kRtmM
-         ZTtNp2Ewp1tPg==
-Received: by mail.lokoho.com for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 08:40:32 GMT
-Message-ID: <20230110074501-0.1.3b.lhkm.0.4v807ojtik@lokoho.com>
-Date:   Tue, 10 Jan 2023 08:40:32 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-rtc@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S235197AbjAJKOI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 05:14:08 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7C95132E
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 02:14:07 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id az7so11177762wrb.5
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 02:14:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jojCCGfavVKv5imMe2sO0IZFTAm6Qt+UkX8aAOYmM8Q=;
+        b=bbhb/M2Tbo7P6JQFLKz1c0s92pip1LUY/qoQtVnezlvmXlve3kgyeNba8+WtmX4t2D
+         Dqs5HvWz9j8ad8G7zjQAKt2OUhJ5oPpmAugq792ubXvNuvlNgx12r2eNxoiWtfJtAgkc
+         ln8dRvw1xf/0keWdYbSaNriNWp27rABFZucUCHjhkgOSv2oYBu+gDWHpRQmu7nuZYux/
+         Ch1A4NbCcbmL1JAXJRKL58l8adrR3ecbI+lYW+4ObQNnSVJc2XVqhStvYLd1MguXeStw
+         ks3SHXuek07nXLDarhxwAioHsl5xyI708nCoT8Z6Vdq/Uf2JhdoccDoTWgGesRpg8BQ0
+         zb0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jojCCGfavVKv5imMe2sO0IZFTAm6Qt+UkX8aAOYmM8Q=;
+        b=kJ9uUtKjiJogJ+0k4HNDZOGqLTOfQCkH13X2CY1D+Aa6bx+TV7wFh7gaMAhB/Hk2dh
+         kG3SkOB+/Qecb726HkCj1IvOaqm4oZ6sKO4B17d7GogJ25j4Fw69NL77hGt8Q1XssnIs
+         0Zsh43CaOmHbadpRCuIwBwvf6admUV7u0fjCnk8EWRx/fVSboYqmfuRDdEtV+vInmdyF
+         s0ys6ghfS0JL1OTEdZuGWJ1e8FljMWxMd9jij2pkwAsQzqWtyxoNSYSrf3Dd+0XwoaWN
+         q+g9+cTugs5cR5s1NFfKLJFZUu6pwYBw5sP/3LGDDrp7oMB4/7Ocs5WDdvHwGx3Y+1/z
+         V0PQ==
+X-Gm-Message-State: AFqh2kqTyrcRM98LK/tOWERMDlJ34axv4EZAG1DLl8DDFjVELnJIszwr
+        2/I3iasqjzR4GxflwwqXl21qMQ==
+X-Google-Smtp-Source: AMrXdXsns+wODkeVA+eyVg6DWDP7h4ZsUK2KoND8WPXo2OLQMg/ZUcoSsqQ0z3Y2wBq+9Yj/x0NG4A==
+X-Received: by 2002:a05:6000:16cb:b0:242:1b0d:9c58 with SMTP id h11-20020a05600016cb00b002421b0d9c58mr50376842wrf.69.1673345645653;
+        Tue, 10 Jan 2023 02:14:05 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id a10-20020adfdd0a000000b002bb6b45ab57sm8867372wrm.85.2023.01.10.02.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 02:14:04 -0800 (PST)
+Message-ID: <6044f85b-93f2-fe2e-68b5-9912836f4a38@linaro.org>
+Date:   Tue, 10 Jan 2023 11:14:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 01/11] dt-bindings: firmware: convert meson_sm.txt to
+ dt-schema
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-1-36ad050bb625@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-1-36ad050bb625@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 09/01/2023 13:53, Neil Armstrong wrote:
+> Convert the Amlogic Secure Monitor bindings to dt-schema.
+> 
+> Take in account usage the used variant with amlogic,meson-gx-sm.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Best regards,
+Krzysztof
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
-
-
-Pozdrawiam
-Adam Charachuta
