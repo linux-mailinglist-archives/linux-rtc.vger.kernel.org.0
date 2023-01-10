@@ -2,64 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D0B664E7E
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jan 2023 23:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA03664FE5
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jan 2023 00:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233586AbjAJWFa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Jan 2023 17:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S233314AbjAJXXc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Jan 2023 18:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbjAJWFM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 17:05:12 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5CF6219B;
-        Tue, 10 Jan 2023 14:05:11 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id 18so19683383edw.7;
-        Tue, 10 Jan 2023 14:05:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WrKmlWHDUV61DahQUIaVkiL3+243B01IgkXVVlGEa8Y=;
-        b=IU6f2FJsgTYlQlUxPC3SgJJ3nHFscGea08quQshVivr8hFfTaCsq0s0LtncJiE9VM6
-         3mP91XMs097IQMqGrGDeR9Q+Nn9BKmtDOAQCWiDZ2Q8eVwcQryoz9SH1KeWnpPHN45c3
-         rPkRe1EqQB8QmpZv3Xy+dztrHgOb2VFHNMCQaPsGirHXniNzQLu5bPySZcqFWzYtaPmq
-         5A2dtC34COH9kL8iMQXmAHCiJ4F7MQp47VlpgBt+vNEbw1EwcfbsX8aGYfoKUM8gt1hz
-         GDPLFshOAOL8YRSF/7Z9ozAVNX/9vQQ2R1X1DLFRvX0Cj+ub7mHHtQz157FGqOyEOaRD
-         YtfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WrKmlWHDUV61DahQUIaVkiL3+243B01IgkXVVlGEa8Y=;
-        b=QgDf5nTv+yAN18kKdiPKO8rTPLJTbBnR7UZ6YoYmVmniPdrg+g/QQYmCtoa0qAQRNX
-         lcZ7TPFtzj1wEYFwvj89tPvBTWGqdhcnG2K9zTPJwQmcpadPFEJq6rVeFBIz9N3iYo78
-         Ieb04EmGw0FpTp6j7ESrsPOcb+IF/KqAOGg8OVjICMamRTZB8VZiDBev+f++URHNwKYs
-         5NE0SjUOT3eSfqAGp2Z4YSIWrufw/k3awvHkbdEaSKfpptMUSPA3algFSREZV02N0JBI
-         NLvsQMYdLOzub805SLcRs3//S8NfkBd74fA7hN1nym17jXiJnnnnV54YbUnyJs4x1l5+
-         iLnQ==
-X-Gm-Message-State: AFqh2ko4ZfbrA2OTRBKkBHrczX3rqwFUDXPYb00Yfx8OuBcbvIGSN6mt
-        hvxn88dOZjMKLDojMs3YWw/95FOL6kayzS1t+y4=
-X-Google-Smtp-Source: AMrXdXslMt+extOJ67lNrPk/gzoVhLdRWwj56JScPZGQacLbHpwmoFzQ7g3CAvQIElO72fbF6+niQAf0El2SmKxOxfk=
-X-Received: by 2002:a05:6402:78b:b0:494:cb79:1ff3 with SMTP id
- d11-20020a056402078b00b00494cb791ff3mr2392529edy.291.1673388309924; Tue, 10
- Jan 2023 14:05:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v2-3-36ad050bb625@linaro.org> <5c59d432-3785-8eaa-af77-03fee09b5fd3@linaro.org>
-In-Reply-To: <5c59d432-3785-8eaa-af77-03fee09b5fd3@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 10 Jan 2023 23:04:58 +0100
-Message-ID: <CAFBinCCjDLN5owiD1x5UNcBiE7P6czkS1wrSYKn-bBPCHQxT9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 03/11] dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt
- to dt-schema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S234114AbjAJXX3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 18:23:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED1463F5;
+        Tue, 10 Jan 2023 15:23:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3C56194C;
+        Tue, 10 Jan 2023 23:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CCCC433D2;
+        Tue, 10 Jan 2023 23:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673393006;
+        bh=KfSPuN+1QhbNUv5tw8QDzbsOpJukhbxBa7/tiSZA6YE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kmBayYB9RkU0+wQl/9jgcDnUFJ81UiubfLDDvtLmip6svd0iZ81Ae9ZOhNuunaz53
+         3+YDBMo3PYZkUs7PS7dCJKYagCO/5yWpIhjev9LaLijR1Sld+WLcGE/RfYOl5Mg9KC
+         9HdifMep/S3Amhq3h+Ed2IrgxEZCaC4JyGgLR36CldJ60HpvOU0qa19/oPMYFerWIu
+         qpWJ0rtAbxpY18prh4Ut8fRWlNQAZ2ISvfPniM8XDKtdWjPfQEcG3YIpPnqKZj3PgB
+         +j7daBrq1rgokCJ3+YLhtG9BQIxFuvvvg1HEltXvh+5uRv8CBvthbrqKQ0wQxv9WPq
+         Si2fNdrIaT1dQ==
+Date:   Tue, 10 Jan 2023 15:23:24 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -74,7 +53,6 @@ Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -83,30 +61,28 @@ Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
         linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        netdev@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 00/11] dt-bindings: first batch of dt-schema
+ conversions for Amlogic Meson bindings
+Message-ID: <20230110152324.1e19974d@kernel.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Neil, Hi Krzysztof,
+On Mon, 09 Jan 2023 13:53:25 +0100 Neil Armstrong wrote:
+> - patch 12: added reviewed-by
+> - Link to v1: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org
 
-On Tue, Jan 10, 2023 at 11:15 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-[...]
-> > +  secure-monitor:
-> > +    description: phandle to the secure-monitor node
->
-> Missing $ref
-Actually this IP does not connect to a secure-monitor. So the
-secure-monitor property can be removed.
-
-
-Best regards,
-Martin
+I'm guessing patch 12 is patch 11 in this posting.
+Should we take it via net-next? Looks acked & ready.
