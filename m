@@ -2,79 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B776633A5
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Jan 2023 23:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D055663B69
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jan 2023 09:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234593AbjAIWEX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 9 Jan 2023 17:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S231630AbjAJIku (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Jan 2023 03:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjAIWEV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Jan 2023 17:04:21 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729BE13DC6;
-        Mon,  9 Jan 2023 14:04:20 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3D5A240002;
-        Mon,  9 Jan 2023 22:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1673301858;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=inY30xisfam4YsgnPcMR38i+CvhLKAgVwrVah5uQ76s=;
-        b=OqNAa3wF2sn6lXv0kug09Fl9zzZSf4UalHBh6pb+X1GmaeOux5zfD918K/cl+Ams1bF9Po
-        SydVLFNQlynY4/6sLct6Nv2ZCh4/TBcj4FAQpREyGFpqB5bDMslUbL73gMlW2ydxSQFG0T
-        l7xM93zQwdP91zAK2E7wrG13sUdIlIhepTr7rEsMHmDvsN3LeAAKjif1y/K4tRV1nTGGb0
-        YfPL8foszWTPEsezwLxA080y2j+ho5Hf4bjRT82nBG+uqb0Xt5veapLm06bJwQFE55Qnmt
-        pMCwNQEnie72B1mPConidzHn6pgDqh6fyJ8qEFfLBlkl09fn+HvyZ+Btr+9YgA==
-Date:   Mon, 9 Jan 2023 23:04:17 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 560/606] rtc: ds1307: Convert to i2c's
- .probe_new()
-Message-ID: <167330184365.58615.1381399815168512020.b4-ty@bootlin.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-561-uwe@kleine-koenig.org>
+        with ESMTP id S238092AbjAJIki (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 03:40:38 -0500
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420161115F
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 00:40:34 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id B285682D62; Tue, 10 Jan 2023 08:40:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1673340033; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=KM4wYdOY3KIHfiueQosteU8nXXQEP1U/GuxXBR3KhNdz7N5keDnEMPg+EhPXeZmgK
+         aKmc308WZ3wAQDIBiX685+yJ06S4CVp9CDvWquWQP7udU58mBbg90xw3GpGy+VW6qW
+         FVpMZt2G4DKS+B/n8nwrSMEMllgqIhcxSynvi1j+xRUL9X7cv43aX+2qqL1ut1VBz4
+         TNCc4VqoxYsvykmIv9zkl+/dAC6h3kXAXEqrqree3L7k7GPL/UpcP+9UG+kctFad7A
+         PiICegOoEphvnzMOj6EjBQYWti+w3wXSfRBpmin3z4f6YTvL2aqJnuPIZBAb8kRtmM
+         ZTtNp2Ewp1tPg==
+Received: by mail.lokoho.com for <linux-rtc@vger.kernel.org>; Tue, 10 Jan 2023 08:40:32 GMT
+Message-ID: <20230110074501-0.1.3b.lhkm.0.4v807ojtik@lokoho.com>
+Date:   Tue, 10 Jan 2023 08:40:32 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-rtc@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-561-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On Fri, 18 Nov 2022 23:44:54 +0100, Uwe Kleine-König wrote:
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
-> 
-> 
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-Applied, thanks!
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-[560/606] rtc: ds1307: Convert to i2c's .probe_new()
-          commit: 4cd0ca1fe9a79d81a001ff14f14035531773fe43
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-Best regards,
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Pozdrawiam
+Adam Charachuta
