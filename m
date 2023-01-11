@@ -2,122 +2,243 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072A86656B5
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jan 2023 10:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 576B766609F
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jan 2023 17:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237715AbjAKJB1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Jan 2023 04:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S234703AbjAKQfL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Jan 2023 11:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235983AbjAKJA4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Jan 2023 04:00:56 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFB3C1F
-        for <linux-rtc@vger.kernel.org>; Wed, 11 Jan 2023 01:00:54 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so12064834wms.4
-        for <linux-rtc@vger.kernel.org>; Wed, 11 Jan 2023 01:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UIgNk4h0ykNf4W9R10f+g8s9MtlXPDlZWGID0CLp804=;
-        b=ACz2pUEAplUyKMwahar14IEYYnawh0ar2G+KL0+AdO+fXKDb6L1+7Aq1cR/JhRxMxF
-         mptt0m7OE+hHLEPyv2GGxmbq78+4PKJIg2OU+Et0ss+4vM4s35EB+0jdnp7VOr0n3o4Y
-         sVNrXDS1NCtl4llNRycijVOG7GqCqJE9sTXrkMnrFCkCNHARqK/VingD2ZFf2CaIyh5R
-         BkUyz70LPfPlxaoLoSrL9Eyv1OPob/snhvTSgSee+4oBHoO28UzKBMYs7qZmo3PKc7Oj
-         TZY7YEEZvny5IzPNF2MZFoR+8B8dExdbws1pT2JocEc7BXwbvR4fsYcDcyxTp6JjTglr
-         yNAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UIgNk4h0ykNf4W9R10f+g8s9MtlXPDlZWGID0CLp804=;
-        b=gvHWcV8RNuDganNa1dSQqaE83LcTKYKSQTMzvqZJ4o0+q4GEmCC0frgMWv63DuYM7p
-         snm+8mZ6tIVgMmPg9U1eZBCtkjvuUOjtuw8MNWy4sN1drNYrjR+lpowcTli/UFtAHCOu
-         pKJVq3QgclkzVtHx9o3Rk06VFyo/goqQcnXsiw+DarBJlYPeYDDh3jBwRhHDdQmXRuDh
-         sZLqIaeEz+uaqAdV8RD9S4kI8f7bU1Uj/irYe8+RbFMefCGs94cTUpdRMdgj+dvoMdsX
-         Q1n2wUPgPqLjWyHIJrkWLzYxRUi1/mY0QFaOhT2QQYPEyPrd6xnRQU0dieYIvNR8oe9n
-         UbuQ==
-X-Gm-Message-State: AFqh2kpLRRgT0UtO30XDzi7eHXoaHgAJA2mL4jg3aUSbdiUUCRJzCg8r
-        RI3pC9/GiaxNYNqPu2GfGTG1Uw==
-X-Google-Smtp-Source: AMrXdXu50nuURvF/uZXf+xmLuSwesdnOY8E4IcaZoYRp8Au4jWUve2YDc0RJ8X2U2aelNYBfkHhv2g==
-X-Received: by 2002:a05:600c:34d0:b0:3d6:b691:b80d with SMTP id d16-20020a05600c34d000b003d6b691b80dmr50949988wmq.21.1673427652953;
-        Wed, 11 Jan 2023 01:00:52 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:d95d:43b7:d6a9:39a5? ([2a01:e0a:982:cbb0:d95d:43b7:d6a9:39a5])
-        by smtp.gmail.com with ESMTPSA id o21-20020a1c7515000000b003d995a704fdsm17507540wmc.33.2023.01.11.01.00.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 01:00:52 -0800 (PST)
-Message-ID: <08698c06-49b0-1cf7-efd3-1038104972cf@linaro.org>
-Date:   Wed, 11 Jan 2023 10:00:51 +0100
+        with ESMTP id S235479AbjAKQeg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Jan 2023 11:34:36 -0500
+Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5EF8FED
+        for <linux-rtc@vger.kernel.org>; Wed, 11 Jan 2023 08:34:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1673454851; x=1676046851;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DIVSltv1EoxJ/HckyzieslouUpu2jYUZiLJc7CfcCaE=;
+        b=GhEs4vp8Uz3g3xY3kL8CQoszNpr1KORB/4yxAxTVdk7Knqa0Eckp/M9aYs8dspFn
+        krokQP5triDkCwdcWWdfkmiXdosTgQcntOU8m/x/v/qf4I91VX/bflRcwRGhYDrj
+        iKufekjOExZDvY2umxxLS1XHU8IZiS4fO9U/AWJ3HlM=;
+X-AuditID: ac14000a-917fe70000007ecb-a4-63bee503c4b7
+Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id C1.F6.32459.305EEB36; Wed, 11 Jan 2023 17:34:11 +0100 (CET)
+Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
+ (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 11 Jan
+ 2023 17:34:11 +0100
+From:   Wadim Egorov <w.egorov@phytec.de>
+To:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <upstream@lists.phytec.de>
+CC:     <riku.voipio@iki.fi>, <alexandre.belloni@bootlin.com>,
+        <a.zummo@towertech.it>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <lee@kernel.org>, <pavel@ucw.cz>
+Subject: [PATCH v2 1/2] dt-bindings: leds: Convert PCA9532 to dtschema
+Date:   Wed, 11 Jan 2023 17:34:03 +0100
+Message-ID: <20230111163404.3526248-1-w.egorov@phytec.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 00/11] dt-bindings: first batch of dt-schema
- conversions for Amlogic Meson bindings
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
- <20230110152324.1e19974d@kernel.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230110152324.1e19974d@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.25.0.11]
+X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
+ (172.25.0.12)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrELMWRmVeSWpSXmKPExsWyRpKBR5f56b5kg63vzSyWXLzKbtH+bhm7
+        xfwj51gt+l48ZLbY0baQxeLyrjlsFlvfrGO0OLb6CpvF3VNH2SxObrjEZtG69wi7Rfc7dQce
+        j3lrqj0Of13I4rFpVSebx51re9g8+rtbWD2mz/vJ5LFi9Xd2j8+b5AI4orhsUlJzMstSi/Tt
+        ErgyevZ9Yi04oFZxYd1ZxgbGXtkuRk4OCQETiTPdK5i6GLk4hAQWM0l8fvWeGcJ5wijR3bSZ
+        DaSKTUBd4s6Gb6wgCRGB2YwSHW83gFUxC2xilJhy8zgLSJWwgJvE1eaDrCA2i4CqxMTup+xd
+        jBwcvAKWEhf/10Gsk5eYeek7O4jNKyAocXLmE7BWZqB489bZzBC2hMTBFy/AbCGg+ItLy1lg
+        eqede80MYYdKbP2ynWkCo8AsJKNmIRk1C8moBYzMqxiFcjOTs1OLMrP1CjIqS1KT9VJSNzGC
+        4kWEgWsHY98cj0OMTByMhxglOJiVRHhXcu5JFuJNSaysSi3Kjy8qzUktPsQozcGiJM57v4cp
+        UUggPbEkNTs1tSC1CCbLxMEp1cAYpKTBfECRVYh9wtpI3fu23dPPXVp6XyF22e20k2UC9cyu
+        n5tk8r+UCSzw8F7ItPb454smn+obz/zMWVklOfPMzncfLkYrvmrh9s1umvhCI/546GudZQkl
+        3YaK1p27zsysenXSd+3ryc+/nmRXPLdAdv/cHTH65ho9z4+9eOzQM/HyZYP5q28uUWIpzkg0
+        1GIuKk4EAH0/IumFAgAA
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+Convert the PCA9532 LED dimmer to dtschema.
+While at it, also update and the the example to match
+recommended node names and the link to the product datasheet.
 
-On 11/01/2023 00:23, Jakub Kicinski wrote:
-> On Mon, 09 Jan 2023 13:53:25 +0100 Neil Armstrong wrote:
->> - patch 12: added reviewed-by
->> - Link to v1: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org
-> 
-> I'm guessing patch 12 is patch 11 in this posting.
-> Should we take it via net-next? Looks acked & ready.
+Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+---
+v2:
+  - Rename yaml file to match compatibles, nxp,pca953x.yaml
+  - Remove Jacek Anaszewski from maintainers list
+  - Remove color labels in example
+  - Restore labels/default-states from original example
+  - Drop reg description
+  - Add unevaluatedProperties to patternProperties scope
+  - Update description of type property & set default to 0
+  - Fix indentation in example
+---
+ .../devicetree/bindings/leds/leds-pca9532.txt | 49 -----------
+ .../devicetree/bindings/leds/nxp,pca953x.yaml | 85 +++++++++++++++++++
+ 2 files changed, 85 insertions(+), 49 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-pca9532.txt
+ create mode 100644 Documentation/devicetree/bindings/leds/nxp,pca953x.yaml
 
-Exact it's ready to be taken
-
-Thanks,
-Neil
+diff --git a/Documentation/devicetree/bindings/leds/leds-pca9532.txt b/Documentation/devicetree/bindings/leds/leds-pca9532.txt
+deleted file mode 100644
+index f769c52e3643..000000000000
+--- a/Documentation/devicetree/bindings/leds/leds-pca9532.txt
++++ /dev/null
+@@ -1,49 +0,0 @@
+-*NXP - pca9532 PWM LED Driver
+-
+-The PCA9532 family is SMBus I/O expander optimized for dimming LEDs.
+-The PWM support 256 steps.
+-
+-Required properties:
+-	- compatible:
+-		"nxp,pca9530"
+-		"nxp,pca9531"
+-		"nxp,pca9532"
+-		"nxp,pca9533"
+-	- reg -  I2C slave address
+-
+-Each led is represented as a sub-node of the nxp,pca9530.
+-
+-Optional sub-node properties:
+-	- label: see Documentation/devicetree/bindings/leds/common.txt
+-	- type: Output configuration, see dt-bindings/leds/leds-pca9532.h (default NONE)
+-	- linux,default-trigger: see Documentation/devicetree/bindings/leds/common.txt
+-	- default-state: see Documentation/devicetree/bindings/leds/common.txt
+-	  This property is only valid for sub-nodes of type <PCA9532_TYPE_LED>.
+-
+-Example:
+-  #include <dt-bindings/leds/leds-pca9532.h>
+-
+-  leds: pca9530@60 {
+-    compatible = "nxp,pca9530";
+-    reg = <0x60>;
+-
+-    red-power {
+-      label = "pca:red:power";
+-      type = <PCA9532_TYPE_LED>;
+-    };
+-    green-power {
+-      label = "pca:green:power";
+-      type = <PCA9532_TYPE_LED>;
+-    };
+-    kernel-booting {
+-      type = <PCA9532_TYPE_LED>;
+-      default-state = "on";
+-    };
+-    sys-stat {
+-      type = <PCA9532_TYPE_LED>;
+-      default-state = "keep"; // don't touch, was set by U-Boot
+-    };
+-  };
+-
+-For more product information please see the link below:
+-http://nxp.com/documents/data_sheet/PCA9532.pdf
+diff --git a/Documentation/devicetree/bindings/leds/nxp,pca953x.yaml b/Documentation/devicetree/bindings/leds/nxp,pca953x.yaml
+new file mode 100644
+index 000000000000..f735379775a7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/leds/nxp,pca953x.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/nxp,pca953x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PCA9532 LED Dimmer
++
++maintainers:
++  - Riku Voipio <riku.voipio@iki.fi>
++
++description: |
++  The PCA9532 family is SMBus I/O expander optimized for dimming LEDs.
++  The PWM support 256 steps.
++
++  For more product information please see the link below:
++    https://www.nxp.com/docs/en/data-sheet/PCA9532.pdf
++
++properties:
++  compatible:
++    enum:
++      - nxp,pca9530
++      - nxp,pca9531
++      - nxp,pca9532
++      - nxp,pca9533
++
++  reg:
++    maxItems: 1
++
++patternProperties:
++  "^led-[0-9a-z]+$":
++    type: object
++    $ref: common.yaml#
++    unevaluatedProperties: false
++
++    properties:
++      type:
++        description: |
++          Output configuration, see include/dt-bindings/leds/leds-pca9532.h
++        $ref: /schemas/types.yaml#/definitions/uint32
++        default: 0
++        minimum: 0
++        maximum: 4
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/leds/leds-pca9532.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        led-controller@62 {
++            compatible = "nxp,pca9533";
++            reg = <0x62>;
++
++            led-1 {
++                label = "pca:red:power";
++                type = <PCA9532_TYPE_LED>;
++            };
++
++            led-2 {
++                label = "pca:green:power";
++                type = <PCA9532_TYPE_LED>;
++            };
++
++            led-3 {
++                type = <PCA9532_TYPE_LED>;
++                default-state = "on";
++            };
++
++            led-4 {
++                type = <PCA9532_TYPE_LED>;
++                default-state = "keep";
++            };
++        };
++    };
++
++...
+-- 
+2.34.1
 
