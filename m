@@ -2,38 +2,65 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA03664FE5
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jan 2023 00:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072A86656B5
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jan 2023 10:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjAJXXc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Jan 2023 18:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S237715AbjAKJB1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Jan 2023 04:01:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234114AbjAJXX3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Jan 2023 18:23:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED1463F5;
-        Tue, 10 Jan 2023 15:23:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3C56194C;
-        Tue, 10 Jan 2023 23:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CCCC433D2;
-        Tue, 10 Jan 2023 23:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673393006;
-        bh=KfSPuN+1QhbNUv5tw8QDzbsOpJukhbxBa7/tiSZA6YE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kmBayYB9RkU0+wQl/9jgcDnUFJ81UiubfLDDvtLmip6svd0iZ81Ae9ZOhNuunaz53
-         3+YDBMo3PYZkUs7PS7dCJKYagCO/5yWpIhjev9LaLijR1Sld+WLcGE/RfYOl5Mg9KC
-         9HdifMep/S3Amhq3h+Ed2IrgxEZCaC4JyGgLR36CldJ60HpvOU0qa19/oPMYFerWIu
-         qpWJ0rtAbxpY18prh4Ut8fRWlNQAZ2ISvfPniM8XDKtdWjPfQEcG3YIpPnqKZj3PgB
-         +j7daBrq1rgokCJ3+YLhtG9BQIxFuvvvg1HEltXvh+5uRv8CBvthbrqKQ0wQxv9WPq
-         Si2fNdrIaT1dQ==
-Date:   Tue, 10 Jan 2023 15:23:24 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
+        with ESMTP id S235983AbjAKJA4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Jan 2023 04:00:56 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFB3C1F
+        for <linux-rtc@vger.kernel.org>; Wed, 11 Jan 2023 01:00:54 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so12064834wms.4
+        for <linux-rtc@vger.kernel.org>; Wed, 11 Jan 2023 01:00:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UIgNk4h0ykNf4W9R10f+g8s9MtlXPDlZWGID0CLp804=;
+        b=ACz2pUEAplUyKMwahar14IEYYnawh0ar2G+KL0+AdO+fXKDb6L1+7Aq1cR/JhRxMxF
+         mptt0m7OE+hHLEPyv2GGxmbq78+4PKJIg2OU+Et0ss+4vM4s35EB+0jdnp7VOr0n3o4Y
+         sVNrXDS1NCtl4llNRycijVOG7GqCqJE9sTXrkMnrFCkCNHARqK/VingD2ZFf2CaIyh5R
+         BkUyz70LPfPlxaoLoSrL9Eyv1OPob/snhvTSgSee+4oBHoO28UzKBMYs7qZmo3PKc7Oj
+         TZY7YEEZvny5IzPNF2MZFoR+8B8dExdbws1pT2JocEc7BXwbvR4fsYcDcyxTp6JjTglr
+         yNAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UIgNk4h0ykNf4W9R10f+g8s9MtlXPDlZWGID0CLp804=;
+        b=gvHWcV8RNuDganNa1dSQqaE83LcTKYKSQTMzvqZJ4o0+q4GEmCC0frgMWv63DuYM7p
+         snm+8mZ6tIVgMmPg9U1eZBCtkjvuUOjtuw8MNWy4sN1drNYrjR+lpowcTli/UFtAHCOu
+         pKJVq3QgclkzVtHx9o3Rk06VFyo/goqQcnXsiw+DarBJlYPeYDDh3jBwRhHDdQmXRuDh
+         sZLqIaeEz+uaqAdV8RD9S4kI8f7bU1Uj/irYe8+RbFMefCGs94cTUpdRMdgj+dvoMdsX
+         Q1n2wUPgPqLjWyHIJrkWLzYxRUi1/mY0QFaOhT2QQYPEyPrd6xnRQU0dieYIvNR8oe9n
+         UbuQ==
+X-Gm-Message-State: AFqh2kpLRRgT0UtO30XDzi7eHXoaHgAJA2mL4jg3aUSbdiUUCRJzCg8r
+        RI3pC9/GiaxNYNqPu2GfGTG1Uw==
+X-Google-Smtp-Source: AMrXdXu50nuURvF/uZXf+xmLuSwesdnOY8E4IcaZoYRp8Au4jWUve2YDc0RJ8X2U2aelNYBfkHhv2g==
+X-Received: by 2002:a05:600c:34d0:b0:3d6:b691:b80d with SMTP id d16-20020a05600c34d000b003d6b691b80dmr50949988wmq.21.1673427652953;
+        Wed, 11 Jan 2023 01:00:52 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:d95d:43b7:d6a9:39a5? ([2a01:e0a:982:cbb0:d95d:43b7:d6a9:39a5])
+        by smtp.gmail.com with ESMTPSA id o21-20020a1c7515000000b003d995a704fdsm17507540wmc.33.2023.01.11.01.00.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 01:00:52 -0800 (PST)
+Message-ID: <08698c06-49b0-1cf7-efd3-1038104972cf@linaro.org>
+Date:   Wed, 11 Jan 2023 10:00:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 00/11] dt-bindings: first batch of dt-schema
+ conversions for Amlogic Meson bindings
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
@@ -63,26 +90,34 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
         netdev@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 00/11] dt-bindings: first batch of dt-schema
- conversions for Amlogic Meson bindings
-Message-ID: <20230110152324.1e19974d@kernel.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
 References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <20230110152324.1e19974d@kernel.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230110152324.1e19974d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 09 Jan 2023 13:53:25 +0100 Neil Armstrong wrote:
-> - patch 12: added reviewed-by
-> - Link to v1: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org
+Hi,
 
-I'm guessing patch 12 is patch 11 in this posting.
-Should we take it via net-next? Looks acked & ready.
+On 11/01/2023 00:23, Jakub Kicinski wrote:
+> On Mon, 09 Jan 2023 13:53:25 +0100 Neil Armstrong wrote:
+>> - patch 12: added reviewed-by
+>> - Link to v1: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org
+> 
+> I'm guessing patch 12 is patch 11 in this posting.
+> Should we take it via net-next? Looks acked & ready.
+
+Exact it's ready to be taken
+
+Thanks,
+Neil
+
