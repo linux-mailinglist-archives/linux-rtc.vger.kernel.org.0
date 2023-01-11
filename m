@@ -2,165 +2,145 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0317666098
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jan 2023 17:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE116660EF
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jan 2023 17:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbjAKQes (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Jan 2023 11:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S233100AbjAKQrq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Jan 2023 11:47:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238633AbjAKQec (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Jan 2023 11:34:32 -0500
-Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3B463D1
-        for <linux-rtc@vger.kernel.org>; Wed, 11 Jan 2023 08:34:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-        q=dns/txt; i=@phytec.de; t=1673454852; x=1676046852;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=C4kvWi4nYSn0kSIK0WvaQkfls0F7UuJxhBfke5JCvQE=;
-        b=GSjL3laUR3wL5q5WR1mBIqYvHmXfwkHxALnFu4n2tILDVvtsIyCTlERpiQrFIJyM
-        dpVj3K+99Tdk3iWnSC4FdzZZjGK5gHXT4nSyePL1W9vWz9Ub3lMFs0azHx5Deat/
-        b2dQvhWeRUn4aKS9Uv/+8Xqw0wqElU5LsgLFlxEZOH8=;
-X-AuditID: ac14000a-923ff70000007ecb-a5-63bee504219b
-Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
-        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id B2.F6.32459.405EEB36; Wed, 11 Jan 2023 17:34:12 +0100 (CET)
-Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
- (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 11 Jan
- 2023 17:34:11 +0100
-From:   Wadim Egorov <w.egorov@phytec.de>
-To:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <upstream@lists.phytec.de>
-CC:     <riku.voipio@iki.fi>, <alexandre.belloni@bootlin.com>,
-        <a.zummo@towertech.it>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <lee@kernel.org>, <pavel@ucw.cz>
-Subject: [PATCH v2 2/2] dt-bindings: rtc: Move rv3028 from trivial-rtc.yaml into own schema file
-Date:   Wed, 11 Jan 2023 17:34:04 +0100
-Message-ID: <20230111163404.3526248-2-w.egorov@phytec.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230111163404.3526248-1-w.egorov@phytec.de>
-References: <20230111163404.3526248-1-w.egorov@phytec.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.25.0.11]
-X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
- (172.25.0.12)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmkeLIzCtJLcpLzFFi42JZI8nAo8vydF+yweYGZoslF6+yW7S/W8Zu
-        Mf/IOVaLvhcPmS12tC1ksbi8aw6bxdY36xgtjq2+wmZx99RRNouTGy6xWbTuPcJu0f1O3YHH
-        Y96aao/DXxeyeGxa1cnmcefaHjaP/u4WVo/p834yeaxY/Z3d4/MmuQCOKC6blNSczLLUIn27
-        BK6MK6sa2Av+C1fMWHKTsYHxDn8XIyeHhICJxL/uz6xdjFwcQgKLmSQebN/DBOE8YZTobtrM
-        BlLFJqAucWfDN7AqEYHZjBIdbzcwgzjMApsYJabcPM4CUiUskCCx6eoHMJtFQFWiY+EbJhCb
-        V8BSYtaf0ywQ++QlZl76zg5icwpYSTw5+4kZxBYCqnl1+yYrRL2gxMmZT8DqmYHqm7fOZoaw
-        JSQOvngBVS8v8eLScriZ0869ZoawQyW2ftnONIFRaBaSUbOQjJqFZNQCRuZVjEK5mcnZqUWZ
-        2XoFGZUlqcl6KambGEERJsLAtYOxb47HIUYmDsZDjBIczEoivCs59yQL8aYkVlalFuXHF5Xm
-        pBYfYpTmYFES573fw5QoJJCeWJKanZpakFoEk2Xi4JRqYFTgaY1W/lihLDWtejGn2haOlcnn
-        nv457CuT/E58Q8yM3YkP+dhPb5ppJqPkpnW98Xf43pp3SezRdQsMZ0imRz/59uL4xdBZtomZ
-        XEIB+zPkdPnPtR8MLTj0/uxlA52y3JxE9Yhin/3qnc+6TdkZmf9Na/E8K+vEoP094XylkKrU
-        EgWH029WKrEUZyQaajEXFScCAEX6bHeeAgAA
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232408AbjAKQri (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Jan 2023 11:47:38 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01061B86;
+        Wed, 11 Jan 2023 08:47:37 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 484493200945;
+        Wed, 11 Jan 2023 11:47:36 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute2.internal (MEProxy); Wed, 11 Jan 2023 11:47:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1673455655; x=
+        1673542055; bh=317hm/HGpgVr00LGmqYgdx8qn5gsqlg5pbk+Bphz3lk=; b=O
+        2i5LKBJTP4Ytl/BdYnkPjuUsQ5C8JoSm2tGohQY2mNNyAIQSja5JDIEdhtN1Vuxw
+        rLOppgBaGzjRTFYUPLf/A0qY7+FyFznyXX1Fw5cFQQhEAX1uz0Xem4ZX8owE3P6t
+        jgu4n7+dzLNRaolapwY5DRBnj5DKLrF7K6xc5agpu+RvJKvU3Z0KnLiNQxOPJVBx
+        Dsw0pzQiuHMp4qmquZOtloj2R270AX35hE4VTq+rx8SV+GlDFEa+VoR0V41YIiEA
+        dqDFTT0lwylBKu8pjCSMLC3CXMzlNHPwvJkY6UqC33N4PzFGgFXShHHA7bvRkUxD
+        StYE/xeEqOmRoBynwgCYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1673455655; x=
+        1673542055; bh=317hm/HGpgVr00LGmqYgdx8qn5gsqlg5pbk+Bphz3lk=; b=T
+        ZRlvkmRpkPS8vsjiZds74p9YlgD0Ps4Tt2Bqe4DectWKc0i/ZK2/Ix/kdBU7+Eo9
+        rni9vWUoOgPtyk6qMsbnEMnR0Q+l21EjKiX90qFCPxtxaxDwRm466/Bai3GE/OJZ
+        wDhBbNULdUIxgOpztj/4ViSLxSWg6WX9YOdOZnILKew+R/wXzLYB5HZ5vQSse+oK
+        hn0XwNMa7YqAGaX+4mQ4RMTtGsP5yc1BXWiX6bSH1V6/XPX/c9W4ViPGufQu50kq
+        w2x8MQVPRL7G80emOYbSJctrTlS82c8fn/lpLb4whBqqWokRK8da2+XiNSJ/wixh
+        I4cAHtiUC27A9+y7yNSoA==
+X-ME-Sender: <xms:Jui-Y70m9x498enBJPQbxeUPMFcRBTJQRJC-Zy-0PG6-8NF9sjrFiw>
+    <xme:Jui-Y6FoOyD6VuN3WzW0tLKALSwJdMge_yahGdMX74kBQT3dZ2_HCKUXjUmVz2TLw
+    mSXfk1llKIkPbQs9b0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleeggdelvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
+    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:Jui-Y76KGCNLr_Fo-pv_X0BK3eKyg6jMfE2_AL3vLd9gS0Cy1IQ3fg>
+    <xmx:Jui-Yw0zJe7kllYpaBtUmbBiuL-3A8-H6SZxVAZfavSU5k6FXclEBw>
+    <xmx:Jui-Y-Eu9GMmEMeUKNzaXTiqKJKOD3-IfXbwo4fGuVj9-TQVujzN1A>
+    <xmx:J-i-Y6HnrkzHfe0zXx9zceFoazuZwE6DNSl8-jG4XO2EeNSI3bFjaA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2C25036A0073; Wed, 11 Jan 2023 11:47:34 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <f6c80b25-c11d-4f11-885c-6d7fb71bb92f@app.fastmail.com>
+In-Reply-To: <8be1bf437f5407c54a93e7be2c6303d0eb6eeb83.1673227292.git.zhoubinbin@loongson.cn>
+References: <cover.1673227292.git.zhoubinbin@loongson.cn>
+ <8be1bf437f5407c54a93e7be2c6303d0eb6eeb83.1673227292.git.zhoubinbin@loongson.cn>
+Date:   Wed, 11 Jan 2023 16:47:13 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Binbin Zhou" <zhoubinbin@loongson.cn>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Xuerui Wang" <kernel@xen0n.name>
+Cc:     linux-rtc@vger.kernel.org,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        loongarch@lists.linux.dev, "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, "Qing Zhang" <zhangqing@loongson.cn>,
+        "Tiezhu Yang" <yangtiezhu@loongson.cn>,
+        zhaoxiao <zhaoxiao@uniontech.com>, "WANG Xuerui" <git@xen0n.name>
+Subject: Re: [PATCH V2 6/7] MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Move RV3028 RTC bindings from trivial-rtc.yaml into microcrystal,rv3032.yaml.
 
-Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
----
-v2:
-  - Update subject 
-  - Remove not needed quotes
-  - Remove start-year
-  - Use unevaluatedProperties instead of additionalProperties
----
- .../bindings/rtc/microcrystal,rv3028.yaml     | 54 +++++++++++++++++++
- .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
- 2 files changed, 54 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
 
-diff --git a/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
-new file mode 100644
-index 000000000000..5ade5dfad048
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/microcrystal,rv3028.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip RV-3028 RTC
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+properties:
-+  compatible:
-+    const: microcrystal,rv3028
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  trickle-resistor-ohms:
-+    enum:
-+      - 3000
-+      - 5000
-+      - 9000
-+      - 15000
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@51 {
-+            compatible = "microcrystal,rv3028";
-+            reg = <0x51>;
-+            pinctrl-0 = <&rtc_nint_pins>;
-+            interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
-+            trickle-resistor-ohms = <3000>;
-+        };
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-index d9fc120c61cc..84cce1f0ca0c 100644
---- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-@@ -48,8 +48,6 @@ properties:
-       # Intersil ISL12022 Real-time Clock
-       - isil,isl12022
-       # Real Time Clock Module with I2C-Bus
--      - microcrystal,rv3028
--      # Real Time Clock Module with I2C-Bus
-       - microcrystal,rv3029
-       # Real Time Clock
-       - microcrystal,rv8523
--- 
-2.34.1
+=E5=9C=A82023=E5=B9=B41=E6=9C=889=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8A=E5=
+=8D=881:36=EF=BC=8CBinbin Zhou=E5=86=99=E9=81=93=EF=BC=9A
+> The Loongson-2K RTC module is now supported, enable it.
+>
+> The MMIO address is unclear from the Loongson 2K1000 user manual, I to=
+ok
+> it from Loongson's out-of-tree fork of Linux 4.19.
 
+Can confirm this MMIO address is correct. It matches current confbus BAR
+setting by PMON.
+
+>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+
+> ---
+>  arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi=20
+> b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> index 8143a61111e3..c22414595140 100644
+> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> @@ -57,6 +57,13 @@ pm: reset-controller@1fe07000 {
+>  			reg =3D <0 0x1fe07000 0 0x422>;
+>  		};
+>=20
+> +		rtc0: rtc@1fe07800 {
+> +			compatible =3D "loongson,ls2x-rtc";
+> +			reg =3D <0 0x1fe07800 0 0x78>;
+> +			interrupt-parent =3D <&liointc0>;
+> +			interrupts =3D <60 IRQ_TYPE_LEVEL_LOW>;
+> +		};
+> +
+>  		liointc0: interrupt-controller@1fe11400 {
+>  			compatible =3D "loongson,liointc-2.0";
+>  			reg =3D <0 0x1fe11400 0 0x40>,
+> --=20
+> 2.31.1
+
+--=20
+- Jiaxun
