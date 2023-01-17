@@ -2,112 +2,142 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5186766E6C3
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Jan 2023 20:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0A866E781
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Jan 2023 21:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbjAQTPO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Jan 2023 14:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S231373AbjAQUKg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Jan 2023 15:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbjAQTLD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Jan 2023 14:11:03 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC17E37B55;
-        Tue, 17 Jan 2023 10:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Fw8ToiXtlXOF2nBnzsWFVHyxc/MXeE65vU/PQZripck=; b=S+5wJzzZMBzIqx8qubJw7UJ7ri
-        kcgS9JLFhwlxnYroTEQZrM2zugGlhdGdhGSmDgYMTebYMYdrha0PX78AvF0t3YVvgaU9qcAlk3Gs8
-        V0nk641gnA+KaYcK31R6HDyOy1t54OhnVurSJzYLR+ffAghX6xNqgOCydlJFzs3CDrfV1S+56keaK
-        gNhVIzFCQ7pAzo2aXblOpFEU6r1F0IIkVVf+4MyWad+XNTuMUOF7zj7krUpO+gLB3O9+ugtm/QzEn
-        jt9geOtAsj0YFRs6EyZvFwrSvO8GC5bvPLxHiOL5z36Q+SgRIx57ybFYH9UBvwQrCFoL8QVUEtGSo
-        sW9UtLYA==;
-Received: from [2601:1c2:d80:3110::9307]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHqdf-00FQbU-15; Tue, 17 Jan 2023 18:24:51 +0000
-Message-ID: <54f13745-bec5-8777-4212-6f093947f146@infradead.org>
-Date:   Tue, 17 Jan 2023 10:24:49 -0800
+        with ESMTP id S234266AbjAQUHS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Jan 2023 15:07:18 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3173FF22
+        for <linux-rtc@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-15027746720so32964577fac.13
+        for <linux-rtc@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=7UFMvbpKkJyjWVLlq6ctk0nXiLL3RrLgvGqk+/g8pD0wAzMEFNodkoMNXxSPAzvJye
+         T4nqVDpRCF5Pkw4fe0ROrd1BjE8DZbycDcUSRlgnihtqJaZkkqELJ7TzEZYyPHojRNxM
+         MBh6YZCgcmJgLXwboxe3bvrjmez4qHhfCRIxGuc2G0+QOOJ/eKT38XBZ7MfSSmNLVm7z
+         gDt6C3Ymsnj+eKLcMZ0dj5q2KFKnZutgcY/1C6+IgeLmT5DwAU4QsUhG6TCQdnlD6nEb
+         fYtWfawIuB6wYahQA/cq89ISwAR2GZXbrrCFpCVxRJqHc9Mn337ID3jg/QgfKjbyHIu6
+         BObQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=a5xhF2cXmMinG4mZpl1K8pyOjOI7vD89R60oOTfDSigHLQELD6dQrEwbjaHB457kx8
+         B6cftjWDaNo0rB+rSgf1uTccOVTGaGTV5sOBWBrt/vf4SSMSaYXSts8oEQY9CPcvUzfp
+         5c/Kr2U5pUnDj8KO/Y8s2o+BECJueil28dKERDNa4pezfkqzX6wAyJUJxpU+5hF1TI1i
+         n5GzVGnkgsiwEdYw9driBPMnO/5Re/cC3TIsMvVw7ht+8uK4rCKrHVLWblnc6xLPZLnn
+         HjQXk2Zne1p8s0VIQfGqbZvHjcQPO56u4vV5FBOJcmWheSwYO7YXDrjXHNvysUo4cNrF
+         +o3A==
+X-Gm-Message-State: AFqh2kqIUQOS3a5Ru9NZ+f5wqW606YU1KBlujgG44WN/iwqA8K2OLFIR
+        GgbWnOO+xxfQrUabIFFhMDDEJOcgwE3zKbXQIik=
+X-Google-Smtp-Source: AMrXdXsgzCxMhqm+bb3il7EsJjEv0NbGPCzT1qf9VREFYRxVllxrk/YEzaFAyrBdtefAaDgGfnk/UQ==
+X-Received: by 2002:a05:6870:c190:b0:15e:cfca:b312 with SMTP id h16-20020a056870c19000b0015ecfcab312mr2807015oad.52.1673982083592;
+        Tue, 17 Jan 2023 11:01:23 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05687080d200b0012763819bcasm16664335oab.50.2023.01.17.11.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:01:22 -0800 (PST)
+Message-ID: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
+Date:   Tue, 17 Jan 2023 13:13:38 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] rtc: sunplus: fix format string for printing resource
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
 Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230117172450.2938962-1-arnd@kernel.org>
- <Y8bhApoC4Bmgtjoq@mail.local>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y8bhApoC4Bmgtjoq@mail.local>
+To:     Christoph Hellwig <hch@lst.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <20230116071306.GA15848@lst.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
-
-On 1/17/23 09:55, Alexandre Belloni wrote:
-> On 17/01/2023 18:24:44+0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
+On 1/16/23 01:13, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
+>> I'm still maintaining and using this port in Debian.
 >>
->> On 32-bit architectures with 64-bit resource_size_t, sp_rtc_probe()
->> causes a compiler warning:
->>
->> drivers/rtc/rtc-sunplus.c: In function 'sp_rtc_probe':
->> drivers/rtc/rtc-sunplus.c:243:33: error: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Werror=format=]
->>   243 |         dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
->>       |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> The best way to print a resource is the special %pR format string,
->> and similarly to print a pointer we can use %p and avoid the cast.
->>
+>> It's a bit disappointing that people keep hammering on it. It works fine for me.
 > 
-> I got this one this morning, which one is more correct? :)
-> https://lore.kernel.org/all/20230117054232.24023-1-rdunlap@infradead.org/
+> What platforms do you (or your users) use it on?
 
-I prefer my handling of res->start and Arnd's no-cast handling of reg_base.
-IMO using "%pR" prints too much info, but that's more up to the file's author
-or maintainer...
+3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
+sh4 emulator.
 
+I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
+different kinds of boards running it here). There's an existing mmu version of
+j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
+released yet, I have yet to get that to run Linux because the mmu code would
+need adapting, but the most recent customer projects were on the existing nommu
+SOC, as was last year's ASIC work via sky130.
 
-How's that?  :)
+My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
+little blue one is... sh4a I think? (It can run the same userspace, I haven't
+replaced that board's kernel since I got it, I think it's the type Glaubitz is
+using? It's mostly in case he had an issue I couldn't reproduce on different
+hardware, or if I spill something on my N40.)
 
->> Fixes: fad6cbe9b2b4 ("rtc: Add driver for RTC in Sunplus SP7021")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>  drivers/rtc/rtc-sunplus.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/rtc/rtc-sunplus.c b/drivers/rtc/rtc-sunplus.c
->> index e8e2ab1103fc..4b578e4d44f6 100644
->> --- a/drivers/rtc/rtc-sunplus.c
->> +++ b/drivers/rtc/rtc-sunplus.c
->> @@ -240,8 +240,8 @@ static int sp_rtc_probe(struct platform_device *plat_dev)
->>  	if (IS_ERR(sp_rtc->reg_base))
->>  		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc->reg_base),
->>  					    "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
->> -	dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
->> -		sp_rtc->res->start, (unsigned long)sp_rtc->reg_base);
->> +	dev_dbg(&plat_dev->dev, "res = %pR, reg_base = %p\n",
->> +		sp_rtc->res, sp_rtc->reg_base);
->>  
->>  	sp_rtc->irq = platform_get_irq(plat_dev, 0);
->>  	if (sp_rtc->irq < 0)
->> -- 
->> 2.39.0
->>
-> 
+I also have a physical sh2 board on the shelf which I haven't touched in years
+(used to comparison test during j2 development, and then the j2 boards replaced it).
 
--- 
-~Randy
+I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
+really convenient: neither of my physical boards boot from SD card so replacing
+the kernel requires reflashing soldered in flash. (They'll net mount userspace
+but I haven't gotten either bootloader to net-boot a kernel.)
+
+I include sh4 in the my mkroot builds each toybox release, I have a ~300 line
+bash script that builds bootable toybox systems for a dozen-ish architectures,
+including building a kernel configured to run under qemu:
+
+  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+
+And I ship the resulting bootable system images, most recent release is at:
+
+  https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
+
+As described at:
+
+  http://landley.net/toybox/faq.html#mkroot
+
+Various people in Japan have more hardware, but I haven't made it physically
+back there since 2020. (My residency card expired during the pandemic.)
+
+Rob
