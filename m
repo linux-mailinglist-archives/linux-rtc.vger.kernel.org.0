@@ -2,94 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86016670EC7
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Jan 2023 01:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F5D670F81
+	for <lists+linux-rtc@lfdr.de>; Wed, 18 Jan 2023 02:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjARAjL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Jan 2023 19:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        id S229628AbjARBHS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Jan 2023 20:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjARAim (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Jan 2023 19:38:42 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD40741B5D;
-        Tue, 17 Jan 2023 16:10:29 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id e130so6705819yba.7;
-        Tue, 17 Jan 2023 16:10:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mqoGaxCv32d9QDH8rbs+wNFx+mRHisbPyzqWglfmzdo=;
-        b=X8kEN2RCR0Z7j9dvYBPvrUngCUUeFWtb1S07rcVgUPJfjZWU74psq/1gmCn184hHsa
-         uAze+wMWm/HhTilA6p92QH5ri8+IauhT90wWGY1gF+L4D1hxqn6EEUAC2u4NEpV9Nmvn
-         x+3uw1f3Kj62qSMscS/TsPlYBzCYZoW6NNjmtZbAPUJ/5TKESadBgRtm8J1MdvDK06vz
-         WYfkJ4Sp7G5/xmXAjhT1J6VJC34p+oXr1s/hPXo04xworQlkKedZ7oKdZ+cdRdRuwnLj
-         FlNdnb/9pL7BHz0y6pWQYZ0EY4EDj4CwBCe3rsWwDGIkCSO63TNtAcqrhSR1ML+9G3SE
-         inSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mqoGaxCv32d9QDH8rbs+wNFx+mRHisbPyzqWglfmzdo=;
-        b=CkWMK8SSgKtwWDurvooUxsnwFaOrfo0s/0lVapsSexK3ZlfjE/KFildOSMZhUbtipo
-         Y2jlcU+lqWuvupbRvx7dfpm3OZkKnLe71kqG+1qYYDDMjEWG1m0b8p0YFbxFJ4aTJ9HU
-         2UJ3+iqXiejc8axSpH5z2oAIG1eCujwx+zLVMSGTnWX8bETMTgZEeF8mA7Daah1gB4ng
-         nUYC+t4YLxnxv7nXDsKGtwS+U3lFgmFxNaVdas9S74m55hz+ANQxTARJaWqq5GZXrDbl
-         WxZYfqpOjSgiBEPZ7iTORwId6em8pNr2DPWKH3hRXqnB2vWzni3hZtk6jsZFhf3Sy5uM
-         SaIg==
-X-Gm-Message-State: AFqh2kph3v8kIbeohz3YGLHiCLvsDDqoxePReUF7rPv87rsowlfXUtnl
-        HnXseFG/4YK/Pi70588+Opk=
-X-Google-Smtp-Source: AMrXdXvLckhDa1bG5Pn2IzKkim7J+U5lK7NIKjwNimaDoNI+pnG9GJpZUGRqId1mcbsUGnMptZYX1A==
-X-Received: by 2002:a25:4084:0:b0:7d8:aaf9:bdd7 with SMTP id n126-20020a254084000000b007d8aaf9bdd7mr4610072yba.3.1674000628976;
-        Tue, 17 Jan 2023 16:10:28 -0800 (PST)
-Received: from [192.168.0.14] (cpe84948cc906a3-cm84948cc906a0.cpe.net.cable.rogers.com. [99.231.72.42])
-        by smtp.gmail.com with ESMTPSA id h18-20020a05620a401200b007064fa2c616sm6796318qko.66.2023.01.17.16.10.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 Jan 2023 16:10:28 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.7\))
-Subject: Re: remove arch/sh
-From:   "D. Jeff Dionne" <djeffdionne@gmail.com>
-In-Reply-To: <c9ce648e-e63e-8a47-03c6-7c7e30d8dbc7@roeck-us.net>
-Date:   Tue, 17 Jan 2023 19:10:25 -0500
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Landley <rob@landley.net>, Christoph Hellwig <hch@lst.de>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9FC76FF3-9DD4-48E2-BC39-479A50B40C1D@gmail.com>
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
- <CAMuHMdUJm5QvzH8hvqwvn9O6qSbzNOapabjw5nh9DJd0F55Zdg@mail.gmail.com>
- <c9ce648e-e63e-8a47-03c6-7c7e30d8dbc7@roeck-us.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-X-Mailer: Apple Mail (2.3608.120.23.2.7)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229818AbjARBGv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Jan 2023 20:06:51 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96B33C288;
+        Tue, 17 Jan 2023 16:56:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=i4RkttW8fJDbyZOT5cX4fAabf2Wi+aZdAXMv1JEZ7Hc=; b=NXLSsL9V7Bo6BKRF5Y9jfRUgrQ
+        pdCFL6s8KfhkjazcKLSqN3u1CkBz9NhcL5GM5NW0EQ+djyO/iwuePSLZQild575wArFqbPjMZompR
+        WH33mY7hWiO52lvdZ/OAf2WWLZKJpxh4UP/c289so17o7EycuDkdKK0wOKDZeTxhVOkm4oh9ExlNY
+        bxg+1afaacpFIk8tP/AuMF5nYbEehFugAtZcopEm/zNFVZvNtPadNisTjH6jLW7UxLqaV0lEP5ysC
+        wVpaagAKfTwOYFD5+lVEHhx0mu6LzWHbBrhVczSydBh9yBJMUIKAzxymYxNH5IurEOnjNZgyOD4oS
+        mGUH9rFQ==;
+Received: from [2601:1c2:d80:3110::9307]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pHwkp-00GNFP-E9; Wed, 18 Jan 2023 00:56:39 +0000
+Message-ID: <19d40c05-4e97-a739-47b4-689b047841fc@infradead.org>
+Date:   Tue, 17 Jan 2023 16:56:36 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] rtc: sunplus: fix format string for printing resource
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Vincent Shih <vincent.sunplus@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230117172450.2938962-1-arnd@kernel.org>
+ <Y8bhApoC4Bmgtjoq@mail.local>
+ <54f13745-bec5-8777-4212-6f093947f146@infradead.org>
+ <589415b2-ddf2-44e5-bca5-5971f8ab9576@app.fastmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <589415b2-ddf2-44e5-bca5-5971f8ab9576@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,33 +58,39 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
-> Since there are people around with real hardware .... is sh in big =
-endian mode
-> (sheb) real ? Its qemu support is quite limited; most PCI devices =
-don't work
-> due to endianness issues. It would be interesting to know if this =
-works better
-> with real hardware.
 
-Hi Guenter,
+On 1/17/23 11:36, Arnd Bergmann wrote:
+> On Tue, Jan 17, 2023, at 19:24, Randy Dunlap wrote:
+>> On 1/17/23 09:55, Alexandre Belloni wrote:
+>>> On 17/01/2023 18:24:44+0100, Arnd Bergmann wrote:
+>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>
+>>>> On 32-bit architectures with 64-bit resource_size_t, sp_rtc_probe()
+>>>> causes a compiler warning:
+>>>>
+>>>> drivers/rtc/rtc-sunplus.c: In function 'sp_rtc_probe':
+>>>> drivers/rtc/rtc-sunplus.c:243:33: error: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Werror=format=]
+>>>>   243 |         dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
+>>>>       |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>>
+>>>> The best way to print a resource is the special %pR format string,
+>>>> and similarly to print a pointer we can use %p and avoid the cast.
+>>>>
+>>>
+>>> I got this one this morning, which one is more correct? :)
+>>> https://lore.kernel.org/all/20230117054232.24023-1-rdunlap@infradead.org/
+> 
+> Both are equally correct, it's just a preference.
+> 
+>> I prefer my handling of res->start and Arnd's no-cast handling of reg_base.
+>> IMO using "%pR" prints too much info, but that's more up to the file's author
+>> or maintainer...
+> 
+> Right, I could have equally well picked the %pap version, and just
+> went for brevity in the source. It's only pr_debug(), so very few
+> users are going to actually see the output.
 
-SH big endian works very well, and is in use on J-Core J2 SMP (hardware =
-w/FPGA, simulation and ASIC this year) as well as some of the Hitachi / =
-Renesas IoT chips e.g. SH7619.
+Alexandre, sounds like you should just go with Arnd's patch.
 
-It=E2=80=99s the base of the real new line of development (as opposed to =
-backward looking support of older SH chips).  New chipsets will be based =
-on the same RTL.
-
-But does it actually work?  Yes, we have (new) devices such as a USB =
-Wireguard based VPN hardware dongle, that are J2 (SH2 2 core SMP) that =
-are in use with Linux sheb, nommu and fdpic.  MMU chips will be little =
-endian.
-
-Cheers,
-J.
-
-> Thanks,
-> Guenter
->=20
-
+-- 
+~Randy
