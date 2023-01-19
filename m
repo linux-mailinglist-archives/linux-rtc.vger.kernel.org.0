@@ -2,57 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DF1674710
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 00:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B6F674735
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 00:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjASXTm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Jan 2023 18:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S229724AbjASX2A (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Jan 2023 18:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjASXTX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 18:19:23 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6EC868E
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 15:17:40 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id e16so3809848ljn.3
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 15:17:40 -0800 (PST)
+        with ESMTP id S229659AbjASX17 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 18:27:59 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0984900D
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 15:27:57 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id by7so2797163ljb.6
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 15:27:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sparkcharge.io; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpclHWjHCh8u37izsHyLub1WI5T41GcP65dSnJSHN4M=;
-        b=D56pePQdJRVdGhjYma2YESmzkNwZ8lpP8cVRAdzQ9shd5SMdPcZvlcQrRViIEqJCi7
-         I9y513i7+mJWw7Nk00G36cQksMDV06px3DdfYNk+2wdPf0KpY+NX2eYZzNo5AMrg7gZc
-         vmrxpwDTFSB6FhVJFgCt9kD1Hdn2b/QsKXg61OrSoyuM2dXTbQNfy/Pop6bfx29xpakg
-         FaE+MarJ3fSs7FsPr2MTWSMype3Z5WGEZronLqGQM9cS3C3OiAcdH4uHkCagyYhOMK6R
-         r8ueD36XGs52tPcPEP6AY/voffZcW4UM10N25DHMFj3BsMfZcSQnDuqArWXV6QM1Kb1Q
-         9MYQ==
+        bh=kDmL0K++1s4Mya2O7kGY5mEjqqYCgvB7aw/CJew8g1A=;
+        b=H9de9Us+oCArxhPuh/jcI4Kqmlwh86mbB8kLQ3GkLQYmFNLghxvMaVGj6JgRoaIJQ3
+         50BKzPWzTCyD2VzffNQWhueJqdyS1ha3CvqnbjZTdlhni1/Qzt+u5+7lSegxNAz4FV5F
+         YD/DuzVbRsh51NkdsNatjpvUNyhrJN0kFRgbKg5MM7PmpbIwkZq1/drTdM4C1BhFqSZn
+         C/ttYQNN1WrNzmDnRpfb+D4QZ5RoUwcULM34aUKscTgS+5iOFEDH2Bhaio6FfJ599Ecp
+         0W9x3pNDybRvG2QiTGRafAjekyAmocC6whnzZLJgnQY6vkVNalEZQ5uuEIWW4AxrdrvC
+         lSdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kpclHWjHCh8u37izsHyLub1WI5T41GcP65dSnJSHN4M=;
-        b=1p3ahcREeTJ0ioyToUcLuuJjtQbNBezggNlmQ0D3xr0255k7AjMgvJXIhKlNa5GCoi
-         yjfLVGeIA/oKVd9OT361I6rVKk05vu66JIfJiInAWcvzKF7VPfHo6BQURBRl2bWj01iM
-         fC6ZQMMJiODrjY0dfN4iPJUPZtU7piPsIppHccIbTXBH0HCVWHMwQCMhhDSUmspNMLyr
-         14JuKI//QhpEmTRqjL6WatzUhKqqI5gnAktL9bpKLHuCZSvEUgpAuW6t5rUN3B1Llh2w
-         KUqTV9ywQbXIlTJMlQPhAz5fLcuRKLZXHHXLZSQrerUyC8yeg++ONNh0QS84bleo0yBY
-         UZDg==
-X-Gm-Message-State: AFqh2kp2hUqJ3Me5tgtzh0GgBE3A3VIMA3AmwTrJW9MK9CIlrIBXS3Wy
-        ZpiyxnjmWwHEB7nj6gwc83TrJa2lIIu8I51fM2udbA==
-X-Google-Smtp-Source: AMrXdXvevcNFMCqNhojGd+9L+5uQBtQtnlbRWqtgQrBc7GvAS4VtfYoPAfatTKdEewsqyvxVayU+tlNZ/Q9qNERW+Rw=
-X-Received: by 2002:a05:651c:1584:b0:27f:acdd:e42b with SMTP id
- h4-20020a05651c158400b0027facdde42bmr718959ljq.308.1674170258541; Thu, 19 Jan
- 2023 15:17:38 -0800 (PST)
+        bh=kDmL0K++1s4Mya2O7kGY5mEjqqYCgvB7aw/CJew8g1A=;
+        b=PMhF2bRtjBrLCNmuHB5UPg7Hk1uD2ncW45hUrx164SKN6CTvfPi5ycUHMRCKVjcQkI
+         fIPxf0uq0duRoZFX49YTkzM/uw0S6PgWbDO5WiiTojImHlHPnvUL3Mq5szkYK1mSjm7t
+         Vkvgr/ZvMXp01yg227HHqyXOn335fyrWFkrr+9A9hULXwckCyxcA45aXJUfpTWDxEPSU
+         BmQdmeC/jTAMX/sIBUmwm4yRK+69Xhn6mhFOu4AKryPWoQDK6oq8xVGo0xN5WLn2NHeq
+         opw0W8KA6tCc6SppBOKS6OkVUuUlIy+incWIOdd1G7Q1GyOFu6u3E/KNjqqCVoj2HzMx
+         6A4A==
+X-Gm-Message-State: AFqh2kphJ6iWP9nCJ75hD1gFU4hecGIdXTcKW46ltVTlVODoSP9mBlBX
+        rTRCk/BqE3YC2Hw4F0+sivA0OEfTo2VujtEXwqE6Rg==
+X-Google-Smtp-Source: AMrXdXsc63eeOG5QbM3YICUOh1tZoXR66/wQ9YOZ202aHSDWYdO/MhMACQJCFcKE6uC/PYsgEh7sGIjSLPmxCGJpFYA=
+X-Received: by 2002:a2e:9449:0:b0:28b:9755:77a with SMTP id
+ o9-20020a2e9449000000b0028b9755077amr1230879ljh.152.1674170875783; Thu, 19
+ Jan 2023 15:27:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20230119213903.899756-1-dennis@sparkcharge.io>
- <20230119213903.899756-2-dennis@sparkcharge.io> <Y8nCS8Z0QKzbeY2G@mail.local>
-In-Reply-To: <Y8nCS8Z0QKzbeY2G@mail.local>
+References: <20230119213903.899756-1-dennis@sparkcharge.io> <Y8nBloQfBPK3t5ce@mail.local>
+In-Reply-To: <Y8nBloQfBPK3t5ce@mail.local>
 From:   Dennis Lambe <dennis@sparkcharge.io>
-Date:   Thu, 19 Jan 2023 18:17:26 -0500
-Message-ID: <CAKYiA1ACTXSg2RubWEq-ETXpfZaF7BCYgGHL66PyHL=nGPt9ew@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
+Date:   Thu, 19 Jan 2023 18:27:44 -0500
+Message-ID: <CAKYiA1Dr0TAmsqDf1wMeeysN4N8K+KJL6onCgQL98LVV5L7Vmg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance
+ from DT
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Atsushi Nemoto <atsushi.nemoto@sord.co.jp>,
@@ -71,27 +71,59 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 5:21 PM Alexandre Belloni
+On Thu, Jan 19, 2023 at 5:18 PM Alexandre Belloni
 <alexandre.belloni@bootlin.com> wrote:
 
-> > -#ifdef CONFIG_OF
-> > -     wakeup_source = of_property_read_bool(client->dev.of_node,
-> > -                                           "wakeup-source");
-> > -#endif
-> > +     if (IS_ENABLED(CONFIG_OF)) {
-> > +             wakeup_source = of_property_read_bool(client->dev.of_node,
-> > +                                                   "wakeup-source");
-> > +     }
-> > +
->
-> A way better patch would switch to fwnode_property_read_bool
+> I need to find time to think about it because while setting the analog
+> trimming statically from the device tree solves your immediate problem,
+> it will also remove the possibility to handle it from userspace later
+> on. I would really prefer this uses the offset interface or a better
+> interface that unfortunately doesn't exist yet.
 
-If you like that better, I'll make sure that's how I do it in future
-revs of the patchset. I didn't know if it was appropriate since I
-don't know if it would ever make sense to call acpi_dev_prop_get on
-"wakeup-source" or "quartz-load-femtofarads", or if that kind of
-consideration should even matter when choosing to use fwnode_* instead
-of of_*.
+Thanks for letting me know what you're thinking about this. I think I
+see what you're getting at.
+
+However, I think this is more complex than either of us had
+considered. The M41T82 has two different calibration capabilities:
+
+1. Digital calibration. This looks to me like it behaves similarly to
+the digital calibration feature of the M41T00, which ds1307.c exposes
+through the offset interface. The M41T8x driver doesn't currently
+expose the digital calibration register at all, but if it did I would
+agree that the offset interface looks appropriate.
+
+2. Analog calibration -- that's what the datasheet calls it, but the
+range on it is very big -- 3.5 pF all the way up to 17.4 pF -- and
+their reference design uses it as the only xtal load capacitance in
+the circuit. Most of the values you could set for this would be wildly
+inappropriate for any given design's choice of xtal oscillator.
+
+Between these, I don't know if you'd want to expose just one, the
+other, or some synthesis of both via the offset interface or some new
+interface.
+
+I'd make the case that the xtal's required load capacitance is a
+hardware requirement that's appropriate to configure via the Device
+Tree. Even if you did want to allow some amount of runtime fine-tuning
+of this register, you'd still want to document a rational starting
+value chosen based on the hardware.
+
+I agree with you, though, that if a runtime fine-tuning feature were
+added, we'd have to find a way to choose whether to initialize the
+register on boot or not, so that we didn't overwrite the fine-tuning.
+
+Just to demonstrate something that could work, and would be
+backward-compatible with this patchset, here's a hypothetical design:
+* dt-bindings: add quartz-load-femtofarad-tuning-min and
+quartz-load-femtofarad-tuning-max
+* Limit run-time tuning adjustments to be within that range
+* Only overwrite the analog calibration register on start-up if its
+value is outside that range
+
+After thinking through all this, I'd still advocate for merging this
+patchset in some form and leaving integration with runtime APIs as a
+potential future enhancement. I look forward to hearing your thoughts
+about it.
 -- 
 Dennis Lambe (He/Him)
 Lead Firmware Engineer
