@@ -2,127 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28554671E75
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Jan 2023 14:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A03A673FDD
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 18:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjARNwZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 Jan 2023 08:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S229728AbjASR1M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Jan 2023 12:27:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjARNv5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Jan 2023 08:51:57 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2057.outbound.protection.outlook.com [40.107.247.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A300979281;
-        Wed, 18 Jan 2023 05:23:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V2UwUoE05SxmWURc0Sn7j8vlwBvBzHMWdl0he0ueHqu5Ba1XSAtgvUlKdzU8FybbYam5o1zigZuOgaGYoVvZP9UlApqGLt77lFYmjzuLERcmlupqIcl8nOLxZwOjmIWjwciml0Nayc2BrAuuP8C625PRWui3QKYnc0J9PAqVkmqH1Fto1vfhu2Ux7DCb+dx8NoZvBlbtGkOawrLJruyomUDBWpcgNvvrIWJNGiXI0zMVYbukV69dFxCHhrJpFJLWEAt8a1dXzTk+fQfoIeiESdZrvCiC2ne20z9HEXmFe3DGPCFn5sOzskcdn43bmL3NkvgT4/IdePjBnVWSAHHfOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kluzBRc+6MD1EE5ewuEZS2rnmzyeiYc/a9BKmjw3NSA=;
- b=ktZ7RlZjtw2vSOPiAQcV71OCGoswKP+MzLqALnmC+6eUwgO671JHCUTKkkfN8GEYX1TtBbHpngoLCX+7fAYwCOuvl1B6XBg8Yae5rLTIxKGfsHvtNtyczOQUISl80A72qoUNQlr4Bzpe1dryOj0x1t0qD1vb278gnq4AKjT//fwv10V/kIUkv33fbNVrumZCDRNtYtlWiSEdlT2eHzuMCzwfKItJXx6bgoRwFR3imfJh6OVajCzE2PppejNmCsBwTNmyV7/RYY3syapIKY0kpdPB63ColN1dCgotTZy/+NvfJSbFLg3LYND5frbs152sQbscs3RgVerrq3MA6wDplA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kluzBRc+6MD1EE5ewuEZS2rnmzyeiYc/a9BKmjw3NSA=;
- b=EQIrsNf5M841eEoERad/v57UBcwSQrfzXLMfPm37cezHVnHMSX+Ss2JDpWypMdLstL2NSyLvRQCFQB0Qp1ChYQ/bVJmHpZSphU4GnLmACJUgYg8bD7qYRv/MTzTHBn9kT3bRHWbcKjOj5/M2IWP4D0YwlvjtnsqZgHwfdK+AU1s=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kunbus.com;
-Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:160::8)
- by GV1P193MB2312.EURP193.PROD.OUTLOOK.COM (2603:10a6:150:2d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Wed, 18 Jan
- 2023 13:23:15 +0000
-Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
- ([fe80::9506:ff7b:ae6e:e51a]) by AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
- ([fe80::9506:ff7b:ae6e:e51a%3]) with mapi id 15.20.5986.023; Wed, 18 Jan 2023
- 13:23:15 +0000
-Message-ID: <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
-Date:   Wed, 18 Jan 2023 14:23:14 +0100
+        with ESMTP id S229482AbjASR1L (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 12:27:11 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4797649002;
+        Thu, 19 Jan 2023 09:27:09 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id q8so2097345wmo.5;
+        Thu, 19 Jan 2023 09:27:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s5y/E0y/zCyC6ZcSFXDPmaGDVbN4bDkeMBtZup2uQow=;
+        b=Q+/HYM8e41V4GuvCTiY3gvtW+mNK48qnHVtjyPOCSrW1VRNpm1nkmi3Z8HEiZKKs8p
+         FBYjy8y0ctk2n+NViAtJXKaW5wuJIw0tAYg6E98HwJs2JQWp0t8MJjFSckeG7opqdAn/
+         RyGYr8GY/8tNtzpJNOsn1U1RfSd58FgCYVZVvxb7MwQ9YcTEI+WvirSjOyONQOfM6x73
+         TVpHhhymWpoSjYXXhSq32Qq07iQ2OQJUKv/8SB2mqS7Y24OdlAqFirr1KjYs5uLAqYKy
+         lVmZdLHhm9YaFMpofVONGlzUDIrBL8iSW8gGdcagx5JZGt//yC0wdVvY5n+l+3OrDwrI
+         Gj9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s5y/E0y/zCyC6ZcSFXDPmaGDVbN4bDkeMBtZup2uQow=;
+        b=IxX+UCzyP1pRf4S+7xmeP8eika4zWYyXYF3fXTmSMmzHZ/C1gjZyShovI77l6wx6LV
+         EVm3AE3akspQhF1NQ0lSk4moifWVPuP0fX29eFJ+34BlUk70hJecI5ZoibZU3U+2z4mm
+         WzUH0wnxwKAq6hUk9fsTS/mTYof1q+NBJtUFqEbXjNbF54rU1Ncm2GJ9s0dvKIXwJCkn
+         8anuEIVtSGfPeYQ8TVf2DNnxKtAAKaEtoBcCP0ZAxOZMy1mRdxZ0XXrq1efREQt0UI+f
+         q2NMN+9aD2AxetwPEeOfBXVr/e+vEr8RIcy94OQcqMzv49oeJJwbFk0nZBDzcEt4V2kF
+         NASg==
+X-Gm-Message-State: AFqh2kpJb5e2f6dPsqDZto9ruRSaaFMnjVHauNWML5FPrQggxL6iIBWJ
+        hxXMPTSMXYvdaVw0Gl5GtjU=
+X-Google-Smtp-Source: AMrXdXswYjyd5jQSxUgYzCkHUVW7m22GFDjuiW/FJIbMs0QSTwSVWbfqCuMsYVX1xk4H7r6DwDcRhw==
+X-Received: by 2002:a05:600c:3d8d:b0:3d2:bca5:10a2 with SMTP id bi13-20020a05600c3d8d00b003d2bca510a2mr10965006wmb.22.1674149227654;
+        Thu, 19 Jan 2023 09:27:07 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05600c4f4a00b003d96efd09b7sm5784755wmq.19.2023.01.19.09.27.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 09:27:07 -0800 (PST)
+Message-ID: <fe4eddeb-2aea-64e3-ddbd-50e4f0661476@gmail.com>
+Date:   Thu, 19 Jan 2023 18:27:04 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 12/14] rtc: pcf2127: support generic watchdog timing
- configuration
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 0/6] Add MediaTek MT6357 PMIC support
 Content-Language: en-US
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
- <20221215150214.1109074-13-hugo@hugovil.com>
-From:   Philipp Rosenberger <p.rosenberger@kunbus.com>
-In-Reply-To: <20221215150214.1109074-13-hugo@hugovil.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Flora Fu <flora.fu@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-rtc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221005-mt6357-support-v8-0-560caaafee53@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221005-mt6357-support-v8-0-560caaafee53@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0010.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::15) To AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:160::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0P193MB0738:EE_|GV1P193MB2312:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d94d981-8f0b-44f2-8903-08daf957280c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9Bq/1XgSfMhbnc8UbgcYOKNuFU8xNPNA/rHYosrdjgSjsoLTWXyukwIqZQUsUv9JcwdXPZsN6dHIxPbpS4BqSPBhEzCeumcqDebb8C7Mya6hzc7t1s+XdRQq0U3o380BcF8zjZNnGTfQH6lq6VSM26UB9KZ+P2XM8oPxdZIM6fjd3PSiSFKyezdkIqRI7lJyajOVEzMa++gEXiYYLw6WiQzh6/m6At9ufYZ0wxve1m84Ex4TL06tKxT4od3u9CMQCfkbCGB0FfMCcUrVUA4NHJHVZVx4mR4U63rSHW5yhC5oAkh4l9gvcai3mmpqGEqaipVIcbaeNmHYGnSDe31/NdNoCoUhP0puQU0g54k3E1LrJ31mGOSKrRqTkT7Q4HbsBCxAdLnIctjvl7yPjSaVNXHjeGMUVgJV6TTdf4MT3bNYEnb1e634H5Ou4dR3jC2RJCK4PFrcfFcVF+zM4rIYJ61hRQiN2Nmiw64aEzSr2+c9lhhXkZSge+8e173g3V//9pPtAY/f+4jTLVU2PYDJPOM+2Tr6r9i3nLkRDxdUz/9/CAOTWx2VrJMCz1Fxuu+sdukfpSgBSTcq+8UD75oYh0biD1VyddgAQI2Kg8QMdMH0Rydrzz+g5ZFbfm9ZVdnPBJyMwSYMvWabf9bQdTFAvHfIhybhR+TkR2S5uvaqzL6f0UC1xPOTcfbX5OSbKB3WbXb/5ai7WVfRPNK/jPnv8j81j+SxKuWJoLfzTlZCKZdxUlTWT2lbfwnSXTosTjAL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P193MB0738.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(376002)(39840400004)(396003)(451199015)(31686004)(86362001)(2906002)(66946007)(66556008)(8936002)(5660300002)(31696002)(38100700002)(66476007)(316002)(53546011)(6486002)(6506007)(478600001)(36756003)(8676002)(4326008)(41300700001)(6916009)(186003)(6512007)(26005)(83380400001)(2616005)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cGpqcWUzTU8wcXpWa2N5c3FTekZjU25kS3YzQlREa3dLRzRPTUF1bjBkbloy?=
- =?utf-8?B?SStxUndBNjI4Qng5cGRkZjlxUXF4MkRDUjBLMHdtMCtocjljMktFMEU0MCsr?=
- =?utf-8?B?VjU0YUEyY1lnWC85dFl1SXcyN2JZeDJmQ3JBRlMzTkVDYTVIU01CbEI5SFha?=
- =?utf-8?B?ZFIxNk12Z2J6dWdHUkpNenVKRzFydHpNM1Z3YlUzNTdod0hqOGlIdUR2RXpw?=
- =?utf-8?B?aWhZeTNoeHJiMkRVeG9mMXNyWHNpQWhwZlhNTC8xbDBCbXlENUdRbjg5MnNX?=
- =?utf-8?B?WVpQNlVNNzQvZmVJNENLQXZKb1dsR0RFQ09FaHRsMG01VGZjS1FCWm8wdW90?=
- =?utf-8?B?cnFPSVVHdnI0K3MxbE44S08rTFl0a3BLNHFVbUQ5Sk50dHlBQWRzRnAzUG1S?=
- =?utf-8?B?VmJ5VmFuSnVDRW5DTlJVOG5ESHByOXFlVExhbW55Z3AzTC91dmNCVmtoNEFN?=
- =?utf-8?B?RzhPdldsZnFyc1FQSktMM0RXcm45eURoS2hVNzJkUjc2WTBNbEFWWTR6dGhS?=
- =?utf-8?B?Ymh6ZjFkQjBJanE4aitLbzZIYXRESEgwQnQ2V1RMZmJBeENKTDNPZ0o0c1hJ?=
- =?utf-8?B?R3l0dFZyaXY3TXo4b05SVVphVC8yYU9lUk5jWktWT2Q3QXJyWFppbHpaMEQ0?=
- =?utf-8?B?cFhmMk5ib2pieXQ2VUFLR1Z2blZvK0RlTWJYOUFPSVlPUmRpUStZdnMyQm02?=
- =?utf-8?B?QXloWDdyOHY5ZFBPT09qbmJ3VE5GSWZjdGhPUFlpOEdEZUdYcndpZVpPbFNV?=
- =?utf-8?B?eVpUUXg4ZUlRKzI5R2JLNU81M1VJV3IzSU1DVFlJVVZsZ2VTdmVtMi93U0E2?=
- =?utf-8?B?Ri9nUWFtM2JHOGZ5Zlp6RHlEaVliaTU1eUZhSjBWRFJXSnRMbSs2RlpocXJr?=
- =?utf-8?B?RkdoblE5SDVjdTlkcTBmRFp6eko1WVlsYkZPMmVLZ0NKK29keXhUaElIbmxl?=
- =?utf-8?B?a3NxeHc5dXg4SlFGbHRKSmR3Z1JVZFlBTVoyYVppMDd2RFgyWTUvUW9sZjNs?=
- =?utf-8?B?cjVkWjBoUWV2Y0Ixc252WC9DYUZsQnowOU1xR2N1QjFMQ0RyV1Q2ejJLMnp6?=
- =?utf-8?B?dUw5dUNXZ3VTejdjODh5OUw5bm9tdjVURXBSZ0tnVlJrKzM4SXJPU1lCbHZT?=
- =?utf-8?B?SW5pSDZWVzRHN2tKaHNnUi9ST1c2NDhBdXExVkd6RVVjdHl6NlVXYllEdEFx?=
- =?utf-8?B?MlZQSWc5V0xTTEJtdEQwVnlSa003TVEwYWV2ZXZ3djJVQlN1Sjl6ZEpaeWln?=
- =?utf-8?B?ZXlBOGJWWStKMmpiUEQ2U2R6bHhtVklEVTRJaU83QjhyekxrY0ZWM0hidWhR?=
- =?utf-8?B?QjVadlNoZnE3UW5tYkcxdmFJU1orTjF4dUd6bEJXNjB0RWRnb29qN0JpT055?=
- =?utf-8?B?VW1OYzUwblJDVVlQcnpLWUtKUTJxSlA2eGdldDNnT3dXQ1lnQ3hYb083d3k0?=
- =?utf-8?B?RlhLUE8wMUg1a3phQUpWZEQ4YzNFeENpOHdUcUdYakFvN0RGNFBhbSswTzRm?=
- =?utf-8?B?KzJUUXdoaXY5Tk1qSzIvNExpeCtCNlN3VHBMUGxXYXRQeTR1U1dDa3BZMTBK?=
- =?utf-8?B?MUs3WHdveGpSblhMYVd6QytuQ3hqR1ZUeHdBdnROblJFZzhQT04xemM2THlR?=
- =?utf-8?B?RWh0UnIxRHFUWEovVnBRNGVTeTd2elVLZkx5V056NS91WGxGQVVldW9EOVRj?=
- =?utf-8?B?Yk1TY25FNnRCaGtKSUdoNjVCaUE1WkNaZ3FYTkhtRmRJK1g3WDloODFheUZ6?=
- =?utf-8?B?dGgvWHlVVWg2dENnWUtUNFBOREswclJXbCtiZzlGQjhPR2ExWi9WazYvcGdz?=
- =?utf-8?B?cFptQ01lMGI5L2RxSVVJSHEwaWVKaThWWGdGT3lKeXU4Y3NOTStoVkZWRGNN?=
- =?utf-8?B?UnVjRjFrQVdBMklYLzZHUGtpN0tWZitWQ1pKclpJa1BoY2NLcFNqYWNaRWtz?=
- =?utf-8?B?STNyZUplUG1FRjlSRnF4R3VpZURHb3pheGc5a251NStCWnNjQzI5N3o5QUdB?=
- =?utf-8?B?My9VWHZNVHgzRzdXTFNpRzFWdkJvbTBzaEd1RVVPMU9GMzkvMVU1TmZBb2hH?=
- =?utf-8?B?c1BUeXc1ZmpXTHVqWXhYUmo2VUJWZGNTSTI4eVNpS0xOOWNVNW5oNS9lcCtD?=
- =?utf-8?B?VmNwdVpaWHM1Q2pUWmYwbmwzdVNDclE0bTJXWUtkREk3VFl4Nkh1eG9FRVJY?=
- =?utf-8?B?ZWc9PQ==?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d94d981-8f0b-44f2-8903-08daf957280c
-X-MS-Exchange-CrossTenant-AuthSource: AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 13:23:15.7757
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JnqkyOfjk+2zNbqHOW6Ln7vNQGT/kggqFPe2C4vP6HwS4DkMZJdy0/YY2jcRAIyTHQEAXA4In9q+11338921dY9yQeaRsTYRw0v/FqUbNAk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1P193MB2312
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,152 +94,165 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Hugo,
+Given the ACK in the series I took the bindings and driver through v6.2-next/soc 
+and the DTS changes through v6.2-next/dts64
 
-shouldn't the timeout set with pcf2127_wdt_set_timeout() be in seconds? 
-With your changes this value is dependent on the configuration of the 
-timer source clock for watchdog timer. So with a default of 1/4Hz this 
-will be almost seconds * 4.
+Thanks!
 
-I think we need to do the same calculations as in the 
-pcf2127_watchdog_init() when calculating the timeout from the 
-PCF2127_WD_VAL_DEFAULT.
-
-Best regards,
-Philipp
-
-
-On 15.12.22 16:02, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On 02/01/2023 17:06, Alexandre Mergnat wrote:
+> Hi,
+> This patch series adds MFD, PMIC keys, and regulator support for MT6357.
+> MT6357 is a MediaTek PMIC very similar to MT6358.
 > 
-> Introduce in the configuration structure two new values to hold the
-> watchdog clock source and the min_hw_heartbeat_ms value.
+> Currently, MTK bindings related to the PMICs are not converted yet (still .txt):
 > 
-> The minimum and maximum timeout values are automatically computed from
-> the watchdog clock source value for each variant.
+> soc/mediatek/pwrap.txt (all PMIC parent)
+>        |
+>        V
+> mfd/mt6397.txt (support lot of mt63XX PMIC)
+>        +---------------+----------------+---...
+>        V               V                V
+> regulator/...      rtc/...          codec/...
 > 
-> The PCF2131 has no 1Hz watchdog clock source, as is the case for
-> PCF2127/29.
+> 1) Convert pwrap to yaml is ok.
 > 
-> The next best choice is using a 1/4Hz clock, giving a watchdog timeout
-> range between 4 and 1016s. By using the same register configuration as
-> for the PCF2127/29, the 1/4Hz clock source is selected.
+> 2) For the PMIC bindings, there are two option:
+> - Convert mt6397.txt to mediatek,mt6397.yaml and continue to support multiple
+>    PMIC with only one file. IMO, the file will be hard to read because
+>    the supported features aren't the same for each PMIC.
 > 
-> Note: the PCF2127 datasheet gives a min/max range between 1 and 255s,
-> but it should be between 2 and 254s, because the watchdog is triggered
-> when the timer value reaches 1, not 0.
+> - Make a binding file for each PMIC ref:
+>      - mfd/mediatek,mt6357.yaml
+>      - mfd/mediatek,mt6358.yaml
+>      - ...
 > 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 3) All PMIC daughter bindings (regulator, rtc, codec, led, ...) aren't fully
+> converted yet. Refering to the two PMIC convertion options above:
+> - To be clean, all daughter bindings should be converted. This is hard because
+>    a good understanding of each device is requiered to write efficient bindings.
+> - Only daughter bindings supported by the added PMIC should be converted, that
+>    allows to do the task conversion step by step.
+> 
+> In the V4 of this serie, I chose the second option.
+> 
+> Regards,
+> Alex
+> 
+> Changes in v8:
+> - Remove the 2 applied patches (v6.2-rc1) from the serie.
+>      - regulator: dt-bindings: Add binding schema for mt6357 regulators
+>      - regulator: add mt6357 regulator
+> - Rebase from v6.2-tmp/soc branch, got from kernel/git/matthias.bgg/linux.git
+> - Link to v7: https://lore.kernel.org/r/20221005-mt6357-support-v7-0-477e60126749@baylibre.com
+> 
+> Changes in v7:
+> - Drop mt6397 RTC schema conversion.
+> - Integrate mt6357 RTC schema directly in mediatek,mt6357.yaml.
+> - Fix unit address in mediatek,pwrap.yaml.
+> - Link to v6: https://lore.kernel.org/r/20221005-mt6357-support-v6-0-4f589756befa@baylibre.com
+> 
+> Changes in v6:
+> - Fix typo in documentations.
+> - Remove mediatek,mt6397-rtc.yaml example.
+> - Align pwrap convertion with the original .txt file.
+> - Remove unecessary include in the mt6357-regulator driver.
+> - Link to v5: https://lore.kernel.org/r/20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com
+> 
+> Changes in v5:
+> - Add missing maintainers
+> - Improve RTC binding by adding rtc.yaml ref and start-year property
+> - Split the txt->yaml conversion in one commit and the addition of the
+>    new mt6357-rtc compatible in another commit.
+> - Improve PWRAP binding:
+>    - clocks and clock-name have been refactored.
+>    - reset-names is now properly dependent to resets.
+>    - additionalProperties change from true to false.
+>    - change example for a most recent and popular SoC.
+>    - "allOf" part has been simplified.
+> - Pass binding tests with the updated tools. Here the command:
+>    "make DT_CHECKER_FLAGS=-m dt_binding_check"
+> - Link to v4: https://lore.kernel.org/r/20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com
+> 
+> Changes in v4:
+> - "dt-bindings: mfd: mt6397: add binding for MT6357" has been applied
+>    by Lee Jones
+> - All fixed regulator are now refering to fixed-regulator.yaml
+> - vfe28 and vcamio18 regulators have been added
+> - pwrap binding has been converted and mt8365 support has been added
+> - mt6357 PMIC binding has been created
+> - mt6397 RTC binding has been converted and mt6357 support has been added
+> - Link to v3: https://lore.kernel.org/r/20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com
+> 
+> Changes in v3:
+> - To be consistent with regulator/driver.h and helper.c, shift
+>    variables have been removed and the mask values have been directly shifted.
+> - Remove index tables and rework volt tables to use set/get helper functions.
+> - Add comment to structure and function.
+> - Fix Fabien Parent mail address.
+> - Link to v2: https://lore.kernel.org/r/20221005-mt6357-support-v2-0-f17ba2d2d0a9@baylibre.com
+> 
+> Changes in v2:
+> - Rebase
+> - Fix typo
+> - Remove dependencies with https://lore.kernel.org/all/20220415153629.1817202-1-fparent@baylibre.com/
+>    which is no longer relevant.
+> 
+> Previous versions:
+> v1 - https://lore.kernel.org/all/20220531124959.202787-1-fparent@baylibre.com/
+> 
+> To: Lee Jones <lee@kernel.org>
+> To: Rob Herring <robh+dt@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Matthias Brugger <matthias.bgg@gmail.com>
+> To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> To: Chen Zhong <chen.zhong@mediatek.com>
+> To: Liam Girdwood <lgirdwood@gmail.com>
+> To: Mark Brown <broonie@kernel.org>
+> To: Fabien Parent <fabien.parent@linaro.org>
+> To: Alessandro Zummo <a.zummo@towertech.it>
+> To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> To: Sean Wang <sean.wang@mediatek.com>
+> To: Pavel Machek <pavel@ucw.cz>
+> To: Tianping Fang <tianping.fang@mediatek.com>
+> To: Flora Fu <flora.fu@mediatek.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-input@vger.kernel.org
+> Cc: Fabien Parent <fparent@baylibre.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Cc: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> 
 > ---
->   drivers/rtc/rtc-pcf2127.c | 56 +++++++++++++++++++++++++++++++++------
->   1 file changed, 48 insertions(+), 8 deletions(-)
+> Alexandre Mergnat (4):
+>        dt-bindings: soc: mediatek: convert pwrap documentation
+>        dt-bindings: mfd: mediatek: Add bindings for MT6357 PMIC
+>        arm64: dts: mt6358: change node names
+>        arm64: dts: mt8173: change node name
 > 
-> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 11fbdab6bf01..3fd2fee4978b 100644
-> --- a/drivers/rtc/rtc-pcf2127.c
-> +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -157,9 +157,29 @@
->   
->   /* Watchdog timer value constants */
->   #define PCF2127_WD_VAL_STOP		0
-> -#define PCF2127_WD_VAL_MIN		2
-> -#define PCF2127_WD_VAL_MAX		255
-> -#define PCF2127_WD_VAL_DEFAULT		60
-> +#define PCF2127_WD_VAL_DEFAULT		60 /* In seconds. */
-> +/* PCF2127/29 watchdog timer value constants */
-> +#define PCF2127_WD_CLOCK_HZ_X1000	1000 /* 1Hz */
-> +#define PCF2127_WD_MIN_HW_HEARTBEAT_MS	500
-> +/* PCF2131 watchdog timer value constants */
-> +#define PCF2131_WD_CLOCK_HZ_X1000	250  /* 1/4Hz */
-> +#define PCF2131_WD_MIN_HW_HEARTBEAT_MS	4000
-> +/*
-> + * Compute watchdog period, t, in seconds, from the WATCHDG_TIM_VAL register
-> + * value, n, and the clock frequency, f, in Hz.
-> + *
-> + * The PCF2127/29 datasheet gives t as:
-> + *   t = n / f
-> + * The PCF2131 datasheet gives t as:
-> + *   t = (n - 1) / f
-> + * For both variants, the watchdog is triggered when the WATCHDG_TIM_VAL reaches
-> + * the value 1, and not zero. Consequently, the equation from the PCF2131
-> + * datasheet seems to be the correct one for both variants.
-> + */
-> +#define WD_PERIOD_S(_n_, _f1000_) ((1000 * ((_n_) - 1)) / (_f1000_))
-> +
-> +/* Compute value of WATCHDG_TIM_VAL to obtain period t, in seconds. */
-> +#define WD_COUNTER(_t_, _f1000_) ((((_t_) * (_f1000_)) / 1000) + 1)
->   
->   /* Mask for currently enabled interrupts */
->   #define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
-> @@ -202,6 +222,11 @@ struct pcf21xx_config {
->   	u8 reg_wd_val; /* Watchdog value register. */
->   	u8 reg_clkout; /* Clkout register. */
->   	u8 reg_reset;  /* Reset register if available. */
-> +
-> +	/* Watchdog configuration. */
-> +	int wdd_clock_hz_x1000; /* Value in Hz multiplicated by 1000 */
-> +	int wdd_min_hw_heartbeat_ms;
-> +
->   	unsigned int ts_count;
->   	struct pcf21xx_ts_config ts[4];
->   	struct attribute_group attribute_group;
-> @@ -496,10 +521,19 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
->   	pcf2127->wdd.parent = dev;
->   	pcf2127->wdd.info = &pcf2127_wdt_info;
->   	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
-> -	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
-> -	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
-> -	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
-> -	pcf2127->wdd.min_hw_heartbeat_ms = 500;
-> +
-> +	pcf2127->wdd.min_timeout =
-> +		WD_PERIOD_S(2, pcf2127->cfg->wdd_clock_hz_x1000);
-> +	pcf2127->wdd.max_timeout =
-> +		WD_PERIOD_S(255, pcf2127->cfg->wdd_clock_hz_x1000);
-> +	pcf2127->wdd.timeout = WD_COUNTER(PCF2127_WD_VAL_DEFAULT,
-> +					  pcf2127->cfg->wdd_clock_hz_x1000);
-> +
-> +	dev_dbg(dev, "%s min = %ds\n", __func__, pcf2127->wdd.min_timeout);
-> +	dev_dbg(dev, "%s max = %ds\n", __func__, pcf2127->wdd.max_timeout);
-> +	dev_dbg(dev, "%s def = %d\n", __func__, pcf2127->wdd.timeout);
-> +
-> +	pcf2127->wdd.min_hw_heartbeat_ms = pcf2127->cfg->wdd_min_hw_heartbeat_ms;
->   	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
->   
->   	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
-> @@ -926,6 +960,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
->   		.reg_wd_val = PCF2127_REG_WD_VAL,
->   		.reg_clkout = PCF2127_REG_CLKOUT,
-> +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-> +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
->   		.ts_count = 1,
->   		.ts[0] = {
->   			.regs_base = PCF2127_REG_TS1_BASE,
-> @@ -951,6 +987,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
->   		.reg_wd_val = PCF2127_REG_WD_VAL,
->   		.reg_clkout = PCF2127_REG_CLKOUT,
-> +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-> +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
->   		.ts_count = 1,
->   		.ts[0] = {
->   			.regs_base = PCF2127_REG_TS1_BASE,
-> @@ -977,6 +1015,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
->   		.reg_wd_val = PCF2131_REG_WD_VAL,
->   		.reg_clkout = PCF2131_REG_CLKOUT,
->   		.reg_reset  = PCF2131_REG_SR_RESET,
-> +		.wdd_clock_hz_x1000 = PCF2131_WD_CLOCK_HZ_X1000,
-> +		.wdd_min_hw_heartbeat_ms = PCF2131_WD_MIN_HW_HEARTBEAT_MS,
->   		.ts_count = 4,
->   		.ts[0] = {
->   			.regs_base = PCF2131_REG_TS1_BASE,
-> @@ -1215,7 +1255,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->   
->   	/*
->   	 * Watchdog timer enabled and reset pin /RST activated when timed out.
-> -	 * Select 1Hz clock source for watchdog timer.
-> +	 * Select 1Hz clock source for watchdog timer (1/4Hz for PCF2131).
->   	 * Note: Countdown timer disabled and not available.
->   	 * For pca2129, pcf2129 and pcf2131, only bit[7] is for Symbol WD_CD
->   	 * of register watchdg_tim_ctl. The bit[6] is labeled
+> Fabien Parent (2):
+>        dt-bindings: input: mtk-pmic-keys: add binding for MT6357 PMIC
+>        Input: mtk-pmic-keys: add MT6357 support
+> 
+>   .../bindings/input/mediatek,pmic-keys.yaml         |   1 +
+>   .../devicetree/bindings/leds/leds-mt6323.txt       |   2 +-
+>   .../devicetree/bindings/mfd/mediatek,mt6357.yaml   | 111 ++++++++++++++++
+>   Documentation/devicetree/bindings/mfd/mt6397.txt   |   2 +-
+>   .../bindings/soc/mediatek/mediatek,pwrap.yaml      | 147 +++++++++++++++++++++
+>   .../devicetree/bindings/soc/mediatek/pwrap.txt     |  75 -----------
+>   arch/arm64/boot/dts/mediatek/mt6358.dtsi           |   6 +-
+>   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |   2 +-
+>   arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |   2 +-
+>   drivers/input/keyboard/mtk-pmic-keys.c             |  17 +++
+>   10 files changed, 283 insertions(+), 82 deletions(-)
+> ---
+> base-commit: e32caddfc737a96f6593754c2a08be6b8c1e0cec
+> change-id: 20221005-mt6357-support-55308b82e33f
+> 
+> Best regards,
