@@ -2,237 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C4267404A
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 18:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF8067455D
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 23:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjASRtK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Jan 2023 12:49:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S229623AbjASWBk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Jan 2023 17:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjASRtI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 12:49:08 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928C918B10;
-        Thu, 19 Jan 2023 09:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=hX4OYiBGR92+HjPLeBF5dAXZ5JjVpQRGM664v9KvkC8=; b=dA9yfFFkGxgp4w9VJmvyzmjN1Y
-        Ah0YE+IoIoTV0DsGTEw6tdX1i1gobS9ntaQoBy6kaeZ82q7SQUyjcHc3UKBJ4R2ymA5aP+173/54x
-        Nfpxmx6rfOMqgDhEl0RMhP/XpBY7bFvgCcq0iHbjm1KR0JcS66NE4yEI+WS7+IUCJPVU=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41480 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pIZ1y-00088F-2h; Thu, 19 Jan 2023 12:48:54 -0500
-Date:   Thu, 19 Jan 2023 12:48:53 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Philipp Rosenberger <p.rosenberger@kunbus.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230119124853.9193fd073b8a95b45e20f41c@hugovil.com>
-In-Reply-To: <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-13-hugo@hugovil.com>
-        <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        with ESMTP id S229659AbjASWBK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 17:01:10 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F345C380A
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:29 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id jr19so1467560qtb.7
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sparkcharge.io; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=diUS7SbW+4cNCdAZHjd5Rb9WzsMVmloUYnR4biBBhXI=;
+        b=xZayoIa34oX8jpXw5WEG7a1XwkbdqXP7TWyTJXPzHmxAgsQgZyCK7miSfSHLuTxwQT
+         IePLF8SK3U8Hx6tl9ole8Op4kDgozndWjmtij8TNRJqqLxJxZBwnFkAbOOhmO6vGXBX+
+         KnpvRquWY/6tESSK+Tk2lFB3MRz77pHkdJMHIINmXV3Xi8Em81/fRMqeaEQUnixeqDfB
+         IggX6yHiULbL/z9Ws62zZLdVMG2pzKnHL5ACRNw7y86yfD9ekSmnlX1l5GNV2hZkj5du
+         P1j14kebMDOU4+Wwwth2PUCBi0ZhUYYdILBwxgYz8ZRJXRkq4ZGZ72j2njvmqnlzwa/m
+         8Njg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=diUS7SbW+4cNCdAZHjd5Rb9WzsMVmloUYnR4biBBhXI=;
+        b=ChuyiAmHi8Smh0QD338lZcg9jwTfiOdMVynjyKYG4snOuOjcD8CddN+P7mw2b1hrs/
+         DEoo78q8uS9WsvUZA/kklj0w4jYAqTOAwlD4bz1Wvt+VsSgTV6US8pE5VDtkSd4nUTZP
+         7/cYJ5Ko5WhZZzIaLqPryg8nzCJz166Xqbxaon1rnZsygVPefRD7a4jPYyYyTL6+fbGK
+         JJFrbFu05zEA+05HcmyrmFd4yTMsNlT/GfZBAWe639kURY20qi728RaTX9dO9BYsFL/2
+         ehIX5itfcXyygV5guKU+4BvvEi9Rxex8QHspaMpirwy5vtW5YyU41jRfdu+SzQ6DDN61
+         Dy7w==
+X-Gm-Message-State: AFqh2koArDyZSPw0dITuoWLNqqv1xXMRiC0mYkAOhqie+vwBmpFpenJb
+        abWyyn9RYOMMmmg50B2wDdcXDQ==
+X-Google-Smtp-Source: AMrXdXu20D+eAnx/j7BRIFAVfNKdOhXio7U6ZSQzIOr1FUFoa4y0uo3eY/M2amHQ3H0kkH8huV7Q8Q==
+X-Received: by 2002:ac8:66da:0:b0:3a7:e9a2:4f4a with SMTP id m26-20020ac866da000000b003a7e9a24f4amr18376043qtp.8.1674164367865;
+        Thu, 19 Jan 2023 13:39:27 -0800 (PST)
+Received: from localhost.localdomain (c-66-31-16-167.hsd1.ma.comcast.net. [66.31.16.167])
+        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 13:39:27 -0800 (PST)
+From:   Dennis Lambe Jr <dennis@sparkcharge.io>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
+Cc:     =?UTF-8?q?Myl=C3=A8ne=20Josserand?= 
+        <mylene.josserand@free-electrons.com>,
+        Gary Bisson <gary.bisson@boundarydevices.com>,
+        Javier Martinez Canillas <javier@osg.samsung.com>,
+        Troy Kisky <troy.kisky@boundarydevices.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Dennis Lambe Jr <dennis@sparkcharge.io>
+Subject: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance from DT
+Date:   Thu, 19 Jan 2023 21:39:00 +0000
+Message-Id: <20230119213903.899756-1-dennis@sparkcharge.io>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 12/14] rtc: pcf2127: support generic watchdog timing
- configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 18 Jan 2023 14:23:14 +0100
-Philipp Rosenberger <p.rosenberger@kunbus.com> wrote:
+Other than adding a sign-off to one of the changelogs, this is a RESEND.
 
-> Hi Hugo,
-> 
-> shouldn't the timeout set with pcf2127_wdt_set_timeout() be in seconds? 
-> With your changes this value is dependent on the configuration of the 
-> timer source clock for watchdog timer. So with a default of 1/4Hz this 
-> will be almost seconds * 4.
-> 
-> I think we need to do the same calculations as in the 
-> pcf2127_watchdog_init() when calculating the timeout from the 
-> PCF2127_WD_VAL_DEFAULT.
-> 
-> Best regards,
-> Philipp
+Alexandre Belloni, what do you need for this before you'd want to apply
+it? In case it's additional reviewers, I have CC'd some more
+potentially-interested parties this time and updated Atsushi Nemoto's
+email address to one that's hopefully more current.
 
-Hi Philipp,
-you are right that the value store/computed inside the structure wdd (struct watchdog_device) should be in seconds, according to the header file documentation in watchdog.h.
+I think the original author listed in the header for this driver,
+Alexander Bigga, is inaccurate. It looks to me like his name got copied
+over by Atsushi Nemoto when he created m41t82.c by deriving it from a
+similar driver. At any rate, Alexander Bigga's listed email address
+bounces, I didn't find a newer one for him, and he doesn't show up in
+the kernel commit log after 2007. I don't think he can be considered the
+maintainer for this driver anymore if he ever was.
 
-However, in the PCF2127 datasheet, the value n that is stored in the PCF2127_REG_WD_VAL register does not represent a value in seconds, but a counter value. It is given by this equation:
+Changes in v3:
+* dt-bindings: added Krzysztof Kozlowski sign-off to changelog
 
-    n = source_clock_frequency x timer_period_in_seconds
+Changes in v2:
+* dt-bindings: remove accidental wakeup-sources line
+    suggested by Krzysztof Kozlowski
+* spelling fixes in changelogs
 
-For the PCF2127, since the clock used is 1Hz, it works as the previous equation can be simplified as:
+The m41t82 and m41t83 have an adjustable internal capacitance that
+defaults to 25 pF per xtal pin. This patch series adds the ability to
+configure it via the devicetree.
 
-    n = timer_period_in_seconds
+Patch 1 just changes `#ifdef CONFIG_OF` to `if (IS_ENABLED(CONFIG_OF))`
+in m41t80_probe() so that I don't need to use __maybe_unused on my new
+functions and variables.
 
-However, if the source clock is different than 1Hz, it would no longer work. Also, since the PCF2131 uses a default clock of 1/4 Hz, it also would not work.
+Patch 2 is the dt-bindings.
 
-That is the reason why I modified the watchdog timer value (n) computation to take the clock into account. I then use the desired timeout in seconds given by  PCF2127_WD_VAL_DEFAULT to compute the counter value (n).
+Patch 3 is the actual feature implementation.
 
-So what I am proposing to do is to store the PCF2127_WD_VAL_DEFAULT value in wdd->timeout, as before, but convert it to a counter value in pcf2127_wdt_active_ping(). Or to only compute it once, I could define a new variable and compute/set it in pcf2127_watchdog_init().
+The desired capacitance comes from the quartz-load-femtofarads property,
+following the example of two other RTC ICs that have adjustable internal
+load capacitance, the NXP pcf85063 and pcf8523. The m41t82 and m41t83
+support much finer-grained control over the capacitance than those
+chips, and ST calls the feature "analog calibration", but it looks to me
+like it's essentially the same kind of thing.
 
-Hugo.
+My use case for this is:
 
- 
-> On 15.12.22 16:02, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Introduce in the configuration structure two new values to hold the
-> > watchdog clock source and the min_hw_heartbeat_ms value.
-> > 
-> > The minimum and maximum timeout values are automatically computed from
-> > the watchdog clock source value for each variant.
-> > 
-> > The PCF2131 has no 1Hz watchdog clock source, as is the case for
-> > PCF2127/29.
-> > 
-> > The next best choice is using a 1/4Hz clock, giving a watchdog timeout
-> > range between 4 and 1016s. By using the same register configuration as
-> > for the PCF2127/29, the 1/4Hz clock source is selected.
-> > 
-> > Note: the PCF2127 datasheet gives a min/max range between 1 and 255s,
-> > but it should be between 2 and 254s, because the watchdog is triggered
-> > when the timer value reaches 1, not 0.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >   drivers/rtc/rtc-pcf2127.c | 56 +++++++++++++++++++++++++++++++++------
-> >   1 file changed, 48 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index 11fbdab6bf01..3fd2fee4978b 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -157,9 +157,29 @@
-> >   
-> >   /* Watchdog timer value constants */
-> >   #define PCF2127_WD_VAL_STOP		0
-> > -#define PCF2127_WD_VAL_MIN		2
-> > -#define PCF2127_WD_VAL_MAX		255
-> > -#define PCF2127_WD_VAL_DEFAULT		60
-> > +#define PCF2127_WD_VAL_DEFAULT		60 /* In seconds. */
-> > +/* PCF2127/29 watchdog timer value constants */
-> > +#define PCF2127_WD_CLOCK_HZ_X1000	1000 /* 1Hz */
-> > +#define PCF2127_WD_MIN_HW_HEARTBEAT_MS	500
-> > +/* PCF2131 watchdog timer value constants */
-> > +#define PCF2131_WD_CLOCK_HZ_X1000	250  /* 1/4Hz */
-> > +#define PCF2131_WD_MIN_HW_HEARTBEAT_MS	4000
-> > +/*
-> > + * Compute watchdog period, t, in seconds, from the WATCHDG_TIM_VAL register
-> > + * value, n, and the clock frequency, f, in Hz.
-> > + *
-> > + * The PCF2127/29 datasheet gives t as:
-> > + *   t = n / f
-> > + * The PCF2131 datasheet gives t as:
-> > + *   t = (n - 1) / f
-> > + * For both variants, the watchdog is triggered when the WATCHDG_TIM_VAL reaches
-> > + * the value 1, and not zero. Consequently, the equation from the PCF2131
-> > + * datasheet seems to be the correct one for both variants.
-> > + */
-> > +#define WD_PERIOD_S(_n_, _f1000_) ((1000 * ((_n_) - 1)) / (_f1000_))
-> > +
-> > +/* Compute value of WATCHDG_TIM_VAL to obtain period t, in seconds. */
-> > +#define WD_COUNTER(_t_, _f1000_) ((((_t_) * (_f1000_)) / 1000) + 1)
-> >   
-> >   /* Mask for currently enabled interrupts */
-> >   #define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
-> > @@ -202,6 +222,11 @@ struct pcf21xx_config {
-> >   	u8 reg_wd_val; /* Watchdog value register. */
-> >   	u8 reg_clkout; /* Clkout register. */
-> >   	u8 reg_reset;  /* Reset register if available. */
-> > +
-> > +	/* Watchdog configuration. */
-> > +	int wdd_clock_hz_x1000; /* Value in Hz multiplicated by 1000 */
-> > +	int wdd_min_hw_heartbeat_ms;
-> > +
-> >   	unsigned int ts_count;
-> >   	struct pcf21xx_ts_config ts[4];
-> >   	struct attribute_group attribute_group;
-> > @@ -496,10 +521,19 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
-> >   	pcf2127->wdd.parent = dev;
-> >   	pcf2127->wdd.info = &pcf2127_wdt_info;
-> >   	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
-> > -	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
-> > -	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
-> > -	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
-> > -	pcf2127->wdd.min_hw_heartbeat_ms = 500;
-> > +
-> > +	pcf2127->wdd.min_timeout =
-> > +		WD_PERIOD_S(2, pcf2127->cfg->wdd_clock_hz_x1000);
-> > +	pcf2127->wdd.max_timeout =
-> > +		WD_PERIOD_S(255, pcf2127->cfg->wdd_clock_hz_x1000);
-> > +	pcf2127->wdd.timeout = WD_COUNTER(PCF2127_WD_VAL_DEFAULT,
-> > +					  pcf2127->cfg->wdd_clock_hz_x1000);
-> > +
-> > +	dev_dbg(dev, "%s min = %ds\n", __func__, pcf2127->wdd.min_timeout);
-> > +	dev_dbg(dev, "%s max = %ds\n", __func__, pcf2127->wdd.max_timeout);
-> > +	dev_dbg(dev, "%s def = %d\n", __func__, pcf2127->wdd.timeout);
-> > +
-> > +	pcf2127->wdd.min_hw_heartbeat_ms = pcf2127->cfg->wdd_min_hw_heartbeat_ms;
-> >   	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
-> >   
-> >   	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
-> > @@ -926,6 +960,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
-> >   		.reg_clkout = PCF2127_REG_CLKOUT,
-> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
-> >   		.ts_count = 1,
-> >   		.ts[0] = {
-> >   			.regs_base = PCF2127_REG_TS1_BASE,
-> > @@ -951,6 +987,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
-> >   		.reg_clkout = PCF2127_REG_CLKOUT,
-> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
-> >   		.ts_count = 1,
-> >   		.ts[0] = {
-> >   			.regs_base = PCF2127_REG_TS1_BASE,
-> > @@ -977,6 +1015,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> >   		.reg_wd_val = PCF2131_REG_WD_VAL,
-> >   		.reg_clkout = PCF2131_REG_CLKOUT,
-> >   		.reg_reset  = PCF2131_REG_SR_RESET,
-> > +		.wdd_clock_hz_x1000 = PCF2131_WD_CLOCK_HZ_X1000,
-> > +		.wdd_min_hw_heartbeat_ms = PCF2131_WD_MIN_HW_HEARTBEAT_MS,
-> >   		.ts_count = 4,
-> >   		.ts[0] = {
-> >   			.regs_base = PCF2131_REG_TS1_BASE,
-> > @@ -1215,7 +1255,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >   
-> >   	/*
-> >   	 * Watchdog timer enabled and reset pin /RST activated when timed out.
-> > -	 * Select 1Hz clock source for watchdog timer.
-> > +	 * Select 1Hz clock source for watchdog timer (1/4Hz for PCF2131).
-> >   	 * Note: Countdown timer disabled and not available.
-> >   	 * For pca2129, pcf2129 and pcf2131, only bit[7] is for Symbol WD_CD
-> >   	 * of register watchdg_tim_ctl. The bit[6] is labeled
-> 
+ST specifies not to add any additional external load capacitance[1], but
+the MikroElektronika RTC 9 Click board[2] has a 22 pF cap on each xtal
+pin[3]. The resulting combined capacitance appears to be outside of the
+operating range of the xtal, because when power is removed from the
+boards I'm testing with, the RTC reports an Oscillator-Fail flag on the
+next power on.
 
+I found I could work around the problem by reducing the internal load
+capacitance as low as it will go.
+
+References:
+[1] https://www.st.com/resource/en/application_note/an3060-applications-guide-for-serial-realtime-clocks-rtcs-stmicroelectronics.pdf
+[2] https://www.mikroe.com/rtc-9-click
+[3] https://download.mikroe.com/documents/add-on-boards/click/rtc-9/rtc-9-click-schematic-v100.pdf
+
+Previous versions:
+v1: https://lore.kernel.org/linux-rtc/20221219190915.3912384-1-dennis@sparkcharge.io/T/
+
+Dennis Lambe Jr (3):
+  rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
+  dt-bindings: m41t80: add xtal load capacitance
+  rtc: m41t80: set xtal load capacitance from DT
+
+ .../devicetree/bindings/rtc/st,m41t80.yaml    | 16 ++++
+ drivers/rtc/rtc-m41t80.c                      | 84 +++++++++++++++++--
+ 2 files changed, 92 insertions(+), 8 deletions(-)
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+2.25.1
+
