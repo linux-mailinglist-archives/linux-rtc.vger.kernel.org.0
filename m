@@ -2,257 +2,237 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A03A673FDD
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 18:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C4267404A
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 18:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjASR1M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Jan 2023 12:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S230170AbjASRtK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Jan 2023 12:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjASR1L (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 12:27:11 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4797649002;
-        Thu, 19 Jan 2023 09:27:09 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id q8so2097345wmo.5;
-        Thu, 19 Jan 2023 09:27:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s5y/E0y/zCyC6ZcSFXDPmaGDVbN4bDkeMBtZup2uQow=;
-        b=Q+/HYM8e41V4GuvCTiY3gvtW+mNK48qnHVtjyPOCSrW1VRNpm1nkmi3Z8HEiZKKs8p
-         FBYjy8y0ctk2n+NViAtJXKaW5wuJIw0tAYg6E98HwJs2JQWp0t8MJjFSckeG7opqdAn/
-         RyGYr8GY/8tNtzpJNOsn1U1RfSd58FgCYVZVvxb7MwQ9YcTEI+WvirSjOyONQOfM6x73
-         TVpHhhymWpoSjYXXhSq32Qq07iQ2OQJUKv/8SB2mqS7Y24OdlAqFirr1KjYs5uLAqYKy
-         lVmZdLHhm9YaFMpofVONGlzUDIrBL8iSW8gGdcagx5JZGt//yC0wdVvY5n+l+3OrDwrI
-         Gj9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s5y/E0y/zCyC6ZcSFXDPmaGDVbN4bDkeMBtZup2uQow=;
-        b=IxX+UCzyP1pRf4S+7xmeP8eika4zWYyXYF3fXTmSMmzHZ/C1gjZyShovI77l6wx6LV
-         EVm3AE3akspQhF1NQ0lSk4moifWVPuP0fX29eFJ+34BlUk70hJecI5ZoibZU3U+2z4mm
-         WzUH0wnxwKAq6hUk9fsTS/mTYof1q+NBJtUFqEbXjNbF54rU1Ncm2GJ9s0dvKIXwJCkn
-         8anuEIVtSGfPeYQ8TVf2DNnxKtAAKaEtoBcCP0ZAxOZMy1mRdxZ0XXrq1efREQt0UI+f
-         q2NMN+9aD2AxetwPEeOfBXVr/e+vEr8RIcy94OQcqMzv49oeJJwbFk0nZBDzcEt4V2kF
-         NASg==
-X-Gm-Message-State: AFqh2kpJb5e2f6dPsqDZto9ruRSaaFMnjVHauNWML5FPrQggxL6iIBWJ
-        hxXMPTSMXYvdaVw0Gl5GtjU=
-X-Google-Smtp-Source: AMrXdXswYjyd5jQSxUgYzCkHUVW7m22GFDjuiW/FJIbMs0QSTwSVWbfqCuMsYVX1xk4H7r6DwDcRhw==
-X-Received: by 2002:a05:600c:3d8d:b0:3d2:bca5:10a2 with SMTP id bi13-20020a05600c3d8d00b003d2bca510a2mr10965006wmb.22.1674149227654;
-        Thu, 19 Jan 2023 09:27:07 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m10-20020a05600c4f4a00b003d96efd09b7sm5784755wmq.19.2023.01.19.09.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 09:27:07 -0800 (PST)
-Message-ID: <fe4eddeb-2aea-64e3-ddbd-50e4f0661476@gmail.com>
-Date:   Thu, 19 Jan 2023 18:27:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v8 0/6] Add MediaTek MT6357 PMIC support
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-rtc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221005-mt6357-support-v8-0-560caaafee53@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221005-mt6357-support-v8-0-560caaafee53@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        with ESMTP id S230073AbjASRtI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 12:49:08 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928C918B10;
+        Thu, 19 Jan 2023 09:49:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hX4OYiBGR92+HjPLeBF5dAXZ5JjVpQRGM664v9KvkC8=; b=dA9yfFFkGxgp4w9VJmvyzmjN1Y
+        Ah0YE+IoIoTV0DsGTEw6tdX1i1gobS9ntaQoBy6kaeZ82q7SQUyjcHc3UKBJ4R2ymA5aP+173/54x
+        Nfpxmx6rfOMqgDhEl0RMhP/XpBY7bFvgCcq0iHbjm1KR0JcS66NE4yEI+WS7+IUCJPVU=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41480 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pIZ1y-00088F-2h; Thu, 19 Jan 2023 12:48:54 -0500
+Date:   Thu, 19 Jan 2023 12:48:53 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Philipp Rosenberger <p.rosenberger@kunbus.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230119124853.9193fd073b8a95b45e20f41c@hugovil.com>
+In-Reply-To: <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-13-hugo@hugovil.com>
+        <72514fec-12e2-5b51-261d-9e171b46f5bb@kunbus.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 12/14] rtc: pcf2127: support generic watchdog timing
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Given the ACK in the series I took the bindings and driver through v6.2-next/soc 
-and the DTS changes through v6.2-next/dts64
+On Wed, 18 Jan 2023 14:23:14 +0100
+Philipp Rosenberger <p.rosenberger@kunbus.com> wrote:
 
-Thanks!
-
-On 02/01/2023 17:06, Alexandre Mergnat wrote:
-> Hi,
-> This patch series adds MFD, PMIC keys, and regulator support for MT6357.
-> MT6357 is a MediaTek PMIC very similar to MT6358.
+> Hi Hugo,
 > 
-> Currently, MTK bindings related to the PMICs are not converted yet (still .txt):
+> shouldn't the timeout set with pcf2127_wdt_set_timeout() be in seconds? 
+> With your changes this value is dependent on the configuration of the 
+> timer source clock for watchdog timer. So with a default of 1/4Hz this 
+> will be almost seconds * 4.
 > 
-> soc/mediatek/pwrap.txt (all PMIC parent)
->        |
->        V
-> mfd/mt6397.txt (support lot of mt63XX PMIC)
->        +---------------+----------------+---...
->        V               V                V
-> regulator/...      rtc/...          codec/...
-> 
-> 1) Convert pwrap to yaml is ok.
-> 
-> 2) For the PMIC bindings, there are two option:
-> - Convert mt6397.txt to mediatek,mt6397.yaml and continue to support multiple
->    PMIC with only one file. IMO, the file will be hard to read because
->    the supported features aren't the same for each PMIC.
-> 
-> - Make a binding file for each PMIC ref:
->      - mfd/mediatek,mt6357.yaml
->      - mfd/mediatek,mt6358.yaml
->      - ...
-> 
-> 3) All PMIC daughter bindings (regulator, rtc, codec, led, ...) aren't fully
-> converted yet. Refering to the two PMIC convertion options above:
-> - To be clean, all daughter bindings should be converted. This is hard because
->    a good understanding of each device is requiered to write efficient bindings.
-> - Only daughter bindings supported by the added PMIC should be converted, that
->    allows to do the task conversion step by step.
-> 
-> In the V4 of this serie, I chose the second option.
-> 
-> Regards,
-> Alex
-> 
-> Changes in v8:
-> - Remove the 2 applied patches (v6.2-rc1) from the serie.
->      - regulator: dt-bindings: Add binding schema for mt6357 regulators
->      - regulator: add mt6357 regulator
-> - Rebase from v6.2-tmp/soc branch, got from kernel/git/matthias.bgg/linux.git
-> - Link to v7: https://lore.kernel.org/r/20221005-mt6357-support-v7-0-477e60126749@baylibre.com
-> 
-> Changes in v7:
-> - Drop mt6397 RTC schema conversion.
-> - Integrate mt6357 RTC schema directly in mediatek,mt6357.yaml.
-> - Fix unit address in mediatek,pwrap.yaml.
-> - Link to v6: https://lore.kernel.org/r/20221005-mt6357-support-v6-0-4f589756befa@baylibre.com
-> 
-> Changes in v6:
-> - Fix typo in documentations.
-> - Remove mediatek,mt6397-rtc.yaml example.
-> - Align pwrap convertion with the original .txt file.
-> - Remove unecessary include in the mt6357-regulator driver.
-> - Link to v5: https://lore.kernel.org/r/20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com
-> 
-> Changes in v5:
-> - Add missing maintainers
-> - Improve RTC binding by adding rtc.yaml ref and start-year property
-> - Split the txt->yaml conversion in one commit and the addition of the
->    new mt6357-rtc compatible in another commit.
-> - Improve PWRAP binding:
->    - clocks and clock-name have been refactored.
->    - reset-names is now properly dependent to resets.
->    - additionalProperties change from true to false.
->    - change example for a most recent and popular SoC.
->    - "allOf" part has been simplified.
-> - Pass binding tests with the updated tools. Here the command:
->    "make DT_CHECKER_FLAGS=-m dt_binding_check"
-> - Link to v4: https://lore.kernel.org/r/20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com
-> 
-> Changes in v4:
-> - "dt-bindings: mfd: mt6397: add binding for MT6357" has been applied
->    by Lee Jones
-> - All fixed regulator are now refering to fixed-regulator.yaml
-> - vfe28 and vcamio18 regulators have been added
-> - pwrap binding has been converted and mt8365 support has been added
-> - mt6357 PMIC binding has been created
-> - mt6397 RTC binding has been converted and mt6357 support has been added
-> - Link to v3: https://lore.kernel.org/r/20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com
-> 
-> Changes in v3:
-> - To be consistent with regulator/driver.h and helper.c, shift
->    variables have been removed and the mask values have been directly shifted.
-> - Remove index tables and rework volt tables to use set/get helper functions.
-> - Add comment to structure and function.
-> - Fix Fabien Parent mail address.
-> - Link to v2: https://lore.kernel.org/r/20221005-mt6357-support-v2-0-f17ba2d2d0a9@baylibre.com
-> 
-> Changes in v2:
-> - Rebase
-> - Fix typo
-> - Remove dependencies with https://lore.kernel.org/all/20220415153629.1817202-1-fparent@baylibre.com/
->    which is no longer relevant.
-> 
-> Previous versions:
-> v1 - https://lore.kernel.org/all/20220531124959.202787-1-fparent@baylibre.com/
-> 
-> To: Lee Jones <lee@kernel.org>
-> To: Rob Herring <robh+dt@kernel.org>
-> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> To: Matthias Brugger <matthias.bgg@gmail.com>
-> To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> To: Chen Zhong <chen.zhong@mediatek.com>
-> To: Liam Girdwood <lgirdwood@gmail.com>
-> To: Mark Brown <broonie@kernel.org>
-> To: Fabien Parent <fabien.parent@linaro.org>
-> To: Alessandro Zummo <a.zummo@towertech.it>
-> To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> To: Sean Wang <sean.wang@mediatek.com>
-> To: Pavel Machek <pavel@ucw.cz>
-> To: Tianping Fang <tianping.fang@mediatek.com>
-> To: Flora Fu <flora.fu@mediatek.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: Fabien Parent <fparent@baylibre.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Cc: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> 
-> ---
-> Alexandre Mergnat (4):
->        dt-bindings: soc: mediatek: convert pwrap documentation
->        dt-bindings: mfd: mediatek: Add bindings for MT6357 PMIC
->        arm64: dts: mt6358: change node names
->        arm64: dts: mt8173: change node name
-> 
-> Fabien Parent (2):
->        dt-bindings: input: mtk-pmic-keys: add binding for MT6357 PMIC
->        Input: mtk-pmic-keys: add MT6357 support
-> 
->   .../bindings/input/mediatek,pmic-keys.yaml         |   1 +
->   .../devicetree/bindings/leds/leds-mt6323.txt       |   2 +-
->   .../devicetree/bindings/mfd/mediatek,mt6357.yaml   | 111 ++++++++++++++++
->   Documentation/devicetree/bindings/mfd/mt6397.txt   |   2 +-
->   .../bindings/soc/mediatek/mediatek,pwrap.yaml      | 147 +++++++++++++++++++++
->   .../devicetree/bindings/soc/mediatek/pwrap.txt     |  75 -----------
->   arch/arm64/boot/dts/mediatek/mt6358.dtsi           |   6 +-
->   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |   2 +-
->   arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |   2 +-
->   drivers/input/keyboard/mtk-pmic-keys.c             |  17 +++
->   10 files changed, 283 insertions(+), 82 deletions(-)
-> ---
-> base-commit: e32caddfc737a96f6593754c2a08be6b8c1e0cec
-> change-id: 20221005-mt6357-support-55308b82e33f
+> I think we need to do the same calculations as in the 
+> pcf2127_watchdog_init() when calculating the timeout from the 
+> PCF2127_WD_VAL_DEFAULT.
 > 
 > Best regards,
+> Philipp
+
+Hi Philipp,
+you are right that the value store/computed inside the structure wdd (struct watchdog_device) should be in seconds, according to the header file documentation in watchdog.h.
+
+However, in the PCF2127 datasheet, the value n that is stored in the PCF2127_REG_WD_VAL register does not represent a value in seconds, but a counter value. It is given by this equation:
+
+    n = source_clock_frequency x timer_period_in_seconds
+
+For the PCF2127, since the clock used is 1Hz, it works as the previous equation can be simplified as:
+
+    n = timer_period_in_seconds
+
+However, if the source clock is different than 1Hz, it would no longer work. Also, since the PCF2131 uses a default clock of 1/4 Hz, it also would not work.
+
+That is the reason why I modified the watchdog timer value (n) computation to take the clock into account. I then use the desired timeout in seconds given by  PCF2127_WD_VAL_DEFAULT to compute the counter value (n).
+
+So what I am proposing to do is to store the PCF2127_WD_VAL_DEFAULT value in wdd->timeout, as before, but convert it to a counter value in pcf2127_wdt_active_ping(). Or to only compute it once, I could define a new variable and compute/set it in pcf2127_watchdog_init().
+
+Hugo.
+
+ 
+> On 15.12.22 16:02, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Introduce in the configuration structure two new values to hold the
+> > watchdog clock source and the min_hw_heartbeat_ms value.
+> > 
+> > The minimum and maximum timeout values are automatically computed from
+> > the watchdog clock source value for each variant.
+> > 
+> > The PCF2131 has no 1Hz watchdog clock source, as is the case for
+> > PCF2127/29.
+> > 
+> > The next best choice is using a 1/4Hz clock, giving a watchdog timeout
+> > range between 4 and 1016s. By using the same register configuration as
+> > for the PCF2127/29, the 1/4Hz clock source is selected.
+> > 
+> > Note: the PCF2127 datasheet gives a min/max range between 1 and 255s,
+> > but it should be between 2 and 254s, because the watchdog is triggered
+> > when the timer value reaches 1, not 0.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >   drivers/rtc/rtc-pcf2127.c | 56 +++++++++++++++++++++++++++++++++------
+> >   1 file changed, 48 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index 11fbdab6bf01..3fd2fee4978b 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -157,9 +157,29 @@
+> >   
+> >   /* Watchdog timer value constants */
+> >   #define PCF2127_WD_VAL_STOP		0
+> > -#define PCF2127_WD_VAL_MIN		2
+> > -#define PCF2127_WD_VAL_MAX		255
+> > -#define PCF2127_WD_VAL_DEFAULT		60
+> > +#define PCF2127_WD_VAL_DEFAULT		60 /* In seconds. */
+> > +/* PCF2127/29 watchdog timer value constants */
+> > +#define PCF2127_WD_CLOCK_HZ_X1000	1000 /* 1Hz */
+> > +#define PCF2127_WD_MIN_HW_HEARTBEAT_MS	500
+> > +/* PCF2131 watchdog timer value constants */
+> > +#define PCF2131_WD_CLOCK_HZ_X1000	250  /* 1/4Hz */
+> > +#define PCF2131_WD_MIN_HW_HEARTBEAT_MS	4000
+> > +/*
+> > + * Compute watchdog period, t, in seconds, from the WATCHDG_TIM_VAL register
+> > + * value, n, and the clock frequency, f, in Hz.
+> > + *
+> > + * The PCF2127/29 datasheet gives t as:
+> > + *   t = n / f
+> > + * The PCF2131 datasheet gives t as:
+> > + *   t = (n - 1) / f
+> > + * For both variants, the watchdog is triggered when the WATCHDG_TIM_VAL reaches
+> > + * the value 1, and not zero. Consequently, the equation from the PCF2131
+> > + * datasheet seems to be the correct one for both variants.
+> > + */
+> > +#define WD_PERIOD_S(_n_, _f1000_) ((1000 * ((_n_) - 1)) / (_f1000_))
+> > +
+> > +/* Compute value of WATCHDG_TIM_VAL to obtain period t, in seconds. */
+> > +#define WD_COUNTER(_t_, _f1000_) ((((_t_) * (_f1000_)) / 1000) + 1)
+> >   
+> >   /* Mask for currently enabled interrupts */
+> >   #define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
+> > @@ -202,6 +222,11 @@ struct pcf21xx_config {
+> >   	u8 reg_wd_val; /* Watchdog value register. */
+> >   	u8 reg_clkout; /* Clkout register. */
+> >   	u8 reg_reset;  /* Reset register if available. */
+> > +
+> > +	/* Watchdog configuration. */
+> > +	int wdd_clock_hz_x1000; /* Value in Hz multiplicated by 1000 */
+> > +	int wdd_min_hw_heartbeat_ms;
+> > +
+> >   	unsigned int ts_count;
+> >   	struct pcf21xx_ts_config ts[4];
+> >   	struct attribute_group attribute_group;
+> > @@ -496,10 +521,19 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
+> >   	pcf2127->wdd.parent = dev;
+> >   	pcf2127->wdd.info = &pcf2127_wdt_info;
+> >   	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
+> > -	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
+> > -	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
+> > -	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
+> > -	pcf2127->wdd.min_hw_heartbeat_ms = 500;
+> > +
+> > +	pcf2127->wdd.min_timeout =
+> > +		WD_PERIOD_S(2, pcf2127->cfg->wdd_clock_hz_x1000);
+> > +	pcf2127->wdd.max_timeout =
+> > +		WD_PERIOD_S(255, pcf2127->cfg->wdd_clock_hz_x1000);
+> > +	pcf2127->wdd.timeout = WD_COUNTER(PCF2127_WD_VAL_DEFAULT,
+> > +					  pcf2127->cfg->wdd_clock_hz_x1000);
+> > +
+> > +	dev_dbg(dev, "%s min = %ds\n", __func__, pcf2127->wdd.min_timeout);
+> > +	dev_dbg(dev, "%s max = %ds\n", __func__, pcf2127->wdd.max_timeout);
+> > +	dev_dbg(dev, "%s def = %d\n", __func__, pcf2127->wdd.timeout);
+> > +
+> > +	pcf2127->wdd.min_hw_heartbeat_ms = pcf2127->cfg->wdd_min_hw_heartbeat_ms;
+> >   	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
+> >   
+> >   	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
+> > @@ -926,6 +960,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
+> >   		.reg_clkout = PCF2127_REG_CLKOUT,
+> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
+> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
+> >   		.ts_count = 1,
+> >   		.ts[0] = {
+> >   			.regs_base = PCF2127_REG_TS1_BASE,
+> > @@ -951,6 +987,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> >   		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> >   		.reg_wd_val = PCF2127_REG_WD_VAL,
+> >   		.reg_clkout = PCF2127_REG_CLKOUT,
+> > +		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
+> > +		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
+> >   		.ts_count = 1,
+> >   		.ts[0] = {
+> >   			.regs_base = PCF2127_REG_TS1_BASE,
+> > @@ -977,6 +1015,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> >   		.reg_wd_val = PCF2131_REG_WD_VAL,
+> >   		.reg_clkout = PCF2131_REG_CLKOUT,
+> >   		.reg_reset  = PCF2131_REG_SR_RESET,
+> > +		.wdd_clock_hz_x1000 = PCF2131_WD_CLOCK_HZ_X1000,
+> > +		.wdd_min_hw_heartbeat_ms = PCF2131_WD_MIN_HW_HEARTBEAT_MS,
+> >   		.ts_count = 4,
+> >   		.ts[0] = {
+> >   			.regs_base = PCF2131_REG_TS1_BASE,
+> > @@ -1215,7 +1255,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> >   
+> >   	/*
+> >   	 * Watchdog timer enabled and reset pin /RST activated when timed out.
+> > -	 * Select 1Hz clock source for watchdog timer.
+> > +	 * Select 1Hz clock source for watchdog timer (1/4Hz for PCF2131).
+> >   	 * Note: Countdown timer disabled and not available.
+> >   	 * For pca2129, pcf2129 and pcf2131, only bit[7] is for Symbol WD_CD
+> >   	 * of register watchdg_tim_ctl. The bit[6] is labeled
+> 
+
+
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
