@@ -2,53 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E6D674563
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 23:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70400674565
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 23:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjASWBz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Jan 2023 17:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S230145AbjASWCB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Jan 2023 17:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjASWBT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 17:01:19 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBDB460AC
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:40 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id q15so2748727qtn.0
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:40 -0800 (PST)
+        with ESMTP id S230040AbjASWBZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 17:01:25 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50288C380E
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:45 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id a25so2683515qto.10
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sparkcharge.io; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EvnEAnqblTBDjO4L9lAoJAikuecyCt30DJ9Jy9ahvAM=;
-        b=XPjTivTM93RwFnsS/ljsxPX3656SstcIyCWz/ntXj5hdmpSndYugg7yxUcU6rdzkNk
-         EwuLDbRZkZ8qW2KzsNRlPdkxWupoC7hlWR1jJNklPpyjVD42alTaXQI+g3JiTP9VtTUD
-         fDpcf45LF78MkYjJCV/IE4LaUG58VDlzdifWa89+9+iHxv9carzoBVyCSj5k8fWTp2Pp
-         YcgS/vM2TqoWHXRZS68OFmmwTntMELqVb1QETDAD6yFP6wtqeU2DP8CJC9Dqb4B3DV3C
-         6vLzxj4QRTUw2YTn8aBHMXlx3u2qLPyc+Zrp5YAloicoDCr3DfxWw7yXpoWNGrbVDkhQ
-         6GEA==
+        bh=jgeqi6RRPNuIjdr+16qci9xGfe9jHTKnAUBA+hjYEZ0=;
+        b=EM5fiD7lxkWQV4cO85UqeJfo5w+/+GA2DxMmx4KyqmT7Ya6x/ZZDUCblPCkvNdy1wP
+         eOnDdtzU7Dzhj7aBf5k4JCwJgaKhAEKpgFuiFm2+OZihWKRjm0AJK9SeGMigFFbSu7Np
+         Dqf7+iOUcd/GbfnWuLKlBTs7KYKsrUOfr3SiRBFVr5cNIy459kiW9zegQ9VuwMdDpVqt
+         PXcYxClPSEa8poQU4+FSqgQOscFd1R8EX+dEGCTII96FpWD/iryz8gKlwkRhASWv3YR9
+         V71zL2cBuKkZd6gpIWwpv8ityyo9feO7MpJ2QKjHFlnU4xFbgFhtj9AkIpRjyYY838YA
+         V8rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EvnEAnqblTBDjO4L9lAoJAikuecyCt30DJ9Jy9ahvAM=;
-        b=t2qWvi+LL4DGy6YJNLAigd0f9ynW8nZWMpUJieBQGMbE6R6lW5jY7/JSj6v2f/yyMK
-         ONAFPrIuhzuhvQepdbLQSMxZcLfMAFkS0Sz2kuDG99o1cazjgsOFi7LpthbFTKOUG81j
-         ZVOdQyWH57WSk8QwibUYfgI5isgFPv0/TACsbIJhf+Qgp7l7trGE9X4lrKzptTNEERPE
-         B2OZt4w/9LWMOFwjaeC9BxMUt1f49JT7O6iHwBuMkCZxob5KEqSL1ydjnrocdaj96Yug
-         uGabuyMUi1WHDqZpAOSjukDeArhL7DRdqPC7cEi7ePWW1RdRAw9CkIIthMsB0RcK6da2
-         5A/w==
-X-Gm-Message-State: AFqh2kqJ/w7CDtmvs6p37/Pr0JiRKCI8QnUydc0ifxrOzSKB1znTImOS
-        2CYPwdqGUoDALFhD8cWxci75uQ==
-X-Google-Smtp-Source: AMrXdXvH05SRTIswgL/NPk4wgC7B25swx7vGDsNwIubApjxY3JniaRycLxhz6UZ1VXgRljC9SldxGQ==
-X-Received: by 2002:ac8:71c1:0:b0:3b6:3abd:fcc2 with SMTP id i1-20020ac871c1000000b003b63abdfcc2mr16964684qtp.46.1674164374360;
-        Thu, 19 Jan 2023 13:39:34 -0800 (PST)
+        bh=jgeqi6RRPNuIjdr+16qci9xGfe9jHTKnAUBA+hjYEZ0=;
+        b=SbGL3LxFWzbClxJEtWR8F2u6QuMWIg5sgvYn7wSrNT0gXUaZWjAIoRxL2CzDUwR5/B
+         4IbZYcbWm/Ke0SxvXuE84dUatZMU+Cq5tPJy+f02effzid86nZZyZ4zEA31XRZnYzwtE
+         u/qGOCXdUjNUbUz/PAnZyKJotBDCWRGZTshWW7G2MAO6ZldCQeLHR0M/wKh0KkFy07Y/
+         La7EpEVirITMXXS+SRy534n8/lZrs+NgPl+hMYQwqf4WCSjVjUzoq9g8V2r762vkT5zK
+         LnezgWBcuvazByiQrZNCk2GojQCjs0FSe0qa/XuSD2m1B3StTXP4rmaDmTxam4lrAblk
+         rPlA==
+X-Gm-Message-State: AFqh2kokMYA8ZExK+r8oh9sAVqEnL9u99R7FDgnaWc8xHLfJC5StTLzj
+        3CA0wJkZ92+h/68C5D5zX0aOkg==
+X-Google-Smtp-Source: AMrXdXtHHcZdlw6wPUTOUTPnLQ3VB2DUtwWDS/88v7sZM2nnU2rHJymWFvpGKOwx2VP9jbQaovN2Dg==
+X-Received: by 2002:ac8:4703:0:b0:3b6:2bbf:581e with SMTP id f3-20020ac84703000000b003b62bbf581emr17315557qtp.35.1674164382424;
+        Thu, 19 Jan 2023 13:39:42 -0800 (PST)
 Received: from localhost.localdomain (c-66-31-16-167.hsd1.ma.comcast.net. [66.31.16.167])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.33
+        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 13:39:33 -0800 (PST)
+        Thu, 19 Jan 2023 13:39:42 -0800 (PST)
 From:   Dennis Lambe Jr <dennis@sparkcharge.io>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -61,11 +61,10 @@ Cc:     =?UTF-8?q?Myl=C3=A8ne=20Josserand?=
         Javier Martinez Canillas <javier@osg.samsung.com>,
         Troy Kisky <troy.kisky@boundarydevices.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Dennis Lambe Jr <dennis@sparkcharge.io>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/3] dt-bindings: m41t80: add xtal load capacitance
-Date:   Thu, 19 Jan 2023 21:39:02 +0000
-Message-Id: <20230119213903.899756-3-dennis@sparkcharge.io>
+        linux-rtc@vger.kernel.org, Dennis Lambe Jr <dennis@sparkcharge.io>
+Subject: [PATCH v3 3/3] rtc: m41t80: set xtal load capacitance from DT
+Date:   Thu, 19 Jan 2023 21:39:03 +0000
+Message-Id: <20230119213903.899756-4-dennis@sparkcharge.io>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230119213903.899756-1-dennis@sparkcharge.io>
 References: <20230119213903.899756-1-dennis@sparkcharge.io>
@@ -80,65 +79,157 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The ST m41t82 and m41t83 support programmable load capacitance from 3.5
-pF to 17.4 pF. The hardware defaults to 12.5 pF.
+Add support for specifying the xtal load capacitance in the DT node for
+devices with an Analog Calibration register.
 
-The accuracy of the xtal can be calibrated precisely by adjusting the
-load capacitance.
+the m41t82 and m41t83 support xtal load capacitance from 3.5 pF to 17.4
+pF.
 
-Add default, minimum, and maximum for the standard rtc property
-quartz-load-femtofarads on compatible devices.
+If no xtal load capacitance is specified, the battery-backed register
+won't be modified. The hardware defaults to 12.5 pF on reset.
 
 Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
+ drivers/rtc/rtc-m41t80.c | 75 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 71 insertions(+), 4 deletions(-)
 
-Notes:
-    v2 -> v3:
-    	added "Reviewed-by: Krzysztof Kozlowski" to changelog
-    
-    v1 -> v2:
-    	remove accidental wakeup-sources line
-    		suggested by Krzysztof Kozlowski
-    	spelling fix in changelog
-
- .../devicetree/bindings/rtc/st,m41t80.yaml       | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
-index fc9c6da6483f..6673adf6e99b 100644
---- a/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
-+++ b/Documentation/devicetree/bindings/rtc/st,m41t80.yaml
-@@ -33,6 +33,11 @@ properties:
-   "#clock-cells":
-     const: 1
+diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+index f963b76e5fc0..85bde7130a4d 100644
+--- a/drivers/rtc/rtc-m41t80.c
++++ b/drivers/rtc/rtc-m41t80.c
+@@ -44,12 +44,17 @@
+ #define M41T80_REG_ALARM_MIN	0x0d
+ #define M41T80_REG_ALARM_SEC	0x0e
+ #define M41T80_REG_FLAGS	0x0f
++#define M41T80_REG_AC		0x12
+ #define M41T80_REG_SQW		0x13
  
-+  quartz-load-femtofarads:
-+    default: 12500
-+    minimum: 3500
-+    maximum: 17375
+ #define M41T80_DATETIME_REG_SIZE	(M41T80_REG_YEAR + 1)
+ #define M41T80_ALARM_REG_SIZE	\
+ 	(M41T80_REG_ALARM_SEC + 1 - M41T80_REG_ALARM_MON)
+ 
++#define M41T80_AC_MIN		 3500
++#define M41T80_AC_MAX		17375
++#define M41T80_AC_DEFAULT	12500
 +
-   clock-output-names:
-     maxItems: 1
-     description: From common clock binding to override the default output clock name.
-@@ -46,6 +51,17 @@ properties:
+ #define M41T80_SQW_MAX_FREQ	32768
  
- allOf:
-   - $ref: rtc.yaml
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              enum:
-+                - st,m41t82
-+                - st,m41t83
-+    then:
-+      properties:
-+        quartz-load-femtofarads: false
+ #define M41T80_SEC_ST		BIT(7)	/* ST: Stop Bit */
+@@ -68,6 +73,7 @@
+ #define M41T80_FEATURE_SQ	BIT(2)	/* Squarewave feature */
+ #define M41T80_FEATURE_WD	BIT(3)	/* Extra watchdog resolution */
+ #define M41T80_FEATURE_SQ_ALT	BIT(4)	/* RSx bits are in reg 4 */
++#define M41T80_FEATURE_AC	BIT(5) /* Analog calibration */
  
- unevaluatedProperties: false
+ static const struct i2c_device_id m41t80_id[] = {
+ 	{ "m41t62", M41T80_FEATURE_SQ | M41T80_FEATURE_SQ_ALT },
+@@ -75,8 +81,10 @@ static const struct i2c_device_id m41t80_id[] = {
+ 	{ "m41t80", M41T80_FEATURE_SQ },
+ 	{ "m41t81", M41T80_FEATURE_HT | M41T80_FEATURE_SQ},
+ 	{ "m41t81s", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
+-	{ "m41t82", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
+-	{ "m41t83", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
++	{ "m41t82", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
++		    | M41T80_FEATURE_AC },
++	{ "m41t83", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
++		    | M41T80_FEATURE_AC },
+ 	{ "m41st84", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
+ 	{ "m41st85", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
+ 	{ "m41st87", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
+@@ -108,11 +116,13 @@ static const __maybe_unused struct of_device_id m41t80_of_match[] = {
+ 	},
+ 	{
+ 		.compatible = "st,m41t82",
+-		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ)
++		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
++				 | M41T80_FEATURE_AC)
+ 	},
+ 	{
+ 		.compatible = "st,m41t83",
+-		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ)
++		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
++				 | M41T80_FEATURE_AC)
+ 	},
+ 	{
+ 		.compatible = "st,m41t84",
+@@ -405,6 +415,54 @@ static const struct rtc_class_ops m41t80_rtc_ops = {
+ 	.alarm_irq_enable = m41t80_alarm_irq_enable,
+ };
  
++static u8 to_sign_magnitude_u8(int n)
++{
++	if (n < 0)
++		return 0x80 | -n;
++	return n;
++}
++
++static int m41t80_encode_ac(int quartz_load)
++{
++	if (quartz_load < M41T80_AC_MIN || quartz_load > M41T80_AC_MAX)
++		return -EINVAL;
++
++	/*
++	 * register representation is the per-capacitor offset from its default
++	 * value in units of 1/4 pF, in sign-magnitude form.
++	 */
++	return to_sign_magnitude_u8((quartz_load - M41T80_AC_DEFAULT) / 125);
++}
++
++static int m41t80_set_ac(struct m41t80_data *m41t80_data, int quartz_load)
++{
++	struct i2c_client *client = m41t80_data->client;
++	struct device *dev = &client->dev;
++	int ret;
++	int ac;
++
++	if (!(m41t80_data->features & M41T80_FEATURE_AC)) {
++		dev_err(dev, "analog calibration requested but not supported\n");
++		return -EOPNOTSUPP;
++	}
++
++	ac = m41t80_encode_ac(quartz_load);
++	if (ac < 0) {
++		dev_err(dev, "quartz load %d fF out of range\n",
++			quartz_load);
++		return ac;
++	}
++
++	ret = i2c_smbus_write_byte_data(client, M41T80_REG_AC, ac);
++	if (ret < 0) {
++		dev_err(dev, "Can't set AC register\n");
++		return ret;
++	}
++
++	dev_info(dev, "quartz load set to %d fF (AC=0x%x)\n", quartz_load, ac);
++	return 0;
++}
++
+ #ifdef CONFIG_PM_SLEEP
+ static int m41t80_suspend(struct device *dev)
+ {
+@@ -883,6 +941,7 @@ static int m41t80_probe(struct i2c_client *client)
+ 	struct rtc_time tm;
+ 	struct m41t80_data *m41t80_data = NULL;
+ 	bool wakeup_source = false;
++	u32 quartz_load = M41T80_AC_DEFAULT;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_I2C_BLOCK |
+ 				     I2C_FUNC_SMBUS_BYTE_DATA)) {
+@@ -912,6 +971,14 @@ static int m41t80_probe(struct i2c_client *client)
+ 	if (IS_ENABLED(CONFIG_OF)) {
+ 		wakeup_source = of_property_read_bool(client->dev.of_node,
+ 						      "wakeup-source");
++
++		rc = of_property_read_u32(client->dev.of_node,
++					  "quartz-load-femtofarads",
++					  &quartz_load);
++		if (!rc)
++			m41t80_set_ac(m41t80_data, quartz_load);
++		else if (rc != -EINVAL)
++			dev_err(&client->dev, "quartz-load-femtofarads property value is missing or invalid\n");
+ 	}
+ 
+ 	if (client->irq > 0) {
 -- 
 2.25.1
 
