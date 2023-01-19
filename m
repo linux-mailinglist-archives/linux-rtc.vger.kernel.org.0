@@ -2,234 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70400674565
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 23:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0E567463D
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Jan 2023 23:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjASWCB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Jan 2023 17:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S230182AbjASWgc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Jan 2023 17:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjASWBZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 17:01:25 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50288C380E
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:45 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id a25so2683515qto.10
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Jan 2023 13:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sparkcharge.io; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jgeqi6RRPNuIjdr+16qci9xGfe9jHTKnAUBA+hjYEZ0=;
-        b=EM5fiD7lxkWQV4cO85UqeJfo5w+/+GA2DxMmx4KyqmT7Ya6x/ZZDUCblPCkvNdy1wP
-         eOnDdtzU7Dzhj7aBf5k4JCwJgaKhAEKpgFuiFm2+OZihWKRjm0AJK9SeGMigFFbSu7Np
-         Dqf7+iOUcd/GbfnWuLKlBTs7KYKsrUOfr3SiRBFVr5cNIy459kiW9zegQ9VuwMdDpVqt
-         PXcYxClPSEa8poQU4+FSqgQOscFd1R8EX+dEGCTII96FpWD/iryz8gKlwkRhASWv3YR9
-         V71zL2cBuKkZd6gpIWwpv8ityyo9feO7MpJ2QKjHFlnU4xFbgFhtj9AkIpRjyYY838YA
-         V8rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jgeqi6RRPNuIjdr+16qci9xGfe9jHTKnAUBA+hjYEZ0=;
-        b=SbGL3LxFWzbClxJEtWR8F2u6QuMWIg5sgvYn7wSrNT0gXUaZWjAIoRxL2CzDUwR5/B
-         4IbZYcbWm/Ke0SxvXuE84dUatZMU+Cq5tPJy+f02effzid86nZZyZ4zEA31XRZnYzwtE
-         u/qGOCXdUjNUbUz/PAnZyKJotBDCWRGZTshWW7G2MAO6ZldCQeLHR0M/wKh0KkFy07Y/
-         La7EpEVirITMXXS+SRy534n8/lZrs+NgPl+hMYQwqf4WCSjVjUzoq9g8V2r762vkT5zK
-         LnezgWBcuvazByiQrZNCk2GojQCjs0FSe0qa/XuSD2m1B3StTXP4rmaDmTxam4lrAblk
-         rPlA==
-X-Gm-Message-State: AFqh2kokMYA8ZExK+r8oh9sAVqEnL9u99R7FDgnaWc8xHLfJC5StTLzj
-        3CA0wJkZ92+h/68C5D5zX0aOkg==
-X-Google-Smtp-Source: AMrXdXtHHcZdlw6wPUTOUTPnLQ3VB2DUtwWDS/88v7sZM2nnU2rHJymWFvpGKOwx2VP9jbQaovN2Dg==
-X-Received: by 2002:ac8:4703:0:b0:3b6:2bbf:581e with SMTP id f3-20020ac84703000000b003b62bbf581emr17315557qtp.35.1674164382424;
-        Thu, 19 Jan 2023 13:39:42 -0800 (PST)
-Received: from localhost.localdomain (c-66-31-16-167.hsd1.ma.comcast.net. [66.31.16.167])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05620a28cd00b0070531c5d655sm2600676qkp.90.2023.01.19.13.39.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 13:39:42 -0800 (PST)
-From:   Dennis Lambe Jr <dennis@sparkcharge.io>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        with ESMTP id S230382AbjASWgF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 17:36:05 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E533717CC1;
+        Thu, 19 Jan 2023 14:18:02 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1EEFAC0004;
+        Thu, 19 Jan 2023 22:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674166680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JpJEqzHQqnXucAEeBIdt9PMVNIHwQVKdpxkEc3sDRTQ=;
+        b=ifo7P9Q2GWBoPF5tUO78+PhK/XNNBOhUAizj+BSOfTqBJ8h1MTimuD6xsUC1LSL1A6piTy
+        Vucf+Q9pIPX+ZvEeL9htL0npRbN17Y+lw5PF9uZXH/ZawPtTpRBblIjpXxJ4x736xEppd7
+        gt5bOjd00shYFNBw7E0nRkvH85AZXRWiJi+LdcNgB833dZB2JG8ABV6W8luNM9rBczFPOT
+        5iwemfWZG02Bu5CHRso2QQp65o7R8AW61TLUmXUB6SVupKt0pq9ZpIUAVQ4rxI+DsBlSot
+        DSmrEx82ixacIqLc3V/Uksv0MTWgdhloocO9ql9fi00+HpQHMLboFkiXl8m1pQ==
+Date:   Thu, 19 Jan 2023 23:17:58 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Dennis Lambe Jr <dennis@sparkcharge.io>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
-Cc:     =?UTF-8?q?Myl=C3=A8ne=20Josserand?= 
+        Atsushi Nemoto <atsushi.nemoto@sord.co.jp>,
+        =?iso-8859-1?Q?Myl=E8ne?= Josserand 
         <mylene.josserand@free-electrons.com>,
         Gary Bisson <gary.bisson@boundarydevices.com>,
         Javier Martinez Canillas <javier@osg.samsung.com>,
         Troy Kisky <troy.kisky@boundarydevices.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Dennis Lambe Jr <dennis@sparkcharge.io>
-Subject: [PATCH v3 3/3] rtc: m41t80: set xtal load capacitance from DT
-Date:   Thu, 19 Jan 2023 21:39:03 +0000
-Message-Id: <20230119213903.899756-4-dennis@sparkcharge.io>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230119213903.899756-1-dennis@sparkcharge.io>
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance
+ from DT
+Message-ID: <Y8nBloQfBPK3t5ce@mail.local>
 References: <20230119213903.899756-1-dennis@sparkcharge.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119213903.899756-1-dennis@sparkcharge.io>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add support for specifying the xtal load capacitance in the DT node for
-devices with an Analog Calibration register.
+On 19/01/2023 21:39:00+0000, Dennis Lambe Jr wrote:
+> Other than adding a sign-off to one of the changelogs, this is a RESEND.
+> 
+> Alexandre Belloni, what do you need for this before you'd want to apply
+> it? In case it's additional reviewers, I have CC'd some more
+> potentially-interested parties this time and updated Atsushi Nemoto's
+> email address to one that's hopefully more current.
+> 
 
-the m41t82 and m41t83 support xtal load capacitance from 3.5 pF to 17.4
-pF.
+I need to find time to think about it because while setting the analog
+trimming statically from the device tree solves your immediate problem,
+it will also remove the possibility to handle it from userspace later
+on. I would really prefer this uses the offset interface or a better
+interface that unfortunately doesn't exist yet.
 
-If no xtal load capacitance is specified, the battery-backed register
-won't be modified. The hardware defaults to 12.5 pF on reset.
+> I think the original author listed in the header for this driver,
+> Alexander Bigga, is inaccurate. It looks to me like his name got copied
+> over by Atsushi Nemoto when he created m41t82.c by deriving it from a
+> similar driver. At any rate, Alexander Bigga's listed email address
+> bounces, I didn't find a newer one for him, and he doesn't show up in
+> the kernel commit log after 2007. I don't think he can be considered the
+> maintainer for this driver anymore if he ever was.
+> 
+> Changes in v3:
+> * dt-bindings: added Krzysztof Kozlowski sign-off to changelog
+> 
+> Changes in v2:
+> * dt-bindings: remove accidental wakeup-sources line
+>     suggested by Krzysztof Kozlowski
+> * spelling fixes in changelogs
+> 
+> The m41t82 and m41t83 have an adjustable internal capacitance that
+> defaults to 25 pF per xtal pin. This patch series adds the ability to
+> configure it via the devicetree.
+> 
+> Patch 1 just changes `#ifdef CONFIG_OF` to `if (IS_ENABLED(CONFIG_OF))`
+> in m41t80_probe() so that I don't need to use __maybe_unused on my new
+> functions and variables.
+> 
+> Patch 2 is the dt-bindings.
+> 
+> Patch 3 is the actual feature implementation.
+> 
+> The desired capacitance comes from the quartz-load-femtofarads property,
+> following the example of two other RTC ICs that have adjustable internal
+> load capacitance, the NXP pcf85063 and pcf8523. The m41t82 and m41t83
+> support much finer-grained control over the capacitance than those
+> chips, and ST calls the feature "analog calibration", but it looks to me
+> like it's essentially the same kind of thing.
+> 
+> My use case for this is:
+> 
+> ST specifies not to add any additional external load capacitance[1], but
+> the MikroElektronika RTC 9 Click board[2] has a 22 pF cap on each xtal
+> pin[3]. The resulting combined capacitance appears to be outside of the
+> operating range of the xtal, because when power is removed from the
+> boards I'm testing with, the RTC reports an Oscillator-Fail flag on the
+> next power on.
+> 
+> I found I could work around the problem by reducing the internal load
+> capacitance as low as it will go.
+> 
+> References:
+> [1] https://www.st.com/resource/en/application_note/an3060-applications-guide-for-serial-realtime-clocks-rtcs-stmicroelectronics.pdf
+> [2] https://www.mikroe.com/rtc-9-click
+> [3] https://download.mikroe.com/documents/add-on-boards/click/rtc-9/rtc-9-click-schematic-v100.pdf
+> 
+> Previous versions:
+> v1: https://lore.kernel.org/linux-rtc/20221219190915.3912384-1-dennis@sparkcharge.io/T/
+> 
+> Dennis Lambe Jr (3):
+>   rtc: m41t80: probe: use IS_ENABLED for CONFIG_OF
+>   dt-bindings: m41t80: add xtal load capacitance
+>   rtc: m41t80: set xtal load capacitance from DT
+> 
+>  .../devicetree/bindings/rtc/st,m41t80.yaml    | 16 ++++
+>  drivers/rtc/rtc-m41t80.c                      | 84 +++++++++++++++++--
+>  2 files changed, 92 insertions(+), 8 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
 
-Signed-off-by: Dennis Lambe Jr <dennis@sparkcharge.io>
----
- drivers/rtc/rtc-m41t80.c | 75 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 71 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-index f963b76e5fc0..85bde7130a4d 100644
---- a/drivers/rtc/rtc-m41t80.c
-+++ b/drivers/rtc/rtc-m41t80.c
-@@ -44,12 +44,17 @@
- #define M41T80_REG_ALARM_MIN	0x0d
- #define M41T80_REG_ALARM_SEC	0x0e
- #define M41T80_REG_FLAGS	0x0f
-+#define M41T80_REG_AC		0x12
- #define M41T80_REG_SQW		0x13
- 
- #define M41T80_DATETIME_REG_SIZE	(M41T80_REG_YEAR + 1)
- #define M41T80_ALARM_REG_SIZE	\
- 	(M41T80_REG_ALARM_SEC + 1 - M41T80_REG_ALARM_MON)
- 
-+#define M41T80_AC_MIN		 3500
-+#define M41T80_AC_MAX		17375
-+#define M41T80_AC_DEFAULT	12500
-+
- #define M41T80_SQW_MAX_FREQ	32768
- 
- #define M41T80_SEC_ST		BIT(7)	/* ST: Stop Bit */
-@@ -68,6 +73,7 @@
- #define M41T80_FEATURE_SQ	BIT(2)	/* Squarewave feature */
- #define M41T80_FEATURE_WD	BIT(3)	/* Extra watchdog resolution */
- #define M41T80_FEATURE_SQ_ALT	BIT(4)	/* RSx bits are in reg 4 */
-+#define M41T80_FEATURE_AC	BIT(5) /* Analog calibration */
- 
- static const struct i2c_device_id m41t80_id[] = {
- 	{ "m41t62", M41T80_FEATURE_SQ | M41T80_FEATURE_SQ_ALT },
-@@ -75,8 +81,10 @@ static const struct i2c_device_id m41t80_id[] = {
- 	{ "m41t80", M41T80_FEATURE_SQ },
- 	{ "m41t81", M41T80_FEATURE_HT | M41T80_FEATURE_SQ},
- 	{ "m41t81s", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
--	{ "m41t82", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
--	{ "m41t83", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
-+	{ "m41t82", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
-+		    | M41T80_FEATURE_AC },
-+	{ "m41t83", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
-+		    | M41T80_FEATURE_AC },
- 	{ "m41st84", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
- 	{ "m41st85", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
- 	{ "m41st87", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
-@@ -108,11 +116,13 @@ static const __maybe_unused struct of_device_id m41t80_of_match[] = {
- 	},
- 	{
- 		.compatible = "st,m41t82",
--		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ)
-+		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
-+				 | M41T80_FEATURE_AC)
- 	},
- 	{
- 		.compatible = "st,m41t83",
--		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ)
-+		.data = (void *)(M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ
-+				 | M41T80_FEATURE_AC)
- 	},
- 	{
- 		.compatible = "st,m41t84",
-@@ -405,6 +415,54 @@ static const struct rtc_class_ops m41t80_rtc_ops = {
- 	.alarm_irq_enable = m41t80_alarm_irq_enable,
- };
- 
-+static u8 to_sign_magnitude_u8(int n)
-+{
-+	if (n < 0)
-+		return 0x80 | -n;
-+	return n;
-+}
-+
-+static int m41t80_encode_ac(int quartz_load)
-+{
-+	if (quartz_load < M41T80_AC_MIN || quartz_load > M41T80_AC_MAX)
-+		return -EINVAL;
-+
-+	/*
-+	 * register representation is the per-capacitor offset from its default
-+	 * value in units of 1/4 pF, in sign-magnitude form.
-+	 */
-+	return to_sign_magnitude_u8((quartz_load - M41T80_AC_DEFAULT) / 125);
-+}
-+
-+static int m41t80_set_ac(struct m41t80_data *m41t80_data, int quartz_load)
-+{
-+	struct i2c_client *client = m41t80_data->client;
-+	struct device *dev = &client->dev;
-+	int ret;
-+	int ac;
-+
-+	if (!(m41t80_data->features & M41T80_FEATURE_AC)) {
-+		dev_err(dev, "analog calibration requested but not supported\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	ac = m41t80_encode_ac(quartz_load);
-+	if (ac < 0) {
-+		dev_err(dev, "quartz load %d fF out of range\n",
-+			quartz_load);
-+		return ac;
-+	}
-+
-+	ret = i2c_smbus_write_byte_data(client, M41T80_REG_AC, ac);
-+	if (ret < 0) {
-+		dev_err(dev, "Can't set AC register\n");
-+		return ret;
-+	}
-+
-+	dev_info(dev, "quartz load set to %d fF (AC=0x%x)\n", quartz_load, ac);
-+	return 0;
-+}
-+
- #ifdef CONFIG_PM_SLEEP
- static int m41t80_suspend(struct device *dev)
- {
-@@ -883,6 +941,7 @@ static int m41t80_probe(struct i2c_client *client)
- 	struct rtc_time tm;
- 	struct m41t80_data *m41t80_data = NULL;
- 	bool wakeup_source = false;
-+	u32 quartz_load = M41T80_AC_DEFAULT;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_I2C_BLOCK |
- 				     I2C_FUNC_SMBUS_BYTE_DATA)) {
-@@ -912,6 +971,14 @@ static int m41t80_probe(struct i2c_client *client)
- 	if (IS_ENABLED(CONFIG_OF)) {
- 		wakeup_source = of_property_read_bool(client->dev.of_node,
- 						      "wakeup-source");
-+
-+		rc = of_property_read_u32(client->dev.of_node,
-+					  "quartz-load-femtofarads",
-+					  &quartz_load);
-+		if (!rc)
-+			m41t80_set_ac(m41t80_data, quartz_load);
-+		else if (rc != -EINVAL)
-+			dev_err(&client->dev, "quartz-load-femtofarads property value is missing or invalid\n");
- 	}
- 
- 	if (client->irq > 0) {
 -- 
-2.25.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
