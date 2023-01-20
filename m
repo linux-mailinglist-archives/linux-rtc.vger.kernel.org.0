@@ -2,129 +2,160 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAB8674770
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 00:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1C4674962
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 03:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjASXwI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Jan 2023 18:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S229552AbjATCgK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Jan 2023 21:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjASXwH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 18:52:07 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58E29F398;
-        Thu, 19 Jan 2023 15:52:04 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DD2D2240003;
-        Thu, 19 Jan 2023 23:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674172323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HoYj7soWc4efzFRwg0HwkO/RREKv/HkGYPmHsNZ+ugg=;
-        b=d+y5aB5liVdDMNs7xy/6ser1eaS/Q+e/szVENUA6+MN/ibCLTHG1X49FjOax+oSxE7mRq2
-        4j1OwduPkI86qwr1fL+L1LPsBVD8u02UGU9xMt8QZ/7L314Z+XL6sPsXFTFDPiTLt7bjtn
-        xstpFREEmVXK5iaI2lXD0VINT71EVT1rkBWEVHiIpU1gmhRtjF8NSMNPckNGb9oiDWsKSo
-        ty/LbAD6z4dcbIMSNzCyerTVOdgIVWHPpcyrak7pcPjJf5mgpGtP/8uUaczX2J7Y3k4MjH
-        A+DHST1lpvP80rsurh5g3iXwZETlIY41FZOQsqx6YpJswprAZVRiGi28pb3p2A==
-Date:   Fri, 20 Jan 2023 00:52:01 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Dennis Lambe <dennis@sparkcharge.io>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Atsushi Nemoto <atsushi.nemoto@sord.co.jp>,
+        with ESMTP id S229447AbjATCgJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Jan 2023 21:36:09 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2060.outbound.protection.outlook.com [40.107.113.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6E2A295B;
+        Thu, 19 Jan 2023 18:36:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UTPTXxqa/wprnS5WYPKO/1NV9QcRHUScFkkxAUNSvK+3WAF10xREz7i3V3OLcRmkZQI87N8G78/vLvWcThbQNTnmm6zCgYxk0guqoXu7M021IOG5p6Lz4eAw2SmdYKhgLRRHI2PgifwpmdKXvkKChlZgcX4JUL0cI9/odCTNxspqbAp4YRuV3KH2MzloCDEYKTT1NDi11cZogi10B90O1c4Edd7AeS0vn3n2/NzYxXpX2/xa03A8zOJmrPRe7tNuxssNphdk/fOYD1LwIIx8UOq9fNTR6nAjfAbOcZkVhUxz8r/fgQJcaG4XuWGMhES6rGiALio09xN9GAdnzQZiXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6sV/6Sw1sYBhvizjJ0t1fLvMMKNnX8PDsRLlrZElGNo=;
+ b=DYwnrg6LGgs9vzkH7ENnObAN5NfOTOyGzEFSaxtr5Nx/iuhGh90genInuFCkQyECKLoPnKDhtOp/oMEdO+M3DqGbyaM2PR28WP1boDQKhOeG7fzAYvy6/2c1PFDtEankqXeMNYRZuq/n931/EO4mUpBJZeVm7NpBm4bgFEAOfqlYTdgEG+d51WOT0xyC7B4Rqbd3ogkyLVbexRMvwgAZmS4bqRe9vAgUeEe/82EdMTqtkYHXd6mQRHPLR9459bY3vUpOWKQ79+s6Px8Mk8UURp8mEfsseL5+Bf+nPiQBby3dT0IuQ23NMBoyF4QVLA9d3SyqtRKD8rSge9uLAP/vpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sord.co.jp; dmarc=pass action=none header.from=sord.co.jp;
+ dkim=pass header.d=sord.co.jp; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sordcorp.onmicrosoft.com; s=selector2-sordcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6sV/6Sw1sYBhvizjJ0t1fLvMMKNnX8PDsRLlrZElGNo=;
+ b=iUCZ6HPDFHpJ/J1hfiIgzCUsUzRpRiW2hSpnD92MkKhJXldxDwq6PM0OLAtmA1v0MyRCdhwzGM7l6C8Rj4i6ewPnGu54BVWrt4zzmqEY82DD/Bf91KUvqE43piQkXHCw666n9lRWCK3a8bxU2Tl3CX1QQabjXIPNDwwDs2sjoKE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=sord.co.jp;
+Received: from OSZPR01MB7049.jpnprd01.prod.outlook.com (2603:1096:604:13c::13)
+ by TYVPR01MB10813.jpnprd01.prod.outlook.com (2603:1096:400:2af::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.27; Fri, 20 Jan
+ 2023 02:36:04 +0000
+Received: from OSZPR01MB7049.jpnprd01.prod.outlook.com
+ ([fe80::4f13:ff9a:ae4a:452a]) by OSZPR01MB7049.jpnprd01.prod.outlook.com
+ ([fe80::4f13:ff9a:ae4a:452a%9]) with mapi id 15.20.6002.027; Fri, 20 Jan 2023
+ 02:36:04 +0000
+Message-ID: <379c3311-9563-0fe1-760c-9dc252cdf0d0@sord.co.jp>
+Date:   Fri, 20 Jan 2023 11:36:03 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+To:     Dennis Lambe Jr <dennis@sparkcharge.io>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     =?UTF-8?Q?Myl=c3=a8ne_Josserand?= 
+        <mylene.josserand@free-electrons.com>,
         Gary Bisson <gary.bisson@boundarydevices.com>,
         Javier Martinez Canillas <javier@osg.samsung.com>,
         Troy Kisky <troy.kisky@boundarydevices.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org
+References: <20230119213903.899756-1-dennis@sparkcharge.io>
+Content-Language: en-US
+From:   Atsushi Nemoto <atsushi.nemoto@sord.co.jp>
 Subject: Re: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance
  from DT
-Message-ID: <Y8nXoZjco8uIrtFJ@mail.local>
-References: <20230119213903.899756-1-dennis@sparkcharge.io>
- <Y8nBloQfBPK3t5ce@mail.local>
- <CAKYiA1Dr0TAmsqDf1wMeeysN4N8K+KJL6onCgQL98LVV5L7Vmg@mail.gmail.com>
+In-Reply-To: <20230119213903.899756-1-dennis@sparkcharge.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TYAPR01CA0131.jpnprd01.prod.outlook.com
+ (2603:1096:404:2d::23) To OSZPR01MB7049.jpnprd01.prod.outlook.com
+ (2603:1096:604:13c::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKYiA1Dr0TAmsqDf1wMeeysN4N8K+KJL6onCgQL98LVV5L7Vmg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OSZPR01MB7049:EE_|TYVPR01MB10813:EE_
+X-MS-Office365-Filtering-Correlation-Id: b63f7c5c-1f05-458d-3bf2-08dafa8f13b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i7VgTo0QBGnepXbOEbaf/olaEqXtkVWy/kkFRFfOjfYTH/lN/74o+BL8AQEvuYenD6H6KqqHNhbdsMSt2oNNoQndsOcKLaRb1IMhqiCkFqk/n8CLx/+H+U+kaQbE5HvO3OrCj9k87PmggHXyXnquJ/2BFhW+IqTe4HJ4qVKwJx36MxXFRi1Zi0VHm4nFfcVkSZG6HnF9KbU9y2FKK7PQz6S8huhIFRV8hzFDFoZBqt+zAcMkIyEC/eYiJfTrKxDku3qCYvq2A4VADm3KHMTjeHsofpJLZlJO9razSl3Vk2hU9Is2BHZV6pAauN4NX5ISoYw63pa58kRAaFjkmWsbDk5TR2PVPGHd5bAKMqwIMfD8hj/zsDzTAgV/bRasu5Mr1PshExcQJFiyYobQpk1YxRwm7ud5jAMM+mPaIL09R0prDg96Af0LYxWpfcQoMWPkx5qARZ8z+UV1y6zAbTvhfJGfj5sVeSUXhXZP3VBVyDcXIfh19lQc38I4xgmEefmM3mIuZ9nm+YB00pR2BEj+TGFO9iOA//Ji2TjzA3rzexs8/dUlbgLXw/wfHVK4YWY9rXg3aXJGd/L/TpxYdAMjdOqeaFIa7Wbu+XTG12KwYO3YB/XLGcERYtN5bpIjuaTzApmRFJmGa3tJYkZs44WTjNHgV+QnnL+T/M7m/JFT3JMns1bO3OK06jBGWr4GWttXCQuko7FP5yGfEQNgcIQ7QpI1ioJKiBJKvk1I6edxohc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB7049.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(376002)(136003)(396003)(366004)(346002)(451199015)(31686004)(6486002)(478600001)(53546011)(6506007)(41300700001)(6512007)(186003)(26005)(7416002)(110136005)(2616005)(66946007)(4326008)(83380400001)(8676002)(36756003)(66476007)(66556008)(8936002)(2906002)(5660300002)(38100700002)(44832011)(54906003)(86362001)(31696002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZkJDYm5vdkV0SXV4S0gwVGx5RG4vbUorV2dULzZuWG9kYS9yVkJEd3Q2Mmhz?=
+ =?utf-8?B?clVmVjJsa2t4ZisvYnhLK3NrT3dDeUU3TTlDQk93eXYySFk3NUhjd2hGM3Zv?=
+ =?utf-8?B?R3kxS1o3eWtpVjdyS3dqVjJFakFxY016Qnp1S2dJcUtNRi9VeURKNURrRkRO?=
+ =?utf-8?B?SUQ0angvcGlYV2tzVHFZTlRtZHNXTXhhekUyWmVEbXYveFRCTGwzTzhwMUJp?=
+ =?utf-8?B?ZjBmcjhYYmtjNi9EYTVmeDhkSVFsOGdqcVBBNGNJUzNhcGxyb2FmSlN3MFpF?=
+ =?utf-8?B?MktGR0xhY1EwWnVPbkZOTTFtQTBDR1lhUnA3b3JOSXU1ZmI0U09lbHIya0l4?=
+ =?utf-8?B?WW4rQm5FWlFoWEYrS3VGcVBQS1o3VFQ3bGxybGFKMzZERHhrUFFranpQcUV2?=
+ =?utf-8?B?clU3UmVRRHhidU9WK2NFRXB5YkNhSkp0eUZ0RUJkdmdKY0c3Njg2OUlCUTZs?=
+ =?utf-8?B?R3R1a1pkTWNiWXRKTC9mdWRTSzFDRXNBMGVBZzhqMzRUd1krbE1RVEFGNHlm?=
+ =?utf-8?B?Sk1yZXNPWmErdUxCVytsN0t4UzQyQzBZVHkwbi84K0hVSUJETkN1bU1QYXgy?=
+ =?utf-8?B?L09QTFE3a2lTVWxTdE8xMGNpZFpnbm5NWVJZQ01mNVErclA0ZVE2ZXA5bEdI?=
+ =?utf-8?B?Z0wzMThDQVdqaVM3eFBMbjZxK1kzTzU1dVFMYVpBTHJTQXgyWEtudHc2cTEy?=
+ =?utf-8?B?OENTa1Y3Q0xhZGVWZGhtM2Y2eHlxY29meVFzaklDVzhxbG1ERVZxcHR5VDBY?=
+ =?utf-8?B?cVgwSjZCTlBZMmhUQUJ2UDdEalNNakpsMlR3Tlp2S3dlYnZwcEhZOWpQVjBx?=
+ =?utf-8?B?Vk5IUTFEWThoVm5QbnRNTGgwVzFKZW1iUTdkTkoxT0pGelZURkVBcFRLWHlz?=
+ =?utf-8?B?RGhyRy9vVk5hTS9wUUdHd3A5WWtCQXMxS2VrVGkrRHBKM1U2T2dvTElkQVVl?=
+ =?utf-8?B?NlFjOWNSaXlSYVQvblFNeEV1MjV4RDBFWmpINldlOU1Nd2pqei8yTU10M0ZW?=
+ =?utf-8?B?Sk1mb0lWdk5sM2syaWY0cFJMcVVadkp0UHBSQXdQNTZrTUpMYzN5ZHRXdHIz?=
+ =?utf-8?B?SVEwclcxNXlRRm9PSW1wQlJ6VCsyZm1kQXNEUjBSZThERzFhRTlXbHpoYUlz?=
+ =?utf-8?B?S21vYll6SmUzanlvMDc1emZHYW42K0J6Q2IvcDlIRWRCbmxxc3NzQlhTVmNR?=
+ =?utf-8?B?UkU1anVadFNnVXJlS1pRbll1Y1UzOXZiSmhpT3NuUkFiUlJLKzIzVFR1QmY4?=
+ =?utf-8?B?S0hGZXJDWU5NNDVMVTB0Y1F2eUg5RXhhdUlXMHhKNlRYSlk2eXk0Y0NaNXNq?=
+ =?utf-8?B?N09qVFJVek1aZXBpMW8wWXB3dllxS0RPTDV5dXFibEpkMS9QNVJMN0M1WGJs?=
+ =?utf-8?B?MjI2TDkrSlJQYlZKcUYxYmlhWXo5dE9DbEZDMW9OT0FCNVM4Qy9IclNoK0RM?=
+ =?utf-8?B?WUNiRTBXYWxLQmVqKzdaNEYyb01qWVZZODY0WlpYdXlnaThHMWsxRHowVmk3?=
+ =?utf-8?B?VnltaUl2WEhLc0piYTgwLzdIYnhIZDNlL0YwelgvekNoQmhaTGxqSHBUaWZM?=
+ =?utf-8?B?S0tBeVA4akloQW5rSDl2Y1FWOTR2cnBIV0Y0aGtvSmEva1NGUTBjY3FjQ1hI?=
+ =?utf-8?B?ajQ1a0dlWW1iUTRCS09pZUhrVWZFZWJpd0VTR09ldDREdGdjZDRsSURSOWZG?=
+ =?utf-8?B?dXJJKzdrZUZ6UjgyZS9lNGZUNVo2MGJNYVlGSUxsckxQdGFsaVdIa2RJMWQz?=
+ =?utf-8?B?aWw5WkRCbEZydWlhcWU0K1dUbzY0ZHgwUjQ4VDNrSkIrOUhvVnFVMGhhUjhL?=
+ =?utf-8?B?Nlp1aXZMdDU4SGJva0JsNkhRWnc1WkszYTdOTkhSTG5FZ3hJYW5qdDI2R1px?=
+ =?utf-8?B?SG96cENHbzZiQVFXWkZFWmxmTytRN1hwT3FadFVMRFJGSFk3cE1sSWpiSnhm?=
+ =?utf-8?B?a1JPYzhnOVg4Y0Ezd3BFdHgwaThZeXBrVzdSQ2RGN0JBbk02UGRmczNSUlE1?=
+ =?utf-8?B?ZGJ1dnh2Nm8zK2RTWGcyeHNCbVhWZUpBSWF0V01LM21DN1pHaC9mZ0JhbTFz?=
+ =?utf-8?B?a0djR1lNSkhzTWlOOTB4eXRuaVU0My9xbXg5V2tzQzZxRWo4bGdXVXhZS0gv?=
+ =?utf-8?B?ZURGd0szSjlqcU5FejVHWlJTZUZXMUpxTzljZzNObWpYRlRtMGxhZll3dVlH?=
+ =?utf-8?B?dkE9PQ==?=
+X-OriginatorOrg: sord.co.jp
+X-MS-Exchange-CrossTenant-Network-Message-Id: b63f7c5c-1f05-458d-3bf2-08dafa8f13b1
+X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB7049.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 02:36:04.5558
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: cf867293-59a2-46d0-8328-dfdea9397b80
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JV51eRPlefPbOVpnwMkRD8Q6RD0V+FQ69kBD3ogFPd9M28rBso2m5+HIESF1TXDqQsYSzJiYgrX6KhEL2Qlk8CdthAi4CV2UiEo21MAj4QM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB10813
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 19/01/2023 18:27:44-0500, Dennis Lambe wrote:
-> On Thu, Jan 19, 2023 at 5:18 PM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> 
-> > I need to find time to think about it because while setting the analog
-> > trimming statically from the device tree solves your immediate problem,
-> > it will also remove the possibility to handle it from userspace later
-> > on. I would really prefer this uses the offset interface or a better
-> > interface that unfortunately doesn't exist yet.
-> 
-> Thanks for letting me know what you're thinking about this. I think I
-> see what you're getting at.
-> 
-> However, I think this is more complex than either of us had
-> considered. The M41T82 has two different calibration capabilities:
-> 
-> 1. Digital calibration. This looks to me like it behaves similarly to
-> the digital calibration feature of the M41T00, which ds1307.c exposes
-> through the offset interface. The M41T8x driver doesn't currently
-> expose the digital calibration register at all, but if it did I would
-> agree that the offset interface looks appropriate.
-> 
-> 2. Analog calibration -- that's what the datasheet calls it, but the
-> range on it is very big -- 3.5 pF all the way up to 17.4 pF -- and
-> their reference design uses it as the only xtal load capacitance in
-> the circuit. Most of the values you could set for this would be wildly
-> inappropriate for any given design's choice of xtal oscillator.
-> 
-> Between these, I don't know if you'd want to expose just one, the
-> other, or some synthesis of both via the offset interface or some new
-> interface.
-> 
-> I'd make the case that the xtal's required load capacitance is a
-> hardware requirement that's appropriate to configure via the Device
-> Tree. Even if you did want to allow some amount of runtime fine-tuning
-> of this register, you'd still want to document a rational starting
-> value chosen based on the hardware.
-> 
-> I agree with you, though, that if a runtime fine-tuning feature were
-> added, we'd have to find a way to choose whether to initialize the
-> register on boot or not, so that we didn't overwrite the fine-tuning.
-> 
-> Just to demonstrate something that could work, and would be
-> backward-compatible with this patchset, here's a hypothetical design:
-> * dt-bindings: add quartz-load-femtofarad-tuning-min and
-> quartz-load-femtofarad-tuning-max
-> * Limit run-time tuning adjustments to be within that range
-> * Only overwrite the analog calibration register on start-up if its
-> value is outside that range
-> 
-> After thinking through all this, I'd still advocate for merging this
-> patchset in some form and leaving integration with runtime APIs as a
-> potential future enhancement. I look forward to hearing your thoughts
-> about it.
+On 2023/01/20 6:39, Dennis Lambe Jr wrote:
+> In case it's additional reviewers, I have CC'd some more
+> potentially-interested parties this time and updated Atsushi Nemoto's
+> email address to one that's hopefully more current.
 
-I specifically referred to analog trimming in my reply because I knew it
-could do digital trimming and I also said that we will probably need a
-new interface for this.
-The main existing issue is that the register changes the capacitance but
-the datasheet doesn't give the actual effect in ppm which doesn't
-integrate well with the existing userspace tooling.
+My addresses are both still active (dispite the slow response).
+Ether is fine.
 
-I advocate against merging as is without more thought because changing
-anything later will mean breaking the DT ABI and this is not allowed.
+> I think the original author listed in the header for this driver,
+> Alexander Bigga, is inaccurate. It looks to me like his name got copied
+> over by Atsushi Nemoto when he created m41t82.c by deriving it from a
+> similar driver. At any rate, Alexander Bigga's listed email address
+> bounces, I didn't find a newer one for him, and he doesn't show up in
+> the kernel commit log after 2007. I don't think he can be considered the
+> maintainer for this driver anymore if he ever was.
 
+In 2006-2007, I wrote rtc-m41t80 driver based on Alexander Bigga's
+rtc-m41txx driver with his cooperation and review, then upstreamed it.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+About your patchset, I have no idea, since I have not touched this device
+and driver for a long time (>10 years) ...
+
+---
+Atsushi Nemoto
+
