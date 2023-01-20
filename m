@@ -2,49 +2,48 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22E7675A25
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 17:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F6F675A93
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 17:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjATQjX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 20 Jan 2023 11:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S229936AbjATQ5T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 20 Jan 2023 11:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjATQjX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Jan 2023 11:39:23 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AD94699;
-        Fri, 20 Jan 2023 08:39:20 -0800 (PST)
+        with ESMTP id S229698AbjATQ5R (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Jan 2023 11:57:17 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A8D7B2CC;
+        Fri, 20 Jan 2023 08:56:52 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1AE58FF809;
-        Fri, 20 Jan 2023 16:39:17 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 17A60100007;
+        Fri, 20 Jan 2023 16:56:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674232759;
+        t=1674233801;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=RTcqpcvjSuMhMocjoOJ/438aoJ+MVvQH8jGg8nUJVFs=;
-        b=UgsGEBFradR2vJ/uKQZyFKy1n+VNMKyvJZRXJqKyf3d7Njiz/zvui1+dBOQYGl5fM6mAN/
-        2CD9WCo5y8OYzN/4Yzn6kCtKs4oRdouV2/up6CLL0CD9up7v3OJDFcBId9T2ilf7jtsp4J
-        7/FfC9xL0AJbVJtZnQmYcStq16Si0gSijHaepuRGbP0eLiaJst+3ftZylEuEhmmQ/ykO8x
-        +C3Oyy8EDrdNvZS202w/pB7SlZbDroPwH978z7DJfrtiK7nZJ53A2XstOvnM0A0H9MpSH8
-        S5vEH2DVT2RgUC+mxc4PSCu9zCBW0xM8+lgeg/2lsf3v3kkVuxqLE6eSHhlH2Q==
-Date:   Fri, 20 Jan 2023 17:39:17 +0100
+        bh=HF1zcyrDbSQAeGSxKbh2vrY+GncQaEmDCUhB8D21gCo=;
+        b=MI7kNqGSatGfQSpefBSK3zCXWaWNQXihqIOmpuEQjTfhLCjwYTwJ6M1OBo2RVKK80IcOkz
+        5qzrFwsRv9Ictyt5oBJh1tOCcxvQbUbUwKboBTxDEukZ9mS18HTUD1F/ecpRnG9q/G6kr1
+        XEXu6vLMbEEos5+cRvqrQjHS3DZ10Or29DIJHj+wbOX4ueyXKfDuSYDBPLFUpPcgUdMCue
+        /AEEuBob4VCgXeapkpHVMljQuzlyLeaxxlxtRtVjvJI1ebgT0p006gLf0IYJNHVEQSlj7m
+        GCgdImiae0MPlZVrSr9r0+NzqFrTL22auiZ3IqFv0K6zk5OOcEmPuLiri0/7dQ==
+Date:   Fri, 20 Jan 2023 17:56:39 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     Hugo Villeneuve <hugo@hugovil.com>, a.zummo@towertech.it,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 09/14] rtc: pcf2127: set PWRMNG value for PCF2131
-Message-ID: <Y8rDtWEoepkd1D1u@mail.local>
+Subject: Re: [PATCH v3 08/14] rtc: pcf2127: add support for PCF2131
+ interrupts on output INT_A
+Message-ID: <Y8rHx8U4peB+fnW8@mail.local>
 References: <20221215150214.1109074-1-hugo@hugovil.com>
- <20221215150214.1109074-10-hugo@hugovil.com>
- <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
+ <20221215150214.1109074-9-hugo@hugovil.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
+In-Reply-To: <20221215150214.1109074-9-hugo@hugovil.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -55,73 +54,111 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+On 15/12/2022 10:02:09-0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> The PCF2127 and PCF2129 have one output interrupt pin. The PCF2131 has
+> two, named INT_A and INT_B. The hardware support that any interrupt
+> source can be routed to either one or both of them.
+> 
+> Force all interrupt sources to go to the INT A pin.
+> 
+> Support to route any interrupt source to INT A/B pins is not supported
+> by this driver at the moment.
+> 
 
-On 07/01/2023 19:36:06+0100, Bruno Thomsen wrote:
-> Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
-> >
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > Default PWRMNG[2:0] bits are set to 000b for PCF2127/29, but to
-> > 111b for PCF2131.
-> >
-> > Set these bits to 000b to select same mode as PCF2127/29.
-> >
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-> 
-> I think it's a good idea[1] but there have been concerns about
-> setting default values in the past[2]. In case somebody needs
-> a different behaviour they should add a device tree property.
-> 
-> [1] https://lore.kernel.org/linux-rtc/20190910143945.9364-1-bruno.thomsen@gmail.com/
-> [2] https://lore.kernel.org/linux-rtc/20191211163354.GC1463890@piout.net/
+The main issue with this is that this will created a breaking change
+once someone needs support for INTB
 
-I confirm this is still my point of view and I won't take this patch as
-this may break existing users.
-
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  drivers/rtc/rtc-pcf2127.c | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 > 
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index 68af4d0438b8..241189ee4a05 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -53,6 +53,7 @@
-> >  #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
-> >  #define PCF2127_BIT_CTRL3_BF                   BIT(3)
-> >  #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
-> > +#define PCF2127_CTRL3_PWRMNG_MASK              GENMASK(7, 5)
-> >  /* Control register 4 */
-> >  #define PCF2131_REG_CTRL4              0x03
-> >  #define PCF2131_BIT_CTRL4_TSF4                 BIT(4)
-> > @@ -1129,6 +1130,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> >         regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> >                                 PCF2127_BIT_CTRL1_POR_OVRD);
-> >
-> > +       /* Make sure PWRMNG[2:0] is set to 000b. This is the default for
-> > +        * PCF2127/29, but not for PCF2131 (default of 111b).
-> > +        *
-> > +        * PWRMNG[2:0]  = 000b:
-> > +        *   battery switch-over function is enabled in standard mode;
-> > +        *   battery low detection function is enabled
-> > +        */
-> > +       ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-> > +                               PCF2127_CTRL3_PWRMNG_MASK);
-> > +       if (ret < 0) {
-> > +               dev_err(dev, "PWRMNG config failed\n");
-> > +               return ret;
-> > +       }
-> > +
-> >         ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
-> >         if (ret < 0)
-> >                 return ret;
-> > --
-> > 2.30.2
-> >
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index 4148e135f935..68af4d0438b8 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -191,6 +191,7 @@ struct pcf21xx_config {
+>  	int max_register;
+>  	unsigned int has_nvmem:1;
+>  	unsigned int has_bit_wd_ctl_cd0:1;
+> +	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
+>  	u8 regs_td_base; /* Time/data base registers. */
+>  	u8 regs_alarm_base; /* Alarm function base registers. */
+>  	u8 reg_wd_ctl; /* Watchdog control register. */
+> @@ -879,6 +880,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+>  		.max_register = 0x1d,
+>  		.has_nvmem = 1,
+>  		.has_bit_wd_ctl_cd0 = 1,
+> +		.has_int_a_b = 0,
+>  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+>  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
+>  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> @@ -902,6 +904,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+>  		.max_register = 0x19,
+>  		.has_nvmem = 0,
+>  		.has_bit_wd_ctl_cd0 = 0,
+> +		.has_int_a_b = 0,
+>  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+>  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
+>  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> @@ -925,6 +928,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+>  		.max_register = 0x36,
+>  		.has_nvmem = 0,
+>  		.has_bit_wd_ctl_cd0 = 0,
+> +		.has_int_a_b = 1,
+>  		.regs_td_base = PCF2131_REG_TIME_DATE_BASE,
+>  		.regs_alarm_base = PCF2131_REG_ALARM_BASE,
+>  		.reg_wd_ctl = PCF2131_REG_WD_CTL,
+> @@ -1017,6 +1021,28 @@ static int pcf2127_enable_ts(struct device *dev, int ts_id)
+>  	return ret;
+>  }
+>  
+> +/* Route all interrupt sources to INT A pin. */
+> +static int pcf2127_configure_interrupt_pins(struct device *dev)
+> +{
+> +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Mask bits need to be cleared to enable corresponding
+> +	 * interrupt source.
+> +	 */
+> +	ret = regmap_write(pcf2127->regmap,
+> +			   PCF2131_REG_INT_A_MASK1, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(pcf2127->regmap,
+> +			   PCF2131_REG_INT_A_MASK2, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ret;
+> +}
+> +
+>  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  			 int alarm_irq, const char *name, const struct pcf21xx_config *config)
+>  {
+> @@ -1076,6 +1102,15 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  		set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+>  	}
+>  
+> +	if (pcf2127->cfg->has_int_a_b) {
+> +		/* Configure int A/B pins, independently of alarm_irq. */
+> +		ret = pcf2127_configure_interrupt_pins(dev);
+> +		if (ret) {
+> +			dev_err(dev, "failed to configure interrupt pins\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+>  	if (pcf2127->cfg->has_nvmem) {
+>  		struct nvmem_config nvmem_cfg = {
+>  			.priv = pcf2127,
+> -- 
+> 2.30.2
+> 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
