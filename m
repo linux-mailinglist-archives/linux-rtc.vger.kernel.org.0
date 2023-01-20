@@ -2,76 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21C1675D58
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 20:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2C8675D9C
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 20:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjATTCv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 20 Jan 2023 14:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
+        id S229554AbjATTGa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 20 Jan 2023 14:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjATTCm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Jan 2023 14:02:42 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F8B3A88;
-        Fri, 20 Jan 2023 11:02:35 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id i1so3161030ilu.8;
-        Fri, 20 Jan 2023 11:02:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uqkC6sovxRXM6xizruGfWT9Cuv1q7uo8QTDLi10Fn4g=;
-        b=EKuaVn9G3pyj6UJjR4KsvEGeAKeMW/ybk5bDiRItK543Wilx6Jfd7+C6b2FRBQOjaX
-         XBucpToQF7YKAbHpfvWaRfkUyIy9PYC6mDdD/oo24Z3uLTRohw8SZ/Pysy9V0JIdtv97
-         hbLKehRGToyuPqdDqIZbFvlpJYEZNsqMkKCYWrLwwZgEfg0aJ7iRAGLWx4ThVSczPTE9
-         CmN9LSgn34DRhElpbkwKzf3PSE2eQ8MtJxdvsesqaRzo4jry5rlCxm1K6HFQ8jWeO3kT
-         MKI7c/CQR4yUMBdIeUP5H4lhcXicAji0+7Z5K63tO+X7zINQrNm2XF0RPOfmX52zNnCf
-         aOnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uqkC6sovxRXM6xizruGfWT9Cuv1q7uo8QTDLi10Fn4g=;
-        b=8Cb9gQN1D3Q1ieMQeOTRU2cg5UpyZRC0aoNEmJhcu7OXrmPK61ml4umgZA/Hwhb4l/
-         xAxsIRaeR3bDFTXSgDJDVkwr3tlYeP2KDPswiIMe8j3qADHrPb6k4X2TkcJabiQvr5Vp
-         ZGvF2uV5UlTxTNDuV8UjpuEz3fKW0rnzEaS178WHk/hSJFIYzlrHQKyllzGv6rc8Yi+n
-         j+W53pthcmIr+t2Mokbo/JtoL6Fua2LLbPVB6tcb361SG9RLwBG4W9+zFvdS8lrurR/1
-         ZrJDgwxLQLG/KzGXcrIhY+3/0Zjle6RDMT5GrCHDJUCJyAB2CKFAjB3yjLzzJH9iQpFh
-         3wKw==
-X-Gm-Message-State: AFqh2krS1t9UnFfoE+Zvn+EcV9WTOCqrFHnLsOxootXPN+aZTKE3lxHN
-        +6eH5PHeT0EjPmqDKS2KCaQ=
-X-Google-Smtp-Source: AMrXdXv5kk+vvblkJlrYDYP1ADRamyDuD/SOH21v7YiPKQRb/vaNuluVKYKQO50+vfcGSLMBXncyoA==
-X-Received: by 2002:a05:6e02:1562:b0:30f:3736:25ab with SMTP id k2-20020a056e02156200b0030f373625abmr8463918ilu.28.1674241355300;
-        Fri, 20 Jan 2023 11:02:35 -0800 (PST)
-Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y13-20020a37f60d000000b006fa2b1c3c1esm10379806qkj.58.2023.01.20.11.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 11:02:34 -0800 (PST)
-From:   Doug Berger <opendmb@gmail.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Brian Norris <computersforpeace@gmail.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH 6/6] rtc: brcmstb-waketimer: allow use as non-wake alarm
-Date:   Fri, 20 Jan 2023 11:01:47 -0800
-Message-Id: <20230120190147.718976-7-opendmb@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230120190147.718976-1-opendmb@gmail.com>
-References: <20230120190147.718976-1-opendmb@gmail.com>
+        with ESMTP id S229547AbjATTG3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Jan 2023 14:06:29 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B317A53C;
+        Fri, 20 Jan 2023 11:06:05 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C12E120003;
+        Fri, 20 Jan 2023 19:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1674241508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9E+QtNt/tZxl4Is0JIBM8KaZdkhA+rSRubd0xlkD1hw=;
+        b=Mb2Fh1aAnkRXnvGascZr+4jUG7mf45VPGVIDZ5JWEclvUMQSA4O8XxOEho9saTFPoLDAKr
+        aolcDJFeJGw+ZBeqA6/cCGJHkYSk0CdX8apdLmW/w2x3vtJjthgcVl7EXkT5Rzi+fCxrmZ
+        Speb6jwBwtbIvnEn9ZsVkozwfZooo9AKsKjBwNWd+Uu2Xlb+DzUsK2AjfN4pt/mUJNwm84
+        xx5mXRZ69BEilJkI+ofitdBqrDwQh18RefGedM+WqOGhqxdA+i92Aqx4SfGNwsp23GQzEF
+        XGk/mil2kkZrS/pRC04umAlVhesz+bZb+EKGZjEqjUm5AuOJX8o281Zj+iYhtA==
+Date:   Fri, 20 Jan 2023 20:05:07 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
+Message-ID: <Y8rl452Xm1FrnFfF@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221215150214.1109074-1-hugo@hugovil.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,140 +52,133 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The wake interrupt only fires when the system is in a suspend
-state. Fortunately we have another interrupt that fires in a
-non-suspend state at the L2 controller UPG_AUX_AON. Add support
-for this interrupt line so we can use the alarm in a non-wake
-context.
+Hello,
 
-Signed-off-by: Doug Berger <opendmb@gmail.com>
----
- drivers/rtc/rtc-brcmstb-waketimer.c | 55 +++++++++++++++++++++++++++--
- 1 file changed, 52 insertions(+), 3 deletions(-)
+I know I've been holding off on the review of this series for a while
+and I'm sorry for that.
 
-diff --git a/drivers/rtc/rtc-brcmstb-waketimer.c b/drivers/rtc/rtc-brcmstb-waketimer.c
-index e25f9fcd6ed1..1efa81cecc27 100644
---- a/drivers/rtc/rtc-brcmstb-waketimer.c
-+++ b/drivers/rtc/rtc-brcmstb-waketimer.c
-@@ -28,6 +28,7 @@ struct brcmstb_waketmr {
- 	struct device *dev;
- 	void __iomem *base;
- 	unsigned int wake_irq;
-+	unsigned int alarm_irq;
- 	struct notifier_block reboot_notifier;
- 	struct clk *clk;
- 	u32 rate;
-@@ -56,6 +57,8 @@ static inline void brcmstb_waketmr_clear_alarm(struct brcmstb_waketmr *timer)
- {
- 	u32 reg;
- 
-+	if (timer->alarm_en && timer->alarm_irq)
-+		disable_irq(timer->alarm_irq);
- 	timer->alarm_en = false;
- 	reg = readl_relaxed(timer->base + BRCMSTB_WKTMR_COUNTER);
- 	writel_relaxed(reg - 1, timer->base + BRCMSTB_WKTMR_ALARM);
-@@ -88,7 +91,25 @@ static irqreturn_t brcmstb_waketmr_irq(int irq, void *data)
- {
- 	struct brcmstb_waketmr *timer = data;
- 
--	pm_wakeup_event(timer->dev, 0);
-+	if (!timer->alarm_irq)
-+		pm_wakeup_event(timer->dev, 0);
-+	return IRQ_HANDLED;
-+}
-+
-+static irqreturn_t brcmstb_alarm_irq(int irq, void *data)
-+{
-+	struct brcmstb_waketmr *timer = data;
-+
-+	/* Ignore spurious interrupts */
-+	if (!brcmstb_waketmr_is_pending(timer))
-+		return IRQ_HANDLED;
-+
-+	if (timer->alarm_en) {
-+		if (!device_may_wakeup(timer->dev))
-+			writel_relaxed(WKTMR_ALARM_EVENT,
-+				       timer->base + BRCMSTB_WKTMR_EVENT);
-+		rtc_update_irq(timer->rtc, 1, RTC_IRQF | RTC_AF);
-+	}
- 
- 	return IRQ_HANDLED;
- }
-@@ -114,7 +135,7 @@ static void wktmr_read(struct brcmstb_waketmr *timer,
- static int brcmstb_waketmr_prepare_suspend(struct brcmstb_waketmr *timer)
- {
- 	struct device *dev = timer->dev;
--	int ret = 0;
-+	int ret;
- 
- 	if (device_may_wakeup(dev)) {
- 		ret = enable_irq_wake(timer->wake_irq);
-@@ -122,9 +143,17 @@ static int brcmstb_waketmr_prepare_suspend(struct brcmstb_waketmr *timer)
- 			dev_err(dev, "failed to enable wake-up interrupt\n");
- 			return ret;
- 		}
-+		if (timer->alarm_en && timer->alarm_irq) {
-+			ret = enable_irq_wake(timer->alarm_irq);
-+			if (ret) {
-+				dev_err(dev, "failed to enable rtc interrupt\n");
-+				disable_irq_wake(timer->wake_irq);
-+				return ret;
-+			}
-+		}
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- /* If enabled as a wakeup-source, arm the timer when powering off */
-@@ -192,7 +221,11 @@ static int brcmstb_waketmr_alarm_enable(struct device *dev,
- 		    !brcmstb_waketmr_is_pending(timer))
- 			return -EINVAL;
- 		timer->alarm_en = true;
-+		if (timer->alarm_irq)
-+			enable_irq(timer->alarm_irq);
- 	} else if (!enabled && timer->alarm_en) {
-+		if (timer->alarm_irq)
-+			disable_irq(timer->alarm_irq);
- 		timer->alarm_en = false;
- 	}
- 
-@@ -269,6 +302,19 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_clk;
- 
-+	brcmstb_waketmr_clear_alarm(timer);
-+
-+	/* Attempt to initialize non-wake irq */
-+	ret = platform_get_irq(pdev, 1);
-+	if (ret > 0) {
-+		timer->alarm_irq = (unsigned int)ret;
-+		ret = devm_request_irq(dev, timer->alarm_irq, brcmstb_alarm_irq,
-+				       IRQF_NO_AUTOEN, "brcmstb-waketimer-rtc",
-+				       timer);
-+		if (ret < 0)
-+			timer->alarm_irq = 0;
-+	}
-+
- 	timer->reboot_notifier.notifier_call = brcmstb_waketmr_reboot;
- 	register_reboot_notifier(&timer->reboot_notifier);
- 
-@@ -317,6 +363,8 @@ static int brcmstb_waketmr_resume(struct device *dev)
- 		return 0;
- 
- 	ret = disable_irq_wake(timer->wake_irq);
-+	if (timer->alarm_en && timer->alarm_irq)
-+		disable_irq_wake(timer->alarm_irq);
- 
- 	brcmstb_waketmr_clear_alarm(timer);
- 
-@@ -346,4 +394,5 @@ module_platform_driver(brcmstb_waketmr_driver);
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Brian Norris");
- MODULE_AUTHOR("Markus Mayer");
-+MODULE_AUTHOR("Doug Berger");
- MODULE_DESCRIPTION("Wake-up timer driver for STB chips");
+One of the main issue that is remaining is that the driver ends up being
+53% bigger and generaly less efficient for no added functionality for
+the existing RTCs.
+
+I know performance is not a concern however, having more code in the
+set/read time and irq paths means that it is more difficult to set an
+get the time precisely.
+
+I guess I'll take it as a merged driver but I took a different decision
+for other RTCs.
+
+On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> Hello,
+> this patch series adds the driver for the PCF2131 real-time clock.
+> 
+> This RTC is very similar in functionality to the PCF2127/29 with the
+> following differences:
+>   -supports two new control registers at offsets 4 and 5
+>   -supports a new reset register
+>   -supports 4 tamper detection functions instead of 1
+>   -has no nvmem (like the PCF2129)
+>   -has two output interrupt pins instead of one
+>   -has 1/100th seconds capabilities (not supported in this driver)
+>   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
+>    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
+>   -watchdog value register cannot be read after being set
+> 
+> Most of the register addresses are very different, although they still
+> follow the same layout. For example, the time/date and tamper registers
+> have a different base address, but the offsets are all the same.
+> Consequently, the source code of the PCF2127 driver can be easily adapted
+> to support this new device.
+> 
+> Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
+> and able to support multiple variants, like the PCF2131. This is done
+> mostly by using offsets instead of absolute hardcoded register addresses.
+> 
+> Patch 7 add actual support for the PCF2131.
+> 
+> Patch 8 configures all interrupt sources to go through the INT A pin.
+> 
+> Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
+>       are with the PCF2127/29 (different default values).
+> 
+> Patch 10 allow to confirm PCF2131 device presence by reading the reset
+>       register fixed pattern.
+> 
+> Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
+>       CPR bits).
+> 
+> Patch 12 add support for generic watchdog timing configuration.
+> 
+> Patch 13 add a new flag to identify if device has read support for reading
+>       watchdog register value.
+>       Since the watchdog value register cannot be read on the PCF2131 after
+>       being set, it seems that we cannot detect if watchdog timer was
+>       started by bootloader. I am not sure what is the best way to handle
+>       this situation, suggestions are welcomed.
+> 
+> Patch 14 add the dt-bindings for the PCF2131.
+> 
+> I have tested the driver using a PCF2131-ARD evaluation board connected to
+> an NXP imx8mp evaluation board:
+>   - Time get/set ok;
+>   - Alarms get/set ok
+>   - Timestamp 1 to 4 ok
+>   - IRQ alarm ok
+>   - Watchdog ok
+>   - Also tested successfully with "RTC Driver Test Example" from
+>     Documentation/rtc.txt
+> 
+> I have also tested the driver on a custom PCF2129 adapter board connected to a
+> beaglebone black.
+> 
+> Thank you.
+> 
+> Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
+> Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
+> 
+> Changes for V3:
+> - Rebased for kernel v6.1
+> 
+> Changes for V2:
+> - In general, fix and improvements after I have tested on real hardware
+> - Fix alarm interrupt A/B mask setting for PCF2131:
+>   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
+> - Remove low_reg validation: only check if TS interrupt flag is
+>   defined, as low_reg is defined at address 0 for PCF2127/29.
+> - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
+> - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
+> - Map all interrupt sources to INT A pin
+> - Read and validate PCF2131 device presence from RESET register
+> - Adapt watchdog configuration for PCF2131
+> 
+> Hugo Villeneuve (14):
+>   rtc: pcf2127: add variant-specific configuration structure
+>   rtc: pcf2127: adapt for time/date registers at any offset
+>   rtc: pcf2127: adapt for alarm registers at any offset
+>   rtc: pcf2127: adapt for WD registers at any offset
+>   rtc: pcf2127: adapt for CLKOUT register at any offset
+>   rtc: pcf2127: add support for multiple TS functions
+>   rtc: pcf2127: add support for PCF2131 RTC
+>   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
+>   rtc: pcf2127: set PWRMNG value for PCF2131
+>   rtc: pcf2127: read and validate PCF2131 device signature
+>   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+>   rtc: pcf2127: support generic watchdog timing configuration
+>   rtc: pcf2127: add flag for watchdog register value read support
+>   dt-bindings: rtc: pcf2127: add PCF2131
+> 
+>  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
+>  drivers/rtc/Kconfig                           |   4 +-
+>  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
+>  3 files changed, 752 insertions(+), 195 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
+
 -- 
-2.25.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
