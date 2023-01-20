@@ -2,49 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2C8675D9C
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 20:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00919675DB5
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Jan 2023 20:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjATTGa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 20 Jan 2023 14:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S229897AbjATTM0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 20 Jan 2023 14:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjATTG3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Jan 2023 14:06:29 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B317A53C;
-        Fri, 20 Jan 2023 11:06:05 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C12E120003;
-        Fri, 20 Jan 2023 19:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674241508;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9E+QtNt/tZxl4Is0JIBM8KaZdkhA+rSRubd0xlkD1hw=;
-        b=Mb2Fh1aAnkRXnvGascZr+4jUG7mf45VPGVIDZ5JWEclvUMQSA4O8XxOEho9saTFPoLDAKr
-        aolcDJFeJGw+ZBeqA6/cCGJHkYSk0CdX8apdLmW/w2x3vtJjthgcVl7EXkT5Rzi+fCxrmZ
-        Speb6jwBwtbIvnEn9ZsVkozwfZooo9AKsKjBwNWd+Uu2Xlb+DzUsK2AjfN4pt/mUJNwm84
-        xx5mXRZ69BEilJkI+ofitdBqrDwQh18RefGedM+WqOGhqxdA+i92Aqx4SfGNwsp23GQzEF
-        XGk/mil2kkZrS/pRC04umAlVhesz+bZb+EKGZjEqjUm5AuOJX8o281Zj+iYhtA==
-Date:   Fri, 20 Jan 2023 20:05:07 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
-Message-ID: <Y8rl452Xm1FrnFfF@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
+        with ESMTP id S229762AbjATTMZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Jan 2023 14:12:25 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FD5421A
+        for <linux-rtc@vger.kernel.org>; Fri, 20 Jan 2023 11:12:22 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id w11so5812610lfu.11
+        for <linux-rtc@vger.kernel.org>; Fri, 20 Jan 2023 11:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sparkcharge.io; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bSA3wh9gMj+Mvd34uj2dtbNIbWdD9BJi2jkGKY8O+Nw=;
+        b=cQAixSrgYRlylZTk1zBwdTwmpPb8cWCe1rkPu3F6V6FnCJifFUhoUsEdyDkQwata26
+         Zpdo9+yWgpMs6vSDFHLsHp6w71sBnx0VSr5YHOcsafHER85JeFnMrYXS3fW3iSEGlJwc
+         7IxIIm3IvK4tWlEzY4LDcZq+44Yq+y4aPHDf9kXs4HW2AmX9LdZrPh2iRHe4syc4SH0S
+         N9ZP/dml6mjg+eat2j+wIfXNkgW0BWFNDrHBrMW4YJEtjapJfaW7DgnQmeyE1NEkoOb8
+         4gqdfBS6Axrj/Z/uikspm49smMOUW0X2Zzgqs4EIF4KTUSIsQ84eZAfFzOgTD0OQDa1S
+         BTmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bSA3wh9gMj+Mvd34uj2dtbNIbWdD9BJi2jkGKY8O+Nw=;
+        b=uwFUlNFYxgTfWyMjd6nN3JpgXF+ydslqYdNHzg9BoRg0Qa7tlZsu0BRcwPy/NytSdi
+         Nr0+ChaMU/W1jD2GUsb3utCrkf9i2F1VMuG4dKFEhSrmynfI0G6U/k/04iT6WrCNc8DE
+         8h4z4aDdB0+g1KcjYsDJ1lXFlDAisvU78LPRO9qfLvXL3Pow/ZP92kRwIb89E9RZMAKD
+         mKciqdM0FKvOO2w7rM1MxX6qaXb8pJ8cdST9Fba/ja8oTYOwWCKBvEUkDo72e6ozbLB9
+         asBmyJXuZEIWWVg3k/ft9o7QFdXZUFZAZc2NTZs20oet+Jy+sc5TgAEx9fhS0fpJNRYO
+         B9cg==
+X-Gm-Message-State: AFqh2koGwMWVeCaIK5itjOCBNq1IghVJ87FInjC5xGK2cbRnfUkARGj9
+        ByLGQu8Dyy5QHqtANjqa7AKgXs1l4n2kqDJ6wPpd2w==
+X-Google-Smtp-Source: AMrXdXsmKNfhtpIFKW5CZxtAmamvdxaQgh9Nkd9XD/xUxdytFu5paVK1tK63g/5bW7BwTl2cji9jEpurDAZcsRqErp8=
+X-Received: by 2002:a05:6512:39c5:b0:4d5:8faa:bfe8 with SMTP id
+ k5-20020a05651239c500b004d58faabfe8mr952594lfu.277.1674241940987; Fri, 20 Jan
+ 2023 11:12:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215150214.1109074-1-hugo@hugovil.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230119213903.899756-1-dennis@sparkcharge.io>
+ <Y8nBloQfBPK3t5ce@mail.local> <CAKYiA1Dr0TAmsqDf1wMeeysN4N8K+KJL6onCgQL98LVV5L7Vmg@mail.gmail.com>
+ <Y8nXoZjco8uIrtFJ@mail.local>
+In-Reply-To: <Y8nXoZjco8uIrtFJ@mail.local>
+From:   Dennis Lambe <dennis@sparkcharge.io>
+Date:   Fri, 20 Jan 2023 14:12:09 -0500
+Message-ID: <CAKYiA1CTWeGPQDsNGzJwjwJgW7SGTPCH3NQ0rFqKQVHbgWh9sw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] rtc: Set M41T82 & M41T83 xtal load capacitance
+ from DT
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Atsushi Nemoto <atsushi.nemoto@sord.co.jp>,
+        Gary Bisson <gary.bisson@boundarydevices.com>,
+        Javier Martinez Canillas <javier@osg.samsung.com>,
+        Troy Kisky <troy.kisky@boundarydevices.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,133 +73,42 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+On Thu, Jan 19, 2023 at 6:52 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+> On 19/01/2023 18:27:44-0500, Dennis Lambe wrote:
+> > 2. Analog calibration -- that's what the datasheet calls it, but the
+> > range on it is very big -- 3.5 pF all the way up to 17.4 pF -- and
+> > their reference design uses it as the only xtal load capacitance in
+> > the circuit. Most of the values you could set for this would be wildly
+> > inappropriate for any given design's choice of xtal oscillator.
 
-I know I've been holding off on the review of this series for a while
-and I'm sorry for that.
+I think I should start with an apology, almost everything I wrote
+yesterday was in error one way or another. I was conflating this RTC
+with I'm also working with. I see now that the datasheet for this one
+clearly states that it's only to be used with 12.5 pF crystals, and
+that the analog adjustments are meant exclusively for calibration. I
+get what you mean about wanting it to be a new runtime interface and
+it not making sense to put in the DeviceTree.
 
-One of the main issue that is remaining is that the driver ends up being
-53% bigger and generaly less efficient for no added functionality for
-the existing RTCs.
+I also see what you mean about the datasheet not providing a good
+capacitance vs. ppm table. The graph is approximate at best, and ST's
+appnote recommends an iterative tuning procedure rather than just
+assuming a certain value gives exactly a certain ppm adjustment. I see
+why you would want to avoid using 'offset' for this.
 
-I know performance is not a concern however, having more code in the
-set/read time and irq paths means that it is more difficult to set an
-get the time precisely.
+I'll hold off on submitting any more patches for this until you've had
+a chance to think about how you would want a new interface to work.
+Would it be useful to you if I start working up a patchset that makes
+a new rtc sysfs attribute and wires the m41t80 driver into it so that
+I'm ready to adapt it to whatever naming, scaling, semantics,
+interpretation, etc. you decide is right for it?
 
-I guess I'll take it as a merged driver but I took a different decision
-for other RTCs.
+> I advocate against merging as is without more thought because changing
+> anything later will mean breaking the DT ABI and this is not allowed.
 
-On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> Hello,
-> this patch series adds the driver for the PCF2131 real-time clock.
-> 
-> This RTC is very similar in functionality to the PCF2127/29 with the
-> following differences:
->   -supports two new control registers at offsets 4 and 5
->   -supports a new reset register
->   -supports 4 tamper detection functions instead of 1
->   -has no nvmem (like the PCF2129)
->   -has two output interrupt pins instead of one
->   -has 1/100th seconds capabilities (not supported in this driver)
->   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
->    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
->   -watchdog value register cannot be read after being set
-> 
-> Most of the register addresses are very different, although they still
-> follow the same layout. For example, the time/date and tamper registers
-> have a different base address, but the offsets are all the same.
-> Consequently, the source code of the PCF2127 driver can be easily adapted
-> to support this new device.
-> 
-> Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
-> and able to support multiple variants, like the PCF2131. This is done
-> mostly by using offsets instead of absolute hardcoded register addresses.
-> 
-> Patch 7 add actual support for the PCF2131.
-> 
-> Patch 8 configures all interrupt sources to go through the INT A pin.
-> 
-> Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
->       are with the PCF2127/29 (different default values).
-> 
-> Patch 10 allow to confirm PCF2131 device presence by reading the reset
->       register fixed pattern.
-> 
-> Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
->       CPR bits).
-> 
-> Patch 12 add support for generic watchdog timing configuration.
-> 
-> Patch 13 add a new flag to identify if device has read support for reading
->       watchdog register value.
->       Since the watchdog value register cannot be read on the PCF2131 after
->       being set, it seems that we cannot detect if watchdog timer was
->       started by bootloader. I am not sure what is the best way to handle
->       this situation, suggestions are welcomed.
-> 
-> Patch 14 add the dt-bindings for the PCF2131.
-> 
-> I have tested the driver using a PCF2131-ARD evaluation board connected to
-> an NXP imx8mp evaluation board:
->   - Time get/set ok;
->   - Alarms get/set ok
->   - Timestamp 1 to 4 ok
->   - IRQ alarm ok
->   - Watchdog ok
->   - Also tested successfully with "RTC Driver Test Example" from
->     Documentation/rtc.txt
-> 
-> I have also tested the driver on a custom PCF2129 adapter board connected to a
-> beaglebone black.
-> 
-> Thank you.
-> 
-> Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
-> Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
-> 
-> Changes for V3:
-> - Rebased for kernel v6.1
-> 
-> Changes for V2:
-> - In general, fix and improvements after I have tested on real hardware
-> - Fix alarm interrupt A/B mask setting for PCF2131:
->   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
-> - Remove low_reg validation: only check if TS interrupt flag is
->   defined, as low_reg is defined at address 0 for PCF2127/29.
-> - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
-> - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
-> - Map all interrupt sources to INT A pin
-> - Read and validate PCF2131 device presence from RESET register
-> - Adapt watchdog configuration for PCF2131
-> 
-> Hugo Villeneuve (14):
->   rtc: pcf2127: add variant-specific configuration structure
->   rtc: pcf2127: adapt for time/date registers at any offset
->   rtc: pcf2127: adapt for alarm registers at any offset
->   rtc: pcf2127: adapt for WD registers at any offset
->   rtc: pcf2127: adapt for CLKOUT register at any offset
->   rtc: pcf2127: add support for multiple TS functions
->   rtc: pcf2127: add support for PCF2131 RTC
->   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
->   rtc: pcf2127: set PWRMNG value for PCF2131
->   rtc: pcf2127: read and validate PCF2131 device signature
->   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
->   rtc: pcf2127: support generic watchdog timing configuration
->   rtc: pcf2127: add flag for watchdog register value read support
->   dt-bindings: rtc: pcf2127: add PCF2131
-> 
->  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
->  drivers/rtc/Kconfig                           |   4 +-
->  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
->  3 files changed, 752 insertions(+), 195 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
-
+Me too, thanks for taking the time to get through to me about it.
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+Dennis Lambe (He/Him)
+Lead Firmware Engineer
+sparkcharge.io
