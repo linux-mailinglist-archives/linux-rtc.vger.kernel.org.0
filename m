@@ -2,333 +2,197 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565826789AD
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jan 2023 22:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FE4678A0E
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jan 2023 22:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbjAWVbV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Jan 2023 16:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        id S231537AbjAWV5w (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Jan 2023 16:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjAWVbU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Jan 2023 16:31:20 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712E138E81;
-        Mon, 23 Jan 2023 13:31:18 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id v13so16212208eda.11;
-        Mon, 23 Jan 2023 13:31:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FbvaBDv4AuFMFSfD4pfq9eHigQMw7BiJJeXrVGHM3fA=;
-        b=Na7qXEjST9dcdqqejZpAYdLxnQLIHGc17SiU8cL7seoOz0nKiDbrdZkLXh81s9XRzD
-         KNfKmP7A7fI6RO1m5+x8M1t1/66sE6j8tM+Hzb3zi6ycyh1iEBCP/DJRc7BwJotpKUSP
-         8vcrStExdi07iryNM0TnsMPtMx0QMMdB1K7ZfseFXElNFv6OYvePJPFw67fCmKncJjin
-         N3+FUVE2ZNGB0/XkpmzWoNtOx8NfU3FCmftWVYGJoRCpD8M4F0MFpoO1NaeQN24HIxg3
-         iatD3fYivY2KGe6ZyySyNTot3gz7Jooy5vjp+a4hPkk0HrJzVd8LSim8vEMZSEjwsth6
-         3sGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FbvaBDv4AuFMFSfD4pfq9eHigQMw7BiJJeXrVGHM3fA=;
-        b=RWnEgiIo10Xy8LaipKhFvaiJVbxU4p5srSFzmP6r7jUt28EsKe5qWEFRKC1N0g7TyM
-         8xzUorQiK0wjEo8SYmeekpZN+rri6y4NzLDEyhL1Er1gB/wt5OvmpjKwBZepsrr8Ne7B
-         +HgPhE1zbQaMCtYAK9eFlIZ4H7Hbf8E7U7Kjf9T7FkvFwsAl+hlUdoyGhmhM1gF8UQ+c
-         Zwf0IAOR/Nr1/K2Tk9rTdRgQxoBY6KZdsOXYo7C0fgataOfg/7+j95nO2gNut8TRNSRO
-         jlfdQnCibhPUiqoKJ3ruFTpqzT/rtRlbkHKLcP0sxfBCtocJIKHLV0Y685Z9V5H3Rrd6
-         rZsg==
-X-Gm-Message-State: AFqh2kpd7Tny+qd/5vpa+Btz+7fOe4EjlgZe9SY6GISmVHiP8y8nWGPy
-        xY/baZnqbuOJ94qPV7CoIf4=
-X-Google-Smtp-Source: AMrXdXspByrb10lD6d3wx+cd+//RpC0wKKyjFT3EOSbGbzGbzu9iO5AvlWjH1aSUay3kBumeIcxLaQ==
-X-Received: by 2002:a05:6402:4441:b0:49c:91d8:e989 with SMTP id o1-20020a056402444100b0049c91d8e989mr24706485edb.42.1674509476877;
-        Mon, 23 Jan 2023 13:31:16 -0800 (PST)
-Received: from ?IPV6:2a01:c23:bc5b:9400:dc4c:6fb7:47b2:beb7? (dynamic-2a01-0c23-bc5b-9400-dc4c-6fb7-47b2-beb7.c23.pool.telefonica.de. [2a01:c23:bc5b:9400:dc4c:6fb7:47b2:beb7])
-        by smtp.googlemail.com with ESMTPSA id en11-20020a056402528b00b0049fc459ef1fsm192641edb.90.2023.01.23.13.31.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 13:31:16 -0800 (PST)
-Message-ID: <69188960-9d88-4163-8a87-1820fb673eb9@gmail.com>
-Date:   Mon, 23 Jan 2023 22:30:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: [PATCH 8/8] dt-bindings: pinctrl: Add Amlogic Meson pinctrl binding
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-References: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
-In-Reply-To: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S231788AbjAWV5v (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Jan 2023 16:57:51 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F417A8A;
+        Mon, 23 Jan 2023 13:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=QvnJUYBAAf6yHh2I0qs12OTqtrhXe/po+uAsx+ieTLc=; b=j5WKCjBiYdM+iNLcNlZZFFpQub
+        25ECzKsMfvhIKmPJW4+Ossi48R192YWe7m/mA03MCbT5FmTdpupwKh45oOJfllaavJFbZtw+jK0Lt
+        3oQK2mQxyvwGI/cHSwZ0TO9wR+ARP5/0Bbp0+4FSOlqKKdprKY2wVZsCA6wJm+Us4+EY=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41508 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pK4ov-0005jk-I7; Mon, 23 Jan 2023 16:57:42 -0500
+Date:   Mon, 23 Jan 2023 16:57:41 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
+In-Reply-To: <Y8rK1dgpNJaSy/Gb@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <20221215150214.1109074-12-hugo@hugovil.com>
+        <Y8rK1dgpNJaSy/Gb@mail.local>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
+ sequence for PCF2131
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add Amlogic Meson pinctrl binding.
-Tested with make targets dt_binding_check and dtbs_check.
+On Fri, 20 Jan 2023 18:09:41 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- .../pinctrl/amlogic,meson-pinctrl.yaml        | 121 ++++++++++++++++++
- .../bindings/pinctrl/meson,pinctrl.txt        |  94 --------------
- 2 files changed, 121 insertions(+), 94 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/meson,pinctrl.txt
+> On 15/12/2022 10:02:12-0500, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > The sequence for updating the time/date registers is slightly
+> > different between PCF2127/29 and PCF2131.
+> > 
+> > For PCF2127/29, during write operations, the time counting
+> > circuits (memory locations 03h through 09h) are automatically blocked.
+> > 
+> > For PCF2131, time/date registers write access requires setting the
+> > STOP bit and sending the clear prescaler instruction (CPR). STOP then
+> > needs to be released once write operation is completed.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 37 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index e4b78b9c03f9..11fbdab6bf01 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -39,6 +39,7 @@
+> >  #define PCF2127_REG_CTRL1		0x00
+> >  #define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
+> >  #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
+> > +#define PCF2127_BIT_CTRL1_STOP			BIT(5)
+> >  /* Control register 2 */
+> >  #define PCF2127_REG_CTRL2		0x01
+> >  #define PCF2127_BIT_CTRL2_AIE			BIT(1)
+> > @@ -70,6 +71,7 @@
+> >  #define PCF2131_REG_SR_RESET		0x05
+> >  #define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
+> >  #define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
+> > +#define PCF2131_SR_RESET_CPR_CMD	0xA4 /* CPR is bit 7. */
+> >  /* Time and date registers */
+> >  #define PCF2127_REG_TIME_DATE_BASE	0x03
+> >  #define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
+> > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> >  	/* year */
+> >  	buf[i++] = bin2bcd(tm->tm_year - 100);
+> >  
+> > -	/* write register's data */
+> > +	/* Write access to time registers:
+> > +	 * PCF2127/29: no special action required.
+> > +	 * PCF2131:    requires setting the STOP bit. STOP bit needs to
+> > +	 *             be cleared after time registers are updated.
+> > +	 *             It is also recommended to set CPR bit, although
+> > +	 *             write access will work without it.
+> > +	 */
+> > +	if (pcf2127->cfg->has_reset_reg) {
+> 
+> This should probably be tied to the actual rtc model rather than the
+> presence of the reset register.
+> You MUST clear CPR to be able to set the time precisely.
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl.yaml
-new file mode 100644
-index 000000000..afdf4dade
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/amlogic,meson-pinctrl.yaml
-@@ -0,0 +1,121 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/amlogic,meson-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Amlogic Meson pinmux controller
-+
-+maintainers:
-+  - Neil Armstrong <neil.armstrong@linaro.org>
-+
-+allOf:
-+  - $ref: pinctrl.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - amlogic,meson8-cbus-pinctrl
-+      - amlogic,meson8b-cbus-pinctrl
-+      - amlogic,meson8m2-cbus-pinctrl
-+      - amlogic,meson8-aobus-pinctrl
-+      - amlogic,meson8b-aobus-pinctrl
-+      - amlogic,meson8m2-aobus-pinctrl
-+      - amlogic,meson-gxbb-periphs-pinctrl
-+      - amlogic,meson-gxbb-aobus-pinctrl
-+      - amlogic,meson-gxl-periphs-pinctrl
-+      - amlogic,meson-gxl-aobus-pinctrl
-+      - amlogic,meson-axg-periphs-pinctrl
-+      - amlogic,meson-axg-aobus-pinctrl
-+      - amlogic,meson-g12a-periphs-pinctrl
-+      - amlogic,meson-g12a-aobus-pinctrl
-+      - amlogic,meson-a1-periphs-pinctrl
-+      - amlogic,meson-s4-periphs-pinctrl
-+
-+  ranges: true
-+
-+  "#address-cells":
-+    const: 2
-+
-+  "#size-cells":
-+    const: 2
-+
-+required:
-+  - compatible
-+  - ranges
-+  - "#address-cells"
-+  - "#size-cells"
-+
-+additionalProperties:
-+  anyOf:
-+    - type: object
-+      allOf:
-+        - $ref: pincfg-node.yaml#
-+        - $ref: pinmux-node.yaml#
-+
-+patternProperties:
-+  "^bank@[0-9]$":
-+    type: object
-+    properties:
-+      reg:
-+        minItems: 5
-+        maxItems: 5
-+
-+      reg-names:
-+        items:
-+          - const: gpio
-+          - const: pull
-+          - const: pull-enable
-+          - const: mux
-+          - const: ds
-+
-+      gpio-controller: true
-+
-+      "#gpio-cells":
-+        const: 2
-+
-+      gpio-ranges:
-+        $ref: /schemas/types.yaml#/definitions/phandle
-+
-+    required:
-+      - reg
-+      - reg-names
-+      - gpio-controller
-+      - "#gpio-cells"
-+      - gpio-ranges
-+
-+examples:
-+  - |
-+    bus@34400 {
-+      reg = <0x0 0x34400 0x0 0x400>;
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      pinctrl@40 {
-+        compatible = "amlogic,meson-g12a-periphs-pinctrl";
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        /* avoid "unit has no reg or ranges property" warning */
-+        ranges = <0x0 0x0 0x0 0x34400 0x0 0x100>;
-+
-+        bank@40 {
-+          reg = <0x0 0x40  0x0 0x4c>,
-+                <0x0 0xe8  0x0 0x18>,
-+                <0x0 0x120 0x0 0x18>,
-+                <0x0 0x2c0 0x0 0x40>,
-+                <0x0 0x340 0x0 0x1c>;
-+          reg-names = "gpio", "pull", "pull-enable", "mux", "ds";
-+          gpio-controller;
-+          #gpio-cells = <2>;
-+          gpio-ranges = <&periphs_pinctrl 0 0 86>;
-+        };
-+
-+        cec_ao_a_h_pins: cec_ao_a_h {
-+          mux {
-+            groups = "cec_ao_a_h";
-+            function = "cec_ao_a_h";
-+            bias-disable;
-+          };
-+        };
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/pinctrl/meson,pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/meson,pinctrl.txt
-deleted file mode 100644
-index 8146193bd..000000000
---- a/Documentation/devicetree/bindings/pinctrl/meson,pinctrl.txt
-+++ /dev/null
-@@ -1,94 +0,0 @@
--== Amlogic Meson pinmux controller ==
--
--Required properties for the root node:
-- - compatible: one of "amlogic,meson8-cbus-pinctrl"
--		      "amlogic,meson8b-cbus-pinctrl"
--		      "amlogic,meson8m2-cbus-pinctrl"
--		      "amlogic,meson8-aobus-pinctrl"
--		      "amlogic,meson8b-aobus-pinctrl"
--		      "amlogic,meson8m2-aobus-pinctrl"
--		      "amlogic,meson-gxbb-periphs-pinctrl"
--		      "amlogic,meson-gxbb-aobus-pinctrl"
--		      "amlogic,meson-gxl-periphs-pinctrl"
--		      "amlogic,meson-gxl-aobus-pinctrl"
--		      "amlogic,meson-axg-periphs-pinctrl"
--		      "amlogic,meson-axg-aobus-pinctrl"
--		      "amlogic,meson-g12a-periphs-pinctrl"
--		      "amlogic,meson-g12a-aobus-pinctrl"
--		      "amlogic,meson-a1-periphs-pinctrl"
--		      "amlogic,meson-s4-periphs-pinctrl"
-- - reg: address and size of registers controlling irq functionality
--
--=== GPIO sub-nodes ===
--
--The GPIO bank for the controller is represented as a sub-node and it acts as a
--GPIO controller.
--
--Required properties for sub-nodes are:
-- - reg: should contain a list of address and size, one tuple for each entry
--   in reg-names.
-- - reg-names: an array of strings describing the "reg" entries.
--   Must contain "mux" and "gpio".
--   May contain "pull", "pull-enable" and "ds" when appropriate.
-- - gpio-controller: identifies the node as a gpio controller
-- - #gpio-cells: must be 2
--
--=== Other sub-nodes ===
--
--Child nodes without the "gpio-controller" represent some desired
--configuration for a pin or a group. Those nodes can be pinmux nodes or
--configuration nodes.
--
--Required properties for pinmux nodes are:
-- - groups: a list of pinmux groups. The list of all available groups
--   depends on the SoC and can be found in driver sources.
-- - function: the name of a function to activate for the specified set
--   of groups. The list of all available functions depends on the SoC
--   and can be found in driver sources.
--
--Required properties for configuration nodes:
-- - pins: a list of pin names
--
--Configuration nodes support the following generic properties, as
--described in file pinctrl-bindings.txt:
-- - "bias-disable"
-- - "bias-pull-up"
-- - "bias-pull-down"
-- - "output-enable"
-- - "output-disable"
-- - "output-low"
-- - "output-high"
--
--Optional properties :
-- - drive-strength-microamp: Drive strength for the specified pins in uA.
--			    This property is only valid for G12A and newer.
--
--=== Example ===
--
--	pinctrl: pinctrl@c1109880 {
--		compatible = "amlogic,meson8-cbus-pinctrl";
--		reg = <0xc1109880 0x10>;
--		#address-cells = <1>;
--		#size-cells = <1>;
--		ranges;
--
--		gpio: banks@c11080b0 {
--			reg = <0xc11080b0 0x28>,
--			      <0xc11080e8 0x18>,
--			      <0xc1108120 0x18>,
--			      <0xc1108030 0x30>;
--			reg-names = "mux", "pull", "pull-enable", "gpio";
--			gpio-controller;
--			#gpio-cells = <2>;
--               };
--
--		nand {
--			mux {
--				groups = "nand_io", "nand_io_ce0", "nand_io_ce1",
--					 "nand_io_rb0", "nand_ale", "nand_cle",
--					 "nand_wen_clk", "nand_ren_clk", "nand_dqs",
--					 "nand_ce2", "nand_ce3";
--				function = "nand";
--			};
--		};
--	};
+In fact you must actually SET the CPR bit to clear the prescaler, confusing!
+
+I was already setting the CPR bit (clearing prescaler), so I modified the confusing comment.
+
+The CPR bit is only present IF the reset register is also present, that is why I simply used the presence of the reset register to take the correct action. This avoids to define a new bit or matching on a device model for that functionality (adding newer models could potentially mean modifying the model match).
+
+But if you absolutely want to match on the model, I would like to know how you would like to practically do it (maybe an example)?
+
+
+
+> 
+> > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > +					 PCF2127_BIT_CTRL1_STOP,
+> > +					 PCF2127_BIT_CTRL1_STOP);
+> > +		if (err) {
+> > +			dev_err(dev, "setting STOP bit failed\n");
+> 
+> This really needs to be less verbose. There is nothing a user can really
+> do after having seen this message. Having an error in userspace will
+> anyway prompt the user to retry the operation which is the only action
+> it can do.
+
+I converted the dev_err messages to dev_dbg.
+
+In the original driver and in the same function, there is also a dev_err to handle regmap_bulk_write() failure. Do you suggest that we also make it less verbose:
+
+err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->reg_time_base, buf, i);
+ 	if (err) {
+ 		dev_err(dev,
+
+???
+
+
+> > +			return err;
+> > +		}
+> > +
+> > +		err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
+> > +				   PCF2131_SR_RESET_CPR_CMD);
+> > +		if (err) {
+> > +			dev_err(dev, "sending CPR cmd failed\n");
+> > +			return err;
+> > +		}
+> > +	}
+> > +
+> > +	/* write time register's data */
+> >  	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
+> >  	if (err) {
+> >  		dev_err(dev,
+> > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> >  		return err;
+> >  	}
+> >  
+> > +	if (pcf2127->cfg->has_reset_reg) {
+> > +		/* Clear STOP bit (PCF2131 only) after write is completed. */
+> > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > +					 PCF2127_BIT_CTRL1_STOP, 0);
+> > +		if (err) {
+> > +			dev_err(dev, "clearing STOP bit failed\n");
+> > +			return err;
+> > +		}
+> > +	}
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > -- 
+> > 2.30.2
+> > 
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+
+
 -- 
-2.39.1
-
-
+Hugo Villeneuve <hugo@hugovil.com>
