@@ -2,43 +2,45 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FE4678A0E
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jan 2023 22:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B97F678A5C
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jan 2023 23:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjAWV5w (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Jan 2023 16:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S232841AbjAWWJR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Jan 2023 17:09:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbjAWV5v (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Jan 2023 16:57:51 -0500
+        with ESMTP id S232151AbjAWWJM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Jan 2023 17:09:12 -0500
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F417A8A;
-        Mon, 23 Jan 2023 13:57:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA67FF0A;
+        Mon, 23 Jan 2023 14:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
         ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
         References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=QvnJUYBAAf6yHh2I0qs12OTqtrhXe/po+uAsx+ieTLc=; b=j5WKCjBiYdM+iNLcNlZZFFpQub
-        25ECzKsMfvhIKmPJW4+Ossi48R192YWe7m/mA03MCbT5FmTdpupwKh45oOJfllaavJFbZtw+jK0Lt
-        3oQK2mQxyvwGI/cHSwZ0TO9wR+ARP5/0Bbp0+4FSOlqKKdprKY2wVZsCA6wJm+Us4+EY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41508 helo=pettiford)
+        bh=u5mEA9fTKwHUW5DRXPq23i4R949KNCYG4QT28VraxFs=; b=ObgYyqvjX+VdUY24KCHfpSwHSG
+        x8294RODKpUEleuF5CBDx9tFXbxucymMJ+0SQpvHOHtOaV9SLU/4avAk8hffp5CWC6DN291im6wTE
+        pfRgr02PcLg3rm2kUIzSdR5cJfAH44I14WNLX2W6xO3KG2oq0fLffeA5IRK0NJU8UXjg=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41510 helo=pettiford)
         by mail.hugovil.com with esmtpa (Exim 4.92)
         (envelope-from <hugo@hugovil.com>)
-        id 1pK4ov-0005jk-I7; Mon, 23 Jan 2023 16:57:42 -0500
-Date:   Mon, 23 Jan 2023 16:57:41 -0500
+        id 1pK4yS-0005qP-1g; Mon, 23 Jan 2023 17:07:33 -0500
+Date:   Mon, 23 Jan 2023 17:07:31 -0500
 From:   Hugo Villeneuve <hugo@hugovil.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Bruno Thomsen <bruno.thomsen@gmail.com>, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
-In-Reply-To: <Y8rK1dgpNJaSy/Gb@mail.local>
+Message-Id: <20230123170731.6064430c50f5fb7b484d8734@hugovil.com>
+In-Reply-To: <Y8rDtWEoepkd1D1u@mail.local>
 References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <20221215150214.1109074-12-hugo@hugovil.com>
-        <Y8rK1dgpNJaSy/Gb@mail.local>
+        <20221215150214.1109074-10-hugo@hugovil.com>
+        <CAH+2xPDpdDZzE7z-caaVV53fy+RQCcYweNyYFu133YOyao2e6A@mail.gmail.com>
+        <Y8rDtWEoepkd1D1u@mail.local>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -51,141 +53,86 @@ X-Spam-Level:
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
- sequence for PCF2131
+Subject: Re: [PATCH v3 09/14] rtc: pcf2127: set PWRMNG value for PCF2131
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 20 Jan 2023 18:09:41 +0100
+On Fri, 20 Jan 2023 17:39:17 +0100
 Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-> On 15/12/2022 10:02:12-0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > The sequence for updating the time/date registers is slightly
-> > different between PCF2127/29 and PCF2131.
-> > 
-> > For PCF2127/29, during write operations, the time counting
-> > circuits (memory locations 03h through 09h) are automatically blocked.
-> > 
-> > For PCF2131, time/date registers write access requires setting the
-> > STOP bit and sending the clear prescaler instruction (CPR). STOP then
-> > needs to be released once write operation is completed.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 37 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index e4b78b9c03f9..11fbdab6bf01 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -39,6 +39,7 @@
-> >  #define PCF2127_REG_CTRL1		0x00
-> >  #define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
-> >  #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
-> > +#define PCF2127_BIT_CTRL1_STOP			BIT(5)
-> >  /* Control register 2 */
-> >  #define PCF2127_REG_CTRL2		0x01
-> >  #define PCF2127_BIT_CTRL2_AIE			BIT(1)
-> > @@ -70,6 +71,7 @@
-> >  #define PCF2131_REG_SR_RESET		0x05
-> >  #define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
-> >  #define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
-> > +#define PCF2131_SR_RESET_CPR_CMD	0xA4 /* CPR is bit 7. */
-> >  /* Time and date registers */
-> >  #define PCF2127_REG_TIME_DATE_BASE	0x03
-> >  #define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
-> > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >  	/* year */
-> >  	buf[i++] = bin2bcd(tm->tm_year - 100);
-> >  
-> > -	/* write register's data */
-> > +	/* Write access to time registers:
-> > +	 * PCF2127/29: no special action required.
-> > +	 * PCF2131:    requires setting the STOP bit. STOP bit needs to
-> > +	 *             be cleared after time registers are updated.
-> > +	 *             It is also recommended to set CPR bit, although
-> > +	 *             write access will work without it.
-> > +	 */
-> > +	if (pcf2127->cfg->has_reset_reg) {
+> Hello,
 > 
-> This should probably be tied to the actual rtc model rather than the
-> presence of the reset register.
-> You MUST clear CPR to be able to set the time precisely.
-
-In fact you must actually SET the CPR bit to clear the prescaler, confusing!
-
-I was already setting the CPR bit (clearing prescaler), so I modified the confusing comment.
-
-The CPR bit is only present IF the reset register is also present, that is why I simply used the presence of the reset register to take the correct action. This avoids to define a new bit or matching on a device model for that functionality (adding newer models could potentially mean modifying the model match).
-
-But if you absolutely want to match on the model, I would like to know how you would like to practically do it (maybe an example)?
-
-
-
-> 
-> > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > +					 PCF2127_BIT_CTRL1_STOP,
-> > +					 PCF2127_BIT_CTRL1_STOP);
-> > +		if (err) {
-> > +			dev_err(dev, "setting STOP bit failed\n");
-> 
-> This really needs to be less verbose. There is nothing a user can really
-> do after having seen this message. Having an error in userspace will
-> anyway prompt the user to retry the operation which is the only action
-> it can do.
-
-I converted the dev_err messages to dev_dbg.
-
-In the original driver and in the same function, there is also a dev_err to handle regmap_bulk_write() failure. Do you suggest that we also make it less verbose:
-
-err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->reg_time_base, buf, i);
- 	if (err) {
- 		dev_err(dev,
-
-???
-
-
-> > +			return err;
-> > +		}
-> > +
-> > +		err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
-> > +				   PCF2131_SR_RESET_CPR_CMD);
-> > +		if (err) {
-> > +			dev_err(dev, "sending CPR cmd failed\n");
-> > +			return err;
-> > +		}
-> > +	}
-> > +
-> > +	/* write time register's data */
-> >  	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
-> >  	if (err) {
-> >  		dev_err(dev,
-> > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >  		return err;
-> >  	}
-> >  
-> > +	if (pcf2127->cfg->has_reset_reg) {
-> > +		/* Clear STOP bit (PCF2131 only) after write is completed. */
-> > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > +					 PCF2127_BIT_CTRL1_STOP, 0);
-> > +		if (err) {
-> > +			dev_err(dev, "clearing STOP bit failed\n");
-> > +			return err;
-> > +		}
-> > +	}
-> > +
-> >  	return 0;
-> >  }
-> >  
-> > -- 
-> > 2.30.2
+> On 07/01/2023 19:36:06+0100, Bruno Thomsen wrote:
+> > Den tor. 15. dec. 2022 kl. 16.19 skrev Hugo Villeneuve <hugo@hugovil.com>:
+> > >
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > >
+> > > Default PWRMNG[2:0] bits are set to 000b for PCF2127/29, but to
+> > > 111b for PCF2131.
+> > >
+> > > Set these bits to 000b to select same mode as PCF2127/29.
+> > >
+> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > > 
+> > Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+> > 
+> > I think it's a good idea[1] but there have been concerns about
+> > setting default values in the past[2]. In case somebody needs
+> > a different behaviour they should add a device tree property.
+> > 
+> > [1] https://lore.kernel.org/linux-rtc/20190910143945.9364-1-bruno.thomsen@gmail.com/
+> > [2] https://lore.kernel.org/linux-rtc/20191211163354.GC1463890@piout.net/
+> 
+> I confirm this is still my point of view and I won't take this patch as
+> this may break existing users.
+
+Patch dropped.
+
+ 
+> > 
+> > > ---
+> > >  drivers/rtc/rtc-pcf2127.c | 15 +++++++++++++++
+> > >  1 file changed, 15 insertions(+)
+> > >
+> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > > index 68af4d0438b8..241189ee4a05 100644
+> > > --- a/drivers/rtc/rtc-pcf2127.c
+> > > +++ b/drivers/rtc/rtc-pcf2127.c
+> > > @@ -53,6 +53,7 @@
+> > >  #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
+> > >  #define PCF2127_BIT_CTRL3_BF                   BIT(3)
+> > >  #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
+> > > +#define PCF2127_CTRL3_PWRMNG_MASK              GENMASK(7, 5)
+> > >  /* Control register 4 */
+> > >  #define PCF2131_REG_CTRL4              0x03
+> > >  #define PCF2131_BIT_CTRL4_TSF4                 BIT(4)
+> > > @@ -1129,6 +1130,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > >         regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > >                                 PCF2127_BIT_CTRL1_POR_OVRD);
+> > >
+> > > +       /* Make sure PWRMNG[2:0] is set to 000b. This is the default for
+> > > +        * PCF2127/29, but not for PCF2131 (default of 111b).
+> > > +        *
+> > > +        * PWRMNG[2:0]  = 000b:
+> > > +        *   battery switch-over function is enabled in standard mode;
+> > > +        *   battery low detection function is enabled
+> > > +        */
+> > > +       ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
+> > > +                               PCF2127_CTRL3_PWRMNG_MASK);
+> > > +       if (ret < 0) {
+> > > +               dev_err(dev, "PWRMNG config failed\n");
+> > > +               return ret;
+> > > +       }
+> > > +
+> > >         ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
+> > >         if (ret < 0)
+> > >                 return ret;
+> > > --
+> > > 2.30.2
+> > >
 > 
 > -- 
 > Alexandre Belloni, co-owner and COO, Bootlin
