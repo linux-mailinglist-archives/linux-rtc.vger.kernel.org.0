@@ -2,50 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A918678C38
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Jan 2023 00:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14495678D49
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Jan 2023 02:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjAWXr1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Jan 2023 18:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S230149AbjAXBXz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Jan 2023 20:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjAWXr1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Jan 2023 18:47:27 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCC0B76C;
-        Mon, 23 Jan 2023 15:47:25 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7385F40003;
-        Mon, 23 Jan 2023 23:47:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674517644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jwmcVqno/YcAQeOYokZ/vj5NmGSag+BGNuxqJkFhlmI=;
-        b=o9k+1bE129WTOlXJLiQquy0CTYzOwComZEGon0prGdvsiAf488iRtFThFaM4UroTt6/LT/
-        G3ELWt95VYwPuntnrvHYWEakost8RHFHFZAW52XcWNoT7z09LFn/w/rwGZZ7+r5KU98o+J
-        nSFE5ljwVM/wnTOoZ+8FqonPaYeCXc6gBt+u8GnzM15MT4NpJEH5EFOzJb6UCOi+2DrmSg
-        zncttuEeq3nhJU/abbCOcc8EyvGveWxnhH0h4rGXhBb2zieEEqhd2UZBZFD3Fy7nD9o3xq
-        o01T+pnHjf6Q6U3C/QezLMCYydBrBtUuFs3/gfM5B01JUn1/QMYmV2T2UBG6jw==
-Date:   Tue, 24 Jan 2023 00:47:23 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] rtc: sun6i: Always export the internal oscillator
-Message-ID: <167451762667.1272571.6826220647911763740.b4-ty@bootlin.com>
-References: <20221229215319.14145-1-samuel@sholland.org>
+        with ESMTP id S230062AbjAXBXy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Jan 2023 20:23:54 -0500
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E60305E2;
+        Mon, 23 Jan 2023 17:23:22 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id j10-20020a4aa64a000000b004f9b746ee29so2433261oom.0;
+        Mon, 23 Jan 2023 17:23:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2cQMAwwRREiwr/oZxVGOyaxb8i+wrIpEeXOLH8JzHGE=;
+        b=zzNhWldsZMzxwDgcjg98oROoYjVrD/BUJrBZ4PSIFBS7/JMtEZ1Eu6zva2d+0LLr/n
+         zlcjcOaltmmw1WN7vnj8+1UYpqYffhpAvl/uxe3s5/71OpdaIgwh1aoU5FEnrtZ+5ymb
+         7p0dgQ24Gpr33NELtJ5St48Yj/94GahipdgvqE+fPVuXC600e8hG4fj5ygrzr5aj4Rjn
+         EyfQ7aT/lEXUPnBp5HC2HiAH/lxYml4x7jBIenHrkCLJHTxHpSNJuo2u5ABTSXt5F6mI
+         3thKUSagvC4auyCt0IhoWBJ3NsGrh6p8U6btFrcJMA62BApHe25qjJlGjBKTdoSMg58g
+         YM3w==
+X-Gm-Message-State: AFqh2koOrMsONkKErIY4sr70GvrGnPbE57Ir+PtkYsjKne3B0iakKodv
+        8JxTHzKTGnJwWMTRHUHfRA==
+X-Google-Smtp-Source: AMrXdXujZwMm6fXYSgOameyhHf0Aq2138aPsqvYqCTkEXLOXKLmaxvKaplYwPXK4MO3oQ+4UfNXC9g==
+X-Received: by 2002:a4a:8c68:0:b0:4a3:aa96:23c7 with SMTP id v37-20020a4a8c68000000b004a3aa9623c7mr11797638ooj.6.1674523365895;
+        Mon, 23 Jan 2023 17:22:45 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z14-20020a4a984e000000b004fca8a11c61sm277950ooi.3.2023.01.23.17.22.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 17:22:45 -0800 (PST)
+Received: (nullmailer pid 3121723 invoked by uid 1000);
+        Tue, 24 Jan 2023 01:22:42 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221229215319.14145-1-samuel@sholland.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        linux-pwm@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-rtc@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?utf-8?q?=2C?= "devicetree@vger.kernel.org" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Marc Zyngier <maz@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+In-Reply-To: <06289641-18b1-320d-6162-7ae176452f31@gmail.com>
+References: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
+ <06289641-18b1-320d-6162-7ae176452f31@gmail.com>
+Message-Id: <167452325371.3118653.16373677195744392136.robh@kernel.org>
+Subject: Re: [PATCH 7/8] dt-bindings: interrupt-controller: Add Amlogic Meson
+ GPIO interrupt controller binding
+Date:   Mon, 23 Jan 2023 19:22:42 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,21 +83,160 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
-On Thu, 29 Dec 2022 15:53:19 -0600, Samuel Holland wrote:
-> On all variants of the hardware, the internal oscillator is one possible
-> parent for the AR100 clock. It needs to be exported so we can model that
-> relationship correctly in the devicetree.
+On Mon, 23 Jan 2023 22:30:08 +0100, Heiner Kallweit wrote:
+> Add Amlogic Meson GPIO interrupt controller binding.
+> Tested with make targets dt_binding_check and dtbs_check.
 > 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  .../amlogic,meson-gpio-intc.txt               | 38 ----------
+>  .../amlogic,meson-gpio-intc.yaml              | 72 +++++++++++++++++++
+>  2 files changed, 72 insertions(+), 38 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.txt
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.yaml
 > 
 
-Applied, thanks!
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-[1/1] rtc: sun6i: Always export the internal oscillator
-      commit: 344f4030f6c50a9db2d03021884c4bf36191b53a
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Best regards,
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/06289641-18b1-320d-6162-7ae176452f31@gmail.com
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+interrupt-controller@4080: compatible: ['amlogic,meson-s4-gpio-intc', 'amlogic,meson-gpio-intc'] is too long
+	arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dtb
+
+interrupt-controller@9880: compatible:0: 'amlogic,meson-gpio-intc' is not one of ['amlogic,meson8-gpio-intc', 'amlogic,meson8b-gpio-intc', 'amlogic,meson-gxbb-gpio-intc', 'amlogic,meson-gxl-gpio-intc', 'amlogic,meson-axg-gpio-intc', 'amlogic,meson-g12a-gpio-intc', 'amlogic,meson-sm1-gpio-intc', 'amlogic,meson-a1-gpio-intc', 'amlogic,meson-s4-gpio-intc', 'amlogic,meson-sc2-gpio-intc']
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+	arch/arm/boot/dts/meson8b-ec100.dtb
+	arch/arm/boot/dts/meson8b-mxq.dtb
+	arch/arm/boot/dts/meson8b-odroidc1.dtb
+
+interrupt-controller@9880: compatible: ['amlogic,meson8-gpio-intc', 'amlogic,meson-gpio-intc'] is too long
+	arch/arm/boot/dts/meson8m2-mxiii-plus.dtb
+	arch/arm/boot/dts/meson8-minix-neo-x8.dtb
+
+interrupt-controller@9880: compatible: ['amlogic,meson-gpio-intc', 'amlogic,meson8b-gpio-intc'] is too long
+	arch/arm/boot/dts/meson8b-ec100.dtb
+	arch/arm/boot/dts/meson8b-mxq.dtb
+	arch/arm/boot/dts/meson8b-odroidc1.dtb
+
+interrupt-controller@9880: compatible: ['amlogic,meson-gpio-intc', 'amlogic,meson-gxbb-gpio-intc'] is too long
+	arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nanopi-k2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-odroidc2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-p201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-meta.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-vega-s95-telos.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-hub.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxbb-wetek-play2.dtb
+
+interrupt-controller@9880: compatible: ['amlogic,meson-gpio-intc', 'amlogic,meson-gxl-gpio-intc'] is too long
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-libretech-ac.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s805x-p241.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-mecool-kii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p230.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-p231.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-sml5442tw.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-p281.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-hwacom-amazetv.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-libretech-cc-v2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-nexbox-a95x.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxl-s905x-p212.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-mecool-kiii-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-nexbox-a1.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q200.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-q201.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-rbox-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-vega-s96.dtb
+	arch/arm64/boot/dts/amlogic/meson-gxm-wetek-core2.dtb
+
+interrupt-controller@f080: compatible: ['amlogic,meson-axg-gpio-intc', 'amlogic,meson-gpio-intc'] is too long
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
+	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
+	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
+
+interrupt-controller@f080: compatible: ['amlogic,meson-g12a-gpio-intc', 'amlogic,meson-gpio-intc'] is too long
+	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
+	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
+
+interrupt-controller@f080: compatible: ['amlogic,meson-sm1-gpio-intc', 'amlogic,meson-gpio-intc'] is too long
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
+	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
+
