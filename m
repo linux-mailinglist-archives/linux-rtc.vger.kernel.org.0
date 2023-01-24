@@ -2,63 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCBA6791C8
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Jan 2023 08:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3283D6792ED
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Jan 2023 09:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbjAXHSB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 Jan 2023 02:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S232656AbjAXIWT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 24 Jan 2023 03:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbjAXHSA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Jan 2023 02:18:00 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD2F76B3
-        for <linux-rtc@vger.kernel.org>; Mon, 23 Jan 2023 23:17:56 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h12so8926310wrv.10
-        for <linux-rtc@vger.kernel.org>; Mon, 23 Jan 2023 23:17:56 -0800 (PST)
+        with ESMTP id S232483AbjAXIWS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Jan 2023 03:22:18 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F55B23D80
+        for <linux-rtc@vger.kernel.org>; Tue, 24 Jan 2023 00:22:16 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id f12-20020a7bc8cc000000b003daf6b2f9b9so12228788wml.3
+        for <linux-rtc@vger.kernel.org>; Tue, 24 Jan 2023 00:22:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VK1e6exqqlScuIzxu3kNmwlgTnCtE6Xr3k93M7x3/qM=;
-        b=u5z15n4Cyt2W8vpNpjDEUeibtG9KHLxTHPITggkl6YipYA5BXWZ7/ft4hggv0FDPB9
-         PK+Nzz9u4k22ogUnKlyaMoStBoHq36k9tnELpawylWBgOzKjH24AqP5EoUJg8nP/j5JC
-         7qfbyrBwPAJBOQeDyW1+9gtnBsodssyGQLbXIwnAAcRwe+9Htsl7d2PdGMMQ+KQ33jR1
-         6IGA5AGS/Bs1jAmEjr+ugu/XSrwDHcF7cJtzaxEbP77pq7CVPbnTDa17+Pd26pIB3iJD
-         LxNctTqt2rhXFwlCLbPNRC2Uspa54BJ5j0kq3toy/k9GBvlsjGUtn09KGQwCbrBdu9tI
-         N49A==
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U9DqS2Jn9nJYNaDy07cme/7hQmGWWsUBjAPPDyYRsn4=;
+        b=Vu2rxQhfqYQNgFFNRdKmRY6baqaJ+wwVQzel9USbomB3kstntshg/9LBTQZpk5SPY6
+         SDRy0WiL0IpizDWYRT0N2/2Tw1JeWu/YXwMwC8sok/CA/IeuO7BG+6Zol4XtzttTWx5z
+         mzP2+6XybKArW3kdhnDz3yYcoa2rZvGJnIZUjiWplWf7HLXCmww+AKipfQ3vWJ1GPsA6
+         pt1qrFpjgHqM4VdD8nFt9XdEk7RrYhBC50UqZqkKZ2H0LhH/uCQlm93ENJmEOu/mssSM
+         5TsN/fO5/a8Cdc1QexvNUVnfKWlsJCNoGvlpEnxP2OCHrRpWWJ0FL2TGptMEVapD16Cd
+         fvAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VK1e6exqqlScuIzxu3kNmwlgTnCtE6Xr3k93M7x3/qM=;
-        b=psewFLeFJd+XPdVtD0B89e/VibotyDyY9Mdhmv7i3wBfsW/ROsHCdsThowKUx4ORxa
-         mSpY2Nmi1o/xgvaSqW9875dPexenaRyGxWaQprjYQrhFTiSUbBSJDtdN6vf+RwmwMYQy
-         woVDSVyWKFLaqKgOZRy8zD9KPX7t36LtgjecIwswWFDqkiNe1eTewUgaemRcK0hnAzG7
-         pjA8hby2NXgoaUWNnOFmal42gPBfw8CbC8j4IjybPPx0J9j1p7cU4xY/L4V18vnJdpPq
-         IS7VDzkVBxtnLR9ldfsGRwqw2jt33SKKNHdkDXZQ++pTASf2cRCO9hfz7FcQmmBMbPlT
-         +g2g==
-X-Gm-Message-State: AFqh2kotEUq/739aVGwuRbFwTlClbiTubb51UnFzdGOpxLFr8pHol63i
-        nJJm/aodnoLozFEzYJccmodRYg==
-X-Google-Smtp-Source: AMrXdXvwcy3PSUb4q848sDoaIWHWtvBUmNR0so2nrtzYx6JjuVz/rsCcjLc37lx8FLvr6XECSoyb9g==
-X-Received: by 2002:adf:dc0a:0:b0:2be:57a6:8161 with SMTP id t10-20020adfdc0a000000b002be57a68161mr12340309wri.46.1674544674861;
-        Mon, 23 Jan 2023 23:17:54 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:7542:4469:3507:5738? ([2a01:e0a:982:cbb0:7542:4469:3507:5738])
-        by smtp.gmail.com with ESMTPSA id p7-20020adff207000000b002bdff778d87sm1147623wro.34.2023.01.23.23.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 23:17:54 -0800 (PST)
-Message-ID: <02e97893-ccae-50d1-db38-fb6fa31faaa5@linaro.org>
-Date:   Tue, 24 Jan 2023 08:17:53 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 2/8] arm64: dts: amlogic: Fix non-compliant SD/SDIO node
- names
-Content-Language: fr
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U9DqS2Jn9nJYNaDy07cme/7hQmGWWsUBjAPPDyYRsn4=;
+        b=27O/Hu7E0hkz2mgMmW0sGhyYr2O5D9KIqjGaiLcdUOYp++Ak6TlHs/Zq1VhUqWor7y
+         30iYonrptqgIATee43kTDPgzckqUOZKxUbw8ANWtDLRwdIuyoVqfxqGmPeGCPo2iE+kQ
+         ohBSsBHfuRLnoBZMVFoeqkCujl3mZFAlWUy2o3m6+3FdlTf3ADrIGNEhrAmzqaDZ3idi
+         pClSiFbq1v6e0leaMP78F6jhblC+kYBpuNKfrkROk7vXzveI/4V7JKn4Mm2UF29+XNUa
+         D4s62GX7lcB+T4jn7M9TyhLHaHaPp5zatBaLKTPOOJ3Aaz/Ayg6PTtd5GzorMP682w5f
+         AzDw==
+X-Gm-Message-State: AO0yUKXo0A1E8dVq8wSXV+I5snl7ff756/1/1BfwPjRqEIXiGEdtx5Gc
+        WWCAU4MVfvKmHr/A9FOcez2QVQ==
+X-Google-Smtp-Source: AK7set9kgsgyREqDkDA4wXQveg9l8CTz4di8q5DI2C+/Ud24R0ZH9g/nee+rfw3tBwzBqjJdZL6CoA==
+X-Received: by 2002:a05:600c:4fcb:b0:3dc:1687:9b9a with SMTP id o11-20020a05600c4fcb00b003dc16879b9amr460697wmq.37.1674548535007;
+        Tue, 24 Jan 2023 00:22:15 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id h13-20020a05600c2cad00b003cfa622a18asm13870207wmc.3.2023.01.24.00.22.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 00:22:14 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -66,24 +58,27 @@ To:     Heiner Kallweit <hkallweit1@gmail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
         linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+        linux-gpio@vger.kernel.org
+In-Reply-To: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
 References: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
- <55c53e8d-6b30-51bf-edf6-b5b67887bd0a@gmail.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-In-Reply-To: <55c53e8d-6b30-51bf-edf6-b5b67887bd0a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: (subset) [PATCH 0/8] soc: amlogic: switch bindings to yaml and
+ adjust some dtbs's
+Message-Id: <167454853388.2972173.6260080234043719240.b4-ty@linaro.org>
+Date:   Tue, 24 Jan 2023 09:22:13 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,51 +87,55 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Le 23/01/2023 à 22:24, Heiner Kallweit a écrit :
-> mmc-controller.yaml defines "^mmc(@.*)?$" as node name pattern.
-> In preparation of adding schema-based validation fix the node name
-> in two affected files.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->   arch/arm64/boot/dts/amlogic/meson-axg.dtsi        | 2 +-
->   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-> index 1648e67af..ed895fb32 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-> @@ -1883,7 +1883,7 @@ apb: bus@ffe00000 {
->   			#size-cells = <2>;
->   			ranges = <0x0 0x0 0x0 0xffe00000 0x0 0x200000>;
->   
-> -			sd_emmc_b: sd@5000 {
-> +			sd_emmc_b: mmc@5000 {
->   				compatible = "amlogic,meson-axg-mmc";
->   				reg = <0x0 0x5000 0x0 0x800>;
->   				interrupts = <GIC_SPI 217 IRQ_TYPE_EDGE_RISING>;
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> index 1a931d5c2..80d82f739 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-> @@ -2321,7 +2321,7 @@ uart_A: serial@24000 {
->   			};
->   		};
->   
-> -		sd_emmc_a: sd@ffe03000 {
-> +		sd_emmc_a: mmc@ffe03000 {
->   			compatible = "amlogic,meson-axg-mmc";
->   			reg = <0x0 0xffe03000 0x0 0x800>;
->   			interrupts = <GIC_SPI 189 IRQ_TYPE_EDGE_RISING>;
-> @@ -2333,7 +2333,7 @@ sd_emmc_a: sd@ffe03000 {
->   			resets = <&reset RESET_SD_EMMC_A>;
->   		};
->   
-> -		sd_emmc_b: sd@ffe05000 {
-> +		sd_emmc_b: mmc@ffe05000 {
->   			compatible = "amlogic,meson-axg-mmc";
->   			reg = <0x0 0xffe05000 0x0 0x800>;
->   			interrupts = <GIC_SPI 190 IRQ_TYPE_EDGE_RISING>;
+Hi,
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+On Mon, 23 Jan 2023 22:22:15 +0100, Heiner Kallweit wrote:
+> At first adjust some existing dtbs's so that they pass dtbs_check
+> after switching bindings to yaml.
+> 
+> Then switch further Amlogic Meson bindings to yaml.
+> Tested with make targets dt_binding_check and dtbs_check.
+> 
+> Heiner Kallweit (8):
+>   arm64: dts: meson-gx: Remove invalid pwm compatible
+>   arm64: dts: amlogic: Fix non-compliant SD/SDIO node names
+>   arm64: dts: meson-gx: Set only one compatible string for mmc
+>   arm64: dts: amlogic: Remove invalid compatible string
+>     amlogic,meson-gpio-intc
+>   dt-bindings: rtc: Add Amlogic Meson vrtc controller binding
+>   dt-bindings: pwm: Add Amlogic Meson PWM binding
+>   dt-bindings: interrupt-controller: Add Amlogic Meson GPIO interrupt
+>     controller binding
+>   dt-bindings: pinctrl: Add Amlogic Meson pinctrl binding
+> 
+> [...]
+
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.3/arm64-dt)
+
+[2/8] arm64: dts: amlogic: Fix non-compliant SD/SDIO node names
+      https://git.kernel.org/amlogic/c/1be13a5091bf71627aa1a3d35360b039510f42f3
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.3/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
+
