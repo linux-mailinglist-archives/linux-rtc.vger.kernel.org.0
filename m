@@ -2,205 +2,182 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6366867BAAA
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jan 2023 20:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7C567BFF1
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jan 2023 23:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236138AbjAYTWS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 25 Jan 2023 14:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S236307AbjAYW3C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 25 Jan 2023 17:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbjAYTWN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 25 Jan 2023 14:22:13 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC825C0CE;
-        Wed, 25 Jan 2023 11:22:10 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id r9so17123612oig.12;
-        Wed, 25 Jan 2023 11:22:10 -0800 (PST)
+        with ESMTP id S234668AbjAYW3B (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 25 Jan 2023 17:29:01 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B34F60CA1;
+        Wed, 25 Jan 2023 14:28:48 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id y19so298585edc.2;
+        Wed, 25 Jan 2023 14:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SknBnpJKa9Le9Ohn9Af3FhBYcCoixgyHtGZJrle29Mk=;
+        b=BMeY2H1SnnytoFvIB2srqelouqpuy0uyMXWk7FXrOEoOjRW2PKZnNM3y5qTgPaZv/Z
+         kOh4aVcU9bUwP8VC+7zepandHCecvhrh6ljiIRDqLlf+zDly2gwUapfvCarEEn6nFQ4x
+         9aYQSlWWBHbByY1U1ij31MGlwJ8XNJMGyBIkZz4SGXu0WF6kCW+6AywVngtYhILFzMzx
+         Up6vqe+DKosm0oqjHUPXIcQhYDWXyUPYuB3NK4R511oRem4Wosh021bZT45V4Dq/De8C
+         xaNB6/QirxI8HpSqf/oM/9jeZMcPGuG1nE1hkorH5OOJl83hKTikJV5w/QnYeMyf7aJS
+         e6Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9PVEqBCzfLUzY4IompNf+WDKcAK9eA2hdVNa/dgEZEM=;
-        b=64XRWRO7jNWT3ritowQPdT/UV/FlGGUIIVFkoG7vqIJ2eZ4oBoD5ZrrGdPqODKP2Hr
-         +ODSepk4lqprdLyuNN3xUKmEcTOkAHd3HM4W+unQ+SbM1dNB3XZxG9mups+nbHvXK6uo
-         uzfzTa7duHbnKpQZLMrgSPz4Z6q6DCl6XzhP82GURxUIlM3spDwKfGq5hca9BxaYIwW+
-         zBu6LI/uxfz0TQ/iRgagA5//oS5gNyVz1B9EmBBbaDvVvUZpo+o47yyCnQbi8fqp5IeD
-         7Mwjm60Te0B2UiOJBenMuo9A40ZjV4czhLgTC8X12hJKpRMG8JWaU6Vg+tMw/4kH+Ume
-         2fyw==
-X-Gm-Message-State: AFqh2kqAwjeNY1a+JRUT1Vhn6HrO3qUGOkdZNHdKSqcY7vUZgbBIqo9F
-        yGtNFnoqMgfK7ESkU46xGg==
-X-Google-Smtp-Source: AMrXdXtSGTGKDZXApqdn1BokhZuqhAW4CWOl6Q8yAt6sCWvdBefTWfX8VBhMIBueSOmJDZQTrHxWyA==
-X-Received: by 2002:a05:6808:2015:b0:36c:e058:9cc with SMTP id q21-20020a056808201500b0036ce05809ccmr16173734oiw.7.1674674529265;
-        Wed, 25 Jan 2023 11:22:09 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m24-20020a05680806d800b0035ec1384c9esm2396349oih.23.2023.01.25.11.22.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 11:22:08 -0800 (PST)
-Received: (nullmailer pid 2716000 invoked by uid 1000);
-        Wed, 25 Jan 2023 19:22:08 -0000
-Date:   Wed, 25 Jan 2023 13:22:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SknBnpJKa9Le9Ohn9Af3FhBYcCoixgyHtGZJrle29Mk=;
+        b=RtR1YKnb5vhbDfBRTWq5iakYOtxlqAtG+bUy6TQxLTUX0qUrz1c/0LtMgwyYsutO2Y
+         YO14ka0qrd8WGAul2a0+a5ZqjTRycA15MmSwW95URFbCVzeRht/wUUFTv6A7oBJNud6B
+         DO7FTCcTa6ES48ckmmgiFklwZBM7nuFwS3SpWQm9PbO1KN8EI0ZXhA+gVZB6mGgXNouB
+         8FTM4v6gDn+qro2ha7ChDd6uTIaeVZ56Bzw8LcuZzczlPbux4z+IIHEKNdR7s+73hD4D
+         E5qSIpqmItb8vEaRBMTVBZVNVuc8SDQnhvxg2XMVtVsC7CHeQK4J/5sIKLlikcJd7AN3
+         nU2A==
+X-Gm-Message-State: AFqh2kpF2yiVBMINHE1cg7yoSx6FOs+/lnTKheyMxnzlyOlL2+O/yGWF
+        E+i29Ir17m3fdDZeORsR8Dw=
+X-Google-Smtp-Source: AMrXdXtVNwIZ/OnkeKeiaUswnp8VEO04Z8vkoe1lxyyoTajb75PHr6b6G1JW46m7LrDgU36GFXWXfg==
+X-Received: by 2002:a05:6402:1f13:b0:49b:cf25:152d with SMTP id b19-20020a0564021f1300b0049bcf25152dmr32007759edb.24.1674685726784;
+        Wed, 25 Jan 2023 14:28:46 -0800 (PST)
+Received: from ?IPV6:2a01:c22:720f:5a00:b1aa:59d6:6587:3051? (dynamic-2a01-0c22-720f-5a00-b1aa-59d6-6587-3051.c22.pool.telefonica.de. [2a01:c22:720f:5a00:b1aa:59d6:6587:3051])
+        by smtp.googlemail.com with ESMTPSA id u10-20020aa7db8a000000b00487b73912c2sm2891416edt.12.2023.01.25.14.28.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 14:28:46 -0800 (PST)
+Message-ID: <d820d54b-d082-589a-621f-2795d885696a@gmail.com>
+Date:   Wed, 25 Jan 2023 23:24:24 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v2] dt-bindings: rtc: Convert Amlogic Meson vrtc controller
+ binding
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH 6/8] dt-bindings: pwm: Add Amlogic Meson PWM binding
-Message-ID: <20230125192208.GA2713777-robh@kernel.org>
+        linux-rtc@vger.kernel.org
 References: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
- <0d492f0e-abb3-33f6-3ee9-09e1440a9015@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d492f0e-abb3-33f6-3ee9-09e1440a9015@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Language: en-US
+In-Reply-To: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:29:27PM +0100, Heiner Kallweit wrote:
-> Add Amlogic Meson PWM binding.
-> Tested with make targets dt_binding_check and dtbs_check.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  .../devicetree/bindings/pwm/pwm-amlogic.yaml  | 61 +++++++++++++++++++
->  .../devicetree/bindings/pwm/pwm-meson.txt     | 29 ---------
->  2 files changed, 61 insertions(+), 29 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pwm/pwm-amlogic.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-meson.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/pwm/pwm-amlogic.yaml b/Documentation/devicetree/bindings/pwm/pwm-amlogic.yaml
-> new file mode 100644
-> index 000000000..443ff4e5b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/pwm-amlogic.yaml
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/pwm-amlogic.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic PWM
-> +
-> +maintainers:
-> +  - Heiner Kallweit <hkallweit1@gmail.com>
-> +
-> +allOf:
-> +  - $ref: pwm.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,meson8b-pwm
-> +      - amlogic,meson-gxbb-pwm
-> +      - amlogic,meson-gxbb-ao-pwm
-> +      - amlogic,meson-axg-ee-pwm
-> +      - amlogic,meson-axg-ao-pwm
-> +      - amlogic,meson-g12a-ee-pwm
-> +      - amlogic,meson-g12a-ao-pwm-ab
-> +      - amlogic,meson-g12a-ao-pwm-cd
-> +      - amlogic,meson-s4-pwm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+Convert Amlogic Meson vrtc controller binding to yaml.
 
-No need for a type, 'clocks' already has one. You need how many and what 
-each one is when more than 1.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+v2:
+- improve title and commit message
+- remove bus part from example
+---
+ .../bindings/rtc/amlogic,meson-vrtc.yaml      | 44 +++++++++++++++++++
+ .../bindings/rtc/rtc-meson-vrtc.txt           | 22 ----------
+ 2 files changed, 44 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/amlogic,meson-vrtc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
 
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 2
+diff --git a/Documentation/devicetree/bindings/rtc/amlogic,meson-vrtc.yaml b/Documentation/devicetree/bindings/rtc/amlogic,meson-vrtc.yaml
+new file mode 100644
+index 000000000..a89865fa6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/amlogic,meson-vrtc.yaml
+@@ -0,0 +1,44 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/amlogic,meson-vrtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Virtual RTC (VRTC)
++
++maintainers:
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++description: |
++  This is a Linux interface to an RTC managed by firmware, hence it's
++  virtual from a Linux perspective.  The interface is 1 register where
++  an alarm time (in seconds) is to be written.
++  The alarm register is a simple scratch register shared between the
++  application processors (AP) and the secure co-processor (SCP.)  When
++  the AP suspends, the SCP will use the value of this register to
++  program an always-on timer before going sleep. When the timer expires,
++  the SCP will wake up and will then wake the AP.
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    enum:
++      - amlogic,meson-vrtc
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    rtc@a8 {
++      compatible = "amlogic,meson-vrtc";
++      reg = <0x000a8 0x4>;
++    };
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt b/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
+deleted file mode 100644
+index c014f54a9..000000000
+--- a/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-* Amlogic Virtual RTC (VRTC)
+-
+-This is a Linux interface to an RTC managed by firmware, hence it's
+-virtual from a Linux perspective.  The interface is 1 register where
+-an alarm time (in seconds) is to be written.
+-
+-Required properties:
+-- compatible: should be "amlogic,meson-vrtc"
+-- reg: physical address for the alarm register
+-
+-The alarm register is a simple scratch register shared between the
+-application processors (AP) and the secure co-processor (SCP.)  When
+-the AP suspends, the SCP will use the value of this register to
+-program an always-on timer before going sleep. When the timer expires,
+-the SCP will wake up and will then wake the AP.
+-
+-Example:
+-
+-	vrtc: rtc@0a8 {
+-		compatible = "amlogic,meson-vrtc";
+-		reg = <0x0 0x000a8 0x0 0x4>;
+-	};
+-- 
+2.39.1
 
-Need the exact names here.
 
-> +
-> +  "#pwm-cells":
-> +    const: 3
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    apb@fe000000 {
-> +      reg = <0x0 0xfe000000 0x0 0x480000>;
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      pwm@8550 {
-> +        compatible = "amlogic,meson-gxbb-pwm";
-> +        reg = <0x0 0x08550 0x0 0x10>;
-> +        clocks = <&xtal>, <&xtal>;
-> +        clock-names = "clkin0", "clkin1";
-> +        #pwm-cells = <3>;
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/pwm/pwm-meson.txt b/Documentation/devicetree/bindings/pwm/pwm-meson.txt
-> deleted file mode 100644
-> index bd02b0a14..000000000
-> --- a/Documentation/devicetree/bindings/pwm/pwm-meson.txt
-> +++ /dev/null
-> @@ -1,29 +0,0 @@
-> -Amlogic Meson PWM Controller
-> -============================
-> -
-> -Required properties:
-> -- compatible: Shall contain "amlogic,meson8b-pwm"
-> -                         or "amlogic,meson-gxbb-pwm"
-> -                         or "amlogic,meson-gxbb-ao-pwm"
-> -                         or "amlogic,meson-axg-ee-pwm"
-> -                         or "amlogic,meson-axg-ao-pwm"
-> -                         or "amlogic,meson-g12a-ee-pwm"
-> -                         or "amlogic,meson-g12a-ao-pwm-ab"
-> -                         or "amlogic,meson-g12a-ao-pwm-cd"
-> -- #pwm-cells: Should be 3. See pwm.yaml in this directory for a description of
-> -  the cells format.
-> -
-> -Optional properties:
-> -- clocks: Could contain one or two parents clocks phandle for each of the two
-> -  PWM channels.
-> -- clock-names: Could contain at least the "clkin0" and/or "clkin1" names.
-> -
-> -Example:
-> -
-> -	pwm_ab: pwm@8550 {
-> -		compatible = "amlogic,meson-gxbb-pwm";
-> -		reg = <0x0 0x08550 0x0 0x10>;
-> -		#pwm-cells = <3>;
-> -		clocks = <&xtal>, <&xtal>;
-> -		clock-names = "clkin0", "clkin1";
-> -	}
-> -- 
-> 2.39.1
-> 
-> 
