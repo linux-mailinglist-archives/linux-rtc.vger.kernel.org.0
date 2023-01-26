@@ -2,167 +2,166 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6398067C4F8
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Jan 2023 08:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFA067CD97
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Jan 2023 15:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjAZHlb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 26 Jan 2023 02:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S231783AbjAZOXA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 26 Jan 2023 09:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjAZHla (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 26 Jan 2023 02:41:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A5B65F1D
-        for <linux-rtc@vger.kernel.org>; Wed, 25 Jan 2023 23:41:29 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pKwsX-0006uE-DD; Thu, 26 Jan 2023 08:41:01 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pKwsV-000Vax-LD; Thu, 26 Jan 2023 08:40:58 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pKwsU-00Fy4h-2i; Thu, 26 Jan 2023 08:40:58 +0100
-Date:   Thu, 26 Jan 2023 08:40:55 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        with ESMTP id S231509AbjAZOW7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 26 Jan 2023 09:22:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D517113D6;
+        Thu, 26 Jan 2023 06:22:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B57461756;
+        Thu, 26 Jan 2023 14:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 798B5C433EF;
+        Thu, 26 Jan 2023 14:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674742977;
+        bh=NOA8j3J98EBvT+bxuXUAwLV7dgvm64E0wbmG6VgvG70=;
+        h=From:To:Cc:Subject:Date:From;
+        b=umm0WalUBd5sd79xcP/BdT3Saf7ADb8SB9/VfGyVaEvEZ/yAcWY8C7v9zgCgGHiQS
+         gsrVg4fmyYeHWopoWYSD7muU5Khrw7T9aVVGRXaSmZRyQAW011Iakg70z0MRz20Ykd
+         y8c5mg5XlQMVnBZNf4/rFITHEHCeXq+CzRVk4HJpJBm1tjtFiBlvi66lb6NL0t0gqm
+         Aas6BAmJxj4uKxT9cq+0+qzlAup+z0ACbUbpHmDFIROBBN2scWDR/s1+V/3CLrLNpF
+         sJckuBzFd5mA1rQMfzeKoAvKmuA0MZuqzT4k1GNUwa+W9UW8LeEwygAErMrs9FnS+j
+         BPDhjeB1o4HqA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pL39b-0006iC-5y; Thu, 26 Jan 2023 15:23:03 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH 0/8] soc: amlogic: switch bindings to yaml and adjust
- some dtbs's
-Message-ID: <20230126074055.7za4nfu6n5kgnqlz@pengutronix.de>
-References: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
- <0e48405a-d4e7-92a8-339f-4be2f4ec1378@linaro.org>
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 00/24] rtc: pm8xxx: add support for setting time using nvmem
+Date:   Thu, 26 Jan 2023 15:20:33 +0100
+Message-Id: <20230126142057.25715-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="m3isnjrac4mftej2"
-Content-Disposition: inline
-In-Reply-To: <0e48405a-d4e7-92a8-339f-4be2f4ec1378@linaro.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+This series adds support for setting the RTC time on Qualcomm platforms
+where the PMIC RTC time registers are read-only by instead storing an
+offset in some other non-volatile memory. This is used to enable the RTC
+in the SC8280XP Compute Reference Design (CRD) and Lenovo Thinkpad X13s
+laptop.
 
---m3isnjrac4mftej2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The RTCs in many Qualcomm devices are effectively broken due to the time
+registers being read-only. Instead some other non-volatile memory can be
+used to store and offset which a driver can take into account. On
+machines like the X13s, the UEFI firmware (and Windows) use a UEFI
+variable for storing such an offset, but not all Qualcomm systems use
+UEFI.
 
-Hello,
+The Qualcomm firmware also does not support any UEFI runtime services,
+but Maximilian Luz recently posted a driver for talking to the secure
+world directly through the SCM interface and this can be used to access
+the UEFI variables:
 
-On Tue, Jan 24, 2023 at 08:16:45AM +0100, Neil Armstrong wrote:
-> Le 23/01/2023 =E0 22:22, Heiner Kallweit a =E9crit=A0:
-> > At first adjust some existing dtbs's so that they pass dtbs_check
-> > after switching bindings to yaml.
->=20
-> Thanks for this patchset, but please drop patches 1, 3 & 4, and take
-> in account the existing compatible usage in your new bindings like
-> I did in my conversion patchset.
->=20
-> While we did remove some bad compatibles we introduced a few years ago,
-> now the GXBB, GXL & GXM are now stable a aew LTS releases now and
-> a few other projects uses them as-is (U-Boot, BSDs, ...) so changing
-> the compatibles isn't an option anymore... and we can't know which
-> one they use and how the implementation behaves we must document
-> the existing usage without breaking any potential users (including linux).
+	https://lore.kernel.org/all/20220723224949.1089973-1-luzmaximilian@gmail.com/
 
-I only looked into patch #1, and I support dropping it for stronger
-reasons than not breaking things which maybe started to rely on the
-existing contents.
+I was initially told that the PMICs in the X13s did not have any spare
+battery-backed registers which could have been used to store an RTC
+offset so there seemed to be no alternative to try using the UEFI
+offset. In the processes however, I learnt that there are in fact some
+registers in PMIC that could be used, at least on the SC8280XP CRD and
+the X13s. 
 
-In patch #1 you write:
+This was especially fortunate as it turned out that the firmware on the
+CRD does not allow updating the UEFI RTC offset even if this works on
+the X13s.
 
-| amlogic,meson-gx-pwm isn't a valid compatible string, so remove it.
-| See drivers/pwm/pwm-meson.c.
-|=20
-| Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-| ---
-|  arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 8 ++++----
-|  1 file changed, 4 insertions(+), 4 deletions(-)
-|=20
-| diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/=
-dts/amlogic/meson-gx.dtsi
-| index a79a35e84..75d35dcfe 100644
-| --- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-| +++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-| @@ -328,14 +328,14 @@ i2c_A: i2c@8500 {
-|                         };
-|=20
-|                         pwm_ab: pwm@8550 {
-| -                               compatible =3D "amlogic,meson-gx-pwm", "a=
-mlogic,meson-gxbb-pwm";
-| +                               compatible =3D "amlogic,meson-gxbb-pwm";
+As the benefit of sharing the RTC offset with the UEFI firmware (and
+Windows) is rather small (e.g. to make sure they never get out sync), I
+instead opted for using the PMIC registers on both machines. This also
+avoids relying on a fairly complex reverse-engineered firmware driver,
+as well as potential issues like flash wear due to RTC drift. Let's keep
+it simple.
 
-There are two issues:
+But as there could be older Qualcomm UEFI machines out there where we
+don't have any other non-volatile storage I included the UEFI patches
+here as an RFC for reference. In case it turns out there are systems out
+there were this could be used, those two patches could be merged as
+well. An alternative could be to see if Maximilian's work could be
+extended to access the time services directly.
 
-a) drivers/pwm/pwm-meson.c isn't the reference. The driver doesn't
-   justify which compatibles should be used. You should refer to the
-   binding document instead.
+This series first fixes a few issues with the current Qualcomm PMIC RTC
+driver before cleaning it up a bit so that support for setting the time
+using an offset stored in an nvmem cell can be added.
 
-b) Having the SoC name as an additional compatible (i.e. the status quo
-   before your patch) is an advantage. While it doesn't hurt (apart from
-   making the dtb a tad bigger) it makes it possible to adapt the driver
-   if in the future someone discovers that the PWM component on GX is a
-   tad different from the GXBB one. In that case you can add a check in
-   the driver =E0 la=20
+The two RFC patches on top, add support for the Qualcomm UEFI RTC offset
+and are not intended to be merged just yet. Note that these two also
+depend on an efi core patch that has been merged for 6.3:
 
-   	if (of_device_is_compatible(np, amlogic,meson-gx-pwm))
-		do_the_special_gx_handling()
+	https://lore.kernel.org/all/20230119164255.28091-1-johan+linaro@kernel.org/
 
-   without having to adapt the device trees then (or use some ugly
-   code that somehow detects if it's running on GX).
+The final patches enables the RTC on the SC8280XP CRD and X13s and can
+be merged by Bjorn once the (non-UEFI) RTC patches are in.
 
-So the driver not handling amlogic,meson-gx-pwm today is fine. I expect
-the fix to be: Include that compatible in the binding.
+Note that for the SDAM nvmem driver to be autoloaded when built as a
+module, you also need this fix:
 
-Best regards
-Uwe
+	https://lore.kernel.org/lkml/20230126133034.27491-1-johan+linaro@kernel.org/
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Johan
 
---m3isnjrac4mftej2
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Johan Hovold (24):
+  rtc: pm8xxx: fix set-alarm race
+  rtc: pm8xxx: drop spmi error messages
+  rtc: pm8xxx: use regmap_update_bits()
+  rtc: pm8xxx: drop bogus locking
+  rtc: pm8xxx: return IRQ_NONE on errors
+  rtc: pm8xxx: drop unused register defines
+  rtc: pm8xxx: use unaligned le32 helpers
+  rtc: pm8xxx: clean up time and alarm debugging
+  rtc: pm8xxx: rename struct device pointer
+  rtc: pm8xxx: rename alarm irq variable
+  rtc: pm8xxx: clean up comments
+  rtc: pm8xxx: use u32 for timestamps
+  rtc: pm8xxx: refactor read_time()
+  rtc: pm8xxx: clean up local declarations
+  dt-bindings: rtc: qcom-pm8xxx: add nvmem-cell offset
+  rtc: pm8xxx: add support for nvmem offset
+  rtc: pm8xxx: add copyright notice
+  dt-bindings: rtc: qcom-pm8xxx: add uefi-variable offset
+  rtc: pm8xxx: add support for uefi offset
+  arm64: defconfig: enable Qualcomm SDAM nvmem driver
+  arm64: dts: qcom: sc8280xp-pmics: add pmk8280 rtc
+  arm64: dts: qcom: sc8280xp-pmics: add pmk8280 sdam nvram
+  arm64: dts: qcom: sc8280xp-crd: enable rtc
+  arm64: dts: qcom: sc8280xp-x13s: enable rtc
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPSLoQACgkQwfwUeK3K
-7Akkowf/emZNlTr/+ucs/fg+qTCWpgwgyYENdpjTH/m4tDB3rg4W1f0KXHt8JgxS
-3CnyjJrJfsBBox0FanIwNYfVHrC8KKaRNpanXiEagq2e1zVGy0xFdJkFMuYeDf0X
-8FbIarmwyjwOu1zFoA5j1txfeS1/wRl2SCMsb4tzg5aQDXe24XRc/rHCfl12DbKY
-g45YU3VopNpinmd7n4UCCbQkH6g+RxOxHd0oErdPW1Ii6bsrAzR1lYaOBJnC1esi
-VgHCOvB8bYAq2Oo3aMYj1l98jPlzfb+rv9ZmA4UbrizTvpequKYECnytV+3cd5gl
-8LkL8MWmS6yGUHEdObMCLR5mNuEfqw==
-=HveX
------END PGP SIGNATURE-----
+ .../bindings/rtc/qcom-pm8xxx-rtc.yaml         |  18 +
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |  15 +
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |  15 +
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |  18 +
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/rtc/rtc-pm8xxx.c                      | 639 ++++++++++--------
+ include/linux/rtc.h                           |   1 +
+ 7 files changed, 443 insertions(+), 264 deletions(-)
 
---m3isnjrac4mftej2--
+-- 
+2.39.1
+
