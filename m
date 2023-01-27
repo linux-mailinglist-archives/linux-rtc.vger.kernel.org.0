@@ -2,42 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E220067E963
-	for <lists+linux-rtc@lfdr.de>; Fri, 27 Jan 2023 16:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C8E67E97C
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Jan 2023 16:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbjA0P0T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 27 Jan 2023 10:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S233848AbjA0PcM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 27 Jan 2023 10:32:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjA0P0T (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Jan 2023 10:26:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F28126C7;
-        Fri, 27 Jan 2023 07:26:18 -0800 (PST)
+        with ESMTP id S232439AbjA0PcL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Jan 2023 10:32:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8AF1F91E;
+        Fri, 27 Jan 2023 07:32:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C293461CB1;
-        Fri, 27 Jan 2023 15:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CED7C433D2;
-        Fri, 27 Jan 2023 15:26:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81AD861CB1;
+        Fri, 27 Jan 2023 15:32:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BF0C433D2;
+        Fri, 27 Jan 2023 15:32:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674833177;
-        bh=Z5ZP4DaoVQ2QC+fknVQWZA212TOY3bzBXTC09PEvXyk=;
+        s=k20201202; t=1674833529;
+        bh=Z2iqEMIhEJct0i4hJR+FbRDHoDL2SDX5PExgGOdBZHE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UNQtfsRxBJ762s3ZPwg0veDwjdbh9f/dsZi1AmCtvr9IPvhA0QgR1W5fc+eJTaAt3
-         3fIhlHDoqClG+KAB/H/wAuUrSuNj0LJHqLMV/uBDfyjwHiuKiERks4NM9NM+em8apV
-         w5G6CF+0nK2wp/CaTdxUqAYilQ43XOrMMdWOp8jh9v31Ct+xn41MVrhcIwRv206g44
-         qYy/imjKEgDdF5TwocAS4hjWK9xw6Tq23xSVFKGKCip7+qJwObU+WFo7VEheZUAZiH
-         Gvyj1Mpgtq8tKz37ECKoD/HX2f6lleyoY3nC1qGP5ilt2/h8ZreM+2QjJB8jm2X6hL
-         Rh80pil6+W1Hg==
+        b=aWdfQA8Trz6dfaYjQIE9SN1VapQVhi/7rcpMdmYajLyTwh+o3ZNxBiHQyFu0Epi7s
+         o2kAKgLG09Bf1dTKxaEyQ9wNc/yu7qD84i7WOOjpn7ymox0y2WWv8LS1HX54z7kZci
+         TzIjZF968TS5GNFn+GThsza46v8bGRJn5jehv6a6Vwx51e3MSugMEQnraC+YSbE7Rx
+         ecJBPaXrp0rWRKiwSsxKEWx/I7qBeQ1A8SoRLOT5zvmDPsEFgcjgXlP9t7OzVA+Ef4
+         qxkn236YJlRf5zg1mRP2PDo8Jra3p0zqq2elbibnE8H7O5otpaHxgvbC4wgOy1WzCT
+         +sP3fK+n5fMfA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1pLQcU-0001Cp-Fp; Fri, 27 Jan 2023 16:26:26 +0100
-Date:   Fri, 27 Jan 2023 16:26:26 +0100
+        id 1pLQiA-0001GM-EI; Fri, 27 Jan 2023 16:32:19 +0100
+Date:   Fri, 27 Jan 2023 16:32:18 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -47,15 +48,15 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Maximilian Luz <luzmaximilian@gmail.com>,
         linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/24] rtc: pm8xxx: add support for uefi offset
-Message-ID: <Y9PtIiD1o8eBq2wk@hovoldconsulting.com>
+Subject: Re: [PATCH 16/24] rtc: pm8xxx: add support for nvmem offset
+Message-ID: <Y9PugpnzsqZpzSGE@hovoldconsulting.com>
 References: <20230126142057.25715-1-johan+linaro@kernel.org>
- <20230126142057.25715-20-johan+linaro@kernel.org>
- <Y9PrdqLHZpZrdGJ4@mail.local>
+ <20230126142057.25715-17-johan+linaro@kernel.org>
+ <85481368-b32e-61aa-f83a-fb42d58c351a@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9PrdqLHZpZrdGJ4@mail.local>
+In-Reply-To: <85481368-b32e-61aa-f83a-fb42d58c351a@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,30 +66,55 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 04:19:18PM +0100, Alexandre Belloni wrote:
-> On 26/01/2023 15:20:52+0100, Johan Hovold wrote:
+On Fri, Jan 27, 2023 at 02:13:21PM +0000, Srinivas Kandagatla wrote:
+> On 26/01/2023 14:20, Johan Hovold wrote:
 > > On many Qualcomm platforms the PMIC RTC control and time registers are
 > > read-only so that the RTC time can not be updated. Instead an offset
 > > needs be stored in some machine-specific non-volatile memory, which the
 > > driver can take into account.
 > > 
-> > Add support for storing a 32-bit offset from the GPS time epoch in a
-> > UEFI variable so that the RTC time can be set on such platforms.
+> > Add support for storing a 32-bit offset from the Epoch in an nvmem cell
+> > so that the RTC time can be set on such platforms.
 > > 
-> 
-> Why are you using the GPS epoch? This seems pretty random.
-
-Tell that to the Qualcomm firmware team. ;)
-
-Perhaps I could have made it more clear, but this is the format that the
-firmware uses so Linux is not free to pick a different base here (or
-time would differ ten years between UEFI/Windows and Linux).
-
-> > The UEFI variable is
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >   drivers/rtc/rtc-pm8xxx.c | 134 +++++++++++++++++++++++++++++++++++----
+> >   1 file changed, 123 insertions(+), 11 deletions(-)
 > > 
-> >             882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
-> > 
-> > and holds a 12-byte structure where the first four bytes is a GPS time
-> > offset in little-endian byte order.
+> > diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+> > index 922aef0f0241..09816b9f6282 100644
+> > --- a/drivers/rtc/rtc-pm8xxx.c
+> > +++ b/drivers/rtc/rtc-pm8xxx.c
+> > @@ -3,6 +3,7 @@
+> >    */
+> > +static int pm8xxx_rtc_read_nvmem_offset(struct pm8xxx_rtc *rtc_dd)
+> > +{
+> > +	size_t len;
+> > +	void *buf;
+> > +	int rc;
+> > +
+> > +	buf = nvmem_cell_read(rtc_dd->nvmem_cell, &len);
+> > +	if (IS_ERR(buf)) {
+> > +		rc = PTR_ERR(buf);
+> > +		dev_err(rtc_dd->dev, "failed to read nvmem offset: %d\n", rc);
+> > +		return rc;
+> > +	}
+> > +
+> > +	if (len != sizeof(u32)) {
+> > +		dev_err(rtc_dd->dev, "unexpected nvmem cell size %zu\n", len);
+> > +		kfree(buf);
+> > +		return -EINVAL;
+> > +	}
+
+> how about us nvmem_cell_read_u32()
+
+I considered that, but did not like the asymmetry of the interface.
+
+Specifically, nvmem_cell_read_u32() would go out and look up the nvmem
+cell again even though I already have and need a reference for
+nvmem_cell_write().
+
+nvmem_cell_read_u32() seems to be a better fit as a convenience wrapper
+for drivers that only need to do a single read at probe.
 
 Johan
