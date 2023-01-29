@@ -2,43 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AA267FD41
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 Jan 2023 08:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0554667FD44
+	for <lists+linux-rtc@lfdr.de>; Sun, 29 Jan 2023 08:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjA2HHV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 29 Jan 2023 02:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
+        id S231394AbjA2HHb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 29 Jan 2023 02:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjA2HHU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 29 Jan 2023 02:07:20 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2054.outbound.protection.outlook.com [40.107.6.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCA2227B4;
-        Sat, 28 Jan 2023 23:07:18 -0800 (PST)
+        with ESMTP id S230238AbjA2HH0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 29 Jan 2023 02:07:26 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2055.outbound.protection.outlook.com [40.107.6.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8190422A03;
+        Sat, 28 Jan 2023 23:07:24 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dANkvxWk5bv7CMERURXArm1K6TTBoc11v23xojrZzzDse7aduypNwYksZN+/AkW/eYsVGLhpty2EnLexWYPzXlkSP+wG/tx8H4jfgIpf+fVy3DwoppihRq7vrOGeFAkyZjJMKryzPJkC79iG4rksutmEy2JqJugoTD1KoRnjMc+/Ytm4rFj3TOjaojBRqZg85ew8xd6INa2CZ8sWTSjA8gNausyWHKQ2XZfp9LOsvgbTQOa1khK+SnJWHohrJ9PbP4Xiolgq2mBRo0zcXEJXm/fmjM5Ga24aSuRVkBWynMkfXA1AYZdnGym2GBMUSpYAm0d75xbFhS6/9kwWTwhn9Q==
+ b=P13v+8yt9M1LwAZmfPGHoizPM4/We663qw6SWu6Qn//pYKbYVkCybHArZJqoeS6MVgjoVoIrwpG3Bmd9Oh8JwoInjzNy3XzS3mX65II2RZ9sYLYt2Y1A4t10nrQTuSIerV2MDoSspTaNTZQ3CwCAACojrCZjpE5hgA2KGaoODXvmhLTMPXwRaguGP/acvgX7zMEkf3IRkOXygZ6wOa7ucib4aK2hs1l8Jv1XaJLa6l/+St3K/Sc9qXLBm9CtKRZB2jMxE/P25f21XId4nPdDEHf+61N8/2bwB9MnQaOGKdlserK/GI8ojgh28oSNVPaSy+A6BtGL6s+lZokOWuaQ2g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fdno9/3nzzp92mz2talKnfGcF1jnRVNF6jgaSs1Sc7Q=;
- b=OmgDbx2vjuE0i+TTW7PJvHf9i6vxDzXfW7H5luY/6v7axztfM0ge69D6D4ZBPMuUKlOm7lKi9LppRNUQBOdcQm/0Ck63lqNDR9zjZghiqn10TKR+2qegR1Vo4jKg2IICE/AMmKz7m0Lv7kChdtLsw4Mkq7aXgd6iq8hJUIE/tbgyUMdpnc67pliDbJelJvL31SBUtlFQrx0nX4ytDH34zebtW0HJYDjS7XwA7IkbAd0aVyZMNgIDrWXXYCG3SdBuQhR4e/VD0YP9ivHdBxsNuTct3jtau5CsM/5BG7TKLPig+2F2r1C5CdZ1XkriF/KCUkB9PADiB/blC478FIkqew==
+ bh=LNQEKSD0SwfvFR4Ud8oMe8N5uEOdIUC9x5hYLNrBhUU=;
+ b=nz6JVfPxjAM8kKNRMEyjx6Edh/TYsKb61CKqiTSKNqqdhjwHj84w8KR7xuYCpwOzl8vPWVfuaLcDt4XWCKzgpq2rHcBPSt3+I4p4MOYulTEqMlBzineCxvmGuBnKHzsD6WIkmgQaDap0h6WZhfYIkLQ6N45KqB/chf17pcFifrND46XVg7eM9rI7MvzsoClxnL0MMAoT9rVfVuswQW7BbSqCcCZWMH3Id/Tn5mCe5kwgDvXE7q5V5gJCtr99NDrn8FRplAxLbINMTfB+W3cmMe23qzh1VaklWRFIw6cTTtIebZx8TQbaXY5LZsiJxNVKxW0d9P6JbwRZpvrfRCY6ig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fdno9/3nzzp92mz2talKnfGcF1jnRVNF6jgaSs1Sc7Q=;
- b=YBVYJ1kz0I2hVZ/FDsQgYNxALhj6cYSWaxfT/0dswD8Ld8DmMRT+KLTVXryt5bpNKC2EXX9SrSRujCBz8xlo3nOnXJwrLDGBOnlMslVGRa4pNDKHQro3oTDogbVqQMTjoZh5MnVRXzwVhKXQNk2mFFyJaPg+n/G3kO9eXoeKNkQ=
+ bh=LNQEKSD0SwfvFR4Ud8oMe8N5uEOdIUC9x5hYLNrBhUU=;
+ b=BosaOF6FGHAhFAeBWGBC9y7YWtWIY2rSRDJQ0UIpOsu6uW96mhXgAAf+HMQ3W4fWGyKGNmAVazpp0Vx+4gnXYoXI5Iix4U040syGLUpO41ynLltgmuVT2OYO0zY/XthwGkqJ61TYLOV3WOXX7mq+lRbaggtuNr38hzgzgxVodO4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM9PR04MB8650.eurprd04.prod.outlook.com (2603:10a6:20b:43d::18)
  by PAXPR04MB8815.eurprd04.prod.outlook.com (2603:10a6:102:20e::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Sun, 29 Jan
- 2023 07:07:16 +0000
+ 2023 07:07:22 +0000
 Received: from AM9PR04MB8650.eurprd04.prod.outlook.com
  ([fe80::4ca4:bfde:62dc:4b2c]) by AM9PR04MB8650.eurprd04.prod.outlook.com
  ([fe80::4ca4:bfde:62dc:4b2c%3]) with mapi id 15.20.6043.033; Sun, 29 Jan 2023
- 07:07:16 +0000
+ 07:07:22 +0000
 From:   Jacky Bai <ping.bai@nxp.com>
 To:     lee@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
@@ -47,9 +47,9 @@ To:     lee@kernel.org, robh+dt@kernel.org,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
         kernel@pengutronix.de, linux-imx@nxp.com, festevam@gmail.com
-Subject: [PATCH v4 1/4] dt-bindings: mfd: Add nxp bbnsm
-Date:   Sun, 29 Jan 2023 15:08:20 +0800
-Message-Id: <20230129070823.1945489-2-ping.bai@nxp.com>
+Subject: [PATCH v4 2/4] input: bbnsm_pwrkey: Add bbnsm power key support
+Date:   Sun, 29 Jan 2023 15:08:21 +0800
+Message-Id: <20230129070823.1945489-3-ping.bai@nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230129070823.1945489-1-ping.bai@nxp.com>
 References: <20230129070823.1945489-1-ping.bai@nxp.com>
@@ -61,50 +61,50 @@ X-ClientProxiedBy: SG2PR01CA0170.apcprd01.prod.exchangelabs.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM9PR04MB8650:EE_|PAXPR04MB8815:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd884d7a-8461-42ae-8db8-08db01c77451
+X-MS-Office365-Filtering-Correlation-Id: 41d01fba-adb8-43cc-1809-08db01c7778d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /vPYKgvnENs1CutuEMNQdp0rwhG8ByhxQVrXEtVeWVcXMd0HOE8p/X2GKOh5A6N3CugzI9kWeyhQUqxAb+tGKLwH9UttNVnv4EopLWNjKBr6eG2R9elrwBWODFwoCeenNx/A4gaDI0E/VKm1mDWrLWGr7bGrhw2QUYrLAeUdfQ+vkwD5Ft0bo9/dQi/Y2IDOwHJrrBRzhnjyNtaMJqN9zzgnK/xl7X7Aka6SfSuOeG7og7ckvS9tGQvk8Tud9Poxi8yJvbHweGvc7DMoGCiYsot7IVTJGqFFBWJ+5vbCLy9bnwolG0zBj9MsVwwb16bb0za+p5Drll+EQB7f4PtsdCDFVfE9zMKZuemHwwUIJ5aDxUvNrLmpT5mquieZ90kHJPR9pU7jjziZm6sE7spVEXf2vkuRb5S0FbQSWnVE8SRJgC/qWWrr/pLLh96/Oz5yEZoC84VPjNM9mTzc7NBLFneZ9DJ4JamCjYXTORrh1aTMGjsD4h9g5DqDUN3ezMOJKQ3GA3dZJl5a9oeaFw8YQygizE8JrTCRjUQto7FG1klQmDERFCyuIiupwFiO24IHEccx8Keb7pIUlP9+BC3D2CH5xrVKm3HrE+5MP2OKOM7Pt6OkO3bil0RxDekufRqXHhqaJ7Bwrk7UVAdo4iPbv4iBccOc96ElFODkwYnQf5Ud2tzV8/NEfLy0ORRuX9AJ075H6/eDgNbsa95aHY9J46EtmldtPPel0QkWmIuobqV++QczF5l4WmezsD2ZKGxJwXX1uctCP6bDZIwfF+Ylpw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8650.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199018)(2906002)(36756003)(52116002)(6666004)(7416002)(478600001)(6486002)(966005)(38350700002)(86362001)(38100700002)(41300700001)(2616005)(1076003)(6506007)(66476007)(8676002)(66556008)(4326008)(66946007)(316002)(8936002)(5660300002)(26005)(186003)(6512007)(83380400001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tTDx2U4Yn9cyj8JLh3/hNOM6ocxhimp9toxB1UknUaMV4V2My89fTgi2ehn16jTa4sDCD0NhiRSmiBmvA1UiCWF+KDnTc3jnLMmoF+Kua0KjKHf/cwjM4Sz4ZUz6rIkeDW4RlfFBIvVVLaf4jAwhIUaqH7+WeQIa/zD6iYI2kinXD1gdsIoa5pmM+g90v0/6SHv9Bx5e8QHjdTH8jei71m9r1bj3mrEEM6nGp3TUKZ+Xbw30qOJ+KfhAXdngbc6Fx2O9yUxcP38eQx1Gt6d5GyZD0J4xoPT9FWRANuYeKsKtD2632sxxodGKc49NMLz2m5Pb1T0K7ZrkuufI8PbYGJ+EmIxlqHr9yD1HKUTcGEdOnLo4UvbbGc2nvNddQ6GsvuOJgbrNvo3KRNHdVusuNoEX8kAqTt94kw18iG54IZHa2HZYfDi85TR8AZc9a6WcUMd8+5r98pP+YhN3GEHg89ezaR9NTx3y6dhL/HmtwF0yQYq4x4ZH9LCn4nzOhkpT7BuhvIK5OFSmxEoWdD/WFow+DzSsSTcOk7pPJt8StHu3nXcC9mIPauXNpYQ7BbwAf15AdYJT5e27fjDHn3R4XcPm8W57pBuFdHOOFzfZD23EY1S3hbhtycxtWN6JLIvdLff1QJ6j4og2ZOhK83BE5YJFnTg/yyI4TQzmnizXweJ670USAp65/a9P3yoWpUdy05HCEeFKNGm+J0TnShpDVQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8650.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199018)(2906002)(36756003)(52116002)(7416002)(478600001)(6486002)(38350700002)(86362001)(38100700002)(41300700001)(2616005)(1076003)(6506007)(66476007)(8676002)(66556008)(4326008)(66946007)(316002)(8936002)(5660300002)(26005)(186003)(6512007)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QKKaIj042KmPVP2oLdgB836TYh4pjWdn69TmyciXQvz3fQEGgk2/oKiRSRUZ?=
- =?us-ascii?Q?IcD9EwbwdlAIbx0MZeQWpRhPXbhQ98aVAFjxE22cKHy9GG+3RczoSVHUEvrE?=
- =?us-ascii?Q?4sUL/k5AfhtQM8qzZ6x+RopBe01jrYOZLa/KlvzfjUcmFtpiKg4j0ZwUIspX?=
- =?us-ascii?Q?WfZ0YGmKCuyTo5LuEMPrfSDql3uv3g2Ly2dwKb+9qcQoT7XLNQs8UCi29TOV?=
- =?us-ascii?Q?EP5/+u87aPR/Y1d0d2ptHUmbyr1HogSCLM3pmBPvbOrnFKa5Ki7P4TGQlor9?=
- =?us-ascii?Q?Vo2eE80G6DVN6vWThBtcgXmvGMUd/RaPyDPbJlHqyBpOT5+/Mw2i1oIi55GL?=
- =?us-ascii?Q?O8bdnKs8qbIvcP0bixhjRGRwnIJIjrg37HuUoRKsVLYI9Wzi8dlf4yvVvmXI?=
- =?us-ascii?Q?yErH4w/4Z8GXRKjBMjlZVSdJVfBG/N4bN5IOtbL0Olr36j/z7C0NisJG0hFy?=
- =?us-ascii?Q?DwHB+B7KRSidU/QDT8vKw0Ss76U79JHTSVDeRIrDna/VY9rSUleUhPDhLPQV?=
- =?us-ascii?Q?jlhDsZnmguGk2tDQyq10J5PyHMic/nmbpDq4qLE6vS961Ppp3aw/SQ1SIJGK?=
- =?us-ascii?Q?Ck5jG5Vb/3wLhrW7Tnn8t6zDNavryChiEanJHoOlAB+AuCRfEPnLomiBQmNN?=
- =?us-ascii?Q?tPRmlWWu5YDPwShDt6PtBh5AkVTNap1W2f6GzYwv9oFZ8epDzKDihv8JAL2n?=
- =?us-ascii?Q?3U6a2c+D0GL2OOaQL+kGyhwXyipDjc6AvoFXoShzozw7bPa0bECEjTr56RFq?=
- =?us-ascii?Q?es6ds5GcTWTaGGRORRqcuEArp9l2TOK1If4RIlGyfuQx0wSy6T9BZMoBAUQ2?=
- =?us-ascii?Q?EgyOnE//ikxTox8CeOUHY2zHV3U2YBmXveqXIBhIDZWHkZgUPgfY+YOUS5gC?=
- =?us-ascii?Q?GSDtPWYk8ZCPWEHYdspoPLRWrINh4OFU65tYD/N7QrUQdjTf28cv8uqeUifL?=
- =?us-ascii?Q?7oaBb1TefRGSJv1HyFJ//kwTI/LqnLIdS+6zoxPSl6q3hX5p69ifGFsK84fV?=
- =?us-ascii?Q?4GVqMgYunnmlVqGr4SlyFu5SX6QTcNKV7NCRkNf+2irXr8TjAwqb93e69r91?=
- =?us-ascii?Q?hJR5cMzO/Rzps9juNyFFVs0liMseSZkaNuiKAv+IDWt3N0VAjLOaO7ERkdnm?=
- =?us-ascii?Q?+QdeCm2ndTOq0BEO2rtszTmGPD1ySYONBRA0OLnn++spcjwLouKX2A8KZY4Y?=
- =?us-ascii?Q?gnGjfEziI5bUeUI5VyNtaKOGB40btt2J6vCQx7rK/jebNKwqgmqvqp5IvZ5Q?=
- =?us-ascii?Q?xlcZZErYWY20nXZykdVjleMlJkZ6FbYNu1fqMH+c7Ipv3OXy1XUPpNkA7XFH?=
- =?us-ascii?Q?DRe5AGJgO6eaAt7oU9C9DuXNo/9eXM6IOB9ZwMHxtnsnhe+Gk/UHmI5aiTTI?=
- =?us-ascii?Q?IB6T+lf+nU2ITVYnWYMCnoEKrU7dBvBCWsk7cBGshy4Vo39bRoUVzXT/1WyC?=
- =?us-ascii?Q?tjYAOUW5E8hvz6N3c4cJFIJTKvH2kbp89lqo7nsxKgELqMyp+qo622Rea+q3?=
- =?us-ascii?Q?62R70Wz/WxozXilR6Q7/VPPwJVZS/0h5VNmcgNobDBHDwljsSrO56Y6qKnc4?=
- =?us-ascii?Q?3W0Un3PX3D2VsnMFLEJin7roxk6PAMlEwlNPUlBt?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rZV6u3/UAcHwTDnDwf8keKYgS4tZOOlD4BFy9Ibe3aKcfwKmSqk+VPeZziC7?=
+ =?us-ascii?Q?YIno0k9HkD6ZuDyvxgWBiXefkdJhMgOqNFPLesH/IZ8YJhFZDIAL+5hBg3EF?=
+ =?us-ascii?Q?13EHTkaTEsP1OOwVLFEoNn6monP+nkhh7JLI+p6Fx184UG++T3Ld4E7+BCKw?=
+ =?us-ascii?Q?tjHQRoaVrV741p+QWWWeEsw9KQgpbbAXuUG6iuXStUtfoRMR1RvA6zXiJuF/?=
+ =?us-ascii?Q?6B32zraFTGc/kuP87+P4V3SOa5yFL+Ubi+OmCSR4FSubVcLOZnlT9ZHZ7WRF?=
+ =?us-ascii?Q?uf/LYCpUGT8ViBh8yoWH3A2v7s3vfobQoq0yrrONgpfYrhjy3tZgMv5W3CS5?=
+ =?us-ascii?Q?3TuhOnJjJsWNiJOkQSPpN5q0PwfwZaDhbXBV5EK49RCTPv30jkfYLud5/2/J?=
+ =?us-ascii?Q?sk+mUL8D/9utvO6qHKllDaA8bVx/fvyGuO4POnPIZH6Cid7Rpw/V+m8yQnyO?=
+ =?us-ascii?Q?7ZNCn1uFiT9VjxohVqdr4lePAJ8aC4enrjSZluhtdrrNdlbIzZe9tIiSMDYf?=
+ =?us-ascii?Q?xIYGNLMym8d8/DB/+dHzoyegU4zGOc3asACxhrbrEkGHV2syjpJfaaDDIE9I?=
+ =?us-ascii?Q?kE4/hkT+YKKO11pj3ZWnscmY2WO7Eb83e2/sr8DWzokcSiy/Lq4/hAehKnai?=
+ =?us-ascii?Q?bPkVAbfBVnJDQnGnkGN1GHC2Fim00VAWCw/9kSDbA1iQCVWvs6k+jg2EHqeM?=
+ =?us-ascii?Q?lXLMwDHpwJL7452ESAoJ26un2dcFtZuXcF+qbvXgpAe2w0Nfo7DhvVqlzqX2?=
+ =?us-ascii?Q?w6hAPSUQQmPEyhYeBp0TYIjdTB4m3XfyJUcUf4hdduLzkpBtwEO1ma40dmgR?=
+ =?us-ascii?Q?rtaDSozj6JparRrVPWL/gBOkAaDs+UyLbqVkwhdn6Ysx/+Bmj4T0LVu/G/CB?=
+ =?us-ascii?Q?6Y5+mHQHttXrypyMoNN4WuC3ASRhFwKyE+60mMGnhYCWcB1qYgEsSWADo7yj?=
+ =?us-ascii?Q?g0p5k5lR1v4VYzkPMWZ71PWRWbvkCxXTvFjKYaia2xVWYtzbKJIGu4FdrTNY?=
+ =?us-ascii?Q?nwAExde8ol97B4+KdjOKSj/cEcnaFR51WI7zrzracyMhpI/jXnDV98TtLABX?=
+ =?us-ascii?Q?OWc9nGkckn82ZXY5NqQwl7KWfKJW8pZePxrauu/skDyX7WFLQErqt3B4zpnA?=
+ =?us-ascii?Q?/R4S5nINvIRPTyoottA7U4MRuuXSI9iN7Xt6KKi+MLqKYqpqH066SdWS1IO1?=
+ =?us-ascii?Q?uuTHwaSG1f83+cF9eb5W9uOI2QluW/b0C+tLheE7NSEyos/Eri1kQpzP1Rzk?=
+ =?us-ascii?Q?wGyVSA86UdUznta4VjZP5MnxzJ6y1ibHMJ7T8yYQOyXGHVkQrVMUI36cPlla?=
+ =?us-ascii?Q?/iIuEjdymqtaI3Ihnmhgwq7vFjvkgNPaEWvO+xEUc3tf63m6dH5H30LJSo8E?=
+ =?us-ascii?Q?7oDdLYqOWExk/NeOunIonO00ZY6FWbOcZpveAT0W6R6nan6WTLYvoC65hQiy?=
+ =?us-ascii?Q?kY8CDUI1DCCQTk4uGBkgK3Sc27XbkwGXSoR2qHqvungSzGs2SMBZTJI7srWq?=
+ =?us-ascii?Q?8aS4ps+IvEOUULyRanM0tKHTGYCazR1jieJ7qEZd2IsWO7U83pxz0FPWs+TY?=
+ =?us-ascii?Q?ssMyXxGzsRn4rB7ApLjPjBECGqR1vUfhdXSbPlQP?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd884d7a-8461-42ae-8db8-08db01c77451
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41d01fba-adb8-43cc-1809-08db01c7778d
 X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8650.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2023 07:07:16.6866
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2023 07:07:22.0944
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gzNfXVmL1JlfS+l4paDaFV9VDCMSEnd84rSU8SAiMT3swFkqVjRRWfBlTqLAwY1ECoPf26OgTuMSCuv3nLoV+A==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ADEnG6cmfW7/1CMZ3PvWQyIbkbEwGxO7MuGFue3VQeXEHZ9mfNtZGK9EDKGqL83d2Oo6g6KNkdNIbrT1Jz8awQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8815
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -116,135 +116,270 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add binding for NXP BBNSM(Battery-Backed Non-Secure Module).
+The ON/OFF logic inside the BBNSM allows for connecting directly
+into a PMIC or other voltage regulator device. The module has an
+button input signal and a wakeup request input signal. It also
+has two interrupts (set_pwr_off_irq and set_pwr_on_irq) and an
+active-low PMIC enable (pmic_en_b) output.
+
+Add the power key support for the ON/OFF button function found in
+BBNSM module.
 
 Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
 ---
   - v2 changes:
-    - remove the redundant 'bindings' string
-    - add ref to rtc.yaml
-    - add start-year property
-    - rename 'regmap' to 'nxp,bbnsm-regmap' and add description & type define
-    - add header files including in the example and correct the indentation
+    - use device_property_read_u32() to read the property
+    - clean up the goto return, return directly
+    - sort the header file alphabetically
+    - rename the file to add 'nxp' prefix
 
-  -v3 changes:
-    - remove the 'nxp,bbnsm-regmap' property, get the regmap directly from the
-      parent node in rtc/pwrkey driver
+  - v3 changes:
+    - get the regmap directly from the parent node
 
   - v4 changes:
-    - update the compatible string to include the soc id as Rob suggested
+    - update the compatible string to align with binding file
+    - fix the device_property_read_u32 as stated in v2.
+    - add back the 'dev_warn' for 'dev_pm_set_wake_irq' return fail.
 ---
- .../devicetree/bindings/mfd/nxp,bbnsm.yaml    | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml
+ drivers/input/keyboard/Kconfig            |  11 ++
+ drivers/input/keyboard/Makefile           |   1 +
+ drivers/input/keyboard/nxp-bbnsm-pwrkey.c | 192 ++++++++++++++++++++++
+ 3 files changed, 204 insertions(+)
+ create mode 100644 drivers/input/keyboard/nxp-bbnsm-pwrkey.c
 
-diff --git a/Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml b/Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml
+diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
+index 84490915ae4d..43827e34f276 100644
+--- a/drivers/input/keyboard/Kconfig
++++ b/drivers/input/keyboard/Kconfig
+@@ -456,6 +456,17 @@ config KEYBOARD_SNVS_PWRKEY
+ 	  To compile this driver as a module, choose M here; the
+ 	  module will be called snvs_pwrkey.
+ 
++config KEYBOARD_BBNSM_PWRKEY
++	tristate "NXP BBNSM Power Key Driver"
++	depends on ARCH_MXC || COMPILE_TEST
++	depends on OF
++	help
++	  This is the bbnsm powerkey driver for the NXP i.MX application
++	  processors.
++
++	  To compile this driver as a module, choose M here; the
++	  module will be called bbnsm_pwrkey.
++
+ config KEYBOARD_IMX
+ 	tristate "IMX keypad support"
+ 	depends on ARCH_MXC || COMPILE_TEST
+diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
+index 5f67196bb2c1..e34dd65a34c3 100644
+--- a/drivers/input/keyboard/Makefile
++++ b/drivers/input/keyboard/Makefile
+@@ -13,6 +13,7 @@ obj-$(CONFIG_KEYBOARD_AMIGA)		+= amikbd.o
+ obj-$(CONFIG_KEYBOARD_APPLESPI)		+= applespi.o
+ obj-$(CONFIG_KEYBOARD_ATARI)		+= atakbd.o
+ obj-$(CONFIG_KEYBOARD_ATKBD)		+= atkbd.o
++obj-$(CONFIG_KEYBOARD_BBNSM_PWRKEY)	+= nxp-bbnsm-pwrkey.o
+ obj-$(CONFIG_KEYBOARD_BCM)		+= bcm-keypad.o
+ obj-$(CONFIG_KEYBOARD_CAP11XX)		+= cap11xx.o
+ obj-$(CONFIG_KEYBOARD_CLPS711X)		+= clps711x-keypad.o
+diff --git a/drivers/input/keyboard/nxp-bbnsm-pwrkey.c b/drivers/input/keyboard/nxp-bbnsm-pwrkey.c
 new file mode 100644
-index 000000000000..b1ade64a1554
+index 000000000000..154ce58b9d5a
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/nxp,bbnsm.yaml
-@@ -0,0 +1,101 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/nxp,bbnsm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/input/keyboard/nxp-bbnsm-pwrkey.c
+@@ -0,0 +1,192 @@
++// SPDX-License-Identifier: GPL-2.0+
++//
++// Copyright 2022 NXP.
 +
-+title: NXP Battery-Backed Non-Secure Module
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/init.h>
++#include <linux/input.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/jiffies.h>
++#include <linux/kernel.h>
++#include <linux/mfd/syscon.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++#include <linux/pm_wakeirq.h>
++#include <linux/regmap.h>
 +
-+maintainers:
-+  - Jacky Bai <ping.bai@nxp.com>
++#define BBNSM_CTRL		0x8
++#define BBNSM_INT_EN		0x10
++#define BBNSM_EVENTS		0x14
++#define BBNSM_PAD_CTRL		0x24
 +
-+description: |
-+  NXP BBNSM serves as non-volatile logic and storage for the system.
-+  it Intergrates RTC & ON/OFF control.
-+  The RTC can retain its state and continues counting even when the
-+  main chip is power down. A time alarm is generated once the most
-+  significant 32 bits of the real-time counter match the value in the
-+  Time Alarm register.
-+  The ON/OFF logic inside the BBNSM allows for connecting directly to
-+  a PMIC or other voltage regulator device. both smart PMIC mode and
-+  Dumb PMIC mode supported.
++#define BBNSM_BTN_PRESSED	BIT(7)
++#define BBNSM_PWR_ON		BIT(6)
++#define BBNSM_BTN_OFF		BIT(5)
++#define BBNSM_EMG_OFF		BIT(4)
++#define BBNSM_PWRKEY_EVENTS	(BBNSM_PWR_ON | BBNSM_BTN_OFF | BBNSM_EMG_OFF)
++#define BBNSM_DP_EN		BIT(24)
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - nxp,imx93-bbnsm
-+      - const: syscon
-+      - const: simple-mfd
++#define DEBOUNCE_TIME		30
++#define REPEAT_INTERVAL		60
 +
-+  reg:
-+    maxItems: 1
++struct bbnsm_pwrkey {
++	struct regmap *regmap;
++	int irq;
++	int keycode;
++	int keystate;  /* 1:pressed */
++	struct timer_list check_timer;
++	struct input_dev *input;
++};
 +
-+  rtc:
-+    type: object
-+    $ref: /schemas/rtc/rtc.yaml#
++static void bbnsm_pwrkey_check_for_events(struct timer_list *t)
++{
++	struct bbnsm_pwrkey *bbnsm = from_timer(bbnsm, t, check_timer);
++	struct input_dev *input = bbnsm->input;
++	u32 state;
 +
-+    properties:
-+      compatible:
-+        enum:
-+          - nxp,imx93-bbnsm-rtc
++	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &state);
 +
-+      interrupts:
-+        maxItems: 1
++	state = state & BBNSM_BTN_PRESSED ? 1 : 0;
 +
-+      start-year: true
++	/* only report new event if status changed */
++	if (state ^ bbnsm->keystate) {
++		bbnsm->keystate = state;
++		input_event(input, EV_KEY, bbnsm->keycode, state);
++		input_sync(input);
++		pm_relax(bbnsm->input->dev.parent);
++	}
 +
-+    required:
-+      - compatible
-+      - interrupts
++	/* repeat check if pressed long */
++	if (state) {
++		mod_timer(&bbnsm->check_timer,
++			  jiffies + msecs_to_jiffies(REPEAT_INTERVAL));
++	}
++}
 +
-+    additionalProperties: false
++static irqreturn_t bbnsm_pwrkey_interrupt(int irq, void *dev_id)
++{
++	struct platform_device *pdev = dev_id;
++	struct bbnsm_pwrkey *bbnsm = platform_get_drvdata(pdev);
++	struct input_dev *input = bbnsm->input;
++	u32 event;
 +
-+  pwrkey:
-+    type: object
-+    $ref: /schemas/input/input.yaml#
++	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &event);
++	if (event & BBNSM_BTN_OFF)
++		mod_timer(&bbnsm->check_timer, jiffies + msecs_to_jiffies(DEBOUNCE_TIME));
++	else
++		return IRQ_NONE;
 +
-+    properties:
-+      compatible:
-+        enum:
-+          - nxp,imx93-bbnsm-pwrkey
++	pm_wakeup_event(input->dev.parent, 0);
 +
-+      interrupts:
-+        maxItems: 1
++	/* clear PWR OFF */
++	regmap_write(bbnsm->regmap, BBNSM_EVENTS, BBNSM_BTN_OFF);
 +
-+      linux,code: true
++	return IRQ_HANDLED;
++}
 +
-+    required:
-+      - compatible
-+      - interrupts
++static void bbnsm_pwrkey_act(void *pdata)
++{
++	struct bbnsm_pwrkey *bbnsm = pdata;
 +
-+    additionalProperties: false
++	del_timer_sync(&bbnsm->check_timer);
++}
 +
-+required:
-+  - compatible
-+  - reg
-+  - rtc
-+  - pwrkey
++static int bbnsm_pwrkey_probe(struct platform_device *pdev)
++{
++	struct bbnsm_pwrkey *bbnsm;
++	struct input_dev *input;
++	struct device_node *np = pdev->dev.of_node;
++	int error;
 +
-+additionalProperties: false
++	bbnsm = devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
++	if (!bbnsm)
++		return -ENOMEM;
 +
-+examples:
-+  - |
-+    #include <dt-bindings/input/linux-event-codes.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
++	bbnsm->regmap = syscon_node_to_regmap(np->parent);
++	if (IS_ERR(bbnsm->regmap)) {
++		dev_err(&pdev->dev, "bbnsm pwerkey get regmap failed\n");
++		return PTR_ERR(bbnsm->regmap);
++	}
 +
-+    bbnsm: bbnsm@44440000 {
-+        compatible = "nxp,imx93-bbnsm", "syscon", "simple-mfd";
-+        reg = <0x44440000 0x10000>;
++	if (device_property_read_u32(&pdev->dev, "linux,code", &bbnsm->keycode)) {
++		bbnsm->keycode = KEY_POWER;
++		dev_warn(&pdev->dev, "KEY_POWER without setting in dts\n");
++	}
 +
-+        bbnsm_rtc: rtc {
-+            compatible = "nxp,imx93-bbnsm-rtc";
-+            interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+        };
++	bbnsm->irq = platform_get_irq(pdev, 0);
++	if (bbnsm->irq < 0)
++		return -EINVAL;
 +
-+        bbnsm_pwrkey: pwrkey {
-+            compatible = "nxp,imx93-bbnsm-pwrkey";
-+            interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+            linux,code = <KEY_POWER>;
-+        };
-+    };
++	/* config the BBNSM power related register */
++	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, BBNSM_DP_EN, BBNSM_DP_EN);
++
++	/* clear the unexpected interrupt before driver ready */
++	regmap_write_bits(bbnsm->regmap, BBNSM_EVENTS, BBNSM_PWRKEY_EVENTS, BBNSM_PWRKEY_EVENTS);
++
++	timer_setup(&bbnsm->check_timer, bbnsm_pwrkey_check_for_events, 0);
++
++	input = devm_input_allocate_device(&pdev->dev);
++	if (!input) {
++		dev_err(&pdev->dev, "failed to allocate the input device\n");
++		return -ENOMEM;
++	}
++
++	input->name = pdev->name;
++	input->phys = "bbnsm-pwrkey/input0";
++	input->id.bustype = BUS_HOST;
++
++	input_set_capability(input, EV_KEY, bbnsm->keycode);
++
++	/* input customer action to cancel release timer */
++	error = devm_add_action(&pdev->dev, bbnsm_pwrkey_act, bbnsm);
++	if (error) {
++		dev_err(&pdev->dev, "failed to register remove action\n");
++		return error;
++	}
++
++	bbnsm->input = input;
++	platform_set_drvdata(pdev, bbnsm);
++
++	error = devm_request_irq(&pdev->dev, bbnsm->irq, bbnsm_pwrkey_interrupt,
++			       IRQF_SHARED, pdev->name, pdev);
++	if (error) {
++		dev_err(&pdev->dev, "interrupt not available.\n");
++		return error;
++	}
++
++	error = input_register_device(input);
++	if (error < 0) {
++		dev_err(&pdev->dev, "failed to register input device\n");
++		return error;
++	}
++
++	device_init_wakeup(&pdev->dev, true);
++	error = dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
++	if (error)
++		dev_warn(&pdev->dev, "irq wake enable failed.\n");
++
++	return 0;
++}
++
++static const struct of_device_id bbnsm_pwrkey_ids[] = {
++	{ .compatible = "nxp,imx93-bbnsm-pwrkey" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, bbnsm_pwrkey_ids);
++
++static struct platform_driver bbnsm_pwrkey_driver = {
++	.driver = {
++		.name = "bbnsm_pwrkey",
++		.of_match_table = bbnsm_pwrkey_ids,
++	},
++	.probe = bbnsm_pwrkey_probe,
++};
++module_platform_driver(bbnsm_pwrkey_driver);
++
++MODULE_AUTHOR("Jacky Bai <ping.bai@nxp.com>");
++MODULE_DESCRIPTION("NXP bbnsm power key Driver");
++MODULE_LICENSE("GPL");
 -- 
 2.37.1
 
