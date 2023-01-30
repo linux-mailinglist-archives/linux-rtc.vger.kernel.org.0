@@ -2,205 +2,237 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4769667FEC9
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 Jan 2023 13:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4B2680E91
+	for <lists+linux-rtc@lfdr.de>; Mon, 30 Jan 2023 14:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjA2MF6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 29 Jan 2023 07:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S229694AbjA3NKt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 30 Jan 2023 08:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234913AbjA2MF4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 29 Jan 2023 07:05:56 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DA623647;
-        Sun, 29 Jan 2023 04:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1674993893; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yR258zPvf0vX2EOy31knRww44w8mPVrFUXCg6iYmgXQ=;
-        b=bJ2JWZrwbRM6k6sF2xEwFcNaxI+xfs0me9P4SYjPztYSJB13ERuqOAOeQvQAZOkjFid//x
-        gLBzJcp73MpZRJV9/UAlQ1ga7gLsidJ6DOWgbHGfnaZ3VjD0cE7Gh9J7hQoRWMJA5c7+Tl
-        jr4Z5tovxaVH3brO3Hrxx/v2uO2ORAc=
-From:   Paul Cercueil <paul@crapouillou.net>
+        with ESMTP id S235575AbjA3NKt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Jan 2023 08:10:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED29E35AF;
+        Mon, 30 Jan 2023 05:10:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 741CFB810BC;
+        Mon, 30 Jan 2023 13:10:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2FCC433D2;
+        Mon, 30 Jan 2023 13:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675084228;
+        bh=xdPT6u7z72VUkN+u7Fl/ijfgw0xiO7Ouzrg9nJ5fKgY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jhycMSudBNl+EATBAaAfeSIKby9dK2iIZFGaSBWzJKU0B6LQ+FD9hulTzENKmqWle
+         DIR4N5GqyGj7LxDeKeCMKKRh+055UIl83v2jJI4HrlD7jrJF62FjFcdFd/0n8P+UpL
+         Wtamkg/aiiYWI+FrQsjmPE6+hLz0s0qLdCmq/QOmXVi/6OjKjXe9iPaHqRZbSZBvLd
+         no5tK8MESmUnkoz0MRSv3YwaYRVaErLnTMBmUDTs75+0jJxFcyAGCNmEHMb4bI2bwH
+         Z/rDk7p9Q0rn8qpsv/6e+pxpA/5yVloV/qwIfLQfCohRPrlz1QLXn3swynAj4u+A00
+         q7JlXmdUK8+uQ==
+From:   Arnd Bergmann <arnd@kernel.org>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        list@opendingux.net, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 4/4] rtc: jz4740: Register clock provider for the CLK32K pin
-Date:   Sun, 29 Jan 2023 12:04:42 +0000
-Message-Id: <20230129120442.22858-5-paul@crapouillou.net>
-In-Reply-To: <20230129120442.22858-1-paul@crapouillou.net>
-References: <20230129120442.22858-1-paul@crapouillou.net>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: moxart: convert to gpio descriptors
+Date:   Mon, 30 Jan 2023 14:10:20 +0100
+Message-Id: <20230130131024.695212-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On JZ4770 and JZ4780, the CLK32K pin is configurable. By default, it is
-configured as a GPIO in input mode, and its value can be read through
-GPIO PD14.
+From: Arnd Bergmann <arnd@arndb.de>
 
-With this change, clients can now request the 32 kHz clock on the CLK32K
-pin, through Device Tree. This clock is simply a pass-through of the
-input oscillator's clock with enable/disable operations.
+The conversion is fairly simple as the driver only has DT based
+probing, and all the gpio calls have a direct replacement.
 
-This will permit the WiFi/Bluetooth chip to work on the MIPS CI20 board,
-which does source one of its clocks from the CLK32K pin.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-v3: - Use dev_err_probe()
-    - Use __clk_hw_get() to get a pointer to the parent clock, instead
-      of doing it by name.
-    - Add Kconfig dependency on CONFIG_COMMON_CLK
-    - Register CLK32K clock if the #clock-cells device property is
-      present, instead of doing it based on the compatible string
----
- drivers/rtc/Kconfig      |  2 +-
- drivers/rtc/rtc-jz4740.c | 56 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-moxart.c | 100 +++++++++++++++------------------------
+ 1 file changed, 38 insertions(+), 62 deletions(-)
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 677d2601d305..d2b6d20a6745 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1690,7 +1690,7 @@ config RTC_DRV_MPC5121
- config RTC_DRV_JZ4740
- 	tristate "Ingenic JZ4740 SoC"
- 	depends on MIPS || COMPILE_TEST
--	depends on OF
-+	depends on OF && COMMON_CLK
- 	help
- 	  If you say yes here you get support for the Ingenic JZ47xx SoCs RTC
- 	  controllers.
-diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index 9ffa764aa71e..59d279e3e6f5 100644
---- a/drivers/rtc/rtc-jz4740.c
-+++ b/drivers/rtc/rtc-jz4740.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/clk-provider.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
-@@ -13,6 +14,7 @@
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_wakeirq.h>
-+#include <linux/property.h>
- #include <linux/reboot.h>
+diff --git a/drivers/rtc/rtc-moxart.c b/drivers/rtc/rtc-moxart.c
+index 6b24ac9e1cfa..6537351c5dad 100644
+--- a/drivers/rtc/rtc-moxart.c
++++ b/drivers/rtc/rtc-moxart.c
+@@ -16,8 +16,8 @@
  #include <linux/rtc.h>
- #include <linux/slab.h>
-@@ -26,6 +28,7 @@
- #define JZ_REG_RTC_WAKEUP_FILTER	0x24
- #define JZ_REG_RTC_RESET_COUNTER	0x28
- #define JZ_REG_RTC_SCRATCHPAD	0x34
-+#define JZ_REG_RTC_CKPCR	0x40
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+-#include <linux/gpio.h>
+-#include <linux/of_gpio.h>
++#include <linux/gpio/consumer.h>
++#include <linux/of.h>
  
- /* The following are present on the jz4780 */
- #define JZ_REG_RTC_WENR	0x3C
-@@ -45,6 +48,9 @@
- #define JZ_RTC_WAKEUP_FILTER_MASK	0x0000FFE0
- #define JZ_RTC_RESET_COUNTER_MASK	0x00000FE0
- 
-+#define JZ_RTC_CKPCR_CK32PULL_DIS	BIT(4)
-+#define JZ_RTC_CKPCR_CK32CTL_EN		(BIT(2) | BIT(1))
-+
- enum jz4740_rtc_type {
- 	ID_JZ4740,
- 	ID_JZ4760,
-@@ -57,6 +63,8 @@ struct jz4740_rtc {
- 
+ #define GPIO_RTC_RESERVED			0x0C
+ #define GPIO_RTC_DATA_SET			0x10
+@@ -55,7 +55,7 @@
+ struct moxart_rtc {
  	struct rtc_device *rtc;
- 
-+	struct clk_hw clk32k;
-+
- 	spinlock_t lock;
+ 	spinlock_t rtc_lock;
+-	int gpio_data, gpio_sclk, gpio_reset;
++	struct gpio_desc *gpio_data, *gpio_sclk, *gpio_reset;
  };
  
-@@ -254,6 +262,7 @@ static void jz4740_rtc_power_off(void)
- static const struct of_device_id jz4740_rtc_of_match[] = {
- 	{ .compatible = "ingenic,jz4740-rtc", .data = (void *)ID_JZ4740 },
- 	{ .compatible = "ingenic,jz4760-rtc", .data = (void *)ID_JZ4760 },
-+	{ .compatible = "ingenic,jz4770-rtc", .data = (void *)ID_JZ4780 },
- 	{ .compatible = "ingenic,jz4780-rtc", .data = (void *)ID_JZ4780 },
- 	{},
- };
-@@ -295,6 +304,38 @@ static void jz4740_rtc_set_wakeup_params(struct jz4740_rtc *rtc,
- 	jz4740_rtc_reg_write(rtc, JZ_REG_RTC_RESET_COUNTER, reset_ticks);
- }
+ static int day_of_year[12] =	{ 0, 31, 59, 90, 120, 151, 181,
+@@ -67,10 +67,10 @@ static void moxart_rtc_write_byte(struct device *dev, u8 data)
+ 	int i;
  
-+static int jz4740_rtc_clk32k_enable(struct clk_hw *hw)
-+{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
-+
-+	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_CKPCR,
-+				    JZ_RTC_CKPCR_CK32PULL_DIS |
-+				    JZ_RTC_CKPCR_CK32CTL_EN);
-+}
-+
-+static void jz4740_rtc_clk32k_disable(struct clk_hw *hw)
-+{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
-+
-+	jz4740_rtc_reg_write(rtc, JZ_REG_RTC_CKPCR, 0);
-+}
-+
-+static int jz4740_rtc_clk32k_is_enabled(struct clk_hw *hw)
-+{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
-+	u32 ckpcr;
-+
-+	ckpcr = jz4740_rtc_reg_read(rtc, JZ_REG_RTC_CKPCR);
-+
-+	return !!(ckpcr & JZ_RTC_CKPCR_CK32CTL_EN);
-+}
-+
-+static const struct clk_ops jz4740_rtc_clk32k_ops = {
-+	.enable = jz4740_rtc_clk32k_enable,
-+	.disable = jz4740_rtc_clk32k_disable,
-+	.is_enabled = jz4740_rtc_clk32k_is_enabled,
-+};
-+
- static int jz4740_rtc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -364,6 +405,21 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 			dev_warn(dev, "Poweroff handler already present!\n");
+ 	for (i = 0; i < 8; i++, data >>= 1) {
+-		gpio_set_value(moxart_rtc->gpio_sclk, 0);
+-		gpio_set_value(moxart_rtc->gpio_data, ((data & 1) == 1));
++		gpiod_set_value(moxart_rtc->gpio_sclk, 0);
++		gpiod_set_value(moxart_rtc->gpio_data, ((data & 1) == 1));
+ 		udelay(GPIO_RTC_DELAY_TIME);
+-		gpio_set_value(moxart_rtc->gpio_sclk, 1);
++		gpiod_set_value(moxart_rtc->gpio_sclk, 1);
+ 		udelay(GPIO_RTC_DELAY_TIME);
  	}
- 
-+	if (device_property_present(dev, "#clock-cells")) {
-+		rtc->clk32k.init = CLK_HW_INIT_HW("clk32k", __clk_get_hw(clk),
-+						  &jz4740_rtc_clk32k_ops, 0);
-+
-+		ret = devm_clk_hw_register(dev, &rtc->clk32k);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					     "Unable to register clk32k clock\n");
-+
-+		ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, &rtc->clk32k);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					     "Unable to register clk32k clock provider\n");
-+	}
-+
- 	return 0;
  }
+@@ -82,11 +82,11 @@ static u8 moxart_rtc_read_byte(struct device *dev)
+ 	u8 data = 0;
  
+ 	for (i = 0; i < 8; i++) {
+-		gpio_set_value(moxart_rtc->gpio_sclk, 0);
++		gpiod_set_value(moxart_rtc->gpio_sclk, 0);
+ 		udelay(GPIO_RTC_DELAY_TIME);
+-		gpio_set_value(moxart_rtc->gpio_sclk, 1);
++		gpiod_set_value(moxart_rtc->gpio_sclk, 1);
+ 		udelay(GPIO_RTC_DELAY_TIME);
+-		if (gpio_get_value(moxart_rtc->gpio_data))
++		if (gpiod_get_value(moxart_rtc->gpio_data))
+ 			data |= (1 << i);
+ 		udelay(GPIO_RTC_DELAY_TIME);
+ 	}
+@@ -101,15 +101,15 @@ static u8 moxart_rtc_read_register(struct device *dev, u8 cmd)
+ 
+ 	local_irq_save(flags);
+ 
+-	gpio_direction_output(moxart_rtc->gpio_data, 0);
+-	gpio_set_value(moxart_rtc->gpio_reset, 1);
++	gpiod_direction_output(moxart_rtc->gpio_data, 0);
++	gpiod_set_value(moxart_rtc->gpio_reset, 1);
+ 	udelay(GPIO_RTC_DELAY_TIME);
+ 	moxart_rtc_write_byte(dev, cmd);
+-	gpio_direction_input(moxart_rtc->gpio_data);
++	gpiod_direction_input(moxart_rtc->gpio_data);
+ 	udelay(GPIO_RTC_DELAY_TIME);
+ 	data = moxart_rtc_read_byte(dev);
+-	gpio_set_value(moxart_rtc->gpio_sclk, 0);
+-	gpio_set_value(moxart_rtc->gpio_reset, 0);
++	gpiod_set_value(moxart_rtc->gpio_sclk, 0);
++	gpiod_set_value(moxart_rtc->gpio_reset, 0);
+ 	udelay(GPIO_RTC_DELAY_TIME);
+ 
+ 	local_irq_restore(flags);
+@@ -124,13 +124,13 @@ static void moxart_rtc_write_register(struct device *dev, u8 cmd, u8 data)
+ 
+ 	local_irq_save(flags);
+ 
+-	gpio_direction_output(moxart_rtc->gpio_data, 0);
+-	gpio_set_value(moxart_rtc->gpio_reset, 1);
++	gpiod_direction_output(moxart_rtc->gpio_data, 0);
++	gpiod_set_value(moxart_rtc->gpio_reset, 1);
+ 	udelay(GPIO_RTC_DELAY_TIME);
+ 	moxart_rtc_write_byte(dev, cmd);
+ 	moxart_rtc_write_byte(dev, data);
+-	gpio_set_value(moxart_rtc->gpio_sclk, 0);
+-	gpio_set_value(moxart_rtc->gpio_reset, 0);
++	gpiod_set_value(moxart_rtc->gpio_sclk, 0);
++	gpiod_set_value(moxart_rtc->gpio_reset, 0);
+ 	udelay(GPIO_RTC_DELAY_TIME);
+ 
+ 	local_irq_restore(flags);
+@@ -241,59 +241,35 @@ static const struct rtc_class_ops moxart_rtc_ops = {
+ static int moxart_rtc_probe(struct platform_device *pdev)
+ {
+ 	struct moxart_rtc *moxart_rtc;
+-	int ret = 0;
+ 
+ 	moxart_rtc = devm_kzalloc(&pdev->dev, sizeof(*moxart_rtc), GFP_KERNEL);
+ 	if (!moxart_rtc)
+ 		return -ENOMEM;
+ 
+-	moxart_rtc->gpio_data = of_get_named_gpio(pdev->dev.of_node,
+-						  "gpio-rtc-data", 0);
+-	if (!gpio_is_valid(moxart_rtc->gpio_data)) {
+-		dev_err(&pdev->dev, "invalid gpio (data): %d\n",
+-			moxart_rtc->gpio_data);
+-		return moxart_rtc->gpio_data;
+-	}
+-
+-	moxart_rtc->gpio_sclk = of_get_named_gpio(pdev->dev.of_node,
+-						  "gpio-rtc-sclk", 0);
+-	if (!gpio_is_valid(moxart_rtc->gpio_sclk)) {
+-		dev_err(&pdev->dev, "invalid gpio (sclk): %d\n",
+-			moxart_rtc->gpio_sclk);
+-		return moxart_rtc->gpio_sclk;
+-	}
+-
+-	moxart_rtc->gpio_reset = of_get_named_gpio(pdev->dev.of_node,
+-						   "gpio-rtc-reset", 0);
+-	if (!gpio_is_valid(moxart_rtc->gpio_reset)) {
+-		dev_err(&pdev->dev, "invalid gpio (reset): %d\n",
+-			moxart_rtc->gpio_reset);
+-		return moxart_rtc->gpio_reset;
+-	}
++	moxart_rtc->gpio_data = devm_gpiod_get(&pdev->dev, "gpio-rtc-data",
++					       GPIOD_IN);
++	if (IS_ERR(moxart_rtc->gpio_data))
++		return dev_err_probe(&pdev->dev,
++				     PTR_ERR(moxart_rtc->gpio_data),
++				     "invalid gpio (data)");
++
++	moxart_rtc->gpio_sclk = devm_gpiod_get(&pdev->dev, "gpio-rtc-sclk",
++						GPIOD_OUT_LOW);
++	if (IS_ERR(moxart_rtc->gpio_sclk))
++		return dev_err_probe(&pdev->dev,
++				     PTR_ERR(moxart_rtc->gpio_sclk),
++				    "invalid gpio (sclk)");
++
++	moxart_rtc->gpio_reset = devm_gpiod_get(&pdev->dev, "gpio-rtc-reset",
++						GPIOD_OUT_LOW);
++	if (IS_ERR(moxart_rtc->gpio_reset))
++		return dev_err_probe(&pdev->dev,
++				     PTR_ERR(moxart_rtc->gpio_reset),
++				     "invalid gpio (reset)\n");
+ 
+ 	spin_lock_init(&moxart_rtc->rtc_lock);
+ 	platform_set_drvdata(pdev, moxart_rtc);
+ 
+-	ret = devm_gpio_request(&pdev->dev, moxart_rtc->gpio_data, "rtc_data");
+-	if (ret) {
+-		dev_err(&pdev->dev, "can't get rtc_data gpio\n");
+-		return ret;
+-	}
+-
+-	ret = devm_gpio_request_one(&pdev->dev, moxart_rtc->gpio_sclk,
+-				    GPIOF_DIR_OUT, "rtc_sclk");
+-	if (ret) {
+-		dev_err(&pdev->dev, "can't get rtc_sclk gpio\n");
+-		return ret;
+-	}
+-
+-	ret = devm_gpio_request_one(&pdev->dev, moxart_rtc->gpio_reset,
+-				    GPIOF_DIR_OUT, "rtc_reset");
+-	if (ret) {
+-		dev_err(&pdev->dev, "can't get rtc_reset gpio\n");
+-		return ret;
+-	}
+-
+ 	moxart_rtc->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
+ 						   &moxart_rtc_ops,
+ 						   THIS_MODULE);
 -- 
 2.39.0
 
