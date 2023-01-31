@@ -2,175 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29437682D22
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Jan 2023 14:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF8B683562
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Jan 2023 19:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbjAaNAI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 31 Jan 2023 08:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
+        id S231799AbjAaSdp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 31 Jan 2023 13:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjAaNAH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Jan 2023 08:00:07 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8854C0D1;
-        Tue, 31 Jan 2023 04:59:53 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id p26so30123595ejx.13;
-        Tue, 31 Jan 2023 04:59:53 -0800 (PST)
+        with ESMTP id S231843AbjAaSd0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Jan 2023 13:33:26 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D79359765;
+        Tue, 31 Jan 2023 10:32:27 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id t7so6749112wrp.5;
+        Tue, 31 Jan 2023 10:32:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tmFGl6w1T2X4Iy8+4eFf49j5NvCgFbPb0EL0ASIAaVI=;
-        b=eWXVzLfbpi3n2E+VS5aBQxpuKaAQTApd9ALBvi4nr3xCIZcR2372Q+JwCNDnh8SJ3F
-         FtiSeLIvLjfs55hR5TQ2QKb/lnp55d3hs73tb14pMvvWWJzgNZOIQfLJF8m0l+HQNglb
-         OWamgw70Ge/2LtyVYYjNGUb5CbnBsPzyLAcNDX4WSKckRQ36F4NOCLRJUxs3KpXkZ88g
-         QeVy1RS7kpdxNKzOcHZX00s//yteeMaKcSBXqQSveGB7mtqCEvxqd6Ai+CbvHFz4rRAj
-         SlkrOVQpAf8kL8EV8676ZX+jWcFiQoa73DoCueWYXzTTKNGatxGvRfzCs89y+rkFtCnq
-         9zyA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pmfwiug2vCvfWKAJuMbDLrLuqCSQQyxwRBO0nWickj4=;
+        b=ZiUQqG4kL6Wt8nv+2ejxhjtEQ4u/bPZs3rh6zHg1QNVc9Gz8RBF86Um1FZJnEY3biM
+         lcqxYN+dr8OWKArxQlrYvw83rvabKcyIeC8cTNkdNdS3+HNPTrGrEjKaYIGso3BNwU5G
+         nxOA657lUVZ5xF+fbEXrIEvcepOhRA22wQlu8BAE5hXlTCw6hQLcUBe9NlvXRz9Ea+8D
+         9b/8smWHdvdsWEcOYWP+kgFK5/enyNU/yZGlI6mtkVSc+v9iV8cA0FX7BONOKAuoXDrI
+         r5UHAHKKvNwcIEO1zaj0oWDlEzBOV54Tu/XXRafufNjnDtoMZE8gzo+CCvhS7RB/HBWB
+         TU0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tmFGl6w1T2X4Iy8+4eFf49j5NvCgFbPb0EL0ASIAaVI=;
-        b=xHL/0p8PnH762Luc2NYQYLKqRG+Vj4UcmGvWTDr1xCBbVgieNAcni6+7j8sR/Mo+ey
-         44sgkEjFdpSBhc57KFzmqL6TEIZhxvn70RDBiIW9bzRd5PpY27flBsFnMbpbNtfMLrpH
-         N+EVvBkgf8HCbkF3hq6P5E8G9RQvEK3IhcNXL+ke/jNYUykFGexTgrmJkyGr4to+UfZO
-         en3EUBVLM0d4FsLqJxnog5r9nK/EvS2DliWufHAm2FC1k2kdgKrOskg9UFGe/zRsD4sr
-         gKT2fcFkMyV+FppOtbmUanXrKyIdv2v6xTMBuQ5EIP/Yc5heZQYSsaaS/IGCHdqT/6aE
-         r4kA==
-X-Gm-Message-State: AO0yUKXY82r0AD68cwOMfj3mZS8K4/+PVdB0oNKf0SXwYTzI/eqhxQPg
-        HMHY11s26OMq71hUKleDVdV9Ugg6ok4AK5Ub77+1lcXXr027jAUm
-X-Google-Smtp-Source: AK7set970BlocwV52n44djBoL/Js4qvYthDu+af0gSiKo5LxU6fJE+DM2hEBIFVxOCFGQjMs5MfdOHs1/I3SDYkdMcc=
-X-Received: by 2002:a17:906:4950:b0:88a:b6ca:7d3a with SMTP id
- f16-20020a170906495000b0088ab6ca7d3amr1315292ejt.1.1675169991517; Tue, 31 Jan
- 2023 04:59:51 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1673227292.git.zhoubinbin@loongson.cn> <Y88VIXerF5Wk/9kj@mail.local>
-In-Reply-To: <Y88VIXerF5Wk/9kj@mail.local>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Tue, 31 Jan 2023 20:59:37 +0800
-Message-ID: <CAMpQs4+8m0r98eGMHO7ktS2_AuNCA_u3Yk1q06i99TdbVZJ_Cg@mail.gmail.com>
-Subject: Re: [PATCH V2 0/7] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        bh=pmfwiug2vCvfWKAJuMbDLrLuqCSQQyxwRBO0nWickj4=;
+        b=WRl47RXIHxklXtzCzTC9KL+J40tEPp/ki3bFCgc7XxLk/wMugzndQ5WiiDqr+WaczE
+         tz3qehDeawTFQrJQFm2gN1QZZ0pnxguV4MpVApqz8vdDDpImjONq4EE6fh9PSFiYIBr9
+         3CA+0CxUJMihz6NnLFV7y3Ewm+llspNOk3TtcUQYguqIRnXWrEeMyU/21KpkY+OR5oP8
+         W79DCFkR4NTfWrmFnMGAD0bVguNXDc2nh3l/SCfCIZhcA9tz+1eitiddYcoLDhCmWM70
+         rKifmO/j5VGCiICNMWb/pAjsIaCapSv572gOPen9WWFUDmwfMUmQa5WQ49+86KuK5f0j
+         HerQ==
+X-Gm-Message-State: AO0yUKXHlqH19Klj5gHDBgAB5CziP/yj+BVyS7VlulG+0e84xkJO3v+W
+        +U5iB7cs6Cbb8S+qMVsfSaAUuoMm4Bw=
+X-Google-Smtp-Source: AK7set/plZAoM6/JpYaTJheKuSus0+0knEK9IiWHLuL87LafAun7GTiLX51w9N9IBAPTbVsXDXGI2A==
+X-Received: by 2002:a5d:64e6:0:b0:2bf:ba69:71ef with SMTP id g6-20020a5d64e6000000b002bfba6971efmr16984wri.1.1675189944538;
+        Tue, 31 Jan 2023 10:32:24 -0800 (PST)
+Received: from localhost.localdomain ([2a02:ab88:368f:2080:5d6e:322:57b6:5f03])
+        by smtp.googlemail.com with ESMTPSA id c7-20020adffb47000000b002ba2646fd30sm17307311wrs.36.2023.01.31.10.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 10:32:24 -0800 (PST)
+From:   David Virag <virag.david003@gmail.com>
+Cc:     David Virag <virag.david003@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lee Jones <lee@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
-        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>, zhzhl555@gmail.com,
-        Kelvin Cheung <keguang.zhang@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH 0/2] Remove SEC S5M MFDs with no compatibles
+Date:   Tue, 31 Jan 2023 19:30:05 +0100
+Message-Id: <20230131183008.4451-1-virag.david003@gmail.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Kelvin:
+The S5M8751 and S5M8763 MFD PMICs have no compatibles, and board file
+support for them was removed, resulting in essentially no way for these
+chips to be used anymore (unless they get dt compatibles).
+They seemingly have never been in any board files upstream and I only
+found references to the SM8751 being on the SMDK6450 board (which has
+been unsupported for many years now) in a downstream Samsung Galaxy S2
+kernel tree.
 
-Excuse me.
-I am submitting the Loongson-2K/LS7A RTC driver and Alexandre would
-like me to merge the ls1x rtc driver in parallel.
-Unfortunately I found out that the loongson-1 does not yet support DT
-and would like to ask if you have any plans to support DT?
+The patches should be applied in order.
 
-I think this is the prerequisite for the merge.
+David Virag (2):
+  mfd: sec: Remove PMICs without compatibles
+  rtc: s5m: Drop S5M8763 support
 
-Regards.
+ drivers/mfd/sec-core.c              | 46 ---------------
+ drivers/mfd/sec-irq.c               | 89 ----------------------------
+ drivers/rtc/rtc-s5m.c               | 82 +-------------------------
+ include/linux/mfd/samsung/core.h    |  2 -
+ include/linux/mfd/samsung/irq.h     | 50 ----------------
+ include/linux/mfd/samsung/s5m8763.h | 90 -----------------------------
+ 6 files changed, 3 insertions(+), 356 deletions(-)
+ delete mode 100644 include/linux/mfd/samsung/s5m8763.h
 
+-- 
+2.39.0
 
-Binbin
-
-
-
-
-On Tue, Jan 24, 2023 at 7:24 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 09/01/2023 09:35:10+0800, Binbin Zhou wrote:
-> > Hi all:
-> >
-> > The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
-> > released five versions of patchset before, and all related mail records
-> > are shown below if you are interested:
-> >
-> > https://lore.kernel.org/all/?q=ls2x-rtc
-> >
-> > In this series of patches, based on the code above, I have added the
-> > following support:
-> >
-> > 1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
-> >    by default under LoongArch architecture;
-> > 2. Add rtc alarm/walarm related functions.
-> >
-> > I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
-> > and Loongson-2K0500.
-> >
-> > BTW:
-> > There have been discussions about merging the rtc drivers of ls1x and
-> > ls2x, but the following reasons made the merger difficult to achieve:
-> >
-> > 1. ls1x does not support ACPI, for it is only on MIPS-based system;
->
-> This is not a good justification, you have to support both in your
-> driver anyway, as shown by your CONFIG_ACPI ifdefery.
->
-> > 2. ls1x does not support alarm function.
->
-> It is just a matter of clearing a single bit, this is not difficult at
-> all.
->
-> >
-> > Thanks.
-> >
-> > -------
-> > Changes since v1:
-> > 1. Rebased on top of latest loongarch-next;
-> > 2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
-> > errors when the driver gets the IRQ number, Thanks to Qing Zhang for
-> > testing;
-> > 3. Remove some inexact CONFIG_ACPI.
-> >
-> > Binbin Zhou (4):
-> >   rtc: Add support for the Loongson-2K/LS7A RTC
-> >   LoongArch: Enable LS2X RTC in loongson3_defconfig
-> >   MIPS: Loongson64: DTS: Add RTC support to LS7A
-> >   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
-> >
-> > WANG Xuerui (3):
-> >   dt-bindings: rtc: Add Loongson LS2X RTC support
-> >   MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
-> >   MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
-> >
-> >  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
-> >  arch/loongarch/configs/loongson3_defconfig    |   1 +
-> >  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
-> >  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
-> >  arch/mips/configs/loongson2k_defconfig        |   1 +
-> >  arch/mips/configs/loongson3_defconfig         |   1 +
-> >  drivers/rtc/Kconfig                           |  11 +
-> >  drivers/rtc/Makefile                          |   1 +
-> >  drivers/rtc/rtc-ls2x.c                        | 379 ++++++++++++++++++
-> >  9 files changed, 410 insertions(+)
-> >  create mode 100644 drivers/rtc/rtc-ls2x.c
-> >
-> > --
-> > 2.31.1
-> >
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
