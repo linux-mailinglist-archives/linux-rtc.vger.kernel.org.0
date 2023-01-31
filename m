@@ -2,65 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F627681DD1
-	for <lists+linux-rtc@lfdr.de>; Mon, 30 Jan 2023 23:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED4168263E
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Jan 2023 09:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjA3WMF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 30 Jan 2023 17:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S230152AbjAaIUG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 31 Jan 2023 03:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjA3WMB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Jan 2023 17:12:01 -0500
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081C83B0DB;
-        Mon, 30 Jan 2023 14:11:58 -0800 (PST)
-Received: by mail-oo1-f48.google.com with SMTP id i11-20020a056820012b00b00517518d79f6so638957ood.10;
-        Mon, 30 Jan 2023 14:11:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dWJ05yhc/QoYhGwjtBStJIcXLe5TjSNLXFeusdsihHg=;
-        b=PolgQlT2OFSmEkWhXl1LMQ9Dr9C5/9hW04sjACVQKiX4a/Kd+KGIUtjNoycqiaICqg
-         6G9W47J5lMVvUhwIxvTgTpcIOaAFdtlHhBe6gZbcQk9o5SzsoYZAp/DG1eeJ6uhsa8VO
-         +mKylTM2duNUY0kT3sGsk4V6Tv8aPeosBVWRGvA59Ac1jeEFU6TAmoHwtzAtVSzIwTGM
-         pFG9SeBViG5uoXtnRYmEDwrvSZKW8zN7mn1Ji2cKy3aOWaNj/hxPsKc57E2zJMZJ5vep
-         k2oYg0TS8daNgRc7QuSmI+djG65YSjxMs+GWpMcBlM9ru2hAKfctB8El4J27/Dst8vz2
-         vsuQ==
-X-Gm-Message-State: AO0yUKWDUVigRJHOWGlnBGLX/qHBDM/RVX9juNK2/Tg/zquEPF0cIngE
-        NjWGB19DfzKpAzqZVqxVj1LbYhjb2g==
-X-Google-Smtp-Source: AK7set/YAH3TEUhitOrmZxOxRKiEb2e6U2zBS7JTANOg3qFnJ89fkAqhM0gR0HuIkDCGafJlzcSxRw==
-X-Received: by 2002:a4a:c884:0:b0:517:7b89:b8d3 with SMTP id t4-20020a4ac884000000b005177b89b8d3mr2657984ooq.6.1675116717033;
-        Mon, 30 Jan 2023 14:11:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o22-20020a4ae596000000b004f269f9b8f3sm5441483oov.25.2023.01.30.14.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 14:11:56 -0800 (PST)
-Received: (nullmailer pid 3618211 invoked by uid 1000);
-        Mon, 30 Jan 2023 22:11:55 -0000
-Date:   Mon, 30 Jan 2023 16:11:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, list@opendingux.net,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: rtc: Add #clock-cells property
-Message-ID: <167511671553.3618148.6225023459111985094.robh@kernel.org>
-References: <20230129120442.22858-1-paul@crapouillou.net>
- <20230129120442.22858-2-paul@crapouillou.net>
+        with ESMTP id S229546AbjAaIUF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Jan 2023 03:20:05 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A67BEB64
+        for <linux-rtc@vger.kernel.org>; Tue, 31 Jan 2023 00:20:04 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pMls2-0007NV-3d; Tue, 31 Jan 2023 09:20:02 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:29f7:a2fc:d3f6:7550])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 421F4169B6A;
+        Tue, 31 Jan 2023 08:20:01 +0000 (UTC)
+Date:   Tue, 31 Jan 2023 09:19:55 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-rtc@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        kernel@pengutronix.de, Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH RESEND 0/2] rtc: rv8803 patches
+Message-ID: <20230131081955.ke2larva6ftm5v4j@pengutronix.de>
+References: <20221123095527.2771434-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gkiyxll5cdmehrgy"
 Content-Disposition: inline
-In-Reply-To: <20230129120442.22858-2-paul@crapouillou.net>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221123095527.2771434-1-s.hauer@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,23 +52,75 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
-On Sun, 29 Jan 2023 12:04:39 +0000, Paul Cercueil wrote:
-> The RTC in the JZ4770 is compatible with the JZ4760, but has an extra
-> register that permits to configure the behaviour of the CLK32K pin. The
-> same goes for the RTC in the JZ4780.
-> 
-> With this change, the RTC node is now also a clock provider on these
-> SoCs, so a #clock-cells property is added.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> ---
->  v2: - add constraint on which SoCs can have the #clock-cells property
->      - add JZ4780 example which has a #clock-cells
->  v3: Don't break ABI anymore.
-> ---
->  .../devicetree/bindings/rtc/ingenic,rtc.yaml  | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
+--gkiyxll5cdmehrgy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Hello Alexandre,
+
+On 23.11.2022 10:55:25, Sascha Hauer wrote:
+> This series has the remainder of
+> https://lore.kernel.org/all/20220426071056.1187235-1-s.hauer@pengutronix.=
+de/
+> which was partly applied.
+>=20
+> Alexandre,
+>=20
+> Last time this series was send you asked if this series fixes a problem
+> we've really seen to which Ahmad answered:
+>=20
+> > The kernel message
+> >=20
+> >   rtc rtc0: invalid alarm value: 2020-3-27 7:82:0
+> >=20
+> > listed in the commit message is something I actually ran into. There
+> > was no v2f set then. The customer has also variously observed bit flips
+> > independently of v2f: During EMC testing, electrostatic discharge at de=
+veloper
+> > desks and even in the field: Suspected causes were lightning strikes in=
+ the
+> > vicinity and the switching of larger inductive loads.
+> > They're very paranoid of logging invalid timestamps, so we'll keep the =
+patch
+> > anyhow at our side, but I think it is generally useful as well: If we c=
+an't
+> > set an invalid alarm time by normal means, but read back an invalid tim=
+e,
+> > something may have corrupted other memory, so treating it as a v2f is s=
+ensible.
+>=20
+> There was no answer to this. I would be glad if you could take this
+> series. I would understand though if you say that this problem is too
+> esoteric to fix it upstream, we would keep the patches locally then.
+> Please just say so, it would help me to get the problem from my desk
+> ;)
+
+Can someone take this patch series? If not, what can we do to get these
+changes upstream?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--gkiyxll5cdmehrgy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmPYzykACgkQrX5LkNig
+011N9gf/fzb3QJWRmcpacDngtJ29px1Ik7Q1EKaF1trwDvvRtiEZIO49JcxUAFSN
+CSlwsD/vleMgiQME8PP4XQ6kOmfXujY9w7KCyktvibePwx2sNA1EYScvWziNL/E5
+qXCGpT95QPkT4TSMSudI1eoK/eyzOZmuBNsKRvqTQAIWRLDMCDIUDUIxMXNheN9h
+P4Mt+4q6wkTL0/gLyuKBNkBuYn8+jBeR8V0LxGVO7PAVGHGIbR7J1uT90VF/kdM2
+Gr0Aaex5EOFnVIVc1ugOqqeY6HGx3O+o8Nojopqrkjgxbrs8P31TgFF4MvLBIRoi
+KqcJLpegv8H53bezufrWQTzakpsW3g==
+=38nR
+-----END PGP SIGNATURE-----
+
+--gkiyxll5cdmehrgy--
