@@ -2,122 +2,117 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55B1686B2C
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Feb 2023 17:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0832B686B5A
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Feb 2023 17:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjBAQJh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Feb 2023 11:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S232040AbjBAQPl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 Feb 2023 11:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjBAQJg (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Feb 2023 11:09:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A6326A6;
-        Wed,  1 Feb 2023 08:09:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8FFB6172E;
-        Wed,  1 Feb 2023 16:09:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A11C433EF;
-        Wed,  1 Feb 2023 16:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675267774;
-        bh=OFFjipLLeQzikky+LqTRKkqTej58cv5vGpMRCQQNo04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SsrkQlAySNT9T4qTChhsbieGUNSl3Lrv5aqnwB8d2ACOwkYCE9Lj6FxsMc28mSb13
-         rkwOnTuuMMwPN6vksKjY49Gs7H3hzKCldVN2gE9ZUzmZZPQqqixwkwLLT+ycRaxhZU
-         4sNUcpgEE76kzKHXx0vlAujb3J6YiuFdOqHen0fx7q9teXxE47FzeQdxShky6AfkBd
-         8zk/nkucfPLWshM1UI8ENSM5Pym3mq8rN2/k9SkD4QUQmaSBxAM+VuUV/gHQWMZOrs
-         kfd8R5FL+VNCbfwo1eYUVO26VuJrco88CcCkznENly8sBQqKbF5qZnm8898BidQBR5
-         RXqcRSaScpvmw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pNFgJ-00078p-HR; Wed, 01 Feb 2023 17:09:55 +0100
-Date:   Wed, 1 Feb 2023 17:09:55 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        with ESMTP id S231868AbjBAQPh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Feb 2023 11:15:37 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB640FD;
+        Wed,  1 Feb 2023 08:15:36 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id b5so11680679plz.5;
+        Wed, 01 Feb 2023 08:15:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AhR4u+vxDGzq69f5+cc5asnvpVqZaiftxbUIgQ+O7y8=;
+        b=mJ0tX01t685V6CibzNWcXwo0AQi3b3VVSjlkoqCiMcof4SAKo3KJxnY2U7IPVAwRz7
+         xLCLI0jywgcmlCBoUuWcWgg3Qxl6H0GbFczg5RfB5g+GrrhXLakccmqr+HU7ZXGDAQUp
+         u4Yc4ZqV/ULPrMJGGohn8maidjUvROAcln43aipv34gZtGNDem15nkpo/nStsvOkkf1y
+         Xl3jiW5fX6Cseo9wqrnLim6bTutBhNCuFZXmTqyo+ecASCdg61oGtStUcr+m/PoChBpP
+         ruvVfHjF3mpJ/HVsgbc2+C3irRJAdLCm2sQa0k1aaEwPnmEKnipGRRIQWcG1iNu3ERr6
+         A9/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AhR4u+vxDGzq69f5+cc5asnvpVqZaiftxbUIgQ+O7y8=;
+        b=jVsZh6xLDjkwqFxvqjPwZueYVukYrNpegEq9VerbM4LCkaeszYwkh42DVbcUEo5FdO
+         zop1oFWQ5F0lCve/hEPE5ZT0/74pr5U9wiSfvRapUwlwxNN+yl1cVzGIUaUD1hdyFugN
+         bOe6EO2FEwLE7H8hZwnGBb6j/G+laHrrNtUQmmoNnARmTluQu/Nmjn3vfnSIDuaFx19s
+         apSdksFVJFRBA3HXHOxM3OwXWp5qVk8eoNXAGvfam+lXFxkM+STGjFLZzbCpNgq+KDbJ
+         xlfAQ2Wgb8Hn6bpJS86iFIMX725H+Fzvqxe90GzeYqre55QOcxVslN3g8oOAWYrpY+7h
+         0/4g==
+X-Gm-Message-State: AO0yUKXBlVjCSsMs213RJik+WCCA0PoIMc/hEc/ewxotloGpOduQMRi5
+        0fN8SY5D8TOue8PK8RE+gEI=
+X-Google-Smtp-Source: AK7set/cXFOzG/U5yeAhHQQhMy5PiRNYtGMDesEiGCMSOznrqODzwLM9sAEhg0yMZ24Xux0oizSdiA==
+X-Received: by 2002:a05:6a20:a689:b0:be:e0c3:5012 with SMTP id ba9-20020a056a20a68900b000bee0c35012mr6615060pzb.1.1675268130748;
+        Wed, 01 Feb 2023 08:15:30 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:ce3a:44de:62b3:7a4b])
+        by smtp.gmail.com with ESMTPSA id q21-20020a637515000000b004b1fef0bf16sm10752763pgc.73.2023.02.01.08.15.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 08:15:29 -0800 (PST)
+Date:   Wed, 1 Feb 2023 08:15:26 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [RFC 18/24] dt-bindings: rtc: qcom-pm8xxx: add uefi-variable
- offset
-Message-ID: <Y9qO0yQ7oLux2L9n@hovoldconsulting.com>
-References: <20230126142057.25715-1-johan+linaro@kernel.org>
- <20230126142057.25715-19-johan+linaro@kernel.org>
- <20230130184944.GA3096050-robh@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: moxart: use proper names for gpio
+ properties
+Message-ID: <Y9qQHj70SN/3fZCc@google.com>
+References: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
+ <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
+ <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230130184944.GA3096050-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-[ +CC: Ard ]
-
-On Mon, Jan 30, 2023 at 12:49:44PM -0600, Rob Herring wrote:
-> On Thu, Jan 26, 2023 at 03:20:51PM +0100, Johan Hovold wrote:
-> > On many Qualcomm platforms the PMIC RTC control and time registers are
-> > read-only so that the RTC time can not be updated. Instead an offset
-> > needs be stored in some machine-specific non-volatile memory, which a
-> > driver can take into account.
+On Wed, Feb 01, 2023 at 08:38:48AM +0100, Krzysztof Kozlowski wrote:
+> On 01/02/2023 06:48, Dmitry Torokhov wrote:
+> > MOXA ART RTC driver has been switched to gpiod API and is now using
+> > properly named properties for its gpios (with gpiolib implementing a
+> > quirk to recognize legacy names). Change binding document to use
+> > proper names as well.
 > > 
-> > Add a 'qcom,uefi-rtc-info' boolean flag which indicates that the RTC
-> > offset is stored in a Qualcomm specific UEFI variable so that the RTC
-> > time can be updated on such platforms.
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> >  .../devicetree/bindings/rtc/moxa,moxart-rtc.txt      | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
 > > 
-> > The UEFI variable is
-> > 
-> > 	882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
-> > 
-> > and holds a 12-byte structure where the first four bytes is a GPS time
-> > offset in little-endian byte order.
+> > diff --git a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > index c9d3ac1477fe..1374df7bf9d6 100644
+> > --- a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > +++ b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > @@ -3,15 +3,15 @@ MOXA ART real-time clock
+> >  Required properties:
+> >  
+> >  - compatible : Should be "moxa,moxart-rtc"
+> > -- gpio-rtc-sclk : RTC sclk gpio, with zero flags
+> > -- gpio-rtc-data : RTC data gpio, with zero flags
+> > -- gpio-rtc-reset : RTC reset gpio, with zero flags
+> > +- rtc-sclk-gpios : RTC sclk gpio, with zero flags
+> > +- rtc-data-gpios : RTC data gpio, with zero flags
+> > +- rtc-reset-gpios : RTC reset gpio, with zero flags
 > 
-> Can't you just try to read the UEFI variable and use it if that 
-> succeeds?
+> Your driver breaks the ABI, doesn't it? If not, how are the old
+> properties parsed?
 
-Generally, yes. The problem here is that this UEFI variable is not used
-on all devices using these PMICs and I need a way to determine whether
-to wait for the UEFI variables to become available or not (e.g. when
-efivars support is built as module, yes, that's a thing now...).
+It does not. As I mentioned in the driver code patch, commit
+eaf1a29665cd ("gpiolib: of: add a quirk for legacy names in MOXA ART
+RTC") makes sure gpiolib falls back to trying old variants if it can't
+locate properly formatted names.
 
-> I don't like this in DT because what if lots of devices start storing 
-> lots of things in vendor specific UEFI variables. It doesn't scale.
+Thanks.
 
-I hope we won't see that even if we already have some devices for x86
-platforms storing MAC addresses and such in UEFI variables. They
-currently access the UEFI firmware directly (i.e. not using the efivars
-abstraction) and simply assume UEFI is always there.
-
-With the Google SMI efivars implementation or the new Qualcomm SMC-based
-one, we need a way to determine whether to wait for efivars to become
-registered. For drivers where efivars is always needed we can just probe
-defer, but in this case we should not wait unless the DT indicates that
-the RTC offset is stored in UEFI on this particular machine.
-
-Just as the nvmem-cell property indicates that the offset is stored in
-some abstract nvmem, it seems reasonable to describe the offset being
-stored in UEFI when that is the case (even if it is indeed generally
-possible to probe for the latter).
-
-An alternative might be to describe the efivars fw dependency in DT too
-(e.g. for device links), but I believe you have already expressed some
-concerns over that:
-
-	https://lore.kernel.org/lkml/20230130210530.GA3339716-robh@kernel.org/
-
-Johan
+-- 
+Dmitry
