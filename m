@@ -2,38 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C74688326
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Feb 2023 16:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AF2688335
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Feb 2023 16:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbjBBPzB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 Feb 2023 10:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S233141AbjBBPzE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 Feb 2023 10:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbjBBPy4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 10:54:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DFD5CE68;
-        Thu,  2 Feb 2023 07:54:46 -0800 (PST)
+        with ESMTP id S233066AbjBBPyz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 10:54:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22EE627A1;
+        Thu,  2 Feb 2023 07:54:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72E2FB826E5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 606A061C12;
         Thu,  2 Feb 2023 15:54:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183E3C433A4;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4134BC43325;
         Thu,  2 Feb 2023 15:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1675353284;
-        bh=+e6vabk7nnIxKnRB4DqirjDl+9Kx3GaOJxRWKeLLfb0=;
+        bh=INUNOAIIyLUZq0CCEN/lm/WexHT7eTy04ZYkgnZoeqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ciZXDGizJFd1TJYfJJ/zS/Q8jiKYC7lr27aPbJQ38ShGvTs4ajMm8t3XmKzfDviVT
-         CFTE2visdDCHaZGNqG/i/LnRq+IHZRtbCgJs2R/Te4G0oHNHSAm5cEXk3tLv7n5MJ/
-         +RK1vfbEoqzKE+wXXw2Buugo8fv+VIbgejO6htZEjbRFXaNKr84Em6KgRKemmJyhap
-         4DpiB5jvwTIn9YTSP2zlXZ7J0Dp1QqCpcUIv8IEEdVTYNA93t2CvcCoTfn5d6eMEQw
-         /KIMQjWG7G98uNySrX1ICfmLoVf6lj+osMK6n8gDvRgnoLLIbPWCiLMVmo1+uS9CA8
-         q0BJbuLUkFStQ==
+        b=WKCd7jLAcATdRaKIjt8gj+oObiuW0FAfDMtGUb8bNlG2ycCLR9Cq8ZaQrfWpr/+ga
+         kMwjLlxIV51px4exKK1FQTSMvPSnEvV5xzTm/aRGcjRT+xPLGFHyXdgRMQTsjZMESW
+         JtkoYdiAEIB2rB1TVsnRvOu0+Pyfh4g7H4z3qnHDDhbjVkzeCML+ci+6M/QEAyx+nk
+         85EU9HO5tjVfYvbUZFw4T2s+9w2bSofl/YEsGzgc0n2M8Snqvve7ov9mPvcxZfJgNx
+         WwM1DOIdlyLS8L6dJyxMKPQzjhpwre7LIBBc93M5kBcvNdSVOX9cFQ6+agzXi3RUzO
+         HKR/agAxZkftQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pNbvZ-0001lw-1n; Thu, 02 Feb 2023 16:55:09 +0100
+        id 1pNbvZ-0001lz-4J; Thu, 02 Feb 2023 16:55:09 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Bjorn Andersson <andersson@kernel.org>
@@ -46,16 +46,16 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 06/22] rtc: pm8xxx: drop unused register defines
-Date:   Thu,  2 Feb 2023 16:54:32 +0100
-Message-Id: <20230202155448.6715-7-johan+linaro@kernel.org>
+Subject: [PATCH v2 07/22] rtc: pm8xxx: use unaligned le32 helpers
+Date:   Thu,  2 Feb 2023 16:54:33 +0100
+Message-Id: <20230202155448.6715-8-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230202155448.6715-1-johan+linaro@kernel.org>
 References: <20230202155448.6715-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,31 +63,98 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Drop the original register defines which have been used since commit
-c8d523a4b053 ("drivers/rtc/rtc-pm8xxx.c: rework to support pm8941 rtc").
+Use the unaligned le32 helpers instead of open coding when accessing the
+time and alarm registers.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/rtc/rtc-pm8xxx.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/rtc/rtc-pm8xxx.c | 26 ++++++++------------------
+ 1 file changed, 8 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index dc7e659cbb2a..90027a7cfb12 100644
+index 90027a7cfb12..5ff6898bcace 100644
 --- a/drivers/rtc/rtc-pm8xxx.c
 +++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -12,12 +12,6 @@
+@@ -12,6 +12,8 @@
  #include <linux/slab.h>
  #include <linux/spinlock.h>
  
--/* RTC Register offsets from RTC CTRL REG */
--#define PM8XXX_ALARM_CTRL_OFFSET	0x01
--#define PM8XXX_RTC_WRITE_OFFSET		0x02
--#define PM8XXX_RTC_READ_OFFSET		0x06
--#define PM8XXX_ALARM_RW_OFFSET		0x0A
--
++#include <asm/unaligned.h>
++
  /* RTC_CTRL register bit fields */
  #define PM8xxx_RTC_ENABLE		BIT(7)
  #define PM8xxx_RTC_ALARM_CLEAR		BIT(0)
+@@ -68,25 +70,21 @@ struct pm8xxx_rtc {
+  */
+ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
+-	int rc, i;
+ 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+ 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+ 	u8 value[NUM_8_BIT_RTC_REGS];
+ 	bool alarm_enabled;
+ 	unsigned long secs;
++	int rc;
+ 
+ 	if (!rtc_dd->allow_set_time)
+ 		return -ENODEV;
+ 
+ 	secs = rtc_tm_to_time64(tm);
++	put_unaligned_le32(secs, value);
+ 
+ 	dev_dbg(dev, "Seconds value to be written to RTC = %lu\n", secs);
+ 
+-	for (i = 0; i < NUM_8_BIT_RTC_REGS; i++) {
+-		value[i] = secs & 0xFF;
+-		secs >>= 8;
+-	}
+-
+ 	rc = regmap_update_bits_check(rtc_dd->regmap, regs->alarm_ctrl,
+ 				      regs->alarm_en, 0, &alarm_enabled);
+ 	if (rc)
+@@ -157,9 +155,7 @@ static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 			return rc;
+ 	}
+ 
+-	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
+-	       ((unsigned long)value[3] << 24);
+-
++	secs = get_unaligned_le32(value);
+ 	rtc_time64_to_tm(secs, tm);
+ 
+ 	dev_dbg(dev, "secs = %lu, h:m:s == %ptRt, y-m-d = %ptRdr\n", secs, tm, tm);
+@@ -169,18 +165,14 @@ static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 
+ static int pm8xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ {
+-	int rc, i;
+ 	u8 value[NUM_8_BIT_RTC_REGS];
+ 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+ 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+ 	unsigned long secs;
++	int rc;
+ 
+ 	secs = rtc_tm_to_time64(&alarm->time);
+-
+-	for (i = 0; i < NUM_8_BIT_RTC_REGS; i++) {
+-		value[i] = secs & 0xFF;
+-		secs >>= 8;
+-	}
++	put_unaligned_le32(secs, value);
+ 
+ 	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl,
+ 				regs->alarm_en, 0);
+@@ -219,9 +211,7 @@ static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	if (rc)
+ 		return rc;
+ 
+-	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
+-	       ((unsigned long)value[3] << 24);
+-
++	secs = get_unaligned_le32(value);
+ 	rtc_time64_to_tm(secs, &alarm->time);
+ 
+ 	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
 -- 
 2.39.1
 
