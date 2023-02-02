@@ -2,124 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83C9688375
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Feb 2023 16:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD510688AB2
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 00:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233417AbjBBPzy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 Feb 2023 10:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S231679AbjBBXXH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 Feb 2023 18:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbjBBPzH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 10:55:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F67AAD0E;
-        Thu,  2 Feb 2023 07:54:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5CE8B826EE;
-        Thu,  2 Feb 2023 15:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EAAC4332A;
-        Thu,  2 Feb 2023 15:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675353285;
-        bh=6djvmuAChIFeJKMJvy/scNkMFP3hnJhKKtF5jokukOg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r6SUVO4EU/hNfLuDItJpqcKznhgeYxVBZ/K3xDo5aYROrdPEufLEreqp+tJ3cx9KO
-         sj64n7NicEFNeLfV4pvxV8pG/7BBfCZQ78Mw3hHpcPnouII3C3EWZFTvjiwoKpK6kS
-         JHkiwSPykZmX8Qpeadpi5HMoz6i6hiaJbM4lrIug2C0DauZccDlCfjO4I77ZpOMgYl
-         z+kV4YNeNLhx9nhbJMun7gik9M2+hMXXV8lWRwIhAwfuTWR1JCeqM+2GV5qp96qIQP
-         23+gLx62W6skWuZzxBYD+lmyYybQ3wka9VcCKiWUitb6B6bdYn4WQEKBjr7/zFiQQt
-         8av9qE2G7ywaA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pNbva-0001mj-Ey; Thu, 02 Feb 2023 16:55:10 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S231322AbjBBXXE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 18:23:04 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B186A5BA8;
+        Thu,  2 Feb 2023 15:23:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675380182; x=1706916182;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bn6l3TxTIC/CqdrEgmBOI9ZWD5WN5Blzw4xC/dDljDU=;
+  b=mo7SIiuZjuJ6avi+67Gm5EXkL1WImd98ih1TtOezlfLIdLpLvmC1E/5m
+   1cyaXa6rgCYLdb3vqKxpm/1560Ngs4hKuSx85uPQ/Z46Z9orPmq6/cPdV
+   mcb6R5lK7i6huRnJ7av76McbmFdkuXxUBe2Ajh7np+Qd0aqoptrOTbCGt
+   49uiC/gUqoeZd8onMo9j34dYv0dlMkTG+GPEI4/jkOku/IxPRUEbzFv7f
+   k0NvNLAV1a5/kVK5X3YBrh/I7XPcok+Ow1H5Ea/vje5nG3yLZTMbTxzwJ
+   85PdZKdV40DLhJL6kY3hF8Y7ZI4RAjxQdM1CD7Mkl1Xr+r6MCQf7Vv5P8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="355939761"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="355939761"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 15:23:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="643076420"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="643076420"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2023 15:22:55 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNius-0006wa-2r;
+        Thu, 02 Feb 2023 23:22:54 +0000
+Date:   Fri, 3 Feb 2023 07:22:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frieder Schrempf <frieder@fris.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 22/22] arm64: dts: qcom: sc8280xp-x13s: enable rtc
-Date:   Thu,  2 Feb 2023 16:54:48 +0100
-Message-Id: <20230202155448.6715-23-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202155448.6715-1-johan+linaro@kernel.org>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Frieder Schrempf <frieder.schrempf@kontron.de>
+Subject: Re: [PATCH 4/7] rtc: Move BSM defines to separate header for DT usage
+Message-ID: <202302030706.gBkl14ay-lkp@intel.com>
+References: <20230201143431.863784-5-frieder@fris.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201143431.863784-5-frieder@fris.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The Lenovo X13s firmware does not implement the UEFI time runtime
-services so the RTC in the PM8280K PMIC needs to be accessed directly.
+Hi Frieder,
 
-To complicate things further, the RTC control and time registers are
-read-only on this platform so an offset must be stored in some other
-machine-specific non-volatile memory which an RTC driver can take into
-account when reading or updating the time.
+Thank you for the patch! Yet something to improve:
 
-The UEFI firmware (and Windows) use a UEFI variable for this:
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on arm/for-next arm/fixes arm64/for-next/core kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next xilinx-xlnx/master linus/master v6.2-rc6]
+[cannot apply to abelloni/rtc-next next-20230202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
+url:    https://github.com/intel-lab-lkp/linux/commits/Frieder-Schrempf/dt-bindings-rtc-Move-RV3028-to-separate-binding-file/20230201-224450
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230201143431.863784-5-frieder%40fris.de
+patch subject: [PATCH 4/7] rtc: Move BSM defines to separate header for DT usage
+config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20230203/202302030706.gBkl14ay-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/2dfe054992e73c8da87d242a35a30d969d87b1a0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Frieder-Schrempf/dt-bindings-rtc-Move-RV3028-to-separate-binding-file/20230201-224450
+        git checkout 2dfe054992e73c8da87d242a35a30d969d87b1a0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-but the offset can only be accessed via the Qualcomm UEFI Secure
-Application residing in the TEE as the firmware does not implement the
-variable runtime services either.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-While it is possible to access this UEFI variable from Linux on the
-X13s, this requires using a fairly complex and reverse-engineered
-firmware interface. As the only benefit of doing so is to make sure that
-the UEFI (Windows) and Linux time never gets out of sync, it seems
-preferable to use the PMIC scratch registers for storing an offset
-instead. This also avoids flash wear in case of RTC drift, etc.
+All errors (new ones prefixed by >>):
 
-So instead of using the UEFI RTC offset, reserve four bytes in one of
-the PMIC SDAM scratch-register blocks to hold the RTC offset.
+   In file included from <command-line>:
+>> ./usr/include/linux/rtc.h:15:10: fatal error: dt-bindings/rtc/rtc.h: No such file or directory
+      15 | #include <dt-bindings/rtc/rtc.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index db406f7774de..6e88e0bb6871 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -683,6 +683,21 @@ &pmk8280_pon_resin {
- 	status = "okay";
- };
- 
-+&pmk8280_rtc {
-+	nvmem-cells = <&rtc_offset>;
-+	nvmem-cell-names = "offset";
-+
-+	status = "okay";
-+};
-+
-+&pmk8280_sdam_6 {
-+	status = "okay";
-+
-+	rtc_offset: rtc-offset@bc {
-+		reg = <0xbc 0x4>;
-+	};
-+};
-+
- &pmk8280_vadc {
- 	status = "okay";
- 
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
