@@ -2,111 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD510688AB2
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 00:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0559A688ACB
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 00:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjBBXXH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 Feb 2023 18:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
+        id S231185AbjBBX2n (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 Feb 2023 18:28:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjBBXXE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 18:23:04 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B186A5BA8;
-        Thu,  2 Feb 2023 15:23:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675380182; x=1706916182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bn6l3TxTIC/CqdrEgmBOI9ZWD5WN5Blzw4xC/dDljDU=;
-  b=mo7SIiuZjuJ6avi+67Gm5EXkL1WImd98ih1TtOezlfLIdLpLvmC1E/5m
-   1cyaXa6rgCYLdb3vqKxpm/1560Ngs4hKuSx85uPQ/Z46Z9orPmq6/cPdV
-   mcb6R5lK7i6huRnJ7av76McbmFdkuXxUBe2Ajh7np+Qd0aqoptrOTbCGt
-   49uiC/gUqoeZd8onMo9j34dYv0dlMkTG+GPEI4/jkOku/IxPRUEbzFv7f
-   k0NvNLAV1a5/kVK5X3YBrh/I7XPcok+Ow1H5Ea/vje5nG3yLZTMbTxzwJ
-   85PdZKdV40DLhJL6kY3hF8Y7ZI4RAjxQdM1CD7Mkl1Xr+r6MCQf7Vv5P8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="355939761"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="355939761"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 15:23:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="643076420"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="643076420"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2023 15:22:55 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNius-0006wa-2r;
-        Thu, 02 Feb 2023 23:22:54 +0000
-Date:   Fri, 3 Feb 2023 07:22:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frieder Schrempf <frieder@fris.de>,
+        with ESMTP id S232461AbjBBX2m (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 18:28:42 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2132112;
+        Thu,  2 Feb 2023 15:27:57 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id s124so2825508oif.1;
+        Thu, 02 Feb 2023 15:27:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aHvjgJWR/netkSjL2dqjCkxba3y55n8wa4csM2Y+3Jg=;
+        b=vH5e0nMEckMA1tknk4wKZvXrMN5wSYZcxvqS7hTxTesmvnWfv0AFW1WpJoldPpKXl6
+         R77wPYFptRS7GNVw5dwf1VbVDkDEwjooSduLO/5NxkGAZPQvxQ5qSNFH5fSX/6nL0dI1
+         iuGgKWIx2muzcl+f0qcku2YLTRpV+H++Lt85sZ0/zmk/ssJcV35auKeYVneIqfwZHncN
+         roeGoFu9VGVrZgjjdlckioM87w/zFyAdIEm9RzigO+tdn6i3gatRojhhPtmUzQv1vmvP
+         Nd3DGM3Ti71i1DAbo/K33fO5r5fcxJYubj7y016gFLf1zNu8hcmI1AHF0jSXXNTRkkRZ
+         Q/jQ==
+X-Gm-Message-State: AO0yUKU+LgcxR+rLUjL38K20jK4LxQyKIw1cnZsczkwcDbxsGxH/dv7W
+        rvtJCO4X/n0W80UoG0cD3F0Jmfxzgg==
+X-Google-Smtp-Source: AK7set/+RI1xpnNSZzLqGcvwm4nz4nqML8jWdkfETq2qTLNo7VHzU21LzvSuoYRncxpgNJ22sPJ3Bg==
+X-Received: by 2002:aca:110f:0:b0:378:477c:3e0e with SMTP id 15-20020aca110f000000b00378477c3e0emr3368090oir.45.1675380455727;
+        Thu, 02 Feb 2023 15:27:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u18-20020a056808115200b003780e80fad6sm213109oiu.49.2023.02.02.15.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 15:27:35 -0800 (PST)
+Received: (nullmailer pid 2898046 invoked by uid 1000);
+        Thu, 02 Feb 2023 23:27:34 -0000
+Date:   Thu, 2 Feb 2023 17:27:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Frieder Schrempf <frieder.schrempf@kontron.de>
-Subject: Re: [PATCH 4/7] rtc: Move BSM defines to separate header for DT usage
-Message-ID: <202302030706.gBkl14ay-lkp@intel.com>
-References: <20230201143431.863784-5-frieder@fris.de>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: moxart: use proper names for gpio
+ properties
+Message-ID: <20230202232734.GA2889187-robh@kernel.org>
+References: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
+ <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
+ <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
+ <Y9qQHj70SN/3fZCc@google.com>
+ <20230201175504.GA4075318-robh@kernel.org>
+ <Y9q3T17r5G2PD9Gk@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201143431.863784-5-frieder@fris.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9q3T17r5G2PD9Gk@google.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Frieder,
+On Wed, Feb 01, 2023 at 11:02:39AM -0800, Dmitry Torokhov wrote:
+> On Wed, Feb 01, 2023 at 11:55:04AM -0600, Rob Herring wrote:
+> > On Wed, Feb 01, 2023 at 08:15:26AM -0800, Dmitry Torokhov wrote:
+> > > On Wed, Feb 01, 2023 at 08:38:48AM +0100, Krzysztof Kozlowski wrote:
+> > > > On 01/02/2023 06:48, Dmitry Torokhov wrote:
+> > > > > MOXA ART RTC driver has been switched to gpiod API and is now using
+> > > > > properly named properties for its gpios (with gpiolib implementing a
+> > > > > quirk to recognize legacy names). Change binding document to use
+> > > > > proper names as well.
+> > > > > 
+> > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > > > ---
+> > > > >  .../devicetree/bindings/rtc/moxa,moxart-rtc.txt      | 12 ++++++------
+> > > > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > > > > 
+> > > > > diff --git a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > > > > index c9d3ac1477fe..1374df7bf9d6 100644
+> > > > > --- a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > > > > +++ b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> > > > > @@ -3,15 +3,15 @@ MOXA ART real-time clock
+> > > > >  Required properties:
+> > > > >  
+> > > > >  - compatible : Should be "moxa,moxart-rtc"
+> > > > > -- gpio-rtc-sclk : RTC sclk gpio, with zero flags
+> > > > > -- gpio-rtc-data : RTC data gpio, with zero flags
+> > > > > -- gpio-rtc-reset : RTC reset gpio, with zero flags
+> > > > > +- rtc-sclk-gpios : RTC sclk gpio, with zero flags
+> > > > > +- rtc-data-gpios : RTC data gpio, with zero flags
+> > > > > +- rtc-reset-gpios : RTC reset gpio, with zero flags
+> > > > 
+> > > > Your driver breaks the ABI, doesn't it? If not, how are the old
+> > > > properties parsed?
+> > > 
+> > > It does not. As I mentioned in the driver code patch, commit
+> > > eaf1a29665cd ("gpiolib: of: add a quirk for legacy names in MOXA ART
+> > > RTC") makes sure gpiolib falls back to trying old variants if it can't
+> > > locate properly formatted names.
+> > 
+> > A dtb with the new names and a kernel without the gpiod conversion would 
+> > be broken. Up to the platform whether they care really.
+> 
+> Seriously? And I guess devices with DTS do not work with kernels v2.0 so
+> we should never have introduced it...
 
-Thank you for the patch! Yet something to improve:
+They would be fine because they would ignore the dtb. ;)
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on arm/for-next arm/fixes arm64/for-next/core kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next xilinx-xlnx/master linus/master v6.2-rc6]
-[cannot apply to abelloni/rtc-next next-20230202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> I understand wanting backward compatibility, but asking for both
+> backward and forward is a bit too much IMO.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Frieder-Schrempf/dt-bindings-rtc-Move-RV3028-to-separate-binding-file/20230201-224450
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230201143431.863784-5-frieder%40fris.de
-patch subject: [PATCH 4/7] rtc: Move BSM defines to separate header for DT usage
-config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20230203/202302030706.gBkl14ay-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/2dfe054992e73c8da87d242a35a30d969d87b1a0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Frieder-Schrempf/dt-bindings-rtc-Move-RV3028-to-separate-binding-file/20230201-224450
-        git checkout 2dfe054992e73c8da87d242a35a30d969d87b1a0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Like I said, up to the platform to decide. I'm just defining what's an 
+ABI break or not.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+If the dtb ships with firmware, do you want new firmware with a newer 
+dtb to break your OS? We can sometimes mitigate that with stable kernel 
+updates. There are obvious cases that don't work such as adding 
+providers such as clocks (instead of dummy fixed clocks) or pinctrl, 
+where old kernels will never have the driver (but doesn't know that).
 
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
->> ./usr/include/linux/rtc.h:15:10: fatal error: dt-bindings/rtc/rtc.h: No such file or directory
-      15 | #include <dt-bindings/rtc/rtc.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Rob
