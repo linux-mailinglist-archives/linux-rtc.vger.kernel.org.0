@@ -2,60 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5672C6890B2
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 08:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3DF6890C9
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 08:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjBCHWd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 3 Feb 2023 02:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S232363AbjBCHZX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 3 Feb 2023 02:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjBCHWc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 Feb 2023 02:22:32 -0500
+        with ESMTP id S232056AbjBCHZV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 Feb 2023 02:25:21 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34AA8A45;
-        Thu,  2 Feb 2023 23:22:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ABA8C1E8;
+        Thu,  2 Feb 2023 23:25:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ADF661DA4;
-        Fri,  3 Feb 2023 07:22:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E371C433EF;
-        Fri,  3 Feb 2023 07:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675408949;
-        bh=icTa3capbXXz6Tr5vVLT7o8x/2rzWpy+HrEApn3fCe4=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4BE61DB8;
+        Fri,  3 Feb 2023 07:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9EAC433D2;
+        Fri,  3 Feb 2023 07:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675409118;
+        bh=w/73Uc/n5KxsufzX5CddSnsJWhi8Tl5rHcWOUj980gE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DuXiPY9UdzDQjrqndWYCKpH9LMj0wHpXawtCOAUgprKRkGh6hjr8qP5lBBlMIzv5g
-         DTCvPOcrpRomQFnFTFINj3xI8pLhezHzLpLtnxKN6Vc0aZnlp041YEski9iqPcOL2G
-         ItkWuYMCuHva5mK+68a4iDRW1DOqGSvW6w0hQYxucXfzSJT8niaYym+wRh2EJW870O
-         OHH1jdyPeFMmzRCOsn5K28eD3W19GpINXxCpmKauMtpSNH3c5ONeFM9xna2Dv/kjfH
-         Ghj8gD6JFNtM8AWUmuily+7KB8YmcvvwchJxxV+IaQ93QWO6Tn3Obf4y1bN07yu/D6
-         ogeFhMrqpu8Cg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pNqPP-0008K5-Nc; Fri, 03 Feb 2023 08:22:55 +0100
-Date:   Fri, 3 Feb 2023 08:22:55 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 17/22] rtc: pm8xxx: add support for nvmem offset
-Message-ID: <Y9y2T+mrzDk5IVq9@hovoldconsulting.com>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-18-johan+linaro@kernel.org>
- <8a3eb2d3-5cdf-8bdb-63f5-ab89798d38e6@linaro.org>
+        b=KvD8eTpjLOtWB+UEaur78gdbkDk2uNg4iTyG7EduGBBQeFYYfDMJR0zI5M46iGXgI
+         B/g60xlZj15BQnrefnVhdWcwV0eYwBhVI1fWaHKJRFJ022Eb8m0gihPo6B9goL/ROM
+         S4BKuWCyK0zSKt6MO3m0b0jgs8LUO3Xke14ThSpk=
+Date:   Fri, 3 Feb 2023 08:25:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
+Message-ID: <Y9y221RalpLWJE0S@kroah.com>
+References: <20230113062339.1909087-1-hch@lst.de>
+ <20230113062339.1909087-3-hch@lst.de>
+ <Y8EEbCP6PRMzWP5y@kroah.com>
+ <20230203071542.GC24833@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8a3eb2d3-5cdf-8bdb-63f5-ab89798d38e6@linaro.org>
+In-Reply-To: <20230203071542.GC24833@lst.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,30 +66,14 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 04:31:54AM +0100, Konrad Dybcio wrote:
+On Fri, Feb 03, 2023 at 08:15:42AM +0100, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 08:12:44AM +0100, Greg Kroah-Hartman wrote:
+> > Do you want all of these to go through a single tree, or can they go
+> > through the different driver subsystem trees?
 > 
-> 
-> On 2.02.2023 16:54, Johan Hovold wrote:
-> > On many Qualcomm platforms the PMIC RTC control and time registers are
-> > read-only so that the RTC time can not be updated. Instead an offset
-> > needs be stored in some machine-specific non-volatile memory, which the
-> > driver can take into account.
-> > 
-> > Add support for storing a 32-bit offset from the Epoch in an nvmem cell
-> > so that the RTC time can be set on such platforms.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> That's gonna be a stupid question, but just to make sure..
-> 
-> SDAM is rewritable, right? So that when somebody sets the time to
-> year 2077 by mistake, they won't have to put up with it for the next
-> 50 years? :D
+> Looks like the big removal isn't going in for this merge winodw,
+> so can you queue this patch up after all Greg?
 
-Heh, yes, it is re-writeable. Otherwise, using SDAM wouldn't really have
-been an alternative to using the UEFI offset. :)
+Sure, I'll go apply it right now, thanks.
 
-These registers are reset if you lose battery power so you'd be back at
-1970 as expected if that ever happens too.
-
-Johan
+greg k-h
