@@ -2,131 +2,341 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0559A688ACB
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 00:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABBD688E00
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 04:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjBBX2n (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 Feb 2023 18:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+        id S232283AbjBCDcH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 Feb 2023 22:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232461AbjBBX2m (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 18:28:42 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2132112;
-        Thu,  2 Feb 2023 15:27:57 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id s124so2825508oif.1;
-        Thu, 02 Feb 2023 15:27:57 -0800 (PST)
+        with ESMTP id S230451AbjBCDcG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Feb 2023 22:32:06 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B4068128
+        for <linux-rtc@vger.kernel.org>; Thu,  2 Feb 2023 19:31:57 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id bk15so11846053ejb.9
+        for <linux-rtc@vger.kernel.org>; Thu, 02 Feb 2023 19:31:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3U+VBc+U8900xd5EAE+/o092MReN2kqBrk9eevhvIKU=;
+        b=low5lDLusr3RQ+ufb4mgQmtlD+OkztWKTyxvaV0jR+lH2ApeK7vCMb7vBNCX0Yw5eN
+         BKQk+annfE09U8uu/fpXWvPvK2CcpXPQyX3b0v1Cde5GmA+g+QWYbOfrl4B15c/2nqB8
+         j3/IZBcn2TRyDfcnuYjVKcJRl6rvRrpG2YJPNZKFIO3a1eqWRcrEFsFUw8NqnLeFtXQq
+         YDVpuuAuz9dIQB2GqtoS84ysImXccRKWgGauXdk5mZgeky48OzvhvQAkY350XMApp61D
+         ny7+B19aAmc8fDm5pRBcDgFUO/ynEIf2xu2NlUUJDfyWr9aSxLuJyLn2058MSC8Is7Zd
+         tXXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aHvjgJWR/netkSjL2dqjCkxba3y55n8wa4csM2Y+3Jg=;
-        b=vH5e0nMEckMA1tknk4wKZvXrMN5wSYZcxvqS7hTxTesmvnWfv0AFW1WpJoldPpKXl6
-         R77wPYFptRS7GNVw5dwf1VbVDkDEwjooSduLO/5NxkGAZPQvxQ5qSNFH5fSX/6nL0dI1
-         iuGgKWIx2muzcl+f0qcku2YLTRpV+H++Lt85sZ0/zmk/ssJcV35auKeYVneIqfwZHncN
-         roeGoFu9VGVrZgjjdlckioM87w/zFyAdIEm9RzigO+tdn6i3gatRojhhPtmUzQv1vmvP
-         Nd3DGM3Ti71i1DAbo/K33fO5r5fcxJYubj7y016gFLf1zNu8hcmI1AHF0jSXXNTRkkRZ
-         Q/jQ==
-X-Gm-Message-State: AO0yUKU+LgcxR+rLUjL38K20jK4LxQyKIw1cnZsczkwcDbxsGxH/dv7W
-        rvtJCO4X/n0W80UoG0cD3F0Jmfxzgg==
-X-Google-Smtp-Source: AK7set/+RI1xpnNSZzLqGcvwm4nz4nqML8jWdkfETq2qTLNo7VHzU21LzvSuoYRncxpgNJ22sPJ3Bg==
-X-Received: by 2002:aca:110f:0:b0:378:477c:3e0e with SMTP id 15-20020aca110f000000b00378477c3e0emr3368090oir.45.1675380455727;
-        Thu, 02 Feb 2023 15:27:35 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u18-20020a056808115200b003780e80fad6sm213109oiu.49.2023.02.02.15.27.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 15:27:35 -0800 (PST)
-Received: (nullmailer pid 2898046 invoked by uid 1000);
-        Thu, 02 Feb 2023 23:27:34 -0000
-Date:   Thu, 2 Feb 2023 17:27:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: rtc: moxart: use proper names for gpio
- properties
-Message-ID: <20230202232734.GA2889187-robh@kernel.org>
-References: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
- <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
- <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
- <Y9qQHj70SN/3fZCc@google.com>
- <20230201175504.GA4075318-robh@kernel.org>
- <Y9q3T17r5G2PD9Gk@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3U+VBc+U8900xd5EAE+/o092MReN2kqBrk9eevhvIKU=;
+        b=tv6+jnRdxIw54Y9jZFVIZpyXE8ButCNivcOL17ygOzf9wiF71NS2c++g6POP6Nk+JV
+         PNcniceB5/Gou1bjtIfWe2Dfay6ZeLMGHwKJG5NbY2KLbGqZnZizVuw0Nby6jqdvVtti
+         lVccDIr/CLDbsGMZ4CbjQfXTsC/bbL3IiJuxSbkXYsTR7JD6T9XzfjQ/bGgVa9K8jL7Y
+         cEvYHingO8/eoB81OiOu/YsfwdH4l9c/Mlu2Z7H5P2r1jBJ7p7gENNMO7LGO3+8jWZFv
+         yTwfQ5SE/CXsRiZ7M/WjyNbpM8Y6vg9q0f9bCmEk/+X3RCoOYBn7nz+60gl4S5QCQY9m
+         ixyA==
+X-Gm-Message-State: AO0yUKVOLPH2BPzs5j15jK3rZINBM8EnVHCYeRhVF0esExNtbkRCnxiu
+        dlenyOdB3m7wWJNcly1JtnX+FA==
+X-Google-Smtp-Source: AK7set+a2b1QYPixHmpV/BoB+ddXv4X+iXvFucmfpHR9OC/m2Llgni6j4LO+C7y0u6t3cxpX5CJ/yQ==
+X-Received: by 2002:a17:907:2c49:b0:887:2248:efd5 with SMTP id hf9-20020a1709072c4900b008872248efd5mr9230647ejc.77.1675395116303;
+        Thu, 02 Feb 2023 19:31:56 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170906318c00b0088b93bfa765sm698374ejy.138.2023.02.02.19.31.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 19:31:56 -0800 (PST)
+Message-ID: <8a3eb2d3-5cdf-8bdb-63f5-ab89798d38e6@linaro.org>
+Date:   Fri, 3 Feb 2023 04:31:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9q3T17r5G2PD9Gk@google.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v2 17/22] rtc: pm8xxx: add support for nvmem offset
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230202155448.6715-1-johan+linaro@kernel.org>
+ <20230202155448.6715-18-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230202155448.6715-18-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 11:02:39AM -0800, Dmitry Torokhov wrote:
-> On Wed, Feb 01, 2023 at 11:55:04AM -0600, Rob Herring wrote:
-> > On Wed, Feb 01, 2023 at 08:15:26AM -0800, Dmitry Torokhov wrote:
-> > > On Wed, Feb 01, 2023 at 08:38:48AM +0100, Krzysztof Kozlowski wrote:
-> > > > On 01/02/2023 06:48, Dmitry Torokhov wrote:
-> > > > > MOXA ART RTC driver has been switched to gpiod API and is now using
-> > > > > properly named properties for its gpios (with gpiolib implementing a
-> > > > > quirk to recognize legacy names). Change binding document to use
-> > > > > proper names as well.
-> > > > > 
-> > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > > > ---
-> > > > >  .../devicetree/bindings/rtc/moxa,moxart-rtc.txt      | 12 ++++++------
-> > > > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
-> > > > > index c9d3ac1477fe..1374df7bf9d6 100644
-> > > > > --- a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
-> > > > > +++ b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
-> > > > > @@ -3,15 +3,15 @@ MOXA ART real-time clock
-> > > > >  Required properties:
-> > > > >  
-> > > > >  - compatible : Should be "moxa,moxart-rtc"
-> > > > > -- gpio-rtc-sclk : RTC sclk gpio, with zero flags
-> > > > > -- gpio-rtc-data : RTC data gpio, with zero flags
-> > > > > -- gpio-rtc-reset : RTC reset gpio, with zero flags
-> > > > > +- rtc-sclk-gpios : RTC sclk gpio, with zero flags
-> > > > > +- rtc-data-gpios : RTC data gpio, with zero flags
-> > > > > +- rtc-reset-gpios : RTC reset gpio, with zero flags
-> > > > 
-> > > > Your driver breaks the ABI, doesn't it? If not, how are the old
-> > > > properties parsed?
-> > > 
-> > > It does not. As I mentioned in the driver code patch, commit
-> > > eaf1a29665cd ("gpiolib: of: add a quirk for legacy names in MOXA ART
-> > > RTC") makes sure gpiolib falls back to trying old variants if it can't
-> > > locate properly formatted names.
-> > 
-> > A dtb with the new names and a kernel without the gpiod conversion would 
-> > be broken. Up to the platform whether they care really.
+
+
+On 2.02.2023 16:54, Johan Hovold wrote:
+> On many Qualcomm platforms the PMIC RTC control and time registers are
+> read-only so that the RTC time can not be updated. Instead an offset
+> needs be stored in some machine-specific non-volatile memory, which the
+> driver can take into account.
 > 
-> Seriously? And I guess devices with DTS do not work with kernels v2.0 so
-> we should never have introduced it...
+> Add support for storing a 32-bit offset from the Epoch in an nvmem cell
+> so that the RTC time can be set on such platforms.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+That's gonna be a stupid question, but just to make sure..
 
-They would be fine because they would ignore the dtb. ;)
+SDAM is rewritable, right? So that when somebody sets the time to
+year 2077 by mistake, they won't have to put up with it for the next
+50 years? :D
 
-> I understand wanting backward compatibility, but asking for both
-> backward and forward is a bit too much IMO.
-
-Like I said, up to the platform to decide. I'm just defining what's an 
-ABI break or not.
-
-If the dtb ships with firmware, do you want new firmware with a newer 
-dtb to break your OS? We can sometimes mitigate that with stable kernel 
-updates. There are obvious cases that don't work such as adding 
-providers such as clocks (instead of dummy fixed clocks) or pinctrl, 
-where old kernels will never have the driver (but doesn't know that).
-
-Rob
+Konrad
+>  drivers/rtc/rtc-pm8xxx.c | 141 +++++++++++++++++++++++++++++++++++----
+>  1 file changed, 129 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+> index eff2782beeed..372494e82f40 100644
+> --- a/drivers/rtc/rtc-pm8xxx.c
+> +++ b/drivers/rtc/rtc-pm8xxx.c
+> @@ -1,8 +1,13 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+> -/* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+> +/*
+> + * pm8xxx RTC driver
+> + *
+> + * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+> + * Copyright (c) 2023, Linaro Limited
+>   */
+>  #include <linux/of.h>
+>  #include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+>  #include <linux/init.h>
+>  #include <linux/rtc.h>
+>  #include <linux/platform_device.h>
+> @@ -49,6 +54,8 @@ struct pm8xxx_rtc_regs {
+>   * @alarm_irq:		alarm irq number
+>   * @regs:		register description
+>   * @dev:		device structure
+> + * @nvmem_cell:		nvmem cell for offset
+> + * @offset:		offset from epoch in seconds
+>   */
+>  struct pm8xxx_rtc {
+>  	struct rtc_device *rtc;
+> @@ -57,8 +64,60 @@ struct pm8xxx_rtc {
+>  	int alarm_irq;
+>  	const struct pm8xxx_rtc_regs *regs;
+>  	struct device *dev;
+> +	struct nvmem_cell *nvmem_cell;
+> +	u32 offset;
+>  };
+>  
+> +static int pm8xxx_rtc_read_nvmem_offset(struct pm8xxx_rtc *rtc_dd)
+> +{
+> +	size_t len;
+> +	void *buf;
+> +	int rc;
+> +
+> +	buf = nvmem_cell_read(rtc_dd->nvmem_cell, &len);
+> +	if (IS_ERR(buf)) {
+> +		rc = PTR_ERR(buf);
+> +		dev_dbg(rtc_dd->dev, "failed to read nvmem offset: %d\n", rc);
+> +		return rc;
+> +	}
+> +
+> +	if (len != sizeof(u32)) {
+> +		dev_dbg(rtc_dd->dev, "unexpected nvmem cell size %zu\n", len);
+> +		kfree(buf);
+> +		return -EINVAL;
+> +	}
+> +
+> +	rtc_dd->offset = get_unaligned_le32(buf);
+> +
+> +	kfree(buf);
+> +
+> +	return 0;
+> +}
+> +
+> +static int pm8xxx_rtc_write_nvmem_offset(struct pm8xxx_rtc *rtc_dd, u32 offset)
+> +{
+> +	u8 buf[sizeof(u32)];
+> +	int rc;
+> +
+> +	put_unaligned_le32(offset, buf);
+> +
+> +	rc = nvmem_cell_write(rtc_dd->nvmem_cell, buf, sizeof(buf));
+> +	if (rc < 0) {
+> +		dev_dbg(rtc_dd->dev, "failed to write nvmem offset: %d\n", rc);
+> +		return rc;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pm8xxx_rtc_read_offset(struct pm8xxx_rtc *rtc_dd)
+> +{
+> +	if (!rtc_dd->nvmem_cell)
+> +		return 0;
+> +
+> +	return pm8xxx_rtc_read_nvmem_offset(rtc_dd);
+> +}
+> +
+>  static int pm8xxx_rtc_read_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
+>  {
+>  	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+> @@ -90,6 +149,33 @@ static int pm8xxx_rtc_read_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
+>  	return 0;
+>  }
+>  
+> +static int pm8xxx_rtc_update_offset(struct pm8xxx_rtc *rtc_dd, u32 secs)
+> +{
+> +	u32 raw_secs;
+> +	u32 offset;
+> +	int rc;
+> +
+> +	if (!rtc_dd->nvmem_cell)
+> +		return -ENODEV;
+> +
+> +	rc = pm8xxx_rtc_read_raw(rtc_dd, &raw_secs);
+> +	if (rc)
+> +		return rc;
+> +
+> +	offset = secs - raw_secs;
+> +
+> +	if (offset == rtc_dd->offset)
+> +		return 0;
+> +
+> +	rc = pm8xxx_rtc_write_nvmem_offset(rtc_dd, offset);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rtc_dd->offset = offset;
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Steps to write the RTC registers.
+>   * 1. Disable alarm if enabled.
+> @@ -99,23 +185,15 @@ static int pm8xxx_rtc_read_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
+>   * 5. Enable rtc if disabled in step 2.
+>   * 6. Enable alarm if disabled in step 1.
+>   */
+> -static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +static int __pm8xxx_rtc_set_time(struct pm8xxx_rtc *rtc_dd, u32 secs)
+>  {
+> -	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+>  	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+>  	u8 value[NUM_8_BIT_RTC_REGS];
+>  	bool alarm_enabled;
+> -	u32 secs;
+>  	int rc;
+>  
+> -	if (!rtc_dd->allow_set_time)
+> -		return -ENODEV;
+> -
+> -	secs = rtc_tm_to_time64(tm);
+>  	put_unaligned_le32(secs, value);
+>  
+> -	dev_dbg(dev, "set time: %ptRd %ptRt (%u)\n", tm, tm, secs);
+> -
+>  	rc = regmap_update_bits_check(rtc_dd->regmap, regs->alarm_ctrl,
+>  				      regs->alarm_en, 0, &alarm_enabled);
+>  	if (rc)
+> @@ -158,6 +236,27 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>  	return 0;
+>  }
+>  
+> +static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+> +	u32 secs;
+> +	int rc;
+> +
+> +	secs = rtc_tm_to_time64(tm);
+> +
+> +	if (rtc_dd->allow_set_time)
+> +		rc = __pm8xxx_rtc_set_time(rtc_dd, secs);
+> +	else
+> +		rc = pm8xxx_rtc_update_offset(rtc_dd, secs);
+> +
+> +	if (rc)
+> +		return rc;
+> +
+> +	dev_dbg(dev, "set time: %ptRd %ptRt (%u + %u)\n", tm, tm,
+> +			secs - rtc_dd->offset, rtc_dd->offset);
+> +	return 0;
+> +}
+> +
+>  static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  {
+>  	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+> @@ -168,10 +267,11 @@ static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  	if (rc)
+>  		return rc;
+>  
+> +	secs += rtc_dd->offset;
+>  	rtc_time64_to_tm(secs, tm);
+>  
+> -	dev_dbg(dev, "read time: %ptRd %ptRt (%u)\n", tm, tm, secs);
+> -
+> +	dev_dbg(dev, "read time: %ptRd %ptRt (%u + %u)\n", tm, tm,
+> +			secs - rtc_dd->offset, rtc_dd->offset);
+>  	return 0;
+>  }
+>  
+> @@ -184,6 +284,7 @@ static int pm8xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+>  	int rc;
+>  
+>  	secs = rtc_tm_to_time64(&alarm->time);
+> +	secs -= rtc_dd->offset;
+>  	put_unaligned_le32(secs, value);
+>  
+>  	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl,
+> @@ -223,6 +324,7 @@ static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+>  		return rc;
+>  
+>  	secs = get_unaligned_le32(value);
+> +	secs += rtc_dd->offset;
+>  	rtc_time64_to_tm(secs, &alarm->time);
+>  
+>  	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
+> @@ -378,9 +480,23 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+>  	rtc_dd->allow_set_time = of_property_read_bool(pdev->dev.of_node,
+>  						      "allow-set-time");
+>  
+> +	rtc_dd->nvmem_cell = devm_nvmem_cell_get(&pdev->dev, "offset");
+> +	if (IS_ERR(rtc_dd->nvmem_cell)) {
+> +		rc = PTR_ERR(rtc_dd->nvmem_cell);
+> +		if (rc != -ENOENT)
+> +			return rc;
+> +		rtc_dd->nvmem_cell = NULL;
+> +	}
+> +
+>  	rtc_dd->regs = match->data;
+>  	rtc_dd->dev = &pdev->dev;
+>  
+> +	if (!rtc_dd->allow_set_time) {
+> +		rc = pm8xxx_rtc_read_offset(rtc_dd);
+> +		if (rc)
+> +			return rc;
+> +	}
+> +
+>  	rc = pm8xxx_rtc_enable(rtc_dd);
+>  	if (rc)
+>  		return rc;
+> @@ -435,3 +551,4 @@ MODULE_ALIAS("platform:rtc-pm8xxx");
+>  MODULE_DESCRIPTION("PMIC8xxx RTC driver");
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Anirudh Ghayal <aghayal@codeaurora.org>");
+> +MODULE_AUTHOR("Johan Hovold <johan@kernel.org>");
