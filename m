@@ -2,344 +2,129 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8270F689C7F
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 16:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB93F689EA1
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Feb 2023 16:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbjBCPDM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 3 Feb 2023 10:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S233294AbjBCP5p (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 3 Feb 2023 10:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbjBCPDL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 Feb 2023 10:03:11 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6DF1C5A6
-        for <linux-rtc@vger.kernel.org>; Fri,  3 Feb 2023 07:03:06 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id o18so4915198wrj.3
-        for <linux-rtc@vger.kernel.org>; Fri, 03 Feb 2023 07:03:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZphXZnJIf1mnSAPMAYN3jkqyGuWPwCiTft4uIOkPsY=;
-        b=UZKB0uszXuQHPjV/d6ldMJYmQaVCu6r7bSKXcRZmgnVmYVfoJa2IPY9dZKlOiAeTF7
-         ilzNdXHY1p0vbz8ufY1c8BIw08lNZ9l+srVJ3ZsjAG6QiUHWSg2RuGrgs2DWqLkNmyjJ
-         tFO4MJriJhFKpA/Du52z4/S1Ecl8nPiZP5GlG/H72vtRFel7/ktPumCTK5+pJr3Ths4c
-         dyd3bqmLkBhSSWkjs8AJV+wBucuKpSZF/1V/J+QwC2ldErzW9m4nWFFcNTUqNi6Q4hRF
-         sjzR4mT5qjf5ouZoXtiONSE2EzUXg57TPl5TB5ceikasxSgwcH0uLqY7zCkM7JJjSixX
-         Co4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZphXZnJIf1mnSAPMAYN3jkqyGuWPwCiTft4uIOkPsY=;
-        b=UPcGnV1QUP8UE3DO0HFjbyRzbe2mTPbA39Nec0oKBqzJkkIf66MW6Ps2yXK+0vbyHc
-         Xf8MpE6bJ/ZCOQD8Qe0qH6g2ZvFoinJZyiO/I4Qf3LRq/t2e3aKBLsXDpAFRehgKqRV6
-         SlJ9gmw/jJMo3lmxZ42CTITNomvuh2JgYhonwXS2Um5fi8+Ctjwam3HgIWrDVcEc/oFE
-         voheGkNBGw1tLZ56Gq17hXTs/BPoUZH8u6gNDUzCR9Ow8kg05JV8zeJzQEZardgRBNSw
-         5KuIC4/RfR8dOMn4PwUZcAVa7c7YxOyEC3LpOBkhzNeiFMs9N0Nbdml8xcsuQIGFssj4
-         21Xw==
-X-Gm-Message-State: AO0yUKUIfYEFoiphwZd2fNVjEJyyl+NPhwakajU9jhgv0V1eww96Jvgz
-        51KpNEb66wHz9GKCicGABaxfTw==
-X-Google-Smtp-Source: AK7set/Kxs51195391nVlWqZlCne+07F2FEBIK9FnyV3fGefDJXzM/3jikNVX55sasc3DNtUtqsu1A==
-X-Received: by 2002:a5d:6906:0:b0:2bf:e9dc:5542 with SMTP id t6-20020a5d6906000000b002bfe9dc5542mr8285055wru.53.1675436585053;
-        Fri, 03 Feb 2023 07:03:05 -0800 (PST)
-Received: from localhost ([2a01:cb1a:d:9cd7:1733:6588:b4e9:c6d3])
-        by smtp.gmail.com with ESMTPSA id t10-20020adff60a000000b002bbddb89c71sm2191084wrp.67.2023.02.03.07.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 07:03:04 -0800 (PST)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Jacky Bai <ping.bai@nxp.com>, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, dmitry.torokhov@gmail.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com, festevam@gmail.com
-Subject: Re: [PATCH v4 2/4] input: bbnsm_pwrkey: Add bbnsm power key support
-In-Reply-To: <20230129070823.1945489-3-ping.bai@nxp.com>
-References: <20230129070823.1945489-1-ping.bai@nxp.com>
- <20230129070823.1945489-3-ping.bai@nxp.com>
-Date:   Fri, 03 Feb 2023 16:03:03 +0100
-Message-ID: <87r0v6lrko.fsf@baylibre.com>
+        with ESMTP id S233117AbjBCP5k (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 Feb 2023 10:57:40 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF0B9E9C9;
+        Fri,  3 Feb 2023 07:57:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=RABYZKQEnf0QK23SEeW3xVSQhJGlQ3o0a9xB2pxXdFg=; b=mxbhKN8eDLHf3sRbpUD1Pm5ad9
+        DUxn/adCxDe6jPyxHF/gdCrJDf3lsIsIixEOuV8CpNuzkiX752ZBaf0wsnY0b2i3cM9FUEcN20eX2
+        rIR05AXVLD17i/oQNhbkjja3UIifH2qUWnxDkJqAUC7NG8o6c1/1J2q0zeQmeJMRLojURzkVBUv7W
+        j9O4rmt4LMN1wjI6tRgPyBaBqiFphCrvwmB0uTJBDK4DzjkMj6rO8E5wNKaysJXqmttqL9r4yHFrh
+        f47+XS3tx6LOOWc7AZ91W6sFA96KtfzRuvr3oItFzuKm5u8MGjDHAAIf0SDJC5iX+lV71N215QhEo
+        +ggV+adQ==;
+Received: from [2601:1c2:d00:6a60::9526]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNyR8-002pf0-3m; Fri, 03 Feb 2023 15:57:14 +0000
+Message-ID: <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
+Date:   Fri, 3 Feb 2023 07:57:12 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+ <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+ <20230203071423.GA24833@lst.de>
+ <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+ <20230203083037.GA30738@lst.de>
+ <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
+ <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 15:08, Jacky Bai <ping.bai@nxp.com> wrote:
+Hi--
 
-> The ON/OFF logic inside the BBNSM allows for connecting directly
-> into a PMIC or other voltage regulator device. The module has an
-> button input signal and a wakeup request input signal. It also
-> has two interrupts (set_pwr_off_irq and set_pwr_on_irq) and an
-> active-low PMIC enable (pmic_en_b) output.
->
-> Add the power key support for the ON/OFF button function found in
-> BBNSM module.
->
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+On 2/3/23 02:33, Geert Uytterhoeven wrote:
+> Hi Adrian,
+> 
+> On Fri, Feb 3, 2023 at 11:29 AM John Paul Adrian Glaubitz
+> <glaubitz@physik.fu-berlin.de> wrote:
+>> On Fri, 2023-02-03 at 09:30 +0100, Christoph Hellwig wrote:
+>>> On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
+>>>> Since this is my very first time stepping up as a kernel maintainer, I was hoping
+>>>> to get some pointers on what to do to make this happen.
+>>>>
+>>>> So far, we have set up a new kernel tree and I have set up a local development and
+>>>> test environment for SH kernels using my SH7785LCR board as the target platform.
+>>>>
+>>>> Do I just need to send a patch asking to change the corresponding entry in the
+>>>> MAINTAINERS file?
+>>>
+>>> I'm not sure a there is a document, but:
+>>>
+>>>  - add the MAINTAINERS change to your tree
+>>>  - ask Stephen to get your tree included in linux-next
+>>>
+>>> then eventually send a pull request to Linus with all of that.  Make
+>>> sure it's been in linux-next for a while.
+>>
+>> OK, thanks for the pointers! Will try to get this done by next week.
+>>
+>> We're still discussing among SuperH developer community whether there will be a second
+>> maintainer, so please bear with us a few more days. I will collect patches in the
+>> meantime.
+> 
+> Thanks a lot!
+> 
+> If you need any help with process, setup, ... don't hesitate to ask
+> (on e.g. #renesas-soc on Libera).
 
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+While Adrian and Geert are reading this, I have a question:
 
-> ---
->   - v2 changes:
->     - use device_property_read_u32() to read the property
->     - clean up the goto return, return directly
->     - sort the header file alphabetically
->     - rename the file to add 'nxp' prefix
->
->   - v3 changes:
->     - get the regmap directly from the parent node
->
->   - v4 changes:
->     - update the compatible string to align with binding file
->     - fix the device_property_read_u32 as stated in v2.
->     - add back the 'dev_warn' for 'dev_pm_set_wake_irq' return fail.
-> ---
->  drivers/input/keyboard/Kconfig            |  11 ++
->  drivers/input/keyboard/Makefile           |   1 +
->  drivers/input/keyboard/nxp-bbnsm-pwrkey.c | 192 ++++++++++++++++++++++
->  3 files changed, 204 insertions(+)
->  create mode 100644 drivers/input/keyboard/nxp-bbnsm-pwrkey.c
->
-> diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-> index 84490915ae4d..43827e34f276 100644
-> --- a/drivers/input/keyboard/Kconfig
-> +++ b/drivers/input/keyboard/Kconfig
-> @@ -456,6 +456,17 @@ config KEYBOARD_SNVS_PWRKEY
->  	  To compile this driver as a module, choose M here; the
->  	  module will be called snvs_pwrkey.
->  
-> +config KEYBOARD_BBNSM_PWRKEY
-> +	tristate "NXP BBNSM Power Key Driver"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	depends on OF
-> +	help
-> +	  This is the bbnsm powerkey driver for the NXP i.MX application
-> +	  processors.
-> +
-> +	  To compile this driver as a module, choose M here; the
-> +	  module will be called bbnsm_pwrkey.
-> +
->  config KEYBOARD_IMX
->  	tristate "IMX keypad support"
->  	depends on ARCH_MXC || COMPILE_TEST
-> diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-> index 5f67196bb2c1..e34dd65a34c3 100644
-> --- a/drivers/input/keyboard/Makefile
-> +++ b/drivers/input/keyboard/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_KEYBOARD_AMIGA)		+= amikbd.o
->  obj-$(CONFIG_KEYBOARD_APPLESPI)		+= applespi.o
->  obj-$(CONFIG_KEYBOARD_ATARI)		+= atakbd.o
->  obj-$(CONFIG_KEYBOARD_ATKBD)		+= atkbd.o
-> +obj-$(CONFIG_KEYBOARD_BBNSM_PWRKEY)	+= nxp-bbnsm-pwrkey.o
->  obj-$(CONFIG_KEYBOARD_BCM)		+= bcm-keypad.o
->  obj-$(CONFIG_KEYBOARD_CAP11XX)		+= cap11xx.o
->  obj-$(CONFIG_KEYBOARD_CLPS711X)		+= clps711x-keypad.o
-> diff --git a/drivers/input/keyboard/nxp-bbnsm-pwrkey.c b/drivers/input/keyboard/nxp-bbnsm-pwrkey.c
-> new file mode 100644
-> index 000000000000..154ce58b9d5a
-> --- /dev/null
-> +++ b/drivers/input/keyboard/nxp-bbnsm-pwrkey.c
-> @@ -0,0 +1,192 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +//
-> +// Copyright 2022 NXP.
-> +
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/init.h>
-> +#include <linux/input.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_wakeirq.h>
-> +#include <linux/regmap.h>
-> +
-> +#define BBNSM_CTRL		0x8
-> +#define BBNSM_INT_EN		0x10
-> +#define BBNSM_EVENTS		0x14
-> +#define BBNSM_PAD_CTRL		0x24
-> +
-> +#define BBNSM_BTN_PRESSED	BIT(7)
-> +#define BBNSM_PWR_ON		BIT(6)
-> +#define BBNSM_BTN_OFF		BIT(5)
-> +#define BBNSM_EMG_OFF		BIT(4)
-> +#define BBNSM_PWRKEY_EVENTS	(BBNSM_PWR_ON | BBNSM_BTN_OFF | BBNSM_EMG_OFF)
-> +#define BBNSM_DP_EN		BIT(24)
-> +
-> +#define DEBOUNCE_TIME		30
-> +#define REPEAT_INTERVAL		60
-> +
-> +struct bbnsm_pwrkey {
-> +	struct regmap *regmap;
-> +	int irq;
-> +	int keycode;
-> +	int keystate;  /* 1:pressed */
-> +	struct timer_list check_timer;
-> +	struct input_dev *input;
-> +};
-> +
-> +static void bbnsm_pwrkey_check_for_events(struct timer_list *t)
-> +{
-> +	struct bbnsm_pwrkey *bbnsm = from_timer(bbnsm, t, check_timer);
-> +	struct input_dev *input = bbnsm->input;
-> +	u32 state;
-> +
-> +	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &state);
-> +
-> +	state = state & BBNSM_BTN_PRESSED ? 1 : 0;
-> +
-> +	/* only report new event if status changed */
-> +	if (state ^ bbnsm->keystate) {
-> +		bbnsm->keystate = state;
-> +		input_event(input, EV_KEY, bbnsm->keycode, state);
-> +		input_sync(input);
-> +		pm_relax(bbnsm->input->dev.parent);
-> +	}
-> +
-> +	/* repeat check if pressed long */
-> +	if (state) {
-> +		mod_timer(&bbnsm->check_timer,
-> +			  jiffies + msecs_to_jiffies(REPEAT_INTERVAL));
-> +	}
-> +}
-> +
-> +static irqreturn_t bbnsm_pwrkey_interrupt(int irq, void *dev_id)
-> +{
-> +	struct platform_device *pdev = dev_id;
-> +	struct bbnsm_pwrkey *bbnsm = platform_get_drvdata(pdev);
-> +	struct input_dev *input = bbnsm->input;
-> +	u32 event;
-> +
-> +	regmap_read(bbnsm->regmap, BBNSM_EVENTS, &event);
-> +	if (event & BBNSM_BTN_OFF)
-> +		mod_timer(&bbnsm->check_timer, jiffies + msecs_to_jiffies(DEBOUNCE_TIME));
-> +	else
-> +		return IRQ_NONE;
-> +
-> +	pm_wakeup_event(input->dev.parent, 0);
-> +
-> +	/* clear PWR OFF */
-> +	regmap_write(bbnsm->regmap, BBNSM_EVENTS, BBNSM_BTN_OFF);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static void bbnsm_pwrkey_act(void *pdata)
-> +{
-> +	struct bbnsm_pwrkey *bbnsm = pdata;
-> +
-> +	del_timer_sync(&bbnsm->check_timer);
-> +}
-> +
-> +static int bbnsm_pwrkey_probe(struct platform_device *pdev)
-> +{
-> +	struct bbnsm_pwrkey *bbnsm;
-> +	struct input_dev *input;
-> +	struct device_node *np = pdev->dev.of_node;
-> +	int error;
-> +
-> +	bbnsm = devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
-> +	if (!bbnsm)
-> +		return -ENOMEM;
-> +
-> +	bbnsm->regmap = syscon_node_to_regmap(np->parent);
-> +	if (IS_ERR(bbnsm->regmap)) {
-> +		dev_err(&pdev->dev, "bbnsm pwerkey get regmap failed\n");
-> +		return PTR_ERR(bbnsm->regmap);
-> +	}
-> +
-> +	if (device_property_read_u32(&pdev->dev, "linux,code", &bbnsm->keycode)) {
-> +		bbnsm->keycode = KEY_POWER;
-> +		dev_warn(&pdev->dev, "KEY_POWER without setting in dts\n");
-> +	}
-> +
-> +	bbnsm->irq = platform_get_irq(pdev, 0);
-> +	if (bbnsm->irq < 0)
-> +		return -EINVAL;
-> +
-> +	/* config the BBNSM power related register */
-> +	regmap_update_bits(bbnsm->regmap, BBNSM_CTRL, BBNSM_DP_EN, BBNSM_DP_EN);
-> +
-> +	/* clear the unexpected interrupt before driver ready */
-> +	regmap_write_bits(bbnsm->regmap, BBNSM_EVENTS, BBNSM_PWRKEY_EVENTS, BBNSM_PWRKEY_EVENTS);
-> +
-> +	timer_setup(&bbnsm->check_timer, bbnsm_pwrkey_check_for_events, 0);
-> +
-> +	input = devm_input_allocate_device(&pdev->dev);
-> +	if (!input) {
-> +		dev_err(&pdev->dev, "failed to allocate the input device\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	input->name = pdev->name;
-> +	input->phys = "bbnsm-pwrkey/input0";
-> +	input->id.bustype = BUS_HOST;
-> +
-> +	input_set_capability(input, EV_KEY, bbnsm->keycode);
-> +
-> +	/* input customer action to cancel release timer */
-> +	error = devm_add_action(&pdev->dev, bbnsm_pwrkey_act, bbnsm);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "failed to register remove action\n");
-> +		return error;
-> +	}
-> +
-> +	bbnsm->input = input;
-> +	platform_set_drvdata(pdev, bbnsm);
-> +
-> +	error = devm_request_irq(&pdev->dev, bbnsm->irq, bbnsm_pwrkey_interrupt,
-> +			       IRQF_SHARED, pdev->name, pdev);
-> +	if (error) {
-> +		dev_err(&pdev->dev, "interrupt not available.\n");
-> +		return error;
-> +	}
-> +
-> +	error = input_register_device(input);
-> +	if (error < 0) {
-> +		dev_err(&pdev->dev, "failed to register input device\n");
-> +		return error;
-> +	}
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +	error = dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
-> +	if (error)
-> +		dev_warn(&pdev->dev, "irq wake enable failed.\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id bbnsm_pwrkey_ids[] = {
-> +	{ .compatible = "nxp,imx93-bbnsm-pwrkey" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, bbnsm_pwrkey_ids);
-> +
-> +static struct platform_driver bbnsm_pwrkey_driver = {
-> +	.driver = {
-> +		.name = "bbnsm_pwrkey",
-> +		.of_match_table = bbnsm_pwrkey_ids,
-> +	},
-> +	.probe = bbnsm_pwrkey_probe,
-> +};
-> +module_platform_driver(bbnsm_pwrkey_driver);
-> +
-> +MODULE_AUTHOR("Jacky Bai <ping.bai@nxp.com>");
-> +MODULE_DESCRIPTION("NXP bbnsm power key Driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.37.1
+Is this "sh64" still accurate and applicable? from Documentation/kbuild/kbuild.rst:
+
+But some architectures such as x86 and sparc have aliases.
+
+- x86: i386 for 32 bit, x86_64 for 64 bit
+- sh: sh for 32 bit, sh64 for 64 bit <<<<<<<<<<<<<<<
+- sparc: sparc32 for 32 bit, sparc64 for 64 bit
+
+
+
+Thanks.
+-- 
+~Randy
