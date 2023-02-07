@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE0C68DCE8
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Feb 2023 16:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD0F68DD20
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 Feb 2023 16:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjBGPYU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Feb 2023 10:24:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S231514AbjBGPgJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 7 Feb 2023 10:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjBGPYU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Feb 2023 10:24:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E711D;
-        Tue,  7 Feb 2023 07:24:19 -0800 (PST)
+        with ESMTP id S230153AbjBGPgH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Feb 2023 10:36:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328A1C17F;
+        Tue,  7 Feb 2023 07:36:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C8B60E87;
-        Tue,  7 Feb 2023 15:24:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B9DC433D2;
-        Tue,  7 Feb 2023 15:24:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5418B819EE;
+        Tue,  7 Feb 2023 15:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C22CC4339B;
+        Tue,  7 Feb 2023 15:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675783458;
-        bh=ryvnmyTVD0opUc4DjrEl6f3pgUv/hzePaZ3/59RkEKQ=;
+        s=k20201202; t=1675784164;
+        bh=twUuRWo9k9a5573XBSzemQ0MkkZj6VKOcK+Snm4pbYQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pUDdomIahlSdTMDN+sGGYnboaJCDE3SClnRrVGn8tKIhvBXFubGJvxQdeFhktFVuu
-         TuMS/g5j0SqEPtZjeefzK9lxRDoQyX5sKAi++AcR8d0MSy6zzA7nc1lpQx7ZE+Tzzh
-         szhUYd58s+9RSxL/PzE7B+iJO9dWWMqnAS8z6o3EHlegCpscHsDDJj1PWQZxl0ROIQ
-         mRwt07OJshXC3yVHS+qcaSjWMl1Lw8OneJa60F1TZgB0qoXmueltsrzyQMvKI8P8Ck
-         hc5OFHNYTxio7YZJpMPFiw47euIX2/HY8Jvvj5ut9P5FrBxix+Cize86k/YVIYSi2P
-         dXpUl7Eskha9w==
+        b=on7gJR781lE0FEpK0kHYrD5xk+6bAxBTheM6yrUELehxQPQvUN+82j9kgc8MoH6Rv
+         ANwsPYYxde5xhhPJacBLJD/iSB6+p1rPacaSYIJ6au/q9VN7Dh+X0r80h+yMgw5SOD
+         59ISRMLHicS+F9ktW8sGdRuT0LapgpHpSy+CP2qY0FtzAQF1pJ11FXtfQP0skns7Wz
+         EOIni3uqdYBwvTJcarlq2NfgX373LNLIuTHbynIekuuaO/cYB+eAvQKoHzl386tbuN
+         7OewWkHUmdzNtLrQcx1Kil1pD+zSbomE039Zt9tp+kvQGggq6jF1Gw9/cld6d7gUTr
+         R7x84V8c35huw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1pPPpz-00029h-FJ; Tue, 07 Feb 2023 16:24:51 +0100
-Date:   Tue, 7 Feb 2023 16:24:51 +0100
+        id 1pPQ1O-0002CR-9t; Tue, 07 Feb 2023 16:36:38 +0100
+Date:   Tue, 7 Feb 2023 16:36:38 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     David Collins <quic_collinsd@quicinc.com>
 Cc:     Johan Hovold <johan+linaro@kernel.org>,
@@ -47,18 +47,16 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Maximilian Luz <luzmaximilian@gmail.com>,
         linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 16/22] dt-bindings: rtc: qcom-pm8xxx: add nvmem-cell
- offset
-Message-ID: <Y+JtQ26xEU70KxkC@hovoldconsulting.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 17/22] rtc: pm8xxx: add support for nvmem offset
+Message-ID: <Y+JwBkhc/WbkFq25@hovoldconsulting.com>
 References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-17-johan+linaro@kernel.org>
- <d9cfbdfe-5068-f826-dc37-252ef165589f@quicinc.com>
+ <20230202155448.6715-18-johan+linaro@kernel.org>
+ <f7e6203d-5773-3c40-db3c-547334efb218@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d9cfbdfe-5068-f826-dc37-252ef165589f@quicinc.com>
+In-Reply-To: <f7e6203d-5773-3c40-db3c-547334efb218@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,34 +66,32 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 07:16:37PM -0800, David Collins wrote:
+On Mon, Feb 06, 2023 at 07:16:54PM -0800, David Collins wrote:
 > On 2/2/23 07:54, Johan Hovold wrote:
-> > On many Qualcomm platforms the PMIC RTC control and time registers are
-> > read-only so that the RTC time can not be updated. Instead an offset
+
+> > +static int pm8xxx_rtc_read_nvmem_offset(struct pm8xxx_rtc *rtc_dd)
+> > +{
+> > +	size_t len;
+> > +	void *buf;
+> > +	int rc;
+> > +
+> > +	buf = nvmem_cell_read(rtc_dd->nvmem_cell, &len);
+> > +	if (IS_ERR(buf)) {
+> > +		rc = PTR_ERR(buf);
+> > +		dev_dbg(rtc_dd->dev, "failed to read nvmem offset: %d\n", rc);
 > 
-> s/can not/cannot/
+> Why is dev_dbg() used instead of dev_err() for newly added error
+> messages?  Also, why do these conditions warrant error logging when some
+> of the previous patches in this series removed older error logging?
 
-As far as I can tell, 'can not' is still correct even if it's less
-commonly used this way compared to 'cannot'.
+I would have used dev_err() here and did so for v1, but Alexandre
+prefers dev_dbg() for errors that are unlikely to be seen by regular
+users but that can still be useful to developers (e.g. when enabling the
+rtc on a new platform).
 
-> > needs be stored in some machine-specific non-volatile memory, which a
-> > driver can take into account.
-> > 
-> > Add an 'offset' nvmem cell which can be used to store a 32-bit offset
-> > from the Unix epoch so that the RTC time can be updated on such
-> > platforms.
-> > 
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml     | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> 
-> Assuming that the minor commit text comment above is addressed:
-
-I'm definitely not resending because of this, but I'll keep it in mind
-for future patches. Thanks.
-
-> Reviewed-by: David Collins <quic_collinsd@quicinc.com>
+One or two of the spmi errors I removed falls in the same category in so
+far that the control and time registers may write-protected on some
+platforms, but such errors are currently logged by the spmi controller
+driver.
 
 Johan
