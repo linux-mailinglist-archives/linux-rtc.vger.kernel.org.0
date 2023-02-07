@@ -2,50 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825BB68C12F
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Feb 2023 16:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F15568CD22
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 Feb 2023 04:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjBFPSk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 6 Feb 2023 10:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S229479AbjBGDNn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 6 Feb 2023 22:13:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFPSi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Feb 2023 10:18:38 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638C57A97
-        for <linux-rtc@vger.kernel.org>; Mon,  6 Feb 2023 07:18:36 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pP3GM-0004Jl-4c; Mon, 06 Feb 2023 16:18:34 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:ed53:8ea4:3645:4bd2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0C324171903;
-        Mon,  6 Feb 2023 15:18:33 +0000 (UTC)
-Date:   Mon, 6 Feb 2023 16:18:24 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>, linux-rtc@vger.kernel.org,
-        kernel@pengutronix.de, Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH RESEND 0/2] rtc: rv8803 patches
-Message-ID: <20230206151824.rb32y2jojtcdz5wp@pengutronix.de>
-References: <20221123095527.2771434-1-s.hauer@pengutronix.de>
- <20230131081955.ke2larva6ftm5v4j@pengutronix.de>
- <Y9kCzCvGopu8+RCb@mail.local>
+        with ESMTP id S229460AbjBGDNn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Feb 2023 22:13:43 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B5814490;
+        Mon,  6 Feb 2023 19:13:42 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3172C3m9013776;
+        Tue, 7 Feb 2023 03:13:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=smUu0KqA8nxvqZWVjdSpMGXHrp8MSM1Ao/dSlFdeWlY=;
+ b=HfqTowwO/Xflp4tmg0cie7Cn0iz9y60B6IyZI2ET8uuQa7osRb/lRfq8Lwuv+wMFIAl/
+ +A02/9Xvxztklbkbhdf9hmxsrJcB/97QHEMhbDztUDJCxnHMEGM+OP6J2y2ac2ZKozwt
+ lgGh/zon3PjmsZpo2rPZ/eKfFm6rAJwbMenDZZ2EpRW2XH+1Jb1nGJ1VRQQ/R40oBa4q
+ v/uEqhyTqemct9VD4MKw/xGUVgk/MnPcwrITd/o745PmiZCNZGrvEtkL4n3101o5AYZ/
+ FouK40UQk2fFoJ3QIXbT4EfTKj/dwvXAC6RjzG2tllxqxkvzfcWsBps7M6h4BTeS6dHp pg== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nheb0wa4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 03:13:28 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3173DRCX019578
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Feb 2023 03:13:27 GMT
+Received: from [10.47.206.1] (10.49.16.6) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 19:13:27 -0800
+Message-ID: <efab844a-4ffe-bc68-d99e-8688ad222e3a@quicinc.com>
+Date:   Mon, 6 Feb 2023 19:12:43 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="43djrhc3gjx3uggm"
-Content-Disposition: inline
-In-Reply-To: <Y9kCzCvGopu8+RCb@mail.local>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 01/22] rtc: pm8xxx: fix set-alarm race
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <20230202155448.6715-1-johan+linaro@kernel.org>
+ <20230202155448.6715-2-johan+linaro@kernel.org>
+From:   David Collins <quic_collinsd@quicinc.com>
+In-Reply-To: <20230202155448.6715-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: c3uBQBVhOjnB3ngB7UUuQJDCIXLtNq3z
+X-Proofpoint-GUID: c3uBQBVhOjnB3ngB7UUuQJDCIXLtNq3z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=826 adultscore=0 phishscore=0 clxscore=1011 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302070027
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,87 +87,33 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On 2/2/23 07:54, Johan Hovold wrote:
+> Make sure to disable the alarm before updating the four alarm time
+> registers to avoid spurious alarms during the update.
 
---43djrhc3gjx3uggm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What scenario can encounter a spurious alarm triggering upon writing the
+new alarm time inside of pm8xxx_rtc_set_alarm()?
 
-On 31.01.2023 13:00:12, Alexandre Belloni wrote:
-> On 31/01/2023 09:19:55+0100, Marc Kleine-Budde wrote:
-> > Hello Alexandre,
-> >=20
-> > On 23.11.2022 10:55:25, Sascha Hauer wrote:
-> > > This series has the remainder of
-> > > https://lore.kernel.org/all/20220426071056.1187235-1-s.hauer@pengutro=
-nix.de/
-> > > which was partly applied.
-> > >=20
-> > > Alexandre,
-> > >=20
-> > > Last time this series was send you asked if this series fixes a probl=
-em
-> > > we've really seen to which Ahmad answered:
-> > >=20
-> > > > The kernel message
-> > > >=20
-> > > >   rtc rtc0: invalid alarm value: 2020-3-27 7:82:0
-> > > >=20
-> > > > listed in the commit message is something I actually ran into. There
-> > > > was no v2f set then. The customer has also variously observed bit f=
-lips
-> > > > independently of v2f: During EMC testing, electrostatic discharge a=
-t developer
-> > > > desks and even in the field: Suspected causes were lightning strike=
-s in the
-> > > > vicinity and the switching of larger inductive loads.
-> > > > They're very paranoid of logging invalid timestamps, so we'll keep =
-the patch
-> > > > anyhow at our side, but I think it is generally useful as well: If =
-we can't
-> > > > set an invalid alarm time by normal means, but read back an invalid=
- time,
-> > > > something may have corrupted other memory, so treating it as a v2f =
-is sensible.
-> > >=20
-> > > There was no answer to this. I would be glad if you could take this
-> > > series. I would understand though if you say that this problem is too
-> > > esoteric to fix it upstream, we would keep the patches locally then.
-> > > Please just say so, it would help me to get the problem from my desk
-> > > ;)
-> >=20
-> > Can someone take this patch series? If not, what can we do to get these
-> > changes upstream?
->=20
-> I'm going to take it but this may silently break existing users with a
-> niche use case.
-> Also, this check will only happen at boot time so I'm not sure there is
-> a huge benefit, unless your customer reboots the platform often.
+> Note that the disable needs to be done outside of the ctrl_reg_lock
+> section to prevent a racing alarm interrupt from disabling the newly set
+> alarm when the lock is released.
 
-Thanks Alexandre, is this patch already on an immutable branch?
+What scenario shows the IRQ race issue that you mentioned?  How does not
+protecting this register write with a lock avoid the race condition?
 
-regards,
-Marc
+> Fixes: 9a9a54ad7aa2 ("drivers/rtc: add support for Qualcomm PMIC8xxx RTC")
+> Cc: stable@vger.kernel.org      # 3.1
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/rtc/rtc-pm8xxx.c | 24 ++++++++++--------------
+>  1 file changed, 10 insertions(+), 14 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Note that since locking is removed later in the patch series, my
+questions above are mainly for the sake of curiosity.
 
---43djrhc3gjx3uggm
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: David Collins <quic_collinsd@quicinc.com>
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPhGi0ACgkQvlAcSiqK
-BOivpwf8CsXd/B6/U9IZU2mP+m1R7tuknGZ5wTzWBx+ewVHQ7OTW+oJvxL8sXiga
-I7n+vm8PVaGspzMNlujZP74kznwN9Od2/GDv8k5O8TMuXekTFd8PpuDag+U+296X
-X1itpwu4Llw0XWH66m7piETEHxb+1QQ0p1GA/gLB3qotUwaLhfnCcvdOK8V33FCM
-A9at3g41gpBWBn4cVS3tK0izTFKG/+r+N2zlsE6wyxYgVUDYrVkEV2lCqKRJqI4x
-hKXQb9u9r8zQBgEX+QWI5LokNSY7g12BFvP2OOjpTXKc/koPzEbfRjx3TsH3X2KC
-DI5mzBhroIdZXs6ptWNPREBxTPuNOA==
-=j7+d
------END PGP SIGNATURE-----
+Thanks,
+David
 
---43djrhc3gjx3uggm--
