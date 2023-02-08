@@ -2,143 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D4C68F06C
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Feb 2023 15:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435BA68F19D
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Feb 2023 16:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjBHONG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 8 Feb 2023 09:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S230407AbjBHPIG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Feb 2023 10:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjBHONB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Feb 2023 09:13:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC5437F1E;
-        Wed,  8 Feb 2023 06:12:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99DC5B81C76;
-        Wed,  8 Feb 2023 14:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6EF7C4339C;
-        Wed,  8 Feb 2023 14:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675865539;
-        bh=CM9X2AuKUJbsYimacCNPKUAK4TpbgQFBIKIrx7h4lJw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LVucjxu+REx2vxJaU73V9LeqN0VfNlpVqOVjlgapAR7+Js6CJh2wUlBGjryat06Mx
-         D9i30JRbIJdOspvFUtAoFUTSjc7q9zKrJAeQbeBiwFIiiX8euIEbk0Ty1Tz6V657+T
-         FLA5gRRVsKUOtlkaWGYAvOyX2NIaQlgKRJiFZbCRwtUw7qjRf/eGTg/jPYZv/0q1tt
-         FcUOC2BCeTia4s8YYIZRIs5mKBJvajFbiu7xD8C4mv+0OOcBl6e5vyuvgWOBBh+MUZ
-         xz5q4YEAPB/J4RrPpxV69F8ll/mVwhh9Od/sV4/BiL8f+TOBF8F2/I8j5Fv6bLISdE
-         LVYCGEEzxvGgw==
-Date:   Wed, 8 Feb 2023 15:12:16 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <Y+OtwCqt26UjCwkZ@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
- <CAAhV-H57bV855SMr6iBqoQzdak5QSnaRLjQ9oAbOtYZnik5SoQ@mail.gmail.com>
- <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
+        with ESMTP id S229827AbjBHPIF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Feb 2023 10:08:05 -0500
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6DF19F14
+        for <linux-rtc@vger.kernel.org>; Wed,  8 Feb 2023 07:08:02 -0800 (PST)
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+ (mail-am6eur05lp2113.outbound.protection.outlook.com [104.47.18.113]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-26-2hW5sY44M6GCz5W-EOpzbA-2; Wed, 08 Feb 2023 16:06:41 +0100
+X-MC-Unique: 2hW5sY44M6GCz5W-EOpzbA-2
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ GV0P278MB0782.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:54::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.36; Wed, 8 Feb 2023 15:06:28 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ee37:449a:ef93:fada]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ee37:449a:ef93:fada%5]) with mapi id 15.20.6086.017; Wed, 8 Feb 2023
+ 15:06:28 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>
+Subject: [REGRESSION] rtc: imx-sc: remove .read_alarm
+Thread-Topic: [REGRESSION] rtc: imx-sc: remove .read_alarm
+Thread-Index: AQHZO87r6JrHLUV5a0mkHf2nuLX1Pg==
+Date:   Wed, 8 Feb 2023 15:06:28 +0000
+Message-ID: <bbe470eaeeb17624444b37dbe35b0883193e475b.camel@toradex.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZR0P278MB0683:EE_|GV0P278MB0782:EE_
+x-ms-office365-filtering-correlation-id: fc7a011d-62bd-4b14-4f0b-08db09e60dfa
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: e/BTK+wAFJl7hyEIzWbQVaWuORSyYDkTVnqc1AgVwcnvHFEiCbcCQO+62JzcawR9Oulu82Tkg4xzJ0nndRLemLc7AaqWyER1D2Ueutql0t4pzstwG8pFLRVQnMx2h+n+Cc+eorWo52cQGFkFcrAORe5wOvDPdB64CveqCZKSmiW1WJFoVhexx1QdmvUO6H4jMjMFLxcwtKmKTq2RYIcLPzGvuBv8irBGVKwvHTa5JvqBAOzLnvmOJ4XzAtu1lUtWwtbKLXnOFBOqPEw1xwNg5uEJWtz8xuyL0HtrKFQW3UQVMnAdPM/lvO9kXVhiC7j9Yr5M5G3Gli+pimOZMSBjZROREY4+4Jewmqj9YAHU4qpoRWhm5TAj+MA/xWQysAWdxb28V/2IYEwIj1hqKsevrYysqimpnWBv8b3raB+1HNkPPOj/ltbf+CAlFcxF8/AkhGRrgB4gT/d2aX72ib+CSpR5ojbvSbWfj2QVOfmUogL+djxX9oaq7RytojapM6zjepBoQzQ8yXivoikmbVz0SWwsQMDv22GC+l563m0ca9VjA91JhA5FpOisORggylOPxZeDTe3VluEGbjsfrYgFYZglUtbto6TOPswXWuKPnv4hh3HYqEqn3OFWwXtS8YVGvPb9aLfxhxeRCo/RFhC96c4z0S5AXJaTJqLFfVsMHtR6MwvJTjVaLuG0o6gjqE9rdozSgIdDZ8TIsSAHX2I4vRfCjLb8CMQ3juCe+opQuRo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(366004)(39850400004)(451199018)(2906002)(38070700005)(4744005)(7416002)(44832011)(5660300002)(38100700002)(122000001)(66446008)(71200400001)(478600001)(36756003)(6486002)(2616005)(86362001)(6506007)(186003)(26005)(6512007)(6916009)(64756008)(8676002)(66476007)(66556008)(76116006)(66946007)(8936002)(41300700001)(4326008)(83380400001)(54906003)(316002)(142923001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y2NQcldLMk1OU2RyNU9aSHNmVTYrWHNKL3B1d2FQQ3hDTllEcTFMa3M5M2JD?=
+ =?utf-8?B?RXFiRmZzeCt0c0NGMy91Y0tJWDRXOTgvYkZBUTZWNDZhU3FDL0dkQUp3aytz?=
+ =?utf-8?B?cHlaQ0pBdTFubUk5ZHN4NEdBSWF4U1FMaEJmWHBtMGU1VVpSQWxWdjEwczhJ?=
+ =?utf-8?B?R1VZQVdVb1d1N3lKTDJGc09Lb3JlblpQUy9CTXZPaUptTU1Ib21LMmFJRDdu?=
+ =?utf-8?B?RkhScWlNd1VLWHJCaXRFbDFtQmlTR2pPa3QyV1k3VXRiczJHZjBiTVJsWkhI?=
+ =?utf-8?B?RTByeEpRdENBcVpINk5EVVUxUkJ5ZzVPcDFGcmxteXdJbFk3SWRyalRLNWpx?=
+ =?utf-8?B?RHMrbVlyYzVwVG9sZDZwTlNHL1A0cVFXR2ZPUUZMd01YTUdub201WFMwN1Qy?=
+ =?utf-8?B?ODJYNFI4M1h5ODUvYjk1d2dVTmNIdzVOcUpUdG83UEpXTzNYa0h6bnkraVVi?=
+ =?utf-8?B?eUhBYVdyamhib2VGbkE1dUhYM3A0TWg2bTlqWlVFN3pNRUdwMUpMSEpvdWFG?=
+ =?utf-8?B?MUU0YVMvaGt1dnRFdkJYTldHTmFaOWtFOWNDYitWaFZCM2NtY2VUUjdKbjkr?=
+ =?utf-8?B?VTd2bjJoNTZrVlNPNzdqZkg5WVRITlZ5RWp3Y3B5S0hzL3hJZHAvZzBaLzNB?=
+ =?utf-8?B?cWhudFFuNTFBaGp4K1dqVVpWT1NyMWJsUWVHSnBLUkx2bmU2LzNiQzdvaVN6?=
+ =?utf-8?B?Um9vUXV3ZFFlNkpaQ0xpTW9FditqYnQ2VnI3S2FTbmFURXp2RUJ1Q0lYVm1k?=
+ =?utf-8?B?M2Z0cVBidGxVZEFzeWZxT2tqZUovMXl2cW00YVNURFMrUFovN0hJZ2VwZURG?=
+ =?utf-8?B?c2lNUy82ZkNPbEZYSVQ1QktyTGdpRk9RbS9qN2lmTzlTcWVVUkxUd1lkZFJr?=
+ =?utf-8?B?MG90c2JPWFI2Q2UrZGF2VlRTd2hHN0JXTlZyOHdvcjFja1ZRbmdqb1VoTzkr?=
+ =?utf-8?B?VDYrdVZlYTR0YUdNcGw4MUQ0blZnODFpOUozY3pSQUdLeFh3UkhRMVFQLy9y?=
+ =?utf-8?B?Q3hZMExmMHY1bjFhY3hGNkxhb3pNNFlDVVk5VHR3NzVKVWFoYzNBYjl5WnU3?=
+ =?utf-8?B?a0tYZWpweWh2cEppZ2NVeEtVNzlncFQzU3liTXNjZDZ5OWpCTFhSREpDck9o?=
+ =?utf-8?B?eUlaRG9zVENhWFpMcENlYTNIRldHZnBqS2dsVExLYXdScVRLWVkxQjIxTXQ1?=
+ =?utf-8?B?WWpBc2txVHlrQS9JajRaQVR6ZWZ6MXNxN2o0bzlaSTRxRlU1SHo1MUZ4djB3?=
+ =?utf-8?B?OUthWTlrbjRXMm83Nko4YUREbzg3RVEvUkxuWUdnUFF0bmtLNWVmN1FmaEtM?=
+ =?utf-8?B?Vm53eG9WZXovdXlmYmlTZEUyNFFldURzL1RCSEdCWWRqK05rME5ZKzhRWFhm?=
+ =?utf-8?B?RjNJMVVKK0NETWhwWFZDYkFEdlNzWEI2amdsWjhTMEE4MTFGTytwOTJmZXVn?=
+ =?utf-8?B?bG5jT0RhWVdFL2lKRGNUVmw5OXE0c1FHRE9Id01abFd4bVRoZGhBZkx2S0pF?=
+ =?utf-8?B?Tk51aldzSkFIUkJVVHRvN29pelY2SDdkMXMyZjNYcEozUW00TDlJOHVzZWpU?=
+ =?utf-8?B?MmVHcDFuNTd5dmQzZEVjbFJtUEZiY2NHellLcFJ0NGE2Q3ppLzN3RTlsWGdi?=
+ =?utf-8?B?NEFGMGNxZ1lETDRWTnhDazVEYWUvVy8zMlFuNldybjVDUE1QeG14UHQ4TUY3?=
+ =?utf-8?B?cElJZmdBOWEydkZNT0d2RE1MT0tRN0M0TWwwTkUwQ1g4VHIrTHBoNlRwM21S?=
+ =?utf-8?B?cEx1SllqMXM5RWxibTdOb1Z6UFJoVEpoemFJQ3owYVQ0VDRUaVNLVlpxWFdM?=
+ =?utf-8?B?a0xLYmdGWjlRdEozaWR2K1ZvL3diR3NvcjY5NnZITUV2K1IxMzV2TkI1Z2Rv?=
+ =?utf-8?B?OC96M05EV3liVEpLVzNUMXNzR2pKSmpsd1BXZDJSa3libVR5K1U1bWp6YTRC?=
+ =?utf-8?B?TzhWcnhwNUN2ZjFLZ25qbER5QXZsWVVSZW5KWEZwS1NlREFDUTNFYVFZVzRH?=
+ =?utf-8?B?VWQxUFBVcE5TblE3Q1ZCMVNERDRjYkJIdXpsOE5pcjk1MFhLQVl1ZEhHaitP?=
+ =?utf-8?B?UmNlaEU2ei8vUkhVSEJFWU1sbGR4NWlPZ3FydzROOXBIUXYxMllPamlnRDRs?=
+ =?utf-8?B?bEJjc1hzellHMFJ1dU10Vk1XeVdFY0c2N3M0K0c5V05wZGl5YXoxaE5iUjBY?=
+ =?utf-8?Q?xgh65X778pp+5Jc56q2qXpc=3D?=
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H/y3lZ2MEalioY2m"
-Content-Disposition: inline
-In-Reply-To: <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc7a011d-62bd-4b14-4f0b-08db09e60dfa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2023 15:06:28.4380
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +yIjmopvLPsN1jYlCvZM5sTORTq1ajFHthj6cbA1eGGVf1p0AZRkqa7r2KD6Hlk1znYIbJBL5qesPF0hnt65U0Kc0iZXYn339tab5NZjWFA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0782
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <C2FA59C21DB53E428E0EF67C231238D7@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+SGkgQWxleGFuZHJlDQoNCldlcmUgeW91IGF3YXJlIHRoYXQgdGhpcyBicmVha3MgdGhlIHN5c2Zz
+IHVzZSBjYXNlPyBFLmcuIGJlZm9yZSB3ZSB3ZXJlIGFibGUgdG8gc3VzcGVuZCBhbmQgcmVzdW1l
+IDEwIHNlY29uZHMNCmxhdGVyIGFzIGZvbGxvd3M6DQoNCmVjaG8gKzEwID4gL3N5cy9jbGFzcy9y
+dGMvcnRjMS93YWtlYWxhcm07IGVjaG8gbWVtID4gL3N5cy9wb3dlci9zdGF0ZQ0KDQpTaW5jZSB0
+aGUgcmVtb3ZhbCBvZiAucmVhZF9hbGFybSBpbiBjb21taXQgNzk0MjEyMWI4Y2EwICgicnRjOiBp
+bXgtc2M6IHJlbW92ZSAucmVhZF9hbGFybSIpIHRoaXMgbm8gbG9uZ2VyDQpzZWVtcyB0byB3b3Jr
+Lg0KDQpUaGlzIHNlZW1zIGxpa2UgYSByZWdyZXNzaW9uIG9yIGlzIHRoaXMgbm90IHN1cHBvc2Vk
+IHRvIHdvcms/DQoNClRoYW5rcyBmb3IgY2xhcmlmeWluZy4NCg0KQ2hlZXJzDQoNCk1hcmNlbA0K
 
---H/y3lZ2MEalioY2m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-
-> Yes, that's the plan. We're collecting the various patches people have se=
-nt
-> in for arch/sh, review and test them and apply them.
->=20
-> My test board is running the latest kernel now, so I can test new patches=
-, too.
-
-I am just witnessing this development, but I want to say thanks for your
-effort and congrats on your progress. Looks like you do the right things
-correctly, cool! Kudos also to Geert and others for their assistance.
-
-
---H/y3lZ2MEalioY2m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPjrbwACgkQFA3kzBSg
-KbYHCw//YV/RG0PWJ1txmpgpA0mLX7EfhxqJS6vwNlqziCSd910A+/ZNL7p2Q5Hx
-wVdeRoLHd9OcZFYXr0HLH0VCIJUYpr57DCy0AoIKL9q9CWET1hAMZjsIv5Kx2uVa
-1obdyCX46XEMqpSBhcsq8Vsq0TMQ4sCLdpVq/wPqBEDGUBGAIhkWX1UMQv2kiS1T
-uuYPKgsFmI2kl52owcOU2yZ42SVZNTEWiO2A8/4BXFfhhzKLWVcZQpEV9OInJ30n
-iXm6abMFAsFavgI90NZl1H4UKKLOzD5Jgr9Rv6DfYuyeADsKe2oQN1NvioHHVqvm
-qWG2b2UnZ7oS+dXxhS7YsQeiiTyZP/mpUprmrCrm0HMsl6iKCgCU8ceuRzy80Obt
-7u9CpA+ceRJ05Gfgo18YElk42l4Qhwk4zSWDQdOwtOlk1FpX9TBxOtOVngYEprMM
-UDRSSXFIJZTEyUAbqWqsMDuGRVcq3S9XAPYINbzig3H+Iy7an/wpxWBnYrRm+eCz
-/eb7eQ/iQYmBd7Zn8XO74E6vvH+pG8f9nqr2sRPpk89ZDPsZEk0wFCHpJQShIYJt
-iSeMDaLVGP+e+YlW7qvKavsdPISxlLhNFA1kj66ccHNZVbNQ5xyGhps/8qefpitG
-nN9N+KCLmNvyC8QCuMiMRDD9RVq8OSQ3VcL2zT8pj3XuJo2po4s=
-=9hIS
------END PGP SIGNATURE-----
-
---H/y3lZ2MEalioY2m--
