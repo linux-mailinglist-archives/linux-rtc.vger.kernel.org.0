@@ -2,99 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A5068DD5E
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Feb 2023 16:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F3C68E573
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Feb 2023 02:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbjBGPz4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Feb 2023 10:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S230168AbjBHBcK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 7 Feb 2023 20:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbjBGPzz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Feb 2023 10:55:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2FF4687;
-        Tue,  7 Feb 2023 07:55:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 145B2B80AED;
-        Tue,  7 Feb 2023 15:55:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC638C4339C;
-        Tue,  7 Feb 2023 15:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675785350;
-        bh=5mhpI+u4oUJT36z1i/S8OyG8M5avFgLEbPsJiJcXGh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HO8mbrNb0EMrF+aeW6Zq9fgZrXW4uWcZHRVsy7+J1WzP71OQzrS2VRoeS+kdjeNZ3
-         D3wfAfnTCcw3PDEEhx43sNxLGsCfjeutl/lCPN/fNqyiG3h48JSstX99jLTCieytQZ
-         qABTIZlKB18pMVBA6N573zv1e+WpcM9vIeBPuPi0uJQ3oMFUPhPiGxTb9WyiCQTqey
-         7wjlONL9aU6C7Mu+e6ka5fLDgRPNbvnR7k91HYEkXoREoXPsLhDgRY6vB6KHGZaK7Q
-         Vnp141fW7mI46vU/lNKyqf/JpoLW3Sk8fZqp/7NBaiecWJ7hKuPm9+wTS3YV1+zCcc
-         Wqzp/AzEussWA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pPQKW-0002JP-Hx; Tue, 07 Feb 2023 16:56:24 +0100
-Date:   Tue, 7 Feb 2023 16:56:24 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     David Collins <quic_collinsd@quicinc.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 01/22] rtc: pm8xxx: fix set-alarm race
-Message-ID: <Y+J0qHrIcDYSuKKW@hovoldconsulting.com>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-2-johan+linaro@kernel.org>
- <efab844a-4ffe-bc68-d99e-8688ad222e3a@quicinc.com>
- <Y+Jqn5/Yt0BaitQd@hovoldconsulting.com>
+        with ESMTP id S229457AbjBHBcH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Feb 2023 20:32:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697E618B2C;
+        Tue,  7 Feb 2023 17:32:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=jo71tlA2eEZPdxKjgTvLhMtzKyjxK2QlLMd+t0w/e3Q=; b=ay2mX2FLZ3Pvx6L5UJcyeffPih
+        Z2FzC7RnqKsgae3U/fJ+2MREDfNnYcX+7/DIUMs8G3h8JY9UkvYd4HWnOOk7Is6BNTJaTYAZxe1vf
+        l8LfWY1qS4pm/xpZ6w6Q4zuQ/rSlOUnCWslbQWOSRIy7DLC8xbsQgRlz+/9U8gmSYKYFTGHng3Won
+        9zYe4KLDgG2h5xOK/JslAPD/TMcDxUIDr8Uh+bYJm6gP5/ICWPz84oG5SIr1LjuTibzDMj3s3eZNT
+        vAuQJO05IAMM1Vxg5h6AY1cFu3fy6HRqxOeCQZZ0SMxWcVxafZAqAdGTnLRRAF2dInznQN6ckvsDV
+        zMkQoO9Q==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPZJD-00Dmp1-1J; Wed, 08 Feb 2023 01:31:39 +0000
+Message-ID: <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+Date:   Tue, 7 Feb 2023 17:31:37 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+Jqn5/Yt0BaitQd@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: remove arch/sh
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+ <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+ <20230203071423.GA24833@lst.de>
+ <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 04:13:36PM +0100, Johan Hovold wrote:
-> On Mon, Feb 06, 2023 at 07:12:43PM -0800, David Collins wrote:
-> > On 2/2/23 07:54, Johan Hovold wrote:
-> > > Make sure to disable the alarm before updating the four alarm time
-> > > registers to avoid spurious alarms during the update.
-> > 
-> > What scenario can encounter a spurious alarm triggering upon writing the
-> > new alarm time inside of pm8xxx_rtc_set_alarm()?
+
+
+On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
+> Hello Christoph!
 > 
-> The alarm is stored in four bytes in little-endian order. Consider
-> having had an alarm set and expired at:
+> On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+>> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+>>> We have had a discussion between multiple people invested in the SuperH port and
+>>> I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+>>> when he isn't available.
+>>
+>> So, this still isn't reflected in MAINTAINERS in linux-next.  When
+>> do you plan to take over?  What platforms will remain supported and
+>> what can we start dropping due to being unused and unmaintained?
+> 
+> I'm getting everything ready now with Geert's help and I have a probably dumb
+> question regarding the MAINTAINERS file change: Shall I just add myself as an
+> additional maintainer first or shall I also drop Yoshinori Sato?
+> 
+> Also, is it desirable to add a "T:" entry for the kernel tree?
 
-This was just supposed to say "Consider having an alarm set at:" as the
-alarm must still be enabled. Let me update the example I gave:
+Yes, definitely.
 
-Consider having an alarm set at
- 
- 	10 01 00 00
-
-and now you want to set an alarm at
-
- 	01 02 00 00
- 
-Unless the alarm is disabled before the update the alarm could go off at
- 
- 	01 01 00 00
- 
-after updating the first byte.
-
-Johan
+thanks.
+-- 
+~Randy
