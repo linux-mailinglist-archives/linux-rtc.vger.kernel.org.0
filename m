@@ -2,61 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9D6690AA4
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 14:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F1D690AA8
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 14:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjBINl5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 9 Feb 2023 08:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S230307AbjBINmA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Feb 2023 08:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjBINls (ORCPT
+        with ESMTP id S230308AbjBINls (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 08:41:48 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D236F3A9E
-        for <linux-rtc@vger.kernel.org>; Thu,  9 Feb 2023 05:41:43 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so3891936wmb.2
-        for <linux-rtc@vger.kernel.org>; Thu, 09 Feb 2023 05:41:43 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B7F5EBFE
+        for <linux-rtc@vger.kernel.org>; Thu,  9 Feb 2023 05:41:44 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so3891959wmb.2
+        for <linux-rtc@vger.kernel.org>; Thu, 09 Feb 2023 05:41:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DjLQ6k0eKtXjQgrCbXriLkzXKMYzM/hKWrkASWGobfc=;
-        b=mLWrjSKmdpGUaYDAQZICxLSAs7ZKrnHVZVKfVMia/8ggNhMzJKm1PbELGzCVEp4P6P
-         GV5X7yqJYTmZKPs7A1B73sYqHrQtxASN0f4t9HJnf8snZPE52n4bn4AdbaerH68pSmrH
-         4430KlCz4zA/sGWku5Dvsq3e5Yq/b/Wkxe419l/FC6AcWdy1HJ31dCU00yftQLoto8qZ
-         9729k5Draj6qbMyc+XufEqxgtLatzbXK/Mf2+ggx9OisMzo/xoLmVsxGqSnaoogqIrLl
-         pnAGufiAbevEvkTHgCXWgr+pPAjdrO98VbecW+t0wA8kj3rzheusqdkdRI6tkMWHD/zm
-         ABXw==
+        bh=TtExAhyASjCaoXqGCyD4SFP8HX8WU84xqgiQDTtv4mE=;
+        b=DZ4iuTh3FtikDJN19LSa9P+ch6kwH06TXcGr9O5HsoP3GNbzqz6d3zOWkobQxkNfUu
+         0cC8pZRAUn/bMNiaFwNSIkrTSmGU4WYQAJ3RbxSupAdJm9hMBEyjmsIUNJkhxFXKpY6J
+         gounMRJc4gd7VaL14Se5D5QxNkW54DZvWDkws+pZthuPynORhmggp5Wi8x29AYV6BciX
+         DgNgLCI8hSuU+tbc28CYbe8joB60yi0BmKiSUH+TfJfH/HIjd1b8Hye/nWtGlVDR1aEH
+         2An59fO1i3LypUeM/iOTlWN89K26GPchHe4ptteYzlqjjQtl0YiH99+99vNMaQbMKtxN
+         Xbqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DjLQ6k0eKtXjQgrCbXriLkzXKMYzM/hKWrkASWGobfc=;
-        b=TyzRsFHqKCzaUk399k4/oKTSpFsIwJYywpPaczT811tuaY/vq2bLfmhkh3HWqrHBnP
-         RNBgZpudKP+SranXttUL77icW460NO6G9qeiyOE/kQVdNqdL13KExVn9XbH8qO2Qbzwd
-         Nyjwa6ZMF1WwTHfIaNekfVnzpF6ZqtotRAYou9aeQVUE8UGqgbXXsAAdnp5ZptR4/fDh
-         SR1RInpflUZdyecnSB5cqZ39PdlGhmQPCx/uzrAhKOXeECnqbkYNQzxZ2s/Ebu495oyP
-         CRuRA8CggTnKkd9+WmiowYb8NjJqPtkeUpqJdHOwqibjn/S7ORWCKU2/VPSVDzJAbg/n
-         dNpg==
-X-Gm-Message-State: AO0yUKVHjFbyWR5xICO738TOyYp1mUwRtRF9+jnfySuIZ3e23HM2auTG
-        0oVT/6/5MzCgZaMqbiwNW2p+Aw==
-X-Google-Smtp-Source: AK7set9vgmNMX33CebLjgnK/NCuxhWo3nDtnIa0yVi6jVPXlG+ofn9yTRMMHHwUsy0duwDeSmANpIQ==
-X-Received: by 2002:a05:600c:511e:b0:3df:9858:c038 with SMTP id o30-20020a05600c511e00b003df9858c038mr6116913wms.13.1675950102431;
-        Thu, 09 Feb 2023 05:41:42 -0800 (PST)
+        bh=TtExAhyASjCaoXqGCyD4SFP8HX8WU84xqgiQDTtv4mE=;
+        b=vgYaIoRg4QH95XrJNLxcUj/bHxf5g8hd9NxO4xmNFCuA1h6gqDBTjKYFF5JxXLx9Jw
+         zcN0aqQLe1imcWWklHYK9z98JQ9nbegNJ6AzKSLG+qPsr5AsPgk55Y0GIhFda0A0K5lp
+         8RcAlzMRHouxlKfT8GLhz00/vBrehqLnE48pU/D783x2IvMQ7cDsJKnCeCaL+R2iHxTI
+         2tXgHRRofnNp9B6f/LiVDyARRp158VvZS1DeDHBu6ALeAT6Hy58z914Lqps86eRM0Jtn
+         v743asAvAWZA4zJFJ2a2UyMnidXGKEd4M81b3pRVZ3AK4/rCfbnh+HOA2ZZa8UqHcYgS
+         9n0g==
+X-Gm-Message-State: AO0yUKXxM2RcFwcqxwRlOcs5IzbzP3PwhNojEcmLbCbZTqhi02HqQHoG
+        lG1uGU/Cvht4UHcJD6fUSM3v3T4TcM6sTS78tw4=
+X-Google-Smtp-Source: AK7set8OFp887uOX9Ujf+dz1+EFOgo9XzvM2Bd1CPJzipfjT2n3QdC2yiT6YQ+Mf8MBKOgqIE4ewUQ==
+X-Received: by 2002:a05:600c:13d4:b0:3df:e1e9:200e with SMTP id e20-20020a05600c13d400b003dfe1e9200emr10046874wmg.39.1675950103457;
+        Thu, 09 Feb 2023 05:41:43 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm4946991wmi.18.2023.02.09.05.41.41
+        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm4946991wmi.18.2023.02.09.05.41.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 05:41:42 -0800 (PST)
+        Thu, 09 Feb 2023 05:41:43 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 09 Feb 2023 14:41:39 +0100
-Subject: [PATCH 3/6] dt-bindings: soc: amlogic: document System Control
- registers
+Date:   Thu, 09 Feb 2023 14:41:40 +0100
+Subject: [PATCH 4/6] dt-bindings: soc: amlogic: convert
+ amlogic,gxbb-clkc.txt to dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230209-b4-amlogic-bindings-convert-take2-v1-3-c4fe9049def9@linaro.org>
+Message-Id: <20230209-b4-amlogic-bindings-convert-take2-v1-4-c4fe9049def9@linaro.org>
 References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
 In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
@@ -76,107 +76,122 @@ Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Document the System Control registers regions found on all Amlogic
-SoC families and it's clock, power, pinctrl and phy subnodes.
-
-The regions has various independent registers tied to other
-hardware devices, thus the syscon compatible.
-
-Clock controllers and Pinctrl devices are not yet documented, the
-definition of those will be updated in a second time.
+Convert the Amlogic Clock Controller bindings to dt-schema.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml  | 109 +++++++++++++++++++++
- 1 file changed, 109 insertions(+)
+ .../bindings/clock/amlogic,gxbb-clkc.txt           | 53 ----------------------
+ .../bindings/clock/amlogic,gxbb-clkc.yaml          | 51 +++++++++++++++++++++
+ 2 files changed, 51 insertions(+), 53 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
+diff --git a/Documentation/devicetree/bindings/clock/amlogic,gxbb-clkc.txt b/Documentation/devicetree/bindings/clock/amlogic,gxbb-clkc.txt
+deleted file mode 100644
+index 7ccecd5c02c1..000000000000
+--- a/Documentation/devicetree/bindings/clock/amlogic,gxbb-clkc.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-* Amlogic GXBB Clock and Reset Unit
+-
+-The Amlogic GXBB clock controller generates and supplies clock to various
+-controllers within the SoC.
+-
+-Required Properties:
+-
+-- compatible: should be:
+-		"amlogic,gxbb-clkc" for GXBB SoC,
+-		"amlogic,gxl-clkc" for GXL and GXM SoC,
+-		"amlogic,axg-clkc" for AXG SoC.
+-		"amlogic,g12a-clkc" for G12A SoC.
+-		"amlogic,g12b-clkc" for G12B SoC.
+-		"amlogic,sm1-clkc" for SM1 SoC.
+-- clocks : list of clock phandle, one for each entry clock-names.
+-- clock-names : should contain the following:
+-  * "xtal": the platform xtal
+-
+-- #clock-cells: should be 1.
+-
+-Each clock is assigned an identifier and client nodes can use this identifier
+-to specify the clock which they consume. All available clocks are defined as
+-preprocessor macros in the dt-bindings/clock/gxbb-clkc.h header and can be
+-used in device tree sources.
+-
+-Parent node should have the following properties :
+-- compatible: "syscon", "simple-mfd, and "amlogic,meson-gx-hhi-sysctrl" or
+-              "amlogic,meson-axg-hhi-sysctrl"
+-- reg: base address and size of the HHI system control register space.
+-
+-Example: Clock controller node:
+-
+-sysctrl: system-controller@0 {
+-	compatible = "amlogic,meson-gx-hhi-sysctrl", "syscon", "simple-mfd";
+-	reg = <0 0 0 0x400>;
+-
+-	clkc: clock-controller {
+-		#clock-cells = <1>;
+-		compatible = "amlogic,gxbb-clkc";
+-		clocks = <&xtal>;
+-		clock-names = "xtal";
+-	};
+-};
+-
+-Example: UART controller node that consumes the clock generated by the clock
+-  controller:
+-
+-	uart_AO: serial@c81004c0 {
+-		compatible = "amlogic,meson-uart";
+-		reg = <0xc81004c0 0x14>;
+-		interrupts = <0 90 1>;
+-		clocks = <&clkc CLKID_CLK81>;
+-	};
+diff --git a/Documentation/devicetree/bindings/clock/amlogic,gxbb-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,gxbb-clkc.yaml
 new file mode 100644
-index 000000000000..672eabd90c09
+index 000000000000..412453fc75e4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
-@@ -0,0 +1,109 @@
++++ b/Documentation/devicetree/bindings/clock/amlogic,gxbb-clkc.yaml
+@@ -0,0 +1,51 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml#
++$id: http://devicetree.org/schemas/clock/amlogic,gxbb-clkc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Amlogic Meson System Control registers
++title: Amlogic Clock Controller
 +
 +maintainers:
 +  - Neil Armstrong <neil.armstrong@linaro.org>
 +
 +properties:
 +  compatible:
-+    items:
-+      - enum:
-+          - amlogic,meson-gx-hhi-sysctrl
-+          - amlogic,meson-gx-ao-sysctrl
-+          - amlogic,meson-axg-hhi-sysctrl
-+          - amlogic,meson-axg-ao-sysctrl
-+      - const: simple-mfd
-+      - const: syscon
++    enum:
++      - amlogic,gxbb-clkc
++      - amlogic,gxl-clkc
++      - amlogic,axg-clkc
++      - amlogic,g12a-clkc
++      - amlogic,g12b-clkc
++      - amlogic,sm1-clkc
 +
-+  reg:
++  clocks:
 +    maxItems: 1
 +
-+  clock-controller:
-+    type: object
++  clock-names:
++    const: xtal
 +
-+  power-controller:
-+    $ref: /schemas/power/amlogic,meson-ee-pwrc.yaml
-+
-+  pinctrl:
-+    type: object
-+
-+  phy:
-+    type: object
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - amlogic,meson-gx-hhi-sysctrl
-+            - amlogic,meson-axg-hhi-sysctrl
-+    then:
-+      required:
-+        - power-controller
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - amlogic,meson-gx-ao-sysctrl
-+            - amlogic,meson-axg-ao-sysctrl
-+    then:
-+      required:
-+        - pinctrl
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - amlogic,meson-axg-hhi-sysctrl
-+    then:
-+      properties:
-+        phy:
-+          oneOf:
-+            - $ref: /schemas/phy/amlogic,g12a-mipi-dphy-analog.yaml
-+            - $ref: /schemas/phy/amlogic,meson-axg-mipi-pcie-analog.yaml
++  '#clock-cells':
++    const: 1
 +
 +required:
 +  - compatible
-+  - reg
-+  - clock-controller
++  - clocks
++  - clock-names
++  - '#clock-cells'
 +
 +unevaluatedProperties: false
 +
@@ -185,31 +200,12 @@ index 000000000000..672eabd90c09
 +    sysctrl: system-controller@0 {
 +        compatible = "amlogic,meson-gx-hhi-sysctrl", "simple-mfd", "syscon";
 +        reg = <0 0x400>;
-+
-+        clock-controller { };
-+
-+        power-controller {
-+            compatible = "amlogic,meson-gxbb-pwrc";
-+            #power-domain-cells = <1>;
-+            amlogic,ao-sysctrl = <&sysctrl_AO>;
-+
-+            resets = <&reset_viu>,
-+                     <&reset_venc>,
-+                     <&reset_vcbus>,
-+                     <&reset_bt656>,
-+                     <&reset_dvin>,
-+                     <&reset_rdma>,
-+                     <&reset_venci>,
-+                     <&reset_vencp>,
-+                     <&reset_vdac>,
-+                     <&reset_vdi6>,
-+                     <&reset_vencl>,
-+                     <&reset_vid_lock>;
-+            reset-names = "viu", "venc", "vcbus", "bt656", "dvin",
-+                          "rdma", "venci", "vencp", "vdac", "vdi6",
-+                          "vencl", "vid_lock";
-+            clocks = <&clk_vpu>, <&clk_vapb>;
-+            clock-names = "vpu", "vapb";
++ 
++        clkc: clock-controller {
++            compatible = "amlogic,gxbb-clkc";
++            #clock-cells = <1>;
++            clocks = <&xtal>;
++            clock-names = "xtal";
 +        };
 +    };
 
