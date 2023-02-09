@@ -2,48 +2,47 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3116C69138F
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 23:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CAD6913BF
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 23:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjBIWkG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 9 Feb 2023 17:40:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S230334AbjBIWuC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Feb 2023 17:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjBIWjQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 17:39:16 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB1F6BABE;
-        Thu,  9 Feb 2023 14:38:47 -0800 (PST)
+        with ESMTP id S230400AbjBIWt5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 17:49:57 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DE62823C;
+        Thu,  9 Feb 2023 14:49:47 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 796CA100004;
-        Thu,  9 Feb 2023 22:38:44 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 77FACFF805;
+        Thu,  9 Feb 2023 22:49:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675982325;
+        t=1675982986;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GlmlRq1SwmIoi67aUVNcS7ctofjzfmDlTqR+bZ6hmVg=;
-        b=GyHZle2edxB4Pl2ob6GyRhceamq4ZPeyBsxTMi8lsmZdGLJwLEYKtxnGFCrcg59J7qdMyY
-        fGL/E+WH29LnkgMXcjHndhwpe6NHCCAsxOEhzA4NKuNtpP3DXKXMOQ08Nw1zyL4qCQZyYM
-        EcEAwnT/hO2LFwAIIrmuH8BQu4VBpKqS8t3enrSHDDkHtlqCFD0upMQk4CH6ThbYZ34Gv4
-        Aic9WnwO5hAne8ECWhy3bAqDJwU69QHIUld+ZDUWZIoIXDjiSmbJmhaFeUGXXtZwFsaJSl
-        rbn9M0rP9BTkO5qQgf+O8IvWnqp3nJ7X8RyHdMSbI1ltH/e+4ox2Q/Ay1yV7jA==
-Date:   Thu, 9 Feb 2023 23:38:43 +0100
+        bh=Lnvtyk9aeHwFjeMnZfCC53dWohWwbHsKqzFVtpNGRYY=;
+        b=B+TTLo7qiAp2HGaN2AVJrlbifCRg1l7HsMHwDVeSx5Iwx3s9v6hzut3xSOnTfWHn6CYy/n
+        jbRIzx1Y2kkEqiwnmGtqI/45a3BA1JNHvsPT4DG+ATjvCCsUdtyxF27LKIDCDXlO8syEGX
+        CjG7OTrCV7LewTmAsP58jI7Y70ONtv4NptspdDdBmnoKSpPjpCwEoy+sDHzr3tZShC3/oJ
+        fdW4EB3fwfQPYS2UOzmgbIr2EtjJpEtGJfgV/QYW3AbA9BsxJJYKKqp/CzGrCJ9hhnnmNk
+        E3I52P7/9Q2x4D3W7QUC9Y6Phq118ifkXHyCYA0bLJAcde7ootsmrXpdJ7F9WQ==
+Date:   Thu, 9 Feb 2023 23:49:44 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        list@opendingux.net
-Subject: Re: [PATCH v3 0/4] rtc: jz4740: Various updates
-Message-ID: <167598230483.1658778.17605710915150090375.b4-ty@bootlin.com>
-References: <20230129120442.22858-1-paul@crapouillou.net>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/2] rtc: sun6i: Prevent an out-of-bounds read
+Message-ID: <Y+V4iMaZ7WzCWzSc@mail.local>
+References: <20221229184011.62925-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230129120442.22858-1-paul@crapouillou.net>
+In-Reply-To: <20221229184011.62925-1-samuel@sholland.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,33 +52,43 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hello,
 
-On Sun, 29 Jan 2023 12:04:38 +0000, Paul Cercueil wrote:
-> Here's a revised patchset that introduces a few updates to the
-> jz4740-rtc driver.
+What should I do with this series, I'm not sure you came to an
+agreement.
+Also, 2/2 doesn't apply so you'd have to rebase.
+
+On 29/12/2022 12:40:10-0600, Samuel Holland wrote:
+> If there is more than one parent clock in the devicetree, the
+> driver sets .num_parents to a larger value than the number of array
+> elements, which causes an out-of-bounds read in the clock framework.
 > 
-> Patch [1/4] used to break ABI, it does not anymore.
-> Patch [2/4] did not change, patch [3/4] is new.
+> Fix this by coercing the parent count to a Boolean value, like the
+> driver expects.
 > 
-> Patch [3/4] has been updated to use dev_err_probe(), use __clk_hw_get()
-> instead of looking up the parent's clock by name, and will now register
-> the CLK32K clock when the #clock-cells device property is present
-> instead of doing it based on the compatible string.
+> Fixes: 3855c2c3e546 ("rtc: sun6i: Expose the 32kHz oscillator")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
 > 
-> [...]
-
-Applied, thanks!
-
-[1/4] dt-bindings: rtc: Add #clock-cells property
-      commit: 4737a703528c769c4fde6b68462f656f91f4ad99
-[2/4] rtc: jz4740: Use readl_poll_timeout
-      commit: d644b133f78d6d8efd36f7b1703bebca09036f0b
-[3/4] rtc: jz4740: Use dev_err_probe()
-      commit: ff6fd3770e9687d7b849a0e826a32563bfcb98da
-[4/4] rtc: jz4740: Register clock provider for the CLK32K pin
-      commit: 5ddfa148de8cf5491fd1c89522c7cad859db8c88
-
-Best regards,
+>  drivers/rtc/rtc-sun6i.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index ed5516089e9a..a22358a44e32 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -294,7 +294,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+>  
+>  	init.parent_names = parents;
+>  	/* ... number of clock parents will be 1. */
+> -	init.num_parents = of_clk_get_parent_count(node) + 1;
+> +	init.num_parents = !!of_clk_get_parent_count(node) + 1;
+>  	of_property_read_string_index(node, "clock-output-names", 0,
+>  				      &init.name);
+>  
+> -- 
+> 2.37.4
+> 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
