@@ -2,64 +2,78 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBAE690743
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 12:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC08690A94
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 14:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjBIL0M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 9 Feb 2023 06:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S230116AbjBINlo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Feb 2023 08:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjBILZ1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 06:25:27 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3D25D1C6
-        for <linux-rtc@vger.kernel.org>; Thu,  9 Feb 2023 03:19:58 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id rp23so5288337ejb.7
-        for <linux-rtc@vger.kernel.org>; Thu, 09 Feb 2023 03:19:58 -0800 (PST)
+        with ESMTP id S229728AbjBINln (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 08:41:43 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AC63BD92
+        for <linux-rtc@vger.kernel.org>; Thu,  9 Feb 2023 05:41:40 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id az16so971285wrb.1
+        for <linux-rtc@vger.kernel.org>; Thu, 09 Feb 2023 05:41:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nz56ImgJrv1CC3lx6MAOTCnqrbrf9AATvSrQft4alFo=;
-        b=bqSJjTGTuxIMIR4TEuGifUiSeNSVXHjZn6T82NW25CPqgM7Ws7Fj6QjXMocmNyF/2f
-         n2VKBj746pJRNvKAJ/SD1LtfTaGIKTXD+V9pD79k03qJwWEOU1TtOYPLiwDt9+54lfqb
-         E0T4Sn+NaDz0Vnlq5AuhGCSKFSdHHcqjKpDKY=
+        d=linaro.org; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UH1FxS+Al9Ybgi+KxNoTC8ETohhFHsXFP4JFZVHRAP0=;
+        b=vxbXh9gBJBoppO3MqpRAXQW/7ZH+O8sim9MSobZQaBaFondUXzPawxgSuBPQaN2wrb
+         RgH6EIGOf+5RYo1trbIsCz1pDvu+vSRZs4qUsxruNAnFAb6q8wQfqBWVEC8zrKuDKsuD
+         03Y73sP1G7tUJdPTgpWHlzswtkdal8lR0UKzEHdGsq3pifb3SO6jd1PQKiHb+sp5jYy+
+         Jmi2BgzO8OVnP7CqjE3tgtW4miPWHhEqWwY9kCtbqUu9vFIX683v0LfT1xsMe6QT3PJv
+         ncsXvwALgD02ttdiaWIuwMFe30kUIT11tRKmG9XEHX6FzRGq2kcikxGQCGlG4fqWxfx/
+         xXIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nz56ImgJrv1CC3lx6MAOTCnqrbrf9AATvSrQft4alFo=;
-        b=LaX/+eHoWNbZAyo76+znU8CiAuj7DgKhLriGml6CLpP4YmP7lowFtiKKDlaVqVeMJz
-         nTe5TjaJW73Z8VXYQExaBCqTkCI/PWA26Na1RW240M3ffkeW1Bpj54uJhqdW+9qHypGr
-         xBI0jNmhCY0zpsMFrkcEBZIAesH/T8nnBlkpaZfHxPnZqI+z4AAnA0KddPUPZ1uLU5Y6
-         zGHorQOIHHXaoiaHiI9YH00xBXWohsmBCZ69d+uZA+Fupd91qPKO3Gm0aQ5TynQReCFK
-         W95UC34rhPuhsEaEbFQpXZJm3Emnv22WYRs74oIJH24gBknEqMbOeuEdYH4vbdDDrnQQ
-         6FoA==
-X-Gm-Message-State: AO0yUKXlzBkS6fqRcmOl10/vtCgIm5DNLkHtto6QQBohuhA3GYmrU4CN
-        3nSR6Qh05ffCBECi/oumAskFqOQeZ19S56gj6VOm7g==
-X-Google-Smtp-Source: AK7set8lh5QP9lwmqrh7PbHYgxC9D3m31I6V/lHZRre+hf+eSv2OnOz60v7CGC5f8+EUqeBIDpAxPCMJuoMiFiWX6sQ=
-X-Received: by 2002:a17:906:27c4:b0:888:7a3e:1d7f with SMTP id
- k4-20020a17090627c400b008887a3e1d7fmr411199ejc.12.1675941568493; Thu, 09 Feb
- 2023 03:19:28 -0800 (PST)
+        bh=UH1FxS+Al9Ybgi+KxNoTC8ETohhFHsXFP4JFZVHRAP0=;
+        b=ZpquwE6vpJ3RP1t6mzHZ7AtVPQDP7x9XG7A6c6MTl5t5fM2R9Syf2ZWoq1ZRKD2/9y
+         9GZV1Aubc3yqm7z59nEID/c59B2zzzoadyRHmqnofvrjNVAsjLBxmO6z/bgliTKyAE/L
+         V3pBVQOOmE/5JFBcXankihCLi0ROgf58Ra/0yKSMMgyeCJwMnMNk6H57mYpAPqjGjysU
+         PISqDqX9SpPoVln8Ei69zKZrXLCifyitHUHiBj8ZHd8YW2BRFcqPX3WXR/P9ah1eLkMn
+         CePQg/YH35DkKHtOOf7qN2Yh57HEBEtkZg6BWdpJPV6JVVA026mpXpOKxE3Xf116uioP
+         L0tQ==
+X-Gm-Message-State: AO0yUKV78D3Th5YZq7O5lcWn5BcI1I14136My7OZTbycV3/2XYM/c8P1
+        MnV7iNRyuu5ziEudQeczQwtMiQ==
+X-Google-Smtp-Source: AK7set/L6y9JA47P+Wg2ntnqmghlLGsbHSVJ+ZSuNq1ygPmrpHcbyzAjgS0I/MTMc7LZME9xNa9X/A==
+X-Received: by 2002:adf:f212:0:b0:2c3:ebc1:30a9 with SMTP id p18-20020adff212000000b002c3ebc130a9mr11324485wro.23.1675950099211;
+        Thu, 09 Feb 2023 05:41:39 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm4946991wmi.18.2023.02.09.05.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 05:41:38 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/6] dt-bindings: second batch of dt-schema conversions for
+ Amlogic Meson bindings
+Date:   Thu, 09 Feb 2023 14:41:36 +0100
+Message-Id: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
 MIME-Version: 1.0
-References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
- <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
- <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
- <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de> <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
- <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx>
-In-Reply-To: <87edr02fsc.ffs@tglx>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Thu, 9 Feb 2023 12:19:17 +0100
-Message-ID: <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
-Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
- is zero
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Michael <michael@mipisi.de>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABD45GMC/x2NMQ7CMAwAv1J5xlKSMgBfQQyO66QWwUVJqZCq/
+ p2I8W6426FJVWlwG3aosmnTxTr40wA8k2VBnTpDcGF0wV0xnpFeZcnKGNUmtdyQF9ukrrjSUwJ
+ KYEoX8ezHBL0TqQnGSsZzL9mnlC7fVZJ+/+P74zh+xut8logAAAA=
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -70,55 +84,68 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Thomas
+Batch conversion of the following bindings:
+- rtc-meson-vrtc.txt
+- amlogic,gxbb-clkc.txt
+- amlogic,gxbb-aoclkc.txt
+- clk-measure.txt
 
-On Wed, Feb 8, 2023 at 7:06 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Michael!
->
-> On Wed, Feb 08 2023 at 16:23, Michael Trimarchi wrote:
-> > On Wed, Sep 04, 2019 at 12:49:21AM +0200, Thomas Gleixner wrote:
-> >> On Tue, 3 Sep 2019, Michael wrote:
-> >> >
-> >> > thank you very much for your patch. Unfortunately currently I can only test it
-> >> > with a kernel 4.1.52 but i've tried to patch
-> >> > your new logic into my older kernel version.
-> >>
-> > Is this patch valid on mainline too? because apply it was let rtc
-> > working 100% of the time
->
-> I wrote that patch against the back then mainline code. No idea if it's
-> still applying, but the underlying issue is still the same AFAICT.
->
-> It needs some polishing and a proper changelog.
->
+And in addition document the System Control registers top node.
 
-Ok, I will try to update it on some mainline kernel in my environment
-and test it back. I need
-a little information if it's possible. Consider that I have no
-experience in this area. I understand how
-code was designed in general but the part around the freezer and all
-those code you remove, what was the logic behind in the removed code?
+DT fixups will be posted once those conversion are fully reviewed.
 
-Michael
+With this serie, the in-review and applied bindings documentation, the
+the following arm64 compatible are yet to be documented in dt-schema:
+ ['amlogic,axg-audio-clkc']
+ ['amlogic,g12a-audio-clkc']
+ ['amlogic,sm1-audio-clkc']
+ ['amlogic,g12a-tohdmitx']
+ ['amlogic,sm1-tohdmitx', 'amlogic,g12a-tohdmitx']
+ ['everest,es7154']
+ ['everest,es7241']
+ ['ti,tas5707']
+ ['linux,spdif-dir']
+ ['gpio-fan']
+ ['pwm-fan']
 
-> Thanks,
->
->         tglx
->
->
+For reference, the following bindings conversion patches are taken in account on top
+of next-20230208 tag :
+- https://lore.kernel.org/r/20230208093520.52843-2-jbrunet@baylibre.com
+- https://lore.kernel.org/r/3ffd1889-1966-47a8-9504-d44e452d5a31@gmail.com
+- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-7-e28dd31e3bed@linaro.org
+- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-5-e28dd31e3bed@linaro.org
+- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-4-e28dd31e3bed@linaro.org
+- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-3-e28dd31e3bed@linaro.org
+- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-2-e28dd31e3bed@linaro.org
+- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-1-e28dd31e3bed@linaro.org
+- https://lore.kernel.org/r/8cae0b08-8040-ef7b-da0e-92d9b3695249@gmail.com
+- https://lore.kernel.org/r/5b83767e-c53d-316f-df10-45a39dbd9c88@gmail.com
 
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (6):
+      dt-bindings: rtc: convert rtc-meson-vrtc.txt to dt-schema
+      dt-bindings: soc: amlogic: convert clk-measure.txt to dt-schema
+      dt-bindings: soc: amlogic: document System Control registers
+      dt-bindings: soc: amlogic: convert amlogic,gxbb-clkc.txt to dt-schema
+      dt-bindings: soc: amlogic: convert amlogic,gxbb-aoclkc.txt to dt-schema
+      dt-bindings: soc: amlogic: update sysctrl clock-controller subnode type
 
+ .../bindings/clock/amlogic,gxbb-aoclkc.txt         |  64 -----------
+ .../bindings/clock/amlogic,gxbb-aoclkc.yaml        | 120 ++++++++++++++++++++
+ .../bindings/clock/amlogic,gxbb-clkc.txt           |  53 ---------
+ .../bindings/clock/amlogic,gxbb-clkc.yaml          |  51 +++++++++
+ .../bindings/rtc/amlogic,meson-vrtc.yaml           |  42 +++++++
+ .../devicetree/bindings/rtc/rtc-meson-vrtc.txt     |  22 ----
+ .../soc/amlogic/amlogic,meson-gx-clk-measure.yaml  |  40 +++++++
+ .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml  | 122 +++++++++++++++++++++
+ .../bindings/soc/amlogic/clk-measure.txt           |  21 ----
+ 9 files changed, 375 insertions(+), 160 deletions(-)
+---
+base-commit: 5b1c3cf237da1dec2945694a6b7e5a0b66272d53
+change-id: 20230209-b4-amlogic-bindings-convert-take2-e2caf8e1c13f
 
---
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
