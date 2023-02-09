@@ -2,93 +2,123 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4838690315
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 10:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBAE690743
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 12:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjBIJQP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Thu, 9 Feb 2023 04:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S230315AbjBIL0M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Feb 2023 06:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBIJQM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 04:16:12 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558EB5B92;
-        Thu,  9 Feb 2023 01:16:10 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pQ323-003ncL-Bt; Thu, 09 Feb 2023 10:15:55 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pQ323-0012H8-3k; Thu, 09 Feb 2023 10:15:55 +0100
-Message-ID: <ed4a36508c3d047f9e9a882475388be18b790b76.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Rob Landley <rob@landley.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Thu, 09 Feb 2023 10:15:52 +0100
-In-Reply-To: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
-         <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
-         <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-         <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S231641AbjBILZ1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 06:25:27 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3D25D1C6
+        for <linux-rtc@vger.kernel.org>; Thu,  9 Feb 2023 03:19:58 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id rp23so5288337ejb.7
+        for <linux-rtc@vger.kernel.org>; Thu, 09 Feb 2023 03:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nz56ImgJrv1CC3lx6MAOTCnqrbrf9AATvSrQft4alFo=;
+        b=bqSJjTGTuxIMIR4TEuGifUiSeNSVXHjZn6T82NW25CPqgM7Ws7Fj6QjXMocmNyF/2f
+         n2VKBj746pJRNvKAJ/SD1LtfTaGIKTXD+V9pD79k03qJwWEOU1TtOYPLiwDt9+54lfqb
+         E0T4Sn+NaDz0Vnlq5AuhGCSKFSdHHcqjKpDKY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nz56ImgJrv1CC3lx6MAOTCnqrbrf9AATvSrQft4alFo=;
+        b=LaX/+eHoWNbZAyo76+znU8CiAuj7DgKhLriGml6CLpP4YmP7lowFtiKKDlaVqVeMJz
+         nTe5TjaJW73Z8VXYQExaBCqTkCI/PWA26Na1RW240M3ffkeW1Bpj54uJhqdW+9qHypGr
+         xBI0jNmhCY0zpsMFrkcEBZIAesH/T8nnBlkpaZfHxPnZqI+z4AAnA0KddPUPZ1uLU5Y6
+         zGHorQOIHHXaoiaHiI9YH00xBXWohsmBCZ69d+uZA+Fupd91qPKO3Gm0aQ5TynQReCFK
+         W95UC34rhPuhsEaEbFQpXZJm3Emnv22WYRs74oIJH24gBknEqMbOeuEdYH4vbdDDrnQQ
+         6FoA==
+X-Gm-Message-State: AO0yUKXlzBkS6fqRcmOl10/vtCgIm5DNLkHtto6QQBohuhA3GYmrU4CN
+        3nSR6Qh05ffCBECi/oumAskFqOQeZ19S56gj6VOm7g==
+X-Google-Smtp-Source: AK7set8lh5QP9lwmqrh7PbHYgxC9D3m31I6V/lHZRre+hf+eSv2OnOz60v7CGC5f8+EUqeBIDpAxPCMJuoMiFiWX6sQ=
+X-Received: by 2002:a17:906:27c4:b0:888:7a3e:1d7f with SMTP id
+ k4-20020a17090627c400b008887a3e1d7fmr411199ejc.12.1675941568493; Thu, 09 Feb
+ 2023 03:19:28 -0800 (PST)
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
+ <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
+ <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
+ <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de> <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
+ <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx>
+In-Reply-To: <87edr02fsc.ffs@tglx>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Thu, 9 Feb 2023 12:19:17 +0100
+Message-ID: <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
+Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
+ is zero
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Michael <michael@mipisi.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 2023-02-08 at 21:09 -0600, Rob Landley wrote:
-> > Geert has suggested to wait with adding a tree source to the entry until I get my
-> > own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> > on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
-> 
-> So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-> but push to kernel.org and ask Linus to pull from there?
+Hi Thomas
 
-Yes, that's what Geert recommended.
+On Wed, Feb 8, 2023 at 7:06 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Michael!
+>
+> On Wed, Feb 08 2023 at 16:23, Michael Trimarchi wrote:
+> > On Wed, Sep 04, 2019 at 12:49:21AM +0200, Thomas Gleixner wrote:
+> >> On Tue, 3 Sep 2019, Michael wrote:
+> >> >
+> >> > thank you very much for your patch. Unfortunately currently I can only test it
+> >> > with a kernel 4.1.52 but i've tried to patch
+> >> > your new logic into my older kernel version.
+> >>
+> > Is this patch valid on mainline too? because apply it was let rtc
+> > working 100% of the time
+>
+> I wrote that patch against the back then mainline code. No idea if it's
+> still applying, but the underlying issue is still the same AFAICT.
+>
+> It needs some polishing and a proper changelog.
+>
 
-Adrian
+Ok, I will try to update it on some mainline kernel in my environment
+and test it back. I need
+a little information if it's possible. Consider that I have no
+experience in this area. I understand how
+code was designed in general but the part around the freezer and all
+those code you remove, what was the logic behind in the removed code?
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Michael
+
+> Thanks,
+>
+>         tglx
+>
+>
+
+
+
+--
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
