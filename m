@@ -2,134 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4B068FD97
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 04:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECFF68FF74
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 05:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjBIDA6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 8 Feb 2023 22:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S229831AbjBIElJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Feb 2023 23:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjBIC7J (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Feb 2023 21:59:09 -0500
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D7815C94
-        for <linux-rtc@vger.kernel.org>; Wed,  8 Feb 2023 18:56:37 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id z138-20020a4a4990000000b005175b8ae66cso95890ooa.6
-        for <linux-rtc@vger.kernel.org>; Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=cpXzCzr+cz0YwMg8OioZbOdFT6x6Xm6HxQuCqdoPsmS9hedulw1eO6Kk/3hEebcpma
-         XmVmNXfmMApG2N79Si3uHiYwQf3pkrY8yoF8TXhNqwM63RW+rXEAr2c9GvCwLnpdMizZ
-         /i8XL5yNmB4lLP5zpVm7le3plURiLI5xI0pF39yvS1te1cCGkPno0+9YUYvh8/jIQets
-         PkfeCX7kq7oaaZINx71/ntTci+5+uSn1VJ3kfEYljJIBKf1cp8PDE/LSANc9+WdWamP2
-         UdiemMHM1/q9NSBnjYTg3Wlj/GIvYnBRMQxV2QKkM2GCOhCzUuRGyTbkMr557hPEVKAp
-         8+Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=uqGr0+U4hgiXBWZ0tH9UNAIRCFzTvry2yjc+bS3vmQ0Rn/b9LwbpLmHJm+P7JqRTqR
-         ObvYaeDK+a/3DgFzsQMtR2GoqemE+32KQ3xgD9xlEx0NwcO1ve0fOaOi6HyHn1WnRKaW
-         pVAE9NOIdhf44S1dzR9wvXohJMlwjDr8tQcA6r8iQVgHUWyvaymTVOOrJ8RaJ6dsJeci
-         xbnNYGXVozt/kr2vqDpe0N6SJIKx9TK4qGIAGQi3GVoj80oatDYz0VAPQmeuhv4GDOPS
-         b0FKTxSQN07C8JLNzAuhmxRN/YWzgwz29qBGV1c82ignroYAN8qe4qmQ7m0TPPM5aRAK
-         ITIg==
-X-Gm-Message-State: AO0yUKX2zY0Pj0aJeqmuERSqdDB1Gr2JF+Zq7JaeaMFT9Y4RLXdU/im9
-        GSFlwJZiK0Gp2K5UqRRCKprfuLZT7JWiwgYl5U8=
-X-Google-Smtp-Source: AK7set/z8RwoK5zLi99e0gYyO0saoOIvr4Qi+M0w1VEg8sxij2tCPL/DbU7DENRObgoCAx8yBLGhmQ==
-X-Received: by 2002:a4a:9b8e:0:b0:51a:48f4:75de with SMTP id x14-20020a4a9b8e000000b0051a48f475demr241022ooj.0.1675911397288;
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id bm9-20020a056820188900b004f8cf5f45e9sm133765oob.22.2023.02.08.18.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Message-ID: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Date:   Wed, 8 Feb 2023 21:09:35 -0600
+        with ESMTP id S231304AbjBIEk1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Feb 2023 23:40:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A186A13DFD;
+        Wed,  8 Feb 2023 20:37:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0074BB81FFF;
+        Thu,  9 Feb 2023 04:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA812C433A8;
+        Thu,  9 Feb 2023 04:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675916501;
+        bh=XBpGPZeL8XTfy9VO7r09l+ADYGLyAn3GkbuBH5MBYDc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GhGqSBdXpd1rVykcZRLmBPUvbTGtge3Ou4zWXn6gsseF3IBTFVVqmmzkhNX6iIyjC
+         eoQHcB+DPlvQmjlcqIeTNiiSUfnCHIFm9koKax3iikICnUasZeB6VkFla0jC6dJOwk
+         jkJi/x8OhQ7EXEf0zGo97P5DX4Eh499UGoh138fZMEiDf5QQjel5Q9UMIwcWHomCDn
+         uNwJF8y1H6LuSRn4O8g9NoNFFEL0+/ox4c4VzpCG9xBFiishhEsDaJT7mzZUxwn5Rm
+         SqqnsZsDNEVdShZYhdl1R9OpezZnFNt8ujikRE+Czkk//Y06O50ayZVb1M/9ABcIFp
+         pbu4KDjCLRMUA==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Johan Hovold <johan+linaro@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 00/22] rtc: pm8xxx: add support for setting time using nvmem
+Date:   Wed,  8 Feb 2023 20:22:57 -0800
+Message-Id: <167591660371.1230100.17894948728225084854.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230202155448.6715-1-johan+linaro@kernel.org>
+References: <20230202155448.6715-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 2/8/23 06:13, John Paul Adrian Glaubitz wrote:
-> Hi Randy!
+On Thu, 2 Feb 2023 16:54:26 +0100, Johan Hovold wrote:
+> This series adds support for setting the RTC time on Qualcomm platforms
+> where the PMIC RTC time registers are read-only by instead storing an
+> offset in some other non-volatile memory. This is used to enable the RTC
+> in the SC8280XP Compute Reference Design (CRD) and Lenovo Thinkpad X13s
+> laptop.
 > 
-> On Tue, 2023-02-07 at 17:31 -0800, Randy Dunlap wrote:
->> 
->> On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
->> > Hello Christoph!
->> > 
->> > On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
->> > > On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
->> > > > We have had a discussion between multiple people invested in the SuperH port and
->> > > > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
->> > > > when he isn't available.
->> > > 
->> > > So, this still isn't reflected in MAINTAINERS in linux-next.  When
->> > > do you plan to take over?  What platforms will remain supported and
->> > > what can we start dropping due to being unused and unmaintained?
->> > 
->> > I'm getting everything ready now with Geert's help and I have a probably dumb
->> > question regarding the MAINTAINERS file change: Shall I just add myself as an
->> > additional maintainer first or shall I also drop Yoshinori Sato?
->> > 
->> > Also, is it desirable to add a "T:" entry for the kernel tree?
->> 
->> Yes, definitely.
+> The RTCs in many Qualcomm devices are effectively broken due to the time
+> registers being read-only. Instead some other non-volatile memory can be
+> used to store and offset which a driver can take into account. On
+> machines like the X13s, the UEFI firmware (and Windows) use a UEFI
+> variable for storing such an offset, but not all Qualcomm systems use
+> UEFI.
 > 
-> Geert has suggested to wait with adding a tree source to the entry until I get my
-> own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
+> [...]
 
-So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-but push to kernel.org and ask Linus to pull from there?
+Applied, thanks!
 
-> Adrian
+[18/22] arm64: defconfig: enable Qualcomm SDAM nvmem driver
+        commit: 480ba14b9a95641647a6561d5b246de661589514
 
-Rob
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
