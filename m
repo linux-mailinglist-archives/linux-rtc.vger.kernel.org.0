@@ -2,63 +2,63 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC08690A94
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 14:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157F7690A97
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Feb 2023 14:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjBINlo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 9 Feb 2023 08:41:44 -0500
+        id S230299AbjBINlq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Feb 2023 08:41:46 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjBINln (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 08:41:43 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AC63BD92
-        for <linux-rtc@vger.kernel.org>; Thu,  9 Feb 2023 05:41:40 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id az16so971285wrb.1
-        for <linux-rtc@vger.kernel.org>; Thu, 09 Feb 2023 05:41:40 -0800 (PST)
+        with ESMTP id S230263AbjBINlp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Feb 2023 08:41:45 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07D1193D5
+        for <linux-rtc@vger.kernel.org>; Thu,  9 Feb 2023 05:41:41 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1537395wms.4
+        for <linux-rtc@vger.kernel.org>; Thu, 09 Feb 2023 05:41:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UH1FxS+Al9Ybgi+KxNoTC8ETohhFHsXFP4JFZVHRAP0=;
-        b=vxbXh9gBJBoppO3MqpRAXQW/7ZH+O8sim9MSobZQaBaFondUXzPawxgSuBPQaN2wrb
-         RgH6EIGOf+5RYo1trbIsCz1pDvu+vSRZs4qUsxruNAnFAb6q8wQfqBWVEC8zrKuDKsuD
-         03Y73sP1G7tUJdPTgpWHlzswtkdal8lR0UKzEHdGsq3pifb3SO6jd1PQKiHb+sp5jYy+
-         Jmi2BgzO8OVnP7CqjE3tgtW4miPWHhEqWwY9kCtbqUu9vFIX683v0LfT1xsMe6QT3PJv
-         ncsXvwALgD02ttdiaWIuwMFe30kUIT11tRKmG9XEHX6FzRGq2kcikxGQCGlG4fqWxfx/
-         xXIg==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CU99A3qAz7AXXrQplpT1MuuDMQU9ldkAjGA2AqUf0T0=;
+        b=ImlKFUeQ2taGX0SvIp26PSGxKa3dwwl1tmuZ5M06ujHzWh3hl3rd60sY83lv+qCenI
+         0qSza1Y/OBLJB+j9fCJpRl32j0bK+sa8GFPagG81MyG0fN7r5iK+CVleCcV/URfEAB0f
+         AVa9JouaiSTi2Viojvw8h2p3FFt9reL9nJzooThQQbCy5F9Awhulg9YjFhRrCKOAIc7y
+         WqVkmKaX9fAxus7LCSrQlMrSF0mzvcuZ8TPCMbhx4G6LEjg8VmfnyCbGQChwu2/Td8uQ
+         CXAgnnxdZ6xPgXTbLqTnea8RHfK0GHRaB/iw/beQkRv2WbIFDVj/qXFiSehgBSb+GDJQ
+         h61g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UH1FxS+Al9Ybgi+KxNoTC8ETohhFHsXFP4JFZVHRAP0=;
-        b=ZpquwE6vpJ3RP1t6mzHZ7AtVPQDP7x9XG7A6c6MTl5t5fM2R9Syf2ZWoq1ZRKD2/9y
-         9GZV1Aubc3yqm7z59nEID/c59B2zzzoadyRHmqnofvrjNVAsjLBxmO6z/bgliTKyAE/L
-         V3pBVQOOmE/5JFBcXankihCLi0ROgf58Ra/0yKSMMgyeCJwMnMNk6H57mYpAPqjGjysU
-         PISqDqX9SpPoVln8Ei69zKZrXLCifyitHUHiBj8ZHd8YW2BRFcqPX3WXR/P9ah1eLkMn
-         CePQg/YH35DkKHtOOf7qN2Yh57HEBEtkZg6BWdpJPV6JVVA026mpXpOKxE3Xf116uioP
-         L0tQ==
-X-Gm-Message-State: AO0yUKV78D3Th5YZq7O5lcWn5BcI1I14136My7OZTbycV3/2XYM/c8P1
-        MnV7iNRyuu5ziEudQeczQwtMiQ==
-X-Google-Smtp-Source: AK7set/L6y9JA47P+Wg2ntnqmghlLGsbHSVJ+ZSuNq1ygPmrpHcbyzAjgS0I/MTMc7LZME9xNa9X/A==
-X-Received: by 2002:adf:f212:0:b0:2c3:ebc1:30a9 with SMTP id p18-20020adff212000000b002c3ebc130a9mr11324485wro.23.1675950099211;
-        Thu, 09 Feb 2023 05:41:39 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CU99A3qAz7AXXrQplpT1MuuDMQU9ldkAjGA2AqUf0T0=;
+        b=IUrzqe4peYij/yKHEVsrfV0lgxTkoeK6o57Wjp5Oay2xE2EITTwbG34UHka9IKNhI4
+         CQ516p95IPTrRNtXJG+Wqyx1vxtmp9OiVtzE/zQQLW/+yIZonAMtH88l0sKzLxHJ33o4
+         GmhMifZjtZeQ0rtkTpb9udUQfaqRlCTEfknKddn363l0zglnPj7eThsgmOgrZeCYs3Ic
+         MTOXmHpuh1jPZz/RC//WeZcvqP0qS+TlnkIhQM/I0zL9qG63q028CLs/NSfBn0Q27uwi
+         LVX8Qpd+lJRdPv4nO0CM47Z8ErgGqW3C8KEH+uD6qC/90o4BG9Zg/kLixz9M9m+RxxD3
+         TiAA==
+X-Gm-Message-State: AO0yUKW6KLcdWqDeNvByFKwflQ/1P9AaLi0AUE8NXfaOfScFN3TqoMGv
+        Tgn5ke3nQYkrC7Oh1hoW5pxcDA==
+X-Google-Smtp-Source: AK7set9KbStsFCWSuek/BkTuzJIPXd3DaYisd2ak/58gga5zQlIerOgkiYECAD2ikHl+dqpxsBFq8g==
+X-Received: by 2002:a05:600c:2e94:b0:3df:e46f:c226 with SMTP id p20-20020a05600c2e9400b003dfe46fc226mr9731856wmn.16.1675950100407;
+        Thu, 09 Feb 2023 05:41:40 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm4946991wmi.18.2023.02.09.05.41.38
+        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm4946991wmi.18.2023.02.09.05.41.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 05:41:38 -0800 (PST)
+        Thu, 09 Feb 2023 05:41:39 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH 0/6] dt-bindings: second batch of dt-schema conversions for
- Amlogic Meson bindings
-Date:   Thu, 09 Feb 2023 14:41:36 +0100
-Message-Id: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
+Date:   Thu, 09 Feb 2023 14:41:37 +0100
+Subject: [PATCH 1/6] dt-bindings: rtc: convert rtc-meson-vrtc.txt to
+ dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABD45GMC/x2NMQ7CMAwAv1J5xlKSMgBfQQyO66QWwUVJqZCq/
- p2I8W6426FJVWlwG3aosmnTxTr40wA8k2VBnTpDcGF0wV0xnpFeZcnKGNUmtdyQF9ukrrjSUwJ
- KYEoX8ezHBL0TqQnGSsZzL9mnlC7fVZJ+/+P74zh+xut8logAAAA=
+Message-Id: <20230209-b4-amlogic-bindings-convert-take2-v1-1-c4fe9049def9@linaro.org>
+References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
+In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -84,68 +84,91 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Batch conversion of the following bindings:
-- rtc-meson-vrtc.txt
-- amlogic,gxbb-clkc.txt
-- amlogic,gxbb-aoclkc.txt
-- clk-measure.txt
-
-And in addition document the System Control registers top node.
-
-DT fixups will be posted once those conversion are fully reviewed.
-
-With this serie, the in-review and applied bindings documentation, the
-the following arm64 compatible are yet to be documented in dt-schema:
- ['amlogic,axg-audio-clkc']
- ['amlogic,g12a-audio-clkc']
- ['amlogic,sm1-audio-clkc']
- ['amlogic,g12a-tohdmitx']
- ['amlogic,sm1-tohdmitx', 'amlogic,g12a-tohdmitx']
- ['everest,es7154']
- ['everest,es7241']
- ['ti,tas5707']
- ['linux,spdif-dir']
- ['gpio-fan']
- ['pwm-fan']
-
-For reference, the following bindings conversion patches are taken in account on top
-of next-20230208 tag :
-- https://lore.kernel.org/r/20230208093520.52843-2-jbrunet@baylibre.com
-- https://lore.kernel.org/r/3ffd1889-1966-47a8-9504-d44e452d5a31@gmail.com
-- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-7-e28dd31e3bed@linaro.org
-- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-5-e28dd31e3bed@linaro.org
-- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-4-e28dd31e3bed@linaro.org
-- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-3-e28dd31e3bed@linaro.org
-- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-2-e28dd31e3bed@linaro.org
-- https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v3-1-e28dd31e3bed@linaro.org
-- https://lore.kernel.org/r/8cae0b08-8040-ef7b-da0e-92d9b3695249@gmail.com
-- https://lore.kernel.org/r/5b83767e-c53d-316f-df10-45a39dbd9c88@gmail.com
+Convert the Amlogic Virtual RTC bindings to dt-schema.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
-Neil Armstrong (6):
-      dt-bindings: rtc: convert rtc-meson-vrtc.txt to dt-schema
-      dt-bindings: soc: amlogic: convert clk-measure.txt to dt-schema
-      dt-bindings: soc: amlogic: document System Control registers
-      dt-bindings: soc: amlogic: convert amlogic,gxbb-clkc.txt to dt-schema
-      dt-bindings: soc: amlogic: convert amlogic,gxbb-aoclkc.txt to dt-schema
-      dt-bindings: soc: amlogic: update sysctrl clock-controller subnode type
+ .../bindings/rtc/amlogic,meson-vrtc.yaml           | 42 ++++++++++++++++++++++
+ .../devicetree/bindings/rtc/rtc-meson-vrtc.txt     | 22 ------------
+ 2 files changed, 42 insertions(+), 22 deletions(-)
 
- .../bindings/clock/amlogic,gxbb-aoclkc.txt         |  64 -----------
- .../bindings/clock/amlogic,gxbb-aoclkc.yaml        | 120 ++++++++++++++++++++
- .../bindings/clock/amlogic,gxbb-clkc.txt           |  53 ---------
- .../bindings/clock/amlogic,gxbb-clkc.yaml          |  51 +++++++++
- .../bindings/rtc/amlogic,meson-vrtc.yaml           |  42 +++++++
- .../devicetree/bindings/rtc/rtc-meson-vrtc.txt     |  22 ----
- .../soc/amlogic/amlogic,meson-gx-clk-measure.yaml  |  40 +++++++
- .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml  | 122 +++++++++++++++++++++
- .../bindings/soc/amlogic/clk-measure.txt           |  21 ----
- 9 files changed, 375 insertions(+), 160 deletions(-)
----
-base-commit: 5b1c3cf237da1dec2945694a6b7e5a0b66272d53
-change-id: 20230209-b4-amlogic-bindings-convert-take2-e2caf8e1c13f
+diff --git a/Documentation/devicetree/bindings/rtc/amlogic,meson-vrtc.yaml b/Documentation/devicetree/bindings/rtc/amlogic,meson-vrtc.yaml
+new file mode 100644
+index 000000000000..1d5694c08965
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/amlogic,meson-vrtc.yaml
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/amlogic,meson-vrtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Virtual RTC (VRTC)
++
++maintainers:
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++description:
++  The interface is 1 register where an alarm time (in seconds) is to be written.
++
++  The alarm register is a simple scratch register shared between the
++  application processors (AP) and the secure co-processor (SCP).
++  When the AP suspends, the SCP will use the value of this register to
++  program an always-on timer before going sleep. When the timer expires,
++  the SCP will wake up and will then wake the AP.
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    const: amlogic,meson-vrtc
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    vrtc: rtc@a8 {
++        compatible = "amlogic,meson-vrtc";
++        reg = <0x000a8 0x4>;
++    };
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt b/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
+deleted file mode 100644
+index c014f54a9853..000000000000
+--- a/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-* Amlogic Virtual RTC (VRTC)
+-
+-This is a Linux interface to an RTC managed by firmware, hence it's
+-virtual from a Linux perspective.  The interface is 1 register where
+-an alarm time (in seconds) is to be written.
+-
+-Required properties:
+-- compatible: should be "amlogic,meson-vrtc"
+-- reg: physical address for the alarm register
+-
+-The alarm register is a simple scratch register shared between the
+-application processors (AP) and the secure co-processor (SCP.)  When
+-the AP suspends, the SCP will use the value of this register to
+-program an always-on timer before going sleep. When the timer expires,
+-the SCP will wake up and will then wake the AP.
+-
+-Example:
+-
+-	vrtc: rtc@0a8 {
+-		compatible = "amlogic,meson-vrtc";
+-		reg = <0x0 0x000a8 0x0 0x4>;
+-	};
 
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.34.1
 
