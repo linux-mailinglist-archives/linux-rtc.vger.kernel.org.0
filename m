@@ -2,57 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28F1693390
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Feb 2023 21:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B396D6933A5
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Feb 2023 21:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjBKUNv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 11 Feb 2023 15:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S229720AbjBKUZp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 11 Feb 2023 15:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjBKUNu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Feb 2023 15:13:50 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981F218B22;
-        Sat, 11 Feb 2023 12:13:49 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id ud5so23398988ejc.4;
-        Sat, 11 Feb 2023 12:13:49 -0800 (PST)
+        with ESMTP id S229533AbjBKUZo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Feb 2023 15:25:44 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931DE125BE;
+        Sat, 11 Feb 2023 12:25:42 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id qb15so21341380ejc.1;
+        Sat, 11 Feb 2023 12:25:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c9e5tNbxrcBqEtClBWjdGwDiemkYMqsKA+UfmHWi9+Y=;
-        b=peycM+ujMjmntXoGI352UOHmuAfZD/7B8Z2kvOo6YTCh/KJgu4kYXEBBuJ9pF6eOni
-         n/jkAn2nzhAbTV4i161WMDkjtnc7jgH6wPfW7dTfm6LZTzvHFz+0b1tBY6pHhezeVhC1
-         wAUwDsP/tZsr0cvP7ENO4JD8TULOY6hnOuipeT8blB0aYiR/MqF2ycAkRMGv0ChVqUZy
-         VRdPfk5vN6lbG8pyVkZcT1tIMr72sRFO6AbBbckRAIs4ZmVOg5r9Jw1PmpQsOeeXhTrf
-         H9LT9SRgFrQTJ55BeTGy9aUCDUJFSlMPYeeKk5Npgc1gfYsiMy/iwC/OcluVY3HEeAfa
-         8GUg==
+        bh=lLacBBRlz93H3GiKKvSQD2qZJYcpqiTjyuyAIXkHfUk=;
+        b=HnvlPd2wCVKP1vEA5oBzN09Hm7YBjsJX5upx2hujewee0OEBtMeFDjUN0pNfY1qNzj
+         /6e+ChM9OpYSHEHTVo/d5JN4LCYMYeMvjzMpTmh5pZ+FbQjTSiarXOl3fsp3LN3r5lrU
+         uVDbJHNlzEbGRXVmnwYdZ+4BdMeKqhSrmF7yAiLEgDHQOfQsGAU1ESNHG4p1GZ/FBk8C
+         PYnUrj+WyW5jtbwdj9wyGMdBbTO10UXCDDg9EzsoEbicsFM6IuGG6OOIQre7nLz3vyNV
+         Rx/nB7kR/S5q71duUSyDIiXocP70Q2eDFgGyiBMVG3XXFeN6BUnMsH1/O0MgRKRhZ9v1
+         peQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=c9e5tNbxrcBqEtClBWjdGwDiemkYMqsKA+UfmHWi9+Y=;
-        b=4JRs46CgPAso5PTfhrXYRAege1Qu4FwQEG2dNy/t+9Onxo2yy5HkQhXXTFvM9fik9q
-         uwDO3Qhvdsh+xNuPeWGd5TyNPDG5vzHfxIrXEyEEt0ha66w7nj82Iqn2XcdT+L5yb58U
-         uEsNl94hF2dS4QZr/NEwfJl+DwuEnc8PxxwBDBPjhE6auxPRwHe3gH2gasIgAXCGZ/5L
-         X2oZ6C/L8CrXR8XxZ6dDyZ431uBDyDl13zzMj6U/LgwnBDFz1AfrO+1uiVqME0lnuBJH
-         WChjSP9FQel9xoyiIyNNhBdg+XF265hkA0J62CYdrzUnQSdATFUJ2dT9LODnQZRU1qfM
-         KdVQ==
-X-Gm-Message-State: AO0yUKXd+Qmma1FC9bO3EFqzKBR0Q+1t5j0UrZ33YltgdT2yhrqiqP0F
-        dmVHZLtI1ZvBJk6rA2tl7OuiLRIBmQDqSKkcTKt67GY2pMA=
-X-Google-Smtp-Source: AK7set+CLHA+r6hk9yDAzRpOY5AME8RdEBbntcSFFOqlzGdnQUpD1d7oJaCWx8p2BMFIbib4Qh1NGfRfm+it7DyoINU=
-X-Received: by 2002:a17:906:149b:b0:88a:5bed:62f2 with SMTP id
- x27-20020a170906149b00b0088a5bed62f2mr2644188ejc.4.1676146428121; Sat, 11 Feb
- 2023 12:13:48 -0800 (PST)
+        bh=lLacBBRlz93H3GiKKvSQD2qZJYcpqiTjyuyAIXkHfUk=;
+        b=fhCtsIjS0Fm7/2hQo9u6KS71nPy6U8935uc98VX26SOATUoPWtaJYh0OxxO0wD8lL8
+         LVYISUqJRGkttHkgi+AqCLxx4Ud1DbqEKN2uYj7cxhs1dYk246DIlHgWbyEt7oxNl/GI
+         hHNdGr6q3ll7MkaBp6SNzZxV6R/9wtKE0pMg44EIBXdTpHe+umlNyg1p/2BAKouUo8TA
+         j0HsUOLt+KqfN9ub7OK1N9VUxEH3P8O0k4Rns+xwqAJMfgeinZSsM3UjmarDcVnLhFqa
+         aB07YzhlLkkuNxp+6lBMo7JicLati4uD/cPHn0pEK0KVxCo4t0kgzIa1dK3dUGhE/BEI
+         Fffw==
+X-Gm-Message-State: AO0yUKWZItBUq8Ps+OmOAobMdtj3H5Pw68Msn+RxwKUyUxZNe+zBWm8i
+        89MgpIYA2tNEAHDYQRG/qyv5MS1NXw/lEVj4lUM=
+X-Google-Smtp-Source: AK7set+r8/isemvwKFykUdz65hr3VaRSbzbkw3mFuod0hK8/niYyuljq/yGDoa19MVZw3qAcXd7psXWFNbni52Mh3LI=
+X-Received: by 2002:a17:906:c44e:b0:8af:341c:1f82 with SMTP id
+ ck14-20020a170906c44e00b008af341c1f82mr2622125ejb.4.1676147141118; Sat, 11
+ Feb 2023 12:25:41 -0800 (PST)
 MIME-Version: 1.0
 References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
- <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
-In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
+ <20230209-b4-amlogic-bindings-convert-take2-v1-3-c4fe9049def9@linaro.org>
+In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-3-c4fe9049def9@linaro.org>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Feb 2023 21:13:37 +0100
-Message-ID: <CAFBinCDEtwVYUB5KTJCQ+1KL5+bqeCNeF4gPe1jzx3SPeftqGQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] dt-bindings: soc: amlogic: convert clk-measure.txt to dt-schema
+Date:   Sat, 11 Feb 2023 21:25:30 +0100
+Message-ID: <CAFBinCCACzEDaa2Z+h5JzXRjEcQ9QH0R+=_UXOKHe7zX02im=Q@mail.gmail.com>
+Subject: Re: [PATCH 3/6] dt-bindings: soc: amlogic: document System Control registers
 To:     Neil Armstrong <neil.armstrong@linaro.org>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -80,39 +80,41 @@ Hi Neil,
 
 On Thu, Feb 9, 2023 at 2:41 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
 >
-> Convert the Amlogic Internal Clock Measurer bindings to dt-schema.
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../soc/amlogic/amlogic,meson-gx-clk-measure.yaml  | 40 ++++++++++++++++++++++
->  .../bindings/soc/amlogic/clk-measure.txt           | 21 ------------
->  2 files changed, 40 insertions(+), 21 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml
-> new file mode 100644
-> index 000000000000..77c281153010
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/amlogic/amlogic,meson-gx-clk-measure.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Internal Clock Measurer
-> +
-> +description:
-> +  The Amlogic SoCs contains an IP to measure the internal clocks.
-s/contains/contain/
-It's been there in the old bindings as well but it would be great to
-have it fixed.
+> Document the System Control registers regions found on all Amlogic
+> SoC families and it's clock, power, pinctrl and phy subnodes.
+I understand clock (main clock controller) power (power domain
+controller) and PHY (HDMI and CVBS PHYs). Are you sure about pinctrl?
 
 [...]
 > +properties:
-do we need something like the following?
-  $nodename:
-    pattern: "^clock-measurer(@.*|-[0-9a-f])*$"
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - amlogic,meson-gx-hhi-sysctrl
+> +          - amlogic,meson-gx-ao-sysctrl
+> +          - amlogic,meson-axg-hhi-sysctrl
+> +          - amlogic,meson-axg-ao-sysctrl
+If you have to re-send this then it would be great if you could add:
+          - amlogic,meson-hhi-sysctrl
+because we already have that in arch/arm/boot/dts/meson.dtsi for the
+32-bit SoCs.
+
+[...]
+> +        power-controller {
+> +            compatible = "amlogic,meson-gxbb-pwrc";
+> +            #power-domain-cells = <1>;
+> +            amlogic,ao-sysctrl = <&sysctrl_AO>;
+For this node (and similar ones) I have a question to the device-tree
+maintainers:
+The power controller has a dedicated sub-range of registers. This also
+applies to the CVBS and HDMI PHYs.
+But the clock controller does not (it has its registers all over the
+place - unfortunately that's how the hardware is).
+I have been asked to add a "reg" property to child nodes with a
+sub-register space.
+Does this mean we need to add a reg property here as well (regardless
+of whether we're using it in the driver or not)? And what to do in
+case of the clock controller though?
 
 
 Best regards,
