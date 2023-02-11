@@ -2,60 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6FF692C65
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Feb 2023 02:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EA1692C7B
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Feb 2023 02:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjBKBEm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 Feb 2023 20:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S229871AbjBKBSi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 10 Feb 2023 20:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBKBEm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Feb 2023 20:04:42 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E975A75F56
-        for <linux-rtc@vger.kernel.org>; Fri, 10 Feb 2023 17:04:40 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id g2so8349786ybk.8
-        for <linux-rtc@vger.kernel.org>; Fri, 10 Feb 2023 17:04:40 -0800 (PST)
+        with ESMTP id S229698AbjBKBSh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Feb 2023 20:18:37 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FD1765E2
+        for <linux-rtc@vger.kernel.org>; Fri, 10 Feb 2023 17:18:36 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-52ebee9a848so75435567b3.3
+        for <linux-rtc@vger.kernel.org>; Fri, 10 Feb 2023 17:18:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KCmOGuBPv31UY5B1zXCetlCYTSlsv5u9zQ46BG1wFyA=;
-        b=bnrJaquB/tPkt/lJWzNkdevVm8WHdDmXnnxixhXv0x9lnfGxe4gwzSWC98z54m+fR/
-         adc82mymHz1NF4uljr7ef9/vKIIjKFR94YrzBrY88RH369na61ieBQ7AEGLtnJCeQjiv
-         PY4QbVjAedTx4HcKD0p+ArD0R0MYFW3hzmatI3y89dgPFsPdmOZ1Lw86dyTguSFCZjYf
-         0kPXBjj/LUbak2pOD0hpKK+FhaJgbt9oe57x9P0aF0N7Vo336x6Cck4WfUn0Rw8IJw+s
-         EzN0uvaGkooCyHezU7zRqbsXBKyXcVHclFnkD6IZvHT7zorm7uGFGo9UOYgAa6WxZY5/
-         /nHQ==
+        bh=cp2zIBbIpvXAM7Zj4Wg0jFyWUO1R0STE0dCNXKFyBY4=;
+        b=AELaoNaTADorAiw+/Zz9py1vM8XiJQuku5iNqK6EosG6jV2SGVk0PQPEyYLgtzjy63
+         Kiv1zMwLkvvwExoFz3QfYzCTCfNQr3XB2G5E4tsDfCyFh8Todn0lZs+ZKACVgC6Uqo4E
+         2vapFN3R9BgKr2ekNd99ryKlPqvy+lMNo7kQ8TsyLXDNX21suN/FRH7Vlq1EU9HdliDV
+         CwM/vZS2W0bJgackJ6I6VILwPPXUWmek4YonUmROzRLojSpMCvwodLRVs8yOX1a1fT/r
+         2BvNW+VMIWRUzipzsh53iLe+fIXZFgCTlo2YBtMVHHUxCINVjxVf4mdbOc4pn8TaNn8g
+         kuZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KCmOGuBPv31UY5B1zXCetlCYTSlsv5u9zQ46BG1wFyA=;
-        b=nqXC0LHkawF2p28BP7FTShqdR3RlEKFW79dnby+0weSmKS+LT/0iK6xyBqfQC6H4ae
-         ZepQVVNVJxlLMPsWFQL53+nCKSSSbEBpKZAe9E4/U7dB8R0RWCVfd58u0YRPnl3rL6bY
-         NnBxdHp8b0HoXW8d2/UJ+DQ59EO15+hoHQ4iUNpsxkZRjEnckFQ/TGHtUdIVK0NonqQs
-         boxSZf7PflGiT6gjWsh0uPv3yg9y4EhjxWorg7co8MrMeWvQ6qPJx9sieRjdJPxCQ32d
-         3/Db7DwEC6y1+X3XCdgyqgx55joX5Xwp377FGopuEcwbtP/0ygk1cMnX9eoN5HIlyIqL
-         hWOw==
-X-Gm-Message-State: AO0yUKUZk9ELq4POgpNJpaIHjfkT4xN+9suysXkYqUj1DiM/+dj9AIwl
-        rj2OQsIO9HqqJTR7yss4lzTyUSB4AJxCcvqViaAn
-X-Google-Smtp-Source: AK7set9g6Mafb/QDw8fUZh0hFORiAihjBIDqPTa+Vzv8SHnlH6la0bZEvLhiVF1mS2/6YN3/Z0uCPt1e1hdjSE9v81c=
-X-Received: by 2002:a05:6902:24c:b0:8b9:66a7:bb53 with SMTP id
- k12-20020a056902024c00b008b966a7bb53mr1742717ybs.219.1676077480028; Fri, 10
- Feb 2023 17:04:40 -0800 (PST)
+        bh=cp2zIBbIpvXAM7Zj4Wg0jFyWUO1R0STE0dCNXKFyBY4=;
+        b=ftRqCJyYe3JUaek2e4l8AwjrpiO9B3U/T/PaG8BiDucO9ZGoWI75wuOy+y7Cs9r6wS
+         nl5KszwJvObYILy+RoiAUqoG0sfmVfzFbg86jAE+wd8PodVfmOzcTpypYRn+GAbsp944
+         3O+TL/G8LENRELZf9chH89eKWvXur8gk9FGvCuKScIztRLiSoR7/TYS0CXDoi9NAgYQ4
+         wuUqsvqARDUQjl1z5KzRf3vsYImkAOSpaMDdjReuATshbPNcqeLV2I1QZYaCDPUyAHuF
+         XwTBoyMLe8Mx71X94YjA5ChLrKdKuWT84uFy86vbsIC/eanIoXVEuaUqyWp+wYYiPd/K
+         4DJQ==
+X-Gm-Message-State: AO0yUKX5mJ+hXV+sVf8G2y26VHqcM5ja4ybBoPBfisZFl3xssQPZRPpL
+        H1S4IN3uvNnOu1MKqPHp843yOn/sM5x272DH8fMJ
+X-Google-Smtp-Source: AK7set+N85BqMue2v5DA9Vr88JsCXNggIFu/8mvX8mUPoZrr6/LcRki42XTM/2uOd37lvUPRUKmH16fMgwdWvO+OcmQ=
+X-Received: by 2002:a0d:cb04:0:b0:52b:e174:c153 with SMTP id
+ n4-20020a0dcb04000000b0052be174c153mr1426017ywd.271.1676078315356; Fri, 10
+ Feb 2023 17:18:35 -0800 (PST)
 MIME-Version: 1.0
 References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
  <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
  <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
  <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de> <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
  <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx> <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
- <87zg9m26f2.ffs@tglx>
-In-Reply-To: <87zg9m26f2.ffs@tglx>
+ <87zg9m26f2.ffs@tglx> <CANDhNCopf___L_3cARqK8WDHSJWFYYikxvANHh2CRMjDRag9yw@mail.gmail.com>
+In-Reply-To: <CANDhNCopf___L_3cARqK8WDHSJWFYYikxvANHh2CRMjDRag9yw@mail.gmail.com>
 From:   John Stultz <jstultz@google.com>
-Date:   Fri, 10 Feb 2023 17:04:28 -0800
-Message-ID: <CANDhNCopf___L_3cARqK8WDHSJWFYYikxvANHh2CRMjDRag9yw@mail.gmail.com>
+Date:   Fri, 10 Feb 2023 17:18:23 -0800
+Message-ID: <CANDhNCqaawcr6hxxKsk1Vd8e4kvwd8-qgVv--uLtWnB1AoJdig@mail.gmail.com>
 Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
  is zero
 To:     Thomas Gleixner <tglx@linutronix.de>
@@ -76,95 +76,22 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 7:40 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> On Thu, Feb 09 2023 at 12:19, Michael Nazzareno Trimarchi wrote:
-> > On Wed, Feb 8, 2023 at 7:06 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >> I wrote that patch against the back then mainline code. No idea if it's
-> >> still applying, but the underlying issue is still the same AFAICT.
-> >>
-> >> It needs some polishing and a proper changelog.
-> >>
-> > Ok, I will try to update it on some mainline kernel in my environment
-> > and test it back. I need
-> > a little information if it's possible. Consider that I have no
-> > experience in this area. I understand how
-> > code was designed in general but the part around the freezer and all
-> > those code you remove, what was the logic behind in the removed code?
+On Fri, Feb 10, 2023 at 5:04 PM John Stultz <jstultz@google.com> wrote:
+> Thomas' patch fixes the erronious 0-as-invalid initialization issue
+> using KTIME_MAX but also simplifies the logic getting rid of the
+> freezer handling.
 >
-> What I can oracle out of that well commented gem is:
->
->   A userspace task invokes clock_nanosleep(CLOCK_*_ALARM, ...), which
->   arms an alarm timer. The expiry of an alarmtimer causes the system to
->   come out of suspend.
->
->   As the task invokes schedule() it can also be brought back from
->   schedule() via a signal. If that happens then the task cancels the
->   alarmtimer and returns to handle the signal. While doing that it can
->   be frozen, which means the alarm and therefore the wake from suspend
->   is lost.
->
->   To prevent that the code tries to save the earliest expiring alarm if
->   the task is marked freezing() and the suspend code takes that into
->   account.
->
-> John, did I summarize that correctly?
->
-> The change I made remove that magic and marks the task freezable when it
-> goes to schedule, which prevents the signal wakeup. That ensures that
-> the alarm stays armed during freeze/suspend.
->
-> That obviously needs some testing and scrunity by the folks which use
-> this mechanism. IIRC that's used by android, but I might be wrong.
+> I don't have as much familiarity with the freezer handling change, so
+> while it looks sane, I can't say I would likely catch an issue doing a
+> visual review.
 
-So, thanks for dredging this old thread up, I'm sorry I didn't see it
-the first time it came around.
+Actually, because of this, I'm going to split Thomas' change in two.
 
-Not having a clear memory of why we do the (min == 0) early return, I
-went digging in, and found it was in the original git commit, so I
-went looking to the archives.
+The first to just use KTIME_MAX as the invalid initialization value,
+and the second to cleanup the freezer logic.
 
-It's completely not present in the first version of the patch:
-  https://lore.kernel.org/lkml/1288809079-14663-8-git-send-email-john.stultz@linaro.org/
-
-But it did appear in the second version:
-  https://lore.kernel.org/lkml/1290136329-18291-6-git-send-email-john.stultz@linaro.org/
-
-And from there it's a clear case of wanting to avoid setting the RTC
-if there were just no timers to expire.
-
-But, indeed this is a bug, as initializing min to ktime_set(0, 0) as
-the "invalid" case isn't a good plan, as it might be possible that
-suspend is run right as an alarmtimer expires, and you get a real zero
-delta value (as has been reported).
-
-Instead it seemed I should have used KTIME_MAX as the "invalid" case
-(as Thomas' patch uses).
-
-However, before the patch was merged, it changed further to handle the
-freezer waking a current sleeper:
-  https://lore.kernel.org/lkml/1294280159-2513-13-git-send-email-john.stultz@linaro.org/
-
-Which was then used to initialize the min value (still erroneously
-using 0 as an "invalid" value) in the case that the freezer woke a
-task sleeping which would cause the alarm to be lost (as Thomas
-summarized).
-
-Thomas' patch fixes the erronious 0-as-invalid initialization issue
-using KTIME_MAX but also simplifies the logic getting rid of the
-freezer handling.
-
-I don't have as much familiarity with the freezer handling change, so
-while it looks sane, I can't say I would likely catch an issue doing a
-visual review.
-
-Michael: If you are still intending to send the patch out, please do,
-otherwise I've already forward ported it so I can do some testing with
-it. I'm happy to put together a commit message and send it out if
-that's easier for you.
-
-And, just for correct Reported-by: tags: Michael Trimarchi, are you
-the same Michael (michael@mipisi.de) that originally reported this
-issue?
+That way if the freezer change is problematic we can revert it and not
+lose the fix here.
 
 thanks
 -john
