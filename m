@@ -2,57 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A718A693389
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Feb 2023 21:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28F1693390
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Feb 2023 21:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjBKUKY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 11 Feb 2023 15:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
+        id S229503AbjBKUNv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 11 Feb 2023 15:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBKUKY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Feb 2023 15:10:24 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D5393F8;
-        Sat, 11 Feb 2023 12:10:23 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id lu11so23386224ejb.3;
-        Sat, 11 Feb 2023 12:10:23 -0800 (PST)
+        with ESMTP id S229455AbjBKUNu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Feb 2023 15:13:50 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981F218B22;
+        Sat, 11 Feb 2023 12:13:49 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id ud5so23398988ejc.4;
+        Sat, 11 Feb 2023 12:13:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqvtYFdR0CJM/IKruwD6L9LivhuvudH2/deM4TDKO8U=;
-        b=VaGQ+DB+jTkrMi1vkI0YiEnDC+RGJ7VSVTUDGD8WTUI7roAGNy6pbABULsdeKia4fo
-         XfNsawqq8ZlXbRbZjM7rquszBkSfaTGZLsgO1IczIFREpZUZhKBSwawQyK9xSAYyqome
-         UbTMgEr932yELRVLPmTypXwOZjKZHknWVXy6iaLqwZ7vFN5GMcTuR6LKYMmLw8Cbgs+0
-         SgKzB6pUYglNZ/BIML/rD7KmG7heEFNntTKNdM/3hhOQDxTQalLP1jrUycFBewgT0Zti
-         ZAO+Cl0Hu2nRbZc5wK+1/2uxujb1mPuh1IQXOXsGM5+iWX34JIvOoB7fB2f4vmE1mln4
-         YXjQ==
+        bh=c9e5tNbxrcBqEtClBWjdGwDiemkYMqsKA+UfmHWi9+Y=;
+        b=peycM+ujMjmntXoGI352UOHmuAfZD/7B8Z2kvOo6YTCh/KJgu4kYXEBBuJ9pF6eOni
+         n/jkAn2nzhAbTV4i161WMDkjtnc7jgH6wPfW7dTfm6LZTzvHFz+0b1tBY6pHhezeVhC1
+         wAUwDsP/tZsr0cvP7ENO4JD8TULOY6hnOuipeT8blB0aYiR/MqF2ycAkRMGv0ChVqUZy
+         VRdPfk5vN6lbG8pyVkZcT1tIMr72sRFO6AbBbckRAIs4ZmVOg5r9Jw1PmpQsOeeXhTrf
+         H9LT9SRgFrQTJ55BeTGy9aUCDUJFSlMPYeeKk5Npgc1gfYsiMy/iwC/OcluVY3HEeAfa
+         8GUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aqvtYFdR0CJM/IKruwD6L9LivhuvudH2/deM4TDKO8U=;
-        b=z4QHDeRL7HuTcz9iW4TxlB+qRBUEPzRIdmH/mmN5e1lnVW4fvFPT+NnieZrLDaruYq
-         ye4tyfvlhebMHN5N8lyuXYNHXtdXwihJjOoSf7rmVFKIDkyPZsdMIOMapwjCm5NwZ1FZ
-         8r6G9MaQyc4c7/rIBTG8TdjiMFl3v5rT32IqKcNN9Fzez/DJF6mUiWA+su5wO/HAu39K
-         32D7E2W71vOEmxKEnKNyhNZSIZaxZMIYt8KlhLjOHkmoTcgbop72zhbnt0b0fVppUC1s
-         e1MqZoM3IqWQwpEwQ+kNMpn5FwumtJZDSN9QFnCRqBRuc942xVkJVuQZg5rIFa+p7Iko
-         2q+g==
-X-Gm-Message-State: AO0yUKWnpZVpioIBeY/TMRDVjoZQpA35+hoWEM1FxmctUu9fxBBqCtcU
-        8rZdddA+AHhDwYsDx+HgQ/y9769lsWuN1MYUqt4=
-X-Google-Smtp-Source: AK7set9+5nzM0kGkpoawYhuBJ1IxkbkuleIU6WdPltyPi0WLRcRSqsIRC6icJ8P/TCMEyzHPC97cBkWZ0ueEvmnIapE=
+        bh=c9e5tNbxrcBqEtClBWjdGwDiemkYMqsKA+UfmHWi9+Y=;
+        b=4JRs46CgPAso5PTfhrXYRAege1Qu4FwQEG2dNy/t+9Onxo2yy5HkQhXXTFvM9fik9q
+         uwDO3Qhvdsh+xNuPeWGd5TyNPDG5vzHfxIrXEyEEt0ha66w7nj82Iqn2XcdT+L5yb58U
+         uEsNl94hF2dS4QZr/NEwfJl+DwuEnc8PxxwBDBPjhE6auxPRwHe3gH2gasIgAXCGZ/5L
+         X2oZ6C/L8CrXR8XxZ6dDyZ431uBDyDl13zzMj6U/LgwnBDFz1AfrO+1uiVqME0lnuBJH
+         WChjSP9FQel9xoyiIyNNhBdg+XF265hkA0J62CYdrzUnQSdATFUJ2dT9LODnQZRU1qfM
+         KdVQ==
+X-Gm-Message-State: AO0yUKXd+Qmma1FC9bO3EFqzKBR0Q+1t5j0UrZ33YltgdT2yhrqiqP0F
+        dmVHZLtI1ZvBJk6rA2tl7OuiLRIBmQDqSKkcTKt67GY2pMA=
+X-Google-Smtp-Source: AK7set+CLHA+r6hk9yDAzRpOY5AME8RdEBbntcSFFOqlzGdnQUpD1d7oJaCWx8p2BMFIbib4Qh1NGfRfm+it7DyoINU=
 X-Received: by 2002:a17:906:149b:b0:88a:5bed:62f2 with SMTP id
- x27-20020a170906149b00b0088a5bed62f2mr2641855ejc.4.1676146221795; Sat, 11 Feb
- 2023 12:10:21 -0800 (PST)
+ x27-20020a170906149b00b0088a5bed62f2mr2644188ejc.4.1676146428121; Sat, 11 Feb
+ 2023 12:13:48 -0800 (PST)
 MIME-Version: 1.0
 References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
- <20230209-b4-amlogic-bindings-convert-take2-v1-1-c4fe9049def9@linaro.org>
-In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-1-c4fe9049def9@linaro.org>
+ <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
+In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Feb 2023 21:10:10 +0100
-Message-ID: <CAFBinCDBwh0KWVXHV4eT=SijHvHUQ-KtwhcV1X9o_f5wHVOTWQ@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: rtc: convert rtc-meson-vrtc.txt to dt-schema
+Date:   Sat, 11 Feb 2023 21:13:37 +0100
+Message-ID: <CAFBinCDEtwVYUB5KTJCQ+1KL5+bqeCNeF4gPe1jzx3SPeftqGQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: soc: amlogic: convert clk-measure.txt to dt-schema
 To:     Neil Armstrong <neil.armstrong@linaro.org>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -76,9 +76,44 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hi Neil,
+
 On Thu, Feb 9, 2023 at 2:41 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
 >
-> Convert the Amlogic Virtual RTC bindings to dt-schema.
+> Convert the Amlogic Internal Clock Measurer bindings to dt-schema.
 >
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  .../soc/amlogic/amlogic,meson-gx-clk-measure.yaml  | 40 ++++++++++++++++++++++
+>  .../bindings/soc/amlogic/clk-measure.txt           | 21 ------------
+>  2 files changed, 40 insertions(+), 21 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml
+> new file mode 100644
+> index 000000000000..77c281153010
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/amlogic/amlogic,meson-gx-clk-measure.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Internal Clock Measurer
+> +
+> +description:
+> +  The Amlogic SoCs contains an IP to measure the internal clocks.
+s/contains/contain/
+It's been there in the old bindings as well but it would be great to
+have it fixed.
+
+[...]
+> +properties:
+do we need something like the following?
+  $nodename:
+    pattern: "^clock-measurer(@.*|-[0-9a-f])*$"
+
+
+Best regards,
+Martin
