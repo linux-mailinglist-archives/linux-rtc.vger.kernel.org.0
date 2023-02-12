@@ -2,87 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F927693A27
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Feb 2023 22:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85F0693A2D
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Feb 2023 22:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjBLVKB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 12 Feb 2023 16:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S229543AbjBLVL2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 12 Feb 2023 16:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjBLVKB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Feb 2023 16:10:01 -0500
+        with ESMTP id S229712AbjBLVL2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Feb 2023 16:11:28 -0500
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD693599;
-        Sun, 12 Feb 2023 13:09:59 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3E06F5C00F3;
-        Sun, 12 Feb 2023 16:09:57 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490AC1115F;
+        Sun, 12 Feb 2023 13:11:27 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id B74E75C00C8;
+        Sun, 12 Feb 2023 16:11:26 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 12 Feb 2023 16:09:57 -0500
+  by compute6.internal (MEProxy); Sun, 12 Feb 2023 16:11:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1676236197; x=
-        1676322597; bh=wfIsoUZApr8e7Lrxv9tsDnhqLEAta34iw5p74J+0dro=; b=I
-        pqaPo89o17h5ShCwFokV3KO3nbd/Tu0y5bZIXy1N97AxKJkzwtFctzHh7cDx7hgB
-        dfrmgLfDWObv52rA9X7IG37LfadGotBk0SEBWeBWx7crrk2N9nTmaCDYIvNYGRyk
-        mOAAzF49elyqsiHmT1ab8to81Nh3GqVI1cvGFuXKUIiXjU2ahHdQuX1jVHnMQXSC
-        chLCJ8KN08vtTQiySKVfOtR9IjIEKokf3GTA/OGx1w/cVApy4YlrzfEYbtS7BBn1
-        mX9inXXHUINK/P/3G2Mm5SoAKIh3XBXMU+z5TCKdOG51bNaMSa2RsC2h3GUXCY51
-        TXF8eaXyDUnjRrUbUzM7A==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1676236286; x=
+        1676322686; bh=/BkqxOtXcZA548SCvbOvOHi/XeQIUpilhd0t/wMeQnw=; b=K
+        uLKSf3DtAmqKfbtNpo3a5/dMq4CUYH5ZaBNBvGZA1tTwEKbZBMTD+h1i4s6Wi7Bq
+        +YPYUjmGk7gHmHn+/GxrlwHlPUD6a6V0G5tC4Zgg0IelnvWWNqCcS1/5IoBroNGh
+        l8vZyEp+XjPhsfOPflDUszUlzyCobhLnnoM34RMnsvIMfwgI0oI1X//wW/f0tXE+
+        wUhIECoaOZ5jPe37BfMCEVrOg7IM77my2cL0sRp9g26m692yInvc6K+qzh2FXLF5
+        qYkI6JnrjcOa+v1AlLYmqYTjPEi9sVosIgeltRRMl7NtC/mewJIgVQBYNMLOFxdi
+        gnu68yDbaNXQ3lzFVeLSA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676236197; x=
-        1676322597; bh=wfIsoUZApr8e7Lrxv9tsDnhqLEAta34iw5p74J+0dro=; b=A
-        d/QSMIKMeTm6RthhYcbbHK89QWRauvEz+g+iLZU8ug7jb9xNWfECxQtH6G7JwBQ2
-        fkWQjy5GkzmofcNS45vfRmtMpljng6AyLm/hdVX5/U6uObeU5qfjlReEg15HtDbg
-        zu3JOk8SKrtMv2QJb2EMbdRLnNadgX5hz8vY8FB2eXLADRZHF8MjcTwXFakAdJ2M
-        +UgF/fYvlWppio63ybf4Tl6YIKxqM4nYC0vdncc5CWjtPs8aly4ZJ7CXTYmnXtVf
-        BqpMZLzNlVoyGcYVCOAKFJbsCSp68x06o2IYEvSBWBaDxICjp/hovDx9dzuJNeVY
-        rkTgsSjSg7wzTisB+wGIw==
-X-ME-Sender: <xms:pFXpY5aC0xQYHmvMjnOvLczqk4r0Omu_zzUy3sFz7a9kFTc46xzODQ>
-    <xme:pFXpYwZ6n6MaLKJKzg37aTmUxVnhc98Nx_9CjFq-xrrTQzFF-pPy76RTQNtGu-URr
-    Wbo8ps40kbGV9JMoQ>
-X-ME-Received: <xmr:pFXpY7-wcJsB66SmW8ddFzW5iQSRuAm5b-1a7Ydu4ELIAdYiw28_ueobixo429rjCTWxC7YLwfOMhed21xUiVG258pAh3DlIVELqa6wCKg7iLVW133ZzDJW1Bg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehledgudeghecutefuodetggdotefrod
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676236286; x=
+        1676322686; bh=/BkqxOtXcZA548SCvbOvOHi/XeQIUpilhd0t/wMeQnw=; b=t
+        dyMqsPxMjdYBCd6+tf5abiJwml3YyRuaaTYNS8eaYPLB40W+Hfnxj0lsM+U0S1rP
+        H+PG+VOtR2VVaCpwb4TJSNikPMorNEXjjQlndGrHhQie+wRCV2nDbbLtPwVpx5G0
+        HNmiQnOpb924Bgu4WUrpnZP6YbABiDFQev0aXxomtQaWp+EpOzrL+KXjqnfsOrET
+        HrYk/TcTQduUqhybRNzgKSF8W9JTAfh42c4tIpfYQ2mJau3/AKudxkS7BIhTmO2q
+        3IzqDe6hLPATOuAG/6qKuRJwQa7HIGHvH2y0ccrX+YB+DiadsT3rl7HVy420337u
+        audEIiyuJfqBauD1zcczw==
+X-ME-Sender: <xms:_lXpYzo4W_Nusw_D-MqC7qm0oEifHbFeYQ9QhhZdud9xYteh2KqBnw>
+    <xme:_lXpY9ooyfsqYfi-higT-B90WKZCIR5qd5-ETKFEh2kaWty9QP6nd475odrqqqm8Z
+    pcmTk0uvjwbI_e3KA>
+X-ME-Received: <xmr:_lXpYwOZspstzzVgcDwNBeb4cPeOqtxVQfs6oK_2PtfLswogagxArkhSw84yjaRQiO7vKYgwM1qkoMDLpvIiIThu5ZDWiXPpX1lcKk6O-EysGjAnX4P_5bnPAw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehledgudegiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfvvehfhffujggtgfesthekredttdefjeenucfhrhhomhepufgr
+    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgr
     mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
-    cuggftrfgrthhtvghrnhepgeeikeeufedvvdeuteeivdeiffdtgfdtfeejgfetfeefgeff
-    gfdvffehjedvueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    cuggftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeel
+    leeftdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
     hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:pFXpY3pHvkQI4KQG3B2GKBpzHU81GyEbOOaVZVk11OQHc9fdpJdnWg>
-    <xmx:pFXpY0rP9yWWLZYVnt8JwMXGwCU1KGS-jB2fDYF--m-ObwT38w9HMQ>
-    <xmx:pFXpY9Ra3pPSIw4Yrp85jwILx-Vuu-lWagciTlGtvd9SCMZHMiEUgg>
-    <xmx:pVXpY1e5Hgiy9QI_JLQZQEBOvPpQPlcKO9r_tZ4vOo3fiTAVZBo0NQ>
+X-ME-Proxy: <xmx:_lXpY25EK67y7TwH2JV97juE8-Xm2ORky6HYdO-MIKpRqb5BGSodHw>
+    <xmx:_lXpYy67kr2yr-b7qlqTQonQyu_xm-iq1ipnUm2CB3M_MqDuTstdpQ>
+    <xmx:_lXpY-ii837Mbw0K6D1bdwfkfl57GozFzzCncE7527-LBVTUlelg9Q>
+    <xmx:_lXpY_sfT2ZU4WZiCZ8YiaUBpxnHDRFBniT5-X3QUGI9tad5o9p3Sg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 12 Feb 2023 16:09:55 -0500 (EST)
-Message-ID: <90760cb1-81b2-ad83-0c62-f1c8180b0c0f@sholland.org>
-Date:   Sun, 12 Feb 2023 15:10:00 -0600
+ 12 Feb 2023 16:11:25 -0500 (EST)
+Message-ID: <bfd6e869-dccf-bd00-d8fc-da2c33715c8d@sholland.org>
+Date:   Sun, 12 Feb 2023 15:11:30 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Content-Language: en-US
-To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-References: <20221229184011.62925-1-samuel@sholland.org>
- <8201852.NyiUUSuA9g@jernej-laptop>
- <5c20af59-5fb5-8f7d-f6af-2b3984d79595@sholland.org>
- <4834080.31r3eYUQgx@jernej-laptop>
-From:   Samuel Holland <samuel@sholland.org>
 Subject: Re: [PATCH 1/2] rtc: sun6i: Prevent an out-of-bounds read
-In-Reply-To: <4834080.31r3eYUQgx@jernej-laptop>
+Content-Language: en-US
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20221229184011.62925-1-samuel@sholland.org>
+ <Y+V4iMaZ7WzCWzSc@mail.local>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <Y+V4iMaZ7WzCWzSc@mail.local>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -93,75 +91,48 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Jernej,
-
-On 1/8/23 13:39, Jernej Škrabec wrote:
-> Dne sobota, 07. januar 2023 ob 18:15:47 CET je Samuel Holland napisal(a):
->> On 1/5/23 11:26, Jernej Škrabec wrote:
->>> Dne četrtek, 29. december 2022 ob 19:40:10 CET je Samuel Holland napisal(a):
->>>> If there is more than one parent clock in the devicetree, the
->>>> driver sets .num_parents to a larger value than the number of array
->>>> elements, which causes an out-of-bounds read in the clock framework.
->>>
->>> Is there any DT with more than one parent? I think more fixes are needed
->>> if
->>> this is the case.
->>
->> H616 and newer expect more than one parent, to accurately represent the
->> RTC clock tree, but they use the CCU driver instead of this code.
+On 2/9/23 16:49, Alexandre Belloni wrote:
+> Hello,
 > 
-> If I understand that correctly, second clock would be 24 MHz crystal? In any 
+> What should I do with this series, I'm not sure you came to an
+> agreement.
+> Also, 2/2 doesn't apply so you'd have to rebase.
 
-That is correct.
-
-> case, if multiple parents are possible, check needs to be added to see if 
-> parent clocks include 32 kHz clock or not.
-
-Right, if we allow other clock inputs, we need to check specifically for
-"ext-osc32k", or a single clock input without clock-names, not just the
-presence of the clocks property. (A hypothetical new binding would have
-to require clock-names even for a single clock to distinguish the old
-binding with only "ext-osc32k" from the new binding with only "hosc".)
-
->> This bug is preventing us from relaxing `maxItems` in the binding for H6
->> and older SoCs, even if Linux does not use the additional parent clocks.
->> I want to fix this bug now, to give us the option (if beneficial) of
->> relaxing the binding in the long-term future.
-> 
-> I wouldn't call it a bug, since it works just fine for currently defined 
-> binding. Do you have DT binding change in pipeline?
-
-This would be a far future change, so as to not break the "old kernel +
-new DT" scenario. Maybe it's not even worth doing. But I really don't
-like the unbounded assignment to num_parents here.
+I will send v2 after the merge window, possibly including only patch 2.
 
 Regards,
 Samuel
 
->>>> Fix this by coercing the parent count to a Boolean value, like the
->>>> driver expects.
->>>>
->>>> Fixes: 3855c2c3e546 ("rtc: sun6i: Expose the 32kHz oscillator")
->>>> Signed-off-by: Samuel Holland <samuel@sholland.org>
->>>> ---
->>>>
->>>>  drivers/rtc/rtc-sun6i.c | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
->>>> index ed5516089e9a..a22358a44e32 100644
->>>> --- a/drivers/rtc/rtc-sun6i.c
->>>> +++ b/drivers/rtc/rtc-sun6i.c
->>>> @@ -294,7 +294,7 @@ static void __init sun6i_rtc_clk_init(struct
->>>> device_node *node,
->>>>
->>>>  	init.parent_names = parents;
->>>>  	/* ... number of clock parents will be 1. */
->>>>
->>>> -	init.num_parents = of_clk_get_parent_count(node) + 1;
->>>> +	init.num_parents = !!of_clk_get_parent_count(node) + 1;
->>>>
->>>>  	of_property_read_string_index(node, "clock-output-names", 0,
->>>>  	
->>>>  				      &init.name);
+> On 29/12/2022 12:40:10-0600, Samuel Holland wrote:
+>> If there is more than one parent clock in the devicetree, the
+>> driver sets .num_parents to a larger value than the number of array
+>> elements, which causes an out-of-bounds read in the clock framework.
+>>
+>> Fix this by coercing the parent count to a Boolean value, like the
+>> driver expects.
+>>
+>> Fixes: 3855c2c3e546 ("rtc: sun6i: Expose the 32kHz oscillator")
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>>  drivers/rtc/rtc-sun6i.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+>> index ed5516089e9a..a22358a44e32 100644
+>> --- a/drivers/rtc/rtc-sun6i.c
+>> +++ b/drivers/rtc/rtc-sun6i.c
+>> @@ -294,7 +294,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+>>  
+>>  	init.parent_names = parents;
+>>  	/* ... number of clock parents will be 1. */
+>> -	init.num_parents = of_clk_get_parent_count(node) + 1;
+>> +	init.num_parents = !!of_clk_get_parent_count(node) + 1;
+>>  	of_property_read_string_index(node, "clock-output-names", 0,
+>>  				      &init.name);
+>>  
+>> -- 
+>> 2.37.4
+>>
+> 
 
