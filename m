@@ -2,159 +2,159 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234586940AC
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 10:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A265D6941EE
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 10:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjBMJSS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Feb 2023 04:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S229878AbjBMJvP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Feb 2023 04:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjBMJSQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 04:18:16 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2108.outbound.protection.outlook.com [40.107.247.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3129113DE1;
-        Mon, 13 Feb 2023 01:18:14 -0800 (PST)
+        with ESMTP id S229596AbjBMJvN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 04:51:13 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2057.outbound.protection.outlook.com [40.107.14.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AA910C2;
+        Mon, 13 Feb 2023 01:51:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EnXf7NJULRmzHnoXa295fm7UJ73cpcfuP81uCEzv5Cc=;
+ b=dW1KTAWGhG3vFqKu4AA/p8kuS6CgyoaV1dIHo2mxsfq94A4ehEizQ8WfomHjLmdcjTgKE3Ex6qfPSq8bV2y+PY77XsNpakVSf9Gk9CpIXnciJgpSceHfgSJ/cpx5RNzFI5B4I5w8skFTgcANb7+OGcqT1TBSK3AuSn2m54ZRdg8=
+Received: from FR3P281CA0149.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:95::20)
+ by DB4PR08MB9263.eurprd08.prod.outlook.com (2603:10a6:10:3f8::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Mon, 13 Feb
+ 2023 09:51:08 +0000
+Received: from VI1EUR04FT028.eop-eur04.prod.protection.outlook.com
+ (2603:10a6:d10:95:cafe::80) by FR3P281CA0149.outlook.office365.com
+ (2603:10a6:d10:95::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.10 via Frontend
+ Transport; Mon, 13 Feb 2023 09:51:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.74.137.176)
+ smtp.mailfrom=wolfvision.net; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=wolfvision.net;
+Received-SPF: Pass (protection.outlook.com: domain of wolfvision.net
+ designates 13.74.137.176 as permitted sender)
+ receiver=protection.outlook.com; client-ip=13.74.137.176;
+ helo=eu21-emailsignatures-cloud.codetwo.com; pr=C
+Received: from eu21-emailsignatures-cloud.codetwo.com (13.74.137.176) by
+ VI1EUR04FT028.mail.protection.outlook.com (10.152.29.60) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.24 via Frontend Transport; Mon, 13 Feb 2023 09:51:07 +0000
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (104.47.17.169) by eu21-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 13 Feb 2023 09:51:05 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KzerTYGhcKKhsJZXr6Q+f/qLAffLSVsXUTLfmcejOtoX9Oo9vUkGEOhuA1tXM193sInM/WWQQoIx5T13UVk8tu4cqTstETxEBRzIEVvYYS4pVJG4BzrQsTPz8l62k1S+cL5euvmYK2SCap+3ZAoe1cGk/DrCJRsu/VRKDsbwJ0QWduogFv3jPny3ZsktghSPhT5znQZH7Awi2ERxD+BDGc/gDvc4W7S4/Cf9G+Ed8UW/V47OTWPoQ9cPK2rDC8+zpuwfpZuQQbxzQd8eB0WPi2zAvRVcXklEeY3hrJ29TAk9eNIu7kEtNse5gzIDFHDs+9Bs6Gh3PSwb678WLmqpdQ==
+ b=NBLtz9HLJvaO7ApUtLrWj/Lfgckjpqz+wfdgd1L4OV0B23zSBx+mIGHQGdb0VYvvX/f0uYCcPp8fkAXkmw9UieGQSduat70osEIs6sWCq4qrwQDTpSgWoHkJ8XXC4ZmhNr142P2Igfe4TISwFpblTa+jYO2E3EysHd4eAWzxgasD1lx1asNpr8KVHwdDak0Geda590QJlk3YqWCzuKeIx0G6u6Q2o85B0/G4/rn6Rl0Ty87h08WhwXzpYunWjUoQpBBYx2aUjjnu8H05x600IbN08WGxBupgy2TeoNOrN/nyIfZOesNnYAAatiRDdu463Da7umdZqWrucVicZi1KBw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vzUmuCoO+0lm7dHOJA+BodOBYy38nILjT8XCBROWSuQ=;
- b=TU8c8drxiA3pMCY0BCmeKSft85nwtmby66IH0oVv99adX4fRp7ySg79mHg/yQRChn1o2Wyi6ULvQXj4PuN6ip/YbYqpDMO9Qf+tO3tAX8+XNt9Iy4pyc21p10R2T0ZKQ5G8HZ3sRdfi7qdHTgPmmc4cG8EEJVnucs7UKdK0Bci5tUDmEmur+KmImXQC0b+0OBgofhCAz/ZSMdpo56EEYyhxDo2h5rW1RGwH5IB2AXNUqbOsETVdrhR/ebSUR3cC3m0AJlcHSCIzxWbkq03mlCkR8olWZiswPV0prUKMH99jW64ruHYuJa6OcJBY9JyySUap7WVtaKDal7coQtyLYPw==
+ bh=PwTulmfI9HQ1GPy4LvQkLnxUELWNHDT9RC8UyXmedrA=;
+ b=gXP/gHJ6nhQXmgaMXFbJp8k6wLeVcxr3BU6wZ/I1nvJkF22Lejd6UdM821iwPdPH+d3SqjIvW+Ok3ajwVv0xfpH4XZxdQiWyqDyPV06Od6DdeLEN/AW3B7gAit6RfHuy2/k32Znn8Qy4+gkBTHCWtff0EQy3YRD701Zpvn4L2guf49aPCJlEmLkq4f7WJQyBje8c6+RQ/nyOE7RtY2EvfJeV2LERr0kE9X0lfK0c9Or8bQl0Wli/CoppFr5BKnaRl84DbY/R3dvyyJ9aTWI5JjFs48kcUWBz9JzKBv+GQCK7wgcLL6oMOKSAsOWV4HIggJYwdh0LnvPYMuV1IplbOA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vzUmuCoO+0lm7dHOJA+BodOBYy38nILjT8XCBROWSuQ=;
- b=eM8JLmXzAQhDZI8jgG2/9MIfZ42GjoFLoVLu9cDdRfmDBgxGy4qxchlXhnV1z2s8NZvDc8TPOuF/v47wGj+vE9AY8kZT4XkxHGV6lFIIM0wNP/SYj4mp2mmYlxRA3RCYWmbY5RMAth4yEyY/hUfjPmF3Ghi1MHfgRga3pgM7e2o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by GV1PR10MB6075.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:9d::6) with
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by AS8PR08MB7941.eurprd08.prod.outlook.com (2603:10a6:20b:539::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 09:18:10 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::59e9:ea90:b6ea:3863]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::59e9:ea90:b6ea:3863%9]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
- 09:18:09 +0000
-Message-ID: <7268b05b-bbb1-ec4d-6a05-f5ccbdfeed90@kontron.de>
-Date:   Mon, 13 Feb 2023 10:18:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 0/7] Enable backup switch mode on RTCs via devicetree
-Content-Language: en-US
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Frieder Schrempf <frieder@fris.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ 2023 09:51:02 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::93ad:a231:e2ea:d1b1]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::93ad:a231:e2ea:d1b1%5]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
+ 09:51:02 +0000
+From:   Javier Carrasco <javier.carrasco@wolfvision.net>
+To:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+CC:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-References: <20230201143431.863784-1-frieder@fris.de>
- <Y9qQHpySbrFcBB0P@mail.local>
- <b58f5e31-f13f-6d90-774c-2017ee3de121@kontron.de>
-In-Reply-To: <b58f5e31-f13f-6d90-774c-2017ee3de121@kontron.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZR0P278CA0074.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:22::7) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Javier Carrasco <javier.carrasco@wolfvision.net>
+Subject: [PATCH 0/2] pcf85363: support for quartz-load-femtofarads
+Date:   Mon, 13 Feb 2023 10:50:16 +0100
+Message-ID: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
+X-Mailer: git-send-email 2.37.2
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0801CA0088.eurprd08.prod.outlook.com
+ (2603:10a6:800:7d::32) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|GV1PR10MB6075:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f50f52c-f0dc-4d2e-079d-08db0da3395d
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|AS8PR08MB7941:EE_|VI1EUR04FT028:EE_|DB4PR08MB9263:EE_
+X-MS-Office365-Filtering-Correlation-Id: e2fcf9dd-e834-4724-eb17-08db0da7d48c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: 5cUAgyJcPxNGQJjfAcBJyih1JIiuFbs4hWwZxgEuIaNDeZfrobAscfzwCjwCRydPnle7ARLpNbhlFQrgM99gK/kqtUBYajnqDWut/Q4SYMpm5CZxClNjAigrdCzglao0JpmwsPsOA+o4gDxXdpNBgrIrdwrowYMXlOUbbcph+9twiFYv56BLDRb6W7aqlkCuVitfHGcayIaNCYFgeXVXy3XfB+56rYJgxLDReRx2Igstxsi0Nr+oXA8NNrlKNHpgWAfhGrCMYOAczZ+mIfGdHD6IN/Hi95B1M1X1jIwrjh5DJbX25lJvWnzbxdLH8PEeeA2YoW9FrEGgYkApk4gL2rLDV9Z+ZRopWdota0bRGfn69o31JdKz5c7sS6hO5WVSC/Eg/jDalgt3r+7JO/4R8EBkAVGVXgGmoCipGg+S1MIQFtztlv+mxhRJ8QXuxWyfSu/MRLusqUnimA1Ns/OgcRoaklpyuqvTFWuI4VWKFg0prL4rSj0xOOdenv3SgSWMl/Zw/dKinzLpgeT9tT9sQzQYVSZ2j57IwEhdTGaPThsckMdgkBYAndy3qkZg6Tg0heto/bbyu6ACObzBM6lastVwe1JVdVIX+kDuP8L+/g91AY1pz9V0PMwYi1We1NOQyhdCAUmp8UeKcg4rEqbv8OOFlRLFeKakvmUvV68r0ipyvVWlzz4esMiIe3C6co8/eO9f7pAsRsiKwloOTsP+dA==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(39850400004)(136003)(366004)(451199018)(478600001)(52116002)(6486002)(36756003)(83380400001)(86362001)(38350700002)(38100700002)(186003)(6512007)(2616005)(26005)(6506007)(1076003)(6666004)(107886003)(41300700001)(8936002)(2906002)(44832011)(54906003)(5660300002)(316002)(66946007)(66476007)(66556008)(8676002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB7941
+X-CodeTwo-MessageID: 682be564-43ec-4edb-a8dc-b5f69e4b7cbd.20230213095105@eu21-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+References: <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.c239d173-62f0-457e-aa9e-d6e0511e3c3c@emailsignatures365.codetwo.com>
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR04FT028.eop-eur04.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 82c970d8-66f6-4bf2-3be0-08db0da7d137
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +1tgSUSSPLzFVxLn6mVnejDrhQJ7PNUtrHwIhIoKseXrg5lMDlek7L1aKtrUzjNN9Jjv/Bsz7dIYkir9POOtZXlylt48tbBZBdVUStQwiekAVnDNl2DLIiGbbPqINLyKHDxdT2KwK4xgZRVRPaeoLhuxC3FxkfOxfRuyh+yEsaIEYXVWUvlVHsfWB6Xl4fuwDiMy+IwoY2jRiYAH/HiTbBI90OqjjCiga/q9x2Dyu7vl4PUiCD/YB944AKQZGUji5nVoIqKOhjXFOT6O3eYm7yvfBv3bh7M/IEkk5IYcdZaz4Z+Evo3ohI/T1beEX6RVCJXIWnIxdF+snOb0t8RqdD7YRxDEE1As69N/oz3uTTl3o4ejCXUSVtM3En7rfpXoxHiVs+D+8uboiLsSr1gXXkRS9bKHGHHp+TyRIVEhUj9BtS5EpQYfkKSlxIVzSFR0KPRIyuZsI4RP4qfGU9WBmlae2fPekFt/wKF/BqsoMpDBlAPjcrd5VABhJyzTzIwB57IDernd0fXlAzz3hlFzA8pbhlejmZFP/59sZgHxwVXakw5RxUmnCJuxZGUreOIT9kgvxhO8mOMuHJVkVzIhegCDBPpA0NQVYIfRdxqaaxE2kh2yVZ6IG1K8THzXR5EjnFk9DxK0rrKXgsDjgTeMNJud+dJz8y4i2f/+Jf5eFHKe5xE6sHbhKS8LcMewbbgv4mXw8tO/fPI84P8zfidiZ+YZRMjtGWT18zg3fpuiKhI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199018)(6512007)(26005)(186003)(31686004)(2616005)(478600001)(6486002)(8676002)(66946007)(66556008)(66476007)(4326008)(53546011)(6506007)(54906003)(110136005)(316002)(7416002)(5660300002)(38100700002)(8936002)(41300700001)(44832011)(2906002)(66899018)(31696002)(86362001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wm8xODU1RXRHM2tKeG8vbjN5ZzdBRUY3SnFJK2lBU2piZGQwaGltNXNNSk5Y?=
- =?utf-8?B?WXZDVmZxNzhCeHVNTG9LMVp6UU9ESVFWY3k2cXhVZW5yZDVHTU1HcmthUUtK?=
- =?utf-8?B?NUZta3hnVGhLVlBrd0RuOUtFVnR4S0REME5RQWRRVW9HeHpSRjdmbUtIYkNk?=
- =?utf-8?B?d0R5blcwT0J1SXUvNGJLUjBhaURlc2QrOXFTSFFNbldodFJNQ1grZk5qUnV2?=
- =?utf-8?B?SVM4R0prbVdRNWpOU1hLYjFwTFBNRkIyRVE4QXRFdy9BVVFmRkNOK0VDNTdh?=
- =?utf-8?B?dEQrZ1pZUXNML0p0VEdyZk94V0s0K0lYZ0podmJaWDhiOTNHRkhUdkVmNFlt?=
- =?utf-8?B?SGZYUzFYTDlVRWtJV1Q0SlBKS216MEZMQUF3QzhScGlkMHJpSzVmZEY3NmZo?=
- =?utf-8?B?SVlCaGRlcWMrRWg2bUpSZWxtNGRFK0JzOFZDcExrWTlJQXo0TmxXVTZzNlFp?=
- =?utf-8?B?bVpnL2NSMTFLVGoxL2FDTFAvbFZtSjVzeURVRWZKR2hBNS9kWjJzQmViMnRj?=
- =?utf-8?B?L1F6enRVMmFhdDVoVlYzK05kWE5uVXBmZllMT2paV2F5QndmSGh0eHBDUnhV?=
- =?utf-8?B?d285RHdMOXhiNWxWZExCQlZ0dzUvYk52VER6Yk84K1Z3eHQrT3RiQUlwOHds?=
- =?utf-8?B?L3FrWnlLTmU4M0YxaE1rYVhPVVZuYlZpSVNnc0JSbmFmb3FvZ1pseHhOZmZQ?=
- =?utf-8?B?VXF5c3p2d1JhK3owT2NzOFZtejR3ME4wK0xZNEJJU2RKbmZtNWJQbWtBNm1O?=
- =?utf-8?B?OHEwWDc1NFVQMWxYSnZQNEZEUmRHUjRpbzJGOFczaklER0twNnRMeWxERlBz?=
- =?utf-8?B?Qk9rR0cza1p2MndETUZxTlFmMGZwNkhHaFNDVElXbHVMbDBESzkyWTAxS00y?=
- =?utf-8?B?RmNwb3hLOHIvdjYrQ3Y0Y1BTVVhVS2dGaDgrRDFZZVZCREI0bW1qVTJxa1BH?=
- =?utf-8?B?UDIycGJ2NnVSRHJZRnhDZzE1aHRhYXVmSERHdHVKZWdjMjNhZFBBaTdzQkhE?=
- =?utf-8?B?RXV0VUdvdTJ6ZWNPd2tDRFpxUUpjNTY1QTA4Q0tLVEhSSkdzR1RndlpjOUc0?=
- =?utf-8?B?b28wL1JNUlZGMkxtb09lZDlVczV6YmtOY3lOYUQ5OGhGR3V6V2xtUG02MEJI?=
- =?utf-8?B?TFBOQS9tbEt3eHcxdGkyQ2pLMFRSMURrcTZUQ2lrTk9odFlaV2hRNEpTUTVD?=
- =?utf-8?B?T29TYmxWL242OE5aV2NrUWZpK2hZWGNFM0JDUk0vU1pDVFk3Q2Nua0F3bDBW?=
- =?utf-8?B?SjBqOEgrR09aUFJMZDROVXNRckk3Tit0dU9EdHRMS3ZmdTdKOXcrYmhwWllp?=
- =?utf-8?B?bENWdTk2Z0dtcjBSc2ZRSStNZmVBWHJnOG9JbnduQWtTZEo5alY1NzlSMzVz?=
- =?utf-8?B?dzRweTdVMW1Qa1J1Vk9iWnFjMmtkSTFaVG1CK1BsRTQ0SlVsc3NUMzFYV2RW?=
- =?utf-8?B?QkFsNU93TDNSc2poc2Q4alNxR2FIejNLM0dEK29SOFNFeGpSemFoWEc5QWlF?=
- =?utf-8?B?dUc0ODBhR2ZjWU5kb28zRzFnZkk2MERQNjJybVJWKzI4eVBwbkwzZXlkdEZD?=
- =?utf-8?B?SG1HTkNSZHd1cVFsOGtiYjZyd2llaHFjclVkVEFYOElIS1hhMS9PdFZ1dm5M?=
- =?utf-8?B?eG1VSHlDamhXZURRa1g1N0EvdnE2dm10S3N2NzFBYUFJZDFLSEZyaTQrU3Nq?=
- =?utf-8?B?UWowMVRkZkdBYjNDajhNVzdXNU1lajNEbnV6VWpWTkRmSGIvS0dCNko1UmFj?=
- =?utf-8?B?YUo0dG8zeVBINGU4bVQ5WTVvcldmU1lSY0J2VFFsTFFrSlhweVNyL24yWUZD?=
- =?utf-8?B?RmhyaE1FbWNGT1Rib3o4Z0NnZkk2SmZwMzJTcktzZjlZTzBhNmg3M1BtL2xC?=
- =?utf-8?B?QmtSKzhzTVZKb1p3UTA2UTZnOU1RK2tmekdRZ0gxMUh3bGVnWHZEYmg2VGI3?=
- =?utf-8?B?NEkwTGpWUTZQd0FGeFlzWUJISUI2VlBnQnEyK1JNSURSSjhPaXYwV05MUUJj?=
- =?utf-8?B?NVJLQlY2TjJlSjEyTFFaTzdURnBrREVReWMyL1U3RlU1NCszajYxK1JtVG5X?=
- =?utf-8?B?RGNpeG43WGlJVHZJT0YvR0I1c3JpVGRVSXl1K1lmVVVMUTBXUGEvZ1F0ZnJB?=
- =?utf-8?B?bTVKb3Y4Qit0VzJ2TW9aNG9JaG1sQ1FQOWJyUHJ0OGh4SXdhUDNvYnlhNkYx?=
- =?utf-8?B?Nnc9PQ==?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f50f52c-f0dc-4d2e-079d-08db0da3395d
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 09:18:09.8004
+X-Microsoft-Antispam-Message-Info: ZJmjwzdKlzIZxWZpqVqz/P8oQbAcSWUtrdTdybYzzoU4+rDNCZLQbjRt9ZiXJxTkCOJDwAFQ2cWG56oHgvZsORNDYNJdnlif5aIUg2CCT3zA4np7FwbUaGN97l+s5mFXD8o/24848Tty7BZ/ngt+mzTMPCc2aTAe/FriCJBDAA/zGKokmMV9CDoH2mHF8fNBkgZL2i6BdZxG0HWr+RzjWbRUKHkdHUS++vGslukdE9aV5xB4oGpjkD6k/TBtr5n9NKCUsYT6CZHXqHbMyZ2nJGXGS55Ko/kJlL9KSjdcclz3aK1RFn72ZHaevUMM62BMi7LwAt/7ZE+FZSx2GA3ZfCoQMfR15RTK7u+zzhEDKiU3LEHgaGfki9YefiVZBV4Za5aGHyg9V3fiXjWB2XbXyvCY7sU1jOaFykEcuWyRvwElt9jkeCdX/6KJFIKRVxzBwChyEefYLtCRCvzb4+OEcxetMgnP43NHSDb+8oq8LBQHnC1Wp422tEHj6m/cMU3buvwolAfOL12qA37RCC/f22hXe3BMSaZB/g+Q0VimZ9RZhDHpihOgdtvV2kF+NmdLc5iEYQc7g6CnVT6+k7maj3snmIwFWRcoCYq+MkczWjmVZDTKD2in6AFAKYAOqi+ClGyZ8iBuovZSpmH/MPXLIhZ1OvDqSH8UH2pEat7sUmjk5/xX5YmyYT/XGLoAu92y5uJFEMBC6amu28E9BpgP5w==
+X-Forefront-Antispam-Report: CIP:13.74.137.176;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eu21-emailsignatures-cloud.codetwo.com;PTR:eu21-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(136003)(376002)(396003)(346002)(451199018)(36840700001)(46966006)(82310400005)(1076003)(26005)(36860700001)(6486002)(83380400001)(2906002)(36756003)(6506007)(7596003)(7636003)(54906003)(4326008)(47076005)(6666004)(107886003)(336012)(478600001)(40480700001)(70586007)(8676002)(70206006)(6512007)(2616005)(356005)(186003)(8936002)(5660300002)(86362001)(44832011)(316002)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 09:51:07.6949
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a9A7oUSNbrWIWmgR5NgxXRk5kLdydEdjS74aGmImEK3nQUVB2r150ni+em5pHOoMW9N7F+zPdhN+cXutWssGbLBwXu0hfILq9K7ibcQsczA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR10MB6075
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2fcf9dd-e834-4724-eb17-08db0da7d48c
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e94ec9da-9183-471e-83b3-51baa8eb804f;Ip=[13.74.137.176];Helo=[eu21-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR04FT028.eop-eur04.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB9263
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Alexandre,
+These patches add support for the quartz-load-femtofarads property in
+the pcf85363 device driver and a description of the property's possible
+values.=20
 
-On 01.02.23 17:26, Frieder Schrempf wrote:
-> On 01.02.23 17:15, Alexandre Belloni wrote:
->> Hello,
->>
->> You can't do that, this breaks an important use case and it is the
->> reason why I didn't use device tree in the beginning. What is wrong with
->> setting BSM from userspace? You will anyway have to set the time and
->> date from userspace for it to be saved.
-> 
-> Ok, I was already afraid there is something I missed. Can you give a
-> short explanation of what use case this would break?
-> 
-> There is nothing wrong with setting BSM from userspace. It's just the
-> fact that users expect BSM to be enabled in any case as there is a
-> battery on the board. It is much more effort to ensure that production,
-> user, etc. are aware of an extra step required than to let the kernel
-> deal with it behind the scenes.
+The driver has been tested with a PCF85263ATT RTC and a CTS3-32.768-12.5-20
+oscillator that needs a 12.5 pF load capacitor. With no property
+support the 7 pF default value leads to at least 2 Hz output frequency
+deviations, while setting the right value the deviation decreased to
+0.15 Hz. These measurements were made with a high precision oscilloscope
+(SIGLENT SDS5104X).
 
-Would you mind elaborating on your argument that this would break stuff?
-I currently don't see how an additional optional devicetree property
-would break anything.
+This modification does not affect existing designs where the
+quartz-load-femtofarads is not defined because in that case the default
+value is used.
 
-Thanks
-Frieder
+Javier Carrasco (2):
+  rtc: pcf85363: add support for the quartz-load-femtofarads property
+  dt-bindings: rtc: nxp,pcf8563: add quartz-load-femtofarads for
+    pcf85263 and pcf85363
+
+ .../devicetree/bindings/rtc/nxp,pcf8563.yaml  | 20 ++++++++--
+ drivers/rtc/rtc-pcf85363.c                    | 37 ++++++++++++++++++-
+ 2 files changed, 53 insertions(+), 4 deletions(-)
+
+--=20
+2.37.2
+
+
+Javier Carrasco =0A=
+Research and Development=0A=
+=0A=
+Wolfvision GmbH =0A=
+Oberes Ried 14 | 6833 Klaus | Austria =0A=
+Tel: +43 5523 52250 <tel:+43552352250> | Mail: javier.carrasco@wolfvision.n=
+et <mailto:javier.carrasco@wolfvision.net>=0A=
+=0A=
+Website: wolfvision.com <www.wolfvision.com> =0A=
+Firmenbuch / Commercial Register: FN283521v Feldkirch/Austria=0A=
+=0A=
