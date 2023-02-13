@@ -2,116 +2,158 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F91694CD6
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 17:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD15694D94
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 18:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbjBMQbC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 13 Feb 2023 11:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S229651AbjBMRDt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Feb 2023 12:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjBMQbA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 11:31:00 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97041CA3E;
-        Mon, 13 Feb 2023 08:30:58 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pRbiw-0043kT-S2; Mon, 13 Feb 2023 17:30:38 +0100
-Received: from p5b13aa49.dip0.t-ipconnect.de ([91.19.170.73] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pRbiw-0046cc-HY; Mon, 13 Feb 2023 17:30:38 +0100
-Message-ID: <dbda1f6e1c280c13d963ad6e7f68a853a7741199.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Mon, 13 Feb 2023 17:30:36 +0100
-In-Reply-To: <20230206100856.603a0f8f@canb.auug.org.au>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
-         <20230203083037.GA30738@lst.de> <20230206100856.603a0f8f@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        with ESMTP id S229554AbjBMRDs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 12:03:48 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BA91BC8;
+        Mon, 13 Feb 2023 09:03:45 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0FDFB1BF204;
+        Mon, 13 Feb 2023 17:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676307823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g20IozxcPu/cLozwZlBnvYiVCX7Gf7LJ+VUCodqo4Qo=;
+        b=Svr+D2e3zApWrdKfaG63ay91RuLQvKIF31fC8jNcY8zj2Rtc6dqCxxxMUGwJ/0jTrusqr/
+        899+WlhhOzbG6TvkKEnOFkEDupKUb2ZBRcrLBkMShFFAgqgCk6WJ0jAO3/5bB6vsh2AF76
+        +vGpyY1PTCwJNcGriksZ/3ZQ9rXPhhCXtF72jkKtJ6SxXOXIehjrZ3OC0i4QroZD5hiQ9u
+        SZg50wozvBI4EVHzcksBmhlCW3CJ5F6n5c5jBqNCaz54zhKOe188RFlEUtgHU1RCDxUC+w
+        WtzBPj5twGvpXKX25p3xUJdGR1viMXsWgFHZhk2JDmxzCUcz2Z7d5a3IvKAkMQ==
+Date:   Mon, 13 Feb 2023 18:03:42 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH 1/2] rtc: pcf85363: add support for the
+ quartz-load-femtofarads property
+Message-ID: <Y+ptbuZWXrVigvKz@mail.local>
+References: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
+ <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f44d6731-6fc0-4ea1-bc6d-c08581fb532e@emailsignatures365.codetwo.com>
+ <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.170.73
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Steve!
-
-On Mon, 2023-02-06 at 10:08 +1100, Stephen Rothwell wrote:
-> Hi,
+On 13/02/2023 10:50:17+0100, Javier Carrasco wrote:
+> The quartz oscillator load capacitance of the PCF85263 and PCF85363 can
+> be adjusted to 6 pF, 7 pF (default) and 12.5 pF with the CL[1:0] bits in
+> the oscillator control register (address 25h).
 > 
-> On Fri, 3 Feb 2023 09:30:37 +0100 Christoph Hellwig <hch@lst.de> wrote:
-> > 
-> > On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> > > Since this is my very first time stepping up as a kernel maintainer, I was hoping
-> > > to get some pointers on what to do to make this happen.
-> > > 
-> > > So far, we have set up a new kernel tree and I have set up a local development and
-> > > test environment for SH kernels using my SH7785LCR board as the target platform.
-> > > 
-> > > Do I just need to send a patch asking to change the corresponding entry in the
-> > > MAINTAINERS file?  
-> > 
-> > I'm not sure a there is a document, but:
-> > 
-> >  - add the MAINTAINERS change to your tree
-> >  - ask Stephen to get your tree included in linux-next
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> ---
+>  drivers/rtc/rtc-pcf85363.c | 37 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 36 insertions(+), 1 deletion(-)
 > 
-> And by "Stephen", Christoph means me.  When you are ready, please send
-> me a request to include your tree/branch in linux-next (usually the
-> branch is called something like "for-next" or just "next") telling me
-> the git URL, and the contacts I should send email to if there are
-> conflicts/build issues with the branch.  I will then fetch the branch
-> every time I create a new linux-next release (most work days), so all
-> you need to do is update that branch each time you are ready to publish
-> more commits.
+> diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
+> index c05b722f0060..941f9264cf0a 100644
+> --- a/drivers/rtc/rtc-pcf85363.c
+> +++ b/drivers/rtc/rtc-pcf85363.c
+> @@ -101,6 +101,10 @@
+>  #define PIN_IO_INTA_OUT	2
+>  #define PIN_IO_INTA_HIZ	3
+>  
+> +#define OSC_CAP_SEL	GENMASK(1, 0)
+> +#define OSC_CAP_6000	0x01
+> +#define OSC_CAP_12500	0x02
+> +
+>  #define STOP_EN_STOP	BIT(0)
+>  
+>  #define RESET_CPR	0xa4
+> @@ -117,6 +121,32 @@ struct pcf85x63_config {
+>  	unsigned int num_nvram;
+>  };
+>  
+> +static int pcf85363_load_capacitance(struct pcf85363 *pcf85363, struct device_node *node)
+> +{
+> +	u32 load = 7000;
+> +	u8 value = 0;
+> +
+> +	of_property_read_u32(node, "quartz-load-femtofarads", &load);
+> +
+> +	switch (load) {
+> +	default:
+> +		dev_warn(&pcf85363->rtc->dev, "Unknown quartz-load-femtofarads value: %d. Assuming 7000",
+> +			 load);
+> +		fallthrough;
+> +	case 7000:
+> +		break;
+> +	case 6000:
+> +		value |= OSC_CAP_6000;
 
-I'm in the MAINTAINERS now in Linus' tree. I have requested a kernel.org
-account now and will hopefully have my trees set up later this week.
+Why are you using the |= operator?
 
-I'll let you know about the URLs as soon as possible.
-
-Adrian
+> +		break;
+> +	case 12500:
+> +		value |= OSC_CAP_12500;
+> +		break;
+> +	}
+> +
+> +	return regmap_update_bits(pcf85363->regmap, CTRL_OSCILLATOR,
+> +				  OSC_CAP_SEL, value);
+> +}
+> +
+>  static int pcf85363_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  {
+>  	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
+> @@ -372,7 +402,7 @@ static int pcf85363_probe(struct i2c_client *client)
+>  			.reg_write = pcf85363_nvram_write,
+>  		},
+>  	};
+> -	int ret, i;
+> +	int ret, i, err;
+>  
+>  	if (data)
+>  		config = data;
+> @@ -394,6 +424,11 @@ static int pcf85363_probe(struct i2c_client *client)
+>  	if (IS_ERR(pcf85363->rtc))
+>  		return PTR_ERR(pcf85363->rtc);
+>  
+> +	err = pcf85363_load_capacitance(pcf85363, client->dev.of_node);
+> +	if (err < 0)
+> +		dev_warn(&client->dev, "failed to set xtal load capacitance: %d",
+> +			 err);
+> +
+>  	pcf85363->rtc->ops = &rtc_ops;
+>  	pcf85363->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+>  	pcf85363->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> -- 
+> 2.37.2
+> 
+> 
+> Javier Carrasco 
+> Research and Development
+> 
+> Wolfvision GmbH 
+> Oberes Ried 14 | 6833 Klaus | Austria 
+> Tel: +43 5523 52250 <tel:+43552352250> | Mail: javier.carrasco@wolfvision.net <mailto:javier.carrasco@wolfvision.net>
+> 
+> Website: wolfvision.com <www.wolfvision.com> 
+> Firmenbuch / Commercial Register: FN283521v Feldkirch/Austria
+> 
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
