@@ -2,33 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD15694D94
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 18:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B826E694DB7
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 18:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjBMRDt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Feb 2023 12:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        id S229651AbjBMRJJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Feb 2023 12:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBMRDs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 12:03:48 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BA91BC8;
-        Mon, 13 Feb 2023 09:03:45 -0800 (PST)
+        with ESMTP id S230232AbjBMRJI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 12:09:08 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B576F1719;
+        Mon, 13 Feb 2023 09:09:06 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0FDFB1BF204;
-        Mon, 13 Feb 2023 17:03:42 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7F393E0002;
+        Mon, 13 Feb 2023 17:09:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1676307823;
+        t=1676308145;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=g20IozxcPu/cLozwZlBnvYiVCX7Gf7LJ+VUCodqo4Qo=;
-        b=Svr+D2e3zApWrdKfaG63ay91RuLQvKIF31fC8jNcY8zj2Rtc6dqCxxxMUGwJ/0jTrusqr/
-        899+WlhhOzbG6TvkKEnOFkEDupKUb2ZBRcrLBkMShFFAgqgCk6WJ0jAO3/5bB6vsh2AF76
-        +vGpyY1PTCwJNcGriksZ/3ZQ9rXPhhCXtF72jkKtJ6SxXOXIehjrZ3OC0i4QroZD5hiQ9u
-        SZg50wozvBI4EVHzcksBmhlCW3CJ5F6n5c5jBqNCaz54zhKOe188RFlEUtgHU1RCDxUC+w
-        WtzBPj5twGvpXKX25p3xUJdGR1viMXsWgFHZhk2JDmxzCUcz2Z7d5a3IvKAkMQ==
-Date:   Mon, 13 Feb 2023 18:03:42 +0100
+        bh=9CXoqr/LwmnludUMAPV/RwqG8TgU+YKzhwwGreym1Tk=;
+        b=QkoNLQ4sr1PJ46Fa1ikTVkkGih9U2wAFHwRXSFoSM+Z7MNo0XyzdmsUcqTw3TOwR3Kx7aG
+        HHsyUYCV7WtTdtYJMGviMcSostic1NxgUtO6hTt87fw6F8HqdemB0Yn1UI0cHfbHJ5k3on
+        7WfGpAHlotX2i5n6PlcgTcomgKsWC+DkLqEzka1DlcA1pbDjFb0L90cw209V7kYqm/BI+O
+        PFIHHHs2WcK8+PXzRn56Zs/UK2p68zKdExOUhpcUcaXGENQ/BXEUB8yzfcNG6D8nyuOGt1
+        GTq5qhKLanOJmQESc0IJAJcyHuSMj2Jhd10cDtnBxsWjf/oVVvkQtUP+RDE0tw==
+Date:   Mon, 13 Feb 2023 18:09:03 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Javier Carrasco <javier.carrasco@wolfvision.net>
 Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
@@ -37,107 +37,78 @@ Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Riesch <michael.riesch@wolfvision.net>
-Subject: Re: [PATCH 1/2] rtc: pcf85363: add support for the
- quartz-load-femtofarads property
-Message-ID: <Y+ptbuZWXrVigvKz@mail.local>
+Subject: Re: [PATCH 2/2] dt-bindings: rtc: nxp,pcf8563: add
+ quartz-load-femtofarads for pcf85263 and pcf85363
+Message-ID: <Y+pur70KB7wWRCCi@mail.local>
 References: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
- <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f44d6731-6fc0-4ea1-bc6d-c08581fb532e@emailsignatures365.codetwo.com>
- <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
+ <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f8cc75cd-465e-4339-8415-7d994963b841@emailsignatures365.codetwo.com>
+ <20230213095018.2255225-3-javier.carrasco@wolfvision.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
+In-Reply-To: <20230213095018.2255225-3-javier.carrasco@wolfvision.net>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 13/02/2023 10:50:17+0100, Javier Carrasco wrote:
-> The quartz oscillator load capacitance of the PCF85263 and PCF85363 can
-> be adjusted to 6 pF, 7 pF (default) and 12.5 pF with the CL[1:0] bits in
-> the oscillator control register (address 25h).
+Hello,
+
+Krzysztof's confusion is because you are changing the binding for
+nxp,pcf8563 while adding support for the nxp,pcf85263/nxp,pcf85363
+
+On 13/02/2023 10:50:18+0100, Javier Carrasco wrote:
+> These RTCs are handled by the pcf85363 device driver, which now supports
+> the quartz-load-femtofarads property.
 > 
 > Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 > ---
->  drivers/rtc/rtc-pcf85363.c | 37 ++++++++++++++++++++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/rtc/nxp,pcf8563.yaml  | 20 ++++++++++++++++---
+>  1 file changed, 17 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-> index c05b722f0060..941f9264cf0a 100644
-> --- a/drivers/rtc/rtc-pcf85363.c
-> +++ b/drivers/rtc/rtc-pcf85363.c
-> @@ -101,6 +101,10 @@
->  #define PIN_IO_INTA_OUT	2
->  #define PIN_IO_INTA_HIZ	3
+> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8563.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf8563.yaml
+> index a98b72752349..aac7f7565ba7 100644
+> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf8563.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf8563.yaml
+> @@ -9,9 +9,6 @@ title: Philips PCF8563/Epson RTC8564 Real Time Clock
+>  maintainers:
+>    - Alexandre Belloni <alexandre.belloni@bootlin.com>
 >  
-> +#define OSC_CAP_SEL	GENMASK(1, 0)
-> +#define OSC_CAP_6000	0x01
-> +#define OSC_CAP_12500	0x02
-> +
->  #define STOP_EN_STOP	BIT(0)
+> -allOf:
+> -  - $ref: rtc.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+> @@ -37,6 +34,23 @@ properties:
+>    start-year: true
+>    wakeup-source: true
 >  
->  #define RESET_CPR	0xa4
-> @@ -117,6 +121,32 @@ struct pcf85x63_config {
->  	unsigned int num_nvram;
->  };
->  
-> +static int pcf85363_load_capacitance(struct pcf85363 *pcf85363, struct device_node *node)
-> +{
-> +	u32 load = 7000;
-> +	u8 value = 0;
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - nxp,pcf85263
+> +              - nxp,pcf85363
+> +    then:
+> +      properties:
+> +        quartz-load-femtofarads:
+> +          description:
+> +            The capacitive load of the quartz(x-tal).
+> +          enum: [6000, 7000, 12500]
+> +          default: 7000
 > +
-> +	of_property_read_u32(node, "quartz-load-femtofarads", &load);
-> +
-> +	switch (load) {
-> +	default:
-> +		dev_warn(&pcf85363->rtc->dev, "Unknown quartz-load-femtofarads value: %d. Assuming 7000",
-> +			 load);
-> +		fallthrough;
-> +	case 7000:
-> +		break;
-> +	case 6000:
-> +		value |= OSC_CAP_6000;
-
-Why are you using the |= operator?
-
-> +		break;
-> +	case 12500:
-> +		value |= OSC_CAP_12500;
-> +		break;
-> +	}
-> +
-> +	return regmap_update_bits(pcf85363->regmap, CTRL_OSCILLATOR,
-> +				  OSC_CAP_SEL, value);
-> +}
-> +
->  static int pcf85363_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  {
->  	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
-> @@ -372,7 +402,7 @@ static int pcf85363_probe(struct i2c_client *client)
->  			.reg_write = pcf85363_nvram_write,
->  		},
->  	};
-> -	int ret, i;
-> +	int ret, i, err;
->  
->  	if (data)
->  		config = data;
-> @@ -394,6 +424,11 @@ static int pcf85363_probe(struct i2c_client *client)
->  	if (IS_ERR(pcf85363->rtc))
->  		return PTR_ERR(pcf85363->rtc);
->  
-> +	err = pcf85363_load_capacitance(pcf85363, client->dev.of_node);
-> +	if (err < 0)
-> +		dev_warn(&client->dev, "failed to set xtal load capacitance: %d",
-> +			 err);
-> +
->  	pcf85363->rtc->ops = &rtc_ops;
->  	pcf85363->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
->  	pcf85363->rtc->range_max = RTC_TIMESTAMP_END_2099;
+>  required:
+>    - compatible
+>    - reg
 > -- 
 > 2.37.2
 > 
