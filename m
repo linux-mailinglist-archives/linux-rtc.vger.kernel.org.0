@@ -2,125 +2,161 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E315B6943D6
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 12:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9426F6945BB
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 13:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjBMLGy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Feb 2023 06:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S230332AbjBMMYb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Feb 2023 07:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjBMLGr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 06:06:47 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFE01815B
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 03:06:38 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id m10so2835699wrn.4
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 03:06:38 -0800 (PST)
+        with ESMTP id S229745AbjBMMYb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 07:24:31 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77B0193D2
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 04:24:24 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o36so8587884wms.1
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 04:24:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=E1kDvgegzp8HWEVBLAzdwEfk/Chnh0ftRbXNmWsD8bo=;
-        b=jOJiSmkmlAxMHR9ru/D7S60yONeX2jqwTsk0E8f9Y0JLDobSdLnNTVoz5yM4pzYvtH
-         VSJS7AiseXZJGTo1RKr2M6VDP0/4QEFXCahPPyQJY/pLaURrO3RKCTxRfxXIGEWxPoVd
-         7Yeo0HFE/uJ4Q0xMpXGl5nGaYQNBlewpkscThoMr2muEjUIYHnd6H1/adHNSPbOdU8ia
-         u5Lv/uAAB0+NfGIRVOlxPxfbHCBmuZlo6xreNhVWT1GJgSaMYpl3dBr4gSZAbI0d0tkM
-         FrnTDJ7xxal3f8GpHjv3qhl0DOtVg/fnGyyCg9u0Ng41JELx8N8VBC5DqYveIyEvIbZA
-         TOYQ==
+        bh=akDdfWgAom4+Qw6oyiFy0XwcGM2sFwhM88l4NhMh8Yk=;
+        b=p5YYZG3Z9ppDNThNZy/tz6Yuou5EdPxXopV4/5yFaI40miPBZ9IX5TD0nTKMATIHd7
+         Euz8gCYfGkWXLDX13F77p5qks7C0y/cpQmvYJuV7BvbvcjZUvPDrfifFb2T0K0Hciixc
+         LpPcTl7JwCGHS/R22K1yqzriCwyuXX/vT+8OG5nEjtvsfpyQHegk84g0GJzP0Th1MdTF
+         OZLIKfbiIoe5GB3jMpBuBuV6qcgH96a7mr+oWGnEqMHTIg+R7yx56JN+m+UbTRe5aLdj
+         WIGkRNRsIfDkns0GN7e1dSi421tRQB3krkrT/CNq1K2wJfe+FJYEidc/qXp78CY2aaTG
+         GgNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E1kDvgegzp8HWEVBLAzdwEfk/Chnh0ftRbXNmWsD8bo=;
-        b=kseEsAlEuIt3A5qZfekrf7KfCffbpV2DxIr7vuNMzjIFgGKMaP3BJBcc2L8/pLzhJY
-         HHYCK5oQADpSYa/Lo/i5D/P5VPkzmJXsGp/jU5nWLS7JYTttMjSmJ4Yt365RRjpaQxZ/
-         svOKSW3zVUtnLgdxTQfbzhHLfd3kwXV+JbIwkaaJfCoVFmg9x4eOUhNgPIZRVE8s9VqE
-         q7JTRE7JE4X1O2VBws+kmjdD6jijBkEGm8OUmiyhjJBU55LigXjOt6BBmLzvUu0aRAKi
-         GvJjBVmlTR8RWwGvI8J8e06gh5dbAbwfaHDAFb2od0MUfVPiFGYEOed8K4yddChjqyOY
-         VtKg==
-X-Gm-Message-State: AO0yUKVogdxm9+glC99b7TBfifq6Lgf45CHvziEpKvGBBLmYXNjVMdNE
-        1aCPQZ8PNqEF5/jPers9zvuLPA==
-X-Google-Smtp-Source: AK7set/w9dCD3bxFSNonkfKDpD4T2DRe0uU35pPoh3abEZ0xxxlBew9+lTJCPWJGeRsvZUh6Kx49DQ==
-X-Received: by 2002:a5d:5545:0:b0:2c5:3cfa:f7dc with SMTP id g5-20020a5d5545000000b002c53cfaf7dcmr10443422wrw.7.1676286397447;
-        Mon, 13 Feb 2023 03:06:37 -0800 (PST)
+        bh=akDdfWgAom4+Qw6oyiFy0XwcGM2sFwhM88l4NhMh8Yk=;
+        b=AuzcvfXODj9tGIvt2v9+y4Z0yQ12IQGm0RqUZnUP3QcoFb6yF/xLiHlQ15U8Iu6Vb5
+         J/ievrXAxQJ68LLBrZNQ4iuWRJ2FGkcMB8tna5j06eqPtS2hZNHfAKNimsUSn9ds6iL3
+         89ALyG2RVuaZ0fe0wz05YO2ISrlHzabE/jQmfjHSxC+hZ/JtLUQ++zy7AkdzsQ+ld+Fh
+         85DBq1DmQhIK9bH7+AXdcNvpXRooaebQtaJREHZvnFiURQx+Wv8xSNYf9TtyiiGUl1PD
+         1CPrYPQpA83YRjhEFuXjYzjyZqEMSRfksxetwgQe3KmmaKPr+MexE2Xm+w4iZUD2Vtp2
+         sISg==
+X-Gm-Message-State: AO0yUKXrSUshmKZPi/fnD1WauYO3i9oG41TSeKnTla0QDYEPw7eB4Tbf
+        fMbkyHEhhK0knhYblT3wm8wxkdTHJggPAVAi
+X-Google-Smtp-Source: AK7set8CA6HBWgQFi1iHVyKXED3E3GqaxxXZI6kp4jnxJeL/OCD+KZp0i7N94qkf4k+kxjVAMAq4Sg==
+X-Received: by 2002:a05:600c:a295:b0:3da:1e35:dfec with SMTP id hu21-20020a05600ca29500b003da1e35dfecmr18942967wmb.4.1676291063435;
+        Mon, 13 Feb 2023 04:24:23 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id z17-20020a5d6551000000b002c54c8e70b1sm7211342wrv.9.2023.02.13.03.06.35
+        by smtp.gmail.com with ESMTPSA id n19-20020a05600c3b9300b003daf7721bb3sm18199812wms.12.2023.02.13.04.24.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:06:37 -0800 (PST)
-Message-ID: <5d6ca298-19c2-3fcf-b025-dd72fa0784eb@linaro.org>
-Date:   Mon, 13 Feb 2023 12:06:34 +0100
+        Mon, 13 Feb 2023 04:24:23 -0800 (PST)
+Message-ID: <5739cfb2-ec6a-410f-9d2f-6e9bfc115cdd@linaro.org>
+Date:   Mon, 13 Feb 2023 13:24:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 6/6] dt-bindings: soc: amlogic: update sysctrl
- clock-controller subnode type
+Subject: Re: [PATCH 1/2] rtc: pcf85363: add support for the
+ quartz-load-femtofarads property
 Content-Language: en-US
-To:     neil.armstrong@linaro.org, Alessandro Zummo <a.zummo@towertech.it>,
+To:     Javier Carrasco <javier.carrasco@wolfvision.net>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
- <20230209-b4-amlogic-bindings-convert-take2-v1-6-c4fe9049def9@linaro.org>
- <f18230c9-7c9b-9e59-993f-24d40b74ba9d@linaro.org>
- <039e9f93-5b97-bb5e-e3c0-b8bf2c52a2a3@linaro.org>
+        Michael Riesch <michael.riesch@wolfvision.net>
+References: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
+ <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f44d6731-6fc0-4ea1-bc6d-c08581fb532e@emailsignatures365.codetwo.com>
+ <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <039e9f93-5b97-bb5e-e3c0-b8bf2c52a2a3@linaro.org>
+In-Reply-To: <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 13/02/2023 12:03, Neil Armstrong wrote:
-> Hi,
+On 13/02/2023 10:50, Javier Carrasco wrote:
+> The quartz oscillator load capacitance of the PCF85263 and PCF85363 can
+> be adjusted to 6 pF, 7 pF (default) and 12.5 pF with the CL[1:0] bits in
+> the oscillator control register (address 25h).
 > 
-> On 13/02/2023 12:00, Krzysztof Kozlowski wrote:
->> On 09/02/2023 14:41, Neil Armstrong wrote:
->>> Since the clock controllers are now documented define the right ref
->>> for the clock-controller subnodes and fill up the example node.
->>>
->>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>> ---
->>>   .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml         | 15 ++++++++++++++-
->>>   1 file changed, 14 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
->>> index 672eabd90c09..57eae355f1b9 100644
->>> --- a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
->>> +++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
->>> @@ -43,6 +43,10 @@ allOf:
->>>               - amlogic,meson-gx-hhi-sysctrl
->>>               - amlogic,meson-axg-hhi-sysctrl
->>>       then:
->>> +      properties:
->>> +        clock-controller:
->>> +          $ref: /schemas/clock/amlogic,gxbb-clkc.yaml#
->>
->> You just added this binding. I don't understand the split.
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> ---
+>  drivers/rtc/rtc-pcf85363.c | 37 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 36 insertions(+), 1 deletion(-)
 > 
-> It's a chicken and egg problem, the clock controller bindings (patches 4 & 6)
-> I've added the system-controller top node in the DT example, but this
-> example won't be valid until I add the system-controller bindings.
+> diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
+> index c05b722f0060..941f9264cf0a 100644
+> --- a/drivers/rtc/rtc-pcf85363.c
+> +++ b/drivers/rtc/rtc-pcf85363.c
+> @@ -101,6 +101,10 @@
+>  #define PIN_IO_INTA_OUT	2
+>  #define PIN_IO_INTA_HIZ	3
+>  
+> +#define OSC_CAP_SEL	GENMASK(1, 0)
+> +#define OSC_CAP_6000	0x01
+> +#define OSC_CAP_12500	0x02
+> +
+>  #define STOP_EN_STOP	BIT(0)
+>  
+>  #define RESET_CPR	0xa4
+> @@ -117,6 +121,32 @@ struct pcf85x63_config {
+>  	unsigned int num_nvram;
+>  };
+>  
+> +static int pcf85363_load_capacitance(struct pcf85363 *pcf85363, struct device_node *node)
+> +{
+> +	u32 load = 7000;
+> +	u8 value = 0;
+> +
+> +	of_property_read_u32(node, "quartz-load-femtofarads", &load);
+> +
+> +	switch (load) {
+> +	default:
+> +		dev_warn(&pcf85363->rtc->dev, "Unknown quartz-load-femtofarads value: %d. Assuming 7000",
+> +			 load);
+> +		fallthrough;
+> +	case 7000:
+> +		break;
+> +	case 6000:
+> +		value |= OSC_CAP_6000;
+> +		break;
+> +	case 12500:
+> +		value |= OSC_CAP_12500;
+> +		break;
+> +	}
+> +
+> +	return regmap_update_bits(pcf85363->regmap, CTRL_OSCILLATOR,
+> +				  OSC_CAP_SEL, value);
+> +}
+> +
+>  static int pcf85363_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  {
+>  	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
+> @@ -372,7 +402,7 @@ static int pcf85363_probe(struct i2c_client *client)
+>  			.reg_write = pcf85363_nvram_write,
+>  		},
+>  	};
+> -	int ret, i;
+> +	int ret, i, err;
+>  
+>  	if (data)
+>  		config = data;
+> @@ -394,6 +424,11 @@ static int pcf85363_probe(struct i2c_client *client)
+>  	if (IS_ERR(pcf85363->rtc))
+>  		return PTR_ERR(pcf85363->rtc);
+>  
+> +	err = pcf85363_load_capacitance(pcf85363, client->dev.of_node);
 
-Just drop the parent node or even entire example.
-
-
+Aren't you updating it for all variants? But the property is marked as
+not valid for them.
 
 Best regards,
 Krzysztof
