@@ -2,60 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBE46943A6
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 12:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE176943B0
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 12:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjBMLAM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Feb 2023 06:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
+        id S229839AbjBMLCF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Feb 2023 06:02:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBMLAL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 06:00:11 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685C6B761
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 03:00:10 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id k3so4095345wrv.5
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 03:00:10 -0800 (PST)
+        with ESMTP id S229745AbjBMLCE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 06:02:04 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B21BDFA
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 03:02:03 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so10980691wma.1
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Feb 2023 03:02:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=c2OREUNkDHFo+6N4ZDHlsRxITrcEyLw+kVy88yhDDyg=;
-        b=bLYM6lVB6hoCsp0byzoA0iR72BM+YJVLDs6Nu4sZLAVLA1pPuYwCJV8ecUJQIoR+8P
-         u76I2Z1jSi5uzQIX5yjPAKAGvBql3yAlnYXPbTnWlGMknTpgcSYMs3MR4/v6uOtpCZrm
-         GS9XdUVWWvdzk83i5f3svEgoqndpoVNtVNm7Klf8FcAWt+9ItdaWtQvyHfM2HdRavRr9
-         nCNaByxSrKsHAM770HAQLfAhtooM3/1sQfAUqEqW+UmJXInJvAMNhVXimCyMr1UsSxao
-         NLd/4fHTDEIH3jbvW84cpuFFq3AjiWbJ8frIF4CWHfMRP/ovJQvSmXlMkb8FOK3+eEw7
-         jEYA==
+        bh=8WzWyArS5gEO/wRc+fU03BRey5p9sqIym9cvOO3Y6eU=;
+        b=zTMeYc9cO7mscsDds2h1TZLFUu8Tl/dWC1eLhgkAYD33QzKi6lOyFZCe4+5knSiBwW
+         XR9UNZ7XsvjvO+JG615egdZseIchSL73cinaBanQbKXDwrgW6dI+LJeA0+4BOQMu1/PF
+         v9zI5YVn0kLkc96zUF45F0XddOourilUsjqZ5szNWdTcjvKSgFQ7Kr49GHZCMqFk8XYo
+         6nXIBHRxVldefmfy3uIgJCqG2AYHb6yEFGpeYNwKl0qVOBfBX4MJGRdOwPOuRWvjK2iH
+         i+aPALN0LvPGF6CkeuXz11c6z1jOZewTHifzj233mIEG8CXKDMNEdNxzgiLC/bHO7oc6
+         XePw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c2OREUNkDHFo+6N4ZDHlsRxITrcEyLw+kVy88yhDDyg=;
-        b=0s1pir5NWtHx0A7dRLmCgY9p0EvrIaUt09hLA43tebwm40N9JWZ8Ohr6Di/Y6jvz/t
-         d9PbPjemfwk4+keuqlOxa6E/nExP0jhCkm3nPynXvmwz9pn/baK4Nsg8L49FAU3nj5xe
-         B19jNIyNEwF6q2ue3maJdxbousr68lErX/APItJSrHphW3MC7eNPb99LvVa33a1nQ5QW
-         60QtbgDf2QYNW8ncTDxqnfYQtuL2UlWxIWC7P7wpEVIEef81qfmxMFcDpVll/xHm6nXo
-         u8Rgbq/nBmUQUDGRtJsr/unRzrJOoBO9klXT3M7K8lPX5nTITwvemsBHee2FOj5/FLv2
-         Pc1Q==
-X-Gm-Message-State: AO0yUKUU6NchCVvsEUGjMWlWYzh5MnvMzeVjdfghRAjwJXjVjx26biTW
-        VAhx0yejpLRgmd6BZv4A8OlPfA==
-X-Google-Smtp-Source: AK7set8Az8lflKGGAyVJoMUwWTvPJZXQy3tXG76vQT2n6km1ji7E3RkIzXnJ3v/QjTWCBlEoeoqdzw==
-X-Received: by 2002:a05:6000:1d2:b0:2bf:b661:87d9 with SMTP id t18-20020a05600001d200b002bfb66187d9mr19780548wrx.50.1676286009033;
-        Mon, 13 Feb 2023 03:00:09 -0800 (PST)
+        bh=8WzWyArS5gEO/wRc+fU03BRey5p9sqIym9cvOO3Y6eU=;
+        b=cqk9mqFpRvwMRglj6ydum4iD0XBF6dDz4xnUEp+b7EAhpVcUxVwDl/oxPodjkMrnu8
+         9rZhjB+2zZ6KDLb4BuYO/j+/XlBlJEKEWT+WKaP2XZWt3jiekFCax+d3GYSAw7mi5vvH
+         p+3o1KZbs4r51ZUxQmFU3ddApDtQ0iAOVOT+WVe+WUU0hu/yDTKNerRW9pjRbQtftBUT
+         LzayAl4H6yOQCAPM3UQpcIlSEkFXPggBDgVQXPr2C6NBGqHP7ma8XcRRCGKfPnU1J1Wd
+         dqMwD1qMm8w8VhiSTLxEB2ZQatMcku6QHGTtVPKbb+X9wG+NSrvIHt9XdiXobPEfWwyJ
+         tDvg==
+X-Gm-Message-State: AO0yUKUBgT8xJ5yucYm0uOz61uCcYig2l+dZJot2gaAD52J/UJ43PNlt
+        gfIdfEBrJUPijsV0B1LI354jEA==
+X-Google-Smtp-Source: AK7set+QKXqhsOFrxdGsWPqrhu0Ju0VH7kga/YlH2Hs/FF4nhofUvdKD5RlJPyj/WOB3XGC6kDFFXg==
+X-Received: by 2002:a05:600c:30ca:b0:3df:c284:7e78 with SMTP id h10-20020a05600c30ca00b003dfc2847e78mr20536285wmn.38.1676286121946;
+        Mon, 13 Feb 2023 03:02:01 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g17-20020a056000119100b002c54e26bca5sm5790579wrx.49.2023.02.13.03.00.07
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003e1e8d794e1sm4719972wmo.13.2023.02.13.03.02.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:00:08 -0800 (PST)
-Message-ID: <f18230c9-7c9b-9e59-993f-24d40b74ba9d@linaro.org>
-Date:   Mon, 13 Feb 2023 12:00:07 +0100
+        Mon, 13 Feb 2023 03:02:01 -0800 (PST)
+Message-ID: <4b8e3164-f39a-c559-7bac-86c4fdcd6834@linaro.org>
+Date:   Mon, 13 Feb 2023 12:01:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 6/6] dt-bindings: soc: amlogic: update sysctrl
- clock-controller subnode type
+Subject: Re: [PATCH 4/6] dt-bindings: soc: amlogic: convert
+ amlogic,gxbb-clkc.txt to dt-schema
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
@@ -72,14 +72,15 @@ Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
 References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
- <20230209-b4-amlogic-bindings-convert-take2-v1-6-c4fe9049def9@linaro.org>
+ <20230209-b4-amlogic-bindings-convert-take2-v1-4-c4fe9049def9@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-6-c4fe9049def9@linaro.org>
+In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-4-c4fe9049def9@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,54 +88,57 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 09/02/2023 14:41, Neil Armstrong wrote:
-> Since the clock controllers are now documented define the right ref
-> for the clock-controller subnodes and fill up the example node.
+> Convert the Amlogic Clock Controller bindings to dt-schema.
+
+Subject prefix - clock, not soc.
+
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml         | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
-> index 672eabd90c09..57eae355f1b9 100644
-> --- a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
-> +++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
-> @@ -43,6 +43,10 @@ allOf:
->              - amlogic,meson-gx-hhi-sysctrl
->              - amlogic,meson-axg-hhi-sysctrl
->      then:
-> +      properties:
-> +        clock-controller:
-> +          $ref: /schemas/clock/amlogic,gxbb-clkc.yaml#
+>  .../bindings/clock/amlogic,gxbb-clkc.txt           | 53 ----------------------
+>  .../bindings/clock/amlogic,gxbb-clkc.yaml          | 51 +++++++++++++++++++++
+>  2 files changed, 51 insertions(+), 53 deletions(-)
 
-You just added this binding. I don't understand the split.
+
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: xtal
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +
+> +unevaluatedProperties: false
+
+additionalProperties: false
 
 > +
->        required:
->          - power-controller
->  
-> @@ -53,6 +57,10 @@ allOf:
->              - amlogic,meson-gx-ao-sysctrl
->              - amlogic,meson-axg-ao-sysctrl
->      then:
-> +      properties:
-> +        clock-controller:
-> +          $ref: /schemas/clock/amlogic,gxbb-aoclkc.yaml#
-> +
->        required:
->          - pinctrl
->  
-> @@ -81,7 +89,12 @@ examples:
->          compatible = "amlogic,meson-gx-hhi-sysctrl", "simple-mfd", "syscon";
->          reg = <0 0x400>;
->  
-> -        clock-controller { };
-> +        clock-controller {
+> +examples:
+> +  - |
+> +    sysctrl: system-controller@0 {
+> +        compatible = "amlogic,meson-gx-hhi-sysctrl", "simple-mfd", "syscon";
+> +        reg = <0 0x400>;
+
+Drop the parent node, not needed here. You could even skip the example
+entirely as it is part of your syscon. If you keep example, then without
+parent pieces.
+
+> + 
+> +        clkc: clock-controller {
 > +            compatible = "amlogic,gxbb-clkc";
 > +            #clock-cells = <1>;
 > +            clocks = <&xtal>;
 > +            clock-names = "xtal";
-
+> +        };
+> +    };
+> 
 
 Best regards,
 Krzysztof
