@@ -2,103 +2,126 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C63693D53
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 05:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88DE693F4F
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Feb 2023 09:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbjBMEPr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 12 Feb 2023 23:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S229552AbjBMIFq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Feb 2023 03:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjBMEPq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Feb 2023 23:15:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182B8E398;
-        Sun, 12 Feb 2023 20:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=b2TQAFC9pQ+rFyre5LGzTHnEk3iqoypnovZvNJTJtgQ=; b=tt2oG+eQWgWsZl+xyvKM8MNAxj
-        VxZJMIDE6T3wn23KcFzBD2dZVlX3BTABLB+4WrBlgaRzb3rdD0dpboH8TYGeHiU2lhtkx0SY/WCcj
-        VhcGdaq6k7QC+QmoafepvH76tngi5sLd4M6iRNNfvtbh+M4hWKo2F0oiYBxHhCmZpoP96sDZckkqe
-        4rCFVUvZxuSw6zPA3AawRwJAmUfXZGtOjvS+FeTbxlsP+G62MvLGcSAOz7CP+XxzONhy4JAMFoBRR
-        jvA6VS63YbZlktpuhP/73IAV4Q+eSz38jmc2cOuzML+Nsu040MaMbXOdEQpag8pVY5K81qU/j/v2E
-        fW58fEIA==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRQFh-00D56G-7X; Mon, 13 Feb 2023 04:15:41 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Peter Rosin <peda@axentia.se>
-Subject: [PATCH 3/3] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
-Date:   Sun, 12 Feb 2023 20:15:35 -0800
-Message-Id: <20230213041535.12083-4-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S229477AbjBMIFp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Feb 2023 03:05:45 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA66BBBAC;
+        Mon, 13 Feb 2023 00:05:44 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 915805C00D9;
+        Mon, 13 Feb 2023 03:05:42 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 13 Feb 2023 03:05:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676275542; x=1676361942; bh=PneGRKGzzq
+        PYOheQ2SeW0ZVjFQxDgBZMJk96e1F96vU=; b=ISRz0Ae0bepULqIirvjXr/V+Cu
+        jUWhSiVca/0RBp52DfSwBliPDAw8Pq8hswj7R2rgZXzXZrytQ3Fp8bVBHvp61B7d
+        Hc3ELl22FwEfEB+mYggExZkOMr/FFy/XLNX4UXoVVcsqDSLJyDydXgCvEc+URdAi
+        iAsH9k/OsKSUVe2JPrQxiblcHeh3C8bV8x187RVKLsQjFwAd8SYUcNjsS1GS0fuw
+        vyVrORNdQUzc1ny3+yyyfOmkgDQEdY5W9c9LdE2toxjYnPJOljupK9LHCe6+A2up
+        u+PIbGRR2/vJ1/znn4E++UHEqPZV2dmJXQX0fTcY/+Eox+CJrYhxJCKtrCsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676275542; x=1676361942; bh=PneGRKGzzqPYOheQ2SeW0ZVjFQxD
+        gBZMJk96e1F96vU=; b=sZnOQjadNTLVnQV6lJipH3DxSKzklKx4nyio7wtzj6RK
+        vB9vFEJrci8VKYcMz9OBvCURKoPK4aaysbvgZrJwgy+U3V5m3jsyovjf62YDkLhj
+        zmSVjWAUdhN2Xr1AaGFQ7utWCgoHb3P0NwvHQIqnO0gGsthhSGVe7hB9wN6IouUG
+        TKpEhyEo7CQr1sh17TR/+kv5zxRbHXF8QhZMbV42pP0L9z17BJXIAUlQLIrjBGy2
+        1ed99w8cudVCtxS2i/d11V2Hcf2n5Bif0BTlgcszYD6RayDqH3TTIHMAMIFLMmyT
+        WXWyrR78j+aDKBU27cgCK7EYRGbp84s0g/Vwfkh9pQ==
+X-ME-Sender: <xms:Ve_pY32NDfwtw-Tfs8yKDSn_gNMRvb3VIm3Rhz01xmh51z689I54lA>
+    <xme:Ve_pY2GoFZwlQaTkL-iKlufKZhdNU4RjUQO2knZTI2me12snbsSC9mCLZ8oN27wkb
+    _Uq-axaW6QLg3gLi58>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeitddguddugecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Ve_pY34vTDlza4J4eNyCWo5VTAi01-dXLPScXbTtPGtpoVebVAzxJQ>
+    <xmx:Ve_pY83YJil3BG00-dNtigyFx_8p_OldSmBlDOmNnR2YeOcNuyWFeQ>
+    <xmx:Ve_pY6FBkksVIkW0wzfLsXyyrCiF8UK-xpQjz72PMiDjHCMGTWZ2PQ>
+    <xmx:Vu_pY4UIgVkZZagG-p2s30ANgOLK2TB7gVWlCqW87zh9F62vE8n6Lw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 26A52B60086; Mon, 13 Feb 2023 03:05:41 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <b8fb48b9-349d-4723-9b35-6471cb65b6b5@app.fastmail.com>
 In-Reply-To: <20230213041535.12083-1-rdunlap@infradead.org>
 References: <20230213041535.12083-1-rdunlap@infradead.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 13 Feb 2023 09:05:12 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Randy Dunlap" <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     "MyungJoo Ham" <myungjoo.ham@samsung.com>,
+        "Chanwoo Choi" <cw00.choi@samsung.com>,
+        "Donggeun Kim" <dg77.kim@samsung.com>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Peter Rosin" <peda@axentia.se>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Rob Herring" <robh@kernel.org>,
+        "Eddie Huang" <eddie.huang@mediatek.com>,
+        "Sean Wang" <sean.wang@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 0/3] IRQ_DOMAIN: remove all "depends on", use only "select"
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
-it directly thru "make *config", so drivers should select it instead
-of depending on it if they need it.
-Relying on it being set for a dependency is risky.
+On Mon, Feb 13, 2023, at 05:15, Randy Dunlap wrote:
+> IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
+> it directly thru "make *config", so drivers should select it instead
+> of depending on it if they need it.
+> Relying on it being set for a dependency is risky.
+>
+> Consistently using "select" or "depends on" can also help reduce
+> Kconfig circular dependency issues.
+>
+> IRQ_DOMAIN is selected 109 times and is depended on 3 times in
+> current linux-next. Eliminate the uses of "depends on" by
+> converting them to "select".
+>
+>  [PATCH 1/3] extcon: max8997: select IRQ_DOMAIN instead of depending on it
+>  [PATCH 2/3] of: OF_IRQ: select IRQ_DOMAIN instead of depending on it
+>  [PATCH 3/3] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
 
-Consistently using "select" or "depends on" can also help reduce
-Kconfig circular dependency issues.
+From a Kconfig perspective, your reasoning makes a lot of sense.
 
-Therefore, change the use of "depends on" for IRQ_DOMAIN to
-"select" for RTC_DRV_MT6397.
+Looking at the bigger picture, I wonder if we should just remove the
+option and make it unconditional. It is enabled in ever architecture
+defconfig other than alpha and sparc, and it's selected by a lot of
+very common options such as I2C,  GENERIC_MSI_IRQ, GENERIC_IRQ_CHIP,
+and PCI_HOST_GENERIC. Enabling the option on Alpha grows the kernel
+image from 9010KB to 9023KB, or on m68k Coldfire from 3346KB to
+3351KB.
 
-Fixes: 04d3ba70a3c9 ("rtc: mt6397: add IRQ domain dependency")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Eddie Huang <eddie.huang@mediatek.com>
-Cc: Sean Wang <sean.wang@mediatek.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Peter Rosin <peda@axentia.se>
----
-I have a similar patch (should be a series) for REGMAP.
-
- drivers/rtc/Kconfig |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff -- a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1814,7 +1814,8 @@ config RTC_DRV_MT2712
- 
- config RTC_DRV_MT6397
- 	tristate "MediaTek PMIC based RTC"
--	depends on MFD_MT6397 || (COMPILE_TEST && IRQ_DOMAIN)
-+	depends on MFD_MT6397 || COMPILE_TEST
-+	select IRQ_DOMAIN
- 	help
- 	  This selects the MediaTek(R) RTC driver. RTC is part of MediaTek
- 	  MT6397 PMIC. You should enable MT6397 PMIC MFD before select
+      Arnd
