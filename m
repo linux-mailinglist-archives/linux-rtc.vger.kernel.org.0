@@ -2,105 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DC7696328
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Feb 2023 13:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 165D2696CF8
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Feb 2023 19:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjBNMLM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 14 Feb 2023 07:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S229522AbjBNSbC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 14 Feb 2023 13:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbjBNMLK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Feb 2023 07:11:10 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3440E252BD
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Feb 2023 04:11:08 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so11407576wmb.2
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Feb 2023 04:11:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qsynl3c9/exYqhLPLTij4MAPZSOa6fQ7e/dqK8dTCZ0=;
-        b=W9sTwdj2pV5LIk3e6/BPE2u1/eTeScATB64+gHn9slsGT0anYgRR0ZwF4l54ITSpcV
-         T8jCVPAkmeRBahfFuidj19A+i8cUn/fTA4wm6hqcPK64zXZRSfMJu0HmVXt/vTjxIN2d
-         poV+H6L/ldgxKbp3q3rrZaPaLSNIBByuzY7iwwzJwsPBcYKio/30MPBrLDCIJ3PjvHES
-         xWAMVG2g2ZxQqgfHDolxRKgramMuWbNK513EgSwH9hmJbsfLaeX6+9NXFFYAFPAWeQnn
-         x8MzRHgwGF8JN5N375ARONwA41K7vDnqwPMs+h0iViMPVDk6JAaAJgvixF9bfbHf5wiV
-         VlHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qsynl3c9/exYqhLPLTij4MAPZSOa6fQ7e/dqK8dTCZ0=;
-        b=0iLQ1bggy9e63fG1eh+WzRH+EKLfNorzRUQ1BbBlIeQJ9UwKK+2IWToeuPXcAQL9m+
-         c4R/apH70PFigO7vnzOsCZbE878fSzF9awAkYIyuWMbCnPpoW2Tkc6CzA6P8DajAj0rB
-         iLHioyxGyad/5kpEdoUPnCNnGE0IQS4d7wiMkhOF1npZ399jqUJPea0ET+8z+2MWySzw
-         VxO340ggQ38EjGuk4MFW54cS1j8tU3MxMT+LDxTr8gocq8Q+L5+f+lul/KoBs45VBg/S
-         /9wasHnJlpqDlGFZY37rc6CNOppXziWNHnmWx77syr/j1Vu27Yk8PzavUxtBkgnhZXHz
-         01cQ==
-X-Gm-Message-State: AO0yUKWDe7+myGBn0s+NQWdV8L1pwXLSH1TK9geXeIW/oP/Bpl7HvwUa
-        cxLQc3g+PxNEMFMltdG8Xg3dxQ==
-X-Google-Smtp-Source: AK7set+n8mvzI5yKXSAOBEDOY7oMYc1PI9SZkjH+Yzxzcfc5Efqqh4ncsKDNKD3w8M//fRznmqDo+w==
-X-Received: by 2002:a7b:cc8d:0:b0:3e0:98c:dd93 with SMTP id p13-20020a7bcc8d000000b003e0098cdd93mr1766040wma.29.1676376666808;
-        Tue, 14 Feb 2023 04:11:06 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w19-20020a05600c475300b003dc433355aasm18391819wmo.18.2023.02.14.04.11.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 04:11:06 -0800 (PST)
-Message-ID: <3e3a6d8c-cb00-39bd-f14d-65990972e0b4@linaro.org>
-Date:   Tue, 14 Feb 2023 13:11:04 +0100
+        with ESMTP id S229878AbjBNSbC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Feb 2023 13:31:02 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EBB2C647;
+        Tue, 14 Feb 2023 10:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=txgtixKW7VrUQkrQdJH5MMVOgQ+O3F4VEtjOSuR+WFs=; b=cAF5cDPHDwHYrrTDHykc6PKy2K
+        0Vdty9nUVhJMreDBwp0A+QelMEkTj+FQgFHmpBA3jdct4C8BHjDIvcGmb3d1pOQ+z2POFvCGNzopk
+        jcStwsIAjRcGUh3x33fJGFLSg0LdDd7duWIsVsyg7zOMQawQeopx2J7GsH6y59pJ+mLur3BH2i06o
+        CDXKnY/GEI6lk5pKVNEWkamnZkVLV9BUdazfeew71ouPgPEfwIVZYTZ/hlJIG3yRPtcxNf1Cc0xI7
+        ooZO05yGoefN11eQUnn5NN0ywXvPZx5oT2ekRFFaxwO3hchkKxtSp678MrmkDkAkOMM8rC0WBTBpA
+        NrIQPKuQ==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pS04u-003BDQ-2H; Tue, 14 Feb 2023 18:30:56 +0000
+Message-ID: <8e6977b8-d256-4e51-82b7-e36d6ca259dc@infradead.org>
+Date:   Tue, 14 Feb 2023 10:30:54 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] dt-bindings: rtc: nxp,pcf8563: add
- quartz-load-femtofarads for pcf85263 and pcf85363
+Subject: Re: [PATCH 0/3] IRQ_DOMAIN: remove all "depends on", use only
+ "select"
 Content-Language: en-US
-To:     Javier Carrasco Cruz <javier.carrasco@wolfvision.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Donggeun Kim <dg77.kim@samsung.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Peter Rosin <peda@axentia.se>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-References: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
- <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f8cc75cd-465e-4339-8415-7d994963b841@emailsignatures365.codetwo.com>
- <20230213095018.2255225-3-javier.carrasco@wolfvision.net>
- <Y+pur70KB7wWRCCi@mail.local>
- <1145ccf7-ffe0-533e-45ef-5576a54e4531@wolfvision.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1145ccf7-ffe0-533e-45ef-5576a54e4531@wolfvision.net>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230213041535.12083-1-rdunlap@infradead.org>
+ <b8fb48b9-349d-4723-9b35-6471cb65b6b5@app.fastmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <b8fb48b9-349d-4723-9b35-6471cb65b6b5@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 14/02/2023 12:41, Javier Carrasco Cruz wrote:
-> Hello,
-> 
-> Sorry for the previous mail in html format with annoying signatures.
-> 
->> Hello,
+
+
+On 2/13/23 00:05, Arnd Bergmann wrote:
+> On Mon, Feb 13, 2023, at 05:15, Randy Dunlap wrote:
+>> IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
+>> it directly thru "make *config", so drivers should select it instead
+>> of depending on it if they need it.
+>> Relying on it being set for a dependency is risky.
 >>
->> Krzysztof's confusion is because you are changing the binding for
->> nxp,pcf8563 while adding support for the nxp,pcf85263/nxp,pcf85363
+>> Consistently using "select" or "depends on" can also help reduce
+>> Kconfig circular dependency issues.
+>>
+>> IRQ_DOMAIN is selected 109 times and is depended on 3 times in
+>> current linux-next. Eliminate the uses of "depends on" by
+>> converting them to "select".
+>>
+>>  [PATCH 1/3] extcon: max8997: select IRQ_DOMAIN instead of depending on it
+>>  [PATCH 2/3] of: OF_IRQ: select IRQ_DOMAIN instead of depending on it
+>>  [PATCH 3/3] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
 > 
-> If that is ok I would propose a new bindings file nxp,pcf85363 for 
-> pcf85263 and pcf85363 in the next version.
+> From a Kconfig perspective, your reasoning makes a lot of sense.
+> 
+> Looking at the bigger picture, I wonder if we should just remove the
+> option and make it unconditional. It is enabled in ever architecture
+> defconfig other than alpha and sparc, and it's selected by a lot of
+> very common options such as I2C,  GENERIC_MSI_IRQ, GENERIC_IRQ_CHIP,
+> and PCI_HOST_GENERIC. Enabling the option on Alpha grows the kernel
+> image from 9010KB to 9023KB, or on m68k Coldfire from 3346KB to
+> 3351KB.
 
-Could be or still could be fixed in this binding. Indeed my comment in
-the driver came from confusion that there are two drivers but one
-binding. Having two bindings might be simpler and more readable in such
-case.
+Marc, what do you think about this suggestion?
 
-Best regards,
-Krzysztof
-
+Thanks.
+-- 
+~Randy
