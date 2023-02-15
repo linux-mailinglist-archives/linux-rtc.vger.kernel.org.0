@@ -2,102 +2,153 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB36698145
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Feb 2023 17:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99D4698579
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Feb 2023 21:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjBOQua (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Feb 2023 11:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        id S229732AbjBOUWl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Feb 2023 15:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjBOQu2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Feb 2023 11:50:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636FC32E6D;
-        Wed, 15 Feb 2023 08:50:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19250B82315;
-        Wed, 15 Feb 2023 16:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C867BC433EF;
-        Wed, 15 Feb 2023 16:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676479823;
-        bh=uLarJKzg3GuQJ0dY2bl5m5RJLzCC31PglWJs+3lcu4s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hr5FzDtcqvXY60ppMmVSJoNwwexR29uuUJCiZGW74prZxlpjp9kb6Dd2fI2w7ROqY
-         TfltEnCuc/m8bayGoV0hzBXoIgfJxEKbTvrbmFpQ3YH+WNmsZkYX8kzgJu5FOxausV
-         /2N6GmnUwqmFQhTn3ptmgyIkzgl3Oqbgy0Nbhbtb8uYmWdgm82PFZ5sSgRRgqHnu0E
-         adLMIDPKbWUW2CrgQIhvmslvx41Fkd7ooszYK4MEInBb2xTn1AbDM5Eld7PXHW9iuH
-         7JUiD1/VR6UST5X/aCqBsfDBp2q4jGplemtO/wG5/vMu7j7G3VlhpardK9NBXRXKOF
-         K/ylOtQ3ITRvA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pSL04-0000Py-TM; Wed, 15 Feb 2023 17:51:20 +0100
-Date:   Wed, 15 Feb 2023 17:51:20 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S229710AbjBOUWk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Feb 2023 15:22:40 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCC72CC67
+        for <linux-rtc@vger.kernel.org>; Wed, 15 Feb 2023 12:22:38 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id y1so20418467wru.2
+        for <linux-rtc@vger.kernel.org>; Wed, 15 Feb 2023 12:22:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zuvkbge6mkPjzQmD+S7+UtE4w7WXp41ZirBm14pyU3M=;
+        b=qCEEn9/tno24xig3oKrHMSFuh6lNDZw6d+ZJKxQLgfAf/b9K2EWWph2iLmBxpf0/ZC
+         9rXCDLBvrYVeqPeXUkzppaq7fyGf4bHi5NATAabtUr8dIdcs7AM03Q82RzK6Cmm3JDRl
+         vBfP2s5TICP4gSL3B8weD5lT2OZnZ+3whe2BSUGtUZVCcJOsS3fyzKJGNgetVhHEHWKw
+         YcbhjOC+Vs0XgoWbZiyvqn/NEm5M9j8pAK9anobkc/zzG+rWPeA8DXttqLp4BZVCtaxR
+         WQCJ+yhkrk1OOmECoxu3jaRLX4Gv4WlaLVnYc0ljzETNjoZCuZcGlXkOiJzqv4qijHNO
+         Jffg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zuvkbge6mkPjzQmD+S7+UtE4w7WXp41ZirBm14pyU3M=;
+        b=yggKLwYLn3hv4ZRnaowZ7j+C27ZdTiPGNWvS9rBFCXDqx7UdZcD1IEFq0RinA+0hQJ
+         5NV5kzWgoMlnvRB/1+0k8rvpA0g/fx7MICsuMBqgvoWMSmIJSkzxNXBgrjzx42eVAHAY
+         hwt+cJLEpfQu68reMtTg6PXXL9hEMaElZrotlanP3ip35Uux/CLzr3oH/dabpHy/yu7N
+         obIVIL2CCXgHBybfLtr174E8begilNQU/KPOe/auNr8dYs8SZFjWXojFNTDRFCMMZxFm
+         pRFY2vFtRJRwHDtxBS2oAMFnvRufIHqfYPHBBQ5EtWF5ci8mvU+YogKD7x1Oi7V8OLSv
+         drMA==
+X-Gm-Message-State: AO0yUKWQy60JY9i4IAn36IGBMpvY71PFucngwv/tjgh2+AyTTjvvZOLb
+        JWryn+m392A43e6TpbyV4bQ8PA==
+X-Google-Smtp-Source: AK7set8kwaAvwsp2XgtutyMrq28GMkilDYbwLvbErvHm9KDz6GXESTACCyuIJDxf3J5pkyLgwsoJqQ==
+X-Received: by 2002:a5d:47cb:0:b0:2c5:642f:1550 with SMTP id o11-20020a5d47cb000000b002c5642f1550mr522851wrc.15.1676492556479;
+        Wed, 15 Feb 2023 12:22:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id a12-20020a5d508c000000b002c55ec7f661sm6928606wrt.5.2023.02.15.12.22.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 12:22:35 -0800 (PST)
+Message-ID: <5e4b15b1-30f6-ca4e-1355-3c4d36b79541@linaro.org>
+Date:   Wed, 15 Feb 2023 21:22:34 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: nxp,pcf8563: move
+ pcf85263/pcf85363 to a dedicated binding
+Content-Language: en-US
+To:     Javier Carrasco <javier.carrasco@wolfvision.net>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 16/22] dt-bindings: rtc: qcom-pm8xxx: add nvmem-cell
- offset
-Message-ID: <Y+0NiJsp4JjeyrqH@hovoldconsulting.com>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-17-johan+linaro@kernel.org>
- <Y+bJqIpgZ0fbzL2b@mail.local>
- <Y+dQXlABqc/uzIXc@hovoldconsulting.com>
- <Y+fF94EOkUuMq9Fc@mail.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+fF94EOkUuMq9Fc@mail.local>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Michael Riesch <michael.riesch@wolfvision.net>
+References: <20230215081815.3141776-1-javier.carrasco@wolfvision.net>
+ <20230215081815.3141776-2-javier.carrasco@wolfvision.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230215081815.3141776-2-javier.carrasco@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 05:44:39PM +0100, Alexandre Belloni wrote:
-> On 11/02/2023 09:22:54+0100, Johan Hovold wrote:
-> > On Fri, Feb 10, 2023 at 11:48:08PM +0100, Alexandre Belloni wrote:
-> > > On 02/02/2023 16:54:42+0100, Johan Hovold wrote:
-> > > > On many Qualcomm platforms the PMIC RTC control and time registers are
-> > > > read-only so that the RTC time can not be updated. Instead an offset
-> > > > needs be stored in some machine-specific non-volatile memory, which a
-> > > > driver can take into account.
-> > > > 
-> > > > Add an 'offset' nvmem cell which can be used to store a 32-bit offset
-> > > > from the Unix epoch so that the RTC time can be updated on such
-> > > > platforms.
-> > > > 
-> > > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-
-> > > The patch doesn't apply because this part of the context is not
-> > > upstream. Can you rebase?
-> > 
-> > Ah, sorry about that. That's because of commit 51b3802e7960
-> > ("dt-bindings: rtc: qcom-pm8xxx: allow 'wakeup-source' property") which
-> > is now in Linus's tree (and your rtc-fixes branch).
-> > 
-> > Do you still want me to rebase or do you prefer to handle the conflict
-> > some other way?
+On 15/02/2023 09:18, Javier Carrasco wrote:
+> These Real Time Clocks are managed by the rtc-pcf85363 device driver,
+> which now supports the quartz-load-femtofarads property.
 > 
-> Ah yes, my bad, I'll merge rtc-fixes in rtc-next before applying
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> ---
+> v2:
+>   - create new bindings instead of adding conditional properties to an
+>     existing one.
+> 
+>  .../devicetree/bindings/rtc/nxp,pcf85363.yaml | 60 +++++++++++++++++++
+>  .../devicetree/bindings/rtc/nxp,pcf8563.yaml  |  2 -
+>  2 files changed, 60 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
+> new file mode 100644
+> index 000000000000..52aa3e2091e9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/nxp,pcf85363.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Philips PCF85263/PCF85363 Real Time Clock
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,pcf85263
+> +      - nxp,pcf85363
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 0
+> +
+> +  clock-output-names:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  quartz-load-femtofarads:
+> +    description:
+> +      The capacitive load of the quartz(x-tal).
+> +    enum: [6000, 7000, 12500]
+> +    default: 7000
+> +
+> +  start-year: true
+> +  wakeup-source: true
 
-Sorry about reminding so soon, but with the merge window approaching
-fast, will you be able to get this merged for 6.3?
+You could drop these two and use "unevaluatedProperties: false" instead
+of additionalProp - less coding and binding already will be prepared for
+any new RTC common properties. But it is fine for me as is.
 
-Johan
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
