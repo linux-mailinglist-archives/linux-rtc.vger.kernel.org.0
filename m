@@ -2,76 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D575697445
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Feb 2023 03:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255E469746E
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Feb 2023 03:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjBOCRH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 14 Feb 2023 21:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
+        id S231915AbjBOCj6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 14 Feb 2023 21:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjBOCRG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Feb 2023 21:17:06 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CF025941;
-        Tue, 14 Feb 2023 18:17:04 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id lf10so12839604ejc.5;
-        Tue, 14 Feb 2023 18:17:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LxxlzPg4mizXqJNDigPYQlPuo1iqpw5WjKtKqM6DiE=;
-        b=mdtXMHguzvpQUS5lrmb4Pf8yWnMPy5O161mHqUuRD4pHl7RTCZeGex5H/ndl31zNNY
-         PS/JLb/hknFAl07aGpTgHTffCShUXFfsoR83lCCdp6qPLn+XUaNaAuRpRx2i0ZMdl5yu
-         vUqNqN0aQsm+cIXEE6YdIeJNwJON5NAvKLyN93ICk5Mf3Kfg46o6Qoy9twk5KthbGvTQ
-         ufMkFNE4fOy3I2lS3W6V2sIiJ8k2Fxy9zu11Yv8ucnvQD5EQ8jjV4l7aR4g61xEXQJwt
-         0BIYHSA1BtjqoBOQ7w01yVI2/zpT3paAa2Qm5OP7iLl2lhL3Nkc0VZrAVf8PGEiaHBrQ
-         NUjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6LxxlzPg4mizXqJNDigPYQlPuo1iqpw5WjKtKqM6DiE=;
-        b=RsMxikBrgweD5weN1KyuH1pXEO8hJ51mJ3bniOiuikHcKdpXYJpjXI+CxmPyoQkqVJ
-         UrMUU6EpoQnIVhokPzU92HiXDcz6EpJ4QTwv8ZptZUVO99mNGLMi+7SIswhr93ZztKdc
-         29xujbYWK+xyIDt5NWshhcWt57KZfIIBiQfAJsTnv+CfPc5mr1SBfaW/AwE78oy2+USn
-         OCxNMvrq/bqksQRJ13juPmBco9BNqkp8acXU1ohLVJ02ZKrC4lYS+CMyG4h9dJJrz93j
-         /5n6YwiHwcRvFnOU+cSJdq0BvshmChFvDSMX1Wn8P/d4ZCbqS314J6u0iY/MCPGwp6L/
-         Lrjw==
-X-Gm-Message-State: AO0yUKUK9k0kGovI7onUsCUDidYSFW9V8iAiPahX/ti6ePPVT+JwPeck
-        SDt+fGO5HNNlvLynuMljzuZEBTboK9rAfLZM1uw=
-X-Google-Smtp-Source: AK7set/fzpOM02wfNk52NdqUIG77iAJxisnDk9pzjjI5GCx7b+6LlJ3SFgk59YpfC9G6AH0tDasj2Vs3AbAXQYTg2Sw=
-X-Received: by 2002:a17:906:5ad4:b0:877:747e:f076 with SMTP id
- x20-20020a1709065ad400b00877747ef076mr300787ejs.0.1676427422995; Tue, 14 Feb
- 2023 18:17:02 -0800 (PST)
+        with ESMTP id S229527AbjBOCj4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Feb 2023 21:39:56 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2080.outbound.protection.outlook.com [40.107.21.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7491B2CC42;
+        Tue, 14 Feb 2023 18:39:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mR0qoo8X3JqBmdj1xk14ktsRSATpQES/feHDWN3hFkafm4TpPMaBTOXnthRgeoF8NPyH8Bcsxk3vWVPf/9lpoJDcrVXupjvNUl7Z2wUXJiG+vtm/MAtvbdWrMbCMddQt2WkDLBlBpJm4Tz4TQHCo0us/GTHMEoB3mpKE1OiemqWq2kQ0kcIpBpJKad1nVhoRBBA8REbVKNcpdYdw6d6Cjyj62zQ2/W9UCQW+aVKLpz5dYWqhOPLGZU82fCvwz1TjJkcpdYxXyIpf43P0eg5D+QNAjeLHCBwLv0lMXYrA4M0/XiSMjWzno8zMGge+yJwfQcxLS2L51HTpBKFc4i9vEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MyJKHLItjvaoADuueMadlKG6pYM4lFf3pOuhLvgzjJU=;
+ b=IzXLVMlJn6q6Pr3ig7WrJvTH76GsNBtjnuQ1NJeBkJNU+TDaAo0DBg6b39+G4VmhSKkE+FKJtBk0mlVJl9EN+P5PFJItL6fB0z5oD4NvidfvAeAHyn0NacolZMBl/ulWW6mc6QbeBDutEwOv/ZoHHcCLnTFw3Bwy/Y+KdfjB6gXjTn5x3Ji59Cl3+jP0pa2i8SMHEafJ1vuni3w+F3bKOBDwx6PFXmy1+Uv2YiNkO0fdmuZXuXH/szBSjE7jtlBs5T4fcwzrt5oukFXfEJhDSvdSlfD45cRCB9GJ55tdzut4V5Ac2/0N/cCITABef4ve64O6N0haX3UiA+a3GprqkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MyJKHLItjvaoADuueMadlKG6pYM4lFf3pOuhLvgzjJU=;
+ b=qPZqgYyK/kxZY8Q+ggIwkFqT8KMDxqKvGwDB4NKZbH4HAfTMav3ozE0LFlFWNKamamtDTI+My58HSIM0oqLqbqtDNtyFTUsM39BJotcYIBFIJ/cMkTTSUea+Zvt3BQNAXkcOdw4R2Pp6m2I2ihXVlAxPIQ84sDkeIc0HVC5BSYs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
+ by PAXPR04MB8975.eurprd04.prod.outlook.com (2603:10a6:102:20e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Wed, 15 Feb
+ 2023 02:39:52 +0000
+Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
+ ([fe80::1793:79b4:2cb7:4db]) by AS8PR04MB8642.eurprd04.prod.outlook.com
+ ([fe80::1793:79b4:2cb7:4db%9]) with mapi id 15.20.6086.026; Wed, 15 Feb 2023
+ 02:39:52 +0000
+From:   Jacky Bai <ping.bai@nxp.com>
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, dmitry.torokhov@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com, festevam@gmail.com
+Subject: [PATCH v5 0/3] Add nxp bbnsm module support
+Date:   Wed, 15 Feb 2023 10:41:14 +0800
+Message-Id: <20230215024117.3357341-1-ping.bai@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0031.apcprd02.prod.outlook.com
+ (2603:1096:3:18::19) To AS8PR04MB8642.eurprd04.prod.outlook.com
+ (2603:10a6:20b:429::24)
 MIME-Version: 1.0
-References: <cover.1673227292.git.zhoubinbin@loongson.cn> <Y88VIXerF5Wk/9kj@mail.local>
- <CAMpQs4+8m0r98eGMHO7ktS2_AuNCA_u3Yk1q06i99TdbVZJ_Cg@mail.gmail.com>
- <CAMpQs4+uW75TdkMicdfU+5LYQxA_7kfbdabwO=iDiKwW-PzO9Q@mail.gmail.com> <Y+wWp61zxZ3V316d@mail.local>
-In-Reply-To: <Y+wWp61zxZ3V316d@mail.local>
-From:   Kelvin Cheung <keguang.zhang@gmail.com>
-Date:   Wed, 15 Feb 2023 10:16:46 +0800
-Message-ID: <CAJhJPsX2qLYMaVOR1bwS75sju4EPf3PcVX4L6Tyuz7NMv4Z2eQ@mail.gmail.com>
-Subject: Re: [PATCH V2 0/7] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
-        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>, zhzhl555@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8642:EE_|PAXPR04MB8975:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3347cdd9-5104-40c4-754c-08db0efde9f1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3JXYFuZtA2EwNpYY2BxCSirA2NqNmQhyoSwS72sHqlocIYMKbLtuu2C5FISnf8kEu1lpSZIHXzq5WRHBHvDJRUTENq0+6hU0oy26IcPwRbl3ugS0hNRgbh0OqKUmp4iqw3nJtTxUbfvy7TzAufY0pmbLK5OZyBe9098E+1dnjnI55jtjLahofWfBFmMI/4iTWU32fB5/iJtUVD6MJbJfh3fo6WqM/yss1nRjZ6oJqtyZaMHm9E8dR3gORGqk0/t2UyvW8ViZ/hJyohFj1wqDb2LFrE/uV6upvYZtRYZK3S/bSQQe4Im0QDRhn9SZzsuKRo7O0QObIz35dNmsPVTmfIHaOD7kCqn38T00aUVEurmJ5NwMU+qyxNhO4141pCOnxQr0C3FkUlaAuqBdHmqn8RB5icv55F+Xy0iCFOsb1e7zUuGQEVQnawZ+OTS1K05dvL6z8znz2rp+9AWuvvh2ydlG7JPj4IoV6FaOzqdBSOuLcbz+EcE1VWNBLKrsgrELXtJnXjh9MPDVuuhwyP1dlyODs6RAGUzRjC1umednOIE6EMGiwzaO4f2DEBywqeC08vJ8zkBUnySjHv+c6RqoYu/245aHr9vATMVi3/fyNKgQ9DaA9ybFDuwqtnU0OqmuFgKvzxuTf7yOxt23uaNddcihD9n2bFzBihsUa0jxuxQ+ppd86CyFy6yY1uA9yMghr5uOEiQ2Ktm7nBMWcsIyNQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199018)(38100700002)(38350700002)(1076003)(6506007)(6666004)(36756003)(52116002)(316002)(7416002)(5660300002)(6486002)(478600001)(6512007)(26005)(186003)(2616005)(66556008)(66946007)(66476007)(8936002)(2906002)(8676002)(41300700001)(4326008)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jFq9x6l7GeiSJn6y6c2H3rrkYm9fUSFALml2O7h5ylVtm/guDT7zkylaT/pI?=
+ =?us-ascii?Q?qZk7GGkpHM3R1H3yO/S2ac6mcHIkbLGtIDBpnTHnxnGrstC4QmhThgIvVurB?=
+ =?us-ascii?Q?A6d7xnVQUIVIwDXA0dKYhf9djNUB6yO+OAk26KmXyPBSWG/0O9+NejnsnciQ?=
+ =?us-ascii?Q?kdEoj1VrNOQUgUInv1y+CbMQkA1OQk31wJwxUq2B7bWnhFwfxlMWJcdjTgXw?=
+ =?us-ascii?Q?FgXrPfNbrbakmeBD83yS5PkhEXD2kP+ALPbY3Q2H02Qmn8FDcChPifJPja/N?=
+ =?us-ascii?Q?VKfIwQ4+apnvuGmMHsmqIlm4/oenNLJLsK9Z3VyZXYGq7dDgDkTMhn/6od3z?=
+ =?us-ascii?Q?HRLM8kKBEhz5zhuGPWCzulGOrbteiv9JR13CeNM5l0cU8aqZD7cy3yMQ2iBb?=
+ =?us-ascii?Q?/AwqYNK3fApejNAxhFMR3WrthaqAmSOkA5OzWowOxFsSb9CJdzs70cPo8JYP?=
+ =?us-ascii?Q?LJ7O2ztNnkeB0RsFPFeKse8vkKld01vyiZwHBIbhPrLvN4aY5LNYzOQ0OiLw?=
+ =?us-ascii?Q?JD8aIx2uPxaUKDUvFjojr76Rt4Ek6fAdJDs/qYzWgZ6qPn/V+bt5D7Yipdzm?=
+ =?us-ascii?Q?bbpBq3K6oYxGFE9qGCa8RRVq02Qd4vCsqMh7jifqKwZ5QgpoiVe126jsCQwT?=
+ =?us-ascii?Q?TJYx9BcMnh4pa3rzWWJWfhVE09JTnKuUhfTMmDz5/f4kQ2Tw0hFOXq/PQvXN?=
+ =?us-ascii?Q?LeSsqUQFMpoETqLpdvFIp8zaohDhpcafzxl2RTCdMxoE9aAvvlyr8JKjTS/5?=
+ =?us-ascii?Q?92IjvZmkk/7N0NfSmQBQvPkaQO0LqI2wEJM9SgqhYj/KaAjt0UIhVTX6NK1T?=
+ =?us-ascii?Q?DeXYNQi9iDSd0Dt/lhzmd/0o7fGEiCRrF+opVloDiBA5l31VKQTKuQBPpV8m?=
+ =?us-ascii?Q?Cp8bJBmohehWdj9btLZiBMsARycf3eBdSQp6fPuKRLWYZKHQwDwraVpTt3KM?=
+ =?us-ascii?Q?RCcKO7JJ1gU48MX3t/Jx5Dprs5IXn9OY5AFjl1Q4PJVR0eacYeW8saMWHb7g?=
+ =?us-ascii?Q?wleIHYYHajBVPMUT+1KFmB7GDZw0pApi6oRfKvWZVuFX8SKuKMVg2Y6mlatE?=
+ =?us-ascii?Q?JdjDcYrvE2ccf8XZyrAA/jlGRGSXtR2orySqQEf7VvGOANuq8RVbZdhj+/zg?=
+ =?us-ascii?Q?p0qsKoZzxAy+RyU4APQ8sae4yyfwvJ6gm/VIUrwoHIZ6U9RVlmXzWeZ6TrTb?=
+ =?us-ascii?Q?ZsTEmZTo8AMvdCJ/e3bHS2JlMSDl3LDRk1phq3tLjddMlNV99UoiFWAG1L85?=
+ =?us-ascii?Q?2e40iJGDOjJt1BISExeGdP4nlm1RAcsy6aMoOc5GyBX2b4+18jeKzc6ouCjK?=
+ =?us-ascii?Q?r3D9FRuTSyKcmd20o6rE5WBkOV8vfnQTT1Vm8yUWAUWxJdE7jR5UKn4fs+w+?=
+ =?us-ascii?Q?PTRMHh+uJr7Eei3bPLq0W6tqiJ6+1BHIkpsOCG8wgB5BlXE6z1GigYHFrvPP?=
+ =?us-ascii?Q?+2FDiFEjSMyu+nEYkuj7T1axrqPw5Zp/jhFsO09GEz1/WLHxF9uFB6gh6FkC?=
+ =?us-ascii?Q?8m+Fk1un7w5DbuDSnlF5V6ye8AoMThyHouJ0PaOD3THr8oh19ys9ftuVDK1T?=
+ =?us-ascii?Q?TlZU5TKmKQRVHS0hOEXlJgmlIE+4YwYi03hTmNxy?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3347cdd9-5104-40c4-754c-08db0efde9f1
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2023 02:39:52.0768
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mr6JdsxJcYucjT06JG8bkRFKnkfM65wxyXm4fHxw4OOtagnPpKeXL+TPqc2b74ejatgydxuvcT8Ri8ApByiVNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8975
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,137 +114,31 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Alexandre,
-I will maintain rtc-ls1x continuously.
-And I'm adding DT support for it.
+NXP BBNSM (Battery-Backed Non-Secure Module) serves as non-volatile
+logic and storage for the system. it provides some similar functions
+like RTC and ON/OFF support as previous SNVS module found on legacy
+i.MX SoCs. The BBNSM is replacement of previous SNVS module, and more
+likely it will be used on all the future i.MX SoC or other SoCs from
+NXP.
 
-On Wed, Feb 15, 2023 at 7:18 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 10/02/2023 18:03:07+0800, Binbin Zhou wrote:
-> > On Tue, Jan 31, 2023 at 8:59 PM Binbin Zhou <zhoubb.aaron@gmail.com> wrote:
-> > >
-> > > Hi Kelvin:
-> > >
-> > > Excuse me.
-> > > I am submitting the Loongson-2K/LS7A RTC driver and Alexandre would
-> > > like me to merge the ls1x rtc driver in parallel.
-> > > Unfortunately I found out that the loongson-1 does not yet support DT
-> > > and would like to ask if you have any plans to support DT?
-> > >
-> > > I think this is the prerequisite for the merge.
-> > >
-> > > Regards.
-> > > Binbin
-> > >
-> > >
-> >
-> > Hi Alexandre:
-> >
-> > Unfortunately there has been no reply from Keguang for the past week
-> > or so. Can we try rtc-ls2x and rtc-ls1x to coexist until Loongson-1
-> > supports DT?
-> > Later on, if Keguang or someone else familiar with Loongson-1 adds DT
-> > support, I would be happy to continue trying to merge the two drivers.
-> >
->
-> My point is exactly that if nobody in Loongson wants to maintain
-> rtc-ls1x, we may just drop it. This also probably tells a lot about how
-> rtc-ls2x is going to be maintained once upstreamed...
->
-> > Regards.
-> > Binbin
-> >
-> > >
-> > >
-> > > On Tue, Jan 24, 2023 at 7:24 AM Alexandre Belloni
-> > > <alexandre.belloni@bootlin.com> wrote:
-> > > >
-> > > > On 09/01/2023 09:35:10+0800, Binbin Zhou wrote:
-> > > > > Hi all:
-> > > > >
-> > > > > The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
-> > > > > released five versions of patchset before, and all related mail records
-> > > > > are shown below if you are interested:
-> > > > >
-> > > > > https://lore.kernel.org/all/?q=ls2x-rtc
-> > > > >
-> > > > > In this series of patches, based on the code above, I have added the
-> > > > > following support:
-> > > > >
-> > > > > 1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
-> > > > >    by default under LoongArch architecture;
-> > > > > 2. Add rtc alarm/walarm related functions.
-> > > > >
-> > > > > I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
-> > > > > and Loongson-2K0500.
-> > > > >
-> > > > > BTW:
-> > > > > There have been discussions about merging the rtc drivers of ls1x and
-> > > > > ls2x, but the following reasons made the merger difficult to achieve:
-> > > > >
-> > > > > 1. ls1x does not support ACPI, for it is only on MIPS-based system;
-> > > >
-> > > > This is not a good justification, you have to support both in your
-> > > > driver anyway, as shown by your CONFIG_ACPI ifdefery.
-> > > >
-> > > > > 2. ls1x does not support alarm function.
-> > > >
-> > > > It is just a matter of clearing a single bit, this is not difficult at
-> > > > all.
-> > > >
-> > > > >
-> > > > > Thanks.
-> > > > >
-> > > > > -------
-> > > > > Changes since v1:
-> > > > > 1. Rebased on top of latest loongarch-next;
-> > > > > 2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
-> > > > > errors when the driver gets the IRQ number, Thanks to Qing Zhang for
-> > > > > testing;
-> > > > > 3. Remove some inexact CONFIG_ACPI.
-> > > > >
-> > > > > Binbin Zhou (4):
-> > > > >   rtc: Add support for the Loongson-2K/LS7A RTC
-> > > > >   LoongArch: Enable LS2X RTC in loongson3_defconfig
-> > > > >   MIPS: Loongson64: DTS: Add RTC support to LS7A
-> > > > >   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
-> > > > >
-> > > > > WANG Xuerui (3):
-> > > > >   dt-bindings: rtc: Add Loongson LS2X RTC support
-> > > > >   MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
-> > > > >   MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
-> > > > >
-> > > > >  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
-> > > > >  arch/loongarch/configs/loongson3_defconfig    |   1 +
-> > > > >  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
-> > > > >  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
-> > > > >  arch/mips/configs/loongson2k_defconfig        |   1 +
-> > > > >  arch/mips/configs/loongson3_defconfig         |   1 +
-> > > > >  drivers/rtc/Kconfig                           |  11 +
-> > > > >  drivers/rtc/Makefile                          |   1 +
-> > > > >  drivers/rtc/rtc-ls2x.c                        | 379 ++++++++++++++++++
-> > > > >  9 files changed, 410 insertions(+)
-> > > > >  create mode 100644 drivers/rtc/rtc-ls2x.c
-> > > > >
-> > > > > --
-> > > > > 2.31.1
-> > > > >
-> > > >
-> > > > --
-> > > > Alexandre Belloni, co-owner and COO, Bootlin
-> > > > Embedded Linux and Kernel engineering
-> > > > https://bootlin.com
-> > > >
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+This patchset add the basic support for BBNSM that found on i.MX93.
 
+Jacky Bai (3):
+  input: bbnsm_pwrkey: Add bbnsm power key support
+  rtc: bbnsm: Add the bbnsm rtc support
+  arm64: dts: imx93: Add the bbnsm dts node
 
+ arch/arm64/boot/dts/freescale/imx93.dtsi |  16 ++
+ drivers/input/misc/Kconfig               |  11 ++
+ drivers/input/misc/Makefile              |   1 +
+ drivers/input/misc/nxp-bbnsm-pwrkey.c    | 192 +++++++++++++++++++
+ drivers/rtc/Kconfig                      |  12 ++
+ drivers/rtc/Makefile                     |   1 +
+ drivers/rtc/rtc-nxp-bbnsm.c              | 226 +++++++++++++++++++++++
+ 7 files changed, 459 insertions(+)
+ create mode 100644 drivers/input/misc/nxp-bbnsm-pwrkey.c
+ create mode 100644 drivers/rtc/rtc-nxp-bbnsm.c
 
 -- 
-Best regards,
+2.34.1
 
-Kelvin Cheung
