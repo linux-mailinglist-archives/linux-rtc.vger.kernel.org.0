@@ -2,119 +2,138 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8347A69E6CA
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Feb 2023 19:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C04869E997
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Feb 2023 22:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjBUSFF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Feb 2023 13:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S229951AbjBUVi5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Feb 2023 16:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjBUSE6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Feb 2023 13:04:58 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C352FCC7;
-        Tue, 21 Feb 2023 10:04:56 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 712B260005;
-        Tue, 21 Feb 2023 18:04:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677002694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=th5oVun89F1CjoNpW3raiplVH4YZiPGNROtimdr74Ys=;
-        b=PU9cgx04rXx10Nt5B3tiF7EtxoCsmUJanG451qwj5Od76mF928b3PAwxcM4FqeGKnaPLhJ
-        jkhHHpTb6PDw+QFOcR1n7f9SpMJJ6zbG7FMreUMf/xN0peoVs3uGTMJA7OH5DzphbG4heW
-        XEw3ZLmLdmi2omm5HbDj4tTsU/xbjNsXiTWCXqGtXMIN6gkjYDbCDOIYiF507ZqHeJAK9A
-        T1p6zq7m1jZ2NKnJ2X0wTvmQw+ywN82wG1tHiSuIsOppy9RU+0v8DDAbeRs4TlOtY5MPjd
-        HkTtjuY1KU5zFYGBUYE8NWdWtJrG6zgkJonzIcmUUXFfsGVu3UddvpbgZqqPwA==
-Date:   Tue, 21 Feb 2023 19:04:51 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jacky Bai <ping.bai@nxp.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, dmitry.torokhov@gmail.com,
-        a.zummo@towertech.it, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, festevam@gmail.com
-Subject: Re: [PATCH v5 2/3] rtc: bbnsm: Add the bbnsm rtc support
-Message-ID: <Y/UHw2Q0FL9zlfFk@mail.local>
-References: <20230215024117.3357341-1-ping.bai@nxp.com>
- <20230215024117.3357341-3-ping.bai@nxp.com>
- <Y/UG7LT6e7+UySRs@mail.local>
+        with ESMTP id S229839AbjBUVi4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Feb 2023 16:38:56 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23DC2DE55;
+        Tue, 21 Feb 2023 13:38:25 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cq23so22504172edb.1;
+        Tue, 21 Feb 2023 13:38:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g2x4QxJv4nKAQD6nmh3v1P/gvRFcvPZ/+reUMK1IHmk=;
+        b=hvcbbxjHy3yfhZZaSoQ20ukzgEnIfEyrMlnC1c8Mj23mZ7Z3onoLj/8XHMhGA9BGdj
+         2e55K/WV6r5hQDtRQOvv6Luyw8hQYXkV9vDaxVFsHD77eysOg2nkgkw+/JjpTCkAeFBN
+         lznssBgKnma18h7wVh5jhzY5IReazXSbGL9j8s7utXvSkeXZmD8s6kMSM7EcRgZLCYyG
+         yYnuxUfUfSGSdRy10QjagUJAF3urpw1t3CZN0Gk6ajP79qxMM1PpbRMsSgckdZqlRUJa
+         cllc8OuefC+uCPx2sarqRn+81n7w22uOi37fJj34mGr+UEKjzYlRxX8OQjb0wgqBB63z
+         ZHhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2x4QxJv4nKAQD6nmh3v1P/gvRFcvPZ/+reUMK1IHmk=;
+        b=cGrDUPUYh6tJgtK9uY2LzRprp9wzIpCraYt/681iTtfO+o/0p17YmzY+PiUmDPUUBD
+         kHkd/79eWqzVsVVw9q/wQ5ajhrz0/iM720JAmWvkrZrZCjOu5P6BXfxD8V0Oxz9CLYOt
+         5UDMWBm26ychWX1vqfj/08n6zjv4176+YLT1c9Q/289E6MGZGf1co5m2fSV9ZW/uONWF
+         siRY0iIUyCIKCBhDsMuoMoLXmyBIJ68HasMFrT1/LHo73fQSKHYaxDQyX8TwBc2EVqA8
+         VRrF8W71EfsIL79shXLIqy3cVavH/wpfh/MfWVrr2US3v7GOLpx9GDm3/7Ru1wwqytAf
+         Y8/g==
+X-Gm-Message-State: AO0yUKWi2kvNdDXP89K5xNAVZZLym2lkPP9Xvr5MLW38vhDhE5ZGCrBW
+        VugcCQpSzVqlXXxLhuM3jf5ZrWLohA8EG3JZnzA=
+X-Google-Smtp-Source: AK7set+WgWx80yG+IPD6BZtc2LM511WxHd/1uNy9RyymaByA5DzDe9ltu/NxF8DAR1dqIEJxGGjio8OxlPTpsYlt4UQ=
+X-Received: by 2002:a17:907:3d91:b0:8af:2e89:83df with SMTP id
+ he17-20020a1709073d9100b008af2e8983dfmr13559381ejc.6.1677015504149; Tue, 21
+ Feb 2023 13:38:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/UG7LT6e7+UySRs@mail.local>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221145021.31993-1-zajec5@gmail.com>
+In-Reply-To: <20230221145021.31993-1-zajec5@gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 21 Feb 2023 22:38:13 +0100
+Message-ID: <CAFBinCDxB=xtz9mtZupBC7J5oxknN1ENHzJ-cFxX4FTDSgZeFQ@mail.gmail.com>
+Subject: Re: [PATCH] nvmem: add explicit config option to read OF fixed cells
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 21/02/2023 19:01:16+0100, Alexandre Belloni wrote:
-> On 15/02/2023 10:41:16+0800, Jacky Bai wrote:
-> > The BBNSM module includes a real time counter with alarm.
-> > Add a RTC driver for this function.
-> > 
-> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> > Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> 
+Hello Rafa=C5=82,
 
-Actually, as there is no dependency anymore, I'm going to apply that
-directly.
+On Tue, Feb 21, 2023 at 3:50 PM Rafa=C5=82 Mi=C5=82ecki <zajec5@gmail.com> =
+wrote:
+>
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>
+> NVMEM subsystem looks for fixed NVMEM cells (specified in DT) by
+> default. This behaviour made sense in early days before adding support
+> for dynamic cells.
+>
+> With every new supported NVMEM device with dynamic cells current
+> behaviour becomes non-optimal. It results in unneeded iterating over DT
+> nodes and may result in false discovery of cells (depending on used DT
+> properties).
+I am not familiar with the recent changes around dynamic cells.
+Is there any discussion/summary that I can read to get up to speed?
 
-> > +static int bbnsm_rtc_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device_node *np = pdev->dev.of_node;
-> > +	struct bbnsm_rtc *bbnsm;
-> > +	int ret;
-> > +
-> > +	bbnsm = devm_kzalloc(&pdev->dev, sizeof(*bbnsm), GFP_KERNEL);
-> > +	if (!bbnsm)
-> > +		return -ENOMEM;
-> > +
-> > +	bbnsm->rtc = devm_rtc_allocate_device(&pdev->dev);
-> > +	if (IS_ERR(bbnsm->rtc))
-> > +		return PTR_ERR(bbnsm->rtc);
-> > +
-> > +	bbnsm->regmap = syscon_node_to_regmap(np->parent);
-> > +	if (IS_ERR(bbnsm->regmap)) {
-> > +		dev_dbg(&pdev->dev, "bbnsm get regmap failed\n");
-> > +		return PTR_ERR(bbnsm->regmap);
-> > +	}
-> > +
-> > +	bbnsm->irq = platform_get_irq(pdev, 0);
-> > +	if (bbnsm->irq < 0)
-> > +		return bbnsm->irq;
-> > +
-> > +	platform_set_drvdata(pdev, bbnsm);
-> > +
-> > +	/* clear all the pending events */
-> > +	regmap_write(bbnsm->regmap, BBNSM_EVENTS, 0x7A);
-> > +
-> > +	device_init_wakeup(&pdev->dev, true);
-> > +	dev_pm_set_wake_irq(&pdev->dev, bbnsm->irq);
-> > +
-> > +	ret = devm_request_irq(&pdev->dev, bbnsm->irq, bbnsm_rtc_irq_handler,
-> > +			IRQF_SHARED, "rtc alarm", &pdev->dev);
-> 
-> This is not properly aligned, you can fix that if you ever have to
-> resend.
+My main thought is: if there are many "fixed OF cells" implementations
+and only a few "dynamic" ones - does it make sense to flip the logic
+and introduce a new "use_dynamic_of_cells" flag instead?
 
-> 
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Martin
