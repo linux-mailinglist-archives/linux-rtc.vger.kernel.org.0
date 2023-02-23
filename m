@@ -2,127 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8324E6A0CCB
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Feb 2023 16:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053FC6A0F8D
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 Feb 2023 19:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbjBWPWt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 23 Feb 2023 10:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S229633AbjBWShJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 23 Feb 2023 13:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234202AbjBWPWs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 23 Feb 2023 10:22:48 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B967F57D38
-        for <linux-rtc@vger.kernel.org>; Thu, 23 Feb 2023 07:22:46 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso3118993wmp.4
-        for <linux-rtc@vger.kernel.org>; Thu, 23 Feb 2023 07:22:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5Cwbrse9pZAxCvyGzfZ4RNvckcnZylA2fH9zi27S+QI=;
-        b=NOruivWnthOebJDqC4gaJPdYD62QJ09c3qsdWWT1Bhwb1c4svUr8/bYY8ZmlqHVwst
-         uXphoclV4DxL49Vu703Cpn82F0jT40Z73ayldO4wq1OA9AYkTQ0d/exfG7pZK33Oglon
-         xG10fGCoFhKNeMEvggIC1YTE/i71GROkyL4kmxaVT0nlwRPOjfDS1PR9s+I8XZPiHTnV
-         mHQaa+AZjdRvWf+Fa1C4A8r6tM9NKIZSMtUs9sygQou/pt8VIOlcsdb8dQ/9nFsJ8ncx
-         aCFNzb5KOPija2h2uB1a3dgS0lqz0ef3WTlDWuAyv+6aUb0jcsjUejallakvNjDsHGuF
-         Evfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Cwbrse9pZAxCvyGzfZ4RNvckcnZylA2fH9zi27S+QI=;
-        b=MSB8vky3snYwNPS0mNWgJilexyC/bjhx0PNUpyd1alyZqW8x1SMB5ue3qXx1rknJCD
-         A+esNqWH6+7XhL89VC6fGRXmbM2rMJO9b07nCu2YYa0G/xBUJAT7rKVoJgpzag4HWS7V
-         uPG1FkkmR/MNKVC54jvYxuUlGW8rg3yE7J4DmTIDOGnikA4k4gi5FQmwF/xG6M+/O/HT
-         SR9XMt1bR+bl3MeFzmA9zW5s6yzxY2ITnRCXOtmxXLNo/UviYylpQ0SUSv0uozZZcug/
-         kkNv8x6uXHNpR99sxV45Y9NNJFxN1j1VViiswNDDAJNuq5gkTZFnZyaJaiCctdYMeeAD
-         2Bvw==
-X-Gm-Message-State: AO0yUKWDn0lJxsr8VNx27AQaQ11DJjpedk/DS8bEkIw9gqFfOPnhmqRe
-        klDfZD82bQNd7rRN907hBG6DEQ==
-X-Google-Smtp-Source: AK7set++SQwiX6anztrdTaCyOV4SjeN7vFMHvuxS//fEFz98O8goJ7YLvAky+T/G+gUg5Pn95Q+aDA==
-X-Received: by 2002:a05:600c:2b46:b0:3e0:14a:697a with SMTP id e6-20020a05600c2b4600b003e0014a697amr10024326wmf.6.1677165765179;
-        Thu, 23 Feb 2023 07:22:45 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l3-20020a1ced03000000b003e0015c8618sm4984762wmh.6.2023.02.23.07.22.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 07:22:44 -0800 (PST)
-Message-ID: <6aa802c2-fe0d-f830-dc4d-3a139003e137@linaro.org>
-Date:   Thu, 23 Feb 2023 16:22:43 +0100
+        with ESMTP id S229536AbjBWShI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 23 Feb 2023 13:37:08 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3BF474C5;
+        Thu, 23 Feb 2023 10:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=eeaVgMNzMvTqo9FnteDz9okW4Ekj5JoeyLGIRaXoGh4=; b=KT53wHPWJim8SoVZZ/nK4a0EFy
+        2m+uYEWKmiyuGQA+MehtkdLovW1M/6i9bjn2dOMGY6uzetlLXW/5xIBYwnDUjtx1DeMgNgu/AkuBx
+        eHPj2F4hhpAoAZnNU93mNn4GI2DPumMSsizs9z06xbhwr7eyuKW0XEj+23i/8C85NDY3Xt+GJPu9q
+        EXGiVhh/28gTfs8+Qnq6gvYxl4EothZozbty4G6o7GaFHBqKYy3lMdzhVd6uDBnMZivYBxXIfHFpm
+        NZWTog8vIYSKrdsEsRn9k7QOOC8FToMXvc3fvrWPmaF6u9habX0XzPna9lQKwJEfJqU91t6V694g+
+        rI20yG+g==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pVGSk-00HYYD-NL; Thu, 23 Feb 2023 18:37:02 +0000
+Message-ID: <6bb7bca5-e663-60c4-d574-9a4856cdb802@infradead.org>
+Date:   Thu, 23 Feb 2023 10:37:01 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] rtc: s5m: Drop S5M8763 support
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 0/3] IRQ_DOMAIN: remove all "depends on", use only
+ "select"
 Content-Language: en-US
-To:     David Virag <virag.david003@gmail.com>,
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Donggeun Kim <dg77.kim@samsung.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Peter Rosin <peda@axentia.se>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Lee Jones <lee@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-References: <20230131183008.4451-1-virag.david003@gmail.com>
- <20230131183008.4451-3-virag.david003@gmail.com>
- <Y/d1DY/mXe7R5q8W@google.com> <Y/d1omGzBMFqjQx+@google.com>
- <Y/eAPXwdv0kclEVA@mail.local>
- <3a8e24921b9b47834199a7ca78af4d22ed370586.camel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3a8e24921b9b47834199a7ca78af4d22ed370586.camel@gmail.com>
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230213041535.12083-1-rdunlap@infradead.org>
+ <b8fb48b9-349d-4723-9b35-6471cb65b6b5@app.fastmail.com>
+ <8e6977b8-d256-4e51-82b7-e36d6ca259dc@infradead.org>
+ <86y1p0xbqd.wl-maz@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <86y1p0xbqd.wl-maz@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 23/02/2023 16:11, David Virag wrote:
-> On Thu, 2023-02-23 at 16:03 +0100, Alexandre Belloni wrote:
->> On 23/02/2023 14:18:10+0000, Lee Jones wrote:
->>> On Thu, 23 Feb 2023, Lee Jones wrote:
+Hi Marc,
+
+On 2/14/23 11:56, Marc Zyngier wrote:
+> On Tue, 14 Feb 2023 18:30:54 +0000,
+> Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>>
+>>
+>> On 2/13/23 00:05, Arnd Bergmann wrote:
+>>> On Mon, Feb 13, 2023, at 05:15, Randy Dunlap wrote:
+>>>> IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
+>>>> it directly thru "make *config", so drivers should select it instead
+>>>> of depending on it if they need it.
+>>>> Relying on it being set for a dependency is risky.
+>>>>
+>>>> Consistently using "select" or "depends on" can also help reduce
+>>>> Kconfig circular dependency issues.
+>>>>
+>>>> IRQ_DOMAIN is selected 109 times and is depended on 3 times in
+>>>> current linux-next. Eliminate the uses of "depends on" by
+>>>> converting them to "select".
+>>>>
+>>>>  [PATCH 1/3] extcon: max8997: select IRQ_DOMAIN instead of depending on it
+>>>>  [PATCH 2/3] of: OF_IRQ: select IRQ_DOMAIN instead of depending on it
+>>>>  [PATCH 3/3] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
 >>>
->>>> On Tue, 31 Jan 2023, David Virag wrote:
->>>>
->>>>> The S5M8763 MFD has no device tree compatible, and since board
->>>>> file
->>>>> support for it was removed, there's no way to use this MFD.
->>>>> After
->>>>> removing the remaining code for it from the MFD driver, also
->>>>> remove
->>>>> support for it in the s5m RTC driver, and all remaining
->>>>> references to
->>>>> it.
->>>>>
->>>>> Signed-off-by: David Virag <virag.david003@gmail.com>
->>>>> ---
->>>>>  drivers/rtc/rtc-s5m.c            | 82 ++----------------------
->>>>> --------
->>>>
->>>>>  include/linux/mfd/samsung/core.h |  1 -
->>>>>  include/linux/mfd/samsung/irq.h  | 50 -------------------
->>>>
->>>> Acked-by: Lee Jones <lee@kernel.org>
+>>> From a Kconfig perspective, your reasoning makes a lot of sense.
 >>>
->>> Actually, looks like this should probably go in via MFD, so I need
->>> an
->>> RTC Ack.
+>>> Looking at the bigger picture, I wonder if we should just remove the
+>>> option and make it unconditional. It is enabled in ever architecture
+>>> defconfig other than alpha and sparc, and it's selected by a lot of
+>>> very common options such as I2C,  GENERIC_MSI_IRQ, GENERIC_IRQ_CHIP,
+>>> and PCI_HOST_GENERIC. Enabling the option on Alpha grows the kernel
+>>> image from 9010KB to 9023KB, or on m68k Coldfire from 3346KB to
+>>> 3351KB.
 >>
->> There were comments on 1/2 so I was expecting a v2.
->>
->>
+>> Marc, what do you think about this suggestion?
 > 
-> Krzysztof commented there about the removal of an enum value that's
-> actually removed in 2/2 since it would break the RTC driver if it was
-> removed in 1/2. He realised that and corrected himself. No need for v2
-> AFAIK, unless something else is found.
+> Seems sensible enough to me.
+> 
+> I'd also get rid of the IRQ_DOMAIN_HIERARCHY option, which is used by
+> a ton of things. Architectures that are not using it are either dead,
+> or at least terminally comatose.
+> 
+> I'm half-tempted to put the following patch into -next. Maybe after
+> -rc1 though. And then the option can go as well.
+> 
+> 	M.
 
-Yep. I also gave review tags for both of these.
+What is this patch based on?  It doesn't apply cleanly to current linux-next.
 
-Best regards,
-Krzysztof
+I made a similar patch (to linux-next) that drops the IRQ_DOMAIN_HIERARCHY
+option and converts its dependent code to always on.
+It has been built (multiple randconfigs) on all ARCHes (except hexagon),
+both 32-bit and 64-bit where applicable (not that it should matter here).
 
+But yes, let's plan to get one of these patches in soon (after -rc1).
+Thanks.
+
+-- 
+~Randy
