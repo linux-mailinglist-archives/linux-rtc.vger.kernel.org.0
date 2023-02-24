@@ -2,87 +2,136 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298276A18A7
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Feb 2023 10:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 333FC6A1CD4
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Feb 2023 14:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjBXJYm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 24 Feb 2023 04:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S229460AbjBXNOI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 24 Feb 2023 08:14:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBXJYl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Feb 2023 04:24:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623E160132;
-        Fri, 24 Feb 2023 01:24:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229446AbjBXNOH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Feb 2023 08:14:07 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F38D1C308;
+        Fri, 24 Feb 2023 05:14:05 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24C07B81BE0;
-        Fri, 24 Feb 2023 09:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87F6C433D2;
-        Fri, 24 Feb 2023 09:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677230677;
-        bh=JTlnceaMAn4H4iP52lMgGtEKORtQS2pIE1OgoKHtH70=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f0SnnPEB9P7u/XrrEaaj4ngWoTVK+LbZYKwmiKVwik0UlY/j92e47u15eUBezSasE
-         JRpEU6EDLZwrTLMsjLjbgbmwf6F2ZM0G39mIcpMdJwAQP0u9l8LglNnspzlAV6X4+9
-         cnbw8yQx/Rrn7ULq2BIbkcP7cFq/CMZUheKMCm9YbPnmR6si3ynw3VraRHB91RX7RM
-         Whr2X58fVheKV91vkWk79IrtFX9MFnalwzArxR5Fz3QHUjdkNXgLJr86fS6SSVMehy
-         fshjbZohaOuONv7iiluA9ksW1jd8bbPfvBLsLZVFH3ghSH2w0aHU7QAYGSReHyRBnc
-         OXtwkvTuB1H/g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pVUJs-0003wL-JT; Fri, 24 Feb 2023 10:24:48 +0100
-Date:   Fri, 24 Feb 2023 10:24:48 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 16/22] dt-bindings: rtc: qcom-pm8xxx: add nvmem-cell
- offset
-Message-ID: <Y/iCYA3xQEE4w2Th@hovoldconsulting.com>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-17-johan+linaro@kernel.org>
- <Y+bJqIpgZ0fbzL2b@mail.local>
- <Y+dQXlABqc/uzIXc@hovoldconsulting.com>
- <Y+fF94EOkUuMq9Fc@mail.local>
- <Y+0NiJsp4JjeyrqH@hovoldconsulting.com>
- <Y/hzcxrS3D0O3s9U@hovoldconsulting.com>
- <Y/iA/sQh/p9980qQ@mail.local>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 65D7D6602FB6;
+        Fri, 24 Feb 2023 13:14:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677244443;
+        bh=Okn4gS1gr349hyYSKqFPtphNu9lynSCGwrmaUsYAV7k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Gm+baLq2JEYoErHccOrY+sq6UkDE63wM7blUSKo5+RWdViPYvsPewvBWLj6KK/Klp
+         mX0JPGD4xhg/6yWU++Nzbmfnl82cF9liwmH7/V49AdT0JhjKn/9qFXL/MGmI+iFB67
+         kEGGWDZczMu1ApL71HWexGJDHuCekPnec8VhOqK/IaN4Ec18oW5lZJK5IMSXZwaONx
+         pW0CUQ3NXQdomYvAUVtmuLd3Bvdsg8AvWF57+1ZZ3pSrcDOBQdPK7V6n01YRtKSLUa
+         bKRbQR8cYQ9XXXp8GWwxsBTRfmoO71Bj6gti3TX4MnkShBZEDgDb+fHdBMjgfzYc9q
+         hsCnVl7kz1jdg==
+Message-ID: <c17f94a6-c710-f80e-c2af-9e450f144157@collabora.com>
+Date:   Fri, 24 Feb 2023 14:13:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/iA/sQh/p9980qQ@mail.local>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2] nvmem: add explicit config option to read OF fixed
+ cells
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230224072903.20945-1-zajec5@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230224072903.20945-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 10:18:54AM +0100, Alexandre Belloni wrote:
-> On 24/02/2023 09:21:07+0100, Johan Hovold wrote:
-
-> > Looks like these last two patches adding support for the nvmem offset
-> > has not been applied yet. Still hoping you can get them merged for 6.3
-> > even if this one does not apply cleanly unless you first merge your
-> > rtc-fixes branch.
+Il 24/02/23 08:29, Rafał Miłecki ha scritto:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> This is still my plan, I'm travelling right now but they will be sent for
-> 6.3
+> NVMEM subsystem looks for fixed NVMEM cells (specified in DT) by
+> default. This behaviour made sense in early days before adding support
+> for dynamic cells.
+> 
+> With every new supported NVMEM device with dynamic cells current
+> behaviour becomes non-optimal. It results in unneeded iterating over DT
+> nodes and may result in false discovery of cells (depending on used DT
+> properties).
+> 
+> This behaviour has actually caused a problem already with the MTD
+> subsystem. MTD subpartitions were incorrectly treated as NVMEM cells.
+> 
+> Also with upcoming support for NVMEM layouts no new binding or driver
+> should support fixed cells defined in device node.
+> 
+> Solve this by modifying drivers for bindings that support specifying
+> fixed NVMEM cells in DT. Make them explicitly tell NVMEM subsystem to
+> read cells from DT.
+> 
+> It wasn't clear (to me) if rtc and w1 code actually uses fixed cells. I
+> enabled them to don't risk any breakage.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> [for drivers/nvmem/meson-{efuse,mx-efuse}.c]
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Perfect, thanks!
+[for mtk-efuse.c, nvmem/core.c, nvmem-provider.h]
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Johan
+[MT8192, MT8195 Chromebooks]
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
