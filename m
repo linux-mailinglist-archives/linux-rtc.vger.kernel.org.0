@@ -2,158 +2,157 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F78A6A3A92
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Feb 2023 06:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F0F6A5FA0
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Feb 2023 20:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjB0Fjb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 Feb 2023 00:39:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S229537AbjB1T3g (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 Feb 2023 14:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0Fja (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Feb 2023 00:39:30 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD46A976F;
-        Sun, 26 Feb 2023 21:39:27 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A04741BF203;
-        Mon, 27 Feb 2023 05:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1677476366;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HSUtZZZIsMOTcVvHu0tixFiyHTHL04pUAee04ApJQyU=;
-        b=egUclZcQnQTw2I4NZ+GndWv94hAxJyCN5DHJ1mUawKqxqv8VA56PzKyWy6uj96Odo4q9X7
-        X5T1l2IaFCg4WW2FqUqqkGZkXUDFNxT4c7AVfukix3A7sf7bjp1kuPR52Xs/h3hz0Cqyzx
-        1wMipbSb0mzsWoNnJ/mggq2aOXMrMX73Tb7lgjSC4di0DbGdXiBGdmx16X+hRHXRvQ/369
-        LJHIbEH+sPSS1HwYINJRLgWfYsn07h7RLEGtiqm8JYP7XT8TjC0dBXQR6YKIjyQDyyNQbO
-        AHqtoh0hkXEPyp/KxnnagpO4CFNn9Zc8viF4tw/nRW6WwmLoBZFs0MbLhPyz8A==
-Date:   Mon, 27 Feb 2023 06:39:23 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        with ESMTP id S229951AbjB1T3f (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Feb 2023 14:29:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD81432E5B;
+        Tue, 28 Feb 2023 11:29:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73E2CB80EB9;
+        Tue, 28 Feb 2023 19:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31534C433D2;
+        Tue, 28 Feb 2023 19:29:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677612570;
+        bh=0crKvCVlXbQHhK0hVWeeHPbKSkNSrZfsAg93hhclvLM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UNZCZ9i3h0qhD6hHIVtloCYpkml4NRcDwkYhv9GrwZhRoMVsjYVzI0cArMQfbQZN+
+         LGFYbMx//Vw8HzeO6pCa2sBQ7dvrE4OZXbjWLikHI/na99+mwGxICloB0BrRpaPLc6
+         SJCN2i2Yp0CkGa+DfifrRT0TpGXqeYwUZdT/XSi5LiOFxipFLqnKoXQ3iBVI9tKSOP
+         +ZHA6zHA8GPGlTtHOeWsrSqGchf0eL6NoT0smo67O6Si4L/jUbyIPlzYvac4CJlal5
+         3wVvuVfPOYy5jorgt6+nRECC6NKpdkZY/cj/RWy5u9nMWojGXEf1kigzCt727/LZ07
+         DrYjbjQzW024w==
+Received: from [47.176.216.2] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pX5fD-00Dv1i-Eb;
+        Tue, 28 Feb 2023 19:29:27 +0000
+Date:   Tue, 28 Feb 2023 19:29:20 +0000
+Message-ID: <87r0u9h9m7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Donggeun Kim <dg77.kim@samsung.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Peter Rosin <peda@axentia.se>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
-        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH V2 2/7] rtc: Add support for the Loongson-2K/LS7A RTC
-Message-ID: <Y/xCC8cpGxG/8g97@mail.local>
-References: <cover.1673227292.git.zhoubinbin@loongson.cn>
- <8cd5e1b763951d4ce69188cdff95d8adaf12755f.1673227292.git.zhoubinbin@loongson.cn>
- <Y88ZaWnh9ERRocPv@mail.local>
- <CAMpQs4+pWpw9bmCvKor+V41aMcLc-90aYz0QH-WS2KqkkFqMFA@mail.gmail.com>
- <Y+wVkl7r6HbriqA7@mail.local>
- <CAMpQs4Kx3E+MdE0naf-TM2_JMjwWr2f4+b0vP+adZNFOF1fLhA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMpQs4Kx3E+MdE0naf-TM2_JMjwWr2f4+b0vP+adZNFOF1fLhA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 0/3] IRQ_DOMAIN: remove all "depends on", use only "select"
+In-Reply-To: <6bb7bca5-e663-60c4-d574-9a4856cdb802@infradead.org>
+References: <20230213041535.12083-1-rdunlap@infradead.org>
+        <b8fb48b9-349d-4723-9b35-6471cb65b6b5@app.fastmail.com>
+        <8e6977b8-d256-4e51-82b7-e36d6ca259dc@infradead.org>
+        <86y1p0xbqd.wl-maz@kernel.org>
+        <6bb7bca5-e663-60c4-d574-9a4856cdb802@infradead.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 47.176.216.2
+X-SA-Exim-Rcpt-To: rdunlap@infradead.org, arnd@arndb.de, linux-kernel@vger.kernel.org, myungjoo.ham@samsung.com, cw00.choi@samsung.com, dg77.kim@samsung.com, p.zabel@pengutronix.de, peda@axentia.se, gregkh@linuxfoundation.org, geert@linux-m68k.org, robh@kernel.org, eddie.huang@mediatek.com, sean.wang@mediatek.com, matthias.bgg@gmail.com, a.zummo@towertech.it, alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 27/02/2023 10:26:09+0800, Binbin Zhou wrote:
-> > > > > +static inline void ls2x_rtc_alarm_regs_to_time(struct ls2x_rtc_regs *regs,
-> > > > > +                                      struct rtc_time *tm)
-> > > > > +{
-> > > > > +     tm->tm_sec = FIELD_GET(TOY_MATCH_SEC, regs->reg0);
-> > > > > +     tm->tm_min = FIELD_GET(TOY_MATCH_MIN, regs->reg0);
-> > > > > +     tm->tm_hour = FIELD_GET(TOY_MATCH_HOUR, regs->reg0);
-> > > > > +     tm->tm_mday = FIELD_GET(TOY_MATCH_DAY, regs->reg0);
-> > > > > +     tm->tm_mon = FIELD_GET(TOY_MATCH_MON, regs->reg0) - 1;
-> > > > > +     /*
-> > > > > +      * The rtc SYS_TOYMATCH0/YEAR bit field is only 6 bits, so it means 63
-> > > > > +      * years at most. Therefore, The RTC alarm years can be set from 1900
-> > > > > +      * to 1963. This causes the initialization of alarm fail during call
-> > > > > +      * __rtc_read_alarm.
-> > > > > +      * We add 64 years offset to ls2x_rtc_read_alarm. After adding the
-> > > > > +      * offset, the RTC alarm clock can be set from 1964 to 2027.
-> > > > > +      */
-> > > > > +     tm->tm_year = FIELD_GET(TOY_MATCH_YEAR, regs->reg0) + 64;
-> > > >
-> > > > This is not symmetric with ls2x_rtc_time_to_alarm_regs, how can it work?
-> > >
-> > > This is to avoid an "invalid alarm value" at boot time, which of
-> > > course should not be a good solution.
-> > > When the alarm value is read at boot time, "year" is not yet set to
-> > > the proper value so the year is always set to 1900.
-> >
-> > Why isn't it set at boot time? Isn't the register persisting after a
-> > reboot?
-> > Setting a bogus alarm is not a solution.
-> >
+On Thu, 23 Feb 2023 18:37:01 +0000,
+Randy Dunlap <rdunlap@infradead.org> wrote:
 > 
-> Hi, Alexandre:
+> Hi Marc,
 > 
-> Sorry, I seem to have misled the issue.
-> This is a hardware bug, as we know from the datasheet, the year field
-> in the TOY_MATCH register has only 6 bits (bit[31:26]), so the maximum
-> value is 63. For example, 2023 can only be read here as 1959,
-> resulting in an invalid alarm.
-> The current workaround: after reading the year field in
-> ls2x_rtc_read_alarm(), manually add 64 or a multiple of 64 (equivalent
-> to completing the high bits), which also ensures that the reading and
-> writing is consistent.
-
-My first complain was that this is not symmetric with
-ls2x_rtc_time_to_alarm_regs. If you are adding 64 when reading the
-alarm, you need to remove 64 when setting the alarm.
-
-Now I get that FIELD_PREP will drop the overflowing bits.
-Instead of having support for the 1964 to 2027 range, you should
-probably aim for 2000 to 2064.
-
-Also, this makes me realize that you are not setting the year properly,
-the datasheet I have says that the supported year goes from 00 to 99.
-This is also what you set in .probe.
-Removing 100 from tm_year when setting and adding it back when reading
-would fix all of that.
-
-> > > The LS7A and Loongson-2K datasheets also do not mention any latching
-> > > happening. Reading TOY_READ1_REG first is probably just a matter of
-> > > habit.
-> > > I tried using regmap_bulk_xxx() and it also reads and writes time
-> > > properly. In the next version I will rewrite this part of the code.
-> > >
-> > > Example:
-> > >
-> > > #define LS2X_NUM_TIME_REGS      2
-> > >
-> > > u32 rtc_data[LS2X_NUM_TIME_REGS];
-> > > struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> > >
-> > > ret = regmap_bulk_read(priv->regmap, TOY_READ0_REG, rtc_data,
-> > > LS2X_NUM_TIME_REGS);
-> > >
-> >
-> > Doing a bulk read doesn't guarantee the atomicity of the operation. You
-> > really must check whether a register changed while reading the other
-> > one.
-> >
+> On 2/14/23 11:56, Marc Zyngier wrote:
+> > On Tue, 14 Feb 2023 18:30:54 +0000,
+> > Randy Dunlap <rdunlap@infradead.org> wrote:
+> >>
+> >>
+> >>
+> >> On 2/13/23 00:05, Arnd Bergmann wrote:
+> >>> On Mon, Feb 13, 2023, at 05:15, Randy Dunlap wrote:
+> >>>> IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
+> >>>> it directly thru "make *config", so drivers should select it instead
+> >>>> of depending on it if they need it.
+> >>>> Relying on it being set for a dependency is risky.
+> >>>>
+> >>>> Consistently using "select" or "depends on" can also help reduce
+> >>>> Kconfig circular dependency issues.
+> >>>>
+> >>>> IRQ_DOMAIN is selected 109 times and is depended on 3 times in
+> >>>> current linux-next. Eliminate the uses of "depends on" by
+> >>>> converting them to "select".
+> >>>>
+> >>>>  [PATCH 1/3] extcon: max8997: select IRQ_DOMAIN instead of depending on it
+> >>>>  [PATCH 2/3] of: OF_IRQ: select IRQ_DOMAIN instead of depending on it
+> >>>>  [PATCH 3/3] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
+> >>>
+> >>> From a Kconfig perspective, your reasoning makes a lot of sense.
+> >>>
+> >>> Looking at the bigger picture, I wonder if we should just remove the
+> >>> option and make it unconditional. It is enabled in ever architecture
+> >>> defconfig other than alpha and sparc, and it's selected by a lot of
+> >>> very common options such as I2C,  GENERIC_MSI_IRQ, GENERIC_IRQ_CHIP,
+> >>> and PCI_HOST_GENERIC. Enabling the option on Alpha grows the kernel
+> >>> image from 9010KB to 9023KB, or on m68k Coldfire from 3346KB to
+> >>> 3351KB.
+> >>
+> >> Marc, what do you think about this suggestion?
+> > 
+> > Seems sensible enough to me.
+> > 
+> > I'd also get rid of the IRQ_DOMAIN_HIERARCHY option, which is used by
+> > a ton of things. Architectures that are not using it are either dead,
+> > or at least terminally comatose.
+> > 
+> > I'm half-tempted to put the following patch into -next. Maybe after
+> > -rc1 though. And then the option can go as well.
+> > 
+> > 	M.
 > 
-> How about protecting with mutex?
+> What is this patch based on?  It doesn't apply cleanly to current linux-next.
+
+Not very surprising, I usually base my stuff on a stable rc tag. But
+in this instance, it may have been based on whatever was in my sandbox
+at that point in time, and subsequently discarded.
+
+> I made a similar patch (to linux-next) that drops the IRQ_DOMAIN_HIERARCHY
+> option and converts its dependent code to always on.
+> It has been built (multiple randconfigs) on all ARCHes (except hexagon),
+> both 32-bit and 64-bit where applicable (not that it should matter here).
 > 
+> But yes, let's plan to get one of these patches in soon (after -rc1).
 
-No, this would fix multiple processes accessing a variable, here what
-you have are two unsynchronized hardware registers.
+Please send it based on -rc1 once it is out, and I'll be happy to
+stick that in -next for further simmering.
 
+Thanks,
+
+	M.
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Without deviation from the norm, progress is not possible.
