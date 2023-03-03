@@ -2,184 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3376A9A25
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Mar 2023 16:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE66C6A9D7D
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Mar 2023 18:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjCCPCi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 3 Mar 2023 10:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S230521AbjCCRWu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 3 Mar 2023 12:22:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjCCPCh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 Mar 2023 10:02:37 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB98422DE5
-        for <linux-rtc@vger.kernel.org>; Fri,  3 Mar 2023 07:02:34 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so4126862wmb.5
-        for <linux-rtc@vger.kernel.org>; Fri, 03 Mar 2023 07:02:34 -0800 (PST)
+        with ESMTP id S231596AbjCCRWj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 Mar 2023 12:22:39 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8948E1A
+        for <linux-rtc@vger.kernel.org>; Fri,  3 Mar 2023 09:22:06 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id a25so13420975edb.0
+        for <linux-rtc@vger.kernel.org>; Fri, 03 Mar 2023 09:22:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UnIOnNRt4JVqThxM0+CX1uQMFZb/6/ZcZPc0zJV+qsU=;
-        b=1NTWDe3nj/7cYwGHxGT/1Dv3jcXKmlBfvIB7ZFF6Eukp99/Q5f0jc8s+NWoEr02K9z
-         73ZyzmWFH+oTrMBPqkcFdHeo4ZIzZPq59uwtXr5K3wHjOeRMEmB++/fj/wKllZGu6mWj
-         tcFJUkFUrOOzZ+2NOLRqjDcrUaYVSCn5xLMSTmA5SxeU5GPflswIBAamOXkb4geXBQuz
-         C7a+CoxZ9NrJZI9Ty+ZUQtfLgKzzLppVi7jK8IUmrDqOTRitSvRQpPkmAfIJsUoz1za8
-         c2n9+U6I3II8LgJpwJBMMXqnlXbMDih7kpp1egeT9hwcdRJFX7++gZH45w5o43ywgNAb
-         3AsA==
+        d=linux-foundation.org; s=google; t=1677864125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DP7vTNKcPM1bVXDUg5anR387ZbgL2nhOAlAGlClVsjk=;
+        b=KmF3NDGZSwRMe7+f5y/y0k5l0SjiOKYiBKLgWjsV8/77Uh9jMFfjhBTnukLpembo8m
+         CNx7ncqmHewiP6g3BUFcFn6Rc/LW60ePAeRU0Lb09xaBOVldkAN1Wxr24nlfJiUrE2J7
+         zlF/UQ8axdqiaHUMzaxmiCFnj8HH1tyKeJ86U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UnIOnNRt4JVqThxM0+CX1uQMFZb/6/ZcZPc0zJV+qsU=;
-        b=ax10TWJ1FQS5yS+eEbMYvALhsl/npeFqJ8PQ/fwVvzPR059tDw4UBtnrTjoQX/AJtP
-         MaQQjbrFCVs5v3QdS7rtiUNd5DXqorU+7a8nhrbi2xDXajpgTl4dW2mA/KfAjzigLTi6
-         m+b7OLMsxHYRFSUFTG7IzIfDZeuEJvWtq9gXrQtuQtob2U3y3HZdv86c3Q48jBRolYMI
-         VBMQUeZTm1mci8WJu467IeHNAi5+cCWC5G/5rn6qvaH8XPkkZoErRaxq6VCxApqsDFN8
-         W3OYSvRuSdY8NZa1uWujhOhP4oPB+1x8j01TNQg3akiieLzranGPewwM3EoYRvnKHzSd
-         +gYw==
-X-Gm-Message-State: AO0yUKXXlteKQCN35R0gd0VnsvnaPp/1wMaMlDeGuWFKDKt2CKlS1PWf
-        4iyvD/HP8/jZYej5+By+uhEppw==
-X-Google-Smtp-Source: AK7set/Hs0IS13V87cGQUUtuXtDk4qY0YBJ62x3fonEQK7SCQA+YAxhfYlZ/z74YwVIR7QT2byQv1w==
-X-Received: by 2002:a05:600c:444c:b0:3dc:16d2:ae5e with SMTP id v12-20020a05600c444c00b003dc16d2ae5emr1980396wmn.32.1677855753191;
-        Fri, 03 Mar 2023 07:02:33 -0800 (PST)
-Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id hu21-20020a05600ca29500b003eaee9e0d22sm2617183wmb.33.2023.03.03.07.02.32
+        d=1e100.net; s=20210112; t=1677864125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DP7vTNKcPM1bVXDUg5anR387ZbgL2nhOAlAGlClVsjk=;
+        b=PY0d+Y6Pw85hzWspGVcU9yISXp+r7/xGiHNrqJDR0mx9vUwJcuDrEgSqJcTt2JGAka
+         COgxuSVBzuwDhjgGT7Wiz+8p06AOlCrM9DpD8ndnUg1yRHNCQxEtNAQ/cOHAB6cLaorL
+         2FA13jhrw3Y2rKkyc9t5Uwx6KNSWYk+8eQWSjKht3Coy5VqRqDH3/HwnF2n7MBNahs/+
+         l18x1V+FTsKY5jQ2SGaRxe0DvkABxsvgu50qr0L7Ih7Ts1b96T1RA3rL+m2YswND3YmQ
+         5jdWq8WudiLnn0StYiTCQi9LUv1toMNjlElPsdnyNJI8kMTSjghatkRLjvT63+e4dH7E
+         OQZw==
+X-Gm-Message-State: AO0yUKUWeFUhB5pCrIzZb6Xh1432A3HcKzM3j6OrW2/odat51/1elSm3
+        uJkNIjFcuSr9DDBfc3lUksFdoyRiJab1LxD1T2vmQw==
+X-Google-Smtp-Source: AK7set8mYuXguGKtPGLeI+SbBfPvPppTwNDO5w/HmA/NxzcjaE0L8vADOmGNb6Yix7tWJ2HuOW6jtg==
+X-Received: by 2002:a17:907:1045:b0:8a6:93a4:c892 with SMTP id oy5-20020a170907104500b008a693a4c892mr2211021ejb.44.1677864125049;
+        Fri, 03 Mar 2023 09:22:05 -0800 (PST)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id 24-20020a170906301800b008f883765c9asm1147143ejz.136.2023.03.03.09.22.04
+        for <linux-rtc@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 07:02:32 -0800 (PST)
-Message-ID: <377c6c53-e2f1-cb0d-c4d5-611efccf9717@baylibre.com>
-Date:   Fri, 3 Mar 2023 16:02:32 +0100
+        Fri, 03 Mar 2023 09:22:04 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id f13so13173188edz.6
+        for <linux-rtc@vger.kernel.org>; Fri, 03 Mar 2023 09:22:04 -0800 (PST)
+X-Received: by 2002:a50:9fa8:0:b0:4ae:e5f1:7c50 with SMTP id
+ c37-20020a509fa8000000b004aee5f17c50mr1557108edf.5.1677864123991; Fri, 03 Mar
+ 2023 09:22:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
- for TI TPS6594 regulators
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-4-eblanc@baylibre.com>
- <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <2023030300024180930d7a@mail.local>
+In-Reply-To: <2023030300024180930d7a@mail.local>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 3 Mar 2023 09:21:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjCw+NLkLcjbh9e=Pk1mV1A65m5nTTj-g7FB=Hasa3HLw@mail.gmail.com>
+Message-ID: <CAHk-=wjCw+NLkLcjbh9e=Pk1mV1A65m5nTTj-g7FB=Hasa3HLw@mail.gmail.com>
+Subject: Re: [GIT PULL] RTC for 6.3
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Thu, Mar 2, 2023 at 4:02=E2=80=AFPM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> I had to merge rtc-6.2-fixes that you already have to apply the last two
+> patches.
 
+Please people... Explain hat in the *merge* message too.
 
-On 24/02/2023 14:42, Mark Brown wrote:
-> On Fri, Feb 24, 2023 at 02:31:29PM +0100, Esteban Blanc wrote:
->> From: Jerome Neanne <jneanne@baylibre.com>
->>
->> This patch adds support for TPS6594 regulators (bucks and LDOs).
->> The output voltages are configurable and are meant to supply power
->> to the main processor and other components.
->> Bucks can be used in single or multiphase mode, depending on PMIC
->> part number.
->>
->> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
->> ---
-> 
-> You've not provided a Signed-off-by for this so I can't do anything with
-> it, please see Documentation/process/submitting-patches.rst for details
-> on what this is and why it's important.
-> 
-I did this patch but Esteban sent the whole patch-list. The sign-off has 
-not been updated accordingly. Sorry for disturbance. We'll fix that.
->> @@ -0,0 +1,559 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Regulator driver for tps6594 PMIC
->> + *
->> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
-> 
-> Please make the entire comment block a C++ one so things look more
-> intentional.
-> 
->> +static unsigned int tps6594_get_mode(struct regulator_dev *dev)
->> +{
->> +	return REGULATOR_MODE_NORMAL;
->> +}
-> 
-> If configuring modes isn't supported just omit all mode operations.
-> 
->> +	}
->> +
->> +	regulator_notifier_call_chain(irq_data->rdev,
->> +				      irq_data->type->event, NULL);
->> +
->> +	dev_err(irq_data->dev, "Error IRQ trap %s for %s\n",
->> +		irq_data->type->event_name, irq_data->type->regulator_name);
-> 
-> I suspect it might avoid future confusion to log the error before
-> notifying so that any consequences of the error more clearly happen in
-> response to the error.
-> 
-I'll rework all that section for v2 following your recommendations
->> +static int tps6594_get_rdev_by_name(const char *regulator_name,
->> +				    struct regulator_dev *rdevbucktbl[BUCK_NB],
->> +				    struct regulator_dev *rdevldotbl[LDO_NB],
->> +				    struct regulator_dev *dev)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i <= BUCK_NB; i++) {
->> +		if (strcmp(regulator_name, buck_regs[i].name) == 0) {
->> +			dev = rdevbucktbl[i];
->> +			return 0;
->> +		}
->> +	}
->> +
->> +	for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
->> +		if (strcmp(regulator_name, ldo_regs[i].name) == 0) {
->> +			dev = rdevldotbl[i];
->> +			return 0;
->> +		}
->> +	}
->> +	return -EINVAL;
->> +}
-> 
->> +	for (i = 0; i < ARRAY_SIZE(tps6594_regulator_irq_types); ++i) {
->> +		irq_type = &tps6594_regulator_irq_types[i];
->> +
->> +		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
->> +		if (irq < 0)
->> +			return -EINVAL;
->> +
->> +		irq_data[i].dev = tps->dev;
->> +		irq_data[i].type = irq_type;
->> +
->> +		tps6594_get_rdev_by_name(irq_type->regulator_name, rdevbucktbl,
->> +					 rdevldotbl, rdev);
-> 
-> This would be simpler and you wouldn't need this lookup function if the
-> regulator descriptions included their IRQ names, then you could just
-> request the interrupts while registering the regulators.
-> 
->> +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
->> +						  tps6594_regulator_irq_handler,
->> +						  IRQF_ONESHOT,
->> +						  irq_type->irq_name,
->> +						  &irq_data[i]);
->> +		if (error) {
->> +			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
->> +				irq_type->irq_name, irq, error);
->> +			return error;
->> +		}
-> 
-> This leaks all previously requested interrupts.
-Thanks for your time and precious feedback.
+Now we have yet another merge with absolutely zero explanation for it.
+
+Repeat after me: merges are commits too, and need an explanation.
+Sometimes they need *more* explanation than regular commits, because
+they are subtler than regular commits.
+
+If you cannot be bothered to explain  your merge, then DO NOT DO IT.
+
+             Linus "repeating myself" Torvalds
