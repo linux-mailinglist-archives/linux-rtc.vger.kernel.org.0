@@ -2,65 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372036AC2C7
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Mar 2023 15:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35316ACE5A
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Mar 2023 20:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjCFOQF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 6 Mar 2023 09:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S229565AbjCFTnt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 6 Mar 2023 14:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjCFOOl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Mar 2023 09:14:41 -0500
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BBC1FCC
-        for <linux-rtc@vger.kernel.org>; Mon,  6 Mar 2023 06:12:52 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-536c2a1cc07so185860077b3.5
-        for <linux-rtc@vger.kernel.org>; Mon, 06 Mar 2023 06:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678111838;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2fFPV3S+fNPRg5F4+BxgnVsec4VIMQRpi6fgWcdHiVA=;
-        b=FIGf5h3w/Z08HcXuh3X1ZpHZHrFPPW41yGGIFmWyf+Aohi+qnbhHYbiBwbqPGyQBn9
-         NXXqtx1HjjBkgxE5rJKm5VPbdFqmjg0Go3gPxH1GrQgcYKwWxmu3ELxR1K1jmkI7hmiM
-         qhgnQ32O2QZyqap+kNQg+E3+2PdmASMpKke7V7bFtyJ78t7xmrtHX0+UHJFKNTHk6olf
-         sU8hO5smfzr/u+n25yU+8CUEX85DC6SHhqCy2+ijdGO5Gk5f/ksH6Z4g26UrvbSDi38P
-         lZ6HGPMchyt1o6b7gijDWXGKu93xj4/hFm65Ta8rLR1ybK3Xu9mlsHMU6V7E3YoDdXV6
-         3+iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678111838;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2fFPV3S+fNPRg5F4+BxgnVsec4VIMQRpi6fgWcdHiVA=;
-        b=arZMvVgI/xRkwFVATj79203UuIklfTJ3AjI69F3OeB/uXRy23ztzMo8dJlKK8pAaKz
-         SezkpwkS5Sj5GCk1OebBjGnpbhxOg7gj4sv/vnsjkfwlvmUkrjLc5yRR/88GwO2J7mbN
-         BCJI1QvR12Oc21eziJ/LNqJazFOQN5/1fROp1IzmwWNUo1Zg/XBdAKb81MK3bVmfV42e
-         5OLQQUoccf4t72uyU7otvo9bLru18O6hCijTlx6vlSfwG61ThFHxbf4VuWDcbh68p/y8
-         CVUswPMhj6uj0phaAg1uAsGZ3B7D2p9R3R4qpjcdjZ58gaVOSfbHYH693eMlPjAVg2PA
-         1OBw==
-X-Gm-Message-State: AO0yUKX1o4CsrTE+hKO7c2tE4SvKqUhSylfiphKTsGWYPQW93Ze3OJ2D
-        zLSfyEyvCNQUEpnhht1vk/fWZzogc4ALrArjGa2m2w==
-X-Google-Smtp-Source: AK7set+L8XveTCLOf7uzdZIqX6Ru0O9dDIwJQAPpsGqfycSP5D3nLqQMy0RuH1oMg349JgrwV1dtktPyLhpIbNIwnno=
-X-Received: by 2002:a81:4317:0:b0:52e:dddf:82b9 with SMTP id
- q23-20020a814317000000b0052edddf82b9mr6925941ywa.10.1678111837757; Mon, 06
- Mar 2023 06:10:37 -0800 (PST)
+        with ESMTP id S230244AbjCFTng (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Mar 2023 14:43:36 -0500
+Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952BB6BDD7
+        for <linux-rtc@vger.kernel.org>; Mon,  6 Mar 2023 11:43:25 -0800 (PST)
+Message-ID: <9e2df07f-92d3-966a-5092-22572e102253@gentoo.org>
+Date:   Mon, 6 Mar 2023 14:43:20 -0500
 MIME-Version: 1.0
-References: <20230224133129.887203-1-eblanc@baylibre.com> <20230224133129.887203-3-eblanc@baylibre.com>
-In-Reply-To: <20230224133129.887203-3-eblanc@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 15:10:26 +0100
-Message-ID: <CACRpkdYck+=3sUKQbg2j=KMfv_FEiofFxHpDsXgFo=p2uMYfEQ@mail.gmail.com>
-Subject: Re: [PATCH INTERNAL v1 2/3] pinctrl: tps6594: add for TPS6594 PMIC
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.0
+Subject: Re: [PATCH 11/41] rtc: ds1685: Convert to platform remove callback
+ returning void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, kernel@pengutronix.de
+References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
+ <20230304133028.2135435-12-u.kleine-koenig@pengutronix.de>
+From:   Joshua Kinard <kumba@gentoo.org>
+In-Reply-To: <20230304133028.2135435-12-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,65 +41,66 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Esteban,
+On 3/4/2023 08:29, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>   drivers/rtc/rtc-ds1685.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
+> index 5db9c737c022..0f707be0eb87 100644
+> --- a/drivers/rtc/rtc-ds1685.c
+> +++ b/drivers/rtc/rtc-ds1685.c
+> @@ -1322,7 +1322,7 @@ ds1685_rtc_probe(struct platform_device *pdev)
+>    * ds1685_rtc_remove - removes rtc driver.
+>    * @pdev: pointer to platform_device structure.
+>    */
+> -static int
+> +static void
+>   ds1685_rtc_remove(struct platform_device *pdev)
+>   {
+>   	struct ds1685_priv *rtc = platform_get_drvdata(pdev);
+> @@ -1344,8 +1344,6 @@ ds1685_rtc_remove(struct platform_device *pdev)
+>   	rtc->write(rtc, RTC_EXT_CTRL_4A,
+>   		   (rtc->read(rtc, RTC_EXT_CTRL_4A) &
+>   		    ~(RTC_CTRL_4A_RWK_MASK)));
+> -
+> -	return 0;
+>   }
+>   
+>   /*
+> @@ -1356,7 +1354,7 @@ static struct platform_driver ds1685_rtc_driver = {
+>   		.name	= "rtc-ds1685",
+>   	},
+>   	.probe		= ds1685_rtc_probe,
+> -	.remove		= ds1685_rtc_remove,
+> +	.remove_new	= ds1685_rtc_remove,
+>   };
+>   module_platform_driver(ds1685_rtc_driver);
+>   /* ----------------------------------------------------------------------- */
 
-thanks for your patch!
+Is there a future planned patch that would remove the .remove member and then rename .remove_new --> .remove?
 
-On Fri, Feb 24, 2023 at 2:31 PM Esteban Blanc <eblanc@baylibre.com> wrote:
+-- 
+Joshua Kinard
+Gentoo/MIPS
+kumba@gentoo.org
+rsa6144/5C63F4E3F5C6C943 2015-04-27
+177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
 
-> TI TPS6594 PMIC has 11 GPIOs which can be used for different
-> functions
->
-> This add a pinctrl and pinmux drivers in order to use those functions
->
-> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
+"The past tempts us, the present confuses us, the future frightens us.  And our lives slip away, moment by 
+moment, lost in that vast, terrible in-between."
 
-> +config PINCTRL_TPS6594
-> +       tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
-> +       depends on MFD_TPS6594
+         --Emperor Turhan, Centauri Republic
 
-I would add:
-
-default MFD_TPS6594
-
-so you always get this as module or built in along with the MFD.
-Otherwise Kconfig gets complicated and tedious for users.
-
-> +       select PINMUX
-> +       select GPIOLIB
-> +       help
-> +         This driver supports the GPIO for the TPS6594 PMICs.
-> +         chip family.
-
-(...)
-> +#define DEBUG
-
-Don't put this in production code.
-
-Look in drivers/pinctrl/Kconfig.
-
-config DEBUG_PINCTRL
-        bool "Debug PINCTRL calls"
-        depends on DEBUG_KERNEL
-        help
-          Say Y here to add some extra checks and diagnostics to PINCTRL calls.
-
-Look in drivers/pinctrl/Makefile:
-
-subdir-ccflags-$(CONFIG_DEBUG_PINCTRL)  += -DDEBUG
-
-Nifty eh? :D
-
-> +static const struct tps6594_pinctrl_function pinctrl_functions[] = {
-(...)
-> +       { "scl_i2c2-cs_spi", TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION,
-> +         (const char *[]){ "GPIO0", "GPIO1" }, 2 },
-
-Ow this is starting to look hairy.
-
-Is there some better way to get here?
-
-Other than this the code looks very nice.
-
-Yours,
-Linus Walleij
