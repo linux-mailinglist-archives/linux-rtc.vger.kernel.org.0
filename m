@@ -2,87 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084866ABA1C
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Mar 2023 10:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600AB6ABA07
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Mar 2023 10:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjCFJkl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 6 Mar 2023 04:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S229567AbjCFJha (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 6 Mar 2023 04:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjCFJkk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Mar 2023 04:40:40 -0500
-X-Greylist: delayed 1184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 01:40:38 PST
-Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E54233D3
-        for <linux-rtc@vger.kernel.org>; Mon,  6 Mar 2023 01:40:38 -0800 (PST)
-Received: by mail.ettrick.pl (Postfix, from userid 1002)
-        id 45034A33A1; Mon,  6 Mar 2023 09:01:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
-        t=1678093342; bh=KHux3km3Civcx5ChslOYQZwQRBjoJa4kWJfGcMIuN6w=;
-        h=Date:From:To:Subject:From;
-        b=XIZCcUpW65GeE9ufS7quH/JWsR1nR05fkyI1t9gX13BmlDWDE64pED5ou3b/2x2qF
-         OfcD0W6JPlzglvdV6nOnX8r+/SRZWob6YSQJlzAoHC5awYJV7NmSAlLrNqNlTbWK34
-         XsTW2AW+BvhN7pRcsoVd5kewyAeMKrSEmWx3GxHX3cbDKoSee30gG3RnDsRMvMLJQh
-         3cScfh0t168GIaLX7p/jdQP3bGlkHsSD127d/GJLVrbqJyKThzycJXNBa22JXInoO4
-         hvXv79mFVLlPkd1Gs/39rhztZ60Qto8rKqMnunZyLAmNQe9vMhni66NGhjCGJPoFsJ
-         65YVeLLBNso6A==
-Received: by mail.ettrick.pl for <linux-rtc@vger.kernel.org>; Mon,  6 Mar 2023 09:00:53 GMT
-Message-ID: <20230306074500-0.1.97.36ze4.0.ct5wzcgwe9@ettrick.pl>
-Date:   Mon,  6 Mar 2023 09:00:53 GMT
-From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
-To:     <linux-rtc@vger.kernel.org>
-Subject: Fotowoltaika - nowe warunki
-X-Mailer: mail.ettrick.pl
+        with ESMTP id S229486AbjCFJh3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Mar 2023 04:37:29 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85073ABF
+        for <linux-rtc@vger.kernel.org>; Mon,  6 Mar 2023 01:37:28 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3268e3Yi013010;
+        Mon, 6 Mar 2023 03:37:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=PODMain02222019;
+ bh=yx89XbYbo2ayyKVzTM1XTk8n6bJRcj3bIZzeHiYfN7E=;
+ b=TRCi/TrgZgiswDoD5nf2QEv4HnZX6RLwmi0YPb0x7UXUpqfqw8rOk8Hq7DbVC4fjoe5+
+ tgBZ7DNXhbShEgzsvKIgPQuUnwUBDpbR1BojuPeX9CwYcWSAwLOTL1H5p8VBHJzK3Xv6
+ 0ph5hE5Hk9GBF5jsU2o1KYTg6+a78Ln7O+r62unHnr0jITgxiNT7AMsFQALbtNtoInJF
+ jQVx60WVhIbv/4lENftqeAhF9Brq8HP5DgURT8QCh1pvro+goC68M1rI/MnHWcnDKVaV
+ /7R4X8dbMAeYlMbl8JnFkkqP74D5yfkZFdLAwXnk4oQaSx56e01oPUsXHClN/qM5KfbL 7A== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3p44972bbh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 03:37:13 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 6 Mar
+ 2023 03:37:11 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Mon, 6 Mar 2023 03:37:11 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CBF69458;
+        Mon,  6 Mar 2023 09:37:11 +0000 (UTC)
+Date:   Mon, 6 Mar 2023 09:37:11 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <patches@opensource.cirrus.com>, <linux-rtc@vger.kernel.org>,
+        <kernel@pengutronix.de>
+Subject: Re: [PATCH 39/41] rtc: wm8350: Convert to platform remove callback
+ returning void
+Message-ID: <20230306093711.GR68926@ediswmail.ad.cirrus.com>
+References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
+ <20230304133028.2135435-40-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,URIBL_ABUSE_SURBL,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.2 URIBL_ABUSE_SURBL Contains an URL listed in the ABUSE SURBL
-        *      blocklist
-        *      [URIs: ettrick.pl]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: ettrick.pl]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [141.94.21.111 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: ettrick.pl]
-        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
-        *      [score: 0.0141]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-X-Spam-Level: ******
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230304133028.2135435-40-u.kleine-koenig@pengutronix.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: yZhSlUVV6u7CMfAKk079X40MXTxCAkSN
+X-Proofpoint-ORIG-GUID: yZhSlUVV6u7CMfAKk079X40MXTxCAkSN
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Sat, Mar 04, 2023 at 02:30:26PM +0100, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
 
-chcia=C5=82bym poinformowa=C4=87, i=C5=BC mog=C4=85 Pa=C5=84stwo uzyska=C4=
-=87 dofinansowanie na systemy fotowoltaiczne w ramach nowej edycji progra=
-mu M=C3=B3j Pr=C4=85d.
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Program zapewnia 6000 z=C5=82 dofinansowania na instalacj=C4=99 paneli i =
-16 000 z=C5=82 na magazyn energii, ni=C5=BCsze cen pr=C4=85du i mo=C5=BCl=
-iwo=C5=9B=C4=87 odliczenia koszt=C3=B3w zwi=C4=85zanych z instalacj=C4=85=
- fotowoltaiki w ramach rozliczenia PIT (tzw. ulga termomodernizacyjna).
-
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-
-Pozdrawiam,
-Norbert Karecki
+Thanks,
+Charles
