@@ -2,91 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600AB6ABA07
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Mar 2023 10:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC396ABC5E
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Mar 2023 11:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjCFJha (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 6 Mar 2023 04:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S230347AbjCFK04 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 6 Mar 2023 05:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFJh3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Mar 2023 04:37:29 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85073ABF
-        for <linux-rtc@vger.kernel.org>; Mon,  6 Mar 2023 01:37:28 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3268e3Yi013010;
-        Mon, 6 Mar 2023 03:37:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=PODMain02222019;
- bh=yx89XbYbo2ayyKVzTM1XTk8n6bJRcj3bIZzeHiYfN7E=;
- b=TRCi/TrgZgiswDoD5nf2QEv4HnZX6RLwmi0YPb0x7UXUpqfqw8rOk8Hq7DbVC4fjoe5+
- tgBZ7DNXhbShEgzsvKIgPQuUnwUBDpbR1BojuPeX9CwYcWSAwLOTL1H5p8VBHJzK3Xv6
- 0ph5hE5Hk9GBF5jsU2o1KYTg6+a78Ln7O+r62unHnr0jITgxiNT7AMsFQALbtNtoInJF
- jQVx60WVhIbv/4lENftqeAhF9Brq8HP5DgURT8QCh1pvro+goC68M1rI/MnHWcnDKVaV
- /7R4X8dbMAeYlMbl8JnFkkqP74D5yfkZFdLAwXnk4oQaSx56e01oPUsXHClN/qM5KfbL 7A== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3p44972bbh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 03:37:13 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 6 Mar
- 2023 03:37:11 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 6 Mar 2023 03:37:11 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CBF69458;
-        Mon,  6 Mar 2023 09:37:11 +0000 (UTC)
-Date:   Mon, 6 Mar 2023 09:37:11 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        <patches@opensource.cirrus.com>, <linux-rtc@vger.kernel.org>,
-        <kernel@pengutronix.de>
-Subject: Re: [PATCH 39/41] rtc: wm8350: Convert to platform remove callback
- returning void
-Message-ID: <20230306093711.GR68926@ediswmail.ad.cirrus.com>
-References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
- <20230304133028.2135435-40-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230440AbjCFK0b (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 6 Mar 2023 05:26:31 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716CE26858
+        for <linux-rtc@vger.kernel.org>; Mon,  6 Mar 2023 02:26:02 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1763e201bb4so10854060fac.1
+        for <linux-rtc@vger.kernel.org>; Mon, 06 Mar 2023 02:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678098351;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=EDbhPO1WKzSJy97Cp1KR4Ue1wIcLFSscoH9L1E67CyPoJvstONJwP7RxKCqsDiuar/
+         4XZc6UhnyOFrEHlIQ3KmGU6oX8xWOyZpiVA4bD6F27cjopM5KQeiwoXnQq1r2hu/0hkW
+         LgiQ9FGonNq8AsMsEKBqZEvtwgOfW2lv3iUKapY2ocqE+LRWfsVifUNA3eNbIcULbvPT
+         nBBU0ns0xWwmvS7ETCAh5Z5lhdCiLVSRis+m63aq8CObwyUrMLAjGQpDeSf4OVAOQav5
+         5TuEH4NOUnTGCqcHGRIE0/tBavRRplzW4HaWY1DRs+pas+nyfL/37adPjYmqfexbl/Di
+         PS3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678098351;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=veMPTGOfaJkpL7NyQI6Nbclgi0QlL4HmEq5TlcIKkqijVPkNJUBLvLVLuchayS7wkA
+         KiDzKPu4k0wX+bQT4XtjJf44rr1WjYYfUt8zgTz5VbCPKUPf44HZDA+wK5kRBTArw/QV
+         7UAz+IKIxn56UWkbn/ETkHSwbp4yatLe54Y3GVNNc1N1155K1KeqqAdzBGuSPCPR/RbF
+         VK3QywlSHgJYS1etzCJ4SwYfN6BiTq87ZcU8A2Eieovch3NtSHlR1yCzeLY+8hxg+D9E
+         2Vgr0Uh57AYcop4yDwB5iSozZx4fUcQ4GwqxES49Bhyzdpru7HU4qBX26b65s16xufCX
+         QYlA==
+X-Gm-Message-State: AO0yUKXRUbbIeH5uGK7A8YgdrvyZEJ3H2ctiGus4Gn1j8BPfN3pk+9RF
+        68DtcBO3lZ8yKCAaqWV/Pv6SY+l2JTEdSQ7otBREqoh4pqw=
+X-Google-Smtp-Source: AK7set9YqazPiOkBuGm+YrFZOLe51O90+qKBrIr6WBjXtnVrmZ9RIOYyWRLBWcHI+/rsVoNhMQhwnCpcR6G8n2Z6mzE=
+X-Received: by 2002:a05:6102:e44:b0:402:999f:44d3 with SMTP id
+ p4-20020a0561020e4400b00402999f44d3mr6975472vst.1.1678098330725; Mon, 06 Mar
+ 2023 02:25:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230304133028.2135435-40-u.kleine-koenig@pengutronix.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: yZhSlUVV6u7CMfAKk079X40MXTxCAkSN
-X-Proofpoint-ORIG-GUID: yZhSlUVV6u7CMfAKk079X40MXTxCAkSN
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:ce6f:0:b0:3ae:930b:3e70 with HTTP; Mon, 6 Mar 2023
+ 02:25:30 -0800 (PST)
+Reply-To: madis.scarl@terlera.it
+From:   "Ms Eve from U.N" <denisagotou@gmail.com>
+Date:   Mon, 6 Mar 2023 11:25:30 +0100
+Message-ID: <CAD6bNBi6bPCYboaF4-xBgmeUTFn6JMXqU6TNepQig=NRMqhdUg@mail.gmail.com>
+Subject: Re: Claim of Fund:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, Mar 04, 2023 at 02:30:26PM +0100, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
+Hello Good Morning,
+This is to bring to your notice that all our efforts to contact you
+through this your email ID failed Please Kindly contact Barrister.
+Steven Mike { mbarrsteven@gmail.com } on his private email for the
+claim of your compensation entitlement
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-
-Thanks,
-Charles
+Note: You have to pay for the delivery fee.
+Yours Sincerely
+Mrs EVE LEWIS
