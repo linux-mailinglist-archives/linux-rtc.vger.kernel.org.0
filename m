@@ -2,290 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B126ADCE9
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Mar 2023 12:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EC46AE0A6
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 Mar 2023 14:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjCGLLc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Mar 2023 06:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
+        id S229720AbjCGNfg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 7 Mar 2023 08:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjCGLKs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Mar 2023 06:10:48 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847296A42;
-        Tue,  7 Mar 2023 03:08:25 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A232A40003;
-        Tue,  7 Mar 2023 11:08:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678187304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m/ZT+fHV0i3BWjuL+daVd6NNe8UoW0Hdg7fXQIX6rHM=;
-        b=eLWjn4Ou9/2l1vBB1dkpLuiGW+fp9q5WOKvqARF+4/kiKVVJfx0MIKkNdfFWN3R9tHKDv5
-        3bGecloBMLqKRWq3QNEjcDagN+MJFdhF0iWwxL6lzNvURIhjT4+MzS7N+5IAKMSAsegxLX
-        181Fho/Pbd1q4OwxUnQk4vkRlCt8migujJKksvyBAmaQk+v9+ZH344VthGvtCFi0slOVm2
-        Tj8OpGsgSt95IoWK8babFVGqUQJj6s7hBgDfAh1gpuVXbrZSYkXhNGhdjIalbTzQJ3tqwu
-        1MqpxzNckAJidzYzqbKDGIVeFzjX05K3ox3vC8oHuEpvwUiDSz/YYLThtuT5VQ==
-Date:   Tue, 7 Mar 2023 12:08:23 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com
-Subject: Re: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594
- PMIC RTC
-Message-ID: <ZAcbJxrNtWTTTSjR@mail.local>
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-2-eblanc@baylibre.com>
+        with ESMTP id S229593AbjCGNff (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Mar 2023 08:35:35 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6372B5BC90
+        for <linux-rtc@vger.kernel.org>; Tue,  7 Mar 2023 05:35:34 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id v101so11392581ybi.2
+        for <linux-rtc@vger.kernel.org>; Tue, 07 Mar 2023 05:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678196133;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SuoCQcOuTdpcxwFMyiCQRw8MwyW1RKCTWVLX8zDnBP8=;
+        b=x0CH/mqY8dQEWykIgObYl4BegwE2o74N8Nk+1P7/eQhq2D1ePD9gL9y5rIe5n0u4XH
+         z9Mpv7s1zCpvREvjx/fI3vDaln2qv0mk3Ogc8qZGT2xIbGM5nkVyz3giM20+ZKmCqo+f
+         al4w9EOA9xamoMDZoI6ZEEDCqdkXfcLrl3N632W8UH+sXDUjAsV5qZ2pS+51acvTrbUA
+         Whg4irETQi+VLcu1gQWWMm5fhI23S4pxN0xw+bKOUNgNnlGz2q6UojaiS6OTaJt6HAP/
+         /FIzFg+EgixuvYuTZwCoZDUuB2iskYQ4jrktefiS4UF/lWYc36YfpwZA7pW/DXD6Eln+
+         ol5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678196133;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SuoCQcOuTdpcxwFMyiCQRw8MwyW1RKCTWVLX8zDnBP8=;
+        b=flYtnSnslz9/3ZOGXI3acw6dA6m1uPY8U4Ny0csZZgGcLFcJ+D/PY+WztH7wr5n2Ht
+         P6QdRS8SaurMFTbZvzVjsh7A/xd2KgzDw7Iy2Z1l4PtqMNab4unOzjym6R3Y4DoM7QT/
+         iLZ31eMBVUC2QqoUEMc+Pm1WCcFg3zBN8lfyKxoY/cZzHxJJVAJyE/+tpqU6YHv/uZnW
+         ZsCXFRmGPDSVa92k8lAwQopHipPW1DXkuNhPWvkNzZJ8/meaUgBOI66eYAqXg7WOcLtU
+         CfCQMjZM5apb1heG0ZLJfeP4ULw17UY4Zg19NuAo73HWs3TbCzb7qzgZvJ1u8IrI2TZh
+         5ifw==
+X-Gm-Message-State: AO0yUKXAl8QvjNQp70SYgTmtMtWaajueoMqJfoluo6eNNVKmdWIDLgzv
+        8aK4w/rwVbTkGdizbDOVmsNMM8gkoEqPmtbdhWPXqA==
+X-Google-Smtp-Source: AK7set+DpX86VGcKmGJrgdwMb8omqcOHYp7TY4T6JIsWaxpwGJDK6A0wL6l9j/Rc/exm4oNI3BiFr/U8b1pQ2V8seDI=
+X-Received: by 2002:a05:6902:4f4:b0:a06:5ef5:3a82 with SMTP id
+ w20-20020a05690204f400b00a065ef53a82mr6798249ybs.5.1678196133303; Tue, 07 Mar
+ 2023 05:35:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224133129.887203-2-eblanc@baylibre.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de> <20230304133028.2135435-4-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230304133028.2135435-4-u.kleine-koenig@pengutronix.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 7 Mar 2023 14:35:22 +0100
+Message-ID: <CACRpkdZjV3ggmXvma68fT_uL4LK4vpib7e_tx+qVLwi3VPGkFA@mail.gmail.com>
+Subject: Re: [PATCH 03/41] rtc: ab8500: Convert to platform remove callback
+ returning void
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+On Sat, Mar 4, 2023 at 2:30 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
 
-On 24/02/2023 14:31:27+0100, Esteban Blanc wrote:
-> +struct tps6594_rtc {
-> +	struct rtc_device *rtc;
-> +};
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+>
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Is the struct actually useful?
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-> +/* Pulse GET_TIME field of RTC_CTRL_1 to store a timestamp in shadow registers */
-> +static int tps6594_rtc_shadow_timestamp(struct device *dev, struct tps6594 *tps)
-> +{
-> +	int ret;
-> +
-> +	/* Set GET_TIME to 0. This way, next time we set GET_TIME to 1 we are sure to store an
-> +	 * up-to-date timestamp
-> +	 */
-> +	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +				TPS6594_BIT_GET_TIME);
-> +	if (ret < 0) {
-> +		dev_err(dev, "RTC CTRL1 reg update failed with err:%d\n", ret);
-
-This is very verbose and the user doesn't have any meaningful action
-once this happens. Either remove the dev_err or convert them to dev_dbg.
-
-> +		return ret;
-> +	}
-> +
-> +	/* Copy content of RTC registers to shadow registers or latches to read a coherent
-> +	 *  timestamp
-> +	 */
-> +	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +			      TPS6594_BIT_GET_TIME);
-> +	if (ret < 0) {
-> +		dev_err(dev, "RTC CTRL1 reg update failed with err:%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Gets current tps6594 RTC time and date parameters.
-> + *
-> + * The RTC's time/alarm representation is not what gmtime(3) requires
-> + * Linux to use:
-> + *
-> + *  - Months are 1..12 vs Linux 0-11
-> + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
-> + */
-
-I don't find this comment to be particularly useful.
-
-> +static int tps6594_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	unsigned char rtc_data[NUM_TIME_REGS];
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	int ret;
-> +
-
-You could check whether the RTC is actually started here and return
--EINVAL if this is not the case.
-
-> +	ret = tps6594_rtc_shadow_timestamp(dev, tps);
-> +	if (ret < 0) {
-> +		dev_err(dev,
-> +			"failed to store a timestamp in shadow registers:%d\n",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Read shadowed RTC registers */
-> +	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_RTC_SECONDS, rtc_data,
-> +			       NUM_TIME_REGS);
-> +	if (ret < 0) {
-> +		dev_err(dev, "rtc_read_time failed with error :%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	tm->tm_sec = bcd2bin(rtc_data[0]);
-> +	tm->tm_min = bcd2bin(rtc_data[1]);
-> +	tm->tm_hour = bcd2bin(rtc_data[2]);
-> +	tm->tm_mday = bcd2bin(rtc_data[3]);
-> +	tm->tm_mon = bcd2bin(rtc_data[4]) - 1;
-> +	tm->tm_year = bcd2bin(rtc_data[5]) + 100;
-> +	tm->tm_wday = bcd2bin(rtc_data[6]);
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Sets current tps6594 RTC time and date parameters.
-> + *
-> + * The RTC's time/alarm representation is not what gmtime(3) requires
-> + * Linux to use:
-> + *
-> + *  - Months are 1..12 vs Linux 0-11
-> + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
-> + */
-
-Ditto
-
-> +static int tps6594_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	unsigned char rtc_data[NUM_TIME_REGS];
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	int ret;
-> +
-> +	rtc_data[0] = bin2bcd(tm->tm_sec);
-> +	rtc_data[1] = bin2bcd(tm->tm_min);
-> +	rtc_data[2] = bin2bcd(tm->tm_hour);
-> +	rtc_data[3] = bin2bcd(tm->tm_mday);
-> +	rtc_data[4] = bin2bcd(tm->tm_mon + 1);
-> +	rtc_data[5] = bin2bcd(tm->tm_year - 100);
-> +	rtc_data[6] = bin2bcd(tm->tm_wday);
-> +
-> +	/* Stop RTC while updating the RTC time registers */
-> +	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +				TPS6594_BIT_STOP_RTC);
-> +	if (ret < 0) {
-> +		dev_err(dev, "RTC stop failed: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Update all the time registers in one shot */
-> +	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_RTC_SECONDS, rtc_data,
-> +				NUM_TIME_REGS);
-> +	if (ret < 0) {
-> +		dev_err(dev, "rtc_set_time failed: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Start back RTC */
-> +	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +			      TPS6594_BIT_STOP_RTC);
-> +	if (ret < 0)
-> +		dev_err(dev, "RTC start failed: %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-
-
-> +static int tps6594_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct tps6594 *tps6594;
-> +	struct tps6594_rtc *tps_rtc;
-> +	int irq;
-> +	int ret;
-> +
-> +	tps6594 = dev_get_drvdata(pdev->dev.parent);
-> +
-> +	tps_rtc = devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
-> +			       GFP_KERNEL);
-> +	if (!tps_rtc)
-> +		return -ENOMEM;
-> +
-> +	tps_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(tps_rtc->rtc))
-> +		return PTR_ERR(tps_rtc->rtc);
-> +
-> +	/* Enable crystal oscillator */
-> +	ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
-> +			      TPS6594_BIT_XTAL_EN);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Start rtc */
-> +	ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
-> +			      TPS6594_BIT_STOP_RTC);
-> +	if (ret < 0)
-> +		return ret;
-
-Do that (XTAL_EN and clearing STOP) only once the time is known to be
-set to a correct value so read_time doesn't have a chance to return a
-bogus value.
-
-> +
-> +	mdelay(100);
-> +
-> +	/*
-> +	 * RTC should be running now. Check if this is the case.
-> +	 * If not it might be a missing oscillator.
-> +	 */
-> +	ret = regmap_test_bits(tps6594->regmap, TPS6594_REG_RTC_STATUS,
-> +			       TPS6594_BIT_RUN);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret == 0)
-> +		return -ENODEV;
-> +
-> +	platform_set_drvdata(pdev, tps_rtc);
-> +
-> +	irq = platform_get_irq_byname(pdev, TPS6594_IRQ_NAME_ALARM);
-> +	if (irq < 0) {
-> +		dev_err(&pdev->dev, "Failed to get irq\n");
-> +		return irq;
-> +	}
-> +
-> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +					tps6594_rtc_interrupt, IRQF_ONESHOT,
-> +					TPS6594_IRQ_NAME_ALARM, &pdev->dev);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "Failed to request_threaded_irq\n");
-> +		return ret;
-> +	}
-> +
-> +	tps_rtc->rtc->ops = &tps6594_rtc_ops;
-> +	tps_rtc->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	tps_rtc->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> +
-> +	return devm_rtc_register_device(tps_rtc->rtc);
-> +}
-> +
-> +static struct platform_driver tps6594_rtc_driver = {
-> +	.probe		= tps6594_rtc_probe,
-> +	.driver		= {
-> +		.name	= "tps6594-rtc",
-> +	},
-> +};
-> +
-> +module_platform_driver(tps6594_rtc_driver);
-> +
-> +MODULE_ALIAS("platform:tps6594-rtc");
-> +MODULE_AUTHOR("Esteban Blanc <eblanc@baylibre.com>");
-> +MODULE_DESCRIPTION("TPS6594 RTC driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.38.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yours,
+Linus Walleij
