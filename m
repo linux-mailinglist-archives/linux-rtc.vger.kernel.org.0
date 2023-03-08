@@ -2,94 +2,113 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033076AE0A8
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Mar 2023 14:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971926B01AC
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Mar 2023 09:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjCGNfy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Mar 2023 08:35:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S229716AbjCHIim (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Mar 2023 03:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjCGNfx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Mar 2023 08:35:53 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50054614D
-        for <linux-rtc@vger.kernel.org>; Tue,  7 Mar 2023 05:35:51 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id n18so11353751ybm.10
-        for <linux-rtc@vger.kernel.org>; Tue, 07 Mar 2023 05:35:51 -0800 (PST)
+        with ESMTP id S229772AbjCHIiP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Mar 2023 03:38:15 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BAAC64D;
+        Wed,  8 Mar 2023 00:38:12 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id cy23so62402102edb.12;
+        Wed, 08 Mar 2023 00:38:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678196151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SuoCQcOuTdpcxwFMyiCQRw8MwyW1RKCTWVLX8zDnBP8=;
-        b=oKcHU8iZbV3pKdyO74g/UsZDWJtauIlM0JK+E1M79GSeS9vNKZfWv7ZfC5+hr6fcYr
-         bhtw3+Kn/P2lcY2k94skuM7ukQRprcgnltJV1J9f9+RvyzUFnc78vwv7YbLuH89QFTq5
-         leSSPwlgC/dzwawrP0pbZtJ6XFxy7kQ51Do44H6otwKNJ0+abPTS7JGKJzejeD9qrg5h
-         AK3hqRhRbplhj3N5363KR6Lpc8wc5YN4sZq6NF0D020g+5ZAHSHd1Jzb+KNYsVP62H8A
-         dzQMeVS+/mU/Z+YSa3ZAqmEtMK/8AvgzAU/0PiXGS8iSP6PSx2Ep8kz8mxoiUHBDuqZm
-         oVdQ==
+        d=gmail.com; s=20210112; t=1678264691;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FjcDlz4XTRjbVMkK7ur7l1kd35DIiV7fVBc0YXc8Pfk=;
+        b=CiNyVTkTUk5idm4lvZK53mA0Qada/38QZ1MYF4CZX6P8Xf0S8lo2XN5xMcgBWTSdN5
+         i5duPacjeQzfcYql+JwzqccufOmqB3JHHjV6dzmKCecSA10+RQ6i4dCEld+fXjFercsR
+         E89Iv0Mv4D/84bE7pM9dDjiteg71w335VaSO0sR+vzQY59r9auj9TMFWVaBTCwCvze9P
+         qTVJAdJG8RwPDTCRS1eXfwlEP57dTBuj1RKse97aCqF9zDrN/9gN01Bo1Dx9nHJb5lTm
+         PL9j74yzkfG62z5g4wU6lnaEdmmBkC6Ui9KuXPPGSm7uf5to70niDJcEDdL82GX+kc7l
+         f3bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SuoCQcOuTdpcxwFMyiCQRw8MwyW1RKCTWVLX8zDnBP8=;
-        b=OBVBmNKKGuBzw0K0phvaMt5EGiMt8jxR/vGgL9F4LIaypbpaZHSrRRKDQu7iH4GrNg
-         J5F5vRhPbPRA9QTvEE0hCfy7osHnyCeLklttwNu/1YWE9/XxL6a9eIaQiL372A5tKr0p
-         wbNmpMEVIXmfctvWMSlmUQK2JvHOBYuVOk96hUQMl1GbbsVuvxMg/7MesnTQZ3aCXiaQ
-         vfgjc6PPDXhHufrtgONCtnIZcmYnUjEjlh3BA8qCnNM4blZb4xYAiOjQMNk/+FYBfL3q
-         9uLPJUAZQWeS10u3axrnfk98BX7+YbY21BD/KPQ/oX5FFvprcshkZRvfsE4GxXNlP1xY
-         tgxA==
-X-Gm-Message-State: AO0yUKUxX/Sh3DQ4W2vma+51qYm69JX15Bs/adxby6lpicEtJU5/yRzA
-        AnRSsjpjypUVa52I4Cx3qnqIm2URT+wDfiU0wK9UFEmNb5wR9teualA=
-X-Google-Smtp-Source: AK7set8DMHVxEZQ1dg1f+o1clay7yuY+eJwsWe/XT2oTmSr1Z4UenRZPGuF1PNo9djtmlvRcd+dxzMyQ5wj2vWgX0Yk=
-X-Received: by 2002:a05:6902:4f4:b0:a06:5ef5:3a82 with SMTP id
- w20-20020a05690204f400b00a065ef53a82mr6798628ybs.5.1678196150859; Tue, 07 Mar
- 2023 05:35:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de> <20230304133028.2135435-13-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230304133028.2135435-13-u.kleine-koenig@pengutronix.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 7 Mar 2023 14:35:39 +0100
-Message-ID: <CACRpkdZfzL-1gfmjo39JJVnC80gRtk6B8KCjgrbFdGuc=QMZ-w@mail.gmail.com>
-Subject: Re: [PATCH 12/41] rtc: ftrtc010: Convert to platform remove callback
- returning void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        d=1e100.net; s=20210112; t=1678264691;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FjcDlz4XTRjbVMkK7ur7l1kd35DIiV7fVBc0YXc8Pfk=;
+        b=Hs60iQfsW2HygGMx/n9A19kK0v0MEdKZXHkwIZJ3MsuNgT5EPM9YsWsrQtpPFqqX/X
+         BSdAlbOBEgKHu/Z9EdHBoNXVpCgW3b/ccVXr5G0yvEy7Al8a2Iw7s/MOeD/ya89edoMH
+         UgbKW60XxASGfEd4oJ6Mq1abBizVBSYoXUf3hVMgb4G9CXj9XVFxSNMfeDimiq5zYjo9
+         5XtAScmVDTvfcYFbQB8J8VChv+iqlPdOqUaV4tFXzMjE3f+/fUN0MamO7bIim4VHnlos
+         VSLGz3dM4J21sxy5FnaKc6XEYXs2ZNqGk8FXlBRupzhh6wmLwzFbgH62HpWsA9gZIMnz
+         i2QQ==
+X-Gm-Message-State: AO0yUKXnL+VpaUpJKO6x1GpnvoUoxYD/by2dPJIFBNFgPGC4IiC18mnK
+        OakgXgOrt2an/7QgUezNgkM=
+X-Google-Smtp-Source: AK7set/wNPkppLjM+7xCA+q7PYZ74OnWYsw0svBWJtQee5GhjhIWL2eeMKPdgyi1bqIT/cggn3tC5g==
+X-Received: by 2002:aa7:c0da:0:b0:4c0:9bd7:54cc with SMTP id j26-20020aa7c0da000000b004c09bd754ccmr13365511edp.11.1678264690784;
+        Wed, 08 Mar 2023 00:38:10 -0800 (PST)
+Received: from xeon.. ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id k7-20020a170906578700b008b904cb2bcdsm7300511ejq.11.2023.03.08.00.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 00:38:10 -0800 (PST)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH v1] max77663-rtc: pass rtc address from device tree node if exists
+Date:   Wed,  8 Mar 2023 10:37:59 +0200
+Message-Id: <20230308083759.11692-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, Mar 4, 2023 at 2:30 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+MAX77663 PMIC can have RTC on both 0x63 i2c address (like grouper)
+which is main address but on some devices RTC is located on 0x48
+i2c address (like p880 and p895 from LG). Lets add property to be
+able to use alternative address if needed without breaking existing
+bindings.
 
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+---
+ drivers/rtc/rtc-max77686.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+index b0250d91fb00..218177375531 100644
+--- a/drivers/rtc/rtc-max77686.c
++++ b/drivers/rtc/rtc-max77686.c
+@@ -691,6 +691,7 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
+ {
+ 	struct device *parent = info->dev->parent;
+ 	struct i2c_client *parent_i2c = to_i2c_client(parent);
++	int rtc_i2c_addr;
+ 	int ret;
+ 
+ 	if (info->drv_data->rtc_irq_from_platform) {
+@@ -714,8 +715,13 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
+ 		goto add_rtc_irq;
+ 	}
+ 
++	ret = device_property_read_u32(parent, "maxim,rtc-i2c-address",
++				       &rtc_i2c_addr);
++	if (ret)
++		rtc_i2c_addr = info->drv_data->rtc_i2c_addr;
++
+ 	info->rtc = devm_i2c_new_dummy_device(info->dev, parent_i2c->adapter,
+-					      info->drv_data->rtc_i2c_addr);
++					      rtc_i2c_addr);
+ 	if (IS_ERR(info->rtc)) {
+ 		dev_err(info->dev, "Failed to allocate I2C device for RTC\n");
+ 		return PTR_ERR(info->rtc);
+-- 
+2.37.2
 
-Yours,
-Linus Walleij
