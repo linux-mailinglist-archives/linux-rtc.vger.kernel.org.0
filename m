@@ -2,209 +2,241 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4D06B0E7A
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Mar 2023 17:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A386B0ED3
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Mar 2023 17:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjCHQUt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 8 Mar 2023 11:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        id S230002AbjCHQfQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Mar 2023 11:35:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjCHQUm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Mar 2023 11:20:42 -0500
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F61EC1C36
-        for <linux-rtc@vger.kernel.org>; Wed,  8 Mar 2023 08:20:38 -0800 (PST)
-Message-ID: <ac8895ab-68cb-1250-199e-4758e44e740a@gentoo.org>
-Date:   Wed, 8 Mar 2023 11:20:34 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.0
-Subject: Re: [PATCH 11/41] rtc: ds1685: Convert to platform remove callback
- returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S230333AbjCHQfE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Mar 2023 11:35:04 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21C65262;
+        Wed,  8 Mar 2023 08:35:01 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 80F85FF811;
+        Wed,  8 Mar 2023 16:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678293300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lUqLGRcG0w1R1iyEPwO1Ebbfe3rcU5gyLFk3k2avVAA=;
+        b=aHrGdIQeeaiSvYoxSkLc+KAYSRX4ac2bF5cebMcenP1fS2MSr2Knm0vLB2OazwSvbodCvH
+        ngNLG2Qkv7cwBX15KF36vC4m+gfmMsAw32l/HChTK739+bFor3Ya7fTEwEfCsMB6j8F5IA
+        RzZqXkwxa1dp7Wy86wS7S9tFCtqbmrM2NvGOeOoP02m8zdKIqAymEDeXyy0rwnfnaYf08F
+        8MhV9B8uD4Ht0JD0Hhb1m2PiSPW1P8k7lUrV+dI4RkgATib9HdhOihqM4U60ZNPH2vr68V
+        pF+33zGbMA2taiYfi7KHopl6udaUGxzqC8X2EXQaW80UuRJ95luD65pOC+ArPw==
+Date:   Wed, 8 Mar 2023 17:34:53 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel@pengutronix.de
-References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
- <20230304133028.2135435-12-u.kleine-koenig@pengutronix.de>
- <9e2df07f-92d3-966a-5092-22572e102253@gentoo.org>
- <20230306212218.qzer65c74rb7d6yy@pengutronix.de>
- <00ee8bf1-478b-fdba-7938-221dbefd40f2@gentoo.org>
- <20230307081118.rociwbzuk6dl7fwu@pengutronix.de>
-From:   Joshua Kinard <kumba@gentoo.org>
-In-Reply-To: <20230307081118.rociwbzuk6dl7fwu@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V2] nvmem: add explicit config option to read OF fixed
+ cells
+Message-ID: <20230308173256.3837b87b@xps-13>
+In-Reply-To: <20230224072903.20945-1-zajec5@gmail.com>
+References: <20230224072903.20945-1-zajec5@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 3/7/2023 03:11, Uwe Kleine-König wrote:
-> Hello Joshua,
-> 
-> On Mon, Mar 06, 2023 at 09:09:03PM -0500, Joshua Kinard wrote:
->> On 3/6/2023 16:22, Uwe Kleine-König wrote:
->>> On Mon, Mar 06, 2023 at 02:43:20PM -0500, Joshua Kinard wrote:
->>>> On 3/4/2023 08:29, Uwe Kleine-König wrote:
->>>>> The .remove() callback for a platform driver returns an int which makes
->>>>> many driver authors wrongly assume it's possible to do error handling by
->>>>> returning an error code. However the value returned is (mostly) ignored
->>>>> and this typically results in resource leaks. To improve here there is a
->>>>> quest to make the remove callback return void. In the first step of this
->>>>> quest all drivers are converted to .remove_new() which already returns
->>>>> void.
->>>>>
->>>>> Trivially convert this driver from always returning zero in the remove
->>>>> callback to the void returning variant.
->>>>>
->>>>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->>>>> ---
->>>>>     drivers/rtc/rtc-ds1685.c | 6 ++----
->>>>>     1 file changed, 2 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
->>>>> index 5db9c737c022..0f707be0eb87 100644
->>>>> --- a/drivers/rtc/rtc-ds1685.c
->>>>> +++ b/drivers/rtc/rtc-ds1685.c
->>>>> @@ -1322,7 +1322,7 @@ ds1685_rtc_probe(struct platform_device *pdev)
->>>>>      * ds1685_rtc_remove - removes rtc driver.
->>>>>      * @pdev: pointer to platform_device structure.
->>>>>      */
->>>>> -static int
->>>>> +static void
->>>>>     ds1685_rtc_remove(struct platform_device *pdev)
->>>>>     {
->>>>>     	struct ds1685_priv *rtc = platform_get_drvdata(pdev);
->>>>> @@ -1344,8 +1344,6 @@ ds1685_rtc_remove(struct platform_device *pdev)
->>>>>     	rtc->write(rtc, RTC_EXT_CTRL_4A,
->>>>>     		   (rtc->read(rtc, RTC_EXT_CTRL_4A) &
->>>>>     		    ~(RTC_CTRL_4A_RWK_MASK)));
->>>>> -
->>>>> -	return 0;
->>>>>     }
->>>>>     /*
->>>>> @@ -1356,7 +1354,7 @@ static struct platform_driver ds1685_rtc_driver = {
->>>>>     		.name	= "rtc-ds1685",
->>>>>     	},
->>>>>     	.probe		= ds1685_rtc_probe,
->>>>> -	.remove		= ds1685_rtc_remove,
->>>>> +	.remove_new	= ds1685_rtc_remove,
->>>>>     };
->>>>>     module_platform_driver(ds1685_rtc_driver);
->>>>>     /* ----------------------------------------------------------------------- */
->>>>
->>>> Is there a future planned patch that would remove the .remove member
->>>> and then rename .remove_new --> .remove?
->>>
->>> The eventual plan is to do
->>>
->>> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
->>> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
->>> index 77510e4f47de..1c65943d6b53 100644
->>> --- a/drivers/base/platform.c
->>> +++ b/drivers/base/platform.c
->>> @@ -1420,14 +1420,8 @@ static void platform_remove(struct device *_dev)
->>>    	struct platform_driver *drv = to_platform_driver(_dev->driver);
->>>    	struct platform_device *dev = to_platform_device(_dev);
->>> -	if (drv->remove_new) {
->>> -		drv->remove_new(dev);
->>> -	} else if (drv->remove) {
->>> -		int ret = drv->remove(dev);
->>> -
->>> -		if (ret)
->>> -			dev_warn(_dev, "remove callback returned a non-zero value. This will be ignored.\n");
->>> -	}
->>> +	if (drv->remove)
->>> +		drv->remove(dev);
->>>    	dev_pm_domain_detach(_dev, true);
->>>    }
->>> index b845fd83f429..8c5fdaa8645f 100644
->>> --- a/include/linux/platform_device.h
->>> +++ b/include/linux/platform_device.h
->>> @@ -209,15 +209,16 @@ struct platform_driver {
->>>    	int (*probe)(struct platform_device *);
->>>    	/*
->>> -	 * Traditionally the remove callback returned an int which however is
->>> +	 * Traditionally the remove callback returned an int which however was
->>>    	 * ignored by the driver core. This led to wrong expectations by driver
->>>    	 * authors who thought returning an error code was a valid error
->>> -	 * handling strategy. To convert to a callback returning void, new
->>> -	 * drivers should implement .remove_new() until the conversion it done
->>> -	 * that eventually makes .remove() return void.
->>> +	 * handling strategy. .remove_new is a hangover from these times which
->>> +	 * will be dropped once all drivers are converted to .remove().
->>>    	 */
->>> -	int (*remove)(struct platform_device *);
->>> -	void (*remove_new)(struct platform_device *);
->>> +	union {
->>> +		void (*remove)(struct platform_device *);
->>> +		void (*remove_new)(struct platform_device *);
->>> +	};
->>>    	void (*shutdown)(struct platform_device *);
->>>    	int (*suspend)(struct platform_device *, pm_message_t state);
->>>
->>> and then once all the drivers are converted back to .remove() drop the
->>> union and .remove_new().
->>>
->>> Best regards
->>> Uwe
->>>
->>
->> This looks like a pretty simple/minor API change.  Why not just do a patch
->> series that makes both the API change and updates all of the drivers at once
->> (one commit per driver)?
-> 
-> A bit of statistic: Based on v6.3-rc1 I have 2286 patches like the ones
-> from this series that (mostly) convert drivers that today already return
-> zero unconditionally. Then there is my todo-list of ~100 additional
-> drivers that don't return 0 that need manual inspection and fixing.
-> 
-> So we're talking about 2300+ drivers in all subsystems here. To get a
-> bisectable series that does the complete conversion, we need:
-> 
-> 	2300 patches to convert drivers to .remove_new()
-> 	the above patch
-> 	2300 patches to convert drivers back to the new .remove()
-> 
-> Last time I sent a series with ~640 patches (for a similar conversion
-> for i2c drivers) people were unlucky already and I got tons of bounces.
-> Please consider the address list for the cover letter. While most
-> patches are trivial this would require a massive coordination.
-> 
-> So no, this isn't a sensible suggestion. I'll continue to send out
-> conversions to .remove_new() per subsystem and once most of them are
-> converted, the above patch will be sent with the remainder of the
-> unapplied patches.
-> 
-> Best regards
-> Uwe
+Hi Rafa=C5=82,
 
-I was actually thinking more along the lines of doing one patch series per subsystem, so for RTC, ~160 
-patches, one per rtc-*.c driver making the change to have .remove() be void, plus a patch to adjust the struct 
-platform_driver rtc definition itself.  That way you don't have to have that interval period where drivers are 
-carrying around the .remove_new() method, cause I've seen instances in the past where such large-scale changes 
-could not be completed in a single kernel development cycle.
+zajec5@gmail.com wrote on Fri, 24 Feb 2023 08:29:03 +0100:
 
-But it sounds like you've already got a plan worked out, so your call on how you want to handle this.  Thanks 
-for the additional clarification!
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>=20
+> NVMEM subsystem looks for fixed NVMEM cells (specified in DT) by
+> default. This behaviour made sense in early days before adding support
+> for dynamic cells.
+>=20
+> With every new supported NVMEM device with dynamic cells current
+> behaviour becomes non-optimal. It results in unneeded iterating over DT
+> nodes and may result in false discovery of cells (depending on used DT
+> properties).
+>=20
+> This behaviour has actually caused a problem already with the MTD
+> subsystem. MTD subpartitions were incorrectly treated as NVMEM cells.
 
-Acked-By: Joshua Kinard <kumba@gentoo.org>
+That's true, but I expect this to be really MTD specific.
 
--- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+A concrete proposal below.
 
-"The past tempts us, the present confuses us, the future frightens us.  And our lives slip away, moment by 
-moment, lost in that vast, terrible in-between."
+> Also with upcoming support for NVMEM layouts no new binding or driver
+> should support fixed cells defined in device node.
 
-         --Emperor Turhan, Centauri Republic
+I'm not sure I agree with this statement. We are not preventing new
+binding/driver to use fixed cells, or...? We offer a new way to expose
+nvmem cells with another way than "fixed-offset" and "fixed-size" OF
+nodes.
 
+> Solve this by modifying drivers for bindings that support specifying
+> fixed NVMEM cells in DT. Make them explicitly tell NVMEM subsystem to
+> read cells from DT.
+>=20
+> It wasn't clear (to me) if rtc and w1 code actually uses fixed cells. I
+> enabled them to don't risk any breakage.
+>=20
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> [for drivers/nvmem/meson-{efuse,mx-efuse}.c]
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+> V2: Fix stm32-romem.c typo breaking its compilation
+>     Pick Martin's Acked-by
+>     Add paragraph about layouts deprecating use_fixed_of_cells
+> ---
+>  drivers/mtd/mtdcore.c          | 2 ++
+>  drivers/nvmem/apple-efuses.c   | 1 +
+>  drivers/nvmem/core.c           | 8 +++++---
+>  drivers/nvmem/imx-ocotp-scu.c  | 1 +
+>  drivers/nvmem/imx-ocotp.c      | 1 +
+>  drivers/nvmem/meson-efuse.c    | 1 +
+>  drivers/nvmem/meson-mx-efuse.c | 1 +
+>  drivers/nvmem/microchip-otpc.c | 1 +
+>  drivers/nvmem/mtk-efuse.c      | 1 +
+>  drivers/nvmem/qcom-spmi-sdam.c | 1 +
+>  drivers/nvmem/qfprom.c         | 1 +
+>  drivers/nvmem/rave-sp-eeprom.c | 1 +
+>  drivers/nvmem/rockchip-efuse.c | 1 +
+>  drivers/nvmem/sc27xx-efuse.c   | 1 +
+>  drivers/nvmem/sprd-efuse.c     | 1 +
+>  drivers/nvmem/stm32-romem.c    | 1 +
+>  drivers/nvmem/sunplus-ocotp.c  | 1 +
+>  drivers/nvmem/sunxi_sid.c      | 1 +
+>  drivers/nvmem/uniphier-efuse.c | 1 +
+>  drivers/nvmem/zynqmp_nvmem.c   | 1 +
+>  drivers/rtc/nvmem.c            | 1 +
+>  drivers/w1/slaves/w1_ds250x.c  | 1 +
+>  include/linux/nvmem-provider.h | 2 ++
+>  23 files changed, 29 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+> index 0feacb9fbdac..1bb479c0f758 100644
+> --- a/drivers/mtd/mtdcore.c
+> +++ b/drivers/mtd/mtdcore.c
+> @@ -523,6 +523,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
+>  	config.dev =3D &mtd->dev;
+>  	config.name =3D dev_name(&mtd->dev);
+>  	config.owner =3D THIS_MODULE;
+> +	config.use_fixed_of_cells =3D of_device_is_compatible(node, "nvmem-cell=
+s");
+
+I am wondering how mtd specific this is? For me all OF nodes containing
+the nvmem-cells compatible should be treated as cells providers and
+populate nvmem cells as for each children.
+
+Why don't we just check for this compatible to be present? in
+nvmem_add_cells_from_of() ? And if not we just skip the operation.
+
+This way we still follow the bindings (even though using nvmem-cells in
+the compatible property to require cells population was a mistake in
+the first place, as discussed in the devlink thread recently) but there
+is no need for a per-driver config option?
+
+>  	config.reg_read =3D mtd_nvmem_reg_read;
+>  	config.size =3D mtd->size;
+>  	config.word_size =3D 1;
+> @@ -891,6 +892,7 @@ static struct nvmem_device *mtd_otp_nvmem_register(st=
+ruct mtd_info *mtd,
+>  	config.name =3D kasprintf(GFP_KERNEL, "%s-%s", dev_name(&mtd->dev), com=
+patible);
+>  	config.id =3D NVMEM_DEVID_NONE;
+>  	config.owner =3D THIS_MODULE;
+> +	config.use_fixed_of_cells =3D true;
+>  	config.type =3D NVMEM_TYPE_OTP;
+>  	config.root_only =3D true;
+>  	config.ignore_wp =3D true;
+> diff --git a/drivers/nvmem/apple-efuses.c b/drivers/nvmem/apple-efuses.c
+> index 9b7c87102104..0119bac43b2c 100644
+> --- a/drivers/nvmem/apple-efuses.c
+> +++ b/drivers/nvmem/apple-efuses.c
+> @@ -36,6 +36,7 @@ static int apple_efuses_probe(struct platform_device *p=
+dev)
+>  	struct resource *res;
+>  	struct nvmem_config config =3D {
+>  		.dev =3D &pdev->dev,
+> +		.use_fixed_of_cells =3D true,
+>  		.read_only =3D true,
+>  		.reg_read =3D apple_efuses_read,
+>  		.stride =3D sizeof(u32),
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 174ef3574e07..6783cd8478d7 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -844,9 +844,11 @@ struct nvmem_device *nvmem_register(const struct nvm=
+em_config *config)
+>  	if (rval)
+>  		goto err_remove_cells;
+> =20
+> -	rval =3D nvmem_add_cells_from_of(nvmem);
+> -	if (rval)
+> -		goto err_remove_cells;
+> +	if (config->use_fixed_of_cells) {
+> +		rval =3D nvmem_add_cells_from_of(nvmem);
+> +		if (rval)
+> +			goto err_remove_cells;
+> +	}
+> =20
+>  	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
+> =20
+
+Thanks,
+Miqu=C3=A8l
