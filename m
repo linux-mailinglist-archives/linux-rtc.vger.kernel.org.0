@@ -2,100 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BEB6B0228
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Mar 2023 09:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25216B027B
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Mar 2023 10:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCHI6k (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 8 Mar 2023 03:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S229780AbjCHJLh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Mar 2023 04:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCHI6k (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Mar 2023 03:58:40 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DE8898CD;
-        Wed,  8 Mar 2023 00:58:38 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id o12so62674269edb.9;
-        Wed, 08 Mar 2023 00:58:38 -0800 (PST)
+        with ESMTP id S229646AbjCHJLf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Mar 2023 04:11:35 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266E027483
+        for <linux-rtc@vger.kernel.org>; Wed,  8 Mar 2023 01:11:34 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u9so62965798edd.2
+        for <linux-rtc@vger.kernel.org>; Wed, 08 Mar 2023 01:11:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678265917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TyDxTUkqT1QypYuABfqldH2UkT8vCS493/a2H3Z5+PA=;
-        b=L5UN5szr2gCCzAYLpDJVu97N5+niUcZ21kL6KiPDQsPq1bgXy54Szuee0hilQ7gSVa
-         zE+YN7A4Q7vH2BVyJV2JvwMjPdEeNmHE1JfMuJxzM+TxYd6emMn/xhWU4UWQNVp24LPM
-         Bk1OeycihLvh3hKE/3yYpiN9Ea+LdBq+XKrmgb9JYm2VD8M4rpytX1YDAvbIlewkg7WC
-         DgEgAqyHdnwxdugNV0v+JT9s6t5mVq33F8wwLm1yFGSyNmZZgfydJ/bQz2czJRiHw2AY
-         wY/Slwuh2QYWta+fEF/q/nBlCZf1Fi/ZZK5HVfqk8+uCAKpZgRflh5KbftpOt1RnxEQu
-         jRDw==
+        d=linaro.org; s=google; t=1678266692;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s0oj0CL9BnYfLK0x4oHfSTBQkmbarC+Cjqy+nmwt32k=;
+        b=m+2ObWsq3KZvPh3aNkl9jgASVbIpqkjqajI/6hkr+tPloWdmjmj8seF+Px2aK83De/
+         r6vGzZGYt/MAc+xDBI8YHUf69PaLWKFPGlLlEqrnkPSADoaW3IEIfSxeKH2QG1RgHpRx
+         AQJee+dnKflfnQJM3zqi2/13VvHwc5xPGvzyZMm8OZWETk0OFmDJPdO1I9IeB/SBqY3U
+         OLSiW+5POHuS32oM5sBWwFG92uIRW1KZGcZ6ZFsTbwC3zG/hDlkwh53FG/iQG5ZrPkLu
+         AeTq1N3dUceBt5mrWzxUu1x+mEU+UlidNQCW0TwWiYknmA0gLdC+r07fHjCg6KnOhpxq
+         MNgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678265917;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TyDxTUkqT1QypYuABfqldH2UkT8vCS493/a2H3Z5+PA=;
-        b=n9NqKKZeP3Qab4Quw3yLOsRseDIxAPIHk5KDtvT8jyCJQLLpX4j2gjl+5yx+p+GeSZ
-         HIBFESM8uJZv+XRkCAxT6MQHeJOp7dIBEYWBMzMjcgtPUE4DTJmzaUPnIPM4xWKQi9WK
-         NJrv8TmcNRaKXFAV/NC7W4Eh8506hFSikRofNCblWnqgbtbFRWoH1le53SUIz7XjrrgJ
-         aCYOORxhWtbFa5NHG98/SfBvTz4seiiuyWSF/52ZWLj12L0btiBD9S/3KzJwF8lMwH8t
-         h8F3LMmicpcqthXm+CIxZ2Hc6LR700CvS2auzCIK7KwWgnZ1rSFTzKR2ivCe8YFMRmtO
-         x6qg==
-X-Gm-Message-State: AO0yUKXUGpSuv8fENSVSlSJbQqoW1dlFLF4bUTx4+XlXGG5scSMkAmt5
-        I+Irdu/xOzVSm/nHGqC+syoqmXkZaiq6Bj8Vr4lQd6j1O1o=
-X-Google-Smtp-Source: AK7set+Wr59uGqaqN9VvnsDI7d55cXglMImv9XFTRXHplUDjFfAtfU+48B4O52euOb1OaMrTqN1cdrNlrdFQrcrCQ8E=
-X-Received: by 2002:a17:906:3090:b0:878:b86b:de15 with SMTP id
- 16-20020a170906309000b00878b86bde15mr8962683ejv.11.1678265917431; Wed, 08 Mar
- 2023 00:58:37 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678266692;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s0oj0CL9BnYfLK0x4oHfSTBQkmbarC+Cjqy+nmwt32k=;
+        b=3zeQmZR6zhg8tJXblzCRIMsBm8cqqlSuXyvrBdw47Y4PvisEoyEeslQjZT+5Xp/KfN
+         vQ80Q10tqm09vsLG0DnFf1dCy7vEYah/eZ4BK2WMZAZqQHkPJ4tWHbQ7AIhSgs2wYFek
+         6WTX2vqVDWHW45pex2VrE1xdi6sGsbYze0ip0M1eUAjjcvzM2qt1hbK+Z+zVP5guJrVT
+         cuy/La7f45NDNUsQeYJTEnXXHupRNTzqMKi1+SGIzXy+BAV3jYTG0uYDQhsjxogMfWqF
+         qNA0oiwpS2LSGC+7Y4cIJAEjkKFpzdkVzdR71p/zargalWtkLt0DqiildfQxPWD6Cu2o
+         68zg==
+X-Gm-Message-State: AO0yUKUy3Yr99HXMCjxvH5FTteWRTBnniS5h7MktXpFl519ZLairfcRo
+        Zx2b5VDxM+23L8qUoPhWjscB6g==
+X-Google-Smtp-Source: AK7set8xfEE2t6/kA5+l3xnMif2Y54F6J/auVV+63fsbrgL+aso/6KzHSF5zoMep8m9pWUtcI1o4FQ==
+X-Received: by 2002:a05:6402:b1c:b0:4bc:b40:108b with SMTP id bm28-20020a0564020b1c00b004bc0b40108bmr15775258edb.9.1678266692627;
+        Wed, 08 Mar 2023 01:11:32 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:bba:fbfa:8aec:a133? ([2a02:810d:15c0:828:bba:fbfa:8aec:a133])
+        by smtp.gmail.com with ESMTPSA id u15-20020a17090657cf00b008eaf99be56esm7308458ejr.170.2023.03.08.01.11.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 01:11:32 -0800 (PST)
+Message-ID: <190897d3-39b6-fb7c-dc18-dac580fadea6@linaro.org>
+Date:   Wed, 8 Mar 2023 10:11:31 +0100
 MIME-Version: 1.0
-References: <20230308083759.11692-1-clamor95@gmail.com> <f1df5968-4322-3f67-3da8-c10ea50386a8@linaro.org>
-In-Reply-To: <f1df5968-4322-3f67-3da8-c10ea50386a8@linaro.org>
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-Date:   Wed, 8 Mar 2023 10:58:26 +0200
-Message-ID: <CAPVz0n24odz4bxt8nRe08-UJFoaDSTGMAPfj2b2RBG+ZbwntfQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
 Subject: Re: [PATCH v1] max77663-rtc: pass rtc address from device tree node
  if exists
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
 Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230308083759.11692-1-clamor95@gmail.com>
+ <f1df5968-4322-3f67-3da8-c10ea50386a8@linaro.org>
+ <CAPVz0n24odz4bxt8nRe08-UJFoaDSTGMAPfj2b2RBG+ZbwntfQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAPVz0n24odz4bxt8nRe08-UJFoaDSTGMAPfj2b2RBG+ZbwntfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-I would love to, but max77663 uses max77686 rtc
-https://github.com/torvalds/linux/blob/master/drivers/mfd/max77620.c#L123
-how to handle this?
+On 08/03/2023 09:58, Svyatoslav Ryhel wrote:
+> I would love to, but max77663 uses max77686 rtc
+> https://github.com/torvalds/linux/blob/master/drivers/mfd/max77620.c#L123
+> how to handle this?
 
-=D1=81=D1=80, 8 =D0=B1=D0=B5=D1=80. 2023=E2=80=AF=D1=80. =D0=BE 10:54 Krzys=
-ztof Kozlowski
-<krzysztof.kozlowski@linaro.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On 08/03/2023 09:37, Svyatoslav Ryhel wrote:
-> > MAX77663 PMIC can have RTC on both 0x63 i2c address (like grouper)
-> > which is main address but on some devices RTC is located on 0x48
-> > i2c address (like p880 and p895 from LG). Lets add property to be
-> > able to use alternative address if needed without breaking existing
-> > bindings.
->
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
->
-> Anyway this is not max77663 driver.
->
-> The property does not make sense in the context of max77686. Maybe for
-> max77802/77620 and 77714 would have... but still max77663 is not there.
-> Don't add properties for unrelated and unsupported devices.
->
-> Best regards,
-> Krzysztof
->
+Don't top post.
+
+Hm, so it seems max7763 is already documented via max77620. I missed
+that. Add the new property to max77620, not to max77686 RTC. It does not
+look like RTC's property, but the PMIC's.
+
+Best regards,
+Krzysztof
+
