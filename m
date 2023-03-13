@@ -2,54 +2,44 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD45E6B7925
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 14:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5822F6B7B86
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 16:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjCMNix (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Mar 2023 09:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S230086AbjCMPI1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Mar 2023 11:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjCMNiw (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Mar 2023 09:38:52 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19AEE181;
-        Mon, 13 Mar 2023 06:38:29 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D3101240002;
-        Mon, 13 Mar 2023 13:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678714707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9P09iremWXOid0qmunSiTxvo86djuYD/ctGTwvv+eB4=;
-        b=OxDcKC2EByCRqP2D9Bj0URPAghXjN+ukTKEQWket54PTBeS6p5OxQv4PNmo8ZpDesgwt2V
-        iJhC5EFTV+c/FFAJen5PwufprbcSzEITmOF0SfwjtvE3xueJhDLUluLEM+kl3V34WoziXz
-        ajev2Jh9mTCjG+zJcdfIbitLUEo5yo16Kw2QFhOtziz+P0Rs8E4ahdJOey2HwB2c0AHroo
-        NowNIvffACpOXTK0b2p+wwogetlfj0QNs6doXs9Boqmo94hP6OQuCYu7G/MeL4GCOo4hYz
-        voFQKv3vuKoNS4TfsJnY8SIrP55iHyRa8eZKVUGx2+xF2WH5Jxg/fmV9qL0Jiw==
-Date:   Mon, 13 Mar 2023 14:38:26 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com
-Subject: Re: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594
- PMIC RTC
-Message-ID: <20230313133826fe761785@mail.local>
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-2-eblanc@baylibre.com>
- <ZAcbJxrNtWTTTSjR@mail.local>
- <CR556BV2M4I4.2L3LLJ8V1I352@burritosblues>
- <20230313110158f5c27b63@mail.local>
- <CR58TXDRGAUA.3CSML8HXRI97S@burritosblues>
+        with ESMTP id S230118AbjCMPIX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Mar 2023 11:08:23 -0400
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18A3E05A
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Mar 2023 08:08:17 -0700 (PDT)
+Message-ID: <2a039428-3875-248d-c54e-6239f6d48cc2@gentoo.org>
+Date:   Mon, 13 Mar 2023 11:08:14 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CR58TXDRGAUA.3CSML8HXRI97S@burritosblues>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH 11/41] rtc: ds1685: Convert to platform remove callback
+ returning void
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        kernel@pengutronix.de
+References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
+ <20230304133028.2135435-12-u.kleine-koenig@pengutronix.de>
+ <9e2df07f-92d3-966a-5092-22572e102253@gentoo.org>
+ <20230306212218.qzer65c74rb7d6yy@pengutronix.de>
+ <00ee8bf1-478b-fdba-7938-221dbefd40f2@gentoo.org>
+ <20230307081118.rociwbzuk6dl7fwu@pengutronix.de>
+ <ac8895ab-68cb-1250-199e-4758e44e740a@gentoo.org>
+ <20230308164750.x4ozcdxymcqoz73m@pengutronix.de>
+From:   Joshua Kinard <kumba@gentoo.org>
+In-Reply-To: <20230308164750.x4ozcdxymcqoz73m@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,95 +47,187 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 13/03/2023 13:10:37+0100, Esteban Blanc wrote:
-> On Mon Mar 13, 2023 at 12:01 PM CET, Alexandre Belloni wrote:
-> > On 13/03/2023 10:18:45+0100, Esteban Blanc wrote:
-> > > On Tue Mar 7, 2023 at 12:08 PM CET, Alexandre Belloni wrote:
-> > > > On 24/02/2023 14:31:27+0100, Esteban Blanc wrote:
-> > > > > +/*
-> > > > > + * Gets current tps6594 RTC time and date parameters.
-> > > > > + *
-> > > > > + * The RTC's time/alarm representation is not what gmtime(3) requires
-> > > > > + * Linux to use:
-> > > > > + *
-> > > > > + *  - Months are 1..12 vs Linux 0-11
-> > > > > + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
-> > > > > + */
-> > > >
-> > > > I don't find this comment to be particularly useful.
-> > > 
-> > > Ok. I propose that I add 2 constants for the -1 and +100 in the month and year
-> > > calculation. This way, without the comment the computation would be a
-> > > bit more self explanatory.
-> > > What do you think?
-> >
-> > I don't think this is necessary, keep -1 for the month and +100 for the
-> > year, those are very common operations in the subsystem and don't really
-> > need any explanation
+On 3/8/2023 11:47, Uwe Kleine-König wrote:
+> Hello Joshua,
 > 
-> Ok. I will just remove the comment then.
+> On Wed, Mar 08, 2023 at 11:20:34AM -0500, Joshua Kinard wrote:
+>> On 3/7/2023 03:11, Uwe Kleine-König wrote:
+>>> On Mon, Mar 06, 2023 at 09:09:03PM -0500, Joshua Kinard wrote:
+>>>> On 3/6/2023 16:22, Uwe Kleine-König wrote:
+>>>>> On Mon, Mar 06, 2023 at 02:43:20PM -0500, Joshua Kinard wrote:
+>>>>>> On 3/4/2023 08:29, Uwe Kleine-König wrote:
+>>>>>>> The .remove() callback for a platform driver returns an int which makes
+>>>>>>> many driver authors wrongly assume it's possible to do error handling by
+>>>>>>> returning an error code. However the value returned is (mostly) ignored
+>>>>>>> and this typically results in resource leaks. To improve here there is a
+>>>>>>> quest to make the remove callback return void. In the first step of this
+>>>>>>> quest all drivers are converted to .remove_new() which already returns
+>>>>>>> void.
+>>>>>>>
+>>>>>>> Trivially convert this driver from always returning zero in the remove
+>>>>>>> callback to the void returning variant.
+>>>>>>>
+>>>>>>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>>>>>>> ---
+>>>>>>>      drivers/rtc/rtc-ds1685.c | 6 ++----
+>>>>>>>      1 file changed, 2 insertions(+), 4 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
+>>>>>>> index 5db9c737c022..0f707be0eb87 100644
+>>>>>>> --- a/drivers/rtc/rtc-ds1685.c
+>>>>>>> +++ b/drivers/rtc/rtc-ds1685.c
+>>>>>>> @@ -1322,7 +1322,7 @@ ds1685_rtc_probe(struct platform_device *pdev)
+>>>>>>>       * ds1685_rtc_remove - removes rtc driver.
+>>>>>>>       * @pdev: pointer to platform_device structure.
+>>>>>>>       */
+>>>>>>> -static int
+>>>>>>> +static void
+>>>>>>>      ds1685_rtc_remove(struct platform_device *pdev)
+>>>>>>>      {
+>>>>>>>      	struct ds1685_priv *rtc = platform_get_drvdata(pdev);
+>>>>>>> @@ -1344,8 +1344,6 @@ ds1685_rtc_remove(struct platform_device *pdev)
+>>>>>>>      	rtc->write(rtc, RTC_EXT_CTRL_4A,
+>>>>>>>      		   (rtc->read(rtc, RTC_EXT_CTRL_4A) &
+>>>>>>>      		    ~(RTC_CTRL_4A_RWK_MASK)));
+>>>>>>> -
+>>>>>>> -	return 0;
+>>>>>>>      }
+>>>>>>>      /*
+>>>>>>> @@ -1356,7 +1354,7 @@ static struct platform_driver ds1685_rtc_driver = {
+>>>>>>>      		.name	= "rtc-ds1685",
+>>>>>>>      	},
+>>>>>>>      	.probe		= ds1685_rtc_probe,
+>>>>>>> -	.remove		= ds1685_rtc_remove,
+>>>>>>> +	.remove_new	= ds1685_rtc_remove,
+>>>>>>>      };
+>>>>>>>      module_platform_driver(ds1685_rtc_driver);
+>>>>>>>      /* ----------------------------------------------------------------------- */
+>>>>>>
+>>>>>> Is there a future planned patch that would remove the .remove member
+>>>>>> and then rename .remove_new --> .remove?
+>>>>>
+>>>>> The eventual plan is to do
+>>>>>
+>>>>> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+>>>>> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+>>>>> index 77510e4f47de..1c65943d6b53 100644
+>>>>> --- a/drivers/base/platform.c
+>>>>> +++ b/drivers/base/platform.c
+>>>>> @@ -1420,14 +1420,8 @@ static void platform_remove(struct device *_dev)
+>>>>>     	struct platform_driver *drv = to_platform_driver(_dev->driver);
+>>>>>     	struct platform_device *dev = to_platform_device(_dev);
+>>>>> -	if (drv->remove_new) {
+>>>>> -		drv->remove_new(dev);
+>>>>> -	} else if (drv->remove) {
+>>>>> -		int ret = drv->remove(dev);
+>>>>> -
+>>>>> -		if (ret)
+>>>>> -			dev_warn(_dev, "remove callback returned a non-zero value. This will be ignored.\n");
+>>>>> -	}
+>>>>> +	if (drv->remove)
+>>>>> +		drv->remove(dev);
+>>>>>     	dev_pm_domain_detach(_dev, true);
+>>>>>     }
+>>>>> index b845fd83f429..8c5fdaa8645f 100644
+>>>>> --- a/include/linux/platform_device.h
+>>>>> +++ b/include/linux/platform_device.h
+>>>>> @@ -209,15 +209,16 @@ struct platform_driver {
+>>>>>     	int (*probe)(struct platform_device *);
+>>>>>     	/*
+>>>>> -	 * Traditionally the remove callback returned an int which however is
+>>>>> +	 * Traditionally the remove callback returned an int which however was
+>>>>>     	 * ignored by the driver core. This led to wrong expectations by driver
+>>>>>     	 * authors who thought returning an error code was a valid error
+>>>>> -	 * handling strategy. To convert to a callback returning void, new
+>>>>> -	 * drivers should implement .remove_new() until the conversion it done
+>>>>> -	 * that eventually makes .remove() return void.
+>>>>> +	 * handling strategy. .remove_new is a hangover from these times which
+>>>>> +	 * will be dropped once all drivers are converted to .remove().
+>>>>>     	 */
+>>>>> -	int (*remove)(struct platform_device *);
+>>>>> -	void (*remove_new)(struct platform_device *);
+>>>>> +	union {
+>>>>> +		void (*remove)(struct platform_device *);
+>>>>> +		void (*remove_new)(struct platform_device *);
+>>>>> +	};
+>>>>>     	void (*shutdown)(struct platform_device *);
+>>>>>     	int (*suspend)(struct platform_device *, pm_message_t state);
+>>>>>
+>>>>> and then once all the drivers are converted back to .remove() drop the
+>>>>> union and .remove_new().
+>>>>>
+>>>>> Best regards
+>>>>> Uwe
+>>>>>
+>>>>
+>>>> This looks like a pretty simple/minor API change.  Why not just do a patch
+>>>> series that makes both the API change and updates all of the drivers at once
+>>>> (one commit per driver)?
+>>>
+>>> A bit of statistic: Based on v6.3-rc1 I have 2286 patches like the ones
+>>> from this series that (mostly) convert drivers that today already return
+>>> zero unconditionally. Then there is my todo-list of ~100 additional
+>>> drivers that don't return 0 that need manual inspection and fixing.
+>>>
+>>> So we're talking about 2300+ drivers in all subsystems here. To get a
+>>> bisectable series that does the complete conversion, we need:
+>>>
+>>> 	2300 patches to convert drivers to .remove_new()
+>>> 	the above patch
+>>> 	2300 patches to convert drivers back to the new .remove()
+>>>
+>>> Last time I sent a series with ~640 patches (for a similar conversion
+>>> for i2c drivers) people were unlucky already and I got tons of bounces.
+>>> Please consider the address list for the cover letter. While most
+>>> patches are trivial this would require a massive coordination.
+>>>
+>>> So no, this isn't a sensible suggestion. I'll continue to send out
+>>> conversions to .remove_new() per subsystem and once most of them are
+>>> converted, the above patch will be sent with the remainder of the
+>>> unapplied patches.
+>>
+>> I was actually thinking more along the lines of doing one patch series per
+>> subsystem, so for RTC, ~160 patches, one per rtc-*.c driver making the
+>> change to have .remove() be void, plus a patch to adjust the struct
+>> platform_driver rtc definition itself.
 > 
-> > > > > +static int tps6594_rtc_probe(struct platform_device *pdev)
-> > > > > +{
-> > > > > +   struct tps6594 *tps6594;
-> > > > > +   struct tps6594_rtc *tps_rtc;
-> > > > > +   int irq;
-> > > > > +   int ret;
-> > > > > +
-> > > > > +   tps6594 = dev_get_drvdata(pdev->dev.parent);
-> > > > > +
-> > > > > +   tps_rtc = devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
-> > > > > +                          GFP_KERNEL);
-> > > > > +   if (!tps_rtc)
-> > > > > +           return -ENOMEM;
-> > > > > +
-> > > > > +   tps_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-> > > > > +   if (IS_ERR(tps_rtc->rtc))
-> > > > > +           return PTR_ERR(tps_rtc->rtc);
-> > > > > +
-> > > > > +   /* Enable crystal oscillator */
-> > > > > +   ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
-> > > > > +                         TPS6594_BIT_XTAL_EN);
-> > > > > +   if (ret < 0)
-> > > > > +           return ret;
-> > > > > +
-> > > > > +   /* Start rtc */
-> > > > > +   ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
-> > > > > +                         TPS6594_BIT_STOP_RTC);
-> > > > > +   if (ret < 0)
-> > > > > +           return ret;
-> > > >
-> > > > Do that (XTAL_EN and clearing STOP) only once the time is known to be
-> > > > set to a correct value so read_time doesn't have a chance to return a
-> > > > bogus value.
-> > > >
-> > > 
-> > > (...)
-> > > 
-> > > I understand your point, however I'm not sure of the canonical way to do
-> > > this. Simply calling `tps6594_rtc_set_time` is enough?
-> >
-> > Yeah, let userspace set the time and start the rtc at that point.
-> 
-> The problem with that is we might have some RTCs that will just not be
-> usable. We have boards with multiple TP6594 PMICs where only one of them
-> has a crystal oscillator. The way to detect this is to start the RTC
-> then checked if the STOP_RTC bit is still 0. By doing this in the probe,
-> I'm able to not register an RTC device that doesn't work.
-> 
-> If I just start the RTC on the first call to `tps6594_rtc_set_time`, it
-> will work for the RTC with the crystal and fails for all the others 
-> 
-> I can stop the RTC at the end of the probe, after the check to rule out
-> unusable devices. If I add the check you proposed in
-> `tps6594_rtc_read_time` it will fail until a successful call to
-> `tps6594_rtc_set_time`. Would that be a suitable solution?
+> The problem is that all subsystems use the same struct platform_driver.
+> So I cannot change it for rtc and then in the next development cycle for
+> (say) iio and i2c.
 > 
 
-That would work, yes
+Hah, you're right!  Sorry, I was thinking more classic OOP and thought that the rtc base API had a derived 
+struct from platform_driver that allowed for a more precise patch series to be applied.  I know some 
+subsystems do have this, but not rtc, so yes, your approach does make more sense now.
 
+
+>> That way you don't have to have that
+>> interval period where drivers are carrying around the .remove_new() method,
+>> cause I've seen instances in the past where such large-scale changes could
+>> not be completed in a single kernel development cycle.
+> 
+> Different maintainers seem to have different preferences, but most
+> prefer one patch per driver. And I don't plan to complete the conversion
+> in a single development cycle.
+> 
+>> But it sounds like you've already got a plan worked out, so your call on how
+>> you want to handle this.  Thanks for the additional clarification!
+>>
+>> Acked-By: Joshua Kinard <kumba@gentoo.org>
+> 
+> Thanks
+> Uwe
+> 
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Joshua Kinard
+Gentoo/MIPS
+kumba@gentoo.org
+rsa6144/5C63F4E3F5C6C943 2015-04-27
+177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+
+"The past tempts us, the present confuses us, the future frightens us.  And our lives slip away, moment by 
+moment, lost in that vast, terrible in-between."
+
+         --Emperor Turhan, Centauri Republic
+
