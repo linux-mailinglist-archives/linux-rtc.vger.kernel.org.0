@@ -2,159 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476736B7259
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 10:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337466B73CE
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 11:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjCMJS6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Mar 2023 05:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S229960AbjCMKXr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Mar 2023 06:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjCMJSt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Mar 2023 05:18:49 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8BC2CC67
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Mar 2023 02:18:48 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id g3so10576104wri.6
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Mar 2023 02:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678699127;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=819sPWiRDLbyXTj9lMI3wSZfzf6rbkGsUCg2JBu7bxs=;
-        b=HEuvy6TUvSYW5RtpVkz10SjI+9Ax3kWRYRPXvmBLU3VhxDaq0cDEwvydJKd+cxoUjc
-         3busOreQ9i39DHCjQqAO2/NIV7WATtltZwTZB0JclxrU9Mpjg4fs8aWnzLbVv9Ca9++g
-         Rac5GSjH8A8qS+nqaKXi9ONuQsIkX6fxpMKGfsl9EqUJvwUrRX15dQ1AxSI1TYd2ttBm
-         qUoCp3LUtxevls+mep5w0NCD4+/TQBHA3KLIF2ArkX83Kch/4drsZIexiDFywCJ178rs
-         dolm91ISx3Xf09e/BGhPyo5Xg18GyMCxYvmVvk8Mqkg3ulkeT6FF5nYuEy70HTwDSIRB
-         ZZXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678699127;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=819sPWiRDLbyXTj9lMI3wSZfzf6rbkGsUCg2JBu7bxs=;
-        b=k/ls+15J1VURwoclKcUJy1AqQPvAJ9FrQwxf+FBYrNBgKtjC758jnlKWM4mQqF5p59
-         Cayzdl3+KQ3tbfKi5s9oUtl85LiBdKUpLEPMqnlVzz3tbCNcAm8J4GxZqo4v1FUtKNWF
-         f1KMZqx4bm3kFovFkqeH1/lOxhHGYD6G+rzhrxkZ1P97oMDxSfHdRXYqtA/9VMxsDnlP
-         c7L39MsKSL0din49vuZ0kJ9E9EZ7bpCdWWRwTEyVfwkJXEKySAEB2iOr9+qbPUNYKUzV
-         4LpizsJmA82XZEkKSHIn4SJoS5WfGS6/YZfBh1+nP1kyaF15aaSrvmDtNbkL1RRAg73F
-         +EoA==
-X-Gm-Message-State: AO0yUKXeThbj0OVFb/fYnbNDhJ2XhqWjj6YZkSEFK/5k4+pnpkggdL9E
-        +4yqEs2JOQRtmAQTPMmDbMG+2Q==
-X-Google-Smtp-Source: AK7set9TLdu1nH2qB5bjiwDrkGH1cNy+YauBVt/YbewUUWhgEQWBNzt8sbYpWdKlwBvw5FPmT3lLWw==
-X-Received: by 2002:a5d:610e:0:b0:2cb:5b58:74a with SMTP id v14-20020a5d610e000000b002cb5b58074amr22200673wrt.56.1678699126908;
-        Mon, 13 Mar 2023 02:18:46 -0700 (PDT)
-Received: from localhost ([2a01:e0a:28d:66d0:7e56:113b:5d10:d06b])
-        by smtp.gmail.com with ESMTPSA id b12-20020adff90c000000b002c71d206329sm7356587wrr.55.2023.03.13.02.18.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 02:18:46 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 13 Mar 2023 10:18:45 +0100
-Message-Id: <CR556BV2M4I4.2L3LLJ8V1I352@burritosblues>
-Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <a.zummo@towertech.it>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
-        <jneanne@baylibre.com>
-Subject: Re: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594
- PMIC RTC
-From:   "Esteban Blanc" <eblanc@baylibre.com>
-To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-X-Mailer: aerc 0.14.0
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-2-eblanc@baylibre.com> <ZAcbJxrNtWTTTSjR@mail.local>
-In-Reply-To: <ZAcbJxrNtWTTTSjR@mail.local>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229845AbjCMKXT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Mar 2023 06:23:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0CD6C67A;
+        Mon, 13 Mar 2023 03:23:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12DE44B3;
+        Mon, 13 Mar 2023 03:23:45 -0700 (PDT)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB2553F71A;
+        Mon, 13 Mar 2023 03:22:59 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 10:22:46 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: sun6i: Use of_property_present() for testing DT
+ property presence
+Message-ID: <20230313102246.6a41d61e@slackpad.lan>
+In-Reply-To: <20230310144736.1547041-1-robh@kernel.org>
+References: <20230310144736.1547041-1-robh@kernel.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue Mar 7, 2023 at 12:08 PM CET, Alexandre Belloni wrote:
-> On 24/02/2023 14:31:27+0100, Esteban Blanc wrote:
-> > +struct tps6594_rtc {
-> > +   struct rtc_device *rtc;
-> > +};
->
-> Is the struct actually useful?
+On Fri, 10 Mar 2023 08:47:36 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-Good catch, it's not. I will remove it for V2.
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-(...)
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
-> > +/*
-> > + * Gets current tps6594 RTC time and date parameters.
-> > + *
-> > + * The RTC's time/alarm representation is not what gmtime(3) requires
-> > + * Linux to use:
-> > + *
-> > + *  - Months are 1..12 vs Linux 0-11
-> > + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
-> > + */
->
-> I don't find this comment to be particularly useful.
+Cheers,
+Andre
 
-Ok. I propose that I add 2 constants for the -1 and +100 in the month and y=
-ear
-calculation. This way, without the comment the computation would be a
-bit more self explanatory.
-What do you think?
-
-(...)
-
-> > +static int tps6594_rtc_probe(struct platform_device *pdev)
-> > +{
-> > +   struct tps6594 *tps6594;
-> > +   struct tps6594_rtc *tps_rtc;
-> > +   int irq;
-> > +   int ret;
-> > +
-> > +   tps6594 =3D dev_get_drvdata(pdev->dev.parent);
-> > +
-> > +   tps_rtc =3D devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
-> > +                          GFP_KERNEL);
-> > +   if (!tps_rtc)
-> > +           return -ENOMEM;
-> > +
-> > +   tps_rtc->rtc =3D devm_rtc_allocate_device(&pdev->dev);
-> > +   if (IS_ERR(tps_rtc->rtc))
-> > +           return PTR_ERR(tps_rtc->rtc);
-> > +
-> > +   /* Enable crystal oscillator */
-> > +   ret =3D regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
-> > +                         TPS6594_BIT_XTAL_EN);
-> > +   if (ret < 0)
-> > +           return ret;
-> > +
-> > +   /* Start rtc */
-> > +   ret =3D regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
-> > +                         TPS6594_BIT_STOP_RTC);
-> > +   if (ret < 0)
-> > +           return ret;
->
-> Do that (XTAL_EN and clearing STOP) only once the time is known to be
-> set to a correct value so read_time doesn't have a chance to return a
-> bogus value.
->
-
-(...)
-
-I understand your point, however I'm not sure of the canonical way to do
-this. Simply calling `tps6594_rtc_set_time` is enough?
-
-> --=20
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Thanks for your time. Best regards,
---=20
-Esteban Blanc
-BayLibre
+> ---
+>  drivers/rtc/rtc-sun6i.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index 7038f47d77ff..dc76537f1b62 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -260,7 +260,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+>  	}
+>  
+>  	/* Switch to the external, more precise, oscillator, if present */
+> -	if (of_get_property(node, "clocks", NULL)) {
+> +	if (of_property_present(node, "clocks")) {
+>  		reg |= SUN6I_LOSC_CTRL_EXT_OSC;
+>  		if (rtc->data->has_losc_en)
+>  			reg |= SUN6I_LOSC_CTRL_EXT_LOSC_EN;
 
