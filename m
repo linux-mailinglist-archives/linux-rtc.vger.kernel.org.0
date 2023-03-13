@@ -2,36 +2,45 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656C46B6D69
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 03:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13556B6D83
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 03:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjCMCUZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 12 Mar 2023 22:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S229519AbjCMCaQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 12 Mar 2023 22:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCMCUY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Mar 2023 22:20:24 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C946B3251A;
-        Sun, 12 Mar 2023 19:20:21 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0A1E820002;
-        Mon, 13 Mar 2023 02:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678674019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RUwXbYnksL+nMUTh6tFpMBtQrBc+4TuCw6h4lOTsxR4=;
-        b=EXO09eSq5srtLUwf6XxAXIIjKBGlJDJ/M/ybbgLRcDnjNqR9MF5GUo4m9Oto+TFdCnjtzw
-        WVDee2b3JQ0VFHAjGUn63PLcVBE1rnCfiF/+daqO75n31hnqtdbcxj2DRbWaHIEMQftZj1
-        BIifpnESbz8PZM+xjXHBtV1Ko+edMo7dRjtPu2EBqTlNypoJ0tAmdm2hbb73GWRl0Wg5UM
-        I3mA5KvUIOL0q+hltuMf9GMAK2brj2UMJp5BebAu5bJ6KyH+n0SDo1wvPJoLLZSvwGAcH+
-        fTQDXzllSHGzbQzEwxQV8thygHMro2ONJsI/P9L7zqWU8gwiae1SxuK55XG0WQ==
-Date:   Mon, 13 Mar 2023 03:20:17 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        with ESMTP id S229698AbjCMCaP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Mar 2023 22:30:15 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D0C29431
+        for <linux-rtc@vger.kernel.org>; Sun, 12 Mar 2023 19:30:12 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A7DE72C05F3;
+        Mon, 13 Mar 2023 15:30:09 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1678674609;
+        bh=TCB+oOL3AmP8xAYR9XQS9bPYP9L337PgciAAc9DV86Y=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=orBjQ8JDkBKYlVyOz2kDboi1hFN9iU8haFSon8C3KW2skwva6KaFTI+/M1YtKe3AV
+         HzQFZPPHzVu0AATU/itsLYhFKZvEwsPkhyE3WwVO2gj0jbQs87mDGLjb2/LIJS1DuY
+         Y2aHvNPNATZZ6zvDsp6EvkOeTKmcnhB1COsrceJjdaGEVn8YFznRKjSgl1J3nGDDDf
+         ygggrDgdxgqagjDhPWU/flXsuc0fL8K3NqWUEn27YH7PVTZ3UsDi9dbZpAmP/xvrYD
+         IXhu9Fsj0o/z8hgZVrrKKHHMzwlas/ci5chKZDMBwwum3jMkCXTkTEU1RSv0wdFlSb
+         p/nzR2R0tnG8Q==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B640e8ab10001>; Mon, 13 Mar 2023 15:30:09 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar 2023 15:30:09 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.047; Mon, 13 Mar 2023 15:30:09 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
         "a.zummo@towertech.it" <a.zummo@towertech.it>,
         "jdelvare@suse.com" <jdelvare@suse.com>,
         "linux@roeck-us.net" <linux@roeck-us.net>,
@@ -44,73 +53,81 @@ Cc:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
 Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-Message-ID: <20230313022017afe9a8fe@mail.local>
+Thread-Topic: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
+Thread-Index: AQHZQLLY3ijYBbo43E6McZa87qvtIa7Sap6AgCTdZwCAAAFbgIAAAsKA
+Date:   Mon, 13 Mar 2023 02:30:09 +0000
+Message-ID: <630c70a9-f82e-fe3d-324a-041cde8f5deb@alliedtelesis.co.nz>
 References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
  <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
  <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
  <CY4PR03MB2488B54E722831F0375430CA96A19@CY4PR03MB2488.namprd03.prod.outlook.com>
  <52382400-5abd-b473-6cf7-333e7deab2d4@alliedtelesis.co.nz>
+ <20230313022017afe9a8fe@mail.local>
+In-Reply-To: <20230313022017afe9a8fe@mail.local>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C66490394C18B040B7FCBCAACE57B2DC@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <52382400-5abd-b473-6cf7-333e7deab2d4@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10 a=gAnH3GRIAAAA:8 a=6rO8HCioFkcRVP0wza0A:9 a=QEXdDO2ut3YA:10 a=oVHKYsEdi7-vN-J5QA_j:22
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 13/03/2023 02:15:26+0000, Chris Packham wrote:
-> Hi Ibrahim,
-> 
-> On 18/02/23 04:17, Tilki, Ibrahim wrote:
-> >> Hi Ibrahim,
-> >>
-> >> On 9/11/22 01:22, Ibrahim Tilki wrote:
-> >>> Adding support for Analog Devices MAX313XX series RTCs.
-> >>>
-> >>> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> >>> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> >>> ---
-> >>>    drivers/rtc/Kconfig        |   11 +
-> >>>    drivers/rtc/Makefile       |    1 +
-> >>>    drivers/rtc/rtc-max313xx.c | 1070 ++++++++++++++++++++++++++++++++++++
-> >>>    3 files changed, 1082 insertions(+)
-> >>>    create mode 100644 drivers/rtc/rtc-max313xx.c
-> >> What is the current state of this work? I see there are some comments on
-> >> this v3 iteration from late last year and I couldn't find any newer
-> >> iteration on any mailing list. We've got some new hardware arriving soon
-> >> that will have the MAX31331 RTC and I'm keen to see this patch series
-> >> land. Is there anything I can do to help it along? I can't be very
-> >> specific about when I'll see the new hardware (who can these days), the
-> >> last update was "boards are due in March".
-> >>
-> >> For the maintainers on the Cc list once the dust settles how would I get
-> >> this supported in a LTS kernel (we're currently using the 5.15 series)?
-> >> Or is totally out of the question because it's not just a new device id?
-> > Hi Chris,
-> >
-> > Patch v4 is on the way, I will be sending it in a few weeks.
-> > It is hard to tell when it is going to land but I expect to be more responsive
-> > to reviews after patch v4.
-> 
-> FYI I've now got some boards with a MAX31331. I've given v3 a quick test 
-> and it works for me.
-> 
-> Are you also looking at a u-boot driver? If not I can port your driver 
-> across reasonably easily.
-> 
-
-I'm curious why would you need an RTC driver for u-boot?
-
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+DQpPbiAxMy8wMy8yMyAxNToyMCwgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+IEhlbGxvLA0K
+Pg0KPiBPbiAxMy8wMy8yMDIzIDAyOjE1OjI2KzAwMDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+
+PiBIaSBJYnJhaGltLA0KPj4NCj4+IE9uIDE4LzAyLzIzIDA0OjE3LCBUaWxraSwgSWJyYWhpbSB3
+cm90ZToNCj4+Pj4gSGkgSWJyYWhpbSwNCj4+Pj4NCj4+Pj4gT24gOS8xMS8yMiAwMToyMiwgSWJy
+YWhpbSBUaWxraSB3cm90ZToNCj4+Pj4+IEFkZGluZyBzdXBwb3J0IGZvciBBbmFsb2cgRGV2aWNl
+cyBNQVgzMTNYWCBzZXJpZXMgUlRDcy4NCj4+Pj4+DQo+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBJYnJh
+aGltIFRpbGtpIDxJYnJhaGltLlRpbGtpQGFuYWxvZy5jb20+DQo+Pj4+PiBTaWduZWQtb2ZmLWJ5
+OiBaZXluZXAgQXJzbGFuYmVuemVyIDxaZXluZXAuQXJzbGFuYmVuemVyQGFuYWxvZy5jb20+DQo+
+Pj4+PiAtLS0NCj4+Pj4+ICAgICBkcml2ZXJzL3J0Yy9LY29uZmlnICAgICAgICB8ICAgMTEgKw0K
+Pj4+Pj4gICAgIGRyaXZlcnMvcnRjL01ha2VmaWxlICAgICAgIHwgICAgMSArDQo+Pj4+PiAgICAg
+ZHJpdmVycy9ydGMvcnRjLW1heDMxM3h4LmMgfCAxMDcwICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKw0KPj4+Pj4gICAgIDMgZmlsZXMgY2hhbmdlZCwgMTA4MiBpbnNlcnRpb25z
+KCspDQo+Pj4+PiAgICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvcnRjL3J0Yy1tYXgzMTN4
+eC5jDQo+Pj4+IFdoYXQgaXMgdGhlIGN1cnJlbnQgc3RhdGUgb2YgdGhpcyB3b3JrPyBJIHNlZSB0
+aGVyZSBhcmUgc29tZSBjb21tZW50cyBvbg0KPj4+PiB0aGlzIHYzIGl0ZXJhdGlvbiBmcm9tIGxh
+dGUgbGFzdCB5ZWFyIGFuZCBJIGNvdWxkbid0IGZpbmQgYW55IG5ld2VyDQo+Pj4+IGl0ZXJhdGlv
+biBvbiBhbnkgbWFpbGluZyBsaXN0LiBXZSd2ZSBnb3Qgc29tZSBuZXcgaGFyZHdhcmUgYXJyaXZp
+bmcgc29vbg0KPj4+PiB0aGF0IHdpbGwgaGF2ZSB0aGUgTUFYMzEzMzEgUlRDIGFuZCBJJ20ga2Vl
+biB0byBzZWUgdGhpcyBwYXRjaCBzZXJpZXMNCj4+Pj4gbGFuZC4gSXMgdGhlcmUgYW55dGhpbmcg
+SSBjYW4gZG8gdG8gaGVscCBpdCBhbG9uZz8gSSBjYW4ndCBiZSB2ZXJ5DQo+Pj4+IHNwZWNpZmlj
+IGFib3V0IHdoZW4gSSdsbCBzZWUgdGhlIG5ldyBoYXJkd2FyZSAod2hvIGNhbiB0aGVzZSBkYXlz
+KSwgdGhlDQo+Pj4+IGxhc3QgdXBkYXRlIHdhcyAiYm9hcmRzIGFyZSBkdWUgaW4gTWFyY2giLg0K
+Pj4+Pg0KPj4+PiBGb3IgdGhlIG1haW50YWluZXJzIG9uIHRoZSBDYyBsaXN0IG9uY2UgdGhlIGR1
+c3Qgc2V0dGxlcyBob3cgd291bGQgSSBnZXQNCj4+Pj4gdGhpcyBzdXBwb3J0ZWQgaW4gYSBMVFMg
+a2VybmVsICh3ZSdyZSBjdXJyZW50bHkgdXNpbmcgdGhlIDUuMTUgc2VyaWVzKT8NCj4+Pj4gT3Ig
+aXMgdG90YWxseSBvdXQgb2YgdGhlIHF1ZXN0aW9uIGJlY2F1c2UgaXQncyBub3QganVzdCBhIG5l
+dyBkZXZpY2UgaWQ/DQo+Pj4gSGkgQ2hyaXMsDQo+Pj4NCj4+PiBQYXRjaCB2NCBpcyBvbiB0aGUg
+d2F5LCBJIHdpbGwgYmUgc2VuZGluZyBpdCBpbiBhIGZldyB3ZWVrcy4NCj4+PiBJdCBpcyBoYXJk
+IHRvIHRlbGwgd2hlbiBpdCBpcyBnb2luZyB0byBsYW5kIGJ1dCBJIGV4cGVjdCB0byBiZSBtb3Jl
+IHJlc3BvbnNpdmUNCj4+PiB0byByZXZpZXdzIGFmdGVyIHBhdGNoIHY0Lg0KPj4gRllJIEkndmUg
+bm93IGdvdCBzb21lIGJvYXJkcyB3aXRoIGEgTUFYMzEzMzEuIEkndmUgZ2l2ZW4gdjMgYSBxdWlj
+ayB0ZXN0DQo+PiBhbmQgaXQgd29ya3MgZm9yIG1lLg0KPj4NCj4+IEFyZSB5b3UgYWxzbyBsb29r
+aW5nIGF0IGEgdS1ib290IGRyaXZlcj8gSWYgbm90IEkgY2FuIHBvcnQgeW91ciBkcml2ZXINCj4+
+IGFjcm9zcyByZWFzb25hYmx5IGVhc2lseS4NCj4+DQo+IEknbSBjdXJpb3VzIHdoeSB3b3VsZCB5
+b3UgbmVlZCBhbiBSVEMgZHJpdmVyIGZvciB1LWJvb3Q/DQoNClNob3J0IGFuc3dlciBpcyBiZWNh
+dXNlIHUtYm9vdCBoYXMgUlRDIGRyaXZlcnMgYW5kIGNvbW1hbmRzIHRvIHNldC9yZWFkIA0KdGhl
+bS4NCg0KU2xpZ2h0bHkgbG9uZ2VyIGFuc3dlciBpcyB0aGF0IGZvciBvdXIgY3VycmVudCBwcm9k
+dWN0cyAobW9zdCB3aXRoIGEgDQpEUzEzNDAgb3Igc29tZXRoaW5nIGNsb3NlKSBvdXIgaW5pdGlh
+bCBtYW51ZmFjdHVyaW5nIHByb2Nlc3MgaW5jbHVkZXMgDQpzZXR0aW5nIHRoZSBSVEMgZnJvbSB1
+LWJvb3QuIEl0J3MgbW9zdGx5IGEgImJlY2F1c2Ugd2UndmUgYWx3YXlzIGRvbmUgaXQgDQp0aGF0
+IHdheSIgYnV0IGl0IGRvZXMgaGF2ZSB0aGUgYWR2YW50YWdlIHRoYXQgYW55IGxvZ3Mgb3IgZmls
+ZXMgY3JlYXRlZCANCm9uIGZpcnN0IGJvb3QgZ2V0IHRpbWVzdGFtcGVkIGNvcnJlY3RseS4gWWVz
+IHdlIGNvdWxkIHNldCB0aGUgY2xvY2sgZnJvbSANCnVzZXJsYW5kIG9uIGZpcnN0IGJvb3QgYnV0
+IHRoZXJlIHdvdWxkIGJlIGEgZmV3IG9kZCBsb2cgZW50cmllcyBmcm9tIA0KYmVmb3JlIHRoZSBS
+VEMgd2FzIHNldC4NCg==
