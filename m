@@ -2,132 +2,159 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13556B6D83
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 03:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 476736B7259
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 10:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjCMCaQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 12 Mar 2023 22:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S229992AbjCMJS6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Mar 2023 05:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjCMCaP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Mar 2023 22:30:15 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D0C29431
-        for <linux-rtc@vger.kernel.org>; Sun, 12 Mar 2023 19:30:12 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A7DE72C05F3;
-        Mon, 13 Mar 2023 15:30:09 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1678674609;
-        bh=TCB+oOL3AmP8xAYR9XQS9bPYP9L337PgciAAc9DV86Y=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=orBjQ8JDkBKYlVyOz2kDboi1hFN9iU8haFSon8C3KW2skwva6KaFTI+/M1YtKe3AV
-         HzQFZPPHzVu0AATU/itsLYhFKZvEwsPkhyE3WwVO2gj0jbQs87mDGLjb2/LIJS1DuY
-         Y2aHvNPNATZZ6zvDsp6EvkOeTKmcnhB1COsrceJjdaGEVn8YFznRKjSgl1J3nGDDDf
-         ygggrDgdxgqagjDhPWU/flXsuc0fL8K3NqWUEn27YH7PVTZ3UsDi9dbZpAmP/xvrYD
-         IXhu9Fsj0o/z8hgZVrrKKHHMzwlas/ci5chKZDMBwwum3jMkCXTkTEU1RSv0wdFlSb
-         p/nzR2R0tnG8Q==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B640e8ab10001>; Mon, 13 Mar 2023 15:30:09 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar 2023 15:30:09 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.047; Mon, 13 Mar 2023 15:30:09 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-Thread-Topic: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-Thread-Index: AQHZQLLY3ijYBbo43E6McZa87qvtIa7Sap6AgCTdZwCAAAFbgIAAAsKA
-Date:   Mon, 13 Mar 2023 02:30:09 +0000
-Message-ID: <630c70a9-f82e-fe3d-324a-041cde8f5deb@alliedtelesis.co.nz>
-References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
- <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
- <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
- <CY4PR03MB2488B54E722831F0375430CA96A19@CY4PR03MB2488.namprd03.prod.outlook.com>
- <52382400-5abd-b473-6cf7-333e7deab2d4@alliedtelesis.co.nz>
- <20230313022017afe9a8fe@mail.local>
-In-Reply-To: <20230313022017afe9a8fe@mail.local>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C66490394C18B040B7FCBCAACE57B2DC@atlnz.lc>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10 a=gAnH3GRIAAAA:8 a=6rO8HCioFkcRVP0wza0A:9 a=QEXdDO2ut3YA:10 a=oVHKYsEdi7-vN-J5QA_j:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229994AbjCMJSt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Mar 2023 05:18:49 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8BC2CC67
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Mar 2023 02:18:48 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id g3so10576104wri.6
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Mar 2023 02:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678699127;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=819sPWiRDLbyXTj9lMI3wSZfzf6rbkGsUCg2JBu7bxs=;
+        b=HEuvy6TUvSYW5RtpVkz10SjI+9Ax3kWRYRPXvmBLU3VhxDaq0cDEwvydJKd+cxoUjc
+         3busOreQ9i39DHCjQqAO2/NIV7WATtltZwTZB0JclxrU9Mpjg4fs8aWnzLbVv9Ca9++g
+         Rac5GSjH8A8qS+nqaKXi9ONuQsIkX6fxpMKGfsl9EqUJvwUrRX15dQ1AxSI1TYd2ttBm
+         qUoCp3LUtxevls+mep5w0NCD4+/TQBHA3KLIF2ArkX83Kch/4drsZIexiDFywCJ178rs
+         dolm91ISx3Xf09e/BGhPyo5Xg18GyMCxYvmVvk8Mqkg3ulkeT6FF5nYuEy70HTwDSIRB
+         ZZXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678699127;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=819sPWiRDLbyXTj9lMI3wSZfzf6rbkGsUCg2JBu7bxs=;
+        b=k/ls+15J1VURwoclKcUJy1AqQPvAJ9FrQwxf+FBYrNBgKtjC758jnlKWM4mQqF5p59
+         Cayzdl3+KQ3tbfKi5s9oUtl85LiBdKUpLEPMqnlVzz3tbCNcAm8J4GxZqo4v1FUtKNWF
+         f1KMZqx4bm3kFovFkqeH1/lOxhHGYD6G+rzhrxkZ1P97oMDxSfHdRXYqtA/9VMxsDnlP
+         c7L39MsKSL0din49vuZ0kJ9E9EZ7bpCdWWRwTEyVfwkJXEKySAEB2iOr9+qbPUNYKUzV
+         4LpizsJmA82XZEkKSHIn4SJoS5WfGS6/YZfBh1+nP1kyaF15aaSrvmDtNbkL1RRAg73F
+         +EoA==
+X-Gm-Message-State: AO0yUKXeThbj0OVFb/fYnbNDhJ2XhqWjj6YZkSEFK/5k4+pnpkggdL9E
+        +4yqEs2JOQRtmAQTPMmDbMG+2Q==
+X-Google-Smtp-Source: AK7set9TLdu1nH2qB5bjiwDrkGH1cNy+YauBVt/YbewUUWhgEQWBNzt8sbYpWdKlwBvw5FPmT3lLWw==
+X-Received: by 2002:a5d:610e:0:b0:2cb:5b58:74a with SMTP id v14-20020a5d610e000000b002cb5b58074amr22200673wrt.56.1678699126908;
+        Mon, 13 Mar 2023 02:18:46 -0700 (PDT)
+Received: from localhost ([2a01:e0a:28d:66d0:7e56:113b:5d10:d06b])
+        by smtp.gmail.com with ESMTPSA id b12-20020adff90c000000b002c71d206329sm7356587wrr.55.2023.03.13.02.18.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 02:18:46 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 13 Mar 2023 10:18:45 +0100
+Message-Id: <CR556BV2M4I4.2L3LLJ8V1I352@burritosblues>
+Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
+        <jneanne@baylibre.com>
+Subject: Re: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594
+ PMIC RTC
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+X-Mailer: aerc 0.14.0
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-2-eblanc@baylibre.com> <ZAcbJxrNtWTTTSjR@mail.local>
+In-Reply-To: <ZAcbJxrNtWTTTSjR@mail.local>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQpPbiAxMy8wMy8yMyAxNToyMCwgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+IEhlbGxvLA0K
-Pg0KPiBPbiAxMy8wMy8yMDIzIDAyOjE1OjI2KzAwMDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+
-PiBIaSBJYnJhaGltLA0KPj4NCj4+IE9uIDE4LzAyLzIzIDA0OjE3LCBUaWxraSwgSWJyYWhpbSB3
-cm90ZToNCj4+Pj4gSGkgSWJyYWhpbSwNCj4+Pj4NCj4+Pj4gT24gOS8xMS8yMiAwMToyMiwgSWJy
-YWhpbSBUaWxraSB3cm90ZToNCj4+Pj4+IEFkZGluZyBzdXBwb3J0IGZvciBBbmFsb2cgRGV2aWNl
-cyBNQVgzMTNYWCBzZXJpZXMgUlRDcy4NCj4+Pj4+DQo+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBJYnJh
-aGltIFRpbGtpIDxJYnJhaGltLlRpbGtpQGFuYWxvZy5jb20+DQo+Pj4+PiBTaWduZWQtb2ZmLWJ5
-OiBaZXluZXAgQXJzbGFuYmVuemVyIDxaZXluZXAuQXJzbGFuYmVuemVyQGFuYWxvZy5jb20+DQo+
-Pj4+PiAtLS0NCj4+Pj4+ICAgICBkcml2ZXJzL3J0Yy9LY29uZmlnICAgICAgICB8ICAgMTEgKw0K
-Pj4+Pj4gICAgIGRyaXZlcnMvcnRjL01ha2VmaWxlICAgICAgIHwgICAgMSArDQo+Pj4+PiAgICAg
-ZHJpdmVycy9ydGMvcnRjLW1heDMxM3h4LmMgfCAxMDcwICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKw0KPj4+Pj4gICAgIDMgZmlsZXMgY2hhbmdlZCwgMTA4MiBpbnNlcnRpb25z
-KCspDQo+Pj4+PiAgICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvcnRjL3J0Yy1tYXgzMTN4
-eC5jDQo+Pj4+IFdoYXQgaXMgdGhlIGN1cnJlbnQgc3RhdGUgb2YgdGhpcyB3b3JrPyBJIHNlZSB0
-aGVyZSBhcmUgc29tZSBjb21tZW50cyBvbg0KPj4+PiB0aGlzIHYzIGl0ZXJhdGlvbiBmcm9tIGxh
-dGUgbGFzdCB5ZWFyIGFuZCBJIGNvdWxkbid0IGZpbmQgYW55IG5ld2VyDQo+Pj4+IGl0ZXJhdGlv
-biBvbiBhbnkgbWFpbGluZyBsaXN0LiBXZSd2ZSBnb3Qgc29tZSBuZXcgaGFyZHdhcmUgYXJyaXZp
-bmcgc29vbg0KPj4+PiB0aGF0IHdpbGwgaGF2ZSB0aGUgTUFYMzEzMzEgUlRDIGFuZCBJJ20ga2Vl
-biB0byBzZWUgdGhpcyBwYXRjaCBzZXJpZXMNCj4+Pj4gbGFuZC4gSXMgdGhlcmUgYW55dGhpbmcg
-SSBjYW4gZG8gdG8gaGVscCBpdCBhbG9uZz8gSSBjYW4ndCBiZSB2ZXJ5DQo+Pj4+IHNwZWNpZmlj
-IGFib3V0IHdoZW4gSSdsbCBzZWUgdGhlIG5ldyBoYXJkd2FyZSAod2hvIGNhbiB0aGVzZSBkYXlz
-KSwgdGhlDQo+Pj4+IGxhc3QgdXBkYXRlIHdhcyAiYm9hcmRzIGFyZSBkdWUgaW4gTWFyY2giLg0K
-Pj4+Pg0KPj4+PiBGb3IgdGhlIG1haW50YWluZXJzIG9uIHRoZSBDYyBsaXN0IG9uY2UgdGhlIGR1
-c3Qgc2V0dGxlcyBob3cgd291bGQgSSBnZXQNCj4+Pj4gdGhpcyBzdXBwb3J0ZWQgaW4gYSBMVFMg
-a2VybmVsICh3ZSdyZSBjdXJyZW50bHkgdXNpbmcgdGhlIDUuMTUgc2VyaWVzKT8NCj4+Pj4gT3Ig
-aXMgdG90YWxseSBvdXQgb2YgdGhlIHF1ZXN0aW9uIGJlY2F1c2UgaXQncyBub3QganVzdCBhIG5l
-dyBkZXZpY2UgaWQ/DQo+Pj4gSGkgQ2hyaXMsDQo+Pj4NCj4+PiBQYXRjaCB2NCBpcyBvbiB0aGUg
-d2F5LCBJIHdpbGwgYmUgc2VuZGluZyBpdCBpbiBhIGZldyB3ZWVrcy4NCj4+PiBJdCBpcyBoYXJk
-IHRvIHRlbGwgd2hlbiBpdCBpcyBnb2luZyB0byBsYW5kIGJ1dCBJIGV4cGVjdCB0byBiZSBtb3Jl
-IHJlc3BvbnNpdmUNCj4+PiB0byByZXZpZXdzIGFmdGVyIHBhdGNoIHY0Lg0KPj4gRllJIEkndmUg
-bm93IGdvdCBzb21lIGJvYXJkcyB3aXRoIGEgTUFYMzEzMzEuIEkndmUgZ2l2ZW4gdjMgYSBxdWlj
-ayB0ZXN0DQo+PiBhbmQgaXQgd29ya3MgZm9yIG1lLg0KPj4NCj4+IEFyZSB5b3UgYWxzbyBsb29r
-aW5nIGF0IGEgdS1ib290IGRyaXZlcj8gSWYgbm90IEkgY2FuIHBvcnQgeW91ciBkcml2ZXINCj4+
-IGFjcm9zcyByZWFzb25hYmx5IGVhc2lseS4NCj4+DQo+IEknbSBjdXJpb3VzIHdoeSB3b3VsZCB5
-b3UgbmVlZCBhbiBSVEMgZHJpdmVyIGZvciB1LWJvb3Q/DQoNClNob3J0IGFuc3dlciBpcyBiZWNh
-dXNlIHUtYm9vdCBoYXMgUlRDIGRyaXZlcnMgYW5kIGNvbW1hbmRzIHRvIHNldC9yZWFkIA0KdGhl
-bS4NCg0KU2xpZ2h0bHkgbG9uZ2VyIGFuc3dlciBpcyB0aGF0IGZvciBvdXIgY3VycmVudCBwcm9k
-dWN0cyAobW9zdCB3aXRoIGEgDQpEUzEzNDAgb3Igc29tZXRoaW5nIGNsb3NlKSBvdXIgaW5pdGlh
-bCBtYW51ZmFjdHVyaW5nIHByb2Nlc3MgaW5jbHVkZXMgDQpzZXR0aW5nIHRoZSBSVEMgZnJvbSB1
-LWJvb3QuIEl0J3MgbW9zdGx5IGEgImJlY2F1c2Ugd2UndmUgYWx3YXlzIGRvbmUgaXQgDQp0aGF0
-IHdheSIgYnV0IGl0IGRvZXMgaGF2ZSB0aGUgYWR2YW50YWdlIHRoYXQgYW55IGxvZ3Mgb3IgZmls
-ZXMgY3JlYXRlZCANCm9uIGZpcnN0IGJvb3QgZ2V0IHRpbWVzdGFtcGVkIGNvcnJlY3RseS4gWWVz
-IHdlIGNvdWxkIHNldCB0aGUgY2xvY2sgZnJvbSANCnVzZXJsYW5kIG9uIGZpcnN0IGJvb3QgYnV0
-IHRoZXJlIHdvdWxkIGJlIGEgZmV3IG9kZCBsb2cgZW50cmllcyBmcm9tIA0KYmVmb3JlIHRoZSBS
-VEMgd2FzIHNldC4NCg==
+On Tue Mar 7, 2023 at 12:08 PM CET, Alexandre Belloni wrote:
+> On 24/02/2023 14:31:27+0100, Esteban Blanc wrote:
+> > +struct tps6594_rtc {
+> > +   struct rtc_device *rtc;
+> > +};
+>
+> Is the struct actually useful?
+
+Good catch, it's not. I will remove it for V2.
+
+(...)
+
+> > +/*
+> > + * Gets current tps6594 RTC time and date parameters.
+> > + *
+> > + * The RTC's time/alarm representation is not what gmtime(3) requires
+> > + * Linux to use:
+> > + *
+> > + *  - Months are 1..12 vs Linux 0-11
+> > + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
+> > + */
+>
+> I don't find this comment to be particularly useful.
+
+Ok. I propose that I add 2 constants for the -1 and +100 in the month and y=
+ear
+calculation. This way, without the comment the computation would be a
+bit more self explanatory.
+What do you think?
+
+(...)
+
+> > +static int tps6594_rtc_probe(struct platform_device *pdev)
+> > +{
+> > +   struct tps6594 *tps6594;
+> > +   struct tps6594_rtc *tps_rtc;
+> > +   int irq;
+> > +   int ret;
+> > +
+> > +   tps6594 =3D dev_get_drvdata(pdev->dev.parent);
+> > +
+> > +   tps_rtc =3D devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
+> > +                          GFP_KERNEL);
+> > +   if (!tps_rtc)
+> > +           return -ENOMEM;
+> > +
+> > +   tps_rtc->rtc =3D devm_rtc_allocate_device(&pdev->dev);
+> > +   if (IS_ERR(tps_rtc->rtc))
+> > +           return PTR_ERR(tps_rtc->rtc);
+> > +
+> > +   /* Enable crystal oscillator */
+> > +   ret =3D regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
+> > +                         TPS6594_BIT_XTAL_EN);
+> > +   if (ret < 0)
+> > +           return ret;
+> > +
+> > +   /* Start rtc */
+> > +   ret =3D regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
+> > +                         TPS6594_BIT_STOP_RTC);
+> > +   if (ret < 0)
+> > +           return ret;
+>
+> Do that (XTAL_EN and clearing STOP) only once the time is known to be
+> set to a correct value so read_time doesn't have a chance to return a
+> bogus value.
+>
+
+(...)
+
+I understand your point, however I'm not sure of the canonical way to do
+this. Simply calling `tps6594_rtc_set_time` is enough?
+
+> --=20
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Thanks for your time. Best regards,
+--=20
+Esteban Blanc
+BayLibre
+
