@@ -2,232 +2,266 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5822F6B7B86
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 16:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2146B7BED
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Mar 2023 16:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjCMPI1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Mar 2023 11:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S231158AbjCMP2v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Mar 2023 11:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCMPIX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Mar 2023 11:08:23 -0400
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18A3E05A
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Mar 2023 08:08:17 -0700 (PDT)
-Message-ID: <2a039428-3875-248d-c54e-6239f6d48cc2@gentoo.org>
-Date:   Mon, 13 Mar 2023 11:08:14 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH 11/41] rtc: ds1685: Convert to platform remove callback
- returning void
+        with ESMTP id S231192AbjCMP2s (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Mar 2023 11:28:48 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2043.outbound.protection.outlook.com [40.107.8.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FF176144;
+        Mon, 13 Mar 2023 08:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XZlzeuB99z2QMf0zZvwBf9fww0nyXfSCVEUQLazLS4c=;
+ b=nPWQ6vDZkYJOrUTZ7ehsnXyGDUQJFnYFhkkUZzTILX5hIt9fdGBzwW+GON1Wqe+ht3ZAeqFaD3sECSA0oACdXYEbZeiHrJLocP84rTPhXnbAy2ni0CS6GCrUefMvWOAJDBJydDx7PHtjds0804plPg9xP/S+Zbc+Wp5LF0MVUizsZUmAXgql+YLLSp9HFMlowh4dzgLafURpYh8083DjsPS+txOB0B8/0FnRcmD7Z9o/odVjwGg0P/BUFV3g6hUlqXSUD6EMgenHz8cMtlR+zKU4EfVokDoo5AvwTfaj3vU7aFBzoLLuGUHjnEibsDDIatzHxwTerJJn7wRu46YH+w==
+Received: from AM5PR0601CA0030.eurprd06.prod.outlook.com
+ (2603:10a6:203:68::16) by AS8PR03MB7604.eurprd03.prod.outlook.com
+ (2603:10a6:20b:34f::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 15:28:43 +0000
+Received: from AM6EUR05FT064.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:203:68:cafe::9b) by AM5PR0601CA0030.outlook.office365.com
+ (2603:10a6:203:68::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.22 via Frontend
+ Transport; Mon, 13 Mar 2023 15:28:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.83)
+ smtp.mailfrom=seco.com; dkim=pass (signature was verified)
+ header.d=seco.com;dmarc=pass action=none header.from=seco.com;
+Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
+ 20.160.56.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.160.56.83; helo=inpost-eu.tmcas.trendmicro.com; pr=C
+Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.83) by
+ AM6EUR05FT064.mail.protection.outlook.com (10.233.241.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6199.11 via Frontend Transport; Mon, 13 Mar 2023 15:28:43 +0000
+Received: from outmta (unknown [192.168.82.140])
+        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 063022008026E;
+        Mon, 13 Mar 2023 15:28:43 +0000 (UTC)
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (unknown [104.47.2.51])
+        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 2FE7620080075;
+        Mon, 13 Mar 2023 15:19:48 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gk6SZewqqNMDJWXHHpBvq43XKDp6DSlnxd5PPa0DhMXsRVzX+UGgV+vI/5AGe+M8PGLUeQsQfQ0FckYnYfBE6pBd/hVSGGhi/uAueTYxjA2P66jSgk7sMiBAZ3zilU4LRNYOEzGD2dUzU1lbeu06A1v6bfc9Ughd+mqWFAR+vwvGtnIxDf8isqTLAbk0W9W0QvNRgSjXyBb/Z17avCuGdXJkdwI9UBZ+V3MEwv+SyhUvwIPi6MIdMhK9bvcHUdR+MpalX1+s/NvlFrzmvTjeRfnEMqSLdsMm0EHGSZaqt7T5jKItnTFJwPqTjZzHCIRaQyLUd5riki0EOZCDoTQ2YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XZlzeuB99z2QMf0zZvwBf9fww0nyXfSCVEUQLazLS4c=;
+ b=nKae3vkg3xLo/uKc66950UEpNwDaAAuPoJ7sSFG5s/ygwzckaa78WVkqCGI/RYrx16LpQgaMaglPxSq0kUHUaHszszbc7UhmyPmULI71hOTtSpwoHLh9HSUgwhXPxo/dWwBvT5zPKXs8sDgwNq2d3Qmue3ucD42YnvTVQw67A9cd7C8au5vBBHSN4OHHF1IT7NQQYwTL5gev8XCS4kC7ZV/4cldl4y4hg4d3EvH6uPdIPBUU5OCu7x60jQYgx/EOUFXaOYsCPZsbLMVsfR9q+uqbWwGUGhq2IeLFv59ZSVvdreM5r5YMvMypwVu30YwG5U8yTBBWaZ5lVeYJLse+ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XZlzeuB99z2QMf0zZvwBf9fww0nyXfSCVEUQLazLS4c=;
+ b=nPWQ6vDZkYJOrUTZ7ehsnXyGDUQJFnYFhkkUZzTILX5hIt9fdGBzwW+GON1Wqe+ht3ZAeqFaD3sECSA0oACdXYEbZeiHrJLocP84rTPhXnbAy2ni0CS6GCrUefMvWOAJDBJydDx7PHtjds0804plPg9xP/S+Zbc+Wp5LF0MVUizsZUmAXgql+YLLSp9HFMlowh4dzgLafURpYh8083DjsPS+txOB0B8/0FnRcmD7Z9o/odVjwGg0P/BUFV3g6hUlqXSUD6EMgenHz8cMtlR+zKU4EfVokDoo5AvwTfaj3vU7aFBzoLLuGUHjnEibsDDIatzHxwTerJJn7wRu46YH+w==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by DB9PR03MB7179.eurprd03.prod.outlook.com (2603:10a6:10:224::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 15:28:34 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::dbcf:1089:3242:614e]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::dbcf:1089:3242:614e%4]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 15:28:34 +0000
+Message-ID: <e029e39b-196d-ee4b-318d-6dc950b2b26c@seco.com>
+Date:   Mon, 13 Mar 2023 11:28:30 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4] rtc: abx80x: Add nvmem support
 Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel@pengutronix.de
-References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
- <20230304133028.2135435-12-u.kleine-koenig@pengutronix.de>
- <9e2df07f-92d3-966a-5092-22572e102253@gentoo.org>
- <20230306212218.qzer65c74rb7d6yy@pengutronix.de>
- <00ee8bf1-478b-fdba-7938-221dbefd40f2@gentoo.org>
- <20230307081118.rociwbzuk6dl7fwu@pengutronix.de>
- <ac8895ab-68cb-1250-199e-4758e44e740a@gentoo.org>
- <20230308164750.x4ozcdxymcqoz73m@pengutronix.de>
-From:   Joshua Kinard <kumba@gentoo.org>
-In-Reply-To: <20230308164750.x4ozcdxymcqoz73m@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-rtc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20221222214532.1873718-1-sean.anderson@seco.com>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <20221222214532.1873718-1-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR20CA0025.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::38) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
+MIME-Version: 1.0
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|DB9PR03MB7179:EE_|AM6EUR05FT064:EE_|AS8PR03MB7604:EE_
+X-MS-Office365-Filtering-Correlation-Id: e2d1117b-5a1e-406b-de27-08db23d7a126
+X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: geQsltJG+JJ/b3ewYXTsX72yQiUTwpSyFQDApXXQ/2+dMaxEjccLh1RqqTFLDk5QgV1alMeaHZ86l2Y9aeyDh0JG9yue/5W8C5e8GT44yUEMqgNJMLFoXi10zdSN5ZUOEHZVzUsIH8CYhTLC2mIKj9BNO/MtZwZPJhpMXSh3UQUWJvKSDKkBj4oGC7djoez6TjeURyOMQR/vCV2wBUB6RaHt/UjtWGBoH3P2Dh6iHJZjfME0SC0xqP8x7+BzitUHQHONqXEAcMWyzTeiNmuo82hFndAqSShyLTD6cpQYiGAqOp43lDkF/pO8eY05OoVTNKqxVq3sr7bjPwD18icpuMbfDDZnN5N1nufsran5CqNkUYIuv/Mlc0wQ3X3zOvfwveEDs+4J4XtTa2rXuqSsmJZH9IeHAw0u8mZkMlaYjUsmNjdQsTpR3NuuPGMgvuvoei7OrRbO688KkoY+r84uh2NHuxqDrje+rBH4S4fC4ersLZgDBwatRofMnFVyii+XDt+PbjqZMuML7Rrwx8zNepuZg4Eo8Fndcpon/b/H6qYZj+TrqXZYwpmUp4Ut+EE9PobI03dzRLf3KKZaon8IJ4wAzGArzdEQSwqBA23/wXwQiQu2INso1bKscyGeKs82ndRPe1obcCk4B2dPMiVAgwB8RjvUCk3i5EfSdvhe0Aj2W8iI9m2NrPACb79JULqeoqM5ZW2S8wBKrMy8akYlHi39gNZ/TQLX1mBU5O8XEZtwnY5sODVtSO693+W5u66NGDmOSxUDW/CKSXLdB0Bmvw==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(136003)(39850400004)(366004)(346002)(451199018)(86362001)(36756003)(31696002)(38100700002)(38350700002)(44832011)(5660300002)(52116002)(6486002)(110136005)(8936002)(316002)(66946007)(478600001)(41300700001)(4326008)(83380400001)(8676002)(66556008)(66476007)(6506007)(6512007)(6666004)(53546011)(26005)(186003)(2616005)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7179
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM6EUR05FT064.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: f790a46e-a31c-4d5c-cb74-08db23d79be7
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jNm0QcbC3o4adgSzA5QXZx1yb3dZS/DuUoO9pWiefHA+FlHuxGS/jid8yt3vz5oBTRpUHX9Deq7IQOzBCiVu4GRIC67N0IXZsf+FYpKGol0SJrJ4yh7KrsXvWNu62XSRNe7VPTeZdDW2PEPWhcxP6LdrLVhVaK//lu1Qa3GlHjNFspCLfcFNI9+PUSmIANHFIYcqy009Ed2ajlILgrcfneoiuqO8BFXfbW5onP/zInMxuLEReFPc2Jbca8TnyPkP8zpq8fkZQLtp/wrk/fzKcqlBmqhyQo2s2Zux2NTfwAsNbTQspHsdVycWp3/Ww2/UvCzFJDyaxzyjqVlTrq+pDmOpvoRg8+JbhRFey9/LnqffvFOiNppP+79WPAKJGRdZdlK21wTiBLIuV3W86WfZEGAsstR7ZZZlj5MZkZ81Sj63Iid6g6Q9zHYWrXN+YxoeqbhFbIL+r+fnPPfpmIVFHCXXiXgLQXfoW5mMKFEboyPk/halWskgQ2P8XH864CZIPD4pUNtM9vKo58i/rYxs7ltzYi5I0pG2HFf6taHCLipc5MBTRB6AIyDapxmuEKtJGU0Y4wDp3Xkwy3DABoB/yvjKJbNfe8a1tCmesYJRpoR0lOe1x3HWxT3W1foKnVdNW+FOPPXwPLVSz7MuYsAy5c/amCE96ZCSpz/O7XeZSHWmnBLJc0ZW7NmeoU37U1Q1UeZnPgPPvAs0Jbj9sDE5jJhNRF0kIED4WVn+Aky8NR5VcxQd5W0l8jUjusg0ei4Q7rrTBz82U/jPCap3s38Vdg==
+X-Forefront-Antispam-Report: CIP:20.160.56.83;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230025)(136003)(39850400004)(396003)(376002)(346002)(451199018)(40470700004)(46966006)(36840700001)(31686004)(36756003)(8936002)(5660300002)(44832011)(2906002)(7596003)(36860700001)(82740400003)(7636003)(31696002)(356005)(86362001)(41300700001)(34020700004)(70206006)(70586007)(8676002)(478600001)(6486002)(6666004)(40480700001)(4326008)(82310400005)(40460700003)(110136005)(47076005)(2616005)(336012)(316002)(83380400001)(186003)(6506007)(26005)(6512007)(53546011)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 15:28:43.1208
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2d1117b-5a1e-406b-de27-08db23d7a126
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.83];Helo=[inpost-eu.tmcas.trendmicro.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM6EUR05FT064.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7604
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 3/8/2023 11:47, Uwe Kleine-König wrote:
-> Hello Joshua,
+On 12/22/22 16:45, Sean Anderson wrote:
+> This adds support for the 256-byte internal RAM. There are two windows
+> which can be used to access this RAM: 64 bytes at 0x40 (the "standard"
+> address space) and 128 bytes at 0x80 (the "alternate" address space). We
+> use the standard address space because it is also accessible over SPI
+> (if such a port is ever done). We are limited to 32-byte reads for SMBus
+> compatibility, so there's no advantage to using the alternate address
+> space.
 > 
-> On Wed, Mar 08, 2023 at 11:20:34AM -0500, Joshua Kinard wrote:
->> On 3/7/2023 03:11, Uwe Kleine-König wrote:
->>> On Mon, Mar 06, 2023 at 09:09:03PM -0500, Joshua Kinard wrote:
->>>> On 3/6/2023 16:22, Uwe Kleine-König wrote:
->>>>> On Mon, Mar 06, 2023 at 02:43:20PM -0500, Joshua Kinard wrote:
->>>>>> On 3/4/2023 08:29, Uwe Kleine-König wrote:
->>>>>>> The .remove() callback for a platform driver returns an int which makes
->>>>>>> many driver authors wrongly assume it's possible to do error handling by
->>>>>>> returning an error code. However the value returned is (mostly) ignored
->>>>>>> and this typically results in resource leaks. To improve here there is a
->>>>>>> quest to make the remove callback return void. In the first step of this
->>>>>>> quest all drivers are converted to .remove_new() which already returns
->>>>>>> void.
->>>>>>>
->>>>>>> Trivially convert this driver from always returning zero in the remove
->>>>>>> callback to the void returning variant.
->>>>>>>
->>>>>>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->>>>>>> ---
->>>>>>>      drivers/rtc/rtc-ds1685.c | 6 ++----
->>>>>>>      1 file changed, 2 insertions(+), 4 deletions(-)
->>>>>>>
->>>>>>> diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
->>>>>>> index 5db9c737c022..0f707be0eb87 100644
->>>>>>> --- a/drivers/rtc/rtc-ds1685.c
->>>>>>> +++ b/drivers/rtc/rtc-ds1685.c
->>>>>>> @@ -1322,7 +1322,7 @@ ds1685_rtc_probe(struct platform_device *pdev)
->>>>>>>       * ds1685_rtc_remove - removes rtc driver.
->>>>>>>       * @pdev: pointer to platform_device structure.
->>>>>>>       */
->>>>>>> -static int
->>>>>>> +static void
->>>>>>>      ds1685_rtc_remove(struct platform_device *pdev)
->>>>>>>      {
->>>>>>>      	struct ds1685_priv *rtc = platform_get_drvdata(pdev);
->>>>>>> @@ -1344,8 +1344,6 @@ ds1685_rtc_remove(struct platform_device *pdev)
->>>>>>>      	rtc->write(rtc, RTC_EXT_CTRL_4A,
->>>>>>>      		   (rtc->read(rtc, RTC_EXT_CTRL_4A) &
->>>>>>>      		    ~(RTC_CTRL_4A_RWK_MASK)));
->>>>>>> -
->>>>>>> -	return 0;
->>>>>>>      }
->>>>>>>      /*
->>>>>>> @@ -1356,7 +1354,7 @@ static struct platform_driver ds1685_rtc_driver = {
->>>>>>>      		.name	= "rtc-ds1685",
->>>>>>>      	},
->>>>>>>      	.probe		= ds1685_rtc_probe,
->>>>>>> -	.remove		= ds1685_rtc_remove,
->>>>>>> +	.remove_new	= ds1685_rtc_remove,
->>>>>>>      };
->>>>>>>      module_platform_driver(ds1685_rtc_driver);
->>>>>>>      /* ----------------------------------------------------------------------- */
->>>>>>
->>>>>> Is there a future planned patch that would remove the .remove member
->>>>>> and then rename .remove_new --> .remove?
->>>>>
->>>>> The eventual plan is to do
->>>>>
->>>>> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
->>>>> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
->>>>> index 77510e4f47de..1c65943d6b53 100644
->>>>> --- a/drivers/base/platform.c
->>>>> +++ b/drivers/base/platform.c
->>>>> @@ -1420,14 +1420,8 @@ static void platform_remove(struct device *_dev)
->>>>>     	struct platform_driver *drv = to_platform_driver(_dev->driver);
->>>>>     	struct platform_device *dev = to_platform_device(_dev);
->>>>> -	if (drv->remove_new) {
->>>>> -		drv->remove_new(dev);
->>>>> -	} else if (drv->remove) {
->>>>> -		int ret = drv->remove(dev);
->>>>> -
->>>>> -		if (ret)
->>>>> -			dev_warn(_dev, "remove callback returned a non-zero value. This will be ignored.\n");
->>>>> -	}
->>>>> +	if (drv->remove)
->>>>> +		drv->remove(dev);
->>>>>     	dev_pm_domain_detach(_dev, true);
->>>>>     }
->>>>> index b845fd83f429..8c5fdaa8645f 100644
->>>>> --- a/include/linux/platform_device.h
->>>>> +++ b/include/linux/platform_device.h
->>>>> @@ -209,15 +209,16 @@ struct platform_driver {
->>>>>     	int (*probe)(struct platform_device *);
->>>>>     	/*
->>>>> -	 * Traditionally the remove callback returned an int which however is
->>>>> +	 * Traditionally the remove callback returned an int which however was
->>>>>     	 * ignored by the driver core. This led to wrong expectations by driver
->>>>>     	 * authors who thought returning an error code was a valid error
->>>>> -	 * handling strategy. To convert to a callback returning void, new
->>>>> -	 * drivers should implement .remove_new() until the conversion it done
->>>>> -	 * that eventually makes .remove() return void.
->>>>> +	 * handling strategy. .remove_new is a hangover from these times which
->>>>> +	 * will be dropped once all drivers are converted to .remove().
->>>>>     	 */
->>>>> -	int (*remove)(struct platform_device *);
->>>>> -	void (*remove_new)(struct platform_device *);
->>>>> +	union {
->>>>> +		void (*remove)(struct platform_device *);
->>>>> +		void (*remove_new)(struct platform_device *);
->>>>> +	};
->>>>>     	void (*shutdown)(struct platform_device *);
->>>>>     	int (*suspend)(struct platform_device *, pm_message_t state);
->>>>>
->>>>> and then once all the drivers are converted back to .remove() drop the
->>>>> union and .remove_new().
->>>>>
->>>>> Best regards
->>>>> Uwe
->>>>>
->>>>
->>>> This looks like a pretty simple/minor API change.  Why not just do a patch
->>>> series that makes both the API change and updates all of the drivers at once
->>>> (one commit per driver)?
->>>
->>> A bit of statistic: Based on v6.3-rc1 I have 2286 patches like the ones
->>> from this series that (mostly) convert drivers that today already return
->>> zero unconditionally. Then there is my todo-list of ~100 additional
->>> drivers that don't return 0 that need manual inspection and fixing.
->>>
->>> So we're talking about 2300+ drivers in all subsystems here. To get a
->>> bisectable series that does the complete conversion, we need:
->>>
->>> 	2300 patches to convert drivers to .remove_new()
->>> 	the above patch
->>> 	2300 patches to convert drivers back to the new .remove()
->>>
->>> Last time I sent a series with ~640 patches (for a similar conversion
->>> for i2c drivers) people were unlucky already and I got tons of bounces.
->>> Please consider the address list for the cover letter. While most
->>> patches are trivial this would require a massive coordination.
->>>
->>> So no, this isn't a sensible suggestion. I'll continue to send out
->>> conversions to .remove_new() per subsystem and once most of them are
->>> converted, the above patch will be sent with the remainder of the
->>> unapplied patches.
->>
->> I was actually thinking more along the lines of doing one patch series per
->> subsystem, so for RTC, ~160 patches, one per rtc-*.c driver making the
->> change to have .remove() be void, plus a patch to adjust the struct
->> platform_driver rtc definition itself.
+> There are some reserved bits in the EXTRAM register, and the datasheet
+> doesn't say what to do with them. I've opted to skip a read/modify/write
+> and just write the whole thing. If this driver is ever converted to
+> regmap, this would be a good place to use regmap_update_bits.
 > 
-> The problem is that all subsystems use the same struct platform_driver.
-> So I cannot change it for rtc and then in the next development cycle for
-> (say) iio and i2c.
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
 > 
-
-Hah, you're right!  Sorry, I was thinking more classic OOP and thought that the rtc base API had a derived 
-struct from platform_driver that allowed for a more precise patch series to be applied.  I know some 
-subsystems do have this, but not rtc, so yes, your approach does make more sense now.
-
-
->> That way you don't have to have that
->> interval period where drivers are carrying around the .remove_new() method,
->> cause I've seen instances in the past where such large-scale changes could
->> not be completed in a single kernel development cycle.
+> Changes in v4:
+> - Remove unused variable
 > 
-> Different maintainers seem to have different preferences, but most
-> prefer one patch per driver. And I don't plan to complete the conversion
-> in a single development cycle.
+> Changes in v3:
+> - Use devm_rtc_nvmem_register
+> - Remove ifdefs
 > 
->> But it sounds like you've already got a plan worked out, so your call on how
->> you want to handle this.  Thanks for the additional clarification!
->>
->> Acked-By: Joshua Kinard <kumba@gentoo.org>
+> Changes in v2:
+> - Fix building on non-arm platforms
 > 
-> Thanks
-> Uwe
+>  drivers/rtc/rtc-abx80x.c | 77 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
 > 
+> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+> index 9b0138d07232..74ff820f5481 100644
+> --- a/drivers/rtc/rtc-abx80x.c
+> +++ b/drivers/rtc/rtc-abx80x.c
+> @@ -11,6 +11,7 @@
+>   */
+>  
+>  #include <linux/bcd.h>
+> +#include <linux/bitfield.h>
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> @@ -87,6 +88,16 @@
+>  #define ABX8XX_TRICKLE_STANDARD_DIODE	0x8
+>  #define ABX8XX_TRICKLE_SCHOTTKY_DIODE	0x4
+>  
+> +#define ABX8XX_REG_EXTRAM	0x3f
+> +#define ABX8XX_EXTRAM_XADS	GENMASK(1, 0)
+> +
+> +#define ABX8XX_SRAM_BASE	0x40
+> +#define ABX8XX_SRAM_WIN_SIZE	0x40
+> +#define ABX8XX_RAM_SIZE		256
+> +
+> +#define NVMEM_ADDR_LOWER	GENMASK(5, 0)
+> +#define NVMEM_ADDR_UPPER	GENMASK(7, 6)
+> +
+>  static u8 trickle_resistors[] = {0, 3, 6, 11};
+>  
+>  enum abx80x_chip {AB0801, AB0803, AB0804, AB0805,
+> @@ -673,6 +684,68 @@ static int abx80x_setup_watchdog(struct abx80x_priv *priv)
+>  }
+>  #endif
+>  
+> +static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
+> +			     void *val, size_t bytes, bool write)
+> +{
+> +	int ret;
+> +
+> +	while (bytes) {
+> +		u8 extram, reg, len, lower, upper;
+> +
+> +		lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
+> +		upper = FIELD_GET(NVMEM_ADDR_UPPER, offset);
+> +		extram = FIELD_PREP(ABX8XX_EXTRAM_XADS, upper);
+> +		reg = ABX8XX_SRAM_BASE + lower;
+> +		len = min(lower + bytes, (size_t)ABX8XX_SRAM_WIN_SIZE) - lower;
+> +		len = min_t(u8, len, I2C_SMBUS_BLOCK_MAX);
+> +
+> +		ret = i2c_smbus_write_byte_data(priv->client, ABX8XX_REG_EXTRAM,
+> +						extram);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (write)
+> +			ret = i2c_smbus_write_i2c_block_data(priv->client, reg,
+> +							     len, val);
+> +		else
+> +			ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
+> +							    len, val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		offset += len;
+> +		val += len;
+> +		bytes -= len;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int abx80x_nvmem_read(void *priv, unsigned int offset, void *val,
+> +			     size_t bytes)
+> +{
+> +	return abx80x_nvmem_xfer(priv, offset, val, bytes, false);
+> +}
+> +
+> +static int abx80x_nvmem_write(void *priv, unsigned int offset, void *val,
+> +			      size_t bytes)
+> +{
+> +	return abx80x_nvmem_xfer(priv, offset, val, bytes, true);
+> +}
+> +
+> +static int abx80x_setup_nvmem(struct abx80x_priv *priv)
+> +{
+> +	struct nvmem_config config = {
+> +		.type = NVMEM_TYPE_BATTERY_BACKED,
+> +		.reg_read = abx80x_nvmem_read,
+> +		.reg_write = abx80x_nvmem_write,
+> +		.size = ABX8XX_RAM_SIZE,
+> +		.priv = priv,
+> +	};
+> +
+> +	return devm_rtc_nvmem_register(priv->rtc, &config);
+> +}
+> +
+>  static int abx80x_probe(struct i2c_client *client,
+>  			const struct i2c_device_id *id)
+>  {
+> @@ -824,6 +897,10 @@ static int abx80x_probe(struct i2c_client *client,
+>  			return err;
+>  	}
+>  
+> +	err = abx80x_setup_nvmem(priv);
+> +	if (err)
+> +		return err;
+> +
+>  	if (client->irq > 0) {
+>  		dev_info(&client->dev, "IRQ %d supplied\n", client->irq);
+>  		err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
 
--- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-
-"The past tempts us, the present confuses us, the future frightens us.  And our lives slip away, moment by 
-moment, lost in that vast, terrible in-between."
-
-         --Emperor Turhan, Centauri Republic
-
+ping?
