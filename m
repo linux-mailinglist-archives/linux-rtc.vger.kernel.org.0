@@ -2,88 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950676B8E22
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Mar 2023 10:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EC06B9353
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Mar 2023 13:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjCNJGp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 14 Mar 2023 05:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
+        id S231384AbjCNMPm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 14 Mar 2023 08:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjCNJGo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Mar 2023 05:06:44 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B420D99BCA
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Mar 2023 02:06:12 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id i3so15854982plg.6
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Mar 2023 02:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678784772;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VvVKKTfClzDHbKr25iX73V342HR8rTZ6C7kPvWX0aBY=;
-        b=ta4LarLUW8GVYewL3V7G52f2PnqeptY/XG+Xj++LeAYExfggHPOU6rG3/4/3rQXG+n
-         AzvmQ2wQl0ABLmLB+j8uqP96pHc5Kxv0AojIqlYpcGB1hUHvyyK276Yy6PoiJmTkGYcu
-         zGJWJSkXkAHoByUCG6b1z7gylywfPo1un+ivuW9QzU19dOPVUL+TdFCv2jh27+uFdlUv
-         7c7ZUWQY8PPanuRhSoHepXGS5nc7Tm/aIJfcWW/45typlJNAf25mejQ/TUovv4vr0E7i
-         ZjaKWWdJFJ1ZCo3L2LxQbfB4xP8RlcaiME0yAjDtKQXdfMsvfTAldgKplyZxAWY1yeil
-         yyWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678784772;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VvVKKTfClzDHbKr25iX73V342HR8rTZ6C7kPvWX0aBY=;
-        b=IQKmVGBQSitq4tvPCl5DkE40Qxx7uJUezaO9OkQbfJ+QW2Idd6vlGWpTXzK3nKtWHn
-         dZM+qkBbtWyFozE8E8uRboL4JQqRCyGLvJzkjK+uBzZfSFc5NfUbeHQDYmK1krf17hT+
-         2SzvjJM8wXVCSrBRgajRorvaREqhDCu2qCsLMvgjgSGq4xrW5jMZtwWfOkj8FLZqva+1
-         Nejua84VJta9VRsjxMdFnvL7eYiKp4kEsam/bN7BeFduYyl2YUr8Hm2/knsqp+VdXULB
-         60nOGGQ2+WQNgU41PrTYCZQ0YvItHcgis1v32YzerQUz0yMm59DAFtTvOQ6SczualFP7
-         87hQ==
-X-Gm-Message-State: AO0yUKUuox44gQzoebcQ+Qeu6vzbkT0HCO2SlxYQFvJmvl4txJznIqkT
-        93avx9l8FazfjQasu4lM8kaybg==
-X-Google-Smtp-Source: AK7set/XpT6XzJflkOougYbJXIWlZCBg7D1MY8N+0OWLt8IZY2LG8a7E83HVnkqfAtO3xcf+IpKViQ==
-X-Received: by 2002:a17:902:d4cc:b0:19a:b033:2bb0 with SMTP id o12-20020a170902d4cc00b0019ab0332bb0mr43699652plg.46.1678784771688;
-        Tue, 14 Mar 2023 02:06:11 -0700 (PDT)
-Received: from localhost.localdomain ([49.206.34.126])
-        by smtp.gmail.com with ESMTPSA id kv3-20020a17090328c300b0019c919bccf8sm1254131plb.86.2023.03.14.02.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 02:06:10 -0700 (PDT)
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-To:     u.kleine-koenig@pengutronix.de
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        alexandre.torgue@foss.st.com,
-        angelogioacchino.delregno@collabora.com,
-        bcm-kernel-feedback-list@broadcom.com, bleung@chromium.org,
-        chrome-platform@lists.linux.dev, claudiu.beznea@microchip.com,
-        conor.dooley@microchip.com, cw00.choi@samsung.com,
-        daire.mcnamara@microchip.com, eddie.huang@mediatek.com,
-        f.fainelli@gmail.com, groeck@chromium.org, jonathanh@nvidia.com,
-        kernel@pengutronix.de, krzysztof.kozlowski@linaro.org,
-        kumba@gentoo.org, linus.walleij@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, michal.simek@xilinx.com,
-        miquel.raynal@bootlin.com, nicolas.ferre@microchip.com,
-        patches@opensource.cirrus.com, sean.wang@mediatek.com,
-        thierry.reding@gmail.com, ulli.kroll@googlemail.com,
-        vincent.sunplus@gmail.com, vz@mleia.com,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH 00/41] rtc: Convert to platform remove callback returning void
-Date:   Tue, 14 Mar 2023 14:35:57 +0530
-Message-Id: <20230314090557.41960-1-naresh.kamboju@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
-References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S231948AbjCNMOv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Mar 2023 08:14:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F7FA17D4;
+        Tue, 14 Mar 2023 05:13:45 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EBJfXW004950;
+        Tue, 14 Mar 2023 12:12:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=4s5IzeE50FKgT5lCLIC3rUk2mGkqu67OQKlzgenEORU=;
+ b=mzcd+nuvqoVoReILcFQr7mLizX0YEBh0rbn+2KdFCHnkmPCyf/eg+ekdCGIn4D+i8YdI
+ xw2PFUy9qDE5oeFjtT3DQierBKtsGCFnD45mPuQJD6wmICnxA1qk/2aRVQWEwtHqpTyz
+ /650AhHy6GdVu6QiHDEsaCK12DGZr4uGN3VoiGR4tLSwCaKlYzxeEqYAmEEJTxWy6kBs
+ 1envjOADScs4NTJYmQ81oOhBgp4LDCIhH5kdZk2r5RCAVhfk9QkCubVLxIjqtGVyJueA
+ S6tHxENqXcuc+4/fSaqYeTzRoJUS5sS8Z9HxUDCuaeWBH1OLnElKQTBsmTcq2TMkAjvx xQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pap49cmq0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 12:12:52 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EAc9H5037490;
+        Tue, 14 Mar 2023 12:12:51 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pap49cmne-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 12:12:51 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32E6few9028628;
+        Tue, 14 Mar 2023 12:12:48 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3p8h96msmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 12:12:48 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ECCkNh27198134
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Mar 2023 12:12:46 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E72DF2007D;
+        Tue, 14 Mar 2023 12:12:45 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C30A2007A;
+        Tue, 14 Mar 2023 12:12:45 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Mar 2023 12:12:45 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH v3 28/38] rtc: add HAS_IOPORT dependencies
+Date:   Tue, 14 Mar 2023 13:12:06 +0100
+Message-Id: <20230314121216.413434-29-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230314121216.413434-1-schnelle@linux.ibm.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DlOU3Lpa4pwpaG9dyu6d7RQ6cpkrfNi9
+X-Proofpoint-ORIG-GUID: G27jwAgQCa0xo34Ec3NOSW-wx8e6dyr1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-14_06,2023-03-14_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ clxscore=1011 bulkscore=0 spamscore=0 mlxlogscore=818 phishscore=0
+ mlxscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303140103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,31 +103,45 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-> Hello,
-> 
-> this patch series adapts the platform drivers below drivers/rtc to use the
-> .remove_new() callback. Compared to the traditional .remove() callback
-> .remove_new() returns no value. This is a good thing because the driver core
-> doesn't (and cannot) cope for errors during remove. The only effect of a
-> non-zero return value in .remove() is that the driver core emits a warning. The
-> device is removed anyhow and an early return from .remove() usually yields a
-> resource leak.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-This patch set applied on top of Linux next.
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+ drivers/rtc/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Build tested with gcc-12, clang-16 and clang nightly.
-Boot and LTP smoketests performed on
- - qemu-x86_64
- - qemu-arm64
- - fvp-aemva
- - qemu-armv7
- - qemu-i386
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 5a71579af0a1..20aa77bf0a9f 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -956,6 +956,7 @@ comment "Platform RTC drivers"
+ config RTC_DRV_CMOS
+ 	tristate "PC-style 'CMOS'"
+ 	depends on X86 || ARM || PPC || MIPS || SPARC64
++	depends on HAS_IOPORT
+ 	default y if X86
+ 	select RTC_MC146818_LIB
+ 	help
+@@ -976,6 +977,7 @@ config RTC_DRV_CMOS
+ config RTC_DRV_ALPHA
+ 	bool "Alpha PC-style CMOS"
+ 	depends on ALPHA
++	depends on HAS_IOPORT
+ 	select RTC_MC146818_LIB
+ 	default y
+ 	help
+@@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
+ 
+ config RTC_DRV_BQ4802
+ 	tristate "TI BQ4802"
+-	depends on HAS_IOMEM
++	depends on HAS_IOMEM && HAS_IOPORT
+ 	help
+ 	  If you say Y here you will get support for the TI
+ 	  BQ4802 RTC chip.
+-- 
+2.37.2
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Link,
-https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-arm-kernel_20230304133028_2135435-1-u_kleine-koenig_pengutronix_de/?failures_only=false#!#test-results
-
---
-Linaro LKFT
-https://lkft.linaro.org
