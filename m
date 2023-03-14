@@ -2,73 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99C66B9D09
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Mar 2023 18:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382516BA031
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Mar 2023 20:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjCNRax (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 14 Mar 2023 13:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S230187AbjCNT6p (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 14 Mar 2023 15:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCNRat (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Mar 2023 13:30:49 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCF499D71
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Mar 2023 10:30:44 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id l12so6813748wrm.10
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Mar 2023 10:30:44 -0700 (PDT)
+        with ESMTP id S229997AbjCNT6o (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Mar 2023 15:58:44 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B404BBBD;
+        Tue, 14 Mar 2023 12:58:28 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id x13so19462253edd.1;
+        Tue, 14 Mar 2023 12:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678815043;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678823907;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jA81WFPNy0EPSrNo17igrl0CGZjDcJvedSMpZSsU+6E=;
-        b=zsgo4bmYuM5zBKJbeDnLMyJYui7WTJq+Ao3H5aI86gdk9ZZX5pQVX4JKVsUtcqaBGT
-         g9RgUHRbN8Km9VTjus+dqrUxdNTvFuF2Warrfq86P2ra3luIoUUm24WsgLkfAkit2Yta
-         DwpdYxGD9li4/tuvZ/lGV0cyd0UWKfKXNIN/81RjB0I9z0h6hxJbTmbjmMenEucI8trw
-         KFjFYtt3hcpOsNg2VUzEfZJnurs7Y33OcE1ewlHh5Co2/6HHBz7MOhR2FKpqNUEncaPQ
-         oAiH0myhwXqyPAmZj1THytxBOh8Y7BW9oLXrOleErLFwb/7aVArWy8FTtP566yrp8YFe
-         Ntpw==
+        bh=xqwHb3pl10s7quxiCLdge3d3HiQ2kieNQ2q19oo8kDs=;
+        b=kCsABlT+HkwgRsyKMRlCb41qMBQ1GsJeb1u/zUZGfUsAzgBXSebzj7zTIdHOMUZ4hm
+         Jddh/W1F1qfjhpUOo0OHPBm+37Xkubd46bVkGO+nzkvBHmgWXgYJxLvi2CIGm3NkwLtt
+         kTUFSwRuOG4YU3Y11mcrYUcfx9+a1mAo3RXJ4kCw3cmIAjNz7A4g6IB638HJRaArVmGZ
+         FkELAXbvLbkwoqaBGrGROnDFSrfeEb/heIyC0YFgIstC2AE3Yw9l6BDMbblzJgcit2De
+         eaOyNCNGLDVUabserU/ISATGn9ccpbBAh0xp94IoBx925GjvIaAd//hykfRIi5NliUk6
+         SMTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678815043;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jA81WFPNy0EPSrNo17igrl0CGZjDcJvedSMpZSsU+6E=;
-        b=Evc6Nj2NpTNT2wBzYRpx8N+LFW3QNvuR8GxGeEFMhHFoX+vJGA7NefSrov5JZnR3Y/
-         UxhEjDwTU93duBeJIsySS8A+Otke8HKmJwBmk7Ocn9FdwKU0KNopRNBmBk64YtBC6jpl
-         IRrYzZp0Fbf9XgOKy46noL3fc3OV26SjRczSozGTK+7tOlm3T/RGlQrMCwNjkvaRP9Eu
-         kTJBGloobrxccUIQOlH15nCiWSIx+2jnwjW1MTem0ilELcuqR3fUClF2Hub2UpO+fMRG
-         7Dmgwhg8jPXFRhmfDo5tmBTznffnhverSGUyVaUDVcXv1HWaV/O8bO6/yw7ZMdEHi1++
-         Y3bg==
-X-Gm-Message-State: AO0yUKUB5kzWy5unzcuRDYnmjP014yL0280NWktBfS0oxEP/0e1XtoSI
-        BJ23RIml1378qhW0yBEhim+BrA==
-X-Google-Smtp-Source: AK7set/T/8WEyVxTYMU9mTmjG8IrLeEeDinPS2KNKEzSkgnXTy6In34QdyaalWS2HiJrvbKl3i4NAg==
-X-Received: by 2002:a5d:4521:0:b0:2cd:de25:1c76 with SMTP id j1-20020a5d4521000000b002cdde251c76mr11116164wra.17.1678815042700;
-        Tue, 14 Mar 2023 10:30:42 -0700 (PDT)
-Received: from localhost ([2a01:e0a:28d:66d0:6662:e593:9847:a659])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05600c0b5500b003dc4a47605fsm3355042wmr.8.2023.03.14.10.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 10:30:41 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 14 Mar 2023 18:30:40 +0100
-Message-Id: <CR6A9IIIMSIY.G13N1XGBQG2M@burritosblues>
-Subject: Re: [PATCH INTERNAL v1 2/3] pinctrl: tps6594: add for TPS6594 PMIC
-From:   "Esteban Blanc" <eblanc@baylibre.com>
-To:     "Linus Walleij" <linus.walleij@linaro.org>
-Cc:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
-        <jneanne@baylibre.com>
-X-Mailer: aerc 0.14.0
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-3-eblanc@baylibre.com>
- <CACRpkdYck+=3sUKQbg2j=KMfv_FEiofFxHpDsXgFo=p2uMYfEQ@mail.gmail.com>
-In-Reply-To: <CACRpkdYck+=3sUKQbg2j=KMfv_FEiofFxHpDsXgFo=p2uMYfEQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        d=1e100.net; s=20210112; t=1678823907;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xqwHb3pl10s7quxiCLdge3d3HiQ2kieNQ2q19oo8kDs=;
+        b=o7+Eqv8HzKAuwLFYq/Xim1V9Hm5XrovjXVSQaalLoGdy7qvVHro4sRIImE3FqltYas
+         kpdFqEBfWu4qHR16vqZwJRgDwTDaSwBgl86jLTQjnDMhcBnGJQBupK+5o1LCW48BlXw2
+         NwHMT1/0pH7GN0U89CRs515TYUFQQbX1FvgIE3VlH3gU9fiMDjKUTL7fkNKySWBugo0s
+         r537rEHrrEZg7xUBvATTLLSyQNYqxjqfFs/leyRW54Ve7O3uS8NxRmQ+tdcZCxI5jMU3
+         GHuK1+ufUoRnr9/U51of39hGbyZc5JLu7nGoWBjXho0WOTiio9VWYPbIHh7iNI/FzrC7
+         hDyQ==
+X-Gm-Message-State: AO0yUKVCxuOMvicGHALocg2gAScDSzPJzscbae78zWXLZsprnsu0L4O/
+        B+b+UKfytI6Hxph18K0mAv0=
+X-Google-Smtp-Source: AK7set+c9gXFRmjVi6fFDbFdISN4aKZTF0Ediiw5KyDrz4H9I2ZmJcurfv6q47uliZL8XXT7wR5jVQ==
+X-Received: by 2002:a17:906:6b0c:b0:8aa:be5c:b7c5 with SMTP id q12-20020a1709066b0c00b008aabe5cb7c5mr3670395ejr.41.1678823906634;
+        Tue, 14 Mar 2023 12:58:26 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id de11-20020a1709069bcb00b008d1dc5f5692sm1514491ejc.76.2023.03.14.12.58.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 12:58:26 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: sun6i: Use of_property_present() for testing DT property
+ presence
+Date:   Tue, 14 Mar 2023 20:58:25 +0100
+Message-ID: <1845104.tdWV9SEqCh@jernej-laptop>
+In-Reply-To: <20230310144736.1547041-1-robh@kernel.org>
+References: <20230310144736.1547041-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,73 +77,39 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Linus,
+Dne petek, 10. marec 2023 ob 15:47:36 CET je Rob Herring napisal(a):
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-On Mon Mar 6, 2023 at 3:10 PM CET, Linus Walleij wrote:
-> On Fri, Feb 24, 2023 at 2:31 PM Esteban Blanc <eblanc@baylibre.com> wrote=
-:
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-> > TI TPS6594 PMIC has 11 GPIOs which can be used for different
-> > functions
-> >
-> > This add a pinctrl and pinmux drivers in order to use those functions
-> >
-> > Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
->
-> > +config PINCTRL_TPS6594
-> > +       tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
-> > +       depends on MFD_TPS6594
->
-> I would add:
->
-> default MFD_TPS6594
->
-> so you always get this as module or built in along with the MFD.
-> Otherwise Kconfig gets complicated and tedious for users.
+Best regards,
+Jernej
 
-I did not know this, thanks. I will add this to V2.
+> ---
+>  drivers/rtc/rtc-sun6i.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index 7038f47d77ff..dc76537f1b62 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -260,7 +260,7 @@ static void __init sun6i_rtc_clk_init(struct device_node
+> *node, }
+> 
+>  	/* Switch to the external, more precise, oscillator, if present */
+> -	if (of_get_property(node, "clocks", NULL)) {
+> +	if (of_property_present(node, "clocks")) {
+>  		reg |= SUN6I_LOSC_CTRL_EXT_OSC;
+>  		if (rtc->data->has_losc_en)
+>  			reg |= SUN6I_LOSC_CTRL_EXT_LOSC_EN;
 
-(...)
 
-> > +#define DEBUG
->
-> Don't put this in production code.
->
-> Look in drivers/pinctrl/Kconfig.
->
-> config DEBUG_PINCTRL
->         bool "Debug PINCTRL calls"
->         depends on DEBUG_KERNEL
->         help
->           Say Y here to add some extra checks and diagnostics to PINCTRL =
-calls.
->
-> Look in drivers/pinctrl/Makefile:
->
-> subdir-ccflags-$(CONFIG_DEBUG_PINCTRL)  +=3D -DDEBUG
->
-> Nifty eh? :D
 
-Nifty indeed :D. #define DEBUG will be removed for V2, I should have
-noticed it for V1...
-
-> > +static const struct tps6594_pinctrl_function pinctrl_functions[] =3D {
-> (...)
-> > +       { "scl_i2c2-cs_spi", TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION,
-> > +         (const char *[]){ "GPIO0", "GPIO1" }, 2 },
->
-> Ow this is starting to look hairy.
->
-> Is there some better way to get here?
-
-I tried with a macro but I was not able to pass an array directly to
-avoid both the cast and the hard coded length. I saw on other drivers
-that I could generate the table dynamically but I'm not a huge fan of that
-and I feel like it would look even more clunky...
-
->
-> Other than this the code looks very nice.
->
-> Yours,
-> Linus Walleij
 
