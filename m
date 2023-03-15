@@ -2,33 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9206BAAAB
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Mar 2023 09:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 518DB6BAAAC
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Mar 2023 09:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbjCOIWG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Mar 2023 04:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        id S229765AbjCOIWH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Mar 2023 04:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCOIV7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Mar 2023 04:21:59 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2085.outbound.protection.outlook.com [40.107.105.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B028E25E05;
-        Wed, 15 Mar 2023 01:21:44 -0700 (PDT)
+        with ESMTP id S231583AbjCOIWA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Mar 2023 04:22:00 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2083.outbound.protection.outlook.com [40.107.105.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361732A990;
+        Wed, 15 Mar 2023 01:21:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lfxTuw+SF7olATn/OFRmT8g7Jb0oDR/pJnfjqqyzCuTBYRfr8H1cyrI2FnUydM3v+uzWj+ZIEEVIrUKkD73vuo6kKn1HthqutrFA0ilYUON95I1G9r7TITHZ2JqjM4opyEpUvwXDykUOXxwHd2JnluabT6w1ZD1BDHKnR7qjtPbx20mZ3DqHU8CzEwra1tWwKOUSkRDFGQ27pYsVeFyBF2FTZ/SzPvnTWYDoB9vLt/uywk9PS3d0PcH3bzDeUhuClMTg3tPRtQmNaTH731eCSFJ6VniBTy173xxUaOpHQMqR1UrdbC1TAa0sGl4Fh9Xl+zLNdE9Ei8yb9gd+9mMCnQ==
+ b=bb9RXKA++OBwhfxekUUo8+DQASl9OuxXv9hlM/nl8M66BR3rOcYnx+2/MqB/pw7oqAhLu8KPoEm/Ef9T2dYQQ2OqKNINsFsjmoEu7NpUidOA60c9IQcsSGqQ/bnXW8eAPLkVO8gh1Wsm9x5821GUzm4tTmxJkpwLySUDZts4jMAMS0iZ5gOsgPxcsM9Fo1jKNDDzYVsuKhLmBzOY1/23c41ynwAipklw0QqiS29xsMRCPnww680XwEZBuiSWLhHfJYycEAzNLkNmflu476zqn+IRSh7H4n04OSklXoWaVeT8I5NCtnKpEYsOXU603fkBUiiMa+WNh9SesLVDQa+EYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PZhRency8aOyahpSY6tslS3NcjDRB3GkWL+ZSLnF9qY=;
- b=EwksV4P1l7bIpqBkXdVFFvS8ZQc9bt2x4wZGDNK6B1SKA3Kd2bbfwy+zRRvP7deyqeIod+Xg+nu3pJk4cmpOwYGRJr3SnLA1jO0aeB0/lXz7sBEfz0Ot7oIXIE1M87n9EA4nFhxqmRZQ/n7GGk+OeqvMsC3hepZPFOVT32OhjfVgmrmGi5O2wexFmGjkTcJFfPCtTbElYxQ/TCfsEZho0ObgvJqjMYE2A06ewWSmo/n5y8oAk0Q0BeVI9hd2ufOXE+sZqwhbjIIomicgzoxB6HZNqt9KnLhvyqrvnbSylplQd+PKYyVN4NLskEjG2Ax3GkEkf5MW0yfY07F4rmUciw==
+ bh=ZH0+jYwmkjUSTp0If1c7KiVGidEhl4NXXDW+tbGIb5o=;
+ b=FQ8tPaTRkqktDbTQyVRJcBxMbOEEY4BRS8v3a2PsMrFgcv/Mu5BLCngrWbGVUIXUz4XShtuThqj1dBuRr/PdgwRtsmq8W7M+dRZ0YobKzrKiEbd5xP5Nt6zFNg4krbeeVrjQAIEJGJVC8TGiWlSVKtLIAzeCndDnbfMLfp6+bZqHC+PquEBbaOLToznKY/ArH8QXbsFyVufELzRyxFm46p98mD/oWtJP3XMtPHWaWeC3V7OMybwETX0S+iHTwh1UhQJAcgASScWzYIsnUL2Gc0Nb9+P1s48yH6VDOnyb7JD9Zvu76tBdyZh6/xUAF8tI3HcE4Y+OaN7U26n9W9jTKQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wolfvision.net; dmarc=pass action=none
  header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PZhRency8aOyahpSY6tslS3NcjDRB3GkWL+ZSLnF9qY=;
- b=pDVVtnW0EWtqABlFtMhveoY0cfirI96fZmcq9b/VYkPx/LPP8mBjWks07+JcJn1RMZa46A5WYLec1u2iO40j9hSxMKKD/R5pU7TLO9TNYdJ7b3Kj9Vr6qbcDl/ryIF4yj7qMT557Mu9N0p3ZLYqfQgr1bx1RY0C4g7ylFRaGZ+Y=
+ bh=ZH0+jYwmkjUSTp0If1c7KiVGidEhl4NXXDW+tbGIb5o=;
+ b=zof6Bh7RdKNOz7pcgBD3XNx3vU8JVoQ6m+Kej1krA+BXTEGAD/ciQGzdcVL8Y8pmzJghULHSq4i5v7sRL6YvHKayIpOblggnm4CFNPlICj0ZtpBjuQ+V1ome6umywzf5QqR7UkvmMTPftBuhnz/UfIRnFhU6keGP29uuKTVG0Co=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wolfvision.net;
 Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
@@ -45,9 +45,9 @@ To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Javier Carrasco <javier.carrasco@wolfvision.net>
-Subject: [PATCH 1/2] rtc: pcf8523: fix coding-style issues
-Date:   Wed, 15 Mar 2023 09:20:20 +0100
-Message-Id: <20230315082021.2104452-2-javier.carrasco@wolfvision.net>
+Subject: [PATCH 2/2] rtc: pcf8523: remove unnecessary OR operation
+Date:   Wed, 15 Mar 2023 09:20:21 +0100
+Message-Id: <20230315082021.2104452-3-javier.carrasco@wolfvision.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230315082021.2104452-1-javier.carrasco@wolfvision.net>
 References: <20230315082021.2104452-1-javier.carrasco@wolfvision.net>
@@ -59,51 +59,51 @@ X-ClientProxiedBy: VI1PR07CA0132.eurprd07.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|AS8PR08MB8779:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0ac1106-f2bd-47a7-4cba-08db252e3b77
+X-MS-Office365-Filtering-Correlation-Id: 9eebb214-4d50-4673-0d38-08db252e3bba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /LY7RX+cW8+JfJ5YLB32+baPeb/AatGQkuf0pM1spIRBici2mSnEXiYQfU0AZNkHa9fgRBwNdL3UaFgsqaUw50Std9MmdssxmlG/fs4oNT8IHhQeUt335DRMY/7ixjNRHXtyweIKl5Mx2DWG6cYm9K/7QC4KtUjKmvK1DkP4jIcyY6cW8TlZKIu6vrM9x4urlgVm6+MswmUSOfTeKg1r2Lmjc7wnU44z/RnU9a8L8Ue+MQxYYp4Sd3THVZUl3lQPW7LFcpusThg3h0RbjpvD0IcUC31SHs7FFPJPtZ0PmXdQOJ2QltgvZ0mPgWkPQsd3yFDYRLzBuIrw7iS8LUH+YzpdGwgCc2pgdGGChf7nV39OYWk2f/TldouhynkLAjUtRPaChGFyTYvsV65GDtuz3RizQLHUQbifdO/rMScvvVnhF4guceSpRmlxeHlQVPVJUlUalW4vKbpSlT053TTsUvVMsfr6LU54GU79QE7HPbufkdu98TgebkS8PpcTyIdUdjsDdXNBm2DL7H2hzmpeaqg8wbTlDCDrbmKsVF6GOdhL3SjE87oDP3C627IyHEMo2uT2ZkMRbLLQBecdTsQD3ABDrQJoNGwUIC0DYCF1Y3EHqUmDMuREZEOFEfL8deOFNOEY6DBZpSTp20hS7x2/CmPtBJT3T5r599NDZ4WrZS1Rw1kBieCj1vrVdlIcHR5nJI1fA/iluOwYpSaHoCmolA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(396003)(39850400004)(376002)(451199018)(38100700002)(4326008)(38350700002)(316002)(54906003)(86362001)(8936002)(41300700001)(8676002)(66946007)(66556008)(66476007)(83380400001)(36756003)(44832011)(2616005)(478600001)(5660300002)(2906002)(6666004)(107886003)(52116002)(6486002)(6506007)(186003)(6512007)(26005)(1076003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 6yGZJ23qAvY/GjQp6W1jv3PrJL2QqiuJdPdkr0RsnVNrxT6kUUzTAxZ42bnNIB8Rd4wjZmw3tuyKzDCIu2js9K/MuYMfdIetQ09VS57z/jp0Bk9/N5+Aqek0kMvPYqA5Lh3WLWXZvulU8zwNuMR2iA4U44mgXyRNgC+q//jSWDS84T9yrhHZbJ8cMQUvEEu/kttMsqY0+DKTtdLEABmEvJOIy7kz2LBlpgeZRECswGPXwaHzhgPKUkViDP+Vg+ssF7aAj6i64iFxPecJgPf5VLd9ZwfSOMHAH6n4f1uzhm+5d7k6JZ7ueeadbQoHPQpx3mpAgW5kEs28B9ST1sUsct1/6udsT6RtPArFkl37U3PTOKh4yxkYdetSOrdb9upWD+8fI1BnBWgC10z07431L/jF6khAfqLCfy0myH6ovyHcHmXvbDIDYh4FEBCv0Z14i/PygQLhEIwXA+zU6f7d6gQxCxsVBtkSc0966p/pdmvWM7N63Lt96c8PCfaaPnRde5Q+ES0yNHsMnDnRxLw95914H3yU7s4g+Vja71X0vjKJ5Lg4C4UbQGxUs/T0e9m+WaJnDgmZOogvXVWBtfVwBARUg6q8APyRO4IEgktDtyGS2lJuXegE8LFd6pjcwBbJurqkfEHpIJdIaOnuC3DaakCdhMJ2Vo33X7ik4ap91mRol4/SUVYWlSX3702/DPV8lgdZ91zJT+yEO48Ex8A+KQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(396003)(39850400004)(376002)(451199018)(38100700002)(4326008)(38350700002)(316002)(54906003)(86362001)(8936002)(41300700001)(8676002)(66946007)(66556008)(66476007)(83380400001)(36756003)(44832011)(2616005)(478600001)(5660300002)(4744005)(2906002)(6666004)(107886003)(52116002)(6486002)(6506007)(186003)(6512007)(26005)(1076003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kTH+X8ok1zKa87ZxA+svVqEiTgTCp2OaKUU90/fKVOs69o2ECNIwd8GdQC0q?=
- =?us-ascii?Q?w6+8ZlkfNzThYeAyaJFShEAmtGLc2hYgttBwP7vvmDRvp3QJJqH+pD5D37cq?=
- =?us-ascii?Q?ovX+4fCjRrDUXEt0IuMJ2lOumvsXPqxLmLtWfQXSW4GqsMmpT9mTFsz3eaRW?=
- =?us-ascii?Q?SIm0kVe4gno5rjuIzjH8p42DyRNlR4iKVI2ldXsmFknC4VUUIk+xFOMv+uDW?=
- =?us-ascii?Q?7wtG3Jt3nsiJZpQXf6Mcsk2eJ7eL41YpoF+NGjYM2oO/hTeuAXX+FclLTpk9?=
- =?us-ascii?Q?vuMUffNoDGbE84YbwCiGrtIcdCYyLmU8u/a1LcPCOApPJAyY/XNd2/HDJB3t?=
- =?us-ascii?Q?PKhuLzMC6FDOXbTyGI5rLlbUnyE0qzTGADm0SYtiJavFWqnEg7G2+ZIES+yT?=
- =?us-ascii?Q?fUx0wvsN33jHZNKJb9/mE2AFlurUBav2f34yixSfpeoUzx4X+KjUqMW9q9J9?=
- =?us-ascii?Q?YqTyDwl8B9t/M+IfnMrH0tDc1+C9LgXlOHCf1NKBwUP56z84JgKzIm/dUc5q?=
- =?us-ascii?Q?FzgNLPomcJu30LdilG5Tn6TaCWbsJ/eD4x9Iq83HHgKb4J5XLpREMiriAUqm?=
- =?us-ascii?Q?aOhburf/BjH8FcvJsH6ZWGR2Fe1KKjL9nYdE+xlv8EDq4K0B/rBDRGMFaJYv?=
- =?us-ascii?Q?hUj/FucF744obX8LxAFCeBa+WloY9r/OQOzgwwJxliBg8sPYgsx16q1+mOR4?=
- =?us-ascii?Q?tcywUeQBtNeuTinHrN0NubfAXqZawdDVRdKtNRRSsxJQN+iFHWcEOmLNdJPV?=
- =?us-ascii?Q?DmEnfzRF2y9fM/sALxWpGAvTyhHj2eJwGKrMJP1w74K8/ZCJr3dJMRKYNQl1?=
- =?us-ascii?Q?IpHRLOBWUT5kmgxYH9PdyC6V3qYFjbNgXHthHKk4LcQj3l8ALTPEaOYVGlmk?=
- =?us-ascii?Q?9194LqsqKnNroHCj/L8WnLcaAnVRKdDpm9B17jMlyGNdVe97dkUtuo9lyMBx?=
- =?us-ascii?Q?Zgqg4t8/6nDfUG0PmsDTDMp+adpHsD9SakKWlKQ4nXRbaTYOozrfdk0h5jUy?=
- =?us-ascii?Q?rYYwgoQAj1N4luHan6iK2o4DVrMGYNHed4oUD5NSSmF6iFmwB0toU9iCcbwS?=
- =?us-ascii?Q?j5I41c+EqI7PFV4RRs+Jj6LQaAGjHMWgbIvs96G3FdLwCAL9FdsA6EXK1cyJ?=
- =?us-ascii?Q?mgL9l3CWgXqAvHSG+hYY7beGpdWC3y0pzupv2tCoL20bCrS0QC3P/AkHkmbO?=
- =?us-ascii?Q?TvVi0jyXmWREfc4YiDpd2BEF4YC+xjk1Kw7DmXmOArON/Qyy++XURPND2RmO?=
- =?us-ascii?Q?75BjV9dEqAkQY1ZpM6WgcWnNtM0bK0wno1HsaSnKz7cfiYtC4c+0oMJh3xif?=
- =?us-ascii?Q?+4UvsrEN05HDGyEW8GeIreiZykmtw00jJHjkBh0943PFBZz12xDpaAI2CMt+?=
- =?us-ascii?Q?j+VNRByEpInAbxTuAchkxi8Qz4gEsG+IMXIdtKU68GbG4ndfoBJ3fVZDQOcy?=
- =?us-ascii?Q?exDGDuWZiEiRLRULXbLNOZOvEbLmG3yuOdSBB0R90B+NR1br4p+Wvo2HruLy?=
- =?us-ascii?Q?fmOHiyb2rgcRbssV1IxoxEAPzG3pCAAeEJtnaWddGV/Z9+rGdbOyPbHFD3gk?=
- =?us-ascii?Q?2D4jLhI6ct6yfHMEbg/ehrBqiE/rPT0brwvGRfYIXYR/6Cj2EYtWCwC2Zfrp?=
- =?us-ascii?Q?Ql3g0bKSxt3F4w5+38Vrcc4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pzTqILLBwMqdtpUXBvWSJYOZ/pMH5FG7PMWixWO0LQp67oF1mGYTmsbkYuFs?=
+ =?us-ascii?Q?PKJ6+chbBj/f9siN7b3BdDYgdWCu9l4PSVXm6eNECmOWonLVRkrly1PJVnCJ?=
+ =?us-ascii?Q?0LGs0q8YJzKqgJI2gUN8D6vW3BdeNSNVBEI5OPfzD6AVt502o6L8DL80DZg1?=
+ =?us-ascii?Q?dqyGvXpmYaYxxRHI9meuYp9hdPJkV/hJXyQsTsggsnqa2QO9OKmnRF+ptMtv?=
+ =?us-ascii?Q?wmHOZTH1X2oBo5E72AvWysMF8dkgfHGlVfAJ55scyqII1/odJCsQbhljbOx6?=
+ =?us-ascii?Q?Ft0mnbo2dCSH1xXwYEoiz1hd3dgs+yG2v2y9WRuqedOBUE2ewTIvEa4F5GOo?=
+ =?us-ascii?Q?RAMbfVkBoAkkxePIx0QtCS9Cc7TkWBJk82WiOo5Kk9kdQK36m9otTIqPOQSE?=
+ =?us-ascii?Q?kWkI/ZDzUK5OEsJyAgKZCvdwm2C7HP0iE4i4DSzlmecGzTmjlezwqQNgUiyS?=
+ =?us-ascii?Q?kuKgzKWQJfSZ8H6RfoujchJgCkGZgOHUWsMkVdBSmcC+M0C2v4W1150hiFkl?=
+ =?us-ascii?Q?JyJbPY1eyxX4rPltORTjVkcPfQWBV3gY6KTfLSJDKyDSR5PkgrvYb0Hgbrlx?=
+ =?us-ascii?Q?9sfj2as6R/Nt3DEepGqgpeMBXjw2Y/Y7TEX86skJ2ddwgv+YkUntEjiC6fFU?=
+ =?us-ascii?Q?o25ebP5QM2jHmQBBjZlCtG8GneO/exeuRZFuftNG1QEsnys4S5KUyUlr8BsQ?=
+ =?us-ascii?Q?+Fh2yTW2tHwAPQ45juAHM02Yq4JjQcl/BResLmZ3Zik7IA/bCINL0frw5PSk?=
+ =?us-ascii?Q?a3YTxlVE2FVwDf9uOXogKr2Rn/YOHt5Z1AwVR1m9BMQDlbp4tbZmpq421Tam?=
+ =?us-ascii?Q?sH8RzV+hO2Z/aqP1DsMujpC3OoPaGt8artcotIRdtqvNAyh9jiQe3u7TDz9W?=
+ =?us-ascii?Q?u0dmJK1Dw1Moy9DvgVH+IatcNusHfs/Ohh4N313Z1qNmz0J5yquDq/I+RB/C?=
+ =?us-ascii?Q?IXpxidv/QdsZCcSh+viR3XNen285i7esKyd9rZXwRcRc9g70BULXYYGbuKIF?=
+ =?us-ascii?Q?82U/K+J8JQWbedeDztoJbk1X/dR9NdJiHzCelfLyk/IqP6K2duV73e/pna74?=
+ =?us-ascii?Q?OgJuWLpISn1puAyThfRmhKSUQ+1cRXjzXhZUw7cP4cQb11hz2zn6mgiUHjXD?=
+ =?us-ascii?Q?trB9NR5KNDCPBbMKlzN6GMXndknHbrUbwtwqR7ax5M9E6MyAloZzB3Jw0Ex4?=
+ =?us-ascii?Q?AocMQL3U/fcKzW0XROEyN0dRWipTgMz/3U1KaqNbKliPEaHxIObJc8EAyo/t?=
+ =?us-ascii?Q?h9mhv3+57F8wZCBGrjdlFnbwPHyuNUJoLRgKpaPtTG5eB9ok8RprY7n+Xd4j?=
+ =?us-ascii?Q?riHVGhhRmc+mMy969ryTVvH/lwBLoHV4jxPR0fxXUgpu2QsDaXS1xu0uT+Uw?=
+ =?us-ascii?Q?mAbddP5KKgd72YjYLt9ly/399HzIQGSI44U7BeTLOhU2SjxFruQp2kMuNuRA?=
+ =?us-ascii?Q?YjP3vgUULkC8CF/Ar2ErVKNxUNRMzE/fTZ+C6NKprSit6FIp1Fs+TlsvSwVg?=
+ =?us-ascii?Q?1s0X6KtLyABST69ghmXCSi1Tj/OHqdsdVnsL9jyYbAvzRLbl1qDZ8N27ArRm?=
+ =?us-ascii?Q?tf21uBKFnOUFTej1DT9xSgjjiRF/9hmjLZMmD57dI4W5MuDmyv2RX8WpjRZS?=
+ =?us-ascii?Q?MQzB9DZ0hdus8KDKCG7wfhA=3D?=
 X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0ac1106-f2bd-47a7-4cba-08db252e3b77
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9eebb214-4d50-4673-0d38-08db252e3bba
 X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 08:21:10.1954
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 08:21:10.7422
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yCJ1yDt/91KSfMurNP3IzqQlNqaQ2/6gKawjDHZbtnofcxI9nOwTKn/7Fyvc8ywU+xlY9OP9Jb568smfc5ksjasepBtpnlpW2qoHD1rdBe0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: xw97F8B8O5jIYMl05hOYD6lfxPLgXGoJzG3F8BXEgreV5UTabSeBY0B5urDBFGTsFM5ZoAmcU5g1vBWXQ/qZ5vOrOBYs9IV2GbkiRCDfauk=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB8779
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -115,70 +115,30 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Minor modifications for coding-style correctness (tabs, spaces and blank
-lines before and after brackets). In total 7 errors, 3 warnings and 1
-check where removed from the checkpatch output without damaging code
-readability.
+The value variable is initialized to 0 and it is not used to set any
+other bits rather than the one that defines the capacitor value. Setting
+this capacitor value is the only purpose of the function where the
+variable is defined and therefore the OR operation does not apply as a
+way to foresee functionality extensions either.
 
 Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 ---
- drivers/rtc/rtc-pcf8523.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/rtc/rtc-pcf8523.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
-index 2e111cdb94f7..ccb5aa690433 100644
+index ccb5aa690433..e7115ebef707 100644
 --- a/drivers/rtc/rtc-pcf8523.c
 +++ b/drivers/rtc/rtc-pcf8523.c
-@@ -21,7 +21,7 @@
- #define PCF8523_CONTROL2_AF BIT(3)
- 
- #define PCF8523_REG_CONTROL3 0x02
--#define PCF8523_CONTROL3_PM  GENMASK(7,5)
-+#define PCF8523_CONTROL3_PM  GENMASK(7, 5)
- #define PCF8523_PM_STANDBY   0x7
- #define PCF8523_CONTROL3_BLF BIT(2) /* battery low bit, read-only */
- #define PCF8523_CONTROL3_BSF BIT(3)
-@@ -234,8 +234,7 @@ static int pcf8523_param_get(struct device *dev, struct rtc_param *param)
- 	int ret;
- 	u32 value;
- 
--	switch(param->param) {
--
-+	switch (param->param) {
- 	case RTC_PARAM_BACKUP_SWITCH_MODE:
- 		ret = regmap_read(pcf8523->regmap, PCF8523_REG_CONTROL3, &value);
- 		if (ret < 0)
-@@ -243,7 +242,7 @@ static int pcf8523_param_get(struct device *dev, struct rtc_param *param)
- 
- 		value = FIELD_GET(PCF8523_CONTROL3_PM, value);
- 
--		switch(value) {
-+		switch (value) {
- 		case 0x0:
- 		case 0x4:
- 			param->uvalue = RTC_BSM_LEVEL;
-@@ -273,7 +272,7 @@ static int pcf8523_param_set(struct device *dev, struct rtc_param *param)
- 	struct pcf8523 *pcf8523 = dev_get_drvdata(dev);
- 	u8 mode;
- 
--	switch(param->param) {
-+	switch (param->param) {
- 	case RTC_PARAM_BACKUP_SWITCH_MODE:
- 		switch (param->uvalue) {
- 		case RTC_BSM_DISABLED:
-@@ -385,9 +384,9 @@ static const struct rtc_class_ops pcf8523_rtc_ops = {
- };
- 
- static const struct regmap_config regmap_config = {
--        .reg_bits = 8,
--        .val_bits = 8,
--        .max_register = 0x13,
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0x13,
- };
- 
- static int pcf8523_probe(struct i2c_client *client)
+@@ -65,7 +65,7 @@ static int pcf8523_load_capacitance(struct pcf8523 *pcf8523, struct device_node
+ 			 load);
+ 		fallthrough;
+ 	case 12500:
+-		value |= PCF8523_CONTROL1_CAP_SEL;
++		value = PCF8523_CONTROL1_CAP_SEL;
+ 		break;
+ 	case 7000:
+ 		break;
 -- 
 2.37.2
 
