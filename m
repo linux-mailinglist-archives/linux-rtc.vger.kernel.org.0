@@ -2,53 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599D06BD30C
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Mar 2023 16:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639626BD8C8
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Mar 2023 20:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCPPNk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Mar 2023 11:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S229852AbjCPTTF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Mar 2023 15:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbjCPPNj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Mar 2023 11:13:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098D92E808;
-        Thu, 16 Mar 2023 08:13:20 -0700 (PDT)
+        with ESMTP id S230006AbjCPTTC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Mar 2023 15:19:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA19E4863;
+        Thu, 16 Mar 2023 12:18:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BBA8B82252;
-        Thu, 16 Mar 2023 15:13:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771D3C4339B;
-        Thu, 16 Mar 2023 15:13:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 207BC620F7;
+        Thu, 16 Mar 2023 19:18:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D0DC433D2;
+        Thu, 16 Mar 2023 19:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678979598;
-        bh=rqZMffWFujs1hJXDUL+lclulqKOD8zGLO5s7fzL9yjQ=;
+        s=k20201202; t=1678994298;
+        bh=U6/3MAM8lEWJuAQad1Q+TVX2oTsNcl0STc3k5xy9Klg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UfV0xsODZ7SkOKG6niZ3in/PLDlyunrWDvNPn9fk7yRQ7OlrTtX21pV048zSFQm/G
-         +vT7L0tmR0/x4nGe3vylSyORyWAMV0Ha//0o/SGbT43Q13iyQoGMW2LsapGK/UD7an
-         t1gpuPtRWH7SnKtJZ9dIzAG+92GVF/wwED3aMsV1uJT2K0Lk5/Cf0drH21rlYy2QXb
-         lT3voOMMi0aLtTBac5YFcLy3+tZnuYVicSaIdZxfv5F6ix6UEvXKx9Bke+ecBBV1R+
-         63DRi22ztEIs9ZTRKx0ww+m29KLYaaeBcs7z/YsR/bEkhVQ07HOXwEwh/P0pd9BFi+
-         jnksjfMIgP6Pg==
-Date:   Thu, 16 Mar 2023 15:13:13 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        b=lka3LA3zNxRuOKAFjjixGSIQqsYiL+s0wuBpCboYGUB+hn39p7r+N9ZHBasxkdnyb
+         4JSSvT96btScmpf0WgeEX29S62/0B301LF49slJPT5Z0XJEhHOrzXTm1hOQ03rtDP/
+         XbzEMb5/S1Rx3gdNkhmMaZ+5U/zWhgPN6skkB8J79ghJkpmb1htrW7LAOPrDYW5Ewc
+         uPHZPuIYSC8ya9qx8xt1HMHWoK3sd4uhVWfW0MtgXlmhOG+gwTy1XznsCAwW1V79lk
+         vMJix/0BhIo+9Dkjd2gLc+Kf36QBHmsmh4vWdWXtquzrQJWBE/zF5SdrR0PfkLyFod
+         QvYWz9NCaDZqw==
+Date:   Thu, 16 Mar 2023 20:18:15 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-kernel@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 0/2] Remove SEC S5M MFDs with no compatibles
-Message-ID: <20230316151313.GH9667@google.com>
-References: <20230131183008.4451-1-virag.david003@gmail.com>
+        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Daire McNamara <daire.mcnamara@microchip.com>
+Subject: Re: [PATCH v1 2/5] i2c: microchip-core: convert
+ SOC_MICROCHIP_POLARFIRE to ARCH_MICROCHIP_POLARFIRE
+Message-ID: <ZBNrd5ww9YD3xQTS@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Daire McNamara <daire.mcnamara@microchip.com>
+References: <20230309204452.969574-1-conor@kernel.org>
+ <20230309204452.969574-3-conor@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TIODK/DyJw5FNTCf"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230131183008.4451-1-virag.david003@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230309204452.969574-3-conor@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,32 +80,42 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 31 Jan 2023, David Virag wrote:
 
-> The S5M8751 and S5M8763 MFD PMICs have no compatibles, and board file
-> support for them was removed, resulting in essentially no way for these
-> chips to be used anymore (unless they get dt compatibles).
-> They seemingly have never been in any board files upstream and I only
-> found references to the SM8751 being on the SMDK6450 board (which has
-> been unsupported for many years now) in a downstream Samsung Galaxy S2
-> kernel tree.
->
-> The patches should be applied in order.
->
-> David Virag (2):
->   mfd: sec: Remove PMICs without compatibles
->   rtc: s5m: Drop S5M8763 support
->
->  drivers/mfd/sec-core.c              | 46 ---------------
->  drivers/mfd/sec-irq.c               | 89 ----------------------------
->  drivers/rtc/rtc-s5m.c               | 82 +-------------------------
->  include/linux/mfd/samsung/core.h    |  2 -
->  include/linux/mfd/samsung/irq.h     | 50 ----------------
->  include/linux/mfd/samsung/s5m8763.h | 90 -----------------------------
->  6 files changed, 3 insertions(+), 356 deletions(-)
->  delete mode 100644 include/linux/mfd/samsung/s5m8763.h
+--TIODK/DyJw5FNTCf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Pull-request to follow, once it passes build testing.
+On Thu, Mar 09, 2023 at 08:44:49PM +0000, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
+> use of such symbols on other architectures, convert the Microchip FPGA
+> i2c drivers to use the new symbol.
+>=20
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
---
-Lee Jones [李琼斯]
+Applied to for-next, thanks!
+
+
+--TIODK/DyJw5FNTCf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTa3YACgkQFA3kzBSg
+KbZWQRAArPUHPGdzaDCWZYxs1RoufYMPW3mLcn2mvcWqFmxkR89/yXReohhpb09D
+99smcOSUtpAXFkzmCoCc4KlsUQDmUqG8Zy8dJ70//YEbx1IZddE8OkDOu2WwMToX
+WY3AQ7Xkfa3Ror25SeitAVTnpP3XnFTR/jPl4d6Vz7ug5vGIcleqJRs5AOShZfdH
+nDRdXQfayeVeWfjA/zSp4XM4ahx5ZaLAyqyOQEUmx2IZDJGcaUZXc4K2SeHoeJ9e
+KYrhY+SHfwTSqNoPB7bUUfrz11Ub6use6WHLLZPMGUYzkuHyhpkFUxAInoZPpVgd
+dhpTUodP5iZHalX4Z2ZFCX1ciYuowOQN5fr5dFZBBM87cxE9OMd/eaGC3dVMe98U
+LqAmJzWg1+E38GswGLZdgRWtuhSwMxvSGm5bRxlZlyoOdBXEFlTjOB1WAKGyduzs
+raLno/7NRrdQvPzV9/DVXNQQ4ERA5hInN6Ax1bhqApMNouaxsTqv8leU+AVFL+Tg
+JVU1OFGedAfBYFHySpAEO3AeNV1hWKBMkccjWZHMwExC86r3dGFfc4KYo8/OEM//
+/yjIwK1DuOLfH7CoM/F/wsK4Ga8XmuIg7z1/34m5Z7iKfsz30zmlDxHHKeMLm5RF
+XoBHu7Mq3A0osybzaKLJWmXXYW9G3/kIIeXGZhQNoCb999t+8+I=
+=WGcd
+-----END PGP SIGNATURE-----
+
+--TIODK/DyJw5FNTCf--
