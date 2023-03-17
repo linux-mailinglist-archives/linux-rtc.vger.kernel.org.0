@@ -2,56 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4106BF4ED
-	for <lists+linux-rtc@lfdr.de>; Fri, 17 Mar 2023 23:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F33A6BF502
+	for <lists+linux-rtc@lfdr.de>; Fri, 17 Mar 2023 23:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCQWNj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 17 Mar 2023 18:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S230200AbjCQWVa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 17 Mar 2023 18:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjCQWNi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 17 Mar 2023 18:13:38 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B14B532A8;
-        Fri, 17 Mar 2023 15:13:36 -0700 (PDT)
+        with ESMTP id S230198AbjCQWV3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 17 Mar 2023 18:21:29 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8729C8C5AA;
+        Fri, 17 Mar 2023 15:21:26 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2EF9720002;
-        Fri, 17 Mar 2023 22:13:33 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8DE4E40003;
+        Fri, 17 Mar 2023 22:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679091214;
+        t=1679091684;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=eqxKutKiqW8yb2sPT5I6IOs38EHv69itxPuXft2vTRA=;
-        b=AbsH0TjoP6YcpQsD+UJ+eJekzztouvgcCeWA2NlIs0pjV7MpzkjbqVA48XdcBYQLK8f8IV
-        g38lBx8f21+94whY7EBbNXB4OT9l/XbjfPrfUR+UQrElDTAd82JqXq1qm0q2HF4VeoCVxg
-        hXjnzuYZ3sK7S6HiY8aYU8zOHwAaK/SFn77zRqWcv8c5ADq+RCcR8He/Ac9vc7eHhV7bXS
-        /jL+O67DQidklXIf5le3d3+atjpZfiCs8TaLVtuFlhFcDFAFThDSxbmXfd7Iqbvbk8qxly
-        XNFCVknlDusaQbfgP0m/5Cn5nAkwGekIz3Vn+eCEArSWqT8H+mDLsaLqx0H8cw==
-Date:   Fri, 17 Mar 2023 23:13:32 +0100
+        bh=M1H0b+8pt3zecfZdT4Lt4hoL0pnvHKD6pkdBtwNxvW4=;
+        b=hJ5LBiF1mKl2oulAqe7KSjjKGLbCZw1yF7Sc+jPyNHe5He6DEIw3OKO36ROWMv3xJfcjfo
+        yQCThlu4bNCKzClbHV/hgDnTHhyrKFLaS+hHB+J323GaZC5MRzwfVPIXuRUSswx+m95XT8
+        DKzTeZfrJ3u7mRBsHqEsh3Oz2NlZwYVCVhTu+SGSEkkmi8grjOKaNp5eMWNoBUWwAUj9GP
+        FZNLslGB024APPJcabeY2gUrfszNDkes8eD4Mgu6Ni9UN+U5gKRZJ4d6lEJ+qb7U0LxBD2
+        Uno1kxl1rBW4gEM7nwQw8AEyiymx/Hkcw6k4AwIzeS2jVPBtEYa/oIl/bLQsDA==
+Date:   Fri, 17 Mar 2023 23:21:22 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>
-Subject: Re: (subset) [PATCH v1 4/5] rtc: mpfs: convert
- SOC_MICROCHIP_POLARFIRE to ARCH_MICROCHIP_POLARFIRE
-Message-ID: <167909119653.115559.4747292512289955247.b4-ty@bootlin.com>
-References: <20230309204452.969574-1-conor@kernel.org>
- <20230309204452.969574-5-conor@kernel.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: sun6i: Use of_property_present() for testing DT
+ property presence
+Message-ID: <167909163830.117471.962092693437106290.b4-ty@bootlin.com>
+References: <20230310144736.1547041-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230309204452.969574-5-conor@kernel.org>
+In-Reply-To: <20230310144736.1547041-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -62,17 +56,20 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
-On Thu, 09 Mar 2023 20:44:51 +0000, Conor Dooley wrote:
-> As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
-> use of such symbols on other architectures, convert the Microchip FPGA
-> RTC driver to use the new symbol.
+On Fri, 10 Mar 2023 08:47:36 -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[4/5] rtc: mpfs: convert SOC_MICROCHIP_POLARFIRE to ARCH_MICROCHIP_POLARFIRE
-      commit: f12f0c7da37c58da92bd4a6bdc469df7e0b2da5e
+[1/1] rtc: sun6i: Use of_property_present() for testing DT property presence
+      commit: 4d9890ac9d43d4dfd011110ab96633caa6fa829c
 
 Best regards,
 
