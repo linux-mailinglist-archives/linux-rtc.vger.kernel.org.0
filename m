@@ -2,130 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1521F6C30A7
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Mar 2023 12:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCBD6C3AD6
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Mar 2023 20:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCULqG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Mar 2023 07:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S230398AbjCUTkn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Mar 2023 15:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCULqF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Mar 2023 07:46:05 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58494AD13
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Mar 2023 04:46:02 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id t15so13335524wrz.7
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Mar 2023 04:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679399161;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aoa86AtLIbV7nO5suJgaHyPoZu1RFBX6SeZwEU5izi0=;
-        b=g0tDnK7U3yE1cXgUCouZXhSeaPQjHU0hO0Wb7E6Rrp9eYGppf7tv6hE/VIdtGhnLJC
-         iURk84zw+7T5jTFbfO2/eM8m2Ffql0M50F3blCnmfrPlhyhTb8p6rRREXjOfExH57QaJ
-         spPBaJDlPM0/IDowS5CT/3HZSVO8aBrlcishTtyVWw2dOIy/qVrDxoS3BKirb0t285nf
-         r4pyjxkN+DT/m4A1tBXThODVVPeNkhgQgnJDswE5n6jM8d/y7IZyjES0LgmMOAIqB7jV
-         5ycLODo/DHSEd/fnUrMywCLko9ijPvyELlJprcZaH7ilLhXCkWo2KvItPOSlkWBIdtMq
-         V66A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679399161;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Aoa86AtLIbV7nO5suJgaHyPoZu1RFBX6SeZwEU5izi0=;
-        b=MRqVuL16BB9LMH1mWKDcA8rvUHIbMOcgQH4TWPXqrMFDxc/Cv9kobUUVB+Bmr77ygB
-         PpN4tYlxpsajDmAjtmDEMuDOGt8nlpqEJgixSaln4ch0eNgxqMv26P5PlbcpCmHmV9rf
-         sBXyR4pV97LAfzeFOYdFe4l0ype3Rarqcdn9FTX0LUYd+WNkotOq/6PUeCFPmsLNjEAH
-         ekXG9/uVdgM9hev2YBBo5FNhDWAf0dXnuNHbx9No/hKNEJSOx8AmXGAztulFMyrMusmg
-         TSws8I9lKi2QHx4BZoygcM7L2LjhoZsuisiRDO+NI2zsPsANf5/rGQvY8G+1j4ZhhPay
-         x8Pw==
-X-Gm-Message-State: AO0yUKVf3KhgO/rsvnVaCbzBiSFD8wJseKeKIgPl6mXt2+2Hg5l2fvhJ
-        m0ClK/LLzfAfqO/lS4ANNR6vfA==
-X-Google-Smtp-Source: AK7set9UnwHxt4TUznSruwgSkTeqo/4spI6v/mq5YvGSm1KsUXOMir+4ZvQ98uVGlqIMqKA2STyEBg==
-X-Received: by 2002:adf:dccb:0:b0:2d0:d739:e37e with SMTP id x11-20020adfdccb000000b002d0d739e37emr1999488wrm.40.1679399161083;
-        Tue, 21 Mar 2023 04:46:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:c8ed:7915:30cc:f830? ([2a01:e0a:982:cbb0:c8ed:7915:30cc:f830])
-        by smtp.gmail.com with ESMTPSA id e2-20020a5d5942000000b002c552c6c8c2sm11115902wri.87.2023.03.21.04.46.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 04:46:00 -0700 (PDT)
-Message-ID: <e768dd6c-5945-c1ed-89c5-b250bc90241f@linaro.org>
-Date:   Tue, 21 Mar 2023 12:46:00 +0100
+        with ESMTP id S230418AbjCUTkR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Mar 2023 15:40:17 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE73C132F5;
+        Tue, 21 Mar 2023 12:39:48 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 600B420002;
+        Tue, 21 Mar 2023 19:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679427559;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yBHkU6tb5xg5smOIlShgBtygMh+FM3sL86bax3a5bDo=;
+        b=Gqqu81VcF0q1VsN48gRKkyeZZ3R6+UANTWm2J0WaavxgBCkF8PFF1FerT5b2POxH1Hq7s9
+        1Qv0wA5bBLGiB1yBLatCXEeo/olRqMhkC5dE4arA3WU73R7BIuzPPg4vfFc1u/sVLYaKUn
+        m2OghwcQmLKpja/d6gy4765C02hTkInW1+wBxz83j1dyTKQe4ZMhwBitXC40IKLdqmfHTU
+        BAMM0YHBvatH/VDQ67MXVxu7s73gDTtd4aJxEGXc5aVBqOchr9VzbdyawWSJcaBYaQZlD0
+        VbHpWvQhmbAASjUzsLZ8sIYPYNcy9pB0mKubjbE0R6u2nurh6F5U/M0+ADg2EA==
+Date:   Tue, 21 Mar 2023 20:39:15 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] dt-bindings: rtc: Drop unneeded quotes
+Message-ID: <167942752119.675121.3470511868063129229.b4-ty@bootlin.com>
+References: <20230317233634.3968656-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 RFC] rtc: meson-vrtc: Use ktime_get_real_ts64() to get
- the current time
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-rtc@vger.kernel.org, linux-amlogic@lists.infradead.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230320212142.2355062-1-martin.blumenstingl@googlemail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230320212142.2355062-1-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317233634.3968656-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 20/03/2023 22:21, Martin Blumenstingl wrote:
-> The VRTC alarm register can be programmed with an amount of seconds
-> after which the SoC will be woken up by the VRTC timer again. We are
-> already converting the alarm time from meson_vrtc_set_alarm() to
-> "seconds since 1970". This means we also need to use "seconds since
-> 1970" for the current time.
-> 
-> This fixes a problem where setting the alarm to one minute in the future
-> results in the firmware (which handles wakeup) to output (on the serial
-> console) that the system will be woken up in billions of seconds.
-> ktime_get_raw_ts64() returns the time since boot, not since 1970. Switch
-> to ktime_get_real_ts64() to fix the calculation of the alarm time and to
-> make the SoC wake up at the specified date/time. Also the firmware
-> (which manages suspend) now prints either 59 or 60 seconds until wakeup
-> (depending on how long it takes for the system to enter suspend).
-> 
-> Fixes: 6ef35398e827 ("rtc: Add Amlogic Virtual Wake RTC")
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->   drivers/rtc/rtc-meson-vrtc.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-meson-vrtc.c b/drivers/rtc/rtc-meson-vrtc.c
-> index 1463c8621561..648fa362ec44 100644
-> --- a/drivers/rtc/rtc-meson-vrtc.c
-> +++ b/drivers/rtc/rtc-meson-vrtc.c
-> @@ -23,7 +23,7 @@ static int meson_vrtc_read_time(struct device *dev, struct rtc_time *tm)
->   	struct timespec64 time;
->   
->   	dev_dbg(dev, "%s\n", __func__);
-> -	ktime_get_raw_ts64(&time);
-> +	ktime_get_real_ts64(&time);
->   	rtc_time64_to_tm(time.tv_sec, tm);
->   
->   	return 0;
-> @@ -96,7 +96,7 @@ static int __maybe_unused meson_vrtc_suspend(struct device *dev)
->   		long alarm_secs;
->   		struct timespec64 time;
->   
-> -		ktime_get_raw_ts64(&time);
-> +		ktime_get_real_ts64(&time);
->   		local_time = time.tv_sec;
->   
->   		dev_dbg(dev, "alarm_time = %lus, local_time=%lus\n",
 
-Thx for the fix!
+On Fri, 17 Mar 2023 18:36:33 -0500, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> 
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Applied, thanks!
+
+[1/1] dt-bindings: rtc: Drop unneeded quotes
+      commit: ab0fccc373d505c9a09bf459557768ab3177e0d2
+
+Best regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
