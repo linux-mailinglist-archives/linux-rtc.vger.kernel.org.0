@@ -2,119 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3779F6C2387
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Mar 2023 22:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5526C2E3F
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Mar 2023 10:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjCTVWI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 20 Mar 2023 17:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        id S229891AbjCUJwi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Mar 2023 05:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbjCTVWH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 20 Mar 2023 17:22:07 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5F62CC41;
-        Mon, 20 Mar 2023 14:22:02 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id w9so52282514edc.3;
-        Mon, 20 Mar 2023 14:22:02 -0700 (PDT)
+        with ESMTP id S229931AbjCUJwg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Mar 2023 05:52:36 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D8F33478
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Mar 2023 02:52:33 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q189so8194286pga.9
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Mar 2023 02:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1679347321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JKZyZ9UtP1ZZ748rC6wje4ZjvZJKdAV8kDbH4x8qqR8=;
-        b=fOB38sbMMg7Xpl15jekHcEJ9v8TQ8siGqWnC9c3X7uj6+6zlhsGZjTasrkL8MsS8mC
-         NRGmE3o6J9eIQBSoY/Gm/L5qD/B363AagucxmVfmmEUd4NG+LWtzX5lgzB0B5BaNCo6D
-         RqxANucCnq42gDZoqhjJWauCKoNv4Te6+2Co4w9/vsVp2sD8kGip0qu4I93WUcc0vb8N
-         cxda3Nf6t8vCHlinxft3VJmbJkthM8eynrqLX5zB44nYj4P8au3+4PHWVeiSVDP9WPqw
-         mM6VEInnCGg/f0zR+rlARDJOkgIl/Uge9NZEZSPG53S+SeYuYn77fTekdIjEixoBYm/q
-         r2SA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679392352;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z3kX+a3qX70gDW/sRmJECpI+SbkCmpJ7AHS+lpfkXrc=;
+        b=MwZfTXpLvQD/0H2VRFADWwvrOgGNjNRSUsGK/xJzzEwaWqDK25VFlf9iOR0/JG4esq
+         lv3Xgd8Mtri+UWS4zzCljcizT7gkCEzbPK/Oi7BqUzSngbZ1yiQfl31fxM/xPo8jGx1J
+         valLYDqhnXHH4OrAlj+X8pZTlYJRSSKoxUfnXPz8ARrRpmoik6JRSDHKGZjrmUl0e43E
+         YjpP0PZpEjm7lNj1iqRaSjeujZvPD3kTPWqurYgYqMnEZDbGcpkXqGt7EhkAtPZF9TON
+         h/JKnlkka6BtEYgpXOjpeg2OsaheJZ4QDxL7NwTbTFh6Si0AfYevAAYSStVKwGIpxgHx
+         tnUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679347321;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JKZyZ9UtP1ZZ748rC6wje4ZjvZJKdAV8kDbH4x8qqR8=;
-        b=p7W2r3A2BsD+7JEm9/fR3eW2zDgeZRGQ0bfF0iIVcy1/4yKvPUabQ1sxFZ9raexf5f
-         7x4D2jkHmq+uvBudoOCd0SEPSWCu9X43aecJYntFF798ohjXp54+lk2+OzEC5NqTIb60
-         ZxGegAq9ssrcXXACYOL+V9MR6av/5LubXMrgdWvEYwfK8SRvxF1YW96eXNLZlacn6rhS
-         hHT1jKTe3eEEv3muHxfNUa8LQWbKUYVc/zQHMP3Pu/Kd9xmX3T8cKOsiWYPG9mJyx2ip
-         WOO1AWpVuGSXyUNs3/+uUGiY0nVmIsc3ZeqlAdBIcTjM/9L+87JTj4AD0PfzlTvadgW6
-         HDrA==
-X-Gm-Message-State: AO0yUKXjKUdkwV9qi5r6bwRcOZ22ZW2IhLa8bqAOvK0RxMDueWon032n
-        Oz3juiVFeNiR8mgDjiEK/s9n/IomS1Q=
-X-Google-Smtp-Source: AK7set8AX5IQmx37Co1yuIMYxkdQKuukCk7qo9qZ3nFRwvxpknx1JxVBWM/utdYOKjq3h+SSzncEOw==
-X-Received: by 2002:a17:906:b845:b0:931:c6ba:8619 with SMTP id ga5-20020a170906b84500b00931c6ba8619mr495101ejb.72.1679347320677;
-        Mon, 20 Mar 2023 14:22:00 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c22-73dd-8200-0000-0000-0000-0e63.c22.pool.telefonica.de. [2a01:c22:73dd:8200::e63])
-        by smtp.googlemail.com with ESMTPSA id j30-20020a508a9e000000b004af5968cb3bsm5346622edj.17.2023.03.20.14.21.59
+        d=1e100.net; s=20210112; t=1679392353;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z3kX+a3qX70gDW/sRmJECpI+SbkCmpJ7AHS+lpfkXrc=;
+        b=i1/ihcwa4vd+jDiApZXNkX3/t3BIaNb7kt2z5ks2CXIMIE91iqtpMc9BoU8UCZMska
+         5ShqJApAaY66UGGObAvB0Nh+r/dqX/F5GDAZi/vm6maPIg/QfIPIJoEdrJW2VvBVsvgc
+         PPPiGWja0VbLLVZ30YjEY+amSEqaOBty9QhHDqZKdZDUG+BxWgkq4cIyMMTOydatsbmI
+         rSIOCREPvl4KPZl9Il3r61VaAVX+LT7V5Cdu+oQYEnYElw0IgOhCk8YJ7NbmCNHEiAme
+         qakBIby14jjFBkZ7uOrG/CbvwkVN0PG9781OvcqUJeN9XXI5kFnIW9P5F7aKeF7eaXsX
+         14JQ==
+X-Gm-Message-State: AO0yUKWEP7YTWtm5KkD4SIyctWDzj6Jaj5BYgvmeFmypGCr//LooSjyZ
+        Qan1u1ybatTrvJTnXDPvV52e4A==
+X-Google-Smtp-Source: AK7set8l8FeYzQFjltUm3v4e/D0eeBLpFn2IDwYmXFiw33WAeQ3He5HzXT9vccYmxhfHduptUCglAg==
+X-Received: by 2002:aa7:98db:0:b0:624:9205:977d with SMTP id e27-20020aa798db000000b006249205977dmr1464992pfm.27.1679392352621;
+        Tue, 21 Mar 2023 02:52:32 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id b5-20020aa78705000000b005a852450b14sm7801451pfo.183.2023.03.21.02.52.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 14:22:00 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-rtc@vger.kernel.org, linux-amlogic@lists.infradead.org
+        Tue, 21 Mar 2023 02:52:32 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-rtc@vger.kernel.org, linux-amlogic@lists.infradead.org
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v1 RFC] rtc: meson-vrtc: Use ktime_get_real_ts64() to get the current time
-Date:   Mon, 20 Mar 2023 22:21:42 +0100
-Message-Id: <20230320212142.2355062-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.40.0
+Subject: Re: [PATCH v1 RFC] rtc: meson-vrtc: Use ktime_get_real_ts64() to
+ get the current time
+In-Reply-To: <20230320212142.2355062-1-martin.blumenstingl@googlemail.com>
+References: <20230320212142.2355062-1-martin.blumenstingl@googlemail.com>
+Date:   Tue, 21 Mar 2023 02:52:31 -0700
+Message-ID: <7hbkkmwhwg.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The VRTC alarm register can be programmed with an amount of seconds
-after which the SoC will be woken up by the VRTC timer again. We are
-already converting the alarm time from meson_vrtc_set_alarm() to
-"seconds since 1970". This means we also need to use "seconds since
-1970" for the current time.
+Martin Blumenstingl <martin.blumenstingl@googlemail.com> writes:
 
-This fixes a problem where setting the alarm to one minute in the future
-results in the firmware (which handles wakeup) to output (on the serial
-console) that the system will be woken up in billions of seconds.
-ktime_get_raw_ts64() returns the time since boot, not since 1970. Switch
-to ktime_get_real_ts64() to fix the calculation of the alarm time and to
-make the SoC wake up at the specified date/time. Also the firmware
-(which manages suspend) now prints either 59 or 60 seconds until wakeup
-(depending on how long it takes for the system to enter suspend).
+> The VRTC alarm register can be programmed with an amount of seconds
+> after which the SoC will be woken up by the VRTC timer again. We are
+> already converting the alarm time from meson_vrtc_set_alarm() to
+> "seconds since 1970". This means we also need to use "seconds since
+> 1970" for the current time.
+>
+> This fixes a problem where setting the alarm to one minute in the future
+> results in the firmware (which handles wakeup) to output (on the serial
+> console) that the system will be woken up in billions of seconds.
+> ktime_get_raw_ts64() returns the time since boot, not since 1970. Switch
+> to ktime_get_real_ts64() to fix the calculation of the alarm time and to
+> make the SoC wake up at the specified date/time. Also the firmware
+> (which manages suspend) now prints either 59 or 60 seconds until wakeup
+> (depending on how long it takes for the system to enter suspend).
+>
+> Fixes: 6ef35398e827 ("rtc: Add Amlogic Virtual Wake RTC")
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Fixes: 6ef35398e827 ("rtc: Add Amlogic Virtual Wake RTC")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/rtc/rtc-meson-vrtc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/rtc/rtc-meson-vrtc.c b/drivers/rtc/rtc-meson-vrtc.c
-index 1463c8621561..648fa362ec44 100644
---- a/drivers/rtc/rtc-meson-vrtc.c
-+++ b/drivers/rtc/rtc-meson-vrtc.c
-@@ -23,7 +23,7 @@ static int meson_vrtc_read_time(struct device *dev, struct rtc_time *tm)
- 	struct timespec64 time;
- 
- 	dev_dbg(dev, "%s\n", __func__);
--	ktime_get_raw_ts64(&time);
-+	ktime_get_real_ts64(&time);
- 	rtc_time64_to_tm(time.tv_sec, tm);
- 
- 	return 0;
-@@ -96,7 +96,7 @@ static int __maybe_unused meson_vrtc_suspend(struct device *dev)
- 		long alarm_secs;
- 		struct timespec64 time;
- 
--		ktime_get_raw_ts64(&time);
-+		ktime_get_real_ts64(&time);
- 		local_time = time.tv_sec;
- 
- 		dev_dbg(dev, "alarm_time = %lus, local_time=%lus\n",
--- 
-2.40.0
-
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
