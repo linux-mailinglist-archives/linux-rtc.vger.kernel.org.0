@@ -2,109 +2,119 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07F36C4C01
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Mar 2023 14:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272206C595E
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Mar 2023 23:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCVNkP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Mar 2023 09:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S229645AbjCVWTI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 22 Mar 2023 18:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCVNkO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Mar 2023 09:40:14 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91E24AFF7
-        for <linux-rtc@vger.kernel.org>; Wed, 22 Mar 2023 06:40:12 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id l12so17115666wrm.10
-        for <linux-rtc@vger.kernel.org>; Wed, 22 Mar 2023 06:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679492411;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VHNsw7LxlCqFoMl8EWjBKiEZL4o59QoD2UHFpV8/WBQ=;
-        b=caba7aVPU6lnf+BBBU3K0f1qmo+uKqFlE6l6h44agRSSrtj20S6XpgSa2rd5WdBKyC
-         u0Ipx+BvSlR+JBzx7NBe8uvaONUl81uWcyRL7+RFyOKIvuXTc8agXOazlHHDDXsCwLoN
-         +2BlOHNyuYWss/a43M6g05BdeUhLnFH4pXR7yzF0+7uvjnENS9/vCUwCff7j3LPpFCwn
-         qZ0pO/Er+LlNAmBFI4qQvw6rNNJh+Vk2i7fxfPxTjRS4jQIXRmp92xPzV/n+fNUHmOkU
-         jhqXZUKc3ImlL4uiFBG0i3x9eLrEGYH9h3l6+4CqyyZdqR9B8DyLC4UlYZZsr303eIYN
-         R8CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679492411;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VHNsw7LxlCqFoMl8EWjBKiEZL4o59QoD2UHFpV8/WBQ=;
-        b=n7cBl1Rb0T3+utEpTBJ3jOoes9i3y8PJ6samBZcy+h2gl7EnkP7r2XcBt2+X2pBgAH
-         fSa93PnxWBwn4Ha3hbrNppCqQbEu5whnZjD3rSQ05rGaZkjOcbhkMQ/DAa2M6WN6j3ny
-         nwEqy9Hen969qH/vpYkf+wTrpJ2jOOdbyJFJWRZiHPFSvvITICMuCBwl91dwGYhl5d7c
-         g5s6Fy1yNU3W2KoSLNl8mFqSpbOR+SLngbn5IDqfAIuDTgjAi8WQt2T29/cjgm26+YfE
-         Pv8Kygnzdgqlisv8KmpPo8SMHtIYTbZ2Hw/Zt0K/712lQnIkROms+l8kYEIb/+qiyxhq
-         3Aag==
-X-Gm-Message-State: AO0yUKVa7KZ+36ZJEkqEtFcYtPYGb2OOJiY0mwzgD4eOyZwkyp4HEXAh
-        HFcQNeZ+UWbwIs4ZFT/C0dpCJNR6j+dhVLizRIc=
-X-Google-Smtp-Source: AK7set+TloqbMZ+vJGhqg1CScqLm59HoY+1s0hGrELHfVbcANa48Mh0hMTkdbKsbqLDM7ulS1fQs3A==
-X-Received: by 2002:a5d:644b:0:b0:2d2:3ca:8c43 with SMTP id d11-20020a5d644b000000b002d203ca8c43mr5025509wrw.31.1679492411230;
-        Wed, 22 Mar 2023 06:40:11 -0700 (PDT)
-Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id b9-20020adfde09000000b002daeb108304sm791234wrm.33.2023.03.22.06.40.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 06:40:10 -0700 (PDT)
-Message-ID: <3cb28b7e-fc43-a222-77be-137e04118bd8@baylibre.com>
-Date:   Wed, 22 Mar 2023 14:40:09 +0100
+        with ESMTP id S229436AbjCVWTH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Mar 2023 18:19:07 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C9835B5;
+        Wed, 22 Mar 2023 15:19:04 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3862A1BF207;
+        Wed, 22 Mar 2023 22:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1679523543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3mjbfAka6B37e0KLGUhxUpe2dBgCPhl+V2vV2LCTJ5E=;
+        b=BOJeM2ybRH5eO7IdR+XNOl1FwdIrfDZl8WJBfo05uMnsQ68RwMvKvYWarJNDKZQ/qFk5RQ
+        iujueB5qtsuYAv9VKqSMoMoifOcac5tHFuuPw/gA5zZqsKqKNhq5I/rbAqOsHKx9Ucz5e6
+        lOBvt3FfXcvcLX5HlnhedHCSVGthILVGJ3LrzWiVe64VPPZa1VuM2SVuujaucHV+iGupCb
+        d11/XmzV6bcNets90AKh08DthMaYyJxs0V1SaR17bFGlVVE0Arc7fk0xE05fKdR1uY8/T4
+        gv/OB2jEH0Awmzp5ZK8pgzjFkJcTYgP0LWMvG+h294ivNcXbjH6q/00KSoqO1A==
+Date:   Wed, 22 Mar 2023 23:19:01 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     Frieder Schrempf <frieder@fris.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH 0/7] Enable backup switch mode on RTCs via devicetree
+Message-ID: <2023032222190171a38d5f@mail.local>
+References: <20230201143431.863784-1-frieder@fris.de>
+ <Y9qQHpySbrFcBB0P@mail.local>
+ <b58f5e31-f13f-6d90-774c-2017ee3de121@kontron.de>
+ <7268b05b-bbb1-ec4d-6a05-f5ccbdfeed90@kontron.de>
+ <da83fdd0-9eae-09ce-ff6f-47cc012f9628@kontron.de>
+ <31b0a8b1-d027-d47a-e10d-614c09211734@kontron.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
- for TI TPS6594 regulators
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
-        lgirdwood@gmail.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jneanne@baylibre.com
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-4-eblanc@baylibre.com>
- <205a4e62-fd87-629c-ea34-d863ff1549d8@baylibre.com>
- <ZBr+7X3lcFdI8p/o@sirena.org.uk>
-From:   Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <ZBr+7X3lcFdI8p/o@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <31b0a8b1-d027-d47a-e10d-614c09211734@kontron.de>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hello,
 
+On 22/03/2023 14:14:50+0100, Frieder Schrempf wrote:
+> On 06.03.23 14:27, Frieder Schrempf wrote:
+> > On 13.02.23 10:18, Frieder Schrempf wrote:
+> >> Hi Alexandre,
+> >>
+> >> On 01.02.23 17:26, Frieder Schrempf wrote:
+> >>> On 01.02.23 17:15, Alexandre Belloni wrote:
+> >>>> Hello,
+> >>>>
+> >>>> You can't do that, this breaks an important use case and it is the
+> >>>> reason why I didn't use device tree in the beginning. What is wrong with
+> >>>> setting BSM from userspace? You will anyway have to set the time and
+> >>>> date from userspace for it to be saved.
+> >>>
+> >>> Ok, I was already afraid there is something I missed. Can you give a
+> >>> short explanation of what use case this would break?
+> >>>
+> >>> There is nothing wrong with setting BSM from userspace. It's just the
+> >>> fact that users expect BSM to be enabled in any case as there is a
+> >>> battery on the board. It is much more effort to ensure that production,
+> >>> user, etc. are aware of an extra step required than to let the kernel
+> >>> deal with it behind the scenes.
+> >>
+> >> Would you mind elaborating on your argument that this would break stuff?
+> >> I currently don't see how an additional optional devicetree property
+> >> would break anything.
+> > 
+> > Ping!?
+> 
+> It seems like you decided to ignore me for whatever reasons there are.
+> I'm sure we can sort it out in some way if you would respond, please.
 
-On 3/22/23 14:13, Mark Brown wrote:
-> On Wed, Mar 22, 2023 at 10:10:23AM +0100, Julien Panis wrote:
->
->> Question @ Mark/Liam:
->> Shouldn't we use the generic 'regulator-coupled-with' property
->> instead of 'ti,multi-phase-id' ?
-> My understanding was that this was a hardware configuration where
-> two regulators operate as one with only one set of registers used
-> for configuration.
+I do what I can with the time I have.
 
-Your understanding was correct.
+There are 2 issues:
+ - the first one is that this is encoding device configuration in the
+   device tree which is forbidden. BSM is not really hardware related.
+The worse that could happen is that the backup voltage is not present
+and so the RTC will never switch to the backup source.
 
->
->> I am in charge of upstreaming dt-bindings and maintainers
->> pointed out the similarity between 'multi-phase' and 'coupled'
->> regulator concepts. Does 'regulator-coupled-with' mean that
->> outputs of buck converters are combined ? If so, this generic
->> property should replace our specific 'ti,multi-phase-id' prop,
->> I guess.
-> No, coupled regulators are regulators where the voltages can vary
-> but there's a constraint that their configurations need to be
-> related somehow, for example they must be within 200mV of each
-> other or something like that.
+ - the second one is why I got to a userspace solution. There are RTC
+   where it is crucial to be able to change BSM dynamically. Those RTCs
+have a standby mode: they will only draw current from the backup source
+once they have seen VDD once. This is useful when you install a battery
+in a product and this products stays on the shelf for a while before
+being used. However, if your production line needs to powerup the device
+to flash it or perform tests, the RTC will get out of standby mode and
+you need a way to get it back to standby. This is possible with the
+current interface, I'm not going to have a second interface.
 
-OK, thank you for this explanation.
-So, we keep 'ti,multi-phase-id' property.
+Regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
