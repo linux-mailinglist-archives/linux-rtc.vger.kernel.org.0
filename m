@@ -2,85 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EAA6C3B84
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Mar 2023 21:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECDC6C4105
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Mar 2023 04:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjCUUQf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Mar 2023 16:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S229664AbjCVDau (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Mar 2023 23:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjCUUQZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Mar 2023 16:16:25 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BEB18B1D;
-        Tue, 21 Mar 2023 13:15:53 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 92EF0FF802;
-        Tue, 21 Mar 2023 20:15:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679429750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cc+qNEZ1EzSB9IZt8CHtV76yUlh0JjmYuBy/GWO2DUs=;
-        b=OJi5weJFGQioSkJQd5/SUYbolA50WhSTiYvD06XBP9RW5a91sWOLAirktoEIQNx2l7cojo
-        4PLPVb/XYsSgRt+EtykaDwuJjFNaUjBMP1w6iD6DkyZVq4heLOklu6kqWyu2mh67Dci6w7
-        rSKinPXvCKraO8/H6s8XlSLRWUsJ/yhDDqysEG4YQY6kMvg4dIo9n7HgZdsK9U7UViQlNV
-        rWSguoyaBBHahzLRyHmY1dMQ9QHZ8LAi3yojE0biQ0l0/2qoxdYvQnMR2pNf2PAoXzCC7A
-        19Fld+FXsCIflcXr+eLbhPcR/syNggMCz4SB6g7hPxCOVu/RlINPPEm06xn8Ug==
-Date:   Tue, 21 Mar 2023 21:15:49 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 RFC] rtc: meson-vrtc: Use ktime_get_real_ts64() to get
- the current time
-Message-ID: <167942973227.681565.15801130800253450098.b4-ty@bootlin.com>
-References: <20230320212142.2355062-1-martin.blumenstingl@googlemail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320212142.2355062-1-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229482AbjCVDat (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Mar 2023 23:30:49 -0400
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7116F1ABF5;
+        Tue, 21 Mar 2023 20:30:48 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PhDWq0SNGz501Sg;
+        Wed, 22 Mar 2023 11:30:47 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl1.zte.com.cn with SMTP id 32M3UUgZ015264;
+        Wed, 22 Mar 2023 11:30:30 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 22 Mar 2023 11:30:31 +0800 (CST)
+Date:   Wed, 22 Mar 2023 11:30:31 +0800 (CST)
+X-Zmail-TransId: 2afa641a76574ea-e0473
+X-Mailer: Zmail v1.0
+Message-ID: <202303221130316049449@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <alexandre.belloni@bootlin.com>
+Cc:     <andrew@lunn.ch>, <gregory.clement@bootlin.com>,
+        <sebastian.hesselbarth@gmail.com>, <a.zummo@towertech.it>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBydGM6IGFybWFkYTM4eDogdXNlIGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZV9ieW5hbWUoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 32M3UUgZ015264
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 641A7667.000/4PhDWq0SNGz501Sg
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-On Mon, 20 Mar 2023 22:21:42 +0100, Martin Blumenstingl wrote:
-> The VRTC alarm register can be programmed with an amount of seconds
-> after which the SoC will be woken up by the VRTC timer again. We are
-> already converting the alarm time from meson_vrtc_set_alarm() to
-> "seconds since 1970". This means we also need to use "seconds since
-> 1970" for the current time.
-> 
-> This fixes a problem where setting the alarm to one minute in the future
-> results in the firmware (which handles wakeup) to output (on the serial
-> console) that the system will be woken up in billions of seconds.
-> ktime_get_raw_ts64() returns the time since boot, not since 1970. Switch
-> to ktime_get_real_ts64() to fix the calculation of the alarm time and to
-> make the SoC wake up at the specified date/time. Also the firmware
-> (which manages suspend) now prints either 59 or 60 seconds until wakeup
-> (depending on how long it takes for the system to enter suspend).
-> 
-> [...]
+Convert platform_get_resource_byname(),devm_ioremap_resource() to a single
+call to devm_platform_ioremap_resource_byname(), as this is exactly what
+this function does.
 
-Applied, thanks!
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/rtc/rtc-armada38x.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-[1/1] rtc: meson-vrtc: Use ktime_get_real_ts64() to get the current time
-      commit: 0e6255fa3f649170da6bd1a544680589cfae1131
+diff --git a/drivers/rtc/rtc-armada38x.c b/drivers/rtc/rtc-armada38x.c
+index cc542e6b1d5b..b4139c200676 100644
+--- a/drivers/rtc/rtc-armada38x.c
++++ b/drivers/rtc/rtc-armada38x.c
+@@ -491,7 +491,6 @@ MODULE_DEVICE_TABLE(of, armada38x_rtc_of_match_table);
 
-Best regards,
+ static __init int armada38x_rtc_probe(struct platform_device *pdev)
+ {
+-	struct resource *res;
+ 	struct armada38x_rtc *rtc;
+
+ 	rtc = devm_kzalloc(&pdev->dev, sizeof(struct armada38x_rtc),
+@@ -508,12 +507,10 @@ static __init int armada38x_rtc_probe(struct platform_device *pdev)
+
+ 	spin_lock_init(&rtc->lock);
+
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rtc");
+-	rtc->regs = devm_ioremap_resource(&pdev->dev, res);
++	rtc->regs = devm_platform_ioremap_resource_byname(pdev, "rtc");
+ 	if (IS_ERR(rtc->regs))
+ 		return PTR_ERR(rtc->regs);
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "rtc-soc");
+-	rtc->regs_soc = devm_ioremap_resource(&pdev->dev, res);
++	rtc->regs_soc = devm_platform_ioremap_resource_byname(pdev, "rtc-soc");
+ 	if (IS_ERR(rtc->regs_soc))
+ 		return PTR_ERR(rtc->regs_soc);
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
