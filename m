@@ -2,136 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EE96C47D4
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Mar 2023 11:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18846C4B65
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Mar 2023 14:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjCVKky (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Mar 2023 06:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S229731AbjCVNNI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 22 Mar 2023 09:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjCVKkx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Mar 2023 06:40:53 -0400
-X-Greylist: delayed 1199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Mar 2023 03:40:52 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95644741F;
-        Wed, 22 Mar 2023 03:40:52 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 3B7282B06B3B;
-        Wed, 22 Mar 2023 06:02:01 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 22 Mar 2023 06:02:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679479320; x=1679486520; bh=Gt
-        a6DeZfb/Xau68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=NorTwVKQADW6KDf4kx
-        gTnHWfLbpN0EHokeoC3DrOhiZ8CU+KJABXVU+NCa4piYXo6HpTy5HuzRNiFF7tvk
-        kS1uF/ZP394MUuAXVna9Fpn5iDdg0QWtevomnrNhpIe8AFZeNrF8jhIQTLTrI4Ez
-        F8Qq3dke4/3ZmogeOMWjTD3G0qEPqcWsVr1d4vEZWddG5PYi4J+p82qo/RJd1+Pc
-        D0wApM8Ce7YBSMxA8ajCR6phnmYRwiQ+O0944pCsdBUvTlzEsCNbSTwkGxjs5mkS
-        NFc+f7bGpNjIchGEdl3yn7/xBjiqmaS6rxVy3+SCY/EzwAAydjJ28Yv1QCgqUXW5
-        bw3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679479320; x=1679486520; bh=Gta6DeZfb/Xau
-        68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=hSHnolcwH3t3bdKswDish1u/kHXRm
-        GBRI+wa61UtRx0Zfrdsmq8CnsjhuT0V4tk4WhsMm/dY76LIFlaULjvwZ2Is4sByR
-        wnxq6k16NmOke2GgTmcYxC0a6B4M8NbJbdxhf7RYClD05krVRz4oMtNmPPFUz6R8
-        X7AoD2/fmudieEE2qro35wOUjhLadWUNt4yny+XeRhuzuTRtnQEOj4VK4BUdxU/D
-        zi0g/ITaWRhuRN9kFMW6pQhMC12Gxcd91h/lhV8gMs1zfdQ6CWUNBs/ZUdzW133y
-        7r1y/0Q0UW2r7+wW+iKmkbtAUEOh+P4wH5qpItfTivzwuUxdDObXugLGA==
-X-ME-Sender: <xms:FtIaZH_cP3JOYJvAj5oXSd2OXcDDKRtpMgnneLT8maCrLgFT1uQ4nw>
-    <xme:FtIaZDsYVbTOawAhmoa1oHa1uoPNqdzfMuj7H8tTDpE_F1DWS5baFq1_V5RMtYsKY
-    9ZpEjgEFQHUDWVr4rk>
-X-ME-Received: <xmr:FtIaZFCrxLPEjFjrYQZiYYmsseQcWkD9OS0c3-ySi7agJ-uGVLqJDI9_JpnBVpkVO-euEIby8gsGmxPlhwdU9mKdE7Bvs1g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:FtIaZDc9Ss_19xgb6mhlQrLE2QXKvFoiIL34VGbsSSZIH4FlYiJYkQ>
-    <xmx:FtIaZMM-k1IhWCLqsm0aMt16t2CzF1nOejsm53Durk41tY8K7upzcA>
-    <xmx:FtIaZFmHv-kP0VetVBA3YfQuGBF9hqOu-s8l7lOOTdqLpGXLYmgqsQ>
-    <xmx:GNIaZAV9AZ4qhuQDCpvviTReJqZxJZ2jgJo22F_udVCHmNFQ2Gz5SS1iyA8>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Mar 2023 06:01:56 -0400 (EDT)
-Date:   Wed, 22 Mar 2023 11:01:53 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        David Lechner <david@lechnology.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sekhar Nori <nsekhar@ti.com>, Shawn Guo <shawnguo@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 00/65] clk: Make determine_rate mandatory for muxes
-Message-ID: <20230322100153.gzyznaukbdngcvko@houat>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
+        with ESMTP id S229656AbjCVNNH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Mar 2023 09:13:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8B711145;
+        Wed, 22 Mar 2023 06:13:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 270E7620D3;
+        Wed, 22 Mar 2023 13:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4EBC433D2;
+        Wed, 22 Mar 2023 13:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679490784;
+        bh=UvO/rgqkGbJc95T3t1UHTtRhKye0R10rQgK65bejcvc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rtogtzHurkiu0kIVZthRLVF/mYAru9YONzebTzm+AJ8rVO448D78s/SRmH79K7a4l
+         JI9yrdZtJd8iIU2gMRTGDXQuAcvImATuA1Y3JNexyu+u7KQA9257HhXJ6cdM3Cgk1j
+         4w45fYlEKXAcXde6VgDUnMV2rRHdQNEIlzp73JDAzjOBuFkFZ9ZwJcNAEIKBuQSbJz
+         HWWXDI3vcf1Wk2IcsLhz2Ez/05ETpxeMNnTv0FPyYvHWQwm4Kur6lZ3n4UZjRYCLxk
+         oF2XH1rhWkdzWjJX5wJHrZTdnI55T7WJjh7w/6SA2DBuOKT/pSYdjktOnx81nuIj43
+         r6cfoRu51B9GA==
+Date:   Wed, 22 Mar 2023 13:13:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
+        lgirdwood@gmail.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        jneanne@baylibre.com
+Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
+ for TI TPS6594 regulators
+Message-ID: <ZBr+7X3lcFdI8p/o@sirena.org.uk>
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-4-eblanc@baylibre.com>
+ <205a4e62-fd87-629c-ea34-d863ff1549d8@baylibre.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vv4zkvfgrnplpmur"
+        protocol="application/pgp-signature"; boundary="7b77vJCR5aLhKSWc"
 Content-Disposition: inline
-In-Reply-To: <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <205a4e62-fd87-629c-ea34-d863ff1549d8@baylibre.com>
+X-Cookie: Single tasking: Just Say No.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -139,51 +61,45 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---vv4zkvfgrnplpmur
+--7b77vJCR5aLhKSWc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+On Wed, Mar 22, 2023 at 10:10:23AM +0100, Julien Panis wrote:
 
-On Tue, Mar 21, 2023 at 04:55:03PM -0700, Stephen Boyd wrote:
-> Quoting Maxime Ripard (2022-11-04 06:17:17)
-> > Hi,
-> >=20
-> > This is a follow-up to a previous series that was printing a warning
-> > when a mux has a set_parent implementation but is missing
-> > determine_rate().
-> >=20
-> > The rationale is that set_parent() is very likely to be useful when
-> > changing the rate, but it's determine_rate() that takes the parenting
-> > decision. If we're missing it, then the current parent is always going
-> > to be used, and thus set_parent() will not be used. The only exception
-> > being a direct call to clk_set_parent(), but those are fairly rare
-> > compared to clk_set_rate().
-> >=20
-> > Stephen then asked to promote the warning to an error, and to fix up all
-> > the muxes that are in that situation first. So here it is :)
-> >=20
-> > Let me know what you think,
->=20
-> What's the plan here? Are you going to resend?
+> Question @ Mark/Liam:
+> Shouldn't we use the generic 'regulator-coupled-with' property
+> instead of 'ti,multi-phase-id' ?
 
-It wasn't clear to me whether or not this was something that you wanted,
-and I got some pushback on the drivers so I kind of forgot about it.
+My understanding was that this was a hardware configuration where
+two regulators operate as one with only one set of registers used
+for configuration.
 
-If you do want it (and it looks like you do), I'll resend it.
+> I am in charge of upstreaming dt-bindings and maintainers
+> pointed out the similarity between 'multi-phase' and 'coupled'
+> regulator concepts. Does 'regulator-coupled-with' mean that
+> outputs of buck converters are combined ? If so, this generic
+> property should replace our specific 'ti,multi-phase-id' prop,
+> I guess.
 
-Maxime
+No, coupled regulators are regulators where the voltages can vary
+but there's a constraint that their configurations need to be
+related somehow, for example they must be within 200mV of each
+other or something like that.
 
---vv4zkvfgrnplpmur
+--7b77vJCR5aLhKSWc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBrSEQAKCRDj7w1vZxhR
-xbTqAQDfuo+7won5pWzakHyWfnltaYo2jqEYfAWn/jNs6cp2QwD9EUEVxPQOk0xp
-CPNSu0go9roDa7ZOHrlkqTVTbZM0DQo=
-=JaLV
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQa/u0ACgkQJNaLcl1U
+h9CHVwf+MNSLGVVn5oahssZebfVn5ilv5kCZfyYQW582N/XQEr64fra8vYqaYDps
+nxq0VkcVPeLeN9z69Alhpz3bSLsHVWP22N9v8usCp3Q6NlC6NY8vpePOPkXVTMmn
+KATjO2Z0N8Q86xodlSNxefZKNlycEIRvRS4vCnTrM5iqJ/VlVKlGhhlscQH+W5Aw
+UClOwf3NFosZgRLoopZEa4PLTS0ocETMzWAU0X5hXEn4rr275rap0yoNk/IRdkAN
+cmEPWD993RJr+PcnuaiqL9qT5fKquqA+1UCBM+2OU3kNgouOgnvKPkRoq2LNem9N
+A5dnRWHEb2M2hASiQH5RxwDTIxflLA==
+=aJlP
 -----END PGP SIGNATURE-----
 
---vv4zkvfgrnplpmur--
+--7b77vJCR5aLhKSWc--
