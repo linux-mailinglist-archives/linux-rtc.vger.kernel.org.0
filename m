@@ -2,75 +2,136 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEDA6C45D2
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Mar 2023 10:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EE96C47D4
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Mar 2023 11:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjCVJKz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Mar 2023 05:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S230329AbjCVKky (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 22 Mar 2023 06:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjCVJKt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Mar 2023 05:10:49 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB55D8B5
-        for <linux-rtc@vger.kernel.org>; Wed, 22 Mar 2023 02:10:30 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id p16so11010608wmq.5
-        for <linux-rtc@vger.kernel.org>; Wed, 22 Mar 2023 02:10:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679476225;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ovrBn6XPxYUDXZ6TqJALCD62LFL/C1a6JXlrzcVVchg=;
-        b=cJcm+5nrTY2Ye1VvjpgZgsnRmOxK0ACJKxHYyNldG6fGsVPJxEUn+A9HH2RNliyTRv
-         NyfLpiQNqDi2HtfMK6SQiCr2ynPg9Opy86P+GFGGGpwhiCPXPMLLUpdYXxWXdRbzSTgq
-         N3ooUpi1YCzy9YGI6F5aZ5Zip8c+oZwbzCX0dWypaf+/iOO3HfTWMxvdlP+6BN1LzhEV
-         9p5oWee4Dv5jO1Obf4059B1tTSZHK1pcst+CwqrEvaNJikfRl3DZi1hwjl09ecGDdT1K
-         J0w2/ovxJOlECqPTdkS4IzUCPWRhm+rlt3WqcPXWd/NSm5HK//btSC5pNrO2KZ/Uz+tC
-         7c4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679476225;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovrBn6XPxYUDXZ6TqJALCD62LFL/C1a6JXlrzcVVchg=;
-        b=DiHYBNE03bSvefbF0rcwpMUF45GqIbBAIxHXbuhIJtjZjz3RsrrifkvBbEDjj/igjJ
-         rvBzuUp4FUlkz/rXQWaPlIkVkq9InOeqIee7faHm1NaRTUOqdiEcUELvhBJVjq8Afkhu
-         oe0pN47AZZgHX9VnZjzl7mrifnghltT0x6dczlq4DgEU7HfkzlRqvzq45gOdu1ji3WhH
-         32tKs6lJpNAOj+8BUF/ifE4NgrTXUTf7uEuKoXkkLIeD6w2yYenzQzNy6HAt8/PirBSi
-         vWpkqKULxCnL/tdIpAIzYHWi6KEbzucs27DryuxrZ0T7MZes59RSyvK7xOgIf8GJ1wTw
-         v/Cg==
-X-Gm-Message-State: AO0yUKXjYyXXSjPhdh4jZ2yX8WSC2/M1bj+gW7KQopj3a5r3y9bHTRnE
-        6V+ERaS9qn69ho/aOeYf+X8jmjPJ/qvr/WR8Fco=
-X-Google-Smtp-Source: AK7set9Ml0a40IciGXQHSgRw0rALE4oqBwXtJ8GyQOJY478RsNUaRDn3DpclGi+b5ehfWidoBqeEDw==
-X-Received: by 2002:a7b:cb90:0:b0:3ed:31fa:f563 with SMTP id m16-20020a7bcb90000000b003ed31faf563mr4480590wmi.20.1679476225490;
-        Wed, 22 Mar 2023 02:10:25 -0700 (PDT)
-Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05600c469400b003ee2a0d49dbsm5240947wmo.25.2023.03.22.02.10.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 02:10:25 -0700 (PDT)
-Message-ID: <205a4e62-fd87-629c-ea34-d863ff1549d8@baylibre.com>
-Date:   Wed, 22 Mar 2023 10:10:23 +0100
+        with ESMTP id S230326AbjCVKkx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Mar 2023 06:40:53 -0400
+X-Greylist: delayed 1199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Mar 2023 03:40:52 PDT
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95644741F;
+        Wed, 22 Mar 2023 03:40:52 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 3B7282B06B3B;
+        Wed, 22 Mar 2023 06:02:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 22 Mar 2023 06:02:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679479320; x=1679486520; bh=Gt
+        a6DeZfb/Xau68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=NorTwVKQADW6KDf4kx
+        gTnHWfLbpN0EHokeoC3DrOhiZ8CU+KJABXVU+NCa4piYXo6HpTy5HuzRNiFF7tvk
+        kS1uF/ZP394MUuAXVna9Fpn5iDdg0QWtevomnrNhpIe8AFZeNrF8jhIQTLTrI4Ez
+        F8Qq3dke4/3ZmogeOMWjTD3G0qEPqcWsVr1d4vEZWddG5PYi4J+p82qo/RJd1+Pc
+        D0wApM8Ce7YBSMxA8ajCR6phnmYRwiQ+O0944pCsdBUvTlzEsCNbSTwkGxjs5mkS
+        NFc+f7bGpNjIchGEdl3yn7/xBjiqmaS6rxVy3+SCY/EzwAAydjJ28Yv1QCgqUXW5
+        bw3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679479320; x=1679486520; bh=Gta6DeZfb/Xau
+        68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=hSHnolcwH3t3bdKswDish1u/kHXRm
+        GBRI+wa61UtRx0Zfrdsmq8CnsjhuT0V4tk4WhsMm/dY76LIFlaULjvwZ2Is4sByR
+        wnxq6k16NmOke2GgTmcYxC0a6B4M8NbJbdxhf7RYClD05krVRz4oMtNmPPFUz6R8
+        X7AoD2/fmudieEE2qro35wOUjhLadWUNt4yny+XeRhuzuTRtnQEOj4VK4BUdxU/D
+        zi0g/ITaWRhuRN9kFMW6pQhMC12Gxcd91h/lhV8gMs1zfdQ6CWUNBs/ZUdzW133y
+        7r1y/0Q0UW2r7+wW+iKmkbtAUEOh+P4wH5qpItfTivzwuUxdDObXugLGA==
+X-ME-Sender: <xms:FtIaZH_cP3JOYJvAj5oXSd2OXcDDKRtpMgnneLT8maCrLgFT1uQ4nw>
+    <xme:FtIaZDsYVbTOawAhmoa1oHa1uoPNqdzfMuj7H8tTDpE_F1DWS5baFq1_V5RMtYsKY
+    9ZpEjgEFQHUDWVr4rk>
+X-ME-Received: <xmr:FtIaZFCrxLPEjFjrYQZiYYmsseQcWkD9OS0c3-ySi7agJ-uGVLqJDI9_JpnBVpkVO-euEIby8gsGmxPlhwdU9mKdE7Bvs1g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:FtIaZDc9Ss_19xgb6mhlQrLE2QXKvFoiIL34VGbsSSZIH4FlYiJYkQ>
+    <xmx:FtIaZMM-k1IhWCLqsm0aMt16t2CzF1nOejsm53Durk41tY8K7upzcA>
+    <xmx:FtIaZFmHv-kP0VetVBA3YfQuGBF9hqOu-s8l7lOOTdqLpGXLYmgqsQ>
+    <xmx:GNIaZAV9AZ4qhuQDCpvviTReJqZxJZ2jgJo22F_udVCHmNFQ2Gz5SS1iyA8>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Mar 2023 06:01:56 -0400 (EDT)
+Date:   Wed, 22 Mar 2023 11:01:53 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        David Lechner <david@lechnology.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sekhar Nori <nsekhar@ti.com>, Shawn Guo <shawnguo@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 00/65] clk: Make determine_rate mandatory for muxes
+Message-ID: <20230322100153.gzyznaukbdngcvko@houat>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
- for TI TPS6594 regulators
-Content-Language: en-US
-To:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jneanne@baylibre.com
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-4-eblanc@baylibre.com>
-From:   Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <20230224133129.887203-4-eblanc@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vv4zkvfgrnplpmur"
+Content-Disposition: inline
+In-Reply-To: <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,111 +139,51 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
+--vv4zkvfgrnplpmur
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/24/23 14:31, Esteban Blanc wrote:
-> From: Jerome Neanne <jneanne@baylibre.com>
->
-> This patch adds support for TPS6594 regulators (bucks and LDOs).
-> The output voltages are configurable and are meant to supply power
-> to the main processor and other components.
-> Bucks can be used in single or multiphase mode, depending on PMIC
-> part number.
->
-> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-> ---
+Hi Stephen,
 
-(...)
+On Tue, Mar 21, 2023 at 04:55:03PM -0700, Stephen Boyd wrote:
+> Quoting Maxime Ripard (2022-11-04 06:17:17)
+> > Hi,
+> >=20
+> > This is a follow-up to a previous series that was printing a warning
+> > when a mux has a set_parent implementation but is missing
+> > determine_rate().
+> >=20
+> > The rationale is that set_parent() is very likely to be useful when
+> > changing the rate, but it's determine_rate() that takes the parenting
+> > decision. If we're missing it, then the current parent is always going
+> > to be used, and thus set_parent() will not be used. The only exception
+> > being a direct call to clk_set_parent(), but those are fairly rare
+> > compared to clk_set_rate().
+> >=20
+> > Stephen then asked to promote the warning to an error, and to fix up all
+> > the muxes that are in that situation first. So here it is :)
+> >=20
+> > Let me know what you think,
+>=20
+> What's the plan here? Are you going to resend?
 
-> +static int tps6594_regulator_probe(struct platform_device *pdev)
-> +{
-> +	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-> +	struct regulator_dev *rdev;
-> +	struct regulator_config config = {};
-> +	u8 buck_configured[BUCK_NB] = { 0 };
-> +	u8 buck_multi[MULTI_PHASE_NB] = { 0 };
-> +	int i;
-> +	int error;
-> +	int irq;
-> +	int ext_reg_irq_nb = 2;
-> +	struct tps6594_regulator_irq_data *irq_data;
-> +	struct tps6594_ext_regulator_irq_data *irq_ext_reg_data;
-> +	struct tps6594_regulator_irq_type *irq_type;
-> +	struct regulator_dev *rdevbucktbl[BUCK_NB];
-> +	struct regulator_dev *rdevmultitbl[MULTI_PHASE_NB];
-> +	struct regulator_dev *rdevldotbl[LDO_NB];
-> +
-> +	int multi_phase_id;
-> +	int multi_phase_case = 0xFFFF;
-> +
-> +	config.dev = tps->dev;
-> +	config.driver_data = tps;
-> +	config.regmap = tps->regmap;
-> +
-> +	/*
-> +	 * Switch case defines different possible multi phase config
-> +	 * This is based on dts custom property: multi-phase-id
-> +	 * Using compatible or device rev is a too complex alternative
-> +	 * Default case is no Multiphase buck.
-> +	 * In case of Multiphase configuration, value should be defined for
-> +	 * buck_configured to avoid creating bucks for every buck in multiphase
-> +	 */
-> +
-> +	if (device_property_present(tps->dev, "ti,multi-phase-id")) {
+It wasn't clear to me whether or not this was something that you wanted,
+and I got some pushback on the drivers so I kind of forgot about it.
 
-Question @ Mark/Liam:
-Shouldn't we use the generic 'regulator-coupled-with' property
-instead of 'ti,multi-phase-id' ?
-I am in charge of upstreaming dt-bindings and maintainers
-pointed out the similarity between 'multi-phase' and 'coupled'
-regulator concepts. Does 'regulator-coupled-with' mean that
-outputs of buck converters are combined ? If so, this generic
-property should replace our specific 'ti,multi-phase-id' prop,
-I guess.
+If you do want it (and it looks like you do), I'll resend it.
 
-> +		device_property_read_u32(tps->dev, "ti,multi-phase-id", &multi_phase_id);
-> +		switch (multi_phase_id) {
-> +		case 12:
-> +			buck_multi[0] = 1;
-> +			buck_configured[0] = 1;
-> +			buck_configured[1] = 1;
-> +			multi_phase_case = TPS6594_BUCK_12;
-> +			break;
-> +		case 34:
-> +			buck_multi[1] = 1;
-> +			buck_configured[2] = 1;
-> +			buck_configured[3] = 1;
-> +			multi_phase_case = TPS6594_BUCK_34;
-> +			break;
-> +		case 123:
-> +			buck_multi[2] = 1;
-> +			buck_configured[0] = 1;
-> +			buck_configured[1] = 1;
-> +			buck_configured[2] = 1;
-> +			multi_phase_case = TPS6594_BUCK_123;
-> +			break;
-> +		case 1234:
-> +			buck_multi[3] = 1;
-> +			buck_configured[0] = 1;
-> +			buck_configured[1] = 1;
-> +			buck_configured[2] = 1;
-> +			buck_configured[3] = 1;
-> +			multi_phase_case = TPS6594_BUCK_1234;
-> +			break;
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < MULTI_PHASE_NB; i++) {
-> +		if (buck_multi[i] == 0)
-> +			continue;
-> +
-> +		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
-> +		if (IS_ERR(rdev)) {
-> +			dev_err(tps->dev, "failed to register %s regulator\n",
-> +				pdev->name);
-> +			return PTR_ERR(rdev);
-> +		}
-> +		rdevmultitbl[i] = rdev;
-> +	}
-> +
+Maxime
 
-(...)
+--vv4zkvfgrnplpmur
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBrSEQAKCRDj7w1vZxhR
+xbTqAQDfuo+7won5pWzakHyWfnltaYo2jqEYfAWn/jNs6cp2QwD9EUEVxPQOk0xp
+CPNSu0go9roDa7ZOHrlkqTVTbZM0DQo=
+=JaLV
+-----END PGP SIGNATURE-----
+
+--vv4zkvfgrnplpmur--
