@@ -2,97 +2,157 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DC46C6285
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Mar 2023 09:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D53E86C62F8
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 Mar 2023 10:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjCWI7z (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 23 Mar 2023 04:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S231176AbjCWJMb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 23 Mar 2023 05:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbjCWI7u (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 23 Mar 2023 04:59:50 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B0830E7;
-        Thu, 23 Mar 2023 01:59:48 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32N8xbdD061805;
-        Thu, 23 Mar 2023 03:59:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679561977;
-        bh=vlYds6UzcqS+9v3/F0rZRe6bOfqsdIBTaQvZgdI4u2c=;
-        h=From:To:CC:Subject:Date;
-        b=VZzlWKVtDleJwYwUM/AAXdhAttqEKsPJONO/Pk6KYeak4XUDgUxzk76eATipmkx+w
-         xvTsheHkZMrbkFu0DQgjOXMCxQ3mtoVJkjZo7wkeBtrVhpgmKWgiTKS09ua27wtaYI
-         FKqhI9mihd5k91HXgPkMu9LPQjzDtmHO1jZSpO+g=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32N8xbQZ049521
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Mar 2023 03:59:37 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 23
- Mar 2023 03:59:37 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 23 Mar 2023 03:59:37 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32N8xZlr027625;
-        Thu, 23 Mar 2023 03:59:36 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>,
-        <linux-rtc@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH V2] rtc: k3: handle errors while enabling wake irq
-Date:   Thu, 23 Mar 2023 14:29:04 +0530
-Message-ID: <20230323085904.957999-1-d-gole@ti.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231231AbjCWJMa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 23 Mar 2023 05:12:30 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B996E1CAD9
+        for <linux-rtc@vger.kernel.org>; Thu, 23 Mar 2023 02:12:24 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id i9so19638660wrp.3
+        for <linux-rtc@vger.kernel.org>; Thu, 23 Mar 2023 02:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679562743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eFctY62Fu/oerMamaIjbU4d8HvtLi/rh0sE4EKaYOE4=;
+        b=36fYa/ni7ysZ5y5TDytFuzn2/ZhJ5cmxm21cABzySX6BmlX8zVq48bPOkprqHyTcJ5
+         zzg7Qf6tBUYt1Gybs3TN7FRJhcDVKCHmacgztIUPSFT0Af/qiHUD8HFfUK6o9xQqKS4e
+         lVI+iNooLMaKDC+qDdGmf6WM/wUInJxFAAlHmATXUaPTEg1f7ZU6SDcs2eE4CEYJHtOQ
+         EbXJU3FqtNVZwFhWKULQi7yo3ai6JEKf+tuWuHRWPBZZt11QEXWrA3hSLq2dgP3lW8EW
+         40QPG8ldYh7NuL7c5hO86kmzwRJXTzpw/aPZCcOlVhkXBwT3sI9Rj/T/P0u/7/8zaA2S
+         HzSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679562743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eFctY62Fu/oerMamaIjbU4d8HvtLi/rh0sE4EKaYOE4=;
+        b=FgwGRRUst8MUlUYIT2yzK7tpENgELLSSUIjtIUZ7B523FdwLU6K3lx7uI1V48+VYup
+         fySjywudSPzIbC+QHDdmOLa2+wo+f4IT9eIYKBBlSGagvkre6OjdMfKEkIw364OpuayQ
+         Wpscw4GiXOQeAuxrFdYwy4jzAsk6KDHlScjcB0nTRYyxJ+7mFMo5+jdN3H/gBKDXEmWd
+         8Tek+1i4MB9BjjLwutWw4vQ7v2c9e9SAxhficd595o3TtYFzqYa1hNRXnD2BNd+w+zx9
+         RUiDnlwc3vhiW9rZCjSIeT7hILRUWxfi1llpizIA625JsBfioy6AU0Lkh/3fnkXzyVIv
+         x8CQ==
+X-Gm-Message-State: AAQBX9fciw1uBO/+8hGdR71L14BcqKXZQoOGS5ckx6wbGoPJaGY8RXFx
+        oOK0vRjGdg7lfGGyA84w159dSQ==
+X-Google-Smtp-Source: AKy350bIXyKctpx/1wqip3Rp2mheJwmbgFP+LGEPKZLQHpj9doYPwLwDb6cxO863qF14Dp5zVyQigg==
+X-Received: by 2002:a5d:4487:0:b0:2c5:a742:572f with SMTP id j7-20020a5d4487000000b002c5a742572fmr1950315wrq.49.1679562743221;
+        Thu, 23 Mar 2023 02:12:23 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id u13-20020adfdb8d000000b002d2b117a6a6sm15687914wri.41.2023.03.23.02.12.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 02:12:22 -0700 (PDT)
+Message-ID: <bd4aa2ad-4535-94ca-7630-846546ae3d82@baylibre.com>
+Date:   Thu, 23 Mar 2023 10:12:21 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
+ for TI TPS6594 regulators
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-4-eblanc@baylibre.com>
+ <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Due to the potential failure of enable_irq_wake(), it would be better to
-return error if it fails.
 
-Fixes: b09d633575e5 ("rtc: Introduce ti-k3-rtc")
-Cc: Nishanth Menon <nm@ti.com>
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
+>> +static int tps6594_get_rdev_by_name(const char *regulator_name,
+>> +				    struct regulator_dev *rdevbucktbl[BUCK_NB],
+>> +				    struct regulator_dev *rdevldotbl[LDO_NB],
+>> +				    struct regulator_dev *dev)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i <= BUCK_NB; i++) {
+>> +		if (strcmp(regulator_name, buck_regs[i].name) == 0) {
+>> +			dev = rdevbucktbl[i];
+>> +			return 0;
+>> +		}
+>> +	}
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
+>> +		if (strcmp(regulator_name, ldo_regs[i].name) == 0) {
+>> +			dev = rdevldotbl[i];
+>> +			return 0;
+>> +		}
+>> +	}
+>> +	return -EINVAL;
+>> +}
+> 
+>> +	for (i = 0; i < ARRAY_SIZE(tps6594_regulator_irq_types); ++i) {
+>> +		irq_type = &tps6594_regulator_irq_types[i];
+>> +
+>> +		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
+>> +		if (irq < 0)
+>> +			return -EINVAL;
+>> +
+>> +		irq_data[i].dev = tps->dev;
+>> +		irq_data[i].type = irq_type;
+>> +
+>> +		tps6594_get_rdev_by_name(irq_type->regulator_name, rdevbucktbl,
+>> +					 rdevldotbl, rdev);
+> 
+> This would be simpler and you wouldn't need this lookup function if the
+> regulator descriptions included their IRQ names, then you could just
+> request the interrupts while registering the regulators.
+I changed the code to follow your recommendations then now in case of a 
+multiphase buck, only one set of interrupt is requested.
+ex: multiphase buck1234 single buck5
+cat /proc/interrupts:
+563:          0          0  tps6594-0-0x4c   0 Edge      buck1_ov
+564:          0          0  tps6594-0-0x4c   1 Edge      buck1_uv
+565:          0          0  tps6594-0-0x4c   2 Edge      buck1_sc
+566:          0          0  tps6594-0-0x4c   3 Edge      buck1_ilim
+579:          0          0  tps6594-0-0x4c  16 Edge      buck5_ov
+580:          0          0  tps6594-0-0x4c  17 Edge      buck5_uv
+581:          0          0  tps6594-0-0x4c  18 Edge      buck5_sc
+582:          0          0  tps6594-0-0x4c  19 Edge      buck5_ilim
 
-Changelog:
-Address the comments from Alexandre Belloni
+buck2, buck3, buck4 are not associated to a regulator device because 
+buck1 registers control all the multiphase bucks (only one logic 
+regulator). Consequently the mapping for the associated interrupts does 
+not occur.
+I'm not sure it's the right option.
+Do you suggest to keep it like that for multiphase?
+Is it better to request all the interrupts anyway and map it to the same 
+rdev?
 
-V1 link:
-https://lore.kernel.org/linux-rtc/20230323081942.951542-1-d-gole@ti.com
-
- drivers/rtc/rtc-ti-k3.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-ti-k3.c b/drivers/rtc/rtc-ti-k3.c
-index ba23163cc042..0d90fe923355 100644
---- a/drivers/rtc/rtc-ti-k3.c
-+++ b/drivers/rtc/rtc-ti-k3.c
-@@ -632,7 +632,8 @@ static int __maybe_unused ti_k3_rtc_suspend(struct device *dev)
- 	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
- 
- 	if (device_may_wakeup(dev))
--		enable_irq_wake(priv->irq);
-+		return enable_irq_wake(priv->irq);
-+
- 	return 0;
- }
- 
--- 
-2.25.1
-
+> 
+>> +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
+>> +						  tps6594_regulator_irq_handler,
+>> +						  IRQF_ONESHOT,
+>> +						  irq_type->irq_name,
+>> +						  &irq_data[i]);
+>> +		if (error) {
+>> +			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
+>> +				irq_type->irq_name, irq, error);
+>> +			return error;
+>> +		}
+> 
+> This leaks all previously requested interrupts.
+I'm not sure to understand this sentence correctly. You mean all the 
+interrupts already requested are still allocated after the error occurs?
