@@ -2,79 +2,129 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3660E6C7946
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Mar 2023 09:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8C36C7D07
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Mar 2023 12:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjCXIAK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 24 Mar 2023 04:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
+        id S231681AbjCXLJo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 24 Mar 2023 07:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCXIAJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Mar 2023 04:00:09 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B953C1E1E4
-        for <linux-rtc@vger.kernel.org>; Fri, 24 Mar 2023 01:00:06 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id s13so578443wmr.4
-        for <linux-rtc@vger.kernel.org>; Fri, 24 Mar 2023 01:00:06 -0700 (PDT)
+        with ESMTP id S229908AbjCXLJn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Mar 2023 07:09:43 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC7312CFA;
+        Fri, 24 Mar 2023 04:09:42 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id r29so1356682wra.13;
+        Fri, 24 Mar 2023 04:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1679644805;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Et+I6m2/3M3ihrXodAsozWva/ZYQ4ukUjISIAm7jl7w=;
-        b=7uTrwDQ1t1lwRIveny17vL0ua24bvr+rukAwV8ZAU/Bh/9eHLfPnqzJcagHhJ77xc1
-         R12KpmviwRpqJ4y6Y7xZIAjO5cSmC7a20FEkkQ031zyw3mgdRfGkV9F4b0WXVo//BDWb
-         pv33ubHZsRu1o5S6esuayqgduq2qg1o1BR+zc4rnXRk4R7JxDuvuyoUZvrWGQggjnFpg
-         HFKdo01a2yCcEWZbpylOeM49mBx2kRTMZIlUJ8Acg29QyPuKSkobnONi1GVPP8xdXPtk
-         SS+d9gHTVyKvmxTlJaUNIYst+zO15RsLKQpmIe06ziCZcvuCWRJgRKMT0WC97EwRPFTv
-         UW5Q==
+        d=gmail.com; s=20210112; t=1679656180;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=KKGzHAjESOwY5CJ6aIkXRblEUT9vcmLWXQ+M0lRFaT8=;
+        b=hzyILuXnSZ7lMaDYB5rhB/bnNUkufwU6fB5inzHRnGwGUpJquemA3X84Lzp++Y2YJ+
+         xX92fJNLk8xQHwS1+YxTda7OSm5DtCOvp4pDLhNSgUC+z/fJXup9nphjXvyJHgvtZySv
+         Ing1oEJUNGaC5fkPShiXmhVhP4ZVm14D3SAO1J3Mw26nhpiPZuGPtANkaXRqnth94OzX
+         eWmkntp/5aW21aNCDZJKirG9vn5GmZabE2CYZSk/g1dEY9qxrgIgg/yw5kqOFSzwoNBS
+         JwX3UeufEHb7ANEt7KtJeAKptHBPlTmLr2bfmp8WEFpNkr4PD3Q/FNi6OhewGezr1Z61
+         Chlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679644805;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Et+I6m2/3M3ihrXodAsozWva/ZYQ4ukUjISIAm7jl7w=;
-        b=rdYQxbUQHWRWFIbOhq8LMER6Qw6iAcXfJA+l38R+zx1fOYCc/YeBMEVLEYPhVGtqb1
-         eLKyOI4FYfKmaN1yCftJEfrPgrmjPCc047jOgiF793P3WxJal6695fueuKxZSm/kbuGK
-         5UKfyiytZCNC6kO7AXmPCRh8XTbH3Wx/lI/ezWYJNWT5M63XpZHjrE2XJVIYiFUPnq31
-         vtps36xDb8mcCF9McPA8cDGVkQrbQcIc5C7w+Ufg1AQMQDfQU06kXFfIAqR7sFE9Kstg
-         wJpksuVvZnmmOEg5z61AMVDYWUCV7j1sUat0CyHdPI/Zhzxk7tGXgxsViKxs7X+5wJuU
-         frXA==
-X-Gm-Message-State: AO0yUKVfV1UrgJlL4gSe6t2JPeohcTgoLSHI+CARrccW7ZS2fVsczftY
-        wy5qjQFLacs6mJcm+0D1gxvnnA==
-X-Google-Smtp-Source: AK7set+7GtYYYBL2VrSmA9bJmuExAPTlzEC0BfGfpIDI3vPJ/0MYCH4+pz2gUQPasqmxOJoLCzyLKw==
-X-Received: by 2002:a7b:c409:0:b0:3ea:f6c4:305e with SMTP id k9-20020a7bc409000000b003eaf6c4305emr1653541wmi.38.1679644804698;
-        Fri, 24 Mar 2023 01:00:04 -0700 (PDT)
-Received: from [192.168.1.91] ([85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id c18-20020a7bc852000000b003ed2c0a0f37sm4082775wml.35.2023.03.24.01.00.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 01:00:04 -0700 (PDT)
-Message-ID: <3d684dec-338a-085f-3ef1-1642e5067fb2@baylibre.com>
-Date:   Fri, 24 Mar 2023 09:00:01 +0100
+        d=1e100.net; s=20210112; t=1679656180;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KKGzHAjESOwY5CJ6aIkXRblEUT9vcmLWXQ+M0lRFaT8=;
+        b=ly5d+/fL5EKpn7Bp+71iKSRbyO7HkCOSlqRVToPpkQcwQxjoExn2qXhRa6aL2P8VYR
+         L3cn82n8D9kWtW16wyaaCX2aA6PPBslJ8KqtQ1eqA4ewCd18tmzREnRvXWEQ+9yxxZn1
+         EbYNXUve1JZbDLB3j8Zs/5G+EGgC51UdGWxpiruj70bvj8LntE6DUFbkLIc3+Luxy1qz
+         ezJKwU4NO0MEoxdtsntbn7gEFewHA9RCTbYvSewCzIIyK+mf/QOha5nQ524L5qLN85vo
+         tUrOAiKIiPTT1xR6FGISAj7kHKy9Y89e6s7Y+S3bmjgQoUJSyYfSxhZagl4orQqlJk9B
+         ar6Q==
+X-Gm-Message-State: AAQBX9f6sUP/obKVPazfcA2R9b+mg0FPaxX/sf6ZLCxXwDWmtsT29Jvx
+        jjOxYpQFGLrRNZTHL2w6/D8=
+X-Google-Smtp-Source: AKy350ZmBQJTJNYHdzNhp0Qvsm2ha5bci7Pffhjn47i2N4HkGJnSU/0GajVbD8LVTLhlg10uq2ysNw==
+X-Received: by 2002:a5d:6290:0:b0:2da:53e3:57cf with SMTP id k16-20020a5d6290000000b002da53e357cfmr1959487wru.71.1679656180460;
+        Fri, 24 Mar 2023 04:09:40 -0700 (PDT)
+Received: from localhost (188.28.8.105.threembb.co.uk. [188.28.8.105])
+        by smtp.gmail.com with ESMTPSA id a8-20020a056000100800b002d8566128e5sm9760336wrx.25.2023.03.24.04.09.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 04:09:39 -0700 (PDT)
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-56-f6736dec138e@cerno.tech>
+ <80VTKR.CE8RVN8M3ZYK3@crapouillou.net>
+ <20221104145946.orsyrhiqvypisl5j@houat>
+ <cp7Yh29ndlOOi1yW8KwCcpzoLPLxm1vR@localhost>
+ <20221107085417.xrsh6xy3ouwdkp4z@houat>
+ <ucJ6KSBqdPTxfxUQqLUr9C9RGiQRnY1I@localhost>
+ <20221109110045.j24vwkaq3s4yzoy3@houat>
+ <06a293adc75990ed3e297b076fc38d8a.sboyd@kernel.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 56/65] clk: ingenic: cgu: Switch to determine_rate
+Date:   Thu, 23 Mar 2023 15:35:30 +0000
+In-reply-to: <06a293adc75990ed3e297b076fc38d8a.sboyd@kernel.org>
+Message-ID: <xpKMzGb1sOsucWMTlJIMzrT5KjLlZ7JP@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH INTERNAL v1 3/3] regulator: tps6594-regulator: Add driver
- for TI TPS6594 regulators
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
-        lgirdwood@gmail.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-4-eblanc@baylibre.com>
- <Y/i+wVSy+eQxDFJ3@sirena.org.uk>
- <bd4aa2ad-4535-94ca-7630-846546ae3d82@baylibre.com>
- <e08686be-0b46-403b-b3cd-3462db92dd60@sirena.org.uk>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <e08686be-0b46-403b-b3cd-3462db92dd60@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.9 required=5.0 tests=DATE_IN_PAST_12_24,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,51 +132,79 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
+Stephen Boyd <sboyd@kernel.org> writes:
 
-On 23/03/2023 12:38, Mark Brown wrote:
-> On Thu, Mar 23, 2023 at 10:12:21AM +0100, jerome Neanne wrote:
-> 
->>> This would be simpler and you wouldn't need this lookup function if the
->>> regulator descriptions included their IRQ names, then you could just
->>> request the interrupts while registering the regulators.
-> 
->> I changed the code to follow your recommendations then now in case of a
->> multiphase buck, only one set of interrupt is requested.
-> 
->> buck2, buck3, buck4 are not associated to a regulator device because buck1
->> registers control all the multiphase bucks (only one logic regulator).
->> Consequently the mapping for the associated interrupts does not occur.
->> I'm not sure it's the right option.
->> Do you suggest to keep it like that for multiphase?
->> Is it better to request all the interrupts anyway and map it to the same
->> rdev?
-> 
-> Do the other interrupts do anything useful for this configuration?  With
-> a lot of hardware the whole control interface gets merged into one which
-> includes the interrupts.
-> 
-Discussed the point with TI in //. In case of multiphase buck ex: buck12
-All the control is delegated to buck1 registers but there is still a 
-possibility that an interrupt triggers on buck2 (overcurrent typically).
-I slightly changed the logic so that all the interrupts are registered 
-even in multiphase mode. In that case interrupts for buck2 are attached 
-to rdev buck12.
->>>> +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
->>>> +						  tps6594_regulator_irq_handler,
->>>> +						  IRQF_ONESHOT,
->>>> +						  irq_type->irq_name,
->>>> +						  &irq_data[i]);
->>>> +		if (error) {
->>>> +			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
->>>> +				irq_type->irq_name, irq, error);
->>>> +			return error;
->>>> +		}
-> 
->>> This leaks all previously requested interrupts.
-> 
->> I'm not sure to understand this sentence correctly. You mean all the
->> interrupts already requested are still allocated after the error occurs?
-> 
-> Yes, I'd either not registered the devm or thought there was some other
-> interrupt wasn't devm.
-All the interrupts are requested with devm, then should be fine.
+> Quoting Maxime Ripard (2022-11-09 03:00:45)
+>> On Mon, Nov 07, 2022 at 08:57:22PM +0000, Aidan MacDonald wrote:
+>> >
+>> > Maxime Ripard <maxime@cerno.tech> writes:
+>> >
+>> > > Hi,
+>> > >
+>> > > On Fri, Nov 04, 2022 at 05:35:29PM +0000, Aidan MacDonald wrote:
+>> >
+>> > Assigning the parent clock in the DT works once, at boot, but going off
+>> > what you wrote in the commit message, if the clock driver has a
+>> > .determine_rate() implementation that *can* reparent clocks then it
+>> > probably *will* reparent them, and the DT assignment will be lost.
+>>
+>> Yes, indeed, but assigned-clock-parents never provided any sort of
+>> guarantee on whether or not the clock was allowed to reparent or not.
+>> It's just a one-off thing, right before probe, and a clk_set_parent()
+>> call at probe will override that just fine.
+>>
+>> Just like assigned-clock-rates isn't permanent.
+>>
+>> > What I'm suggesting is a runtime constraint that the clock subsystem
+>> > would enforce, and actively prevent drivers from changing the parent.
+>> > Either explicitly with clk_set_parent() or due to .determine_rate().
+>> >
+>> > That way you could write a .determine_rate() implementation that *can*
+>> > select a better parent, but if the DT applies a constraint to fix the
+>> > clock to a particular parent, the clock subsystem will force that parent
+>> > to be used so you can be sure the clock is never reparented by accident.
+>>
+>> Yeah, that sounds like a good idea, and CLK_SET_RATE_NO_REPARENT isn't
+>> too far off from this, it's just ignored by clk_set_parent() for now. I
+>> guess we could rename CLK_SET_RATE_NO_REPARENT to CLK_NO_REPARENT, make
+>> clk_set_parent handle it, and set that flag whenever
+>> assigned-clock-parents is set on a clock.
+>>
+>> It's out of scope for this series though, and I certainly don't want to
+>> deal with all the regressions it might create :)
+>>
+>
+> This sounds like a new dt binding that says the assigned parent should
+> never change. It sounds sort of like gpio hogs. A clock-hogs binding?
+
+Ideally we want the clock driver to be able to reparent clocks freely
+to get the best rate. But we also need some control over that to stop
+consumers from being reparented in undesired ways. Eg. you might want
+to make sure the GPU gets its own PLL so it can be reclocked easily,
+and putting another device on the GPU's PLL could prevent that.
+
+The only way to achieve this today is (1) never do any reparenting in
+the clock driver; and (2) use assigned-clock-parents in the DT to set
+up the entire clock tree manually.
+
+Maxime said that (2) is basically wrong -- if assigned-clock-parents
+provides no guarantee on what the OS does "after boot" then the OS is
+pretty much free to ignore it.
+
+My suggestion: add a per-clock bitmap to keep track of which parents
+are allowed. Any operation that would select a parent clock not on the
+whitelist should fail. Automatic reparenting should only select from
+clocks on the whitelist. And we need new DT bindings for controlling
+the whitelist, for example:
+
+    clock-parents-0 = <&clk1>, <&pll_c>;
+    clock-parents-1 = <&clk2>, <&pll_a>, <&pll_b>;
+
+This means that clk1 can only have pll_c as a parent, while clk2 can
+have pll_a or pll_b as parents. By default every clock will be able
+to use any parent, so a list is only needed if the machine needs a
+more restrictive policy.
+
+assigned-clock-parents should disable automatic reparenting, but allow
+explicit clk_set_parent(). This will allow clock drivers to start doing
+reparenting without breaking old DTs.
