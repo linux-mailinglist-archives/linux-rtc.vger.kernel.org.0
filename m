@@ -2,105 +2,132 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5106CC110
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Mar 2023 15:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F9E6CC1A2
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Mar 2023 16:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbjC1NfW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 Mar 2023 09:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S233055AbjC1OBb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 Mar 2023 10:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbjC1NfV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Mar 2023 09:35:21 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D938CA19;
-        Tue, 28 Mar 2023 06:34:41 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 032DA1BF20A;
-        Tue, 28 Mar 2023 13:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680010471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bixo3EguG8ry3BhHfrwgjJLk/bpjG+PfEZUK6cyM/PQ=;
-        b=K0PnbLtSisL5Nl2aFIXgSep1EByLG/r1ECQrxS6lrEkLyiB6b3Bh6OheucZ4dowZy56w9e
-        njCF9/6NJ5Jwd/n95AFBmAjMTCtH3uGy7WJnEucanXEvQQLWQsqOGRm7jMWiPUhOFM1B90
-        QlZ5LKsKaiIuT6KYktriqV7MN9kio4/qVWnbfEOH0eFJ70Nuv9eMCKdPPyCplLINI+6vy3
-        xpi5erUfIjaoRcpYa/qak1mmgDW9CWQRQsQZQT7NUWyUP8l5sxf39akSTuuwVyeImtSG9F
-        Kl4IRLDQkY0/uou7XqMUUS3AbxSeTNJystmt39nr6H9rVIPK/DslL96dTHU4LA==
-Date:   Tue, 28 Mar 2023 15:34:29 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com, sterzik@ti.com,
-        u-kumar1@ti.com
+        with ESMTP id S233218AbjC1OBP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Mar 2023 10:01:15 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37DCA270
+        for <linux-rtc@vger.kernel.org>; Tue, 28 Mar 2023 07:00:01 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e18so12318780wra.9
+        for <linux-rtc@vger.kernel.org>; Tue, 28 Mar 2023 07:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680012000;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eV//EvN5VWGb8SfUPOB9U4N0xtHSlciNsKaOFZxrxK4=;
+        b=4shH9I4lUneiCAv/WWHI/+aYoULUDi7/DWClIZRJaycfbJLk9rMqYZa9ZLOtaL6dJ7
+         PEUosXnY9H+z9t+CC9p2OGvR8n3dDv7yVBHvDbESROi0o2dENIXTcBVD1KrvLX4AhRIi
+         IxjJYZuevZlpkRXfifw/cIBKOOoff2u1hoepzGcA7SUrqVwTsjsx91NqLA6UjnRLiDCH
+         WelD6HYYW/TTBZztIddivAERSkuOTBq5ST/sCSl2iWyU5PBounh78ljBzKAV+psRtovk
+         k8MJ65+vwyMv1mRK1MUZxvjFeQCLojyV3Il4vVpI3Z5ngAihUrw5pQnSnDGIsVRGWC5N
+         CXmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680012000;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eV//EvN5VWGb8SfUPOB9U4N0xtHSlciNsKaOFZxrxK4=;
+        b=Xxo0rkG8WqGISoJR+bZnKN8zdavmP76clinymzaRikh5Eon2jvvQdxLZhtdpsFzSdg
+         6PPenop4hnumRNZhsRmLCWC54pD2xubt2Hqtxz2MmepY9CziuPdfeUFu1wrjNeXlpjoi
+         pWIX2qyc4Ci9lps/2qviNEqgDfjWZ9UqlVoivCeMyfjwinlU3hZyNbNIJSn1jVXymBBV
+         cg6Fn2SJpZTvz0CjWtMUkWF/sZk/gpftUlMQ1tEqinGudF0i0lisWChz86h8em8bo/5T
+         O7VVCUkYrNMtbFXFgVVSswkM7h02xYlWKBbDY8FIinQr2GPEG5502cAu7aUCovxP49H2
+         WPgA==
+X-Gm-Message-State: AAQBX9db00ibAXq+dto3t/H50omBV1mWkr5DModhB2bj/wGU7n3SqItN
+        6c7KzOk5tzVT8evC1ymhAkZ0OQ==
+X-Google-Smtp-Source: AKy350aEv76ZvmQGS0luC/FyqA5xPY4en5meBrNymKWlHJ12eRvvLXQsj+Eg12yTo7KS8EqE5LK4oA==
+X-Received: by 2002:adf:e8ca:0:b0:2c7:1d0d:7184 with SMTP id k10-20020adfe8ca000000b002c71d0d7184mr14430611wrn.11.1680012000283;
+        Tue, 28 Mar 2023 07:00:00 -0700 (PDT)
+Received: from localhost ([2a01:e0a:28d:66d0:910e:c4d8:1565:354])
+        by smtp.gmail.com with ESMTPSA id g16-20020a5d4890000000b002de99432fc8sm8155245wrq.49.2023.03.28.06.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Mar 2023 06:59:59 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 28 Mar 2023 15:59:58 +0200
+Message-Id: <CRI2JTK76CHY.PX9MOKSRGSE5@burritosblues>
+To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
+        <jneanne@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
 Subject: Re: [PATCH v2 1/3] rtc: tps6594: add driver for TPS6594 PMIC RTC
-Message-ID: <20230328133429ff45c492@mail.local>
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+X-Mailer: aerc 0.14.0
 References: <20230328091448.648452-1-eblanc@baylibre.com>
  <20230328091448.648452-2-eblanc@baylibre.com>
  <202303280929448e41808d@mail.local>
  <CRI1AQ7OIF6F.2G26C7VQKL5P0@burritosblues>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CRI1AQ7OIF6F.2G26C7VQKL5P0@burritosblues>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <20230328133429ff45c492@mail.local>
+In-Reply-To: <20230328133429ff45c492@mail.local>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/03/2023 15:01:05+0200, Esteban Blanc wrote:
-> On Tue Mar 28, 2023 at 11:29 AM CEST, Alexandre Belloni wrote:
-> > Hello,
-> >
-> > On 28/03/2023 11:14:46+0200, Esteban Blanc wrote:
-> > > +	/* Start rtc */
-> > > +	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> > > +			      TPS6594_BIT_STOP_RTC);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	mdelay(100);
-> > > +
-> > > +	/*
-> > > +	 * RTC should be running now. Check if this is the case.
-> > > +	 * If not it might be a missing oscillator.
-> > > +	 */
-> > > +	ret = regmap_test_bits(tps->regmap, TPS6594_REG_RTC_STATUS,
-> > > +			       TPS6594_BIT_RUN);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +	if (ret == 0)
-> > > +		return -ENODEV;
-> > > +
-> > > +	/* Stop RTC until first call to `tps6594_rtc_set_time */
-> > > +	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> > > +				TPS6594_BIT_STOP_RTC);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> >
-> > This whole block must not be executed when the RTC is already running,
-> > else, you are stopping a perfectly running RTC.
-> 
-> I'm not sure to get your point. You mean that during probe, the driver
-> might encounter an RTC device that is already running with a correct
-> timestamp? How would this be possible? A previous bootstage or the
-> driver was removed then re-inserted again?
-> 
+On Tue Mar 28, 2023 at 3:34 PM CEST, Alexandre Belloni wrote:
+> On 28/03/2023 15:01:05+0200, Esteban Blanc wrote:
+> > On Tue Mar 28, 2023 at 11:29 AM CEST, Alexandre Belloni wrote:
+> > > Hello,
+> > >
+> > > On 28/03/2023 11:14:46+0200, Esteban Blanc wrote:
+> > > > +	/* Start rtc */
+> > > > +	ret =3D regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
+> > > > +			      TPS6594_BIT_STOP_RTC);
+> > > > +	if (ret < 0)
+> > > > +		return ret;
+> > > > +
+> > > > +	mdelay(100);
+> > > > +
+> > > > +	/*
+> > > > +	 * RTC should be running now. Check if this is the case.
+> > > > +	 * If not it might be a missing oscillator.
+> > > > +	 */
+> > > > +	ret =3D regmap_test_bits(tps->regmap, TPS6594_REG_RTC_STATUS,
+> > > > +			       TPS6594_BIT_RUN);
+> > > > +	if (ret < 0)
+> > > > +		return ret;
+> > > > +	if (ret =3D=3D 0)
+> > > > +		return -ENODEV;
+> > > > +
+> > > > +	/* Stop RTC until first call to `tps6594_rtc_set_time */
+> > > > +	ret =3D regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
+> > > > +				TPS6594_BIT_STOP_RTC);
+> > > > +	if (ret < 0)
+> > > > +		return ret;
+> > > > +
+> > >
+> > > This whole block must not be executed when the RTC is already running=
+,
+> > > else, you are stopping a perfectly running RTC.
+> >=20
+> > I'm not sure to get your point. You mean that during probe, the driver
+> > might encounter an RTC device that is already running with a correct
+> > timestamp? How would this be possible? A previous bootstage or the
+> > driver was removed then re-inserted again?
+> >=20
+>
+> The whole point of having an RTC is that the time tracking survives a
+> reboot so yes, I would expect the RTC to have a valid timestamp at probe
+> time.
 
-The whole point of having an RTC is that the time tracking survives a
-reboot so yes, I would expect the RTC to have a valid timestamp at probe
-time.
+Oh. Oh I see. I did not think of that. I will add a check for that.
 
+Thanks again,
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--=20
+Esteban Blanc
+BayLibre
