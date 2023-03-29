@@ -2,332 +2,223 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D026CCB39
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Mar 2023 22:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78666CF3B8
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Mar 2023 21:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjC1UK3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 Mar 2023 16:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S230472AbjC2TwH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 29 Mar 2023 15:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjC1UK3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Mar 2023 16:10:29 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BE426AA;
-        Tue, 28 Mar 2023 13:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680034227; x=1711570227;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bqz2a0tDDrO3Ug0U0rJWmNzaiLxLbO5wioAjP7cmdpo=;
-  b=DSu6v0gdh26DzG+fiiUVojYQ3MbUjTrSU3TnFdTq/77GpQLrn7IDTjbD
-   tAzlXqTpOJrTuYYnLoX0AkqAz4y6TWAJpgGY4U8RZEu90dJ3+Ewa/Z9ao
-   Q3SUoCjeuvMXw/UpcjFh90Mqqzo3azuK/EbCSASJLI2D9HFgQgaHOrhha
-   C6NiTv1GP1sF1XGe1g6C1yx+vzI48mstFlPE3C6EnpgMaGPxv21jbssRi
-   rjNT/0izKC06sQB4jksZ7akRgyY5J0Nk+DlNmenwOWblvgIFZTy96ww4X
-   D4jqbvrA2USTRXkptQGBOZIB8jYLzyMXj2JRHykvWIKAhlzvKNt89/ntR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="403297734"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="403297734"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 13:10:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="858228540"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="858228540"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Mar 2023 13:10:20 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phFe7-000Is7-2a;
-        Tue, 28 Mar 2023 20:10:19 +0000
-Date:   Wed, 29 Mar 2023 04:09:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com, sterzik@ti.com,
-        u-kumar1@ti.com
-Subject: Re: [PATCH v2 3/3] regulator: tps6594-regulator: Add driver for TI
- TPS6594 regulators
-Message-ID: <202303290336.bSKllPZi-lkp@intel.com>
-References: <20230328091448.648452-4-eblanc@baylibre.com>
+        with ESMTP id S230480AbjC2TwB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 29 Mar 2023 15:52:01 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA9FCA;
+        Wed, 29 Mar 2023 12:51:40 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id B22DC2B05BE1;
+        Wed, 29 Mar 2023 15:50:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 29 Mar 2023 15:50:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1680119453; x=1680126653; bh=S0
+        0Xp8JXjn19UH995q1FPsxfz6/qb923iCtN7jshDa0=; b=bjfu/u+3WNSfLMbwG8
+        kgDlb33yFeBpTyDn26O0i5sMcaQYMH5k+w0P2n88u/CL6nmHobkHURfCmf1/C29t
+        U0Qh1AeatQqCeBn6lka/dn10E2764ErqPqb3njkwCEp0gR+damC3mrcUvTxoLGFt
+        C8YUuH43zoflGPvolh5JgeGOuMjpcUVK2XMglwkAj5Jbl90JOiW6MmIBfFxsj47Z
+        LmLClTdxuUi8kFNiCE0STmAKXFF18XHkXI+HXgSXZYmlUiBbZLpqDOcow+ybw2xE
+        2FoegJ/5RU8yvTqRDV9YushjRc122S3DH00UzJnafvUsGPLUeJnt1P45+mZXlwwx
+        9r5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680119453; x=1680126653; bh=S00Xp8JXjn19U
+        H995q1FPsxfz6/qb923iCtN7jshDa0=; b=mDHZlaVnXucLsPRdtiP08QfOw0gbw
+        L+tUMJhcynxctO/kzDo9N9LThihIenJjo53qM0euM2lsFwMzIIJmLZaKDMEQ9gKS
+        btQwIniilAJ2KR0keHWJin00kBMMw6Fvxj0Tqr2fZDydPMLtTJ9/sGRArw3nvLEJ
+        Inl8nRAJ+p1On2TOo/Jkf5NvgfFrgD8xiz+wUxe+OLxZLqgad7dL+FZKdxkOCpJr
+        jXFB1C2jlktQjz7Pf5BdwXfRgXBHnZg2CeqLIpNinGTcVjw+BWRP0a6XnT9W3OK0
+        vrpjM1vniY/j4v5fsA1EOzPEQz9MwxVgK2edMj2xcjAO4WZgtdvUtY6ug==
+X-ME-Sender: <xms:mpYkZD7Ox3zkaNg9OIbaq_Geirriia0AyR5zsctORI6EJu7ND1ZsRQ>
+    <xme:mpYkZI6gfNEQJJATGLF-jP5tejftDvf4e2pRhn5b30pSmUBJQi8Q22RK3CYpCbdPk
+    nljkuFaqJebKdIGblI>
+X-ME-Received: <xmr:mpYkZKdImEiijk94na28hpIQuEi3cQuAMkQWm0nzJyixb0OJnKMRnOXbcA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedgudeggecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
+    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:mpYkZEJl9MrKZSU_H62ZAJfDV2fQB_Dukmg12b6sz6GsGnrs1I7MQA>
+    <xmx:mpYkZHItJM6rTbcj4kioTn3BMkpHiPds2sYYICneLW9ubA5TBI5WRQ>
+    <xmx:mpYkZNxhOoittDkCw7hbXZnCUDUd-FuZ-EKLeSqNz8AN2-VxFNYVfA>
+    <xmx:nZYkZIRJx8oRJdN_mOMdRd18Mh8SZ8lDvg6OQ5KdOS-_17hhw45Pa7Wurdo>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 29 Mar 2023 15:50:49 -0400 (EDT)
+Date:   Wed, 29 Mar 2023 21:50:49 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <20230329195049.lbdbkbqu6zbq5xii@penduick>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
+ <Y2UzdYyjgahJsbHg@sirena.org.uk>
+ <20221104155123.qomguvthehnogkdd@houat>
+ <Y2U2+ePwRieYkNjv@sirena.org.uk>
+ <20221107084322.gk4j75r52zo5k7xk@houat>
+ <Y2j0r0wX1XtQBvqO@sirena.org.uk>
+ <20221107152603.57qimyzkinhifx5p@houat>
+ <5819b1362f35ce306e1b6d566bfd44e5.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bx2st77tq2vvri5u"
 Content-Disposition: inline
-In-Reply-To: <20230328091448.648452-4-eblanc@baylibre.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <5819b1362f35ce306e1b6d566bfd44e5.sboyd@kernel.org>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Esteban,
 
-Thank you for the patch! Perhaps something to improve:
+--bx2st77tq2vvri5u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linusw-pinctrl/for-next broonie-regulator/for-next abelloni/rtc-next linus/master v6.3-rc4 next-20230328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi Stephen,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Esteban-Blanc/rtc-tps6594-add-driver-for-TPS6594-PMIC-RTC/20230328-171612
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20230328091448.648452-4-eblanc%40baylibre.com
-patch subject: [PATCH v2 3/3] regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20230329/202303290336.bSKllPZi-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/842fe9039c5ca8c856ee7433c0dff43ee7f52cfe
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Esteban-Blanc/rtc-tps6594-add-driver-for-TPS6594-PMIC-RTC/20230328-171612
-        git checkout 842fe9039c5ca8c856ee7433c0dff43ee7f52cfe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/
+On Wed, Mar 22, 2023 at 04:31:04PM -0700, Stephen Boyd wrote:
+> > It's also replacing one implicit behavior by another. The point of this
+> > series was to raise awareness on that particular point, so I'm not sure
+> > it actually fixes things. We'll see what Stephen thinks about it.
+> >=20
+>=20
+> Right. A decade ago (!) when determine_rate() was introduced we
+> introduced CLK_SET_RATE_NO_REPARENT and set it on each mux user (see
+> commit  819c1de344c5 ("clk: add CLK_SET_RATE_NO_REPARENT flag")). This
+> way driver behavior wouldn't change and the status quo would be
+> maintained, i.e. that clk_set_rate() on a mux wouldn't change parents.
+> We didn't enforce that determine_rate exists if the set_parent() op
+> existed at the same time though. Probably an oversight.
+>=20
+> Most of the replies to this series have been "DT is setting the parent",
+> which makes me believe that there are 'assigned-clock-parents' being
+> used.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303290336.bSKllPZi-lkp@intel.com/
+Yes, that's my understanding as well.
 
-All warnings (new ones prefixed by >>):
+> The clk_set_parent() path is valid for those cases. Probably nobody
+> cares about determine_rate because they don't set rates on these clks.
+> Some drivers even explicitly left out determine_rate()/round_rate()
+> because they didn't want to have some other clk round up to the mux
+> and change the parent.
+>=20
+> Eventually we want drivers to migrate to determine_rate op so we can get
+> rid of the round_rate op and save a pointer (we're so greedy). It's been
+> 10 years though, and that hasn't been done. Sigh! I can see value in
+> this series from the angle of migrating, but adding a determine_rate op
+> when there isn't a round_rate op makes it hard to reason about. What if
+> something copies the clk_ops or sets a different flag? Now we've just
+> added parent changing support to clk_set_rate(). What if the clk has
+> CLK_SET_RATE_PARENT flag set? Now we're going to ask the parent clk to
+> change rate. Fun bugs.
+>=20
+> TL;DR: If the set_parent op exists but determine_rate/round_rate doesn't
+> then the clk is a mux that doesn't want to support clk_set_rate(). Make
+> a new mux function that's the contents of the CLK_SET_RATE_NO_REPARENT
+> branch in clk_mux_determine_rate_flags() and call that directly from the
+> clk_ops so it is clear what's happening,
+> clk_hw_mux_same_parent_determine_rate() or something with a better name.
+> Otherwise migrate the explicit determine_rate op to this new function
+> and don't set the flag.
+>=20
+> It may be possible to entirely remove the CLK_SET_RATE_NO_REPARENT flag
+> with this design, if the determine_rate clk_op can call the inner
+> wrapper function instead of __clk_mux_determine_rate*() (those
+> underscores are awful, we should just prefix them with clk_hw_mux_*()
+> and live happier). That should be another patch series.
 
-   drivers/regulator/tps6594-regulator.c: In function 'tps6594_regulator_probe':
->> drivers/regulator/tps6594-regulator.c:423:31: warning: variable 'rdevldotbl' set but not used [-Wunused-but-set-variable]
-     423 |         struct regulator_dev *rdevldotbl[LDO_NB];
-         |                               ^~~~~~~~~~
->> drivers/regulator/tps6594-regulator.c:422:31: warning: variable 'rdevmultitbl' set but not used [-Wunused-but-set-variable]
-     422 |         struct regulator_dev *rdevmultitbl[MULTI_PHASE_NB];
-         |                               ^~~~~~~~~~~~
->> drivers/regulator/tps6594-regulator.c:421:31: warning: variable 'rdevbucktbl' set but not used [-Wunused-but-set-variable]
-     421 |         struct regulator_dev *rdevbucktbl[BUCK_NB];
-         |                               ^~~~~~~~~~~
+Sorry but it's not really clear to me what you expect in the v2 of this
+series (if you even expect one). It looks that you don't like the
+assignment-if-missing idea Mark suggested, but should I just
+rebase/resend or did you expect something else?
 
+Maxime
 
-vim +/rdevldotbl +423 drivers/regulator/tps6594-regulator.c
+--bx2st77tq2vvri5u
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   405	
-   406	static int tps6594_regulator_probe(struct platform_device *pdev)
-   407	{
-   408		struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-   409		struct regulator_dev *rdev;
-   410		struct regulator_config config = {};
-   411		u8 buck_configured[BUCK_NB] = { 0 };
-   412		u8 buck_multi[MULTI_PHASE_NB] = { 0 };
-   413		int i, nranges;
-   414		int irq_idx = 0;
-   415		int buck_idx = 0;
-   416		int error, irq;
-   417		int ext_reg_irq_nb = 2;
-   418		struct tps6594_regulator_irq_data *irq_data;
-   419		struct tps6594_ext_regulator_irq_data *irq_ext_reg_data;
-   420		struct tps6594_regulator_irq_type *irq_type;
- > 421		struct regulator_dev *rdevbucktbl[BUCK_NB];
- > 422		struct regulator_dev *rdevmultitbl[MULTI_PHASE_NB];
- > 423		struct regulator_dev *rdevldotbl[LDO_NB];
-   424		u32 multi_phase_id;
-   425		u32 multi_phase_id_tbl[2];
-   426	
-   427		config.dev = tps->dev;
-   428		config.driver_data = tps;
-   429		config.regmap = tps->regmap;
-   430	
-   431		/*
-   432		 * Switch case defines different possible multi phase config
-   433		 * This is based on dts custom property: multi-phase-id
-   434		 * Using compatible or device rev is a too complex alternative
-   435		 * Default case is no Multiphase buck.
-   436		 * In case of Multiphase configuration, value should be defined for
-   437		 * buck_configured to avoid creating bucks for every buck in multiphase
-   438		 */
-   439	
-   440		if (device_property_present(tps->dev, "ti,multi-phase-id")) {
-   441			nranges = device_property_count_u32(tps->dev, "ti,multi-phase-id");
-   442			if (nranges < 1 || nranges > 2) {
-   443				dev_err(tps->dev, "%s port range: '%s' property\n",
-   444					nranges == -EINVAL ? "Missing" : "Invalid",
-   445					"ti,multi-phase-id");
-   446				return -EINVAL;
-   447			}
-   448			error = device_property_read_u32_array(tps->dev, "ti,multi-phase-id",
-   449							       multi_phase_id_tbl, nranges);
-   450			if (error) {
-   451				dev_err(tps->dev, "failed to parse '%s' property: %d\n",
-   452					"ti,multi-phase-id", error);
-   453				return error;
-   454			}
-   455			multi_phase_id = multi_phase_id_tbl[0];
-   456			/* Only configuration multiphase buck12 & buck34 requires 2 arguments */
-   457			if (nranges > 1 && multi_phase_id != 34)
-   458				multi_phase_id = multi_phase_id_tbl[1];
-   459	
-   460			switch (multi_phase_id) {
-   461			case 12:
-   462				buck_multi[0] = 1;
-   463				buck_configured[0] = 1;
-   464				buck_configured[1] = 1;
-   465				break;
-   466			/* multiphase buck34 is supported only with buck12 */
-   467			case 34:
-   468				buck_multi[0] = 1;
-   469				buck_configured[0] = 1;
-   470				buck_configured[1] = 1;
-   471				buck_multi[1] = 1;
-   472				buck_configured[2] = 1;
-   473				buck_configured[3] = 1;
-   474				break;
-   475			case 123:
-   476				buck_multi[2] = 1;
-   477				buck_configured[0] = 1;
-   478				buck_configured[1] = 1;
-   479				buck_configured[2] = 1;
-   480				break;
-   481			case 1234:
-   482				buck_multi[3] = 1;
-   483				buck_configured[0] = 1;
-   484				buck_configured[1] = 1;
-   485				buck_configured[2] = 1;
-   486				buck_configured[3] = 1;
-   487				break;
-   488			}
-   489		}
-   490	
-   491		if (tps->chip_id == LP8764X)
-   492			/* There is only 4 buck on LP8764X */
-   493			buck_configured[4] = 1;
-   494	
-   495		irq_data = devm_kmalloc(tps->dev,
-   496					ARRAY_SIZE(tps6594_bucks_irq_types) *
-   497					REGS_INT_NB *
-   498					sizeof(struct tps6594_regulator_irq_data) +
-   499					ARRAY_SIZE(tps6594_ldos_irq_types) *
-   500					REGS_INT_NB *
-   501					sizeof(struct tps6594_regulator_irq_data),
-   502					GFP_KERNEL);
-   503		if (!irq_data)
-   504			return -ENOMEM;
-   505	
-   506		for (i = 0; i < MULTI_PHASE_NB; i++) {
-   507			if (buck_multi[i] == 0)
-   508				continue;
-   509	
-   510			rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
-   511			if (IS_ERR(rdev)) {
-   512				dev_err(tps->dev, "failed to register %s regulator\n",
-   513					pdev->name);
-   514				return PTR_ERR(rdev);
-   515			}
-   516			rdevmultitbl[i] = rdev;
-   517			/* config multiphase buck12+buck34 */
-   518			if (i == 1)
-   519				buck_idx = 2;
-   520			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-   521							 tps6594_bucks_irq_types[buck_idx], &irq_idx);
-   522			if (error)
-   523				return error;
-   524			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-   525							 tps6594_bucks_irq_types[buck_idx + 1], &irq_idx);
-   526			if (error)
-   527				return error;
-   528	
-   529			if (i == 2 || i == 3) {
-   530				error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-   531								 tps6594_bucks_irq_types[buck_idx + 2],
-   532								 &irq_idx);
-   533				if (error)
-   534					return error;
-   535			}
-   536			if (i == 3) {
-   537				error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-   538								 tps6594_bucks_irq_types[buck_idx + 3],
-   539								 &irq_idx);
-   540				if (error)
-   541					return error;
-   542			}
-   543		}
-   544	
-   545		for (i = 0; i < BUCK_NB; i++) {
-   546			if (buck_configured[i] == 1)
-   547				continue;
-   548	
-   549			rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
-   550			if (IS_ERR(rdev)) {
-   551				dev_err(tps->dev, "failed to register %s regulator\n",
-   552					pdev->name);
-   553				return PTR_ERR(rdev);
-   554			}
-   555			rdevbucktbl[i] = rdev;
-   556	
-   557			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-   558							 tps6594_bucks_irq_types[i], &irq_idx);
-   559			if (error)
-   560				return error;
-   561		}
-   562	
-   563		/* LP8764X dosen't have LDO */
-   564		if (tps->chip_id != LP8764X) {
-   565			for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
-   566				rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
-   567				if (IS_ERR(rdev)) {
-   568					dev_err(tps->dev,
-   569						"failed to register %s regulator\n",
-   570						pdev->name);
-   571					return PTR_ERR(rdev);
-   572				}
-   573				rdevldotbl[i] = rdev;
-   574				error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-   575								 tps6594_ldos_irq_types[i],
-   576								 &irq_idx);
-   577				if (error)
-   578					return error;
-   579			}
-   580		}
-   581	
-   582		if (tps->chip_id == LP8764X)
-   583			ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
-   584	
-   585		irq_ext_reg_data = devm_kmalloc(tps->dev,
-   586						ext_reg_irq_nb *
-   587						sizeof(struct tps6594_ext_regulator_irq_data),
-   588						GFP_KERNEL);
-   589		if (!irq_ext_reg_data)
-   590			return -ENOMEM;
-   591	
-   592		for (i = 0; i < ext_reg_irq_nb; ++i) {
-   593			irq_type = &tps6594_ext_regulator_irq_types[i];
-   594	
-   595			irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-   596			if (irq < 0)
-   597				return -EINVAL;
-   598	
-   599			irq_ext_reg_data[i].dev = tps->dev;
-   600			irq_ext_reg_data[i].type = irq_type;
-   601	
-   602			error = devm_request_threaded_irq(tps->dev, irq, NULL,
-   603							  tps6594_regulator_irq_handler,
-   604							  IRQF_ONESHOT,
-   605							  irq_type->irq_name,
-   606							  &irq_ext_reg_data[i]);
-   607			if (error) {
-   608				dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
-   609					irq_type->irq_name, irq, error);
-   610				return error;
-   611			}
-   612		}
-   613		return 0;
-   614	}
-   615	
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZCSWmAAKCRDj7w1vZxhR
+xQXTAP0bPg2EVQxPktgSpE4coaiyyn0Cu6Bba/x8MkUcPgNRVQEAxpbYr0uDsXMC
+CE9ojO6fXNwPgqHm5ELQGJgnrvcQQQg=
+=B5xn
+-----END PGP SIGNATURE-----
+
+--bx2st77tq2vvri5u--
