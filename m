@@ -2,113 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4FC6D69A6
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Apr 2023 18:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC896D7449
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Apr 2023 08:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235643AbjDDQ5o (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 4 Apr 2023 12:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S237024AbjDEGQJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 5 Apr 2023 02:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235645AbjDDQ5m (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 Apr 2023 12:57:42 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B08E7B;
-        Tue,  4 Apr 2023 09:57:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id b20so133317298edd.1;
-        Tue, 04 Apr 2023 09:57:18 -0700 (PDT)
+        with ESMTP id S236670AbjDEGQJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Apr 2023 02:16:09 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9530C4
+        for <linux-rtc@vger.kernel.org>; Tue,  4 Apr 2023 23:16:06 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id r11so138440266edd.5
+        for <linux-rtc@vger.kernel.org>; Tue, 04 Apr 2023 23:16:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680627437;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P7MhNZCWbmm+EQT2ZpLl2E/34gvDoi8JcsBYxfVZFwk=;
-        b=VpLHIMinqDrwBgJCKe6aTCq+o2ToI2AcQwk7ETuH985y5l712JB/Jr1vrwVpie63AZ
-         nP362aTfXVOwRwLlXpHGRk4PBTdeD94ijJ3+RUp1P9nqBBAXEX3pLLPbG+6Inwk7Uyaj
-         uFjOnX4OGtjx8sYfx5vR29bO11rfY1Hsi6htfgOa7JqSh39Nv9chkha/eSesvzGdBXYu
-         bpqi5ctpHBfKsmoMkLOHfPG+HXDlIrDf4yTtLRYMdJ/ZFlrEERZIjqkBnEZBJXKN5zvv
-         6tBj4cl/oiz+AS47+YvLvIi9B3cokqy7sBMFOpBtuySkQHlO05Xw1iJ2uLy3r//bUthI
-         cYSg==
+        d=linaro.org; s=google; t=1680675365;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SB6X/HPTBevD11u4QesH1uUiIVJAKhGlwM+UoQhXDmQ=;
+        b=qJhxInXHBw/oSbV9tNmfcQFbtnUx6E7N2r9k3ZFHgcpcgdbTB/BheZcrVZk2ompKf6
+         QZvCAW+W7dLo/vGw09DONctdVUzN5Y6zpsklyAvSWyMTGkzCvNtXkm+LBctimMZP3ebj
+         41EW9FJvirGU86VygdOFV42YVmrch4kbTp6z8JBsh/Zg5Q3rwHrPnQ9TufpF5CJhUWvb
+         +GQ92fsVA4uwK6V92UHDLVKb5n8cWo5zlwlWZ/M2zccjH+6IDfpL+IEKg57BeYpmRScp
+         BImKfkvu/EQKNwltoGoKP1AgIF032xnerm0u2isVkdbwmq7TZlYenDjOIf6kL3dbZwGI
+         qH3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680627437;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P7MhNZCWbmm+EQT2ZpLl2E/34gvDoi8JcsBYxfVZFwk=;
-        b=PRTYfEX1C8ZXf47E47LaSmilt401XwtlshFpHdUHRzQnSxpSyIfQ2fSyYtL4dDeRh5
-         PLGKpnSVA/e3biAM6OFr4D5ZyoSacotVatQB87DE53OvspBTTyh2MHaMYw5v5inekHBt
-         qzu3t/zrhxySq8JKdtqDFqoFAQoLBiBo67ROpJmIAob7Ga8XjCZnVCiffUHZAt1gfp+l
-         I6uwyDIuho2i/GFPp/k1W+WK9pGuCfSi26m885ih2DWP+xu97pXzN+98QoK8HL4wMhX+
-         SQ+3TqxDcgl8n3CRJ/f9vgwew6dldUrKiRH0YrACcgiwcFBuf70HmOwrTV5PchkNZGP1
-         wjlA==
-X-Gm-Message-State: AAQBX9cb6HgpGP+A+t0BjAJL1P9jodHXaUVyz5VInSupSoZOFQplaAYp
-        HSGtKbUbpaxkaCZCv5NupYY=
-X-Google-Smtp-Source: AKy350aLVwwKqFdLN/chhOt48r5LY4guvRxpRxIkNFsLEqvsNQmQtpD22vmnvW+Hx6srEDa7zCZz5g==
-X-Received: by 2002:aa7:d514:0:b0:4fb:6523:2b38 with SMTP id y20-20020aa7d514000000b004fb65232b38mr156531edq.27.1680627437154;
-        Tue, 04 Apr 2023 09:57:17 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id e27-20020a50d4db000000b004fadc041e13sm6144420edj.42.2023.04.04.09.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 09:57:16 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
-        Michael Walle <michael@walle.cc>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V4] nvmem: add explicit config option to read old syntax fixed OF
- cells
-Date:   Tue, 04 Apr 2023 18:57:14 +0200
-Message-ID: <4817385.31r3eYUQgx@jernej-laptop>
-In-Reply-To: <20230403225540.1931-1-zajec5@gmail.com>
-References: <20230403225540.1931-1-zajec5@gmail.com>
+        d=1e100.net; s=20210112; t=1680675365;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SB6X/HPTBevD11u4QesH1uUiIVJAKhGlwM+UoQhXDmQ=;
+        b=x+p5C2gdI7yrCDGFRI+Dm9C1WZmkmdAR1k+rNP5+qQJkOdyZcqkeq3KqGuPE/UE0KU
+         1v+O8NueAc43zluad6/t7SL4lzfbcX3zz9TgSR79tkwCnjCMe1lkZOi9NzbaNS2veXkg
+         bbWqyEBAcrc151zb8VVZB6U2hm9iK+uFbLZpnbYfoSYuZwT59EhB8+DbHukvx2wPHTbg
+         XD/iE0367BIpVrjHoDQ4YMbzKJvFZGsomSq6kowEauQvsoYkJQ2xhIoRf7zwmniRpu78
+         64PUszF9/IPN7/0W/JWi1hhvWHNPRSu/eNtc/AM+9nNhmM78ZEvXburPn6n7FoC1XTed
+         6h4g==
+X-Gm-Message-State: AAQBX9cy3b9jc3tGwljkGKfVA1E+j6uQIPCaPfUg5TdkaNtub32Jj6YI
+        DHyagVLIHda2LD9h5QK0SUqH5A==
+X-Google-Smtp-Source: AKy350ZqXgpOtVx4SPo6LBhpRXn1qmcne+hCujVIv/eRRqCcdGlsUSwBk4dJbc9hzj2xOu33Zw/2UA==
+X-Received: by 2002:a17:906:ef2:b0:93f:9ef3:945b with SMTP id x18-20020a1709060ef200b0093f9ef3945bmr1889689eji.17.1680675365315;
+        Tue, 04 Apr 2023 23:16:05 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
+        by smtp.gmail.com with ESMTPSA id l23-20020a170906079700b0093338259b2bsm6772861ejc.207.2023.04.04.23.16.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 23:16:04 -0700 (PDT)
+Message-ID: <fe580065-9ad3-3d28-522d-3905a9e9e518@linaro.org>
+Date:   Wed, 5 Apr 2023 08:16:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: add max313xx RTCs
+Content-Language: en-US
+To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
+References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
+ <20230403154342.3108-3-Ibrahim.Tilki@analog.com>
+ <7d5c4407-3198-c39a-2c30-fbaeb5c53b08@linaro.org>
+ <CY4PR03MB2488D9CED963C26DB7D9709B96939@CY4PR03MB2488.namprd03.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CY4PR03MB2488D9CED963C26DB7D9709B96939@CY4PR03MB2488.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -117,83 +87,66 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dne torek, 04. april 2023 ob 00:55:40 CEST je Rafa=C5=82 Mi=C5=82ecki napis=
-al(a):
-> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
->=20
-> Binding for fixed NVMEM cells defined directly as NVMEM device subnodes
-> has been deprecated. It has been replaced by the "fixed-layout" NVMEM
-> layout binding.
->=20
-> New syntax is meant to be clearer and should help avoiding imprecise
-> bindings.
->=20
-> NVMEM subsystem already supports the new binding. It should be a good
-> idea to limit support for old syntax to existing drivers that actually
-> support & use it (we can't break backward compatibility!). That way we
-> additionally encourage new bindings & drivers to ignore deprecated
-> binding.
->=20
-> It wasn't clear (to me) if rtc and w1 code actually uses old syntax
-> fixed cells. I enabled them to don't risk any breakage.
->=20
-> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-> [for meson-{efuse,mx-efuse}.c]
-> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> [for mtk-efuse.c, nvmem/core.c, nvmem-provider.h]
-> Reviewed-by: AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> [MT8192, MT8195 Chromebooks]
-> Tested-by: AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> [for microchip-otpc.c]
-> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> [SAMA7G5-EK]
-> Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
-> This is based on top of them
-> [PATCH V6 3/3] nvmem: core: add support for fixed cells *layout*
->=20
-> V2: Fix stm32-romem.c typo breaking its compilation
->     Pick Martin's Acked-by
->     Add paragraph about layouts deprecating add_legacy_fixed_of_cells
-> V3: Update commit description:
->     1. Make it clear we're NOT dropping fixed cells support
->     2. Use nicer words (s/made sense/was totally safe/)
->     3. Explain fixed cells layout thing
->     4. Add paragraph with purpose of this commit
-> V4: Completely rewrite commit message.
->     Rename config option to "add_legacy_fixed_of_cells".
-> ---
->  drivers/mtd/mtdcore.c          | 2 ++
->  drivers/nvmem/apple-efuses.c   | 1 +
->  drivers/nvmem/core.c           | 8 +++++---
->  drivers/nvmem/imx-ocotp-scu.c  | 1 +
->  drivers/nvmem/imx-ocotp.c      | 1 +
->  drivers/nvmem/meson-efuse.c    | 1 +
->  drivers/nvmem/meson-mx-efuse.c | 1 +
->  drivers/nvmem/microchip-otpc.c | 1 +
->  drivers/nvmem/mtk-efuse.c      | 1 +
->  drivers/nvmem/qcom-spmi-sdam.c | 1 +
->  drivers/nvmem/qfprom.c         | 1 +
->  drivers/nvmem/rave-sp-eeprom.c | 1 +
->  drivers/nvmem/rockchip-efuse.c | 1 +
->  drivers/nvmem/sc27xx-efuse.c   | 1 +
->  drivers/nvmem/sprd-efuse.c     | 1 +
->  drivers/nvmem/stm32-romem.c    | 1 +
->  drivers/nvmem/sunplus-ocotp.c  | 1 +
->  drivers/nvmem/sunxi_sid.c      | 1 +
+On 04/04/2023 17:40, Tilki, Ibrahim wrote:
+>>> +  interrupts:
+>>> +    description: |
+>>> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
+>>> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
+>>> +      configuration.
+>>> +    maxItems: 1
+>>> +
+>>> +  "#clock-cells":
+>>> +    description: |
+>>> +      RTC can be used as a clock source through its clock output pin when
+>>> +      supplied.
+>>
+>> This part is correct, but your implementation is not. I don't think you
+>> can disable or enable interrupts, based on usage of clock. Either this
+>> is clock (gated or not) or interrupt, not both.
+>>
+> 
+> The driver doesn't enable or disable interrupts based on clock usage. It checks
+> whether the IRQ is possible or not. Enablement of interrupt depends on the 
+> "interrupts" property. The tricky part is that interrupt muxing depends on
+> clock configuration.
 
-=46or sunxi_sid:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+I think it is not what your driver is doing. It checks if clock-cells...
+
+> 
+> Let me briefly explain the behavior of RTCs and the driver[v4]
+> 
+> MAX31328:
+>   - Has a single pin which is either used as IRQ or clock output.
+>   - Driver aborts probe with "-EOPNOTSUPP" when user requests irq and clockout
+>     at the same time. In other words, when both "interrupts" and "#clock-cells"
+>     properties are present. Otherwise, we are fine.
+
+Why? These are fixed properties of the device. It is always a clock
+controller and always has interrupt line. The choice between them is
+depending on pins, so pin control.
+
+> 
+> MAX31331:
+> MAX31334:
+>   - Has two pins: INTA and INTB/CLOCKOUT. INTA pin is dedicated for interrupt.
+>     INTB pin is used as either interrupt or clockout. The Alarm1 interrupt is
+>     muxed into INTB by default. If the CLOCKOUT is enabled, Alarm1 irq is muxed
+>     into INTA. We don't have further control over interrupt muxing.
+>   - Driver checks for "#clock-cells". If it is present, it enables the clockout
+>     so that we can get interrupt from INTA.
+> 
+> The Rest:
+>   - Has two pins: INTA/CLKIN and INTB/CLOCKOUT. Alarm1 interrupt is muxed into
+>     INTA by default, muxed into INTB if and only if we enable CLKIN.
+>   - Driver aborts probe with -EOPNOTSUPP when user requests interrupt, clockin
+>     and clockout at the same time. We can't have all three with two pins.
+> 	
+> 
+> Unfortunately we don't have control over the interrupt muxing other than clock
+> configuration. How should the driver approach this?
+
+Pinmux with two states - interrupt or clock.
 
 Best regards,
-Jernej
-
->  drivers/nvmem/uniphier-efuse.c | 1 +
->  drivers/nvmem/zynqmp_nvmem.c   | 1 +
->  drivers/rtc/nvmem.c            | 1 +
->  drivers/w1/slaves/w1_ds250x.c  | 1 +
->  include/linux/nvmem-provider.h | 2 ++
->  23 files changed, 29 insertions(+), 3 deletions(-)
-
-
+Krzysztof
 
