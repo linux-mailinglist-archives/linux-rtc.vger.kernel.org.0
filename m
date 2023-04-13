@@ -2,61 +2,140 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9746DECCC
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Apr 2023 09:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B836E0864
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Apr 2023 09:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjDLHmb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 12 Apr 2023 03:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
+        id S230263AbjDMH6O (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 13 Apr 2023 03:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjDLHmQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 Apr 2023 03:42:16 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB2C55BB
-        for <linux-rtc@vger.kernel.org>; Wed, 12 Apr 2023 00:42:15 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id 534B083B01; Wed, 12 Apr 2023 08:41:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1681285333; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=jGvh/vigLKPqBXortIH7y0fWEZli8T1PZbVZBiazCgvW9Otds/jkoZ3Dq9MNAYtUZ
-         aZNG5+3c2i63ZGqqVAKXkb6kfXXbQUF51dhVuZv5rlPOb/niWGcN70bXZcFfRVQueU
-         /pa/ZWH1L0jOvQWQE/lCKmlknXETbRhUA2Xptl+Zu1sr8zEbGWnxurn2N9WIRzTgaj
-         lhgpRvDy2m8ibGXgwEt5aza+o4haqlmKii7DbicVtcQmrk5QPfPh25omjmgBPwMkEU
-         9lLhU4Ox+vGp0QNbzCMA1Oe+aBU4BYhpwaY6iNp+lJRJYPIV+uFCWulXpEy5pIKsMg
-         z7LDP05EL9qTg==
-Received: by mail.lokoho.com for <linux-rtc@vger.kernel.org>; Wed, 12 Apr 2023 07:40:53 GMT
-Message-ID: <20230412074501-0.1.59.1u7r9.0.bo6j464om2@lokoho.com>
-Date:   Wed, 12 Apr 2023 07:40:53 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-rtc@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S230070AbjDMH6M (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 13 Apr 2023 03:58:12 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C03A076AD;
+        Thu, 13 Apr 2023 00:58:00 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.110.113])
+        by gateway (Coremail) with SMTP id _____8DxUOUHtjdkH7obAA--.42985S3;
+        Thu, 13 Apr 2023 15:57:59 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.20.110.113])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuQDtjdk7BciAA--.6706S2;
+        Thu, 13 Apr 2023 15:57:56 +0800 (CST)
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-rtc@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
+        zhaoxiao <zhaoxiao@uniontech.com>, keguang.zhang@gmail.com,
+        Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH V3 0/7] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+Date:   Thu, 13 Apr 2023 15:57:32 +0800
+Message-Id: <cover.1681370153.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxHuQDtjdk7BciAA--.6706S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uFW5JrWxAryUCryrZw47Jwb_yoW5JF4kpa
+        y3CwnxKr1ktr13Ars3Jrykurn3ZrW3JryDAa17J3y3urZ3Ca4UZa4SyFWFyrsxCr95CFyj
+        qryrGF43Way5CrJanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi all:
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
+released five versions of patchset before, and all related mail records
+are shown below if you are interested:
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+https://lore.kernel.org/all/?q=ls2x-rtc
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+In this series of patches, based on the code above, I have added the
+following support:
 
+1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
+   by default under LoongArch architecture;
+2. Add rtc alarm/walarm related functions.
 
-Pozdrawiam
-Adam Charachuta
+I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA
+and Loongson-2K0500.
+
+BTW:
+As LS1X does not support DT, we will merge LS2X and LS1X after keguang
+has completed DT support for LS1X.
+
+-------
+Changes since v2:
+- Rebase on the top of rtc-next.
+patch(1/7):
+ - The new patch.
+patch(2/7):
+ - Check patchset with "checkpatch.pl --strict";
+ - Drop static inline functions which are used only once, such as
+   ls2x_rtc_regs_to_time;
+ - Remove the suruct ls2x_rtc_regs and regmap_bulk_xxx() is used to read
+   and write rtc registers;
+ - Clear the RTC wakeup interrupt manually;
+ - Enable the RTC in set_time() and check in read_time();
+ - device_get_match_data() is used to get ls2x_pm_offset, for LS2k1000
+   has the different value;
+ - Remove some inexact CONFIG_ACPI;
+ - remove()->remove_new().
+
+Changes since v1:
+1. Rebased on top of latest loongarch-next;
+2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
+errors when the driver gets the IRQ number, Thanks to Qing Zhang for
+testing;
+3. Remove some inexact CONFIG_ACPI.
+
+Thanks.
+
+Binbin Zhou (7):
+  dt-bindings: rtc: Subdivision of LS2X RTC compatible
+  rtc: Add support for the Loongson-2K/LS7A RTC
+  LoongArch: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson64: DTS: Add RTC support to LS7A
+  MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+  MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+
+ .../devicetree/bindings/rtc/trivial-rtc.yaml  |   7 +-
+ arch/loongarch/configs/loongson3_defconfig    |   1 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
+ arch/mips/configs/loongson2k_defconfig        |   1 +
+ arch/mips/configs/loongson3_defconfig         |   1 +
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ls2x.c                        | 345 ++++++++++++++++++
+ 9 files changed, 379 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/rtc/rtc-ls2x.c
+
+-- 
+2.39.1
+
