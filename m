@@ -2,178 +2,181 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63896E1432
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Apr 2023 20:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDBC6E205C
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Apr 2023 12:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjDMSgN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 13 Apr 2023 14:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S229950AbjDNKMX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 14 Apr 2023 06:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDMSgM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 13 Apr 2023 14:36:12 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3AC76A2;
-        Thu, 13 Apr 2023 11:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681410971; x=1712946971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r97ETdLe83X1qhr3CYIugk6zwVDKsPmPWxIRW6Sbhmw=;
-  b=OnIrChrrF8Kgza2FRaYiTkJcsT5lWQu7nlxIS8DkCzN+vnhHiLQDDvpc
-   gOquhVSEJpKUBA6x/xLtwf5BpF5Kc84dgxfZNUgmTr8GHZKTXry2B+zdh
-   PFqIkEoZhmJis3gnumJ4wP/711ZBchDEVS5z+q2+Bb9Ah+AmTxFJhrzz/
-   JwupX31R9DJ0lNTuMutszEZgD5UenJ6Hqn9UEZjjOBHgZiXrU8U6LyPBJ
-   1COCMg+zG+t8078nXibqvDCxDrwy1a8iYGYZBVf4yGp1dxJekGNBxIwyg
-   efXpQuxCUJ+ydOyQRnZ/0DGcuIV4YxCQtSnvcfzuDOzB1beAbEsa6oqO9
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="328411521"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="328411521"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 11:36:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="800906389"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="800906389"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Apr 2023 11:36:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pn1nb-000YsN-19;
-        Thu, 13 Apr 2023 18:35:59 +0000
-Date:   Fri, 14 Apr 2023 02:35:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-rtc@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, Qing Zhang <zhangqing@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>, keguang.zhang@gmail.com,
-        Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: Re: [PATCH V3 2/7] rtc: Add support for the Loongson-2K/LS7A RTC
-Message-ID: <202304140202.URh2nrLx-lkp@intel.com>
-References: <09f381f445cfbcf857845f61d10238452037b2e8.1681370153.git.zhoubinbin@loongson.cn>
+        with ESMTP id S229764AbjDNKMW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Apr 2023 06:12:22 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2493D198D
+        for <linux-rtc@vger.kernel.org>; Fri, 14 Apr 2023 03:12:20 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id j12so696120wrd.2
+        for <linux-rtc@vger.kernel.org>; Fri, 14 Apr 2023 03:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1681467138; x=1684059138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l9MrgycC+Ry3nL7aoyHl4KAfyHmCSmhMmAF9BWsea68=;
+        b=K8HiVTkvSQxJYCI4yW3lnwUkh9jV5x6ObxprMR+WS4aQ7yszLnCibfeNPIks+jXQIa
+         AvQflIkpQDrdhwcGpR8rP2td6lEtZ+sC/LIQ7xKqM8wWgx4hwZdDKcQk8snVi5bRjEdt
+         ucskh0eU9/FGWk9/ynHWjE0EHomwaqa0ppzU1ERakIHGX566VPL1K2eucvuR+vqIPFIm
+         r/iAaeJ49jj9IrlYpVooU2Am1veUjaaZ4X3gTzIn9y2fyn8dqyi/WbVzAZ3+mmtsszQo
+         jR4qalxoQfXeRKHW7lrxxYSrpzwBecTVPPL7CrNrs4uRGfP0TjmrBxB+6Xf5xw2buTme
+         yV0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681467138; x=1684059138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l9MrgycC+Ry3nL7aoyHl4KAfyHmCSmhMmAF9BWsea68=;
+        b=BolmFktnTRIy0hYcsNDolW6UC8zJ75f2u8L5sqWZKLkVnnYnA7wkiVsUuYiaf3s7zC
+         GiYzEAI/bpjfk5Uc8tFUf2l8JgrnP2gdQSF/5aCJxzgPG88rZVrfSOH0eRinJIow9HMg
+         5Q9A9BuVd4NGlYiQ3TEAQXlJCgp5B2h9UJsrtRauok5T4pSX/yFqpsUDno48leOHvdz2
+         LBxuDC6a7+dFH9OUloYvX2/q+KKYhQWUhr996Q1XMSmuadVOYgTtTN1qCRlKrcoaOZaP
+         YbGz5plXUk2EEXqWKVaC1T5YhFdQmuv5bQmTiwjzzJtLAJCjUJphDYVBts1bhtyQle7q
+         4k1g==
+X-Gm-Message-State: AAQBX9djrFmM4yWzgTDghqp+tWKplFW6MpE2f6xNdIIJbmv66Dm0z2IJ
+        +r6n2Dk6f7i53odD5EypGpGUqA==
+X-Google-Smtp-Source: AKy350azRtIEGQUorp2nEiC2k00GEzI7nDxBLPnf6oFvBJz5UtGkzrT4KLPGPoJnElkkDU6h2Exbvg==
+X-Received: by 2002:a05:6000:12c3:b0:2cb:2775:6e6 with SMTP id l3-20020a05600012c300b002cb277506e6mr3489731wrx.45.1681467138545;
+        Fri, 14 Apr 2023 03:12:18 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e34:eca6:27f0:42a5:8f07:826a:465d])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05600c3b0a00b003ef5e5f93f5sm7612923wms.19.2023.04.14.03.12.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 03:12:17 -0700 (PDT)
+From:   Esteban Blanc <eblanc@baylibre.com>
+To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, sterzik@ti.com,
+        u-kumar1@ti.com
+Subject: [PATCH v3 0/3] TI TPS6594 PMIC support (RTC, pinctrl, regulators)
+Date:   Fri, 14 Apr 2023 12:12:14 +0200
+Message-Id: <20230414101217.1342891-1-eblanc@baylibre.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09f381f445cfbcf857845f61d10238452037b2e8.1681370153.git.zhoubinbin@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Binbin,
+TPS6594 is a Power Management IC which provides regulators and others
+features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+communicate through the I2C or SPI interfaces.
+TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
 
-kernel test robot noticed the following build warnings:
+This series adds support to TI TPS6594 PMIC and its derivatives.
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on robh/for-next linus/master v6.3-rc6 next-20230412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This should be applied on top of other patch series:
+- https://lore.kernel.org/all/20230406075622.8990-1-jpanis@baylibre.com/
+  For core MFD driver
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Zhou/dt-bindings-rtc-Subdivision-of-LS2X-RTC-compatible/20230413-155906
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/09f381f445cfbcf857845f61d10238452037b2e8.1681370153.git.zhoubinbin%40loongson.cn
-patch subject: [PATCH V3 2/7] rtc: Add support for the Loongson-2K/LS7A RTC
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230414/202304140202.URh2nrLx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/30ef4691d0ab95241315bf9ba7cf20b7d549b071
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Binbin-Zhou/dt-bindings-rtc-Subdivision-of-LS2X-RTC-compatible/20230413-155906
-        git checkout 30ef4691d0ab95241315bf9ba7cf20b7d549b071
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/rtc/
+The features implemented in this series are:
+- RTC (child device)
+- Pinmux/GPIO (child device)
+- Regulator (child device)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304140202.URh2nrLx-lkp@intel.com/
+RTC description:
+The TPS6594 family has an RTC built-in, except for LP8764.
+It provides time and an alarm.
 
-All warnings (new ones prefixed by >>):
+Pinmux/GPIO:
+TPS6594 family has 11 GPIOs. Those GPIO can also serve different
+functions such as I2C or SPI interface, watchdog disable functions.
+The driver provides both pinmuxing for the functions and GPIO capability.
 
->> drivers/rtc/rtc-ls2x.c:276:25: warning: cast to smaller integer type 'enum ls2x_pm_offset' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           priv->pm_base = regs - (enum ls2x_pm_offset)device_get_match_data(dev);
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Regulator:
+TPS6594/TPS6593: 5 BUCKs and 4LDOs
+LP8764: 4 BUCKs and no LDO
+Bucks can be used in multipahse mode.
 
+Changes since v1:
+https://lore.kernel.org/all/20230224133129.887203-1-eblanc@baylibre.com/
+Rtc:
+- Removed struct tps6594_rtc.
+- Removed some dev_err messages.
+- Removed some comments.
+- Remove some whitespaces in comments and error messages.
+- Check if RTC is running before reading a timestamp in read_rtc.
+- Stop RTC at the end of probe to wait for a timestamp to be set.
+- Add default MFD_TPS6594 to Kconfig.
 
-vim +276 drivers/rtc/rtc-ls2x.c
+Pinctrl:
+- Removed #define DEBUG.
+- Add default MFD_TPS6594 to Kconfig.
+- Fix typo and reword help message of Kconfig.
 
-   249	
-   250	static int ls2x_rtc_probe(struct platform_device *pdev)
-   251	{
-   252		int ret;
-   253		void __iomem *regs;
-   254		struct ls2x_rtc_priv *priv;
-   255		struct device *dev = &pdev->dev;
-   256	
-   257		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-   258		if (!priv)
-   259			return -ENOMEM;
-   260	
-   261		regs = devm_platform_ioremap_resource(pdev, 0);
-   262		if (IS_ERR(regs))
-   263			return dev_err_probe(dev, PTR_ERR(regs),
-   264					     "devm_platform_ioremap_resource failed\n");
-   265	
-   266		priv->regmap = devm_regmap_init_mmio(dev, regs,
-   267						     &ls2x_rtc_regmap_config);
-   268		if (IS_ERR(priv->regmap))
-   269			return dev_err_probe(dev, PTR_ERR(priv->regmap),
-   270					     "devm_regmap_init_mmio failed\n");
-   271	
-   272		device_init_wakeup(dev, 1);
-   273		spin_lock_init(&priv->lock);
-   274		platform_set_drvdata(pdev, priv);
-   275	
- > 276		priv->pm_base = regs - (enum ls2x_pm_offset)device_get_match_data(dev);
-   277	
-   278		if (has_acpi_companion(dev))
-   279			acpi_install_fixed_event_handler(ACPI_EVENT_RTC,
-   280							 ls2x_rtc_handler, priv);
-   281	
-   282		priv->rtcdev = devm_rtc_allocate_device(dev);
-   283		if (IS_ERR(priv->rtcdev))
-   284			return dev_err_probe(dev, PTR_ERR(priv->rtcdev),
-   285					     "devm_rtc_allocate_device failed\n");
-   286	
-   287		priv->rtcdev->ops = &ls2x_rtc_ops;
-   288		priv->rtcdev->range_min = RTC_TIMESTAMP_BEGIN_2000;
-   289		priv->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
-   290	
-   291		priv->irq = platform_get_irq(pdev, 0);
-   292		if (priv->irq < 0)
-   293			return dev_err_probe(dev, priv->irq, "platform_get_irq failed\n");
-   294	
-   295		ret = devm_request_irq(dev, priv->irq, ls2x_rtc_isr,
-   296				       IRQF_TRIGGER_RISING, "ls2x-alarm", priv);
-   297		if (ret < 0)
-   298			return dev_err_probe(dev, ret, "Unable to request irq %d\n",
-   299					     priv->irq);
-   300	
-   301		return devm_rtc_register_device(priv->rtcdev);
-   302	}
-   303	
+Regulators:
+Further to Mark Brown review:
+- File header whole block C++ style.
+- Configuring modes not supported: omit all mode operations
+- Log the error before notifying.
+- Request the interrupts while registering the regulators (then remove
+  the lookup function).
+Further to Matti review:
+- Postponed: devm_regulator_irq_helper() and
+  regulator_irq_map_event_simple() can probably be used but code.
+  refactoring is not so trivial. This can be done later as an enhancement
+  after this patch list is merged.
+Buck Multi phase management:
+- Multiphase property can take an array when 2 multi phase buck, buck12
+  and buck34.
+- Configuration multi phase buck34 without multiphase buck12 is not
+  supported (when only one multiphase, must be buck12). Not clear from the
+  spec but confirmed by TI.
+- Supported multiphase conficurations: buck12, buck123, buck1234,
+  buck12 + buck34.
+- All interrupts are attached to the multiphase buck (ie: for regulator
+  buck12, buck1 & buck2 interrupts are registered).
+
+Changes since v2:
+https://lore.kernel.org/all/20230328091448.648452-1-eblanc@baylibre.com/
+Rtc:
+- Add logic to avoid reinitializing a working clock.
+- Fix some multiline comments format.
+
+Regulators:
+Further to Mark Brown review:
+- Log the error before notifying.
+- Request the interrupts while registering the regulators.
+Further to Krzysztof Kozlowski:
+https://lore.kernel.org/all/75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com/
+- Remove ti, multi-phase-id property which is redundant with buck dts naming
+  rules.
+
+Esteban Blanc (2):
+  rtc: tps6594: add driver for TPS6594 PMIC RTC
+  pinctrl: tps6594: add for TPS6594 PMIC
+
+Jerome Neanne (1):
+  regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
+
+ drivers/pinctrl/Kconfig               |  10 +
+ drivers/pinctrl/Makefile              |   1 +
+ drivers/pinctrl/pinctrl-tps6594.c     | 365 +++++++++++++++
+ drivers/regulator/Kconfig             |  13 +
+ drivers/regulator/Makefile            |   1 +
+ drivers/regulator/tps6594-regulator.c | 620 ++++++++++++++++++++++++++
+ drivers/rtc/Kconfig                   |   9 +
+ drivers/rtc/Makefile                  |   1 +
+ drivers/rtc/rtc-tps6594.c             | 473 ++++++++++++++++++++
+ 9 files changed, 1493 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
+ create mode 100644 drivers/regulator/tps6594-regulator.c
+ create mode 100644 drivers/rtc/rtc-tps6594.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
