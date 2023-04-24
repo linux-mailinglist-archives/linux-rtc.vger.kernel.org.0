@@ -2,59 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0DB6ED1D3
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 Apr 2023 17:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F326ED268
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 Apr 2023 18:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjDXP4c (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 24 Apr 2023 11:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
+        id S231992AbjDXQZx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 24 Apr 2023 12:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjDXP4b (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 Apr 2023 11:56:31 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE69E422A;
-        Mon, 24 Apr 2023 08:56:30 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6a5f765d5b8so3542757a34.3;
-        Mon, 24 Apr 2023 08:56:30 -0700 (PDT)
+        with ESMTP id S232016AbjDXQZw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 Apr 2023 12:25:52 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674399008;
+        Mon, 24 Apr 2023 09:25:50 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-187fc21f6acso1621934fac.2;
+        Mon, 24 Apr 2023 09:25:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682351790; x=1684943790;
+        d=1e100.net; s=20221208; t=1682353549; x=1684945549;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ospy+0e+g7CaAevMAfgtm5j51EvWWuU+Q6as+suKlmE=;
-        b=bE8JLpTL2Yp/X4bq787vES61o+o+x62tCx98JpdQ9CV0teWrqzr7EFh1oI4vtsp/Fk
-         HKea0FdkpuUnucvJtCVP67a+nhUwpKgEfyZgEFuw/egnP2tYh8NqmLIm7xW1SwVscu5U
-         I+vrgjKwryW1PDRiDBsPFPxN1+65sDwfV96EIKwX4rYn0kHRKK/x1GUKrrFucEz39LVE
-         dtgYKkbn5xAUUXrxgKtL7s9aOD48wpnCHvhJcdIJLLlbTCqdidTzM3+Pxsjnm1DmBG3J
-         tXTRFFmaRAfh2xNtIwzJtZAjW7oqMsWIF9NYjQA3GXvjD2SmjfPtayjMyjnekRWsdTPG
-         2ZpQ==
-X-Gm-Message-State: AAQBX9eGggcBnqjJCPIYNPQj7fjObIkEZSOoe/raD23hcI//JS0sxsH+
-        3e2oeh+IYvjWEJwOnGqICTPexjl9kQ==
-X-Google-Smtp-Source: AKy350aQBab5M7kAF+uXaFdNg48iN7n8UM9QhRUPI5ShiaOukm/0Mb2cnXeg2yclCJr4/1Y7Yv2L+Q==
-X-Received: by 2002:a9d:7415:0:b0:6a5:ff5f:f923 with SMTP id n21-20020a9d7415000000b006a5ff5ff923mr7803527otk.29.1682351790171;
-        Mon, 24 Apr 2023 08:56:30 -0700 (PDT)
+        bh=FYc7VTBHaoCcnGKGN3LHqqJbrueJDpL55HrA0KKEtPA=;
+        b=hxYE3bZhVJmFkAulSQbyrQlPogxO9iln+wQpma1IjVSCpee3/DruKjETI3FhNjK21D
+         9SKm4c4OgfQzyx7f9ByeTYHO+K7xGv5V3jQQrzHvGCEMuefEcw46jUXlG5OpJDUIFX2u
+         ckOKdhT+XGlENm8A6eyX3WiGB2AgXshB5GtGcYm2QCYrIyYM5w98MZDYtqpke8ADTVV3
+         EttngL6LEo21CsToFBFifd+NQipSvNzqxRx1PqZrCAK9rc2EJBnotaWf7Jxbgi5Jx7pf
+         gbTDabZePoUJSRm/WdXv3BLN74XJWjDH0Cyx/MBkTyu0FArvNltgzBwZFoXfJH81dppy
+         uMLA==
+X-Gm-Message-State: AAQBX9dXIbOpsJFNtG6s2SNpynPZ5PAuj+D/eFiKWTD+G7KhJBGZjtbM
+        X/3LLfb5By78geUZSN96Eg==
+X-Google-Smtp-Source: AKy350Yfaz+VuSxsA/jla5dgW+ksuw/am73QFaYWILnHxGr7pfffiqli1vQtsVp5llqNffj1A0VhZw==
+X-Received: by 2002:a05:6870:eca7:b0:184:37a:41f5 with SMTP id eo39-20020a056870eca700b00184037a41f5mr10084299oab.30.1682353549506;
+        Mon, 24 Apr 2023 09:25:49 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h5-20020a9d6405000000b006a65be836acsm1417089otl.16.2023.04.24.08.56.29
+        by smtp.gmail.com with ESMTPSA id s129-20020a4a5187000000b005252e5b6604sm5028167ooa.36.2023.04.24.09.25.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 08:56:29 -0700 (PDT)
-Received: (nullmailer pid 2704587 invoked by uid 1000);
-        Mon, 24 Apr 2023 15:56:29 -0000
-Date:   Mon, 24 Apr 2023 10:56:29 -0500
+        Mon, 24 Apr 2023 09:25:49 -0700 (PDT)
+Received: (nullmailer pid 2777356 invoked by uid 1000);
+        Mon, 24 Apr 2023 16:25:48 -0000
+Date:   Mon, 24 Apr 2023 11:25:48 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Nikita Shubin <nikita.shubin@maquefel.me>
 Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/43] rtc: ep93xx: add DT support for Cirrus EP93xx
-Message-ID: <20230424155629.GA2701399-robh@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 28/43] dt-bindings: rtc: Add DT binding m48t86 rtc
+Message-ID: <20230424162548.GI2701399-robh@kernel.org>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-9-nikita.shubin@maquefel.me>
+ <20230424123522.18302-29-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424123522.18302-9-nikita.shubin@maquefel.me>
+In-Reply-To: <20230424123522.18302-29-nikita.shubin@maquefel.me>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -66,52 +68,63 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 03:34:24PM +0300, Nikita Shubin wrote:
-> - Find register range from the device tree.
+On Mon, Apr 24, 2023 at 03:34:44PM +0300, Nikita Shubin wrote:
+> Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
 > 
 > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 > ---
+>  .../bindings/rtc/dallas,rtc-m48t86.yaml       | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml
 > 
-> Notes:
->     Arnd Bergmann:
->     - wildcards ep93xx to something meaningful, i.e. ep9301
->     - drop wrappers
-> 
->  drivers/rtc/rtc-ep93xx.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-ep93xx.c b/drivers/rtc/rtc-ep93xx.c
-> index acae7f16808f..8bda20a4940a 100644
-> --- a/drivers/rtc/rtc-ep93xx.c
-> +++ b/drivers/rtc/rtc-ep93xx.c
-> @@ -8,6 +8,7 @@
->  
->  #include <linux/module.h>
->  #include <linux/rtc.h>
-> +#include <linux/of.h>
-
-linux/mod_devicetable.h is the actual header you depend on.
-
->  #include <linux/platform_device.h>
->  #include <linux/io.h>
->  #include <linux/gfp.h>
-> @@ -148,9 +149,16 @@ static int ep93xx_rtc_probe(struct platform_device *pdev)
->  	return devm_rtc_register_device(ep93xx_rtc->rtc);
->  }
->  
-> +static const struct of_device_id ep93xx_rtc_of_ids[] = {
-> +	{ .compatible = "cirrus,ep9301-rtc" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, ep93xx_rtc_of_ids);
+> diff --git a/Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml b/Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml
+> new file mode 100644
+> index 000000000000..51f98bdbc385
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/dallas,rtc-m48t86.yaml
+> @@ -0,0 +1,33 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/dallas,rtc-m48t86.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  static struct platform_driver ep93xx_rtc_driver = {
->  	.driver		= {
->  		.name	= "ep93xx-rtc",
-> +		.of_match_table = ep93xx_rtc_of_ids,
->  	},
->  	.probe		= ep93xx_rtc_probe,
->  };
+> +title: ST M48T86 / Dallas DS12887 RTC bindings
+> +
+> +maintainers:
+> +  - Alessandro Zummo <a.zummo@towertech.it>
+> +
+> +properties:
+> +  compatible:
+> +    const: dallas,rtc-m48t86
+
+'rtc-' is redundant. And haven't you mixed up the vendor and part 
+number? It should be dallas,ds12887 and/or st,m48t86?
+
+This can probably go in the trivial rtc binding.
+
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    rtc1: rtc@10800000 {
+
+Drop unused labels.
+
+> +        compatible = "dallas,rtc-m48t86";
+> +        reg = <0x10800000 0x1>, <0x11700000 0x1>;
+> +    };
+> +
+> +...
+> +
 > -- 
 > 2.39.2
 > 
