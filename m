@@ -2,164 +2,126 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D066EDF0D
-	for <lists+linux-rtc@lfdr.de>; Tue, 25 Apr 2023 11:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E106EDF30
+	for <lists+linux-rtc@lfdr.de>; Tue, 25 Apr 2023 11:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjDYJU6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 25 Apr 2023 05:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S233612AbjDYJ2j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 25 Apr 2023 05:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232854AbjDYJU4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 25 Apr 2023 05:20:56 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2829940E0
-        for <linux-rtc@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-958bb7731a9so558863766b.0
-        for <linux-rtc@vger.kernel.org>; Tue, 25 Apr 2023 02:20:51 -0700 (PDT)
+        with ESMTP id S231989AbjDYJ2h (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 25 Apr 2023 05:28:37 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F143A85
+        for <linux-rtc@vger.kernel.org>; Tue, 25 Apr 2023 02:28:36 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50506ac462bso8220452a12.3
+        for <linux-rtc@vger.kernel.org>; Tue, 25 Apr 2023 02:28:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682414449; x=1685006449;
+        d=linaro.org; s=google; t=1682414915; x=1685006915;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
-        b=wOvkX2oC5ZHyFMdylx8IkrryNZeg23DU/Ch9AChLKbcB/sx0DFV8Yb/H7vUSsHm/ay
-         6vKeAhZHqi4KvKzBL9RsojhjUK4oU8lb+V+mupjRsr3d4Ozv9ezhvySx+DHEhqR+hjMA
-         gaiJOqLYT51c8eBo6o+cG8x82KOH/6WDLxVffZqZup0JrvMaRV4XDFiPQxHmTy81GMpM
-         QIfjcv/pPcyMi1TiLUVU+h31xU2FfOzqmTSR6PnZ45uP7vvaFC3j0EA3bBbvXBOdzaR3
-         fHRbyuMSy1Dp046zUXSSm/0Gjosdxp/aEC/NPYM4X7lNjpFDITb7o57bkR9W209v9XtR
-         w4rg==
+        bh=jATRlbjXv5J+rEp492wNPd1HzXNCpPqK/mHv12ah7jo=;
+        b=U6wrCMhlhs3lK2GT2Q6zJRS74H8+DpdTbKJ7VhiKEkxpAbStuZUYTlajchnT2wyaK5
+         S+8v3hlHMsjea0L6q/7bfM5OlzsT+uIb56SwiSqvJUyEKJVx449i9d/reE4qM8HG0kv/
+         yNUV8Fk1D9eHz+wEDc6NatiLFSwOI75HZa3P/EkjgQz0qUWoxWLpjtai4AY5SpKHEk2k
+         vUdKDkPz/5Z9ZfYm3EfOGw1R2NxNGs0zFABFduFJRiq728amWxtTKBKxVFi/tNbv9XQF
+         PyIVwu7zedxxeJV9rVZJFC046JX0x+OM3CRdMd8B9R6oLe6ikNBYV0v3by5tVWO+pETS
+         uxfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682414449; x=1685006449;
+        d=1e100.net; s=20221208; t=1682414915; x=1685006915;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WsdCNQzIoPz+lH63xj1YaKKNKo3iDm5pfw23qiYoBOQ=;
-        b=AYpoRV/hmNXvpIzlS0zcPBcCQg2243Ee6Wb5zFaaCcfOPceJtMWrc4F7zwt26jjYAA
-         py6ri1BjyenEEkXyE2RqhRoogutzN7h7MqfbBD6Nq9Hwr+uHtFZSLjKBf1UyIcysxuHq
-         Ja4rkAqcUivnf7XvTMWvtkJQlksMmEvyGVVCzuGsuAGJ6rj0rOsRRGlmgeNihQFIyF+K
-         GujLukcQuKP9YrdIalFi4sjuOuRMeK2RR2/oQw9M9dljMo3TgFsnr9LnYo49c6TLjM2x
-         OcHgyCAqNKKpSKc07qMEkvk/tfXypnH8Akr+kgcN/XnDJHGekxci5kS3ts8bUocbArdV
-         /eug==
-X-Gm-Message-State: AAQBX9dTW2ZUTdCZWjZMH6iIIpOvDa5RjLjAtuNDM5Jav5TyGRSdeOYX
-        OnmwdKf+jOwdluiFrPDyqz5wUQ==
-X-Google-Smtp-Source: AKy350YuXymrw7So4UOjZjef+iEPyi/CshywTQ5AjTJZJr/4WaSMcccmVMSSXrgcRBO0CsBCTlwDVg==
-X-Received: by 2002:a17:907:b9d9:b0:94f:1a23:2f1c with SMTP id xa25-20020a170907b9d900b0094f1a232f1cmr14815686ejc.50.1682414449568;
-        Tue, 25 Apr 2023 02:20:49 -0700 (PDT)
+        bh=jATRlbjXv5J+rEp492wNPd1HzXNCpPqK/mHv12ah7jo=;
+        b=VggIggjhGzoJFxiSCHTrfJUz8MdbkcvOMC9YiHA4CktZT7j+LvqpueZpk6o98lmj1r
+         W8xCO0Alwp2H/W5gkbYOwgRt2pV0p/9UL6eNeePkaEawL1rg7rWsfTugpSP19n+loyyM
+         fAG920XwA0i/RQ8FqeEtBi0zG9P/o4luWW7iDWQq39La+yxL7sCak5IzQZZFl5gAbqbW
+         MmfWaLcrfzg2JUFDNEdaGrH+fDGyOx1FWgOh92QFGUsX/YZwEDoomn5w4Lj3yKP/yqE9
+         tuvbFopUynrfmIcDwr7IuHpUfuHo3q9++FhBv6z5r2PMhfeldRQYC2E/syPXHWAJ5TXl
+         v7KA==
+X-Gm-Message-State: AAQBX9fUjNvkC+M/32tlANySSjPtH8y1tLkfnH3Hi2QuC13ZQ5dlbAR1
+        p7hw2xL6hRNHngWSW4DXhn9pgGPn5/KMvk9kePSpEeFJ
+X-Google-Smtp-Source: AKy350bpVOT/qCWlTtSfAS77lfzKvlDUH4Ja386ohyjISP/id/ad2bl27gQyQJ1quqMcOLW79J/yPA==
+X-Received: by 2002:aa7:d494:0:b0:506:6c4d:3292 with SMTP id b20-20020aa7d494000000b005066c4d3292mr13157772edr.25.1682414914811;
+        Tue, 25 Apr 2023 02:28:34 -0700 (PDT)
 Received: from [192.168.9.102] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170906828b00b0094f23480619sm6620286ejx.172.2023.04.25.02.20.47
+        by smtp.gmail.com with ESMTPSA id t1-20020aa7d4c1000000b005066cadcc54sm5486122edr.43.2023.04.25.02.28.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 02:20:48 -0700 (PDT)
-Message-ID: <0210316b-9e21-347c-ed15-ce8200aeeb94@linaro.org>
-Date:   Tue, 25 Apr 2023 11:20:46 +0200
+        Tue, 25 Apr 2023 02:28:34 -0700 (PDT)
+Message-ID: <9e7583be-ad4a-0ccc-08f6-cdf3fa4ed6bd@linaro.org>
+Date:   Tue, 25 Apr 2023 11:28:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+Subject: Re: [PATCH 07/43] dt-bindings: rtc: add DT bindings for Cirrus EP93xx
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Brian Norris <briannorris@chromium.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Richard Weinberger <richard@nod.at>,
         Rob Herring <robh+dt@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        soc@kernel.org
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <8101c53e-e682-4dc3-95cc-a332b1822b8b@app.fastmail.com>
- <20230424152933.48b2ede1@kernel.org>
+ <20230424123522.18302-8-nikita.shubin@maquefel.me>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230424152933.48b2ede1@kernel.org>
+In-Reply-To: <20230424123522.18302-8-nikita.shubin@maquefel.me>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 25/04/2023 00:29, Jakub Kicinski wrote:
-> On Mon, 24 Apr 2023 13:31:25 +0200 Arnd Bergmann wrote:
->> Thanks a lot for your continued work. I can't merge any of this at
->> the moment since the upstream merge window just opened, but I'm
->> happy to take this all through the soc tree for 6.5, provided we
->> get the sufficient Acks from the subsystem maintainers. Merging
->> it through each individual tree would take a lot longer, so I
->> hope we can avoid that.
-> 
-> Is there a dependency between the patches?
+On 24/04/2023 14:34, Nikita Shubin wrote:
+> This adds device tree bindings for the Cirrus Logic EP93xx
+> RTC block used in these SoCs.
 
-I didn't get entire patchset and cover letter does not mention
-dependencies, but usually there shouldn't be such. Maybe for the next
-versions this should be split per subsystem?
+Thank you for your patch. There is something to discuss/improve.
+
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+>  .../bindings/rtc/cirrus,ep93xx-rtc.yaml       | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml b/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+> new file mode 100644
+> index 000000000000..d4774e984e7b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+> @@ -0,0 +1,32 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/cirrus,ep93xx-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cirrus EP93xx Real Time Clock controller
+> +
+> +maintainers:
+> +  - Hartley Sweeten <hsweeten@visionengravers.com>
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: cirrus,ep9301-rtc
+
+Why only one compatible? What about ep9307 and ep9312? The same question
+for your previous patch - timer.
+
+Anyway, if you want to keep it like that, then filename should match
+compatible. Or merge it into trivial-rtc like Alexandre suggested.
 
 Best regards,
 Krzysztof
