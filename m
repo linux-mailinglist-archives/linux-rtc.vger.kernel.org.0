@@ -2,180 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3236F0C5B
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Apr 2023 21:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFC46F0E60
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Apr 2023 00:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244308AbjD0TJ6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 27 Apr 2023 15:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S1344053AbjD0WmR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 27 Apr 2023 18:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244687AbjD0TJ5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Apr 2023 15:09:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01E79E;
-        Thu, 27 Apr 2023 12:09:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BE9D63F22;
-        Thu, 27 Apr 2023 19:09:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAF8C433EF;
-        Thu, 27 Apr 2023 19:09:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682622594;
-        bh=4MuGyWTQQD8YDc9ZDP5EuTvCXfhs1RGXEGefTe8GbFs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OEyoAdAg2oHj1kpUaFAUQnORGNgUcMTwXna94WirWc4/7OFURAmKcVKLlVxGAFkME
-         toxsg2t0o0U7Q+9nKKAWfOe1B/t1z3g1kRabot2L3KU7VvngL293h0JsGHTQ534ZJP
-         wb/t5pQP0ryuyOaWJAQ0Akswuclq647TVGmt1KHHbj8adW21pY6mXqBy4ogxoG3XiT
-         nl8v4DuX6FhDVh3IAmmeTltphT6HmwSaAdaxUAAee3iYvoH2HR36H28EF1sUk2sy35
-         kac9ZjDMYlfFNHS8ZZYJ4TPcDUlbU3BEvZYy9X6SsaJklf3YKOr0nvFwrR0eNy/XBZ
-         ccVK16xunjKbA==
-Message-ID: <57dd81d0-510e-0fab-670d-1109eb8dd974@kernel.org>
-Date:   Thu, 27 Apr 2023 14:09:48 -0500
+        with ESMTP id S229870AbjD0WmP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Apr 2023 18:42:15 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E7CC0;
+        Thu, 27 Apr 2023 15:42:12 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B7872E0007;
+        Thu, 27 Apr 2023 22:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682635330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vuOyXz5JVpVmfnHiWfsKmhETCfXaasy0XMv5v+E9ol4=;
+        b=X8BBH/TSW/xzv5EVaVXh6SXzBU6yfzv5Nbk9TyUIoIsdEO3kNgx5Ug06FwhVYAGNCqBX5T
+        sZGFMq9v4HMx2GTXA9cZyWfrx1UId2Vm4sSN3MvKXPlPwDcr0y2jUtWBr9mGssCdERNRH6
+        tJONXuxx3e8YA556mCr+urM7Rjs4rvuK0kRnJBqjyrBC1s5hS2dCvcAw/XIlC205fth9BN
+        xwpgkmh88iNMc62UqVswueX7Vo4brA1XDHu/6Aug8lJ9PwR3gnFK5kJSKSAdnEEqWoS8nR
+        OxTcIvDOOTK0jp87fYqhMTLPV24LFk+HOU4tcGpeay5o72p4NvhhLhAjn4uTFw==
+Date:   Fri, 28 Apr 2023 00:42:09 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
+Message-ID: <168263530235.78879.11958237032842726405.b4-ty@bootlin.com>
+References: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 29/65] clk: socfpga: gate: Add a determine_rate hook
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
- <679921ee-98d4-d6ef-5934-e009fd4b31fc@kernel.org>
- <sjlp5ubnpvulgwhhymmfkmmobkgxacyqwagqozodkee3di2qik@3igj6k3zgbk6>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <sjlp5ubnpvulgwhhymmfkmmobkgxacyqwagqozodkee3di2qik@3igj6k3zgbk6>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Maxime,
 
-On 4/25/23 09:48, Maxime Ripard wrote:
-> Hi Dinh,
+On Fri, 07 Apr 2023 17:03:03 +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
 > 
-> On Mon, Apr 24, 2023 at 01:32:28PM -0500, Dinh Nguyen wrote:
->> On 4/4/23 05:11, Maxime Ripard wrote:
->>> The SoCFGPA gate clock implements a mux with a set_parent hook, but
->>> doesn't provide a determine_rate implementation.
->>>
->>> This is a bit odd, since set_parent() is there to, as its name implies,
->>> change the parent of a clock. However, the most likely candidate to
->>> trigger that parent change is a call to clk_set_rate(), with
->>> determine_rate() figuring out which parent is the best suited for a
->>> given rate.
->>>
->>> The other trigger would be a call to clk_set_parent(), but it's far less
->>> used, and it doesn't look like there's any obvious user for that clock.
->>>
->>> So, the set_parent hook is effectively unused, possibly because of an
->>> oversight. However, it could also be an explicit decision by the
->>> original author to avoid any reparenting but through an explicit call to
->>> clk_set_parent().
->>>
->>> The latter case would be equivalent to setting the flag
->>> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
->>> to __clk_mux_determine_rate(). Indeed, if no determine_rate
->>> implementation is provided, clk_round_rate() (through
->>> clk_core_round_rate_nolock()) will call itself on the parent if
->>> CLK_SET_RATE_PARENT is set, and will not change the clock rate
->>> otherwise. __clk_mux_determine_rate() has the exact same behavior when
->>> CLK_SET_RATE_NO_REPARENT is set.
->>>
->>> And if it was an oversight, then we are at least explicit about our
->>> behavior now and it can be further refined down the line.
->>>
->>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>> ---
->>>    drivers/clk/socfpga/clk-gate.c | 3 ++-
->>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
->>> index 32ccda960f28..cbba8462a09e 100644
->>> --- a/drivers/clk/socfpga/clk-gate.c
->>> +++ b/drivers/clk/socfpga/clk-gate.c
->>> @@ -110,6 +110,7 @@ static unsigned long socfpga_clk_recalc_rate(struct clk_hw *hwclk,
->>>    static struct clk_ops gateclk_ops = {
->>>    	.recalc_rate = socfpga_clk_recalc_rate,
->>> +	.determine_rate = __clk_mux_determine_rate,
->>>    	.get_parent = socfpga_clk_get_parent,
->>>    	.set_parent = socfpga_clk_set_parent,
->>>    };
->>> @@ -166,7 +167,7 @@ void __init socfpga_gate_init(struct device_node *node)
->>>    	init.name = clk_name;
->>>    	init.ops = ops;
->>> -	init.flags = 0;
->>> +	init.flags = CLK_SET_RATE_NO_REPARENT;
->>>    	init.num_parents = of_clk_parent_fill(node, parent_name, SOCFPGA_MAX_PARENTS);
->>>    	if (init.num_parents < 2) {
->>>
->>
->> This patch broke SoCFPGA boot serial port. The characters are mangled.
-> 
-> Do you have any other access to that board? If so, could you dump
-> clk_summary in debugfs with and without that patch?
 > 
 
-That dump from the clk_summary are identical for both cases.
+Applied, thanks!
+
+[1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
+      commit: 4c3f19ce70d7a008953a8d2e9584a20c328699c6
+[2/4] rtc: ds3232: constify pointers to hwmon_channel_info
+      commit: e4133995fe80251ad2abb0261745ea27ab97c2e7
+[3/4] rtc: isl12022: constify pointers to hwmon_channel_info
+      commit: a176de9fffcb97ee885b2ade3dbb23dc9be33b29
+[4/4] rtc: rv3032: constify pointers to hwmon_channel_info
+      commit: eaa9cec95de9405ee7400e8888e6d3d42173df28
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
