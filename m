@@ -2,81 +2,117 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A479A6F16CA
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Apr 2023 13:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C906F16DC
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Apr 2023 13:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345885AbjD1LbK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 28 Apr 2023 07:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S230435AbjD1Lfp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 28 Apr 2023 07:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345880AbjD1LbJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Apr 2023 07:31:09 -0400
-Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C4A55A1
-        for <linux-rtc@vger.kernel.org>; Fri, 28 Apr 2023 04:31:07 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:b14:0:640:93f9:0])
-        by forward500c.mail.yandex.net (Yandex) with ESMTP id 1FC2D5E7B0;
-        Fri, 28 Apr 2023 14:31:01 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id xUHfdw0DZ8c0-MMVwmCQb;
-        Fri, 28 Apr 2023 14:31:00 +0300
+        with ESMTP id S231822AbjD1Lfo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Apr 2023 07:35:44 -0400
+Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [178.154.239.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEBC59F5;
+        Fri, 28 Apr 2023 04:35:40 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:d315:0:640:bb64:0])
+        by forward502b.mail.yandex.net (Yandex) with ESMTP id 40E245EB4F;
+        Fri, 28 Apr 2023 14:35:38 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id aZHRVt0Wo8c0-ZH0b4yvg;
+        Fri, 28 Apr 2023 14:35:37 +0300
 X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682681460;
-        bh=NwxRsu8ht1atvOJT+L90HFqBBiIpbm8MFFmBYW6Zgcg=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682681737;
+        bh=CCx18jxXnQWO9tYFjWm/WdccOn5/RZF/6RqlULR1c7g=;
         h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-        b=FNHvO6bWnBk2y/dQjZHyQBjMkk+QLTdaJbEjCUYIs+penWxplDFFFO+dB4tCQ/fMo
-         jflzbouhJVv943orvd+aW26rts+UcxB08FeMf6IWBccjPGi5drQF9nfeaCxYJQUmQf
-         PBVDDgNLnEzcNYdu9WyzcTAlgqQvROmLS3cS/MIs=
-Authentication-Results: mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <bd4554f1910ba253d7833bae99d7c00b9098eae2.camel@maquefel.me>
-Subject: Re: [PATCH 29/43] rtc: m48t86: add DT support for m48t86
+        b=Q+zmdGt0nz+3XBM3dGR1j8w0Te+iwZ5NERi58hbhOz/nbbFlaHemMnDcfTPT4a8ET
+         xoDaVzXGqPa7tKcRK7ch4kfXbt+25hIVPmnp+Oh80Xb+ypEf9C1rw7BXDbngCd9BZp
+         BogMcMnPSjbZRlxUMigYMBk6UTi5TpR+OEbNg9LM=
+Authentication-Results: mail-nwsmtp-smtp-production-main-31.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <d1b7f24604332cf6010f533898f96eb9be4bb686.camel@maquefel.me>
+Subject: Re: [PATCH 07/43] dt-bindings: rtc: add DT bindings for Cirrus
+ EP93xx
 From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     andy.shevchenko@gmail.com
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 28 Apr 2023 17:31:01 +0300
-In-Reply-To: <ZEkozMAM674O2r7e@surfacebook>
+        Rob Herring <robh+dt@kernel.org>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 28 Apr 2023 17:35:38 +0300
+In-Reply-To: <9e7583be-ad4a-0ccc-08f6-cdf3fa4ed6bd@linaro.org>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230424123522.18302-30-nikita.shubin@maquefel.me>
-         <ZEkozMAM674O2r7e@surfacebook>
+         <20230424123522.18302-8-nikita.shubin@maquefel.me>
+         <9e7583be-ad4a-0ccc-08f6-cdf3fa4ed6bd@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 2023-04-26 at 16:36 +0300, andy.shevchenko@gmail.com wrote:
-> Mon, Apr 24, 2023 at 03:34:45PM +0300, Nikita Shubin kirjoitti:
-> > - get regs from device tree
+On Tue, 2023-04-25 at 11:28 +0200, Krzysztof Kozlowski wrote:
+> On 24/04/2023 14:34, Nikita Shubin wrote:
+> > This adds device tree bindings for the Cirrus Logic EP93xx
+> > RTC block used in these SoCs.
 >=20
-> ...
+> Thank you for your patch. There is something to discuss/improve.
 >=20
-> > +#include <linux/of.h>
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> > ---
+> > =C2=A0.../bindings/rtc/cirrus,ep93xx-rtc.yaml=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 32
+> > +++++++++++++++++++
+> > =C2=A01 file changed, 32 insertions(+)
+> > =C2=A0create mode 100644
+> > Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-
+> > rtc.yaml b/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-
+> > rtc.yaml
+> > new file mode 100644
+> > index 000000000000..d4774e984e7b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/rtc/cirrus,ep93xx-rtc.yaml
+> > @@ -0,0 +1,32 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/rtc/cirrus,ep93xx-rtc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Cirrus EP93xx Real Time Clock controller
+> > +
+> > +maintainers:
+> > +=C2=A0 - Hartley Sweeten <hsweeten@visionengravers.com>
+> > +=C2=A0 - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> > +
+> > +properties:
+> > +=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0 const: cirrus,ep9301-rtc
 >=20
-> mod_devicetable.h and drop ugly ifdeffery along with of_match_ptr().
+> Why only one compatible? What about ep9307 and ep9312? The same
+> question
+> for your previous patch - timer.
 >=20
-> ...
+> Anyway, if you want to keep it like that, then filename should match
+> compatible. Or merge it into trivial-rtc like Alexandre suggested.
+
+I think i should move it to trivial-rtc - there is no need for a
+separate file.
+
+
 >=20
-> > +static const struct of_device_id m48t86_rtc_of_ids[] =3D {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "dallas,rt=
-c-m48t86" },
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ /* end of table */ },
->=20
-> No comma for the terminator entry
->=20
-> > +};
+> Best regards,
+> Krzysztof
 >=20
 
-Thanks you for all your comments and effort!
-
-All will be fixed conforming your comments.
