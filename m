@@ -2,186 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965A16F56A3
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 May 2023 12:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BFE6F573F
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 May 2023 13:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjECK5D (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 3 May 2023 06:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S229711AbjECLhN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 3 May 2023 07:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjECK5B (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 3 May 2023 06:57:01 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD11A3C01;
-        Wed,  3 May 2023 03:56:56 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3E5E91C000C;
-        Wed,  3 May 2023 10:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683111414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CEImU2OtlqI7/+mhE+uS0nyEZGmW4Lt1EbENk6B3Q58=;
-        b=KOjVQnR50buLkGjEL7Wd4oalR34sBdp2WhfpEYG1/s2fz/HXtJCSee+EsSze/uyzaBrfnx
-        Zt4uBy66BwRPjfxpYm5OcWLPB2mVLLONCXBHnIO6kTUI7/P27EUdNKt7MK8w8yo6v5nwym
-        mOgGfSKKZ/IljqzsCuI3lNEoP2+bgXW9PkarzZWP4tIIqIlPff8goHQfdYBs3GQOx/3cne
-        gZb6tRXDjs4EyZpFjE3O2xztJgMXAsGh0tgmF4EuSaFH0o10dQD2fDXeolNVM66Lby0Q24
-        5AX/ChmywKwFjPYm+flovvijceV01+XLOYVFmlh9BHqIDiBtM4dQi+rGGxAlxQ==
-Date:   Wed, 3 May 2023 12:56:49 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lee Jones <lee@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: Re: [PATCH RFC 5/6] rtc: isl1208: Add support for the built-in RTC
- on the PMIC RAA215300
-Message-ID: <20230503105649cd039d9a@mail.local>
-References: <20230503084608.14008-1-biju.das.jz@bp.renesas.com>
- <20230503084608.14008-6-biju.das.jz@bp.renesas.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230503084608.14008-6-biju.das.jz@bp.renesas.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229575AbjECLhK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 3 May 2023 07:37:10 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F186359E5
+        for <linux-rtc@vger.kernel.org>; Wed,  3 May 2023 04:37:07 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30639daee76so1299225f8f.1
+        for <linux-rtc@vger.kernel.org>; Wed, 03 May 2023 04:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683113826; x=1685705826;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ElfKrvCpInhLz/Z11HONGQ5ugEk4h7txKdzMFSSJ7WI=;
+        b=3YMjtCt+YEx9MHKvkBysT1EG56mO+Vo+YpW/LTWjsGLyLxMn4K1HSNucKEXLONZNCS
+         WlRhlXGKcOJD4M45LldidayZsG5Q8hQjdyXJBulUn46q6719ha8EyNR+cgUlFWYgmCw5
+         JI/7dApiX3rNM6wdb+rqnYcNzgvSPb+lZeQ0aIwyA/9Pz5gOLMuCqo2BJMkAziMYt2f8
+         dpw0ICkRigcxHcGuG2Dn03W4Des24k+0QnLpLOzy4T/cQhMTErvk5Ze73frvNBXAWxVK
+         bbiV3YKwcV63I7Bqd1pW/6ITZojNpCoW02a95gVkOiRmm1tg5N143mfA5laDQ/UAo7sR
+         Ak/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683113826; x=1685705826;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ElfKrvCpInhLz/Z11HONGQ5ugEk4h7txKdzMFSSJ7WI=;
+        b=BF97reLBqOFRFD+ApZ3vMUOCpC7w4Gz3Joke3wjxF6ar7pj/iZdXhsAVtoe7DnvDj5
+         dkY7/9fMlJnbUM4hLyhv3PJutr/6W8BxkK27QczWZVM5T4tcpdxm1sZc1qp/Ax3z03eE
+         +hq1/89FtQ8HdDQN7tPJeSkK00QxAOqNlJEa4cnmPeOFtYzQs5kCrjcyaJK+Sql6fjcX
+         El2CRQmuS/FNpj0eDMfetN77T/2vpZc8SQ1Jbcx/wk4F/4taOu6CLWIxA0ryv2glbRPE
+         7d2dbg2akl2Ikx+q4NU4v+L5zkqHTe9atjBp08Kuw5Eo5VgjLw7rDd/15FojNxE/V1aK
+         vnQg==
+X-Gm-Message-State: AC+VfDzuOMEEzlCpdQIxbW/JlzZ1rSbiYIpt7vWIqi1D+YgwSPwZbukc
+        ORWI1KRsQcJbpGqvWAcr0toxAQ==
+X-Google-Smtp-Source: ACHHUZ4DApPSRWp2+mUTN9/wyi4skFbo/r44ueyxB4RUcB9WR+vb3A1heHuO0vLG1ABVxySeBoCIDg==
+X-Received: by 2002:adf:fcce:0:b0:306:2d3d:a108 with SMTP id f14-20020adffcce000000b003062d3da108mr6793461wrs.11.1683113826415;
+        Wed, 03 May 2023 04:37:06 -0700 (PDT)
+Received: from localhost ([2a01:e0a:28d:66d0:a20d:16d3:a674:dfc4])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600012d200b002ceacff44c7sm33708069wrx.83.2023.05.03.04.37.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 04:37:05 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 03 May 2023 13:37:04 +0200
+Message-Id: <CSCM20VPW7QB.RQD36XO6634I@burritosblues>
+Subject: Re: [PATCH v3 2/3] pinctrl: tps6594: add for TPS6594 PMIC
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     "Linus Walleij" <linus.walleij@linaro.org>
+Cc:     <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
+        <jneanne@baylibre.com>, <aseketeli@baylibre.com>, <sterzik@ti.com>,
+        <u-kumar1@ti.com>
+X-Mailer: aerc 0.14.0
+References: <20230414101217.1342891-1-eblanc@baylibre.com>
+ <20230414101217.1342891-3-eblanc@baylibre.com>
+ <CACRpkdab_26D9BMGeSygy_oa6SFa62ytXcy+Ydi3yPzQO3tU4A@mail.gmail.com>
+In-Reply-To: <CACRpkdab_26D9BMGeSygy_oa6SFa62ytXcy+Ydi3yPzQO3tU4A@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 03/05/2023 09:46:07+0100, Biju Das wrote:
-> The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
-> However, the external oscillator polarity is determined by the
-> PMIC version. For eg: the PMIC version has inverted polarity for
-> the external oscillator and the corresponding bit in RTC need to
-> be inverted(XTOSCB). This info needs to be shared from PMIC driver
-> to RTC driver, so that it can support all versions without any code
-> changes.
-> 
-> Add a new compatible renesas,raa215300-isl1208 to support RTC found
-> on PMIC RAA215300 and renesas,raa215300-pmic property to support
-> different versions.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
->  drivers/rtc/rtc-isl1208.c | 50 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-> index 73cc6aaf9b8b..f4ea19691ac1 100644
-> --- a/drivers/rtc/rtc-isl1208.c
-> +++ b/drivers/rtc/rtc-isl1208.c
-> @@ -74,6 +74,7 @@ enum isl1208_id {
->  	TYPE_ISL1209,
->  	TYPE_ISL1218,
->  	TYPE_ISL1219,
-> +	TYPE_RAA215300_ISL1208,
->  	ISL_LAST_ID
->  };
->  
-> @@ -83,11 +84,13 @@ static const struct isl1208_config {
->  	unsigned int	nvmem_length;
->  	unsigned	has_tamper:1;
->  	unsigned	has_timestamp:1;
-> +	unsigned	has_pmic_parent:1;
->  } isl1208_configs[] = {
->  	[TYPE_ISL1208] = { "isl1208", 2, false, false },
->  	[TYPE_ISL1209] = { "isl1209", 2, true,  false },
->  	[TYPE_ISL1218] = { "isl1218", 8, false, false },
->  	[TYPE_ISL1219] = { "isl1219", 2, true,  true },
-> +	[TYPE_RAA215300_ISL1208] = { "isl1208", 2, false, false, true },
->  };
->  
->  static const struct i2c_device_id isl1208_id[] = {
-> @@ -104,6 +107,10 @@ static const __maybe_unused struct of_device_id isl1208_of_match[] = {
->  	{ .compatible = "isil,isl1209", .data = &isl1208_configs[TYPE_ISL1209] },
->  	{ .compatible = "isil,isl1218", .data = &isl1208_configs[TYPE_ISL1218] },
->  	{ .compatible = "isil,isl1219", .data = &isl1208_configs[TYPE_ISL1219] },
-> +	{
-> +		.compatible = "renesas,raa215300-isl1208",
-> +		.data = &isl1208_configs[TYPE_RAA215300_ISL1208]
-> +	},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, isl1208_of_match);
-> @@ -166,6 +173,43 @@ isl1208_i2c_validate_client(struct i2c_client *client)
->  	return 0;
->  }
->  
-> +static bool isl1208_is_xtosc_polarity_inverted(struct i2c_client *client)
+On Fri Apr 21, 2023 at 10:34 AM CEST, Linus Walleij wrote:
+> Hi Esteban,
+>
+> thanks for your patch!
+>
+> On Fri, Apr 14, 2023 at 12:12=E2=80=AFPM Esteban Blanc <eblanc@baylibre.c=
+om> wrote:
+>
+> > TI TPS6594 PMIC has 11 GPIOs which can be used for different
+> > functions.
+> >
+> > This add a pinctrl and pinmux drivers in order to use those functions.
+> >
+> > Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
+> (...)
+> > +config PINCTRL_TPS6594
+> > +       tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
+> > +       depends on MFD_TPS6594
+> > +       default MFD_TPS6594
+> > +       select PINMUX
+> > +       select GPIOLIB
+>
+> select GPIO_REGMAP
+> ?
+>
+> I think this driver can use the GPIO_REGMAP helper library.
+>
+> Please look into other drivers using this, such as
+> drivers/gpio/gpio-sl28cpld.c
 
-I'd remove polarity from the name of this function
+I had a look at this driver and gpio-regmap.c. I think I understood
+what's going on, but I'm not sure how to handle the
+gpio_regmap_set_direction case. It is using the same reg_mask_xlate to
+determine the register and value to write as gpio_regmap_set or
+gpio_regmap_read. The problem is that this PMIC has 1 register per GPIO
+for the configuration (GPIOX_CONF registers with a bit for direction),
+while the in and out register are used for 8 pins (GPIO_OUT_1,
+GPIO_OUT_2 and GPIO_IN_1, GPIO_IN_2). This means that the register and
+mask returned by reg_mask_xlate will be erroneous in one or the other
+case.
 
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct i2c_client *pmic_dev;
-> +	unsigned int *pmic_version;
-> +	struct device_node *np;
-> +	bool ret = false;
-> +
-> +	np = of_parse_phandle(dev->of_node, "renesas,raa215300-pmic", 0);
-> +	if (np)
-> +		pmic_dev = of_find_i2c_device_by_node(np);
-> +
-> +	of_node_put(np);
-> +	if (!pmic_dev)
-> +		return ret;
-> +
-> +	pmic_version = dev_get_drvdata(&pmic_dev->dev);
-> +	/* External Oscillator polarity is inverted on revision 0x12 onwards */
+I noticed that I could override reg_mask_xlate, so I should be able to
+"just" match on the base address given as argument to perform a
+different computation depending on whether we are using reg_mask_xlate in
+a "direction change" or not, but somehow this feels a bit wrong.
 
-s/polarity/bit/
+Is this the correct solution?
+Am I missing something?
 
-My understanding is that the bit meaning is inverted. It is still a
-on/off bit.
+Thanks again for your time. Best regards,
 
-> +	if (*pmic_version >= 0x12)
-> +		ret = true;
-> +
-> +	put_device(&pmic_dev->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +isl1208_set_ext_osc_based_on_pmic_version(struct i2c_client *client, int rc)
-> +{
-> +	if (isl1208_is_xtosc_polarity_inverted(client))
-> +		rc &= ~ISL1208_REG_SR_XTOSCB;
-> +	else
-> +		rc |= ISL1208_REG_SR_XTOSCB;
-> +
-> +	return i2c_smbus_write_byte_data(client, ISL1208_REG_SR, rc);
-> +}
-> +
->  static int
->  isl1208_i2c_get_sr(struct i2c_client *client)
->  {
-> @@ -845,6 +889,12 @@ isl1208_probe(struct i2c_client *client)
->  		return rc;
->  	}
->  
-> +	if (isl1208->config->has_pmic_parent) {
-> +		rc = isl1208_set_ext_osc_based_on_pmic_version(client, rc);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
->  	if (rc & ISL1208_REG_SR_RTCF)
->  		dev_warn(&client->dev, "rtc power failure detected, "
->  			 "please set clock.\n");
-> -- 
-> 2.25.1
-> 
+--=20
+Esteban Blanc
+BayLibre
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
