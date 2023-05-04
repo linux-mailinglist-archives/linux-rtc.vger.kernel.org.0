@@ -2,215 +2,188 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA816F7000
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 May 2023 18:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F326F7057
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 May 2023 19:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjEDQjs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 May 2023 12:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S229620AbjEDRBg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 May 2023 13:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjEDQjp (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 12:39:45 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB3930C3
-        for <linux-rtc@vger.kernel.org>; Thu,  4 May 2023 09:39:43 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so18990178a12.1
-        for <linux-rtc@vger.kernel.org>; Thu, 04 May 2023 09:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683218382; x=1685810382;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wu+BPT/PK5OWIhPXpwTFPmkJWhW9/h2dLggQxSAxIY8=;
-        b=qS73PrUuuBzl7XLhrxV14w2kWNHRnU+9QCtMga4AlQheBNHQs64CRoOQdT3lmHeBtx
-         zfknQJ9jay5gRwEDkZSb/KABVUNRvUZKZrX/0Bqrx2bRcqMgL1ZAGjTTKnGC5oQF566G
-         vKiobJ1fY6K2GVcBuYsEjC16LV2kFlePRLzGE+Aph66Od5+pARB9HIBvblAfZ+09mgA8
-         3eCHG+VTKXu6/4wcrhpnnE8GiG3XwJ4v9EAC7BiiDMtvnlNkgKa00TeZeReAFJSlG0bD
-         puf0SwTtvnmpji/4D1LMPoLiHmsccJJu50fmZMq62PW9u5TMCt55yZHFuQNsrcZdDjsF
-         S0xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683218382; x=1685810382;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wu+BPT/PK5OWIhPXpwTFPmkJWhW9/h2dLggQxSAxIY8=;
-        b=PhbQySdD4x0YMrkHVbQhdTpDS/S81O/XSpCqtMpqNGlpmQ+x37GBIk/dR7loezaaBl
-         0gh2qfTIp/57YoCr1PTLmxVFAB5/mQ5H7GtHDShuvt4CaQ8bDVkmtiaL7s7t9rRgjL4M
-         ecakgAZq9NkSinCJwK5pfkbEzZATV5yshDLcF+WMNhBlwalWUSETN9ImSYYZBQYuyGX3
-         UICdq/41lQfR8MUffKwvbKaEHcR13dpn/kgABaq6W1hDjJie6/5o0CGpnV8RgtXj6hSG
-         B0Wa85sH/POriTdr2Vsn/a2QdOd+VqI9dwUtXLBXVVO9ipAGninyb684C4egw8vz6ZOx
-         ddyQ==
-X-Gm-Message-State: AC+VfDz3efeaNK92AR1E4Z6Zr2bErE8L0Ruq3IrRAs1s9ulXCfJ4k1Z7
-        wsOOhYS/KWRJflGB3RwZmYp5+w==
-X-Google-Smtp-Source: ACHHUZ6fH1oVbazZOh4UI1/8ULjm/q4hoyN+tKILu9S7JHk9IEJZ3LcRHLUmrN/BCDMCGp218zm1MQ==
-X-Received: by 2002:a17:907:7b99:b0:965:5046:f446 with SMTP id ne25-20020a1709077b9900b009655046f446mr5662347ejc.9.1683218382311;
-        Thu, 04 May 2023 09:39:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bdb9:99c4:33a5:6114? ([2a02:810d:15c0:828:bdb9:99c4:33a5:6114])
-        by smtp.gmail.com with ESMTPSA id sb21-20020a170906edd500b0094f4d2d81d9sm18936157ejb.94.2023.05.04.09.39.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 09:39:41 -0700 (PDT)
-Message-ID: <306f000d-6eec-cf90-b494-f391ff3d387c@linaro.org>
-Date:   Thu, 4 May 2023 18:39:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH RFC 3/6] dt-bindings: rtc: isl1208: Convert to json-schema
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S229470AbjEDRBf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 13:01:35 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BD030C0;
+        Thu,  4 May 2023 10:01:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8758A5803C8;
+        Thu,  4 May 2023 13:01:31 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 04 May 2023 13:01:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1683219691; x=1683226891; bh=92
+        1YgmgJDyX8fTpEjsf680K9b88j6xKzseERDrln0VI=; b=UYj68jiu63Xrv9446C
+        U+7U9vT/DXuEOuF3C0zduG+D5WwodyQMk5zwxbNyx6IQ/IHLcFFKytQ58Niabyii
+        HVter6AnK4ozGstpWcb5IyV/Epexltg5yOm/kFrPSmr4yj5YIzaeiVlfA1JjwN+q
+        eZIFziOXq/OXFg/9YSOYo2OZTG7PRgSnfuJ/SjE7Y4ew/Bj25quWLuh/t0BdQ1nN
+        gr29J1wULKDJhJMUQ5sC6VZCQ0LmvT5mvjrh1ge/K441JeWExDM+jU8TvC9BbaI7
+        FZBNgnpNSIK7wXulqF9ONHUxtHhw/a67TW9cQwyucpsYz4ig7GrlTNbCH5W9yCeh
+        W5gA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683219691; x=1683226891; bh=921YgmgJDyX8f
+        TpEjsf680K9b88j6xKzseERDrln0VI=; b=WZAQbTl4KhdIBGFggnepbC24ozON+
+        Y9P7RamUUn7KUOWfYKgsofJKMU48g+a442uJvpwU3eSyLQOp4GW03QHV/nxVQUZy
+        kwx1JFK0G0n3OX0QxctPhaenfPjSDIRHfhQCLLL2k/1SNkO0+tdr2ePUDWuuQElv
+        hAIWgE5sxPtyjiqrYoW9Xzd1CGRPuuuJqVj0jqU1tNQgYccAk9hmIGX4ChAah8ut
+        YyPTN1JU564F6RHSmzHnxPcTGjFo5Vzs3IXod7C95xqFT6q0ULFQe2gA2K8RFkeH
+        AkTeomH/mAn/3XjfXDtpF5l4Y14mA6UOEaSmMPu86fbGpwwMJ8npfGAjQ==
+X-ME-Sender: <xms:6eRTZBd0Ca4UchpFkmcVRifBZTiLzDjaNYIL7ROKZYaoG-tDG7sJzw>
+    <xme:6eRTZPMzfdcnM01gMAo4h9ncJjXV2G6Nnz_K08C0TtkeGA9U0GpVI924kPDOXLzG1
+    o3H35qXB0mAKR_nHJo>
+X-ME-Received: <xmr:6eRTZKjIX9LfZkO66qX4gILAEZHe-iK55SIBd3aO1CEJWIS47IOXh50_YQkpM_GGYDtiztC_5PPESExggI7WAxdKyZmWwh8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeftddguddtjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
+    kefgleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:6eRTZK_L0pD3f9C6mQznCyuZW59l3sB-Df_ouW1uu_huJ9lMp9fZrQ>
+    <xmx:6eRTZNu3V9DGdTelUE-VIZ4R-xjzfJTdBioowM4FVQ2sC0il4NTMOQ>
+    <xmx:6eRTZJGmUm2SjMFMmFm9mJ4FpEruFnIuKFeUcXhEvcHdHm2GnQML-Q>
+    <xmx:6-RTZB2mU23ipge8XMotfaWkDt4t3YRIYZvJ9OpnSv1sp4-zCY_M7A>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 4 May 2023 13:01:27 -0400 (EDT)
+Date:   Thu, 4 May 2023 19:01:25 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Trent Piepho <tpiepho@gmail.com>
-References: <20230503084608.14008-1-biju.das.jz@bp.renesas.com>
- <20230503084608.14008-4-biju.das.jz@bp.renesas.com>
- <OS0PR01MB5922D95278CE2D1C085661C0866C9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922DDA5F5F112DF8B7755E5866C9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922E58C3A0DDF0EFD4E854F866D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <OS0PR01MB5922E58C3A0DDF0EFD4E854F866D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <leuxcmkwyb6k77oh47jcpcyp3dujy5f7gjijvkaxjz6gy5im3f@c4kvrnq6auug>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
+ <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
+ <erm4iq3mygnrr4h2gd5cag3sfuovv47ibdqsbmxcfabngvnwy4@z63ksvj55zuu>
+ <fcc11e4d-eba6-4eff-b3e5-9488a4da84c3@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="co3427ienkolccfs"
+Content-Disposition: inline
+In-Reply-To: <fcc11e4d-eba6-4eff-b3e5-9488a4da84c3@sirena.org.uk>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/05/2023 18:22, Biju Das wrote:
-> Hi Krzysztof Kozlowski and  Rob,
-> 
->>>> <fabrizio.castro.jz@renesas.com>; linux-renesas-soc@vger.kernel.org
->>>> Subject: [PATCH RFC 3/6] dt-bindings: rtc: isl1208: Convert to
->>>> json-schema
->>>>
->>>> Convert the isl1208 RTC device tree binding documentation to json-
->> schema.
->>>>
->>>> Update the example to match reality.
->>>>
->>>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
->>>> ---
->>>>  .../devicetree/bindings/rtc/isil,isl1208.txt  | 38 ----------
->>>> .../devicetree/bindings/rtc/isil,isl1208.yaml | 74
->>>> +++++++++++++++++++
->>>>  2 files changed, 74 insertions(+), 38 deletions(-)  delete mode
->>>> 100644 Documentation/devicetree/bindings/rtc/isil,isl1208.txt
->>>>  create mode 100644
->>>> Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/rtc/isil,isl1208.txt
->>>> b/Documentation/devicetree/bindings/rtc/isil,isl1208.txt
->>>> deleted file mode 100644
->>>> index 51f003006f04..000000000000
->>>> --- a/Documentation/devicetree/bindings/rtc/isil,isl1208.txt
->>>> +++ /dev/null
->>>> @@ -1,38 +0,0 @@
->>>> -Intersil ISL1209/19 I2C RTC/Alarm chip with event in
->>>> -
->>>> -ISL12X9 have additional pins EVIN and #EVDET for tamper detection,
->>>> while the
->>>> -ISL1208 and ISL1218 do not.  They are all use the same driver with
->>>> the bindings -described here, with chip specific properties as noted.
->>>> -
->>>> -Required properties supported by the device:
->>>> - - "compatible": Should be one of the following:
->>>> -		- "isil,isl1208"
->>>> -		- "isil,isl1209"
->>>> -		- "isil,isl1218"
->>>> -		- "isil,isl1219"
->>>> - - "reg": I2C bus address of the device
->>>> -
->>>> -Optional properties:
->>>> - - "interrupt-names": list which may contains "irq" and "evdet"
->>>> -	evdet applies to isl1209 and isl1219 only
->>>> - - "interrupts": list of interrupts for "irq" and "evdet"
->>>> -	evdet applies to isl1209 and isl1219 only
->>>> - - "isil,ev-evienb": Enable or disable internal pull on EVIN pin
->>>> -	Applies to isl1209 and isl1219 only
->>>> -	Possible values are 0 and 1
->>>> -	Value 0 enables internal pull-up on evin pin, 1 disables it.
->>>> -	Default will leave the non-volatile configuration of the pullup
->>>> -	as is.
->>>> -
->>>> -Example isl1219 node with #IRQ pin connected to SoC gpio1 pin12 and
->>>> #EVDET pin -connected to SoC gpio2 pin 24 and internal pull-up
->>>> enabled in
->>> EVIN pin.
->>>> -
->>>> -	isl1219: rtc@68 {
->>>> -		compatible = "isil,isl1219";
->>>> -		reg = <0x68>;
->>>> -		interrupt-names = "irq", "evdet";
->>>> -		interrupts-extended = <&gpio1 12 IRQ_TYPE_EDGE_FALLING>,
->>>> -			<&gpio2 24 IRQ_TYPE_EDGE_FALLING>;
->>>> -		isil,ev-evienb = <1>;
->>>> -	};
->>>> -
->>>> diff --git a/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->>>> b/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->>>> new file mode 100644
->>>> index 000000000000..04d51887855f
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->>>> @@ -0,0 +1,74 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
->>>> +---
->>>> +$id:
->>>> +
->>>> +title: Intersil ISL12{08,09,18,19} I2C RTC/Alarm chip
->>>> +
->>>> +maintainers:
->>>> +  - Biju Das <biju.das.jz@bp.renesas.com>
->>>> +  - Trent Piepho <tpiepho@impinj.com>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    oneOf:
->>>> +      - enum:
->>>> +          - isil,isl1208
->>>> +          - isil,isl1209
->>>> +          - isil,isl1218
->>>> +          - isil,isl1219
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  interrupts:
->>>> +    minItems: 1
->>>> +    maxItems: 2
->>>> +
->>>> +  interrupt-names:
->>>> +    items:
->>>> +      - const: irq
->>>> +      - const: evdet
->>>> +
->>>> +  isil,ev-evienb:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    enum: [ 0, 1 ]
->>>> +    default: 0
-> 
-> 
-> What is your thoughts on this? we should keep default or we should remove?
-> 
-> As per HW data sheet[1], the reset value is 0,  
-> [1] https://www.renesas.com/us/en/document/dst/isl1219-datasheet
-> 
-> But as per text version of bindings [2], Looks like default is not needed.
 
-Missing value has different meaning in original binding, so default is
-wrong here and you should explain that meaning in description.
+--co3427ienkolccfs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+Hi Mark,
 
+On Wed, Apr 05, 2023 at 04:34:31PM +0100, Mark Brown wrote:
+> On Wed, Apr 05, 2023 at 05:17:21PM +0200, Maxime Ripard wrote:
+> > On Tue, Apr 04, 2023 at 04:26:18PM +0100, Mark Brown wrote:
+>=20
+> > > To be honest it's surprising that we'd have to manually specify this,=
+ I
+> > > would expect to be able to reparent.  I suspect it'd be better to go =
+the
+> > > other way here and allow reparenting.
+>=20
+> > Yeah, I think I'd prefer to allow reparenting too, but as can be seen
+> > from the other reviewers in that thread, it seems like we have a very
+> > split community here, so that doesn't sound very realistic without some
+> > major pushback :)
+>=20
+> For these ASoC drivers I think we should just do the reparenting,
+> they're very much at the leaf of the tree so the considerations that
+> make it a problem sometimes are unlikely to apply.
+
+I'd still prefer to remain conservative on this series and try not to
+change the behaviour in it. It's pretty massive already, I'd like to
+avoid tracking regressions left and right :)
+
+Would sending a subsequent series that would do this acceptable for you?
+
+Maxime
+
+--co3427ienkolccfs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZFPk5QAKCRDj7w1vZxhR
+xYK/AQDT76loaORROKC2ghqyIIHmBg+xw8VB5nThUFKuIO4RhgD9ERaCF31CTPdE
+PdgL4dyZrWlQGqGmbyHbk465s505Jww=
+=OlOa
+-----END PGP SIGNATURE-----
+
+--co3427ienkolccfs--
