@@ -2,110 +2,158 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCE86F680F
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 May 2023 11:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EB66F6D03
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 May 2023 15:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjEDJNA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 May 2023 05:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S229768AbjEDNjm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 May 2023 09:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjEDJM7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 05:12:59 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F5410E7
-        for <linux-rtc@vger.kernel.org>; Thu,  4 May 2023 02:12:56 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id ABC69FF81A;
-        Thu,  4 May 2023 09:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683191574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jaevO5lAQrcQwxDgnrLEy4MhAIx2xNFCMXjWETsSmPA=;
-        b=muzR9RgboChcmt4QD4AcJiMaUDC2LZNtv/Qjogb+n104zcWL4IpnEDQOaGsaxY+0Ago6FZ
-        e6MzPIcnVgKHJZ45J3iM7nxxuhwwvIIhFLNhp3l9kj8ET8MpZ3f3wV8fPCOVMHTe1z7AFX
-        AGaBbg1SnTxQNgB1gDsVjlRYaiK9xJ10kAKZ4Qy/FFTOMNEDnQssJzCuVjIAAFvlu+VrRg
-        s6qoma8mI1VwCoXEvp6r9yIqs195T99ZpEfkgjPpNa49CjPFs5M91qh26Vn4RkvU0E25Ac
-        i0vFBgeD8kcvMrGpwn8foOqeOvZCMvfB28a67lTPq3UyDPDWfe6VKpwxmdy7sw==
-Date:   Thu, 4 May 2023 11:12:50 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Johannes Kirchmair <johannes.kirchmair@sigmatek.at>
-Cc:     linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] disable clkout for rv3028 by default
-Message-ID: <202305040912507451f5a2@mail.local>
-References: <20230504083217.2371933-1-johannes.kirchmair@sigmatek.at>
+        with ESMTP id S229638AbjEDNjl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 09:39:41 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA08E768B;
+        Thu,  4 May 2023 06:39:40 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3445DKX4028271;
+        Thu, 4 May 2023 08:39:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=zEWDZRH16IxZH8jYRpv51rOx+oio62y+XziPw6IiJ1w=;
+ b=L9OXVtBpZ1h2EQYPU9fS+CdLeJbQogB3ovHqBxHZV93tB0yyeToDCRKM+3p1Z+XcLFZz
+ DhnfCDaIAxZdN2kEgqy91hT0ZkrDGwKDxWYOZyY84Bl71CaNzT/kQ6H7HeGti1LPjN2A
+ 1C53tmN+15LZY4Xx0LsXz3jdPfYj804ASLi4vP04knaO2fZRiDoRcGlVawsjF8dnEBef
+ /SeuYP9ruq4TACIUkQ8hZ4rHae8zIGOhnmbirZT1jFR/3kSOYyRRGhG6Ds8kk3q2z9qA
+ m1ycJOjn8GapD45ROvo5FEKeAAyqeD0ftMxijnIycmgOTyr7CJvQgOt/JbzSOHf7FjX0 fg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3q8ynqxxwk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 May 2023 08:39:25 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 4 May
+ 2023 08:39:24 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Thu, 4 May 2023 08:39:24 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E168D11AA;
+        Thu,  4 May 2023 13:39:23 +0000 (UTC)
+Date:   Thu, 4 May 2023 13:39:23 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+CC:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-actions@lists.infradead.org>,
+        <patches@opensource.cirrus.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-phy@lists.infradead.org>,
+        <linux-rtc@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+        <alsa-devel@alsa-project.org>, <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v3 14/65] clk: lochnagar: Add a determine_rate hook
+Message-ID: <20230504133923.GE68926@ediswmail.ad.cirrus.com>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-14-9a1358472d52@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230504083217.2371933-1-johannes.kirchmair@sigmatek.at>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-14-9a1358472d52@cerno.tech>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: by0VDh8QAdOEbtK8UU7dmeZOMGxMIv4b
+X-Proofpoint-ORIG-GUID: by0VDh8QAdOEbtK8UU7dmeZOMGxMIv4b
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/05/2023 10:32:17+0200, Johannes Kirchmair wrote:
-> The rv3028 chip is kind of strange.
-> The chip has two inputs one for the buffer battery
-> (V_backup) and one for the main power supply (V_dd).
-> By default a clk out of the chip is enabled, drawing a big amount of
-> current, draining the buffer battery of our board in 3 days.
-> There is a mode that would shut down the clk out if powered from
-> V_backup, but that would have to be configured as well. In our
-> application the battery is connected via V_dd. So disabling the clk by
-> default is the way to go for us.
+On Tue, Apr 04, 2023 at 12:11:04PM +0200, Maxime Ripard wrote:
+> The lochnagar clocks implement a mux with a set_parent hook, but
+> doesn't provide a determine_rate implementation.
 > 
-
-You can't do that, this introduces a glitch in the clock output and will
-break existing users. The clock should be disabled automatically by the
-CCF when there are no users. Is your kernel built without
-CONFIG_COMMON_CLK?
-
-> Signed-off-by: Johannes Kirchmair <johannes.kirchmair@sigmatek.at>
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+> 
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+> 
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+> 
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+> 
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
->  drivers/rtc/rtc-rv3028.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
-> index 12c807306893..9e2aaa7a533e 100644
-> --- a/drivers/rtc/rtc-rv3028.c
-> +++ b/drivers/rtc/rtc-rv3028.c
-> @@ -787,7 +787,7 @@ static const struct regmap_config regmap_config = {
->  static int rv3028_probe(struct i2c_client *client)
->  {
->  	struct rv3028_data *rv3028;
-> -	int ret, status;
-> +	int ret, status, buf;
->  	u32 ohms;
->  	struct nvmem_config nvmem_cfg = {
->  		.name = "rv3028_nvram",
-> @@ -826,6 +826,16 @@ static int rv3028_probe(struct i2c_client *client)
->  	if (status & RV3028_STATUS_AF)
->  		dev_warn(&client->dev, "An alarm may have been missed.\n");
->  
-> +	ret = regmap_read(rv3028->regmap, RV3028_CLKOUT, &buf);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (buf != RV3028_CLKOUT_FD_MASK) {
-> +		ret = rv3028_update_cfg(rv3028, RV3028_CLKOUT, 0xff, RV3028_CLKOUT_FD_MASK); // disable clk out
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
->  	rv3028->rtc = devm_rtc_allocate_device(&client->dev);
->  	if (IS_ERR(rv3028->rtc))
->  		return PTR_ERR(rv3028->rtc);
-> -- 
-> 2.25.1
-> 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+
+Thanks,
+Charles
