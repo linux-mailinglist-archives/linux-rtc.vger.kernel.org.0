@@ -2,145 +2,161 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328B86F670B
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 May 2023 10:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4086F6798
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 May 2023 10:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjEDIO1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 May 2023 04:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S229959AbjEDIfU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 May 2023 04:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjEDIMz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 04:12:55 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB1340F0
-        for <linux-rtc@vger.kernel.org>; Thu,  4 May 2023 01:10:34 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bc1612940so248955a12.2
-        for <linux-rtc@vger.kernel.org>; Thu, 04 May 2023 01:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683187833; x=1685779833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5wRI/V0QYUmMTdZtjU5QAUWi8YTe7VYR3YoE2fbr0uY=;
-        b=F7JbaNf9rfAEFgyXNHxd07Nto4BeqGXHS3SMc1b3XtN3NsGlRH+sAVNfhCIQZe009O
-         /8v6DZtRpVOTI5w7AGTHpEe7n32li8nbtYOVQfDcBQwcRZbecU3i9scjYa+yNlwu1iS8
-         Fh0al9PHCU80mgW22f33y1HJgbjGYQJPgd5CTtJdDIDwqMLsgPCn35ifl/ilD42Bq4OH
-         KKNYYmq1tiactNu+zmZ32MhRKaLmBrxgZHyFGCpQB9DKgfan4E95ZzD3JV2gqaAYgAPg
-         oJFpPJWLsCzVlZChRUHgqeTQ1QgpOeB2cE1EZuib/jD+CZkUOV4sRpfkkR6SZWegljMB
-         Dqnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683187833; x=1685779833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5wRI/V0QYUmMTdZtjU5QAUWi8YTe7VYR3YoE2fbr0uY=;
-        b=WY6IL9Bf3IxknMqtUC7pEkTVp63OidgSBg0g9rU04XhwvtBUm5uJZK6vfjTQzbKNkY
-         k2pfdsdL547pYbzvxhZaWB7ShNxvG2IuMSj/uCPm1xFFeuyUUBaneI9HYKvARCm2Eusg
-         XcEW1ABP4+gKZ4uqY+ZFCs2JUaGo2XwxLfmnSjFAvNpjr35bt+bwxvIN3KZtYSqEFh7B
-         /DPpNqnlOmqgIb/KE/hFRo3unwG35HcYnWhRpEouqW2cYAHOuM+NpeBDrfNSPXAGIWrH
-         PNxCe4x6Pw0a8IYg3c4EmnHGiOci8WMH8B+ji7dF6nzyJaFK2u44qu6dlAaxvk7FFcVs
-         4x1Q==
-X-Gm-Message-State: AC+VfDzwEgm3bvfKjwU+Kr60HoWik0vfFWMsLJkC1P+eI5La33QXr0iq
-        mXJdxvuNwn7vfzxrvFMZKNa3DQ==
-X-Google-Smtp-Source: ACHHUZ7o1xz1G094JLRpXVK8atuEDiJxNMnfsG3ePzcSVoQ7q8+HOTLwQN7AQK23FwfRuup1yiivcw==
-X-Received: by 2002:a05:6402:391:b0:506:7d65:c1fb with SMTP id o17-20020a056402039100b005067d65c1fbmr811720edv.30.1683187832940;
-        Thu, 04 May 2023 01:10:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:cbf1:e7ef:fb81:e912? ([2a02:810d:15c0:828:cbf1:e7ef:fb81:e912])
-        by smtp.gmail.com with ESMTPSA id b15-20020aa7cd0f000000b005067d6b06efsm1556607edw.17.2023.05.04.01.10.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 01:10:32 -0700 (PDT)
-Message-ID: <47f5498d-2c7c-7e27-c93d-a2787e720b42@linaro.org>
-Date:   Thu, 4 May 2023 10:10:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH RFC 4/6] dt-bindings: rtc: isl1208: Document built-in RTC
- device on PMIC RAA215300
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Trent Piepho <tpiepho@impinj.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-References: <20230503084608.14008-1-biju.das.jz@bp.renesas.com>
- <20230503084608.14008-5-biju.das.jz@bp.renesas.com>
- <db7ae5f9-393a-b892-dd6f-08c4f25ce7a8@linaro.org>
- <CAMuHMdVMsdvwq3t50ifKuCJ6LvPUcDjSu14tkdrSquizA=TsTw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdVMsdvwq3t50ifKuCJ6LvPUcDjSu14tkdrSquizA=TsTw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S230513AbjEDIe6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 04:34:58 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2090.outbound.protection.outlook.com [40.107.247.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485145273
+        for <linux-rtc@vger.kernel.org>; Thu,  4 May 2023 01:32:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R/g1IlKVEFTm1l4Iz6GSLsK1ONCWKWNNO1HegiBc5nZbGl9yhXKQH6fLJN7VEUDL9N9x9XAp8yNDEtXlkgHllCOuV5BQaE8sr8Z/tWJINXY2eLS2k4bSqRWAdPmDpUQrLsTEqF7/lDWcGr3a1j9ox06Gs4d/D83ZwhWP1oh8j6klRhif8GImPUyxYD3h5z+Ul7sAA1gZ+/bQSUz7KJBRfm8gFWq41MRLokNljAEPFGscF8YIaqLcHZkS15/xxjAxHqgHYzbKkv5Zk0OEdmCu06pFoYsPcjLES0QgG6Q0YJpAbmHuy7nLBLaH3qPWWL+y1MFVJWjIKE6CrBTvPDdJuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jsTz5x/hsRBHD4r3aTCJ6HJIqRip6HFvR/hTtWQ3WOE=;
+ b=ZwS85nSPINMF0eQPIpczAhiMp62bAxk1NUTicBm2XO/xpAOVXIM2YjdbJps338E/BliJ32coLIquPsE05UGsa/H5wWDG2Is9BYg0aXzX8JsapCGjdKQbs/DIvksqB6KOjNi/iiRn8hlNq7t8aE5uowPP8YaTikdOhME0QrZ7aP9BZXOBdNtfAMbaSHjjDpMTW959IwQ0QKxhRGszGgq8F4Tb/c6XjNgI6vTL4BAV5Fzp7HrQifHUlQIg2C9Xl2b2waTzG+qXCqZV3lFo6uIbLuEIN1Lo5xw/UE54mJUDpnxtaXoGbWJTlcWyFPerLJt3EFbPapj/DN/eBW9v1Na3qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sigmatek.at; dmarc=pass action=none header.from=sigmatek.at;
+ dkim=pass header.d=sigmatek.at; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sigmatek.at;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jsTz5x/hsRBHD4r3aTCJ6HJIqRip6HFvR/hTtWQ3WOE=;
+ b=QmflRt3EWAgqJ6gZNQNO3EeuuGKdRBo9d/nPoYsgHhT22Jf4mNQyD3h/9m2jqZVZwNhv1PMTkZLxnHHXis1q94oYhSCt2+9zXknwGmjrgPzA11VAIQZLMYtZAEw6jm9j7bvzZq/7DDTb2HQ6JuaE1Em6RdtE43plLGgXa2yhX3E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=sigmatek.at;
+Received: from VE1PR08MB4909.eurprd08.prod.outlook.com (2603:10a6:802:a8::22)
+ by AS4PR08MB8242.eurprd08.prod.outlook.com (2603:10a6:20b:51e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 4 May
+ 2023 08:32:38 +0000
+Received: from VE1PR08MB4909.eurprd08.prod.outlook.com
+ ([fe80::89fb:34bc:72e9:6c15]) by VE1PR08MB4909.eurprd08.prod.outlook.com
+ ([fe80::89fb:34bc:72e9:6c15%5]) with mapi id 15.20.6363.021; Thu, 4 May 2023
+ 08:32:38 +0000
+From:   Johannes Kirchmair <johannes.kirchmair@sigmatek.at>
+To:     linux-rtc@vger.kernel.org
+Cc:     alexandre.belloni@bootlin.com,
+        Johannes Kirchmair <johannes.kirchmair@sigmatek.at>
+Subject: [PATCH] disable clkout for rv3028 by default
+Date:   Thu,  4 May 2023 10:32:17 +0200
+Message-Id: <20230504083217.2371933-1-johannes.kirchmair@sigmatek.at>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0802CA0008.eurprd08.prod.outlook.com
+ (2603:10a6:800:aa::18) To VE1PR08MB4909.eurprd08.prod.outlook.com
+ (2603:10a6:802:a8::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4909:EE_|AS4PR08MB8242:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b587886-ab6f-46fb-934a-08db4c7a1e5e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O/LAjI0lFYKFixwFV172Cqj0YV5YmD+FcqsWoGb1/Z2Zjk0jeBErPJJXu6HFKPldegCmZGndD+kI0h/g+ynmMelZMUVi9FDHJaSlG9HTxifRO5Lvolbghd/Gj5NyDplg5TEmQr6tnmqLmi5PlKYhAHqHYcpwBtMutUUXzkLmX7FzlPKgO8PTTeHQaMVcVrW6oUF9inCmT0XC+YUFQwGsKY4oMiWqWGwEblZECqNLg+URiZqcilCS2GsRvo6csYTEwI/JZ+T9oDml0tRQsPA5mszAuIlOnZfY6QTHq/PlMzbWYul9WxJkDC5uC9sqHvdRKBLBxBfBlD2v0kHtBzRxc7HA3HlztvSfKWc0A6dTBW0fq226S4aJ+2pyUDhuNc44DdAY7LhnSYyvQtWY+3HsvCjxA/gP9g5IC9Yc/1nM1GXKA95L2+z8iLYcrnjU1WOlPqJk5GU2YgbkVlxqZh08iJs847M0zNaC/kQ4jLLRouZm0+iAGmvcX+VZht1WtBQOWCzx63Fnd9YlaeD65kKQy4Luj5sutuoRe+GzbGNN/DqQ2NqWZPoT8yhDX8pbSXg7UJHGdXZlHV72+UBHzc4GP0kIgBKr2kkvuWAw3RmNsRCvQna1vvoZswqh+A9JU++1
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4909.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(396003)(39850400004)(366004)(451199021)(44832011)(478600001)(38100700002)(38350700002)(5660300002)(8676002)(8936002)(2616005)(26005)(6666004)(86362001)(66476007)(66946007)(66556008)(4326008)(107886003)(6916009)(83380400001)(6486002)(6506007)(1076003)(52116002)(36756003)(316002)(186003)(2906002)(41300700001)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qNME2BVZXjc/BabVIi+Lzim7MR3e/lvUY8EZ7O/fLrnZBlvO8bdm8LW+PCQn?=
+ =?us-ascii?Q?T3TvP4bAhe8IKO4VoMfgm2/F5BAgrdqVHXNuX14TLLDRgmxEBcGR+N5IRDm3?=
+ =?us-ascii?Q?gE+WOmvPXGVWu0dS9JjffAVE9rZMfhF6YJ2J6WCT+anXTIwyvBQ0C+6eN0ac?=
+ =?us-ascii?Q?Ih09nxdwpdsaBl01bam5Tn1ZJ6lYbaxkP0x7mY0m8+8+QXp4cU0Igjj57+TD?=
+ =?us-ascii?Q?ewd0sZAzzONVv3vDJ3TwWikcexfH8Qy1J+En+PZL27yp5snHsrOkEplyGbKg?=
+ =?us-ascii?Q?u3b8OmyDhJZXwc/tAPRku8Y2rCChS/hJqNDKtZiTleZ6rKkuNCXtkrr6ZWGM?=
+ =?us-ascii?Q?yAvk3WMB0TYMWECvZ6HaAhEim2DGM1By+9whdNxBTPWtNe5aj693Wx263KIC?=
+ =?us-ascii?Q?XANp3QuHojwANXFmhYYJ5cbYliWR9659Nk1TcBjENzqLeSAcnIeIpsOf0HDL?=
+ =?us-ascii?Q?63gbuBMQLQmYcW8xoCYvPGt7NcpjULUD48ByBNToFJD0X6bcRVBYQI5A/ubX?=
+ =?us-ascii?Q?/cSx3GSqlhPbK8rvInc1URjs+NY9C3LBzN4bRHPus+L5liRt0i4+mnGp1ubp?=
+ =?us-ascii?Q?flQmkQ/H9Fp+aKSvaFWbGIZXEYGTPwBd38Trh2ibelCNdYBvDQd5T6NEuis0?=
+ =?us-ascii?Q?+2uzJZKbIOPwbnDw7LthVY63Bb1Kf7zAudT1VYdK7lGv4jGO5uPTe3/KQYaj?=
+ =?us-ascii?Q?pXjKA5POm+AywYOXJRwKoEKH1Xl2uWeECsJiS+ee1j8nx7VkdDApXSchp5Ok?=
+ =?us-ascii?Q?VKBJ9yPYFBoxwoKL0kOF8vhCcHZe/hiwiuU9aN0pJnbqCd1wnWb+lQkmK29k?=
+ =?us-ascii?Q?JKFcAoIZxIju/vrkvy7j2KDkSru6LrGMYv4lFas6j8nPSyUEMnyun1J+EtJi?=
+ =?us-ascii?Q?zU+g89NNsNr8dlBDfUn2rDlh7c/T7dI4aOtL2U+u/UVTl34ESetr5Ga8wMag?=
+ =?us-ascii?Q?SfpptLmYFCgIGVoorsdDrXAXgdg3OB78maeYdS82yQ8T2/uYgngfNPhuH2nj?=
+ =?us-ascii?Q?V2BCMAW6ZlYmxSqIPrzlTti7ylfMfvon0OdusM38zMu0297FISulCCY7jvsQ?=
+ =?us-ascii?Q?1LK1dycpVGzFNuvNJ6vKY4Y5Hbh+4NPWC+JY2QNnIB2U7bPbfj3Q9Y5cswLO?=
+ =?us-ascii?Q?z6UeC2P9Y6BtuVyB8jnIVCivmbLCDXgc/llH3tbFWCRMpxZQim3Hf7iddSp9?=
+ =?us-ascii?Q?m9RToY5lhJcwDObo6iJbCuSdJen5LAf4+ggO1fCjj/sDheXISlgwHCxzF8oM?=
+ =?us-ascii?Q?ljg6CStXu84niA7umSKKNSRNFNlWuajePST/lvz0B4tvN8GcBTUw5avPdNGU?=
+ =?us-ascii?Q?STX+WPeiBf5qnJe2AUKZpzW7nKAe3xAeprjE3mZhnO/PkJ/jVqGOHE0jgI+5?=
+ =?us-ascii?Q?VEx8oDM1ui5Oy6fkw6xNgspiU/FKbYmUvwKNUjov/ayfwiTuPYMSKjr++kpA?=
+ =?us-ascii?Q?hfs9NqsUpKDYr+DHL8x1/V6em6Twbmi+6LLGz87olE4KY7TTse+J7FtNf/J0?=
+ =?us-ascii?Q?WOibiF26CUEVW2Goxdm30dGafuClv4AsrwFfOWd01PWV7x9iiV6CPTjlge5i?=
+ =?us-ascii?Q?m1GxDwNsHnINExoukDTtxOwIYEW+MNKPRvik8qz4YkGyYTUitdfoQsNx11jJ?=
+ =?us-ascii?Q?FaLpbAgmI7e5yfU4zKdhxes=3D?=
+X-OriginatorOrg: sigmatek.at
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b587886-ab6f-46fb-934a-08db4c7a1e5e
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4909.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 08:32:38.3637
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bcb1d87a-d2bc-486e-a62b-9ac9c746bc1b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PKywdja/Zct2gwg52MY17NXWn+kne3/h7C43tMWoU70IazDPNinw7fEW8rM/tVMOztuDqkw47iFs6IKPYxtYn3te5aYXxQ4ojjy06tnXT6g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR08MB8242
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/05/2023 09:47, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Thu, May 4, 2023 at 9:11 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> On 03/05/2023 10:46, Biju Das wrote:
->>> The Built-in RTC device found on PMIC RAA215300 is similar to the isl1208
->>> IP. However, RTC is enabled by PMIC RAA215300 and the polarity of the
->>> external oscillator is determined by the PMIC revision.
->>>
->>> Document renesas,raa215300-isl1208 compatible and renesas,raa215300-pmic
->>> property to handle these differences.
->>>
->>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
->>> ---
->>>  .../devicetree/bindings/rtc/isil,isl1208.yaml       | 13 +++++++++++++
->>>  1 file changed, 13 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml b/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->>> index 04d51887855f..888a832ed1db 100644
->>> --- a/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->>> +++ b/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
->>> @@ -18,6 +18,7 @@ properties:
->>>            - isil,isl1209
->>>            - isil,isl1218
->>>            - isil,isl1219
->>> +          - renesas,raa215300-isl1208
->>>
->>>    reg:
->>>      maxItems: 1
->>> @@ -40,6 +41,10 @@ properties:
->>>          <0> : Enable internal pull-up
->>>          <1> : Disable internal pull-up
->>>
->>> +  renesas,raa215300-pmic:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>> +    description: phandle to the pmic device with isl1208 built-in RTC.
->>
->> No. You don't need cross-linking. We do not represent one device as two
->> and then fix this by cross-linking them. The existing binding does not
->> have it, so it should be a hint for you.
-> 
-> Makes sense.
-> So there should be a single device node with 2 reg cells, and
-> a "renesas,raa215300" compatible value.
+The rv3028 chip is kind of strange.
+The chip has two inputs one for the buffer battery
+(V_backup) and one for the main power supply (V_dd).
+By default a clk out of the chip is enabled, drawing a big amount of
+current, draining the buffer battery of our board in 3 days.
+There is a mode that would shut down the clk out if powered from
+V_backup, but that would have to be configured as well. In our
+application the battery is connected via V_dd. So disabling the clk by
+default is the way to go for us.
 
-Yes.
+Signed-off-by: Johannes Kirchmair <johannes.kirchmair@sigmatek.at>
+---
+ drivers/rtc/rtc-rv3028.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-> 
-> On the Linux side, the "renesas,raa215300" MFD driver can instantiate
-> a PMIC and an RTC cell, the latter served by the (enhanced) existing
-> rtc-isl1208 driver.
-
-Right.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 12c807306893..9e2aaa7a533e 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -787,7 +787,7 @@ static const struct regmap_config regmap_config = {
+ static int rv3028_probe(struct i2c_client *client)
+ {
+ 	struct rv3028_data *rv3028;
+-	int ret, status;
++	int ret, status, buf;
+ 	u32 ohms;
+ 	struct nvmem_config nvmem_cfg = {
+ 		.name = "rv3028_nvram",
+@@ -826,6 +826,16 @@ static int rv3028_probe(struct i2c_client *client)
+ 	if (status & RV3028_STATUS_AF)
+ 		dev_warn(&client->dev, "An alarm may have been missed.\n");
+ 
++	ret = regmap_read(rv3028->regmap, RV3028_CLKOUT, &buf);
++	if (ret < 0)
++		return ret;
++
++	if (buf != RV3028_CLKOUT_FD_MASK) {
++		ret = rv3028_update_cfg(rv3028, RV3028_CLKOUT, 0xff, RV3028_CLKOUT_FD_MASK); // disable clk out
++		if (ret < 0)
++			return ret;
++	}
++
+ 	rv3028->rtc = devm_rtc_allocate_device(&client->dev);
+ 	if (IS_ERR(rv3028->rtc))
+ 		return PTR_ERR(rv3028->rtc);
+-- 
+2.25.1
 
