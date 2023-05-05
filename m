@@ -2,420 +2,272 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF346F7AE1
-	for <lists+linux-rtc@lfdr.de>; Fri,  5 May 2023 04:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E5F6F7CD6
+	for <lists+linux-rtc@lfdr.de>; Fri,  5 May 2023 08:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjEEC2d (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 May 2023 22:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S230369AbjEEGOO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 5 May 2023 02:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjEEC2c (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 22:28:32 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C9CAD37;
-        Thu,  4 May 2023 19:28:30 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a7c1b86e8so1595998276.2;
-        Thu, 04 May 2023 19:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683253709; x=1685845709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IQTwCtOioJF8t/OiNx/dPasS+fdTMROa/SSWtKZQgKs=;
-        b=JIWVovMpQ3sB1Y2LItd2ey9cLqND5SVtLG/8J4+W6kJJosibN1+m8+ousRJlYRLjms
-         pFD42ttOvGyeO0vBmCLohiRM/cmdb3MEslUpdzxtDeEqb0XLI+Nv88W8baeZka2pUK83
-         UTCAQNM/6duTyT8/c5ngSJaFw6ocRwUNOd8mydPI84GdzFbgSAKdJbqJWJl6Nl/W66tN
-         UmAVwigIsyaIH5OWjFSQe6cYlBKFaE87zB7VL/4zOcbCDjMOiP0Ccha1IjsgDeyh3uuZ
-         LnBOZEHjyUntMlacBaSUb5kDv5FC8cFQXH8xoReYqYbVlcDa0rK8idPo2sG0u2pCrByo
-         Rlkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683253709; x=1685845709;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IQTwCtOioJF8t/OiNx/dPasS+fdTMROa/SSWtKZQgKs=;
-        b=U0y3VKZRMnV3mV4rdWJyJ+whKM/BWkvjYVCyD1tdCw8PwB7F5whLsIv9zc/4UUG1+S
-         pQBWDhaGgRoiIE9Z4bGpJ8FGOhluxnaS7LsMGVzr1j1YvPOjKwfV3QqtUPj0UKH2FYeU
-         Y5XFPe7EwkFZ1rzzbYM7JxGeen+ZtzncWA7+M7NZtNFdXGMtxOHt8YXS5iGhyh9Jw6x8
-         mbXmerphyBTd8QUyPztZHtmInvmMChgaXo/+29vLqyUsjbUy5m1YCX8NqoxFnQ3BHPJM
-         dQGx1SaRVNFNP/aWgyP8F/eq2blgh2cJMcj/fCw/rwwRHdEZZnO5x2Bujj/tnEVxdRFK
-         5xKg==
-X-Gm-Message-State: AC+VfDy2cyC+aU9ifwWSf0gIJfKPLqqIePhoEOkAFbCMDc1VfUIDnrhS
-        Xa2ATkOe/1AydjNlbINis7cXwAvD0gGzcQo88vY=
-X-Google-Smtp-Source: ACHHUZ6s8kmM5Dp5ih24Bs2hjigFmkgmEJakDis6EgSGdU/4H1aET/JyFpi3QqfwTFH10DYcjaA8FESVKsOzzJ1oQFQ=
-X-Received: by 2002:a25:c78f:0:b0:b9a:8298:d873 with SMTP id
- w137-20020a25c78f000000b00b9a8298d873mr30812ybe.49.1683253709325; Thu, 04 May
- 2023 19:28:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1681370153.git.zhoubinbin@loongson.cn> <09f381f445cfbcf857845f61d10238452037b2e8.1681370153.git.zhoubinbin@loongson.cn>
- <20230416194901b538cb7c@mail.local>
-In-Reply-To: <20230416194901b538cb7c@mail.local>
-From:   Binbin Zhou <zhoubb.aaron@gmail.com>
-Date:   Fri, 5 May 2023 10:28:16 +0800
-Message-ID: <CAMpQs4LhkupxQExQCqg9qJ0eWCzLZEaeKDrJThTVyezz=ne53A@mail.gmail.com>
-Subject: Re: [PATCH V3 2/7] rtc: Add support for the Loongson-2K/LS7A RTC
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        with ESMTP id S230329AbjEEGON (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 May 2023 02:14:13 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2119.outbound.protection.outlook.com [40.107.114.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602A314349;
+        Thu,  4 May 2023 23:14:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nb0o5Ll79NB753e8Xaxy5oR3vHXJGWxV6LfOWWbtrXYBXWo7Sk0Pc6fIt+inarJM5O/+c7j6ZIytIkzyy9dFbNoAPT1BewZl59b/2+xEjYVHghhOSJg+7ayi6oFXjDtgRWhu6UTVDwA3YgTyW3+zyNFlXOOfgyeRWIOFEY/CQFgKV6oKsZyS6YaM2k83o1TL+Duwvihesds5nyXoBYHPcwiWePOrjqJdkg7VKX+iqvVJHI/3LbCZpnHN40OO+xH9m/qADvKFghwukosmGXk9xP2giewzNQEwi07ia/SNtCYHsHnWLNNYF7fZl3Suds0HRTS/ped02ERnPnjKpQeA9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WzT2HOcUwESHMDE1PEu7Rbq/2UKaTVGO7/DxrQS24Ug=;
+ b=iy4SzQwDQ5L9YOMy0hqUzMmyJtFz1DSzyvLlXV6nuABXEhc4lnpC7dcDgs6XpMl1emtRDRS9GsYcgywjswk7T/NabvSFpIhH7mQKFN1Y/Lxqt7TVMCjQyMK17MHGCH2xFg6c6OyU+LMDwacVn6kCw8g0uORXEdI2uDyTh6c1H92NTFfncaiap0IINBBDtiJ9IHPhKdDDflHywRK/JuEi2uHh8Io3R/Rpj6cANUs2HwsY+lzkGq6Czxi1gTL5B55Ef62eoQVkQcr19WqAv3Y3pz8jP3LdRAb71IJ239spLawKb2seoi6LuIp18fsqY6u58lK6BeAUoD15o9x0RjHDfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WzT2HOcUwESHMDE1PEu7Rbq/2UKaTVGO7/DxrQS24Ug=;
+ b=FjL8UsJbXaLhnGMiqDJvGlB1ZF19Gz5Ap72bQZbYYZgJiK3qvoL29RHK41E1yUwQmpqFRtjzbzw/zEG1jUTWW2cp1QRNapWIam53K5KWfBqKYczIt+7E7aCMObCybDbi/+zzjKH7OUaLRGgZCTjehfCXFKTVoNKQxY/btCCvEXo=
+Received: from TYCPR01MB5933.jpnprd01.prod.outlook.com (2603:1096:400:47::11)
+ by TYWPR01MB11340.jpnprd01.prod.outlook.com (2603:1096:400:3f0::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
+ 2023 06:14:08 +0000
+Received: from TYCPR01MB5933.jpnprd01.prod.outlook.com
+ ([fe80::831b:77c4:7538:9f90]) by TYCPR01MB5933.jpnprd01.prod.outlook.com
+ ([fe80::831b:77c4:7538:9f90%7]) with mapi id 15.20.6363.027; Fri, 5 May 2023
+ 06:14:08 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
-        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, keguang.zhang@gmail.com,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>, zhangbaoqi@loongson.cn
-Content-Type: text/plain; charset="UTF-8"
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Trent Piepho <tpiepho@gmail.com>
+Subject: RE: [PATCH RFC 3/6] dt-bindings: rtc: isl1208: Convert to json-schema
+Thread-Topic: [PATCH RFC 3/6] dt-bindings: rtc: isl1208: Convert to
+ json-schema
+Thread-Index: AQHZfZvAkKrBUOZKYEaRmzaYqKPbDK9IRqAAgAATdCCAAfKGgIAABjkAgADiz3A=
+Date:   Fri, 5 May 2023 06:14:08 +0000
+Message-ID: <TYCPR01MB593378429752A6EDC987484186729@TYCPR01MB5933.jpnprd01.prod.outlook.com>
+References: <20230503084608.14008-1-biju.das.jz@bp.renesas.com>
+ <20230503084608.14008-4-biju.das.jz@bp.renesas.com>
+ <OS0PR01MB5922D95278CE2D1C085661C0866C9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <OS0PR01MB5922DDA5F5F112DF8B7755E5866C9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <OS0PR01MB5922E58C3A0DDF0EFD4E854F866D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <306f000d-6eec-cf90-b494-f391ff3d387c@linaro.org>
+In-Reply-To: <306f000d-6eec-cf90-b494-f391ff3d387c@linaro.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB5933:EE_|TYWPR01MB11340:EE_
+x-ms-office365-filtering-correlation-id: 8ce72162-1d67-405d-f7a2-08db4d2fefce
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6al8ulK5adzdxusU9pjlVLRsI/JVBj7brl5FiiR54+ywjUlDtJJMcsUozcyOonndCshEJwgBKy00gQZxaZE/hLKlR2Nwe8LepNIYT4pkWumA1D1sAF8/vdZTeFubn8i8x1e9ipsxqaqHqf5q07uMk8v5Wg3/hrBn5Z2vXGthJrKoIMnNNVl+itYbhiBQNOPxnBTjUeMidScTb0y36WtwcsvQNXp7dm7i1FvMyvR2LLVofrOXNcWCLWWBxgh2HDUvHG314R/CR9sX8xqx3tRd/jCeNwZJWFT2ieIs3IZ8uh4zBDJ5wnFGSuPKacSqonQPWE3ipOHZnWiutiE+zkkNQl1+xxKeUUkkBYvffR8l1Bn1m7T7ba6JEsHZ9mOjMkWMLp9xIMMwJj1jqiqWXxRPbauXj8u6tlbKCggGLvRGj2OfnRMie9Fob1uB5ULuvnf7DUTR7XFAVzQ5bEEg/eBW2vvI1ZqhtEzWMGVjXhx9ctCLsNRRK43+EbX0IJzxxwwBsQOIq8K9ZbwIFrKpbUujJ7rgOyHAQ1nyZA1+XaXp+VZ98C8csE7CM2v7Co1pwfoF1P7IIpf9k4o/v1DXnSiYr4WWeYP5k0i3u90ItVRkoD4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB5933.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199021)(33656002)(86362001)(71200400001)(316002)(110136005)(54906003)(66556008)(66476007)(66446008)(64756008)(4326008)(66946007)(76116006)(7696005)(966005)(478600001)(41300700001)(55016003)(8936002)(5660300002)(52536014)(8676002)(2906002)(7416002)(38070700005)(122000001)(38100700002)(186003)(26005)(53546011)(9686003)(6506007)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wgcuw7ZgugcpeHf82pCnGPXRJ1rN/0LdXJJtYV2CPXgiec6knBJiXeYOrMy0?=
+ =?us-ascii?Q?K9vfVfns8kriM2a6g6MIHArogaJz34nuwGNcW8awz7JkOCT2EwJmv4TRVJyW?=
+ =?us-ascii?Q?IuyX9a+nthpxbkN2I2+UmdH3DhFLFS7LikVd7bZrisEkVGDVY6f01d7vb8bH?=
+ =?us-ascii?Q?K22kQGvSOYSa6z437bcQ+/qQmnAU6RXoVin1RDelnn6jLx8bIh7n3flNWZId?=
+ =?us-ascii?Q?3J7sGwGo+MQdIs3shXGRbNcwNu/x4dNDv4liAdxpGq4NK9hRHwoSLF0wbzDd?=
+ =?us-ascii?Q?KSKAQ3xXmAB5ikd6GZFymaScA+lHeYF1z/Ru7ggk/8cCxtL0fwsn2P4eQqLA?=
+ =?us-ascii?Q?PQaTtoC1Jpjt7mr1KlBLgfS3j+kg/EI2DGkifkc9LA/9YTcc59h0TCOKh5lo?=
+ =?us-ascii?Q?zQpC86lc9amxXwsw6R9yg3DnjhxmmU+8nIBVKkipNXZglaMSsg45RTz+PWc+?=
+ =?us-ascii?Q?JBd3i+IVFSWYe1h1yIJJwzgmnuXUDfQoolI2sBOL75T+zfqD9jQyrmN3XX4r?=
+ =?us-ascii?Q?HHzaZ6rf58+dGwKduQiOZE3BGNiCGJEhTTPYWb2Bc25QbGsdulT/ZJBH52oh?=
+ =?us-ascii?Q?NVgkTQ8HttIa/9OnjYGFBqYpMioFL1t9FurwDUIn6q6c2+ZdBRN3jGS+DbSo?=
+ =?us-ascii?Q?wRxNZZo3o92U5kfOB9pZGORegAmX/MgsKrOp61LLW9RgGLJzTA6M9KQDoFNM?=
+ =?us-ascii?Q?tyomIwf9xbsYIZUCX3xeShxHf+JrtwMZehtiAgu9YVamSt5cJ5DBke0oub68?=
+ =?us-ascii?Q?VstH9Ry3R38FjyM/S5ecTkKCl7KC+eA5o7MT7N6clVCwYvnnJuS7YjcQFUyp?=
+ =?us-ascii?Q?lF+f7AHYrSNLUKOjDuEHzLNDq9tttkDZNunOcBTZaeABMu0aw2HE90LT/Il/?=
+ =?us-ascii?Q?5wUSCSYDIFTGZSuTPgvPLlYOR5QqIz6WNjdlek/+YBwS217Rtcg1zXai0Hqe?=
+ =?us-ascii?Q?EgqSMe37aHCiYx+E1c9q7kDK71dTGCkHjJKceMebbuzzc9kyN5fz7iOTItJ8?=
+ =?us-ascii?Q?5EzT1db6Tg6Ayq2u0+z6aYt/zeS126OU4gtSCHmC+gqIg5k6/ekXBv2bmQWW?=
+ =?us-ascii?Q?7Hl24JYcHS9cU130b2C1Faoyv1V/noKCzOZGQ7uZGygWL1w0Y+x2vb04pYvU?=
+ =?us-ascii?Q?8SUOKi2TLscBULbPMMe57uDa4N5gjLk1BSzoQp6sUDwD6KPGXYvnlr4PO8Ba?=
+ =?us-ascii?Q?AxOxdWo30YaNEptE5L9X3xM4DuX+dYbTGfnzm8AP2BLrOqTw/9+BnUPr4LSy?=
+ =?us-ascii?Q?XS2yXav6t1G6N5ru2TZnmF6GIaluKrklouUIhb7pIqFow5VW5+wL6mK42z5p?=
+ =?us-ascii?Q?0G1w0ibIF4AYNGfDzvvpe77c6It1/vsX+vtXufTiMrGKnLdWR7vNJuxeCpqi?=
+ =?us-ascii?Q?Yk9BQT+R88ZPPjvifUCoa3xmXVZvfQVTeDb8MjHmQXTRvDKfEv9SfvRkQM63?=
+ =?us-ascii?Q?9tSeXXWkxEagSdpb1AGMT5JyWtY1lHi8XJ0gaqq9QbhN13a0xVNXn9LVUlh/?=
+ =?us-ascii?Q?7P4EHrrC6RbdGv/NTidkSd3IFKJkMHdZ5AGMr9wEEoPF1gzmuOfdF5wk+f3+?=
+ =?us-ascii?Q?CO/ueeeZY/U9TtpJjKAPqSyh1KvO8dNqI6SOUBxP?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB5933.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ce72162-1d67-405d-f7a2-08db4d2fefce
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2023 06:14:08.5002
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: C4M5hu5P8ks1kCZqYe/7W5X/TtEwA9txqUA77oBxNjuxptia9HvzH+PeQ4PMDMg6jAYaXAzzG5lj6YJ+RWxAf0VnFX4rJlXVElEGCIVv5mA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB11340
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 3:49=E2=80=AFAM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 13/04/2023 15:57:34+0800, Binbin Zhou wrote:
-> > This RTC module is integrated into the Loongson-2K SoC and the LS7A
-> > bridge chip. This version is almost entirely rewritten to make use of
-> > current kernel API, and it supports both ACPI and DT.
+Hi Krzysztof Kozlowski,
+
+> Subject: Re: [PATCH RFC 3/6] dt-bindings: rtc: isl1208: Convert to json-
+> schema
+>=20
+> On 04/05/2023 18:22, Biju Das wrote:
+> > Hi Krzysztof Kozlowski and  Rob,
 > >
-> > This driver is shared by MIPS-based Loongson-3A4000 system (use FDT) an=
-d
-> > LoongArch-based Loongson-3A5000 system (use ACPI).
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
-> > Signed-off-by: WANG Xuerui <git@xen0n.name>
-> > ---
-> >  drivers/rtc/Kconfig    |  11 ++
-> >  drivers/rtc/Makefile   |   1 +
-> >  drivers/rtc/rtc-ls2x.c | 345 +++++++++++++++++++++++++++++++++++++++++
->
-> This is v3 and this is still not merged in rtc-ls1x.c.
-
-Hi Alexandre:
-
-The ls1x rtc has been merged in at my local repository and Keguang has
-helped test it through, so it will be ready for release in the next
-version.
-In the meantime rtc-ls2x will be renamed to rtc-loongson.
-
->
-> >  3 files changed, 357 insertions(+)
-> >  create mode 100644 drivers/rtc/rtc-ls2x.c
-> >
-> > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> > index 753872408615..e1b9d64d2678 100644
-> > --- a/drivers/rtc/Kconfig
-> > +++ b/drivers/rtc/Kconfig
-> > @@ -1706,6 +1706,17 @@ config RTC_DRV_LPC32XX
-> >         This driver can also be built as a module. If so, the module
-> >         will be called rtc-lpc32xx.
-> >
-> > +config RTC_DRV_LS2X
-> > +     tristate "Loongson LS2X RTC"
-> > +     depends on MACH_LOONGSON64 || COMPILE_TEST
-> > +     select REGMAP_MMIO
-> > +     help
-> > +       If you say yes here you get support for the RTC on the Loongson=
--2K
-> > +       SoC and LS7A bridge, which first appeared on the Loongson-2H.
-> > +
-> > +       This driver can also be built as a module. If so, the module
-> > +       will be called rtc-ls2x.
-> > +
-> >  config RTC_DRV_PM8XXX
-> >       tristate "Qualcomm PMIC8XXX RTC"
-> >       depends on MFD_PM8XXX || MFD_SPMI_PMIC || COMPILE_TEST
-> > diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> > index ea445d1ebb17..cff5df09fc60 100644
-> > --- a/drivers/rtc/Makefile
-> > +++ b/drivers/rtc/Makefile
-> > @@ -82,6 +82,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)     +=3D rtc-ls1x.o
-> >  obj-$(CONFIG_RTC_DRV_LP8788) +=3D rtc-lp8788.o
-> >  obj-$(CONFIG_RTC_DRV_LPC24XX)        +=3D rtc-lpc24xx.o
-> >  obj-$(CONFIG_RTC_DRV_LPC32XX)        +=3D rtc-lpc32xx.o
-> > +obj-$(CONFIG_RTC_DRV_LS2X)   +=3D rtc-ls2x.o
-> >  obj-$(CONFIG_RTC_DRV_M41T80) +=3D rtc-m41t80.o
-> >  obj-$(CONFIG_RTC_DRV_M41T93) +=3D rtc-m41t93.o
-> >  obj-$(CONFIG_RTC_DRV_M41T94) +=3D rtc-m41t94.o
-> > diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
-> > new file mode 100644
-> > index 000000000000..c74dd88ae11b
-> > --- /dev/null
-> > +++ b/drivers/rtc/rtc-ls2x.c
-> > @@ -0,0 +1,345 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Loongson-2K/LS7A RTC driver
-> > + *
-> > + * Based on the original out-of-tree Loongson-2H RTC driver for Linux =
-2.6.32,
-> > + * by Shaozong Liu <liushaozong@loongson.cn>.
-> > + *
-> > + * Maintained out-of-tree by Huacai Chen <chenhuacai@kernel.org>.
-> > + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
-> > + *                           Binbin Zhou <zhoubinbin@loongson.cn>
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/rtc.h>
-> > +#include <linux/acpi.h>
-> > +
-> > +/* Time Of Year(TOY) counters registers */
-> > +#define TOY_TRIM_REG         0x20 /* Must be initialized to 0 */
-> > +#define TOY_WRITE0_REG               0x24 /* TOY low 32-bits value (wr=
-ite-only) */
-> > +#define TOY_WRITE1_REG               0x28 /* TOY high 32-bits value (w=
-rite-only) */
-> > +#define TOY_READ0_REG                0x2c /* TOY low 32-bits value (re=
-ad-only) */
-> > +#define TOY_READ1_REG                0x30 /* TOY high 32-bits value (r=
-ead-only) */
-> > +#define TOY_MATCH0_REG               0x34 /* TOY timing interrupt 0 */
-> > +#define TOY_MATCH1_REG               0x38 /* TOY timing interrupt 1 */
-> > +#define TOY_MATCH2_REG               0x3c /* TOY timing interrupt 2 */
-> > +
-> > +/* RTC counters registers */
-> > +#define RTC_CTRL_REG         0x40 /* TOY and RTC control register */
-> > +#define RTC_TRIM_REG         0x60 /* Must be initialized to 0 */
-> > +#define RTC_WRITE0_REG               0x64 /* RTC counters value (write=
--only) */
-> > +#define RTC_READ0_REG                0x68 /* RTC counters value (read-=
-only) */
-> > +#define RTC_MATCH0_REG               0x6c /* RTC timing interrupt 0 */
-> > +#define RTC_MATCH1_REG               0x70 /* RTC timing interrupt 1 */
-> > +#define RTC_MATCH2_REG               0x74 /* RTC timing interrupt 2 */
-> > +
-> > +/* bitmask of TOY_WRITE0_REG */
-> > +#define TOY_MON                      GENMASK(31, 26)
-> > +#define TOY_DAY                      GENMASK(25, 21)
-> > +#define TOY_HOUR             GENMASK(20, 16)
-> > +#define TOY_MIN                      GENMASK(15, 10)
-> > +#define TOY_SEC                      GENMASK(9, 4)
-> > +#define TOY_MSEC             GENMASK(3, 0)
-> > +
-> > +/* bitmask of TOY_MATCH0/1/2_REG */
-> > +#define TOY_MATCH_YEAR               GENMASK(31, 26)
-> > +#define TOY_MATCH_MON                GENMASK(25, 22)
-> > +#define TOY_MATCH_DAY                GENMASK(21, 17)
-> > +#define TOY_MATCH_HOUR               GENMASK(16, 12)
-> > +#define TOY_MATCH_MIN                GENMASK(11, 6)
-> > +#define TOY_MATCH_SEC                GENMASK(5, 0)
-> > +
-> > +/* bitmask of RTC_CTRL_REG */
-> > +#define RTC_ENABLE           BIT(13) /* 1: RTC counters enable */
-> > +#define TOY_ENABLE           BIT(11) /* 1: TOY counters enable */
-> > +#define OSC_ENABLE           BIT(8) /* 1: 32.768k crystal enable */
-> > +#define TOY_ENABLE_MASK              (TOY_ENABLE | OSC_ENABLE)
-> > +
-> > +/* PM domain registers */
-> > +#define PM1_STS_REG          0x0c /* Power management 1 status registe=
-r */
-> > +#define RTC_STS                      BIT(10) /* RTC status */
-> > +#define PM1_EN_REG           0x10 /* Power management 1 enable registe=
-r */
-> > +#define RTC_EN                       BIT(10) /* RTC event enable */
-> > +
-> > +/* Offset of PM domain from RTC domain, for rtc alarm */
-> > +enum ls2x_pm_offset {
-> > +     GENERIC_OFFSET =3D 0x100,
-> > +     LS2K1000_OFFSET =3D 0x800,
-> > +};
-> > +
-> > +struct ls2x_rtc_priv {
-> > +     spinlock_t lock; /* protects PM registers access */
-> > +     int irq;
-> > +     struct rtc_device *rtcdev;
-> > +     struct regmap *regmap;
-> > +     void __iomem *pm_base; /* PM domain base, for rtc alarm */
-> > +};
-> > +
-> > +static const struct regmap_config ls2x_rtc_regmap_config =3D {
-> > +     .reg_bits =3D 32,
-> > +     .val_bits =3D 32,
-> > +     .reg_stride =3D 4,
-> > +};
-> > +
-> > +/* IRQ Handlers */
-> > +static irqreturn_t ls2x_rtc_isr(int irq, void *id)
-> > +{
-> > +     struct ls2x_rtc_priv *priv =3D (struct ls2x_rtc_priv *)id;
-> > +
-> > +     rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
-> > +     return IRQ_HANDLED;
-> > +}
-> > +
-> > +static u32 ls2x_rtc_handler(void *id)
-> > +{
-> > +     u32 ret;
-> > +     struct ls2x_rtc_priv *priv =3D (struct ls2x_rtc_priv *)id;
-> > +
-> > +     spin_lock(&priv->lock);
-> > +     /* Disable rtc event */
-> > +     writel(readl(priv->pm_base + PM1_EN_REG) & ~RTC_EN,
-> > +            priv->pm_base + PM1_EN_REG);
-> > +
-> > +     /* Clear rtc interrupt status */
-> > +     writel(RTC_STS, priv->pm_base + PM1_STS_REG);
-> > +     spin_unlock(&priv->lock);
-> > +
-> > +     /*
-> > +      * The TOY_MATCH0_REG should be cleared 0 here,
-> > +      * otherwise the interrupt cannot be cleared.
-> > +      */
-> > +     ret =3D regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
-> > +     return 0;
-> > +}
-> > +
-> > +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> > +{
-> > +     int ret;
-> > +     u32 ctrl_data, rtc_data[2];
-> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
-> > +
-> > +     ret =3D regmap_read(priv->regmap, RTC_CTRL_REG, &ctrl_data);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     if (!(ctrl_data & TOY_ENABLE_MASK))
-> > +             return -EINVAL;
-> > +
-> > +     ret =3D regmap_bulk_read(priv->regmap, TOY_READ0_REG, rtc_data,
-> > +                            ARRAY_SIZE(rtc_data));
->
-> There is still no answer on whether the TOY_READ0_REG and TOY_READ1_REG
-> are latched.
->
-
-After talking to colleagues offline, the RTC hardware itself can
-guarantee atomicity for bulk reads.
-
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     tm->tm_sec =3D FIELD_GET(TOY_SEC, rtc_data[0]);
-> > +     tm->tm_min =3D FIELD_GET(TOY_MIN, rtc_data[0]);
-> > +     tm->tm_hour =3D FIELD_GET(TOY_HOUR, rtc_data[0]);
-> > +     tm->tm_mday =3D FIELD_GET(TOY_DAY, rtc_data[0]);
-> > +     tm->tm_mon =3D FIELD_GET(TOY_MON, rtc_data[0]) - 1;
-> > +     tm->tm_year =3D rtc_data[1];
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> > +{
-> > +     int ret;
-> > +     u32 rtc_data[2];
-> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
-> > +
-> > +     rtc_data[0] =3D FIELD_PREP(TOY_SEC, tm->tm_sec)
-> > +                 | FIELD_PREP(TOY_MIN, tm->tm_min)
-> > +                 | FIELD_PREP(TOY_HOUR, tm->tm_hour)
-> > +                 | FIELD_PREP(TOY_DAY, tm->tm_mday)
-> > +                 | FIELD_PREP(TOY_MON, tm->tm_mon + 1);
-> > +     rtc_data[1] =3D tm->tm_year;
-> > +
-> > +     ret =3D regmap_bulk_write(priv->regmap, TOY_WRITE0_REG, rtc_data,
-> > +                             ARRAY_SIZE(rtc_data));
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     /* Enable RTC TOY counters and crystal */
-> > +     return regmap_update_bits(priv->regmap, RTC_CTRL_REG, TOY_ENABLE_=
-MASK,
-> > +                               TOY_ENABLE_MASK);
-> > +}
-> > +
-> > +static int ls2x_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *=
-alrm)
-> > +{
-> > +     int ret;
-> > +     u32 alarm_data;
-> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
-> > +
-> > +     ret =3D regmap_read(priv->regmap, TOY_MATCH0_REG, &alarm_data);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     alrm->time.tm_sec =3D FIELD_GET(TOY_MATCH_SEC, alarm_data);
-> > +     alrm->time.tm_min =3D FIELD_GET(TOY_MATCH_MIN, alarm_data);
-> > +     alrm->time.tm_hour =3D FIELD_GET(TOY_MATCH_HOUR, alarm_data);
-> > +     alrm->time.tm_mday =3D FIELD_GET(TOY_MATCH_DAY, alarm_data);
-> > +     alrm->time.tm_mon =3D FIELD_GET(TOY_MATCH_MON, alarm_data) - 1;
-> > +     /*
-> > +      * This is a hardware bug.
-> > +      * The year field in the SYS_TOYMATCH has only 6 bits(bits[31:26]=
-),
-> > +      * so it can only be set from 1900 to 1963.
-> > +      * In order to avoid an invalid alarm value during booting, we ma=
-nually
-> > +      * add 64 after reading the year field (equivalent to filling in =
-the
-> > +      * high bits).
-> > +      */
-> > +     alrm->time.tm_year =3D FIELD_GET(TOY_MATCH_YEAR, alarm_data) + 64=
-;
->
-> This is restricting to the 1964 to 2027 range whereas you claim the RTC
-> has a 2000 to 2099 range. Why don't you simply do 2000 to 2063 which
-> would at least match most of it.
->
-
-I have compiled a description of this hardware defect:
-
-Firstly, the root cause of the defect is that there are not enough
-bits in the MATCH register to indicate the year, only 6 bits.
-The rtc hardware uses the MATCH register to compare the alarm time
-values and to determine if an alarm is triggered.
-
-Therefore, we have to ensure that the lower 6 bits remain unchanged
-during the conversion of the year value . Otherwise the rtc hardware
-will definitely not succeed when matching and thus the alarm function
-will not work.
-In summary, here we can only add or subtract 64 (or a multiple of 64).
-
-To avoid the year being described only up to 2027, how about the
-following solution:
-1. define the global variable year_offset, which holds the required offset.
-2. In ls2x_rtc_read_time(), calculate year_offset =3D tm->tm_year / 64 * 64=
+> >>>> <fabrizio.castro.jz@renesas.com>; linux-renesas-soc@vger.kernel.org
+> >>>> Subject: [PATCH RFC 3/6] dt-bindings: rtc: isl1208: Convert to
+> >>>> json-schema
+> >>>>
+> >>>> Convert the isl1208 RTC device tree binding documentation to json-
+> >> schema.
+> >>>>
+> >>>> Update the example to match reality.
+> >>>>
+> >>>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> >>>> ---
+> >>>>  .../devicetree/bindings/rtc/isil,isl1208.txt  | 38 ----------
+> >>>> .../devicetree/bindings/rtc/isil,isl1208.yaml | 74
+> >>>> +++++++++++++++++++
+> >>>>  2 files changed, 74 insertions(+), 38 deletions(-)  delete mode
+> >>>> 100644 Documentation/devicetree/bindings/rtc/isil,isl1208.txt
+> >>>>  create mode 100644
+> >>>> Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
+> >>>>
+> >>>> diff --git a/Documentation/devicetree/bindings/rtc/isil,isl1208.txt
+> >>>> b/Documentation/devicetree/bindings/rtc/isil,isl1208.txt
+> >>>> deleted file mode 100644
+> >>>> index 51f003006f04..000000000000
+> >>>> --- a/Documentation/devicetree/bindings/rtc/isil,isl1208.txt
+> >>>> +++ /dev/null
+> >>>> @@ -1,38 +0,0 @@
+> >>>> -Intersil ISL1209/19 I2C RTC/Alarm chip with event in
+> >>>> -
+> >>>> -ISL12X9 have additional pins EVIN and #EVDET for tamper detection,
+> >>>> while the
+> >>>> -ISL1208 and ISL1218 do not.  They are all use the same driver with
+> >>>> the bindings -described here, with chip specific properties as noted=
 .
+> >>>> -
+> >>>> -Required properties supported by the device:
+> >>>> - - "compatible": Should be one of the following:
+> >>>> -		- "isil,isl1208"
+> >>>> -		- "isil,isl1209"
+> >>>> -		- "isil,isl1218"
+> >>>> -		- "isil,isl1219"
+> >>>> - - "reg": I2C bus address of the device
+> >>>> -
+> >>>> -Optional properties:
+> >>>> - - "interrupt-names": list which may contains "irq" and "evdet"
+> >>>> -	evdet applies to isl1209 and isl1219 only
+> >>>> - - "interrupts": list of interrupts for "irq" and "evdet"
+> >>>> -	evdet applies to isl1209 and isl1219 only
+> >>>> - - "isil,ev-evienb": Enable or disable internal pull on EVIN pin
+> >>>> -	Applies to isl1209 and isl1219 only
+> >>>> -	Possible values are 0 and 1
+> >>>> -	Value 0 enables internal pull-up on evin pin, 1 disables it.
+> >>>> -	Default will leave the non-volatile configuration of the pullup
+> >>>> -	as is.
+> >>>> -
+> >>>> -Example isl1219 node with #IRQ pin connected to SoC gpio1 pin12
+> >>>> and #EVDET pin -connected to SoC gpio2 pin 24 and internal pull-up
+> >>>> enabled in
+> >>> EVIN pin.
+> >>>> -
+> >>>> -	isl1219: rtc@68 {
+> >>>> -		compatible =3D "isil,isl1219";
+> >>>> -		reg =3D <0x68>;
+> >>>> -		interrupt-names =3D "irq", "evdet";
+> >>>> -		interrupts-extended =3D <&gpio1 12 IRQ_TYPE_EDGE_FALLING>,
+> >>>> -			<&gpio2 24 IRQ_TYPE_EDGE_FALLING>;
+> >>>> -		isil,ev-evienb =3D <1>;
+> >>>> -	};
+> >>>> -
+> >>>> diff --git
+> >>>> a/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
+> >>>> b/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
+> >>>> new file mode 100644
+> >>>> index 000000000000..04d51887855f
+> >>>> --- /dev/null
+> >>>> +++ b/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
+> >>>> @@ -0,0 +1,74 @@
+> >>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML
+> >>>> +1.2
+> >>>> +---
+> >>>> +$id:
+> >>>> +
+> >>>> +title: Intersil ISL12{08,09,18,19} I2C RTC/Alarm chip
+> >>>> +
+> >>>> +maintainers:
+> >>>> +  - Biju Das <biju.das.jz@bp.renesas.com>
+> >>>> +  - Trent Piepho <tpiepho@impinj.com>
+> >>>> +
+> >>>> +properties:
+> >>>> +  compatible:
+> >>>> +    oneOf:
+> >>>> +      - enum:
+> >>>> +          - isil,isl1208
+> >>>> +          - isil,isl1209
+> >>>> +          - isil,isl1218
+> >>>> +          - isil,isl1219
+> >>>> +
+> >>>> +  reg:
+> >>>> +    maxItems: 1
+> >>>> +
+> >>>> +  interrupts:
+> >>>> +    minItems: 1
+> >>>> +    maxItems: 2
+> >>>> +
+> >>>> +  interrupt-names:
+> >>>> +    items:
+> >>>> +      - const: irq
+> >>>> +      - const: evdet
+> >>>> +
+> >>>> +  isil,ev-evienb:
+> >>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >>>> +    enum: [ 0, 1 ]
+> >>>> +    default: 0
+> >
+> >
+> > What is your thoughts on this? we should keep default or we should remo=
+ve?
+> >
+> > As per HW data sheet[1], the reset value is 0, [1]
+> > https://www.renesas.com/us/en/document/dst/isl1219-datasheet
+> >
+> > But as per text version of bindings [2], Looks like default is not need=
+ed.
+>=20
+> Missing value has different meaning in original binding, so default is wr=
+ong
+> here and you should explain that meaning in description.
 
-> I am very very disappointed. I had all these comments on v1 and v2, you
-> are sending v3 with the exact same issues. How can I trust this is ever
-> going to progress in the right direction?
+OK, I will remove default and use the same description from the original bi=
+ndings
+and send it as separate patch.
 
-I apologise that the time between these two patch sets is a bit long
-and I did not double check the relevant change points.
-I will double check each point that needs to be changed before sending
-out subsequent patches.
-
-Again, I apologise.
-
-Thanks.
-Binbin
-
->
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+Cheers,
+Biju
