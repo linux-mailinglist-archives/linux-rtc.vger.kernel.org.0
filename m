@@ -2,256 +2,420 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153986F7062
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 May 2023 19:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF346F7AE1
+	for <lists+linux-rtc@lfdr.de>; Fri,  5 May 2023 04:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjEDREQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 May 2023 13:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S229872AbjEEC2d (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 May 2023 22:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjEDREP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 13:04:15 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90B62719;
-        Thu,  4 May 2023 10:04:13 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id F1E2E580E6A;
-        Thu,  4 May 2023 13:04:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 04 May 2023 13:04:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1683219852; x=1683227052; bh=Pk
-        SQbmz2mEiFvQuMjYfFpQvVcVsNXX6yAK0DMQvrT78=; b=cmJlwLa8yhdC4PdQoI
-        d0hb531eiI2SORxL3Fl3hrBicgmrIqTK2JruPb97I5kPMeDAKroA/qfvcVn4SHpi
-        0GJwBwwJhVyBr0Z3gCWPJStGYlLHJVRHb8h+jKHQvCaAntRpesESAK3sBnsryQLT
-        SY1pMZNm7NeXzxB0X4LGhh4tDtYGJwHvxymMS6zun/yeRMUOk17dwvfkedHb73tr
-        HDJwJT3hqrDjvLymB2DkFIWIl9NAK1sqV8mngyOKOOkARjYozakGWeevZLdVnLJM
-        2r9OCaZnJE/Iut75vl7CK6hrYFM8e09Zs5jDuDCIHU4E46AgWleB+oJARw3dPB4i
-        nWXg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683219852; x=1683227052; bh=PkSQbmz2mEiFv
-        QuMjYfFpQvVcVsNXX6yAK0DMQvrT78=; b=AuagbG+sDeabBm6qygO9uf6q6oPyP
-        ln51yGwNChqfoFi25xJw+emXpwH8g/NTNhI3i5k1yWKZiYlTlAS5rplMF6gQkK/e
-        laonPFrlE/3b3UZB5kH5Oe8M2j6oYoZR4K3PB9E/ohKD6c/GRXCbuk26UWMvS6ps
-        IGPMb413/9tdMInk8seyummLGmLiYcAs0royMw83PEXI5IllNN1DDdz1ub/MnRtP
-        jNV3A8TnFjNuN73VANJme+us+/xozB2Fslb8vtM7RCSV5PVpN7WkauqzxtupFLrH
-        w6KIslwyhc14ZQfGI9ojV26lTWu/2uydNx3dHVpk0RYe0JWyoFktgKk2g==
-X-ME-Sender: <xms:iuVTZB3-j9J9v_I9u_nLe23G-6Km95qYmGddsS8j9B3EISxW2I58tQ>
-    <xme:iuVTZIFcT7ZRU7I8Q-j_hIxB2UA45VX7YZUSc23XiwcJfwvL32Fc00IBM8g7HDbhY
-    fDMxv-M9z8kq6nDOks>
-X-ME-Received: <xmr:iuVTZB6hMgnVSN6caEFK-biUtu_4lRmFrrREwhLfK0aqpVD8obrAFVEs3OgODGka612q-Vxrss0VmiOBn_hzt2nWqkubj9U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeftddguddtkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
-    kefgleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:iuVTZO352jeG413D2-8gCuvaVz9nzir5JVeGb9Qt5T66BjFUHxDI6A>
-    <xmx:iuVTZEEch61XFzQdgNXpnEgchfdDLzHESPV9TD2R7L76K_Tm_CGCzg>
-    <xmx:iuVTZP8JvDB9v2-05uIiSmwcEsdw1ZGXKd400N956wEG9rbS3yqRhA>
-    <xmx:jOVTZIO2DARyLcbYRuAk0sTaKYb8VuLfnAb3kuIJaa_ZaJPDtFbScA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 4 May 2023 13:04:09 -0400 (EDT)
-Date:   Thu, 4 May 2023 19:04:07 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 29/65] clk: socfpga: gate: Add a determine_rate hook
-Message-ID: <tgtfisqxubin4cjj6q26fboirbcnjzcazt5y3m322lw5lskz6l@d3tgz4hdfnk2>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
- <679921ee-98d4-d6ef-5934-e009fd4b31fc@kernel.org>
- <sjlp5ubnpvulgwhhymmfkmmobkgxacyqwagqozodkee3di2qik@3igj6k3zgbk6>
- <57dd81d0-510e-0fab-670d-1109eb8dd974@kernel.org>
+        with ESMTP id S229758AbjEEC2c (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 May 2023 22:28:32 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C9CAD37;
+        Thu,  4 May 2023 19:28:30 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a7c1b86e8so1595998276.2;
+        Thu, 04 May 2023 19:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683253709; x=1685845709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IQTwCtOioJF8t/OiNx/dPasS+fdTMROa/SSWtKZQgKs=;
+        b=JIWVovMpQ3sB1Y2LItd2ey9cLqND5SVtLG/8J4+W6kJJosibN1+m8+ousRJlYRLjms
+         pFD42ttOvGyeO0vBmCLohiRM/cmdb3MEslUpdzxtDeEqb0XLI+Nv88W8baeZka2pUK83
+         UTCAQNM/6duTyT8/c5ngSJaFw6ocRwUNOd8mydPI84GdzFbgSAKdJbqJWJl6Nl/W66tN
+         UmAVwigIsyaIH5OWjFSQe6cYlBKFaE87zB7VL/4zOcbCDjMOiP0Ccha1IjsgDeyh3uuZ
+         LnBOZEHjyUntMlacBaSUb5kDv5FC8cFQXH8xoReYqYbVlcDa0rK8idPo2sG0u2pCrByo
+         Rlkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683253709; x=1685845709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IQTwCtOioJF8t/OiNx/dPasS+fdTMROa/SSWtKZQgKs=;
+        b=U0y3VKZRMnV3mV4rdWJyJ+whKM/BWkvjYVCyD1tdCw8PwB7F5whLsIv9zc/4UUG1+S
+         pQBWDhaGgRoiIE9Z4bGpJ8FGOhluxnaS7LsMGVzr1j1YvPOjKwfV3QqtUPj0UKH2FYeU
+         Y5XFPe7EwkFZ1rzzbYM7JxGeen+ZtzncWA7+M7NZtNFdXGMtxOHt8YXS5iGhyh9Jw6x8
+         mbXmerphyBTd8QUyPztZHtmInvmMChgaXo/+29vLqyUsjbUy5m1YCX8NqoxFnQ3BHPJM
+         dQGx1SaRVNFNP/aWgyP8F/eq2blgh2cJMcj/fCw/rwwRHdEZZnO5x2Bujj/tnEVxdRFK
+         5xKg==
+X-Gm-Message-State: AC+VfDy2cyC+aU9ifwWSf0gIJfKPLqqIePhoEOkAFbCMDc1VfUIDnrhS
+        Xa2ATkOe/1AydjNlbINis7cXwAvD0gGzcQo88vY=
+X-Google-Smtp-Source: ACHHUZ6s8kmM5Dp5ih24Bs2hjigFmkgmEJakDis6EgSGdU/4H1aET/JyFpi3QqfwTFH10DYcjaA8FESVKsOzzJ1oQFQ=
+X-Received: by 2002:a25:c78f:0:b0:b9a:8298:d873 with SMTP id
+ w137-20020a25c78f000000b00b9a8298d873mr30812ybe.49.1683253709325; Thu, 04 May
+ 2023 19:28:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wz33ctz6wi47hpno"
-Content-Disposition: inline
-In-Reply-To: <57dd81d0-510e-0fab-670d-1109eb8dd974@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1681370153.git.zhoubinbin@loongson.cn> <09f381f445cfbcf857845f61d10238452037b2e8.1681370153.git.zhoubinbin@loongson.cn>
+ <20230416194901b538cb7c@mail.local>
+In-Reply-To: <20230416194901b538cb7c@mail.local>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Fri, 5 May 2023 10:28:16 +0800
+Message-ID: <CAMpQs4LhkupxQExQCqg9qJ0eWCzLZEaeKDrJThTVyezz=ne53A@mail.gmail.com>
+Subject: Re: [PATCH V3 2/7] rtc: Add support for the Loongson-2K/LS7A RTC
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, linux-rtc@vger.kernel.org,
+        linux-mips@vger.kernel.org, loongarch@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, keguang.zhang@gmail.com,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>, zhangbaoqi@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Mon, Apr 17, 2023 at 3:49=E2=80=AFAM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 13/04/2023 15:57:34+0800, Binbin Zhou wrote:
+> > This RTC module is integrated into the Loongson-2K SoC and the LS7A
+> > bridge chip. This version is almost entirely rewritten to make use of
+> > current kernel API, and it supports both ACPI and DT.
+> >
+> > This driver is shared by MIPS-based Loongson-3A4000 system (use FDT) an=
+d
+> > LoongArch-based Loongson-3A5000 system (use ACPI).
+> >
+> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
+> > Signed-off-by: WANG Xuerui <git@xen0n.name>
+> > ---
+> >  drivers/rtc/Kconfig    |  11 ++
+> >  drivers/rtc/Makefile   |   1 +
+> >  drivers/rtc/rtc-ls2x.c | 345 +++++++++++++++++++++++++++++++++++++++++
+>
+> This is v3 and this is still not merged in rtc-ls1x.c.
 
---wz33ctz6wi47hpno
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Alexandre:
 
-Hi Dinh,
+The ls1x rtc has been merged in at my local repository and Keguang has
+helped test it through, so it will be ready for release in the next
+version.
+In the meantime rtc-ls2x will be renamed to rtc-loongson.
 
-On Thu, Apr 27, 2023 at 02:09:48PM -0500, Dinh Nguyen wrote:
-> Hi Maxime,
->=20
-> On 4/25/23 09:48, Maxime Ripard wrote:
-> > Hi Dinh,
-> >=20
-> > On Mon, Apr 24, 2023 at 01:32:28PM -0500, Dinh Nguyen wrote:
-> > > On 4/4/23 05:11, Maxime Ripard wrote:
-> > > > The SoCFGPA gate clock implements a mux with a set_parent hook, but
-> > > > doesn't provide a determine_rate implementation.
-> > > >=20
-> > > > This is a bit odd, since set_parent() is there to, as its name impl=
-ies,
-> > > > change the parent of a clock. However, the most likely candidate to
-> > > > trigger that parent change is a call to clk_set_rate(), with
-> > > > determine_rate() figuring out which parent is the best suited for a
-> > > > given rate.
-> > > >=20
-> > > > The other trigger would be a call to clk_set_parent(), but it's far=
- less
-> > > > used, and it doesn't look like there's any obvious user for that cl=
-ock.
-> > > >=20
-> > > > So, the set_parent hook is effectively unused, possibly because of =
-an
-> > > > oversight. However, it could also be an explicit decision by the
-> > > > original author to avoid any reparenting but through an explicit ca=
-ll to
-> > > > clk_set_parent().
-> > > >=20
-> > > > The latter case would be equivalent to setting the flag
-> > > > CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate =
-hook
-> > > > to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> > > > implementation is provided, clk_round_rate() (through
-> > > > clk_core_round_rate_nolock()) will call itself on the parent if
-> > > > CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> > > > otherwise. __clk_mux_determine_rate() has the exact same behavior w=
-hen
-> > > > CLK_SET_RATE_NO_REPARENT is set.
-> > > >=20
-> > > > And if it was an oversight, then we are at least explicit about our
-> > > > behavior now and it can be further refined down the line.
-> > > >=20
-> > > > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > > > ---
-> > > >    drivers/clk/socfpga/clk-gate.c | 3 ++-
-> > > >    1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/c=
-lk-gate.c
-> > > > index 32ccda960f28..cbba8462a09e 100644
-> > > > --- a/drivers/clk/socfpga/clk-gate.c
-> > > > +++ b/drivers/clk/socfpga/clk-gate.c
-> > > > @@ -110,6 +110,7 @@ static unsigned long socfpga_clk_recalc_rate(st=
-ruct clk_hw *hwclk,
-> > > >    static struct clk_ops gateclk_ops =3D {
-> > > >    	.recalc_rate =3D socfpga_clk_recalc_rate,
-> > > > +	.determine_rate =3D __clk_mux_determine_rate,
-> > > >    	.get_parent =3D socfpga_clk_get_parent,
-> > > >    	.set_parent =3D socfpga_clk_set_parent,
-> > > >    };
-> > > > @@ -166,7 +167,7 @@ void __init socfpga_gate_init(struct device_nod=
-e *node)
-> > > >    	init.name =3D clk_name;
-> > > >    	init.ops =3D ops;
-> > > > -	init.flags =3D 0;
-> > > > +	init.flags =3D CLK_SET_RATE_NO_REPARENT;
-> > > >    	init.num_parents =3D of_clk_parent_fill(node, parent_name, SOCF=
-PGA_MAX_PARENTS);
-> > > >    	if (init.num_parents < 2) {
-> > > >=20
-> > >=20
-> > > This patch broke SoCFPGA boot serial port. The characters are mangled.
-> >=20
-> > Do you have any other access to that board? If so, could you dump
-> > clk_summary in debugfs with and without that patch?
-> >=20
->=20
-> That dump from the clk_summary are identical for both cases.
+>
+> >  3 files changed, 357 insertions(+)
+> >  create mode 100644 drivers/rtc/rtc-ls2x.c
+> >
+> > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> > index 753872408615..e1b9d64d2678 100644
+> > --- a/drivers/rtc/Kconfig
+> > +++ b/drivers/rtc/Kconfig
+> > @@ -1706,6 +1706,17 @@ config RTC_DRV_LPC32XX
+> >         This driver can also be built as a module. If so, the module
+> >         will be called rtc-lpc32xx.
+> >
+> > +config RTC_DRV_LS2X
+> > +     tristate "Loongson LS2X RTC"
+> > +     depends on MACH_LOONGSON64 || COMPILE_TEST
+> > +     select REGMAP_MMIO
+> > +     help
+> > +       If you say yes here you get support for the RTC on the Loongson=
+-2K
+> > +       SoC and LS7A bridge, which first appeared on the Loongson-2H.
+> > +
+> > +       This driver can also be built as a module. If so, the module
+> > +       will be called rtc-ls2x.
+> > +
+> >  config RTC_DRV_PM8XXX
+> >       tristate "Qualcomm PMIC8XXX RTC"
+> >       depends on MFD_PM8XXX || MFD_SPMI_PMIC || COMPILE_TEST
+> > diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> > index ea445d1ebb17..cff5df09fc60 100644
+> > --- a/drivers/rtc/Makefile
+> > +++ b/drivers/rtc/Makefile
+> > @@ -82,6 +82,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)     +=3D rtc-ls1x.o
+> >  obj-$(CONFIG_RTC_DRV_LP8788) +=3D rtc-lp8788.o
+> >  obj-$(CONFIG_RTC_DRV_LPC24XX)        +=3D rtc-lpc24xx.o
+> >  obj-$(CONFIG_RTC_DRV_LPC32XX)        +=3D rtc-lpc32xx.o
+> > +obj-$(CONFIG_RTC_DRV_LS2X)   +=3D rtc-ls2x.o
+> >  obj-$(CONFIG_RTC_DRV_M41T80) +=3D rtc-m41t80.o
+> >  obj-$(CONFIG_RTC_DRV_M41T93) +=3D rtc-m41t93.o
+> >  obj-$(CONFIG_RTC_DRV_M41T94) +=3D rtc-m41t94.o
+> > diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
+> > new file mode 100644
+> > index 000000000000..c74dd88ae11b
+> > --- /dev/null
+> > +++ b/drivers/rtc/rtc-ls2x.c
+> > @@ -0,0 +1,345 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * Loongson-2K/LS7A RTC driver
+> > + *
+> > + * Based on the original out-of-tree Loongson-2H RTC driver for Linux =
+2.6.32,
+> > + * by Shaozong Liu <liushaozong@loongson.cn>.
+> > + *
+> > + * Maintained out-of-tree by Huacai Chen <chenhuacai@kernel.org>.
+> > + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
+> > + *                           Binbin Zhou <zhoubinbin@loongson.cn>
+> > + */
+> > +
+> > +#include <linux/bitfield.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/rtc.h>
+> > +#include <linux/acpi.h>
+> > +
+> > +/* Time Of Year(TOY) counters registers */
+> > +#define TOY_TRIM_REG         0x20 /* Must be initialized to 0 */
+> > +#define TOY_WRITE0_REG               0x24 /* TOY low 32-bits value (wr=
+ite-only) */
+> > +#define TOY_WRITE1_REG               0x28 /* TOY high 32-bits value (w=
+rite-only) */
+> > +#define TOY_READ0_REG                0x2c /* TOY low 32-bits value (re=
+ad-only) */
+> > +#define TOY_READ1_REG                0x30 /* TOY high 32-bits value (r=
+ead-only) */
+> > +#define TOY_MATCH0_REG               0x34 /* TOY timing interrupt 0 */
+> > +#define TOY_MATCH1_REG               0x38 /* TOY timing interrupt 1 */
+> > +#define TOY_MATCH2_REG               0x3c /* TOY timing interrupt 2 */
+> > +
+> > +/* RTC counters registers */
+> > +#define RTC_CTRL_REG         0x40 /* TOY and RTC control register */
+> > +#define RTC_TRIM_REG         0x60 /* Must be initialized to 0 */
+> > +#define RTC_WRITE0_REG               0x64 /* RTC counters value (write=
+-only) */
+> > +#define RTC_READ0_REG                0x68 /* RTC counters value (read-=
+only) */
+> > +#define RTC_MATCH0_REG               0x6c /* RTC timing interrupt 0 */
+> > +#define RTC_MATCH1_REG               0x70 /* RTC timing interrupt 1 */
+> > +#define RTC_MATCH2_REG               0x74 /* RTC timing interrupt 2 */
+> > +
+> > +/* bitmask of TOY_WRITE0_REG */
+> > +#define TOY_MON                      GENMASK(31, 26)
+> > +#define TOY_DAY                      GENMASK(25, 21)
+> > +#define TOY_HOUR             GENMASK(20, 16)
+> > +#define TOY_MIN                      GENMASK(15, 10)
+> > +#define TOY_SEC                      GENMASK(9, 4)
+> > +#define TOY_MSEC             GENMASK(3, 0)
+> > +
+> > +/* bitmask of TOY_MATCH0/1/2_REG */
+> > +#define TOY_MATCH_YEAR               GENMASK(31, 26)
+> > +#define TOY_MATCH_MON                GENMASK(25, 22)
+> > +#define TOY_MATCH_DAY                GENMASK(21, 17)
+> > +#define TOY_MATCH_HOUR               GENMASK(16, 12)
+> > +#define TOY_MATCH_MIN                GENMASK(11, 6)
+> > +#define TOY_MATCH_SEC                GENMASK(5, 0)
+> > +
+> > +/* bitmask of RTC_CTRL_REG */
+> > +#define RTC_ENABLE           BIT(13) /* 1: RTC counters enable */
+> > +#define TOY_ENABLE           BIT(11) /* 1: TOY counters enable */
+> > +#define OSC_ENABLE           BIT(8) /* 1: 32.768k crystal enable */
+> > +#define TOY_ENABLE_MASK              (TOY_ENABLE | OSC_ENABLE)
+> > +
+> > +/* PM domain registers */
+> > +#define PM1_STS_REG          0x0c /* Power management 1 status registe=
+r */
+> > +#define RTC_STS                      BIT(10) /* RTC status */
+> > +#define PM1_EN_REG           0x10 /* Power management 1 enable registe=
+r */
+> > +#define RTC_EN                       BIT(10) /* RTC event enable */
+> > +
+> > +/* Offset of PM domain from RTC domain, for rtc alarm */
+> > +enum ls2x_pm_offset {
+> > +     GENERIC_OFFSET =3D 0x100,
+> > +     LS2K1000_OFFSET =3D 0x800,
+> > +};
+> > +
+> > +struct ls2x_rtc_priv {
+> > +     spinlock_t lock; /* protects PM registers access */
+> > +     int irq;
+> > +     struct rtc_device *rtcdev;
+> > +     struct regmap *regmap;
+> > +     void __iomem *pm_base; /* PM domain base, for rtc alarm */
+> > +};
+> > +
+> > +static const struct regmap_config ls2x_rtc_regmap_config =3D {
+> > +     .reg_bits =3D 32,
+> > +     .val_bits =3D 32,
+> > +     .reg_stride =3D 4,
+> > +};
+> > +
+> > +/* IRQ Handlers */
+> > +static irqreturn_t ls2x_rtc_isr(int irq, void *id)
+> > +{
+> > +     struct ls2x_rtc_priv *priv =3D (struct ls2x_rtc_priv *)id;
+> > +
+> > +     rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+> > +     return IRQ_HANDLED;
+> > +}
+> > +
+> > +static u32 ls2x_rtc_handler(void *id)
+> > +{
+> > +     u32 ret;
+> > +     struct ls2x_rtc_priv *priv =3D (struct ls2x_rtc_priv *)id;
+> > +
+> > +     spin_lock(&priv->lock);
+> > +     /* Disable rtc event */
+> > +     writel(readl(priv->pm_base + PM1_EN_REG) & ~RTC_EN,
+> > +            priv->pm_base + PM1_EN_REG);
+> > +
+> > +     /* Clear rtc interrupt status */
+> > +     writel(RTC_STS, priv->pm_base + PM1_STS_REG);
+> > +     spin_unlock(&priv->lock);
+> > +
+> > +     /*
+> > +      * The TOY_MATCH0_REG should be cleared 0 here,
+> > +      * otherwise the interrupt cannot be cleared.
+> > +      */
+> > +     ret =3D regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+> > +     return 0;
+> > +}
+> > +
+> > +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> > +{
+> > +     int ret;
+> > +     u32 ctrl_data, rtc_data[2];
+> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +     ret =3D regmap_read(priv->regmap, RTC_CTRL_REG, &ctrl_data);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     if (!(ctrl_data & TOY_ENABLE_MASK))
+> > +             return -EINVAL;
+> > +
+> > +     ret =3D regmap_bulk_read(priv->regmap, TOY_READ0_REG, rtc_data,
+> > +                            ARRAY_SIZE(rtc_data));
+>
+> There is still no answer on whether the TOY_READ0_REG and TOY_READ1_REG
+> are latched.
+>
 
-Thanks for testing
+After talking to colleagues offline, the RTC hardware itself can
+guarantee atomicity for bulk reads.
 
-I'm a bit confused, there should be no difference in behaviour, and if
-there was any difference I would expect the clock tree to be somewhat
-different.
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     tm->tm_sec =3D FIELD_GET(TOY_SEC, rtc_data[0]);
+> > +     tm->tm_min =3D FIELD_GET(TOY_MIN, rtc_data[0]);
+> > +     tm->tm_hour =3D FIELD_GET(TOY_HOUR, rtc_data[0]);
+> > +     tm->tm_mday =3D FIELD_GET(TOY_DAY, rtc_data[0]);
+> > +     tm->tm_mon =3D FIELD_GET(TOY_MON, rtc_data[0]) - 1;
+> > +     tm->tm_year =3D rtc_data[1];
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> > +{
+> > +     int ret;
+> > +     u32 rtc_data[2];
+> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +     rtc_data[0] =3D FIELD_PREP(TOY_SEC, tm->tm_sec)
+> > +                 | FIELD_PREP(TOY_MIN, tm->tm_min)
+> > +                 | FIELD_PREP(TOY_HOUR, tm->tm_hour)
+> > +                 | FIELD_PREP(TOY_DAY, tm->tm_mday)
+> > +                 | FIELD_PREP(TOY_MON, tm->tm_mon + 1);
+> > +     rtc_data[1] =3D tm->tm_year;
+> > +
+> > +     ret =3D regmap_bulk_write(priv->regmap, TOY_WRITE0_REG, rtc_data,
+> > +                             ARRAY_SIZE(rtc_data));
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     /* Enable RTC TOY counters and crystal */
+> > +     return regmap_update_bits(priv->regmap, RTC_CTRL_REG, TOY_ENABLE_=
+MASK,
+> > +                               TOY_ENABLE_MASK);
+> > +}
+> > +
+> > +static int ls2x_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *=
+alrm)
+> > +{
+> > +     int ret;
+> > +     u32 alarm_data;
+> > +     struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +     ret =3D regmap_read(priv->regmap, TOY_MATCH0_REG, &alarm_data);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     alrm->time.tm_sec =3D FIELD_GET(TOY_MATCH_SEC, alarm_data);
+> > +     alrm->time.tm_min =3D FIELD_GET(TOY_MATCH_MIN, alarm_data);
+> > +     alrm->time.tm_hour =3D FIELD_GET(TOY_MATCH_HOUR, alarm_data);
+> > +     alrm->time.tm_mday =3D FIELD_GET(TOY_MATCH_DAY, alarm_data);
+> > +     alrm->time.tm_mon =3D FIELD_GET(TOY_MATCH_MON, alarm_data) - 1;
+> > +     /*
+> > +      * This is a hardware bug.
+> > +      * The year field in the SYS_TOYMATCH has only 6 bits(bits[31:26]=
+),
+> > +      * so it can only be set from 1900 to 1963.
+> > +      * In order to avoid an invalid alarm value during booting, we ma=
+nually
+> > +      * add 64 after reading the year field (equivalent to filling in =
+the
+> > +      * high bits).
+> > +      */
+> > +     alrm->time.tm_year =3D FIELD_GET(TOY_MATCH_YEAR, alarm_data) + 64=
+;
+>
+> This is restricting to the 1964 to 2027 range whereas you claim the RTC
+> has a 2000 to 2099 range. Why don't you simply do 2000 to 2063 which
+> would at least match most of it.
+>
 
-Could you still paste the clk_summary (and dmesg) output? Which UART
-driver is being used?
+I have compiled a description of this hardware defect:
 
-Also, is there a way for me to test it somehow?
+Firstly, the root cause of the defect is that there are not enough
+bits in the MATCH register to indicate the year, only 6 bits.
+The rtc hardware uses the MATCH register to compare the alarm time
+values and to determine if an alarm is triggered.
 
-Thanks,
-Maxime
+Therefore, we have to ensure that the lower 6 bits remain unchanged
+during the conversion of the year value . Otherwise the rtc hardware
+will definitely not succeed when matching and thus the alarm function
+will not work.
+In summary, here we can only add or subtract 64 (or a multiple of 64).
 
---wz33ctz6wi47hpno
-Content-Type: application/pgp-signature; name="signature.asc"
+To avoid the year being described only up to 2027, how about the
+following solution:
+1. define the global variable year_offset, which holds the required offset.
+2. In ls2x_rtc_read_time(), calculate year_offset =3D tm->tm_year / 64 * 64=
+.
 
------BEGIN PGP SIGNATURE-----
+> I am very very disappointed. I had all these comments on v1 and v2, you
+> are sending v3 with the exact same issues. How can I trust this is ever
+> going to progress in the right direction?
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZFPlhwAKCRDj7w1vZxhR
-xctpAQD9sYYRJZv9h/D0iPAAtlYeOZYDF7u18IvdR8rTQHoA/wEAz3/h3C/WCX/e
-9OHv6OkqMBGTFLQxWrqvIxshn0fuYg4=
-=DIwC
------END PGP SIGNATURE-----
+I apologise that the time between these two patch sets is a bit long
+and I did not double check the relevant change points.
+I will double check each point that needs to be changed before sending
+out subsequent patches.
 
---wz33ctz6wi47hpno--
+Again, I apologise.
+
+Thanks.
+Binbin
+
+>
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
