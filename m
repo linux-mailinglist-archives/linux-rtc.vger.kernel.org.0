@@ -2,129 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585836F887A
-	for <lists+linux-rtc@lfdr.de>; Fri,  5 May 2023 20:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D926F88D5
+	for <lists+linux-rtc@lfdr.de>; Fri,  5 May 2023 20:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233285AbjEESKy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 5 May 2023 14:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S233301AbjEESqT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 5 May 2023 14:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbjEESKv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 May 2023 14:10:51 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CB01E9B7
-        for <linux-rtc@vger.kernel.org>; Fri,  5 May 2023 11:10:44 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965ddb2093bso171629366b.2
-        for <linux-rtc@vger.kernel.org>; Fri, 05 May 2023 11:10:44 -0700 (PDT)
+        with ESMTP id S232137AbjEESqQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 May 2023 14:46:16 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6968203E0;
+        Fri,  5 May 2023 11:46:15 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so3282777a12.2;
+        Fri, 05 May 2023 11:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683310243; x=1685902243;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DQBt9O9556cUDwM/8n6L+XNwPkEzkVWxHyZle1gkXm0=;
-        b=dhCOOHqjNDYtwBV3y73eG5mx+qh8+rmCCbutjJWAHpGAuo3a1SADNxeP7V6Ej4h9O9
-         GRqFToP2+KM9688fe0iJg6slfqOGXJxkL4cNLxNnxbG6oeG/2hKLy/Jb7UeqfSVDR5MB
-         fW0WGcWirra+BdzZDuYZcYUuB3rEDiVxH8XCLgOjQZ8ghU/AEOXxMg+HxeRQjfRJzduS
-         ymW5eF5bXMX/goxPRjvg0Px9eeHwH6PDNPz12dGdqsIWgkgjhaIdRH+nC8Q11QRNljcV
-         tqRtsROP7PV9wJzfuUtszTYN3vooF3cWh332P4iLzkRZHVaWmkeni38bXNidH6MnDFiO
-         0o/g==
+        d=gmail.com; s=20221208; t=1683312374; x=1685904374;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OL+1qoziu9QsKZaGAp4w2GCjNWWHE42lzOyIZ2hEKeo=;
+        b=YIfG+3VlUPqHPZoZ5pe5sVJDjfpIkRHTnLS9nbyd28/0urK0wSthkXftlxmEmMybUw
+         65HtGg0JDmHhaw1+rUv1YeSAFT3N6jjdcOnPH7WfR3iSRfegj+Pf5a++8HD61opYOlln
+         v1cUkRky/kb8cx92/+9TEMUZXbi4jXNin3VDfLCnNvi+uFdJ5+oY3nrGjqYs2PKWiZxJ
+         +hEIy4NkaIHeeRnwBXezTnWMfK7vFykXvuDeBw6K+h9dza2sLHiCYYlEz4/BFALZKMFf
+         A+1DasHNTCiKNRqojiyfMMlYvKD5v6xHawDrk9aZffDQpMsmaBgmU5Ivq7oKMghFiqCm
+         kOiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683310243; x=1685902243;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DQBt9O9556cUDwM/8n6L+XNwPkEzkVWxHyZle1gkXm0=;
-        b=lMrhvK4irZUAytm66lm3YEtjuTyG6giWwVToY91w2cdaiCsTZbxdSZ+0w3D48JqkLG
-         6lTp2hlBNSzohp/qu1IkYJHg8rkGrLn8dneylz20cuuGw3BHaajgwIsXrC/8Dy2yXtZu
-         mBJahiWvJFvQmVx7l0xVsgqp1xTh1scoMf4zZaxGKUJpzDAcW5yTOjt8k/nkrO61V1gN
-         aFmi52BFZgqpte2AAEFyLPpcaD+PIXG7scN65UU84c7v5vHiEscnoT3AMhbW/irzqiJN
-         LG91WChs9o2pvM9QSeDasZNjwJWEjM7rDsoB8bWpeGWkcsL2o9Go6S1ie4Wiq305JcYB
-         BTNg==
-X-Gm-Message-State: AC+VfDwT3IiXdnhpvyWjmnZzdDDwWBYYJ2EolR1QjzXgUAx0l4Hrxhpy
-        k4zw2bvF/ioy0G+kxo88TqJxMg==
-X-Google-Smtp-Source: ACHHUZ4CkUu61HPatWQxUGhsYIa4QfVRdHuzWrcLP3IPxF7Im7eghSPNTBdRv5T7vdAgjVLiF3c/nw==
-X-Received: by 2002:a17:907:3207:b0:957:48c8:b081 with SMTP id xg7-20020a170907320700b0095748c8b081mr1435683ejb.24.1683310242848;
-        Fri, 05 May 2023 11:10:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:52e:24ce:bbc1:127d? ([2a02:810d:15c0:828:52e:24ce:bbc1:127d])
-        by smtp.gmail.com with ESMTPSA id t26-20020a17090616da00b0094ee700d8e4sm1233010ejd.44.2023.05.05.11.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 11:10:42 -0700 (PDT)
-Message-ID: <a55c7ac8-1037-4509-a16e-83c7894b1a4d@linaro.org>
-Date:   Fri, 5 May 2023 20:10:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3] dt-bindings: rtc: isl1208: Convert to json-schema
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        d=1e100.net; s=20221208; t=1683312374; x=1685904374;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OL+1qoziu9QsKZaGAp4w2GCjNWWHE42lzOyIZ2hEKeo=;
+        b=U+FoLCG8Y9RDhYl00PwWAmUgidhaQc1y86AObFmloP1giEvXwoQr3uRKOWdBskpFsD
+         gS7ff53v1Ola/0vJG0Rb1nV+r4uBPjtAJGdTv1D8HBE9HR7frSGZaVvhWBAXYpn5Ros4
+         W5VLpBfRylECEQypWxCXbjwfYfMqCec4ue1eHbPRBzpP+p2nnbZhSPae1xVE/t0HFywv
+         jthjt/dwB9qOzyYnyFtbzpD5aoWSWkrsucYryLeV/SBwmT+Fxoyf1xJJAYA5bDT/HT8c
+         mgJl2ba+moDz3+5G9gtUIFW5O1LlskoCc+klqzGF46IR2xvsAry7f8Qk7zInsx0WFgCG
+         fHBQ==
+X-Gm-Message-State: AC+VfDyuV0qTRVJ67bp2SDlc52ZceAM/nemiRKQNYfYsiZCswnQW4GLf
+        TxnO46iDq4U9CoHRCMKgpvU=
+X-Google-Smtp-Source: ACHHUZ5NZnESKFbkWrc+8ONER0zwRZSahRZS7mWNfc1zuF8NuHoqqlR4Oa8H1LKUwXFmtMxyRLiyAQ==
+X-Received: by 2002:aa7:df8e:0:b0:50b:c58a:a7ae with SMTP id b14-20020aa7df8e000000b0050bc58aa7aemr2336540edy.4.1683312374077;
+        Fri, 05 May 2023 11:46:14 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id u3-20020aa7d883000000b00504ecc4fa96sm3163911edq.95.2023.05.05.11.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 May 2023 11:46:13 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     linux-clk@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Trent Piepho <tpiepho@gmail.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20230505091720.115675-1-biju.das.jz@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230505091720.115675-1-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v4 45/68] rtc: sun6i: Add a determine_rate hook
+Date:   Fri, 05 May 2023 20:46:12 +0200
+Message-ID: <1852119.tdWV9SEqCh@jernej-laptop>
+In-Reply-To: <20221018-clk-range-checks-fixes-v4-45-971d5077e7d2@cerno.tech>
+References: <20221018-clk-range-checks-fixes-v4-0-971d5077e7d2@cerno.tech>
+ <20221018-clk-range-checks-fixes-v4-45-971d5077e7d2@cerno.tech>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/05/2023 11:17, Biju Das wrote:
-> Convert the isl1208 RTC device tree binding documentation to json-schema.
+Dne petek, 05. maj 2023 ob 13:25:47 CEST je Maxime Ripard napisal(a):
+> The Allwinner sun6i RTC clock implements a mux with a set_parent hook,
+> but doesn't provide a determine_rate implementation.
 > 
-> Update the example to match reality.
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidates to
+> trigger that parent change are either the assigned-clock-parents device
+> tree property or a call to clk_set_rate(), with determine_rate()
+> figuring out which parent is the best suited for a given rate.
 > 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+> 
+> Similarly, it doesn't look like the device tree using that clock driver
+> uses any of the assigned-clock properties on that clock.
+> 
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+> 
+> The latter case would be equivalent to setting the determine_rate
+> implementation to clk_hw_determine_rate_no_reparent(). Indeed, if no
+> determine_rate implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise.
+> 
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+> 
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-sunxi@lists.linux.dev
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Thank you for your patch. There is something to discuss/improve.
-
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/isil,isl1208.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Intersil ISL1209/19 I2C RTC/Alarm chip with event in
-> +
-> +maintainers:
-> +  - Trent Piepho <tpiepho@gmail.com>
-> +
-> +description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +  ISL12X9 have additional pins EVIN and #EVDET for tamper detection, while the
-> +  ISL1208 and ISL1218 do not.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-
-It's not oneOf, but only enum.
-
-> +      - enum:
-> +          - isil,isl1208
-> +          - isil,isl1209
-> +          - isil,isl1218
-> +          - isil,isl1219
-> +
-
-With above fixed:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
-Krzysztof
+Jernej
+
+> ---
+>  drivers/rtc/rtc-sun6i.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index dc76537f1b62..71548dd59a3a 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -214,6 +214,7 @@ static int sun6i_rtc_osc_set_parent(struct clk_hw *hw,
+> u8 index)
+> 
+>  static const struct clk_ops sun6i_rtc_osc_ops = {
+>  	.recalc_rate	= sun6i_rtc_osc_recalc_rate,
+> +	.determine_rate	= clk_hw_determine_rate_no_reparent,
+> 
+>  	.get_parent	= sun6i_rtc_osc_get_parent,
+>  	.set_parent	= sun6i_rtc_osc_set_parent,
+
+
+
 
