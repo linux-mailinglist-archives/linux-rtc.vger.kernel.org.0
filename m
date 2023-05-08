@@ -2,104 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF066F9E66
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 May 2023 05:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224016FB3F4
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 May 2023 17:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjEHD4F (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 7 May 2023 23:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        id S234446AbjEHPj3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 May 2023 11:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjEHD4D (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 7 May 2023 23:56:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB6659EE;
-        Sun,  7 May 2023 20:56:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7265A60FB1;
-        Mon,  8 May 2023 03:56:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C0525C4339B;
-        Mon,  8 May 2023 03:56:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683518161;
-        bh=NrJr0EBtNIgpAarh3hsg9dldeOGUlRjf/3/JXcqh+nU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=X7Dj3d2UdyEHAXKLIl/zP/EagxnlIOOO361aTHP/9S37uGTBFAUZ/A3T8XxjRO/ct
-         ka4fIGeNufAEUZUGWQTXPqBVf5Fi6T1S6jXxMShex5cm+Kg7oyrHDO6NIX7LamSMMN
-         j9sSBMYy1gqcPjf2QxtJLqSR7zDU4gh0HJVC3r4YHPMzkGFGX7rVKW9gotzYsZnooV
-         TeEY5jCwIP4dvklJeYpU/TrxoysK/QCgVfLMXmZl8UDSbvturAi6WsSbx1c9Qq0HHK
-         DPppWwftxiCGJvYFfzZ/2xL7AEJ/de3i3fO0hXboi7ZQtcmnsWG8cTmRODuePCWOAe
-         lTHDKmzU22p5w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A0975C395C8;
-        Mon,  8 May 2023 03:56:01 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234092AbjEHPj2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 May 2023 11:39:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204C665AB;
+        Mon,  8 May 2023 08:39:27 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348FSUPJ031602;
+        Mon, 8 May 2023 15:38:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=5EqBMa4gR0QbDtx8JIBT/ijJxpZC9W9h/jf+aACfoa4=;
+ b=HXOweJalFLJ4p/2scyuwFnXGFrpQEvBA7T6Gsd9hfUeos76y5GXZQw8oCKrQiuz/xwKX
+ np+fXcPiDgeJT+qelxypHduJq5MixQd8QUvM5R9099iXmNJ17c9kNFndWZF9Bc6M0HT8
+ UQ+bqdZRFYxwJyb4eAk+CB1XYqGREZ5DLRrfbaB7gjUpaMMsRFIW8p2Vpj9EnHNW2REO
+ FCsOCZcKNlpbI+kHqMAwNx35oZ5VGwPpU0n1eWxiSECsjt8QV4Zy63wObK+hVQT4cdL2
+ Xh6P24GpDB+B0ydbGM4qn4arxXHkvELvBR7edtlhTQpgXbC5ItCfWEJ2DqSmMAMtHhZd Dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qf3rmgq84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 15:38:56 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 348FT9ce001343;
+        Mon, 8 May 2023 15:37:39 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qf3rmgk1r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 15:37:38 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3483Rkbm001141;
+        Mon, 8 May 2023 15:36:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3qdeh6gywq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 15:36:35 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 348FaW1Q44826890
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 8 May 2023 15:36:32 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D8E720043;
+        Mon,  8 May 2023 15:36:32 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8473220040;
+        Mon,  8 May 2023 15:36:31 +0000 (GMT)
+Received: from [9.171.75.120] (unknown [9.171.75.120])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  8 May 2023 15:36:31 +0000 (GMT)
+Message-ID: <aa68b4afdca34bf3bfd2439b03e6f9bcfad94903.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 28/38] rtc: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org
+Date:   Mon, 08 May 2023 17:36:31 +0200
+In-Reply-To: <202303141252027ef5511a@mail.local>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-29-schnelle@linux.ibm.com>
+         <202303141252027ef5511a@mail.local>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/41] rtc: Convert to platform remove callback returning void
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <168351816165.5651.12752189615466403387.git-patchwork-notify@kernel.org>
-Date:   Mon, 08 May 2023 03:56:01 +0000
-References: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230304133028.2135435-1-u.kleine-koenig@pengutronix.de>
-To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@ci.codeaurora.org
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linus.walleij@linaro.org, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, f.fainelli@gmail.com,
-        bleung@chromium.org, kumba@gentoo.org, ulli.kroll@googlemail.com,
-        vz@mleia.com, cw00.choi@samsung.com,
-        krzysztof.kozlowski@linaro.org, conor.dooley@microchip.com,
-        daire.mcnamara@microchip.com, eddie.huang@mediatek.com,
-        sean.wang@mediatek.com, matthias.bgg@gmail.com,
-        miquel.raynal@bootlin.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, vincent.sunplus@gmail.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        michal.simek@xilinx.com, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-riscv@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
-        kernel@pengutronix.de
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HRugoYqyIQPXXC-tvn11OSwiaFsesSiz
+X-Proofpoint-ORIG-GUID: o20aFgLcvaCJXNwI7RQ5eYI4YmrObTiV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ mlxlogscore=846 adultscore=0 phishscore=0 spamscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305080103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello:
-
-This patch was applied to chrome-platform/linux.git (for-next)
-by Alexandre Belloni <alexandre.belloni@bootlin.com>:
-
-On Sat,  4 Mar 2023 14:29:47 +0100 you wrote:
+On Tue, 2023-03-14 at 13:52 +0100, Alexandre Belloni wrote:
 > Hello,
-> 
-> this patch series adapts the platform drivers below drivers/rtc to use the
-> .remove_new() callback. Compared to the traditional .remove() callback
-> .remove_new() returns no value. This is a good thing because the driver core
-> doesn't (and cannot) cope for errors during remove. The only effect of a
-> non-zero return value in .remove() is that the driver core emits a warning. The
-> device is removed anyhow and an early return from .remove() usually yields a
-> resource leak.
-> 
-> [...]
+>=20
+> On 14/03/2023 13:12:06+0100, Niklas Schnelle wrote:
+> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friend=
+s
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them.
+> >=20
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> >  drivers/rtc/Kconfig | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> > index 5a71579af0a1..20aa77bf0a9f 100644
+> > --- a/drivers/rtc/Kconfig
+> > +++ b/drivers/rtc/Kconfig
+> > @@ -956,6 +956,7 @@ comment "Platform RTC drivers"
+> >  config RTC_DRV_CMOS
+> >  	tristate "PC-style 'CMOS'"
+> >  	depends on X86 || ARM || PPC || MIPS || SPARC64
+> > +	depends on HAS_IOPORT
+>=20
+> Did you check that this will not break platforms that doesn't have RTC_PO=
+RT defined?
+> >=20
 
-Here is the summary with links:
-  - [10/41] rtc: cros-ec: Convert to platform remove callback returning void
-    https://git.kernel.org/chrome-platform/c/0d8742e61098
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+From what I can tell the CMOS_READ() macro this driver relies on uses
+some form of inb() style I/O port access in all its definitions. So my
+understanding is that this device is always accessed via I/O ports even
+if the variants differ slightly and would make no sense on a platform
+without any way of accessing I/O ports which is what lack of HAS_IOPORT
+means. From what I can see even without RTC_PORT being defined the
+CMOS_READ is still used. Hope that answers your question?
