@@ -2,213 +2,142 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92594700DEE
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 May 2023 19:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB01701847
+	for <lists+linux-rtc@lfdr.de>; Sat, 13 May 2023 18:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237777AbjELRex (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 12 May 2023 13:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S229834AbjEMQwi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 13 May 2023 12:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbjELRev (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 12 May 2023 13:34:51 -0400
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6D31B7
-        for <linux-rtc@vger.kernel.org>; Fri, 12 May 2023 10:34:49 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id 4a6e862d-f0eb-11ed-abf4-005056bdd08f;
-        Fri, 12 May 2023 20:34:47 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Fri, 12 May 2023 20:34:47 +0300
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, sterzik@ti.com,
-        u-kumar1@ti.com
-Subject: Re: [PATCH v4 3/3] regulator: tps6594-regulator: Add driver for TI
- TPS6594 regulators
-Message-ID: <ZF54t38o2PFsl_oX@surfacebook>
-References: <20230512141755.1712358-1-eblanc@baylibre.com>
- <20230512141755.1712358-4-eblanc@baylibre.com>
+        with ESMTP id S229603AbjEMQwi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 13 May 2023 12:52:38 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 593D830C4;
+        Sat, 13 May 2023 09:52:36 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.99,272,1677510000"; 
+   d="scan'208";a="159221916"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 14 May 2023 01:52:35 +0900
+Received: from localhost.localdomain (unknown [10.226.92.8])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3291340062D0;
+        Sun, 14 May 2023 01:52:30 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: [PATCH v3 0/5] Add Renesas PMIC RAA215300 and built-in RTC support
+Date:   Sat, 13 May 2023 17:52:22 +0100
+Message-Id: <20230513165227.13117-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512141755.1712358-4-eblanc@baylibre.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Fri, May 12, 2023 at 04:17:55PM +0200, Esteban Blanc kirjoitti:
-> From: Jerome Neanne <jneanne@baylibre.com>
-> 
-> This patch adds support for TPS6594 regulators (bucks and LDOs).
-> The output voltages are configurable and are meant to supply power
-> to the main processor and other components.
-> Bucks can be used in single or multiphase mode, depending on PMIC
-> part number.
+This patch series aims to add support for Renesas PMIC RAA215300 and
+built-in RTC found on this PMIC device.
 
-...
+The details of PMIC can be found here[1].
 
-> +	enum {
-> +	MULTI_BUCK12,
-> +	MULTI_BUCK123,
-> +	MULTI_BUCK1234,
-> +	MULTI_BUCK12_34,
-> +	MULTI_FIRST = MULTI_BUCK12,
-> +	MULTI_LAST = MULTI_BUCK12_34,
-> +	MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
+Renesas PMIC RAA215300 exposes two separate i2c devices, one for the main
+device and another for rtc device.
 
-Missing TABs?
+Enhance i2c_new_ancillary_device() to instantiate a real device.
+(eg: Instantiate rtc device from PMIC driver)
 
-> +	};
+The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
+However, the external oscillator bit is inverted on PMIC version
+0x11. The PMIC driver detects PMIC version and instantiate appropriate
+RTC device.
 
-...
+[1]
+https://www.renesas.com/in/en/products/power-power-management/multi-channel-power-management-ics-pmics/ssdsoc-power-management-ics-pmic-and-pmus/raa215300-high-performance-9-channel-pmic-supporting-ddr-memory-built-charger-and-rtc
 
-> +	for (multi = MULTI_FIRST ; multi < MULTI_NUM ; multi++) {
+[2]
+ https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230505091720.115675-1-biju.das.jz@bp.renesas.com/
 
-Just a remark: spaces before ; are not standard.
+[3]
+ https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230505172530.357455-5-biju.das.jz@bp.renesas.com/
 
-> +		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
-> +		npname = of_node_full_name(np);
-> +		np_pmic_parent = of_get_parent(of_get_parent(np));
-> +		if (strcmp((of_node_full_name(np_pmic_parent)), tps->dev->of_node->full_name))
-> +			continue;
+v2->v3:
+ * Enhanced i2c_new_ancillary_device() to instantiate a real ancillary_device().
+ * RTC device is instantiated by PMIC driver and dropped isl1208_probe_helper().
+ * Added "TYPE_RAA215300_RTC_A0" to handle inverted oscillator bit case.
+ * Added more detailed description for renesas,rtc-enabled property.
+ * Added support for handling "renesas,rtc-enabled" property.
+ * Based on PMIC version, it instantiates rtc device by calling i2c_new_
+   ancillary_device().
+ * Updated the logs.
+RFC->v2:
+ * Dropped the cross-links from bindings and used a single compatible
+   with separate i2c addresses for pmic main and rtc device.
+ * Dropped patch#4 and split patch#3 from this series and send as
+   separate patch to ML [2].
+ * Added RTC platform driver and mfd cell entry to the PMIC driver.RTC
+   platform driver creates rtc device by using i2c_new_ancillary_device()
+   and register the rtc device by calling the helper function provided
+   by rtc-isl2108 driver.
+ * Updated reg property in bindings.
+ * Added optional reg-names, interrupts and renesas,rtc-enabled
+   properties.
+ * Fixed the node name in the binding example
+ * Dropped the cross link property renesas,raa215300-rtc.
+ * Updated the binding example
+ * Dropped MODULE_SOFTDEP from the driver as it is added in RTC platform
+   driver.
+ * Dropped compatible "renesas,raa215300-isl1208" and "renesas,raa215300-pmic" property.
+ * Updated the comment polarity->bit for External Oscillator.
+ * Added raa215300_rtc_probe_helper() for registering raa215300_rtc device and
+   added the helper function isl1208_probe_helper() to share the code.
+ * Updated pmic device node on the SoM dtsi based on the bindings.
 
-Isn't there an API to compare OF node name with a given parameter?
+Logs:
+[   15.447305] rtc-isl1208 3-006f: registered as rtc0
+[   15.479493] rtc-isl1208 3-006f: setting system clock to 2023-04-27T19:31:02 UTC (1682623862)
 
-> +		delta = strcmp(npname, multiphases[multi]);
-> +		if (!delta) {
-> +			switch (multi) {
-> +			case MULTI_BUCK12:
-> +				buck_multi[0] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
-> +				break;
-> +			/* multiphase buck34 is supported only with buck12 */
-> +			case MULTI_BUCK12_34:
-> +				buck_multi[0] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
+root@smarc-rzv2l:~# hwclock -r
+2023-04-27 19:33:05.499001+00:00
+root@smarc-rzv2l:~# hwclock -r
+2023-04-27 19:33:06.936688+00:00
+root@smarc-rzv2l:~#
 
-> +				buck_multi[1] = 1;
+Biju Das (5):
+  i2c: Enhance i2c_new_ancillary_device API
+  rtc: isl1208: Add support for the built-in RTC on the PMIC RAA215300
+  dt-bindings: mfd: Add Renesas RAA215300 PMIC bindings
+  mfd: Add Renesas PMIC RAA215300 driver
+  arm64: dts: renesas: rzg2l-smarc-som: Enable PMIC and built-in RTC
 
-Might be easier to read if this is grouped with [0] assignment above.
-
-> +				buck_configured[2] = 1;
-> +				buck_configured[3] = 1;
-> +				break;
-> +			case MULTI_BUCK123:
-> +				buck_multi[2] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
-> +				buck_configured[2] = 1;
-> +				break;
-> +			case MULTI_BUCK1234:
-> +				buck_multi[3] = 1;
-> +				buck_configured[0] = 1;
-> +				buck_configured[1] = 1;
-> +				buck_configured[2] = 1;
-> +				buck_configured[3] = 1;
-> +				break;
-> +			}
-> +		}
-> +	}
-
-...
-
-> +	irq_data = devm_kmalloc(tps->dev,
-> +				ARRAY_SIZE(tps6594_bucks_irq_types) *
-> +				REGS_INT_NB *
-> +				sizeof(struct tps6594_regulator_irq_data) +
-> +				ARRAY_SIZE(tps6594_ldos_irq_types) *
-> +				REGS_INT_NB *
-> +				sizeof(struct tps6594_regulator_irq_data),
-
-We have respective macros in overflow.h that can be used here.
-
-> +				GFP_KERNEL);
-> +	if (!irq_data)
-> +		return -ENOMEM;
-
-...
-
-> +		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
-> +		if (IS_ERR(rdev)) {
-> +			dev_err(tps->dev, "failed to register %s regulator\n",
-> +				pdev->name);
-> +			return PTR_ERR(rdev);
-
-		return dev_err_probe(...);
-?
-
-> +		}
-
-...
-
-> +		rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
-> +		if (IS_ERR(rdev)) {
-> +			dev_err(tps->dev, "failed to register %s regulator\n",
-> +				pdev->name);
-> +			return PTR_ERR(rdev);
-
-Same question.
-
-> +		}
-
-...
-
-> +			rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
-> +			if (IS_ERR(rdev)) {
-> +				dev_err(tps->dev,
-> +					"failed to register %s regulator\n",
-> +					pdev->name);
-> +				return PTR_ERR(rdev);
-
-Same question.
-
-> +			}
-
-> +	irq_ext_reg_data = devm_kmalloc(tps->dev,
-> +					ext_reg_irq_nb *
-> +					sizeof(struct tps6594_ext_regulator_irq_data),
-> +					GFP_KERNEL);
-
-devm_kmalloc_array()
-
-> +	if (!irq_ext_reg_data)
-> +		return -ENOMEM;
-
-...
-
-> +		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-> +						  tps6594_regulator_irq_handler,
-> +						  IRQF_ONESHOT,
-> +						  irq_type->irq_name,
-> +						  &irq_ext_reg_data[i]);
-> +		if (error) {
-> +			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
-> +				irq_type->irq_name, irq, error);
-> +			return error;
-
-	return dev_err_probe(...);
-
-?
-
-> +		}
-> +	}
-> +	return 0;
-> +}
+ .../bindings/mfd/renesas,raa215300.yaml       |  70 ++++++++++++
+ .../boot/dts/renesas/rzg2l-smarc-som.dtsi     |  10 ++
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c  |   6 +-
+ drivers/i2c/i2c-core-base.c                   |  38 +++++--
+ drivers/media/i2c/adv748x/adv748x-core.c      |   2 +-
+ drivers/media/i2c/adv7604.c                   |   3 +-
+ drivers/mfd/Kconfig                           |   7 ++
+ drivers/mfd/Makefile                          |   2 +
+ drivers/mfd/raa215300.c                       | 102 ++++++++++++++++++
+ drivers/rtc/rtc-isl1208.c                     |  21 ++++
+ include/linux/i2c.h                           |   3 +-
+ 11 files changed, 251 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/renesas,raa215300.yaml
+ create mode 100644 drivers/mfd/raa215300.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
