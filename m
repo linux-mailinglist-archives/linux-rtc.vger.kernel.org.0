@@ -2,342 +2,565 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32D8704ED8
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 May 2023 15:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20EB704FDB
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 May 2023 15:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbjEPNJe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 May 2023 09:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S233818AbjEPNvt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 May 2023 09:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbjEPNJb (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 May 2023 09:09:31 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2112.outbound.protection.outlook.com [40.107.114.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15536E5F;
-        Tue, 16 May 2023 06:09:29 -0700 (PDT)
+        with ESMTP id S232708AbjEPNvp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 May 2023 09:51:45 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2040.outbound.protection.outlook.com [40.107.237.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475C64691;
+        Tue, 16 May 2023 06:51:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=amyb682luczUXkHgbxjHKEfOc3ihpZX7lnswdfMGd9Ib3dTDB5XvHFNgoz7KPSI3PhSSeFfDNzzb2ox0SoDUUbNijI0nBjQUW2bcCck2jgL4/qrwfrZ+IPDM5xwYfoooz78Da3ahPUqzhVcsVrO+cFMwVcziaNd/EqEAmCg0L9o5QcfSPS1xLHH5hegU6DLN/ttLL9VXUFWGnW4GoL8ZsBpl+w8PqmWxw6e4YWn1wd6e5LV0dpV8374fVEOMhgyK4/N2YUuIcbSsuXbEFFYb6eg53Eh5asxPtCBuVmOPZzGLzNPzuYJCME3NTSPhcVXX4IGEFYk7geeWut9XONbYqw==
+ b=NkKiRcJ7uiZPimt/Sz+uhsQsvB1KXjiOxahShyh2HAw6u4frxMA6CK9ekYKMAyKFLeJCtSUfthQMEHlEINGwynXIO8fGPsgJ0OZm5matuSg7oMdwpH0n6LltzXgX8WkA4jcKoWDCUgGKtquzy0GqQieORJQBz3kDYcdRouGv2se/aBEeEYytvQXXzxkifomLayJtFLOATWuZXbhNLzADrhiEVZ/prHBVcXT/rMhNEgDX5zxWOnMVDpc++8fPcJnOCFZa8FYvkUlPBOOsw4tL21sI5jrF05MA88eO/xso1VCRVpOvNIgf8FP4pkwgd2j21oMGiXjB3OSNPWP2+s9UUA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JLn2ZKTVa9rujnVnf8m7CUvvB+XKA2+3rV4KxzFYw74=;
- b=RXY0Y2mpUyRVtQGuqW9EFKTZq4GND3usEbSlcF87PRXJrXy7lbD57w32irHEiKCYM89ietn2PcWJk7+bg8kOpjs6k/ThC5xj+pMQ5Cyn36WssIeSIrn4cuBSpV6UoaVhk9b42bPWSKEl4JM/msGfqiByrzu78PUIW39Es3wdZrXW6RHy6THJqyhD7rSEmZcmEXnItLP1n0ONt+gULLhMC4PZebSF2ZLXPxck1FCqrIQo8qQN6lYG+jM7bkRtMmv8AZjSD0d2TmlLmMSiGQ2Bh98vUnp/aajzE+ZvaRh76kBjDXcwzndkKEA99up4yYhdBI3L4I0C3Jet/bCFE4kMZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
+ bh=R2ZgRpCc/7+ww9IN5ckUA3E+YG3MxBndy5MLIRl9WYw=;
+ b=YalqqcfeIx5wceDCYOdmlu4Fr0aAKRsOuDX3FKMVy3SxtPHbdO+aXZ6Kq2ntCtF3hZ0pqxvXtY0lMqtCRPelJyb53gFw0J7fNzT00yIQ0pGDCpcax9eSusQgTbEgmWAbjIcNy0TojbIxwFWXBlZwbmFhWZcL68wuAdkQqDOqrAzqCQTLHjvH27/FWfalsT5L3lEFsBZ9dr96IqXWB1sPrrLZGtigJxR/JNMylmI0PcYOXXu8xnweXG6SNr9AQbSmltT8cdBzDbB7tlIQ96ZVclDTKj1O+Ib6Gp1nWbWEMK4iUP0FvuWY+KY6QVWviYIOk0GnrfSmTeSZaz5J6MIzvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JLn2ZKTVa9rujnVnf8m7CUvvB+XKA2+3rV4KxzFYw74=;
- b=g3o15upFrVRouIm0V8SrrGs/Bxw7WBmbvlZ/ZJcPBgFzQg/a/N88dbSrB3n7ogUyw1+QpLAR6oANjeWTQZJSauZbxYd0/q+gBS+fg/u3V1bC/e+m3CkltE9Q7Kfbmv7+t9Ly1XmTXcezd5eMsRken9Q1/ibi76tlMI7wul+bz9w=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYVPR01MB11339.jpnprd01.prod.outlook.com (2603:1096:400:366::5) with
+ bh=R2ZgRpCc/7+ww9IN5ckUA3E+YG3MxBndy5MLIRl9WYw=;
+ b=RxTXlBGwIn4+NJwTYx3gvXWeisYprpMBCgCXYDU1ox77EuMh7kDy9phfm4hHdMXd+4G92oAzWACfeElvh3c3EtYQgmHU5k0pspA05F5OaYQOsOlTwxQGRn8yHWgHkTeG4j0QnIbzX5KuFPq5WCxaoHtnm0lZt3Ns7cPse/8yA28=
+Received: from DM6PR02CA0042.namprd02.prod.outlook.com (2603:10b6:5:177::19)
+ by PH7PR12MB6442.namprd12.prod.outlook.com (2603:10b6:510:1fa::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
- 2023 13:09:25 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6387.032; Tue, 16 May 2023
- 13:09:25 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
+ 2023 13:51:37 +0000
+Received: from DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:177:cafe::86) by DM6PR02CA0042.outlook.office365.com
+ (2603:10b6:5:177::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.31 via Frontend
+ Transport; Tue, 16 May 2023 13:51:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT033.mail.protection.outlook.com (10.13.172.221) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.15 via Frontend Transport; Tue, 16 May 2023 13:51:37 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
+ 2023 08:51:35 -0500
+From:   Michal Simek <michal.simek@amd.com>
+To:     <piyush.mehta@amd.com>, <nava.kishore.manne@amd.com>,
+        <sai.krishna.potthuri@amd.com>, <shubhrajyoti.datta@amd.com>,
+        <vishal.sagar@amd.com>, <kalyani.akula@amd.com>,
+        <bharat.kumar.gogada@amd.com>, <linux-kernel@vger.kernel.org>,
+        <monstr@monstr.eu>, <michal.simek@xilinx.com>, <git@xilinx.com>
 CC:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: RE: [PATCH v3 2/5] rtc: isl1208: Add support for the built-in RTC on
- the PMIC RAA215300
-Thread-Topic: [PATCH v3 2/5] rtc: isl1208: Add support for the built-in RTC on
- the PMIC RAA215300
-Thread-Index: AQHZhbtZvbD5d59xcUG/7sk4bHrDF69ckNSAgAADcqCAAAlsAIAAFmIQgAAh1ICAAAmpIA==
-Date:   Tue, 16 May 2023 13:09:24 +0000
-Message-ID: <OS0PR01MB592237BB15D9CF1FD87F55C486799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230513165227.13117-1-biju.das.jz@bp.renesas.com>
- <20230513165227.13117-3-biju.das.jz@bp.renesas.com>
- <CAMuHMdWWsNdewjug8JEpbwy1jFQqVEoioBctvQEHzjiLQzx7uQ@mail.gmail.com>
- <OS0PR01MB592259C10181D3A9B590CA8186799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdWv45YhBtAX-4sAvgp2wkwPP7Q95Cs-tZFWDLQKMcJo=w@mail.gmail.com>
- <OS0PR01MB5922F63772A1E8F7364E59E586799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdWDc7qoC_iz6m1s7_2GoZAFb-j4n3iKdqHNp5gYud2bdA@mail.gmail.com>
-In-Reply-To: <CAMuHMdWDc7qoC_iz6m1s7_2GoZAFb-j4n3iKdqHNp5gYud2bdA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYVPR01MB11339:EE_
-x-ms-office365-filtering-correlation-id: cd8f6317-4c92-4db5-d61c-08db560ec5bf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IPWuFvwcC9QDPOSvfOV8gILPKMXC5tGJzdLcJfGD9LGWPwsMdJYq/360HynpbfQ/c3j24HyvPeTWkOAiJR9Z72fVst0FGQjtM3OtV0knfKLXOtbl0nZzOqJW6h5kd5vbeKux9YUS/Jwe9ZL990F2Ysd1dAr2eBT5i7oeS8gh2q6YpTKsaNxPZ9AMbM01y9DPkSpx/GNla3vDy38xoAv2+27cbURvJGPgx2eeATpezEvVJUF2EaDfGekpKxloTEt7Q8fSmQFPl2WupmXrtM4Bky2lUYx3SwUIzvDY3Fo+hyTtrv+LIRj4eXlGhR0Gnvzk9o6FQXCgTLQxAFRKPzzHpRYhb2qVzgDLXsWFPpOrMxYF7d7w5ia2hw1Xf30Bgu680qIYzzotNRwzKHBt8VWDjBQVJjlXP/4MkpfPiYDuFm8/hmR0sRHNuPBa4rj+3pnPGaIq3HWxnXYyK1+cWpCpXb1PBnrtoa0vT8jubD7B51AXssNBKK6ziLvPorm56PZ+F+GfsG3S8folSa01NfDmXzSzDpfGSGHDMT4dRch56rjArjA6nIyFba6E3PrApe7cow686t6t6km4RsY6Evspyw0+XRVkLGuFZDIsy/1OwnhI14y5ZIJ38zshiw6apLeI
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(396003)(346002)(376002)(451199021)(26005)(9686003)(53546011)(6506007)(107886003)(83380400001)(55016003)(122000001)(38100700002)(33656002)(86362001)(38070700005)(186003)(2906002)(54906003)(478600001)(5660300002)(4326008)(6916009)(64756008)(66446008)(66476007)(66556008)(8676002)(8936002)(66946007)(76116006)(316002)(52536014)(71200400001)(7696005)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VjNPbkJFWll0U0JGQ1hUZ3B1bnB5dkNadTlhaWVJeXpWdXJ5bWZnSjlxKy9u?=
- =?utf-8?B?U2dJTmpPZW85Ujc2MHpsaUJzSzM4dzRuYlFreFAwRSt4MXNGdGFiTkNZUVpQ?=
- =?utf-8?B?ZEQvRU5vVmt3MHZLeDhKMVlhL2lHUVlwUlowUWVpak1LY2Zic0Y4N1c1cDVV?=
- =?utf-8?B?ZUQ1VERoVmNqcHFzMkQ2K3lVNkFBVy9Ic0NncTdINUNGa2xwWC8wS2tORWc1?=
- =?utf-8?B?MXVuWW02Qlh6SGVML1lyS0xOOHVIeGY4ZW14Y0dYT3pkZWVFMWk0Wjk4anV1?=
- =?utf-8?B?TnRzeVZvUGN2WGxOUHNsdVN6Y1JyR2tDeGN1T0dnMFpBODdwYVZGUDUrN29T?=
- =?utf-8?B?ZStNRzU2NVErcFZQSW1WcmZnM0J0YnVxSVc3NXNJYm0wNEM0dVhvenIzelc5?=
- =?utf-8?B?Mi9CNHF3SWJwS25OTUdQVUhwRWk2VHNuNUdLS29VM3RET0syME02cjZSVGxK?=
- =?utf-8?B?V0ZNZzNWTEx6ZFpNb3VZVC9tUlBJc3hhSi8vNkVaNTZXQlBKd3Iva3RuTFEv?=
- =?utf-8?B?S2xhUGVQVXY1Ykw2ei9jdVVORXhiOFczSm9CN09OYXdCSEVMdjlWcnpGWjJT?=
- =?utf-8?B?ZVdJSmJiMzVWd2ZoY3FGYUd2aDZvWUl3WkZNWVh2TzQ2bWJqTDZrWUdNWjhV?=
- =?utf-8?B?ZkdiVjNyV2JOVFVmYVI1ZDV5cGx1V05TOXhXU0xzNzVtU3FhdS9jbWFpWUdh?=
- =?utf-8?B?NmRnTFVxemt0dTE3VW1UK2ZObHhqOUlPV3RDdStEcGNzc0hpemoySDluUmhL?=
- =?utf-8?B?RkNSd3kzZTZBZEFPNkZCck9mK2U0VXkwbG1IOEpUUURZeHFuK1JDVzNRc2Rm?=
- =?utf-8?B?bmIva3VJcDVCY2hKTVdEZlQyanR2SGUxcFhiUzFuamIxOEtwVEdIelRyTHlC?=
- =?utf-8?B?MjViRWo0cnNmc3lVNTNJOEdrVGdZZGI5OW5xRkFyajg0OUxBOHVhUEFsbGlO?=
- =?utf-8?B?REs3TnNheWJHSUMydHE2akFjRjdFTXNISCsrWWxFcVJxbUE5NkgybXhHcG9D?=
- =?utf-8?B?QWtzMTdMN2l4RmRoeDZXQkpHUGRhbkEvZG0vNllIdTI0ekw4cHhlS1VwZnEz?=
- =?utf-8?B?SEhZK3A2dXFWZENaSmIzK0cwdktLR2ZmMDBWTzlWbU5HNXIzWmRvNUxCSXVw?=
- =?utf-8?B?RmNEL2N1MGhNMFExUU1sSFBHenVBd0xUVHM5Y3pSeUh5Mm90ZHZuSEQvTnN2?=
- =?utf-8?B?NGFkb2hFbWhCVFRINmlScW5mSi92cGRvcmxrWlRaSUl2VTRNWXR2Mkdvemxv?=
- =?utf-8?B?T1VnWmdUeVd5aTV2TmdLdFMxOVBobW5ENXh1alVRRCs2bDJjT0RPY2YzV0li?=
- =?utf-8?B?SzlKTXdDeU1RWXIzZ25XYlIxZElGTmgzbEJRbkE4MEpOczBxUlkxa3hRRjQ1?=
- =?utf-8?B?WllSNkdoR1lXeDBGdW5RR09QMzVsNTZSb3RCd2E1NkJMWnJGelVKYjRnM2pP?=
- =?utf-8?B?VEhFSmhXemorSityU1NKYm1kZFVZWUFvOG9TRnlEZG9PNHd5VnhDMVdkR2VU?=
- =?utf-8?B?eTNsMDIyMDltN1d3emszRCs1eVBUUTlDUy9DNlFEZXE5aGdyYXJYaFNIQXlH?=
- =?utf-8?B?ejB6aGVCU3M4QXdoYkVoSyt2ZEVSK0M1bDhVV1NSRUVMdk5qLzltSmQxblpp?=
- =?utf-8?B?WjBFWERZK3YyVXMrRVJYcHFML05MT2dXaitDQ1VnTE9tYlFtK1o1aDRHVzhz?=
- =?utf-8?B?aStRak1zTkEyVGlXR2ZTcXlxVTRTTmI0WHRWUm9hcW16WTVIc0I2YU9raURy?=
- =?utf-8?B?UDdmZmMwanM4VWZWUHhNN3pKZUNGVWhwWEt5bWpMaW1zcndPazNaM200M1Rt?=
- =?utf-8?B?d3FTMTE0MkgyWWUzYVVmdXY3ZVFCY3Zob0ZjazVRYlhKK1pHTkJGamt3L241?=
- =?utf-8?B?S2ErZ2V3YzhGUHl4Y3VKM0FFNEVrUFBCdU1LSXFIQ085djJ5ZXY2NWhpZzBv?=
- =?utf-8?B?ek1ia0IxakdMOUtwZE42ZDFTQkU5dDNjZkNBbDAycU5xcncydUlabmxPVUk3?=
- =?utf-8?B?WEF5MzJTMmtZMmx0NUc2VU9TTlBjNm9NSXFOVjN0dHVQamdWYUNHZWV4aEVK?=
- =?utf-8?B?VHZxcWt5MUVvN0IwMWJhNFl5YURTTHYxUW81NFlacC9lUUNRcStVQk5qaHFH?=
- =?utf-8?Q?0y1MqsHuzoUZWR+l1hEe1Cqnd?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Andrew Lunn <andrew@lunn.ch>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Manish Narani" <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-fpga@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Date:   Tue, 16 May 2023 15:51:08 +0200
+Message-ID: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd8f6317-4c92-4db5-d61c-08db560ec5bf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2023 13:09:24.9953
+X-Developer-Signature: v=1; a=openpgp-sha256; l=20389; i=michal.simek@amd.com; h=from:subject:message-id; bh=UJh2IbZcbImCfax+wplr5YvbR5aWcrJrXIpjLjnMnSs=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhpTkLk+OHWYbE3oiF9ay/d2mueFPf5/0P6sGc7nIqE1zT j1Yrx/ZEcvCIMjEICumyCJtc+XM3soZU4QvHpaDmcPKBDKEgYtTACYy/zvDPJta2ci3Xy+8/Lu8 N1UhN3blTv6MpQzzXQ4Gnal0DlhhWi333uJTBJdIyNoTAA==
+X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT033:EE_|PH7PR12MB6442:EE_
+X-MS-Office365-Filtering-Correlation-Id: eea31f22-da87-40fd-0b8c-08db5614ab4c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FxBbdi+PqJuPQd3NwHFgquM7450SbmDYv5U/7QfqGNNZIWYg8lyePWtjewTDEJbJ/W4AX9l1RfZsAdy5PK93YG6jVC897ku4VSqPDA4XM3f/1ZUx4OjL+z4Zcxy0aJZKdtqi53yttgve6fJJSVqC9JlAv1PCDuYnf++BZRmKvV6pQD4dV4lHkCFVhIW3NTYjec+w3J/UZDjwGHj3x7FRDWKvQwfOXzbQUfFmNTo1NoHZmEOU99sH8UCu9nTeYRYCA2FYPRaG5pWG3iK/bULaeiB5QA1Lesp5P1igVtubXsBlUqlPeUpu6PE6al7CuBxEBt6steuhO6cdirQOWU9cTYOXk5d00BA4TE1OplPH0zK+kopUP5MUCFcGhGOzzL23uEDcdlEKI+xnDzqkqLunOhrPyU2E4TT48KOetVqKziTAYFmgbrdNDUlv6x9ByvEmRuQ1ZIj2pI/qvgn9T2famQkyU6pMRSLA2kTI8BE6dtyJ40/LLBHz3xF+G8+sZDtM7uXqg30+ZUUiROkoAsniGPWdX6X4r9LWNCwMXvqELWISaw/aoMaBeKDjqDS8513+9vOnD22lJP6RDFAsbohraMllgHaoPP9bummSfU0kE/hpvAp0Q3eoK1BhuahJau3fDCaoB1zHOM1oygZJ8Qfya89rh28ljOJWMjfF8KwD3yWGu769+FuaqZOfeGKh8XyIqFscH4jl5SAGzCeH96/DftpZ6QQ0mZso4oKiQYUPAh01L7tkpNQa60jLUlk5GAv2KJL38YPzZWSBW8O76dkgQPGqtaeaDtkUyqLUuy9epT3OSusM9lp3plq0cx7y4LTB
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(36756003)(70586007)(54906003)(110136005)(316002)(478600001)(70206006)(966005)(4326008)(86362001)(81166007)(82740400003)(82310400005)(921005)(40480700001)(2616005)(5660300002)(8676002)(7366002)(7416002)(8936002)(6666004)(30864003)(7406005)(2906002)(44832011)(16526019)(356005)(41300700001)(26005)(186003)(336012)(36860700001)(47076005)(426003)(83380400001)(40460700003)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 13:51:37.5029
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JmnvDii5Nadpy1z/ca3HE/90cfscSwVlWixNBuiBsBBJSlfWBbPCOZwJ7dgwl6GpFYNpwvDK77wGBRZ9FhAIDuIS1RP8mkRQA1GEFICe2u8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB11339
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: eea31f22-da87-40fd-0b8c-08db5614ab4c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6442
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrLg0KDQo+IC0tLS0tT3JpZ2luYWwg
-TWVzc2FnZS0tLS0tDQo+IEZyb206IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnRAbGludXgtbTY4
-ay5vcmc+DQo+IFNlbnQ6IFR1ZXNkYXksIE1heSAxNiwgMjAyMyAxOjIwIFBNDQo+IFRvOiBCaWp1
-IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+IENjOiBBbGVzc2FuZHJvIFp1bW1v
-IDxhLnp1bW1vQHRvd2VydGVjaC5pdD47IEFsZXhhbmRyZSBCZWxsb25pDQo+IDxhbGV4YW5kcmUu
-YmVsbG9uaUBib290bGluLmNvbT47IE1hZ251cyBEYW1tIDxtYWdudXMuZGFtbUBnbWFpbC5jb20+
-Ow0KPiBMZWUgSm9uZXMgPGxlZUBrZXJuZWwub3JnPjsgbGludXgtcnRjQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtcmVuZXNhcy0NCj4gc29jQHZnZXIua2VybmVsLm9yZzsgRmFicml6aW8gQ2FzdHJv
-IDxmYWJyaXppby5jYXN0cm8uanpAcmVuZXNhcy5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0gg
-djMgMi81XSBydGM6IGlzbDEyMDg6IEFkZCBzdXBwb3J0IGZvciB0aGUgYnVpbHQtaW4NCj4gUlRD
-IG9uIHRoZSBQTUlDIFJBQTIxNTMwMA0KPiANCj4gSGkgQmlqdSwNCj4gDQo+IE9uIFR1ZSwgTWF5
-IDE2LCAyMDIzIGF0IDEyOjIy4oCvUE0gQmlqdSBEYXMgPGJpanUuZGFzLmp6QGJwLnJlbmVzYXMu
-Y29tPg0KPiB3cm90ZToNCj4gPiA+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4gPiBG
-cm9tOiBHZWVydCBVeXR0ZXJob2V2ZW4gPGdlZXJ0QGxpbnV4LW02OGsub3JnPg0KPiA+ID4gU2Vu
-dDogVHVlc2RheSwgTWF5IDE2LCAyMDIzIDk6NTggQU0NCj4gPiA+IFRvOiBCaWp1IERhcyA8Ymlq
-dS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+ID4gPiBDYzogQWxlc3NhbmRybyBadW1tbyA8YS56
-dW1tb0B0b3dlcnRlY2guaXQ+OyBBbGV4YW5kcmUgQmVsbG9uaQ0KPiA+ID4gPGFsZXhhbmRyZS5i
-ZWxsb25pQGJvb3RsaW4uY29tPjsgTWFnbnVzIERhbW0NCj4gPiA+IDxtYWdudXMuZGFtbUBnbWFp
-bC5jb20+OyBMZWUgSm9uZXMgPGxlZUBrZXJuZWwub3JnPjsNCj4gPiA+IGxpbnV4LXJ0Y0B2Z2Vy
-Lmtlcm5lbC5vcmc7IGxpbnV4LXJlbmVzYXMtIHNvY0B2Z2VyLmtlcm5lbC5vcmc7DQo+ID4gPiBG
-YWJyaXppbyBDYXN0cm8gPGZhYnJpemlvLmNhc3Ryby5qekByZW5lc2FzLmNvbT4NCj4gPiA+IFN1
-YmplY3Q6IFJlOiBbUEFUQ0ggdjMgMi81XSBydGM6IGlzbDEyMDg6IEFkZCBzdXBwb3J0IGZvciB0
-aGUNCj4gPiA+IGJ1aWx0LWluIFJUQyBvbiB0aGUgUE1JQyBSQUEyMTUzMDANCj4gPiA+DQo+ID4g
-PiBPbiBUdWUsIE1heSAxNiwgMjAyMyBhdCAxMDo0NuKAr0FNIEJpanUgRGFzDQo+ID4gPiA8Ymlq
-dS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+ID4gPiB3cm90ZToNCj4gPiA+ID4gPiBTdWJqZWN0
-OiBSZTogW1BBVENIIHYzIDIvNV0gcnRjOiBpc2wxMjA4OiBBZGQgc3VwcG9ydCBmb3IgdGhlDQo+
-ID4gPiA+ID4gYnVpbHQtaW4gUlRDIG9uIHRoZSBQTUlDIFJBQTIxNTMwMCBPbiBTYXQsIE1heSAx
-MywgMjAyMyBhdCA2OjUy4oCvDQo+ID4gPiA+ID4gUE0gQmlqdSBEYXMgPGJpanUuZGFzLmp6QGJw
-LnJlbmVzYXMuY29tPg0KPiA+ID4gPiA+IHdyb3RlOg0KPiA+ID4gPiA+ID4gVGhlIGJ1aWx0LWlu
-IFJUQyBmb3VuZCBvbiBQTUlDIFJBQTIxNTMwMCBpcyB0aGUgc2FtZSBhcw0KPiBJU0wxMjA4Lg0K
-PiA+ID4gPiA+ID4gSG93ZXZlciwgdGhlIGV4dGVybmFsIG9zY2lsbGF0b3IgYml0IGlzIGludmVy
-dGVkIG9uIFBNSUMNCj4gPiA+ID4gPiA+IHZlcnNpb24NCj4gPiA+IDB4MTEuDQo+ID4gPiA+ID4g
-PiBUaGUgUE1JQyBkcml2ZXIgZGV0ZWN0cyBQTUlDIHZlcnNpb24gYW5kIGluc3RhbnRpYXRlDQo+
-ID4gPiA+ID4gPiBhcHByb3ByaWF0ZSBSVEMgZGV2aWNlIGJhc2VkIG9uIGkyY19kZXZpY2VfaWQu
-DQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gU2lnbmVkLW9mZi1ieTogQmlqdSBEYXMgPGJpanUu
-ZGFzLmp6QGJwLnJlbmVzYXMuY29tPg0KPiA+ID4gPiA+ID4gLS0tDQo+ID4gPiA+ID4gPiB2Mi0+
-djM6DQo+ID4gPiA+ID4gPiAgKiBSVEMgZGV2aWNlIGlzIGluc3RhbnRpYXRlZCBieSBQTUlDIGRy
-aXZlciBhbmQgZHJvcHBlZA0KPiA+ID4gPiA+IGlzbDEyMDhfcHJvYmVfaGVscGVyKCkuDQo+ID4g
-PiA+ID4gPiAgKiBBZGRlZCAiVFlQRV9SQUEyMTUzMDBfUlRDX0EwIiB0byBoYW5kbGUgaW52ZXJ0
-ZWQgb3NjaWxsYXRvcg0KPiA+ID4gPiA+ID4gYml0DQo+ID4gPiA+ID4gY2FzZS4NCj4gPiA+ID4g
-PiA+IFJGQy0+djI6DQo+ID4gPiA+ID4gPiAgKiBEcm9wcGVkIGNvbXBhdGlibGUgInJlbmVzYXMs
-cmFhMjE1MzAwLWlzbDEyMDgiIGFuZA0KPiA+ID4gPiA+ICJyZW5lc2FzLHJhYTIxNTMwMC1wbWlj
-IiBwcm9wZXJ0eS4NCj4gPiA+ID4gPiA+ICAqIFVwZGF0ZWQgdGhlIGNvbW1lbnQgcG9sYXJpdHkt
-PmJpdCBmb3IgRXh0ZXJuYWwgT3NjaWxsYXRvci4NCj4gPiA+ID4gPiA+ICAqIEFkZGVkIHJhYTIx
-NTMwMF9ydGNfcHJvYmVfaGVscGVyKCkgZm9yIHJlZ2lzdGVyaW5nDQo+ID4gPiA+ID4gPiByYWEy
-MTUzMDBfcnRjDQo+ID4gPiA+ID4gZGV2aWNlIGFuZA0KPiA+ID4gPiA+ID4gICAgYWRkZWQgdGhl
-IGhlbHBlciBmdW5jdGlvbiBpc2wxMjA4X3Byb2JlX2hlbHBlcigpIHRvIHNoYXJlDQo+ID4gPiA+
-ID4gPiB0aGUNCj4gPiA+IGNvZGUuDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBUaGFua3MgZm9yIHRo
-ZSB1cGRhdGUhDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IC0tLSBhL2RyaXZlcnMvcnRjL3J0Yy1p
-c2wxMjA4LmMNCj4gPiA+ID4gPiA+ICsrKyBiL2RyaXZlcnMvcnRjL3J0Yy1pc2wxMjA4LmMNCj4g
-PiA+ID4gPiA+IEBAIC03NCw2ICs3NCw3IEBAIGVudW0gaXNsMTIwOF9pZCB7DQo+ID4gPiA+ID4g
-PiAgICAgICAgIFRZUEVfSVNMMTIwOSwNCj4gPiA+ID4gPiA+ICAgICAgICAgVFlQRV9JU0wxMjE4
-LA0KPiA+ID4gPiA+ID4gICAgICAgICBUWVBFX0lTTDEyMTksDQo+ID4gPiA+ID4gPiArICAgICAg
-IFRZUEVfUkFBMjE1MzAwX1JUQ19BMCwNCj4gPiA+ID4gPiA+ICAgICAgICAgSVNMX0xBU1RfSUQN
-Cj4gPiA+ID4gPiA+ICB9Ow0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IEBAIC04MywxMSArODQs
-MTMgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBpc2wxMjA4X2NvbmZpZyB7DQo+ID4gPiA+ID4gPiAg
-ICAgICAgIHVuc2lnbmVkIGludCAgICBudm1lbV9sZW5ndGg7DQo+ID4gPiA+ID4gPiAgICAgICAg
-IHVuc2lnbmVkICAgICAgICBoYXNfdGFtcGVyOjE7DQo+ID4gPiA+ID4gPiAgICAgICAgIHVuc2ln
-bmVkICAgICAgICBoYXNfdGltZXN0YW1wOjE7DQo+ID4gPiA+ID4gPiArICAgICAgIHVuc2lnbmVk
-ICAgICAgICBoYXNfaW52ZXJ0ZWRfb3NjX2JpdDoxOw0KPiA+ID4gPiA+ID4gIH0gaXNsMTIwOF9j
-b25maWdzW10gPSB7DQo+ID4gPiA+ID4gPiAgICAgICAgIFtUWVBFX0lTTDEyMDhdID0geyAiaXNs
-MTIwOCIsIDIsIGZhbHNlLCBmYWxzZSB9LA0KPiA+ID4gPiA+ID4gICAgICAgICBbVFlQRV9JU0wx
-MjA5XSA9IHsgImlzbDEyMDkiLCAyLCB0cnVlLCAgZmFsc2UgfSwNCj4gPiA+ID4gPiA+ICAgICAg
-ICAgW1RZUEVfSVNMMTIxOF0gPSB7ICJpc2wxMjE4IiwgOCwgZmFsc2UsIGZhbHNlIH0sDQo+ID4g
-PiA+ID4gPiAgICAgICAgIFtUWVBFX0lTTDEyMTldID0geyAiaXNsMTIxOSIsIDIsIHRydWUsICB0
-cnVlIH0sDQo+ID4gPiA+ID4gPiArICAgICAgIFtUWVBFX1JBQTIxNTMwMF9SVENfQTBdID0geyAi
-cnRjX2EwIiwgMiwgZmFsc2UsIGZhbHNlLA0KPiA+ID4gPiA+ID4gKyB0cnVlIH0sDQo+ID4gPiA+
-ID4gPiAgfTsNCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiAgc3RhdGljIGNvbnN0IHN0cnVjdCBp
-MmNfZGV2aWNlX2lkIGlzbDEyMDhfaWRbXSA9IHsgQEAgLTk1LDYNCj4gPiA+ID4gPiA+ICs5OCw3
-IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgaTJjX2RldmljZV9pZCBpc2wxMjA4X2lkW10gPSB7DQo+
-ID4gPiA+ID4gPiAgICAgICAgIHsgImlzbDEyMDkiLCBUWVBFX0lTTDEyMDkgfSwNCj4gPiA+ID4g
-PiA+ICAgICAgICAgeyAiaXNsMTIxOCIsIFRZUEVfSVNMMTIxOCB9LA0KPiA+ID4gPiA+ID4gICAg
-ICAgICB7ICJpc2wxMjE5IiwgVFlQRV9JU0wxMjE5IH0sDQo+ID4gPiA+ID4gPiArICAgICAgIHsg
-InJ0Y19hMCIsIFRZUEVfUkFBMjE1MzAwX1JUQ19BMCB9LA0KPiA+ID4gPiA+DQo+ID4gPiA+ID4g
-InJ0Y19hMCIgaXMgSU1ITyBhIHRvby1nZW5lcmljIG5hbWUuDQo+ID4gPiA+DQo+ID4gPiA+IEkg
-dHJpZWQgdG8gc3F1ZWV6ZSB3aXRoIHN0cmluZyBsZW5ndGggIjgiLg0KPiA+ID4gPg0KPiA+ID4g
-PiBXaGF0IGFib3V0IGNoYW5naW5nIGl0IHRvICJyYWEyMTUzMDBfYTAiIGFuZCBjaGFuZ2luZyBs
-ZW5ndGggdG8NCj4gIjEyIj8NCj4gPiA+ID4gYXMgdmVyc2lvbiBBMCBvZiBSQUEyMTUzMDAgcG1p
-YyBjaGlwIGhhdmUgdGhpcyBpbnZlcnRlZCBvc2NpbGxhdG9yDQo+ID4gPiBiaXQuDQo+ID4gPg0K
-PiA+ID4gQWgsIGJlY2F1c2Ugb2YgdGhlIHNpemUgbGltaXQgb2YgaXNsMTIwOF9jb25maWcubmFt
-ZVtdPw0KPiA+ID4gTm90ZSB0aGF0IHRoYXQgZmllbGQgaXMgb25seSBpbml0aWFsaXplZCwgYnV0
-IGZ1cnRoZXIgdW51c2VkLCBzbyB5b3UNCj4gPiA+IGNhbiBqdXN0IGRyb3AgaXQuDQo+ID4NCj4g
-PiBBZ3JlZWQuIEl0IHdpbGwgbG9vayBsaWtlDQo+ID4NCj4gPiBzdGF0aWMgY29uc3Qgc3RydWN0
-IGlzbDEyMDhfY29uZmlnIHsNCj4gPiAtICAgICAgIGNvbnN0IGNoYXIgICAgICBuYW1lWzhdOw0K
-PiA+ICAgICAgICAgdW5zaWduZWQgaW50ICAgIG52bWVtX2xlbmd0aDsNCj4gPiAgICAgICAgIHVu
-c2lnbmVkICAgICAgICBoYXNfdGFtcGVyOjE7DQo+ID4gICAgICAgICB1bnNpZ25lZCAgICAgICAg
-aGFzX3RpbWVzdGFtcDoxOw0KPiA+ICAgICAgICAgdW5zaWduZWQgICAgICAgIGhhc19pbnZlcnRl
-ZF9vc2NfYml0OjE7DQo+ID4gIH0gaXNsMTIwOF9jb25maWdzW10gPSB7DQo+ID4gLSAgICAgICBb
-VFlQRV9JU0wxMjA4XSA9IHsgImlzbDEyMDgiLCAyLCBmYWxzZSwgZmFsc2UgfSwNCj4gPiAtICAg
-ICAgIFtUWVBFX0lTTDEyMDldID0geyAiaXNsMTIwOSIsIDIsIHRydWUsICBmYWxzZSB9LA0KPiA+
-IC0gICAgICAgW1RZUEVfSVNMMTIxOF0gPSB7ICJpc2wxMjE4IiwgOCwgZmFsc2UsIGZhbHNlIH0s
-DQo+ID4gLSAgICAgICBbVFlQRV9JU0wxMjE5XSA9IHsgImlzbDEyMTkiLCAyLCB0cnVlLCAgdHJ1
-ZSB9LA0KPiA+IC0gICAgICAgW1RZUEVfUkFBMjE1MzAwX1JUQ19BMF0gPSB7ICJydGNfYTAiLCAy
-LCBmYWxzZSwgZmFsc2UsIHRydWUgfSwNCj4gPiArICAgICAgIFtUWVBFX0lTTDEyMDhdID0geyAy
-LCBmYWxzZSwgZmFsc2UgfSwNCj4gPiArICAgICAgIFtUWVBFX0lTTDEyMDldID0geyAyLCB0cnVl
-LCAgZmFsc2UgfSwNCj4gPiArICAgICAgIFtUWVBFX0lTTDEyMThdID0geyA4LCBmYWxzZSwgZmFs
-c2UgfSwNCj4gPiArICAgICAgIFtUWVBFX0lTTDEyMTldID0geyAyLCB0cnVlLCAgdHJ1ZSB9LA0K
-PiA+ICsgICAgICAgW1RZUEVfUkFBMjE1MzAwX1JUQ19BMF0gPSB7IDIsIGZhbHNlLCBmYWxzZSwg
-dHJ1ZSB9LA0KPiA+ICB9Ow0KPiA+DQo+ID4gPg0KPiA+ID4gQlRXLCBpc2wxMjA4X2lkW10uZHJp
-dmVyX2RhdGEgY291bGQgc3RvcmUgYSBwb2ludGVyIHRvIHRoZSBjb25maWcsDQo+ID4gPiBsaWtl
-IGZvciBEVC1iYXNlZCBtYXRjaGluZywgbWFraW5nIEkyQyBhbmQgRFQtYmFzZWQgbWF0Y2hpbmcg
-bW9yZQ0KPiBzaW1pbGFyLg0KPiA+DQo+ID4gT0suIEJ1dCBzb21lIHR5cGUgY2FzdGluZyByZXF1
-aXJlZA0KPiA+DQo+ID4gKyAgICAgICB7ICJpc2wxMjA4IiwgLmRyaXZlcl9kYXRhID0gKHVuc2ln
-bmVkDQo+IGxvbmcpJmlzbDEyMDhfY29uZmlnc1tUWVBFX0lTTDEyMDhdIH0sDQo+ID4gKyAgICAg
-ICB7ICJpc2wxMjA5IiwgLmRyaXZlcl9kYXRhID0gKHVuc2lnbmVkDQo+IGxvbmcpJmlzbDEyMDhf
-Y29uZmlnc1tUWVBFX0lTTDEyMDldIH0sDQo+ID4gKyAgICAgICB7ICJpc2wxMjE4IiwgLmRyaXZl
-cl9kYXRhID0gKHVuc2lnbmVkDQo+IGxvbmcpJmlzbDEyMDhfY29uZmlnc1tUWVBFX0lTTDEyMThd
-IH0sDQo+ID4gKyAgICAgICB7ICJpc2wxMjE5IiwgLmRyaXZlcl9kYXRhID0gKHVuc2lnbmVkDQo+
-IGxvbmcpJmlzbDEyMDhfY29uZmlnc1tUWVBFX0lTTDEyMTldIH0sDQo+ID4gKyAgICAgICB7ICJy
-YWEyMTUzMDBfcnRjX2EwIiwgLmRyaXZlcl9kYXRhID0gKHVuc2lnbmVkDQo+ID4gKyBsb25nKSZp
-c2wxMjA4X2NvbmZpZ3NbVFlQRV9SQUEyMTUzMDBfUlRDX0EwXSB9LA0KPiANCj4gTm93IHRoZXJl
-IGFyZSBubyBtb3JlIHVzZXJzIGxlZnQgb2YgaXNsMTIwOF9jb25maWdzW10sIHlvdSBjYW4gc3Bs
-aXQgdGhlDQo+IGFycmF5IGluIGluZGl2aWR1YWwgdmFyaWFibGVzLCBhbmQgbWFrZSBsaW5lcyBz
-aG9ydGVyIGJ5IHJlZmVycmluZyB0bw0KPiBlLmcuICZjb25maWdfaXNsMTIxOSBpbnN0ZWFkIG9m
-ICZpc2wxMjA4X2NvbmZpZ3NbVFlQRV9JU0wxMjE5XS4NCg0KSXQgbG9va3MgYmV0dGVyIG5vdywN
-Cg0KLS8qIElTTDEyMDggdmFyaW91cyB2YXJpYW50cyAqLw0KLWVudW0gaXNsMTIwOF9pZCB7DQot
-ICAgICAgIFRZUEVfSVNMMTIwOCA9IDAsDQotICAgICAgIFRZUEVfSVNMMTIwOSwNCi0gICAgICAg
-VFlQRV9JU0wxMjE4LA0KLSAgICAgICBUWVBFX0lTTDEyMTksDQotICAgICAgIFRZUEVfUkFBMjE1
-MzAwX1JUQ19BMCwNCi0gICAgICAgSVNMX0xBU1RfSUQNCi19Ow0KLQ0KDQotc3RhdGljIGNvbnN0
-IHN0cnVjdCBpc2wxMjA4X2NvbmZpZyB7DQorc3RydWN0IGlzbDEyMDhfY29uZmlnIHsNCiAgICAg
-ICAgdW5zaWduZWQgaW50ICAgIG52bWVtX2xlbmd0aDsNCiAgICAgICAgdW5zaWduZWQgICAgICAg
-IGhhc190YW1wZXI6MTsNCiAgICAgICAgdW5zaWduZWQgICAgICAgIGhhc190aW1lc3RhbXA6MTsN
-CiAgICAgICAgdW5zaWduZWQgICAgICAgIGhhc19pbnZlcnRlZF9vc2NfYml0OjE7DQotfSBpc2wx
-MjA4X2NvbmZpZ3NbXSA9IHsNCi0gICAgICAgW1RZUEVfSVNMMTIwOF0gPSB7IDIsIGZhbHNlLCBm
-YWxzZSB9LA0KLSAgICAgICBbVFlQRV9JU0wxMjA5XSA9IHsgMiwgdHJ1ZSwgIGZhbHNlIH0sDQot
-ICAgICAgIFtUWVBFX0lTTDEyMThdID0geyA4LCBmYWxzZSwgZmFsc2UgfSwNCi0gICAgICAgW1RZ
-UEVfSVNMMTIxOV0gPSB7IDIsIHRydWUsICB0cnVlIH0sDQotICAgICAgIFtUWVBFX1JBQTIxNTMw
-MF9SVENfQTBdID0geyAyLCBmYWxzZSwgZmFsc2UsIHRydWUgfSwNCit9Ow0KKw0KK3N0YXRpYyBj
-b25zdCBzdHJ1Y3QgaXNsMTIwOF9jb25maWcgY29uZmlnX2lzbDEyMDggPSB7DQorICAgICAgIC5u
-dm1lbV9sZW5ndGggPSAyLA0KKyAgICAgICAuaGFzX3RhbXBlciA9IGZhbHNlLA0KKyAgICAgICAu
-aGFzX3RpbWVzdGFtcCA9IGZhbHNlDQorfTsNCisNCitzdGF0aWMgY29uc3Qgc3RydWN0IGlzbDEy
-MDhfY29uZmlnIGNvbmZpZ19pc2wxMjA5ID0gew0KKyAgICAgICAubnZtZW1fbGVuZ3RoID0gMiwN
-CisgICAgICAgLmhhc190YW1wZXIgPSB0cnVlLA0KKyAgICAgICAuaGFzX3RpbWVzdGFtcCA9IGZh
-bHNlDQorfTsNCisNCitzdGF0aWMgY29uc3Qgc3RydWN0IGlzbDEyMDhfY29uZmlnIGNvbmZpZ19p
-c2wxMjE4ID0gew0KKyAgICAgICAubnZtZW1fbGVuZ3RoID0gOCwNCisgICAgICAgLmhhc190YW1w
-ZXIgPSBmYWxzZSwNCisgICAgICAgLmhhc190aW1lc3RhbXAgPSBmYWxzZQ0KK307DQorDQorc3Rh
-dGljIGNvbnN0IHN0cnVjdCBpc2wxMjA4X2NvbmZpZyBjb25maWdfaXNsMTIxOSA9IHsNCisgICAg
-ICAgLm52bWVtX2xlbmd0aCA9IDIsDQorICAgICAgIC5oYXNfdGFtcGVyID0gdHJ1ZSwNCisgICAg
-ICAgLmhhc190aW1lc3RhbXAgPSB0cnVlDQorfTsNCisNCitzdGF0aWMgY29uc3Qgc3RydWN0IGlz
-bDEyMDhfY29uZmlnIGNvbmZpZ19yYWEyMTUzMDBfYTAgPSB7DQorICAgICAgIC5udm1lbV9sZW5n
-dGggPSAyLA0KKyAgICAgICAuaGFzX3RhbXBlciA9IGZhbHNlLA0KKyAgICAgICAuaGFzX3RpbWVz
-dGFtcCA9IGZhbHNlLA0KKyAgICAgICAuaGFzX2ludmVydGVkX29zY19iaXQgPSB0cnVlDQogfTsN
-CiANCiBzdGF0aWMgY29uc3Qgc3RydWN0IGkyY19kZXZpY2VfaWQgaXNsMTIwOF9pZFtdID0gew0K
-LSAgICAgICB7ICJpc2wxMjA4IiwgLmRyaXZlcl9kYXRhID0gKHVuc2lnbmVkIGxvbmcpJmlzbDEy
-MDhfY29uZmlnc1tUWVBFX0lTTDEyMDhdIH0sDQotICAgICAgIHsgImlzbDEyMDkiLCAuZHJpdmVy
-X2RhdGEgPSAodW5zaWduZWQgbG9uZykmaXNsMTIwOF9jb25maWdzW1RZUEVfSVNMMTIwOV0gfSwN
-Ci0gICAgICAgeyAiaXNsMTIxOCIsIC5kcml2ZXJfZGF0YSA9ICh1bnNpZ25lZCBsb25nKSZpc2wx
-MjA4X2NvbmZpZ3NbVFlQRV9JU0wxMjE4XSB9LA0KLSAgICAgICB7ICJpc2wxMjE5IiwgLmRyaXZl
-cl9kYXRhID0gKHVuc2lnbmVkIGxvbmcpJmlzbDEyMDhfY29uZmlnc1tUWVBFX0lTTDEyMTldIH0s
-DQotICAgICAgIHsgInJhYTIxNTMwMF9ydGNfYTAiLCAuZHJpdmVyX2RhdGEgPSAodW5zaWduZWQg
-bG9uZykmaXNsMTIwOF9jb25maWdzW1RZUEVfUkFBMjE1MzAwX1JUQ19BMF0gfSwNCisgICAgICAg
-eyAiaXNsMTIwOCIsIC5kcml2ZXJfZGF0YSA9ICh1bnNpZ25lZCBsb25nKSZjb25maWdfaXNsMTIw
-OCB9LA0KKyAgICAgICB7ICJpc2wxMjA5IiwgLmRyaXZlcl9kYXRhID0gKHVuc2lnbmVkIGxvbmcp
-JmNvbmZpZ19pc2wxMjA5IH0sDQorICAgICAgIHsgImlzbDEyMTgiLCAuZHJpdmVyX2RhdGEgPSAo
-dW5zaWduZWQgbG9uZykmY29uZmlnX2lzbDEyMTggfSwNCisgICAgICAgeyAiaXNsMTIxOSIsIC5k
-cml2ZXJfZGF0YSA9ICh1bnNpZ25lZCBsb25nKSZjb25maWdfaXNsMTIxOSB9LA0KKyAgICAgICB7
-ICJyYWEyMTUzMDBfYTAiLCAuZHJpdmVyX2RhdGEgPSAodW5zaWduZWQgbG9uZykmY29uZmlnX3Jh
-YTIxNTMwMF9hMCB9LA0KICAgICAgICB7IH0NCiB9Ow0KIE1PRFVMRV9ERVZJQ0VfVEFCTEUoaTJj
-LCBpc2wxMjA4X2lkKTsNCiANCiBzdGF0aWMgY29uc3QgX19tYXliZV91bnVzZWQgc3RydWN0IG9m
-X2RldmljZV9pZCBpc2wxMjA4X29mX21hdGNoW10gPSB7DQotICAgICAgIHsgLmNvbXBhdGlibGUg
-PSAiaXNpbCxpc2wxMjA4IiwgLmRhdGEgPSAmaXNsMTIwOF9jb25maWdzW1RZUEVfSVNMMTIwOF0g
-fSwNCi0gICAgICAgeyAuY29tcGF0aWJsZSA9ICJpc2lsLGlzbDEyMDkiLCAuZGF0YSA9ICZpc2wx
-MjA4X2NvbmZpZ3NbVFlQRV9JU0wxMjA5XSB9LA0KLSAgICAgICB7IC5jb21wYXRpYmxlID0gImlz
-aWwsaXNsMTIxOCIsIC5kYXRhID0gJmlzbDEyMDhfY29uZmlnc1tUWVBFX0lTTDEyMThdIH0sDQot
-ICAgICAgIHsgLmNvbXBhdGlibGUgPSAiaXNpbCxpc2wxMjE5IiwgLmRhdGEgPSAmaXNsMTIwOF9j
-b25maWdzW1RZUEVfSVNMMTIxOV0gfSwNCisgICAgICAgeyAuY29tcGF0aWJsZSA9ICJpc2lsLGlz
-bDEyMDgiLCAuZGF0YSA9ICZjb25maWdfaXNsMTIwOCB9LA0KKyAgICAgICB7IC5jb21wYXRpYmxl
-ID0gImlzaWwsaXNsMTIwOSIsIC5kYXRhID0gJmNvbmZpZ19pc2wxMjA5IH0sDQorICAgICAgIHsg
-LmNvbXBhdGlibGUgPSAiaXNpbCxpc2wxMjE4IiwgLmRhdGEgPSAmY29uZmlnX2lzbDEyMTggfSwN
-CisgICAgICAgeyAuY29tcGF0aWJsZSA9ICJpc2lsLGlzbDEyMTkiLCAuZGF0YSA9ICZjb25maWdf
-aXNsMTIxOSB9LA0KDQoNCj4gDQo+ID4gPiA+ID4gPiAgaXNsMTIwOF9pMmNfZ2V0X3NyKHN0cnVj
-dCBpMmNfY2xpZW50ICpjbGllbnQpICB7IEBAIC04NDUsNg0KPiA+ID4gPiA+ID4gKzg1OSwxMyBA
-QCBpc2wxMjA4X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpjbGllbnQpDQo+ID4gPiA+ID4gPiAg
-ICAgICAgICAgICAgICAgcmV0dXJuIHJjOw0KPiA+ID4gPiA+ID4gICAgICAgICB9DQo+ID4gPiA+
-ID4gPg0KPiA+ID4gPiA+ID4gKyAgICAgICBpZiAoaXNsMTIwOC0+Y29uZmlnLT5oYXNfaW52ZXJ0
-ZWRfb3NjX2JpdCkgew0KPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIHJjID0gaXNsMTIwOF9z
-ZXRfZXh0ZXJuYWxfb3NjaWxsYXRvcihjbGllbnQsDQo+ID4gPiA+ID4gPiArIHJjLA0KPiA+ID4g
-PiA+DQo+ID4gPiA+ID4gUGFzc2luZyAicmMiIGlzIGNvbmZ1c2luZywgdGhpcyBpcyByZWFsbHkg
-dGhlIHN0YXR1cyByZWdpc3Rlcg0KPiA+ID4gPiA+IHZhbHVlIG9idGFpbmVkIGFib3ZlLi4uDQo+
-ID4gPiA+DQo+ID4gPiA+IEkgYW0gcGxhbm5pbmcgdG8gZHJvcCB0aGlzIGZ1bmN0aW9uIGluIG5l
-eHQgdmVyc2lvbiBhbmQgd2lsbCB1c2UNCj4gPiA+ID4gdGhlDQo+ID4gPiBiZWxvdyBsb2dpYyBp
-bnN0ZWFkLg0KPiA+ID4gPiBJcyBpdCBvaz8NCj4gPiA+ID4NCj4gPiA+ID4gICAgICAgICAgaWYg
-KGlzbDEyMDgtPmNvbmZpZy0+aGFzX2ludmVydGVkX29zY19iaXQpIHsNCj4gPiA+ID4gICAgICAg
-ICAgICAgICAgICAgICBpbnQgc3I7DQo+ID4gPiA+DQo+ID4gPiA+ICAgICAgICAgICAgICAgICAg
-c3IgPSBpMmNfc21idXNfd3JpdGVfYnl0ZV9kYXRhKGNsaWVudCwNCj4gPiA+IElTTDEyMDhfUkVH
-X1NSLA0KPiA+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgcmMgfA0KPiA+ID4gSVNMMTIwOF9SRUdfU1JfWFRPU0NCKTsNCj4gPiA+ID4gICAgICAgICAg
-ICAgICAgICBpZiAoc3IpDQo+ID4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4g
-c3I7DQo+ID4gPg0KPiA+ID4gSXNuJ3QgdGhpcyBtb3JlIGNvbmZ1c2luZzogInJjIiBpcyB0aGUg
-U3RhdHVzIFJlZ2lzdGVyIHZhbHVlLCBhbmQNCj4gInNyIg0KPiA+ID4gaXMgdGhlIFJldHVybiBD
-b2RlPw0KPiA+DQo+ID4gT0sgd2lsbCB1c2UgInJldCIgaW5zdGVhZC4NCj4gDQo+IFVzZSAicmV0
-IiBpbnN0ZWFkIG9mIHdoYXQ/IDstKQ0KPiBKdXN0IGRlY2xhcmUgImludCBzciIgYXQgdGhlIHRv
-cCwgYW5kIHVzZSB0aGF0IHRvIHN0b3JlIHRoZSBTdGF0dXMNCj4gUmVnaXN0ZXIgdmFsdWUsIGFu
-ZCB1c2UgcmMgZXZlcnl3aGVyZSBlbHNlPw0KDQpBZ3JlZWQuDQoNCk1heWJlIHdpbGwgY3JlYXRl
-IDItMyBwYXRjaGVzLiBJcyBpdCBvayB0byBzZW5kIFJUQyBwYXRjaGVzIHNlcGFyYXRlIGZyb20g
-dGhlIG9yaWdpbmFsIHNlcmllcywNCmFzIHRoZXJlIGlzIG5vIGRlcGVuZGVuY3k/DQoNCkZpcnN0
-IHBhdGNoIGZvciByZW1vdmluZyBuYW1lIHZhcmlhYmxlIGFuZCBhbHNvIHVzaW5nIHNyIHZhcmlh
-YmxlIHRvIHJlYWQgc3RhdHVzIHJlZ2lzdGVyIGluIHByb2JlDQoNClNlY29uZCBwYXRjaCBmb3Ig
-aXNsMTIwOF9pZFtdLmRyaXZlcl9kYXRhIHRvIHN0b3JlIGEgcG9pbnRlciB0byB0aGUgY29uZmln
-LCBsaWtlIGZvciBEVC1iYXNlZCBtYXRjaGluZywgbWFraW5nIEkyQyBhbmQgRFQtYmFzZWQgbWF0
-Y2hpbmcgbW9yZSBzaW1pbGFyIGFuZCBkcm9wcGluZyBlbnVtIGlzbDEyMDhfaWQuDQoNClRoaXJk
-IHBhdGNoIGlzIGZvciBhZGRpbmcgc3VwcG9ydCBmb3IgaW52IG9zY2lsbGF0b3IgYml0Lg0KDQpQ
-bGVhc2UgbGV0IG1lIGtub3cuDQoNCkNoZWVycywNCkJpanUNCg==
+@xilinx.com is still working but better to switch to new amd.com after
+AMD/Xilinx acquisition.
+
+Signed-off-by: Michal Simek <michal.simek@amd.com>
+---
+
+ Documentation/devicetree/bindings/arm/xilinx.yaml             | 2 +-
+ Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml     | 2 +-
+ .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 2 +-
+ Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml  | 2 +-
+ Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml | 4 ++--
+ .../bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml        | 2 +-
+ .../devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml        | 2 +-
+ Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml  | 2 +-
+ .../devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml       | 2 +-
+ Documentation/devicetree/bindings/gpio/gpio-zynq.yaml         | 2 +-
+ Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml  | 2 +-
+ .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml    | 2 +-
+ Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 2 +-
+ .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 2 +-
+ .../devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml       | 2 +-
+ .../bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml      | 2 +-
+ .../bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml       | 2 +-
+ Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml  | 2 +-
+ .../devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml        | 2 +-
+ .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 2 +-
+ .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
+ Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml    | 2 +-
+ Documentation/devicetree/bindings/serial/cdns,uart.yaml       | 2 +-
+ Documentation/devicetree/bindings/spi/spi-cadence.yaml        | 2 +-
+ Documentation/devicetree/bindings/spi/spi-xilinx.yaml         | 2 +-
+ Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml    | 2 +-
+ Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml     | 2 +-
+ Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
+ .../devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml   | 4 ++--
+ 29 files changed, 31 insertions(+), 31 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/xilinx.yaml b/Documentation/devicetree/bindings/arm/xilinx.yaml
+index b3071d10ea65..f57ed0347894 100644
+--- a/Documentation/devicetree/bindings/arm/xilinx.yaml
++++ b/Documentation/devicetree/bindings/arm/xilinx.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Zynq Platforms
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ description: |
+   Xilinx boards with Zynq-7000 SOC or Zynq UltraScale+ MPSoC
+diff --git a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml b/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
+index 71364c6081ff..b29ce598f9aa 100644
+--- a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
++++ b/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Ceva AHCI SATA Controller
+ 
+ maintainers:
+-  - Piyush Mehta <piyush.mehta@xilinx.com>
++  - Piyush Mehta <piyush.mehta@amd.com>
+ 
+ description: |
+   The Ceva SATA controller mostly conforms to the AHCI interface with some
+diff --git a/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+index c1f04830a832..02bd556bd91a 100644
+--- a/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
++++ b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx clocking wizard
+ 
+ maintainers:
+-  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
++  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+ 
+ description:
+   The clocking wizard is a soft ip clocking block of Xilinx versal. It
+diff --git a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+index 229af98b1d30..93ae349cf9e9 100644
+--- a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
++++ b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Versal clock controller
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+   - Jolly Shah <jolly.shah@xilinx.com>
+   - Rajan Vaja <rajan.vaja@xilinx.com>
+ 
+diff --git a/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
+index 9e8fbd02b150..8aead97a585b 100644
+--- a/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
++++ b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx ZynqMP AES-GCM Hardware Accelerator
+ 
+ maintainers:
+-  - Kalyani Akula <kalyani.akula@xilinx.com>
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Kalyani Akula <kalyani.akula@amd.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ description: |
+   The ZynqMP AES-GCM hardened cryptographic accelerator is used to
+diff --git a/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml b/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
+index f14f7b454f07..910bebe6cfa8 100644
+--- a/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
++++ b/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx firmware driver
+ 
+ maintainers:
+-  - Nava kishore Manne <nava.manne@xilinx.com>
++  - Nava kishore Manne <nava.kishore.manne@amd.com>
+ 
+ description: The zynqmp-firmware node describes the interface to platform
+   firmware. ZynqMP has an interface to communicate with secure firmware.
+diff --git a/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml
+index f47b6140a742..04dcadc2c20e 100644
+--- a/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml
++++ b/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Zynq FPGA Manager
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+index ac6a207278d5..26f18834caa3 100644
+--- a/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
++++ b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Versal FPGA driver.
+ 
+ maintainers:
+-  - Nava kishore Manne <nava.manne@xilinx.com>
++  - Nava kishore Manne <nava.kishore.manne@amd.com>
+ 
+ description: |
+   Device Tree Versal FPGA bindings for the Versal SoC, controlled
+diff --git a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
+index 00a8d92ff736..1390ae103b0b 100644
+--- a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
++++ b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Zynq Ultrascale MPSoC FPGA Manager
+ 
+ maintainers:
+-  - Nava kishore Manne <navam@xilinx.com>
++  - Nava kishore Manne <nava.kishore.manne@amd.com>
+ 
+ description: |
+   Device Tree Bindings for Zynq Ultrascale MPSoC FPGA Manager.
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml b/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
+index 572e1718f501..5e2496379a3c 100644
+--- a/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
++++ b/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Zynq GPIO controller
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml b/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
+index f333ee2288e7..c1060e5fcef3 100644
+--- a/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
++++ b/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx AXI GPIO controller
+ 
+ maintainers:
+-  - Neeli Srinivas <srinivas.neeli@xilinx.com>
++  - Neeli Srinivas <srinivas.neeli@amd.com>
+ 
+ description:
+   The AXI GPIO design provides a general purpose input/output interface
+diff --git a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
+index 31c0fc345903..18e61aff2185 100644
+--- a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
++++ b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
+@@ -12,7 +12,7 @@ description:
+   PS_MODE). Every pin can be configured as input/output.
+ 
+ maintainers:
+-  - Piyush Mehta <piyush.mehta@xilinx.com>
++  - Piyush Mehta <piyush.mehta@amd.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
+index cb24d7b3221c..ff57c5416ebc 100644
+--- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
++++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Cadence I2C controller
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ allOf:
+   - $ref: /schemas/i2c/i2c-controller.yaml#
+diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
+index 374ffe64016f..aeaddbf574b0 100644
+--- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
+@@ -33,7 +33,7 @@ description: |
+               +------------------------------------------+
+ 
+ maintainers:
+-  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
++  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
+index 7d77823dbb7a..43daf837fc9f 100644
+--- a/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
++++ b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx MIPI CSI-2 Receiver Subsystem
+ 
+ maintainers:
+-  - Vishal Sagar <vishal.sagar@xilinx.com>
++  - Vishal Sagar <vishal.sagar@amd.com>
+ 
+ description: |
+   The Xilinx MIPI CSI-2 Receiver Subsystem is used to capture MIPI CSI-2
+diff --git a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
+index e68c4306025a..6b62d5d83476 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
+@@ -9,7 +9,7 @@ title: Synopsys DesignWare Universal Multi-Protocol Memory Controller
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
+   - Manish Narani <manish.narani@xilinx.com>
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ description: |
+   Synopsys DesignWare Enhanced uMCTL2 DDR Memory Controller is capable of
+diff --git a/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml b/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
+index 8f72e2f8588a..7864a1c994eb 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
+@@ -9,7 +9,7 @@ title: Zynq A05 DDR Memory Controller
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
+   - Manish Narani <manish.narani@xilinx.com>
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ description:
+   The Zynq DDR ECC controller has an optional ECC support in half-bus width
+diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+index 24ddc2855b94..4734be456bde 100644
+--- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
++++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: CPM Host Controller device tree for Xilinx Versal SoCs
+ 
+ maintainers:
+-  - Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
++  - Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
+ 
+ allOf:
+   - $ref: /schemas/pci/pci-bus.yaml#
+diff --git a/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml
+index 598a042850b8..b85f9e36ce4b 100644
+--- a/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Zynq Pinctrl
+ 
+ maintainers:
+-  - Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
++  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+ 
+ description: |
+   Please refer to pinctrl-bindings.txt in this directory for details of the
+diff --git a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
+index 2722dc7bb03d..cdebfa991e06 100644
+--- a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx ZynqMP Pinctrl
+ 
+ maintainers:
+-  - Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
++  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+   - Rajan Vaja <rajan.vaja@xilinx.com>
+ 
+ description: |
+diff --git a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+index 11f1f98c1cdc..45792e216981 100644
+--- a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
++++ b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Zynq MPSoC Power Management
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ description: |
+   The zynqmp-power node describes the power management configurations.
+diff --git a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+index 7ed0230f6c67..d1f5eb996dba 100644
+--- a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+@@ -11,7 +11,7 @@ description:
+   The RTC controller has separate IRQ lines for seconds and alarm.
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ allOf:
+   - $ref: rtc.yaml#
+diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.yaml b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
+index a8b323d7bf94..e35ad1109efc 100644
+--- a/Documentation/devicetree/bindings/serial/cdns,uart.yaml
++++ b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Cadence UART Controller
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
+index b0f83b5c2cdd..b7552739b554 100644
+--- a/Documentation/devicetree/bindings/spi/spi-cadence.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Cadence SPI controller
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ allOf:
+   - $ref: spi-controller.yaml#
+diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+index 6bd83836eded..4beb3af0416d 100644
+--- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx SPI controller
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ allOf:
+   - $ref: spi-controller.yaml#
+diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+index 226d8b493b57..e5199b109dad 100644
+--- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx Zynq UltraScale+ MPSoC GQSPI controller
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ allOf:
+   - $ref: spi-controller.yaml#
+diff --git a/Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml b/Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml
+index 83e8fb4a548d..7ea8fb42ce2c 100644
+--- a/Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml
++++ b/Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml
+@@ -14,7 +14,7 @@ allOf:
+   - $ref: spi-controller.yaml#
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ # Everything else is described in the common file
+ properties:
+diff --git a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+index bc5e6f226295..dbba780c9b02 100644
+--- a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
++++ b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Cadence TTC - Triple Timer Counter
+ 
+ maintainers:
+-  - Michal Simek <michal.simek@xilinx.com>
++  - Michal Simek <michal.simek@amd.com>
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+index 8444c56dd602..dc1ff39d05a0 100644
+--- a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+@@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Xilinx AXI/PLB softcore and window Watchdog Timer
+ 
+ maintainers:
+-  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+-  - Srinivas Neeli <srinivas.neeli@xilinx.com>
++  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
++  - Srinivas Neeli <srinivas.neeli@amd.com>
+ 
+ description:
+   The Timebase watchdog timer(WDT) is a free-running 32 bit counter.
+-- 
+2.36.1
+
