@@ -2,67 +2,42 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81172704419
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 May 2023 05:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4468704694
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 May 2023 09:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjEPDrY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 15 May 2023 23:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
+        id S231404AbjEPHiT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 May 2023 03:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjEPDrV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 15 May 2023 23:47:21 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8593D4C22;
-        Mon, 15 May 2023 20:47:20 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aae46e62e9so97098635ad.2;
-        Mon, 15 May 2023 20:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684208840; x=1686800840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PJkA0m3mLV3FScvH0VRdP/qwbPPh2FB8d0fW+TuWxR4=;
-        b=ApPSFRvnOtBS+Z/iKlnWcxMj6EFTaNcebWTAxUNqbr2V59bdCsI1CCGa7BSHqaDeQo
-         Y716hG4KkN0jkNJRqHDrjT+AwLp9OZhn4DGdlJ3osLyZeE9jrOxLkOIUjMJkvpo84CAq
-         nUTDHKlEa12CbYtD834uGpkePWIxfOzVkSxhCNiXiFb0yo2dh6eXGqhzdTiT1iPqmM5o
-         51Or2UyL9Qx+e5KfZ5LhYuXVvZSCPLsQ/mCaORrP9aCbUB2c2S/PnEh5FColWdomJPuP
-         SPspvw61zWv9jTS1y0MWuWQpPc6Zc2rkMxuDBflIpnO2zr1wz5G588YCFmWLp553g2yw
-         ki8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684208840; x=1686800840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PJkA0m3mLV3FScvH0VRdP/qwbPPh2FB8d0fW+TuWxR4=;
-        b=lHE2H5xgGA75v6QHR6fsJMhj+/NE14jwZY3j7T9HIPRVZ97/X55/R9CoqnA4Dl046j
-         Y8cMKFcpEZYg/g1kR7y4EYBElg+qnIBcMptWd+fGN1+cylu4RB+SMC+sR8RWHQi/KFXe
-         M3dBYvw4kyZ6/5Kh7XCy3rx1gxarNYpSzotIe7w5ASSSqpI4fFSmaS2GYKjRFBpFO6rj
-         z9fyVYKWDZhQ7iuu3iOEh/4Q8Rwid6zKaDf1tZiF1ZA5bpdVWuhzHOzeZG86wowwPkdK
-         YbtI1n0GgGz18a15Cv/HFOdtxAz6pL6WQeMrirUJoDyoVc14wi+GJNnxD3pC0M2UnUPx
-         +JdQ==
-X-Gm-Message-State: AC+VfDyq8O1WQNc6X8mxYtOGpmcI++e7UerQtZ5uHxX/1J+2SLz01mLB
-        NKItuW386nSo5Q1BLzYjkjg=
-X-Google-Smtp-Source: ACHHUZ7e1MfX6kyZu2E4WmLGOzMJRaaqKuW9yru0MqXdpKhkdM51h0LCt+6AtwA0+6KM5psbnkf95w==
-X-Received: by 2002:a17:903:41cb:b0:1ad:f7d9:1ae0 with SMTP id u11-20020a17090341cb00b001adf7d91ae0mr12593543ple.38.1684208839868;
-        Mon, 15 May 2023 20:47:19 -0700 (PDT)
-Received: from [10.230.29.214] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k3-20020a170902ba8300b001a245b49731sm9786807pls.128.2023.05.15.20.47.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 20:47:19 -0700 (PDT)
-Message-ID: <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
-Date:   Mon, 15 May 2023 20:47:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
+        with ESMTP id S231387AbjEPHiM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 May 2023 03:38:12 -0400
+Received: from forward501b.mail.yandex.net (forward501b.mail.yandex.net [178.154.239.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29D3581;
+        Tue, 16 May 2023 00:38:09 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:2991:0:640:bb47:0])
+        by forward501b.mail.yandex.net (Yandex) with ESMTP id 6695D5F29E;
+        Tue, 16 May 2023 10:38:03 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rbVsqF6Wo4Y0-UkaxrYJI;
+        Tue, 16 May 2023 10:38:01 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1684222681;
+        bh=R3NyR73k7IhF7nI84HX4UghfXKGpid2SwwTSfXwtO70=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=QotG58g6dFkLdzg/jCTCPqPNHWfIFJSnx9H8OHC12M2roLLuxVWKx6W2h25dkjVSe
+         HRwtXoqfClom0cLuEY16ejoh6MbeEy+uPI8UAhwOs+j0NQ/gw1AVexLnYUBpraFKDp
+         l0egQl1rEQANggrBncTSCi4j3ZinsQfxms2ylvX4=
+Authentication-Results: mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <4f81a96b826344f45d0994539e3b3fe94fe7eb50.camel@maquefel.me>
 Subject: Re: [PATCH 00/43] ep93xx device tree conversion
-Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Florian Fainelli <f.fainelli@gmail.com>
 Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
         "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -127,36 +102,48 @@ Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
         linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
         netdev@vger.kernel.org, soc@kernel.org
+Date:   Tue, 16 May 2023 13:37:54 +0300
+In-Reply-To: <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+         <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hello Florian!
 
+On Mon, 2023-05-15 at 20:47 -0700, Florian Fainelli wrote:
+>=20
+>=20
+> On 4/24/2023 5:34 AM, Nikita Shubin wrote:
+> > This series aims to convert ep93xx from platform to full device
+> > tree support.
+> >=20
+> > Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
+> >=20
+> > Thank you Linus and Arnd for your support, review and comments,
+> > sorry if i missed something -
+> > these series are quite big for me.
+> >=20
+> > Big thanks to Alexander Sverdlin for his testing, support, review,
+> > fixes and patches.
+>=20
+> If anyone is interested I still have a TS-7300 board [1] that is
+> fully=20
+> functional and could be sent out to a new home.
 
-On 4/24/2023 5:34 AM, Nikita Shubin wrote:
-> This series aims to convert ep93xx from platform to full device tree support.
-> 
-> Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
-> 
-> Thank you Linus and Arnd for your support, review and comments, sorry if i missed something -
-> these series are quite big for me.
-> 
-> Big thanks to Alexander Sverdlin for his testing, support, review, fixes and patches.
+Thank you kindly, i'll keep this in mind !
 
-If anyone is interested I still have a TS-7300 board [1] that is fully 
-functional and could be sent out to a new home.
+>=20
+> https://www.embeddedts.com/products/TS-7300
 
-https://www.embeddedts.com/products/TS-7300
--- 
-Florian
