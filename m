@@ -2,245 +2,214 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EB4704DA2
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 May 2023 14:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F99704EAF
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 May 2023 15:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbjEPMUB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Tue, 16 May 2023 08:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S233453AbjEPNGP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 May 2023 09:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbjEPMUA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 May 2023 08:20:00 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA67A469D;
-        Tue, 16 May 2023 05:19:57 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-ba8151a744fso1312318276.2;
-        Tue, 16 May 2023 05:19:57 -0700 (PDT)
+        with ESMTP id S233507AbjEPNFs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 May 2023 09:05:48 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DE87AA5
+        for <linux-rtc@vger.kernel.org>; Tue, 16 May 2023 06:05:31 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc0117683so24905245a12.1
+        for <linux-rtc@vger.kernel.org>; Tue, 16 May 2023 06:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684242330; x=1686834330;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SILiKT7DyQHGvk192s9Ly9vz52SszDMfSKnLZJbbwME=;
+        b=OKYCj8ao+l6YoC9a2Ext9WHsseMCn+eb0yyEwQDdY9SGFc5Mhii8DPzaZCLqVETaDO
+         v1cN7V0nRZNiLkcrlsredYoUwJVT+e2Nm1vGi44Q3EWupAabrLVRenHK49vPp46040S9
+         jCaXwpqxkZhHQ9UvHHGZyCri3+CvZ4Z06R0Gqloqwdspd+1xJtJwvoIM7AeiW2RO+cp2
+         R7OgLX3KjxMPV9iQUpvFvxVKM6DXGdQN28MIZT3NMevbE+egXhdLFj9kDwdvy/wtx3q5
+         spxIFh0ptWBmNrq712d6mE3EW45ysxzcNiuwuGKMF2h1z5bFj4VVqLlklJsjKKZrfPyZ
+         8UnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684239595; x=1686831595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b+wO58J+9WLolvkX08i5fr0SVn1qXB65EOP/U8xLIMQ=;
-        b=i0Gr0e75t17/WKjWm0ytXOiTue7myQHfz41v0wzmi/kDqiYXjpb8xswKkWNEqfbKJ9
-         08wFeUnPGmwjr4MMY8ixVPTHb/n3jedyki/sfOW3yiCt9A3ywAaUO+DL3ZZlZNDwtOZN
-         DOx9RitfNe6AgZazrCswhkwD5TV0dkOJOgerj4CEdHMkzOk2ZEOoewNo9oX8YMDh3BcQ
-         HJIdiRW7b6neRCEWOLaSHNr2EIpZVTzlRz+XJu9PnIScfKCwq/9JBTNcYPhYME3wZMQT
-         dF9wXgV3nFzz+kYasdB8IFV3NUPyQwCVa5Iwhz/hftiVqOUZgyEPMaKGFp9JKocidJCH
-         E/eg==
-X-Gm-Message-State: AC+VfDyZ0BEWte/sILyRti5BG+jW57qOI1MPe4pS+2UNNPG/Denxe8QP
-        9qrr9kQ1SzGTNHRTQKk6Kfl8D3pCroSQFA==
-X-Google-Smtp-Source: ACHHUZ7k2AxkImaVSqi1V5gmrWOmqezLEHCoRnZmuFQrE7L+p1JBo7fipX3atdaaE3L963zxqpag/A==
-X-Received: by 2002:a25:2f16:0:b0:ba8:1912:ea7b with SMTP id v22-20020a252f16000000b00ba81912ea7bmr1582267ybv.65.1684239594979;
-        Tue, 16 May 2023 05:19:54 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05690203d100b00b9a82c1b070sm435710ybs.27.2023.05.16.05.19.54
+        d=1e100.net; s=20221208; t=1684242330; x=1686834330;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SILiKT7DyQHGvk192s9Ly9vz52SszDMfSKnLZJbbwME=;
+        b=Q6RQqJ78TkM3KrmbcgKkJXxXdeKFN7AQu0XZtqWEM8sbUWex0Iec8pCvM+ckMBe4CY
+         MTz7By//zszvkjPb8wdTiZZFkhmjeA4KJcNHrzb9XDLdhnv8djpi+i28PexkYlr45/ly
+         o2nZg7rA4iHJ9hKdRCwuDak4Ytssvu08OeeBtydSMORViW01qi3MCRl3xwHm/Pf0NzDp
+         TBC17LZ761CiSUx3xHnxq7bPQY1XKwBw119rWpmIqAKvVxs7sGPvIAN0ULE2oGk/vgL7
+         12hPojbk03FLiFjamZKMm5J0qyJX98FaFRiEgFgZRjB9Smj01qiw5ZyR0DL8kg2TQbyl
+         zCZw==
+X-Gm-Message-State: AC+VfDyEe2q6NgRopwR5QwOYB3Ug9ldke1CzvYBeyt2I9T9ObzmhMTBe
+        CbjwcQ0VGM9H7X9DrlGSOlNeNA==
+X-Google-Smtp-Source: ACHHUZ4p++q6A01FN2qI1ELY6dUfQfr9w1Rob5iLw7tQwgDjNyLDPtKFnIwj+OPpVhqkO16PluVA6A==
+X-Received: by 2002:a17:907:7d8e:b0:96a:63bf:89d with SMTP id oz14-20020a1709077d8e00b0096a63bf089dmr16895629ejc.47.1684242329274;
+        Tue, 16 May 2023 06:05:29 -0700 (PDT)
+Received: from localhost (abordeaux-655-1-129-86.w90-5.abo.wanadoo.fr. [90.5.10.86])
+        by smtp.gmail.com with ESMTPSA id hy27-20020a1709068a7b00b0094f1fe1696bsm10848372ejc.216.2023.05.16.06.05.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 05:19:54 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-ba81f71dfefso965684276.0;
-        Tue, 16 May 2023 05:19:54 -0700 (PDT)
-X-Received: by 2002:a81:920c:0:b0:55a:a635:7e1e with SMTP id
- j12-20020a81920c000000b0055aa6357e1emr37830122ywg.31.1684239592684; Tue, 16
- May 2023 05:19:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230513165227.13117-1-biju.das.jz@bp.renesas.com>
- <20230513165227.13117-3-biju.das.jz@bp.renesas.com> <CAMuHMdWWsNdewjug8JEpbwy1jFQqVEoioBctvQEHzjiLQzx7uQ@mail.gmail.com>
- <OS0PR01MB592259C10181D3A9B590CA8186799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdWv45YhBtAX-4sAvgp2wkwPP7Q95Cs-tZFWDLQKMcJo=w@mail.gmail.com> <OS0PR01MB5922F63772A1E8F7364E59E586799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922F63772A1E8F7364E59E586799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 16 May 2023 14:19:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWDc7qoC_iz6m1s7_2GoZAFb-j4n3iKdqHNp5gYud2bdA@mail.gmail.com>
-Message-ID: <CAMuHMdWDc7qoC_iz6m1s7_2GoZAFb-j4n3iKdqHNp5gYud2bdA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] rtc: isl1208: Add support for the built-in RTC on
- the PMIC RAA215300
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 06:05:28 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 16 May 2023 15:05:27 +0200
+Message-Id: <CSNQ2RRG7XDC.164H6P357UHSR@burritosblues>
+Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <jpanis@baylibre.com>, <jneanne@baylibre.com>,
+        <aseketeli@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
+Subject: Re: [PATCH v4 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl
+ and GPIOs
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     <andy.shevchenko@gmail.com>
+X-Mailer: aerc 0.14.0
+References: <20230512141755.1712358-1-eblanc@baylibre.com>
+ <20230512141755.1712358-3-eblanc@baylibre.com>
+ <ZF5yb4DbVDbfxVU4@surfacebook>
+In-Reply-To: <ZF5yb4DbVDbfxVU4@surfacebook>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Biju,
-
-On Tue, May 16, 2023 at 12:22 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > -----Original Message-----
-> > From: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Sent: Tuesday, May 16, 2023 9:58 AM
-> > To: Biju Das <biju.das.jz@bp.renesas.com>
-> > Cc: Alessandro Zummo <a.zummo@towertech.it>; Alexandre Belloni
-> > <alexandre.belloni@bootlin.com>; Magnus Damm <magnus.damm@gmail.com>;
-> > Lee Jones <lee@kernel.org>; linux-rtc@vger.kernel.org; linux-renesas-
-> > soc@vger.kernel.org; Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> > Subject: Re: [PATCH v3 2/5] rtc: isl1208: Add support for the built-in
-> > RTC on the PMIC RAA215300
-> >
-> > On Tue, May 16, 2023 at 10:46 AM Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > > > Subject: Re: [PATCH v3 2/5] rtc: isl1208: Add support for the
-> > > > built-in RTC on the PMIC RAA215300 On Sat, May 13, 2023 at 6:52 PM
-> > > > Biju Das <biju.das.jz@bp.renesas.com>
-> > > > wrote:
-> > > > > The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
-> > > > > However, the external oscillator bit is inverted on PMIC version
-> > 0x11.
-> > > > > The PMIC driver detects PMIC version and instantiate appropriate
-> > > > > RTC device based on i2c_device_id.
-> > > > >
-> > > > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > > > ---
-> > > > > v2->v3:
-> > > > >  * RTC device is instantiated by PMIC driver and dropped
-> > > > isl1208_probe_helper().
-> > > > >  * Added "TYPE_RAA215300_RTC_A0" to handle inverted oscillator bit
-> > > > case.
-> > > > > RFC->v2:
-> > > > >  * Dropped compatible "renesas,raa215300-isl1208" and
-> > > > "renesas,raa215300-pmic" property.
-> > > > >  * Updated the comment polarity->bit for External Oscillator.
-> > > > >  * Added raa215300_rtc_probe_helper() for registering
-> > > > > raa215300_rtc
-> > > > device and
-> > > > >    added the helper function isl1208_probe_helper() to share the
-> > code.
-> > > >
-> > > > Thanks for the update!
-> > > >
-> > > > > --- a/drivers/rtc/rtc-isl1208.c
-> > > > > +++ b/drivers/rtc/rtc-isl1208.c
-> > > > > @@ -74,6 +74,7 @@ enum isl1208_id {
-> > > > >         TYPE_ISL1209,
-> > > > >         TYPE_ISL1218,
-> > > > >         TYPE_ISL1219,
-> > > > > +       TYPE_RAA215300_RTC_A0,
-> > > > >         ISL_LAST_ID
-> > > > >  };
-> > > > >
-> > > > > @@ -83,11 +84,13 @@ static const struct isl1208_config {
-> > > > >         unsigned int    nvmem_length;
-> > > > >         unsigned        has_tamper:1;
-> > > > >         unsigned        has_timestamp:1;
-> > > > > +       unsigned        has_inverted_osc_bit:1;
-> > > > >  } isl1208_configs[] = {
-> > > > >         [TYPE_ISL1208] = { "isl1208", 2, false, false },
-> > > > >         [TYPE_ISL1209] = { "isl1209", 2, true,  false },
-> > > > >         [TYPE_ISL1218] = { "isl1218", 8, false, false },
-> > > > >         [TYPE_ISL1219] = { "isl1219", 2, true,  true },
-> > > > > +       [TYPE_RAA215300_RTC_A0] = { "rtc_a0", 2, false, false,
-> > > > > + true },
-> > > > >  };
-> > > > >
-> > > > >  static const struct i2c_device_id isl1208_id[] = { @@ -95,6 +98,7
-> > > > > @@ static const struct i2c_device_id isl1208_id[] = {
-> > > > >         { "isl1209", TYPE_ISL1209 },
-> > > > >         { "isl1218", TYPE_ISL1218 },
-> > > > >         { "isl1219", TYPE_ISL1219 },
-> > > > > +       { "rtc_a0", TYPE_RAA215300_RTC_A0 },
-> > > >
-> > > > "rtc_a0" is IMHO a too-generic name.
-> > >
-> > > I tried to squeeze with string length "8".
-> > >
-> > > What about changing it to "raa215300_a0" and changing length to "12"?
-> > > as version A0 of RAA215300 pmic chip have this inverted oscillator
-> > bit.
-> >
-> > Ah, because of the size limit of isl1208_config.name[]?
-> > Note that that field is only initialized, but further unused, so you can
-> > just drop it.
+On Fri May 12, 2023 at 7:07 PM CEST,  wrote:
+> Fri, May 12, 2023 at 04:17:54PM +0200, Esteban Blanc kirjoitti:
+> > TI TPS6594 PMIC has 11 GPIOs which can be used
+> > for different functions.
+> >=20
+> > This patch adds a pinctrl and GPIO drivers in
+> > order to use those functions.
 >
-> Agreed. It will look like
+> ...
 >
-> static const struct isl1208_config {
-> -       const char      name[8];
->         unsigned int    nvmem_length;
->         unsigned        has_tamper:1;
->         unsigned        has_timestamp:1;
->         unsigned        has_inverted_osc_bit:1;
->  } isl1208_configs[] = {
-> -       [TYPE_ISL1208] = { "isl1208", 2, false, false },
-> -       [TYPE_ISL1209] = { "isl1209", 2, true,  false },
-> -       [TYPE_ISL1218] = { "isl1218", 8, false, false },
-> -       [TYPE_ISL1219] = { "isl1219", 2, true,  true },
-> -       [TYPE_RAA215300_RTC_A0] = { "rtc_a0", 2, false, false, true },
-> +       [TYPE_ISL1208] = { 2, false, false },
-> +       [TYPE_ISL1209] = { 2, true,  false },
-> +       [TYPE_ISL1218] = { 8, false, false },
-> +       [TYPE_ISL1219] = { 2, true,  true },
-> +       [TYPE_RAA215300_RTC_A0] = { 2, false, false, true },
->  };
+> > +config PINCTRL_THUNDERBAY
 >
-> >
-> > BTW, isl1208_id[].driver_data could store a pointer to the config, like
-> > for DT-based matching, making I2C and DT-based matching more similar.
+> Is it correct name? To me sounds not. The problem is that you use platfor=
+m name
+> for the non-platform-wide pin control, i.e. for PMIC exclusively.
+> Did I miss anything?
 >
-> OK. But some type casting required
+> > +	tristate "Generic pinctrl and GPIO driver for Intel Thunder Bay SoC"
+> > +	depends on ARCH_THUNDERBAY || (ARM64 && COMPILE_TEST)
 >
-> +       { "isl1208", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1208] },
-> +       { "isl1209", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1209] },
-> +       { "isl1218", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1218] },
-> +       { "isl1219", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1219] },
-> +       { "raa215300_rtc_a0", .driver_data = (unsigned long)&isl1208_configs[TYPE_RAA215300_RTC_A0] },
-
-Now there are no more users left of isl1208_configs[], you can split
-the array in individual variables, and make lines shorter by referring
-to e.g. &config_isl1219 instead of &isl1208_configs[TYPE_ISL1219].
-
-> > > > >  isl1208_i2c_get_sr(struct i2c_client *client)  { @@ -845,6
-> > > > > +859,13 @@ isl1208_probe(struct i2c_client *client)
-> > > > >                 return rc;
-> > > > >         }
-> > > > >
-> > > > > +       if (isl1208->config->has_inverted_osc_bit) {
-> > > > > +               rc = isl1208_set_external_oscillator(client, rc,
-> > > >
-> > > > Passing "rc" is confusing, this is really the status register value
-> > > > obtained above...
-> > >
-> > > I am planning to drop this function in next version and will use the
-> > below logic instead.
-> > > Is it ok?
-> > >
-> > >          if (isl1208->config->has_inverted_osc_bit) {
-> > >                     int sr;
-> > >
-> > >                  sr = i2c_smbus_write_byte_data(client,
-> > ISL1208_REG_SR,
-> > >                                               rc |
-> > ISL1208_REG_SR_XTOSCB);
-> > >                  if (sr)
-> > >                          return sr;
-> >
-> > Isn't this more confusing: "rc" is the Status Register value, and "sr"
-> > is the Return Code?
+> This doesn't look correct, but I remember some Kconfig options that are u=
+sing
+> this way of dependency.
 >
-> OK will use "ret" instead.
+> > +	depends on HAS_IOMEM
+> > +	select PINMUX
+> > +	select PINCONF
+> > +	select GENERIC_PINCONF
+> > +	select GENERIC_PINCTRL_GROUPS
+> > +	select GENERIC_PINMUX_FUNCTIONS
+> > +	select GPIOLIB
+> > +	select GPIOLIB_IRQCHIP
+> > +	select GPIO_GENERIC
+> > +	help
+> > +	  This selects pin control driver for the Intel Thunder Bay SoC.
+> > +	  It provides pin config functions such as pull-up, pull-down,
+> > +	  interrupt, drive strength, sec lock, Schmitt trigger, slew
+> > +	  rate control and direction control. This module will be
+> > +	  called as pinctrl-thunderbay.
+>
+> Ah, the above simply a mistake. right?
+> Why is it in this patch?
 
-Use "ret" instead of what? ;-)
-Just declare "int sr" at the top, and use that to store the Status Register
-value, and use rc everywhere else?
+I respond to all comments about PINCTRL_THUNDERBAY.
+It is indeed a mistake on my side. I failed my rebase on 6.4-rc1...
+I will fix it for the next version.
+Sorry about this...
 
-Gr{oetje,eeting}s,
+> > +config PINCTRL_TPS6594
+> > +	tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
+> > +	depends on MFD_TPS6594
+> > +	default MFD_TPS6594
+> > +	select PINMUX
+> > +	select GPIOLIB
+> > +	select REGMAP
+> > +	select GPIO_REGMAP
+> > +	help
+> > +	  This driver supports GPIOs and pinmuxing for the TPS6594
+> > +	  PMICs chip family.
+>
+> Module name?
 
-                        Geert
+I'm not sure to understand what you are looking for. Something like this
+?:
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+To compile this driver as a module, choose M here: the
+module will be called pinctrl-tps6594.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> > +obj-$(CONFIG_PINCTRL_THUNDERBAY) +=3D pinctrl-thunderbay.o
+>
+> Huh?!
+
+Same as for Kconfig file, it's a mistake.
+
+> > +#include <linux/gpio/regmap.h>
+> > +#include <linux/gpio/driver.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/pinctrl/pinmux.h>
+>
+> Ordered?
+>
+
+It's not, I fix this.
+
+> > +static int tps6594_group_pins(struct pinctrl_dev *pctldev,
+> > +			      unsigned int selector, const unsigned int **pins,
+> > +			      unsigned int *num_pins)
+> > +{
+> > +	struct tps6594_pinctrl *pinctrl =3D pinctrl_dev_get_drvdata(pctldev);
+> > +
+> > +	*pins =3D (unsigned int *)&pinctrl->pins[selector];
+>
+> Why casting?
+
+It's an error, thanks.
+
+> > +	pinctrl->pctl_dev =3D
+> > +		devm_pinctrl_register(&pdev->dev, pctrl_desc, pinctrl);
+>
+> One line?
+
+I use clang-format quite extensively so I would rather keep it like
+that to still be able to just run it over the whole file without having
+to fix this line every time.
+If you feel like I should not respect the 80 columns recommendation, I
+will fix it.
+
+> > +	if (IS_ERR(pinctrl->pctl_dev)) {
+> > +		dev_err(&pdev->dev, "Couldn't register pinctrl driver\n");
+> > +		return PTR_ERR(pinctrl->pctl_dev);
+>
+> 	return dev_err_probe(...);
+
+Did not know this one, I will use it. Thanks.
+
+> > -#define TPS6594_REG_GPIOX_CONF(gpio_inst)		(0x31 + (gpio_inst))
+> > +#define TPS6594_REG_GPIO1_CONF				0x31
+> > +#define TPS6594_REG_GPIOX_CONF(gpio_inst)	(TPS6594_REG_GPIO1_CONF + (g=
+pio_inst))
+>
+> Why? The original code with parameter 0 will issue the same.
+
+I felt that replacing 0x31 with a constant would make the computation
+in TPS6594_REG_GPIOX_CONFIG more understandable. What do you think?
+
+
+Thanks for your time. Sorry again about this "thunderbay" confusion...
+Note for the future, don't send patches on Fridays :)
+
+Best regards,
+
+--=20
+Esteban Blanc
+BayLibre
