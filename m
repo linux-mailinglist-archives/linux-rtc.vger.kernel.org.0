@@ -2,146 +2,180 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EFE706C22
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 May 2023 17:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4C9706E7C
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 May 2023 18:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbjEQPGK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 17 May 2023 11:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
+        id S229585AbjEQQrz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 17 May 2023 12:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjEQPF6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 17 May 2023 11:05:58 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BA5AD27;
-        Wed, 17 May 2023 08:05:19 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-6235aac00edso7908956d6.1;
-        Wed, 17 May 2023 08:05:19 -0700 (PDT)
+        with ESMTP id S229487AbjEQQrx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 17 May 2023 12:47:53 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC70420B
+        for <linux-rtc@vger.kernel.org>; Wed, 17 May 2023 09:47:50 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f41d087b24so7783465e9.1
+        for <linux-rtc@vger.kernel.org>; Wed, 17 May 2023 09:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684335919; x=1686927919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684342069; x=1686934069;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qUgd8Z8Cw7pZWL5d1d5CDdQgCXfcppP5cODXNK/F1Es=;
-        b=ARYpi0qG8DajvRnCV3QeKksPSfank93Wms0UWUi1jyw7RT7jDq4ikQpHdX5cb6olx4
-         KNnZDqs+eViGPMYyWeorWoZFw/9MiF1ul5Agj5hsAGK8j0Wspfisn4rG8A5Zuu6FqiNI
-         ka/prXZu9ywe9w/vc/QaYRAX6PSLYEx889ZOFHElh+4lnHJOeAQ7SOrpB2EWrTKbpi0c
-         m/7xGJbPbjqbLbw6CimM+D2P6q5Qy8FDuZKg9J/mD+hAyqsgcTAQtBsw4mDvQql1+XQE
-         ow5jt8tvrlAToU7y1R5lyn+f+kCbpkQXjfJCyErXrjoK7EKlaNDV2z7M9CIObslIcZRG
-         Op2w==
+        bh=xemdrTLdrPZASEl7ie1XM2zNjPHq2033DBfX2S/R9zs=;
+        b=jleW3joMYjt0O0WZ2aUBXAV6frph5/PSVJjZIDZnGIZmbS6JadCF3TNjMEouenlDXo
+         oQrA8P+VyRJJexwgyveVymXBplBt8rAwEV+8Mci7ZdoLKnul2J4n/c7D162EF4eqJn2F
+         8GUGI3CKx+zqvqHLPCTQkAwy0aJSJirq+1A9Gc4coGwqW5LOzpBKYluAjG+w8MIjVXyF
+         S5PNsSePisWSytCGZQOg8N13Q+gD/efBtPglnqULhv66GfZr+NjWyJVJleN0l85Guiqc
+         PwGEFuO77h6szGyEnJ5g9OIyWovyuw6cAL/EHtfb/QsldbSy1HepUWJiwpyifd7ScFKs
+         dg5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335919; x=1686927919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qUgd8Z8Cw7pZWL5d1d5CDdQgCXfcppP5cODXNK/F1Es=;
-        b=OWdE7Ozeitc+4GQrRC41zD1iEFSrxLImQQJO1smd3CPjY302etdSvNBz07sNs7vGl8
-         jFMcYmOK84HVV6jspwbzW/mb3mQd1/hrSEZqUIJdcIi0t2DkCnBr4OMXZK4pQMApSF8p
-         1qOynoo+vwXkOpkVb0UUw+VW4V7AgiyiOrMd1HIqiN0GH0Zz1gxg0X+sL6f12sVHIUE5
-         +pVwrABGG6IlSsRfICRntcboPAfWZ5fUsUAV2noNVM3mv+aU3dRN8tc/l0kTM9vcgppm
-         Hy7F/JnKPQabYmWkzox+8ixJI+HyQv3goBuvjljIgxH+0bKBqjVLuaEUEp5RBM2O8szL
-         L+6Q==
-X-Gm-Message-State: AC+VfDw3WyKL3d8lrgeE4t8FKHGiDPIfmA+BIysinRkcEELDfzGAsX84
-        th0P6ppYIITHY/x5tdBFRTxEo3fMSmmoZwEpM7w=
-X-Google-Smtp-Source: ACHHUZ6mfAVYa+QMLH/avsDaoMdqB9wda5rGDnXcHLXzYgKy9oNT/orTQQgI8Lizixn+DFstVUAdkbwxmfXgGEYMPYM=
-X-Received: by 2002:a05:6214:260e:b0:616:5c8b:582 with SMTP id
- gu14-20020a056214260e00b006165c8b0582mr76388369qvb.37.1684335918724; Wed, 17
- May 2023 08:05:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230512141755.1712358-1-eblanc@baylibre.com> <20230512141755.1712358-3-eblanc@baylibre.com>
- <ZF5yb4DbVDbfxVU4@surfacebook> <CSNQ2RRG7XDC.164H6P357UHSR@burritosblues>
- <CAHp75VdNgBv5yVTXzDpY3rrF31p=p99cfXdEs0q7m8VmLLJwbg@mail.gmail.com>
- <CSOGQIRNP61G.1Q2A4ZXB43YYQ@burritosblues> <CAHp75Vc-c=VU5Bfy5097z4wm43=bZ4LG83QBYV19YOrC7zSGag@mail.gmail.com>
- <CSOMS0W9MIUG.2MN43QZO9EX7Q@burritosblues>
-In-Reply-To: <CSOMS0W9MIUG.2MN43QZO9EX7Q@burritosblues>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 17 May 2023 18:04:41 +0300
-Message-ID: <CAHp75VeNvfDqkQZq_ghiv8vb2NaogKqkiFi9i0N3yLgA=ZTDbA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl
- and GPIOs
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, sterzik@ti.com,
-        u-kumar1@ti.com
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1684342069; x=1686934069;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xemdrTLdrPZASEl7ie1XM2zNjPHq2033DBfX2S/R9zs=;
+        b=lCnYtIMt9qdRyYKXCC7BDbdaSMBDOYMCrkSMkjGscncx+fEp5cIJQoTYMtKk+FLXEc
+         ge4mIEd4S8TRXaQTMCK4EhbfLrEJ+QgChx/4BUWtfb7QXlY/OR7C9Q0/QjkPMkIcQ6Jh
+         C2X4wlAYkhOE1YQGA48vp2LiPhsHXHDOZ7V7u6LxmOYS9qVh9OFwPoLshsR0iio1dvBL
+         MAvtKsQ4sCF56uupQEZrxc8H13LZunT8yyNlwnhB0SJooQkHXqItflBn5CVgExl5j3zl
+         isYbq6CsZ+cBnASZ3e8KbHNRGvPgdOsfkqE/+IKFH8ibQ6XHqQtvYGLTbGvL6rFdB8Zi
+         01qw==
+X-Gm-Message-State: AC+VfDzE02nCETPbkVjo4H4CGZaEt3MS+64Mj7/94cYdzweJcBxvYYLs
+        KB0zBaeW/vbPFzMqsMB7/3cu1w==
+X-Google-Smtp-Source: ACHHUZ7JJraEr8hdS86PhPKsZ4rWwU7b1s/JUe123j1z6YVL7y4EnH1askXJF4Y500r0AAocajgoOA==
+X-Received: by 2002:a05:600c:1149:b0:3f5:e7f:5327 with SMTP id z9-20020a05600c114900b003f50e7f5327mr6771248wmz.10.1684342069109;
+        Wed, 17 May 2023 09:47:49 -0700 (PDT)
+Received: from localhost ([2a01:e0a:28d:66d0:5b2e:1428:59f1:44a4])
+        by smtp.gmail.com with ESMTPSA id f6-20020a1c6a06000000b003f427cba193sm2682309wmc.41.2023.05.17.09.47.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 09:47:48 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 17 May 2023 18:47:47 +0200
+Message-Id: <CSOPFJOVLSS1.1XKI60F9TLBMN@burritosblues>
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     <andy.shevchenko@gmail.com>
+Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <jpanis@baylibre.com>, <jneanne@baylibre.com>,
+        <aseketeli@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
+Subject: Re: [PATCH v4 1/3] rtc: tps6594: Add driver for TPS6594 RTC
+X-Mailer: aerc 0.14.0
+References: <20230512141755.1712358-1-eblanc@baylibre.com>
+ <20230512141755.1712358-2-eblanc@baylibre.com>
+ <ZF514wvUt_xrU1gG@surfacebook>
+In-Reply-To: <ZF514wvUt_xrU1gG@surfacebook>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, May 17, 2023 at 5:43=E2=80=AFPM Esteban Blanc <eblanc@baylibre.com>=
- wrote:
-> On Wed May 17, 2023 at 3:51 PM CEST, Andy Shevchenko wrote:
-> > On Wed, May 17, 2023 at 12:58=E2=80=AFPM Esteban Blanc <eblanc@baylibre=
-.com> wrote:
-> > > On Tue May 16, 2023 at 6:48 PM CEST, Andy Shevchenko wrote:
-> > > > On Tue, May 16, 2023 at 4:05=E2=80=AFPM Esteban Blanc <eblanc@bayli=
-bre.com> wrote:
-> > > > > On Fri May 12, 2023 at 7:07 PM CEST,  wrote:
-> > > > > > Fri, May 12, 2023 at 04:17:54PM +0200, Esteban Blanc kirjoitti:
+On Fri May 12, 2023 at 7:22 PM CEST,  wrote:
+> Fri, May 12, 2023 at 04:17:53PM +0200, Esteban Blanc kirjoitti:
+> > +/* Multiplier for ppb conversions */
+> > +#define PPB_MULT (1000000000LL)
+>
+> We have something in units.h. Can you use generic macro?
 
-...
+I found GIGA, NANO and NANOHZ_PER_HZ that have the same value in
+units.h. However I'm not sure any of them have the correct meaning in
+this situation.
 
-> > > > > > > -#define TPS6594_REG_GPIOX_CONF(gpio_inst)          (0x31 + (=
-gpio_inst))
-> > > > > > > +#define TPS6594_REG_GPIO1_CONF                             0=
-x31
-> > > > > > > +#define TPS6594_REG_GPIOX_CONF(gpio_inst)  (TPS6594_REG_GPIO=
-1_CONF + (gpio_inst))
-> > > > > >
-> > > > > > Why? The original code with parameter 0 will issue the same.
-> > > > >
-> > > > > I felt that replacing 0x31 with a constant would make the computa=
-tion
-> > > > > in TPS6594_REG_GPIOX_CONFIG more understandable. What do you thin=
-k?
-> > > >
-> > > > The question is why that register is so special that you need to ha=
-ve
-> > > > it as a constant explicitly?
-> > >
-> > > It is not special, it's just the first one of the serie of config
-> > > registers. I felt like just having 0x31 without context was a bit wei=
-rd
-> >
-> > I'm not sure I understand what 'context' you are talking about.
-> I was trying to convey the fact that 0x31 was representing
-> TPS6594_REG_GPIO1_CONF address. This way when looking at
-> TPS6594_REG_GPIOX_CONF(...), one will better understand that this macro
-> is just about offsetting from the first GPIO_CONF register.
+> > +	/*
+> > +	 * Set GET_TIME to 0. This way, next time we set GET_TIME to 1 we are=
+ sure to store an
+> > +	 * up-to-date timestamp
+> > +	 */
+>
+> Please, check all your multi-line comments for proper punctuation.
 
-You can add a comment on top of the macro, so anybody can read and see
-what this macro is doing.
+Ok. I will do my best.
 
-> > This is pretty normal to have two kind of definitions (depending on the=
- case):
-> > 1/
-> >
-> >   #define FOO_1 ...
-> >   #define FOO_2 ...
-> >
-> > and so on
-> >
-> > 2/
-> >
-> >   #define FOO(x)  (... (x) ...)
-> >
-> > Having a mix of them seems quite unusual.
-> I did not know that. I will revert this change for next version then.
+> > +	/* Check if RTC is running. */
+>
+> Please, keep a single style for the one-line comments (with or without pe=
+riod
+> at the end).
 
-Don't get me wrong, it's possible to have, but since it's unusual it
-needs to be well justified. In the change you proposed you have
-changed that, but I haven't seen where the new definition is used  (in
-*.c files).
+Sure.
+
+> > +	return ret;
+>
+> Why not return 0 explicitly? Or do you return positive value?
+
+I should return 0 here, you are right.
+
+> > +	comp_data[0] =3D (u16)value & 0xFF;
+> > +	comp_data[1] =3D ((u16)value >> 8) & 0xFF;
+>
+> Use proper bitwise type, i.e. __le16.
+
+I was not aware of theses kind of types. Thanks!
+
+> > +	/* Convert from RTC calibration register format to ppb format */
+> > +	tmp =3D calibration * (s64)PPB_MULT;
+>
+> Is casting really needed?
+
+No it's not. Thanks!
+
+> > +	if (tmp < 0)
+> > +		tmp -=3D TICKS_PER_HOUR / 2LL;
+> > +	else
+> > +		tmp +=3D TICKS_PER_HOUR / 2LL;
+>
+> Is it guaranteed to have no overflow here?
+
+We know from `tps6594_rtc_set_offset` that the loaded value can't be
+more than 277774 (register default value is 0), So `tmp` can't exceed
+277774000000000 which is lower than 2^63-1. No overflow here.
+
+TICK_PER_HOUR / 2LL =3D 117964800, so at the end of this computation,
+`tmp` can have a maximum value of 277774117964800 which is still
+inferior to 2^63-1.
+
+> > +	tmp =3D div_s64(tmp, TICKS_PER_HOUR);
+> > +
+> > +	/*
+> > +	 * Offset value operates in negative way, so swap sign.
+> > +	 * See 8.3.10.5, (32768 - COMP_REG)
+> > +	 */
+> > +	*offset =3D (long)-tmp;
+> > +
+> > +	return ret;
+>
+> ret?!
+
+That's a mistake. Thanks!
+
+> > +	/* RTC not running */
+> > +	if (ret =3D=3D 0) {
+> > +		/* Start rtc */
+>
+> RTC for the sake of consistency.
+>
+> But I think one of the comment is redundant.
+
+I will remove the second one
+
+> > +		mdelay(100);
+>
+> Such long delays have to be explicitly elaborated (in the comment on top)=
+.
+
+This should just not be there.
+
+
+Best regards,
 
 --=20
-With Best Regards,
-Andy Shevchenko
+Esteban Blanc
+BayLibre
