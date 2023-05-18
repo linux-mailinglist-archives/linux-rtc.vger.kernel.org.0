@@ -2,25 +2,25 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEB3707FC3
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 May 2023 13:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397C1707FBE
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 May 2023 13:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjERLjK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 18 May 2023 07:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        id S231570AbjERLjA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 18 May 2023 07:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjERLi6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 May 2023 07:38:58 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08ABE271F;
-        Thu, 18 May 2023 04:37:58 -0700 (PDT)
+        with ESMTP id S231124AbjERLit (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 May 2023 07:38:49 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 607CD3A9D;
+        Thu, 18 May 2023 04:37:43 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.99,285,1677510000"; 
-   d="scan'208";a="159842781"
+   d="scan'208";a="163369252"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 18 May 2023 20:37:16 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 18 May 2023 20:37:19 +0900
 Received: from localhost.localdomain (unknown [10.226.92.79])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 33C1640037F6;
-        Thu, 18 May 2023 20:37:13 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id F26EB4005B2A;
+        Thu, 18 May 2023 20:37:16 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -28,9 +28,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 06/11] rtc: isl1208: Drop enum isl1208_id and split isl1208_configs[]
-Date:   Thu, 18 May 2023 12:36:38 +0100
-Message-Id: <20230518113643.420806-7-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v4 07/11] rtc: isl1208: Add isl1208_set_xtoscb()
+Date:   Thu, 18 May 2023 12:36:39 +0100
+Message-Id: <20230518113643.420806-8-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230518113643.420806-1-biju.das.jz@bp.renesas.com>
 References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com>
@@ -45,97 +45,108 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Drop enum isl1208_id and split the array isl1208_configs[] as individual
-variables, and make lines shorter by referring to e.g. &config_isl1219
-instead of &isl1208_configs[TYPE_ISL1219].
+As per the HW manual, setting of XTOSCB bit as follws
+
+If using an external clock signal, set the XTOSCB bit as 1 to
+disable the crystal oscillator.
+
+If using an external crystal, the XTOSCB bit needs to be set at 0
+to enable the crystal oscillator.
+
+Add isl1208_set_xtoscb() to set XTOSCB bit based on the clock-names
+property. Fallback is enabling the internal crystal oscillator.
+
+While at it, introduce a variable "sr" for reading status register
+in probe() as it is reused for writing.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v4:
- * New patch
+ * New patch.
 ---
- drivers/rtc/rtc-isl1208.c | 56 +++++++++++++++++++++++----------------
- 1 file changed, 33 insertions(+), 23 deletions(-)
+ drivers/rtc/rtc-isl1208.c | 36 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index a6a133f719df..916e7d44c96f 100644
+index 916e7d44c96f..5f91a3ca5920 100644
 --- a/drivers/rtc/rtc-isl1208.c
 +++ b/drivers/rtc/rtc-isl1208.c
-@@ -68,41 +68,51 @@
+@@ -6,6 +6,7 @@
+  */
  
- static struct i2c_driver isl1208_driver;
+ #include <linux/bcd.h>
++#include <linux/clk.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+@@ -175,6 +176,16 @@ isl1208_i2c_validate_client(struct i2c_client *client)
+ 	return 0;
+ }
  
--/* ISL1208 various variants */
--enum isl1208_id {
--	TYPE_ISL1208 = 0,
--	TYPE_ISL1209,
--	TYPE_ISL1218,
--	TYPE_ISL1219,
--	ISL_LAST_ID
--};
--
- /* Chip capabilities table */
--static const struct isl1208_config {
-+struct isl1208_config {
- 	unsigned int	nvmem_length;
- 	unsigned	has_tamper:1;
- 	unsigned	has_timestamp:1;
--} isl1208_configs[] = {
--	[TYPE_ISL1208] = { 2, false, false },
--	[TYPE_ISL1209] = { 2, true,  false },
--	[TYPE_ISL1218] = { 8, false, false },
--	[TYPE_ISL1219] = { 2, true,  true },
-+};
++static int isl1208_set_xtoscb(struct i2c_client *client, int sr, bool int_osc_en)
++{
++	if (int_osc_en)
++		sr &= ~ISL1208_REG_SR_XTOSCB;
++	else
++		sr |= ISL1208_REG_SR_XTOSCB;
 +
-+static const struct isl1208_config config_isl1208 = {
-+	.nvmem_length = 2,
-+	.has_tamper = false,
-+	.has_timestamp = false
-+};
++	return i2c_smbus_write_byte_data(client, ISL1208_REG_SR, sr);
++}
 +
-+static const struct isl1208_config config_isl1209 = {
-+	.nvmem_length = 2,
-+	.has_tamper = true,
-+	.has_timestamp = false
-+};
-+
-+static const struct isl1208_config config_isl1218 = {
-+	.nvmem_length = 8,
-+	.has_tamper = false,
-+	.has_timestamp = false
-+};
-+
-+static const struct isl1208_config config_isl1219 = {
-+	.nvmem_length = 2,
-+	.has_tamper = true,
-+	.has_timestamp = true
- };
+ static int
+ isl1208_i2c_get_sr(struct i2c_client *client)
+ {
+@@ -808,9 +819,13 @@ static int isl1208_setup_irq(struct i2c_client *client, int irq)
+ static int
+ isl1208_probe(struct i2c_client *client)
+ {
+-	int rc = 0;
+ 	struct isl1208_state *isl1208;
++	bool int_osc_en = true;
+ 	int evdet_irq = -1;
++	struct clk *clkin;
++	struct clk *xin;
++	int rc = 0;
++	int sr;
  
- static const struct i2c_device_id isl1208_id[] = {
--	{ "isl1208", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1208] },
--	{ "isl1209", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1209] },
--	{ "isl1218", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1218] },
--	{ "isl1219", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1219] },
-+	{ "isl1208", .driver_data = (unsigned long)&config_isl1208 },
-+	{ "isl1209", .driver_data = (unsigned long)&config_isl1209 },
-+	{ "isl1218", .driver_data = (unsigned long)&config_isl1218 },
-+	{ "isl1219", .driver_data = (unsigned long)&config_isl1219 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, isl1208_id);
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
+@@ -837,6 +852,13 @@ isl1208_probe(struct i2c_client *client)
+ 		isl1208->config = (struct isl1208_config *)id->driver_data;
+ 	}
  
- static const __maybe_unused struct of_device_id isl1208_of_match[] = {
--	{ .compatible = "isil,isl1208", .data = &isl1208_configs[TYPE_ISL1208] },
--	{ .compatible = "isil,isl1209", .data = &isl1208_configs[TYPE_ISL1209] },
--	{ .compatible = "isil,isl1218", .data = &isl1208_configs[TYPE_ISL1218] },
--	{ .compatible = "isil,isl1219", .data = &isl1208_configs[TYPE_ISL1219] },
-+	{ .compatible = "isil,isl1208", .data = &config_isl1208 },
-+	{ .compatible = "isil,isl1209", .data = &config_isl1209 },
-+	{ .compatible = "isil,isl1218", .data = &config_isl1218 },
-+	{ .compatible = "isil,isl1219", .data = &config_isl1219 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, isl1208_of_match);
++	xin = devm_clk_get(&client->dev, "xin");
++	if (IS_ERR(xin)) {
++		clkin = devm_clk_get(&client->dev, "clkin");
++		if (!IS_ERR(clkin))
++			int_osc_en = false;
++	}
++
+ 	isl1208->rtc = devm_rtc_allocate_device(&client->dev);
+ 	if (IS_ERR(isl1208->rtc))
+ 		return PTR_ERR(isl1208->rtc);
+@@ -848,13 +870,17 @@ isl1208_probe(struct i2c_client *client)
+ 	isl1208->nvmem_config.size = isl1208->config->nvmem_length;
+ 	isl1208->nvmem_config.priv = isl1208;
+ 
+-	rc = isl1208_i2c_get_sr(client);
+-	if (rc < 0) {
++	sr = isl1208_i2c_get_sr(client);
++	if (sr < 0) {
+ 		dev_err(&client->dev, "reading status failed\n");
+-		return rc;
++		return sr;
+ 	}
+ 
+-	if (rc & ISL1208_REG_SR_RTCF)
++	rc = isl1208_set_xtoscb(client, sr, int_osc_en);
++	if (rc)
++		return rc;
++
++	if (sr & ISL1208_REG_SR_RTCF)
+ 		dev_warn(&client->dev, "rtc power failure detected, "
+ 			 "please set clock.\n");
+ 
 -- 
 2.25.1
 
