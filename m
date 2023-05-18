@@ -2,25 +2,25 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D50707FC1
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 May 2023 13:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEB3707FC3
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 May 2023 13:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjERLjI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 18 May 2023 07:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S231538AbjERLjK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 18 May 2023 07:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjERLi4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 May 2023 07:38:56 -0400
+        with ESMTP id S231561AbjERLi6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 May 2023 07:38:58 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09CD63C2B;
-        Thu, 18 May 2023 04:37:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08ABE271F;
+        Thu, 18 May 2023 04:37:58 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.99,285,1677510000"; 
-   d="scan'208";a="159842774"
+   d="scan'208";a="159842781"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 18 May 2023 20:37:13 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 18 May 2023 20:37:16 +0900
 Received: from localhost.localdomain (unknown [10.226.92.79])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 6EFF14005B2A;
-        Thu, 18 May 2023 20:37:11 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 33C1640037F6;
+        Thu, 18 May 2023 20:37:13 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -28,9 +28,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 05/11] rtc: isl1208: Make similar I2C and DT-based matching table
-Date:   Thu, 18 May 2023 12:36:37 +0100
-Message-Id: <20230518113643.420806-6-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v4 06/11] rtc: isl1208: Drop enum isl1208_id and split isl1208_configs[]
+Date:   Thu, 18 May 2023 12:36:38 +0100
+Message-Id: <20230518113643.420806-7-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230518113643.420806-1-biju.das.jz@bp.renesas.com>
 References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com>
@@ -45,49 +45,97 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The isl1208_id[].driver_data could store a pointer to the config,
-like for DT-based matching, making I2C and DT-based matching
-more similar.
+Drop enum isl1208_id and split the array isl1208_configs[] as individual
+variables, and make lines shorter by referring to e.g. &config_isl1219
+instead of &isl1208_configs[TYPE_ISL1219].
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v4:
- * New patch.
+ * New patch
 ---
- drivers/rtc/rtc-isl1208.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-isl1208.c | 56 +++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index a73eb78b8a40..a6a133f719df 100644
+index a6a133f719df..916e7d44c96f 100644
 --- a/drivers/rtc/rtc-isl1208.c
 +++ b/drivers/rtc/rtc-isl1208.c
-@@ -90,10 +90,10 @@ static const struct isl1208_config {
+@@ -68,41 +68,51 @@
+ 
+ static struct i2c_driver isl1208_driver;
+ 
+-/* ISL1208 various variants */
+-enum isl1208_id {
+-	TYPE_ISL1208 = 0,
+-	TYPE_ISL1209,
+-	TYPE_ISL1218,
+-	TYPE_ISL1219,
+-	ISL_LAST_ID
+-};
+-
+ /* Chip capabilities table */
+-static const struct isl1208_config {
++struct isl1208_config {
+ 	unsigned int	nvmem_length;
+ 	unsigned	has_tamper:1;
+ 	unsigned	has_timestamp:1;
+-} isl1208_configs[] = {
+-	[TYPE_ISL1208] = { 2, false, false },
+-	[TYPE_ISL1209] = { 2, true,  false },
+-	[TYPE_ISL1218] = { 8, false, false },
+-	[TYPE_ISL1219] = { 2, true,  true },
++};
++
++static const struct isl1208_config config_isl1208 = {
++	.nvmem_length = 2,
++	.has_tamper = false,
++	.has_timestamp = false
++};
++
++static const struct isl1208_config config_isl1209 = {
++	.nvmem_length = 2,
++	.has_tamper = true,
++	.has_timestamp = false
++};
++
++static const struct isl1208_config config_isl1218 = {
++	.nvmem_length = 8,
++	.has_tamper = false,
++	.has_timestamp = false
++};
++
++static const struct isl1208_config config_isl1219 = {
++	.nvmem_length = 2,
++	.has_tamper = true,
++	.has_timestamp = true
  };
  
  static const struct i2c_device_id isl1208_id[] = {
--	{ "isl1208", TYPE_ISL1208 },
--	{ "isl1209", TYPE_ISL1209 },
--	{ "isl1218", TYPE_ISL1218 },
--	{ "isl1219", TYPE_ISL1219 },
-+	{ "isl1208", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1208] },
-+	{ "isl1209", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1209] },
-+	{ "isl1218", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1218] },
-+	{ "isl1219", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1219] },
+-	{ "isl1208", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1208] },
+-	{ "isl1209", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1209] },
+-	{ "isl1218", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1218] },
+-	{ "isl1219", .driver_data = (unsigned long)&isl1208_configs[TYPE_ISL1219] },
++	{ "isl1208", .driver_data = (unsigned long)&config_isl1208 },
++	{ "isl1209", .driver_data = (unsigned long)&config_isl1209 },
++	{ "isl1218", .driver_data = (unsigned long)&config_isl1218 },
++	{ "isl1219", .driver_data = (unsigned long)&config_isl1219 },
  	{ }
  };
  MODULE_DEVICE_TABLE(i2c, isl1208_id);
-@@ -822,9 +822,9 @@ isl1208_probe(struct i2c_client *client)
- 	} else {
- 		const struct i2c_device_id *id = i2c_match_id(isl1208_id, client);
  
--		if (id->driver_data >= ISL_LAST_ID)
-+		if (!id)
- 			return -ENODEV;
--		isl1208->config = &isl1208_configs[id->driver_data];
-+		isl1208->config = (struct isl1208_config *)id->driver_data;
- 	}
- 
- 	isl1208->rtc = devm_rtc_allocate_device(&client->dev);
+ static const __maybe_unused struct of_device_id isl1208_of_match[] = {
+-	{ .compatible = "isil,isl1208", .data = &isl1208_configs[TYPE_ISL1208] },
+-	{ .compatible = "isil,isl1209", .data = &isl1208_configs[TYPE_ISL1209] },
+-	{ .compatible = "isil,isl1218", .data = &isl1208_configs[TYPE_ISL1218] },
+-	{ .compatible = "isil,isl1219", .data = &isl1208_configs[TYPE_ISL1219] },
++	{ .compatible = "isil,isl1208", .data = &config_isl1208 },
++	{ .compatible = "isil,isl1209", .data = &config_isl1209 },
++	{ .compatible = "isil,isl1218", .data = &config_isl1218 },
++	{ .compatible = "isil,isl1219", .data = &config_isl1219 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, isl1208_of_match);
 -- 
 2.25.1
 
