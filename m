@@ -2,165 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8903C707FBF
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 May 2023 13:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8517083E2
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 May 2023 16:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjERLjA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 18 May 2023 07:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
+        id S230272AbjEROYz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 18 May 2023 10:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjERLit (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 May 2023 07:38:49 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DD463A9E;
-        Thu, 18 May 2023 04:37:43 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.99,285,1677510000"; 
-   d="scan'208";a="163369257"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 18 May 2023 20:37:22 +0900
-Received: from localhost.localdomain (unknown [10.226.92.79])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id BBAC44005B2A;
-        Thu, 18 May 2023 20:37:19 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 08/11] rtc: isl1208: Add support for the built-in RTC on the PMIC RAA215300
-Date:   Thu, 18 May 2023 12:36:40 +0100
-Message-Id: <20230518113643.420806-9-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230518113643.420806-1-biju.das.jz@bp.renesas.com>
-References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S230031AbjEROYz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 May 2023 10:24:55 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AE510D
+        for <linux-rtc@vger.kernel.org>; Thu, 18 May 2023 07:24:54 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-53467c2486cso936619a12.3
+        for <linux-rtc@vger.kernel.org>; Thu, 18 May 2023 07:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684419894; x=1687011894;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FqyEPS3iMUxc76SEhJtwLts/CI3Xi7E/aFk+jvzg10A=;
+        b=PFCek8xaxBZ9GWFrzogsICwh8v3d4gM9KOkC21vDYc0AgOMAmBdFTesSx2Dv9piaGN
+         vQSeW8bRCL46eaV9erO6/EVJmldi0TYuRF1U8njqaL0PDq5nPo/QKtciJCkZ6GU1z4mB
+         RO8paCrd1b0swQKG+rCuMHzcuMa32/+DRSClS0h4PP2WMDqGJ6KGcioDISjalxIIZsP/
+         ESp5i6yaz2BON2ekejjDG0hiC5okP1QVCarwXbS/UHv9FfDHwVXT5iZDvIamV2xrYDOz
+         tRGUmdVu3wrso2nBECLZ8QJT4oiPwn1VoFeWK8aahY4Idak7VbCCAO3ZsIm7VHdIFvyE
+         zFAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684419894; x=1687011894;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FqyEPS3iMUxc76SEhJtwLts/CI3Xi7E/aFk+jvzg10A=;
+        b=j1hRG2VMYgDjmy3Eifmxnj0bH537OcfiRsa2HzwYvb/fk+BQVhg+Gw92t8pUG0DgKJ
+         1JnqU/TwMBm+Rf1KJLwFK/7TuW99NmnT+SqPDA6jCZQuElM3j6fabmsgsjp2kTFT8wLS
+         C2DK4DPLjgg+m9CIzdPUbHxhT+4fZjVr2O2vrjqoma9o3XCtxCCcwCF0rINt5hZBPaRY
+         IVTCQ5zP/XXf69+okHQFuh57LoRqgVVNq+ox5b/XMs8w+saN240VeDC8cnliXmnB9DT0
+         Ptr4HaaupkIQvcOGQYh+JwCLF7xT8Q/ZDrhY7ambhn3sab8rGgziA/91+skWozMr7hNn
+         2bpA==
+X-Gm-Message-State: AC+VfDz0HdgzcP1JVMWD/8ROks9Pp4J3LcWb34B/phRcJBEQhrTl/ZQZ
+        qYK8boTr03XsePAWVY7vx0ehuPuT2YV5KLTN2g==
+X-Google-Smtp-Source: ACHHUZ6kuwmVLWTvbplK1R/WfWAGc3bF5TGzxIZPVSvk8McKl/PPwrGIEDt6hFBewrdkFhbmOtdfnjTTDh8ILQ0mZsU=
+X-Received: by 2002:a17:902:d482:b0:1ac:8835:b89b with SMTP id
+ c2-20020a170902d48200b001ac8835b89bmr2896556plg.5.1684419893712; Thu, 18 May
+ 2023 07:24:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: miraayaann@gmail.com
+Received: by 2002:a17:903:3303:b0:1ae:5916:9f1d with HTTP; Thu, 18 May 2023
+ 07:24:53 -0700 (PDT)
+From:   Mira Ayaan <mira.malakaim303@gmail.com>
+Date:   Thu, 18 May 2023 23:24:53 +0900
+X-Google-Sender-Auth: o6wfNJ0eCNdP05G9Oboy0f4yrpg
+Message-ID: <CAD-xOMgN4C3+ijNoD0F=kFkvJ15JEcaM4nWpOFWtWvnch71pQw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
-However, the external oscillator bit is inverted on PMIC version
-0x11. The PMIC driver detects PMIC version and instantiate appropriate
-RTC device based on i2c_device_id.
+Hi, is me Mira, can you please tell me if you receive my previous email?.
 
-Enhance isl1208_set_xtoscb() to handle inverted bit and internal oscillator
-is enabled or not is determined by the parent clock name.
-
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v3->v4:
- * Added support for internal oscillator enable/disable.
-v2->v3:
- * RTC device is instantiated by PMIC driver and dropped isl1208_probe_helper().
- * Added "TYPE_RAA215300_RTC_A0" to handle inverted oscillator bit case.
-RFC->v2:
- * Dropped compatible "renesas,raa215300-isl1208" and "renesas,raa215300-pmic" property.
- * Updated the comment polarity->bit for External Oscillator.
- * Added raa215300_rtc_probe_helper() for registering raa215300_rtc device and
-   added the helper function isl1208_probe_helper() to share the code.
----
- drivers/rtc/rtc-isl1208.c | 44 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 36 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index 5f91a3ca5920..597e0126155f 100644
---- a/drivers/rtc/rtc-isl1208.c
-+++ b/drivers/rtc/rtc-isl1208.c
-@@ -74,6 +74,7 @@ struct isl1208_config {
- 	unsigned int	nvmem_length;
- 	unsigned	has_tamper:1;
- 	unsigned	has_timestamp:1;
-+	unsigned	has_inverted_osc_bit:1;
- };
- 
- static const struct isl1208_config config_isl1208 = {
-@@ -100,11 +101,19 @@ static const struct isl1208_config config_isl1219 = {
- 	.has_timestamp = true
- };
- 
-+static const struct isl1208_config config_raa215300_a0 = {
-+	.nvmem_length = 2,
-+	.has_tamper = false,
-+	.has_timestamp = false,
-+	.has_inverted_osc_bit = true
-+};
-+
- static const struct i2c_device_id isl1208_id[] = {
- 	{ "isl1208", .driver_data = (unsigned long)&config_isl1208 },
- 	{ "isl1209", .driver_data = (unsigned long)&config_isl1209 },
- 	{ "isl1218", .driver_data = (unsigned long)&config_isl1218 },
- 	{ "isl1219", .driver_data = (unsigned long)&config_isl1219 },
-+	{ "raa215300_a0", .driver_data = (unsigned long)&config_raa215300_a0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, isl1208_id);
-@@ -176,12 +185,16 @@ isl1208_i2c_validate_client(struct i2c_client *client)
- 	return 0;
- }
- 
--static int isl1208_set_xtoscb(struct i2c_client *client, int sr, bool int_osc_en)
-+static int isl1208_set_xtoscb(struct i2c_client *client, int sr,
-+			      bool int_osc_en, bool inverted)
- {
-+	int xtosb_set = sr | ISL1208_REG_SR_XTOSCB;
-+	int xtosb_clr = sr & ~ISL1208_REG_SR_XTOSCB;
-+
- 	if (int_osc_en)
--		sr &= ~ISL1208_REG_SR_XTOSCB;
-+		sr = inverted ? xtosb_set : xtosb_clr;
- 	else
--		sr |= ISL1208_REG_SR_XTOSCB;
-+		sr = inverted ? xtosb_clr : xtosb_set;
- 
- 	return i2c_smbus_write_byte_data(client, ISL1208_REG_SR, sr);
- }
-@@ -852,11 +865,25 @@ isl1208_probe(struct i2c_client *client)
- 		isl1208->config = (struct isl1208_config *)id->driver_data;
- 	}
- 
--	xin = devm_clk_get(&client->dev, "xin");
--	if (IS_ERR(xin)) {
--		clkin = devm_clk_get(&client->dev, "clkin");
--		if (!IS_ERR(clkin))
-+	if (client->dev.parent->type == &i2c_client_type) {
-+		xin = of_clk_get_by_name(client->dev.parent->of_node, "xin");
-+		if (IS_ERR(xin)) {
-+			clkin = of_clk_get_by_name(client->dev.parent->of_node, "clkin");
-+			if (IS_ERR(clkin))
-+				return -ENODEV;
-+
- 			int_osc_en = false;
-+			clk_put(clkin);
-+		} else {
-+			clk_put(xin);
-+		}
-+	} else {
-+		xin = devm_clk_get(&client->dev, "xin");
-+		if (IS_ERR(xin)) {
-+			clkin = devm_clk_get(&client->dev, "clkin");
-+			if (!IS_ERR(clkin))
-+				int_osc_en = false;
-+		}
- 	}
- 
- 	isl1208->rtc = devm_rtc_allocate_device(&client->dev);
-@@ -876,7 +903,8 @@ isl1208_probe(struct i2c_client *client)
- 		return sr;
- 	}
- 
--	rc = isl1208_set_xtoscb(client, sr, int_osc_en);
-+	rc = isl1208_set_xtoscb(client, sr, int_osc_en,
-+				isl1208->config->has_inverted_osc_bit);
- 	if (rc)
- 		return rc;
- 
--- 
-2.25.1
-
+Thanks
