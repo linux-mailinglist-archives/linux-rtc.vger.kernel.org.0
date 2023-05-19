@@ -2,54 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91458709767
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 May 2023 14:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E5770977F
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 May 2023 14:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjESMlz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 19 May 2023 08:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S231182AbjESMsw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 19 May 2023 08:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjESMlz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 May 2023 08:41:55 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9479D10D9;
-        Fri, 19 May 2023 05:41:32 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-ba6d024a196so2818342276.2;
-        Fri, 19 May 2023 05:41:32 -0700 (PDT)
+        with ESMTP id S229965AbjESMsw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 May 2023 08:48:52 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21ACD106;
+        Fri, 19 May 2023 05:48:51 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-561deaad117so45254467b3.0;
+        Fri, 19 May 2023 05:48:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684500047; x=1687092047;
+        d=1e100.net; s=20221208; t=1684500530; x=1687092530;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xFmSAJcL9N8nEF+kFKLtW5aG5I3dG26qUlE85kJEnag=;
-        b=iBNRU9BFX7jTMKBgLCaAniCdv2IbhhZfnXOybFi48IVuvYW+bsXJwSqImde1ISpLz+
-         tbZMk6vRPujZyjnd+QupDULQx0Ry/jQ2nr5LLWhhGlYZF0m7J7koD68LEM/NmUY71erF
-         GYV/NXLi7pugr9UQArMkND4zbd/h2/LLQgp92pCMB/BWAMXBawR6hKlv48pRxwtX89dw
-         nIc0xAouRYnftPNf0FnvW5t0cOPQhp3t80dTh7SbGfi3x1ad03PIa9MNqJKpDFH+Z6Bf
-         IYeE6Vzzj7VWq5UTvdmvqpS0iMtbbmMp7INiGCZwWjJZ9S8qDJFka84w235JSEVnz9Z9
-         WiWA==
-X-Gm-Message-State: AC+VfDxJmDu4qpcxCY1s3WsTjhdJDEHVLHlu6po4zE4dqilWe3FfftgV
-        UjBVHUNwYePjWtpOpSGmS/s3fKlmJxpLEQ==
-X-Google-Smtp-Source: ACHHUZ7IVB1lS2FyxG5gxorisRWLvT07hdWrgTDh9O6ry/7KMGJd04GdSd/KnE0ci7qNQ8gMTJWR/w==
-X-Received: by 2002:a0d:cc81:0:b0:561:b783:fb76 with SMTP id o123-20020a0dcc81000000b00561b783fb76mr1598628ywd.51.1684500046981;
-        Fri, 19 May 2023 05:40:46 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id v191-20020a8148c8000000b0055d7f00d4f7sm1125330ywa.22.2023.05.19.05.40.46
+        bh=Np2Q6cwdFlIPshEj7ORawpLR6UZkJ5eAGP9CNEU2NpI=;
+        b=fN9vbXH3a76OMlesIGvez8niO8XOVLDy4vNXwufUvkrMDnUxz2EovAqG+6PyzA4Dvc
+         PquEYCf+4XvoJDC6NQz454ISghm7c+tRoYp72WjBKlpCQGvIMChtvWgRluafSmhqizra
+         TpVoCh52TDcDaxPT2v9SMdqOXORxlv3DUCDyo+QVWuZKWZSQhnUeM+61jQ8j28Xa/TV0
+         DpmuxH5dPjpnjCikBxRljLR2UvWElPQhAM+2sQdB1a50Fl899EA1cqYSjBMX3f6+CYa9
+         eGycEo/4ph23HurT4FsrrPjbN4r1ed9JWxkbPEauLpcmNiukvGegIDlKJLNCKwlkLxhF
+         ekPA==
+X-Gm-Message-State: AC+VfDxXy+6YPyVHwVu721hL1PnP2LqdGYbW/IsHMtAu1+ItMEYe88qh
+        SOEn/QbjXM1UjuRwUajrMjkdgIcrfjktJA==
+X-Google-Smtp-Source: ACHHUZ4n5C9sIE39S1cDpl1TK9mnUgNkys7TA0XVa8DPshJoBO5Z7LDiXaj5pFP/YvB2OBHc/oFQ/Q==
+X-Received: by 2002:a0d:d68b:0:b0:55a:12ab:a739 with SMTP id y133-20020a0dd68b000000b0055a12aba739mr1995713ywd.47.1684500528181;
+        Fri, 19 May 2023 05:48:48 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id a205-20020a0dd8d6000000b0055a679f1d91sm1143390ywe.32.2023.05.19.05.48.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 05:40:46 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-ba1815e12efso2812341276.3;
-        Fri, 19 May 2023 05:40:46 -0700 (PDT)
-X-Received: by 2002:a25:b31c:0:b0:b8b:dd05:b60 with SMTP id
- l28-20020a25b31c000000b00b8bdd050b60mr1477777ybj.45.1684500045986; Fri, 19
- May 2023 05:40:45 -0700 (PDT)
+        Fri, 19 May 2023 05:48:47 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-561d5a16be0so46734167b3.2;
+        Fri, 19 May 2023 05:48:47 -0700 (PDT)
+X-Received: by 2002:a0d:df8b:0:b0:55a:8b11:5f6a with SMTP id
+ i133-20020a0ddf8b000000b0055a8b115f6amr1507847ywe.19.1684500527006; Fri, 19
+ May 2023 05:48:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com> <20230518113643.420806-7-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230518113643.420806-7-biju.das.jz@bp.renesas.com>
+References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com> <20230518113643.420806-8-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230518113643.420806-8-biju.das.jz@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 19 May 2023 14:40:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUPddoG7r8FASToPVsCXcva8_3+-JjsE7bXNkUX=Hb8Nw@mail.gmail.com>
-Message-ID: <CAMuHMdUPddoG7r8FASToPVsCXcva8_3+-JjsE7bXNkUX=Hb8Nw@mail.gmail.com>
-Subject: Re: [PATCH v4 06/11] rtc: isl1208: Drop enum isl1208_id and split isl1208_configs[]
+Date:   Fri, 19 May 2023 14:48:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW73f4TYVTNFnXpKZS6azqJnLP06uhh7XnXa=3YG-o+Cg@mail.gmail.com>
+Message-ID: <CAMuHMdW73f4TYVTNFnXpKZS6azqJnLP06uhh7XnXa=3YG-o+Cg@mail.gmail.com>
+Subject: Re: [PATCH v4 07/11] rtc: isl1208: Add isl1208_set_xtoscb()
 To:     Biju Das <biju.das.jz@bp.renesas.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -68,17 +68,54 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hi Biju,
+
 On Thu, May 18, 2023 at 1:37 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Drop enum isl1208_id and split the array isl1208_configs[] as individual
-> variables, and make lines shorter by referring to e.g. &config_isl1219
-> instead of &isl1208_configs[TYPE_ISL1219].
+> As per the HW manual, setting of XTOSCB bit as follws
+
+... set the XTOSCB bit as follows:
+
+> If using an external clock signal, set the XTOSCB bit as 1 to
+> disable the crystal oscillator.
+>
+> If using an external crystal, the XTOSCB bit needs to be set at 0
+> to enable the crystal oscillator.
+>
+> Add isl1208_set_xtoscb() to set XTOSCB bit based on the clock-names
+> property. Fallback is enabling the internal crystal oscillator.
+>
+> While at it, introduce a variable "sr" for reading status register
+
+the status register
+
+> in probe() as it is reused for writing.
 >
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
 > v4:
->  * New patch
+>  * New patch.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks for your patch!
+
+> --- a/drivers/rtc/rtc-isl1208.c
+> +++ b/drivers/rtc/rtc-isl1208.c
+
+> @@ -837,6 +852,13 @@ isl1208_probe(struct i2c_client *client)
+>                 isl1208->config = (struct isl1208_config *)id->driver_data;
+>         }
+>
+> +       xin = devm_clk_get(&client->dev, "xin");
+> +       if (IS_ERR(xin)) {
+> +               clkin = devm_clk_get(&client->dev, "clkin");
+> +               if (!IS_ERR(clkin))
+> +                       int_osc_en = false;
+> +       }
+
+devm_clk_get_optional()
+(doesn't devm_clk_get() print an error message?)
+
+And check for NULL to find out if a clock is present.
+IS_ERR() is a real error condition to be propagated.
 
 Gr{oetje,eeting}s,
 
