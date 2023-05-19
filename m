@@ -2,74 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC9870964E
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 May 2023 13:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38189709745
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 May 2023 14:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjESLSq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 19 May 2023 07:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S230373AbjESMgH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 19 May 2023 08:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbjESLS3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 May 2023 07:18:29 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0995C1997
-        for <linux-rtc@vger.kernel.org>; Fri, 19 May 2023 04:18:24 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5112cae8d82so774141a12.2
-        for <linux-rtc@vger.kernel.org>; Fri, 19 May 2023 04:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684495103; x=1687087103;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
-        b=YrB/oM/9+DfdWsBYK5tE+VKexgOscQSdsQfyNuKsAEzaTYQrmV8QTOqw+n6ncFEG7/
-         NrzWtVQUP7+OiIp81BAxWp4/UA25FSfMBP8v31Vr27/6mv+gpWeEjdQtXcTyd5QbQRXQ
-         jQsq3ZZiseoC7dbmEKV/v7W5pMditEv8MtmfbU+xJe27P/r6UpIIOa1tC9UGmpl2zp50
-         MzUJDLpg49H8SzwE6tQuOsZmLJqfmdmj+F1UdmogGeAKG+63if08XOvkcQ3hE8tURB/u
-         e+KtIjmw1bhP1l1fiAyUwAswvZk0EPc4O8/eM+CpYABwaPGP/JS50wZnv1wX2QAcz1gX
-         wwDA==
+        with ESMTP id S229456AbjESMgG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 May 2023 08:36:06 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B9BC4;
+        Fri, 19 May 2023 05:36:03 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-ba8cf3cb34fso1199632276.1;
+        Fri, 19 May 2023 05:36:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684495103; x=1687087103;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
-        b=YryPbkPAxA8Nwd7TvtfYKQQMnteitDsJAQHqYKOKIqU5nUQ94TvB79oyDC9TA9S420
-         PKc83dBUKv/45FNdoYj+hLlxUFifye6ohMMwfeXg5oGSTpNy2PTPXwSKkjW/2ak9CYQ3
-         1WCScf3HzS+YJvAMrz7YuAv7F7sYa6ujXfOtQRdKUUM3vIEhmkNqnirfo4m1PHt6z63e
-         5J3RFF9Gv1tIZ/CnfxBAv11W2lpUU0+DSYwxEdPZvCgqhAxEr7b+qG6/80BDdYly4qIv
-         V2EOZhzJbnqak1iJ3HIO5mLCg2xXhb7U6SwCR1ThMQu8ENeTEsgzqMIPgPV0rXZhKhDW
-         QfsQ==
-X-Gm-Message-State: AC+VfDyK1tmltAmlRqccpERrLMe22R2S6xevpbdKEIBDNMCPEaeeXmx+
-        1kvBNchJe2lGFri3dW4MjUhrY+/CgCmS/+4mPiA67k+gQilAvw==
-X-Google-Smtp-Source: ACHHUZ4u0RD9o3Kl8FtNeecPkKIUUkqQP5EKCQy8Odb3BCVRQ/plvct7PNXp53hldLkfZ7jyXh0W2roGP4wdAWIFYf4=
-X-Received: by 2002:a17:906:af64:b0:966:5730:c3fe with SMTP id
- os4-20020a170906af6400b009665730c3femr1223003ejb.52.1684495082502; Fri, 19
- May 2023 04:18:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684499762; x=1687091762;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SVpGxtPV/5zH7gZigHRWqwwkAYdOfCIFqk5Eo57CTOw=;
+        b=d1HbcAZzxq+AfnTQ8t8fY5keuIBY5Z24fn7vC9sDYXhhh3sDj7/jw7U7RM5L4JlfAq
+         918esMteOsamHqbyGID+AHGMK1SsM0bSuLiLbGtFKErd1h2pYijc6iAeOcjLrgRV3cQB
+         775B7y3WRQhXFHBRxErIMJFLgSUVPEmJ2nSXNH+hNncpuXZC4yVcAsOF6YR61/bhUa5L
+         mhFjMTQ6ojA+kzRv49btsIJf2DZ3Wn919mJinWLFk+s0Z2m0RVJyEWpMhm1psky1OaFV
+         VsEmgWs0vBgd5Fb4S7989VvlGGuN3nQ2AdAbjeB1AVGD8ZBJPTD6np57sSWIrqbGtfPe
+         G8Xg==
+X-Gm-Message-State: AC+VfDwQqd9oSvmC4EcoXfZ1s4ELPWZHNNWoZsNY5TiZaLJ98JObooxJ
+        NZ4dIbJhj2cc0pwHShm9vR6BVXI/sRD/cA==
+X-Google-Smtp-Source: ACHHUZ4sdhY2ST+CPexXEX/KtoiXLc59OyMCBumXS356s5zSPHYAd7hA9cKqdnhy7cjvHEvMALy17w==
+X-Received: by 2002:a25:f83:0:b0:ba8:28ab:684b with SMTP id 125-20020a250f83000000b00ba828ab684bmr1580880ybp.11.1684499762600;
+        Fri, 19 May 2023 05:36:02 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id x184-20020a8187c1000000b0055a486140b6sm1134230ywf.36.2023.05.19.05.36.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 05:36:01 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-ba8cf3cb34fso1199565276.1;
+        Fri, 19 May 2023 05:36:00 -0700 (PDT)
+X-Received: by 2002:a25:140a:0:b0:ba8:2a74:155 with SMTP id
+ 10-20020a25140a000000b00ba82a740155mr1381964ybu.32.1684499760349; Fri, 19 May
+ 2023 05:36:00 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:907:7dab:b0:94f:7d03:8e8b with HTTP; Fri, 19 May 2023
- 04:18:02 -0700 (PDT)
-Reply-To: ninacoulibaly03@myself.com
-From:   nina coulibaly <ninacoulibaly199@gmail.com>
-Date:   Fri, 19 May 2023 04:18:02 -0700
-Message-ID: <CAM7Z2JAs+q6RsD5Hw352ZDFruUVR5ngjAamir+4ZCakNdZyceg@mail.gmail.com>
-Subject: from nina coulibaly
-To:     undisclosed-recipients:;
+References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com> <20230518113643.420806-4-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230518113643.420806-4-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 19 May 2023 14:35:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWugibN6BDGfaNdJvi5+MQ8C0utPQJAym1gk61TEHdOdA@mail.gmail.com>
+Message-ID: <CAMuHMdWugibN6BDGfaNdJvi5+MQ8C0utPQJAym1gk61TEHdOdA@mail.gmail.com>
+Subject: Re: [PATCH v4 03/11] dt-bindings: rtc: isil,isl1208: Document clock
+ and clock-names properties
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Trent Piepho <tpiepho@gmail.com>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear,
+Hi Biju,
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+On Thu, May 18, 2023 at 1:37 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> As per the HW manual, XTOSCB bit setting is as follows
+>
+> If using an external clock signal, set the XTOSCB bit as 1 to
+> disable the crystal oscillator.
+>
+> If using an external crystal, the XTOSCB bit needs to be set at 0
+> to enable the crystal oscillator.
+>
+> Document clock and clock-names properties.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v4:
+>  * New patch
 
-Mrs. Nina Coulibal
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
+> @@ -25,6 +25,19 @@ properties:
+>    reg:
+>      maxItems: 1
+>
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    description: |
+> +      Use xin, if connected to an external crystal.
+> +      Use clkin, if connected to an external clock signal.
+> +    oneOf:
+> +      - items:
+> +          - const: xin
+> +      - items:
+> +          - const: clkin
+> +
+
+I guess that oneOf scheme is equivalent to the simpler
+
+    enum:
+      - xin
+      - clkin
+
+?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
