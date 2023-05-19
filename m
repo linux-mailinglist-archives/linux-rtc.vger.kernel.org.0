@@ -2,55 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1F0709751
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 May 2023 14:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91458709767
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 May 2023 14:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjESMit convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 19 May 2023 08:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S229456AbjESMlz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 19 May 2023 08:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjESMis (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 May 2023 08:38:48 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8371F4;
-        Fri, 19 May 2023 05:38:47 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-561b7729a12so11638887b3.1;
-        Fri, 19 May 2023 05:38:47 -0700 (PDT)
+        with ESMTP id S229675AbjESMlz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 May 2023 08:41:55 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9479D10D9;
+        Fri, 19 May 2023 05:41:32 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-ba6d024a196so2818342276.2;
+        Fri, 19 May 2023 05:41:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684499927; x=1687091927;
+        d=1e100.net; s=20221208; t=1684500047; x=1687092047;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RsiohPyfmUuh1RDjB7JqkRWD8PxiG5Qasv8IirbWDCQ=;
-        b=g+OxegRl9hcDvp81xlE1CUN+BqU42M7rtXvJ5AyF+GNh6KFcd50vh21F30iJ4jaDkX
-         up4ibKyZ1X/DCNKdJmOuzO0V12Vmk9Q8wMMeNC7uPsnGFJU69Qu0dVokTPAQm0SLiSqr
-         GvxIxMFuMp3rHS3OmlZKntEGWXqm456WIydmLwMrYGeIUZA6f+x0hxobO5TmQy1rGfQm
-         ZOoIGLyWFNPNYYauWG0jqG30wDSACONOnWL9c8huW2W9WMNIp7xV5TUvPTdH0UjPeiMs
-         CrpoN54JZOsweV/Qk/PpVZDwl3EzbKmF6v0lVfaKVAe5Di2izgsCmc6X5dry1O8LwGnG
-         FDAA==
-X-Gm-Message-State: AC+VfDw5oisnQoRO02pSKID048POURw0gvqXfRp7soMCATfqzPCC316E
-        j9eAaEo/v6tkk/8KIAk2tTMDcQ9AqL8CKA==
-X-Google-Smtp-Source: ACHHUZ6eEN7ErPnTr881PAPr7duD0mwm14796+5QJmexT6Tv1YoVnJO1ZcKn6gpN1AD5/10X832lSg==
-X-Received: by 2002:a0d:cac7:0:b0:55a:2084:9e05 with SMTP id m190-20020a0dcac7000000b0055a20849e05mr1585062ywd.23.1684499926810;
-        Fri, 19 May 2023 05:38:46 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id y16-20020a0dd610000000b00561608bc0dfsm1133249ywd.56.2023.05.19.05.38.45
+        bh=xFmSAJcL9N8nEF+kFKLtW5aG5I3dG26qUlE85kJEnag=;
+        b=iBNRU9BFX7jTMKBgLCaAniCdv2IbhhZfnXOybFi48IVuvYW+bsXJwSqImde1ISpLz+
+         tbZMk6vRPujZyjnd+QupDULQx0Ry/jQ2nr5LLWhhGlYZF0m7J7koD68LEM/NmUY71erF
+         GYV/NXLi7pugr9UQArMkND4zbd/h2/LLQgp92pCMB/BWAMXBawR6hKlv48pRxwtX89dw
+         nIc0xAouRYnftPNf0FnvW5t0cOPQhp3t80dTh7SbGfi3x1ad03PIa9MNqJKpDFH+Z6Bf
+         IYeE6Vzzj7VWq5UTvdmvqpS0iMtbbmMp7INiGCZwWjJZ9S8qDJFka84w235JSEVnz9Z9
+         WiWA==
+X-Gm-Message-State: AC+VfDxJmDu4qpcxCY1s3WsTjhdJDEHVLHlu6po4zE4dqilWe3FfftgV
+        UjBVHUNwYePjWtpOpSGmS/s3fKlmJxpLEQ==
+X-Google-Smtp-Source: ACHHUZ7IVB1lS2FyxG5gxorisRWLvT07hdWrgTDh9O6ry/7KMGJd04GdSd/KnE0ci7qNQ8gMTJWR/w==
+X-Received: by 2002:a0d:cc81:0:b0:561:b783:fb76 with SMTP id o123-20020a0dcc81000000b00561b783fb76mr1598628ywd.51.1684500046981;
+        Fri, 19 May 2023 05:40:46 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id v191-20020a8148c8000000b0055d7f00d4f7sm1125330ywa.22.2023.05.19.05.40.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 05:38:46 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-55db055b412so11922887b3.0;
-        Fri, 19 May 2023 05:38:45 -0700 (PDT)
-X-Received: by 2002:a81:494c:0:b0:561:1cb6:f3d6 with SMTP id
- w73-20020a81494c000000b005611cb6f3d6mr1637337ywa.0.1684499925543; Fri, 19 May
- 2023 05:38:45 -0700 (PDT)
+        Fri, 19 May 2023 05:40:46 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-ba1815e12efso2812341276.3;
+        Fri, 19 May 2023 05:40:46 -0700 (PDT)
+X-Received: by 2002:a25:b31c:0:b0:b8b:dd05:b60 with SMTP id
+ l28-20020a25b31c000000b00b8bdd050b60mr1477777ybj.45.1684500045986; Fri, 19
+ May 2023 05:40:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com> <20230518113643.420806-6-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230518113643.420806-6-biju.das.jz@bp.renesas.com>
+References: <20230518113643.420806-1-biju.das.jz@bp.renesas.com> <20230518113643.420806-7-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230518113643.420806-7-biju.das.jz@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 19 May 2023 14:38:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXaJtZVxp5faw=vovsdukdwiXH8RbaJfiKAoOKTLWrZzA@mail.gmail.com>
-Message-ID: <CAMuHMdXaJtZVxp5faw=vovsdukdwiXH8RbaJfiKAoOKTLWrZzA@mail.gmail.com>
-Subject: Re: [PATCH v4 05/11] rtc: isl1208: Make similar I2C and DT-based
- matching table
+Date:   Fri, 19 May 2023 14:40:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUPddoG7r8FASToPVsCXcva8_3+-JjsE7bXNkUX=Hb8Nw@mail.gmail.com>
+Message-ID: <CAMuHMdUPddoG7r8FASToPVsCXcva8_3+-JjsE7bXNkUX=Hb8Nw@mail.gmail.com>
+Subject: Re: [PATCH v4 06/11] rtc: isl1208: Drop enum isl1208_id and split isl1208_configs[]
 To:     Biju Das <biju.das.jz@bp.renesas.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -70,34 +69,22 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On Thu, May 18, 2023 at 1:37 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> The isl1208_id[].driver_data could store a pointer to the config,
-> like for DT-based matching, making I2C and DT-based matching
-> more similar.
+> Drop enum isl1208_id and split the array isl1208_configs[] as individual
+> variables, and make lines shorter by referring to e.g. &config_isl1219
+> instead of &isl1208_configs[TYPE_ISL1219].
 >
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
 > v4:
->  * New patch.
+>  * New patch
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> @@ -822,9 +822,9 @@ isl1208_probe(struct i2c_client *client)
->         } else {
->                 const struct i2c_device_id *id = i2c_match_id(isl1208_id, client);
->
-> -               if (id->driver_data >= ISL_LAST_ID)
-> +               if (!id)
->                         return -ENODEV;
-> -               isl1208->config = &isl1208_configs[id->driver_data];
-> +               isl1208->config = (struct isl1208_config *)id->driver_data;
-
-It's a pity there's no i2c_get_match_data() yet...
 
 Gr{oetje,eeting}s,
 
                         Geert
 
---
+-- 
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
