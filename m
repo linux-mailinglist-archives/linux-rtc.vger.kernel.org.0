@@ -2,109 +2,160 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD39B70B655
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 09:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15AA70B7E8
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 10:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbjEVHUO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 May 2023 03:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S232382AbjEVIpI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 May 2023 04:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjEVHTe (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 03:19:34 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A00189;
-        Mon, 22 May 2023 00:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684739877; x=1716275877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1M6Z1ByBow/bXnOdxqxOjd8jNr1kq0mhhAPQJOGMrTY=;
-  b=nLQQSzAoeEijsP300GK78DBeuth/7bGWhw02/LqaYxBHHIN4aMtzM4RB
-   f9bi1ARDGR8koVjR2wS6Lianw1SIO0ieBJBJLu2NRYHuQWV75j3XiC4XJ
-   hkOZs76k9m4qnNfQVvUa180LEIT0IFRe88ZAad4bvUva2qX1ZiN9tdfNR
-   hHCH9iN/XMherZQ9bIBBzOI6ksGDNulKEQ7TP9lYQl0GyPdWU47IolBfP
-   sWbyzRMVTGWC1LAXMMLAVDkF41xPZciCrtEab367ZGVWMvwkCJTGwvqBC
-   xZPfGDfPAPRf2d7Ei7t9Ms9z34HPlpeH70m9ZszkIyp6cU+ZFskVi8FQe
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="asc'?scan'208";a="212408777"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 00:16:52 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 00:16:51 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 22 May 2023 00:16:50 -0700
-Date:   Mon, 22 May 2023 08:16:28 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Romain Perier <romain.perier@gmail.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-rtc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/3] dt-bindings: rtc: Add Mstar SSD20xD RTC devicetree
- bindings documentation
-Message-ID: <20230522-entitle-pediatric-18da6d47df87@wendy>
-References: <20230517144144.365631-1-romain.perier@gmail.com>
- <20230517144144.365631-3-romain.perier@gmail.com>
- <20230517-undertone-revolver-26b42b888b12@spud>
- <CABgxDoJa_yPmAGt6myOWNjQ6eXQ9YgL1H2HjTjza3oD7j4H=RQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FDNTg1yOeMHAZATM"
-Content-Disposition: inline
-In-Reply-To: <CABgxDoJa_yPmAGt6myOWNjQ6eXQ9YgL1H2HjTjza3oD7j4H=RQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229571AbjEVIpH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 04:45:07 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3099B6
+        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 01:45:05 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30957dd7640so1889225f8f.3
+        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 01:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684745104; x=1687337104;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xx/yHMnjVgWF4QcF/HJeTU6OliuvijvBL2Kqd+0E4e8=;
+        b=1UDYjGh+BPZr2LEsSh3RQXEFzaHhqBaP1+FsoGcNjDbS4uZXZi9F2KyQryNpg7pETT
+         6k02A5SKqgyKKCDVoJL55gYIoY4N22aUXcW47uzYv+9g3+2fdBRKT1/pJW+WqVKPqaTd
+         mqqHO+4A4ijOEzV3M/vu/DhYAbFIHVkbhYry2pIOKE09IIcMvWJDTgeYtLE2fL+7clN1
+         vRWXZP0PcRI8fje/hRD7cz4CsOmkuCliCGWwfsDbzz14XJQZRcBg6qo8q7UzcPmhxoWg
+         6cK2JAdANkgRMLu4lmMRJ65lWS9lGM0z3FqGwtNub4koooLVr37assjeS8FCZiBHgyaV
+         7FOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684745104; x=1687337104;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Xx/yHMnjVgWF4QcF/HJeTU6OliuvijvBL2Kqd+0E4e8=;
+        b=JAjS18emBnoCHt98yguwDho6zy1ir00hqxK4aBk2splj5kEJ7ONp6EUH8hPIDZkRup
+         CA+iwnpBcKT1/pRiYZa7HEz8BMwsHM4+CMsQe+Q/QkP1RNoGlwAK50X9dxMlXGoFiiSf
+         v8w93a/vql9vB9kiB7F/BfsZaj0OJ9H/LbTYdcdbvmiB9fMP1Cfj4hl+rVsp1UAjwQRS
+         IpgU236l9dT8DtE41Wi5da9O/LFz+W44fm9nTewDRj79/hFSfEdGRM+dmNwK95DzeWqd
+         zcctFn/EouU1kw4GxC2cfnWpipycdh02lueBUnqbZGrx6wgymabNOAd159jjXsOxa+7L
+         gsXA==
+X-Gm-Message-State: AC+VfDxLBglJ9Lvsd8cQGCMqGuyAZ/Y9FENXQXD3fOG0/cAJH0vXE+eN
+        QTff6jAyp/Hyy4WSXZ7oN8J5ug==
+X-Google-Smtp-Source: ACHHUZ7BDGQPkYzVpmgbmhFfKupu4EBCiwWLCV9C3ObjST1s1V08/DvUXG+k8JTERV+zaCiVUb/vrA==
+X-Received: by 2002:a5d:568d:0:b0:306:4239:4cd with SMTP id f13-20020a5d568d000000b00306423904cdmr6026365wrv.31.1684745104189;
+        Mon, 22 May 2023 01:45:04 -0700 (PDT)
+Received: from localhost ([2a01:e0a:28d:66d0:bdef:c8a1:3699:6b83])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d4001000000b003062ad45243sm7016080wrp.14.2023.05.22.01.45.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 01:45:03 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 22 May 2023 10:45:02 +0200
+Message-Id: <CSSOANIQ2JQR.9JFPM92KNQX9@burritosblues>
+Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <jpanis@baylibre.com>, <jneanne@baylibre.com>,
+        <aseketeli@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
+Subject: Re: [PATCH v4 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl
+ and GPIOs
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     "Andy Shevchenko" <andy.shevchenko@gmail.com>
+X-Mailer: aerc 0.14.0
+References: <20230512141755.1712358-1-eblanc@baylibre.com>
+ <20230512141755.1712358-3-eblanc@baylibre.com>
+ <ZF5yb4DbVDbfxVU4@surfacebook> <CSNQ2RRG7XDC.164H6P357UHSR@burritosblues>
+ <CAHp75VdNgBv5yVTXzDpY3rrF31p=p99cfXdEs0q7m8VmLLJwbg@mail.gmail.com>
+ <CSOGQIRNP61G.1Q2A4ZXB43YYQ@burritosblues>
+ <CAHp75Vc-c=VU5Bfy5097z4wm43=bZ4LG83QBYV19YOrC7zSGag@mail.gmail.com>
+ <CSOMS0W9MIUG.2MN43QZO9EX7Q@burritosblues>
+ <CAHp75VeNvfDqkQZq_ghiv8vb2NaogKqkiFi9i0N3yLgA=ZTDbA@mail.gmail.com>
+In-Reply-To: <CAHp75VeNvfDqkQZq_ghiv8vb2NaogKqkiFi9i0N3yLgA=ZTDbA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---FDNTg1yOeMHAZATM
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed May 17, 2023 at 5:04 PM CEST, Andy Shevchenko wrote:
+> On Wed, May 17, 2023 at 5:43=E2=80=AFPM Esteban Blanc <eblanc@baylibre.co=
+m> wrote:
+> > On Wed May 17, 2023 at 3:51 PM CEST, Andy Shevchenko wrote:
+> > > On Wed, May 17, 2023 at 12:58=E2=80=AFPM Esteban Blanc <eblanc@baylib=
+re.com> wrote:
+> > > > On Tue May 16, 2023 at 6:48 PM CEST, Andy Shevchenko wrote:
+> > > > > On Tue, May 16, 2023 at 4:05=E2=80=AFPM Esteban Blanc <eblanc@bay=
+libre.com> wrote:
+> > > > > > On Fri May 12, 2023 at 7:07 PM CEST,  wrote:
+> > > > > > > Fri, May 12, 2023 at 04:17:54PM +0200, Esteban Blanc kirjoitt=
+i:
+>
+> ...
+>
+> > > > > > > > -#define TPS6594_REG_GPIOX_CONF(gpio_inst)          (0x31 +=
+ (gpio_inst))
+> > > > > > > > +#define TPS6594_REG_GPIO1_CONF                            =
+ 0x31
+> > > > > > > > +#define TPS6594_REG_GPIOX_CONF(gpio_inst)  (TPS6594_REG_GP=
+IO1_CONF + (gpio_inst))
+> > > > > > >
+> > > > > > > Why? The original code with parameter 0 will issue the same.
+> > > > > >
+> > > > > > I felt that replacing 0x31 with a constant would make the compu=
+tation
+> > > > > > in TPS6594_REG_GPIOX_CONFIG more understandable. What do you th=
+ink?
+> > > > >
+> > > > > The question is why that register is so special that you need to =
+have
+> > > > > it as a constant explicitly?
+> > > >
+> > > > It is not special, it's just the first one of the serie of config
+> > > > registers. I felt like just having 0x31 without context was a bit w=
+eird
+> > >
+> > > I'm not sure I understand what 'context' you are talking about.
+> > I was trying to convey the fact that 0x31 was representing
+> > TPS6594_REG_GPIO1_CONF address. This way when looking at
+> > TPS6594_REG_GPIOX_CONF(...), one will better understand that this macro
+> > is just about offsetting from the first GPIO_CONF register.
+>
+> You can add a comment on top of the macro, so anybody can read and see
+> what this macro is doing.
 
-On Mon, May 22, 2023 at 08:47:08AM +0200, Romain Perier wrote:
-> Le mer. 17 mai 2023 =E0 19:44, Conor Dooley <conor@kernel.org> a =E9crit :
+Ok I will do that then. Thanks :)
 
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - mstar,ssd20xd-rtc
-> >
-> > Is this x a wildcard?
-> > In general, having a specific compatible is preferred, and if there are
-> > other models that are compatible we can list several "fall back" to the
-> > most specific one implemented in a driver.
->=20
->=20
-> The first SoC being concerned is SSD202D, so  "mstar,ssd202d-rtc" ?
+> > > This is pretty normal to have two kind of definitions (depending on t=
+he case):
+> > > 1/
+> > >
+> > >   #define FOO_1 ...
+> > >   #define FOO_2 ...
+> > >
+> > > and so on
+> > >
+> > > 2/
+> > >
+> > >   #define FOO(x)  (... (x) ...)
+> > >
+> > > Having a mix of them seems quite unusual.
+> > I did not know that. I will revert this change for next version then.
+>
+> Don't get me wrong, it's possible to have, but since it's unusual it
+> needs to be well justified. In the change you proposed you have
+> changed that, but I haven't seen where the new definition is used  (in
+> *.c files).
 
-Sounds good to me, thanks.
+GPIO1_CONF is only used by the GPIOX_CONF macro in the header.
 
---FDNTg1yOeMHAZATM
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGsWzAAKCRB4tDGHoIJi
-0h6mAP44axUOcBRXHlC1XXKiO03fGCdj9szctxcElnu2RTN8KAEAlTlMi7zT2zQ3
-8xTfzu6irOhovIkfauEYfi53Dr34uQY=
-=ZhIz
------END PGP SIGNATURE-----
-
---FDNTg1yOeMHAZATM--
+--=20
+Esteban Blanc
+BayLibre
