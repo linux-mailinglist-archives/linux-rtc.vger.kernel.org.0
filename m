@@ -2,127 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E2070BC39
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 13:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A71370BF37
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 15:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbjEVLu3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 May 2023 07:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S232345AbjEVNJf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 May 2023 09:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233560AbjEVLuK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 07:50:10 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2EC1B4
-        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 04:50:01 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30781184e78so2401275f8f.0
-        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 04:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684756200; x=1687348200;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sKgwbXDZ93PhOsZpMHYSuhMcEuh5tVlQ5GHAYoAXTTk=;
-        b=oXlZi6dQ+locvnwMb6tXz6Haerq4h2rmMsYNDuyKGsjCLrXuZZ1WoRXsul7Hmffq5V
-         BAL5Xy1fvZBlwHlGAT4Gt9cdnpFuUHC2JYFmRLtAE9y3lQmrh0C+vKG4mtkZbEBMn711
-         CKts6AS3KF5mRTiEiAI+P31FqY1psc+RKnBht4wKqqVdoaW+l7FwVq9KM4rxq6MEu5Fq
-         Io9rAmmmjXOOwWXFp2Xy8qeX1NwzTdOOwg3ScATZSQ8mzRVx61Q2314f4i1dos2r1GoA
-         cMt8ymh+xftxI78J0hkyTAuZvtfVhvhgUMELKVvy7asFaUmGTrJNEsNXE2Rowf+wWf42
-         dQww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684756200; x=1687348200;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sKgwbXDZ93PhOsZpMHYSuhMcEuh5tVlQ5GHAYoAXTTk=;
-        b=EPSJOZVPZZqjmOORKmK8OxHCwehluoZ59Xkwkhz8OIc38lxUi9r1wqLSG10qGmrKrg
-         mmYDBP1LL27nyunzcWMBacViu9U/+NygO9xkWmfwmomZCUYsGJ0tuehB6/zwW84YV/v3
-         rtcHywn9ZkZnTLItPWadmTrpYASvkpkLK+IiNRW0BlM8ijhdxED0iE5W+hbBNfdAMH9g
-         5HrYg3FbPNHR4BMaeMZUfdejKac38nDkaEg0pnp4RzlSg0xa6bt/VIhzSKvZyX0f7csQ
-         7R/ao0AQOHdan+1saRHiwfbtJb0vEy36uaW19CeajSyzcdccB67Caa889+3OaMUaY10G
-         ah4Q==
-X-Gm-Message-State: AC+VfDynptBOT3XZ0KC8dtQX/9EB8OD/1GGAwvX0hiAEhX4kOXtZaNb+
-        Hq6ki4UG7AjcmZzxhVPUQ3mauA==
-X-Google-Smtp-Source: ACHHUZ4aNoH0wsH4IeJXzePZtSiXVMs1nKqN0mwAKpV4dgI33pkdm3OAwuaeuaJLSl4OQrhKVI7aag==
-X-Received: by 2002:adf:f48f:0:b0:307:5091:5b96 with SMTP id l15-20020adff48f000000b0030750915b96mr10113342wro.22.1684756200409;
-        Mon, 22 May 2023 04:50:00 -0700 (PDT)
-Received: from localhost ([2a01:e0a:28d:66d0:72d:52cc:8221:fcda])
-        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003f6042d6d92sm3490280wmc.46.2023.05.22.04.49.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 04:49:59 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 22 May 2023 13:49:58 +0200
-Message-Id: <CSSS892QYLWK.3T71MRNHOH0IZ@burritosblues>
-Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <jpanis@baylibre.com>, <jneanne@baylibre.com>,
-        <aseketeli@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
-Subject: Re: [PATCH v4 1/3] rtc: tps6594: Add driver for TPS6594 RTC
-From:   "Esteban Blanc" <eblanc@baylibre.com>
-To:     "Andy Shevchenko" <andy.shevchenko@gmail.com>
-X-Mailer: aerc 0.14.0
-References: <20230512141755.1712358-1-eblanc@baylibre.com>
- <20230512141755.1712358-2-eblanc@baylibre.com>
- <ZF514wvUt_xrU1gG@surfacebook> <CSOPFJOVLSS1.1XKI60F9TLBMN@burritosblues>
- <CAHp75Vfg+yAhJ58qt76GHqxWHD48hF-6ZnT=xEUh+1rzr7UvVg@mail.gmail.com>
-In-Reply-To: <CAHp75Vfg+yAhJ58qt76GHqxWHD48hF-6ZnT=xEUh+1rzr7UvVg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230489AbjEVNJe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 09:09:34 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F549E;
+        Mon, 22 May 2023 06:09:32 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 147F092009C; Mon, 22 May 2023 15:09:31 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 1093692009B;
+        Mon, 22 May 2023 14:09:31 +0100 (BST)
+Date:   Mon, 22 May 2023 14:09:30 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
+In-Reply-To: <20230522105049.1467313-31-schnelle@linux.ibm.com>
+Message-ID: <alpine.DEB.2.21.2305221314480.27887@angie.orcam.me.uk>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com> <20230522105049.1467313-31-schnelle@linux.ibm.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed May 17, 2023 at 6:52 PM CEST, Andy Shevchenko wrote:
-> On Wed, May 17, 2023 at 7:47=E2=80=AFPM Esteban Blanc <eblanc@baylibre.co=
-m> wrote:
-> > On Fri May 12, 2023 at 7:22 PM CEST,  wrote:
-> > > Fri, May 12, 2023 at 04:17:53PM +0200, Esteban Blanc kirjoitti:
->
-> ...
->
-> > > > +/* Multiplier for ppb conversions */
-> > > > +#define PPB_MULT (1000000000LL)
-> > >
-> > > We have something in units.h. Can you use generic macro?
-> >
-> > I found GIGA, NANO and NANOHZ_PER_HZ that have the same value in
-> > units.h. However I'm not sure any of them have the correct meaning in
-> > this situation.
->
-> MULT[IPLIER] has no units AFAIU, so SI macro can be used, no? NANO or
-> GIGA depends on what the actual sign of the exponent of the multiplier
-> is. Write it on paper and check the exponent in the equation(s) and
-> hence decide which one to use.
+On Mon, 22 May 2023, Niklas Schnelle wrote:
 
-Thanks. I've checked and it should be NANO.
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 753872408615..a38a919b3f15 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -956,6 +956,7 @@ comment "Platform RTC drivers"
+>  config RTC_DRV_CMOS
+>  	tristate "PC-style 'CMOS'"
+>  	depends on X86 || ARM || PPC || MIPS || SPARC64
+> +	depends on HAS_IOPORT || MACH_DECSTATION
+>  	default y if X86
+>  	select RTC_MC146818_LIB
+>  	help
 
-> > > > +   if (tmp < 0)
-> > > > +           tmp -=3D TICKS_PER_HOUR / 2LL;
-> > > > +   else
-> > > > +           tmp +=3D TICKS_PER_HOUR / 2LL;
-> > >
-> > > Is it guaranteed to have no overflow here?
-> >
-> > We know from `tps6594_rtc_set_offset` that the loaded value can't be
-> > more than 277774 (register default value is 0), So `tmp` can't exceed
-> > 277774000000000 which is lower than 2^63-1. No overflow here.
-> >
-> > TICK_PER_HOUR / 2LL =3D 117964800, so at the end of this computation,
-> > `tmp` can have a maximum value of 277774117964800 which is still
-> > inferior to 2^63-1.
->
-> Please add a respective comment.
+ For the DECstation part:
 
-I've reformatted this and put it in a SAFETY comment.
+Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
 
-Thanks for your help,
-
---=20
-Esteban Blanc
-BayLibre
+  Maciej
