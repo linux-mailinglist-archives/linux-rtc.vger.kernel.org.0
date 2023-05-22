@@ -2,160 +2,200 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15AA70B7E8
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 10:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC3A70B9CD
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 12:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbjEVIpI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 May 2023 04:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        id S230344AbjEVKTA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 May 2023 06:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjEVIpH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 04:45:07 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3099B6
-        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 01:45:05 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30957dd7640so1889225f8f.3
-        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 01:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684745104; x=1687337104;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xx/yHMnjVgWF4QcF/HJeTU6OliuvijvBL2Kqd+0E4e8=;
-        b=1UDYjGh+BPZr2LEsSh3RQXEFzaHhqBaP1+FsoGcNjDbS4uZXZi9F2KyQryNpg7pETT
-         6k02A5SKqgyKKCDVoJL55gYIoY4N22aUXcW47uzYv+9g3+2fdBRKT1/pJW+WqVKPqaTd
-         mqqHO+4A4ijOEzV3M/vu/DhYAbFIHVkbhYry2pIOKE09IIcMvWJDTgeYtLE2fL+7clN1
-         vRWXZP0PcRI8fje/hRD7cz4CsOmkuCliCGWwfsDbzz14XJQZRcBg6qo8q7UzcPmhxoWg
-         6cK2JAdANkgRMLu4lmMRJ65lWS9lGM0z3FqGwtNub4koooLVr37assjeS8FCZiBHgyaV
-         7FOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684745104; x=1687337104;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Xx/yHMnjVgWF4QcF/HJeTU6OliuvijvBL2Kqd+0E4e8=;
-        b=JAjS18emBnoCHt98yguwDho6zy1ir00hqxK4aBk2splj5kEJ7ONp6EUH8hPIDZkRup
-         CA+iwnpBcKT1/pRiYZa7HEz8BMwsHM4+CMsQe+Q/QkP1RNoGlwAK50X9dxMlXGoFiiSf
-         v8w93a/vql9vB9kiB7F/BfsZaj0OJ9H/LbTYdcdbvmiB9fMP1Cfj4hl+rVsp1UAjwQRS
-         IpgU236l9dT8DtE41Wi5da9O/LFz+W44fm9nTewDRj79/hFSfEdGRM+dmNwK95DzeWqd
-         zcctFn/EouU1kw4GxC2cfnWpipycdh02lueBUnqbZGrx6wgymabNOAd159jjXsOxa+7L
-         gsXA==
-X-Gm-Message-State: AC+VfDxLBglJ9Lvsd8cQGCMqGuyAZ/Y9FENXQXD3fOG0/cAJH0vXE+eN
-        QTff6jAyp/Hyy4WSXZ7oN8J5ug==
-X-Google-Smtp-Source: ACHHUZ7BDGQPkYzVpmgbmhFfKupu4EBCiwWLCV9C3ObjST1s1V08/DvUXG+k8JTERV+zaCiVUb/vrA==
-X-Received: by 2002:a5d:568d:0:b0:306:4239:4cd with SMTP id f13-20020a5d568d000000b00306423904cdmr6026365wrv.31.1684745104189;
-        Mon, 22 May 2023 01:45:04 -0700 (PDT)
-Received: from localhost ([2a01:e0a:28d:66d0:bdef:c8a1:3699:6b83])
-        by smtp.gmail.com with ESMTPSA id n1-20020a5d4001000000b003062ad45243sm7016080wrp.14.2023.05.22.01.45.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 01:45:03 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 22 May 2023 10:45:02 +0200
-Message-Id: <CSSOANIQ2JQR.9JFPM92KNQX9@burritosblues>
-Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <jpanis@baylibre.com>, <jneanne@baylibre.com>,
-        <aseketeli@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
-Subject: Re: [PATCH v4 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl
- and GPIOs
-From:   "Esteban Blanc" <eblanc@baylibre.com>
-To:     "Andy Shevchenko" <andy.shevchenko@gmail.com>
-X-Mailer: aerc 0.14.0
-References: <20230512141755.1712358-1-eblanc@baylibre.com>
- <20230512141755.1712358-3-eblanc@baylibre.com>
- <ZF5yb4DbVDbfxVU4@surfacebook> <CSNQ2RRG7XDC.164H6P357UHSR@burritosblues>
- <CAHp75VdNgBv5yVTXzDpY3rrF31p=p99cfXdEs0q7m8VmLLJwbg@mail.gmail.com>
- <CSOGQIRNP61G.1Q2A4ZXB43YYQ@burritosblues>
- <CAHp75Vc-c=VU5Bfy5097z4wm43=bZ4LG83QBYV19YOrC7zSGag@mail.gmail.com>
- <CSOMS0W9MIUG.2MN43QZO9EX7Q@burritosblues>
- <CAHp75VeNvfDqkQZq_ghiv8vb2NaogKqkiFi9i0N3yLgA=ZTDbA@mail.gmail.com>
-In-Reply-To: <CAHp75VeNvfDqkQZq_ghiv8vb2NaogKqkiFi9i0N3yLgA=ZTDbA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231245AbjEVKS7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 06:18:59 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0AA3DB;
+        Mon, 22 May 2023 03:18:57 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.00,184,1681138800"; 
+   d="scan'208";a="163778279"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 22 May 2023 19:18:57 +0900
+Received: from localhost.localdomain (unknown [10.226.93.9])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id BCE12400A10B;
+        Mon, 22 May 2023 19:18:52 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: [PATCH v5 00/11] Add Renesas PMIC RAA215300 and built-in RTC support
+Date:   Mon, 22 May 2023 11:18:38 +0100
+Message-Id: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed May 17, 2023 at 5:04 PM CEST, Andy Shevchenko wrote:
-> On Wed, May 17, 2023 at 5:43=E2=80=AFPM Esteban Blanc <eblanc@baylibre.co=
-m> wrote:
-> > On Wed May 17, 2023 at 3:51 PM CEST, Andy Shevchenko wrote:
-> > > On Wed, May 17, 2023 at 12:58=E2=80=AFPM Esteban Blanc <eblanc@baylib=
-re.com> wrote:
-> > > > On Tue May 16, 2023 at 6:48 PM CEST, Andy Shevchenko wrote:
-> > > > > On Tue, May 16, 2023 at 4:05=E2=80=AFPM Esteban Blanc <eblanc@bay=
-libre.com> wrote:
-> > > > > > On Fri May 12, 2023 at 7:07 PM CEST,  wrote:
-> > > > > > > Fri, May 12, 2023 at 04:17:54PM +0200, Esteban Blanc kirjoitt=
-i:
->
-> ...
->
-> > > > > > > > -#define TPS6594_REG_GPIOX_CONF(gpio_inst)          (0x31 +=
- (gpio_inst))
-> > > > > > > > +#define TPS6594_REG_GPIO1_CONF                            =
- 0x31
-> > > > > > > > +#define TPS6594_REG_GPIOX_CONF(gpio_inst)  (TPS6594_REG_GP=
-IO1_CONF + (gpio_inst))
-> > > > > > >
-> > > > > > > Why? The original code with parameter 0 will issue the same.
-> > > > > >
-> > > > > > I felt that replacing 0x31 with a constant would make the compu=
-tation
-> > > > > > in TPS6594_REG_GPIOX_CONFIG more understandable. What do you th=
-ink?
-> > > > >
-> > > > > The question is why that register is so special that you need to =
-have
-> > > > > it as a constant explicitly?
-> > > >
-> > > > It is not special, it's just the first one of the serie of config
-> > > > registers. I felt like just having 0x31 without context was a bit w=
-eird
-> > >
-> > > I'm not sure I understand what 'context' you are talking about.
-> > I was trying to convey the fact that 0x31 was representing
-> > TPS6594_REG_GPIO1_CONF address. This way when looking at
-> > TPS6594_REG_GPIOX_CONF(...), one will better understand that this macro
-> > is just about offsetting from the first GPIO_CONF register.
->
-> You can add a comment on top of the macro, so anybody can read and see
-> what this macro is doing.
+This patch series aims to add support for Renesas PMIC RAA215300 and
+built-in RTC found on this PMIC device.
 
-Ok I will do that then. Thanks :)
+The details of PMIC can be found here[1].
 
-> > > This is pretty normal to have two kind of definitions (depending on t=
-he case):
-> > > 1/
-> > >
-> > >   #define FOO_1 ...
-> > >   #define FOO_2 ...
-> > >
-> > > and so on
-> > >
-> > > 2/
-> > >
-> > >   #define FOO(x)  (... (x) ...)
-> > >
-> > > Having a mix of them seems quite unusual.
-> > I did not know that. I will revert this change for next version then.
->
-> Don't get me wrong, it's possible to have, but since it's unusual it
-> needs to be well justified. In the change you proposed you have
-> changed that, but I haven't seen where the new definition is used  (in
-> *.c files).
+Renesas PMIC RAA215300 exposes two separate i2c devices, one for the main
+device and another for rtc device.
 
-GPIO1_CONF is only used by the GPIOX_CONF macro in the header.
+Enhance i2c_new_ancillary_device() to instantiate a real device.
+(eg: Instantiate rtc device from PMIC driver)
 
-Best regards,
+The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
+However, the external oscillator bit is inverted on PMIC version
+0x11. The PMIC driver detects PMIC version and instantiate appropriate
+RTC device.
 
---=20
-Esteban Blanc
-BayLibre
+[1]
+https://www.renesas.com/in/en/products/power-power-management/multi-channel-power-management-ics-pmics/ssdsoc-power-management-ics-pmic-and-pmus/raa215300-high-performance-9-channel-pmic-supporting-ddr-memory-built-charger-and-rtc
+
+Ref:
+ https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230505091720.115675-1-biju.das.jz@bp.renesas.com/
+ https://patchwork.kernel.org/project/linux-renesas-soc/patch/20230505172530.357455-5-biju.das.jz@bp.renesas.com/
+
+v4->v5:
+ * Replaced parameter dev->parent in __i2c_new_client_device() and
+   __i2c_new_dummy_device().
+ * Improved error message in __i2c_new_dummy_device() by printing device name.
+ * Updated comment for ancillary's device parent
+ * Dropped aux_device_name check in i2c_new_ancillary_device().
+ * Replaced oneOf->enum for clock-names as it is simpler.
+ * Added Rb tag from Conor for binding patches#3 and #9.
+ * Added Rb tag from Geert for patches#4, #5 and #6.
+ * Replaced "unsigned long"->"kernel_ulong_t" in isl1208_id[].
+ * Fixed the typo in commit description.
+ * Replaced the variable int_osc_en->xtosb_val for isl1208_set_xtoscb() and
+   changed the data type from bool->u8.
+ * Replaced devm_clk_get->devm_clk_get_optional() in probe.
+ * IS_ERR() related error is propagated and check for NULL to find out
+   if a clock is present.
+ * -ENOENT means clock not present, so any other errors are propagated.
+ * Dropped bool inverted parameter from isl1208_set_xtoscb() instead
+   using xor to compute the value of xtoscb.
+ * Added description for clocks in PMIC bindings patch.
+ * Dropped clk.h and started using of_property_present to check the
+   clocks.
+v3->v4:
+ * Dropped Rb tag from Geert for patch#1 as there are new changes.
+ * Introduced __i2c_new_dummy_device() to share the code between
+   i2c_new_dummy_device and i2c_new_ancillary_device().
+ * Introduced __i2c_new_client_device() to pass parent dev
+   parameter, so that the ancillary device can assign its parent during
+   creation.
+ * Added minItems to interrupt-names in binding patch.
+ * Added interrupt-names in conditional schema check.
+ * Documented clock and clock-names properties.
+ * Dropped unused name variable from struct isl1208_config.
+ * Make similar I2C and DT-based matching.
+ * Drop enum isl1208_id and split the array isl1208_configs[].
+ * Introduced isl1208_set_xtoscb() to set XTOSCB bit.
+ * Added support for internal oscillator enable/disable.
+ * Moved PMIC bindings from mfd->regulator.
+ * Dropped minItems from reg.
+ * Dropped renesas,rtc-enabled property and instead used clock-names property
+   to find RTC is enabled or not.
+ * Added reg-names in required property.
+ * Updated the example.
+ * Moved from mfd->regulator as it doesn't use MFD APIs
+ * Dropped handling "renesas,rtc-enabled" property and instead used
+   clock-names to determine RTC is enabled or not and then instantiating
+   RTC device.
+ * Added clock nodes.
+v2->v3:
+ * Enhanced i2c_new_ancillary_device() to instantiate a real ancillary_device().
+ * RTC device is instantiated by PMIC driver and dropped isl1208_probe_helper().
+ * Added "TYPE_RAA215300_RTC_A0" to handle inverted oscillator bit case.
+ * Added more detailed description for renesas,rtc-enabled property.
+ * Added support for handling "renesas,rtc-enabled" property.
+ * Based on PMIC version, it instantiates rtc device by calling i2c_new_
+   ancillary_device().
+ * Updated the logs.
+RFC->v2:
+ * Dropped the cross-links from bindings and used a single compatible
+   with separate i2c addresses for pmic main and rtc device.
+ * Dropped patch#4 and split patch#3 from this series and send as
+   separate patch to ML [2].
+ * Added RTC platform driver and mfd cell entry to the PMIC driver.RTC
+   platform driver creates rtc device by using i2c_new_ancillary_device()
+   and register the rtc device by calling the helper function provided
+   by rtc-isl2108 driver.
+ * Updated reg property in bindings.
+ * Added optional reg-names, interrupts and renesas,rtc-enabled
+   properties.
+ * Fixed the node name in the binding example
+ * Dropped the cross link property renesas,raa215300-rtc.
+ * Updated the binding example
+ * Dropped MODULE_SOFTDEP from the driver as it is added in RTC platform
+   driver.
+ * Dropped compatible "renesas,raa215300-isl1208" and "renesas,raa215300-pmic" property.
+ * Updated the comment polarity->bit for External Oscillator.
+ * Added raa215300_rtc_probe_helper() for registering raa215300_rtc device and
+   added the helper function isl1208_probe_helper() to share the code.
+ * Updated pmic device node on the SoM dtsi based on the bindings.
+
+Logs:
+[   15.447305] rtc-isl1208 3-006f: registered as rtc0
+[   15.479493] rtc-isl1208 3-006f: setting system clock to 2023-04-27T19:31:02 UTC (1682623862)
+
+root@smarc-rzv2l:~# hwclock -r
+2023-04-27 19:33:05.499001+00:00
+root@smarc-rzv2l:~# hwclock -r
+2023-04-27 19:33:06.936688+00:00
+root@smarc-rzv2l:~#
+
+Biju Das (11):
+  i2c: Enhance i2c_new_ancillary_device API
+  dt-bindings: rtc: isl1208: Convert to json-schema
+  dt-bindings: rtc: isil,isl1208: Document clock and clock-names
+    properties
+  rtc: isl1208: Drop name variable
+  rtc: isl1208: Make similar I2C and DT-based matching table
+  rtc: isl1208: Drop enum isl1208_id and split isl1208_configs[]
+  rtc: isl1208: Add isl1208_set_xtoscb()
+  rtc: isl1208: Add support for the built-in RTC on the PMIC RAA215300
+  regulator: dt-bindings: Add Renesas RAA215300 PMIC bindings
+  regulator: Add Renesas PMIC RAA215300 driver
+  arm64: dts: renesas: rzg2l-smarc-som: Enable PMIC and built-in RTC
+
+ .../bindings/regulator/renesas,raa215300.yaml |  85 +++++++++++
+ .../devicetree/bindings/rtc/isil,isl1208.txt  |  38 -----
+ .../devicetree/bindings/rtc/isil,isl1208.yaml | 100 +++++++++++++
+ .../boot/dts/renesas/rzg2l-smarc-som.dtsi     |  18 +++
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c  |   6 +-
+ drivers/i2c/i2c-core-base.c                   |  92 ++++++++----
+ drivers/media/i2c/adv748x/adv748x-core.c      |   2 +-
+ drivers/media/i2c/adv7604.c                   |   3 +-
+ drivers/regulator/Kconfig                     |   7 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/raa215300.c                 | 102 ++++++++++++++
+ drivers/rtc/rtc-isl1208.c                     | 133 ++++++++++++++----
+ include/linux/i2c.h                           |   3 +-
+ 13 files changed, 484 insertions(+), 106 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/renesas,raa215300.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/isil,isl1208.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/isil,isl1208.yaml
+ create mode 100644 drivers/regulator/raa215300.c
+
+-- 
+2.25.1
+
