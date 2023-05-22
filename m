@@ -2,166 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F60470B9E5
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 12:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A907170BAEF
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 12:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjEVKTi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 May 2023 06:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S232949AbjEVKzR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 May 2023 06:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbjEVKTa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 06:19:30 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01873E0;
-        Mon, 22 May 2023 03:19:28 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.00,184,1681138800"; 
-   d="scan'208";a="163778368"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 22 May 2023 19:19:28 +0900
-Received: from localhost.localdomain (unknown [10.226.93.9])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 545DE400BC16;
-        Mon, 22 May 2023 19:19:26 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S232964AbjEVKxU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 06:53:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F315C6;
+        Mon, 22 May 2023 03:51:48 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9qMHi014961;
+        Mon, 22 May 2023 10:51:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=lZBL4kOttDo6OcG66doNlqIQcqB5P0FhRz/+1vMlQuY=;
+ b=gHWyLlkHtb6/KkcLOk0kiDO3YAiF5owTVVnO4xbgW8rRjAczWz9y0j/jYNIP4E0sVdng
+ 43vYZNsFOMWSisgqiyCBIUiWyAwHoRdt27RAUUH2kbKRb32exfT8JUm59icd5IG4+JMQ
+ 7MlTrQ43639VIuXdUIzejmdYd9UojMe9bQImwx2OVYmkE8mVQrtwF1fyolOzLHfu6zAW
+ iRfJ0Jl1QB50k7eTlHAduOmWsLMqJlioBsS3X+Re1MjAr8sMquDPRv/kgi4Sgv/avG8f
+ QMKtWBtQ5F9MP6MGeqRBy9De1qj6/hNiW9JblElKJAoJz7wO9Mvx+ZNGnOSnjWBtTju9 Qg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgk8s35k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:51:23 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MAbZ1o023711;
+        Mon, 22 May 2023 10:51:22 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgk8s34c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:51:22 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M4jAdp004151;
+        Mon, 22 May 2023 10:51:19 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qppc10ru2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:51:19 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MApGc121693072
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 May 2023 10:51:16 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 462B12004D;
+        Mon, 22 May 2023 10:51:16 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7C2C20040;
+        Mon, 22 May 2023 10:51:15 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 22 May 2023 10:51:15 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v5 08/11] rtc: isl1208: Add support for the built-in RTC on the PMIC RAA215300
-Date:   Mon, 22 May 2023 11:18:46 +0100
-Message-Id: <20230522101849.297499-9-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
-References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
+Date:   Mon, 22 May 2023 12:50:35 +0200
+Message-Id: <20230522105049.1467313-31-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GiA6URbS7rsQKqoZnW--h5JDhkw52A6k
+X-Proofpoint-ORIG-GUID: 9ylNKlDFRWujZ3NFph7DBqTz0Gp8JCtc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_06,2023-05-22_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=843 spamscore=0
+ mlxscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1011
+ priorityscore=1501 adultscore=0 impostorscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220089
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
-However, the external oscillator bit is inverted on PMIC version
-0x11. The PMIC driver detects PMIC version and instantiates the
-RTC device based on i2c_device_id.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-The internal oscillator is enabled or not is determined by the
-parent clock name.
-
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
-v4->v5:
- * Updated commit description.
- * Replaced "unsigned long"->"kernel_ulong_t" in isl1208_id[].
- * -ENOENT means clock not present, so any other errors are propagated.
- * Dropped bool inverted parameter from isl1208_set_xtoscb() instead
-   using xor to compute the value of xtoscb.
-v3->v4:
- * Added support for internal oscillator enable/disable.
-v2->v3:
- * RTC device is instantiated by PMIC driver and dropped isl1208_probe_helper().
- * Added "TYPE_RAA215300_RTC_A0" to handle inverted oscillator bit case.
-RFC->v2:
- * Dropped compatible "renesas,raa215300-isl1208" and "renesas,raa215300-pmic" property.
- * Updated the comment polarity->bit for External Oscillator.
- * Added raa215300_rtc_probe_helper() for registering raa215300_rtc device and
-   added the helper function isl1208_probe_helper() to share the code.
----
- drivers/rtc/rtc-isl1208.c | 48 +++++++++++++++++++++++++++++++--------
- 1 file changed, 39 insertions(+), 9 deletions(-)
+ drivers/rtc/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index 6ca977595977..5c68120ff543 100644
---- a/drivers/rtc/rtc-isl1208.c
-+++ b/drivers/rtc/rtc-isl1208.c
-@@ -74,6 +74,7 @@ struct isl1208_config {
- 	unsigned int	nvmem_length;
- 	unsigned	has_tamper:1;
- 	unsigned	has_timestamp:1;
-+	unsigned	has_inverted_osc_bit:1;
- };
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 753872408615..a38a919b3f15 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -956,6 +956,7 @@ comment "Platform RTC drivers"
+ config RTC_DRV_CMOS
+ 	tristate "PC-style 'CMOS'"
+ 	depends on X86 || ARM || PPC || MIPS || SPARC64
++	depends on HAS_IOPORT || MACH_DECSTATION
+ 	default y if X86
+ 	select RTC_MC146818_LIB
+ 	help
+@@ -976,6 +977,7 @@ config RTC_DRV_CMOS
+ config RTC_DRV_ALPHA
+ 	bool "Alpha PC-style CMOS"
+ 	depends on ALPHA
++	depends on HAS_IOPORT
+ 	select RTC_MC146818_LIB
+ 	default y
+ 	help
+@@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
  
- static const struct isl1208_config config_isl1208 = {
-@@ -100,11 +101,19 @@ static const struct isl1208_config config_isl1219 = {
- 	.has_timestamp = true
- };
- 
-+static const struct isl1208_config config_raa215300_a0 = {
-+	.nvmem_length = 2,
-+	.has_tamper = false,
-+	.has_timestamp = false,
-+	.has_inverted_osc_bit = true
-+};
-+
- static const struct i2c_device_id isl1208_id[] = {
- 	{ "isl1208", .driver_data = (kernel_ulong_t)&config_isl1208 },
- 	{ "isl1209", .driver_data = (kernel_ulong_t)&config_isl1209 },
- 	{ "isl1218", .driver_data = (kernel_ulong_t)&config_isl1218 },
- 	{ "isl1219", .driver_data = (kernel_ulong_t)&config_isl1219 },
-+	{ "raa215300_a0", .driver_data = (kernel_ulong_t)&config_raa215300_a0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, isl1208_id);
-@@ -852,17 +861,37 @@ isl1208_probe(struct i2c_client *client)
- 		isl1208->config = (struct isl1208_config *)id->driver_data;
- 	}
- 
--	xin = devm_clk_get_optional(&client->dev, "xin");
--	if (IS_ERR(xin))
--		return PTR_ERR(xin);
-+	if (client->dev.parent->type == &i2c_client_type) {
-+		xin = of_clk_get_by_name(client->dev.parent->of_node, "xin");
-+		if (IS_ERR(xin)) {
-+			if (PTR_ERR(xin) != -ENOENT)
-+				return PTR_ERR(xin);
-+
-+			clkin = of_clk_get_by_name(client->dev.parent->of_node,
-+						   "clkin");
-+			if (IS_ERR(clkin)) {
-+				if (PTR_ERR(clkin) != -ENOENT)
-+					return PTR_ERR(xin);
-+			} else {
-+				xtosb_val = 0;
-+				clk_put(clkin);
-+			}
-+		} else {
-+			clk_put(xin);
-+		}
-+	} else {
-+		xin = devm_clk_get_optional(&client->dev, "xin");
-+		if (IS_ERR(xin))
-+			return PTR_ERR(xin);
- 
--	if (!xin) {
--		clkin = devm_clk_get_optional(&client->dev, "clkin");
--		if (IS_ERR(clkin))
--			return PTR_ERR(clkin);
-+		if (!xin) {
-+			clkin = devm_clk_get_optional(&client->dev, "clkin");
-+			if (IS_ERR(clkin))
-+				return PTR_ERR(clkin);
- 
--		if (clkin)
--			xtosb_val = 0;
-+			if (clkin)
-+				xtosb_val = 0;
-+		}
- 	}
- 
- 	isl1208->rtc = devm_rtc_allocate_device(&client->dev);
-@@ -882,6 +911,7 @@ isl1208_probe(struct i2c_client *client)
- 		return sr;
- 	}
- 
-+	xtosb_val ^= isl1208->config->has_inverted_osc_bit ? 1 : 0;
- 	rc = isl1208_set_xtoscb(client, sr, xtosb_val);
- 	if (rc)
- 		return rc;
+ config RTC_DRV_BQ4802
+ 	tristate "TI BQ4802"
+-	depends on HAS_IOMEM
++	depends on HAS_IOMEM && HAS_IOPORT
+ 	help
+ 	  If you say Y here you will get support for the TI
+ 	  BQ4802 RTC chip.
 -- 
-2.25.1
+2.39.2
 
