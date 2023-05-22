@@ -2,147 +2,194 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A907170BAEF
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 12:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3F970BBC3
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 13:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbjEVKzR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 May 2023 06:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S233314AbjEVL20 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 May 2023 07:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbjEVKxU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 06:53:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F315C6;
-        Mon, 22 May 2023 03:51:48 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9qMHi014961;
-        Mon, 22 May 2023 10:51:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=lZBL4kOttDo6OcG66doNlqIQcqB5P0FhRz/+1vMlQuY=;
- b=gHWyLlkHtb6/KkcLOk0kiDO3YAiF5owTVVnO4xbgW8rRjAczWz9y0j/jYNIP4E0sVdng
- 43vYZNsFOMWSisgqiyCBIUiWyAwHoRdt27RAUUH2kbKRb32exfT8JUm59icd5IG4+JMQ
- 7MlTrQ43639VIuXdUIzejmdYd9UojMe9bQImwx2OVYmkE8mVQrtwF1fyolOzLHfu6zAW
- iRfJ0Jl1QB50k7eTlHAduOmWsLMqJlioBsS3X+Re1MjAr8sMquDPRv/kgi4Sgv/avG8f
- QMKtWBtQ5F9MP6MGeqRBy9De1qj6/hNiW9JblElKJAoJz7wO9Mvx+ZNGnOSnjWBtTju9 Qg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgk8s35k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:23 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MAbZ1o023711;
-        Mon, 22 May 2023 10:51:22 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgk8s34c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:22 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M4jAdp004151;
-        Mon, 22 May 2023 10:51:19 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qppc10ru2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:19 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MApGc121693072
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 10:51:16 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 462B12004D;
-        Mon, 22 May 2023 10:51:16 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D7C2C20040;
-        Mon, 22 May 2023 10:51:15 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 22 May 2023 10:51:15 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
-Date:   Mon, 22 May 2023 12:50:35 +0200
-Message-Id: <20230522105049.1467313-31-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230522105049.1467313-1-schnelle@linux.ibm.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+        with ESMTP id S230448AbjEVL2K (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 07:28:10 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCA110E2;
+        Mon, 22 May 2023 04:27:33 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-4394a8f26d5so201710137.0;
+        Mon, 22 May 2023 04:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684754853; x=1687346853;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FzQoV7Wn/u+jSz7wS4+l8UNnhbuTTevU/GeKVF6hC4w=;
+        b=h7hUkfRkIT8d1TL8VKcpL2xEoZtrzD3E7/5higkXyOtTPMqXCNN4fsw12MpHn3+pII
+         wTvcGOW3TgzJPTWgFxDbosDQO803p7POb0VHGQF3B9WpPHB2rE/Ym6OQsURR/z71Gg2v
+         kRdxwTC7rVH7kAsrh733d+GD8a8uRYIx6QgWiOJYbmKKVOSj7+KzuT6sl0AYuXtke6iz
+         0BcpImAQiUWzsCG24/zRQy+7d+OiJcfSo5flb7mlllOBKZOoJaYOtG9kwDc7mHOaLqs3
+         cWvr2GK3zuTqKRRz3O58kKzBQsQIUBF2nLIm5uXnilHkmdYRq0avSBiSziyHxp5cyik3
+         kF0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684754853; x=1687346853;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FzQoV7Wn/u+jSz7wS4+l8UNnhbuTTevU/GeKVF6hC4w=;
+        b=AynkQq0OEG8TnvC8RHGNUIxFts3hYrehvWUt0tLDll0pl2eAG80YQaIB5e8qt33Ss8
+         tFbxXqmdYCfueSAVNDiY3hXQyIDhHD6/j9itXcn1QEvQstRxtroGC9I7YlfC4alDRs+z
+         R9f7Hc/Zf3NeVHwEIYzHN2ooGsofdfhIyEHnuBg09pHH2mISuSqMUS0dMh1eVmANeQTy
+         xB5yzO6d78DKoGs8ts4AfLuNdkt4BtHKqUzgYBdWnxrFJouRCBtT/A+2cfBdViWKJoIs
+         VLANtrJ1aCwE5P528kr4w52+A0O0Ab+jYOW/intMuhVvWrdKlVVu8lgAv7QaYjXvtYXh
+         fAow==
+X-Gm-Message-State: AC+VfDykE+O5P7gb3xOZxOQJ7VaSjnlNYjvHQzZ66Fp2PzIDiuPCDF8p
+        IlmSluigBdd8tH2zp3xhalLpiqUvd4pqVTXhMDY0/lFG
+X-Google-Smtp-Source: ACHHUZ4TPDqwfF/yCxuDCTXZZCpG6InrjMEmVffSb/3qOxXl5IC+8Z7O85xhEWQCLGY5ogtoZVqfOgacvB6qu5SgiTA=
+X-Received: by 2002:a05:6102:3c1:b0:430:3aec:efb8 with SMTP id
+ n1-20020a05610203c100b004303aecefb8mr2093110vsq.28.1684754852768; Mon, 22 May
+ 2023 04:27:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GiA6URbS7rsQKqoZnW--h5JDhkw52A6k
-X-Proofpoint-ORIG-GUID: 9ylNKlDFRWujZ3NFph7DBqTz0Gp8JCtc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_06,2023-05-22_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=843 spamscore=0
- mlxscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1011
- priorityscore=1501 adultscore=0 impostorscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517144144.365631-1-romain.perier@gmail.com>
+ <20230517144144.365631-3-romain.perier@gmail.com> <669d7b79-71a6-e1f9-8d7a-71c4b64de28d@kernel.org>
+In-Reply-To: <669d7b79-71a6-e1f9-8d7a-71c4b64de28d@kernel.org>
+From:   Romain Perier <romain.perier@gmail.com>
+Date:   Mon, 22 May 2023 13:27:21 +0200
+Message-ID: <CABgxDoKaVip=T5=s2Gd8qpX15cLD=_0TZtQoNodK1CCf+GTYZw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: Add Mstar SSD20xD RTC devicetree
+ bindings documentation
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+Le jeu. 18 mai 2023 =C3=A0 10:24, Krzysztof Kozlowski <krzk@kernel.org> a =
+=C3=A9crit :
+>
+> On 17/05/2023 16:41, Romain Perier wrote:
+> > This adds the documentation for the devicetree bindings of the Mstar
+> > SSD20xD RTC driver.
+> >
+>
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- drivers/rtc/Kconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 753872408615..a38a919b3f15 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -956,6 +956,7 @@ comment "Platform RTC drivers"
- config RTC_DRV_CMOS
- 	tristate "PC-style 'CMOS'"
- 	depends on X86 || ARM || PPC || MIPS || SPARC64
-+	depends on HAS_IOPORT || MACH_DECSTATION
- 	default y if X86
- 	select RTC_MC146818_LIB
- 	help
-@@ -976,6 +977,7 @@ config RTC_DRV_CMOS
- config RTC_DRV_ALPHA
- 	bool "Alpha PC-style CMOS"
- 	depends on ALPHA
-+	depends on HAS_IOPORT
- 	select RTC_MC146818_LIB
- 	default y
- 	help
-@@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
- 
- config RTC_DRV_BQ4802
- 	tristate "TI BQ4802"
--	depends on HAS_IOMEM
-+	depends on HAS_IOMEM && HAS_IOPORT
- 	help
- 	  If you say Y here you will get support for the TI
- 	  BQ4802 RTC chip.
--- 
-2.39.2
+This is usually what I do for all patches series, but possible I have
+missed some person
 
+>
+> A nit, subject: drop second/last, redundant "devicetree bindings
+> documentation". The "dt-bindings" prefix is already stating that these
+> are bindings. You actually repeated everything...
+
+Originally, it was just to write a simple sentence with words... it
+gives context, you know...
+
+Like here:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-nex=
+t.git/commit/?id=3D7647204c2e81b28b4a7c4eec7d539f998d48eaf0
+or here:  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
+it/commit/?id=3Ddd49cbedde8a0f1e0d09698f9cad791d37a8e03e
+
+But honestly, I don't want to debate about this, yes I can remove
+redundant "devicetree bindings documentation" ^^
+
+
+>
+> > Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> > ---
+> >  .../bindings/rtc/mstar,ssd20xd-rtc.yaml       | 37 +++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,ssd20xd=
+-rtc.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.ya=
+ml b/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml
+> > new file mode 100644
+> > index 000000000000..2acd86cce69f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml
+> > @@ -0,0 +1,37 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/rtc/mstar,ssd20xd-rtc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Mstar SSD20xD RTC
+> > +
+> > +allOf:
+> > +  - $ref: rtc.yaml#
+>
+> This goes just above properties:
+>
+
+ack
+
+> > +
+> > +maintainers:
+> > +  - Daniel Palmer <daniel@0x0f.com>
+> > +  - Romain Perier <romain.perier@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mstar,ssd20xd-rtc
+>
+> Why rtc suffix? Can it be anything else?
+
+Well, it is the dt-bindings for an RTC block ? suppose tomorrow we
+have an ethernet block specific to the SoC SSD202D, it should be
+"mstar,ssd202d-ethernet" , how do you make
+the difference if you just put "mstar,sd202d" ? Plus a lot of rtc
+dt-bindings have this suffix (when it is not an IP name). This is
+exactly the case for rtc-msc313e and it was not an issue.
+
+>
+> Missing blank line
+
+ack
+
+>
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  start-year: true
+>
+> Drop
+>
+> What about interrupt line?
+
+There is currently no interrupt right now, we have not yet the irqchip
+code for handling the alarm irq of this rtc block.
+
+
+>
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+>
+> instead
+> unevaluatedProperties: false
+
+ack
+
+Thanks,
+Romain
