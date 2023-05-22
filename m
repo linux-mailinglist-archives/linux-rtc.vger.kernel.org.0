@@ -2,194 +2,127 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3F970BBC3
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 13:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E2070BC39
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 13:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjEVL20 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 May 2023 07:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S233523AbjEVLu3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 May 2023 07:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjEVL2K (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 07:28:10 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCA110E2;
-        Mon, 22 May 2023 04:27:33 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-4394a8f26d5so201710137.0;
-        Mon, 22 May 2023 04:27:33 -0700 (PDT)
+        with ESMTP id S233560AbjEVLuK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 07:50:10 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2EC1B4
+        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 04:50:01 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30781184e78so2401275f8f.0
+        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 04:50:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684754853; x=1687346853;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684756200; x=1687348200;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FzQoV7Wn/u+jSz7wS4+l8UNnhbuTTevU/GeKVF6hC4w=;
-        b=h7hUkfRkIT8d1TL8VKcpL2xEoZtrzD3E7/5higkXyOtTPMqXCNN4fsw12MpHn3+pII
-         wTvcGOW3TgzJPTWgFxDbosDQO803p7POb0VHGQF3B9WpPHB2rE/Ym6OQsURR/z71Gg2v
-         kRdxwTC7rVH7kAsrh733d+GD8a8uRYIx6QgWiOJYbmKKVOSj7+KzuT6sl0AYuXtke6iz
-         0BcpImAQiUWzsCG24/zRQy+7d+OiJcfSo5flb7mlllOBKZOoJaYOtG9kwDc7mHOaLqs3
-         cWvr2GK3zuTqKRRz3O58kKzBQsQIUBF2nLIm5uXnilHkmdYRq0avSBiSziyHxp5cyik3
-         kF0A==
+        bh=sKgwbXDZ93PhOsZpMHYSuhMcEuh5tVlQ5GHAYoAXTTk=;
+        b=oXlZi6dQ+locvnwMb6tXz6Haerq4h2rmMsYNDuyKGsjCLrXuZZ1WoRXsul7Hmffq5V
+         BAL5Xy1fvZBlwHlGAT4Gt9cdnpFuUHC2JYFmRLtAE9y3lQmrh0C+vKG4mtkZbEBMn711
+         CKts6AS3KF5mRTiEiAI+P31FqY1psc+RKnBht4wKqqVdoaW+l7FwVq9KM4rxq6MEu5Fq
+         Io9rAmmmjXOOwWXFp2Xy8qeX1NwzTdOOwg3ScATZSQ8mzRVx61Q2314f4i1dos2r1GoA
+         cMt8ymh+xftxI78J0hkyTAuZvtfVhvhgUMELKVvy7asFaUmGTrJNEsNXE2Rowf+wWf42
+         dQww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684754853; x=1687346853;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FzQoV7Wn/u+jSz7wS4+l8UNnhbuTTevU/GeKVF6hC4w=;
-        b=AynkQq0OEG8TnvC8RHGNUIxFts3hYrehvWUt0tLDll0pl2eAG80YQaIB5e8qt33Ss8
-         tFbxXqmdYCfueSAVNDiY3hXQyIDhHD6/j9itXcn1QEvQstRxtroGC9I7YlfC4alDRs+z
-         R9f7Hc/Zf3NeVHwEIYzHN2ooGsofdfhIyEHnuBg09pHH2mISuSqMUS0dMh1eVmANeQTy
-         xB5yzO6d78DKoGs8ts4AfLuNdkt4BtHKqUzgYBdWnxrFJouRCBtT/A+2cfBdViWKJoIs
-         VLANtrJ1aCwE5P528kr4w52+A0O0Ab+jYOW/intMuhVvWrdKlVVu8lgAv7QaYjXvtYXh
-         fAow==
-X-Gm-Message-State: AC+VfDykE+O5P7gb3xOZxOQJ7VaSjnlNYjvHQzZ66Fp2PzIDiuPCDF8p
-        IlmSluigBdd8tH2zp3xhalLpiqUvd4pqVTXhMDY0/lFG
-X-Google-Smtp-Source: ACHHUZ4TPDqwfF/yCxuDCTXZZCpG6InrjMEmVffSb/3qOxXl5IC+8Z7O85xhEWQCLGY5ogtoZVqfOgacvB6qu5SgiTA=
-X-Received: by 2002:a05:6102:3c1:b0:430:3aec:efb8 with SMTP id
- n1-20020a05610203c100b004303aecefb8mr2093110vsq.28.1684754852768; Mon, 22 May
- 2023 04:27:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517144144.365631-1-romain.perier@gmail.com>
- <20230517144144.365631-3-romain.perier@gmail.com> <669d7b79-71a6-e1f9-8d7a-71c4b64de28d@kernel.org>
-In-Reply-To: <669d7b79-71a6-e1f9-8d7a-71c4b64de28d@kernel.org>
-From:   Romain Perier <romain.perier@gmail.com>
-Date:   Mon, 22 May 2023 13:27:21 +0200
-Message-ID: <CABgxDoKaVip=T5=s2Gd8qpX15cLD=_0TZtQoNodK1CCf+GTYZw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: rtc: Add Mstar SSD20xD RTC devicetree
- bindings documentation
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1684756200; x=1687348200;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sKgwbXDZ93PhOsZpMHYSuhMcEuh5tVlQ5GHAYoAXTTk=;
+        b=EPSJOZVPZZqjmOORKmK8OxHCwehluoZ59Xkwkhz8OIc38lxUi9r1wqLSG10qGmrKrg
+         mmYDBP1LL27nyunzcWMBacViu9U/+NygO9xkWmfwmomZCUYsGJ0tuehB6/zwW84YV/v3
+         rtcHywn9ZkZnTLItPWadmTrpYASvkpkLK+IiNRW0BlM8ijhdxED0iE5W+hbBNfdAMH9g
+         5HrYg3FbPNHR4BMaeMZUfdejKac38nDkaEg0pnp4RzlSg0xa6bt/VIhzSKvZyX0f7csQ
+         7R/ao0AQOHdan+1saRHiwfbtJb0vEy36uaW19CeajSyzcdccB67Caa889+3OaMUaY10G
+         ah4Q==
+X-Gm-Message-State: AC+VfDynptBOT3XZ0KC8dtQX/9EB8OD/1GGAwvX0hiAEhX4kOXtZaNb+
+        Hq6ki4UG7AjcmZzxhVPUQ3mauA==
+X-Google-Smtp-Source: ACHHUZ4aNoH0wsH4IeJXzePZtSiXVMs1nKqN0mwAKpV4dgI33pkdm3OAwuaeuaJLSl4OQrhKVI7aag==
+X-Received: by 2002:adf:f48f:0:b0:307:5091:5b96 with SMTP id l15-20020adff48f000000b0030750915b96mr10113342wro.22.1684756200409;
+        Mon, 22 May 2023 04:50:00 -0700 (PDT)
+Received: from localhost ([2a01:e0a:28d:66d0:72d:52cc:8221:fcda])
+        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003f6042d6d92sm3490280wmc.46.2023.05.22.04.49.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 04:49:59 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 22 May 2023 13:49:58 +0200
+Message-Id: <CSSS892QYLWK.3T71MRNHOH0IZ@burritosblues>
+Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <jpanis@baylibre.com>, <jneanne@baylibre.com>,
+        <aseketeli@baylibre.com>, <sterzik@ti.com>, <u-kumar1@ti.com>
+Subject: Re: [PATCH v4 1/3] rtc: tps6594: Add driver for TPS6594 RTC
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     "Andy Shevchenko" <andy.shevchenko@gmail.com>
+X-Mailer: aerc 0.14.0
+References: <20230512141755.1712358-1-eblanc@baylibre.com>
+ <20230512141755.1712358-2-eblanc@baylibre.com>
+ <ZF514wvUt_xrU1gG@surfacebook> <CSOPFJOVLSS1.1XKI60F9TLBMN@burritosblues>
+ <CAHp75Vfg+yAhJ58qt76GHqxWHD48hF-6ZnT=xEUh+1rzr7UvVg@mail.gmail.com>
+In-Reply-To: <CAHp75Vfg+yAhJ58qt76GHqxWHD48hF-6ZnT=xEUh+1rzr7UvVg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Le jeu. 18 mai 2023 =C3=A0 10:24, Krzysztof Kozlowski <krzk@kernel.org> a =
-=C3=A9crit :
+On Wed May 17, 2023 at 6:52 PM CEST, Andy Shevchenko wrote:
+> On Wed, May 17, 2023 at 7:47=E2=80=AFPM Esteban Blanc <eblanc@baylibre.co=
+m> wrote:
+> > On Fri May 12, 2023 at 7:22 PM CEST,  wrote:
+> > > Fri, May 12, 2023 at 04:17:53PM +0200, Esteban Blanc kirjoitti:
 >
-> On 17/05/2023 16:41, Romain Perier wrote:
-> > This adds the documentation for the devicetree bindings of the Mstar
-> > SSD20xD RTC driver.
+> ...
+>
+> > > > +/* Multiplier for ppb conversions */
+> > > > +#define PPB_MULT (1000000000LL)
+> > >
+> > > We have something in units.h. Can you use generic macro?
 > >
+> > I found GIGA, NANO and NANOHZ_PER_HZ that have the same value in
+> > units.h. However I'm not sure any of them have the correct meaning in
+> > this situation.
 >
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
+> MULT[IPLIER] has no units AFAIU, so SI macro can be used, no? NANO or
+> GIGA depends on what the actual sign of the exponent of the multiplier
+> is. Write it on paper and check the exponent in the equation(s) and
+> hence decide which one to use.
 
-Hi,
+Thanks. I've checked and it should be NANO.
 
-This is usually what I do for all patches series, but possible I have
-missed some person
-
->
-> A nit, subject: drop second/last, redundant "devicetree bindings
-> documentation". The "dt-bindings" prefix is already stating that these
-> are bindings. You actually repeated everything...
-
-Originally, it was just to write a simple sentence with words... it
-gives context, you know...
-
-Like here:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-nex=
-t.git/commit/?id=3D7647204c2e81b28b4a7c4eec7d539f998d48eaf0
-or here:  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it/commit/?id=3Ddd49cbedde8a0f1e0d09698f9cad791d37a8e03e
-
-But honestly, I don't want to debate about this, yes I can remove
-redundant "devicetree bindings documentation" ^^
-
-
->
-> > Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> > ---
-> >  .../bindings/rtc/mstar,ssd20xd-rtc.yaml       | 37 +++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,ssd20xd=
--rtc.yaml
+> > > > +   if (tmp < 0)
+> > > > +           tmp -=3D TICKS_PER_HOUR / 2LL;
+> > > > +   else
+> > > > +           tmp +=3D TICKS_PER_HOUR / 2LL;
+> > >
+> > > Is it guaranteed to have no overflow here?
 > >
-> > diff --git a/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.ya=
-ml b/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml
-> > new file mode 100644
-> > index 000000000000..2acd86cce69f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml
-> > @@ -0,0 +1,37 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/mstar,ssd20xd-rtc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mstar SSD20xD RTC
-> > +
-> > +allOf:
-> > +  - $ref: rtc.yaml#
+> > We know from `tps6594_rtc_set_offset` that the loaded value can't be
+> > more than 277774 (register default value is 0), So `tmp` can't exceed
+> > 277774000000000 which is lower than 2^63-1. No overflow here.
+> >
+> > TICK_PER_HOUR / 2LL =3D 117964800, so at the end of this computation,
+> > `tmp` can have a maximum value of 277774117964800 which is still
+> > inferior to 2^63-1.
 >
-> This goes just above properties:
->
+> Please add a respective comment.
 
-ack
+I've reformatted this and put it in a SAFETY comment.
 
-> > +
-> > +maintainers:
-> > +  - Daniel Palmer <daniel@0x0f.com>
-> > +  - Romain Perier <romain.perier@gmail.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mstar,ssd20xd-rtc
->
-> Why rtc suffix? Can it be anything else?
+Thanks for your help,
 
-Well, it is the dt-bindings for an RTC block ? suppose tomorrow we
-have an ethernet block specific to the SoC SSD202D, it should be
-"mstar,ssd202d-ethernet" , how do you make
-the difference if you just put "mstar,sd202d" ? Plus a lot of rtc
-dt-bindings have this suffix (when it is not an IP name). This is
-exactly the case for rtc-msc313e and it was not an issue.
-
->
-> Missing blank line
-
-ack
-
->
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  start-year: true
->
-> Drop
->
-> What about interrupt line?
-
-There is currently no interrupt right now, we have not yet the irqchip
-code for handling the alarm irq of this rtc block.
-
-
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
->
-> instead
-> unevaluatedProperties: false
-
-ack
-
-Thanks,
-Romain
+--=20
+Esteban Blanc
+BayLibre
