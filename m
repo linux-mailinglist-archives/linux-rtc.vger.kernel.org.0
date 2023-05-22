@@ -2,137 +2,215 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D7F70C16A
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 16:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6047E70C370
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 May 2023 18:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbjEVOqv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 May 2023 10:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S231712AbjEVQbq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 May 2023 12:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjEVOqv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 10:46:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A89599
-        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 07:46:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC24B622D5
-        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 14:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A863C433EF;
-        Mon, 22 May 2023 14:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684766809;
-        bh=vhuIRrDT8X9cmo3+5XIh/SHkWG/f+SP++78rC5pbsrk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jmx1AeaYX6OCpAR8lMmhL+nuFWFRAZ8HZfqZD8tUnJ9nVc92g2Nmnzyktw/lBoZv6
-         4987INZy30EP7WySXWzVH1JTe4CFSYeeuDUgO79C09x4+Pe8mAaR5b1zB0vMCyb29I
-         JrY62vS5Q/wBBxkWQD7eaDqWDkQb7QexQe/CkARM4fnVVK/gA2zF7UMTYDawmQoAfw
-         vrt/BQqw5T8y+GXWHFvIu0P1GNV8O1x8gyWnbaULFLJVsqveKn7BAIJwqLt4lznjgz
-         TtVs7UDLCFWU6AcBs8cCEIjk7cxX99AWy4zcxAGlD3qPPM9T3JS51dTFXV53hOJPVU
-         SjSOfvgPJYLkw==
-Date:   Mon, 22 May 2023 16:46:38 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     linux-rtc@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: question about firmware RTC design (for rtcwake)
-Message-ID: <20230522164638.68fea327@thinkpad>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        with ESMTP id S229555AbjEVQbp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 May 2023 12:31:45 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8186ED
+        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 09:31:19 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30a992a9c3eso50837f8f.0
+        for <linux-rtc@vger.kernel.org>; Mon, 22 May 2023 09:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684773077; x=1687365077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEgmNUrCbeG3nZlq74WNQ3yrX7mau9NSkmXEo6FUUAU=;
+        b=k99GXKqq6ArbLO0akmS22DhTmqBRgpXKczmvvCUedCZXXMcpA9pKO41awPHjGf9bfV
+         0RZ8xfApaLvY/dVBErVlqDdXnwkoeltP80DUNSiy2O4qQ7MzdjodQvEj6yNKWDzyVO6b
+         rt0teRogHetUPjN3WTgFJXFg1DHGn7n/SoPaEsGGF3cI4w2RaRlTZVVr93AL5l4n2pcE
+         CWD2mVU36edsbCN/W5yOymsFOTCsQpQTVJE5D2PdobThG0jaKh91oTuzHGAtxNP8YZuM
+         gzKX1Wcxim0N+Mjoy/qUQ5URyi5nYPq732CcGUneNbXGjYhJz0UeTNNjvjJUUWfm0BXE
+         mNaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684773077; x=1687365077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xEgmNUrCbeG3nZlq74WNQ3yrX7mau9NSkmXEo6FUUAU=;
+        b=DJej5CZeYlws3+0z/n5bvOieS4Iq4OyV9sFgHFkoE7m4ualHsVzJuEv09bE9NLWH8S
+         ja5DwbkQjaNO1hy+i/ivzTBZpWoLEfw8wD6hlOrHKQ7s3XABlFBES5Vqd8PxFptvkv/7
+         zTfOveGW0lP6ci+SFCIiUm1TJU56PIPc61CBC4ayAhPAZ1CZT588gkRy6mN/ILFTC3Lj
+         cdz1OrRbJIuqj8MCh8QqARUG35Bk/CUuAZjaTa7vnK1iXcoEfdo4uQb0TjNnXHHtpPZD
+         4ibHidP6tiXNZV9SfHnyS5SitIkA0VEMCupF2N07BWs1dT1nYzNbVsYZGS5ArwVX/Wu5
+         2O9A==
+X-Gm-Message-State: AC+VfDwunqDwaG9z1NKZFgb8RWYByu46VckZmFBYuncAdhAsQOH8XGG5
+        qKhBDAEF1zCuKj0tDqfEscFLsQ==
+X-Google-Smtp-Source: ACHHUZ5kPwgWlK+OxdMeEYOg+PItWvIcvwUOLDdDk0yt/yTA0g0xlvUWMyS8J+37lXLMzAzzya+MQA==
+X-Received: by 2002:adf:fa01:0:b0:306:3163:2b76 with SMTP id m1-20020adffa01000000b0030631632b76mr7780474wrr.15.1684773076870;
+        Mon, 22 May 2023 09:31:16 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:28d:66d0:72d:52cc:8221:fcda])
+        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b002f103ca90cdsm8152677wrp.101.2023.05.22.09.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 09:31:16 -0700 (PDT)
+From:   Esteban Blanc <eblanc@baylibre.com>
+To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, eblanc@baylibre.com,
+        u-kumar1@ti.com
+Subject: [PATCH v5 0/3] TI TPS6594 PMIC support (RTC, pinctrl, regulators)
+Date:   Mon, 22 May 2023 18:31:12 +0200
+Message-Id: <20230522163115.2592883-1-eblanc@baylibre.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello RTC guys,
+TPS6594 is a Power Management IC which provides regulators and others
+features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+communicate through the I2C or SPI interfaces.
+TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
 
-this is a request for suggestions / question about how to implement a
-RTC driver so that it will be accepted into upstream Linux.
+This series adds support to TI TPS6594 PMIC and its derivatives.
 
-Let me start with the description of the problem.
+This should be applied on top of other patch series:
+- https://lore.kernel.org/all/20230511095126.105104-1-jpanis@baylibre.com/
+  For core MFD driver
 
-The MCU on the Turris Omnia router can disable / enable power
-regulators basically for the whole board, giving capability for
-platform specific poweroff and for powering the system on at a
-specified time.
+The features implemented in this series are:
+- RTC (child device)
+- Pinmux/GPIO (child device)
+- Regulator (child device)
 
-I want to add support for this to the MCU firmware and write a driver
-for Linux. Since I know only of one utility by which users can request
-the system to power on at a specified time - the rtcwake utility - I
-want to write this as a RTC driver.
+RTC description:
+The TPS6594 family has an RTC built-in, except for LP8764.
+It provides time and an alarm.
 
-Because the MCU is not a true RTC in the sense that it does not have
-battery to count time when not under power, I am wondering how exactly
-to design this. One problem is that the RTC driver must implement the
-read function, but the MCU does not know the real time unless it is
-told beforehand.
+Pinmux/GPIO:
+TPS6594 family has 11 GPIOs. Those GPIO can also serve different
+functions such as I2C or SPI interface, watchdog disable functions.
+The driver provides both pinmuxing for the functions and GPIO capability.
 
-Note that the board also has a true RTC with battery, handled by the
-rtc-armada38x driver. We can make sure that this true RTC is used for
-hctosys.
+Regulator:
+TPS6594/TPS6593: 5 BUCKs and 4LDOs
+LP8764: 4 BUCKs and no LDO
+Bucks can be used in multipahse mode.
 
-Proposal 1:
-- the MCU will implement only one command, poweroff, with optional
-  argument wakeup_timeout, the number of seconds after which to power
-  the board up again
-- the corresponding driver will register a system off handler and a RTC
-  device
-- the RTC will implement methods as:
-    .read_time   will use ktime_get(), so it will return monotonic clock
-    .set_alarm   will store the requested wakeup time in an internal
-                 structure
-    .alarm_irq_enable   will just update the internal structure
-    .read_alarm  will return information from the stored structure
-- the system off handler will send the poweroff command and it will
-  take the requested wakeup time from the internal structure and
-  subtract current time (ktime_get()) to get the wakeup_timeout
-  argument for the MCU poweroff command
+Changes since v1:
+https://lore.kernel.org/all/20230224133129.887203-1-eblanc@baylibre.com/
+Rtc:
+- Removed struct tps6594_rtc.
+- Removed some dev_err messages.
+- Removed some comments.
+- Remove some whitespaces in comments and error messages.
+- Check if RTC is running before reading a timestamp in read_rtc.
+- Stop RTC at the end of probe to wait for a timestamp to be set.
+- Add default MFD_TPS6594 to Kconfig.
 
-- advantages:
-  - MCU needs only to implement one command
-- disadvantages:
-  - the new RTC device will not behave at all like a rtc device
-    regarding timekeeping, since .read_time returns system's monotonic
-    clock. This may confuse users who do not know about the fact that
-    this rtc device is only meant for rtcwake. We can print this info
-    into dmesg, but...
-  - removing the driver and loading it back loses information about set
-    wakeup time
+Pinctrl:
+- Removed #define DEBUG.
+- Add default MFD_TPS6594 to Kconfig.
+- Fix typo and reword help message of Kconfig.
 
-Proposal 2:
-- the MCU will implement:
-  - command for getting and setting clock that the MCU will count
-    The clock will be considered invalid unless it was set at least
-    once.
-  - command for getting and setting wakeup alarm
-  - command for power off
-- the corresponding driver will again register a system off handler and
-  a RTC device
-- the system off handler will just send the poweroff command
-- the RTC device can now behave like a true RTC device, but without a
-  battery, the RTC_VL_BACKUP_EMPTY bit will be set.
-  The userspace can set time from the true RTC, so that rtcwake may be
-  used
+Regulators:
+Further to Mark Brown review:
+- File header whole block C++ style.
+- Configuring modes not supported: omit all mode operations
+- Log the error before notifying.
+- Request the interrupts while registering the regulators (then remove
+  the lookup function).
+Further to Matti review:
+- Postponed: devm_regulator_irq_helper() and
+  regulator_irq_map_event_simple() can probably be used but code.
+  refactoring is not so trivial. This can be done later as an enhancement
+  after this patch list is merged.
+Buck Multi phase management:
+- Multiphase property can take an array when 2 multi phase buck, buck12
+  and buck34.
+- Configuration multi phase buck34 without multiphase buck12 is not
+  supported (when only one multiphase, must be buck12). Not clear from the
+  spec but confirmed by TI.
+- Supported multiphase conficurations: buck12, buck123, buck1234,
+  buck12 + buck34.
+- All interrupts are attached to the multiphase buck (ie: for regulator
+  buck12, buck1 & buck2 interrupts are registered).
 
-Overall proposal 1 is easier to implement, but the resulting /dev/rtc
-device will not be a true RTC, which may confuse users. Proposal 2
-gives more complexity to MCU firmware.
+Changes since v2:
+https://lore.kernel.org/all/20230328091448.648452-1-eblanc@baylibre.com/
+Rtc:
+- Add logic to avoid reinitializing a working clock.
+- Fix some multiline comments format.
 
-Personally I prefer proposal one.
+Regulators:
+Further to Mark Brown review:
+- Log the error before notifying.
+- Request the interrupts while registering the regulators.
+Further to Krzysztof Kozlowski:
+https://lore.kernel.org/all/75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com/
+- Remove ti, multi-phase-id property which is redundant with buck dts naming
+  rules.
 
-Do you guys have suggestions? Which kind of driver would you be willing
-to accept?
+Changes since v3:
+https://lore.kernel.org/lkml/20230414101217.1342891-1-eblanc@baylibre.com/
+RTC:
+- Add wakeup source
 
-Note that the driver will probably live under drivers/mfd or
-drivers/platform, since the MCU implements other features, as well (a
-GPIO controller, for example).
+Pinctrl:
+- Switch to GPIO_REGMAP framework
 
-Marek
+Change since v4:
+https://lore.kernel.org/lkml/20230512141755.1712358-1-eblanc@baylibre.com/
+Update Copyright notice date
+Reorder includes
+
+RTC:
+- Rework some comments, fixing punctuation and style
+- Use NANO macro from units.h for PPB_MULT
+- Rework to use bitwise types
+- Remove unnecessary casts
+- Add SAFETY comments
+- Use `dev_err_probe(...)` instead of print then return
+
+Pinctrl:
+- Reword help message and add module name in Kconfig
+- Rework code to use struct pinfunction and PINCTRL_PINFUNCTION() macro
+- Remove unnecessary casts
+- Use `dev_err_probe(...)` instead of print then return
+- Replace TPS6594_REG_GPIO1_CONF with a comment for TPS6594_REG_GPIOX_CONF
+
+Regulators:
+- nits: Add missing tabs, standard spaces, group "buck_multi".
+- Use OF dedicated of_node_cmp API instead of standard strcmp.
+- Use devm_kmalloc_array(...) API instead of devm_kmalloc(...) wherever possible.
+- return dev_err_probe(...) wherever possible.
+
+Esteban Blanc (2):
+  rtc: tps6594: Add driver for TPS6594 RTC
+  pinctrl: tps6594: Add driver for TPS6594 pinctrl and GPIOs
+
+Jerome Neanne (1):
+  regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
+
+ drivers/pinctrl/Kconfig               |  13 +
+ drivers/pinctrl/Makefile              |   1 +
+ drivers/pinctrl/pinctrl-tps6594.c     | 367 +++++++++++++++
+ drivers/regulator/Kconfig             |  13 +
+ drivers/regulator/Makefile            |   1 +
+ drivers/regulator/tps6594-regulator.c | 615 ++++++++++++++++++++++++++
+ drivers/rtc/Kconfig                   |  12 +
+ drivers/rtc/Makefile                  |   1 +
+ drivers/rtc/rtc-tps6594.c             | 463 +++++++++++++++++++
+ include/linux/mfd/tps6594.h           |   3 +-
+ 10 files changed, 1488 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
+ create mode 100644 drivers/regulator/tps6594-regulator.c
+ create mode 100644 drivers/rtc/rtc-tps6594.c
+
+-- 
+2.39.2
+
