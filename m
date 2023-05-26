@@ -2,193 +2,213 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252C1712136
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 09:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DAB712643
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 14:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242516AbjEZHg1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 26 May 2023 03:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        id S237205AbjEZMHZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 26 May 2023 08:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242521AbjEZHgU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 03:36:20 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732CAB6;
-        Fri, 26 May 2023 00:35:38 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-ba81deea9c2so431047276.2;
-        Fri, 26 May 2023 00:35:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685086525; x=1687678525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2lw0ehb9zzDGJQZHFbsLfDAkiUJYx4u+oRm8HNoVjSw=;
-        b=Yq2xDHBC4/mBxzDE6jUtk5dtPUJSZTsh76cX/R7IyX5cubGGR2Ovluzpr73xDeOYKz
-         oMfuTnUfmuLUaLuiCJ9NczWZFMwXRPso7+XHm57kKAPDmQd+rNTTQ3TDHDBKeCzSPC44
-         ueJaKNQZGtNodtOhsD/dvDcZrgP29Hywz/eURtL+B6k7wOF5CjpfdFUrh849n7O+GK6R
-         59X3j6GrpeGNPIBtFENcPCe887iQNyhPcbQdzN2sdmJsYWzD0w65uu4/YmkYNrGhoeq2
-         o0b6dxpHcgmn5N7uoExKD5xGFpVMoCSBl2jTEEYIvjiz+AuwAWQrXYfc7KGcBoLTspYe
-         9Uig==
-X-Gm-Message-State: AC+VfDyTLOpyzZVt9nqgwyWIph/slDiYAz1auRVgQKF5Dte3DgsNJbps
-        sR0ijYTEhnzm/WTWvYzOywpxuga9i3hdJA==
-X-Google-Smtp-Source: ACHHUZ7Q0yzHi5vlhQd1qeWVSKVxoIwpPc0ps8a2P0zMsH0Z8/BLlYpuisE+KmKcZpIZLgr4IDtgxA==
-X-Received: by 2002:a25:1c5:0:b0:bad:fb1:a9f7 with SMTP id 188-20020a2501c5000000b00bad0fb1a9f7mr873596ybb.24.1685086525132;
-        Fri, 26 May 2023 00:35:25 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id h6-20020a255306000000b00ba867a46d19sm864923ybb.18.2023.05.26.00.35.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 00:35:24 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ba82059ef0bso440949276.1;
-        Fri, 26 May 2023 00:35:23 -0700 (PDT)
-X-Received: by 2002:a81:dd06:0:b0:561:dd6a:b84 with SMTP id
- e6-20020a81dd06000000b00561dd6a0b84mr1116960ywn.26.1685086523778; Fri, 26 May
- 2023 00:35:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com> <20230522101849.297499-9-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230522101849.297499-9-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 26 May 2023 09:35:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXSf0wteEcL9+DGCAqsMX95ULf22=oMEJYGrn_PEm=vRg@mail.gmail.com>
-Message-ID: <CAMuHMdXSf0wteEcL9+DGCAqsMX95ULf22=oMEJYGrn_PEm=vRg@mail.gmail.com>
-Subject: Re: [PATCH v5 08/11] rtc: isl1208: Add support for the built-in RTC
- on the PMIC RAA215300
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S236664AbjEZMHZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 08:07:25 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425AA95;
+        Fri, 26 May 2023 05:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685102844; x=1716638844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9uDtaJJPHuq2pUZEOpF84Xtv1dE0EgruaQ3xoTPIbx8=;
+  b=eSLj85TIVc8KHmo2poLqGB6BR9HZPOABkzhgvrS+KGk8dYxkqpfBd7g5
+   0NrACf62b5e5Mmn9ADqDE9XVXmuidgB1CpXoWsIY0zCs0JxHnv5n2l9sl
+   9s4PBdpiheZWF9nDcrE2iuMiRmQLYr6f1heMwu+kn00LIvmY8g+BwJ0dC
+   QV37lgi8I87kewcIufDlqxQ1oyJLvggtc8Ni4Ylzmjruw985RCgH/FTid
+   dTn3KMaLkSBmEhAr7WMUDPxBqPF7Ou8Abv1pos9SV7V2AbhoUTtX2OTAo
+   ++87oq/kEvFhL4XU+o3rKdyWU8YEt2jPZauhNUDPUn9awzOGm/zMby3R5
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="asc'?scan'208";a="227145655"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 05:07:12 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 26 May 2023 05:07:09 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 26 May 2023 05:07:06 -0700
+Date:   Fri, 26 May 2023 13:06:43 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Binbin Zhou <zhoubb.aaron@gmail.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        <linux-rtc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, <loongarch@lists.linux.dev>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        <linux-mips@vger.kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        zhao zhang <zhzhl555@gmail.com>,
+        Yang Ling <gnaygnil@gmail.com>,
+        <loongson-kernel@lists.loongnix.cn>
+Subject: Re: [PATCH V4 1/5] dt-bindings: rtc: Remove the LS2X from the
+ trivial RTCs
+Message-ID: <20230526-dolly-reheat-06c4d5658415@wendy>
+References: <cover.1684983279.git.zhoubinbin@loongson.cn>
+ <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
+ <20230525-custody-oversleep-f778eddf981c@spud>
+ <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lgJrIcXE3eFmHlx7"
+Content-Disposition: inline
+In-Reply-To: <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Biju,
+--lgJrIcXE3eFmHlx7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 22, 2023 at 12:19 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
-> However, the external oscillator bit is inverted on PMIC version
-> 0x11. The PMIC driver detects PMIC version and instantiates the
-> RTC device based on i2c_device_id.
->
-> The internal oscillator is enabled or not is determined by the
-> parent clock name.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v4->v5:
->  * Updated commit description.
->  * Replaced "unsigned long"->"kernel_ulong_t" in isl1208_id[].
->  * -ENOENT means clock not present, so any other errors are propagated.
->  * Dropped bool inverted parameter from isl1208_set_xtoscb() instead
->    using xor to compute the value of xtoscb.
+On Fri, May 26, 2023 at 09:37:02AM +0800, Binbin Zhou wrote:
+> On Fri, May 26, 2023 at 1:05=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
+rote:
+> > On Thu, May 25, 2023 at 08:55:23PM +0800, Binbin Zhou wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - loongson,ls1b-rtc
+> > > +      - loongson,ls1c-rtc
+> > > +      - loongson,ls7a-rtc
+> > > +      - loongson,ls2k0500-rtc
+> > > +      - loongson,ls2k1000-rtc
+> > > +      - loongson,ls2k2000-rtc
+> >
+> > |+static const struct of_device_id loongson_rtc_of_match[] =3D {
+> > |+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_con=
+fig },
+> > |+       { .compatible =3D "loongson,ls1c-rtc", .data =3D &ls1x_rtc_con=
+fig },
+> > |+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_=
+config },
+> > |+       { .compatible =3D "loongson,ls2k0500-rtc", .data =3D &generic_=
+rtc_config },
+> > |+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000=
+_rtc_config },
+> > |+       { .compatible =3D "loongson,ls2k2000-rtc", .data =3D &generic_=
+rtc_config },
+> > |+       { /* sentinel */ }
+> > |+};
+> >
+> > This is a sign to me that your compatibles here are could do with some
+> > fallbacks. Both of the ls1 ones are compatible with each other & there
+> > are three that are generic.
+> >
+> > I would allow the following:
+> > "loongson,ls1b-rtc"
+> > "loongson,ls1c-rtc", "loongson,ls1b-rtc"
+> > "loongson,ls7a-rtc"
+> > "loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
+> > "loongson,ls2k2000-rtc", "loongson,ls7a-rtc"
+> > "loongson,ls2k1000-rtc"
+> >
+> > And then the driver only needs:
+> > |+static const struct of_device_id loongson_rtc_of_match[] =3D {
+> > |+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_con=
+fig },
+> > |+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rtc_=
+config },
+> > |+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k1000=
+_rtc_config },
+> > |+       { /* sentinel */ }
+> > |+};
+> >
+> > And ~if~when you add support for more devices in the future that are
+> > compatible with the existing ones no code changes are required.
+>=20
+> Hi Conor:
+>=20
+> Thanks for your reply.
+>=20
+> Yes, this is looking much cleaner. But it can't show every chip that
+> supports that driver.
+>=20
+> As we know, Loongson is a family of chips:
+> ls1b/ls1c represent the Loongson-1 family of CPU chips;
+> ls7a represents the Loongson LS7A bridge chip;
+> ls2k0500/ls2k1000/ls2k2000 represent the Loongson-2 family of CPU chips.
+>=20
+> Based on my previous conversations with Krzysztof, it seems that
+> soc-based to order compatible is more popular, so I have listed all
+> the chips that support that RTC driver.
 
-Some suggestions for improvement below...
+Right. You don't actually have to list them all *in the driver* though,
+just in the binding and in the devicetree. I think what you have missed
+is:
+> > I would allow the following:
+> > "loongson,ls1b-rtc"
+> > "loongson,ls1c-rtc", "loongson,ls1b-rtc"
+> > "loongson,ls7a-rtc"
+> > "loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
+> > "loongson,ls2k2000-rtc", "loongson,ls7a-rtc"
+> > "loongson,ls2k1000-rtc"
 
-> --- a/drivers/rtc/rtc-isl1208.c
-> +++ b/drivers/rtc/rtc-isl1208.c
+This is what you would put in the compatible section of a devicetree
+node, using "fallback compatibles". So for a ls1c you put in
+compatible =3D "loongson,ls1c-rtc", "loongson,ls1b-rtc";
+and the kernel first tries to find a driver that supports
+"loongson,ls1c-rtc" but if that fails it tries to find one that supports
+"loongson,ls1b-rtc". This gives you the best of both worlds - you can
+add support easily for new systems (when an ls1d comes out, you don't
+even need to change the driver for it to just work!) and you have a
+soc-specific compatible in case you need to add some workaround for
+hardware errata etc in the future.
 
-> @@ -852,17 +861,37 @@ isl1208_probe(struct i2c_client *client)
->                 isl1208->config = (struct isl1208_config *)id->driver_data;
->         }
->
-> -       xin = devm_clk_get_optional(&client->dev, "xin");
-> -       if (IS_ERR(xin))
-> -               return PTR_ERR(xin);
-> +       if (client->dev.parent->type == &i2c_client_type) {
+> > To maintain compatibility with the existing devicetrees, should the old
+> > "loongson,ls2x-rtc" be kept in the driver?
+>=20
+> No, It seems that wildcards in compatible are not allowed."
+> loongson,ls2x-rtc" itself was part of this patch series at one time,
+> but apparently it is not the right way to describe these chips.
 
-I think this deserves a comment, to explain why you are looking
-at the parent.
+Right, but it has been merged - you are deleting the driver that supports
+it after all - which means that any dtb with the old compatible will
+stop working.
+I don't disagree with Krzysztof that having wildcard based compatibles
+is bad, but I do not think that regressing rtc support for systems with
+these old devicetrees is the right way to go either.
 
-> +               xin = of_clk_get_by_name(client->dev.parent->of_node, "xin");
-> +               if (IS_ERR(xin)) {
-> +                       if (PTR_ERR(xin) != -ENOENT)
-> +                               return PTR_ERR(xin);
-> +
-> +                       clkin = of_clk_get_by_name(client->dev.parent->of_node,
-> +                                                  "clkin");
-> +                       if (IS_ERR(clkin)) {
-> +                               if (PTR_ERR(clkin) != -ENOENT)
-> +                                       return PTR_ERR(xin);
-> +                       } else {
-> +                               xtosb_val = 0;
-> +                               clk_put(clkin);
-> +                       }
-> +               } else {
-> +                       clk_put(xin);
-> +               }
-> +       } else {
-> +               xin = devm_clk_get_optional(&client->dev, "xin");
-> +               if (IS_ERR(xin))
-> +                       return PTR_ERR(xin);
->
-> -       if (!xin) {
-> -               clkin = devm_clk_get_optional(&client->dev, "clkin");
-> -               if (IS_ERR(clkin))
-> -                       return PTR_ERR(clkin);
-> +               if (!xin) {
-> +                       clkin = devm_clk_get_optional(&client->dev, "clkin");
-> +                       if (IS_ERR(clkin))
-> +                               return PTR_ERR(clkin);
->
-> -               if (clkin)
-> -                       xtosb_val = 0;
-> +                       if (clkin)
-> +                               xtosb_val = 0;
-> +               }
+Thanks,
+Conor.
 
-I think it would make the code more readable if you would spin off the
-OF vs. dev-based clock handling into a separate helper function.
-Then you can just do in the probe function:
+--lgJrIcXE3eFmHlx7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    ret = isl1208_clk_present(client, "xin");
-    if (ret < 0)
-        return ret;
-    if (!ret) {
-            ret = isl1208_clk_present(client, "clkin");
-            if (ret < 0)
-                    return ret;
-            if (ret)
-                    xtosb_val = 0;
-    }
+-----BEGIN PGP SIGNATURE-----
 
->         }
->
->         isl1208->rtc = devm_rtc_allocate_device(&client->dev);
-> @@ -882,6 +911,7 @@ isl1208_probe(struct i2c_client *client)
->                 return sr;
->         }
->
-> +       xtosb_val ^= isl1208->config->has_inverted_osc_bit ? 1 : 0;
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHCg0wAKCRB4tDGHoIJi
+0mWSAQCDAMxaQunRpWEDNCiW02WKO3wTUY0nxz1jUphUwGxD+AEA9ek3o9O/gDCp
+hKbikL4ct/NAgvcpTLcTtunWKqjw4QY=
+=LEBi
+-----END PGP SIGNATURE-----
 
-As has_inverted_osc_bit is already either 0 or 1:
-
-    xtosb_val ^= isl1208->config->has_inverted_osc_bit;
-
-If you don't trust XOR, or want to make the operation more clear:
-
-    if (isl1208->config->has_inverted_osc_bit)
-            xtosb_val = !xtosb_val;
-
->         rc = isl1208_set_xtoscb(client, sr, xtosb_val);
->         if (rc)
->                 return rc;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--lgJrIcXE3eFmHlx7--
