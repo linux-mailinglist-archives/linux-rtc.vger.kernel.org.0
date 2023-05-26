@@ -2,82 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74FC7126D6
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 14:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09920712CBA
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 20:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243014AbjEZMjF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 26 May 2023 08:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S243599AbjEZSoe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 26 May 2023 14:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjEZMjE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 08:39:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B9B116;
-        Fri, 26 May 2023 05:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685104742; x=1716640742;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0eDJx4cPwsq80iImTB8nLrKWaWeH8p+wAFaX0YpCUpY=;
-  b=kIUIswIV8nfMoxQbefA8Gt+/iF04dDbz6AMUzWiD0g9mpzpd3vQEDOuL
-   woVibj7F8knInITZaEu/Hhkp/ShgHcu5FtvKCRu6t43StUX8pnGuNhjcY
-   Ar1efd+NqLmquQwh4XVBw/m7qm27tpaAYQfzQzRpTlYJrEVuTyNGfx9ZK
-   nnnyftnO2xstO4b2LZ/VixflGYnTZdPMi/I/q1bBzbzNoCKGS1iXGIhUd
-   K/Di5bQirhzbjYkZaa4OlceNwJZY5zniNcDQdjZ6koilDUXi4hn6RpwNm
-   PShGBJcqn5bXbDPBHN2+jKQSbKGw4AuiM7cTfuXUnppW2AXUSCFwFe4pA
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="asc'?scan'208";a="154091159"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 05:39:01 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 26 May 2023 05:38:55 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 26 May 2023 05:38:52 -0700
-Date:   Fri, 26 May 2023 13:38:29 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     Binbin Zhou <zhoubb.aaron@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        <linux-rtc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>, <loongarch@lists.linux.dev>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Kelvin Cheung <keguang.zhang@gmail.com>,
-        zhao zhang <zhzhl555@gmail.com>,
-        Yang Ling <gnaygnil@gmail.com>,
-        <loongson-kernel@lists.loongnix.cn>
-Subject: Re: [PATCH V4 1/5] dt-bindings: rtc: Remove the LS2X from the
- trivial RTCs
-Message-ID: <20230526-hardwired-flashbulb-de3ef456f9a0@wendy>
-References: <cover.1684983279.git.zhoubinbin@loongson.cn>
- <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
- <20230525-custody-oversleep-f778eddf981c@spud>
- <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com>
- <20230526-dolly-reheat-06c4d5658415@wendy>
- <1EAC8FA8-4125-4436-9EE1-13B61B5687AF@flygoat.com>
+        with ESMTP id S243070AbjEZSoa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 14:44:30 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C35FE4D;
+        Fri, 26 May 2023 11:44:08 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f6b94062f3so4996781cf.0;
+        Fri, 26 May 2023 11:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685126647; x=1687718647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h8Soqmr4Cmql4V9gPC0Ws8IpyroUmhGOvXmfI1LG86I=;
+        b=rMrfJD4XR25ov+VQKVpVXNLko3z+n+hYq+eqbbIKeSLxBZeLok5c3moKNx/BOZETSM
+         i9Fo0DK8+f4g30TZN+bbW1NY22Zk4fuLha97rZRgnCldTR1LBUPYZwm9nXVmfTSQe/lD
+         hEv085fHLVhPhg1Ts5cvBWEOZ0UcGX1i7CZEzXOJxQ7xsB0/26fmdU4vGxEz0LEtRSMX
+         z5Jra5cDaReWO4CHcqAfOJfzvo7sOAXb9Fj6v9IpHE3Mk8sFtomUFLIkp4g2lOKy0zgQ
+         /Bd2B97pGX8Kjyj1YaSw0fk8h60Uim4n+d356L6ZQCqGMHZ2AMxyt70gBBl8J0jcgme1
+         158Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685126647; x=1687718647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h8Soqmr4Cmql4V9gPC0Ws8IpyroUmhGOvXmfI1LG86I=;
+        b=bOd8KOswEy6fIqVceiG4EkyO7z40Wb3g8jHq5rPtmfVfVA3HqhziprjDXUg2T4xPkG
+         cCxd9aEYyImYkZUU977HEqLWcQ47p3t14wETxc/pt5wBtrMARdQ0F3fXdwWTDQTNFHjL
+         gF0CD3kaNSHWMZ25v973tybDnu7uZhpHHQFGlye1dmqF/NRVFIHozzAdbKRNII+3Y2ck
+         GeFgRL3ngSlVrnPr/cb+nbSlJD4kkw+PeiyYpkUnErJM/oNC+3XxWcws1H51v5xv5eBF
+         tN21zuhXrSktvPzkRNK9eEoaB2briwLe6dLhery0LNdH6nSXH95JxtQP3Wc/5E0c5yV8
+         IIBw==
+X-Gm-Message-State: AC+VfDxeiyYyu74CmVWPHcSRhFR0MAxurE7mrSqTDuO/KZcU/MjGgX1q
+        S6At4udVOf7xQgcyvRRQ/tCdCdlOE81eZs5wX6Y=
+X-Google-Smtp-Source: ACHHUZ6HPf/Zp+tv2MrQlVYxIjGwBqf41XojhtMIEYqJ0MXZo+9KV8MKMi/GS8Zzk+m1rV1hHZ04/K7mY2aI6ESPOGA=
+X-Received: by 2002:a05:622a:1a08:b0:3f6:b9af:51eb with SMTP id
+ f8-20020a05622a1a0800b003f6b9af51ebmr2971771qtb.38.1685126647582; Fri, 26 May
+ 2023 11:44:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WSYevugeXVX6hZ2M"
-Content-Disposition: inline
-In-Reply-To: <1EAC8FA8-4125-4436-9EE1-13B61B5687AF@flygoat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230522163115.2592883-1-eblanc@baylibre.com> <20230522163115.2592883-3-eblanc@baylibre.com>
+ <ZG0QmjZwvzWbNwA4@surfacebook> <CSVF1AQBGQU0.1V5KJP08TCKLT@burritosblues>
+In-Reply-To: <CSVF1AQBGQU0.1V5KJP08TCKLT@burritosblues>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 26 May 2023 21:43:31 +0300
+Message-ID: <CAHp75VcF65xZUVYB1mjK4HV86=m+ayESeDD2Nwas7UDoJjeLSA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl
+ and GPIOs
+To:     Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,54 +73,24 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---WSYevugeXVX6hZ2M
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, May 25, 2023 at 5:07=E2=80=AFPM Esteban Blanc <eblanc@baylibre.com>=
+ wrote:
+> On Tue May 23, 2023 at 9:14 PM CEST,  wrote:
+> > Mon, May 22, 2023 at 06:31:14PM +0200, Esteban Blanc kirjoitti:
 
-On Fri, May 26, 2023 at 01:22:15PM +0100, Jiaxun Yang wrote:
->=20
->=20
-> > 2023=E5=B9=B45=E6=9C=8826=E6=97=A5 13:06=EF=BC=8CConor Dooley <conor.do=
-oley@microchip.com> =E5=86=99=E9=81=93=EF=BC=9A
-> Hi all,
->=20
-> [...]
-> My two cents here as Loongson64 maintainer.
->=20
-> >=20
-> >>> To maintain compatibility with the existing devicetrees, should the o=
-ld
-> >>> "loongson,ls2x-rtc" be kept in the driver?
-> >>=20
-> >> No, It seems that wildcards in compatible are not allowed."
-> >> loongson,ls2x-rtc" itself was part of this patch series at one time,
-> >> but apparently it is not the right way to describe these chips.
-> >=20
-> > Right, but it has been merged - you are deleting the driver that suppor=
-ts
-> > it after all - which means that any dtb with the old compatible will
-> > stop working.
-> It is perfectly fine to break DTB compatibility for Loongson64 systems
-> As they *only* use builtin dtb. Bootloader will only pass machine type in=
-formation
-> and kernel will choose one dtb from it=E2=80=99s dtbs pool.
+...
 
-Ah, that is good to know thanks! I think that should be mentioned in the
-commit messages for the next revision.
+> > > +// Used to compute register address of GPIO1_CONF to GPIO11_CONF
+> >
+> > This is good.
 
-Cheers,
-Conor.
+Btw
 
---WSYevugeXVX6hZ2M
-Content-Type: application/pgp-signature; name="signature.asc"
+  the register
 
------BEGIN PGP SIGNATURE-----
+and shouldn't it start from GPIO0_CONF (please, double check, my
+memory can do tricks on me)?
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHCoRQAKCRB4tDGHoIJi
-0m7HAQDegOrEFQvfjtNlpAP88Pr1kQ6xFHXGlHvSieXoat9fSAD/fQLNWWmCM9oI
-Nebcr7/ygJ6fD/4udFPchcokkg67nA8=
-=4uhD
------END PGP SIGNATURE-----
-
---WSYevugeXVX6hZ2M--
+--=20
+With Best Regards,
+Andy Shevchenko
