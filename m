@@ -2,97 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6A7711FF7
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 08:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AD27120C6
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 09:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242138AbjEZG3Q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 26 May 2023 02:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S236274AbjEZHVA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 26 May 2023 03:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjEZG3L (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 02:29:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE63213D
-        for <linux-rtc@vger.kernel.org>; Thu, 25 May 2023 23:29:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q2Qwk-0005IP-Oy; Fri, 26 May 2023 08:29:06 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q2Qwj-002tT1-Od; Fri, 26 May 2023 08:29:05 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q2Qwi-0084xJ-Tt; Fri, 26 May 2023 08:29:04 +0200
-Date:   Fri, 26 May 2023 08:29:04 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] rtc: Switch i2c drivers back to use .probe()
-Message-ID: <20230526062904.vcsmst7rmdw2vkiw@pengutronix.de>
-References: <20230505121136.1185653-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S229736AbjEZHVA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 03:21:00 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC12699;
+        Fri, 26 May 2023 00:20:57 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-56190515833so9268537b3.0;
+        Fri, 26 May 2023 00:20:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685085657; x=1687677657;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PUDBoh1hXwNOTGqMEugtcAGO4vzK+p0VYicK7HiX7E8=;
+        b=ep6/aOY1DQqV2CsBv7KVrAiJ7LqILZVfU0naTiKtCHruMZP96OFu5gcsQnxmBLRWN7
+         FrMOOM5grtIDx3XV6UI/d5Zms9i0s7kxjRmE+DBqAXIgKqIZWrVDj+6vcZm0dUndjYhk
+         4c1BcNexjCXN6f2j4/DeeON+wnyikyOd9xgrF4Fyz4M5sFbBTSiCISbOx/Kq8XlYoIW7
+         xCccjD7YYYjSeCRtaaPnP+o/rcDDwf3PLqjtNb6yDgU4xk3xlcSoMY2H8iiVLSqSctKd
+         Kvyvjvt1BctQC+Z6ZHOee16dWNqvAZ0EW13qNwBK70/z1euCn7H5W5td+OI2a9gdYGVC
+         8O3Q==
+X-Gm-Message-State: AC+VfDx3bKu4T819kCiFD3cozNrf6jVK1JNqHg6izMPkRoLPJo0XJHLQ
+        OruzM27+vPwoEBEwwkpFSMvqDeX/NgJAGQ==
+X-Google-Smtp-Source: ACHHUZ6qcNQgtY8tsanmFPQSlgnHopA7yEEgpTx1W4VE732SvqqKqob9t2Y/wKkKQ+SCfophbUghGw==
+X-Received: by 2002:a0d:e2c3:0:b0:565:b76d:82c8 with SMTP id l186-20020a0de2c3000000b00565b76d82c8mr623189ywe.5.1685085656891;
+        Fri, 26 May 2023 00:20:56 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id g134-20020a0ddd8c000000b00565b1b3f9c3sm231244ywe.76.2023.05.26.00.20.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 00:20:55 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5621a279cbbso9084337b3.1;
+        Fri, 26 May 2023 00:20:55 -0700 (PDT)
+X-Received: by 2002:a81:78d7:0:b0:561:94a9:f9f7 with SMTP id
+ t206-20020a8178d7000000b0056194a9f9f7mr1699938ywc.20.1685085655327; Fri, 26
+ May 2023 00:20:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2y5hgy5f5dmdxs7c"
-Content-Disposition: inline
-In-Reply-To: <20230505121136.1185653-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com> <20230522101849.297499-8-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230522101849.297499-8-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 26 May 2023 09:20:44 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW_9JNusQ3USMHam5D9fu93CgBD46w-oMb6MQ-V=33Xnw@mail.gmail.com>
+Message-ID: <CAMuHMdW_9JNusQ3USMHam5D9fu93CgBD46w-oMb6MQ-V=33Xnw@mail.gmail.com>
+Subject: Re: [PATCH v5 07/11] rtc: isl1208: Add isl1208_set_xtoscb()
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hi Biju,
 
---2y5hgy5f5dmdxs7c
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 22, 2023 at 12:19 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> As per the HW manual, set the XTOSCB bit as follows:
+>
+> If using an external clock signal, set the XTOSCB bit as 1 to
+> disable the crystal oscillator.
+>
+> If using an external crystal, the XTOSCB bit needs to be set at 0
+> to enable the crystal oscillator.
+>
+> Add isl1208_set_xtoscb() to set XTOSCB bit based on the clock-names
+> property. Fallback is enabling the internal crystal oscillator.
+>
+> While at it, introduce a variable "sr" for reading the status register
+> in probe() as it is reused for writing.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v4->v5:
+>  * Fixed the typo in commit description.
+>  * Replaced the variable int_osc_en->xtosb_val for isl1208_set_xtoscb() and
+>    changed the data type from bool->u8.
 
-Hello,
+You might as well just use int.
 
-On Fri, May 05, 2023 at 02:11:36PM +0200, Uwe Kleine-K=F6nig wrote:
-> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type"), all drivers being converted to .probe_new() and then
-> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
-> back to (the new) .probe() to be able to eventually drop .probe_new() from
-> struct i2c_driver.
+>  * Replaced devm_clk_get->devm_clk_get_optional() in probe.
+>  * IS_ERR() related error is propagated and check for NULL to find out
+>    if a clock is present.
 
-this patch wasn't applied yet and I didn't receive any feedback. It
-still applies fine to yesterday's next and is still complete there (i.e.
-no new drivers introducing another .probe_new()).
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Is this patch still considered to be applied?
+Gr{oetje,eeting}s,
 
-Best regards
-Uwe
+                        Geert
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---2y5hgy5f5dmdxs7c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRwUa8ACgkQj4D7WH0S
-/k7SBAf/U0kQFhPaq7kRxh7nf9i1Xy+v4PZC5sKXhsacuxG7LKLrrHzC2egKDUPd
-pb7D7jmNi5jKojuQ+qy6GdP9ly080MGFPhRA0/BWp/e9PBftm0oYb2TO3/YOGiPI
-8UHfRetMzEGZvVuz6LDvnosFav2FGoTR6Zor/69GdwpJRYzm4lun50gSARJN8emt
-H0e01hVhTGJKJ6H8l/Q5QWes8uYF7rp9e4Y+ZN7fVPhi5stJDiGf/76dkOHH/CoJ
-IjN1Kdn08cbZ3aCjzk5US6Y16Qh0XcmL5jrtvTXj1h9iKZzhZgdHEdJSwOSVcgbV
-5PDEDCPj9qlU+IUnuk+x699lRKGeCA==
-=p/ZI
------END PGP SIGNATURE-----
-
---2y5hgy5f5dmdxs7c--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
