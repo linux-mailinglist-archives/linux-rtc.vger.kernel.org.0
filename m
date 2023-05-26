@@ -2,54 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AD27120C6
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 09:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 252C1712136
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 09:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbjEZHVA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 26 May 2023 03:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S242516AbjEZHg1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 26 May 2023 03:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjEZHVA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 03:21:00 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC12699;
-        Fri, 26 May 2023 00:20:57 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-56190515833so9268537b3.0;
-        Fri, 26 May 2023 00:20:57 -0700 (PDT)
+        with ESMTP id S242521AbjEZHgU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 03:36:20 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732CAB6;
+        Fri, 26 May 2023 00:35:38 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-ba81deea9c2so431047276.2;
+        Fri, 26 May 2023 00:35:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685085657; x=1687677657;
+        d=1e100.net; s=20221208; t=1685086525; x=1687678525;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PUDBoh1hXwNOTGqMEugtcAGO4vzK+p0VYicK7HiX7E8=;
-        b=ep6/aOY1DQqV2CsBv7KVrAiJ7LqILZVfU0naTiKtCHruMZP96OFu5gcsQnxmBLRWN7
-         FrMOOM5grtIDx3XV6UI/d5Zms9i0s7kxjRmE+DBqAXIgKqIZWrVDj+6vcZm0dUndjYhk
-         4c1BcNexjCXN6f2j4/DeeON+wnyikyOd9xgrF4Fyz4M5sFbBTSiCISbOx/Kq8XlYoIW7
-         xCccjD7YYYjSeCRtaaPnP+o/rcDDwf3PLqjtNb6yDgU4xk3xlcSoMY2H8iiVLSqSctKd
-         Kvyvjvt1BctQC+Z6ZHOee16dWNqvAZ0EW13qNwBK70/z1euCn7H5W5td+OI2a9gdYGVC
-         8O3Q==
-X-Gm-Message-State: AC+VfDx3bKu4T819kCiFD3cozNrf6jVK1JNqHg6izMPkRoLPJo0XJHLQ
-        OruzM27+vPwoEBEwwkpFSMvqDeX/NgJAGQ==
-X-Google-Smtp-Source: ACHHUZ6qcNQgtY8tsanmFPQSlgnHopA7yEEgpTx1W4VE732SvqqKqob9t2Y/wKkKQ+SCfophbUghGw==
-X-Received: by 2002:a0d:e2c3:0:b0:565:b76d:82c8 with SMTP id l186-20020a0de2c3000000b00565b76d82c8mr623189ywe.5.1685085656891;
-        Fri, 26 May 2023 00:20:56 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id g134-20020a0ddd8c000000b00565b1b3f9c3sm231244ywe.76.2023.05.26.00.20.55
+        bh=2lw0ehb9zzDGJQZHFbsLfDAkiUJYx4u+oRm8HNoVjSw=;
+        b=Yq2xDHBC4/mBxzDE6jUtk5dtPUJSZTsh76cX/R7IyX5cubGGR2Ovluzpr73xDeOYKz
+         oMfuTnUfmuLUaLuiCJ9NczWZFMwXRPso7+XHm57kKAPDmQd+rNTTQ3TDHDBKeCzSPC44
+         ueJaKNQZGtNodtOhsD/dvDcZrgP29Hywz/eURtL+B6k7wOF5CjpfdFUrh849n7O+GK6R
+         59X3j6GrpeGNPIBtFENcPCe887iQNyhPcbQdzN2sdmJsYWzD0w65uu4/YmkYNrGhoeq2
+         o0b6dxpHcgmn5N7uoExKD5xGFpVMoCSBl2jTEEYIvjiz+AuwAWQrXYfc7KGcBoLTspYe
+         9Uig==
+X-Gm-Message-State: AC+VfDyTLOpyzZVt9nqgwyWIph/slDiYAz1auRVgQKF5Dte3DgsNJbps
+        sR0ijYTEhnzm/WTWvYzOywpxuga9i3hdJA==
+X-Google-Smtp-Source: ACHHUZ7Q0yzHi5vlhQd1qeWVSKVxoIwpPc0ps8a2P0zMsH0Z8/BLlYpuisE+KmKcZpIZLgr4IDtgxA==
+X-Received: by 2002:a25:1c5:0:b0:bad:fb1:a9f7 with SMTP id 188-20020a2501c5000000b00bad0fb1a9f7mr873596ybb.24.1685086525132;
+        Fri, 26 May 2023 00:35:25 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id h6-20020a255306000000b00ba867a46d19sm864923ybb.18.2023.05.26.00.35.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 00:20:55 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5621a279cbbso9084337b3.1;
-        Fri, 26 May 2023 00:20:55 -0700 (PDT)
-X-Received: by 2002:a81:78d7:0:b0:561:94a9:f9f7 with SMTP id
- t206-20020a8178d7000000b0056194a9f9f7mr1699938ywc.20.1685085655327; Fri, 26
- May 2023 00:20:55 -0700 (PDT)
+        Fri, 26 May 2023 00:35:24 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-ba82059ef0bso440949276.1;
+        Fri, 26 May 2023 00:35:23 -0700 (PDT)
+X-Received: by 2002:a81:dd06:0:b0:561:dd6a:b84 with SMTP id
+ e6-20020a81dd06000000b00561dd6a0b84mr1116960ywn.26.1685086523778; Fri, 26 May
+ 2023 00:35:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com> <20230522101849.297499-8-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230522101849.297499-8-biju.das.jz@bp.renesas.com>
+References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com> <20230522101849.297499-9-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230522101849.297499-9-biju.das.jz@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 26 May 2023 09:20:44 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW_9JNusQ3USMHam5D9fu93CgBD46w-oMb6MQ-V=33Xnw@mail.gmail.com>
-Message-ID: <CAMuHMdW_9JNusQ3USMHam5D9fu93CgBD46w-oMb6MQ-V=33Xnw@mail.gmail.com>
-Subject: Re: [PATCH v5 07/11] rtc: isl1208: Add isl1208_set_xtoscb()
+Date:   Fri, 26 May 2023 09:35:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXSf0wteEcL9+DGCAqsMX95ULf22=oMEJYGrn_PEm=vRg@mail.gmail.com>
+Message-ID: <CAMuHMdXSf0wteEcL9+DGCAqsMX95ULf22=oMEJYGrn_PEm=vRg@mail.gmail.com>
+Subject: Re: [PATCH v5 08/11] rtc: isl1208: Add support for the built-in RTC
+ on the PMIC RAA215300
 To:     Biju Das <biju.das.jz@bp.renesas.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -71,34 +72,115 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 Hi Biju,
 
 On Mon, May 22, 2023 at 12:19 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> As per the HW manual, set the XTOSCB bit as follows:
+> The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
+> However, the external oscillator bit is inverted on PMIC version
+> 0x11. The PMIC driver detects PMIC version and instantiates the
+> RTC device based on i2c_device_id.
 >
-> If using an external clock signal, set the XTOSCB bit as 1 to
-> disable the crystal oscillator.
->
-> If using an external crystal, the XTOSCB bit needs to be set at 0
-> to enable the crystal oscillator.
->
-> Add isl1208_set_xtoscb() to set XTOSCB bit based on the clock-names
-> property. Fallback is enabling the internal crystal oscillator.
->
-> While at it, introduce a variable "sr" for reading the status register
-> in probe() as it is reused for writing.
+> The internal oscillator is enabled or not is determined by the
+> parent clock name.
 >
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
 > v4->v5:
->  * Fixed the typo in commit description.
->  * Replaced the variable int_osc_en->xtosb_val for isl1208_set_xtoscb() and
->    changed the data type from bool->u8.
-
-You might as well just use int.
-
->  * Replaced devm_clk_get->devm_clk_get_optional() in probe.
->  * IS_ERR() related error is propagated and check for NULL to find out
->    if a clock is present.
+>  * Updated commit description.
+>  * Replaced "unsigned long"->"kernel_ulong_t" in isl1208_id[].
+>  * -ENOENT means clock not present, so any other errors are propagated.
+>  * Dropped bool inverted parameter from isl1208_set_xtoscb() instead
+>    using xor to compute the value of xtoscb.
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Some suggestions for improvement below...
+
+> --- a/drivers/rtc/rtc-isl1208.c
+> +++ b/drivers/rtc/rtc-isl1208.c
+
+> @@ -852,17 +861,37 @@ isl1208_probe(struct i2c_client *client)
+>                 isl1208->config = (struct isl1208_config *)id->driver_data;
+>         }
+>
+> -       xin = devm_clk_get_optional(&client->dev, "xin");
+> -       if (IS_ERR(xin))
+> -               return PTR_ERR(xin);
+> +       if (client->dev.parent->type == &i2c_client_type) {
+
+I think this deserves a comment, to explain why you are looking
+at the parent.
+
+> +               xin = of_clk_get_by_name(client->dev.parent->of_node, "xin");
+> +               if (IS_ERR(xin)) {
+> +                       if (PTR_ERR(xin) != -ENOENT)
+> +                               return PTR_ERR(xin);
+> +
+> +                       clkin = of_clk_get_by_name(client->dev.parent->of_node,
+> +                                                  "clkin");
+> +                       if (IS_ERR(clkin)) {
+> +                               if (PTR_ERR(clkin) != -ENOENT)
+> +                                       return PTR_ERR(xin);
+> +                       } else {
+> +                               xtosb_val = 0;
+> +                               clk_put(clkin);
+> +                       }
+> +               } else {
+> +                       clk_put(xin);
+> +               }
+> +       } else {
+> +               xin = devm_clk_get_optional(&client->dev, "xin");
+> +               if (IS_ERR(xin))
+> +                       return PTR_ERR(xin);
+>
+> -       if (!xin) {
+> -               clkin = devm_clk_get_optional(&client->dev, "clkin");
+> -               if (IS_ERR(clkin))
+> -                       return PTR_ERR(clkin);
+> +               if (!xin) {
+> +                       clkin = devm_clk_get_optional(&client->dev, "clkin");
+> +                       if (IS_ERR(clkin))
+> +                               return PTR_ERR(clkin);
+>
+> -               if (clkin)
+> -                       xtosb_val = 0;
+> +                       if (clkin)
+> +                               xtosb_val = 0;
+> +               }
+
+I think it would make the code more readable if you would spin off the
+OF vs. dev-based clock handling into a separate helper function.
+Then you can just do in the probe function:
+
+    ret = isl1208_clk_present(client, "xin");
+    if (ret < 0)
+        return ret;
+    if (!ret) {
+            ret = isl1208_clk_present(client, "clkin");
+            if (ret < 0)
+                    return ret;
+            if (ret)
+                    xtosb_val = 0;
+    }
+
+>         }
+>
+>         isl1208->rtc = devm_rtc_allocate_device(&client->dev);
+> @@ -882,6 +911,7 @@ isl1208_probe(struct i2c_client *client)
+>                 return sr;
+>         }
+>
+> +       xtosb_val ^= isl1208->config->has_inverted_osc_bit ? 1 : 0;
+
+As has_inverted_osc_bit is already either 0 or 1:
+
+    xtosb_val ^= isl1208->config->has_inverted_osc_bit;
+
+If you don't trust XOR, or want to make the operation more clear:
+
+    if (isl1208->config->has_inverted_osc_bit)
+            xtosb_val = !xtosb_val;
+
+>         rc = isl1208_set_xtoscb(client, sr, xtosb_val);
+>         if (rc)
+>                 return rc;
 
 Gr{oetje,eeting}s,
 
