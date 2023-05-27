@@ -2,65 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09920712CBA
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 May 2023 20:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A757D7133A7
+	for <lists+linux-rtc@lfdr.de>; Sat, 27 May 2023 11:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243599AbjEZSoe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 26 May 2023 14:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        id S231756AbjE0JXU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 27 May 2023 05:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243070AbjEZSoa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 May 2023 14:44:30 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C35FE4D;
-        Fri, 26 May 2023 11:44:08 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f6b94062f3so4996781cf.0;
-        Fri, 26 May 2023 11:44:08 -0700 (PDT)
+        with ESMTP id S231907AbjE0JXR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 27 May 2023 05:23:17 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED05AE46;
+        Sat, 27 May 2023 02:23:00 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5658875abfaso23969037b3.1;
+        Sat, 27 May 2023 02:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685126647; x=1687718647;
+        d=gmail.com; s=20221208; t=1685179380; x=1687771380;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h8Soqmr4Cmql4V9gPC0Ws8IpyroUmhGOvXmfI1LG86I=;
-        b=rMrfJD4XR25ov+VQKVpVXNLko3z+n+hYq+eqbbIKeSLxBZeLok5c3moKNx/BOZETSM
-         i9Fo0DK8+f4g30TZN+bbW1NY22Zk4fuLha97rZRgnCldTR1LBUPYZwm9nXVmfTSQe/lD
-         hEv085fHLVhPhg1Ts5cvBWEOZ0UcGX1i7CZEzXOJxQ7xsB0/26fmdU4vGxEz0LEtRSMX
-         z5Jra5cDaReWO4CHcqAfOJfzvo7sOAXb9Fj6v9IpHE3Mk8sFtomUFLIkp4g2lOKy0zgQ
-         /Bd2B97pGX8Kjyj1YaSw0fk8h60Uim4n+d356L6ZQCqGMHZ2AMxyt70gBBl8J0jcgme1
-         158Q==
+        bh=YuPOou2ChL9QAjpTDeWMH9OMTxYByyxepLnhS7nCInU=;
+        b=UypQL/1cTDi0jd5atuzjWwrNbEZHph9c81yu9B026PuuRefA2X7exdJbYS+AOx0nBp
+         gAM4/C+tc/QMH5TXhnmPmcu1CzlDW+sm2lJ1uH28kYO/Iahk4SZgNrQB5Kp7NSDEcVtl
+         TAIXWUnGNKQEkgubKWG/y2W1PtO0NSljxJeG0GJOdE717jgybvCyZtHUIJrl69fjSsPs
+         c/lHsTB2ZHY1ZfwRytky/hcr8KVRp2qlxPOTva3Ow0wHEH1rK4w+J+jRsB75f8REyKCi
+         ZDkc5cgIVQr4jW7tzWZEKPTjezlb0HKQII7emo61su46V7bDndt31K4y21jhN7q5jFqp
+         l23A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126647; x=1687718647;
+        d=1e100.net; s=20221208; t=1685179380; x=1687771380;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h8Soqmr4Cmql4V9gPC0Ws8IpyroUmhGOvXmfI1LG86I=;
-        b=bOd8KOswEy6fIqVceiG4EkyO7z40Wb3g8jHq5rPtmfVfVA3HqhziprjDXUg2T4xPkG
-         cCxd9aEYyImYkZUU977HEqLWcQ47p3t14wETxc/pt5wBtrMARdQ0F3fXdwWTDQTNFHjL
-         gF0CD3kaNSHWMZ25v973tybDnu7uZhpHHQFGlye1dmqF/NRVFIHozzAdbKRNII+3Y2ck
-         GeFgRL3ngSlVrnPr/cb+nbSlJD4kkw+PeiyYpkUnErJM/oNC+3XxWcws1H51v5xv5eBF
-         tN21zuhXrSktvPzkRNK9eEoaB2briwLe6dLhery0LNdH6nSXH95JxtQP3Wc/5E0c5yV8
-         IIBw==
-X-Gm-Message-State: AC+VfDxeiyYyu74CmVWPHcSRhFR0MAxurE7mrSqTDuO/KZcU/MjGgX1q
-        S6At4udVOf7xQgcyvRRQ/tCdCdlOE81eZs5wX6Y=
-X-Google-Smtp-Source: ACHHUZ6HPf/Zp+tv2MrQlVYxIjGwBqf41XojhtMIEYqJ0MXZo+9KV8MKMi/GS8Zzk+m1rV1hHZ04/K7mY2aI6ESPOGA=
-X-Received: by 2002:a05:622a:1a08:b0:3f6:b9af:51eb with SMTP id
- f8-20020a05622a1a0800b003f6b9af51ebmr2971771qtb.38.1685126647582; Fri, 26 May
- 2023 11:44:07 -0700 (PDT)
+        bh=YuPOou2ChL9QAjpTDeWMH9OMTxYByyxepLnhS7nCInU=;
+        b=EvO0hm4iRnbn42NhK8/sIJGFa45Ln/OY0aS+ok8DNloS8aamyGIOLs8Yi1qgvHbr0X
+         aKwkVlONiP0Oh6XqAD0xT95aCOhRkgXeUmpY4/tAAF2UIJMc8sAaUMRYHNXPd9U1YfmE
+         Kag2zxM/KXdOpbkqKB4/XgODL12M53pEZkpHjTB1f5QeSpzQsxZEfasc4RRpa1MquscD
+         SGFojdGPZA1lyLG98faUzSabxyBsBr+fnzcQfNtYza+KaZK9EauCzVNd5JJzIHpmy+gx
+         aq4psNMcm4vCbKrK+LrVjlqXIvbWBaWmZnsO2rG0rWsKOj9GHPMFM6ILXj30QaecFVXC
+         FxdQ==
+X-Gm-Message-State: AC+VfDyugCfpWUP3Q5Z9PAX+ZZ4KqvnjBUhf77gEBCWiHHwU7Pm0IVSd
+        rvo1XONg4pPCYvg5DgG3IHhfiKFV5gNygSAbkwg=
+X-Google-Smtp-Source: ACHHUZ4nCuMzRZKk6dXeDY7dZsT6tQWUJPKOPNYzgMbPZwdT1gG/zS5BtPMCqhQZ/U1B3et1LNOcHl0PMtnNpQgUMl0=
+X-Received: by 2002:a0d:eb03:0:b0:565:e48d:32cf with SMTP id
+ u3-20020a0deb03000000b00565e48d32cfmr134704ywe.7.1685179380005; Sat, 27 May
+ 2023 02:23:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230522163115.2592883-1-eblanc@baylibre.com> <20230522163115.2592883-3-eblanc@baylibre.com>
- <ZG0QmjZwvzWbNwA4@surfacebook> <CSVF1AQBGQU0.1V5KJP08TCKLT@burritosblues>
-In-Reply-To: <CSVF1AQBGQU0.1V5KJP08TCKLT@burritosblues>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 26 May 2023 21:43:31 +0300
-Message-ID: <CAHp75VcF65xZUVYB1mjK4HV86=m+ayESeDD2Nwas7UDoJjeLSA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl
- and GPIOs
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
+References: <cover.1684983279.git.zhoubinbin@loongson.cn> <9a2fbd6860f37760ca6089c150fd6f67628405f6.1684983279.git.zhoubinbin@loongson.cn>
+ <20230525-custody-oversleep-f778eddf981c@spud> <CAMpQs4LuGAUfMNB93B=vgwJaLqEM6Cq5KyaCtnHOL7RWGuZy-w@mail.gmail.com>
+ <20230526-dolly-reheat-06c4d5658415@wendy>
+In-Reply-To: <20230526-dolly-reheat-06c4d5658415@wendy>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Sat, 27 May 2023 17:22:48 +0800
+Message-ID: <CAMpQs4KeHCW+9ssAn-jF0efiUOzERRFDu9Sjz1Mtv5Lk1uFuPA@mail.gmail.com>
+Subject: Re: [PATCH V4 1/5] dt-bindings: rtc: Remove the LS2X from the trivial RTCs
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        zhao zhang <zhzhl555@gmail.com>,
+        Yang Ling <gnaygnil@gmail.com>,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,24 +85,151 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, May 25, 2023 at 5:07=E2=80=AFPM Esteban Blanc <eblanc@baylibre.com>=
+On Fri, May 26, 2023 at 8:07=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> On Fri, May 26, 2023 at 09:37:02AM +0800, Binbin Zhou wrote:
+> > On Fri, May 26, 2023 at 1:05=E2=80=AFAM Conor Dooley <conor@kernel.org>=
  wrote:
-> On Tue May 23, 2023 at 9:14 PM CEST,  wrote:
-> > Mon, May 22, 2023 at 06:31:14PM +0200, Esteban Blanc kirjoitti:
-
-...
-
-> > > +// Used to compute register address of GPIO1_CONF to GPIO11_CONF
+> > > On Thu, May 25, 2023 at 08:55:23PM +0800, Binbin Zhou wrote:
+>
+> >> > > +properties:
+> > > > +  compatible:
+> > > > +    enum:
+> > > > +      - loongson,ls1b-rtc
+> > > > +      - loongson,ls1c-rtc
+> > > > +      - loongson,ls7a-rtc
+> > > > +      - loongson,ls2k0500-rtc
+> > > > +      - loongson,ls2k1000-rtc
+> > > > +      - loongson,ls2k2000-rtc
+> > >
+> > > |+static const struct of_device_id loongson_rtc_of_match[] =3D {
+> > > |+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_c=
+onfig },
+> > > |+       { .compatible =3D "loongson,ls1c-rtc", .data =3D &ls1x_rtc_c=
+onfig },
+> > > |+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rt=
+c_config },
+> > > |+       { .compatible =3D "loongson,ls2k0500-rtc", .data =3D &generi=
+c_rtc_config },
+> > > |+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k10=
+00_rtc_config },
+> > > |+       { .compatible =3D "loongson,ls2k2000-rtc", .data =3D &generi=
+c_rtc_config },
+> > > |+       { /* sentinel */ }
+> > > |+};
+> > >
+> > > This is a sign to me that your compatibles here are could do with som=
+e
+> > > fallbacks. Both of the ls1 ones are compatible with each other & ther=
+e
+> > > are three that are generic.
+> > >
+> > > I would allow the following:
+> > > "loongson,ls1b-rtc"
+> > > "loongson,ls1c-rtc", "loongson,ls1b-rtc"
+> > > "loongson,ls7a-rtc"
+> > > "loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
+> > > "loongson,ls2k2000-rtc", "loongson,ls7a-rtc"
+> > > "loongson,ls2k1000-rtc"
+> > >
+> > > And then the driver only needs:
+> > > |+static const struct of_device_id loongson_rtc_of_match[] =3D {
+> > > |+       { .compatible =3D "loongson,ls1b-rtc", .data =3D &ls1x_rtc_c=
+onfig },
+> > > |+       { .compatible =3D "loongson,ls7a-rtc", .data =3D &generic_rt=
+c_config },
+> > > |+       { .compatible =3D "loongson,ls2k1000-rtc", .data =3D &ls2k10=
+00_rtc_config },
+> > > |+       { /* sentinel */ }
+> > > |+};
+> > >
+> > > And ~if~when you add support for more devices in the future that are
+> > > compatible with the existing ones no code changes are required.
 > >
-> > This is good.
+> > Hi Conor:
+> >
+> > Thanks for your reply.
+> >
+> > Yes, this is looking much cleaner. But it can't show every chip that
+> > supports that driver.
+> >
+> > As we know, Loongson is a family of chips:
+> > ls1b/ls1c represent the Loongson-1 family of CPU chips;
+> > ls7a represents the Loongson LS7A bridge chip;
+> > ls2k0500/ls2k1000/ls2k2000 represent the Loongson-2 family of CPU chips=
+.
+> >
+> > Based on my previous conversations with Krzysztof, it seems that
+> > soc-based to order compatible is more popular, so I have listed all
+> > the chips that support that RTC driver.
+>
+> Right. You don't actually have to list them all *in the driver* though,
+> just in the binding and in the devicetree. I think what you have missed
+> is:
+> > > I would allow the following:
+> > > "loongson,ls1b-rtc"
+> > > "loongson,ls1c-rtc", "loongson,ls1b-rtc"
+> > > "loongson,ls7a-rtc"
+> > > "loongson,ls2k0500-rtc", "loongson,ls7a-rtc"
+> > > "loongson,ls2k2000-rtc", "loongson,ls7a-rtc"
+> > > "loongson,ls2k1000-rtc"
+>
+> This is what you would put in the compatible section of a devicetree
+> node, using "fallback compatibles". So for a ls1c you put in
+> compatible =3D "loongson,ls1c-rtc", "loongson,ls1b-rtc";
+> and the kernel first tries to find a driver that supports
+> "loongson,ls1c-rtc" but if that fails it tries to find one that supports
+> "loongson,ls1b-rtc". This gives you the best of both worlds - you can
+> add support easily for new systems (when an ls1d comes out, you don't
+> even need to change the driver for it to just work!) and you have a
+> soc-specific compatible in case you need to add some workaround for
+> hardware errata etc in the future.
 
-Btw
+Hi Conor:
 
-  the register
+I seem to understand what you are talking about.
+I hadn't delved into "fallback compatibles" before, so thanks for the
+detailed explanation.
 
-and shouldn't it start from GPIO0_CONF (please, double check, my
-memory can do tricks on me)?
+In fact, I have thought before if there is a good way to do it other
+than adding comptable to the driver frequently, and "fallback
+compatibles" should be the most suitable.
 
---=20
-With Best Regards,
-Andy Shevchenko
+So in the dt-bindings file, should we just write this:
+
+  compatible:
+    oneOf:
+      - items:
+          - enum:
+              - loongson,ls1c-rtc
+          - const: loongson,ls1b-rtc
+      - items:
+          - enum:
+              - loongson,ls2k0500-rtc
+              - loongson,ls2k2000-rtc
+          - const: loongson,ls7a-rtc
+      - items:
+          - const: loongson,ls2k1000-rtc
+
+Thanks.
+Binbin
+
+>
+> > > To maintain compatibility with the existing devicetrees, should the o=
+ld
+> > > "loongson,ls2x-rtc" be kept in the driver?
+> >
+> > No, It seems that wildcards in compatible are not allowed."
+> > loongson,ls2x-rtc" itself was part of this patch series at one time,
+> > but apparently it is not the right way to describe these chips.
+>
+> Right, but it has been merged - you are deleting the driver that supports
+> it after all - which means that any dtb with the old compatible will
+> stop working.
+> I don't disagree with Krzysztof that having wildcard based compatibles
+> is bad, but I do not think that regressing rtc support for systems with
+> these old devicetrees is the right way to go either.
+>
+> Thanks,
+> Conor.
