@@ -2,185 +2,86 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B5C717FE6
-	for <lists+linux-rtc@lfdr.de>; Wed, 31 May 2023 14:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14590718E66
+	for <lists+linux-rtc@lfdr.de>; Thu,  1 Jun 2023 00:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbjEaM1v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 31 May 2023 08:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S229955AbjEaW0h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 31 May 2023 18:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjEaM1v (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 31 May 2023 08:27:51 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D0510F;
-        Wed, 31 May 2023 05:27:49 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VCJ43R010603;
-        Wed, 31 May 2023 14:27:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=h7L5j+RUM3hQ2mgGUZnVH7FJKV90A51gfQKR4MF9lFk=;
- b=sPP6nP4UaqPo/lkWbNS+0p/cmLiyBKEooMxSguV/7ivMg2GXexyS3K6WOu92iJQeDSYN
- 6ZkFLb+lt5y8VdcNnQVcB19PtXhBH7W+jmFOViY4LOzRMEOJPQDYVso6sXwYOwG4UF3i
- EJL22blZDCLwAXBYxArP1Waf4dxdaNy/2oIwz4eQbuQAOs+H0A6gyhFynk4yMIVnHo5A
- 9O8EKlk4e7nM5/Nsz2iaZ46NXMmnD8mMbBxfkvCiT/N1WhDx5ibB1/as4yZedB0fRsTi
- 7Z0lWx/nF/djt1/AnMGyGuZwcWq6mAf6qyHnMQEzaHJHcSq4rM84SCc9yMQFxAXILnkT Cw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qx314sh8r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:27:33 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ABB8C10002A;
-        Wed, 31 May 2023 14:27:32 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A21E6233C97;
-        Wed, 31 May 2023 14:27:32 +0200 (CEST)
-Received: from localhost (10.252.9.126) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 31 May
- 2023 14:27:32 +0200
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        <linux-rtc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] rtc: stm32: remove dedicated wakeup management
-Date:   Wed, 31 May 2023 14:27:31 +0200
-Message-ID: <20230531122732.1515594-1-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229476AbjEaW0h (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 31 May 2023 18:26:37 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C309F
+        for <linux-rtc@vger.kernel.org>; Wed, 31 May 2023 15:26:35 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so125710276.3
+        for <linux-rtc@vger.kernel.org>; Wed, 31 May 2023 15:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google; t=1685571995; x=1688163995;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DvXHIjun/4CTxosApTF0PYo6iJjE95CYydLIVwhHBQg=;
+        b=kInfsUOhJGIjEQmHeu9bzEPw7jRfiajattPrD+9hK3VxkDn7HlXPId6k947qP+Da1j
+         /8gF2rM+IGwsKG4DHnmBuUtw0rdGiO+tktJnlTwJMayVNGzcsHRKBqouvfJm7WSVMV8E
+         M0bFNopLBWMZSIuJw50r5NJ9FCQAfktsQHHFc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685571995; x=1688163995;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DvXHIjun/4CTxosApTF0PYo6iJjE95CYydLIVwhHBQg=;
+        b=goSGFttra+BX+3UMVMg1Hv/ahRbbsOD5gAjayuqYlhlij/t88VmX5Gn+PECnuTR0w6
+         2H6/ZBdgnF2KUbVbCkuFBBbfWqPw7UqntuKMfyL1WUQfFZfENJQIczdpY4KgaplDap1A
+         pTC5zXHasHYl5Q0tkbw8AkNTNVH7qv+e2VNFKgQDybVOOak3aaU/TiH4jb2kkVrxOP4p
+         2EAcPrpVlMays7mCOjU2zFheT7qAVfCtHNaaPQIGXq4lH3MnD6KdmvraAzqjQ/xQjnR+
+         3WZ+xQLKBlGrHvA4gNpJFy8K5VZE9JDVFuy9Raxy1AebWLNE1nIr39ybrvZWeGWhiB+I
+         WdcA==
+X-Gm-Message-State: AC+VfDxp5+vCt2CbYMMw1OLgJFSS7d8Sa9OQX4C9pds9s2xTiz3M5S5M
+        yDwNjUp3rE/KJGUtjUQN7v3rRNtfAVro5ZdhUrFY7Q==
+X-Google-Smtp-Source: ACHHUZ5PypSnPvHyFqawOE8bJ8rbG/2ckwXMp1s1Rnn27JB5Y5ROJzT40uFNfOrXCRRtfNnP0e6pCQY4ECp0UtD/bmE=
+X-Received: by 2002:a25:385:0:b0:ba1:dfba:1d12 with SMTP id
+ 127-20020a250385000000b00ba1dfba1d12mr8259813ybd.29.1685571994849; Wed, 31
+ May 2023 15:26:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.9.126]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_08,2023-05-31_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230517144144.365631-1-romain.perier@gmail.com>
+ <20230517144144.365631-3-romain.perier@gmail.com> <669d7b79-71a6-e1f9-8d7a-71c4b64de28d@kernel.org>
+ <CABgxDoKaVip=T5=s2Gd8qpX15cLD=_0TZtQoNodK1CCf+GTYZw@mail.gmail.com>
+ <ad788d84-48ea-2fdb-607a-a8d49c8fe52c@kernel.org> <CAFr9PXmkvunO8mu+n7_YFSixe3k0vzowJzrmEWKcs9W677=WNQ@mail.gmail.com>
+ <1a267380-c39d-d3a7-9287-61ba632480c3@kernel.org>
+In-Reply-To: <1a267380-c39d-d3a7-9287-61ba632480c3@kernel.org>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Thu, 1 Jun 2023 07:26:24 +0900
+Message-ID: <CAFr9PX=yHqjfmYdn9LN9pLm4HO5tquuJibPVZz6NruuiA6wXaA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: Add Mstar SSD20xD RTC devicetree
+ bindings documentation
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Romain Perier <romain.perier@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Hi Krzysztof,
 
-There is no more needs to use a dedicated wake up interrupt for RTC as
-EXTI block manages by itself now all interrupt lines.
+On Wed, 31 May 2023 at 15:49, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > This RTC block is a block inside of the SSD201/SSD202D (they are the
+>
+> But what is SSD201?
 
-Dedicated wakeup interrupt has been introduced with STM32 MP1 support
-commit b72252b6580c ("rtc: stm32: add stm32mp1 rtc support") because GIC &
-EXTI interrupts were not yet linked in EXTI driver.
+Dual Cortex A7 SoC with integrated memory (SSD201 == 64MB, SSD202D ==
+128MB) that happens to have an RTC.
 
-Removing this interrupt won't break compatibility with device trees which
-do use two interrupts entries: it could only prevent wakeup from low power
-modes on STM32MP1x, but platform power management is not yet available.
+Cheers,
 
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- drivers/rtc/rtc-stm32.c | 28 +++++-----------------------
- 1 file changed, 5 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 229cb2847cc4..3d36e11cff80 100644
---- a/drivers/rtc/rtc-stm32.c
-+++ b/drivers/rtc/rtc-stm32.c
-@@ -114,7 +114,6 @@ struct stm32_rtc_data {
- 	void (*clear_events)(struct stm32_rtc *rtc, unsigned int flags);
- 	bool has_pclk;
- 	bool need_dbp;
--	bool has_wakeirq;
- };
- 
- struct stm32_rtc {
-@@ -127,7 +126,6 @@ struct stm32_rtc {
- 	struct clk *rtc_ck;
- 	const struct stm32_rtc_data *data;
- 	int irq_alarm;
--	int wakeirq_alarm;
- };
- 
- static void stm32_rtc_wpr_unlock(struct stm32_rtc *rtc)
-@@ -547,7 +545,6 @@ static void stm32_rtc_clear_events(struct stm32_rtc *rtc,
- static const struct stm32_rtc_data stm32_rtc_data = {
- 	.has_pclk = false,
- 	.need_dbp = true,
--	.has_wakeirq = false,
- 	.regs = {
- 		.tr = 0x00,
- 		.dr = 0x04,
-@@ -569,7 +566,6 @@ static const struct stm32_rtc_data stm32_rtc_data = {
- static const struct stm32_rtc_data stm32h7_rtc_data = {
- 	.has_pclk = true,
- 	.need_dbp = true,
--	.has_wakeirq = false,
- 	.regs = {
- 		.tr = 0x00,
- 		.dr = 0x04,
-@@ -600,7 +596,6 @@ static void stm32mp1_rtc_clear_events(struct stm32_rtc *rtc,
- static const struct stm32_rtc_data stm32mp1_data = {
- 	.has_pclk = true,
- 	.need_dbp = false,
--	.has_wakeirq = true,
- 	.regs = {
- 		.tr = 0x00,
- 		.dr = 0x04,
-@@ -779,19 +774,12 @@ static int stm32_rtc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = device_init_wakeup(&pdev->dev, true);
--	if (rtc->data->has_wakeirq) {
--		rtc->wakeirq_alarm = platform_get_irq(pdev, 1);
--		if (rtc->wakeirq_alarm > 0) {
--			ret = dev_pm_set_dedicated_wake_irq(&pdev->dev,
--							    rtc->wakeirq_alarm);
--		} else {
--			ret = rtc->wakeirq_alarm;
--			if (rtc->wakeirq_alarm == -EPROBE_DEFER)
--				goto err;
--		}
--	}
- 	if (ret)
--		dev_warn(&pdev->dev, "alarm can't wake up the system: %d", ret);
-+		goto err;
-+
-+	ret = dev_pm_set_wake_irq(&pdev->dev, rtc->irq_alarm);
-+	if (ret)
-+		goto err;
- 
- 	platform_set_drvdata(pdev, rtc);
- 
-@@ -879,9 +867,6 @@ static int stm32_rtc_suspend(struct device *dev)
- 	if (rtc->data->has_pclk)
- 		clk_disable_unprepare(rtc->pclk);
- 
--	if (device_may_wakeup(dev))
--		return enable_irq_wake(rtc->irq_alarm);
--
- 	return 0;
- }
- 
-@@ -903,9 +888,6 @@ static int stm32_rtc_resume(struct device *dev)
- 		return ret;
- 	}
- 
--	if (device_may_wakeup(dev))
--		return disable_irq_wake(rtc->irq_alarm);
--
- 	return ret;
- }
- #endif
--- 
-2.25.1
-
+Daniel
