@@ -2,59 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8934C719257
-	for <lists+linux-rtc@lfdr.de>; Thu,  1 Jun 2023 07:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D79719297
+	for <lists+linux-rtc@lfdr.de>; Thu,  1 Jun 2023 07:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjFAFiR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 1 Jun 2023 01:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        id S231681AbjFAFrY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 1 Jun 2023 01:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjFAFhs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 1 Jun 2023 01:37:48 -0400
-Received: from forward100b.mail.yandex.net (forward100b.mail.yandex.net [178.154.239.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492C5134;
-        Wed, 31 May 2023 22:37:10 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:c83:0:640:84f9:0])
-        by forward100b.mail.yandex.net (Yandex) with ESMTP id CAC3C600D4;
-        Thu,  1 Jun 2023 08:37:08 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id OaGNfZvWv8c0-6hcLzyhA;
-        Thu, 01 Jun 2023 08:37:08 +0300
+        with ESMTP id S231532AbjFAFqr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 1 Jun 2023 01:46:47 -0400
+Received: from forward103a.mail.yandex.net (forward103a.mail.yandex.net [178.154.239.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24CD198;
+        Wed, 31 May 2023 22:46:21 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
+        by forward103a.mail.yandex.net (Yandex) with ESMTP id A6CD546C82;
+        Thu,  1 Jun 2023 08:46:18 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id pjGDMhnDduQ0-hLahdx3m;
+        Thu, 01 Jun 2023 08:46:18 +0300
 X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685597828;
-        bh=R+Pz7YByYt2SATeGDLe/ccdxjieXmmvUqEMemvxyK3o=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685598378;
+        bh=8mv9WgoxbioXCOy16e14XS+bGBzb5G+x5fHcfpNSO94=;
         h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=GE4qmciVDxM7OEXSzFXGcIiE537k0frwF7ZjWFt55Hd1bYs/DGl/p7zSrwRQoqtWT
-         MlRuagrWKA6v6096m9Rwnx1B2UCEMyAVAQeCVhtuWL1ddPtb3rBLww2tWW34yZ/t/K
-         lMwcGIeqid4xvnxfCKa3NxUbmxKYBzfp1Frhn6O4=
-Authentication-Results: mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+        b=bAdCoH4GwgznK3z6WyG85AD3cuS2Egc8kxwU4LQF2pAwXudQK4/8SyAz2zPd4g2pl
+         tYafkfQB2IelK0f4aPYMNZXueyIXq78YEL7lWhbSuqEMscSUks5C85aQ9H07wwowdW
+         +ldhDHbBc2TShyNOjNI9+/XGM1rxaaNDnAMOzSKU=
+Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
 From:   Nikita Shubin <nikita.shubin@maquefel.me>
 To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
         Michael Peters <mpeters@embeddedTS.com>,
         Kris Bahnsen <kris@embeddedTS.com>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 11/43] rtc: ep93xx: add DT support for Cirrus EP93xx
-Date:   Thu,  1 Jun 2023 08:34:02 +0300
-Message-Id: <20230601053546.9574-12-nikita.shubin@maquefel.me>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 29/43] dt-bindings: rtc: Add ST M48T86
+Date:   Thu,  1 Jun 2023 08:45:34 +0300
+Message-Id: <20230601054549.10843-11-nikita.shubin@maquefel.me>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-- Find register range from the device tree.
+Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
@@ -62,40 +65,62 @@ Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 Notes:
     v0 -> v1:
     
-    - fixed headers
+    - s/dallas/st/
+    - description for regs
+    - s/additionalProperties/unevaluatedProperties/
+    - add ref rtc.yaml
+    - changed compatible to st,m48t86
+    - dropped label in example
+    - replaced Alessandro Alessandro to Alexandre Belloni
 
- drivers/rtc/rtc-ep93xx.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../bindings/rtc/st,m48t86-rtc.yaml           | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
 
-diff --git a/drivers/rtc/rtc-ep93xx.c b/drivers/rtc/rtc-ep93xx.c
-index acae7f16808f..1fdd20d01560 100644
---- a/drivers/rtc/rtc-ep93xx.c
-+++ b/drivers/rtc/rtc-ep93xx.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/rtc.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-@@ -148,9 +149,16 @@ static int ep93xx_rtc_probe(struct platform_device *pdev)
- 	return devm_rtc_register_device(ep93xx_rtc->rtc);
- }
- 
-+static const struct of_device_id ep93xx_rtc_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-rtc" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ep93xx_rtc_of_ids);
+diff --git a/Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+new file mode 100644
+index 000000000000..eb8e6451d7c8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/st,m48t86-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static struct platform_driver ep93xx_rtc_driver = {
- 	.driver		= {
- 		.name	= "ep93xx-rtc",
-+		.of_match_table = ep93xx_rtc_of_ids,
- 	},
- 	.probe		= ep93xx_rtc_probe,
- };
++title: ST M48T86 / Dallas DS12887 RTC wirh SRAM
++
++maintainers:
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++properties:
++  compatible:
++    enum:
++      - st,m48t86
++
++  reg:
++    items:
++      - description: index register
++      - description: data register
++
++allOf:
++  - $ref: rtc.yaml
++
++unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++
++examples:
++  - |
++    rtc@10800000 {
++      compatible = "st,m48t86";
++      reg = <0x10800000 0x1>, <0x11700000 0x1>;
++    };
++
++...
 -- 
 2.37.4
 
