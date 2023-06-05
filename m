@@ -2,108 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A22722440
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Jun 2023 13:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463797224EF
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Jun 2023 13:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbjFELLT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 5 Jun 2023 07:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S232250AbjFELwp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 5 Jun 2023 07:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjFELLQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Jun 2023 07:11:16 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCBCFD
-        for <linux-rtc@vger.kernel.org>; Mon,  5 Jun 2023 04:11:02 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977d6aa3758so177608766b.0
-        for <linux-rtc@vger.kernel.org>; Mon, 05 Jun 2023 04:11:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1685963461; x=1688555461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xz/gIyGLAa00Ho9qsceUjDdF3ckRJGistqectqhHPQ0=;
-        b=t0XcxfZTmxtrU4/ziMpt5ZPpzi0AXzfijXgg8AHq2rNydhE+oiaDLYH3u0hrpVudeD
-         uXR/hg1KMjTOecO8X4pXeWEBLH868TCm379WtYxsMDs4AVnWZwoS/qKQ/cAKHfiwPTwt
-         eEm0DJrQgNEMIFE4qBFffGyTe/DUOjWmcuBbLMBVnM1qjXE+wjvrVRAAMHL/v9S48L4/
-         LKH6GTMATUc3X8h8jAHeFqlNi4H/7XDPvxOxLXTIZFJhA7jDKRhyMREGboUMRDZ129yY
-         a+J0TwFcFy2BdtH1TiHjVGkLZyqe2U5O077dsOkiCK4MLTgMChuC42A/WYU+blk08gt7
-         kg/g==
+        with ESMTP id S232183AbjFELwo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Jun 2023 07:52:44 -0400
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAE2D3;
+        Mon,  5 Jun 2023 04:52:43 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6b15e510630so1181236a34.3;
+        Mon, 05 Jun 2023 04:52:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685963461; x=1688555461;
+        d=1e100.net; s=20221208; t=1685965962; x=1688557962;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xz/gIyGLAa00Ho9qsceUjDdF3ckRJGistqectqhHPQ0=;
-        b=atyLEGT/hEdoJhhPTIDdSvgxPDIbN+qTxhIwYk8kqCn27YvNFyDmhAhb45abjIBOtx
-         UDl5osLCD9Zr5QEjht9NFyz+O0lxZOknfL85mWCdcosS7ElqTywtxeW5L3sB4jbAoYkz
-         nkvIU8nf1FkbyNQRrLYpEbRngn2jY9xkHnJuH8JZ03dwBbNdLUhJPLI+TFgO6OOlp2wi
-         T+uz6P1V+7DF8JasBDmhOkG+Y7hiTWMTXDa6en6RS731j7/UfOq9L1CbM3PynT+Jju19
-         spBIFUWAUGsRZA83OPbnBDoJgUThDKC9u8Sd/Emi2M4Ed7sYrcnAD1BvnRPxbQleXYjF
-         gEQw==
-X-Gm-Message-State: AC+VfDwDKmCYymM+7rKXUszy6PCCgyUylQ/ZsblgH/5eIFn4rmNE+qoQ
-        maw+7CNyYP+1jkpvCwOixnCWjn/H+N+tZZpd+utDBg==
-X-Google-Smtp-Source: ACHHUZ7Myh4P550fmY4KgTrMjcVnpWx0cBq0yOe6l1+zqgJeRkdJtHt3XVmv5M7WqhGVjDr/M7wAxI8E9EIAXW/6zNA=
-X-Received: by 2002:a17:907:26c4:b0:974:c32c:b484 with SMTP id
- bp4-20020a17090726c400b00974c32cb484mr5173211ejc.72.1685963460711; Mon, 05
- Jun 2023 04:11:00 -0700 (PDT)
+        bh=J9kN4k3jGKyLqomziUJlF/seUS8vG7yIxPpdXeMA6Rs=;
+        b=IL5P94H+KjYf7mH5345Jl2PseGnsBzDKZVDSo3HV4rBNX7C7Ewwgsr/Ta5EyfCgyVl
+         Eq3pD95MDFXuMl73PmNegH9nbj/1MI0zmRx8v+jFxEH10w/PXBZKe6ac2NveSl8VJDuS
+         hogb+6vruxsJqjPaE5EFHxgUUkDYWTJwLryYVQSo1ZbEQFUrehEa7sa4uqYIQTGInSOt
+         awSUHYqnpHtMJLTfZEaFL1npvp+LYS3hfd2GYYW6gptXAydVb3F3sBmbTlHb1zmasnUZ
+         iPC2vM8zcMtCRERfeiYi7ZHcVBi+08cqRIJ0eURLldPwshZVla62hQx3j081w2JVaI1a
+         5NwQ==
+X-Gm-Message-State: AC+VfDyN1GOIrD4J+xnhGYWiGORFXPXOV9Iv/Fiil7NfH46MebRkYXUL
+        DWJEHgZBHwCHFMOIBt3XdJU3RspEXj8M1w==
+X-Google-Smtp-Source: ACHHUZ71hd2P5bRSbxTTh9TVYJV+ziGr297roGigDm/7970gvzvWG0G1aASalNixpFlsA4mDVck8nA==
+X-Received: by 2002:a9d:6294:0:b0:6b0:9fd7:de3a with SMTP id x20-20020a9d6294000000b006b09fd7de3amr6885159otk.0.1685965962675;
+        Mon, 05 Jun 2023 04:52:42 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id c84-20020a25c057000000b00b9a80b9e08esm2595171ybf.12.2023.06.05.04.52.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 04:52:41 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-ba82059ef0bso4847426276.1;
+        Mon, 05 Jun 2023 04:52:41 -0700 (PDT)
+X-Received: by 2002:a25:d742:0:b0:b9e:6d2c:ce2 with SMTP id
+ o63-20020a25d742000000b00b9e6d2c0ce2mr11257804ybg.46.1685965961457; Mon, 05
+ Jun 2023 04:52:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-From:   Michal Simek <monstr@monstr.eu>
-Date:   Mon, 5 Jun 2023 13:10:48 +0200
-Message-ID: <CAHTX3dJMVZhh3BUA1TWErFd5G0rdrtnr-UmEiOfO2ZyzPKdZ0w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
-        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
-        vishal.sagar@amd.com, kalyani.akula@amd.com,
-        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
-        git@xilinx.com, Alessandro Zummo <a.zummo@towertech.it>,
+References: <20230602142426.438375-1-biju.das.jz@bp.renesas.com> <20230602142426.438375-11-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230602142426.438375-11-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 5 Jun 2023 13:52:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXRM978LZYDQsmH4w5GLTYZE03F5+ZAKN5EQscx0AWgSw@mail.gmail.com>
+Message-ID: <CAMuHMdXRM978LZYDQsmH4w5GLTYZE03F5+ZAKN5EQscx0AWgSw@mail.gmail.com>
+Subject: Re: [PATCH v6 10/11] rtc: isl1208: Add isl1208_set_xtoscb()
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jolly Shah <jolly.shah@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
+        linux-rtc@vger.kernel.org,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,494 +69,78 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-=C3=BAt 16. 5. 2023 v 15:51 odes=C3=ADlatel Michal Simek <michal.simek@amd.=
-com> napsal:
+Hi Biju,
+
+On Fri, Jun 2, 2023 at 4:25 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> As per the HW manual, set the XTOSCB bit as follows:
 >
-> @xilinx.com is still working but better to switch to new amd.com after
-> AMD/Xilinx acquisition.
+> If using an external clock signal, set the XTOSCB bit as 1 to
+> disable the crystal oscillator.
 >
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> If using an external crystal, the XTOSCB bit needs to be set at 0
+> to enable the crystal oscillator.
+>
+> Add isl1208_set_xtoscb() to set XTOSCB bit based on the clock-names
+> property. Fallback is enabling the internal crystal oscillator.
+>
+> While at it, introduce a variable "sr" for reading the status register
+> in probe() as it is reused for writing.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
->
->  Documentation/devicetree/bindings/arm/xilinx.yaml             | 2 +-
->  Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml     | 2 +-
->  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 2 +-
->  Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml  | 2 +-
->  Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml | 4 ++--
->  .../bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml        | 2 +-
->  .../devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml        | 2 +-
->  Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml  | 2 +-
->  .../devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml       | 2 +-
->  Documentation/devicetree/bindings/gpio/gpio-zynq.yaml         | 2 +-
->  Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml  | 2 +-
->  .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml    | 2 +-
->  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 2 +-
->  .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 2 +-
->  .../devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml       | 2 +-
->  .../bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml      | 2 +-
->  .../bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml       | 2 +-
->  Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml  | 2 +-
->  .../devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml        | 2 +-
->  .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 2 +-
->  .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
->  Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml    | 2 +-
->  Documentation/devicetree/bindings/serial/cdns,uart.yaml       | 2 +-
->  Documentation/devicetree/bindings/spi/spi-cadence.yaml        | 2 +-
->  Documentation/devicetree/bindings/spi/spi-xilinx.yaml         | 2 +-
->  Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml    | 2 +-
->  Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml     | 2 +-
->  Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
->  .../devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml   | 4 ++--
->  29 files changed, 31 insertions(+), 31 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/arm/xilinx.yaml b/Document=
-ation/devicetree/bindings/arm/xilinx.yaml
-> index b3071d10ea65..f57ed0347894 100644
-> --- a/Documentation/devicetree/bindings/arm/xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/arm/xilinx.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Zynq Platforms
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  description: |
->    Xilinx boards with Zynq-7000 SOC or Zynq UltraScale+ MPSoC
-> diff --git a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml b/=
-Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
-> index 71364c6081ff..b29ce598f9aa 100644
-> --- a/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
-> +++ b/Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Ceva AHCI SATA Controller
->
->  maintainers:
-> -  - Piyush Mehta <piyush.mehta@xilinx.com>
-> +  - Piyush Mehta <piyush.mehta@amd.com>
->
->  description: |
->    The Ceva SATA controller mostly conforms to the AHCI interface with so=
-me
-> diff --git a/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard=
-.yaml b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
-> index c1f04830a832..02bd556bd91a 100644
-> --- a/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
-> +++ b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx clocking wizard
->
->  maintainers:
-> -  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
->
->  description:
->    The clocking wizard is a soft ip clocking block of Xilinx versal. It
-> diff --git a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml=
- b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
-> index 229af98b1d30..93ae349cf9e9 100644
-> --- a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
-> +++ b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Versal clock controller
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->    - Jolly Shah <jolly.shah@xilinx.com>
->    - Rajan Vaja <rajan.vaja@xilinx.com>
->
-> diff --git a/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yam=
-l b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
-> index 9e8fbd02b150..8aead97a585b 100644
-> --- a/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml
-> @@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx ZynqMP AES-GCM Hardware Accelerator
->
->  maintainers:
-> -  - Kalyani Akula <kalyani.akula@xilinx.com>
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Kalyani Akula <kalyani.akula@amd.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  description: |
->    The ZynqMP AES-GCM hardened cryptographic accelerator is used to
-> diff --git a/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqm=
-p-firmware.yaml b/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zy=
-nqmp-firmware.yaml
-> index f14f7b454f07..910bebe6cfa8 100644
-> --- a/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmw=
-are.yaml
-> +++ b/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-firmw=
-are.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx firmware driver
->
->  maintainers:
-> -  - Nava kishore Manne <nava.manne@xilinx.com>
-> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
->
->  description: The zynqmp-firmware node describes the interface to platfor=
-m
->    firmware. ZynqMP has an interface to communicate with secure firmware.
-> diff --git a/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.=
-yaml b/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml
-> index f47b6140a742..04dcadc2c20e 100644
-> --- a/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml
-> +++ b/Documentation/devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Zynq FPGA Manager
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml=
- b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
-> index ac6a207278d5..26f18834caa3 100644
-> --- a/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Versal FPGA driver.
->
->  maintainers:
-> -  - Nava kishore Manne <nava.manne@xilinx.com>
-> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
->
->  description: |
->    Device Tree Versal FPGA bindings for the Versal SoC, controlled
-> diff --git a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga=
-.yaml b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
-> index 00a8d92ff736..1390ae103b0b 100644
-> --- a/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
-> +++ b/Documentation/devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Zynq Ultrascale MPSoC FPGA Manager
->
->  maintainers:
-> -  - Nava kishore Manne <navam@xilinx.com>
-> +  - Nava kishore Manne <nava.kishore.manne@amd.com>
->
->  description: |
->    Device Tree Bindings for Zynq Ultrascale MPSoC FPGA Manager.
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml b/Docu=
-mentation/devicetree/bindings/gpio/gpio-zynq.yaml
-> index 572e1718f501..5e2496379a3c 100644
-> --- a/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/gpio-zynq.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Zynq GPIO controller
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml=
- b/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
-> index f333ee2288e7..c1060e5fcef3 100644
-> --- a/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx AXI GPIO controller
->
->  maintainers:
-> -  - Neeli Srinivas <srinivas.neeli@xilinx.com>
-> +  - Neeli Srinivas <srinivas.neeli@amd.com>
->
->  description:
->    The AXI GPIO design provides a general purpose input/output interface
-> diff --git a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-mode=
-pin.yaml b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.=
-yaml
-> index 31c0fc345903..18e61aff2185 100644
-> --- a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yam=
-l
-> +++ b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yam=
-l
-> @@ -12,7 +12,7 @@ description:
->    PS_MODE). Every pin can be configured as input/output.
->
->  maintainers:
-> -  - Piyush Mehta <piyush.mehta@xilinx.com>
-> +  - Piyush Mehta <piyush.mehta@amd.com>
->
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml b/=
-Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> index cb24d7b3221c..ff57c5416ebc 100644
-> --- a/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Cadence I2C controller
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  allOf:
->    - $ref: /schemas/i2c/i2c-controller.yaml#
-> diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-ma=
-ilbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mail=
-box.yaml
-> index 374ffe64016f..aeaddbf574b0 100644
-> --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.y=
-aml
-> +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.y=
-aml
-> @@ -33,7 +33,7 @@ description: |
->                +------------------------------------------+
->
->  maintainers:
-> -  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
->
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss=
-.yaml b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
-> index 7d77823dbb7a..43daf837fc9f 100644
-> --- a/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
-> +++ b/Documentation/devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx MIPI CSI-2 Receiver Subsystem
->
->  maintainers:
-> -  - Vishal Sagar <vishal.sagar@xilinx.com>
-> +  - Vishal Sagar <vishal.sagar@amd.com>
->
->  description: |
->    The Xilinx MIPI CSI-2 Receiver Subsystem is used to capture MIPI CSI-2
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/snps,dw=
--umctl2-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/sn=
-ps,dw-umctl2-ddrc.yaml
-> index e68c4306025a..6b62d5d83476 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2=
--ddrc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2=
--ddrc.yaml
-> @@ -9,7 +9,7 @@ title: Synopsys DesignWare Universal Multi-Protocol Memor=
-y Controller
->  maintainers:
->    - Krzysztof Kozlowski <krzk@kernel.org>
->    - Manish Narani <manish.narani@xilinx.com>
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  description: |
->    Synopsys DesignWare Enhanced uMCTL2 DDR Memory Controller is capable o=
-f
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/xlnx,zy=
-nq-ddrc-a05.yaml b/Documentation/devicetree/bindings/memory-controllers/xln=
-x,zynq-ddrc-a05.yaml
-> index 8f72e2f8588a..7864a1c994eb 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc=
--a05.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc=
--a05.yaml
-> @@ -9,7 +9,7 @@ title: Zynq A05 DDR Memory Controller
->  maintainers:
->    - Krzysztof Kozlowski <krzk@kernel.org>
->    - Manish Narani <manish.narani@xilinx.com>
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  description:
->    The Zynq DDR ECC controller has an optional ECC support in half-bus wi=
-dth
-> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml=
- b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> index 24ddc2855b94..4734be456bde 100644
-> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: CPM Host Controller device tree for Xilinx Versal SoCs
->
->  maintainers:
-> -  - Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> +  - Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
->
->  allOf:
->    - $ref: /schemas/pci/pci-bus.yaml#
-> diff --git a/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.=
-yaml b/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml
-> index 598a042850b8..b85f9e36ce4b 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Zynq Pinctrl
->
->  maintainers:
-> -  - Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-> +  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
->
->  description: |
->    Please refer to pinctrl-bindings.txt in this directory for details of =
-the
-> diff --git a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctr=
-l.yaml b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-> index 2722dc7bb03d..cdebfa991e06 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx ZynqMP Pinctrl
->
->  maintainers:
-> -  - Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-> +  - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
->    - Rajan Vaja <rajan.vaja@xilinx.com>
->
->  description: |
-> diff --git a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-po=
-wer.yaml b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.=
-yaml
-> index 11f1f98c1cdc..45792e216981 100644
-> --- a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yam=
-l
-> +++ b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yam=
-l
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Zynq MPSoC Power Management
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  description: |
->    The zynqmp-power node describes the power management configurations.
-> diff --git a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml b=
-/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
-> index 7ed0230f6c67..d1f5eb996dba 100644
-> --- a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
-> @@ -11,7 +11,7 @@ description:
->    The RTC controller has separate IRQ lines for seconds and alarm.
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  allOf:
->    - $ref: rtc.yaml#
-> diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.yaml b/Do=
-cumentation/devicetree/bindings/serial/cdns,uart.yaml
-> index a8b323d7bf94..e35ad1109efc 100644
-> --- a/Documentation/devicetree/bindings/serial/cdns,uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Cadence UART Controller
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Doc=
-umentation/devicetree/bindings/spi/spi-cadence.yaml
-> index b0f83b5c2cdd..b7552739b554 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Cadence SPI controller
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  allOf:
->    - $ref: spi-controller.yaml#
-> diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml b/Docu=
-mentation/devicetree/bindings/spi/spi-xilinx.yaml
-> index 6bd83836eded..4beb3af0416d 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx SPI controller
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  allOf:
->    - $ref: spi-controller.yaml#
-> diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b=
-/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> index 226d8b493b57..e5199b109dad 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx Zynq UltraScale+ MPSoC GQSPI controller
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  allOf:
->    - $ref: spi-controller.yaml#
-> diff --git a/Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml b/=
-Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml
-> index 83e8fb4a548d..7ea8fb42ce2c 100644
-> --- a/Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml
-> @@ -14,7 +14,7 @@ allOf:
->    - $ref: spi-controller.yaml#
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  # Everything else is described in the common file
->  properties:
-> diff --git a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml b/Docu=
-mentation/devicetree/bindings/timer/cdns,ttc.yaml
-> index bc5e6f226295..dbba780c9b02 100644
-> --- a/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
-> +++ b/Documentation/devicetree/bindings/timer/cdns,ttc.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Cadence TTC - Triple Timer Counter
->
->  maintainers:
-> -  - Michal Simek <michal.simek@xilinx.com>
-> +  - Michal Simek <michal.simek@amd.com>
->
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase=
--wdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wd=
-t.yaml
-> index 8444c56dd602..dc1ff39d05a0 100644
-> --- a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.ya=
-ml
-> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.ya=
-ml
-> @@ -7,8 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Xilinx AXI/PLB softcore and window Watchdog Timer
->
->  maintainers:
-> -  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> -  - Srinivas Neeli <srinivas.neeli@xilinx.com>
-> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> +  - Srinivas Neeli <srinivas.neeli@amd.com>
->
->  description:
->    The Timebase watchdog timer(WDT) is a free-running 32 bit counter.
-> --
-> 2.36.1
->
+> v5->v6:
+>  * Added Rb tag from Geert
+>  * Replaced u8->int for xtosb_val parameter.
+>  * Introduced isl1208_clk_present() for checking the presence of "xin" and
+>    "clkin" for determining internal oscillator is enabled or not.
 
-Applied.
-M
+Thanks for the update!
 
+> --- a/drivers/rtc/rtc-isl1208.c
+> +++ b/drivers/rtc/rtc-isl1208.c
+> @@ -805,12 +816,33 @@ static int isl1208_setup_irq(struct i2c_client *client, int irq)
+>         return rc;
+>  }
+>
+> +static int
+> +isl1208_clk_present(struct i2c_client *client, const char *name)
+> +{
+> +       struct clk *clk;
+> +       int ret;
+> +
+> +       clk = devm_clk_get_optional(&client->dev, name);
+> +       if (IS_ERR(clk)) {
+> +               ret = PTR_ERR(clk);
+> +       } else {
+> +               if (!clk)
 
---=20
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+What about "else if"? ;-)
+But in this case, you can make the code even simpler (less indented)
+by returning early after each test.
+
+> +                       ret = 0;
+> +               else
+> +                       ret = 1;
+> +       }
+
+if (IS_ERR(clk))
+        return PTR_ERR(clk);
+
+return !!clk;
+
+> +
+> +       return ret;
+> +}
+> +
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
