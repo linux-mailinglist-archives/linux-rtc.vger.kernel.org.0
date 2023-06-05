@@ -2,65 +2,137 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCA07222CE
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Jun 2023 12:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778B67222F9
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Jun 2023 12:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjFEKBW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 5 Jun 2023 06:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S230453AbjFEKJM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Jun 2023 06:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFEKBV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Jun 2023 06:01:21 -0400
+        with ESMTP id S229604AbjFEKJH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Jun 2023 06:09:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0072FB0;
-        Mon,  5 Jun 2023 03:01:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC008E3;
+        Mon,  5 Jun 2023 03:09:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 587DB621FF;
-        Mon,  5 Jun 2023 10:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 296D3C433EF;
-        Mon,  5 Jun 2023 10:01:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7165B6142D;
+        Mon,  5 Jun 2023 10:09:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A84C433EF;
+        Mon,  5 Jun 2023 10:09:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685959279;
-        bh=Ko2/E0JsGtzyMh6s/bA2jB4gL89ymBC0HzbiqVmHm8w=;
+        s=k20201202; t=1685959745;
+        bh=vR126awxcUVwkB+vDMvPtCpzsX4o/jUNFWue4cfisK4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qKEuPh4N/0E6ogaA6woi0DrSZ1lv0SM9st5Sx2wLBSaBsMSWGksFp4Rxd+BRCYYUc
-         1xjIKXiTvGb4LtySanS31Xa4MMcBtyMX0Xyq0CWeIQtF03udr3txs+cTeDBweQgxpr
-         HR0vPzRDqypovgd15wAqN4Rdf1GAn2/OuYda2Sg+Ai0q91scy1dWpb9rS5r3ACbAK7
-         FtuJBZMC9J62st2x+FF8gQ84D/WWn3xSfEeCwIzE3XgQHu3+dE4BqDugqtAybTkU13
-         OH9CstsjAixBAShG8g8q9ZJbJcJAA3x8v/1i/w4RaDF6DeYaPdrlqf5WKGOrarKeax
-         uRMpS4SJTK1Pw==
-Date:   Mon, 5 Jun 2023 12:01:16 +0200
+        b=jGzB5Lk8x9cx95oG26XZOnRJk3ecWXQXEE07nQpVPtV0ldNyjBH+HF+PE67Y7BaJJ
+         Rr3ULQyt++0jpBkQcUB6dtzHGzTjv3M2ialKNinB+zPSqHMhJHjuOXl09E3kIINcDr
+         ainCX7TdvicCZowvSKu0Imjn3a2HSe+PaHRV5wCbfibFHwmjxecOKX/pBzY6MMJVH9
+         PRUd1U94/aMQLLs6h2roaIwCi2wKw54+JxUdln3ex3j1eeHU3sfXSFSi3sNId2DTA1
+         A9TVGDCBa3pkug7NMMjLVIV38slENc59CTNhjtBV91E1BeYMtSxuqGpEoGjEOJorUU
+         t+ravi9eHQa2Q==
+Date:   Mon, 5 Jun 2023 12:09:02 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: Add i2c_get_match_data()
-Message-ID: <ZH2ybOmr8fyWOtmg@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
+        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
+        vishal.sagar@amd.com, kalyani.akula@amd.com,
+        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-References: <20230601171711.221430-1-biju.das.jz@bp.renesas.com>
- <ZH2p7iWYizLsxZ1g@shikoro>
- <OS0PR01MB5922300F70EF37359C53D646864DA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        Andrew Lunn <andrew@lunn.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Message-ID: <ZH20PkU1WAqQ0rap@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Michal Simek <michal.simek@amd.com>, piyush.mehta@amd.com,
+        nava.kishore.manne@amd.com, sai.krishna.potthuri@amd.com,
+        shubhrajyoti.datta@amd.com, vishal.sagar@amd.com,
+        kalyani.akula@amd.com, bharat.kumar.gogada@amd.com,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>, Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JLdzwM2xJGM2lKSf"
+        protocol="application/pgp-signature"; boundary="m1s0pAgPK6Y5qfq2"
 Content-Disposition: inline
-In-Reply-To: <OS0PR01MB5922300F70EF37359C53D646864DA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,57 +144,38 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---JLdzwM2xJGM2lKSf
+--m1s0pAgPK6Y5qfq2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> You mean like below?? The new helper function will do both I2C and DT-bas=
-ed matching??
-> const void *i2c_get_match_data(const struct i2c_client *client)
-> {
-> 	struct device_driver *drv =3D client->dev.driver;
-> 	struct i2c_driver *driver =3D to_i2c_driver(drv);
-> 	const struct i2c_device_id *match;
-> 	const void *match_data;
+On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
 >=20
-> 	if (client->dev.of_node){
-> 		match_data =3D of_device_get_match_data(&client->dev);
-> 	} else {
-> 	      match =3D i2c_match_id(driver->id_table, client);
-> 	      if (!match)
-> 		   return NULL;
-> =09
-> 		match_data =3D (const void *)match->driver_data;
-> 	}
->=20
-> 	return match_data;
-> }
-> EXPORT_SYMBOL(i2c_get_match_data);
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-Yes. Not good? I thought a function named 'i2c_get_match_data' should
-get match_data and find out itself where it is coming from. No?
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
 
---JLdzwM2xJGM2lKSf
+--m1s0pAgPK6Y5qfq2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9smgACgkQFA3kzBSg
-KbZ1axAAnycfYzZMFdOjqRJZWwFKa1tm3NNHuPwXyQDqvpWr9gXecq+dWhcFs+I9
-Di7IBdnwQ9W5CDtXGigQtkL8qH1NGkrprESQ62z6hJVZUYfOjOL2d7PwZGFSho/v
-2lnySROhI+Bt1wR2MqKbe8xxNurrFdnS/pCy2KI3qOfRJRQrNOpbBXraI4aJJuVJ
-gb+X7bcs1SLFue3oGoFLC4+uqOLPZ87qzPBYml7jgsrXhktcye6J/vmAJ6OsNXfy
-eC0gFs0SQaz4mTsB/VeWlywx8/iIY6NOwRH41epf1VlAtmfzmLyEPoHBP3NwMIdz
-gGfk7PiskUMrEtBz6RREIZ4sU498+OBZI5qSX65h6a8rQDQOOPST3svDqJxBeear
-r0V6MX/mgsnzR46c3NIDtLIeY88eHv/v6iN/0AIDUVfedEyp+X1Y0kv27pPMPNr6
-wVLanIUH/dVfis4dlUW62JII7AzmRh9u8vt2fgOTW0xhyGNF+O/U/qUi/O0dq4FT
-xKmP/B3cKK1RC1AWswJW3G1jvLvwi0gpnI29NH3yTIhiowBE94bG41QryIzCpx+h
-dBD8vp/03f61MCPxt0KYD4mHcbXJLkytYUJuz9ecWOhBWB1sTJTeqSc5tlrwEUqC
-xUnvvwhvCW0mPyUfyJPKqhCtWrTNFF2lnvfcuBq7uyicC2GSpw8=
-=byry
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9tD4ACgkQFA3kzBSg
+KbYxkhAAr/KV+7eVEy7Tyr1buRUjnSFHfeoi92WwdiRkwD3KEgGd3CGm8RFiHEH3
+xVJnR47Ii6/IU9NidYLsuN6WTYlCdGoQqY6ncEpZui1rIIZpJPEbHbw4IRrDEu+o
+/wd/3S/y3VvGjvsnBK2sbBpTOb8N10Xw084aSJTmFz8Ztzy9mZU9ub6TFxMZhWK2
+w0Unv2I6q+Yl0kEy05PAoEID7mXf33aFnz+j3iz0LtUU6nMQilQHdkfYSsec5c04
+jirw6YLgK+VBRncT55L3XKpAamfUKU7o3DY20/pPw8fSlDj2Z0aQkHM1P22cKwNF
+C1Q0epu85vIJVBW45SEBY7ccPLZuwjFNMl5Do8hRZGBtHJOxhqmRjOA3SWc0u4lx
+txwo97w+Ux9dMlS+UJhD5rWGFfF+HHqxg+M71SCOa94kg2Drs+WLHXd1NgG1YEcb
+FoHsGkzv0nvkBf0O6X3hd8tAdkks9l1370YbDSBvSXUUHxIefUNzEjvQVTdJUj0J
+y+X6CigfCUyYdoscjH8rCdA7fwbxnbeX5zSSXKKp2coIAwEl7ItMx8h8QwwQzZB2
+z/05V/3n4FekryCdpDn5/YH7k2rO6WgSN4L7n+8yDhjWtTwXPRB0XeomogN5CpGj
+T+DR5iqEdJHfmWETr4Pn7ttnc/rvH5ak5U9raBF2+SYA5p/XQGU=
+=PkRp
 -----END PGP SIGNATURE-----
 
---JLdzwM2xJGM2lKSf--
+--m1s0pAgPK6Y5qfq2--
