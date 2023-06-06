@@ -2,48 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CAB724EC6
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 Jun 2023 23:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79BE724ED0
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 Jun 2023 23:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238613AbjFFV1N (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 6 Jun 2023 17:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S239745AbjFFVaP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 6 Jun 2023 17:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbjFFV1M (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Jun 2023 17:27:12 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA6F10D1;
-        Tue,  6 Jun 2023 14:27:10 -0700 (PDT)
+        with ESMTP id S239762AbjFFVaL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Jun 2023 17:30:11 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A160510FB
+        for <linux-rtc@vger.kernel.org>; Tue,  6 Jun 2023 14:30:10 -0700 (PDT)
 X-GND-Sasl: alexandre.belloni@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686086829;
+        t=1686087009;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BR43p4vFQutMyYXqBIKO62/tUgmD0zV23thmYuRjMzw=;
-        b=FlWU8qKRmx/dIllvOWX2F9qZORCGEDXh0A11c8Pl/5ZGcyNHuvcZF6d0n7pX09zO+pmfzW
-        popQUbiaWVgrSdr5ajFNRYuUlo4EmednQ9QLagpg0TTVXmnukwEFAs+DLVYS0gbojMysds
-        /kJG7lK0WxUqhdLQlNyp+6jBe+5LK/2dspv7VlFr+XYVpymgMt1qJ8Bm2F+/j2xagFYluE
-        0d1TImHdIJBpNKgU6Nk0gIFwIfnkwZkpQXCV45xhYe7CSAQol983qKzoiVWgAPc+Dkno1y
-        zosYoIEzOJmwPTlfVgqAx/Q7IipZuVY3/PC5Tzc8DgfRg18tk9/OXNUdMP/Avw==
+        bh=yPc7g0OE+NGmFJK9qpx6ai/Y8FPstWuCkZWN564PldA=;
+        b=j0jR711+B0S2O/2MwtZSHbTJ2c4GTmUb7zj4Ig3Ewgj1JsuRxp2pBdNWJhUSay89xl5Vqm
+        5TKlP/LUIodAo9Ku98arYuTYdpZ2RbWW9g5xxQKQ7qnp0MLCJWfw4QlEhPxGmQTwz8j+/a
+        aE574q13rxGoV7Bw2JkR99jOPmvVKL/qWmyXcKQDWCifpsezjOjMuUdskHZ7HkFFp/G6/h
+        1fyqIN+GcAPpTEAM1W44n3sVsiPANPmo1Zlzzmv5WFahU3KK+BnmUjfdDGoEF+8G68Uiy+
+        7EWYw/SWIaZjU88415m3RN2nmd5imM5TFomJAjwE/tS/4lIAfV38L8oghIXhQg==
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 218AC240004;
-        Tue,  6 Jun 2023 21:27:09 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 23:27:08 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F0EC7FF80B;
+        Tue,  6 Jun 2023 21:30:08 +0000 (UTC)
+Date:   Tue, 6 Jun 2023 23:30:08 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [RESEND PATCH 1/4] rtc: ab-eoz9: constify pointers to
- hwmon_channel_info
-Message-ID: <168608680172.26438.4791232990703685081.b4-ty@bootlin.com>
-References: <20230511175609.282191-1-krzysztof.kozlowski@linaro.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-rtc@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] rtc: Switch i2c drivers back to use .probe()
+Message-ID: <168608698320.28775.5939921325619549910.b4-ty@bootlin.com>
+References: <20230505121136.1185653-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230511175609.282191-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230505121136.1185653-1-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -55,22 +57,20 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
-On Thu, 11 May 2023 19:56:06 +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointers to hwmon_channel_info can be made
-> const for safety.
+On Fri, 05 May 2023 14:11:36 +0200, Uwe Kleine-König wrote:
+> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type"), all drivers being converted to .probe_new() and then
+> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
+> back to (the new) .probe() to be able to eventually drop .probe_new() from
+> struct i2c_driver.
 > 
 > 
+> [...]
 
 Applied, thanks!
 
-[1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
-      commit: 973ef08456f8c6aea4672ae986dfe907b9e4fdc3
-[2/4] rtc: ds3232: constify pointers to hwmon_channel_info
-      commit: d00caa55cecd3e833c21c9372fc558cb9f40a07f
-[3/4] rtc: isl12022: constify pointers to hwmon_channel_info
-      commit: 303b1e894470421f7c5b6452937fc8c1f0f89075
-[4/4] rtc: rv3032: constify pointers to hwmon_channel_info
-      commit: b19118965778da3ba9fbeeca39bdf24738d229b4
+[1/1] rtc: Switch i2c drivers back to use .probe()
+      commit: 31b0cecb4042d2676fd48f09379a19bc8b16eadd
 
 Best regards,
 
