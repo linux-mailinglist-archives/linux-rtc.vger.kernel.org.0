@@ -2,130 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A127243A0
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 Jun 2023 15:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D15724983
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 Jun 2023 18:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237993AbjFFNFf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 6 Jun 2023 09:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S233553AbjFFQvX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 6 Jun 2023 12:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237962AbjFFNF1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Jun 2023 09:05:27 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52FF1E7C;
-        Tue,  6 Jun 2023 06:05:25 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.00,221,1681138800"; 
-   d="scan'208";a="162417460"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 06 Jun 2023 22:05:24 +0900
-Received: from localhost.localdomain (unknown [10.226.92.247])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id E26EB41F04A3;
-        Tue,  6 Jun 2023 22:05:21 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-i2c@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3] i2c: Add i2c_get_match_data()
-Date:   Tue,  6 Jun 2023 14:05:19 +0100
-Message-Id: <20230606130519.382304-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233006AbjFFQvX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Jun 2023 12:51:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEE710C2;
+        Tue,  6 Jun 2023 09:51:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F298862579;
+        Tue,  6 Jun 2023 16:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08A6C433D2;
+        Tue,  6 Jun 2023 16:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686070281;
+        bh=GsAcMf51raeYsV6vbOG1tdCBiEHjMvNKUg6I9eW5Tp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ou587+Cv554NFbAyUpcwffzNVuQtVFLdrhV0U/wQwy1dq1HSlG3OL7lq3U8TsyJUr
+         nMZBLp87YQGpjLiUz1n3AkYPRv/R/aUuJBm8/k+8lI4rB7EkPpTYwIHXgboqVI2abW
+         FEAlCaBiRfxhTT/SOivNvkP3puFrpjrnpYC3DrzAf0iY7AsJjXMWqeuPLO0+xY2b1w
+         fFws9e7Gy20itKZGg4YvjdOxAxkVR+sJayrYHSJqyEvxk4n1PJjfRqXf0AoavIstNS
+         qWxPlkkGFwMDXrgixFjlkCrgqUiiH5zSd5FAZSTvl+d23z1lN5BeU/nMDVBHpopQrF
+         pJDfCFR8aWNUw==
+Date:   Tue, 6 Jun 2023 17:51:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
+Subject: Re: [PATCH v5 0/3] TI TPS6594 PMIC support (RTC, pinctrl, regulators)
+Message-ID: <82930e05-70f7-45fd-908c-37d39fe9151e@sirena.org.uk>
+References: <20230522163115.2592883-1-eblanc@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="32WbtcUJdsBajjrX"
+Content-Disposition: inline
+In-Reply-To: <20230522163115.2592883-1-eblanc@baylibre.com>
+X-Cookie: Keep out of the sunlight.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add i2c_get_match_data() to get match data for both I2C and
-DT-based matching, so that we can optimize the driver code that
-uses both.
 
-Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v2->v3:
- * Added support for getting match data for both I2C and DT-based
-   matching.
- * Added Rb tag from Geert and retained the Rb tag as change is trivial.
-v1->v2:
- * Dropped parameter const struct i2c_device_id *id and the helper function.
+--32WbtcUJdsBajjrX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-eg: The RTC pcf85063/isl1208 driver code can be optimized with this patch.
--       if (client->dev.of_node) {
--                config = of_device_get_match_data(&client->dev);
--               if (!config)
--                       return -ENODEV;
--       } else {
--               enum pcf85063_type type =
--                       i2c_match_id(pcf85063_ids, client)->driver_data;
--               if (type >= PCF85063_LAST_ID)
--                       return -ENODEV;
--               config = &pcf85063_cfg[type];
--       }
-+       config = i2c_get_match_data(client);
-+       if (!config)
-+               return -ENODEV;
----
- drivers/i2c/i2c-core-base.c | 21 +++++++++++++++++++++
- include/linux/i2c.h         |  2 ++
- 2 files changed, 23 insertions(+)
+On Mon, May 22, 2023 at 06:31:12PM +0200, Esteban Blanc wrote:
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index ae3af738b03f..15a49f4ba668 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -114,6 +114,27 @@ const struct i2c_device_id *i2c_match_id(const struct i2c_device_id *id,
- }
- EXPORT_SYMBOL_GPL(i2c_match_id);
- 
-+const void *i2c_get_match_data(const struct i2c_client *client)
-+{
-+	struct device_driver *drv = client->dev.driver;
-+	struct i2c_driver *driver = to_i2c_driver(drv);
-+	const struct i2c_device_id *match;
-+	const void *data;
-+
-+	if (client->dev.of_node) {
-+		data = of_device_get_match_data(&client->dev);
-+	} else {
-+		match = i2c_match_id(driver->id_table, client);
-+		if (!match)
-+			return NULL;
-+
-+		data = (const void *)match->driver_data;
-+	}
-+
-+	return data;
-+}
-+EXPORT_SYMBOL(i2c_get_match_data);
-+
- static int i2c_device_match(struct device *dev, struct device_driver *drv)
- {
- 	struct i2c_client	*client = i2c_verify_client(dev);
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 13a1ce38cb0c..3430cc2b05a6 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -367,6 +367,8 @@ struct i2c_adapter *i2c_verify_adapter(struct device *dev);
- const struct i2c_device_id *i2c_match_id(const struct i2c_device_id *id,
- 					 const struct i2c_client *client);
- 
-+const void *i2c_get_match_data(const struct i2c_client *client);
-+
- static inline struct i2c_client *kobj_to_i2c_client(struct kobject *kobj)
- {
- 	struct device * const dev = kobj_to_dev(kobj);
--- 
-2.25.1
+> This should be applied on top of other patch series:
+> - https://lore.kernel.org/all/20230511095126.105104-1-jpanis@baylibre.com/
+>   For core MFD driver
 
+Please if you're doing this in future just post a single series, it
+makes things much easier to follow.
+
+--32WbtcUJdsBajjrX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/ZAIACgkQJNaLcl1U
+h9CgVQf/TucnhXI6ll0vuM+yZlKN8P03c9Mx/4NTo0P4VglS1m/6V2NMZZy+aySY
+vjfQktzTXOcmuqEz2HMZGNJk3DlgPm/poBqFetJvPvc+8MGDwbXYoCMBs74gamEJ
+MFGPdwT9RdfE55xVpXNaLMwJdMAd5i+qhZBa/iWITQCdCzes6MHWTT0KtWfgRdM/
+aQozxxufxZhVYjUgh6Y1JM0GXPzc1DeixC5+YMEn12L1Jo1NED3U7Kd+Eq8HEZwv
+0+7d6EgY30S+Bxqkgmji8EV3YgF05mmkMuk3ZYB0lsA5i8s2sJVEqu8FfVv/222J
+Fh9ZzbSlR0wPLuoUBGzG+Bfz3/vF+Q==
+=iGYQ
+-----END PGP SIGNATURE-----
+
+--32WbtcUJdsBajjrX--
