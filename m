@@ -2,72 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E04725B77
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jun 2023 12:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111D1725D81
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jun 2023 13:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbjFGKUe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Jun 2023 06:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
+        id S235262AbjFGLpE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Jun 2023 07:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239450AbjFGKUY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jun 2023 06:20:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4464E1BDC;
-        Wed,  7 Jun 2023 03:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E20E630F2;
-        Wed,  7 Jun 2023 10:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF91C433D2;
-        Wed,  7 Jun 2023 10:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686133221;
-        bh=b3vSbHeHOJIjqYkB+PfhGhloojhkLAsRq5fFqo+8tk4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=chpQ8hLtAOxT3tgcGQy8V6VnJUefzDl3+Cl15vWHuIl/k/lfIR9txDlTQCZptx9FF
-         DykUwYpzH7baVwlhBKhtVNPBqjduj/J1R4c6MeT7W4VZBliMzBEDkxvPdoVFGv/kTZ
-         qzXassjfIcYkjIIu0SAOWnNqX1JWq70LF7nGZZkrZC0d8vUcSzq9/SacXMAigfCYdI
-         U6zbiUaZoALeru9LyjvUB+rWYwMoPYKnspqwTDdDlwEULnCQGm3ot2zca1I+EEapc1
-         BK5Myc6lVu67sjaGhd678/7uSnEl3N7EbwO+5aHAoFDZC+ngmmTpNI9Lis4moCcdIg
-         mChuIz5Bv7+QA==
-Date:   Wed, 7 Jun 2023 12:20:17 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v3] i2c: Add i2c_get_match_data()
-Message-ID: <ZIBZ4RzFvLN368nQ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        Marek Vasut <marex@denx.de>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-References: <20230606130519.382304-1-biju.das.jz@bp.renesas.com>
- <OS0PR01MB592282658E36A14D0A762BBB8653A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdVXekgea3biJXXNb3fa-8Fe3iUJ=K51jKnu9ew_+Fq69g@mail.gmail.com>
+        with ESMTP id S239346AbjFGLow (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jun 2023 07:44:52 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAE51BCB
+        for <linux-rtc@vger.kernel.org>; Wed,  7 Jun 2023 04:44:49 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30ae95c4e75so7326638f8f.2
+        for <linux-rtc@vger.kernel.org>; Wed, 07 Jun 2023 04:44:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686138287; x=1688730287;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
+        b=3RBQjFfyDmBSo1AlYjKhIdm1beEdbNpeWKrKMomP7swI46B5yjDO5BHhe1tyU1q8ky
+         t1CWplL20m0oi2y9YZQhsRKLhqNOV8jqzD8AdgCtLZSYm8GaahtxsNiV6+093izidZOc
+         sDjlMaU18OGfEobAFY9ZhXQMQu8vcx4i4pxIx0eHAc4xmC1VDgVQNxvtHYGYLQfJUiF/
+         QwuIQvmqz5jeI2Xrq3QtoGIG3MoKh+ZsizZHQESghrYuyfnjsEveUYtFwNYgPIELhx+F
+         pwQ7zAVRDv8r6l7rv6rtyfVBq9ZfWcnQY+3VXW4YVXU/C10L3zvHPz1MXI+obInazKwJ
+         EHnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686138287; x=1688730287;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
+        b=HJvDzanTwEG7nX34CR1xYkOA6x79J/M/IV1KETfCRUqlKA0L+5SmN7qyHOxxSa02ng
+         7XqGsC+Z6ven8TmOojD6OfHFtvh58Tz5y51KNrtqQWwKPeppGPjBcmjmVq8GoUoB6zdy
+         wZ3p3Rrz4nx4yf4zI4OWmKxim8TBepLxUrehgQrXu2RlikHOJJnMPCpzQZ8BQsB3SioA
+         VWGri6U19s+GnwI4Ijoc82y/jg03qfCeiihHqjZEGWXijVxa9b7PjYFMHcBsisblkpau
+         hH8kdGqaQ4iXrfanjVD5ni0USEVyrODOcGAMc4sScmYtlbjlNSV06AVTrDDDwohTSL8d
+         vH4A==
+X-Gm-Message-State: AC+VfDxmUJ/6cEOyYE0YW+1zDoNgqYPwXxY7xLMDfMr6pPilaR0T8p/T
+        esRAp2eKej6ojBhnz8IgwI+qtsB/2xI+u2S+rQKt/XuR
+X-Google-Smtp-Source: ACHHUZ4ag2NB29YmYf2NEyem1AS1fBVfRnebEHbs1kVzFKODnpHwBnsEXbEBUs2kQ3ajwzKCBP//Cg==
+X-Received: by 2002:adf:efc7:0:b0:306:26d1:230a with SMTP id i7-20020adfefc7000000b0030626d1230amr3860283wrp.65.1686138287554;
+        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id n18-20020a5d4c52000000b0030ae901bc54sm15135507wrt.62.2023.06.07.04.44.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
+Message-ID: <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
+Date:   Wed, 7 Jun 2023 13:44:46 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ArSYnhEy2YRLKnCd"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVXekgea3biJXXNb3fa-8Fe3iUJ=K51jKnu9ew_+Fq69g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
+ TPS6594 regulators
+Content-Language: en-US
+To:     andy.shevchenko@gmail.com, Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        aseketeli@baylibre.com, u-kumar1@ti.com
+References: <20230522163115.2592883-1-eblanc@baylibre.com>
+ <20230522163115.2592883-4-eblanc@baylibre.com> <ZG0VHnEByyMW9i4a@surfacebook>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <ZG0VHnEByyMW9i4a@surfacebook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,46 +79,75 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---ArSYnhEy2YRLKnCd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> 
+>> +	enum {
+>> +		MULTI_BUCK12,
+>> +		MULTI_BUCK123,
+>> +		MULTI_BUCK1234,
+>> +		MULTI_BUCK12_34,
+> 
+>> +		MULTI_FIRST = MULTI_BUCK12,
+>> +		MULTI_LAST = MULTI_BUCK12_34,
+>> +		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
+> 
+> 		MULT_NUM
+> 
+> will suffice instead all this.
+> 
+>> +	};
+> 
+> But why enum at all? See below.
+Just for the switch case readability.
+I have to iterate across the multiphases array for look up name into 
+device tree and evaluate in that order.
 
+This can be reduced to:
+	enum {
+		MULTI_BUCK12,
+		MULTI_BUCK123,
+		MULTI_BUCK1234,
+		MULTI_BUCK12_34,
+		MULTI_NUM = MULTI_BUCK12_34 - MULTI_BUCK12 + 1
+	};
 
-> > +const void *i2c_get_match_data(const struct i2c_client *client) {
-> > +       struct device_driver *drv =3D client->dev.driver;
-> > +       struct i2c_driver *driver =3D to_i2c_driver(drv);
-> > +       const struct i2c_device_id *match;
-> > +       const void *data;
-> > +
-> > +       data =3D device_get_match_data(&client->dev);
->=20
->     if (data)
->             return data;
+> 
+> ...
+> 
+>> +	/*
+>> +	 * Switch case defines different possible multi phase config
+>> +	 * This is based on dts buck node name.
+>> +	 * Buck node name must be chosen accordingly.
+>> +	 * Default case is no Multiphase buck.
+>> +	 * In case of Multiphase configuration, value should be defined for
+>> +	 * buck_configured to avoid creating bucks for every buck in multiphase
+>> +	 */
+>> +	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
+>> +		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
+>> +		npname = of_node_full_name(np);
+>> +		np_pmic_parent = of_get_parent(of_get_parent(np));
+>> +		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
+> 
+> Why not of_node_full_name() in the second case?
+Sure.
+> 
+> 
+>> +			continue;
+>> +		delta = strcmp(npname, multiphases[multi]);
+>> +		if (!delta) {
+>> +			switch (multi) {
+>> +			case MULTI_BUCK12:
+> 
+> This all looks like match_string() reinvention.
+I can go with match_string but this is not significantly changing the game:
 
-I like Biju's version a tad more. Except for errors, and especially
-within small functions, I think single exit points are easier to
-understand.
+index = match_string(multiphases, ARRAY_SIZE(multiphases), npname);
+if (index >= 0) {
+	switch (index) {
 
+No question on all your other feedback. Just wondering if I missed 
+something with match_string use. Looks like a good idea indeed but this 
+is not drastically changing the code as you seem to expect... Let me 
+know if you think I'm doing it in a wrong way.
 
---ArSYnhEy2YRLKnCd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSAWeEACgkQFA3kzBSg
-KbbEPw/5AQWOxmhUDl5BM3hz0sVcfZBH780GCZPXC925lLHUj/gjfgkWYA7Pqv8w
-A5bT/b8Z4Es3vQaKV7gtg+v6dniONQLfqV6icQpliRw22jds3gR6fLr3A59ithSp
-Ga2Q3vvI9wihCXTt7Gwuht9eCABPRcIgFjbwdGjZuqSbB50w3hI0Ew+xeeq37+XK
-duYymbgG6CoIDsK0SLxU7TB2AUGXLWrD8s41bXTAgZdg2ZUkvsbAZ9KzLPgWC4k7
-UibDr831q997s39HIxlUD2eB7FBdOlaXegxf0LaKqIbU0ib3bOLUTiHyfOVA61av
-uIq2ZqpAqV1pLfauSGZ297Ry9N9RZ9w8n9gmDrz+jnS8ZCMdgVSqWzWVCCYAt/sY
-9dTHTyNFEOshPsCEk6vDzz6UTeRBFTvjNd5a5bXOG+ZjvnOYjXbwwq5g7voEti0o
-3bozVaQ0CwJgtb0WWboXMjr56KWBnm3abjYmiUoidwyARETjeI9WjRC1YbyjMV7x
-OOAlVf97oplJZb/F/3k8PVwJcKuF5gFnO2aMJg2+llCqu7lxtPFPFOH9Uiltv5yr
-hyVVvdA4XwF5CRuJV7iZToK8vtQn/elFSPw0uXg0033I1nIWej7WObo/cj3v5XOy
-6GKvNrlFGLNdHM6pXgk/jh9eiVmNSiGhpEXn+ROc6xOtOEEvCQk=
-=TxIj
------END PGP SIGNATURE-----
-
---ArSYnhEy2YRLKnCd--
+Regards,
+Jerome.
