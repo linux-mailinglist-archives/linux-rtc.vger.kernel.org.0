@@ -2,152 +2,98 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111D1725D81
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jun 2023 13:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8FE725FC0
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jun 2023 14:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbjFGLpE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Jun 2023 07:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+        id S241001AbjFGMld (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Jun 2023 08:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239346AbjFGLow (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jun 2023 07:44:52 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAE51BCB
-        for <linux-rtc@vger.kernel.org>; Wed,  7 Jun 2023 04:44:49 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30ae95c4e75so7326638f8f.2
-        for <linux-rtc@vger.kernel.org>; Wed, 07 Jun 2023 04:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686138287; x=1688730287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
-        b=3RBQjFfyDmBSo1AlYjKhIdm1beEdbNpeWKrKMomP7swI46B5yjDO5BHhe1tyU1q8ky
-         t1CWplL20m0oi2y9YZQhsRKLhqNOV8jqzD8AdgCtLZSYm8GaahtxsNiV6+093izidZOc
-         sDjlMaU18OGfEobAFY9ZhXQMQu8vcx4i4pxIx0eHAc4xmC1VDgVQNxvtHYGYLQfJUiF/
-         QwuIQvmqz5jeI2Xrq3QtoGIG3MoKh+ZsizZHQESghrYuyfnjsEveUYtFwNYgPIELhx+F
-         pwQ7zAVRDv8r6l7rv6rtyfVBq9ZfWcnQY+3VXW4YVXU/C10L3zvHPz1MXI+obInazKwJ
-         EHnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686138287; x=1688730287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
-        b=HJvDzanTwEG7nX34CR1xYkOA6x79J/M/IV1KETfCRUqlKA0L+5SmN7qyHOxxSa02ng
-         7XqGsC+Z6ven8TmOojD6OfHFtvh58Tz5y51KNrtqQWwKPeppGPjBcmjmVq8GoUoB6zdy
-         wZ3p3Rrz4nx4yf4zI4OWmKxim8TBepLxUrehgQrXu2RlikHOJJnMPCpzQZ8BQsB3SioA
-         VWGri6U19s+GnwI4Ijoc82y/jg03qfCeiihHqjZEGWXijVxa9b7PjYFMHcBsisblkpau
-         hH8kdGqaQ4iXrfanjVD5ni0USEVyrODOcGAMc4sScmYtlbjlNSV06AVTrDDDwohTSL8d
-         vH4A==
-X-Gm-Message-State: AC+VfDxmUJ/6cEOyYE0YW+1zDoNgqYPwXxY7xLMDfMr6pPilaR0T8p/T
-        esRAp2eKej6ojBhnz8IgwI+qtsB/2xI+u2S+rQKt/XuR
-X-Google-Smtp-Source: ACHHUZ4ag2NB29YmYf2NEyem1AS1fBVfRnebEHbs1kVzFKODnpHwBnsEXbEBUs2kQ3ajwzKCBP//Cg==
-X-Received: by 2002:adf:efc7:0:b0:306:26d1:230a with SMTP id i7-20020adfefc7000000b0030626d1230amr3860283wrp.65.1686138287554;
-        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
-Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id n18-20020a5d4c52000000b0030ae901bc54sm15135507wrt.62.2023.06.07.04.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
-Message-ID: <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
-Date:   Wed, 7 Jun 2023 13:44:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
- TPS6594 regulators
-Content-Language: en-US
-To:     andy.shevchenko@gmail.com, Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        with ESMTP id S240996AbjFGMla (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jun 2023 08:41:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586911FC7;
+        Wed,  7 Jun 2023 05:41:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0783663875;
+        Wed,  7 Jun 2023 12:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171C7C433D2;
+        Wed,  7 Jun 2023 12:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686141614;
+        bh=vjnZbE/2yE3OwFbjO2qGTa9dDTldjx2j9GsQii2RpUk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=U3ItOqlersJwiBwVH2Q1RQQUY31iUFz8QJ99setU8NuK0l48SSnc5sDgRjHeqz1d3
+         ZeWRMWnZVWJjOwEBS8vTQea2IhIJR+QF6y65rKEjDeQpVnvaQPZcnfxiygURRrfJ/L
+         xOxtxVxv9N/mWpNK0j9qUMZtW2pHkzWST4lR/s+MlcGIUKBGG/nWJV57yyebxGMYeE
+         QOieUV85nJttpNVegcBY5pMRP6MZr5k1vjHpMDIFRDH9vTGRXl78PmWGwZITv+8aES
+         owVyFtAJVoggXg335xUTr5cBrqHASIffgnoiuiAdJbR7MAvrp5K/JLZ4R3Zce9uu3g
+         aqU1L64N+MZZg==
+From:   Mark Brown <broonie@kernel.org>
+To:     linus.walleij@linaro.org, lgirdwood@gmail.com,
         a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Esteban Blanc <eblanc@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        aseketeli@baylibre.com, u-kumar1@ti.com
+        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
+In-Reply-To: <20230522163115.2592883-1-eblanc@baylibre.com>
 References: <20230522163115.2592883-1-eblanc@baylibre.com>
- <20230522163115.2592883-4-eblanc@baylibre.com> <ZG0VHnEByyMW9i4a@surfacebook>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <ZG0VHnEByyMW9i4a@surfacebook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: (subset) [PATCH v5 0/3] TI TPS6594 PMIC support (RTC, pinctrl,
+ regulators)
+Message-Id: <168614161180.30174.9903723014149714624.b4-ty@kernel.org>
+Date:   Wed, 07 Jun 2023 13:40:11 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Mon, 22 May 2023 18:31:12 +0200, Esteban Blanc wrote:
+> TPS6594 is a Power Management IC which provides regulators and others
+> features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+> PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+> communicate through the I2C or SPI interfaces.
+> TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
+> 
+> This series adds support to TI TPS6594 PMIC and its derivatives.
+> 
+> [...]
 
-> 
->> +	enum {
->> +		MULTI_BUCK12,
->> +		MULTI_BUCK123,
->> +		MULTI_BUCK1234,
->> +		MULTI_BUCK12_34,
-> 
->> +		MULTI_FIRST = MULTI_BUCK12,
->> +		MULTI_LAST = MULTI_BUCK12_34,
->> +		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
-> 
-> 		MULT_NUM
-> 
-> will suffice instead all this.
-> 
->> +	};
-> 
-> But why enum at all? See below.
-Just for the switch case readability.
-I have to iterate across the multiphases array for look up name into 
-device tree and evaluate in that order.
+Applied to
 
-This can be reduced to:
-	enum {
-		MULTI_BUCK12,
-		MULTI_BUCK123,
-		MULTI_BUCK1234,
-		MULTI_BUCK12_34,
-		MULTI_NUM = MULTI_BUCK12_34 - MULTI_BUCK12 + 1
-	};
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-> 
-> ...
-> 
->> +	/*
->> +	 * Switch case defines different possible multi phase config
->> +	 * This is based on dts buck node name.
->> +	 * Buck node name must be chosen accordingly.
->> +	 * Default case is no Multiphase buck.
->> +	 * In case of Multiphase configuration, value should be defined for
->> +	 * buck_configured to avoid creating bucks for every buck in multiphase
->> +	 */
->> +	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
->> +		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
->> +		npname = of_node_full_name(np);
->> +		np_pmic_parent = of_get_parent(of_get_parent(np));
->> +		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
-> 
-> Why not of_node_full_name() in the second case?
-Sure.
-> 
-> 
->> +			continue;
->> +		delta = strcmp(npname, multiphases[multi]);
->> +		if (!delta) {
->> +			switch (multi) {
->> +			case MULTI_BUCK12:
-> 
-> This all looks like match_string() reinvention.
-I can go with match_string but this is not significantly changing the game:
+Thanks!
 
-index = match_string(multiphases, ARRAY_SIZE(multiphases), npname);
-if (index >= 0) {
-	switch (index) {
+[3/3] regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
+      commit: f17ccc5deb4d024bb52fd3433471e77ab7ae9ad8
 
-No question on all your other feedback. Just wondering if I missed 
-something with match_string use. Looks like a good idea indeed but this 
-is not drastically changing the code as you seem to expect... Let me 
-know if you think I'm doing it in a wrong way.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Regards,
-Jerome.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
