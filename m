@@ -2,173 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAC6725623
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jun 2023 09:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B617257A2
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jun 2023 10:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239288AbjFGHoH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Jun 2023 03:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S239492AbjFGI2h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Jun 2023 04:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238729AbjFGHnk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jun 2023 03:43:40 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74784221
-        for <linux-rtc@vger.kernel.org>; Wed,  7 Jun 2023 00:40:41 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso843087a12.3
-        for <linux-rtc@vger.kernel.org>; Wed, 07 Jun 2023 00:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686123640; x=1688715640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QzNzUxBgctT5U3+gB3td/wPDXx9tt+J9TkByw444vb4=;
-        b=dpiv/lAao6jUqNRWIwDa/t6LO1tyPxkPWni1OUv3MwCcaBvBG9TZJWlQAsTwrpJG8z
-         WiSLr3KTYWPNapPhFe4g/UQTjDvdv2Kh5m3vUHx2Uvn0qhMaWW7936pz4POvuJM/IQsq
-         Nj5IuPvfSkJvvk2/lgKSqanZnlPWCLIWckttk5fd61hIvF0Cv5Sw1t5kE8iZvriviEW+
-         In+gf5HZQY8yoXdiDm/zttqRTvXjVTxgNdcYNhuap4h3KffjSa1/I4wWvgR5nzhKYxNl
-         ilEXGjb2B7MxuIK+KjltPks5gdQ0IXXIg2nLLmfmXMao4M6uuWPsgMMFy1+JhqAIHqER
-         v4DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686123640; x=1688715640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzNzUxBgctT5U3+gB3td/wPDXx9tt+J9TkByw444vb4=;
-        b=HQIFtTcOMin+qOiVulzza76liKZ/4tP9RFVulNSH5ZG7qzqmK3ar+OQabBZE4av1Pq
-         Cy7eRZkhFtyroR85+Z+cjRGU/QaNejrsRA39qJiTVZjowf0oKKhAYiLdf2E2bUPml5rI
-         8CrZ67Vf2DRyG/fxVc9s1Z47I/No711NYnlPYU3LY5fCz8AL+OGNbA976/zJw2PjZKzO
-         jnjMWCQ3F3V+JN8LTHewJX+Eb5Gji0Cm5WvISRLMx+Hh2jDVm/yxVvRhRvecSiJ21Vpu
-         ujZCrV511Xl9eoHrkShsAE+YcBmIKNaUFpbdAM3cmnRNtJDQFy4qDFntszmhpL5J0WuV
-         7s0A==
-X-Gm-Message-State: AC+VfDxxpiGTJzeiTPpKk6HE+dQuj1fxMz84VujJWuxdlSmr+NjPwmN+
-        hQgMYlqO2RBoZFkuCgsaUZZKiw==
-X-Google-Smtp-Source: ACHHUZ6nIjpeIRlx7fPahFZ5gzxmNl29452UMvG6AuY1y9w+PrjwLC4zGKqXZHhvW+xhYzrUW9v6Ug==
-X-Received: by 2002:a17:907:9403:b0:965:cc76:7716 with SMTP id dk3-20020a170907940300b00965cc767716mr4912526ejc.76.1686123640173;
-        Wed, 07 Jun 2023 00:40:40 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k16-20020a1709065fd000b00977db7d08cbsm3376124ejv.74.2023.06.07.00.40.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:40:39 -0700 (PDT)
-Message-ID: <f141a538-23b8-d10e-227c-5f0ad191c3a6@linaro.org>
-Date:   Wed, 7 Jun 2023 09:40:37 +0200
+        with ESMTP id S239491AbjFGI2c (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jun 2023 04:28:32 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB405E60
+        for <linux-rtc@vger.kernel.org>; Wed,  7 Jun 2023 01:28:30 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686126509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kyUWQ0jaKAo5DxVruAqqY0uxC0YwQguhI23bJqwwpsU=;
+        b=IzwF+oITjWbudJ0isLi3GjxvAxSqMiMBW08bhXeGtwaSEJDKJATut6/G/h9IOB0sIZgGFU
+        Nixa4l+a9H+dyHbl40g1RvCuLJVBcLeuXYQPE5gm+5CMTHjfYIvY+ztGD2NB0tlIzrm5BK
+        UM/Vna/Oa89y4CAVjD90vbR/hmge6bCqB8KSkdwFKintvtDktmi97Dz4l85/kkMojb0XSC
+        7Zn4BxHhLbyY0eZN/xzFU86QIInVjdz2ByfGbRaxGEnwhFxhG1gSDooFrn5n3L7OTXOQ0W
+        lbUrAozzpUe9+F0THCdHSxq6G0dVaiZRyfBsQyl8ojHQ/ebsX+uxASmqceE1cQ==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 05F7B20004;
+        Wed,  7 Jun 2023 08:28:28 +0000 (UTC)
+Date:   Wed, 7 Jun 2023 10:28:28 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: question about firmware RTC design (for rtcwake)
+Message-ID: <20230607082828fd8d03fc@mail.local>
+References: <20230522164638.68fea327@thinkpad>
+ <2023052219400923b59cc0@mail.local>
+ <20230522231454.30283751@thinkpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/7] dt-bindings: pwm: restrict node name suffixes
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
- <20230607073652.hoyrernfcuoryrqs@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607073652.hoyrernfcuoryrqs@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230522231454.30283751@thinkpad>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 07/06/2023 09:36, Uwe Kleine-König wrote:
-> On Tue, May 30, 2023 at 04:48:46PM +0200, Krzysztof Kozlowski wrote:
->> Make the pattern matching node names a bit stricter to improve DTS
->> consistency.  The pattern is restricted to:
->> 1. Only one unit address or one -N suffix,
->> 2. -N suffixes to decimal numbers.
->>
->> Suggested-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 22/05/2023 23:14:54+0200, Marek Beh�n wrote:
+> > You probably need to look at rtc-meson-vrtc.c, rtc-fsl-ftm-alarm.c and
+> > rtc-brcmstb-waketimer.c which implement something similar.
+> > 
+> > Honestly, I would go for an in-between proposal where you would store
+> > the requested alarm time (or more likely countdown) on
+> > set_alarm/alarm_irq_enable so you would get .read_alarm working.
+> > 
+> > However, my main concern is that this is yet another custom protocol. We
+> > can't possibly have a driver for everyone implementing a timer in their
+> > FPGA/CPLD/cortexM.
+> > 
+> > How will you communicate with the MCU, can't you use an already existing
+> > driver?
 > 
->>
->> ---
->>
->> Cc: Tony Lindgren <tony@atomide.com>
->> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
->> ---
->>  Documentation/devicetree/bindings/pwm/pwm.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pwm/pwm.yaml b/Documentation/devicetree/bindings/pwm/pwm.yaml
->> index 3c01f85029e5..abd9fa873354 100644
->> --- a/Documentation/devicetree/bindings/pwm/pwm.yaml
->> +++ b/Documentation/devicetree/bindings/pwm/pwm.yaml
->> @@ -13,7 +13,7 @@ select: false
->>  
->>  properties:
->>    $nodename:
->> -    pattern: "^pwm(@.*|-[0-9a-f])*$"
->> +    pattern: "^pwm(@.*|-([0-9]|[1-9][0-9]+))?$"
+> The MCU exposes a command interface over I2C. There already are
+> existing commands, which needs to stay for backwards compatibility.
 > 
-> With this patch we forbid now the following patterns:
+> It is theoretically possible to simulate an existing RTC device on
+> another I2C address, but I would need to study them, because the boards
+> are shipped with three different MCUs (STM32, GD32, NXP's MKL81) and
+> they sometimes have a little different I2C slave behavior.
 > 
-> 	pwm-[0-9a-f][@-].*
-> 	pwm-0[0-9a-f]+
-> 	pwm-[a-f]([@-].*)?
+> But I will need to create a platform/mfd driver anyway for the system
+> off handler and GPIO controller. If I am going to create a new driver
+> anyway, why not add the RTC functionality as well?
 
-Yes, this was discussed last time:
-https://lore.kernel.org/all/20221127182232.GA128974-robh@kernel.org/
+No, this is not how MFD is working, you will be writing a separate RTC
+driver or reusing an existing one. Have a look at the recent isl1208
+series:
 
-> 
-> Checking for such names:
-> 
-> 	$ git grep -oP '\bpwm-([0-9a-f][@-].*|0[0-9a-f]+|[0-9]*[a-f][0-9a-f]*)(*pla:\s*\{)' arch/*/boot/dts
-> 	arch/arm/boot/dts/meson8.dtsi:pwm-f-ao
-> 	arch/arm/boot/dts/meson8.dtsi:pwm-e
-> 	arch/arm/boot/dts/meson8b.dtsi:pwm-d
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x7
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x19
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-c
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x5
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x8
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x3
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x6
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-e
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-z
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-a
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-x
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-h
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a-e
+https://lore.kernel.org/linux-rtc/OS0PR01MB5922DAC377266672ADA9FC28864DA@OS0PR01MB5922.jpnprd01.prod.outlook.com/T/#mab0a75187abf7d8aada2c3517ebfdf7241f4bc7a
 
-Are you sure these are pwms, not pins?
-
-> 
-> These are all pinmux-settings and no pwm nodes, so the change is fine.
-> (But arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi isn't properly
-> sorted alphabetically.)
-
-Exactly...
-
-> 
-> Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+This patch adds supports for the isl1208 on board of a PMIC, as you can
+see, this is a very small change versus a full blown RTC driver.
 
 
-Best regards,
-Krzysztof
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
