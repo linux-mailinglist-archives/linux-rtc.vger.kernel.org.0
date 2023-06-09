@@ -2,122 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A969729C2B
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jun 2023 16:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C56729DDF
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jun 2023 17:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239211AbjFIOE2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 9 Jun 2023 10:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S239103AbjFIPKc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 9 Jun 2023 11:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjFIOEY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 9 Jun 2023 10:04:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9259E1BC6;
-        Fri,  9 Jun 2023 07:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686319462; x=1717855462;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NRBfHD/6pEpjkFG2oKWveB5W2AWXlcZfQ9xyk1RhqhY=;
-  b=VkgTTjgstvhVtv3tZRtsAd5g7cUMj+Mm10c8KE/PpvDltiHgs3ObBPH3
-   Vd4tLFrfbvHyK7H4zQd1dV1dZ2oRV4Ri5MCNzjOSotqv/6+jHJABtG7mW
-   EXb9PFijcEsRb/yMo2g0rOt2Rg12XGRc1BdB8xXMWPNeT57M+hsaKmYZK
-   O++yuT2+mkimeDrwUQpNUCJcwA2WBm4KSTkgTpWIzt/YA2eqIcj3a3kh7
-   obugOA6N0hruUrXUcMZSFZuutB49E1FDnPbjp+z/h7cisIBb5slrFFAw7
-   pdBE59nK9G4eu7rBxT2v6P5zJ58187VJbz+ZOrXFKF62pG8gKSGU/32VZ
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="asc'?scan'208";a="219601371"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2023 07:04:20 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 9 Jun 2023 07:04:19 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 9 Jun 2023 07:04:17 -0700
-Date:   Fri, 9 Jun 2023 15:03:52 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Trent Piepho <tpiepho@gmail.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S231479AbjFIPKc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 9 Jun 2023 11:10:32 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDD4B6;
+        Fri,  9 Jun 2023 08:10:29 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-777b4c9e341so84869939f.0;
+        Fri, 09 Jun 2023 08:10:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686323428; x=1688915428;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bgEA1Mw1A/5s3GKiOUjS2OVmsqKcYspaLT+4TG/YkK4=;
+        b=DjwNmx67BeoFLM27pn5XmdbceUPDiON3563DnauYeHwea8zuquToq281cv41H+Iak3
+         BouT0We4DQIMqblU63IGUlAEJmwAQCXkdWfAqTMfH/RJORQ+KVGABHBjU4CW/cdEnjnj
+         xNi52lIsQPf2dqRnXBuyPkY5BEQQ2mMiCMtzGvSTVbGQyrf7KnwJsfcQp2PkYSwKRo5k
+         X2yz4+pRTRgA4PCjQffFjALn4wN0QHcdxsqoc80Lt9Ms+6J3PDh5S6xDrs7PBhlZc6be
+         +M0dv6G3UnM7DQctBLOUihm8hb2nssUDhKaoWDMsJLISdOMM1OX/MKppuNnCs9srr0YQ
+         eOzw==
+X-Gm-Message-State: AC+VfDwbJncx6FYyP1722y0fC7ojnw9SgAcibTsq3LIt2DiY02DRI+QH
+        aiCOKcpSJzYwe84ichZkKg==
+X-Google-Smtp-Source: ACHHUZ6GLJF9xmiCznvrkvDAHStb1dFZWwEwBO0JSyNuKSB2A4EFN0t4aWuWCLrZCT/E+UeHUSc/ew==
+X-Received: by 2002:a92:ce11:0:b0:33a:56d6:d9a4 with SMTP id b17-20020a92ce11000000b0033a56d6d9a4mr2155501ilo.10.1686323428407;
+        Fri, 09 Jun 2023 08:10:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id l5-20020a92d8c5000000b00338a1272ce1sm1147336ilo.52.2023.06.09.08.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 08:10:27 -0700 (PDT)
+Received: (nullmailer pid 986311 invoked by uid 1000);
+        Fri, 09 Jun 2023 15:10:25 -0000
+Date:   Fri, 9 Jun 2023 09:10:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Mark Brown <broonie@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v6 05/11] dt-bindings: rtc: isl1208: Convert to
- json-schema
-Message-ID: <20230609-chalice-parasitic-14b7868f6aff@wendy>
-References: <20230602142426.438375-1-biju.das.jz@bp.renesas.com>
- <20230602142426.438375-6-biju.das.jz@bp.renesas.com>
- <OS0PR01MB592217A7291027A7C27C17268651A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <202306091348319ef75d62@mail.local>
+        linux-watchdog@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-spi@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        timestamp@lists.linux.dev
+Subject: Re: [PATCH 1/7] dt-bindings: phy: intel,combo-phy: restrict node
+ name suffixes
+Message-ID: <168632342399.985906.12431431892707276555.robh@kernel.org>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2Zsjy79XFfr7ZGEp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306091348319ef75d62@mail.local>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230530144851.92059-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---2Zsjy79XFfr7ZGEp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 09, 2023 at 03:48:31PM +0200, Alexandre Belloni wrote:
-> Hello,
->=20
-> On 09/06/2023 06:42:59+0000, Biju Das wrote:
-> > Hi Alexandre Belloni,
-> >=20
-> > Is it ok, if I send isl1208 driver enhancement patches patch#5 to patch=
-#10,
-> > as it has no dependencies?
-> >=20
->=20
-> I was still waiting on a review from the DT maintainers on 6/11 to apply
-> the series.
+On Tue, 30 May 2023 16:48:45 +0200, Krzysztof Kozlowski wrote:
+> Make the pattern matching node names a bit stricter to improve DTS
+> consistency.  The pattern is restricted to:
+> 1. Only one unit address or one -N suffix,
+> 2. -N suffixes to decimal numbers.
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/phy/intel,combo-phy.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-It should have one, no? Although I am new as of -rc1 and the information
-is unlikely to have propagated far maintainers wise.
-https://www.kernel.org/doc/html/latest/process/maintainers.html#open-firmwa=
-re-and-flattened-device-tree-bindings
+Acked-by: Rob Herring <robh@kernel.org>
 
-Cheers,
-Conor.
-
---2Zsjy79XFfr7ZGEp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIMxSAAKCRB4tDGHoIJi
-0iCeAQDD2TEMdCOfrDVQOehJYVDMhyr9+0ZQnAHJbte3VgXQGQD8D6Z5x1ntWtFU
-OLBUS4WwcVv7iX9WPIvAlPovvpuvnA4=
-=Pr/3
------END PGP SIGNATURE-----
-
---2Zsjy79XFfr7ZGEp--
