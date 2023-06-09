@@ -2,154 +2,196 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F101729EA4
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jun 2023 17:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2798872A514
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jun 2023 23:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241747AbjFIPfH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 9 Jun 2023 11:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
+        id S230418AbjFIVEW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 9 Jun 2023 17:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241904AbjFIPfE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 9 Jun 2023 11:35:04 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2131.outbound.protection.outlook.com [40.107.114.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC7030D8;
-        Fri,  9 Jun 2023 08:35:02 -0700 (PDT)
+        with ESMTP id S229530AbjFIVEV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 9 Jun 2023 17:04:21 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2064.outbound.protection.outlook.com [40.107.241.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5FC358E;
+        Fri,  9 Jun 2023 14:04:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XfyRoyYSHY9YXow63PSZPHYL0CZK/YSRO8NuRoALDVmW9nuzdbbatopr92/NsW36nykVYLJk4ZQ/CSyE2jYOzn0zkWvEiOewR5h4754GWgCRJ6EkiRUGyqG6bRJpRqt6n8/TLS/7ti78yzou4lkbEg4Oo6Qj7gaFrZdAwbBxwdb8FquxWuPzedvdWyyrLLaKHZDUYDlyEXVMuMwrV3Ehn+iQvi51Yytn9uinuYZuFbvV6WVk4gycLFSOZKkpLd4xmvzQU91CHp7Q1uZWfMAu4LANvvGCwMQr5xFRi+vjFAseYZ8T3DxyjS408ahAo3IA4Ud3Gr0xBiaRKPcJC6YYJg==
+ b=eqpBynF0JNtS3v/KconJ6zXao/hyfjPoi6+bx3YgzZ9lYSw1U6pk82c9/5IIriWYYxFXuLJTjwmdjuO5Acc4TAE3I08iqanIfJoZnhAV/Fu/rR8xnGAp+IAnYVSo7Gd7EivyVO2QycqsiXu+pJm0Stn0HxkuIfap6Am9S+f3XCq7uI32qPW2UtcKcIMtyzdTswRIR4Bf1XvmzBjTBmFdUshWbrIyTkIDondcluED/2Q8QRPzy+9taKnf0NnJeuEEsnbxU1dUeLvnSxcD3T+Nq3VO8eRxQDjUWqM2LEMjavlJueMPqzikkaipl+1m5mErBjxTW9ReJxiOJLsi1C8QFQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TKGcvvHo9S1C6c7Q7mfhEspLX53IYGaOmfbdCmLEAtM=;
- b=knSzFZRQLqTje+SIIkO/hFTl1vTh/mhN3nF8BkwnA+FtMh85/rJNv7W8Z176FImmOAlE+oZghTpBBKDnEBH3AkKo4GhNts8PxVgYPenOvq6rvPXnoZdKxy/GTPYMnanaKxJO1MVZEXyh+FZ/1Zl29iMDdtY7QfPWpeEl2L81Fm2KYTXK9zaWTKenLALISAy/NbxNvkBMviVSqPOfFBLiHbd1eCRmMeolz2/z6r0h4ZHMSIYo6oR7vTW9xUaxfEbQS9N3dhGGvALKa607e6yA3QdFPLfAiFF1BYvvcQX1GuP6Qm/A2DzlTXduo8D3b8877GNVLk52nsJEJ9IkFKDGbQ==
+ bh=H2jdjcuNyFUKWFm4EMWdqKR6ASTe7qlr2IBFsbHVWNA=;
+ b=jsD01sSYE5hp5CJYGV4vnIeA3txFM0V1Wx6/0d30b4pKD1vhNKmQkb4o6/TrObolq/McOV4tosY/0KRhF7gYgGlRrCHnikpeCYvYZ0FXbzhSzvUNXa2RBgIiWdAXaTPwIBxikY4TUaEA+aMvFMc0fVx690PQDbbduLOkGPKISCgZLRYrrWKbl8rhgg+LefIWS9/V/hKOihzwCN+JBuP5ePRT2P4ZPBzDxco1xUGmUXZBuzgrQVn0HLtHJQ7AcDiZ/bTfM++qWIRI47+iUgrzn9OxdLVaDluop5TcQSPJkTQNZatzPqqe8sKOQCRASx9gF2kHINRW0JGMDpuOSGV6Pw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TKGcvvHo9S1C6c7Q7mfhEspLX53IYGaOmfbdCmLEAtM=;
- b=ks+FfH91aogv6F8LoNPYCBM3M/FReB+ib2nWydIwPHxuesBcviWAUGdKRrm9V9E/hdV37ZoMsNC+lht6GxWtWdtRN6tmPL3HqNRgknL6rJg4hk3Bq8utjjLSqOdjjHD/qA8SlFjk7HTRDq2Ei3evSN9Yw1HOlnZGCLMh9H4Fd0o=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OS3PR01MB10185.jpnprd01.prod.outlook.com (2603:1096:604:1e4::5) with
+ bh=H2jdjcuNyFUKWFm4EMWdqKR6ASTe7qlr2IBFsbHVWNA=;
+ b=Ehe+RFt5baxR7VejwxWu3D6dHVpaDcjqBMGK1tJc5czr6PnG18S1C8fnVsgChj+OBrkNyIXsQFUVLY82HmKybdj8mQTlperFG6ZmZJPbVBmOq8z8DsoDw6JG3uKrNBLGDTdjKT03UZKCyzE3MwC3tAC0HPQpC2qe8t2n0dQu/QHJ7NA50tg8UEkFD/QPIW9q8YgEcahXj4su5JStjr+94csAoO3+epSN+4iskuzTsiAJwcXDaexHevOI0OdQ6zBiGGO05aeIH/r+cE5bU2oGX7RI1k//ZvHclKzTcqMbm1AhOoLU59kmFbjmcrnxxj1UXrxdEAAN0j5hhi+2riuW1g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
+ by AS8PR10MB7428.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5ac::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Fri, 9 Jun
- 2023 15:34:59 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.039; Fri, 9 Jun 2023
- 15:34:59 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfram Sang <wsa@kernel.org>
-CC:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v4] i2c: Add i2c_get_match_data()
-Thread-Topic: [PATCH v4] i2c: Add i2c_get_match_data()
-Thread-Index: AQHZmWEvpHHyYQXYEUaO2IMvdgA3Qq+CmnKAgAACa2A=
-Date:   Fri, 9 Jun 2023 15:34:59 +0000
-Message-ID: <OS0PR01MB5922056817E134BE28452F008651A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230607165738.138357-1-biju.das.jz@bp.renesas.com>
- <ZINEYYxGBSQ0mKyV@shikoro>
-In-Reply-To: <ZINEYYxGBSQ0mKyV@shikoro>
-Accept-Language: en-GB, en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Fri, 9 Jun
+ 2023 21:04:16 +0000
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::53c2:174a:8b13:ce94]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::53c2:174a:8b13:ce94%3]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
+ 21:04:16 +0000
+Message-ID: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
+Date:   Fri, 9 Jun 2023 23:04:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH] rtc: pcf-8563: Report previously detected low-voltage via
+ RTC_VL_BACKUP_LOW
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OS3PR01MB10185:EE_
-x-ms-office365-filtering-correlation-id: 3e6d87c5-8674-41d4-177d-08db68ff159d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /+bIT0XYn+8xojw5FtvKlH4g7RhGiQi4VpdOZIpc9momsCbQX7PRfEAJ+qiNhBPkcyn0MfJIscgnudaNDLYUQLyHlOfwxnKzrvYU2yAIVV7Q5mGLuSXrglWPzVP8nSiBlW0iKTZObywSR7IEXj8N7zrXWzEyYE1lt1H9jKW9jwN0eRf1rGECRCX4G2S4MRt43CizxRyUftfnsTFb3cWpDZ+s1/xWjEEAx+Ndw66LemxXv2rSEa9CQNEchqkd/mfUNuP0j3XC5u5PjZMfIHcN0rP/CTYtDOg5bnhTdHKXhmRfvEcJ9sz51rmpChoSg0+cHQhEDEHQzBixVM3SS7ymLpYn1gXAgeQiaYHw5JPZLFYh4Hpx2zRyTzZQUeszUYZa0EBxNU24pvRH7il0ko97sJaNZNvlvJAQRCy/ouPvntUGXyVwQAefvQ3DYQSfJ1nYcMbFhb+Cpt6J9SfErYGCMyd5UZfVBFtgiPA9zF91UMU2x9LJzUlcgVgRq2vXYpKN8Fk6Mm1bVl32/YI54Jo54p96GJLgPhpebRFvc4ocKZ7w013J0WfApLBNcndQg6NGtC8BJK8W6XEmJWhS1XgtsBjObz4ynidSDlY4ZHv2EAFcRtyQ6n8JsT01zYmRLEpN
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(136003)(366004)(396003)(451199021)(7696005)(55016003)(478600001)(76116006)(4326008)(64756008)(66446008)(66476007)(66946007)(66556008)(316002)(6916009)(52536014)(5660300002)(41300700001)(8936002)(8676002)(54906003)(38100700002)(122000001)(71200400001)(33656002)(26005)(2906002)(4744005)(38070700005)(9686003)(6506007)(86362001)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5gG+wrb8VbmkWHSaN7XTf7XWhbNTtDFTKe1rdlwCbpaEJPQ2VZ/7qnvUpaH3?=
- =?us-ascii?Q?467OhrXQeFnDZzC4cpeiOX/bjEIyLsWbbSNd/sX5LA6iu9rMzXvqC3IlqBdC?=
- =?us-ascii?Q?s+dvIzU17XHzEGvDv6s99PGv0/1M/QHkl8xq7LpQHTOpZnyCn+4nqH5JhB91?=
- =?us-ascii?Q?ATyKuVWENbdRcqqBs553xK408piKYlBmQOrl2qKg06QJyEh7KpM/vnFfWA72?=
- =?us-ascii?Q?OKp5+423KoSw4j+ypH/M7YCsFsq+6fYcK1nLlBZplqr44tF1HlIiiNhQQYKY?=
- =?us-ascii?Q?aTZtaMB8bV+JRSp4i34FcPG8kmY1Dfx2rn+ujCTtyrNVRm500bjkAMCsbh4i?=
- =?us-ascii?Q?KjNxdGUnAje3Oike76+ZPvVdfTTug7gCuWBLpBuEmCGdjvrJHgA2pbtUz1Y7?=
- =?us-ascii?Q?I+1yVRfhq/noedgpKOflgyGCLj0N9H5E2Bqy20iuZFuUst9lP62f7cfzcOI9?=
- =?us-ascii?Q?Yz40H8Xz5Oazcz8kcZUsyXSvvkME+BfupcgtGcIvuXGCwmnjbh1d7+6V0fJS?=
- =?us-ascii?Q?uS2YsbZ/hHWRK6S4ggdTbMJeZH6qpsbFJ6mDIqAvjucWlx8QuqZZXGDtfi8x?=
- =?us-ascii?Q?mHMotkban4HbVTOPh5a9xnjS+tGZCSzJgvKgUiyUx+WRth2vkCGy61VFMwuH?=
- =?us-ascii?Q?i9//tLa/MSz/vXDW/jRGSftz3ssCfY3e7Us+CLos1IaZHTuctgcUMJ5EwHmL?=
- =?us-ascii?Q?cQXsI02bbfnycyV777i2IlzE4PuSR25C2JlPH9eAqmdokftnqUn2BMZBVUqw?=
- =?us-ascii?Q?pMt3SbGW3OfR/XA5YexpqHi8nS3xq7xtxMPxJHSJfySsOLK3Iu1/QhBobeub?=
- =?us-ascii?Q?+Mm3tMOAqo50gsNYEGHlNEism8xCDQ2N/o4b7sHq6iumtYbOOFWe9Qa+ioYm?=
- =?us-ascii?Q?zjzfeOEey3duFMakgF8ntDe6HSDuX9CkeSr7S9kuPSg0Gmn6m4wCQpHT1avp?=
- =?us-ascii?Q?DiFOMHBHuIu3350kI/qe3jgkqPZ+M0S1OiG9CHTux9/OYolb605y8D7yEioP?=
- =?us-ascii?Q?rnB30tEX2Y7yfeJcapTUClVbgE46Mq34suFvVH2AJ5rd+EhWkVz6DsX1Oeru?=
- =?us-ascii?Q?sOkVDbP+MG1cldpkuE5Jan0di3Q274Ab52Hk7lBEHG6YAM0rY9x2ao0yLYoO?=
- =?us-ascii?Q?iItACbrokvk4SeRr2H3Ijj0BW3/FG2K/ZA4IajnIP812bIBRaag1sSA4btLg?=
- =?us-ascii?Q?fCEvRkX5sGx1dJWy8dHE6dwmpXIqYmlKkxx6j1l0WUQoSGoPB7W0hgDemNgB?=
- =?us-ascii?Q?wltszzD+1gSF5WvDROXsCUPR0VVHV9OSK8HBm36hQauEC9ZBTBujRGxYVTbi?=
- =?us-ascii?Q?P0FR4jQu4gyQMtrx50815E1ImpfJEh6MWNlY3toj+2e7Be8lNlFT1PYZln29?=
- =?us-ascii?Q?d5zeF8+OBMOZ0j2wEJi+0oB2rw+d6yQ5JIV+JVo7Lnws/OxD47igZAvZ1pGb?=
- =?us-ascii?Q?xUfseHC7QE35/NBbYdv45wZWPQY6Dg5/qEzDLDjPK+vgV8AZM7+4FkfZjqin?=
- =?us-ascii?Q?M5ODWrEIpaJ4tcnPyl6mOiEMOUuwXifVPuEvfrbp8Q7jPj8hTFsGFbYzT+tw?=
- =?us-ascii?Q?B9Scx9HzFFeZA3Yndte1l42ZQD04UEcf9qzk+/VkxY8f+Tf7jTkdjXxe6oJN?=
- =?us-ascii?Q?0A=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0250.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:af::20) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:588::19)
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|AS8PR10MB7428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 615d9b18-8006-4f68-34d6-08db692d15db
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aVJMD+guSdgVHVNSrowqlUfxZ9gaYHSbrF/Py/Tr5zCqHxnPRWGzLT3lp5LJMsOLh5NTJA5tCJg5ocRNZCoheEUIJvH+B7Of64oV19efHkkMSobxo00BtXdbLYRG+QAX4HrZu5SXM6t+euQo7Hyzr47ZdxahrRl6ejP10igRH0STdlaMKxCnX+14iHePcXkkut1lPH2j3Mi/zoeiT9+McBFn1oF33k9PhwXronT+uwtnhRIlCtH84SFIFmu4JV3WvOuKhRn/Nr6QMziA+0jkQQkmBHzESmTqAkmLfEYM+kwf2EeZqxPpgqTkz14OYOi9G2BLNZlru7Svk0Eyz1XMClZxE/UZf+V20dzftNeu/rd8eD6JgRah42Z9/QujTDY1+o7TBjmwAKoGbocIF3yoIhhyPoZcOUWOoYjWEVT9bnIBHAM15PqOV+ixMcEZ5aQXWZOxy+r1b/AJrD3ixvNakK6qSNVFlljiPB/4D+lnBNMasLfwzZ2WTZ/EcfgytFQQb9BkC1qiGqQalytihpc9ApCTDOwB675qE8EqFEzWA8O3XkzDpOrS6iy/SoMx26x6q7DM4VuYIrAXwM0oy3QSGM1REXKbqrTm/gGMuuKzqYkK6+gE3awc096wXke4fNqcY6T9fjMs+8sLZBvRVJPr2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(451199021)(44832011)(5660300002)(38100700002)(82960400001)(186003)(26005)(83380400001)(6506007)(2616005)(6512007)(478600001)(110136005)(2906002)(86362001)(6486002)(31696002)(36756003)(66946007)(66556008)(8676002)(4326008)(31686004)(66476007)(8936002)(6666004)(41300700001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aTNZRWZEeWtKbUNpUlRvKzhLekpKcHNpeEpGVUNnd2xWRzhSd2wrZHN5Ukc0?=
+ =?utf-8?B?OFFTWit2anBkbmN0RDR1bnM3L2NrVjZWaWtNYUZGMEI0QXo5N1JQY09FdlRI?=
+ =?utf-8?B?c2Urcm1VNU5YYXZObEV2Q1R5NS9aeWs1Z3MrSnJkQzhGZGtqWHZQdUVpSlZO?=
+ =?utf-8?B?Z1o3WHA1Y1lua3Y4c3RuNUtaSGxTbzNiVDBiSWFYb2x2Zm5mRk81dUt0alla?=
+ =?utf-8?B?RmV4Q1RJeFN4b1Z4dHdwYkpGUUZnUk9nUWdZUDJCRmE5d3huZFRpQ0tBelRL?=
+ =?utf-8?B?QWhLa0tsM2FJdlNmVG5KNFhWVWxXZWpBV3JMZitqb0QxOUltRGh6Ny8zd3hP?=
+ =?utf-8?B?NkRJdGprY3BaTEt2QlBCVU5aQk9yV1BBclRxK1lhQzZPMkd5T2ZET3hieE1B?=
+ =?utf-8?B?ZFczMWFtak5DcW10b3ZMN2FOcC9hZ3MxY2JGQVM4QU9qTlUzaGdNdk02ZCtn?=
+ =?utf-8?B?a3hNTm5LRFUxR0RUMWZreCtXMmpaNE1TYzZCM2g3WExIc1lSTVFjVEtTakJD?=
+ =?utf-8?B?VGQvZTNjaXEzcFdIbWtKSUdIdFdobHFubGZVUVNOeVlUejBFcGxzUVN4dkd3?=
+ =?utf-8?B?cUVDREJhSjNXK1ozK0lOUERWYTgwdlZzM0d1eXdob2VrT3NrMG95RGdFZUY3?=
+ =?utf-8?B?MlJVdnZLbGQ3NlRGTUdpbVlJWW9QTXM0WWhtazZhc3pzNGVBcU0xZGNGVTR4?=
+ =?utf-8?B?SlZoSTRIRmtEUHFSV1ZESVhiL2hKN0ZaSG5HTkxiRURhZlhjZk5JTmpnMmtr?=
+ =?utf-8?B?dDU1ZFlCTm41WFBESC9GN0Fwd2d6dW5DRGRhMzBXbmViNWgrRC80clhtbUhB?=
+ =?utf-8?B?VXgzYWpXY0pEaUpDWXhDU0VjaGpYVW94S1cvUmg4T0d3OW9Hc2IzeHFHbS9Y?=
+ =?utf-8?B?dGZTSnpZMFo0Q2ZPNlljS3p5RWdMZzc3OUdROW5OOVVGblFVYlZtTnV0OWpS?=
+ =?utf-8?B?ZjJKQjkvZlh5UjlQR0JsblhuTjNlRWF0dlJCdEhlRCtxMU1uYWR6MlhlK2kv?=
+ =?utf-8?B?a28zeCtFTlpGOW9ieVI1Z2xMWWI3VTNSdzYyTkRlYUFBZm9CWHVyTEV3ZXp2?=
+ =?utf-8?B?NXdINUYzUHJmNE9JdzR1SWFDUzVmUGlIZUhoQmtucmFXUldJeUhyRGk3dG9S?=
+ =?utf-8?B?UTZnYkFSemZmaEsxUzRQem1xYVFpaVRoZk9CelRoZVBjU0ZPQ0lUb1NKNHBJ?=
+ =?utf-8?B?dmlPK29UY0xaMktTRmhyMVlheG1lSVNUNlV0VDBwZ01zTTZyVDRYZmt2MndW?=
+ =?utf-8?B?V3ZXNkJEbytkcE5JbG1PMHR2UE5XQXdBTEFYbTRONWpXTkozVjZ5SU9ERWdG?=
+ =?utf-8?B?ajFkRXJpMFhNeGYvbnVjN1BtZnNGY3dHbG5iOWo3R2NHZ0Nya05IZks5Ykdl?=
+ =?utf-8?B?Yk1XWTJhcXpmZjArd0liZ3Q0S1puSkVPNlNZc2hpTXlFRkpxeEI2RUpxb2hL?=
+ =?utf-8?B?U2k5QzFETUVKcEkwZFQ4RUZOOGh2SVlZd0tSNVlZbDVzRG56ak9xT0RlMkdl?=
+ =?utf-8?B?ZXMzRnVjK3VuZ3NOd21VY0tXMVVNL0pzbk5MdXBSK0RybXk0eWQ2aXRZVUl0?=
+ =?utf-8?B?aVBpcTUwckVLdmVGTks1a3g3dHRiSUJsNDZCM25XTjVrTHhMeWNCcDZGUEhI?=
+ =?utf-8?B?bDkwVkxZL0thWEtTd2t4VjkrdGthMldrOGZvM0dTZGtlQVd5Q3NBWEhybHlN?=
+ =?utf-8?B?YXZiWFdabXM2eWNNZVNCemZpdEY0Sjk3NmZ6cnplcjIzZE1EN2pZbkhUSEt2?=
+ =?utf-8?B?SzZTa1d3Ukd5M1NXSDR4UU5manIrMlBCZlh2THNIMDVSZUFuMkFzTjFuS1V6?=
+ =?utf-8?B?M1JDNzhCdmhqQUs0dTYydUZrTjhaWTlEMkZnNk9RSjEvUmtmcDRJeVlxbm5y?=
+ =?utf-8?B?OHp1alFtcWtVV1FoQ3hOaEc3UmNrVVJaMEZtekVldVRLclFvdG5iaE1ONWdv?=
+ =?utf-8?B?Z2lFZEZpL0Y3L0luWDkxRVphVzZHandUdjFZOTA2S1RtWDAzZWJ0VjlCaitH?=
+ =?utf-8?B?L2Rab2tzS05aaEI2SUZTSW9PNGJDZUR3OU1tR3JHT1hGeFhzZDh3dzhyeXlB?=
+ =?utf-8?B?dnN2NHNzQnp3YXlpSEd4b1FDV095b3RxMTNyTFE5Ty94OUFxQS9hRkNacE1k?=
+ =?utf-8?B?THlobzl4ZHBuOVZYcUtRckJBSUljenpEN29EaElnYXEvQUI2b3RsVStNUmxR?=
+ =?utf-8?B?R1E9PQ==?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 615d9b18-8006-4f68-34d6-08db692d15db
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e6d87c5-8674-41d4-177d-08db68ff159d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2023 15:34:59.1030
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 21:04:16.5681
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sMhlfNoywHVPubjVR6qbpfYerYbDYtDnsPfzvsO0f2MHJQEfLfMRQniHObkRw9521i9lqczV1HpaNLhNczRoUC89T/+cCXyRl9kmqjtkBpc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB10185
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jkg4RELARfWSW2V/vvynImkJOQP8noe9zxoouFJA+2ZLclEDibtIRsgHUKyxaiDNkvCF5m3uFz0l+6x7uNJ+Qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7428
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Wolfram Sang,
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-> Subject: Re: [PATCH v4] i2c: Add i2c_get_match_data()
->=20
-> On Wed, Jun 07, 2023 at 05:57:38PM +0100, Biju Das wrote:
-> > Add i2c_get_match_data() to get match data for I2C, ACPI and DT-based
-> > matching, so that we can optimize the driver code.
-> >
-> > Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
->=20
-> No further comments, yet I like it, so:
->=20
-> Applied to for-next, thanks!
->=20
-> With one minor change, I hope you are okay with it:
->=20
-> > +	struct device_driver *drv =3D client->dev.driver;
-> > +	struct i2c_driver *driver =3D to_i2c_driver(drv);
->=20
-> Variables 'drv' and 'driver' sounds like it could cause confusion later.
-> I merged the two and eliminated 'drv' that way.
+The VL bit in the seconds register remains set only until seconds are
+written under main power. As this often happens during boot-up after
+picking up a network time, make sure to preserve the low battery state
+across this, caching it and returning it via the RTC_VL_BACKUP_LOW bit.
 
-Yes, it is much better.
+To permit userspace clearing this state during runtime, also implement
+RTC_VL_CLR that works against the cached state.
 
-Cheers,
-Biju
+This is emulating RTCs which have a battery voltage check that works
+under main power as well.
 
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ drivers/rtc/rtc-pcf8563.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+index 7e720472213c..f8c6cdb9a39d 100644
+--- a/drivers/rtc/rtc-pcf8563.c
++++ b/drivers/rtc/rtc-pcf8563.c
+@@ -81,6 +81,7 @@ struct pcf8563 {
+ #ifdef CONFIG_COMMON_CLK
+ 	struct clk_hw		clkout_hw;
+ #endif
++	bool low_bat;
+ };
+ 
+ static int pcf8563_read_block_data(struct i2c_client *client, unsigned char reg,
+@@ -207,6 +208,7 @@ static int pcf8563_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 		return err;
+ 
+ 	if (buf[PCF8563_REG_SC] & PCF8563_SC_LV) {
++		pcf8563->low_bat = true;
+ 		dev_err(&client->dev,
+ 			"low voltage detected, date/time is not reliable.\n");
+ 		return -EINVAL;
+@@ -277,6 +279,8 @@ static int pcf8563_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
++	struct pcf8563 *pcf8563 = i2c_get_clientdata(client);
++	unsigned int state = 0;
+ 	int ret;
+ 
+ 	switch (cmd) {
+@@ -284,9 +288,16 @@ static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long
+ 		ret = i2c_smbus_read_byte_data(client, PCF8563_REG_SC);
+ 		if (ret < 0)
+ 			return ret;
+-
+-		return put_user(ret & PCF8563_SC_LV ? RTC_VL_DATA_INVALID : 0,
+-				(unsigned int __user *)arg);
++		if (ret & PCF8563_SC_LV) {
++			state |= RTC_VL_DATA_INVALID;
++			pcf8563->low_bat = true;
++		}
++		if (pcf8563->low_bat)
++			state |= RTC_VL_BACKUP_LOW;
++		return put_user(state, (unsigned int __user *)arg);
++	case RTC_VL_CLR:
++		pcf8563->low_bat = false;
++		return 0;
+ 	default:
+ 		return -ENOIOCTLCMD;
+ 	}
+-- 
+2.35.3
