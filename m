@@ -2,52 +2,52 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70FB72CD91
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jun 2023 20:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B76972CEDA
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jun 2023 20:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235797AbjFLSLs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Jun 2023 14:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S237475AbjFLS7R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 12 Jun 2023 14:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbjFLSLq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Jun 2023 14:11:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE20E63;
-        Mon, 12 Jun 2023 11:11:45 -0700 (PDT)
+        with ESMTP id S229513AbjFLS7Q (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Jun 2023 14:59:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3349313A;
+        Mon, 12 Jun 2023 11:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686593505; x=1718129505;
+  t=1686596355; x=1718132355;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MUJIyIIxyWDXLsGprFR9Y5h4WDL/y5XyfJH9HS3u2l4=;
-  b=YsvgQBbWKGr1GAY+D33JesYy8ptPuytgM4NjSmv5OfmLGrHFN0HxYH3H
-   h4W80luDKY7REpmFFwtGGTrBKxgRL5zIl7J7doMviOY3n1DxvrtGpvovM
-   uC204ByMS28sLBj7w63R7d40vd+aiNBTDEDN6yzPnVCkIGc0WHUNGKRmN
-   SPRJ3+PO5kI5hr5dHJS8fkmuMMnhmsiaa3+Sa/vX90MC/HnOa5Y1Ck2Cz
-   pwQpJLmsTMgUoUmJl3kl82Py7TOiOWYCNpy5x6YxVGKJQZg9xaE5AWON1
-   tviSCPISxfrGyV7A3SO/o08xqMbB2SObpuzo/ruU+W4tASTFl3zL07JIG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="444502002"
+  bh=VZa1fYkJlOSJPNfqG8vxxOmpB4Z55y+Js6DTs8pgAj4=;
+  b=MOPLBkzPlZTP0DbGBZi8WmXlvGBp6P+EYEC+Zz2kfTnzbrv7Wn68sHnH
+   gPtsxHSF46qQloZp6LNeaVQnKz2f1cDMx3IX5xk3Oc4nqpGZZ9lzqsfsT
+   hlVqi1Wm1grmxoTfZ7GZXwZhgxi/SNVs2FEhYbIKLmE/xbhieZxu520LR
+   YXJbec/mVHBQeBHjgs74G1lG1y/ubV2wCClJuGym57+dkjyXUu/pCUICh
+   yoDOItDinHIHQvlRSl460Ah0iuB9MdTNiLtd2LiazhsBWiLfEWwcyBqen
+   kTjz64Ebxp+h+TxiqRrFnef00A4qDFENQOpo4MAM4kFd37Z3KHmhkwKxb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="342820431"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="444502002"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:11:45 -0700
+   d="scan'208";a="342820431"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:59:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="855757138"
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="801125292"
 X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="855757138"
+   d="scan'208";a="801125292"
 Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2023 11:11:42 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Jun 2023 11:59:11 -0700
 Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q8m0z-0000YW-2g;
-        Mon, 12 Jun 2023 18:11:41 +0000
-Date:   Tue, 13 Jun 2023 02:10:38 +0800
+        id 1q8mkw-0000aG-34;
+        Mon, 12 Jun 2023 18:59:10 +0000
+Date:   Tue, 13 Jun 2023 02:58:32 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+Cc:     oe-kbuild-all@lists.linux.dev,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
@@ -55,16 +55,16 @@ Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-Message-ID: <202306130116.8PIDa21J-lkp@intel.com>
+Message-ID: <202306130201.ai7ck1mx-lkp@intel.com>
 References: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,34 +85,33 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Rasmus-Villemoes/rtc-isl1
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
 patch link:    https://lore.kernel.org/r/20230612113059.247275-5-linux%40rasmusvillemoes.dk
 patch subject: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-config: arm-randconfig-r012-20230612 (https://download.01.org/0day-ci/archive/20230613/202306130116.8PIDa21J-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230613/202306130201.ai7ck1mx-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
         git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
         git fetch abelloni rtc-next
         git checkout abelloni/rtc-next
         b4 shazam https://lore.kernel.org/r/20230612113059.247275-5-linux@rasmusvillemoes.dk
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/rtc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306130116.8PIDa21J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306130201.ai7ck1mx-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/rtc/rtc-isl12022.c:238:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/rtc/rtc-isl12022.c: In function 'isl12022_set_trip_levels':
+>> drivers/rtc/rtc-isl12022.c:238:15: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
      238 |         val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
-         |               ^
-   1 error generated.
+         |               ^~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
 vim +/FIELD_PREP +238 drivers/rtc/rtc-isl12022.c
