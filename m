@@ -2,112 +2,234 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A51972C466
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jun 2023 14:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BBF72C512
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jun 2023 14:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbjFLMgL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Jun 2023 08:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S235740AbjFLMxR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 12 Jun 2023 08:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbjFLMgK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Jun 2023 08:36:10 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52BECE
-        for <linux-rtc@vger.kernel.org>; Mon, 12 Jun 2023 05:36:06 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f62b512fe2so5166254e87.1
-        for <linux-rtc@vger.kernel.org>; Mon, 12 Jun 2023 05:36:06 -0700 (PDT)
+        with ESMTP id S235329AbjFLMxK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Jun 2023 08:53:10 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFAC10E3
+        for <linux-rtc@vger.kernel.org>; Mon, 12 Jun 2023 05:52:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso6433532a12.0
+        for <linux-rtc@vger.kernel.org>; Mon, 12 Jun 2023 05:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686573365; x=1689165365;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cs0olSYEItKtn767ESE540fraVlcmbticwKxKjHPy6A=;
-        b=OxPnUC7HiMXz859dtF70HMax8lhjTJyqpzGATRXKW4hUW7ulL8hUVjBcNbx8HeTzsi
-         RybQNfBGUuytrAMeOQ97QGSnEcv22EZj8iFS5wSbwLDy7dDET4sCFnTRUWqD42gpjvUz
-         FiLXT6gee53N12m3WprnMTq77FY76PadA/06c=
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686574371; x=1689166371;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tc9/BWqhD4AJmez8iqRZiPBvpGjiApBjbr87P5AWxy4=;
+        b=bxI3s/ctCa9fA+NOsGl6fPNFFjn/s0XFl5dApYrF9/HpcQPLzILsTHc+IV/WSw1Jzk
+         u0LS/6w4XKl9KF4MigcdKLcobCorBI8kYflktDTuVTDjO65tIE1HNz1R2Adbh/Qez2p3
+         JO9jA3+3eaw8QpgI8btVQroISMWfhEtq9jDp4FBpjLH/YGLvu8a9V8dvi0qU4lb14PQk
+         4U9nHiIuOJCTCWT7Ve+2fqvvewv8As8JpXubLWsQItMoUkvsMX+aUFFOr8fnAqSOBvsY
+         JMerYUMV8BfSVf0kgNGcdreyfwMTV056zmiokVd+gpWvnZDKTq4mOrXgVBHCaGAzVjAr
+         qRiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686573365; x=1689165365;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cs0olSYEItKtn767ESE540fraVlcmbticwKxKjHPy6A=;
-        b=LgShuSKS4zli5Gldy648Zf/h6HjlLwZJqi1pOg882zY9aLthQnnznXuzJzxL5kp2fd
-         LNv1p4NMLaBG0rCb9kJlCFzGKHmgOR0eHwM3gVaVbm9cmP+O27yb7rJyOG77jfE+6G55
-         lkCYqkh1d3bzD67N7amA2PH7fzPRl5PR9muPk9fty7+plBrYwdW55gj5h2rVC93VlOMB
-         Q2iBQ8QifpCnQHGmQle3IucN+IYEZzPalUzQikg/NsWMQYLSNVC6XaN3PAC0RwalNmxX
-         iPznKNjnvvSVmyfHJaGCrayvdvyJpgTD/AfSLqINclfkLft+l0573Z9FA3gF52DlIJlB
-         RwYg==
-X-Gm-Message-State: AC+VfDxxK/nxs/52BvTGUDSw5CTTPJGteRu/2E+i4PgEtV2iqrns77IC
-        aqe/LXLRbRGva2UU5fV4i9jmLg==
-X-Google-Smtp-Source: ACHHUZ4Cejd5jOArObXHcQm3kWtkiB+UPGBXUzfi+0xU5ER7MSdmDxzJBBxjvkl1rAyhuigY+2/Hnw==
-X-Received: by 2002:a19:2d12:0:b0:4ea:e60a:2f5d with SMTP id k18-20020a192d12000000b004eae60a2f5dmr3537309lfj.40.1686573365111;
-        Mon, 12 Jun 2023 05:36:05 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id t11-20020a19ad0b000000b004f3940c2b07sm1422021lfc.274.2023.06.12.05.36.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 05:36:04 -0700 (PDT)
-Message-ID: <2a2fa3c5-739c-6bcf-3c41-3db1aac5ccca@rasmusvillemoes.dk>
-Date:   Mon, 12 Jun 2023 14:36:03 +0200
+        d=1e100.net; s=20221208; t=1686574371; x=1689166371;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tc9/BWqhD4AJmez8iqRZiPBvpGjiApBjbr87P5AWxy4=;
+        b=hqt47XcJaB0R0EFNzINfB/KA+OFrInivE1BdSmlxSoZwYpQUOkphe+u9qrGfPcCbuF
+         XweczQzyRCV2LkKF1iKcdFPf3NqNHdz6+tgNBlDrWfR7u5SK4dD0MwE3ZUNRhdaaKnil
+         NDk3RnKE+4ayBQdLYkRPMOutf5c9Ekn/WIkUxGsxEdFXXXDMh++RGrZGLcnPS4BfyavH
+         l398PkL4QkDAkt9pUiigsyDrYSuGKcj+YJsfn8N5f1qGVesFX1C4AuHxu7MSuiMSMcrP
+         yQhZYSmxmJa9rHuWfL6Lx+shkfmg+nGxq26+m1N226Is1MreeK+v22jTSqcH/0BAQY1l
+         qgsA==
+X-Gm-Message-State: AC+VfDwNoGwN/9jPX0Mgq/y4ylsOLIgsPpzeGWwqH0PrqodvjImvX7l2
+        o8FYgQnRec72FwSftZ2SG2qAnA==
+X-Google-Smtp-Source: ACHHUZ4VFaNG5tC1669O8IoVV7+32mGE7Ne1/E1fcGrbzLZBnpjey3TQqsAd5ihpB4tpw5NV8e2oXw==
+X-Received: by 2002:a05:6402:88e:b0:516:81d3:2627 with SMTP id e14-20020a056402088e00b0051681d32627mr5864164edy.0.1686574370815;
+        Mon, 12 Jun 2023 05:52:50 -0700 (PDT)
+Received: from localhost.localdomain (abordeaux-655-1-129-86.w90-5.abo.wanadoo.fr. [90.5.10.86])
+        by smtp.gmail.com with ESMTPSA id r19-20020aa7da13000000b00514aef7daacsm5037522eds.76.2023.06.12.05.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 05:52:50 -0700 (PDT)
+From:   Esteban Blanc <eblanc@baylibre.com>
+To:     linus.walleij@linaro.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, eblanc@baylibre.com,
+        u-kumar1@ti.com
+Subject: [PATCH v6 0/2] TI TPS6594 PMIC support (RTC, pinctrl, regulators)
+Date:   Mon, 12 Jun 2023 14:52:46 +0200
+Message-Id: <20230612125248.1235581-1-eblanc@baylibre.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/8] dt-bindings: rtc: Move isil,isl12022 from
- trivial-rtc.yaml into own schema file
-Content-Language: en-US, da
-To:     Rob Herring <robh@kernel.org>
-Cc:     Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230612113059.247275-3-linux@rasmusvillemoes.dk>
- <168657279982.4044345.9896354759743085279.robh@kernel.org>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <168657279982.4044345.9896354759743085279.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 12/06/2023 14.26, Rob Herring wrote:
-> 
-> On Mon, 12 Jun 2023 13:30:52 +0200, Rasmus Villemoes wrote:
->> Move the isil,isl12022 RTC bindings from trivial-rtc.yaml into its own
->> intersil,isl12022.yaml file, in preparation for adding more bindings.
->>
->> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->> ---
->>  .../bindings/rtc/intersil,isl12022.yaml       | 42 +++++++++++++++++++
->>  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
->>  2 files changed, 42 insertions(+), 2 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml: 'maintainers' is a required property
-> 	hint: Metaschema for devicetree binding documentation
-> 	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+TPS6594 is a Power Management IC which provides regulators and others
+features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+communicate through the I2C or SPI interfaces.
+TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
 
-Hm ok. Can/should I copy the value from the trivial-rtc.yaml? Alexandre,
-would that be ok with you?
+This series adds support to TI TPS6594 PMIC and its derivatives.
 
-Is there some simple way to do that dt_binding_check for a single file
-or just a few? It seems to take forever to run on the whole tree.
+This should be applied on top of other patch series:
+- https://lore.kernel.org/all/20230511095126.105104-1-jpanis@baylibre.com/
+  For core MFD driver. The necessary part of this patch series is already
+  applied in linux-next.
 
-Rasmus
+The features implemented in this series are:
+- RTC (child device)
+- Pinmux/GPIO (child device)
+- Regulator (child device)
+
+RTC description:
+The TPS6594 family has an RTC built-in, except for LP8764.
+It provides time and an alarm.
+
+Pinmux/GPIO:
+TPS6594 family has 11 GPIOs. Those GPIO can also serve different
+functions such as I2C or SPI interface, watchdog disable functions.
+The driver provides both pinmuxing for the functions and GPIO capability.
+
+Regulator:
+TPS6594/TPS6593: 5 BUCKs and 4LDOs
+LP8764: 4 BUCKs and no LDO
+Bucks can be used in multipahse mode.
+
+Regulators were applied to linux-next by Mark Brown on 06/06/2023 so this
+patch has been dropped from the patch series.
+There were some pending comments from Andy Shevchenko so a follow up patch will
+be sent later.
+
+Changes since v1:
+https://lore.kernel.org/all/20230224133129.887203-1-eblanc@baylibre.com/
+Rtc:
+- Removed struct tps6594_rtc.
+- Removed some dev_err messages.
+- Removed some comments.
+- Remove some whitespaces in comments and error messages.
+- Check if RTC is running before reading a timestamp in read_rtc.
+- Stop RTC at the end of probe to wait for a timestamp to be set.
+- Add default MFD_TPS6594 to Kconfig.
+
+Pinctrl:
+- Removed #define DEBUG.
+- Add default MFD_TPS6594 to Kconfig.
+- Fix typo and reword help message of Kconfig.
+
+Regulators:
+Further to Mark Brown review:
+- File header whole block C++ style.
+- Configuring modes not supported: omit all mode operations
+- Log the error before notifying.
+- Request the interrupts while registering the regulators (then remove
+  the lookup function).
+Further to Matti review:
+- Postponed: devm_regulator_irq_helper() and
+  regulator_irq_map_event_simple() can probably be used but code.
+  refactoring is not so trivial. This can be done later as an enhancement
+  after this patch list is merged.
+Buck Multi phase management:
+- Multiphase property can take an array when 2 multi phase buck, buck12
+  and buck34.
+- Configuration multi phase buck34 without multiphase buck12 is not
+  supported (when only one multiphase, must be buck12). Not clear from the
+  spec but confirmed by TI.
+- Supported multiphase conficurations: buck12, buck123, buck1234,
+  buck12 + buck34.
+- All interrupts are attached to the multiphase buck (ie: for regulator
+  buck12, buck1 & buck2 interrupts are registered).
+
+Changes since v2:
+https://lore.kernel.org/all/20230328091448.648452-1-eblanc@baylibre.com/
+Rtc:
+- Add logic to avoid reinitializing a working clock.
+- Fix some multiline comments format.
+
+Regulators:
+Further to Mark Brown review:
+- Log the error before notifying.
+- Request the interrupts while registering the regulators.
+Further to Krzysztof Kozlowski:
+https://lore.kernel.org/all/75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com/
+- Remove ti, multi-phase-id property which is redundant with buck dts naming
+  rules.
+
+Changes since v3:
+https://lore.kernel.org/lkml/20230414101217.1342891-1-eblanc@baylibre.com/
+RTC:
+- Add wakeup source
+
+Pinctrl:
+- Switch to GPIO_REGMAP framework
+
+Change since v4:
+https://lore.kernel.org/lkml/20230512141755.1712358-1-eblanc@baylibre.com/
+Update Copyright notice date
+Reorder includes
+
+RTC:
+- Rework some comments, fixing punctuation and style
+- Use NANO macro from units.h for PPB_MULT
+- Rework to use bitwise types
+- Remove unnecessary casts
+- Add SAFETY comments
+- Use `dev_err_probe(...)` instead of print then return
+
+Pinctrl:
+- Reword help message and add module name in Kconfig
+- Rework code to use struct pinfunction and PINCTRL_PINFUNCTION() macro
+- Remove unnecessary casts
+- Use `dev_err_probe(...)` instead of print then return
+- Replace TPS6594_REG_GPIO1_CONF with a comment for TPS6594_REG_GPIOX_CONF
+
+Regulators:
+- nits: Add missing tabs, standard spaces, group "buck_multi".
+- Use OF dedicated of_node_cmp API instead of standard strcmp.
+- Use devm_kmalloc_array(...) API instead of devm_kmalloc(...) wherever
+  possible.
+- return dev_err_probe(...) wherever possible.
+
+Changes since v5:
+https://lore.kernel.org/lkml/20230522163115.2592883-1-eblanc@baylibre.com/
+
+Pinctrl:
+- Rework code for clarity
+- Rework macro to fix checkpatch macro argument reuse
+- Coding style fixes
+- Reword some comments
+
+Rtc:
+- Grammar fixes
+- Removed unused macros
+- Use type MIN/MAX macro instead of magic numbers
+- Fix return code in calibration
+- Use cpu_to_le16 and le16_to_cpu APIs instead of casting.
+- Reintroduce mdelay before reading BIT_RUN as otherwise both AM62 and J784S4
+  will report a -ENODEV on a working RTC.
+
+
+Esteban Blanc (2):
+  rtc: tps6594: Add driver for TPS6594 RTC
+  pinctrl: tps6594: Add driver for TPS6594 pinctrl and GPIOs
+
+ drivers/pinctrl/Kconfig           |  15 +
+ drivers/pinctrl/Makefile          |   1 +
+ drivers/pinctrl/pinctrl-tps6594.c | 368 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig               |  12 +
+ drivers/rtc/Makefile              |   1 +
+ drivers/rtc/rtc-tps6594.c         | 452 ++++++++++++++++++++++++++++++
+ include/linux/mfd/tps6594.h       |   1 +
+ 7 files changed, 850 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
+ create mode 100644 drivers/rtc/rtc-tps6594.c
+
+-- 
+2.40.1
 
