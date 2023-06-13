@@ -2,60 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF5372EE18
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jun 2023 23:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6722572EE2A
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jun 2023 23:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjFMVhZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 13 Jun 2023 17:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S238478AbjFMViq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Jun 2023 17:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbjFMVhY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jun 2023 17:37:24 -0400
+        with ESMTP id S229559AbjFMVip (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jun 2023 17:38:45 -0400
 Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7643D1BF4
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 14:37:19 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-970028cfb6cso4898066b.1
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 14:37:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1A198
+        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 14:38:43 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977ed383b8aso2212866b.3
+        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 14:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686692238; x=1689284238;
+        d=linaro.org; s=google; t=1686692322; x=1689284322;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oip7SqC/cNKZpwuyshsaw2zREje6DYUcsApGrxnqSjc=;
-        b=i1xbrWeSBBDDeChk2v1jFQ8oNrFfLHyhMK5pCcLQkja3OqbHo2bJ/wFHW7uutFX9XZ
-         i6B51pldX5oeo7lYYaDlHiTKsm3/u5OCvL6YNOnA4lmfBx8a7VyTS7N9SzxKcGs57wnC
-         8mxdIiwnNcJ2FlyXtMEyA/0/wBdPgaVhyqfO45QxRPAoBTT+nQbHDzy9uF69dhqIcI2W
-         YetKdFtdwJTU5y2CCz1KyLhQgYgzrxUF9Vky5XdyrtXP992Uz8lCG4PAr11dJpPmNO6b
-         Re0941tRW3KeLKZgV89XErY04JlNHWHSMzNtAWQ7qXUP/V8UU59V4mLSIl8GHpkHDOxN
-         yVuw==
+        bh=IjC8sLTBfnrVHtu3dchJNU/FgXzyF+J0/8Jze1O1iI8=;
+        b=AzPT/wZgr7P0DAlj9wX7buFMwigcsG5VkN5YC46JszhbWZpQOMBnCVL1CGFrzmZeOT
+         Yz1QkEOXoaZQOMUJeGAAkC0LGXGETn0ux03RePC5Qq6T9BPXxd+Me4IWCkg5CSYYQcqH
+         t/a1dpR4nmcP9MzGMtoqtVbQ3MVNa3tgU47r/gOXlvB97wW0TRSee4EnK6stQyxk7Ulm
+         O+QubKI24lPmUcxuds3zWVjhhI28F3r2KGcuBMzkLhaV6goEd2zFsN9LadnDdl/ZPtZl
+         bzyF3QsqXk1IOEzTY+E+MD2zpzq5B4h40GwOAAXqT2qsimPfVXek/cFCRCKca4fCKOqI
+         JeJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686692238; x=1689284238;
+        d=1e100.net; s=20221208; t=1686692322; x=1689284322;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oip7SqC/cNKZpwuyshsaw2zREje6DYUcsApGrxnqSjc=;
-        b=bLapKGXpB20rtOfWDv6ckSu0SmnJzggnFh4qVFfjweUEGJrzkg2c3AVLK7RIr+lNm7
-         xWm/VDNPkcmRhZUQy5ZsarDEyzbdCBTheE1pNBwBtLoODKa8L7IZ6SM+7iCvup+Dzpp0
-         uBShLN79VI7L4DxNzqbngEzSvuMyVQ9YqRtfif/kguofDQ+s/g63uBzefr1M5Ogjychh
-         r9SwH+5LVANdGaLmlFMtsFp+UbWkY/L0Fb+Wal3bjzpVodN/gIZFKjXzhu2XgzKhOEGa
-         Xx5YvDEXJmx/BVztoX4bM6ND2CJSes7pwFO5XTNtLKGgeKaQAyV1MTOlseCxEa6m2F9v
-         owhg==
-X-Gm-Message-State: AC+VfDzzCrBMJYW0E3r13pyR283i83PvU6s0LlSGT/15fujcXD9QM4zy
-        1J++LgJQLsMnagLNw0PjPRrBBg==
-X-Google-Smtp-Source: ACHHUZ6a2hnnxxgRqbHde0/z6M1zAJKLjWqTWlBx8ZNIxyQ4NWlh0GA2OLSUJCuN3o03XaigIgk1JA==
-X-Received: by 2002:a17:906:ef03:b0:977:d676:d3ca with SMTP id f3-20020a170906ef0300b00977d676d3camr16308640ejs.33.1686692237898;
-        Tue, 13 Jun 2023 14:37:17 -0700 (PDT)
+        bh=IjC8sLTBfnrVHtu3dchJNU/FgXzyF+J0/8Jze1O1iI8=;
+        b=WEcYvomoLPqls1cpKXWYFt5MEMwpxqfMnuv+5n7z98UHKIELtN5F+XCJn5ZahVWoPC
+         1nJn3L5PPTmoA48OwUIArI0B54ke7JJkzb4hQO+lxPde7pvyIs3GlXyvV2P/692pXAit
+         un63EIud0nCpvv2Fu6+DsByeyt2yBOF+EFwgod6rMORW6nQ9+9/qclQXxJPhYZnGVRMQ
+         Xh83eqQIJPMAAf6VCOdPRH37pIeLsslrbqwdx/puo8Mu9yRjXe0AsYKO3tM8AKWMN3hH
+         9aTsUGH5cN1c20YYwCCjZj7NEQZqcqUQbv+5NIBiHPIBVcGwBJ4ZLeMUWyuNqhmB9cSU
+         Ulxg==
+X-Gm-Message-State: AC+VfDzSXRV4NlwNLP9pQCDsfaSSUZEbdxZiMR62aC5laxUHd6+XVtau
+        E21u2jD0pKIhM1hT5QuQ7zaH/A==
+X-Google-Smtp-Source: ACHHUZ65Rx8zx8S8O4fyQjWDJKbkfBSxlojJnhgAncSog4C1GQJK1oHej6a0lu74m26bO+xbiEsNPQ==
+X-Received: by 2002:a17:906:eece:b0:959:6fb2:1c3b with SMTP id wu14-20020a170906eece00b009596fb21c3bmr13125627ejb.39.1686692322273;
+        Tue, 13 Jun 2023 14:38:42 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id gu4-20020a170906f28400b0096fbc516a93sm7107806ejb.211.2023.06.13.14.37.16
+        by smtp.gmail.com with ESMTPSA id v6-20020a17090606c600b009745d484519sm7135381ejb.70.2023.06.13.14.38.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 14:37:17 -0700 (PDT)
-Message-ID: <605616cd-d0f9-a430-7cf2-b2f36d07ffe3@linaro.org>
-Date:   Tue, 13 Jun 2023 23:37:15 +0200
+        Tue, 13 Jun 2023 14:38:41 -0700 (PDT)
+Message-ID: <57082b2e-7f89-4e90-492e-54d7bebb427b@linaro.org>
+Date:   Tue, 13 Jun 2023 23:38:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/8] dt-bindings: rtc: isl12022: add bindings for
- battery alarm trip levels
+Subject: Re: [PATCH v2 7/8] dt-bindings: rtc: isl12022: add #clock-cells
+ property
 Content-Language: en-US
 To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Alessandro Zummo <a.zummo@towertech.it>,
@@ -67,49 +67,57 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-kernel@vger.kernel.org
 References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
  <20230613130011.305589-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-4-linux@rasmusvillemoes.dk>
- <0600a505-d1bf-f4be-57ef-51d34c77501e@linaro.org>
- <dd15aaeb-04ff-126b-b524-44e30c60426b@rasmusvillemoes.dk>
+ <20230613130011.305589-8-linux@rasmusvillemoes.dk>
+ <208d06d1-58e3-748e-de28-075dc0cd28de@linaro.org>
+ <13f61130-ca44-cacb-15f7-835a74dda26f@rasmusvillemoes.dk>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dd15aaeb-04ff-126b-b524-44e30c60426b@rasmusvillemoes.dk>
+In-Reply-To: <13f61130-ca44-cacb-15f7-835a74dda26f@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 13/06/2023 21:51, Rasmus Villemoes wrote:
+On 13/06/2023 22:25, Rasmus Villemoes wrote:
+> On 13/06/2023 21.10, Krzysztof Kozlowski wrote:
+>> On 13/06/2023 15:00, Rasmus Villemoes wrote:
+> 
 >>> diff --git a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
->>> index 7c1e638d657a..d5d3a687a34d 100644
+>>> index d5d3a687a34d..a9ef68b5fdcd 100644
 >>> --- a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
 >>> +++ b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
->>> @@ -22,6 +22,18 @@ properties:
->>>    interrupts:
->>>      maxItems: 1
+>>> @@ -11,6 +11,13 @@ maintainers:
 >>>  
->>> +  isil,trip-level85-microvolt:
+>>>  allOf:
+>>>    - $ref: rtc.yaml#
+>>> +  # If #clock-cells is present, interrupts must not be present
+>>> +  - if:
+>>> +      required:
+>>> +        - '#clock-cells'
+>>> +    then:
+>>> +      properties:
+>>> +        interrupts: false
 >>
->> Why encoding level85 in the property name? Your commit msg (datasheet)
->> suggests this is quite flexible, so why it cannot be just list of two
->> trip levels - for first and second interrupt?
+>> Entire allOf block should be like in example-schema, so before
+>> unevaluatedProperties. Please put it in correct place in your first
+>> patch so here it does not have to be moved.
+>>
 > 
-> Yeah, so I did consider just making it a two-element array
-> isil,trip-levels-microvolt. But then I didn't know how to express the
-> enum constraint, i.e. that the first must be one of the 2125000, ...,
-> 4675000 values and the second one of the 1875000, ..., 4125000 ones. Is
-> that possible, without providing a list of 49 possible pairs? Or is it
-> sufficient to just write this out in prose?
+> OK. That first patch was basically a copy-paste of c690048ed59b, and
+> e.g. ingenic,rtc.yaml has a similar non-trivial allOf block between
+> maintainers and properties. Is there somehow I could have known it
+> should be right before unevaluatedProperties?
 
-items:
-  - enum: [ a, b, c ]
-  - enum: [ f, d, e ]
-
+The trivial - with a $ref - we keep often at the top. But once it starts
+growing, should be at the bottom. Since you know it will grow, just put
+it at the bottom (not total bottom, but like in example-schema, so after
+required:).
 
 Best regards,
 Krzysztof
