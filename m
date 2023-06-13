@@ -2,173 +2,126 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E67472E3A6
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jun 2023 15:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F6372E6F9
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jun 2023 17:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242530AbjFMNBc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 13 Jun 2023 09:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S240113AbjFMPVD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Jun 2023 11:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242493AbjFMNBP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jun 2023 09:01:15 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C28A6
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 06:01:14 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so6679006e87.2
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 06:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686661272; x=1689253272;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=46KkCoyCaP4pL/jEPklf2fuk5AVWyAvfGth05Co0T18=;
-        b=haQOPWKa3ER2duykMm+Sd0Nw4FfDB0m4UkrtopsZoLbZe5z0EQuBlcfaZjRcVf7oI7
-         gSOYW1J5eCDYEE938vG6q9t9zkVV1LYsz1/P0Ya6BTaYoYiY2lRDk6SfKNE6FV+Qc1+D
-         QK/hgXfh4ct2iLAwQgA0Z8UuyFOUsvcCdAGS0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686661272; x=1689253272;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=46KkCoyCaP4pL/jEPklf2fuk5AVWyAvfGth05Co0T18=;
-        b=ZitbOUFnqL680eHM4oyE9ve8S+b+EIspPKGV29VFTlW9BJYwUSJqgss+BZE9jYDiRc
-         Y9qDz0F+ov60Y6+AfALRpaie5mA35GsFJWaoIO/fjXyfuWCOvC4uZng3VMpDpocKD9L1
-         Nhhq3FnNp6dJIBoojBa5ppE8s7YChxB1tywa2HTQrzCWv43kwPdmNorxJGGTm4hJbFXG
-         IFS9oPvgZGL4jQut8OlBNzaPCL/CU83LeToqGvnjvhldf0nxSdLM0iK6Tx0XDHf/jkFv
-         57sfCuWnuDqi89flU3aEVVa8SVwolgyhbNj427Rjiuu+i5G/w/6yiOgP8aDhlJeyTrzl
-         AuYQ==
-X-Gm-Message-State: AC+VfDxE5la1ouRFKmLKxnYr6z0CGDs7EmKm8qE7RYMlmV9NdGROOCEl
-        nc6YCV/GWYRDY2Gp+n9ZUtNZDQ==
-X-Google-Smtp-Source: ACHHUZ73JuWNHjEuDGnIJzA9IFe0ASfyWKtlyLgVfjFM/EXl0T/cvjy8lsrXXCSpjHmDHJbHAFtFnQ==
-X-Received: by 2002:a19:771d:0:b0:4f6:217a:561e with SMTP id s29-20020a19771d000000b004f6217a561emr5797407lfc.37.1686661272390;
-        Tue, 13 Jun 2023 06:01:12 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id u24-20020ac243d8000000b004f14ae5ded8sm1793786lfl.28.2023.06.13.06.01.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 06:01:11 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        with ESMTP id S234367AbjFMPVC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jun 2023 11:21:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A794199A;
+        Tue, 13 Jun 2023 08:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686669662; x=1718205662;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=plNmqEkqncOE/3uGn703aXGX7ZUQBL5FWEgWSiyApfI=;
+  b=O0dpH6xIz/XCyfM3PxwfCzMhuFzKOIPErkS8ijCMMZeCHP1O5ZoQAnYN
+   Lyy+bjVUo/mrhFKqtIcZGLeXYZxvBzbcSDbPx2MC11HdFcjiYrZZjNIg4
+   RNvQzcmPqdqvAUSIHCmjZjy6UAQaBro5ngPqFHeE/CpwUmwgIN937Clb+
+   IdVwnC6JjE+x/LrBLU2ZVMTJVCV+CL0Su0z4ZgNqbqdXQ30JdNJvS8Xe+
+   CGGVpn9jZoHAnGVMdU+vDP0951MOHLxenzXmOqEwkN8byyU3fsx0Hw3ZY
+   9f6niiNWiq8fajeJwVYj5kIxrB5z5qkZa57rnJXfwepAbF8uXoRbOk+/F
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348021136"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="348021136"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 08:21:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="711699337"
+X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
+   d="scan'208";a="711699337"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 08:20:58 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q95pI-003UAE-1G;
+        Tue, 13 Jun 2023 18:20:56 +0300
+Date:   Tue, 13 Jun 2023 18:20:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] rtc: isl12022: implement support for the #clock-cells DT property
-Date:   Tue, 13 Jun 2023 15:00:10 +0200
-Message-Id: <20230613130011.305589-9-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230613130011.305589-1-linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v2 5/8] rtc: isl12022: implement RTC_VL_READ ioctl
+Message-ID: <ZIiJWKBFojAcNCkA@smile.fi.intel.com>
 References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
  <20230613130011.305589-1-linux@rasmusvillemoes.dk>
+ <20230613130011.305589-6-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230613130011.305589-6-linux@rasmusvillemoes.dk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-If device tree implies that the chip's IRQ/F_OUT pin is used as a
-clock, expose that in the driver. For now, pretend it is a
-fixed-rate (32kHz) clock; if other use cases appear the driver can be
-updated to provide its own clk_ops etc.
+On Tue, Jun 13, 2023 at 03:00:07PM +0200, Rasmus Villemoes wrote:
+> Hook up support for reading the values of the SR_LBAT85 and SR_LBAT75
+> bits. Translate the former to "battery low", and the latter to
+> "battery empty or not-present".
 
-When the clock output is not used on a given board, one can prolong
-the battery life by ensuring that the FOx bits are 0. For the hardware
-I'm currently working on, the RTC draws 1.2uA with the FOx bits at
-their default 0001 value, dropping to 0.88uA when those bits are
-cleared.
+A couple of nit-picks below.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/rtc/rtc-isl12022.c | 40 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+...
 
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index 44603169e575..3e69f1a5dc12 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -10,6 +10,7 @@
- 
- #include <linux/bcd.h>
- #include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
- #include <linux/i2c.h>
-@@ -44,6 +45,9 @@
- #define ISL12022_SR_LBAT75	(1 << 1)
- 
- #define ISL12022_INT_WRTC	(1 << 6)
-+#define ISL12022_INT_FO_MASK	GENMASK(3, 0)
-+#define ISL12022_INT_FO_OFF	0x0
-+#define ISL12022_INT_FO_32K	0x1
- 
- #define ISL12022_REG_VB85_MASK	GENMASK(5, 3)
- #define ISL12022_REG_VB75_MASK	GENMASK(2, 0)
-@@ -241,6 +245,37 @@ static const struct regmap_config regmap_config = {
- 	.use_single_write = true,
- };
- 
-+static int isl12022_register_clock(struct device *dev)
-+{
-+	struct regmap *regmap = dev_get_drvdata(dev);
-+	struct clk_hw *hw;
-+	int ret;
-+
-+	if (!device_property_present(dev, "#clock-cells")) {
-+		/*
-+		 * Disabling the F_OUT pin reduces the power
-+		 * consumption in battery mode by ~25%.
-+		 */
-+		regmap_update_bits(regmap, ISL12022_REG_INT, ISL12022_INT_FO_MASK,
-+				   ISL12022_INT_FO_OFF);
-+
-+		return 0;
-+	}
-+
-+	/*
-+	 * For now, only support a fixed clock of 32768Hz (the reset default).
-+	 */
-+	ret = regmap_update_bits(regmap, ISL12022_REG_INT, ISL12022_INT_FO_MASK, ISL12022_INT_FO_32K);
-+	if (ret)
-+		return ret;
-+
-+	hw = devm_clk_hw_register_fixed_rate(dev, "isl12022", NULL, 0, 32768);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
-+}
-+
- static const u32 trip_level85[] = { 2125000, 2295000, 2550000, 2805000, 3060000, 4250000, 4675000 };
- static const u32 trip_level75[] = { 1875000, 2025000, 2250000, 2475000, 2700000, 3750000, 4125000 };
- 
-@@ -284,6 +319,7 @@ static int isl12022_probe(struct i2c_client *client)
- {
- 	struct rtc_device *rtc;
- 	struct regmap *regmap;
-+	int ret;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
-@@ -296,6 +332,10 @@ static int isl12022_probe(struct i2c_client *client)
- 
- 	dev_set_drvdata(&client->dev, regmap);
- 
-+	ret = isl12022_register_clock(&client->dev);
-+	if (ret)
-+		return ret;
-+
- 	isl12022_set_trip_levels(&client->dev);
- 	isl12022_hwmon_register(&client->dev);
- 
+> +static int isl12022_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+> +{
+> +	struct regmap *regmap = dev_get_drvdata(dev);
+> +	u32 user = 0, val;
+
+This assignment can be done in the actual case below.
+
+> +	int ret;
+> +
+> +	switch (cmd) {
+> +	case RTC_VL_READ:
+> +		ret = regmap_read(regmap, ISL12022_REG_SR, &val);
+> +		if (ret < 0)
+
+I always feel uneasy with ' < 0' — Does positive error makes sense?
+Is it even possible? OTOH if the entire driver uses this idiom...
+oh well, let's make it consistent.
+
+> +			return ret;
+
+		user = 0;
+
+The rationale to avoid potential mistakes in the future in case this function
+will be expanded and user will be re-used.
+
+> +		if (val & ISL12022_SR_LBAT85)
+> +			user |= RTC_VL_BACKUP_LOW;
+> +
+> +		if (val & ISL12022_SR_LBAT75)
+> +			user |= RTC_VL_BACKUP_EMPTY;
+> +
+> +		return put_user(user, (u32 __user *)arg);
+> +
+> +	default:
+> +		return -ENOIOCTLCMD;
+> +	}
+> +}
+
 -- 
-2.37.2
+With Best Regards,
+Andy Shevchenko
+
 
