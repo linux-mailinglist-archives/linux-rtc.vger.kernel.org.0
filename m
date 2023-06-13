@@ -2,52 +2,52 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F4672DB62
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jun 2023 09:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E187D72DB84
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jun 2023 09:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240256AbjFMHpH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 13 Jun 2023 03:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S238464AbjFMHvI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Jun 2023 03:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240750AbjFMHo7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jun 2023 03:44:59 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D89192
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 00:44:58 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f62b512fe2so6517862e87.1
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 00:44:57 -0700 (PDT)
+        with ESMTP id S240439AbjFMHvG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jun 2023 03:51:06 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148EB10CC
+        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 00:51:05 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b1b30445cfso63012471fa.1
+        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 00:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686642296; x=1689234296;
+        d=rasmusvillemoes.dk; s=google; t=1686642663; x=1689234663;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=02PxR/+kVAvvGBTO7SEoXtDE8MZbxhIVxDygWi88kew=;
-        b=Ub2HPpEiDQy1wdpzr5FtQ1+0dalyu1mh4DpWc2O9pNCvXcdg4omJJ9EecsB9yEcI8D
-         iN0trlwGD9r2L/9KTL1Ed4e9kSbHYIsntR38N3vtPlt/2zUH+1BNKN/PGr4EC/L7flT1
-         BJhCxdQms1G3TvC/wxUM71eWAJaTNS+6Ea3iA=
+        bh=lspr7HNHeaiV2qUAruENxLGYvC88tqFFiuL3gIqe8Ng=;
+        b=Bfcv+iym0jAhe6QyFmsR+93MybVzpMSVKmDEm8W2UVLvT6Inyo5pgZzRAJeHte+nxN
+         BJK4fExKC1I64Q4mGdw46jdbKaefgxZjaEhyPl+XmOvNr1W3ufD3pDmWVhJDcqBpM7V9
+         en1UM0NaP0oDUZu1vnk9SEvH1Qztxcbyb8Cgo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686642296; x=1689234296;
+        d=1e100.net; s=20221208; t=1686642663; x=1689234663;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=02PxR/+kVAvvGBTO7SEoXtDE8MZbxhIVxDygWi88kew=;
-        b=Bu6SY6Pn782b9ddjuPdWuIAqrjIhwHj9/03LtD0qzMx+0bLb/JUjKF6Q5XSeOh0BAa
-         /wfdVbus94KdBucVb+wTaDxfzGck9x75kaqaSFlPEzo3OOB1Tk8u39yDbPZo33G6A759
-         7Y+c1JSV8hR56A7yEEaLpdGSmFrK3m6h/6Wc/2dE5FzowcpA6ofytUKL7vNlngcdNJQi
-         RIDkps7D6I71ycKSSRqCNpH2e8UQfZg9XDQj6iZLGsbRbDB/ua9pQUfUesNg/x4fXo3J
-         io5DXx1e6SRppyYvaRSTlMIcNsCmRe3q+7Hk3Gmh4HsxqvYHYsUqgIvUmdzEANgRRx7P
-         RrFg==
-X-Gm-Message-State: AC+VfDzzG4VfUwDPz3IrAs0KI4XyrcvyLg9hs+AekDw5IaSX4gBqIFKC
-        gW2JNTMSrLcOTU6PmQTfyiFjYcAZ2sY4V0vBlnVo0Q==
-X-Google-Smtp-Source: ACHHUZ58Byy+VmtD139tVQSXxePOCFJUK7DJPemhhPHwWC7DNIMMaYVgPI6uquHnw/OYQngEQ6jzMQ==
-X-Received: by 2002:a19:504c:0:b0:4f6:138a:8ee1 with SMTP id z12-20020a19504c000000b004f6138a8ee1mr5024264lfj.47.1686642296140;
-        Tue, 13 Jun 2023 00:44:56 -0700 (PDT)
+        bh=lspr7HNHeaiV2qUAruENxLGYvC88tqFFiuL3gIqe8Ng=;
+        b=CDh3I6MZwFffeLQM51rVvcqmLuqnZ4iacFlWw5zx2SXiRhnrj2Qjd8VA2HE12QaGPk
+         eC2CfzSfCL0MP91C7aQO6cVqjTt311img8RM1jxpXi9prK93Fju0+EUQUWZMrhzyIm3P
+         amSoa1qBJJwyFaba6s+OdB1dnuDg3Cb10AeACRt20dbR1hUlP+UP9p3A1bTVi2rBrj20
+         hhFc+aegfA2hM+oYGxe8k2qbySCTv8qE2tQQp7sG/LZzhdJkvo9UO8SMEOPbIev6VJV8
+         WRcZumEfnFHFGB3dPQ/ZIxz9aikuv/x6LlxFTCHSDp+RcmEi5zqYCqw6AezLZtXmPajD
+         XEQw==
+X-Gm-Message-State: AC+VfDzY9KGfLkZL45mv6e0SgMDvbyraQEryc2NzHdB4J4nzf4dgfIVv
+        tB4Py514yhDpZoG5813aEgztkQ==
+X-Google-Smtp-Source: ACHHUZ5NJdywuSGoAJEJ2wJgaZpkSFmc45vSo0/ophNi9f/UuDLXCQvRZe4z15pqwaznFKAZMCsw5g==
+X-Received: by 2002:a2e:9ad0:0:b0:2b2:1373:2377 with SMTP id p16-20020a2e9ad0000000b002b213732377mr3831735ljj.35.1686642663330;
+        Tue, 13 Jun 2023 00:51:03 -0700 (PDT)
 Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056512020700b004d4d7fb0e07sm1677507lfo.216.2023.06.13.00.44.55
+        by smtp.gmail.com with ESMTPSA id w20-20020a2e3014000000b002b331e241edsm326177ljw.133.2023.06.13.00.51.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 00:44:55 -0700 (PDT)
-Message-ID: <f3dc01bc-cdd1-ab0c-5891-083f6d255a4c@rasmusvillemoes.dk>
-Date:   Tue, 13 Jun 2023 09:44:55 +0200
+        Tue, 13 Jun 2023 00:51:02 -0700 (PDT)
+Message-ID: <919df40e-2f8a-1ad9-7c2e-9ba9fe1a481a@rasmusvillemoes.dk>
+Date:   Tue, 13 Jun 2023 09:51:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -63,97 +63,50 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         linux-kernel@vger.kernel.org
 References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
  <20230612113059.247275-7-linux@rasmusvillemoes.dk>
- <20230612141518c2119835@mail.local>
+ <665d9926-2e0f-4b16-1414-f6d8fc487124@rasmusvillemoes.dk>
+ <2023061214170504ac9f0b@mail.local>
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20230612141518c2119835@mail.local>
+In-Reply-To: <2023061214170504ac9f0b@mail.local>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 12/06/2023 16.15, Alexandre Belloni wrote:
-> On 12/06/2023 13:30:56+0200, Rasmus Villemoes wrote:
->> Since the meaning of the SR_LBAT85 and SR_LBAT75 bits are different in
->> battery backup mode, they may very well be set after power on, and
->> stay set for up to a minute (i.e. until the battery detection in VDD
->> mode happens when the seconds counter hits 59). This would mean that
->> userspace doing a ioctl(RTC_VL_READ) early on could get a false
->> positive.
+On 12/06/2023 16.17, Alexandre Belloni wrote:
+> On 12/06/2023 14:30:18+0200, Rasmus Villemoes wrote:
+
+>> So testing this a bit more thoroughly reveals that the LBAT85/LBAT75
+>> bits do not get updated immediately after the TSE bit is set; one needs
+>> to wait a little before the battery voltage detection is done and the SR
+>> bits updated. Unfortunately, the data sheet doesn't say anything about
+>> how long that might be or if there's some busy bit one could look at;
+>> all it says is actually exactly what I've done above:
 >>
->> The battery level detection can also be triggered by explicitly
->> writing a 1 to the TSE bit in the BETA register. Do that once during
->> boot (well, probe), and emit a single warning to the kernel log if the
->> battery is already low.
+>>   The battery level monitor is not functional in battery backup
+>>   mode. In order to read the monitor bits after powering up VDD,
+>>   instigate a battery level measurement by setting the TSE bit to
+>>   "1" (BETA register), and then read the bits.
 >>
->> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->> ---
->>  drivers/rtc/rtc-isl12022.c | 19 ++++++++++++++++++-
->>  1 file changed, 18 insertions(+), 1 deletion(-)
+>> IOW, please don't apply this patch until I figure out how to do this
+>> properly.
 >>
->> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
->> index 1b6659a9b33a..690dbb446d1a 100644
->> --- a/drivers/rtc/rtc-isl12022.c
->> +++ b/drivers/rtc/rtc-isl12022.c
->> @@ -280,8 +280,25 @@ static void isl12022_set_trip_levels(struct device *dev)
->>  	mask = ISL12022_REG_VB85_MASK | ISL12022_REG_VB75_MASK;
->>  
->>  	ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
->> -	if (ret)
->> +	if (ret) {
->>  		dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
->> +		return;
->> +	}
->> +
->> +	ret = regmap_write_bits(regmap, ISL12022_REG_BETA,
->> +				ISL12022_BETA_TSE, ISL12022_BETA_TSE);
->> +	if (ret) {
->> +		dev_warn(dev, "unable to trigger battery level detection: %d\n", ret);
 > 
-> This is too verbose, there is no action for the user upon getting this
-> message.
+> The datasheet states 22ms for the temperature conversion so I would
+> expect it takes about that time.
 
-OK.
-
-> Setting TSE also enables temperature compensation, which may be an
-> undesirable side effect. Shouldn't this be reverted if necessary?
-
-Well, I can't imagine the board designer not wanting/expecting
-temperature compensation to be enabled since they've spent the $$ on
-using a part with that capability. Also, we anyway set TSE if
-CONFIG_HWMON so that the TEMP registers get updated once per minute.
-
-If you insist I'll do the proper logic to set it back to 0 if it wasn't
-set beforehand, but I prefer to just keep it as-is.
-
-> 
->> +		return;
->> +	}
->> +
->> +	ret = isl12022_read_sr(regmap);
->> +	if (ret < 0) {
->> +		dev_warn(dev, "unable to read status register: %d\n", ret);
->> +	} else if (ret & (ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75)) {
->> +		dev_warn(dev, "battery voltage is below %u%%\n",
->> +			 (ret & ISL12022_SR_LBAT75) ? 75 : 85);
-> 
-> This message is useless, I'd drop the whole block.
-
-I only added this as "compensation" for ripping out the warning in 1/8,
-since I assumed somebody actually wanted at least one warning in the
-kernel log if the battery is low.
-
-I/we are not going to scrape dmesg but will use the ioctl() to monitor
-the battery, so I'm perfectly happy to just remove this. That will also
-make the question of how long to wait after setting TSE moot, since
-certainly userspace won't be able to issue the ioctl() soon enough to
-see stale values in the LBAT bits.
+It's most likely much shorter than that - if I just busy-read SR until
+the LBAT bits are clear, that takes no more than 2ms, and the final read
+of SR still has the BUSY bit set, indicating a temp conversion being
+(still) in progress. But I'd prefer to have Renesas provide the proper
+value rather than using some seems-to-work-on-my-desk. But but, it's
+probably moot, see other reply.
 
 Rasmus
 
