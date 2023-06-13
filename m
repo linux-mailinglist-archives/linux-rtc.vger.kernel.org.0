@@ -2,148 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B76972CEDA
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jun 2023 20:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF6572DABD
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jun 2023 09:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237475AbjFLS7R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Jun 2023 14:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S238833AbjFMH1R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Jun 2023 03:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFLS7Q (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Jun 2023 14:59:16 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3349313A;
-        Mon, 12 Jun 2023 11:59:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686596355; x=1718132355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VZa1fYkJlOSJPNfqG8vxxOmpB4Z55y+Js6DTs8pgAj4=;
-  b=MOPLBkzPlZTP0DbGBZi8WmXlvGBp6P+EYEC+Zz2kfTnzbrv7Wn68sHnH
-   gPtsxHSF46qQloZp6LNeaVQnKz2f1cDMx3IX5xk3Oc4nqpGZZ9lzqsfsT
-   hlVqi1Wm1grmxoTfZ7GZXwZhgxi/SNVs2FEhYbIKLmE/xbhieZxu520LR
-   YXJbec/mVHBQeBHjgs74G1lG1y/ubV2wCClJuGym57+dkjyXUu/pCUICh
-   yoDOItDinHIHQvlRSl460Ah0iuB9MdTNiLtd2LiazhsBWiLfEWwcyBqen
-   kTjz64Ebxp+h+TxiqRrFnef00A4qDFENQOpo4MAM4kFd37Z3KHmhkwKxb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="342820431"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="342820431"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:59:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="801125292"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="801125292"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Jun 2023 11:59:11 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q8mkw-0000aG-34;
-        Mon, 12 Jun 2023 18:59:10 +0000
-Date:   Tue, 13 Jun 2023 02:58:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
+        with ESMTP id S240479AbjFMH1Q (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jun 2023 03:27:16 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AA69B
+        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 00:27:13 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f619c2ba18so5941580e87.1
+        for <linux-rtc@vger.kernel.org>; Tue, 13 Jun 2023 00:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1686641231; x=1689233231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iCo9VX6y9eskW7XjUhZdDSOq/PCOqTXRwWrOd9wTu+s=;
+        b=XYA14pIhapBKivqyi3B9Ed9HUVcA0lKpuz2vxCxtj8/5rWSJ8C1VCgk+GIdV7X66xa
+         kN5ndtyrdGmXN6zQQXpNy5Sz0dP56rvMvPNv7UlWHQJniiWRuKfTmBkzYXyU27yf0GfD
+         RK9vUQyEbi6qr/C/0geRHm1FhKhtRUffLe/zQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686641231; x=1689233231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iCo9VX6y9eskW7XjUhZdDSOq/PCOqTXRwWrOd9wTu+s=;
+        b=Kx5B3i4fKqmpvvvMGDlI0RVTvYrbFO21TvLk8SOGjKh7HMrshfazroS31qKd4zH/Vb
+         QqMHNKahUeCxrtxwtxUHFymZBiHoJfwOhZkZuKYbPvYnsqfE/En0KKVDi9viPv1GWQpZ
+         VOwlhQQwgUkrI3VECdTiMCCwYXQrztQng6UjhBMkZ/z9/eoVJVe3ep2iIAfjx4VFWeCV
+         11JnV46CsWxikeuX8aamvLsE82dicfQSgKgQtmVIyDo9aXQXSK5anqAnNuycRDbFKGwo
+         5KkbJVoj4kUmvRp9jc5IViW1gXsGqrJHfn04XIt7Wpt8J4TOUVz/lTIF3IFCOYjVVMe2
+         +OVA==
+X-Gm-Message-State: AC+VfDyQHh95wZ/qTtNZVEQgJav1hpavDs/j6Y+iWIvLpW11U7xUgVCM
+        /zO7LSHvQ4NrbMLEObAvpa2Jlw==
+X-Google-Smtp-Source: ACHHUZ7b79zF1t3JexEgFXaaW0BEgSSi2mVnZwe64OwRddvWIYqYcVYq/ieGRFeTDhaQJKFKuKaiSw==
+X-Received: by 2002:a19:4312:0:b0:4f4:b28f:6b9c with SMTP id q18-20020a194312000000b004f4b28f6b9cmr4619711lfa.29.1686641231173;
+        Tue, 13 Jun 2023 00:27:11 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id j7-20020ac24547000000b004f251cf3d31sm1678280lfm.153.2023.06.13.00.27.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 00:27:10 -0700 (PDT)
+Message-ID: <76f0f62d-e53f-8708-e8a8-f71777a95f21@rasmusvillemoes.dk>
+Date:   Tue, 13 Jun 2023 09:27:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5/8] rtc: isl12022: implement RTC_VL_READ and RTC_VL_CLR
+ ioctls
+Content-Language: en-US, da
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-Message-ID: <202306130201.ai7ck1mx-lkp@intel.com>
-References: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612113059.247275-5-linux@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230612113059.247275-6-linux@rasmusvillemoes.dk>
+ <2023061214074623dcc0cf@mail.local>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <2023061214074623dcc0cf@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Rasmus,
+On 12/06/2023 16.07, Alexandre Belloni wrote:
+> On 12/06/2023 13:30:55+0200, Rasmus Villemoes wrote:
 
-kernel test robot noticed the following build errors:
+>> +static int isl12022_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+>> +{
+>> +	struct regmap *regmap = dev_get_drvdata(dev);
+>> +	u32 user = 0;
+>> +	int ret;
+>> +
+>> +	switch (cmd) {
+>> +	case RTC_VL_READ:
+>> +		ret = isl12022_read_sr(regmap);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +
+>> +		if (ret & ISL12022_SR_LBAT85)
+>> +			user |= RTC_VL_BACKUP_LOW;
+>> +
+>> +		if (ret & ISL12022_SR_LBAT75)
+>> +			user |= RTC_VL_BACKUP_EMPTY;
+>> +
+>> +		return put_user(user, (u32 __user *)arg);
+>> +
+>> +	case RTC_VL_CLR:
+>> +		return regmap_clear_bits(regmap, ISL12022_REG_SR,
+>> +					 ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75);
+> 
+> I'm against using RTC_VL_CLR for this as it deletes important
+> information (i.e. the date is probably invalid). You should let the RTC
+> clear the bits once the battery has been changed:
+> 
+> "The LBAT75 bit is set when the
+> VBAT has dropped below the pre-selected trip level, and will self
+> clear when the VBAT is above the pre-selected trip level at the
+> next detection cycle either by manual or automatic trigger."
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next linus/master v6.4-rc6 next-20230609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Well, the same thing means that the bit would get set again within a
+minute after the RTC_VL_CLR, so the information isn't lost as such. I
+actually don't understand what RTC_VL_CLR would be for if not this
+(though, again, in this case at least it would only have a very
+short-lived effect), but I'm perfectly happy to just rip out the
+RTC_VL_CLR case.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rasmus-Villemoes/rtc-isl12022-remove-wrong-warning-for-low-battery-level/20230612-211434
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20230612113059.247275-5-linux%40rasmusvillemoes.dk
-patch subject: [PATCH 4/8] rtc: isl12022: add support for trip level DT bindings
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230613/202306130201.ai7ck1mx-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add abelloni https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
-        git fetch abelloni rtc-next
-        git checkout abelloni/rtc-next
-        b4 shazam https://lore.kernel.org/r/20230612113059.247275-5-linux@rasmusvillemoes.dk
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/
+Rasmus
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306130201.ai7ck1mx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/rtc/rtc-isl12022.c: In function 'isl12022_set_trip_levels':
->> drivers/rtc/rtc-isl12022.c:238:15: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     238 |         val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
-         |               ^~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/FIELD_PREP +238 drivers/rtc/rtc-isl12022.c
-
-   219	
-   220	static void isl12022_set_trip_levels(struct device *dev)
-   221	{
-   222		struct regmap *regmap = dev_get_drvdata(dev);
-   223		u32 level85 = 0, level75 = 0;
-   224		int ret, x85, x75;
-   225		u8 val, mask;
-   226	
-   227		device_property_read_u32(dev, "isil,trip-level85-microvolt", &level85);
-   228		device_property_read_u32(dev, "isil,trip-level75-microvolt", &level75);
-   229	
-   230		for (x85 = 0; x85 < ARRAY_SIZE(trip_level85) - 1; ++x85)
-   231			if (level85 <= trip_level85[x85])
-   232				break;
-   233	
-   234		for (x75 = 0; x75 < ARRAY_SIZE(trip_level75) - 1; ++x75)
-   235			if (level75 <= trip_level75[x75])
-   236				break;
-   237	
- > 238		val = FIELD_PREP(ISL12022_REG_VB85_MASK, x85) | FIELD_PREP(ISL12022_REG_VB75_MASK, x75);
-   239		mask = ISL12022_REG_VB85_MASK | ISL12022_REG_VB75_MASK;
-   240	
-   241		ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
-   242		if (ret)
-   243			dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
-   244	}
-   245	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
