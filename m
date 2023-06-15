@@ -2,74 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5436373032E
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jun 2023 17:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E40F730F11
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jun 2023 08:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343626AbjFNPOD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 14 Jun 2023 11:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S237910AbjFOGHs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Jun 2023 02:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343616AbjFNPOC (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 14 Jun 2023 11:14:02 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCDF2107;
-        Wed, 14 Jun 2023 08:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686755639; x=1718291639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=MmppHhausc57QaDzWWA+gNGrwmT8VwlTPcsgP+wDNds=;
-  b=EPB4Qf9H6YZ4tk+JgNNcrXqVDzjY7JF91kF67YLUKuF0CQfR8bse0e+d
-   mJMPrvxkr6/nR6hjp8fNPbQSBtmhpiJ/JK2uOCrze/Jivkd1JCPvBoCey
-   xqneGYZkyOptC+ggRmO+NiWPmuGPgLWwtmz4jKWyWUCxEK+Ax4gp66FIN
-   2OyVBSvqGMW76+IBQ/riZp7hT8pF+MQDa6OngVmi6mge4vUtS3b4wB499
-   Y2+9/WyHRc6qV32BjVeb56rwUy1TpdY7y3Ls1zJKOf7qMCuvGkPUa7kRe
-   uQR/FdcE/b7Pq0NPALutYr/2hTp00NWHZSdS0CyZQu6YHRy73GbzUyT4M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="348301625"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="348301625"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 08:13:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="886272995"
-X-IronPort-AV: E=Sophos;i="6.00,242,1681196400"; 
-   d="scan'208";a="886272995"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 14 Jun 2023 08:13:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9SC0-003j7Z-2q;
-        Wed, 14 Jun 2023 18:13:52 +0300
-Date:   Wed, 14 Jun 2023 18:13:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] rtc: isl12022: implement RTC_VL_READ ioctl
-Message-ID: <ZInZMEZBZ8Dm2jem@smile.fi.intel.com>
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-6-linux@rasmusvillemoes.dk>
- <ZIiJWKBFojAcNCkA@smile.fi.intel.com>
- <20230613212651c8770218@mail.local>
- <ZImvjj34YILrNJU5@smile.fi.intel.com>
- <20230614135036a3e049c4@mail.local>
+        with ESMTP id S236728AbjFOGHU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jun 2023 02:07:20 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC40A26B0;
+        Wed, 14 Jun 2023 23:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc
+        :To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=bOx+x+aNkJZYtlU42uTvVfhpkabjU4hq9FT92avJTsw=; b=ODu6UM+xWmOeodIoMdmuDTF96r
+        C54Gahhiy8PbGgHLVd/SldQWCof1ghe4VGpqCTouqh3DSLGENgukeArgLJIvv3YSAbuVl60LdC/7X
+        M3Rb2TqKLqclCI6UMBp8YJbHt1KiNEu4S7TWRD2lwSaA1mhsmxI8dr186LFmjL6eDXeu6aAQpqQli
+        ZE6cKFlR14a0S/4VavqRzfNxWK5xNjBXaDzg532tNgB9mSRkHnhBEfrsz8pSA3UMJL67lQL1SKoAj
+        WitHud0Od9/3AgK+R540dPJGJeEWhx6AwhrP2CdO6xMWzC+0EObUWp8AHg/linnE/pHOppviqgjVr
+        xi+MppbQ==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:51988 helo=[192.168.69.84])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1q9g7r-005nfQ-01;
+        Thu, 15 Jun 2023 08:06:30 +0200
+Message-ID: <31ed2ed3-8b59-3903-c491-a10a4702c23d@norik.com>
+Date:   Thu, 15 Jun 2023 08:06:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] rtc: rv3028: Improve trickle charger logic
+Content-Language: en-GB
+From:   Andrej Picej <andrej.picej@norik.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, upstream@phytec.de
+References: <20230608090446.2899646-1-andrej.picej@norik.com>
+ <20230608093155cedff41a@mail.local>
+ <73bc2f5c-bdae-e57f-73ab-db5e453e0c7f@norik.com>
+In-Reply-To: <73bc2f5c-bdae-e57f-73ab-db5e453e0c7f@norik.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230614135036a3e049c4@mail.local>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,62 +69,96 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 03:50:36PM +0200, Alexandre Belloni wrote:
-> On 14/06/2023 15:16:14+0300, Andy Shevchenko wrote:
-> > On Tue, Jun 13, 2023 at 11:26:51PM +0200, Alexandre Belloni wrote:
-> > > On 13/06/2023 18:20:56+0300, Andy Shevchenko wrote:
-> > > > On Tue, Jun 13, 2023 at 03:00:07PM +0200, Rasmus Villemoes wrote:
-
-...
-
-> > > > > +		ret = regmap_read(regmap, ISL12022_REG_SR, &val);
-> > > > > +		if (ret < 0)
-> > > > 
-> > > > I always feel uneasy with ' < 0' — Does positive error makes sense?
-> > > > Is it even possible? OTOH if the entire driver uses this idiom...
-> > > > oh well, let's make it consistent.
-> > > 
-> > > /**
-> > >  * regmap_read() - Read a value from a single register
-> > >  *
-> > >  * @map: Register map to read from
-> > >  * @reg: Register to be read from
-> > >  * @val: Pointer to store read value
-> > >  *
-> > >  * A value of zero will be returned on success, a negative errno will
-> > >  * be returned in error cases.
-> > >  */
-> > 
-> > I'm not sure what you meant by this. Yes, I know that there is no
-> > possibility that regmap API returns positive value. Do you mean that
-> > regmap API documentation is unclear?
+On 8. 06. 23 12:35, Andrej Picej wrote:
+> Hi Alexandre,
 > 
-> No, I mean that you'd have to be clearer as to why you are uneasy with a
-> test for a negative value when the function returns 0 for success and a
-> negative value for an error. Else, this is pure bullying.
+> On 8. 06. 23 11:31, Alexandre Belloni wrote:
+>> Hello,
+>>
+>> On 08/06/2023 11:04:46+0200, Andrej Picej wrote:
+>>> +    ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
+>>> +    if (ret < 0)
+>>> +        return ret;
+>>> +
+>>> +    /* mask out only trickle charger bits */
+>>> +    val_old = val_old & (RV3028_BACKUP_TCE | RV3028_BACKUP_TCR_MASK);
+>>> +
+>>>       /* setup trickle charger */
+>>> -    if (!device_property_read_u32(&client->dev, 
+>>> "trickle-resistor-ohms",
+>>> -                      &ohms)) {
+>>> +    if (device_property_read_u32(&client->dev, 
+>>> "trickle-resistor-ohms", &ohms)) {
+>>> +        /* disable the trickle charger */
+>>> +        val = 0;
+>>
+>> You can't do that, this will break existing users that may set the
+>> trickle charger from their bootloader for example.
+> 
+> hmm...ok I understand that idea. I thought that might be a problem. I 
+> guess keeping default as it is has a higher priority.
+> 
+> What do you say if setting this property to 0 (or maybe -1) disabled the 
+> trickle charger?
+> So if users add:
+> 
+> trickle-resistor-ohms = <0>;
+> or
+> trickle-resistor-ohms = <(-1)>;
+> 
+> this would mean disable the trickle charger?
+> 
+> I know it is far from optimal, but this would solve both things:
+> * not braking existing implementation,
+> * users could disable the trickle charger.
+> 
+> What do you say.
 
-From the perspective of the code reader, a person, who might have not known all
-the implementation details of the calls this kind of check will always puzzle
-about positive value.
+Gentle ping. Would this be something you would consider?
 
-When reading such a code the following questions are arisen:
-1) Can the positive return value be the case?
-2) If so, what is the meaning of a such?
-3) Why do we not care about it?
+Thanks,
+Andrej
 
-All this can simply gone if we use
-
-	ret = foo(...);
-	if (ret)
-		return ret;
-
-As it's clear that whatever is non-zero we accept as something to be promoted
-to the upper layer. I hope this explains my position.
-
-> > > > > +			return ret;
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> 
+> Thanks for your review.
+> 
+> Best regards,
+> Andrej
+> 
+>>
+>>> +    } else {
+>>>           int i;
+>>>           for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
+>>> @@ -947,15 +957,21 @@ static int rv3028_probe(struct i2c_client *client)
+>>>                   break;
+>>>           if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
+>>> -            ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, 
+>>> RV3028_BACKUP_TCE |
+>>> -                         RV3028_BACKUP_TCR_MASK, RV3028_BACKUP_TCE | 
+>>> i);
+>>> -            if (ret)
+>>> -                return ret;
+>>> +            /* enable the trickle charger and setup its resistor 
+>>> accordingly */
+>>> +            val = RV3028_BACKUP_TCE | i;
+>>>           } else {
+>>>               dev_warn(&client->dev, "invalid trickle resistor 
+>>> value\n");
+>>>           }
+>>>       }
+>>> +    /* only update EEPROM if changes are necessary */
+>>> +    if (val_old != val) {
+>>> +        ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, 
+>>> RV3028_BACKUP_TCE |
+>>> +                    RV3028_BACKUP_TCR_MASK, val);
+>>> +        if (ret)
+>>> +            return ret;
+>>> +    }
+>>> +
+>>>       ret = rtc_add_group(rv3028->rtc, &rv3028_attr_group);
+>>>       if (ret)
+>>>           return ret;
+>>> -- 
+>>> 2.25.1
+>>>
+>>
