@@ -2,50 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914B17315DE
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jun 2023 12:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08647315E0
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jun 2023 12:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245527AbjFOK6f (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Jun 2023 06:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
+        id S245690AbjFOK6j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Jun 2023 06:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343635AbjFOK6d (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jun 2023 06:58:33 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8258B2729
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:32 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso10151945e87.1
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:32 -0700 (PDT)
+        with ESMTP id S1343697AbjFOK6i (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jun 2023 06:58:38 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7DD26B0
+        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:34 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so10175908e87.2
+        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686826710; x=1689418710;
+        d=rasmusvillemoes.dk; s=google; t=1686826712; x=1689418712;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JeevWcsSXn1CFxZQsMjVguw/C1vstGsj3+NDcrpF2Zk=;
-        b=U7twVLe8SYHDAxvYUBWTfZuehTCtUiQG/9WHCrwVRdOwslE5ZuCSc7VA9iMSRP1eHK
-         dgJUbAFyr1ylgdobeRTMvFgPDYCNqCqgRLIfr7/gKm1GZLSm71v+C69hTpLVNGOO0Uil
-         rLv+B3hc9H6aqTkDT5AZIUIhVjmLcXIMJ9V3Y=
+        bh=jgVb0YJLMNEKVO6C16PIZb2dGiXFxsfavrt5+857HKY=;
+        b=Yj0kx/mnMznFixbKd4cfvllbue4ow0vPQ2gb+hHs05qEo6g4Jz/KzZ0EHGDOTImMCh
+         zHMvXOrN5dBlTFH+k4+0P3iorwv+DW9guDy5mX/Ti9JcTz4AzcAoL9X/pN9kqQNA8VrI
+         JplgpIs/BHXocNT0DLT/VPqf/fiJ63TRiu0js=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686826710; x=1689418710;
+        d=1e100.net; s=20221208; t=1686826712; x=1689418712;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JeevWcsSXn1CFxZQsMjVguw/C1vstGsj3+NDcrpF2Zk=;
-        b=dLCx7NOK8fsbSzMPfIrADMTfy5jjOWVxv6rTLFtM4kgCq+FiJot1wM5iZ0f0+8BpBu
-         eLHSixr07rOSc+yIiYNzBD43z6JaXRphvkcaTusiWpAvmbN/MiYt95IkxA6vbdR+oJDu
-         WtI3+r6sVWrJlaZl5nAoPhmeu6qS8V6Gxt7/UHesxVvSrveN00hz5sYYfgXFMddQvnXC
-         bs4y/vjnvh5J9jixmPV4CCvX/QodfjbAS7+fcgG36IpDeGyYHcrTvARkFpCq+2jBZXDt
-         GPspo5YF3UM4ca0J7MyO1hzFJIklaBt55vPQJfjLKluUAJdS9/wAn1VFuTc9yqZOUSF5
-         7ZUw==
-X-Gm-Message-State: AC+VfDyfm3NVwCI5VKjkGLbScDrc34SKMpNkEum8GKnp6cEG/0+pn6hO
-        NT6zqwxZ8jBLNCGcgV8cUF6a4YKXyefFpnan6/7Ffw==
-X-Google-Smtp-Source: ACHHUZ6ZMekOIhXEQ866tI+/Ika9Omf5yyqZaBV7+xFTsK4w01rUJM6BfBs0U4PA0L0FEqV7P+jAGw==
-X-Received: by 2002:a19:f20e:0:b0:4f6:54f1:ea36 with SMTP id q14-20020a19f20e000000b004f654f1ea36mr9743158lfh.43.1686826710616;
-        Thu, 15 Jun 2023 03:58:30 -0700 (PDT)
+        bh=jgVb0YJLMNEKVO6C16PIZb2dGiXFxsfavrt5+857HKY=;
+        b=AWB3JYXWsJmDrVI/eUnpilKvf2IL3s6Uj8P/hX3h9++JBWPNCm9tRT0wl0yV5/gwpo
+         STuiP5sheTgvAm39ilXKFY3Hn0WZPaNHZHisI2EJAbdBWucAPaPYujb654BMJu6lGRIp
+         gasuHuUzaMeWlJpFjIsdjP50EiFhaiQ9ZgJVOSH6rvdk5faFOxxNHxNWHNYy0otISd4N
+         OQoJtyAmQ6XTjmNWcWRG6b7nNd/eO9eY/EQvuMSZigiAzE/R4rU+TMVlSDZas77CNC4H
+         xsGMUMtxZi9b+KZ/uo3AkbyNmk4EYdHmDc21iPOqBLzSXIQiOXyEwCyJPr/Xf4YGhtVU
+         WJuw==
+X-Gm-Message-State: AC+VfDyvO/lJNerfCU9Fo8U9AfincIW6mTwe1XAzq7IQvWay9GLhd/rI
+        5B9GGWYp4aFwmx6e1Stik+oV6A==
+X-Google-Smtp-Source: ACHHUZ7R1TJP7+lICTrGlXmck65FIWV3+MNalxpQW7+KmHqWIgonNn0yfiR966KdXWuQYILZ/lSe4Q==
+X-Received: by 2002:a19:9145:0:b0:4f6:4bf6:59a1 with SMTP id y5-20020a199145000000b004f64bf659a1mr9728645lfj.34.1686826712565;
+        Thu, 15 Jun 2023 03:58:32 -0700 (PDT)
 Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm165364lfp.186.2023.06.15.03.58.29
+        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm165364lfp.186.2023.06.15.03.58.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 03:58:30 -0700 (PDT)
+        Thu, 15 Jun 2023 03:58:31 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -55,12 +55,13 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/8] rtc: isl12022: battery backup voltage and clock support
-Date:   Thu, 15 Jun 2023 12:58:18 +0200
-Message-Id: <20230615105826.411953-1-linux@rasmusvillemoes.dk>
+Subject: [PATCH v3 1/8] rtc: isl12022: remove wrong warning for low battery level
+Date:   Thu, 15 Jun 2023 12:58:19 +0200
+Message-Id: <20230615105826.411953-2-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+In-Reply-To: <20230615105826.411953-1-linux@rasmusvillemoes.dk>
 References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230615105826.411953-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,54 +74,79 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The current handling of the low-battery bits in the status register is
-wrong. The first six patches fix that and implement proper support for
-RTC_VL_READ.
+There are multiple problems with this warning.
 
-The last two patches allow describing the isl12022 as a clock
-provider, for now just as a fixed 32kHz clock. They are also
-tangentially related to the backup battery, in that when the isl12022
-is not used as a clock source, one can save some power consumption in
-battery mode by setting the FOx bits to 0.
+First of all, it triggers way too often, in fact nearly on every boot,
+because the SR_LBAT85/SR_LBAT75 bits have another meaning when in
+battery backup mode. Quoting from the data sheet:
 
-v3 changes:
+  LOW BATTERY INDICATOR 85% BIT (LBAT85)
 
-Patch 2: move the allOf block further down, add R-b [Krzysztof]
+  In Normal Mode (VDD), this bit indicates when the battery level has
+  dropped below the pre-selected trip levels. [...] The LBAT85
+  detection happens automatically once every minute when seconds
+  register reaches 59.
 
-Patch 3: change to a single property with two values [Krzysztof]
+  In Battery Mode (VBAT), this bit indicates the device has entered
+  into battery mode by polling once every 10 minutes. The LBAT85
+  detection happens automatically once when the minute register
+  reaches x9h or x0h minutes.
 
-Patch 4: adjust implementation accordingly
+Similar wording applies to the LBAT75 bit.
 
-Patch 5: move initialization of 'user' variable inside switch case,
-use 'if (ret)' instead of 'if (ret < 0)' for consistency within the
-driver [Andy]
+This means that if the device is powered off for more than 10 minutes,
+the LBAT85 bit is guaranteed to be set. Upon power-on, unless we're
+close enough to the end of a minute and/or the boot is slow enough
+that the second register passes 59, the LBAT85 bit is still set when
+the kernel (or early userspace) reads the RTC to set the system's
+wallclock time.
 
-Patch 7: semantically identical to v2, just context changes due to
-changes in 2/8 and 3/8
+Another minor problem is with the bit logic. If the 75% level is
+reached, logically we're also below 85%, so both bits would most
+likely be set. So even if the battery is below 75%, the warning would
+still say "voltage dropped below 85%".
 
-Patch 8: only do the clock registration when CONFIG_COMMON_CLK [kernel
-test robot]
+A third problem is that the driver and current DT binding offer no way
+to indicate the nominal battery level and/or settings of the Battery
+Level Monitor Trip Bits. Since the default value of the VB85TP[2:0] and
+VB75TP[2:0] bits are 000, this means the actual setting of the
+LBAT85/LBAT75 bits in VDD mode doesn't happen until the battery is below
+2.125V/1.875V, which for a standard 3V battery is way too late.
 
-v2: https://lore.kernel.org/lkml/20230613130011.305589-1-linux@rasmusvillemoes.dk/
-v1: https://lore.kernel.org/lkml/20230612113059.247275-1-linux@rasmusvillemoes.dk/
+A fourth problem is emitting this warning from ->read_time:
+util-linux' hwclock will, in the absence of support for getting an
+interrupt when the seconds counter is updated, issue
+ioctl(RTC_RD_TIME) in a busy-loop until it sees a change in the
+seconds field. In that case, if the battery low bits are set (either
+genuinely, more than a minute after boot, due to the battery actually
+being low, or as above, bogusly shortly after boot), the kernel log is
+swamped with hundreds of identical warnings.
 
-Rasmus Villemoes (8):
-  rtc: isl12022: remove wrong warning for low battery level
-  dt-bindings: rtc: Move isil,isl12022 from trivial-rtc.yaml into own
-    schema file
-  dt-bindings: rtc: isl12022: add bindings for battery alarm trip levels
-  rtc: isl12022: add support for trip level DT binding
-  rtc: isl12022: implement RTC_VL_READ ioctl
-  rtc: isl12022: trigger battery level detection during probe
-  dt-bindings: rtc: isl12022: add #clock-cells property
-  rtc: isl12022: implement support for the #clock-cells DT property
+Subsequent patches will add such bindings and driver support, and also
+proper support for RTC_VL_READ. For now, remove the broken warning.
 
- .../bindings/rtc/intersil,isl12022.yaml       |  64 +++++++++
- .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 -
- drivers/rtc/rtc-isl12022.c                    | 126 +++++++++++++++++-
- 3 files changed, 184 insertions(+), 8 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ drivers/rtc/rtc-isl12022.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
+diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+index e68a79b5e00e..ebd66b835cef 100644
+--- a/drivers/rtc/rtc-isl12022.c
++++ b/drivers/rtc/rtc-isl12022.c
+@@ -141,12 +141,6 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (buf[ISL12022_REG_SR] & (ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75)) {
+-		dev_warn(dev,
+-			 "voltage dropped below %u%%, date and time is not reliable.\n",
+-			 buf[ISL12022_REG_SR] & ISL12022_SR_LBAT85 ? 85 : 75);
+-	}
+-
+ 	dev_dbg(dev,
+ 		"raw data is sec=%02x, min=%02x, hr=%02x, mday=%02x, mon=%02x, year=%02x, wday=%02x, sr=%02x, int=%02x",
+ 		buf[ISL12022_REG_SC],
 -- 
 2.37.2
 
