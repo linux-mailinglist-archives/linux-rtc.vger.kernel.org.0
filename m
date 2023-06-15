@@ -2,50 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17B97315E8
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jun 2023 12:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFB77315ED
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jun 2023 12:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343806AbjFOK6y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Jun 2023 06:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S1343791AbjFOK65 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Jun 2023 06:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343774AbjFOK6m (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jun 2023 06:58:42 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009E42135
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:38 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f76b6db73fso794843e87.1
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:38 -0700 (PDT)
+        with ESMTP id S1343697AbjFOK6x (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jun 2023 06:58:53 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B996526B6
+        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:40 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f841b7a697so1020972e87.3
+        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 03:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686826717; x=1689418717;
+        d=rasmusvillemoes.dk; s=google; t=1686826719; x=1689418719;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cfopBjHrRqDySJuSAMCUvhXmj8ZxffTN4Fp5DsieY7A=;
-        b=Lz6b6vSFV436npcr01hqfn/fSPQ3iCiWMoVTbEZAZeaDjmqE5NJUwJofa1Mqm0ORzg
-         IyzgJkRfQEkALXUjUiCeKMY3E/6lAZqVq0T+ta77WY2h/GVPUdggQ6vemrz3VanJr10E
-         dAfiyEgfami0fJahzDv9md1i7sRI5xr3dysBQ=
+        bh=LYfZJ0PxZixY0dLK5zmM+/mrSboE1mU7I13VvIoENDw=;
+        b=PmuxOTSVjQn1kT6lIyY95Bndpk5NDtK6UeKpy3xHbzizb3puAVukBDCtUxEPKQQjHA
+         rQ3dN0xutz377HnXe/t98WxB455hiS0Ot4M2IwFEzX3had6VAfBEGlmSmP1509pLvZXp
+         WJqGClZ0ivwsespZ3HxA/nCKE0l3PKt4bEwKc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686826717; x=1689418717;
+        d=1e100.net; s=20221208; t=1686826719; x=1689418719;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cfopBjHrRqDySJuSAMCUvhXmj8ZxffTN4Fp5DsieY7A=;
-        b=QJ0+/CY/XUYxlK5PWlHnVtxsWvIjCUi2v9m75Q8wY3ehFyL6A5kRVXCpz2dNjgqaBZ
-         bPtYRLcbWD7OZ7asEF74yQwZFXZmMZNJuUMcsBqst4KcQbAUbFFUTu7YX+BBqjEo+YdW
-         WYV8as+YMFpjK/f1g217g+NYUoAtu1GX3AV2uJ3OUgrWmpxZ2CeZcnMhwtcLc887DDOe
-         tVtuCzozUBF0CfTZuutsPcjolG1Xm21N5gMRwIZpp9sqACIYabU/s/NOW+G6AFAHnPAA
-         jZsOkSMPe5l8tm5gxo9mnxVmOGj77gY5bRZ3cdT5JJTmIv9EI78OEhaTRklJ3Hwo96kK
-         zz6Q==
-X-Gm-Message-State: AC+VfDz/tva6e7JHZgDYYCQ28zyQ+KcsTZNnYMPlU6u8IVyJyGLHuX/F
-        IIJ7SYt3zyEbPQGHvdY5lM3yYA==
-X-Google-Smtp-Source: ACHHUZ7IkH/iPRuaojwiROlR5IplUqvPDIVOTVziRavD7wWfI4f+xvSDjHul6Uwh8je0aBQ193us0A==
-X-Received: by 2002:a05:6512:46d:b0:4f1:2ebf:536f with SMTP id x13-20020a056512046d00b004f12ebf536fmr1457824lfd.16.1686826717359;
-        Thu, 15 Jun 2023 03:58:37 -0700 (PDT)
+        bh=LYfZJ0PxZixY0dLK5zmM+/mrSboE1mU7I13VvIoENDw=;
+        b=iRPWEidqAk/McHSZeJyaSbDyMX6kWvFzpxkzEUH6eDeswm7bSm5KfQhT1hf1KpRvvN
+         yXKoZMI7lA+WFCpfFMyRODMzes6EWCf/3W0tgrBFHnFM8PI9s2pq97S5bYSt8QT6fcGg
+         gUav9QyeuRNefiOFlxz8x4zlHnUDj3d//x1TaeTL1GWzx1iQUZ4vcXM/9+HEVpX5DXxi
+         TJTt38FrlOic7h7G5UGstzKudClQGvsvQTcx4aYwmYmvxR0NJz7ZP7nz4VEw7ZvDg8Id
+         4dsxDhRz0g3SyzsUqiMzFQZCtW34KJoVSzxtQm8KqlyO4SJqTmLPxWJ5pq7LFjSNKzWt
+         piXg==
+X-Gm-Message-State: AC+VfDzoNgintdEz8N2RZfpnxW8YXAdXfDjO7bvtxxhnFYxN6bDfCTxf
+        LA8o+8SQoQDn1qx/TmKR1WsQ1w==
+X-Google-Smtp-Source: ACHHUZ4Ki/3UyNWljzTgPUtV1FL38EtSQGnHyLqfoIZ+0hG7grzuUa8EpnVtVNvrik6Id4QlmX/GMA==
+X-Received: by 2002:a19:5007:0:b0:4f6:29b2:f92a with SMTP id e7-20020a195007000000b004f629b2f92amr10870918lfb.21.1686826719087;
+        Thu, 15 Jun 2023 03:58:39 -0700 (PDT)
 Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm165364lfp.186.2023.06.15.03.58.34
+        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm165364lfp.186.2023.06.15.03.58.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 03:58:37 -0700 (PDT)
+        Thu, 15 Jun 2023 03:58:38 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -55,9 +55,9 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/8] dt-bindings: rtc: isl12022: add bindings for battery alarm trip levels
-Date:   Thu, 15 Jun 2023 12:58:21 +0200
-Message-Id: <20230615105826.411953-4-linux@rasmusvillemoes.dk>
+Subject: [PATCH v3 4/8] rtc: isl12022: add support for trip level DT binding
+Date:   Thu, 15 Jun 2023 12:58:22 +0200
+Message-Id: <20230615105826.411953-5-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230615105826.411953-1-linux@rasmusvillemoes.dk>
 References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
@@ -74,58 +74,93 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The isl12022 has a built-in support for monitoring the voltage of the
-backup battery, and setting bits in the status register when that
-voltage drops below two predetermined levels (usually 85% and 75% of
-the nominal voltage). However, since it can operate at wide range of
-battery voltages (2.5V - 5.5V), one must configure those trip levels
-according to which battery is used on a given board.
-
-Add bindings for defining these two trip levels. While the register
-and bit names suggest that they should correspond to 85% and 75% of
-the nominal battery voltage, the data sheet also says
-
-  There are total of 7 levels that could be selected for the first
-  alarm. Any of the of levels could be selected as the first alarm
-  with no reference as to nominal Battery voltage level.
-
-Hence this provides the hardware designer the ability to choose values
-based on the discharge characteristics of the battery chosen for the
-given product, rather than just having one battery-microvolt property
-and having the driver choose levels close to 0.85/0.75 times that.
+Implement support for using the values given in the
+isil,battery-trip-levels-microvolt property to set appropriate values
+in the VB85TP/VB75TP bits in the PWR_VBAT register.
 
 Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- .../devicetree/bindings/rtc/intersil,isl12022.yaml       | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/rtc/rtc-isl12022.c | 39 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-index 054d3fc649ba..3c6c07aaa78f 100644
---- a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-+++ b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-@@ -19,6 +19,14 @@ properties:
-   interrupts:
-     maxItems: 1
+diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+index ebd66b835cef..6a757f0a4736 100644
+--- a/drivers/rtc/rtc-isl12022.c
++++ b/drivers/rtc/rtc-isl12022.c
+@@ -9,6 +9,7 @@
+  */
  
-+  isil,battery-trip-levels-microvolt:
-+    description:
-+      The battery voltages at which the first alarm and second alarm
-+      should trigger (normally ~85% and ~75% of nominal V_BAT).
-+    items:
-+      - enum: [2125000, 2295000, 2550000, 2805000, 3060000, 4250000, 4675000]
-+      - enum: [1875000, 2025000, 2250000, 2475000, 2700000, 3750000, 4125000]
+ #include <linux/bcd.h>
++#include <linux/bitfield.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/i2c.h>
+@@ -31,6 +32,8 @@
+ #define ISL12022_REG_SR		0x07
+ #define ISL12022_REG_INT	0x08
+ 
++#define ISL12022_REG_PWR_VBAT	0x0a
 +
- required:
-   - compatible
-   - reg
-@@ -39,6 +47,7 @@ examples:
-             compatible = "isil,isl12022";
-             reg = <0x6f>;
-             interrupts-extended = <&gpio1 5 IRQ_TYPE_LEVEL_LOW>;
-+            isil,battery-trip-levels-microvolt = <2550000>, <2250000>;
-         };
-     };
+ #define ISL12022_REG_BETA	0x0d
+ #define ISL12022_REG_TEMP_L	0x28
  
+@@ -42,6 +45,9 @@
+ 
+ #define ISL12022_INT_WRTC	(1 << 6)
+ 
++#define ISL12022_REG_VB85_MASK	GENMASK(5, 3)
++#define ISL12022_REG_VB75_MASK	GENMASK(2, 0)
++
+ #define ISL12022_BETA_TSE	(1 << 7)
+ 
+ static umode_t isl12022_hwmon_is_visible(const void *data,
+@@ -209,6 +215,38 @@ static const struct regmap_config regmap_config = {
+ 	.use_single_write = true,
+ };
+ 
++static const u32 trip_levels[2][7] = {
++	{ 2125000, 2295000, 2550000, 2805000, 3060000, 4250000, 4675000 },
++	{ 1875000, 2025000, 2250000, 2475000, 2700000, 3750000, 4125000 },
++};
++
++static void isl12022_set_trip_levels(struct device *dev)
++{
++	struct regmap *regmap = dev_get_drvdata(dev);
++	u32 levels[2] = {0, 0};
++	int ret, i, j, x[2];
++	u8 val, mask;
++
++	device_property_read_u32_array(dev, "isil,battery-trip-levels-microvolt",
++				       levels, 2);
++
++	for (i = 0; i < 2; i++) {
++		for (j = 0; j < ARRAY_SIZE(trip_levels[i]) - 1; j++) {
++			if (levels[i] <= trip_levels[i][j])
++				break;
++		}
++		x[i] = j;
++	}
++
++	val = FIELD_PREP(ISL12022_REG_VB85_MASK, x[0]) |
++		FIELD_PREP(ISL12022_REG_VB75_MASK, x[1]);
++	mask = ISL12022_REG_VB85_MASK | ISL12022_REG_VB75_MASK;
++
++	ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
++	if (ret)
++		dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
++}
++
+ static int isl12022_probe(struct i2c_client *client)
+ {
+ 	struct rtc_device *rtc;
+@@ -225,6 +263,7 @@ static int isl12022_probe(struct i2c_client *client)
+ 
+ 	dev_set_drvdata(&client->dev, regmap);
+ 
++	isl12022_set_trip_levels(&client->dev);
+ 	isl12022_hwmon_register(&client->dev);
+ 
+ 	rtc = devm_rtc_allocate_device(&client->dev);
 -- 
 2.37.2
 
