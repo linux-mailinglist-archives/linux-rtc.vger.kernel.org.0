@@ -2,62 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7BB7313C2
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jun 2023 11:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D139A7313EC
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jun 2023 11:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240525AbjFOJ2s (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Jun 2023 05:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S244884AbjFOJcj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Jun 2023 05:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241114AbjFOJ2Q (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jun 2023 05:28:16 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9C1BD2
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 02:28:15 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id DA2DB869E5; Thu, 15 Jun 2023 10:24:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1686821090; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=I3GjuaOOzi9lRmWA90PKSDhSyQcPZWvEZghISc+bA6i6wn55eMSykPZqrHJSNRuzi
-         +C1Jy8INu0fYALxC5k3mdfkzxSXxDWGo0xrctQRz4dtb8+u0NS0U65ZvMAhS7f9fGn
-         tM9H/5L/bx1lKYxz5TSKKCYCzWaFGHyDYUKZBkr580DL6+k+eiV7ElgLNgN5S8TqeE
-         toFfOFSdvz3Nf8XzM2Mi0fAv3l0RU7el7B0tk9d110IKTdTQxyBZdi0kxUn0fkuj7N
-         PwOLSGE8VdDtks6m02BgsTN7w5Al0YOciJVgeljLLnzwq84gyN8sh1/JvLReoOxUnq
-         I/m6WaDaERDUA==
-Received: by mail.lokoho.com for <linux-rtc@vger.kernel.org>; Thu, 15 Jun 2023 09:21:26 GMT
-Message-ID: <20230615094301-0.1.6n.2mcol.0.pxf5jenukt@lokoho.com>
-Date:   Thu, 15 Jun 2023 09:21:26 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-rtc@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S234714AbjFOJch (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jun 2023 05:32:37 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2326AA;
+        Thu, 15 Jun 2023 02:32:36 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F8I2Et009956;
+        Thu, 15 Jun 2023 11:32:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=7FTvGFOInZeY6DQoM9GEo1BZzNU9jNs0DHdmg607YF4=;
+ b=qME7t9rpEE4303bvZoAbFXYZETQhqt3DN7XsWVgXTkasE71XsacSUGPg+3hJE+ZiTRJk
+ 9+EuJmCmskQvzB2YNOT1/HicbCmgSIFBBY0XMMMulR/KELxqFmYEF/gz2+rQFjEJpp/y
+ vBao6xoe/OCnSqe7ifadgLH9bHBA34HIqnEaHQpoG7NNROTAWc/Afm18Qj/fY5mwif7k
+ xF+NsB98MBYb51e9kGYv6cibAsPl7ROZ5oohAGh1WFSIzC6HqUN+TJlrkgRMMcZzJexD
+ cVRnqaOlpPYoGDT5tTNyO/GqFxoETVrtJOWsnP0sGSniHncvPC1xkhcimh3YCXbIXMC/ Kg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7s1maxqa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 11:32:21 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E8D0110002A;
+        Thu, 15 Jun 2023 11:32:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B712521A91B;
+        Thu, 15 Jun 2023 11:32:20 +0200 (CEST)
+Received: from localhost (10.252.8.64) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
+ 2023 11:32:20 +0200
+From:   Valentin Caron <valentin.caron@foss.st.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Christophe Guibout <christophe.guibout@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        <linux-rtc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Valentin Caron <valentin.caron@foss.st.com>
+Subject: [PATCH 0/7] rtc: stm32: multiple bug fixes and improvements
+Date:   Thu, 15 Jun 2023 11:27:46 +0200
+Message-ID: <20230615092753.323844-1-valentin.caron@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.252.8.64]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_06,2023-06-14_02,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This series implements some bug fixes for theses issues:
+- typo issues
+- register read sequence issue
+- irq during pm callbacks issue
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+This series implements also some improvements:
+- don't switch to INIT mode uselessly
+- improve error printing during probe
+- improve rtc precision on stm32mp1
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Antonio Borneo (2):
+  rtc: stm32: use the proper register sequence to read date/time
+  rtc: stm32: don't stop time counter if not needed
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Christophe Guibout (1):
+  rtc: stm32: improve rtc precision
 
+Gabriel Fernandez (1):
+  rtc: stm32: change PM callbacks to "_noirq()"
 
-Pozdrawiam
-Adam Charachuta
+Valentin Caron (3):
+  rtc: stm32: don't print an error on probe deferral
+  rtc: stm32: fix unnecessary parentheses
+  rtc: stm32: fix issues of stm32_rtc_valid_alrm function
+
+ drivers/rtc/rtc-stm32.c | 138 +++++++++++++++++++++++++---------------
+ 1 file changed, 85 insertions(+), 53 deletions(-)
+
+-- 
+2.25.1
+
