@@ -2,120 +2,160 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801FC734C53
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jun 2023 09:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EAC73648E
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Jun 2023 09:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjFSH1Z (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 19 Jun 2023 03:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S230267AbjFTHbS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Jun 2023 03:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFSH1Y (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Jun 2023 03:27:24 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0404C1A4
-        for <linux-rtc@vger.kernel.org>; Mon, 19 Jun 2023 00:27:23 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f909853509so10773535e9.3
-        for <linux-rtc@vger.kernel.org>; Mon, 19 Jun 2023 00:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1687159641; x=1689751641;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KVaISX2m9XxL5h5a/4y8I7apZS6weBxYRlQstKHaB2s=;
-        b=iJhu5+me0m2HX6u+lFFiJJFhkyPa4BO1Dtdj6q+mAsFrDzUYRH7Qd7TkyYs6Yo7Gxo
-         zVRaQ+hs8FAhIwXoX5AUxwGNd9jYngTnYnrFyd6GoXL5BlccS2jFBZ+KCtVJCZtRq1ez
-         MExxIv0syI2A9xo2DVjrvC+jNnSr9YK+cuBOE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687159641; x=1689751641;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KVaISX2m9XxL5h5a/4y8I7apZS6weBxYRlQstKHaB2s=;
-        b=klxoifs1aVnSi5lMmU5fmEVKYnY4nX5aVY7VXp6HDYrmu3nlwRGsmRyCoE7TNct/E7
-         jKnHXdaWrMWBxxuy+g5vhSupyXKDuiAFM9IgYypmFNXnWpwcaSKsQjyVQVJ5uxbg1mSm
-         DUNHe3mzf7E3eAtLR/SQOfkm0pDDsIItMElZhHSxXeaT756OJBLYVsQ4MG+kD22Z19UK
-         cQubCVxoQDrSU5DyTNb2U7+wnWiaun+Ry4IY1bldb+3RxQYcxVBp+nw7fnensobF53x0
-         oCC2UaISsYh71JJcMh3z7fW5AF/fU07Mly+UwI/KHW9b2dKATPlrtaBctzayoKGNtXJW
-         hSdA==
-X-Gm-Message-State: AC+VfDzbuWjZY1glDk9wop0Rf76Sb/wxsy8axPzen+7LlhqlKicjSTVW
-        uoKKnEXqUm8TMKpeZV8GhVM9Tg==
-X-Google-Smtp-Source: ACHHUZ7D4N4Ny9o6BKYovhoFL8IM6tDrg1j5ahbMthjQAaIA3tSDhTpQ070XzmtBpkxVnRCJqUqrzA==
-X-Received: by 2002:a7b:c356:0:b0:3f8:f6fe:26bf with SMTP id l22-20020a7bc356000000b003f8f6fe26bfmr5666144wmj.12.1687159641390;
-        Mon, 19 Jun 2023 00:27:21 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id l22-20020a7bc356000000b003f7e4d143cfsm9726492wmj.15.2023.06.19.00.27.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 00:27:20 -0700 (PDT)
-Message-ID: <50f1066a-5c4c-540b-d69e-8ffe022cb860@rasmusvillemoes.dk>
-Date:   Mon, 19 Jun 2023 09:27:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 4/8] rtc: isl12022: add support for trip level DT
- binding
-Content-Language: en-US, da
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S229966AbjFTHbR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Jun 2023 03:31:17 -0400
+Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D945FE4D;
+        Tue, 20 Jun 2023 00:30:56 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:c83:0:640:84f9:0])
+        by forward500c.mail.yandex.net (Yandex) with ESMTP id 379B75EDBD;
+        Tue, 20 Jun 2023 10:30:54 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id pUbQt2qDVKo0-eL4OdmlW;
+        Tue, 20 Jun 2023 10:30:53 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1687246253;
+        bh=3rtRPYT14HBdyVacf+D4l8FmRddXv2uGiiB1drmivrY=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=n1eSasTp6ajRtQvhnqv+1Y30fetreVfCGaUbhe/ONKZruw5nR7lYLfj65my4PUj+5
+         IZvD+PJ7iQ3899jqYpUbdsJXAhi09TfZfIIxC6b/ByuAPe1cnvC7d1I0PTvZag9iIB
+         Bsyp5Bq6nr4OPZW4a54OFVGbAum1HQMsQTITJu9I=
+Authentication-Results: mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <e6c68580df0bb8441bf5beabfa978bfe15e0a39d.camel@maquefel.me>
+Subject: Re: [PATCH v1 29/43] dt-bindings: rtc: Add ST M48T86
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230615105826.411953-1-linux@rasmusvillemoes.dk>
- <20230615105826.411953-5-linux@rasmusvillemoes.dk>
- <ZIrx6lZfsYnM7TnQ@smile.fi.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <ZIrx6lZfsYnM7TnQ@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 20 Jun 2023 10:30:54 +0300
+In-Reply-To: <a2b286a5-32c1-213d-49df-129f2d94d771@linaro.org>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230601054549.10843-11-nikita.shubin@maquefel.me>
+         <a2b286a5-32c1-213d-49df-129f2d94d771@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/06/2023 13.11, Andy Shevchenko wrote:
-> On Thu, Jun 15, 2023 at 12:58:22PM +0200, Rasmus Villemoes wrote:
+Hello Krzysztof!
 
->> +static void isl12022_set_trip_levels(struct device *dev)
->> +{
->> +	struct regmap *regmap = dev_get_drvdata(dev);
->> +	u32 levels[2] = {0, 0};
-> 
-> A nit, 0, 0 is not needed, {} will do the job.
+On Thu, 2023-06-01 at 10:18 +0200, Krzysztof Kozlowski wrote:
+> On 01/06/2023 07:45, Nikita Shubin wrote:
+> > Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> > ---
+> >=20
+> > Notes:
+> > =C2=A0=C2=A0=C2=A0 v0 -> v1:
+> > =C2=A0=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 - s/dallas/st/
+> > =C2=A0=C2=A0=C2=A0 - description for regs
+> > =C2=A0=C2=A0=C2=A0 - s/additionalProperties/unevaluatedProperties/
+> > =C2=A0=C2=A0=C2=A0 - add ref rtc.yaml
+> > =C2=A0=C2=A0=C2=A0 - changed compatible to st,m48t86
+> > =C2=A0=C2=A0=C2=A0 - dropped label in example
+> > =C2=A0=C2=A0=C2=A0 - replaced Alessandro Alessandro to Alexandre Bellon=
+i
+> >=20
+> > =C2=A0.../bindings/rtc/st,m48t86-rtc.yaml=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 38
+> > +++++++++++++++++++
+> > =C2=A01 file changed, 38 insertions(+)
+> > =C2=A0create mode 100644
+> > Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/rtc/st,m48t86-
+> > rtc.yaml b/Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+> > new file mode 100644
+> > index 000000000000..eb8e6451d7c8
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+>=20
+> Filename based on compatible, so drop "rtc".
+>=20
+> > @@ -0,0 +1,38 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/rtc/st,m48t86-rtc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: ST M48T86 / Dallas DS12887 RTC wirh SRAM
+>=20
+> typo: with
+>=20
+> > +
+> > +maintainers:
+> > +=C2=A0 - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > +
+> > +properties:
+> > +=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0 enum:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - st,m48t86
+> > +
+> > +=C2=A0 reg:
+> > +=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: index register
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: data register
+> > +
+> > +allOf:
+> > +=C2=A0 - $ref: rtc.yaml
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +required:
+> > +=C2=A0 - compatible
+> > +=C2=A0 - reg
+>=20
+> required goes after properties:
+>=20
+> Keep the same order in all your patches.
+>=20
+> > +
+> > +examples:
+> > +=C2=A0 - |
+> > +=C2=A0=C2=A0=C2=A0 rtc@10800000 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "st,m48t86";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x10800000 0x1>, <0x11700000 0=
+x1>;
+>=20
+> One byte long? Not a word?
 
-So? I'm not code-golfing, and here I really want to initialize to 0 (or
-any value lower than the first entries in the trip_levels[] arrays so
-that, lacking the DT property, the code ends up using what are the chip
-reset defaults).
+They are indeed one byte long:
 
->> +	int ret, i, j, x[2];
->> +	u8 val, mask;
-> 
-> BUILD_BUG_ON(ARRAY_SIZE(x) != ARRAY_SIZE(levels)) ?
+https://elixir.bootlin.com/linux/v6.4-rc7/source/drivers/rtc/rtc-m48t86.c#L=
+46
 
-BUILD_BUG_ON doesn't make sense when these things are declared within a
-few lines of each other _and_ since they're sized based on properties of
-the hardware we're dealing with, nobody would ever have a reason to
-change either. So no, that would IMO make it harder to read, because one
-would stop and think "why is this obvious thing asserted?".
-
->> +	device_property_read_u32_array(dev, "isil,battery-trip-levels-microvolt",
->> +				       levels, 2);
-> 
-> A nit, ARRAY_SIZE(levels) ?
-> 
->> +	for (i = 0; i < 2; i++) {
-> 
-> ARRAY_SIZE(x) ?
-
-I considered that, but really didn't think it improved readability. I'll
-defer to Alexandre on whether to change this.
-
-Rasmus
+>=20
+> > +=C2=A0=C2=A0=C2=A0 };
+> > +
+> > +...
+>=20
+> Best regards,
+> Krzysztof
+>=20
 
