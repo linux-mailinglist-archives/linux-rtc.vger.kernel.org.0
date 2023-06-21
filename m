@@ -2,30 +2,30 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2AC73900A
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jun 2023 21:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75BA739027
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jun 2023 21:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjFUT01 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 21 Jun 2023 15:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S230415AbjFUTgV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 21 Jun 2023 15:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjFUT00 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Jun 2023 15:26:26 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7590CFC;
-        Wed, 21 Jun 2023 12:26:24 -0700 (PDT)
+        with ESMTP id S230267AbjFUTgT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Jun 2023 15:36:19 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129B71989;
+        Wed, 21 Jun 2023 12:36:15 -0700 (PDT)
 X-GND-Sasl: alexandre.belloni@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687375583;
+        t=1687376174;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=vlqLzpB1JDNNnymCns/wsqrCuU7w6ETUKOznj+yVpUk=;
-        b=oELAVpIY3IvGypd/ai021DaQePJRhsWkSdxhphQ7iOIUKP1JpJIUVBCabHhaf7wvVAO4WO
-        djufLY4oQ1GZG1Wajz4UHGO+Jt/4tRX2EdzXHp3URDoffrNx0d4MnRSeCMeLa1HOxwV4IO
-        ooGBWGPrskRZbtqNjuhCRtueWb3iTmt1YiP9EGN+GTBAii19I9mgZgH9aavIVt2yrdir7Q
-        8NWBCDiJjfX5aq3HzLrH464vAYf56g8dKeCZCttMaI8yd3PZyVHpLiMDfhxVfywVvYWgmf
-        /bZxt5rvPe3DJRPJesRIv2eN8TEMuHWrXnXGCygF/Tj9wAzY7eZT/lQwmNuXvA==
+        bh=t2IbrcNzQNr/fmkdLl77sKepHEuqtDNp0dRZtoi2jnM=;
+        b=Je/33w7wN8peztYmhMOKG59d4LYTqq9ZW6pXS5GVcPdtjGF596LGjli5jIjbW+5wTS7tM1
+        n4ExkXx2NkcsmkBnlicRXMFp7QydUJ3fTUOQPY36vtUpY3NNTQ4iH2NQCuUI2Fp4CnOTB5
+        UPDuvfZYRHB+xVaTnj3lKZEMzGT2LoRp/HZ/bRYSI0l3tsiVilZg8ANY/39JZ2Zk8jLtqZ
+        wocgzy0mF7IZkSV/BH306ZpZE0zJWURZ8hHr8Lc/VwsDLBexUT+81LVl2esJ1uhdcMfMOj
+        YErVFYxSUCgAzxGVbvDUVxqM1LGPbfSuNeiwPf6LybkkRn9DazvOqKeXtrI7WA==
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-GND-Sasl: alexandre.belloni@bootlin.com
@@ -33,28 +33,26 @@ X-GND-Sasl: alexandre.belloni@bootlin.com
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 634FD60002;
-        Wed, 21 Jun 2023 19:26:21 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 21:26:21 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CCE3C1BF204;
+        Wed, 21 Jun 2023 19:36:13 +0000 (UTC)
+Date:   Wed, 21 Jun 2023 21:36:13 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Hugo Villeneuve <hugo@hugovil.com>
 Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 08/14] rtc: pcf2127: add support for PCF2131
- interrupts on output INT_A
-Message-ID: <20230621192621619a92eb@mail.local>
+Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
+ sequence for PCF2131
+Message-ID: <20230621193613d25ceb92@mail.local>
 References: <20221215150214.1109074-1-hugo@hugovil.com>
- <20221215150214.1109074-9-hugo@hugovil.com>
- <Y8rHx8U4peB+fnW8@mail.local>
- <20230123155240.2d55fc2f5874a50e2e6252d2@hugovil.com>
- <20230511131958.fd82402f8ef43dd8690bee78@hugovil.com>
- <2023062119243680b73b71@mail.local>
+ <20221215150214.1109074-12-hugo@hugovil.com>
+ <Y8rK1dgpNJaSy/Gb@mail.local>
+ <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023062119243680b73b71@mail.local>
+In-Reply-To: <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -65,165 +63,150 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 21/06/2023 21:24:37+0200, Alexandre Belloni wrote:
-> On 11/05/2023 13:19:58-0400, Hugo Villeneuve wrote:
-> > On Mon, 23 Jan 2023 15:52:40 -0500
-> > Hugo Villeneuve <hugo@hugovil.com> wrote:
-> > 
-> > > On Fri, 20 Jan 2023 17:56:39 +0100
-> > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > > 
-> > > > On 15/12/2022 10:02:09-0500, Hugo Villeneuve wrote:
-> > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > > 
-> > > > > The PCF2127 and PCF2129 have one output interrupt pin. The PCF2131 has
-> > > > > two, named INT_A and INT_B. The hardware support that any interrupt
-> > > > > source can be routed to either one or both of them.
-> > > > > 
-> > > > > Force all interrupt sources to go to the INT A pin.
-> > > > > 
-> > > > > Support to route any interrupt source to INT A/B pins is not supported
-> > > > > by this driver at the moment.
-> > > > > 
-> > > > 
-> > > > The main issue with this is that this will created a breaking change
-> > > > once someone needs support for INTB
-> > > 
-> > > We already had a discussion about this a while ago:
-> > > 
-> > >     https://lore.kernel.org/linux-rtc/7be3f9541eaed7e17e334267e49665f442b1b458.camel@dimonoff.com/
-> > > 
-> > > What exactly do you suggest? I personnaly don't have any need for INTB at the moment and I would prefer to avoid the great complexity of supporting any combination of routing interrupts to any A ou  pins.
-> > 
-> > Hi Alexandre,
-> > a few months later, and I am still waiting for your feedback on this (and other questions/interrogations I raised for other patches related to this series) to submit the next version of this patch series.
-> > 
-> > Can you have a look at it and provide some answers?
-> > 
+On 23/01/2023 16:57:41-0500, Hugo Villeneuve wrote:
+> On Fri, 20 Jan 2023 18:09:41 +0100
+> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 > 
-> I'm very very sorry this takes so long. For this one, I don't have a
-> precise idea. I guess we could have one property per pin with a mask of
-> the interrupts we are interested in. That would cover all the use cases.
-> For example, a PMIC could take the alarms on INTB and the CPU could have
-> alarms, battery low and UIE on INTA.
+> > On 15/12/2022 10:02:12-0500, Hugo Villeneuve wrote:
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > 
+> > > The sequence for updating the time/date registers is slightly
+> > > different between PCF2127/29 and PCF2131.
+> > > 
+> > > For PCF2127/29, during write operations, the time counting
+> > > circuits (memory locations 03h through 09h) are automatically blocked.
+> > > 
+> > > For PCF2131, time/date registers write access requires setting the
+> > > STOP bit and sending the clear prescaler instruction (CPR). STOP then
+> > > needs to be released once write operation is completed.
+> > > 
+> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > ---
+> > >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
+> > >  1 file changed, 37 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > > index e4b78b9c03f9..11fbdab6bf01 100644
+> > > --- a/drivers/rtc/rtc-pcf2127.c
+> > > +++ b/drivers/rtc/rtc-pcf2127.c
+> > > @@ -39,6 +39,7 @@
+> > >  #define PCF2127_REG_CTRL1		0x00
+> > >  #define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
+> > >  #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
+> > > +#define PCF2127_BIT_CTRL1_STOP			BIT(5)
+> > >  /* Control register 2 */
+> > >  #define PCF2127_REG_CTRL2		0x01
+> > >  #define PCF2127_BIT_CTRL2_AIE			BIT(1)
+> > > @@ -70,6 +71,7 @@
+> > >  #define PCF2131_REG_SR_RESET		0x05
+> > >  #define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
+> > >  #define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
+> > > +#define PCF2131_SR_RESET_CPR_CMD	0xA4 /* CPR is bit 7. */
+> > >  /* Time and date registers */
+> > >  #define PCF2127_REG_TIME_DATE_BASE	0x03
+> > >  #define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
+> > > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> > >  	/* year */
+> > >  	buf[i++] = bin2bcd(tm->tm_year - 100);
+> > >  
+> > > -	/* write register's data */
+> > > +	/* Write access to time registers:
+> > > +	 * PCF2127/29: no special action required.
+> > > +	 * PCF2131:    requires setting the STOP bit. STOP bit needs to
+> > > +	 *             be cleared after time registers are updated.
+> > > +	 *             It is also recommended to set CPR bit, although
+> > > +	 *             write access will work without it.
+> > > +	 */
+> > > +	if (pcf2127->cfg->has_reset_reg) {
+> > 
+> > This should probably be tied to the actual rtc model rather than the
+> > presence of the reset register.
+> > You MUST clear CPR to be able to set the time precisely.
+> 
+> In fact you must actually SET the CPR bit to clear the prescaler, confusing!
+> 
+> I was already setting the CPR bit (clearing prescaler), so I modified the confusing comment.
+> 
+> The CPR bit is only present IF the reset register is also present, that is why I simply used the presence of the reset register to take the correct action. This avoids to define a new bit or matching on a device model for that functionality (adding newer models could potentially mean modifying the model match).
+> 
+> But if you absolutely want to match on the model, I would like to know how you would like to practically do it (maybe an example)?
+> 
 
-As the mask for INTA and INTB are set to have interrupts on both by
-default, maybe you could keep that in a separate series so we can wait
-for the DT maintainer to give their opinion.
+You can keep pcf21xx_type around, in pcf21xx_config for example.
+
 > 
 > 
-> > Thank you,
-> > Hugo.
 > > 
+> > > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > > +					 PCF2127_BIT_CTRL1_STOP,
+> > > +					 PCF2127_BIT_CTRL1_STOP);
+> > > +		if (err) {
+> > > +			dev_err(dev, "setting STOP bit failed\n");
 > > 
-> > > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > > ---
-> > > > >  drivers/rtc/rtc-pcf2127.c | 35 +++++++++++++++++++++++++++++++++++
-> > > > >  1 file changed, 35 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > > > index 4148e135f935..68af4d0438b8 100644
-> > > > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > > > @@ -191,6 +191,7 @@ struct pcf21xx_config {
-> > > > >  	int max_register;
-> > > > >  	unsigned int has_nvmem:1;
-> > > > >  	unsigned int has_bit_wd_ctl_cd0:1;
-> > > > > +	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
-> > > > >  	u8 regs_td_base; /* Time/data base registers. */
-> > > > >  	u8 regs_alarm_base; /* Alarm function base registers. */
-> > > > >  	u8 reg_wd_ctl; /* Watchdog control register. */
-> > > > > @@ -879,6 +880,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> > > > >  		.max_register = 0x1d,
-> > > > >  		.has_nvmem = 1,
-> > > > >  		.has_bit_wd_ctl_cd0 = 1,
-> > > > > +		.has_int_a_b = 0,
-> > > > >  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> > > > >  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
-> > > > >  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> > > > > @@ -902,6 +904,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> > > > >  		.max_register = 0x19,
-> > > > >  		.has_nvmem = 0,
-> > > > >  		.has_bit_wd_ctl_cd0 = 0,
-> > > > > +		.has_int_a_b = 0,
-> > > > >  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
-> > > > >  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
-> > > > >  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-> > > > > @@ -925,6 +928,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
-> > > > >  		.max_register = 0x36,
-> > > > >  		.has_nvmem = 0,
-> > > > >  		.has_bit_wd_ctl_cd0 = 0,
-> > > > > +		.has_int_a_b = 1,
-> > > > >  		.regs_td_base = PCF2131_REG_TIME_DATE_BASE,
-> > > > >  		.regs_alarm_base = PCF2131_REG_ALARM_BASE,
-> > > > >  		.reg_wd_ctl = PCF2131_REG_WD_CTL,
-> > > > > @@ -1017,6 +1021,28 @@ static int pcf2127_enable_ts(struct device *dev, int ts_id)
-> > > > >  	return ret;
-> > > > >  }
-> > > > >  
-> > > > > +/* Route all interrupt sources to INT A pin. */
-> > > > > +static int pcf2127_configure_interrupt_pins(struct device *dev)
-> > > > > +{
-> > > > > +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> > > > > +	int ret;
-> > > > > +
-> > > > > +	/* Mask bits need to be cleared to enable corresponding
-> > > > > +	 * interrupt source.
-> > > > > +	 */
-> > > > > +	ret = regmap_write(pcf2127->regmap,
-> > > > > +			   PCF2131_REG_INT_A_MASK1, 0);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > > +
-> > > > > +	ret = regmap_write(pcf2127->regmap,
-> > > > > +			   PCF2131_REG_INT_A_MASK2, 0);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > > +
-> > > > > +	return ret;
-> > > > > +}
-> > > > > +
-> > > > >  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > > > >  			 int alarm_irq, const char *name, const struct pcf21xx_config *config)
-> > > > >  {
-> > > > > @@ -1076,6 +1102,15 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > > > >  		set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
-> > > > >  	}
-> > > > >  
-> > > > > +	if (pcf2127->cfg->has_int_a_b) {
-> > > > > +		/* Configure int A/B pins, independently of alarm_irq. */
-> > > > > +		ret = pcf2127_configure_interrupt_pins(dev);
-> > > > > +		if (ret) {
-> > > > > +			dev_err(dev, "failed to configure interrupt pins\n");
-> > > > > +			return ret;
-> > > > > +		}
-> > > > > +	}
-> > > > > +
-> > > > >  	if (pcf2127->cfg->has_nvmem) {
-> > > > >  		struct nvmem_config nvmem_cfg = {
-> > > > >  			.priv = pcf2127,
-> > > > > -- 
-> > > > > 2.30.2
-> > > > > 
-> > > > 
-> > > > -- 
-> > > > Alexandre Belloni, co-owner and COO, Bootlin
-> > > > Embedded Linux and Kernel engineering
-> > > > https://bootlin.com
-> > > > 
-> > > 
-> > > 
+> > This really needs to be less verbose. There is nothing a user can really
+> > do after having seen this message. Having an error in userspace will
+> > anyway prompt the user to retry the operation which is the only action
+> > it can do.
+> 
+> I converted the dev_err messages to dev_dbg.
+> 
+> In the original driver and in the same function, there is also a dev_err to handle regmap_bulk_write() failure. Do you suggest that we also make it less verbose:
+> 
+> err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->reg_time_base, buf, i);
+>  	if (err) {
+>  		dev_err(dev,
+> 
+> ???
+
+yes, you can remove it as part of your previous patches.
+
+> 
+> 
+> > > +			return err;
+> > > +		}
+> > > +
+> > > +		err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
+> > > +				   PCF2131_SR_RESET_CPR_CMD);
+> > > +		if (err) {
+> > > +			dev_err(dev, "sending CPR cmd failed\n");
+> > > +			return err;
+> > > +		}
+> > > +	}
+> > > +
+> > > +	/* write time register's data */
+> > >  	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
+> > >  	if (err) {
+> > >  		dev_err(dev,
+> > > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> > >  		return err;
+> > >  	}
+> > >  
+> > > +	if (pcf2127->cfg->has_reset_reg) {
+> > > +		/* Clear STOP bit (PCF2131 only) after write is completed. */
+> > > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > > +					 PCF2127_BIT_CTRL1_STOP, 0);
+> > > +		if (err) {
+> > > +			dev_err(dev, "clearing STOP bit failed\n");
+> > > +			return err;
+> > > +		}
+> > > +	}
+> > > +
+> > >  	return 0;
+> > >  }
+> > >  
 > > > -- 
-> > > Hugo Villeneuve <hugo@hugovil.com>
-> > 
+> > > 2.30.2
+> > > 
 > > 
 > > -- 
-> > Hugo Villeneuve
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> > 
+> 
 > 
 > -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Hugo Villeneuve <hugo@hugovil.com>
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
