@@ -2,213 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75BA739027
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jun 2023 21:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FA77397FF
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jun 2023 09:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjFUTgV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 21 Jun 2023 15:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S229853AbjFVHQj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 22 Jun 2023 03:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjFUTgT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Jun 2023 15:36:19 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129B71989;
-        Wed, 21 Jun 2023 12:36:15 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687376174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t2IbrcNzQNr/fmkdLl77sKepHEuqtDNp0dRZtoi2jnM=;
-        b=Je/33w7wN8peztYmhMOKG59d4LYTqq9ZW6pXS5GVcPdtjGF596LGjli5jIjbW+5wTS7tM1
-        n4ExkXx2NkcsmkBnlicRXMFp7QydUJ3fTUOQPY36vtUpY3NNTQ4iH2NQCuUI2Fp4CnOTB5
-        UPDuvfZYRHB+xVaTnj3lKZEMzGT2LoRp/HZ/bRYSI0l3tsiVilZg8ANY/39JZ2Zk8jLtqZ
-        wocgzy0mF7IZkSV/BH306ZpZE0zJWURZ8hHr8Lc/VwsDLBexUT+81LVl2esJ1uhdcMfMOj
-        YErVFYxSUCgAzxGVbvDUVxqM1LGPbfSuNeiwPf6LybkkRn9DazvOqKeXtrI7WA==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CCE3C1BF204;
-        Wed, 21 Jun 2023 19:36:13 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 21:36:13 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
- sequence for PCF2131
-Message-ID: <20230621193613d25ceb92@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
- <20221215150214.1109074-12-hugo@hugovil.com>
- <Y8rK1dgpNJaSy/Gb@mail.local>
- <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
+        with ESMTP id S229732AbjFVHQi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Jun 2023 03:16:38 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCA3E69;
+        Thu, 22 Jun 2023 00:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=fFVRpThLopAOrI7yVx0trLMYaXbzsG/TuaZoGCChqNw=; b=fSkCGMLx+NtSIbxhA4neDCIrap
+        qFGe6/138gRm4hZ/6lRTphSY3opopD9feU9LWWb9jYjHb1/rSQlwXXewKzfOGRBe5EfEAHHpuK2s/
+        mDoohjOQJn+9LlH1lPSF5wTOqw0Br0Fgu2JWbKa6kRQkI7ROWwFEdAb8E9OK2JiYaQg1emlKZSj0x
+        bhZZBs0r9SI2De+otddX/HV171HjAlQolyOEt7SqTeqzWB9xX6H4cn8P3M4G3zt3izODvQUhIeLZh
+        57GCiIy4UqTmLbfAkDmlQKhJTvlPMXM+DGgeZVKExbygfhDdvSZknk26suzIjPGf7YuXUl5HhppKf
+        S7VK528g==;
+Received: from [89.212.21.243] (port=50578 helo=localhost.localdomain)
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1qCEYN-00GUK0-2G;
+        Thu, 22 Jun 2023 09:16:27 +0200
+From:   Andrej Picej <andrej.picej@norik.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@phytec.de
+Subject: [PATCH v2] rtc: rv3028: Improve trickle charger logic
+Date:   Thu, 22 Jun 2023 09:16:09 +0200
+Message-Id: <20230622071609.4032736-1-andrej.picej@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 23/01/2023 16:57:41-0500, Hugo Villeneuve wrote:
-> On Fri, 20 Jan 2023 18:09:41 +0100
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> 
-> > On 15/12/2022 10:02:12-0500, Hugo Villeneuve wrote:
-> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > 
-> > > The sequence for updating the time/date registers is slightly
-> > > different between PCF2127/29 and PCF2131.
-> > > 
-> > > For PCF2127/29, during write operations, the time counting
-> > > circuits (memory locations 03h through 09h) are automatically blocked.
-> > > 
-> > > For PCF2131, time/date registers write access requires setting the
-> > > STOP bit and sending the clear prescaler instruction (CPR). STOP then
-> > > needs to be released once write operation is completed.
-> > > 
-> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > ---
-> > >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
-> > >  1 file changed, 37 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > index e4b78b9c03f9..11fbdab6bf01 100644
-> > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > @@ -39,6 +39,7 @@
-> > >  #define PCF2127_REG_CTRL1		0x00
-> > >  #define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
-> > >  #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
-> > > +#define PCF2127_BIT_CTRL1_STOP			BIT(5)
-> > >  /* Control register 2 */
-> > >  #define PCF2127_REG_CTRL2		0x01
-> > >  #define PCF2127_BIT_CTRL2_AIE			BIT(1)
-> > > @@ -70,6 +71,7 @@
-> > >  #define PCF2131_REG_SR_RESET		0x05
-> > >  #define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
-> > >  #define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
-> > > +#define PCF2131_SR_RESET_CPR_CMD	0xA4 /* CPR is bit 7. */
-> > >  /* Time and date registers */
-> > >  #define PCF2127_REG_TIME_DATE_BASE	0x03
-> > >  #define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
-> > > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> > >  	/* year */
-> > >  	buf[i++] = bin2bcd(tm->tm_year - 100);
-> > >  
-> > > -	/* write register's data */
-> > > +	/* Write access to time registers:
-> > > +	 * PCF2127/29: no special action required.
-> > > +	 * PCF2131:    requires setting the STOP bit. STOP bit needs to
-> > > +	 *             be cleared after time registers are updated.
-> > > +	 *             It is also recommended to set CPR bit, although
-> > > +	 *             write access will work without it.
-> > > +	 */
-> > > +	if (pcf2127->cfg->has_reset_reg) {
-> > 
-> > This should probably be tied to the actual rtc model rather than the
-> > presence of the reset register.
-> > You MUST clear CPR to be able to set the time precisely.
-> 
-> In fact you must actually SET the CPR bit to clear the prescaler, confusing!
-> 
-> I was already setting the CPR bit (clearing prescaler), so I modified the confusing comment.
-> 
-> The CPR bit is only present IF the reset register is also present, that is why I simply used the presence of the reset register to take the correct action. This avoids to define a new bit or matching on a device model for that functionality (adding newer models could potentially mean modifying the model match).
-> 
-> But if you absolutely want to match on the model, I would like to know how you would like to practically do it (maybe an example)?
-> 
+Property "trickle-resistor-ohms" allows us to set trickle charger
+resistor. However there is no possibility to disable it afterwards.
 
-You can keep pcf21xx_type around, in pcf21xx_config for example.
+From now on, disable trickle charger circuit in case device-tree
+property "trickle-resistor-ohms" is set to -1.
 
-> 
-> 
-> > 
-> > > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > > +					 PCF2127_BIT_CTRL1_STOP,
-> > > +					 PCF2127_BIT_CTRL1_STOP);
-> > > +		if (err) {
-> > > +			dev_err(dev, "setting STOP bit failed\n");
-> > 
-> > This really needs to be less verbose. There is nothing a user can really
-> > do after having seen this message. Having an error in userspace will
-> > anyway prompt the user to retry the operation which is the only action
-> > it can do.
-> 
-> I converted the dev_err messages to dev_dbg.
-> 
-> In the original driver and in the same function, there is also a dev_err to handle regmap_bulk_write() failure. Do you suggest that we also make it less verbose:
-> 
-> err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->reg_time_base, buf, i);
->  	if (err) {
->  		dev_err(dev,
-> 
-> ???
+Additionally, lets make sure we only update internal EEPROM in case of a
+change. This prevents wear due to excessive EEPROM writes on each probe.
 
-yes, you can remove it as part of your previous patches.
+Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+---
+Changes in v2:
+- disable trickle charger if device tree property trickle-resistor-ohms
+  is set to -1.
+---
+ drivers/rtc/rtc-rv3028.c | 45 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 33 insertions(+), 12 deletions(-)
 
-> 
-> 
-> > > +			return err;
-> > > +		}
-> > > +
-> > > +		err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
-> > > +				   PCF2131_SR_RESET_CPR_CMD);
-> > > +		if (err) {
-> > > +			dev_err(dev, "sending CPR cmd failed\n");
-> > > +			return err;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	/* write time register's data */
-> > >  	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
-> > >  	if (err) {
-> > >  		dev_err(dev,
-> > > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> > >  		return err;
-> > >  	}
-> > >  
-> > > +	if (pcf2127->cfg->has_reset_reg) {
-> > > +		/* Clear STOP bit (PCF2131 only) after write is completed. */
-> > > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > > +					 PCF2127_BIT_CTRL1_STOP, 0);
-> > > +		if (err) {
-> > > +			dev_err(dev, "clearing STOP bit failed\n");
-> > > +			return err;
-> > > +		}
-> > > +	}
-> > > +
-> > >  	return 0;
-> > >  }
-> > >  
-> > > -- 
-> > > 2.30.2
-> > > 
-> > 
-> > -- 
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > 
-> 
-> 
-> -- 
-> Hugo Villeneuve <hugo@hugovil.com>
-
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index ec5d7a614e2d..da2ae81fe7c8 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -859,7 +859,8 @@ static int rv3028_probe(struct i2c_client *client)
+ {
+ 	struct rv3028_data *rv3028;
+ 	int ret, status;
+-	u32 ohms;
++	s32 ohms;
++	int val_old, val;
+ 	struct nvmem_config nvmem_cfg = {
+ 		.name = "rv3028_nvram",
+ 		.word_size = 1,
+@@ -937,22 +938,42 @@ static int rv3028_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
+ 
+-	/* setup trickle charger */
+-	if (!device_property_read_u32(&client->dev, "trickle-resistor-ohms",
+-				      &ohms)) {
+-		int i;
++	ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
++	if (ret < 0)
++		return ret;
++
++	/* mask out only trickle charger bits */
++	val_old = val_old & (RV3028_BACKUP_TCE | RV3028_BACKUP_TCR_MASK);
+ 
+-		for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
+-			if (ohms == rv3028_trickle_resistors[i])
+-				break;
++	/* setup trickle charger */
++	if (!of_property_read_s32(client->dev.of_node, "trickle-resistor-ohms",
++				  &ohms)) {
++		/* disable trickle charger if trickle-resistor-ohms = <(-1)>; */
++		if (ohms == -1) {
++			val = val_old & ~RV3028_BACKUP_TCE;
++		} else {
++			int i;
++
++			for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
++				if (ohms == rv3028_trickle_resistors[i])
++					break;
++
++			if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
++				/* enable trickle charger and its resistor */
++				val = RV3028_BACKUP_TCE | i;
++			} else {
++				dev_warn(&client->dev, "invalid trickle resistor value\n");
++				/* don't update the trickle charger regs */
++				val = val_old;
++			}
++		}
+ 
+-		if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
++		/* only update EEPROM if changes are necessary */
++		if (val_old != val) {
+ 			ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_TCE |
+-						 RV3028_BACKUP_TCR_MASK, RV3028_BACKUP_TCE | i);
++						RV3028_BACKUP_TCR_MASK, val);
+ 			if (ret)
+ 				return ret;
+-		} else {
+-			dev_warn(&client->dev, "invalid trickle resistor value\n");
+ 		}
+ 	}
+ 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
