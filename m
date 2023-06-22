@@ -2,154 +2,140 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5D773982E
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jun 2023 09:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608AD7398BC
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jun 2023 09:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjFVHfF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 22 Jun 2023 03:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S230458AbjFVH6d (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 22 Jun 2023 03:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjFVHfD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Jun 2023 03:35:03 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02781992;
-        Thu, 22 Jun 2023 00:35:00 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687419299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fjdI8hAWq8rRbopuLAzW8xGOPk9XesOe6kfQHrFp7GY=;
-        b=BQE82NsrS8NeEQAYG+vpPyS2ZyKfdgdGzizBBatseeR6pqop6UvHtR3dRMldKcmwrRARvD
-        HbU411bxng9hD83QWODyC9QFsvicyEANhFHHD6vY2rMn9jNxBpTzWCG7lovKfm9lYJ4PrC
-        KEywegX+HSatfXBzzCeUmnTsaC9Ph0i8WlCYmSPC0GiDe0Dk43T9mvCIhLFsR1EifXPhLn
-        vu76MMHxCSgp/+53+/Q5V1B2BL/7dSB1rwVQDAnSg5ZNo0mtNQi3ABKkiYatD85c4+vMkM
-        VfYob9ubzxYkRzW/W/q0ghtxsP6S6D8wrc5S4idzYGNPgBbOqkYEgRQDbEIVUg==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A40860011;
-        Thu, 22 Jun 2023 07:34:59 +0000 (UTC)
-Date:   Thu, 22 Jun 2023 09:34:58 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Andrej Picej <andrej.picej@norik.com>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, upstream@phytec.de
-Subject: Re: [PATCH v2] rtc: rv3028: Improve trickle charger logic
-Message-ID: <20230622073458dcd9f636@mail.local>
-References: <20230622071609.4032736-1-andrej.picej@norik.com>
+        with ESMTP id S230474AbjFVH6a (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Jun 2023 03:58:30 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B285219B5
+        for <linux-rtc@vger.kernel.org>; Thu, 22 Jun 2023 00:58:02 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fa23c3e618so7848145e9.0
+        for <linux-rtc@vger.kernel.org>; Thu, 22 Jun 2023 00:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687420678; x=1690012678;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qwq75zYUHkn/9Dpk4owisZ27y9W8ALSN2XNSG1RSGjs=;
+        b=dXKEfAn4lDYZ779o1lNXaamSP08+9Qa/N283WOsK/wu7YL/LF/JbQ4T7kg63lKab11
+         Qs1pt41rnvonUrKzgEGX9eeETVIE21h0zLRAxuP5aDcwg9qIeqQIeZCsPpV3HqO1oaP0
+         9TkYNYWSiQ1xh0mhMqnIVs2Hht+p1bG10rA6xribKVc9yV1wdbipjPzYJlJzjy7AzwVe
+         +6Si5u5Vxcn1yTNuM6JzjEI6V5uwN5dsirdeR/5TTIKkzy1j+mCv9np3/blvDMz9q+3s
+         N6U2u7hltkPIec0fJzSVT4+T14DTJjfGtmvihpa5DM8iMfuZwZcmoHo0DmcwfsKJdDos
+         eK4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687420678; x=1690012678;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qwq75zYUHkn/9Dpk4owisZ27y9W8ALSN2XNSG1RSGjs=;
+        b=Cgq25FaNnqgdvaeftdgc45V9pMwqUnxcK2B3cGPI04ysYW8uyjPljUsNueCxM+p4mJ
+         4s58RC1E09DjS+lZL2+/NmhGzM3AlHnHfSinT9qHPgKWK+oyfJT6U8Y1u+nyGApT2u6r
+         A3+Z3xk+EVC9ddxsUv3mBx663yPdVWaDQ3JkydYNiA8eilBkSo3fXrUWlPpj8Z3gGdD2
+         4w8Y6InP+4OhPt+377hbJ6mBre9aujNoR6wJLEC7Hn8q0QJU9wN38nv0WcV3KTedhMkk
+         elvba9dXMwve87bpaC7vZtEbISROe7SPwVqVM33XMmHJrw8Dxgjc7tbKydw/92J5lwaO
+         3akg==
+X-Gm-Message-State: AC+VfDxH/SptA+h/fWswrSSIRv1J8OXv27v5xRNU8HVyO/HL9hex+cwg
+        n77yWNA4wt0ScQ6sU5tPiEyXag==
+X-Google-Smtp-Source: ACHHUZ6VU14QJ9KVoogL68Wvs38IfYUvRR09TALogE5vv0xpIYmSyrfNEHbmbTNWSy5LmsqiEO6hIw==
+X-Received: by 2002:a7b:c4cc:0:b0:3f8:fed0:1c56 with SMTP id g12-20020a7bc4cc000000b003f8fed01c56mr13170797wmk.23.1687420678124;
+        Thu, 22 Jun 2023 00:57:58 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id u23-20020a05600c00d700b003f78fd2cf5esm7000683wmm.40.2023.06.22.00.57.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 00:57:57 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+In-Reply-To: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
+References: <cb62dfc0-cb3d-beba-6d0b-8db18583dda0@gmail.com>
+Subject: Re: [PATCH 0/8] soc: amlogic: switch bindings to yaml and adjust
+ some dtbs's
+Message-Id: <168742067695.2178283.8048572430137764480.b4-ty@linaro.org>
+Date:   Thu, 22 Jun 2023 09:57:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622071609.4032736-1-andrej.picej@norik.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 22/06/2023 09:16:09+0200, Andrej Picej wrote:
-> Property "trickle-resistor-ohms" allows us to set trickle charger
-> resistor. However there is no possibility to disable it afterwards.
-> 
-> From now on, disable trickle charger circuit in case device-tree
-> property "trickle-resistor-ohms" is set to -1.
-> 
-> Additionally, lets make sure we only update internal EEPROM in case of a
-> change. This prevents wear due to excessive EEPROM writes on each probe.
-> 
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-> ---
-> Changes in v2:
-> - disable trickle charger if device tree property trickle-resistor-ohms
->   is set to -1.
+Hi,
 
-What about using aux-voltage-chargeable which is the generic property
-for this?
+On Mon, 23 Jan 2023 22:22:15 +0100, Heiner Kallweit wrote:
+> At first adjust some existing dtbs's so that they pass dtbs_check
+> after switching bindings to yaml.
+> 
+> Then switch further Amlogic Meson bindings to yaml.
+> Tested with make targets dt_binding_check and dtbs_check.
+> 
+> Heiner Kallweit (8):
+>   arm64: dts: meson-gx: Remove invalid pwm compatible
+>   arm64: dts: amlogic: Fix non-compliant SD/SDIO node names
+>   arm64: dts: meson-gx: Set only one compatible string for mmc
+>   arm64: dts: amlogic: Remove invalid compatible string
+>     amlogic,meson-gpio-intc
+>   dt-bindings: rtc: Add Amlogic Meson vrtc controller binding
+>   dt-bindings: pwm: Add Amlogic Meson PWM binding
+>   dt-bindings: interrupt-controller: Add Amlogic Meson GPIO interrupt
+>     controller binding
+>   dt-bindings: pinctrl: Add Amlogic Meson pinctrl binding
+> 
+> [...]
 
-> ---
->  drivers/rtc/rtc-rv3028.c | 45 +++++++++++++++++++++++++++++-----------
->  1 file changed, 33 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
-> index ec5d7a614e2d..da2ae81fe7c8 100644
-> --- a/drivers/rtc/rtc-rv3028.c
-> +++ b/drivers/rtc/rtc-rv3028.c
-> @@ -859,7 +859,8 @@ static int rv3028_probe(struct i2c_client *client)
->  {
->  	struct rv3028_data *rv3028;
->  	int ret, status;
-> -	u32 ohms;
-> +	s32 ohms;
-> +	int val_old, val;
->  	struct nvmem_config nvmem_cfg = {
->  		.name = "rv3028_nvram",
->  		.word_size = 1,
-> @@ -937,22 +938,42 @@ static int rv3028_probe(struct i2c_client *client)
->  	if (ret)
->  		return ret;
->  
-> -	/* setup trickle charger */
-> -	if (!device_property_read_u32(&client->dev, "trickle-resistor-ohms",
-> -				      &ohms)) {
-> -		int i;
-> +	ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* mask out only trickle charger bits */
-> +	val_old = val_old & (RV3028_BACKUP_TCE | RV3028_BACKUP_TCR_MASK);
->  
-> -		for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
-> -			if (ohms == rv3028_trickle_resistors[i])
-> -				break;
-> +	/* setup trickle charger */
-> +	if (!of_property_read_s32(client->dev.of_node, "trickle-resistor-ohms",
-> +				  &ohms)) {
-> +		/* disable trickle charger if trickle-resistor-ohms = <(-1)>; */
-> +		if (ohms == -1) {
-> +			val = val_old & ~RV3028_BACKUP_TCE;
-> +		} else {
-> +			int i;
-> +
-> +			for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
-> +				if (ohms == rv3028_trickle_resistors[i])
-> +					break;
-> +
-> +			if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
-> +				/* enable trickle charger and its resistor */
-> +				val = RV3028_BACKUP_TCE | i;
-> +			} else {
-> +				dev_warn(&client->dev, "invalid trickle resistor value\n");
-> +				/* don't update the trickle charger regs */
-> +				val = val_old;
-> +			}
-> +		}
->  
-> -		if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
-> +		/* only update EEPROM if changes are necessary */
-> +		if (val_old != val) {
->  			ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_TCE |
-> -						 RV3028_BACKUP_TCR_MASK, RV3028_BACKUP_TCE | i);
-> +						RV3028_BACKUP_TCR_MASK, val);
->  			if (ret)
->  				return ret;
-> -		} else {
-> -			dev_warn(&client->dev, "invalid trickle resistor value\n");
->  		}
->  	}
->  
-> -- 
-> 2.25.1
-> 
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.5/drivers)
+
+[1/1] dt-bindings: interrupt-controller: Convert Amlogic Meson GPIO interrupt controller binding
+      https://git.kernel.org/amlogic/c/6b0139b372d40bd5dafc140b6618b57d13211168
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.5/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Neil
+
