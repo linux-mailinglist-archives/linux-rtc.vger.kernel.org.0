@@ -2,25 +2,25 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E2B73B97C
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jun 2023 16:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE4E73B97D
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jun 2023 16:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjFWOKr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Jun 2023 10:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        id S231249AbjFWOKs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Jun 2023 10:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjFWOKn (ORCPT
+        with ESMTP id S231969AbjFWOKn (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Jun 2023 10:10:43 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1901270D;
-        Fri, 23 Jun 2023 07:10:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CB282695;
+        Fri, 23 Jun 2023 07:10:41 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="6.01,152,1684767600"; 
-   d="scan'208";a="165108886"
+   d="scan'208";a="165108893"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 23 Jun 2023 23:10:36 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 23 Jun 2023 23:10:40 +0900
 Received: from localhost.localdomain (unknown [10.226.93.107])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5813F4270491;
-        Fri, 23 Jun 2023 23:10:33 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 560C34270489;
+        Fri, 23 Jun 2023 23:10:37 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -30,9 +30,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v7 09/10] rtc: isl1208: Add isl1208_set_xtoscb()
-Date:   Fri, 23 Jun 2023 15:09:47 +0100
-Message-Id: <20230623140948.384762-10-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v7 10/10] rtc: isl1208: Add support for the built-in RTC on the PMIC RAA215300
+Date:   Fri, 23 Jun 2023 15:09:48 +0100
+Message-Id: <20230623140948.384762-11-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623140948.384762-1-biju.das.jz@bp.renesas.com>
 References: <20230623140948.384762-1-biju.das.jz@bp.renesas.com>
@@ -47,160 +47,85 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-As per the HW manual, set the XTOSCB bit as follows:
-
-If using an external clock signal, set the XTOSCB bit as 1 to
-disable the crystal oscillator.
-
-If using an external crystal, the XTOSCB bit needs to be set at 0
-to enable the crystal oscillator.
-
-Add isl1208_set_xtoscb() to set XTOSCB bit based on the clock-names
-property. Fallback is enabling the internal crystal oscillator.
-
-While at it, introduce a variable "sr" for reading the status register
-in probe() as it is reused for writing and also remove the unnecessary
-blank line.
+The built-in RTC found on PMIC RAA215300 is the same as ISL1208.
+However, the external oscillator bit is inverted on PMIC version
+0x11. The PMIC driver detects PMIC version and instantiates the
+RTC device based on i2c_device_id.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
 v6->v7:
- * Dropped Rb tag from Geert as new changes introduced.
- * In isl1208_set_xtoscb(), override the xtosc bit only if there is a
-   mismatch.
- * Handling of xtosb_val inverted in probe() and the same change is adapted in
-   isl1208_set_xtoscb().
- * Simplified isl1208_clk_present().
- * Removed unnecessary blank line before isl1208_rtc_set_time()
+ * Dropped Rb tag from Geert as there is new changes.
+ * Dropped parsing the parent node for retrieving clk details as
+   clk_dev is registered in sibling PMIC driver. So same info available
+   here.
 v5->v6:
- * Added Rb tag from Geert
- * Replaced u8->int for xtosb_val parameter.
- * Introduced isl1208_clk_present() for checking the presence of "xin" and
-   "clkin" for determining internal oscillator is enabled or not.
+ * Added Rb tag from Geert.
+ * Parsing of parent node is moved from probe->isl1208_clk_present()
+ * Added comment for parsing parent node for getting clock resource.
+ * Replaced XOR->NOT to make the operation more clear for the inverted case.
 v4->v5:
- * Fixed the typo in commit description.
- * Replaced the variable int_osc_en->xtosb_val for isl1208_set_xtoscb() and
-   changed the data type from bool->u8.
- * Replaced devm_clk_get->devm_clk_get_optional() in probe.
- * IS_ERR() related error is propagated and check for NULL to find out
-   if a clock is present.
-v4:
- * New patch.
+ * Updated commit description.
+ * Replaced "unsigned long"->"kernel_ulong_t" in isl1208_id[].
+ * -ENOENT means clock not present, so any other errors are propagated.
+ * Dropped bool inverted parameter from isl1208_set_xtoscb() instead
+   using xor to compute the value of xtoscb.
+v3->v4:
+ * Added support for internal oscillator enable/disable.
+v2->v3:
+ * RTC device is instantiated by PMIC driver and dropped isl1208_probe_helper().
+ * Added "TYPE_RAA215300_RTC_A0" to handle inverted oscillator bit case.
+RFC->v2:
+ * Dropped compatible "renesas,raa215300-isl1208" and "renesas,raa215300-pmic" property.
+ * Updated the comment polarity->bit for External Oscillator.
+ * Added raa215300_rtc_probe_helper() for registering raa215300_rtc device and
+   added the helper function isl1208_probe_helper() to share the code.
 ---
- drivers/rtc/rtc-isl1208.c | 57 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 51 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-isl1208.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index 42d2116d244d..e9ec5675e27c 100644
+index e9ec5675e27c..b0712b4e3648 100644
 --- a/drivers/rtc/rtc-isl1208.c
 +++ b/drivers/rtc/rtc-isl1208.c
-@@ -6,6 +6,7 @@
-  */
+@@ -74,6 +74,7 @@ struct isl1208_config {
+ 	unsigned int	nvmem_length;
+ 	unsigned	has_tamper:1;
+ 	unsigned	has_timestamp:1;
++	unsigned	has_inverted_osc_bit:1;
+ };
  
- #include <linux/bcd.h>
-+#include <linux/clk.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-@@ -175,6 +176,20 @@ isl1208_i2c_validate_client(struct i2c_client *client)
- 	return 0;
- }
+ static const struct isl1208_config config_isl1208 = {
+@@ -100,11 +101,19 @@ static const struct isl1208_config config_isl1219 = {
+ 	.has_timestamp = true
+ };
  
-+static int isl1208_set_xtoscb(struct i2c_client *client, int sr, int xtosb_val)
-+{
-+	/* Do nothing if bit is already set to desired value */
-+	if ((sr & ISL1208_REG_SR_XTOSCB) == xtosb_val)
-+		return 0;
++static const struct isl1208_config config_raa215300_a0 = {
++	.nvmem_length = 2,
++	.has_tamper = false,
++	.has_timestamp = false,
++	.has_inverted_osc_bit = true
++};
 +
-+	if (xtosb_val)
-+		sr |= ISL1208_REG_SR_XTOSCB;
-+	else
-+		sr &= ~ISL1208_REG_SR_XTOSCB;
-+
-+	return i2c_smbus_write_byte_data(client, ISL1208_REG_SR, sr);
-+}
-+
- static int
- isl1208_i2c_get_sr(struct i2c_client *client)
- {
-@@ -511,7 +526,6 @@ isl1208_i2c_set_time(struct i2c_client *client, struct rtc_time const *tm)
- 	return 0;
- }
- 
--
- static int
- isl1208_rtc_set_time(struct device *dev, struct rtc_time *tm)
- {
-@@ -805,12 +819,26 @@ static int isl1208_setup_irq(struct i2c_client *client, int irq)
- 	return rc;
- }
- 
-+static int
-+isl1208_clk_present(struct i2c_client *client, const char *name)
-+{
-+	struct clk *clk;
-+
-+	clk = devm_clk_get_optional(&client->dev, name);
-+	if (IS_ERR(clk))
-+		return PTR_ERR(clk);
-+
-+	return !!clk;
-+}
-+
- static int
- isl1208_probe(struct i2c_client *client)
- {
--	int rc = 0;
- 	struct isl1208_state *isl1208;
- 	int evdet_irq = -1;
-+	int xtosb_val = 0;
-+	int rc = 0;
-+	int sr;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
-@@ -837,6 +865,19 @@ isl1208_probe(struct i2c_client *client)
- 		isl1208->config = (struct isl1208_config *)id->driver_data;
+ static const struct i2c_device_id isl1208_id[] = {
+ 	{ "isl1208", .driver_data = (kernel_ulong_t)&config_isl1208 },
+ 	{ "isl1209", .driver_data = (kernel_ulong_t)&config_isl1209 },
+ 	{ "isl1218", .driver_data = (kernel_ulong_t)&config_isl1218 },
+ 	{ "isl1219", .driver_data = (kernel_ulong_t)&config_isl1219 },
++	{ "raa215300_a0", .driver_data = (kernel_ulong_t)&config_raa215300_a0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, isl1208_id);
+@@ -895,6 +904,9 @@ isl1208_probe(struct i2c_client *client)
+ 		return sr;
  	}
  
-+	rc = isl1208_clk_present(client, "xin");
-+	if (rc < 0)
-+		return rc;
++	if (isl1208->config->has_inverted_osc_bit)
++		xtosb_val = !xtosb_val;
 +
-+	if (!rc) {
-+		rc = isl1208_clk_present(client, "clkin");
-+		if (rc < 0)
-+			return rc;
-+
-+		if (rc)
-+			xtosb_val = 1;
-+	}
-+
- 	isl1208->rtc = devm_rtc_allocate_device(&client->dev);
- 	if (IS_ERR(isl1208->rtc))
- 		return PTR_ERR(isl1208->rtc);
-@@ -848,13 +889,17 @@ isl1208_probe(struct i2c_client *client)
- 	isl1208->nvmem_config.size = isl1208->config->nvmem_length;
- 	isl1208->nvmem_config.priv = isl1208;
- 
--	rc = isl1208_i2c_get_sr(client);
--	if (rc < 0) {
-+	sr = isl1208_i2c_get_sr(client);
-+	if (sr < 0) {
- 		dev_err(&client->dev, "reading status failed\n");
--		return rc;
-+		return sr;
- 	}
- 
--	if (rc & ISL1208_REG_SR_RTCF)
-+	rc = isl1208_set_xtoscb(client, sr, xtosb_val);
-+	if (rc)
-+		return rc;
-+
-+	if (sr & ISL1208_REG_SR_RTCF)
- 		dev_warn(&client->dev, "rtc power failure detected, "
- 			 "please set clock.\n");
- 
+ 	rc = isl1208_set_xtoscb(client, sr, xtosb_val);
+ 	if (rc)
+ 		return rc;
 -- 
 2.25.1
 
