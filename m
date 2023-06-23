@@ -2,129 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B7D73BB0F
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jun 2023 17:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F37173BF92
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jun 2023 22:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbjFWPIL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Jun 2023 11:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S231734AbjFWUbk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Jun 2023 16:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjFWPIK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Jun 2023 11:08:10 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2110.outbound.protection.outlook.com [40.107.113.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5241BCA;
-        Fri, 23 Jun 2023 08:08:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ek4xBtpnIOmMI2msEF45m9rX5SobaFcCy6I3pQjgVpUL7fCLukzkdal+Q/B1AzfCu1CvF+PLS7Gk0k4mQVjmJQ1HS4mi5q8YobwKv1SwjtCXqtCSaTMvoMaBHHZCP01VKg6umU3p0va30MH05iKiAFItgcqkdM9y65S4flh6M/us+i7Y5Qer90MsOgySeB4p08WB+ymdem+rZsHC0hb512okQkTu6PzlYl7fE6xDCWxrEV1x0z/TOt7fETfXPZNUupn7FsLbww6+6JhPOU0D268lBiqks21cuJ424bhO678fCn4CwBnoJ+f0laXat0qcQSfWCf1ReZ+7JE6A1BMYdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bFBJUCTRZgdMiEyyb1jjDvaJ1brRZmkHPpi3It3Amqk=;
- b=FjWEGadnV15l8JgVax839o2xB6svPO+bau7byfiH/ZvCy3gYcM/aJnqnhBFTQ42R6Ywyngk5FjJq9xGQjTZZToWlCX3Nf6XCo1EoHqzfeHuDT+p5puk+CjB9rYUqHQQCrENQ3YbeiTiJ91IZ9OS8YGbEUu0gy9pZhzr2adAywp+8uqhOs2LxncCFJVciz3zmO/oSr6pdZMS4qR4PFVgJq3jUxkwBwPwfyoGQN1tPgWCtdMSSIIwXMjRxIAePRpK+ykfdFR29krydUITymzg7iEji1oIQI4Mqbh11bKzV8bWx9z/0MPz7rIZGux/MapXnwi16k5pJXOhdEnPm1vAUaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bFBJUCTRZgdMiEyyb1jjDvaJ1brRZmkHPpi3It3Amqk=;
- b=rX+wE6O8BJ6j8r0QYTbkkqNLBiMBDkVAgHNBQ8w0GP0t3AFot/TwkNm6afndaEYdtKHlh3IxUcXOXL4wINrN6P4Dc1iobjcW7D+jdFxLRhv5gNSODLyvQS+jyvE1wq4+lhkSR3QEhfPVF8wE2zg1spLD7DiXP0wRkH3wgQqXoAg=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TY3PR01MB10533.jpnprd01.prod.outlook.com (2603:1096:400:315::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 23 Jun
- 2023 15:08:01 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::fc77:6148:d6a:c72b]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::fc77:6148:d6a:c72b%4]) with mapi id 15.20.6521.026; Fri, 23 Jun 2023
- 15:08:01 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Wolfram Sang <wsa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Trent Piepho <tpiepho@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: RE: [PATCH v7 00/10] Add Renesas PMIC RAA215300 and built-in RTC
- support
-Thread-Topic: [PATCH v7 00/10] Add Renesas PMIC RAA215300 and built-in RTC
- support
-Thread-Index: AQHZpdxkavVA64nn002doRrvHahzcK+YfNWAgAAAOoA=
-Date:   Fri, 23 Jun 2023 15:08:01 +0000
-Message-ID: <OS0PR01MB59221C8B147CEAD791AE8A428623A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230623140948.384762-1-biju.das.jz@bp.renesas.com>
- <ZJW08YIZROKg2a2c@finisterre.sirena.org.uk>
-In-Reply-To: <ZJW08YIZROKg2a2c@finisterre.sirena.org.uk>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TY3PR01MB10533:EE_
-x-ms-office365-filtering-correlation-id: dc0bdf98-baa0-469e-0e9a-08db73fba355
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Om2YtZpBH2CHi1EJSZnE43lrOukCfZH/K63nVqI6LgFBX5B9KtstMuHpuD+frt9/WaU3YWSXDGHHpvLfIPCafHyT+xVNnuAKh+1hMr1e9ASYVgDZ+Ei4ywicGvHpendn6QuPRxRjIuyPtEHbBbQa4QhKwkN4VN48lFj5vrpv7RKP29lOdKW5phpIEzR2/fBQvxhflpzDiKobrcoQ1m1fpm0BbPMqVxl1fu+XzpNOPwGX95B474RD7z3ZZsyJhfDwBFZ3kQIuPld4nQiE1E1dV7TKKLOHV4uAuhGXj+W2ddGnDMdc84gtopkhg5bmMw8jVxiRl9+mBWZTuk9FzXx7gksNzE5AFvzf/gvoK3Anq6FApMncUc8/3CZ5IxMG+g8KU0X1px9wc62W29goCrJavPFQSlZN6OIlq2lGuUVQb9S29auO4unTULr8ei26Ebbd0Vi4Ox8LFqGBbEOANqrjUX4Ih9gOzHi9bZZGmhzCisoJd/YxbGizeXz4XbcFODtEQn+ywuhhbVejetxpPOlmFpdii2fgjriGMnkiHkOi6GAbibOnZ4Oy4A/sBNy3xsG+xZUngnVsn+fyHc9isimZUtUUiD2300JM9g0J6H0XwiQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(366004)(346002)(451199021)(122000001)(38100700002)(38070700005)(83380400001)(86362001)(33656002)(478600001)(7696005)(8676002)(71200400001)(54906003)(66476007)(66556008)(64756008)(66446008)(76116006)(4326008)(8936002)(66946007)(6916009)(41300700001)(107886003)(316002)(26005)(186003)(6506007)(53546011)(9686003)(2906002)(4744005)(7416002)(5660300002)(52536014)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KXf/SYmws1jaynhbznwh0DUmLsn3RIbVfXObNG/YqbaUG0PtyikcHBSiVbhS?=
- =?us-ascii?Q?FYhijn66Gl42juugCTC0yzpXkePqKzfBLgNVEwDF64xG/QSbSUhTRLsXS/Bf?=
- =?us-ascii?Q?FLv5NS/gqoD660KzVMiZO7+ZSSn/Vc76ukphu7SMbMdJgf9KchkN0g4I1ZKf?=
- =?us-ascii?Q?RnuBJGVTFbXTXuEzA0B+kXFMVJ1yScF/aWIrSKX4fMdJJEUYOacgpXgupLEo?=
- =?us-ascii?Q?X3td4YwkLLrvd10/hi6B7jmMF5QBrULWhCq0hWAd8h3Psbp171io5Frx6i8x?=
- =?us-ascii?Q?r6ZSpQSnRXgicJwKTmu+USAaGjfmS8Wr7afV+mJlJ448RyhtgAJIugdouVQB?=
- =?us-ascii?Q?VVjgDM6k50BSod70S6nfVeY6VS9+NrHXgN9oYnJVu8/2v1NKvf3Hs0ixg/uR?=
- =?us-ascii?Q?jqv20hX2HXRlGWYsyktxBjVcMEKg37zfwnFQdLKQ9KqrPhDsQf1bRBfMXyFO?=
- =?us-ascii?Q?0C+GEN6X2SuRqVALihGEjYTNEpedsQ+qP9Jd20cIVVYWes7N85K/yEfeJYp7?=
- =?us-ascii?Q?cQY/0/xUOHWHlt5IOB+2IFPTTeMptUIUrPiDMPxRTYC1Gt8ZN3Dyr/il/wA+?=
- =?us-ascii?Q?HIUS8i/Mq9YMhr8q5LrcqF09sUHdO+ZMxGxw5uyH/VuFbSwAis+hkwjJHbp9?=
- =?us-ascii?Q?J748WmSH9YCqG2iHjP0XY0PvkhNsq/xfs0QoJYiZu7jrC5rwfnrLekV8Kjwf?=
- =?us-ascii?Q?pyT76fidCd8Gx5wj9NtJ6EbeHGy4Js8Ohwy/hH+33iPNYZLxhGfRNjl7qqTq?=
- =?us-ascii?Q?FM6bX8GiA+PqALR7LLNIfoupZDjgNIC22a/HrWUL7YwHc9xch9oKO7pj5sft?=
- =?us-ascii?Q?2MDM4zFF5t5RpifF0UrQ6Zx+7QiTwkCV42YUWv0TWulXicItvIRhnbnkTJRN?=
- =?us-ascii?Q?nbMhNWk9gZJc1+q8hukxQvhvicH7tW423yhyD+4PawJ03QZVAxMN4Mzj9drT?=
- =?us-ascii?Q?BchA86MH7V+FZp7saczr0zL9iyFbrguS3FoCT7bDJhfpt38zWUlAkXYIsxDY?=
- =?us-ascii?Q?NBGQZZyMQZM1CdesVxVRv0AxgT6nnMBqBiYW65P81VVxPbwQVyYS7ilQKrG+?=
- =?us-ascii?Q?eOMYUrjm0HaWCruY2K0sYgrXyvv7WAaOIn8cYSYVpys/y9kSUP4PxzNToe2c?=
- =?us-ascii?Q?yvffu5Tnlva/i8R2xKKfAKRqEJjewxPziDpkOopASi3wTVAq7V+GOZXLH1n8?=
- =?us-ascii?Q?kXrodyS/lCjAyuM71XMIRHWtsS9XyKI71pziFDflB2PN0w0XBHEQuFn7Wt3o?=
- =?us-ascii?Q?4bxDNcRwjJPIhzlcS5dNJxRydZ1Mf76NOu540XyFeqBsU879uLNASI4xNvwF?=
- =?us-ascii?Q?i7fqwa3AK5XCywmnx26sDibdxFiyoDrg7s+M/9KBrZKl8uOCPd+ddMah7t7/?=
- =?us-ascii?Q?MbtqPDvj4bJvH+Q4KtV4nTlhM8IuuRGeFdZ54/yY8dY2hkU2z7dElJGwJOvX?=
- =?us-ascii?Q?K6dHVEiX50ZrYrkSCWo75f7/m7wCAu4YtP5p8mkeoKVoylcPjM082uQfZGBC?=
- =?us-ascii?Q?pKI2lI5gDDO5F8ZFte3AR2HsdIVHnfhRRtxHFui2LUln24kYGTQdFAqNYylZ?=
- =?us-ascii?Q?OA9T3ubyLo6Nc4WiYw8oK1EsUWldipq0W+0vtntSUl/iCmDRLvc7IFiQmin/?=
- =?us-ascii?Q?bQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229451AbjFWUbi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Jun 2023 16:31:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9622112;
+        Fri, 23 Jun 2023 13:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687552296; x=1719088296;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k09nEHCiSzbJsqqSNMTaSxW8jtMKfqLZrahLVUHWd9A=;
+  b=cIB4HII1991xayeKfBVY8uQfzaGu2JvLWmpYq2Rz73SETXIum2cd8ECy
+   SuuoDw1tXjVffAcr91e3vhPvi5jILKqDYVb5oadMi8bqGeLrky9wTmrsz
+   qTi8H9AW/OJcC4I9qt2343tw+CjZj/gfVJBCj88TAEicfIdQ0ZaYfFwLs
+   26TW0SSgEXwi4shStxrZ2IB08bgRxOoeWuMezKLa945Ibk7uYv25FafjP
+   /Unr6MPZRaLLIPOwGu9/AIFS+ojOg7hM26Cu/cjv4PJYHEnbvdajx9Xpw
+   YvniVclikzVMVIwoEIDZzJrS7Dgplgvfp0zZ5Y54y3VIvpmzlt5Cf8IBL
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
+   d="scan'208";a="158361729"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:31:34 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 23 Jun 2023 13:31:29 -0700
+Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:30:59 -0700
+From:   Varshini Rajendran <varshini.rajendran@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <vkoul@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>,
+        <lee@kernel.org>, <ulf.hansson@linaro.org>,
+        <tudor.ambarus@linaro.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <linus.walleij@linaro.org>,
+        <p.zabel@pengutronix.de>, <olivia@selenic.com>,
+        <a.zummo@towertech.it>, <radu_nicolae.pirea@upb.ro>,
+        <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <arnd@arndb.de>,
+        <olof@lixom.net>, <soc@kernel.org>, <linux@armlinux.org.uk>,
+        <sre@kernel.org>, <jerry.ray@microchip.com>,
+        <horatiu.vultur@microchip.com>, <durai.manickamkr@microchip.com>,
+        <varshini.rajendran@microchip.com>, <andrew@lunn.ch>,
+        <alain.volmat@foss.st.com>, <neil.armstrong@linaro.org>,
+        <mihai.sain@microchip.com>, <eugen.hristev@collabora.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
+        <balamanikandan.gunasundar@microchip.com>,
+        <manikandan.m@microchip.com>, <dharma.b@microchip.com>,
+        <nayabbasha.sayed@microchip.com>, <balakrishnan.s@microchip.com>
+Subject: [PATCH v2 00/45] Add support for sam9x7 SoC family
+Date:   Sat, 24 Jun 2023 02:00:11 +0530
+Message-ID: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc0bdf98-baa0-469e-0e9a-08db73fba355
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2023 15:08:01.7204
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FdJD1HlOeFo3VTo2htf3Xtz9cD6RIm+jBeUoBS4Nqbb38CsBOzOrqw4DBuY2AfYiwhLgzsrXpV2owQfmfWYTasjy3oUHK5zRefau1KLky30=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB10533
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,39 +92,140 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Mark,
+This patch series adds support for the new SoC family - sam9x7.
+ - The device tree, configs and drivers are added
+ - Clock driver for sam9x7 is added
+ - Support for basic peripherals is added
+ - Target board SAM9X75 Curiosity is added
 
-> -----Original Message-----
-> From: Mark Brown <broonie@kernel.org>
-> Sent: Friday, June 23, 2023 4:06 PM
-> To: Biju Das <biju.das.jz@bp.renesas.com>
-> Cc: Wolfram Sang <wsa@kernel.org>; Alessandro Zummo
-> <a.zummo@towertech.it>; Alexandre Belloni
-> <alexandre.belloni@bootlin.com>; Rob Herring <robh+dt@kernel.org>;
-> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Liam Girdwood
-> <lgirdwood@gmail.com>; Geert Uytterhoeven <geert+renesas@glider.be>;
-> Magnus Damm <magnus.damm@gmail.com>; Trent Piepho <tpiepho@gmail.com>;
-> devicetree@vger.kernel.org; linux-rtc@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org; Fabrizio
-> Castro <fabrizio.castro.jz@renesas.com>
-> Subject: Re: [PATCH v7 00/10] Add Renesas PMIC RAA215300 and built-in
-> RTC support
->=20
-> On Fri, Jun 23, 2023 at 03:09:38PM +0100, Biju Das wrote:
->=20
-> > v6->v7:
-> >  * Updated the test logs by running rtc_test.
-> >  * Dropped patch#1 and instead using i2c_new_client_device() to
-> instantiate
-> >    RTC driver.
-> >  * Replaced i2c_new_ancillary_device->i2c_new_client_device for RTC
-> client
-> >    instantiation.
->=20
-> This means that there's now no longer any interdependencies for the
-> regulator patches AIUI?
+ Changes in v2:
+ --------------
 
-Yes, that is correct.
+ - Added sam9x7 specific compatibles in DT with fallbacks
+ - Documented all the newly added DT compatible strings
+ - Added device tree for the target board sam9x75 curiosity and
+   documented the same in the DT bindings documentation
+ - Removed the dt nodes that are not supported at the moment
+ - Removed the configs added by previous version that are not supported
+   at the moment
+ - Fixed all the corrections in the commit message
+ - Changed all the instances of copyright year to 2023
+ - Added sam9x7 flag in PIT64B configuration
+ - Moved macro definitions to header file
+ - Added another divider in mck characteristics in the pmc driver
+ - Fixed the memory leak in the pmc driver
+ - Dropped patches that are no longer needed
+ - Picked up Acked-by and Reviewed-by tags
 
-Cheers,
-Biju
+
+Hari Prasath (1):
+  irqchip/atmel-aic5: Add support for sam9x7 aic
+
+Varshini Rajendran (44):
+  dt-bindings: microchip: atmel,at91rm9200-tcb: add sam9x60, sam9x7
+    compatible
+  dt-bindings: usb: ehci: Add atmel at91sam9g45-ehci compatible
+  dt-bindings: usb: generic-ehci: Document clock-names property
+  dt-bindings: net: cdns,macb: add documentation for sam9x7 ethernet
+    interface
+  ARM: at91: pm: add support for sam9x7 SoC family
+  ARM: at91: pm: add sam9x7 SoC init config
+  ARM: at91: add support in SoC driver for new sam9x7
+  clk: at91: clk-sam9x60-pll: re-factor to support individual core freq
+    outputs
+  clk: at91: sam9x7: add support for HW PLL freq dividers
+  clk: at91: sama7g5: move mux table macros to header file
+  dt-bindings: clk: at91: add bindings for SAM9X7's clock controller
+  dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7 binding
+  dt-bindings: atmel-sysreg: add bindings for sam9x7
+  dt-bindings: crypto: add bindings for sam9x7 in Atmel AES
+  dt-bindings: crypto: add bindings for sam9x7 in Atmel SHA
+  dt-bindings: crypto: add bindings for sam9x7 in Atmel TDES
+  dt-bindings: dmaengine: at_xdmac: add compatible with microchip,sam9x7
+  dt-bindings: i2c: at91: Add SAM9X7 compatible string
+  dt-bindings: mfd: at91: Add SAM9X7 compatible string
+  dt-bindings: atmel-gpbr: add microchip,sam9x7-gpbr
+  dt-bindings: atmel-matrix: add microchip,sam9x7-matrix
+  dt-bindings: atmel-smc: add microchip,sam9x7-smc
+  dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
+  dt-bindings: sdhci-of-at91: add microchip,sam9x7-sdhci
+  dt-bindings: atmel-nand: add microchip,sam9x7-pmecc
+  dt-bindings: pinctrl: at91: add bindings for SAM9X7
+  dt-bindings: rng: atmel,at91-trng: document sam9x7 TRNG
+  dt-bindings: rtc: at91rm9200: add sam9x7 compatible
+  dt-bindings: rtt: at91rm9260: add sam9x7 compatible
+  dt-bindings: serial: atmel,at91-usart: add compatible for sam9x7
+  dt-bindings: atmel-classd: add sam9x7 compatible
+  spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7 compatible
+  dt-bindings: usb: atmel: Update DT bindings documentation for sam9x7
+  dt-bindings: watchdog: sama5d4-wdt: add compatible for sam9x7-wdt
+  dt-bindings: irqchip/atmel-aic5: Add support for sam9x7 aic
+  clk: at91: sam9x7: add sam9x7 pmc driver
+  power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
+  power: reset: at91-reset: add reset support for sam9x7 SoC
+  power: reset: at91-reset: add sdhwc support for sam9x7 SoC
+  ARM: at91: Kconfig: add config flag for SAM9X7 SoC
+  ARM: configs: at91: enable config flags for sam9x7 SoC family
+  ARM: dts: at91: sam9x7: add device tree for SoC
+  dt-bindings: arm: add sam9x75 curiosity board
+  ARM: dts: at91: sam9x75_curiosity: add device tree for sam9x75
+    curiosity board
+
+ .../devicetree/bindings/arm/atmel-at91.yaml   |    6 +
+ .../devicetree/bindings/arm/atmel-sysregs.txt |    7 +-
+ .../devicetree/bindings/clock/at91-clock.txt  |    7 +-
+ .../crypto/atmel,at91sam9g46-aes.yaml         |    5 +-
+ .../crypto/atmel,at91sam9g46-sha.yaml         |    5 +-
+ .../crypto/atmel,at91sam9g46-tdes.yaml        |    5 +-
+ .../devicetree/bindings/dma/atmel-xdma.txt    |    4 +-
+ .../bindings/i2c/atmel,at91sam-i2c.yaml       |    3 +
+ .../interrupt-controller/atmel,aic.txt        |    2 +-
+ .../devicetree/bindings/mfd/atmel-flexcom.txt |    2 +-
+ .../devicetree/bindings/mfd/atmel-gpbr.txt    |    1 +
+ .../devicetree/bindings/mfd/atmel-matrix.txt  |    1 +
+ .../devicetree/bindings/mfd/atmel-smc.txt     |    1 +
+ .../devicetree/bindings/misc/atmel-ssc.txt    |    1 +
+ .../devicetree/bindings/mmc/sdhci-atmel.txt   |    4 +-
+ .../devicetree/bindings/mtd/atmel-nand.txt    |    1 +
+ .../devicetree/bindings/net/cdns,macb.yaml    |    1 +
+ .../bindings/pinctrl/atmel,at91-pinctrl.txt   |    3 +-
+ .../reset/atmel,at91sam9260-reset.yaml        |    1 +
+ .../bindings/rng/atmel,at91-trng.yaml         |    1 +
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |    1 +
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |    1 +
+ .../bindings/serial/atmel,at91-usart.yaml     |    3 +
+ .../soc/microchip/atmel,at91rm9200-tcb.yaml   |    2 +
+ .../bindings/sound/atmel,sama5d2-classd.yaml  |    5 +-
+ .../bindings/spi/atmel,at91rm9200-spi.yaml    |    1 +
+ .../devicetree/bindings/usb/atmel-usb.txt     |    9 +-
+ .../devicetree/bindings/usb/generic-ehci.yaml |    5 +
+ .../bindings/watchdog/atmel,sama5d4-wdt.yaml  |    1 +
+ arch/arm/boot/dts/Makefile                    |    2 +
+ arch/arm/boot/dts/at91-sam9x75_curiosity.dts  |  336 +++++
+ arch/arm/boot/dts/sam9x7.dtsi                 | 1237 +++++++++++++++++
+ arch/arm/configs/at91_dt_defconfig            |    1 +
+ arch/arm/mach-at91/Kconfig                    |   23 +-
+ arch/arm/mach-at91/Makefile                   |    1 +
+ arch/arm/mach-at91/generic.h                  |    2 +
+ arch/arm/mach-at91/pm.c                       |   35 +
+ arch/arm/mach-at91/sam9x7.c                   |   34 +
+ drivers/clk/at91/Makefile                     |    1 +
+ drivers/clk/at91/clk-sam9x60-pll.c            |   50 +-
+ drivers/clk/at91/pmc.h                        |   18 +
+ drivers/clk/at91/sam9x60.c                    |    7 +
+ drivers/clk/at91/sam9x7.c                     |  942 +++++++++++++
+ drivers/clk/at91/sama7g5.c                    |   42 +-
+ drivers/irqchip/irq-atmel-aic5.c              |   10 +
+ drivers/power/reset/Kconfig                   |    4 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
+ drivers/soc/atmel/soc.c                       |   23 +
+ drivers/soc/atmel/soc.h                       |    9 +
+ 49 files changed, 2806 insertions(+), 61 deletions(-)
+ create mode 100644 arch/arm/boot/dts/at91-sam9x75_curiosity.dts
+ create mode 100644 arch/arm/boot/dts/sam9x7.dtsi
+ create mode 100644 arch/arm/mach-at91/sam9x7.c
+ create mode 100644 drivers/clk/at91/sam9x7.c
+
+-- 
+2.25.1
+
