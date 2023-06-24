@@ -2,60 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A899B73C79E
-	for <lists+linux-rtc@lfdr.de>; Sat, 24 Jun 2023 09:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3220373C7AD
+	for <lists+linux-rtc@lfdr.de>; Sat, 24 Jun 2023 09:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjFXHxu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 24 Jun 2023 03:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S232282AbjFXHya (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 24 Jun 2023 03:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbjFXHxm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 24 Jun 2023 03:53:42 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B621296D
-        for <linux-rtc@vger.kernel.org>; Sat, 24 Jun 2023 00:53:35 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-988c495f35fso164350366b.1
-        for <linux-rtc@vger.kernel.org>; Sat, 24 Jun 2023 00:53:35 -0700 (PDT)
+        with ESMTP id S232155AbjFXHyW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 24 Jun 2023 03:54:22 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFE030C2
+        for <linux-rtc@vger.kernel.org>; Sat, 24 Jun 2023 00:54:08 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-988a5383fd4so268503866b.0
+        for <linux-rtc@vger.kernel.org>; Sat, 24 Jun 2023 00:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593214; x=1690185214;
+        d=linaro.org; s=google; t=1687593247; x=1690185247;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=d0dU3KHDoF8oZzutBDKpvFK9O6jXuVzZS7UeXmnvOCk=;
-        b=VfEuAfQJjaU+3+AhGm2VI0yKk6Z52U9dP541QhU6CmfJ5hEaXLukxGQrHOtAPQWYR9
-         lswaVNrvNo1qQq9ncM3JQ8H6Gq9e5gmpf+kQlzCmYE370RqKGQxwVSS2tSEzwPviV2ZZ
-         MpTGlZo7kGQpFjYxdHgOtVTcYhR9oAAcUgK5Kzik5dB/Rbj6BuZbQ9dbDkZeD1wXvk75
-         92hnU6fXoOmJqCXk0s8VqOZdMps2ucQ8RB58LBaT37adnJiaFJhn05k6NxWP5PXG3JKM
-         Vemyaq8xs0QoT+dpX/VkLjMqaEZcLdZ8/xaP96sqBTK9xr+47AC3/lBpALCEMnLykm+i
-         eC9g==
+        bh=0ItoFIh/55aB/e70WP466UAh+90Zeto+YBld1GOUDlc=;
+        b=EMiHkbCpoLNTFLfvE7yhuYoRmcpbWb3rg2e6rjYkrRWUkV3fMaSxN0z1o8joDvVjrF
+         DoaQ2G69xGhdivKzBpITuBI7fwDLLK3JLAuwl/I3lieCx6wNCA1RdHp6Qq3HPJK+Ch7w
+         sNFSwBWU3Pq8LyYI9RuLehCvyvt3g6zSMiO9N43sAbiPWMsMZovSFcIbcIctLXJo7W5U
+         yFWwjCxo5Twsd0ALag83G1j5rpdBHNyIdPYEu8S2miEtIY7LMieyZzlBgLJ8BwcYNZMw
+         AaV5P0qpdR5CxkyEJPN0K6gzIoiSd3OEktqDRfmjQEb4O3OEHEE+CAvUXEK4v8SxS6xC
+         Y0ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593214; x=1690185214;
+        d=1e100.net; s=20221208; t=1687593247; x=1690185247;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d0dU3KHDoF8oZzutBDKpvFK9O6jXuVzZS7UeXmnvOCk=;
-        b=Zhnr+do5ArrGU5HJaaBcq6wwlxKxAhRBjTnvTwdsPU5RkFx7Q1pQrFvp5NqbsFLNfu
-         JH0Y5AVxV8Q6erVUtm8gS0HWk6Ptzjx5BCG2deDlYFRKacZwVlT2OJg/Bz40aV45SJUw
-         QjXumnlP5iPsScFkK7JJmMLKcKd4HcpoXZztoXAiFxvPPzDMJCS+qNoqC/9EIm4ctn3l
-         5V0sYjqVGhjuB7QyzFq3Y50guFJ42rqQaE9fHfhDoN1SLkxz8wnrc/EsnfBjOt0ie3ds
-         QB/5y3lI4nfHfwVJSir/AoNNwiYtTvQXHBCuUYdhuGsPZYg3cePAuC+iRxZyCtRlzNLi
-         gxyw==
-X-Gm-Message-State: AC+VfDwHAmCk8HjFJVcZ006CzYB8OeizKj+Sn58sXpnZ7or5WJG/O3v6
-        8t1wxYj9JLotk65LK5NMeMj27A==
-X-Google-Smtp-Source: ACHHUZ6rxF9D2gin1FtwSBjnqHQU40ChmXYOoZkfDSe/Nou9AC2VX7R26o19SB77+MsKurZ8l61ESw==
-X-Received: by 2002:a17:906:7a19:b0:98d:b73b:b5f2 with SMTP id d25-20020a1709067a1900b0098db73bb5f2mr1706603ejo.71.1687593213726;
-        Sat, 24 Jun 2023 00:53:33 -0700 (PDT)
+        bh=0ItoFIh/55aB/e70WP466UAh+90Zeto+YBld1GOUDlc=;
+        b=LxF6DhUiJUyrdsBBtNc5ITNtZMZksUO2gDFLWvy+iTUqeqdcvgAiZQD6QlELmv9iCT
+         ky5TEcQFlwuD5zs4RvSSVweCGEoDWsFlD8shxufzcu6CuGG4ujqvEQ8xTe0Lp+5Xp9oO
+         fvhzNEzOyvG3IqYizqSud5IYm6hGrrHeS6kVVq8Yc9lY+jIRhxPZ3/foyEhM2T8mLZhL
+         N9j2MgALkQAUPS538KxBKgbdCVSshL56MDL3F21FRmDxILAN9asW79MiSrNEqRY/yJfi
+         ZYcbpoNram1eSBInvEhLuxZGdAweOyMxzl2EYkBBjBxlfMGyluNxyBtpkDSWtUW7Pqqj
+         37tw==
+X-Gm-Message-State: AC+VfDwxnJfhKP5Qhljx4c9Zp1eOEhezyVjm5TZ53MO6GcuuH4XhpmpJ
+        VXseSAtEJRW8n4TMRBkV4mQoYg==
+X-Google-Smtp-Source: ACHHUZ49jFwiXxqnSCSn4kNoVnnSW/YdtiArnK3FxalPv2kaFMQNSvBgECWFO9OcGbSuOPMw0UOLPA==
+X-Received: by 2002:a17:906:58d2:b0:988:77f0:b671 with SMTP id e18-20020a17090658d200b0098877f0b671mr14792178ejs.38.1687593246753;
+        Sat, 24 Jun 2023 00:54:06 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g25-20020a1709064e5900b00987e76827b2sm602028ejw.53.2023.06.24.00.53.28
+        by smtp.gmail.com with ESMTPSA id u12-20020a170906068c00b0098856d1470csm592132ejb.75.2023.06.24.00.54.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 00:53:33 -0700 (PDT)
-Message-ID: <8574bbcc-2dfd-3fed-ff4c-cab1f6e79f7b@linaro.org>
-Date:   Sat, 24 Jun 2023 09:53:26 +0200
+        Sat, 24 Jun 2023 00:54:06 -0700 (PDT)
+Message-ID: <4f1015bb-50d3-84c9-ca32-564a0fe204e1@linaro.org>
+Date:   Sat, 24 Jun 2023 09:54:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 02/45] dt-bindings: usb: ehci: Add atmel
- at91sam9g45-ehci compatible
+Subject: Re: [PATCH v2 03/45] dt-bindings: usb: generic-ehci: Document
+ clock-names property
 Content-Language: en-US
 To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -92,9 +92,9 @@ Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
         manikandan.m@microchip.com, dharma.b@microchip.com,
         nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-3-varshini.rajendran@microchip.com>
+ <20230623203056.689705-4-varshini.rajendran@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-3-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-4-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -108,25 +108,23 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Document at91sam9g45-ehci compatible for usb-ehci.
+> Document the property clock-names in the schema.
+> 
+> It fixes the dtbs_check warning,
+> 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
->  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 1 +
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 4 ++++
 
 This is a friendly reminder during the review process.
 
-It looks like you received a tag and forgot to add it.
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
+Thank you.
 
 Best regards,
 Krzysztof
