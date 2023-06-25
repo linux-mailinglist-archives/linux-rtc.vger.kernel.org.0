@@ -2,127 +2,204 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6767673CA00
-	for <lists+linux-rtc@lfdr.de>; Sat, 24 Jun 2023 11:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C25A73CE10
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jun 2023 04:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbjFXJUI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 24 Jun 2023 05:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S230498AbjFYCfg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 24 Jun 2023 22:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbjFXJUA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 24 Jun 2023 05:20:00 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B85C1FF0
-        for <linux-rtc@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-988aefaa44eso186441966b.2
-        for <linux-rtc@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
+        with ESMTP id S229550AbjFYCff (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 24 Jun 2023 22:35:35 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAF0180;
+        Sat, 24 Jun 2023 19:35:33 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-57688a146ecso13939727b3.2;
+        Sat, 24 Jun 2023 19:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=yQVzjTKSXVmVV9dLLVhjlfW4hSkCHaHSkFp8XKDuppCzQpGHvyVttjnWT3sZWadL6G
-         Aptg8K8aHU9euO2VsKWw8w5GNb7iZUmQN6s980dsKNw8bDt/Gg0mjyG+1qbTOWHueIrY
-         /Q6bxSUkrx10KI9Bk3ImA6gPyy5RwRLI1IVUQjGo73WdFwY+k9WU2qYNImsGMRH4LVBY
-         NGoLGDAz09o/yosqduTlRt/bCpwDw40AnKJvyTtb5EsV6kYLtwXhkQO6myiWdEiHilCp
-         eezk0kHCVcUBB/e4mc1VfkMXxJnPCuve2SWX/BdtYwhjQIOCgvko85iNcFXLb/8ecU/N
-         rm6g==
+        d=gmail.com; s=20221208; t=1687660532; x=1690252532;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iGVGx8SjqYwUfEzfo92AjXT3wg7PYePtDlAlKCZ2ZtI=;
+        b=PlDZbM5fazgJxBiQ/GPeqoFVq9els2RF3xcTCCoES5Pf0WroXG2sbEhL/hLEmB0tn+
+         YqXNmsatWzstYXfkCmVU9n16mbEUCIVS+jjCnXAD6TbzBaHL5lgaglljWB/UXQnPZuzG
+         pSjOlMuJMWX1I6AkQW0uF/VN2BGFT8EZPZqhRqfm0eFMcJ56VU/hjmpnyiHWerZtE+69
+         ajXXSALxq7JOFQt05MSWE3nceZSB6v+iBEQN0acYvQ79VnvZHb+1A3ky0usimm2p22gY
+         7bfMS/WCvRHuAV/slHNEnJpd/8GgJyiQdopVRir6llBBJpLkJgT1VdxH2yM+icNqJqa3
+         P5yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=bV/mlK9p/6FApSKxM+jCN7v3gSpA8X4a6Y5I67NKS3sclsAtsK5h/V5Ied1IcKf6Ot
-         JHmnFiY19idPTC+JnFCL4xMtwBbfdsNY1rWgx4hKIa4cQkf/lC8efcTHYmyVzyZjHbWZ
-         eQwqau46cyMyVG5SFEvAtnyJ3lPbLHxlWDuFOLk2I5LNch+glQHXf/NqrK3vi5Ayy4my
-         Nk61qlEUEphF4sN56WmQCrrAw9vpYvQlfXZa1YJzryrswoWHuKCk3WZLarTa9utkXVkk
-         0VTPRFH0oqgq5Eic7IinVUfTfLIe4q14vzcYlMqCxbr6yp20WwZdxBkiIZwEPloHSyz9
-         +pNg==
-X-Gm-Message-State: AC+VfDzZlArhAnvwXLR+YiMqtrpEr9CnE8WCLtcSv93Efy8Z5OSVDLvo
-        6X3c/3OypPmLIARlxzpNEYuzTw==
-X-Google-Smtp-Source: ACHHUZ5fG8f481PX14S7vktzFZQMA1l6HoKP1yysFPHfBvGgcLJOb2TMBp2polua7/w5jYwHHssrXQ==
-X-Received: by 2002:a17:907:987:b0:987:6372:c31f with SMTP id bf7-20020a170907098700b009876372c31fmr16230436ejc.37.1687598396633;
-        Sat, 24 Jun 2023 02:19:56 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p13-20020a1709060e8d00b00989065149d0sm663324ejf.86.2023.06.24.02.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 02:19:55 -0700 (PDT)
-Message-ID: <ca3b6a75-2811-6013-28cc-9f6a7854b469@linaro.org>
-Date:   Sat, 24 Jun 2023 11:19:49 +0200
+        d=1e100.net; s=20221208; t=1687660532; x=1690252532;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iGVGx8SjqYwUfEzfo92AjXT3wg7PYePtDlAlKCZ2ZtI=;
+        b=bSan+HoFN4c0RVhD5CSWgLM/bn5JBtCxRcwF4kB41941Gw4soEgOV/Ja3rjXML+rbr
+         fXqmKhnVLRjlVyeSPywy9hpk4gF0io2Zofr2Q3VVoYARMcP30W91mq/a59L7MDdAPhS5
+         KZExyXtdRfzXbSolhf1IduTCRIFGbSNPv61CNvRIQTejV8wG3HJYe2vtr35/9keRw1sT
+         YSyXdAUUVqHt6H4N0OPRP7t1+8EvD6PUkOnR178QBm19m5h9gSQZFcHbW4+IDeztD79e
+         +QXs4dx1yWBl0xq7SB35dGwD6QhZI9PHox5rRKBS30T04TPe8Z8XOpdDIPmSs7i47XiH
+         7wkQ==
+X-Gm-Message-State: AC+VfDzETsRIy/Hvqft5o1BZtVvUyJcO/t0+XOp9oZ7N3Az05B4Qb+yW
+        tjGHcPCHG/zLLUp4sFjfcL6GO0/bfHbiVUjdK1Y=
+X-Google-Smtp-Source: ACHHUZ6eEFiyGlRr28sg4+XcHRCAdRZBjnVwQfmZ89hVYgHtqdZoNOTKSPIRPwYYqU72cXkW+O9dM3yz26Ki7V8ID34=
+X-Received: by 2002:a81:4815:0:b0:56c:e563:23fc with SMTP id
+ v21-20020a814815000000b0056ce56323fcmr27701408ywa.24.1687660532611; Sat, 24
+ Jun 2023 19:35:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 01/45] dt-bindings: microchip: atmel,at91rm9200-tcb:
- add sam9x60, sam9x7 compatible
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
-        ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linus.walleij@linaro.org, p.zabel@pengutronix.de,
-        olivia@selenic.com, a.zummo@towertech.it,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com,
-        horatiu.vultur@microchip.com, durai.manickamkr@microchip.com,
-        andrew@lunn.ch, alain.volmat@foss.st.com,
-        neil.armstrong@linaro.org, mihai.sain@microchip.com,
-        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        balamanikandan.gunasundar@microchip.com,
-        manikandan.m@microchip.com, dharma.b@microchip.com,
-        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-2-varshini.rajendran@microchip.com>
- <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-In-Reply-To: <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1685693501.git.zhoubinbin@loongson.cn>
+In-Reply-To: <cover.1685693501.git.zhoubinbin@loongson.cn>
+From:   Binbin Zhou <zhoubb.aaron@gmail.com>
+Date:   Sun, 25 Jun 2023 10:35:20 +0800
+Message-ID: <CAMpQs4LFunPW_7FAe+0Zyq5LMhcsRJ+qSGvARiQd-o6ZFn2qJg@mail.gmail.com>
+Subject: Re: [PATCH V5 0/5] Add rtc driver for the Loongson family chips
+To:     Binbin Zhou <zhoubinbin@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, Xuerui Wang <kernel@xen0n.name>,
+        loongarch@lists.linux.dev,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        zhao zhang <zhzhl555@gmail.com>, Yang Ling <gnaygnil@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 24/06/2023 09:53, Krzysztof Kozlowski wrote:
-> On 23/06/2023 22:30, Varshini Rajendran wrote:
->> Add sam9x60, sam9x7 compatible string support in the schema file.
->>
->> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->> ---
->>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml | 
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Alexandre:
 
-Un-acked. Actually NAK.
+Gentle ping.
+The dt-binding part of the patchset looks good now, do you have any
+more comments on the driver part?
 
-This does not match your DTS. Please test your patches before sending.
+Thanks.
+Binbin
 
-Best regards,
-Krzysztof
 
+
+
+
+
+
+On Fri, Jun 2, 2023 at 5:51=E2=80=AFPM Binbin Zhou <zhoubinbin@loongson.cn>=
+ wrote:
+>
+> Hi all:
+>
+> The initial DT-base ls2x rtc driver was written by Wang Xuerui, He has
+> released five versions of patchset before, and all related mail records
+> are shown below if you are interested:
+>
+> https://lore.kernel.org/all/?q=3Dls2x-rtc
+>
+> In this series of patches, based on the code above, I have added the
+> following support:
+>
+> 1. Add ACPI-related support, as Loongson-3A5000 + LS7A is now ACPI-base
+>    by default under LoongArch architecture;
+> 2. Add rtc alarm/walarm related functions;
+> 3. Merge LS1X rtc and LS2X rtc into a unified rtc-loongson driver.
+>
+> I have tested on Loongson-3A5000LA+LS7A1000/LS7A2000, Loongson-2K1000LA,
+> Loongson-2K0500 and Loongson-2K2000(ACPI/DT).
+>
+> Thanks to everyone for reviewing and testing the code.
+>
+> -------
+> v5:
+> patch(1/5)
+>   - The reason why ls2x can be removed directly is explained in the
+>     commit message;
+>   - Use fallback compatible;
+>     Thanks to all who participated in the fallback compatible discussion.
+> patch(3/5)
+>   - Since ls1b and ls1c have different register definitions, we'd better
+>     distinguish them with different
+>     configurations(ls1b_rtc_config/ls1c_rtc_config);
+>   - Due to the use of fallback compatible, the redundant compatible is
+>     removed. We can see the full list of supported chips in dt-binding..
+>
+> v4:
+> https://lore.kernel.org/linux-rtc/cover.1684983279.git.zhoubinbin@loongso=
+n.cn/
+>
+> - Rebase on the top of rtc-next;
+> - Drop defconfig-related patches;
+> patch(1/5)
+>   - New patch, Loongson RTC bindings have been rewritten and we have
+>     dropped the wildcard (ls2x) in compatible.
+>     Thanks to Krzysztof for your comments;
+> patch(2/5)
+>   - New patch, drop the ls1x rtc driver;
+> patch(3/5)
+>   - Clear RTC_FEATURE_UPDATE_INTERRUPT bit, for the rtc does not support
+>     UIE;
+>   - Add LS2K2000 support(DT/ACPI);
+>   - Merge ls1x support and name the driver rtc-loongson;
+>     Thanks to Jiaxun for his comments and Keguang for his assistance in
+> testing.
+>
+> v3:
+> https://lore.kernel.org/linux-rtc/cover.1681370153.git.zhoubinbin@loongso=
+n.cn/
+>
+> patch(2/7):
+>  - Check patchset with "checkpatch.pl --strict";
+>  - Drop static inline functions which are used only once, such as
+>    ls2x_rtc_regs_to_time;
+>  - Remove the suruct ls2x_rtc_regs and regmap_bulk_xxx() is used to read
+>    and write rtc registers;
+>  - Clear the RTC wakeup interrupt manually;
+>  - Enable the RTC in set_time() and check in read_time();
+>  - device_get_match_data() is used to get ls2x_pm_offset, for LS2k1000
+>    has the different value;
+>  - Remove some inexact CONFIG_ACPI.
+>
+> v2:
+> 1. Rebased on top of latest loongarch-next;
+> 2. Add interrupt descriptions to the ls2k and ls7a DTS files to avoid
+> errors when the driver gets the IRQ number, Thanks to Qing Zhang for
+> testing;
+> 3. Remove some inexact CONFIG_ACPI.
+>
+> Thanks.
+>
+> Binbin Zhou (5):
+>   dt-bindings: rtc: Remove the LS2X from the trivial RTCs
+>   rtc: Remove the Loongson-1 RTC driver
+>   rtc: Add rtc driver for the Loongson family chips
+>   MIPS: Loongson64: DTS: Add RTC support to LS7A PCH
+>   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K1000
+>
+>  .../devicetree/bindings/rtc/loongson,rtc.yaml |  57 +++
+>  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 -
+>  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   7 +
+>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +
+>  drivers/rtc/Kconfig                           |  23 +-
+>  drivers/rtc/Makefile                          |   2 +-
+>  drivers/rtc/rtc-loongson.c                    | 397 ++++++++++++++++++
+>  drivers/rtc/rtc-ls1x.c                        | 192 ---------
+>  8 files changed, 482 insertions(+), 205 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/loongson,rtc.ya=
+ml
+>  create mode 100644 drivers/rtc/rtc-loongson.c
+>  delete mode 100644 drivers/rtc/rtc-ls1x.c
+>
+> --
+> 2.39.1
+>
+>
