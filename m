@@ -2,68 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C927420B2
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Jun 2023 09:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568387440CC
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Jun 2023 19:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjF2HAU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 29 Jun 2023 03:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S232048AbjF3RFl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 30 Jun 2023 13:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbjF2HAT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Jun 2023 03:00:19 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9637F1FC1
-        for <linux-rtc@vger.kernel.org>; Thu, 29 Jun 2023 00:00:17 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bd61dd9a346so348123276.2
-        for <linux-rtc@vger.kernel.org>; Thu, 29 Jun 2023 00:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688022017; x=1690614017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1O2td54UAVvMVuiHOPam6KGvjm+KGijM26LEk6Y/MBE=;
-        b=JmdDx3z6fCj+K4c0xRA6XjxR78jrsvayHIjM0U8C0Hy+I+RVzUWwwS/5sYC4ndPE7j
-         sdkBkgiwI8psDVD2SDOsS+GMyDHBmWbGAQB0a9GfrgRFFrf2MmqleQLrYHh2rNY0ZUET
-         SDMWP7vO9mdzelze4P7w3f41QlqLYklynBSm21Qyt7HwflLUtyFOVZPRKliijgto2u+l
-         kgph69R6elFZU991wDmc8vuNZXtlZmLWrd3JUn2ma2hmQLz2O9OcQfvePlioQOfc8/Av
-         uB6ljxB2QOZEOtqh47y23n4io3kTu02FSr/XUhDei/DsadG2B2L0vRksYbiJECpyO3bl
-         rBOA==
+        with ESMTP id S233000AbjF3REy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 30 Jun 2023 13:04:54 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F051D3C30;
+        Fri, 30 Jun 2023 10:04:48 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7835bad99fbso88923439f.1;
+        Fri, 30 Jun 2023 10:04:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688022017; x=1690614017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1O2td54UAVvMVuiHOPam6KGvjm+KGijM26LEk6Y/MBE=;
-        b=kBqBfWok1de6p8ZbOCR0v/XaRtaMjxV/3Tw+l8yuJ9O+X4FgZIsR4AWhMQpRx+rKFC
-         0L1cR2JyiuQzq9IjaPZhmgXA1yAvTFXBrhzJpmCoMHTrJ4CsRNNS1V2pHt1Sa7LDf7hr
-         HTInrlr/WkXza9XZMwKEWMH6NjEIOWvD/6OOCTVOPHJokmm09DUFDnpcFIzXB6UEpH3O
-         vdwz2BnPjc6T0pk/e9HOhSZHlS5o6mYx/WCBlXrImFw7lvPsyWlPVs6+7HwFNkEwjE8d
-         UStt93iRDRCreRFVoptQvKKnZjkHVoSDvv091rxTfHsfLRmDfqCTXyBd5BGDslEEt/8E
-         OzKQ==
-X-Gm-Message-State: AC+VfDw6tCWiByyLWf7yAq+OT55LPQyAwS92ud58J20OqWRKb49rWfeK
-        eBuIrR0ndJ8AfyA6W1wcVhYtRh42rVPVq5IGKPexcQ==
-X-Google-Smtp-Source: ACHHUZ7xKpLRzmTr3/h+3Fd4K9nni98PVt0vXCb0o/8t1wqkT4btUTSQTnT4V/xz/0EbFSpZKZbLNyop53TGoJ9VcL4=
-X-Received: by 2002:a25:b195:0:b0:bc6:cf90:a286 with SMTP id
- h21-20020a25b195000000b00bc6cf90a286mr34342655ybj.36.1688022016763; Thu, 29
- Jun 2023 00:00:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688144688; x=1690736688;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bDSvITIumvxU+9FeXxHNbJLwhZGzlxTTZldXnMbbHIk=;
+        b=RruGZEIVVjV37EmwLYWeUNTEgoEZLxVyAoTrlVySuNTybnB76gI/OQ9FCuN2/9xKIa
+         /zq6qEUSJBt+GMQa0gy3DnWcORqJSSV3F2ykshWOQO/zrwFxIg2/Bhhin1BGiCI9avPL
+         DGfa0NCeozfC3fESajjY7jzZgmHVOtoxupq66ZsAAbOnM5d0KcRQ4II+riFfhpttfvU9
+         wN/KA89OOtubXAhfGlBISy3/JZ/2gZU4RpCSLKGcT5Udz5G+T+N7SkzL8vvsm4nmB1dL
+         qd6nxd/KqCICTBShtvadvURwMqvZ1j03Uv3fwtDkyjLXzleSfzXZY86blQMlua+ACBFw
+         GugQ==
+X-Gm-Message-State: AC+VfDzBhSbH3SnZzUTAKg4ECB4QbCRAxibYLyG7EZpIESJMUr5BtARU
+        Do3zv4Ks4W3JpifkCe8RUQ==
+X-Google-Smtp-Source: ACHHUZ7YVGW6lKVvg7C24o8CcDQqjgMElHyuoGKVnJCWvqYKZlQzdchG5JVGPC50uiHB8TDngxV6bA==
+X-Received: by 2002:a05:6602:19d1:b0:783:5209:c01 with SMTP id ba17-20020a05660219d100b0078352090c01mr3305594iob.17.1688144687999;
+        Fri, 30 Jun 2023 10:04:47 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id k5-20020a02cb45000000b0040bbcee6b57sm2373025jap.133.2023.06.30.10.04.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 10:04:47 -0700 (PDT)
+Received: (nullmailer pid 1908824 invoked by uid 1000);
+        Fri, 30 Jun 2023 17:04:44 -0000
+Date:   Fri, 30 Jun 2023 11:04:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, timestamp@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-watchdog@vger.kernel.org,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-phy@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] dt-bindings: watchdog: restrict node name suffixes
+Message-ID: <168814464489.1908194.10092224539849073775.robh@kernel.org>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230628133021.500477-1-eblanc@baylibre.com> <20230628133021.500477-3-eblanc@baylibre.com>
-In-Reply-To: <20230628133021.500477-3-eblanc@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 29 Jun 2023 09:00:05 +0200
-Message-ID: <CACRpkdbtH-GtoZ5pJJCMu3sj2RB1=skqRV0nZ0qoZfXaVTNuqw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] pinctrl: tps6594: Add driver for TPS6594 pinctrl
- and GPIOs
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,20 +83,23 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:30=E2=80=AFPM Esteban Blanc <eblanc@baylibre.com>=
- wrote:
 
-> TI TPS6594 PMIC has 11 GPIOs which can be used
-> for different functions.
->
-> This patch adds a pinctrl and GPIO drivers in
-> order to use those functions.
->
-> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
+On Tue, 30 May 2023 16:48:51 +0200, Krzysztof Kozlowski wrote:
+> Make the pattern matching node names a bit stricter to improve DTS
+> consistency.  The pattern is restricted to -N suffixes to decimal
+> numbers.
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-That's a very compact and nice driver. Surely good enough for
-me to merge!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Seems watchdog patches aren't getting applied... Applied, thanks!
 
-Yours,
-Linus Walleij
