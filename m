@@ -2,564 +2,245 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C271A748146
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jul 2023 11:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CF4748530
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jul 2023 15:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjGEJpa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 5 Jul 2023 05:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S230477AbjGENkl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 5 Jul 2023 09:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjGEJp3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Jul 2023 05:45:29 -0400
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ECD1712
-        for <linux-rtc@vger.kernel.org>; Wed,  5 Jul 2023 02:45:27 -0700 (PDT)
-Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
-        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id a9b7ff9e-1b18-11ee-a9de-005056bdf889;
-        Wed, 05 Jul 2023 12:45:24 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Wed, 5 Jul 2023 12:45:23 +0300
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com, aseketeli@baylibre.com,
-        u-kumar1@ti.com
-Subject: Re: [PATCH v7 1/2] rtc: tps6594: Add driver for TPS6594 RTC
-Message-ID: <ZKU7s-q0Q_ZWWVgd@surfacebook>
-References: <20230628133021.500477-1-eblanc@baylibre.com>
- <20230628133021.500477-2-eblanc@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628133021.500477-2-eblanc@baylibre.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230466AbjGENkk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Jul 2023 09:40:40 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3369F;
+        Wed,  5 Jul 2023 06:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=xCdqLKG1nXaRMoiOUaSkIvb0jJRnoEa7lfZSbBirUUA=; b=YLJRNgZqHYdv4EpcxpHCBXnvAM
+        hP4DnBaBSb1/RzBLDmOj/+uqL4aL9bEpruSLpMrvjkHqji8MOBZXALZasaGFfZwhxXsSqPlJaTXA7
+        kHgTPw3pFlzppmIgSdE28G562FzICthBIK2F7bWydFyVEbtEyQQNMVFSgbC2h2bsTEmc=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:54756 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qH2k4-0003vb-5Y; Wed, 05 Jul 2023 09:40:25 -0400
+Date:   Wed, 5 Jul 2023 09:40:12 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230705094012.7e6660dc4669d375911044f1@hugovil.com>
+In-Reply-To: <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <Y8rl452Xm1FrnFfF@mail.local>
+        <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
+        <20230621125945.1f10b66832d0d1c61e21f78d@hugovil.com>
+        <20230621181441cd214f99@mail.local>
+        <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Wed, Jun 28, 2023 at 03:30:20PM +0200, Esteban Blanc kirjoitti:
-> TPS6594 PMIC is a MFD. This patch adds support for
-> the RTC found inside TPS6594 family of PMIC.
+On Wed, 21 Jun 2023 14:28:52 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
+
+> On Wed, 21 Jun 2023 20:14:41 +0200
+> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 > 
-> Alarm is also supported.
-
-LGTM from generic style and code comments perspective,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
-> ---
->  drivers/rtc/Kconfig       |  12 +
->  drivers/rtc/Makefile      |   1 +
->  drivers/rtc/rtc-tps6594.c | 452 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 465 insertions(+)
->  create mode 100644 drivers/rtc/rtc-tps6594.c
+> > On 21/06/2023 12:59:45-0400, Hugo Villeneuve wrote:
+> > > On Wed, 21 Jun 2023 10:14:29 -0400
+> > > Hugo Villeneuve <hugo@hugovil.com> wrote:
+> > > 
+> > > > On Fri, 20 Jan 2023 20:05:07 +0100
+> > > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > > > 
+> > > > > Hello,
+> > > > > 
+> > > > > I know I've been holding off on the review of this series for a while
+> > > > > and I'm sorry for that.
+> > > > > 
+> > > > > One of the main issue that is remaining is that the driver ends up being
+> > > > > 53% bigger and generaly less efficient for no added functionality for
+> > > > > the existing RTCs.
+> > > > > 
+> > > > > I know performance is not a concern however, having more code in the
+> > > > > set/read time and irq paths means that it is more difficult to set an
+> > > > > get the time precisely.
+> > > > 
+> > > > Hi Alexandre,
+> > > > one way to keep rtc_read_time() as efficient as before, and even more
+> > > > efficient by reading 7 instead of 10 registers, would be to drop reading
+> > > > the CTRL3 register, which is only used to detect and display an info
+> > > > message for the low battery condition. This low battery check could be
+> > > > moved to an ioctl call, like it is done in the PCF8523 driver.
+> > > > 
+> > > > Hugo.
+> > > 
+> > > Hi,
+> > > in fact it is already part of the ioctl, so it is even simpler...
+> > > 
+> > 
+> > Yes, the dev_info can be removed.
 > 
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 753872408615..39b5c93c6282 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -578,6 +578,18 @@ config RTC_DRV_TPS6586X
->  	  along with alarm. This driver supports the RTC driver for
->  	  the TPS6586X RTC module.
->  
-> +config RTC_DRV_TPS6594
-> +	tristate "TI TPS6594 RTC driver"
-> +	depends on MFD_TPS6594
-> +	default MFD_TPS6594
-> +	help
-> +	  TI Power Management IC TPS6594 supports RTC functionality
-> +	  along with alarm. This driver supports the RTC driver for
-> +	  the TPS6594 RTC module.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called rtc-tps6594.
-> +
->  config RTC_DRV_TPS65910
->  	tristate "TI TPS65910 RTC driver"
->  	depends on MFD_TPS65910
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index ea445d1ebb17..3d3f8c9d0697 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -175,6 +175,7 @@ obj-$(CONFIG_RTC_DRV_TEGRA)	+= rtc-tegra.o
->  obj-$(CONFIG_RTC_DRV_TEST)	+= rtc-test.o
->  obj-$(CONFIG_RTC_DRV_TI_K3)	+= rtc-ti-k3.o
->  obj-$(CONFIG_RTC_DRV_TPS6586X)	+= rtc-tps6586x.o
-> +obj-$(CONFIG_RTC_DRV_TPS6594)	+= rtc-tps6594.o
->  obj-$(CONFIG_RTC_DRV_TPS65910)	+= rtc-tps65910.o
->  obj-$(CONFIG_RTC_DRV_TWL4030)	+= rtc-twl.o
->  obj-$(CONFIG_RTC_DRV_VT8500)	+= rtc-vt8500.o
-> diff --git a/drivers/rtc/rtc-tps6594.c b/drivers/rtc/rtc-tps6594.c
-> new file mode 100644
-> index 000000000000..7328ea7da849
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-tps6594.c
-> @@ -0,0 +1,452 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * RTC driver for tps6594 PMIC
-> + *
-> + * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-> + */
-> +
-> +#include <linux/bcd.h>
-> +#include <linux/errno.h>
-> +#include <linux/init.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/kernel.h>
-> +#include <linux/limits.h>
-> +#include <linux/math64.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/rtc.h>
-> +#include <linux/types.h>
-> +#include <linux/units.h>
-> +
-> +#include <linux/mfd/tps6594.h>
-> +
-> +// Total number of RTC registers needed to set time
-> +#define NUM_TIME_REGS (TPS6594_REG_RTC_WEEKS - TPS6594_REG_RTC_SECONDS + 1)
-> +
-> +// Total number of RTC alarm registers
-> +#define NUM_TIME_ALARM_REGS (NUM_TIME_REGS - 1)
-> +
-> +/*
-> + * Min and max values supported by 'offset' interface (swapped sign).
-> + * After conversion, the values do not exceed the range [-32767, 33767]
-> + * which COMP_REG must conform to.
-> + */
-> +#define MIN_OFFSET (-277774)
-> +#define MAX_OFFSET (277774)
-> +
-> +// Number of ticks per hour
-> +#define TICKS_PER_HOUR (32768 * 3600)
-> +
-> +// Multiplier for ppb conversions
-> +#define PPB_MULT NANO
-> +
-> +static int tps6594_rtc_alarm_irq_enable(struct device *dev,
-> +					unsigned int enabled)
-> +{
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	u8 val;
-> +
-> +	val = enabled ? TPS6594_BIT_IT_ALARM : 0;
-> +
-> +	return regmap_update_bits(tps->regmap, TPS6594_REG_RTC_INTERRUPTS,
-> +				  TPS6594_BIT_IT_ALARM, val);
-> +}
-> +
-> +/* Pulse GET_TIME field of RTC_CTRL_1 to store a timestamp in shadow registers. */
-> +static int tps6594_rtc_shadow_timestamp(struct device *dev, struct tps6594 *tps)
-> +{
-> +	int ret;
-> +
-> +	/*
-> +	 * Set GET_TIME to 0. Next time we set GET_TIME to 1 we will be sure to store
-> +	 * an up-to-date timestamp.
-> +	 */
-> +	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +				TPS6594_BIT_GET_TIME);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * Copy content of RTC registers to shadow registers or latches to read
-> +	 * a coherent timestamp.
-> +	 */
-> +	return regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +			       TPS6594_BIT_GET_TIME);
-> +}
-> +
-> +static int tps6594_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	unsigned char rtc_data[NUM_TIME_REGS];
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	int ret;
-> +
-> +	// Check if RTC is running.
-> +	ret = regmap_test_bits(tps->regmap, TPS6594_REG_RTC_STATUS,
-> +			       TPS6594_BIT_RUN);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret == 0)
-> +		return -EINVAL;
-> +
-> +	ret = tps6594_rtc_shadow_timestamp(dev, tps);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// Read shadowed RTC registers.
-> +	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_RTC_SECONDS, rtc_data,
-> +			       NUM_TIME_REGS);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	tm->tm_sec = bcd2bin(rtc_data[0]);
-> +	tm->tm_min = bcd2bin(rtc_data[1]);
-> +	tm->tm_hour = bcd2bin(rtc_data[2]);
-> +	tm->tm_mday = bcd2bin(rtc_data[3]);
-> +	tm->tm_mon = bcd2bin(rtc_data[4]) - 1;
-> +	tm->tm_year = bcd2bin(rtc_data[5]) + 100;
-> +	tm->tm_wday = bcd2bin(rtc_data[6]);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tps6594_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	unsigned char rtc_data[NUM_TIME_REGS];
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	int ret;
-> +
-> +	rtc_data[0] = bin2bcd(tm->tm_sec);
-> +	rtc_data[1] = bin2bcd(tm->tm_min);
-> +	rtc_data[2] = bin2bcd(tm->tm_hour);
-> +	rtc_data[3] = bin2bcd(tm->tm_mday);
-> +	rtc_data[4] = bin2bcd(tm->tm_mon + 1);
-> +	rtc_data[5] = bin2bcd(tm->tm_year - 100);
-> +	rtc_data[6] = bin2bcd(tm->tm_wday);
-> +
-> +	// Stop RTC while updating the RTC time registers.
-> +	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +				TPS6594_BIT_STOP_RTC);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// Update all the time registers in one shot.
-> +	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_RTC_SECONDS, rtc_data,
-> +				NUM_TIME_REGS);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// Start back RTC.
-> +	return regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +			       TPS6594_BIT_STOP_RTC);
-> +}
-> +
-> +static int tps6594_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
-> +{
-> +	unsigned char alarm_data[NUM_TIME_ALARM_REGS];
-> +	u32 int_val;
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_ALARM_SECONDS,
-> +			       alarm_data, NUM_TIME_ALARM_REGS);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	alm->time.tm_sec = bcd2bin(alarm_data[0]);
-> +	alm->time.tm_min = bcd2bin(alarm_data[1]);
-> +	alm->time.tm_hour = bcd2bin(alarm_data[2]);
-> +	alm->time.tm_mday = bcd2bin(alarm_data[3]);
-> +	alm->time.tm_mon = bcd2bin(alarm_data[4]) - 1;
-> +	alm->time.tm_year = bcd2bin(alarm_data[5]) + 100;
-> +
-> +	ret = regmap_read(tps->regmap, TPS6594_REG_RTC_INTERRUPTS, &int_val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	alm->enabled = int_val & TPS6594_BIT_IT_ALARM;
-> +
-> +	return 0;
-> +}
-> +
-> +static int tps6594_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
-> +{
-> +	unsigned char alarm_data[NUM_TIME_ALARM_REGS];
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	int ret;
-> +
-> +	// Disable alarm irq before changing the alarm timestamp.
-> +	ret = tps6594_rtc_alarm_irq_enable(dev, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	alarm_data[0] = bin2bcd(alm->time.tm_sec);
-> +	alarm_data[1] = bin2bcd(alm->time.tm_min);
-> +	alarm_data[2] = bin2bcd(alm->time.tm_hour);
-> +	alarm_data[3] = bin2bcd(alm->time.tm_mday);
-> +	alarm_data[4] = bin2bcd(alm->time.tm_mon + 1);
-> +	alarm_data[5] = bin2bcd(alm->time.tm_year - 100);
-> +
-> +	// Update all the alarm registers in one shot.
-> +	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_ALARM_SECONDS,
-> +				alarm_data, NUM_TIME_ALARM_REGS);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (alm->enabled)
-> +		ret = tps6594_rtc_alarm_irq_enable(dev, 1);
-> +
-> +	return ret;
-> +}
-> +
-> +static int tps6594_rtc_set_calibration(struct device *dev, int calibration)
-> +{
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	__le16 value;
-> +	int ret;
-> +
-> +	/*
-> +	 * TPS6594 uses two's complement 16 bit value for compensation of RTC
-> +	 * crystal inaccuracies. One time every hour when seconds counter
-> +	 * increments from 0 to 1 compensation value will be added to internal
-> +	 * RTC counter value.
-> +	 *
-> +	 * Valid range for compensation value: [-32767 .. 32767].
-> +	 */
-> +	if (calibration < S16_MIN + 1 || calibration > S16_MAX)
-> +		return -ERANGE;
-> +
-> +	value = cpu_to_le16(calibration);
-> +
-> +	// Update all the compensation registers in one shot.
-> +	ret = regmap_bulk_write(tps->regmap, TPS6594_REG_RTC_COMP_LSB, &value,
-> +				sizeof(value));
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// Enable automatic compensation.
-> +	return regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +			       TPS6594_BIT_AUTO_COMP);
-> +}
-> +
-> +static int tps6594_rtc_get_calibration(struct device *dev, int *calibration)
-> +{
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	unsigned int ctrl;
-> +	__le16 value;
-> +	int ret;
-> +
-> +	ret = regmap_read(tps->regmap, TPS6594_REG_RTC_CTRL_1, &ctrl);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// If automatic compensation is not enabled report back zero.
-> +	if (!(ctrl & TPS6594_BIT_AUTO_COMP)) {
-> +		*calibration = 0;
-> +		return 0;
-> +	}
-> +
-> +	ret = regmap_bulk_read(tps->regmap, TPS6594_REG_RTC_COMP_LSB, &value,
-> +			       sizeof(value));
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*calibration = le16_to_cpu(value);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tps6594_rtc_read_offset(struct device *dev, long *offset)
-> +{
-> +	int calibration;
-> +	s64 tmp;
-> +	int ret;
-> +
-> +	ret = tps6594_rtc_get_calibration(dev, &calibration);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	// Convert from RTC calibration register format to ppb format.
-> +	tmp = calibration * PPB_MULT;
-> +
-> +	if (tmp < 0)
-> +		tmp -= TICKS_PER_HOUR / 2LL;
-> +	else
-> +		tmp += TICKS_PER_HOUR / 2LL;
-> +	tmp = div_s64(tmp, TICKS_PER_HOUR);
-> +
-> +	/*
-> +	 * SAFETY:
-> +	 * Compution is the reverse operation of the one done in
-> +	 * `tps6594_rtc_set_offset`. The safety remarks applie here too.
-> +	 */
-> +
-> +	/*
-> +	 * Offset value operates in negative way, so swap sign.
-> +	 * See 8.3.10.5, (32768 - COMP_REG).
-> +	 */
-> +	*offset = (long)-tmp;
-> +
-> +	return 0;
-> +}
-> +
-> +static int tps6594_rtc_set_offset(struct device *dev, long offset)
-> +{
-> +	int calibration;
-> +	s64 tmp;
-> +
-> +	// Make sure offset value is within supported range.
-> +	if (offset < MIN_OFFSET || offset > MAX_OFFSET)
-> +		return -ERANGE;
-> +
-> +	// Convert from ppb format to RTC calibration register format.
-> +
-> +	tmp = offset * TICKS_PER_HOUR;
-> +	if (tmp < 0)
-> +		tmp -= PPB_MULT / 2LL;
-> +	else
-> +		tmp += PPB_MULT / 2LL;
-> +	tmp = div_s64(tmp, PPB_MULT);
-> +
-> +	/*
-> +	 * SAFETY:
-> +	 * - tmp = offset * TICK_PER_HOUR :
-> +	 *	`offset` can't be more than 277774, so `tmp` can't exceed 277774000000000
-> +	 *	which is lower than the maximum value in an `s64` (2^63-1). No overflow here.
-> +	 *
-> +	 * - tmp += TICK_PER_HOUR / 2LL :
-> +	 *	tmp will have a maximum value of 277774117964800 which is still inferior to 2^63-1.
-> +	 */
-> +
-> +	// Offset value operates in negative way, so swap sign.
-> +	calibration = (int)-tmp;
-> +
-> +	return tps6594_rtc_set_calibration(dev, calibration);
-> +}
-> +
-> +static irqreturn_t tps6594_rtc_interrupt(int irq, void *rtc)
-> +{
-> +	struct device *dev = rtc;
-> +	unsigned long events = 0;
-> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-> +	struct rtc_device *rtc_dev = dev_get_drvdata(dev);
-> +	int ret;
-> +	u32 rtc_reg;
-> +
-> +	ret = regmap_read(tps->regmap, TPS6594_REG_RTC_STATUS, &rtc_reg);
-> +	if (ret)
-> +		return IRQ_NONE;
-> +
-> +	if (rtc_reg & TPS6594_BIT_ALARM)
-> +		events = RTC_IRQF | RTC_AF;
-> +
-> +	// Notify RTC core on event.
-> +	rtc_update_irq(rtc_dev, 1, events);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static const struct rtc_class_ops tps6594_rtc_ops = {
-> +	.read_time = tps6594_rtc_read_time,
-> +	.set_time = tps6594_rtc_set_time,
-> +	.read_alarm = tps6594_rtc_read_alarm,
-> +	.set_alarm = tps6594_rtc_set_alarm,
-> +	.alarm_irq_enable = tps6594_rtc_alarm_irq_enable,
-> +	.read_offset = tps6594_rtc_read_offset,
-> +	.set_offset = tps6594_rtc_set_offset,
-> +};
-> +
-> +static int tps6594_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-> +	struct device *dev = &pdev->dev;
-> +	struct rtc_device *rtc;
-> +	int irq;
-> +	int ret;
-> +
-> +	rtc = devm_kzalloc(dev, sizeof(*rtc), GFP_KERNEL);
-> +	if (!rtc)
-> +		return -ENOMEM;
-> +
-> +	rtc = devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(rtc))
-> +		return PTR_ERR(rtc);
-> +
-> +	// Enable crystal oscillator.
-> +	ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_2,
-> +			      TPS6594_BIT_XTAL_EN);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = regmap_test_bits(tps->regmap, TPS6594_REG_RTC_STATUS,
-> +			       TPS6594_BIT_RUN);
-> +	if (ret < 0)
-> +		return ret;
-> +	// RTC not running.
-> +	if (ret == 0) {
-> +		ret = regmap_set_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +				      TPS6594_BIT_STOP_RTC);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		/*
-> +		 * On some boards, a 40 ms delay is needed before BIT_RUN is set.
-> +		 * 80 ms should provide sufficient margin.
-> +		 */
-> +		mdelay(80);
-> +
-> +		/*
-> +		 * RTC should be running now. Check if this is the case.
-> +		 * If not it might be a missing oscillator.
-> +		 */
-> +		ret = regmap_test_bits(tps->regmap, TPS6594_REG_RTC_STATUS,
-> +				       TPS6594_BIT_RUN);
-> +		if (ret < 0)
-> +			return ret;
-> +		if (ret == 0)
-> +			return -ENODEV;
-> +
-> +		// Stop RTC until first call to `tps6594_rtc_set_time`.
-> +		ret = regmap_clear_bits(tps->regmap, TPS6594_REG_RTC_CTRL_1,
-> +					TPS6594_BIT_STOP_RTC);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, rtc);
-> +
-> +	irq = platform_get_irq_byname(pdev, TPS6594_IRQ_NAME_ALARM);
-> +	if (irq < 0)
-> +		return dev_err_probe(dev, irq, "Failed to get irq\n");
-> +
-> +	ret = devm_request_threaded_irq(dev, irq, NULL, tps6594_rtc_interrupt,
-> +					IRQF_ONESHOT, TPS6594_IRQ_NAME_ALARM,
-> +					dev);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret,
-> +				     "Failed to request_threaded_irq\n");
-> +
-> +	ret = device_init_wakeup(dev, true);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret,
-> +				     "Failed to init rtc as wakeup source\n");
-> +
-> +	rtc->ops = &tps6594_rtc_ops;
-> +	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	rtc->range_max = RTC_TIMESTAMP_END_2099;
-> +
-> +	return devm_rtc_register_device(rtc);
-> +}
-> +
-> +static struct platform_driver tps6594_rtc_driver = {
-> +	.probe		= tps6594_rtc_probe,
-> +	.driver		= {
-> +		.name	= "tps6594-rtc",
-> +	},
-> +};
-> +
-> +module_platform_driver(tps6594_rtc_driver);
-> +MODULE_ALIAS("platform:tps6594-rtc");
-> +MODULE_AUTHOR("Esteban Blanc <eblanc@baylibre.com>");
-> +MODULE_DESCRIPTION("TPS6594 RTC driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.41.0
+> Hi,
+> great, I will integrate that patch to improve rtc_read_time()
+> performance, and resubmit V4 soon with the requested changes mentioned
+> during V3 review.
 > 
+> Thank you, Hugo.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Hi Alexandre,
+I submitted V4 a few days ago, please let me know if everything is
+in order and all comments properly addressed.
+
+If all is good, any chance we can have that integrated into v6.5?
+
+Thank you, Hugo.
 
 
+> > > > > I guess I'll take it as a merged driver but I took a different decision
+> > > > > for other RTCs.
+> > > > > 
+> > > > > On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
+> > > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > > > 
+> > > > > > Hello,
+> > > > > > this patch series adds the driver for the PCF2131 real-time clock.
+> > > > > > 
+> > > > > > This RTC is very similar in functionality to the PCF2127/29 with the
+> > > > > > following differences:
+> > > > > >   -supports two new control registers at offsets 4 and 5
+> > > > > >   -supports a new reset register
+> > > > > >   -supports 4 tamper detection functions instead of 1
+> > > > > >   -has no nvmem (like the PCF2129)
+> > > > > >   -has two output interrupt pins instead of one
+> > > > > >   -has 1/100th seconds capabilities (not supported in this driver)
+> > > > > >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
+> > > > > >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
+> > > > > >   -watchdog value register cannot be read after being set
+> > > > > > 
+> > > > > > Most of the register addresses are very different, although they still
+> > > > > > follow the same layout. For example, the time/date and tamper registers
+> > > > > > have a different base address, but the offsets are all the same.
+> > > > > > Consequently, the source code of the PCF2127 driver can be easily adapted
+> > > > > > to support this new device.
+> > > > > > 
+> > > > > > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
+> > > > > > and able to support multiple variants, like the PCF2131. This is done
+> > > > > > mostly by using offsets instead of absolute hardcoded register addresses.
+> > > > > > 
+> > > > > > Patch 7 add actual support for the PCF2131.
+> > > > > > 
+> > > > > > Patch 8 configures all interrupt sources to go through the INT A pin.
+> > > > > > 
+> > > > > > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
+> > > > > >       are with the PCF2127/29 (different default values).
+> > > > > > 
+> > > > > > Patch 10 allow to confirm PCF2131 device presence by reading the reset
+> > > > > >       register fixed pattern.
+> > > > > > 
+> > > > > > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
+> > > > > >       CPR bits).
+> > > > > > 
+> > > > > > Patch 12 add support for generic watchdog timing configuration.
+> > > > > > 
+> > > > > > Patch 13 add a new flag to identify if device has read support for reading
+> > > > > >       watchdog register value.
+> > > > > >       Since the watchdog value register cannot be read on the PCF2131 after
+> > > > > >       being set, it seems that we cannot detect if watchdog timer was
+> > > > > >       started by bootloader. I am not sure what is the best way to handle
+> > > > > >       this situation, suggestions are welcomed.
+> > > > > > 
+> > > > > > Patch 14 add the dt-bindings for the PCF2131.
+> > > > > > 
+> > > > > > I have tested the driver using a PCF2131-ARD evaluation board connected to
+> > > > > > an NXP imx8mp evaluation board:
+> > > > > >   - Time get/set ok;
+> > > > > >   - Alarms get/set ok
+> > > > > >   - Timestamp 1 to 4 ok
+> > > > > >   - IRQ alarm ok
+> > > > > >   - Watchdog ok
+> > > > > >   - Also tested successfully with "RTC Driver Test Example" from
+> > > > > >     Documentation/rtc.txt
+> > > > > > 
+> > > > > > I have also tested the driver on a custom PCF2129 adapter board connected to a
+> > > > > > beaglebone black.
+> > > > > > 
+> > > > > > Thank you.
+> > > > > > 
+> > > > > > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
+> > > > > > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
+> > > > > > 
+> > > > > > Changes for V3:
+> > > > > > - Rebased for kernel v6.1
+> > > > > > 
+> > > > > > Changes for V2:
+> > > > > > - In general, fix and improvements after I have tested on real hardware
+> > > > > > - Fix alarm interrupt A/B mask setting for PCF2131:
+> > > > > >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
+> > > > > > - Remove low_reg validation: only check if TS interrupt flag is
+> > > > > >   defined, as low_reg is defined at address 0 for PCF2127/29.
+> > > > > > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
+> > > > > > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
+> > > > > > - Map all interrupt sources to INT A pin
+> > > > > > - Read and validate PCF2131 device presence from RESET register
+> > > > > > - Adapt watchdog configuration for PCF2131
+> > > > > > 
+> > > > > > Hugo Villeneuve (14):
+> > > > > >   rtc: pcf2127: add variant-specific configuration structure
+> > > > > >   rtc: pcf2127: adapt for time/date registers at any offset
+> > > > > >   rtc: pcf2127: adapt for alarm registers at any offset
+> > > > > >   rtc: pcf2127: adapt for WD registers at any offset
+> > > > > >   rtc: pcf2127: adapt for CLKOUT register at any offset
+> > > > > >   rtc: pcf2127: add support for multiple TS functions
+> > > > > >   rtc: pcf2127: add support for PCF2131 RTC
+> > > > > >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
+> > > > > >   rtc: pcf2127: set PWRMNG value for PCF2131
+> > > > > >   rtc: pcf2127: read and validate PCF2131 device signature
+> > > > > >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+> > > > > >   rtc: pcf2127: support generic watchdog timing configuration
+> > > > > >   rtc: pcf2127: add flag for watchdog register value read support
+> > > > > >   dt-bindings: rtc: pcf2127: add PCF2131
+> > > > > > 
+> > > > > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
+> > > > > >  drivers/rtc/Kconfig                           |   4 +-
+> > > > > >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
+> > > > > >  3 files changed, 752 insertions(+), 195 deletions(-)
+> > > > > > 
+> > > > > > -- 
+> > > > > > 2.30.2
+> > > > > > 
+> > > > > 
+> > > > > -- 
+> > > > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > > > Embedded Linux and Kernel engineering
+> > > > > https://bootlin.com
+> > > > > 
+> > 
+> > -- 
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> > 
