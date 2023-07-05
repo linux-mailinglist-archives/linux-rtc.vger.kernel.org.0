@@ -2,144 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94857471A3
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Jul 2023 14:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A615747AB4
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jul 2023 02:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjGDMqk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Tue, 4 Jul 2023 08:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S230285AbjGEAap (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 4 Jul 2023 20:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjGDMqj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 Jul 2023 08:46:39 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2A5FC;
-        Tue,  4 Jul 2023 05:46:38 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5701eaf0d04so63442037b3.2;
-        Tue, 04 Jul 2023 05:46:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688474797; x=1691066797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WsNvAMnSUofmRnmSjEUJ3mWWbVeL8c/aa7qR+cnWQFc=;
-        b=bpKdjo0PJRGD2hslPW3U84g02EoL7z+pWsCPBA/wA12i/bUeGyvtK5WEfhykj/Uive
-         PhJ/B/5K6XYew87tIKJ3BD6DTv6Deq29L9m0p0gxwEFiXO+Plby3qVI6PBzE2wJ44tB8
-         2fOPuuq0Jf61KLpXUY5gNTimBYVvRSEjHYc0SFDqxHD9QMGqRhj8FpT1b+C+OcUwFIeZ
-         th6GJrYWsoAC11fzDXQ2U/lix6+QTWo1KvCdHw1S4MOuCbSZ8lPbCPsW8k8s/6K3reSK
-         1mkd18WdOisYhkL+RAdY63biIPGAAJCLr2ocpHJ5YcZMXafijsxkA/GkGeWgWha4QN8r
-         cVJA==
-X-Gm-Message-State: ABy/qLaKwFcD/ouzeyyFTDel4+Qj1r+jSDM+S+XeeM9WRmq739QKKVoP
-        32yTkjNEnlwPR8GJIt/iKOFqWhTP0idt1w==
-X-Google-Smtp-Source: APBJJlEprUem1w4DutjWd/uw6IbAAIX0kkVfJEgSSavd8k2WOgnGt02uBNTvdhN7a1/CrM3xu0Of9g==
-X-Received: by 2002:a25:ce8c:0:b0:c18:bbaa:754 with SMTP id x134-20020a25ce8c000000b00c18bbaa0754mr10944507ybe.51.1688474797062;
-        Tue, 04 Jul 2023 05:46:37 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id g64-20020a25a4c6000000b00ba73c26f0d6sm4895523ybi.15.2023.07.04.05.46.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jul 2023 05:46:35 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-c581c758ad8so1754570276.1;
-        Tue, 04 Jul 2023 05:46:35 -0700 (PDT)
-X-Received: by 2002:a25:6d02:0:b0:c5c:35d0:1c0f with SMTP id
- i2-20020a256d02000000b00c5c35d01c0fmr1671423ybc.20.1688474795342; Tue, 04 Jul
- 2023 05:46:35 -0700 (PDT)
+        with ESMTP id S229512AbjGEAap (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 Jul 2023 20:30:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38653EA
+        for <linux-rtc@vger.kernel.org>; Tue,  4 Jul 2023 17:30:44 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3650QIAr029240;
+        Wed, 5 Jul 2023 00:30:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=DK/iVlFkHdpcCizkqoQ7ZjlxWPQ/giBD4RfDuqGSwGY=;
+ b=TCiqqouL+qD9TzJ+bsoeZ2zNmIPigeCGOczwPsEuK+NLk6vBO2m/9nlZhohmGjxsNo0/
+ 4xK/9L8iiLnWlIaYKBJQntqBD229M+Wo/ICyEuEql5QT/sYDL3DtRQU/oVOCTNokhoab
+ mFfw2U9BH8PK4ie0KU48I6RvvNC8njo16Yl74CguA2wuf7prPbw8rNcqbbA3PPGqM87+
+ ubFXp6cRv1R7ThVjNFawwVYA+jXVJ14Fq/yFv+AMpm9DhurM3QQ87BdH3pNLaq9aLGjO
+ g7De+mLT4h06m/2OeTly6TfomTUqJgtq5Nue7pqtNCeJUCNERc6vSl2HpZhnkYUXRo6C pQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rmwyjg2ab-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 00:30:39 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 364NSIl4019974;
+        Wed, 5 Jul 2023 00:30:37 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3rjbddspev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 00:30:37 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3650UZKv48103714
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jul 2023 00:30:35 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E85920040;
+        Wed,  5 Jul 2023 00:30:35 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8ADEE20049;
+        Wed,  5 Jul 2023 00:30:34 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jul 2023 00:30:34 +0000 (GMT)
+Received: from bgray-lenovo-p15.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 6A1CD60142;
+        Wed,  5 Jul 2023 10:30:30 +1000 (AEST)
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     linux-rtc@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, Benjamin Gray <bgray@linux.ibm.com>
+Subject: [PATCH] rtc: Kconfig: select REGMAP for RTC_DRV_DS1307
+Date:   Wed,  5 Jul 2023 10:30:24 +1000
+Message-ID: <20230705003024.1486757-1-bgray@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
- <20230522105049.1467313-31-schnelle@linux.ibm.com> <CAMuHMdUAkRB9z2cqq6XBDKi-8zLyKxdw_PaT_TwLj78S5B6J8g@mail.gmail.com>
- <28a513fd-1e7c-4772-a3c1-f312938459ed@app.fastmail.com>
-In-Reply-To: <28a513fd-1e7c-4772-a3c1-f312938459ed@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 4 Jul 2023 14:46:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWEx0F=fNei4Bz_JPkuvoaN-+zk08h0i8KnSi_VjO615g@mail.gmail.com>
-Message-ID: <CAMuHMdWEx0F=fNei4Bz_JPkuvoaN-+zk08h0i8KnSi_VjO615g@mail.gmail.com>
-Subject: Re: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-rtc@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _GGuUBYf2y57M1hhAYBaJwQe8CrT3y0e
+X-Proofpoint-ORIG-GUID: _GGuUBYf2y57M1hhAYBaJwQe8CrT3y0e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-04_16,2023-07-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ mlxlogscore=999 phishscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0
+ mlxscore=0 spamscore=0 priorityscore=1501 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307040214
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Arnd,
+The drivers/rtc/rtc-ds1307.c driver has a direct dependency on
+struct regmap_config, which is guarded behind CONFIG_REGMAP.
 
-On Tue, Jul 4, 2023 at 1:25 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Tue, Jul 4, 2023, at 10:06, Geert Uytterhoeven wrote:
-> > On Mon, May 22, 2023 at 12:51 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> >> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> >> not being declared. We thus need to add HAS_IOPORT as dependency for
-> >> those drivers using them.
-> >>
-> >> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> >> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> >> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> >
-> > Thanks for your patch, which is now commit 8bb12adb214b2d7c ("rtc:
-> > add HAS_IOPORT dependencies") upstream.
-> >
-> >> --- a/drivers/rtc/Kconfig
-> >> +++ b/drivers/rtc/Kconfig
-> >> @@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
-> >>
-> >>  config RTC_DRV_BQ4802
-> >>         tristate "TI BQ4802"
-> >> -       depends on HAS_IOMEM
-> >> +       depends on HAS_IOMEM && HAS_IOPORT
-> >>         help
-> >>           If you say Y here you will get support for the TI
-> >>           BQ4802 RTC chip.
-> >
-> > This driver can use either iomem or ioport.
-> > By adding a dependency on HAS_IOPORT, it can no longer be used
-> > on platforms that provide HAS_IOMEM only.
->
-> You are correct, we could allow building this driver even
-> without IOPORT and make it use ioport_map() or an #ifdef.
->
-> > Probably the driver should be refactored to make it use only
-> > the accessors that are available.
->
-> Since the driver itself has no DT support, it looks like the
-> only way it can be used is from the sparc64/ultra45 wrapper,
-> but that architecture always provides CONFIG_IOPORT, so I
-> don't think it makes any difference in the end. We can change
-> this again if another user comes up.
+Commit 70a640c0efa7 ("regmap: REGMAP_KUNIT should not select REGMAP")
+exposed this by disabling the default pick unless KUNIT_ALL_TESTS is
+set, causing the ppc64be allnoconfig build to fail.
 
-Correct, I made the same reasoning after sending my previous email...
+Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+---
+ drivers/rtc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> It might be good to know whether the machine uses a memory or
-> I/O resource in its device tree.
-
-Indeed.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index ffca9a8bb878..7455ebd189fe 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -246,6 +246,7 @@ config RTC_DRV_AS3722
+ 
+ config RTC_DRV_DS1307
+ 	tristate "Dallas/Maxim DS1307/37/38/39/40/41, ST M41T00, EPSON RX-8025, ISL12057"
++	select REGMAP
+ 	select REGMAP_I2C
+ 	select WATCHDOG_CORE if WATCHDOG
+ 	help
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.41.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
