@@ -2,153 +2,156 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36147494EA
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jul 2023 07:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AA074956D
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jul 2023 08:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjGFFNr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 6 Jul 2023 01:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S233518AbjGFGOy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 6 Jul 2023 02:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjGFFNq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 Jul 2023 01:13:46 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2043.outbound.protection.outlook.com [40.107.12.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38219E1
-        for <linux-rtc@vger.kernel.org>; Wed,  5 Jul 2023 22:13:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DMFVOtHFIm7DLpwdqSEFwdfjVKVzqiAPNB8p3gc27ZAur77k0KnXGHkCm+JBCHRjwgVohKpAM7wGF2k46Pv/JVbtBFZxPpdVvTbdZbKsf/QgLjuwOpiVxWZVCRZ4OCK0vC03V7gjUWgWFhgPqKgD4E43vTDHpjrwi8AsqS7ev952Tos8/XT0wuSyRXT90yt1LSuQdaTnMPDwuF00/PR6O/LqzBBdN7aWlfuEEMyAMLJRzvJX38lHaNpVxKgw7k6rtWb+EjbyBbTT1fl3i8P1Gbai1o0lazAyNG55m/ZZrTJKCkiJdxkzYp0gAXHEBUtsxHORvzW84Z3QRAUghJ+Kbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DWwY7pAG9MLtfmb+sBB7+i1iGCGrLxjhmoFvvh0IMVQ=;
- b=ScsgJ3M/0YTkg14NQ6J9Ja6XhC2MdbAhhfQfjIqezOR7zTQqM4NN74VceS4zAvPQt4Pkfc4EekqVHmBK+1gT9uxeDWZiMMG5wr5zEHnE2bl4VsABN6tLvLdFyKEfT9O6Sk8/TT+oD8Uwx59h5MJpHCcHIg9KbtICd9NFYnQsXJ1sfazqTCCCKYMtxW/P+3k0nivO/2BcSvR/nHtHEMls0Gst8ukOcDEOTBvZ1S7NP9TfLkPZW0EOHcliMGx6noKIog+rdgXnbu6Yf/67wN85n80oQsU4SLf2reRZHF9OQ5MW2jlHdODoZoSfy1voT3j0rQdO/UQTNQrKLc2jeEqUNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DWwY7pAG9MLtfmb+sBB7+i1iGCGrLxjhmoFvvh0IMVQ=;
- b=UzbgIuVdxU8jBSklYYQC9iAe+0LjUH+dl3aMoqxigHCTPt6hjBfNqzgqPgegPGHOn3aEQFpalqdBRdkrd4dU38YRWY08YC8R93G9Mionwfw5y01i796CgrPyVK0c8RuujleOSY33Yb7XWj0wc7Qmm83bU7B+WWIBdIcsot0Z8+FrGzxhPQAtfABproTvl6g/iDgVfamCKNgWkXt+wqZTTChzv1nB4+6G0y9gk8A1KdBcz5NMT6RTMgLoEJ53Y2S4zOLmcbZi0J5HRE6oiyN7XMS4Su/BrN9Xa0m0nYEcqkSG8iUOx6kkNDpTWY3QLmmvykLVPa80toVawOO2U/QmQg==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2083.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:11::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
- 2023 05:13:38 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::802b:33:561c:4217]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::802b:33:561c:4217%4]) with mapi id 15.20.6565.016; Thu, 6 Jul 2023
- 05:13:37 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Gray <bgray@linux.ibm.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+        with ESMTP id S233502AbjGFGOx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 Jul 2023 02:14:53 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558B71737
+        for <linux-rtc@vger.kernel.org>; Wed,  5 Jul 2023 23:14:52 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3665qNr3014103;
+        Thu, 6 Jul 2023 06:14:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=X8sXLsSHxfg1iIQFuf+SYkXBpsfA44R6YEJxrviC1Vw=;
+ b=ssE2a4aJuprbBLkMlI8re2l34UQ8WwO55tULMkkcTzK6lxO84+I7VfU9soG8bmOlbuXX
+ YNeI//paLWmYZt5MNybSgthlkf3n5ctFGp7+zgFjs3+ypF/tAxk6QVja40d0C6msTl49
+ 4ycS9BSwwZvMlM4N2hyYN6t3kKfqdjJ9ANBQ2r2pHw0Mju079rGl7YyY2t7PuX+QoTK6
+ 7bEIGJzacGosF/rN3un0N3xdBLxWPR6ZkhgoSKHmgVYmnlZx4ARQ1oGHXYaiaJH9xefF
+ qUMv+0Gle2+234pwCBAsdyKi6Y0hxZLg0bYyM2U02SO3sFSCBPIKP3gjKqsZfrmTdejo 2A== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rnqudgkyk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 06:14:40 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3664e8lI009912;
+        Thu, 6 Jul 2023 06:14:36 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rjbs4u5x3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jul 2023 06:14:36 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3666EX0X45679226
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jul 2023 06:14:33 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B038720049;
+        Thu,  6 Jul 2023 06:14:33 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36B1220040;
+        Thu,  6 Jul 2023 06:14:33 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jul 2023 06:14:33 +0000 (GMT)
+Received: from [10.61.2.107] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 00D4960142;
+        Thu,  6 Jul 2023 16:14:29 +1000 (AEST)
+Message-ID: <06d642f1e1245df1c68b6bd5fbd288233be027bc.camel@linux.ibm.com>
 Subject: Re: [PATCH] rtc: Kconfig: select REGMAP for RTC_DRV_DS1307
-Thread-Topic: [PATCH] rtc: Kconfig: select REGMAP for RTC_DRV_DS1307
-Thread-Index: AQHZrtgK5cTbG97WIEibeUwAL5uQ7K+sM4sA
-Date:   Thu, 6 Jul 2023 05:13:37 +0000
-Message-ID: <4e94cb11-1f39-d631-fe0a-b945b301b77c@csgroup.eu>
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joel Stanley <joel@jms.id.au>
+Date:   Thu, 06 Jul 2023 16:14:28 +1000
+In-Reply-To: <4e94cb11-1f39-d631-fe0a-b945b301b77c@csgroup.eu>
 References: <20230705003024.1486757-1-bgray@linux.ibm.com>
-In-Reply-To: <20230705003024.1486757-1-bgray@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB2083:EE_
-x-ms-office365-filtering-correlation-id: fca516e4-dd0d-46db-a0e3-08db7ddfc167
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YCCIyFGE2ra4FpEca8VQqIeYWOrOaKKYvxSa2xaGTdSDhMm1ZDfQxSdD8eYbvlKjwI1gtdRHHptLKi08lqY1PiHNglAK91iyBZ+AuF1PRD/HkyI76yG00E49adKOItK7v6V4lyuoB+ejS8v+IIenpvMbGNBskEBwfpArFinkUN1kuoNY1OVKX1aP2qeyihD0SEgd5F6pYYVo355VbLK01H7Pyctf1U/kAGSdoEn33ZglW8iIVwCFBDh2gwSYUtk8JVWgxrWh4uwfH9/ZJx86QGShDoO9hlBhdhbGhsBlx9w9FjiAlJP7mihUmao/kUX8lAOygiSO8QGY6cxTsP6maKFN5ATwxFffdZuoiA6l75BOszaMZnZMpRtCXqXJT9t3vq0sh7c51yA3XiOm1EqYBOSptdRD6EDswl38dK/EijrrZcTmTCUdI6eI1o6PrxyEmYickVCoRmCS5Fc0gTtu54W/Gj/WBVQz+bjMqtmAadaGtkJRJkl5gY1R6Rj+9XSzojjFQavLVEnphn2LA6pwaUgX9YIWkj4/9+Xc3VDlQKF/Fcjrd/RSIk5uHHT/fDE60bnYq93m8oc30eOBjViivYAtGEXDeTS3RmVE+Rgj5H39cBFdu/KQPy7nQ2FiJDw1QKrc4/uKK26jrvSU7fjfB9VZ+UsqLSFNYfeVhl2YOr0SsYCHzFXbmRbdG2ISBvrP
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39850400004)(366004)(396003)(136003)(451199021)(44832011)(5660300002)(8676002)(8936002)(41300700001)(316002)(2906002)(83380400001)(31686004)(122000001)(76116006)(6506007)(2616005)(4326008)(91956017)(66476007)(64756008)(66946007)(66446008)(66556008)(38100700002)(86362001)(186003)(6512007)(26005)(110136005)(478600001)(6486002)(31696002)(38070700005)(36756003)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UjRZa21XL3Y2Z3BxWjhaU2FXVHRONG0wYk82bml0YUlhZWxqY2kvRlQ2aFd4?=
- =?utf-8?B?RVZvNUZWa3czTDExWTlqamVGVnRmbE0ybENiMmZ1RXhKMW1IUnQ5c1lLV0lB?=
- =?utf-8?B?MCtONDhmeEtHTnFSZzd5OGh3SG5GUkNLZWtqeVdGUWlmOWI1UE5jTUdmNzJt?=
- =?utf-8?B?eVI0ZFNJQWdVQjRnS2NmLzFod3dLS2ZyVHphRmhVS1U3aWpuUGZURmxZekNV?=
- =?utf-8?B?SkxYTi92UGpTNXpXZmN5ZUc1UXU3S2NCSEVRU3dFNFJ0UkVrQlVOMVR1ekpV?=
- =?utf-8?B?c05qUllDeERWY0h3WUltZ3dGM3VDdjEvZ2wxOGRaWDNBRG5GdUxWWDVYK3o4?=
- =?utf-8?B?SmRqT09BdXhaMUNrelFCUzVHZkpLTXI2VkhNeUZDblVxY1hHYUlvTlY5ZVBF?=
- =?utf-8?B?ekZoVGJWYXR2aGZEK3lDOU8wdlF2VXJvZHFPLzJhOGlTalRQUVk5czFtd3M0?=
- =?utf-8?B?MEJuaEJNWEFmcEF3d05YNWR4L3JUSTRIQ3Z5ZjhPQUM4cnRpbE5PaGo4Nlg4?=
- =?utf-8?B?QWNGdGlwWWYvcjlTZFBKdkIvYWIyRjZDdm1VNVlGR2Z2Y254bHdvaFdrbHBY?=
- =?utf-8?B?d0c5dXZ0ZlEvRUhBd2NCbG56UWl1MTJ2TjQ0eHYxSVdxY2NCbG04Q08xOUxx?=
- =?utf-8?B?ODJvdmg2Yk5uRlU3NnQzWldwWGhhc3FLaGFiTDB1TW44WWwwSEJOaFl4SkxR?=
- =?utf-8?B?VWliQ0FmVytjMFFURGViN2ljZkJpZ2Zra0J5S01seEQzeklka29wWU43akF6?=
- =?utf-8?B?TmI0RFlUNVh3NEZHREpkRkhkSDdJVDZVVG9JTExYUWlTZ3dLQXB6SzIrMGd0?=
- =?utf-8?B?SGRDcmV4KzFHdkgzeEduTU1pVlRKTGszeTdlTkgxTWV6K1daZFMxQ1dLckZY?=
- =?utf-8?B?MWFLUUFrUnNjNjZZZldWMHdvWDV4N3pUZmNhWU94SXFMZWF6MzFLTGpKUFdL?=
- =?utf-8?B?dmVWWTdxRkVMenRvMDdTa2YvTU80cDBqRjZkRkxBeWVldkJIZGJxbmg1NGpM?=
- =?utf-8?B?djJpejVnRi9CSHNhaExtTUFpTzc4R25BQURueEM0UWlXakhCRm5kVTJTdXZl?=
- =?utf-8?B?ZklVV0x6YTM5cWxmcGhnYUhSbk8zY2RNMHdwT01aU2ZUcVJKUDUraTByR3NN?=
- =?utf-8?B?c3A5cFNvT1VvZFg5TnRCSzk1M0VubFdreDBQQ2RmY01jQnpLVzhza1lHLzho?=
- =?utf-8?B?U1ZXenFWTTc2VVppSHRnMWtUbWtNTThRN3ExeFozTFBtSGh6VHh1ZnVta1Mv?=
- =?utf-8?B?MDBSRHZsMFp1cFliT0lIZ3JaZ21sdDEza1JXUk5QRDk5ZVY3UDBIdENDOVFJ?=
- =?utf-8?B?TlFwNytPT0JSdjFlN2h4UW5MVE81V3NtNkYzWDBGbU15ekJ5SjRSZ2JqaE5S?=
- =?utf-8?B?VVFkSGo4S2pxMkFZZDduMDFrNFVwb3g4WlBpRUNoZjBBcTkyaURGZ2l5MG5k?=
- =?utf-8?B?eWlXbWVBOEMrM0NnVGRrZVJTZXUzTFlSVGZhOHlDM0txeWgvUGtna3ZjempK?=
- =?utf-8?B?YjF5M2VFKzJsTWhBMFBIekxxVStNOE1iQm9BY0lQN1VEYmxSQXEwc2RibnNB?=
- =?utf-8?B?OXBTSHJoZ3gwVUVZei96bTJpSVQvdXZsaS9icTVPaWZGM0hmazJ3WHAzeHNF?=
- =?utf-8?B?NGFDQ3M1aUZtd3VWSVExK1JMRHZTRVJvRE9LV0c5OC9XeFF6cVNhSXpIMksw?=
- =?utf-8?B?ZzdJQU1VODFyQlJvZTkvaEh1QkowdHdTNzIya09GMjBQRkxHVnczQ0lNN2g2?=
- =?utf-8?B?bUdJNEVTMmd6cWh2MXZKSVYramNhbFJPQU9Cd1AzV0xkZndHNmkxbzN3OE1G?=
- =?utf-8?B?RW5PaWZacmE3M1V0a3VtdUVaWkU4QlpBcm15M1VpTFRtREFEc095Qi9oL0NP?=
- =?utf-8?B?NXRqazJHbHNDZzhrYU04amgwbVczTEdENVUvY09GMmdyMnh4YjVHMWpraEJE?=
- =?utf-8?B?S29UL2kzMjJPSGIwcmwwcWhGTVYyaXJKZDNYZ2ZUWk56TTdWbnhBUDlPV21Q?=
- =?utf-8?B?NXYxd0NRbmZmTTh3Q0JxNkZMakhRR2J4YVFCaHZJekRDQUcrTVkxZDl2dkZE?=
- =?utf-8?B?VWtaa0NJYnhyVzkyTnJuMWhGWjNPaS82SjVFaWxzMmtIM09jRGtzdXNxb3Y5?=
- =?utf-8?Q?Hrkj4dleBqwElCEuvm33cnvaq?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <70BDCCE043276642A3E0C2F44F397B99@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+         <4e94cb11-1f39-d631-fe0a-b945b301b77c@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: fca516e4-dd0d-46db-a0e3-08db7ddfc167
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2023 05:13:37.8557
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TN3gz9s9spsymHVOh4XZZfMQAFyYelPcWFu7mPEXHnCJYszQ90V/xNb0IL67V58mRujuNcqWsn1hcBtUcbEoJTomI19nc1w1azVUBWv7/2s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2083
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: P4GMUuuqTGgiz0Zic8uX8SfIZPI5tUah
+X-Proofpoint-ORIG-GUID: P4GMUuuqTGgiz0Zic8uX8SfIZPI5tUah
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-06_02,2023-07-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1011 malwarescore=0 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307060052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQoNCkxlIDA1LzA3LzIwMjMgw6AgMDI6MzAsIEJlbmphbWluIEdyYXkgYSDDqWNyaXTCoDoNCj4g
-VGhlIGRyaXZlcnMvcnRjL3J0Yy1kczEzMDcuYyBkcml2ZXIgaGFzIGEgZGlyZWN0IGRlcGVuZGVu
-Y3kgb24NCj4gc3RydWN0IHJlZ21hcF9jb25maWcsIHdoaWNoIGlzIGd1YXJkZWQgYmVoaW5kIENP
-TkZJR19SRUdNQVAuDQo+IA0KPiBDb21taXQgNzBhNjQwYzBlZmE3ICgicmVnbWFwOiBSRUdNQVBf
-S1VOSVQgc2hvdWxkIG5vdCBzZWxlY3QgUkVHTUFQIikNCj4gZXhwb3NlZCB0aGlzIGJ5IGRpc2Fi
-bGluZyB0aGUgZGVmYXVsdCBwaWNrIHVubGVzcyBLVU5JVF9BTExfVEVTVFMgaXMNCj4gc2V0LCBj
-YXVzaW5nIHRoZSBwcGM2NGJlIGFsbG5vY29uZmlnIGJ1aWxkIHRvIGZhaWwuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBCZW5qYW1pbiBHcmF5IDxiZ3JheUBsaW51eC5pYm0uY29tPg0KPiAtLS0NCj4g
-ICBkcml2ZXJzL3J0Yy9LY29uZmlnIHwgMSArDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
-aW9uKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ydGMvS2NvbmZpZyBiL2RyaXZlcnMv
-cnRjL0tjb25maWcNCj4gaW5kZXggZmZjYTlhOGJiODc4Li43NDU1ZWJkMTg5ZmUgMTAwNjQ0DQo+
-IC0tLSBhL2RyaXZlcnMvcnRjL0tjb25maWcNCj4gKysrIGIvZHJpdmVycy9ydGMvS2NvbmZpZw0K
-PiBAQCAtMjQ2LDYgKzI0Niw3IEBAIGNvbmZpZyBSVENfRFJWX0FTMzcyMg0KPiAgIA0KPiAgIGNv
-bmZpZyBSVENfRFJWX0RTMTMwNw0KPiAgIAl0cmlzdGF0ZSAiRGFsbGFzL01heGltIERTMTMwNy8z
-Ny8zOC8zOS80MC80MSwgU1QgTTQxVDAwLCBFUFNPTiBSWC04MDI1LCBJU0wxMjA1NyINCj4gKwlz
-ZWxlY3QgUkVHTUFQDQoNCkFzIGZhciBhcyBJIGNhbiBzZWUsIFJFR01BUCBkZWZhdWx0cyB0byBZ
-IHdoZW4gUkVHTUFQX0kyQyBpcyBzZWxlY3RlZC4NCkNhbiB5b3UgZXhwbGFpbiBtb3JlIGluIGRl
-dGFpbHMgd2h5IHlvdSBoYXZlIHRvIHNlbGVjdCBpdCBleHBsaWNpdGVseSA/IA0KSWYgdGhlcmUg
-aXMgc29tZXRoaW5nIHdyb25nIHdpdGggdGhlIGxvZ2ljLCB0aGVuIHRoZSBsb2dpYyBzaG91bGQg
-YmUgDQpmaXhlZCBpbnN0ZWFkIG9mIGp1c3QgYWRkaW5nIGEgc2VsZWN0aW9uIG9mIFJFR01BUCBm
-b3IgdGhhdCBwYXJ0aWN1bGFyIA0KUlRDX0RSVl9EUzEzMDcuIEJlY2F1c2Ugb3RoZXJzIGxpa2Ug
-UlRDX0RSVl9BQkI1WkVTMyBvciBSVENfRFJWX0FCRU9aOSANCm1pZ2h0IGhhdmUgdGhlIGV4YWN0
-IHNhbWUgcHJvYmxlbS4NCg0KPiAgIAlzZWxlY3QgUkVHTUFQX0kyQw0KPiAgIAlzZWxlY3QgV0FU
-Q0hET0dfQ09SRSBpZiBXQVRDSERPRw0KPiAgIAloZWxwDQo=
+On Thu, 2023-07-06 at 05:13 +0000, Christophe Leroy wrote:
+>=20
+>=20
+> Le 05/07/2023 =C3=A0 02:30, Benjamin Gray a =C3=A9crit=C2=A0:
+> > The drivers/rtc/rtc-ds1307.c driver has a direct dependency on
+> > struct regmap_config, which is guarded behind CONFIG_REGMAP.
+> >=20
+> > Commit 70a640c0efa7 ("regmap: REGMAP_KUNIT should not select
+> > REGMAP")
+> > exposed this by disabling the default pick unless KUNIT_ALL_TESTS
+> > is
+> > set, causing the ppc64be allnoconfig build to fail.
+> >=20
+> > Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+> > ---
+> > =C2=A0 drivers/rtc/Kconfig | 1 +
+> > =C2=A0 1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> > index ffca9a8bb878..7455ebd189fe 100644
+> > --- a/drivers/rtc/Kconfig
+> > +++ b/drivers/rtc/Kconfig
+> > @@ -246,6 +246,7 @@ config RTC_DRV_AS3722
+> > =C2=A0=20
+> > =C2=A0 config RTC_DRV_DS1307
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tristate "Dallas/Maxim =
+DS1307/37/38/39/40/41, ST M41T00,
+> > EPSON RX-8025, ISL12057"
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select REGMAP
+>=20
+> As far as I can see, REGMAP defaults to Y when REGMAP_I2C is
+> selected.
+> Can you explain more in details why you have to select it explicitely
+> ?=20
+> If there is something wrong with the logic, then the logic should be=20
+> fixed instead of just adding a selection of REGMAP for that
+> particular=20
+> RTC_DRV_DS1307. Because others like RTC_DRV_ABB5ZES3 or
+> RTC_DRV_ABEOZ9=20
+> might have the exact same problem.
+
+Right, yeah, I don't want to assert this patch is the correct solution,
+sending it was more to offer a fix and=C2=A0allow discussion if it should b=
+e
+resolved some other way (so thanks for replying, I appreciate it).
+
+In terms of why I made this patch, the way I see it, if a config option
+requires another config option be set, then "selects" is the natural
+way of phrasing this dependency. "default" on the REGMAP side seems
+weird. If it's a default, does that mean it can be overridden? But
+RTC_DRV_DS1307 *requires* REGMAP; it's not just a "would be nice". The
+build breaks without it.
+
+But maybe KConfig works differently to my assumptions. Maybe the
+referenced patch that causes the build failure is actually incorrect
+(CC Geert). I spoke with Joel Stanley (CC) and he indicated you're not
+supposed to depend on REGMAP like KUnit does?
+
+As for other drivers having the same problem, quite possibly, yes. But
+the PPC configs don't seem to build those drivers, so I'd prefer to
+leave it to anyone who does build them to report the error. I wasn't
+planning to audit all the drivers, I was just trying to fix the PPC
+configs I build and test.
