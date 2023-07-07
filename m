@@ -2,151 +2,260 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5552C749B06
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jul 2023 13:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D454074B2EA
+	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jul 2023 16:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjGFLn6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Thu, 6 Jul 2023 07:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S232874AbjGGOQq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 7 Jul 2023 10:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbjGFLn5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 Jul 2023 07:43:57 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E47AAA
-        for <linux-rtc@vger.kernel.org>; Thu,  6 Jul 2023 04:43:40 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-577497ec6c6so7641527b3.2
-        for <linux-rtc@vger.kernel.org>; Thu, 06 Jul 2023 04:43:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688643816; x=1691235816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3B1P5iTyw+q1EyirQ9/CZcpAFyHq3bZB1xtPbht2ZGU=;
-        b=g7dfgSKK3Rh2o2/VzJtXwPfvC0EZKvfzr8Jq2Ws+3F5SBKo23Bd41b6kIShij2FLqk
-         jVST824BUQZY2pCGTyREr+5Q9J0amn7/Q192Zxkt2FYti42NXrOlcpDQ9yqwr4KYMhs1
-         YtIG13V1ux/rGqp04lwmYhhUt8YhxRbrwxB24XU1tUEWarcmp1CYFNyGHxCT+L746sG/
-         AQbxDJw3cZ6cJ2I7pKQhPCKk0w4xMS1v6vjUW7OG1XhnzmOGfoZN/jVavXBicM2R81GZ
-         VweYDmonNoeRNeTMS3kDWp8lPqSm4q3T60S8ZYwMFANa7os455YcRyoimWlx/A0wuVkN
-         8nCw==
-X-Gm-Message-State: ABy/qLYrWT8q4jwA10KpfxLUQqKNcC/GV+0NLCJgIFyLgR/iWnMHKZU0
-        /q6vU/MPviQ3xKR694DFvfXb/RKdbYzswA==
-X-Google-Smtp-Source: APBJJlG31Pyf+dXRIdyhwZo1UTtHMb+MbShiVThWoJL7CB4vQUqsMxuFVZtW9LlcrEJyCsHOOHOqUw==
-X-Received: by 2002:a81:92c2:0:b0:573:4815:8347 with SMTP id j185-20020a8192c2000000b0057348158347mr1888803ywg.36.1688643815717;
-        Thu, 06 Jul 2023 04:43:35 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id x142-20020a81a094000000b00565de196516sm295738ywg.32.2023.07.06.04.43.34
-        for <linux-rtc@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 04:43:35 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-c4d04d50c4cso576783276.1
-        for <linux-rtc@vger.kernel.org>; Thu, 06 Jul 2023 04:43:34 -0700 (PDT)
-X-Received: by 2002:a25:4f03:0:b0:bff:5852:b112 with SMTP id
- d3-20020a254f03000000b00bff5852b112mr1350536ybb.61.1688643814620; Thu, 06 Jul
- 2023 04:43:34 -0700 (PDT)
+        with ESMTP id S233016AbjGGOQo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 7 Jul 2023 10:16:44 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D1B10B;
+        Fri,  7 Jul 2023 07:16:40 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1688739398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BzBJkXTDJKrU1/z9U4Pc1CCjnQpHhlKjMBAd1ZCx47k=;
+        b=G/dBPL71CVZm42FuZqmnDkEO4AJQtnS7JuhpF/zCtww1axUTRsnHzVj02MNqb9ik7azTEI
+        MYjKzwqzL2FQXFC0UHHDwQne/XnrroBgWZMqRXpw3R9WHRvIRLhCo6QoOUrFkk44VfhREQ
+        7daqaAY389A0WaVf0rHsTzeQfleetK3WJwmijJPNgplXH0MEj45YwpljcrzVnioUEnewdv
+        l7wdGiSk4bIGVvQtBf8vbk9g1hNxoKbxyRGkL3DSzklHapLzmHlucH+SqcuDWe2HD14Qxn
+        t2faT4fOk6y52MvWh19njwKEPW5nplUy1z7DiwhXyYFK+5cCH+l4bNJmzhiM/A==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 212264000A;
+        Fri,  7 Jul 2023 14:16:37 +0000 (UTC)
+Date:   Fri, 7 Jul 2023 16:16:37 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
+Message-ID: <20230707141637e7364385@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+ <Y8rl452Xm1FrnFfF@mail.local>
+ <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
+ <20230621125945.1f10b66832d0d1c61e21f78d@hugovil.com>
+ <20230621181441cd214f99@mail.local>
+ <20230621142852.07c5f4940e5a9920039bf4d1@hugovil.com>
+ <20230705094012.7e6660dc4669d375911044f1@hugovil.com>
 MIME-Version: 1.0
-References: <20230705003024.1486757-1-bgray@linux.ibm.com> <4e94cb11-1f39-d631-fe0a-b945b301b77c@csgroup.eu>
- <06d642f1e1245df1c68b6bd5fbd288233be027bc.camel@linux.ibm.com> <CAMuHMdUO_qEd2oVCMRGDZML6COquu-5=pS9fnFQ4pax6G4vxGQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdUO_qEd2oVCMRGDZML6COquu-5=pS9fnFQ4pax6G4vxGQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 6 Jul 2023 13:43:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWL+1=dZHCXwxO7PmK8kU95Ey5boQrqCxUNQPed_5U+Hw@mail.gmail.com>
-Message-ID: <CAMuHMdWL+1=dZHCXwxO7PmK8kU95Ey5boQrqCxUNQPed_5U+Hw@mail.gmail.com>
-Subject: Re: [PATCH] rtc: Kconfig: select REGMAP for RTC_DRV_DS1307
-To:     Benjamin Gray <bgray@linux.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230705094012.7e6660dc4669d375911044f1@hugovil.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 9:50 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Thu, Jul 6, 2023 at 8:14 AM Benjamin Gray <bgray@linux.ibm.com> wrote:
-> > On Thu, 2023-07-06 at 05:13 +0000, Christophe Leroy wrote:
-> > > Le 05/07/2023 à 02:30, Benjamin Gray a écrit :
-> > > > The drivers/rtc/rtc-ds1307.c driver has a direct dependency on
-> > > > struct regmap_config, which is guarded behind CONFIG_REGMAP.
-> > > >
-> > > > Commit 70a640c0efa7 ("regmap: REGMAP_KUNIT should not select
-> > > > REGMAP")
-> > > > exposed this by disabling the default pick unless KUNIT_ALL_TESTS
-> > > > is
-> > > > set, causing the ppc64be allnoconfig build to fail.
-> > > >
-> > > > Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
-> > > > ---
-> > > >   drivers/rtc/Kconfig | 1 +
-> > > >   1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> > > > index ffca9a8bb878..7455ebd189fe 100644
-> > > > --- a/drivers/rtc/Kconfig
-> > > > +++ b/drivers/rtc/Kconfig
-> > > > @@ -246,6 +246,7 @@ config RTC_DRV_AS3722
-> > > >
-> > > >   config RTC_DRV_DS1307
-> > > >         tristate "Dallas/Maxim DS1307/37/38/39/40/41, ST M41T00,
-> > > > EPSON RX-8025, ISL12057"
-> > > > +       select REGMAP
-> > >
-> > > As far as I can see, REGMAP defaults to Y when REGMAP_I2C is
-> > > selected.
-> > > Can you explain more in details why you have to select it explicitely
-> > > ?
-> > > If there is something wrong with the logic, then the logic should be
-> > > fixed instead of just adding a selection of REGMAP for that
-> > > particular
-> > > RTC_DRV_DS1307. Because others like RTC_DRV_ABB5ZES3 or
-> > > RTC_DRV_ABEOZ9
-> > > might have the exact same problem.
-> >
-> > Right, yeah, I don't want to assert this patch is the correct solution,
-> > sending it was more to offer a fix and allow discussion if it should be
-> > resolved some other way (so thanks for replying, I appreciate it).
-> >
-> > In terms of why I made this patch, the way I see it, if a config option
-> > requires another config option be set, then "selects" is the natural
-> > way of phrasing this dependency. "default" on the REGMAP side seems
-> > weird. If it's a default, does that mean it can be overridden? But
-> > RTC_DRV_DS1307 *requires* REGMAP; it's not just a "would be nice". The
-> > build breaks without it.
-> >
-> > But maybe KConfig works differently to my assumptions. Maybe the
-> > referenced patch that causes the build failure is actually incorrect
-> > (CC Geert). I spoke with Joel Stanley (CC) and he indicated you're not
-> > supposed to depend on REGMAP like KUnit does?
->
-> Thanks for CCing me!
->
-> Looks like I made a really silly mistake here: my patch not only allows
-> the user to enable REGMAP manually (for the test), but also to disable
-> it manually, regardless if there are users or not :-(
->
-> I think the proper fix is to replace the "default y if ..." by
-> "select REGMAP" for all users.
+Hello,
 
-I have sent a patch to do so, followed by a few related fixes
-https://lore.kernel.org/r/525c37a568b10623ffb2d108850afd7e37f9350e.1688643442.git.geert@linux-m68k.org
+On 05/07/2023 09:40:12-0400, Hugo Villeneuve wrote:
+> On Wed, 21 Jun 2023 14:28:52 -0400
+> Hugo Villeneuve <hugo@hugovil.com> wrote:
+> 
+> > On Wed, 21 Jun 2023 20:14:41 +0200
+> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > 
+> > > On 21/06/2023 12:59:45-0400, Hugo Villeneuve wrote:
+> > > > On Wed, 21 Jun 2023 10:14:29 -0400
+> > > > Hugo Villeneuve <hugo@hugovil.com> wrote:
+> > > > 
+> > > > > On Fri, 20 Jan 2023 20:05:07 +0100
+> > > > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > > > > 
+> > > > > > Hello,
+> > > > > > 
+> > > > > > I know I've been holding off on the review of this series for a while
+> > > > > > and I'm sorry for that.
+> > > > > > 
+> > > > > > One of the main issue that is remaining is that the driver ends up being
+> > > > > > 53% bigger and generaly less efficient for no added functionality for
+> > > > > > the existing RTCs.
+> > > > > > 
+> > > > > > I know performance is not a concern however, having more code in the
+> > > > > > set/read time and irq paths means that it is more difficult to set an
+> > > > > > get the time precisely.
+> > > > > 
+> > > > > Hi Alexandre,
+> > > > > one way to keep rtc_read_time() as efficient as before, and even more
+> > > > > efficient by reading 7 instead of 10 registers, would be to drop reading
+> > > > > the CTRL3 register, which is only used to detect and display an info
+> > > > > message for the low battery condition. This low battery check could be
+> > > > > moved to an ioctl call, like it is done in the PCF8523 driver.
+> > > > > 
+> > > > > Hugo.
+> > > > 
+> > > > Hi,
+> > > > in fact it is already part of the ioctl, so it is even simpler...
+> > > > 
+> > > 
+> > > Yes, the dev_info can be removed.
+> > 
+> > Hi,
+> > great, I will integrate that patch to improve rtc_read_time()
+> > performance, and resubmit V4 soon with the requested changes mentioned
+> > during V3 review.
+> > 
+> > Thank you, Hugo.
+> 
+> Hi Alexandre,
+> I submitted V4 a few days ago, please let me know if everything is
+> in order and all comments properly addressed.
+> 
+> If all is good, any chance we can have that integrated into v6.5?
+> 
 
-Thanks!
+I've seen v4, I'll review more this week end but it looks good. However,
+I have to wait for 6.5-rc1 to apply it. This means it won't be in before v6.6.
 
+> Thank you, Hugo.
+> 
+> 
+> > > > > > I guess I'll take it as a merged driver but I took a different decision
+> > > > > > for other RTCs.
+> > > > > > 
+> > > > > > On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
+> > > > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > > > > 
+> > > > > > > Hello,
+> > > > > > > this patch series adds the driver for the PCF2131 real-time clock.
+> > > > > > > 
+> > > > > > > This RTC is very similar in functionality to the PCF2127/29 with the
+> > > > > > > following differences:
+> > > > > > >   -supports two new control registers at offsets 4 and 5
+> > > > > > >   -supports a new reset register
+> > > > > > >   -supports 4 tamper detection functions instead of 1
+> > > > > > >   -has no nvmem (like the PCF2129)
+> > > > > > >   -has two output interrupt pins instead of one
+> > > > > > >   -has 1/100th seconds capabilities (not supported in this driver)
+> > > > > > >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
+> > > > > > >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
+> > > > > > >   -watchdog value register cannot be read after being set
+> > > > > > > 
+> > > > > > > Most of the register addresses are very different, although they still
+> > > > > > > follow the same layout. For example, the time/date and tamper registers
+> > > > > > > have a different base address, but the offsets are all the same.
+> > > > > > > Consequently, the source code of the PCF2127 driver can be easily adapted
+> > > > > > > to support this new device.
+> > > > > > > 
+> > > > > > > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
+> > > > > > > and able to support multiple variants, like the PCF2131. This is done
+> > > > > > > mostly by using offsets instead of absolute hardcoded register addresses.
+> > > > > > > 
+> > > > > > > Patch 7 add actual support for the PCF2131.
+> > > > > > > 
+> > > > > > > Patch 8 configures all interrupt sources to go through the INT A pin.
+> > > > > > > 
+> > > > > > > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
+> > > > > > >       are with the PCF2127/29 (different default values).
+> > > > > > > 
+> > > > > > > Patch 10 allow to confirm PCF2131 device presence by reading the reset
+> > > > > > >       register fixed pattern.
+> > > > > > > 
+> > > > > > > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
+> > > > > > >       CPR bits).
+> > > > > > > 
+> > > > > > > Patch 12 add support for generic watchdog timing configuration.
+> > > > > > > 
+> > > > > > > Patch 13 add a new flag to identify if device has read support for reading
+> > > > > > >       watchdog register value.
+> > > > > > >       Since the watchdog value register cannot be read on the PCF2131 after
+> > > > > > >       being set, it seems that we cannot detect if watchdog timer was
+> > > > > > >       started by bootloader. I am not sure what is the best way to handle
+> > > > > > >       this situation, suggestions are welcomed.
+> > > > > > > 
+> > > > > > > Patch 14 add the dt-bindings for the PCF2131.
+> > > > > > > 
+> > > > > > > I have tested the driver using a PCF2131-ARD evaluation board connected to
+> > > > > > > an NXP imx8mp evaluation board:
+> > > > > > >   - Time get/set ok;
+> > > > > > >   - Alarms get/set ok
+> > > > > > >   - Timestamp 1 to 4 ok
+> > > > > > >   - IRQ alarm ok
+> > > > > > >   - Watchdog ok
+> > > > > > >   - Also tested successfully with "RTC Driver Test Example" from
+> > > > > > >     Documentation/rtc.txt
+> > > > > > > 
+> > > > > > > I have also tested the driver on a custom PCF2129 adapter board connected to a
+> > > > > > > beaglebone black.
+> > > > > > > 
+> > > > > > > Thank you.
+> > > > > > > 
+> > > > > > > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
+> > > > > > > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
+> > > > > > > 
+> > > > > > > Changes for V3:
+> > > > > > > - Rebased for kernel v6.1
+> > > > > > > 
+> > > > > > > Changes for V2:
+> > > > > > > - In general, fix and improvements after I have tested on real hardware
+> > > > > > > - Fix alarm interrupt A/B mask setting for PCF2131:
+> > > > > > >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
+> > > > > > > - Remove low_reg validation: only check if TS interrupt flag is
+> > > > > > >   defined, as low_reg is defined at address 0 for PCF2127/29.
+> > > > > > > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
+> > > > > > > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
+> > > > > > > - Map all interrupt sources to INT A pin
+> > > > > > > - Read and validate PCF2131 device presence from RESET register
+> > > > > > > - Adapt watchdog configuration for PCF2131
+> > > > > > > 
+> > > > > > > Hugo Villeneuve (14):
+> > > > > > >   rtc: pcf2127: add variant-specific configuration structure
+> > > > > > >   rtc: pcf2127: adapt for time/date registers at any offset
+> > > > > > >   rtc: pcf2127: adapt for alarm registers at any offset
+> > > > > > >   rtc: pcf2127: adapt for WD registers at any offset
+> > > > > > >   rtc: pcf2127: adapt for CLKOUT register at any offset
+> > > > > > >   rtc: pcf2127: add support for multiple TS functions
+> > > > > > >   rtc: pcf2127: add support for PCF2131 RTC
+> > > > > > >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
+> > > > > > >   rtc: pcf2127: set PWRMNG value for PCF2131
+> > > > > > >   rtc: pcf2127: read and validate PCF2131 device signature
+> > > > > > >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+> > > > > > >   rtc: pcf2127: support generic watchdog timing configuration
+> > > > > > >   rtc: pcf2127: add flag for watchdog register value read support
+> > > > > > >   dt-bindings: rtc: pcf2127: add PCF2131
+> > > > > > > 
+> > > > > > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
+> > > > > > >  drivers/rtc/Kconfig                           |   4 +-
+> > > > > > >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
+> > > > > > >  3 files changed, 752 insertions(+), 195 deletions(-)
+> > > > > > > 
+> > > > > > > -- 
+> > > > > > > 2.30.2
+> > > > > > > 
+> > > > > > 
+> > > > > > -- 
+> > > > > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > > > > Embedded Linux and Kernel engineering
+> > > > > > https://bootlin.com
+> > > > > > 
+> > > 
+> > > -- 
+> > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
+> > > 
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
