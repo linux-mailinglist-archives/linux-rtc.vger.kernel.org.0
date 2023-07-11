@@ -2,95 +2,155 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7116B74F961
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jul 2023 22:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2C274F9E7
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jul 2023 23:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjGKUyp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 11 Jul 2023 16:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        id S230289AbjGKVjW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 11 Jul 2023 17:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjGKUyo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 11 Jul 2023 16:54:44 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99231709;
-        Tue, 11 Jul 2023 13:54:41 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 134251BF203;
-        Tue, 11 Jul 2023 20:54:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689108880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=biIajIQS8usePEbgPL/4UdQnxtkHBuw/MmCRAWoFrB0=;
-        b=Gq2ZmwVoHBOYBr9HyfaAHzYNOj8bWniPMkcjRkDuKNCZF4H7u6Ud6xvJRFS65MXplPeLZ3
-        sQVXZVA5ak7tnboAubSyeHTIywDWj7X3FLBUhphyBoKTNzS3pHzAzpBMB5pRnR/k9Osv5O
-        3Xjen2MRWTDLfkHf4IoyuxwEhZ0LkmlP9cN/4jkiZXZ/2OBvBdvG82gyotpE373dBPK9Bb
-        G/uEgUG0PjIs+N+Ik2ySDBBYZUkcPhqb6gYYv5vnaZ57X5p93gMX2xOppp3nJjhbCpT1pY
-        dh6hcnhqhgTqrEI+sOpDLr7eZnsQzxRrz+QhTlr9QHSauO4QywECEbjNct6H/g==
-Date:   Tue, 11 Jul 2023 22:54:39 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtc: pcf-8563: Report previously detected low-voltage
- via RTC_VL_BACKUP_LOW
-Message-ID: <2023071120543925735a3a@mail.local>
-References: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
- <20230610083135e40dd2f6@mail.local>
- <1d532c45-ee33-9729-f0ac-b59c2bec8d7d@siemens.com>
- <202306111511569834cac2@mail.local>
- <9ac4b2a5-7cc8-4fce-7ea0-61b26d6ef223@siemens.com>
- <202306112216153a75dfa3@mail.local>
- <c195c196-d99b-9e17-3854-fc147ac2e447@siemens.com>
- <69dd51b9-aab1-a9ec-91c2-b1dc79797f10@siemens.com>
+        with ESMTP id S229537AbjGKVjV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 11 Jul 2023 17:39:21 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9DC127;
+        Tue, 11 Jul 2023 14:39:20 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b89d47ffb6so32097155ad.2;
+        Tue, 11 Jul 2023 14:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689111560; x=1691703560;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KtT4gFz6TTEFRseSk+gcMtJFveuGAwBprTn2TmvM3QM=;
+        b=qVGDef4XTDiy2pQQAH3Cwnbtqh8ZKWeDR0YpW5oBVmIf8Ft1FfiQFB9j/nigTkpw8I
+         82vXU59i3SdogLeNz/ABKCqINgA4PTDr9/ZdUPp6ZUB83Z6MdD4YHZx6qWrTB/+YO5SG
+         xt3gCozG7WIu1lWUXRr3EpK+TzZRAcw2ll3vth9VDJ1GAaRvrA2V8kIgGX9kdM2Wgg3l
+         stzdpWOedBvZ0uhTUpLtvsrBCTVN9HRCFZfzCFKFQAEkzZQTdhvlZETvKEQOgCpBxb1y
+         lgv7BtP9O20Qjyp/f7+CQeQ3LbV13czXSXJgwRbcUJP+TfmtuZqC2GkNl1o/MlSqRGEW
+         v5GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689111560; x=1691703560;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KtT4gFz6TTEFRseSk+gcMtJFveuGAwBprTn2TmvM3QM=;
+        b=hm8E4CWDWpbVZZ/+chXcJ7tdA4AR/wwkc6zVZU92wh0wHs5qBdenkc+UEB6mFSZ4XZ
+         8SJ5UAwVhW5mwC6+OrNEvwivGpCBvhuDzKI4tId4ng9Yf8BzmutY01tDT7m0gnqOu+yg
+         m4gMsrzsZj+OnXjDY/tAi1tuwoo2Vo420xOaPzZTe6yyrrR4a6eV/vF2zr0h0q6aB3pw
+         xF6n9AtDZhrtv7gkZteIzebInWjRv6qvq8LQ5D3Yemyds4oLFwI3y9BBiiJ9H8tu51Ij
+         OIsAk5FHDmvvpEKkrbWZET54CKfnJQisQEuxfcY0+Za2rbh1vSW1QW0WFRHkoO4+rLHG
+         cQbw==
+X-Gm-Message-State: ABy/qLY2MGoYPaQXvDgloKfTQQOhhNGNIDy5sCwAO/D0tbP/5sjIELhQ
+        4P4dsfoJXbL45Ui7piOqFVc=
+X-Google-Smtp-Source: APBJJlHvfrCF++DlafNT3B6O6EffAGKpXCrh8newwF9nz4kDCviiDR8GuVNpvkxYKklGu+rZ5VQk5Q==
+X-Received: by 2002:a17:903:24e:b0:1b6:80f0:d969 with SMTP id j14-20020a170903024e00b001b680f0d969mr15429164plh.11.1689111559501;
+        Tue, 11 Jul 2023 14:39:19 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:9374])
+        by smtp.gmail.com with ESMTPSA id bd5-20020a170902830500b001b8761c739csm2362090plb.271.2023.07.11.14.39.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 14:39:19 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 11 Jul 2023 11:39:17 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-team@meta.com, Linux PM list <linux-pm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-rtc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: Consider switching to WQ_UNBOUND messages (was: Re: [PATCH v2
+ 6/7] workqueue: Report work funcs that trigger automatic CPU_INTENSIVE
+ mechanism)
+Message-ID: <ZK3MBfPS-3-tJgjO@slm.duckdns.org>
+References: <20230511181931.869812-1-tj@kernel.org>
+ <20230511181931.869812-7-tj@kernel.org>
+ <ZF6WsSVGX3O1d0pL@slm.duckdns.org>
+ <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
+ <CAMuHMdW1kxZ1RHKTRVRqDNAbj1Df2=v0fPn5KYK3kfX_kiXR6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <69dd51b9-aab1-a9ec-91c2-b1dc79797f10@siemens.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdW1kxZ1RHKTRVRqDNAbj1Df2=v0fPn5KYK3kfX_kiXR6A@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/07/2023 09:27:14+0200, Jan Kiszka wrote:
-> >>> Nope, that could be easily avoided in software. The actual problem is
-> >>> that the VL bit is not settable (clear-on-write). And that means we
-> >>> can't do anything about losing the low battery information across
-> >>> reboots - but that's no difference to the situation with the existing
-> >>> driver.
-> >>>
-> >>> There is no "fix" for userspace as there is no standard framework to
-> >>> read-out the status early and retrieve it from there when the user asks
-> >>> for it. That's best done in the kernel.
-> >>
-> >> That's not true, nothing prevents userspace from reading the battery
-> >> status before setting the time and destroying the information which is
-> >> exactly what you should be doing.
-> > 
-> > What is your "userspace"? Mine is stock Debian with systemd and
-> > timesyncd enabled. But there is no framework to read the status early
-> > enough and propagate that after timesyncd did its job. Any concrete
-> > suggestion to "fix" userspace?
-> > 
+Hello,
+
+On Tue, Jul 11, 2023 at 04:06:22PM +0200, Geert Uytterhoeven wrote:
+> On Tue, Jul 11, 2023 at 3:55 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > Hi Tejun,
+> >
+> > On Fri, May 12, 2023 at 9:54 PM Tejun Heo <tj@kernel.org> wrote:
+> > > Workqueue now automatically marks per-cpu work items that hog CPU for too
+> > > long as CPU_INTENSIVE, which excludes them from concurrency management and
+> > > prevents stalling other concurrency-managed work items. If a work function
+> > > keeps running over the thershold, it likely needs to be switched to use an
+> > > unbound workqueue.
+> > >
+> > > This patch adds a debug mechanism which tracks the work functions which
+> > > trigger the automatic CPU_INTENSIVE mechanism and report them using
+> > > pr_warn() with exponential backoff.
+> > >
+> > > v2: Drop bouncing through kthread_worker for printing messages. It was to
+> > >     avoid introducing circular locking dependency but wasn't effective as it
+> > >     still had pool lock -> wci_lock -> printk -> pool lock loop. Let's just
+> > >     print directly using printk_deferred().
+> > >
+> > > Signed-off-by: Tejun Heo <tj@kernel.org>
+> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> >
+> > Thanks for your patch, which is now commit 6363845005202148
+> > ("workqueue: Report work funcs that trigger automatic CPU_INTENSIVE
+> > mechanism") in v6.5-rc1.
+> >
+> > I guess you are interested to know where this triggers.
+> > I enabled CONFIG_WQ_CPU_INTENSIVE_REPORT=y, and tested
+> > the result on various machines...
 > 
-> Ping - I still have seen no suggestion to improve this situation otherwise.
+> > OrangeCrab/Linux-on-LiteX-VexRiscV with ht16k33 14-seg display and ssd130xdrmfb:
+> >
+> >   workqueue: check_lifetime hogged CPU for >10000us 4 times, consider
+> > switching to WQ_UNBOUND
+> >   workqueue: drm_fb_helper_damage_work hogged CPU for >10000us 1024
+> > times, consider switching to WQ_UNBOUND
+> >   workqueue: fb_flashcursor hogged CPU for >10000us 128 times,
+> > consider switching to WQ_UNBOUND
+> >   workqueue: ht16k33_seg14_update hogged CPU for >10000us 128 times,
+> > consider switching to WQ_UNBOUND
+> >   workqueue: mmc_rescan hogged CPU for >10000us 128 times, consider
+> > switching to WQ_UNBOUND
 > 
+> Got one more after a while:
+> 
+> workqueue: neigh_managed_work hogged CPU for >10000us 4 times,
+> consider switching to WQ_UNBOUND
 
-You can get systemd or any daemon to read the rtc flag before systemd
-decides to use NTP and set the time, destroying the information.
+I wonder whether the right thing to do here is somehow scaling the threshold
+according to the relative processing power. It's difficult to come up with a
+threshold which works well across the latest & fastest and really tiny CPUs.
+I'll think about it some more but if you have some ideas, please feel free
+to suggest.
 
-This is a systemd issue, not a kernel issue. I already have to handle
-two other issues caused by systemd because they don't want to budge, I
-will not take a third one.
-
+Thanks.
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+tejun
