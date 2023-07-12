@@ -2,62 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723D27500D3
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jul 2023 10:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEBC750271
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jul 2023 11:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbjGLIJ7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 12 Jul 2023 04:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S232806AbjGLJGD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Wed, 12 Jul 2023 05:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbjGLIJ6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 Jul 2023 04:09:58 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9E10E5
-        for <linux-rtc@vger.kernel.org>; Wed, 12 Jul 2023 01:09:57 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1002)
-        id D2D94886C5; Wed, 12 Jul 2023 10:06:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1689149235; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=FsDryMx3EQBFznyDqP0muWyg0Cn13r6dFNVkDUBSHbjtkLP/SZZOyP566U1QkJhL2
-         b41rD03ulSROTNDKCKRs5hurYbc+n9Rr7yz/hZQdq+whV0Vhnek4eRKO5L8QHEz8N5
-         ykiOx592MxZt+PAZReSlO2qpmaAYldEmUxEdjWcdRqjLNp6KszX8cZaiQyAdJSXnF+
-         RCyscdy5MMMIuk6bQSlfuy+yQIkZXHvwUU4o15LLjEeKMeu1Ar2q4/9AhLLdkz86Q2
-         ChNSTE8SXA784eimsXBTf4MPTVDBNCDxLHfncvTXsgt+XiY49ymhcoGMQad/knuwfl
-         PdD1ji9wnhlpA==
-Received: by mail.lokoho.com for <linux-rtc@vger.kernel.org>; Wed, 12 Jul 2023 08:05:10 GMT
-Message-ID: <20230712084501-0.1.9.2k61.0.3vkey09rh6@lokoho.com>
-Date:   Wed, 12 Jul 2023 08:05:10 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-rtc@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S232626AbjGLJFd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 Jul 2023 05:05:33 -0400
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE0F2724;
+        Wed, 12 Jul 2023 02:04:33 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7679d75940fso584616485a.0;
+        Wed, 12 Jul 2023 02:04:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689152672; x=1691744672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uIF186mRaGX5BFXMSlH2BgP4u+RcqYufJt4GrXqOpCU=;
+        b=jobu/vNOftR2lpurXpGcQu7ojLTUcBOMfCRPEXoKqu9kWjNUob61h8o22ryYsAwd7H
+         7Np3lCaTj6ZjYzquVWgqCpB2dGGB9JGHPF6UiOlOGbcSl/UNuWKvD8lKk2P+8DCeidAm
+         8DL6YvHiQuzWmx+6yEh2K7/sSCY6zPz8KJRJprzGqktVW9a5aZ951uZ86LuS7+gf27jL
+         R/bFxTn/IYNmMWoZvAZoz7OBkDKYNdNh9+ao5s1eZG7qgLgZ5VkQ5dfmkA414mctQVjp
+         za3jv3IYSHcL64q1ZLjTisjDIML20TTTBUWgsnivvx1YD04y0s73bWb2yxXBihgbuP07
+         EI/g==
+X-Gm-Message-State: ABy/qLaZ3i+Ce/9OSCJBMFCpI+fLLJqSNvyTGY9PX6AaBc0oSmBvHJnd
+        RUqO1l1Y7zRsZODYOQX311KbmUmN6SNJfg==
+X-Google-Smtp-Source: APBJJlHRYOUv25KUCxkJccL53H535+lbcKGBj66auOLOAOuJE3/We/1zfX2OodslL+8fqfxOmJFWLQ==
+X-Received: by 2002:a05:620a:2401:b0:767:30a5:4ca1 with SMTP id d1-20020a05620a240100b0076730a54ca1mr21216067qkn.46.1689152672485;
+        Wed, 12 Jul 2023 02:04:32 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id s2-20020a81bf42000000b0057d24f8278bsm631250ywk.104.2023.07.12.02.04.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 02:04:31 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso7766516276.2;
+        Wed, 12 Jul 2023 02:04:31 -0700 (PDT)
+X-Received: by 2002:a05:6902:28b:b0:c4b:41ce:f68b with SMTP id
+ v11-20020a056902028b00b00c4b41cef68bmr16459258ybh.41.1689152670844; Wed, 12
+ Jul 2023 02:04:30 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230511181931.869812-1-tj@kernel.org> <20230511181931.869812-7-tj@kernel.org>
+ <ZF6WsSVGX3O1d0pL@slm.duckdns.org> <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
+ <CAMuHMdW1kxZ1RHKTRVRqDNAbj1Df2=v0fPn5KYK3kfX_kiXR6A@mail.gmail.com>
+ <ZK3MBfPS-3-tJgjO@slm.duckdns.org> <20230712080504.GA3100107@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230712080504.GA3100107@hirez.programming.kicks-ass.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jul 2023 11:04:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUMRS9_nJXp3rrWQrODRQcBQggze0k=0GjSScCknFmmgQ@mail.gmail.com>
+Message-ID: <CAMuHMdUMRS9_nJXp3rrWQrODRQcBQggze0k=0GjSScCknFmmgQ@mail.gmail.com>
+Subject: Re: Consider switching to WQ_UNBOUND messages (was: Re: [PATCH v2
+ 6/7] workqueue: Report work funcs that trigger automatic CPU_INTENSIVE mechanism)
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-team@meta.com, Linux PM list <linux-pm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-rtc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hoi Peter,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+On Wed, Jul 12, 2023 at 10:05 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> On Tue, Jul 11, 2023 at 11:39:17AM -1000, Tejun Heo wrote:
+> > I wonder whether the right thing to do here is somehow scaling the threshold
+> > according to the relative processing power. It's difficult to come up with a
+> > threshold which works well across the latest & fastest and really tiny CPUs.
+> > I'll think about it some more but if you have some ideas, please feel free
+> > to suggest.
+>
+> We could scale by BogoMIPS I suppose, it's a bogus measurement, as per
+> the name, but it does have some relation to how fast the machine is.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+That's gonna fail miserably on e.g. ARM and RISC-V, where BogoMIPS
+depends on some timer frequency.
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+R-Car M2-W with 1.5 GHz Cortex-A15: 40.00 BogoMIPS
+R-Car V4H with 1.8 GHz Cortex-A76: 33.33 BogoMIPS
 
+while the real slow 48 MHz VexRiscV gets 128 BogoMIPS.
 
-Pozdrawiam
-Adam Charachuta
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
