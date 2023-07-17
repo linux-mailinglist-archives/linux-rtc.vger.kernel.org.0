@@ -2,129 +2,139 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09CD75503F
-	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jul 2023 20:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B10755CEC
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jul 2023 09:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjGPSSi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 16 Jul 2023 14:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S229476AbjGQHby convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 17 Jul 2023 03:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjGPSSh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 16 Jul 2023 14:18:37 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E091B0;
-        Sun, 16 Jul 2023 11:18:36 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b9e9765f2cso21858475ad.3;
-        Sun, 16 Jul 2023 11:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689531516; x=1692123516;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRr4t72OqG7bbsdSQp36s5QmJpiGmQDwT7OtOfgVJAs=;
-        b=GaaYjzKLGGS1UieotsqzLzc8zg49fL2l6LbQTq3nbfRE+3kPmSrdRXeC5u7qg1VvXB
-         ruuwP3vXsuw7i7PcoixYO4rTMutHMuhoAoT3wQ5lO0TZi5uBCYh/B1j8b1Tkuh+p1Jw5
-         GMyOpBuH6+TcBxZYOBO7/F0bG+EraHMrDfGydgkurseGk/ofa92an7A/FhERLpHr4pte
-         OwQINR0kLvSSLFs9k4ApiPmnIGKO79f9d38yBzjXvL6Cj1FNF3U3Trp8ZGs/fSG1hzdK
-         A8pZkBlstHyHiWzs/QntkFLl6bp9ddzq4TpFicx12n3wumpjmvzZaC1DUudpjgA9OeVg
-         EzoA==
+        with ESMTP id S229461AbjGQHbx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Jul 2023 03:31:53 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D75AB2;
+        Mon, 17 Jul 2023 00:31:52 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-bff27026cb0so4466513276.1;
+        Mon, 17 Jul 2023 00:31:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689531516; x=1692123516;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uRr4t72OqG7bbsdSQp36s5QmJpiGmQDwT7OtOfgVJAs=;
-        b=OMe7v2235ncjIfyuUvOVSeUa96RHL2FxtZ8CXieSDEjDLHt/jzJ8F0/I4RJxWeZrQK
-         50PexF7fqmf1UfCk+R+gdHau/Axda/c0tIOOLfZlQuvX0bt4BLpULY4OPheLrVOBUa1X
-         fkNUe6IHU4Trq0GzZe6Ljrb0C7FQ6bKHbe1MAYDvO2H2VaHFMAzPO1E3Igl72PaXfqHi
-         bRBjwXBzD7dWg5rhWb6BSIYwF2U4jmeAMTBr7XY2llSdQFaA48MKvA4iUALFTIj9NPIP
-         IGJnDU6txtdzmheoSGjOKlgxHem8X0fCmiEgB0Ep2yS8XY1LDc+hITcUt+A1uf4pWUxo
-         Vflg==
-X-Gm-Message-State: ABy/qLbcMxhO7pZHW6wWGihLQavI51Jiuz/wMkW56WV6K+3FaSux7l59
-        BGFXvh9sRqHk8j+ItALY+4n/Oq6alT4=
-X-Google-Smtp-Source: APBJJlGeSVnKgr9IYi96OpeUoLCDTdox4GFlFamj0ylUDg3pvZD2cublCV/5BfUn/SiWjyUynohRiw==
-X-Received: by 2002:a17:903:182:b0:1b8:944a:a932 with SMTP id z2-20020a170903018200b001b8944aa932mr10984982plg.2.1689531516055;
-        Sun, 16 Jul 2023 11:18:36 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:c009:58ea:65e4:f662:2536:5ba8])
-        by smtp.gmail.com with ESMTPSA id e15-20020a17090301cf00b001b87d3e845bsm11242422plh.149.2023.07.16.11.18.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jul 2023 11:18:35 -0700 (PDT)
-From:   Atul Kumar Pant <atulpant.linux@gmail.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>, shuah@kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] selftests: rtc: Improves rtctest error handling.
-Date:   Sun, 16 Jul 2023 23:48:25 +0530
-Message-Id: <20230716181825.44337-1-atulpant.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20221208; t=1689579111; x=1692171111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JCgNayKY0pdumqOxmF5GF6ZIqIlQ+G3WbstYtyqr9L0=;
+        b=TwQVSxeE/4ajFZ/nofilCmPNMn5HgEa8NKrknVxdBW29wc8h5wQKbpHf9EtBidhrWc
+         tLiN9GlZgyPboHREdZCkh1YP5R0U+GlJRQIei7szpoisN6f/WuMtEiKc8AebnVpZUH7j
+         GEAs+lVefI4ynG3YCP5eIGMV+G0ttJuO7OgYxSzxMNyGPnCiOMdRBYpGmJXwc+0XBqmO
+         kKKN36PeExZTcteO07N8OD/6BasgsGcx+dbzCcKt7WCD0yDenenopLkazYltspb8BQvS
+         6EgFxK2GnZG/Ct74X/qvuBrnoviSsVaAYWyaLgzUiwplRW2rbsE977eWqK5wS+EiVJOk
+         TVOg==
+X-Gm-Message-State: ABy/qLZ2jMUJlE4n0BXTjaxx9+COWtDiuzJyznSxI5qJGStaPNG1LT0m
+        QqmL/CSNSEyjglaZhUw+jkjGoKYyAv+Juw==
+X-Google-Smtp-Source: APBJJlGyIdC62Wxg8P5j8wCvFna007a82YazS/MVHkj8wGyNoyS9ShsXfYsn14Mn+SwtvVWWbdN65w==
+X-Received: by 2002:a25:4207:0:b0:c61:98e3:fcb9 with SMTP id p7-20020a254207000000b00c6198e3fcb9mr11460112yba.44.1689579110977;
+        Mon, 17 Jul 2023 00:31:50 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id h6-20020a25e206000000b00be865f3d4fdsm2763183ybe.62.2023.07.17.00.31.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jul 2023 00:31:50 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bfe6ea01ff5so4463582276.3;
+        Mon, 17 Jul 2023 00:31:50 -0700 (PDT)
+X-Received: by 2002:a25:9187:0:b0:cc7:c3ab:c4e0 with SMTP id
+ w7-20020a259187000000b00cc7c3abc4e0mr5831837ybl.36.1689579110178; Mon, 17 Jul
+ 2023 00:31:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230716152858.92696-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230716152858.92696-1-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 17 Jul 2023 09:31:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWDz9kEMbtcg_N8Z4DeKiHeAk_eLvRF3_QbdkMYB+-hvA@mail.gmail.com>
+Message-ID: <CAMuHMdWDz9kEMbtcg_N8Z4DeKiHeAk_eLvRF3_QbdkMYB+-hvA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: pcf85063: Simplify probe()
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-When running the rtctest if we pass wrong rtc device file as an argument
-the test fails expectedly, but prints the logs that are not useful
-to point out the issue.
-To handle this, the patch adds a checks to verify if the rtc_file is valid.
+Hi Biju,
 
-Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
----
+On Sun, Jul 16, 2023 at 5:29 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> The pcf85063_ids[].driver_data could store a pointer to the config,
+> like for DT-based matching, making I2C and DT-based matching
+> more similar.
+>
+> After that, we can simplify the probe() by replacing of_device_get_
+> match_data() and i2c_match_id() by i2c_get_match_data() as we have
+> similar I2C and DT-based matching table.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-changes since v3:
-    Added Linux-kselftest and Linux-kernel mailing lists.
+Thanks for your patch!
 
-changes since v2:
-    Changed error message when rtc file does not exist.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-changes since v1:
-    Removed check for uid=0
-    If rtc file is invalid, then exit the test.
+One suggestion for improvement (which can be a separate patch,
+as it would also touch pcf85063_of_match[]) below...
 
- tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+> --- a/drivers/rtc/rtc-pcf85063.c
+> +++ b/drivers/rtc/rtc-pcf85063.c
+> @@ -579,17 +577,9 @@ static int pcf85063_probe(struct i2c_client *client)
+>         if (!pcf85063)
+>                 return -ENOMEM;
+>
+> -       if (client->dev.of_node) {
+> -               config = of_device_get_match_data(&client->dev);
+> -               if (!config)
+> -                       return -ENODEV;
+> -       } else {
+> -               enum pcf85063_type type =
+> -                       i2c_match_id(pcf85063_ids, client)->driver_data;
+> -               if (type >= PCF85063_LAST_ID)
 
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 63ce02d1d5cc..630fef735c7e 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -17,6 +17,7 @@
- #include <unistd.h>
- 
- #include "../kselftest_harness.h"
-+#include "../kselftest.h"
- 
- #define NUM_UIE 3
- #define ALARM_DELTA 3
-@@ -419,6 +420,8 @@ __constructor_order_last(void)
- 
- int main(int argc, char **argv)
- {
-+	int ret = -1;
-+
- 	switch (argc) {
- 	case 2:
- 		rtc_file = argv[1];
-@@ -430,5 +433,11 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
- 
--	return test_harness_run(argc, argv);
-+	// Run the test if rtc_file is valid
-+	if (access(rtc_file, F_OK) == 0)
-+		ret = test_harness_run(argc, argv);
-+	else
-+		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
-+
-+	return ret;
- }
+Note that this was the sole user of PCF85063_LAST_ID...
+
+> @@ -655,11 +645,11 @@ static int pcf85063_probe(struct i2c_client *client)
+>  }
+>
+>  static const struct i2c_device_id pcf85063_ids[] = {
+> -       { "pca85073a", PCF85063A },
+> -       { "pcf85063", PCF85063 },
+> -       { "pcf85063tp", PCF85063TP },
+> -       { "pcf85063a", PCF85063A },
+> -       { "rv8263", RV8263 },
+> +       { "pca85073a", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063A] },
+> +       { "pcf85063", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063] },
+> +       { "pcf85063tp", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063TP] },
+> +       { "pcf85063a", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063A] },
+> +       { "rv8263", .driver_data = (kernel_ulong_t)&pcf85063_cfg[RV8263] },
+
+These lines can be shortened (and enum pcf85063_type can be removed)
+by splitting pcf85063_cfg[] in individual variables.
+
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(i2c, pcf85063_ids);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
