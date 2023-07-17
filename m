@@ -2,174 +2,119 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD227562F0
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jul 2023 14:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E76875653A
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jul 2023 15:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjGQMlS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 17 Jul 2023 08:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S229590AbjGQNkV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 17 Jul 2023 09:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjGQMlL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Jul 2023 08:41:11 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF9EEE4C;
-        Mon, 17 Jul 2023 05:41:09 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.01,211,1684767600"; 
-   d="scan'208";a="173145688"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 17 Jul 2023 21:41:09 +0900
-Received: from localhost.localdomain (unknown [10.226.92.210])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 61B134008C71;
-        Mon, 17 Jul 2023 21:41:07 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 2/2] rtc: pcf85063: Drop enum pcf85063_type and split pcf85063_cfg[]
-Date:   Mon, 17 Jul 2023 13:40:59 +0100
-Message-Id: <20230717124059.196244-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230717124059.196244-1-biju.das.jz@bp.renesas.com>
-References: <20230717124059.196244-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S229835AbjGQNkS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Jul 2023 09:40:18 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAACA6;
+        Mon, 17 Jul 2023 06:40:16 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 426E5E0003;
+        Mon, 17 Jul 2023 13:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1689601215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cIOJ9XDDj8Zlm/dBf+2lrlsSRq6U8W8Z1yTJUmZo32g=;
+        b=PNkPUvNEtYWWK32WmffVTKZFtUbBTJN3EdTEct3h83Ud7UzarKkyL1fG4IOh6koK4wywAn
+        v3A9DRzr4NrWT2pnff+FUBEuz1OGpBAVVNhpSbcTkqAZ53cYcyUhx5LFjQobTaDORhcHSg
+        9G9MbLzndqOOxjwvJuWt6ETQboDZm6yZUrhJs3mdVRG+NgNyB6kH6IHVVwpj2c//vem/As
+        jAaNudTcFF4wq1b8ACbb2czoE0sjbQsTFcVuXw9fEZj3AyR6ZO6yuNQn7waz6snGiuJ21G
+        X7tKU6tDeitGtlkKira46KELxX5JdCqZsc/0jAgx6kmomhqwUWydvXo9GTQ91g==
+Date:   Mon, 17 Jul 2023 15:40:15 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Atul Kumar Pant <atulpant.linux@gmail.com>
+Cc:     a.zummo@towertech.it, shuah@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] selftests: rtc: Improves rtctest error handling.
+Message-ID: <2023071713401551822659@mail.local>
+References: <20230716181825.44337-1-atulpant.linux@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230716181825.44337-1-atulpant.linux@gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Drop enum pcf85063_type and split the array pcf85063_cfg[] as individual
-variables, and make lines shorter by referring to e.g. &pcf85063_cfg
-instead of &pcf85063_cfg[PCF85063].
+On 16/07/2023 23:48:25+0530, Atul Kumar Pant wrote:
+> When running the rtctest if we pass wrong rtc device file as an argument
+> the test fails expectedly, but prints the logs that are not useful
+> to point out the issue.
+> To handle this, the patch adds a checks to verify if the rtc_file is valid.
+> 
+> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v2:
- * New patch
----
- drivers/rtc/rtc-pcf85063.c | 83 +++++++++++++++++---------------------
- 1 file changed, 38 insertions(+), 45 deletions(-)
+> ---
+> 
+> changes since v3:
+>     Added Linux-kselftest and Linux-kernel mailing lists.
+> 
+> changes since v2:
+>     Changed error message when rtc file does not exist.
+> 
+> changes since v1:
+>     Removed check for uid=0
+>     If rtc file is invalid, then exit the test.
+> 
+>  tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+> index 63ce02d1d5cc..630fef735c7e 100644
+> --- a/tools/testing/selftests/rtc/rtctest.c
+> +++ b/tools/testing/selftests/rtc/rtctest.c
+> @@ -17,6 +17,7 @@
+>  #include <unistd.h>
+>  
+>  #include "../kselftest_harness.h"
+> +#include "../kselftest.h"
+>  
+>  #define NUM_UIE 3
+>  #define ALARM_DELTA 3
+> @@ -419,6 +420,8 @@ __constructor_order_last(void)
+>  
+>  int main(int argc, char **argv)
+>  {
+> +	int ret = -1;
+> +
+>  	switch (argc) {
+>  	case 2:
+>  		rtc_file = argv[1];
+> @@ -430,5 +433,11 @@ int main(int argc, char **argv)
+>  		return 1;
+>  	}
+>  
+> -	return test_harness_run(argc, argv);
+> +	// Run the test if rtc_file is valid
+> +	if (access(rtc_file, F_OK) == 0)
+> +		ret = test_harness_run(argc, argv);
+> +	else
+> +		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
+> +
+> +	return ret;
+>  }
+> -- 
+> 2.25.1
+> 
 
-diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-index a3b75c96ff9a..f501b6f9ed01 100644
---- a/drivers/rtc/rtc-pcf85063.c
-+++ b/drivers/rtc/rtc-pcf85063.c
-@@ -514,46 +514,39 @@ static struct clk *pcf85063_clkout_register_clk(struct pcf85063 *pcf85063)
- }
- #endif
- 
--enum pcf85063_type {
--	PCF85063,
--	PCF85063TP,
--	PCF85063A,
--	RV8263,
--	PCF85063_LAST_ID
-+static const struct pcf85063_config config_pcf85063 = {
-+	.regmap = {
-+		.reg_bits = 8,
-+		.val_bits = 8,
-+		.max_register = 0x0a,
-+	},
- };
- 
--static struct pcf85063_config pcf85063_cfg[] = {
--	[PCF85063] = {
--		.regmap = {
--			.reg_bits = 8,
--			.val_bits = 8,
--			.max_register = 0x0a,
--		},
--	},
--	[PCF85063TP] = {
--		.regmap = {
--			.reg_bits = 8,
--			.val_bits = 8,
--			.max_register = 0x0a,
--		},
-+static const struct pcf85063_config config_pcf85063tp = {
-+	.regmap = {
-+		.reg_bits = 8,
-+		.val_bits = 8,
-+		.max_register = 0x0a,
- 	},
--	[PCF85063A] = {
--		.regmap = {
--			.reg_bits = 8,
--			.val_bits = 8,
--			.max_register = 0x11,
--		},
--		.has_alarms = 1,
-+};
-+
-+static const struct pcf85063_config config_pcf85063a = {
-+	.regmap = {
-+		.reg_bits = 8,
-+		.val_bits = 8,
-+		.max_register = 0x11,
- 	},
--	[RV8263] = {
--		.regmap = {
--			.reg_bits = 8,
--			.val_bits = 8,
--			.max_register = 0x11,
--		},
--		.has_alarms = 1,
--		.force_cap_7000 = 1,
-+	.has_alarms = 1,
-+};
-+
-+static const struct pcf85063_config config_rv8263 = {
-+	.regmap = {
-+		.reg_bits = 8,
-+		.val_bits = 8,
-+		.max_register = 0x11,
- 	},
-+	.has_alarms = 1,
-+	.force_cap_7000 = 1,
- };
- 
- static int pcf85063_probe(struct i2c_client *client)
-@@ -645,22 +638,22 @@ static int pcf85063_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id pcf85063_ids[] = {
--	{ "pca85073a", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063A] },
--	{ "pcf85063", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063] },
--	{ "pcf85063tp", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063TP] },
--	{ "pcf85063a", .driver_data = (kernel_ulong_t)&pcf85063_cfg[PCF85063A] },
--	{ "rv8263", .driver_data = (kernel_ulong_t)&pcf85063_cfg[RV8263] },
-+	{ "pca85073a", .driver_data = (kernel_ulong_t)&config_pcf85063a },
-+	{ "pcf85063", .driver_data = (kernel_ulong_t)&config_pcf85063 },
-+	{ "pcf85063tp", .driver_data = (kernel_ulong_t)&config_pcf85063tp },
-+	{ "pcf85063a", .driver_data = (kernel_ulong_t)&config_pcf85063a },
-+	{ "rv8263", .driver_data = (kernel_ulong_t)&config_rv8263 },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, pcf85063_ids);
- 
- #ifdef CONFIG_OF
- static const struct of_device_id pcf85063_of_match[] = {
--	{ .compatible = "nxp,pca85073a", .data = &pcf85063_cfg[PCF85063A] },
--	{ .compatible = "nxp,pcf85063", .data = &pcf85063_cfg[PCF85063] },
--	{ .compatible = "nxp,pcf85063tp", .data = &pcf85063_cfg[PCF85063TP] },
--	{ .compatible = "nxp,pcf85063a", .data = &pcf85063_cfg[PCF85063A] },
--	{ .compatible = "microcrystal,rv8263", .data = &pcf85063_cfg[RV8263] },
-+	{ .compatible = "nxp,pca85073a", .data = &config_pcf85063a },
-+	{ .compatible = "nxp,pcf85063", .data = &config_pcf85063 },
-+	{ .compatible = "nxp,pcf85063tp", .data = &config_pcf85063tp },
-+	{ .compatible = "nxp,pcf85063a", .data = &config_pcf85063a },
-+	{ .compatible = "microcrystal,rv8263", .data = &config_rv8263 },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, pcf85063_of_match);
 -- 
-2.25.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
