@@ -2,130 +2,110 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60FE756AFC
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jul 2023 19:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80440756CD4
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jul 2023 21:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjGQRxD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 17 Jul 2023 13:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S229939AbjGQTJo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 17 Jul 2023 15:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjGQRxD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Jul 2023 13:53:03 -0400
+        with ESMTP id S229787AbjGQTJn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Jul 2023 15:09:43 -0400
 Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F305A1B5;
-        Mon, 17 Jul 2023 10:53:01 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b8c81e36c0so29069925ad.0;
-        Mon, 17 Jul 2023 10:53:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEA5198
+        for <linux-rtc@vger.kernel.org>; Mon, 17 Jul 2023 12:09:41 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b852785a65so30331575ad.0
+        for <linux-rtc@vger.kernel.org>; Mon, 17 Jul 2023 12:09:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689616381; x=1692208381;
+        d=sifive.com; s=google; t=1689620981; x=1692212981;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5tYEoMOLm/mIuBIhnH5hvMExYrOHr41KyvUDfsyubA4=;
-        b=I610iZ7puRZvI+aUPm6JVT0dUWkBr3MTu4xvOwRBstjV0TF5f0x8XaPiSALfqFBbqM
-         dq50Oy2VSixBwIgHaPOAsRoQk3tXHlBR4VNJ+2hKoduHsI0FfsVSr9WtOzXoOtdLy+a/
-         amFKicpj+oCr0f3pca8erDuiaCYXQw5nn11b9++W2VBN0HxfEddFqtHYnuOrK76LIu18
-         vHGIVUS2DKYekCR9g1cHPJh4fGy8yzrS5hHC2BLVqbJ9s2nTNDIbrAm6tM32e/Ua0Uu2
-         QsA1kN9g5/ZrIks+bm/3DkeVq28dk/Tdlc7ZHbkA01h7WLbnJQLKbmTceS/OQLA/fEW5
-         Vbmg==
+        bh=r6uasRoxo3I6LINUODhPvTsghfLDKOJtY1t6sJi/dUE=;
+        b=acUhxK3V3gNbKrBg9uaBK2XhWeW4iS1n2cUrofZsbkhBKvWfQLWgdfMomfQ/ilmg3e
+         +Tkc7dwXhn8inu52vRP1PWUrSiscaqeySlATb4DfjV9PoA9Gbm8hJiApTKDXj0k30I0K
+         Yfhl1u8d9LpUcYbaBGPpmjO7dsqEF0EBi3eofl7rbxca9JYbTmjCIP7AYssycOTJBdh0
+         tgFntY6IsCU0XBFGNgG2U5+/FfN/+1JqKIrS/mQni8QQBkxsShdSzbbnX3EuKE9+W8kl
+         7J1ls/7LCQf2rAmcCkrGCnOFN6gcJ3BOpf1h4fzzOMKvC+JB7y82lOOvyOqbpRN0o/oa
+         l2qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689616381; x=1692208381;
+        d=1e100.net; s=20221208; t=1689620981; x=1692212981;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5tYEoMOLm/mIuBIhnH5hvMExYrOHr41KyvUDfsyubA4=;
-        b=HaotZ03GpqelLUUGzGfzZvL3Czjs+Y6oOKzu6zj5rs4fx4IYufHgYQuxSbXciVAEDY
-         1pxjBEpXgmqIhbYel2ELOtePknl6VMr+FamHa6irF2ExP0EG4vnsJHlDkM0OqK/HzBAC
-         Meetiv342h02LOIKB0LY6Zk3YZAewPcdaOWd061swB/UZtMSLcVATzDmhU81R/bRHplA
-         8MGOgQhs3Kc9S+9bjXy3hYAPV2Ti0ILb6M0V0MwVFsn8MqCyJCuoVYoDosxDV11uMn4u
-         f7akNnE7NojcVw558JapKv4qvR+cmdLIzVFLwE4b9J+ClO2hvA9bd6HqukcVbr+q897y
-         ZCqA==
-X-Gm-Message-State: ABy/qLYRkNeQpyIrWgZbDWVm8l567KDb0LIjy4MKsxuGOgs85MaSiedU
-        sX58PQqyvSZ6xBP+PUTIaxs=
-X-Google-Smtp-Source: APBJJlH9GFTB1GX/3XF09GHgj4tbHjuW07ilNWgS+K2qPVPVLx1MwqHs+N8oVGSFHP8+/sOryWoVxw==
-X-Received: by 2002:a17:902:be0f:b0:1b8:7483:d481 with SMTP id r15-20020a170902be0f00b001b87483d481mr10786269pls.8.1689616381291;
-        Mon, 17 Jul 2023 10:53:01 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:c009:58ea:6a1e:612b:7001:f9bd])
-        by smtp.gmail.com with ESMTPSA id jk11-20020a170903330b00b001b8896cd57bsm148971plb.269.2023.07.17.10.52.57
+        bh=r6uasRoxo3I6LINUODhPvTsghfLDKOJtY1t6sJi/dUE=;
+        b=bw23PPXzalUJfEQYaNs7hMycY1oWD7vnTcjIJJIaECCANysO2yhR2/ikDxNifgnlmQ
+         by979kCoY+nfzJ4LaY+N+8LANPRv85o0Pev9Wsj6Wygy1GBhtU+ORovbRMxBBR5bQJze
+         0QHMUX+wRysaE77HwJf4zsNztGm9YR5cQ4ZwrtCc3YWcoKajUdLgE55jptNGXFxTKa5Y
+         0TJDgVP46U9V1GX58SYRt6kNZ0imRbUhmbjqDJ2eHIuXoHAnX6vcflj3QiJFWTdU2lFd
+         sjeaDhn/u0ozpJo5IuOt3xgp1hzAF+8tD2LIiackfXs8zp2HNX0yHBbb3PXgwBcc4Ywa
+         d0Ug==
+X-Gm-Message-State: ABy/qLZZTDTcBU0pg/CvVeUCuJguEVpeR1JjqKBpxcOI2FXh61GxQzYy
+        wOVT0c9eubH/JvSm24uZqFZu1g==
+X-Google-Smtp-Source: APBJJlGsv4Of/eTxsE2yW4esubj7xgtpbKpon4eEjBP0rSH8kaO7OsUfGFmeh1d9S3QlR8bi608FZQ==
+X-Received: by 2002:a17:902:c405:b0:1b6:783d:9ba7 with SMTP id k5-20020a170902c40500b001b6783d9ba7mr14739448plk.27.1689620981198;
+        Mon, 17 Jul 2023 12:09:41 -0700 (PDT)
+Received: from sw06.internal.sifive.com ([64.62.193.194])
+        by smtp.gmail.com with ESMTPSA id ix19-20020a170902f81300b001b9d335223csm250057plb.26.2023.07.17.12.09.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 10:53:00 -0700 (PDT)
-From:   Atul Kumar Pant <atulpant.linux@gmail.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>, shuah@kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5] selftests: rtc: Fixes rtctest error handling.
-Date:   Mon, 17 Jul 2023 23:22:51 +0530
-Message-Id: <20230717175251.54390-1-atulpant.linux@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 17 Jul 2023 12:09:40 -0700 (PDT)
+From:   Samuel Holland <samuel.holland@sifive.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Support Opensource <support.opensource@diasemi.com>
+Cc:     Samuel Holland <samuel.holland@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH] rtc: da9063: Mark the alarm IRQ as a wake IRQ
+Date:   Mon, 17 Jul 2023 12:09:37 -0700
+Message-Id: <20230717190937.1301509-1-samuel.holland@sifive.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Adds a check to verify if the rtc device file is valid or not
-and prints a useful error message if the file is not accessible.
+This keeps the IRQ enabled during system suspend, if the RTC's wakeup
+source is enabled. Since the IRQ is not required to wake from shutdown,
+continue to add the wakeup source even if registering the wakeirq fails.
+See commit 029d3a6f2f3c ("rtc: da9063: add as wakeup source").
 
-Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 ---
 
-changes since v4:
-    Updated the commit message.
+ drivers/rtc/rtc-da9063.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-changes since v3:
-    Added Linux-kselftest and Linux-kernel mailing lists.
-
-changes since v2:
-    Changed error message when rtc file does not exist.
-
-changes since v1:
-    Removed check for uid=0
-    If rtc file is invalid, then exit the test.
-
- tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 63ce02d1d5cc..630fef735c7e 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -17,6 +17,7 @@
- #include <unistd.h>
+diff --git a/drivers/rtc/rtc-da9063.c b/drivers/rtc/rtc-da9063.c
+index ee2efb496174..2f5d60622564 100644
+--- a/drivers/rtc/rtc-da9063.c
++++ b/drivers/rtc/rtc-da9063.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_wakeirq.h>
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+@@ -496,6 +497,12 @@ static int da9063_rtc_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "Failed to request ALARM IRQ %d: %d\n",
+ 			irq_alarm, ret);
  
- #include "../kselftest_harness.h"
-+#include "../kselftest.h"
- 
- #define NUM_UIE 3
- #define ALARM_DELTA 3
-@@ -419,6 +420,8 @@ __constructor_order_last(void)
- 
- int main(int argc, char **argv)
- {
-+	int ret = -1;
++	ret = dev_pm_set_wake_irq(&pdev->dev, irq_alarm);
++	if (ret)
++		dev_warn(&pdev->dev,
++			 "Failed to set IRQ %d as a wake IRQ: %d\n",
++			 irq_alarm, ret);
 +
- 	switch (argc) {
- 	case 2:
- 		rtc_file = argv[1];
-@@ -430,5 +433,11 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
+ 	device_init_wakeup(&pdev->dev, true);
  
--	return test_harness_run(argc, argv);
-+	// Run the test if rtc_file is valid
-+	if (access(rtc_file, F_OK) == 0)
-+		ret = test_harness_run(argc, argv);
-+	else
-+		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
-+
-+	return ret;
- }
+ 	return devm_rtc_register_device(rtc->rtc_dev);
 -- 
-2.25.1
+2.40.1
 
