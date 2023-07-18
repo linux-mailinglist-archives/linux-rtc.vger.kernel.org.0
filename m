@@ -2,173 +2,164 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9802E7578A1
-	for <lists+linux-rtc@lfdr.de>; Tue, 18 Jul 2023 11:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BE875789F
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Jul 2023 11:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbjGRJ4y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 18 Jul 2023 05:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S232392AbjGRJ4g convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Tue, 18 Jul 2023 05:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbjGRJ4V (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 18 Jul 2023 05:56:21 -0400
-X-Greylist: delayed 2134 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Jul 2023 02:55:31 PDT
-Received: from 2.mo581.mail-out.ovh.net (2.mo581.mail-out.ovh.net [87.98.143.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB191994
-        for <linux-rtc@vger.kernel.org>; Tue, 18 Jul 2023 02:55:31 -0700 (PDT)
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.109.156.39])
-        by mo581.mail-out.ovh.net (Postfix) with ESMTP id DF9F125E58
-        for <linux-rtc@vger.kernel.org>; Tue, 18 Jul 2023 09:19:55 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-mn4ct (unknown [10.109.138.229])
-        by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 9177E1FEB2;
-        Tue, 18 Jul 2023 09:19:49 +0000 (UTC)
-Received: from RCM-web4.webmail.mail.ovh.net ([176.31.235.81])
-        by ghost-submission-6684bf9d7b-mn4ct with ESMTPSA
-        id gQ79HjVZtmSJDgAAInjvQA
-        (envelope-from <rafal@milecki.pl>); Tue, 18 Jul 2023 09:19:49 +0000
+        with ESMTP id S232388AbjGRJ4K (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 18 Jul 2023 05:56:10 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C7626B2;
+        Tue, 18 Jul 2023 02:55:12 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c2cf4e61bc6so5807310276.3;
+        Tue, 18 Jul 2023 02:55:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689674112; x=1692266112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dkfu4+zrfsEvNM/oP4wLx2h/8nsgQPK5hugPJnR2T8Y=;
+        b=bpbkAuFRysVLakByeshb8zpAsRtDwSouyWI2zK8LDbire43Ga6Px797CbkzAEiYTKh
+         piTAc/yW/QL3vr53oUbNpxFt5cPJkATey1YCK71ZQagCHeVXrO32uIis8HA7XLQFfqsW
+         S5n52bvq5HBIybyTxHoC8tZ3iUO5lzXGf0Oai+tGxmOCqcyqyD9P34lpYl0pQppd/BLd
+         xFtARFHae+ozxOlCh1aIc0RgweteWxn/3C7dNypw34JcK45OkiqAiJGGCJUzpWg6mavK
+         PqldY9eDrQR3+uGc4HbfLWR05ihT06SvVrQh22NKEjO2C3COV1RX6dSdLs3T51QHncMi
+         yoeg==
+X-Gm-Message-State: ABy/qLaKFV4gKKmCio9VcszED83JhY/l94h7gsHuaSgsQvcG/fREdS2p
+        Sq903AZKZLFu6PblYNwErObL3XvKfNFUbA==
+X-Google-Smtp-Source: APBJJlGPc04fhgxz0E0wgRdcDYs3513a4we7nVqGeT+GTp9gDnYZ0rkf654mHClpLr/GNVPMHelMGg==
+X-Received: by 2002:a25:6fc2:0:b0:c91:717e:7658 with SMTP id k185-20020a256fc2000000b00c91717e7658mr2408070ybc.2.1689674111749;
+        Tue, 18 Jul 2023 02:55:11 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id x71-20020a25ce4a000000b00cec105e03d1sm123056ybe.38.2023.07.18.02.55.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jul 2023 02:55:10 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso5811573276.2;
+        Tue, 18 Jul 2023 02:55:10 -0700 (PDT)
+X-Received: by 2002:a25:860f:0:b0:cec:59f7:b352 with SMTP id
+ y15-20020a25860f000000b00cec59f7b352mr989091ybk.58.1689674110647; Tue, 18 Jul
+ 2023 02:55:10 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 18 Jul 2023 11:19:49 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        linux-mtd@lists.infradead.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Heiko Stuebner <heiko@sntech.de>, linux-rtc@vger.kernel.org,
-        Samuel Holland <samuel@sholland.org>,
-        Richard Weinberger <richard@nod.at>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-rockchip@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
-        Andy Gross <agross@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-sunxi@lists.linux.dev, asahi@lists.linux.dev,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-msm@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-mediatek@lists.infradead.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Hector Martin <marcan@marcan.st>, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [Linux-stm32] [PATCH V4] nvmem: add explicit config option to
- read old syntax fixed OF cells
-In-Reply-To: <e5a8524c-8961-9ff0-db30-3b648345319e@pengutronix.de>
-References: <20230403225540.1931-1-zajec5@gmail.com>
- <e5a8524c-8961-9ff0-db30-3b648345319e@pengutronix.de>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d51234ebc05d2b9fe44625299c103caa@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 31.11.218.106
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 6429732894367460296
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrgeeggdduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepgfeuleeuteetfeeuhefhhffgtedvgeejfeelffeuvdfhueffvdehgeeuveeuhfelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpfedurdduuddrvddukedruddtiedpudejiedrfedurddvfeehrdekudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrrghfrghlsehmihhlvggtkhhirdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekuddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230511181931.869812-1-tj@kernel.org> <20230511181931.869812-7-tj@kernel.org>
+ <ZF6WsSVGX3O1d0pL@slm.duckdns.org> <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
+ <CAMuHMdW1kxZ1RHKTRVRqDNAbj1Df2=v0fPn5KYK3kfX_kiXR6A@mail.gmail.com>
+ <ZK3MBfPS-3-tJgjO@slm.duckdns.org> <ZK30CR196rs-OWLq@slm.duckdns.org>
+ <CAMuHMdUCXPi+aS-7bR3qRetKF9T3W9jk_HKjvaXmfHv5SEeuFg@mail.gmail.com> <ZLXIvXBvhsnL-ik_@slm.duckdns.org>
+In-Reply-To: <ZLXIvXBvhsnL-ik_@slm.duckdns.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Jul 2023 11:54:58 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU8CGhsU-1PZNdWH1xjbWcWSg2s2RFAegXi+vs=d-0t8Q@mail.gmail.com>
+Message-ID: <CAMuHMdU8CGhsU-1PZNdWH1xjbWcWSg2s2RFAegXi+vs=d-0t8Q@mail.gmail.com>
+Subject: Re: Consider switching to WQ_UNBOUND messages (was: Re: [PATCH v2
+ 6/7] workqueue: Report work funcs that trigger automatic CPU_INTENSIVE mechanism)
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-team@meta.com, Linux PM list <linux-pm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-rtc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Ahmad,
+Hi Tejun,
 
-On 2023-07-18 11:08, Ahmad Fatoum wrote:
->> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
->> index 60670b2f70b9..334adbae3690 100644
->> --- a/drivers/mtd/mtdcore.c
->> +++ b/drivers/mtd/mtdcore.c
->> @@ -522,6 +522,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
->>  	config.dev = &mtd->dev;
->>  	config.name = dev_name(&mtd->dev);
->>  	config.owner = THIS_MODULE;
->> +	config.add_legacy_fixed_of_cells = of_device_is_compatible(node, 
->> "nvmem-cells");
-> 
-> How does the new binding look like in this situation?
-> 
-> Before it was:
-> 
-> &{flash/partitions} {
-> 	compatible = "fixed-partitions";
-> 	#address-cells = <1>;
-> 	#size-cells = <1>;
-> 
-> 	partition@0 {
-> 		compatible = "nvmem-cells";
-> 		reg = <0 0x100>;
-> 		#address-cells = <1>;
-> 		#size-cells = <1>;
-> 
-> 		calib@1 {
-> 			reg = <1 1>;
-> 		};
-> 	}
-> };
-> 
-> It it now the same, but s/"nvmem-cells"/"fixed-layout"/ ?
+On Tue, Jul 18, 2023 at 1:03 AM Tejun Heo <tj@kernel.org> wrote:
+> Can you please the following patch and see how many reports you get? Looking
+> back at your reports, I think some of them probably should be converted to
+> UNBOUND but we should have a better idea with the adjusted threshold.
+>
+> Thanks.
+>
+> From 8555cbd4b22e5f85eb2bdcb84fd1d1f519a0a0d3 Mon Sep 17 00:00:00 2001
+> From: Tejun Heo <tj@kernel.org>
+> Date: Mon, 17 Jul 2023 12:50:02 -1000
+> Subject: [PATCH] workqueue: Scale up wq_cpu_intensive_thresh_us if BogoMIPS is
+>  below 1000
+>
+> wq_cpu_intensive_thresh_us is used to detect CPU-hogging per-cpu work items.
+> Once detected, they're excluded from concurrency management to prevent them
+> from blocking other per-cpu work items. If CONFIG_WQ_CPU_INTENSIVE_REPORT is
+> enabled, repeat offenders are also reported so that the code can be updated.
+>
+> The default threshold is 10ms which is long enough to do fair bit of work on
+> modern CPUs while short enough to be usually not noticeable. This
+> unfortunately leads to a lot of, arguable spurious, detections on very slow
+> CPUs. Using the same threshold across CPUs whose performance levels may be
+> apart by multiple levels of magnitude doesn't make whole lot of sense.
+>
+> This patch scales up wq_cpu_intensive_thresh_us upto 1 second when BogoMIPS
+> is below 1000. This is obviously very inaccurate but it doesn't have to be
+> accurate to be useful. The mechanism is still useful when the threshold is
+> fully scaled up and the benefits of reports are usually shared with everyone
+> regardless of who's reporting, so as long as there are sufficient number of
+> fast machines reporting, we don't lose much.
+>
+> Some (or is it all?) ARM CPUs systemtically report significantly lower
+> BogoMIPS. While this doesn't break anything, given how widespread ARM CPUs
+> are, it's at least a missed opportunity and it probably would be a good idea
+> to teach workqueue about it.
+>
+> Signed-off-by: Tejun Heo <tj@kernel.org>
 
-Please take a look at those commits and examples:
+Thanks!
 
-bd912c991d2e ("dt-bindings: nvmem: layouts: add fixed-layout")
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bd912c991d2ef079a32558f057b8663bcf1fb6fc
+I gave it a try on a system with an 800 MHz Cortex A9, only to discover
+it makes no difference, as that machine has 1600 BogoMIPS:
 
-fa7fbe53ecdc ("dt-bindings: nvmem: convert base example to use NVMEM 
-fixed cells layout")
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa7fbe53ecdc4e7d549a9f73a40e257b0046b4b9
+workqueue: drm_fb_helper_damage_work hogged CPU for >10000us 4 times,
+consider switching to WQ_UNBOUND
+workqueue: drm_fb_helper_damage_work hogged CPU for >10000us 8 times,
+consider switching to WQ_UNBOUND
+workqueue: genpd_power_off_work_fn hogged CPU for >10000us 4 times,
+consider switching to WQ_UNBOUND
+workqueue: blk_mq_run_work_fn hogged CPU for >10000us 4 times,
+consider switching to WQ_UNBOUND
+workqueue: pm_runtime_work hogged CPU for >10000us 4 times, consider
+switching to WQ_UNBOUND
+workqueue: phy_state_machine hogged CPU for >10000us 4 times, consider
+switching to WQ_UNBOUND
+workqueue: drm_mode_rmfb_work_fn hogged CPU for >10000us 4 times,
+consider switching to WQ_UNBOUND
+workqueue: sync_hw_clock hogged CPU for >10000us 4 times, consider
+switching to WQ_UNBOUND
+workqueue: rtc_timer_do_work hogged CPU for >10000us 4 times, consider
+switching to WQ_UNBOUND
 
+Artificially low BogoMIPS numbers only happen on systems that have
+the related timers (Cortex A7/A15 and later, Cortex A9 MPCore,
+and arm64).
 
-Basically you need a "nvmem-layout" node with:
-compatible = "fixed-layout";
+I will test on more systems, but that will probably not happen until
+next week...
 
-So in your case that would be:
+Gr{oetje,eeting}s,
 
-&{flash/partitions} {
-	compatible = "fixed-partitions";
+                        Geert
 
-	partition@0 {
-		reg = <0 0x100>;
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-		nvmem-layout {
-			compatible = "fixed-layout";
-			#address-cells = <1>;
-			#size-cells = <1>;
-
-			calib@1 {
-				reg = <1 1>;
-			};
-		};
-	}
-};
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
