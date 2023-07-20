@@ -2,57 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E95D75B19D
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jul 2023 16:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D0375B1B2
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jul 2023 16:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjGTOuL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jul 2023 10:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S231149AbjGTOvY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jul 2023 10:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjGTOuK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jul 2023 10:50:10 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DCD2703
-        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:50:08 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-483a629c3a3so655543e0c.0
-        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:50:08 -0700 (PDT)
+        with ESMTP id S229790AbjGTOvX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jul 2023 10:51:23 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BA626AB
+        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:51:20 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-481604cb9d8so315933e0c.1
+        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689864607; x=1690469407;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689864679; x=1690469479;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=44I4QTXSdpRlGQNX01aNu7Q8jYmgKrsVdvaz0FbrT9w=;
-        b=VHsv4k0q2otI210G2fx8UlqZVBouT1yhHPQeX4/iYKRduLbBfujemaFd84GC3ZVtWX
-         jIbCktQqByAp5iqMc/vfuiwpcDzR/b7VidjqvAa00eAxbSRDadKzFL7ftVkL0wpM8mY4
-         3nANvQf6LnRvO72e3X3PIZq6dwVKEuHJlUuToqWh59bGJFqRqqo0SosmrUxvzzRd1bBC
-         FBz8bvcUB7PznBNwhuRezNy3z5i/4TW+ggCxtW15DP+i0Lj50o4B9jSN9WUDe5Vyw8rc
-         EUeWyncBdaKXPsUBWXs360RXDU8t4kC/iicYJ16kjPZL2O0Kgs5iYg9GIm/a1AZfdPvo
-         1iNw==
+        bh=/+O/muW1Nk3sbzumyk3oSyUNsgXn5aAFedNJT9XhjpY=;
+        b=qHklILRYK8e+9ECBbaFZ7M9L25U5jR9UnSBshRGFdRVHmqpzNlXreFLJxybGBGyMLA
+         JjOIhtWXcXsFXDkQWzdryG/qS0K+qMEB1GG285OY5nANiF5bBiiZqSfRjpAq4JN3qO/G
+         VE1wh3ub6GNTxKYli8B9etbv3Syi4YaZAm8ewJzKDcudPtWv+mpGQnUWLOEpUyVi77HA
+         L1nzjHd9LR1jd0d99mpisIGonQLildHSrZJKuMS/WToklyjf8Qvdn/zjfWDpMZSAG7cZ
+         /maT4QCA9HKlmwzmuyLH+08Sr6TprdvFrIAJ1FYorUt4VLFQyyL7VA770EhWjclKTvfj
+         KjvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689864607; x=1690469407;
+        d=1e100.net; s=20221208; t=1689864679; x=1690469479;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=44I4QTXSdpRlGQNX01aNu7Q8jYmgKrsVdvaz0FbrT9w=;
-        b=g/8aDYsf+uiiVYep4/ukkSf43DWRzP29L6AnGrT5n/MFFb0mhnSULir0AWUJRCIiTO
-         BVvQZL/tjXifhaVt67QpaR7gGHiGN7KX25xyyt6gwj/ZFvjzHYZ47RKBrGBLuSsCO3MY
-         iWwJZObY/LL/76BQ/Np5HrWngJ3DEIYr16ThQE9+av+jaFwZcpIwOvGpFa9aouegIUZ6
-         9IR0SGd0t1I6Cu6La5OdWjW68lr01iLI7+PLb0WdgAaA1zTCObhAegLYDdSXVV2w8/O4
-         XkSmVeX2vb/G3TBKB38IiWvXY9hZY+58YUwdt+tvZwkII8DTiw/9DsWQevk1l9++zWs2
-         iIbQ==
-X-Gm-Message-State: ABy/qLYoU3tcHRQoMnlrSgH4Cp3nvuO7yb7mqegfs7ahmcAmC8o19S6+
-        D/deXb03isym3SB5I7ZbLFThAMPE7XiBbPITTLiCsw==
-X-Google-Smtp-Source: APBJJlHcVbVjnQaUrT7V7jD6HpKLdUNhc+KcBHJVAgkGL82QQnDc268rPznkIAv5GUoMxsi+qdzT6lIi9u/QnbbIPgk=
-X-Received: by 2002:a05:6122:929:b0:481:5132:48c7 with SMTP id
- j41-20020a056122092900b00481513248c7mr2136264vka.1.1689864607273; Thu, 20 Jul
- 2023 07:50:07 -0700 (PDT)
+        bh=/+O/muW1Nk3sbzumyk3oSyUNsgXn5aAFedNJT9XhjpY=;
+        b=KlDZjzTxLwrRcd1PuCf7ZYM463lx0uRqX5OOwCoL6MqyOZD32kCztTM7gP509pwuAj
+         Q34d7HXw3Nji0YdrNlVTsVPT4eDk1RM7cUp7noBOHxoBm4P0IzvhFIfl9AeuuWLLw5uS
+         oR88nK4r+txAbYAs6ToW0gNT0PVtFDGy5GdS9cp09Jxi94a/5/2F+jpvQ5bIOK9VI0eP
+         D2o4FH1UOqRUNS9RPpJsBEMt5lB/caq7FQ+WfEMmBEEgWd/IRXoGovD6kCv6nElmOUfr
+         FWcBLy8LihcEoqxPyegzGJQ6wbGJei4fBPKLeBMEnsQUalbIaUleUijxLyWFS4qO4p6n
+         YBPw==
+X-Gm-Message-State: ABy/qLZDg+/p1yIzCwewTUNsXrT1/vmoeJD04nrfRN2e+FA5fqZf/Fpg
+        KjPg2uMjjDplOGCwS/Hje4IT4hYIOMBfwgwiOd8qZg==
+X-Google-Smtp-Source: APBJJlHzLfxkreBCbbsehsgY/9oCLGFmqhlHHCGSC7psLizhDkF/J99lwZeHjlYsqKv5zg/EMj03GOKDYYgPtq4NGEY=
+X-Received: by 2002:a1f:3d44:0:b0:481:4092:99c with SMTP id
+ k65-20020a1f3d44000000b004814092099cmr2773384vka.0.1689864676288; Thu, 20 Jul
+ 2023 07:51:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me> <20230605-ep93xx-v3-33-3d63a5f1103e@maquefel.me>
-In-Reply-To: <20230605-ep93xx-v3-33-3d63a5f1103e@maquefel.me>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me> <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
+In-Reply-To: <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 20 Jul 2023 16:49:56 +0200
-Message-ID: <CAMRc=McbD1w47GsfvY6p==jDiTQrwg96jFvVKO-9bPhNOBmapw@mail.gmail.com>
-Subject: Re: [PATCH v3 33/42] gpio: ep93xx: add DT support for gpio-ep93xx
+Date:   Thu, 20 Jul 2023 16:51:05 +0200
+Message-ID: <CAMRc=MeXCLzwjPEap_OD7tA+xVsMOU1DNxMbxbZVPaWg4Xdr8w@mail.gmail.com>
+Subject: Re: [PATCH v3 01/42] gpio: ep93xx: split device in multiple
 To:     nikita.shubin@maquefel.me
 Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
         Lennert Buytenhek <kernel@wantstofly.org>,
@@ -99,8 +99,7 @@ Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
         linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
         netdev@vger.kernel.org, dmaengine@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -113,44 +112,25 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 10:30=E2=80=AFAM Nikita Shubin via B4 Relay
+On Thu, Jul 20, 2023 at 10:29=E2=80=AFAM Nikita Shubin via B4 Relay
 <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
 >
 > From: Nikita Shubin <nikita.shubin@maquefel.me>
 >
-> Add OF ID match table.
+> This prepares ep93xx SOC gpio to convert into device tree driver:
+> - dropped banks and legacy defines
+> - split AB IRQ and make it shared
 >
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> We are relying on IRQ number information A, B ports have single shared
+> IRQ, while F port have dedicated IRQ for each line.
+>
+> Also we had to split single ep93xx platform_device into multiple, one
+> for each port, without this we can't do a full working transition from
+> legacy platform code into device tree capable. All GPIO_LOOKUP were
+> change to match new chip namings.
+>
 > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
->  drivers/gpio/gpio-ep93xx.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/gpio/gpio-ep93xx.c b/drivers/gpio/gpio-ep93xx.c
-> index 9a25bb0caf17..c4e272a8773d 100644
-> --- a/drivers/gpio/gpio-ep93xx.c
-> +++ b/drivers/gpio/gpio-ep93xx.c
-> @@ -360,9 +360,15 @@ static int ep93xx_gpio_probe(struct platform_device =
-*pdev)
->         return devm_gpiochip_add_data(&pdev->dev, gc, egc);
->  }
->
-> +static const struct of_device_id ep93xx_gpio_match[] =3D {
-> +       { .compatible =3D "cirrus,ep9301-gpio" },
-> +       { /* sentinel */ }
-> +};
-> +
->  static struct platform_driver ep93xx_gpio_driver =3D {
->         .driver         =3D {
->                 .name   =3D "gpio-ep93xx",
-> +               .of_match_table =3D ep93xx_gpio_match,
->         },
->         .probe          =3D ep93xx_gpio_probe,
->  };
->
-> --
-> 2.39.2
->
 
 Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
