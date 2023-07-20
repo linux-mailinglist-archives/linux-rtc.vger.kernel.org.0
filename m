@@ -2,94 +2,155 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93CE675B0D8
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jul 2023 16:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E95D75B19D
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jul 2023 16:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjGTOIt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jul 2023 10:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S231834AbjGTOuL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jul 2023 10:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjGTOIt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jul 2023 10:08:49 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78A842126
-        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=3UngDXrAHQ19pAfAY5
-        UEDtkmsKF10UxMz5VveAtn+iE=; b=mbQ8IBVZPppcwCzUYZsJWsGC8WgHlDAO4t
-        p3nL8v2VxZK6Q6oh1XDmSjcxWhQC+7pTjPFJduBpqQCNrL9v56uZT1SQ48XC5Gnq
-        pCZowXKGgDxOf01TtcCKfhegwPpBEWy9IZUTxrg96mBhFcc3Ce6wQBs5GZIryA3t
-        fZbbLvGqU=
-Received: from localhost.localdomain (unknown [202.112.113.212])
-        by zwqz-smtp-mta-g0-4 (Coremail) with SMTP id _____wAHgojYP7lk4hFmAw--.47977S4;
-        Thu, 20 Jul 2023 22:08:29 +0800 (CST)
-From:   Yuanjun Gong <ruc_gongyuanjun@163.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S232116AbjGTOuK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jul 2023 10:50:10 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DCD2703
+        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:50:08 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-483a629c3a3so655543e0c.0
+        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689864607; x=1690469407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=44I4QTXSdpRlGQNX01aNu7Q8jYmgKrsVdvaz0FbrT9w=;
+        b=VHsv4k0q2otI210G2fx8UlqZVBouT1yhHPQeX4/iYKRduLbBfujemaFd84GC3ZVtWX
+         jIbCktQqByAp5iqMc/vfuiwpcDzR/b7VidjqvAa00eAxbSRDadKzFL7ftVkL0wpM8mY4
+         3nANvQf6LnRvO72e3X3PIZq6dwVKEuHJlUuToqWh59bGJFqRqqo0SosmrUxvzzRd1bBC
+         FBz8bvcUB7PznBNwhuRezNy3z5i/4TW+ggCxtW15DP+i0Lj50o4B9jSN9WUDe5Vyw8rc
+         EUeWyncBdaKXPsUBWXs360RXDU8t4kC/iicYJ16kjPZL2O0Kgs5iYg9GIm/a1AZfdPvo
+         1iNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689864607; x=1690469407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=44I4QTXSdpRlGQNX01aNu7Q8jYmgKrsVdvaz0FbrT9w=;
+        b=g/8aDYsf+uiiVYep4/ukkSf43DWRzP29L6AnGrT5n/MFFb0mhnSULir0AWUJRCIiTO
+         BVvQZL/tjXifhaVt67QpaR7gGHiGN7KX25xyyt6gwj/ZFvjzHYZ47RKBrGBLuSsCO3MY
+         iWwJZObY/LL/76BQ/Np5HrWngJ3DEIYr16ThQE9+av+jaFwZcpIwOvGpFa9aouegIUZ6
+         9IR0SGd0t1I6Cu6La5OdWjW68lr01iLI7+PLb0WdgAaA1zTCObhAegLYDdSXVV2w8/O4
+         XkSmVeX2vb/G3TBKB38IiWvXY9hZY+58YUwdt+tvZwkII8DTiw/9DsWQevk1l9++zWs2
+         iIbQ==
+X-Gm-Message-State: ABy/qLYoU3tcHRQoMnlrSgH4Cp3nvuO7yb7mqegfs7ahmcAmC8o19S6+
+        D/deXb03isym3SB5I7ZbLFThAMPE7XiBbPITTLiCsw==
+X-Google-Smtp-Source: APBJJlHcVbVjnQaUrT7V7jD6HpKLdUNhc+KcBHJVAgkGL82QQnDc268rPznkIAv5GUoMxsi+qdzT6lIi9u/QnbbIPgk=
+X-Received: by 2002:a05:6122:929:b0:481:5132:48c7 with SMTP id
+ j41-20020a056122092900b00481513248c7mr2136264vka.1.1689864607273; Thu, 20 Jul
+ 2023 07:50:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me> <20230605-ep93xx-v3-33-3d63a5f1103e@maquefel.me>
+In-Reply-To: <20230605-ep93xx-v3-33-3d63a5f1103e@maquefel.me>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Jul 2023 16:49:56 +0200
+Message-ID: <CAMRc=McbD1w47GsfvY6p==jDiTQrwg96jFvVKO-9bPhNOBmapw@mail.gmail.com>
+Subject: Re: [PATCH v3 33/42] gpio: ep93xx: add DT support for gpio-ep93xx
+To:     nikita.shubin@maquefel.me
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     Yuanjun Gong <ruc_gongyuanjun@163.com>
-Subject: [PATCH 1/1] rtc: use devm_clk_get_enabled() in pic32_rtc_probe()
-Date:   Thu, 20 Jul 2023 22:08:23 +0800
-Message-Id: <20230720140823.33392-1-ruc_gongyuanjun@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: _____wAHgojYP7lk4hFmAw--.47977S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF4UXFy5ur1fZFW7JF4UCFg_yoW8GF1xpa
-        ykAFWFk3y2yrWFka4DX3ykZr15Ar1xKa48K3yDu3sa9w15try5Ars3try0vayvyFWkCw1Y
-        qw17tFWrAF15urUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUY9agUUUUU=
-X-Originating-IP: [202.112.113.212]
-X-CM-SenderInfo: 5uxfsw5rqj53pdqm30i6rwjhhfrp/1tbiUQGy5WDESWmofgAAsV
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-in pic32_rtc_probe(), the return value of function
-clk_prepare_enable() should be checked, since it may fail.
-using devm_clk_get_enabled() instead of devm_clk_get() and
-clk_prepare_enable() can avoid this problem.
+On Thu, Jul 20, 2023 at 10:30=E2=80=AFAM Nikita Shubin via B4 Relay
+<devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
+>
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+>
+> Add OF ID match table.
+>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+>  drivers/gpio/gpio-ep93xx.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/gpio/gpio-ep93xx.c b/drivers/gpio/gpio-ep93xx.c
+> index 9a25bb0caf17..c4e272a8773d 100644
+> --- a/drivers/gpio/gpio-ep93xx.c
+> +++ b/drivers/gpio/gpio-ep93xx.c
+> @@ -360,9 +360,15 @@ static int ep93xx_gpio_probe(struct platform_device =
+*pdev)
+>         return devm_gpiochip_add_data(&pdev->dev, gc, egc);
+>  }
+>
+> +static const struct of_device_id ep93xx_gpio_match[] =3D {
+> +       { .compatible =3D "cirrus,ep9301-gpio" },
+> +       { /* sentinel */ }
+> +};
+> +
+>  static struct platform_driver ep93xx_gpio_driver =3D {
+>         .driver         =3D {
+>                 .name   =3D "gpio-ep93xx",
+> +               .of_match_table =3D ep93xx_gpio_match,
+>         },
+>         .probe          =3D ep93xx_gpio_probe,
+>  };
+>
+> --
+> 2.39.2
+>
 
-Signed-off-by: Yuanjun Gong <ruc_gongyuanjun@163.com>
----
- drivers/rtc/rtc-pic32.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/rtc/rtc-pic32.c b/drivers/rtc/rtc-pic32.c
-index 4f85e0c3d757..d8000275679e 100644
---- a/drivers/rtc/rtc-pic32.c
-+++ b/drivers/rtc/rtc-pic32.c
-@@ -312,7 +312,7 @@ static int pic32_rtc_probe(struct platform_device *pdev)
- 	if (IS_ERR(pdata->reg_base))
- 		return PTR_ERR(pdata->reg_base);
- 
--	pdata->clk = devm_clk_get(&pdev->dev, NULL);
-+	pdata->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(pdata->clk)) {
- 		dev_err(&pdev->dev, "failed to find rtc clock source\n");
- 		ret = PTR_ERR(pdata->clk);
-@@ -326,8 +326,6 @@ static int pic32_rtc_probe(struct platform_device *pdev)
- 	if (IS_ERR(pdata->rtc))
- 		return PTR_ERR(pdata->rtc);
- 
--	clk_prepare_enable(pdata->clk);
--
- 	pic32_rtc_enable(pdata, 1);
- 
- 	device_init_wakeup(&pdev->dev, 1);
-@@ -358,7 +356,6 @@ static int pic32_rtc_probe(struct platform_device *pdev)
- 
- err_nortc:
- 	pic32_rtc_enable(pdata, 0);
--	clk_disable_unprepare(pdata->clk);
- 
- 	return ret;
- }
--- 
-2.17.1
-
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
