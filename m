@@ -2,168 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5F775B004
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jul 2023 15:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A562575B0D7
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jul 2023 16:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjGTNb2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jul 2023 09:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S230347AbjGTOIn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jul 2023 10:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbjGTNbK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jul 2023 09:31:10 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E812D54;
-        Thu, 20 Jul 2023 06:30:30 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b8baa836a5so5705575ad.1;
-        Thu, 20 Jul 2023 06:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689859821; x=1690464621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIe8rMdwGK8O6waPW6ElMhYZtqXBgjIAped1KS+Lxj0=;
-        b=E36Ey4hpLP1aGERgJzQAv5oQWbjP2dfI/yJ9QSqsCcAZUQqYH2EJuPmluxVpniz94+
-         SqRDS4pEtomXHfRXODYYhAlZIxAatRHID9D88YI+tj+w3vKM5JieqRypSlSHOTbf2v95
-         PUlca0W45r887uApCqi/zn/yh3GyTCCrBBW1XguZKYFarRPPHvkGdKJALW7+s9TgEir3
-         pVPeDdLYxOZSMJ8v3iGIKvATJZHgcVErXIREn7/pOR3ivfvJWVHJWWTf1p+PnK9L0sBz
-         4nG3H7SIhmhoYiEqtjnis5Ppnyac+F2VaQ2UY7v0ygr32czvJ80e2mlstFNoj9axpszx
-         inAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689859821; x=1690464621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qIe8rMdwGK8O6waPW6ElMhYZtqXBgjIAped1KS+Lxj0=;
-        b=EvNStNqhfvdCRycMNWSDldz9nJ/3UehP9f3BLfjWgQVHod1rlOEpbw+vjBfhCY3vpC
-         9jOTd/+KAo0+WXVPAtqt7PYYLCyanZ08SDuKC4qoVNLAuON+tcB3GG6O6wpKLPvfuF3c
-         fu7aMx97pSwD2QPx+fT4zIj9prUQCA32bNJvOsbcF4Z9XuKHoAX1TSBTf3Ln6rxnRn2t
-         5nO/1OI0mYcYlKu6lk1QQRdUjwF1XRXCzy3RCchjlQImLJUAJ3v/PYkBlLmRhf9SS5IU
-         Z2MRyD3tcPHkzJ9FBMcoQU855tYRxmwirM9TfurKKf91t1KNqX+1sHEiVubcpyA1xFLV
-         4nNQ==
-X-Gm-Message-State: ABy/qLZyt293PadNAyus3aBUo/Nf2dFdmQz4i+vw8Nv7LEqoq+qpump9
-        vHlgsurlu7/M4n6aYRds4KQ=
-X-Google-Smtp-Source: APBJJlFh1AyFX2+11T9yyn39CZ9ejJo7irpyerH5jDd4rJJqhGrNwsFMVrOCBzL5cXWCBiVM2usEnA==
-X-Received: by 2002:a17:903:191:b0:1b8:9b5e:65c8 with SMTP id z17-20020a170903019100b001b89b5e65c8mr25796578plg.4.1689859821611;
-        Thu, 20 Jul 2023 06:30:21 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902728c00b001b86deba2f9sm1302975pll.284.2023.07.20.06.30.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jul 2023 06:30:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1d8cf4f5-3004-3af1-2735-03fde48d69c7@roeck-us.net>
-Date:   Thu, 20 Jul 2023 06:30:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 32/42] wdt: ts72xx: add DT support for ts72xx
-Content-Language: en-US
-To:     nikita.shubin@maquefel.me,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S229828AbjGTOIm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jul 2023 10:08:42 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C4DB211F
+        for <linux-rtc@vger.kernel.org>; Thu, 20 Jul 2023 07:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=aQdjCHvypy7hJkuSlY
+        /LzEB92jzQt8h3nBot8st0K/w=; b=mdc2Mcf15oKi4AM6rFtduEmIaKkYTJFaph
+        3UfPcBw56HTvDrw30HVfa4EZiudaZomYn9926LaJObLFhF2B48ySa10eN2U9Wm4x
+        Z5ibshN3aoU3yYMxLbfdSDhLiBdWNYrvOc9NJiEYY7cZTE/CdIM6p1YmrKB6YBj8
+        F3inESp7I=
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by zwqz-smtp-mta-g3-2 (Coremail) with SMTP id _____wDXUcXQP7lkMH1cAw--.19517S4;
+        Thu, 20 Jul 2023 22:08:19 +0800 (CST)
+From:   Yuanjun Gong <ruc_gongyuanjun@163.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-32-3d63a5f1103e@maquefel.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230605-ep93xx-v3-32-3d63a5f1103e@maquefel.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-rtc@vger.kernel.org
+Cc:     Yuanjun Gong <ruc_gongyuanjun@163.com>
+Subject: [PATCH 1/1] rtc: use devm_clk_get_enabled() in mv_rtc_probe()
+Date:   Thu, 20 Jul 2023 22:08:14 +0800
+Message-Id: <20230720140814.33301-1-ruc_gongyuanjun@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: _____wDXUcXQP7lkMH1cAw--.19517S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF4UXFy5ur1fuFykKrWUXFb_yoW8uw1rpF
+        Z3AFWrKr1UtFZakry7Xa1Du3WYyr1xt3W0k3yDuwn2vw1Yyry5JFs5tryvvayFyrWkGr15
+        tw47tFWfCF4UuwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JU5pnPUUUUU=
+X-Originating-IP: [202.112.113.212]
+X-CM-SenderInfo: 5uxfsw5rqj53pdqm30i6rwjhhfrp/xtbBiAuy5VaEF2imEwABsN
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 7/20/23 04:29, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> Add OF ID match table.
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+in mv_rtc_probe(), the return value of function
+clk_prepare_enable() should be checked, since it may fail.
+using devm_clk_get_enabled() instead of devm_clk_get() and
+clk_prepare_enable() can avoid this problem.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Yuanjun Gong <ruc_gongyuanjun@163.com>
+---
+ drivers/rtc/rtc-mv.c | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
 
-> ---
->   drivers/watchdog/ts72xx_wdt.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
-> index 3d57670befe1..ac709dc31a65 100644
-> --- a/drivers/watchdog/ts72xx_wdt.c
-> +++ b/drivers/watchdog/ts72xx_wdt.c
-> @@ -12,6 +12,7 @@
->    */
->   
->   #include <linux/platform_device.h>
-> +#include <linux/mod_devicetable.h>
->   #include <linux/module.h>
->   #include <linux/watchdog.h>
->   #include <linux/io.h>
-> @@ -160,10 +161,17 @@ static int ts72xx_wdt_probe(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +static const struct of_device_id ts72xx_wdt_of_ids[] = {
-> +	{ .compatible = "technologic,ts7200-wdt" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ts72xx_wdt_of_ids);
-> +
->   static struct platform_driver ts72xx_wdt_driver = {
->   	.probe		= ts72xx_wdt_probe,
->   	.driver		= {
->   		.name	= "ts72xx-wdt",
-> +		.of_match_table = ts72xx_wdt_of_ids,
->   	},
->   };
->   
-> 
+diff --git a/drivers/rtc/rtc-mv.c b/drivers/rtc/rtc-mv.c
+index 6c526e2ec56d..8cd33721be03 100644
+--- a/drivers/rtc/rtc-mv.c
++++ b/drivers/rtc/rtc-mv.c
+@@ -219,17 +219,16 @@ static int __init mv_rtc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(pdata->ioaddr))
+ 		return PTR_ERR(pdata->ioaddr);
+ 
+-	pdata->clk = devm_clk_get(&pdev->dev, NULL);
++	pdata->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	/* Not all SoCs require a clock.*/
+-	if (!IS_ERR(pdata->clk))
+-		clk_prepare_enable(pdata->clk);
++	if (IS_ERR(pdata->clk))
++		return PTR_ERR(pdata->clk);
+ 
+ 	/* make sure the 24 hour mode is enabled */
+ 	rtc_time = readl(pdata->ioaddr + RTC_TIME_REG_OFFS);
+ 	if (rtc_time & RTC_HOURS_12H_MODE) {
+ 		dev_err(&pdev->dev, "12 Hour mode is enabled but not supported.\n");
+-		ret = -EINVAL;
+-		goto out;
++		return -EINVAL;
+ 	}
+ 
+ 	/* make sure it is actually functional */
+@@ -238,8 +237,7 @@ static int __init mv_rtc_probe(struct platform_device *pdev)
+ 		rtc_time = readl(pdata->ioaddr + RTC_TIME_REG_OFFS);
+ 		if (rtc_time == 0x01000000) {
+ 			dev_err(&pdev->dev, "internal RTC not ticking\n");
+-			ret = -ENODEV;
+-			goto out;
++			return -ENODEV;
+ 		}
+ 	}
+ 
+@@ -249,8 +247,7 @@ static int __init mv_rtc_probe(struct platform_device *pdev)
+ 
+ 	pdata->rtc = devm_rtc_allocate_device(&pdev->dev);
+ 	if (IS_ERR(pdata->rtc)) {
+-		ret = PTR_ERR(pdata->rtc);
+-		goto out;
++		return PTR_ERR(pdata->rtc);
+ 	}
+ 
+ 	if (pdata->irq >= 0) {
+@@ -275,11 +272,6 @@ static int __init mv_rtc_probe(struct platform_device *pdev)
+ 	ret = devm_rtc_register_device(pdata->rtc);
+ 	if (!ret)
+ 		return 0;
+-out:
+-	if (!IS_ERR(pdata->clk))
+-		clk_disable_unprepare(pdata->clk);
+-
+-	return ret;
+ }
+ 
+ static int __exit mv_rtc_remove(struct platform_device *pdev)
+-- 
+2.17.1
 
