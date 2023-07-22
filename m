@@ -2,124 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE3475CFE6
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jul 2023 18:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A0675DA43
+	for <lists+linux-rtc@lfdr.de>; Sat, 22 Jul 2023 08:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjGUQn2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 21 Jul 2023 12:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S229628AbjGVGHU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 22 Jul 2023 02:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjGUQnY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 21 Jul 2023 12:43:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689E3273E;
-        Fri, 21 Jul 2023 09:43:13 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="351946345"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="351946345"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 09:42:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10778"; a="728169179"
-X-IronPort-AV: E=Sophos;i="6.01,222,1684825200"; 
-   d="scan'208";a="728169179"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Jul 2023 09:42:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qMtDF-00Cx3r-2P;
-        Fri, 21 Jul 2023 19:42:41 +0300
-Date:   Fri, 21 Jul 2023 19:42:41 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 18/42] spi: ep93xx: add DT support for Cirrus EP93xx
-Message-ID: <ZLq1gQKWWE/2WCYd@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-18-3d63a5f1103e@maquefel.me>
+        with ESMTP id S229457AbjGVGHT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 22 Jul 2023 02:07:19 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0E93A97;
+        Fri, 21 Jul 2023 23:07:18 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1b3c503af99so2074746fac.0;
+        Fri, 21 Jul 2023 23:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690006037; x=1690610837;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rW6GM0YOKgtl8KRMmye9ZDjg4JN8bbrjMVuMmk40jik=;
+        b=DoBw3Me1QOOkU/J1GVBk5SaEYGjZnik2o7BnISvlBySPxczy5lmYzvOCcxWqQYxb1N
+         NcgDMNi+jaKY6uI1eqHyRlE0ugCo1Gnhlw2RNAVeQswQ202G2D+OtrzWvU9IvH1nQjTC
+         Bbsms1KXORTHkB591U+nMfZIGXO7twpzOMR4YEeKk45fAyAG4vSpWppYDPNTNOCqy1E1
+         L2L8XC92xts5DmJySbJTIpxki27QNH8SFTt9dfBoR9ANQ1ZRWVGbM5EAQG94yzo53tQ/
+         ryPh2g3T98RbYr/JoNCPYZ7szaUIfMkibSE7AD76BOVKuAvSv8xxF+EUnJ+NvjmKC21j
+         Mc/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690006037; x=1690610837;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rW6GM0YOKgtl8KRMmye9ZDjg4JN8bbrjMVuMmk40jik=;
+        b=ehFUa17EdEXRUIVbPffnfsfgLEKOnOI9arMzrwiKKicrLeyyeOTS//lGpFC6pRzvPB
+         Llze4CppmskGMOCLpctf0xCcIAhp437yPf3fFQlINyw3pHfNA782f6rlfcCSirl+kkAZ
+         sKQJdbGhh62IGaii6WMn6eIDL6bXj9T7aty0GSdvUjETwaGtXM3NO2sSIofxv1j93trJ
+         yqVxL3V+WX1Nte5nfyyYWwtWzAM/UiC5bo3cfj0mq0kBBZ0zcpuOFKSYk9ciVpJ1BaMJ
+         v+1WlumalQkkFjktuiXzUVTtGTL2Zeqg7E1Hs5kQM6PZgTp9n4g2lsQzKZOLHRLO3fbo
+         v0gg==
+X-Gm-Message-State: ABy/qLaDOl1fjmFW/Nj6X37xZ/7wgqG4oaeIwRj/61a3aQAedZHncXF3
+        I5M7JPkzgXegAMoiqXJTkbA=
+X-Google-Smtp-Source: APBJJlHCe0dYIQRNUPOiWsNip1lqerBaA6M371j3mQZBtlg6icpfQ1ao2XrDcq24IliOaCsmOVeg6A==
+X-Received: by 2002:a05:6870:a40a:b0:1b4:4a2e:b698 with SMTP id m10-20020a056870a40a00b001b44a2eb698mr4386468oal.47.1690006036749;
+        Fri, 21 Jul 2023 23:07:16 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:c009:58e9:afd6:100a:624c:cf38])
+        by smtp.gmail.com with ESMTPSA id y12-20020aa7804c000000b0063b898b3502sm3886060pfm.153.2023.07.21.23.07.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jul 2023 23:07:16 -0700 (PDT)
+From:   Atul Kumar Pant <atulpant.linux@gmail.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     Atul Kumar Pant <atulpant.linux@gmail.com>, shuah@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5] selftests: rtc: Fixes rtctest error handling.
+Date:   Sat, 22 Jul 2023 11:37:06 +0530
+Message-Id: <20230722060706.79759-1-atulpant.linux@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605-ep93xx-v3-18-3d63a5f1103e@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 02:29:18PM +0300, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> - add OF ID match table
-> 
-> Instead of platform use_dma flag - check if DT dmas property is present to
-> decide to use dma ot not.
+Adds a check to verify if the rtc device file is valid or not
+and prints a useful error message if the file is not accessible.
 
-...
+Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
 
-> +#ifdef CONFIG_OF
+changes since v4:
+    Updated the commit message.
 
-Why ifdeffery?
+changes since v3:
+    Added Linux-kselftest and Linux-kernel mailing lists.
 
-Can't it be first checked for firmware provided info and fell back to platdata?
+changes since v2:
+    Changed error message when rtc file does not exist.
 
-> +static struct ep93xx_spi_info dt_spi_info;
+changes since v1:
+    Removed check for uid=0
+    If rtc file is invalid, then exit the test.
 
-...
+ tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-> +#endif
-
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 63ce02d1d5cc..630fef735c7e 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -17,6 +17,7 @@
+ #include <unistd.h>
+ 
+ #include "../kselftest_harness.h"
++#include "../kselftest.h"
+ 
+ #define NUM_UIE 3
+ #define ALARM_DELTA 3
+@@ -419,6 +420,8 @@ __constructor_order_last(void)
+ 
+ int main(int argc, char **argv)
+ {
++	int ret = -1;
++
+ 	switch (argc) {
+ 	case 2:
+ 		rtc_file = argv[1];
+@@ -430,5 +433,11 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+ 
+-	return test_harness_run(argc, argv);
++	// Run the test if rtc_file is valid
++	if (access(rtc_file, F_OK) == 0)
++		ret = test_harness_run(argc, argv);
++	else
++		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
++
++	return ret;
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
