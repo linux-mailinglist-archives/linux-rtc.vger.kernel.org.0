@@ -2,101 +2,105 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93CD765517
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jul 2023 15:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DC37656AC
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jul 2023 17:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbjG0Nc6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Thu, 27 Jul 2023 09:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S233902AbjG0PC2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 27 Jul 2023 11:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233733AbjG0Nc4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Jul 2023 09:32:56 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB6D2728;
-        Thu, 27 Jul 2023 06:32:56 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-584243f84eeso10363367b3.0;
-        Thu, 27 Jul 2023 06:32:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690464775; x=1691069575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lf/pqyRZV/biJkojfSpBvd3tXkvLp57H+KrNoCOq1+0=;
-        b=U2ySh94u11AkLGv020q7OfvwAzGv6guUWJn8JqSfmb8jKOufDTu7bcS4zAX7ujlHzC
-         oj2Rozs6d/AJ1Nigw5uTqIgpk/MrK2efxbliA3wj+FHZUqaPn0CqO5ySSbLyJtPK2rti
-         t4HO3cL3QY1NN1mmZmVr5vAG9LlNv/wsLsDsKItNwGNdTTNHIOfX2i6FJ3iw7xr905uF
-         +IlOVsboiBi+5Q3shf5EsJIQcv293fer2ASjzNnrm0RJCEOcB3pCvLfnmfhxIOfrXi5W
-         DdNm/eXIUU9Fr/15zQfD2D1gouXyT1KNDA1mJHhKNbaloEgFdd7yizUN7BFv8qn6w2YO
-         FEWA==
-X-Gm-Message-State: ABy/qLbXYDUSQDYhBKiaZc4AYhnA150GIe8J3RTcAUawkOMJD4Rv+tG1
-        j/w4pTND7eAIyAqaHDtgpaHfTyAjjMMSHA==
-X-Google-Smtp-Source: APBJJlHC7JRu6htUD7n6d+84F79WBlqMNT4cwa5pmw0NDqWY6PO1uygMYG60FCYwsSH6UAfWWNpYcg==
-X-Received: by 2002:a0d:cc43:0:b0:56c:f68f:d824 with SMTP id o64-20020a0dcc43000000b0056cf68fd824mr4942191ywd.45.1690464775040;
-        Thu, 27 Jul 2023 06:32:55 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id o64-20020a815a43000000b00559fb950d9fsm407035ywb.45.2023.07.27.06.32.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jul 2023 06:32:54 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-d16889b3e93so857939276.0;
-        Thu, 27 Jul 2023 06:32:54 -0700 (PDT)
-X-Received: by 2002:a25:c5:0:b0:d06:f0ab:e17b with SMTP id 188-20020a2500c5000000b00d06f0abe17bmr4639603yba.55.1690464773775;
- Thu, 27 Jul 2023 06:32:53 -0700 (PDT)
+        with ESMTP id S234098AbjG0PCU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Jul 2023 11:02:20 -0400
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007641BD1;
+        Thu, 27 Jul 2023 08:02:16 -0700 (PDT)
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+        by unicorn.mansr.com (Postfix) with ESMTPS id 70D7D15360;
+        Thu, 27 Jul 2023 16:02:13 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id 62DC6221D92; Thu, 27 Jul 2023 16:02:13 +0100 (BST)
+From:   Mans Rullgard <mans@mansr.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH] rtc: sunxi: use external 32k oscillator if provided
+Date:   Thu, 27 Jul 2023 16:01:23 +0100
+Message-ID: <20230727150156.29691-1-mans@mansr.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230719192835.1025406-1-arnd@kernel.org>
-In-Reply-To: <20230719192835.1025406-1-arnd@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 27 Jul 2023 15:32:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXzUvapDXKET6ZRmn33aH-EdQJ4E6Lk2AEXk_fwmtzFGQ@mail.gmail.com>
-Message-ID: <CAMuHMdXzUvapDXKET6ZRmn33aH-EdQJ4E6Lk2AEXk_fwmtzFGQ@mail.gmail.com>
-Subject: Re: [PATCH] [v2] rtc: bq4802: add sparc dependency
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jul 19, 2023 at 9:28 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The added HAS_IOPORT dependency might not actually be necessary as Geert
-> points out, but the driver is also only used on one architecture. Sparc
-> is also a special case here since it converts port numbers into virtual
-> addresses rather than having them mapped into a particular part of the
-> __iomem address space, so the difference is actually not important here.
->
-> Add a dependency on sparc, but allow compile-testing otherwise, to
-> make this clearer without anyone having to spend much time modernizing
-> the driver beyond that.
->
-> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: David S. Miller <davem@davemloft.net>
-> Link: https://lore.kernel.org/all/CAMuHMdWEx0F=fNei4Bz_JPkuvoaN-+zk08h0i8KnSi_VjO615g@mail.gmail.com/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> v2: split dependency into two lines, as suggested by Geert
+Set the OSC32K_SRC_SEL bit in the LOSC control register if a clock is
+specified in the devicetree.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+---
+The newer sun6i rtc driver is a proper clk provider with parent
+selection.  Doing the same thing in this driver would be difficult
+while staying compatible with existing devicetrees.  For that reason,
+this simpler approach seems reasonable.
+---
+ drivers/rtc/rtc-sunxi.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/rtc/rtc-sunxi.c b/drivers/rtc/rtc-sunxi.c
+index 5d019e3a835a..4f1053eab778 100644
+--- a/drivers/rtc/rtc-sunxi.c
++++ b/drivers/rtc/rtc-sunxi.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2013, Carlo Caione <carlo.caione@gmail.com>
+  */
+ 
++#include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/fs.h>
+@@ -21,8 +22,10 @@
+ #include <linux/types.h>
+ 
+ #define SUNXI_LOSC_CTRL				0x0000
++#define SUNXI_LOSC_CTRL_KEY			(0x16aa << 16)
+ #define SUNXI_LOSC_CTRL_RTC_HMS_ACC		BIT(8)
+ #define SUNXI_LOSC_CTRL_RTC_YMD_ACC		BIT(7)
++#define SUNXI_LOSC_CTRL_OSC32K_SRC_SEL		BIT(0)
+ 
+ #define SUNXI_RTC_YMD				0x0004
+ 
+@@ -422,6 +425,7 @@ MODULE_DEVICE_TABLE(of, sunxi_rtc_dt_ids);
+ static int sunxi_rtc_probe(struct platform_device *pdev)
+ {
+ 	struct sunxi_rtc_dev *chip;
++	struct clk *extclk;
+ 	int ret;
+ 
+ 	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+@@ -455,6 +459,14 @@ static int sunxi_rtc_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
++	/* use external oscillator if present */
++	extclk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
++	if (IS_ERR(extclk))
++		return PTR_ERR(extclk);
++	if (extclk)
++		writel(SUNXI_LOSC_CTRL_KEY | SUNXI_LOSC_CTRL_OSC32K_SRC_SEL,
++		       chip->base + SUNXI_LOSC_CTRL);
++
+ 	/* clear the alarm count value */
+ 	writel(0, chip->base + SUNXI_ALRM_DHMS);
+ 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.41.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
