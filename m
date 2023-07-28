@@ -2,156 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D297671FC
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jul 2023 18:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819C8767302
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jul 2023 19:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbjG1QhQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 28 Jul 2023 12:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S231625AbjG1RMo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 28 Jul 2023 13:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjG1QhA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Jul 2023 12:37:00 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE86422A
-        for <linux-rtc@vger.kernel.org>; Fri, 28 Jul 2023 09:36:56 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3178dd771ceso708305f8f.2
-        for <linux-rtc@vger.kernel.org>; Fri, 28 Jul 2023 09:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690562215; x=1691167015;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kv1vn8i10uKiVGMZqWV0hp2dp0U/OH8nWn1xPOKpe2E=;
-        b=WXsUGfp3JibzzSWaJLOYRCf5x8xXWgYZKzFIf69dgVy9YK8C4NDwHyEDFZXz5w3U4v
-         QQOs8VR3xBCFtRC9Uc3C7jDtHbHf/TVcDQbt3KNBbvC3KguUj++OBRSmosar1TXhCfCO
-         cgVRNgC2CqwGVozxV9BCvuohUn46t+dccFpMTd9ejv8OKqQcVDJDj14Xf7r2EkIsfxZ5
-         ogiBvgZjEDgqBJiNCt+R3MZB3dOH5vA6Wa4t08ltVHwtTVkpajcfwR8vctgSe4BB19fI
-         6WAvtCklIkG3U/TnlOkzeYCurxGOclz0CiZwVtqU4t3uUZ/xLeZzpgcwN0UIfUeqn7Sx
-         T+Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690562215; x=1691167015;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kv1vn8i10uKiVGMZqWV0hp2dp0U/OH8nWn1xPOKpe2E=;
-        b=FKaZToxLRpjNZivJ1XXLDntVGdJGBTdMvtwBjHFbhu42OGV2hSz3uawVwh7mvAmlNA
-         bb6HemTgBOALu77VHrr9fTYAq3WS/mCrmbnskW1GQYQgaqdDC6LAqob8cQzTIxHe3+tH
-         wQm7xjSAlOcVFlwNhX470oZf47aeBzHwwhgpihKcZZEWGNDvB1YF5E3R9CLn8ipd6BaU
-         MKLRexF9nNsReJqjd8XRY4lqLbpkNR3AjX/KF/vv1uRJ3//w/kJOEZT9Tve/kpl02gIJ
-         KyWc1UT6ZAwKf4S71ncgelbUGSA6A66OaOaQ+77/Xbj7xlOB6QR37/aBR/Tac56Ez6Ro
-         E4og==
-X-Gm-Message-State: ABy/qLYO+3gDQsNh1rTyQ+QhnyMgfoFDKE941OLlM+bH8v1RDA9J7BmP
-        E1ThCWMY59Z9CTz3PDVJEuAlgw==
-X-Google-Smtp-Source: APBJJlFtwmVxo8pxiclcUgLI8fwOIzC/1t6avYTLDMrZvATE9p+eFs+1MvU7kydx7xR6YX3cFZ69Tg==
-X-Received: by 2002:a05:6000:11:b0:317:5de3:86fb with SMTP id h17-20020a056000001100b003175de386fbmr2171475wrx.10.1690562214762;
-        Fri, 28 Jul 2023 09:36:54 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id p9-20020a5d48c9000000b0031433443265sm5235215wrs.53.2023.07.28.09.36.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 09:36:54 -0700 (PDT)
-Message-ID: <30943376-f895-2eb9-1b00-55ce56f51742@linaro.org>
-Date:   Fri, 28 Jul 2023 18:36:47 +0200
+        with ESMTP id S231792AbjG1RMg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Jul 2023 13:12:36 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C466035A9;
+        Fri, 28 Jul 2023 10:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=iapXccHtapXvoYza5A60N8Syh4OAAzH77Y1/wEH0vXk=; b=I
+        0VWY96Jm2YDqvFYQSB7OI5DXRYWy7LOpq1Ke+wKgqqr+Y7tow0tB3yUWkuOLthqrsDaLWjJnZ1huM
+        xbXMA/qrT85Ez5dRVcrL1Xbl3lp/85pSVERXmZuVeGT5s0KZNqf8sJzNISb1zmxUz0AnmqRU8EH51
+        LjlOdGXfEKBPdEUU=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:53782 helo=localhost.localdomain)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qPR0u-0003RD-Nz; Fri, 28 Jul 2023 13:12:29 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 28 Jul 2023 13:12:12 -0400
+Message-Id: <20230728171211.3016019-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        andi.shyti@kernel.org, tglx@linutronix.de, maz@kernel.org,
-        lee@kernel.org, ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        richard@nod.at, vigneshr@ti.com, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linus.walleij@linaro.org,
-        sre@kernel.org, p.zabel@pengutronix.de, olivia@selenic.com,
-        a.zummo@towertech.it, radu_nicolae.pirea@upb.ro,
-        richard.genoud@gmail.com, gregkh@linuxfoundation.org,
-        lgirdwood@gmail.com, broonie@kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, linux@armlinux.org.uk,
-        durai.manickamkr@microchip.com, andrew@lunn.ch,
-        jerry.ray@microchip.com, andre.przywara@arm.com, mani@kernel.org,
-        alexandre.torgue@st.com, gregory.clement@bootlin.com,
-        arnd@arndb.de, rientjes@google.com, deller@gmx.de,
-        42.hyeyoo@gmail.com, vbabka@suse.cz, mripard@kernel.org,
-        mihai.sain@microchip.com, codrin.ciubotariu@microchip.com,
-        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20230728102223.265216-1-varshini.rajendran@microchip.com>
- <c0792cfd-db4f-7153-0775-824912277908@linaro.org>
- <20230728-floss-stark-889158f968ea@spud> <20230728180443.55363550@xps-13>
- <20230728-perfectly-online-499ba99ce421@spud>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230728-perfectly-online-499ba99ce421@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [RESEND PATCH v2] rtc: pcf2127: add error checking when disabling POR0
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/07/2023 18:10, Conor Dooley wrote:
-> On Fri, Jul 28, 2023 at 06:04:43PM +0200, Miquel Raynal wrote:
->> Hi Conor,
->>
->> conor@kernel.org wrote on Fri, 28 Jul 2023 16:50:24 +0100:
->>
->>> On Fri, Jul 28, 2023 at 01:32:12PM +0200, Krzysztof Kozlowski wrote:
->>>> On 28/07/2023 12:22, Varshini Rajendran wrote:  
->>>>> This patch series adds support for the new SoC family - sam9x7.
->>>>>  - The device tree, configs and drivers are added
->>>>>  - Clock driver for sam9x7 is added
->>>>>  - Support for basic peripherals is added
->>>>>  - Target board SAM9X75 Curiosity is added
->>>>>   
->>>>
->>>> Your threading is absolutely broken making it difficult to review and apply.  
->>>
->>> I had a chat with Varshini today, they were trying to avoid sending the
->>> patches to a massive CC list, but didn't set any in-reply-to header.
->>> For the next submission whole series could be sent to the binding &
->>> platform maintainers and the individual patches additionally to their
->>> respective lists/maintainers. Does that sound okay to you, or do you
->>> think it should be broken up?
->>
->> I usually prefer receiving the dt-bindings *and* the driver changes, so
->> I can give my feedback on the description side, as well as looking at
->> the implementation and see if that really matches what was discussed
->> with you :)
-> 
-> Right, that is what I was suggesting. Respective maintainers would get
-> the drivers *and* bindings for their subsystems - IOW, each patch is
-> sent to what get_maintainer.pl outputs for it.
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-For reviewers I find the easiest if this is mostly split per subsystem.
-There were here few patches for USB, few clk etc, so these easily can be
-separate patchsets. All the rest one-liners or one-patch-per-subsystem
-could be grouped and set in one patchset, after fixing the threading.
+If PCF2127 device is absent from the I2C bus, or if there is a
+communication problem, disabling POR0 may fail silently and we
+still continue with probing the device. In that case, abort probe
+operation.
 
-But the moment the patchset grows to 50 it's time to re-think it whether
-this grouping is necessary or even beneficial.
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+V1 -> V2: Removed error message
+---
+ drivers/rtc/rtc-pcf2127.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-This is not a conversion of mach to DT (like ep93xx) which benefits of
-doing everything in one step. Therefore my recommendation for this work
-is to split it entirely per each subsystem.
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 78141bb06ab0..3387afe93417 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -1192,8 +1192,10 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 	 * The "Power-On Reset Override" facility prevents the RTC to do a reset
+ 	 * after power on. For normal operation the PORO must be disabled.
+ 	 */
+-	regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
++	ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+ 				PCF2127_BIT_CTRL1_POR_OVRD);
++	if (ret < 0)
++		return ret;
+ 
+ 	ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
+ 	if (ret < 0)
 
-Best regards,
-Krzysztof
+base-commit: 3c87b351809f220294aec3c0df7b078ff5c5b15b
+-- 
+2.30.2
 
