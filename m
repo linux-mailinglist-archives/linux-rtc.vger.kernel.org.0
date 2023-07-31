@@ -2,41 +2,35 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223E876A03D
-	for <lists+linux-rtc@lfdr.de>; Mon, 31 Jul 2023 20:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A0576A20A
+	for <lists+linux-rtc@lfdr.de>; Mon, 31 Jul 2023 22:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGaSUI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 31 Jul 2023 14:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        id S229557AbjGaUir (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 31 Jul 2023 16:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjGaSUF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Jul 2023 14:20:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A1419AA;
-        Mon, 31 Jul 2023 11:20:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AC0C6125A;
-        Mon, 31 Jul 2023 18:20:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD9BC433B9;
-        Mon, 31 Jul 2023 18:20:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690827601;
-        bh=AL8IQvRuROckVk8brJfkavPt8PtZd1aJDIS2DkRo6uA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oxEq1KPXwyVC1XodEZWtEzrbM+XLI07D7cJOSKzt1Oscom6oVTU1lwGFJPA5F6uBJ
-         6qL57Cigp7iSIR5GUFKTHhgLDYNw3s54jdNApWbMEkaJC1YsJcasDjaQaL1O05SJLG
-         Ic7ZS7rI9/EYJGe/xRS02qJvdI7YVFP9rsSQPB3ATnZHbcgg4UREZfWCOip439fA4E
-         LsoQccIbooMH6I3oBljrgyoic0cSzMrliwPNcPedoz8+sg+mqGYXJLTuIN5Bcm0RX9
-         QVLPR5U1qki9AeiFZHYj3Cx1t+mlEniOJJbXyxG6y60zJggaAbh70ayc3X/OvNqKg2
-         QSiXoG2n1eSnw==
-Date:   Mon, 31 Jul 2023 11:19:59 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
+        with ESMTP id S229550AbjGaUiq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Jul 2023 16:38:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C42C198;
+        Mon, 31 Jul 2023 13:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ISelzNfwyo+LcVPzu+i+zMJl2RrP3z4luSWxJvJvqhk=; b=ecUqOk1P/oc9OcuXHSZ4MXiHaz
+        s/PUYhO4jddknCn7BxNh6AzglP5ru5XtyE4NPHgTggJ0hBrG/vFhkvbG5IJbN1J7hGM0EDaSwc+pQ
+        TsZc+j9vY2HQCy+iTROBNCUObuLKlTx3SROOpnfU/3kMNRKFdtDEEXomOVD/pJcUfyog6zrUK/ISn
+        regdYt0O7+gGqlcThcy60t/PrOiRSerwdcBtDt1m4wQGOE4knIxa9iQKHqmL9w58KiZAnE9IT07Ub
+        1nty92Qo1vZPqkwYQTLkzX3ueFVI5MOeL/cKXq8eA/gAQ8Ryd1hzXRsM73GsRhoxl8qgKPID3F/cN
+        IJkuQY5g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qQZey-00HJ3x-0X;
+        Mon, 31 Jul 2023 20:38:32 +0000
+Date:   Mon, 31 Jul 2023 13:38:32 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Christoph Hellwig <hch@lst.de>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
@@ -45,34 +39,88 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Joshua Kinard <kumba@gentoo.org>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org (open list),
+        open list <linux-kernel@vger.kernel.org>,
         linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/5] net: enetc: use EXPORT_SYMBOL_GPL for
- enetc_phc_index
-Message-ID: <20230731111959.7403238c@kernel.org>
-In-Reply-To: <20230731083806.453036-3-hch@lst.de>
+Subject: Re: [PATCH 5/5] modules: only allow symbol_get of EXPORT_SYMBOL_GPL
+ modules
+Message-ID: <ZMgbyNKnotCMyB+f@bombadil.infradead.org>
 References: <20230731083806.453036-1-hch@lst.de>
-        <20230731083806.453036-3-hch@lst.de>
+ <20230731083806.453036-6-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230731083806.453036-6-hch@lst.de>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 31 Jul 2023 10:38:03 +0200 Christoph Hellwig wrote:
-> enetc_phc_index is only used via symbol_get, which was only ever
-> intended for very internal symbols like this one.  Use EXPORT_SYMBOL_GPL
-> for it so that symbol_get can enforce only being used on
-> EXPORT_SYMBOL_GPL symbols.
+On Mon, Jul 31, 2023 at 10:38:06AM +0200, Christoph Hellwig wrote:
+> ---
+>  kernel/module/internal.h |  1 +
+>  kernel/module/main.c     | 17 ++++++++++++-----
+>  2 files changed, 13 insertions(+), 5 deletions(-)
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index c8b7b4dcf7820d..add687c2abde8b 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -93,6 +93,7 @@ struct find_symbol_arg {
+>  	/* Input */
+>  	const char *name;
+>  	bool gplok;
+> +	bool gplonly;
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+We'd want to add here a reason or something like that to allow the
+caller to know why we failed if we want to provide feedback.
+
+>  	bool warn;
+>  
+>  	/* Output */
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 59b1d067e52890..85d3f00ca65758 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -281,6 +281,8 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
+>  
+>  	if (!fsa->gplok && syms->license == GPL_ONLY)
+>  		return false;
+> +	if (fsa->gplonly && syms->license != GPL_ONLY)
+
+And set it here to something other than perhaps a default of NOT_FOUND.
+
+> +		return false;
+>  
+>  	sym = bsearch(fsa->name, syms->start, syms->stop - syms->start,
+>  			sizeof(struct kernel_symbol), cmp_name);
+> @@ -776,8 +778,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+> @@ -1289,14 +1292,18 @@ static void free_module(struct module *mod)
+>  void *__symbol_get(const char *symbol)
+>  {
+>  	struct find_symbol_arg fsa = {
+> -		.name	= symbol,
+> -		.gplok	= true,
+> -		.warn	= true,
+> +		.name		= symbol,
+> +		.gplok		= true,
+> +		.gplonly	= true,
+> +		.warn		= true,
+>  	};
+>  
+>  	preempt_disable();
+>  	if (!find_symbol(&fsa) || strong_try_module_get(fsa.owner)) {
+>  		preempt_enable();
+> +		if (fsa.gplonly)
+> +			pr_warn("failing symbol_get of non-GPLONLY symbol %s.\n",
+
+Because here fsa.gplonly is always true here so the above warn will
+print even if a symbol is just not found.
+
+  Luis
