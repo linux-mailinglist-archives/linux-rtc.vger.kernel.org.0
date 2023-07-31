@@ -2,23 +2,40 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5636769D4D
-	for <lists+linux-rtc@lfdr.de>; Mon, 31 Jul 2023 18:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2126076A012
+	for <lists+linux-rtc@lfdr.de>; Mon, 31 Jul 2023 20:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbjGaQ53 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 31 Jul 2023 12:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S229675AbjGaSLq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 31 Jul 2023 14:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbjGaQ52 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Jul 2023 12:57:28 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A0D1722;
-        Mon, 31 Jul 2023 09:57:26 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 8A68A68AA6; Mon, 31 Jul 2023 18:57:22 +0200 (CEST)
-Date:   Mon, 31 Jul 2023 18:57:22 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
+        with ESMTP id S229501AbjGaSLp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Jul 2023 14:11:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED6F172E;
+        Mon, 31 Jul 2023 11:11:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1DFA6126E;
+        Mon, 31 Jul 2023 18:11:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E65C433C8;
+        Mon, 31 Jul 2023 18:11:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690827101;
+        bh=cDFN1vkB0ZVLYUOK6O311UnGeZg6NUNHfqUlOQZ/kMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pCi/haN3XCVahqgyxo0Hwl1jJ8SS0UyvL7SLRzW5+Ivk52fbJRix4Rz3LRTy7KLv2
+         b4GZ55nnyH7K1I+wg64daYkDhcKEaYmaRRiHs182gJ0mMx8d9kLs3mUBsXmCLYqd2I
+         9n0ArLli+1PYHvaEJea1atA1WDbDEWE9s94j+3nI7iYax1SxXdiX9rLFAw1q/ZtZQN
+         u0mwc1ABqwtyhv8sU3Hgxyn1lZXIzSsQcvJxQiqylGaRRfMcWfTs86ltMhQo/J59mu
+         2rZaiXj5ZESpDHTCdWBAz6POpHRwGmOr452Y0zzYVsb+iQ2Nf0oSJkAtHeT6LSN5PG
+         QWyT2Vs/iD6zw==
+Date:   Mon, 31 Jul 2023 20:11:36 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -26,40 +43,38 @@ To:     Luis Chamberlain <mcgrof@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Yangbo Lu <yangbo.lu@nxp.com>,
         Joshua Kinard <kumba@gentoo.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
         linux-arm-kernel@lists.infradead.org,
         open list <linux-kernel@vger.kernel.org>,
         linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH 4/5] mmc: use EXPORT_SYMBOL_GPL for mmc_detect_change
-Message-ID: <20230731165722.GA10760@lst.de>
-References: <20230731083806.453036-1-hch@lst.de> <20230731083806.453036-5-hch@lst.de>
+Subject: Re: [PATCH 5/5] modules: only allow symbol_get of EXPORT_SYMBOL_GPL
+ modules
+Message-ID: <ZMf5WN/2BGC4vYoy@kernel.org>
+References: <20230731083806.453036-1-hch@lst.de>
+ <20230731083806.453036-6-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230731083806.453036-5-hch@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230731083806.453036-6-hch@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 10:38:05AM +0200, Christoph Hellwig wrote:
-> mmc_detect_change is used via symbol_get, which was only ever intended
-> for very internal symbols like this one.  Use EXPORT_SYMBOL_GPL
-> for it so that symbol_get can enforce only being used on
-> EXPORT_SYMBOL_GPL symbols.
+On Mon, Jul 31, 2023 at 10:38:06AM +0200, Christoph Hellwig wrote:
+> It has recently come to my attention that nvidia is circumventing the
+> protection added in 262e6ae7081d ("modules: inherit
+> TAINT_PROPRIETARY_MODULE") by importing exports from their propriertary
+> modules into an allegedly GPL licensed module and then rexporting them.
+> 
+> Given that symbol_get was only ever inteded for tightly cooperating
 
-Btw, I really wonder if this should actually be used through symbol_get.
-It seems like the MIPS/alchemy boards should simply require MMC to be
-built in and not modular, or the IRQ handlers should move into a driver.
+nit: inteded -> intended
 
-That would be a much less mechanical change, but this use really looks
-a bit odd.  And makes me wonder if we should only allow symbol_get
-on symbols specifically marked to supported it, but that would be
-another incremental step.
+...
