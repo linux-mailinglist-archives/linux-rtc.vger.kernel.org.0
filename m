@@ -2,125 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A0576A20A
-	for <lists+linux-rtc@lfdr.de>; Mon, 31 Jul 2023 22:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E4876B3DB
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Aug 2023 13:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjGaUir (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 31 Jul 2023 16:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S234433AbjHALwj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 1 Aug 2023 07:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjGaUiq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Jul 2023 16:38:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C42C198;
-        Mon, 31 Jul 2023 13:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ISelzNfwyo+LcVPzu+i+zMJl2RrP3z4luSWxJvJvqhk=; b=ecUqOk1P/oc9OcuXHSZ4MXiHaz
-        s/PUYhO4jddknCn7BxNh6AzglP5ru5XtyE4NPHgTggJ0hBrG/vFhkvbG5IJbN1J7hGM0EDaSwc+pQ
-        TsZc+j9vY2HQCy+iTROBNCUObuLKlTx3SROOpnfU/3kMNRKFdtDEEXomOVD/pJcUfyog6zrUK/ISn
-        regdYt0O7+gGqlcThcy60t/PrOiRSerwdcBtDt1m4wQGOE4knIxa9iQKHqmL9w58KiZAnE9IT07Ub
-        1nty92Qo1vZPqkwYQTLkzX3ueFVI5MOeL/cKXq8eA/gAQ8Ryd1hzXRsM73GsRhoxl8qgKPID3F/cN
-        IJkuQY5g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qQZey-00HJ3x-0X;
-        Mon, 31 Jul 2023 20:38:32 +0000
-Date:   Mon, 31 Jul 2023 13:38:32 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Yangbo Lu <yangbo.lu@nxp.com>,
-        Joshua Kinard <kumba@gentoo.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH 5/5] modules: only allow symbol_get of EXPORT_SYMBOL_GPL
- modules
-Message-ID: <ZMgbyNKnotCMyB+f@bombadil.infradead.org>
-References: <20230731083806.453036-1-hch@lst.de>
- <20230731083806.453036-6-hch@lst.de>
+        with ESMTP id S234426AbjHALwd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Aug 2023 07:52:33 -0400
+Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7F01BD2
+        for <linux-rtc@vger.kernel.org>; Tue,  1 Aug 2023 04:52:30 -0700 (PDT)
+Received: by mail.cothiafon.pl (Postfix, from userid 1002)
+        id B159B83C7C; Mon, 31 Jul 2023 10:36:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
+        t=1690792652; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
+        h=Date:From:To:Subject:From;
+        b=W0tr0AySefde7ZR/9bJkFCXp5w8uIaf0rU+PW+eUZHmX1RNgmVhXR3djtx/pSEQvG
+         pfjA0kFZC70KBI/OmBsRque9WzmuCCQ5gS95u9yshbZBMDqKBrnmAfgcAXvcbIDxm2
+         LIeMZAWjZbUVHpJtsO6DA4uDDeFGrBaYnvZWqTpm3hp4H/POuWVUUU8f5o+4Zx4Zb0
+         VKf2BkK11mhGjLAx5Y0LIQ9RDu+6ON/uKF59JpMBp8ZFMgdhdNZMGg22u/pM6TokqE
+         EMUB4ljf7KXDFHWB9i4lJQQBVl2Xe9QiM2YwSi7/qcxjswxw9F1uNxkTiXCoepeTUW
+         2/qv0QOXH/20Q==
+Received: by mail.cothiafon.pl for <linux-rtc@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
+Message-ID: <20230731095940-0.1.28.onre.0.c29kige34f@cothiafon.pl>
+Date:   Mon, 31 Jul 2023 08:35:48 GMT
+From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
+        <radoslaw.grabowski@cothiafon.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.cothiafon.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731083806.453036-6-hch@lst.de>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 10:38:06AM +0200, Christoph Hellwig wrote:
-> ---
->  kernel/module/internal.h |  1 +
->  kernel/module/main.c     | 17 ++++++++++++-----
->  2 files changed, 13 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index c8b7b4dcf7820d..add687c2abde8b 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -93,6 +93,7 @@ struct find_symbol_arg {
->  	/* Input */
->  	const char *name;
->  	bool gplok;
-> +	bool gplonly;
+Dzie=C5=84 dobry,
 
-We'd want to add here a reason or something like that to allow the
-caller to know why we failed if we want to provide feedback.
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
->  	bool warn;
->  
->  	/* Output */
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 59b1d067e52890..85d3f00ca65758 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -281,6 +281,8 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
->  
->  	if (!fsa->gplok && syms->license == GPL_ONLY)
->  		return false;
-> +	if (fsa->gplonly && syms->license != GPL_ONLY)
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-And set it here to something other than perhaps a default of NOT_FOUND.
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-> +		return false;
->  
->  	sym = bsearch(fsa->name, syms->start, syms->stop - syms->start,
->  			sizeof(struct kernel_symbol), cmp_name);
-> @@ -776,8 +778,9 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
-> @@ -1289,14 +1292,18 @@ static void free_module(struct module *mod)
->  void *__symbol_get(const char *symbol)
->  {
->  	struct find_symbol_arg fsa = {
-> -		.name	= symbol,
-> -		.gplok	= true,
-> -		.warn	= true,
-> +		.name		= symbol,
-> +		.gplok		= true,
-> +		.gplonly	= true,
-> +		.warn		= true,
->  	};
->  
->  	preempt_disable();
->  	if (!find_symbol(&fsa) || strong_try_module_get(fsa.owner)) {
->  		preempt_enable();
-> +		if (fsa.gplonly)
-> +			pr_warn("failing symbol_get of non-GPLONLY symbol %s.\n",
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
-Because here fsa.gplonly is always true here so the above warn will
-print even if a symbol is just not found.
 
-  Luis
+Pozdrawiam
+Rados=C5=82aw Grabowski
