@@ -2,110 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F3476B2A3
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Aug 2023 13:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EC776B3B0
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Aug 2023 13:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbjHALGT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 1 Aug 2023 07:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S230376AbjHALqk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 1 Aug 2023 07:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjHALF6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Aug 2023 07:05:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397CB7AA9;
-        Tue,  1 Aug 2023 03:59:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C21C361519;
-        Tue,  1 Aug 2023 10:59:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F66C433C8;
-        Tue,  1 Aug 2023 10:59:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690887578;
-        bh=W6uC+hfdQjXTE0b+hUiFIq4lfhy6AJ+5JMfKAqdfPEg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=I3i7dgT+D7pQRjctNSQCfp2q3NsGd0IjKONwgsV5qi8MuPuNxiXt3FhH/F8UHr3NJ
-         H6mbydie71eLjQgprazKi0/9WCDZaQdB9CI+YGBeO4ic0O7fDcb+Wh5kSA6akqKvsM
-         rYzIwsA1LuNixpwVzxZzH4m1Kffo/le6cp3BCbeKy24Iuhw24sdRfesACPcTPrQ6FY
-         Fy/HTlrayvB15X/PhESYg52xrOovl+Y5/mXrdEu0Y25QGEKzqdccTzl450jNLZ3EsJ
-         szRAHJrb6MjAXz7UoAIcBBCTUn7hiYskhJrEbuvUPw3QcjsUIQWe0o2lp5XtyUblRS
-         Jo/W818d0jTyw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Christophe Guibout <christophe.guibout@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: stm32: remove incorrect #ifdef check
-Date:   Tue,  1 Aug 2023 12:59:15 +0200
-Message-Id: <20230801105932.3738430-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S234402AbjHALqY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Aug 2023 07:46:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880BE1BF0;
+        Tue,  1 Aug 2023 04:46:18 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37189c5k002608;
+        Tue, 1 Aug 2023 11:46:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=UXNCaCfe8x00qYEAOnhM3SnTOV1Wu1rCLnFGmnwNIcc=;
+ b=NbB50WKn4T1hheDDOo5VcsyC6O5W2KsAokHr+m9o0QLV27rd+w73Oc+W/twe/mm3zs31
+ I/hXE2D/y6gbWtMuOUVojp3Q3G9qBnC+WGmwaY6se+8P7AlwYtK2mPV2+pLoyd6fgt4R
+ JVoMUvr7YOyv8oMJtkrZs2wtdlVkIwB0SqYf6mRZZFnkOlGw29Mx7oIY8u0bVUPXy5/7
+ u28cBBTRgUmDLJq3uIFpFG3f+rCgxwF9Am7kS+dzOlsSCo9vlmJw1WyxEIA0XgpRBvm3
+ h4bGVlVNcCZT0ncOI5hDuebmhEY17mgrvTw3q+xybFLE8zNFUrY6HaYjk3PEgVm5SPNG cg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s6a503h2v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Aug 2023 11:46:08 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 371Bk7Gh006901
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 1 Aug 2023 11:46:07 GMT
+Received: from hu-ajainp-blr.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 1 Aug 2023 04:46:05 -0700
+From:   Anvesh Jain P <quic_ajainp@quicinc.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Venkata Rao Kakani" <quic_vkakani@quicinc.com>,
+        Anvesh Jain P <quic_ajainp@quicinc.com>
+Subject: [PATCH] rtc: rtc-pm8xxx: control default alarm wake up capability
+Date:   Tue, 1 Aug 2023 17:15:49 +0530
+Message-ID: <20230801114549.26956-1-quic_ajainp@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kRKcQjerAr_8qcYxPtEWbK_kUdhLRi3o
+X-Proofpoint-ORIG-GUID: kRKcQjerAr_8qcYxPtEWbK_kUdhLRi3o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-01_06,2023-08-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2306200000 definitions=main-2308010106
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Enable & disable rtc alarm wake up capability based on
+default parameter passed from device tree.
 
-After a previous commit changed the driver over to
-SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(), the suspend/resume
-functions must no longer be hidden behind an #ifdef:
-
-In file included from include/linux/clk.h:13,
-                 from drivers/rtc/rtc-stm32.c:8:
-drivers/rtc/rtc-stm32.c:927:39: error: 'stm32_rtc_suspend' undeclared here (not in a function); did you mean 'stm32_rtc_probe'?
-  927 |         SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_rtc_suspend, stm32_rtc_resume)
-      |                                       ^~~~~~~~~~~~~~~~~
-include/linux/kernel.h:58:44: note: in definition of macro 'PTR_IF'
-   58 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
-      |                                            ^~~
-include/linux/pm.h:329:26: note: in expansion of macro 'pm_sleep_ptr'
-  329 |         .suspend_noirq = pm_sleep_ptr(suspend_fn), \
-      |                          ^~~~~~~~~~~~
-
-Fixes: fb9a7e5360dc8 ("rtc: stm32: change PM callbacks to "_noirq()"")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Venkata Rao Kakani <quic_vkakani@quicinc.com>
+Signed-off-by: Anvesh Jain P <quic_ajainp@quicinc.com>
 ---
- drivers/rtc/rtc-stm32.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/rtc/rtc-pm8xxx.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 85689192fa7ae..c296e7af0700c 100644
---- a/drivers/rtc/rtc-stm32.c
-+++ b/drivers/rtc/rtc-stm32.c
-@@ -890,7 +890,6 @@ static void stm32_rtc_remove(struct platform_device *pdev)
- 	device_init_wakeup(&pdev->dev, false);
- }
+diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+index f6b779c12ca7..bed57be602b6 100644
+--- a/drivers/rtc/rtc-pm8xxx.c
++++ b/drivers/rtc/rtc-pm8xxx.c
+@@ -523,6 +523,9 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
  
--#ifdef CONFIG_PM_SLEEP
- static int stm32_rtc_suspend(struct device *dev)
- {
- 	struct stm32_rtc *rtc = dev_get_drvdata(dev);
-@@ -921,7 +920,6 @@ static int stm32_rtc_resume(struct device *dev)
- 
- 	return ret;
- }
--#endif
- 
- static const struct dev_pm_ops stm32_rtc_pm_ops = {
- 	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_rtc_suspend, stm32_rtc_resume)
++	if (of_property_read_bool(pdev->dev.of_node, "disable-alarm-wakeup"))
++		device_set_wakeup_capable(&pdev->dev, false);
++
+ 	rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->alarm_irq);
+ 	if (rc)
+ 		return rc;
+
+base-commit: 0a8db05b571ad5b8d5c8774a004c0424260a90bd
 -- 
-2.39.2
+2.17.1
 
