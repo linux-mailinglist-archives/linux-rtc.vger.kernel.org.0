@@ -2,67 +2,110 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E4876B3DB
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Aug 2023 13:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F3476B2A3
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Aug 2023 13:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbjHALwj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 1 Aug 2023 07:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S234017AbjHALGT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 1 Aug 2023 07:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234426AbjHALwd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Aug 2023 07:52:33 -0400
-Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7F01BD2
-        for <linux-rtc@vger.kernel.org>; Tue,  1 Aug 2023 04:52:30 -0700 (PDT)
-Received: by mail.cothiafon.pl (Postfix, from userid 1002)
-        id B159B83C7C; Mon, 31 Jul 2023 10:36:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
-        t=1690792652; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
-        h=Date:From:To:Subject:From;
-        b=W0tr0AySefde7ZR/9bJkFCXp5w8uIaf0rU+PW+eUZHmX1RNgmVhXR3djtx/pSEQvG
-         pfjA0kFZC70KBI/OmBsRque9WzmuCCQ5gS95u9yshbZBMDqKBrnmAfgcAXvcbIDxm2
-         LIeMZAWjZbUVHpJtsO6DA4uDDeFGrBaYnvZWqTpm3hp4H/POuWVUUU8f5o+4Zx4Zb0
-         VKf2BkK11mhGjLAx5Y0LIQ9RDu+6ON/uKF59JpMBp8ZFMgdhdNZMGg22u/pM6TokqE
-         EMUB4ljf7KXDFHWB9i4lJQQBVl2Xe9QiM2YwSi7/qcxjswxw9F1uNxkTiXCoepeTUW
-         2/qv0QOXH/20Q==
-Received: by mail.cothiafon.pl for <linux-rtc@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
-Message-ID: <20230731095940-0.1.28.onre.0.c29kige34f@cothiafon.pl>
-Date:   Mon, 31 Jul 2023 08:35:48 GMT
-From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
-        <radoslaw.grabowski@cothiafon.pl>
-To:     <linux-rtc@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.cothiafon.pl
+        with ESMTP id S233998AbjHALF6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Aug 2023 07:05:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397CB7AA9;
+        Tue,  1 Aug 2023 03:59:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C21C361519;
+        Tue,  1 Aug 2023 10:59:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F66C433C8;
+        Tue,  1 Aug 2023 10:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690887578;
+        bh=W6uC+hfdQjXTE0b+hUiFIq4lfhy6AJ+5JMfKAqdfPEg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I3i7dgT+D7pQRjctNSQCfp2q3NsGd0IjKONwgsV5qi8MuPuNxiXt3FhH/F8UHr3NJ
+         H6mbydie71eLjQgprazKi0/9WCDZaQdB9CI+YGBeO4ic0O7fDcb+Wh5kSA6akqKvsM
+         rYzIwsA1LuNixpwVzxZzH4m1Kffo/le6cp3BCbeKy24Iuhw24sdRfesACPcTPrQ6FY
+         Fy/HTlrayvB15X/PhESYg52xrOovl+Y5/mXrdEu0Y25QGEKzqdccTzl450jNLZ3EsJ
+         szRAHJrb6MjAXz7UoAIcBBCTUn7hiYskhJrEbuvUPw3QcjsUIQWe0o2lp5XtyUblRS
+         Jo/W818d0jTyw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Christophe Guibout <christophe.guibout@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: stm32: remove incorrect #ifdef check
+Date:   Tue,  1 Aug 2023 12:59:15 +0200
+Message-Id: <20230801105932.3738430-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+From: Arnd Bergmann <arnd@arndb.de>
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+After a previous commit changed the driver over to
+SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(), the suspend/resume
+functions must no longer be hidden behind an #ifdef:
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+In file included from include/linux/clk.h:13,
+                 from drivers/rtc/rtc-stm32.c:8:
+drivers/rtc/rtc-stm32.c:927:39: error: 'stm32_rtc_suspend' undeclared here (not in a function); did you mean 'stm32_rtc_probe'?
+  927 |         SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_rtc_suspend, stm32_rtc_resume)
+      |                                       ^~~~~~~~~~~~~~~~~
+include/linux/kernel.h:58:44: note: in definition of macro 'PTR_IF'
+   58 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+      |                                            ^~~
+include/linux/pm.h:329:26: note: in expansion of macro 'pm_sleep_ptr'
+  329 |         .suspend_noirq = pm_sleep_ptr(suspend_fn), \
+      |                          ^~~~~~~~~~~~
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+Fixes: fb9a7e5360dc8 ("rtc: stm32: change PM callbacks to "_noirq()"")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/rtc/rtc-stm32.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index 85689192fa7ae..c296e7af0700c 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -890,7 +890,6 @@ static void stm32_rtc_remove(struct platform_device *pdev)
+ 	device_init_wakeup(&pdev->dev, false);
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int stm32_rtc_suspend(struct device *dev)
+ {
+ 	struct stm32_rtc *rtc = dev_get_drvdata(dev);
+@@ -921,7 +920,6 @@ static int stm32_rtc_resume(struct device *dev)
+ 
+ 	return ret;
+ }
+-#endif
+ 
+ static const struct dev_pm_ops stm32_rtc_pm_ops = {
+ 	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_rtc_suspend, stm32_rtc_resume)
+-- 
+2.39.2
 
-
-Pozdrawiam
-Rados=C5=82aw Grabowski
