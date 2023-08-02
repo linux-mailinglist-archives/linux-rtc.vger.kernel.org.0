@@ -2,129 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE6676C859
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Aug 2023 10:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E0076C98F
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Aug 2023 11:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbjHBIcU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Aug 2023 04:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S231753AbjHBJhY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Aug 2023 05:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjHBIcT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Aug 2023 04:32:19 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560B41718;
-        Wed,  2 Aug 2023 01:32:17 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 6CE97320076F;
-        Wed,  2 Aug 2023 04:32:15 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 02 Aug 2023 04:32:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1690965134; x=1691051534; bh=GB
-        G2iKqO5PLeYvfwEjwF9EfXGrregHJ1kfLxVcxwYlQ=; b=N3cPseisV9cVkV9zmd
-        +Bj0c3T/Wrqvr8HGhu48TPsFZYMroG0x1spK0Q6jRZaNc9snoFo+RkPuA/AgW9Bh
-        fOwYlNsmXg3nnpQRNWK7q8ABt1Lzgw+qMDxOA+CxZWfMFJvyOuHAk0OM1h8myV4i
-        7Xin9sSc4Il3SjgmNH7ALnR/lF4AUNbz3h8qGTrbcqS2M/QSkkzTPYJUBvGKM5zn
-        2hu4ZJlftWIr3+jEESpF15ZfcVU9T+CCczsa2l6H4TdW1xgstwKKwh+KhNS3+3K8
-        o+1T81F2DGqQj48bgi5LR5AfNwPOpIy4fFAfc4TsC+mNJYThYt8Zw+aWJrJraY3H
-        Us7A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1690965134; x=1691051534; bh=GBG2iKqO5PLeY
-        vfwEjwF9EfXGrregHJ1kfLxVcxwYlQ=; b=jwgUEuAhEP3PhPlh0SzuL7yYo4p3Y
-        CCt6YczgNZOBt7AUJjrI+azaYJpjYNktLqYTftnnXtQsCAF6nlNq+m5aFLGEPSa8
-        qnAaEYgn+UTwoFcLZs3EuN7S4BhyBFjNs2eyN1HgvhHxliD760QqPtFRRUrmKNT4
-        e6UF1oPJmY2+eSQYoxHe3VreWcsQgv4iovxZpXhHhpoHoVTOccCgdcRSVNl0h30D
-        ZXmJqFXABqDiH3+VPUT25g6id0ORnjoZSMvzv9lHdKkvfvkjSudeYnC03S3V/gZt
-        jVRlfpfTNbOReO+IM7lVabZfAnIOUAv4G416kO3+ulLgN/bQMxeGGxexg==
-X-ME-Sender: <xms:jhTKZNGkWeckBUSDcHpvvaww6e8jBe8feKb-Va2PpKIVLISBMHAVaA>
-    <xme:jhTKZCUP4YE1W2XwGA5s_ScLBnflpk9xQUxNO_ayDj-wa_RW-xdEBmxxVCg0aZ3Js
-    1UGB6vZlkxu6y8or2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjeekgddthecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:jhTKZPII64Og5KUBH2mOQtXiTk5Pc6AyBlljraY3voghYifE5WV9xw>
-    <xmx:jhTKZDGnF7V2k4i28YgZ9G3aJc-4GxW7jzEGLErvHLJce-t2WS2L3A>
-    <xmx:jhTKZDX6tzb2XofG_Rp_t2u-b7cajc7LQVvYeX4wUINUxv41nP8oUA>
-    <xmx:jhTKZEvACZccrO8b7T7ax00lBYJ9lp-6kR4UZmBCS6COn6IMgOObQQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 55E9AB6008D; Wed,  2 Aug 2023 04:32:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
-Mime-Version: 1.0
-Message-Id: <599b845c-80d9-467c-b9ac-2ce844ee256e@app.fastmail.com>
-In-Reply-To: <20230801173544.1929519-3-hch@lst.de>
-References: <20230801173544.1929519-1-hch@lst.de>
- <20230801173544.1929519-3-hch@lst.de>
-Date:   Wed, 02 Aug 2023 10:31:54 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christoph Hellwig" <hch@lst.de>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Daniel Mack" <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Manuel Lauss" <manuel.lauss@gmail.com>,
-        "Yangbo Lu" <yangbo.lu@nxp.com>, "Joshua Kinard" <kumba@gentoo.org>
-Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        "open list" <linux-kernel@vger.kernel.org>,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 2/5] mmc: au1xmmc: force non-modular build and remove symbol_get
- usage
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229629AbjHBJhX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Aug 2023 05:37:23 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95A8E7
+        for <linux-rtc@vger.kernel.org>; Wed,  2 Aug 2023 02:37:21 -0700 (PDT)
+Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RG6KM2vKWzVjgX;
+        Wed,  2 Aug 2023 17:35:35 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 2 Aug
+ 2023 17:37:19 +0800
+From:   Chen Jiahao <chenjiahao16@huawei.com>
+To:     <vincent.sunplus@gmail.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>
+CC:     <chenjiahao16@huawei.com>
+Subject: [PATCH -next] rtc: sunplus: Clean up redundant dev_err_probe()
+Date:   Wed, 2 Aug 2023 17:36:50 +0800
+Message-ID: <20230802093650.976352-1-chenjiahao16@huawei.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Aug 1, 2023, at 19:35, Christoph Hellwig wrote:
-> au1xmmc is split somewhat awkwardly into the main mmc subsystem driver,
-> and callbacks in platform_data that sit under arch/mips/ and are
-> always built in.  The latter than call mmc_detect_change through
-> symbol_get.  Remove the use of symbol_get by requiring the driver
-> to be built in.  In the future the interrupt handlers for card
-> insert/eject detection should probably be moved into the main driver,
-> and which point it can be built modular again.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Referring to platform_get_irq()'s definition, the return value has
+already been checked if ret < 0, and printed via dev_err_probe().
+Calling dev_err_probe() one more time outside platform_get_irq()
+is obviously redundant.
 
-Good idea.
+Removing dev_err_probe() outside platform_get_irq() to clean up
+above problem.
 
->  	  of Alcor Micro PCI-E card reader
-> 
->  config MMC_AU1X
-> -	tristate "Alchemy AU1XX0 MMC Card Interface support"
-> +	bool "Alchemy AU1XX0 MMC Card Interface support"
->  	depends on MIPS_ALCHEMY
->  	help
+Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
+---
+ drivers/rtc/rtc-sunplus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This needs a 
+diff --git a/drivers/rtc/rtc-sunplus.c b/drivers/rtc/rtc-sunplus.c
+index f33dc301f301..20c7e97c2fc8 100644
+--- a/drivers/rtc/rtc-sunplus.c
++++ b/drivers/rtc/rtc-sunplus.c
+@@ -244,7 +244,7 @@ static int sp_rtc_probe(struct platform_device *plat_dev)
+ 
+ 	sp_rtc->irq = platform_get_irq(plat_dev, 0);
+ 	if (sp_rtc->irq < 0)
+-		return dev_err_probe(&plat_dev->dev, sp_rtc->irq, "platform_get_irq failed\n");
++		return sp_rtc->irq;
+ 
+ 	ret = devm_request_irq(&plat_dev->dev, sp_rtc->irq, sp_rtc_irq_handler,
+ 			       IRQF_TRIGGER_RISING, "rtc irq", plat_dev);
+-- 
+2.34.1
 
-      depends on MMC=y
-
-otherwise you get a link failure with CONFIG_MMC=m and
-CONFIG_MMC_AU1X=y.
-
-With that fixed,
-
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
