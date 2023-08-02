@@ -2,102 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F24076BDD8
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Aug 2023 21:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D312F76C629
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Aug 2023 09:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjHATeN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 1 Aug 2023 15:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S232771AbjHBHN3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Aug 2023 03:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjHATeN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Aug 2023 15:34:13 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A60C19A4;
-        Tue,  1 Aug 2023 12:34:10 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AE02EE0004;
-        Tue,  1 Aug 2023 19:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1690918449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BsYpmsk5UXxFoIUW2ui+3iBsF8PIHOr5des5QvHo2w4=;
-        b=kTGR30K5YlIqYQjlZVe28aIOphjUiaPR05EgNKnNa0WmHNs83me4W5MpLVyYSjiFNo/O4I
-        q28U+6wAwYYBeDFEwEG7YIv8JqTRaundDKZM3Qz/+9qCwYXftrBhgDkg/V6xD8jendZ/7N
-        caplCwauTjIX44It3QZEja95qpYOKcxxey3QEKkb5rZw59n26vOf6I11Ctw+yUgkB2d7jw
-        vkw2hAqeECUmuC48MDLWzDd4iOwm9px2Q4zHkgORa6XUA9b1gyomrchiz6J9lCzGE5J6ux
-        wWBvZd2nAycnkslyYActplp/OxrXf1o/VKxAOHmkl/IJL9QMmHAx3SBHHN0Qig==
-Date:   Tue, 1 Aug 2023 21:34:08 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Anvesh Jain P <quic_ajainp@quicinc.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Venkata Rao Kakani <quic_vkakani@quicinc.com>
-Subject: Re: [PATCH] rtc: rtc-pm8xxx: control default alarm wake up capability
-Message-ID: <202308011934080c7083b9@mail.local>
-References: <20230801114549.26956-1-quic_ajainp@quicinc.com>
- <20230801124056fc665814@mail.local>
- <93722831-dc83-8ea3-4af9-33eaefcf81be@quicinc.com>
+        with ESMTP id S232732AbjHBHNV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Aug 2023 03:13:21 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22D72116;
+        Wed,  2 Aug 2023 00:13:15 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b9aa1d3029so97075721fa.2;
+        Wed, 02 Aug 2023 00:13:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690960394; x=1691565194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2buEm2gDrf1fNgEA1fBvBUhdIcoSkeNWypy9BrDWZro=;
+        b=o/Z0yMvRj/sHbGhhlNrlERgGL/vkblmm6ZJLHQMACyDwmmKmNZYvTU/06maEeEpfRp
+         Qykwe/MywZjAj7CgMOPhkGkeYcF/+NkNb9nzn50MZU8ub6CiuIOy5wlQaHDZiG5zxPFm
+         hOwzsQe8rXq+FQKiuPeG7nEpdZeTr5wWh3uyQZddDw1dVz7T+jkLOZ44dHXGhKyahFF8
+         RSn7gC04V66HalFvzQXJfxycd+4lyPUNPP2wu9sArTQK6awUl2bONG+SgQvFn0/Nru7D
+         YNyTWzdXp1bb3ibxDzOjTS6ZOvdtOkGS6gwUlv+9CUSZEiKg1xeVsqCq30sD7eJNrEvF
+         I9bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690960394; x=1691565194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2buEm2gDrf1fNgEA1fBvBUhdIcoSkeNWypy9BrDWZro=;
+        b=XUFzgcNj1+T+ja5Sme+MS7rFnPURiwiWAPyenGLL87LNjA6GW0opjGW+JzKm4M5A4t
+         /eF7odK+e4tWp4wRapv/vBd6omuW1fvEwP0ScDOzK3fyCl3xKCP+iDn4HEW7ofmNrf+D
+         xi91SNc6Q5Tki+R87S9sJ0nH8Pjj+6Ik1kZBr64iEdQXtTlR14qTMfgaBCgWMZ11GK/4
+         A5CnyqsSPdslVCNT0pDlIMpjWjerkHBP3DBlbxfZzMi4PIltHBYc7VDGBBIryHRdDWLg
+         EMu5Gek5SIEesNZ4orUfLxy23ffT6Qe37kPwdJWFKIK124NNxJ6HtqQvn20bCyHZreXn
+         h90g==
+X-Gm-Message-State: ABy/qLag+rMIB8Mh3pkcecgn+d3kM1MQau1zI/WW3M0E4B6vIu6b+QSv
+        xjjMtWQhcFOU5jGHdSwoU0jnrY+wwcpieVXhqKk=
+X-Google-Smtp-Source: APBJJlFxZVa5Xg7zcWRSLmy5da3OrRqJyEbYh7IorsIlR3vmcIxbFVhHJnD/w70xPRJB36NtVtlb3OCXjqI+33+VmtI=
+X-Received: by 2002:a05:651c:106:b0:2b5:80e0:f18e with SMTP id
+ a6-20020a05651c010600b002b580e0f18emr4150209ljb.3.1690960393778; Wed, 02 Aug
+ 2023 00:13:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93722831-dc83-8ea3-4af9-33eaefcf81be@quicinc.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230801173544.1929519-1-hch@lst.de> <20230801173544.1929519-3-hch@lst.de>
+In-Reply-To: <20230801173544.1929519-3-hch@lst.de>
+From:   Manuel Lauss <manuel.lauss@gmail.com>
+Date:   Wed, 2 Aug 2023 09:12:37 +0200
+Message-ID: <CAOLZvyGAahsfqS0yMZDaHNVxLBC9QxKGEdW1TRfM_EgieCeORQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] mmc: au1xmmc: force non-modular build and remove
+ symbol_get usage
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Yangbo Lu <yangbo.lu@nxp.com>,
+        Joshua Kinard <kumba@gentoo.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 01/08/2023 18:18:46+0530, Anvesh Jain P wrote:
-> In automotive systems, RTC should not wake up the device when it is parked
-> or when it is garage to avoid leakage current. providing a control from
-> device tree to avoid RTC wake up based on the use case is reason for this
-> patch.
-> 
+On Tue, Aug 1, 2023 at 7:36=E2=80=AFPM Christoph Hellwig <hch@lst.de> wrote=
+:
+>
+> au1xmmc is split somewhat awkwardly into the main mmc subsystem driver,
+> and callbacks in platform_data that sit under arch/mips/ and are
+> always built in.  The latter than call mmc_detect_change through
+> symbol_get.  Remove the use of symbol_get by requiring the driver
+> to be built in.  In the future the interrupt handlers for card
+> insert/eject detection should probably be moved into the main driver,
+> and which point it can be built modular again.
 
-Then simply avoid providing an IRQ or setting an alarm.
+The carddetection stuff is entirely system-specific, I don't want the drive=
+r
+littered with board-custom stuff; I'm fine with it being built-in only.
 
-> On 8/1/2023 6:10 PM, Alexandre Belloni wrote:
-> > On 01/08/2023 17:15:49+0530, Anvesh Jain P wrote:
-> > > Enable & disable rtc alarm wake up capability based on
-> > > default parameter passed from device tree.
-> > > 
-> > 
-> > I see what you are doing but not why this is necessary, NAK.
-> > 
-> > > Signed-off-by: Venkata Rao Kakani <quic_vkakani@quicinc.com>
-> > > Signed-off-by: Anvesh Jain P <quic_ajainp@quicinc.com>
-> > > ---
-> > >   drivers/rtc/rtc-pm8xxx.c | 3 +++
-> > >   1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-> > > index f6b779c12ca7..bed57be602b6 100644
-> > > --- a/drivers/rtc/rtc-pm8xxx.c
-> > > +++ b/drivers/rtc/rtc-pm8xxx.c
-> > > @@ -523,6 +523,9 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
-> > >   	if (rc)
-> > >   		return rc;
-> > > +	if (of_property_read_bool(pdev->dev.of_node, "disable-alarm-wakeup"))
-> > > +		device_set_wakeup_capable(&pdev->dev, false);
-> > > +
-> > >   	rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->alarm_irq);
-> > >   	if (rc)
-> > >   		return rc;
-> > > 
-> > > base-commit: 0a8db05b571ad5b8d5c8774a004c0424260a90bd
-> > > -- 
-> > > 2.17.1
-> > > 
-> > 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/mips/alchemy/devboards/db1000.c |  8 +-------
+>  arch/mips/alchemy/devboards/db1200.c | 19 ++-----------------
+>  arch/mips/alchemy/devboards/db1300.c | 10 +---------
+>  drivers/mmc/host/Kconfig             |  4 ++--
+>  4 files changed, 6 insertions(+), 35 deletions(-)
+
+Ok For me.  If it matters:
+
+Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
+
+Thanks!
+     Manuel
