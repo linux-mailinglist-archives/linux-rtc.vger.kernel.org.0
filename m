@@ -2,78 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D312F76C629
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Aug 2023 09:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE6676C859
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Aug 2023 10:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbjHBHN3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Aug 2023 03:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S233919AbjHBIcU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Aug 2023 04:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbjHBHNV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Aug 2023 03:13:21 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22D72116;
-        Wed,  2 Aug 2023 00:13:15 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b9aa1d3029so97075721fa.2;
-        Wed, 02 Aug 2023 00:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690960394; x=1691565194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2buEm2gDrf1fNgEA1fBvBUhdIcoSkeNWypy9BrDWZro=;
-        b=o/Z0yMvRj/sHbGhhlNrlERgGL/vkblmm6ZJLHQMACyDwmmKmNZYvTU/06maEeEpfRp
-         Qykwe/MywZjAj7CgMOPhkGkeYcF/+NkNb9nzn50MZU8ub6CiuIOy5wlQaHDZiG5zxPFm
-         hOwzsQe8rXq+FQKiuPeG7nEpdZeTr5wWh3uyQZddDw1dVz7T+jkLOZ44dHXGhKyahFF8
-         RSn7gC04V66HalFvzQXJfxycd+4lyPUNPP2wu9sArTQK6awUl2bONG+SgQvFn0/Nru7D
-         YNyTWzdXp1bb3ibxDzOjTS6ZOvdtOkGS6gwUlv+9CUSZEiKg1xeVsqCq30sD7eJNrEvF
-         I9bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690960394; x=1691565194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2buEm2gDrf1fNgEA1fBvBUhdIcoSkeNWypy9BrDWZro=;
-        b=XUFzgcNj1+T+ja5Sme+MS7rFnPURiwiWAPyenGLL87LNjA6GW0opjGW+JzKm4M5A4t
-         /eF7odK+e4tWp4wRapv/vBd6omuW1fvEwP0ScDOzK3fyCl3xKCP+iDn4HEW7ofmNrf+D
-         xi91SNc6Q5Tki+R87S9sJ0nH8Pjj+6Ik1kZBr64iEdQXtTlR14qTMfgaBCgWMZ11GK/4
-         A5CnyqsSPdslVCNT0pDlIMpjWjerkHBP3DBlbxfZzMi4PIltHBYc7VDGBBIryHRdDWLg
-         EMu5Gek5SIEesNZ4orUfLxy23ffT6Qe37kPwdJWFKIK124NNxJ6HtqQvn20bCyHZreXn
-         h90g==
-X-Gm-Message-State: ABy/qLag+rMIB8Mh3pkcecgn+d3kM1MQau1zI/WW3M0E4B6vIu6b+QSv
-        xjjMtWQhcFOU5jGHdSwoU0jnrY+wwcpieVXhqKk=
-X-Google-Smtp-Source: APBJJlFxZVa5Xg7zcWRSLmy5da3OrRqJyEbYh7IorsIlR3vmcIxbFVhHJnD/w70xPRJB36NtVtlb3OCXjqI+33+VmtI=
-X-Received: by 2002:a05:651c:106:b0:2b5:80e0:f18e with SMTP id
- a6-20020a05651c010600b002b580e0f18emr4150209ljb.3.1690960393778; Wed, 02 Aug
- 2023 00:13:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230801173544.1929519-1-hch@lst.de> <20230801173544.1929519-3-hch@lst.de>
+        with ESMTP id S229499AbjHBIcT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Aug 2023 04:32:19 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560B41718;
+        Wed,  2 Aug 2023 01:32:17 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 6CE97320076F;
+        Wed,  2 Aug 2023 04:32:15 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 02 Aug 2023 04:32:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1690965134; x=1691051534; bh=GB
+        G2iKqO5PLeYvfwEjwF9EfXGrregHJ1kfLxVcxwYlQ=; b=N3cPseisV9cVkV9zmd
+        +Bj0c3T/Wrqvr8HGhu48TPsFZYMroG0x1spK0Q6jRZaNc9snoFo+RkPuA/AgW9Bh
+        fOwYlNsmXg3nnpQRNWK7q8ABt1Lzgw+qMDxOA+CxZWfMFJvyOuHAk0OM1h8myV4i
+        7Xin9sSc4Il3SjgmNH7ALnR/lF4AUNbz3h8qGTrbcqS2M/QSkkzTPYJUBvGKM5zn
+        2hu4ZJlftWIr3+jEESpF15ZfcVU9T+CCczsa2l6H4TdW1xgstwKKwh+KhNS3+3K8
+        o+1T81F2DGqQj48bgi5LR5AfNwPOpIy4fFAfc4TsC+mNJYThYt8Zw+aWJrJraY3H
+        Us7A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1690965134; x=1691051534; bh=GBG2iKqO5PLeY
+        vfwEjwF9EfXGrregHJ1kfLxVcxwYlQ=; b=jwgUEuAhEP3PhPlh0SzuL7yYo4p3Y
+        CCt6YczgNZOBt7AUJjrI+azaYJpjYNktLqYTftnnXtQsCAF6nlNq+m5aFLGEPSa8
+        qnAaEYgn+UTwoFcLZs3EuN7S4BhyBFjNs2eyN1HgvhHxliD760QqPtFRRUrmKNT4
+        e6UF1oPJmY2+eSQYoxHe3VreWcsQgv4iovxZpXhHhpoHoVTOccCgdcRSVNl0h30D
+        ZXmJqFXABqDiH3+VPUT25g6id0ORnjoZSMvzv9lHdKkvfvkjSudeYnC03S3V/gZt
+        jVRlfpfTNbOReO+IM7lVabZfAnIOUAv4G416kO3+ulLgN/bQMxeGGxexg==
+X-ME-Sender: <xms:jhTKZNGkWeckBUSDcHpvvaww6e8jBe8feKb-Va2PpKIVLISBMHAVaA>
+    <xme:jhTKZCUP4YE1W2XwGA5s_ScLBnflpk9xQUxNO_ayDj-wa_RW-xdEBmxxVCg0aZ3Js
+    1UGB6vZlkxu6y8or2A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjeekgddthecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:jhTKZPII64Og5KUBH2mOQtXiTk5Pc6AyBlljraY3voghYifE5WV9xw>
+    <xmx:jhTKZDGnF7V2k4i28YgZ9G3aJc-4GxW7jzEGLErvHLJce-t2WS2L3A>
+    <xmx:jhTKZDX6tzb2XofG_Rp_t2u-b7cajc7LQVvYeX4wUINUxv41nP8oUA>
+    <xmx:jhTKZEvACZccrO8b7T7ax00lBYJ9lp-6kR4UZmBCS6COn6IMgOObQQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 55E9AB6008D; Wed,  2 Aug 2023 04:32:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
+Mime-Version: 1.0
+Message-Id: <599b845c-80d9-467c-b9ac-2ce844ee256e@app.fastmail.com>
 In-Reply-To: <20230801173544.1929519-3-hch@lst.de>
-From:   Manuel Lauss <manuel.lauss@gmail.com>
-Date:   Wed, 2 Aug 2023 09:12:37 +0200
-Message-ID: <CAOLZvyGAahsfqS0yMZDaHNVxLBC9QxKGEdW1TRfM_EgieCeORQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] mmc: au1xmmc: force non-modular build and remove
- symbol_get usage
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Yangbo Lu <yangbo.lu@nxp.com>,
-        Joshua Kinard <kumba@gentoo.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Arnd Bergmann <arnd@arndb.de>,
+References: <20230801173544.1929519-1-hch@lst.de>
+ <20230801173544.1929519-3-hch@lst.de>
+Date:   Wed, 02 Aug 2023 10:31:54 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Christoph Hellwig" <hch@lst.de>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Daniel Mack" <daniel@zonque.org>,
+        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Manuel Lauss" <manuel.lauss@gmail.com>,
+        "Yangbo Lu" <yangbo.lu@nxp.com>, "Joshua Kinard" <kumba@gentoo.org>
+Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
         linux-arm-kernel@lists.infradead.org,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "open list" <linux-kernel@vger.kernel.org>,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 2/5] mmc: au1xmmc: force non-modular build and remove symbol_get
+ usage
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,9 +97,7 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Aug 1, 2023 at 7:36=E2=80=AFPM Christoph Hellwig <hch@lst.de> wrote=
-:
->
+On Tue, Aug 1, 2023, at 19:35, Christoph Hellwig wrote:
 > au1xmmc is split somewhat awkwardly into the main mmc subsystem driver,
 > and callbacks in platform_data that sit under arch/mips/ and are
 > always built in.  The latter than call mmc_detect_change through
@@ -91,23 +105,26 @@ On Tue, Aug 1, 2023 at 7:36=E2=80=AFPM Christoph Hellwig <hch@lst.de> wrote=
 > to be built in.  In the future the interrupt handlers for card
 > insert/eject detection should probably be moved into the main driver,
 > and which point it can be built modular again.
-
-The carddetection stuff is entirely system-specific, I don't want the drive=
-r
-littered with board-custom stuff; I'm fine with it being built-in only.
-
-
+>
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/mips/alchemy/devboards/db1000.c |  8 +-------
->  arch/mips/alchemy/devboards/db1200.c | 19 ++-----------------
->  arch/mips/alchemy/devboards/db1300.c | 10 +---------
->  drivers/mmc/host/Kconfig             |  4 ++--
->  4 files changed, 6 insertions(+), 35 deletions(-)
 
-Ok For me.  If it matters:
+Good idea.
 
-Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
+>  	  of Alcor Micro PCI-E card reader
+> 
+>  config MMC_AU1X
+> -	tristate "Alchemy AU1XX0 MMC Card Interface support"
+> +	bool "Alchemy AU1XX0 MMC Card Interface support"
+>  	depends on MIPS_ALCHEMY
+>  	help
 
-Thanks!
-     Manuel
+This needs a 
+
+      depends on MMC=y
+
+otherwise you get a link failure with CONFIG_MMC=m and
+CONFIG_MMC_AU1X=y.
+
+With that fixed,
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
