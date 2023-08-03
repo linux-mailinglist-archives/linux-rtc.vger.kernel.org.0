@@ -2,97 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6502076E07D
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Aug 2023 08:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5908776E2AB
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Aug 2023 10:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbjHCGpN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Aug 2023 02:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S234393AbjHCIPi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Aug 2023 04:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbjHCGpK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Aug 2023 02:45:10 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6056CF5
-        for <linux-rtc@vger.kernel.org>; Wed,  2 Aug 2023 23:45:09 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fe0e34f498so1023131e87.2
-        for <linux-rtc@vger.kernel.org>; Wed, 02 Aug 2023 23:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1691045107; x=1691649907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kPS7PxNSM73cITz5+xQx4Opdzddvfq8C1OqqZ8evqeY=;
-        b=EXtiR71mhwuwdPo4BRDwdGMRk2ayLQ7ZmpNp/U1DN15R8NrYVOozcw7R4s0dCB7tOz
-         X5g8Y7dWWCLjUXoNoAWbCP4uBzCIkCX4acrKgsVn95MJqde+cyqdjERXodH6rrRwrNWG
-         euY1O5Xt814vnE4RudD3Vh71RplhJXGcqBbkw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691045107; x=1691649907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kPS7PxNSM73cITz5+xQx4Opdzddvfq8C1OqqZ8evqeY=;
-        b=ayC9APWTNh/CRHITViOhp4BndqsXcishBHiMlU9MVAPnx9qgfb/ueUJ9SUMMjA0PUC
-         eRl/quJYGjPHE6Xl3anxxhSbzg9VlClndA8R6Ick0w9/v7wnwt3SVxEfW5/CY1Acj25B
-         wK7YojjAa7TUgbPX4ZawFkzQ1K9rlu1GxUmsqMKRU7YEx82Y9oXUa+6X3V3/O1YE8Lr0
-         1gmJ9rp3w9V3hPHDPPIQKxbYebPvg2XmVKxIL5r8XT1mZTSIOrVc6HASDO8qpoRZm8XG
-         UokpwWxrgMqzKdV41XyrZhOqut4QoYwu2/1Q7GsQxemXSMPwlR0kPCOaQYtPhjUWnmaH
-         fIsQ==
-X-Gm-Message-State: ABy/qLZIUvJgkFrXgiM5xAf9htPz0GgQ+m3EQBeuS8Mbtk0sjg18FsK2
-        BhFoBRMa6zh2d40JBpsFNL/aSYLNs830db3hr5c=
-X-Google-Smtp-Source: APBJJlGV5jtxqAShsHGEOWeKVwx96kPM2l3qJ0Uxld2juEk/rIqFYlumMqTKAYY/MNm/HJayEnzRlg==
-X-Received: by 2002:a19:6908:0:b0:4f8:4512:c846 with SMTP id e8-20020a196908000000b004f84512c846mr5619988lfc.49.1691045107488;
-        Wed, 02 Aug 2023 23:45:07 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id x4-20020aa7d6c4000000b0051e2cde9e3esm9733504edr.75.2023.08.02.23.45.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Aug 2023 23:45:06 -0700 (PDT)
-Message-ID: <739f81db-4ec2-fe07-a6df-5c1f42588653@rasmusvillemoes.dk>
-Date:   Thu, 3 Aug 2023 08:45:05 +0200
+        with ESMTP id S234209AbjHCIPG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Aug 2023 04:15:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBA6268D
+        for <linux-rtc@vger.kernel.org>; Thu,  3 Aug 2023 01:07:52 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RGhFg5VhzzNm9C;
+        Thu,  3 Aug 2023 16:04:23 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 3 Aug
+ 2023 16:07:49 +0800
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next 0/2] rtc: Do not check for 0 return after calling platform_get_irq()
+Date:   Thu, 3 Aug 2023 16:07:11 +0800
+Message-ID: <20230803080713.4061782-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 0/8] rtc: isl12022: battery backup voltage and clock
- support
-Content-Language: en-US, da
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230615105826.411953-1-linux@rasmusvillemoes.dk>
- <55c19de0-2465-cc4a-6ec7-fd524816fd2b@prevas.dk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <55c19de0-2465-cc4a-6ec7-fd524816fd2b@prevas.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/07/2023 16.31, Rasmus Villemoes wrote:
-> On 15/06/2023 12.58, Rasmus Villemoes wrote:
->> The current handling of the low-battery bits in the status register is
->> wrong. The first six patches fix that and implement proper support for
->> RTC_VL_READ.
->>
->> The last two patches allow describing the isl12022 as a clock
->> provider, for now just as a fixed 32kHz clock. They are also
->> tangentially related to the backup battery, in that when the isl12022
->> is not used as a clock source, one can save some power consumption in
->> battery mode by setting the FOx bits to 0.
-> 
-> Ping. Any chance these could be picked up so they make it for v6.6?
+Since commit a85a6c86c25b ("driver core: platform: Clarify that
+IRQ 0 is invalid"), there is no possible both for platform_get_irq()
+to return 0.
 
-Ping^2.
+And the return value of platform_get_irq() is more sensible
+to show the error reason.
 
-Rasmus
+Since commit 2043727c2882 ("driver core: platform: Make use of
+the helper function dev_err_probe()"), there is no need to call
+the dev_warn() function directly to print a custom message when
+handling an error from platform_get_irq() function as
+it is going to display an appropriate error message
+in case of a failure.
+
+Ruan Jinjie (2):
+  rtc: omap: Do not check for 0 return after calling platform_get_irq()
+  rtc: tps65910: Remove redundant dev_warn() and do not check for 0
+    return after calling platform_get_irq()
+
+ drivers/rtc/rtc-omap.c     | 8 ++++----
+ drivers/rtc/rtc-tps65910.c | 7 ++-----
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+-- 
+2.34.1
 
