@@ -2,173 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA9B76D77C
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Aug 2023 21:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6502076E07D
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Aug 2023 08:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbjHBTMR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Aug 2023 15:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S232749AbjHCGpN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Aug 2023 02:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjHBTMP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Aug 2023 15:12:15 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BFC26B2;
-        Wed,  2 Aug 2023 12:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=l0fagwpjnO0mCXCu/hb1J7U1QL4bJjiaBDvQnvA0kiY=; b=ZJHc5KT4QuCBR5z+VPN0cY+pvX
-        WORp8NjEOqITE7KRFKUnPYZq88XtaWHbNuuPPJ7/20deZo9pJflnY07ZnqZDJe7UQI3R4Y86bkLd6
-        hBgQT3V0R7mfT3J0g6YIIE0IgeKl/sj7Z6kAyLcaiRb4kprANGXj3No1FuQQMRWaJpog=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:50458 helo=localhost.localdomain)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qRHGM-0003z2-Ie; Wed, 02 Aug 2023 15:12:03 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hugo@hugovil.com,
-        bruno.thomsen@gmail.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Date:   Wed,  2 Aug 2023 15:11:53 -0400
-Message-Id: <20230802191153.952667-3-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230802191153.952667-1-hugo@hugovil.com>
-References: <20230802191153.952667-1-hugo@hugovil.com>
+        with ESMTP id S233352AbjHCGpK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Aug 2023 02:45:10 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6056CF5
+        for <linux-rtc@vger.kernel.org>; Wed,  2 Aug 2023 23:45:09 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fe0e34f498so1023131e87.2
+        for <linux-rtc@vger.kernel.org>; Wed, 02 Aug 2023 23:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1691045107; x=1691649907;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kPS7PxNSM73cITz5+xQx4Opdzddvfq8C1OqqZ8evqeY=;
+        b=EXtiR71mhwuwdPo4BRDwdGMRk2ayLQ7ZmpNp/U1DN15R8NrYVOozcw7R4s0dCB7tOz
+         X5g8Y7dWWCLjUXoNoAWbCP4uBzCIkCX4acrKgsVn95MJqde+cyqdjERXodH6rrRwrNWG
+         euY1O5Xt814vnE4RudD3Vh71RplhJXGcqBbkw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691045107; x=1691649907;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kPS7PxNSM73cITz5+xQx4Opdzddvfq8C1OqqZ8evqeY=;
+        b=ayC9APWTNh/CRHITViOhp4BndqsXcishBHiMlU9MVAPnx9qgfb/ueUJ9SUMMjA0PUC
+         eRl/quJYGjPHE6Xl3anxxhSbzg9VlClndA8R6Ick0w9/v7wnwt3SVxEfW5/CY1Acj25B
+         wK7YojjAa7TUgbPX4ZawFkzQ1K9rlu1GxUmsqMKRU7YEx82Y9oXUa+6X3V3/O1YE8Lr0
+         1gmJ9rp3w9V3hPHDPPIQKxbYebPvg2XmVKxIL5r8XT1mZTSIOrVc6HASDO8qpoRZm8XG
+         UokpwWxrgMqzKdV41XyrZhOqut4QoYwu2/1Q7GsQxemXSMPwlR0kPCOaQYtPhjUWnmaH
+         fIsQ==
+X-Gm-Message-State: ABy/qLZIUvJgkFrXgiM5xAf9htPz0GgQ+m3EQBeuS8Mbtk0sjg18FsK2
+        BhFoBRMa6zh2d40JBpsFNL/aSYLNs830db3hr5c=
+X-Google-Smtp-Source: APBJJlGV5jtxqAShsHGEOWeKVwx96kPM2l3qJ0Uxld2juEk/rIqFYlumMqTKAYY/MNm/HJayEnzRlg==
+X-Received: by 2002:a19:6908:0:b0:4f8:4512:c846 with SMTP id e8-20020a196908000000b004f84512c846mr5619988lfc.49.1691045107488;
+        Wed, 02 Aug 2023 23:45:07 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id x4-20020aa7d6c4000000b0051e2cde9e3esm9733504edr.75.2023.08.02.23.45.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Aug 2023 23:45:06 -0700 (PDT)
+Message-ID: <739f81db-4ec2-fe07-a6df-5c1f42588653@rasmusvillemoes.dk>
+Date:   Thu, 3 Aug 2023 08:45:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/8] rtc: isl12022: battery backup voltage and clock
+ support
+Content-Language: en-US, da
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230615105826.411953-1-linux@rasmusvillemoes.dk>
+ <55c19de0-2465-cc4a-6ec7-fd524816fd2b@prevas.dk>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <55c19de0-2465-cc4a-6ec7-fd524816fd2b@prevas.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH 2/2] rtc: pcf2127: add support for battery-related DT properties
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On 28/07/2023 16.31, Rasmus Villemoes wrote:
+> On 15/06/2023 12.58, Rasmus Villemoes wrote:
+>> The current handling of the low-battery bits in the status register is
+>> wrong. The first six patches fix that and implement proper support for
+>> RTC_VL_READ.
+>>
+>> The last two patches allow describing the isl12022 as a clock
+>> provider, for now just as a fixed 32kHz clock. They are also
+>> tangentially related to the backup battery, in that when the isl12022
+>> is not used as a clock source, one can save some power consumption in
+>> battery mode by setting the FOx bits to 0.
+> 
+> Ping. Any chance these could be picked up so they make it for v6.6?
 
-Add support for "battery-switch-over-enable" DT property which can be
-used to enable/disable the battery switch over function.
+Ping^2.
 
-Also add support for "battery-low-detect-enable" DT property which can
-be used to enable/disable the battery low detection function.
-
-If any of these properties is not defined, then no alteration to the
-PWRMNG field will occur.
-
-These properties can be used to change the default power-on values
-(PWRMNG) for battery-related functions. It is especially useful for
-the PCF2131 where the default PWRMNG power-on values disable by
-default the battery-related functions (contrary to the PCF2127).
-
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- drivers/rtc/rtc-pcf2127.c | 59 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
-
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 78141bb06ab0..3bb3ad95c67e 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -20,6 +20,7 @@
- #include <linux/i2c.h>
- #include <linux/spi/spi.h>
- #include <linux/bcd.h>
-+#include <linux/bitfield.h>
- #include <linux/rtc.h>
- #include <linux/slab.h>
- #include <linux/module.h>
-@@ -48,6 +49,7 @@
- #define PCF2127_BIT_CTRL3_BLF			BIT(2)
- #define PCF2127_BIT_CTRL3_BF			BIT(3)
- #define PCF2127_BIT_CTRL3_BTSE			BIT(4)
-+#define PCF2127_CTRL3_PWRMNG_MASK		GENMASK(7, 5)
- /* Time and date registers */
- #define PCF2127_REG_TIME_BASE		0x03
- #define PCF2127_BIT_SC_OSF			BIT(7)
-@@ -1080,6 +1082,57 @@ static int pcf2127_enable_ts(struct device *dev, int ts_id)
- 	return ret;
- }
- 
-+/*
-+ * By default, do not reconfigure or set default power management mode,
-+ * unless explicitly requested via DT properties:
-+ *   battery-switch-over
-+ *   battery-low-detect
-+ */
-+static int pcf2127_configure_power_management(struct device *dev)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	int ret;
-+	u8 pwrmng;
-+	u32 bat_sw_over, bat_low_detect;
-+
-+	/*
-+	 * The PWRMNG field is defined in a peculiar way for PCF21XX
-+	 * devices: there is no individual bit defined for the
-+	 * battery-switch-over or battery-low-detect functions.
-+	 * Therefore, we require that both properties must be defined
-+	 * to alter the PWRMNG field.
-+	 */
-+	if (device_property_read_u32(dev, "battery-switch-over", &bat_sw_over))
-+		return 0;
-+
-+	if (device_property_read_u32(dev, "battery-low-detect",
-+				     &bat_low_detect))
-+		return 0;
-+
-+	if (!bat_sw_over) {
-+		/*
-+		 * If battery-switch-over is disabled, then the
-+		 * battery-low-detect function is always disabled.
-+		 */
-+		pwrmng = BIT(2) | BIT(1) | BIT(0);
-+	} else {
-+		if (bat_low_detect)
-+			pwrmng = 0;
-+		else
-+			pwrmng = BIT(0);
-+	}
-+
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+				 PCF2127_CTRL3_PWRMNG_MASK,
-+				 FIELD_PREP(PCF2127_CTRL3_PWRMNG_MASK, pwrmng));
-+	if (ret < 0) {
-+		dev_dbg(dev, "PWRMNG config failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- /* Route all interrupt sources to INT A pin. */
- static int pcf2127_configure_interrupt_pins(struct device *dev)
- {
-@@ -1163,6 +1216,12 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		pcf2127->irq_enabled = true;
- 	}
- 
-+	ret = pcf2127_configure_power_management(dev);
-+	if (ret) {
-+		dev_err(dev, "failed to configure power management\n");
-+		return ret;
-+	}
-+
- 	if (alarm_irq > 0 || device_property_read_bool(dev, "wakeup-source")) {
- 		device_init_wakeup(dev, true);
- 		set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
--- 
-2.30.2
+Rasmus
 
