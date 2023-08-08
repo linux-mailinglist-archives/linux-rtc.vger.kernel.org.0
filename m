@@ -2,41 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025B07741C3
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Aug 2023 19:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B285E774209
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Aug 2023 19:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234578AbjHHR2M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Aug 2023 13:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S233508AbjHHRcp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Aug 2023 13:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbjHHR1m (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Aug 2023 13:27:42 -0400
+        with ESMTP id S234803AbjHHRb6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Aug 2023 13:31:58 -0400
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE72EBB7;
-        Tue,  8 Aug 2023 09:11:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9847D21E72;
+        Tue,  8 Aug 2023 09:13:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
         ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
         :Date:subject:date:message-id:reply-to;
-        bh=dP3kh+kDx9zElDDDoC7PRVq68biyXb2WGj3LyKhU5Rs=; b=oK5r0qn1HYBL65s1wkMyqZfKO/
-        iRpuXeV0rC2jL8bkDzFW4w36CsFD5Kjy1iDR27NDMB5DLI1OMckuCxwqJXjDWrVKcgj0bf4QwPSIb
-        s2PaB/GZIgfq3/08OsvQhDip/ufHuVE8YnsHFrWvMdpkvOHyjapupfetwCmnGKd6fr80=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:53646 helo=pettiford)
+        bh=Np/8r+TSn8pg9ybumTH+W9CcvjeAPLw+0XCrZJb8yx0=; b=a6jQ+czvjsLICRI1H9YMN6px29
+        RDXso6oV45hQg8FTvlCY/Z2LR2KkqZ4OABJUFr64wO6lFnXSVTowPobNY8WgIHcG2Tz4fTbVDO5QW
+        XfQKlvOSncGaxajKy67p8K0V6KLgBPnM8WMsvwgTN3QMCUnuqXJ02EKLJJEF/pzGcPaU=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:53964 helo=pettiford)
         by mail.hugovil.com with esmtpa (Exim 4.92)
         (envelope-from <hugo@hugovil.com>)
-        id 1qTLmH-0004IO-Qo; Tue, 08 Aug 2023 08:25:34 -0400
-Date:   Tue, 8 Aug 2023 08:25:33 -0400
+        id 1qTM4Z-0004b7-K0; Tue, 08 Aug 2023 08:44:29 -0400
+Date:   Tue, 8 Aug 2023 08:44:26 -0400
 From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Conor Dooley <conor@kernel.org>, a.zummo@towertech.it,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         bruno.thomsen@gmail.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230808082533.b608c9a2a4bd922920643c4b@hugovil.com>
-In-Reply-To: <20230808-capsize-deodorize-5776d3dbb192@spud>
+Message-Id: <20230808084426.fc7e432a9d85e5caf72d3ffe@hugovil.com>
+In-Reply-To: <202308081232266ec8a9b7@mail.local>
 References: <20230802191153.952667-1-hugo@hugovil.com>
         <20230802191153.952667-2-hugo@hugovil.com>
         <20230808-capsize-deodorize-5776d3dbb192@spud>
+        <20230808082533.b608c9a2a4bd922920643c4b@hugovil.com>
+        <202308081232266ec8a9b7@mail.local>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -58,83 +60,111 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 8 Aug 2023 12:21:24 +0100
-Conor Dooley <conor@kernel.org> wrote:
+On Tue, 8 Aug 2023 14:32:26 +0200
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-> Hey Hugo,
+> On 08/08/2023 08:25:33-0400, Hugo Villeneuve wrote:
+> > On Tue, 8 Aug 2023 12:21:24 +0100
+> > Conor Dooley <conor@kernel.org> wrote:
+> > 
+> > > Hey Hugo,
+> > > 
+> > > On Wed, Aug 02, 2023 at 03:11:52PM -0400, Hugo Villeneuve wrote:
+> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > 
+> > > > These properties can be defined in the board's device tree to set the
+> > > > default power-on values for battery-related functions.
+> > > > 
+> > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > ---
+> > > >  .../devicetree/bindings/rtc/rtc.yaml          | 19 +++++++++++++++++++
+> > > >  1 file changed, 19 insertions(+)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > > index efb66df82782..0217d229e3fa 100644
+> > > > --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > > +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > > @@ -26,6 +26,25 @@ properties:
+> > > >        0: not chargeable
+> > > >        1: chargeable
+> > > >  
+> > > > +  battery-low-detect:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    enum: [0, 1]
+> > > > +    description: |
+> > > > +      For RTC devices supporting a backup battery/supercap, this flag can be
+> > > > +      used to configure the battery low detection reporting function:
+> > > > +      0: disabled
+> > > > +      1: enabled
+> > > > +
+> > > > +  battery-switch-over:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    enum: [0, 1]
+> > > > +    description: |
+> > > > +      For RTC devices supporting a backup battery/supercap, this flag can be
+> > > > +      used to configure the battery switch over when the main voltage source is
+> > > > +      turned off:
+> > > > +      0: disabled
+> > > > +      1: enabled
+> > > 
+> > > Why are these implemented as enums? This seems to fall into the category
+> > > of using DT to determine software policy - why's it not sufficient to
+> > > have boolean properties that indicate hardware support and let the software
+> > > decide what to do with them?
+> > 
+> > Hi Conor,
+> > the reason is that I based the new properties on the existing property
+> > "aux-voltage-chargeable":
+> > 
+> > -------------------
+> >  aux-voltage-chargeable:
+> >     $ref: /schemas/types.yaml#/definitions/uint32
+> >     enum: [0, 1]
+> >     description: |
+> >       Tells whether the battery/supercap of the RTC (if any) is
+> >       chargeable or not:
+> >       0: not chargeable
+> >       1: chargeable
+> > -------------------
+> > 
+> > I agree with you that a boolean would be more appropriate. Should I
+> > also submit a (separate) patch to fix the "aux-voltage-chargeable"
+> > property to a boolean?
+> > 
 > 
-> On Wed, Aug 02, 2023 at 03:11:52PM -0400, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > These properties can be defined in the board's device tree to set the
-> > default power-on values for battery-related functions.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  .../devicetree/bindings/rtc/rtc.yaml          | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
-> > index efb66df82782..0217d229e3fa 100644
-> > --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
-> > +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
-> > @@ -26,6 +26,25 @@ properties:
-> >        0: not chargeable
-> >        1: chargeable
-> >  
-> > +  battery-low-detect:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [0, 1]
-> > +    description: |
-> > +      For RTC devices supporting a backup battery/supercap, this flag can be
-> > +      used to configure the battery low detection reporting function:
-> > +      0: disabled
-> > +      1: enabled
-> > +
-> > +  battery-switch-over:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [0, 1]
-> > +    description: |
-> > +      For RTC devices supporting a backup battery/supercap, this flag can be
-> > +      used to configure the battery switch over when the main voltage source is
-> > +      turned off:
-> > +      0: disabled
-> > +      1: enabled
-> 
-> Why are these implemented as enums? This seems to fall into the category
-> of using DT to determine software policy - why's it not sufficient to
-> have boolean properties that indicate hardware support and let the software
-> decide what to do with them?
+> No, this is an enum on purpose.
+> I will not take battery switch over related properties, this is not
+> hardware description but software configuration. There is an ioctl for
+> this.
 
-Hi Conor,
-the reason is that I based the new properties on the existing property
-"aux-voltage-chargeable":
+Hi Alexandre,
+can you suggest then how we can set default PWRMNG values for the
+PCF2131 then?
 
--------------------
- aux-voltage-chargeable:
-    $ref: /schemas/types.yaml#/definitions/uint32
-    enum: [0, 1]
-    description: |
-      Tells whether the battery/supercap of the RTC (if any) is
-      chargeable or not:
-      0: not chargeable
-      1: chargeable
--------------------
+I looked at Documentation/ABI/testing/rtc-cdev but couldn't find an
+ioctl to activate the battery switch over function, nor one to activate
+the battery-low detection...
 
-I agree with you that a boolean would be more appropriate. Should I
-also submit a (separate) patch to fix the "aux-voltage-chargeable"
-property to a boolean?
-
+Thank you,
 Hugo.
 
 
-> Thanks,
-> Conor.
 > 
-> > +
-> >    quartz-load-femtofarads:
-> >      description:
-> >        The capacitive load of the quartz(x-tal), expressed in femto
-> > -- 
-> > 2.30.2
+> > Hugo.
 > > 
+> > 
+> > > Thanks,
+> > > Conor.
+> > > 
+> > > > +
+> > > >    quartz-load-femtofarads:
+> > > >      description:
+> > > >        The capacitive load of the quartz(x-tal), expressed in femto
+> > > > -- 
+> > > > 2.30.2
+> > > > 
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
