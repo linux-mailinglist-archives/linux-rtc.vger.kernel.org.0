@@ -2,82 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7C77745B2
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Aug 2023 20:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BC677462E
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Aug 2023 20:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbjHHSpK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Aug 2023 14:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
+        id S233072AbjHHSyN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Aug 2023 14:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbjHHSoj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Aug 2023 14:44:39 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D933D199;
-        Tue,  8 Aug 2023 09:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691512885; x=1723048885;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eo0WgR5mRHn12TykrjAcW5PBByn61DLkNzcLEYnCe1g=;
-  b=klIBUqiYSWmX9ImvHe/rEkekHrGz0dYN8Zffevdh77odpVXWhXGZjCl2
-   hvEagEOVte6Y3/NmCgXQvEwoRajegFaNmOFdRAm8xTex6pal8gKm8RFt6
-   4f2QbmpnLr2ipsZxKs0E6kq3IB37syNhyVERK/8OMX73hp9awJOblx1p6
-   d7JBxlWKBkAH5Q50/xyeNqUKroGY9OlnPGsZKA5Ro8q6SN5nvcn0XdYxp
-   ei9L/K48Kd5dcSQ+zcvZKq5HBRbvZnHJYVxRTOmtT2SmaNc92vfJpC0+s
-   YvqMBiME61jUJYoj/X9qK3+8zGhkVkoYH5WMi9wiP1KzRVFD+VGQoWd7F
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="374480755"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="374480755"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 05:18:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="734512997"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="734512997"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Aug 2023 05:18:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qTLfo-007NhS-1M;
-        Tue, 08 Aug 2023 15:18:52 +0300
-Date:   Tue, 8 Aug 2023 15:18:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
-Message-ID: <ZNIyrG/2h/PeS9Oz@smile.fi.intel.com>
-References: <20230804161728.394920-1-biju.das.jz@bp.renesas.com>
- <20230805174036.129ffbc2@jic23-huawei>
- <OS0PR01MB59220491C7C8AA40BEFAAD82860EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230806142950.6c409600@jic23-huawei>
- <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
- <ZNFV+C1HCIRJpbdC@google.com>
+        with ESMTP id S233300AbjHHSxt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Aug 2023 14:53:49 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F25A790;
+        Tue,  8 Aug 2023 10:08:34 -0700 (PDT)
+Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id B5DB4C6DC9;
+        Tue,  8 Aug 2023 12:32:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F88D24000C;
+        Tue,  8 Aug 2023 12:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1691497948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Uz4PDleM9cm+NzvA+51SH9T9J1LoZFkV7vQFvjxHPvc=;
+        b=U2zxC6kUkqR+q7UizYXdWgf/r3Vv4/Jg+KWT7f32GCj/bzuGXUXHVrjF9juLgxAk59QO55
+        nBT+btfgySUbEbIp+OxLwsbqA0KcDR/SzFuClmKp0Vli07c53KQOh3Dpn9pB+g5EEoP0Lz
+        9cHdE24aGeI1LNaPdDm5VJureEoSymKLPQBSf3GLIxRF4FukB8m8Fmcw50wnSCwHSdRXPt
+        JO8wWPyfSqvxR+cmD6JcqKO0e9PFc5FnlKNt5KYh6bygJ5nzzdT81Z2vCXGQkR+sfRVybJ
+        AfwpFM8BoGFkaaZmTrbKbBvv8/fkPI/WgtqnNfPyKeWI/Kjaga1F/qnFSzClyg==
+Date:   Tue, 8 Aug 2023 14:32:26 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Conor Dooley <conor@kernel.org>, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bruno.thomsen@gmail.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH 1/2] dt-bindings: rtc: add properties to set
+ battery-related functions
+Message-ID: <202308081232266ec8a9b7@mail.local>
+References: <20230802191153.952667-1-hugo@hugovil.com>
+ <20230802191153.952667-2-hugo@hugovil.com>
+ <20230808-capsize-deodorize-5776d3dbb192@spud>
+ <20230808082533.b608c9a2a4bd922920643c4b@hugovil.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZNFV+C1HCIRJpbdC@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20230808082533.b608c9a2a4bd922920643c4b@hugovil.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,49 +60,95 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 01:37:12PM -0700, Dmitry Torokhov wrote:
-> On Mon, Aug 07, 2023 at 05:54:07PM +0300, Andy Shevchenko wrote:
-> > On Sun, Aug 06, 2023 at 02:29:50PM +0100, Jonathan Cameron wrote:
-> > > On Sat, 5 Aug 2023 17:42:21 +0000
-> > > Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > > > On Fri,  4 Aug 2023 17:17:24 +0100
-> > > > > Biju Das <biju.das.jz@bp.renesas.com> wrote:
-
-...
-
-> > > > + * Besides the fact that some drivers abuse the device ID driver_data type
-> > > > + * and claim it to be integer, for the bus specific ID tables the driver_data
-> > > > + * may be defined as kernel_ulong_t. For these tables 0 is a valid response,
-> > > > + * but not for this function. It's recommended to convert those either to avoid
-> > > > + * 0 or use a real pointer to the predefined driver data.
-> > 
-> > > We still need to maintain consistency across the two tables, which
-> > > is a stronger requirement than avoiding 0.
-> > 
-> > True. Any suggestion how to amend the above comment? Because the documentation
-> > makes sense on its own (may be split from the series?).
-> > 
-> > > Some drivers already do that by forcing the enum used to start at 1 which
-> > > doesn't solver the different data types issue.
-> > 
-> > And some maintainers do not want to see non-enum values in i2c ID table.
-> > *Shrug*.
+On 08/08/2023 08:25:33-0400, Hugo Villeneuve wrote:
+> On Tue, 8 Aug 2023 12:21:24 +0100
+> Conor Dooley <conor@kernel.org> wrote:
 > 
-> So in legacy ID lookup path we can safely assume that values below 4096
-> are scalars and return NULL from the new device_get_match_data(). This
-> way current drivers using the values as indices or doing direct
-> comparisons against them can continue doing manual look up and using
-> them as they see fit. And we can convert the drivers at our leisure.
+> > Hey Hugo,
+> > 
+> > On Wed, Aug 02, 2023 at 03:11:52PM -0400, Hugo Villeneuve wrote:
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > 
+> > > These properties can be defined in the board's device tree to set the
+> > > default power-on values for battery-related functions.
+> > > 
+> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > ---
+> > >  .../devicetree/bindings/rtc/rtc.yaml          | 19 +++++++++++++++++++
+> > >  1 file changed, 19 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > index efb66df82782..0217d229e3fa 100644
+> > > --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > @@ -26,6 +26,25 @@ properties:
+> > >        0: not chargeable
+> > >        1: chargeable
+> > >  
+> > > +  battery-low-detect:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    enum: [0, 1]
+> > > +    description: |
+> > > +      For RTC devices supporting a backup battery/supercap, this flag can be
+> > > +      used to configure the battery low detection reporting function:
+> > > +      0: disabled
+> > > +      1: enabled
+> > > +
+> > > +  battery-switch-over:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    enum: [0, 1]
+> > > +    description: |
+> > > +      For RTC devices supporting a backup battery/supercap, this flag can be
+> > > +      used to configure the battery switch over when the main voltage source is
+> > > +      turned off:
+> > > +      0: disabled
+> > > +      1: enabled
+> > 
+> > Why are these implemented as enums? This seems to fall into the category
+> > of using DT to determine software policy - why's it not sufficient to
+> > have boolean properties that indicate hardware support and let the software
+> > decide what to do with them?
+> 
+> Hi Conor,
+> the reason is that I based the new properties on the existing property
+> "aux-voltage-chargeable":
+> 
+> -------------------
+>  aux-voltage-chargeable:
+>     $ref: /schemas/types.yaml#/definitions/uint32
+>     enum: [0, 1]
+>     description: |
+>       Tells whether the battery/supercap of the RTC (if any) is
+>       chargeable or not:
+>       0: not chargeable
+>       1: chargeable
+> -------------------
+> 
+> I agree with you that a boolean would be more appropriate. Should I
+> also submit a (separate) patch to fix the "aux-voltage-chargeable"
+> property to a boolean?
+> 
 
-It's a good idea, but I believe will be received as hack.
-But why not to try? We indeed have an error pointers for the last page
-and NULL (which is only up to 16 IIRC) and reserved space in the first
-page. To be more robust I would check all enums that are being used
-in I2C ID tables for maximum value and if that is less than 16, use
-ZERO_OR_NULL_PTR() instead of custom stuff.
+No, this is an enum on purpose.
+I will not take battery switch over related properties, this is not
+hardware description but software configuration. There is an ioctl for
+this.
+
+> Hugo.
+> 
+> 
+> > Thanks,
+> > Conor.
+> > 
+> > > +
+> > >    quartz-load-femtofarads:
+> > >      description:
+> > >        The capacitive load of the quartz(x-tal), expressed in femto
+> > > -- 
+> > > 2.30.2
+> > > 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
