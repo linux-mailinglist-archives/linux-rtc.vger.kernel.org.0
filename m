@@ -2,79 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B35B776279
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Aug 2023 16:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE12776531
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Aug 2023 18:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbjHIO3j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Aug 2023 10:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
+        id S229604AbjHIQgr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Aug 2023 12:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbjHIO3j (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Aug 2023 10:29:39 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999C91FD7
-        for <linux-rtc@vger.kernel.org>; Wed,  9 Aug 2023 07:29:38 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fe5c0e57d2so27376545e9.0
-        for <linux-rtc@vger.kernel.org>; Wed, 09 Aug 2023 07:29:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691591377; x=1692196177;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MNnJWt3Ml/e+CS6gb7T+DN3KuuP7RKuupkwVkLHrzVg=;
-        b=IunFX9+mWaUKoG9jeAXOfPCHo25r5SrUF/iqYKMmj28P0SoMMQPPlOxT5tyXIV5Guh
-         GNZECi3lLcwR8CcpfFE13EmQtbDip8bP6QcLPB9imA/DXNB0wvacylNp3oTVlPY5cf+4
-         qNRek2RHoRPFQ6LlDGv/O2bC0x+Sx8ZBpe7HazRCRdMjmGX80Myner9C0xll12eaaq3v
-         MaCZVBJVSN8De6D3Pea8OayoRkB56hm8jNXN5XUQ0FJvtYhaAt1HosFR0uozZm2huk9x
-         9DSkMG6SqWdDyhKziOfFghhS+RfoJb4024dwi+OOnVaZooqcBVVjUT7aAbuAOt2fpFHI
-         2Tbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691591377; x=1692196177;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MNnJWt3Ml/e+CS6gb7T+DN3KuuP7RKuupkwVkLHrzVg=;
-        b=WxUkiLmZ5Us2TIfFweBAANjcFta/l6JA1XNMNPpUVaXdc1v1qYGsYqfBYB8pxvZwfa
-         qG6vE1vuCqOVLiw8rCH1lnz2l4qvI7TIKFmEA+rlRiwrnit2yB5BTJDNT3kpbyjL7DDD
-         /Z6gAlfKZtOCrEqhSIRiTBR7bjUjjx6Dx1hsv3OcZbsoP954JzW6AvWt+p15pT/K8PFv
-         W8y2sSJm5xLgrp6mgiay3d9fpXkQf8DptqwOViwLU8Msp4/1EmkoPhpOXikYOfzqLGw/
-         1ivFtmYsatx6h/4B0qZp3kP7y8d59tF4DTx1rU/4V3gPHa4W2K4PzfjhRmmqlVACyB3U
-         F/6w==
-X-Gm-Message-State: AOJu0Yym56xcSmHtb5ipwkFcvIgyJZ1R2nbFi/wTeLVcd7fUwxiG5tXP
-        Ky/iXx8P/rE1BY1g+HU8+vspXw==
-X-Google-Smtp-Source: AGHT+IE+CisNQcAXzJaQITtm7nC1+71FXGVcEiFr3F3ZRxLtNN5kjYxDbxGZYJdIeWGAhLr41pFwCA==
-X-Received: by 2002:a05:600c:143:b0:3fe:1dad:540f with SMTP id w3-20020a05600c014300b003fe1dad540fmr2227915wmm.10.1691591376468;
-        Wed, 09 Aug 2023 07:29:36 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id 14-20020a05600c22ce00b003fba2734f1esm2182688wmg.1.2023.08.09.07.29.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Aug 2023 07:29:35 -0700 (PDT)
-Message-ID: <50bedd75-bcd6-d7bc-26c0-b8c00f99779a@linaro.org>
-Date:   Wed, 9 Aug 2023 16:29:33 +0200
+        with ESMTP id S229550AbjHIQgq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Aug 2023 12:36:46 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0B11B2;
+        Wed,  9 Aug 2023 09:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691599005; x=1723135005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ydBCJtj9u/y8x/TfM7kTDDFzhiR7ELo5gtwHLbTMVBw=;
+  b=Gq84e0QkX9CWz9V6tl4leGnwT3DOp9Df2xxt/sfJf+kjxccifgpWrrss
+   XPuGHAQ0IlI/lq1qBoDJhm/4ZcABEVPiJOASfZXL1il66bxfCaEUWczOM
+   nKjamZAxIfne8X0HRVUTiN5C8BW7HlC2SJAXUAGy2Oo46bTDtkuvjlap7
+   Lb12ZknsBCcud13BSLejlWKO+Nm2LY8yzTRTs9cZEu79UhDqVNalfBHCk
+   NTpELTdXn5AJb8as9MvvO8HU+Z4dgtX1MJvGbzmHzGEjsYDtr/698KEf2
+   /cw8OmSg7ne1/DRJKBjpnLhvW3L8biHbXyryEAg/e1X4tXoY41G1WLNxa
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="371160773"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="371160773"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 09:36:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="1062540094"
+X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
+   d="scan'208";a="1062540094"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Aug 2023 09:36:39 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qTmAp-0006GG-0Q;
+        Wed, 09 Aug 2023 16:36:39 +0000
+Date:   Thu, 10 Aug 2023 00:36:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Christophe Guibout <christophe.guibout@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: stm32: remove incorrect #ifdef check
+Message-ID: <202308100045.WeVD1ttk-lkp@intel.com>
+References: <20230801105932.3738430-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v2 2/2] rtc: nuvoton: Compatible with NCT3015Y-R and
- NCT3018Y-R
-Content-Language: en-US
-To:     Mia Lin <mimi05633@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, KFLIN@nuvoton.com,
-        mylin1@nuvoton.com
-Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230809095112.2836-1-mimi05633@gmail.com>
- <20230809095112.2836-3-mimi05633@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230809095112.2836-3-mimi05633@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230801105932.3738430-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,36 +75,74 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 09/08/2023 11:51, Mia Lin wrote:
-> -	flags = NCT3018Y_BIT_TWO;
-> -	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> -	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
-> -		return err;
-> +	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_PART);
-> +	if (flags < 0) {
-> +		dev_dbg(&client->dev, "%s: read error\n", __func__);
-> +		return flags;
-> +	} else if (flags & NCT3018Y_REG_PART_NCT3018Y) {
-> +		if (!(flags & data->part_number))
-> +			dev_warn(&client->dev, "%s: part_num=0x%x but NCT3018Y_REG_PART=0x%x\n",
-> +				 __func__, data->part_number, flags);
-> +		flags = NCT3018Y_BIT_HF;
-> +		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> +		if (err < 0) {
-> +			dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
-> +			return err;
-> +		}
-> +	} else if (flags & NCT3018Y_REG_PART_NCT3015Y) {
-> +		if (!(flags & data->part_number))
-> +			dev_warn(&client->dev, "%s: part_num=0x%x but NCT3018Y_REG_PART=0x%x\n",
-> +				 __func__, data->part_number, flags);
+Hi Arnd,
 
-I don't think this is correct. Kernel's job is not to verify the DT...
-and why would it verify the device based on DT? You have here device
-detection so use it directly without this dance of comparing with
-compatible/match data.
+kernel test robot noticed the following build warnings:
 
-Best regards,
-Krzysztof
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on atorgue-stm32/stm32-next soc/for-next linus/master v6.5-rc5 next-20230809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/rtc-stm32-remove-incorrect-ifdef-check/20230801-190951
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20230801105932.3738430-1-arnd%40kernel.org
+patch subject: [PATCH] rtc: stm32: remove incorrect #ifdef check
+config: x86_64-buildonly-randconfig-r003-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100045.WeVD1ttk-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100045.WeVD1ttk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308100045.WeVD1ttk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/rtc/rtc-stm32.c:903:12: warning: 'stm32_rtc_resume' defined but not used [-Wunused-function]
+     903 | static int stm32_rtc_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~
+>> drivers/rtc/rtc-stm32.c:893:12: warning: 'stm32_rtc_suspend' defined but not used [-Wunused-function]
+     893 | static int stm32_rtc_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~
+
+
+vim +/stm32_rtc_resume +903 drivers/rtc/rtc-stm32.c
+
+4e64350f42e2ce Amelie Delaunay 2017-01-11  892  
+4e64350f42e2ce Amelie Delaunay 2017-01-11 @893  static int stm32_rtc_suspend(struct device *dev)
+4e64350f42e2ce Amelie Delaunay 2017-01-11  894  {
+4e64350f42e2ce Amelie Delaunay 2017-01-11  895  	struct stm32_rtc *rtc = dev_get_drvdata(dev);
+4e64350f42e2ce Amelie Delaunay 2017-01-11  896  
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  897  	if (rtc->data->has_pclk)
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  898  		clk_disable_unprepare(rtc->pclk);
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  899  
+4e64350f42e2ce Amelie Delaunay 2017-01-11  900  	return 0;
+4e64350f42e2ce Amelie Delaunay 2017-01-11  901  }
+4e64350f42e2ce Amelie Delaunay 2017-01-11  902  
+4e64350f42e2ce Amelie Delaunay 2017-01-11 @903  static int stm32_rtc_resume(struct device *dev)
+4e64350f42e2ce Amelie Delaunay 2017-01-11  904  {
+4e64350f42e2ce Amelie Delaunay 2017-01-11  905  	struct stm32_rtc *rtc = dev_get_drvdata(dev);
+4e64350f42e2ce Amelie Delaunay 2017-01-11  906  	int ret = 0;
+4e64350f42e2ce Amelie Delaunay 2017-01-11  907  
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  908  	if (rtc->data->has_pclk) {
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  909  		ret = clk_prepare_enable(rtc->pclk);
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  910  		if (ret)
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  911  			return ret;
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  912  	}
+9a6757eadc14f0 Amelie Delaunay 2017-07-06  913  
+4e64350f42e2ce Amelie Delaunay 2017-01-11  914  	ret = stm32_rtc_wait_sync(rtc);
+cf33e911f500f6 Chuhong Yuan    2019-12-06  915  	if (ret < 0) {
+cf33e911f500f6 Chuhong Yuan    2019-12-06  916  		if (rtc->data->has_pclk)
+cf33e911f500f6 Chuhong Yuan    2019-12-06  917  			clk_disable_unprepare(rtc->pclk);
+4e64350f42e2ce Amelie Delaunay 2017-01-11  918  		return ret;
+cf33e911f500f6 Chuhong Yuan    2019-12-06  919  	}
+4e64350f42e2ce Amelie Delaunay 2017-01-11  920  
+4e64350f42e2ce Amelie Delaunay 2017-01-11  921  	return ret;
+4e64350f42e2ce Amelie Delaunay 2017-01-11  922  }
+4e64350f42e2ce Amelie Delaunay 2017-01-11  923  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
