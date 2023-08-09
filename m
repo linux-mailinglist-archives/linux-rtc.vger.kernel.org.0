@@ -2,94 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0611C774D7C
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Aug 2023 23:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469AE775031
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Aug 2023 03:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjHHV6P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Aug 2023 17:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S229540AbjHIBPt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Aug 2023 21:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbjHHV6F (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Aug 2023 17:58:05 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F093F190
-        for <linux-rtc@vger.kernel.org>; Tue,  8 Aug 2023 09:42:16 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RKs2j1vwVzVk36;
-        Tue,  8 Aug 2023 19:50:53 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.202) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 8 Aug 2023 19:52:46 +0800
-From:   Zhu Wang <wangzhu9@huawei.com>
-To:     <andrew@lunn.ch>, <gregory.clement@bootlin.com>,
-        <sebastian.hesselbarth@gmail.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <nicolas.ferre@microchip.com>,
-        <claudiu.beznea@tuxon.dev>, <avifishman70@gmail.com>,
-        <tmaimon77@gmail.com>, <tali.perry1@gmail.com>,
-        <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-rtc@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>
-CC:     <wangzhu9@huawei.com>
-Subject: [PATCH -next 4/5] rtc: armada38x: remove redundant of_match_ptr()
-Date:   Tue, 8 Aug 2023 19:52:12 +0800
-Message-ID: <20230808115213.154377-5-wangzhu9@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230808115213.154377-1-wangzhu9@huawei.com>
-References: <20230808115213.154377-1-wangzhu9@huawei.com>
+        with ESMTP id S229851AbjHIBPt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Aug 2023 21:15:49 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAA319A8;
+        Tue,  8 Aug 2023 18:15:48 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bbf8cb694aso53407125ad.3;
+        Tue, 08 Aug 2023 18:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691543748; x=1692148548;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GPWRUM32s+W+NzJlw5xle7BrQSCJzLbYMkNbUmW2VZM=;
+        b=r6+cYmz7a9GuR4hKSjvtbYHXQ4uSc8zORRE7EPwV9JSIlZuij60Qe5TTdFTgbTfO0V
+         rG1ibU41ckM+vDvqqamY+nfE+6oBdEN/Q33IzfNQHqR98uwwY8wg63IOi0m9SHliTdKF
+         J+Lt/epF6QWs2YIAkePiGzsIJIkfJ1FhWnydtUJWs7UjB42SCKM5TBlhzqDJUD1ayAbn
+         1isR6Yn9S51vHybdTymTQneQcoMflPeL1F1cIGrtnPfdY73uAPyuGxefgVR8cM9TKAVV
+         D9njbPUBeHDlg3e7dR9dCxgbG2EukehnZ7A4kg4ABwyBKicB+sAq8FO8xr+KlG4gxoVj
+         Eocw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691543748; x=1692148548;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GPWRUM32s+W+NzJlw5xle7BrQSCJzLbYMkNbUmW2VZM=;
+        b=ZrGMjuYXetiZzAzF2qG13xNP64qTL5VCbaZKbvzhU2gNSTwsSVAO00bj6KpEsQT688
+         giG6gTnECKww+iw1BGjzrZzdk5e5uwMZz8MlK+luAnOpSiK/7q4sLuQ8/mc+nQ0yYNzr
+         2SnkSeYvexeh38A2UzZUluYlzU0h9zBe9SDx/R3bZPc+Y5EVSCxCmf8uxkA+RmQ39MML
+         Xi5F/ScIRlSFkycOBI4QJsooSfW/spndIZdGvFacVTvBJWFN3wZaJHe8LazjQjQBU/S8
+         7DH4j2iEEEmeU+rAk4V+t4Ee38aZqNv59NjYc+qk6qA+a4jBoLgS3lwNaYQ5SpLAt7gl
+         uyHA==
+X-Gm-Message-State: AOJu0YwOipaOMhgNV52N9bnJFL3DBEDdCpLwU+c9/lkgKzaimZOOs7Ci
+        JCpw+8GYnBy2bV8G3ueMn6U=
+X-Google-Smtp-Source: AGHT+IEaH6Ei7SipTX4Eq714C4AvTEUatqG0ziqy/qoVCZL7cJePyRr90iRzJHRUaWUZ1RmGxLyl5g==
+X-Received: by 2002:a17:902:7793:b0:1b8:6cae:3570 with SMTP id o19-20020a170902779300b001b86cae3570mr1377591pll.11.1691543747719;
+        Tue, 08 Aug 2023 18:15:47 -0700 (PDT)
+Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id t22-20020a1709028c9600b001bc68602e54sm5730449plo.142.2023.08.08.18.15.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 18:15:47 -0700 (PDT)
+From:   Jacky Huang <ychuang570808@gmail.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        soc@kernel.org, mjchen@nuvoton.com, schung@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: [RESEND PATCH v2 0/3] Add support for Nuvoton ma35d1 rtc controller
+Date:   Wed,  9 Aug 2023 01:15:39 +0000
+Message-Id: <20230809011542.429945-1-ychuang570808@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.202]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500025.china.huawei.com (7.185.36.35)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The driver depends on CONFIG_OF, so it is not necessary to use
-of_match_ptr() here. We remove of_match_ptr().
+From: Jacky Huang <ychuang3@nuvoton.com>
 
-Signed-off-by: Zhu Wang <wangzhu9@huawei.com>
----
- drivers/rtc/rtc-armada38x.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+This patch series adds the rtc driver for the nuvoton ma35d1 ARMv8 SoC.
+It includes DT binding documentation, the ma35d1 rtc driver, and device
+tree updates.
 
-diff --git a/drivers/rtc/rtc-armada38x.c b/drivers/rtc/rtc-armada38x.c
-index b4139c200676..ef878b76dd7b 100644
---- a/drivers/rtc/rtc-armada38x.c
-+++ b/drivers/rtc/rtc-armada38x.c
-@@ -474,7 +474,6 @@ static const struct armada38x_rtc_data armada8k_data = {
- 	.alarm = ALARM2,
- };
- 
--#ifdef CONFIG_OF
- static const struct of_device_id armada38x_rtc_of_match_table[] = {
- 	{
- 		.compatible = "marvell,armada-380-rtc",
-@@ -487,7 +486,6 @@ static const struct of_device_id armada38x_rtc_of_match_table[] = {
- 	{}
- };
- MODULE_DEVICE_TABLE(of, armada38x_rtc_of_match_table);
--#endif
- 
- static __init int armada38x_rtc_probe(struct platform_device *pdev)
- {
-@@ -577,7 +575,7 @@ static struct platform_driver armada38x_rtc_driver = {
- 	.driver		= {
- 		.name	= "armada38x-rtc",
- 		.pm	= &armada38x_rtc_pm_ops,
--		.of_match_table = of_match_ptr(armada38x_rtc_of_match_table),
-+		.of_match_table = armada38x_rtc_of_match_table,
- 	},
- };
- 
+The ma35d1 rtc controller provides real-time and calendar messaging
+capabilities. It supports programmable time tick and alarm match
+interrupts. The time and calendar messages are expressed in BCD format.
+
+This rtc driver has been tested on the ma35d1 som board with Linux 6.5-rc2.
+
+v2:
+  - Updated nuvoton,ma35d1-rtc.yaml
+    - Modified patch title and fixed typo
+    - Added reference to rtc.yaml
+    - Used unevaluatedProperties instead of additionalProperties
+  - Modified rtc driver
+    - Used dev_err_probe()
+    - Removed ma35d1_rtc_remove()
+    - Made other minor fixes
+
+Jacky Huang (3):
+  dt-bindings: rtc: Add Nuvoton ma35d1 rtc
+  arm64: dts: nuvoton: Add rtc for ma35d1
+  rtc: Add driver for Nuvoton ma35d1 rtc controller
+
+ .../bindings/rtc/nuvoton,ma35d1-rtc.yaml      |  48 +++
+ .../boot/dts/nuvoton/ma35d1-iot-512m.dts      |   4 +
+ .../boot/dts/nuvoton/ma35d1-som-256m.dts      |   4 +
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       |   8 +
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ma35d1.c                      | 355 ++++++++++++++++++
+ 7 files changed, 431 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,ma35d1-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-ma35d1.c
+
 -- 
-2.17.1
+2.34.1
 
