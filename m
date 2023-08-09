@@ -2,147 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE12776531
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Aug 2023 18:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F7D776722
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Aug 2023 20:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjHIQgr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Aug 2023 12:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S229719AbjHISY7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Aug 2023 14:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjHIQgq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Aug 2023 12:36:46 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0B11B2;
-        Wed,  9 Aug 2023 09:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691599005; x=1723135005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ydBCJtj9u/y8x/TfM7kTDDFzhiR7ELo5gtwHLbTMVBw=;
-  b=Gq84e0QkX9CWz9V6tl4leGnwT3DOp9Df2xxt/sfJf+kjxccifgpWrrss
-   XPuGHAQ0IlI/lq1qBoDJhm/4ZcABEVPiJOASfZXL1il66bxfCaEUWczOM
-   nKjamZAxIfne8X0HRVUTiN5C8BW7HlC2SJAXUAGy2Oo46bTDtkuvjlap7
-   Lb12ZknsBCcud13BSLejlWKO+Nm2LY8yzTRTs9cZEu79UhDqVNalfBHCk
-   NTpELTdXn5AJb8as9MvvO8HU+Z4dgtX1MJvGbzmHzGEjsYDtr/698KEf2
-   /cw8OmSg7ne1/DRJKBjpnLhvW3L8biHbXyryEAg/e1X4tXoY41G1WLNxa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="371160773"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="371160773"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2023 09:36:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10797"; a="1062540094"
-X-IronPort-AV: E=Sophos;i="6.01,159,1684825200"; 
-   d="scan'208";a="1062540094"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Aug 2023 09:36:39 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qTmAp-0006GG-0Q;
-        Wed, 09 Aug 2023 16:36:39 +0000
-Date:   Thu, 10 Aug 2023 00:36:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Christophe Guibout <christophe.guibout@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        with ESMTP id S229600AbjHISY7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Aug 2023 14:24:59 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31DF1BCF;
+        Wed,  9 Aug 2023 11:24:57 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4C83A5C0069;
+        Wed,  9 Aug 2023 14:24:54 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 09 Aug 2023 14:24:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1691605494; x=1691691894; bh=hB
+        sRqPsdDyKhBWx869nPPrv7yqHSzjT8V/8SgiQ7D3k=; b=gdrzpKYpBd0IjkR7x4
+        FysFuHh2rJMWsseUxCHohxKjODlWUnUy+xSGCho/5LmbKi4n6yPrUuXk9TA/s4gQ
+        FVTXeyNIW2n3qTCFSgw4UkN8eH4syZwM+hR0Hyx+EVcNTz03EDzK/p5Fho4LEpr5
+        w4u1meLp47qXO8cxcVqcr6SKeEarteECB04il1mpjPznIeqbSuGkIgQ5S7/clObI
+        NMSur8HXCgfIWB/0Iw5dGh+xlELcIWJgDapqwbzmmB3R0Uum3ixBLkjY8CcsgOMe
+        xUBd8/4xc/3tlMPSvsSqMusOraUyqq/QeGW604fCmJNxGyB7KWe5NwNjsDOHv3bz
+        FwWw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1691605494; x=1691691894; bh=hBsRqPsdDyKhB
+        Wx869nPPrv7yqHSzjT8V/8SgiQ7D3k=; b=ZhdSS16o6u/8hEv8wV/Czd+XPRMkM
+        Y10HEEe//DcvI6L2A1DYxDMoC9ZiHd/Q2aOuKjRZSsJOtOE/e3FcJuhvGhOsYIMZ
+        SnGplUCMJUMJgAoonBfyx+GneCPJdvLRnKbftGJdhbvzldCFdWpJQLE3j2qaLKC+
+        09IIRynlbNeQVDzchyTg75hwfZL9QQX5Y5xBFqPDx8x62JCZKZhpQvFqJ/wWakml
+        OPlIuKg1zRpOWynMeQnrD0eNbQ2lGdxXRD6xoVCx/T6XSQawgpNpCooZjYoj4g0s
+        84lbCxQy28SVL8wM1ZLv65kvffLjNBKCWOGK+9pVfn/+X4ML6ceoZgOOA==
+X-ME-Sender: <xms:9dnTZB9VcLzE1qw3rBnBe4nWPHtlPmurmPE_j9KjzFS-wQpSSnwyXQ>
+    <xme:9dnTZFs02MrhEiQeG9f_2clS12zhYBPElcGJIWvriKT_AhJhw42KZUCjoa8OddTVL
+    To9-zNex9nixVuZe40>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrleeggdduvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:9dnTZPBkXML9WVuCCAUu77SYKQ-xH4M1Ux20ZvIbKyGwEXYcLLM7JQ>
+    <xmx:9dnTZFcGKjbwZeO49TELBm2r3fJmunN3vQdamHaoFevvWindOLV5GQ>
+    <xmx:9dnTZGOhDlgao8OgGmtjkgHfl_ICZFRk-QhMC-9y7C4sVppYozHOCQ>
+    <xmx:9tnTZAu0xKXoOd6mU2anH1qjeSuQgUTaskkzHnsI34a_Jw2Kz0tLnQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A0CC3B6008D; Wed,  9 Aug 2023 14:24:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <106a93ae-90f1-45fb-ae0a-034eb2d6faea@app.fastmail.com>
+In-Reply-To: <202308100045.WeVD1ttk-lkp@intel.com>
+References: <20230801105932.3738430-1-arnd@kernel.org>
+ <202308100045.WeVD1ttk-lkp@intel.com>
+Date:   Wed, 09 Aug 2023 20:24:33 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "kernel test robot" <lkp@intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+        "Valentin Caron" <valentin.caron@foss.st.com>,
+        "Antonio Borneo" <antonio.borneo@foss.st.com>,
+        "Amelie DELAUNAY" <amelie.delaunay@foss.st.com>,
+        "Christophe Guibout" <christophe.guibout@foss.st.com>,
+        "Gabriel Fernandez" <gabriel.fernandez@foss.st.com>,
         linux-rtc@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] rtc: stm32: remove incorrect #ifdef check
-Message-ID: <202308100045.WeVD1ttk-lkp@intel.com>
-References: <20230801105932.3738430-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230801105932.3738430-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Arnd,
+On Wed, Aug 9, 2023, at 18:36, kernel test robot wrote:
+>
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new 
+> version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: 
+> https://lore.kernel.org/oe-kbuild-all/202308100045.WeVD1ttk-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> drivers/rtc/rtc-stm32.c:903:12: warning: 'stm32_rtc_resume' defined but not used [-Wunused-function]
+>      903 | static int stm32_rtc_resume(struct device *dev)
+>          |            ^~~~~~~~~~~~~~~~
+>>> drivers/rtc/rtc-stm32.c:893:12: warning: 'stm32_rtc_suspend' defined but not used [-Wunused-function]
+>      893 | static int stm32_rtc_suspend(struct device *dev)
+>          |            ^~~~~~~~~~~~~~~~~
 
-kernel test robot noticed the following build warnings:
+This is the warning you get if my patch is applied but the
+fb9a7e5360dc8 ("rtc: stm32: change PM callbacks to "_noirq()"")
+commit is not. If that patch is applied, mine is needed to address
+the other warning.
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on atorgue-stm32/stm32-next soc/for-next linus/master v6.5-rc5 next-20230809]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/rtc-stm32-remove-incorrect-ifdef-check/20230801-190951
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20230801105932.3738430-1-arnd%40kernel.org
-patch subject: [PATCH] rtc: stm32: remove incorrect #ifdef check
-config: x86_64-buildonly-randconfig-r003-20230809 (https://download.01.org/0day-ci/archive/20230810/202308100045.WeVD1ttk-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230810/202308100045.WeVD1ttk-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308100045.WeVD1ttk-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/rtc/rtc-stm32.c:903:12: warning: 'stm32_rtc_resume' defined but not used [-Wunused-function]
-     903 | static int stm32_rtc_resume(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~
->> drivers/rtc/rtc-stm32.c:893:12: warning: 'stm32_rtc_suspend' defined but not used [-Wunused-function]
-     893 | static int stm32_rtc_suspend(struct device *dev)
-         |            ^~~~~~~~~~~~~~~~~
-
-
-vim +/stm32_rtc_resume +903 drivers/rtc/rtc-stm32.c
-
-4e64350f42e2ce Amelie Delaunay 2017-01-11  892  
-4e64350f42e2ce Amelie Delaunay 2017-01-11 @893  static int stm32_rtc_suspend(struct device *dev)
-4e64350f42e2ce Amelie Delaunay 2017-01-11  894  {
-4e64350f42e2ce Amelie Delaunay 2017-01-11  895  	struct stm32_rtc *rtc = dev_get_drvdata(dev);
-4e64350f42e2ce Amelie Delaunay 2017-01-11  896  
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  897  	if (rtc->data->has_pclk)
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  898  		clk_disable_unprepare(rtc->pclk);
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  899  
-4e64350f42e2ce Amelie Delaunay 2017-01-11  900  	return 0;
-4e64350f42e2ce Amelie Delaunay 2017-01-11  901  }
-4e64350f42e2ce Amelie Delaunay 2017-01-11  902  
-4e64350f42e2ce Amelie Delaunay 2017-01-11 @903  static int stm32_rtc_resume(struct device *dev)
-4e64350f42e2ce Amelie Delaunay 2017-01-11  904  {
-4e64350f42e2ce Amelie Delaunay 2017-01-11  905  	struct stm32_rtc *rtc = dev_get_drvdata(dev);
-4e64350f42e2ce Amelie Delaunay 2017-01-11  906  	int ret = 0;
-4e64350f42e2ce Amelie Delaunay 2017-01-11  907  
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  908  	if (rtc->data->has_pclk) {
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  909  		ret = clk_prepare_enable(rtc->pclk);
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  910  		if (ret)
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  911  			return ret;
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  912  	}
-9a6757eadc14f0 Amelie Delaunay 2017-07-06  913  
-4e64350f42e2ce Amelie Delaunay 2017-01-11  914  	ret = stm32_rtc_wait_sync(rtc);
-cf33e911f500f6 Chuhong Yuan    2019-12-06  915  	if (ret < 0) {
-cf33e911f500f6 Chuhong Yuan    2019-12-06  916  		if (rtc->data->has_pclk)
-cf33e911f500f6 Chuhong Yuan    2019-12-06  917  			clk_disable_unprepare(rtc->pclk);
-4e64350f42e2ce Amelie Delaunay 2017-01-11  918  		return ret;
-cf33e911f500f6 Chuhong Yuan    2019-12-06  919  	}
-4e64350f42e2ce Amelie Delaunay 2017-01-11  920  
-4e64350f42e2ce Amelie Delaunay 2017-01-11  921  	return ret;
-4e64350f42e2ce Amelie Delaunay 2017-01-11  922  }
-4e64350f42e2ce Amelie Delaunay 2017-01-11  923  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+      Arnd
