@@ -2,77 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9337771E1
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Aug 2023 09:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BDC7771F5
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Aug 2023 09:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbjHJHsL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Aug 2023 03:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+        id S233403AbjHJH4T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Aug 2023 03:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjHJHsI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Aug 2023 03:48:08 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A20E1702
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Aug 2023 00:48:07 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C9321BF207;
-        Thu, 10 Aug 2023 07:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1691653685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=97+K3wphXtML7cmc5tSJB1Ii6h2VIWFAIql1oZyFt48=;
-        b=Qned/ZvMVctiJ8e4SYsUxxjJ/nY+6j8g1yqZz8vNPZSY7H4sR2JbiOlflwZcuv3qBjnEuz
-        A7W3tGHtpOZe/dVutYPcdYkMikpRjzZ++SP8CMLTANFbNZLimkwvQjTWIBcus1pT2nXiAQ
-        LRtnGSSkqSip9J06HiA1+hsTkUm2ELfhR9Rps2QKE4lNXodTA0lmkmgkAp5PGolyDdL81g
-        BNRQeXnD8NucdcjSKLFDRzr8N/8944Iaa6/UCr3iF8/Q9SjkR9n/X73+EYXTAF5z2h5x6d
-        3WwjMAsVJOTNy6xcqXK6AuFGfuHDoL1rB25i5FUy33c1n/3exRMJkVarkx25Bg==
-Date:   Thu, 10 Aug 2023 09:48:01 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, a.zummo@towertech.it,
-        joel@jms.id.au, andrew@aj.id.au, nicolas.ferre@microchip.com,
-        claudiu.beznea@tuxon.dev, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, Zhu Wang <wangzhu9@huawei.com>
-Subject: Re: [PATCH -next 0/5] rtc: remove redundant of_match_ptr()
-Message-ID: <169165359721.972357.2241425230708767028.b4-ty@bootlin.com>
-References: <20230808115213.154377-1-wangzhu9@huawei.com>
+        with ESMTP id S230100AbjHJH4S (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Aug 2023 03:56:18 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D48AE4D;
+        Thu, 10 Aug 2023 00:56:17 -0700 (PDT)
+Received: from [192.168.0.2] (unknown [95.91.208.105])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 028F961E5FE04;
+        Thu, 10 Aug 2023 09:55:30 +0200 (CEST)
+Message-ID: <d23de35f-8d55-4f80-a6ce-281f83fd4243@molgen.mpg.de>
+Date:   Thu, 10 Aug 2023 09:55:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230808115213.154377-1-wangzhu9@huawei.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: nuvoton: Add DT compatible
+To:     Mia Lin <mimi05633@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFLIN@nuvoton.com, mylin1@nuvoton.com, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20230809095112.2836-1-mimi05633@gmail.com>
+ <20230809095112.2836-2-mimi05633@gmail.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230809095112.2836-2-mimi05633@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Dear Mia,
 
-On Tue, 08 Aug 2023 19:52:08 +0800, Zhu Wang wrote:
-> The driver depends on CONFIG_OF, so it is not necessary to use
-> of_match_ptr() here. We remove of_match_ptr().
+
+Thank you for your patch. It’d be great if you mentioned nct3015y in the 
+commit message summary/title. Maybe:
+
+dt-bindings: rtc: Add compatible nct3015y to nuvoton,nct3018y
+
+Am 09.08.23 um 11:51 schrieb Mia Lin:
+> Add DT compatible "nuvoton,nct3015y" to select
+
+What do you mean by “to select”?
+
+Also, maybe add how you tested this.
+
+> Signed-off-by: Mia Lin <mimi05633@gmail.com>
+> ---
+>   Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Zhu Wang (5):
->   rtc: aspeed: remove redundant of_match_ptr()
->   rtc: at91sam9: remove redundant of_match_ptr()
->   rtc: nct3018y: remove redundant of_match_ptr()
->   rtc: armada38x: remove redundant of_match_ptr()
->   rtc: at91rm9200: remove redundant of_match_ptr()
-> 
-> [...]
+> diff --git a/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml b/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+> index 4f9b5604acd9..67fc60fd395c 100644
+> --- a/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+> @@ -15,7 +15,9 @@ maintainers:
+>   
+>   properties:
+>     compatible:
+> -    const: nuvoton,nct3018y
+> +    enum:
+> +      - nuvoton,nct3018y
+> +      - nuvoton,nct3015y
 
-Applied, thanks!
+Would sorting the list be useful?
 
-Best regards,
+>     reg:
+>       maxItems: 1
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+Kind regards,
+
+Paul
