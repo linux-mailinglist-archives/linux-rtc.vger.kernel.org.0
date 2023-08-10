@@ -2,53 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C428777142
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Aug 2023 09:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD35777161
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Aug 2023 09:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbjHJHWd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Aug 2023 03:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S229896AbjHJHaU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Aug 2023 03:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbjHJHWd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Aug 2023 03:22:33 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50371702;
-        Thu, 10 Aug 2023 00:22:30 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AACE920004;
-        Thu, 10 Aug 2023 07:22:27 +0000 (UTC)
+        with ESMTP id S229518AbjHJHaT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Aug 2023 03:30:19 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB15A3;
+        Thu, 10 Aug 2023 00:30:17 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3E8A3C000C;
+        Thu, 10 Aug 2023 07:30:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1691652148;
+        t=1691652616;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F8ho0ZeRgf6GcBDYycgxV6RMNmHgIqASgZeOYExlJaA=;
-        b=n26apJIn/795ozqnWJ141CFV4AWyErDmkf+OaUyCNFQqGxjpFaIRyJb824nVFgMu4yDSa4
-        ZsgPHNoz/XsNVu4Q1wHG/s9K3BOJ0YSbyUtFspyaDHi3qJ4/bk/tsulYwigsA3FFqCL5ps
-        +5vyvADcWT0qiMqpONtfkbDwlGbrfOPT3pmVrmualHJfmkrK/5VG2sky5fLdAhW2maDJ/r
-        7aLn4KZprlDINy0EDcnOtnqG/UvXHZkgNNbkaltdS3hMOJK8X0w5O1b5JzT6jAjB1ZzvoJ
-        Jp76S0pP30RlSr2+pwC+eEf6vlM+chLnY6ZM8UAPdXgprdENYzkJ6CX7CH/Xqw==
-Date:   Thu, 10 Aug 2023 09:22:27 +0200
+        bh=iuypy1p6ook3tCaKkFtNgD/qaSVZXlKQHOWGSdH8/vs=;
+        b=O8+LzBWAp0Cie7swpzb3xVJSTCbbwdVDbCDyoIuO62ahqPrcNZfg9CD2+MRXGXF1u5ku3x
+        sC+GxVNAkSZex6QwVABp0u6reTfOB+OKgUfqEAC7JXfvrKgeSw/sRyXT4AioYJG0Yn9WId
+        vKZPoKQELeD68eQJpAaKfpY0iq3pXjesTqgJrlXRxlKnZVKLqBBwYT4p6zNjQ9hzmxuquU
+        Ye3LE3ozc1xr8xZrrgTJkyEPSbPL2V4POcKLD5cfFBgME2wyIKtPZIMbqsT7UeGnld0TTS
+        1D8X/fQ6W28aO615atqWv2kgdELriff5TnE852M/5gnfBfEZn0R4GKP4eTgBug==
+Date:   Thu, 10 Aug 2023 09:30:15 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Christophe Guibout <christophe.guibout@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: stm32: remove incorrect #ifdef check
-Message-ID: <169165213049.964766.5251410326864889456.b4-ty@bootlin.com>
-References: <20230801105932.3738430-1-arnd@kernel.org>
+To:     Jacky Huang <ychuang570808@gmail.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        soc@kernel.org, mjchen@nuvoton.com, schung@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [RESEND PATCH v2 3/3] rtc: Add driver for Nuvoton ma35d1 rtc
+ controller
+Message-ID: <20230810073015d5545903@mail.local>
+References: <20230809011542.429945-1-ychuang570808@gmail.com>
+ <20230809011542.429945-4-ychuang570808@gmail.com>
+ <20230809021025a7c0daec@mail.local>
+ <426130f6-7b8a-91f9-559b-afc5afdc656e@gmail.com>
+ <2023080922515326db190e@mail.local>
+ <347cf148-bda8-852b-768c-fa2b57ce5bcb@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230801105932.3738430-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <347cf148-bda8-852b-768c-fa2b57ce5bcb@gmail.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -59,32 +61,70 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
-On Tue, 01 Aug 2023 12:59:15 +0200, Arnd Bergmann wrote:
-> After a previous commit changed the driver over to
-> SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(), the suspend/resume
-> functions must no longer be hidden behind an #ifdef:
+On 10/08/2023 15:21:47+0800, Jacky Huang wrote:
+> > > > > +	return 0;
+> > > > > +}
+> > > > > +
+> > > > > +static int ma35d1_rtc_suspend(struct platform_device *pdev, pm_message_t state)
+> > > > > +{
+> > > > > +	struct ma35_rtc *rtc = platform_get_drvdata(pdev);
+> > > > > +	u32 regval;
+> > > > > +
+> > > > > +	if (device_may_wakeup(&pdev->dev))
+> > > > > +		enable_irq_wake(rtc->irq_num);
+> > > > > +
+> > > > > +	regval = rtc_reg_read(rtc, MA35_REG_RTC_INTEN);
+> > > > > +	regval &= ~RTC_INTEN_TICKIEN;
+> > > > > +	rtc_reg_write(rtc, MA35_REG_RTC_INTEN, regval);
+> > > > This is not what the user is asking, don't do this. Also, how was this
+> > > > tested?
+> > > Sure, I will remove these three lines of code.
+> > > 
+> > > We test it with "echo mem > /sys/power/state".
+> > > 
+> > Yes, my point is that if UIE is enabled, then the user wants to be woken
+> > up every second. If this is not what is wanted, then UIE has to be
+> > disabled before going to suspend.
+> > 
+> > My question is why are you enabling RTC_INTEN_TICKIEN in probe? I don't
+> > expect anyone to use an actual hardware tick interrupt, unless the alarm
+> > is broken and can't be set every second. This is why I questioned the
+> > RTC_UF path because I don't expect it to be taken at all.
 > 
-> In file included from include/linux/clk.h:13,
->                  from drivers/rtc/rtc-stm32.c:8:
-> drivers/rtc/rtc-stm32.c:927:39: error: 'stm32_rtc_suspend' undeclared here (not in a function); did you mean 'stm32_rtc_probe'?
->   927 |         SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_rtc_suspend, stm32_rtc_resume)
->       |                                       ^~~~~~~~~~~~~~~~~
-> include/linux/kernel.h:58:44: note: in definition of macro 'PTR_IF'
->    58 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
->       |                                            ^~~
-> include/linux/pm.h:329:26: note: in expansion of macro 'pm_sleep_ptr'
->   329 |         .suspend_noirq = pm_sleep_ptr(suspend_fn), \
->       |                          ^~~~~~~~~~~~
+> Yes, we will remove TICKIEN from probe and modify ma35d1_alarm_irq_enable().
+> TICKIEN will be enabled only if UIE is enabled.
 > 
-> [...]
+> static int ma35d1_alarm_irq_enable(struct device *dev, unsigned int enabled)
+> {
+>     struct ma35d1_rtc *rtc = dev_get_drvdata(dev);
+> 
+>     if (enabled) {
+>         if (rtc->rtc->uie_rtctimer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc,
+> NVT_RTC_INTEN)|(RTC_INTEN_TICKIEN)));
 
-Applied, thanks!
 
-[1/1] rtc: stm32: remove incorrect #ifdef check
-      commit: a69c610e13e2b2de8a1ed2683f13e21b3200bd7a
+Don't do that unless the regular alarm can't be set every second. Simply
+always use ALMIEN, then check rtctest is passing properly.
 
-Best regards,
+>         if (rtc->rtc->aie_timer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc,
+> NVT_RTC_INTEN)|(RTC_INTEN_ALMIEN)));
+>     } else {
+>         if (rtc->rtc->uie_rtctimer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc, NVT_RTC_INTEN) &
+> (~RTC_INTEN_TICKIEN)));
+>         if (rtc->rtc->aie_timer.enabled)
+>             rtc_reg_write(rtc, NVT_RTC_INTEN,
+>                       (rtc_reg_read(rtc, NVT_RTC_INTEN) &
+> (~RTC_INTEN_ALMIEN)));
+>     }
+>     return 0;
+> }
+> 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
