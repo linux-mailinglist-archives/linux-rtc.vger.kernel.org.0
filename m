@@ -2,136 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831AD77A452
-	for <lists+linux-rtc@lfdr.de>; Sun, 13 Aug 2023 02:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FCB77B957
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Aug 2023 15:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjHMAQy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 12 Aug 2023 20:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S231279AbjHNNCU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 14 Aug 2023 09:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjHMAQx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 12 Aug 2023 20:16:53 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E852C13E;
-        Sat, 12 Aug 2023 17:16:54 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bc73a2b0easo21748485ad.0;
-        Sat, 12 Aug 2023 17:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691885814; x=1692490614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8I4OWTxF9djrfSWgvtqI3wQlVbrXSiCGpIyYob9OMug=;
-        b=FSJnlSv+Emh8JyQD3MzlVm45YMOc53yeOB3frNIRvORChBU3kHJn/wJ+L8jGJI0U9d
-         AtGF/n2QgI0AhTuDzXHLt5G5AtJn5GO2FejV1evLhOLtApX+Z9Qxd9aNoY3Hg1KlyEFn
-         qVwVAinsYyc8UGLYSpcKzt8vYK6p05LPDT1vHV6KvrG5tr+Xmi2+Gj+ObXaVSaXHfhPt
-         tFzhpHwEpVTPqPgM1DRA7CsTDVlu9gtU9gD91WnVyzK7wne52rQzyuh1mvjWEDcqkk+K
-         MXAwOP+9gFGE8HZRdrDhupctMFziIwIbmJ8GFp/rs87H64I0mJmfUsN4UBo2vCcna+9l
-         9bNw==
+        with ESMTP id S231623AbjHNNCG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Aug 2023 09:02:06 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D341738;
+        Mon, 14 Aug 2023 06:01:53 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-589a6c2c020so61635517b3.1;
+        Mon, 14 Aug 2023 06:01:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691885814; x=1692490614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8I4OWTxF9djrfSWgvtqI3wQlVbrXSiCGpIyYob9OMug=;
-        b=I3epSWUMbsmcNVu8pgFW4WUJwyTU2OGww/XTHH84xSj+zs4DQMQGqo5/Ro0IV1E5Tu
-         xxG9/kfJQyXxJlI8ftv2TFwGQHsWH6OD86txqgKn89AxblCG59IE7p41VHTBfBE/MW+Y
-         89y8FqKBenvfvLDCV1OF7smGR+BNlJgM876C75oCF+CgUT/7Z+anr4TVOJYRK6+bzTVx
-         dOfbFb89MQeGD2ZoFdhGWSlSYiZ7UETDyx6GnDIQ/GcaB1R0p7l37y5kqVjqZMb56DJF
-         mvgYZt9k4hA7M3li11rpFzVqoJkDbNWVq9O80DhlR922OoJCZWYpqZprPshGTB/azO70
-         tmcw==
-X-Gm-Message-State: AOJu0YwlxkebXv6jl9lHdDQN2a6o451AthqxGRaqwJUkXQ6t4WgHK9Cm
-        0teDb0AfnXm80k+RHnZBGFk=
-X-Google-Smtp-Source: AGHT+IEHsa86s69bUw0dtUX7y0vw4gWoiVNWvVAHHwUHVi1BBh1/7QBIkIw5BtrdXnQdCxIHqSuFlQ==
-X-Received: by 2002:a17:903:2285:b0:1b8:7625:3042 with SMTP id b5-20020a170903228500b001b876253042mr5905468plh.10.1691885814285;
-        Sat, 12 Aug 2023 17:16:54 -0700 (PDT)
-Received: from [192.168.1.101] (1-160-139-178.dynamic-ip.hinet.net. [1.160.139.178])
-        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001bdc6e13665sm2437623plb.275.2023.08.12.17.16.51
+        d=1e100.net; s=20221208; t=1692018096; x=1692622896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ri/aAhV9V1QKg7f5IB5V2rWz5Gg5B1mduf0Q//YtRKw=;
+        b=TdW/cEEx1B47rEg/w44vUWBwTbSwnVJ6raS93GmpebRkmvR3kAgv5SKG5EQtNNELUE
+         2Q3HNHhveh8lY4SfTHFMkLuV/XKB/KoWfMZ7uOdi1tBuGznLzA/iTdLtz1VszyXTdOjS
+         OlM0emgQ3Hy1HqT8xqMJzoCniTLCUVFUX2pmULh0C7qrDr/2PcKIwXOwCgFJNlHDMeIS
+         wlSrPxqu0JRfYyrxoXCRnDa8l+7/8QOkA7igbJUoCd+1pegSl2KsU/XopT79uepqJNHc
+         SHMKusT/Ea7KmZvinANULLeqOcwlRdfxIMsrgOz4+b3lYRsyWUCDDZjk66ryZeKg3q8O
+         RIIw==
+X-Gm-Message-State: AOJu0YzYLjBLdQSs0yNr8efdBnweIKZgEeqeTvcRBf17kmSHfwyrkIuV
+        ju3pR8xbO37ywMVCUH3Tz8f7n+jx0Vul4A==
+X-Google-Smtp-Source: AGHT+IEMeRQYvn22++yzjtAWK3gd9orQ/RXnamvbeDfRBA9FXiU4VWSUM6P6Jab0/J7qK5/Mp4+vEQ==
+X-Received: by 2002:a5b:60a:0:b0:d09:22c0:138d with SMTP id d10-20020a5b060a000000b00d0922c0138dmr11861914ybq.7.1692018094963;
+        Mon, 14 Aug 2023 06:01:34 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id b8-20020a252e48000000b00d0d080074f3sm2311971ybn.31.2023.08.14.06.01.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Aug 2023 17:16:53 -0700 (PDT)
-Message-ID: <6621a721-06fa-2bf8-5279-cc7c464ad615@gmail.com>
-Date:   Sun, 13 Aug 2023 08:16:50 +0800
+        Mon, 14 Aug 2023 06:01:34 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-d67305c80deso3901354276.1;
+        Mon, 14 Aug 2023 06:01:33 -0700 (PDT)
+X-Received: by 2002:a25:361f:0:b0:d48:8ff1:dd12 with SMTP id
+ d31-20020a25361f000000b00d488ff1dd12mr15424802yba.18.1692018093136; Mon, 14
+ Aug 2023 06:01:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RESEND PATCH v2 0/3] Add support for Nuvoton ma35d1 rtc
- controller
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+References: <20230804161728.394920-1-biju.das.jz@bp.renesas.com>
+ <20230805174036.129ffbc2@jic23-huawei> <OS0PR01MB59220491C7C8AA40BEFAAD82860EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <20230806142950.6c409600@jic23-huawei> <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
+In-Reply-To: <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Aug 2023 15:01:21 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUHjema72HrmghH6ozVYHEBHZhnS4+mkrJJZPu2pQNUxg@mail.gmail.com>
+Message-ID: <CAMuHMdUHjema72HrmghH6ozVYHEBHZhnS4+mkrJJZPu2pQNUxg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mjchen@nuvoton.com, schung@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230809011542.429945-1-ychuang570808@gmail.com>
- <43e42ee5-7a56-49ba-8e06-5046ef85c98f@app.fastmail.com>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <43e42ee5-7a56-49ba-8e06-5046ef85c98f@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hi Andy,
 
-On 2023/8/12 下午 04:53, Arnd Bergmann wrote:
-> On Wed, Aug 9, 2023, at 03:15, Jacky Huang wrote:
->> From: Jacky Huang <ychuang3@nuvoton.com>
->>
->> This patch series adds the rtc driver for the nuvoton ma35d1 ARMv8 SoC.
->> It includes DT binding documentation, the ma35d1 rtc driver, and device
->> tree updates.
->>
->> The ma35d1 rtc controller provides real-time and calendar messaging
->> capabilities. It supports programmable time tick and alarm match
->> interrupts. The time and calendar messages are expressed in BCD format.
->>
->> This rtc driver has been tested on the ma35d1 som board with Linux 6.5-rc2.
-> Hi Jacky,
+On Mon, Aug 7, 2023 at 4:54 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Sun, Aug 06, 2023 at 02:29:50PM +0100, Jonathan Cameron wrote:
+> > On Sat, 5 Aug 2023 17:42:21 +0000
+> > Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > > > On Fri,  4 Aug 2023 17:17:24 +0100
+> > > > Biju Das <biju.das.jz@bp.renesas.com> wrote:
 >
-> I see you added soc@kernel.org to Cc for all three patches, which
-> has put them into the patchwork tracker.
+> ...
 >
-> Now that the platoform support is merged, I do not pick up patches
-> for other subsystems through the soc tree, so please drop the Cc
-> here.
+> > > + * Besides the fact that some drivers abuse the device ID driver_data type
+> > > + * and claim it to be integer, for the bus specific ID tables the driver_data
+> > > + * may be defined as kernel_ulong_t. For these tables 0 is a valid response,
+> > > + * but not for this function. It's recommended to convert those either to avoid
+> > > + * 0 or use a real pointer to the predefined driver data.
 >
-> You can post the the dts change along with the driver, but the
-> correct process is that the subsystem maintainer(s) pick up the
-> DT binding and the driver once the review is complete, and then
-> you send the dts changes to soc@kernel.org. Depending on the
-> platform, there may be a lot of conflicting dts changes, so this
-> way you can aggregate any patches for these files before sending
-> them to the soc tree for inclusion, while I then merge them
-> with all the dts changes for other platforms and any global
-> cleanup.
+> > We still need to maintain consistency across the two tables, which
+> > is a stronger requirement than avoiding 0.
 >
->      Arnd
+> True. Any suggestion how to amend the above comment? Because the documentation
+> makes sense on its own (may be split from the series?).
 
+I do have an idea how to handle that (inspired by the macro-heavy
+R-Car pin control drivers ;-)
 
-Dear Arnd,
+    #define DEVICES(fn) \
+        fn("vendor1", "device1", &driver_data1) \
+        fn("vendor3", "device2", &driver_data2) \
+        fn("vendor3", "device2", &driver_data3)
 
+    OF_MATCH_TABLE(driver_of_match, DEVICES);
+    I2C_MATCH_TABLE(driver_i2c_ids, DEVICES);
 
-Thank you for the detailed explanation. I now understand how to proceed.
+and in the of resp. i2c headers:
 
-I will remove Cc: soc@kernel.org from here. I apologize for any 
-inconvenience
+    #define EMIT_OF_ENTRY(_vendor, _device, _data) \
+            { .name = _vendor ## "," ## _device, .data = _data) },
+    #define EMIT_OF_ENTRIES(_name, _devs) \
+            static const struct of_device_id _name[] = { \
+                    _devs(EMIT_OF_ENTRY) \
+                    { } \
+            } \
 
-this patch series may have caused you and appreciate your assistance.
+    #define EMIT_I2C_ENTRY(_vendor, _device, _data) \
+            { .name = _device, .driver_data = (void *)_data) },
+    #define EMIT_I2C_ENTRIES(_name, _devs) \
+            static const struct i2c_device_id _name[] = { \
+                    _devs(EMIT_I2C_ENTRY) \
+                    { } \
+            } \
 
+I didn't try to compile this, so I may have missed something (e.g.
+a required intermediate macro to ensure proper expansion).
+Unfortunately this would break grep'ability for compatible values...
 
-Best Regards,
+Gr{oetje,eeting}s,
 
-Jacky Huang
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
