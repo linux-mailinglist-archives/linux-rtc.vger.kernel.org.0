@@ -2,61 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA67377C5E7
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Aug 2023 04:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A5977C613
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Aug 2023 04:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbjHOCdE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 14 Aug 2023 22:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S234248AbjHOCqP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 14 Aug 2023 22:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbjHOCco (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Aug 2023 22:32:44 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15ED10D0;
-        Mon, 14 Aug 2023 19:32:43 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-56d0f4180bbso3711539eaf.1;
-        Mon, 14 Aug 2023 19:32:43 -0700 (PDT)
+        with ESMTP id S234344AbjHOCqF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Aug 2023 22:46:05 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BA8171B;
+        Mon, 14 Aug 2023 19:46:02 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1bdc8081147so17229005ad.1;
+        Mon, 14 Aug 2023 19:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692066763; x=1692671563;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1692067561; x=1692672361;
+        h=to:cc:date:message-id:subject:mime-version:from
+         :content-transfer-encoding:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/hlrmRxGLs/F9DipX5bUXix2iv7UjJrjeQCKjVDbSg4=;
-        b=h6mXIiKE0O3Y08U5/64fqjrUPBQre19/pWOepTuSEqs4CwW4mmRDAtyIHFC7Izr0mK
-         BUR2vOM2Gnd7EarkFvJ7dT+IVTrzxC5jcnViF3aXUeh2KGLeHTrWgTzk4gwAr4p8+BSO
-         Sbld71OqoQ5vIfZdwo/B+DIXc2iQITJ+QWBC4nMOYwmsu/umuUewZ8PUUL9kAcVbqEw2
-         mKQQQqnUvtCuKnWHiWjuEz1qYf21Kve0rH1T8HIrJk95PJlBnkt9Ld2WadyApYajXsrs
-         wAwOGpgu9K1jPUaMVA7tspadXg8cUh7OlmhybkLuRtyvGpotFcYmcIpkgzeUnE+nCx6x
-         yeIw==
+        bh=wBQ92kohH7JMrCClRaKPkEsOhf96ZT5UADuYTehrlmU=;
+        b=IrYqikNG70bqTMekq6S8AERUH06zWR7D8dR4b1se1DivMCv98aFt60wB0YFS2qGe5F
+         FctUoRWZ5IVHWLjwBDqsvzSRcHMuYobDAlqeZ10INv7hVB8A5a6p8Fs+zVIBju2SFpnC
+         +7pJuXc8Zc98RvhgUTvMEwjKezCaHHX52beeDkhGEZYGf1ibgM9hR9QRuNXaAcLv/teF
+         pPWwVRY3Qo25T9SHagFPmMjk/0sQCXX1gIjUfeXNcq/PyOdOXqL4h86YQ/mnjN7TwAvr
+         8yjaWKr6UgXUoj4bMBDRNRNfNvfALfQsKKscx4VOvjqE7MchRvhHT1aOkk0STNzH/m7Y
+         dZfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692066763; x=1692671563;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/hlrmRxGLs/F9DipX5bUXix2iv7UjJrjeQCKjVDbSg4=;
-        b=Q83uJzLjLxRize/Ww4c9tv1R+TvbLVXIe3xpP88igJcPgiuPkis4Dw0bMot5Kmm52k
-         Q1gpt4LTqvWldViXAKpQ7EegZb/evDUcKmHOXM5IyMGcRA4uzhkPSREhKU16SLRBr1Xt
-         Kse7WnU6OjwZrbx3i9oRlNgF2Otru604hjPhQZPuvyG7JGxQoirJstjBQmfFRHk2jNQa
-         NqzvE1ad89cZY6ycveqcusmNA6P/5S+zfb9limimmM3IyoOHqhOJV1NDCbT6J00Sug6t
-         /ZPCK0hbTXbll/8Bk4pNDJGkS7rArf7GbI+vFdS3lv8/t5NakRj65fSPN1sSP0Er++il
-         LtYQ==
-X-Gm-Message-State: AOJu0YyGKxMAyTp9Bc7qSz0vXtSSkXi7YBQL6TN93PN8+PvIs/FAvDT7
-        noNkBah4kjUefBZus/d/PuM=
-X-Google-Smtp-Source: AGHT+IEHLVcZrXYkf4lPLUJYIE6Kr7VuFAGnc8GiUv44goBA/vP6bdh6hOU12wVcfQ0Q/YURKf+4oA==
-X-Received: by 2002:a05:6358:418b:b0:134:ece4:1e74 with SMTP id w11-20020a056358418b00b00134ece41e74mr7753239rwc.21.1692066762816;
-        Mon, 14 Aug 2023 19:32:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692067561; x=1692672361;
+        h=to:cc:date:message-id:subject:mime-version:from
+         :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wBQ92kohH7JMrCClRaKPkEsOhf96ZT5UADuYTehrlmU=;
+        b=Zt4yjhHBzgoyg3vfsUfhFmJ7ARttYsy/usAGc6tdcuIiaqiIP0KGYQ0hk9gSMixCZe
+         GYVEn/GWgSRQ7k/bMNBpWoQcIVdoTc8uBn/4IVRv6KTUiEAWD2IZ+92E26hA+2cTqMBA
+         nWoxJCcW6xu16laWTdmXaLGNP1RLoPc9aqMFT0G9GLcBx5dFY6DsTOL6ofkuyek8JV4S
+         RwLyfbymU42kUmyQLueuNCxR9JNssLHT4hh26L7Sj0BzVB/D2GCb4WsyT5dqagW2ndXt
+         YJ82t25eC0hUpJ5Ep2LblVWE8tHqyfzY7y4K3QB/MB+5qtgG36vAIB+FC6ATmx+lwtKd
+         El3Q==
+X-Gm-Message-State: AOJu0YxX65OVfMs52DGLTlrXk0k4Sj3Ru9KeL1ACcOv0vYKNbbwoFlpd
+        bPBcQoCMD3toVEjFMHVqOSs=
+X-Google-Smtp-Source: AGHT+IHQ8UZ6DdrRyAirju3lt0PmovMHo8QZvirQPOeY21h6YU4yAN8uyMmHAh7XDW/huVq8TXVsNQ==
+X-Received: by 2002:a17:902:ecce:b0:1b0:3ab6:5140 with SMTP id a14-20020a170902ecce00b001b03ab65140mr1132925plh.4.1692067560990;
+        Mon, 14 Aug 2023 19:46:00 -0700 (PDT)
 Received: from smtpclient.apple ([2401:e180:88a1:80ef:f4f9:717b:5cd:3109])
-        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b00640dbbd7830sm8857152pfm.18.2023.08.14.19.32.41
+        by smtp.gmail.com with ESMTPSA id e4-20020a170902d38400b001bdc9daadc9sm5834170pld.89.2023.08.14.19.46.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 19:32:42 -0700 (PDT)
+        Mon, 14 Aug 2023 19:46:00 -0700 (PDT)
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 From:   Mining Lin <mimi05633@gmail.com>
 Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: nuvoton: Add DT compatible
-Date:   Tue, 15 Aug 2023 10:32:30 +0800
-Message-Id: <8BF54CCD-FCCB-430A-A78E-53DC55F3C286@gmail.com>
-References: <d23de35f-8d55-4f80-a6ce-281f83fd4243@molgen.mpg.de>
+Subject: Re: [PATCH v2 2/2] rtc: nuvoton: Compatible with NCT3015Y-R and NCT3018Y-R
+Message-Id: <295A0B20-FB6F-4858-8B25-6C5E8357DEBB@gmail.com>
+Date:   Tue, 15 Aug 2023 10:45:48 +0800
 Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         venture@google.com, yuenn@google.com, benjaminfair@google.com,
         a.zummo@towertech.it, alexandre.belloni@bootlin.com,
@@ -65,7 +64,6 @@ Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
         KFLIN@nuvoton.com, mylin1@nuvoton.com, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <d23de35f-8d55-4f80-a6ce-281f83fd4243@molgen.mpg.de>
 To:     Paul Menzel <pmenzel@molgen.mpg.de>
 X-Mailer: iPhone Mail (20G75)
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,55 +76,237 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear Paul,
+=EF=BB=BFDear Paul,
 
 Thank you for your comments.
-I  originally wanted to judge whether to match chip data by DT compatible, b=
-ut it does not make sense.
-Therefore, I will remove it in the v4 version.
+The replies are as follows.
 
 Thanks.
 Best regard,
 Mia
 
-> On Aug 10, 2023, at 3:55 PM, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+> On Aug 10, 2023, at 4:16 PM, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
 >=20
 > =EF=BB=BFDear Mia,
 >=20
 >=20
-> Thank you for your patch. It=E2=80=99d be great if you mentioned nct3015y i=
-n the commit message summary/title. Maybe:
+> Thank you for your patch.
 >=20
-> dt-bindings: rtc: Add compatible nct3015y to nuvoton,nct3018y
+> It=E2=80=99d be great if you made the commit message summary/title more sp=
+ecific. Maybe:
 >=20
->> Am 09.08.23 um 11:51 schrieb Mia Lin:
->> Add DT compatible "nuvoton,nct3015y" to select
+> Add support for NCT3015Y-R
 >=20
-> What do you mean by =E2=80=9Cto select=E2=80=9D?
+> Am 09.08.23 um 11:51 schrieb Mia Lin:
 >=20
-> Also, maybe add how you tested this.
+> An introduction what the NCT3015Y-R is and listing the differences to NCT3=
+018Y-R would be nice.
+[Mia] I will add more detail. Thank you for your comments.
+>=20
+>> - In probe,
+>> If part number is NCT3018Y-R, only set HF bit to 24-Hour format.
+>> Else, do nothing
+>> - In set_time,
+>> If part number is NCT3018Y-R && TWO bit is 0,
+>> change TWO bit to 1, and restore TWO bit after updating time.
+>=20
+> Why? This also looks unrelated to the NCT3015Y-R support. Could you factor=
+ it out into separate patch?
+[Mia] The NCT3015Y-R and NCT3018Y-R use the same datasheet but have differen=
+t topologies.
+Therefore, the settings here are to set according to different models to mat=
+ch the behavior of each chip.
+>=20
+>> - Use DT compatible to check the chip matches or not.
+>=20
+> Could you please add the datasheet name and revision?
+[Mia] Use DT compatible to check does not make sense. I will remove it.
 >=20
 >> Signed-off-by: Mia Lin <mimi05633@gmail.com>
 >> ---
->>  Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->> diff --git a/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml b=
-/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
->> index 4f9b5604acd9..67fc60fd395c 100644
->> --- a/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
->> +++ b/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
->> @@ -15,7 +15,9 @@ maintainers:
->>    properties:
->>    compatible:
->> -    const: nuvoton,nct3018y
->> +    enum:
->> +      - nuvoton,nct3018y
->> +      - nuvoton,nct3015y
+>> drivers/rtc/rtc-nct3018y.c | 88 +++++++++++++++++++++++++++++++++-----
+>> 1 file changed, 78 insertions(+), 10 deletions(-)
+>> diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
+>> index a4e3f924837e..edc73be3ab59 100644
+>> --- a/drivers/rtc/rtc-nct3018y.c
+>> +++ b/drivers/rtc/rtc-nct3018y.c
+>> @@ -7,6 +7,7 @@
+>> #include <linux/i2c.h>
+>> #include <linux/module.h>
+>> #include <linux/of.h>
+>> +#include <linux/of_device.h>
+>> #include <linux/rtc.h>
+>> #include <linux/slab.h>
+>> @@ -23,6 +24,7 @@
+>> #define NCT3018Y_REG_CTRL    0x0A /* timer control */
+>> #define NCT3018Y_REG_ST        0x0B /* status */
+>> #define NCT3018Y_REG_CLKO    0x0C /* clock out */
+>> +#define NCT3018Y_REG_PART    0x21 /* part info */
+>> #define NCT3018Y_BIT_AF        BIT(7)
+>> #define NCT3018Y_BIT_ST        BIT(7)
+>> @@ -37,6 +39,20 @@
+>> #define NCT3018Y_REG_BAT_MASK        0x07
+>> #define NCT3018Y_REG_CLKO_F_MASK    0x03 /* frequenc mask */
+>> #define NCT3018Y_REG_CLKO_CKE        0x80 /* clock out enabled */
+>> +#define NCT3018Y_REG_PART_NCT3015Y    0x01
+>> +#define NCT3018Y_REG_PART_NCT3018Y    0x02
+>> +
+>> +struct rtc_data {
+>> +    u8 part_number;
+>> +};
+>> +
+>> +static const struct rtc_data nct3015y_rtc_data =3D {
+>> +    .part_number =3D NCT3018Y_REG_PART_NCT3015Y,
+>> +};
+>> +
+>> +static const struct rtc_data nct3018y_rtc_data =3D {
+>> +    .part_number =3D NCT3018Y_REG_PART_NCT3018Y,
+>> +};
+>> struct nct3018y {
+>>  struct rtc_device *rtc;
+>> @@ -52,7 +68,7 @@ static int nct3018y_set_alarm_mode(struct i2c_client *c=
+lient, bool on)
+>>    dev_dbg(&client->dev, "%s:on:%d\n", __func__, on);
+>> -    flags =3D  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
+>> +    flags =3D i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
+>>  if (flags < 0) {
+>>      dev_dbg(&client->dev,
+>>          "Failed to read NCT3018Y_REG_CTRL\n");
+>> @@ -109,8 +125,10 @@ static int nct3018y_get_alarm_mode(struct i2c_client=
+ *client, unsigned char *ala
+>>      *alarm_flag =3D flags & NCT3018Y_BIT_AF;
+>>  }
+>> -    dev_dbg(&client->dev, "%s:alarm_enable:%x alarm_flag:%x\n",
+>> -        __func__, *alarm_enable, *alarm_flag);
+>> +    if (alarm_enable && alarm_flag) {
+>> +        dev_dbg(&client->dev, "%s:alarm_enable:%x alarm_flag:%x\n",
+>> +            __func__, *alarm_enable, *alarm_flag);
+>> +    }
 >=20
-> Would sorting the list be useful?
+> The two hunks look like unrelated fixes. It=E2=80=99d be great, if you fac=
+tored those out into a separate patch.
+[Mia] I will factor it out into a separate patch.
 >=20
->>    reg:
->>      maxItems: 1
+>>    return 0;
+>> }
+>> @@ -178,7 +196,30 @@ static int nct3018y_rtc_set_time(struct device *dev,=
+ struct rtc_time *tm)
+>> {
+>>  struct i2c_client *client =3D to_i2c_client(dev);
+>>  unsigned char buf[4] =3D {0};
+>> -    int err;
+>> +    int err, part_num, flags, restore_flags =3D 0;
+>=20
+> Why is err now initialized to 0?
+[Mia] I will refine it.
+>=20
+>> +    part_num =3D i2c_smbus_read_byte_data(client, NCT3018Y_REG_PART);
+>> +    if (part_num < 0) {
+>> +        dev_dbg(&client->dev, "%s: read error\n", __func__);
+>> +        return part_num;
+>> +    }
+>> +
+>> +    flags =3D i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
+>> +    if (flags < 0) {
+>> +        dev_dbg(&client->dev, "%s: read error\n", __func__);
+>=20
+> Could you make these distinct error messages, so users are able to pinpoin=
+t the correct location right away? (Or does `dev_dbg` already provide that i=
+nformation? Maybe the line? (Also more cases below.)
+[Mia] I will refine error messages. Thank you.
+>=20
+>> +        return flags;
+>> +    }
+>> +
+>> +    /* Check and set TWO bit */
+>> +    if ((part_num & NCT3018Y_REG_PART_NCT3018Y) && !(flags & NCT3018Y_BI=
+T_TWO)) {
+>> +        restore_flags =3D 1;
+>> +        flags |=3D NCT3018Y_BIT_TWO;
+>> +        err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, fla=
+gs);
+>> +        if (err < 0) {
+>> +            dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n")=
+;
+>> +            return err;
+>> +        }
+>> +    }
+>>    buf[0] =3D bin2bcd(tm->tm_sec);
+>>  err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_SC, buf[0]);
+>> @@ -212,6 +253,18 @@ static int nct3018y_rtc_set_time(struct device *dev,=
+ struct rtc_time *tm)
+>>      return -EIO;
+>>  }
+>> +    /* Restore TWO bit */
+>> +    if (restore_flags) {
+>> +        if (part_num & NCT3018Y_REG_PART_NCT3018Y)
+>> +            flags &=3D ~NCT3018Y_BIT_TWO;
+>> +
+>> +        err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, fla=
+gs);
+>> +        if (err < 0) {
+>> +            dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n")=
+;
+>> +            return err;
+>> +        }
+>> +    }
+>> +
+>>  return err;
+>> }
+>> @@ -456,6 +509,7 @@ static int nct3018y_probe(struct i2c_client *client)
+>> {
+>>  struct nct3018y *nct3018y;
+>>  int err, flags;
+>> +    const struct rtc_data *data =3D of_device_get_match_data(&client->de=
+v);
+>>    if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C |
+>>                   I2C_FUNC_SMBUS_BYTE |
+>> @@ -479,11 +533,24 @@ static int nct3018y_probe(struct i2c_client *client=
+)
+>>      dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is set\n", __func__);
+>>  }
+>> -    flags =3D NCT3018Y_BIT_TWO;
+>> -    err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);=
+
+>> -    if (err < 0) {
+>> -        dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
+>> -        return err;
+>> +    flags =3D i2c_smbus_read_byte_data(client, NCT3018Y_REG_PART);
+>> +    if (flags < 0) {
+>> +        dev_dbg(&client->dev, "%s: read error\n", __func__);
+>> +        return flags;
+>> +    } else if (flags & NCT3018Y_REG_PART_NCT3018Y) {
+>> +        if (!(flags & data->part_number))
+>> +            dev_warn(&client->dev, "%s: part_num=3D0x%x but NCT3018Y_REG=
+_PART=3D0x%x\n",
+>> +                 __func__, data->part_number, flags);
+>> +        flags =3D NCT3018Y_BIT_HF;
+>> +        err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, fla=
+gs);
+>> +        if (err < 0) {
+>> +            dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n")=
+;
+>> +            return err;
+>> +        }
+>> +    } else if (flags & NCT3018Y_REG_PART_NCT3015Y) {
+>> +        if (!(flags & data->part_number))
+>> +            dev_warn(&client->dev, "%s: part_num=3D0x%x but NCT3018Y_REG=
+_PART=3D0x%x\n",
+>> +                 __func__, data->part_number, flags);
+>>  }
+>>    flags =3D 0;
+>> @@ -530,7 +597,8 @@ static const struct i2c_device_id nct3018y_id[] =3D {=
+
+>> MODULE_DEVICE_TABLE(i2c, nct3018y_id);
+>> static const struct of_device_id nct3018y_of_match[] =3D {
+>> -    { .compatible =3D "nuvoton,nct3018y" },
+>> +    { .compatible =3D "nuvoton,nct3015y", .data =3D &nct3015y_rtc_data }=
+,
+>> +    { .compatible =3D "nuvoton,nct3018y", .data =3D &nct3018y_rtc_data }=
+,
+>>  {}
+>> };
+>> MODULE_DEVICE_TABLE(of, nct3018y_of_match);
 >=20
 >=20
 > Kind regards,
