@@ -2,120 +2,129 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3AF77CAAB
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Aug 2023 11:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664B677D5D6
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 00:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbjHOJnN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Aug 2023 05:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S232960AbjHOWRP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Aug 2023 18:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbjHOJmx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Aug 2023 05:42:53 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A201110D8;
-        Tue, 15 Aug 2023 02:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692092551; x=1723628551;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7h+/sSxZl6JCDHnh5reN75axgALtcqO8XExNpLMoAEQ=;
-  b=nfvhqr9cJvOCEq7a0FlaFMqVf1qFKRTzpLODenqzjFwaAou9RMSCouSD
-   ovQoYx+Rd1KaO5IUdaV5brq7Vp/4mFqiAJey6yE1vPujRXAgR7b7Ay13U
-   DMNdLRPEeQClhWbIBb6KOy4R47V7Uh3b+H7GCmaF/GG/7U9o3kfnal0o1
-   lod+uQSSGO2Dj/51i7jg8Mv7exVxQpaTm+PBFHlLMKKF9UXJfGHpoedrH
-   49+I/bTQAy4AXO7ALMZzZOVN2dewGGtLg6Cu0bsT4MmwxJ+oej4tTf/Ir
-   5NDZKQyRdkMKRKHcnABMrMLIm4PZriLBgXnQ6QtAoI7qrRkjt5QR85UPa
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="403222827"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="403222827"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 02:42:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="763223745"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="763223745"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 15 Aug 2023 02:42:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qVqZE-00Cz3N-1T;
-        Tue, 15 Aug 2023 12:42:24 +0300
-Date:   Tue, 15 Aug 2023 12:42:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
-Message-ID: <ZNtIgA4S2rHp/jbA@smile.fi.intel.com>
-References: <ZNFV+C1HCIRJpbdC@google.com>
- <ZNIyrG/2h/PeS9Oz@smile.fi.intel.com>
- <20230809182551.7eca502e@jic23-huawei>
- <OS0PR01MB59221A1ADB67E96E9E39D0198613A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZNT+NY99n7y3abwa@smile.fi.intel.com>
- <OS0PR01MB5922DD3C809B78F1E9C5949B8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZNZF6cjx5N+ZsIJx@smile.fi.intel.com>
- <OS0PR01MB5922E09340CDCFF54A9A6CBA8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZNsez3oWNcT72PGy@smile.fi.intel.com>
- <OS0PR01MB592231608697B4FB0D142CCD8614A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        with ESMTP id S232864AbjHOWQt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Aug 2023 18:16:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C0A198C
+        for <linux-rtc@vger.kernel.org>; Tue, 15 Aug 2023 15:16:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30FAD64038
+        for <linux-rtc@vger.kernel.org>; Tue, 15 Aug 2023 22:16:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C56DC433C8;
+        Tue, 15 Aug 2023 22:16:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692137807;
+        bh=XwXvMZmSyw0Fultdv91spvUYs8G7JznbXwG0CGzyAxM=;
+        h=From:Date:Subject:To:Cc:From;
+        b=KaH3eQclvi001FrOcutYbDGQo7hpeSF0k96n1brchRa+PiK6n2Ae+08jPrhGrUg8T
+         eGCnjPwfFEWv+aMO+PZtOQKDFyPKAdFvH/OSA/jtdlDAW4KZqzIs2CCVlesgdEr8Hh
+         MTwHqy+4AcvB3zN7Fto4z2hfELMIGWO6M4uO+lrwREwp/cETpubtrlMs5hock/a7hQ
+         cW6lJXtRXM2fhmXtByLyZjKJcHtJjUQb0IaZuON8+tszOg3o2QwPmXObWcboYaF5ge
+         TMS6t95ODItsb5blWCaSKTaqKU3ogPmd6ZEZayY/9p48hBjFqAEqfR1M14/gQ4k2Li
+         geulV0KHc0eWw==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Tue, 15 Aug 2023 15:16:41 -0700
+Subject: [PATCH] rtc: stm32: Use NOIRQ_SYSTEM_SLEEP_PM_OPS()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS0PR01MB592231608697B4FB0D142CCD8614A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230815-rtc-stm32-unused-pm-funcs-v1-1-82eb8e02d903@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAEj522QC/x3MMQ6DMAxA0asgz1hKAq1Cr4IYWscpHkhRTBAS4
+ u5EHd/w/wnKWVjh1ZyQeReVX6qwbQM0v9OXUUI1OOM64+0D80ao29I5LKkoB1wXjCWR4mCC7z/
+ kyNgn1H7NHOX4v8fpum502a94awAAAA==
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        arnd@arndb.de, linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2767; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=XwXvMZmSyw0Fultdv91spvUYs8G7JznbXwG0CGzyAxM=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCm3f/rNPqfvaPfxjI/qv/SEwyGPJnwSUl0SduxYtgDPp
+ S69U5dPdJSyMIhxMMiKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJbCxm+B/Vfi3Ps2eVwv+z
+ d45+XBFroiSRWzq3mEllOSNb0qquM7wMv9kzPjClnctoZ5LVLOpb6rI3oe17fUy/WCuD88+wnYt
+ X8QMA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Aug 15, 2023 at 06:58:41AM +0000, Biju Das wrote:
-> > Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
-> > bus_type
-> > On Fri, Aug 11, 2023 at 02:46:10PM +0000, Biju Das wrote:
+After the switch to SET_NOIRQ_SYSTEM_SLEEP_PM_OPS() and a subsequent
+fix, stm32_rtc_{suspend,resume}() are unused when CONFIG_PM_SLEEP is not
+set because SET_NOIRQ_SYSTEM_SLEEP_PM_OPS() is a no-op in that
+configuration:
 
-...
+  drivers/rtc/rtc-stm32.c:904:12: error: 'stm32_rtc_resume' defined but not used [-Werror=unused-function]
+    904 | static int stm32_rtc_resume(struct device *dev)
+        |            ^~~~~~~~~~~~~~~~
+  drivers/rtc/rtc-stm32.c:894:12: error: 'stm32_rtc_suspend' defined but not used [-Werror=unused-function]
+    894 | static int stm32_rtc_suspend(struct device *dev)
+        |            ^~~~~~~~~~~~~~~~~
+  cc1: all warnings being treated as errors
 
-> > It's easy to work around (may be better fix can be found, haven't checked,
-> > just what first comes to my mind):
-> > 
-> > 	match ...
-> > 	name = match->name;
-> 
-> The device_get_match_data()API returns matched data, so we cannot use that one here.
-> 
-> Maybe??
-> 
-> /* If enumerated via ID lookup, fix the ABI */
-> if (!dev_fwnode())
-> 	name = id->name;
+The non-"SET_" version of this macro, NOIRQ_SYSTEM_SLEEP_PM_OPS(), is
+designed to handle this situation by only assigning the callbacks when
+CONFIG_PM_SLEEP is set while allowing the functions to appear used to
+the compiler. Switch to that macro to resolve the warnings. There is no
+functional change with this, as SET_NOIRQ_SYSTEM_SLEEP_PM_OPS() is
+defined using NOIRQ_SYSTEM_SLEEP_PM_OPS() when CONFIG_PM_SLEEP is set.
 
-Yeah, you got the idea.
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+I am not sure what to do about a Fixes: tag for this change. I am not
+sure how Arnd triggered the error/warning in commit a69c610e13e2 ("rtc:
+stm32: remove incorrect #ifdef check"), since from what I can tell,
+SET_NOIRQ_SYSTEM_SLEEP_PM_OPS() is only defined in terms of
+NOIRQ_SYSTEM_SLEEP_PM_OPS() when CONFIG_PM_SLEEP is set, so I am not
+sure how those functions could be absent in the source file but used in
+NOIRQ_SYSTEM_SLEEP_PM_OPS() when CONFIG_PM_SLEEP is unset... I could be
+missing something though.
 
+However, I think this change should have been done as part of commit
+fb9a7e5360dc ("rtc: stm32: change PM callbacks to "_noirq()"") because
+the "SET_" macros are deprecated and that would have made Arnd's change
+necessary so... assign an appropriate Fixes: tag based on that
+information as you will :)
+---
+ drivers/rtc/rtc-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index 3ce4b3d08155..76753c71d92e 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -923,7 +923,7 @@ static int stm32_rtc_resume(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops stm32_rtc_pm_ops = {
+-	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_rtc_suspend, stm32_rtc_resume)
++	NOIRQ_SYSTEM_SLEEP_PM_OPS(stm32_rtc_suspend, stm32_rtc_resume)
+ };
+ 
+ static struct platform_driver stm32_rtc_driver = {
+
+---
+base-commit: 4f3688dca15053555ade31a785a9c75837a64fb8
+change-id: 20230815-rtc-stm32-unused-pm-funcs-90d84bc2c016
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Nathan Chancellor <nathan@kernel.org>
 
