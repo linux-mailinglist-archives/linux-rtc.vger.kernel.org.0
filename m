@@ -2,114 +2,148 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA4E77E23A
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 15:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9A277E2C3
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 15:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244366AbjHPNK6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Aug 2023 09:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
+        id S245600AbjHPNkB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Aug 2023 09:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245414AbjHPNKo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Aug 2023 09:10:44 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC1726BA;
-        Wed, 16 Aug 2023 06:10:42 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 9A3193200921;
-        Wed, 16 Aug 2023 09:10:40 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 16 Aug 2023 09:10:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1692191440; x=1692277840; bh=dbk6un3F9NnxFuDCsKeUUKbwa0Jf99CB0Bc
-        mOR3Wn+0=; b=CLEqak0tE68MU7X604tFBhFvR3ckdz9EVSqebZDPM4412w5LT32
-        v39CH8OHGm1G46dZFDLtCVNJDg9Iqb/lXNC6YIZc4qKv8YuF1ocRjytH43SYOlVO
-        x5K8Ianu6vf9dVHikV7j2zQk3cTu4+gbTWDPgeVXWrfUTJHcbzA4hFVIqtdFcGbQ
-        n9WvYCZsLJDF8OpxjZp2DY+RdN1QHlHy58tqLrXukT4KbHRV7Zj8Kwul8QOuqHLW
-        sNMOPFbLMYflBBiG6gG5XfKDOtS+lJ51zu4raPz7gho3HxC3QXB8hz/Dv8QBeYOF
-        n+cL+LFUtuKWP/8N9W1jaf7ZSeXOhzbvYNQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1692191440; x=1692277840; bh=dbk6un3F9NnxFuDCsKeUUKbwa0Jf99CB0Bc
-        mOR3Wn+0=; b=Ei+4V9vSBYhEDhIyw2K+eQBiq8yLHWNbg0Vyqb03n0nh9NiUtmu
-        3YXh7IzxYKbFzhgwBkpfqkfaBn2/PWQHNBd9YG3zRC2Wd0qbmB/zYqfJg40il6YT
-        sZJSzGVvsSV1jCBNQBavIUi9+tJAkjlT8Z3y6B50ichQEjlLmqz50klHvppwLjcZ
-        IS3ZNrKwYlE87Pk+40xA4ylWSTiomicW37jPfGqtBGmMLIGwx1UFegnYrhpgFM4s
-        1m7zhytJb11/eLsSRxCNEj9MECsLhpz28mQ+MG8d7156A1ot/viEXUM8HM0uCLJU
-        sk9yjgzQNxYi8T58q9L99YOk1z4EZV4DMhQ==
-X-ME-Sender: <xms:z8rcZGMqhiJVQkL9IjXfwu6mnuORyhH4MOQNJ6tTLpHgsNL0hCWNjg>
-    <xme:z8rcZE8ab3LP9R4_kopyEp8YI4FkZEnFsfnW-PvI1gzmW1vDbYUguUdsM1a8-8hc2
-    RM2tIW0-QftF3fdc74>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddtledgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:z8rcZNSFJUXm7tJqf7pd6zJ-EhpqhX-9I0DqEBem-u93B8xOQvN4pw>
-    <xmx:z8rcZGvfiaO3tkaZnFUGFgyt5KmPTxXcwNlIy9lNYpYAp-jGUHg73A>
-    <xmx:z8rcZOcGVn25vovTgrgWsZD4t0r0gdxoKcMNA6RoCfJAaeh4ry4OGg>
-    <xmx:0MrcZEvWn2oPgo6BgojWIa1ndLwZb8v7cKa1MK4BQTXiGxqNB7S0VA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7A443B60089; Wed, 16 Aug 2023 09:10:39 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <500a73ea-98e9-4b85-a34f-88a7bd98550d@app.fastmail.com>
-In-Reply-To: <20230816113326.1468435-1-geert@linux-m68k.org>
-References: <20230816113326.1468435-1-geert@linux-m68k.org>
-Date:   Wed, 16 Aug 2023 15:10:19 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
-        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
-        "Valentin Caron" <valentin.caron@foss.st.com>
-Cc:     linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: stm32: Use NOIRQ_SYSTEM_SLEEP_PM_OPS()
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S245602AbjHPNjn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Aug 2023 09:39:43 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EC326A5;
+        Wed, 16 Aug 2023 06:39:42 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-564b326185bso3800988a12.2;
+        Wed, 16 Aug 2023 06:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692193182; x=1692797982;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=sTITrOLS9p+5HZDFwbykK1NGLoyh4LNTkLdknhZrdNE=;
+        b=hMIjjiR4q/0wPK8xLbgRyhMn8Zd9ICGyz8UEd+JAt5IZBcuJNOmH73/tzwV5o0AKjd
+         nZwaSui3gXm7RwdbO8vy5ij/DlbjVpjON09GG7+Do35soBjDrLNk3SMRT0xiSgeKBcWo
+         Oh1RIQzWihWpOXbE1DmRhdg8wiJYSxJNciHNDWZ4tuvoueBcX13vsEG2TJNs+BOxEstf
+         2XTUG1D/jxevMkBChGNKcxuAEENjEVvQeBokpnN3LlLrPNGT+lsUTZSSUVlTlKyHI8W5
+         6gQHMAigmH5VdmatKHK1XSmPJNepooEOFjXQwOmlAV+SATpAzqQAChk+ByhRiL+o6N2r
+         ihgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692193182; x=1692797982;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sTITrOLS9p+5HZDFwbykK1NGLoyh4LNTkLdknhZrdNE=;
+        b=KiysYb577M4W49ETAEB0lV+qOp5mA0XTfrb570TwUiz+w7cfsmcM3+VRj0xbqhqWKB
+         mp/NkG2wRa8b8LGl0WdyoaluNEg+QNHL7aivRTOMeNafgiwYo98Zz7vphIVRwUnUUoqF
+         Izkn1oxO8MgAhj1DzDUgepnymrxL5g+ioSmQOs65ZhOtUK7CUOY6cZ0Qgv9PJEF6sgw0
+         CCAOslHH0VX32m5KdeNmntE0lEc1vCWsrR7wBfEfngCvbDO9RXjesQoS9HJ/TTlr8kdV
+         R6kt9uag4spWdr65Wftk1yVV9RKgrZn+cT5jE8ri3wYvFOWrTU7q4wSDbTRxLofg46r+
+         hpSg==
+X-Gm-Message-State: AOJu0YyDwwpKiDfvu0V8y9q1MPMlMY10PZybzzGM8ns4WgaaGK7QU+QK
+        EFearYAwU/IG0dpywpHzxGk=
+X-Google-Smtp-Source: AGHT+IF6J5YO3QTNHHvXhzJdMQX6uKS2Z0ALnT0CczHQxvXYnbkh0WczBCCsvBV6h3kLL0wpPJDxIA==
+X-Received: by 2002:a17:90a:e645:b0:26b:1210:a48d with SMTP id ep5-20020a17090ae64500b0026b1210a48dmr1234125pjb.3.1692193181674;
+        Wed, 16 Aug 2023 06:39:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o93-20020a17090a0a6600b0026b3773043dsm8391783pjo.22.2023.08.16.06.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 06:39:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 0/7] rtc: Add support for limited alarm timer offsets
+Date:   Wed, 16 Aug 2023 06:39:29 -0700
+Message-Id: <20230816133936.2150294-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Aug 16, 2023, at 13:33, Geert Uytterhoeven wrote:
-> If CONFIG_PM_SLEEP=3Dn (e.g. m68k/allmodconfig):
->
->     drivers/rtc/rtc-stm32.c:904:12: error: =E2=80=98stm32_rtc_resume=E2=
-=80=99 defined=20
-> but not used [-Werror=3Dunused-function]
->       904 | static int stm32_rtc_resume(struct device *dev)
-> 	  |            ^~~~~~~~~~~~~~~~
->     drivers/rtc/rtc-stm32.c:894:12: error: =E2=80=98stm32_rtc_suspend=E2=
-=80=99 defined=20
-> but not used [-Werror=3Dunused-function]
->       894 | static int stm32_rtc_suspend(struct device *dev)
-> 	  |            ^~~~~~~~~~~~~~~~~
->
-> Indeed, the previous change mixed up the semantics between
-> SET_NOIRQ_SYSTEM_SLEEP_PM_OPS() and NOIRQ_SYSTEM_SLEEP_PM_OPS().
-> Fix this by using the modern NOIRQ_SYSTEM_SLEEP_PM_OPS() instead.
->
-> Reported-by: noreply@ellerman.id.au
-> Fixes: a69c610e13e2b2de ("rtc: stm32: remove incorrect #ifdef check")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Some alarm timers are based on time offsets, not on absolute times.
+In some situations, the amount of time that can be scheduled in the
+future is limited. This may result in a refusal to suspend the system,
+causing substantial battery drain.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+This problem was previously observed on a Chromebook using the cros_ec
+rtc driver. EC variants on some older Chromebooks only support 24 hours
+of alarm time in the future. To work around the problem on affected
+Chromebooks, code to limit the maximum alarm time was added to the cros_ec
+rtc driver with commit f27efee66370 ("rtc: cros-ec: Limit RTC alarm range
+if needed"). The problem is now seen again on a system using the cmos
+RTC driver on hardware limited to 24 hours of alarm time, so a more
+generic solution is needed.
+
+Some RTC drivers remedy the situation by setting the alarm time to the
+maximum supported time if a request for an out-of-range timeout is made.
+This is not really desirable since it may result in unexpected early
+wakeups. It would be even more undesirable to change the behavior
+of existing widely used drivers such as the cmos RTC driver.
+
+The existing range_max variable in struct rtc_device can not be used
+to determine the maximum time offset supported by an rtc chip since
+it describes the maximum absolute time supported by the chip, not the
+maximum time offset that can be set for alarms.
+
+To reduce the impact of this problem, introduce a new variable
+rtc_time_offset in struct rtc_device to let RTC drivers report the maximum
+supported alarm time offset. The code setting alarm timers can then
+decide if it wants to reject setting alarm timers to a larger value, if it
+wants to implement recurring alarms until the actually requested alarm
+time is met, or if it wants to accept the limited alarm time. Use the new
+variable to limit the alarm timer range.
+
+The series is intended to solve the problem with minimal changes in the
+rtc core and in affected drivers.
+
+An alternative I had considered was to have the alarmtimer code guess the
+maximum timeout supported by the rtc hardware. I discarded it as less
+desirable since it had to retry repeatedly depending on rtc limitations.
+This often resulted in error messages by the rtc driver.  On top of that,
+it was all but impossible to support rtc chips such as tps6586x which
+can only support wake alarms up to 16,383 seconds in the future.
+
+The first patch of the series adds support for providing the maximum
+supported time offset to the rtc core. The second patch uses that value
+in the alarmtimer code to set the maximum wake-up time from system suspend.
+Subsequent patches add support for reporting the maximum alarm timer offset
+to a subset of affected drivers.
+
+Previous discussion:
+    https://lore.kernel.org/lkml/Y19AdIntJZGnBh%2Fy@google.com/T/#mc06d206d5bdb77c613712148818934b4f5640de5
+
+----------------------------------------------------------------
+Guenter Roeck (7):
+      rtc: Add support for limited alarm timer offsets
+      rtc: alarmtimer: Use maximum alarm time offset
+      rtc: cros-ec: Detect and report supported alarm window size
+      rtc: cmos: Report supported alarm limit to rtc infrastructure
+      rtc: tps6586x: Report maximum alarm limit to rtc core
+      rtc: ds1305: Report maximum alarm limit to rtc core
+      rtc: rzn1: Report maximum alarm limit to rtc core
+
+ drivers/rtc/rtc-cmos.c     | 11 +++++++++++
+ drivers/rtc/rtc-cros-ec.c  | 38 +++++++++++++++++++++++---------------
+ drivers/rtc/rtc-ds1305.c   |  3 ++-
+ drivers/rtc/rtc-rzn1.c     |  1 +
+ drivers/rtc/rtc-tps6586x.c |  1 +
+ include/linux/rtc.h        |  1 +
+ kernel/time/alarmtimer.c   | 13 +++++++++++++
+ 7 files changed, 52 insertions(+), 16 deletions(-)
