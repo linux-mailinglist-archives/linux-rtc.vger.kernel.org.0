@@ -2,32 +2,32 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA47D77E621
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 18:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83EC77E638
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 18:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344528AbjHPQPJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Aug 2023 12:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S1344627AbjHPQTb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Aug 2023 12:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239186AbjHPQOj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Aug 2023 12:14:39 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF203C1;
-        Wed, 16 Aug 2023 09:14:37 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D7B23E0003;
-        Wed, 16 Aug 2023 16:14:35 +0000 (UTC)
+        with ESMTP id S1344671AbjHPQTN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Aug 2023 12:19:13 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4E12712;
+        Wed, 16 Aug 2023 09:19:08 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2582BE0006;
+        Wed, 16 Aug 2023 16:19:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1692202476;
+        t=1692202746;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Wxb2+0NuQXqPTqCzWBM9tyO1GBBf/uc5NPp8bPde8qw=;
-        b=b/pMTa51xIYRnwpKkFCTWY5zYauco1/597mwff19OnJLg/C9V3AE8TkzFacRAkKQcZniss
-        F9jOrrwK5GVWDYpXAdKysdfGCx3ryK9tLSW8GJycJUyE3zajYCqfL5TYLMWPb2A6XjVUpj
-        df+oWtZRpmrkMIaWn7e2SjVjavUNkgltwtEc6aibrbuCPqgpAQRInWtoRMr3cKuiRpfWR3
-        kPD8MT/DbK1OhgvPIzx0HuUikLUoIWriB6YQiFfCXPU1JFhReVJxXQWXZ7zUT2I98B8PXs
-        OENAhj6fZtc48C5uFBypqC2zw4eJEzaK8eh1RUyxczB3h9Z+lF1fT8HtcXGDWg==
-Date:   Wed, 16 Aug 2023 18:14:35 +0200
+        bh=SSRdwSp0CkIkHnz/RJq/71YFRiVLOTwdYIHwE8GDwYE=;
+        b=MhmrIo4hFHDnkrdlAPBxiDax+PEGnvkKjdwa5LdSpKEs0s5RSzKcDUKo3c1oVuTF82MFec
+        2E2tYVj/6iGqxGdjOIUnAMNkm8ydiIOqaI7Ttn9BxxqFnJr/2iBpWpVKczuaZOlKD9eeNi
+        zqgDdcHEVSBZeE9Jyhc451cLDoELcmfRDA5jL0+SSfMbX1/NnNenMrTulHH+cMjcmTmFjL
+        6P4NgY8A0Wc8AofKQ1z6sPVyHGIt/ndOoKxXUs9376Q95WaTeNYkFFDeXj2tfpGLrETJ11
+        VsB4RxfZ1AqPvojOwCavitPcxGGGdnq67+2IMs30fCFxeEgfY3VuCsLyy0L04w==
+Date:   Wed, 16 Aug 2023 18:19:05 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
@@ -38,41 +38,76 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH 0/7] rtc: Add support for limited alarm timer offsets
-Message-ID: <20230816161435bd2bbd4a@mail.local>
+Subject: Re: [PATCH 1/7] rtc: Add support for limited alarm timer offsets
+Message-ID: <202308161619050943672a@mail.local>
 References: <20230816133936.2150294-1-linux@roeck-us.net>
- <20230816150353137debc5@mail.local>
- <8079bdf4-f790-451b-a2c2-be4e23c0c3a1@roeck-us.net>
+ <20230816133936.2150294-2-linux@roeck-us.net>
+ <202308161457306eecdefb@mail.local>
+ <9b6c7803-f258-472d-9983-530e42e80816@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8079bdf4-f790-451b-a2c2-be4e23c0c3a1@roeck-us.net>
+In-Reply-To: <9b6c7803-f258-472d-9983-530e42e80816@roeck-us.net>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 16/08/2023 08:50:12-0700, Guenter Roeck wrote:
-> > I'm fine with the series, however, this doesn't solve the issue for RTCs
-> > that have an absolute limit on the alarm (as opposed to an offset to the
-> > current time/date).
+On 16/08/2023 08:24:39-0700, Guenter Roeck wrote:
+> On Wed, Aug 16, 2023 at 04:57:30PM +0200, Alexandre Belloni wrote:
+> > On 16/08/2023 06:39:30-0700, Guenter Roeck wrote:
+> > > Some alarm timers are based on time offsets, not on absolute times.
+> > > In some situations, the amount of time that can be scheduled in the
+> > > future is limited. This may result in a refusal to suspend the system,
+> > > causing substantial battery drain.
+> > > 
+> > > Some RTC alarm drivers remedy the situation by setting the alarm time
+> > > to the maximum supported time if a request for an out-of-range timeout
+> > > is made. This is not really desirable since it may result in unexpected
+> > > early wakeups.
+> > > 
+> > > To reduce the impact of this problem, let RTC drivers report the maximum
+> > > supported alarm timer offset. The code setting alarm timers can then
+> > > decide if it wants to reject setting alarm timers to a larger value, if it
+> > > wants to implement recurring alarms until the actually requested alarm
+> > > time is met, or if it wants to accept the limited alarm time.
+> > > 
+> > > Only introduce the necessary variable into struct rtc_device.
+> > > Code to set and use the variable will follow with subsequent patches.
+> > > 
+> > > Cc: Brian Norris <briannorris@chromium.org>
+> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > ---
+> > >  include/linux/rtc.h | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+> > > index 1fd9c6a21ebe..b6d000ab1e5e 100644
+> > > --- a/include/linux/rtc.h
+> > > +++ b/include/linux/rtc.h
+> > > @@ -146,6 +146,7 @@ struct rtc_device {
+> > >  
+> > >  	time64_t range_min;
+> > >  	timeu64_t range_max;
+> > > +	timeu64_t range_max_offset;
 > > 
+> > While range_min and range_max are for the wall clock time, I would
+> > prefer using a name that would clearly mark this as an alarm related
+> > variable.
 > 
-> I thought that is checked by rtc_valid_range() in rtc_set_alarm().
-> Am I missing something ? Of course that assumes that the absolute
-> maximum alarm timeout matches range_max, but I didn't find any
-> drivers where that would not be the case.
-> 
+> Sure, no problem. Do you have a suggestion ? alarm_range_max or
+> alarm_range_max_offset, maybe ? I'd also be happy to use some other
+> term for 'offset' if you have a suggestion.
 
-There are RTCs where this is not the case. When this is far away in the
-future enough, the usual solution is to clip range_max which works but
-is not really great intellectually.
+I don't really know, what about alarm_offset_max? This is the maximum
+value of the offset for the alarm to the current time.
+
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
