@@ -2,96 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6856B77D6A5
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 01:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1451877D7A7
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 03:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240605AbjHOX2u (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Aug 2023 19:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
+        id S241029AbjHPB01 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Aug 2023 21:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbjHOX21 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Aug 2023 19:28:27 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E193C98;
-        Tue, 15 Aug 2023 16:28:24 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4EBCC1BF205;
-        Tue, 15 Aug 2023 23:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1692142103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KqoiUzPl/8iWAJ5m3KsWYUUQxGcs9hu5/Zmem3XAmgk=;
-        b=nDvy8sqLas9We8g2a4pajsYbUzEELa5PVa+FViFrfQC6tLLYIw3Jn7C8Nu/cvyoo77h8Oq
-        dcbvZdetBmqbo+CqcjfdiLqdOAACYqvmGPWZxVjao6pP82BF8gjvgykKGfqhvWsgEvLTTG
-        FG14roPRnXmnjdz8Zk91sErFXhEsHBMNaFlr01YQaut4TZQ7atlWTpTGLBaooIG//6yYN5
-        ilDlkxd4hjy/BUJfH5XCXFT9TXEBaSyf7XPs5IJ+57Mzit2VYvcL3hvU6TK+eyOEicHkux
-        1c7Z8BV9qruAoUrTNb7XKWBgfYH/4sdtNf+oN6xM+EHQqhUstV2a8ENMs6ageQ==
-Date:   Wed, 16 Aug 2023 01:28:22 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/8] rtc: isl12022: battery backup voltage and clock
- support
-Message-ID: <169214205184.2051743.7107002461402510185.b4-ty@bootlin.com>
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230615105826.411953-1-linux@rasmusvillemoes.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615105826.411953-1-linux@rasmusvillemoes.dk>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S241014AbjHPBZ4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Aug 2023 21:25:56 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9E42121;
+        Tue, 15 Aug 2023 18:25:56 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-68872ca740bso805344b3a.2;
+        Tue, 15 Aug 2023 18:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692149156; x=1692753956;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eS73907VIaCeI53gzLLDOXrTmdR8uzZ1TgnhrmdjAfE=;
+        b=W2BVuarHi+6pbrQsl6hiKrxEXM9fXIA6Su8DOcpzFEbDu4//L9sLF6EgJaZhkvnUev
+         N+6t2NTVAFl4kSpxLw1uez5Hr9nAKkejmVBfrO9jWHRUGfWjoY/MKlNxovAqpdnq3q+F
+         Ol7+C2hR62tDDpgSDlO8yl9qHCUUEBBrVG5BkoP3jgS6hXSIOzRgzsThrOwRSzfSSr4m
+         H5i1bOOFKxV6J5Hkbz5Rz5FSTmBGa8uqXf6OdKg/L35iBDzSz4D2iMajGiyz5b1/I+TV
+         55Eh8VMUCMAHp2oRIyjIwcYbU5JwLH/Xa13gWByWSA171lnThMuEJQIsSN085rlWkHYb
+         uVIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692149156; x=1692753956;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eS73907VIaCeI53gzLLDOXrTmdR8uzZ1TgnhrmdjAfE=;
+        b=ZN+r1OhBlh82JjyLxfYd8tmdSsRnlLIEvPFzFDa3EUT/BQxYixd7Lu7UJBOCllZfvt
+         1rC6yRYc/SNTBoM2YsF+xRhiAYZCWU83fooZ0iTKLGmGuSJIO7j+hCeH5QYADdBOE6ue
+         5/4mBKqYV/1jK9j1X53drUQV2sXt78/rp2sankJWc7T+JPecq1UaWAJkWOwpCt94BlKN
+         LASFWx7DkZVwZb2dhl0qG1ahng1Y2DdJ9A7KA7wGdkWBhezPio/XSNFC7tlPsG50AlpW
+         YavFoBQvtpZZ5AARHSPhBnI67celkBDisUlUwnM2YycGIQWnZCzAyS+TFRLt5WJ6MBR/
+         P83A==
+X-Gm-Message-State: AOJu0YwDz77Vmg7aktER3xaEPvU89iNmmUFcfa5RZjahgUTYOv37VuAS
+        M5XJcjl4V0dLBHi9xELu4Wk=
+X-Google-Smtp-Source: AGHT+IHKxroaeDsPMZSPoBDxdrhVDk2WoFodBQQXZmJfm7VKR0XuLLTGvJIobdyYW/H8EJzlkqDyDQ==
+X-Received: by 2002:a05:6a20:42a6:b0:135:110c:c6de with SMTP id o38-20020a056a2042a600b00135110cc6demr769678pzj.6.1692149155478;
+        Tue, 15 Aug 2023 18:25:55 -0700 (PDT)
+Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id 17-20020aa79251000000b0064d47cd116esm9895468pfp.161.2023.08.15.18.25.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 18:25:54 -0700 (PDT)
+From:   Mia Lin <mimi05633@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, KFLIN@nuvoton.com,
+        mylin1@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mia Lin <mimi05633@gmail.com>
+Subject: [PATCH v4 0/1] Compatible with NCT3015Y-R and NCT3018Y-R
+Date:   Wed, 16 Aug 2023 09:25:39 +0800
+Message-Id: <20230816012540.18464-1-mimi05633@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Changes since version 4:
+  Add an introduction bewteen NCT3015Y-R and NCT3018Y-R.
+  Restore the initial value of err in nct3018y_rtc_set_time().
+  Refine error messages to pinpoint the correct location.
 
-On Thu, 15 Jun 2023 12:58:18 +0200, Rasmus Villemoes wrote:
-> The current handling of the low-battery bits in the status register is
-> wrong. The first six patches fix that and implement proper support for
-> RTC_VL_READ.
-> 
-> The last two patches allow describing the isl12022 as a clock
-> provider, for now just as a fixed 32kHz clock. They are also
-> tangentially related to the backup battery, in that when the isl12022
-> is not used as a clock source, one can save some power consumption in
-> battery mode by setting the FOx bits to 0.
-> 
-> [...]
+Changes since version 3:
+  Remove the comparison between DT compatible and chip data.
 
-Applied, thanks!
+Changes since version 2:
+  Add DT compatible to check the chip matches or not.
 
-[1/8] rtc: isl12022: remove wrong warning for low battery level
-      commit: 4d6af37cafad69ff93f62db80d5a3daa9ac3223f
-[2/8] dt-bindings: rtc: Move isil,isl12022 from trivial-rtc.yaml into own schema file
-      commit: ffc005280a47030d16cbbf3105c75d3562dba5a8
-[3/8] dt-bindings: rtc: isl12022: add bindings for battery alarm trip levels
-      commit: 69b569c124ffa698de25d039018fe86313c46c84
-[4/8] rtc: isl12022: add support for trip level DT binding
-      commit: 2caeb566baabb65add7d99ca6d8bfd566fe91582
-[5/8] rtc: isl12022: implement RTC_VL_READ ioctl
-      commit: eccebd813874b748ac4e79a9fe4c7290117ad3be
-[6/8] rtc: isl12022: trigger battery level detection during probe
-      commit: a11b6c460620f7fb5fae4c3aee5a5ba2e1e1129b
-[7/8] dt-bindings: rtc: isl12022: add #clock-cells property
-      commit: ab246c897be0bdf981f776399ca62b5ec4b8138f
-[8/8] rtc: isl12022: implement support for the #clock-cells DT property
-      commit: d57d12db774820819d0e591548a56b5cfc95f82a
+Changes since version 1:
+  rtc: nuvoton: Compatible with NCT3015Y-R and NCT3018Y-R
 
-Best regards,
+Mia Lin (1):
+  rtc: nuvoton: Compatible with NCT3015Y-R and NCT3018Y-R
+
+ drivers/rtc/rtc-nct3018y.c | 122 +++++++++++++++++++++++++------------
+ 1 file changed, 83 insertions(+), 39 deletions(-)
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
+
