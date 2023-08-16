@@ -2,178 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8DD77E5A3
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 17:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5785877E5D4
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Aug 2023 18:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343964AbjHPPuv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Aug 2023 11:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S1344468AbjHPP7g (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Aug 2023 11:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344429AbjHPPua (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Aug 2023 11:50:30 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9042D6D;
-        Wed, 16 Aug 2023 08:50:14 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2681223aaacso4512173a91.0;
-        Wed, 16 Aug 2023 08:50:14 -0700 (PDT)
+        with ESMTP id S1344553AbjHPP7c (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Aug 2023 11:59:32 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75B1E2
+        for <linux-rtc@vger.kernel.org>; Wed, 16 Aug 2023 08:59:31 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-760dff4b701so80395839f.0
+        for <linux-rtc@vger.kernel.org>; Wed, 16 Aug 2023 08:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692201014; x=1692805814;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qEohQI3NAdv35pnfkbCoDXE/h5uAREoOsMxQ8xvIZY8=;
-        b=EgKmEeDfOazGq5uLbR01xSj/QK6VeK1mCysK5ZUWFM3ysweVXEaZ9uUAl5Pof25nQc
-         84vLLBcc0oRJEs9Vu3CTsyU5J5kB34X5h4umaRnBjxWIJDmslHb5gS3Pwru3yldUvJcf
-         +3RN96h77DApM0K/WyrcWjkDGAQUTZgSJEsF4atTJgRMDnvOtzSZApklUYtaxarGmFs9
-         4z8k/mVXbM3Hrkv3vm0BOJGeOp4czwu7swzpb6cYb9tb5QjOI+qE9pAZSg15QSyajd4H
-         2QvVIhcSBuKs338w5o6UZGtgSXKOJJn1M1o9A3o+FO/xLkjs84gCGmW+Mvls71OQr0Px
-         RTYQ==
+        d=linuxfoundation.org; s=google; t=1692201571; x=1692806371;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6LWn1wprpupG35+bMZ4L8PNbSMJ+ptPNw9QujPnf6hY=;
+        b=Y9009i98a5k/RKDiCvgAVt/GpX9xfdqqSzhcRoZ4o5yRIf4K57F6CXkNhs4fCSxZHE
+         gufo+/8vkgMf63/1JpsrRlmv/PgunPkbf9IQQKvFZpljRW4gK3Or+xkqA3dgQ9sRYAPq
+         mx8lAzpcktGEMFRg42+fUjWmNnuPb6pfGq4dY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692201014; x=1692805814;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qEohQI3NAdv35pnfkbCoDXE/h5uAREoOsMxQ8xvIZY8=;
-        b=JDNaB52t9WTwMXBiZUUO3ODZWSPFPjRQwU30vWWxJCvr5JqdyJT/py7rA6Ox/URmZP
-         Bhga+6FaVo8kt7CE7ccEPOVlELP+aDk3bQpM276HMgtQ09tkEAKSbtot+DuhzIFYHeUl
-         aJtDCRGyWap7vZ1ZScOtP4jd000/hKTAQ03EMx2Hmf+2VAQr2sQuwJyCai4ktJ9jomt5
-         TwPtE95fYx1qxLeEi3phcvhRjL2GeG7ET0DUoM9PJcYfYF6e5nbm33C86WMtmfkadmVK
-         UbM/GaPaxqQDp7H6J1xsO+/VzI/m70jzU2TbHxyJg2WL8z+g46wEMOPa+cdgZAQgvGPe
-         pCSQ==
-X-Gm-Message-State: AOJu0YxdxiqzZpEg20C6EMVLE8pNYo6TpclNHOTzQC3EZ5eEW8qyrrHP
-        Xat7yxm8oaibQBi/kBrUZFg=
-X-Google-Smtp-Source: AGHT+IGSMdQKf/ClfcmNH+AsywNOAdUlm3AF4v/Sx0H86wTrmhqjohRzEeHwEw1UhsmvckPxxxOiCw==
-X-Received: by 2002:a17:90a:9a81:b0:26d:d3a:5e48 with SMTP id e1-20020a17090a9a8100b0026d0d3a5e48mr493159pjp.15.1692201014294;
-        Wed, 16 Aug 2023 08:50:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902728c00b001bbaf09ce15sm13403257pll.152.2023.08.16.08.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 08:50:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 16 Aug 2023 08:50:12 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH 0/7] rtc: Add support for limited alarm timer offsets
-Message-ID: <8079bdf4-f790-451b-a2c2-be4e23c0c3a1@roeck-us.net>
-References: <20230816133936.2150294-1-linux@roeck-us.net>
- <20230816150353137debc5@mail.local>
+        d=1e100.net; s=20221208; t=1692201571; x=1692806371;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6LWn1wprpupG35+bMZ4L8PNbSMJ+ptPNw9QujPnf6hY=;
+        b=JNjshW4WJ3ZGwWVAmeMyIz5wZlEuis58GUYyRriHb+wVgzqhhql8WLsPZ41lf6BruM
+         YWt2XrRh1XU+f2k4a9RDAvrx1Vr7ENbg0XAf4Y/DdVKvOeWcFfIBGN580oZL7h4k56K2
+         hSZXZ5sG064DszgdH7n5ClCdSv3GZIQfoHYRaqi4/vmPtiiQWknj6lXPiujxplauLLaC
+         1gCFFsP320tDcsr02lvuBWH7EIEAkdjM5Yrv6pGZufiW2bDW+2wOHpqp68kI5xYEBr0V
+         HWyvWcRWtc8jkVQHKNTgjeCSuadV6bDtFSFHs7tmCPZ2LQDgFkVXqUhJ4VHfuc59DwKe
+         x14g==
+X-Gm-Message-State: AOJu0YxtktETTX6HQ2yNGnPOFvHNJX5S+cXiUSoyisHC7dEjOxkLHB49
+        xIw2prqO/mm9zX8Ko0GV86rcgQ==
+X-Google-Smtp-Source: AGHT+IGK4cdCETtfYgSH4T9D5jn2WTiDl9/1cLISPwpvLDfE4s5qSf8Ox8MxyoVcoyjql0bwO2/2jQ==
+X-Received: by 2002:a05:6602:3983:b0:783:63e8:3bfc with SMTP id bw3-20020a056602398300b0078363e83bfcmr3773980iob.0.1692201571288;
+        Wed, 16 Aug 2023 08:59:31 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b12-20020a5ea70c000000b0078702f4894asm4719286iod.9.2023.08.16.08.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Aug 2023 08:59:30 -0700 (PDT)
+Message-ID: <8d0c3075-22a0-bd13-45fe-f8c052e50588@linuxfoundation.org>
+Date:   Wed, 16 Aug 2023 09:59:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230816150353137debc5@mail.local>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v5] selftests: rtc: Fixes rtctest error handling.
+Content-Language: en-US
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Atul Kumar Pant <atulpant.linux@gmail.com>
+Cc:     a.zummo@towertech.it, shuah@kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230717175251.54390-1-atulpant.linux@gmail.com>
+ <202307172115223bd0669f@mail.local>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <202307172115223bd0669f@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Alexandre,
+On 7/17/23 15:15, Alexandre Belloni wrote:
+> On 17/07/2023 23:22:51+0530, Atul Kumar Pant wrote:
+>> Adds a check to verify if the rtc device file is valid or not
+>> and prints a useful error message if the file is not accessible.
+>>
+>> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+> 
+> Please collect and keep the tags you got on previous versions
+> 
+>> ---
+>>
+>> changes since v4:
+>>      Updated the commit message.
+>>
+>> changes since v3:
+>>      Added Linux-kselftest and Linux-kernel mailing lists.
+>>
+>> changes since v2:
+>>      Changed error message when rtc file does not exist.
+>>
+>> changes since v1:
+>>      Removed check for uid=0
+>>      If rtc file is invalid, then exit the test.
+>>
+>>   tools/testing/selftests/rtc/rtctest.c | 11 ++++++++++-
+>>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+>> index 63ce02d1d5cc..630fef735c7e 100644
+>> --- a/tools/testing/selftests/rtc/rtctest.c
+>> +++ b/tools/testing/selftests/rtc/rtctest.c
+>> @@ -17,6 +17,7 @@
+>>   #include <unistd.h>
+>>   
+>>   #include "../kselftest_harness.h"
+>> +#include "../kselftest.h"
+>>   
+>>   #define NUM_UIE 3
+>>   #define ALARM_DELTA 3
+>> @@ -419,6 +420,8 @@ __constructor_order_last(void)
+>>   
+>>   int main(int argc, char **argv)
+>>   {
+>> +	int ret = -1;
+>> +
+>>   	switch (argc) {
+>>   	case 2:
+>>   		rtc_file = argv[1];
+>> @@ -430,5 +433,11 @@ int main(int argc, char **argv)
+>>   		return 1;
+>>   	}
+>>   
+>> -	return test_harness_run(argc, argv);
+>> +	// Run the test if rtc_file is valid
+>> +	if (access(rtc_file, F_OK) == 0)
+>> +		ret = test_harness_run(argc, argv);
+>> +	else
+>> +		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
 
-On Wed, Aug 16, 2023 at 05:03:53PM +0200, Alexandre Belloni wrote:
-> Hello,
-> 
-> On 16/08/2023 06:39:29-0700, Guenter Roeck wrote:
-> > Some alarm timers are based on time offsets, not on absolute times.
-> > In some situations, the amount of time that can be scheduled in the
-> > future is limited. This may result in a refusal to suspend the system,
-> > causing substantial battery drain.
-> > 
-> > This problem was previously observed on a Chromebook using the cros_ec
-> > rtc driver. EC variants on some older Chromebooks only support 24 hours
-> > of alarm time in the future. To work around the problem on affected
-> > Chromebooks, code to limit the maximum alarm time was added to the cros_ec
-> > rtc driver with commit f27efee66370 ("rtc: cros-ec: Limit RTC alarm range
-> > if needed"). The problem is now seen again on a system using the cmos
-> > RTC driver on hardware limited to 24 hours of alarm time, so a more
-> > generic solution is needed.
-> > 
-> > Some RTC drivers remedy the situation by setting the alarm time to the
-> > maximum supported time if a request for an out-of-range timeout is made.
-> > This is not really desirable since it may result in unexpected early
-> > wakeups. It would be even more undesirable to change the behavior
-> > of existing widely used drivers such as the cmos RTC driver.
-> > 
-> > The existing range_max variable in struct rtc_device can not be used
-> > to determine the maximum time offset supported by an rtc chip since
-> > it describes the maximum absolute time supported by the chip, not the
-> > maximum time offset that can be set for alarms.
-> > 
-> > To reduce the impact of this problem, introduce a new variable
-> > rtc_time_offset in struct rtc_device to let RTC drivers report the maximum
-> > supported alarm time offset. The code setting alarm timers can then
-> > decide if it wants to reject setting alarm timers to a larger value, if it
-> > wants to implement recurring alarms until the actually requested alarm
-> > time is met, or if it wants to accept the limited alarm time. Use the new
-> > variable to limit the alarm timer range.
-> > 
-> > The series is intended to solve the problem with minimal changes in the
-> > rtc core and in affected drivers.
-> > 
-> > An alternative I had considered was to have the alarmtimer code guess the
-> > maximum timeout supported by the rtc hardware. I discarded it as less
-> > desirable since it had to retry repeatedly depending on rtc limitations.
-> > This often resulted in error messages by the rtc driver.  On top of that,
-> > it was all but impossible to support rtc chips such as tps6586x which
-> > can only support wake alarms up to 16,383 seconds in the future.
-> > 
-> > The first patch of the series adds support for providing the maximum
-> > supported time offset to the rtc core. The second patch uses that value
-> > in the alarmtimer code to set the maximum wake-up time from system suspend.
-> > Subsequent patches add support for reporting the maximum alarm timer offset
-> > to a subset of affected drivers.
-> > 
-> > Previous discussion:
-> >     https://lore.kernel.org/lkml/Y19AdIntJZGnBh%2Fy@google.com/T/#mc06d206d5bdb77c613712148818934b4f5640de5
-> > 
-> 
-> I'm fine with the series, however, this doesn't solve the issue for RTCs
-> that have an absolute limit on the alarm (as opposed to an offset to the
-> current time/date).
-> 
-
-I thought that is checked by rtc_valid_range() in rtc_set_alarm().
-Am I missing something ? Of course that assumes that the absolute
-maximum alarm timeout matches range_max, but I didn't find any
-drivers where that would not be the case.
-
-Thanks,
-Guenter
-
-> 
-> 
-> > ----------------------------------------------------------------
-> > Guenter Roeck (7):
-> >       rtc: Add support for limited alarm timer offsets
-> >       rtc: alarmtimer: Use maximum alarm time offset
-> >       rtc: cros-ec: Detect and report supported alarm window size
-> >       rtc: cmos: Report supported alarm limit to rtc infrastructure
-> >       rtc: tps6586x: Report maximum alarm limit to rtc core
-> >       rtc: ds1305: Report maximum alarm limit to rtc core
-> >       rtc: rzn1: Report maximum alarm limit to rtc core
-> > 
-> >  drivers/rtc/rtc-cmos.c     | 11 +++++++++++
-> >  drivers/rtc/rtc-cros-ec.c  | 38 +++++++++++++++++++++++---------------
-> >  drivers/rtc/rtc-ds1305.c   |  3 ++-
-> >  drivers/rtc/rtc-rzn1.c     |  1 +
-> >  drivers/rtc/rtc-tps6586x.c |  1 +
-> >  include/linux/rtc.h        |  1 +
-> >  kernel/time/alarmtimer.c   | 13 +++++++++++++
-> >  7 files changed, 52 insertions(+), 16 deletions(-)
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+This should be skip not a fail. access() could for a number of reasons.
+Since the test isn't run when access() returns error, this would be a
+skip. Also the new message could be improved to use strerror() to
+print message with details on why access() failed.
+  
+thanks,
+-- Shuah
