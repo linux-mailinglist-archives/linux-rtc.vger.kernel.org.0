@@ -2,87 +2,116 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72508780100
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Aug 2023 00:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB21780116
+	for <lists+linux-rtc@lfdr.de>; Fri, 18 Aug 2023 00:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238475AbjHQW0D (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Aug 2023 18:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S244731AbjHQWgN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Aug 2023 18:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355722AbjHQWZs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Aug 2023 18:25:48 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1ABE30D8;
-        Thu, 17 Aug 2023 15:25:45 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 26E5540004;
-        Thu, 17 Aug 2023 22:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1692311144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2nCrCLg8EL+bZyyRQk0feFNmHoHFKKt/ijVy++3LtKk=;
-        b=V7MLkHrwUIrsRLDQLJdLOJHZ/vMc7Ez65l1Uxv1vF3jjsAmiCMaKdwdpMxSBipZMXnNW3g
-        8OEjM7Qkbz8Hb7hQMhtELoCuxQ1MUl5n6AiHykXcj6VIK7SImkcayiLVwhhq1r0/M1AydL
-        yjOqwWk4wltbZTppHF1nfX9MPkWK4YGf6uTB+xBYJd/bHnSYng7HTnrnFAA+XLAYAf3mX2
-        mX15aiLyxPH24H2adjz8fodreoh1dfnhls+Owo5s0XdrI4QWfVViNmV6ArYBDYuCuxUiTe
-        yuDK5NKErQ+hmAfeN9U04zAxif+h+t7aeenkUY3YSJUSmT3AaIw49ZmnYhDYog==
-Date:   Fri, 18 Aug 2023 00:25:43 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf85363: Allow to wake up system without IRQ
-Message-ID: <202308172225433f4bb84b@mail.local>
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.eeedf5db-4013-4c3b-be1c-1121df58f897@emailsignatures365.codetwo.com>
- <20230502055458.11004-1-mike.looijmans@topic.nl>
- <202308162140170c067ce7@mail.local>
- <ec2d7ef3-3dcc-aebb-1a4f-c2e01a09f750@topic.nl>
- <202308170817599c17a369@mail.local>
- <5113ab6e-881b-fa6b-00c4-118b32be4a4c@topic.nl>
+        with ESMTP id S236396AbjHQWgK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Aug 2023 18:36:10 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F58F2722;
+        Thu, 17 Aug 2023 15:36:08 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-68730bafa6bso1022180b3a.1;
+        Thu, 17 Aug 2023 15:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692311768; x=1692916568;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zu2Bex9ZZEBUMNHHS416lQn75kmUTiLhrrmV505zb7o=;
+        b=Dsfqn/KeOcq3Kau6h0piGLYueIIe87DTrRTbH5UQxxCJrV0Ni668dHX/pP6LPyNgte
+         oPiwJ5mJ4UJim2UrxdErPW0kZOJKPdf/sZ7uaU5Kb7RrDNaBJ4EmkmfafkvQDjFBrA/6
+         3B2PwlnWqKsQZZpLLJkGMtAcqjLVXVpHAatbnnOw4LAb+Zi6jQfX5VQMi6Qnymp2W10x
+         gQu6Cp1KqlzNs+8A2yswa0UNydv/kACZKBRA9vO9lezvTTo+ieZSC5qUm3gQbB9sMg5S
+         /DZGWW0Lb0JqCASs/kdaU9L2PGPlFSgnzs81jniJmneCnzxA94HKQFnLYhF/xEBMbTHy
+         Padw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692311768; x=1692916568;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zu2Bex9ZZEBUMNHHS416lQn75kmUTiLhrrmV505zb7o=;
+        b=YXWLlHO8cuN/QzAfSlitj0DdRTcL8WivvDB9h+tKVKZ/kJxH9arGlCjR5D9as4tEU3
+         kM8YD4BC5rOSgoOVHh47zxcwrtG9Z4kbl/JhOVidht8OjkVi9IwxQoyWLq87evhrlpMA
+         7ljggAjTfWdPiceYgW9su/6JXAKZ+sc3xsYquIj3A/YnVf8IvWvBTbS+x2rv8oPiLfKc
+         Lnvrv/AwVqj1xq6et9DZ/6By43n3wIV7uMEpiXMUbUqIbV4kfVULFfvpT6W/Zd5pZxY/
+         y/TIWpAUAhVVrhmIgGF0HlTA8c44TgMUgD7JLlZYQG3hkC29+xbozrjPiiLeltHpjK74
+         fnTw==
+X-Gm-Message-State: AOJu0YyrpBZ6GkWFtXbv30thBeXkRdJaVADmRQ6Lhhztdikm8ZsZm2+7
+        Fw0o4cEXll+s93KFgRrLFYw=
+X-Google-Smtp-Source: AGHT+IEcKbP6rcb7SmE5I4FjVf2tXw9JRpsBkijEOr9G6YFSnvmLL4DAtEUf/V199GW507ni1552DA==
+X-Received: by 2002:a05:6a00:138c:b0:688:79c6:1c13 with SMTP id t12-20020a056a00138c00b0068879c61c13mr962118pfg.9.1692311767976;
+        Thu, 17 Aug 2023 15:36:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j25-20020aa783d9000000b006873aa079aasm257756pfn.171.2023.08.17.15.36.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 15:36:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 17 Aug 2023 15:36:05 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH 0/7] rtc: Add support for limited alarm timer offsets
+Message-ID: <571107fb-9b2d-425d-9201-25bae900341f@roeck-us.net>
+References: <20230816133936.2150294-1-linux@roeck-us.net>
+ <20230816150353137debc5@mail.local>
+ <8079bdf4-f790-451b-a2c2-be4e23c0c3a1@roeck-us.net>
+ <20230816161435bd2bbd4a@mail.local>
+ <6ffc915e-ca91-4b64-b7a5-f13f60df8b1d@roeck-us.net>
+ <202308171951177626a54c@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5113ab6e-881b-fa6b-00c4-118b32be4a4c@topic.nl>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202308171951177626a54c@mail.local>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 17/08/2023 11:02:43+0200, Mike Looijmans wrote:
-> > My comment was also for device_init_wakeup(&client->dev, true);. I think
-> > the easiest would be to move this block later on and set client->irq to
-> > 0 when devm_request_threaded_irq fails.
+On Thu, Aug 17, 2023 at 09:51:17PM +0200, Alexandre Belloni wrote:
+> On 16/08/2023 12:12:14-0700, Guenter Roeck wrote:
+> > On Wed, Aug 16, 2023 at 06:14:35PM +0200, Alexandre Belloni wrote:
+> > > On 16/08/2023 08:50:12-0700, Guenter Roeck wrote:
+> > > > > I'm fine with the series, however, this doesn't solve the issue for RTCs
+> > > > > that have an absolute limit on the alarm (as opposed to an offset to the
+> > > > > current time/date).
+> > > > > 
+> > > > 
+> > > > I thought that is checked by rtc_valid_range() in rtc_set_alarm().
+> > > > Am I missing something ? Of course that assumes that the absolute
+> > > > maximum alarm timeout matches range_max, but I didn't find any
+> > > > drivers where that would not be the case.
+> > > > 
+> > > 
+> > > There are RTCs where this is not the case. When this is far away in the
+> > > future enough, the usual solution is to clip range_max which works but
+> > > is not really great intellectually.
+> > > 
+> > Do you have an example, by any chance ?
 > > 
 > 
-> Ah, clear. That also properly handles things when IRQ fails but
-> wakeup-source was present. In table form:
+> I'm sorry, I've been looking and I couldn't find it anymore. Don't
+> bother with this for now.
 > 
-> IRQ   wakeup-source   Call "device_init_wakeup" etc.
-> N/A   No              No
-> N/A   Yes             Yes
-> OK    No              Yes
-> OK    Yes             Yes
 
-This case is forbidden, you must not have an interrupt property and
-wakeup-source at the same time.
+I have been looking as well and did not find it either.
+I'll go ahead and send v2 with the suggested changes.
 
-> FAIL  No              No
-> FAIL  Yes             Yes
-
-This is then also forbidden
-> 
-> We still have to program the registers before registering the IRQ I think.
-
-Yes, certainly.
-
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks,
+Guenter
