@@ -2,131 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1526E77F7F8
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Aug 2023 15:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B2277FBAD
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Aug 2023 18:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351560AbjHQNnb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Aug 2023 09:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S236259AbjHQQLh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Aug 2023 12:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351586AbjHQNnY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Aug 2023 09:43:24 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07373106;
-        Thu, 17 Aug 2023 06:43:23 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bc6535027aso65044385ad.2;
-        Thu, 17 Aug 2023 06:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692279802; x=1692884602;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2ekX8+Nd4VswfjxOCjX+b1kzoOwGdMKAd1QgVJxzyBU=;
-        b=Kb9cGdIUJ0pBbOrseOO9IQ5aUYDBPMKlfAlIfS3ERPMbNVKWjoRLyYdPYxlYfnmC7l
-         E1a5RY+EERyITC8flXmGnLkL3D3IrFnF4s1bTvIYk1PMwgxiilOvCRvtS9krMRtR9q8x
-         V8VKQaRMEhaxBGxIgEQLVsjcHK2FMj+FvnqZAG8fD+1mpc/+QFwwJPC0TTmPQZZriNsW
-         wkNIRb6bMaAheQVBq6QoVaMv/wpIQSq0jObm1ZdQkOTqekemuT6lHF3aDhGqRmUzqQQg
-         5XzAsmUXL9kThS7cV+OLu1JPZEHSVYVSSQD/DVkSyuLX7ApNV93YlJ0vajgwmd849qaR
-         Kn4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692279802; x=1692884602;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ekX8+Nd4VswfjxOCjX+b1kzoOwGdMKAd1QgVJxzyBU=;
-        b=CYvPYF1i6inIpD51NR7rtdWazU3+H8+GtLfz3YxQSJdgZjPZKO+cSsdr+vDPVrB089
-         esdUAuFwanxWrSTG5RRFTvajY9tF0U29x9oqAXw8oB+v17qprj7nHxGrYF/avuJM6clS
-         BMuwnCx9f/CJG5PbLY6Y9A1iIPmkhI1Y1z8sjadxKogAcUOeaZwBn9j6Z9YPBdX5DrUP
-         lIUwkwoA0MqlxsshYnhTr9j2u3HSUPkRANadfBK2YgpApbanbd2KWdZ4sD1eVBV6RAE0
-         1h7NA2qn0/1sX/HZfaz4SFqmWLL2Pa/5M+3M2QyftktBdZTiUUeBl2u0t+lnk/LGHLo3
-         cfQg==
-X-Gm-Message-State: AOJu0YzC87ekHyZavuoNF0rYtf4clvtijJwPYp/aB2umuS9NRtPO4/C6
-        nkd7tjxp9Ck3WE6jjQ9r6gQ=
-X-Google-Smtp-Source: AGHT+IEWOn7C6DJ0dCJItiCXw8kIj+QzmbnlW0Rs/bE46okrUgBCh1xMLw4dXb20goVTRd+phIi9dQ==
-X-Received: by 2002:a17:902:ec86:b0:1b8:400a:48f2 with SMTP id x6-20020a170902ec8600b001b8400a48f2mr5532154plg.62.1692279802386;
-        Thu, 17 Aug 2023 06:43:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n4-20020a170902d2c400b001bb6c5ff4edsm15234511plc.173.2023.08.17.06.43.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 06:43:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 17 Aug 2023 06:43:20 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH 7/7] rtc: rzn1: Report maximum alarm limit to rtc core
-Message-ID: <ab8d6d2b-f5db-4d77-82b9-f9c4f773b974@roeck-us.net>
-References: <20230816133936.2150294-1-linux@roeck-us.net>
- <20230816133936.2150294-8-linux@roeck-us.net>
- <20230817100341.15867e4d@xps-13>
+        with ESMTP id S1353625AbjHQQLa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Aug 2023 12:11:30 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B2E635B1;
+        Thu, 17 Aug 2023 09:11:06 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.01,180,1684767600"; 
+   d="scan'208";a="176888065"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 18 Aug 2023 01:10:43 +0900
+Received: from localhost.localdomain (unknown [10.226.93.71])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 37CEF40175E8;
+        Fri, 18 Aug 2023 01:10:40 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Pavel Machek <pavel@denx.de>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] rtc: isl1208: Fix incorrect logic in isl1208_set_xtoscb()
+Date:   Thu, 17 Aug 2023 17:10:38 +0100
+Message-Id: <20230817161038.407960-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230817100341.15867e4d@xps-13>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 10:03:41AM +0200, Miquel Raynal wrote:
-> Hi Guenter,
-> 
-> linux@roeck-us.net wrote on Wed, 16 Aug 2023 06:39:36 -0700:
-> 
-> > RZN1 only supports alarms up to one week in the future.
-> > Report the limit to the RTC core.
-> > 
-> > Cc: Brian Norris <briannorris@chromium.org>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/rtc/rtc-rzn1.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> > index dca736caba85..c2cc3774ebb8 100644
-> > --- a/drivers/rtc/rtc-rzn1.c
-> > +++ b/drivers/rtc/rtc-rzn1.c
-> > @@ -351,6 +351,7 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
-> >  
-> >  	rtc->rtcdev->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> >  	rtc->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
-> > +	rtc->rtcdev->range_max_offset = 7 * 86400;
-> 
-> When we set the alarm, we use:
-> 
-> 	farest = rtc_tm_to_time64(&tm_now) + (7 * 86400);
-> 
-> What about using range_max_offset (whatever its final name) in this
-> calculation as it will be now set in probe? It would further clarify
-> its purpose.
+The XTOSCB bit is not bit 0, but xtosb_val is either 0 or 1. If it is 1,
+test will never succeed. Fix this issue by using double negation.
 
-Excellent idea. I'll make that change.
+While at it, remove unnecessary blank line from probe().
 
-Thanks,
-Guenter
+Reported-by: Pavel Machek <pavel@denx.de>
+Closes: https://lore.kernel.org/all/ZN4BgzG2xmzOzdFZ@duo.ucw.cz/
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+ drivers/rtc/rtc-isl1208.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> 
-> >  	rtc->rtcdev->ops = &rzn1_rtc_ops;
-> >  	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->rtcdev->features);
-> >  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->rtcdev->features);
-> 
-> With the above change,
-> 
-> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> 
-> Thanks,
-> Miquèl
+diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
+index 712ca652d6d3..e50c23ee1646 100644
+--- a/drivers/rtc/rtc-isl1208.c
++++ b/drivers/rtc/rtc-isl1208.c
+@@ -188,7 +188,7 @@ isl1208_i2c_validate_client(struct i2c_client *client)
+ static int isl1208_set_xtoscb(struct i2c_client *client, int sr, int xtosb_val)
+ {
+ 	/* Do nothing if bit is already set to desired value */
+-	if ((sr & ISL1208_REG_SR_XTOSCB) == xtosb_val)
++	if (!!(sr & ISL1208_REG_SR_XTOSCB) == xtosb_val)
+ 		return 0;
+ 
+ 	if (xtosb_val)
+@@ -944,7 +944,6 @@ isl1208_probe(struct i2c_client *client)
+ 		rc = isl1208_setup_irq(client, client->irq);
+ 		if (rc)
+ 			return rc;
+-
+ 	} else {
+ 		clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, isl1208->rtc->features);
+ 	}
+-- 
+2.25.1
+
