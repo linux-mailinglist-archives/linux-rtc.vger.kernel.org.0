@@ -2,77 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FBE78065F
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Aug 2023 09:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988E37807DC
+	for <lists+linux-rtc@lfdr.de>; Fri, 18 Aug 2023 11:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346098AbjHRHcp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Aug 2023 03:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
+        id S1358921AbjHRJCz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Aug 2023 05:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358196AbjHRHcd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Aug 2023 03:32:33 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA7330DF;
-        Fri, 18 Aug 2023 00:32:31 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E7E1AFF803;
-        Fri, 18 Aug 2023 07:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1692343948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A6HvyMolA7JCHIViBlfczdYR2onctndQrc03iXd++Jo=;
-        b=dV557G9orv+v+ecXHJWguTMc7FgPMBbybtyO/Y9iaDVbfBABJ1wM7ny9AtuT49UUp1Raab
-        qXyriJwpPMdP8kFjpczDr0l6QrWoJRCtX3LOOVgRLajTwup+Ok/VwRH/jyqYIMajVU5UmX
-        aDRNhjO/UFQ3fNiVFatFBxhnkPHXZmDCgN4xcSDvQ+bcACJjuvTRyEkTtEpblQJG+XTdUi
-        Gux5n5p0LuNK5ajwrN03/xOGNLXquiQae07WZrVmMnOwGO43S1+r79v0GKA80I2f8bhcc9
-        X1x4ADk072HEhNkBjkzfLJo4+ux4HQD0IZoOjr5ys82lTBrIfsgWUy8tJ3O0AA==
-Date:   Fri, 18 Aug 2023 09:32:27 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH v2 7/7] rtc: rzn1: Report maximum alarm limit to rtc
- core
-Message-ID: <20230818093227.7d984302@xps-13>
-In-Reply-To: <20230817225537.4053865-8-linux@roeck-us.net>
-References: <20230817225537.4053865-1-linux@roeck-us.net>
-        <20230817225537.4053865-8-linux@roeck-us.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S1359009AbjHRJCU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Aug 2023 05:02:20 -0400
+X-Greylist: delayed 1497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Aug 2023 02:01:58 PDT
+Received: from mail.leachkin.pl (mail.leachkin.pl [217.61.97.203])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB613C20
+        for <linux-rtc@vger.kernel.org>; Fri, 18 Aug 2023 02:01:58 -0700 (PDT)
+Received: by mail.leachkin.pl (Postfix, from userid 1001)
+        id 11DA38470C; Fri, 18 Aug 2023 09:16:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leachkin.pl; s=mail;
+        t=1692346633; bh=elHzctRz/z3PfTIhGYJKd0TeBTmca98Y+JNgX4gfsPI=;
+        h=Date:From:To:Subject:From;
+        b=hxUC6KPJlQN3P5mb6VM9kxtobjAk+a0VhzWhkWynqTRGTC+Sc4LMq6uDACDi603Ee
+         vJMddSKgDkxFEHWqBCYjpPIX5Hid84qhJmH3K9qwqU+F3he06CEdc0GVe9Xjpk8RJI
+         T103Wz8szKM0ezsHDJD9MgLsHHwzU0yjKiQU+JiZ3VAs87OtMJOCjRjBWq9JIq9yOs
+         EMVlW1WRNd+2N+O31Q4NhEHgpk/1ENQpg7Q+NG8BhsfpNG2yW6mJFVMmrUj7suB3WP
+         xDFjAwmLZTkSrQ4irkn0Eks41JHmgHCTaRlWhUkrAJ2b0N77TS732npm+Evnwo+yku
+         wdW1ypNDRUkVA==
+Received: by mail.leachkin.pl for <linux-rtc@vger.kernel.org>; Fri, 18 Aug 2023 08:15:51 GMT
+Message-ID: <20230818074501-0.1.4u.cunh.0.vt49719v4x@leachkin.pl>
+Date:   Fri, 18 Aug 2023 08:15:51 GMT
+From:   "Jakub Lemczak" <jakub.lemczak@leachkin.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: =?UTF-8?Q?Pytanie_o_samoch=C3=B3d?=
+X-Mailer: mail.leachkin.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Guenter,
+Dzie=C5=84 dobry,
 
-linux@roeck-us.net wrote on Thu, 17 Aug 2023 15:55:37 -0700:
+Czy interesuje Pa=C5=84stwa rozwi=C4=85zanie umo=C5=BCliwiaj=C4=85ce moni=
+torowanie samochod=C3=B3w firmowych oraz optymalizacj=C4=99 koszt=C3=B3w =
+ich utrzymania?=20
 
-> RZN1 only supports alarms up to one week in the future.
-> Report the limit to the RTC core and use the reported limit
-> to validate the requested alarm time when setting it.
->=20
-> Cc: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miqu=C3=A8l
+Pozdrawiam,
+Jakub Lemczak
