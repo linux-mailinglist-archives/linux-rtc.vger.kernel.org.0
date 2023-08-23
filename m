@@ -2,100 +2,98 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE237854E6
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Aug 2023 12:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DABA78551D
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Aug 2023 12:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjHWKID (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Aug 2023 06:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S232904AbjHWKOi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Aug 2023 06:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjHWKHo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Aug 2023 06:07:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCB146BF;
-        Wed, 23 Aug 2023 02:03:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCF2965957;
-        Wed, 23 Aug 2023 09:03:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ED780C433C7;
-        Wed, 23 Aug 2023 09:03:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692781412;
-        bh=cBA8LS1Y1PWRmdPmwFWha1Slu8mL5WLDumH/lb3Wq00=;
-        h=From:Subject:Date:To:Cc:Reply-To:From;
-        b=p7ERIvaGwsPAgIB7Ug9zMNgrNdzS2de6l6WnOo4Uc8hogma7QNcpFDbKvxfQeg9Hg
-         Xriz5lqt+MO8nbtsIDOkoXzTuGTO1mecOZCFQ+cZXfW6vwIoCVp4mEv7g0dXqAgNz0
-         yNZFR9JXpWYo2TE6y6NLsLV5X0gkAKhQm8FqfGObbu4H6bFtMZ9QMdh0fN5DEltv/s
-         olHRGlFG+NMEC1MGOCcmz04ftmcrFUBdUtvG/ZUc4prq/1VBbN6LYM6k+k3kYhMCUK
-         KqfDt1sSg4byhG/Zh2VJLmsVXGVlIXoSvU6xmULNZYQWUtCWHgmJ5YQbISG7xbtU3W
-         wcctWwvm7+L7w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id C5A0CEE49B2;
-        Wed, 23 Aug 2023 09:03:31 +0000 (UTC)
-From:   Nikita Shubin via B4 Relay 
-        <devnull+nikita.shubin.maquefel.me@kernel.org>
-Subject: [PATCH 0/2] device tree support for ST M48T86
-Date:   Wed, 23 Aug 2023 12:03:13 +0300
-Message-Id: <20230823-m48t86_device_tree-v1-0-240023b435ac@maquefel.me>
+        with ESMTP id S232884AbjHWKOe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Aug 2023 06:14:34 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DE3133
+        for <linux-rtc@vger.kernel.org>; Wed, 23 Aug 2023 03:14:26 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5230a22cfd1so6918705a12.1
+        for <linux-rtc@vger.kernel.org>; Wed, 23 Aug 2023 03:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692785665; x=1693390465;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mo5/7rcHcq3EQgUwAoIukeLa+fenPjchd8RqeRcwzh0=;
+        b=ihbNcP54FHcDcsNQrJFy0GzOhp3tX+EONzYnWeK6M6avTg1a2bKWR/FIon1jVynIFF
+         b/8wrIu7GYhe9zB5u9KsIRwrSfLxXB6H3jZ+j0GlDrRhkYg60dC3Tqsf86HgGHn3o575
+         lvOfUWlDqJssE01ir92sNmJlzB+sqgpw87Pe+8FlfeYJ3aRiQwXgTNU2R6NRZuOFTxQu
+         OkUdcDurENzHPaqYct0JDv5GDG6HHGTaHMfPdOc+HLtRMTDg2/Gu0eUxydxWgl1wp27b
+         6CQa8+Cw+wiKh5UCeyEMS6Xr5a1WwfCayQGIr1AxUzrJB18El8LCff29uONOyMSC39n2
+         j9VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692785665; x=1693390465;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mo5/7rcHcq3EQgUwAoIukeLa+fenPjchd8RqeRcwzh0=;
+        b=Oed8VQr3nqgMOMgIOaLudd5+hQq+lSuKxKzr+tg9/MLGwtxAdqtoED+X1nRfNw3Xop
+         7Oyy89lU/3+qx3yzqwZwOl2gJOfeFzGvGRriKYPDNHQYyVLXbDkQnNtnAbD5bXzrhpEN
+         f89tvqLO1n0vockqNdzaYSvmaOTtGbobM1IPzYV+3NykUv8fEPqeo/p69v+RbPAf62dA
+         d6r2TIx7KX3RHJfQKsQNaj7D7f68t/Ihx540c14A/G9kF8C+kphkDeAc16jzur4++zXF
+         cN5QdoIbdlyfjbODXhXKIZf5IWb97+jOF8MCA4pZwCr3C0A588WK0vwiHA/NQJ3uB7ig
+         eekQ==
+X-Gm-Message-State: AOJu0YyMJa/BfM3g/U29KLVHKBPraXBAh9Hvb4Y02K7zlqDv9iOdjXnI
+        MpOkTueR2mrHftjPbCbrFcrKQA==
+X-Google-Smtp-Source: AGHT+IFF2WpbdYLFr/XFlhvXm6Isl4hPxZl/sv6oNX9VHvKVNXhsnhVKAZJbBOlUpIWjtMKFpzn9lA==
+X-Received: by 2002:a17:906:74c8:b0:9a1:d29c:6aa9 with SMTP id z8-20020a17090674c800b009a1d29c6aa9mr1332297ejl.11.1692785665370;
+        Wed, 23 Aug 2023 03:14:25 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id sa4-20020a170906eda400b00992665694f7sm9585022ejb.107.2023.08.23.03.14.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Aug 2023 03:14:24 -0700 (PDT)
+Message-ID: <19f09a5e-c420-f209-ebef-cfa36ffa8467@linaro.org>
+Date:   Wed, 23 Aug 2023 12:14:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFHL5WQC/x2N0QqDMBAEf0XuuQEbRWN/pRQ547beg2m5C6Ug/
- nujj8PssBsZVGB0qzZSfMXknQpcLxXFhdMLTubC5Gvf1ME3bm1DDt04l23EmBVw3Hsw+6Hth0A
- lnNjgJuUUlyNd2TL0EB/FU37n2/2x73+1k/ArfQAAAA==
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 2/2] rtc: m48t86: add DT support for m48t86
+Content-Language: en-US
+To:     nikita.shubin@maquefel.me, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692781413; l=702;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=cBA8LS1Y1PWRmdPmwFWha1Slu8mL5WLDumH/lb3Wq00=; =?utf-8?q?b=3DLXAbPcv1J0we?=
- =?utf-8?q?kD7/fEVbVWnPffGhP0mOmiNjuWFhlj2AFOPjtkZNN/bX43+mISssLNFXFj0z4Ou7?=
- goLNQ4sQCyGjIKQFMnYzGxq5JuHMbCqGiM5FgElvV56j7TNIPedg
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received: by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: <nikita.shubin@maquefel.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230823-m48t86_device_tree-v1-0-240023b435ac@maquefel.me>
+ <20230823-m48t86_device_tree-v1-2-240023b435ac@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230823-m48t86_device_tree-v1-2-240023b435ac@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add device tree support for ST M48T86.
+On 23/08/2023 11:03, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+> 
+> Add OF ID match table.
+> 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-The reason it can't go to trivial-rtc.yaml, is that it has 2 registers
-instead of a single one. The registers are 1 byte wide.
+How did these appear? It's v1, so it is a bit confusing.
 
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
----
-Nikita Shubin (2):
-      dt-bindings: rtc: Add ST M48T86
-      rtc: m48t86: add DT support for m48t86
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 
- .../devicetree/bindings/rtc/st,m48t86.yaml         | 38 ++++++++++++++++++++++
- drivers/rtc/rtc-m48t86.c                           |  8 +++++
- 2 files changed, 46 insertions(+)
----
-base-commit: 89bf6209cad66214d3774dac86b6bbf2aec6a30d
-change-id: 20230823-m48t86_device_tree-a72eaa294798
+> 
 
 Best regards,
--- 
-Nikita Shubin <nikita.shubin@maquefel.me>
+Krzysztof
 
