@@ -2,111 +2,132 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65C6785549
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Aug 2023 12:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0714785DE1
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Aug 2023 18:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjHWKWC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Aug 2023 06:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S235690AbjHWQuv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Aug 2023 12:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjHWKWA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Aug 2023 06:22:00 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F600DF
-        for <linux-rtc@vger.kernel.org>; Wed, 23 Aug 2023 03:21:59 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-99c93638322so1114350566b.1
-        for <linux-rtc@vger.kernel.org>; Wed, 23 Aug 2023 03:21:59 -0700 (PDT)
+        with ESMTP id S234897AbjHWQuv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Aug 2023 12:50:51 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B184ECD5;
+        Wed, 23 Aug 2023 09:50:49 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1bdbbede5d4so46360305ad.2;
+        Wed, 23 Aug 2023 09:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692786117; x=1693390917;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cxd/f9pUe8tSEE35CH9p7Iwcb3H3wlv2n72/JZm5DmY=;
-        b=fhfCXRjF1eOLreLlvb8oxrNvDkJggjqJtbdAUtLifVJ4A/JJb126n//9lEO5dM3Qhj
-         8XsDVxuGPPOkF8JF8rzqm+vmjCLYsdmsjBavoTQtdo5JUlETw1AUp5SWfTWCRtomGfVw
-         TL39HS5JK7BYBZNVbaAwVaNbgxMFdV9hLz5OTj78DUYQmloM9KHMLAqfri9kp2+exXl3
-         /Kpjhg3Z79v8l/dZWrowRkxd4WPC6IZaOBU3tkF43NxJF8nL29xEx8UqsKGPchu0v4b6
-         LrY0i+DU4cK9g0PyGi0lRhzOq7XiYafobq4Yc7YHr9SjQQbceO0awX7if4rnOBrs10pd
-         le4Q==
+        d=gmail.com; s=20221208; t=1692809449; x=1693414249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D1rJRywRerSHpKN9caLA2gQ8y2MlCgXj2iqPjlxyJ44=;
+        b=ZbJqUYDB3GH7o2Dm2wwcpAzSQT4h22XkwlJbjDjyNNmOncay379skFsmRHmELyV4/R
+         IgvA/cow2ZAkGqAh8APe6+AMtAb++uacUJvIA93GQV4mOxDUWB9jdP0L72ojG5vy4Cz1
+         Wn8Awn3qs5GETBGRhRcqXZn2Bcd5g64xf1uf27MO3ib51XXDXEW+D0SFd0cuFzfBmD6F
+         hzCzycyvMwyLh91/WxMAGwZHNqvlKgsIA0iUTqsdsn6ZibQr/TSJHH8leGDrghxKdjni
+         nP8M180gNQeFRMpuDop737u0V8M2LfgRBGae3AZyJW3luesgnrnM7dCqjBoGFTZdTrcM
+         Jzog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692786117; x=1693390917;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cxd/f9pUe8tSEE35CH9p7Iwcb3H3wlv2n72/JZm5DmY=;
-        b=J22w2NI3Ug9xkFVjdDSqLYIKe9hFk95Gx55rFQuQljEesNQpQs7ZChB/dLe8l0b8l6
-         AStNd/oufDcy/rSpDzGWnEIkPuY/K89tl6Af0BNcR2F1iV607a5vpU+8BF51CyFlco4h
-         /uc+6ACI3gOnFgTe82ksJPCjYtHi3kgYdI6Cd1wtJS8VmMEHuLWB0nfKlFdAjtZZWSYr
-         ipnQvuCphiZ7eGt2hBZqgOP1HPL523Qvx1myQmcUrbURge1ZtZWSNmTDC03ON6Nvo3+0
-         9JCw/O8RZHW9FFxS0fIC4249nEvOwKZ4nJCGTSUoOGqPPN6CsFJ34P3efplIlXdM17w6
-         pk3w==
-X-Gm-Message-State: AOJu0Yy1FGBpRkLbgqWhBx+6aFLEVnctHv/10ZPOlvpPCWrmyf24gDIs
-        /laZThOzTZL6InSxrYPAGLW5xw==
-X-Google-Smtp-Source: AGHT+IEUxXO44chPAXFLzuTL41oAjmwX7yfAnA+DmU4UChPuHTMzIvsQpBWV7EeqPqAFCShxzLV+kQ==
-X-Received: by 2002:a17:907:7b8b:b0:9a1:d29c:fb6b with SMTP id ne11-20020a1709077b8b00b009a1d29cfb6bmr2248394ejc.25.1692786117621;
-        Wed, 23 Aug 2023 03:21:57 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id a22-20020a1709064a5600b009a1c4d04989sm1695052ejv.217.2023.08.23.03.21.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Aug 2023 03:21:57 -0700 (PDT)
-Message-ID: <86d91b27-1573-7a7c-40c1-f0bbe4f8df9f@linaro.org>
-Date:   Wed, 23 Aug 2023 12:21:56 +0200
+        d=1e100.net; s=20221208; t=1692809449; x=1693414249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D1rJRywRerSHpKN9caLA2gQ8y2MlCgXj2iqPjlxyJ44=;
+        b=GR5IAmB5ycEohXdmnfqBXzuAUztLdgWf+alHruX2cKQQ+EDamtXO1fKUfn49DfAslW
+         ZdruYxWWMl80GBtr98geLHsRTHeP8/NMavz+kE1+SPlhLB/pNsvlOd79Ev3J8willXHt
+         5VoJ57Dmc2AtC679C2wq/EciuBbEhSptgpLRBlNPpbnYTLXWkqYreD9sT296/0MBaJOd
+         9aR3Msynq1n9VKmfR+TRTEoZHE/FBAlun3Ck3VhcMLRk+0zXQ5B2+lao9FESAV14jmF6
+         Ro2YLnHzAffBhq7ElLHaNgCshPvQclIRYyaPItymDcP1f2J3o6jqh0Ei0Y6pUn2HeJxz
+         yeJw==
+X-Gm-Message-State: AOJu0Ywnq/fQzmJq80sRbNVHT8rtDSDpjEUlkZFWdP7+t7eT7MfPgUN8
+        oVMv/duVlOSN4yVOECYcwdau/yGY2zc=
+X-Google-Smtp-Source: AGHT+IGJ4zPUahe+I8pV4fKp97GwuTJ5+jKETKiilPbd2CcbtxsDMr1YLovxtT0fLpMFWDJ1Tyo4Og==
+X-Received: by 2002:a17:903:25d4:b0:1bd:bbc3:c87b with SMTP id jc20-20020a17090325d400b001bdbbc3c87bmr11857518plb.41.1692809449014;
+        Wed, 23 Aug 2023 09:50:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b001bbc8d65de0sm11221936plg.67.2023.08.23.09.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Aug 2023 09:50:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 23 Aug 2023 09:50:47 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH v2 1/7] rtc: Add support for limited alarm timer offsets
+Message-ID: <b07b19ce-7f04-409c-bcb9-6deba059f57a@roeck-us.net>
+References: <20230817225537.4053865-1-linux@roeck-us.net>
+ <20230817225537.4053865-2-linux@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 2/2] rtc: m48t86: add DT support for m48t86
-Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20230823-m48t86_device_tree-v1-0-240023b435ac@maquefel.me>
- <20230823-m48t86_device_tree-v1-2-240023b435ac@maquefel.me>
- <19f09a5e-c420-f209-ebef-cfa36ffa8467@linaro.org>
- <c39b9281fa599d523591b3a3b34db6a05362cdbf.camel@maquefel.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c39b9281fa599d523591b3a3b34db6a05362cdbf.camel@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817225537.4053865-2-linux@roeck-us.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 23/08/2023 12:20, Nikita Shubin wrote:
-> Hello Krzysztof!
-> 
-> On Wed, 2023-08-23 at 12:14 +0200, Krzysztof Kozlowski wrote:
->> On 23/08/2023 11:03, Nikita Shubin via B4 Relay wrote:
->>> From: Nikita Shubin <nikita.shubin@maquefel.me>
->>>
->>> Add OF ID match table.
->>>
->>> Acked-by: Arnd Bergmann <arnd@arndb.de>
->>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->>
->> How did these appear? It's v1, so it is a bit confusing.
-> 
-> Indeed this is from "ep93xx device tree conversion" series, you asked
-> to submit these part as a separate.
-> 
-> I don't know the rules for tags in such cases, sorry. It's discouraged
-> to use tags given elsewhere ?
+Hi Alexandre,
 
-Ah, no, it's okay, but this patchset should have some history (e.g.
-continuing versioning and changelog) or references to previous lore
-submission with explanation.
+On Thu, Aug 17, 2023 at 03:55:31PM -0700, Guenter Roeck wrote:
+> Some alarm timers are based on time offsets, not on absolute times.
+> In some situations, the amount of time that can be scheduled in the
+> future is limited. This may result in a refusal to suspend the system,
+> causing substantial battery drain.
+> 
+> Some RTC alarm drivers remedy the situation by setting the alarm time
+> to the maximum supported time if a request for an out-of-range timeout
+> is made. This is not really desirable since it may result in unexpected
+> early wakeups.
+> 
+> To reduce the impact of this problem, let RTC drivers report the maximum
+> supported alarm timer offset. The code setting alarm timers can then
+> decide if it wants to reject setting alarm timers to a larger value, if it
+> wants to implement recurring alarms until the actually requested alarm
+> time is met, or if it wants to accept the limited alarm time.
+> 
+> Only introduce the necessary variable into struct rtc_device.
+> Code to set and use the variable will follow with subsequent patches.
+> 
+> Cc: Brian Norris <briannorris@chromium.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Best regards,
-Krzysztof
+I guess it is a bit late to get the series into v6.6, but would it be
+possible to apply it to a -next branch to get some more test coverage ?
 
+Either case, do you have any additional comments / feedback ?
+
+Thanks,
+Guenter
+
+> ---
+> v2: Rename range_max_offset -> alarm_offset_max
+> 
+>  include/linux/rtc.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+> index 1fd9c6a21ebe..4c0bcbeb1f00 100644
+> --- a/include/linux/rtc.h
+> +++ b/include/linux/rtc.h
+> @@ -146,6 +146,7 @@ struct rtc_device {
+>  
+>  	time64_t range_min;
+>  	timeu64_t range_max;
+> +	timeu64_t alarm_offset_max;
+>  	time64_t start_secs;
+>  	time64_t offset_secs;
+>  	bool set_start_time;
