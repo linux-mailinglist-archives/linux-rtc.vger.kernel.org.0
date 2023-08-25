@@ -2,72 +2,65 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AB5787EC5
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Aug 2023 05:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBD9787F5D
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Aug 2023 07:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240369AbjHYDx2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 24 Aug 2023 23:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S237394AbjHYFjj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 25 Aug 2023 01:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240455AbjHYDxD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 24 Aug 2023 23:53:03 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333BD1BEC
-        for <linux-rtc@vger.kernel.org>; Thu, 24 Aug 2023 20:52:58 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fef2fafee2so56085e9.0
-        for <linux-rtc@vger.kernel.org>; Thu, 24 Aug 2023 20:52:58 -0700 (PDT)
+        with ESMTP id S240893AbjHYFj1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Aug 2023 01:39:27 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD3B1FF3;
+        Thu, 24 Aug 2023 22:39:21 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4ff8a1746e0so797607e87.0;
+        Thu, 24 Aug 2023 22:39:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692935576; x=1693540376; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1692941959; x=1693546759;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O8XCsd3dg9SHzVc93cSUW+7XULv1BqDUgoLvkdXt9LQ=;
-        b=4Op9SD+Qa88h0+8rpH6igQOn5AfJhrGga8ZKs/SpoL596LEZbZfqRfqh6bYNth8Wh1
-         jZ5x6Haw036dGURJVDqwZjPn3DivmvNiMwhy0ckJe9BpuZXz0dgnTf3mhlGMS+4zZD3y
-         R3aqY6i/7ml7j2hFhogBTt/YzuHDpT+FgOIejVQMiIWDqn5CEKBWP0eg5ESnoRucBblH
-         acz7Aucqor1+dJcNDfCMcugnHHZnYxd/8qKGzzZM/X2qrzJBLZ3qw7+eit0g53o77P51
-         Ws/YhRAzebYBh5jAhl9WNzK9IRFTXTiC9oKyHezTuf7YK9WRCqBUhOsuWJaqIPKCnFFG
-         VjXA==
+        bh=XxM4hun7J7j3+pA4h09bA4XVsK57JjdIEry9BgKjY3Q=;
+        b=czfc5ny0qfUkRN4qcHiJLAkogPE+hwYtJcgx7VIVnu9wpxNhcdBPdjqqnJuf0Q1UOM
+         oqEWLpPeHnJSdfy6dA4VBo1sHaRzu7ny3u1cyfyefRssEsB62r31K+PQ8qq1RzUUuIMj
+         iSmhx7DPK3pMH//YQKv6qBvA6Tftn+VHelEaIZ6yXXy4TWzO9C55zXVhehfxByDu3o+p
+         zesKgOyKD3FY06RAEXd0Dffpt8w9JhuDRyir0/Pxw7rpzTXQj9kOthzVprCGsitSgi41
+         YRbh4dw18+l/HKvkPFdcv5akBsXfLSGfEt2su4zrzDI2PHmJGjyDvI613NropKfuGC/V
+         6JlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692935576; x=1693540376;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1692941959; x=1693546759;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O8XCsd3dg9SHzVc93cSUW+7XULv1BqDUgoLvkdXt9LQ=;
-        b=VlMklXX27PI5g4/CgxU3MclY/wpV6NKX2CnvnXuz5kTMc+tPHOivKeqlIeRtWVBYIw
-         CIa3du7m43REuKlw0JJmocPYXZ3EzrmMg9/7j7VPMycnY9Vqs8VluM0zRVIoJ9kNw8ud
-         61pOveacsPQIS2zv0sYyNVyZg04pAjMUVyQdSSot8QoZqg8x83zRcVl13v7JzywopdTX
-         w4KsqQZUhoDuzqE+d6VfIwznsujX90ydnS/vL+qxsbT2w5ZJ5Vnb+weJnDpMMDoqnuPK
-         U1vJTU5VSDoQjiWVxrjdtMBim+P+SJQeZaNDmFc5pvrndDuS7PTXZzJwhLedicDE3Fki
-         CQ3g==
-X-Gm-Message-State: AOJu0YxkQ56EmMiy0CkGmpSeBG0pM/384igoKZv2j9oOKCfzpCtp/HDP
-        QZx8M7+HloBFcnh2kKWVS5F2/xee/UmO2uFUO5Hu
-X-Google-Smtp-Source: AGHT+IFw4sr21T6acK/w27R+QgtzDfutLP2a6XR4YfzAYQTBljP59BOnmQFhetUgIA/0GOCIu7mErNkY68JnCalCw7E=
-X-Received: by 2002:a05:600c:600b:b0:3f6:f4b:d4a6 with SMTP id
- az11-20020a05600c600b00b003f60f4bd4a6mr79754wmb.7.1692935576567; Thu, 24 Aug
- 2023 20:52:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230817225537.4053865-1-linux@roeck-us.net> <20230817225537.4053865-3-linux@roeck-us.net>
-In-Reply-To: <20230817225537.4053865-3-linux@roeck-us.net>
-From:   John Stultz <jstultz@google.com>
-Date:   Thu, 24 Aug 2023 20:52:44 -0700
-Message-ID: <CANDhNCqd5VdwGaqHdeFK=Sui+fX_s7SxXnto9jdF_+0c-cuYSw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] rtc: alarmtimer: Use maximum alarm time offset
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        bh=XxM4hun7J7j3+pA4h09bA4XVsK57JjdIEry9BgKjY3Q=;
+        b=dw6P/YhKCBD9c3qCP9CSOVGYEEF/7xLPKaaIekBqDqg68HkiyarL5+8pnrPeW9J7DY
+         8qnNvRq1IkpN0GXyfIEiPqSbyS9iyuKJSF/rSMOqKORzJa889AAToK6tPGblMg+/X4ib
+         DCseWxkIofyVX/r17whY+HWV8kuxodhWWLMdnIx1InRw407lGlZ0cbxrkzTvS+WAumli
+         zaa4a23fxwzpVEmaWQsZYZd7tFfIqJetw1egalHKkJ0Zs0UaJhVuqTZKumAyZiVrB0W+
+         wHK9wjMY0HKdZXJdA3YFuqq+c+OLjuUCy6mGJ6oladNM9yhpxXPub7nuwFnFloR6QYjE
+         DySw==
+X-Gm-Message-State: AOJu0Yy0lprl/yZbrREWSVpjaSFFIK/anLqPqjALfj0PNXZBHITbtSlv
+        mz9M9ORY6Xahrc7NyslMag0=
+X-Google-Smtp-Source: AGHT+IGs7LI6eP5/RZSHTVEf9VXin5JHG9+q/5+tAOHoHiyBvuWVgn7WeG0XLuPmJgMT6OFGHiSdhA==
+X-Received: by 2002:a19:8c0f:0:b0:500:7685:839 with SMTP id o15-20020a198c0f000000b0050076850839mr10472065lfd.65.1692941958921;
+        Thu, 24 Aug 2023 22:39:18 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:98c5:e120:ff1e:7709])
+        by smtp.gmail.com with ESMTPSA id m22-20020aa7d356000000b0052338f5b2a4sm598540edr.86.2023.08.24.22.39.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Aug 2023 22:39:17 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: remove obsolete pattern in RTC SUBSYSTEM section
+Date:   Fri, 25 Aug 2023 07:39:10 +0200
+Message-Id: <20230825053910.17941-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,78 +68,35 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 3:55=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> Some userspace applications use timerfd_create() to request wakeups after
-> a long period of time. For example, a backup application may request a
-> wakeup once per week. This is perfectly fine as long as the system does
-> not try to suspend. However, if the system tries to suspend and the
-> system's RTC does not support the required alarm timeout, the suspend
-> operation will fail with an error such as
->
-> rtc_cmos 00:01: Alarms can be up to one day in the future
-> PM: dpm_run_callback(): platform_pm_suspend+0x0/0x4a returns -22
-> alarmtimer alarmtimer.4.auto: platform_pm_suspend+0x0/0x4a returned -22 a=
-fter 117 usecs
-> PM: Device alarmtimer.4.auto failed to suspend: error -22
->
-> This results in a refusal to suspend the system, causing substantial
-> battery drain on affected systems.
->
-> To fix the problem, use the maximum alarm time offset as reported by rtc
-> drivers to set the maximum alarm time. While this will result in brief
-> spurious wakeups from suspend, it is still much better than not suspendin=
-g
-> at all.
->
-> Cc: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v2: Rename range_max_offset -> alarm_offset_max
->
->  kernel/time/alarmtimer.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->
-> diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
-> index 8d9f13d847f0..895e3a6d6444 100644
-> --- a/kernel/time/alarmtimer.c
-> +++ b/kernel/time/alarmtimer.c
-> @@ -290,6 +290,19 @@ static int alarmtimer_suspend(struct device *dev)
->         rtc_timer_cancel(rtc, &rtctimer);
->         rtc_read_time(rtc, &tm);
->         now =3D rtc_tm_to_ktime(tm);
-> +
-> +       /*
-> +        * If the RTC alarm timer only supports a limited time offset, se=
-t
-> +        * the alarm time to the maximum supported value.
-> +        * The system will wake up earlier than necessary and is expected
-> +        * to go back to sleep if it has nothing to do.
-> +        * It would be desirable to handle such early wakeups without ful=
-ly
-> +        * waking up the system, but it is unknown if this is even possib=
-le.
-> +        */
-> +       if (rtc->alarm_offset_max &&
-> +           rtc->alarm_offset_max * MSEC_PER_SEC < ktime_to_ms(min))
-> +               min =3D ms_to_ktime(rtc->alarm_offset_max * MSEC_PER_SEC)=
-;
+Commit d890cfc25fe9 ("rtc: ds2404: Convert to GPIO descriptors") removes
+the rtc-ds2404.h platform data and with that, there is no file remaining
+matching the pattern 'include/linux/platform_data/rtc-*'. Hence,
+./scripts/get_maintainer.pl --self-test=patterns complains about a broken
+reference.
 
-I don't really have an objection here, but I wonder if this would be
-better abstracted by a rtc_ function?
+Remove the obsolete file pattern in the REAL TIME CLOCK (RTC) SUBSYSTEM.
 
-ktime_t rtc_bound_ktime_interval(ktime interval)
-{
-  if (!rtc->alarm_offset_max)
-      return interval;
-  return ms_to_ktime(min(rtc->alarm_offset_max, ktime_to_ms(interval)));
-}
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Linus, please ack.
 
-(simple enough to throw into rtc.h maybe as an inline function?)
+Alexandre, please pick this into your rtc tree.
 
-Then the above would be tweaked to:
-min =3D rtc_bound_interval(min);
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-thanks
--john
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 250c43c675cb..52277ee9c1b8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18089,7 +18089,6 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
+ F:	Documentation/admin-guide/rtc.rst
+ F:	Documentation/devicetree/bindings/rtc/
+ F:	drivers/rtc/
+-F:	include/linux/platform_data/rtc-*
+ F:	include/linux/rtc.h
+ F:	include/linux/rtc/
+ F:	include/uapi/linux/rtc.h
+-- 
+2.17.1
+
