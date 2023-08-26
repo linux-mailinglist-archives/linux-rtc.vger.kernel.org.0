@@ -2,73 +2,79 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2088778828A
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Aug 2023 10:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49556789637
+	for <lists+linux-rtc@lfdr.de>; Sat, 26 Aug 2023 13:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243862AbjHYIov (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Aug 2023 04:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S232533AbjHZLQA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 26 Aug 2023 07:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243965AbjHYIo2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Aug 2023 04:44:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3576426BC;
-        Fri, 25 Aug 2023 01:43:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5AF267535;
-        Fri, 25 Aug 2023 08:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 37FCCC433C9;
-        Fri, 25 Aug 2023 08:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692953024;
-        bh=X/MOk5kpPYjr9ggDQSqDheWAQJ8w+TztTS+czaBk9c4=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=qvgMc/lD8it1d00ARwunt2wDI4+CWYYnBeQSmFUvcjctozV+uMo8yHYIdTW5yufVl
-         UD7R+5cD0tut8wpKnsoF7INe/rwY2PCpI139nwFRsmJx1AS2TiegbOhbdNmEORGEMM
-         LfGBQwONZ8130HVs2nI8ke35gi4UsYFLSZ+ObQDoxWdihK02c/IG3dI3/7HBEPQtNl
-         jKUppMiox/KXZXXzfS9vo8jeNslkIy3qYL2n58qEYHlCNrfF0hjtD40Tv3fOJwb+Pw
-         APHyszGzY9HfWd7wXqycTk05Gbxhan7q/tD7ejhvRFkQHPAJuMdYiajAkE+vqzmfwF
-         Hk137NyC7VARw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 1EFE4C71133;
-        Fri, 25 Aug 2023 08:43:44 +0000 (UTC)
-From:   Nikita Shubin via B4 Relay 
-        <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date:   Fri, 25 Aug 2023 11:43:26 +0300
-Subject: [PATCH v2 2/2] rtc: m48t86: add DT support for m48t86
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230823-m48t86_device_tree-v2-2-21ff275f949d@maquefel.me>
-References: <20230823-m48t86_device_tree-v2-0-21ff275f949d@maquefel.me>
-In-Reply-To: <20230823-m48t86_device_tree-v2-0-21ff275f949d@maquefel.me>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        with ESMTP id S232362AbjHZLPe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 26 Aug 2023 07:15:34 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC83E1987;
+        Sat, 26 Aug 2023 04:15:28 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1c4d8eaa8ebso1244728fac.0;
+        Sat, 26 Aug 2023 04:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693048528; x=1693653328;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ChGvzopdI6D06ur+9n254we/TUNLfKzd+bLG66SVQsY=;
+        b=pZ+36/GEW/YZXKGLV5MtTdWTEo5jsA37k4tIZILufMzfM4Sg+bATUrvZCXqNT+mg0k
+         qyfJS/CGrHcbApQQNpSooa2TVhlqJhjNK3o8BsAf/DFcS1kl1Mg99LzNHvWnuytQ+TWP
+         /j711VCImvmFnWadCijWFoIALjSJSLmgZRrQLi+pJOEhvXoSfI6h9lpoStUyh04x4im4
+         /PjzWSvC6CMU6rMlqJ1aybr/UT+cCRtAPnIHjuP2Oy25z7zkBHctIKvPC8H3J0d9heYL
+         dUEtsTObuyUP0EQ9iCI0YgKdvbjKTuYdU0hVM+dm7NMp6OOf+p4qG90gF2CN0ccHm9JB
+         DDnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693048528; x=1693653328;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ChGvzopdI6D06ur+9n254we/TUNLfKzd+bLG66SVQsY=;
+        b=gNLWdMp8UIin0qO5cQ3Btb5X7lzRpJQIfZgIcXew4o0Sfu8fZyZXTzhZFMSKGU9cJi
+         y+ovQcJs5AksKHlRYWYnIEiFnexnxIYPsX9EOjEUwyjAc6RtSlFNJQcj9BzQp8/G12I6
+         0uOassaqDqE64tydH+0IxXaVXmFioCgrRED+1o5S8++BIjZ9CxZn1JR4tNmJDPIp5Zk0
+         HSKAnTLmgbv83/zNlWNALgJ7LgkqjfRWRnQrgdQwO0Tb/rtav+cdSEgsN2e+w3NylELS
+         gIv97lLcxWoqdqoNpRwXjoKgAnFRUhn+CrCPxotVGQrPfoMPctc65s1kkOclb1Rm5/Vb
+         ce8Q==
+X-Gm-Message-State: AOJu0Yy9fkjoLbvy4hWx0ChcxkQnZlsWZyf0yoS4UYxfJz+EJ6NESVZZ
+        wvPVCHR7HtNrrMaxVOsJSEY=
+X-Google-Smtp-Source: AGHT+IFsOotk4PhiP42PeuoLCCGf3KThYtlafXR2DSNSG/p9XSWC62Pg/AlWk22+NLlI97jHO5le/g==
+X-Received: by 2002:a05:6870:2182:b0:1bf:94d6:6f8d with SMTP id l2-20020a056870218200b001bf94d66f8dmr6454213oae.31.1693048527897;
+        Sat, 26 Aug 2023 04:15:27 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j22-20020a62b616000000b006889664aa6csm3069484pff.5.2023.08.26.04.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Aug 2023 04:15:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 26 Aug 2023 04:15:25 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     John Stultz <jstultz@google.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692953023; l=1171;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=nNUJapNSivCRonCxS+mxGAyZP1Hfr/cFgMFRykuTeBc=; =?utf-8?q?b=3Dt8EdvTM3pBf/?=
- =?utf-8?q?eWnAA9hjBP05Hqrk+CPRL0vgdXsuo78XhZ19AlHRuzDRrVAvMRCr+GwDExzEXXr0?=
- /IoFvxGMD9jklEZy3uITWLE1Z0wa5EaB7TJTXKj9M+NwrIZkhrQ3
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received: by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: <nikita.shubin@maquefel.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH v2 2/7] rtc: alarmtimer: Use maximum alarm time offset
+Message-ID: <38213512-c8b5-477d-945c-bbdfb56266b8@roeck-us.net>
+References: <20230817225537.4053865-1-linux@roeck-us.net>
+ <20230817225537.4053865-3-linux@roeck-us.net>
+ <CANDhNCqd5VdwGaqHdeFK=Sui+fX_s7SxXnto9jdF_+0c-cuYSw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANDhNCqd5VdwGaqHdeFK=Sui+fX_s7SxXnto9jdF_+0c-cuYSw@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,48 +82,90 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+On Thu, Aug 24, 2023 at 08:52:44PM -0700, John Stultz wrote:
+> On Thu, Aug 17, 2023 at 3:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > Some userspace applications use timerfd_create() to request wakeups after
+> > a long period of time. For example, a backup application may request a
+> > wakeup once per week. This is perfectly fine as long as the system does
+> > not try to suspend. However, if the system tries to suspend and the
+> > system's RTC does not support the required alarm timeout, the suspend
+> > operation will fail with an error such as
+> >
+> > rtc_cmos 00:01: Alarms can be up to one day in the future
+> > PM: dpm_run_callback(): platform_pm_suspend+0x0/0x4a returns -22
+> > alarmtimer alarmtimer.4.auto: platform_pm_suspend+0x0/0x4a returned -22 after 117 usecs
+> > PM: Device alarmtimer.4.auto failed to suspend: error -22
+> >
+> > This results in a refusal to suspend the system, causing substantial
+> > battery drain on affected systems.
+> >
+> > To fix the problem, use the maximum alarm time offset as reported by rtc
+> > drivers to set the maximum alarm time. While this will result in brief
+> > spurious wakeups from suspend, it is still much better than not suspending
+> > at all.
+> >
+> > Cc: Brian Norris <briannorris@chromium.org>
+> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > ---
+> > v2: Rename range_max_offset -> alarm_offset_max
+> >
+> >  kernel/time/alarmtimer.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> >
+> > diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+> > index 8d9f13d847f0..895e3a6d6444 100644
+> > --- a/kernel/time/alarmtimer.c
+> > +++ b/kernel/time/alarmtimer.c
+> > @@ -290,6 +290,19 @@ static int alarmtimer_suspend(struct device *dev)
+> >         rtc_timer_cancel(rtc, &rtctimer);
+> >         rtc_read_time(rtc, &tm);
+> >         now = rtc_tm_to_ktime(tm);
+> > +
+> > +       /*
+> > +        * If the RTC alarm timer only supports a limited time offset, set
+> > +        * the alarm time to the maximum supported value.
+> > +        * The system will wake up earlier than necessary and is expected
+> > +        * to go back to sleep if it has nothing to do.
 
-Add OF ID match table.
+Side note, since someone asked: The behavior is exactly what we see today
+if a rtc driver silently truncates the requested alarm time. The system
+is _expected_ to to back to sleep, but what it does depends on its actual
+configuration. For example, if suspend was requested manually and
+auto-suspend is disabled, it may well be that the system stays up after
+the initial timeout. Again, that is exactly the same behavior that
+is observed today, but with this patch the system doesn't fail the
+initial suspend request because the requested timeout is not supported
+by the rtc driver.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/lkml/20230601054549.10843-12-nikita.shubin@maquefel.me/
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
----
- drivers/rtc/rtc-m48t86.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Not sure if I should add some text along that line above for clarification.
+If so please let me know.
 
-diff --git a/drivers/rtc/rtc-m48t86.c b/drivers/rtc/rtc-m48t86.c
-index 481c9525b1dd..dd4a62e2d39c 100644
---- a/drivers/rtc/rtc-m48t86.c
-+++ b/drivers/rtc/rtc-m48t86.c
-@@ -11,6 +11,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/rtc.h>
- #include <linux/platform_device.h>
- #include <linux/bcd.h>
-@@ -269,9 +270,16 @@ static int m48t86_rtc_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct of_device_id m48t86_rtc_of_ids[] = {
-+	{ .compatible = "st,m48t86" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, m48t86_rtc_of_ids);
-+
- static struct platform_driver m48t86_rtc_platform_driver = {
- 	.driver		= {
- 		.name	= "rtc-m48t86",
-+		.of_match_table = m48t86_rtc_of_ids,
- 	},
- 	.probe		= m48t86_rtc_probe,
- };
+> > +        * It would be desirable to handle such early wakeups without fully
+> > +        * waking up the system, but it is unknown if this is even possible.
+> > +        */
+> > +       if (rtc->alarm_offset_max &&
+> > +           rtc->alarm_offset_max * MSEC_PER_SEC < ktime_to_ms(min))
+> > +               min = ms_to_ktime(rtc->alarm_offset_max * MSEC_PER_SEC);
+> 
+> I don't really have an objection here, but I wonder if this would be
+> better abstracted by a rtc_ function?
+> 
+> ktime_t rtc_bound_ktime_interval(ktime interval)
+> {
+>   if (!rtc->alarm_offset_max)
+>       return interval;
+>   return ms_to_ktime(min(rtc->alarm_offset_max, ktime_to_ms(interval)));
+> }
+> 
+> (simple enough to throw into rtc.h maybe as an inline function?)
+> 
+> Then the above would be tweaked to:
+> min = rtc_bound_interval(min);
+> 
 
--- 
-2.39.2
+How should I proceed ? Would sending two patches on top of patch 1
+to introduce the API and use it be ok ?
 
+Thanks,
+Guenter
