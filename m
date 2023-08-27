@@ -2,82 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8059F78A208
-	for <lists+linux-rtc@lfdr.de>; Sun, 27 Aug 2023 23:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDC578A212
+	for <lists+linux-rtc@lfdr.de>; Sun, 27 Aug 2023 23:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjH0Vq6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 27 Aug 2023 17:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
+        id S230304AbjH0Vtk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 27 Aug 2023 17:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjH0Vq5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 27 Aug 2023 17:46:57 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95D4119;
-        Sun, 27 Aug 2023 14:46:53 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 03591FF803;
-        Sun, 27 Aug 2023 21:46:51 +0000 (UTC)
+        with ESMTP id S230391AbjH0VtW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 27 Aug 2023 17:49:22 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDA4119;
+        Sun, 27 Aug 2023 14:49:19 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D439620003;
+        Sun, 27 Aug 2023 21:49:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1693172812;
+        t=1693172958;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3G8F82twzUxubTRe+spHQSEIY4WH7jzwONQD/yOtQ4I=;
-        b=Di4DsPP2+xRpcZEewdo6boJUQaQATSzHQWv3R+99f6H5IzkJ9C4xRwVmA7QQV4oII/jPWU
-        k1s82kHhVKU3E3NjPj5WZBEtFYs3yK6JiRijvZ+iJe2ZVAX8RhDVEqg/TTE8LNZKAi9mrr
-        EgVqOzEQhm0Y/dP5CdYYg3qzl+JO+AudvnG0FkNnpcNKrSc209Kmjr3yJD1p5BHbp0NVKD
-        WgRIIpYcRPxVz3Mx4RU8Yh/HZib3WaKS/3qxrcbhYJpnzXCPgoRgkugTWJn8ybp7vB1Gxd
-        Qi0PyQfIRYMib10Mr1X/YpGslW32cV9aAniT0MSO076pmQIVIOJe7pdgeXKidw==
-From:   alexandre.belloni@bootlin.com
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OZ157bRkPMqVfr+UZyuD+3fvs2HEAUxcsqT9/I9L4vw=;
+        b=bIriiFklnSklu5OM8LQEhX9St5AF7Q/7DlvVAXmAhcumMsNmrNz76S8fW7tEaAn0AOBpdj
+        ivlCh668ixI2xdvkym2N/3Ge5Eq3cYrJSdgIOz3zqqH/j5w54sZx5aSiTitFzKwizk+erq
+        Dn2zIJ2/W3B7YF74zNqiU2iqgRgYROSfu0UoeVAh/SCmkBmerMuOif43hAs6zrC6Ntg0f+
+        3uUr1JQZbhWOGGaJPIxqFtPULOg31sK8jzmjiWsjIHOXRzT6CPg47KTtvguYwtwrZ27V6x
+        iEWC1zdhJaN1WBgK+kIjoKWSx4y0vLtFgORhg2JIhZE65sma/OZSA2TSAhQJYg==
+Date:   Sun, 27 Aug 2023 23:49:16 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] rtc: pcf2127: remove useless check
-Date:   Sun, 27 Aug 2023 23:46:49 +0200
-Message-ID: <20230827214649.537095-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.41.0
+        Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     linux-rtc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Pavel Machek <pavel@denx.de>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] rtc: isl1208: Fix incorrect logic in isl1208_set_xtoscb()
+Message-ID: <169317294155.537637.12191933080803526406.b4-ty@bootlin.com>
+References: <20230817161038.407960-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817161038.407960-1-biju.das.jz@bp.renesas.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-This check is only useful when introducing support for a new RTC in the
-driver. Cut down the number of strings in th driver.
+On Thu, 17 Aug 2023 17:10:38 +0100, Biju Das wrote:
+> The XTOSCB bit is not bit 0, but xtosb_val is either 0 or 1. If it is 1,
+> test will never succeed. Fix this issue by using double negation.
+> 
+> While at it, remove unnecessary blank line from probe().
+> 
+> 
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-pcf2127.c | 9 ---------
- 1 file changed, 9 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index de8164e1b562..9c04c4e1a49c 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -1054,15 +1054,6 @@ static int pcf2127_enable_ts(struct device *dev, int ts_id)
- 		return ret;
- 	}
- 
--	/* TS input pin driven to GND detection is supported by all variants.
--	 * Make sure that interrupt bit is defined.
--	 */
--	if (pcf2127->cfg->ts[ts_id].gnd_detect_bit == 0) {
--		dev_err(dev, "%s: tamper detection to GND configuration invalid\n",
--			__func__);
--		return -EINVAL;
--	}
--
- 	/*
- 	 * Enable interrupt generation when TSF timestamp flag is set.
- 	 * Interrupt signals are open-drain outputs and can be left floating if
+[1/1] rtc: isl1208: Fix incorrect logic in isl1208_set_xtoscb()
+      commit: f45d32d2cd183c09b6c9aa8689a91d6f2760b557
+
+Best regards,
+
 -- 
-2.41.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
