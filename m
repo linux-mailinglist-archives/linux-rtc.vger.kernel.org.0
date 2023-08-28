@@ -2,76 +2,148 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B414078AE7F
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Aug 2023 13:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3996378AE89
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Aug 2023 13:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbjH1LKs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 28 Aug 2023 07:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S231366AbjH1LOA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 28 Aug 2023 07:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbjH1LKo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 28 Aug 2023 07:10:44 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72A30E3;
-        Mon, 28 Aug 2023 04:10:40 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.02,207,1688396400"; 
-   d="scan'208";a="177919416"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 28 Aug 2023 20:10:39 +0900
-Received: from localhost.localdomain (unknown [10.226.92.234])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3B5EF4005E25;
-        Mon, 28 Aug 2023 20:10:36 +0900 (JST)
+        with ESMTP id S232435AbjH1LNj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 28 Aug 2023 07:13:39 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2118.outbound.protection.outlook.com [40.107.114.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068B0E3;
+        Mon, 28 Aug 2023 04:13:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rm70qd9BPrGNyqU6JTjRfHtARZPuLEKZ2BheahxxmApD9fxBdKyLoFemT9XH77NZFW2GxqQE2pb493graD8ubDLncB0NcmDepsQ6rpTUKIeKxJI/WhUT+p2zl8/6N+h+5UaVCqCUidTAcqhDD/jeS4bsfI4UuHvzwMxXv4Malll2TFZwdP+glmNmdO4jUg3XaiQvvQHQqTJpgwwIzFeOmWeStKGwpmm93ZrjMjdTCEdhJxB/01TZvE4a5WrnvV7hWVKGn0PYxfPGgwTlnrixDpMYv/7k8zCMbkdecMeUgtwFBIw2hJvLm1vxhJMYLVmzR/EHO9Y5AR6ygNLQWUMoMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EwcV0ku5OXmwZgTxSm4u4WREuDtczeLqt8plf2CXuJI=;
+ b=M3iNIoRgHqLGls69ZMD527l/hB6v9gQDnYrJjwK6x3SUWdmVnVqqWQ6XiX+8zi7HzDmpPphaIjoiPuBu/j8IzXbfkQA9p4OLIq33LlVOze0SHURzOUrk7cKegML2pq6d30//iNEtGvR0On5JzL864Hua+RRGoVlrAuM7+mlBEAWpnJaMCt9/FO1uXM9CPyWpFueitIXXejVMclny7+3cu31qgPywjfUnRdPHAjyrLp98v5J7WlBXrDltuAQBpFrIxdAlgHooQSjIlqrLRWv73WDSpRYNHUL9zZXRZbAJm+C9GUSIFBSoYmUBeK6aMMyMgim057qu5tuc4IjQQRaLIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EwcV0ku5OXmwZgTxSm4u4WREuDtczeLqt8plf2CXuJI=;
+ b=FgNsYB8UbzgjkLsnvavOjCCCZhv5NHpxxhW3D48xUsbsxNDPjw/tGjr72CbgZuHEwQGeQu7ZQcIhYSIle+HxvRE5DWQuDCGrmMn8bpOUCF/0pZU0AbJuMGYnGugXmjlLUfmu1u1Bv2xkTSo93m29l6gO+w6xOEMHJbMCfIQdD8A=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYWPR01MB10307.jpnprd01.prod.outlook.com (2603:1096:400:1d5::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.34; Mon, 28 Aug
+ 2023 11:13:30 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::9d23:32f5:9325:3706]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::9d23:32f5:9325:3706%4]) with mapi id 15.20.6699.034; Mon, 28 Aug 2023
+ 11:13:30 +0000
 From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-rtc@vger.kernel.org,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH] rtc: rs5c372: Simplify probe()
-Date:   Mon, 28 Aug 2023 12:10:34 +0100
-Message-Id: <20230828111034.52764-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH] rtc: m41t80: Simplify probe()
+Thread-Topic: [PATCH] rtc: m41t80: Simplify probe()
+Thread-Index: AQHZ2ZHmE9T7P3cQc0GDELPti9Wgha//jVaAgAAAR9A=
+Date:   Mon, 28 Aug 2023 11:13:29 +0000
+Message-ID: <OS0PR01MB592250E1368B54DEC421837A86E0A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230828092737.30816-1-biju.das.jz@bp.renesas.com>
+ <ZOyAn9xnqlai42bF@smile.fi.intel.com>
+In-Reply-To: <ZOyAn9xnqlai42bF@smile.fi.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB10307:EE_
+x-ms-office365-filtering-correlation-id: c4e93b27-b673-451e-acc2-08dba7b7cf29
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HKWlfpxwoQVTYie+DZhqf2T9WHhgCdlBs/TESx873HuQPoQkco2sBETL1L7xO3uv5wSM5PTUSleYJXl1wTGDLnl+ryR0LQbhz84JTjOVrc8ANEC2JPliuASdWqaPc4qWsJ/FPKXUIZnKcDQBpbyO7cMn7bnjDnVy52sFcH3wiKDpnEyQRgw6g/iaQ62UxX4olTPOE8MzjNufP6oQN6OJ9VzWHa0UNXQLheN8kYDpszepXrTP3E5duiE+8ummi2Ho7M+H8v5vScHsykVkStSuSirADLNDjnGBbtnO2URtxrmcikLDTEdtcndk0gjJzbbOr/Q/kUrbCdORtMHzuz+CcXgpFsic8aVyXroRmwzYf2LWkLJq6yKh5MvdujUdO0wb0lkjtO0L+YOBQipA2RlJ1xHUzcPO2NWTGYo8U+5umuAjgM3Ate/V2nqYm3Qnw7VqPoCquB5pmBuGSnQEC31Wyj8NagEYYTJIFnpZzm+5X0yi9jINmMc2cjeUiAbwd/uHcpZGobFQILTn7j1PNnbATy4wukySXvtv7kFP6Bh6BqI5iZ1q9sD1k0FecyQXW44TZeqGjLLXj9oSuWeUUwCE71iEPQbiYUyoJB/CXDlczVnWQode47qKgVVokIZwr+Dk
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(346002)(39860400002)(376002)(396003)(186009)(1800799009)(451199024)(71200400001)(55016003)(6506007)(7696005)(86362001)(33656002)(26005)(9686003)(38070700005)(316002)(6916009)(5660300002)(76116006)(66946007)(66556008)(38100700002)(54906003)(64756008)(66446008)(66476007)(52536014)(41300700001)(2906002)(122000001)(478600001)(8676002)(8936002)(4744005)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?beoDSe+k1sfSdnR1DkPjKID08u5OJtmJpT16sayI6nVg1U0YcW4FO7N5UJES?=
+ =?us-ascii?Q?aaSTUSUhnToXE4DHC0A0Su0JE7wLSUAPPTRkLsVdUp+2D9lCZEpaMo3DW0jL?=
+ =?us-ascii?Q?gSOfzSAyWQonciRzD9CCTGYfhBY8UHSmgRxbqIPQL7pVJ0f/HBJxlIhOJgzV?=
+ =?us-ascii?Q?X7grI4yQ46n32hrR72XlWpzFoh+cRdY9ESyLNUzX0+ublTDxw2EsoCMXo++N?=
+ =?us-ascii?Q?mVLv3J04KLqgLtM1rXzBoW+jW+PI67IOwJYGTmeeoqAcZTcUOeNiw/3H4Gf7?=
+ =?us-ascii?Q?TZlSrkARbogUnUDDDv4ObeFDV24R8bK71A4IgLEmuEDLgfo3x495aWEdzsYx?=
+ =?us-ascii?Q?/kojMbN6IJUg/wKt7dqtXis8Gd+57U5OiOoWeCQxRNmMHOiz6mvTcq1e/UUn?=
+ =?us-ascii?Q?qtV5WfHZe+EZlR8HV3O5PSkIEuSbM+k7cB8vo9n3zd5vAq2CdUxLaY0H/iXs?=
+ =?us-ascii?Q?UNsDOXrWfEkWXIFNn5jMVJG400XkkhkijkmQ2vwwW86G9i6snEc138NQlemU?=
+ =?us-ascii?Q?83ktuBcm/KR56CiMV7IN+Mgi3X02wsQdHrN9ayVbotZ6f/sMjpCp8MaH/g4p?=
+ =?us-ascii?Q?pHSEqInA43dfAWqDsDSop13q5d8EyLPMyGiYzdwIBvzDi/3d/yL1DxGFyzID?=
+ =?us-ascii?Q?r2Ji0UPKnIQ61RGtAHplW0lbR+8B/D3BKkWCBPJdDZgUPaOwcY8gj5SK6vsq?=
+ =?us-ascii?Q?IKy1onHmuPdiirSfIV6p3wlDZBIxvz/l0fjQMU7D+/tg1jyweYM5Yb3mJ32y?=
+ =?us-ascii?Q?SvpCk/tpMlTkPjnGt4+JfhL0Ir/QDQYiCinUwsF+36uKC3xElv2C0JATowrw?=
+ =?us-ascii?Q?xYp134etWmAVaURyZySdzdwmoSF8YtnZUnxjHEl2gHM26X5AG8z2OMI/PFBB?=
+ =?us-ascii?Q?4jfnphilDCwWFi4EzSiLo9ZlwYw3Fd+akPlYmn3mcRioHF2LmgRTXIJI/Xmq?=
+ =?us-ascii?Q?6Hls6MGbyP5kg6cLjhWOs7LGJ05Aja3/zhfNyq9kO7nH3koVDcA1YF8brAmz?=
+ =?us-ascii?Q?eIgqKgAu58pVT5QqKVqcf/luNz9guCgrrHg8lxPgXeAotUJW5ajc3DhnVDG0?=
+ =?us-ascii?Q?mpLKXNSjPsypxJjQcFZYlzqWSOd1wkehRdEXeOT4wm750LrF0HQYwls1uGdR?=
+ =?us-ascii?Q?PKJOinmFZZ/ir+KnV2JRo/Lb6armGd6U6yBwc+nDk1y7nEclEmcT3AKW7aRk?=
+ =?us-ascii?Q?DqM//Aiv/iPI8vne334oi6g/ZUBkHDT/swIuMYXjcpb/ApUHQfczMB+1ZH0s?=
+ =?us-ascii?Q?BpTLAtY/HxkZ+JK8W25+Ris8IMZQraCarjvvXhbid6tFM7HeNqnQqcf3gVUi?=
+ =?us-ascii?Q?VMVerEv4GIlrcRCEiYWASJeE4lR1NgKEOApwjh8XxF1H/UL5JQKN5BrNGBzH?=
+ =?us-ascii?Q?L/u0M3AaflxZ1ESpwL/rsPPl2UnBmZ+fSRlIy/2UyFKwVXxxyOpW4mAZjpCU?=
+ =?us-ascii?Q?HIkzzmRZdU+gBu0vRXNBGUT9WOS/6h7F35CsDD0PaWKqdqhjANBe/vmEU8gC?=
+ =?us-ascii?Q?Pg8kb/lbMY+VUcJkSX53Tdx19TNCBT2gvgb4vJCY/Y6iGpBvFL++DvXENsgr?=
+ =?us-ascii?Q?nNdcjhnxkPvB0LZLo8MPrQPSQlqN9rh2ksP3kVFnVwvSP0eSVIoiW1o9aRXM?=
+ =?us-ascii?Q?DA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4e93b27-b673-451e-acc2-08dba7b7cf29
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Aug 2023 11:13:29.9434
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: omOaTcbPIyAoiAC6P0+xnaR5NaD5dCiMFgHNQB4PnxggpvB8Lzc0ixSItTAKZq1rBJMtqoadYhyLffEUSuXfQsi1FJQA3eufA6VpyqHP/2o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10307
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Simpilfy probe() by replacing of_device_get_match_data() and id lookup for
-retrieving match data by i2c_get_match_data().
+Hi Andy Shevchenko,
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-Note:
- * This patch is only compile tested.
----
- drivers/rtc/rtc-rs5c372.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Thanks for the feedback.
 
-diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-index f8fab0205f8c..936f4f05c8c7 100644
---- a/drivers/rtc/rtc-rs5c372.c
-+++ b/drivers/rtc/rtc-rs5c372.c
-@@ -825,12 +825,7 @@ static int rs5c372_probe(struct i2c_client *client)
- 
- 	rs5c372->client = client;
- 	i2c_set_clientdata(client, rs5c372);
--	if (client->dev.of_node) {
--		rs5c372->type = (uintptr_t)of_device_get_match_data(&client->dev);
--	} else {
--		const struct i2c_device_id *id = i2c_match_id(rs5c372_id, client);
--		rs5c372->type = id->driver_data;
--	}
-+	rs5c372->type = (uintptr_t)i2c_get_match_data(client);
- 
- 	/* we read registers 0x0f then 0x00-0x0f; skip the first one */
- 	rs5c372->regs = &rs5c372->buf[1];
--- 
-2.25.1
+> Subject: Re: [PATCH] rtc: m41t80: Simplify probe()
+>=20
+> On Mon, Aug 28, 2023 at 10:27:37AM +0100, Biju Das wrote:
+> > Simplify probe() by replacing device_get_match_data() and ID lookup
+> > for retrieving match data by i2c_get_match_data().
+>=20
+> ...
+>=20
+> > +	m41t80_data->features =3D (unsigned long)i2c_get_match_data(client);
+>=20
+> uintptr_t is more natural and de facto pattern for this. Why unsigned lon=
+g
+> is here?
 
+I just used the casting used for of_device_get_match_data.
+I will change it to uintptr_t, If there is no objection.
+
+-		m41t80_data->features =3D (unsigned long)
+-			of_device_get_match_data(&client->dev);
+
+Cheers,
+Biju
