@@ -2,59 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6039778E37E
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Aug 2023 01:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7939E78E289
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Aug 2023 00:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241451AbjH3XuG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 30 Aug 2023 19:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S243833AbjH3Wsj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 30 Aug 2023 18:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjH3XuF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 30 Aug 2023 19:50:05 -0400
-X-Greylist: delayed 4199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Aug 2023 16:50:02 PDT
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D74CC;
-        Wed, 30 Aug 2023 16:50:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B92F2CE1F43;
-        Wed, 30 Aug 2023 21:16:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF2DC433C7;
-        Wed, 30 Aug 2023 21:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693430172;
-        bh=MFcgEPzadrj8OBEPDc4xZvWqz8FVULHxOHOFHETze94=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Gnt4JGiX0C8dQpoa6f+FB9sFqf8/CzfwR0o7H7uij54rg9bVazAz7he1VxePlg+Er
-         cvBCI55ETH3vYDq4awZwBnEf9OiYrHzCUNrRZUOk0+n0eGPvHFO6ENJyXVTrzLEILv
-         r8clBWvr2nHEWwivdR43RDT9hSczqUl0XK7zwLVq6N9tP25U66YRMj8MTAmI8t1s3B
-         xjUqPSOw63mgs3iNqOc/vX99Eq5BOP98Pt5exaPHhX44OR5qWFkVEtdhWlDvGr23Q1
-         OYoFtHflC8RLCr1Ax+eGV2sQEGvPEozMQ7m4dkLlWVG0FM6uJYSSH1PxdWhGiRvGUN
-         SxKtSRPZ0irIg==
-Message-ID: <8bde38a9e447fc4c3a8834220a3073fa.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S244087AbjH3Wsi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 30 Aug 2023 18:48:38 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F4DE49;
+        Wed, 30 Aug 2023 15:48:15 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1bf55a81eeaso1303965ad.0;
+        Wed, 30 Aug 2023 15:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693435695; x=1694040495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ubwb8ZkSJEXL4N31fP6n7OBgqr01nG/Maz7pQ2R1NuQ=;
+        b=V5SwwZTQn9kQCU0v9X8V5JNj0q2P4M00n22CBqCt5C2XA47yqgvMU4nBZNdxbaOGkg
+         qNKbrDLTYqNSPqkgy38BzL+AUeXh7qgPruOSoW1PzGvWa6bH0oxA7LbQNmqCaz6X54qW
+         Nfcqah26E8XuxvKHtLQP6+ko6fs65B3N1vDLY4PV01qOljIJP1mZX7w0jO7zB0IDcwly
+         QN91uGjTNKh2+LQo5jg1arh8uACXaIKW+nnv+A9szAN23bSdtL9JOoVoiGdLohyEzgWM
+         65iAdE1UGo9VoDd1W//yBJaGFZ8I6HLk18w1HxV0LBSroDqCi+ae6gHk5Kp3b+MxkMA9
+         V0Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693435695; x=1694040495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ubwb8ZkSJEXL4N31fP6n7OBgqr01nG/Maz7pQ2R1NuQ=;
+        b=FYdAijkYJbecyp/gTJ43l9j/DQ7g2k7m0GS6nSAPTVl2Bahc578Ho3h9LGTl/Igu2X
+         QnhMO/3FO3mYedtcJ7WiJ8xEgEiuwWDITYRoZPPT4V8ElYCGufR52TT1aaNcD8mwNt3x
+         fSuBibsHzf11JVcuIctVvPL2E4cIZWavLrow+oxT5ozx7RQf//hf7Q9VZviKnjJRyBO6
+         E/urBENNwIr6o3YiKiGQKhSFl8TRgDC4DPRMucQWIZEbH1FFrO5kd6mo3dLzJ/X+C5CH
+         go1CVl0XCjSKUcaBDmVBjAPHjn7E0JaTb+NeJhAvvcRoa9676ba9N2pYbZ2mTxWc9uq+
+         xxIQ==
+X-Gm-Message-State: AOJu0YyNIU1xvTyssH9QCBTcTlIQAQM+Ed7Daehj77juWRUWT9vsZkRK
+        m0nB4+9tf1eMVESMSdX6zlE=
+X-Google-Smtp-Source: AGHT+IEg7W8QFA14h0a2Pzn6H/lPyU7ZJTbFvU8hcWHYERy18kUYUQ8TOQ4nF9eY3kKjASknNVu4Mw==
+X-Received: by 2002:a17:903:32ce:b0:1bf:120a:a29e with SMTP id i14-20020a17090332ce00b001bf120aa29emr4106996plr.10.1693435694678;
+        Wed, 30 Aug 2023 15:48:14 -0700 (PDT)
+Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id j22-20020a170902759600b001b8ad8382a4sm13010pll.216.2023.08.30.15.48.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 15:48:13 -0700 (PDT)
+From:   Doug Berger <opendmb@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Doug Berger <opendmb@gmail.com>
+Subject: [PATCH] rtc: brcmstb-waketimer: support level alarm_irq
+Date:   Wed, 30 Aug 2023 15:47:47 -0700
+Message-Id: <20230830224747.1663044-1-opendmb@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <afa30d68-4f53-4903-b470-0d337c9aa7aa@roeck-us.net>
-References: <20230817225537.4053865-1-linux@roeck-us.net> <20230817225537.4053865-3-linux@roeck-us.net> <6991631008bab403e957534d6d05360c.sboyd@kernel.org> <afa30d68-4f53-4903-b470-0d337c9aa7aa@roeck-us.net>
-Subject: Re: [PATCH v2 2/7] rtc: alarmtimer: Use maximum alarm time offset
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <jstultz@google.com>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Date:   Wed, 30 Aug 2023 14:16:09 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,140 +73,128 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Guenter Roeck (2023-08-30 00:13:09)
-> On 8/29/23 14:50, Stephen Boyd wrote:
-> > Quoting Guenter Roeck (2023-08-17 15:55:32)
-> >> Some userspace applications use timerfd_create() to request wakeups af=
-ter
-> >> a long period of time. For example, a backup application may request a
-> >> wakeup once per week. This is perfectly fine as long as the system does
-> >> not try to suspend. However, if the system tries to suspend and the
-> >> system's RTC does not support the required alarm timeout, the suspend
-> >> operation will fail with an error such as
-> >>
-> >> rtc_cmos 00:01: Alarms can be up to one day in the future
-> >> PM: dpm_run_callback(): platform_pm_suspend+0x0/0x4a returns -22
-> >> alarmtimer alarmtimer.4.auto: platform_pm_suspend+0x0/0x4a returned -2=
-2 after 117 usecs
-> >> PM: Device alarmtimer.4.auto failed to suspend: error -22
-> >>
-> >> This results in a refusal to suspend the system, causing substantial
-> >> battery drain on affected systems.
-> >>
-> >> To fix the problem, use the maximum alarm time offset as reported by r=
-tc
-> >> drivers to set the maximum alarm time. While this will result in brief
-> >> spurious wakeups from suspend, it is still much better than not suspen=
-ding
-> >> at all.
-> >>
-> >> Cc: Brian Norris <briannorris@chromium.org>
-> >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> >> ---
-> >> v2: Rename range_max_offset -> alarm_offset_max
-> >>
-> >>   kernel/time/alarmtimer.c | 13 +++++++++++++
-> >>
-> >> diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
-> >> index 8d9f13d847f0..895e3a6d6444 100644
-> >> --- a/kernel/time/alarmtimer.c
-> >> +++ b/kernel/time/alarmtimer.c
-> >> @@ -290,6 +290,19 @@ static int alarmtimer_suspend(struct device *dev)
-> >>          rtc_timer_cancel(rtc, &rtctimer);
-> >>          rtc_read_time(rtc, &tm);
-> >>          now =3D rtc_tm_to_ktime(tm);
-> >> +
-> >> +       /*
-> >> +        * If the RTC alarm timer only supports a limited time offset,=
- set
-> >> +        * the alarm time to the maximum supported value.
-> >> +        * The system will wake up earlier than necessary and is expec=
-ted
-> >> +        * to go back to sleep if it has nothing to do.
-> >=20
-> > Does this assume that the kernel is configured for autosuspend
-> > (CONFIG_PM_AUTOSLEEP)? Maybe we should only do this when that config is
-> > enabled.
-> >=20
->=20
-> It doesn't really assume anything. It standardizes behavior if the rtc
-> does not support the requested alarm time. Today that either fails
-> or the rtc silently adjusts the alarm time (sometimes to 1 day + 1 minute=
- ->
-> one minute) depending on the implementation in the rtc driver. With this
-> patch in place, the the rtc driver informing the rtc core about the limit,
-> the alarm would fire at the maximum time supported by the rtc if the
-> requested alarm time is larger than its limit.
->=20
-> I see that as improvement, no matter if CONFIG_PM_AUTOSLEEP is enabled or=
- not.
+Some devices (e.g. BCM72112) use an alarm_irq interrupt that is
+connected to a level interrupt controller rather than an edge
+interrupt controller. In this case, the interrupt cannot be left
+enabled by the irq handler while preserving the hardware wake-up
+signal on wake capable devices or an interrupt storm will occur.
 
-Agreed. It's an improvement.
+The alarm_expired flag is introduced to allow the disabling of
+the interrupt when an alarm expires and to support balancing the
+calls to disable_irq() and enable_irq() in accordance with the
+existing design.
 
-The ABI of alarmtimers seem to be "Run this timer at time X, and wake up
-the system from suspend if necessary to run the timer at time X".
+Fixes: 24304a87158a ("rtc: brcmstb-waketimer: allow use as non-wake alarm")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+---
+ drivers/rtc/rtc-brcmstb-waketimer.c | 47 ++++++++++++++++++++++++++---
+ 1 file changed, 42 insertions(+), 5 deletions(-)
 
->=20
-> > If userspace is the one autosuspending, then I don't know what we do, or
-> > how the kernel knows it is OK. Maybe we need another alarmtimer clock id
-> > that will fail creation if the wakeup time is larger than what the rtc
-> > can be programmed for? Or maybe that new clock id can have this fixed
-> > behavior to wakeup early with the assumption that userspace will go back
-> > to sleep, and outdated userspace can use the original alarmtimer clock
-> > id if they don't care about suspend failing?
-> >=20
->=20
-> I don't know how to answer this. Again, I see my suggested patch as impro=
-vement
-> over not suspending at all or resuming at a more or less random time, whi=
-ch
-> is what you get today depending on the rtc driver.
->=20
-> Actually, I would argue that the above situation applies even if the rtc =
-supports
-> the requested alarm time. Currently, if userspace is the one autosuspendi=
-ng,
-> the system wakes up after the alarm time expires (assuming the rtc suppor=
-ts it).
-> Then what ? Your above question applies to that situation as well and is
-> really independent of the alarm time limit supported by the rtc.
+diff --git a/drivers/rtc/rtc-brcmstb-waketimer.c b/drivers/rtc/rtc-brcmstb-waketimer.c
+index 3cdc015692ca..1a65a4e0dc00 100644
+--- a/drivers/rtc/rtc-brcmstb-waketimer.c
++++ b/drivers/rtc/rtc-brcmstb-waketimer.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Copyright © 2014-2017 Broadcom
++ * Copyright © 2014-2023 Broadcom
+  */
+ 
+ #define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
+@@ -34,6 +34,7 @@ struct brcmstb_waketmr {
+ 	u32 rate;
+ 	unsigned long rtc_alarm;
+ 	bool alarm_en;
++	bool alarm_expired;
+ };
+ 
+ #define BRCMSTB_WKTMR_EVENT		0x00
+@@ -64,6 +65,11 @@ static inline void brcmstb_waketmr_clear_alarm(struct brcmstb_waketmr *timer)
+ 	writel_relaxed(reg - 1, timer->base + BRCMSTB_WKTMR_ALARM);
+ 	writel_relaxed(WKTMR_ALARM_EVENT, timer->base + BRCMSTB_WKTMR_EVENT);
+ 	(void)readl_relaxed(timer->base + BRCMSTB_WKTMR_EVENT);
++	if (timer->alarm_expired) {
++		timer->alarm_expired = false;
++		/* maintain call balance */
++		enable_irq(timer->alarm_irq);
++	}
+ }
+ 
+ static void brcmstb_waketmr_set_alarm(struct brcmstb_waketmr *timer,
+@@ -105,10 +111,17 @@ static irqreturn_t brcmstb_alarm_irq(int irq, void *data)
+ 		return IRQ_HANDLED;
+ 
+ 	if (timer->alarm_en) {
+-		if (!device_may_wakeup(timer->dev))
++		if (device_may_wakeup(timer->dev)) {
++			disable_irq_nosync(irq);
++			timer->alarm_expired = true;
++		} else {
+ 			writel_relaxed(WKTMR_ALARM_EVENT,
+ 				       timer->base + BRCMSTB_WKTMR_EVENT);
++		}
+ 		rtc_update_irq(timer->rtc, 1, RTC_IRQF | RTC_AF);
++	} else {
++		writel_relaxed(WKTMR_ALARM_EVENT,
++			       timer->base + BRCMSTB_WKTMR_EVENT);
+ 	}
+ 
+ 	return IRQ_HANDLED;
+@@ -221,8 +234,14 @@ static int brcmstb_waketmr_alarm_enable(struct device *dev,
+ 		    !brcmstb_waketmr_is_pending(timer))
+ 			return -EINVAL;
+ 		timer->alarm_en = true;
+-		if (timer->alarm_irq)
++		if (timer->alarm_irq) {
++			if (timer->alarm_expired) {
++				timer->alarm_expired = false;
++				/* maintain call balance */
++				enable_irq(timer->alarm_irq);
++			}
+ 			enable_irq(timer->alarm_irq);
++		}
+ 	} else if (!enabled && timer->alarm_en) {
+ 		if (timer->alarm_irq)
+ 			disable_irq(timer->alarm_irq);
+@@ -352,6 +371,17 @@ static int brcmstb_waketmr_suspend(struct device *dev)
+ 	return brcmstb_waketmr_prepare_suspend(timer);
+ }
+ 
++static int brcmstb_waketmr_suspend_noirq(struct device *dev)
++{
++	struct brcmstb_waketmr *timer = dev_get_drvdata(dev);
++
++	/* Catch any alarms occurring prior to noirq */
++	if (timer->alarm_expired && device_may_wakeup(dev))
++		return -EBUSY;
++
++	return 0;
++}
++
+ static int brcmstb_waketmr_resume(struct device *dev)
+ {
+ 	struct brcmstb_waketmr *timer = dev_get_drvdata(dev);
+@@ -368,10 +398,17 @@ static int brcmstb_waketmr_resume(struct device *dev)
+ 
+ 	return ret;
+ }
++#else
++#define brcmstb_waketmr_suspend		NULL
++#define brcmstb_waketmr_suspend_noirq	NULL
++#define brcmstb_waketmr_resume		NULL
+ #endif /* CONFIG_PM_SLEEP */
+ 
+-static SIMPLE_DEV_PM_OPS(brcmstb_waketmr_pm_ops,
+-			 brcmstb_waketmr_suspend, brcmstb_waketmr_resume);
++static const struct dev_pm_ops brcmstb_waketmr_pm_ops = {
++	.suspend	= brcmstb_waketmr_suspend,
++	.suspend_noirq	= brcmstb_waketmr_suspend_noirq,
++	.resume		= brcmstb_waketmr_resume,
++};
+ 
+ static const __maybe_unused struct of_device_id brcmstb_waketmr_of_match[] = {
+ 	{ .compatible = "brcm,brcmstb-waketimer" },
+-- 
+2.34.1
 
-The comment in the code is causing me confusion. It says
-
-  The system will wake up earlier than necessary and is expected
-  to go back to sleep if it has nothing to do.
-
-I'd reword this to not talk about auto-suspend because the ABI of
-alarmtimers doesn't concern itself with autosuspend.
-
-  The system will wake up earlier (possibly much earlier) than when the
-  alarmtimer runs. This is the best the kernel can do because the
-  alarmtimer exceeds the time that the rtc device can be programmed for.
-
->=20
-> I would agree that various improvements on how to handle the situation wh=
-ere
-> the requested alarm time is larger than the rtc limit may be possible,
-> but I see those as independent and orthogonal to this patch.
-
-I certainly hope that userspace isn't relying on the existing behavior.
-
->=20
-> > I see another problem too. What do we do if an alarmtimer is created,
-> > the rtc device is unregistered, and then we enter suspend? It looks like
-> > alarmtimer_suspend() bails out early with no error, so suspend
-> > continues. That looks wrong. Presumably we should fail suspend entirely
-> > at that point because we'll never be able to wakeup to run the
-> > alarmtimer.
->=20
-> Maybe I am missing something, but I think this is equivalent of not having
-> an rtc in the system, or for CONFIG_RTC_CLASS=3Dn. Currently the system j=
-ust
-> suspends without waking up in those situations. Changing that would be a
-> substantial functional change since suddenly systems without rtc would
-> simply fail to suspend if there is a pending alarm.
-
-We fail alarmtimer creation in the case that CONFIG_RTC_CLASS=3Dn or when
-there isn't an rtc. See alarmtimer_get_rtcdev() and how it is called. I
-doubt it ever really happens in practice, but it looks possible to
-simulate by unbinding the rtc device driver.
