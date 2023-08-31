@@ -2,224 +2,180 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EAF78E566
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Aug 2023 06:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76F478F629
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Sep 2023 01:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240033AbjHaEYB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 31 Aug 2023 00:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S230021AbjHaX2P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 31 Aug 2023 19:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbjHaEYA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 31 Aug 2023 00:24:00 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B69A1;
-        Wed, 30 Aug 2023 21:23:58 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-349a94f3d69so4055145ab.1;
-        Wed, 30 Aug 2023 21:23:57 -0700 (PDT)
+        with ESMTP id S229733AbjHaX2O (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 31 Aug 2023 19:28:14 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E06E50
+        for <linux-rtc@vger.kernel.org>; Thu, 31 Aug 2023 16:28:11 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-41095b84d8eso8020741cf.2
+        for <linux-rtc@vger.kernel.org>; Thu, 31 Aug 2023 16:28:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693455837; x=1694060637; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dhlBBVej6Nml2vr84s2B7ZHFeM4Uz1y/q2puOA0f7cA=;
-        b=p/9Sqs4oEbu7iMAednY8l9L0rgMY/0woLxQX34M9Y/ucceQbVIK3KFLPieNk7MlxgL
-         nCuBchVMympZGAcJ62yUWYvBpcZ5pOBPA18VUxugQsP7KUgdzNUexXFKgFLPL0o3kKLN
-         xBVRUF7xKrd16ff9+xuc8Tkp9aKIcvEM3goe266EwGJYDYmoFRMvA6rPDPeEaZQT3S4T
-         qzphw5hQhLGjI16vjFi7/0zpoAgC3g2mMY/30rQxp1EjYp28sy8QcbSMfY7Q4Q81XhY1
-         Z7JPyjGpKv7R43UtE1x/uDaZ47QT0+rsHo3XvONxOqZ7vWco4cMhioXJLYu/UAcoQ+Gh
-         Gw8Q==
+        d=broadcom.com; s=google; t=1693524491; x=1694129291; darn=vger.kernel.org;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GsiYvAAQEIewilGuLMysj8Kpdfqoweyc1iSzH1poZ/A=;
+        b=J3eVZI1Ool1vdoNGqaUu+4reVIOVX5qY1l7a8+bSbm0ss4F5nfbl7yoDfKBzMJA0S/
+         OQr0vplSjkD5zTMzRLLpDMRZaQChMTEkMb+4KSprLJ4E3HeT/TrTD0LwSBaJMci90x7m
+         AwENpUY955st3JhjcQw4UjplMpkq/bVf+em20=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693455837; x=1694060637;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dhlBBVej6Nml2vr84s2B7ZHFeM4Uz1y/q2puOA0f7cA=;
-        b=JBKPwIo90Kp4gPFK2SkQORje6aSlRDsbK1vR1hNNpe1OYUaAKQjrXfEzghs/oPCv1C
-         nGmKGYYjeRMSTMtB2oWdNJlFeOGaTP6KIXRaNDZuP4GuxxIT/QwoVnWt3jatB3G98wUr
-         gCHYUKB68OdVkSWRsOxxpDGv+Woc2LW1xqcjlPdFDMzQazW4f/EmtrW0nQnCgsbhVrrv
-         b9ESybEe6oZYfn0cVnCULXYzqxIEnP6WrBOIIKS8NVSZvm9pSFxBbIZkdvSq0EX8z/pq
-         9aYhONEjyXwS87v5XzU82UUIDhu/6bfJdffxVOBe7NOqTgspyaUp3sgxqChfJkX3f1EN
-         aRBg==
-X-Gm-Message-State: AOJu0YxNWxDI5bL2c5twzP/iPbEpI7FPXLkm/c2OyN7GlkUrrP3Yvim1
-        P+N20SLtaxzlPMy139RMW12gKU8dY30=
-X-Google-Smtp-Source: AGHT+IG25BHJQOn1u3c6tB8KZi2RYp+fp9jTh9k1ULxnYBgFZqrVeVoBOeYRxtoQK4oo2p7qXQcMYQ==
-X-Received: by 2002:a92:cf0a:0:b0:346:4f37:9ee7 with SMTP id c10-20020a92cf0a000000b003464f379ee7mr1177240ilo.13.1693455837131;
-        Wed, 30 Aug 2023 21:23:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p17-20020a92d291000000b003460b697bc0sm198963ilp.59.2023.08.30.21.23.55
+        d=1e100.net; s=20221208; t=1693524491; x=1694129291;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GsiYvAAQEIewilGuLMysj8Kpdfqoweyc1iSzH1poZ/A=;
+        b=Y3QYWcCNR22zlTFsn07HbUaHrp6DhDorLxTHqyTVBsWXeyfuQgKSJdhuzDwPDrPgld
+         TXrW56pS8n5RoHhTYVbHKX3YK+wqTWnTcZsAuMoJNhzyiZCdCg/wUk43e1jQynJdZiZR
+         ELf+PmtfpJnbnexdUMBkOWFZPkzxVG4dZqk0wnycH3Tlb0W2HbonyMeA172j17Cte5r7
+         QQ6MZ4CDAItTFVkK7WQY6OIQQ7CBBhsubxoUEPUQIX6iyuzs5fbUWyDF3qBzBMa7oLmu
+         DZWW+Wiu9RfoqNdGFdvQ7picRSPT56lXr+3vSg7KI3DJ1c7WjSHNb/NzrsnA7ut6vLet
+         4Ngw==
+X-Gm-Message-State: AOJu0YzzvgSyydXy0x1sld+DTMdsVQlpVDhZhnKSvtJzy7udsYKIAYMp
+        IJnRwgF7vqvEXupc2gmTl4+oRw==
+X-Google-Smtp-Source: AGHT+IFt1jKs8LYTf4k9JWEhmt1XeLp8EEGRxkggxTLJQ7W1RuwRIRhjpKp4hs0ieTACe3i8Nt4W/A==
+X-Received: by 2002:a05:622a:5193:b0:411:fa39:c340 with SMTP id ex19-20020a05622a519300b00411fa39c340mr1021605qtb.17.1693524490987;
+        Thu, 31 Aug 2023 16:28:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id e23-20020a0caa57000000b0063d1f967268sm992020qvb.111.2023.08.31.16.28.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 21:23:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <567a09b4-2184-1bd8-a3fc-8a5fd4d682ad@roeck-us.net>
-Date:   Wed, 30 Aug 2023 21:23:54 -0700
+        Thu, 31 Aug 2023 16:28:10 -0700 (PDT)
+Message-ID: <f96930c8-4ee4-398d-3930-cf25deb83d2a@broadcom.com>
+Date:   Thu, 31 Aug 2023 16:27:58 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
+Subject: Re: [PATCH] rtc: brcmstb-waketimer: support level alarm_irq
+To:     Doug Berger <opendmb@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <jstultz@google.com>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-References: <20230817225537.4053865-1-linux@roeck-us.net>
- <20230817225537.4053865-3-linux@roeck-us.net>
- <6991631008bab403e957534d6d05360c.sboyd@kernel.org>
- <afa30d68-4f53-4903-b470-0d337c9aa7aa@roeck-us.net>
- <8bde38a9e447fc4c3a8834220a3073fa.sboyd@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/7] rtc: alarmtimer: Use maximum alarm time offset
-In-Reply-To: <8bde38a9e447fc4c3a8834220a3073fa.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230830224747.1663044-1-opendmb@gmail.com>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230830224747.1663044-1-opendmb@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000b87fe90604406553"
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 8/30/23 14:16, Stephen Boyd wrote:
-> Quoting Guenter Roeck (2023-08-30 00:13:09)
->> On 8/29/23 14:50, Stephen Boyd wrote:
->>> Quoting Guenter Roeck (2023-08-17 15:55:32)
->>>> Some userspace applications use timerfd_create() to request wakeups after
->>>> a long period of time. For example, a backup application may request a
->>>> wakeup once per week. This is perfectly fine as long as the system does
->>>> not try to suspend. However, if the system tries to suspend and the
->>>> system's RTC does not support the required alarm timeout, the suspend
->>>> operation will fail with an error such as
->>>>
->>>> rtc_cmos 00:01: Alarms can be up to one day in the future
->>>> PM: dpm_run_callback(): platform_pm_suspend+0x0/0x4a returns -22
->>>> alarmtimer alarmtimer.4.auto: platform_pm_suspend+0x0/0x4a returned -22 after 117 usecs
->>>> PM: Device alarmtimer.4.auto failed to suspend: error -22
->>>>
->>>> This results in a refusal to suspend the system, causing substantial
->>>> battery drain on affected systems.
->>>>
->>>> To fix the problem, use the maximum alarm time offset as reported by rtc
->>>> drivers to set the maximum alarm time. While this will result in brief
->>>> spurious wakeups from suspend, it is still much better than not suspending
->>>> at all.
->>>>
->>>> Cc: Brian Norris <briannorris@chromium.org>
->>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>>> ---
->>>> v2: Rename range_max_offset -> alarm_offset_max
->>>>
->>>>    kernel/time/alarmtimer.c | 13 +++++++++++++
->>>>
->>>> diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
->>>> index 8d9f13d847f0..895e3a6d6444 100644
->>>> --- a/kernel/time/alarmtimer.c
->>>> +++ b/kernel/time/alarmtimer.c
->>>> @@ -290,6 +290,19 @@ static int alarmtimer_suspend(struct device *dev)
->>>>           rtc_timer_cancel(rtc, &rtctimer);
->>>>           rtc_read_time(rtc, &tm);
->>>>           now = rtc_tm_to_ktime(tm);
->>>> +
->>>> +       /*
->>>> +        * If the RTC alarm timer only supports a limited time offset, set
->>>> +        * the alarm time to the maximum supported value.
->>>> +        * The system will wake up earlier than necessary and is expected
->>>> +        * to go back to sleep if it has nothing to do.
->>>
->>> Does this assume that the kernel is configured for autosuspend
->>> (CONFIG_PM_AUTOSLEEP)? Maybe we should only do this when that config is
->>> enabled.
->>>
->>
->> It doesn't really assume anything. It standardizes behavior if the rtc
->> does not support the requested alarm time. Today that either fails
->> or the rtc silently adjusts the alarm time (sometimes to 1 day + 1 minute ->
->> one minute) depending on the implementation in the rtc driver. With this
->> patch in place, the the rtc driver informing the rtc core about the limit,
->> the alarm would fire at the maximum time supported by the rtc if the
->> requested alarm time is larger than its limit.
->>
->> I see that as improvement, no matter if CONFIG_PM_AUTOSLEEP is enabled or not.
-> 
-> Agreed. It's an improvement.
-> 
-> The ABI of alarmtimers seem to be "Run this timer at time X, and wake up
-> the system from suspend if necessary to run the timer at time X".
-> 
->>
->>> If userspace is the one autosuspending, then I don't know what we do, or
->>> how the kernel knows it is OK. Maybe we need another alarmtimer clock id
->>> that will fail creation if the wakeup time is larger than what the rtc
->>> can be programmed for? Or maybe that new clock id can have this fixed
->>> behavior to wakeup early with the assumption that userspace will go back
->>> to sleep, and outdated userspace can use the original alarmtimer clock
->>> id if they don't care about suspend failing?
->>>
->>
->> I don't know how to answer this. Again, I see my suggested patch as improvement
->> over not suspending at all or resuming at a more or less random time, which
->> is what you get today depending on the rtc driver.
->>
->> Actually, I would argue that the above situation applies even if the rtc supports
->> the requested alarm time. Currently, if userspace is the one autosuspending,
->> the system wakes up after the alarm time expires (assuming the rtc supports it).
->> Then what ? Your above question applies to that situation as well and is
->> really independent of the alarm time limit supported by the rtc.
-> 
-> The comment in the code is causing me confusion. It says
-> 
->    The system will wake up earlier than necessary and is expected
->    to go back to sleep if it has nothing to do.
-> 
-> I'd reword this to not talk about auto-suspend because the ABI of
-> alarmtimers doesn't concern itself with autosuspend.
-> 
->    The system will wake up earlier (possibly much earlier) than when the
->    alarmtimer runs. This is the best the kernel can do because the
->    alarmtimer exceeds the time that the rtc device can be programmed for.
-> 
+--000000000000b87fe90604406553
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Makes sense, and I agree that this is much better. I changed the comment
-accordingly.
-
->>
->> I would agree that various improvements on how to handle the situation where
->> the requested alarm time is larger than the rtc limit may be possible,
->> but I see those as independent and orthogonal to this patch.
+On 8/30/23 15:47, Doug Berger wrote:
+> Some devices (e.g. BCM72112) use an alarm_irq interrupt that is
+> connected to a level interrupt controller rather than an edge
+> interrupt controller. In this case, the interrupt cannot be left
+> enabled by the irq handler while preserving the hardware wake-up
+> signal on wake capable devices or an interrupt storm will occur.
 > 
-> I certainly hope that userspace isn't relying on the existing behavior.
+> The alarm_expired flag is introduced to allow the disabling of
+> the interrupt when an alarm expires and to support balancing the
+> calls to disable_irq() and enable_irq() in accordance with the
+> existing design.
 > 
->>
->>> I see another problem too. What do we do if an alarmtimer is created,
->>> the rtc device is unregistered, and then we enter suspend? It looks like
->>> alarmtimer_suspend() bails out early with no error, so suspend
->>> continues. That looks wrong. Presumably we should fail suspend entirely
->>> at that point because we'll never be able to wakeup to run the
->>> alarmtimer.
->>
->> Maybe I am missing something, but I think this is equivalent of not having
->> an rtc in the system, or for CONFIG_RTC_CLASS=n. Currently the system just
->> suspends without waking up in those situations. Changing that would be a
->> substantial functional change since suddenly systems without rtc would
->> simply fail to suspend if there is a pending alarm.
-> 
-> We fail alarmtimer creation in the case that CONFIG_RTC_CLASS=n or when
-> there isn't an rtc. See alarmtimer_get_rtcdev() and how it is called. I
-> doubt it ever really happens in practice, but it looks possible to
-> simulate by unbinding the rtc device driver.
+> Fixes: 24304a87158a ("rtc: brcmstb-waketimer: allow use as non-wake alarm")
+> Signed-off-by: Doug Berger <opendmb@gmail.com>
 
-Thanks for the clarification. That really makes me wonder what happens
-if an rtc device is unregistered. The .remove_dev callback of
-alarmtimer_rtc_interface is not populated, and rtc_dev is never cleared.
-That means unbinding an rtc device driver should result in a crash.
-Am I missing something ?
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
-Thanks,
-Guenter
 
+--000000000000b87fe90604406553
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOc7u/8+Qq9KPBf7
+UBY65mNd9Yzg00DDK/9pAxYS23GvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDgzMTIzMjgxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBre268s2I+wAQxnNqrmD3NomneITA80rML
+P5fttXOBmE8IC1gi9fzmZVlbBuqom3cmUsIlVfuaIf1GXpeNw1HNcoPDJwULzlvCMTGV8sFDE5MH
+b1ePu9KzfWqrE2INIUIKBHhI4BgurdYgDhXpt82T1gXikyShnVuz3A4AZy/Xhx1U5vfEQ7wxaiCx
+0dhWAR011FhqI87xFnAWVHeLEdiAL9NOGJHdgb78pBwglnWO+tpGMLoLXGz9EaVgPPK9fh4MkFRk
+xHMoe8d70Je6ykjtqTdkZtBLM6+NvS/jyJvI0eTZdDTLS0NPomQBCcL1sGYuk/oC+cDi3/XhK+8H
+w7FS
+--000000000000b87fe90604406553--
