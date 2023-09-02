@@ -2,69 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76F478F629
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Sep 2023 01:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C5679081E
+	for <lists+linux-rtc@lfdr.de>; Sat,  2 Sep 2023 15:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjHaX2P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 31 Aug 2023 19:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
+        id S229912AbjIBNoT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 2 Sep 2023 09:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjHaX2O (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 31 Aug 2023 19:28:14 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E06E50
-        for <linux-rtc@vger.kernel.org>; Thu, 31 Aug 2023 16:28:11 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-41095b84d8eso8020741cf.2
-        for <linux-rtc@vger.kernel.org>; Thu, 31 Aug 2023 16:28:11 -0700 (PDT)
+        with ESMTP id S229567AbjIBNoS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 2 Sep 2023 09:44:18 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0A2E5B;
+        Sat,  2 Sep 2023 06:44:15 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6bb1133b063so4730a34.1;
+        Sat, 02 Sep 2023 06:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1693524491; x=1694129291; darn=vger.kernel.org;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=GsiYvAAQEIewilGuLMysj8Kpdfqoweyc1iSzH1poZ/A=;
-        b=J3eVZI1Ool1vdoNGqaUu+4reVIOVX5qY1l7a8+bSbm0ss4F5nfbl7yoDfKBzMJA0S/
-         OQr0vplSjkD5zTMzRLLpDMRZaQChMTEkMb+4KSprLJ4E3HeT/TrTD0LwSBaJMci90x7m
-         AwENpUY955st3JhjcQw4UjplMpkq/bVf+em20=
+        d=gmail.com; s=20221208; t=1693662255; x=1694267055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t5MW0CXTPSk+NqmypdFWCwTdnSw+85UwrhKdEQ+oUfQ=;
+        b=GYxziEkge88vA+P4JM3XWG4ud/YhaxLxG5H1hTghzvlicrGi8CGHdNQqPoJ7iWixQ+
+         +celG7astF2j7eEf0LQ4C9yqR5H5ioEQTtGkctMRorXNNM18G2hZNcdb5GwnCc8MhOvN
+         CTWf2ZP9dOwaOWF3vwQzvaZabXdroNbo7nePsm6uD+glVCpLb/X5HMKkUMwJxGNbyuc1
+         3jHQToBL56yeFhv3R/rkvjRVSWlixL4XnpRj81aq8Na2/iu8q+NFsIxU2f+XkrhynLU2
+         0SLFDpcSDPFJYh12T57huoLiI2cLDDBnSZQHfytIbY2bXA9S9kLUo2Bh1XfV95uSpmL6
+         EUjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693524491; x=1694129291;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GsiYvAAQEIewilGuLMysj8Kpdfqoweyc1iSzH1poZ/A=;
-        b=Y3QYWcCNR22zlTFsn07HbUaHrp6DhDorLxTHqyTVBsWXeyfuQgKSJdhuzDwPDrPgld
-         TXrW56pS8n5RoHhTYVbHKX3YK+wqTWnTcZsAuMoJNhzyiZCdCg/wUk43e1jQynJdZiZR
-         ELf+PmtfpJnbnexdUMBkOWFZPkzxVG4dZqk0wnycH3Tlb0W2HbonyMeA172j17Cte5r7
-         QQ6MZ4CDAItTFVkK7WQY6OIQQ7CBBhsubxoUEPUQIX6iyuzs5fbUWyDF3qBzBMa7oLmu
-         DZWW+Wiu9RfoqNdGFdvQ7picRSPT56lXr+3vSg7KI3DJ1c7WjSHNb/NzrsnA7ut6vLet
-         4Ngw==
-X-Gm-Message-State: AOJu0YzzvgSyydXy0x1sld+DTMdsVQlpVDhZhnKSvtJzy7udsYKIAYMp
-        IJnRwgF7vqvEXupc2gmTl4+oRw==
-X-Google-Smtp-Source: AGHT+IFt1jKs8LYTf4k9JWEhmt1XeLp8EEGRxkggxTLJQ7W1RuwRIRhjpKp4hs0ieTACe3i8Nt4W/A==
-X-Received: by 2002:a05:622a:5193:b0:411:fa39:c340 with SMTP id ex19-20020a05622a519300b00411fa39c340mr1021605qtb.17.1693524490987;
-        Thu, 31 Aug 2023 16:28:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id e23-20020a0caa57000000b0063d1f967268sm992020qvb.111.2023.08.31.16.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Aug 2023 16:28:10 -0700 (PDT)
-Message-ID: <f96930c8-4ee4-398d-3930-cf25deb83d2a@broadcom.com>
-Date:   Thu, 31 Aug 2023 16:27:58 -0700
+        d=1e100.net; s=20221208; t=1693662255; x=1694267055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t5MW0CXTPSk+NqmypdFWCwTdnSw+85UwrhKdEQ+oUfQ=;
+        b=BxvzZkaqYprd+AWhWg7dLTWRRz42Ez/eG4490kDuwRdVUenj7mgBegpDRhXmhGG4l4
+         z5c+o9xC9riNY7+rX+gZRmypedExciG67gcUOOKpn4H6GMeXuDv/RL+6d57aKozQdZvr
+         /3D9p48cD43/sg18hzw5l4siiR7x51wIrR2WJTRGPV/kSL5fbRauXsik1oVnubkOdUPA
+         vi5cGNsQY07KiyJkzFKXVrVWxs3CJq3j+39lPgKCsjNLGI9Km0r2pj/SwrSmurTG/KHu
+         2ashiJX4ICJnqA9YneAM9rp71IKIfYUKg8HywRM/302QUAhP30konpuQ1crU52M27ETG
+         pWow==
+X-Gm-Message-State: AOJu0YzUMxJ3BitH6YFA4odpIwMVQnViSDXurYyOvI2i7iGL5MUd6BRy
+        W6B5qlKzD2La8I4a6wfr3a9OERx0fUU=
+X-Google-Smtp-Source: AGHT+IHazI+oEZzC17Pw/8wNRX2LvFHtXHdtmAVoX1ZfY6izvZxD7DQ9Etep4pQMpovEvtps4J1Nhw==
+X-Received: by 2002:a05:6830:6a9b:b0:6bc:a6d0:ab7 with SMTP id da27-20020a0568306a9b00b006bca6d00ab7mr3625338otb.3.1693662255017;
+        Sat, 02 Sep 2023 06:44:15 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:24a7:7a7d:d9f7:937b])
+        by smtp.gmail.com with ESMTPSA id l2-20020a05683004a200b006b8c6eb962esm2791560otd.52.2023.09.02.06.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Sep 2023 06:44:14 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     alexandre.belloni@bootlin.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] dt-bindings: rtc: ds3231: Remove text binding
+Date:   Sat,  2 Sep 2023 10:44:07 -0300
+Message-Id: <20230902134407.2589099-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] rtc: brcmstb-waketimer: support level alarm_irq
-To:     Doug Berger <opendmb@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230830224747.1663044-1-opendmb@gmail.com>
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <20230830224747.1663044-1-opendmb@gmail.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b87fe90604406553"
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,110 +69,63 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---000000000000b87fe90604406553
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Fabio Estevam <festevam@denx.de>
 
-On 8/30/23 15:47, Doug Berger wrote:
-> Some devices (e.g. BCM72112) use an alarm_irq interrupt that is
-> connected to a level interrupt controller rather than an edge
-> interrupt controller. In this case, the interrupt cannot be left
-> enabled by the irq handler while preserving the hardware wake-up
-> signal on wake capable devices or an interrupt storm will occur.
-> 
-> The alarm_expired flag is introduced to allow the disabling of
-> the interrupt when an alarm expires and to support balancing the
-> calls to disable_irq() and enable_irq() in accordance with the
-> existing design.
-> 
-> Fixes: 24304a87158a ("rtc: brcmstb-waketimer: allow use as non-wake alarm")
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
+The "maxim,ds3231" compatible is described in the rtc-ds1307.yaml, so
+there is no need to keep the text bindings version.
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Remove the maxim,ds3231.txt file in favor of the rtc-ds1307.yaml binding.
+
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ .../devicetree/bindings/rtc/maxim,ds3231.txt  | 38 -------------------
+ 1 file changed, 38 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/maxim,ds3231.txt
+
+diff --git a/Documentation/devicetree/bindings/rtc/maxim,ds3231.txt b/Documentation/devicetree/bindings/rtc/maxim,ds3231.txt
+deleted file mode 100644
+index 85be53a42180..000000000000
+--- a/Documentation/devicetree/bindings/rtc/maxim,ds3231.txt
++++ /dev/null
+@@ -1,38 +0,0 @@
+-* Maxim DS3231 Real Time Clock
+-
+-Required properties:
+-- compatible: Should contain "maxim,ds3231".
+-- reg: I2C address for chip.
+-
+-Optional property:
+-- #clock-cells: Should be 1.
+-- clock-output-names:
+-  overwrite the default clock names "ds3231_clk_sqw" and "ds3231_clk_32khz".
+-
+-Each clock is assigned an identifier and client nodes can use this identifier
+-to specify the clock which they consume. Following indices are allowed:
+-    - 0: square-wave output on the SQW pin
+-    - 1: square-wave output on the 32kHz pin
+-
+-- interrupts: rtc alarm/event interrupt. When this property is selected,
+-  clock on the SQW pin cannot be used.
+-
+-Example:
+-
+-ds3231: ds3231@51 {
+-	compatible = "maxim,ds3231";
+-	reg = <0x68>;
+-	#clock-cells = <1>;
+-};
+-
+-device1 {
+-...
+-	clocks = <&ds3231 0>;
+-...
+-};
+-
+-device2 {
+-...
+-	clocks = <&ds3231 1>;
+-...
+-};
 -- 
-Florian
+2.34.1
 
-
---000000000000b87fe90604406553
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOc7u/8+Qq9KPBf7
-UBY65mNd9Yzg00DDK/9pAxYS23GvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDgzMTIzMjgxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBre268s2I+wAQxnNqrmD3NomneITA80rML
-P5fttXOBmE8IC1gi9fzmZVlbBuqom3cmUsIlVfuaIf1GXpeNw1HNcoPDJwULzlvCMTGV8sFDE5MH
-b1ePu9KzfWqrE2INIUIKBHhI4BgurdYgDhXpt82T1gXikyShnVuz3A4AZy/Xhx1U5vfEQ7wxaiCx
-0dhWAR011FhqI87xFnAWVHeLEdiAL9NOGJHdgb78pBwglnWO+tpGMLoLXGz9EaVgPPK9fh4MkFRk
-xHMoe8d70Je6ykjtqTdkZtBLM6+NvS/jyJvI0eTZdDTLS0NPomQBCcL1sGYuk/oC+cDi3/XhK+8H
-w7FS
---000000000000b87fe90604406553--
