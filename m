@@ -2,70 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7514679292E
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 18:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0910379293F
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 18:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351036AbjIEQZ2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Sep 2023 12:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S1351419AbjIEQZ5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Sep 2023 12:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354073AbjIEJe4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 05:34:56 -0400
-X-Greylist: delayed 4132 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:34:53 PDT
-Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814191A8
-        for <linux-rtc@vger.kernel.org>; Tue,  5 Sep 2023 02:34:53 -0700 (PDT)
-Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
-        id 4785C8359B; Mon,  4 Sep 2023 09:40:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
-        s=mail; t=1693813306;
-        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
-        h=Date:From:To:Subject:From;
-        b=jAJZrjgL+TJB5hmnpeuer+Wbu7yBhTI9p/bvzo4L3mOLUPs8hjgdJ7DZSqmssWnE3
-         bh04UzDtWbwMbEs4HZ1A/m5KdUws/bvVMy8GdP6cusYxsKejNjRVw0q34jV9xMbwD3
-         lIr4BoGmcFsgjKbuPTZ0wIpFZGNKt3S328XRoXdE2PmyNbhZEh3AcrkWnkH1DT7Mpb
-         +2wFPhR0aBi1dGIeeUeqvQNcVX4AuC2PNHH6YQXu/0gK9DP7F4ROkTKMCnT4LYlkQM
-         2klTxbGyhKuQtqvxZEUIacGhDsPgtuLUaepeKaWYDmV7DYbOg6yewpPTHg1TzeiTIE
-         D6zYqJZQTlbqQ==
-Received: by mail.equinoxrise.pl for <linux-rtc@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
-Message-ID: <20230904084500-0.1.7.ql3.0.451t65muzt@equinoxrise.pl>
-Date:   Mon,  4 Sep 2023 07:40:34 GMT
-From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
-To:     <linux-rtc@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.equinoxrise.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+        with ESMTP id S1353052AbjIEGDy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 02:03:54 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F561B8;
+        Mon,  4 Sep 2023 23:03:50 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-68bed2c786eso1228840b3a.0;
+        Mon, 04 Sep 2023 23:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693893830; x=1694498630; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KiBuOJI+CBSIVZXrdUCIwxPgk0hrH9gjlhPqB1GT98I=;
+        b=laQ4p0HbC2hElTTSGIId3gk68kCbl+/k0gDwgCKvWw/JajajBejHFGuiyeU/PrFtcq
+         LSR+nMS26vKTiOQWcdssImxlOBvslumY/VglZJQrBB9PXU93IpvLwmiqk2V4Ux5ZLjL2
+         rciaZhNjugv9PwZ/kw4Sz76Zbzd2xX7ryGD8M3Od1Z/Um3AokgTAQVhI8FMyLCAdOcQJ
+         YelhicN5XlG0QlBojsgqssmeaQYTlPavfRpTjVoA/UD+4GfRT6Fi3Euc8VSwXfpIvUv0
+         NMrOhTt+ghQ+q/BLRvlBFiEVJ8W5pyM3Btao2VCdqxxLoAsEQI8tX8MCSiKsK79+a0rF
+         0vsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693893830; x=1694498630;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KiBuOJI+CBSIVZXrdUCIwxPgk0hrH9gjlhPqB1GT98I=;
+        b=ZVgf4iTkLx9vVBdYPNtQHXKJnkHlARRruo7lFfe/YOr4Py5MqO5gimIGmwRmk+HAud
+         le95q2U9CGP9iVSbA55ETS8ghnsJ8SZiDIEXIsihP75bXWJ527nl3UzqtvUzVIYMB+uM
+         N3XR5eBkMSjDuCXIur52+cEF0RuwPq+tOnz6gsirPJ5tmEWmvOVyPnJ+vcmgpmyWDJZq
+         gGc8BFAKx3GQVCLhDtGlGxEsSm/0DmLE4vUGZO6pP7AlTnjG2u5CZJTKzGMlxImUy4J5
+         hkudvFaxUEgI8JD2e0Pvj4JqrdJbqsdoj7oPhBRVUhFxfP7WCX9em19D3NSk9SCZX1NS
+         4zpQ==
+X-Gm-Message-State: AOJu0YwHJb8ic1TYxz3Kthp4P3yIsBFM/qiQWVjDME27EdyNYq8aI3cI
+        Qe9K9oWz3NFO3OxXrJqebcI=
+X-Google-Smtp-Source: AGHT+IFP8zd0itczP3+4VNTwpFdK3waU0XTslf+VWq3OTW1dVfoSL3qvPmwgTG6xNUFXXfIY9L0Usw==
+X-Received: by 2002:a05:6a20:8f17:b0:133:e3e3:dc07 with SMTP id b23-20020a056a208f1700b00133e3e3dc07mr12560721pzk.49.1693893830108;
+        Mon, 04 Sep 2023 23:03:50 -0700 (PDT)
+Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b001bf6ea340b3sm8482921ply.116.2023.09.04.23.03.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Sep 2023 23:03:49 -0700 (PDT)
+From:   Mia Lin <mimi05633@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, KFLIN@nuvoton.com,
+        mylin1@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mia Lin <mimi05633@gmail.com>
+Subject: [PATCH v5 0/1] Compatible with NCT3015Y-R and NCT3018Y-R
+Date:   Tue,  5 Sep 2023 14:03:40 +0800
+Message-Id: <20230905060341.5632-1-mimi05633@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry!
+Changes since version 5:
+  Add global parameter to store part number.
+  Remove unnecessary changes for easier reading.
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+Changes since version 4:
+  Add an introduction bewteen NCT3015Y-R and NCT3018Y-R.
+  Restore the initial value of err in nct3018y_rtc_set_time().
+  Refine error messages to pinpoint the correct location.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+Changes since version 3:
+  Remove the comparison between DT compatible and chip data.
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+Changes since version 2:
+  Add DT compatible to check the chip matches or not.
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+Changes since version 1:
+  rtc: nuvoton: Compatible with NCT3015Y-R and NCT3018Y-R
 
+Mia Lin (1):
+  rtc: nuvoton: Compatible with NCT3015Y-R and NCT3018Y-R
 
-Pozdrawiam
-Mateusz Talaga
+ drivers/rtc/rtc-nct3018y.c | 87 ++++++++++++++++++++++++++++----------
+ 1 file changed, 64 insertions(+), 23 deletions(-)
+
+-- 
+2.17.1
+
