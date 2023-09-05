@@ -2,166 +2,71 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9B97931CC
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 00:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6CB79328D
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 01:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbjIEWIl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Sep 2023 18:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S238789AbjIEX3B (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Sep 2023 19:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjIEWIk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 18:08:40 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B15E6;
-        Tue,  5 Sep 2023 15:08:37 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6bca018afe8so895030a34.0;
-        Tue, 05 Sep 2023 15:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693951717; x=1694556517; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Ce16MbM3TIjereNRMgMjUrtiSlhzKCA03BxWXdmdgQ=;
-        b=aTtUrvcDN/fRQUYtfldxBs5oN77nWLl/VGcWZi6GUb0UTg7eBEuI3b6JoAJWO7uP2h
-         jm9NZ6Dh2tQWIv/GLqnj1OJPHS19EIJqC53Oa1P7bRwWt7oosD9f7zxTNDSACWGlNFX5
-         9dT9cKQ9S/mC1OqBaEwegZnOFRsOicDHC3cFdPk9zi1rMtkf8Ljw/KP6sYNLtdmBUefa
-         vJloqXz5s/2DYyFtjtn/sB+tKAqQCRPNJPq4z0b8AsU0lcq/w09e0jUZjv+EZDJaaD0w
-         BH34YqBcQv3/ERNivpRgKBynvxf305Z1ZAVZmh2Xu0roN4LQIaJ8QU1p2X9hMqTu5qj/
-         yL3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693951717; x=1694556517;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+Ce16MbM3TIjereNRMgMjUrtiSlhzKCA03BxWXdmdgQ=;
-        b=DLa0QIEnQnwmSsALG+unBwW+v0cSCm6BVB5brutNNgh11MJSC0wRDgKPDR78Emgx8H
-         oFdlhODPIAlLVJj7hNjvninogP8JUN2LYFAo+Yn935mWLDl6IHDbh48SNsoCyYt4Fbi3
-         PH2VDjjHUJFpOZAgjB1otOKP0k5oU+LH/zRRXEzzoUnWSQ+KT4quF2NcGFVeSLEe4aqU
-         ECouBY+b+WaJX3fmsAnIcswj8OXx50UwSATt98xQEd5IgendDk7O5ImQKsyO1wyPzBSa
-         UfQ/Qha228/jaeLWIEhfYa51VpousN+SDThObX5i3+QD01SCHPTb8TO5XX4wmiWMDO2F
-         1fWQ==
-X-Gm-Message-State: AOJu0YwskcLtKiGN602MphNHjM5zO0Ni/ksBuBFRdRYJwgmXX4Xv5Py7
-        q6icrR++BP7BfgVo9pjecPA=
-X-Google-Smtp-Source: AGHT+IE9No+QwoJ279rZlSWHEdl6v0ks4fUomqCbO0ofRUUcJH3Fek5URlHzmlUZ9r/dcaYDCaxnDg==
-X-Received: by 2002:a05:687c:86:b0:1d1:40a6:e832 with SMTP id yg6-20020a05687c008600b001d140a6e832mr9385921oab.4.1693951716591;
-        Tue, 05 Sep 2023 15:08:36 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:2abb:b8c2:b1a6:d1ec])
-        by smtp.gmail.com with ESMTPSA id j12-20020a056870168c00b001d4c5e4c2c5sm3430765oae.25.2023.09.05.15.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 15:08:36 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     alexandre.belloni@bootlin.com
+        with ESMTP id S230081AbjIEX3B (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 19:29:01 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C13B0;
+        Tue,  5 Sep 2023 16:28:57 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7628F40006;
+        Tue,  5 Sep 2023 23:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1693956536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zuWbjrK14FpRjBQ8BxeTR6DWVw5uS7OL9akdPs8EATo=;
+        b=SoGVmDnJ8MJUTmi54q+/E2/76mmA4x14DKTqSssRzZ6oLn3/XeKkPyjzNmMjQ83llRff8H
+        AC7jAbHyUoWFw+B9Y49evg1Rf1VsMEO2cOL2rI85o14rrBeBfXSxNZlRfofiQV2gr1j5H2
+        1UwliN0Kjwm6PkRBg9+D4iOfqidU26xwPEQCbWHzWY3SBVs1exaWS5Q5TpxwY6vgrp2kKK
+        ZPx16Mb8iHN+fXj35qyqOJh6WTIHGUg+/UQhRTVd/CeZ2NW8ncjzetvDXwxcaS9OizPSp5
+        /Q5EuFgxAO+370v1F0xSQBnXdWc9cmdANg95oymSE+CV+XBEiS/BPrp6B/xs9w==
+Date:   Wed, 6 Sep 2023 01:28:55 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Fabio Estevam <festevam@gmail.com>
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, sam@ravnborg.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        javier.carrasco@wolfvision.net, Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v3] dt-bindings: rtc: pcf8523: Convert to YAML
-Date:   Tue,  5 Sep 2023 19:08:26 -0300
-Message-Id: <20230905220826.79901-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        conor+dt@kernel.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+Subject: Re: [PATCH] dt-bindings: rtc: ds3231: Remove text binding
+Message-ID: <169395650936.306948.2415359175774403273.b4-ty@bootlin.com>
+References: <20230902134407.2589099-1-festevam@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230902134407.2589099-1-festevam@gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
 
-Convert the PCF8523 bindings from text format to YAML.
+On Sat, 02 Sep 2023 10:44:07 -0300, Fabio Estevam wrote:
+> The "maxim,ds3231" compatible is described in the rtc-ds1307.yaml, so
+> there is no need to keep the text bindings version.
+> 
+> Remove the maxim,ds3231.txt file in favor of the rtc-ds1307.yaml binding.
+> 
+> 
 
-The YAML format is preferred as it allows validation.
+Applied, thanks!
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v2:
-- Fix the default quartz-load-femtofarads value. (Javier)
+[1/1] dt-bindings: rtc: ds3231: Remove text binding
+      commit: ce413486c9a0d735d86cc7d88660abeac99c2501
 
- .../devicetree/bindings/rtc/nxp,pcf8523.txt   | 18 --------
- .../devicetree/bindings/rtc/nxp,pcf8523.yaml  | 45 +++++++++++++++++++
- 2 files changed, 45 insertions(+), 18 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
+Best regards,
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
-deleted file mode 100644
-index 0b1080c60f63..000000000000
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--* NXP PCF8523 Real Time Clock
--
--Required properties:
--- compatible: Should contain "nxp,pcf8523".
--- reg: I2C address for chip.
--
--Optional property:
--- quartz-load-femtofarads: The capacitive load of the quartz(x-tal),
--  expressed in femto Farad (fF). Valid values are 7000 and 12500.
--  Default value (if no value is specified) is 12500fF.
--
--Example:
--
--pcf8523: rtc@68 {
--	compatible = "nxp,pcf8523";
--	reg = <0x68>;
--	quartz-load-femtofarads = <7000>;
--};
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
-new file mode 100644
-index 000000000000..8d17b89fef5e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
-@@ -0,0 +1,45 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/nxp,pcf8523.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP PCF8523 Real Time Clock
-+
-+maintainers:
-+  - Sam Ravnborg <sam@ravnborg.org>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    const: nxp,pcf8523
-+
-+  reg:
-+    maxItems: 1
-+
-+  quartz-load-femtofarads:
-+    description:
-+      The capacitive load of the crystal, expressed in femto Farad (fF).
-+    enum: [ 7000, 12500 ]
-+    default: 12500
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@68 {
-+            compatible = "nxp,pcf8523";
-+            reg = <0x68>;
-+            quartz-load-femtofarads = <7000>;
-+        };
-+    };
 -- 
-2.34.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
