@@ -2,320 +2,166 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8D4792933
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 18:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9064C792934
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 18:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351104AbjIEQZn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Sep 2023 12:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S1351275AbjIEQZq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Sep 2023 12:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353533AbjIEGfO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 02:35:14 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE41BD;
-        Mon,  4 Sep 2023 23:35:09 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 197D81BF20D;
-        Tue,  5 Sep 2023 06:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1693895708;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9/qNxvvIN1DMOdd6K0/v1/1he9CNJQC3OqEVPPxjBiI=;
-        b=hhHnaTV+C9lUEffPJX6azGDot8g0b39Mf72fpvmqzjYRjVulOK36Qtw8pYE/39dkr9hf/7
-        N0VtbZheDJYMrKAMZLVS44rlks58KDIuaXYL5yzIEp0SOW1u07DIVuZSdianwKhrbJQNEI
-        eSqUi8R3zBoaHxeGxQGoisatCliJwRccgK9VCCJxWA4kHknBxnq+1cE9B1fgWk45caFQ3p
-        7YYN4RACsqgIpP/8AsPk7esT1oz2t4FiEc1mo+A7wlPemtN/AcJPa2wDDgSJB13MwGLM/I
-        iMGnL+t1cAM8v8azZC5Zq8kCtcA/2teK5zXyrwuRSxVy7ZmXd5XHVO2XEcwhqw==
-Date:   Tue, 5 Sep 2023 08:35:05 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Mia Lin <mimi05633@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        a.zummo@towertech.it, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        KFLIN@nuvoton.com, mylin1@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] rtc: nuvoton: Compatible with NCT3015Y-R and
- NCT3018Y-R
-Message-ID: <202309050635059ecd17a2@mail.local>
-References: <20230905060341.5632-1-mimi05633@gmail.com>
- <20230905060341.5632-2-mimi05633@gmail.com>
+        with ESMTP id S1354666AbjIENXg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 09:23:36 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBF319B;
+        Tue,  5 Sep 2023 06:23:32 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6bb1133b063so298386a34.1;
+        Tue, 05 Sep 2023 06:23:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693920212; x=1694525012; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tAnyjNoEHzOtoWr8RZt8Z0B0PvJcndgHMjpREL+JJTc=;
+        b=BKfp3hMsq6pBIVCozL+NV4m3WSnJh85eG61DsCI6irpq9MxhaiLrh7NWjsPqfVB9Fn
+         9ZhRghXNv71ttQjrvWhuu4WHaaKy0KAKhrbHGUZ1TA9xUsHf4b3+xhx+ZHopZBPSzjdo
+         L0jLVwl/XRbcQFR1Pfm5zd0op5Sj5J0hUq6+m43hCFScVpzIAbJhqTMngtAwRMuMFnVm
+         hXuU7MDv9TVfAtuaDjuWZEV7m5a+7AewoxLdWlFvvJBMRRdDNvmA3XPyKrt0hu8hwdJ+
+         t7B4TCcZMLbe12jUPYsXCesrT0yIKrgpWYj9Q14L+vbMfzOPLvIsgZtCso7tRTZMf0Wk
+         AEjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693920212; x=1694525012;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tAnyjNoEHzOtoWr8RZt8Z0B0PvJcndgHMjpREL+JJTc=;
+        b=gqFq6K4hwr9N4kPTMtcSdtk6jy3U0VIpYZHgYqag0LqXsqEmjXF6z9IBJ2jAhkjfBS
+         H6rd9+hvbviHs/oyHF82x1cFz9scx6FMuYVJa8UMSjWrHnqLeQFSu7Kv8YkcTfJ1Slzs
+         Tnlfzqm/ipyqlz47dZBGVzrpXOzEFy3eAXhyfmdzQ34aVfsccR08pgNrUdXiHzPLAX5L
+         As8ZgpHq48SUzFY1aZRdY6tgfgGJ0jyi0vT2tdNZeWA6RX48CxsXP9bAli9TkWj88lTr
+         IwhSszyWFtJryr5jRJvLcNLjY1BP6LkgI804YppuF7b9M6IyThtSZKSxXohhB2atpxDe
+         pQrA==
+X-Gm-Message-State: AOJu0YytNPWH+H5hNNX/sbryXTzT/dl7C7njtX5Gz2IJqBWJdVif1bFN
+        OA4kjrdRbHCRPjOz1pLLbO0=
+X-Google-Smtp-Source: AGHT+IGzXHFvxkJru02iZ4T7UiUFfUmCbJBdZ7YcOEEj2J6kpE0YGf1LLj2iwpaTeIynToQfSlvAFQ==
+X-Received: by 2002:a05:6830:6a9b:b0:6bc:a6d0:ab7 with SMTP id da27-20020a0568306a9b00b006bca6d00ab7mr11675305otb.3.1693920212064;
+        Tue, 05 Sep 2023 06:23:32 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:ed1a:13f:d0c6:913b])
+        by smtp.gmail.com with ESMTPSA id e26-20020a9d63da000000b006b9d8c31e94sm5443062otl.39.2023.09.05.06.23.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 06:23:31 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     alexandre.belloni@bootlin.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, sam@ravnborg.or, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fabio Estevam <festevam@denx.de>
+Subject: [PATCH] dt-bindings: rtc: pcf8523: Convert to YAML
+Date:   Tue,  5 Sep 2023 10:23:24 -0300
+Message-Id: <20230905132324.3146722-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905060341.5632-2-mimi05633@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/09/2023 14:03:41+0800, Mia Lin wrote:
-> The NCT3015Y-R and NCT3018Y-R use the same datasheet
->     but have different topologies as follows.
-> - Topology (Only 1st i2c can set TWO bit and HF bit)
->   In NCT3015Y-R,
->     rtc 1st i2c is connected to a host CPU
->     rtc 2nd i2c is connected to a BMC
->   In NCT3018Y-R,
->     rtc 1st i2c is connected to a BMC
->     rtc 2nd i2c is connected to a host CPU
-> In order to be compatible with NCT3015Y-R and NCT3018Y-R,
-> - In probe,
->   If part number is NCT3018Y-R, only set HF bit to 24-Hour format.
->   Else, do nothing
-> - In set_time,
->   If part number is NCT3018Y-R && TWO bit is 0,
->      change TWO bit to 1, and restore TWO bit after updating time.
-> - Refine error messages to pinpoint the correct location.
-> 
-> Signed-off-by: Mia Lin <mimi05633@gmail.com>
-> ---
->  drivers/rtc/rtc-nct3018y.c | 87 ++++++++++++++++++++++++++++----------
->  1 file changed, 64 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
-> index a4e3f924837e..9ec20f241e15 100644
-> --- a/drivers/rtc/rtc-nct3018y.c
-> +++ b/drivers/rtc/rtc-nct3018y.c
-> @@ -23,6 +23,7 @@
->  #define NCT3018Y_REG_CTRL	0x0A /* timer control */
->  #define NCT3018Y_REG_ST		0x0B /* status */
->  #define NCT3018Y_REG_CLKO	0x0C /* clock out */
-> +#define NCT3018Y_REG_PART	0x21 /* part info */
->  
->  #define NCT3018Y_BIT_AF		BIT(7)
->  #define NCT3018Y_BIT_ST		BIT(7)
-> @@ -37,6 +38,7 @@
->  #define NCT3018Y_REG_BAT_MASK		0x07
->  #define NCT3018Y_REG_CLKO_F_MASK	0x03 /* frequenc mask */
->  #define NCT3018Y_REG_CLKO_CKE		0x80 /* clock out enabled */
-> +#define NCT3018Y_REG_PART_NCT3018Y	0x02
->  
->  struct nct3018y {
->  	struct rtc_device *rtc;
-> @@ -46,6 +48,8 @@ struct nct3018y {
->  #endif
->  };
->  
-> +static int part_num;
-> +
+From: Fabio Estevam <festevam@denx.de>
 
-This must be part of struct nct3018y.
+Convert the PCF8523 bindings from text format to YAML.
 
->  static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
->  {
->  	int err, flags;
-> @@ -55,7 +59,7 @@ static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
->  	flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
->  	if (flags < 0) {
->  		dev_dbg(&client->dev,
-> -			"Failed to read NCT3018Y_REG_CTRL\n");
-> +			"%s: Failed to read ctrl reg.\n", __func__);
+The YAML format is preferred as it allows validation.
 
-If you really insist on this change, what about:
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+ .../devicetree/bindings/rtc/nxp,pcf8523.txt   | 18 -------
+ .../devicetree/bindings/rtc/nxp,pcf8523.yaml  | 48 +++++++++++++++++++
+ 2 files changed, 48 insertions(+), 18 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
 
-#define pr_fmt(fmt) "%s: " fmt, __func__
-
->  		return flags;
->  	}
->  
-> @@ -67,21 +71,21 @@ static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
->  	flags |= NCT3018Y_BIT_CIE;
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write ctrl reg.\n", __func__);
->  		return err;
->  	}
->  
->  	flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
->  	if (flags < 0) {
->  		dev_dbg(&client->dev,
-> -			"Failed to read NCT3018Y_REG_ST\n");
-> +			"%s: Failed to read status reg.\n", __func__);
->  		return flags;
->  	}
->  
->  	flags &= ~(NCT3018Y_BIT_AF);
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_ST, flags);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_ST\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write status reg.\n", __func__);
->  		return err;
->  	}
->  
-> @@ -155,7 +159,7 @@ static int nct3018y_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  		return err;
->  
->  	if (!buf[0]) {
-> -		dev_dbg(&client->dev, " voltage <=1.7, date/time is not reliable.\n");
-> +		dev_dbg(&client->dev, "%s: voltage <=1.7, date/time is not reliable.\n", __func__);
->  		return -EINVAL;
->  	}
->  
-> @@ -178,26 +182,44 @@ static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
->  	unsigned char buf[4] = {0};
-> -	int err;
-> +	int err, flags;
-> +	int restore_flags = 0;
-> +
-> +	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-> +	if (flags < 0) {
-> +		dev_dbg(&client->dev, "%s: Failed to read ctrl reg.\n", __func__);
-> +		return flags;
-> +	}
-> +
-> +	/* Check and set TWO bit */
-> +	if ((part_num & NCT3018Y_REG_PART_NCT3018Y) && !(flags & NCT3018Y_BIT_TWO)) {
-> +		restore_flags = 1;
-> +		flags |= NCT3018Y_BIT_TWO;
-> +		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> +		if (err < 0) {
-> +			dev_dbg(&client->dev, "%s: Unable to write ctrl reg.\n", __func__);
-> +			return err;
-> +		}
-> +	}
->  
->  	buf[0] = bin2bcd(tm->tm_sec);
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SC, buf[0]);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_SC\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write seconds reg.\n", __func__);
->  		return err;
->  	}
->  
->  	buf[0] = bin2bcd(tm->tm_min);
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_MN, buf[0]);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_MN\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write minutes reg.\n", __func__);
->  		return err;
->  	}
->  
->  	buf[0] = bin2bcd(tm->tm_hour);
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_HR, buf[0]);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_HR\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write hour reg.\n", __func__);
->  		return err;
->  	}
->  
-> @@ -208,10 +230,22 @@ static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  	err = i2c_smbus_write_i2c_block_data(client, NCT3018Y_REG_DW,
->  					     sizeof(buf), buf);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write for day and mon and year\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write for day and mon and year.\n", __func__);
->  		return -EIO;
->  	}
->  
-> +	/* Restore TWO bit */
-> +	if (restore_flags) {
-> +		if (part_num & NCT3018Y_REG_PART_NCT3018Y)
-> +			flags &= ~NCT3018Y_BIT_TWO;
-> +
-> +		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> +		if (err < 0) {
-> +			dev_dbg(&client->dev, "%s: Unable to write ctrl reg.\n", __func__);
-> +			return err;
-> +		}
-> +	}
-> +
->  	return err;
->  }
->  
-> @@ -224,7 +258,7 @@ static int nct3018y_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *tm)
->  	err = i2c_smbus_read_i2c_block_data(client, NCT3018Y_REG_SCA,
->  					    sizeof(buf), buf);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to read date\n");
-> +		dev_dbg(&client->dev, "%s: Unable to read date.\n", __func__);
->  		return -EIO;
->  	}
->  
-> @@ -257,19 +291,19 @@ static int nct3018y_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *tm)
->  
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SCA, bin2bcd(tm->time.tm_sec));
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_SCA\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write seconds alarm reg.\n", __func__);
->  		return err;
->  	}
->  
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_MNA, bin2bcd(tm->time.tm_min));
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_MNA\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write minutes alarm reg.\n", __func__);
->  		return err;
->  	}
->  
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_HRA, bin2bcd(tm->time.tm_hour));
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_HRA\n");
-> +		dev_dbg(&client->dev, "%s: Unable to write hour alarm reg.\n", __func__);
->  		return err;
->  	}
->  
-> @@ -473,23 +507,29 @@ static int nct3018y_probe(struct i2c_client *client)
->  
->  	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
->  	if (flags < 0) {
-> -		dev_dbg(&client->dev, "%s: read error\n", __func__);
-> +		dev_dbg(&client->dev, "%s: Failed to read ctrl reg.\n", __func__);
->  		return flags;
->  	} else if (flags & NCT3018Y_BIT_TWO) {
-> -		dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is set\n", __func__);
-> +		dev_dbg(&client->dev, "%s: TWO bit is set.\n", __func__);
->  	}
->  
-> -	flags = NCT3018Y_BIT_TWO;
-> -	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> -	if (err < 0) {
-> -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
-> -		return err;
-> +	part_num = i2c_smbus_read_byte_data(client, NCT3018Y_REG_PART);
-> +	if (part_num < 0) {
-> +		dev_dbg(&client->dev, "%s: Failed to read part info reg.\n", __func__);
-> +		return part_num;
-> +	} else if (part_num & NCT3018Y_REG_PART_NCT3018Y) {
-> +		flags = NCT3018Y_BIT_HF;
-> +		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> +		if (err < 0) {
-> +			dev_dbg(&client->dev, "%s: Unable to write ctrl reg.\n", __func__);
-> +			return err;
-> +		}
->  	}
->  
->  	flags = 0;
->  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_ST, flags);
->  	if (err < 0) {
-> -		dev_dbg(&client->dev, "%s: write error\n", __func__);
-> +		dev_dbg(&client->dev, "%s: Failed to clear status reg.\n", __func__);
->  		return err;
->  	}
->  
-> @@ -507,7 +547,8 @@ static int nct3018y_probe(struct i2c_client *client)
->  						IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
->  						"nct3018y", client);
->  		if (err) {
-> -			dev_dbg(&client->dev, "unable to request IRQ %d\n", client->irq);
-> +			dev_dbg(&client->dev, "%s: Unable to request IRQ %d.\n",
-> +				__func__, client->irq);
->  			return err;
->  		}
->  	} else {
-> -- 
-> 2.17.1
-> 
-
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
+deleted file mode 100644
+index 0b1080c60f63..000000000000
+--- a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-* NXP PCF8523 Real Time Clock
+-
+-Required properties:
+-- compatible: Should contain "nxp,pcf8523".
+-- reg: I2C address for chip.
+-
+-Optional property:
+-- quartz-load-femtofarads: The capacitive load of the quartz(x-tal),
+-  expressed in femto Farad (fF). Valid values are 7000 and 12500.
+-  Default value (if no value is specified) is 12500fF.
+-
+-Example:
+-
+-pcf8523: rtc@68 {
+-	compatible = "nxp,pcf8523";
+-	reg = <0x68>;
+-	quartz-load-femtofarads = <7000>;
+-};
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
+new file mode 100644
+index 000000000000..111cb9938f8f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/nxp,pcf8523.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PCF8523 Real Time Clock
++
++maintainers:
++  - Sam Ravnborg <sam@ravnborg.org>
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    const: nxp,pcf8523
++
++  reg:
++    maxItems: 1
++
++  quartz-load-femtofarads:
++    description:
++      The capacitive load of the crystal, expressed in femto Farad (fF).
++      Valid values are 7000 and 12500. The default value when this property
++      is absent is 12500fF.
++    enum: [ 7000, 12500 ]
++
++  wakeup-source: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@68 {
++            compatible = "nxp,pcf8523";
++            reg = <0x68>;
++            quartz-load-femtofarads = <7000>;
++        };
++    };
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
