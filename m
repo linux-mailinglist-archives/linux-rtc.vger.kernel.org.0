@@ -2,73 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330AC792C86
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 19:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F968792FF4
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 22:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236604AbjIERfY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Sep 2023 13:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S241178AbjIEU2q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Sep 2023 16:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236897AbjIERfH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 13:35:07 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED07412374
-        for <linux-rtc@vger.kernel.org>; Tue,  5 Sep 2023 10:02:36 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-500d13a8fafso4822327e87.1
-        for <linux-rtc@vger.kernel.org>; Tue, 05 Sep 2023 10:02:36 -0700 (PDT)
+        with ESMTP id S240498AbjIEU2p (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 16:28:45 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127E1FA;
+        Tue,  5 Sep 2023 13:28:38 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3a9e89fa553so167643b6e.1;
+        Tue, 05 Sep 2023 13:28:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693933261; x=1694538061; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ITVqO5bicenhh3jxUPk7Zpl/DCHN9osVHVYICZSjhFw=;
-        b=lXMwXLxKEs5vTFWBwQt3PGa/2eXF5PZpI26NsQFfm/Hj/Ox0Yh1Y/7eTRxs5QmqpDY
-         nKTjjmj2R7Ei0gMOPdGLvAdxvchGlqRF2h6Sckx4VHY9xVlpJMjKVS/Vjh2IFU+VfMo/
-         BXMt4tNC3Lypkio66zu9Z58lXDeRb+2U5YhohSPZYMu7zbjL2JjRdMuP6fVzbCmpE/9l
-         UnbvSzDOdiDTlS/5GxofEz+gNvOmg4pRGTsYaueuNIlac91GnbXi4/r6jPfluolav6Sb
-         OBHVS7uTiQQKYdiBI7IIhrJwvS8wx0NnbD+ElTEGKhLAT80UQgMKV2EGyiRpBZGZbZBq
-         ycjQ==
+        d=gmail.com; s=20221208; t=1693945717; x=1694550517; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BTAlf1Pn0y/kznlJiOVRc19uOH2iY5h9kLD6cMbrGec=;
+        b=liOj2IIS8xlM/noLQncRlxHTaJFuzby7A0Z8wm6fRgFFzqB/hVh/EEm4QjLAPjXyNw
+         w8NSsz9RhIBS75XVPsr0lbFHJQ4EG3W4SiX79jF6krxB5vuUugkCASpKcMV62f59Qi2Q
+         iYWYnkKp66PJFtBiJzACESIoR6lYGV+0+9cyGFTfNqKzqgzWyI3aRpYLU+yqb8FUDdPB
+         /q7VRf8A1X9pDaGqGLnwD96zrl36q2JEafifdOKnhoEVmYDB5TJSwD2+wJCiKnr0v65F
+         hqVED9B6P8kIvUPu/woJoqkwpwsl3yLCRCbZF6SnnSTKLn8wlOqgsbWSFfkzPst8ZY1V
+         ar8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693933261; x=1694538061;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITVqO5bicenhh3jxUPk7Zpl/DCHN9osVHVYICZSjhFw=;
-        b=UUy7YoXL3dQrHWL3jw18EoT/sqDENWXMtZToASUIhi8hoF2yzz7aJwYEvTuooFbD/N
-         sJUfbstWpyVof4IfEU0dc462BYWmBs+tV16a2bim1sDoY4pvhEYMeMzsuJ2DogDlyTuP
-         xLbMNduuzBZrQX0p6NNtu26P2ieWtdM05RjGCvCkn5wQPFGJEA3kKEZYg07RUCudCcqT
-         UhlWYVIJjQH1aXElcNojbFq4u2M6aouksjgKIhMtDwxYPCzb3Q5VYJeZHtToJIDdpBaF
-         S/WnmycbyABhQ8cePDzJBxt0vg9qPD1wgU1jUWsq7wiqMNtRmlYr8E/VmlEB1HMZO8Md
-         otPw==
-X-Gm-Message-State: AOJu0YzQcYR61oZAlmQlWhIEuH6Bc7n2wh8vXUzBr8g+0plvaqapxhjP
-        adNGoJ/tksDDKxHBWWONFF9f118i4F431HgnA3E=
-X-Google-Smtp-Source: AGHT+IFezyZ2iyzDBykWMivtiyqKBcnLI8r94bk/OvsGEvrihHti9Fz/5TMpZF4FUMogOwUT/65HTQ==
-X-Received: by 2002:a17:907:a06b:b0:9a1:c00e:60cd with SMTP id ia11-20020a170907a06b00b009a1c00e60cdmr294105ejc.15.1693932355679;
-        Tue, 05 Sep 2023 09:45:55 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id e6-20020a17090681c600b009828e26e519sm7740506ejx.122.2023.09.05.09.45.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Sep 2023 09:45:55 -0700 (PDT)
-Message-ID: <39836874-e3c8-a09c-67ae-42dcb1b40644@linaro.org>
-Date:   Tue, 5 Sep 2023 18:45:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] dt-bindings: rtc: pcf8523: Convert to YAML
-Content-Language: en-US
-To:     Fabio Estevam <festevam@gmail.com>, alexandre.belloni@bootlin.com
+        d=1e100.net; s=20221208; t=1693945717; x=1694550517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BTAlf1Pn0y/kznlJiOVRc19uOH2iY5h9kLD6cMbrGec=;
+        b=ep7F46B2oFW5qaJpOpDw2xWPOJC2MbBKZ777/TJnXIZKhdzJzev0+LeQxlI3XjGVGj
+         YCtIUaXCfR8inutA+Ap1tKoLvTrgFJSNmw+Wy59PYOJGxVYRTCSSDXfypkXyvZJdSgE7
+         gzu6r6k6mHEchD8YAzT5MrUgrMlZRTCjSHaR+h0TRI6Oi9fii/Co7a967NFiyhWZTKmX
+         vJk/X50QEFmzEtobN6x13kuJ9ZJV8xe7NzLwIFlRwAOBp0mt1BaMMFWoSXGQH9m3mesv
+         sGm8602/ftInEVMdLrU8UR7wmxIkSiXUoQX0DlIXSo/JfdLPiaLKHvZudIezYKwMrXjt
+         ywMw==
+X-Gm-Message-State: AOJu0YwnT8ZZQ892Z3jiqYmtnw8Uz/+WPxDEgDoooqpPq+RoSVz2s44m
+        uV+zLe42iIecXZjLNJqVJk5VmxlEc84=
+X-Google-Smtp-Source: AGHT+IE7x7EBKIFZ+qVuqswnyxIG2uwHjRUE1iT/ARHkwcvh5TxlyI8/qqrxmVug6W2kMtdDnkV0Vg==
+X-Received: by 2002:a05:6808:4443:b0:3a9:e40c:683c with SMTP id ep3-20020a056808444300b003a9e40c683cmr16061835oib.1.1693945717206;
+        Tue, 05 Sep 2023 13:28:37 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:2abb:b8c2:b1a6:d1ec])
+        by smtp.gmail.com with ESMTPSA id bf36-20020a056808192400b003a89019d5fesm6279419oib.51.2023.09.05.13.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 13:28:36 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     alexandre.belloni@bootlin.com
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, sam@ravnborg.or, linux-rtc@vger.kernel.org,
+        conor+dt@kernel.org, sam@ravnborg.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Fabio Estevam <festevam@denx.de>
-References: <20230905132324.3146722-1-festevam@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230905132324.3146722-1-festevam@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Subject: [PATCH v2] dt-bindings: rtc: pcf8523: Convert to YAML
+Date:   Tue,  5 Sep 2023 17:28:27 -0300
+Message-Id: <20230905202827.67212-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +70,100 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/09/2023 15:23, Fabio Estevam wrote:
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: nxp,pcf8523
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  quartz-load-femtofarads:
-> +    description:
-> +      The capacitive load of the crystal, expressed in femto Farad (fF).
-> +      Valid values are 7000 and 12500. The default value when this property
-> +      is absent is 12500fF.
-> +    enum: [ 7000, 12500 ]
+From: Fabio Estevam <festevam@denx.de>
 
-default:
-(original binding had it, wasn't it true?)
+Convert the PCF8523 bindings from text format to YAML.
 
-> +
-> +  wakeup-source: true
+The YAML format is preferred as it allows validation.
 
-If there is going to be new version:
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+Changes since v1:
+- Add the default value for quartz-load-femtofarads. (Krzysztof)
+- Pass unevaluatedProperties: false. (Krzysztof)
+- Fixed a typo on Sam's email address.
 
-You can drop it and switch to unevaluatedProperties: false later.
+ .../devicetree/bindings/rtc/nxp,pcf8523.txt   | 18 --------
+ .../devicetree/bindings/rtc/nxp,pcf8523.yaml  | 45 +++++++++++++++++++
+ 2 files changed, 45 insertions(+), 18 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
 
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
+deleted file mode 100644
+index 0b1080c60f63..000000000000
+--- a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-* NXP PCF8523 Real Time Clock
+-
+-Required properties:
+-- compatible: Should contain "nxp,pcf8523".
+-- reg: I2C address for chip.
+-
+-Optional property:
+-- quartz-load-femtofarads: The capacitive load of the quartz(x-tal),
+-  expressed in femto Farad (fF). Valid values are 7000 and 12500.
+-  Default value (if no value is specified) is 12500fF.
+-
+-Example:
+-
+-pcf8523: rtc@68 {
+-	compatible = "nxp,pcf8523";
+-	reg = <0x68>;
+-	quartz-load-femtofarads = <7000>;
+-};
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
+new file mode 100644
+index 000000000000..8d17b89fef5e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/nxp,pcf8523.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PCF8523 Real Time Clock
++
++maintainers:
++  - Sam Ravnborg <sam@ravnborg.org>
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    const: nxp,pcf8523
++
++  reg:
++    maxItems: 1
++
++  quartz-load-femtofarads:
++    description:
++      The capacitive load of the crystal, expressed in femto Farad (fF).
++    enum: [ 7000, 12500 ]
++    default: 7000
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@68 {
++            compatible = "nxp,pcf8523";
++            reg = <0x68>;
++            quartz-load-femtofarads = <7000>;
++        };
++    };
+-- 
+2.34.1
 
