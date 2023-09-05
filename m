@@ -2,176 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09AA792936
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 18:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330AC792C86
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Sep 2023 19:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351375AbjIEQZu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Sep 2023 12:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S236604AbjIERfY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Sep 2023 13:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354890AbjIEPbO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 11:31:14 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC0E133;
-        Tue,  5 Sep 2023 08:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
-        :Date:subject:date:message-id:reply-to;
-        bh=fR7/pUIZZF8wg5bPUHqm8nweapAeagB9vRBa1oywFk8=; b=CPlhF/FT7DZNwNFu6rkZtRg6oU
-        YpXFpDGlXxb892/ha1uPUNk7mTelmfcMesVzb21iUJp19Y7zshm0ohfnCY1W3VOBRS0Znai09dh0E
-        NKspso2/BCG323PHVD5b7lWYZYEWeEPkYRDLiOt7LIpo2ag9Q1fY0NFme0pCxAcTarqM=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57534 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qdY15-0001Zj-Io; Tue, 05 Sep 2023 11:31:00 -0400
-Date:   Tue, 5 Sep 2023 11:30:58 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Conor Dooley <conor@kernel.org>, a.zummo@towertech.it,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-rtc@vger.kernel.org,
+        with ESMTP id S236897AbjIERfH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Sep 2023 13:35:07 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED07412374
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Sep 2023 10:02:36 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-500d13a8fafso4822327e87.1
+        for <linux-rtc@vger.kernel.org>; Tue, 05 Sep 2023 10:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693933261; x=1694538061; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ITVqO5bicenhh3jxUPk7Zpl/DCHN9osVHVYICZSjhFw=;
+        b=lXMwXLxKEs5vTFWBwQt3PGa/2eXF5PZpI26NsQFfm/Hj/Ox0Yh1Y/7eTRxs5QmqpDY
+         nKTjjmj2R7Ei0gMOPdGLvAdxvchGlqRF2h6Sckx4VHY9xVlpJMjKVS/Vjh2IFU+VfMo/
+         BXMt4tNC3Lypkio66zu9Z58lXDeRb+2U5YhohSPZYMu7zbjL2JjRdMuP6fVzbCmpE/9l
+         UnbvSzDOdiDTlS/5GxofEz+gNvOmg4pRGTsYaueuNIlac91GnbXi4/r6jPfluolav6Sb
+         OBHVS7uTiQQKYdiBI7IIhrJwvS8wx0NnbD+ElTEGKhLAT80UQgMKV2EGyiRpBZGZbZBq
+         ycjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693933261; x=1694538061;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ITVqO5bicenhh3jxUPk7Zpl/DCHN9osVHVYICZSjhFw=;
+        b=UUy7YoXL3dQrHWL3jw18EoT/sqDENWXMtZToASUIhi8hoF2yzz7aJwYEvTuooFbD/N
+         sJUfbstWpyVof4IfEU0dc462BYWmBs+tV16a2bim1sDoY4pvhEYMeMzsuJ2DogDlyTuP
+         xLbMNduuzBZrQX0p6NNtu26P2ieWtdM05RjGCvCkn5wQPFGJEA3kKEZYg07RUCudCcqT
+         UhlWYVIJjQH1aXElcNojbFq4u2M6aouksjgKIhMtDwxYPCzb3Q5VYJeZHtToJIDdpBaF
+         S/WnmycbyABhQ8cePDzJBxt0vg9qPD1wgU1jUWsq7wiqMNtRmlYr8E/VmlEB1HMZO8Md
+         otPw==
+X-Gm-Message-State: AOJu0YzQcYR61oZAlmQlWhIEuH6Bc7n2wh8vXUzBr8g+0plvaqapxhjP
+        adNGoJ/tksDDKxHBWWONFF9f118i4F431HgnA3E=
+X-Google-Smtp-Source: AGHT+IFezyZ2iyzDBykWMivtiyqKBcnLI8r94bk/OvsGEvrihHti9Fz/5TMpZF4FUMogOwUT/65HTQ==
+X-Received: by 2002:a17:907:a06b:b0:9a1:c00e:60cd with SMTP id ia11-20020a170907a06b00b009a1c00e60cdmr294105ejc.15.1693932355679;
+        Tue, 05 Sep 2023 09:45:55 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id e6-20020a17090681c600b009828e26e519sm7740506ejx.122.2023.09.05.09.45.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Sep 2023 09:45:55 -0700 (PDT)
+Message-ID: <39836874-e3c8-a09c-67ae-42dcb1b40644@linaro.org>
+Date:   Tue, 5 Sep 2023 18:45:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] dt-bindings: rtc: pcf8523: Convert to YAML
+Content-Language: en-US
+To:     Fabio Estevam <festevam@gmail.com>, alexandre.belloni@bootlin.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, sam@ravnborg.or, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bruno.thomsen@gmail.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230905113058.0fed933265fb68cd53b6d0fa@hugovil.com>
-In-Reply-To: <20230808084426.fc7e432a9d85e5caf72d3ffe@hugovil.com>
-References: <20230802191153.952667-1-hugo@hugovil.com>
-        <20230802191153.952667-2-hugo@hugovil.com>
-        <20230808-capsize-deodorize-5776d3dbb192@spud>
-        <20230808082533.b608c9a2a4bd922920643c4b@hugovil.com>
-        <202308081232266ec8a9b7@mail.local>
-        <20230808084426.fc7e432a9d85e5caf72d3ffe@hugovil.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fabio Estevam <festevam@denx.de>
+References: <20230905132324.3146722-1-festevam@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230905132324.3146722-1-festevam@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH 1/2] dt-bindings: rtc: add properties to set
- battery-related functions
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 8 Aug 2023 08:44:26 -0400
-Hugo Villeneuve <hugo@hugovil.com> wrote:
+On 05/09/2023 15:23, Fabio Estevam wrote:
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: nxp,pcf8523
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  quartz-load-femtofarads:
+> +    description:
+> +      The capacitive load of the crystal, expressed in femto Farad (fF).
+> +      Valid values are 7000 and 12500. The default value when this property
+> +      is absent is 12500fF.
+> +    enum: [ 7000, 12500 ]
 
-> On Tue, 8 Aug 2023 14:32:26 +0200
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> 
-> > On 08/08/2023 08:25:33-0400, Hugo Villeneuve wrote:
-> > > On Tue, 8 Aug 2023 12:21:24 +0100
-> > > Conor Dooley <conor@kernel.org> wrote:
-> > > 
-> > > > Hey Hugo,
-> > > > 
-> > > > On Wed, Aug 02, 2023 at 03:11:52PM -0400, Hugo Villeneuve wrote:
-> > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > > 
-> > > > > These properties can be defined in the board's device tree to set the
-> > > > > default power-on values for battery-related functions.
-> > > > > 
-> > > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > > ---
-> > > > >  .../devicetree/bindings/rtc/rtc.yaml          | 19 +++++++++++++++++++
-> > > > >  1 file changed, 19 insertions(+)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
-> > > > > index efb66df82782..0217d229e3fa 100644
-> > > > > --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
-> > > > > @@ -26,6 +26,25 @@ properties:
-> > > > >        0: not chargeable
-> > > > >        1: chargeable
-> > > > >  
-> > > > > +  battery-low-detect:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > +    enum: [0, 1]
-> > > > > +    description: |
-> > > > > +      For RTC devices supporting a backup battery/supercap, this flag can be
-> > > > > +      used to configure the battery low detection reporting function:
-> > > > > +      0: disabled
-> > > > > +      1: enabled
-> > > > > +
-> > > > > +  battery-switch-over:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > +    enum: [0, 1]
-> > > > > +    description: |
-> > > > > +      For RTC devices supporting a backup battery/supercap, this flag can be
-> > > > > +      used to configure the battery switch over when the main voltage source is
-> > > > > +      turned off:
-> > > > > +      0: disabled
-> > > > > +      1: enabled
-> > > > 
-> > > > Why are these implemented as enums? This seems to fall into the category
-> > > > of using DT to determine software policy - why's it not sufficient to
-> > > > have boolean properties that indicate hardware support and let the software
-> > > > decide what to do with them?
-> > > 
-> > > Hi Conor,
-> > > the reason is that I based the new properties on the existing property
-> > > "aux-voltage-chargeable":
-> > > 
-> > > -------------------
-> > >  aux-voltage-chargeable:
-> > >     $ref: /schemas/types.yaml#/definitions/uint32
-> > >     enum: [0, 1]
-> > >     description: |
-> > >       Tells whether the battery/supercap of the RTC (if any) is
-> > >       chargeable or not:
-> > >       0: not chargeable
-> > >       1: chargeable
-> > > -------------------
-> > > 
-> > > I agree with you that a boolean would be more appropriate. Should I
-> > > also submit a (separate) patch to fix the "aux-voltage-chargeable"
-> > > property to a boolean?
-> > > 
-> > 
-> > No, this is an enum on purpose.
-> > I will not take battery switch over related properties, this is not
-> > hardware description but software configuration. There is an ioctl for
-> > this.
-> 
-> Hi Alexandre,
-> can you suggest then how we can set default PWRMNG values for the
-> PCF2131 then?
-> 
-> I looked at Documentation/ABI/testing/rtc-cdev but couldn't find an
-> ioctl to activate the battery switch over function, nor one to activate
-> the battery-low detection...
+default:
+(original binding had it, wasn't it true?)
 
-Ping...
+> +
+> +  wakeup-source: true
+
+If there is going to be new version:
+
+You can drop it and switch to unevaluatedProperties: false later.
 
 
-> Thank you,
-> Hugo.
-> 
-> 
-> > 
-> > > Hugo.
-> > > 
-> > > 
-> > > > Thanks,
-> > > > Conor.
-> > > > 
-> > > > > +
-> > > > >    quartz-load-femtofarads:
-> > > > >      description:
-> > > > >        The capacitive load of the quartz(x-tal), expressed in femto
-> > > > > -- 
-> > > > > 2.30.2
-> > > > > 
-> > 
-> > -- 
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+Best regards,
+Krzysztof
+
