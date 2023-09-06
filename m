@@ -2,64 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0FD793CF6
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 14:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81A1793D90
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 15:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238457AbjIFMs1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Sep 2023 08:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S233115AbjIFNVs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Sep 2023 09:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238324AbjIFMs0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Sep 2023 08:48:26 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3450E1733;
-        Wed,  6 Sep 2023 05:48:20 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-52bcb8b199aso5207240a12.3;
-        Wed, 06 Sep 2023 05:48:20 -0700 (PDT)
+        with ESMTP id S231766AbjIFNVr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Sep 2023 09:21:47 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B02E10E2
+        for <linux-rtc@vger.kernel.org>; Wed,  6 Sep 2023 06:21:42 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9a603159f33so543691166b.0
+        for <linux-rtc@vger.kernel.org>; Wed, 06 Sep 2023 06:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694004498; x=1694609298; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rsE1sJuhI3+vAPSDY8OreHubYHG2pVwPaUCCeIf6A3c=;
-        b=Cf14bEvLFIrit+rPL20H1ksAD5qcSkzUPjjRg6t025knet9SkvDCvihXPRO35C9aBu
-         hPoL0seiy0YwKILr51I4AzrKnEaSmgr1gaVtoMthvwqPDeVTvGpiwewdgIm6cs6ftFJM
-         U21BhgyiNv5ArSyyyIWSk9i9j29EVJycm5vLTAg7+KNNwJTa1iYRMNpEdxk12u/ZM5U6
-         35GRrCnlHrFDCjicT4sXGz6VHLgKnLgr5DhfDZd3B+1r38jiS5Lp7DFnb8hyoS5tf+sp
-         3wCtjwUbv8i/Qxj7A19L1GklMx7X/+qqpgtqTH4euJiRlL5AAMEadWvIAQqp9mBmfFxB
-         zGkA==
+        d=linaro.org; s=google; t=1694006501; x=1694611301; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5VeKi9/ArJTcrdf/DJQWIeh6fMdLX32bOeVBSbYiaos=;
+        b=husH/zp9/SSyhOM63F1EVjV+XCBnoKoDjcI+iK8KyBqsBYL2luTCLW+5cUG22a4lLT
+         1f2uKHnAMr/UW5DWO1W6P5tx/FZTU3Tw4ZGXWi1rLxPUQ+1LFNMH3kWXp/pwRwilcVG7
+         UiGjknjH/leEhAiBdlXAL+/M18svHuCJp04lyARD10+jwzOG5Ju2jSc2euNM8xW51hE3
+         VG71LjtNPHDfItDDd0OLPoecA6vnlWuvyFj6sAwwgGbVAbvnx59OjE5Ai3fpj0eAQxAc
+         D3vmZpOJ1IBcBj9BaA5JP75394d87Sluoo5NDQLoBAGNld/AJDPX7nWyXi1FsJ0/9DQ9
+         agZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694004498; x=1694609298;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rsE1sJuhI3+vAPSDY8OreHubYHG2pVwPaUCCeIf6A3c=;
-        b=IqL8h7409RT2dWL5v18SZ4Syi54iNeNVD0KMUumjBwfcQ02m3td8pHQ6o0RXLhLR5w
-         CXQXsU2kZoeU1llUxOmrwg/I0oEgSbqNyz9KuGm4tnS+nP2sClYtdIWZoI31uD3CYk6J
-         1/ubksLyjsc6KoPR1DR99NsGPOE0XhO81jm5vk1sWbZHh6nxmAYsrozY7FfRAMeDS+GH
-         7Ll2N+Dxqmoct52nfPydFOPK117jujh4+rS8KBkFWSgkNYiK95GF2foMskHNKGam8Ogl
-         C+0XZkdXymvQHatQBjzjjCxwywQZaDwhxVkxeQU6sOqf596ye7DQnTD1sT0oXfAeADbn
-         zMNg==
-X-Gm-Message-State: AOJu0Yx+knYeGoRM/jGclV+DLm+QFXoSCK0WYjBW+D5mwvvK2Vw32iPQ
-        muQxWKI/eJx0utDwKn6yUqs=
-X-Google-Smtp-Source: AGHT+IGUTzqcn12Bjvfufbj0dyXJDiPt8h1wWAslBvMpwzaDQMx7ryWqXpsFVbPl48RjKNUgVQIl3w==
-X-Received: by 2002:a17:906:4e:b0:9a5:a0c6:9e8d with SMTP id 14-20020a170906004e00b009a5a0c69e8dmr2273405ejg.5.1694004498166;
-        Wed, 06 Sep 2023 05:48:18 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41b4-ce80-9ba7-86a5-b5ba-d267.cable.dynamic.v6.surfer.at. [2a02:8389:41b4:ce80:9ba7:86a5:b5ba:d267])
-        by smtp.gmail.com with ESMTPSA id se22-20020a170906ce5600b009a1dbf55665sm8972496ejb.161.2023.09.06.05.48.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 05:48:17 -0700 (PDT)
-From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date:   Wed, 06 Sep 2023 14:48:16 +0200
-Subject: [PATCH v2] dt-bindings: rtc: mcp795: move to trivial-rtc
+        d=1e100.net; s=20221208; t=1694006501; x=1694611301;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5VeKi9/ArJTcrdf/DJQWIeh6fMdLX32bOeVBSbYiaos=;
+        b=ZOhsMFKkGHUoiFFZ005VzaJRroAKbpymXhjGvAKV/wT0ZG2i1HcHaZRgIfViYhrY1i
+         cAvGTNjKkqofXIn6p4Lxsn8yrdpINiYF5gaaU1Gf302AbSei1Hzsw9zSSjTddwJ76Mq7
+         6KXxreCUoEwv7PIRvfK07bpYlUdSf3Y2cc6HWc+fxt12l7E6YKvyHhu2Tixbul0DKV9N
+         /zhE0siMeFT/mrNpdxKwpamKSO90oXGdXAmmRh34kCUANh4gcK6d2krmb+X/AQNcNOwP
+         xK4BhWLwSEhr8Ga3noKJuZ8bV2c+X55pkZzAEbsmHdW/L8AuA3WpA+5Cq5Y/L8AIgx7Y
+         2PkA==
+X-Gm-Message-State: AOJu0YwXnzxlz7NM9C8Q9iMsLV87qfUbTxMZujvXRpw0LIgv33K+wcnK
+        35Xl/5cNEHP9MbkSnpraoq/T3w==
+X-Google-Smtp-Source: AGHT+IHV10jiJH/3WC9ALJHJW1lfi34oo5lqmZPk3BL0t6juF8X5rY+MxuF2VkP3ZNWfJRtva7WsmA==
+X-Received: by 2002:a17:906:1d1:b0:9a1:fb4c:3b65 with SMTP id 17-20020a17090601d100b009a1fb4c3b65mr2496168ejj.14.1694006500792;
+        Wed, 06 Sep 2023 06:21:40 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id gu18-20020a170906f29200b0098f99048053sm9165893ejb.148.2023.09.06.06.21.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Sep 2023 06:21:40 -0700 (PDT)
+Message-ID: <6ae8f584-63ac-2d41-c689-c49eefa19764@linaro.org>
+Date:   Wed, 6 Sep 2023 15:21:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230906-topic-rtc_mcp795_yaml-v2-1-f9bef40c99b9@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAA91+GQC/4WNSwrCMBQAryJZG0laYowr7yGl5PNsH+RTklosp
- Xc39gIuZ2CYjRTICIXcTxvJsGDBFCs05xOxo44DUHSVScOalil2pXOa0NI82z7YSSrRrzp4yjk
- TN1DKOe1IbY0uQE3W0Y61jm/vq5wyvPBzzJ5d5RHLnPJ6vBf+s/82C6ecOpDCtlIaYdhjCBr9x
- aZAun3fv6orsHfPAAAA
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2] dt-bindings: rtc: mcp795: move to trivial-rtc
+To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -67,19 +64,16 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Emil Bartczak <emilbart@gmail.com>,
         Josef Gajdusek <atx@atx.name>
 Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694004496; l=2370;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=zChXtySttk/deFixIOur9hQARtSdvouNz1smwQEmocY=;
- b=mcXKZze19ECtyzc8zDaf3IGATW+DWDRMVd79bz1zHSdn9SlujT1Bs4ACgBuYPHvNyHxXwmU1u
- RS56uMwiUr4BbeE5jFqQZUxFYCn711TbxhgsP8Cl/u3Fii8pd0VRHRr
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        linux-kernel@vger.kernel.org
+References: <20230906-topic-rtc_mcp795_yaml-v2-1-f9bef40c99b9@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230906-topic-rtc_mcp795_yaml-v2-1-f9bef40c99b9@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,70 +81,65 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The current mcp795 bindings in text format do not support validation and
-are missing the optional interrupt property that is currently supported.
+On 06/09/2023 14:48, Javier Carrasco wrote:
+> The current mcp795 bindings in text format do not support validation and
+> are missing the optional interrupt property that is currently supported.
+> 
+> Adding the missing property makes the bindings identical to the existing
+> trivial-rtc bindings.
+> 
+> Add maxim,mcp795 to the trivial-rtc bindings and delete current .txt
+> bindings
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+> The current mcp795 bindings in text format do not support validation and
+> are missing the optional interrupt property that is currently supported.
+> 
+> Adding the missing property makes the bindings identical to the existing
+> trivial-rtc bindings.
+> 
+> Add maxim,mcp795 to the trivial-rtc bindings and delete current .txt
+> bindings
+> ---
+> Changes in v2:
+> - Move mcp795 to trivial-rtc
+> - Link to v1: https://lore.kernel.org/r/20230906-topic-rtc_mcp795_yaml-v1-1-de75c377b5b0@gmail.com
+> ---
+>  Documentation/devicetree/bindings/rtc/maxim,mcp795.txt | 11 -----------
+>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml |  2 ++
+>  2 files changed, 2 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt b/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
+> deleted file mode 100644
+> index a59fdd8c236d..000000000000
+> --- a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -* Maxim MCP795		SPI Serial Real-Time Clock
+> -
+> -Required properties:
+> -- compatible: Should contain "maxim,mcp795".
+> -- reg: SPI address for chip
+> -
+> -Example:
+> -	mcp795: rtc@0 {
+> -		compatible = "maxim,mcp795";
+> -		reg = <0>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> index 9af77f21bb7f..ae4792bbde92 100644
+> --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> @@ -49,6 +49,8 @@ properties:
+>        - isil,isl12022
+>        # Real Time Clock Module with I2C-Bus
+>        - microcrystal,rv3029
+> +      # SPI-BUS INTERFACE REAL TIME CLOCK MODULE
+> +      - maxim,mcp795
 
-Adding the missing property makes the bindings identical to the existing
-trivial-rtc bindings.
-
-Add maxim,mcp795 to the trivial-rtc bindings and delete current .txt
-bindings
-
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
-The current mcp795 bindings in text format do not support validation and
-are missing the optional interrupt property that is currently supported.
-
-Adding the missing property makes the bindings identical to the existing
-trivial-rtc bindings.
-
-Add maxim,mcp795 to the trivial-rtc bindings and delete current .txt
-bindings
----
-Changes in v2:
-- Move mcp795 to trivial-rtc
-- Link to v1: https://lore.kernel.org/r/20230906-topic-rtc_mcp795_yaml-v1-1-de75c377b5b0@gmail.com
----
- Documentation/devicetree/bindings/rtc/maxim,mcp795.txt | 11 -----------
- Documentation/devicetree/bindings/rtc/trivial-rtc.yaml |  2 ++
- 2 files changed, 2 insertions(+), 11 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt b/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-deleted file mode 100644
-index a59fdd8c236d..000000000000
---- a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-+++ /dev/null
-@@ -1,11 +0,0 @@
--* Maxim MCP795		SPI Serial Real-Time Clock
--
--Required properties:
--- compatible: Should contain "maxim,mcp795".
--- reg: SPI address for chip
--
--Example:
--	mcp795: rtc@0 {
--		compatible = "maxim,mcp795";
--		reg = <0>;
--	};
-diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-index 9af77f21bb7f..ae4792bbde92 100644
---- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-@@ -49,6 +49,8 @@ properties:
-       - isil,isl12022
-       # Real Time Clock Module with I2C-Bus
-       - microcrystal,rv3029
-+      # SPI-BUS INTERFACE REAL TIME CLOCK MODULE
-+      - maxim,mcp795
-       # Real Time Clock
-       - microcrystal,rv8523
-       # Real-time Clock Module
-
----
-base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-change-id: 20230906-topic-rtc_mcp795_yaml-11058e99ddad
+Does not look ordered by compatible.
 
 Best regards,
--- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Krzysztof
 
