@@ -2,79 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD99793E44
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 16:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73F87944EF
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 23:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241382AbjIFOBc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Sep 2023 10:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
+        id S229866AbjIFVHE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Sep 2023 17:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjIFOBc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Sep 2023 10:01:32 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C410C6;
-        Wed,  6 Sep 2023 07:01:27 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 64C85E0014;
-        Wed,  6 Sep 2023 14:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1694008886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/Cc3GDyhTJkNnRyDhyOHbwZd++EIJkpgVHFot9WD1+s=;
-        b=R+wgsfOVdpCFKot7c1YUEADgmYoIQ5/WhpjKIOe4kdT91hMjPded5ljT30TGF1L07Lv016
-        yYGyZlJt8zlfWFWju4AA5RuLB2RR0riAlJMGtB00OOUgr4lB6xpjxcmRY0R9k+wVb9wuvS
-        4o8MBGd9hdZra+NgmUC3ThYFm7L80D4E8fogwPbAHC5wtKdlGfvU/DKJklONQFx2EsN99s
-        mGDeeh/nDAlZxfNVAgne3rtD55H1l4hv0S1bwx/5ZcCrEc45LJadW2DMJSguM6giJ6Vxot
-        AyFJZXCIzVFCzvFKJNgoQwFICvDSffmtNGSnsbi2tFRwnr48NosQxI9qBskj5Q==
-Date:   Wed, 6 Sep 2023 16:01:23 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Mining Lin <mimi05633@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        a.zummo@towertech.it, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        KFLIN@nuvoton.com, mylin1@nuvoton.com, openbmc@lists.ozlabs.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] rtc: nuvoton: Compatible with NCT3015Y-R and
- NCT3018Y-R
-Message-ID: <20230906140123dd8ffac4@mail.local>
-References: <202309050635059ecd17a2@mail.local>
- <D6734DA5-839E-40A6-9085-F25BB8D70022@gmail.com>
+        with ESMTP id S232411AbjIFVHE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Sep 2023 17:07:04 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F221010E9;
+        Wed,  6 Sep 2023 14:07:00 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8812DC433C7;
+        Wed,  6 Sep 2023 21:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694034420;
+        bh=an0mR5nW8SKPBFAgxd/VoVsb+gga/Qf/UwrGGkZeZP8=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=mey/NcOM/wjd1acfrlS810bTi1xacHHCj1q/+t9+AqHcg+d8nVG5ts5m5k+GWJU7k
+         SYnCHQGGkR1S+o8g///Cys77gvWEe1tp95OGCkujE8WG9/dNdtbJ3L0sPS2x/oJuRT
+         7vqCsB2s1udQrELIg7isaO1e6II8oOLxGFNyE0s8TpduFMvUjC52p6NB6Ujll5o4SJ
+         BvLGT/EVRKRiQxtWsyrQqyjAi2b802FXuUXnZd1xk8Cnr0xW8fDnvIZgC3geSrkumq
+         xmvmN3pTpzDJLk8rceNuK3E3uqmu7GOzwSssYTDPIWk6eOpfXwiy+D5u4wfFPO08sR
+         5+yZfnT9Os11w==
+Message-ID: <be8d0ac6da08fdb757d4bec365bc8a94.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D6734DA5-839E-40A6-9085-F25BB8D70022@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <567a09b4-2184-1bd8-a3fc-8a5fd4d682ad@roeck-us.net>
+References: <20230817225537.4053865-1-linux@roeck-us.net> <20230817225537.4053865-3-linux@roeck-us.net> <6991631008bab403e957534d6d05360c.sboyd@kernel.org> <afa30d68-4f53-4903-b470-0d337c9aa7aa@roeck-us.net> <8bde38a9e447fc4c3a8834220a3073fa.sboyd@kernel.org> <567a09b4-2184-1bd8-a3fc-8a5fd4d682ad@roeck-us.net>
+Subject: Re: [PATCH v2 2/7] rtc: alarmtimer: Use maximum alarm time offset
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <jstultz@google.com>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Date:   Wed, 06 Sep 2023 14:06:58 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 06/09/2023 09:19:29+0800, Mining Lin wrote:
-> >> static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
-> >> {
-> >>    int err, flags;
-> >> @@ -55,7 +59,7 @@ static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
-> >>    flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-> >>    if (flags < 0) {
-> >>        dev_dbg(&client->dev,
-> >> -            "Failed to read NCT3018Y_REG_CTRL\n");
-> >> +            "%s: Failed to read ctrl reg.\n", __func__);
-> > 
-> > If you really insist on this change, what about:
-> > 
-> > #define pr_fmt(fmt) "%s: " fmt, __func__
-> [Mia] Do you mean to replace dev_dbg with pr_debug? If yes, for consistency, I'm going to refine all messages via pr_debug. Thank you for your suggestion.
+Quoting Guenter Roeck (2023-08-30 21:23:54)
+> On 8/30/23 14:16, Stephen Boyd wrote:
+> >=20
+> > We fail alarmtimer creation in the case that CONFIG_RTC_CLASS=3Dn or wh=
+en
+> > there isn't an rtc. See alarmtimer_get_rtcdev() and how it is called. I
+> > doubt it ever really happens in practice, but it looks possible to
+> > simulate by unbinding the rtc device driver.
+>=20
+> Thanks for the clarification. That really makes me wonder what happens
+> if an rtc device is unregistered. The .remove_dev callback of
+> alarmtimer_rtc_interface is not populated, and rtc_dev is never cleared.
+> That means unbinding an rtc device driver should result in a crash.
+> Am I missing something ?
+>=20
 
-No, I mean that instead of adding __func__ to all the messages just
-define pr_fmt, this should achieve what you want.
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yeah it looks like a potential problem, but most likely nobody actually
+removes the rtc device from the system. It would be good to handle this
+case in a followup patch anyway though.
