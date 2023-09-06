@@ -2,77 +2,52 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DF2793A0E
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 12:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC55F793B5B
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Sep 2023 13:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237490AbjIFKmy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Sep 2023 06:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S239771AbjIFLdC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Sep 2023 07:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbjIFKmt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Sep 2023 06:42:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B13E71
-        for <linux-rtc@vger.kernel.org>; Wed,  6 Sep 2023 03:42:45 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9a603159f33so518126166b.0
-        for <linux-rtc@vger.kernel.org>; Wed, 06 Sep 2023 03:42:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693996964; x=1694601764; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eO5wMu98pG36tlzNwqD46Jc2RmjnNtEapWMKukOamV8=;
-        b=ipf4dUHvbmgiS7z9f8Mlr4iOhLIsagGKUwaWxeQFVv2erbVKEmmmwJ1GyHlvQIhiZN
-         xN9nOA2n8hqwbFshiBOe8kOorYSVn5tGZGUJlyIBddNKsR4C89/vGj89/9KqSjh0qdat
-         UAffT83yEpGvY44bxygDNgYPBdWygj9FmPCZxUjQAE5rSy0vp9/TcMVogwNOOnehzh+K
-         R6XbUGHy1GS99ohVJ/025zuz4M87bs8yIyjapoUOWcLZW8ZOgMmeRxsWPtYty5nSAqa2
-         PW/dkq9OcBadv0xnd9BmhjoGvTo/sxm3yoUsSAisXWV7EC7cv1gPzjydI38XHe4d/571
-         tztg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693996964; x=1694601764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eO5wMu98pG36tlzNwqD46Jc2RmjnNtEapWMKukOamV8=;
-        b=BFrIJbfKsm869sFtp/5JZDyV6cWM94FvpketM/l/w8g6FIWlXCuFK0YhZqx53EakhL
-         wFy6bObJGeTtT3tc2j++SQfSwto4BI0AamStjy6rHubYF48asEbUwMrR/Jl2q5RDF0+o
-         EqBYq5N7WxjoAGcb8J7uOy6lr1j85WeHlegrTCjcOdmzxwX3Ud9xTlBnexNye8esNk1J
-         0RVCxmvPk8a2r6vgPwxH5vGeWSZqhyxOYEuAriKbkESiDfEEBEh+FVeYjcyyMki4Ov11
-         NoZSs2eBDOep+Zmdz74tsxEYySPNUcSe4BY9vNJFwEgbqJzTzZV7U70GMm6BIZiSyeQc
-         6CXA==
-X-Gm-Message-State: AOJu0YynWdM7zImmiz2P4MEEOsuXtOA56sHqrvsB2tfWMFtQ0VXBc9uo
-        LygR9xFIxNgCsCM43e+yUaqrjA==
-X-Google-Smtp-Source: AGHT+IHzRpu9vaazq4OQ0fvnAeUpDMKnozi+4O/OgApO0oxQ1a0GAmIoAgrCOSntQcZNm4cOSnkszw==
-X-Received: by 2002:a17:906:217:b0:9a1:f21e:cdff with SMTP id 23-20020a170906021700b009a1f21ecdffmr2136635ejd.23.1693996964049;
-        Wed, 06 Sep 2023 03:42:44 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id cf20-20020a170906b2d400b00988dbbd1f7esm8764168ejb.213.2023.09.06.03.42.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Sep 2023 03:42:43 -0700 (PDT)
-Message-ID: <bb0548ed-e88c-bd21-caeb-1b767259b0ad@linaro.org>
-Date:   Wed, 6 Sep 2023 12:42:42 +0200
+        with ESMTP id S238572AbjIFLdB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Sep 2023 07:33:01 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6CD1734;
+        Wed,  6 Sep 2023 04:32:25 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28719C433C7;
+        Wed,  6 Sep 2023 11:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693999921;
+        bh=gY6yuQsGYBUPwDr9MeYAHXj+FeYbykc4igmyd6IpcLY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=HlNMzfMGP9osgqtfU0VLYL9Y6cPbRqTLxOwgxOME6sMezlh86l/MwdG79pKSRQFgp
+         FeJpkzel1s7QrQMcT4p2ca2PQLFgcWas7qD58hCS5McJWyLggd+d8hdnhWJD2bbDB1
+         oFkU198xfVT5XcLkXatYNkgf5DOkHxr+7mgPmprp6bkjCTgYi+F/FDFNssF03bc9Om
+         4Jh0DOiM+5wB01U58Uk0FnsfDlOKIIICCiyGU4EYfZ/Dphi4LbfEG9DapycXQJQpDy
+         cHcN5Aw+w0TPgwuHgQKZotdVVuyD+Qb5J1r6k8Ce2+wHEVQVp54s9Guoapq4gk9MXH
+         ZtutRz0CSNVOQ==
+Received: (nullmailer pid 1001423 invoked by uid 1000);
+        Wed, 06 Sep 2023 11:31:59 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] dt-bindings: rtc: mcp795: convert to YAML
-Content-Language: en-US
-To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
+From:   Rob Herring <robh@kernel.org>
+To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc:     Emil Bartczak <emilbart@gmail.com>, linux-rtc@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Conor Dooley <conor+dt@kernel.org>,
-        Emil Bartczak <emilbart@gmail.com>,
-        Josef Gajdusek <atx@atx.name>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230906-topic-rtc_mcp795_yaml-v1-1-de75c377b5b0@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Josef Gajdusek <atx@atx.name>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        devicetree@vger.kernel.org
 In-Reply-To: <20230906-topic-rtc_mcp795_yaml-v1-1-de75c377b5b0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20230906-topic-rtc_mcp795_yaml-v1-1-de75c377b5b0@gmail.com>
+Message-Id: <169399991900.1001400.3348200070313324495.robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: rtc: mcp795: convert to YAML
+Date:   Wed, 06 Sep 2023 06:31:59 -0500
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,7 +56,8 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 06/09/2023 12:23, Javier Carrasco wrote:
+
+On Wed, 06 Sep 2023 12:23:10 +0200, Javier Carrasco wrote:
 > Convert the MCP795 bindings from text to YAML format to support bindings
 > validation.
 > 
@@ -93,66 +69,34 @@ On 06/09/2023 12:23, Javier Carrasco wrote:
 >  .../devicetree/bindings/rtc/maxim,mcp795.yaml      | 35 ++++++++++++++++++++++
 >  2 files changed, 35 insertions(+), 11 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt b/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-> deleted file mode 100644
-> index a59fdd8c236d..000000000000
-> --- a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -* Maxim MCP795		SPI Serial Real-Time Clock
-> -
-> -Required properties:
-> -- compatible: Should contain "maxim,mcp795".
-> -- reg: SPI address for chip
-> -
-> -Example:
-> -	mcp795: rtc@0 {
-> -		compatible = "maxim,mcp795";
-> -		reg = <0>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/rtc/maxim,mcp795.yaml b/Documentation/devicetree/bindings/rtc/maxim,mcp795.yaml
-> new file mode 100644
-> index 000000000000..77e465747d43
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/maxim,mcp795.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/maxim,mcp795.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MCP795 SPI Serial Real Time Clock
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
 
-Nit: By convention, this goes after maintainers/description.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +
-> +maintainers:
-> +  - Josef Gajdusek <atx@atx.name>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - maxim,mcp795
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
+yamllint warnings/errors:
 
-This should be unevaluatedProperties:false, so you allow other common
-RTC properties. But then, it is even smaller than trivial RTC devices, so:
-1. What about interrupts? No interrupt line?
-2. If there is interrupt line, just add it to trivial-rtc. Otherwise,
-it's fine here with changes above.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/rtc/maxim,mcp795.example.dts:20.13-23: Warning (reg_format): /example-0/rtc@0:reg: property has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
+Documentation/devicetree/bindings/rtc/maxim,mcp795.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/rtc/maxim,mcp795.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/rtc/maxim,mcp795.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/rtc/maxim,mcp795.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/rtc/maxim,mcp795.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
 
-Best regards,
-Krzysztof
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230906-topic-rtc_mcp795_yaml-v1-1-de75c377b5b0@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
