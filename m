@@ -2,75 +2,194 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954ED79B252
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Sep 2023 01:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D61079BF44
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Sep 2023 02:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbjIKUuW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Sep 2023 16:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S230295AbjIKUuY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Sep 2023 16:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236117AbjIKJvL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Sep 2023 05:51:11 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D7CCE6;
-        Mon, 11 Sep 2023 02:51:05 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7A672E0007;
-        Mon, 11 Sep 2023 09:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1694425862;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wMBDha9fdZATE/tS3IS+GhXBQ2biCPCamqQI4+g2x5g=;
-        b=U6NLyNh/FEH8/fvpeQUtHKs2dyTGmlZ2vxroPbFcIvQZQoyvpDfTEjyboTTSdA5E5tfyo/
-        GpjrWeqhWoDJsZs0FiDH/kSTom27AsLTlepmo6BAMbnCBh6ZjhnJIsQ33pFyDTwnnQcaC9
-        W/n5guAa/4ylt+9J1um+VCGVv1r0cTIdsEjJICyeyevyJq0YCMdNKPEp9QHcbheHEgz9xN
-        17AK0kjtATkweDTaQn+H/0x87YvtfQOeXnRIiKCG+5XptPBFsSncOQ26R3fs/igCRZpz3M
-        96uAMiZYPjdod8+g3fojYhnH0Rt+qafY0ENgIzig/K2Swt97NVYsmNFtBHVVCA==
-From:   alexandre.belloni@bootlin.com
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: sh: silence warning
-Date:   Mon, 11 Sep 2023 11:50:51 +0200
-Message-ID: <20230911095052.1292869-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S235482AbjIKInb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Sep 2023 04:43:31 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6471A5;
+        Mon, 11 Sep 2023 01:43:26 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b9338e4695so67908241fa.2;
+        Mon, 11 Sep 2023 01:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694421804; x=1695026604; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VXFTsP12wrxAzUjCCRboSM4a3IaTPoXxwWoK/D998/w=;
+        b=ZnHnDJLjc0GjCqMA4/Z/mZbcL7LVy8Y+yu/mUiA8nzCYT5DMvWQKasVt/iKo7Urrrq
+         u5ZukdaeMKSjgTKSdsKx0U+H1wk7ANRNUzcQNeRbXKn1ljj4kn58TwoTOiziOiV2Uh0m
+         MRdrZTugI/ZYc3Qljjuwz2m27xUi1OZcFxVYOLsJ+d7M/ozxPGqOBpU9dAVLdXAN1QEl
+         r+oWQZN5/iD4EQVz3FxHphkFK4KXR3FJhgspzWtzM2y22laaWubF4EMp46snK36YXWj1
+         CRiCozEGdqAtJ1e7dINaUBhl2Y97RRaBOibcsMG50+SwGKA9W+BIVbapX0uzzqxwgc0P
+         F1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694421804; x=1695026604;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VXFTsP12wrxAzUjCCRboSM4a3IaTPoXxwWoK/D998/w=;
+        b=HQ0hxA6RSH0yanhxMjc/j7STMmEAj334+UycXxFQjH34qiUnjd7v1mSQg/TWpu/Eml
+         oOL85jyGlyrx5E49n7XG3vi/GFuvK0MEgsNoIIEigRE7LB7uP8xzgUl8gG+Y1aizLt9Q
+         snqmsElmnZPJOM6PlkJNqXVOM2qFASNpFF2Nh2wNs7ketwzJMF3kQWrg1xM7fM/aKQ9h
+         hCtXzK1hF+nMmsPUGHMEYHEb47OhyYUWPRy+2aiqOYwzCcLzHkTxAlBc/n70zWHkNGo6
+         aqMJvzVkzdebWNGFJr37ih215PoS6/RRFoj8qnNiEfTljglk4ZM0OEgoY4MPWZEr91GR
+         xkPg==
+X-Gm-Message-State: AOJu0YxtJidUuynkgdeYrBwsj9ycXuOo3sxNc8LXct6VlM0GMwlYcACU
+        srAOMFU+clSOMBj+KBoFAhQ=
+X-Google-Smtp-Source: AGHT+IEBePdY5vRblamEOb4Bxr3m/BHlMOLZkfFn36ztGoB0yxzSBu2uVVDZkqtjqnQUqPnzTh0XJA==
+X-Received: by 2002:a2e:9f45:0:b0:2b6:9da9:2884 with SMTP id v5-20020a2e9f45000000b002b69da92884mr6670730ljk.40.1694421804210;
+        Mon, 11 Sep 2023 01:43:24 -0700 (PDT)
+Received: from [192.168.100.74] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id f2-20020a1709064dc200b0099cc15f09a0sm4945462ejw.55.2023.09.11.01.43.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Sep 2023 01:43:23 -0700 (PDT)
+Message-ID: <32c8cfb6-e14b-326d-1415-63c4bf46b23e@gmail.com>
+Date:   Mon, 11 Sep 2023 10:43:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] dt-bindings: rtc: pcf2123: convert to YAML
+Content-Language: en-US
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chris Verges <chrisv@cyberswitching.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230907-topic-pcf2123_yaml-v1-1-40e82bed2066@gmail.com>
+ <202309101217447eae4bc4@mail.local>
+From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <202309101217447eae4bc4@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Silence:
-drivers/rtc/rtc-sh.c:517:58: warning: '%d' directive output may be truncated writing between 1 and 10 bytes into a region of size 3 [-Wformat-truncation=]
+On 10.09.23 14:17, Alexandre Belloni wrote:
+> On 10/09/2023 13:00:27+0200, Javier Carrasco wrote:
+>> Convert the existing txt binding to the preferred YAML format.
+>>
+>> The pcf2123 node may contain SPI settings such as spi-cs-high and
+>> spi-max-frequency, which keeps it from being added to the trivial-rtc
+>> binding with its current definition. Add a reference to
+>> spi-peripheral-props.yaml to account for that.
+>>
+>> The "interrupts" property was missing in the binding although it is
+>> already supported. Add the missing property in the new binding.
+>>
+>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+>> ---
+>>  .../devicetree/bindings/rtc/nxp,pcf2123.yaml       | 45 ++++++++++++++++++++++
+>>  .../devicetree/bindings/rtc/nxp,rtc-2123.txt       | 17 --------
+>>  2 files changed, 45 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2123.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2123.yaml
+>> new file mode 100644
+>> index 000000000000..013e5e5dc0ae
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2123.yaml
+>> @@ -0,0 +1,45 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/rtc/nxp,pcf2123.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: NXP PCF2123 SPI Real Time Clock
+>> +
+>> +maintainers:
+>> +  - Chris Verges <chrisv@cyberswitching.com>
+> 
+> Is Chris willing to maintain the binding?
+> 
+The email address chrisv@cyberswitching.com does not exist anymore so it
+is likely that Chris will not reply unless he is subscribed to the
+mailing list with a different email address. I would propose that I add
+myself as the binding maintainer and send a v2.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-sh.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-sh.c b/drivers/rtc/rtc-sh.c
-index cd146b574143..04a6d24e2817 100644
---- a/drivers/rtc/rtc-sh.c
-+++ b/drivers/rtc/rtc-sh.c
-@@ -469,7 +469,7 @@ static int __init sh_rtc_probe(struct platform_device *pdev)
- {
- 	struct sh_rtc *rtc;
- 	struct resource *res;
--	char clk_name[6];
-+	char clk_name[14];
- 	int clk_id, ret;
- 
- 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
--- 
-2.41.0
-
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>> +  - $ref: rtc.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - nxp,pcf2123
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    spi {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        rtc@3 {
+>> +            compatible = "nxp,pcf2123";
+>> +            reg = <3>;
+>> +            spi-cs-high;
+>> +        };
+>> +    };
+>> +...
+>> diff --git a/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt b/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
+>> deleted file mode 100644
+>> index 7371f525a687..000000000000
+>> --- a/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
+>> +++ /dev/null
+>> @@ -1,17 +0,0 @@
+>> -NXP PCF2123 SPI Real Time Clock
+>> -
+>> -Required properties:
+>> -- compatible: should be: "nxp,pcf2123"
+>> -                      or "microcrystal,rv2123"
+>> -- reg: should be the SPI slave chipselect address
+>> -
+>> -Optional properties:
+>> -- spi-cs-high: PCF2123 needs chipselect high
+>> -
+>> -Example:
+>> -
+>> -pcf2123: rtc@3 {
+>> -	compatible = "nxp,pcf2123"
+>> -	reg = <3>
+>> -	spi-cs-high;
+>> -};
+>>
+>> ---
+>> base-commit: 535a265d7f0dd50d8c3a4f8b4f3a452d56bd160f
+>> change-id: 20230907-topic-pcf2123_yaml-2ce57f4e77d7
+>>
+>> Best regards,
+>> -- 
+>> Javier Carrasco <javier.carrasco.cruz@gmail.com>
+>>
+> 
+Best regards,
+Javier Carrasco
