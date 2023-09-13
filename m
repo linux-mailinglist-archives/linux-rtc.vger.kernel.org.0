@@ -2,99 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B92A79EC57
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Sep 2023 17:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE70979F11D
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Sep 2023 20:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbjIMPQx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 13 Sep 2023 11:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
+        id S229933AbjIMSac (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Sep 2023 14:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241559AbjIMPQb (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Sep 2023 11:16:31 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662711A7;
-        Wed, 13 Sep 2023 08:16:26 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-401d67434daso75562535e9.2;
-        Wed, 13 Sep 2023 08:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694618185; x=1695222985; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WNiCJ4XPctshWY8ffyi9hR4b/TdmnnAhBF7gV8ICkpY=;
-        b=luVNVtZ3HmtBpd07XMkFDVZY+sc2LdHrJMG/sku0osKa8/hbiDgwi7kXer9Pqmvxcw
-         g3NSG44iZmbUbYP6jtoqoK/QBWyc+4GgE0tj0qcEr8nQDsuQ38/xFifSCsmWLvF5jIPb
-         W76tiamkOw2gwhzXy/typafy5UusQHnDLXMQgzoWPgkzvdlt5qSQAxGi5nZLXmClOUZs
-         m+pr5lyDZ++X9Ps5Q4/8iem0LlutfGy4TxDldeOHhwQIYltuHyUqXceY5p6YELMvHdQw
-         W3aW8/9qedUBDQ32Rx1r139ritUYBnjRUlaiSv0h3f9VmzhdavDJgeRksko44XnkdVF0
-         k2EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694618185; x=1695222985;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WNiCJ4XPctshWY8ffyi9hR4b/TdmnnAhBF7gV8ICkpY=;
-        b=IWB3e9oA9zpqxz1mzB80C14MMH8gJBCWpV37lz7ZzRyu64hfCfrTAmRIMh449sJFtS
-         4/NxAfvIGWOHykAb+WIXZrKxSLJiUIy9npRG0veN/v8mp0Tjj4eM3lWRCnr1SiQ/evH+
-         sL1XD4w0/W16tFN/i0eD8mF/qrA/eHswnhOsMe/2WAUgWEDkC2dnpbPFarWTOLVPZHAA
-         raBf9/2CPNvoQ1vzQ3474f9TGTwU9cQFaVUq3BWQX8ljH9yIz1sHjstLb3dc2aeUI1qA
-         LYD2zcHDm4SdUr6MEAF2BgrsDUmV04Zkxa3n3F2AbJrize+KgWdUVwZuo3p2b+ah3G2k
-         fY3g==
-X-Gm-Message-State: AOJu0YznxRasdmmA3a3/xsvwRYj244Dg+9Uh+HKSEi5wfuTm7xYrnOp1
-        iLaMmeS18BPy4SbsW/HVkHA=
-X-Google-Smtp-Source: AGHT+IFtGPwLNzmJ9lGo6bgRROyUOek+CMPJmj33rLwvWVE4I8uylAeEe5p5UpRZq9go6jeZN8Tc3g==
-X-Received: by 2002:a1c:ed01:0:b0:3fc:21:2c43 with SMTP id l1-20020a1ced01000000b003fc00212c43mr2401041wmh.13.1694618184540;
-        Wed, 13 Sep 2023 08:16:24 -0700 (PDT)
-Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
-        by smtp.gmail.com with ESMTPSA id s4-20020a05600c044400b003fee567235bsm2305140wmb.1.2023.09.13.08.16.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 08:16:24 -0700 (PDT)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S229468AbjIMSab (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Sep 2023 14:30:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AA11BC6;
+        Wed, 13 Sep 2023 11:30:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB50C433C7;
+        Wed, 13 Sep 2023 18:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694629827;
+        bh=31I+vvfgxK2RhSOo9RhuKS344PF5cuX3/n6t1MBZpzo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MCFNq3tlLXBYEdwM2SebVUys4XPCNqAteJLX8meljGy/43fW9KgqlC5NrbO/EK9VX
+         nB8jd6URfw0oaYQXALu8Id/brV27/zfSdcCMdAaohnUnGG2BAt3l7M6r5zyCR/072a
+         FjSI1Zw1fwB01Hwe5scQfa9WnHJ8oDLEibDp0LYrYSSAxhPjj0AxNFI0XZJjbWkj1v
+         a84rr5RFBuSSvgHUNXInn69Je4vSP4lFSawZ/p8fPiwQEjCRJmdCICyjjwN4uTc84Y
+         Aq+Nf2tzKXlqmWdAZVYmsSGknWTlDyntQqblNoS7mbVaVSNo0AglWbi/sn61UZ0eIT
+         BmBQu0zWuUEgw==
+Date:   Wed, 13 Sep 2023 19:30:22 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Daniel Palmer <daniel@0x0f.com>,
-        Romain Perier <romain.perier@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 3/3] ARM: dts: mstar: Enable rtc for SSD202D
-Date:   Wed, 13 Sep 2023 17:16:06 +0200
-Message-Id: <20230913151606.69494-4-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230913151606.69494-1-romain.perier@gmail.com>
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: rtc: Add Mstar SSD202D RTC
+Message-ID: <20230913-depress-bootlace-6b88bfd83966@spud>
 References: <20230913151606.69494-1-romain.perier@gmail.com>
+ <20230913151606.69494-3-romain.perier@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zSIJHToUSvODMYzW"
+Content-Disposition: inline
+In-Reply-To: <20230913151606.69494-3-romain.perier@gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This adds the definition of the rtc device node. It enables RTC block
-for SSD202D SoCs and newer.
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
----
- arch/arm/boot/dts/sigmastar/mstar-infinity2m.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+--zSIJHToUSvODMYzW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm/boot/dts/sigmastar/mstar-infinity2m.dtsi b/arch/arm/boot/dts/sigmastar/mstar-infinity2m.dtsi
-index 1b485efd7156..b4ac535a73c8 100644
---- a/arch/arm/boot/dts/sigmastar/mstar-infinity2m.dtsi
-+++ b/arch/arm/boot/dts/sigmastar/mstar-infinity2m.dtsi
-@@ -32,6 +32,11 @@ cpu1: cpu@1 {
- };
- 
- &riu {
-+	rtc@6800 {
-+		compatible = "mstar,ssd202d-rtc";
-+		reg = <0x6800 0x200>;
-+	};
-+
- 	smpctrl: smpctrl@204000 {
- 		reg = <0x204000 0x200>;
- 		status = "disabled";
--- 
-2.39.2
+On Wed, Sep 13, 2023 at 05:16:05PM +0200, Romain Perier wrote:
+> Add YAML bindings for Mstar SSD202D RTC.
+>=20
+> Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> ---
+>  .../bindings/rtc/mstar,ssd202d-rtc.yaml       | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,ssd202d-r=
+tc.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/mstar,ssd202d-rtc.yaml=
+ b/Documentation/devicetree/bindings/rtc/mstar,ssd202d-rtc.yaml
+> new file mode 100644
+> index 000000000000..4c1f22ef5a2c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/mstar,ssd202d-rtc.yaml
+> @@ -0,0 +1,35 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/mstar,ssd202d-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mstar SSD202D Real Time Clock
+> +
+> +maintainers:
+> +  - Daniel Palmer <daniel@0x0f.com>
+> +  - Romain Perier <romain.perier@gmail.com>
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mstar,ssd202d-rtc
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
 
+So, this seems fine to me in isolation, but isn't this now the sort of
+thing that can be documented in trivial-rtc.yaml?
+Its only got compatible & reg, which seems to fit the bill for that.
+
+Apologies if I am missing something,
+Conor.
+
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    rtc@6800 {
+> +        compatible =3D "mstar,ssd202d-rtc";
+> +        reg =3D <0x6800 0x200>;
+> +    };
+> +...
+> --=20
+> 2.39.2
+>=20
+
+--zSIJHToUSvODMYzW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZQH/vgAKCRB4tDGHoIJi
+0kNuAPsEvE8AqBxe+MoFCB0pt3YnCSej+vAgfRprRQ+KRYy1yQD+Lzs9ukZ+5ELi
+q1HOYU3/VRN5LYUIQ75IqFUXkGmnXAA=
+=Oj2N
+-----END PGP SIGNATURE-----
+
+--zSIJHToUSvODMYzW--
