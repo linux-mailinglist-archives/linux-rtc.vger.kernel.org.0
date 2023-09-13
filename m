@@ -2,187 +2,144 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0860E79DDA8
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Sep 2023 03:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45DA79EC50
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Sep 2023 17:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbjIMBhh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Sep 2023 21:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S241552AbjIMPQb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Sep 2023 11:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjIMBhd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Sep 2023 21:37:33 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DCC115;
-        Tue, 12 Sep 2023 18:37:29 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-68fe2470d81so1671436b3a.1;
-        Tue, 12 Sep 2023 18:37:29 -0700 (PDT)
+        with ESMTP id S230254AbjIMPQ1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Sep 2023 11:16:27 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96AEBD;
+        Wed, 13 Sep 2023 08:16:22 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-4018af1038cso75538515e9.0;
+        Wed, 13 Sep 2023 08:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694569049; x=1695173849; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2Qr8W+YNZxo/PHrt3cm26F+6wvNKcFBceX5yhtm3BlE=;
-        b=gplgE2NYc29wVpvu6Z9/jlSlWIVqxZ5lR/poNJ0KUCZqj6rSkcst7sH15KbtcbhM+B
-         mrsuOIUPdk+MvP12N1rf17JojTUBDky+Dhnnajybd9CnmtdtwyG0or1lqn3JN+v5Y9Nd
-         gr6akl/I2e9IzTdpwZgkmpwHIutNIS4n7Zodf89m78Y8ctXNCUZYUoOOdis9URYCeyMo
-         8sfA4GJ4W3RMPHb3zXMme7NKOsVkMQqBlL11kcNrJ8AvVtJ8lCm6vFMcUlEAvVDhj2zr
-         //USXaue2/jnBz6dD5hDzTZ+RQRB8TxKH1u8q1yZVSI5720F2bod9lhMVChAxiDVybhU
-         zewg==
+        d=gmail.com; s=20221208; t=1694618181; x=1695222981; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wHlb4TZdTg18dIQRSMHj1vLV5U+xhED8U8Tcp/nIAY=;
+        b=pt7b3ELNkFkWz/Qm60VgX2GufJFrwa1Jyfk1gf+5HWsmKazqN7WIGvCiZ1raeuVAN8
+         Y2KWvv6WcJMlEfeDBJ5jrPWWO4dnY5TuHhOw7eeuvk4kRHuVJX5nORLGO3K5UpsQyHRk
+         P0CPOO6YOFFb2xx9Nyd7GakQJcomDstplGOjpRsyCqhsiNM7zfpXYIaO3ZcD30ttp8SX
+         4jtUiau8/f1QLnMk4dh7qveEC7WKyVtcwVuLCwdVl89fucfoSGyGzYT/BmU9IIhlJyYU
+         YFK56r1QMn/cfPQydccLLSPtDSyzCdDyy69s6Eg/aKuzjXwdtluitiAI2L5nspydZt28
+         l5jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694569049; x=1695173849;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Qr8W+YNZxo/PHrt3cm26F+6wvNKcFBceX5yhtm3BlE=;
-        b=case/Ox42GqZ+OmX/0GdN/hunb8xMuPxuvqQyseVjS6uo9KzFyOlcAUIb9h6t4+DFB
-         E77vE8LYcMFZs1nOPMb3tTScXOsqBRHc24O/GyS/DQM40U6aAH6Dn+6VyhfdvEChcuBD
-         jfB/01aNtChNZss2YzzEHbTUEp1y+S7LDFO+MYzPa8fsIXtW+oUKd1LjBA8+eyaOg+AN
-         nKRTse0xwr80Jy/LLlnR7wfZNGsAQWesCkTAemlqj/wMMQh7wmyn8kvvf6MjVqfaH5Fg
-         CNyvs3thr2Xv7M7LsWBRxP1WkD3yNviAjJvyGxtZnLPp583+/NskOyD2EN6takb501Lh
-         LDJA==
-X-Gm-Message-State: AOJu0YwJfMryKc5Bj6Ap98zPRTLaIarheZhHIIYfu3AJP4SgxRymhGPV
-        UMyO/gqYHqtlmMl5jqP/gyI=
-X-Google-Smtp-Source: AGHT+IGrwyy2AwKKihEq6EvWvFtmbZ20XQE2n5RSWwFYjNLYqUuW7iPocw5YvspS9tY/IjuP9oy94g==
-X-Received: by 2002:a05:6a00:1a11:b0:68f:b5cb:ced0 with SMTP id g17-20020a056a001a1100b0068fb5cbced0mr1439599pfv.34.1694569049094;
-        Tue, 12 Sep 2023 18:37:29 -0700 (PDT)
-Received: from localhost.localdomain (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id l20-20020a62be14000000b0068a0c403636sm7874648pff.192.2023.09.12.18.37.26
+        d=1e100.net; s=20230601; t=1694618181; x=1695222981;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+wHlb4TZdTg18dIQRSMHj1vLV5U+xhED8U8Tcp/nIAY=;
+        b=cFThWIVC+TgyDMp6FtCYpuoPw/M3Zr9nOnLXEEM45fHDhjcKWoMKm1PGvekPHsqiDb
+         Df1e+IvUCO5ropQmq1X3VJJgFStKwwVI1W+M/QvGa1UyOyE+13ivSruq5dHWhzeG7NzB
+         UgpUsNnqFIfKKKwl60YuI8GeS0DtA5zwXmbloes6ngqlvJZNGs+/ijx5IUZi38+zukcb
+         2g6lBWc5dj3phN4MZQJNffLira375LqxyInRXt8MoiKSEADLBFWpO62FpDGyrRC1SrUi
+         3jmriF2EojbLe8LZAYfAE2CclZzYl0YvmhcISwJpN0cwdJCNIJHmhFbRoTNYLlW93kQw
+         xacw==
+X-Gm-Message-State: AOJu0YyG/DCBq6f04o3ReB6xrzSW5g24TFqvf+rccYmw+zCdkMLAZxSc
+        K1PLu1LQBV5lmR6kxSLkDgzNz37LYIyIsw==
+X-Google-Smtp-Source: AGHT+IHDFXk9pLwaVNEfoWDOMr0cNYlA7ShKyzzr1OimlPOFw7rJqT0nMt26qj4IyJRDn5otb6IwgA==
+X-Received: by 2002:a7b:c416:0:b0:403:bb04:2908 with SMTP id k22-20020a7bc416000000b00403bb042908mr2217447wmi.23.1694618180871;
+        Wed, 13 Sep 2023 08:16:20 -0700 (PDT)
+Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
+        by smtp.gmail.com with ESMTPSA id w18-20020a5d6092000000b0031c52e81490sm15886631wrt.72.2023.09.13.08.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 18:37:28 -0700 (PDT)
-From:   Mia Lin <mimi05633@gmail.com>
-To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, KFLIN@nuvoton.com,
-        mylin1@nuvoton.com
-Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mia Lin <mimi05633@gmail.com>
-Subject: [PATCH v6 1/1] rtc: nuvoton: Compatible with NCT3015Y-R and NCT3018Y-R
-Date:   Wed, 13 Sep 2023 09:37:19 +0800
-Message-Id: <20230913013719.8342-2-mimi05633@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230913013719.8342-1-mimi05633@gmail.com>
-References: <20230913013719.8342-1-mimi05633@gmail.com>
+        Wed, 13 Sep 2023 08:16:20 -0700 (PDT)
+From:   Romain Perier <romain.perier@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/3] Add RTC for MStar SSD20xD SoCs
+Date:   Wed, 13 Sep 2023 17:16:03 +0200
+Message-Id: <20230913151606.69494-1-romain.perier@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The NCT3015Y-R and NCT3018Y-R use the same datasheet
-    but have different topologies as follows.
-- Topology (Only 1st i2c can set TWO bit and HF bit)
-  In NCT3015Y-R,
-    rtc 1st i2c is connected to a host CPU
-    rtc 2nd i2c is connected to a BMC
-  In NCT3018Y-R,
-    rtc 1st i2c is connected to a BMC
-    rtc 2nd i2c is connected to a host CPU
-In order to be compatible with NCT3015Y-R and NCT3018Y-R,
-- In probe,
-  If part number is NCT3018Y-R, only set HF bit to 24-Hour format.
-  Else, do nothing
-- In set_time,
-  If part number is NCT3018Y-R && TWO bit is 0,
-     change TWO bit to 1, and restore TWO bit after updating time.
+This patches series adds a new driver for the RTC found in the Mstar
+SSD202D SoCs. It adds a basic rtc driver, the corresponding devicetree
+bindings.
 
-Signed-off-by: Mia Lin <mimi05633@gmail.com>
----
- drivers/rtc/rtc-nct3018y.c | 52 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 6 deletions(-)
+The rtctest (from selftests) has been passed on this driver, with the
+following output:
 
-diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
-index ed4e606be8e5..b006b58e15e2 100644
---- a/drivers/rtc/rtc-nct3018y.c
-+++ b/drivers/rtc/rtc-nct3018y.c
-@@ -23,6 +23,7 @@
- #define NCT3018Y_REG_CTRL	0x0A /* timer control */
- #define NCT3018Y_REG_ST		0x0B /* status */
- #define NCT3018Y_REG_CLKO	0x0C /* clock out */
-+#define NCT3018Y_REG_PART	0x21 /* part info */
- 
- #define NCT3018Y_BIT_AF		BIT(7)
- #define NCT3018Y_BIT_ST		BIT(7)
-@@ -37,10 +38,12 @@
- #define NCT3018Y_REG_BAT_MASK		0x07
- #define NCT3018Y_REG_CLKO_F_MASK	0x03 /* frequenc mask */
- #define NCT3018Y_REG_CLKO_CKE		0x80 /* clock out enabled */
-+#define NCT3018Y_REG_PART_NCT3018Y	0x02
- 
- struct nct3018y {
- 	struct rtc_device *rtc;
- 	struct i2c_client *client;
-+	int part_num;
- #ifdef CONFIG_COMMON_CLK
- 	struct clk_hw clkout_hw;
- #endif
-@@ -177,8 +180,27 @@ static int nct3018y_rtc_read_time(struct device *dev, struct rtc_time *tm)
- static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
-+	struct nct3018y *nct3018y = dev_get_drvdata(dev);
- 	unsigned char buf[4] = {0};
--	int err;
-+	int err, flags;
-+	int restore_flags = 0;
-+
-+	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-+	if (flags < 0) {
-+		dev_dbg(&client->dev, "Failed to read NCT3018Y_REG_CTRL.\n");
-+		return flags;
-+	}
-+
-+	/* Check and set TWO bit */
-+	if ((nct3018y->part_num & NCT3018Y_REG_PART_NCT3018Y) && !(flags & NCT3018Y_BIT_TWO)) {
-+		restore_flags = 1;
-+		flags |= NCT3018Y_BIT_TWO;
-+		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-+		if (err < 0) {
-+			dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL.\n");
-+			return err;
-+		}
-+	}
- 
- 	buf[0] = bin2bcd(tm->tm_sec);
- 	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SC, buf[0]);
-@@ -212,6 +234,18 @@ static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 		return -EIO;
- 	}
- 
-+	/* Restore TWO bit */
-+	if (restore_flags) {
-+		if (nct3018y->part_num & NCT3018Y_REG_PART_NCT3018Y)
-+			flags &= ~NCT3018Y_BIT_TWO;
-+
-+		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-+		if (err < 0) {
-+			dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL.\n");
-+			return err;
-+		}
-+	}
-+
- 	return err;
- }
- 
-@@ -479,11 +513,17 @@ static int nct3018y_probe(struct i2c_client *client)
- 		dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is set\n", __func__);
- 	}
- 
--	flags = NCT3018Y_BIT_TWO;
--	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
--	if (err < 0) {
--		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
--		return err;
-+	nct3018y->part_num = i2c_smbus_read_byte_data(client, NCT3018Y_REG_PART);
-+	if (nct3018y->part_num < 0) {
-+		dev_dbg(&client->dev, "Failed to read NCT3018Y_REG_PART.\n");
-+		return nct3018y->part_num;
-+	} else if (nct3018y->part_num & NCT3018Y_REG_PART_NCT3018Y) {
-+		flags = NCT3018Y_BIT_HF;
-+		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-+		if (err < 0) {
-+			dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL.\n");
-+			return err;
-+		}
- 	}
- 
- 	flags = 0;
+# rtctest 
+TAP version 13
+1..8
+# Starting 8 tests from 1 test cases.
+#  RUN           rtc.date_read ...
+# rtctest.c:52:date_read:Current RTC date/time is 17/05/2023 15:58:12.
+#            OK  rtc.date_read
+ok 1 rtc.date_read
+#  RUN           rtc.date_read_loop ...
+# rtctest.c:95:date_read_loop:Continuously reading RTC time for 30s (with 11ms breaks after every read).
+# rtctest.c:122:date_read_loop:Performed 888 RTC time reads.
+#            OK  rtc.date_read_loop
+ok 2 rtc.date_read_loop
+#  RUN           rtc.uie_read ...
+# rtctest.c:137:uie_read:skip update IRQs not supported.
+#            OK  rtc.uie_read
+ok 3 rtc.uie_read
+#  RUN           rtc.uie_select ...
+# rtctest.c:166:uie_select:skip update IRQs not supported.
+#            OK  rtc.uie_select
+ok 4 rtc.uie_select
+#  RUN           rtc.alarm_alm_set ...
+# rtctest.c:214:alarm_alm_set:skip alarms are not supported.
+#            OK  rtc.alarm_alm_set
+ok 5 rtc.alarm_alm_set
+#  RUN           rtc.alarm_wkalm_set ...
+# rtctest.c:274:alarm_wkalm_set:skip alarms are not supported.
+#            OK  rtc.alarm_wkalm_set
+ok 6 rtc.alarm_wkalm_set
+#  RUN           rtc.alarm_alm_set_minute ...
+# rtctest.c:324:alarm_alm_set_minute:skip alarms are not supported.
+#            OK  rtc.alarm_alm_set_minute
+ok 7 rtc.alarm_alm_set_minute
+#  RUN           rtc.alarm_wkalm_set_minute ...
+# rtctest.c:384:alarm_wkalm_set_minute:skip alarms are not supported.
+#            OK  rtc.alarm_wkalm_set_minute
+ok 8 rtc.alarm_wkalm_set_minute
+# PASSED: 8 / 8 tests passed.
+# Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Changes since v1:
+- Changed the compatible from mstar,ssd20xd-rtc to mstar,ssd20d-rtc.
+  So the driver, its documentation and the commit messages have been
+  reworked accordingly.
+- Re-worked the dt-binding, I have also simplified the commit message
+- Re-worked the commit message for the driver
+- Remove redundant logging message for the user in the driver, as
+  requested by the subsystem maintainer. As these messages are helpful
+  for debugging purpose, I have switched these to dev_dbg().
+- Updated the list of maintainers (sorry for that).
+
+Romain Perier (3):
+  rtc: Add support for the SSD202D RTC
+  dt-bindings: rtc: Add Mstar SSD202D RTC
+  ARM: dts: mstar: Enable rtc for SSD202D
+
+ .../bindings/rtc/mstar,ssd202d-rtc.yaml       |  35 +++
+ .../boot/dts/sigmastar/mstar-infinity2m.dtsi  |   5 +
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ssd202d.c                     | 249 ++++++++++++++++++
+ 5 files changed, 301 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/mstar,ssd202d-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-ssd202d.c
+
 -- 
-2.17.1
+2.39.2
 
