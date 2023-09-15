@@ -2,63 +2,78 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF367A182B
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Sep 2023 10:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927C67A1C91
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 Sep 2023 12:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbjIOIMd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Sep 2023 04:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
+        id S229646AbjIOKni (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 15 Sep 2023 06:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbjIOIMS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Sep 2023 04:12:18 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E512271C;
-        Fri, 15 Sep 2023 01:12:11 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ED4C5C116A6;
-        Fri, 15 Sep 2023 08:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694765529;
-        bh=PIAVRsubooNT/IoJh/5r833VlR5IHIMSLPb5V8bEVII=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=iykzSGPcCWpaTtiatlxtCM/u/jzYPiSMh4tsav5dtjgrLpgCOeZKjV/BR1oTdwnH/
-         2WAGKZDY9VH4vzT9jEQPjQtLxjx7ZSGYinXl6NJOqVm2bMhCUdG+Ss4XlvTA3FGnFu
-         axgrRfCWEl41K0egBrLkghwqC44JvuBXsVEl3l7xVYqRY7sTSh0xrvar6FO10j0adw
-         yNbZeMYIUKBJVCeQo+3i/SviQEw+iS4muyyb7Ig4dJrex1IYGbTMpELQAi4iMXs/8G
-         /91pv7osbK18GIEY0aJr93gZcER0NxiRho8+gZp4tm57K/OsgIUoBww341L374HS5b
-         MMFebCl7wHdcA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id DAC7BEE6436;
-        Fri, 15 Sep 2023 08:12:08 +0000 (UTC)
-From:   Nikita Shubin via B4 Relay 
-        <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date:   Fri, 15 Sep 2023 11:10:56 +0300
-Subject: [PATCH v4 14/42] rtc: ep93xx: add DT support for Cirrus EP93xx
+        with ESMTP id S231841AbjIOKnh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Sep 2023 06:43:37 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7685DFB
+        for <linux-rtc@vger.kernel.org>; Fri, 15 Sep 2023 03:43:31 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9adb9fa7200so362857766b.0
+        for <linux-rtc@vger.kernel.org>; Fri, 15 Sep 2023 03:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694774610; x=1695379410; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zs7SCGNmTvKC0KYE227sV1lKMejl7A2RG6oKRsvvi0Y=;
+        b=qtTWs0c1WdmsKS0M0miJ7mB7smV1CpvsCBH91MylI3QWJZI3b72nGhfuQeuh+G47wC
+         h/AmXtNsE/YgrtFFRWf1Awr1aGAUfPsW7KytfUk6AR/jG+GCmWx0yUxadsY725ybQWIy
+         xRAHAxXc//9m2DkwU+Xxbt97rN88Ecx4SULdWUF+BjGqR9Wgh/e/aZ0X8nY1MCaIodnT
+         bEKOXIINlaRBEgkkyAkgfdvzb8xE3vPVjNdypjPY1VyiQwGEjbjYuoTikJCNHpigGwvY
+         9lOxViSlGLwvsupKDQnNuMQ8pbeJSClSuOgWnnIZ7lvVdVOin/nPUM5MVIiJrKUEQudx
+         3BsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694774610; x=1695379410;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zs7SCGNmTvKC0KYE227sV1lKMejl7A2RG6oKRsvvi0Y=;
+        b=cpt+Z/7BTrDP2+o1BXUGDs/dtT/d2smlhlTAKWlPv8xQkeFW7ark/6yfvdsLXEDSoD
+         poI5v+3PvhZyuZBFaPNL+I8yW0aJgh/OcUfc6KxvHCgsTqbVlD9XDo/8qCR8OVQd2Z61
+         OL1WMRQdGdmMKNpxrMcTgmBGlkoydSZunsPcto2aRvIDOAZglYAOlD/et2H7mIj3FFip
+         eAVa4up1bA3+UBwI/+F8Ii1Pw+Q9tsY+d3BDpYwPALb05ZoCUM5Ye6fWeSmCnejYJQ7W
+         1X0T50p6ZboL1WqrIM8dSvqRa0CXFzGaL+6AyNtomVdTC9/J3ScNlowfrDqkXCUnvgpW
+         gOdA==
+X-Gm-Message-State: AOJu0YwS0xvnuL+J8qFbtKpAe9qGswM/jVVp0NGkOWY0oSZ4ylB3JmRU
+        xm8xbzEO6mfRod22YT98r5v/Lg==
+X-Google-Smtp-Source: AGHT+IHpnNBzlJ2LOuDnbdpSUsDYpTLkTr9y4sJY9oDs6w29u/LntMeSJBldqYBgfKwOBJOvxytpCg==
+X-Received: by 2002:a17:907:80a:b0:9a9:405b:26d1 with SMTP id wv10-20020a170907080a00b009a9405b26d1mr5767523ejb.5.1694774609954;
+        Fri, 15 Sep 2023 03:43:29 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id ld3-20020a1709079c0300b009adc81bb544sm1088343ejc.106.2023.09.15.03.43.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Sep 2023 03:43:29 -0700 (PDT)
+Message-ID: <a95f93f3-0acb-35d8-fad2-ad81043e5f26@linaro.org>
+Date:   Fri, 15 Sep 2023 12:43:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230915-ep93xx-v4-14-a1d779dcec10@maquefel.me>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v4 13/42] dt-bindings: rtc: Add Cirrus EP93xx
+Content-Language: en-US
+To:     nikita.shubin@maquefel.me, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
 References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
-In-Reply-To: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694765525; l=1082;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=p80xCnz+NiYVYSqsKWTadEzof+wILB6tYu5g6z/UQHM=; =?utf-8?q?b=3D5o3Yk09uQHB6?=
- =?utf-8?q?rSVNBOSYUARYgtDmO/npd1JvYZ7zPPxiZeant3v1EDCH+4HoeQBCbNXAMgS6Hz8Q?=
- F4LqkKUrCYmh9RfkZt88PHzOK9mvSjOZO6yKlztjR0F/7RI9tUUM
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received: by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: <nikita.shubin@maquefel.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+ <20230915-ep93xx-v4-13-a1d779dcec10@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230915-ep93xx-v4-13-a1d779dcec10@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,46 +81,17 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+On 15/09/2023 10:10, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+> 
+> Add device tree bindings for the Cirrus Logic EP93xx RTC block
+> used in these SoCs.
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Add OF ID match table.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
----
- drivers/rtc/rtc-ep93xx.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/rtc/rtc-ep93xx.c b/drivers/rtc/rtc-ep93xx.c
-index acae7f16808f..1fdd20d01560 100644
---- a/drivers/rtc/rtc-ep93xx.c
-+++ b/drivers/rtc/rtc-ep93xx.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/rtc.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-@@ -148,9 +149,16 @@ static int ep93xx_rtc_probe(struct platform_device *pdev)
- 	return devm_rtc_register_device(ep93xx_rtc->rtc);
- }
- 
-+static const struct of_device_id ep93xx_rtc_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-rtc" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ep93xx_rtc_of_ids);
-+
- static struct platform_driver ep93xx_rtc_driver = {
- 	.driver		= {
- 		.name	= "ep93xx-rtc",
-+		.of_match_table = ep93xx_rtc_of_ids,
- 	},
- 	.probe		= ep93xx_rtc_probe,
- };
-
--- 
-2.39.2
+Best regards,
+Krzysztof
 
