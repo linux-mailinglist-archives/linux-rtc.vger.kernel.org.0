@@ -2,79 +2,121 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076467A3264
-	for <lists+linux-rtc@lfdr.de>; Sat, 16 Sep 2023 22:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F79A7A4311
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 Sep 2023 09:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233681AbjIPUHs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 16 Sep 2023 16:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S240175AbjIRHmu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 18 Sep 2023 03:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjIPUHT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 16 Sep 2023 16:07:19 -0400
-X-Greylist: delayed 964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 16 Sep 2023 13:07:13 PDT
-Received: from mailrelay4-1.pub.mailoutpod2-cph3.one.com (mailrelay4-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:403::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF05CC1
-        for <linux-rtc@vger.kernel.org>; Sat, 16 Sep 2023 13:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=fezrpIaIpQxdaG2CC4X62gW75ZqMToSOm+5V/o22VUg=;
-        b=VT+TV471gEc1E3zHRWfBlEo9MhYeIBvrxDTb6GIP0sJBCCIkujy8aSTtwuvqWW+L0kdbMAvpFiTF5
-         06Wkucd6Yj/85cL9xqdcPfy6L6a8rEV1hK3zcsQyDCNc3sqfWO4olwuvDV7E8ruBYoYdwIKptd5yst
-         41kG1JKyUHOyfOYSWr4MhjnnVXlvTgQT7UsgF2/NNueL66rxh12bdWYn2PG7utDO48BXvQFVlUMv4n
-         Fb1spmH6NhltIIhUF7IaCPlmp4CAxkc8GBqJhEAZxDiHCpKy0N5nPk5XWqrSMiR32tiGGYZdwqzklq
-         4HmbE8Vs2TgAlrPRDRS+cy8WZsQ8+Dg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=fezrpIaIpQxdaG2CC4X62gW75ZqMToSOm+5V/o22VUg=;
-        b=w4PKBPRv9vrkQO3B3Qk3e/3d3yIWHWBxdbAL5WgOfG2AMY6O1uq1fUm8N1l3x4/NsJdgJIhLvlRhO
-         6w/KjtmBQ==
-X-HalOne-ID: 5f1579ed-54ca-11ee-8b67-118fcd41062f
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4 (Halon) with ESMTPSA
-        id 5f1579ed-54ca-11ee-8b67-118fcd41062f;
-        Sat, 16 Sep 2023 19:51:07 +0000 (UTC)
-Date:   Sat, 16 Sep 2023 21:51:05 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, javier.carrasco@wolfvision.net,
-        Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH v3] dt-bindings: rtc: pcf8523: Convert to YAML
-Message-ID: <20230916195105.GA213821@ravnborg.org>
-References: <20230905220826.79901-1-festevam@gmail.com>
+        with ESMTP id S240339AbjIRHmc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 Sep 2023 03:42:32 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035FB1AE;
+        Mon, 18 Sep 2023 00:39:39 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="382333083"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="382333083"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 00:39:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="811259953"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="811259953"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 00:39:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+        (envelope-from <andy@kernel.org>)
+        id 1qi8qk-0000000EvwK-3qGW;
+        Mon, 18 Sep 2023 10:39:18 +0300
+Date:   Mon, 18 Sep 2023 10:39:18 +0300
+From:   Andy Shevchenko <andy@kernel.org>
+To:     nikita.shubin@maquefel.me
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v4 00/42] ep93xx device tree conversion
+Message-ID: <ZQf+pps0Ffsak+BA@smile.fi.intel.com>
+References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230905220826.79901-1-festevam@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Fabio,
-On Tue, Sep 05, 2023 at 07:08:26PM -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
+On Fri, Sep 15, 2023 at 11:10:42AM +0300, Nikita Shubin via B4 Relay wrote:
+> This series aims to convert ep93xx from platform to full device tree support.
 > 
-> Convert the PCF8523 bindings from text format to YAML.
+> The main goal is to receive ACK's to take it via Arnd's arm-soc branch.
 > 
-> The YAML format is preferred as it allows validation.
+> Major changes:
+> - drop newline at the end from each YAML files
+> - rename dma and clk bindings headers to match first compatible
+> - shrink SoC exported functions number to only 2
+> - dropped some ep93xx_pata fixes from these series
+> - dropped m48t86 stuff from these series
 > 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
+> Bit thanks to Andy Shevchenko for thorough review.
 
-Looks good,
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+You are welcome!
 
-I assume the dt people (or rtc people) will land this.
+Dunno if you have used --patience when formatted the patches, but I think
+you should, if hadn't, for the next version. It will help a lot in reviewing
+and understanding the changes.
 
-	Sam
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
