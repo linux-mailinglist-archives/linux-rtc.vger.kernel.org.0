@@ -2,38 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ADC7A6824
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Sep 2023 17:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D977A682D
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Sep 2023 17:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjISPdJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Sep 2023 11:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S233001AbjISPee (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Sep 2023 11:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjISPdI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Sep 2023 11:33:08 -0400
+        with ESMTP id S232459AbjISPed (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Sep 2023 11:34:33 -0400
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600D79C;
-        Tue, 19 Sep 2023 08:33:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCB893;
+        Tue, 19 Sep 2023 08:34:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
         ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
         :Date:subject:date:message-id:reply-to;
-        bh=COIi7V8Dln3dFm9ipDogI+EC//kjZFT069pSR756Kb4=; b=f3ancpyVUrenVsKOfEjb8Q8l4f
-        sHtLs1XEQNdJwnJy0YXN2SEKyH+lAiHisXLuBjSVg2tjL8bBt9cFitK75tG+Ufr4rJ4LlW5CQHGwy
-        Qrfa4QvhU5UwErkQ1bap4rmTYmIkvcuwv5b22U1d1//Tmwu/vAgJ1/L5PePMceiQmUis=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:36272 helo=pettiford)
+        bh=COIi7V8Dln3dFm9ipDogI+EC//kjZFT069pSR756Kb4=; b=qWJccAObV+1fSRIRpzWr/+QmNf
+        HDBxamIqfN5HITmNRTEE6OWFz+cM9vMAu5pfdvG2NsI7usG6RqwmX4PmmgjkAuPsPfFzg4dWnjegC
+        a66u5YhsK82l5DhfNm9bSymkc/QjkFuik4wJ/Vp5n5hSanHOgreCIgN2OhwLKcp8SCf4=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:38978 helo=pettiford)
         by mail.hugovil.com with esmtpa (Exim 4.92)
         (envelope-from <hugo@hugovil.com>)
-        id 1qiciX-00029x-Uu; Tue, 19 Sep 2023 11:32:50 -0400
-Date:   Tue, 19 Sep 2023 11:32:49 -0400
+        id 1qick4-0002B5-6d; Tue, 19 Sep 2023 11:34:25 -0400
+Date:   Tue, 19 Sep 2023 11:34:23 -0400
 From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Conor Dooley <conor@kernel.org>, a.zummo@towertech.it,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Conor Dooley <conor@kernel.org>, a.zummo@towertech.it,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         bruno.thomsen@gmail.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230919113249.05dc6f11a1d97f1ca2e09731@hugovil.com>
+Message-Id: <20230919113423.6c8c48cb1b89275f5b4f3cc2@hugovil.com>
 In-Reply-To: <20230905113058.0fed933265fb68cd53b6d0fa@hugovil.com>
 References: <20230802191153.952667-1-hugo@hugovil.com>
         <20230802191153.952667-2-hugo@hugovil.com>
