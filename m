@@ -2,263 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5947A6AB1
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Sep 2023 20:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04BD7A757E
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Sep 2023 10:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjISS1V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Sep 2023 14:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S231347AbjITIMV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 20 Sep 2023 04:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjISS1V (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Sep 2023 14:27:21 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EC690;
-        Tue, 19 Sep 2023 11:27:15 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="382772293"
-X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
-   d="scan'208";a="382772293"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 11:27:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="861654643"
-X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
-   d="scan'208";a="861654643"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 11:27:08 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-        (envelope-from <andy@kernel.org>)
-        id 1qifRA-0000000BuCz-3EUB;
-        Tue, 19 Sep 2023 21:27:04 +0300
-Date:   Tue, 19 Sep 2023 21:27:04 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S230447AbjITIMU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Sep 2023 04:12:20 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2103.outbound.protection.outlook.com [40.107.113.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4F39E;
+        Wed, 20 Sep 2023 01:12:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lcJz0jANSzFSrf2QJDp4kgjWSKbPWTcn0NVV4g5fEdVwvnDPBAct77/KDX7Di8QM5wLh4iOkoa3Pkabmukx99XqD8A8XNX9rb6RVpjtsxuZx6t9mxU+9LpwjZHjU9esGxDAgmmcCpskY4MVP/cw2pUT5O4W7UfG8Vpz5lP/1te6VFO8ZAW+KPj3abmiT1mJNeGWuojQH9RFmxfM33Y0Q6dFk2TFQ+0EY5D54VsMbZ0cWyennF8EMMlQxUQcVB/If6dyZ6cSy0YofycYvAh1mTUOUPVWloApU4GAGWC74OvqN/Xiu89ZvtDcwmZp9M1dIqjDK5ZDtVlTCM/s592GMkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hkPnjaBBAxXaEklcO/ETek/zT5+h6gxKwuAsUJ5YLb8=;
+ b=ee/oi1DbcGM7BNuvImp1gPIAfFRBtcImGAgnR0N40dG4NMS0lJ/AS8miqtIvT7MlQy1q5dEo9mZEz9Izj2vDV54/U6/OJQaUxrPH42ATJ1+WTLMtjr+uJBgvdAyixP5Dvx3UHw+z4DGq1PvkCDK0R/G6mCCnyBOZ9DkFYu0imkf7srjDRQBHc6ZMqbqxdP2+THc6X3epI+OMln3SPdV9WduzT2cVOLW1cXpsgexYpzyfxMKXaGDynOAygu140CXzb7WJ8k6PSVLlEnaQ31gbOT0xbp9Z7XP3zfnG7nlBCw+DzZOap7dy11cshSiw5yC6n4vpl5sXqTDsd06RNaPhRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hkPnjaBBAxXaEklcO/ETek/zT5+h6gxKwuAsUJ5YLb8=;
+ b=E8iCEj/nlnxPbOK5KA0XVs0NxPWRcj5wjOxEeyoEh6Wh44xvRAHpXn54LByV+CbpUFhoH8IF/PHfd+tG3hsnlMOInv/XAAcbKb4jxXFOws36QIaLtNJPWozV0f3rnRYUJQElEppSKhQi2np0/+WClOkIRB3Ud7DwOYPNlBa69Ng=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYCPR01MB5999.jpnprd01.prod.outlook.com (2603:1096:400:4a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Wed, 20 Sep
+ 2023 08:12:10 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::9d23:32f5:9325:3706]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::9d23:32f5:9325:3706%5]) with mapi id 15.20.6792.026; Wed, 20 Sep 2023
+ 08:12:10 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 2/7] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-Message-ID: <ZQnn+Gi0xVlsGCYA@smile.fi.intel.com>
-References: <20230919103815.16818-1-kabel@kernel.org>
- <20230919103815.16818-3-kabel@kernel.org>
- <ZQmUFPvIx91+ps6k@smile.fi.intel.com>
- <20230919171638.19bc1619@dellmb>
+        Geert Uytterhoeven <geert+renesas@glider.be>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Trent Piepho <tpiepho@gmail.com>
+Subject: [Query]: Resource cleanup for Alarmtimer
+Thread-Topic: [Query]: Resource cleanup for Alarmtimer
+Thread-Index: AdnrmFAjUih7l1QlSdSObu7MvB/BAQ==
+Date:   Wed, 20 Sep 2023 08:12:10 +0000
+Message-ID: <OS0PR01MB5922DD412F43E1C836E32AF486F9A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB5999:EE_
+x-ms-office365-filtering-correlation-id: c1465bd9-5f54-4226-7126-08dbb9b149e4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TdBmv+eSZI26auFVwNL6yCLBjfUpFZfMBdAI7ZYafZjjW9fLSvHzZtnf5/JFuQ5qWZgeJkET40Wb+l4OJ2aNJrDcIxZUVg6fvZXUKLypJJYmbdWNEs4zIGvparfJWSdYF8Cqgj5QUvce1J8FWntMx6bDxzIQnvZmtt9NHz9Y9tfxqngvQyxTmnLQA3UZt2tPL3VvlAybA7Z4igapB2bPeRzs6axR5d9PAc3hMSnD+DI14mPgpRNYkZbhxLSZ7+tFDWt50025FEo3MSAxDCmMsQ0OTNWszB3qz6vpq4wjyiCemlRk21Z/26YBAEadWz7oACFefF0wHZeG9HjZrmENLlDxVG+IWIX4uMMi+ONacbNv21h+5ND7ERi9D1YOWdNdoAEYjVyWTar8L3SISnUFkIdu8wbjsvNdENAKPmcEXPcigXHmQFGBfkzBTA+c2G9vlpp/gVSeBWJPa8safl3IUFl4Dz2mWXSJFh0o8NsQjBQB6rrdFrKrc2WVn+4qo/5InBDCur1Y4nAULTSb9xbq3Fd4NxyhH44Ny9rMmAiJUJPAvnQgjVx7HffEdVBwKpyXSbQtYPoqa/cmKTS3Ql4d+x72U+4cdERWE1tc/Cqnp6oghLGEOohSCOYsFlN2kF/x
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(376002)(346002)(39860400002)(366004)(451199024)(186009)(1800799009)(2906002)(5660300002)(52536014)(26005)(55016003)(66446008)(64756008)(54906003)(7416002)(41300700001)(316002)(66476007)(66556008)(66946007)(110136005)(4744005)(76116006)(8936002)(8676002)(4326008)(478600001)(71200400001)(6506007)(7696005)(9686003)(122000001)(38070700005)(38100700002)(86362001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0qAuBHCGHAvbWguVYRFQVGk+glbOQU7ht41FxLOTsyEbut7BxbWnhCPKUKXT?=
+ =?us-ascii?Q?ub8tp0U77ErzZuWMJhpwde/D2gb2P6ubfbbC2jeQqAmM748NzgXSDyJEu22r?=
+ =?us-ascii?Q?sbZ3cZTJrLCe4ew1Vh086dovHX1SE9PNjEUUG2PIKOVanyHA586zisYZUBxC?=
+ =?us-ascii?Q?6n2XpKZqB2F/6/Tn5sIuM93pEGLqRSAgQFlooUDoFe69rZVRGBvg3C+Jbho+?=
+ =?us-ascii?Q?HwQcCY1tNKL9Vhf3FfoOPyC9U9kAH0eO0STjDqe8beD50+5Rwi3jclOAKb3N?=
+ =?us-ascii?Q?jhInv2An+KhPJcRZf5CuSVBpSg1utw7sb0YzqizId7R8A/H9DtlMW9aBa7gI?=
+ =?us-ascii?Q?k0rZo0BBAkAuC8FdxAUuhWszP2bpY+TrZ3E+xWlaFa73Sk+tmMD/f8UAVNhc?=
+ =?us-ascii?Q?Jmoc3cMmAJmHbca9P9nJP1pGgkEWqkq9JuXQ+1l0o2xoF6OvdgeQ8AcB4Dti?=
+ =?us-ascii?Q?JP9hScq32ZGZZXuPMTsVVYzP2lw9VmAeyXuM7c6Ctl/Rbdh3NXpl/yGYDUVa?=
+ =?us-ascii?Q?FDK4I89qH+CYUZsBg1HmnYL8dTcQL/4ez5c7METnCy04pl4jCVhPZfIC08E5?=
+ =?us-ascii?Q?mM7YSD10z84l5C1MPu3TTEukDkb810ewYQ0D6BlgaVMOlpiWqenHn0eckqhR?=
+ =?us-ascii?Q?I1GwAQLy+yM/rq+oBkWT3nw+pigtRuc/Nq9GIF+ML8vMkRhV6XjYhvYcBALc?=
+ =?us-ascii?Q?uG0OIcPlXXSwMs54TgzELWqlYHQr9ZPOljz2Kjv22wCp739nlvd7oAyGIicA?=
+ =?us-ascii?Q?lE1MMKjV12JI9u2zgC8WbIQ6PA50p3TXmwr5uT6rF0wtHq8R4WdDAiC/z+oM?=
+ =?us-ascii?Q?IvI/76mOhG+Ap4od+fC5BNYjnU+eyVb9u9JGtfsT3ZDby5tXF0AI9FSG40uB?=
+ =?us-ascii?Q?QdRWUsnWlTtDWjC8KEOmp+rI6pnmCFLjurw0bH9MiSy/VVYCHGU0zFH/mf+H?=
+ =?us-ascii?Q?67cSQhTBqSS2Thwy8BCdqdfu9qgNr0YoTXe1I05fanemLeoyoBtvNO2cHBN9?=
+ =?us-ascii?Q?SFGodol2ClwcP5nGAtP0g8u+CQKFyCDQ5sFuV5JR0188jAarDwa0OgJF2SV/?=
+ =?us-ascii?Q?5mp5XtNvq9fKiXaa/e4Bh0OfBaY5bgSSE4mhK3AYidLrQkFJS3PJfDk9Udid?=
+ =?us-ascii?Q?b0+j7mN2mngz6kxSJYxCFfdib99JDTu9Dy7NVuihPvApQIxKWctny193Rpug?=
+ =?us-ascii?Q?mJ7W3yFEE4W4k6rD1YluiIjJSJ134P9SjtRB/ibtoa2NqJnIBE6Df1/j9lYr?=
+ =?us-ascii?Q?WnL/+1/oJ9hEy/wm7A45mkHUOH626Urw94jN/WOjqKbb6iSj0qLTJlOMMms5?=
+ =?us-ascii?Q?G3ezKJonRlMiRmOqbNpr8vdpKIk11Skgs3hV1VP84fgTe5sC3WjlIVAeXMtU?=
+ =?us-ascii?Q?JYfjZTD1gtcMDT4HCyxZOod6f6scjA5gzS9V+6JLKU3RllzNJo1r0hut+P9i?=
+ =?us-ascii?Q?5NmN1w/I07VdLeVJLv3nlVskekGZNE1+AV5PBVyXC/GeMwNmflTujmUsa/Ut?=
+ =?us-ascii?Q?+Ey8crNoLDzDLbKipv4FWHqMffpEiLz4AxgFteLq9qBHn7RB1aahjTFiSP/4?=
+ =?us-ascii?Q?f/HB2f/wSSwF3rnxSlcetdIvwBpU9PIO0n6drntyWWFnmfSZGNqqhr11XGa8?=
+ =?us-ascii?Q?3Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230919171638.19bc1619@dellmb>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1465bd9-5f54-4226-7126-08dbb9b149e4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2023 08:12:10.3068
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: m6TYDM0RhEUOXa2Fpf3J+GNg+WSCgXECUlWesBW57h7JtJZ7OKtp6zpH9jj4zqnsS4SLxBsVsyqRFxM90KtVgRzB7tdb1GEsGi2GaszHjrg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5999
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 05:16:38PM +0200, Marek Behún wrote:
-> On Tue, 19 Sep 2023 15:29:08 +0300
-> Andy Shevchenko <andy@kernel.org> wrote:
-> > On Tue, Sep 19, 2023 at 12:38:10PM +0200, Marek Behún wrote:
+Hi All,
 
-...
+Currently unbind/bind is not working as expected on rtc-isl1208 driver. The=
+ reason is put_device() is not calling rtc_device_release()
+as some of the kobjects are not freed during unbind.
 
-> > >  obj-$(CONFIG_GOLDFISH)		+= goldfish/
-> > >  obj-$(CONFIG_CHROME_PLATFORMS)	+= chrome/
-> > >  obj-$(CONFIG_SURFACE_PLATFORMS)	+= surface/
-> > > +obj-$(CONFIG_CZNIC_PLATFORMS)	+= cznic/  
-> > 
-> > Why not ordered (to some extent) here (as you did in the other file)?
-> 
-> Where should I put it? The other entries are not ordered, see
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/platform/Makefile?h=v6.6-rc2
+The commit 	c79108bd19a8 "alarmtimer: Make alarmtimer platform device child=
+ of RTC device" adds kobjects for alarmtimer device/sysfs, when we call dev=
+ice_init_wakeup() followed by devm_rtc_register_device()from the end point =
+driver during probe().
+But these kobjects are never freed when we do unbind on the endpoint driver=
+.
 
-With the visible context above, at least after chrome already much better, no?
+The alarm timer device has alarmtimer_rtc_add_device() but it does not have=
+ remove_device() callbacks to free kbjects.
 
-...
+Q1) Has anyone tested unbind/rebind on RTC subsystem with device_init_wakeu=
+p() followed by devm_rtc_register_device() in
+the probe?
 
-> > > +turris-omnia-mcu-objs		:= turris-omnia-mcu-base.o  
-> > 
-> > objs is for user space tools. Kernel code should use m,y.
-> 
-> I don't understand. There are plenty driver using -objs. The driver
-> consists of multiple C source files. I thought this should be done as
->   obj-$(CONFIG_XXX) += xxx.o
->   xxx-objs := xxx-a.o xxx-b.o xxx-c.o
-> 
-> If you choose CONFIG_XXX = y, then the driver will be compiled into
-> kernel, if you choose CONFIG_XXX = m, then the driver will be a module
-> xxx.ko.
-
-Hmm... Maybe I mixed something... Let me check.
-For now than it's okay.
-
-...
-
-> > > +#include <linux/hex.h>
-> > > +#include <linux/module.h>  
-> > 
-> > Missing types.h, sysfs.h, mod_devicetable.h, i2c.h, ...
-> 
-> i2c.h comes from turris-omnia-mcu.h. The others I will fix. Does the
-> the .c file also include all those headers if it includes a local
-> header already?
-
-For generic ones, yes.
-
-...
-
-> > > +	if (ret < 0)  
-> > 
-> > Can it return positive value? What would be the meaning of it?
-> 
-> Originally I had it return 0 on success, but recently I've had a
-> discussion about this same thing with LED subsystem maintainer about
-> some LED patches, Lee Jones, who requested the _read function to return
-> number of bytes read on success. See at
->   https://lore.kernel.org/linux-leds/20230821122644.GJ1380343@google.com/
-> where he says:
->   Read and write APIs, even abstracted ones such as these generally
->   return the number of bytes successfully read and written respectively.
->   If you are going to normalise, then please do so against this
->   standard.
-> I do not agree with him, since this is a local command accessor which
-> only succeeds if all the bytes are read/written as requested. But I
-> adjusted my code as per his request since he is the maintainer.
-
-This is strange. For example, regmap APIs never returns amount of data written
-or read. I think it's solely depends on the API. It might be useful for i²c
-APIs, in case you can do something about it. but if you have wrappers on top
-of that already (meaning not using directly the i2c_*() calls, I dunno the
-positive return is anyhow useful.
-
-> I will change the code back so that it returns 0 on success instead of
-> the number of bytes written.
-
-> > > +		return ret;  
-
-...
-
-> > > +	version[40] = '\0';  
-> > 
-> > How do you know the version has enough space?
-> 
-> The function is only use within the file, and both users know how much
-> space it needs. But ok, I shall enforce it with the static keyword as
->   static int
->   omnia_get_version_hash(...,
-> 			 u8 version[static 2*OMNIA_FW_VERSION_LEN + 1]);
-> Would that be okay?
-
-Perhaps, it's a thing in a category "TIL", and it seems we have so few callers
-of that.
-
-...
-
-> > > +	int err;  
-> > 
-> > In two near functions you already inconsistent in the naming of the
-> > return code variable. Be consistent across all your code, i.e. choose
-> > one name and use it everywhere.
-> 
-> I use
->   ret - when the return value can also be positive and mean something
->   err - when the return value is either 0 (no error) or negative errno
-> Is this inconsistent?
-
-TBH sounds good, but I close to never had heard about such a distinction in
-a Linux kernel source file(s).
-
-...
-
-> > > +	int status;  
-> > 
-> > My gosh, it's a _third_ name for the same!
-> 
-> The variable holds value of the status register, which is needed at
-> another point in this function. I thought naming it just "ret" would
-> cause confusions... Do you really propose to rename it such?
-
-It's not bad per se, just put yourself on the place of somebody who would like
-to understand the semantics of all these variables. Maybe you can add a comment
-on top explaining that (in short)?
-
-...
-
-> > > +	for (int i = 0; i < ARRAY_SIZE(features); ++i) {  
-> > 
-> > Why signed?
-> 
-> Because it is shorter and makes no difference and there are tons of
->   for (int i = 0; i < ARRAY_SIZE(x); i++)
-> in the kernel already. But if you really want, I can change it. Please
-> let me know.
-
-It just makes harder to get the code, because of possible unneeded questions
-like "if it's a signed type, maybe it's on purpose?"
-
-> > Why pre-increment?
-> 
-> Again, it makes no difference, is widely used in the kernel and I
-> personally prefer it. But I will change it if you want.
-
-Pre-increment usually also a sign of something special about the iterator
-variable. In non-special cases we use post-increment. And if you count
-the use of each you will see the difference.
-
-...
-
-> > > +		dev_info(dev,
-> > > +			 "Consider upgrading MCU firmware with the
-> > > omnia-mcutool utility.\n");  
-> > 
-> > You have so-o many dev_info() calls, are you sure you not abusing use
-> > of that?
-> 
-> I want the users to upgrade the MCU firmware. These infos are only
-> printed during probe time, and won't be printed at all if the firmware
-> is upgraded. Is this a problem?
-
-Depends how really useful they are. If you think it's way to go, go for it.
-
-...
-
-> > > +	if (likely(ret == ARRAY_SIZE(msgs)))  
-> > 
-> > Why likely()? Please, justify.
-> 
-> Becuase it is unlikely the I2C transaction will fail. In most cases, it
-> does not.
-
-Yes, but why likely() is needed? So, i.o.w. what's the benefit in _this_ case?
-
-> > > +		return len;  
-
-...
-
-> > > +enum commands_e {  
-> > 
-> > Are you sure the name is unique enough / properly namespaced?
-> > Same Q to all enums.
-> 
-> I can change it. I wanted it to be compatible with the header in the
-> firmware repository.
-
-Are these being generated, or also statically written in that repo?
-If the latter, I think better to use more unique naming schema in
-the kernel.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Cheers,
+Biju
 
 
