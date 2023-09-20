@@ -2,42 +2,42 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04BD7A757E
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Sep 2023 10:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D166C7A7AE4
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Sep 2023 13:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjITIMV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 20 Sep 2023 04:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S234578AbjITLrL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 20 Sep 2023 07:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjITIMU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Sep 2023 04:12:20 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2103.outbound.protection.outlook.com [40.107.113.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4F39E;
-        Wed, 20 Sep 2023 01:12:13 -0700 (PDT)
+        with ESMTP id S234582AbjITLrK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Sep 2023 07:47:10 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2136.outbound.protection.outlook.com [40.107.114.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988F9B0;
+        Wed, 20 Sep 2023 04:47:03 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lcJz0jANSzFSrf2QJDp4kgjWSKbPWTcn0NVV4g5fEdVwvnDPBAct77/KDX7Di8QM5wLh4iOkoa3Pkabmukx99XqD8A8XNX9rb6RVpjtsxuZx6t9mxU+9LpwjZHjU9esGxDAgmmcCpskY4MVP/cw2pUT5O4W7UfG8Vpz5lP/1te6VFO8ZAW+KPj3abmiT1mJNeGWuojQH9RFmxfM33Y0Q6dFk2TFQ+0EY5D54VsMbZ0cWyennF8EMMlQxUQcVB/If6dyZ6cSy0YofycYvAh1mTUOUPVWloApU4GAGWC74OvqN/Xiu89ZvtDcwmZp9M1dIqjDK5ZDtVlTCM/s592GMkg==
+ b=kWEvWFK1D1ivA9ijiXhyjeUpj+UFNwuSdNEID9sRKfsEltoMu2c67fdpLtKe4q5KhaSqcMef5mkk4UuvQpzUI3Lau2E/+vXf0UHvHAgoqLFinpPPx1kLLmu82/DC8Dvh19JLYyOffUb/Nx2Bx2HR/4Tz5YfuxaJJ1gHG0RmYKJAhcFljByBqmODxQnQfRBRYq8k1wNiQBRHoHYEFbwR89AK0StxeACWHGTNjEaWP9U2bDDwoR5DkKasDwZOTjwqK9akBmoENfMEGHkB5FSWV0P7bYX5bBil9EpC05yQq2/53V+Y4cd40n6+VptQbzcHyM6P/0MBTeFp4aF0idBmAyg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hkPnjaBBAxXaEklcO/ETek/zT5+h6gxKwuAsUJ5YLb8=;
- b=ee/oi1DbcGM7BNuvImp1gPIAfFRBtcImGAgnR0N40dG4NMS0lJ/AS8miqtIvT7MlQy1q5dEo9mZEz9Izj2vDV54/U6/OJQaUxrPH42ATJ1+WTLMtjr+uJBgvdAyixP5Dvx3UHw+z4DGq1PvkCDK0R/G6mCCnyBOZ9DkFYu0imkf7srjDRQBHc6ZMqbqxdP2+THc6X3epI+OMln3SPdV9WduzT2cVOLW1cXpsgexYpzyfxMKXaGDynOAygu140CXzb7WJ8k6PSVLlEnaQ31gbOT0xbp9Z7XP3zfnG7nlBCw+DzZOap7dy11cshSiw5yC6n4vpl5sXqTDsd06RNaPhRg==
+ bh=X9gSj/bUJ3giYfour0lSM/2pmT52qxMi14p/NX4CHRE=;
+ b=OL06W4x/CQLM/NWZWuAkuO1ggRWyBi/fri3lJ0sf64ZYjIdLYVr8cVDbs8a8caJHf3kkxmMiwUwAFdyK02/aalYZP7iw8dkeYTT6lXhDa7erapFdVrJ4ELUnTV7wIC1LPrxkAkabj2fckRR0o9dXzDycsnp7TguCEVITkZceFeHcZuh1YuF4Xs20r8SQCnHdyO//DOYyCO8Vy1r6taS7APudeZvEs7QSFzVZpxj9rED29tzQQ9meyu65RO2wVrqdooPlvfb06Ytq8rLpgmqEXzA04GI2u3y6f9BHynKBxsSMizT0JynMvF2bWYZUi4i+mr1WU1SF0EHJU4vW/WQ6Kg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
  header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hkPnjaBBAxXaEklcO/ETek/zT5+h6gxKwuAsUJ5YLb8=;
- b=E8iCEj/nlnxPbOK5KA0XVs0NxPWRcj5wjOxEeyoEh6Wh44xvRAHpXn54LByV+CbpUFhoH8IF/PHfd+tG3hsnlMOInv/XAAcbKb4jxXFOws36QIaLtNJPWozV0f3rnRYUJQElEppSKhQi2np0/+WClOkIRB3Ud7DwOYPNlBa69Ng=
+ bh=X9gSj/bUJ3giYfour0lSM/2pmT52qxMi14p/NX4CHRE=;
+ b=n69Wp3sdAcMX32WopB7mjWQejRlmPhrEzcVyL34Y153KmYKdG5gtWm+8jXtzwXMnH0NXGMDadEWeTVem/u6huN6tIXVGm+uF/QqMZiOfDLX+ryxFBYmOujbVYmlIypl7BG3Vkype/+fYNyOBT+oIWI5EDtRRzhnjdsXKZMyzR70=
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB5999.jpnprd01.prod.outlook.com (2603:1096:400:4a::7) with
+ by TY3PR01MB10517.jpnprd01.prod.outlook.com (2603:1096:400:315::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Wed, 20 Sep
- 2023 08:12:10 +0000
+ 2023 11:47:00 +0000
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::9d23:32f5:9325:3706]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::9d23:32f5:9325:3706%5]) with mapi id 15.20.6792.026; Wed, 20 Sep 2023
- 08:12:10 +0000
+ ([fe80::9d23:32f5:9325:3706%5]) with mapi id 15.20.6813.017; Wed, 20 Sep 2023
+ 11:46:57 +0000
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         John Stultz <jstultz@google.com>,
@@ -55,11 +55,13 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>,
         Trent Piepho <tpiepho@gmail.com>
-Subject: [Query]: Resource cleanup for Alarmtimer
+Subject: RE: [Query]: Resource cleanup for Alarmtimer
 Thread-Topic: [Query]: Resource cleanup for Alarmtimer
-Thread-Index: AdnrmFAjUih7l1QlSdSObu7MvB/BAQ==
-Date:   Wed, 20 Sep 2023 08:12:10 +0000
-Message-ID: <OS0PR01MB5922DD412F43E1C836E32AF486F9A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Thread-Index: AdnrmFAjUih7l1QlSdSObu7MvB/BAQAH7oWA
+Date:   Wed, 20 Sep 2023 11:46:56 +0000
+Message-ID: <OS0PR01MB5922E907FCC5B7638B9CA29A86F9A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <OS0PR01MB5922DD412F43E1C836E32AF486F9A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB5922DD412F43E1C836E32AF486F9A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -67,56 +69,55 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bp.renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB5999:EE_
-x-ms-office365-filtering-correlation-id: c1465bd9-5f54-4226-7126-08dbb9b149e4
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TY3PR01MB10517:EE_
+x-ms-office365-filtering-correlation-id: da2a09a3-12d0-4d8d-73eb-08dbb9cf4af5
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TdBmv+eSZI26auFVwNL6yCLBjfUpFZfMBdAI7ZYafZjjW9fLSvHzZtnf5/JFuQ5qWZgeJkET40Wb+l4OJ2aNJrDcIxZUVg6fvZXUKLypJJYmbdWNEs4zIGvparfJWSdYF8Cqgj5QUvce1J8FWntMx6bDxzIQnvZmtt9NHz9Y9tfxqngvQyxTmnLQA3UZt2tPL3VvlAybA7Z4igapB2bPeRzs6axR5d9PAc3hMSnD+DI14mPgpRNYkZbhxLSZ7+tFDWt50025FEo3MSAxDCmMsQ0OTNWszB3qz6vpq4wjyiCemlRk21Z/26YBAEadWz7oACFefF0wHZeG9HjZrmENLlDxVG+IWIX4uMMi+ONacbNv21h+5ND7ERi9D1YOWdNdoAEYjVyWTar8L3SISnUFkIdu8wbjsvNdENAKPmcEXPcigXHmQFGBfkzBTA+c2G9vlpp/gVSeBWJPa8safl3IUFl4Dz2mWXSJFh0o8NsQjBQB6rrdFrKrc2WVn+4qo/5InBDCur1Y4nAULTSb9xbq3Fd4NxyhH44Ny9rMmAiJUJPAvnQgjVx7HffEdVBwKpyXSbQtYPoqa/cmKTS3Ql4d+x72U+4cdERWE1tc/Cqnp6oghLGEOohSCOYsFlN2kF/x
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(376002)(346002)(39860400002)(366004)(451199024)(186009)(1800799009)(2906002)(5660300002)(52536014)(26005)(55016003)(66446008)(64756008)(54906003)(7416002)(41300700001)(316002)(66476007)(66556008)(66946007)(110136005)(4744005)(76116006)(8936002)(8676002)(4326008)(478600001)(71200400001)(6506007)(7696005)(9686003)(122000001)(38070700005)(38100700002)(86362001)(33656002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: nA11M2GFJEF+raIH1cymjhO4rGRpQciOgFvO2MELiEcIQRrS2MC89BrPPlgYsPtFJhwyE8L084cUcMqjZtPSWcBEnKv2U1mZ2yLXh9mmC4LIqihav88dPDkOmx6uc7pbcECwwO55XA8o8SDWuighIdFXqHe6ERW32DHgATWJ91GuSS0d1T9QUm+ZYprDYIzh+ifo/4D5GlVQxPduweDOwFDd2T5EKptHd9Vb7KntIJtsYB/z3PRDDRfqQF5dS/BxJ1uAQrsK4w38lyCbH4YKuU1YZX32a/6FDkcrxaHs2uS4BCry5aI5w+GDdo+wM5EUOsLlHRfh3rk48oUfDnGAxTGv6BW8wJNQMsTR1h8e7tBHQAMgtZzhErWassvFv4zoRhUZIV8CaRyw+vmgiSOoii5Hs+XAx3Qf0D233Vlo3J8v4K5uYSZ9WQcWT1lODnbDntT/2cz22Ok4HssruR9+/+esROxLEEj0tOmoBwbIUWUY+kmdDrzm46pyOvszvUR7QXV3u4vulG8MkNnh3kq4VBZZ7IUGOoJ6FVVn/hbvDsQTJP/HOZpYKk+UhFq93sOq1cN0xZC5hqfQaMCyTu5vtPnZ+7ovqkfGIs7QmqRC2R4FEpd7WK9prDPiLJHAtR93
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(346002)(396003)(376002)(136003)(366004)(1800799009)(186009)(451199024)(2940100002)(9686003)(6506007)(7696005)(71200400001)(122000001)(86362001)(38070700005)(33656002)(38100700002)(55016003)(4744005)(110136005)(66476007)(66556008)(316002)(64756008)(66946007)(54906003)(66446008)(76116006)(41300700001)(7416002)(2906002)(52536014)(5660300002)(8936002)(4326008)(8676002)(478600001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0qAuBHCGHAvbWguVYRFQVGk+glbOQU7ht41FxLOTsyEbut7BxbWnhCPKUKXT?=
- =?us-ascii?Q?ub8tp0U77ErzZuWMJhpwde/D2gb2P6ubfbbC2jeQqAmM748NzgXSDyJEu22r?=
- =?us-ascii?Q?sbZ3cZTJrLCe4ew1Vh086dovHX1SE9PNjEUUG2PIKOVanyHA586zisYZUBxC?=
- =?us-ascii?Q?6n2XpKZqB2F/6/Tn5sIuM93pEGLqRSAgQFlooUDoFe69rZVRGBvg3C+Jbho+?=
- =?us-ascii?Q?HwQcCY1tNKL9Vhf3FfoOPyC9U9kAH0eO0STjDqe8beD50+5Rwi3jclOAKb3N?=
- =?us-ascii?Q?jhInv2An+KhPJcRZf5CuSVBpSg1utw7sb0YzqizId7R8A/H9DtlMW9aBa7gI?=
- =?us-ascii?Q?k0rZo0BBAkAuC8FdxAUuhWszP2bpY+TrZ3E+xWlaFa73Sk+tmMD/f8UAVNhc?=
- =?us-ascii?Q?Jmoc3cMmAJmHbca9P9nJP1pGgkEWqkq9JuXQ+1l0o2xoF6OvdgeQ8AcB4Dti?=
- =?us-ascii?Q?JP9hScq32ZGZZXuPMTsVVYzP2lw9VmAeyXuM7c6Ctl/Rbdh3NXpl/yGYDUVa?=
- =?us-ascii?Q?FDK4I89qH+CYUZsBg1HmnYL8dTcQL/4ez5c7METnCy04pl4jCVhPZfIC08E5?=
- =?us-ascii?Q?mM7YSD10z84l5C1MPu3TTEukDkb810ewYQ0D6BlgaVMOlpiWqenHn0eckqhR?=
- =?us-ascii?Q?I1GwAQLy+yM/rq+oBkWT3nw+pigtRuc/Nq9GIF+ML8vMkRhV6XjYhvYcBALc?=
- =?us-ascii?Q?uG0OIcPlXXSwMs54TgzELWqlYHQr9ZPOljz2Kjv22wCp739nlvd7oAyGIicA?=
- =?us-ascii?Q?lE1MMKjV12JI9u2zgC8WbIQ6PA50p3TXmwr5uT6rF0wtHq8R4WdDAiC/z+oM?=
- =?us-ascii?Q?IvI/76mOhG+Ap4od+fC5BNYjnU+eyVb9u9JGtfsT3ZDby5tXF0AI9FSG40uB?=
- =?us-ascii?Q?QdRWUsnWlTtDWjC8KEOmp+rI6pnmCFLjurw0bH9MiSy/VVYCHGU0zFH/mf+H?=
- =?us-ascii?Q?67cSQhTBqSS2Thwy8BCdqdfu9qgNr0YoTXe1I05fanemLeoyoBtvNO2cHBN9?=
- =?us-ascii?Q?SFGodol2ClwcP5nGAtP0g8u+CQKFyCDQ5sFuV5JR0188jAarDwa0OgJF2SV/?=
- =?us-ascii?Q?5mp5XtNvq9fKiXaa/e4Bh0OfBaY5bgSSE4mhK3AYidLrQkFJS3PJfDk9Udid?=
- =?us-ascii?Q?b0+j7mN2mngz6kxSJYxCFfdib99JDTu9Dy7NVuihPvApQIxKWctny193Rpug?=
- =?us-ascii?Q?mJ7W3yFEE4W4k6rD1YluiIjJSJ134P9SjtRB/ibtoa2NqJnIBE6Df1/j9lYr?=
- =?us-ascii?Q?WnL/+1/oJ9hEy/wm7A45mkHUOH626Urw94jN/WOjqKbb6iSj0qLTJlOMMms5?=
- =?us-ascii?Q?G3ezKJonRlMiRmOqbNpr8vdpKIk11Skgs3hV1VP84fgTe5sC3WjlIVAeXMtU?=
- =?us-ascii?Q?JYfjZTD1gtcMDT4HCyxZOod6f6scjA5gzS9V+6JLKU3RllzNJo1r0hut+P9i?=
- =?us-ascii?Q?5NmN1w/I07VdLeVJLv3nlVskekGZNE1+AV5PBVyXC/GeMwNmflTujmUsa/Ut?=
- =?us-ascii?Q?+Ey8crNoLDzDLbKipv4FWHqMffpEiLz4AxgFteLq9qBHn7RB1aahjTFiSP/4?=
- =?us-ascii?Q?f/HB2f/wSSwF3rnxSlcetdIvwBpU9PIO0n6drntyWWFnmfSZGNqqhr11XGa8?=
- =?us-ascii?Q?3Q=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4QbKqCyWfyzXSdQpNQrQ8nuWmB4tT9V1SIeOn0sS1DwxDdqFBsNKUu+fUEcw?=
+ =?us-ascii?Q?eUxXRVoauCEZrtp3J0+NWvwsjZ60SjqyYLGT7G06Jy7zMcBoc8iugdXdqtjl?=
+ =?us-ascii?Q?V+t7fodO8APd4FG88z2EiESK2VGqDGSp/6xfD42B5ZqGlYCrA2VE2Qe/rxnV?=
+ =?us-ascii?Q?jMeB5YvcRURSpymEpFbz+BrqQmIOL0IGfCEe2GgBfG8pdGAV/34Nvz2sAD86?=
+ =?us-ascii?Q?Rm5djXDDpemHaeUoQJpgJxpyIgEehb8qvCtOLizbm7NOAjbiKCKwrrq94iX0?=
+ =?us-ascii?Q?gFztRM0HsvcLEPFC7KZfYH1jkVMAP8CdK8T/YHEpXstOCvX/DDFF+xasM3it?=
+ =?us-ascii?Q?2EPHy/pUJOVUNrRiJFyP69DPUUya271ZfH4Yq+5BF6OkP1/Jv9v6CkB4dojR?=
+ =?us-ascii?Q?rAAlBDGZ/qi+aMdPgB3alDMjsuwqwEMPkWJBqp6dF/5nleQvENXTlGEurx3c?=
+ =?us-ascii?Q?J5YAqYVZyNzXIXZmW5IpGnjXKH3Febf/zPszvnd6PA+qOiHsoDp0LTfj3Obh?=
+ =?us-ascii?Q?MQi2pvGnGLBV8LmpNAkURyttSsTajrfAdbKvfPxSMhq19AJS2ETWgQg8Gs/F?=
+ =?us-ascii?Q?/S+PKyvkunbVdE/5IDKl0JhteHMD0ykNoXPvUeQCDQSSArBbfnQVF3NBywN/?=
+ =?us-ascii?Q?b0vLOyyBZzRJg1Y+GUf+1yRvbJ875r+Ik5gxkOYJ9jJc3OcU4XdzvOfeIo2g?=
+ =?us-ascii?Q?OXo6zJ312iSVLxfzj0d68fhSpzEBMORZtuHVtV7bC5XjokrxJ3ZvsqnAJxcy?=
+ =?us-ascii?Q?kg/3g4eOaaUMcIsvo/iYwFs4rX9N84/XU8J3u7nFNX2auvX6nfiL4zRPeg7b?=
+ =?us-ascii?Q?8e59BiK3mz1+TDojwhlGxbmvdjnyYGPtCfV5q1J7r9pEA6CAirzcO1hBUSwU?=
+ =?us-ascii?Q?iHsrMOxnxRVPTXANxyraEXA4Z2YLt3WboPyRzwKadlLJGrEaGe8PxSedtIGV?=
+ =?us-ascii?Q?0mnP7pJzFfn3sK6tGes+4QA/Y//yw84wFpGFdxq7Hi8JxvfJlLBav+zrbiQC?=
+ =?us-ascii?Q?HJJ8QV1G5bjB+t5mcEcXELEcVVU6mJYCiRW5Vs7PDF/Y1or9aO4nt7hEYIEr?=
+ =?us-ascii?Q?xa4Y6jO37Fx7Gxs01j72E4J31QoZ65SMUpQn87qEPMIedc6qbgf7tLnHrD2m?=
+ =?us-ascii?Q?3dZFeDCyIeZgQRKmTrhMzxMfuMpHVgdc+gzu1BTf4NDLlg8/bmuedBFnnLHy?=
+ =?us-ascii?Q?ivu2KRR+kTSYOVsOLoFoyKO1awwFfrZSdEg703dyM6P4+/AYJz2U4E2DdLlM?=
+ =?us-ascii?Q?cAWzPbJZYprx+JqPp8QmgmVRO3tcoTUHocvOGyqvKQgnnxlP1xnN1BwuDxdU?=
+ =?us-ascii?Q?KoDNrjNeRjPdLcAuwYbAdv//Mm/e9FqbpatFIl1ZT6yN5Xs81Jdla6c/Z3Nx?=
+ =?us-ascii?Q?Iin56XwngKffc4v5jxR2sActKvephUxNImuieSSVQWIdeXYCToTNKpvf9xRu?=
+ =?us-ascii?Q?wQWjVNY3u/JlnORsf4HiG2ufSTa/nxyXh9djzVuc/X3LZYDZrjB3BUuWdArk?=
+ =?us-ascii?Q?Qv0WeLU6gsBVdJtdlsKhhwq5xvcnrREnuvtSMxco2NkVIIwOawrbomZHmnPY?=
+ =?us-ascii?Q?roAGPEhmUS1makfkFVc=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1465bd9-5f54-4226-7126-08dbb9b149e4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2023 08:12:10.3068
+X-MS-Exchange-CrossTenant-Network-Message-Id: da2a09a3-12d0-4d8d-73eb-08dbb9cf4af5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2023 11:46:56.9779
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m6TYDM0RhEUOXa2Fpf3J+GNg+WSCgXECUlWesBW57h7JtJZ7OKtp6zpH9jj4zqnsS4SLxBsVsyqRFxM90KtVgRzB7tdb1GEsGi2GaszHjrg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB5999
+X-MS-Exchange-CrossTenant-userprincipalname: BssCwHosGTEeijBuFrZsPcLwNa4kkGC1j60EOHe+xjzuKpHAqftC5oPnEmfu8W7Fnhn0MXwmH4w5mh1/znqShewnqUz2i2LGGVqFU7bIrUs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB10517
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -126,27 +127,38 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi All,
+HI all,
 
-Currently unbind/bind is not working as expected on rtc-isl1208 driver. The=
- reason is put_device() is not calling rtc_device_release()
-as some of the kobjects are not freed during unbind.
-
-The commit 	c79108bd19a8 "alarmtimer: Make alarmtimer platform device child=
- of RTC device" adds kobjects for alarmtimer device/sysfs, when we call dev=
-ice_init_wakeup() followed by devm_rtc_register_device()from the end point =
-driver during probe().
-But these kobjects are never freed when we do unbind on the endpoint driver=
-.
-
-The alarm timer device has alarmtimer_rtc_add_device() but it does not have=
- remove_device() callbacks to free kbjects.
-
-Q1) Has anyone tested unbind/rebind on RTC subsystem with device_init_wakeu=
-p() followed by devm_rtc_register_device() in
-the probe?
+I will send a patch to fix this issue soon. We will discuss
+this topic there.
 
 Cheers,
 Biju
 
+> Subject: [Query]: Resource cleanup for Alarmtimer
+>=20
+> Hi All,
+>=20
+> Currently unbind/bind is not working as expected on rtc-isl1208 driver. T=
+he
+> reason is put_device() is not calling rtc_device_release() as some of the
+> kobjects are not freed during unbind.
+>=20
+> The commit 	c79108bd19a8 "alarmtimer: Make alarmtimer platform device
+> child of RTC device" adds kobjects for alarmtimer device/sysfs, when we
+> call device_init_wakeup() followed by devm_rtc_register_device()from the
+> end point driver during probe().
+> But these kobjects are never freed when we do unbind on the endpoint
+> driver.
+>=20
+> The alarm timer device has alarmtimer_rtc_add_device() but it does not ha=
+ve
+> remove_device() callbacks to free kbjects.
+>=20
+> Q1) Has anyone tested unbind/rebind on RTC subsystem with
+> device_init_wakeup() followed by devm_rtc_register_device() in the probe?
+>=20
+> Cheers,
+> Biju
+>=20
 
