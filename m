@@ -1,177 +1,195 @@
-Return-Path: <linux-rtc+bounces-4-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-7-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77B1C7A9FD3
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Sep 2023 22:28:18 +0200 (CEST)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FFE51C209F7
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Sep 2023 20:28:17 +0000 (UTC)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E77067AA9DB
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Sep 2023 09:15:10 +0200 (CEST)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by sy.mirrors.kernel.org (Postfix) with ESMTP id 5C273B20A6B
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Sep 2023 07:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE98218C08;
-	Thu, 21 Sep 2023 20:28:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570D41775A;
+	Fri, 22 Sep 2023 07:15:05 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388B1182D1
-	for <linux-rtc@vger.kernel.org>; Thu, 21 Sep 2023 20:28:13 +0000 (UTC)
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D07CAE257
-	for <linux-rtc@vger.kernel.org>; Thu, 21 Sep 2023 13:27:47 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b703a0453fso24047521fa.3
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Sep 2023 13:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695328065; x=1695932865; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2VjJPXsrYAqjFL9Nf8NIel2/K4dIRRk1OeUMv0TCyUw=;
-        b=iIthuDwMR+kZ4eJDokD9KqDrlipW2CB4uJn6lYJRKpsMw1A5ClD4jgJKJruHg+XZGJ
-         ck1/YJQdprY3PohMj/hj0SMw+acNGSYg/6z88+bKvea9T0si5gRET+7vtYSWFd8FyYKD
-         acJrndxB6NAzsAlO2kYE2RRp2udomcwYjQ68V3tor5q2/dGWTkGUcKHEBDGf1VGT47Cr
-         WSnK+UsZ2FDYNxKdiVTGk7Q5xKDtC2fmQeaTh8q4kEmWbLm4T3uXT0NdakevLv6EgKWJ
-         s6q7eMQ+XS0D5J7SU0e0D5vM7Lk9rs+TQgX8JZdHAHV0FIBCXbGy2Z0/TMTsPbVD24A9
-         ukBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695328065; x=1695932865;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2VjJPXsrYAqjFL9Nf8NIel2/K4dIRRk1OeUMv0TCyUw=;
-        b=u7LAedvRemnpni20awGNm+wR1NegvuaETccrk8tDUciZTLmo7Wa+gZ1v62MFxKNVvu
-         Q7IB05Su4JhaifYc1NPoz9REJQMmyviQ45VJ+YrF6qZkSglluRKtD2If2EmhUUq15Zmb
-         VeL52ZsVoJsLjDqFwNMjZVDVTs/9EimikGpQ0AZbyz5mqEhNWGMkiAsWJ4g1HQW4hL6/
-         yfou+kWuq4AuUZjJd2ihAJR+MXXS6Q3ni8qST9e1wVwcnIsos/Qxz9130C/Lul40JhVL
-         YNDmhQ7kBBf3NygT7OA7OrhJktccIyuFesKxYF1/LnvGPCRuxt4lYPUAsV26awrJopva
-         Ph0g==
-X-Gm-Message-State: AOJu0YxgbH2OeOh1i7HEV0Ki7LbMUjqRvTQqgrkPSIWHN89lYMBWzOrq
-	fyxbsEv60KfaMdYx9VCc6vZG2Q==
-X-Google-Smtp-Source: AGHT+IGFn7MokoBEuQEOUGLAbeRVMl3+32En/E5zHnp7dndZVa+xuHv7NpsZs6rGfY5goMVQP86kUA==
-X-Received: by 2002:a2e:a404:0:b0:2be:5b09:553b with SMTP id p4-20020a2ea404000000b002be5b09553bmr6018229ljn.8.1695328065334;
-        Thu, 21 Sep 2023 13:27:45 -0700 (PDT)
-Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id y2-20020a2eb002000000b002bcbc62dc22sm524892ljk.86.2023.09.21.13.27.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 13:27:44 -0700 (PDT)
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 21 Sep 2023 22:27:43 +0200
-Subject: [PATCH 2/2] rtc: rtc7301: Support byte-addressed IO
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BB6154A7
+	for <linux-rtc@vger.kernel.org>; Fri, 22 Sep 2023 07:15:03 +0000 (UTC)
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2096.outbound.protection.outlook.com [40.107.114.96])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB48DC2;
+	Fri, 22 Sep 2023 00:15:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A+sf2mYIMJs/Zac278AunWvLjs+pzrOOY6NS8xuOG7Wb7xzaqpJ+o+u7FwdIt0g6vcvPc5WsYK5WqtXhnf+Vx7MQlwbjQnJaeXqtD84NU5ecWXpvQymAxa5e+VlyVb2Ph76nO2xmpv0JOz5YUe6TY9WoPK2w7LPmdITt7BRIndYphwUnhs91UyNTDprtJphPovpJxFQ5Y3UKaPRwg/mjiRB8Qc2dM0LFI38pHEViSPftUzDRu/I8JxeGCMTRWPjI39p3QXEyqpBjrv2CsRgEjJ2O2NBqvpuWRpaEO8I3mNjGmQEUYcjYlsgwFZntOI30nslggFe6VPz7Mfq37GEzEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=drCeuk5/vrxWruk58Bdq4GwFBlaBzwk6SnMsHPp0g5I=;
+ b=WW2OCKRihae88pz89QNBpir6F/JqNfB7Y6r2moP1XAKSuHG7wfaMP0aCyMNWRdCQJVIIu6Ya3U8KQ6feMliU+lnIr/Z5zBe8Gxaq3z9nfE0++WqNWkLXg+/2YBeDVLaetrjsX2V6/DjoE1/HYTGkHdR403Wr4x7/VtI94QeZGr+6SJpxL9T7PKGrb70stiOBb7zcTW/bOPB1J0+7DMc7xeAmUTSUvZ8HkHPp8BuzVcFz5qiIoCZRTLOoxop1xz7d01MkpJVq0lilkp09zmloEPkYEv2lxYBdUwRJeqVxsUL/TZYRb26HePpVNyVfKpuiLvQaP/KSpDxUExOBFYiI3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=drCeuk5/vrxWruk58Bdq4GwFBlaBzwk6SnMsHPp0g5I=;
+ b=OgWyVsH5Nt63KCCY0T+w5j+GbfrrDOIn8+2FzL4vkvpzE+zsZuIp06rElQ6vvcuKwxmgBgIrE2qKZCcOaMyOyK9TNWPqe0l5HIvehj6A3sp3D+O+DLjPPvp+FFs2NBD2n2J8X9PqgHSFY58lJZkaDRCNFYzKUSMnMTueF5jCz4s=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYWPR01MB8573.jpnprd01.prod.outlook.com (2603:1096:400:171::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Fri, 22 Sep
+ 2023 07:14:57 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::9d23:32f5:9325:3706]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::9d23:32f5:9325:3706%5]) with mapi id 15.20.6813.017; Fri, 22 Sep 2023
+ 07:14:53 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+CC: Thomas Gleixner <tglx@linutronix.de>, Alessandro Zummo
+	<a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Biju Das <biju.das.au@gmail.com>,
+	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH] alarmtimer: Fix rebind failure
+Thread-Topic: [PATCH] alarmtimer: Fix rebind failure
+Thread-Index: AQHZ67nxDPIpzSJRaUGrxRMZix2AJrAjo1KAgAADuiCAAsoCkA==
+Date: Fri, 22 Sep 2023 07:14:53 +0000
+Message-ID:
+ <OS0PR01MB592211963202423E46CC2B4D86FFA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230920115935.144391-1-biju.das.jz@bp.renesas.com>
+ <CAMuHMdWp_U_k5nSgmNV6whdK=pNr14h2dS=NetJXRgVEDSSK_g@mail.gmail.com>
+ <OS0PR01MB59221716AD7E6A10CDB295D986F9A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To:
+ <OS0PR01MB59221716AD7E6A10CDB295D986F9A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB8573:EE_
+x-ms-office365-filtering-correlation-id: 46dd31b1-8375-4265-202e-08dbbb3b9e37
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 1v2i7HYrhv7u/9IhuSL8Ya1r/C02rLqxJuaRfqhwioImvzCQbAp2935dQVHJfHavd/+iun65EpfruRsTyxX0VzhxsLfzJ6VHrD1NnUgiX6C4eyKy/oq8llI7w1DOrqw5ow0l4jRqwgujBKtAwvvEao53KCwvuCZSuypWTgan1RXQ3DLtTE0F1JfLdewHIHb6FdEq2/zZSwKpHrIOuZfD5zdRdXCAdyKq75hfK/Ru23sIUCDDb05ZaFoBw6XVF65wBmdOJ8lrMZKUQfBxQ/qapdc9zYebBdAlRxFjQTIUBlsyZxNkB40WSILWvTszQLJbdW12KcCdg1CehBaaVeiLfiyPlm18Kr/S3dmB3TPlmEruaoSlLBY/i7cDfNBzts12RYvnYRNilYcrFwaJ+P+Ad58ZRfttfyIQV9P/tO1aT95t1sLzJLPV/LA5QM93ZFIRhQY01pnF43mT0PgRc0n0PJhW1jF95lTK6PwhDUZhZq0qPhivC7/6Loq+kt6PQkbEmHEGjIVDyBKbLixm3iq8xfNUCin6X45I5FeIj3dZMdczlJEsC4UjZEZzE38836wusV2zWpBj9e8q2Z0Ao8DppaV65LWfMDXh0QxR12M205Wbte0zDtQXCp7prUTUBsYG
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(396003)(346002)(136003)(376002)(451199024)(186009)(1800799009)(8936002)(2906002)(5660300002)(4326008)(52536014)(66446008)(55016003)(26005)(66556008)(7416002)(6916009)(41300700001)(316002)(66946007)(54906003)(66476007)(76116006)(64756008)(8676002)(478600001)(71200400001)(7696005)(6506007)(53546011)(9686003)(38100700002)(122000001)(38070700005)(33656002)(86362001)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?ajZKSUc4aElkc0dpQlFXMk1VS1JueFd0Nk4zdkEvN3FvbGFGNTlLWEloN1dE?=
+ =?utf-8?B?ZmNyQ2h1QXNhcjBPQUxWR2NBOU5ndnBxRndBbzVaZWtta2EwWGVORlg4Rkxi?=
+ =?utf-8?B?RFh4c3ZJNm9TdVUyUnJsVVl6SVo1TjVjV2Vua2hka05XbjJjZFdYOGdkNXdw?=
+ =?utf-8?B?Wi9XbFo0a1ZPU0RjWXlmMm9Jc0MydldGMFg2dGp5YTZxUnorVzk3RG5ReXB2?=
+ =?utf-8?B?MXRlUHo2REkzQmZYbFVIMVZnZTJhWDREZ21UbXJFRjhYT0Q1ZVlIbVppNHFF?=
+ =?utf-8?B?TGFmTGtPdE9CdVJlZVZvVXdpSit0dHpFNFdsWUxLNElRYjRqTkp6bmxRUVNU?=
+ =?utf-8?B?ZHBtTmI1VGJ0Z2N0RmVrTXhxbFVOVWNuQkZzNmVHdm05KzhjQXliaVRTUUtS?=
+ =?utf-8?B?aG1FcG1zMWFqRFQrT1ZlUU9UaVpoNElnTWxHMjljUndzS3FlOTVycm9BdlM2?=
+ =?utf-8?B?dmVDcFIrazlra2YxNjVlSGMwZ1p5WjRoTHU5a3FNMndKSWJ6VkZBNi9ockxa?=
+ =?utf-8?B?b01iTk9TcFdMMzZqamEyZC9HaXlUbVBOVDVWLzJ5K2JFOEJDM1c1WTdQbW9Z?=
+ =?utf-8?B?Y24zNTZpVDZtR0ZlWG03N0h3Y2NEb2NOUDdaS2xhY3ovZlhTUFkzbVVVdTJ6?=
+ =?utf-8?B?c1dHYlVUOGIvK3llQ2xMb3V5S055RTc5by9sRmxLdmdBdFhhUXRGVjdVaVI4?=
+ =?utf-8?B?cnlzN0Q3T3RXbDhQc2sxangxcUpTY1NLbWVlc0ttcTF0WTlNZzkxTUVFTHdQ?=
+ =?utf-8?B?b3JEY1Vkb0luQ01kUnU4TGRhRGpFMDB4aDhQRm1hSDFrUURlVEhzQnkybkhn?=
+ =?utf-8?B?U09wZ0Nza0dzMHpLSHpmN1FWb2ZYV0U4WnVKTlN3QmI4RllpUmhKclFoU0Qy?=
+ =?utf-8?B?Ni85NEdMby9vRlN0REREMmNoN1A1SmdSRFhNMUdVVi9XNWIzZ2tNWFpaUElu?=
+ =?utf-8?B?Rmg0cHBXbkN1Q2o0eWRBRi8yN2ZwRjhFbURmeW5MV0RYZytNTFcxL0REWTVD?=
+ =?utf-8?B?TnYyWm1sMTRWY3M1MWVXY2xZYTdhdFovaU80U0IyMTNHTEF6UEg1Vk0rNkhx?=
+ =?utf-8?B?dGxsVCtudERITWd0NnBmaDhtR2JSeDhPT3EzdXBNendaRnFxeXBneUl5TGU2?=
+ =?utf-8?B?UFJOLzdFOWxnOVZlbllLZnYxdFdZbms5RlFXVW9CU1V1aExjdFl3RGFpNWhL?=
+ =?utf-8?B?cmlheG15eVdTZTVwdmlSLy9Fb211U2RzNDdQcnJqaFdvYmNPeURNMUpCRy9s?=
+ =?utf-8?B?blJCVGFaYjAyanFINzlRR090cHFKOU5YTWc5MGJrUFhxb29WQ216RCtyeWFw?=
+ =?utf-8?B?eXRELzBoQTdLaWRnMEFFZkEzbmx5c3VQUEZwRWdDeXUram44L3lhUFBBUU9x?=
+ =?utf-8?B?VnJDZGhSR1RGM1V4aUZKakVTNXE4SU5YWlU2cGFWR1lDWjBFQmFaM2FjUVdS?=
+ =?utf-8?B?bng3N2tydmpVeVFBVEVNYy9sOGJUaVlPbHpKRGNVcmJ5NVgreW5hSE5JYVpF?=
+ =?utf-8?B?ZmdpSzZEdkttNU94cjVyOXN2d2krbDNxMXNWT1V5QlFvNkg4a1JMSFFOVFBy?=
+ =?utf-8?B?bHBLMEl0U0s1c3ZFQWU1aGQ5QzQ0cHZsMTU3ZmFBT2VPL0lMclpHK0RTL1Ft?=
+ =?utf-8?B?OEJ4R2tVbWozWGdSUUMwYXJ5NTkvM3JDU20xNGkzcXg2VWxCQkpuWmdkT3E0?=
+ =?utf-8?B?aGdMWnNUL2tBd0JjNmp5WlFUQkxWcERuUHlJdWd5c2hLbENtRVo4TXpQOFVy?=
+ =?utf-8?B?LzRYSk1Td2l0ZUdKSGJwTjhPUC9DdnA4VmkrRTRJNVQ2RDlWTDAyOFNpUmNw?=
+ =?utf-8?B?anhaZTk4UW1XdjNEdmMxWnZGL2h1bFk5ZGN4ak13WGlLVzBjWitIa05Ia1VG?=
+ =?utf-8?B?b0xmZ0xxTjliN3QrNWhGZTRUeEtzWVRKbXRmZ1NweHNobktDNzdhdXF1ZmJn?=
+ =?utf-8?B?R0F0NHV2RnlEVXZ2TTZrdVY4Z3NVaCtrcElJKzQ5YlRqTmQzN3Y5c0p5ZDJZ?=
+ =?utf-8?B?Wms5WnJGbjl0TndGdWtZSlFaR2VjWGx2OXhkS1l0VFZqdHdxcXZraEhibXpa?=
+ =?utf-8?B?Tk9adWQrQ0xxUG83U2NnaUJGbjFrVEVsdUZJa1lvTlpqbmtrS1BDNitXZmU1?=
+ =?utf-8?B?OEhpcWFPUGZlNzhYQTYxVEhkQkdrT2drVWRkQTVYRGg1UkZyMXRyd1o4Mkxs?=
+ =?utf-8?B?bFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230921-rtc-7301-regwidth-v1-2-1900556181bf@linaro.org>
-References: <20230921-rtc-7301-regwidth-v1-0-1900556181bf@linaro.org>
-In-Reply-To: <20230921-rtc-7301-regwidth-v1-0-1900556181bf@linaro.org>
-To: Alessandro Zummo <a.zummo@towertech.it>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Akinobu Mita <akinobu.mita@gmail.com>
-Cc: Jose Vasconcellos <jvasco@verizon.net>, linux-rtc@vger.kernel.org, 
- devicetree@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46dd31b1-8375-4265-202e-08dbbb3b9e37
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2023 07:14:53.4850
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ora2AvH/38/5USHR9Uddn+JIArzwFHi4kdcSxWWhWOgZqkbhRye7DhCFSKft8dgcJKN/qFdbIpyvhOVaJjk8m8aRrVPP6vOVQzV9evWHN24=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB8573
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+	SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The old RTC7301 driver in OpenWrt used byte access, but the
-current mainline Linux driver uses 32bit word access.
-
-Make this configurable using device properties using the
-standard property "reg-io-width" in e.g. device tree.
-
-This is needed for the USRobotics USR8200 which has the
-chip connected using byte accesses.
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/rtc/rtc-r7301.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/rtc/rtc-r7301.c b/drivers/rtc/rtc-r7301.c
-index 5dbaeb7af648..843e16966b65 100644
---- a/drivers/rtc/rtc-r7301.c
-+++ b/drivers/rtc/rtc-r7301.c
-@@ -14,6 +14,7 @@
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/delay.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/platform_device.h>
- #include <linux/rtc.h>
-@@ -55,12 +56,23 @@ struct rtc7301_priv {
- 	u8 bank;
- };
- 
--static const struct regmap_config rtc7301_regmap_config = {
-+/*
-+ * When the device is memory-mapped, some platforms pack the registers into
-+ * 32-bit access using the lower 8 bits at each 4-byte stride, while others
-+ * expose them as simply consequitive bytes.
-+ */
-+static const struct regmap_config rtc7301_regmap_32_config = {
- 	.reg_bits = 32,
- 	.val_bits = 8,
- 	.reg_stride = 4,
- };
- 
-+static const struct regmap_config rtc7301_regmap_8_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.reg_stride = 1,
-+};
-+
- static u8 rtc7301_read(struct rtc7301_priv *priv, unsigned int reg)
- {
- 	int reg_stride = regmap_get_reg_stride(priv->regmap);
-@@ -356,7 +368,9 @@ static int __init rtc7301_rtc_probe(struct platform_device *dev)
- 	void __iomem *regs;
- 	struct rtc7301_priv *priv;
- 	struct rtc_device *rtc;
-+	static const struct regmap_config *mapconf;
- 	int ret;
-+	u32 val;
- 
- 	priv = devm_kzalloc(&dev->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -366,8 +380,22 @@ static int __init rtc7301_rtc_probe(struct platform_device *dev)
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
- 
-+	ret = device_property_read_u32(&dev->dev, "reg-io-width", &val);
-+	if (!ret)
-+		/* Default to 32bit accesses */
-+		val = 4;
-+
-+	switch (val) {
-+	case 1:
-+		mapconf = &rtc7301_regmap_8_config;
-+		break;
-+	case 4:
-+	default:
-+		mapconf = &rtc7301_regmap_32_config;
-+	}
-+
- 	priv->regmap = devm_regmap_init_mmio(&dev->dev, regs,
--					     &rtc7301_regmap_config);
-+					     mapconf);
- 	if (IS_ERR(priv->regmap))
- 		return PTR_ERR(priv->regmap);
- 
-
--- 
-2.41.0
-
+SGkgR2VlcnQgVXl0dGVyaG9ldmVuLA0KDQo+IFN1YmplY3Q6IFJFOiBbUEFUQ0hdIGFsYXJtdGlt
+ZXI6IEZpeCByZWJpbmQgZmFpbHVyZQ0KPiANCj4gSGkgR2VlcnQgVXl0dGVyaG9ldmVuLA0KPiAN
+Cj4gVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQo+IA0KPiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0hd
+IGFsYXJtdGltZXI6IEZpeCByZWJpbmQgZmFpbHVyZQ0KPiA+DQo+ID4gSGkgQmlqdSwNCj4gPg0K
+PiA+IE9uIFdlZCwgU2VwIDIwLCAyMDIzIGF0IDE6NTnigK9QTSBCaWp1IERhcyA8YmlqdS5kYXMu
+anpAYnAucmVuZXNhcy5jb20+DQo+ID4gd3JvdGU6DQo+ID4gPiBUaGUgcmVzb3VyY2VzIGFsbG9j
+YXRlZCBpbiBhbGFybXRpbWVyX3J0Y19hZGRfZGV2aWNlKCkgYXJlIG5vdCBmcmVlZA0KPiA+ID4g
+bGVhZGluZyB0byByZS1iaW5kIGZhaWx1cmUgZm9yIHRoZSBlbmRwb2ludCBkcml2ZXIuIEZpeCB0
+aGlzIGlzc3VlDQo+ID4gPiBieSBhZGRpbmcgYWxhcm10aW1lcl9ydGNfcmVtb3ZlX2RldmljZSgp
+Lg0KPiA+ID4NCj4gPiA+IFNpZ25lZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5y
+ZW5lc2FzLmNvbT4NCj4gPg0KPiA+IFRoYW5rcyBmb3IgeW91ciBwYXRjaCENCj4gPg0KPiA+IERv
+ZXMgdGhpcyBuZWVkIGEgRml4ZXMgdGFnPw0KPiANCj4gSSB0aGluayBzbywgYXMgaXQgYnJlYWtz
+IHVuYmluZC9iaW5kIG9uIGxvdCBvZiBSVEMgZHJpdmVycy4NCj4gDQo+IFRoZXJlIGFyZSAyIGNv
+bW1pdHMsIEkgd2lsbCBhZGQgYm90aCBhcyBmaXhlcyB0YWcuDQo+IA0KPiBjNzkxMDhiZDE5YTgg
+KCJhbGFybXRpbWVyOiBNYWtlIGFsYXJtdGltZXIgcGxhdGZvcm0gZGV2aWNlIGNoaWxkIG9mIFJU
+Qw0KPiBkZXZpY2UiKQ0KPiANCj4gN2M5NGNhY2E4NzdiICgiYWxhcm10aW1lcjogVXNlIHdha2V1
+cCBzb3VyY2UgZnJvbSBhbGFybXRpbWVyIHBsYXRmb3JtDQo+IGRldmljZSINCj4gDQo+ID4NCj4g
+PiA+IC0tLSBhL2tlcm5lbC90aW1lL2FsYXJtdGltZXIuYw0KPiA+ID4gKysrIGIva2VybmVsL3Rp
+bWUvYWxhcm10aW1lci5jDQo+ID4gPiBAQCAtNjEsNiArNjEsNyBAQCBzdGF0aWMgREVGSU5FX1NQ
+SU5MT0NLKGZyZWV6ZXJfZGVsdGFfbG9jayk7DQo+ID4gPiAgLyogcnRjIHRpbWVyIGFuZCBkZXZp
+Y2UgZm9yIHNldHRpbmcgYWxhcm0gd2FrZXVwcyBhdCBzdXNwZW5kICovDQo+ID4gPiAgc3RhdGlj
+IHN0cnVjdCBydGNfdGltZXIgICAgICAgICAgICAgICAgcnRjdGltZXI7DQo+ID4gPiAgc3RhdGlj
+IHN0cnVjdCBydGNfZGV2aWNlICAgICAgICpydGNkZXY7DQo+ID4gPiArc3RhdGljIHN0cnVjdCBw
+bGF0Zm9ybV9kZXZpY2UgICpydGNfcGRldjsNCj4gPiA+ICBzdGF0aWMgREVGSU5FX1NQSU5MT0NL
+KHJ0Y2Rldl9sb2NrKTsNCj4gPiA+DQo+ID4gPiAgLyoqDQo+ID4gPiBAQCAtMTA5LDYgKzExMCw3
+IEBAIHN0YXRpYyBpbnQgYWxhcm10aW1lcl9ydGNfYWRkX2RldmljZShzdHJ1Y3QNCj4gPiA+IGRl
+dmljZQ0KPiA+ICpkZXYpDQo+ID4gPiAgICAgICAgICAgICAgICAgfQ0KPiA+ID4NCj4gPiA+ICAg
+ICAgICAgICAgICAgICBydGNkZXYgPSBydGM7DQo+ID4gPiArICAgICAgICAgICAgICAgcnRjX3Bk
+ZXYgPSBwZGV2Ow0KPiA+ID4gICAgICAgICAgICAgICAgIC8qIGhvbGQgYSByZWZlcmVuY2Ugc28g
+aXQgZG9lc24ndCBnbyBhd2F5ICovDQo+ID4gPiAgICAgICAgICAgICAgICAgZ2V0X2RldmljZShk
+ZXYpOw0KPiA+ID4gICAgICAgICAgICAgICAgIHBkZXYgPSBOVUxMOw0KPiA+ID4gQEAgLTEyMyw2
+ICsxMjUsMjMgQEAgc3RhdGljIGludCBhbGFybXRpbWVyX3J0Y19hZGRfZGV2aWNlKHN0cnVjdA0K
+PiA+ID4gZGV2aWNlDQo+ID4gKmRldikNCj4gPiA+ICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiA+
+ICB9DQo+ID4gPg0KPiA+ID4gK3N0YXRpYyB2b2lkIGFsYXJtdGltZXJfcnRjX3JlbW92ZV9kZXZp
+Y2Uoc3RydWN0IGRldmljZSAqZGV2KSB7DQo+ID4gPiArICAgICAgIHN0cnVjdCBydGNfZGV2aWNl
+ICpydGMgPSB0b19ydGNfZGV2aWNlKGRldik7DQo+ID4gPiArDQo+ID4gPiArICAgICAgIGlmIChy
+dGNfcGRldikgew0KPiA+DQo+ID4gQXMgdGhlIHJldHVybiB2YWx1ZSBvZiBjbGFzc19pbnRlcmZh
+Y2UuYWRkX2RldigpIGlzIG5ldmVyIGNoZWNrZWQNCj4gPiAoYWxhcm10aW1lcl9ydGNfYWRkX2Rl
+dmljZSgpIHJldHVybnMgLUVCVVNZIG9uIGFkZGluZyBhIHNlY29uZA0KPiA+IGFsYXJtdGltZXIp
+LCBtdWx0aXBsZSB0aW1lcnMgbWF5IGhhdmUgYmVlbiBhZGRlZCwgYnV0IG9ubHkgb25lIG9mIHRo
+ZW0NCj4gPiB3aWxsIGJlIHRoZSByZWFsIGFsYXJtdGltZXIuDQo+ID4gSGVuY2UgdGhpcyBmdW5j
+dGlvbiBzaG91bGQgY2hlY2sgaWYgcnRjZGV2ID09IHJ0YyBiZWZvcmUgdW5yZWdpc3RlcmluZw0K
+PiA+IHRoZSByZWFsIGFsYXJtdGltZXIuICBPZiBjb3Vyc2UgYWxsIG9mIHRoaXMgc2hvdWxkIGJl
+IHByb3RlY3RlZCBieQ0KPiBydGNkZXZfbG9jay4NCj4gDQo+IE9rIHdpbGwgYWRkIGxvY2sgaGVy
+ZSBhbmQgdGhlIGNoZWNrLg0KDQpJIHdvbid0IGJlIGFibGUgdG8gYWRkIGxvY2sgaGVyZSBhcyBp
+dCBpcyBnaXZpbmcNCg0KMSkgQlVHIGludmFsaWQgY29udGV4dA0KMikgU2NoZWR1bGluZyB3aGls
+ZSBhdG9taWMoKSBhcyBsb2NrIGlzIGhlbGQgYnkgZGVsZXRlIGZ1bmN0aW9uLg0KDQpDaGVlcnMs
+DQpCaWp1DQo=
 
