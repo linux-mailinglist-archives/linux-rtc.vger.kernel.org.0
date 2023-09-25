@@ -1,135 +1,146 @@
-Return-Path: <linux-rtc+bounces-14-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-15-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E594D7AC407
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 Sep 2023 19:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC76C7AD0FA
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 Sep 2023 09:03:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 5F25A1C203AE
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 Sep 2023 17:37:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id E4CD71C20843
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 Sep 2023 07:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED6920B2F;
-	Sat, 23 Sep 2023 17:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6AC4107A4;
+	Mon, 25 Sep 2023 07:03:05 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA2D1640F
-	for <linux-rtc@vger.kernel.org>; Sat, 23 Sep 2023 17:37:00 +0000 (UTC)
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8431519C;
-	Sat, 23 Sep 2023 10:36:58 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1c39f2b4f5aso29766245ad.0;
-        Sat, 23 Sep 2023 10:36:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F86110797;
+	Mon, 25 Sep 2023 07:03:04 +0000 (UTC)
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015D6BF;
+	Mon, 25 Sep 2023 00:03:01 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6c0a3a2cc20so3669852a34.0;
+        Mon, 25 Sep 2023 00:03:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695490618; x=1696095418; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jlE6JLRfL48qtVwq8jA/2h0BZ48NcfrSjI1lDQ5avkE=;
-        b=UUDKUWN6eT64lnmOU3admofshJbH0x33cyjAFmu3qr4uF528zwtB7P2xPv+L5jqa2S
-         SKiBgdIAmZWaHRbJbAzMDI/f+hC10EdF2q1wqM1OZ20OVJuy3AnFuYxwa16Dt5EiEps5
-         EoNpOmgTQW+g3DmAGo9domgb1o+dPiJvKpV4HwWb6gZp3x/grizgbLLaCWjlcpQVGag/
-         06jfntnoHsJPjZjXKflw/8Y22YEbJJfOd9TT7N3JiLFgvyCZg9YH5NzBlneO2us9aPEk
-         6RpzU+UvOqBqpR0ESO8dtZ9hzPMUdxMYSAjRNQxbtiD6ffjXA7TuvqvQDVFuKiaqnmf5
-         Iszg==
+        d=gmail.com; s=20230601; t=1695625381; x=1696230181; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8aDz349SKKv9+MQGXfZ+z1/ikbG1yq6pnD7zJlqgtSM=;
+        b=J+V3bpzy0mNtOz/q0k1jWsD9mRigO9qiVssqo/nhUe6grIYErEltxSTD0aj4g9BNE+
+         ZKXTlu3D7EoTdw/Iz21WglGGPpZ7RBj+4egF56I31/swnKnNR6o5OZqcF0mqNZJkoE0S
+         zeNL3sSW5tEwrtl2n2JaRGXYskJB0cLESiIbDvFAxLM3DQvz0LZkuThpvNTS6OrrJ8rI
+         hbjpQupjTn8IG09LyWQi9uqxZK+ZWPqgWSm24njc6uuMIHUUxm2pfKv556SBuMlTp9jI
+         XVSa9VnO25aL6d1kxJxxJcEKzLC1vjoGq8Vw52LbusTeDlSC5rgbV+LCr+CfdmD2NCSg
+         npeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695490618; x=1696095418;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jlE6JLRfL48qtVwq8jA/2h0BZ48NcfrSjI1lDQ5avkE=;
-        b=C6FX4aDJ0uFzgA0DklRZZdIgongw8Hsl7mo/v1GY1xjh4rw2OMlosK2GcZCkL1XtQj
-         rNkMdP6D25vFggQOAewrrutORjSMgeS0clhroFNxpfsp1vKknhzZMN7hFCbgKiYJndDn
-         GPq2+fFOYMxOm3LvX6SrM0YFIb565DMe366NPofyhcDpMr7Ck6fkohphhHKFwQEOPhku
-         ny5MfkiW1XYQmrDP/ebiHeZ0R/FAxit5mrxGkmO+VB3U+QratOys4KjOVeQNCMJhvtAR
-         cfelCZwqme/2AQcmtCVH1oKR+eNySwgiIDTNEv6Yg4ZGL+lBLYNYseVyegUD6o97nulu
-         mhlA==
-X-Gm-Message-State: AOJu0YwmRirPCIDPgoDRr7iHVSVmUOnlaeIGoNMS0KY+WMtx+ij+UBeO
-	gfCBhbNJg7KqFwub+H26WxIL/fAYa2U=
-X-Google-Smtp-Source: AGHT+IFSlAyqGeRovEjDNA4A/S+3zh83GX0PrVo3gnROIu0Q0EjRgGRrlmfg0p7A9iVAdg6YXQtFCQ==
-X-Received: by 2002:a17:902:e84d:b0:1c4:50fd:7cd1 with SMTP id t13-20020a170902e84d00b001c450fd7cd1mr2130303plg.11.1695490617930;
-        Sat, 23 Sep 2023 10:36:57 -0700 (PDT)
-Received: from atom0118 ([2405:201:c009:52e1:3075:4405:fdad:b3f9])
-        by smtp.gmail.com with ESMTPSA id n5-20020a170902e54500b001b8b2b95068sm5585448plf.204.2023.09.23.10.36.54
+        d=1e100.net; s=20230601; t=1695625381; x=1696230181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8aDz349SKKv9+MQGXfZ+z1/ikbG1yq6pnD7zJlqgtSM=;
+        b=QYn2C6nNfU1eptX2TYheTu9H7V+1GIleDcjsBGkYF8YLqOOtveHBTOYFBUeKU4T8J7
+         /6s2yaMDXSvhGMBRBNy2RYN5LVG/pJLH+UDuJd5xEznCNJvjDNUVxIdyhUI0b4SL2mug
+         2p2wGhm9J+5nXyxWFtWQmbIFoIRmPgtrT1e2cBkprjtTBDVrSmHUahL7dkqfr6Q23IWA
+         j45BpeuJ0jfpFO2RQ9oLBDK3DWFW9v4dOMm3+muIF72y3i9dq+3l2WyrG5cu8S4W6fIn
+         Ml47YjewjYKvcOqLd5v29dfzL9ebSeBF6QeJqqpeOabSymM6L05tzFSaIEEQZl3zerP4
+         TC3g==
+X-Gm-Message-State: AOJu0YxT/gO66eZuaL3NkpNk2+yPfZZcr8kAyljik3RJ43GEopDUlFhd
+	EXWvAiRG40sVIsKeTq0/rnYqKBL7JiA=
+X-Google-Smtp-Source: AGHT+IFdlgHAsFON54gDD32JbB0ZiUi6gzdiPWTk7C0UUN14dZBZKnXI5ekgKJs1JogFAj7YhKfQMQ==
+X-Received: by 2002:a05:6830:c9:b0:6be:fe1e:c13 with SMTP id x9-20020a05683000c900b006befe1e0c13mr7754598oto.0.1695625380989;
+        Mon, 25 Sep 2023 00:03:00 -0700 (PDT)
+Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id y5-20020a62b505000000b0068ffb8da107sm7349833pfe.212.2023.09.25.00.02.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Sep 2023 10:36:57 -0700 (PDT)
-Date: Sat, 23 Sep 2023 23:06:52 +0530
-From: Atul Kumar Pant <atulpant.linux@gmail.com>
-To: a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc: shuah@kernel.org, linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] selftests: rtc: Fixes rtctest error handling.
-Message-ID: <20230923173652.GC159038@atom0118>
-References: <20230817091401.72674-1-atulpant.linux@gmail.com>
+        Mon, 25 Sep 2023 00:03:00 -0700 (PDT)
+From: Jacky Huang <ychuang570808@gmail.com>
+To: a.zummo@towertech.it,
+	alexandre.belloni@bootlin.com,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	mjchen@nuvoton.com,
+	schung@nuvoton.com,
+	Jacky Huang <ychuang3@nuvoton.com>
+Subject: [PATCH v4 0/3] Add support for Nuvoton ma35d1 rtc controller
+Date: Mon, 25 Sep 2023 07:02:48 +0000
+Message-Id: <20230925070251.28-1-ychuang570808@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230817091401.72674-1-atulpant.linux@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Aug 17, 2023 at 02:44:01PM +0530, Atul Kumar Pant wrote:
-> Adds a check to verify if the rtc device file is valid or not
-> and prints a useful error message if the file is not accessible.
-> 
-> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
-> ---
-> 
-> changes since v5:
->     Updated error message to use strerror().
-> 	If the rtc file is invalid, the skip the test.
-> 
-> changes since v4:
->     Updated the commit message.
-> 
-> changes since v3:
->     Added Linux-kselftest and Linux-kernel mailing lists.
-> 
-> changes since v2:
->     Changed error message when rtc file does not exist.
-> 
-> changes since v1:
->     Removed check for uid=0
->     If rtc file is invalid, then exit the test.
-> 
->  tools/testing/selftests/rtc/rtctest.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-> index 630fef735c7e..27b466111885 100644
-> --- a/tools/testing/selftests/rtc/rtctest.c
-> +++ b/tools/testing/selftests/rtc/rtctest.c
-> @@ -15,6 +15,7 @@
->  #include <sys/types.h>
->  #include <time.h>
->  #include <unistd.h>
-> +#include <error.h>
->  
->  #include "../kselftest_harness.h"
->  #include "../kselftest.h"
-> @@ -437,7 +438,7 @@ int main(int argc, char **argv)
->  	if (access(rtc_file, F_OK) == 0)
->  		ret = test_harness_run(argc, argv);
->  	else
-> -		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
-> +		ksft_exit_skip("%s: %s\n", rtc_file, strerror(errno));
->  
->  	return ret;
->  }
-> -- 
-> 2.25.1
-> 
+From: Jacky Huang <ychuang3@nuvoton.com>
 
-	Hi Shuah, I have made the changes as per your comments. Can you please
-	review the changes ?
+This patch series adds the rtc driver for the nuvoton ma35d1 ARMv8 SoC.
+It includes DT binding documentation, the ma35d1 rtc driver, and device
+tree updates.
+
+The ma35d1 rtc controller provides real-time and calendar messaging
+capabilities. It supports programmable time tick and alarm match
+interrupts. The time and calendar messages are expressed in BCD format.
+
+This rtc driver has been tested on the ma35d1 som board with Linux 6.5-rc2.
+It passed the rtctest and rtc-range 2000 ~ 2099.
+
+v4:
+  This version is actually a resend of v3.
+  - Updated drivers/rtc/Kconfig due to this file was modified in the
+    recent mainline update.
+
+v3:
+  - Update ma35d1 rtc driver
+    - Renamed "TICKIEN" to "UIEN" as their functional equivalence.
+    - Eliminated the usage of 'struct ma35_bcd_time' and associated
+      ma35d1 bcd functions; instead, opted to directly utilize the
+      "bin2bcd()" function
+    - Employed "ma35d1_alarm_irq_enable()" to accommodate the
+      "alrm->enabled" feature
+    - Revised the probe sequence and implemented a check to verify if
+      the rtc was initialized
+    - Other minor fixes
+
+v2:
+  - Updated nuvoton,ma35d1-rtc.yaml
+    - Modified patch title and fixed typo
+    - Added reference to rtc.yaml
+    - Used unevaluatedProperties instead of additionalProperties
+  - Modified rtc driver
+    - Used dev_err_probe()
+    - Removed ma35d1_rtc_remove()
+    - Made other minor fixes
+
+Jacky Huang (3):
+  dt-bindings: rtc: Add Nuvoton ma35d1 rtc
+  arm64: dts: nuvoton: Add rtc for ma35d1
+  rtc: Add driver for Nuvoton ma35d1 rtc controller
+
+ .../bindings/rtc/nuvoton,ma35d1-rtc.yaml      |  48 +++
+ .../boot/dts/nuvoton/ma35d1-iot-512m.dts      |   4 +
+ .../boot/dts/nuvoton/ma35d1-som-256m.dts      |   4 +
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       |   8 +
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ma35d1.c                      | 324 ++++++++++++++++++
+ 7 files changed, 400 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,ma35d1-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-ma35d1.c
+
+-- 
+2.34.1
+
 
