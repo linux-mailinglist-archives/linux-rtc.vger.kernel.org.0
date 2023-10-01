@@ -1,136 +1,174 @@
-Return-Path: <linux-rtc+bounces-25-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-26-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2A167B2EAF
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Sep 2023 10:57:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D90A7B49B4
+	for <lists+linux-rtc@lfdr.de>; Sun,  1 Oct 2023 23:21:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5035B2848E8
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Sep 2023 08:57:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 48FBC1C2040C
+	for <lists+linux-rtc@lfdr.de>; Sun,  1 Oct 2023 21:21:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708F311717;
-	Fri, 29 Sep 2023 08:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D744171D4;
+	Sun,  1 Oct 2023 21:21:07 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10ED3441B
-	for <linux-rtc@vger.kernel.org>; Fri, 29 Sep 2023 08:57:52 +0000 (UTC)
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18CDCC6
-	for <linux-rtc@vger.kernel.org>; Fri, 29 Sep 2023 01:57:47 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99de884ad25so1850516666b.3
-        for <linux-rtc@vger.kernel.org>; Fri, 29 Sep 2023 01:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695977866; x=1696582666; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsBQLJ6Ogoic+1/xmfT0u8ONBi3qeWxubxgbbL3TF8o=;
-        b=sSKLG8DlJQkPzhZ3rUopVPn6OtPZvVVeFDV2Kfu6S5J4o7uX4CaShffB2DAtwYutch
-         KpQCQ4Vy61zO2NC8vmc4nkE0E7Oz1u9wXM+YalPVaeKfq29B5NgyavQ4egg2PZBlnEMl
-         a2e32vEBp3E+3/eCvjPeF/VUcqZOSFzfhpprQQAJvZZh2SQlBs4wpf6eA49QADEieBvV
-         +Bdpk2e5VnLaYlaqxR+a8CBFn7wcgmWxG/YIAh4SX99pMclov7uBbEQ+aUuD62YU3fuW
-         ZH7Xn4MqBM07CvXjMHRH0MNo/W06jDyKuFRwP+9FFwRgV/FJBRdO7cKGC1DG+9aBYCl8
-         gjeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695977866; x=1696582666;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nsBQLJ6Ogoic+1/xmfT0u8ONBi3qeWxubxgbbL3TF8o=;
-        b=qNvRV0s1L7/kfd6LgWBsfXCEe+yZzemPOSFmRJctoSLCwSbXs1SicaqAsk9YDnaQEY
-         sYIsFcP9i/pisFgcOfvUWZ2PPz29efGMGnenIXz64kK/HjuSn878JuzN3VTq9NeFYcOG
-         YAh5DkrCYVAvkyFuCeBv7Ey3luFF6/dS9Mcgk9dGNo2fl+tj6yAX7j7lhlVmsciIuzD/
-         CuQkVcRM6OXhqxN4o4aL7ZxQDDxf6nZzmUzs7Equ7FY62ZoqYlMmAYXE/TRuFnXusiX8
-         vwv6xFp7zniUg468i9yv7ZU+3U5JI15tID0gjroX06y+Bdw7XFRkVB8yxO8a9DKFHMwF
-         W9+A==
-X-Gm-Message-State: AOJu0YxYX2Q/AHYgWNU4BOwdIuXNt9GH2yWUnYpApZkLisLScKw0+cQE
-	kgEU4U0DWEvGLXNX1YwwL6lXWw==
-X-Google-Smtp-Source: AGHT+IEsrmtSBffKc4/0WejFkmq1arFW3oxGMi3C1GOThUgoHMTSmFySeXvpixD0/kTwmWhaMqbTUQ==
-X-Received: by 2002:a17:906:28e:b0:9b2:b749:ff93 with SMTP id 14-20020a170906028e00b009b2b749ff93mr2957352ejf.24.1695977866113;
-        Fri, 29 Sep 2023 01:57:46 -0700 (PDT)
-Received: from srini-hackbase.lan ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id w27-20020a17090633db00b009a2235ed496sm12339806eja.141.2023.09.29.01.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 01:57:45 -0700 (PDT)
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To: =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Claudiu Beznea <claudiu.beznea@microchip.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
- Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Vincent Shih <vincent.sunplus@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Alessandro Zummo <a.zummo@towertech.it>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Evgeniy Polyakov <zbr@ioremap.net>, linux-mtd@lists.infradead.org, 
- linux-kernel@vger.kernel.org, asahi@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
- linux-rockchip@lists.infradead.org, 
- linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, 
- linux-rtc@vger.kernel.org, Michael Walle <michael@walle.cc>, 
- =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
- Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20230927204446.4231-1-zajec5@gmail.com>
-References: <20230927204446.4231-1-zajec5@gmail.com>
-Subject: Re: [PATCH V5] nvmem: add explicit config option to read old
- syntax fixed OF cells
-Message-Id: <169597786418.99756.8731565742524355843.b4-ty@linaro.org>
-Date: Fri, 29 Sep 2023 09:57:44 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3873E2F39
+	for <linux-rtc@vger.kernel.org>; Sun,  1 Oct 2023 21:21:02 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BE69B;
+	Sun,  1 Oct 2023 14:21:00 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E162F240002;
+	Sun,  1 Oct 2023 21:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1696195258;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hwznFwcLGryjA62uDf/A8rrsHVh9Jec8flcbVAK26OQ=;
+	b=AEpfCPllhngkkX3X4yFiOsjUmetJ017fvXJRYRViGeKNTcN6N8bLdmo/vcX9gD1nQ0HWOg
+	7pQynSgHTCgBKnav76tGajYX7XF3jJ4r+/YGBDO25Hz3S8pEHKpC9PELpL6Rmoxyf7/fnK
+	WUlcmnXCRPsdBV+jnCDZ9Eb54aLovugCORI3XAPHy9sNMcFyipgO6f07l7T+QffQ5g8B5+
+	imMyJtokanMwYbUALfjrNBuJP3VUJWvOLIDOhSOfevtK7oTBRbqHFWpthvODSLbbJBY/sE
+	Ys1uatyCmre29mwZtMzd8wnSM0MPDjioct0ZTZB5JU5ovHiWfoW7f9nrAxRb7g==
+Date: Sun, 1 Oct 2023 23:20:49 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Esteban Blanc <eblanc@baylibre.com>
+Cc: linus.walleij@linaro.org, a.zummo@towertech.it,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+	jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
+Subject: Re: [PATCH v7 1/2] rtc: tps6594: Add driver for TPS6594 RTC
+Message-ID: <2023100121204914ad7c28@mail.local>
+References: <20230628133021.500477-1-eblanc@baylibre.com>
+ <20230628133021.500477-2-eblanc@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628133021.500477-2-eblanc@baylibre.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hello,
 
-On Wed, 27 Sep 2023 22:44:46 +0200, Rafał Miłecki wrote:
-> Binding for fixed NVMEM cells defined directly as NVMEM device subnodes
-> has been deprecated. It has been replaced by the "fixed-layout" NVMEM
-> layout binding.
-> 
-> New syntax is meant to be clearer and should help avoiding imprecise
-> bindings.
-> 
-> [...]
+What is the status of this series?
 
-Applied, thanks!
+On 28/06/2023 15:30:20+0200, Esteban Blanc wrote:
+> +static int tps6594_rtc_read_offset(struct device *dev, long *offset)
+> +{
+> +	int calibration;
+> +	s64 tmp;
+> +	int ret;
+> +
+> +	ret = tps6594_rtc_get_calibration(dev, &calibration);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	// Convert from RTC calibration register format to ppb format.
+> +	tmp = calibration * PPB_MULT;
+> +
+> +	if (tmp < 0)
+> +		tmp -= TICKS_PER_HOUR / 2LL;
+> +	else
+> +		tmp += TICKS_PER_HOUR / 2LL;
+> +	tmp = div_s64(tmp, TICKS_PER_HOUR);
+> +
+> +	/*
+> +	 * SAFETY:
+> +	 * Compution is the reverse operation of the one done in
 
-[1/1] nvmem: add explicit config option to read old syntax fixed OF cells
-      commit: ee73a9fae540adbb432bd2854a82409515c7c892
+Small typo -^
 
-Best regards,
+> +	 * `tps6594_rtc_set_offset`. The safety remarks applie here too.
+> +	 */
+> +
+> +	/*
+> +	 * Offset value operates in negative way, so swap sign.
+> +	 * See 8.3.10.5, (32768 - COMP_REG).
+> +	 */
+> +	*offset = (long)-tmp;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tps6594_rtc_set_offset(struct device *dev, long offset)
+> +{
+> +	int calibration;
+> +	s64 tmp;
+> +
+> +	// Make sure offset value is within supported range.
+> +	if (offset < MIN_OFFSET || offset > MAX_OFFSET)
+> +		return -ERANGE;
+> +
+> +	// Convert from ppb format to RTC calibration register format.
+> +
+> +	tmp = offset * TICKS_PER_HOUR;
+> +	if (tmp < 0)
+> +		tmp -= PPB_MULT / 2LL;
+> +	else
+> +		tmp += PPB_MULT / 2LL;
+> +	tmp = div_s64(tmp, PPB_MULT);
+> +
+> +	/*
+> +	 * SAFETY:
+> +	 * - tmp = offset * TICK_PER_HOUR :
+> +	 *	`offset` can't be more than 277774, so `tmp` can't exceed 277774000000000
+> +	 *	which is lower than the maximum value in an `s64` (2^63-1). No overflow here.
+> +	 *
+> +	 * - tmp += TICK_PER_HOUR / 2LL :
+> +	 *	tmp will have a maximum value of 277774117964800 which is still inferior to 2^63-1.
+> +	 */
+> +
+> +	// Offset value operates in negative way, so swap sign.
+> +	calibration = (int)-tmp;
+> +
+> +	return tps6594_rtc_set_calibration(dev, calibration);
+> +}
+> +
+> +static irqreturn_t tps6594_rtc_interrupt(int irq, void *rtc)
+> +{
+> +	struct device *dev = rtc;
+> +	unsigned long events = 0;
+> +	struct tps6594 *tps = dev_get_drvdata(dev->parent);
+> +	struct rtc_device *rtc_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +	u32 rtc_reg;
+> +
+> +	ret = regmap_read(tps->regmap, TPS6594_REG_RTC_STATUS, &rtc_reg);
+> +	if (ret)
+> +		return IRQ_NONE;
+> +
+> +	if (rtc_reg & TPS6594_BIT_ALARM)
+> +		events = RTC_IRQF | RTC_AF;
+> +
+> +	// Notify RTC core on event.
+
+Nit: I don't feel like the events varialbe and the comment are
+necessary.
+
+> +	rtc_update_irq(rtc_dev, 1, events);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+
+If you resend, you can add:
+
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+
 -- 
-Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
