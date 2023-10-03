@@ -1,516 +1,425 @@
-Return-Path: <linux-rtc+bounces-42-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-43-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2CF57B50F8
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Oct 2023 13:14:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0F847B602F
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Oct 2023 07:04:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 56B18B20A4F
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Oct 2023 11:14:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 2640A2816E2
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Oct 2023 05:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6637F10A13;
-	Mon,  2 Oct 2023 11:14:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5488F1392;
+	Tue,  3 Oct 2023 05:04:27 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D5B101F2
-	for <linux-rtc@vger.kernel.org>; Mon,  2 Oct 2023 11:14:50 +0000 (UTC)
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2085.outbound.protection.outlook.com [40.107.105.85])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2A6E1;
-	Mon,  2 Oct 2023 04:14:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JITrncauMWRbDBZcVhk8Npw71NXUBLB4NybppC4TcL9D3JLah34cjEUn6RzOXeAbYSDwMLku4hzpskQ7qBpfmIs1xpGlsdyL3yQdkIZgW6L4bTcWaPrp1wRVvHVIssK5pt7qXbST1PfDCJ0VAch5pLcmr4blwTEfGq6VyOxrXcvjZksUiwpedOFG40TTblXCqRubuupKOeBLpdO0NqE5WvaX0F6UFSIKM0TBRg0qRLFdKb9/biwedANPAzeGY8Nryy3vduaHWQ9YwEGk3QILT6G9fjLZ7n+1Cc2EJoH57lNIsdhdOYjpAjlxW/zssfh81DiE+Agw6Qgem+g4ZTkcmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tRwP2IgiUF0vLdIxnm4vuo1qXgNpn5XMpob++q1rGvQ=;
- b=UEOTw3oZ0ZxrN7+2aMIy5MKU8zJTqbTCsxM2PqgJOZ1QtTSca15NEpUYCQ7BWqLqEOVB3tvjHkEhU1TcxlhyupSqo+tTIspXqqsbfgaa8TOvlBeJR0xC8nqTqNEFX95BK3a7oxWm2BCsSZD3Ecfp1WogvhirIM0haoTQjMeK0M8/f+WE6vQpREy/OXCR3TdNLpaN9RZVL8UgJgVjLFvnVnZ946GdSdJ6m1euoqp3VD9sbgilUlMaeCFkrHuJ1xsxKVV/Zay8vhEK6Sk71K1MYyT8ig0JSC6+VoKLTCsmPy6pSCdGU+sHZa5V0QFqYjvmRBA1sZcf5XTALXhG/1P9RA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 195.60.68.100) smtp.rcpttodomain=bootlin.com smtp.mailfrom=axis.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tRwP2IgiUF0vLdIxnm4vuo1qXgNpn5XMpob++q1rGvQ=;
- b=RILuJ9rAtZoNw3jz3BGV0NdTdLGp7BD62GGE+FRiGUfla48EUhe1Lb/oB2XZvdRyuUKIkVIJ17UwUCnXznm8FuiziXBkaakY1fR0YDgTLgMxbxeiHD+PRG9Pkp36qCH1DFzxwM/WHpew/lNwffO3qJiv5FxpWmXrmqyXFg3Xwbo=
-Received: from AS9PR06CA0779.eurprd06.prod.outlook.com (2603:10a6:20b:484::34)
- by GV1PR02MB8634.eurprd02.prod.outlook.com (2603:10a6:150:92::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.29; Mon, 2 Oct
- 2023 11:14:41 +0000
-Received: from AM3PEPF00009B9E.eurprd04.prod.outlook.com
- (2603:10a6:20b:484:cafe::ca) by AS9PR06CA0779.outlook.office365.com
- (2603:10a6:20b:484::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.30 via Frontend
- Transport; Mon, 2 Oct 2023 11:14:41 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=axis.com;
-Received-SPF: Fail (protection.outlook.com: domain of axis.com does not
- designate 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com;
-Received: from mail.axis.com (195.60.68.100) by
- AM3PEPF00009B9E.mail.protection.outlook.com (10.167.16.23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.14 via Frontend Transport; Mon, 2 Oct 2023 11:14:41 +0000
-Received: from SE-MAIL21W.axis.com (10.20.40.16) by se-mail01w.axis.com
- (10.20.40.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 2 Oct
- 2023 13:14:40 +0200
-Received: from se-mail01w.axis.com (10.20.40.7) by SE-MAIL21W.axis.com
- (10.20.40.16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 2 Oct
- 2023 13:14:40 +0200
-Received: from se-intmail02x.se.axis.com (10.0.5.60) by se-mail01w.axis.com
- (10.20.40.7) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Mon, 2 Oct 2023 13:14:40 +0200
-Received: from pc53218-2308.se.axis.com (pc53218-2308.se.axis.com [10.92.111.2])
-	by se-intmail02x.se.axis.com (Postfix) with ESMTP id 70913B11;
-	Mon,  2 Oct 2023 13:14:40 +0200 (CEST)
-Received: by pc53218-2308.se.axis.com (Postfix, from userid 9850)
-	id 6C48241688CF; Mon,  2 Oct 2023 13:14:40 +0200 (CEST)
-From: Anders Sandahl <anders.sandahl@axis.com>
-Date: Mon, 2 Oct 2023 13:14:14 +0200
-Subject: [PATCH] rtc: rx8111: Add timestamp and nvmem functionality
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695A01375;
+	Tue,  3 Oct 2023 05:04:25 +0000 (UTC)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ACCA9;
+	Mon,  2 Oct 2023 22:04:21 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9adb9fa7200so99446866b.0;
+        Mon, 02 Oct 2023 22:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696309460; x=1696914260; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/VJfK7QTCboY1n5TddMHgU1jpzpDXxYp7al9ZHl+4Q8=;
+        b=j6WL5A7olFV1Uj7PtDcsgx63el11IYIP2w/wvMbIyNRVH8T6/as3YyGQIK0KCj/xmL
+         zlj2T5dwC07EVyZm+H3B5tFRzruTljpFSp/ATXOE+uxRRvwGGojT/4qd7mCnWQd0PQoW
+         2zgxHNktY/BNyBOvi2wv84j+cbGN1KF1dZZCJVGXU8IZOosQXcTY6rYWvICgjttp4Bq1
+         0tDVU1fJGOAosnVS9/bSeUd9apgEecvnkVhliW2D7HUT+RF9DTlfMYxYjJitOx+dHkf5
+         2s3CRoym0Df4MPqpAF43vdrYDVceCn2bI5lm0pH0nCFNKpZRQrX7x2NNcW8PuNj/5ZpR
+         Z3VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696309460; x=1696914260;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/VJfK7QTCboY1n5TddMHgU1jpzpDXxYp7al9ZHl+4Q8=;
+        b=Ba0bGvoMdoLdKvW471slzMIRRuQPQjwxpKP88Pw+XRnGCqn3vmOlA5IeZG7com+oe6
+         XUKlWc2q4s11YsDwDSPWM42TeyQwcKtBUvoQj5oCFb8mzLGTufJdm11ScSRpISDDZBOA
+         stMsiN0wuHl4uNk7Vjtq/odJAsqD6tvA1U4qInANpOsdoz1O5DQNnwj3Jb8Bjs/Mo0Co
+         /QIbS5CN4wwHzB/6zZ2V7PYgTqzeFSLfZx+smWk7FBSv5es0wT2wKh/2Lsn5c59H+rJE
+         cnUfYjjBgSBIVLr30hFcvG9X2KBTrsAKbjgaANfld2kMGgRtHncuhyov3mTbAVrMyqYG
+         dJNw==
+X-Gm-Message-State: AOJu0YxU6Ys7jsvFIiGgqfL/QJ2xPZoaFrCNocU4FmD9Hur2cHYjSBtO
+	S+Jxz1RQEJjT2XtQOhzpfSs=
+X-Google-Smtp-Source: AGHT+IGXtUK1wBIoK3P5LU3I9KqYNPlB/8WvR6qWFyVSqXt1GdxSzxXhYmIiFhUuyMm1g1rw5KIONQ==
+X-Received: by 2002:a17:906:cd2:b0:9a1:ca55:d0cb with SMTP id l18-20020a1709060cd200b009a1ca55d0cbmr1274444ejh.23.1696309459585;
+        Mon, 02 Oct 2023 22:04:19 -0700 (PDT)
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id gg24-20020a170906e29800b0099bd7b26639sm384497ejb.6.2023.10.02.22.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 22:04:19 -0700 (PDT)
+From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Hector Martin <marcan@marcan.st>,
+	Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Vincent Shih <vincent.sunplus@gmail.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Anson Huang <Anson.Huang@nxp.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Lala Lin <lala.lin@mediatek.com>,
+	Komal Bajaj <quic_kbajaj@quicinc.com>,
+	Kumar Thella <sthella@codeaurora.org>,
+	Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+	linux-mtd@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	asahi@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] dt-bindings: nvmem: move deprecated cells binding to its own file
+Date: Tue,  3 Oct 2023 07:03:55 +0200
+Message-Id: <20231003050355.1631-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231002-rx8111-add-timestamp0-v1-1-353727cf7f14@axis.com>
-X-B4-Tracking: v=1; b=H4sIAAWmGmUC/x3MPQqAMAxA4atIZgNNVaxeRRyijZrBH1oRQby7x
- fEb3nsgSlCJ0GYPBLk06r4lUJ7BuPA2C6pPBmtsYRpbY7gdESF7j6euEk9eD4ODcSM55qouBVJ
- 7BJn0/r9d/74fxxY3iGcAAAA=
-To: Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>
-CC: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<kernel@axis.com>, Anders Sandahl <anders.sandahl@axis.com>
-X-Mailer: b4 0.12.3
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM3PEPF00009B9E:EE_|GV1PR02MB8634:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f7296a7-0039-4ec6-f23c-08dbc338c5fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	cnsjuX6akgl3g3sRzQmpfWm3tDbWNy7Z/QlitrIkdVraWF+oSqCpcCf8hmTyg/hA0/hnJ+XC4w6h7xsvzyENhU6EQdRqHSfI+7JcI8SMmTS1qg5VTJ9vnFgpJMUznNozFfKFtaeDMueBj3BISemJgW+bJ6qXYAvUxpsqIzcRE2HFcopwTb4fqy5fawkXvCjhksVCbgsrnGhYbXNPuBwD8/wTEnhcvPWn/hpaoVsMJ849E7Lx0zfbtdXhs/je0mchh1rkabjVopWBYb+zoBSupVUpdLCmKbINzj23JFfSax+2EpmL8BUYtlksqnCz6oj3eN6nBcZl362Q9rMJfGhJ0x8SmrWIBK7XV9TtX5PcrHrcMz+lkE0jjpG45mcqd9OSSmcNvhN2FOVilM1zmLmW5jPpHdaLfAKgZaZN3Tx182x1NBa8PC1wbATcoL/sx11TRN7haChDfHVjWL8er4AAnc6mSETKVaLOWLsu9l0QmbufXCroJ2rTQ0jZuN0afDwmrpVb1vdEALKBpbIHJtH5cm/LYUIm9g/oq6zvExWLciO/4jkDcUgFkjd/tJq5F/lwbIF0pQjoNBgDZdk+uE0P0KNyTHhKFKB6VB0bGs0YbueZxwlXBFVB7errVcJrX5rjIFKBH/x4+GpCatRpsVN0IKrX0ggNl0sTaGhjiUFPADDY7c3eZ/V4PLk/UQTbM3lYD7Dac/Qxd+gnxEEAZkJSeIKUhnL2HcuVuWhcQPB5BWj7aFbzqK1LyIzWQH9hCip1
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(396003)(346002)(376002)(230922051799003)(64100799003)(1800799009)(451199024)(82310400011)(186009)(36840700001)(46966006)(40470700004)(966005)(478600001)(36756003)(47076005)(44832011)(5660300002)(40480700001)(2906002)(316002)(30864003)(4326008)(8936002)(8676002)(41300700001)(70206006)(70586007)(110136005)(6666004)(42186006)(54906003)(2616005)(107886003)(86362001)(40460700003)(26005)(336012)(426003)(6266002)(83380400001)(36860700001)(81166007)(356005)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2023 11:14:41.0149
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f7296a7-0039-4ec6-f23c-08dbc338c5fe
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM3PEPF00009B9E.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR02MB8634
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add timestamp by external event (EVIN pin). Also add support for nvmem.
-If an event occurs the time stamp can be read out from timestamp0 in
-sysfs.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Nvmem will be used as an ordinary non-volatile memory until a '1' is
-written to timestamp0_write_nvmem file in sysfs. In that case time
-stamp data will also be written to the register area shared with
-nvmem.
+Support for old NVMEM fixed cells was deprecated in favour of
+"fixed-layout". It's still part of the nvmem.yaml though and may be
+unknowingly used by new bindings added without much of analyze.
 
-Signed-off-by: Anders Sandahl <anders.sandahl@axis.com>
+To make it more difficult to accidentally support old syntax move its
+binding to separated file with "deprecated" in its name.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
-This patch adds NVMEM and timestamp functionality to the driver for
-Epson RX8111 RTC chip.
+ .../devicetree/bindings/mtd/mtd.yaml          |  7 ++++-
+ .../bindings/mtd/partitions/nvmem-cells.yaml  |  1 +
+ .../nvmem/amlogic,meson-gxbb-efuse.yaml       |  1 +
+ .../bindings/nvmem/amlogic,meson6-efuse.yaml  |  1 +
+ .../bindings/nvmem/apple,efuses.yaml          |  1 +
+ .../devicetree/bindings/nvmem/imx-ocotp.yaml  |  1 +
+ .../bindings/nvmem/mediatek,efuse.yaml        |  1 +
+ .../nvmem/microchip,sama7g5-otpc.yaml         |  1 +
+ .../devicetree/bindings/nvmem/mxs-ocotp.yaml  |  1 +
+ .../nvmem/nvmem-deprecated-cells.yaml         | 28 +++++++++++++++++++
+ .../devicetree/bindings/nvmem/nvmem.yaml      |  9 ------
+ .../bindings/nvmem/qcom,qfprom.yaml           |  1 +
+ .../bindings/nvmem/qcom,sec-qfprom.yaml       |  1 +
+ .../bindings/nvmem/qcom,spmi-sdam.yaml        |  1 +
+ .../bindings/nvmem/rockchip,otp.yaml          |  1 +
+ .../bindings/nvmem/rockchip-efuse.yaml        |  1 +
+ .../nvmem/socionext,uniphier-efuse.yaml       |  1 +
+ .../bindings/nvmem/sunplus,sp7021-ocotp.yaml  |  1 +
+ .../bindings/rtc/amlogic,meson6-rtc.yaml      |  1 +
+ 19 files changed, 50 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/nvmem-deprecated-cells.yaml
 
-The base for this patch is an unmerged patch stack:
-https://lore.kernel.org/lkml/cover.1692699931.git.waqar.hameed@axis.com/
----
- drivers/rtc/rtc-rx8111.c | 299 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 290 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/rtc/rtc-rx8111.c b/drivers/rtc/rtc-rx8111.c
-index 15ff776f739e..d6e4c9baa1de 100644
---- a/drivers/rtc/rtc-rx8111.c
-+++ b/drivers/rtc/rtc-rx8111.c
-@@ -56,13 +56,24 @@
- #define RX8111_REG_TS_CTRL2		0x35	/* Timestamp control 2. */
- #define RX8111_REG_TS_CTRL3		0x36	/* Timestamp control 3. */
+diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml b/Documentation/devicetree/bindings/mtd/mtd.yaml
+index b82ca03e969c..f322290ee516 100644
+--- a/Documentation/devicetree/bindings/mtd/mtd.yaml
++++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
+@@ -43,7 +43,12 @@ patternProperties:
+     deprecated: true
  
-+#define RX8111_REG_TS_RAM_START		0x40	/* Timestamp RAM area start. */
-+#define RX8111_REG_TS_RAM_END		0x7f	/* Timestamp RAM area end. */
+   "^otp(-[0-9]+)?$":
+-    $ref: ../nvmem/nvmem.yaml#
++    type: object
 +
-+#define RX8111_BIT_EVIN_SETTING_OVW	BIT(1)	/* Enable overwrite TSRAM. */
-+#define RX8111_BIT_EVIN_SETTING_PU1	BIT(3)	/* Pull up select 1. */
++    allOf:
++      - $ref: ../nvmem/nvmem.yaml#
++      - $ref: ../nvmem/nvmem-deprecated-cells.yaml#
 +
- #define RX8111_TIME_BUF_SZ (RX8111_REG_YEAR - RX8111_REG_SEC + 1)
--#define RX8111_TIME_BUF_IDX(reg)                                               \
-+#define RX8111_BUF_IDX(reg, min, max)                                          \
- 	({                                                                     \
--		BUILD_BUG_ON_MSG(reg < RX8111_REG_SEC || reg > RX8111_REG_YEAR,\
--				 "Invalid reg value");                         \
--		(reg - RX8111_REG_SEC);                                        \
-+		BUILD_BUG_ON_MSG(reg < min || reg > max, "Invalid reg value"); \
-+		(reg - min);                                                   \
- 	})
-+#define RX8111_TIME_BUF_IDX(reg) \
-+	RX8111_BUF_IDX(reg, RX8111_REG_SEC, RX8111_REG_YEAR)
-+
-+#define RX8111_TS_BUF_SZ (RX8111_REG_TS_YEAR - RX8111_REG_TS_SEC + 1)
-+#define RX8111_TS_BUF_IDX(reg) \
-+	RX8111_BUF_IDX(reg, RX8111_REG_TS_SEC, RX8111_REG_TS_YEAR)
+     unevaluatedProperties: false
  
- enum rx8111_regfield {
- 	/* RX8111_REG_EXT. */
-@@ -99,6 +110,11 @@ enum rx8111_regfield {
- 	RX8111_REGF_INIEN,
- 	RX8111_REGF_CHGEN,
+     description: |
+diff --git a/Documentation/devicetree/bindings/mtd/partitions/nvmem-cells.yaml b/Documentation/devicetree/bindings/mtd/partitions/nvmem-cells.yaml
+index 5474d63268dc..9518281007af 100644
+--- a/Documentation/devicetree/bindings/mtd/partitions/nvmem-cells.yaml
++++ b/Documentation/devicetree/bindings/mtd/partitions/nvmem-cells.yaml
+@@ -19,6 +19,7 @@ maintainers:
+ allOf:
+   - $ref: /schemas/mtd/partitions/partition.yaml#
+   - $ref: /schemas/nvmem/nvmem.yaml#
++  - $ref: /schemas/nvmem/nvmem-deprecated-cells.yaml#
  
-+	/* RX8111_REG_TS_CTRL1. */
-+	RX8111_REGF_TSRAM,
-+	RX8111_REGF_TSCLR,
-+	RX8111_REGF_EISEL,
-+
- 	/* Sentinel value. */
- 	RX8111_REGF_MAX
- };
-@@ -133,12 +149,16 @@ static const struct reg_field rx8111_regfields[] = {
- 	[RX8111_REGF_SWSEL1] = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 3, 3),
- 	[RX8111_REGF_INIEN]  = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 6, 6),
- 	[RX8111_REGF_CHGEN]  = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 7, 7),
-+
-+	[RX8111_REGF_TSRAM]  = REG_FIELD(RX8111_REG_TS_CTRL1, 0, 0),
-+	[RX8111_REGF_TSCLR]  = REG_FIELD(RX8111_REG_TS_CTRL1, 1, 1),
-+	[RX8111_REGF_EISEL]  = REG_FIELD(RX8111_REG_TS_CTRL1, 2, 2),
- };
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/amlogic,meson-gxbb-efuse.yaml b/Documentation/devicetree/bindings/nvmem/amlogic,meson-gxbb-efuse.yaml
+index e49c2754ff55..9801fe6f91b5 100644
+--- a/Documentation/devicetree/bindings/nvmem/amlogic,meson-gxbb-efuse.yaml
++++ b/Documentation/devicetree/bindings/nvmem/amlogic,meson-gxbb-efuse.yaml
+@@ -11,6 +11,7 @@ maintainers:
  
- static const struct regmap_config rx8111_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
--	.max_register = RX8111_REG_TS_CTRL3,
-+	.max_register = RX8111_REG_TS_RAM_END,
- };
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
  
- struct rx8111_data {
-@@ -148,15 +168,191 @@ struct rx8111_data {
- 	struct rtc_device *rtc;
- };
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
+index 84b3dfd21e09..b5cf740f96fa 100644
+--- a/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
++++ b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
+@@ -12,6 +12,7 @@ maintainers:
  
-+static ssize_t timestamp0_store(struct device *dev,
-+				struct device_attribute *attr, const char *buf,
-+				size_t count)
-+{
-+	struct rx8111_data *data = dev_get_drvdata(dev);
-+	int ret, etsval;
-+
-+	/*
-+	 * Clear event only if events are enabled. This is to protect
-+	 * us from losing events in the future if events have been disabled
-+	 * by mistake (error in read function).
-+	 */
-+	ret = regmap_field_read(data->regfields[RX8111_REGF_ETS], &etsval);
-+	if (ret) {
-+		dev_err(dev, "Could not read ETS (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	if (!etsval)
-+		return -EINVAL;
-+
-+	ret = regmap_field_write(data->regfields[RX8111_REGF_EVF], 0);
-+	if (ret) {
-+		dev_err(dev, "Could not write EVF bit (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	return count;
-+}
-+
-+static ssize_t timestamp0_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct rx8111_data *data = dev_get_drvdata(dev);
-+
-+	struct rtc_time tm;
-+	int ret, evfval;
-+	u8 date[RX8111_TS_BUF_SZ];
-+
-+	/* Read out timestamp values only when an event has occurred. */
-+	ret = regmap_field_read(data->regfields[RX8111_REGF_EVF], &evfval);
-+	if (ret) {
-+		dev_err(dev, "Could not read EVF (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	if (!evfval)
-+		return 0;
-+
-+	/* Disable timestamp during readout to avoid unreliable data. */
-+	ret = regmap_field_write(data->regfields[RX8111_REGF_ETS], 0);
-+	if (ret) {
-+		dev_err(dev, "Could not disable timestamp function (%d)\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_bulk_read(data->regmap, RX8111_REG_TS_SEC, date,
-+			       sizeof(date));
-+	if (ret) {
-+		dev_err(dev, "Could not read timestamp data (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_field_write(data->regfields[RX8111_REGF_ETS], 1);
-+	if (ret) {
-+		dev_err(dev, "Could not enable timestamp function (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	tm.tm_sec = bcd2bin(date[RX8111_TS_BUF_IDX(RX8111_REG_TS_SEC)]);
-+	tm.tm_min = bcd2bin(date[RX8111_TS_BUF_IDX(RX8111_REG_TS_MIN)]);
-+	tm.tm_hour = bcd2bin(date[RX8111_TS_BUF_IDX(RX8111_REG_TS_HOUR)]);
-+	tm.tm_mday = bcd2bin(date[RX8111_TS_BUF_IDX(RX8111_REG_TS_DAY)]);
-+	tm.tm_mon = bcd2bin(date[RX8111_TS_BUF_IDX(RX8111_REG_TS_MONTH)]) - 1;
-+	tm.tm_year = bcd2bin(date[RX8111_TS_BUF_IDX(RX8111_REG_TS_YEAR)]) + 100;
-+
-+	ret = rtc_valid_tm(&tm);
-+	if (ret)
-+		return ret;
-+
-+	return sprintf(buf, "%llu\n",
-+		       (unsigned long long)rtc_tm_to_time64(&tm));
-+}
-+
-+static DEVICE_ATTR_RW(timestamp0);
-+
-+static ssize_t timestamp0_write_nvmem_store(struct device *dev,
-+					    struct device_attribute *attr,
-+					    const char *buf, size_t count)
-+{
-+	struct rx8111_data *data = dev_get_drvdata(dev);
-+	bool enable;
-+	int ret;
-+
-+	if (count <= 1)
-+		return -EINVAL;
-+
-+	ret = kstrtobool(buf, &enable);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_field_write(data->regfields[RX8111_REGF_TSRAM],
-+				 enable ? 1 : 0);
-+	if (ret) {
-+		dev_err(dev, "Could not set TSRAM bit (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	return count;
-+}
-+
-+static ssize_t timestamp0_write_nvmem_show(struct device *dev,
-+					   struct device_attribute *attr,
-+					   char *buf)
-+{
-+	struct rx8111_data *data = dev_get_drvdata(dev);
-+	int enable;
-+	int ret;
-+
-+	ret = regmap_field_read(data->regfields[RX8111_REGF_TSRAM], &enable);
-+	if (ret) {
-+		dev_err(dev, "Could not read TSRAM bit (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	return sprintf(buf, "%s\n", enable ? "1" : "0");
-+}
-+
-+static DEVICE_ATTR_RW(timestamp0_write_nvmem);
-+
-+static int rx8111_sysfs_register(struct device *dev)
-+{
-+	int ret;
-+
-+	ret = device_create_file(dev, &dev_attr_timestamp0);
-+	if (ret)
-+		return ret;
-+
-+	ret = device_create_file(dev, &dev_attr_timestamp0_write_nvmem);
-+	if (ret)
-+		device_remove_file(dev, &dev_attr_timestamp0);
-+
-+	return ret;
-+}
-+
-+static void rx8111_sysfs_unregister(void *data)
-+{
-+	struct device *dev = (struct device *)data;
-+
-+	device_remove_file(dev, &dev_attr_timestamp0);
-+	device_remove_file(dev, &dev_attr_timestamp0_write_nvmem);
-+}
-+
- static int rx8111_setup(struct rx8111_data *data)
- {
- 	int ret;
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
  
--	/* Disable extended functionality (timer, events, timestamps etc.). */
--	ret = regmap_write(data->regmap, RX8111_REG_EXT, 0);
-+	/* Disable multiple timestamps; area is used for nvmem as default. */
-+	ret = regmap_write(data->regmap, RX8111_REG_TS_CTRL2, 0);
-+	if (ret) {
-+		dev_err(data->dev, "Could not setup TS_CTRL2 (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_write(data->regmap, RX8111_REG_TS_CTRL3, 0);
-+	if (ret) {
-+		dev_err(data->dev, "Could not setup TS_CTRL3 (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	/* Configure EVIN pin, trigger on low level. PU = 1M Ohm. */
-+	ret = regmap_write(data->regmap, RX8111_REG_EVIN_SETTING,
-+			   RX8111_BIT_EVIN_SETTING_PU1 |
-+				   RX8111_BIT_EVIN_SETTING_OVW);
-+	if (ret) {
-+		dev_err(data->dev, "Could not setup EVIN (%d)\n", ret);
-+		return ret;
-+	}
-+
-+	/* Enable timestamp triggered by EVIN pin. */
-+	ret = regmap_field_write(data->regfields[RX8111_REGF_ETS], 1);
- 	if (ret) {
--		dev_err(data->dev,
--			"Could not disable extended functionality (%d)\n", ret);
-+		dev_err(data->dev, "Could not enable timestamp function (%d)\n",
-+			ret);
- 		return ret;
- 	}
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/apple,efuses.yaml b/Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+index e0860b6b85f3..d3abdafdbca0 100644
+--- a/Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
++++ b/Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+@@ -16,6 +16,7 @@ maintainers:
  
-@@ -330,6 +526,62 @@ static int rx8111_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
- 	}
- }
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
  
-+static int rx8111_nvram_write(void *priv, unsigned int offset, void *val,
-+			      size_t bytes)
-+{
-+	struct rx8111_data *data = priv;
-+	int ret, len;
-+
-+	/*
-+	 * The RX8111 device can only handle transfers with repeated start
-+	 * within the same 16 bytes aligned block.
-+	 */
-+	while (bytes > 0) {
-+		len = ((offset % 15) + bytes > 16) ? 16 - (offset % 16) : bytes;
-+		ret = regmap_bulk_write(data->regmap,
-+					RX8111_REG_TS_RAM_START + offset, val,
-+					len);
-+		if (ret) {
-+			dev_err(data->dev, "Could not write nvmem (%d)\n", ret);
-+			return ret;
-+		}
-+
-+		val += len;
-+		offset += len;
-+		bytes -= len;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rx8111_nvram_read(void *priv, unsigned int offset, void *val,
-+			     size_t bytes)
-+{
-+	struct rx8111_data *data = priv;
-+	int ret, len;
-+
-+	/*
-+	 * The RX8111 device can only handle transfers with repeated start
-+	 * within the same 16 bytes aligned block.
-+	 */
-+	while (bytes > 0) {
-+		len = ((offset % 15) + bytes > 16) ? 16 - (offset % 16) : bytes;
-+		ret = regmap_bulk_read(data->regmap,
-+				       RX8111_REG_TS_RAM_START + offset, val,
-+				       len);
-+		if (ret) {
-+			dev_err(data->dev, "Could not read nvmem (%d)\n", ret);
-+			return ret;
-+		}
-+
-+		val += len;
-+		offset += len;
-+		bytes -= len;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct rtc_class_ops rx8111_rtc_ops = {
- 	.read_time = rx8111_read_time,
- 	.set_time = rx8111_set_time,
-@@ -342,6 +594,15 @@ static int rx8111_probe(struct i2c_client *client)
- 	struct rtc_device *rtc;
- 	size_t i;
- 	int ret;
-+	struct nvmem_config nvmem_cfg = {
-+		.name = "rx8111_nvram",
-+		.word_size = 1,
-+		.stride = 1,
-+		.size = RX8111_REG_TS_RAM_END - RX8111_REG_TS_RAM_START + 1,
-+		.type = NVMEM_TYPE_BATTERY_BACKED,
-+		.reg_read = rx8111_nvram_read,
-+		.reg_write = rx8111_nvram_write,
-+	};
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
+index 99e60d713dac..be1314454bec 100644
+--- a/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
++++ b/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
+@@ -16,6 +16,7 @@ description: |
  
- 	data = devm_kmalloc(&client->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -386,6 +647,26 @@ static int rx8111_probe(struct i2c_client *client)
- 				     "Could not register rtc device (%d)\n",
- 				     ret);
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
  
-+	ret = rx8111_sysfs_register(data->dev);
-+	if (ret)
-+		return dev_err_probe(data->dev, ret,
-+				     "Could not create sysfs entry (%d)\n",
-+				     ret);
-+
-+	ret = devm_add_action_or_reset(data->dev, &rx8111_sysfs_unregister,
-+				       data->dev);
-+	if (ret)
-+		return dev_err_probe(data->dev, ret,
-+				     "Could not add sysfs unregister devres action (%d)\n",
-+				     ret);
-+
-+	nvmem_cfg.priv = data;
-+	ret = devm_rtc_nvmem_register(rtc, &nvmem_cfg);
-+	if (ret)
-+		return dev_err_probe(data->dev, ret,
-+				     "Could not register rtc nvmem device (%d)\n",
-+				     ret);
-+
- 	return 0;
- }
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+index 7ec2988b597e..cf5f9e22bb7e 100644
+--- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
++++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+@@ -16,6 +16,7 @@ maintainers:
  
-
----
-base-commit: 2687773764932f57571bfaffc97290e0a63bb48d
-change-id: 20230927-rx8111-add-timestamp0-b08c18aa574e
-
-Best regards,
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   $nodename:
+diff --git a/Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml b/Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
+index a296d348adb4..cc25f2927682 100644
+--- a/Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
++++ b/Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
+@@ -16,6 +16,7 @@ description: |
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/mxs-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/mxs-ocotp.yaml
+index a9b822aeaa7e..f43186f98607 100644
+--- a/Documentation/devicetree/bindings/nvmem/mxs-ocotp.yaml
++++ b/Documentation/devicetree/bindings/nvmem/mxs-ocotp.yaml
+@@ -11,6 +11,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/nvmem-deprecated-cells.yaml b/Documentation/devicetree/bindings/nvmem/nvmem-deprecated-cells.yaml
+new file mode 100644
+index 000000000000..951af28bbfb3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/nvmem-deprecated-cells.yaml
+@@ -0,0 +1,28 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/nvmem-deprecated-cells.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NVMEM old syntax for fixed cells
++
++maintainers:
++  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
++
++description: |
++  Before introducing NVMEM layouts all NVMEM (fixed) cells were defined
++  as direct device subnodes. That syntax was replaced by "fixed-layout"
++  and is deprecated now. No new bindings should use it.
++
++patternProperties:
++  "@[0-9a-f]+(,[0-7])?$":
++    type: object
++    allOf:
++      - $ref: layouts/fixed-cell.yaml
++      - properties:
++          compatible: false
++    deprecated: true
++
++additionalProperties: true
++
++...
+diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+index 9f921d940142..4fd015d402ce 100644
+--- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+@@ -46,15 +46,6 @@ properties:
+       container may reference more advanced (dynamic) layout
+       parsers.
+ 
+-patternProperties:
+-  "@[0-9a-f]+(,[0-7])?$":
+-    type: object
+-    allOf:
+-      - $ref: layouts/fixed-cell.yaml
+-      - properties:
+-          compatible: false
+-    deprecated: true
+-
+ additionalProperties: true
+ 
+ examples:
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+index 8740938c32eb..8c8f05d9eaf1 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+@@ -11,6 +11,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,sec-qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,sec-qfprom.yaml
+index 9b133f783d29..2ada2099946d 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,sec-qfprom.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,sec-qfprom.yaml
+@@ -16,6 +16,7 @@ description:
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml b/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
+index cd980def97b8..068bedf5dbc9 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
+@@ -16,6 +16,7 @@ description: |
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
+index 9c6eff788928..a44d44b32809 100644
+--- a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
++++ b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
+@@ -49,6 +49,7 @@ required:
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+   - if:
+       properties:
+diff --git a/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml b/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
+index c5403e149080..b80fd8d1ae5b 100644
+--- a/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
++++ b/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
+@@ -11,6 +11,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml b/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml
+index efccc5aacbe0..e27cbae2d63a 100644
+--- a/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml
++++ b/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml
+@@ -12,6 +12,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
+index da3f1de7d281..af97eeb8316c 100644
+--- a/Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
++++ b/Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
+@@ -12,6 +12,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/rtc/amlogic,meson6-rtc.yaml b/Documentation/devicetree/bindings/rtc/amlogic,meson6-rtc.yaml
+index 8bf7d3a9be98..def24d52c8a5 100644
+--- a/Documentation/devicetree/bindings/rtc/amlogic,meson6-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/amlogic,meson6-rtc.yaml
+@@ -13,6 +13,7 @@ maintainers:
+ allOf:
+   - $ref: rtc.yaml#
+   - $ref: /schemas/nvmem/nvmem.yaml#
++  - $ref: nvmem-deprecated-cells.yaml#
+ 
+ properties:
+   compatible:
 -- 
-Anders Sandahl <anders.sandahl@axis.com>
+2.35.3
 
 
