@@ -1,72 +1,134 @@
-Return-Path: <linux-rtc+bounces-47-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-48-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D8917B7917
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Oct 2023 09:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EA9377BA256
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Oct 2023 17:30:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5750F28142A
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Oct 2023 07:53:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id EDCFF2816D4
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Oct 2023 15:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF30D523;
-	Wed,  4 Oct 2023 07:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C832D30D07;
+	Thu,  5 Oct 2023 15:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246D1D51F
-	for <linux-rtc@vger.kernel.org>; Wed,  4 Oct 2023 07:53:45 +0000 (UTC)
-X-Greylist: delayed 480 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Oct 2023 00:53:44 PDT
-Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1A2A1
-	for <linux-rtc@vger.kernel.org>; Wed,  4 Oct 2023 00:53:44 -0700 (PDT)
-Received: by mail.citycodes.pl (Postfix, from userid 1001)
-	id 4B2481F4C2; Wed,  4 Oct 2023 09:45:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
-	t=1696405543; bh=mMhfBvhM53FtUQl1P3lyeSY5aDBQYiR8qQBy6YFQHi0=;
-	h=Date:From:To:Subject:From;
-	b=LE/27ALR62Y1XIpyEP8EpyzYYnO0L8vAz+EhU6zKok5SLLpBtNwv81jjDzYPTSjvu
-	 c7EPjs8uyJAvtYt6LEZU5g9A0tJ6DX4LrOUCcIZFNF1jt75aJJJ98onHy11sB5enZA
-	 MrBOdvFiF+lLHjz7q//Et3uQ1iqK0FpBH5vibINFz833YsGu1DVXdB3z+WvErPWie5
-	 pPDX97OMqmUSTygjdP2h5I5BvylOeZ0NO8/nT56xPXOS72iu3ZPGUSX9rvG6AnUmB+
-	 uI4NOy/GlIWBblWxZ83Agott4biS4HuSrc8UfAuw1T6zsWIfdR2iJtIGPabYW+ew2i
-	 158qrMMgfFlSQ==
-Received: by mail.citycodes.pl for <linux-rtc@vger.kernel.org>; Wed,  4 Oct 2023 07:45:38 GMT
-Message-ID: <20231004084500-0.1.7v.j0u2.0.n3k1kf16wh@citycodes.pl>
-Date: Wed,  4 Oct 2023 07:45:38 GMT
-From: "Kamil Lasek" <kamil.lasek@citycodes.pl>
-To: <linux-rtc@vger.kernel.org>
-Subject: =?UTF-8?Q?Rozszerzenie_Programu_M=C3=B3j_Pr=C4=85d_5.0?=
-X-Mailer: mail.citycodes.pl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B2630D00;
+	Thu,  5 Oct 2023 15:30:44 +0000 (UTC)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAFCAD37;
+	Thu,  5 Oct 2023 08:30:42 -0700 (PDT)
+Received: from i53875a3c.versanet.de ([83.135.90.60] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1qoLAi-0004BA-Lx; Thu, 05 Oct 2023 12:01:32 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Vincent Shih <vincent.sunplus@gmail.com>,
+ Alessandro Zummo <a.zummo@towertech.it>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Christian Marangi <ansuelsmth@gmail.com>, Anson Huang <Anson.Huang@nxp.com>,
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+ Lala Lin <lala.lin@mediatek.com>, Komal Bajaj <quic_kbajaj@quicinc.com>,
+ Kumar Thella <sthella@codeaurora.org>,
+ Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+ linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-amlogic@lists.infradead.org, asahi@lists.linux.dev,
+ linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject:
+ Re: [PATCH V2] dt-bindings: nvmem: move deprecated cells binding to its own
+ file
+Date: Thu, 05 Oct 2023 12:01:30 +0200
+Message-ID: <2829805.88bMQJbFj6@diego>
+In-Reply-To: <20231003064018.7502-1-zajec5@gmail.com>
+References: <20231003064018.7502-1-zajec5@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+	T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Szanowni Pa=C5=84stwo!
+Am Dienstag, 3. Oktober 2023, 08:40:18 CEST schrieb Rafa=C5=82 Mi=C5=82ecki:
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>=20
+> Support for old NVMEM fixed cells was deprecated in favour of
+> "fixed-layout". It's still part of the nvmem.yaml though and may be
+> unknowingly used by new bindings added without much of analyze.
+>=20
+> To make it more difficult to accidentally support old syntax move its
+> binding to separated file with "deprecated" in its name.
+>=20
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> ---
+> V2: Fix path to nvmem-deprecated-cells.yaml in amlogic,meson6-rtc.yaml
+>=20
 
-W ramach nowej edycji programu M=C3=B3j Pr=C4=85d mog=C4=85 otrzyma=C4=87=
- Pa=C5=84stwo dofinansowanie na zakup i monta=C5=BC fotowoltaiki i/lub ma=
-gazynu energii. Maksymalna kwota dofinansowania wynosi 58 tys. z=C5=82.=20
+>  .../bindings/nvmem/rockchip,otp.yaml          |  1 +
+>  .../bindings/nvmem/rockchip-efuse.yaml        |  1 +
 
-Jako firma wyspecjalizowana w tym zakresie zajmiemy si=C4=99 Pa=C5=84stwa=
- wnioskiem o dofinansowanie oraz instalacj=C4=85 i serwisem dopasowanych =
-do Pa=C5=84stwa budynku paneli s=C5=82onecznych.
+> diff --git a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml b/=
+Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
+> index 9c6eff788928..a44d44b32809 100644
+> --- a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
+> @@ -49,6 +49,7 @@ required:
+> =20
+>  allOf:
+>    - $ref: nvmem.yaml#
+> +  - $ref: nvmem-deprecated-cells.yaml#
+> =20
+>    - if:
+>        properties:
+> diff --git a/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml =
+b/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
+> index c5403e149080..b80fd8d1ae5b 100644
+> --- a/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
+> @@ -11,6 +11,7 @@ maintainers:
+> =20
+>  allOf:
+>    - $ref: nvmem.yaml#
+> +  - $ref: nvmem-deprecated-cells.yaml#
+> =20
+>  properties:
+>    compatible:
 
-B=C4=99d=C4=99 wdzi=C4=99czny za informacj=C4=99 czy s=C4=85 Pa=C5=84stwo=
- zainteresowani.
+=46or Rockchip OTP and Efuse bindngs:
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
 
-Pozdrawiam,
-Kamil Lasek
 
