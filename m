@@ -1,134 +1,115 @@
-Return-Path: <linux-rtc+bounces-48-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-49-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA9377BA256
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Oct 2023 17:30:50 +0200 (CEST)
-Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id EDCFF2816D4
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Oct 2023 15:30:47 +0000 (UTC)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 615C67BB3CD
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Oct 2023 11:06:04 +0200 (CEST)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7E27282125
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Oct 2023 09:06:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C832D30D07;
-	Thu,  5 Oct 2023 15:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B51C11714;
+	Fri,  6 Oct 2023 09:06:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eoAlB5AE"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B2630D00;
-	Thu,  5 Oct 2023 15:30:44 +0000 (UTC)
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAFCAD37;
-	Thu,  5 Oct 2023 08:30:42 -0700 (PDT)
-Received: from i53875a3c.versanet.de ([83.135.90.60] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1qoLAi-0004BA-Lx; Thu, 05 Oct 2023 12:01:32 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Vincent Shih <vincent.sunplus@gmail.com>,
- Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Christian Marangi <ansuelsmth@gmail.com>, Anson Huang <Anson.Huang@nxp.com>,
- Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
- Lala Lin <lala.lin@mediatek.com>, Komal Bajaj <quic_kbajaj@quicinc.com>,
- Kumar Thella <sthella@codeaurora.org>,
- Keiji Hayashibara <hayashibara.keiji@socionext.com>,
- linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-amlogic@lists.infradead.org, asahi@lists.linux.dev,
- linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
- =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject:
- Re: [PATCH V2] dt-bindings: nvmem: move deprecated cells binding to its own
- file
-Date: Thu, 05 Oct 2023 12:01:30 +0200
-Message-ID: <2829805.88bMQJbFj6@diego>
-In-Reply-To: <20231003064018.7502-1-zajec5@gmail.com>
-References: <20231003064018.7502-1-zajec5@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B07A79C0
+	for <linux-rtc@vger.kernel.org>; Fri,  6 Oct 2023 09:06:00 +0000 (UTC)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B5683;
+	Fri,  6 Oct 2023 02:05:58 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9b29186e20aso328541166b.2;
+        Fri, 06 Oct 2023 02:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696583157; x=1697187957; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K4HOKOpHHPlHT6d0maywPvHxqU0NRGC5LpozW09vLNA=;
+        b=eoAlB5AEPTIAp458718A2eTT6rq+NhLuK7B/w/JYo2F84yhZETyrDATwtxETxi2ADO
+         RtHtXZhrCsFS873GNWludaqOC7Ya0WYZInO2HEAUimJW72qW87/L9+HqaLMSUbF0B0hB
+         QgovWZQCYmZ7NvkL9jaPRfwBREGh4tl5LGCo3DZMgnzmroqW9sFizis5R9bsOI/6+1+p
+         oeooJ2GPx0yNUi+DNK6JglC6vayeMbQzb5a9jJPR9qUw8llNOEShk02KTr3e5Q5peTCy
+         rsjtmCyEQBf+n8m9we9kVvk6XsOoHfGVHs4PPGwWeLpCZUAJH52dYCeUxrhKSeGCcFX0
+         QUTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696583157; x=1697187957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K4HOKOpHHPlHT6d0maywPvHxqU0NRGC5LpozW09vLNA=;
+        b=IfZNJ1Yf7byLChVVfzLjwjvmZrgfURoXifi+unO+XyMN3MegunztPVJP8q95wD+MFS
+         S2Ekd/pKJe/pZZS0V8d/eAZ0sj5o5VEUI9L/8h+9F3CTZyA9oBbsF7Z9chEoTlKKfSDt
+         BHj5uFP+NDvK/xUVBe/JE39CZnYBnVFlUiKeIkpB7b6Jg3J08qTgW7HdGO9oYwaxEk8Z
+         ZLerE9AScVR9GvsZoqEAVfdjH5Mrx6sgDtAdWX2pw9E30qNPHhWcni/ILvdh1wWkiwoo
+         TA48iX6ZGwzayuglYSGc8OlQ5B1hJY7cHNzrB9MgsjpgKdFwKTWH8v3InywtJ4XqMQF5
+         OKTw==
+X-Gm-Message-State: AOJu0Yz1VYwugyU713e4RpT15IVsCg5EkQ7ZoWLiYEA+1GqF1wPD0tgm
+	/XZQ+gwqbnHkgZkLwhgH9HANNT13h3a9hdHrlXg=
+X-Google-Smtp-Source: AGHT+IFTJ6rcB8I7EMJ9//iL8v3mQ1Z6mTmHYep+kIZhraf0HNeWOZ+eLaVLE2kaKvyRE3E39yRd1Q==
+X-Received: by 2002:a17:907:78d1:b0:9b3:264:446 with SMTP id kv17-20020a17090778d100b009b302640446mr6986948ejc.0.1696583156474;
+        Fri, 06 Oct 2023 02:05:56 -0700 (PDT)
+Received: from mkorotkov.rasu.local ([212.22.67.162])
+        by smtp.gmail.com with ESMTPSA id o6-20020a17090611c600b009ad875d12d7sm2509128eja.210.2023.10.06.02.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 02:05:56 -0700 (PDT)
+From: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+To: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Maxim Korotkov <korotkov.maxim.s@gmail.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Shanker Donthineni <sdonthineni@nvidia.com>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: [PATCH] rtc: efi: fixed typo in efi_procfs()
+Date: Fri,  6 Oct 2023 12:04:44 +0300
+Message-Id: <20231006090444.306729-1-korotkov.maxim.s@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-	T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Am Dienstag, 3. Oktober 2023, 08:40:18 CEST schrieb Rafa=C5=82 Mi=C5=82ecki:
-> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
->=20
-> Support for old NVMEM fixed cells was deprecated in favour of
-> "fixed-layout". It's still part of the nvmem.yaml though and may be
-> unknowingly used by new bindings added without much of analyze.
->=20
-> To make it more difficult to accidentally support old syntax move its
-> binding to separated file with "deprecated" in its name.
->=20
-> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-> ---
-> V2: Fix path to nvmem-deprecated-cells.yaml in amlogic,meson6-rtc.yaml
->=20
+After the first check of the value of the "eft" variable
+it does not change, it is obvious that a copy-paste
+error was made here and the value of variable "alm"
+should be checked here.
 
->  .../bindings/nvmem/rockchip,otp.yaml          |  1 +
->  .../bindings/nvmem/rockchip-efuse.yaml        |  1 +
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> diff --git a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml b/=
-Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-> index 9c6eff788928..a44d44b32809 100644
-> --- a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-> @@ -49,6 +49,7 @@ required:
-> =20
->  allOf:
->    - $ref: nvmem.yaml#
-> +  - $ref: nvmem-deprecated-cells.yaml#
-> =20
->    - if:
->        properties:
-> diff --git a/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml =
-b/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
-> index c5403e149080..b80fd8d1ae5b 100644
-> --- a/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/rockchip-efuse.yaml
-> @@ -11,6 +11,7 @@ maintainers:
-> =20
->  allOf:
->    - $ref: nvmem.yaml#
-> +  - $ref: nvmem-deprecated-cells.yaml#
-> =20
->  properties:
->    compatible:
+Fixes: 101ca8d05913 ("rtc: efi: Enable SET/GET WAKEUP services as optional")
+Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
+---
+ drivers/rtc/rtc-efi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-=46or Rockchip OTP and Efuse bindngs:
-Acked-by: Heiko Stuebner <heiko@sntech.de>
-
+diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
+index dc6b0f4a54e2..fa8bf82df948 100644
+--- a/drivers/rtc/rtc-efi.c
++++ b/drivers/rtc/rtc-efi.c
+@@ -227,7 +227,7 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
+ 			   enabled == 1 ? "yes" : "no",
+ 			   pending == 1 ? "yes" : "no");
+ 
+-		if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
++		if (alm.timezone == EFI_UNSPECIFIED_TIMEZONE)
+ 			seq_puts(seq, "Timezone\t: unspecified\n");
+ 		else
+ 			/* XXX fixme: convert to string? */
+-- 
+2.34.1
 
 
