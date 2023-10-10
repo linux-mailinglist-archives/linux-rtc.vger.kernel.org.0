@@ -1,136 +1,107 @@
-Return-Path: <linux-rtc+bounces-82-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-83-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614F47BFF18
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 16:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85AD57C0026
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 17:16:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9217B1C20B3C
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 14:23:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79CE01C208FE
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 15:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BC6D24C99;
-	Tue, 10 Oct 2023 14:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B873715A;
+	Tue, 10 Oct 2023 15:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKPmAKAI"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EA8aO9qt";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="6kJnWBMs"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D3024C84;
-	Tue, 10 Oct 2023 14:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0802C433C8;
-	Tue, 10 Oct 2023 14:23:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696947830;
-	bh=vV9MY3qCxHZdei9v7PhzyU5viqA4w/zBGC96MDe7auE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TKPmAKAIr3qzwmaeOewpGCJ/TH5dH3HmvOiayuYwA9AHvfBxmtTCpeOiC8RE9f/J8
-	 GL4NnFxK95V8SdLQprgoZMzf7sTJgQBppCqRiJltxMFrqvuCqDjPZeok3GK+fuUwx+
-	 LGsKftUFSFwVAA6um6dOyIErINfs9MZXgqkpvJBJYwRwU4vE7t+rcpOBQWKZbBnrCW
-	 0Tz8FTL4tFWET2LninODU+8E5nnXG6q5lxrwMPDz0XybI19CRLCV/i2Be2xOv8jP+0
-	 ad4lZvphNf6MMgkpe+eEl7+C2QPWqTOs2Tntzs5FYzGDOOE+lew83RmGF5WhQiNdIO
-	 2neqEhpnAE8Dw==
-Received: (nullmailer pid 836844 invoked by uid 1000);
-	Tue, 10 Oct 2023 14:23:48 -0000
-Date: Tue, 10 Oct 2023 09:23:48 -0500
-From: Rob Herring <robh@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Akinobu Mita <akinobu.mita@gmail.com>, Howard Harte <hharte@magicandroidapps.com>, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] rtc: rtc7301: Rewrite bindings in schema
-Message-ID: <20231010142348.GA833404-robh@kernel.org>
-References: <20231007-rtc-7301-regwidth-v2-0-c913aa95f666@linaro.org>
- <20231007-rtc-7301-regwidth-v2-1-c913aa95f666@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C56E21364
+	for <linux-rtc@vger.kernel.org>; Tue, 10 Oct 2023 15:16:31 +0000 (UTC)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C19AAC;
+	Tue, 10 Oct 2023 08:16:28 -0700 (PDT)
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1696950986;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jtkhrz8Wds3YByOny2qieBZFvlhoRSbJRnrkGxOj/8s=;
+	b=EA8aO9qtzCtdIIs3RB6R+H+yerguUoA4x7WGlWDVrlar2Ug8XOgXTjssquzdtFavax7YpH
+	fGb5RLU9tXldOjNRPt0ACkXrRPf7ndi0Nettuj8lRVBID5GHd3/XyAvJ2LuvpsKBgt7QTd
+	ThVSNXVfsRTXeBZrGVQfLmBTqVhBy1m6fv230wmgEpXEFr76o+nBuO0XC3rm8/PUOgrUQ4
+	bqmAT8WM4Z6F6s9SmFYbb4VVk/DyA8XJ1yyoH8Qsy8uD0dkrQZEiQTP+xfPm4VJPP9XGIE
+	UH7sUr31sk7CKra01QYXudZbtffyi5VzXL4Ly9pwbp4c31lVuvT42z9b7rdbKQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1696950986;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jtkhrz8Wds3YByOny2qieBZFvlhoRSbJRnrkGxOj/8s=;
+	b=6kJnWBMsthzSw/fz7cKfale38tOjGv9DQfrYEvUmRAkRqh0m8GjA7XdsSdWPy2dkNkTQ8C
+	aHwy7fhV3sdxaODw==
+To: Biju Das <biju.das.jz@bp.renesas.com>, Alessandro Zummo
+ <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+ Douglas  Anderson <dianders@chromium.org>, Geert Uytterhoeven
+ <geert+renesas@glider.be>, Biju Das <biju.das.au@gmail.com>,
+ "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: RE: [PATCH v2] alarmtimer: Fix rebind failure
+In-Reply-To: <TYCPR01MB11269FF2DBFDC96B9C12D2E5E86CDA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+References: <20230922081208.26334-1-biju.das.jz@bp.renesas.com>
+ <87il7fq1al.ffs@tglx>
+ <TYCPR01MB112697A5D4B57101CDE27C88D86CEA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+ <87fs2jpznr.ffs@tglx>
+ <TYCPR01MB11269C6BF3934F9AAC44F855186CEA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+ <87bkd7pic3.ffs@tglx>
+ <TYCPR01MB11269FF2DBFDC96B9C12D2E5E86CDA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+Date: Tue, 10 Oct 2023 17:16:26 +0200
+Message-ID: <87o7h6o6d1.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231007-rtc-7301-regwidth-v2-1-c913aa95f666@linaro.org>
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Sat, Oct 07, 2023 at 02:30:49PM +0200, Linus Walleij wrote:
-> This rewrites the Epson RTC7301 bindings to use YAML schema,
-> and adds a property for "reg-io-width" as used in several
-> other bindings to account for different register strides.
-> 
-> The USRobotics USR8200 uses the byte IO width.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  .../devicetree/bindings/rtc/epson,rtc7301.txt      | 16 -------
->  .../devicetree/bindings/rtc/epson,rtc7301.yaml     | 50 ++++++++++++++++++++++
->  2 files changed, 50 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/epson,rtc7301.txt b/Documentation/devicetree/bindings/rtc/epson,rtc7301.txt
-> deleted file mode 100644
-> index 5f9df3f1467c..000000000000
-> --- a/Documentation/devicetree/bindings/rtc/epson,rtc7301.txt
-> +++ /dev/null
-> @@ -1,16 +0,0 @@
-> -EPSON TOYOCOM RTC-7301SF/DG
-> -
-> -Required properties:
-> -
-> -- compatible: Should be "epson,rtc7301sf" or "epson,rtc7301dg"
-> -- reg: Specifies base physical address and size of the registers.
-> -- interrupts: A single interrupt specifier.
-> -
-> -Example:
-> -
-> -rtc: rtc@44a00000 {
-> -	compatible = "epson,rtc7301dg";
-> -	reg = <0x44a00000 0x10000>;
-> -	interrupt-parent = <&axi_intc_0>;
-> -	interrupts = <3 2>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/rtc/epson,rtc7301.yaml b/Documentation/devicetree/bindings/rtc/epson,rtc7301.yaml
-> new file mode 100644
-> index 000000000000..0937b094821d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/epson,rtc7301.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/epson,rtc7301.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Epson Toyocom RTC-7301SF/DG
-> +
-> +description:
-> +  The only difference between the two variants is the packaging.
-> +  The DG variant is a DIL package, and the SF variant is a flat
-> +  package.
-> +
-> +maintainers:
-> +  - Akinobu Mita <akinobu.mita@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - epson,rtc7301dg
-> +      - epson,rtc7301sf
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  reg-io-width:
-> +    description:
-> +      The size (in bytes) of the IO accesses that should be performed
-> +      on the device. If not specified, the default is 4.
+Biju!
 
-No prose for what can be a constraint:
+On Tue, Oct 10 2023 at 06:18, Biju Das wrote:
+> RTC driver is defined as a module, so I was testing
+> remove/unbind followed by install/bind on RTC driver to check
+> any resource leakage and found that device is not working properly.
+>
+> As you mentioned above, we should not remove RTC driver. So I would
+> like to drop this patch.
+>
+> Is there any place we can document this to avoid another person doing
+> same mistake?
 
-       default: 4
+The point is that the removal should not happen in the first place.
 
-With that,
+Though it seems that even a held refcount on the module is not
+preventing that, which is bad to begin with.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+That aside I'm not saying that supporting removal is completely
+impossible. The charger driver can probably be fixed, but as this is a
+user space visible change this needs a lot of thoughts and proper
+analysis why such a change would be correct under all circumstances.
 
-> +    enum: [1, 4]
+Thanks,
 
+        tglx
 
