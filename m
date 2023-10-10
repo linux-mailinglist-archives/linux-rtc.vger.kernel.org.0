@@ -1,88 +1,136 @@
-Return-Path: <linux-rtc+bounces-81-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-82-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BC2F7BF5A6
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 10:24:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 614F47BFF18
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 16:23:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF3A8281A98
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 08:24:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9217B1C20B3C
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Oct 2023 14:23:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB034156F3;
-	Tue, 10 Oct 2023 08:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BC6D24C99;
+	Tue, 10 Oct 2023 14:23:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="G6A+LG/l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKPmAKAI"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4F2156E3
-	for <linux-rtc@vger.kernel.org>; Tue, 10 Oct 2023 08:24:47 +0000 (UTC)
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3C297
-	for <linux-rtc@vger.kernel.org>; Tue, 10 Oct 2023 01:24:45 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2c296e6543fso66105681fa.3
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Oct 2023 01:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1696926284; x=1697531084; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aX25oi0TLFjjBEfrkFbaH0utg1e2SC6E+qDGBgsDQdo=;
-        b=G6A+LG/lVb/gMdPuzC/reTnMsTS474QHAkX2wBM+2ZyMHR3YLaeV0fJydXUsJ7w3Fn
-         oy/58WqyarKKjQkZlGIzLJXNBOXBU2AuftG7UAkyeSiJd/Eent952juj05Cdl2GuSyoY
-         UreDa0eCu/QB9UdUOXECOHsogEGpYkcofnkfCF7Jf3dTcs2LT9AnmlVNKOyuVD3kjFxb
-         RXPJN2+i6brcQeawq8nZW687zo7lfOGWGoPbBVrDlmXtWeToZrNWCYqETNxEUK4WWXTt
-         cgGIwZ5WHjrq1emw1ZLFJPJraDEWZwEci/M2jC4RMzeVPCyo4lBbnyINotm3LeaaEGzy
-         1aSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696926284; x=1697531084;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aX25oi0TLFjjBEfrkFbaH0utg1e2SC6E+qDGBgsDQdo=;
-        b=ibMe0p7UxlArMVM0S/1JTLcReb+N56cnPZzkv/tPaBeNzJ2sbnFTpXXveEGIksDxW4
-         0rMOEiT9M+rYLJGQFpZiXTWI8yHKYMZ6ddIyo4SUo+e3R0/KC5APhTWhUp6OVXXFwU0x
-         LT5dXRFe1nNMw7E4VfyWSxCvOaRT4HFJMmEWHDtonhcjC1P9VZpdrB3y+ipcATD2ylc+
-         928ZOVuxRv79LufLxTN/nPZX8sDaVTC096YtsNdxB1K8zQ55XJV+6StLBNuadjk0tuwx
-         hJEHDMqdaMGunRq4Dews3Rnfbzrg01wt4ksgitbqeT+kSEuESVz1w+Zyp2g2PbahLTn5
-         nMbg==
-X-Gm-Message-State: AOJu0YxQc/+OzBCoVTPLe2oCouLxrZp/j4Sis6sUnKEuFsRxhoRFzNnP
-	3frmcELCBc6T6IOVAYIAMrWQDxqfui8Ry+rt3uD/Gw==
-X-Google-Smtp-Source: AGHT+IHhrZiCx5s9X4MQiD/ZMSUpzqLwWRHkc3HfDvbsJDBkyyqNCsF6iTzVVnQFoGa3q3wDj0URozRl7VFxZ+eoCRo=
-X-Received: by 2002:a2e:9ac7:0:b0:2c0:1a80:dfb with SMTP id
- p7-20020a2e9ac7000000b002c01a800dfbmr16890336ljj.27.1696926283756; Tue, 10
- Oct 2023 01:24:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D3024C84;
+	Tue, 10 Oct 2023 14:23:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0802C433C8;
+	Tue, 10 Oct 2023 14:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696947830;
+	bh=vV9MY3qCxHZdei9v7PhzyU5viqA4w/zBGC96MDe7auE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TKPmAKAIr3qzwmaeOewpGCJ/TH5dH3HmvOiayuYwA9AHvfBxmtTCpeOiC8RE9f/J8
+	 GL4NnFxK95V8SdLQprgoZMzf7sTJgQBppCqRiJltxMFrqvuCqDjPZeok3GK+fuUwx+
+	 LGsKftUFSFwVAA6um6dOyIErINfs9MZXgqkpvJBJYwRwU4vE7t+rcpOBQWKZbBnrCW
+	 0Tz8FTL4tFWET2LninODU+8E5nnXG6q5lxrwMPDz0XybI19CRLCV/i2Be2xOv8jP+0
+	 ad4lZvphNf6MMgkpe+eEl7+C2QPWqTOs2Tntzs5FYzGDOOE+lew83RmGF5WhQiNdIO
+	 2neqEhpnAE8Dw==
+Received: (nullmailer pid 836844 invoked by uid 1000);
+	Tue, 10 Oct 2023 14:23:48 -0000
+Date: Tue, 10 Oct 2023 09:23:48 -0500
+From: Rob Herring <robh@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Akinobu Mita <akinobu.mita@gmail.com>, Howard Harte <hharte@magicandroidapps.com>, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] rtc: rtc7301: Rewrite bindings in schema
+Message-ID: <20231010142348.GA833404-robh@kernel.org>
+References: <20231007-rtc-7301-regwidth-v2-0-c913aa95f666@linaro.org>
+ <20231007-rtc-7301-regwidth-v2-1-c913aa95f666@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231009165741.746184-1-max.kellermann@ionos.com> <202310100815076048fb2c@mail.local>
-In-Reply-To: <202310100815076048fb2c@mail.local>
-From: Max Kellermann <max.kellermann@ionos.com>
-Date: Tue, 10 Oct 2023 10:24:32 +0200
-Message-ID: <CAKPOu+9TKVAwQRBAquyK+TGdAzj_xtJLT0oobXM75zVLvRsYoQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] drivers/rtc/sysfs: move code to count_attribute_groups()
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231007-rtc-7301-regwidth-v2-1-c913aa95f666@linaro.org>
 
-On Tue, Oct 10, 2023 at 10:15=E2=80=AFAM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
-> Shouldn't that live out of the rtc subsystem?
+On Sat, Oct 07, 2023 at 02:30:49PM +0200, Linus Walleij wrote:
+> This rewrites the Epson RTC7301 bindings to use YAML schema,
+> and adds a property for "reg-io-width" as used in several
+> other bindings to account for different register strides.
+> 
+> The USRobotics USR8200 uses the byte IO width.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  .../devicetree/bindings/rtc/epson,rtc7301.txt      | 16 -------
+>  .../devicetree/bindings/rtc/epson,rtc7301.yaml     | 50 ++++++++++++++++++++++
+>  2 files changed, 50 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/epson,rtc7301.txt b/Documentation/devicetree/bindings/rtc/epson,rtc7301.txt
+> deleted file mode 100644
+> index 5f9df3f1467c..000000000000
+> --- a/Documentation/devicetree/bindings/rtc/epson,rtc7301.txt
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -EPSON TOYOCOM RTC-7301SF/DG
+> -
+> -Required properties:
+> -
+> -- compatible: Should be "epson,rtc7301sf" or "epson,rtc7301dg"
+> -- reg: Specifies base physical address and size of the registers.
+> -- interrupts: A single interrupt specifier.
+> -
+> -Example:
+> -
+> -rtc: rtc@44a00000 {
+> -	compatible = "epson,rtc7301dg";
+> -	reg = <0x44a00000 0x10000>;
+> -	interrupt-parent = <&axi_intc_0>;
+> -	interrupts = <3 2>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/rtc/epson,rtc7301.yaml b/Documentation/devicetree/bindings/rtc/epson,rtc7301.yaml
+> new file mode 100644
+> index 000000000000..0937b094821d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/epson,rtc7301.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/epson,rtc7301.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Epson Toyocom RTC-7301SF/DG
+> +
+> +description:
+> +  The only difference between the two variants is the packaging.
+> +  The DG variant is a DIL package, and the SF variant is a flat
+> +  package.
+> +
+> +maintainers:
+> +  - Akinobu Mita <akinobu.mita@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - epson,rtc7301dg
+> +      - epson,rtc7301sf
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reg-io-width:
+> +    description:
+> +      The size (in bytes) of the IO accesses that should be performed
+> +      on the device. If not specified, the default is 4.
 
-You suggest making this a global function? Sure, if that's preferred,
-I'll change it. Whose decision is this?
+No prose for what can be a constraint:
+
+       default: 4
+
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +    enum: [1, 4]
+
 
