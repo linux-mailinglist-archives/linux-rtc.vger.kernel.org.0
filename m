@@ -1,114 +1,209 @@
-Return-Path: <linux-rtc+bounces-89-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-90-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DAAE7C4E48
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Oct 2023 11:12:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B199B7C55DF
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Oct 2023 15:49:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5740328207D
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Oct 2023 09:12:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD51C1C20CFE
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Oct 2023 13:49:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356DE1A72B;
-	Wed, 11 Oct 2023 09:12:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC45200B1;
+	Wed, 11 Oct 2023 13:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="l5sh4dOz";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QxJnYCZj"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="MPhapmld"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF651A717
-	for <linux-rtc@vger.kernel.org>; Wed, 11 Oct 2023 09:12:28 +0000 (UTC)
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A12E94;
-	Wed, 11 Oct 2023 02:12:27 -0700 (PDT)
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1697015545;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8mHTnG4MfEd2WInpkSaCyoIk5Nbax8kxNBig7AwLSEU=;
-	b=l5sh4dOzDZ2X5HB7Xi84ttICGEA/Gzkkha41sxLmx8M1qkMsMpYCG0Xnyt/vGoVR0Dbdjy
-	ucI9k/OtsU/Er7zqcw00spV0cvJPo8qfx2tD3YPpBhY0FsWc5l8QHCRzkkJmx1fffCitpK
-	p3KWoVHzp++qoCf8dlfDVFuEtfML3i0rNKwNitl84UoRHNZN9AAmKlVTliBtrwQaQZlHcc
-	+UrlmjwOIV/vAWWxlbAC1SBwNYR5Gymwi67+BIgiBXfjMjMllp22y0hZga4sAYbDkS36Fo
-	sJnENvRXJ20gGfmlw9LvJsEEA5EcKGm5czz2PAlXomLE/TJQXC7jLHM8Xrnp8w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1697015545;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8mHTnG4MfEd2WInpkSaCyoIk5Nbax8kxNBig7AwLSEU=;
-	b=QxJnYCZjXLEtyBI07eDRRe9WPqv1ZDHIwowp2BRGFJbN8R4Ajg6bj5fwV7Th8ozoNOCQOJ
-	iYr4BRUAc4t+t+Cw==
-To: Biju Das <biju.das.jz@bp.renesas.com>, Geert Uytterhoeven
- <geert@linux-m68k.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, John Stultz <jstultz@google.com>, Stephen
- Boyd <sboyd@kernel.org>, Douglas Anderson <dianders@chromium.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Biju Das <biju.das.au@gmail.com>,
- "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: RE: [PATCH v2] alarmtimer: Fix rebind failure
-In-Reply-To: <TYCPR01MB112693065867ACA9C42370B9F86CCA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
-References: <20230922081208.26334-1-biju.das.jz@bp.renesas.com>
- <87il7fq1al.ffs@tglx>
- <TYCPR01MB112697A5D4B57101CDE27C88D86CEA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
- <87fs2jpznr.ffs@tglx>
- <TYCPR01MB11269C6BF3934F9AAC44F855186CEA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
- <87bkd7pic3.ffs@tglx>
- <TYCPR01MB11269FF2DBFDC96B9C12D2E5E86CDA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
- <87o7h6o6d1.ffs@tglx>
- <CAMuHMdVJnqkF7xmjfOyoxE_Lq=AO85CDD85qu3O+xcSr-3BLTQ@mail.gmail.com>
- <TYCPR01MB112693065867ACA9C42370B9F86CCA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
-Date: Wed, 11 Oct 2023 11:12:25 +0200
-Message-ID: <87r0m1ldza.ffs@tglx>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76AB200A9;
+	Wed, 11 Oct 2023 13:49:16 +0000 (UTC)
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA7298;
+	Wed, 11 Oct 2023 06:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+	:Date:subject:date:message-id:reply-to;
+	bh=j7/rAcr/21dThCW85EtuvPfnqYwhIU+45crbdPVz4mw=; b=MPhapmldQBxAgIvtvutf1j9YgT
+	FMOhyPS3dQP4C33upruOk8AYSRExv+vNupT/KePHPXH5Dia8KfzBsgp1TMOCXyGvBrwMGaWznBh0U
+	lB487qyt7QReMgS44Cda5Lo7yZC+NXVbh9mBhKVjHULr9tCUtzF4OsEbuZjVQ/E3eZME=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:59864 helo=pettiford)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1qqZaC-0001Tk-5J; Wed, 11 Oct 2023 09:49:05 -0400
+Date: Wed, 11 Oct 2023 09:49:03 -0400
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: Hugo Villeneuve <hugo@hugovil.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Conor Dooley
+ <conor@kernel.org>, a.zummo@towertech.it, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bruno.thomsen@gmail.com, Hugo Villeneuve
+ <hvilleneuve@dimonoff.com>
+Message-Id: <20231011094903.cd5b137da5d6647d59f94b28@hugovil.com>
+In-Reply-To: <20230919113423.6c8c48cb1b89275f5b4f3cc2@hugovil.com>
+References: <20230802191153.952667-1-hugo@hugovil.com>
+	<20230802191153.952667-2-hugo@hugovil.com>
+	<20230808-capsize-deodorize-5776d3dbb192@spud>
+	<20230808082533.b608c9a2a4bd922920643c4b@hugovil.com>
+	<202308081232266ec8a9b7@mail.local>
+	<20230808084426.fc7e432a9d85e5caf72d3ffe@hugovil.com>
+	<20230905113058.0fed933265fb68cd53b6d0fa@hugovil.com>
+	<20230919113423.6c8c48cb1b89275f5b4f3cc2@hugovil.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] dt-bindings: rtc: add properties to set
+ battery-related functions
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-On Wed, Oct 11 2023 at 06:58, Biju Das wrote:
->> On Tue, Oct 10, 2023 at 5:16=E2=80=AFPM Thomas Gleixner <tglx@linutronix=
-.de> wrote:
->>=20
->> The "if (alarmtimer_get_rtcdev()) { ... }" you pointed out in the probe
->> function  seems to be rather fragile, as it depends on probe order. And
->> both CHARGER_MANAGER and RTC_DRV_88PM860X can be modular.
->
-> Does it mean that current patch is fine?  On normal scenario, no one
-> will remove RTC device, so nothing to worry about battery charger. On
-> exceptional cases if anyone wants to remove RTC driver, this patch
-> will help(for eg: checking resource leak remove/unbind followed by
-> modprobe/bind).
+On Tue, 19 Sep 2023 11:34:23 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-Did you actually read what I wrote?
+> On Tue, 5 Sep 2023 11:30:58 -0400
+> Hugo Villeneuve <hugo@hugovil.com> wrote:
+> 
+> > On Tue, 8 Aug 2023 08:44:26 -0400
+> > Hugo Villeneuve <hugo@hugovil.com> wrote:
+> > 
+> > > On Tue, 8 Aug 2023 14:32:26 +0200
+> > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > > 
+> > > > On 08/08/2023 08:25:33-0400, Hugo Villeneuve wrote:
+> > > > > On Tue, 8 Aug 2023 12:21:24 +0100
+> > > > > Conor Dooley <conor@kernel.org> wrote:
+> > > > > 
+> > > > > > Hey Hugo,
+> > > > > > 
+> > > > > > On Wed, Aug 02, 2023 at 03:11:52PM -0400, Hugo Villeneuve wrote:
+> > > > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > > > > 
+> > > > > > > These properties can be defined in the board's device tree to set the
+> > > > > > > default power-on values for battery-related functions.
+> > > > > > > 
+> > > > > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > > > > ---
+> > > > > > >  .../devicetree/bindings/rtc/rtc.yaml          | 19 +++++++++++++++++++
+> > > > > > >  1 file changed, 19 insertions(+)
+> > > > > > > 
+> > > > > > > diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > > > > > index efb66df82782..0217d229e3fa 100644
+> > > > > > > --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > > > > > +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> > > > > > > @@ -26,6 +26,25 @@ properties:
+> > > > > > >        0: not chargeable
+> > > > > > >        1: chargeable
+> > > > > > >  
+> > > > > > > +  battery-low-detect:
+> > > > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > > > > +    enum: [0, 1]
+> > > > > > > +    description: |
+> > > > > > > +      For RTC devices supporting a backup battery/supercap, this flag can be
+> > > > > > > +      used to configure the battery low detection reporting function:
+> > > > > > > +      0: disabled
+> > > > > > > +      1: enabled
+> > > > > > > +
+> > > > > > > +  battery-switch-over:
+> > > > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > > > > +    enum: [0, 1]
+> > > > > > > +    description: |
+> > > > > > > +      For RTC devices supporting a backup battery/supercap, this flag can be
+> > > > > > > +      used to configure the battery switch over when the main voltage source is
+> > > > > > > +      turned off:
+> > > > > > > +      0: disabled
+> > > > > > > +      1: enabled
+> > > > > > 
+> > > > > > Why are these implemented as enums? This seems to fall into the category
+> > > > > > of using DT to determine software policy - why's it not sufficient to
+> > > > > > have boolean properties that indicate hardware support and let the software
+> > > > > > decide what to do with them?
+> > > > > 
+> > > > > Hi Conor,
+> > > > > the reason is that I based the new properties on the existing property
+> > > > > "aux-voltage-chargeable":
+> > > > > 
+> > > > > -------------------
+> > > > >  aux-voltage-chargeable:
+> > > > >     $ref: /schemas/types.yaml#/definitions/uint32
+> > > > >     enum: [0, 1]
+> > > > >     description: |
+> > > > >       Tells whether the battery/supercap of the RTC (if any) is
+> > > > >       chargeable or not:
+> > > > >       0: not chargeable
+> > > > >       1: chargeable
+> > > > > -------------------
+> > > > > 
+> > > > > I agree with you that a boolean would be more appropriate. Should I
+> > > > > also submit a (separate) patch to fix the "aux-voltage-chargeable"
+> > > > > property to a boolean?
+> > > > > 
+> > > > 
+> > > > No, this is an enum on purpose.
+> > > > I will not take battery switch over related properties, this is not
+> > > > hardware description but software configuration. There is an ioctl for
+> > > > this.
+> > > 
+> > > Hi Alexandre,
+> > > can you suggest then how we can set default PWRMNG values for the
+> > > PCF2131 then?
+> > > 
+> > > I looked at Documentation/ABI/testing/rtc-cdev but couldn't find an
+> > > ioctl to activate the battery switch over function, nor one to activate
+> > > the battery-low detection...
+> > 
+> > Ping...
+> 
+> Second ping...
+> 
+> Hugo.
 
-Allowing removal of a registered RTC alarm device is a user space
-visible change as it violates the assumption that an armed alarm timer
-is actually functional.
+Third ping...
 
-So unless you provide a proper analysis why this does not matter, this
-is going nowhere.
+Hugo.
 
-Thanks,
 
-        tglx
+> 
+> 
+> > > Thank you,
+> > > Hugo.
+> > > 
+> > > 
+> > > > 
+> > > > > Hugo.
+> > > > > 
+> > > > > 
+> > > > > > Thanks,
+> > > > > > Conor.
+> > > > > > 
+> > > > > > > +
+> > > > > > >    quartz-load-femtofarads:
+> > > > > > >      description:
+> > > > > > >        The capacitive load of the quartz(x-tal), expressed in femto
+> > > > > > > -- 
+> > > > > > > 2.30.2
+> > > > > > > 
+> > > > 
+> > > > -- 
+> > > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > > Embedded Linux and Kernel engineering
+> > > > https://bootlin.com
+> > 
 
