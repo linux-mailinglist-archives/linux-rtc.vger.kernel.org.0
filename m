@@ -1,50 +1,55 @@
-Return-Path: <linux-rtc+bounces-97-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-98-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B68E87C9BB3
-	for <lists+linux-rtc@lfdr.de>; Sun, 15 Oct 2023 23:03:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DED087C9BB4
+	for <lists+linux-rtc@lfdr.de>; Sun, 15 Oct 2023 23:03:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA169B20BAD
-	for <lists+linux-rtc@lfdr.de>; Sun, 15 Oct 2023 21:03:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98A57281689
+	for <lists+linux-rtc@lfdr.de>; Sun, 15 Oct 2023 21:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF24125A7;
-	Sun, 15 Oct 2023 21:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD86012B74;
+	Sun, 15 Oct 2023 21:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c6ARML0a"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BV6KLNXe"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640F3F9D7
-	for <linux-rtc@vger.kernel.org>; Sun, 15 Oct 2023 21:03:32 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82069C1;
-	Sun, 15 Oct 2023 14:03:29 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A952FF803;
-	Sun, 15 Oct 2023 21:03:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01C6F9D7;
+	Sun, 15 Oct 2023 21:03:50 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C01C5;
+	Sun, 15 Oct 2023 14:03:48 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A9B9140003;
+	Sun, 15 Oct 2023 21:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1697403807;
+	t=1697403827;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hTwklEfaOGXzPuu0wgNJt+wg/VaYnTSB84Thn1EX5s8=;
-	b=c6ARML0aU00n0wrZPdTw9CDWeohFOYPQmhi+4DNwMBo0mH8fZsf9SVr9pjoDVDiK+mDlA4
-	CMrwzAsHLxW98ky92OTPDU1SucqTHZaFtPBej18fkFFB9faeCjuHZy6PLqRQYmO25MMJDI
-	LncEL6moEG1aaW2PIWNqFUsrK/FTL+5OWj71L098UT83w+zkiB37qcsbZigG2X2ww4GIfU
-	D6wcWohDTdJRjAFhwF6oTCJiGIgIp689PY4/6JgNBFKQETlcvJDgZqcZ3B8nho5ZpHSMrC
-	zWvNcinfG8u1br7xH9LgTxCfpgeLWAjYpNBYPP9zcQjGJ8AZTeElnPaV9WjeVw==
-Date: Sun, 15 Oct 2023 23:03:26 +0200
+	bh=pIh16GD2rNLbL2F8pF6pjHQLfyImAKRlB/ejcwykMRA=;
+	b=BV6KLNXeS/hKEOvxe0K+IMOjJJKtsY0HxJgjiVK0S0NH3tw/pMD7rXKS/sxkmdqMXmu3IB
+	i49jk6mpY7WMYac1/2X7jxgK5jqqk6m/dAZFtyDDnHJ7mCXVA1XJVb+CQ/+EDN+QGJvMue
+	qtUiVf4zXFeo54m8adK2CtJ+dii0gyMhko2H1wDAWimTpfHtBmQ0kCa3YFr7PzvwuHh5Ri
+	+UIJkv7xOUaxt/AkPaZ8fKH5QsvHWjWqvIvlEVXZXfxeLB/NAwmTzqbx0o8vcIQdED1iTM
+	sPzX4KNLbXlvwK/Nj0iDW26xrxwy00XOkeFSD3lfXL72btifj0GdQAS1juOlPw==
+Date: Sun, 15 Oct 2023 23:03:45 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 To: Alessandro Zummo <a.zummo@towertech.it>,
-	Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc: Shanker Donthineni <sdonthineni@nvidia.com>, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] rtc: efi: fixed typo in efi_procfs()
-Message-ID: <169740375019.169509.9586187198023577263.b4-ty@bootlin.com>
-References: <20231006090444.306729-1-korotkov.maxim.s@gmail.com>
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Akinobu Mita <akinobu.mita@gmail.com>,
+	Howard Harte <hharte@magicandroidapps.com>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 0/2] Support byte access in the RTC7301 driver
+Message-ID: <169740375016.169509.3831513934722070019.b4-ty@bootlin.com>
+References: <20231010-rtc-7301-regwidth-v3-0-ade586b62794@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -53,33 +58,28 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231006090444.306729-1-korotkov.maxim.s@gmail.com>
+In-Reply-To: <20231010-rtc-7301-regwidth-v3-0-ade586b62794@linaro.org>
 X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 
-On Fri, 06 Oct 2023 12:04:44 +0300, Maxim Korotkov wrote:
-> After the first check of the value of the "eft" variable
-> it does not change, it is obvious that a copy-paste
-> error was made here and the value of variable "alm"
-> should be checked here.
+On Tue, 10 Oct 2023 21:42:10 +0200, Linus Walleij wrote:
+> This augments the Epson RTC7301 driver so that is supports
+> both 8bit byte and 32bit word access.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> [...]
-
-I changed the fixes tag to:
-Fixes: 501385f2a783 ("rtc: efi: add efi_procfs in efi_rtc_ops")
 
 Applied, thanks!
 
-[1/1] rtc: efi: fixed typo in efi_procfs()
-      commit: f5f4c982f7c8a8cffb2663078a40ecd7d82b534d
+[1/2] rtc: rtc7301: Rewrite bindings in schema
+      commit: 5ded578a18c9515c2c0e1cd148ca42133bbcf055
+[2/2] rtc: rtc7301: Support byte-addressed IO
+      commit: 8c767e9c1ef40c9fa73276df801251cef895b569
 
 Best regards,
 
