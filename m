@@ -1,90 +1,80 @@
-Return-Path: <linux-rtc+bounces-93-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-94-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB957C87EA
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Oct 2023 16:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80F437C993C
+	for <lists+linux-rtc@lfdr.de>; Sun, 15 Oct 2023 15:55:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E80E0282D5E
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Oct 2023 14:34:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8D91281754
+	for <lists+linux-rtc@lfdr.de>; Sun, 15 Oct 2023 13:55:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A268837;
-	Fri, 13 Oct 2023 14:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43746FCA;
+	Sun, 15 Oct 2023 13:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9SQBbhJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZKncDzAW"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D9F1B266
-	for <linux-rtc@vger.kernel.org>; Fri, 13 Oct 2023 14:34:26 +0000 (UTC)
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E203295;
-	Fri, 13 Oct 2023 07:34:24 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-32d569e73acso2010944f8f.1;
-        Fri, 13 Oct 2023 07:34:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698A16FA3;
+	Sun, 15 Oct 2023 13:55:22 +0000 (UTC)
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B294FDA;
+	Sun, 15 Oct 2023 06:55:20 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c504a5e1deso32379721fa.2;
+        Sun, 15 Oct 2023 06:55:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697207663; x=1697812463; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9fTZrrokaIOz1ZV+SInDo976tod0Liz3CoLDMTgWcH0=;
-        b=C9SQBbhJKJecwn50em8+HJuMwgnCVrLPWpX9HTyk36ILtF6nTw7q9H4Yt1IRxJcduo
-         qOabtbr7Lz3SPTCXnaTjg9nCHu8zZnZDPhgXQNN0vY00FMnY13kLpjgeaweEluBFA0uh
-         DvA2wiP5AbgvJ1xvCUcECu87PC1Fcgu4+OVIkh7Rn9XU4OY5d63b6qccT/x0nsmxqtZE
-         v9uu7sFE9fRQINApGM/iYEO0KYblnqXBXpG6+s3eJULNm5aTbNdWeVEj3G8ipId+3Iqg
-         wm52X+FdE182yA8ODWx1e6IaDZzxqhISI1LrVhawrPWLc+jBO62eRJjrxo3alSynvHIl
-         2DEw==
+        d=gmail.com; s=20230601; t=1697378119; x=1697982919; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+nu3q9xetfUZuBGmSKSjg8GptXQiPNikua8+gYwpkQE=;
+        b=ZKncDzAWlIvq2GmpGSrjfAuqINPl+FvDXkQv2Em+73xUCQ6j3f1CRBFPH2GTp0jEca
+         +5HLfp8cq0BofapnlMXPeVpeemnN7zonqwDVUgzomEOTb/7d1+92Ul/tgKEzbQjiwXIH
+         SNQXm21FDZrlR7E4ExU4rUz9EYwp2B+lL9FRBxaHEA4hpHbW8ytHQhKP/HlykcGoFHCf
+         /0Wlc4M75UNAQsMjs4nUfVwaBHVaJEyVN9muJoz6EGRBPwVn/jnshwnPDLxCqv0k/x6p
+         jcKrTFivOhUSR5a2MprC3DKr3U2zgkG4p2m3egrvTydNg5u6LOx6kRY6eTvvvWIXp007
+         j9Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697207663; x=1697812463;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9fTZrrokaIOz1ZV+SInDo976tod0Liz3CoLDMTgWcH0=;
-        b=mFlLND7l9v8EatEesOjIrq2Go5hn9zzDQjAeIe656peBbvrDU8EDkYBmLqMoasNci5
-         s8gcwaGZtID8CUZO2a12HMEXs5G1RbvcIP+MRUfAR4d6S1Hd4dG8XJMYj+E6AW8Gi4+F
-         uSA3WNAQ1HqgAMDdJGO+YGx+UkNR4VWQ3AjoMtCgg90iJgYP0091+uGSMcETSs0Menf5
-         yIDJvWbXIKogohv60CqR1JUXOIU/IJKUANoEwZc/ulRQ+zGIO28Xzv9d+elKmOBYFUwc
-         5Yk4mQp5KfMNeHbs+akDZf5L7XBOlbucIOzp91G4eLmWn8YSIxZ7Q69u1aGREHWQg4VF
-         pmCQ==
-X-Gm-Message-State: AOJu0YyVa9AdOTk40KGTqLWLkYuIvIWKKwIWqz+HCBuboXRKHja5HOy/
-	1iKsNSFUPjDiSs+0WkdTi48=
-X-Google-Smtp-Source: AGHT+IGhUx1gxNh0EBMNVDn2ORKY6FbHk9azpCU8Sw4RKk5gT3991VT9SA0MucWaQzn4DZ2hoEYSUg==
-X-Received: by 2002:a05:6000:c4f:b0:32d:9579:94e0 with SMTP id do15-20020a0560000c4f00b0032d957994e0mr3173368wrb.27.1697207663133;
-        Fri, 13 Oct 2023 07:34:23 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-9a91-fa21-8c45-3dc4.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:9a91:fa21:8c45:3dc4])
-        by smtp.gmail.com with ESMTPSA id e3-20020a056000194300b0031f82743e25sm20855889wry.67.2023.10.13.07.34.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Oct 2023 07:34:22 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Fri, 13 Oct 2023 16:34:21 +0200
-Subject: [PATCH] rtc: pcf85363: fix wrong mask/val parameters in
- regmap_update_bits call
+        d=1e100.net; s=20230601; t=1697378119; x=1697982919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+nu3q9xetfUZuBGmSKSjg8GptXQiPNikua8+gYwpkQE=;
+        b=fsjNodRCogOIhM9NPfvlJFAyJ2Hj6cLSJsya/40BVVYsHsq0h+LIK4H/+ZIJwb5DWy
+         utTLHrnaSMkSnr3uK1kbt1qcFUjFbbu7AKlpE1eU/qOOeciuMU4KVnWOL0H1w93LkFNA
+         kLTxCD6DJW8nvPL8iHA5MzoTx0+o+OjW3LCxkJ9G2GeP8RjyGiiMuTX6WWqSHRLJDgPX
+         Nwcq0efARHlIy5t5GxQkd7L0uKr5TBVp+vymg9uF8wrVSTvOXsnvjhSV4WexXp/cXe+F
+         aFV+JhfCjrSVtFkUPbdul/qJGcpZay0G7J2k4XmSkU/KBZHuaBORzAEXa1iMpnYFlRgb
+         8Y1A==
+X-Gm-Message-State: AOJu0YxYQCZ31pZZm3eCUVqsWD6v7pw5zpADlAXYVmfd95LU3CWkYZzL
+	NTj/youy89v/UalY5SJfpdlBavzJVEv58B3FEi5Xg6UKMBo=
+X-Google-Smtp-Source: AGHT+IEfZ7cvgrZH1UzPtCzRRkhnrKWh8hqNkVeeXFK7ca5VK0TSV58DyxUiQUgcwGoUdmuKyzoJfHUd4fli02773zM=
+X-Received: by 2002:a05:6512:158e:b0:506:899d:1989 with SMTP id
+ bp14-20020a056512158e00b00506899d1989mr25089203lfb.44.1697378118570; Sun, 15
+ Oct 2023 06:55:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231013-topic-pcf85363_regmap_update_bits-v1-1-c454f016f71f@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAGxVKWUC/x2NQQrDIBAAvxI8V4iR1tCvlCKrWZM9xMiuKYWQv
- 9f0OAzMHEqQCUU9u0Mxfkhoyw3MrVNxgTyjpqmxGvrBmt5YXbdCUZeYxrt9WM84r1D8Xiao6AN
- V0c4FOzqXwCRQrRNAUAeGHJertIJU5EsUxkTf//z1Ps8fuYpcOIwAAAA=
-To: Alessandro Zummo <a.zummo@towertech.it>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1697207662; l=1329;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=oJ0Z7JgDTNSci5EgbxEjZIMHUQ9Fje0lkGp/yeK4WcU=;
- b=rjRqxt4/yW3/wMNlOb2OmYw8NQCIku8SYF9dKwrvJ1xkhNuIdWF2bh7e9BnJYuGRehdJFmKjI
- JVgPuiKsAucDbNGZHLWV4SaYhYLXgYHcgWzYo6VufICtjYAyv1ZegN5
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+References: <20231010-rtc-7301-regwidth-v3-0-ade586b62794@linaro.org>
+In-Reply-To: <20231010-rtc-7301-regwidth-v3-0-ade586b62794@linaro.org>
+From: Akinobu Mita <akinobu.mita@gmail.com>
+Date: Sun, 15 Oct 2023 22:55:06 +0900
+Message-ID: <CAC5umyi2QK+R2M3gFpkFu7jy_rwJY9Q5JdHQzLAJssHyhKxLrw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Support byte access in the RTC7301 driver
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Howard Harte <hharte@magicandroidapps.com>, linux-rtc@vger.kernel.org, 
+	devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -92,40 +82,13 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The current implementation passes PIN_IO_INTA_OUT (2) as a mask and
-PIN_IO_INTAPM (GENMASK(1, 0)) as a value.
-Swap the variables to assign mask and value the right way.
+2023=E5=B9=B410=E6=9C=8811=E6=97=A5(=E6=B0=B4) 4:42 Linus Walleij <linus.wa=
+lleij@linaro.org>:
+>
+> This augments the Epson RTC7301 driver so that is supports
+> both 8bit byte and 32bit word access.
 
-This error was first introduced with the alarm support. For better or
-worse it worked as expected because 0x02 was applied as a mask to 0x03,
-resulting 0x02 anyway. This will of course not work for any other value.
+I don't have access to that device anymore, but I think it's a good change.
 
-Fixes: e5aac267a10a ("rtc: pcf85363: add alarm support")
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- drivers/rtc/rtc-pcf85363.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-index 06194674d71c..540042b9eec8 100644
---- a/drivers/rtc/rtc-pcf85363.c
-+++ b/drivers/rtc/rtc-pcf85363.c
-@@ -438,7 +438,7 @@ static int pcf85363_probe(struct i2c_client *client)
- 	if (client->irq > 0 || wakeup_source) {
- 		regmap_write(pcf85363->regmap, CTRL_FLAGS, 0);
- 		regmap_update_bits(pcf85363->regmap, CTRL_PIN_IO,
--				   PIN_IO_INTA_OUT, PIN_IO_INTAPM);
-+				   PIN_IO_INTAPM, PIN_IO_INTA_OUT);
- 	}
- 
- 	if (client->irq > 0) {
-
----
-base-commit: 10a6e5feccb877c3c75ad11d27942ad52c24815f
-change-id: 20231013-topic-pcf85363_regmap_update_bits-77b3877fa1fa
-
-Best regards,
--- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
-
+Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
 
