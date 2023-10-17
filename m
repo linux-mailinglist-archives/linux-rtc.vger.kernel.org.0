@@ -1,91 +1,132 @@
-Return-Path: <linux-rtc+bounces-108-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-109-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B61A7CAC87
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Oct 2023 16:55:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 175707CB9B6
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Oct 2023 06:24:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CE001C20970
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Oct 2023 14:55:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88A28B20EA2
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Oct 2023 04:24:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F144328DDD;
-	Mon, 16 Oct 2023 14:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Jn+t4amb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65E4BE5E;
+	Tue, 17 Oct 2023 04:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466DB262A1;
-	Mon, 16 Oct 2023 14:55:51 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F90AB;
-	Mon, 16 Oct 2023 07:55:48 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 14FD81C000A;
-	Mon, 16 Oct 2023 14:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1697468147;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E4UCdwwM/vYHFGtnjXt/BfQr8+RHOz42nLlox8hDx7I=;
-	b=Jn+t4ambL8klBhufvO/6Mt4eVlnDDEzL3Wexe0PvgBhcWVFCcJRo1Qoyq07k0Jp1gZvSm0
-	FQevd84bliIV7mLtzCd4rZhpjapU9C/NA/Zj9Nqx7dSO4N18PwEdUWOMNkg4w64sQ9KGGe
-	fEh3G4Ay9qV5YpeJeEtvGRJCJesGoMJw6mEBHGwrr5hMs35d1f+5jb58Kws5+3nxoTBm5b
-	b8chmLbqj6wmQXUnU14+OHr0RABsVKRCsDe8bR67wcpWgs9KvuaNN94rSCV0zid36j7M3c
-	PbYXy1E8Tnwke+YcaOfybZxZIa9h0yUvGAF9IaGcde7wNaGVCbCpuuCTRoHx/w==
-Date: Mon, 16 Oct 2023 16:55:45 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Alessandro Zummo <a.zummo@towertech.it>,
-	Daniel Palmer <daniel@0x0f.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Romain Perier <romain.perier@gmail.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 0/3] Add RTC for MStar SSD20xD SoCs
-Message-ID: <169746807623.26616.11393539981836060067.b4-ty@bootlin.com>
-References: <20230913151606.69494-1-romain.perier@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C968BE5D
+	for <linux-rtc@vger.kernel.org>; Tue, 17 Oct 2023 04:24:20 +0000 (UTC)
+X-Greylist: delayed 781 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Oct 2023 21:24:18 PDT
+Received: from r9216.ps.combzmail.jp (r9216.ps.combzmail.jp [160.16.66.19])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A5E83
+	for <linux-rtc@vger.kernel.org>; Mon, 16 Oct 2023 21:24:18 -0700 (PDT)
+Received: by r9216.ps.combzmail.jp (Postfix, from userid 99)
+	id 83B99FEAF9; Tue, 17 Oct 2023 13:10:45 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9216.ps.combzmail.jp 83B99FEAF9
+To: linux-rtc@vger.kernel.org
+From: FC =?ISO-2022-JP?B?GyRCO3Y2SBsoQg==?= =?ISO-2022-JP?B?GyRCQGIbKEI=?=
+ =?ISO-2022-JP?B?GyRCTEAycRsoQg==?= <info@fc-seminar.jp>
+X-Ip: 6206571046751703
+X-Ip-source: k85gj7ra48dnsa5pu0p6gd
+Precedence: bulk
+List-Unsubscribe: <https://regssl.combzmail.jp/d/ra5p&m=linux-rtc@vger.kernel.org>
+Subject: =?ISO-2022-JP?B?GyRCJDMkSSRiJE4lVyVtJTAlaSVfJXMlMCEiGyhC?=
+ =?ISO-2022-JP?B?GyRCNjUwaTt2NkghIRsoQkZDGyRCQGJMQDJxGyhC?=
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913151606.69494-1-romain.perier@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-MagazineId: ra5p
+X-uId: 6761315542485766704479751009
+X-Sender: CombzMailSender
+X-Url: http://www.combzmail.jp/
+Message-Id: <20231017041116.83B99FEAF9@r9216.ps.combzmail.jp>
+Date: Tue, 17 Oct 2023 13:10:45 +0900 (JST)
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_50,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+	SPF_PASS,X_IP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+いつもお世話になります。
 
-On Wed, 13 Sep 2023 17:16:03 +0200, Romain Perier wrote:
-> This patches series adds a new driver for the RTC found in the Mstar
-> SSD202D SoCs. It adds a basic rtc driver, the corresponding devicetree
-> bindings.
-> 
-> The rtctest (from selftests) has been passed on this driver, with the
-> following output:
-> 
-> [...]
 
-Applied, thanks!
+日本の将来を担う、こどもの教育にたずさわるフランチャイズ事業の
+加盟パートナーを募集するオンライン説明会をご案内申し上げます。
 
-[1/3] rtc: Add support for the SSD202D RTC
-      commit: ebf6255868e6141c737cacb8d62b0b347f344877
-[2/3] dt-bindings: rtc: Add Mstar SSD202D RTC
-      commit: cfb67623ce281e045ec11e3eddb1b68b879b53a1
 
-Best regards,
+業界未経験・社員1名でスタートができ、実際にオーナー様の
+9割以上は異業種から新規参入されています。
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+新規事業をお考えの方はこの機会に是非ご参加くださいませ。
+
+
+　10月25日　14:00〜15:00　オンライン開催
+----------------------------------------------------------
+
+
+　　　　　　　　不況に強い「教育事業」
+　　　　　　 新規参入 オンラインセミナー
+
+　　　　　 〜少子化でこそ、成長する理由〜
+
+　　　　　　　　　▼  詳細・申込  ▼
+　　　     https://fc-event.biz/220000wam2/
+
+　  　　　　　　　◆　ご案内事業　◆
+　　　プログラミング教育＆個別指導学習塾 WAM（ワム）
+
+　　　　　　　　　◇　　 提供 　　◇
+　　　　　　　  エイチ・エム・グループ
+
+
+----------------------------------------------------------
+
+『少子化なのに、教育事業？』と思うかもしれませんが、
+実は子ども一人にかける教育費の増加に伴い、市場は成長し続けています。
+
+
+また、教育費は不況時でも削減されにくいため
+コロナ下でも大きく落ち込むことなく底堅さを見せました。
+
+
+幼児教育無償化などの国策もあり、今後も教育投資の増加が予想されます。
+
+
+そこでご紹介するのが、「プログラミング×個別指導」のハイブリッド教育事業です。
+
+
+プログラミングは小学校で必修化されたため、保護者の関心も高まっています。
+
+
+本事業のスタートは業界未経験・社員１名で可能です。
+
+
+新たな事業収益づくりをお考えの方は、是非ご参加ください。
+
+
+　10月25日　14:00〜15:00　オンライン開催
+　▼  詳細・申込  ▼
+　https://fc-event.biz/220000wam2/
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+　教育事業FCセミナー事務局
+　電話：0120-891-893
+  住所：東京都中央区銀座７−１３−６
+―――――――――――――――――――――――――――――――
+　本メールのご不要な方には大変ご迷惑をおかけいたしました。
+　今後ご案内が不要な方は、お手数ですが「配信不要」とご返信いただくか、
+　下記URLより、お手続きをお願いいたします。
+　┗　https://fc-event.biz/mail/
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
