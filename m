@@ -1,182 +1,809 @@
-Return-Path: <linux-rtc+bounces-135-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-141-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAD367D80D4
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Oct 2023 12:35:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93DD37D9E08
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Oct 2023 18:32:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07F581C20F05
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Oct 2023 10:35:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2529BB212C0
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Oct 2023 16:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57FED2D782;
-	Thu, 26 Oct 2023 10:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7AF38F89;
+	Fri, 27 Oct 2023 16:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="rXNtloMH"
+	dkim=pass (2048-bit key) header.d=carlosaurelio.net header.i=@carlosaurelio.net header.b="AQe+tK1a"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC90A2D788;
-	Thu, 26 Oct 2023 10:35:39 +0000 (UTC)
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2075.outbound.protection.outlook.com [40.107.6.75])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABD518A;
-	Thu, 26 Oct 2023 03:35:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aOhzkhev2q+PsGykN9l7ifNnv30PyMZ9HCtZIvjc7ZrkbaPBQmclyxJG1Qq1cLPgHRzEPri7SBp+0Y7Mh2s/8pssvsmFvKTHL4bZsZtgKP4PbJ+901dt/BsKlcctt3UntE/eDzlhcksMtCV8NV9WKRiixxmY9jdWKyocrrt6x0m7GAk3vx7mGZR5Y3eoUnbq19QH2YRuimqBuw5H/QlOoytLQj2r7loD400Nt0hBkpJX7jUH5Z29nsc8UO6TT0E4BQVKFeSyuWitDS3ZfVyR4RoJadrTws1R+i7EOqzoHerDf6iJ/aJ9vseBlz7fjk2aRmc76785TDX6AKjhs/ZYPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ROhD7u63+9O38SKf9KOBAmIDM+B49aYYL50KeiQ0i0U=;
- b=YACbRHGkBNCbVbzAx4+vW42y76a25GtHg8hW6zVkkn9cW6c6kaiUtfwex8eoNcrCb1ZFpCfoAHhTUblApz3HEXdXgHSS6osF7KMd+Kj+c0zTamNfbmjGus6WLJbEXinzgqO1PCmJ6yUOb9qu+KrtvDuRFKS3lvfl+K/GaG4yoXaNQ0TAECVJ3+xReFGA4eSbCffzGOyRN7U3XAjimpDD+FmDS0ubLHfFU+TVGJHC/7+xv1tahfkWi6COsI3mYpx0hKDw9hKCxK6wX7BmOW7RfttH9usAWpfwOZbJ9T/q2bzAKonfjya9H1nAE/jvln+1D4O5BlZsVSbeWwRqEYpcQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ROhD7u63+9O38SKf9KOBAmIDM+B49aYYL50KeiQ0i0U=;
- b=rXNtloMHAsl71RS0VbhUDPCFxqjvLd+Fz1S/SjOC+fYJF/R4GOJvjJoNmS/PAfX9bZd1boSbcbaiBM5Cnij5LtcPU48taoY0dObsEBirvfGYyZV+ed22o58OydGsomyg+K8AstC7u+2iB5+iy04y9g9kckH1oK1VgNN2OhdmDZI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by PA6PR08MB10624.eurprd08.prod.outlook.com (2603:10a6:102:3d2::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33; Thu, 26 Oct
- 2023 10:35:32 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::a309:1d65:f5fb:436b]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::a309:1d65:f5fb:436b%6]) with mapi id 15.20.6933.019; Thu, 26 Oct 2023
- 10:35:32 +0000
-Message-ID: <94113169-710b-4088-a2d0-ad70842bb887@wolfvision.net>
-Date: Thu, 26 Oct 2023 12:35:29 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: rtc: nxp,pcf8563: add hiz-output
- property
-Content-Language: en-US
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-References: <20231024-topic-pcf85363_hiz_output-v1-0-50908aff0e52@wolfvision.net>
- <20231024-topic-pcf85363_hiz_output-v1-2-50908aff0e52@wolfvision.net>
- <20231025222327c0b5d460@mail.local>
- <2f17c031-30f6-4242-b2a1-1628402b3091@wolfvision.net>
- <1c4a6185-fe09-45d1-900a-10abf48e3fc9@wolfvision.net>
- <20231026005008b8255799@mail.local>
- <8fec6c89-548b-43b5-8361-869663a58573@wolfvision.net>
- <202310260956166bdcb845@mail.local>
- <d3dcb034-f589-41bb-8a67-1de8ce51db8c@wolfvision.net>
- <202310261021467b56f131@mail.local>
-From: Javier Carrasco <javier.carrasco@wolfvision.net>
-In-Reply-To: <202310261021467b56f131@mail.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR04CA0050.eurprd04.prod.outlook.com
- (2603:10a6:802:2::21) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A5F39854
+	for <linux-rtc@vger.kernel.org>; Fri, 27 Oct 2023 16:32:26 +0000 (UTC)
+X-Greylist: delayed 672 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 Oct 2023 09:32:23 PDT
+Received: from h5.fbrelay.privateemail.com (h5.fbrelay.privateemail.com [162.0.218.228])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68399C
+	for <linux-rtc@vger.kernel.org>; Fri, 27 Oct 2023 09:32:23 -0700 (PDT)
+Received: from MTA-14-4.privateemail.com (mta-14-1.privateemail.com [198.54.122.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by h5.fbrelay.privateemail.com (Postfix) with ESMTPSA id 3EA2F60025
+	for <linux-rtc@vger.kernel.org>; Fri, 27 Oct 2023 16:21:09 +0000 (UTC)
+Received: from mta-14.privateemail.com (localhost [127.0.0.1])
+	by mta-14.privateemail.com (Postfix) with ESMTP id 0A99318000BA;
+	Fri, 27 Oct 2023 12:21:07 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=carlosaurelio.net;
+	s=default; t=1698423667;
+	bh=OgMaomcSdmd4vjMIZubd/GyYEvz8eeS9v4UxPs+21XA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AQe+tK1a+3TZp2JDr67qsYWqLB3iD+4+zD+Ot8O9t0fApoJj9zTZa/0jFf2+cmp3O
+	 l8K3iFamNHfR85sm/fW3iYv5lWJjxUZWxEQZNNqdfz4at++QBzRl9K1+QVwauTVuUj
+	 CyJscm5slOZXPd7J3KYxL9XsdlgYdMpgFqxpTsHXw1e/n2y6dRbK5Coj+RaLICsQJL
+	 POOs7CDWgj0RwEzUkob31zJYP8iWsRzAgUpNmmFX67GFjLbUQMpvoGjtnHPZ+dLTmp
+	 vHaDFzXdGiAsj5cRuenK/2O4b4vPmda8h7VbkXLCBgtKqe3c3ZOi9+B9AXjQPMq+VI
+	 eXdviPKnA9g/g==
+Received: from GB2-C0476.gertec.local (unknown [152.254.207.93])
+	by mta-14.privateemail.com (Postfix) with ESMTPA;
+	Fri, 27 Oct 2023 12:21:01 -0400 (EDT)
+From: Carlos Menin <menin@carlosaurelio.net>
+To: linux-rtc@vger.kernel.org
+Cc: a.zummo@towertech.it,
+	alexandre.belloni@bootlin.com,
+	Carlos Menin <menin@carlosaurelio.net>,
+	Sergio Prado <sergio.prado@e-labworks.com>
+Subject: [PATCH 1/2] rtc: add pcf85053a
+Date: Fri, 27 Oct 2023 13:20:43 -0300
+Message-Id: <20231027162044.1011951-1-menin@carlosaurelio.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|PA6PR08MB10624:EE_
-X-MS-Office365-Filtering-Correlation-Id: 80d3aea8-7288-4503-d7ba-08dbd60f4793
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	BVDB1WwtmYycKVvhmsc0bg8dLGpDoO0ErIN/nFHzYXWXAyuZ0UMH0vbdRgcEi8JJnsmKscEEJCeRAMiz4PvAFF+jZUJTcSfs5z69hnw3fgwQ37310ZY1vDNryCVmgn+E76Hgpo1h4+EvPKPyIJLK5FaiyudK5wEGPdvXypFgRZ/BQj5r7sjgxF5NKn3d4wCtrUz+9xQb/eKQNzYUUdnH5QemCdRS8WfZwJIVFTQBIRkUSPyYH0bjzg+HG0cldwZK9z/c0fTjAZLQGmMzyQkKLj3JBmdahhpFfEt/R3g4rbWQlO+EELDezNqQ95tsr0o+9TplarwkmWZLNoFn/OjmZ2J8dBtyLuklzh1byRfP+HEyf90bNfSa3tD1eMjgnWjwVjDTDr/WwBDtIJqYS3TScTpQKY72l8HXfIZctgZMMfhn1JfMMoRpP741+rqEtzS579vhqQBXrfLSxJpmj0fRbK1u9e/kdqhIBUC3FSIC8fVI2SjdGuPhrNASIzowrjf010wutTvL499nWzw3k6rCUNN701t0gSM8IBSxApOupQLKX9Og6mdfg0bp/lMWAcrjI9WX+FjAhYcVTgzRyUlLfTgiv7ndH+ZGFs3uZWGhZW8zIb+zotVa5OvfOG8Ik8/H+O2+MfpYYgkg4J2lb0zdOQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(376002)(346002)(366004)(39850400004)(230922051799003)(186009)(1800799009)(451199024)(64100799003)(31686004)(5660300002)(38100700002)(2906002)(44832011)(41300700001)(31696002)(36756003)(86362001)(8676002)(8936002)(4326008)(478600001)(2616005)(6916009)(66556008)(6506007)(316002)(66476007)(6666004)(66946007)(54906003)(83380400001)(6486002)(53546011)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cHNmblA3RzhBTk54elN1YUpRM2hENDBOMXcxaktXMUxkZ3hhaEo4aFNSL01m?=
- =?utf-8?B?OFVQY1JzaVFCUTNDcS83TkV5K25mQ0FnWGlMRndXQ0hULzd5QXU2d2FHc3pQ?=
- =?utf-8?B?NzVFb1JBVm5MckpDc1lUMllOMytBNTBycFE5TFVPemJKNDlOR3lPWXF2eTBl?=
- =?utf-8?B?ak1WdTJ3R3JhckpPUC9tM1VOOTNxS1RRQjgyMjNqVUduV0o0eTZ0Qjh1aHhO?=
- =?utf-8?B?TWszc2daWXJ2SW91cTIxM0Q0YlphTEZvc1VNYklpM2tVd0VrYnpvcTZkdnB0?=
- =?utf-8?B?aDA5eks2NVl0YVBsbDdNVk9hVDk0Y0R0K1hrQTBLdldNM1ppWnIybXdOU0VY?=
- =?utf-8?B?dFp1ang3SEY3MDN4SjVBWGxlaHRUb0ZiOFJZOGZaclFwVXhQbERGY01LM3Fz?=
- =?utf-8?B?U0xmckU5TFJvWmtNUU5oSjFaVjA3Smk0SStXWXdRbUN4OU5YMHhmQzFuMVkv?=
- =?utf-8?B?MHFBaUI4T2l1VzZ2d0s4bFhkV0JHK1NZVlh1emJGVldVQ0JsbFFJdTJjSTEz?=
- =?utf-8?B?bHVYTzJYU0NWMGQ3V0xOeVRVTEJ3RVovdUtVbmlTaWh3N2s1bDVrNU43NWJ4?=
- =?utf-8?B?NjF2VXlJOVEvRUsreERxVGk3Q1RZUjZXRGx0clpNSTc3aDdpYnhrWUVHWi9z?=
- =?utf-8?B?RGhpVWJRUmR5dnlPK2JZeGJJc25OU2UwVzA0WWZXc2JLSXhuUmFuLytvd0No?=
- =?utf-8?B?d3l4ejdqdER5dFAxWjQ2WERlNWE1TmtRVSs1Nk1GMGtwUlF6ZHZkQVQ5dTgr?=
- =?utf-8?B?SzZMYnlBZlZheFpiUW9SU3hXdnZmWDZPQlZXV0t4Wkc1MitncFVGU1FScDRD?=
- =?utf-8?B?VkUxZk1UNlBBVGpSRVNLbktwM2ttRWExdGJBUGJYM0pVdXRsald2a0JPY0tr?=
- =?utf-8?B?NitYMkpmZ2EweEF5bnRQaStCVXpXZnRSdTh6QlNxajlQdEU2TDJrVXR3ZXlu?=
- =?utf-8?B?b3MzWitCOVhBT1RZRzBmVDV0ZUdES2VPUy83SmRHTHlBMmJhaWVxNXVQYVNP?=
- =?utf-8?B?Q21EK3d6cmxpSk1kSENyNlVGQUJSSTFUKzJWdFUxRWxxNmM2eSs2VWlwUlF1?=
- =?utf-8?B?Wm92WFg0UkF1RnNJSEp3NDI2NURjdWwzNmZ6RzVIeXhGbHVMS1FVRk5BY0M3?=
- =?utf-8?B?Mnh2TTFudGwvL1c5UFZvbSt2VDMrbFZLdXB1dU1BYXVxL0pQNjVNbnlIclZL?=
- =?utf-8?B?UjcyUjNOQnBtR3p6dDhXYjlzYWsrdUlmNmJ0STh3ZEZmbzdhdlg2UkxvTUZs?=
- =?utf-8?B?TjB3OWNLZVlNVjBZZ21iZUpneXdXMHU2VWdteWxWOSt0WGQ4am5HLzlteGp1?=
- =?utf-8?B?YU9hQ1lHSjgrRStxRlJWaFFRaVZkM00rYWcvUFJXOE11dTdOUmRGczdhS1BJ?=
- =?utf-8?B?d20rUmxrOHJSOUduS1BvOHBaTDdISG5VcnRNRGRkY0R3cnVEOGxWMWRPcTBr?=
- =?utf-8?B?RllqYXVjSmp6U29PKzd0YUlmL0xia2M2NVpGMnYyRlZSbHkyS0hBV0xBUFNl?=
- =?utf-8?B?U0wxQ1NZdG5XbHp6UXoyeTU0a3MxSXh1UlZ3bHRaakVKdVV6dCtJZ2tNb3I5?=
- =?utf-8?B?M3Y3aFJ4SGw5U1MyRFBsYUd6aTluVmlGVVYyNHZWMXZ4Smh5UVlWWFdKWDVN?=
- =?utf-8?B?MnlLMzVqL01vckFhVmo0Qjd5d3JzRUZPdmJZYktrTjBGNUp1MmlISEJjRklD?=
- =?utf-8?B?OVpGWjhUUUNSQjFJUDZuLzg4SWhBVC93dE1yTStqdFdYbWVLendsSm1kUGUv?=
- =?utf-8?B?M25tM2dXZS9QQTd2L0FMM29oQk1wQXZRUDN5U3FUQmwyOEdpSU9YdUpvZ3Jl?=
- =?utf-8?B?OTFGMUJFc2lvYWM4c29NY3RhT2U1RUkvV3ZsNCtRV0Z2V29MODdab3BQUHMr?=
- =?utf-8?B?UzJoN2NqQnUveWM0ZytLT2tocG9ud1BmdkJzaEQyU3YrUGt2czFkYXQ5aXVx?=
- =?utf-8?B?YW9MR3RmZUpsbGo5NWpETSsxRWIrMkVLeTNXN2JWellsSWxZc01ZNmVsb1No?=
- =?utf-8?B?VVhHSVVZdmhxLzBVSVJDNWh4djhZYnY4UnRsK2pmdDFYNkRwQnRKYTYrZkwr?=
- =?utf-8?B?WUNNVWtKTjI2Q21qbkZiZnpLTjlnYU9ZS3dRbktKMFYxZ0hCT2gvbTBXM2Fa?=
- =?utf-8?B?MVA4T3VveTF1SXFSQ2lERjgwRG4vTHVkWVBSaEo1ZW5vaEtIelJDQThWWmZU?=
- =?utf-8?B?VG5reXVKMmd4VWk4N3gyaGdUSDVHUXpIZE1QbWhQWVMvUGhOcXJHOW1pZFdE?=
- =?utf-8?Q?Eaw3gSFcw2dtjUdAe5ChJefyD+IGAZjPUOG9Dnnk18=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80d3aea8-7288-4503-d7ba-08dbd60f4793
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 10:35:31.9004
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G4Rhuu2arZRweZJdcHGR9EcJJLJHnYGXk0frjc/Tc6ESD/7uLoCFkEMbER735f7TLnN4AuNZog6Wy3qVBQjYdte9+0QOCOvj92Yk3sEgbmQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA6PR08MB10624
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-On 26.10.23 12:21, Alexandre Belloni wrote:
-> On 26/10/2023 12:13:23+0200, Javier Carrasco wrote:
->> I want to model the INTA pin as a clock source that only should run in
->> sleep mode because its clock is only used in that mode. Therefore I want
->> the pin to stay in hi-Z during normal operation.
-> 
-> Can you disclose what is the user of the clock, do you have a driver for
-> this device?
-> 
-It is a Rockchip PMU through its CLK32K_IN pin. I can't disclose the
-exact model (yet) though, but the use case is that the PMU can run with
-the RTC clock connected to that pin in low-power modes.
-That pin is configured in the proper mode and maybe it could be
-configured differently with pinctrl in "default" mode, but the RTC INTA
-would still output the clock, which is what I want to avoid in this
-particular case.
-I just want to stop the clock at the RTC end i.e. write PIN_IO_INTA_HIZ
-into the PIN_IO_INTAPM.
->>
->> I do not want to get any interrupts from the INTA pin and the battery
->> mode indication is not relevant for me either. I do not know the CCF
->> mechanism in other RTCs though, but I think that the hi-Z mode
->> accomplishes exactly what I described.The assumption about the battery
->> mode is therefore beyond my knowledge, but my first reaction is that we
->> already have the hi-Z for that.
->>
->> So in the end I just need a mechanism to configure INTA as hi-Z, which
->> the driver still does not support. There is another application where
->> the clock output is not required even though it is physically connected,
->> so hi-Z is again an interesting mode and the battery mode would be
->> available if it ever becomes relevant for anyone.
->>
-> 
+Add support for NXP's PCF85053A RTC chip.
+
+Signed-off-by: Carlos Menin <menin@carlosaurelio.net>
+Reviewed-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ drivers/rtc/Kconfig         |   9 +
+ drivers/rtc/Makefile        |   1 +
+ drivers/rtc/rtc-pcf85053a.c | 689 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 699 insertions(+)
+ create mode 100644 drivers/rtc/rtc-pcf85053a.c
+
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 3814e0845e77..ab33940070d1 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -460,6 +460,15 @@ config RTC_DRV_PCF8523
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-pcf8523.
+ 
++config RTC_DRV_PCF85053A
++	tristate "NXP PCF85053A"
++	select REGMAP_I2C
++	help
++	  If you say yes here you get support for the PCF85053A RTC chip
++
++	  This driver can also be built as a module. If so, the module
++	  will be called rtc-pcf85053a.
++
+ config RTC_DRV_PCF85063
+ 	tristate "NXP PCF85063"
+ 	select REGMAP_I2C
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 7b03c3abfd78..3f3a1ab8acb0 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -122,6 +122,7 @@ obj-$(CONFIG_RTC_DRV_PCAP)	+= rtc-pcap.o
+ obj-$(CONFIG_RTC_DRV_PCF2123)	+= rtc-pcf2123.o
+ obj-$(CONFIG_RTC_DRV_PCF2127)	+= rtc-pcf2127.o
+ obj-$(CONFIG_RTC_DRV_PCF50633)	+= rtc-pcf50633.o
++obj-$(CONFIG_RTC_DRV_PCF85053A)	+= rtc-pcf85053a.o
+ obj-$(CONFIG_RTC_DRV_PCF85063)	+= rtc-pcf85063.o
+ obj-$(CONFIG_RTC_DRV_PCF8523)	+= rtc-pcf8523.o
+ obj-$(CONFIG_RTC_DRV_PCF85363)	+= rtc-pcf85363.o
+diff --git a/drivers/rtc/rtc-pcf85053a.c b/drivers/rtc/rtc-pcf85053a.c
+new file mode 100644
+index 000000000000..f4ef90323209
+--- /dev/null
++++ b/drivers/rtc/rtc-pcf85053a.c
+@@ -0,0 +1,689 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/module.h>
++#include <linux/i2c.h>
++#include <linux/slab.h>
++#include <linux/rtc.h>
++#include <linux/init.h>
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/bcd.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/regmap.h>
++#include <linux/hwmon.h>
++
++#define ADDR_NVMEM	0x57
++
++#define REG_SECS	0x00
++#define REG_MINUTES	0x02
++#define REG_HOURS	0x04
++#define REG_WEEKDAYS	0x06
++#define REG_DAYS	0x07
++#define REG_MONTHS	0x08
++#define REG_YEARS	0x09
++
++#define REG_SECOND_ALM	0x01
++#define REG_MINUTE_ALM	0x03
++#define REG_HOUR_ALM	0x05
++
++#define REG_CTRL	0x0a
++#define REG_CTRL_ST	BIT(7)
++#define REG_CTRL_DM	BIT(6)
++#define REG_CTRL_HF	BIT(5)
++#define REG_CTRL_DSM	BIT(4)
++#define REG_CTRL_AIE	BIT(3)
++#define REG_CTRL_OFIE	BIT(2)
++#define REG_CTRL_CIE	BIT(1)
++#define REG_CTRL_TWO	BIT(0)
++
++#define REG_STATUS	0x0b
++#define REG_STATUS_AF	BIT(7)
++#define REG_STATUS_OF	BIT(6)
++#define REG_STATUS_RTCF	BIT(5)
++#define REG_STATUS_CIF	BIT(4)
++#define REG_STATUS_BVL	GENMASK(2, 0)
++
++#define REG_CLKOUT	0x0c
++#define REG_CLKOUT_CKE	BIT(7)
++#define REG_CLKOUT_CKD	GENMASK(1, 0)
++
++#define REG_CTRL2	0x0d
++#define REG_CTRL2_MWO	BIT(0)
++
++#define REG_SCRATCHPAD	0x0e
++
++#define REG_VERSION	0x0f
++#define REG_VENDOR	0x10
++#define REG_MODEL	0x11
++
++#define REG_OFFSET	0x12
++
++#define REG_OSCILLATOR	0x13
++#define REG_OSC_CLKIV	BIT(7)
++#define REG_OSC_OFFM	BIT(6)
++#define REG_OSC_LOWJ	BIT(4)
++#define REG_OSC_OSCD	GENMASK(3, 2)
++#define REG_OSC_CL	GENMASK(1, 0)
++
++#define REG_ACCESS	0x14
++#define REG_ACCESS_XCLK	BIT(7)
++
++#define REG_SEC_TS	0x15
++#define REG_MIN_TS	0x16
++#define REG_HOUR_TS	0x17
++#define REG_DAYWK_TS	0x18
++#define REG_DAYMON_TS	0x19
++#define REG_MON_TS	0x1a
++#define REG_YEAR_TS	0x1b
++
++#define REG_RCODE1	0x1c
++#define REG_RCODE2	0x1d
++
++#define OFFSET_STEP0	2170
++#define OFFSET_STEP1	2034
++
++struct pcf85053a {
++	struct rtc_device	*rtc;
++	struct regmap		*regmap;
++	struct regmap		*regmap_nvmem;
++};
++
++struct pcf85053a_config {
++	struct regmap_config regmap;
++	struct regmap_config regmap_nvmem;
++};
++
++static int pcf85053a_read_offset(struct device *dev, long *offset)
++{
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
++	long val;
++	u32 reg_offset, reg_oscillator;
++	int ret;
++
++	ret = regmap_read(pcf85053a->regmap, REG_OFFSET, &reg_offset);
++	if (ret)
++		return -EIO;
++
++	ret = regmap_read(pcf85053a->regmap, REG_OSCILLATOR, &reg_oscillator);
++	if (ret)
++		return -EIO;
++
++	val = sign_extend32(reg_offset, 7);
++
++	if (reg_oscillator & REG_OSC_OFFM)
++		*offset = val * OFFSET_STEP1;
++	else
++		*offset = val * OFFSET_STEP0;
++
++	return 0;
++}
++
++static int pcf85053a_set_offset(struct device *dev, long offset)
++{
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
++	s8 mode0, mode1, reg_offset;
++	unsigned int ret, error0, error1;
++
++	if (offset > OFFSET_STEP0 * 127)
++		return -ERANGE;
++	if (offset < OFFSET_STEP0 * -128)
++		return -ERANGE;
++
++	ret = regmap_set_bits(pcf85053a->regmap, REG_ACCESS, REG_ACCESS_XCLK);
++	if (ret)
++		return -EIO;
++
++	mode0 = DIV_ROUND_CLOSEST(offset, OFFSET_STEP0);
++	mode1 = DIV_ROUND_CLOSEST(offset, OFFSET_STEP1);
++
++	error0 = abs(offset - (mode0 * OFFSET_STEP0));
++	error1 = abs(offset - (mode1 * OFFSET_STEP1));
++	if (error0 < error1) {
++		reg_offset = mode0;
++		ret = regmap_clear_bits(pcf85053a->regmap, REG_OSCILLATOR,
++					REG_OSC_OFFM);
++	} else {
++		reg_offset = mode1;
++		ret = regmap_set_bits(pcf85053a->regmap, REG_OSCILLATOR,
++				      REG_OSC_OFFM);
++	}
++	if (ret)
++		return -EIO;
++
++	ret = regmap_write(pcf85053a->regmap, REG_OFFSET, reg_offset);
++
++	return ret;
++}
++
++static int pcf85053a_rtc_check_reliability(struct device *dev, u8 status_reg)
++{
++	int ret = 0;
++
++	if (status_reg & REG_STATUS_CIF) {
++		dev_warn(dev, "tamper detected,"
++			 " date/time is not reliable\n");
++		ret = -EINVAL;
++	}
++
++	if (status_reg & REG_STATUS_OF) {
++		dev_warn(dev, "oscillator fail detected,"
++			 " date/time is not reliable.\n");
++		ret = -EINVAL;
++	}
++
++	if (status_reg & REG_STATUS_RTCF) {
++		dev_warn(dev, "power loss detected,"
++			 " date/time is not reliable.\n");
++		ret = -EINVAL;
++	}
++
++	return ret;
++}
++
++static int pcf85053a_rtc_read_time(struct device *dev, struct rtc_time *tm)
++{
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
++	u8 buf[REG_STATUS + 1];
++	int ret, len = sizeof(buf);
++
++	ret = regmap_bulk_read(pcf85053a->regmap, REG_SECS, buf, len);
++	if (ret) {
++		dev_err(dev, "%s: error %d\n", __func__, ret);
++		return ret;
++	}
++
++	ret = pcf85053a_rtc_check_reliability(dev, buf[REG_STATUS]);
++	if (ret)
++		return ret;
++
++	tm->tm_year = buf[REG_YEARS];
++	/* adjust for 1900 base of rtc_time */
++	tm->tm_year += 100;
++
++	tm->tm_wday = (buf[REG_WEEKDAYS] - 1) & 7; /* 1 - 7 */
++	tm->tm_sec = buf[REG_SECS];
++	tm->tm_min = buf[REG_MINUTES];
++	tm->tm_hour = buf[REG_HOURS];
++	tm->tm_mday = buf[REG_DAYS];
++	tm->tm_mon = buf[REG_MONTHS] - 1; /* 1 - 12 */
++
++	return 0;
++}
++
++static int pcf85053a_rtc_set_time(struct device *dev, struct rtc_time *tm)
++{
++	int ret;
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
++	struct reg_sequence regs[] = {
++		REG_SEQ0(REG_SECS, tm->tm_sec),
++		REG_SEQ0(REG_MINUTES, tm->tm_min),
++		REG_SEQ0(REG_HOURS, tm->tm_hour),
++		REG_SEQ0(REG_WEEKDAYS, (tm->tm_wday + 1) & 0x7), /* 1 - 7 */
++		REG_SEQ0(REG_DAYS, tm->tm_mday),
++		REG_SEQ0(REG_MONTHS, tm->tm_mon + 1), /* 1 - 12 */
++		REG_SEQ0(REG_YEARS, tm->tm_year % 100),
++	};
++
++	/* tamper event will clear this bit */
++	ret = regmap_set_bits(pcf85053a->regmap, REG_CTRL, REG_CTRL_TWO);
++	if (ret)
++		return ret;
++
++	ret = regmap_set_bits(pcf85053a->regmap, REG_CTRL, REG_CTRL_ST);
++	if (ret)
++		return ret;
++
++	ret = regmap_multi_reg_write(pcf85053a->regmap, regs, ARRAY_SIZE(regs));
++	if (ret)
++		return ret;
++
++	ret = regmap_clear_bits(pcf85053a->regmap, REG_CTRL, REG_CTRL_ST);
++	if (ret)
++		return ret;
++
++	ret = regmap_clear_bits(pcf85053a->regmap, REG_STATUS, REG_STATUS_OF);
++
++	return ret;
++}
++
++static int pcf85053a_bvl_to_mv(unsigned int bvl)
++{
++	long mv_table[] = {
++		1700,
++		1900,
++		2100,
++		2300,
++		2500,
++		2700,
++		2900,
++		3100,
++	};
++	return mv_table[bvl & 7];
++}
++
++static int pcf85053a_hwmon_read_in(struct device *dev, long *mV)
++{
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
++	unsigned int status;
++	int ret;
++
++	ret = regmap_read(pcf85053a->regmap, REG_STATUS, &status);
++	if (ret)
++		return ret;
++
++	*mV = pcf85053a_bvl_to_mv(status & REG_STATUS_BVL);
++	return 0;
++}
++
++static umode_t pcf85053a_hwmon_is_visible(const void *data,
++					  enum hwmon_sensor_types type,
++					  u32 attr, int channel)
++{
++	if (type != hwmon_in)
++		return 0;
++
++	switch (attr) {
++	case hwmon_in_input:
++		return 0444;
++	default:
++		return 0;
++	}
++}
++
++static int pcf85053a_hwmon_read(struct device *dev,
++				enum hwmon_sensor_types type,
++				u32 attr, int channel, long *val)
++{
++	int ret;
++
++	switch (attr) {
++	case hwmon_in_input:
++		ret = pcf85053a_hwmon_read_in(dev, val);
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++		break;
++	}
++
++	return ret;
++}
++
++static u32 pcf85053a_hwmon_in_config[] = {
++	HWMON_I_INPUT,
++	0
++};
++
++static const struct hwmon_channel_info pcf85053a_hwmon_in = {
++	.type = hwmon_in,
++	.config = pcf85053a_hwmon_in_config,
++};
++
++static const struct hwmon_channel_info *pcf85053a_hwmon_info[] = {
++	&pcf85053a_hwmon_in,
++	0
++};
++
++static const struct hwmon_ops pcf85053a_hwmon_ops = {
++	.is_visible = pcf85053a_hwmon_is_visible,
++	.read = pcf85053a_hwmon_read,
++};
++
++static const struct hwmon_chip_info pcf85053a_hwmon_chip_info = {
++	.ops = &pcf85053a_hwmon_ops,
++	.info = pcf85053a_hwmon_info,
++};
++
++static int pcf85053a_hwmon_register(struct device *dev, const char *name)
++{
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev);
++	struct device *hwmon_dev;
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, name, pcf85053a,
++							 &pcf85053a_hwmon_chip_info,
++							 0);
++	if (IS_ERR(hwmon_dev)) {
++		dev_err(dev, "unable to register hwmon device: %ld\n",
++			PTR_ERR(hwmon_dev));
++		return PTR_ERR(hwmon_dev);
++	}
++
++	return 0;
++}
++
++static int pcf85053a_nvmem_read(void *priv, unsigned int offset, void *val,
++				size_t num)
++{
++	int ret;
++	struct pcf85053a *pcf85053a = priv;
++	struct regmap *regmap_nvmem = pcf85053a->regmap_nvmem;
++
++	ret = regmap_bulk_read(regmap_nvmem, offset, val, num);
++	if (ret)
++		pr_warn("%s: failed to read nvmem: %d\n", __func__, ret);
++
++	return ret;
++}
++
++static int pcf85053a_nvmem_write(void *priv, unsigned int offset, void *val,
++				 size_t num)
++{
++	int ret;
++	struct pcf85053a *pcf85053a = priv;
++	struct regmap *regmap_nvmem = pcf85053a->regmap_nvmem;
++
++	/* tamper event will clear this bit */
++	ret = regmap_set_bits(pcf85053a->regmap, REG_CTRL2, REG_CTRL2_MWO);
++	if (ret) {
++		pr_warn("%s: failed to enable nvmem write: %d", __func__, ret);
++		return ret;
++	}
++
++	ret = regmap_bulk_write(regmap_nvmem, offset, val, num);
++	if (ret)
++		pr_warn("%s: failed to write nvmem: %d\n", __func__, ret);
++
++	return ret;
++}
++
++static ssize_t attr_flag_clear(struct device *dev,
++			       struct device_attribute *attr,
++			       const char *buf, size_t count,
++			       u8 reg, u8 flag)
++{
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev->parent);
++	int ret;
++
++	(void)attr;
++	(void)buf;
++	(void)count;
++
++	ret = regmap_clear_bits(pcf85053a->regmap, reg, flag);
++	if (ret)
++		return -EIO;
++
++	return count;
++}
++
++static ssize_t attr_flag_read(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf,
++			      u8 reg, u8 flag)
++{
++	struct pcf85053a *pcf85053a = dev_get_drvdata(dev->parent);
++	unsigned int status, val;
++	int ret;
++
++	(void)attr;
++	ret = regmap_read(pcf85053a->regmap, reg, &status);
++	if (ret)
++		return -EIO;
++
++	val = (status & flag) != 0;
++
++	return sprintf(buf, "%u\n", val);
++}
++
++/* flags that can be read or written to be cleared */
++#define PCF85053A_ATTR_FLAG_RWC(name, reg, flag)                                \
++	static ssize_t name ## _store(                                         \
++			struct device *dev,                                    \
++			struct device_attribute *attr,                         \
++			const char *buf,                                       \
++			size_t count)                                          \
++	{                                                                      \
++		return attr_flag_clear(dev, attr, buf, count,                  \
++				REG_ ## reg, REG_ ## reg ## _ ## flag);        \
++	}                                                                      \
++	static ssize_t name ## _show(                                          \
++			struct device *dev,                                    \
++			struct device_attribute *attr,                         \
++			char *buf)                                             \
++	{                                                                      \
++		return attr_flag_read(dev, attr, buf,                          \
++				REG_ ## reg, REG_ ## reg ## _ ## flag);        \
++	}                                                                      \
++	static DEVICE_ATTR_RW(name)
++
++PCF85053A_ATTR_FLAG_RWC(rtc_fail, STATUS, RTCF);
++PCF85053A_ATTR_FLAG_RWC(oscillator_fail, STATUS, OF);
++PCF85053A_ATTR_FLAG_RWC(rtc_clear, STATUS, CIF);
++
++static struct attribute *pcf85053a_attrs_flags[] = {
++	&dev_attr_rtc_fail.attr,
++	&dev_attr_oscillator_fail.attr,
++	&dev_attr_rtc_clear.attr,
++	0,
++};
++
++static const struct attribute_group pcf85053a_attr_group = {
++	.name = "flags",
++	.attrs = pcf85053a_attrs_flags,
++};
++
++static const struct rtc_class_ops pcf85053a_rtc_ops = {
++	.read_offset		= pcf85053a_read_offset,
++	.set_offset		= pcf85053a_set_offset,
++	.read_time		= pcf85053a_rtc_read_time,
++	.set_time		= pcf85053a_rtc_set_time,
++};
++
++static const struct pcf85053a_config pcf85053a_config = {
++	.regmap = {
++		.reg_bits = 8,
++		.val_bits = 8,
++		.max_register = 0x1d,
++	},
++	.regmap_nvmem = {
++		.reg_bits = 8,
++		.val_bits = 8,
++		.max_register = 0xff,
++	},
++};
++
++static int pcf85053a_add_nvmem(struct i2c_client *client,
++			       struct pcf85053a *pcf85053a)
++{
++	int ret;
++	const struct pcf85053a_config *config = &pcf85053a_config;
++	struct i2c_client *client_nvmem;
++	struct nvmem_config nvmem_cfg = {
++		.name = "pcf85053a_nvmem",
++		.reg_read = pcf85053a_nvmem_read,
++		.reg_write = pcf85053a_nvmem_write,
++		.type = NVMEM_TYPE_BATTERY_BACKED,
++		.size = 128,
++	};
++
++	client_nvmem = devm_i2c_new_dummy_device(&client->dev, client->adapter,
++						 ADDR_NVMEM);
++	if (IS_ERR(client_nvmem)) {
++		dev_warn(&client->dev, "failed to create nvmem i2c device\n");
++		return -ENODEV;
++	}
++
++	pcf85053a->regmap_nvmem = devm_regmap_init_i2c(client_nvmem,
++						       &config->regmap_nvmem);
++	if (IS_ERR(pcf85053a->regmap_nvmem)) {
++		dev_warn(&client->dev, "failed to init nvmem regmap\n");
++		return -EIO;
++	}
++
++	nvmem_cfg.priv = pcf85053a;
++	ret = devm_rtc_nvmem_register(pcf85053a->rtc, &nvmem_cfg);
++
++	return ret;
++}
++
++static void pcf85053a_set_load_capacitance(struct device *dev, u8 *reg_ctrl)
++{
++	int ret;
++	u32 val;
++	u8 regval;
++
++	ret = of_property_read_u32(dev->of_node, "quartz-load-femtofarads",
++				   &val);
++	if (ret) {
++		dev_warn(dev, "failed to read quartz-load-femtofarads property,"
++			 " assuming 12500");
++		val = 12500;
++	}
++
++	switch (val) {
++	case 7000:
++		regval = 0;
++		break;
++	case 6000:
++		regval = 1;
++		break;
++	default:
++		dev_warn(dev, "invalid quartz-load-femtofarads value: %u,"
++			 " assuming 12500", val);
++		fallthrough;
++	case 12500:
++		regval = 2;
++		break;
++	}
++
++	*reg_ctrl |= regval;
++}
++
++static void pcf85053a_set_drive_control(struct device *dev, u8 *reg_ctrl)
++{
++	int ret;
++	const char *val;
++	u8 regval;
++
++	ret = of_property_read_string(dev->of_node, "quartz-drive-control",
++				      &val);
++	if (ret) {
++		dev_warn(dev, "failed to read quartz-drive-control property,"
++			 " assuming 'normal' drive");
++		val = "normal";
++	}
++
++	if (!strcmp(val, "normal")) {
++		regval = 0;
++	} else if (!strcmp(val, "low")) {
++		regval = 1;
++	} else if (!strcmp(val, "high")) {
++		regval = 2;
++	} else {
++		dev_warn(dev, "invalid quartz-drive-control value: %s,"
++			 " assuming 'normal' drive", val);
++		regval = 0;
++	}
++
++	*reg_ctrl |= (regval << 2);
++}
++
++static void pcf85053a_set_low_jitter(struct device *dev, u8 *reg_ctrl)
++{
++	bool val;
++	u8 regval;
++
++	val = of_property_read_bool(dev->of_node, "low-jitter");
++
++	regval = val ? 1 : 0;
++	*reg_ctrl |= (regval << 4);
++}
++
++static void pcf85053a_set_clk_inverted(struct device *dev, u8 *reg_ctrl)
++{
++	bool val;
++	u8 regval;
++
++	val = of_property_read_bool(dev->of_node, "clk-inverted");
++
++	regval = val ? 1 : 0;
++	*reg_ctrl |= (regval << 7);
++}
++
++static int pcf85053a_probe(struct i2c_client *client)
++{
++	int ret;
++	struct pcf85053a *pcf85053a;
++	const struct pcf85053a_config *config = &pcf85053a_config;
++	u8 reg_ctrl;
++
++	pcf85053a = devm_kzalloc(&client->dev, sizeof(*pcf85053a), GFP_KERNEL);
++	if (!pcf85053a) {
++		dev_err(&client->dev, "failed to allocate device: no memory");
++		return -ENOMEM;
++	}
++
++	pcf85053a->regmap = devm_regmap_init_i2c(client, &config->regmap);
++	if (IS_ERR(pcf85053a->regmap)) {
++		dev_err(&client->dev, "failed to allocate regmap: %ld\n",
++			PTR_ERR(pcf85053a->regmap));
++		return PTR_ERR(pcf85053a->regmap);
++	}
++
++	i2c_set_clientdata(client, pcf85053a);
++
++	pcf85053a->rtc = devm_rtc_allocate_device(&client->dev);
++	if (IS_ERR(pcf85053a->rtc)) {
++		dev_err(&client->dev, "failed to allocate rtc: %ld\n",
++			PTR_ERR(pcf85053a->rtc));
++		return PTR_ERR(pcf85053a->rtc);
++	}
++
++	pcf85053a->rtc->ops = &pcf85053a_rtc_ops;
++	pcf85053a->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	pcf85053a->rtc->range_max = RTC_TIMESTAMP_END_2099;
++
++	reg_ctrl = REG_CTRL_DM | REG_CTRL_HF | REG_CTRL_CIE;
++	pcf85053a_set_load_capacitance(&client->dev, &reg_ctrl);
++	pcf85053a_set_drive_control(&client->dev, &reg_ctrl);
++	pcf85053a_set_low_jitter(&client->dev, &reg_ctrl);
++	pcf85053a_set_clk_inverted(&client->dev, &reg_ctrl);
++
++	ret = regmap_write(pcf85053a->regmap, REG_CTRL, reg_ctrl);
++	if (ret) {
++		dev_err(&client->dev, "failed to configure rtc: %d\n", ret);
++		return ret;
++	}
++
++	ret = rtc_add_group(pcf85053a->rtc, &pcf85053a_attr_group);
++	if (ret) {
++		dev_err(&client->dev, "failed to add sysfs entry: %d\n", ret);
++		return ret;
++	}
++
++	ret = devm_rtc_register_device(pcf85053a->rtc);
++	if (ret) {
++		dev_err(&client->dev, "failed to register rtc: %d\n", ret);
++		return ret;
++	}
++
++	ret = pcf85053a_add_nvmem(client, pcf85053a);
++	if (ret) {
++		dev_err(&client->dev, "failed to register nvmem: %d\n", ret);
++		return ret;
++	}
++
++	ret = pcf85053a_hwmon_register(&client->dev, client->name);
++	if (ret)
++		dev_err(&client->dev, "failed to register hwmon: %d\n", ret);
++
++	return ret;
++}
++
++static const __maybe_unused struct of_device_id dev_ids[] = {
++	{ .compatible = "nxp,pcf85053a", .data = &pcf85053a_config },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, dev_ids);
++
++static struct i2c_driver pcf85053a_driver = {
++	.driver = {
++		.name = "pcf85053a",
++		.of_match_table = of_match_ptr(dev_ids),
++	},
++	.probe_new = &pcf85053a_probe,
++};
++
++module_i2c_driver(pcf85053a_driver);
++
++MODULE_AUTHOR("Carlos Menin <menin@carlosaurelio.net>");
++MODULE_DESCRIPTION("PCF85053A I2C RTC driver");
++MODULE_LICENSE("GPL");
+-- 
+2.34.1
+
 
