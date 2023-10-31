@@ -1,65 +1,65 @@
-Return-Path: <linux-rtc+bounces-166-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-167-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 064197DD446
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Oct 2023 18:08:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBDCB7DD487
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Oct 2023 18:20:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3CE7B20AF0
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Oct 2023 17:08:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D77D71C20C40
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Oct 2023 17:20:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F902032C;
-	Tue, 31 Oct 2023 17:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83442208A4;
+	Tue, 31 Oct 2023 17:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JzOU3uur"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IIVyVoGT"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A2F2031D
-	for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 17:08:51 +0000 (UTC)
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EF01AA
-	for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 10:08:49 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9d274222b5dso474708266b.3
-        for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 10:08:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A132033C
+	for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 17:20:30 +0000 (UTC)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF3D9F
+	for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 10:20:28 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-4079ed65471so42654585e9.1
+        for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 10:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698772128; x=1699376928; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698772827; x=1699377627; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+feQs+itGdxA7Jm7f8P6UpJRY3RLYxDN+ML61Wt8IfA=;
-        b=JzOU3uurkijpJ/gjOyKN0ODkzWPWcNf4xFkMis73Y6AJaGP+m9TBSbYZrkP+ivEkyi
-         m53D/eA0Sp+1bBosL9q4L6qKdSUIk4svlCJOdfbK5XQQW+rB6XZkNJzQTCSTWkfBC6yC
-         V+GjGilQx5d9Hmvz+fWNFSdBK8m/5lBBhAFyuTfXw0I8ij8vT1zFC0XSTkmy445JDj0e
-         KqcjcYVZ6U1sUDnt/+7A6iZcbpBK9LNWx330lsdHmNvesgyRnrcTADTjfBWuF6RF2kgT
-         hn1T0GcMlu+PmNROLhroTTGlEiaWNQx3KDo/MSOs4bQpZWV0LYKzOg2F02o565QDmBZO
-         orfw==
+        bh=vA7k1iuqfXtohI+uA4uWBLdnmtXqQvTMIXWywWVhhW8=;
+        b=IIVyVoGT3lHk4oo442sQPuiXqt+ogrkkZGHfiqkGs/ECaqIBVYH1pWxnxvas8oJCEg
+         5sqQX0O4Ggo1X5cFsarqQqyDEBJ4V5BnJOOPguNEGBKg+CJkiTZfTJbInN02gNRMYN70
+         oPDioSuNxVDiOY09efcvoDLhfZNKcQ/4RcNPqXQkXD0zDNDCQWlnAwC5X0BZD8/Wx77F
+         RyCABisMWp7hDU6c4W7iCiz5lwZL6ptR3tAlVuIA8eOGMxkNCQy1G7Nl5wBDOglRBgCh
+         fEUm/Pxm3KiMtlWSXEH1v1Q1BAcRKf8V/WcITGl99G3NysIWBQYcf/a0rHUgYlhNwgnD
+         1eDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698772128; x=1699376928;
+        d=1e100.net; s=20230601; t=1698772827; x=1699377627;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+feQs+itGdxA7Jm7f8P6UpJRY3RLYxDN+ML61Wt8IfA=;
-        b=ppqR5oe7ezJIPBSbUATS8fdHKG8SM+q2AEstkY1wAX015EI8kpHfaMEvGeo1hvKicV
-         avgb0FiQsTUdZPgvC1nw5R77oqgttTcutFvQ8aQi4PsnxTz6dewmBM9YO64d3W60OI8I
-         xDJpWDdQdL4dRQpexTJSO+CYXxlqsgLee2k/YYoFg6woQ5vBPynDX7KOQUy+/Up5IFgh
-         Y2PO08qt1BM2ZVh/GWkEZgLU+T20zvQhK0Z6roP1jVVNsndacdbLjgRYesoRO9ltq7b0
-         bCn4nal0q3jb+fj2vr3YZxdc4LJg94X4dlly7ZXNSllL2JTq2Mydbv0lVKJr1x93Ba0R
-         b5BQ==
-X-Gm-Message-State: AOJu0Yy/TTboNxVDvg4+BVjw+lBRzwea8/f+siConqMTLa/1FeSFx/Fi
-	h/Z/jSejxwk+TiijAHgL89ZKzQ==
-X-Google-Smtp-Source: AGHT+IHNVvDfKgiVTVWwyGmdsJki5ouK2yEzuxPef8Y/cOycrK5RxEm3D0Hzd3jvNoa64LCA73HpjQ==
-X-Received: by 2002:a17:906:c148:b0:9be:6ccb:6a8b with SMTP id dp8-20020a170906c14800b009be6ccb6a8bmr12321140ejc.10.1698772127901;
-        Tue, 31 Oct 2023 10:08:47 -0700 (PDT)
+        bh=vA7k1iuqfXtohI+uA4uWBLdnmtXqQvTMIXWywWVhhW8=;
+        b=djViBcZ6qzeib6NUDBdPrXtByqT5+3HEL7tY3vzGaknCH5w/g6taijv9RXVQsDxt33
+         7X+KFDaIFYp8s7bxn0tAlUX7ifzN2mjwuuM4MSp+7OT/7a4ck9FHZ+1NEI9dXOpUKted
+         3Yh8MgoVAL9q/bH4zPkszm1/0MQJcUBWN3mNxo8rJoRxLPNtUCe3BkZt6iJ/sqAUwOhs
+         azSOZXMnzhR2bST2jvYI85DEQlTsY1EUiuSOQV7o5zG6ShJakc+l8em+/c49aNZykqse
+         kbZGimg0tXGhXnjfQqlNvNUjq18qobt9zO2HvBHUtk2AmZagl6n108OoLCXv6uU0zBij
+         SY8w==
+X-Gm-Message-State: AOJu0Yzckwn3lJxHe74yyVycQ/REYmX3qDVDsWTkTtDvIPrBIcEtYyKh
+	26meH+xHc7wrbPFZHUuOYmmnDw==
+X-Google-Smtp-Source: AGHT+IHgsu4cilYzClwatTkhPhJSmVBT2wxY1IhpMmdxpF8Pr8SIJaOlL051KUjPs2MwM+LgltQS0Q==
+X-Received: by 2002:a05:600c:1913:b0:409:351:873d with SMTP id j19-20020a05600c191300b004090351873dmr11975396wmq.31.1698772827321;
+        Tue, 31 Oct 2023 10:20:27 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id lg17-20020a170906f89100b0098e78ff1a87sm1259634ejb.120.2023.10.31.10.08.46
+        by smtp.gmail.com with ESMTPSA id h13-20020a5d6e0d000000b0032dbf26e7aesm1956909wrz.65.2023.10.31.10.20.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 10:08:47 -0700 (PDT)
-Message-ID: <084b6dd7-2078-43ca-90fe-3611c65dad8a@linaro.org>
-Date: Tue, 31 Oct 2023 18:08:45 +0100
+        Tue, 31 Oct 2023 10:20:26 -0700 (PDT)
+Message-ID: <ba2d3863-5bcb-430f-9cd9-45a2732f853a@linaro.org>
+Date: Tue, 31 Oct 2023 18:20:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: rtc: max31335: add max31335 bindings
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: max31335: add max31335 bindings
 Content-Language: en-US
 To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
  Alessandro Zummo <a.zummo@towertech.it>,
@@ -78,7 +78,7 @@ To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
  Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hwmon@vger.kernel.org
-References: <20231031153100.92939-1-antoniu.miclaus@analog.com>
+References: <20231031125751.86566-1-antoniu.miclaus@analog.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -124,74 +124,24 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231031153100.92939-1-antoniu.miclaus@analog.com>
+In-Reply-To: <20231031125751.86566-1-antoniu.miclaus@analog.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 31/10/2023 16:30, Antoniu Miclaus wrote:
+On 31/10/2023 13:57, Antoniu Miclaus wrote:
 > Document the Analog Devices MAX31335 device tree bindings.
 > 
 > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 > ---
-> changes in v3:
->  - `trickle-resistor-ohms` description specifies that the property is mandatory
->     if trickle charger should be enabled.
->  .../devicetree/bindings/rtc/adi,max31335.yaml | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max31335.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/adi,max31335.yaml b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
-> new file mode 100644
-> index 000000000000..8da9cf2565be
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/adi,max31335.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices MAX31335 RTC
-> +
-> +maintainers:
-> +  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-> +
-> +description:
-> +  Analog Devices MAX31335 I2C RTC ±2ppm Automotive Real-Time Clock with
-> +  Integrated MEMS Resonator.
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: adi,max31335
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  "#clock-cells":
-> +    description:
-> +      RTC can be used as a clock source through its clock output pin.
-> +    const: 0
-> +
-> +  trickle-resistor-ohms:
-> +    description:
-> +      Selected resistor for trickle charger. Should be specified if trickle
-> +      charger should be enabled.
-> +    enum: [3000, 6000, 11000]
-> +
-> +  aux-voltage-chargeable: true
+> changes in v2:
+>  - improve description
+>  - drop "Device Tree Bindings"
+>  - move $ref: rtc.yaml# after description
+>  - drop i2c description
+>  - add aux-voltage-chargeable and drop trickle-diode-enable
+>  - use new dtschema version for checking the bindings
 
-Drop, it comes with rtc.yaml.
-
-With this property removed:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+One patchset per day. Not three. Please allow other reviewers to respond.
 
 Best regards,
 Krzysztof
