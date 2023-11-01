@@ -1,244 +1,222 @@
-Return-Path: <linux-rtc+bounces-178-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-179-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F0B7DE2EC
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 16:22:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 410D07DE302
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 16:31:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A48802812F1
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 15:22:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 625D21C209E2
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 15:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3096E14012;
-	Wed,  1 Nov 2023 15:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0891414286;
+	Wed,  1 Nov 2023 15:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=analog.onmicrosoft.com header.i=@analog.onmicrosoft.com header.b="hgpzde2Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DoGRI3ak"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3611E7480;
-	Wed,  1 Nov 2023 15:22:44 +0000 (UTC)
-Received: from mx0b-00128a01.pphosted.com (mx0b-00128a01.pphosted.com [148.163.139.77])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF43DA;
-	Wed,  1 Nov 2023 08:22:39 -0700 (PDT)
-Received: from pps.filterd (m0167091.ppops.net [127.0.0.1])
-	by mx0b-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3A1DRHan001057;
-	Wed, 1 Nov 2023 11:21:58 -0400
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2040.outbound.protection.outlook.com [104.47.51.40])
-	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3u39sp5sfj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Nov 2023 11:21:58 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WtRd7dY90Fb+Wcx2LRy9rOSgLSYtTekOX1ZsXiI9kmV62BpYaBOBLmCCzBwYxm2msv0y0/GEG5IEExD0R6BhUGKfVATRO17bekflIty1ecKU7P46NoEt5ojkNrg2SoZFStkf9qLed9ZtNkJKxE7/RMBeXK4VbpyJ/PWEDyhViNfOFFUcK+m8iVgccV2nu1suT7woovYa03d8VtXy4VfXmIkMFHYdvXh/ChRJD4CVhzMM7FPPlVb1wf2+8eNeACx4xwGUAsTGAPzYyL4zjzrKFDQUwX77ZBHCK+X9nxBviIE7J8BXCJbKrlqSTIBr1uvN6/rnGrwlqSIZoxVOQKim9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y4Peck0mGsI32ttvfOoZz5XlgE8hNudsC3r2Ysp4Tfw=;
- b=UWsgR6wfoNpc5vt0H0bjSUayFwmPl2MPElRQcOx4iofMm5271Su6f/ho0DwDm+IaGtb5rCFZMytNyP1/URTuuBose76E+/AdHPIBJ5ueB9lJAC+FrLXzFBUskFZzzj5NBCScbB49oVH6vbJ7lgR3ykag2QChHZPOLWUp86fGdjKOXHYqQxlNou8y8BQkyIl656Up9pqkLpuohLQ1WZaQsd4Q1M9442yAz7Qix+mk/ZWywlr7SO7nBIRrYaLvtbgSqHyChEMf+7MMTW8aXujB2lvHjXNmCAuSn6yKCV4MFKxVESYp0e/Paau/RW9UXuVn/XyITIDhbjLNpgsLPaA1Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EFB11CAA;
+	Wed,  1 Nov 2023 15:31:07 +0000 (UTC)
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556D3102;
+	Wed,  1 Nov 2023 08:31:03 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3b3f938331fso513660b6e.1;
+        Wed, 01 Nov 2023 08:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y4Peck0mGsI32ttvfOoZz5XlgE8hNudsC3r2Ysp4Tfw=;
- b=hgpzde2Y12NlGkO9FWSHB35Q5LCF8gYDkv0+WSj22cEcUbxqax0UDsxRnxu2GpN9GofU7C1GlCvFA2ETGbn9GmE8Y26dVDnYTVn/zeaUGbr6PJMLea3jh8wqFPoAm4zfnnCgMhaYHK+RkyUEDCjhElbtJSVd7ZW45ZMTlqc2wvI=
-Received: from CY4PR03MB3399.namprd03.prod.outlook.com (2603:10b6:910:57::13)
- by MW4PR03MB6524.namprd03.prod.outlook.com (2603:10b6:303:127::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.17; Wed, 1 Nov
- 2023 15:21:56 +0000
-Received: from CY4PR03MB3399.namprd03.prod.outlook.com
- ([fe80::26c3:a563:9b0a:3321]) by CY4PR03MB3399.namprd03.prod.outlook.com
- ([fe80::26c3:a563:9b0a:3321%3]) with mapi id 15.20.6954.014; Wed, 1 Nov 2023
- 15:21:56 +0000
-From: "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni
-	<alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [PATCH v4 2/2] rtc: max31335: add driver support
-Thread-Topic: [PATCH v4 2/2] rtc: max31335: add driver support
-Thread-Index: AQHaDMEKHQ+RJtDWgkKJJS24k84zJrBlhACAgAALsYA=
-Date: Wed, 1 Nov 2023 15:21:56 +0000
-Message-ID: 
- <CY4PR03MB3399426A31899901EBADDECF9BA7A@CY4PR03MB3399.namprd03.prod.outlook.com>
-References: <20231101094835.51031-1-antoniu.miclaus@analog.com>
- <20231101094835.51031-2-antoniu.miclaus@analog.com>
- <81efcde1-8305-465a-85a2-cfe449e8a8da@roeck-us.net>
-In-Reply-To: <81efcde1-8305-465a-85a2-cfe449e8a8da@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: 
- =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jWVcxcFkyeGhkWE5jWVhCd1pHRjBZVnh5YjJGdGFXNW5YREE1WkRnME9X?=
- =?utf-8?B?STJMVE15WkRNdE5HRTBNQzA0TldWbExUWmlPRFJpWVRJNVpUTTFZbHh0YzJk?=
- =?utf-8?B?elhHMXpaeTAyTWpVNE1HRmhNaTAzT0dOaExURXhaV1V0WVdVM09TMWtORGd4?=
- =?utf-8?B?WkRjMU1EWmtaR1ZjWVcxbExYUmxjM1JjTmpJMU9EQmhZVE10TnpoallTMHhN?=
- =?utf-8?B?V1ZsTFdGbE56a3RaRFE0TVdRM05UQTJaR1JsWW05a2VTNTBlSFFpSUhONlBT?=
- =?utf-8?B?SXlOakk1SWlCMFBTSXhNek0wTXpNeU5UY3hNelk1TWpZMk1UVWlJR2c5SWxK?=
- =?utf-8?B?Qk1sRm9hMEppVTBabWVIUlBSV3RCY0dKeldXMTJVRzFaTUQwaUlHbGtQU0lp?=
- =?utf-8?B?SUdKc1BTSXdJaUJpYnowaU1TSWdZMms5SW1OQlFVRkJSVkpJVlRGU1UxSlZS?=
- =?utf-8?B?azVEWjFWQlFVVnZRMEZCUTFoeU9UUnJNWGQ2WVVGbGJ6VkdkbGR0ZWk4eGRq?=
- =?utf-8?B?WnFhMWM1WVdKUUwxYzRSRUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRklRVUZCUVVSaFFWRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGRlFVRlJRVUpCUVVGQlJVOXdiRTluUVVGQlFVRkJRVUZCUVVGQlFVRkJT?=
- =?utf-8?B?alJCUVVGQ2FFRkhVVUZoVVVKbVFVaE5RVnBSUW1wQlNGVkJZMmRDYkVGR09F?=
- =?utf-8?B?RmpRVUo1UVVjNFFXRm5RbXhCUjAxQlpFRkNla0ZHT0VGYVowSm9RVWQzUVdO?=
- =?utf-8?B?M1FteEJSamhCV21kQ2RrRklUVUZoVVVJd1FVZHJRV1JuUW14QlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVWQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlowRkJRVUZCUVc1blFVRkJSMFZCV2tGQ2NFRkdPRUZqZDBKc1FVZE5RV1JS?=
- =?utf-8?B?UW5sQlIxVkJXSGRDZDBGSVNVRmlkMEp4UVVkVlFWbDNRakJCU0UxQldIZENN?=
- =?utf-8?B?RUZIYTBGYVVVSjVRVVJGUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRlJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRMEZCUVVGQlFVTmxRVUZCUVZsUlFtdEJSMnRCV0hkQ2Vr?=
- =?utf-8?B?RkhWVUZaZDBJeFFVaEpRVnBSUW1aQlNFRkJZMmRDZGtGSGIwRmFVVUpxUVVo?=
- =?utf-8?B?UlFXTjNRbVpCU0ZGQllWRkNiRUZJU1VGTlowRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZDUVVGQlFVRkJRVUZCUVVsQlFVRkJRVUZCUFQwaUx6NDhMMjFs?=
- =?utf-8?Q?dGE+?=
-x-dg-rorf: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY4PR03MB3399:EE_|MW4PR03MB6524:EE_
-x-ms-office365-filtering-correlation-id: d536358b-4b2c-4ccb-e1b1-08dbdaee48c5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- HRb+hOMt7mTIBkgIq/skIB/pColL7R5q9dydFITytdHRN8kMacZWohSPWRWdpriilD+2msFrl8gmrRw91KgvmfEJVIsM5xlD0vUK9SKFncdR27EPvwgIghZM0+YqhNmbZAgQ5Yh53bYyyrJfn/ahY9WQUV0iX0bQ5eb7u8mcSjjavtzKoZHhFx1vIdp36I4jUGRRSF0xrk18ucdjNqG3/iGjnyk1fHXphU/ZCDEqJ9AcLBxjoe0kz/FLVdlNL4KUnboJ/Zmfbi4LSgJVD5kPt9BBUIRExA1kx9nIYp0a4gDnlwRhiKrDGCV79pj89LwQUNa7sbaLG/gZwjnoSGhD3bC83lK2eXr8efJv0umi3xlY7rkos4Z/dhnLzQ2clidBU/QFFbzr5rbsbDi0WEPTwwcawlnq0tTNvxt6rzk/0ZNCpB8COa4mVL8c/PdMbiOpzCx1XUyuXPS7F+na/ZXpsikttij/RsYnwqV8ANXZxd5YKMP+PteBne5b/Mb03nytpD/8Yc78HV2FFG1rrLGxp9hk42Fci77dsjk9Sn2fUofM2kXo18Ircj/Iy6cY+dikMwWsrYBjwu9U+C1eQRrd9EPQTX6bzLIunqCiXtyRWt0=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR03MB3399.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(376002)(396003)(346002)(136003)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(5660300002)(7416002)(41300700001)(2906002)(66556008)(54906003)(66446008)(66476007)(66946007)(76116006)(8676002)(4326008)(8936002)(966005)(52536014)(316002)(478600001)(6916009)(64756008)(38070700009)(83380400001)(33656002)(86362001)(38100700002)(122000001)(7696005)(9686003)(6506007)(55016003)(71200400001)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?czdzZ2Q0dW5IWFMyZ2E4NWg3SjZjcDAydFNLcEp4Sm5pQjczVDNuL2JKd25s?=
- =?utf-8?B?N0IvcU1oRFRERGV0am10dmE5N3g2Z0dhM3paR2dEZVpLOWdvLytldnp3QjhO?=
- =?utf-8?B?VkNPbzNPZXVIZkRmRFNUUkUvNmtxK3o5YlZpbVJ5S2FtYyt4YSswTjl6VFNP?=
- =?utf-8?B?Y0ZXQnhtMVZHYm1mTnRYRjVvTHpTTGE5dVdRRlhzcjZJNFp1WVcyazlvNUl2?=
- =?utf-8?B?MW9TSzlZbHJrdDNSbndVelROZFRMejU1UEdreTJtb3hiV3piczJ5eXZRck8r?=
- =?utf-8?B?ajB2ZTRVbWlzVjRZRDBLRUQvK2Q5MGM1TE44TXBiMnl4eS9WcXJuK1dzYlYv?=
- =?utf-8?B?YVArMWh6YnZoRW9XdUh5ZWVjTDVQa0U1dVNJYmFBMVp2Y0k1cGZjejJ4UzBB?=
- =?utf-8?B?WGQ4RjROWGlSM2hYbXZ1UEJBTjJza3RwQlhKcTJCbGVpT3hGT2dCUG4yb0g0?=
- =?utf-8?B?YWJOWDdpWTFCRTh6YlN1YXZtYlRJQi9TVlNKNHdXMkJBRVZoRjNBVEh0ZjJC?=
- =?utf-8?B?bGh6SUhMaXlQTmdlYi9TY1B1Z1ZaRERsWjluemZNeHpwVzZHQ1FTYlV4bHhM?=
- =?utf-8?B?eDEyMWVhbmdXdEt3OGxKUmFPQU1CVW1JeEs1dXNzaGgwdmRwSElnSlcxcGU1?=
- =?utf-8?B?WFFyenhpbWh6Tk9HYmFJZFlEbkRjeXZyMkhRNnhVeGtHb2J0N0hrUWlEaGFY?=
- =?utf-8?B?WHNxdi9FZzRBMzYxODBaSUJjNWIrb3MwSlN0ZzVVc2pNa1BOSko0TGpPQWpG?=
- =?utf-8?B?bUNyMWQzV2VqYm1CWmJwc2wzSjZPcnh1dTFkb08yNzlxY0wwSk5jd2JEZVdQ?=
- =?utf-8?B?MTY1QXpxSXl4V2VDeVBQR0c3L3FvY2VUSldqeFZpNFJnZ2lrNWloRGgwVGhN?=
- =?utf-8?B?QlZDWEJPMDVHWEhCdEZhdXEyQVdqU0JLUzBKWGkyVnF2RXE1QjM4UTBpNGh2?=
- =?utf-8?B?bFhFR2ZLeHpvMzhvUXJzeWFaSlgwYVFWTmFsUlpsS3BCalhacjl3T3Z4NGQv?=
- =?utf-8?B?WVg4Nll3MlJlVWJJY0NrMUIraEhIRE0rSjlpK1JBSElxamViMGRuVEpFQ3hW?=
- =?utf-8?B?RzNWRjV0OGdhK1pNcTB5N2gyRExXemtGVCtuU0dkS1lEWWt4OTk2dmlZK1JO?=
- =?utf-8?B?NDQwNklFTWtRNVpXVlhmT3M1V0lHU3lTUUFJSEQzcFhObzF0MEFGRWJzbmtx?=
- =?utf-8?B?bEU2bSt0L1ZVV2FVZ3p5LzdOaXNRS0FiTk5hM3lyS3pNaWFxL1luYkVVOGpW?=
- =?utf-8?B?Vkd3TUZINXhwU3o4bDh5Y2xEMWYvVS9EVFFPVTdSZGhxY1cwZkZRd1lxVnFG?=
- =?utf-8?B?UnZRVEtKdDBvVXU3N25yZlh4aUcydTVzd0M0VnlOSWFTNnByQnhMeCs1WnlG?=
- =?utf-8?B?d1l3MU11M3Z6c3BuWnczbWJGK3kwQ2lQM1NJODZyL3YyVlNFcEltV1U2OTRr?=
- =?utf-8?B?cXhjcjlyZSsyUGlrMW9qM0NHMXgvSmpSeXdTUUwrNkhRc0RnOTNIRVhNWmty?=
- =?utf-8?B?aE81bjY0QU01ZFpsMHN4YlpocUxLZUpXMzA4RTMyVHJ1b0JrcW1pRUxQd1Fj?=
- =?utf-8?B?djlXR1JhOUFKMWZtbkllOGdrYnpHK1g0NUhibnFpVnZJeW16aGdHQlhXdXdz?=
- =?utf-8?B?S0YrejRURGovaGRva0pEbnlXWVJQaitGMUswWllkZzRJNUx1YVhLS3BzemhW?=
- =?utf-8?B?NFNsNXpqUXk2cSthQUVSOWc5YlAvSW9FcGxmUVVuNnZONCtuN1dqODJ1QWR0?=
- =?utf-8?B?UmNhYUkrV3FXV0R0YTZtVWpZc1NVODNuSTdvb1E2NlZqM2FYWGQvTzMxL3A0?=
- =?utf-8?B?WldXemlxNmlZZXdwdTZ2TFNJcEkydzh0OFRiU3BRMXYzTE43VHFBZlI2Z3J1?=
- =?utf-8?B?T3hma3l6aVB0cjhVeXg4dEtWZzVTWE9oQUdVWTB0SG90RUZja0RsQWNnbVU4?=
- =?utf-8?B?OWZtMEhvQ05nVTUyUDVrZmVKWTdXYjgyZTVHTGExdlFtZXRZaHo3dGR4Vkxs?=
- =?utf-8?B?RGJ2TjM0THQ5dDJpNGw4N0lBT0x3eFBtSllCU01qQVF2cHVxZXY0c3N6K0Rk?=
- =?utf-8?B?S01RQmpwQWNBMzJWVkdEUTVPNjdLc081NFMrV3R3RHVXOVFEUzNuUk9LM1NZ?=
- =?utf-8?B?OFNUdVVMQTBPSjB3bHBHSUhSb0ZHTjlUOGFjcklzK24yaU9nd3VVeE9EVEJw?=
- =?utf-8?B?L0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20230601; t=1698852662; x=1699457462; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=x+eJKl5QhBuA8gSgrtZxHDFNkGmY8s8qRo9IFIWyhMY=;
+        b=DoGRI3akXtuLrFjpGkJcIEZThZrs76jeiVmaWsFLgP6MQDx4xnpHdDrPWIErNV7Rzq
+         zKD20n+IusDLHd5DIsZCxaUOmPM4rnHmJksfrMLjqf0GPPLPZa6KJ4EASu8vdQrsvqpL
+         BtLAiqL2koXj9O1yO6q7W+JU70ELgmpNIXSJ8K+VbWfnL7ySg0ZheUDBo73EWBfI897d
+         Ei6s4HEJ/7Pwf7iDK3hXz2vZM5ylMKHE3izGPud8teMK66omUHF2NqWuJsrLhuh1o8fa
+         7uISIGutHapmuteTU9IJ9nnuxuwwaOcxy7a3h4Zm/IHMwi4FFx59BAgcFrmR/0ALfNe0
+         Stfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698852662; x=1699457462;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x+eJKl5QhBuA8gSgrtZxHDFNkGmY8s8qRo9IFIWyhMY=;
+        b=uTNDwzSoHwrPge4hgof57hvJZYMtg9SvHbuKvg7kv4BN1UT1j/SdyhtC3JwoRc3J2X
+         WQkaXVEh/9IPyDEygrB4Cgnw+Cz0V5qizJFfloPNB0JOGHtLoRq/nxDwWB19jWful/2r
+         PPnrd4GcV/tYfXrftbTFB7KA63KUeTDHfSk+rnQDFQYa1QB6GIV+b1DvSaEck9e95NJM
+         1N7zewH1qsvKmdv95xjaH1R+salr3uK9vPXdpPUxL/I4ZO790u/OBqgHaWO5JdexwP9U
+         n4T6ZpZS4CLF2B9daUeKyRJAmUobzbIGFJh0cLCQxsXIAsW8yE0OYgxlX8F+mCDCi/4i
+         MFzg==
+X-Gm-Message-State: AOJu0YzJ99tHfQBcqek93ynccx7oGIY4xD8pExCXwZf8mX36h3pdyD4L
+	zEEv29br7UKVaef5WMTuaScBD0cKMOA=
+X-Google-Smtp-Source: AGHT+IF8ccE6RAg+/SxiwfG7bYocm3sGs5LRAximEXuh8mLqr/9Izsz6GifMeiIvo+KD2H+fjnfgag==
+X-Received: by 2002:a05:6808:1507:b0:3ad:c018:7d9a with SMTP id u7-20020a056808150700b003adc0187d9amr1817791oiw.13.1698852662448;
+        Wed, 01 Nov 2023 08:31:02 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t2-20020a0568080b2200b003af6eeed9b6sm247866oij.27.2023.11.01.08.31.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Nov 2023 08:31:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <590b1e94-ec4f-4c6e-b6cb-d87e72bd0fd0@roeck-us.net>
+Date: Wed, 1 Nov 2023 08:30:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR03MB3399.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d536358b-4b2c-4ccb-e1b1-08dbdaee48c5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2023 15:21:56.0754
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Igqu9uE9Pi5S1kDiwx9s+WaNwNqzOswKpxO0hgCe4yjmHdHEjVyfQicnx1QLWb4bwdGNXuJd38RX0e/hsLzVhfDySyFhIDcSOedckUnn85I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR03MB6524
-X-Proofpoint-ORIG-GUID: JvUn3V_hEwbPO-CFpK9-EQ30jR9Kxskp
-X-Proofpoint-GUID: JvUn3V_hEwbPO-CFpK9-EQ30jR9Kxskp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-01_13,2023-11-01_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 mlxlogscore=955 spamscore=0
- adultscore=0 phishscore=0 malwarescore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2310240000 definitions=main-2311010127
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] rtc: max31335: add driver support
+Content-Language: en-US
+To: "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <20231101094835.51031-1-antoniu.miclaus@analog.com>
+ <20231101094835.51031-2-antoniu.miclaus@analog.com>
+ <81efcde1-8305-465a-85a2-cfe449e8a8da@roeck-us.net>
+ <CY4PR03MB3399426A31899901EBADDECF9BA7A@CY4PR03MB3399.namprd03.prod.outlook.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <CY4PR03MB3399426A31899901EBADDECF9BA7A@CY4PR03MB3399.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-PiBPbiBXZWQsIE5vdiAwMSwgMjAyMyBhdCAxMTo0ODoxNEFNICswMjAwLCBBbnRvbml1IE1pY2xh
-dXMgd3JvdGU6DQo+ID4gUlRDIGRyaXZlciBmb3IgTUFYMzEzMzUgwrEycHBtIEF1dG9tb3RpdmUg
-UmVhbC1UaW1lIENsb2NrIHdpdGgNCj4gPiBJbnRlZ3JhdGVkIE1FTVMgUmVzb25hdG9yLg0KPiA+
-DQo+ID4gU2lnbmVkLW9mZi1ieTogQW50b25pdSBNaWNsYXVzIDxhbnRvbml1Lm1pY2xhdXNAYW5h
-bG9nLmNvbT4NCj4gPiAtLS0NCj4gPiBjaGFuZ2VzIGluIHY0Og0KPiA+ICAtIGFkZCBLY29uZmln
-IGVudHJ5IGZvciBIV01PTiBkZXBlbmRlbmN5Lg0KPiA+ICBNQUlOVEFJTkVSUyAgICAgICAgICAg
-ICAgICB8ICAgOCArDQo+ID4gIGRyaXZlcnMvcnRjL0tjb25maWcgICAgICAgIHwgIDIwICsNCj4g
-PiAgZHJpdmVycy9ydGMvTWFrZWZpbGUgICAgICAgfCAgIDEgKw0KPiA+ICBkcml2ZXJzL3J0Yy9y
-dGMtbWF4MzEzMzUuYyB8IDc2NQ0KPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrDQo+ID4gIDQgZmlsZXMgY2hhbmdlZCwgNzk0IGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IGRyaXZlcnMvcnRjL3J0Yy1tYXgzMTMzNS5jDQo+ID4NCj4gPiBkaWZmIC0t
-Z2l0IGEvTUFJTlRBSU5FUlMgYi9NQUlOVEFJTkVSUw0KPiA+IGluZGV4IGRkNWRlNTQwZWMwYi4u
-YmM0ODRjYjk5N2FiIDEwMDY0NA0KPiA+IC0tLSBhL01BSU5UQUlORVJTDQo+ID4gKysrIGIvTUFJ
-TlRBSU5FUlMNCj4gPiBAQCAtMTI4MjMsNiArMTI4MjMsMTQgQEAgRjoNCj4gCURvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9hZGksbWF4MzE4MjcueWFtbA0KPiA+ICBGOglE
-b2N1bWVudGF0aW9uL2h3bW9uL21heDMxODI3LnJzdA0KPiA+ICBGOglkcml2ZXJzL2h3bW9uL21h
-eDMxODI3LmMNCj4gPg0KPiA+ICtNQVgzMTMzNSBSVEMgRFJJVkVSDQo+ID4gK006CUFudG9uaXUg
-TWljbGF1cyA8YW50b25pdS5taWNsYXVzQGFuYWxvZy5jb20+DQo+ID4gK0w6CWxpbnV4LXJ0Y0B2
-Z2VyLmtlcm5lbC5vcmcNCj4gPiArUzoJU3VwcG9ydGVkDQo+ID4gK1c6CWh0dHBzOi8vZXouYW5h
-bG9nLmNvbS9saW51eC1zb2Z0d2FyZS1kcml2ZXJzDQo+ID4gK0Y6CURvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy9ydGMvYWRpLG1heDMxMzM1LnlhbWwNCj4gPiArRjoJZHJpdmVycy9y
-dGMvcnRjLW1heDMxMzM1LmMNCj4gPiArDQo+ID4gIE1BWDY2NTAgSEFSRFdBUkUgTU9OSVRPUiBB
-TkQgRkFOIENPTlRST0xMRVIgRFJJVkVSDQo+ID4gIEw6CWxpbnV4LWh3bW9uQHZnZXIua2VybmVs
-Lm9yZw0KPiA+ICBTOglPcnBoYW4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ydGMvS2NvbmZp
-ZyBiL2RyaXZlcnMvcnRjL0tjb25maWcNCj4gPiBpbmRleCBkNzUwMjQzM2M3OGEuLjM2MGRhMTNm
-ZTYxYiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3J0Yy9LY29uZmlnDQo+ID4gKysrIGIvZHJp
-dmVycy9ydGMvS2NvbmZpZw0KPiA+IEBAIC0zNzMsNiArMzczLDI2IEBAIGNvbmZpZyBSVENfRFJW
-X01BWDg5OTcNCj4gPiAgCSAgVGhpcyBkcml2ZXIgY2FuIGFsc28gYmUgYnVpbHQgYXMgYSBtb2R1
-bGUuIElmIHNvLCB0aGUgbW9kdWxlDQo+ID4gIAkgIHdpbGwgYmUgY2FsbGVkIHJ0Yy1tYXg4OTk3
-Lg0KPiA+DQo+ID4gK2NvbmZpZyBSVENfRFJWX01BWDMxMzM1DQo+ID4gKwl0cmlzdGF0ZSAiQW5h
-bG9nIERldmljZXMgTUFYMzEzMzUiDQo+ID4gKwlkZXBlbmRzIG9uIEkyQw0KPiA+ICsJc2VsZWN0
-IFJFR01BUF9JMkMNCj4gPiArCWhlbHANCj4gPiArCSAgSWYgeW91IHNheSB5ZXMgaGVyZSB5b3Ug
-Z2V0IHN1cHBvcnQgZm9yIHRoZSBBbmFsb2cgRGV2aWNlcw0KPiA+ICsJICBNQVgzMTMzNS4NCj4g
-PiArDQo+ID4gKwkgIFRoaXMgZHJpdmVyIGNhbiBhbHNvIGJlIGJ1aWx0IGFzIGEgbW9kdWxlLiBJ
-ZiBzbywgdGhlIG1vZHVsZQ0KPiA+ICsJICB3aWxsIGJlIGNhbGxlZCBydGMtbWF4MzEzMzUuDQo+
-ID4gKw0KPiA+ICtjb25maWcgUlRDX0RSVl9NQVgzMTMzNV9IV01PTg0KPiA+ICsJYm9vbCAiSFdN
-T04gc3VwcG9ydCBmb3IgQW5hbG9nIERldmljZXMgTUFYMzEzMzUiDQo+ID4gKwlkZXBlbmRzIG9u
-IFJUQ19EUlZfTUFYMzEzMzUgJiYgSFdNT04NCj4gPiArCWRlcGVuZHMgb24gIShSVENfRFJWX01B
-WDMxMzM1PXkgJiYgSFdNT049bSkNCj4gPiArCWRlZmF1bHQgeQ0KPiA+ICsJaGVscA0KPiA+ICsJ
-ICBTYXkgWSBoZXJlIGlmIHlvdSB3YW50IHRvIGV4cG9zZSB0ZW1wZXJhdHVyZSBzZW5zb3IgZGF0
-YSBvbg0KPiA+ICsJICBydGMtbWF4MzEzMzUuDQo+ID4gKw0KPiANCj4gVGhpcyBpc24ndCB1c2Vk
-IGluIHRoZSBkcml2ZXIuIERpZCB5b3UgdGVzdCB3aXRoIEhXTU9OPW4gPw0KPiANCg0KSSBuZWVk
-IHRvIHN0YXJ0IHRoaW5raW5nIGEgYml0IG1vcmUgb3V0IG9mIHRoZSBib3ggaW5zdGVhZCBvZiAN
-CnRha2luZyBvdGhlciBkcml2ZXIgYXBwcm9hY2hlcyBhcyBiZWluZyB0aGUgb25seSB3YXkgdG8g
-Z28uIPCfmIoNCg0KV2lsbCBmaXggaW4gdjUuDQoNCj4gR3VlbnRlcg0K
+On 11/1/23 08:21, Miclaus, Antoniu wrote:
+>> On Wed, Nov 01, 2023 at 11:48:14AM +0200, Antoniu Miclaus wrote:
+>>> RTC driver for MAX31335 ±2ppm Automotive Real-Time Clock with
+>>> Integrated MEMS Resonator.
+>>>
+>>> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+>>> ---
+>>> changes in v4:
+>>>   - add Kconfig entry for HWMON dependency.
+>>>   MAINTAINERS                |   8 +
+>>>   drivers/rtc/Kconfig        |  20 +
+>>>   drivers/rtc/Makefile       |   1 +
+>>>   drivers/rtc/rtc-max31335.c | 765
+>> +++++++++++++++++++++++++++++++++++++
+>>>   4 files changed, 794 insertions(+)
+>>>   create mode 100644 drivers/rtc/rtc-max31335.c
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index dd5de540ec0b..bc484cb997ab 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -12823,6 +12823,14 @@ F:
+>> 	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+>>>   F:	Documentation/hwmon/max31827.rst
+>>>   F:	drivers/hwmon/max31827.c
+>>>
+>>> +MAX31335 RTC DRIVER
+>>> +M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
+>>> +L:	linux-rtc@vger.kernel.org
+>>> +S:	Supported
+>>> +W:	https://ez.analog.com/linux-software-drivers
+>>> +F:	Documentation/devicetree/bindings/rtc/adi,max31335.yaml
+>>> +F:	drivers/rtc/rtc-max31335.c
+>>> +
+>>>   MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
+>>>   L:	linux-hwmon@vger.kernel.org
+>>>   S:	Orphan
+>>> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+>>> index d7502433c78a..360da13fe61b 100644
+>>> --- a/drivers/rtc/Kconfig
+>>> +++ b/drivers/rtc/Kconfig
+>>> @@ -373,6 +373,26 @@ config RTC_DRV_MAX8997
+>>>   	  This driver can also be built as a module. If so, the module
+>>>   	  will be called rtc-max8997.
+>>>
+>>> +config RTC_DRV_MAX31335
+>>> +	tristate "Analog Devices MAX31335"
+>>> +	depends on I2C
+>>> +	select REGMAP_I2C
+>>> +	help
+>>> +	  If you say yes here you get support for the Analog Devices
+>>> +	  MAX31335.
+>>> +
+>>> +	  This driver can also be built as a module. If so, the module
+>>> +	  will be called rtc-max31335.
+>>> +
+>>> +config RTC_DRV_MAX31335_HWMON
+>>> +	bool "HWMON support for Analog Devices MAX31335"
+>>> +	depends on RTC_DRV_MAX31335 && HWMON
+>>> +	depends on !(RTC_DRV_MAX31335=y && HWMON=m)
+>>> +	default y
+>>> +	help
+>>> +	  Say Y here if you want to expose temperature sensor data on
+>>> +	  rtc-max31335.
+>>> +
+>>
+>> This isn't used in the driver. Did you test with HWMON=n ?
+>>
+> 
+> I need to start thinking a bit more out of the box instead of
+> taking other driver approaches as being the only way to go. 😊
+> 
+
+There are essentially two options: Either the above, or use
+	depends on HWMON || HWMON=n
+for RTC_DRV_MAX31335.
+
+In both cases, the driver hwmon code has to be surrounded with #if[def].
+Depending on your approach, that will be "#ifdef RTC_DRV_MAX31335_HWMON"
+or "#if IS_REACHABLE(HWMON)".
+
+You could also use "depends on HWMON" for RTC_DRV_MAX31335 to avoid the
+#ifdef in the driver, but that is normally undesirable.
+
+Guenter
+
 
