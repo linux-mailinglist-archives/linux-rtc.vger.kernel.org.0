@@ -1,155 +1,175 @@
-Return-Path: <linux-rtc+bounces-169-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-170-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2E167DDB82
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 04:27:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59DB67DDBEE
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 05:43:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1D601C20C90
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 03:27:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EF8C2819BF
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 04:43:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FBB3ED1;
-	Wed,  1 Nov 2023 03:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D19E15B3;
+	Wed,  1 Nov 2023 04:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=carlosaurelio.net header.i=@carlosaurelio.net header.b="Gl27MAD2"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0A1ED0
-	for <linux-rtc@vger.kernel.org>; Wed,  1 Nov 2023 03:27:11 +0000 (UTC)
-X-Greylist: delayed 645 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Oct 2023 20:27:05 PDT
-Received: from r9110.ps.combzmail.jp (r9110.ps.combzmail.jp [49.212.36.116])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219B7101
-	for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 20:27:05 -0700 (PDT)
-Received: by r9110.ps.combzmail.jp (Postfix, from userid 99)
-	id D28A81891E4; Wed,  1 Nov 2023 12:16:07 +0900 (JST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 r9110.ps.combzmail.jp D28A81891E4
-To: linux-rtc@vger.kernel.org
-From: info@fc-seminar.jp
-X-Ip: 700268748711558
-X-Ip-source: k85gj7cj48dnsaziu0p6gd
-Precedence: bulk
-List-Unsubscribe: <https://regssl.combzmail.jp/d/cjzi&m=linux-rtc@vger.kernel.org>
-Subject: =?ISO-2022-JP?B?GyRCR2M8aEBsTGdFORsoQiAbJEIlVSVpJXMbKEI=?=
- =?ISO-2022-JP?B?GyRCJUElYyUkJTolNyU5JUYlYEBiTEAycRsoQg==?=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FED87F
+	for <linux-rtc@vger.kernel.org>; Wed,  1 Nov 2023 04:43:19 +0000 (UTC)
+Received: from h7.fbrelay.privateemail.com (h7.fbrelay.privateemail.com [162.0.218.230])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A037CF4
+	for <linux-rtc@vger.kernel.org>; Tue, 31 Oct 2023 21:43:14 -0700 (PDT)
+Received: from MTA-09-4.privateemail.com (mta-09.privateemail.com [198.54.127.58])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by h7.fbrelay.privateemail.com (Postfix) with ESMTPSA id 7DA75604A1
+	for <linux-rtc@vger.kernel.org>; Wed,  1 Nov 2023 00:43:12 -0400 (EDT)
+Received: from mta-09.privateemail.com (localhost [127.0.0.1])
+	by mta-09.privateemail.com (Postfix) with ESMTP id 2226F18000B4;
+	Wed,  1 Nov 2023 00:43:10 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=carlosaurelio.net;
+	s=default; t=1698813790;
+	bh=wrM4wws3GzG7Pdxz82HLUW40XAslUvqeDD096zLTAdM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Gl27MAD2uUufnxa3GVRx1s1UlYp4o4xKq3ZBVs3Ywd94D5V9TJ1b8dlmzFk93KOX/
+	 Cpz3YrP6exQCrfmup6ZK2ubm7IXVou7tiBg9ZHNrliyijquOiYRKwo2IaZtHIb1n4n
+	 jSE7lwaS6p/1mZPrsXL9ZExT3siyv5SiDwxc0AQ/TKxdlP2MUgm3VuXJAaoJe6uslr
+	 avaqjslGjETJnbdBnP7OBUu+9U562XIlkDkiR+No9KsfcENva+j4NLx/PRx9eKZbKr
+	 +1ejSVQZoYAzs3rgRgcYOiQ/q/ebcMbJJMqQLGbcX7Fb1LIDLODoLaIudSlpZnnJ1S
+	 CxmOkeIZuifOA==
+Received: from [192.168.1.10] (unknown [152.254.207.93])
+	by mta-09.privateemail.com (Postfix) with ESMTPA;
+	Wed,  1 Nov 2023 00:43:03 -0400 (EDT)
+Message-ID: <9f77191d-c3d7-4092-a754-baf96e664692@carlosaurelio.net>
+Date: Wed, 1 Nov 2023 01:43:00 -0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-2022-jp
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] dt-bindings: rtc: add pcf85053a
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ Carlos Menin <menin@carlosaurelio.net>, linux-rtc@vger.kernel.org
+Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+ Sergio Prado <sergio.prado@e-labworks.com>
+References: <20231027162044.1011951-1-menin@carlosaurelio.net>
+ <20231027162044.1011951-2-menin@carlosaurelio.net>
+ <10971a4c-ac5a-4e89-8347-96b31ccd9587@kernel.org>
+From: Carlos Aurelio <menin@carlosaurelio.net>
+In-Reply-To: <10971a4c-ac5a-4e89-8347-96b31ccd9587@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MagazineId: cjzi
-X-uId: 6761323940485767544177161044
-X-Sender: CombzMailSender
-X-Url: http://www.combzmail.jp/
-Message-Id: <20231101031618.D28A81891E4@r9110.ps.combzmail.jp>
-Date: Wed,  1 Nov 2023 12:16:07 +0900 (JST)
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-新規事業をお探しの経営者様・事業オーナー様へ
+On 28/10/2023 05:44, Krzysztof Kozlowski wrote:
+> On 27/10/2023 18:20, Carlos Menin wrote:
+>> Add YAML bindings for NXP's PCF85053A RTC chip.
+>>
+>> Signed-off-by: Carlos Menin <menin@carlosaurelio.net>
+>> Reviewed-by: Sergio Prado <sergio.prado@e-labworks.com>
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC. It might happen, that command when run on an older
+> kernel, gives you outdated entries. Therefore please be sure you base
+> your patches on recent Linux kernel.
+>
+> You missed at least devicetree list (maybe more), so this won't be
+> tested by automated tooling. Performing review on untested code might be
+> a waste of time, thus I will skip this patch entirely till you follow
+> the process allowing the patch to be tested.
+>
+> Please kindly resend and include all necessary To/Cc entries.
+>
+>> ---
+>>   .../bindings/rtc/nxp,pcf85053a.yaml           | 57 +++++++++++++++++++
+>>   1 file changed, 57 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
+>> new file mode 100644
+>> index 000000000000..80980377e27f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
+>> @@ -0,0 +1,57 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/rtc/nxp,pcf85053a.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: NXP PCF85053A Real Time Clock
+>> +
+>> +maintainers:
+>> +  - Carlos Menin <menin@carlosaurelio.net>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - nxp,pcf85053a
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  quartz-load-femtofarads:
+>> +    description:
+>> +      The quartz oscillator load capacitance.
+>> +    enum: [6000, 7000, 12500]
+>> +    default: 6000
+>> +
+>> +  quartz-drive-control:
+>> +    description:
+>> +      The quartz oscillator drive control.
+>> +    enum: [low, normal, high]
+>> +    default: normal
+>> +
+>> +  low-jitter:
+>> +    description:
+>> +      Low jitter mode.
+>> +    type: boolean
+>> +    default: false
+> Cannot be anything else.
 
+Sorry, I 'm not sure I understood, just to confirm before I resend the 
+patch, does this mean this first part of the YAML is correct?
 
-いつもお世話になります。
+>> +
+>> +allOf:
+>> +  - $ref: rtc.yaml#
+> This goes after required:
+>
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        rtc@6f {
+>> +          compatible = "nxp,pcf85053a";
+> Use 4 spaces for example indentation.
+>
+>> +          reg = <0x6f>;
+>> +        };
+>> +      };
+> Best regards,
+> Krzysztof
+>
 
+Thanks for reviewing!
 
-法人の新規事業として、リスクを抑えてスタートできる、
-フランチャイズ事業のオンライン説明会をご案内いたします。
-
-
-業界未経験／社員1名でスタートできるので
-ご興味があれば是非お申込みください。
-
-
-　　※　Zoomのウェビナー機能による発信形式のため
-　　　　視聴者のお顔やお声が表に出ることはございません。
-
-
-　　■　セミナー視聴後のアンケートで個別説明へ
-　　　　お申込みされた方には書籍をプレゼント。
-　　　　　　　　　 ▼　書籍紹介　▼
-　　　　https://www.amazon.co.jp/dp/4478114706
-　　　　―　2022年3月　ダイヤモンド社出版　―
-　　　　　　株式会社エンパワー（買取大吉 運営本部）
-　　　　　　代表 増井俊介 著
-　　　　　　「学歴なし、人脈なしなら、社長になれ!」
-
-
-　11月9日　フランチャイズ事業　オンライン説明会
-----------------------------------------------------------
-
-　　　　　　　　　全国650店舗
-　　　　 　 10年間の店舗継続率97.4%
-　　　 　　　　　　買取専門店
-　　　　　　　　―　買取大吉　―
-
-　　　　買い取り「専門」だから実現できる
-　　　　低リスク／高収益のビジネスモデル
-
-
-　　　　　　　▼  詳細・申込  ▼
-　　　https://fc-event.biz/220000dai3/
-
-　　　　　　　◆　 　提供　　 ◆
-　　　　　　　株式会社エンパワー
-　　　　　　　（買取大吉FC本部）
-
-　　日程１　：　11月  9日 （木）14:00〜14:30　※
-　　日程２　：　11月 24日 （金）14:00〜14:30　※
-　　対　象　：　新規事業をお考えの法人or個人事業主
-　　※　両日程とも内容は同じです
-
-　　　　　　　◇　コンテンツ　◇
-　　―　買い取ったあとの儲けのカラクリは？
-　　―　リサイクルショップとの違いは？
-　　―　未経験で査定はどうするのか？
-　　―　メルカリ、ヤフオクに負けているのでは？
-　　―　新規事業としての収益性・リスク・継続性は？　etc...
-
-----------------------------------------------------------
-
-
-ご紹介するのは「　買取専門店　」のフランチャイズです。
-
-
-一般的にリユース事業は買い取ってから販売するまで在庫を抱えるため
-「在庫リスク」「価格変動リスク」「資金不足リスク」といった３大リスクが伴います。
-
-
-こうしたリスクを取り除くのが、買い取った瞬間に利益が確定する「買取専門店」です。
-
-
-このビジネスモデルが受け入れられ、買取大吉は業界2位の650店舗まで拡大しました。
-
-
-しかし、まだまだ伸長するリユース市場に対して店舗が足りていないため
-一緒に取り組んでいただける加盟店を募集しています。
-
-
-本説明会にて儲けのカラクリや収益性・リスク・継続性などをお伝えしますので
-新規事業の立ち上げをお考えの方は是非ともご参加ください。
-
-
-　　日程１　：　11月  9日 （木）14:00〜14:30　※
-　　日程２　：　11月 24日 （金）14:00〜14:30　※
-　　※　どちらの日程も内容は同じです　※
-
-
-　　▼　お申込は下記URLよりお願いします　▼
-
-　 　　https://fc-event.biz/220000dai3/
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-　フランチャイズセミナー　運営事務局
-　電話：0120-891-893
-  住所：東京都中央区銀座７−１３−６
-―――――――――――――――――――――――――――――――
-　本メールのご不要な方には大変ご迷惑をおかけいたしました。
-　配信停止ご希望の方は、お手数ですが「配信不要」とご返信いただくか、
-　下記アドレスより、お手続きをお願いいたします。
-　┗　https://fc-event.biz/mail/
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Best regards,
+Carlos
 
