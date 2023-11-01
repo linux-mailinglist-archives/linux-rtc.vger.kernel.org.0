@@ -1,48 +1,47 @@
-Return-Path: <linux-rtc+bounces-174-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-175-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 190F57DE245
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 15:19:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D3CA7DE24A
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 15:22:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56D17B20E63
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 14:19:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33B501F21574
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Nov 2023 14:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E219134DF;
-	Wed,  1 Nov 2023 14:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4926F13ADA;
+	Wed,  1 Nov 2023 14:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="N5L7RROl"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="jKmW3CGj"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4692B7489;
-	Wed,  1 Nov 2023 14:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7E2134D3;
+	Wed,  1 Nov 2023 14:21:51 +0000 (UTC)
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A980DC;
-	Wed,  1 Nov 2023 07:19:36 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151EB115;
+	Wed,  1 Nov 2023 07:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
 	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
 	:Date:subject:date:message-id:reply-to;
-	bh=OCON80s5+YBfYIu8CqkppkNaABmnDO3nFsvKwtvLV2k=; b=N5L7RROlMKNHC0MTKFbiB/5ZxP
-	PT0zK4Q3Ip1YMbe8c4/sIZ+W0d3tKXM9N5XBFsihGEd1nksb4AWPgyrDqxf+T2YCzPQhoBZ67iqgJ
-	+D1SfnV/qssCq9Pu/kHQRz9LAMiVI5shaoSYbGTBS+YH9NZRY8qk9ziU03F+lDwBHwqo=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:37880 helo=pettiford)
+	bh=OCON80s5+YBfYIu8CqkppkNaABmnDO3nFsvKwtvLV2k=; b=jKmW3CGjYqjvqvQkv061BlX4aq
+	w88GulevTOno29x6tMLLgPdHUHau7teiI5GIzRbD8eOfa0Q+Xk/jGCqoDEOCFBV+bRDmdepuNPEqE
+	Cbq6EkfCnVERbaCzav+0EJch/oug7K+X36L0HMZdzQ+SBaRWMVLeHS8F0qsEn1hUYmKk=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:43426 helo=pettiford)
 	by mail.hugovil.com with esmtpa (Exim 4.92)
 	(envelope-from <hugo@hugovil.com>)
-	id 1qyC3x-0005yH-RT; Wed, 01 Nov 2023 10:19:22 -0400
-Date: Wed, 1 Nov 2023 10:19:16 -0400
+	id 1qyC6A-00062D-K3; Wed, 01 Nov 2023 10:21:39 -0400
+Date: Wed, 1 Nov 2023 10:21:34 -0400
 From: Hugo Villeneuve <hugo@hugovil.com>
-To: Hugo Villeneuve <hugo@hugovil.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Conor Dooley
- <conor@kernel.org>, a.zummo@towertech.it, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Conor Dooley <conor@kernel.org>, a.zummo@towertech.it,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
  linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, bruno.thomsen@gmail.com, Hugo Villeneuve
  <hvilleneuve@dimonoff.com>
-Message-Id: <20231101101916.259618f7e5d4abfcac2ffe9b@hugovil.com>
+Message-Id: <20231101102134.ecce883a3ccbbf76abf8013d@hugovil.com>
 In-Reply-To: <20231011182330.393f4ec10ba53c85cb09c7e8@hugovil.com>
 References: <20230802191153.952667-1-hugo@hugovil.com>
 	<20230802191153.952667-2-hugo@hugovil.com>
