@@ -1,166 +1,176 @@
-Return-Path: <linux-rtc+bounces-195-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-196-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B12B7E0333
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Nov 2023 13:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A3EE7E0427
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Nov 2023 15:02:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A19A8B20FE8
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Nov 2023 12:53:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFA96B21249
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Nov 2023 14:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C062171AB;
-	Fri,  3 Nov 2023 12:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=carlosaurelio.net header.i=@carlosaurelio.net header.b="d1bqnMWB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F4518659;
+	Fri,  3 Nov 2023 14:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557E61642F
-	for <linux-rtc@vger.kernel.org>; Fri,  3 Nov 2023 12:52:56 +0000 (UTC)
-Received: from h5.fbrelay.privateemail.com (h5.fbrelay.privateemail.com [162.0.218.228])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3427CE
-	for <linux-rtc@vger.kernel.org>; Fri,  3 Nov 2023 05:52:51 -0700 (PDT)
-Received: from MTA-12-4.privateemail.com (mta-12-1.privateemail.com [198.54.122.106])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by h5.fbrelay.privateemail.com (Postfix) with ESMTPSA id 4E28860136;
-	Fri,  3 Nov 2023 12:52:49 +0000 (UTC)
-Received: from mta-12.privateemail.com (localhost [127.0.0.1])
-	by mta-12.privateemail.com (Postfix) with ESMTP id 4F89418000A2;
-	Fri,  3 Nov 2023 08:52:47 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=carlosaurelio.net;
-	s=default; t=1699015967;
-	bh=7x6abVPdbko5LarCk/0BZn1SkuXjeT6liiRK10w8DLQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d1bqnMWBVt8/q7tRhYhjuT27rxqblzI1eR/EgXyN5SZiCLMKLC2bFJtAwN8wVNp26
-	 ZH31E2cz4DNKSKYJ0OJ/qARjq8moF6jPJYXlgAdKYbYBEZfddo4DSkdRqJJrbcKxOE
-	 uBqa8CBRFM+fJWdsYFrFTgo8nEt4m3Umukp85uv9wHSA8kY5+lN5NZ7VvhQs6UyrIA
-	 h0m7SRD4FvVi/648FHhDpRF6rZWaqHNUkNJ/Za365ZYFVXyf7GMpbMWfTMO0BjPjEq
-	 ohh7E6B8wBVHbRDpnKMYnFHEY+aK48KrjzyVAv8vkU6crXXRxdOnQNH2tAD9JbDFTa
-	 hcZDq7Sw8zmbA==
-Received: from GB2-C0476.gertec.local (unknown [187.11.35.108])
-	by mta-12.privateemail.com (Postfix) with ESMTPA;
-	Fri,  3 Nov 2023 08:52:30 -0400 (EDT)
-From: Carlos Menin <menin@carlosaurelio.net>
-To: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Cc: Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Carlos Menin <menin@carlosaurelio.net>,
-	Sergio Prado <sergio.prado@e-labworks.com>
-Subject: [PATCH v2 2/2] dt-bindings: rtc: add pcf85053a
-Date: Fri,  3 Nov 2023 09:51:06 -0300
-Message-Id: <20231103125106.78220-2-menin@carlosaurelio.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231103125106.78220-1-menin@carlosaurelio.net>
-References: <20231103125106.78220-1-menin@carlosaurelio.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55AD1862F;
+	Fri,  3 Nov 2023 14:02:07 +0000 (UTC)
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6CDD4B;
+	Fri,  3 Nov 2023 07:02:02 -0700 (PDT)
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3A38gCiZ001828;
+	Fri, 3 Nov 2023 10:01:23 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3u4wk811r8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Nov 2023 10:01:22 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 3A3E1LoD008711
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 3 Nov 2023 10:01:21 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 3 Nov 2023 10:01:20 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Fri, 3 Nov 2023 10:01:20 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 3 Nov 2023 10:01:20 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.145])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 3A3E13ht020117;
+	Fri, 3 Nov 2023 10:01:06 -0400
+From: Antoniu Miclaus <antoniu.miclaus@analog.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Alessandro Zummo
+	<a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, "Jean Delvare" <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, <linux-rtc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/2] dt-bindings: rtc: max31335: add max31335 bindings
+Date: Fri, 3 Nov 2023 16:00:25 +0200
+Message-ID: <20231103140051.43174-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: cBisYt9uOPjCeFtmhXVBTQHHxdRfnr5D
+X-Proofpoint-ORIG-GUID: cBisYt9uOPjCeFtmhXVBTQHHxdRfnr5D
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-03_12,2023-11-02_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ suspectscore=0 spamscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2310240000
+ definitions=main-2311030117
 
-Add YAML bindings for NXP's PCF85053A RTC chip.
+Document the Analog Devices MAX31335 device tree bindings.
 
-Signed-off-by: Carlos Menin <menin@carlosaurelio.net>
-Reviewed-by: Sergio Prado <sergio.prado@e-labworks.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 ---
- .../bindings/rtc/nxp,pcf85053a.yaml           | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
+changes in v5:
+ - add `adi,tc-diode` property.
+ .../devicetree/bindings/rtc/adi,max31335.yaml | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/adi,max31335.yaml
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
+diff --git a/Documentation/devicetree/bindings/rtc/adi,max31335.yaml b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
 new file mode 100644
-index 000000000000..a1fc29dd30f8
+index 000000000000..b82a8aa67428
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/rtc/nxp,pcf85053a.yaml#
++$id: http://devicetree.org/schemas/rtc/adi,max31335.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: NXP PCF85053A Real Time Clock
++title: Analog Devices MAX31335 RTC
 +
 +maintainers:
-+  - Carlos Menin <menin@carlosaurelio.net>
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++
++description:
++  Analog Devices MAX31335 I2C RTC ±2ppm Automotive Real-Time Clock with
++  Integrated MEMS Resonator.
++
++allOf:
++  - $ref: rtc.yaml#
 +
 +properties:
 +  compatible:
-+    enum:
-+      - nxp,pcf85053a
++    const: adi,max31335
 +
 +  reg:
 +    maxItems: 1
 +
-+  quartz-load-femtofarads:
-+    description:
-+      The capacitive load of the crystal, expressed in femto Farad (fF).
-+    enum: [6000, 7000, 12500]
-+    default: 12500
++  interrupts:
++    maxItems: 1
 +
-+  nxp,quartz-drive-control:
++  "#clock-cells":
 +    description:
-+      The oscillator is designed to be used with quartz with a series resistance
-+      up to 100 kOhms. This covers the typical range of 32.768 kHz quartz
-+      crystals. A low drive mode is available for low series resistance quartz
-+      (up to 60 kOhms). This reduces the current consumption. For very high
-+      series resistance quartz (up to 500 kOhms), there is a high drive mode.
-+      Current consumption increases substantially in this mode.
-+    enum: [low, normal, high]
-+    default: normal
++      RTC can be used as a clock source through its clock output pin.
++    const: 0
 +
-+  nxp,low-jitter-mode:
++  adi,tc-diode:
 +    description:
-+      If set to true, will decrease the CLK output jitter, at the cost of
-+      increasing the current consumption.
-+    type: boolean
-+    default: false
++      Select the diode configuration for the trickle charger.
++      schottky - Schottky diode in series.
++      standard+schottky - standard diode + Schottky diode in series.
++    enum: [schottky, standard+schottky]
 +
-+  nxp,clk-inverted:
++  trickle-resistor-ohms:
 +    description:
-+      Invert clock output. Normally, the low jitter mode reduces jitter on the
-+      rising edge of the output clock. If this property is set to true, then the
-+      low jitter mode will affect the falling edge of the output clock.
-+    type: boolean
-+    default: false
++      Selected resistor for trickle charger. Should be specified if trickle
++      charger should be enabled.
++    enum: [3000, 6000, 11000]
 +
 +required:
 +  - compatible
 +  - reg
 +
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+additionalProperties: false
++unevaluatedProperties: false
 +
 +examples:
 +  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
 +    i2c {
 +        #address-cells = <1>;
 +        #size-cells = <0>;
 +
-+        rtc@6f {
-+            compatible = "nxp,pcf85053a";
-+            reg = <0x6f>;
++        rtc@68 {
++            compatible = "adi,max31335";
++            reg = <0x68>;
++            pinctrl-0 = <&rtc_nint_pins>;
++            interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
++            trickle-resistor-ohms = <6000>;
++            adi,tc-diode = "schottky";
 +        };
 +    };
++...
 -- 
-2.34.1
+2.42.0
 
 
