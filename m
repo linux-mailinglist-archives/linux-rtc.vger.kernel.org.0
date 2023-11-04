@@ -1,205 +1,177 @@
-Return-Path: <linux-rtc+bounces-206-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-207-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5795D7E0C0D
-	for <lists+linux-rtc@lfdr.de>; Sat,  4 Nov 2023 00:17:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 611887E0F13
+	for <lists+linux-rtc@lfdr.de>; Sat,  4 Nov 2023 12:28:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36451B20ECF
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Nov 2023 23:17:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86CA41C20941
+	for <lists+linux-rtc@lfdr.de>; Sat,  4 Nov 2023 11:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BE2249F6;
-	Fri,  3 Nov 2023 23:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jLQHORFQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B242156DF;
+	Sat,  4 Nov 2023 11:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500BD26280
-	for <linux-rtc@vger.kernel.org>; Fri,  3 Nov 2023 23:17:41 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1B1D5A;
-	Fri,  3 Nov 2023 16:17:38 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F059920003;
-	Fri,  3 Nov 2023 23:17:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1699053457;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x9+2Ds6qHlsKkAZ8Qimij0GdkxZaoPt8iNhbBiZi5kM=;
-	b=jLQHORFQnfhLF6sIACk/BnEWzYQErzbRUEQX4AAjXrHk3ZABz3/TCBG/lpwPtbXlFhUYXe
-	lInoLK32DOG1W10Ak1XJhOClDFqwlFmCp8EdZekwAOd7rPsvFHw5NmSb1rMMPqYtYjC8J8
-	unlPnhqgHBxuFARFW5LENl3CynTN81v8AeUCGAeXGPN2bmIWMEWY9b8vfiN1/B05wfKxri
-	uNXKpNNspVQfVI4iZIx0mJrt2gWLvoPrTIIOPzTMjdrhaGJmy5F0BuGwydTZtcxjQ+D2F6
-	dgw7tl7gBYbiKtXPAEllqySA1QDXoWjsgXRJc0fU4fmL4dDKm0NS3YDuvSSPyA==
-Date: Sat, 4 Nov 2023 00:17:35 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Mia Lin <mimi05633@gmail.com>
-Cc: avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-	venture@google.com, yuenn@google.com, benjaminfair@google.com,
-	a.zummo@towertech.it, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-	KFLIN@nuvoton.com, mylin1@nuvoton.com, openbmc@lists.ozlabs.org,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/1] rtc: nuvoton: Compatible with NCT3015Y-R and
- NCT3018Y-R
-Message-ID: <20231103231735b4769ca4@mail.local>
-References: <20230913013719.8342-1-mimi05633@gmail.com>
- <20230913013719.8342-2-mimi05633@gmail.com>
- <20231103231639fd4b631c@mail.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5603D68;
+	Sat,  4 Nov 2023 11:28:47 +0000 (UTC)
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486991AA;
+	Sat,  4 Nov 2023 04:28:46 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3A48tWlC006209;
+	Sat, 4 Nov 2023 07:28:20 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3u5jv1g9y0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 04 Nov 2023 07:28:20 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 3A4BSJrg052666
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Sat, 4 Nov 2023 07:28:19 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Sat, 4 Nov 2023 07:28:18 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Sat, 4 Nov 2023 07:28:18 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Sat, 4 Nov 2023 07:28:18 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (JPALOMIN-L01.ad.analog.com [10.65.41.83] (may be forged))
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 3A4BS0Sj031918;
+	Sat, 4 Nov 2023 07:28:02 -0400
+From: Antoniu Miclaus <antoniu.miclaus@analog.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Alessandro Zummo
+	<a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, "Jean Delvare" <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, <linux-rtc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v6 1/2] dt-bindings: rtc: max31335: add max31335 bindings
+Date: Sat, 4 Nov 2023 13:27:40 +0200
+Message-ID: <20231104112752.3217-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231103231639fd4b631c@mail.local>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 4c_qXT-kmUY-K1UW_mvgzwuASM_QlEYM
+X-Proofpoint-ORIG-GUID: 4c_qXT-kmUY-K1UW_mvgzwuASM_QlEYM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-04_10,2023-11-02_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 spamscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2310240000 definitions=main-2311040096
 
-On 04/11/2023 00:16:40+0100, Alexandre Belloni wrote:
-> On 13/09/2023 09:37:19+0800, Mia Lin wrote:
-> > The NCT3015Y-R and NCT3018Y-R use the same datasheet
-> >     but have different topologies as follows.
-> > - Topology (Only 1st i2c can set TWO bit and HF bit)
-> >   In NCT3015Y-R,
-> >     rtc 1st i2c is connected to a host CPU
-> >     rtc 2nd i2c is connected to a BMC
-> >   In NCT3018Y-R,
-> >     rtc 1st i2c is connected to a BMC
-> >     rtc 2nd i2c is connected to a host CPU
-> > In order to be compatible with NCT3015Y-R and NCT3018Y-R,
-> > - In probe,
-> >   If part number is NCT3018Y-R, only set HF bit to 24-Hour format.
-> >   Else, do nothing
-> > - In set_time,
-> >   If part number is NCT3018Y-R && TWO bit is 0,
-> >      change TWO bit to 1, and restore TWO bit after updating time.
-> > 
-> > Signed-off-by: Mia Lin <mimi05633@gmail.com>
-> > ---
+Document the Analog Devices MAX31335 device tree bindings.
 
-I forgot to add, please include a changelog here, this will make my
-reviews easier (and faster).
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+---
+changes in v6:
+ - add aux-voltage-chargeable property back in the example
+ .../devicetree/bindings/rtc/adi,max31335.yaml | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/adi,max31335.yaml
 
-> >  drivers/rtc/rtc-nct3018y.c | 52 +++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 46 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
-> > index ed4e606be8e5..b006b58e15e2 100644
-> > --- a/drivers/rtc/rtc-nct3018y.c
-> > +++ b/drivers/rtc/rtc-nct3018y.c
-> > @@ -23,6 +23,7 @@
-> >  #define NCT3018Y_REG_CTRL	0x0A /* timer control */
-> >  #define NCT3018Y_REG_ST		0x0B /* status */
-> >  #define NCT3018Y_REG_CLKO	0x0C /* clock out */
-> > +#define NCT3018Y_REG_PART	0x21 /* part info */
-> >  
-> >  #define NCT3018Y_BIT_AF		BIT(7)
-> >  #define NCT3018Y_BIT_ST		BIT(7)
-> > @@ -37,10 +38,12 @@
-> >  #define NCT3018Y_REG_BAT_MASK		0x07
-> >  #define NCT3018Y_REG_CLKO_F_MASK	0x03 /* frequenc mask */
-> >  #define NCT3018Y_REG_CLKO_CKE		0x80 /* clock out enabled */
-> > +#define NCT3018Y_REG_PART_NCT3018Y	0x02
-> >  
-> >  struct nct3018y {
-> >  	struct rtc_device *rtc;
-> >  	struct i2c_client *client;
-> > +	int part_num;
-> >  #ifdef CONFIG_COMMON_CLK
-> >  	struct clk_hw clkout_hw;
-> >  #endif
-> > @@ -177,8 +180,27 @@ static int nct3018y_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> >  static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >  {
-> >  	struct i2c_client *client = to_i2c_client(dev);
-> > +	struct nct3018y *nct3018y = dev_get_drvdata(dev);
-> >  	unsigned char buf[4] = {0};
-> > -	int err;
-> > +	int err, flags;
-> > +	int restore_flags = 0;
-> > +
-> > +	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-> > +	if (flags < 0) {
-> > +		dev_dbg(&client->dev, "Failed to read NCT3018Y_REG_CTRL.\n");
-> > +		return flags;
-> > +	}
-> > +
-> > +	/* Check and set TWO bit */
-> > +	if ((nct3018y->part_num & NCT3018Y_REG_PART_NCT3018Y) && !(flags & NCT3018Y_BIT_TWO)) {
-> > +		restore_flags = 1;
-> > +		flags |= NCT3018Y_BIT_TWO;
-> > +		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> > +		if (err < 0) {
-> > +			dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL.\n");
-> > +			return err;
-> > +		}
-> > +	}
-> >  
-> >  	buf[0] = bin2bcd(tm->tm_sec);
-> >  	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SC, buf[0]);
-> > @@ -212,6 +234,18 @@ static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> >  		return -EIO;
-> >  	}
-> >  
-> > +	/* Restore TWO bit */
-> > +	if (restore_flags) {
-> > +		if (nct3018y->part_num & NCT3018Y_REG_PART_NCT3018Y)
-> > +			flags &= ~NCT3018Y_BIT_TWO;
-> > +
-> > +		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> > +		if (err < 0) {
-> > +			dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL.\n");
-> > +			return err;
-> > +		}
-> > +	}
-> > +
-> >  	return err;
-> >  }
-> >  
-> > @@ -479,11 +513,17 @@ static int nct3018y_probe(struct i2c_client *client)
-> >  		dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is set\n", __func__);
-> >  	}
-> >  
-> > -	flags = NCT3018Y_BIT_TWO;
-> > -	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> > -	if (err < 0) {
-> > -		dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
-> > -		return err;
-> > +	nct3018y->part_num = i2c_smbus_read_byte_data(client, NCT3018Y_REG_PART);
-> > +	if (nct3018y->part_num < 0) {
-> > +		dev_dbg(&client->dev, "Failed to read NCT3018Y_REG_PART.\n");
-> > +		return nct3018y->part_num;
-> > +	} else if (nct3018y->part_num & NCT3018Y_REG_PART_NCT3018Y) {
-> 
-> This is a weird way to check as this will accept any value of
-> NCT3018Y_REG_PART as long as bit 1 is set, is this really what you want?
-> 
-> > +		flags = NCT3018Y_BIT_HF;
-> > +		err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-> > +		if (err < 0) {
-> > +			dev_dbg(&client->dev, "Unable to write NCT3018Y_REG_CTRL.\n");
-> > +			return err;
-> > +		}
-> >  	}
-> >  
-> >  	flags = 0;
-> > -- 
-> > 2.17.1
-> > 
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
+diff --git a/Documentation/devicetree/bindings/rtc/adi,max31335.yaml b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
+new file mode 100644
+index 000000000000..0125cf6727cc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/adi,max31335.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX31335 RTC
++
++maintainers:
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++
++description:
++  Analog Devices MAX31335 I2C RTC ±2ppm Automotive Real-Time Clock with
++  Integrated MEMS Resonator.
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    const: adi,max31335
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  "#clock-cells":
++    description:
++      RTC can be used as a clock source through its clock output pin.
++    const: 0
++
++  adi,tc-diode:
++    description:
++      Select the diode configuration for the trickle charger.
++      schottky - Schottky diode in series.
++      standard+schottky - standard diode + Schottky diode in series.
++    enum: [schottky, standard+schottky]
++
++  trickle-resistor-ohms:
++    description:
++      Selected resistor for trickle charger. Should be specified if trickle
++      charger should be enabled.
++    enum: [3000, 6000, 11000]
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@68 {
++            compatible = "adi,max31335";
++            reg = <0x68>;
++            pinctrl-0 = <&rtc_nint_pins>;
++            interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
++            aux-voltage-chargeable = <1>;
++            trickle-resistor-ohms = <6000>;
++            adi,tc-diode = "schottky";
++        };
++    };
++...
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.42.0
+
 
