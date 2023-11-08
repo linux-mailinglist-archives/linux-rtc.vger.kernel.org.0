@@ -1,166 +1,92 @@
-Return-Path: <linux-rtc+bounces-241-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-242-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF50F7E57FA
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 14:27:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EA767E5A4F
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 16:44:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A64AB281227
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 13:27:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2E9EB20D5B
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 15:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCF71945B;
-	Wed,  8 Nov 2023 13:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFBF30352;
+	Wed,  8 Nov 2023 15:44:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PKKwar93"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="coG2U3io"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1748919451;
-	Wed,  8 Nov 2023 13:27:50 +0000 (UTC)
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B94F1BFC;
-	Wed,  8 Nov 2023 05:27:49 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-45ef8c21e8aso1572649137.1;
-        Wed, 08 Nov 2023 05:27:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699450068; x=1700054868; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2aO1ctuOAgiwaAMkZHyV4dmKWIc2NuQImrqw1sRY6dY=;
-        b=PKKwar93s6vd61HowxYoZfR1gmNzmuc1bVoglgqUDA90OK0MzwAM5rT1p3HwhHP9my
-         WaNMK6kERrJ90VDzVjI7iritgUsiQ3R2nkCOhLqgYQ53uCuEm6f/4BJT6ts5YldUUZla
-         KPHFTuIQtYAov1SY/5OPW7MtDxrpRDoyGxJqNh/WP1XxqfSc+OcwjpxxGbcYgIh4aePK
-         nv03hSO8QCGVkaAHapF4OgXKy13JYwbpISjm9sGUCHcKxB8uAxd0iZhOgRUJcmhIhQ4r
-         Mu10eLNP3ORmhMNditag0HjUQ/YtT18LWiw+md01ktPrtpeZES7p4gVk7EwRUjVR+74j
-         JcBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699450068; x=1700054868;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2aO1ctuOAgiwaAMkZHyV4dmKWIc2NuQImrqw1sRY6dY=;
-        b=wk7OXFeywWzCNgptmwVlGishpNQydjOzDll8/RpspftBbLvjzhZDUsitaEQkxpeM5l
-         T3rFeWrsBO80cigysHzA1inZ9MZ7NuK7k8kAlqDPh7clc3zAYoTWNfG8K3rCd42XeXxL
-         CNWGqAVIY9wzbvNfqDw+PXYC+n/6VkKzogy5UYA1pNYoE6pYOT4R72gyUOLTmGHXJeMG
-         NObctOZPPJQspJAlyiUnFP0oHoXsqDsbjagy0am+zjeAb+g+egbPPPrHzoW9TQxgQ227
-         AGXUwir1oEukAatN15MgGlVjchs2G72poebGWOGA2NWXvkrkzkUkPLv5uuckOA32Kbty
-         +aAA==
-X-Gm-Message-State: AOJu0YyJLf8hmZhx4arBVlM/LHS30P+UyZlJj/DXarupfBQ2UiCSmXNY
-	U49jV5pCYehegEUXTwmcbuzYN7M/9Q6NrhV9b/4=
-X-Google-Smtp-Source: AGHT+IECittYtjWU1L+BZtshd86+NTZrnIQlq2JL7WzMlisn5WjMLgavfIgIQtmfP45xuDoRkfOSP47k4ChEuBNw2Qg=
-X-Received: by 2002:a67:ef43:0:b0:45f:18:b2d6 with SMTP id k3-20020a67ef43000000b0045f0018b2d6mr1588218vsr.5.1699450068584;
- Wed, 08 Nov 2023 05:27:48 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D85199A5;
+	Wed,  8 Nov 2023 15:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCA4C433C8;
+	Wed,  8 Nov 2023 15:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699458256;
+	bh=D4tT6+i1rkJ7YbrSU1uZeXHZViIJNDdGOZ3PS+ua+eI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=coG2U3ioZRPJmjWSnMc9Qxh/kZ4r+JirkQrvPr0PBoerd8w4LHg5cHwMEOBbhKSq8
+	 gf7ygTXs3OwSxY04z0d/X4M4DlJHEZjwlfqDHRcrQI/Mu/JfsUlkMreF+tsPB8q2r1
+	 41W3Qzyn6cebaUkMvfWZdqdyNdNDpiQ/hPLOQnXcHggNUufWNRjSsr0QVaeV3o39nd
+	 vuLRyZrG0SiNYtAKWbaX//0Mff8HJeVHRGguBZsYcaw255oHvHRRC8SnxrC2G6ayqG
+	 R/qXPTipKUZ3isTSXxlF3I6xqXfFq8GWg8r4wYDOJ5vmCsd9rvVZqe3BWBSkYYGHJO
+	 5LIaxa+ZRl5HA==
+Date: Wed, 8 Nov 2023 15:44:11 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Romain Perier <romain.perier@gmail.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Daniel Palmer <daniel@0x0f.com>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: rtc: Add Mstar SSD202D RTC
+Message-ID: <20231108-emergency-poker-8be712fdbf8e@spud>
+References: <20230913151606.69494-1-romain.perier@gmail.com>
+ <20230913151606.69494-3-romain.perier@gmail.com>
+ <20230913-depress-bootlace-6b88bfd83966@spud>
+ <CABgxDoK2T3xkKYDVeqRuDXMHfVEJcRkkBOBBkMJ5=XUv9Y5MsQ@mail.gmail.com>
+ <20230914-coagulant-unbroken-2461d32274a1@wendy>
+ <CABgxDoJhfKQesDtV3WJ=C-DPB8P+0LDmzbY9Zy909yr3v1FQKQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230913151606.69494-1-romain.perier@gmail.com>
- <20230913151606.69494-3-romain.perier@gmail.com> <20230913-depress-bootlace-6b88bfd83966@spud>
- <CABgxDoK2T3xkKYDVeqRuDXMHfVEJcRkkBOBBkMJ5=XUv9Y5MsQ@mail.gmail.com> <20230914-coagulant-unbroken-2461d32274a1@wendy>
-In-Reply-To: <20230914-coagulant-unbroken-2461d32274a1@wendy>
-From: Romain Perier <romain.perier@gmail.com>
-Date: Wed, 8 Nov 2023 14:27:37 +0100
-Message-ID: <CABgxDoJhfKQesDtV3WJ=C-DPB8P+0LDmzbY9Zy909yr3v1FQKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: rtc: Add Mstar SSD202D RTC
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Conor Dooley <conor@kernel.org>, Alessandro Zummo <a.zummo@towertech.it>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Daniel Palmer <daniel@0x0f.com>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MvonH0szEPgz/Evd"
+Content-Disposition: inline
+In-Reply-To: <CABgxDoJhfKQesDtV3WJ=C-DPB8P+0LDmzbY9Zy909yr3v1FQKQ@mail.gmail.com>
+
+
+--MvonH0szEPgz/Evd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Wed, Nov 08, 2023 at 02:27:37PM +0100, Romain Perier wrote:
+> Hi,
+>=20
+> Alexandre seems to be okay with the current (merged) dt-binding, what
+> do I do ? I can send a v3 for trivial-rtc.yaml that's not a problem
+> for me but both of you seem to disagree :)
 
-Alexandre seems to be okay with the current (merged) dt-binding, what
-do I do ? I can send a v3 for trivial-rtc.yaml that's not a problem
-for me but both of you seem to
-be disagree :)
+Meh, I wouldn't waste your time moving it.
 
-Regards,
-Romain
+--MvonH0szEPgz/Evd
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Le jeu. 14 sept. 2023 =C3=A0 10:28, Conor Dooley
-<conor.dooley@microchip.com> a =C3=A9crit :
->
-> On Thu, Sep 14, 2023 at 09:08:52AM +0200, Romain Perier wrote:
-> > Le mer. 13 sept. 2023 =C3=A0 20:30, Conor Dooley <conor@kernel.org> a =
-=C3=A9crit :
-> > >
-> > > On Wed, Sep 13, 2023 at 05:16:05PM +0200, Romain Perier wrote:
-> > > > Add YAML bindings for Mstar SSD202D RTC.
-> > > >
-> > > > Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> > > > ---
-> > > >  .../bindings/rtc/mstar,ssd202d-rtc.yaml       | 35 +++++++++++++++=
-++++
-> > > >  1 file changed, 35 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,ssd=
-202d-rtc.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/rtc/mstar,ssd202d-rt=
-c.yaml b/Documentation/devicetree/bindings/rtc/mstar,ssd202d-rtc.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..4c1f22ef5a2c
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/rtc/mstar,ssd202d-rtc.yaml
-> > > > @@ -0,0 +1,35 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/rtc/mstar,ssd202d-rtc.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Mstar SSD202D Real Time Clock
-> > > > +
-> > > > +maintainers:
-> > > > +  - Daniel Palmer <daniel@0x0f.com>
-> > > > +  - Romain Perier <romain.perier@gmail.com>
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: rtc.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    enum:
-> > > > +      - mstar,ssd202d-rtc
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > >
-> >
-> > Hi,
-> >
-> > > So, this seems fine to me in isolation, but isn't this now the sort o=
-f
-> > > thing that can be documented in trivial-rtc.yaml?
-> > > Its only got compatible & reg, which seems to fit the bill for that.
-> > >
-> >
-> > With the current state, it might make sense. However, currently, the
-> > RTC hw block is mostly
-> > reverse-engineered, the driver is not complete yet, things like
-> > external irq or wakeup irq might arrive later (once we know how it is
-> > wired up and used).
-> > So the content of the dt-bindings might change and differ from a
-> > simple "compatible & reg" requirement.
->
-> It's always possible to move from that to a fully fledged binding at a
-> later date. re: interrupts, trivial-rtc permits a single interrupt, so
-> it'd still be suitable if the device only has one.
->
-> Thanks,
-> Conor.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZUusywAKCRB4tDGHoIJi
+0ubVAQCtdcyWkLpZZY7E1pDBQfevVzzlp/4iTySs7rChMJPoywD/bMfx52E1fORA
+V14y5Vy0ZyWc7eL5IN6HIpKsQvpeBAY=
+=jMoL
+-----END PGP SIGNATURE-----
+
+--MvonH0szEPgz/Evd--
 
