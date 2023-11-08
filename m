@@ -1,63 +1,63 @@
-Return-Path: <linux-rtc+bounces-222-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-223-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42AC47E539F
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 11:44:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3BF57E53A6
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 11:44:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93A83B20EB4
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 10:44:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B40CB20D3C
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Nov 2023 10:44:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE4A12E54;
-	Wed,  8 Nov 2023 10:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB38D12B7C;
+	Wed,  8 Nov 2023 10:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hY5KIDh5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iJ1GAqoB"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4651411C93
-	for <linux-rtc@vger.kernel.org>; Wed,  8 Nov 2023 10:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33578125C6
+	for <linux-rtc@vger.kernel.org>; Wed,  8 Nov 2023 10:44:05 +0000 (UTC)
 Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6975C1BE1
-	for <linux-rtc@vger.kernel.org>; Wed,  8 Nov 2023 02:44:00 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-4084b0223ccso48496395e9.2
-        for <linux-rtc@vger.kernel.org>; Wed, 08 Nov 2023 02:44:00 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468B31BF2
+	for <linux-rtc@vger.kernel.org>; Wed,  8 Nov 2023 02:44:04 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40806e4106dso3791775e9.1
+        for <linux-rtc@vger.kernel.org>; Wed, 08 Nov 2023 02:44:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699440239; x=1700045039; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699440242; x=1700045042; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yAjfTJh92uvbCJqXeCi670gcjaUuY+h2OqROwS33rLc=;
-        b=hY5KIDh5hsZxVwhLfTKBUVrVz5npia1F21b068Tw9AAURGCX1u2TucQihDQyEphwKq
-         6vowusYI3F+q704E+HkI2qSiF/C7Ky6UDmQ3G4BsFMN5YxySiQLixsz2Oa3LMqP0H5tl
-         kDNboMWeFGBl6YPByRE/aNR7U2s6Fsz3SVxb/r7ZRugVlhUHjEcmTynBagwLFvMnjofc
-         5hFMHeOMRNnbIDcuMMEI4iB/y2DyynOl72Eku3KNTht8vXj36o2akDp49SCYe8jp0kfi
-         24kG+NIhCsuaVDRZtNI8lo3UQAypL72itK0eqJc0UTpUXEfJPLTKsTH9/dIC0uYlMDmX
-         DPTA==
+        bh=1RgzV0IV23WRll6q2E++ToH69k3tzXfaVshdvzq8RwE=;
+        b=iJ1GAqoBLn/tXaswz46AAySJ+xX9knDU4AGexMC+lunDeabwtIpxVGP41vbswH6CJ6
+         zDo0iX70sH7KcDkArphIMOrL5yX5gPx3KBQC+mSKInHDn0DOqu7584eWKfLBTK9cu7J/
+         NAtdXISNz62cO0nQRNdz8wSv6+qVVJi833Bqk86QSJlFDxGolD2s6INLUDtGOTBzckZ1
+         J54uzjmFH6/8xxX5LRCPe9kp131X3zCORFoeBe5iIbQ1m/oSfrlzbjFEQVQD3AftGj6K
+         a1xwqEQivTh0PtDGXhJOCrF+DKBlTHOGOozm5SbrhwayKorj46hfOnTIl7rpHzNuh0O9
+         g17Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699440239; x=1700045039;
+        d=1e100.net; s=20230601; t=1699440242; x=1700045042;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yAjfTJh92uvbCJqXeCi670gcjaUuY+h2OqROwS33rLc=;
-        b=qXtPSqaV70KgBHTGsrigewk0uBF095XFNUifPOojAFUDgME+OPL3Co4bVNaq2udEJQ
-         P4FQQkEdfcCT39W4LYvsuMlGoLOWtfKoCb718EmURMmPcU25sgv5tOY9zVrGT7NO5M3+
-         qaq4iET4tsnO7JbA8UCOljX8ND9OJPv217At+tJ6pvaJV8v0Rzd7JsoXQOMTqnUeVpxW
-         qWkMuVHnRQKzBIP7eEeszdIggSXdseBs0hmQfZj02qDw7Tp2NUtcDf/mhk+YcrdmHyMw
-         kUbkM18zmXLT5XHbtwXjfRc8jpwM7Q1XZpyJD7Mp9UN57XCOc9DE6u0AIIVWbb/i5JRD
-         n1WQ==
-X-Gm-Message-State: AOJu0YzOvci7e2WTetOfheKR87NDN2VQruw9A/KdIe9xIBV86k8SjafZ
-	m3t7wMhb/evjBKy3VwL7zIrAtA==
-X-Google-Smtp-Source: AGHT+IHIdIU7uiCUR0CHcHyVefUtJ+PHqY1ijnjV387qyUxWKGaH50797907TE+JsncllGcRuZSEtA==
-X-Received: by 2002:a05:600c:3104:b0:406:3fda:962c with SMTP id g4-20020a05600c310400b004063fda962cmr1471144wmo.31.1699440238661;
-        Wed, 08 Nov 2023 02:43:58 -0800 (PST)
+        bh=1RgzV0IV23WRll6q2E++ToH69k3tzXfaVshdvzq8RwE=;
+        b=mfujJ3zNGBZDosrFuwinvy+HgxgY112Rf102scEyMk59yXMOafXzNTCd0O3shWDfbq
+         02BQf8VMaHooazMGr6c7vKe5zXOakg07QnmeTJF0KqG3JijQG61/SNtekFMCaKnYAlWK
+         fAD+8s2byGUmPZNgB4BiK+Daq/TkYXTCtPjewEwcDD5C9odZu65AOeV9i7k8R9UUYGhq
+         8ftI6ZFtpHDI5/jEgj0pEYum7F01bR4uZm3KJpSiKIYozGmGu47PLO6hPasW/zhcPdJy
+         F+paQplLSOZs16v+Y6bcGY2H49ofvJAs3NSbDQy+NQ6o1eAOtVyV2OAF31BE57WKR7Lb
+         iklA==
+X-Gm-Message-State: AOJu0YxPHvHKD7AKZkA0ueSo9QRDkug5XOKpxIwhrTmR0Vf1Zvq+ryDb
+	EHFTmy0FPYSEt6FRY6xLWaGfNg==
+X-Google-Smtp-Source: AGHT+IHPP+/pDFxlh9Psi/Jca/likZzzh/njk10M+c59wDGroA/smDDkbgNQyV6CWfAIY9RQJ9LQTQ==
+X-Received: by 2002:a05:600c:474a:b0:405:3924:3cad with SMTP id w10-20020a05600c474a00b0040539243cadmr1830807wmo.15.1699440242620;
+        Wed, 08 Nov 2023 02:44:02 -0800 (PST)
 Received: from krzk-bin.. ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id fj12-20020a05600c0c8c00b004094c5d92bdsm19377377wmb.31.2023.11.08.02.43.55
+        by smtp.gmail.com with ESMTPSA id fj12-20020a05600c0c8c00b004094c5d92bdsm19377377wmb.31.2023.11.08.02.43.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Nov 2023 02:43:58 -0800 (PST)
+        Wed, 08 Nov 2023 02:44:02 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: David Airlie <airlied@gmail.com>,
 	Daniel Vetter <daniel@ffwll.ch>,
@@ -101,9 +101,9 @@ To: David Airlie <airlied@gmail.com>,
 	alsa-devel@alsa-project.org,
 	linux-sound@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 01/17] dt-bindings: hwinfo: samsung,exynos-chipid: add specific compatibles for existing SoC
-Date: Wed,  8 Nov 2023 11:43:27 +0100
-Message-Id: <20231108104343.24192-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 02/17] dt-bindings: i2c: exynos5: add specific compatibles for existing SoC
+Date: Wed,  8 Nov 2023 11:43:28 +0100
+Message-Id: <20231108104343.24192-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
 References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
@@ -132,37 +132,44 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 I propose to take the patch through Samsung SoC (me). See cover letter
 for explanation.
 ---
- .../bindings/hwinfo/samsung,exynos-chipid.yaml  | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml | 10 +++++++++-
+ .../devicetree/bindings/soc/samsung/exynos-usi.yaml    |  2 +-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwinfo/samsung,exynos-chipid.yaml b/Documentation/devicetree/bindings/hwinfo/samsung,exynos-chipid.yaml
-index 95cbdcb56efe..45f3d468db7c 100644
---- a/Documentation/devicetree/bindings/hwinfo/samsung,exynos-chipid.yaml
-+++ b/Documentation/devicetree/bindings/hwinfo/samsung,exynos-chipid.yaml
-@@ -11,9 +11,20 @@ maintainers:
- 
- properties:
-   compatible:
--    enum:
--      - samsung,exynos4210-chipid
--      - samsung,exynos850-chipid
-+    oneOf:
-+      - enum:
-+          - samsung,exynos4210-chipid
-+          - samsung,exynos850-chipid
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+index 3e52a0db6c41..c1f5d2cb7709 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+@@ -25,7 +25,15 @@ properties:
+           - samsung,exynos5250-hsi2c    # Exynos5250 and Exynos5420
+           - samsung,exynos5260-hsi2c    # Exynos5260
+           - samsung,exynos7-hsi2c       # Exynos7
+-          - samsung,exynosautov9-hsi2c  # ExynosAutoV9 and Exynos850
++          - samsung,exynosautov9-hsi2c
 +      - items:
 +          - enum:
-+              - samsung,exynos5433-chipid
-+              - samsung,exynos7-chipid
-+          - const: samsung,exynos4210-chipid
++              - samsung,exynos5433-hsi2c
++          - const: samsung,exynos7-hsi2c
 +      - items:
 +          - enum:
-+              - samsung,exynos7885-chipid
-+              - samsung,exynosautov9-chipid
-+          - const: samsung,exynos850-chipid
++              - samsung,exynos850-hsi2c
++          - const: samsung,exynosautov9-hsi2c
+       - const: samsung,exynos5-hsi2c    # Exynos5250 and Exynos5420
+         deprecated: true
  
-   reg:
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+index a6836904a4f8..5b7ab69546c4 100644
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+@@ -155,7 +155,7 @@ examples:
+         };
+ 
+         hsi2c_0: i2c@13820000 {
+-            compatible = "samsung,exynosautov9-hsi2c";
++            compatible = "samsung,exynos850-hsi2c", "samsung,exynosautov9-hsi2c";
+             reg = <0x13820000 0xc0>;
+             interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_HIGH>;
+             #address-cells = <1>;
 -- 
 2.34.1
 
