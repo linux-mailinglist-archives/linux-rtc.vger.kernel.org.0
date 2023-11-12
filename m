@@ -1,158 +1,100 @@
-Return-Path: <linux-rtc+bounces-288-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-289-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23B557E8CE9
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Nov 2023 22:33:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E431E7E910A
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Nov 2023 14:50:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6E6280DF6
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Nov 2023 21:33:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 235F82809B3
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Nov 2023 13:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C111DA5E;
-	Sat, 11 Nov 2023 21:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562F08BF4;
+	Sun, 12 Nov 2023 13:50:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoWDJ6Uf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/3hFxBb"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3019D1DA38;
-	Sat, 11 Nov 2023 21:33:46 +0000 (UTC)
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2125430CF;
-	Sat, 11 Nov 2023 13:33:44 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-408382da7f0so25426505e9.0;
-        Sat, 11 Nov 2023 13:33:44 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F521170B;
+	Sun, 12 Nov 2023 13:50:01 +0000 (UTC)
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE3E2688;
+	Sun, 12 Nov 2023 05:50:00 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6ce31c4a653so2174131a34.3;
+        Sun, 12 Nov 2023 05:50:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699738422; x=1700343222; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BjJpwKGCecxdkQ5LjdaCff64J4ZeBO10oL7F7MwcVn4=;
-        b=SoWDJ6UfBqwi53zUN3lqwjEzqeoNaEv5zsc4CMeWzz/pa4MGPZdI9VOIJcxPXDIBXK
-         4ROP0Y0M+5dKmB770QtNeBIstJv2T2waq9KvTEA62oWBNLEK3tn6EpFOzyw9GGtWBiLl
-         +8vMVriKMxML9XTHzs99pBrGIJ2pgUCzNsC/krpkJ4DW+67LIIV033QhiAk/h407sekN
-         7dgneR81A4ZJ6qzpDw/G/X3nhtSAj4wbdrjGmNn7/etm16KaC2w2VT3uteyhr9X8XKNo
-         VPPLSZOuhkiIuszK4PUfU7/99L+ack9ienSwmJqXLSvM4HY0Dmhy8QMLdcAI/ce86wQO
-         Tkrg==
+        d=gmail.com; s=20230601; t=1699797000; x=1700401800; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JB2I+B+rYFLkS4fe+E3Z3AcXhS19RY8fRv5WzyVTB9U=;
+        b=k/3hFxBblLi/ExgW2C2/RCt42RHKHZncdgAPvH2tm/IFmiB3L6nZtu8x5sPI5G0kyk
+         Yys1wZ6EBmSXp4JWz7B0LKqoIPgKh2Z8G9/X5q5/fx5Xp4HwgtTx0HX06peAqNsL6uUA
+         jFWDudx4FHu46GcJR3MD2yT+H+iY2OAT5WPkRFBSVtl8tUYK2alczriZCSz9RnG6ofIN
+         hRbf/9TK+HCEezNH32SpWCAKOHoJbqqWyG+aDx8b/ZtXhfGKMvvmcWydJDcHsDO9dHiE
+         ugpDn4sSDmUCLpnTgWtUbLr7SQkbgilSg4dv+x4hYtC+eyH6G3VM02bnpOOhiDmVAT8d
+         LacA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699738422; x=1700343222;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BjJpwKGCecxdkQ5LjdaCff64J4ZeBO10oL7F7MwcVn4=;
-        b=Hybfyddn3YmL+/eG1Hy+/BMvI3TvTEEYmHeNCUtg5U2fRYWSBljdO3ZgK1vMAd11wk
-         lK04hoaBRwRdCtkCZmUbRh2k307tlfFi5piLK1vfsZRCpSTfXgK31v9T7aJhXh8+a9gy
-         MW/KQyohXQqn1yD4S57z5WCrpWaw6jC/kp8b30IPQqrAV6Fs8DcGN6SILyCsaVNX6tEb
-         uffx9UByCp04rFBnBtOBL6BLTxgMGkm4j6tbSRWvxffFkBv7QuMZVeGtZBm3VZO9VEpV
-         /KnoSMS9k+3kGx8Xwxmr4g7S8Qn76qAItG7IWvjUZv16LtI3qdLTk2QWYWKKdLONWuql
-         P/IA==
-X-Gm-Message-State: AOJu0YwoZRU81bKYCH1So5JLMZQuMV2nYYu4IAh/NCi/ynapwAdf0Thl
-	WteHhhvVGc7pI36hlmTi4/A=
-X-Google-Smtp-Source: AGHT+IGcspAIBmQE8uECroiT5zYPxAfvcuIKjKOjZDZOhwNchFn+oYO8zOgLHmFyk1hPD+Lg8347oA==
-X-Received: by 2002:a05:600c:5121:b0:408:57bb:ef96 with SMTP id o33-20020a05600c512100b0040857bbef96mr2147252wms.30.1699738422278;
-        Sat, 11 Nov 2023 13:33:42 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id be14-20020a05600c1e8e00b00401b242e2e6sm8935242wmb.47.2023.11.11.13.33.40
+        d=1e100.net; s=20230601; t=1699797000; x=1700401800;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JB2I+B+rYFLkS4fe+E3Z3AcXhS19RY8fRv5WzyVTB9U=;
+        b=eQa781wm7lEqkU3QhGMA4tTM5VUGTC1komDqcdFva6r38Ar9Lkq5OrZ/sFl3UoNG3H
+         a7yJLKdmkYyuaLZBo5wBBG41nyldjvicW/SIfm66XTTBynxKFQW54JGGKM3GDsjWhmn/
+         7/k/DiapZyq64LxXozKxNh6EMz3DT1iShaH0MK+ps/8Y9XggVBYwWzd6WQSohS00mWpo
+         NviInI5v2BXZWakWemWBXAnPD6Hjadf9eMnz+mBeb2OYjOcEp+cZ/eCWtgf3DKOW/9UO
+         FdExIWhUzDEL3jmgh9XQ4QPnruKGkKxKjBmwuY0xRR1alHMrE5sD4u3oiojB2tyA+kxF
+         JNdw==
+X-Gm-Message-State: AOJu0Yz91NTZI2VlvQoGrapQAa+K3zulkBrdXCWeLAsYeWWJ/H6T6WnJ
+	Y1k0k3ntL5UGbXIihN+KmCzN0ifPx5g=
+X-Google-Smtp-Source: AGHT+IE47XF45kXA0ihvXDA4astRGQHI6+R4GExIHLFZ33T4m3r1jhFXaC1lvxd5ruxEiOux5/TdhQ==
+X-Received: by 2002:a9d:62d4:0:b0:6c1:7927:6550 with SMTP id z20-20020a9d62d4000000b006c179276550mr5393270otk.2.1699797000239;
+        Sun, 12 Nov 2023 05:50:00 -0800 (PST)
+Received: from atom0118 ([2405:201:6815:d829:c9ab:5d66:b313:f881])
+        by smtp.gmail.com with ESMTPSA id j191-20020a6380c8000000b00578b8fab907sm2693829pgd.73.2023.11.12.05.49.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Nov 2023 13:33:41 -0800 (PST)
-Message-ID: <c49f77492cacc5a30079720af58a9f2fca761609.camel@gmail.com>
-Subject: Re: [PATCH v3 07/42] soc: Add SoC driver for Cirrus ep93xx
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>, Lennert Buytenhek
- <kernel@wantstofly.org>, Russell King <linux@armlinux.org.uk>, Lukasz
- Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
- Golaszewski <brgl@bgdev.pl>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>,  Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Daniel Lezcano
- <daniel.lezcano@linaro.org>,  Thomas Gleixner <tglx@linutronix.de>,
- Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
-  Guenter Roeck <linux@roeck-us.net>, Sebastian Reichel <sre@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>, Mark
- Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>, Miquel Raynal
- <miquel.raynal@bootlin.com>,  Richard Weinberger <richard@nod.at>, Vignesh
- Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, Sergey
- Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,  Jaroslav Kysela
- <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Michael Peters
- <mpeters@embeddedts.com>, Kris Bahnsen <kris@embeddedts.com>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org, 
- linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
- netdev@vger.kernel.org,  dmaengine@vger.kernel.org,
- linux-mtd@lists.infradead.org,  linux-ide@vger.kernel.org,
- linux-input@vger.kernel.org,  alsa-devel@alsa-project.org
-Date: Sat, 11 Nov 2023 22:33:38 +0100
-In-Reply-To: <ZLqSo6B5cJXVRJS/@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
-	 <20230605-ep93xx-v3-7-3d63a5f1103e@maquefel.me>
-	 <ZLqSo6B5cJXVRJS/@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+        Sun, 12 Nov 2023 05:49:59 -0800 (PST)
+Date: Sun, 12 Nov 2023 19:19:53 +0530
+From: Atul Kumar Pant <atulpant.linux@gmail.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, shuah@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] selftests: rtc: Fixes rtctest error handling.
+Message-ID: <20231112134953.GA11910@atom0118>
+References: <20230817091401.72674-1-atulpant.linux@gmail.com>
+ <20230923173652.GC159038@atom0118>
+ <20231007154318.GC20160@atom0118>
+ <22df3ecb-488c-4d58-8efe-4638fa3d614b@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22df3ecb-488c-4d58-8efe-4638fa3d614b@linuxfoundation.org>
 
-Hello Andy,
+On Tue, Nov 07, 2023 at 02:27:35PM -0700, Shuah Khan wrote:
+> On 10/7/23 09:43, Atul Kumar Pant wrote:
+> > On Sat, Sep 23, 2023 at 11:06:58PM +0530, Atul Kumar Pant wrote:
+> > > On Thu, Aug 17, 2023 at 02:44:01PM +0530, Atul Kumar Pant wrote:
+> > > > Adds a check to verify if the rtc device file is valid or not
+> > > > and prints a useful error message if the file is not accessible.
+> > > > 
+> > > > Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+> > > > ---
+> 
+> 
+> Sorry for the delay. I will pick this up for the next rc.
+> 
+> thanks,
+> -- Shuah
 
-On Fri, 2023-07-21 at 17:13 +0300, Andy Shevchenko wrote:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_lock_irqsave(&ep93xx_sw=
-lock, flags);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_read(map, EP93XX_SYSC=
-ON_DEVCFG, &val);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val &=3D ~clear_bits;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val |=3D set_bits;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(map, EP93XX_SYS=
-CON_SWLOCK, EP93XX_SWLOCK_MAGICK);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(map, EP93XX_SYS=
-CON_DEVCFG, val);
->=20
-> Is this sequence a must?
-> I.o.w. can you first supply magic and then update devcfg?
->=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_unlock_irqrestore(&ep93=
-xx_swlock, flags);
->=20
-> ...
->=20
-> > +void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int reg,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int mask, unsigned int =
-val)
-> > +{
->=20
-> Same Q as above.
-
-EP93xx User Manual [1] has most verbose description of SWLock for ADC
-block:
-"Writing 0xAA to this register will unlock all locked registers until the
-next block access. The ARM lock instruction prefix should be used for the
-two consequtive write cycles when writing to locked chip registers."
-
-One may conclude that RmW (two accesses to the particular block) sequence
-is not appropriate.
-
-[1]=C2=A0https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.=
-pdf=20
-
---=20
-Alexander Sverdlin.
-
+	Thanks Shuah
 
