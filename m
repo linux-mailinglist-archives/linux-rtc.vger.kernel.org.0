@@ -1,100 +1,133 @@
-Return-Path: <linux-rtc+bounces-289-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-290-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E431E7E910A
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Nov 2023 14:50:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C68ED7E999B
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Nov 2023 11:00:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 235F82809B3
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Nov 2023 13:50:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 021591C20921
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Nov 2023 10:00:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562F08BF4;
-	Sun, 12 Nov 2023 13:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A15311BDF7;
+	Mon, 13 Nov 2023 10:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/3hFxBb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gxt6jNL1"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F521170B;
-	Sun, 12 Nov 2023 13:50:01 +0000 (UTC)
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE3E2688;
-	Sun, 12 Nov 2023 05:50:00 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6ce31c4a653so2174131a34.3;
-        Sun, 12 Nov 2023 05:50:00 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074FF1C285;
+	Mon, 13 Nov 2023 10:00:31 +0000 (UTC)
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8473010D;
+	Mon, 13 Nov 2023 02:00:27 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-66d0ceba445so22074936d6.0;
+        Mon, 13 Nov 2023 02:00:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699797000; x=1700401800; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JB2I+B+rYFLkS4fe+E3Z3AcXhS19RY8fRv5WzyVTB9U=;
-        b=k/3hFxBblLi/ExgW2C2/RCt42RHKHZncdgAPvH2tm/IFmiB3L6nZtu8x5sPI5G0kyk
-         Yys1wZ6EBmSXp4JWz7B0LKqoIPgKh2Z8G9/X5q5/fx5Xp4HwgtTx0HX06peAqNsL6uUA
-         jFWDudx4FHu46GcJR3MD2yT+H+iY2OAT5WPkRFBSVtl8tUYK2alczriZCSz9RnG6ofIN
-         hRbf/9TK+HCEezNH32SpWCAKOHoJbqqWyG+aDx8b/ZtXhfGKMvvmcWydJDcHsDO9dHiE
-         ugpDn4sSDmUCLpnTgWtUbLr7SQkbgilSg4dv+x4hYtC+eyH6G3VM02bnpOOhiDmVAT8d
-         LacA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699797000; x=1700401800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1699869626; x=1700474426; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JB2I+B+rYFLkS4fe+E3Z3AcXhS19RY8fRv5WzyVTB9U=;
-        b=eQa781wm7lEqkU3QhGMA4tTM5VUGTC1komDqcdFva6r38Ar9Lkq5OrZ/sFl3UoNG3H
-         a7yJLKdmkYyuaLZBo5wBBG41nyldjvicW/SIfm66XTTBynxKFQW54JGGKM3GDsjWhmn/
-         7/k/DiapZyq64LxXozKxNh6EMz3DT1iShaH0MK+ps/8Y9XggVBYwWzd6WQSohS00mWpo
-         NviInI5v2BXZWakWemWBXAnPD6Hjadf9eMnz+mBeb2OYjOcEp+cZ/eCWtgf3DKOW/9UO
-         FdExIWhUzDEL3jmgh9XQ4QPnruKGkKxKjBmwuY0xRR1alHMrE5sD4u3oiojB2tyA+kxF
-         JNdw==
-X-Gm-Message-State: AOJu0Yz91NTZI2VlvQoGrapQAa+K3zulkBrdXCWeLAsYeWWJ/H6T6WnJ
-	Y1k0k3ntL5UGbXIihN+KmCzN0ifPx5g=
-X-Google-Smtp-Source: AGHT+IE47XF45kXA0ihvXDA4astRGQHI6+R4GExIHLFZ33T4m3r1jhFXaC1lvxd5ruxEiOux5/TdhQ==
-X-Received: by 2002:a9d:62d4:0:b0:6c1:7927:6550 with SMTP id z20-20020a9d62d4000000b006c179276550mr5393270otk.2.1699797000239;
-        Sun, 12 Nov 2023 05:50:00 -0800 (PST)
-Received: from atom0118 ([2405:201:6815:d829:c9ab:5d66:b313:f881])
-        by smtp.gmail.com with ESMTPSA id j191-20020a6380c8000000b00578b8fab907sm2693829pgd.73.2023.11.12.05.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Nov 2023 05:49:59 -0800 (PST)
-Date: Sun, 12 Nov 2023 19:19:53 +0530
-From: Atul Kumar Pant <atulpant.linux@gmail.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, shuah@kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] selftests: rtc: Fixes rtctest error handling.
-Message-ID: <20231112134953.GA11910@atom0118>
-References: <20230817091401.72674-1-atulpant.linux@gmail.com>
- <20230923173652.GC159038@atom0118>
- <20231007154318.GC20160@atom0118>
- <22df3ecb-488c-4d58-8efe-4638fa3d614b@linuxfoundation.org>
+        bh=JbOR8jc4vESBCIxoa+hxCKP6qo+nQDlXSDfPg0qKWS8=;
+        b=Gxt6jNL11g8ADqbbtUUu7sfCA5TCxef+Oi9O6UCpUMz2Hl9UAcCsrVGQSAJY0rchSa
+         2fWXVq7AXmWx9ZEJFNMQFvJIZDkZIXeHv3rXTKLTInXimIL/ARnozwGG5lHaBnIYHq84
+         T+nbbCmlUVIzSwHWnuogJ6NMqKpUOmuI7tlR1e4u+1y/C9grNtO1dK5DZHv0+RK28hi/
+         RBU4Pd6DCFzy0+1+KS+0smnNeLou21/Q8HtbSTb8Mj8pOMM+xbjo3DeBsignlYjtGXvp
+         OtNJiD4Po/PezVaW5KiouZMhCgMGPbaaOxgGUf2ydmM7atI4j9IyQ76HgLPRe0c3dX+g
+         4wXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699869626; x=1700474426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JbOR8jc4vESBCIxoa+hxCKP6qo+nQDlXSDfPg0qKWS8=;
+        b=ElWU8ncAAVEDWaTjvNLg4RUgiS5h6Ii4YjZrG6Fp0TZA6A7rlO0+9c7LCWHQ58dXU8
+         8aPKc5TmZgdo/2ijwqylqewCBXF0IvLWEizVWEXR/HaEDefp2y/HFjWOzCZ9Hzi9EGl6
+         dcOJ1yy5tF7xNafy7b4GKJ4GSle1SezSbSfXV9uq4SK+p8tNak1ot4oiaxumVobG8IFc
+         6VUqBknm52oIehzckjwpEogdj29+Wl0WUQH9tnGQiuWCiZQI1k7okfN8XMdq+BWFD+Fe
+         eeTDZCEWofJ83zSGwU7U0qY/eEtE62BAXsCw4ipi1iLWqwKHaBrpCJ4uds2yvq3hl3xf
+         JcZw==
+X-Gm-Message-State: AOJu0YxuqSIsvehFjH2URJaMUnmivfdqyzd4fIxT8nYTH7/rk1hhChTU
+	CnRgg+Z0zB9QUrJasWU8NFjMsuXzsm0L7XKc7jM=
+X-Google-Smtp-Source: AGHT+IGCUr7PujFC+poPa2QrZRvWL4HOk1bJVQMa23HsF2MY33M5q50/7KY3Uea2911BZ50MrpHn+FMZq5R37QecRrw=
+X-Received: by 2002:ad4:45b4:0:b0:658:1eec:408a with SMTP id
+ y20-20020ad445b4000000b006581eec408amr4664228qvu.40.1699869626386; Mon, 13
+ Nov 2023 02:00:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22df3ecb-488c-4d58-8efe-4638fa3d614b@linuxfoundation.org>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-14-3d63a5f1103e@maquefel.me> <ZLq0Z0QgBdCoDpV+@smile.fi.intel.com>
+ <80ed91bb971516638fa1793d648939815eba7630.camel@gmail.com>
+In-Reply-To: <80ed91bb971516638fa1793d648939815eba7630.camel@gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 13 Nov 2023 11:59:49 +0200
+Message-ID: <CAHp75VeYHscM-r94kTrpH44W=OGVq+qoNNQZoVrR5_n-_K_Xsw@mail.gmail.com>
+Subject: Re: [PATCH v3 14/42] power: reset: Add a driver for the ep93xx reset
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me, 
+	Hartley Sweeten <hsweeten@visionengravers.com>, Lennert Buytenhek <kernel@wantstofly.org>, 
+	Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Sebastian Reichel <sre@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Vinod Koul <vkoul@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, 
+	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Michael Peters <mpeters@embeddedts.com>, Kris Bahnsen <kris@embeddedts.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
+	alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 07, 2023 at 02:27:35PM -0700, Shuah Khan wrote:
-> On 10/7/23 09:43, Atul Kumar Pant wrote:
-> > On Sat, Sep 23, 2023 at 11:06:58PM +0530, Atul Kumar Pant wrote:
-> > > On Thu, Aug 17, 2023 at 02:44:01PM +0530, Atul Kumar Pant wrote:
-> > > > Adds a check to verify if the rtc device file is valid or not
-> > > > and prints a useful error message if the file is not accessible.
-> > > > 
-> > > > Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
-> > > > ---
-> 
-> 
-> Sorry for the delay. I will pick this up for the next rc.
-> 
-> thanks,
-> -- Shuah
+On Sat, Nov 11, 2023 at 8:18=E2=80=AFPM Alexander Sverdlin
+<alexander.sverdlin@gmail.com> wrote:
+> On Fri, 2023-07-21 at 19:37 +0300, Andy Shevchenko wrote:
 
-	Thanks Shuah
+...
+
+> > > +       mdelay(1000);
+> >
+> > Atomic?! Such a huge delay must be explained, esp. why it's atomic.
+>
+> atomic or not, SoC is supposed to reset itself here.
+> However there is an errata [1] and the SoC can lockup instead.
+
+Good, and what I'm saying is that this piece of code must have a
+comment explaining this.
+
+> So even pr_emerg() makes sense to me.
+
+This is irrelevant to the comment.
+
+> > > +       pr_emerg("Unable to restart system\n");
+> > > +       return NOTIFY_DONE;
+>
+> [1] http://web.archive.org/web/20161130230727/http://www.cirrus.com/en/pu=
+bs/appNote/AN258REV2.pdf
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
