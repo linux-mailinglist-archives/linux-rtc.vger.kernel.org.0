@@ -1,115 +1,163 @@
-Return-Path: <linux-rtc+bounces-303-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-304-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF8157EB081
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Nov 2023 14:05:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F83C7EB356
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Nov 2023 16:20:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 611A21F22E51
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Nov 2023 13:05:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9203B207F5
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Nov 2023 15:20:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A793FE43;
-	Tue, 14 Nov 2023 13:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DFD641748;
+	Tue, 14 Nov 2023 15:20:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nMk4bjzW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MgnRI5Ag"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3673FE30
-	for <linux-rtc@vger.kernel.org>; Tue, 14 Nov 2023 13:05:13 +0000 (UTC)
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0C019D
-	for <linux-rtc@vger.kernel.org>; Tue, 14 Nov 2023 05:05:11 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d9a518d66a1so5689444276.0
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Nov 2023 05:05:11 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F36C250EE
+	for <linux-rtc@vger.kernel.org>; Tue, 14 Nov 2023 15:20:09 +0000 (UTC)
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52789125
+	for <linux-rtc@vger.kernel.org>; Tue, 14 Nov 2023 07:20:07 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-41b7ec4cceeso32710121cf.1
+        for <linux-rtc@vger.kernel.org>; Tue, 14 Nov 2023 07:20:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699967110; x=1700571910; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y3kLet+ZFc4FiXhXyJTUcUEX1JsMDtWsRFc0PYkqxJM=;
-        b=nMk4bjzWl2OH2sgI2kginq+JqGE7cwEcr+JGDejTGiX2niImmLs4RpluHd3H9DmyOX
-         39NxMktLxD0KR/1jO0DVPvee/GYRKvdT0NGDyOOY9mugEYri1z7tPGOuN1UaDnDslMPM
-         07KVGoolts85BnWYiBEeoDTKbfNmDvu5SMcH8fkerB/VCr7HRL3nOmT0dMFAw6psXo7L
-         PQ/yETAMDp42UEMSaZHW8fDmMccfGZ99jpCF2zkYMbjDRmxmbKkkPuIGDPaJjXwpkPJN
-         6YRQJ9NnpBeWQwKLA6iHGmEX2qiNv1VB3X4ejZsla3zyizgE0zAnjBWzAhmBMv96hrt4
-         Sceg==
+        d=linaro.org; s=google; t=1699975206; x=1700580006; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BA7pnPzeobuo2moOM/02mtG2pcefll8ayuxU3397aJs=;
+        b=MgnRI5Ag/42cLoXqHTUyAhohy8qDN/vsVTkTJ5AaNpYwtO2CWBUqG92JT2nPrpAxTJ
+         Uxm7GGwaVaQE9sWVp7n6HVtAKQ3MbWk4NoKgwEt9JILoFJoq0dKkt/JL6zRkDbvWDmmj
+         yVVDD+f8IQbEfClG3PQWU1muNEWGKEI6VI9u6YCq3M3QT88kJaHJo1uxM3HS5fwW/9Xy
+         7Swp9XbB1r9TsLW6YYooGlGZKUxC/9AAHfhyg0N7FMiuYzOekroeuZ4sdUrX17DFmCod
+         nd8h3S2U+GhYPr/1al4N2CmhiOmRP9cwgNHyxELN3CGr8d1dbNpw1zVV2E2zEg17M5b/
+         RL/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699967110; x=1700571910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1699975206; x=1700580006;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y3kLet+ZFc4FiXhXyJTUcUEX1JsMDtWsRFc0PYkqxJM=;
-        b=Z3Q1km3CE1OMJFouyF4YgrIsu0bpMgovPs145Fgc5nYggJx/hLDKRqM3PGB+N4qZ0q
-         DCCq2cNSutQNQEu6PMQbDo5W6GF0/CSL9zEQGZuVcimwv0kE1pnl17ViUW06qh5VjfkL
-         IV1gAptNvSLIgHSyEtytyx6Vc8kF+utJz4Zx4DaBth7gzhsJBezXSfp3jyzTs3Fr6ynI
-         ek8oAuA7/cPK5uY9LZdkaM3+S0ndz6hWxuoqVMeHeUeHGk+O/LSyOt4C8vFAecWp+1ob
-         r3FPOt8eFjfWUHzLZRI75EC9xB2C7xGvkumUgXpo50NPHwJnWNttXKyf/rLQoIlum4Fn
-         kgVQ==
-X-Gm-Message-State: AOJu0Yywl8ka+udLhH2beA/HYYIDJxokoaDLjQWuwBrmZ11dTsAUN+bS
-	jjRXZIVlHLd1B7SVxZni5YNkvFveYh1YwTmb7pHfEg==
-X-Google-Smtp-Source: AGHT+IHU/EMXoR/AsvwDR5tVM/hTfhag7Py4pB8zx2h4lfdu8R1hVWGA8wCYGXEvgGG4RCO6d/pEhnbc29+P4adFbGc=
-X-Received: by 2002:a25:35d6:0:b0:daf:66f9:cfab with SMTP id
- c205-20020a2535d6000000b00daf66f9cfabmr8292993yba.9.1699967110411; Tue, 14
- Nov 2023 05:05:10 -0800 (PST)
+        bh=BA7pnPzeobuo2moOM/02mtG2pcefll8ayuxU3397aJs=;
+        b=WDGCDVDO5LR+vaUZ+fJVOipeB9oYnGBDw9as7MPZ3aQ5HMBznTxXNrfsQ45mR4SWQq
+         eeqDZIwASbbEtpLKxpf3Ac5yb5HJdXAtYqsoTVH5GKvlkFsMyHXhZdKDiYDsJemrwarK
+         N1bczvew2VgCGU/Y6so7iknQEzBnUC379IcbzwCFeS4S4Mrk+qNQPEJCCGupp4ca3JM/
+         9hcS4cQVrqUJSrPefkDzmX4X5p6h3mH91sok/tu8+WnByILWh+RRjw6vgctvUmGzyG8b
+         EDB0gKRW2RgJhzi9zV3PF6X2tu1zqPNvIylNLX7h15ZDtRgHqxSUVwroLOIUbqWDQ/Zh
+         2HTg==
+X-Gm-Message-State: AOJu0YywHo1wjBUzwNuKkbVcDNONEM5unHGtpD8qBPzIahIdMTSiJWzA
+	P1KRI6KkTpjdhK4nwfWaSMLXHw==
+X-Google-Smtp-Source: AGHT+IEadI/6/GH9NIUFNMeCr9T6NLwUprWeQImT3ovdsHFRg8kMWXk2T9gPr4vx6eENhu9WMgNH1g==
+X-Received: by 2002:a05:622a:105:b0:41e:19d5:bdf5 with SMTP id u5-20020a05622a010500b0041e19d5bdf5mr2279660qtw.48.1699975206381;
+        Tue, 14 Nov 2023 07:20:06 -0800 (PST)
+Received: from [127.0.1.1] ([12.186.190.2])
+        by smtp.gmail.com with ESMTPSA id l24-20020ac848d8000000b00419732075b4sm2806318qtr.84.2023.11.14.07.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Nov 2023 07:20:05 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+ Alessandro Zummo <a.zummo@towertech.it>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, Jaehoon Chung <jh80.chung@samsung.com>, 
+ Sam Protsenko <semen.protsenko@linaro.org>, dri-devel@lists.freedesktop.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
+ linux-sound@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
+References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 00/17] dt-bindings: samsung: add specific compatibles
+ for existing SoC
+Message-Id: <169997520487.6747.17671551558724027958.b4-ty@linaro.org>
+Date: Tue, 14 Nov 2023 16:20:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org> <20231108104343.24192-6-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20231108104343.24192-6-krzysztof.kozlowski@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 14 Nov 2023 14:04:59 +0100
-Message-ID: <CACRpkdaSPTjjPA=TS-WbOb3E=TabtP6MFEx6Q+Dar-Mh=EtknQ@mail.gmail.com>
-Subject: Re: [PATCH 05/17] dt-bindings: pinctrl: samsung: add specific
- compatibles for existing SoC
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Thierry Reding <thierry.reding@gmail.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Jaehoon Chung <jh80.chung@samsung.com>, Sam Protsenko <semen.protsenko@linaro.org>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org, 
-	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
 
-On Wed, Nov 8, 2023 at 11:44=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
 
-> Samsung Exynos SoC reuses several devices from older designs, thus
-> historically we kept the old (block's) compatible only.  This works fine
-> and there is no bug here, however guidelines expressed in
-> Documentation/devicetree/bindings/writing-bindings.rst state that:
-> 1. Compatibles should be specific.
-> 2. We should add new compatibles in case of bugs or features.
->
-> Add compatibles specific to each SoC in front of all old-SoC-like
-> compatibles.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, 08 Nov 2023 11:43:26 +0100, Krzysztof Kozlowski wrote:
+> Merging
+> =======
+> I propose to take entire patchset through my tree (Samsung SoC), because:
+> 1. Next cycle two new SoCs will be coming (Google GS101 and ExynosAutov920), so
+>    they will touch the same lines in some of the DT bindings (not all, though).
+>    It is reasonable for me to take the bindings for the new SoCs, to have clean
+>    `make dtbs_check` on the new DTS.
+> 2. Having it together helps me to have clean `make dtbs_check` within my tree
+>    on the existing DTS.
+> 3. No drivers are affected by this change.
+> 4. I plan to do the same for Tesla FSD and Exynos ARM32 SoCs, thus expect
+>    follow up patchsets.
+> 
+> [...]
 
-This is more formally correct indeed.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Applied, thanks!
 
-Yours,
-Linus Walleij
+[01/17] dt-bindings: hwinfo: samsung,exynos-chipid: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/4be756fd983a0d91c258196b3206e9131e63d62d
+[02/17] dt-bindings: i2c: exynos5: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/9da80ed69eb150617e8c72aeb7fdb9bfc7b97fba
+[03/17] dt-bindings: i2c: samsung,s3c2410-i2c: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/c45860f6ee9b52b2e2f9b9255d93b9875e416cb0
+[04/17] dt-bindings: mmc: samsung,exynos-dw-mshc: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/5faf7e3d35b819cfa8de971f7e8ed84552c3a676
+[05/17] dt-bindings: pinctrl: samsung: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/3e17c66d1aa322db1d68e842089bd639a88a88bf
+[06/17] dt-bindings: rtc: s3c-rtc: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/b8029fbe90351d1fdd54dceb39b21c4062c94ce1
+[07/17] dt-bindings: serial: samsung: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/6f52f8b78d319ba63ce7fae950d9395d376bb6bf
+[08/17] dt-bindings: samsung: exynos-pmu: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/ed856d66b8c679ec1260c3151b2f4f3202aa213b
+[09/17] dt-bindings: gpu: arm,mali-midgard: add specific compatibles for existing Exynos SoC
+        https://git.kernel.org/krzk/linux/c/e47d571301460a214c6253c15ff79db20ea50389
+[10/17] dt-bindings: iio: samsung,exynos-adc: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/bbe4d4bbacd7f11b601a0c912f3f6270558899d8
+[11/17] ASoC: dt-bindings: samsung-i2s: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/4a559c3db839afea05dc0f471823d4401b4444fc
+[12/17] dt-bindings: pwm: samsung: add specific compatibles for existing SoC
+        https://git.kernel.org/krzk/linux/c/0b549b3f74e39f7b0e787f8ffdfd2cf67c0fdc4b
+[13/17] arm64: dts: exynos5433: add specific compatibles to several blocks
+        https://git.kernel.org/krzk/linux/c/e9a72a20acf7b620e48cd4e268d7c7a4d45e1930
+[14/17] arm64: dts: exynos7: add specific compatibles to several blocks
+        https://git.kernel.org/krzk/linux/c/a1c0d44441d35063b79f38120105b5f92ca40445
+[15/17] arm64: dts: exynos7885: add specific compatibles to several blocks
+        https://git.kernel.org/krzk/linux/c/050e7f7217e4d4d73dfcebfbc35b3eafbc36272a
+[16/17] arm64: dts: exynos850: add specific compatibles to several blocks
+        https://git.kernel.org/krzk/linux/c/bd3623def8a93cea94a8689514e557fd4522dd53
+[17/17] arm64: dts: exynosautov9: add specific compatibles to several blocks
+        https://git.kernel.org/krzk/linux/c/2a8ff4d56ef6cb4a7b2b4025ea4366178e4e8eaf
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
