@@ -1,36 +1,36 @@
-Return-Path: <linux-rtc+bounces-321-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-322-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFA137F0244
-	for <lists+linux-rtc@lfdr.de>; Sat, 18 Nov 2023 20:07:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FE617F025A
+	for <lists+linux-rtc@lfdr.de>; Sat, 18 Nov 2023 20:26:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EAEE1F22CB7
-	for <lists+linux-rtc@lfdr.de>; Sat, 18 Nov 2023 19:07:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB637280EDD
+	for <lists+linux-rtc@lfdr.de>; Sat, 18 Nov 2023 19:25:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193E019BCC;
-	Sat, 18 Nov 2023 19:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F42A199CB;
+	Sat, 18 Nov 2023 19:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="QIMdCusO"
+	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="osIwSe8j"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.140])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB1D60
-	for <linux-rtc@vger.kernel.org>; Sat, 18 Nov 2023 11:07:05 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 29537 invoked from network); 18 Nov 2023 20:07:02 +0100
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412EA130
+	for <linux-rtc@vger.kernel.org>; Sat, 18 Nov 2023 11:25:53 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 964 invoked from network); 18 Nov 2023 20:25:51 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1700334422; bh=ah97aCbN24GtUBFT8VSBvxF84jY96VzFBfOL/rbwUPw=;
+          t=1700335551; bh=HhUIqDFODH7t1FpkEBhOaxNBGbEgQXD8TzKgwvTf6Ks=;
           h=Subject:To:Cc:From;
-          b=QIMdCusO1tTtUrw7L3tTLKOgB5VfiROd/ZmFSaxCo+kSCGyovbm8+BVYYg5ae7cyz
-           zttG8pedzbbaQlkKNPJCW3+N/cWFo98RfdkHCJTc1rkZj0LOjh6UGdmpSfUgRUcIdd
-           YFB+/oLZEHpi/kb4IAA4uMjOmXTw8UThtDtrX+3A=
+          b=osIwSe8jY7MxpiReiHJuRlPfP3PIKLgUXpEpGdvXLPABWYg0TgGNbS13Y/GwRTye3
+           8F4TTWQbxYVi8ta6l5IMMFTLUqKu5/D2xKitgEqCURVIpAXgjpa9ZxUE/oLkQtrty5
+           qEfNpF1Soq5T1nV4DZKJZN3xj0XfAEsjyOFKxsf8=
 Received: from aafl106.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.141.106])
           (envelope-sender <mat.jonczyk@o2.pl>)
           by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <mario.limonciello@amd.com>; 18 Nov 2023 20:07:02 +0100
-Message-ID: <9a34ad89-6263-4cda-b938-348bdf62e155@o2.pl>
-Date: Sat, 18 Nov 2023 20:06:59 +0100
+          for <mario.limonciello@amd.com>; 18 Nov 2023 20:25:51 +0100
+Message-ID: <c6c678c1-bd75-4fb2-bf51-e1a745a62a2d@o2.pl>
+Date: Sat, 18 Nov 2023 20:25:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -38,8 +38,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] rtc: Add support for configuring the UIP timeout for
- RTC reads
+Subject: Re: [PATCH 4/4] rtc: Extend timeout for waiting for UIP to clear to
+ 1s
 Content-Language: en-GB
 To: Mario Limonciello <mario.limonciello@amd.com>,
  Alessandro Zummo <a.zummo@towertech.it>,
@@ -49,7 +49,7 @@ Cc: "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
  tobrohl@gmail.com, aalsing@gmail.com, Dhaval.Giani@amd.com,
  xmb8dsv4@gmail.com, x86@kernel.org
 References: <20231117063220.65093-1-mario.limonciello@amd.com>
- <20231117063220.65093-4-mario.limonciello@amd.com>
+ <20231117063220.65093-5-mario.limonciello@amd.com>
 From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
  xsFNBFqMDyQBEAC2VYhOvwXdcGfmMs9amNUFjGFgLixeS2C1uYwaC3tYqjgDQNo/qDoPh52f
@@ -94,22 +94,36 @@ Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
  0nI2LedLnIMUWwLRT4EvdYzsbP6im/7FXps15jaBOreobCaWTWtKtwD2LNI0l9LU9/RF+4Ac
  gwYu1CerMmdFbSo8ZdnaXlbEHinySUPqKmLHmPgDfxKNhfRDm1jJcGATkHCP80Fww8Ihl8aS
  TANkZ3QqXNX2
-In-Reply-To: <20231117063220.65093-4-mario.limonciello@amd.com>
+In-Reply-To: <20231117063220.65093-5-mario.limonciello@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 7ac0a0c6de035ddcdf3814c62d506835
+X-WP-MailID: a2cc7dc73988d07ffcb690eb3b01a57c
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [waP0]                               
-
-Hello,
+X-WP-SPAM: NO 0000000 [UVOl]                               
 
 W dniu 17.11.2023 o 07:32, Mario Limonciello pisze:
-> The UIP timeout is hardcoded to 10ms for all RTC reads, but in some
-> contexts this might not be enough time. Add a timeout parameter to
-> mc146818_get_time() and mc146818_get_time_callback().
-> Make all callers use 10ms to ensure no functional changes.
+> Specs don't say anything about UIP being cleared within 10ms. They
+> only say that UIP won't occur for another 244uS. If a long NMI occurs
+> while UIP is still updating it might not be possible to get valid
+> data in 10ms.
 >
+> This has been observed in the wild that around s2idle some calls can
+> take up to 480ms before UIP is clear.
+>
+> Adjust callers from outside an interrupt context to wait for up to a
+> 1s instead of 10ms.
+>
+> Reported-by: xmb8dsv4@gmail.com
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217626
 > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  arch/x86/kernel/rtc.c          | 2 +-
+>  drivers/base/power/trace.c     | 2 +-
+>  drivers/rtc/rtc-cmos.c         | 2 +-
+>  drivers/rtc/rtc-mc146818-lib.c | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+
+Consider:
 
 Fixes: ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
 
@@ -118,75 +132,6 @@ If you would like to Cc: stable this patch,
 commit d2a632a8a117 ("rtc: mc146818-lib: reduce RTC_UIP polling period")
 
 is a prerequisite.
-
-> ---
->  arch/alpha/kernel/rtc.c        |  2 +-
->  arch/x86/kernel/hpet.c         |  2 +-
->  arch/x86/kernel/rtc.c          |  2 +-
->  drivers/base/power/trace.c     |  2 +-
->  drivers/rtc/rtc-cmos.c         |  6 +++---
->  drivers/rtc/rtc-mc146818-lib.c | 31 +++++++++++++++++++++++--------
->  include/linux/mc146818rtc.h    |  3 ++-
->  7 files changed, 32 insertions(+), 16 deletions(-)
->
-[snip]
-> --- a/drivers/rtc/rtc-mc146818-lib.c
-> +++ b/drivers/rtc/rtc-mc146818-lib.c
-> @@ -8,26 +8,29 @@
->  #include <linux/acpi.h>
->  #endif
->  
-> +#define UIP_RECHECK_DELAY		100	/* usec */
-> +
->  /*
->   * Execute a function while the UIP (Update-in-progress) bit of the RTC is
-> - * unset.
-> + * unset. The timeout is configurable by the caller in ms.
->   *
->   * Warning: callback may be executed more then once.
->   */
->  bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
-> +			int timeout,
->  			void *param)
->  {
->  	int i;
->  	unsigned long flags;
->  	unsigned char seconds;
->  
-> -	for (i = 0; i < 100; i++) {
-> +	for (i = 0; i < USEC_PER_MSEC / UIP_RECHECK_DELAY * timeout; i++) {
->  		spin_lock_irqsave(&rtc_lock, flags);
->  
->  		/*
->  		 * Check whether there is an update in progress during which the
->  		 * readout is unspecified. The maximum update time is ~2ms. Poll
-> -		 * every 100 usec for completion.
-> +		 * for completion.
->  		 *
->  		 * Store the second value before checking UIP so a long lasting
->  		 * NMI which happens to hit after the UIP check cannot make
-> @@ -37,7 +40,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
->  
->  		if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
->  			spin_unlock_irqrestore(&rtc_lock, flags);
-> -			udelay(100);
-> +			udelay(UIP_RECHECK_DELAY);
->  			continue;
->  		}
->  
-> @@ -56,7 +59,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
->  		 */
->  		if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
->  			spin_unlock_irqrestore(&rtc_lock, flags);
-> -			udelay(100);
-> +			udelay(UIP_RECHECK_DELAY);
->  			continue;
->  		}
->  
-
-I think that when reading the RTC is not finished in 100ms or so
-(irrespective of the timeout parameter), the code should log
-a warning / an error message.
 
 Greetings,
 
