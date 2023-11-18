@@ -1,133 +1,113 @@
-Return-Path: <linux-rtc+bounces-318-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-319-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C9797EFC36
-	for <lists+linux-rtc@lfdr.de>; Sat, 18 Nov 2023 00:43:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FA6F7EFEAD
+	for <lists+linux-rtc@lfdr.de>; Sat, 18 Nov 2023 10:22:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B76BA1F26386
-	for <lists+linux-rtc@lfdr.de>; Fri, 17 Nov 2023 23:43:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 912111F22DA3
+	for <lists+linux-rtc@lfdr.de>; Sat, 18 Nov 2023 09:22:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CEE430354;
-	Fri, 17 Nov 2023 23:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878DB53AF;
+	Sat, 18 Nov 2023 09:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2JGkE38t"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcaQXqoZ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAB810C6
-	for <linux-rtc@vger.kernel.org>; Fri, 17 Nov 2023 15:43:29 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-45d9d28142fso986893137.2
-        for <linux-rtc@vger.kernel.org>; Fri, 17 Nov 2023 15:43:29 -0800 (PST)
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6469D72
+	for <linux-rtc@vger.kernel.org>; Sat, 18 Nov 2023 01:22:33 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5c2066accc5so825629a12.3
+        for <linux-rtc@vger.kernel.org>; Sat, 18 Nov 2023 01:22:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700264609; x=1700869409; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1NsfHVE0Rs4ohooYR+8BLZuke8eixnzhlqm2hdvcxE=;
-        b=2JGkE38tL9tv2Ry3f1VtdhShOqff8xHwSkFZ8ZUfKrUZHtyNkAbZNghK0BADOrz8Hj
-         vtWGlw+AtRprl/3fpJ4vHGQoYajHuw9/mTmV/4nULkEjuf3Oda5fbfhK9v9K0T9UsRqD
-         mnyVu1d/1S32suIZFt3R/CIbOCZYSiQM1yAui5Zxf4SbM+Q71Mn0TxvbwzN44CTwsG8U
-         WCoHjHVaNmmuLldEmSs/jCPazPqYOZfOiTvPXeYdqIxcPkhhmzhBCuRQYfglXt8+Hr6p
-         rnuubfRzW7+GbKzO22Q+prdi44N28gCyPudJxqCRuhdQpejaQZ0vJ2euy88bdwIYqXUA
-         aL/A==
+        d=gmail.com; s=20230601; t=1700299348; x=1700904148; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Od+FKbvYOGIsOS132qZhYPHACVtH2G4hHkoWNUhgTrU=;
+        b=XcaQXqoZIxqj4G61GWlwztcNyb0Anzi2c6/GXgDyS8XS5NQf6i+0AP6dtSiGMjMecL
+         /4nJdpb7dTcrEj7FPhU2glFYn67GSWuR9lypgEMv7saJ5e/JT8udbtUY/sphnGRDPX8z
+         0z5AFA0QIsvSBQnvT0yTgvUf7X7AP/SFPH6pUw5sdSRcIHlzo3evE3bGj03Z3UKNQFRj
+         RkykGSF5XI78y3JPij/PNVrX+8WAYeKKyofjmF5mVIO7vVHqzNQv6V7t5G4hEgMAkHji
+         lo4sGXObpaqI6EsaojxfV8e9tTlGWH5mLKdm6oqWJja8BoFmNJydahIO2er4cI0VRp6K
+         5HIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700264609; x=1700869409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1NsfHVE0Rs4ohooYR+8BLZuke8eixnzhlqm2hdvcxE=;
-        b=HVfyPLSFN30lZRhbUBTF/iIcITKCM5yPNcrKFZLU0AAb6x/GvU0Ah3weZ/b2sORcum
-         nGfSRIa6XiNVdOGYr8CjfPygp/yyKy9qWzzxHsJhmDnmm/QZMX6mB4e/QVwpDdrWO3hF
-         MGrN3iBEUlDryMuVIT/F1dfeClsUqGouVXsap+PUadykhq3CGdNOOAqElrcellRoKu6l
-         keKzQbqR/zN8i5xcqTiAV4TofcTFDoJd0L7r7Z1TR0xT3SD32pdIj5ueQ7lA1w/kaG/F
-         PBoMH0HhwYr1AvZngVgg1HnjeRK/2mh3tuutJTFV/p//ya/07zhHo99PvQXgClKAcmSE
-         oZWw==
-X-Gm-Message-State: AOJu0Ywxoa+IKna/iLjSQ1SPPZDaptSb0A9MOGZGcRUnKUR9ldeXS3vb
-	Nmjrv2ZL64O6bpz9FfAHMfp7mqvtZHIipx0+a2kqKA==
-X-Google-Smtp-Source: AGHT+IGsqH+g23NOuftKZQaJNB6FfaihsCTnH4slf6umspoonCke6N4LfYHlgOLJNv+d2Gp+Ls+hxPht5cpbCXm4f4Y=
-X-Received: by 2002:a05:6102:34e2:b0:457:cc6c:9491 with SMTP id
- bi2-20020a05610234e200b00457cc6c9491mr961954vsb.17.1700264608786; Fri, 17 Nov
- 2023 15:43:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700299348; x=1700904148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Od+FKbvYOGIsOS132qZhYPHACVtH2G4hHkoWNUhgTrU=;
+        b=J9Ih0ia5URgmz7TkUglcL2qTGwh7pj8K5ZbtlAwTI47sFVfzVBAeYsCsuf5xAy8M5/
+         rkfX6L96m3d8/CPlLIZqUGTVgvW7EaNvzl3Nr9wzFU1P9sZVYvOv18SWwSbwDQ0EXJ2d
+         BBk3Ca4l4L+yX2CmL6/IeFkkAdlWe8nlSYZ4l7QGsN8QO/m3pYY8oPTSRow51ZI7T7Ia
+         1p8npm+Y9aMUhcHsEzwlaGcEBUAfEbbmEfsfPKX5YySFj+uc77R84diEG1rOljh4cdA0
+         v0GOkln//jbjhdDlA0cWvcKIaVnh75Jgn/ucL5WUFCf3Q3lkekalnlHNYIoLQF4uy0nm
+         jquQ==
+X-Gm-Message-State: AOJu0YypMJfWUaHLfcUqESAreRRJfAHKAP03sWis0ujUnTXP65vrXGc+
+	craMnxTiyHGaNEF1Z9AFhCR8iFs6V7M=
+X-Google-Smtp-Source: AGHT+IH4vZJGovCcV1Fqet2/QcaKnhywWZiK05Ee//WWtBJYMplAkJH3k8VoAFOfNsvbxpMG9X5UVg==
+X-Received: by 2002:a05:6a21:6d9b:b0:187:5302:4b20 with SMTP id wl27-20020a056a216d9b00b0018753024b20mr1609275pzb.41.1700299347880;
+        Sat, 18 Nov 2023 01:22:27 -0800 (PST)
+Received: from localhost.localdomain ([240f:34:212d:1:65f5:5dbb:9d18:499c])
+        by smtp.gmail.com with ESMTPSA id 27-20020a17090a199b00b0028028560c4bsm4847880pji.57.2023.11.18.01.22.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Nov 2023 01:22:26 -0800 (PST)
+From: Akinobu Mita <akinobu.mita@gmail.com>
+To: linux-rtc@vger.kernel.org
+Cc: akinobu.mita@gmail.com,
+	a.zummo@towertech.it,
+	alexandre.belloni@bootlin.com,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] rtc: ds3232: avoid unused-const-variable warning
+Date: Sat, 18 Nov 2023 18:22:00 +0900
+Message-Id: <20231118092200.829808-1-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231106162310.85711-1-mario.limonciello@amd.com>
- <CAHQZ30DP8ED4g3bib-tZ53rm2q2_ouEEL3TxD-SgK4YrCe3bew@mail.gmail.com>
- <d55a80f7-ca4d-406f-b2c8-b2bba45e3104@amd.com> <20231113223819fb469198@mail.local>
- <ZVM4nFaDTwrKMr8K@duo.ucw.cz> <2023111422283827b2a3f2@mail.local>
- <5029e355-6fe8-4d48-9bc3-20256adfbdb7@amd.com> <2023111722570552652970@mail.local>
-In-Reply-To: <2023111722570552652970@mail.local>
-From: Raul Rangel <rrangel@google.com>
-Date: Fri, 17 Nov 2023 16:43:15 -0700
-Message-ID: <CAHQZ30AkayKxQkLajaY6gcFbGMWb=wu3Nqxzed5yFjLo8bX4hQ@mail.gmail.com>
-Subject: Re: [PATCH] rtc: cmos: Use ACPI alarm for non-Intel x86 systems too
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, Pavel Machek <pavel@ucw.cz>, 
-	Alessandro Zummo <a.zummo@towertech.it>, 
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	alvin.zhuge@gmail.com, renzhamin@gmail.com, kelvie@kelvie.ca, 
-	Mark Hasemeyer <markhas@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 17, 2023 at 3:57=E2=80=AFPM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 14/11/2023 18:15:02-0600, Mario Limonciello wrote:
-> > On 11/14/2023 16:28, Alexandre Belloni wrote:
-> > > On 14/11/2023 10:06:36+0100, Pavel Machek wrote:
-> > > > On Mon 2023-11-13 23:38:19, Alexandre Belloni wrote:
-> > > > > On 13/11/2023 15:36:28-0600, Mario Limonciello wrote:
-> > > > > > Now that the merge window is over, can this be picked up?
-> > > > > >
-> > > > >
-> > > > > I'd be happy to invoice AMD so they get a quick response time.
-> > > >
-> > > > That is a really bad joke.
-> > >
-> > > Why would it be a joke?
-> > >
-> > >  From what I get this is an issue since 2021, I don't get how this is=
- so
-> > > urgent that I get a ping less than 24h after the end of the merge
-> > > window.
-> >
-> > It's possibly longer; but I don't have a large enough sample to say tha=
-t
-> > it's safe that far back.
->
-> Would this help this one:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D68331
+Fix the following warning when CONFIG_I2C is not set but CONFIG_SPI_MASTER
+is set.
 
+warning: 'ds3232_pm_ops' defined but not used [-Wunused-const-variable=]
 
-Honestly, the HPET_EMULATE_RTC code is what drove me to switch the AMD
-chromebooks over to using the ACPI timer:
-https://chromium-review.googlesource.com/c/chromiumos/overlays/board-overla=
-ys/+/2355073.
+'ds3232_pm_ops' is only used by rtc-ds3232 i2c driver, so move the device
+PM callbacks inside #if IS_ENABLED(CONFIG_I2C).
 
-Ideally if the HPET was configured with proper IRQs by the firmware,
-the kernel wouldn't enable the HPET legacy emulation bit. The HPET
-spec defines that when the legacy replacement option bit is set, the
-HPET takes control of the RTC (#8) and timer (#2) interrupts. Why it
-takes over the RTC interrupt I've never understood. The HPET is not an
-RTC, so it results in software having to emulate it which results in
-extra complexity. If the kernel didn't set the HPET legacy emulation
-bit when the HPET declared proper IRQs, then the RTC wake interrupt
-would keep working as expected. I guess there's not much benefit to
-fixing this anymore, now that this ACPI timer patch has landed. If a
-platform were to release new firmware to define proper HPET IRQs, the
-date would bump, and it would fall into the ACPI path.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202311172325.33tTniaJ-lkp@intel.com/
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+---
+ drivers/rtc/rtc-ds3232.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->
->
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/drivers/rtc/rtc-ds3232.c b/drivers/rtc/rtc-ds3232.c
+index 89d7b085f721..1485a6ae51e6 100644
+--- a/drivers/rtc/rtc-ds3232.c
++++ b/drivers/rtc/rtc-ds3232.c
+@@ -536,6 +536,8 @@ static int ds3232_probe(struct device *dev, struct regmap *regmap, int irq,
+ 	return 0;
+ }
+ 
++#if IS_ENABLED(CONFIG_I2C)
++
+ #ifdef CONFIG_PM_SLEEP
+ static int ds3232_suspend(struct device *dev)
+ {
+@@ -564,8 +566,6 @@ static const struct dev_pm_ops ds3232_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(ds3232_suspend, ds3232_resume)
+ };
+ 
+-#if IS_ENABLED(CONFIG_I2C)
+-
+ static int ds3232_i2c_probe(struct i2c_client *client)
+ {
+ 	struct regmap *regmap;
+-- 
+2.34.1
+
 
