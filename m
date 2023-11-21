@@ -1,276 +1,174 @@
-Return-Path: <linux-rtc+bounces-342-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-343-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF4707F3544
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 18:48:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34D357F356E
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 19:00:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99FCC282986
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 17:48:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DD81C2088D
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 18:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F0320DF4;
-	Tue, 21 Nov 2023 17:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E342B5B20C;
+	Tue, 21 Nov 2023 18:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kGIlfsuW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aXPgOJI0"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC2ED4B
-	for <linux-rtc@vger.kernel.org>; Tue, 21 Nov 2023 09:48:40 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6b1d1099a84so5546383b3a.1
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Nov 2023 09:48:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700588920; x=1701193720; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EAK/ItuSDRPVMNR15AwNhdUvFP+x071LcAQ3w3yTJs0=;
-        b=kGIlfsuWV9pc67/zTpkfc8YdnXt2hAE3qr+ewTild/gLqpQ9CS9/PsmFolWYr0Re20
-         baGlZQTup9TPCYqBz2blkdq7pSK2JrFq6643iRt+jfyw1R/jU798ExGNdjQXWkJtUOc+
-         qJnOczBjgR6QdFJFMGCdoA+BEVkKXTRoWaMW/G4wWJimH1PmmJllb4EBPaJ4HdT/rB3w
-         feCv3oNiWOGIeuLqszBBQ/1EzYEuPo6unTnYDCBMkMCP5apxWosN8AjWCGqNfRhObimy
-         uOPX0fJ8KpyF0HfQ+M4Ub5D875vEt23/jIXPzBu9mL0he8lpXtR+EGB8ZiIM5FrlHbli
-         Pprw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700588920; x=1701193720;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EAK/ItuSDRPVMNR15AwNhdUvFP+x071LcAQ3w3yTJs0=;
-        b=EW+fCo0ra+q1mMFDFajk0uE+EU/zZMjzv9rO3wj4/dn4JWRNq/MAytf3FShLAPCg37
-         RrJReyYIZcRDN5QXHq5F8ZuUFYT4x4wtuEu+rjv+fDqBM2My8ac586aQkN0/fsYTh5SE
-         M2G4Uf79xeQ3wf6/OIG14Zq6Uh+7Zq4hXk+ZPWRTFeKhawgPXic7rcvowGWUrBlVKad8
-         hxTwuKNWlJ9zmJfA1YUsZIELKahNAlGOjJOpXuQu6uHnuxmtO1L1lhMhCcg/ZvQuiCip
-         OZ+/fVvDDpN/oIIXDIJ1lXlTQAKR3GKaZgfuA2c4LlpnbnE+ryNl0dozbnFFsJAmq2P5
-         /nKw==
-X-Gm-Message-State: AOJu0YzcrbpOSmaBlPCcb8bcglMBKb+E5SaP89MuppmCPLbANTX+1Ycr
-	sykQRW6Myxhcm1WqlXbQINTUWAWcOI1xJU0Teyc1LA==
-X-Google-Smtp-Source: AGHT+IGsVYAziCjXoCBHiftycTLKlFRj+F3xZDSfXKxIguYqxWX7xqT/er/I16AqY0h4UFWzZ5qHqodRZyjJQpRXSA8=
-X-Received: by 2002:a05:6a20:4306:b0:187:5be4:67e2 with SMTP id
- h6-20020a056a20430600b001875be467e2mr16406256pzk.53.1700588920073; Tue, 21
- Nov 2023 09:48:40 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3392197;
+	Tue, 21 Nov 2023 09:59:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700589598; x=1732125598;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HajNcANzS8KHjONWzavIj/4wpkVTaBzXzzIAQEqc5MU=;
+  b=aXPgOJI0oC7xUaDkTkvb2wElPOfZPZkKJT1NXRRaIAEYXsv9wW9PVEQF
+   8npqSnSWtFmOSgwzH2KhaNHEQ1U/T4Ix2MMC3zid/hwskNjU1iPI9S3k0
+   s5N0zXj2oKu9R8WqfM89VCwBJyKuILvWshECuE8yOCCU1asLxUhwECszm
+   u7zwhMhP8z662Ad/J7cpEN1X041aQbTF583B3g0L9brJ2B/1vD9jauCJZ
+   FQ6GWz45L7ijePon+X5DWjD/0MuywUqo7lcGrnEjLPfgHLsnx2YMADLL+
+   fgO2gHpMoijDfincr7srDxydyzlsbbMS+CBf0rXrQmG080eQdUzq4Av9p
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="422990035"
+X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
+   d="scan'208";a="422990035"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 09:59:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="760171994"
+X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
+   d="scan'208";a="760171994"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2023 09:59:53 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r5V2E-00086K-00;
+	Tue, 21 Nov 2023 17:59:45 +0000
+Date: Wed, 22 Nov 2023 01:58:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, a.zummo@towertech.it,
+	alexandre.belloni@bootlin.com, krzysztof.kozlowski+dt@linaro.org,
+	chao.wei@sophgo.com, unicorn_wang@outlook.com, conor+dt@kernel.org,
+	robh+dt@kernel.org, conor@kernel.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+Subject: Re: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B
+ SoC
+Message-ID: <202311220129.aOYelwJQ-lkp@intel.com>
+References: <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org> <20231108104343.24192-17-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20231108104343.24192-17-krzysztof.kozlowski@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Tue, 21 Nov 2023 11:48:29 -0600
-Message-ID: <CAPLW+4nkrMwc9GiQyn7ojaPz_50NQ3vAcMt9+tOzpHfq7G7+Tg@mail.gmail.com>
-Subject: Re: [PATCH 16/17] arm64: dts: exynos850: add specific compatibles to
- several blocks
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Jaehoon Chung <jh80.chung@samsung.com>, dri-devel@lists.freedesktop.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
-	linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com>
 
-On Wed, Nov 8, 2023 at 4:44=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Exynos850 reuses several devices from older designs, thus historically
-> we kept the old (block's) compatible only.  This works fine and there is
-> no bug here, however guidelines expressed in
-> Documentation/devicetree/bindings/writing-bindings.rst state that:
-> 1. Compatibles should be specific.
-> 2. We should add new compatibles in case of bugs or features.
->
-> Add compatibles specific to Exynos850 in front of all old-SoC-like
-> compatibles.  This will also help reviews of new code using existing
-> DTS as template.  No functional impact on Linux drivers behavior.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+Hi Jingbao,
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+kernel test robot noticed the following build errors:
 
->  arch/arm64/boot/dts/exynos/exynos850.dtsi | 34 +++++++++++++----------
->  1 file changed, 20 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/=
-dts/exynos/exynos850.dtsi
-> index 53104e65b9c6..df5ea43ebcad 100644
-> --- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-> @@ -396,7 +396,7 @@ pinctrl_aud: pinctrl@14a60000 {
->                 };
->
->                 rtc: rtc@11a30000 {
-> -                       compatible =3D "samsung,s3c6410-rtc";
-> +                       compatible =3D "samsung,exynos850-rtc", "samsung,=
-s3c6410-rtc";
->                         reg =3D <0x11a30000 0x100>;
->                         interrupts =3D <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>,
->                                      <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -406,7 +406,8 @@ rtc: rtc@11a30000 {
->                 };
->
->                 mmc_0: mmc@12100000 {
-> -                       compatible =3D "samsung,exynos7-dw-mshc-smu";
-> +                       compatible =3D "samsung,exynos850-dw-mshc-smu",
-> +                                    "samsung,exynos7-dw-mshc-smu";
->                         reg =3D <0x12100000 0x2000>;
->                         interrupts =3D <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -419,7 +420,7 @@ mmc_0: mmc@12100000 {
->                 };
->
->                 i2c_0: i2c@13830000 {
-> -                       compatible =3D "samsung,s3c2440-i2c";
-> +                       compatible =3D "samsung,exynos850-i2c", "samsung,=
-s3c2440-i2c";
->                         reg =3D <0x13830000 0x100>;
->                         interrupts =3D <GIC_SPI 196 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -432,7 +433,7 @@ i2c_0: i2c@13830000 {
->                 };
->
->                 i2c_1: i2c@13840000 {
-> -                       compatible =3D "samsung,s3c2440-i2c";
-> +                       compatible =3D "samsung,exynos850-i2c", "samsung,=
-s3c2440-i2c";
->                         reg =3D <0x13840000 0x100>;
->                         interrupts =3D <GIC_SPI 197 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -445,7 +446,7 @@ i2c_1: i2c@13840000 {
->                 };
->
->                 i2c_2: i2c@13850000 {
-> -                       compatible =3D "samsung,s3c2440-i2c";
-> +                       compatible =3D "samsung,exynos850-i2c", "samsung,=
-s3c2440-i2c";
->                         reg =3D <0x13850000 0x100>;
->                         interrupts =3D <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -458,7 +459,7 @@ i2c_2: i2c@13850000 {
->                 };
->
->                 i2c_3: i2c@13860000 {
-> -                       compatible =3D "samsung,s3c2440-i2c";
-> +                       compatible =3D "samsung,exynos850-i2c", "samsung,=
-s3c2440-i2c";
->                         reg =3D <0x13860000 0x100>;
->                         interrupts =3D <GIC_SPI 199 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -471,7 +472,7 @@ i2c_3: i2c@13860000 {
->                 };
->
->                 i2c_4: i2c@13870000 {
-> -                       compatible =3D "samsung,s3c2440-i2c";
-> +                       compatible =3D "samsung,exynos850-i2c", "samsung,=
-s3c2440-i2c";
->                         reg =3D <0x13870000 0x100>;
->                         interrupts =3D <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -485,7 +486,7 @@ i2c_4: i2c@13870000 {
->
->                 /* I2C_5 (also called CAM_PMIC_I2C in TRM) */
->                 i2c_5: i2c@13880000 {
-> -                       compatible =3D "samsung,s3c2440-i2c";
-> +                       compatible =3D "samsung,exynos850-i2c", "samsung,=
-s3c2440-i2c";
->                         reg =3D <0x13880000 0x100>;
->                         interrupts =3D <GIC_SPI 201 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -499,7 +500,7 @@ i2c_5: i2c@13880000 {
->
->                 /* I2C_6 (also called MOTOR_I2C in TRM) */
->                 i2c_6: i2c@13890000 {
-> -                       compatible =3D "samsung,s3c2440-i2c";
-> +                       compatible =3D "samsung,exynos850-i2c", "samsung,=
-s3c2440-i2c";
->                         reg =3D <0x13890000 0x100>;
->                         interrupts =3D <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells =3D <1>;
-> @@ -640,7 +641,8 @@ usi_hsi2c_0: usi@138a00c0 {
->                         status =3D "disabled";
->
->                         hsi2c_0: i2c@138a0000 {
-> -                               compatible =3D "samsung,exynosautov9-hsi2=
-c";
-> +                               compatible =3D "samsung,exynos850-hsi2c",
-> +                                            "samsung,exynosautov9-hsi2c"=
-;
->                                 reg =3D <0x138a0000 0xc0>;
->                                 interrupts =3D <GIC_SPI 193 IRQ_TYPE_LEVE=
-L_HIGH>;
->                                 #address-cells =3D <1>;
-> @@ -668,7 +670,8 @@ usi_hsi2c_1: usi@138b00c0 {
->                         status =3D "disabled";
->
->                         hsi2c_1: i2c@138b0000 {
-> -                               compatible =3D "samsung,exynosautov9-hsi2=
-c";
-> +                               compatible =3D "samsung,exynos850-hsi2c",
-> +                                            "samsung,exynosautov9-hsi2c"=
-;
->                                 reg =3D <0x138b0000 0xc0>;
->                                 interrupts =3D <GIC_SPI 194 IRQ_TYPE_LEVE=
-L_HIGH>;
->                                 #address-cells =3D <1>;
-> @@ -696,7 +699,8 @@ usi_hsi2c_2: usi@138c00c0 {
->                         status =3D "disabled";
->
->                         hsi2c_2: i2c@138c0000 {
-> -                               compatible =3D "samsung,exynosautov9-hsi2=
-c";
-> +                               compatible =3D "samsung,exynos850-hsi2c",
-> +                                            "samsung,exynosautov9-hsi2c"=
-;
->                                 reg =3D <0x138c0000 0xc0>;
->                                 interrupts =3D <GIC_SPI 195 IRQ_TYPE_LEVE=
-L_HIGH>;
->                                 #address-cells =3D <1>;
-> @@ -738,7 +742,8 @@ usi_cmgp0: usi@11d000c0 {
->                         status =3D "disabled";
->
->                         hsi2c_3: i2c@11d00000 {
-> -                               compatible =3D "samsung,exynosautov9-hsi2=
-c";
-> +                               compatible =3D "samsung,exynos850-hsi2c",
-> +                                            "samsung,exynosautov9-hsi2c"=
-;
->                                 reg =3D <0x11d00000 0xc0>;
->                                 interrupts =3D <GIC_SPI 62 IRQ_TYPE_LEVEL=
-_HIGH>;
->                                 #address-cells =3D <1>;
-> @@ -778,7 +783,8 @@ usi_cmgp1: usi@11d200c0 {
->                         status =3D "disabled";
->
->                         hsi2c_4: i2c@11d20000 {
-> -                               compatible =3D "samsung,exynosautov9-hsi2=
-c";
-> +                               compatible =3D "samsung,exynos850-hsi2c",
-> +                                            "samsung,exynosautov9-hsi2c"=
-;
->                                 reg =3D <0x11d20000 0xc0>;
->                                 interrupts =3D <GIC_SPI 63 IRQ_TYPE_LEVEL=
-_HIGH>;
->                                 #address-cells =3D <1>;
-> --
-> 2.34.1
->
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on linus/master v6.7-rc2 next-20231121]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jingbao-Qiu/dt-bindings-rtc-add-binding-for-Sophgo-CV1800B-rtc-controller/20231121-174927
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20231121094642.2973795-3-qiujingbao.dlmu%40gmail.com
+patch subject: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B SoC
+config: parisc-allmodconfig (https://download.01.org/0day-ci/archive/20231122/202311220129.aOYelwJQ-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220129.aOYelwJQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311220129.aOYelwJQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_probe':
+>> drivers/rtc/rtc-cv1800b.c:246:16: error: implicit declaration of function 'rtc_register_device'; did you mean 'devm_rtc_register_device'? [-Werror=implicit-function-declaration]
+     246 |         return rtc_register_device(rtc->rtc_dev);
+         |                ^~~~~~~~~~~~~~~~~~~
+         |                devm_rtc_register_device
+   cc1: some warnings being treated as errors
+
+
+vim +246 drivers/rtc/rtc-cv1800b.c
+
+   189	
+   190	static int cv1800b_rtc_probe(struct platform_device *pdev)
+   191	{
+   192		struct cv1800b_rtc_priv *rtc;
+   193		struct resource *res;
+   194		int ret;
+   195	
+   196		rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+   197		if (!rtc)
+   198			return -ENOMEM;
+   199	
+   200		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   201		if (!res) {
+   202			ret = -ENODEV;
+   203			goto err;
+   204		}
+   205	
+   206		rtc->core_map = devm_ioremap_resource(&pdev->dev, res);
+   207		if (IS_ERR(rtc->core_map)) {
+   208			ret = PTR_ERR(rtc->core_map);
+   209			goto err;
+   210		}
+   211	
+   212		rtc->irq = platform_get_irq(pdev, 0);
+   213		platform_set_drvdata(pdev, rtc);
+   214		if (rtc->irq < 0) {
+   215			ret = -EINVAL;
+   216			goto err;
+   217		}
+   218	
+   219		ret =
+   220		    devm_request_irq(&pdev->dev, rtc->irq, cv1800b_rtc_irq_handler,
+   221				     IRQF_SHARED, "rtc alarm", &pdev->dev);
+   222		if (ret)
+   223			goto err;
+   224	
+   225		rtc->clk = devm_clk_get(&pdev->dev, NULL);
+   226		if (IS_ERR(rtc->clk)) {
+   227			dev_err(&pdev->dev, "no clock");
+   228			ret = PTR_ERR(rtc->clk);
+   229			goto err;
+   230		}
+   231		ret = clk_prepare_enable(rtc->clk);
+   232		if (ret)
+   233			goto err;
+   234		ret = cv1800b_rtc_softinit(rtc);
+   235		if (ret)
+   236			goto err;
+   237		cv1800b_rtc_alarm_irq_enable(&pdev->dev, 1);
+   238		rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+   239		if (IS_ERR(rtc->rtc_dev)) {
+   240			ret = PTR_ERR(rtc->rtc_dev);
+   241			goto err;
+   242		}
+   243		rtc->rtc_dev->range_max = U32_MAX;
+   244		rtc->rtc_dev->ops = &cv800b_rtc_ops;
+   245	
+ > 246		return rtc_register_device(rtc->rtc_dev);
+   247	err:
+   248		return dev_err_probe(&pdev->dev, ret, "Failed to init cv1800b rtc\n");
+   249	}
+   250	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
