@@ -1,52 +1,51 @@
-Return-Path: <linux-rtc+bounces-343-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-344-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34D357F356E
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 19:00:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B36817F3984
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 23:52:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DD81C2088D
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 18:00:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4B82B2192A
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 22:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E342B5B20C;
-	Tue, 21 Nov 2023 18:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52FBE54BC2;
+	Tue, 21 Nov 2023 22:52:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aXPgOJI0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FdMXFFYn"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3392197;
-	Tue, 21 Nov 2023 09:59:58 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9208AF4;
+	Tue, 21 Nov 2023 14:52:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700589598; x=1732125598;
+  t=1700607145; x=1732143145;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HajNcANzS8KHjONWzavIj/4wpkVTaBzXzzIAQEqc5MU=;
-  b=aXPgOJI0oC7xUaDkTkvb2wElPOfZPZkKJT1NXRRaIAEYXsv9wW9PVEQF
-   8npqSnSWtFmOSgwzH2KhaNHEQ1U/T4Ix2MMC3zid/hwskNjU1iPI9S3k0
-   s5N0zXj2oKu9R8WqfM89VCwBJyKuILvWshECuE8yOCCU1asLxUhwECszm
-   u7zwhMhP8z662Ad/J7cpEN1X041aQbTF583B3g0L9brJ2B/1vD9jauCJZ
-   FQ6GWz45L7ijePon+X5DWjD/0MuywUqo7lcGrnEjLPfgHLsnx2YMADLL+
-   fgO2gHpMoijDfincr7srDxydyzlsbbMS+CBf0rXrQmG080eQdUzq4Av9p
+  bh=4El9C1OtR2c7yuMuhHbcy9uKYS1ErYxb0i53zPctChc=;
+  b=FdMXFFYnvb3Ew7o/6oxGEcuehoh82ZXvG2FqVDj70u/Zss0kwLxuRi2E
+   btYrU9V6gE+qFmAMzCexgUhRVpl4bt3eWuKrZjgewnKODe1GQxiZHMtlP
+   YnAAp8SJjD1+h9BiBEJ/9BvlAvNzAV/9rIrd3EjRSl4NrTWY1tJ9cfqdO
+   dkpaeYXWCPwl8oiYibdaQz4kkN+HwH5+FfzpWse2fhwbNYMhWggFmkxBn
+   WywrVBnE/pcdcnAl7YiMoni39iam0Wxmd39+TldAero9aROXnuZhqr1q2
+   1tP9955ghxNb1/T+1k5se+hiTMZUb8RYcsaponn2AdhHx3Z/WdFYi4LVe
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="422990035"
-X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
-   d="scan'208";a="422990035"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 09:59:58 -0800
+X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="395860403"
+X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
+   d="scan'208";a="395860403"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 14:52:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="760171994"
-X-IronPort-AV: E=Sophos;i="6.04,216,1695711600"; 
-   d="scan'208";a="760171994"
+X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
+   d="scan'208";a="15045295"
 Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2023 09:59:53 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 21 Nov 2023 14:52:20 -0800
 Received: from kbuild by b8de5498638e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1r5V2E-00086K-00;
-	Tue, 21 Nov 2023 17:59:45 +0000
-Date: Wed, 22 Nov 2023 01:58:12 +0800
+	id 1r5ZbO-0008Mk-0R;
+	Tue, 21 Nov 2023 22:52:18 +0000
+Date: Wed, 22 Nov 2023 06:52:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, a.zummo@towertech.it,
 	alexandre.belloni@bootlin.com, krzysztof.kozlowski+dt@linaro.org,
@@ -58,7 +57,7 @@ Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
 	Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 Subject: Re: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B
  SoC
-Message-ID: <202311220129.aOYelwJQ-lkp@intel.com>
+Message-ID: <202311220645.2hOquYn6-lkp@intel.com>
 References: <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -84,89 +83,116 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Jingbao-Qiu/dt-bindings-r
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
 patch link:    https://lore.kernel.org/r/20231121094642.2973795-3-qiujingbao.dlmu%40gmail.com
 patch subject: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B SoC
-config: parisc-allmodconfig (https://download.01.org/0day-ci/archive/20231122/202311220129.aOYelwJQ-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220129.aOYelwJQ-lkp@intel.com/reproduce)
+config: sparc-allmodconfig (https://download.01.org/0day-ci/archive/20231122/202311220645.2hOquYn6-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220645.2hOquYn6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311220129.aOYelwJQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311220645.2hOquYn6-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
+   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_alarm_irq_enable':
+>> drivers/rtc/rtc-cv1800b.c:90:17: error: implicit declaration of function 'writel_relaxed' [-Werror=implicit-function-declaration]
+      90 |                 writel_relaxed(REG_ENABLE_FUN, data->core_map + RTC_ALARM_ENABLE);
+         |                 ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_read_alarm':
+>> drivers/rtc/rtc-cv1800b.c:115:21: error: implicit declaration of function 'readl' [-Werror=implicit-function-declaration]
+     115 |         alrm_time = readl(data->core_map + RTC_ALARM_TIME);
+         |                     ^~~~~
+   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_softinit':
+>> drivers/rtc/rtc-cv1800b.c:128:9: error: implicit declaration of function 'writel' [-Werror=implicit-function-declaration]
+     128 |         writel(ACTIVATE_RTC_POR_DB_MAGIC_KEY,
+         |         ^~~~~~
+   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_read_time':
+>> drivers/rtc/rtc-cv1800b.c:150:16: error: implicit declaration of function 'readl_relaxed' [-Werror=implicit-function-declaration]
+     150 |         time = readl_relaxed(data->core_map + RTC_SEC_CNTR_VALUE);
+         |                ^~~~~~~~~~~~~
    drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_probe':
->> drivers/rtc/rtc-cv1800b.c:246:16: error: implicit declaration of function 'rtc_register_device'; did you mean 'devm_rtc_register_device'? [-Werror=implicit-function-declaration]
+   drivers/rtc/rtc-cv1800b.c:246:16: error: implicit declaration of function 'rtc_register_device'; did you mean 'devm_rtc_register_device'? [-Werror=implicit-function-declaration]
      246 |         return rtc_register_device(rtc->rtc_dev);
          |                ^~~~~~~~~~~~~~~~~~~
          |                devm_rtc_register_device
    cc1: some warnings being treated as errors
 
 
-vim +246 drivers/rtc/rtc-cv1800b.c
+vim +/writel_relaxed +90 drivers/rtc/rtc-cv1800b.c
 
-   189	
-   190	static int cv1800b_rtc_probe(struct platform_device *pdev)
-   191	{
-   192		struct cv1800b_rtc_priv *rtc;
-   193		struct resource *res;
-   194		int ret;
-   195	
-   196		rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-   197		if (!rtc)
-   198			return -ENOMEM;
-   199	
-   200		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   201		if (!res) {
-   202			ret = -ENODEV;
-   203			goto err;
-   204		}
-   205	
-   206		rtc->core_map = devm_ioremap_resource(&pdev->dev, res);
-   207		if (IS_ERR(rtc->core_map)) {
-   208			ret = PTR_ERR(rtc->core_map);
-   209			goto err;
-   210		}
-   211	
-   212		rtc->irq = platform_get_irq(pdev, 0);
-   213		platform_set_drvdata(pdev, rtc);
-   214		if (rtc->irq < 0) {
-   215			ret = -EINVAL;
-   216			goto err;
-   217		}
-   218	
-   219		ret =
-   220		    devm_request_irq(&pdev->dev, rtc->irq, cv1800b_rtc_irq_handler,
-   221				     IRQF_SHARED, "rtc alarm", &pdev->dev);
-   222		if (ret)
-   223			goto err;
-   224	
-   225		rtc->clk = devm_clk_get(&pdev->dev, NULL);
-   226		if (IS_ERR(rtc->clk)) {
-   227			dev_err(&pdev->dev, "no clock");
-   228			ret = PTR_ERR(rtc->clk);
-   229			goto err;
-   230		}
-   231		ret = clk_prepare_enable(rtc->clk);
-   232		if (ret)
-   233			goto err;
-   234		ret = cv1800b_rtc_softinit(rtc);
-   235		if (ret)
-   236			goto err;
-   237		cv1800b_rtc_alarm_irq_enable(&pdev->dev, 1);
-   238		rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
-   239		if (IS_ERR(rtc->rtc_dev)) {
-   240			ret = PTR_ERR(rtc->rtc_dev);
-   241			goto err;
-   242		}
-   243		rtc->rtc_dev->range_max = U32_MAX;
-   244		rtc->rtc_dev->ops = &cv800b_rtc_ops;
-   245	
- > 246		return rtc_register_device(rtc->rtc_dev);
-   247	err:
-   248		return dev_err_probe(&pdev->dev, ret, "Failed to init cv1800b rtc\n");
-   249	}
-   250	
+    83	
+    84	static int cv1800b_rtc_alarm_irq_enable(struct device *dev,
+    85						unsigned int enabled)
+    86	{
+    87		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
+    88	
+    89		if (enabled)
+  > 90			writel_relaxed(REG_ENABLE_FUN, data->core_map + RTC_ALARM_ENABLE);
+    91		else
+    92			writel_relaxed(REG_DISABLE_FUN,
+    93				       data->core_map + RTC_ALARM_ENABLE);
+    94	
+    95		return 0;
+    96	}
+    97	
+    98	static int cv1800b_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+    99	{
+   100		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
+   101		unsigned long time = rtc_tm_to_time64(&alrm->time);
+   102	
+   103		writel_relaxed(time, data->core_map + RTC_ALARM_TIME);
+   104	
+   105		cv1800b_rtc_alarm_irq_enable(dev, 1);
+   106	
+   107		return 0;
+   108	}
+   109	
+   110	static int cv1800b_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+   111	{
+   112		u32 alrm_time, now_time;
+   113		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
+   114	
+ > 115		alrm_time = readl(data->core_map + RTC_ALARM_TIME);
+   116		now_time = readl(data->core_map + RTC_SEC_CNTR_VALUE);
+   117		rtc_time64_to_tm(alrm_time, &alrm->time);
+   118		alrm->pending = now_time > alrm_time ? 1 : 0;
+   119		alrm->enabled = readl(data->core_map + RTC_ALARM_ENABLE);
+   120	
+   121		return 0;
+   122	}
+   123	
+   124	static int cv1800b_rtc_softinit(struct cv1800b_rtc_priv *dev)
+   125	{
+   126		u32 timeout = 20;
+   127	
+ > 128		writel(ACTIVATE_RTC_POR_DB_MAGIC_KEY,
+   129		       dev->core_map + RTC_POR_DB_MAGIC_KEY);
+   130		writel(INIT_LOAD_TIME, dev->core_map + RTC_SET_SEC_CNTR_VALUE);
+   131		writel(REG_DISABLE_FUN, dev->core_map + RTC_SET_SEC_CNTR_TRIG);
+   132	
+   133		while (readl(dev->core_map + RTC_SEC_CNTR_VALUE) == INIT_LOAD_TIME
+   134		       && timeout--)
+   135			udelay(5);
+   136	
+   137		if (!timeout)
+   138			return -1;
+   139		return 0;
+   140	}
+   141	
+   142	static int cv1800b_rtc_read_time(struct device *dev, struct rtc_time *tm)
+   143	{
+   144		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
+   145		u32 time = 0;
+   146	
+   147		if (!data)
+   148			return -1;
+   149	
+ > 150		time = readl_relaxed(data->core_map + RTC_SEC_CNTR_VALUE);
+   151		rtc_time64_to_tm(time, tm);
+   152	
+   153		return 0;
+   154	}
+   155	
 
 -- 
 0-DAY CI Kernel Test Service
