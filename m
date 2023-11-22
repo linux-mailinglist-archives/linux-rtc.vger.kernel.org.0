@@ -1,36 +1,36 @@
-Return-Path: <linux-rtc+bounces-345-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-346-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3917D7F4D9D
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Nov 2023 17:58:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49AFE7F4DCF
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Nov 2023 18:06:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 999AAB20BBE
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Nov 2023 16:58:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 027E1281451
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Nov 2023 17:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1984EB20;
-	Wed, 22 Nov 2023 16:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB2056475;
+	Wed, 22 Nov 2023 17:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="JErpZcdC"
+	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="bHhfUM3Q"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4938E7
-	for <linux-rtc@vger.kernel.org>; Wed, 22 Nov 2023 08:58:14 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 14329 invoked from network); 22 Nov 2023 17:58:11 +0100
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.140])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B421A5
+	for <linux-rtc@vger.kernel.org>; Wed, 22 Nov 2023 09:06:15 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 40590 invoked from network); 22 Nov 2023 18:06:08 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1700672291; bh=3TOkf60vDNUoEBZRHO4yuyf9OPyZ930AHngfO3FLpH0=;
+          t=1700672769; bh=YH+s+mGXzXn9Z3vbD3GChpf5e7kkb+7vD/AnIKRBx+U=;
           h=Subject:To:Cc:From;
-          b=JErpZcdCBk31yHcAlTOW8FVRQErD97aOl12wRaxssGfbeRiAT4hgzStDNA8RCtLqH
-           vmMaU44bYoFh08FNklIQJBY1tBWMDbMJtlRr/tUObxYnUrTGpCHKjHnClK1h3WiF58
-           wxBLsTzrN9nBF0byn8dnKE85wonemeHOlyoQaVPE=
+          b=bHhfUM3Qiu+H0Oze6p6stIQYJnDGv8AIvl30jBB7mF40h6vUnf+gdccjZuake+8X4
+           3JWivrXqkmvKk+nWghrHY76t/4Rbx306AbAakTxpcAeyE6habY8KvFSTPtqORdj8FS
+           ePPwuBLhK8c6ND1zUOtzjNLe20PcNfdfR3UJW1zc=
 Received: from aafl106.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.141.106])
           (envelope-sender <mat.jonczyk@o2.pl>)
           by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <mario.limonciello@amd.com>; 22 Nov 2023 17:58:10 +0100
-Message-ID: <cbb60eed-a835-4ee7-a43d-e871c16713e1@o2.pl>
-Date: Wed, 22 Nov 2023 17:58:07 +0100
+          for <mario.limonciello@amd.com>; 22 Nov 2023 18:06:08 +0100
+Message-ID: <5357e62e-2b42-41bc-8c63-1bafdb461e99@o2.pl>
+Date: Wed, 22 Nov 2023 18:06:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -38,7 +38,9 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Extend time to wait for UIP for some callers
+Subject: Re: [PATCH v2 3/4] rtc: Add support for configuring the UIP timeout
+ for RTC reads
+Content-Language: en-GB
 To: Mario Limonciello <mario.limonciello@amd.com>,
  Alessandro Zummo <a.zummo@towertech.it>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -47,7 +49,7 @@ Cc: "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
  tobrohl@gmail.com, aalsing@gmail.com, Dhaval.Giani@amd.com,
  xmb8dsv4@gmail.com, x86@kernel.org, dhaval.giani@gmail.com
 References: <20231120141555.458-1-mario.limonciello@amd.com>
-Content-Language: en-GB
+ <20231120141555.458-4-mario.limonciello@amd.com>
 From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
  xsFNBFqMDyQBEAC2VYhOvwXdcGfmMs9amNUFjGFgLixeS2C1uYwaC3tYqjgDQNo/qDoPh52f
@@ -92,42 +94,52 @@ Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
  0nI2LedLnIMUWwLRT4EvdYzsbP6im/7FXps15jaBOreobCaWTWtKtwD2LNI0l9LU9/RF+4Ac
  gwYu1CerMmdFbSo8ZdnaXlbEHinySUPqKmLHmPgDfxKNhfRDm1jJcGATkHCP80Fww8Ihl8aS
  TANkZ3QqXNX2
-In-Reply-To: <20231120141555.458-1-mario.limonciello@amd.com>
+In-Reply-To: <20231120141555.458-4-mario.limonciello@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: ccc602f34ade53ca99ecd5fad929bca1
+X-WP-MailID: ea291e9367221e28bf5b618e6f0cdea1
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [sZPE]                               
+X-WP-SPAM: NO 0000000 [ITNh]                               
 
 W dniu 20.11.2023 o 15:15, Mario Limonciello pisze:
-> A number of users have reported their system will have a failure reading
-> the RTC around s2idle entry or exit.
+> The UIP timeout is hardcoded to 10ms for all RTC reads, but in some
+> contexts this might not be enough time. Add a timeout parameter to
+> mc146818_get_time() and mc146818_get_time_callback().
 >
-> This failure manifests as UIP clear taking longer than 10ms.
+> If UIP timeout is configured by caller to be >=100 ms and a call
+> takes this long, log a warning.
 >
-> By a debugging patch provided by Mateusz Jończyk it is shown that this
-> has taken upwards of 300ms in some cases.
+> Make all callers use 10ms to ensure no functional changes.
 >
-> This series adjusts the UIP timeout to be configurable by the caller and
-> changes some callers which aren't called in an interrupt context to allow
-> longer timeouts.
->
-> Mario Limonciello (4):
->   rtc: mc146818-lib: Adjust failure return code for mc146818_get_time()
->   rtc: Adjust failure return code for cmos_set_alarm()
->   rtc: Add support for configuring the UIP timeout for RTC reads
->   rtc: Extend timeout for waiting for UIP to clear to 1s
+> Cc: stable@vger.kernel.org # 6.1.y: commit d2a632a8a117 ("rtc: mc146818-lib: reduce RTC_UIP polling period")
 
-Series tested on top of Linux 6.1.63, 6.6.2 and 6.7-rc2
-(on a laptop that is not affected by the problems).
-No problems found, can be submitted to stable.
+I was wrong and
+commit d2a632a8a117 ("rtc: mc146818-lib: reduce RTC_UIP polling period") is
+included in 6.1.y anyway (was merged before 6.1-rc1), does not have to be
+mentioned in the line above.
 
-Tested-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-
-Patches 1 and 2:
-
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Acked-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Fixes: ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>  * Add a warning if 100ms or more
+>  * Add stable and fixes tags
+> ---
+[snip]
+> @@ -72,6 +76,9 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+>  		}
+>  		spin_unlock_irqrestore(&rtc_lock, flags);
+>  
+> +		if (i >= UIP_RECHECK_TIMEOUT_MS(100))
+> +			pr_warn("RTC took %d iterations to clear UIP\n", i);
+> +
+This warning message is difficult to understand for someone that is not familiar
+with
+the code / MC146818 documentation.
+"Reading current time from RTC took around %d ms" would be better.
+>  		return true;
+>  	}
+>  	return false;
 
 Greetings,
 
