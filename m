@@ -1,200 +1,136 @@
-Return-Path: <linux-rtc+bounces-344-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-345-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B36817F3984
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 23:52:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3917D7F4D9D
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Nov 2023 17:58:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4B82B2192A
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Nov 2023 22:52:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 999AAB20BBE
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Nov 2023 16:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52FBE54BC2;
-	Tue, 21 Nov 2023 22:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1984EB20;
+	Wed, 22 Nov 2023 16:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FdMXFFYn"
+	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="JErpZcdC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9208AF4;
-	Tue, 21 Nov 2023 14:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700607145; x=1732143145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4El9C1OtR2c7yuMuhHbcy9uKYS1ErYxb0i53zPctChc=;
-  b=FdMXFFYnvb3Ew7o/6oxGEcuehoh82ZXvG2FqVDj70u/Zss0kwLxuRi2E
-   btYrU9V6gE+qFmAMzCexgUhRVpl4bt3eWuKrZjgewnKODe1GQxiZHMtlP
-   YnAAp8SJjD1+h9BiBEJ/9BvlAvNzAV/9rIrd3EjRSl4NrTWY1tJ9cfqdO
-   dkpaeYXWCPwl8oiYibdaQz4kkN+HwH5+FfzpWse2fhwbNYMhWggFmkxBn
-   WywrVBnE/pcdcnAl7YiMoni39iam0Wxmd39+TldAero9aROXnuZhqr1q2
-   1tP9955ghxNb1/T+1k5se+hiTMZUb8RYcsaponn2AdhHx3Z/WdFYi4LVe
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="395860403"
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="395860403"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 14:52:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="15045295"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 21 Nov 2023 14:52:20 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5ZbO-0008Mk-0R;
-	Tue, 21 Nov 2023 22:52:18 +0000
-Date: Wed, 22 Nov 2023 06:52:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, a.zummo@towertech.it,
-	alexandre.belloni@bootlin.com, krzysztof.kozlowski+dt@linaro.org,
-	chao.wei@sophgo.com, unicorn_wang@outlook.com, conor+dt@kernel.org,
-	robh+dt@kernel.org, conor@kernel.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Subject: Re: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B
- SoC
-Message-ID: <202311220645.2hOquYn6-lkp@intel.com>
-References: <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com>
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4938E7
+	for <linux-rtc@vger.kernel.org>; Wed, 22 Nov 2023 08:58:14 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 14329 invoked from network); 22 Nov 2023 17:58:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1700672291; bh=3TOkf60vDNUoEBZRHO4yuyf9OPyZ930AHngfO3FLpH0=;
+          h=Subject:To:Cc:From;
+          b=JErpZcdCBk31yHcAlTOW8FVRQErD97aOl12wRaxssGfbeRiAT4hgzStDNA8RCtLqH
+           vmMaU44bYoFh08FNklIQJBY1tBWMDbMJtlRr/tUObxYnUrTGpCHKjHnClK1h3WiF58
+           wxBLsTzrN9nBF0byn8dnKE85wonemeHOlyoQaVPE=
+Received: from aafl106.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.141.106])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <mario.limonciello@amd.com>; 22 Nov 2023 17:58:10 +0100
+Message-ID: <cbb60eed-a835-4ee7-a43d-e871c16713e1@o2.pl>
+Date: Wed, 22 Nov 2023 17:58:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] Extend time to wait for UIP for some callers
+To: Mario Limonciello <mario.limonciello@amd.com>,
+ Alessandro Zummo <a.zummo@towertech.it>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+ tobrohl@gmail.com, aalsing@gmail.com, Dhaval.Giani@amd.com,
+ xmb8dsv4@gmail.com, x86@kernel.org, dhaval.giani@gmail.com
+References: <20231120141555.458-1-mario.limonciello@amd.com>
+Content-Language: en-GB
+From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
+ xsFNBFqMDyQBEAC2VYhOvwXdcGfmMs9amNUFjGFgLixeS2C1uYwaC3tYqjgDQNo/qDoPh52f
+ ExoTMJRqx48qvvY/i6iwia7wOTBxbYCBDqGYxDudjtL41ko8AmbGOSkxJww5X/2ZAtFjUJxO
+ QjNESFlRscMfDv5vcCvtH7PaJJob4TBZvKxdL4VCDCgEsmOadTy5hvwv0rjNjohau1y4XfxU
+ DdvOcl6LpWMEezsHGc/PbSHNAKtVht4BZYg66kSEAhs2rOTN6pnWJVd7ErauehrET2xo2JbO
+ 4lAv0nbXmCpPj37ZvURswCeP8PcHoA1QQKWsCnHU2WeVw+XcvR/hmFMI2QnE6V/ObHAb9bzg
+ jxSYVZRAWVsdNakfT7xhkaeHjEQMVRQYBL6bqrJMFFXyh9YDj+MALjyb5hDG3mUcB4Wg7yln
+ DRrda+1EVObfszfBWm2pC9Vz1QUQ4CD88FcmrlC7n2witke3gr38xmiYBzDqi1hRmrSj2WnS
+ RP/s9t+C8M8SweQ2WuoVBLWUvcULYMzwy6mte0aSA8XV6+02a3VuBjP/6Y8yZUd0aZfAHyPi
+ Rf60WVjYNRSeg27lZ9DJmHjSfZNn1FrtZi3W9Ff6bry/SY9D136qXBQxPYxXQfaGDhVeLUVF
+ Q+NIZ6NEjqrLQ07LEvUW2Qzk2q851/IaXZPtP6swx0gqrpjNrwARAQABzSRNYXRldXN6IEpv
+ xYRjenlrIDxtYXQuam9uY3p5a0BvMi5wbD7CwX4EEwECACgFAlqMDyQCGwMFCRLMAwAGCwkI
+ BwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEPvWWrhhCv7Gb0MQAJVIpJ1KAOH6WaT8e65xZulI
+ 1jkwGwNp+3bWWc5eLjKUnXtOYpa9oIsUUAqvh/L8MofGtM1V11kSX9dEloyqlqDyNSQk0h52
+ hZxMsCQyzjGOcBAi0zmWGYB4xu6SXj4LpVpIPW0sogduEOfbC0i7uAIyotHgepQ8RPGmZoXU
+ 9bzFCyqZ8kAqwOoCCx+ccnXtbnlAXQmDb88cIprAU+Elk4k4t7Bpjn2ek4fv35PsvsBdRTq3
+ ADg8sGuq4KQXhbY53n1tyiab3M88uv6Cv//Ncgx+AqMdXq2AJ7amFsYdvkTC98sx20qk6Cul
+ oHggmCre4MBcDD4S0qDXo5Z9NxVR/e9yUHxGLc5BlNj+FJPO7zwvkmIaMMnMlbydWVke0FSR
+ AzJaEV/NNZKYctw2wYThdXPiz/y7aKd6/sM1jgPlleQhs3tZAIdjPfFjGdeeggv668M7GmKl
+ +SEzpeFQ4b0x64XfLfLXX8GP/ArTuxEfJX4L05/Y9w9AJwXCVEwW4q17v8gNsPyVUVEdIroK
+ cve6cgNNSWoxTaYcATePmkKnrAPqfg+6qFM4TuOWmyzCLQ1YoUZMxH+ddivDQtlKCp6JgGCz
+ c9YCESxVii0vo8TsHdIAjQ/px9KsuYBmOlKnHXKbj6BsE/pkMMKQg/L415dvKzhLm2qVih7I
+ U16IAtK5b7RpzsFNBFqMDyQBEACclVvbzpor4XfU6WLUofqnO3QSTwDuNyoNQaE4GJKEXA+p
+ Bw5/D2ruHhj1Bgs6Qx7G4XL3odzO1xT3Iz6w26ZrxH69hYjeTdT8VW4EoYFvliUvgye2cC01
+ ltYrMYV1IBXwJqSEAImU0Xb+AItAnHA1NNUUb9wKHvOLrW4Y7Ntoy1tp7Vww2ecAWEIYjcO6
+ AMoUX8Q6gfVPxVEQv1EpspSwww+x/VlDGEiiYO4Ewm4MMSP4bmxsTmPb/f/K3rv830ZCQ5Ds
+ U0rzUMG2CkyF45qXVWZ974NqZIeVCTE+liCTU7ARX1bN8VlU/yRs/nP2ISO0OAAMBKea7slr
+ mu93to9gXNt3LEt+5aVIQdwEwPcqR09vGvTWdRaEQPqgkOJFyiZ0vYAUTwtITyjYxZWJbKJh
+ JFaHpMds9kZLF9bH45SGb64uZrrE2eXTyI3DSeUS1YvMlJwKGumRTPXIzmVQ5PHiGXr2/9S4
+ 16W9lBDJeHhmcVOsn+04x5KIxHtqAP3mkMjDBYa0A3ksqD84qUBNuEKkZKgibBbs4qT35oXf
+ kgWJtW+JziZf6LYx4WvRa80VDIIYCcQM6TrpsXIJI+su5qpzON1XJQG2iswY8PJ40pkRI9Sm
+ kfTFrHOgiTpwZnI9saWqJh2ABavtnKZ1CtAY2VA8gmEqQeqs2hjdiNHAmRxR2wARAQABwsFl
+ BBgBAgAPBQJajA8kAhsMBQkSzAMAAAoJEPvWWrhhCv7GhpYP/1tH/Kc35OgWu2lsgJxR9Z49
+ 4q+yYAuu11p0aQidL5utMFiemYHvxh/sJ4vMq65uPQXoQ3vo8lu9YR/p8kEt8jbljJusw6xQ
+ iKA1Cc68xtseiKcUrjmN/rk3csbT+Qj2rZwkgod8v9GlKo6BJXMcKGbHb1GJtLF5HyI1q4j/
+ zfeu7G1gVjGTx8e2OLyuBJp0HlFXWs2vWSMesmZQIBVNyyL9mmDLEwO4ULK2quF6RYtbvg+2
+ PMyomNAaQB4s1UbXAO87s75hM79iszIzak2am4dEjTx+uYCWpvcw3rRDz7aMs401CphrlMKr
+ WndS5qYcdiS9fvAfu/Jp5KIawpM0tVrojnKWCKHG4UnJIn+RF26+E7bjzE/Q5/NpkMblKD/Y
+ 6LHzJWsnLnL1o7MUARU++ztOl2Upofyuj7BSath0N632+XCTXk9m5yeDCl/UzPbP9brIChuw
+ gF7DbkdscM7fkYzkUVRJM45rKOupy5Z03EtAzuT5Z/If3qJPU0txAJsquDohppFsGHrzn/X2
+ 0nI2LedLnIMUWwLRT4EvdYzsbP6im/7FXps15jaBOreobCaWTWtKtwD2LNI0l9LU9/RF+4Ac
+ gwYu1CerMmdFbSo8ZdnaXlbEHinySUPqKmLHmPgDfxKNhfRDm1jJcGATkHCP80Fww8Ihl8aS
+ TANkZ3QqXNX2
+In-Reply-To: <20231120141555.458-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: ccc602f34ade53ca99ecd5fad929bca1
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [sZPE]                               
 
-Hi Jingbao,
+W dniu 20.11.2023 o 15:15, Mario Limonciello pisze:
+> A number of users have reported their system will have a failure reading
+> the RTC around s2idle entry or exit.
+>
+> This failure manifests as UIP clear taking longer than 10ms.
+>
+> By a debugging patch provided by Mateusz Jończyk it is shown that this
+> has taken upwards of 300ms in some cases.
+>
+> This series adjusts the UIP timeout to be configurable by the caller and
+> changes some callers which aren't called in an interrupt context to allow
+> longer timeouts.
+>
+> Mario Limonciello (4):
+>   rtc: mc146818-lib: Adjust failure return code for mc146818_get_time()
+>   rtc: Adjust failure return code for cmos_set_alarm()
+>   rtc: Add support for configuring the UIP timeout for RTC reads
+>   rtc: Extend timeout for waiting for UIP to clear to 1s
 
-kernel test robot noticed the following build errors:
+Series tested on top of Linux 6.1.63, 6.6.2 and 6.7-rc2
+(on a laptop that is not affected by the problems).
+No problems found, can be submitted to stable.
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on linus/master v6.7-rc2 next-20231121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jingbao-Qiu/dt-bindings-rtc-add-binding-for-Sophgo-CV1800B-rtc-controller/20231121-174927
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20231121094642.2973795-3-qiujingbao.dlmu%40gmail.com
-patch subject: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B SoC
-config: sparc-allmodconfig (https://download.01.org/0day-ci/archive/20231122/202311220645.2hOquYn6-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231122/202311220645.2hOquYn6-lkp@intel.com/reproduce)
+Patches 1 and 2:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311220645.2hOquYn6-lkp@intel.com/
+Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Acked-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
 
-All errors (new ones prefixed by >>):
+Greetings,
 
-   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_alarm_irq_enable':
->> drivers/rtc/rtc-cv1800b.c:90:17: error: implicit declaration of function 'writel_relaxed' [-Werror=implicit-function-declaration]
-      90 |                 writel_relaxed(REG_ENABLE_FUN, data->core_map + RTC_ALARM_ENABLE);
-         |                 ^~~~~~~~~~~~~~
-   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_read_alarm':
->> drivers/rtc/rtc-cv1800b.c:115:21: error: implicit declaration of function 'readl' [-Werror=implicit-function-declaration]
-     115 |         alrm_time = readl(data->core_map + RTC_ALARM_TIME);
-         |                     ^~~~~
-   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_softinit':
->> drivers/rtc/rtc-cv1800b.c:128:9: error: implicit declaration of function 'writel' [-Werror=implicit-function-declaration]
-     128 |         writel(ACTIVATE_RTC_POR_DB_MAGIC_KEY,
-         |         ^~~~~~
-   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_read_time':
->> drivers/rtc/rtc-cv1800b.c:150:16: error: implicit declaration of function 'readl_relaxed' [-Werror=implicit-function-declaration]
-     150 |         time = readl_relaxed(data->core_map + RTC_SEC_CNTR_VALUE);
-         |                ^~~~~~~~~~~~~
-   drivers/rtc/rtc-cv1800b.c: In function 'cv1800b_rtc_probe':
-   drivers/rtc/rtc-cv1800b.c:246:16: error: implicit declaration of function 'rtc_register_device'; did you mean 'devm_rtc_register_device'? [-Werror=implicit-function-declaration]
-     246 |         return rtc_register_device(rtc->rtc_dev);
-         |                ^~~~~~~~~~~~~~~~~~~
-         |                devm_rtc_register_device
-   cc1: some warnings being treated as errors
+Mateusz
 
-
-vim +/writel_relaxed +90 drivers/rtc/rtc-cv1800b.c
-
-    83	
-    84	static int cv1800b_rtc_alarm_irq_enable(struct device *dev,
-    85						unsigned int enabled)
-    86	{
-    87		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
-    88	
-    89		if (enabled)
-  > 90			writel_relaxed(REG_ENABLE_FUN, data->core_map + RTC_ALARM_ENABLE);
-    91		else
-    92			writel_relaxed(REG_DISABLE_FUN,
-    93				       data->core_map + RTC_ALARM_ENABLE);
-    94	
-    95		return 0;
-    96	}
-    97	
-    98	static int cv1800b_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-    99	{
-   100		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
-   101		unsigned long time = rtc_tm_to_time64(&alrm->time);
-   102	
-   103		writel_relaxed(time, data->core_map + RTC_ALARM_TIME);
-   104	
-   105		cv1800b_rtc_alarm_irq_enable(dev, 1);
-   106	
-   107		return 0;
-   108	}
-   109	
-   110	static int cv1800b_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-   111	{
-   112		u32 alrm_time, now_time;
-   113		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
-   114	
- > 115		alrm_time = readl(data->core_map + RTC_ALARM_TIME);
-   116		now_time = readl(data->core_map + RTC_SEC_CNTR_VALUE);
-   117		rtc_time64_to_tm(alrm_time, &alrm->time);
-   118		alrm->pending = now_time > alrm_time ? 1 : 0;
-   119		alrm->enabled = readl(data->core_map + RTC_ALARM_ENABLE);
-   120	
-   121		return 0;
-   122	}
-   123	
-   124	static int cv1800b_rtc_softinit(struct cv1800b_rtc_priv *dev)
-   125	{
-   126		u32 timeout = 20;
-   127	
- > 128		writel(ACTIVATE_RTC_POR_DB_MAGIC_KEY,
-   129		       dev->core_map + RTC_POR_DB_MAGIC_KEY);
-   130		writel(INIT_LOAD_TIME, dev->core_map + RTC_SET_SEC_CNTR_VALUE);
-   131		writel(REG_DISABLE_FUN, dev->core_map + RTC_SET_SEC_CNTR_TRIG);
-   132	
-   133		while (readl(dev->core_map + RTC_SEC_CNTR_VALUE) == INIT_LOAD_TIME
-   134		       && timeout--)
-   135			udelay(5);
-   136	
-   137		if (!timeout)
-   138			return -1;
-   139		return 0;
-   140	}
-   141	
-   142	static int cv1800b_rtc_read_time(struct device *dev, struct rtc_time *tm)
-   143	{
-   144		struct cv1800b_rtc_priv *data = dev_get_drvdata(dev);
-   145		u32 time = 0;
-   146	
-   147		if (!data)
-   148			return -1;
-   149	
- > 150		time = readl_relaxed(data->core_map + RTC_SEC_CNTR_VALUE);
-   151		rtc_time64_to_tm(time, tm);
-   152	
-   153		return 0;
-   154	}
-   155	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
