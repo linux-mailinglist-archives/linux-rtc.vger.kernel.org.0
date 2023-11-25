@@ -1,102 +1,142 @@
-Return-Path: <linux-rtc+bounces-349-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-350-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9483C7F5A04
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Nov 2023 09:31:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50A857F8F19
+	for <lists+linux-rtc@lfdr.de>; Sat, 25 Nov 2023 21:48:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C59571C20B65
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Nov 2023 08:31:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAA0C2812BC
+	for <lists+linux-rtc@lfdr.de>; Sat, 25 Nov 2023 20:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236DDBE6F;
-	Thu, 23 Nov 2023 08:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B85E430CE0;
+	Sat, 25 Nov 2023 20:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="p3UbL987"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3H6UDq7"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CC2B9;
-	Thu, 23 Nov 2023 00:31:42 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C720D240003;
-	Thu, 23 Nov 2023 08:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1700728301;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i6UMap/rI2ydYhb+yafCRa1PP8MyOv2Soxy73yxJpLk=;
-	b=p3UbL987rz6g+xFTWugAwgcElhdIH12JdApkfMHMDhO/puf08gGx3/MK7RWpzAWv8JwkX5
-	ON5Q85womcvX3ncJ0As/2S61P2H9fiiIARaSy1H8lNj4zhWIsX2O1RzgueB7z2t0nBH2Gb
-	I+832pY9kRzZghUk4KHiMn23LxiiV9P2Z6SgqshaDZURhyc9TlUs9e2fT1i3bkKOTkJFXK
-	77VP1FRWAbWU9zIy75XqxT3HUfgS4gTdgXlXP3KSIZf+xbkTpfU2faE50OAeygVX8sLDi4
-	tz7j9KE6H9p9OVXGk9aNMqgv0uCQCQKztX7QzdmHVPes99bExyijPnMRIfjicw==
-Date: Thu, 23 Nov 2023 09:31:40 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
-	tobrohl@gmail.com, aalsing@gmail.com, Dhaval.Giani@amd.com,
-	xmb8dsv4@gmail.com, x86@kernel.org, dhaval.giani@gmail.com
-Subject: Re: [PATCH v2 0/4] Extend time to wait for UIP for some callers
-Message-ID: <20231123083140e5e75ba2@mail.local>
-References: <20231120141555.458-1-mario.limonciello@amd.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660972D029;
+	Sat, 25 Nov 2023 20:48:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487CBC433C8;
+	Sat, 25 Nov 2023 20:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700945313;
+	bh=MP615DG3faCXFei6ez6/qbJ2Qn+AxlK3zXjwrEKNgcs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=V3H6UDq7A3kCMLfHpZpSX7FXfzHuWMOtsplTH0sNtXsZgArz+P0U4eBCtxi3NSFFd
+	 /Qh78hVGqFA0WqXtaEMTLiv8fodY0nCNwQemnzy2nkPIc8A948DHrbP8ShAHXs9JEh
+	 DZSd65o2b/ffSmFfCaSmhQJlMgtpbBWoxv52RCHkCAWexYJeYwHrGLN9suMTTHOnuk
+	 DdSGqivh1nxdaSurglxzzB29rEdm+mzoC6D5xHsCr4gfSyRMDlvOZaKdKmw5u63wzf
+	 fjwHu1uh7qGvuEyyEExZqT+BueoGfafWluF3pHxDvInU7XHZpnYl45oF6XMQNbYQcP
+	 bHLD2kxsjKD7g==
+Date: Sat, 25 Nov 2023 20:48:14 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Andi Shyti <andi.shyti@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Ulf
+ Hansson <ulf.hansson@linaro.org>, Tomasz Figa <tomasz.figa@gmail.com>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, Linus Walleij
+ <linus.walleij@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, Uwe
+ =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>,
+ Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Liam
+ Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Jaehoon
+ Chung <jh80.chung@samsung.com>, Sam Protsenko <semen.protsenko@linaro.org>,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+ alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH 10/17] dt-bindings: iio: samsung,exynos-adc: add
+ specific compatibles for existing SoC
+Message-ID: <20231125204814.10fe16fa@jic23-huawei>
+In-Reply-To: <20231108104343.24192-11-krzysztof.kozlowski@linaro.org>
+References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
+	<20231108104343.24192-11-krzysztof.kozlowski@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231120141555.458-1-mario.limonciello@amd.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 20/11/2023 08:15:51-0600, Mario Limonciello wrote:
-> A number of users have reported their system will have a failure reading
-> the RTC around s2idle entry or exit.
-> 
-> This failure manifests as UIP clear taking longer than 10ms.
-> 
-> By a debugging patch provided by Mateusz Jończyk it is shown that this
-> has taken upwards of 300ms in some cases.
-> 
-> This series adjusts the UIP timeout to be configurable by the caller and
-> changes some callers which aren't called in an interrupt context to allow
-> longer timeouts.
-> 
-> Mario Limonciello (4):
->   rtc: mc146818-lib: Adjust failure return code for mc146818_get_time()
->   rtc: Adjust failure return code for cmos_set_alarm()
->   rtc: Add support for configuring the UIP timeout for RTC reads
->   rtc: Extend timeout for waiting for UIP to clear to 1s
-> 
->  arch/alpha/kernel/rtc.c        |  2 +-
->  arch/x86/kernel/hpet.c         |  2 +-
->  arch/x86/kernel/rtc.c          |  2 +-
+On Wed,  8 Nov 2023 11:43:36 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-
-Please also copy the x86 maintainers so they know I'm going to carry
-patches that may affect them (which I doubt will cause any issues)
-
->  drivers/base/power/trace.c     |  2 +-
->  drivers/rtc/rtc-cmos.c         | 10 ++++-----
->  drivers/rtc/rtc-mc146818-lib.c | 37 +++++++++++++++++++++++++---------
->  include/linux/mc146818rtc.h    |  3 ++-
->  7 files changed, 39 insertions(+), 19 deletions(-)
+> Samsung Exynos SoC reuses several devices from older designs, thus
+> historically we kept the old (block's) compatible only.  This works fine
+> and there is no bug here, however guidelines expressed in
+> Documentation/devicetree/bindings/writing-bindings.rst state that:
+> 1. Compatibles should be specific.
+> 2. We should add new compatibles in case of bugs or features.
 > 
+> Add compatibles specific to each SoC in front of all old-SoC-like
+> compatibles.
 > 
-> base-commit: 98b1cc82c4affc16f5598d4fa14b1858671b2263
-> -- 
-> 2.34.1
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
+> ---
+> 
+> I propose to take the patch through Samsung SoC (me). See cover letter
+> for explanation.
+> ---
+>  .../bindings/iio/adc/samsung,exynos-adc.yaml  | 29 +++++++++++--------
+>  1 file changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> index 582d0a03b814..4e40f6bed5db 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> @@ -11,18 +11,23 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - samsung,exynos-adc-v1                 # Exynos5250
+> -      - samsung,exynos-adc-v2
+> -      - samsung,exynos3250-adc
+> -      - samsung,exynos4212-adc                # Exynos4212 and Exynos4412
+> -      - samsung,exynos7-adc
+> -      - samsung,s3c2410-adc
+> -      - samsung,s3c2416-adc
+> -      - samsung,s3c2440-adc
+> -      - samsung,s3c2443-adc
+> -      - samsung,s3c6410-adc
+> -      - samsung,s5pv210-adc
+> +    oneOf:
+> +      - enum:
+> +          - samsung,exynos-adc-v1                 # Exynos5250
+> +          - samsung,exynos-adc-v2
+> +          - samsung,exynos3250-adc
+> +          - samsung,exynos4212-adc                # Exynos4212 and Exynos4412
+> +          - samsung,exynos7-adc
+> +          - samsung,s3c2410-adc
+> +          - samsung,s3c2416-adc
+> +          - samsung,s3c2440-adc
+> +          - samsung,s3c2443-adc
+> +          - samsung,s3c6410-adc
+> +          - samsung,s5pv210-adc
+> +      - items:
+> +          - enum:
+> +              - samsung,exynos5433-adc
+> +          - const: samsung,exynos7-adc
+>  
+>    reg:
+>      maxItems: 1
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
