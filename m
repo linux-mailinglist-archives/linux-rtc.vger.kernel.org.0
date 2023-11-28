@@ -1,136 +1,138 @@
-Return-Path: <linux-rtc+bounces-364-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-370-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C57947FBCCF
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 15:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B0ED7FC08D
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 18:49:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B65D8B21859
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 14:34:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED4EFB214F0
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 17:49:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118524F881;
-	Tue, 28 Nov 2023 14:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C9139AF4;
+	Tue, 28 Nov 2023 17:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TrAkaISa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i6b5JWm/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6704E18D;
-	Tue, 28 Nov 2023 06:34:34 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-58d98188dc0so944735eaf.3;
-        Tue, 28 Nov 2023 06:34:34 -0800 (PST)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFBC93;
+	Tue, 28 Nov 2023 09:49:34 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-a03a900956dso2375566b.1;
+        Tue, 28 Nov 2023 09:49:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701182073; x=1701786873; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bMG48SwBK5UHsAZmvVGge+eO1O9aG82zKUQLg7KuJ3A=;
-        b=TrAkaISaDFsf9QTCF4R7EN8cSm7eMOAYjOFBXxrz9YTAtDFlnukVJoXLhlcFqGX8xQ
-         BzkToS8U/L0ZpYEuu6MTd9Gs+U1bM5iW3wbSpz6mjov3p+gnXvNSXViHO3XoJ2uhU3Cq
-         wDhzVr2/essS5hMZXW8vcV8m4lpT8ToH9Uz8aZ+hqAMPQfyvJgoFoqoFYOJIdAea4Uvl
-         CcAjhdgfB9DBCSuvBzqOiLscbKOoEd2SYjpuDbHHvmahW+90TA4iYpbZuSAf+PQnTFUx
-         Jx0mVwBTVRR/dbNWaKX2MbrW66BH9T3H6eaXqdiA1xJ3hZ5leWikInFNdFMH6HXcm5ce
-         Ul0g==
+        d=gmail.com; s=20230601; t=1701193772; x=1701798572; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Q6ar52kT12/oSOUgsQunGkK9992ePoRC0ssPbZWDgw=;
+        b=i6b5JWm/Osc81en8u5MDun6d2WX3T2lgYcXr6EDNsslp3MsrN9UGO1lIuwIsO8uelE
+         p7Ye+IxD1z8eu+soCqNKCvxuiMg8DllwymR/KoOEKthKXtgoLUaBz2EkJzUncZEgPqFL
+         Sl39VY27IQ2XgIsnnv5bBiV3NTmtWd22L6x+vDxo25aqiZ/dJiKEQjHIx8DLvZ1GOJL0
+         E0BI49DiZI7AczT8S3AbawIwwQ3LFiZg4c6AAtvQw9pQ63NPrCVpj4Qp4tP9PG8+mSg4
+         BW92EwaV8iwL+5vZsnTx7LFjyRcjZq/MTgzCBKw7Wg1PkCPsS416mBpjXwM/yqiHoGTN
+         iQ2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701182073; x=1701786873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1701193772; x=1701798572;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bMG48SwBK5UHsAZmvVGge+eO1O9aG82zKUQLg7KuJ3A=;
-        b=ERQnmb23A4yC8DDE8TxrUdGVe8jdyTYaVn954Edu+/98fzdBEmKEeoVeZysvJb+1B3
-         wv+6RNfG24F61f39iptATcPRO4Q1MBhPe/c6sAIK4qgQtojVLma/EotJGE892SzuXAYn
-         6/DZzq2tuzmPPrE7zAW0n2m/JQaIpmSCJDTErkoMkrHAj12u+qmN/opFzbDGHj7ItL2X
-         XpaTVB3Vce2oQeogC7MKq3tOsth27daj8Py0dFEh4ETTR/XTmlPODoxiVKK8UXxibzcj
-         rOgho+B52JGR2Kf6Z/TobJfSR80b87+2eAmx+uVu0ZC8EQM8xyWAgc7i59lQsI/rpDxJ
-         1eGw==
-X-Gm-Message-State: AOJu0YxVOfGinY7WQis2wQTX4gx0/fmUGGsfdP6kSEUYSDr9jUPVH1/H
-	8R757AGbw8FI8GUgSbd+sSeWkyDF63crMZE8qSs=
-X-Google-Smtp-Source: AGHT+IHzPkygydR5FCKAGeIxu2k+cpNdyTREovFpmnR+IYF8jBCyYIDp1Zft+jE6Elx/jhXtXOz/zAXUZQqbC70bm0c=
-X-Received: by 2002:a4a:e559:0:b0:58d:bfab:f5f with SMTP id
- s25-20020a4ae559000000b0058dbfab0f5fmr454326oot.1.1701182073588; Tue, 28 Nov
- 2023 06:34:33 -0800 (PST)
+        bh=2Q6ar52kT12/oSOUgsQunGkK9992ePoRC0ssPbZWDgw=;
+        b=HSCHEJ9tx9fP3ac938yQCRyALwwkzSgU0NA2XKhLkTPBVT3SLcKA2SbDQdCiDA3ElQ
+         J6+1QM5AWhrwExibRUh94ftYAxKvkuWiqSTx+zCP25csTHSYn6Wl1MrWH3vT8Fus4w3q
+         I/d6URFXxgD8O3EU+pqxuMsF5TEyjahKkqBaN9jsrXL4gjKUD7B1ABiaXZO1blaWMm03
+         VYFK4x3mz0mkuQAcxy8HV9KEYEonaw/EiSfw3jw9qoZ04X/EoXy9YobU32SAWL++n5JW
+         ZIQtYZlesTy9mhmt1n9HztfNMSd0FOnE6JKa7KoEHYwe9NA1ldHsEbTUPwZ+g88AvhvB
+         uXCw==
+X-Gm-Message-State: AOJu0YyaouNdzjWolwYz7jj15SqcjG2MMD4Fv1ZHSLwK/6dsL6J+y662
+	coBwelqbex2xOQwHLA83h/8=
+X-Google-Smtp-Source: AGHT+IFegfjLsT1XNjq4u1dJkNE5gSVojRjltbsyE47RsYa/oKV+OirEmiPZK9QlSr1+eKKQQmVk8w==
+X-Received: by 2002:a17:906:f811:b0:a0f:1882:d5e with SMTP id kh17-20020a170906f81100b00a0f18820d5emr5384410ejb.37.1701193772296;
+        Tue, 28 Nov 2023 09:49:32 -0800 (PST)
+Received: from localhost (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id cm26-20020a0564020c9a00b0054ae75dcd6bsm5742280edb.95.2023.11.28.09.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Nov 2023 09:49:30 -0800 (PST)
+From: Thierry Reding <thierry.reding@gmail.com>
+To: David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Lee Jones <lee@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Tomasz Figa <tomasz.figa@gmail.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaehoon Chung <jh80.chung@samsung.com>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	alsa-devel@alsa-project.org,
+	linux-sound@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH 00/17] dt-bindings: samsung: add specific compatibles for existing SoC
+Date: Tue, 28 Nov 2023 18:49:23 +0100
+Message-ID: <170119374454.445690.515311393756577368.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
+References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231121094642.2973795-1-qiujingbao.dlmu@gmail.com>
- <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com> <09b29f1f-a42b-49f7-afca-f82357acd4c8@linaro.org>
- <CAJRtX8TU9Z3OXL1zw9+mGNhxugp_C2jo40k-s9V2byNCQeBoLQ@mail.gmail.com> <438768a3-c50c-46f1-8a4e-2233c7545453@linaro.org>
-In-Reply-To: <438768a3-c50c-46f1-8a4e-2233c7545453@linaro.org>
-From: jingbao qiu <qiujingbao.dlmu@gmail.com>
-Date: Tue, 28 Nov 2023 22:34:22 +0800
-Message-ID: <CAJRtX8QkUFLnrGXHNH_StQeYy3cJZ6svcO4yz+cTC5x4D88mGg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B SoC
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, 
-	krzysztof.kozlowski+dt@linaro.org, chao.wei@sophgo.com, 
-	unicorn_wang@outlook.com, conor+dt@kernel.org, robh+dt@kernel.org, 
-	conor@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 28, 2023 at 9:59=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 28/11/2023 14:22, jingbao qiu wrote:
-> >>> +     if (ret)
-> >>> +             goto err;
-> >>> +
-> >>> +     rtc->clk =3D devm_clk_get(&pdev->dev, NULL);
-> >>> +     if (IS_ERR(rtc->clk)) {
-> >>> +             dev_err(&pdev->dev, "no clock");
-> >>
-> >> This code is not ready for upstream. There are multiple things wrong h=
-ere.
-> >>
-> >> First, syntax is return dev_err_probe.
-> >>
-> >> Second, you do not have clocks and you do not allow them! Just open yo=
-ur
-> >> binding.
-> >
-> > I'm not fully understanding here, can you elaborate more?
->
-> That the syntax is dev_err_probe() or that you do not have clocks?
->
->
-> > as there is clocks info like this in the dt-bindings:
-> >  clocks =3D <&osc>;
->
-> Really?
->
-> Point me to the line in your patch:
->
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sophgo,cv1800b-rtc
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
->
-> Where are the clocks?
 
-I will fix properties.
+On Wed, 08 Nov 2023 11:43:26 +0100, Krzysztof Kozlowski wrote:
+> Merging
+> =======
+> I propose to take entire patchset through my tree (Samsung SoC), because:
+> 1. Next cycle two new SoCs will be coming (Google GS101 and ExynosAutov920), so
+>    they will touch the same lines in some of the DT bindings (not all, though).
+>    It is reasonable for me to take the bindings for the new SoCs, to have clean
+>    `make dtbs_check` on the new DTS.
+> 2. Having it together helps me to have clean `make dtbs_check` within my tree
+>    on the existing DTS.
+> 3. No drivers are affected by this change.
+> 4. I plan to do the same for Tesla FSD and Exynos ARM32 SoCs, thus expect
+>    follow up patchsets.
+> 
+> [...]
 
->
->
-> Best regards,
-> Krzysztof
->
+Applied, thanks!
+
+[12/17] dt-bindings: pwm: samsung: add specific compatibles for existing SoC
+        commit: 5d67b8f81b9d598599366214e3b2eb5f84003c9f
 
 Best regards,
-Jingbao Qiu
+-- 
+Thierry Reding <thierry.reding@gmail.com>
 
