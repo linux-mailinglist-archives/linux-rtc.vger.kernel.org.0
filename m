@@ -1,152 +1,108 @@
-Return-Path: <linux-rtc+bounces-371-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-372-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C43637FC68A
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 21:59:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 193777FCA68
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Nov 2023 00:01:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BADE287C02
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 20:59:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DC47B213DC
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 23:01:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2617044386;
-	Tue, 28 Nov 2023 20:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37E28495DD;
+	Tue, 28 Nov 2023 23:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bRCYPx8M"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F1C19AD
-	for <linux-rtc@vger.kernel.org>; Tue, 28 Nov 2023 12:59:33 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r85AN-0006nV-7B; Tue, 28 Nov 2023 21:58:47 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r85AI-00CFt4-DE; Tue, 28 Nov 2023 21:58:42 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r85AI-00AOAR-2T; Tue, 28 Nov 2023 21:58:42 +0100
-Date: Tue, 28 Nov 2023 21:58:41 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH 00/17] dt-bindings: samsung: add specific
- compatibles for existing SoC
-Message-ID: <20231128205841.al23ra5s34rn3muj@pengutronix.de>
-References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
- <170119374454.445690.515311393756577368.b4-ty@gmail.com>
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1757E1A5;
+	Tue, 28 Nov 2023 15:01:32 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 350AA60004;
+	Tue, 28 Nov 2023 23:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1701212491;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gy5+wWjXgmLyDYNQ/I3zqQTEWmaeVqhCkQPBCljqylA=;
+	b=bRCYPx8Mi+oYupXYeBmI4FBZvfn8XP6SsqWl77lfy8Bro9xS35o7Qn+66vtTzfr+U5bjUJ
+	2gLpnONC/Pn15PtdledA/m6VsZ6rX3A+NC9064+1499LgI9ICIs2L+iQ/SxQGuvFo3GePI
+	XgCSH/EyCzrHrqrGSrg7ANhw9vzwbq1UgGkywJTK0M9VbpDpkuR6O7MFupHp8Q+3nWX+mo
+	/v25DaY9tQ+hbn3i1Qgt+4Zndi7oiz961R3bcSrHnRG/Jw9eDH5IGlJII7x0ucXBNZX4Eo
+	P9gHuDeWO+r9x3U3/uJwwRGpX2UT1uN+oeNlOoF2CpUPQr4ZGiUoJMYVCmzyjA==
+Date: Wed, 29 Nov 2023 00:01:28 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: jingbao qiu <qiujingbao.dlmu@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	a.zummo@towertech.it, krzysztof.kozlowski+dt@linaro.org,
+	chao.wei@sophgo.com, unicorn_wang@outlook.com, conor+dt@kernel.org,
+	robh+dt@kernel.org, conor@kernel.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B
+ SoC
+Message-ID: <202311282301288a92d806@mail.local>
+References: <20231121094642.2973795-1-qiujingbao.dlmu@gmail.com>
+ <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com>
+ <09b29f1f-a42b-49f7-afca-f82357acd4c8@linaro.org>
+ <CAJRtX8TU9Z3OXL1zw9+mGNhxugp_C2jo40k-s9V2byNCQeBoLQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bibczb2zawwhoawf"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <170119374454.445690.515311393756577368.b4-ty@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJRtX8TU9Z3OXL1zw9+mGNhxugp_C2jo40k-s9V2byNCQeBoLQ@mail.gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
+On 28/11/2023 21:22:52+0800, jingbao qiu wrote:
+> >
+> > > +     ret = cv1800b_rtc_softinit(rtc);
+> > > +     if (ret)
+> > > +             goto err;
+> > > +     cv1800b_rtc_alarm_irq_enable(&pdev->dev, 1);
+> > > +     rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+> > > +     if (IS_ERR(rtc->rtc_dev)) {
+> > > +             ret = PTR_ERR(rtc->rtc_dev);
+> > > +             goto err;
+> > > +     }
+> > > +     rtc->rtc_dev->range_max = U32_MAX;
+> > > +     rtc->rtc_dev->ops = &cv800b_rtc_ops;
+> > > +
+> > > +     return rtc_register_device(rtc->rtc_dev);
+> 
+> I find the commet of devm_rtc_device_register wirte
+> “This function is deprecated, use devm_rtc_allocate_device and
+> rtc_register_device instead”
+> but all of code about this, they all use devm_rtc_device_register
 
---bibczb2zawwhoawf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+They don't, they use devm_rtc_register_device
 
-On Tue, Nov 28, 2023 at 06:49:23PM +0100, Thierry Reding wrote:
->=20
-> On Wed, 08 Nov 2023 11:43:26 +0100, Krzysztof Kozlowski wrote:
-> > Merging
-> > =3D=3D=3D=3D=3D=3D=3D
-> > I propose to take entire patchset through my tree (Samsung SoC), becaus=
-e:
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> function. So which one do you suggest I use?
+> 
+> > > +err:
+> > > +     return dev_err_probe(&pdev->dev, ret, "Failed to init cv1800b rtc\n");
+> >
+> > Drop, just return.
+> 
+> ok
+> 
+> >
+> > Best regards,
+> > Krzysztof
+> >
+> 
+> Best regards,
+> Jingbao Qiu
 
-> > 1. Next cycle two new SoCs will be coming (Google GS101 and ExynosAutov=
-920), so
-> >    they will touch the same lines in some of the DT bindings (not all, =
-though).
-> >    It is reasonable for me to take the bindings for the new SoCs, to ha=
-ve clean
-> >    `make dtbs_check` on the new DTS.
-> > 2. Having it together helps me to have clean `make dtbs_check` within m=
-y tree
-> >    on the existing DTS.
-> > 3. No drivers are affected by this change.
-> > 4. I plan to do the same for Tesla FSD and Exynos ARM32 SoCs, thus expe=
-ct
-> >    follow up patchsets.
-> >=20
-> > [...]
->=20
-> Applied, thanks!
->=20
-> [12/17] dt-bindings: pwm: samsung: add specific compatibles for existing =
-SoC
->         commit: 5d67b8f81b9d598599366214e3b2eb5f84003c9f
-
-You didn't honor (or even comment) Krzysztof's proposal to take the
-whole patchset via his tree (marked above). Was there some off-list
-agreement?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---bibczb2zawwhoawf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVmVIAACgkQj4D7WH0S
-/k4mPQgAuzfJsEw0Nil25KsPJwyY53qFjfCGd8WTObzTDFpeIlzV2EL87bWT2Gtd
-vEFgfX2Uj+RoOLX5CNnyuEfwH5e+O5oVYF9gfpsdqtRTJ3zyPV3dUiFCaIh2KNqZ
-aaY1tsb4vECeh7dmEL/y2VUWoO2bAa08sZe6EpJXOkeUWN54VdTCMBwncH1utjgh
-Tb/pHhjkfvdcbXuvxsFY4gL86pT8BER5EjIRZZaPN0kHDrGTBR+ZqjFvMVWTrFbq
-IUK1gAMX+BOooJDwVFE4SeRta6p/lfClW73PbWk1++SyLPA2KbTp8jTul4qgXWKT
-IbIJY8Qwg5trzJ0LHDMX3a02COS9hg==
-=P7ML
------END PGP SIGNATURE-----
-
---bibczb2zawwhoawf--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
