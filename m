@@ -1,55 +1,55 @@
-Return-Path: <linux-rtc+bounces-360-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-361-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 171127FBB50
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 14:20:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A5587FBB5C
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 14:23:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48C311C2108E
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 13:20:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E819B282C37
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Nov 2023 13:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AFB05788B;
-	Tue, 28 Nov 2023 13:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0C758100;
+	Tue, 28 Nov 2023 13:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nOb130mw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hr3Mz0/U"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A8590;
-	Tue, 28 Nov 2023 05:20:30 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1fa289a3b6aso1805011fac.3;
-        Tue, 28 Nov 2023 05:20:29 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D706FA0;
+	Tue, 28 Nov 2023 05:23:03 -0800 (PST)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1fa48ad4e99so1243799fac.3;
+        Tue, 28 Nov 2023 05:23:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701177629; x=1701782429; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701177783; x=1701782583; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=On66ueZto3GF440UWVrRBZc4wrXhVsUGn1SXWaiDi8g=;
-        b=nOb130mw+xpBoGsNiULUoOXulipzQ/m87Ge8d0uVlx2W0To1XkjSgaYck+hNekcdcq
-         8O+RGFRUsxTuSvfTOrC6QcFY/mortnROYFilnD5xZLz8VdJc8CiaTxpTR5DAdm8K8Njm
-         H/ZHLFd9lURqj3iTDF0/8p2abXJ1vdxIf34po8M/CPPGQL6D3fAF/6yZwjD06cfDwgXU
-         4ZSW7zyvB/vMJ8YhCEciL5KOrhgPR/hjfZLyFzRbT9Hu+DqVvAebX+YOyHJxV2LZt5LR
-         Bns+o0nE/0dLwf2UyQxl4uhXbA6SSKZEeHchUh15aHhZ+SeViHrJsd/GINDgF7kHJ97A
-         MBlg==
+        bh=3dCUnmn0BnrE2m+8WTS8NvC7pbXYOAUPOHwpmf2nQ5k=;
+        b=Hr3Mz0/UY0h6jQy7EuuYQyzv9uboz54Iyf4bCWukeT7/2J3wo3t2Z9cS/Y9/KSeHNA
+         8mI5015zlE8C9qGNSpBrKFHKrG/pPdBirUboTDKU6O/DnIkRE2A+A2XlB+yaBJrv/hAO
+         ewVix0i55Hh8A5WvWFhQKsQlUml3FxBOw1UDxJpjDGXI1vXGvFkSQ60djYhv0ukHzoA7
+         dcolUVQwJ3HnZMYbs1FXEZpEuupG/zJ9sDb2eOFMWGpIovCelHbiZRHee5jHmDe1xoSA
+         RSVQPS05rt7wibN4DXcFzRFSndf+SaAENTvmeQTL6tPbeqAW90sEErWneVS/mUGV0aPz
+         2Sug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701177629; x=1701782429;
+        d=1e100.net; s=20230601; t=1701177783; x=1701782583;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=On66ueZto3GF440UWVrRBZc4wrXhVsUGn1SXWaiDi8g=;
-        b=X5ov/zQ08McqTvG/StlNEiN6wnIbFoSJBQZ4v1NlyWhHoGx8ZxmgR8kqZTOStc+/DI
-         QmeIzCszATCNEQnu7xytfo/iCmQxJrQlxwK1uVcsCxhlKkKPAET48uI63Fqt2VD/DKMi
-         aDahbkfBkPO+7w4lMpEo6wLeKumpOfdxoqBFaG5lYJmdvfRynqFRORZoKXz/LKid4N/m
-         q8wolX6k/hVTX2h/PEwMdlqfKc+0N8r0LBXt216X1y89qZNCA2KcDDqAZMoOFF+95bob
-         HFL3Rx9o09xiCnzRHNMt4XwEQeCyC+9wFIQ9VwzkBFFxpqamIDtlo7HGZwYv+wwXbjeD
-         gUWg==
-X-Gm-Message-State: AOJu0Yw7/VWE2rjtkz+DAuNS+QTOa/fCm77pHMNfhJM3MXKpJoDozhpU
-	6SfHSjGXcGRYuwFrTOhOaKvP/hJgkNrUhNMwibAL2/0dhflKVfpH
-X-Google-Smtp-Source: AGHT+IEA6UtACp1At/yuKOgBXha03/AXtZNDcuSQGTuIOcoIm/wVD0Z2tmYIHiOzc7bOCaCNw+wXQ+9dUt2B7jIcqqk=
-X-Received: by 2002:a05:6870:788c:b0:1eb:e8b:73cb with SMTP id
- hc12-20020a056870788c00b001eb0e8b73cbmr21421178oab.58.1701177629143; Tue, 28
- Nov 2023 05:20:29 -0800 (PST)
+        bh=3dCUnmn0BnrE2m+8WTS8NvC7pbXYOAUPOHwpmf2nQ5k=;
+        b=b7VtmVeH6xdHUCTy/CRSlKl/lBZLE+GDasJQoQqfzmzKmbJwAMpBZpT7ouMOHoQrZI
+         S/KnrR32Ol1XeI1BhodOYtvnhQHk7Xw1B2r66TLCRjyCnkPsMT0OPAA9Cn/3YbWpg66l
+         jaI2Qggc3GkyxC5g7Cfv+1MOqeHKJbX2klFqqi4e5bHpI40+Kzt84rpF7A6kBFxA8Ikv
+         XNrKMpDE1Y7RBszI0ufzEidvXHJ/lL1NQZ3yTQwvBZ80g6xvwVf83s2x6IXTw5t0q8CU
+         wK2H6Hk+mIlYPrEj/6OJOxic++/NJ8QlNmXN25kEIgowJVpZ2VEohZSEtT4vrXpw33aa
+         qiuQ==
+X-Gm-Message-State: AOJu0YxXN8mCWNwGTBTmpPlSDajIBaxC4zNxN3wOR1ybKg4NPqL0aT4/
+	Ya4kgdYbqd3yfT1str3Eys3+5STKnT8+3ctiw0o=
+X-Google-Smtp-Source: AGHT+IG4eo1lRqCyzRbI4aFlhW1Z6q6ycRX9VtpnrLDU5d/q8u+XwyLpGVKGiY10at7a6Aa740AOieFwgKcjbmp/tBw=
+X-Received: by 2002:a05:6870:6c0b:b0:1ef:f14e:6f0a with SMTP id
+ na11-20020a0568706c0b00b001eff14e6f0amr20536626oab.0.1701177783127; Tue, 28
+ Nov 2023 05:23:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -57,12 +57,12 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20231121094642.2973795-1-qiujingbao.dlmu@gmail.com>
- <20231121094642.2973795-2-qiujingbao.dlmu@gmail.com> <84a12a2c-3f64-4517-8d38-14c8516e70d0@linaro.org>
-In-Reply-To: <84a12a2c-3f64-4517-8d38-14c8516e70d0@linaro.org>
+ <20231121094642.2973795-3-qiujingbao.dlmu@gmail.com> <09b29f1f-a42b-49f7-afca-f82357acd4c8@linaro.org>
+In-Reply-To: <09b29f1f-a42b-49f7-afca-f82357acd4c8@linaro.org>
 From: jingbao qiu <qiujingbao.dlmu@gmail.com>
-Date: Tue, 28 Nov 2023 21:20:18 +0800
-Message-ID: <CAJRtX8ToRv7Bzyj7fZ530H9oYQWGNnEK_2G5EQjECgg_Y37guQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc: add binding for Sophgo CV1800B rtc controller
+Date: Tue, 28 Nov 2023 21:22:52 +0800
+Message-ID: <CAJRtX8TU9Z3OXL1zw9+mGNhxugp_C2jo40k-s9V2byNCQeBoLQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] rtc: add rtc controller support for Sophgo CV1800B SoC
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, 
 	krzysztof.kozlowski+dt@linaro.org, chao.wei@sophgo.com, 
@@ -73,117 +73,183 @@ Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 21, 2023 at 5:57=E2=80=AFPM Krzysztof Kozlowski
+On Tue, Nov 21, 2023 at 6:01=E2=80=AFPM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
 > On 21/11/2023 10:46, Jingbao Qiu wrote:
-> > Add devicetree binding for Sophgo CV1800B SoC rtc controller.
->
-> A nit, subject: drop second/last, redundant "binding for". The
-> "dt-bindings" prefix is already stating that these are bindings.
-
-will fix.
-
->
+> > Implement the RTC driver for CV1800B, which able to provide time and
+> > alarm functionality.
 > >
 > > Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 > > ---
-> >  .../bindings/rtc/sophgo,cv1800b-rtc.yaml      | 37 +++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/rtc/sophgo,cv1800=
-b-rtc.yaml
+> >  drivers/rtc/Kconfig       |  10 ++
+> >  drivers/rtc/Makefile      |   1 +
+> >  drivers/rtc/rtc-cv1800b.c | 293 ++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 304 insertions(+)
+> >  create mode 100644 drivers/rtc/rtc-cv1800b.c
+>
+> Bindings were not tested, so I assume you did not compile the code
+> either. Please confirm that you fixed all warnings pointed out by W=3D1
+> builds, smatch and sparse. All of them.
+
+ will test & fix in next version
+
+>
 > >
-> > diff --git a/Documentation/devicetree/bindings/rtc/sophgo,cv1800b-rtc.y=
-aml b/Documentation/devicetree/bindings/rtc/sophgo,cv1800b-rtc.yaml
-> > new file mode 100644
-> > index 000000000000..fefb1e70c45c
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/sophgo,cv1800b-rtc.yaml
-> > @@ -0,0 +1,37 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/sophgo,cv1800b-rtc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> > index 3814e0845e77..2089cceea38c 100644
+> > --- a/drivers/rtc/Kconfig
+> > +++ b/drivers/rtc/Kconfig
+> > @@ -1103,6 +1103,16 @@ config RTC_DRV_DS2404
+> >         This driver can also be built as a module. If so, the module
+> >         will be called rtc-ds2404.
+> >
+> > +config RTC_DRV_CV1800B
+> > +     tristate "Sophgo CV1800B RTC"
+> > +     depends on ARCH_SOPHGO || COMPILE_TEST
+> > +     help
+> > +       If you say yes here you will get support for the
+> > +       RTC of the Sophgo CV1800B SOC.
 > > +
-> > +title: Sophgo CV1800B SoC RTC Controller
+> > +       This depend on ARCH_SOPHGO and COMPILE_TEST. Please
+> > +       first config that.
 >
-> What is a RTC Controller? You have multiple RTCs there?
+> ...
 >
-
-will drop "Controller", as I think RTC is not something like I2C, eMMC, USB=
-,
-which have the "controller <-> client/device" model.
-
+> > +static int cv1800b_rtc_probe(struct platform_device *pdev)
+> > +{
+> > +     struct cv1800b_rtc_priv *rtc;
+> > +     struct resource *res;
+> > +     int ret;
 > > +
-> > +maintainers:
-> > +  - Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+> > +     rtc =3D devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> > +     if (!rtc)
+> > +             return -ENOMEM;
 > > +
+> > +     res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > +     if (!res) {
+> > +             ret =3D -ENODEV;
+> > +             goto err;
+> > +     }
+> > +
+> > +     rtc->core_map =3D devm_ioremap_resource(&pdev->dev, res);
 >
-> Missing ref to rtc.yaml. Unless it is not applicable but then why?
+> Use helper combining these two calls.
 
-ok, I should ref this file.
+Ok, will use devm_platform_ioremap_resource() to replace it.
 
 >
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - sophgo,cv1800b-rtc
+> > +     if (IS_ERR(rtc->core_map)) {
+> > +             ret =3D PTR_ERR(rtc->core_map);
+> > +             goto err;
+> > +     }
+> > +
+> > +     rtc->irq =3D platform_get_irq(pdev, 0);
+> > +     platform_set_drvdata(pdev, rtc);
 >
-> Blank line
+> Your code has random order. First you get IRQ, then you check its value,
+> then you go further.
 
 ok
 
 >
-> > +  reg:
-> > +    maxItems: 1
+> > +     if (rtc->irq < 0) {
+> > +             ret =3D -EINVAL;
+> > +             goto err;
+> > +     }
 > > +
-> > +  interrupts:
-> > +    maxItems: 1
+> > +     ret =3D
+> > +         devm_request_irq(&pdev->dev, rtc->irq, cv1800b_rtc_irq_handle=
+r,
+>
+> Wrong wrapping.
+
+ok
+
+>
+> > +                          IRQF_SHARED, "rtc alarm", &pdev->dev);
+>
+> Why shared?
+
+ok
+
+>
+> > +     if (ret)
+> > +             goto err;
 > > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
+> > +     rtc->clk =3D devm_clk_get(&pdev->dev, NULL);
+> > +     if (IS_ERR(rtc->clk)) {
+> > +             dev_err(&pdev->dev, "no clock");
+>
+> This code is not ready for upstream. There are multiple things wrong here=
+.
+>
+> First, syntax is return dev_err_probe.
+>
+> Second, you do not have clocks and you do not allow them! Just open your
+> binding.
+
+I'm not fully understanding here, can you elaborate more?
+as there is clocks info like this in the dt-bindings:
+ clocks =3D <&osc>;
+
+>
+> Third, use wrapper - devm_clk_get_enable or something like that.
+
+I will use devm_clk_get_enabled() to replace it.
+
+>
+>
+> > +             ret =3D PTR_ERR(rtc->clk);
+> > +             goto err;
+> > +     }
+>
+> Blank line.
+
+ok
+
+>
+> > +     ret =3D clk_prepare_enable(rtc->clk);
+> > +     if (ret)
+> > +             goto err;
+>
+> Blank line.
+
+ok
+
+>
+> > +     ret =3D cv1800b_rtc_softinit(rtc);
+> > +     if (ret)
+> > +             goto err;
+> > +     cv1800b_rtc_alarm_irq_enable(&pdev->dev, 1);
+> > +     rtc->rtc_dev =3D devm_rtc_allocate_device(&pdev->dev);
+> > +     if (IS_ERR(rtc->rtc_dev)) {
+> > +             ret =3D PTR_ERR(rtc->rtc_dev);
+> > +             goto err;
+> > +     }
+> > +     rtc->rtc_dev->range_max =3D U32_MAX;
+> > +     rtc->rtc_dev->ops =3D &cv800b_rtc_ops;
 > > +
-> > +additionalProperties: false
->
-> unevaluatedProperties instead
+> > +     return rtc_register_device(rtc->rtc_dev);
 
-will fix .
+I find the commet of devm_rtc_device_register wirte
+=E2=80=9CThis function is deprecated, use devm_rtc_allocate_device and
+rtc_register_device instead=E2=80=9D
+but all of code about this, they all use devm_rtc_device_register
+function. So which one do you suggest I use?
 
+> > +err:
+> > +     return dev_err_probe(&pdev->dev, ret, "Failed to init cv1800b rtc=
+\n");
 >
-> > +
-> > +examples:
-> > +  - |
-> > +    rtc-controller@05026000{
->
-> The names is always "rtc", unless this is not RTC. If it isn't, please
-> add full description of the hardware.
+> Drop, just return.
 
-I will use "rtc" replace "rtc-controller" .
-
->
-> > +      compatible =3D "sophgo,cv800b-rtc";
-> > +      reg =3D <0x05026000 0x1000>;
-> > +      interrupts =3D <17 IRQ_TYPE_LEVEL_HIGH>;
-> > +      interrupt-parent =3D <&plic0>;
-> > +      clocks =3D <&osc>;
->
-> Why do you send untested bindings? Review costs significant amount of
-> effort. Code was also not compiled? Warnings not fixed?
-
-I will check it.
-Leading 0 and referencing issues will be fixed.
+ok
 
 >
 > Best regards,
 > Krzysztof
 >
-
-I'm sorry for taking so long to reply.
-I took a few days off due to being infected with the flu.
-Thank you again for your patient reply.
 
 Best regards,
 Jingbao Qiu
