@@ -1,71 +1,59 @@
-Return-Path: <linux-rtc+bounces-373-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-374-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7019B7FD000
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Nov 2023 08:37:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5CDF7FF84C
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Nov 2023 18:32:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC87F28258E
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Nov 2023 07:37:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78656B210FB
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Nov 2023 17:32:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3B010975;
-	Wed, 29 Nov 2023 07:37:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E82815811B;
+	Thu, 30 Nov 2023 17:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UzwTqtUt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u3qz1RuO"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17AF19BC;
-	Tue, 28 Nov 2023 23:37:20 -0800 (PST)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT7RZhg007125;
-	Wed, 29 Nov 2023 07:37:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=34Yd6W3Cr+IwCKKx95of4zGmT83ghEUbaMMFO3ZwbFg=;
- b=UzwTqtUtAUZXPJc6pMXMc2JPlu+uSqqD+uRBioiHoijANrKxeQw+Z/qZ8AA3SIVsA/jW
- 8Vyzu0+8E3jJRONSiE/WQExVSXZluCMj+jArWQASzWOems3J9suxsBQEwU+ajhCxvap2
- n+mlcyznjxxQ+5YAmUU6eJdK4w+Rflvz+PlKF6mEBL2UYr30aCqUHT0SJIbrOpKvYuGB
- QoO29LOj6O1dFFAGrgO7AP7sTwMSgTVLGIDIBMHprerGU8Fas/sVW/X0lPSvsDzrY9JU
- q2oFC/QkyEWEAIV82f7Kgq6IjsE2+d118m/RXDG9YCLT4rPtsp8+eT9rxc2lxThAGw2a 1A== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3up0x00a8x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Nov 2023 07:37:01 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT5EEbG012193;
-	Wed, 29 Nov 2023 07:36:59 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukvrknmwe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Nov 2023 07:36:59 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AT7avqT25297412
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 29 Nov 2023 07:36:57 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 319AC2004B;
-	Wed, 29 Nov 2023 07:36:57 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B49AE20043;
-	Wed, 29 Nov 2023 07:36:56 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 29 Nov 2023 07:36:56 +0000 (GMT)
-Received: from nicholasmvm.. (haven.au.ibm.com [9.192.254.114])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 4DC9E6030B;
-	Wed, 29 Nov 2023 18:36:54 +1100 (AEDT)
-From: Nicholas Miehlbradt <nicholas@linux.ibm.com>
-To: a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicholas Miehlbradt <nicholas@linux.ibm.com>
-Subject: [PATCH] rtc: fix uninitialized read of rtc_wkalrm.time
-Date: Wed, 29 Nov 2023 07:36:47 +0000
-Message-Id: <20231129073647.2624497-1-nicholas@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA96A5677C;
+	Thu, 30 Nov 2023 17:31:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B982C433C8;
+	Thu, 30 Nov 2023 17:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701365519;
+	bh=wxg56W6HTHMTFYDW4lY4u8CY4BkNOVOP9bjh79kHVmE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=u3qz1RuObFfuunerRon1cBHkIkU7XP6vXJNp5DiAMMPQkvPEoWkUOPZVq+ytWyqs8
+	 rh7hJHBIhJl33qrkpiM0Q7WWcXqao7Ry4bCOlPzT6CkSsubV+dC1TsLJfq8vjG/M6G
+	 1lPmceDj3EQS4HbiaHHU//CySGBJzKKF5qyYfQhZuEuIh8Ud59jTYgzKSELFJs147a
+	 26poZRPxdioOB5zkDpNDbkMay5YADZg7dhw89vYDNDT84MCO9f/ixv7XkCl24c9A5R
+	 6z5wPJ8p7zc/fYtt+eesdYQGHBEUagEoqH0nb141XlkzdUJShW5Rk9IWHNxUoGj+l0
+	 cucAy8DQJB6Hg==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1r8kts-0003KX-1h;
+	Thu, 30 Nov 2023 18:32:32 +0100
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Alessandro Zummo <a.zummo@towertech.it>
+Cc: Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] dt-bindings: rtc: qcom-pm8xxx: fix inconsistent example
+Date: Thu, 30 Nov 2023 18:32:23 +0100
+Message-ID: <20231130173223.12794-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -73,57 +61,70 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GbTP6RiJ4MUC-v08dHZkNh2o5eX09s23
-X-Proofpoint-ORIG-GUID: GbTP6RiJ4MUC-v08dHZkNh2o5eX09s23
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-29_05,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 lowpriorityscore=0 mlxlogscore=777 spamscore=0
- clxscore=1011 suspectscore=0 priorityscore=1501 adultscore=0 phishscore=0
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311290055
 
-If either of the first two branches of the if statement in
-rtc_read_alarm_internal are taken the fields of alarm->time are not
-initialized but are subsequently read by the call to rtc_tm_to_time64.
+The PM8921 is an SSBI PMIC but in the binding example it is described
+as being part of an SPMI PMIC while using an SSBI address.
 
-Refactor so that the time field is only read if the final branch of the
-if statment which initializes the field is taken.
+Make the example consistent by using the sibling PM8941 SPMI PMIC
+instead.
 
-Signed-off-by: Nicholas Miehlbradt <nicholas@linux.ibm.com>
+Fixes: 8138c5f0318c ("dt-bindings: rtc: qcom-pm8xxx-rtc: Add qcom pm8xxx rtc bindings")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/rtc/interface.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../bindings/rtc/qcom-pm8xxx-rtc.yaml         | 36 +++++++++----------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index 1b63111cdda2..f40e76d2fe2b 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -179,6 +179,7 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
- 				   struct rtc_wkalrm *alarm)
- {
- 	int err;
-+	time64_t trace_time = -1;
+diff --git a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+index 774c34c3f8f6..cdc56dfbfac3 100644
+--- a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+@@ -67,27 +67,27 @@ additionalProperties: false
  
- 	err = mutex_lock_interruptible(&rtc->ops_lock);
- 	if (err)
-@@ -201,11 +202,12 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
- 		alarm->time.tm_yday = -1;
- 		alarm->time.tm_isdst = -1;
- 		err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
-+		trace_time = rtc_tm_to_time64(&alarm->time);
- 	}
+ examples:
+   - |
++    #include <dt-bindings/interrupt-controller/irq.h>
+     #include <dt-bindings/spmi/spmi.h>
+-    spmi_bus: spmi@c440000 {
+-      reg = <0x0c440000 0x1100>;
+-      #address-cells = <2>;
+-      #size-cells = <0>;
+-      pmicintc: pmic@0 {
+-        reg = <0x0 SPMI_USID>;
+-        compatible = "qcom,pm8921";
+-        interrupts = <104 8>;
+-        #interrupt-cells = <2>;
+-        interrupt-controller;
+-        #address-cells = <1>;
++
++    spmi {
++        #address-cells = <2>;
+         #size-cells = <0>;
  
- 	mutex_unlock(&rtc->ops_lock);
- 
--	trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
-+	trace_rtc_read_alarm(trace_time, err);
- 	return err;
- }
- 
+-        pm8921_rtc: rtc@11d {
+-          compatible = "qcom,pm8921-rtc";
+-          reg = <0x11d>;
+-          interrupts = <0x27 0>;
+-          nvmem-cells = <&rtc_offset>;
+-          nvmem-cell-names = "offset";
++        pmic@0 {
++            compatible = "qcom,pm8941", "qcom,spmi-pmic";
++            reg = <0x0 SPMI_USID>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            rtc@6000 {
++                compatible = "qcom,pm8941-rtc";
++                reg = <0x6000>, <0x6100>;
++                reg-names = "rtc", "alarm";
++                interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
++                nvmem-cells = <&rtc_offset>;
++                nvmem-cell-names = "offset";
++            };
+         };
+-      };
+     };
+ ...
 -- 
-2.37.2
+2.41.0
 
 
