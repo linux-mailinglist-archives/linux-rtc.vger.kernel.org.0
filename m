@@ -1,189 +1,184 @@
-Return-Path: <linux-rtc+bounces-398-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-399-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87020804A6E
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Dec 2023 07:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70297804D66
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Dec 2023 10:16:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EDDDB20A68
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Dec 2023 06:41:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AACAFB20BC1
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Dec 2023 09:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D70912E4C;
-	Tue,  5 Dec 2023 06:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3213C3D96D;
+	Tue,  5 Dec 2023 09:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="L4G8dPUM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HZXSl2Um"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48682A4;
-	Mon,  4 Dec 2023 22:41:25 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B51uVN9027304;
-	Tue, 5 Dec 2023 06:41:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=huc3944qrFK6MGxccYFPxDHeN84EgsRy740zHLv+jlE=;
- b=L4G8dPUMuI0HzHM7j8i2zlL7yciXNE2geDNH4QY0qOJh9JEFVVdC49t2ClqKwjKxTsgX
- WBd8iR48Vzx47jf8lgJf8r9WXGgloiVaDWMoj0+wA6KeDgjGwQQesiELKxHX8HtCjWWb
- m39Aq3LsdbRjPGO2pG4mO1L43i+7owCoYUZ6f4fmyxoajjBGZ9rM/qyoJdd4IFbut/Qh
- tuWwXPuw35ShGiuobplMwCTFa481iQnW8fNCRgWUZEzIexVU5K20ZPkdFAXvDm+lC0QT
- pvFGOtCTUK0rQhrlSJdEZkSCHdijXk2UcrBmiX4rC0UrLMg1bTzcscwWCxoPErUQ1RHj RQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3usfu79ypv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Dec 2023 06:41:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B56fDK0011767
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 5 Dec 2023 06:41:13 GMT
-Received: from jianbinz-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 4 Dec 2023 22:41:11 -0800
-From: jianbinz <quic_jianbinz@quicinc.com>
-To: <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
-CC: jianbinz <quic_jianbinz@quicinc.com>, <linux-rtc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/1] rtc: rtc-pm8xxx: Retrigger RTC alarm if it's fired before the driver probed
-Date: Tue, 5 Dec 2023 14:40:50 +0800
-Message-ID: <20231205064050.31827-1-quic_jianbinz@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2469183
+	for <linux-rtc@vger.kernel.org>; Tue,  5 Dec 2023 01:16:27 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-50bfd3a5b54so1824954e87.3
+        for <linux-rtc@vger.kernel.org>; Tue, 05 Dec 2023 01:16:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701767786; x=1702372586; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OeEvgoAVw1dp1aM0OWfOemCjE5CEVoVWIKGJuAU8k5U=;
+        b=HZXSl2Um5jrhy96n+kQw3MKZMZPXcQB51M2gfqXTOJ1DOTyt7wdhQGEnhif6vCwNpU
+         RqPsOa3MbjDhYbOwYbGnbnuXRLJcyvJ4IAkpbIqSyN4V9U6KdlOGza/N9CEIo+T0EBZE
+         nmSWyCdJoVTYHZZfEnHXTH0gPPAPqwLGYBeHelWD/tObh5E2zT6Hvsbfdq0VpblvYhcm
+         VTsybofXEkUqQ4qAGVT0t2xds/XKG4ivsdtwz43RR87kXP4As4sC76bgHmoqabAmXDWA
+         wKf7jAbLpX4u/3qcD3gWBiBWY2NQNwg64Mh8LboOae16lkdrd2P9Svy4TLc7tYAWTSuy
+         uHvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701767786; x=1702372586;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OeEvgoAVw1dp1aM0OWfOemCjE5CEVoVWIKGJuAU8k5U=;
+        b=UMOHopj6mlpu2pxJR+hgIJBjJwHHLHbmHC/NGr5ZVctb5c0i47tvJvI57uz+uvJjFa
+         jximeKseICsT11OEUNEcB2NnEUsa+19p4NgSybT8yhLvKN1k808tuZuwIzt0zQowmQGE
+         Mx+6QaHQTZTrHWRumDUsmnrcirnDkvyrboilsG8kHFOszWpIB2YiPzjTKE8JcFzCgmBL
+         pwek6zsnnZuOa8vWTBeMBFoAtva7IVN4oX+sQJUcIHJbvxDAsc3ST672uKOGQXOWioOt
+         vwgKU18/Rxt+TEc2jdChuFHhotjyPXyYP1kA5D7tJ0M/QyKzK4GPhKandq1vhEA76zli
+         /LJg==
+X-Gm-Message-State: AOJu0YxMKUhu54K9rFUdim2garzMEZqYEgBjDMKhqAYw615f6sAlRKiU
+	1AMpvMv2vv4gD2l+Wrr6w7O7sg==
+X-Google-Smtp-Source: AGHT+IFl+InzAht9wjGX3VbUVhsxqPXeTdzVpokOhMfKZ33B+RdV7sB9qjW4A5xQmHAw5a98muxprw==
+X-Received: by 2002:a05:6512:128b:b0:50b:f303:56cd with SMTP id u11-20020a056512128b00b0050bf30356cdmr2070360lfs.15.1701767786021;
+        Tue, 05 Dec 2023 01:16:26 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id f3-20020a056402068300b0054c0264a7fasm799997edy.64.2023.12.05.01.16.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Dec 2023 01:16:25 -0800 (PST)
+Message-ID: <369dfa0c-315d-47a9-81fc-c166c9632bac@linaro.org>
+Date: Tue, 5 Dec 2023 10:16:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 392r4c0mU2zyUR5Mc6a_2Sf2ijE9kHhQ
-X-Proofpoint-ORIG-GUID: 392r4c0mU2zyUR5Mc6a_2Sf2ijE9kHhQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-05_03,2023-12-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- adultscore=0 clxscore=1011 malwarescore=0 bulkscore=0 impostorscore=0
- mlxlogscore=937 priorityscore=1501 mlxscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2312050053
+User-Agent: Mozilla Thunderbird
+Subject: Re: (subset) [PATCH 00/17] dt-bindings: samsung: add specific
+ compatibles for existing SoC
+Content-Language: en-US
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Thierry Reding <thierry.reding@gmail.com>
+Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Tomasz Figa <tomasz.figa@gmail.com>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Alessandro Zummo <a.zummo@towertech.it>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Jaehoon Chung <jh80.chung@samsung.com>,
+ Sam Protsenko <semen.protsenko@linaro.org>, dri-devel@lists.freedesktop.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+ linux-sound@vger.kernel.org
+References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
+ <170119374454.445690.515311393756577368.b4-ty@gmail.com>
+ <20231128205841.al23ra5s34rn3muj@pengutronix.de>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231128205841.al23ra5s34rn3muj@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-If the alarm is triggered before the driver gets probed, the alarm
-interrupt will be missed and it won't be detected, and the stale
-alarm settings will be still retained because of not being cleared.
-Check this condition during driver probe, retrigger the alarm and
-clear the settings manually if it's such case.
+On 28/11/2023 21:58, Uwe Kleine-König wrote:
+> On Tue, Nov 28, 2023 at 06:49:23PM +0100, Thierry Reding wrote:
+>>
+>> On Wed, 08 Nov 2023 11:43:26 +0100, Krzysztof Kozlowski wrote:
+>>> Merging
+>>> =======
+>>> I propose to take entire patchset through my tree (Samsung SoC), because:
+>     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+>>> 1. Next cycle two new SoCs will be coming (Google GS101 and ExynosAutov920), so
+>>>    they will touch the same lines in some of the DT bindings (not all, though).
+>>>    It is reasonable for me to take the bindings for the new SoCs, to have clean
+>>>    `make dtbs_check` on the new DTS.
+>>> 2. Having it together helps me to have clean `make dtbs_check` within my tree
+>>>    on the existing DTS.
+>>> 3. No drivers are affected by this change.
+>>> 4. I plan to do the same for Tesla FSD and Exynos ARM32 SoCs, thus expect
+>>>    follow up patchsets.
+>>>
+>>> [...]
+>>
+>> Applied, thanks!
+>>
+>> [12/17] dt-bindings: pwm: samsung: add specific compatibles for existing SoC
+>>         commit: 5d67b8f81b9d598599366214e3b2eb5f84003c9f
+> 
+> You didn't honor (or even comment) Krzysztof's proposal to take the
+> whole patchset via his tree (marked above). Was there some off-list
+> agreement?
+> 
 
-Changes in v2:
-*Adapt the V1 patch according to the newest rtc-pm8xxx
+It was also written in the PWM patch itself (under changelog ---) and
+expressed with my "applied" response when I took everything. I am
+sending now another set, also touching PWM.
 
-Changes in v1:
-*During driver probe: read ALARM_EN, read ALARM_DATA, read RTC_RDATA,
-if (ALARM_DATA < RTC_DATA), Trigger the alarm event and clear the alarm settins
-Link to v1:https://lore.kernel.org/linux-rtc/20220321090514.4523-1-quic_jianbinz@quicinc.com/
-
-Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
----
- drivers/rtc/rtc-pm8xxx.c | 57 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 53 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index f6b779c12ca7..eac4e7f23aaa 100644
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -309,21 +309,33 @@ static int pm8xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
- 	return 0;
- }
- 
-+static int pm8xxx_rtc_read_alarm_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
-+{
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+	u8 value[NUM_8_BIT_RTC_REGS];
-+	int rc;
-+
-+	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
-+	if (rc)
-+		return rc;
-+
-+	*secs = get_unaligned_le32(value);
-+
-+	return 0;
-+}
-+
- static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
- {
- 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
--	u8 value[NUM_8_BIT_RTC_REGS];
- 	unsigned int ctrl_reg;
- 	u32 secs;
- 	int rc;
- 
--	rc = regmap_bulk_read(rtc_dd->regmap, regs->alarm_rw, value,
--			      sizeof(value));
-+	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &secs);
- 	if (rc)
- 		return rc;
- 
--	secs = get_unaligned_le32(value);
- 	secs += rtc_dd->offset;
- 	rtc_time64_to_tm(secs, &alarm->time);
- 
-@@ -398,6 +410,39 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+/*
-+ * Trigger the alarm event and clear the alarm settings
-+ * if the alarm data has been behind the RTC data which
-+ * means the alarm has been triggered before the driver
-+ * is probed.
-+ */
-+static int pm8xxx_rtc_init_alarm(struct pm8xxx_rtc *rtc_dd)
-+{
-+	int rc;
-+	u32 alarm_sec, rtc_sec;
-+	unsigned int ctrl_reg, alarm_en;
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+
-+	rc = pm8xxx_rtc_read_raw(rtc_dd, &rtc_sec);
-+	if (rc)
-+		return rc;
-+
-+	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &alarm_sec);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
-+	if (rc)
-+		return rc;
-+
-+	alarm_en = !!(ctrl_reg & PM8xxx_RTC_ALARM_ENABLE);
-+
-+	if (alarm_en && rtc_sec >= alarm_sec)
-+		pm8xxx_alarm_trigger(0, rtc_dd);
-+
-+	return 0;
-+}
-+
- static int pm8xxx_rtc_enable(struct pm8xxx_rtc *rtc_dd)
- {
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-@@ -527,6 +572,10 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 	if (rc)
- 		return rc;
- 
-+	rc = pm8xxx_rtc_init_alarm(rtc_dd);
-+	if (rc)
-+		return rc;
-+
- 	return 0;
- }
- 
--- 
-2.17.1
+Best regards,
+Krzysztof
 
 
