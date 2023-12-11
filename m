@@ -1,250 +1,122 @@
-Return-Path: <linux-rtc+bounces-404-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-405-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5E3D80D06E
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Dec 2023 17:04:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E76E680D30D
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Dec 2023 17:58:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54D351F218D0
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Dec 2023 16:04:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 495CEB20584
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Dec 2023 16:58:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A98CD4C3BA;
-	Mon, 11 Dec 2023 16:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seco.com header.i=@seco.com header.b="2yDM5zQk";
-	dkim=pass (2048-bit key) header.d=seco.com header.i=@seco.com header.b="2yDM5zQk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C0B4CDEF;
+	Mon, 11 Dec 2023 16:58:28 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2050.outbound.protection.outlook.com [40.107.7.50])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA39C35AF;
-	Mon, 11 Dec 2023 08:03:55 -0800 (PST)
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
- b=mPsa2aTEXy5utqfdjWFRPdqV+F2qZCTQtMQqrnazJyxydLcgH+guG5kNMty2S6zXN0A3Oz6MpYBHxfN49kg1j4nl7Ze7slaIk07dXvXeOxd1qPogTR5+1UojrlfrrELJaVzt0Heaw8kUld9CcWz8O4UhqNy6exX2b2bJtG665issJjd6momtKUpBCVPcrg0k6QHnd/BVebTfnzmbxhuwqr52LOYxBRJO7Bhi1og5AXfmIN9Zedi1Tz/z869hUnC958/jvjjedlZlSIbii66IDhniQHRlDdeoiaN3/FQOySYmR6JjyKjx90MpKzM2IaEKMGVPXio7oeXL8jkfn5hBuQ==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BAOWK8zygrH4JJLvXwgmhu4Zcwi6QzVQhcvQcHQ3td8=;
- b=T7BdzwvonHG1jYgMA8khWREwG/7e96aDlZE78oRkgZ2k33vIrMm4DYUm76rKUbAh0Mw8U+L0bgxCfaF3U9mZlyWAp8V30EkRutMEkaOWbOIbWjia1pPs1c4+B8+Tq0gY5voLynoALnstxaF/Og77dyVZHkpCAGo2V4FnBIawcHhGMI89O6hhIfXKLxFlubFUL2muBPI1UHFu2GhRbwTWz0JXMuzgXpvbm8upiSbQZ0meup+ybTsrvICu46TsjdDMcpyaeTJwA/xxOLDq3pvYVYuU/Nn6fkbpm3dC8MzpAIVEGGq9VLXaNmRGM/yp1/Opq/D2S1lPMjlzPQTyWhTAfQ==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 20.160.56.86) smtp.rcpttodomain=bootlin.com smtp.mailfrom=seco.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=seco.com;
- dkim=pass (signature was verified) header.d=seco.com; arc=pass (0 oda=1
- ltdi=1 spf=[1,1,smtp.mailfrom=seco.com] dkim=[1,1,header.d=seco.com]
- dmarc=[1,1,header.from=seco.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BAOWK8zygrH4JJLvXwgmhu4Zcwi6QzVQhcvQcHQ3td8=;
- b=2yDM5zQkO/wt/1XM4Pizm17pt4xL+/xDdfubrELXX4TodtOiGpoMEDETezEa4IXKSNkDETjwJ+D/cUQs/KqKsKh0u6WRwbdnkMDw7TYGzevIDgSBCx+Y8MYodspQQnAVAMRW3otIBV98dzbmsmbnLP1/MQAzEz+MI4l+nvHSN/ZKd9idU7v+4qR5+W2rluWf361Lf3xx9Ziac3GNEo+mt88YRmeqMFoKm2p5wooTthsEnNP/UE0sz7sSXtBjojM7zsYVAGA6NLihjFJqHSSTMZVsEkF4qtUX+WljI91VwMceeIGBcoUtwU5vFH1z8i2wtFXg6pVyCRfYMx0vU4jrPg==
-Received: from AM0PR01CA0150.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:aa::19) by AM7PR03MB6264.eurprd03.prod.outlook.com
- (2603:10a6:20b:13d::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Mon, 11 Dec
- 2023 16:03:52 +0000
-Received: from AM6EUR05FT063.eop-eur05.prod.protection.outlook.com
- (2603:10a6:208:aa:cafe::bd) by AM0PR01CA0150.outlook.office365.com
- (2603:10a6:208:aa::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32 via Frontend
- Transport; Mon, 11 Dec 2023 16:03:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.86)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
- 20.160.56.86 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.86; helo=inpost-eu.tmcas.trendmicro.com; pr=C
-Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.86) by
- AM6EUR05FT063.mail.protection.outlook.com (10.233.240.232) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7091.23 via Frontend Transport; Mon, 11 Dec 2023 16:03:50 +0000
-Received: from outmta (unknown [192.168.82.132])
-	by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 6BFF2200813A6;
-	Mon, 11 Dec 2023 16:03:50 +0000 (UTC)
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (unknown [104.47.12.50])
-	by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 417F12008006F;
-	Mon, 11 Dec 2023 16:03:47 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H3vnTz2oFLhreIl0GRs9mAkgjeHFWHv3F6fh5+yV2cotskr3uHQCWtr6B5houvCwPxxHfzHwlZPJ7hgVICbg6rwaet4poRYIiDlCHYGOgyP0twiO+OK/PkFwUZsCj2fypqyt7lMl1iIVD3Hd/xmJEfucYGmmuUvTYo7/+7Qz6smUeSlgOxmX0SkHNHxOW11ku7IhVtyKTbUw0TcIT5A2O37cdQs6nb8TCDFpX1d63km6tjXPM0s4AUdNzMWc7b92PfUw5wIVgs+O3tZSkIV+gPYS3v3ADjO0ih6Ubwo1ZwKcNuZtXdzEt+ErmLCW9r2lwf/L0I5BOcUv/ZJKtJdzXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BAOWK8zygrH4JJLvXwgmhu4Zcwi6QzVQhcvQcHQ3td8=;
- b=B2cyWso6TXvVmkbyQjR9rEbqju9yObPzLCuHUtP+tfgfamEllrsfwg8OAG2NDDgSZGIU2Fnhj7mR+z+ccwcOR5ad4BfzJ9R+27+CD7m5E1zZHk2AwfNVDuveY9ZHW139iVvwT+OiWLK3MXQiHyQJQ3+ANnCfj+EYMWcpIszQdxvvQqLYZ/HSbf/wJw57vgE+MtjKJb+LG/XHHCtc6D0wLlP0oB9Xc4+g+a3G7mF8gGNtWmVT5UkDNkyi4xJnVZQ3f+SulNxfaMXssqDlP32Lob2ZmGpglckAvELquUeLkAEcSQLfNmagr/k3aQW5dAupxhY6TGkWk2insQj+2+w4tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BAOWK8zygrH4JJLvXwgmhu4Zcwi6QzVQhcvQcHQ3td8=;
- b=2yDM5zQkO/wt/1XM4Pizm17pt4xL+/xDdfubrELXX4TodtOiGpoMEDETezEa4IXKSNkDETjwJ+D/cUQs/KqKsKh0u6WRwbdnkMDw7TYGzevIDgSBCx+Y8MYodspQQnAVAMRW3otIBV98dzbmsmbnLP1/MQAzEz+MI4l+nvHSN/ZKd9idU7v+4qR5+W2rluWf361Lf3xx9Ziac3GNEo+mt88YRmeqMFoKm2p5wooTthsEnNP/UE0sz7sSXtBjojM7zsYVAGA6NLihjFJqHSSTMZVsEkF4qtUX+WljI91VwMceeIGBcoUtwU5vFH1z8i2wtFXg6pVyCRfYMx0vU4jrPg==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by DBBPR03MB10395.eurprd03.prod.outlook.com (2603:10a6:10:532::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Mon, 11 Dec
- 2023 16:03:45 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::5cfa:9e05:d8dc:ba0f]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::5cfa:9e05:d8dc:ba0f%7]) with mapi id 15.20.7068.031; Mon, 11 Dec 2023
- 16:03:45 +0000
-Message-ID: <c3cda013-eab0-46c0-a89a-ed51ecfd1e1d@seco.com>
-Date: Mon, 11 Dec 2023 11:03:39 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] rtc: abx80x: Don't warn about oscillator failure after
- PoR
-Content-Language: en-US
-To: Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-References: <20231019163931.3682923-1-sean.anderson@seco.com>
-From: Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <20231019163931.3682923-1-sean.anderson@seco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR05CA0003.namprd05.prod.outlook.com
- (2603:10b6:208:36e::10) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03434BF
+	for <linux-rtc@vger.kernel.org>; Mon, 11 Dec 2023 08:58:25 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rCjbr-0002QV-3t; Mon, 11 Dec 2023 17:58:23 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rCjbq-00F8tu-34; Mon, 11 Dec 2023 17:58:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rCjbp-0012o0-QE; Mon, 11 Dec 2023 17:58:21 +0100
+Date: Mon, 11 Dec 2023 17:58:21 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH] rtc: MAINTAINERS: drop Alessandro Zummo
+Message-ID: <20231211165821.xp3mlxdezvezg6r4@pengutronix.de>
+References: <20231211132600.101090-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DB9PR03MB8847:EE_|DBBPR03MB10395:EE_|AM6EUR05FT063:EE_|AM7PR03MB6264:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d05c5a6-123f-4250-a6b2-08dbfa62c407
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original:
- +lKDBNLGagjOrFxIaVVUoy4I4WsDBWowjTca5BGREoN1z7Wn2RaaH9PeyHLOHQviRoaaS1umFEfDN8STwA0OlElJ2OFNUaY/BxHa5AYUlPcbzgnfbWu82DCa/I+rwQ7yBerlHZbc5geu6PGYx6/MX2QRoydovPZFt65Zkf6I31cIXTd9cgqLSSN8BSPgcuUTsT73ngbWQlsLhO08dicRhxROv3dwFc7VASe9PNRVarTwZxtqPco8PhqDycW8sq+yucCcWnayxiUf0I0V2LUCXZLvpaeIofoIi9lN0ACzscHJXBL8tmEphRgp6FtP5QO1aJg6Srp854FE5H1m3bnZ6b/KRFxQ7WVPXXMRfPMbcnvWAueVYK2sEWI+qwCQXDYjCv9Nf8EbFNiMU5+oY5i9Q45Fs5wOEyIcGzARb1vJ6KCc1Z1umvJPaUrxfYmuW4s/7kl+T8W7XMoFRzDwhwbAzfUWDgaVGzeTFa+Dc1rviEzyNkyOTKeD2O1dDyT408lLCt/JeDniEMfc0nxWyeNlYfnbnGsUMmt3tDa1CXT1SdCKBU6i0rpMhP01va0/N483zVkKemiIG5spdL9j1p1AfVWJ4HTvfRydxH+9INDTRxoDl7+H37PZFygg8wgvizEUT9jLX6g3n1HGn+2zXlD1pyVwGGNb5M0z4qEZ8hjwN5IMYijCR6HPDpsGTQ9WAxA1+3bhAFRCsk9eWS8iKyJP3jsEVakKcYPIDbqhs0Mgchs=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(396003)(39850400004)(376002)(346002)(230273577357003)(230173577357003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(6512007)(53546011)(6506007)(5660300002)(26005)(2616005)(44832011)(36756003)(66946007)(6486002)(66476007)(66556008)(2906002)(83380400001)(31686004)(41300700001)(38350700005)(478600001)(86362001)(8676002)(8936002)(4326008)(52116002)(31696002)(110136005)(316002)(38100700002)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR03MB10395
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AM6EUR05FT063.eop-eur05.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	34aa8a4b-d386-4dd5-3f44-08dbfa62c0a2
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	/dYtreir/uZYa0M+DBcQTuibEQnldZDkk3klILb72uH63Ms3/pKVfBFU7IaluHZJ72G59bjqtoEGzIyrwr9u+BLzfOcEvdFe2Z2bB8/eowsGhIl1t+715cXeHY2XC9f4qr6UAQw5meM9u/hU/4ULpJ7bxBWTvUs7cxQOiC1YNkY8hNcr4PbbhWS6yqUpMNfK1Y3wFW/ZqMS+HqzGpm1+io4RDsHxCxvKrQN4uej5yM2UCBC/1haaf9slVuAmHmkznCw+Ye3Rer2oxUYyfTT+Bt6D8EsG5hxjORdGxFfoSnYBvO4yqcwS36Mjb7TiCu8Hn8hYbkoBc1SAX4OEV0cm23ild/zKojXt1anWcED1bHKJi86cKNHH6Wv4wN/EHSP3Ze9EZru5rhyeGMJgwh9vgZvgogEtGroYmAI9OrzIiSfIDfzG8B/U42V/2d5EQm0TWdHziAL8mFjDM1Ft8FU0vB1cjGZKId6NdkNj6/F+jqUYsLOMF8wFqHx2AyTS2xP98Vz18ibsr8dtMlMs4xntCCjEH+Af1+19TkA9ImaZGF35FJX5VU8dishf//z4aKY+V4CYgSVgTQR7Ms6vZwk1I/itvkSgb7SV+QVJrek1IcKPo7e26sPQ128aCcQsQ7dbRniKC2Ok6dXIOQg8DmYjM1IFqQyu3vI+Gb1LY1BslE27DwnCDLe+6cUzZWyrELB2vVKE+CM7Ue3zkASz2ifggi5qWxSzctqRQsu615vOu4SedpmBTdbAOsEa3m79SsrDBkEfVlZebeJg5xiTjbm1gi0yK1vIkow+UbFKIOHV4KKoLPpamuKKQt+iwO9DErQt
-X-Forefront-Antispam-Report:
-	CIP:20.160.56.86;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230031)(39850400004)(376002)(346002)(136003)(396003)(230922051799003)(230173577357003)(230273577357003)(451199024)(186009)(64100799003)(1800799012)(82310400011)(36840700001)(46966006)(41300700001)(34020700004)(36860700001)(47076005)(336012)(26005)(83380400001)(2616005)(82740400003)(86362001)(36756003)(31696002)(7596003)(7636003)(356005)(44832011)(5660300002)(316002)(8676002)(8936002)(4326008)(2906002)(6666004)(6512007)(6506007)(53546011)(70586007)(70206006)(110136005)(478600001)(6486002)(31686004)(40480700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2023 16:03:50.5163
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d05c5a6-123f-4250-a6b2-08dbfa62c407
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.86];Helo=[inpost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM6EUR05FT063.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR03MB6264
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hfuxyhyjjyeionsg"
+Content-Disposition: inline
+In-Reply-To: <20231211132600.101090-1-krzysztof.kozlowski@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 
-On 10/19/23 12:39, Sean Anderson wrote:
-> According to the datasheet, the "oscillator failure" bit is set
-> 
->> ...on a power on reset, when both the system and battery voltages have
->> dropped below acceptable levels. It is also set if an Oscillator Failure
->> occurs....
-> 
-> From testing, this bit is also set if a software reset is initiated.
-> 
-> This bit has a confusing name; it really tells us whether the time data
-> is valid. We clear it when writing the time. If it is still set, that
-> means there is a persistent issue (such as an oscillator failure),
-> instead of a transient one (such as power loss).
-> 
-> Because there are several other reasons which might cause this bit
-> to be set (including booting for the first time or a battery failure),
-> do not warn about oscillator failures willy-nilly. This may cause system
-> integrators to waste time looking into the wrong line of investigation.
-> 
-> We continue printing a message about invalid time data or an oscillator
-> failure. There is no voltimeter in this RTC, so this is the best
-> indication that the battery is dead (or dying) and reeds replacement.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+
+--hfuxyhyjjyeionsg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Dec 11, 2023 at 02:26:00PM +0100, Krzysztof Kozlowski wrote:
+> Last email from Alessandro was in 2016, so remove him from maintainers
+> of the RTC subsystem.  Stale maintainer entries hide information whether
+> subsystem needs help, has a bus-factor or is even orphaned.
+>=20
+> Link: https://lore.kernel.org/all/?q=3Df%3A%22Alessandro+Zummo%22
+
+unusual usage of Link: (which traditionally has an URL proving the patch
+submission).
+
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> Note that the following drivers all warn when they detect a problem with
-> the oscillator:
-> 
-> drivers/rtc/rtc-ds1672.c
-> drivers/rtc/rtc-pcf*.c
-> drivers/rtc/rtc-rs5c*.c
-> drivers/rtc/rtc-sc27xx.c
-> 
-> So warning about such an error has good precedent.
-> 
-> Changes in v3:
-> - Use info since this is a good indication of a battery failure
-> 
-> Changes in v2:
-> - Use debug instead of info in the typical case (no battery)
-> 
->  drivers/rtc/rtc-abx80x.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
-> index fde2b8054c2e..f463a58a240b 100644
-> --- a/drivers/rtc/rtc-abx80x.c
-> +++ b/drivers/rtc/rtc-abx80x.c
-> @@ -127,6 +127,7 @@ struct abx80x_priv {
->  	struct rtc_device *rtc;
->  	struct i2c_client *client;
->  	struct watchdog_device wdog;
-> +	bool wrote_time;
->  };
->  
->  static int abx80x_write_config_key(struct i2c_client *client, u8 key)
-> @@ -179,6 +180,7 @@ static int abx80x_enable_trickle_charger(struct i2c_client *client,
->  static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> +	struct abx80x_priv *priv = i2c_get_clientdata(client);
->  	unsigned char buf[8];
->  	int err, flags, rc_mode = 0;
->  
-> @@ -193,7 +195,18 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  			return flags;
->  
->  		if (flags & ABX8XX_OSS_OF) {
-> -			dev_err(dev, "Oscillator failure, data is invalid.\n");
-> +			/*
-> +			 * The OF bit can be set either because of a reset
-> +			 * (PoR/Software reset) or because of an oscillator
-> +			 * failure. Effectively, it indicates that the stored
-> +			 * time is invalid. When we write the time, we clear
-> +			 * this bit. If it stays set, then this indicates an
-> +			 * oscillator failure.
-> +			 */
-> +			if (priv->wrote_time)
-> +				dev_err(dev, "Oscillator failure\n");
-> +			else
-> +				dev_info(dev, "Time data invalid\n");
->  			return -EINVAL;
->  		}
->  	}
-> @@ -219,6 +232,7 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> +	struct abx80x_priv *priv = i2c_get_clientdata(client);
->  	unsigned char buf[8];
->  	int err, flags;
->  
-> @@ -252,6 +266,7 @@ static int abx80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  		dev_err(&client->dev, "Unable to write oscillator status register\n");
->  		return err;
->  	}
-> +	priv->wrote_time = true;
->  
->  	return 0;
->  }
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ec736fccbb26..82ef00014f41 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18271,7 +18271,6 @@ X:	include/linux/srcu*.h
+>  X:	kernel/rcu/srcu*.c
+> =20
+>  REAL TIME CLOCK (RTC) SUBSYSTEM
+> -M:	Alessandro Zummo <a.zummo@towertech.it>
+>  M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+>  L:	linux-rtc@vger.kernel.org
+>  S:	Maintained
 
-ping?
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Maybe it would be a nice move to add him to CREDITS.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--hfuxyhyjjyeionsg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV3P6wACgkQj4D7WH0S
+/k40NQf/Qp/lGuMGxdxHGUK86QhoSIf2Aha4aI6sPgwAgGgMWiaAbbAMXgfKn2K0
+ZeApA49vchlK2qnbJ5cXm99fUS294zJK7rdv6Skq+ZlQ5zFkGRNl1jGD8c9Z0gnP
+5zWn2b6r4se0vxd7Xh/U9EAMfUlOMhTFKzz+ECbA/ZNPYRh5tTihv0XKjL4DHNmy
+TLgcN06QAGJycB3OLFJ+/YAcXrKxJ34HNqGAfRHKTJJpbPdc79lzM1s3Sh7ZH/Wn
+kviBaYYA9FTgfqUYLISYhKgz3pd7ojsAEN8PhLmAmxUVEASo7Sp+lsthjHQOHt/2
+K4hT/3psQH8N58YIaOVGIasMcvZRyg==
+=W2Xa
+-----END PGP SIGNATURE-----
+
+--hfuxyhyjjyeionsg--
 
