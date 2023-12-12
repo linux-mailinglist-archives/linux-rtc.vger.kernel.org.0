@@ -1,60 +1,61 @@
-Return-Path: <linux-rtc+bounces-406-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-407-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3706780E61A
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Dec 2023 09:26:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0FDD80E64E
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Dec 2023 09:35:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BF7AB20C1F
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Dec 2023 08:26:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70839B20FC2
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Dec 2023 08:35:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE92D1946A;
-	Tue, 12 Dec 2023 08:26:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466D215AFD;
+	Tue, 12 Dec 2023 08:35:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wjlGhVuP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EQOi2G7m"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610AA61B4
-	for <linux-rtc@vger.kernel.org>; Tue, 12 Dec 2023 00:25:21 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-a1f6433bc1eso814803366b.1
-        for <linux-rtc@vger.kernel.org>; Tue, 12 Dec 2023 00:25:21 -0800 (PST)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0812728
+	for <linux-rtc@vger.kernel.org>; Tue, 12 Dec 2023 00:35:47 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-a1e35c2807fso710416766b.3
+        for <linux-rtc@vger.kernel.org>; Tue, 12 Dec 2023 00:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702369517; x=1702974317; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xCP807InI7wrvOKwQXFYPNf6Ul7w+2AQncnAH+bYvyU=;
-        b=wjlGhVuPpUql/AX2BdiTBH8EfxoyKHzE2DivC4fdpWi3ZGoTm46bG+MRDFOl/AQ1xJ
-         vFWEO4w/aVm9O+kyRTftdHUAmIxQSN1Rl8R+G2WWMbpQ5vZjrqHnHsmfV5nzWPhlxZni
-         BMvlr4t7Tsgim687dZVKAmfhZU1++fXMtMBlEbBtEBfh1IHwQLP4zAlyfaaGnZfu+cal
-         y7aT+G0RaY+JrXeWJBVToP0nRnBpLGybMQ2C14EGIIbVno/FQU1tWTwg2awKchLOInAj
-         3+H3VIZMec086RaiFPw0NOdMi5pxEDfOcs3tQmL8qKxfBR02Y6UN66V2TpDjHvUvm6md
-         Wceg==
+        d=linaro.org; s=google; t=1702370146; x=1702974946; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=yxdG6i18n0awzaNWxfY9GdhnDjrtYCBQjsIp2NIUU4w=;
+        b=EQOi2G7miCaQJsTSeLaysMnE7zkkiP/rDTo18/Jk8Iy58xv14K4ZsCnfMGiTPKpz+J
+         yxa1nbrOixm+Eoq/7RHbPGCyCbimoWgYB+ZBQ2etrJ1Fkw2YIZb60xvlqgsv975UtbBZ
+         JiILoZF1giO7rrKDw6YNoshQ9GEIOs6ETU1RvbtPOJSdaJyCqe8LQMQiTBtLBJZygxNP
+         JDHd38nUjJvUj4wM0ambAuVsjE7FbNan3Xjzx0U8RnG1tpc98q0RDwbbH1aTIxTp/swH
+         GAchUSv4J+5RigYeRbA8RpI4RHLQoMO/fRWL34ghABiHog/uYIkY+I2bjGcIHFUc0G17
+         Vunw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702369517; x=1702974317;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xCP807InI7wrvOKwQXFYPNf6Ul7w+2AQncnAH+bYvyU=;
-        b=s6D8vEXP7Q2QM+CMWtzX4SL0VPpkWbq2tCmSAWW4g4aeWLsE0SJRnqQMiMTpBfx1CY
-         X5af8Die1WF1iQDMByaOLC6XiaoLh4nE8lRcESWQtoX/YcJ6MXVmHJ4WtMI2sKyutTa/
-         /3RGON0zUYcS/kEvwp9njsvXD9xtPdFM2TwdVBhGcyniC1tMyMwYzi6CSm8htPePmjHz
-         1jqQgt0MpZkDUaCrhiQ7o7mEZRLBqbruuhUnvewp+ifNos+JubwMbTCen4qO9QZWU/tE
-         nP90Ff+uppPJ64kw1Su2buuxvs/rnhhz8v0Ruwo98NvbrwgsYq8kxGEfXFa5jttFzXHK
-         G/Uw==
-X-Gm-Message-State: AOJu0YwWrUbc9Se+OKvYvfJYFRoH5Uyh+hdOBq876OxnKgVTsb+dG+3R
-	jpP5553ikER/q40RS1LITxSuzg==
-X-Google-Smtp-Source: AGHT+IEWBY503f1gM2tXLsh9TDR2pLAHeeuek8iOuUjDWd5n15LpazxTf954h68js2awQNyoYQozww==
-X-Received: by 2002:a17:907:98c:b0:a1f:5526:ead1 with SMTP id bf12-20020a170907098c00b00a1f5526ead1mr6951722ejc.58.1702369517281;
-        Tue, 12 Dec 2023 00:25:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702370146; x=1702974946;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yxdG6i18n0awzaNWxfY9GdhnDjrtYCBQjsIp2NIUU4w=;
+        b=Z1yuv3lNc3z0LA2zpFsnzSnXPRagR72jvBDl74c3AZFzuTjiXvlZ3ma+vTF1YG5GhF
+         e/sVAExDcsCWNFBqlZ2oX2yhdENvE7aEMCQxo82fXGjHzRUY9P63Va4x+34sa3f3tcEY
+         TDeXZgrlUnfTrhbFguth2JOvfPMMyD/dscvZpyQfC4Coe+JPzLrEPvWyICNfOw6+h0T5
+         SILUbgsvs4uiIyrfa/3c2fQRur2y3z7kkvWjXj4IVOwcUeGdzKZ//iPyoVFS/sdZnEsH
+         HNAhJIwAHzhCPb4xWug6FdXFoi0VkRTgU+fmJJVmoM450RgQ7NP6zQzAwqL1K1pUWWtt
+         Ch7Q==
+X-Gm-Message-State: AOJu0YwsfrNzY/zVPW8sTd2ONpyEyzDZywKjseXxBLVxHVjj3tOnLgpj
+	ry/xSb6BvBRCKd/7jCL3YuV6ohp9ld4zzE+1Tqg=
+X-Google-Smtp-Source: AGHT+IEdXWvwi1CXLArJycPwUMOqAY/+0In7657z/70CbdZlcpDJJkv+b1Q/Gw8e58tOIOEaZacdbg==
+X-Received: by 2002:a17:906:74d7:b0:a1f:8926:ae23 with SMTP id z23-20020a17090674d700b00a1f8926ae23mr2169601ejl.87.1702370145934;
+        Tue, 12 Dec 2023 00:35:45 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id vb2-20020a170907d04200b00a1f72df5617sm5477009ejc.141.2023.12.12.00.25.16
+        by smtp.gmail.com with ESMTPSA id l28-20020a50d6dc000000b0054ca3df2257sm4684520edj.36.2023.12.12.00.35.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 00:25:16 -0800 (PST)
-Message-ID: <075248b8-1fbc-46ac-b0f3-b841b7f28eba@linaro.org>
-Date: Tue, 12 Dec 2023 09:25:15 +0100
+        Tue, 12 Dec 2023 00:35:45 -0800 (PST)
+Message-ID: <a0bb6c36-c99f-4994-8faa-04bb067396ad@linaro.org>
+Date: Tue, 12 Dec 2023 09:35:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -64,13 +65,14 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] rtc: MAINTAINERS: drop Alessandro Zummo
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
  linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
  Arnd Bergmann <arnd@arndb.de>, Alessandro Zummo <a.zummo@towertech.it>
 References: <20231211132600.101090-1-krzysztof.kozlowski@linaro.org>
  <20231211165821.xp3mlxdezvezg6r4@pengutronix.de>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <075248b8-1fbc-46ac-b0f3-b841b7f28eba@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -115,56 +117,26 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231211165821.xp3mlxdezvezg6r4@pengutronix.de>
+In-Reply-To: <075248b8-1fbc-46ac-b0f3-b841b7f28eba@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 11/12/2023 17:58, Uwe Kleine-König wrote:
-> On Mon, Dec 11, 2023 at 02:26:00PM +0100, Krzysztof Kozlowski wrote:
->> Last email from Alessandro was in 2016, so remove him from maintainers
->> of the RTC subsystem.  Stale maintainer entries hide information whether
->> subsystem needs help, has a bus-factor or is even orphaned.
+On 12/12/2023 09:25, Krzysztof Kozlowski wrote:
+>>>  REAL TIME CLOCK (RTC) SUBSYSTEM
+>>> -M:	Alessandro Zummo <a.zummo@towertech.it>
+>>>  M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>>  L:	linux-rtc@vger.kernel.org
+>>>  S:	Maintained
 >>
->> Link: https://lore.kernel.org/all/?q=f%3A%22Alessandro+Zummo%22
-> 
-> unusual usage of Link: (which traditionally has an URL proving the patch
-> submission).
-
-"If related discussions or any other background information behind the
-change can be found on the web, add 'Link:' tags pointing to it."
-
-It's additional information outside serving as an proof. It's like the
-"background information".
-
-> 
->> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
->> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Alessandro Zummo <a.zummo@towertech.it>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  MAINTAINERS | 1 -
->>  1 file changed, 1 deletion(-)
+>> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 >>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ec736fccbb26..82ef00014f41 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -18271,7 +18271,6 @@ X:	include/linux/srcu*.h
->>  X:	kernel/rcu/srcu*.c
->>  
->>  REAL TIME CLOCK (RTC) SUBSYSTEM
->> -M:	Alessandro Zummo <a.zummo@towertech.it>
->>  M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
->>  L:	linux-rtc@vger.kernel.org
->>  S:	Maintained
+>> Maybe it would be a nice move to add him to CREDITS.
 > 
-> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
-> Maybe it would be a nice move to add him to CREDITS.
+> Yes, this is good idea. I will send v2.
 
-
-Yes, this is good idea. I will send v2.
+Wait, I know why I did not do it in the first place: Alessandro is
+already there for RTC!
 
 Best regards,
 Krzysztof
