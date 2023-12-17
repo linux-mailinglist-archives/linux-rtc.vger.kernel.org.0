@@ -1,53 +1,50 @@
-Return-Path: <linux-rtc+bounces-414-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-415-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0625816226
-	for <lists+linux-rtc@lfdr.de>; Sun, 17 Dec 2023 21:47:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D317281622A
+	for <lists+linux-rtc@lfdr.de>; Sun, 17 Dec 2023 21:48:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 460FDB20FF9
-	for <lists+linux-rtc@lfdr.de>; Sun, 17 Dec 2023 20:47:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 121561C20C0B
+	for <lists+linux-rtc@lfdr.de>; Sun, 17 Dec 2023 20:48:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 580CB481BB;
-	Sun, 17 Dec 2023 20:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3F0648784;
+	Sun, 17 Dec 2023 20:48:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9tTIX1S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZynxvG4T"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342A4481B9;
-	Sun, 17 Dec 2023 20:46:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B55C433C7;
-	Sun, 17 Dec 2023 20:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E00481C0;
+	Sun, 17 Dec 2023 20:48:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38B8CC433C7;
+	Sun, 17 Dec 2023 20:47:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702846019;
-	bh=QpN+XwZLK0DlQcc572CwgNkacAX6mTe+aD5d84FlZzE=;
+	s=k20201202; t=1702846080;
+	bh=MsOuiC4vjp3GdwgSh5eqIM9fcQPx/rrlgv5IxgSP46c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U9tTIX1SpB3+Fg3vJqWeVjipaX+Aaimo5Tgibsu4LNULeKvzOI/Sqr0wuJUPSDIju
-	 X8QBePWbnmnuTAKevNw7/lxSWwbWueYZ1dh7DCyx57EEno4jlgKvdWC6KIDpzZP2ae
-	 UUdAdj5Zn3VgMlbIHwVaA61AzT72vbS9UGEfAkpy+5FCyq/TWKPHZnqc9X42ZMWLQ8
-	 SRoA0LMr+oCfZxtQ+A24AtLju6mO/eFC6/kn9cTH2KuQLRunIsu97/CTchgxks7i5t
-	 GawizzV6oE5bI1LIjq0AOVSMIOJ4elfQGYMAmznSN/5AKpjL8ks2y7JkBXb5NmYWt/
-	 PgcyFFRxpkHgg==
-Date: Sun, 17 Dec 2023 20:46:54 +0000
+	b=ZynxvG4Tt6oSL1swR5Cb+u56TisQK3Ah/s8oc8bzpLfAUMStsu3RebVPXV5a1Ebqf
+	 h7B5V4+Ckwwn0nePxNSySGCZxCUnfj1DoHNIcLf1CzXE+CeSIzCimePmb9Woqt6V7Y
+	 f2Z5iNE1/oml2IoyzA041E1xbe35MzrRyAvkIZcW8gJO+vzGoBuCriO++6Tt29fo6K
+	 aexYdwirgkyxF3/Dy87ZU0L2RcfT9bqVRHlWcYDJ3csPwvQrGPAglRSzsujKuprheI
+	 1xovbfuFV+1DEeNOKf1lPZZ+aE4Ilp4qwCmGkmSoP5bzNvuyzBZAb7UitI2DZBoPpp
+	 fvGt3ZTG19V+w==
+Date: Sun, 17 Dec 2023 20:47:54 +0000
 From: Conor Dooley <conor@kernel.org>
-To: jingbao qiu <qiujingbao.dlmu@gmail.com>
+To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
 	chao.wei@sophgo.com, unicorn_wang@outlook.com,
 	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
 	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, dlan@gentoo.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: rtc: sophgo: add RTC support for
- Sophgo CV1800 series SoC
-Message-ID: <20231217-swept-uncorrupt-92ac058dba4b@spud>
+Subject: Re: [PATCH v2 3/3] riscv: dts: sophgo: add rtc dt node for CV1800
+Message-ID: <20231217-congenial-unwoven-8067fcbff9d5@spud>
 References: <20231217110952.78784-1-qiujingbao.dlmu@gmail.com>
- <20231217110952.78784-2-qiujingbao.dlmu@gmail.com>
- <20231217-wrist-flakily-db9974d8b515@spud>
- <CAJRtX8TQ02swRqzNfPHPrcS-MU=pBN_atjV2PFsAyJeNBF8kgA@mail.gmail.com>
+ <20231217110952.78784-4-qiujingbao.dlmu@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -55,63 +52,59 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="XvhKEa/n8Srf2qdm"
+	protocol="application/pgp-signature"; boundary="j0DE3vb0WktsyfMc"
 Content-Disposition: inline
-In-Reply-To: <CAJRtX8TQ02swRqzNfPHPrcS-MU=pBN_atjV2PFsAyJeNBF8kgA@mail.gmail.com>
+In-Reply-To: <20231217110952.78784-4-qiujingbao.dlmu@gmail.com>
 
 
---XvhKEa/n8Srf2qdm
-Content-Type: text/plain; charset=utf-8
+--j0DE3vb0WktsyfMc
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 17, 2023 at 09:16:39PM +0800, jingbao qiu wrote:
-> On Sun, Dec 17, 2023 at 8:26=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Sun, Dec 17, 2023 at 07:09:50PM +0800, Jingbao Qiu wrote:
-> >
-> > > +  reg:
-> > > +    items:
-> > > +      - description: data register
-> > > +      - description: control register
-> >
-> > > +    rtc@5025000{
-> > > +      compatible =3D "sophgo,cv1800-rtc";
-> > > +      reg =3D <0x5025000 0x1000>, <0x5026000 0x1000>;
-> >
-> > Why are these two regions rather than just one, given they are located
-> > next to one another?
-> > Are they separate on one of the other devices in this family?
-> >
-> > Thanks,
-> > Conor.
-> >
+On Sun, Dec 17, 2023 at 07:09:52PM +0800, Jingbao Qiu wrote:
+> Add the rtc device tree node to cv1800 SoC.
 >=20
-> I think there are two reasons, the first one is to distinguish
-> different logical ,
-> REG_ CTRL (base on 0x5025000) controls clock calibration, sleep,and other
-> functions, RTC_ CORE (base on 0x5026000) has basic RTC functionality,
-> The second is the maximum address used by RTC_CTRL (base on 0x5025000)
-> is 0x0ac,which is much smaller than 0x1000. Therefore, the datasheet divi=
-des
-> it into two parts for introduction, and I also divide it into two
-> parts based on this
-> introduction.So do you suggest that I merge them together=EF=BC=9F
+> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+> ---
+>  arch/riscv/boot/dts/sophgo/cv1800b.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi b/arch/riscv/boot/dt=
+s/sophgo/cv1800b.dtsi
+> index df40e87ee063..429bee76f677 100644
+> --- a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
+> +++ b/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
+> @@ -119,5 +119,12 @@ clint: timer@74000000 {
+>  			reg =3D <0x74000000 0x10000>;
+>  			interrupts-extended =3D <&cpu0_intc 3>, <&cpu0_intc 7>;
+>  		};
+> +
+> +		rtc@5025000 {
+> +			compatible =3D "sophgo,cv1800-rtc";
 
-If all of the cv1800 series devices have them sequentially, I would just
-make them one region.
+This is a cv1800b, not a cv1800.
 
---XvhKEa/n8Srf2qdm
+> +			reg =3D <0x5025000 0x1000>, <0x5026000 0x1000>;
+> +			clocks =3D <&osc>;
+> +			interrupts =3D <17 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+>  	};
+>  };
+> --=20
+> 2.25.1
+>=20
+
+--j0DE3vb0WktsyfMc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZX9eOgAKCRB4tDGHoIJi
-0nBGAP9CpE18F0tCZ5ZZL8oD+sR4o03Wo2uUJVeIkukXO3/g3AD7BTzHdLoIzYY2
-2ujSTOnAoRjAoYWuVbGf616T8GdjNw4=
-=wA1g
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZX9eegAKCRB4tDGHoIJi
+0suWAQDf7i2v9PVtd8LXOAuotFiLnMgZ+BZYKwPFZcKeSpXBxAD+LpHq5X11sPQe
+2e5AtZfiLnIAjR4b+HZ5vPS4SA7pOgU=
+=zCPu
 -----END PGP SIGNATURE-----
 
---XvhKEa/n8Srf2qdm--
+--j0DE3vb0WktsyfMc--
 
