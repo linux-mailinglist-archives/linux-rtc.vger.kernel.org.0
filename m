@@ -1,79 +1,73 @@
-Return-Path: <linux-rtc+bounces-433-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-434-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 186A281A11D
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 15:28:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0CB581A7C4
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 21:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCF341F22B33
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 14:28:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42711C222AC
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 20:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591C038F8D;
-	Wed, 20 Dec 2023 14:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DC251DA4D;
+	Wed, 20 Dec 2023 20:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RT4mppbm"
+	dkim=pass (1024-bit key) header.d=tiruppurdistrict.com header.i=@tiruppurdistrict.com header.b="y4RJRydX"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from dedi.victoryhostings.com (dedi.victoryhostings.com [103.154.184.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B1E38F82;
-	Wed, 20 Dec 2023 14:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 146D81BF204;
-	Wed, 20 Dec 2023 14:28:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1703082515;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nC9eF10X2lqjXUL6MHDbsTgCI+eRXF8SsKwjlAptjRE=;
-	b=RT4mppbm2rdD1gnbuOzoHcU5HifXFlcTA5K/KZtHQyKfty1O17bAxM/TsE0zMA50u3m/+J
-	S5p+eq4fA5BAzX32zGX9fOOZqX3uIp6gcWa+EceDeXjbLFUxouXPvSOzuxx8wcM1Wnu+AC
-	GLnJkB1U5/RTCzr14lpOZIstS7ekMe6+Nmhh5uptn9GsN1ReL/aPG9BPfHlKPmcp+VIcQ3
-	HbjZ18wOTqpbGyA3OnG3J8bKajGpakUvka/cJLtXgZsnqopxDUZhx36NDJJqCKOhlXy/gX
-	w7ah9HhqVScaydaf10sHJzH1ACX0LT+27zjy4AZa1MirlkgTbizc2gtQDdeG0A==
-Message-ID: <52b10a61-ee3e-4166-a9e6-f417f2f5ea5d@bootlin.com>
-Date: Wed, 20 Dec 2023 15:28:34 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46591DFDC
+	for <linux-rtc@vger.kernel.org>; Wed, 20 Dec 2023 20:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tiruppurdistrict.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dedi.victoryhostings.com
+Received: by dedi.victoryhostings.com (Postfix, from userid 1033)
+	id 24CE6616398; Thu, 21 Dec 2023 02:14:12 +0530 (IST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tiruppurdistrict.com;
+	s=default; t=1703105052;
+	bh=hIdW63BnN7UKVG1YefB9fWDsx4hJ47WXVm4uA+KR0k4=;
+	h=To:Subject:Date:From:Reply-To;
+	b=y4RJRydXXB3MBe+N+PXPBLe5ZO8+x/Ty88EEKS64zXCzvc39CP7nIbQ78jNOGJdyR
+	 UhF90ra7Vthe3Ec9TMtdXC7Uqfe9Rv5aPiJEAlQHNjDTszIG0wMpCDUff0IXkcBW/o
+	 s8RK6YUb6Me+fT7QPtZukhLh8rNI4/132etpMnFs=
+To: linux-rtc@vger.kernel.org
+Subject: =?us-ascii?Q?TiruppurDistrict.com_Contact_-_"Rekindling_the_?=  =?us-ascii?Q?Flame"?=
+Date: Wed, 20 Dec 2023 20:44:11 +0000
+From: "TiruppurDistrict.com" <info@tiruppurdistrict.com>
+Reply-To: info@tiruppurdistrict.com
+Message-ID: <S3HlYGeJZbi7FPYkizbOjSJnpZt2XAtvwfjT6X7c@www.cinemas.live>
+X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9] rtc: tps6594: Add driver for TPS6594 RTC
-To: Esteban Blanc <eblanc@baylibre.com>, a.zummo@towertech.it,
- alexandre.belloni@bootlin.com
-Cc: andy.shevchenko@gmail.com, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org, jpanis@baylibre.com, jneanne@baylibre.com,
- u-kumar1@ti.com
-References: <20231107094701.2223486-1-eblanc@baylibre.com>
-Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <20231107094701.2223486-1-eblanc@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
 
-On 11/7/23 10:47, Esteban Blanc wrote:
-> TPS6594 PMIC is a MFD. This patch adds support for
-> the RTC found inside TPS6594 family of PMIC.
-> 
-> Alarm is also supported.
-> 
-> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Hello Isondornob,
 
-Tested-by: Thomas Richard <thomas.richard@bootlin.com>
+Thanks for Contacting us. We will reply you as soon as Possible.
+
+Thank You,
+Admin
+www.TiruppurDistrict.com
+
+-----------------------------------------------------------------
+
+From: Isondornob <linux-rtc@vger.kernel.org>
+Phone: 83383749556
+
+Subject: Rekindling the Flame
+
+Message Body:
+Loneliness in a Crowded Room 
+Dearest, you're the dream I never want to wake from. 
+In case you can spare a moment, could you please visit my page using this link: https://tinyurl.com/yvm9rb9k#VbJpZG   I've shared some new photos and updates from recent events there. It would be great to catch up and share our experiences.
 
 -- 
-Thomas Richard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This e-mail was sent from a contact form on TiruppurDistrict.com Contact (https://www.cinemas.live/contact-us/)
+
 
 
