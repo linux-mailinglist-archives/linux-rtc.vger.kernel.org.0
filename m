@@ -1,73 +1,106 @@
-Return-Path: <linux-rtc+bounces-434-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-435-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0CB581A7C4
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 21:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 582C981A81A
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 22:36:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42711C222AC
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 20:50:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81D561C21BC8
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 21:36:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DC251DA4D;
-	Wed, 20 Dec 2023 20:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F387948CD0;
+	Wed, 20 Dec 2023 21:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tiruppurdistrict.com header.i=@tiruppurdistrict.com header.b="y4RJRydX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FPnDMo7p"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from dedi.victoryhostings.com (dedi.victoryhostings.com [103.154.184.47])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46591DFDC
-	for <linux-rtc@vger.kernel.org>; Wed, 20 Dec 2023 20:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tiruppurdistrict.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dedi.victoryhostings.com
-Received: by dedi.victoryhostings.com (Postfix, from userid 1033)
-	id 24CE6616398; Thu, 21 Dec 2023 02:14:12 +0530 (IST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tiruppurdistrict.com;
-	s=default; t=1703105052;
-	bh=hIdW63BnN7UKVG1YefB9fWDsx4hJ47WXVm4uA+KR0k4=;
-	h=To:Subject:Date:From:Reply-To;
-	b=y4RJRydXXB3MBe+N+PXPBLe5ZO8+x/Ty88EEKS64zXCzvc39CP7nIbQ78jNOGJdyR
-	 UhF90ra7Vthe3Ec9TMtdXC7Uqfe9Rv5aPiJEAlQHNjDTszIG0wMpCDUff0IXkcBW/o
-	 s8RK6YUb6Me+fT7QPtZukhLh8rNI4/132etpMnFs=
-To: linux-rtc@vger.kernel.org
-Subject: =?us-ascii?Q?TiruppurDistrict.com_Contact_-_"Rekindling_the_?=  =?us-ascii?Q?Flame"?=
-Date: Wed, 20 Dec 2023 20:44:11 +0000
-From: "TiruppurDistrict.com" <info@tiruppurdistrict.com>
-Reply-To: info@tiruppurdistrict.com
-Message-ID: <S3HlYGeJZbi7FPYkizbOjSJnpZt2XAtvwfjT6X7c@www.cinemas.live>
-X-Mailer: PHPMailer 6.5.0 (https://github.com/PHPMailer/PHPMailer)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDC6495C1;
+	Wed, 20 Dec 2023 21:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32AAC433C8;
+	Wed, 20 Dec 2023 21:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703108192;
+	bh=8fD+g/UALuuFVC/2IctyRtQM4JlqRN9pptw2dt8R384=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FPnDMo7pNAr/kSeAnISx6iuXuIfsSnkY1fKBKFrT3QgIbqPjQugd/OPucZIcKIpkR
+	 VgyhBRqne7a7T2qdpp79bzBdY7TdF+ZnOXIILHpvaHQEqwWRRamFOKNEc9GqZ2GM0G
+	 6k9rmb+DazFqGagtmG/7WXvigSPZfmi46GjfgghdlY3TMHQ+F1VqfMyDXTkSSs3WWY
+	 r4eLEgwSuVmi0g9kr0MEkRv3hSPPkqnxB7FaqDQ/BSoxSUJUoyZHwqYE9jlHRMZopE
+	 7NPikncxVjQCVqnkhU/wRWfnHZPYRcKSusq37pLNTsJK5Yk1JkYGa460DVfaGpDxxd
+	 UxyFN4JL30JQw==
+Received: (nullmailer pid 1179044 invoked by uid 1000);
+	Wed, 20 Dec 2023 21:36:29 -0000
+Date: Wed, 20 Dec 2023 15:36:29 -0600
+From: Rob Herring <robh@kernel.org>
+To: Inochi Amaoto <inochiama@outlook.com>
+Cc: Conor Dooley <conor@kernel.org>, jingbao qiu <qiujingbao.dlmu@gmail.com>, a.zummo@towertech.it, alexandre.belloni@bootlin.com, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, chao.wei@sophgo.com, unicorn_wang@outlook.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, dlan@gentoo.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: rtc: sophgo: add RTC support for
+ Sophgo CV1800 series SoC
+Message-ID: <20231220213629.GA1177070-robh@kernel.org>
+References: <20231217-swept-uncorrupt-92ac058dba4b@spud>
+ <IA1PR20MB4953BE30DC29820912321C07BB90A@IA1PR20MB4953.namprd20.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA1PR20MB4953BE30DC29820912321C07BB90A@IA1PR20MB4953.namprd20.prod.outlook.com>
 
-Hello Isondornob,
+On Mon, Dec 18, 2023 at 11:41:52AM +0800, Inochi Amaoto wrote:
+> >On Sun, Dec 17, 2023 at 09:16:39PM +0800, jingbao qiu wrote:
+> >> On Sun, Dec 17, 2023 at 8:26=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
+> >rote:
+> >> >
+> >> > On Sun, Dec 17, 2023 at 07:09:50PM +0800, Jingbao Qiu wrote:
+> >> >
+> >> > > +  reg:
+> >> > > +    items:
+> >> > > +      - description: data register
+> >> > > +      - description: control register
+> >> >
+> >> > > +    rtc@5025000{
+> >> > > +      compatible =3D "sophgo,cv1800-rtc";
+> >> > > +      reg =3D <0x5025000 0x1000>, <0x5026000 0x1000>;
+> >> >
+> >> > Why are these two regions rather than just one, given they are located
+> >> > next to one another?
+> >> > Are they separate on one of the other devices in this family?
+> >> >
+> >> > Thanks,
+> >> > Conor.
+> >> >
+> >>=20
+> >> I think there are two reasons, the first one is to distinguish
+> >> different logical ,
+> >> REG_ CTRL (base on 0x5025000) controls clock calibration, sleep,and other
+> >> functions, RTC_ CORE (base on 0x5026000) has basic RTC functionality,
+> >> The second is the maximum address used by RTC_CTRL (base on 0x5025000)
+> >> is 0x0ac,which is much smaller than 0x1000. Therefore, the datasheet divi=
+> >des
+> >> it into two parts for introduction, and I also divide it into two
+> >> parts based on this
+> >> introduction.So do you suggest that I merge them together=EF=BC=9F
+> >
+> >If all of the cv1800 series devices have them sequentially, I would just
+> >make them one region.
+> >
+> 
+> I agree with using one region. The ctrl and core region are highly
+> releated.
+> 
+> Moreover, I suggest using syscon to describe this region, the reboot
+> device is also in this region.
 
-Thanks for Contacting us. We will reply you as soon as Possible.
+Then the description of the device is incomplete. Please describe the 
+whole block/device.
 
-Thank You,
-Admin
-www.TiruppurDistrict.com
-
------------------------------------------------------------------
-
-From: Isondornob <linux-rtc@vger.kernel.org>
-Phone: 83383749556
-
-Subject: Rekindling the Flame
-
-Message Body:
-Loneliness in a Crowded Room 
-Dearest, you're the dream I never want to wake from. 
-In case you can spare a moment, could you please visit my page using this link: https://tinyurl.com/yvm9rb9k#VbJpZG   I've shared some new photos and updates from recent events there. It would be great to catch up and share our experiences.
-
--- 
-This e-mail was sent from a contact form on TiruppurDistrict.com Contact (https://www.cinemas.live/contact-us/)
-
+Rob
 
 
