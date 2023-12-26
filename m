@@ -1,64 +1,64 @@
-Return-Path: <linux-rtc+bounces-443-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-444-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16C8981E74F
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Dec 2023 13:18:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7158681E752
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Dec 2023 13:21:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8234C1F227B5
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Dec 2023 12:18:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDD12282897
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Dec 2023 12:21:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D94054E614;
-	Tue, 26 Dec 2023 12:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50DA44E616;
+	Tue, 26 Dec 2023 12:21:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zb3P/Oar"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bL7SZCX8"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A02C4E603
-	for <linux-rtc@vger.kernel.org>; Tue, 26 Dec 2023 12:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86D64E611
+	for <linux-rtc@vger.kernel.org>; Tue, 26 Dec 2023 12:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-40d5bc68bb7so1539705e9.3
-        for <linux-rtc@vger.kernel.org>; Tue, 26 Dec 2023 04:18:25 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a2698eae0a9so485902466b.3
+        for <linux-rtc@vger.kernel.org>; Tue, 26 Dec 2023 04:21:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703593104; x=1704197904; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1703593288; x=1704198088; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+QvKH0mSDaKVN/E4sH9N8gca1ni/81BAMkf/MznUqUM=;
-        b=Zb3P/OarOWbCEkUrU3XSW9IdU/88R6Q51YK2sJ8VK1dRAlGwLoV25B7zIcvERehdhH
-         8y3y1gtyP/2jSyqs6IjuSLjs1qSJFA5nNqCd/N3fF5MnYurvn20Fr2VVT+7Ea+6Zwj4k
-         iS3veOt/bw0OMlTs+defErz7Awp7Pxopl9JDcwXBXDsFU4ShJKQsx/2SKK9G6DRpqLGZ
-         x+VJftuxOXh6HBQKGyYfpGHdXARkeX7hbes4hanilhcueVFyLEh518mdsHRHlLaKc6Vm
-         tSz2Bq9RFKigCCn6X/g/6THnzKPWmiRqB5Yw6vmvQCoiIP+b4kHPFXknAEXLENSIriu7
-         dcPg==
+        bh=M8ARtKi1G0lnhYwheKGxjHA7hzaZAogUm4w8p8v2zCI=;
+        b=bL7SZCX8a+t/PGJgZQGX24QoU4aF74OOVwyTA0gGzvuTxydvbKRZvqqLkoFG3ALqja
+         EQEzGnioep0qd6Hm+UhBjhdvt4rb9VcICD3cczCBoHHG5G1PTuC8NXXFvmcz8E7ZuOxv
+         mR8qEotic/uop41CVKty3Uh+nQzdz+34JIAv8kS51rpQ89TnvfUynudWe7CZZQxQfnoJ
+         A6BIs26FbgkR1U/VzCZeP8edAELLLXBgv9i2YvZL52RcBMWRG06HSxGULTIlpW5NQMuq
+         BEOqNUq9wgKhHm/0kR9b2bvHdb0v4XVmoQnbVtZf75Pnv73wgzdMKsqib4UzlTdfncXM
+         C28Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703593104; x=1704197904;
+        d=1e100.net; s=20230601; t=1703593288; x=1704198088;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+QvKH0mSDaKVN/E4sH9N8gca1ni/81BAMkf/MznUqUM=;
-        b=ihTXIoEebc9/fyoHM9ubbHWOkjZ7E+whP0+7+097Dj6QuA7FJslW7d7he7bnYS4lFZ
-         NtjidpIoG25PSp1VZMhpk+fp8OMmd3ch3lucJ4LoclolPVGZrpcB2IC4ccq+Wf8A914b
-         L7Ax7/O3h6VoI9fyKhcyKeis4JVyFvFS6EtzTvDSnBTdmxklxYzLHN9lJV+haHPVsOZv
-         kLr+IntXS/3Tv2w6fq6hAh6fxn+LMJR1MhqzcOZLM8dC60kp3sAmAsq7f11oFxt0+wU2
-         DvMSjgeL8YCn45OZzT4vS4gwe5ELoUApl1EJPAovqpaD3ZRJMbd7xF0aFCiBWxgx9a0t
-         BauA==
-X-Gm-Message-State: AOJu0YwBW/AhqoWomUaGSrjUt/T515jaSxqhX2kq5uuwVh3IRJdjdMxw
-	9ZIKJsPTmCEl9qRNgchQ1HN1d/saCzGRqQ==
-X-Google-Smtp-Source: AGHT+IGq4rUS185drGRaGf+X6QK+tXtbcGog7Rmzhhs71bK2vZUqLz8FSfzSqGIhP01Kmjnp0E1rhw==
-X-Received: by 2002:a05:600c:2203:b0:40c:2871:9727 with SMTP id z3-20020a05600c220300b0040c28719727mr3815246wml.150.1703593104407;
-        Tue, 26 Dec 2023 04:18:24 -0800 (PST)
+        bh=M8ARtKi1G0lnhYwheKGxjHA7hzaZAogUm4w8p8v2zCI=;
+        b=FppIOhJgSEuzIkfxdmqKdAuOVJoSm/AJktcSwnwdJlEj5Ti06gN5u+w/icNTD4SJQM
+         7Tvth2bunDRomSYM7hCQqmHFRF5XhtNi/A1xPl88kqs0MLZh4I6APPF1TbF7Opx5VKAx
+         OUOmnfX5WXsDzWCVfenSt06kxFEVjlR6RVPD9JX0s4aFReiWPA7mdv0O1KnzbGk/DLKp
+         Z0zCPwSDVpQPDQj3qGHHRMgTuGeUv727wd2pIBJjl449893vnsd2GDKLj1jeVPuRq0K2
+         2AKAStujik1EwI3DV+uEvHxvug0j/A+iT0WM1pIVIa2kwyTJogsUmnDIqNrq9UXGSdzU
+         BL0g==
+X-Gm-Message-State: AOJu0Yy1WQkNu2Hc7xVgsxx+f02GevWIhDWgTmN+suMgt6NnUtfstyCd
+	T95zI1DsI/kR77fXDx/i/yveTzBXLyTQjQ==
+X-Google-Smtp-Source: AGHT+IGb3QAfu97Sk85PNdQg2IeO+juQyVE3XDThI7M5xC5UogcwgRqt42RtMZ09JxW+zVVcPKc82A==
+X-Received: by 2002:a17:906:fb01:b0:a23:6143:61b5 with SMTP id lz1-20020a170906fb0100b00a23614361b5mr4028159ejb.129.1703593288096;
+        Tue, 26 Dec 2023 04:21:28 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.206.178])
-        by smtp.gmail.com with ESMTPSA id p9-20020a170907910900b00a26ac5e3683sm4955575ejq.100.2023.12.26.04.18.22
+        by smtp.gmail.com with ESMTPSA id z27-20020a17090674db00b00a26aa045d48sm5225353ejl.117.2023.12.26.04.21.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Dec 2023 04:18:23 -0800 (PST)
-Message-ID: <8f5e5cc7-9795-4e17-8bb9-73448e960c3d@linaro.org>
-Date: Tue, 26 Dec 2023 13:18:21 +0100
+        Tue, 26 Dec 2023 04:21:27 -0800 (PST)
+Message-ID: <86481a49-40ec-487f-8cec-6f2f64cf0f12@linaro.org>
+Date: Tue, 26 Dec 2023 13:21:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -128,69 +128,16 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 26/12/2023 11:04, Jingbao Qiu wrote:
-> Add devicetree binding for Sophgo CV1800 SoC MFD subsys.
-
-Subject and commit msg: there is no such hardware as "MFD subsys". Is
-this a PMIC? Does not look like. You must describe here hardware, not
-Linux subsystem.
-
-> 
-> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> ---
-
-Please mention the dependency here.
-
->  .../bindings/mfd/sophgo,cv1800-subsys.yaml    | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/sophgo,cv1800-subsys.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/sophgo,cv1800-subsys.yaml b/Documentation/devicetree/bindings/mfd/sophgo,cv1800-subsys.yaml
-> new file mode 100644
-> index 000000000000..c2a071c8a2de
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/sophgo,cv1800-subsys.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/sophgo,cv1800-subsys.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Sophgo CV1800 SoC subsys controller
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/sophgo,cv1800.h>
 > +
-> +maintainers:
-> +  - Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> +
-> +description:
-> +  The Sophgo CV1800 SoC subsys controller contains many functions
+> +    syscon@5025000 {
 
-What is "subsys"? Why is it in MFD directory? SoC components like
-system-controllers do not go to MFD.
-
-> +  for example, RTC and restart. In addition, CV1800 has an 8051
-> +  subsystem, which is configured through registers at this controller.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: sophgo,cv1800b-subsys
-> +      - const: syscon
-> +      - const: simple-mfd
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  rtc:
-> +    $ref: /schemas/rtc/sophgo,cv1800-rtc.yaml#
-
-Your patchset is not bisectable. What's more, you have dependency
-between patches, so bindings cannot go via separate trees: mfd and rtc.
-You need to make this *EXPLICIT* in the cover letter or patch changelog.
-
-I do not see any resources in MFD block, so why having it as separate
-node? What other devices you did not describe here? You mentioned
-restart and 8051, so where are they? Which driver implements them?
-
+This example and DTS suggest this is system-controller, so use that
+name. Assuming this is system-controller, because I am still not sure.
 
 Best regards,
 Krzysztof
