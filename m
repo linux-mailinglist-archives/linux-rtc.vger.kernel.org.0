@@ -1,106 +1,146 @@
-Return-Path: <linux-rtc+bounces-435-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-436-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 582C981A81A
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 22:36:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C799C81E6C6
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Dec 2023 11:04:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81D561C21BC8
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Dec 2023 21:36:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68BCD1F22837
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Dec 2023 10:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F387948CD0;
-	Wed, 20 Dec 2023 21:36:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFEAE4D58A;
+	Tue, 26 Dec 2023 10:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FPnDMo7p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qg91eduB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDC6495C1;
-	Wed, 20 Dec 2023 21:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32AAC433C8;
-	Wed, 20 Dec 2023 21:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703108192;
-	bh=8fD+g/UALuuFVC/2IctyRtQM4JlqRN9pptw2dt8R384=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FPnDMo7pNAr/kSeAnISx6iuXuIfsSnkY1fKBKFrT3QgIbqPjQugd/OPucZIcKIpkR
-	 VgyhBRqne7a7T2qdpp79bzBdY7TdF+ZnOXIILHpvaHQEqwWRRamFOKNEc9GqZ2GM0G
-	 6k9rmb+DazFqGagtmG/7WXvigSPZfmi46GjfgghdlY3TMHQ+F1VqfMyDXTkSSs3WWY
-	 r4eLEgwSuVmi0g9kr0MEkRv3hSPPkqnxB7FaqDQ/BSoxSUJUoyZHwqYE9jlHRMZopE
-	 7NPikncxVjQCVqnkhU/wRWfnHZPYRcKSusq37pLNTsJK5Yk1JkYGa460DVfaGpDxxd
-	 UxyFN4JL30JQw==
-Received: (nullmailer pid 1179044 invoked by uid 1000);
-	Wed, 20 Dec 2023 21:36:29 -0000
-Date: Wed, 20 Dec 2023 15:36:29 -0600
-From: Rob Herring <robh@kernel.org>
-To: Inochi Amaoto <inochiama@outlook.com>
-Cc: Conor Dooley <conor@kernel.org>, jingbao qiu <qiujingbao.dlmu@gmail.com>, a.zummo@towertech.it, alexandre.belloni@bootlin.com, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, chao.wei@sophgo.com, unicorn_wang@outlook.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, dlan@gentoo.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: rtc: sophgo: add RTC support for
- Sophgo CV1800 series SoC
-Message-ID: <20231220213629.GA1177070-robh@kernel.org>
-References: <20231217-swept-uncorrupt-92ac058dba4b@spud>
- <IA1PR20MB4953BE30DC29820912321C07BB90A@IA1PR20MB4953.namprd20.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A204D118;
+	Tue, 26 Dec 2023 10:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d45629a37eso8489025ad.2;
+        Tue, 26 Dec 2023 02:04:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703585080; x=1704189880; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1CUlK5GWpbi34to/D5VO9Fxv3S6uw4NY832Uic4+4Js=;
+        b=Qg91eduBhtjZs7uCi/PkTK7iW2CPyJzDhntuBWslOs5FxnvWl1KSGzF8TqRNtHu//5
+         ReNLXplnWhv/LwiWGLycOWO+gz6e1Fc4oE50ENFwbKUaDHDBkbvKGSZ9GeQeE+lKIRUL
+         /S3+mLBmORvm6Rh12UOQzvfZtrbIcC5v3nwleXnxMmb+rrCi1zTlrY0JI0KFzFhuASjJ
+         bkxn6y1BBHB7TWRCaX5uc/Rq0Dd9HJaSZ0uOyvS45iJtjgZsWW9afYZOtUvHm3Eo+qWW
+         lT2QmdJtTp2+Vks94Vqrf2xTIyxEQfEkgOEes8dEYp4Qi38ewSWj+OyYIod++iCZkRb6
+         RE1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703585080; x=1704189880;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1CUlK5GWpbi34to/D5VO9Fxv3S6uw4NY832Uic4+4Js=;
+        b=iGAYCvOk6l4qMtIrcw/MXoEYkcRUM5d9W3R9tKWpymU6vFNtHsL887kHeDC9JrIOfU
+         n8LTcXZJM5kErfDifftysYHEKDnG49sg+OCCt2CnhtO9h4d8G7ciqWCayAdhEjvC8v0e
+         Xfl7FgB9Umg1R6m4iAiTRgdP/AIyFtDezVLLwdvpiaBF+xUhgkv4HsjExpEXnNPxM7rx
+         TJeBnKYMJGYTxKFNvA9PxG8PgXvJ02OI76Bynl6EbQI/c1o6qblEPXnf8tlXjAxwcd7k
+         pd4PNFdhknbRMYaHv25YQvJi0bsuIHO2viMkMZVXhatvlHi1iytsCGQdZiZEpMoAOjOO
+         eHbg==
+X-Gm-Message-State: AOJu0Yxz1GmpavJEbPPPzLcbTZ5PNHeioKUOmpQjdmQpJ01F5WOzJaWI
+	+i7FnxY+fz29vhMYZx3LQVQ=
+X-Google-Smtp-Source: AGHT+IEeHwdHS+0pMSSnOm6TXt3AkkjOHQ+9z+r0gUx+hgjkbs6xYNQSsAWHMd5DpvxxmN8oWytnMw==
+X-Received: by 2002:a17:902:bd94:b0:1d3:f285:816c with SMTP id q20-20020a170902bd9400b001d3f285816cmr7319451pls.25.1703585079460;
+        Tue, 26 Dec 2023 02:04:39 -0800 (PST)
+Received: from localhost ([46.3.240.106])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170902d30200b001d3961217a1sm9682272plc.102.2023.12.26.02.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Dec 2023 02:04:39 -0800 (PST)
+From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+To: a.zummo@towertech.it,
+	alexandre.belloni@bootlin.com,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor@kernel.org,
+	conor+dt@kernel.org,
+	chao.wei@sophgo.com,
+	unicorn_wang@outlook.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu
+Cc: linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	dlan@gentoo.org,
+	inochiama@outlook.com,
+	Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+Subject: [PATCH v3 0/4] riscv: rtc: sophgo: add mfd and rtc support for CV1800
+Date: Tue, 26 Dec 2023 18:04:27 +0800
+Message-Id: <20231226100431.331616-1-qiujingbao.dlmu@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <IA1PR20MB4953BE30DC29820912321C07BB90A@IA1PR20MB4953.namprd20.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 18, 2023 at 11:41:52AM +0800, Inochi Amaoto wrote:
-> >On Sun, Dec 17, 2023 at 09:16:39PM +0800, jingbao qiu wrote:
-> >> On Sun, Dec 17, 2023 at 8:26=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-> >rote:
-> >> >
-> >> > On Sun, Dec 17, 2023 at 07:09:50PM +0800, Jingbao Qiu wrote:
-> >> >
-> >> > > +  reg:
-> >> > > +    items:
-> >> > > +      - description: data register
-> >> > > +      - description: control register
-> >> >
-> >> > > +    rtc@5025000{
-> >> > > +      compatible =3D "sophgo,cv1800-rtc";
-> >> > > +      reg =3D <0x5025000 0x1000>, <0x5026000 0x1000>;
-> >> >
-> >> > Why are these two regions rather than just one, given they are located
-> >> > next to one another?
-> >> > Are they separate on one of the other devices in this family?
-> >> >
-> >> > Thanks,
-> >> > Conor.
-> >> >
-> >>=20
-> >> I think there are two reasons, the first one is to distinguish
-> >> different logical ,
-> >> REG_ CTRL (base on 0x5025000) controls clock calibration, sleep,and other
-> >> functions, RTC_ CORE (base on 0x5026000) has basic RTC functionality,
-> >> The second is the maximum address used by RTC_CTRL (base on 0x5025000)
-> >> is 0x0ac,which is much smaller than 0x1000. Therefore, the datasheet divi=
-> >des
-> >> it into two parts for introduction, and I also divide it into two
-> >> parts based on this
-> >> introduction.So do you suggest that I merge them together=EF=BC=9F
-> >
-> >If all of the cv1800 series devices have them sequentially, I would just
-> >make them one region.
-> >
-> 
-> I agree with using one region. The ctrl and core region are highly
-> releated.
-> 
-> Moreover, I suggest using syscon to describe this region, the reboot
-> device is also in this region.
+This patch serises are to add rtc driver and providers by writing
+and reading syscon registers for the CV1800 RISC-V SoC. And add
+documentation and nodes to describe System Controller(syscon).
 
-Then the description of the device is incomplete. Please describe the 
-whole block/device.
+This patch series depends on the clk patch support for Sophgo CV1800 SoC
+patch series which can be found at below link:
+https://lore.kernel.org/all/IA1PR20MB495354167CE560FC18E28DC5BB90A@IA1PR20MB4953.namprd20.prod.outlook.com/
 
-Rob
+Changes since v2:
+- add mfd support for CV1800
+- add rtc to mfd
+- using regmap replace iomap
+- merge register address in dts
+
+v2: https://lore.kernel.org/lkml/20231217110952.78784-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v1
+- fix duplicate names in subject
+- using RTC replace RTC controller
+- improve the properties of dt-bindings
+- using `unevaluatedProperties` replace `additionalProperties`
+- dt-bindings passed the test
+- using `devm_platform_ioremap_resource()` replace
+  `platform_get_resource()` and `devm_ioremap_resource()`
+- fix random order of the code
+- fix wrong wrapping of the `devm_request_irq()` and map the flag with dts
+- using devm_clk_get_enabled replace `devm_clk_get()` and
+  `clk_prepare_enable()`
+- fix return style
+- add rtc clock calibration function
+- use spinlock when write register on read/set time
+
+v1: https://lore.kernel.org/lkml/20231121094642.2973795-1-qiujingbao.dlmu@gmail.com/
+
+Jingbao Qiu (4):
+  dt-bindings: mfd: sophgo: add MFD subsys support for Sophgo CV1800
+    series SoC
+  dt-bindings: rtc: sophgo: add RTC support for Sophgo CV1800 series SoC
+  rtc: sophgo: add rtc support for Sophgo CV1800 SoC
+  riscv: dts: sophgo: add rtc dt node for CV1800
+
+ .../bindings/mfd/sophgo,cv1800-subsys.yaml    |  51 +++
+ .../bindings/rtc/sophgo,cv1800-rtc.yaml       |  45 ++
+ arch/riscv/boot/dts/sophgo/cv1800b.dtsi       |  11 +
+ drivers/rtc/Kconfig                           |   6 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-cv1800.c                      | 417 ++++++++++++++++++
+ 6 files changed, 531 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/sophgo,cv1800-subsys.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/sophgo,cv1800-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-cv1800.c
+
+
+base-commit: dc0684adf3b6be6b20fec9295027980021d30353
+-- 
+2.25.1
 
 
