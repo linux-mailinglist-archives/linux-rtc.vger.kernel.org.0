@@ -1,112 +1,275 @@
-Return-Path: <linux-rtc+bounces-451-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-452-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EE9B81EE9C
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Dec 2023 12:42:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82E4681EF40
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Dec 2023 14:50:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1DA41F21F4C
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Dec 2023 11:42:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D61BAB22064
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Dec 2023 13:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C27446AC;
-	Wed, 27 Dec 2023 11:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DE344C9D;
+	Wed, 27 Dec 2023 13:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qxe1xUqR"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EbVbkrWh"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64418446AF;
-	Wed, 27 Dec 2023 11:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6da4894a8d6so3257797a34.2;
-        Wed, 27 Dec 2023 03:42:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703677327; x=1704282127; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pb7lpldq2Tx1QNQ+H2Dim+WKnJgqfdJmzYnoXpB8qbM=;
-        b=Qxe1xUqRsrCXLFwwVci/d/oZ9hyC5apqYfi98eY0XYcJOI8KLrsb/2WkWfLDCn401+
-         C+v1+76GLBYaQwHoqNYXvmwjGzhEfaUjFhUhM0NIkhIli0/JINHLx+PJXBnSV7tUbj6q
-         D4eR3wVZY8HTNn41s4t/XdknJo/NOSn3Q1nGb+AW26IVMvkL82853Ln2lznxbr47AG5R
-         ALfzohXDM5LwaqQngoBXicuZEhg0G71XtuljhhQTKuuvVbNz3sgpTchJ4NmWXI+MDA/c
-         SfiCIhXAbXejfVUucHCDs9PuPPawZ7K3TySVOqErRuOi1AfPYGKuUwQQIqv+PfKXDoR5
-         SfkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703677327; x=1704282127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pb7lpldq2Tx1QNQ+H2Dim+WKnJgqfdJmzYnoXpB8qbM=;
-        b=c33y2KZv6PPgtepxNPz1ebOe/ZvMim2GMn7ofaZIAmi4WaT1fzTQnuPMszmy4miKfw
-         0WfooMYDLvv7sMYPLqhGJ0I8Q/9nneZfU04B9fGXJg7W6ibrbQ7+n1pXueaKXsjZIlS+
-         bu0UMVl9CgzMz17AnUBxJIv5ZOVHMkH+Z/mRA+eUZXTiay3p6vIqRets6dzr2D2lwzNt
-         /m3PiQz3VlQ0VC/ApwHH1w3tP1ZFw3sJ+/KPJosGaPR1ran51M35JUHX6RWkaxDslQdv
-         v3yhkGxDs4PFZylLEiYnqvJjh+8HFUMaPHDWvkcbS2Vr1G10PZeIoPc1PJ2oMj0pXWkG
-         IB/g==
-X-Gm-Message-State: AOJu0YwTCRVeZHI3ffc9KUr9G1wbKdaQzY6SUK85QZ6wGmXaFGz3mlvm
-	EXGr4+r6alRF3pBAkf7hLH00Vw47m9UJdxNRFh0=
-X-Google-Smtp-Source: AGHT+IG9HREmck3pKgGMOlqJlBXLHQ/lrJdeT/aJclJBNwnuos6qFhPCGAVQVIJrd4I1BFD7ScK4mlSLbvHZfjCNaeU=
-X-Received: by 2002:a9d:6a44:0:b0:6db:ab71:9e56 with SMTP id
- h4-20020a9d6a44000000b006dbab719e56mr3957749otn.68.1703677327094; Wed, 27 Dec
- 2023 03:42:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C1A44C94;
+	Wed, 27 Dec 2023 13:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7DFC01C0002;
+	Wed, 27 Dec 2023 13:50:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1703685027;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AogwvIp/TPDnH6K7tDIn6R4ADqS/CwUQt8C+g0y0TLQ=;
+	b=EbVbkrWhL7RWv6AsHin0RZoRrBHxtzNNg20eiYIXPT5vVbihMCHfSCCrtQfON8ewrVKEtY
+	9NUyFk7Y4nooe5/7a9klPHJYIb7EytnqWl3L9WzfEQdlZGUpMIU1/EdXgjxiC+CPWtF/yL
+	2GIwm5Ln2srlnld1cDlawQxSY+Y2i8RLXn24LiiVXK4L9qZ7VcrhPSMEfUmc9pvTpkBXk/
+	16yXl7mJgRD3fCyuaYdbtO7Es+DK50pLkOjPhuZxhsu2NmsghFKSHKSrWoAu/GysVv1evb
+	/ED759PhiuLkm5NYtY0sQFS0bXB6sxFxAZ677sWADu1VUxgVyq9eXNA10W/JKA==
+Date: Wed, 27 Dec 2023 14:50:24 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+Cc: a.zummo@towertech.it, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor@kernel.org,
+	conor+dt@kernel.org, chao.wei@sophgo.com, unicorn_wang@outlook.com,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dlan@gentoo.org,
+	inochiama@outlook.com
+Subject: Re: [PATCH v3 3/4] rtc: sophgo: add rtc support for Sophgo CV1800 SoC
+Message-ID: <202312271350242a208426@mail.local>
+References: <20231226100431.331616-1-qiujingbao.dlmu@gmail.com>
+ <20231226100431.331616-4-qiujingbao.dlmu@gmail.com>
+ <20231226123743bd2d3f0d@mail.local>
+ <CAJRtX8TYP4NUsrWejVywgLpkPk1rMyNVf8xZGZWSTn6dqJJjwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231226100431.331616-1-qiujingbao.dlmu@gmail.com>
- <20231226100431.331616-2-qiujingbao.dlmu@gmail.com> <8f5e5cc7-9795-4e17-8bb9-73448e960c3d@linaro.org>
- <CAJRtX8R=K6R0o-43cHfL2iKizEJYH+fGFtVj7tWFBuFN1cSsig@mail.gmail.com> <8cadec0b-8bf4-409d-b56e-28c8bae5f567@linaro.org>
-In-Reply-To: <8cadec0b-8bf4-409d-b56e-28c8bae5f567@linaro.org>
-From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Date: Wed, 27 Dec 2023 19:41:56 +0800
-Message-ID: <CAJRtX8RBER6eit11dEwqMHwaQQwk=0cK12Z7vRArUME3rJ_s6w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: mfd: sophgo: add MFD subsys support
- for Sophgo CV1800 series SoC
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor@kernel.org, conor+dt@kernel.org, 
-	chao.wei@sophgo.com, unicorn_wang@outlook.com, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, linux-rtc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, dlan@gentoo.org, 
-	inochiama@outlook.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJRtX8TYP4NUsrWejVywgLpkPk1rMyNVf8xZGZWSTn6dqJJjwA@mail.gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Wed, Dec 27, 2023 at 7:37=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 27/12/2023 08:35, Jingbao Qiu wrote:
-> >>
-> >> I do not see any resources in MFD block, so why having it as separate
-> >> node? What other devices you did not describe here? You mentioned
-> >> restart and 8051, so where are they? Which driver implements them?
-> >>
+On 27/12/2023 16:03:56+0800, Jingbao Qiu wrote:
+> On Tue, Dec 26, 2023 at 8:37 PM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
 > >
-> > I'am sorry for that other drivers have not been implemented yet. I
-> > will implement it
-> > after rtc. They have the same address range, so I use mfd to describe t=
-hem.
->
-> Bindings should be complete even if your driver is not ready. After
-> looking at such device node, I say you do not need that rtc child. If
-> you sent complete bindings, then of course discussion would be
-> different, but...
+> > Hello,
+> >
+> > please run checkpatch.pl --strict, there are a few issues.
+> >
+> > On 26/12/2023 18:04:30+0800, Jingbao Qiu wrote:
+> > > +struct cv1800_rtc_priv {
+> > > +     struct rtc_device *rtc_dev;
+> > > +     struct device *dev;
+> > > +     struct regmap *rtc_map;
+> > > +     struct clk *clk;
+> > > +     spinlock_t rtc_lock;
+> >
+> > This lock seems unnecessary, please check
+> >
+> 
+> you are right. I will fix it.
+> 
+> > > +     int irq;
+> > > +};
+> > > +
+> > > +static int cv1800_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+> > > +{
+> > > +     struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> > > +
+> > > +     if (enabled)
+> > > +             regmap_write(info->rtc_map, ALARM_ENABLE, REG_ENABLE_FUN);
+> > > +     else
+> > > +             regmap_write(info->rtc_map, ALARM_ENABLE, REG_DISABLE_FUN);
+> > > +
+> >
+> > This could be:
+> >         regmap_write(info->rtc_map, ALARM_ENABLE, enabled);
+> 
+> you are right, i will fix it.
+> 
+> >
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int cv1800_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> > > +{
+> > > +     struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> > > +     unsigned long alarm_time;
+> > > +
+> > > +     alarm_time = rtc_tm_to_time64(&alrm->time);
+> > > +
+> > > +     if (alarm_time > SEC_MAX_VAL)
+> > > +             return -EINVAL;
+> >
+> > The core is already checking fr this.
+> 
+> Thanks, I will remove it.
+> 
+> >
+> > > +
+> > > +     regmap_write(info->rtc_map, ALARM_ENABLE, REG_DISABLE_FUN);
+> > > +
+> > > +     udelay(DEALY_TIME_PREPARE);
+> >
+> > Why is this needed?
+> 
+> This doesn't seem to require waiting, I will check it.
+> 
+> >
+> > > +
+> > > +     regmap_write(info->rtc_map, ALARM_TIME, alarm_time);
+> > > +     regmap_write(info->rtc_map, ALARM_ENABLE, REG_ENABLE_FUN);
+> >
+> > You must follow alrm->enabled instead of unconditionally enabling the
+> > alarm.
+> 
+> ok,i will fix it.
+> 
+> >
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> >
+> >
+> > > +static int cv1800_rtc_32k_coarse_val_calib(struct cv1800_rtc_priv *info)
+> >
+> > Please explain those two calibration functions. I don't think you can
+> > achieve what you want to do.
+> 
+> The goal of these two calibration functions is to achieve calibration
+> of RTC time.
+> The code is written according to the data manual.
+> 
+> The calibration circuit uses 25MHz crystal clock to sample 32KHz
+> clock. In coarse
+> tune mode, the 25MHz crystal clock samples one 32KHz clock cycle period and
+> report the counting results.
+> 
+> the datasheet link:
+> Link: https://github.com/milkv-duo/duo-files/blob/main/duo/datasheet/CV1800B-CV1801B-Preliminary-Datasheet-full-en.pdf
+> page:195
 
-Thank you for your patient explanation. I will supplement it completely
-in the next version
 
-Best regards,
-Jingbao Qiu
+I'm really curious as to why this is calibrated using a 25MHz crystal as
+it may be as imprecise as the 32kHz one. I'm asking because we have an
+interface to get calibration done properly so you can use a precise clock
+like GPS, NTP or PTP. This is what you should probably implement
+instead or on top of it.
 
->
-> Best regards,
-> Krzysztof
->
+> >
+> > > +}
+> > > +
+> > > +static int cv1800_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> > > +{
+> > > +     struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> > > +     unsigned int sec;
+> > > +     unsigned int sec_ro_t;
+> > > +     unsigned long flag;
+> > > +
+> > > +     spin_lock_irqsave(&info->rtc_lock, flag);
+> > > +
+> > > +     regmap_read(info->rtc_map, SEC_CNTR_VAL, &sec);
+> > > +     regmap_read(info->rtc_map, MACRO_RO_T, &sec_ro_t);
+> > > +
+> > > +     if (sec_ro_t > (SET_SEC_CNTR_VAL_UPDATE)) {
+> > > +             sec = sec_ro_t;
+> > > +             regmap_write(info->rtc_map, SET_SEC_CNTR_VAL, sec);
+> > > +             regmap_write(info->rtc_map, SET_SEC_CNTR_TRIG, REG_ENABLE_FUN);
+> >
+> > What does this do?
+> 
+> the sec_ro_t be considered to have high accuracy after calibration.
+> So every time read the time, update the RTC time.
+
+So why don't you always use sec_ro_t instead of sec?
+Also, why is this done conditionally on a arbitrary value? As it stands,
+it will happen if the date is after 1995-07-09T16:12:48 for no good
+reason.
+This is awful because the alarm is matching SEC_CNTR_VAL with ALARM_TIME
+so if this means the calibration doesn't affect SEC_CNTR_VAL (which I
+seriously doubt), the alarm will end up being imprecise anyway
+
+> > > +static int cv1800_rtc_probe(struct platform_device *pdev)
+> > > +{
+> > > +     struct cv1800_rtc_priv *rtc;
+> > > +     uint32_t ctrl_val;
+> > > +     int ret;
+> > > +
+> > > +     rtc = devm_kzalloc(&pdev->dev, sizeof(struct cv1800_rtc_priv),
+> > > +                        GFP_KERNEL);
+> > > +     if (!rtc)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     rtc->dev = &pdev->dev;
+> > > +
+> > > +     rtc->rtc_map = syscon_node_to_regmap(rtc->dev->of_node->parent);
+> > > +     if (IS_ERR(rtc->rtc_map))
+> > > +             return PTR_ERR(rtc->rtc_map);
+> > > +
+> > > +     rtc->irq = platform_get_irq(pdev, 0);
+> > > +     if (rtc->irq < 0)
+> > > +             return rtc->irq;
+> > > +
+> > > +     ret = devm_request_irq(&pdev->dev, rtc->irq, cv1800_rtc_irq_handler,
+> > > +                            IRQF_TRIGGER_HIGH, "alarm", &pdev->dev);
+> > > +     if (ret)
+> > > +             return dev_err_probe(&pdev->dev, ret,
+> > > +                                  "cannot register interrupt handler\n");
+> > > +
+> > > +     rtc->clk = devm_clk_get(rtc->dev, NULL);
+> > > +     if (IS_ERR(rtc->clk))
+> > > +             return PTR_ERR(rtc->clk);
+> > > +
+> >
+> > You are going to leak rtc->clk after the next call.
+> 
+> I will release him at the appropriate time. And add the remove
+> function to release.
+> 
+> >
+> > > +     rtc->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+> > > +     if (IS_ERR(rtc->clk))
+> > > +             return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk),
+> > > +                                  "clk not found\n");
+> > > +
+> > > +     platform_set_drvdata(pdev, rtc);
+> > > +
+> > > +     spin_lock_init(&rtc->rtc_lock);
+> > > +
+> > > +     rtc->rtc_dev = devm_rtc_device_register(&pdev->dev,
+> > > +                                                             dev_name(&pdev->dev),
+> > > +                                                             &cv800b_rtc_ops,
+> > > +                                                             THIS_MODULE);
+> > > +     if (IS_ERR(rtc->rtc_dev))
+> > > +             return dev_err_probe(&pdev->dev, PTR_ERR(rtc->rtc_dev),
+> > > +                                  "can't register rtc device\n");
+> >
+> > Please use devm_rtc_allocate_device and devm_rtc_register_device
+> 
+> ok,I will use it.
+
+Also you have to set the RTC range properly.
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
