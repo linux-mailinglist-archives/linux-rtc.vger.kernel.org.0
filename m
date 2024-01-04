@@ -1,64 +1,64 @@
-Return-Path: <linux-rtc+bounces-463-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-464-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFA35823FA8
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jan 2024 11:44:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68C0D823FB5
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jan 2024 11:45:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94B34287597
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jan 2024 10:44:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7D491F25141
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jan 2024 10:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BA820DE2;
-	Thu,  4 Jan 2024 10:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB70421346;
+	Thu,  4 Jan 2024 10:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vkSE24L3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RQj88RdO"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0048F20DD9
-	for <linux-rtc@vger.kernel.org>; Thu,  4 Jan 2024 10:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BE221355
+	for <linux-rtc@vger.kernel.org>; Thu,  4 Jan 2024 10:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-554e902064aso464086a12.1
-        for <linux-rtc@vger.kernel.org>; Thu, 04 Jan 2024 02:44:37 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-556eadd5904so411138a12.2
+        for <linux-rtc@vger.kernel.org>; Thu, 04 Jan 2024 02:45:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704365076; x=1704969876; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704365102; x=1704969902; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GZ904PCI08J616mUFNa005LAvkPUYC1txSxrMYpB/5c=;
-        b=vkSE24L3ogbJqWmiwkNIuCXX891314uMw8VWkX9pAwdyQfDg+EKOP0fDvPwTQNlCK/
-         M/aXvJSmIceyj7TOaBOKwx2SNQihQ8fQyyLXl25wTbheorwWWanQ3p0LMdKihcWQG41c
-         QA6soeTLYIxy6300oTmr9LbCtVyIgvFpa8I8V112ebOXLttGzbDhjTS3efF827PiiZvS
-         FWlE3z+NGGILgIikfiMZrxjxpiVRZxhT7mOuTKaGA7nsw12XO+IH/knk7pFqlxQ9gmyo
-         fZb5P+I7TtEm5hP8/BTjhc1LfQJlXS9IDMXmu60VAG602d7KuUaaDmJJYKxWcL5+6vkT
-         6oxA==
+        bh=rYMrzFRw712+jJN4ykV5Pgp6k8HK7/sA4eXRC+npLfs=;
+        b=RQj88RdOaXlWopW0eOXUzfZmv/+IQVW2/HLzJ9SL4BbUa6yLLBfXliU2J3v4FTqpGw
+         /sxyDvf1Mx8TfH/kAjYzQltn4+uqQFXcq+07rb+jUHrOhANE03GrkEf8o79txaMcbVkG
+         lcpA4s9H9MRyJlhx4SgbKUS00fOm6UJklxnha5qydHI0hEJ3Rw8UxgvsHbl/225mMycd
+         MnGRHvJVvLv59JMdpUMSmbsw8bbWVdUsBXQc3V5LpE5jE5O1+D6WY4liSNPrsNkDWEUD
+         kaETsbvzE+56hXo7cbDrb8mNhshP9lc9l/on2oIateviK2O/Zd4YeTJBMJ0SZHtsb2Vi
+         0Mag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704365076; x=1704969876;
+        d=1e100.net; s=20230601; t=1704365102; x=1704969902;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZ904PCI08J616mUFNa005LAvkPUYC1txSxrMYpB/5c=;
-        b=jCIkVTHs5uwSxHELzUtul0JjGQiBT2iG5MadxC/cvDw9TA46hx+WJmdLfz9OBjlIVq
-         Y11jAkyTNNrzTAguwKov4EUreHiuGh74IqkrGWSzufxVlRpZQpTpibm8xmFCd4U5wOSl
-         A9pJ16BvV2oEYrx0yTQKRzgLAtUgFbb/pSDPlFzLb/tTmR5EJ35bCP8HzSbm1GeY6JjL
-         qWXFneEvQbJl8SP9fo8Bb8D7WaBSdL7qPUjzyK13KRqARVNUuOZv/5a64u+jVG6ZRocO
-         a9pYlbomI9B8iDgxLlRx4mbDg4hF9P0ZQ/KxNHfyah80JCXdKQR9N7pkOTe5kqq09Uqc
-         C1ZQ==
-X-Gm-Message-State: AOJu0Yy+NZMkWtCOfJR7vFt9XvgQAFlQaF+EEu1Yuboi3DjgVxYnjYPe
-	pAiVE2CCSXHabC3gDlbSy9FXpZP+znukaA==
-X-Google-Smtp-Source: AGHT+IFWUMMhZaNRi3RJFYUVHbIofMa+5gOEzfKPfeuLs3UqVXrZXIvyGYUP+f9PyrJeBJ5Mf01vGg==
-X-Received: by 2002:a50:c353:0:b0:557:1379:ed8a with SMTP id q19-20020a50c353000000b005571379ed8amr29744edb.5.1704365076290;
-        Thu, 04 Jan 2024 02:44:36 -0800 (PST)
+        bh=rYMrzFRw712+jJN4ykV5Pgp6k8HK7/sA4eXRC+npLfs=;
+        b=u/h4B8MhpeSmaCi6/9vYf3B/EaSbWondRFHKj3U9gsZjkQV6mgeuZpLWKwdrTUjORo
+         59NOQMsuHaJ4Oh7VF1qUrDQXJYFddMWEmiCkwQIqZ1eTsVr5tRr/oKUXkf+KCEuNBTy1
+         kU6ZXIipjeb4u9fyl+3HhPey2junWxUq5t+4QnDEwda3kwQc26Kaszdh69JnGVTKhJFv
+         X+ayXCg/PnWgN3OW4WfIx50TLO67+Nq3HNTPhvE5T7X+HTpBIUTSDNUefnFKW9rRvoMA
+         JnTwFnE3nT6PW99JHZmtnEbxlYtuskqtsbeI3MDrDDWD+6Lc6o2hfAlegWm8HVolrRb0
+         3ikg==
+X-Gm-Message-State: AOJu0Yxds/b0tshFdEG1LxAGwvEF6CeTVYz/4l43SjNKP5EUQrDHBAQc
+	kFxJ3wkHjky2vyUHHyXd3cNgCIBu82VKbg==
+X-Google-Smtp-Source: AGHT+IFVjo+vbkKlLwtlq0cEjDplIgTB4ZUMqeJYDW9K5Co7jdfF5XDNmoVQgXHFuiTr4RSVEq3/2Q==
+X-Received: by 2002:a50:9b54:0:b0:556:fca2:7e6c with SMTP id a20-20020a509b54000000b00556fca27e6cmr147883edj.115.1704365102517;
+        Thu, 04 Jan 2024 02:45:02 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id et8-20020a056402378800b00554753ec02fsm16110934edb.86.2024.01.04.02.44.34
+        by smtp.gmail.com with ESMTPSA id et8-20020a056402378800b00554753ec02fsm16110934edb.86.2024.01.04.02.45.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jan 2024 02:44:35 -0800 (PST)
-Message-ID: <7a2957c4-d020-4948-8964-4375f6319f32@linaro.org>
-Date: Thu, 4 Jan 2024 11:44:33 +0100
+        Thu, 04 Jan 2024 02:45:01 -0800 (PST)
+Message-ID: <f216b869-6a62-49bc-a32b-8ae7852d2274@linaro.org>
+Date: Thu, 4 Jan 2024 11:45:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,8 +66,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] dt-bindings: rtc: sophgo: add RTC for Sophgo
- CV1800 series SoC.
+Subject: Re: [PATCH v1 2/3] dt-bindings: power: sophgo: add Power-On-Reset/POR
+ for Sophgo CV1800 series SoC.
 Content-Language: en-US
 To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, robh+dt@kernel.org,
@@ -76,9 +76,9 @@ Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, robh+dt@kernel.org,
  linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, dlan@gentoo.org, inochiama@outlook.com
 References: <20231229090643.116575-1-qiujingbao.dlmu@gmail.com>
- <20231229090643.116575-2-qiujingbao.dlmu@gmail.com>
- <c5f7571e-8c99-4143-bfcd-cfd5b08329a9@linaro.org>
- <CAJRtX8SjutyeA29zvkHR2LmoPF0BSWSVVg44MOGqzn5znOmQVw@mail.gmail.com>
+ <20231229090643.116575-3-qiujingbao.dlmu@gmail.com>
+ <bbc6ebbb-9ec2-48af-b57e-a4dcb531973f@linaro.org>
+ <CAJRtX8TOXjiDfcq+GOqo-nnVtTYtbRRdhpzin4izJW-PtUuBHw@mail.gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -124,37 +124,44 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CAJRtX8SjutyeA29zvkHR2LmoPF0BSWSVVg44MOGqzn5znOmQVw@mail.gmail.com>
+In-Reply-To: <CAJRtX8TOXjiDfcq+GOqo-nnVtTYtbRRdhpzin4izJW-PtUuBHw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 04/01/2024 11:34, Jingbao Qiu wrote:
-> On Thu, Jan 4, 2024 at 4:32 PM Krzysztof Kozlowski
+On 04/01/2024 11:39, Jingbao Qiu wrote:
+> On Thu, Jan 4, 2024 at 4:37 PM Krzysztof Kozlowski
 > <krzysztof.kozlowski@linaro.org> wrote:
 >>
 >> On 29/12/2023 10:06, Jingbao Qiu wrote:
->>> Add devicetree binding to describe the RTC for Sophgo CV1800 SoC.
->>>
->>> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
->>> ---
->>> This patch depends on the clk driver
->>> Clk driver link:
->>> https://lore.kernel.org/all/IA1PR20MB49539CDAD9A268CBF6CA184BBB9FA@IA1PR20MB4953.namprd20.prod.outlook.com/
+>>> Add devicetree binding to describe the Power-On-Reset/POR for Sophgo CV1800 SoC.
 >>
->> I don't understand how binding can depend on a driver. This is very
->> confusing and suggests you write binding for the driver, which is not
->> what we want.
+>> Please wrap commit message according to Linux coding style / submission
+>> process (neither too early nor over the limit):
+>> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
 >>
->> What's more, I really do not see the dependency here, so your message is
->> incorrect?
+>> Subject: Make it concise. It's way over the limit. Also, unnecessary
+>> full stop.
+>>
+>> This all applies to all your patches.
 >>
 > 
-> What I mean is that clk is used in the following example. In the clk
-> patch, there
-> is a macro definition that can be used to replace this number.
+> I will do that.
+> 
+>>>
+>>
+>>> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+>>> ---
+>>
+>> What changed here? Where is the changelog? Did you just ignore entire
+>> feedback from v3?
+> 
+> Actually, I separated the previous patches because there were issues
+> in various places.
+> I want to solve it bit by bit. Should I continue with the current
+> patch changes or return to
+> the previous patch?
 
-And how is this a dependency?
-
+You need to keep consistent versioning and changelogs.
 
 Best regards,
 Krzysztof
