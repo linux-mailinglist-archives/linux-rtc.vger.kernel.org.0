@@ -1,59 +1,59 @@
-Return-Path: <linux-rtc+bounces-491-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-492-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93DB2826A4F
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jan 2024 10:10:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 334D0826A58
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jan 2024 10:12:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 440411F21112
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jan 2024 09:10:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4A9A281DA1
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jan 2024 09:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B790CD310;
-	Mon,  8 Jan 2024 09:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3F6101DE;
+	Mon,  8 Jan 2024 09:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WsF6SftS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MnBkJzYy"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466F512B74;
-	Mon,  8 Jan 2024 09:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F7DE570;
+	Mon,  8 Jan 2024 09:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5983686ef62so687748eaf.3;
-        Mon, 08 Jan 2024 01:10:33 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6dbd445f395so921764a34.2;
+        Mon, 08 Jan 2024 01:11:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704705032; x=1705309832; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704705117; x=1705309917; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8BNk0vEp/T06pV48VMkJResRLpbsMI3MWGq9I4p+kNk=;
-        b=WsF6SftS0GQrxkz8NY8BH5/iA2AQhXZ/wXvOvxY2sO4WhUspIUFgugY2zR0CACXEkP
-         1nj8GygmpnEHAlaYsNvT7lhxTdN7YstH0rwBXbM7k0oe2Cu+ciRDeKkuRUZE185YBsfC
-         QvAfamwmhmWMB0TtSBAPUbAoqMVvcaiW0obyBV6jGVw/P90QdWiX7Hxcgp86oo5tWmeo
-         PoOtR8n9aProXuFyj14zvYLuWGm1LR+2pkyJ2Va5x2JqyYLS4T89U0vkO6BC693hpJNW
-         BeBN7tBsPDsJwvvabMAa/jOKhm9sz0Fv7e/vwAeTfmBO6q3qM12q2xmy61aJbs+iYA2c
-         +oTw==
+        bh=PKFUpiPpL3BLTuFv/VPd+EtUxI7pJ2kAwWfiOd5Vkb0=;
+        b=MnBkJzYypGU7P6OUV/pULVfCGFTPz4pCDm0UY/MWGCFUe8oEDm3T0ajlymGi/ANwC4
+         uGOtVbrOUoFMQ2qtyfXd9XBjDeh9LF0WV1WYcbd81b3Q2yuZSiFajONQrX0wkV2pDXB8
+         fhi+qKrkQ8NFCCDoVU5Rqnn3EnKxZctAwg/z+FbFuXx1WxfcTu6byj+/E1XmT7WZ1sYn
+         8ObLQh+OdiEGA+56iomUzIMqEedgRypDF2Ko+GnjEKOpQSFteA2oaQk6jWIy7S8afwfW
+         Z+m/npOZYVo0cG1v92s1q2CGe+bJr4tRSnbmm+o7lWorhkLOXfvQzYIibHcVD5+SGPxR
+         Dp8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704705032; x=1705309832;
+        d=1e100.net; s=20230601; t=1704705117; x=1705309917;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8BNk0vEp/T06pV48VMkJResRLpbsMI3MWGq9I4p+kNk=;
-        b=Sg9rx3hsEb8Ja+tYYU3+KnwZ7EBbR6FJ1z0hBavLWFPGudhay17Hm+pn0dG8IRlBm2
-         lUDJMtFD8oNaFGRpBJjHSCvbxW9BgCYkpMfAE9AjL9cUHj4p1cWHB9WIQ6HcHLtvFJW3
-         dzJ5Nvps+cLWM+SMnLfc79UedA1xqDbFZy8g3Z0FVnmmrE6Y8XhIbcfmDLE9KB6U91DX
-         Zy1hf0MKxI/tZ8haXe8/rKe17oZ2K2rvlAN6vovSpuYoVNItetLj8QpCdP8GIZXKxAGq
-         jy4K4adx+fF6KeRVdtj8lMQWa7I+gg8XX8Hn4sxvKPtY7fcDNRhz3biRtAa4ZTquJYE3
-         XSpA==
-X-Gm-Message-State: AOJu0YzllBRseun9RnGg1yO9b6BMJQyOL13R6Y3pmH3hQEpHhIivT787
-	E1V8rapzQk5FZkBJeioUi+y6YcSI7ELNaXcUsAY=
-X-Google-Smtp-Source: AGHT+IF2MwJ/UZzPV8uyJamt7LhXi1gqzFtMrt+HSyf/3ZHTC8mbQhMMQTQjX3ZC7FHw0NkGYyqC1jicwunwbc66LFY=
-X-Received: by 2002:a05:6820:60c:b0:596:3121:1425 with SMTP id
- e12-20020a056820060c00b0059631211425mr2183414oow.5.1704705032001; Mon, 08 Jan
- 2024 01:10:32 -0800 (PST)
+        bh=PKFUpiPpL3BLTuFv/VPd+EtUxI7pJ2kAwWfiOd5Vkb0=;
+        b=pzJSSwB2FJNHX1fNruuwCTmBTS6tI52YsgGFdvBv3b0ArtUxWBI7AL/tKuPZZAB3R4
+         3VbcLr+8m2C3S5oZNZJ7xbN4mS3enjnesiVtFMLg4LGC3NL2xCUJnOvas7LoYdk4IoFu
+         0CVKiT94NJ4zloe5BoOzV0/1jVx6iSIxZMGSvxJSKVmNRO+pRD936l4mwpCQtBXmBuQB
+         bxymiNepPfvIGJLYQ8baC/aiJ++2AGGUI2mDxR/1nQCT/w2oa1jAwI92pYrw6SyI4Hrv
+         /n9ijmYmtOjFDtnIrHIKCRxuss9IMgeNfwBte8fnnn+Xjy+1XwTJkTfOcHtIKW7XrRsV
+         dFWQ==
+X-Gm-Message-State: AOJu0YxZXUA1U2hfmBPXFKzuB9dYNV98lTQ2yTFmVg1b2223D/F0Wswl
+	E3yPCdEHjwsZ7j9XnnTctrkSmGhyT0rDRZ4kZzQ=
+X-Google-Smtp-Source: AGHT+IHn6yvGBl4B4SqRFua8cF7MkdRCNv2yRTCYFxb0q0fyGTBNqwhF+GpxirP255tCsBrm9tWHdHuSJxnNcknM1UY=
+X-Received: by 2002:a05:6870:4185:b0:204:827:670e with SMTP id
+ y5-20020a056870418500b002040827670emr3125137oac.74.1704705117128; Mon, 08 Jan
+ 2024 01:11:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -61,13 +61,13 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240108072253.30183-1-qiujingbao.dlmu@gmail.com>
- <20240108072253.30183-2-qiujingbao.dlmu@gmail.com> <cd4c5c26-fef9-44d8-a2fe-1cff0fc6fd03@linaro.org>
-In-Reply-To: <cd4c5c26-fef9-44d8-a2fe-1cff0fc6fd03@linaro.org>
+ <93695e92-233d-460c-a6bd-882b30f1dea8@linaro.org> <CAJRtX8T-88x=AeRhOVJP=1ccvOZa-nS4cDEjpSykTxFMRupKZg@mail.gmail.com>
+ <7af6c688-3d3e-4cd5-bbd6-4ca323d7edde@linaro.org>
+In-Reply-To: <7af6c688-3d3e-4cd5-bbd6-4ca323d7edde@linaro.org>
 From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Date: Mon, 8 Jan 2024 17:10:21 +0800
-Message-ID: <CAJRtX8TcXrP8aqr3ejvtDGR5Y-ogbLkvJvJkLh_MzpnK7wgLGw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] dt-bindings: rtc: sophgo: add RTC support for
- Sophgo CV1800 series SoC
+Date: Mon, 8 Jan 2024 17:11:46 +0800
+Message-ID: <CAJRtX8QzDQjMCqXw9BnWPFt5FT3qr9=95F1rpwz_795AF9oSAA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/1] dt-bindings: riscv: sophgo: add RTC for CV1800
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, robh+dt@kernel.org, 
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
@@ -77,73 +77,66 @@ Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, robh+dt@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 8, 2024 at 4:04=E2=80=AFPM Krzysztof Kozlowski
+On Mon, Jan 8, 2024 at 5:06=E2=80=AFPM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 08/01/2024 08:22, Jingbao Qiu wrote:
-> > Add RTC devicetree binding for Sophgo CV1800 SoC.
+> On 08/01/2024 10:00, Jingbao Qiu wrote:
+> > On Mon, Jan 8, 2024 at 4:02=E2=80=AFPM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 08/01/2024 08:22, Jingbao Qiu wrote:
+> >>> Real Time Clock (RTC) is an independently powered module
+> >>> within the chip, which includes a 32KHz oscillator and
+> >>> a Power On Reset/POR submodule. It can be used for time
+> >>> display and timed alarm generation.
+> >>>
+> >>> Power On Reset/POR submodule only using register resources
+> >>> so it should be empty. The 32KHz oscillator only provides
+> >>> pulses for RTC in hardware.
+> >>>
+> >>>
+> >>> Changes since v4:
+> >>> - remove POR dt-bindings because it empty
+> >>> - remove MFD dt-bindings because SoC does
+> >>>   not have MFDs
+> >>> - add syscon attribute to share registers
+> >>>   with POR
+> >>>
+> >>> v4: https://lore.kernel.org/all/20231229090643.116575-1-qiujingbao.dl=
+mu@gmail.com/
+> >>>
+> >>> Changes since v3:
+> >>> - temporarily not submitting RTC driver code
+> >>>   waiting for communication with IC designer
+> >>
+> >> Hm, why?
+> >>
+> >> We do not need bindings if nothing matches to them. If this binding is
+> >> for other upstream open-source project, please provide references.
+> >>
+> >> See also:
+> >> https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicet=
+ree/bindings/submitting-patches.rst#L61
+> >>
 > >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> > ---
-> >  .../bindings/rtc/sophgo,cv1800-rtc.yaml       | 56 +++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/rtc/sophgo,cv1800=
--rtc.yaml
+> > Hi!
 > >
-> > diff --git a/Documentation/devicetree/bindings/rtc/sophgo,cv1800-rtc.ya=
-ml b/Documentation/devicetree/bindings/rtc/sophgo,cv1800-rtc.yaml
-> > new file mode 100644
-> > index 000000000000..01a926cb5c81
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/sophgo,cv1800-rtc.yaml
-> > @@ -0,0 +1,56 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/sophgo,cv1800-rtc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Real Time Clock of the Sophgo CV1800 SoC
-> > +
-> > +allOf:
-> > +  - $ref: rtc.yaml#
+> > There is a function in the RTC driver code used to calibrate the
+> > clock, which is define in the datasheet.
+> > However, Alexandre Belloni raised concerns that clock calibration
+> > should be done using GPS or similar
+> > methods, rather than using other clock sources. I think what he said
+> > makes sense. So it is necessary
+> > to communicate with IC designers.
+> >
+> > link: https://lore.kernel.org/all/202312271350242a208426@mail.local/
 >
-> Why the allOf has moved?
-
-Hi,
-Do you mean allof should be under maintainers? Or other meanings.
-
+> Sure, this I get, but why sending bindings alone? There is no user of the=
+m.
 >
-> > +
-> > +maintainers:
-> > +  - Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> > +
-> > +description:
-> > +  Real Time Clock (RTC) is an independently powered module
-> > +  within the chip, which includes a 32KHz oscillator and a
-> > +  Power On Reset/POR submodule. It can be used for time display
-> > +  and timed alarm generation. In addition, the hardware state
-> > +  machine provides triggering and timing control for chip
-> > +  power on, off, and reset.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: sophgo,cv1800-rtc
-> > +      - const: syscon
->
-> Why is this syscon? Description does not explain this.
 
-Because the driver of the submodule POR in RTC only requires register
-address and range to work, according to what you said, it is only a compati=
-ble
-attribute and does not need to be a child node.
-
-So I wrote the following in the changelog.
-
-- add syscon attribute to share registers
-  with POR
+Thank you for your patient reply.
+May I ask if this user refers to driver code or DTS?
 
 Best regards,
 Jingbao Qiu
