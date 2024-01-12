@@ -1,64 +1,64 @@
-Return-Path: <linux-rtc+bounces-508-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-509-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A06682C496
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Jan 2024 18:19:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8009582C49C
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Jan 2024 18:22:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73F1E1F24B48
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Jan 2024 17:19:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9700F1C21F42
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Jan 2024 17:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BBCD22611;
-	Fri, 12 Jan 2024 17:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD46622619;
+	Fri, 12 Jan 2024 17:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aIiiYTlt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p/lGBzlu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4A72260C
-	for <linux-rtc@vger.kernel.org>; Fri, 12 Jan 2024 17:19:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D91822611
+	for <linux-rtc@vger.kernel.org>; Fri, 12 Jan 2024 17:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3367601a301so5614579f8f.2
-        for <linux-rtc@vger.kernel.org>; Fri, 12 Jan 2024 09:19:02 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40e586a62f7so36941085e9.2
+        for <linux-rtc@vger.kernel.org>; Fri, 12 Jan 2024 09:22:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705079941; x=1705684741; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705080128; x=1705684928; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2x/Pp+fq1HphFEydXqXv8Vv3kzfSxghvlVJyVF7ypZU=;
-        b=aIiiYTltQWTY0n6Ac4kryG6FB26uxZ8uCMfE0+lW/sF9mWcCJdi+kKPFWPOesDFzv+
-         taGpqBMUhsnVapDAHqeYWw+wk3Ku9BSmLwDY06Vum8t2EwrTmwst3RH6+ZCQ7BKNgcKK
-         Jx8vpftmngfBHlL8VkcORg26572Kk/8MbmZHjuTuETGkZj/TK2b6gifnKzHKnAIixBer
-         0FeKlE8fNOl+zP3BzOqO4PS+aB+WPcORNFC6tSiS9tMPfGcZv+vWOj/8sEPbQP6TfhTb
-         ZVG7LamVdnn7DNRVXSMT2In+vgb0yD8jnSCvrnOzm5Dct5+kg5fA6O4HFvPW/6/kN2Wl
-         beLw==
+        bh=hWQs+SrV/KFbufk6ifwh/c7DnE5+G03IvI/aQVbn9p8=;
+        b=p/lGBzluEFowcAMzDkWnJSHiZcfLXRPelFpgpVnPWQRFU9Td86lK6aTRyzq9CBZ4l0
+         aJU45RGd1Iyiui4wZN5q89l/G1LYg9pvLdHOqmEqk34URaxiHZn6ro8jQx4IPkR1KW7W
+         Oo8B2Uep5TchCE8ddoxJuWpuBX9BBKBkJFpKiGtOxcvGwhfUNKdExdYSWwh9XFZBWiPy
+         9a07VOUxIuUrz+EkmmMrHIOLYiigQkrUSXPXtq41WXMI4dpKdxjhsJaHU1RpyTeznTjt
+         i+ARqD91O30qr+RlZ3XUul5reV7HnRzkgbd46FbMykXTblJjrderbWEVgJtbZc3QHjcS
+         0DUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705079941; x=1705684741;
+        d=1e100.net; s=20230601; t=1705080128; x=1705684928;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2x/Pp+fq1HphFEydXqXv8Vv3kzfSxghvlVJyVF7ypZU=;
-        b=qX4NxPQ6Sxyi8h4rDn3W8/oS2U99SDPBH3NlzG5KDHGebeWs6zFH2c8jCK1e5RxdEP
-         XOeokc7osvvkugcgJHWLMzNtUUPTRjPDOmJCL4KrdUTbPOERLBpmwP/CXfZDyDKrX8NG
-         m+8aunRaNmzZBuuF3gHsGgIPtjkKsPgYPNKSwDDtvy9qymb4MWqfu+h9ySI8x06x3utH
-         3QXKU5Dq874UdVY8GeYvdjq4+2Gmhe2LgCeiVcnjnKqWeeMWF7x/8b9J9tT5O9ZPh+go
-         KTiU9kjOLDrnAe8r8dzAMKVqNtUjYppqz39buU0iTXLCvUsbBWNXr6hKUg7ZgSO2E7W0
-         ATZA==
-X-Gm-Message-State: AOJu0Yz8izWY22qR90Kz+Mfehnq3cm96807f4Ieeo8iFdaywvYwwrjpT
-	lTNYg0eZJ1vBLmdxrpp3vSOf0KIlWroi6Q==
-X-Google-Smtp-Source: AGHT+IEIXiLehTOgSV+++MCMBxZbpk5yf5v7qJVaGjfUiZ3gX6MkqPEkE4/yfVZGwNjqtMXmlOEG5A==
-X-Received: by 2002:adf:cd85:0:b0:337:6255:94b4 with SMTP id q5-20020adfcd85000000b00337625594b4mr680447wrj.125.1705079941071;
-        Fri, 12 Jan 2024 09:19:01 -0800 (PST)
+        bh=hWQs+SrV/KFbufk6ifwh/c7DnE5+G03IvI/aQVbn9p8=;
+        b=QTz2cLhsBjqmF4sDFgp33eduRE9jbYv7inPMFCYVjqfIKHumx3MyT7WffHqRoLoS5J
+         nFbTYm89elpbkOCilYUax3Y0TuGo2p7LzmwDG6S978MdSMWy/KPaYW4pO8SHMCGWS90C
+         J+orCk9Nif9B0AEdONrAyr06OY7qlz0KPl2/5VYQVILynPcegS2trRlFsmsht3+K/FIx
+         hlt0VcaZK3dh5M3cqNx19OPRtn/wdQjs8wrKPtJqJqDqH650aqFbHna7nYv6iusVzjL5
+         mcucede1LPVO7YfHQS1+4hHlWwvCNnFCvfekMZ4bCmSvw67TUEjMCjZZxROT6Zgh4w3d
+         3MtA==
+X-Gm-Message-State: AOJu0YzXJQ61J8FOZZAMj6cvzAAHhXHZGWGxpMKhJSrMyHYIpi+0JdwS
+	5GSyDFGQD5wi3NyxcLcVeRKV5/0fwC9aBA==
+X-Google-Smtp-Source: AGHT+IHOCXczXmxh+9wGSnbj5JnHj07o/ME+ktmKRl/TAznRyG6I5SbmL7TLaY1MC0Xp8dHAG/cKOg==
+X-Received: by 2002:a05:600c:6543:b0:40e:68c1:4637 with SMTP id dn3-20020a05600c654300b0040e68c14637mr429175wmb.18.1705080128384;
+        Fri, 12 Jan 2024 09:22:08 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.112])
-        by smtp.gmail.com with ESMTPSA id i6-20020adff306000000b003377e22ffdcsm4393412wro.85.2024.01.12.09.18.59
+        by smtp.gmail.com with ESMTPSA id q8-20020a7bce88000000b0040c11fbe581sm6318800wmj.27.2024.01.12.09.22.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jan 2024 09:19:00 -0800 (PST)
-Message-ID: <7f45aaea-6520-41c7-8788-f6dd14c5fcb2@linaro.org>
-Date: Fri, 12 Jan 2024 18:18:58 +0100
+        Fri, 12 Jan 2024 09:22:07 -0800 (PST)
+Message-ID: <60d78882-0ec5-4cd1-b68d-f75b73cb6cdb@linaro.org>
+Date: Fri, 12 Jan 2024 18:22:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,7 +66,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] dt-bindings: rtc: abx80x: convert to yaml
+Subject: Re: [PATCH v2 4/5] arm64: dts: add description for solidrun am642 som
+ and evaluation board
 Content-Language: en-US
 To: Josua Mayer <josua@solid-run.com>, Nishanth Menon <nm@ti.com>,
  Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
@@ -78,7 +79,7 @@ Cc: Yazan Shhady <yazan.shhady@solid-run.com>,
  linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
 References: <20240112-add-am64-som-v2-0-1385246c428c@solid-run.com>
- <20240112-add-am64-som-v2-2-1385246c428c@solid-run.com>
+ <20240112-add-am64-som-v2-4-1385246c428c@solid-run.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -124,95 +125,173 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240112-add-am64-som-v2-2-1385246c428c@solid-run.com>
+In-Reply-To: <20240112-add-am64-som-v2-4-1385246c428c@solid-run.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 12/01/2024 18:12, Josua Mayer wrote:
-> Convert the abracon abx80x rtc text bindings to dt-schema format.
+> Add description for the SolidRun AM642 SoM, and HummingBoard-T
+> evaluation board.
 > 
-> Additionally added "interrupts" property which was missing from text
-> format, because abx80x and driver support them.
-> 
-> Signed-off-by: Josua Mayer <josua@solid-run.com>
-> ---
+...
 
-
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/abracon,abx80x.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/abracon,abx80x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +&main_gpio0 {
+> +	m2-reset-hog {
+> +		gpio-hog;
+> +		gpios = <12 GPIO_ACTIVE_LOW>;
+> +		output-low; /* deasserted */
+> +		line-name = "m2-reset";
+> +	};
 > +
-> +title: Abracon ABX80X I2C ultra low power RTC/Alarm chip
+> +	m1-m2-w-disable1-hog {
+> +		gpio-hog;
+> +		gpios = <32 GPIO_ACTIVE_LOW>;
+> +		output-low; /* deasserted */
+> +		line-name = "m1-m2-pcie-w-disable1";
+> +	};
 > +
-> +maintainers: []
+> +	m1-m2-w_disable2-hog {
 
-You need a name here. If there is no driver maintainer or anyone
-interested, put devicetree list.
+No, underscores are not allowed.
+
+...
 
 > +
-> +allOf:
-> +  - $ref: rtc.yaml#
+> +#include <dt-bindings/net/ti-dp83869.h>
 > +
-> +properties:
-> +  compatible:
-> +    anyOf:
-
-Please do not invent your own solutions, but use existing code as
-template. Just open example-schema or any other recent RTC binding.
-
-> +      - description: auto-detection from id register
-> +        const: abracon,abx80x
-> +      - const: abracon,,ab0801
-> +      - const: abracon,,ab0803
-> +      - const: abracon,,ab0804
-> +      - const: abracon,,ab0805
-> +      - const: abracon,,ab1801
-> +      - const: abracon,,ab1803
-> +      - const: abracon,,ab1804
-> +      - const: abracon,,ab1805
-> +      - const: microcrystal,rv1805
+> +/ {
+> +	model = "SolidRun AM642 SoM";
+> +	compatible = "solidrun,am642-sr-som", "ti,am642";
 > +
-> +  reg:
-> +    maxItems: 1
+> +	aliases {
+> +		ethernet0 = &cpsw_port1;
+> +		ethernet1 = &icssg1_emac0;
+> +		ethernet2 = &icssg1_emac1;
+> +		mmc0 = &sdhci0;
+> +		mmc1 = &sdhci1;
+> +		serial2 = &main_uart0;
+> +	};
 > +
-> +  interrupts:
-> +    maxItems: 1
+> +	chosen {
+> +		/* SoC default UART console */
+> +		stdout-path = "serial2:115200n8";
+> +	};
 > +
-> +  abracon,tc-diode:
+> +	/* PRU Ethernet Controller */
+> +	icssg1_eth: icssg1-eth {
 
-Missing type - string.
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-> +    description:
-> +      Trickle-charge diode type.
-> +      Required to enable charging backup battery.
-> +    anyOf:
 
-Use enum and explain the meanings of the values in descruption.
-
-> +      - description: standard diode with 0.6V drop
-> +        const: standard
-> +      - description: schottky diode with 0.3V drop
-> +        const: schottky
+> +		compatible = "ti,am642-icssg-prueth";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pru_rgmii1_pins_default>, <&pru_rgmii2_pins_default>;
 > +
-> +  abracon,tc-resistor:
-> +    description:
-> +      Trickle-charge resistor value in kOhm.
-> +      Required to enable charging backup battery.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 3, 6, 11]
+> +		sram = <&oc_sram>;
+> +		ti,prus = <&pru1_0>, <&rtu1_0>, <&tx_pru1_0>, <&pru1_1>, <&rtu1_1>, <&tx_pru1_1>;
+> +		firmware-name = "ti-pruss/am65x-sr2-pru0-prueth-fw.elf",
+> +				"ti-pruss/am65x-sr2-rtu0-prueth-fw.elf",
+> +				"ti-pruss/am65x-sr2-txpru0-prueth-fw.elf",
+> +				"ti-pruss/am65x-sr2-pru1-prueth-fw.elf",
+> +				"ti-pruss/am65x-sr2-rtu1-prueth-fw.elf",
+> +				"ti-pruss/am65x-sr2-txpru1-prueth-fw.elf";
 > +
-> +required:
-> +  - compatible
-> +  - reg
+> +		ti,pruss-gp-mux-sel = <2>,	/* MII mode */
+> +				      <2>,
+> +				      <2>,
+> +				      <2>,	/* MII mode */
+> +				      <2>,
+> +				      <2>;
 > +
-> +unevaluatedProperties: false
+> +		ti,mii-g-rt = <&icssg1_mii_g_rt>;
+> +		ti,mii-rt = <&icssg1_mii_rt>;
+> +		ti,iep = <&icssg1_iep0>, <&icssg1_iep1>;
+> +
+> +		interrupt-parent = <&icssg1_intc>;
+> +		interrupts = <24 0 2>, <25 1 3>;
 
-Provide example.
+None of these are typical interrupt constants/flags?
+
+> +		interrupt-names = "tx_ts0", "tx_ts1";
+> +
+> +		dmas = <&main_pktdma 0xc200 15>, /* egress slice 0 */
+> +		       <&main_pktdma 0xc201 15>, /* egress slice 0 */
+> +		       <&main_pktdma 0xc202 15>, /* egress slice 0 */
+> +		       <&main_pktdma 0xc203 15>, /* egress slice 0 */
+> +		       <&main_pktdma 0xc204 15>, /* egress slice 1 */
+> +		       <&main_pktdma 0xc205 15>, /* egress slice 1 */
+> +		       <&main_pktdma 0xc206 15>, /* egress slice 1 */
+> +		       <&main_pktdma 0xc207 15>, /* egress slice 1 */
+> +		       <&main_pktdma 0x4200 15>, /* ingress slice 0 */
+> +		       <&main_pktdma 0x4201 15>, /* ingress slice 1 */
+> +		       <&main_pktdma 0x4202 0>, /* mgmnt rsp slice 0 */
+> +		       <&main_pktdma 0x4203 0>; /* mgmnt rsp slice 1 */
+> +		dma-names = "tx0-0", "tx0-1", "tx0-2", "tx0-3",
+> +			    "tx1-0", "tx1-1", "tx1-2", "tx1-3",
+> +			    "rx0", "rx1";
+> +
+> +		status = "okay";
+
+Drop. Didn't you get such comments before?
+
+> +
+> +		ethernet-ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			icssg1_emac0: port@0 {
+> +				reg = <0>;
+> +				ti,syscon-rgmii-delay = <&main_conf 0x4110>;
+> +				/* Filled in by bootloader */
+> +				local-mac-address = [00 00 00 00 00 00];
+> +				phy-handle = <&ethernet_phy2>;
+> +				phy-mode = "rgmii-id";
+> +				status = "okay";
+
+?
+
+> +			};
+> +
+> +			icssg1_emac1: port@1 {
+> +				reg = <1>;
+> +				ti,syscon-rgmii-delay = <&main_conf 0x4114>;
+> +				/* Filled in by bootloader */
+> +				local-mac-address = [00 00 00 00 00 00];
+> +				phy-handle = <&ethernet_phy1>;
+> +				phy-mode = "rgmii-id";
+> +				status = "okay";
+
+?
+
+
+....
+
+> +	ethernet_phy0: ethernet-phy@0 {
+> +		compatible = "ethernet-phy-id2000.a0f1";
+> +		reg = <0>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&ethernet_phy0_pins_default>;
+> +		ti,clk-output-sel = <DP83869_CLK_O_SEL_REF_CLK>;
+> +		ti,op-mode = <DP83869_RGMII_COPPER_ETHERNET>;
+> +		/*
+> +		 * Disable interrupts because ISR never clears 0x0040
+> +		 *
+> +		 * interrupt-parent = <&main_gpio1>;
+> +		 * interrupts = <70 IRQ_TYPE_LEVEL_LOW>;
+> +		 */
+> +		/*
+> +		 * Disable HW Reset because clock signal is daisy-chained
+> +		 *
+> +		 * reset-gpios = <&main_gpio0 84 GPIO_ACTIVE_LOW>;
+> +		 * reset-assert-us = <1>;
+> +		 * reset-deassert-us = <30>;
+> +		 */
+> +		 status = "okay";
+
+Drop, this applies everywhere where not needed. You have this in
+multiple places...
 
 Best regards,
 Krzysztof
