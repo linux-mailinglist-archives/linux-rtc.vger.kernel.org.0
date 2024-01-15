@@ -1,122 +1,79 @@
-Return-Path: <linux-rtc+bounces-528-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-529-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 699C882DCF1
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 17:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 930E582E235
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 22:28:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0874B1F21B06
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 16:06:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 319F91F225D0
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 21:28:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B676C17C61;
-	Mon, 15 Jan 2024 16:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC0B1B273;
+	Mon, 15 Jan 2024 21:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dGV4R376"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SB2hnLh1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7050617BA3;
-	Mon, 15 Jan 2024 16:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6d9b13fe9e9so6946378b3a.2;
-        Mon, 15 Jan 2024 08:06:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705334783; x=1705939583; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AFjfBuQ8gREaq4FYxrLGf+324YZ/SzYtv7HMcJo8OiM=;
-        b=dGV4R376ICDmCQn+pbRycYk6b3wIyBzY7jijNawbQgXXxkTE/FSd6xOoAdaMwfIcpH
-         7akwx1kza2NI6111uriHjvoQZG/UZe0XN6hkpiyADJHOuXx++C35agxJTlWLQhmxgF/W
-         HcxTYce60B0wkJ50sUuc5npiY0UTEsq+vLnDmS/WkS7FVUSzc63XoHeuXIuuSxaajtEk
-         4gBzWxUOdKfeSZ+kMAYXBGrFAkebV+mEtEUCcvLofMykLTeulasTB1wgaX7n99q21ju3
-         9Sn3hgs5Iih2cZ9Jb5+St7j0lCvHLXL3oP2QJgB/CtI9H4jWIQ6oWUPeWd5LJdKHI1LV
-         NLcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705334783; x=1705939583;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AFjfBuQ8gREaq4FYxrLGf+324YZ/SzYtv7HMcJo8OiM=;
-        b=vNoyTtbC9AdYJ0b/JzGCP44n/SSH3laSSmx0vW28gaiz9/MdbftjVe3Cju1gbsv/EO
-         pO7vd8/vULU9vJ0PTLzcHUy4D0pCXHLM9jW35BO7FDvAAePSFEMDfQ0YlR4F5QBs6xuU
-         43gwv6+er7SaPToC7CscA1D9GT4XjOYt2py7CEuUewtk2n7m6GMkMQaJALskIsEB7DeW
-         g/na088G4fgx9TFDHWgWKfTJXfcYyXR98bN3uSqMChsUVpEahEwEOv/ft1zAY62NdLVX
-         H4K4m4vr3POPJFVddtY52MswBE0xF8KQJU4+TGqecoNq0sjIFfS/mVP6O2hTEBDW/xHX
-         wtQA==
-X-Gm-Message-State: AOJu0YzPRA20AW1SInee60vqjPEKgC6EcmxUWrP1oZJYYHBJukIW8wzY
-	4bUoBY4xid7iU2vQs/yg1fw=
-X-Google-Smtp-Source: AGHT+IFKj9mSl4b8I0aFzy6SsolLQ9h6pIbeCtf+spzb47O3C8OybzpfLNS5qaDEzORGMAY8PuH/4w==
-X-Received: by 2002:a05:6a20:d392:b0:19a:9e3c:e98a with SMTP id iq18-20020a056a20d39200b0019a9e3ce98amr6370013pzb.21.1705334782493;
-        Mon, 15 Jan 2024 08:06:22 -0800 (PST)
-Received: from localhost ([124.131.233.112])
-        by smtp.gmail.com with ESMTPSA id n27-20020a056a000d5b00b006d9fd64fdcasm7757783pfv.37.2024.01.15.08.06.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jan 2024 08:06:22 -0800 (PST)
-From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-To: alexandre.belloni@bootlin.com,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	chao.wei@sophgo.com,
-	unicorn_wang@outlook.com,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu
-Cc: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	dlan@gentoo.org,
-	inochiama@outlook.com
-Subject: [PATCH v6 3/3] riscv: dts: sophgo: add rtc dt node for CV1800
-Date: Tue, 16 Jan 2024 00:06:00 +0800
-Message-ID: <20240115160600.5444-4-qiujingbao.dlmu@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240115160600.5444-1-qiujingbao.dlmu@gmail.com>
-References: <20240115160600.5444-1-qiujingbao.dlmu@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AB81B270;
+	Mon, 15 Jan 2024 21:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DA110FF803;
+	Mon, 15 Jan 2024 21:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1705354110;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Rct8yHdNHfP9b4Gqe7NZACWXejjU4EyImlY46YUEMpU=;
+	b=SB2hnLh12i4NYdiFIA3ZGcnsb/J1SVCuJdt9pjg4ptxuqRpXy3DLO0E7ymIkcUOMvFmNZy
+	PgTly8u/Z5bcXz90ox9UL7MbAaUWlD0q+fWre9Vh9tqNMe0v2b/hfKLodIcZ84gA6mtNZH
+	qpfUO8Hu5a2prCJxW6ZSJg/ZfF3NxCq4m19Fl3UFeRgnaePgAEERFmXb+5hpLsdNnE+e7m
+	pQUfws2jdI1Khb0IhrQuoD8Veerpm1COsuRXjWbZdWazotv+0BeQtjnr9xv0r4G9c/CzAc
+	OFmnCoZm8b4gT5JGgg/sE8SqAZbZr1oGyL2/AFG8PErQPHXbtVmXwEUY9b0ISQ==
+Date: Mon, 15 Jan 2024 22:28:28 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc: Chen-Yu Tsai <wens@csie.org>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: ac100: remove misuses of kernel-doc
+Message-ID: <170535409306.253773.7862479513182768104.b4-ty@bootlin.com>
+References: <20240114231320.31437-1-rdunlap@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240114231320.31437-1-rdunlap@infradead.org>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Add the rtc device tree node to cv1800 SoC.
 
-Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
----
- arch/riscv/boot/dts/sophgo/cv1800b.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Sun, 14 Jan 2024 15:13:20 -0800, Randy Dunlap wrote:
+> Prevent kernel-doc warnings by changing "/**" to common comment
+> format "/*" in non-kernel-doc comments:
+> 
+> drivers/rtc/rtc-ac100.c:103: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Clock controls for 3 clock output pins
+> drivers/rtc/rtc-ac100.c:382: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * RTC related bits
+> 
+> [...]
 
-diff --git a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi b/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
-index df40e87ee063..66bb4a752b91 100644
---- a/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
-+++ b/arch/riscv/boot/dts/sophgo/cv1800b.dtsi
-@@ -119,5 +119,17 @@ clint: timer@74000000 {
- 			reg = <0x74000000 0x10000>;
- 			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>;
- 		};
-+
-+		rtc: rtc@5025000 {
-+			compatible = "sophgo,cv1800-rtc", "syscon";
-+			reg = <0x5025000 0x2000>;
-+			interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&osc>;
-+		};
-+
-+		por {
-+			compatible = "sophgo,cv1800-por";
-+			sophgo,rtc-sysreg = <&rtc>;
-+		};
- 	};
- };
+Applied, thanks!
+
+[1/1] rtc: ac100: remove misuses of kernel-doc
+      commit: eea7615b684fc98cd0403beaaa2194e6f029c812
+
+Best regards,
+
 -- 
-2.43.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
