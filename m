@@ -1,64 +1,64 @@
-Return-Path: <linux-rtc+bounces-518-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-519-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1605A82D48E
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 08:29:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7352C82D491
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 08:30:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4183AB20AA2
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 07:29:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FC52281000
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 07:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E0E3D8F;
-	Mon, 15 Jan 2024 07:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6773F3D62;
+	Mon, 15 Jan 2024 07:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RwXWlNmR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mr7Eh/io"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E5B3C23
-	for <linux-rtc@vger.kernel.org>; Mon, 15 Jan 2024 07:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA3B63AC
+	for <linux-rtc@vger.kernel.org>; Mon, 15 Jan 2024 07:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a28fb463a28so890697566b.3
-        for <linux-rtc@vger.kernel.org>; Sun, 14 Jan 2024 23:29:10 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a2a17f3217aso927764466b.2
+        for <linux-rtc@vger.kernel.org>; Sun, 14 Jan 2024 23:30:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705303749; x=1705908549; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705303799; x=1705908599; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xC/RFDsUvgpNYXEbYIF5IQX/d8l9YbICStp/7THUWHE=;
-        b=RwXWlNmRKu9rCFX3f2BcCylLCll02ItCgp7pWwrL56uHfrX96tU0zoXvZJi0UunTNi
-         q5XgHTQNFRdblECijpReLqXzWeHv9YvTyz2q7OcAHvIBZuNgOd9kAUUTQWk7DfqV9+NH
-         6Gl9PGnpPbRLP1yafIvehQE2ZHVFF9E5q186KIrQg91BNWoIj4h8pXCHXJ6RxznLgZZB
-         YMlrU5udDXotLLKewC1P2iNqUyOwsxUkibs/34qPrpv1Z0rMHz/hoRJb1lXMAbJ16zPI
-         eJARk+BrexXvKvH7KBD8ovvtZXlumqtp2ImD/LPyGMBhCtRjRRWhEq27KY8YYReOmwCA
-         X9aQ==
+        bh=t0ZEvFNJwWKb20tDDD73XLtLPR4Agv7bAFJry2IVCzE=;
+        b=mr7Eh/ioIQ4F9x0nbxE/c6fp/Ly/tW/hjGt0Q3mwcnXaqgErXNhfodTCbLpyQNnoBX
+         sYCl46WBGeuXoQjYhFv94pg6wU3f6DUxql63o8/XN3ZpchiGpxjmDVEEcDaxNb53MZc/
+         sWJS+H7+PfMhnzyhRAqoWgjd7ENffSiWycQ+qPcHoxyRvP3VX/sNDKyqjLA2oC/oS5Vw
+         SKM6Dqf3dhS4nmLM5vxNdHx0sPV7/4gt2cqxDuGEj/UM/LjPn349lWeUWEQrYda5jF95
+         cdVq2oGEWPTpaBnh2gVJbwYzOT9sHSlaFXWaZEO6dk/tZdaDJLL8ihaOUqEZGA3/MuAV
+         fRaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705303749; x=1705908549;
+        d=1e100.net; s=20230601; t=1705303799; x=1705908599;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xC/RFDsUvgpNYXEbYIF5IQX/d8l9YbICStp/7THUWHE=;
-        b=kRIqs0A0P8O4aJSj2wjG9eLKKS1CNDOhbBKhHRe8G2rNI69W9TfPMzZEafoMAsI37h
-         xGct69iTbgW2fQSFqF5TE+EPUAzzqtT8yem5Hoefp/GThAHZAtnvgvOgOwaYWTE3FXe9
-         c55xTgOoIO1+Jocy7b/U4LgALoXs+KfpHeCNaoD1/vDB1IZYX3KkrQo7AoLsVPrIgCQW
-         h+ak3Sjj9Xa8XLKKEYhZ+Opi5sBOFrxNCsUf5ryevd48hEt+rFSFohmb1k2I0hCZbx5h
-         53kjELx7irJ4xtr7H77UHCbcPG+ZZEEnDdKsD/ziPLTJ2XUJ58IvEXXuSyUO2NxF1ae7
-         JVKg==
-X-Gm-Message-State: AOJu0Yy3O2tBdbP62urJfeQ5b6bP0xy5o7ABqqfKTgJugshws8TQFJX8
-	SkNCM/Q7PDW/Zl7CgPyei6L7CaCFj+tkFA==
-X-Google-Smtp-Source: AGHT+IHiZgreULCpHLf+h+i+C6Xiu2SvcyS89nvLx5LhKwlckntO3LCDt2oo9MnzZzeI852Js046wQ==
-X-Received: by 2002:a17:906:27c8:b0:a2d:4d43:bef7 with SMTP id k8-20020a17090627c800b00a2d4d43bef7mr1212341ejc.71.1705303748734;
-        Sun, 14 Jan 2024 23:29:08 -0800 (PST)
+        bh=t0ZEvFNJwWKb20tDDD73XLtLPR4Agv7bAFJry2IVCzE=;
+        b=Medk+CI8RR7b1mB1a0sYHyUgOZ/cVpa7vqcAfZc7g2FmHs8no7hIsawNrJIn9dBPoF
+         XgdPa8CwtTDq44DZSRoClH80BFxzmhDfFRPSynki+7EUsRLg9xG2hu6v87YJr7zYp3OP
+         pNDz0K7cTr72oKj0p5vn+NvGyZxISkNvDT/xwgm8BYL/a8W4hcQ45Wt3RcdmVXRB9cni
+         dse9TG80SWFIKG8Jg9Bl+fGzjNcgUq9LGNANB00TWPakB1zmpK4p/fs+MattKBHGDn6U
+         Brlg78GHHL4h7eUZuTrQCcrb4CGY48mQx/lxTp71Ni4uRp0PehmD2ZV7Z6GAsLeCosBV
+         cxsg==
+X-Gm-Message-State: AOJu0YzjXLd6yJAk8Sl5IrJd3NiRik25GvoB+EDfW8L3y/XDe48sLDda
+	AwbdQQ8QDLT39353mIkUmZO/TYkHbw1Cwg==
+X-Google-Smtp-Source: AGHT+IHhacOfakfpyayj70MiiFtOsSaPLKrHOE2i7ATXz7OIdyNgw1Rq7JqNXwDRwGr1rZleimqdaQ==
+X-Received: by 2002:a17:907:6d07:b0:a2b:db8e:72f8 with SMTP id sa7-20020a1709076d0700b00a2bdb8e72f8mr3466919ejc.144.1705303799074;
+        Sun, 14 Jan 2024 23:29:59 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id w17-20020a17090652d100b00a28116285e0sm598698ejn.165.2024.01.14.23.29.06
+        by smtp.gmail.com with ESMTPSA id w17-20020a17090652d100b00a28116285e0sm598698ejn.165.2024.01.14.23.29.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Jan 2024 23:29:08 -0800 (PST)
-Message-ID: <0b03af70-7dc4-4a4f-b9dc-218ef365c237@linaro.org>
-Date: Mon, 15 Jan 2024 08:29:06 +0100
+        Sun, 14 Jan 2024 23:29:58 -0800 (PST)
+Message-ID: <c8c41aec-1a53-4b5f-82a3-e9b786c5325b@linaro.org>
+Date: Mon, 15 Jan 2024 08:29:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,8 +66,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] arm64: dts: add description for solidrun am642 som
- and evaluation board
+Subject: Re: [PATCH v2 2/5] dt-bindings: rtc: abx80x: convert to yaml
 Content-Language: en-US
 To: Josua Mayer <josua@solid-run.com>, Nishanth Menon <nm@ti.com>,
  Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
@@ -82,9 +81,10 @@ Cc: Yazan Shhady <yazan.shhady@solid-run.com>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
 References: <20240112-add-am64-som-v2-0-1385246c428c@solid-run.com>
- <20240112-add-am64-som-v2-4-1385246c428c@solid-run.com>
- <60d78882-0ec5-4cd1-b68d-f75b73cb6cdb@linaro.org>
- <1656bf68-c3b4-476d-984e-f231541058f6@solid-run.com>
+ <20240112-add-am64-som-v2-2-1385246c428c@solid-run.com>
+ <7f45aaea-6520-41c7-8788-f6dd14c5fcb2@linaro.org>
+ <fa954f30-22dc-4914-b037-c0ebb311637b@solid-run.com>
+ <9cbc3ab1-0621-450c-b9f5-ecb1f401d326@solid-run.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -130,93 +130,30 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <1656bf68-c3b4-476d-984e-f231541058f6@solid-run.com>
+In-Reply-To: <9cbc3ab1-0621-450c-b9f5-ecb1f401d326@solid-run.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 14/01/2024 15:16, Josua Mayer wrote:
-> Am 12.01.24 um 18:22 schrieb Krzysztof Kozlowski:
+On 14/01/2024 17:26, Josua Mayer wrote:
+>>>> +maintainers: []
+>>> You need a name here. If there is no driver maintainer or anyone
+>>> interested, put devicetree list.
+>> Ack.
+>>>> +
+>>>> +allOf:
+>>>> +  - $ref: rtc.yaml#
 > 
->>> +	/* PRU Ethernet Controller */
->>> +	icssg1_eth: icssg1-eth {
->> Node names should be generic.
-> This name intentionally includes the name of the ip block within am64 soc providing software-defined ethernet controller through coprocessors TI call "pru".
-
-Why? This intentionally should not include specific name.
-
-Also, wrap your emails at proper length so they will be manageable...
-
->> See also an explanation and list of
->> examples (not exhaustive) in DT specification:
->> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->>
->>
->>> +		compatible = "ti,am642-icssg-prueth";
->>> +		pinctrl-names = "default";
->>> +		pinctrl-0 = <&pru_rgmii1_pins_default>, <&pru_rgmii2_pins_default>;
->>> +
->>> +		sram = <&oc_sram>;
->>> +		ti,prus = <&pru1_0>, <&rtu1_0>, <&tx_pru1_0>, <&pru1_1>, <&rtu1_1>, <&tx_pru1_1>;
->>> +		firmware-name = "ti-pruss/am65x-sr2-pru0-prueth-fw.elf",
->>> +				"ti-pruss/am65x-sr2-rtu0-prueth-fw.elf",
->>> +				"ti-pruss/am65x-sr2-txpru0-prueth-fw.elf",
->>> +				"ti-pruss/am65x-sr2-pru1-prueth-fw.elf",
->>> +				"ti-pruss/am65x-sr2-rtu1-prueth-fw.elf",
->>> +				"ti-pruss/am65x-sr2-txpru1-prueth-fw.elf";
->>> +
->>> +		ti,pruss-gp-mux-sel = <2>,	/* MII mode */
->>> +				      <2>,
->>> +				      <2>,
->>> +				      <2>,	/* MII mode */
->>> +				      <2>,
->>> +				      <2>;
->>> +
->>> +		ti,mii-g-rt = <&icssg1_mii_g_rt>;
->>> +		ti,mii-rt = <&icssg1_mii_rt>;
->>> +		ti,iep = <&icssg1_iep0>, <&icssg1_iep1>;
->>> +
->>> +		interrupt-parent = <&icssg1_intc>;
->>> +		interrupts = <24 0 2>, <25 1 3>;
->> None of these are typical interrupt constants/flags?
->>
->>> +		interrupt-names = "tx_ts0", "tx_ts1";
->>> +
->>> +		dmas = <&main_pktdma 0xc200 15>, /* egress slice 0 */
->>> +		       <&main_pktdma 0xc201 15>, /* egress slice 0 */
->>> +		       <&main_pktdma 0xc202 15>, /* egress slice 0 */
->>> +		       <&main_pktdma 0xc203 15>, /* egress slice 0 */
->>> +		       <&main_pktdma 0xc204 15>, /* egress slice 1 */
->>> +		       <&main_pktdma 0xc205 15>, /* egress slice 1 */
->>> +		       <&main_pktdma 0xc206 15>, /* egress slice 1 */
->>> +		       <&main_pktdma 0xc207 15>, /* egress slice 1 */
->>> +		       <&main_pktdma 0x4200 15>, /* ingress slice 0 */
->>> +		       <&main_pktdma 0x4201 15>, /* ingress slice 1 */
->>> +		       <&main_pktdma 0x4202 0>, /* mgmnt rsp slice 0 */
->>> +		       <&main_pktdma 0x4203 0>; /* mgmnt rsp slice 1 */
->>> +		dma-names = "tx0-0", "tx0-1", "tx0-2", "tx0-3",
->>> +			    "tx1-0", "tx1-1", "tx1-2", "tx1-3",
->>> +			    "rx0", "rx1";
->>> +
->>> +		status = "okay";
->> Drop. Didn't you get such comments before?
+> + $ref: /schemas/interrupts.yaml#
 > 
-> Yes, but again I can point to an in-tree example of the same structure.
-> I see no reason for describing the same thing differently in different places.
+> Is it acceptable to reference generic interrupts schema?:
 
-So if there is a bug, you are going to duplicate it.
-
-Please provide real argument why this is needed, not "I saw it
-somewhere", or drop it. Otherwise it's a NAK from me.
+Why? No.
 
 > 
-> Please see arch/arm64/boot/dts/ti/k3-am654-idk.dtso
-> There are only small differences for this feature between am65 and am64.
-> It's inclusion in the tree was very recent, clearly it was good enough right?
-> See also my cover letter dtbs_check remark on dmas property.
+> I see no rtc yaml doing that, and only some describe interrupts property explicitly. But Importing the schema would also cover -parent and -names.
 
-How does dmas matter? What are you talking about?
-
-
+No, it wouldn't. It does not matter. I don't understand what are you
+trying to solve.
 
 Best regards,
 Krzysztof
