@@ -1,64 +1,64 @@
-Return-Path: <linux-rtc+bounces-522-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-523-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E50582D71A
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 11:20:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A07082D720
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 11:21:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7AA828206E
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 10:20:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 914C41C215D0
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jan 2024 10:21:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70AFF9E8;
-	Mon, 15 Jan 2024 10:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B50EEF9E4;
+	Mon, 15 Jan 2024 10:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t2YFl3Xl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h8GCfyT6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30984F9D1
-	for <linux-rtc@vger.kernel.org>; Mon, 15 Jan 2024 10:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F223F9C2
+	for <linux-rtc@vger.kernel.org>; Mon, 15 Jan 2024 10:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a2dd05e02ffso69661766b.3
-        for <linux-rtc@vger.kernel.org>; Mon, 15 Jan 2024 02:20:05 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a28b1095064so953690266b.2
+        for <linux-rtc@vger.kernel.org>; Mon, 15 Jan 2024 02:21:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705314004; x=1705918804; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705314063; x=1705918863; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xijCf/YDkwOnmDTQnERUbZpzUNopwzB6kEA36dUyy38=;
-        b=t2YFl3XlRm7Qh8Qc6NfB+Lk9rat+W85d/GyHbogv6+G4BD+cXO1Jg+pf9ovJl1zu3l
-         VmYD25tEu2B8+o1csN49KfwFw5NkMdbOQTEaP6lpeb3p5pfW8PNmggcv6VmPttl0ahzI
-         DP6DFfBpTCnO/krRp9okzOm5CiEQ0Q7L1+ds4YlPsfUBitOYSziGYkzCx+Fl+6kUGJUV
-         5cYUGUnqnliFKx3DGrVgxWmtpPWMMuXwXSXh2Drw5BBuQnrkxmfgWsLzlFy+mRP3rrnw
-         OFNOTU64OjvXalp4er78fgcpjBAKiidLQJTCUTWmDoI9e3f9RUxYT+NJ3ucDxeUqF39b
-         aGtg==
+        bh=GYQHYPV8K9HIiDvchtyIy3OoQ6MZlVvvckJN2lDq4TA=;
+        b=h8GCfyT6BTw9tqIFoJQ6T29/Oy3pKuTTcDB0dEWu0HPhYuz6rG0uwX+g+bdwidGiU3
+         BBjv44zb0ReGc2qcjBVBZzbidUhnDiomd4B7UGV/7bmseOlHMFXXYuDlCdhQgW1LTfiM
+         +zoj19OXLNatVSo8s5U6rQhKHt03BrzolhZYMpSwL6xhRexbywNxCpkqux+NR2OxLDoj
+         +n4NNbXahZMuC00N+vywAM33dUQ1gbpj55twkt+iQxzUB7Hl39U7oGC+oS7Ctp5E/yyE
+         o2yJJoC00furd6F/+bXWAvXaBk9fXgpWhZVt8uhTE1hfh//kq2lDrAGwpsOSo+5GjDu3
+         wlRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705314004; x=1705918804;
+        d=1e100.net; s=20230601; t=1705314063; x=1705918863;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xijCf/YDkwOnmDTQnERUbZpzUNopwzB6kEA36dUyy38=;
-        b=cNOGh3aVXtX5D1TGNngByg5NbeqxXSS3oGkkMPl2r+hh4hDXhvP/QN6WjHuS5VXDXy
-         +ZuwVZzaIc+p9g7kOKzeSpYapjf2ocNqFiwzkFWOhgFbnrUHbamG1Fb+Kl2joQ7Ndr9v
-         33QnFNi9JOYyZO+WjhbbpNXsYAyAbEugClTSFawRULvzblsFex9Z+qPIVDc+znLZ25sF
-         mJp6FDeF2POJaBhLVKjlUakXaS/qMiTQhK8CACgr6348iWIUJ2Mbzpo/V6ku2skkuevq
-         /a9zPU5VSgdxqgVqPJYcmRsYW3JV4fXqTuXdlHs/N8lMpn/mypzBXoRyMnlJmxNKrHuT
-         FfIw==
-X-Gm-Message-State: AOJu0YwMXVQQyCUSlplQ2Wud7+6Ljxy9ZBikPAyvFegxd2w4f40U06SW
-	8yeXBzU+zQPIKU4CkhnC5KQqtBAje2z9OQ==
-X-Google-Smtp-Source: AGHT+IGuM9d29ZiXgLbaH3iUCnRdKd5I5vbOPK/u1QYJKu5bhpwoXgbFqFWriA3kRhAOxxPlvqPv0w==
-X-Received: by 2002:a17:907:918a:b0:a27:4221:6156 with SMTP id bp10-20020a170907918a00b00a2742216156mr1376218ejb.24.1705314004375;
-        Mon, 15 Jan 2024 02:20:04 -0800 (PST)
+        bh=GYQHYPV8K9HIiDvchtyIy3OoQ6MZlVvvckJN2lDq4TA=;
+        b=uPIL/xNv4CfBItTMyHg86Q3XNnX3ue5lTPnmZORre0+vZjtdo/zyXRHFlxO4b0cnRz
+         167dJ0qgG6F542DY7jyJVW9ME3AW0PxfIuI5Hps7cOvYzyb44wRUaH1XAFRi2tRK+pMu
+         PRIK7zQlvQjeAyebyVi76nXozHYaCVvsNVgPnIoqZJ+ctX4CavCOX1t95t0zKnRcbnxl
+         j9s23/b/WKeirpFUpE9QM15OnISBdlvgFY8PTE6Nur+y5gDeLkGvGfn6C+JGBtetqgkd
+         IF7lsUbrOkfE+e9pdJQRb5SKBQh/b9L6x5SxYgH1urqalvIT0AkpCRmOrxTeSzuxqFZ0
+         GZ7g==
+X-Gm-Message-State: AOJu0Yw6Z4oUMPzXLVmtsFc8Wz808Gtt9T37l8jPLDfAnSlJBwOmsEck
+	QiBCmvJCbIRZen4sNqxh5yIkckH3j6HCqg==
+X-Google-Smtp-Source: AGHT+IFRuZiGNTahxaTHOce+qtQH467ff0YFj/l9oWOqjRtgZMdcQ3P8kiFnWWaxSKN0NizEJzfP7g==
+X-Received: by 2002:a17:907:8b85:b0:a2d:9ac6:7c2d with SMTP id tb5-20020a1709078b8500b00a2d9ac67c2dmr578141ejc.133.1705314063472;
+        Mon, 15 Jan 2024 02:21:03 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id qk28-20020a170906d9dc00b00a28d1d73654sm5090256ejb.207.2024.01.15.02.20.03
+        by smtp.gmail.com with ESMTPSA id qk28-20020a170906d9dc00b00a28d1d73654sm5090256ejb.207.2024.01.15.02.21.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jan 2024 02:20:03 -0800 (PST)
-Message-ID: <bb912aeb-15ad-4410-a1c4-3d895d81d30b@linaro.org>
-Date: Mon, 15 Jan 2024 11:20:02 +0100
+        Mon, 15 Jan 2024 02:21:02 -0800 (PST)
+Message-ID: <a6a02c39-8c7a-41d6-b751-5a230ac7e785@linaro.org>
+Date: Mon, 15 Jan 2024 11:21:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,7 +66,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] dt-bindings: rtc: abx80x: convert to yaml
+Subject: Re: [PATCH v2 4/5] arm64: dts: add description for solidrun am642 som
+ and evaluation board
 Content-Language: en-US
 To: Josua Mayer <josua@solid-run.com>, Nishanth Menon <nm@ti.com>,
  Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
@@ -81,12 +82,11 @@ Cc: Yazan Shhady <yazan.shhady@solid-run.com>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
 References: <20240112-add-am64-som-v2-0-1385246c428c@solid-run.com>
- <20240112-add-am64-som-v2-2-1385246c428c@solid-run.com>
- <7f45aaea-6520-41c7-8788-f6dd14c5fcb2@linaro.org>
- <fa954f30-22dc-4914-b037-c0ebb311637b@solid-run.com>
- <9cbc3ab1-0621-450c-b9f5-ecb1f401d326@solid-run.com>
- <c8c41aec-1a53-4b5f-82a3-e9b786c5325b@linaro.org>
- <d702f384-7c0f-443b-84bc-4333933cee7b@solid-run.com>
+ <20240112-add-am64-som-v2-4-1385246c428c@solid-run.com>
+ <60d78882-0ec5-4cd1-b68d-f75b73cb6cdb@linaro.org>
+ <1656bf68-c3b4-476d-984e-f231541058f6@solid-run.com>
+ <0b03af70-7dc4-4a4f-b9dc-218ef365c237@linaro.org>
+ <2879689e-5a4e-4242-a23b-d2aa9f004b1d@solid-run.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -132,43 +132,93 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <d702f384-7c0f-443b-84bc-4333933cee7b@solid-run.com>
+In-Reply-To: <2879689e-5a4e-4242-a23b-d2aa9f004b1d@solid-run.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/01/2024 11:17, Josua Mayer wrote:
+On 15/01/2024 11:05, Josua Mayer wrote:
 > Am 15.01.24 um 08:29 schrieb Krzysztof Kozlowski:
 > 
->> On 14/01/2024 17:26, Josua Mayer wrote:
->>>>>> +maintainers: []
->>>>> You need a name here. If there is no driver maintainer or anyone
->>>>> interested, put devicetree list.
->>>> Ack.
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: rtc.yaml#
->>> + $ref: /schemas/interrupts.yaml#
+>> On 14/01/2024 15:16, Josua Mayer wrote:
+>>> Am 12.01.24 um 18:22 schrieb Krzysztof Kozlowski:
 >>>
->>> Is it acceptable to reference generic interrupts schema?:
->> Why? No.
+>>>>> +	/* PRU Ethernet Controller */
+>>>>> +	icssg1_eth: icssg1-eth {
+>>>> Node names should be generic.
+>>> This name intentionally includes the name of the ip block within am64 soc
+>>> providing software-defined ethernet controller through coprocessors TI call "pru".
+>> Why? This intentionally should not include specific name.
+> I understand. Which is why I imagined in the other reference had intentionally
+> diverged from that rule.
 >>
->>> I see no rtc yaml doing that, and only some describe interrupts property explicitly. But Importing the schema would also cover -parent and -names.
->> No, it wouldn't. It does not matter. I don't understand what are you
->> trying to solve.
-> dtbs_check is complaining about interrupt-parent property,
-> because I added both interrrupts and interrupt-parent to my rtc node.
+>> Also, wrap your emails at proper length so they will be manageable...
+>>
+>>>> See also an explanation and list of
+>>>> examples (not exhaustive) in DT specification:
+>>>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>>>>
+>>>>
+>>>>> +		compatible = "ti,am642-icssg-prueth";
+>>>>> +		pinctrl-names = "default";
+>>>>> +		pinctrl-0 = <&pru_rgmii1_pins_default>, <&pru_rgmii2_pins_default>;
+>>>>> +
+>>>>> +		sram = <&oc_sram>;
+>>>>> +		ti,prus = <&pru1_0>, <&rtu1_0>, <&tx_pru1_0>, <&pru1_1>, <&rtu1_1>, <&tx_pru1_1>;
+>>>>> +		firmware-name = "ti-pruss/am65x-sr2-pru0-prueth-fw.elf",
+>>>>> +				"ti-pruss/am65x-sr2-rtu0-prueth-fw.elf",
+>>>>> +				"ti-pruss/am65x-sr2-txpru0-prueth-fw.elf",
+>>>>> +				"ti-pruss/am65x-sr2-pru1-prueth-fw.elf",
+>>>>> +				"ti-pruss/am65x-sr2-rtu1-prueth-fw.elf",
+>>>>> +				"ti-pruss/am65x-sr2-txpru1-prueth-fw.elf";
+>>>>> +
+>>>>> +		ti,pruss-gp-mux-sel = <2>,	/* MII mode */
+>>>>> +				      <2>,
+>>>>> +				      <2>,
+>>>>> +				      <2>,	/* MII mode */
+>>>>> +				      <2>,
+>>>>> +				      <2>;
+>>>>> +
+>>>>> +		ti,mii-g-rt = <&icssg1_mii_g_rt>;
+>>>>> +		ti,mii-rt = <&icssg1_mii_rt>;
+>>>>> +		ti,iep = <&icssg1_iep0>, <&icssg1_iep1>;
+>>>>> +
+>>>>> +		interrupt-parent = <&icssg1_intc>;
+>>>>> +		interrupts = <24 0 2>, <25 1 3>;
+>>>> None of these are typical interrupt constants/flags?
+>>>>
+>>>>> +		interrupt-names = "tx_ts0", "tx_ts1";
+>>>>> +
+>>>>> +		dmas = <&main_pktdma 0xc200 15>, /* egress slice 0 */
+>>>>> +		       <&main_pktdma 0xc201 15>, /* egress slice 0 */
+>>>>> +		       <&main_pktdma 0xc202 15>, /* egress slice 0 */
+>>>>> +		       <&main_pktdma 0xc203 15>, /* egress slice 0 */
+>>>>> +		       <&main_pktdma 0xc204 15>, /* egress slice 1 */
+>>>>> +		       <&main_pktdma 0xc205 15>, /* egress slice 1 */
+>>>>> +		       <&main_pktdma 0xc206 15>, /* egress slice 1 */
+>>>>> +		       <&main_pktdma 0xc207 15>, /* egress slice 1 */
+>>>>> +		       <&main_pktdma 0x4200 15>, /* ingress slice 0 */
+>>>>> +		       <&main_pktdma 0x4201 15>, /* ingress slice 1 */
+>>>>> +		       <&main_pktdma 0x4202 0>, /* mgmnt rsp slice 0 */
+>>>>> +		       <&main_pktdma 0x4203 0>; /* mgmnt rsp slice 1 */
+>>>>> +		dma-names = "tx0-0", "tx0-1", "tx0-2", "tx0-3",
+>>>>> +			    "tx1-0", "tx1-1", "tx1-2", "tx1-3",
+>>>>> +			    "rx0", "rx1";
+>>>>> +
+>>>>> +		status = "okay";
+>>>> Drop. Didn't you get such comments before?
+>>> Yes, but again I can point to an in-tree example of the same structure.
+>>> I see no reason for describing the same thing differently in different places.
+>> So if there is a bug, you are going to duplicate it.
+> I was torn between making my own solution, and using recently
+> added and topical (to my submission) code as template.
+>>
+>> Please provide real argument why this is needed, not "I saw it
+>> somewhere", or drop it. Otherwise it's a NAK from me.
+> I will attempt to improve the magic numbers in this whole node,
+> and reconsider the node name. Thanks.
 
-Difficult to say. You did not include example in your schema which
-prevents parts of tests.
-
-> 
-> Also wondering whether interrupts property should be included in
-> the example.
-
-Yes, your example should be complete... but there is no example in the
-first place :/
-
-
+What magic numbers? My comment was under one specific line. There are no
+numbers in status.
 
 Best regards,
 Krzysztof
