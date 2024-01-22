@@ -1,154 +1,178 @@
-Return-Path: <linux-rtc+bounces-569-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-570-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6A61835E04
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 10:23:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C8F38363AE
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 13:50:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BCC0B26350
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 09:23:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8CD828F6DC
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 12:50:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C57539864;
-	Mon, 22 Jan 2024 09:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84913BB24;
+	Mon, 22 Jan 2024 12:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/6YQVNy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cCsMg8NO"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29A439850;
-	Mon, 22 Jan 2024 09:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1239C3A1A5;
+	Mon, 22 Jan 2024 12:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705915424; cv=none; b=QbpjI8VyMQNPn0b8orz+1kOj7RZ4wY9rATAYL2McrNeWiYR4a+6JXXqD9G5eqL2g/5vR+Ee8s8adJdXk+FEkBwyRIPeERd3MKyt0nge7Rfug0QCRV6v4hzwgJpzFMST8GjTrfsy2wJFjtCx+gxWIHrVQ71a45K2JzvQT5nPkfRA=
+	t=1705927800; cv=none; b=HcGrbVSYyGDtFrxMt3WHcx+EDwh0rrpbeJC57B3mJ3vUGd/N/WNAvrdCexQNBVHpVSDLIvs26hmdzHj5oiU49oNb1n3qwEbvZwUIFEvmJz1u1saQopD/JvHoWt6qbn8HSvpVuVYsokCOoDTrKiqhTY5G6HSpJ77cpZWia8fpw3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705915424; c=relaxed/simple;
-	bh=An//1jmJkagxoPM0+8oyaFGToL9WWNmj+iNkfY5Xwm0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QQ5rvyiBRPJeXFZJq1lW8Ylp4HAP6AXXAegnBbZz6voF5pp1Ws1bC6qRVjLOLDhWZscCs5X6BQTXpA1Rrm6YJHwc2tx/wcRLFQ5dstiWVSPQmnFXPMnejz7Wl1ETgD86omIEHU5ey2bAO7+zAT3AI3zHB7XleLMuscMF+OsxN+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/6YQVNy; arc=none smtp.client-ip=209.85.210.47
+	s=arc-20240116; t=1705927800; c=relaxed/simple;
+	bh=znXpPawD5w5l+ZHHYe5GbnDusfFCdx9H/EgMVxkOcWA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=REl0eB2OcnXgmLaFFRRx0GfsW6v0oNfC43j3b7YBcduUKbQxrcF3pzr/DiSz3ASWgEYPYpyFzYqKzUGv6m0lUCRpLNFfLOlP7FDJBgyXXj74I9FEydHks8p0xQdt8d1LUK3XoLBu0E4c7sI35JshZOpLLYttHE7y8MlIwRJaP1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cCsMg8NO; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6dddfdc3244so2271158a34.1;
-        Mon, 22 Jan 2024 01:23:42 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a2c179aa5c4so323167766b.0;
+        Mon, 22 Jan 2024 04:49:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705915421; x=1706520221; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=An//1jmJkagxoPM0+8oyaFGToL9WWNmj+iNkfY5Xwm0=;
-        b=H/6YQVNyKnWoA1koyzHECkqgVnoEJLMx5uRLhoqtb80jRWG3yLSXJpiJzXenicoPpg
-         nldS1NXSXvLT4Riu9btPkaWCwuWiKWG5SBM6vtEEvy21UPx0HJlxCaoBe4+1+PWrXFVM
-         jQYUKT4Nr82xbWwOCUHVy4QO7Fv8kXBt1S7Kyvg18Sc5l8o2DOm2Cx4p3ffEr8YTI8d2
-         ynWQ+PiZPEWO2G+qVAMG8rGS4MgnhHsPHtoneAWgTFY224CBvap8tTcS3rrzcmEKR+gU
-         UGvnji4HGz1xF4sh98j/WIJt09Fx2ARY8naOrlwh+H6OdnPu4zVDKE4P1/WBa3Fk6KD4
-         77Tw==
+        d=gmail.com; s=20230601; t=1705927797; x=1706532597; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WCsG1qVHqedwjqFrj900rKt8IpNXtxQ6hDjxWvk8LME=;
+        b=cCsMg8NOFJrUqrPfDU0lX03kqT+JB/kmR8Ls41LAUOwaAbkljO4YktoqxVVN7wiWZQ
+         P3K4VyEHy+iYUjHxaSYH04L9ep8YsZ4YvuSbP4G0fqt0hevBRckrxi26StnHs/1X6EQq
+         Lip82THsk4KCMZDlirG/24vMqDE6cczM5WZzlHnGBjHVJuEXpJzaDVbyjxAmktYuBwGR
+         2XP5v+quV+VDcs/UEbrhc7xZzpeWi0/FfzKmFxoOPmCn2/KsVKcmxjmhzpsWIwXm+rQk
+         N83vWiuyyHXOVNxv4gvxGWw73mSwTLp1M+mUMbBQzq5Z1Tgg9gFiAlrlD1GyBbioQSPa
+         UItw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705915421; x=1706520221;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=An//1jmJkagxoPM0+8oyaFGToL9WWNmj+iNkfY5Xwm0=;
-        b=gIsnAepcafxVq5tVZlesysryneg3yKFT+J8NHLRn3HDBJm1iYLcTxQxIa0LOOhHSlL
-         kgRC7nSqXIPjr1FKQvakkQAe6Osz83vDyphYyzkcB4sGKOoRtuETTkNNJIE0Ok22Gqql
-         n9IJrBCsAeZfpYcWvexCvJe8eexVO6qhBeNv+qcMh0Z729UFTvBZ9cwItq5r5JZQUHZR
-         DStYvQ3JYFNj5Qf4LtcMN4PTHGvhDBIgglpHf+JVfJxnJ5yY0ZsHD7qlgSUB4K0vh60W
-         PVDmzrsu9wNTQEk5nYP27CSLP8HC2Y1e37+qS+ewCxE14HfzV5rikfTqEs+xlfIv1YLp
-         Wo8Q==
-X-Gm-Message-State: AOJu0YwR6q6h8U8CTr8YxBZjjL0Xxnp6PjhFEzVe2LQexdSYn9wzrktU
-	XdZHP7rzL5qrHLvJWoFJaGiGta6ofa60/UyupBmvqLiX2KKlP+cZclhODclq2geW2DPkFSsLftB
-	qoCXTYzQeBtJrmFYDdlJp6o3F34o=
-X-Google-Smtp-Source: AGHT+IFBYRPl1ryahxuI8r5+ViUmrqkH8rztXRFhCsnMTpg9NzQJdrag3MCpRtAvV5rdD6ReR16lH3SbseV5iIBy8jk=
-X-Received: by 2002:a05:6870:c14a:b0:204:c37:85bf with SMTP id
- g10-20020a056870c14a00b002040c3785bfmr3196999oad.74.1705915421104; Mon, 22
- Jan 2024 01:23:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705927797; x=1706532597;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WCsG1qVHqedwjqFrj900rKt8IpNXtxQ6hDjxWvk8LME=;
+        b=QozkDYUS/DpXQehuMyy7kIXyQm3uH5VdsaEN1rdzYAr3Hz3U6q/tRFO9c8SwFcAWqK
+         s68xfXZlSnhkazboa3v+pFyqPK+mjtQZKRBOiNuPYMhr5+YmqAe8P/3FmYLrmlu6LE2V
+         Bykjs+xrGO7YKm27CFALNYhehvzrR5mKaLF4d0tLCjewHZZDu8m6c7cRZPO5C/kBDjxb
+         1l9cczkUtFiBp4rZ1SgnEoowJTa/RoxqPpJy3tnp6jxjRVJp6R8B43ItAgEU2X0V4y3W
+         AZct/P0XFbG18r1CzAn8rcFNi5UQPOYPP+o9I/2OpFoAc/Bnzp6/WoW5zMWhPwIeW+FS
+         Y+Yg==
+X-Gm-Message-State: AOJu0Yz2tt82XksditQD8kVc3MpwReRnKPAfQUirZIL1Jkgzf2H2PZE9
+	jHevIvv7m41CVyvMtrHokRViedE/Yc4SWweGEj4lMiL6VbZHta3q
+X-Google-Smtp-Source: AGHT+IE5avahwyww21Ka3m0n0aKAE/n/woz1/5tmBlr1BHE2s3vfE8YTfgSRU/TVkOtb92hxNdpMQw==
+X-Received: by 2002:a17:906:6a1f:b0:a30:721d:d21f with SMTP id qw31-20020a1709066a1f00b00a30721dd21fmr574844ejc.143.1705927796956;
+        Mon, 22 Jan 2024 04:49:56 -0800 (PST)
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id kw7-20020a170907770700b00a29dcbe1e72sm13250229ejc.56.2024.01.22.04.49.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jan 2024 04:49:56 -0800 (PST)
+From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Eddie Huang <eddie.huang@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Ran Bi <ran.bi@mediatek.com>,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] dt-bindings: rtc: convert MT2717 RTC to the json-schema
+Date: Mon, 22 Jan 2024 13:49:49 +0100
+Message-Id: <20240122124949.29577-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122080631.2880-1-qiujingbao.dlmu@gmail.com>
- <20240122081722868bdda5@mail.local> <CAJRtX8QU8iHY1oQJ1uDN3YOmCeN7SH+vPC8nD29WS5+2DT1oKQ@mail.gmail.com>
- <2024012209151130867663@mail.local>
-In-Reply-To: <2024012209151130867663@mail.local>
-From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Date: Mon, 22 Jan 2024 17:23:30 +0800
-Message-ID: <CAJRtX8RZZb1Rq1y-QSheimWgJf0W_bnhe=dGmAeqGNYy+jx6KQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/3] rtc: sophgo: add rtc support for Sophgo CV1800 SoC
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	chao.wei@sophgo.com, unicorn_wang@outlook.com, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, linux-rtc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, dlan@gentoo.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 22, 2024 at 5:15=E2=80=AFPM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 22/01/2024 16:34:00+0800, Jingbao Qiu wrote:
-> > On Mon, Jan 22, 2024 at 4:17=E2=80=AFPM Alexandre Belloni
-> > <alexandre.belloni@bootlin.com> wrote:
-> > >
-> > > On 22/01/2024 16:06:30+0800, Jingbao Qiu wrote:
-> > > > Implement the RTC driver for CV1800, which able to provide time ala=
-rm
-> > > > and calibrate functionality.
-> > > >
-> > > > Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> > > > ---
-> > > >
-> > > > Depends on https://lore.kernel.org/all/IA1PR20MB4953C774D41EDF1EADB=
-6EC18BB6D2@IA1PR20MB4953.namprd20.prod.outlook.com/
-> > >
-> > > What is the dependency?
-> > >
-> >
-> > Thank you, this driver requires support from the CLK driver.
-> > I will add an explanation in the next version.
-> >
-> > >
-> > > Also, please fix the checkpatch.pl --strict warnings
-> >
-> > I will use the -- strict option for testing.
-> >
-> > >
-> > > > +/**
-> > > > + * cv1800_rtc_32k_coarse_val_calib() - Using an external
-> > > > + * clock to coarse calibrate the crystal oscillator
-> > > > + * @info: the device of calibrated
-> > > > + *
-> > > > + * @return 0 on success, or -1 on fail
-> > > > + *
-> > > > + * This RTC has an independent 32KHz oscillator. However,
-> > > > + * the accuracy of this oscillator is easily affected by
-> > > > + * external environmental interference,resulting in lower
-> > > > + * accuracy than the internal oscillator.Therefore, a 25M
-> > > > + * crystal oscillator is used as a reference source to
-> > > > + * calibrate the RTC and improve its accuracy.Calibration
-> > > > + * is completed through two steps, namely rough calibration
-> > > > + * and fine calibration.
-> > > > + */
-> > > > +static int cv1800_rtc_32k_coarse_val_calib(struct cv1800_rtc_priv =
-*info)
-> > >
-> > > This is still not working as well as you think it is. You should
-> > > Implement the offset callbacks instead.
-> > >
-> > I'm sorry, I don't quite understand offset callbacks.
-> > Do you mean that this function needs to be executed periodically.
->
-> I mean implement read_offset and set_offset here:
-> https://elixir.bootlin.com/linux/v6.7/source/include/linux/rtc.h#L67
->
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Thank you for your patient reply.
-I will do that.
+This helps validating DTS files. Introduced changes:
+1. Reworded title
+2. Dropper redundant properties descriptions
+3. Added required #include and adjusted "reg" in example
 
-Best regards,
-Jingbao Qiu
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../bindings/rtc/mediatek,mt2712-rtc.yaml     | 39 +++++++++++++++++++
+ .../devicetree/bindings/rtc/rtc-mt2712.txt    | 14 -------
+ 2 files changed, 39 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/mediatek,mt2712-rtc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt2712.txt
+
+diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt2712-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt2712-rtc.yaml
+new file mode 100644
+index 000000000000..75624ddf6d4d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/mediatek,mt2712-rtc.yaml
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/mediatek,mt2712-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek MT2712 on-SoC RTC
++
++allOf:
++  - $ref: rtc.yaml#
++
++maintainers:
++  - Ran Bi <ran.bi@mediatek.com>
++
++properties:
++  compatible:
++    const: mediatek,mt2712-rtc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    rtc@10011000 {
++        compatible = "mediatek,mt2712-rtc";
++        reg = <0x10011000 0x1000>;
++        interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_LOW>;
++    };
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt2712.txt b/Documentation/devicetree/bindings/rtc/rtc-mt2712.txt
+deleted file mode 100644
+index c33d87e5e753..000000000000
+--- a/Documentation/devicetree/bindings/rtc/rtc-mt2712.txt
++++ /dev/null
+@@ -1,14 +0,0 @@
+-Device-Tree bindings for MediaTek SoC based RTC
+-
+-Required properties:
+-- compatible	    : Should be "mediatek,mt2712-rtc" : for MT2712 SoC
+-- reg 		    : Specifies base physical address and size of the registers;
+-- interrupts	    : Should contain the interrupt for RTC alarm;
+-
+-Example:
+-
+-rtc: rtc@10011000 {
+-	compatible = "mediatek,mt2712-rtc";
+-	reg = <0 0x10011000 0 0x1000>;
+-	interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_LOW>;
+-};
+-- 
+2.35.3
+
 
