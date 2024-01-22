@@ -1,140 +1,166 @@
-Return-Path: <linux-rtc+bounces-564-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-565-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C068835CB6
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 09:34:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFCA2835CC0
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 09:37:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B35A6B22E9D
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 08:34:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E3A81F22CDD
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 08:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6712210FD;
-	Mon, 22 Jan 2024 08:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BC3621362;
+	Mon, 22 Jan 2024 08:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g9Wi7kHO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="F/nHb0tV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F98210E0;
-	Mon, 22 Jan 2024 08:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC8B210E7
+	for <linux-rtc@vger.kernel.org>; Mon, 22 Jan 2024 08:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705912453; cv=none; b=RwhA5yDKY5FGddVo9JEkBmyOFL77nI3Wk08ILEaNDe4Nisy6s1eMdmUGuQ+QoVPoYBEb2sptx7jba8rOgUIwfDLU+01XJi/XILHjn7ToVnD9IeN18NV1EKKIp4w9gI/1OmM47svdF0qWIjXCDqWPCHUFF8BwJ70SlG3BGwM6ZQY=
+	t=1705912651; cv=none; b=Bc8R0c7vCQFKh84Ea5DwUE2qrcwL9s12JniPMvuKR6cgUCjazvqAzl/ZjouLncr52R81rt/26FTLdR9U91zgjkPSRqIap9d9JlV/+cj96lHfIVLjq2c2EIFa6dWxl+D80+kE95bsJSAdUHmdE4s7B8k6xzLKhgZBlHCnXppCUX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705912453; c=relaxed/simple;
-	bh=zkwnvGLbqFItCCRb578zOlJjANzoAer2/ivLxkfy9/8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XpCnOfGVXyUrSb8OphCcn6U5AHIwfbgz8TjxDd3iipedbbio2h4T4RKXW3kaaZBOP55ftzYP8j258bCtAh2hYzE3+15Xft6MmEVMJW6pNSuQ4CcFxjIyYdEfFL+43Cbh7TWTSL+W2CDyhxAeH1DP22QR4VqGC1yfjXfH7D7Dx+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g9Wi7kHO; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3bba50cd318so3346930b6e.0;
-        Mon, 22 Jan 2024 00:34:12 -0800 (PST)
+	s=arc-20240116; t=1705912651; c=relaxed/simple;
+	bh=50VnyOQ5yU0OvmhTui00lfaV6jIlkxhVrH3tn6U37kw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=udHozwdqQUkJ6Y3Ku9pHES7ItWIvsQjoTNzi+ZI7m9PDbup0eL6NvZO+dXEt34wT7sVtuHS19Ip/bmkDVgFPPaUcL8NEzrNsq3jRzzZqk74N9n08GmAs8MhmwOoA8y2IW0/YNwwktmsokCgAAq6z/7pyieS8unrvLaOPHxkkizY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=F/nHb0tV; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2cdebb968feso33093921fa.1
+        for <linux-rtc@vger.kernel.org>; Mon, 22 Jan 2024 00:37:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705912451; x=1706517251; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zkwnvGLbqFItCCRb578zOlJjANzoAer2/ivLxkfy9/8=;
-        b=g9Wi7kHOsGPpc1pGhcynsHRjFIYivRW1rXqB1UENSYD2rGJLSAJMr8MHvBnNzd6vnG
-         MXgVq3ytt4GK1vmpFuSZyhv2oKZQBjPUiU0i3rKonvl6Ob23OJ1dsAE61u4fep8LmLl0
-         lRIXJTXemfyTZGHu2Wnst9NNURlv7cZOKlLFRgN1+3DDzrKG5ghLlwZL9jBpMvUHBK+P
-         9cllRpHWwpKKe8z7xCYpd2Ws73TjhFAKpf9RjUqy+2b0kauDzvbxIEa6GJklm0qvidDL
-         G6HR19LQK16NthfEzii9zj6+yutsnAUlebtQb6d3bZ6fK1Rtv002iytqGBSEmdk7ZCCy
-         Jc0g==
+        d=linaro.org; s=google; t=1705912648; x=1706517448; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sUhLxvQpB2444R2OwanB1oURS4LSeIrP1mx21iy3zi4=;
+        b=F/nHb0tVP449PH9sWdLy8KERT3NSwI7P5HMIH/OlH2YThUOVM9fOfiPJuDoV9msrpw
+         60dEnBNZML5PiAP4tH+u/0FTusyKKITkRxo0+ZDGdLVMsF4NQSpwmkbTERBpV1EOnIne
+         7wVda/4Jd/ldiSxqzkv+apNDI6SNcNhDV6DJT+J/U1HybGc2kXrOgp+vauMMHW+xONEN
+         tozgnw4CpwxahytgDC7G4LqrSm0ghKeVpny12XgFHnDMEhODA6rXhcg80GhirnSd/FgZ
+         4QlQDUCTY6n1p3wHaxn3T3LLw1ADaSZC9dU2oQshzGXNdl1bhwuYmbuAWLMdlMCuYi6b
+         cz7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705912451; x=1706517251;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zkwnvGLbqFItCCRb578zOlJjANzoAer2/ivLxkfy9/8=;
-        b=IOWpYZHAmjgErh152k+EsT2z2Frj6dgyyOdJi6fkSvl9QnhNgY3/JfDjNWV+5FM3Yi
-         gX6/IZYLgS891qgR1D81pXmzUNkme2TO/+F9ifYDpMBmvmxxbjDFANgt/UDaBOA9bjux
-         eFtJeZl4UxYC9S1Ad68Wq7HzqsBN//+rJtrU5BmRbgXuaSXvGJOVFt0rGVwiEnuSVOwH
-         LYhUkH/fHSoGb/sigsz3u1V/tR5bS2ECAwovgNetZJLchgkRSAfDaNdIiB5FkcHSjwmu
-         uDicJJFs+kEHYIkdGbzm5AhPaeJ0cgCa+KwR07Iv0epL8aWbHjT1B/841I3duPTunVg0
-         kTjw==
-X-Gm-Message-State: AOJu0YxJe4cDVDuHZS5sviloGtu9KcWCDAJpmp42uxVcWI8td/nZs32D
-	uoVuizR7q6Q1SkZqpQfIWHkVwPMcAmeZXT0Vy9KFu1qi1FQMVL1IivdzrEu1vE6B97e7QMutb4R
-	Q0dGncz8IQHPkwwgynuu/UrDBYLY23g8ms94=
-X-Google-Smtp-Source: AGHT+IG0io7o6XQcMrNeVFyA5PaNM0P8uNlw0Diun23kc9f7dbCBaju58RK0zmyPDtcdlrZAzZ5TzBTnGyXVyuK2x30=
-X-Received: by 2002:a05:6871:549:b0:210:d1b9:dda2 with SMTP id
- t9-20020a056871054900b00210d1b9dda2mr4790038oal.3.1705912450867; Mon, 22 Jan
- 2024 00:34:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705912648; x=1706517448;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sUhLxvQpB2444R2OwanB1oURS4LSeIrP1mx21iy3zi4=;
+        b=oT5fRWzrwDvSwJV5+RXHxNXCadNDXaj0MNkLsgzPFAfYRit7gbP0mLRFn0USxqGtET
+         qpO6LZ9dDnISXmt2EZOVRDElAZg7RfTAypTzom+hFOq5WfcfovRn1laAZ7456ck2JL9r
+         KZ61wxkOFnGd3gF7rMIqSTu9kyo7rDuV0Il81+5XPNT3/Zqsc/oEZIo+Qr5B2ONHaAOW
+         FvUY/W030Vv8yYqTkxK2C9Xqzw8sKkQzvp8s+kUoqP5l9jARCZpTDNzOOgmHdU/skTW2
+         dmzlSYEHdcPeSS9GjKPKt6SOXOUrM3sYJ55CB0rIa4k2O3H1Tih9QtLSUVCEZSHgIlj4
+         3IZw==
+X-Gm-Message-State: AOJu0YymE56cu9w2tsyJgS9cXKBNg3ijZFeZqsxxQ7DYGZwc3hubO7Y/
+	cH/Jigss18SAA3pjpoLmZW1DshqVXzsvDIaMhV0MSOZGKfLWyr5/4YR/OjCU2CM=
+X-Google-Smtp-Source: AGHT+IEUJOQf4Ld0srroyNXWH3OQiDWPRqtkiPiCuP69Ymdllv/sFpV9ONm/e4QkT1gx5Ahl5reJJw==
+X-Received: by 2002:a2e:9d99:0:b0:2cc:78be:9551 with SMTP id c25-20020a2e9d99000000b002cc78be9551mr1222957ljj.2.1705912647781;
+        Mon, 22 Jan 2024 00:37:27 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.215.66])
+        by smtp.gmail.com with ESMTPSA id q6-20020a5d6586000000b0033921f48044sm7892690wru.55.2024.01.22.00.37.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 00:37:27 -0800 (PST)
+Message-ID: <fcd64bbb-9f3c-4e62-96a4-84cb1e3ac59d@linaro.org>
+Date: Mon, 22 Jan 2024 09:37:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122080631.2880-1-qiujingbao.dlmu@gmail.com> <20240122081722868bdda5@mail.local>
-In-Reply-To: <20240122081722868bdda5@mail.local>
-From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Date: Mon, 22 Jan 2024 16:34:00 +0800
-Message-ID: <CAJRtX8QU8iHY1oQJ1uDN3YOmCeN7SH+vPC8nD29WS5+2DT1oKQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v7 2/3] rtc: sophgo: add rtc support for Sophgo CV1800 SoC
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	chao.wei@sophgo.com, unicorn_wang@outlook.com, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, linux-rtc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, dlan@gentoo.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, chao.wei@sophgo.com, unicorn_wang@outlook.com,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ dlan@gentoo.org
+References: <20240122080631.2880-1-qiujingbao.dlmu@gmail.com>
+ <20240122081722868bdda5@mail.local>
+ <CAJRtX8QU8iHY1oQJ1uDN3YOmCeN7SH+vPC8nD29WS5+2DT1oKQ@mail.gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <CAJRtX8QU8iHY1oQJ1uDN3YOmCeN7SH+vPC8nD29WS5+2DT1oKQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 22, 2024 at 4:17=E2=80=AFPM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 22/01/2024 16:06:30+0800, Jingbao Qiu wrote:
-> > Implement the RTC driver for CV1800, which able to provide time alarm
-> > and calibrate functionality.
-> >
-> > Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> > ---
-> >
-> > Depends on https://lore.kernel.org/all/IA1PR20MB4953C774D41EDF1EADB6EC1=
-8BB6D2@IA1PR20MB4953.namprd20.prod.outlook.com/
->
-> What is the dependency?
->
+On 22/01/2024 09:34, Jingbao Qiu wrote:
+> On Mon, Jan 22, 2024 at 4:17 PM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+>>
+>> On 22/01/2024 16:06:30+0800, Jingbao Qiu wrote:
+>>> Implement the RTC driver for CV1800, which able to provide time alarm
+>>> and calibrate functionality.
+>>>
+>>> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+>>> ---
+>>>
+>>> Depends on https://lore.kernel.org/all/IA1PR20MB4953C774D41EDF1EADB6EC18BB6D2@IA1PR20MB4953.namprd20.prod.outlook.com/
+>>
+>> What is the dependency?
+>>
+> 
+> Thank you, this driver requires support from the CLK driver.
 
-Thank you, this driver requires support from the CLK driver.
-I will add an explanation in the next version.
+How? This is really unusual. Just to remind: we talk about build
+dependencies. Other do not matter for new drivers, right? Otherwise what
+is being broken and how it could be even broken?
 
->
-> Also, please fix the checkpatch.pl --strict warnings
-
-I will use the -- strict option for testing.
-
->
-> > +/**
-> > + * cv1800_rtc_32k_coarse_val_calib() - Using an external
-> > + * clock to coarse calibrate the crystal oscillator
-> > + * @info: the device of calibrated
-> > + *
-> > + * @return 0 on success, or -1 on fail
-> > + *
-> > + * This RTC has an independent 32KHz oscillator. However,
-> > + * the accuracy of this oscillator is easily affected by
-> > + * external environmental interference,resulting in lower
-> > + * accuracy than the internal oscillator.Therefore, a 25M
-> > + * crystal oscillator is used as a reference source to
-> > + * calibrate the RTC and improve its accuracy.Calibration
-> > + * is completed through two steps, namely rough calibration
-> > + * and fine calibration.
-> > + */
-> > +static int cv1800_rtc_32k_coarse_val_calib(struct cv1800_rtc_priv *inf=
-o)
->
-> This is still not working as well as you think it is. You should
-> Implement the offset callbacks instead.
->
-I'm sorry, I don't quite understand offset callbacks.
-Do you mean that this function needs to be executed periodically.
 
 Best regards,
-Jingbao Qiu
+Krzysztof
+
 
