@@ -1,83 +1,85 @@
-Return-Path: <linux-rtc+bounces-566-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-567-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE2FE835CCF
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 09:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F92C835CE7
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 09:43:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9C711C21E2B
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 08:39:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C30711C210CE
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jan 2024 08:43:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 316392134F;
-	Mon, 22 Jan 2024 08:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17CAB3613A;
+	Mon, 22 Jan 2024 08:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INj3cZkr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C4y47o3B"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B627737168;
-	Mon, 22 Jan 2024 08:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE7039852;
+	Mon, 22 Jan 2024 08:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705912745; cv=none; b=LtvjE27NEycJvOCdBdjxen7g601HrvKwCtuAz3kQZL6FQym/fK0BhIbB4j3cd5h55IC+iDHp9vf49wo4sQjD4dOA3tnBFWT6oaw1iM+2VxeHjPJi2QcZjlb0aWbf2MByDBghAGPI02+huGPVSvNffEexeM9V5cQgFuDIAwldqVs=
+	t=1705912987; cv=none; b=dhsGctakk7EMYs0OBWvCrQEZ/Dr9sMibDaIHA6rC/HNkO5kaMgYaqJCAZH29uxVFQwhVQ2yKDNwr/i5uT857I5t9COEYRViMbDqdq6WS+FNjC6lMPD8QJM//ssatpVT0JURqZZOYJwNZRaJRSllB5jMtUIfLCuXf/H5gLTXBfzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705912745; c=relaxed/simple;
-	bh=8s0TCbyHAjFpXwZ0nFLBMCAT9Z5oKNHfYImmbtf0qxk=;
+	s=arc-20240116; t=1705912987; c=relaxed/simple;
+	bh=lvVrC+f35N01r8aPfRDm4pbZkjSq9nuQifRbMlHzeSQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RJxES/LaiHLGG3GaJaEkGaV1qNToPJX6SfBhgGkBBhvqAk83tk5KovWpN4fPPnrVEfnYr8rhpNU2F6Gxdb6ag+I38Vl4Zj5oHZFtbRVcn224tdbF7F0x29fVpgawEo31vyXuqSEYbkkVHcq5w1m1xTYP4TNNKyy7fW8f7LGmU1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INj3cZkr; arc=none smtp.client-ip=209.85.161.43
+	 To:Cc:Content-Type; b=Xpdeh0346ibCj4lsmelTyeygK1BwsztOrZAsLHOlWRKKezfXKvBqwI6MwL9n1tXP1865copLWQOK8cGvNqvtGeo5UeW9xthVDvv22s4mOCDSTv56yZsGKcMybhqoz/pj8fLwxC4mAN661iA6QpzA9hLMX9FirMJWLBW82aMXlAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C4y47o3B; arc=none smtp.client-ip=209.85.160.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5986cb7bb61so1663148eaf.2;
-        Mon, 22 Jan 2024 00:39:03 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2108c7829caso895305fac.3;
+        Mon, 22 Jan 2024 00:43:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705912743; x=1706517543; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705912985; x=1706517785; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8CdVvGiqfYdTCxC7+O9XTEejcr2f6NOrdLyxlbWMCWY=;
-        b=INj3cZkr8+FWA1L+Wv6Uk2Vw5JeLrgqRMg+/f2asuXEXEerzdK18H5/ty7kREDHJ/p
-         65iZZo6USDYqw5oNwcYb5Ny/ko2+nDKNjGUQO/yUTt1+3BYkouaL3tSGLF9bQWreZIoH
-         SfCTqO7LE80MAPG4D+SJBTAlIS2X4oCJQB5xHHD3v/eWvQ+1l++sJyu91gix4hwRVLmi
-         qo6oYIulw3D2w40lx5pPxD7bNfcDt9/6MuIIEWXKdbavd/1p2uv993IyL1h0R3xq5Vda
-         uVt0PZlpKvfd/7el9teoimYCs5iSHiwYhExv4BUjILyYSrb5wsB2fKYHDpfL+h6gP8MV
-         Cyig==
+        bh=lvVrC+f35N01r8aPfRDm4pbZkjSq9nuQifRbMlHzeSQ=;
+        b=C4y47o3BKg/qT3YbiTSfurLWyx1GYVgfWTeC8WCN6pac9s3DfPBWBE4Ykrh0p4NecR
+         5esUthIIl9Pu2zbkYfscyQLvgTDsc153bqqaqopnyZU0KYvxbo0Vboir1ajymnAyE0xl
+         AFoyYZQ7Ou1LDuEt/B/6CIp2JA1LF1HGKC4ETuDWEnaIBUiw1pxQ989I62Ft32pd+zqV
+         us5Y6ElCW+zNQzgd8GNS19PiDIczNLIsvBEw2sEaTqgmM8b+z5x/TaZPQz6bXx+56XXk
+         ojrRrI2nTzpQQMl1NzL2/umfQfXaxAr/hBNDbf2fS6SoJ1yQlg1b7nBXVl6u+yCjnDFk
+         bPyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705912743; x=1706517543;
+        d=1e100.net; s=20230601; t=1705912985; x=1706517785;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8CdVvGiqfYdTCxC7+O9XTEejcr2f6NOrdLyxlbWMCWY=;
-        b=l67Z3RK3UtBkndkDIupp3duxT06tpaJkh39FW0i0urrDTWuYkkyMtIHFqbbHktL28n
-         NKDDNrf6UbP+7WAIc++GXn72nCtE8jjQlF+dGUIvLAOF9T+P8pXKsVtzv7GJitoGbXkN
-         rkIn/SoPoniKGf1UWD0GMxJFzYUfwyAI78XkUclpbcEY1HveBrDC++ck9NeBKjtk5LrG
-         CqeoxzMIhsbxlX4N9TQTjqP9z2IUiJapq8BlYwsOyPWmTMXb+5G9GiGjmXGVD7Q7ky6m
-         ahdOFS4BWh254Ejfw3am1F1pbCN0LVLLsAAXmoa9jnD4+BbEPZywLjJUexZ6QkxeMYyN
-         H4rA==
-X-Gm-Message-State: AOJu0YwqSivz7/lz09YbfkKF6yRuvkmSkG+qgUJimTlAs30aGvHcidpz
-	2uthToegxwH9fnZUNwKIXB6f9aHpwihA3Qm+xxT9OlBKNQ0p6ctKgkq0SeShLlUBKVZLg3MTz3v
-	iQq12dcd7HMzY4LfVYBw8Vt2in+U=
-X-Google-Smtp-Source: AGHT+IHSHIMyD+bK3Oc8MHc7OHFPOOY2TwpSZQRqXOls2z9umwLfN1gbC2rc8LCZseXuS1D9LFYzIcR/xEOocK6faz4=
-X-Received: by 2002:a4a:a7c9:0:b0:591:b9ce:4f8f with SMTP id
- n9-20020a4aa7c9000000b00591b9ce4f8fmr2290811oom.19.1705912742390; Mon, 22 Jan
- 2024 00:39:02 -0800 (PST)
+        bh=lvVrC+f35N01r8aPfRDm4pbZkjSq9nuQifRbMlHzeSQ=;
+        b=pB6LVK6ydYnPwPOLUlkmyy0hgEfHTq4erkM5/MKMEryWNhnN4NqwhWjN3WjVwV7CL2
+         w/mAbTCJIYNOjhbfdGYsttocyKPbrqUurF6FXOBcIa1rOk/0yHOrjRcqoRheBEAfCQZF
+         dCp0g50kKwZt1WVDZSmC0KqJr2abhV7+7IBB/uZdisdmHHOm1xgGnls0JBzkcncy0bfs
+         8NyPFOscYSmPMzNAddXzBXxVuEh0ILmW1TY0jHAOYbSCFebQt2oNeFl1nVa6/ZkQy8rY
+         nEp88kdmvFcNulubAgBEVJa203wnZGtFnVupjs1fHH1FbqghXvq0/L2+ScEfcefh1hkt
+         drkw==
+X-Gm-Message-State: AOJu0YyG/udR286KUgVdjsVxIL0W5BhGNpjdvxgnTL5J9GO0ZbuWbjQj
+	MfVmqnZStw4xilK01v0OIs2GL8tB9Ki8kofA8uKs24xa9Fa+3NDeo3NKACBVFUs30cBqtMCGxPJ
+	HoQMnyq3f+IbgRZr6XCNVQ0YxNP0=
+X-Google-Smtp-Source: AGHT+IGO5jrrZtbYOiVQIVGyuNjgvRWaxekfSQGoJMFUsTLosSs7KRyYuQS/Sq24qmG5IJnhKHCJRFaIq5fdWNYON4o=
+X-Received: by 2002:a05:6870:b30e:b0:210:b602:5b75 with SMTP id
+ a14-20020a056870b30e00b00210b6025b75mr2072119oao.42.1705912984419; Mon, 22
+ Jan 2024 00:43:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122080631.2880-1-qiujingbao.dlmu@gmail.com> <90ae0cad-34a8-4e19-a72f-5e497b72b45c@linaro.org>
-In-Reply-To: <90ae0cad-34a8-4e19-a72f-5e497b72b45c@linaro.org>
+References: <20240122080631.2880-1-qiujingbao.dlmu@gmail.com>
+ <20240122081722868bdda5@mail.local> <CAJRtX8QU8iHY1oQJ1uDN3YOmCeN7SH+vPC8nD29WS5+2DT1oKQ@mail.gmail.com>
+ <fcd64bbb-9f3c-4e62-96a4-84cb1e3ac59d@linaro.org>
+In-Reply-To: <fcd64bbb-9f3c-4e62-96a4-84cb1e3ac59d@linaro.org>
 From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Date: Mon, 22 Jan 2024 16:38:51 +0800
-Message-ID: <CAJRtX8SWyUJmiR-z108XcVY77kCXhz7E4=sLE0+gmzsXjipW9w@mail.gmail.com>
+Date: Mon, 22 Jan 2024 16:42:53 +0800
+Message-ID: <CAJRtX8R9bZZyU_6XZ+G_rctRu3TTEAUamVbq1h8q+Fzzd6SZiw@mail.gmail.com>
 Subject: Re: [PATCH v7 2/3] rtc: sophgo: add rtc support for Sophgo CV1800 SoC
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: alexandre.belloni@bootlin.com, robh+dt@kernel.org, 
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, robh+dt@kernel.org, 
 	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, chao.wei@sophgo.com, 
 	unicorn_wang@outlook.com, paul.walmsley@sifive.com, palmer@dabbelt.com, 
 	aou@eecs.berkeley.edu, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
@@ -86,93 +88,34 @@ Cc: alexandre.belloni@bootlin.com, robh+dt@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 22, 2024 at 4:29=E2=80=AFPM Krzysztof Kozlowski
+On Mon, Jan 22, 2024 at 4:37=E2=80=AFPM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 22/01/2024 09:06, Jingbao Qiu wrote:
-> > Implement the RTC driver for CV1800, which able to provide time alarm
-> > and calibrate functionality.
+> On 22/01/2024 09:34, Jingbao Qiu wrote:
+> > On Mon, Jan 22, 2024 at 4:17=E2=80=AFPM Alexandre Belloni
+> > <alexandre.belloni@bootlin.com> wrote:
+> >>
+> >> On 22/01/2024 16:06:30+0800, Jingbao Qiu wrote:
+> >>> Implement the RTC driver for CV1800, which able to provide time alarm
+> >>> and calibrate functionality.
+> >>>
+> >>> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+> >>> ---
+> >>>
+> >>> Depends on https://lore.kernel.org/all/IA1PR20MB4953C774D41EDF1EADB6E=
+C18BB6D2@IA1PR20MB4953.namprd20.prod.outlook.com/
+> >>
+> >> What is the dependency?
+> >>
 > >
-> > Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> > ---
-> >
-> > Depends on https://lore.kernel.org/all/IA1PR20MB4953C774D41EDF1EADB6EC1=
-8BB6D2@IA1PR20MB4953.namprd20.prod.outlook.com/
-> >
+> > Thank you, this driver requires support from the CLK driver.
 >
-> Why?
+> How? This is really unusual. Just to remind: we talk about build
+> dependencies. Other do not matter for new drivers, right? Otherwise what
+> is being broken and how it could be even broken?
 >
-> How could a RTC driver depend on clock driver or clock bindings? This
-> looks wrong and it prevents your driver being merged via easy path.
-
-Thanks,I will fix it.
-
->
-> > diff --git a/drivers/rtc/rtc-cv1800.c b/drivers/rtc/rtc-cv1800.c
-> > new file mode 100644
-> > index 000000000000..fbf2e575ea94
-> > --- /dev/null
-> > +++ b/drivers/rtc/rtc-cv1800.c
-> > @@ -0,0 +1,406 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * rtc-cv1800.c: RTC driver for Sophgo cv1800 RTC
-> > + *
-> > + * Author: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> > + */
-> > +#include <linux/kernel.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/module.h>
-> > +#include <linux/irq.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/rtc.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/mfd/syscon.h>
->
-> Drop
-
-Thanks, I will do that.
-
->
-> > +#include <linux/regmap.h>
-> > +#include <linux/of.h>
->
-> Keep the includes sorted, prefferably alphabetically.
-
-Thank you for your suggestion.I will do that.
-
->
-> ...
->
-> > +
-> > +static int cv1800_rtc_probe(struct platform_device *pdev)
-> > +{
-> > +     struct cv1800_rtc_priv *rtc;
-> > +     uint32_t ctrl_val;
-> > +     void __iomem *base;
-> > +     int ret;
-> > +
-> > +     rtc =3D devm_kzalloc(&pdev->dev, sizeof(struct cv1800_rtc_priv),
->
-> sizeof(*)
-
-I will do that.
-
->
-> > +                        GFP_KERNEL);
-> > +     if (!rtc)
-> > +             return -ENOMEM;
-> > +
-> > +     base =3D devm_platform_ioremap_resource(pdev, 0);
-> > +     if (IS_ERR(base))
-> > +             return PTR_ERR(base);
-> > +
-> > +     rtc->rtc_map =3D
->
-> Unneeded blank line. Don't wrap at =3D.
-
-Thanks, I will do that.
+yes, you're right. This is wrong, I will drop it.
 
 Best regards,
-Jingbao QIu
+Jingbao Qiu
 
