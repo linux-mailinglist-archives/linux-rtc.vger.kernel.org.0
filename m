@@ -1,127 +1,198 @@
-Return-Path: <linux-rtc+bounces-578-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-579-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9399838C47
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jan 2024 11:41:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C9C6838ECE
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jan 2024 13:51:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD6E3B237FF
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jan 2024 10:41:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A84A288859
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jan 2024 12:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CE945C905;
-	Tue, 23 Jan 2024 10:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA035EE6C;
+	Tue, 23 Jan 2024 12:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KCXB9rsP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIcjmVsX"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669E75C61E;
-	Tue, 23 Jan 2024 10:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3A91DFEF;
+	Tue, 23 Jan 2024 12:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706006455; cv=none; b=WySQau3SpO1JFSdP8x8cG2phUbhTRGQnmTV3LtNRwOHvIzB0zMu93WTv7vryIn46Xq3fEinWbDkJFGmmeM5uLI0Dx1UL4epjEj7WIpZJ2iI0vOsWWLCqkrQb9OrYW2Tbhr879aoetx207tmcdY9p4zEn/FQtxTbr4oUjVEXRq9Q=
+	t=1706014273; cv=none; b=mO4O1EA9m0xlEAj8Z5vOWeMSpwoavjJgEgQQHNxqLPMRTmQaMXbKIBR4ciLSIzEFtI0Fw/u0yYcfQAi7C5yh/hj8e+iQmsj1G4wl8qsNfWazOys78OZ79Huh5/CeBnInweZ38U3z69oWJDc/NSyaQpPR0QxZKkDcddmtxj3iVsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706006455; c=relaxed/simple;
-	bh=s4p4CLV+pTT8G1cNbeHX4mdCI5yB1F5H8tIRN0w1MxI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ERaMwDIOrmPhimRnQSYWKAt2LDiHad3S1SVBMYQAtZ9ckUf0F2VPKJTb7uSmeWHidi0ViwjHr/uDOQv89jxpVNyaKkRscl/3fcIYpw2Za0ct4/lahAc4BRMqQL18ibGA1+zdQ1JhSVvod1XEqjh+KR/02e+/Ds232BajtcRWfQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KCXB9rsP; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706006451;
-	bh=s4p4CLV+pTT8G1cNbeHX4mdCI5yB1F5H8tIRN0w1MxI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KCXB9rsPb1aJGlxX68Ab5Gb+R5dgLfA4hoWCkrUVDATQVt6rF8xnwh1l2wICT8cvQ
-	 bL6Mi2RnXULodReB52ZrM1ASZqBFAW9/4eSKLQTECXEH/a2Hp/WhX6Ocx4YCS5I07G
-	 GnEzZ0QXeMR4cLeM3JYDuTYLyezw6mQ+tOH3U3NsdPiilxFcljraNkuXIu0obmrGj6
-	 KXo+M1jRKkc8wkS8kDIpU7BtcmInaFlL2a3kmIrhfGvwTgq6janE1BSjDzMJauRL6R
-	 /q8omfi++AYEuaqECFFEfTlIgLm2E7JbUYQfB+r/5CHmpLHhQDHML9liBP8wWzOHCD
-	 Gz7EuP1GlqDHg==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B138737820A9;
-	Tue, 23 Jan 2024 10:40:50 +0000 (UTC)
-Message-ID: <6e2c7fed-0e61-41fe-8213-9c7ae483cfd7@collabora.com>
-Date: Tue, 23 Jan 2024 11:40:50 +0100
+	s=arc-20240116; t=1706014273; c=relaxed/simple;
+	bh=aqO7/NlNR2Dyi9b3rA/iwNcSpumpMNjCOitWZHC97Uc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=FLYUI97hXDH2dhoX5Hkx4LgNdo+dkVQNvE25PNGE1f5MXH9tsgR9eAk8JjplCNNJhLHCAOA8YK+YdFXnyB4EJh+flWk4LUpwiTL+hHFkBaVroubh4YGN70zFf2H8njH0Rkv3oKgEGJ4xWYQhtDVkyz6jFk09TV48tVXeVXNdHFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIcjmVsX; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2cddb0ee311so44750441fa.0;
+        Tue, 23 Jan 2024 04:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706014270; x=1706619070; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nJe/bb99wvZWtQpEHBH6bF+41ulPQ5p1NzMnmqiIsdI=;
+        b=PIcjmVsXp6xmvveZ1lApsE7CFfF3m/+PMuvkaZtPXGOWRnzYItSOI6Kx6wK/cN3arN
+         Joy+TJXV+Hj9dolHr922XaBr8AXKQD1aeN0R0SdJYHc3fMLIWmKg+bfHWgFTiLr5AOGl
+         u8l2qrCVmIn4gX/ZKZWk4morGJYqwpkBTpclYk9VIaZjaryNcIzvV0bDC/C1K8X+i4eL
+         AaXDsCpWUhZEQVUneJ8mb/t5QgHZ4Emj03a6BN/+F/uNK4Omm10u6grdVSrl+FCTewiY
+         vxH0Ce1Fk/GvdzZ6hx72tQktismZQhq0nVyXNLVakEW4sqT+armocwAP15chl4h7eUdQ
+         /yeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706014270; x=1706619070;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nJe/bb99wvZWtQpEHBH6bF+41ulPQ5p1NzMnmqiIsdI=;
+        b=ZNs9ks0K4ZQ0tVc7dV3n+qGIl5Onv/isupNmmRlbzAQjY3pSnY/2JZKnj73K0LTpi9
+         zLmiLlQnBC5vQ6wBYf2oPfs0Ob/CElVSqHjeiu8noo5VWn21cKOZJYidME1cDTNWW0Cg
+         85oYtUu5eIGor7gEaw2yzx6EGLSKWpZToF0xZPa89d3WFkLah57yWDIqyTEcUfY8xKrX
+         8Mf6axLiB8nf3KLIL9a6QuUdebnB8I+yj6fNfjlOHUpAvkCX+IyhdyhYQ0IDfWrU4Qk4
+         XSlN0m7HUrOsc0ARbVEKmR5vu3UvMeqR0nV/wY/wgHoQHNwk8QoQOxQOe447F//HNv+d
+         V2rg==
+X-Gm-Message-State: AOJu0Yy+7IGH30yTro6T73E6rAltTFzfzIQEs9C/zUmpax11zNjRW/rz
+	IIt3MTAxQdhyw7wznEzQpzcWzRfPeIdeZrb5L5hXY24ncWiHfIl8
+X-Google-Smtp-Source: AGHT+IE44jLIuMt0FErwF7fvN3/iEOcUP3ePoa0CnFnMxIeACCJzIuIjOLKh+Miwuc2mjnbUaKmN5Q==
+X-Received: by 2002:ac2:4642:0:b0:50e:6332:8083 with SMTP id s2-20020ac24642000000b0050e63328083mr1436862lfo.183.1706014269761;
+        Tue, 23 Jan 2024 04:51:09 -0800 (PST)
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id p6-20020a05640210c600b0055c500158b4sm1871944edu.23.2024.01.23.04.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jan 2024 04:51:09 -0800 (PST)
+From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Eddie Huang <eddie.huang@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] dt-bindings: rtc: convert MT7622 RTC to the json-schema
+Date: Tue, 23 Jan 2024 13:50:43 +0100
+Message-Id: <20240123125043.27192-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: rtc: convert MT2717 RTC to the json-schema
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Eddie Huang <eddie.huang@mediatek.com>, Sean Wang
- <sean.wang@mediatek.com>, Ran Bi <ran.bi@mediatek.com>,
- linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20240122124949.29577-1-zajec5@gmail.com>
- <1c4e14f7-ca34-4433-96cb-0ba6d6c6906d@gmail.com>
- <311fa703-7dbc-41d2-bfde-85dd7cb20657@gmail.com>
- <227a0fec-d295-45ea-8d65-3cb0a7ce1af5@linaro.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <227a0fec-d295-45ea-8d65-3cb0a7ce1af5@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Il 23/01/24 09:57, Krzysztof Kozlowski ha scritto:
-> On 22/01/2024 18:40, Rafał Miłecki wrote:
->> On 22.01.2024 14:19, Matthias Brugger wrote:
->>> On 22/01/2024 13:49, Rafał Miłecki wrote:
->>>> From: Rafał Miłecki <rafal@milecki.pl>
->>>>
->>>> This helps validating DTS files. Introduced changes:
->>>> 1. Reworded title
->>>> 2. Dropper redundant properties descriptions
->>>> 3. Added required #include and adjusted "reg" in example
->>>>
->>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->>>> ---
->>>>    .../bindings/rtc/mediatek,mt2712-rtc.yaml     | 39 +++++++++++++++++++
->>>>    .../devicetree/bindings/rtc/rtc-mt2712.txt    | 14 -------
->>>>    2 files changed, 39 insertions(+), 14 deletions(-)
->>>>    create mode 100644 Documentation/devicetree/bindings/rtc/mediatek,mt2712-rtc.yaml
->>>>    delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt2712.txt
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt2712-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt2712-rtc.yaml
->>>
->>> In this schema can easily fit "mediatek,mt7622-rtc", so how about renaming it and add reference for that RTC as well?
->>
->> I see your point but by looking at existing Linux drivers:
->> drivers/rtc/rtc-mt2712.c
->> drivers/rtc/rtc-mt7622.c
->> it seems like quite different hardware blocks.
->>
->> Different registers, different programming, clk in MT7622.
->>
->> Should they really share a YAML binding just because they use similar
->> properties?
-> 
-> Hardware aspect matters more, including features not yet present in the
-> binding, like some power on/off control. Different clock inputs is also
-> an argument.
-> 
+From: Rafał Miłecki <rafal@milecki.pl>
 
-I agree - those IPs are different, we should have two bindings for the two
-(very) different IP versions.
+This helps validating DTS files. Introduced changes:
+1. Reworded title
+2. Dropper redundant properties descriptions
+3. Added required #include-s and adjusted "reg" in example
 
-Cheers,
-Angelo
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../bindings/rtc/mediatek,mt7622-rtc.yaml     | 52 +++++++++++++++++++
+ .../devicetree/bindings/rtc/rtc-mt7622.txt    | 21 --------
+ 2 files changed, 52 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
+
+diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml
+new file mode 100644
+index 000000000000..e74dfc161cfc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/mediatek,mt7622-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek MT7622 on-SoC RTC
++
++allOf:
++  - $ref: rtc.yaml#
++
++maintainers:
++  - Sean Wang <sean.wang@mediatek.com>
++
++properties:
++  compatible:
++    items:
++      - const: mediatek,mt7622-rtc
++      - const: mediatek,soc-rtc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: rtc
++
++required:
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt7622-clk.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    rtc@10212800 {
++        compatible = "mediatek,mt7622-rtc", "mediatek,soc-rtc";
++        reg = <0x10212800 0x200>;
++        interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_LOW>;
++        clocks = <&topckgen CLK_TOP_RTC>;
++        clock-names = "rtc";
++    };
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt7622.txt b/Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
+deleted file mode 100644
+index 09fe8f51476f..000000000000
+--- a/Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
++++ /dev/null
+@@ -1,21 +0,0 @@
+-Device-Tree bindings for MediaTek SoC based RTC
+-
+-Required properties:
+-- compatible	    : Should be
+-			"mediatek,mt7622-rtc", "mediatek,soc-rtc" : for MT7622 SoC
+-- reg 		    : Specifies base physical address and size of the registers;
+-- interrupts	    : Should contain the interrupt for RTC alarm;
+-- clocks	    : Specifies list of clock specifiers, corresponding to
+-		      entries in clock-names property;
+-- clock-names	    : Should contain "rtc" entries
+-
+-Example:
+-
+-rtc: rtc@10212800 {
+-	compatible = "mediatek,mt7622-rtc",
+-		     "mediatek,soc-rtc";
+-	reg = <0 0x10212800 0 0x200>;
+-	interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_LOW>;
+-	clocks = <&topckgen CLK_TOP_RTC>;
+-	clock-names = "rtc";
+-};
+-- 
+2.35.3
 
 
