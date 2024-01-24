@@ -1,202 +1,210 @@
-Return-Path: <linux-rtc+bounces-580-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-581-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BF6C839F1F
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jan 2024 03:29:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D1F839F4C
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jan 2024 03:40:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15E3E1F2619E
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jan 2024 02:29:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6AD0B242CC
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jan 2024 02:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938F820E6;
-	Wed, 24 Jan 2024 02:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DAD4684;
+	Wed, 24 Jan 2024 02:40:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AuaFqQcd"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VfoKY0XD"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C447C1FDC;
-	Wed, 24 Jan 2024 02:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7097A3224;
+	Wed, 24 Jan 2024 02:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706063125; cv=none; b=LYjVpLr6V3O7Il58yyYWFQl8tKZNp4x7cvF9GW/xw2UoqYbDjB262Qng4+T9Qllc0HHkfQwqBbvbFld1qVwFR6ICM1OlIy0hHdefRhTTGJ6FWTTZltuCFuPt3PI7Q88spNHYyZckjhQKO1/p70aZQFf/bhI2+JjW9pgSUEbIs6A=
+	t=1706064029; cv=none; b=bKsIEWXq1Jz8vjjxeAkJ8r/2FKhJqjnVsv6ghenY0qFsnflsIVA3qRBO2NOxnSkBQeLLJMsamkiZMmUOiVVCdxPDycEdCchd+ak3qY2pImPUCON1OrdJlVK1Iqxwu3UbuxXxl1JFm92VDhjWZE5gqCsN/xfJasouinwDTh4t83s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706063125; c=relaxed/simple;
-	bh=hFIfrzWCPj9nLt0OgteJJNKztr2flUthH/Xr/Prkdyw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OlAsRHA8gR6Ce3ah6BWMxJ1KfXs5zD8nmJ9vmKSuFJoyhKKQenSHFvB4uGz4dt4pz92LGEWfMo9lNhjoPwTYsN4QvbV9hmtzflkF2Xa7sunL9qpIRpHPPVyZsipIb0U1QpIkJbT0+xgcTN0nwx6R0HWyTT1PM59Jb13yOSHuiwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AuaFqQcd; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40O05vYi005756;
-	Wed, 24 Jan 2024 02:25:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=huc3944qrFK6MGxccYFPxDHeN84EgsRy740zHLv+jlE=; b=Au
-	aFqQcdEzgY5Msweg0QGAnrON2S8w2ag4kDduobPbzUdRbZJ8euz983IRMsV8zI99
-	x9/JY+Yw3MPlCSKcQQoaP3LsviinAxTFSBtetOnGXxsjvn0rEA75jJkNNRWB+O7m
-	fEXX31+L/VcrZgqJtzTG/ma6RbSRDgiUBns5Kltt89jRj5GchP+mMfWnumKrJWYN
-	AL+ez+qgQJgWn0BIDi23Xtx3IrqbkGwiVdPedt3QGr/wiAPAff+5QjWXeREj8MbO
-	taKR90zDeMZIssbESNNsUP+reFhzRVhqH5N680+u3AKhqpKdgYhH3igu7UEZibbS
-	rIFAXPc+bSkj3ZGfTt6g==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vtmhr0jj1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 02:25:13 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40O2PCZU032565
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 02:25:12 GMT
-Received: from jianbinz-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 23 Jan 2024 18:25:10 -0800
-From: jianbinz <quic_jianbinz@quicinc.com>
-To: <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
-CC: jianbinz <quic_jianbinz@quicinc.com>, <linux-rtc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [Resend PATCH v2 1/1] rtc: rtc-pm8xxx: Retrigger RTC alarm if it's fired
-Date: Wed, 24 Jan 2024 10:24:43 +0800
-Message-ID: <20240124022443.21867-1-quic_jianbinz@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1706064029; c=relaxed/simple;
+	bh=7vsPI7w1YMe/fesVR2Tr+nfZcMfZrfDYr/O4D8VfTLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=shGj09JLme6fu8BVYtUivRbLnCWtInE1pfCiM7ehxwhYGKTqktZ9ugfJ6WQ98FROphCanXyOuRTvb3RreYfub9i1iUtYO/Qb3kJdlbMxPaFBTkh+Y8fFGG63Br02+QC3zKiWjFnO5nBhb7Qiq0LAgbR3N+I5y739eUddJR+nR34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VfoKY0XD; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1644AE0005;
+	Wed, 24 Jan 2024 02:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1706064024;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TGPV8qP/hkyaGbA0vNDa6zhWfSWvSFrWaGiwTw++pO4=;
+	b=VfoKY0XDroy7i+8VLvvFsMTqiG5oYzqUwFZIxhn6aaCvEKMlU+D3iYfDhE6lA1l5yD87j/
+	PN9iTmb7KXD1OPCbT6k5fE+JeTh5JFx5ZW9G2eQAT+DEuZXVgRNQociX/0kICH1Ty/DTD9
+	5gd8OO1rnLSO9U1Cyva4DuuQN9rDnMxOWUsTQ7f42URiGuyY4UCtGvmbB8NcBf5Sj4rrUq
+	aMGhgIdKWQSsbZz+KTxzvP7+QXNX+4MkKIm1xxRLgljwSYwa/PBSPLCPKf1up3ZzjNIvFG
+	S+ddwbjo8mpZhlSaBg4X2VXiIaWTRkMYVYgl27oIyPSTlNRpFUbZcfqLb6Xelg==
+Date: Wed, 24 Jan 2024 03:40:23 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: jianbinz <quic_jianbinz@quicinc.com>
+Cc: a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [Resend PATCH v2 1/1] rtc: rtc-pm8xxx: Retrigger RTC alarm if
+ it's fired
+Message-ID: <20240124024023df15ef6e@mail.local>
+References: <20240124022443.21867-1-quic_jianbinz@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ISgVKRBqUTPj8h1EtrpYLOcxhF2j_Sxv
-X-Proofpoint-GUID: ISgVKRBqUTPj8h1EtrpYLOcxhF2j_Sxv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-23_15,2024-01-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 mlxlogscore=898 mlxscore=0 bulkscore=0 phishscore=0
- malwarescore=0 adultscore=0 impostorscore=0 priorityscore=1501
- clxscore=1011 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2401190000 definitions=main-2401240016
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240124022443.21867-1-quic_jianbinz@quicinc.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-If the alarm is triggered before the driver gets probed, the alarm
-interrupt will be missed and it won't be detected, and the stale
-alarm settings will be still retained because of not being cleared.
-Check this condition during driver probe, retrigger the alarm and
-clear the settings manually if it's such case.
+Hello,
 
-Changes in v2:
-*Adapt the V1 patch according to the newest rtc-pm8xxx
+On 24/01/2024 10:24:43+0800, jianbinz wrote:
+> If the alarm is triggered before the driver gets probed, the alarm
+> interrupt will be missed and it won't be detected, and the stale
+> alarm settings will be still retained because of not being cleared.
+> Check this condition during driver probe, retrigger the alarm and
+> clear the settings manually if it's such case.
+> 
+> Changes in v2:
+> *Adapt the V1 patch according to the newest rtc-pm8xxx
+> 
+> Changes in v1:
+> *During driver probe: read ALARM_EN, read ALARM_DATA, read RTC_RDATA,
+> if (ALARM_DATA < RTC_DATA), Trigger the alarm event and clear the alarm settins
+> Link to v1:https://lore.kernel.org/linux-rtc/20220321090514.4523-1-quic_jianbinz@quicinc.com/
+> 
+> Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
+> ---
+>  drivers/rtc/rtc-pm8xxx.c | 57 +++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 53 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+> index f6b779c12ca7..eac4e7f23aaa 100644
+> --- a/drivers/rtc/rtc-pm8xxx.c
+> +++ b/drivers/rtc/rtc-pm8xxx.c
+> @@ -309,21 +309,33 @@ static int pm8xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+>  	return 0;
+>  }
+>  
+> +static int pm8xxx_rtc_read_alarm_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
+> +{
+> +	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+> +	u8 value[NUM_8_BIT_RTC_REGS];
+> +	int rc;
+> +
+> +	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
+> +	if (rc)
+> +		return rc;
+> +
+> +	*secs = get_unaligned_le32(value);
+> +
+> +	return 0;
+> +}
+> +
+>  static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+>  {
+>  	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+>  	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+> -	u8 value[NUM_8_BIT_RTC_REGS];
+>  	unsigned int ctrl_reg;
+>  	u32 secs;
+>  	int rc;
+>  
+> -	rc = regmap_bulk_read(rtc_dd->regmap, regs->alarm_rw, value,
+> -			      sizeof(value));
+> +	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &secs);
+>  	if (rc)
+>  		return rc;
+>  
+> -	secs = get_unaligned_le32(value);
+>  	secs += rtc_dd->offset;
+>  	rtc_time64_to_tm(secs, &alarm->time);
+>  
+> @@ -398,6 +410,39 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +/*
+> + * Trigger the alarm event and clear the alarm settings
+> + * if the alarm data has been behind the RTC data which
+> + * means the alarm has been triggered before the driver
+> + * is probed.
+> + */
+> +static int pm8xxx_rtc_init_alarm(struct pm8xxx_rtc *rtc_dd)
+> +{
+> +	int rc;
+> +	u32 alarm_sec, rtc_sec;
+> +	unsigned int ctrl_reg, alarm_en;
+> +	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+> +
+> +	rc = pm8xxx_rtc_read_raw(rtc_dd, &rtc_sec);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &alarm_sec);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
+> +	if (rc)
+> +		return rc;
+> +
+> +	alarm_en = !!(ctrl_reg & PM8xxx_RTC_ALARM_ENABLE);
+> +
+> +	if (alarm_en && rtc_sec >= alarm_sec)
+> +		pm8xxx_alarm_trigger(0, rtc_dd);
 
-Changes in v1:
-*During driver probe: read ALARM_EN, read ALARM_DATA, read RTC_RDATA,
-if (ALARM_DATA < RTC_DATA), Trigger the alarm event and clear the alarm settins
-Link to v1:https://lore.kernel.org/linux-rtc/20220321090514.4523-1-quic_jianbinz@quicinc.com/
 
-Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
----
- drivers/rtc/rtc-pm8xxx.c | 57 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 53 insertions(+), 4 deletions(-)
+I have not been replying because I had to go back to the original
+description of the problem which you are not linking here.
 
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index f6b779c12ca7..eac4e7f23aaa 100644
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -309,21 +309,33 @@ static int pm8xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
- 	return 0;
- }
- 
-+static int pm8xxx_rtc_read_alarm_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
-+{
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+	u8 value[NUM_8_BIT_RTC_REGS];
-+	int rc;
-+
-+	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
-+	if (rc)
-+		return rc;
-+
-+	*secs = get_unaligned_le32(value);
-+
-+	return 0;
-+}
-+
- static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
- {
- 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
--	u8 value[NUM_8_BIT_RTC_REGS];
- 	unsigned int ctrl_reg;
- 	u32 secs;
- 	int rc;
- 
--	rc = regmap_bulk_read(rtc_dd->regmap, regs->alarm_rw, value,
--			      sizeof(value));
-+	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &secs);
- 	if (rc)
- 		return rc;
- 
--	secs = get_unaligned_le32(value);
- 	secs += rtc_dd->offset;
- 	rtc_time64_to_tm(secs, &alarm->time);
- 
-@@ -398,6 +410,39 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+/*
-+ * Trigger the alarm event and clear the alarm settings
-+ * if the alarm data has been behind the RTC data which
-+ * means the alarm has been triggered before the driver
-+ * is probed.
-+ */
-+static int pm8xxx_rtc_init_alarm(struct pm8xxx_rtc *rtc_dd)
-+{
-+	int rc;
-+	u32 alarm_sec, rtc_sec;
-+	unsigned int ctrl_reg, alarm_en;
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+
-+	rc = pm8xxx_rtc_read_raw(rtc_dd, &rtc_sec);
-+	if (rc)
-+		return rc;
-+
-+	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &alarm_sec);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
-+	if (rc)
-+		return rc;
-+
-+	alarm_en = !!(ctrl_reg & PM8xxx_RTC_ALARM_ENABLE);
-+
-+	if (alarm_en && rtc_sec >= alarm_sec)
-+		pm8xxx_alarm_trigger(0, rtc_dd);
-+
-+	return 0;
-+}
-+
- static int pm8xxx_rtc_enable(struct pm8xxx_rtc *rtc_dd)
- {
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-@@ -527,6 +572,10 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 	if (rc)
- 		return rc;
- 
-+	rc = pm8xxx_rtc_init_alarm(rtc_dd);
-+	if (rc)
-+		return rc;
-+
- 	return 0;
- }
- 
+Anyway, all of this doesn't do want you explain, you are looking at
+whether the alarm is enabled but not whether it has actually
+triggered...
+
+> +
+> +	return 0;
+> +}
+> +
+>  static int pm8xxx_rtc_enable(struct pm8xxx_rtc *rtc_dd)
+>  {
+>  	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+> @@ -527,6 +572,10 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+>  	if (rc)
+>  		return rc;
+>  
+> +	rc = pm8xxx_rtc_init_alarm(rtc_dd);
+
+...But isn't it useless? I guess that what you can do and what I was
+referring to in my first reply is clear the interrupt in your probe
+unconditionally, here:
+
+rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl2, PM8xxx_RTC_ALARM_CLEAR, 0);
+
+That should do it just fine. There is no point in calling
+pm8xxx_alarm_trigger because there is no chance that userspace is ready
+to handle the rtc update.
+
+> +	if (rc)
+> +		return rc;
+> +
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.17.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
