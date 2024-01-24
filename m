@@ -1,198 +1,202 @@
-Return-Path: <linux-rtc+bounces-579-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-580-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C9C6838ECE
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jan 2024 13:51:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BF6C839F1F
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jan 2024 03:29:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A84A288859
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jan 2024 12:51:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15E3E1F2619E
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jan 2024 02:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA035EE6C;
-	Tue, 23 Jan 2024 12:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938F820E6;
+	Wed, 24 Jan 2024 02:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIcjmVsX"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AuaFqQcd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3A91DFEF;
-	Tue, 23 Jan 2024 12:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C447C1FDC;
+	Wed, 24 Jan 2024 02:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706014273; cv=none; b=mO4O1EA9m0xlEAj8Z5vOWeMSpwoavjJgEgQQHNxqLPMRTmQaMXbKIBR4ciLSIzEFtI0Fw/u0yYcfQAi7C5yh/hj8e+iQmsj1G4wl8qsNfWazOys78OZ79Huh5/CeBnInweZ38U3z69oWJDc/NSyaQpPR0QxZKkDcddmtxj3iVsU=
+	t=1706063125; cv=none; b=LYjVpLr6V3O7Il58yyYWFQl8tKZNp4x7cvF9GW/xw2UoqYbDjB262Qng4+T9Qllc0HHkfQwqBbvbFld1qVwFR6ICM1OlIy0hHdefRhTTGJ6FWTTZltuCFuPt3PI7Q88spNHYyZckjhQKO1/p70aZQFf/bhI2+JjW9pgSUEbIs6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706014273; c=relaxed/simple;
-	bh=aqO7/NlNR2Dyi9b3rA/iwNcSpumpMNjCOitWZHC97Uc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=FLYUI97hXDH2dhoX5Hkx4LgNdo+dkVQNvE25PNGE1f5MXH9tsgR9eAk8JjplCNNJhLHCAOA8YK+YdFXnyB4EJh+flWk4LUpwiTL+hHFkBaVroubh4YGN70zFf2H8njH0Rkv3oKgEGJ4xWYQhtDVkyz6jFk09TV48tVXeVXNdHFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIcjmVsX; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2cddb0ee311so44750441fa.0;
-        Tue, 23 Jan 2024 04:51:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706014270; x=1706619070; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nJe/bb99wvZWtQpEHBH6bF+41ulPQ5p1NzMnmqiIsdI=;
-        b=PIcjmVsXp6xmvveZ1lApsE7CFfF3m/+PMuvkaZtPXGOWRnzYItSOI6Kx6wK/cN3arN
-         Joy+TJXV+Hj9dolHr922XaBr8AXKQD1aeN0R0SdJYHc3fMLIWmKg+bfHWgFTiLr5AOGl
-         u8l2qrCVmIn4gX/ZKZWk4morGJYqwpkBTpclYk9VIaZjaryNcIzvV0bDC/C1K8X+i4eL
-         AaXDsCpWUhZEQVUneJ8mb/t5QgHZ4Emj03a6BN/+F/uNK4Omm10u6grdVSrl+FCTewiY
-         vxH0Ce1Fk/GvdzZ6hx72tQktismZQhq0nVyXNLVakEW4sqT+armocwAP15chl4h7eUdQ
-         /yeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706014270; x=1706619070;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nJe/bb99wvZWtQpEHBH6bF+41ulPQ5p1NzMnmqiIsdI=;
-        b=ZNs9ks0K4ZQ0tVc7dV3n+qGIl5Onv/isupNmmRlbzAQjY3pSnY/2JZKnj73K0LTpi9
-         zLmiLlQnBC5vQ6wBYf2oPfs0Ob/CElVSqHjeiu8noo5VWn21cKOZJYidME1cDTNWW0Cg
-         85oYtUu5eIGor7gEaw2yzx6EGLSKWpZToF0xZPa89d3WFkLah57yWDIqyTEcUfY8xKrX
-         8Mf6axLiB8nf3KLIL9a6QuUdebnB8I+yj6fNfjlOHUpAvkCX+IyhdyhYQ0IDfWrU4Qk4
-         XSlN0m7HUrOsc0ARbVEKmR5vu3UvMeqR0nV/wY/wgHoQHNwk8QoQOxQOe447F//HNv+d
-         V2rg==
-X-Gm-Message-State: AOJu0Yy+7IGH30yTro6T73E6rAltTFzfzIQEs9C/zUmpax11zNjRW/rz
-	IIt3MTAxQdhyw7wznEzQpzcWzRfPeIdeZrb5L5hXY24ncWiHfIl8
-X-Google-Smtp-Source: AGHT+IE44jLIuMt0FErwF7fvN3/iEOcUP3ePoa0CnFnMxIeACCJzIuIjOLKh+Miwuc2mjnbUaKmN5Q==
-X-Received: by 2002:ac2:4642:0:b0:50e:6332:8083 with SMTP id s2-20020ac24642000000b0050e63328083mr1436862lfo.183.1706014269761;
-        Tue, 23 Jan 2024 04:51:09 -0800 (PST)
-Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05640210c600b0055c500158b4sm1871944edu.23.2024.01.23.04.51.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 04:51:09 -0800 (PST)
-From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Eddie Huang <eddie.huang@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: rtc: convert MT7622 RTC to the json-schema
-Date: Tue, 23 Jan 2024 13:50:43 +0100
-Message-Id: <20240123125043.27192-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.35.3
+	s=arc-20240116; t=1706063125; c=relaxed/simple;
+	bh=hFIfrzWCPj9nLt0OgteJJNKztr2flUthH/Xr/Prkdyw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OlAsRHA8gR6Ce3ah6BWMxJ1KfXs5zD8nmJ9vmKSuFJoyhKKQenSHFvB4uGz4dt4pz92LGEWfMo9lNhjoPwTYsN4QvbV9hmtzflkF2Xa7sunL9qpIRpHPPVyZsipIb0U1QpIkJbT0+xgcTN0nwx6R0HWyTT1PM59Jb13yOSHuiwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AuaFqQcd; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40O05vYi005756;
+	Wed, 24 Jan 2024 02:25:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=huc3944qrFK6MGxccYFPxDHeN84EgsRy740zHLv+jlE=; b=Au
+	aFqQcdEzgY5Msweg0QGAnrON2S8w2ag4kDduobPbzUdRbZJ8euz983IRMsV8zI99
+	x9/JY+Yw3MPlCSKcQQoaP3LsviinAxTFSBtetOnGXxsjvn0rEA75jJkNNRWB+O7m
+	fEXX31+L/VcrZgqJtzTG/ma6RbSRDgiUBns5Kltt89jRj5GchP+mMfWnumKrJWYN
+	AL+ez+qgQJgWn0BIDi23Xtx3IrqbkGwiVdPedt3QGr/wiAPAff+5QjWXeREj8MbO
+	taKR90zDeMZIssbESNNsUP+reFhzRVhqH5N680+u3AKhqpKdgYhH3igu7UEZibbS
+	rIFAXPc+bSkj3ZGfTt6g==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vtmhr0jj1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 02:25:13 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40O2PCZU032565
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 02:25:12 GMT
+Received: from jianbinz-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 23 Jan 2024 18:25:10 -0800
+From: jianbinz <quic_jianbinz@quicinc.com>
+To: <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
+CC: jianbinz <quic_jianbinz@quicinc.com>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [Resend PATCH v2 1/1] rtc: rtc-pm8xxx: Retrigger RTC alarm if it's fired
+Date: Wed, 24 Jan 2024 10:24:43 +0800
+Message-ID: <20240124022443.21867-1-quic_jianbinz@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ISgVKRBqUTPj8h1EtrpYLOcxhF2j_Sxv
+X-Proofpoint-GUID: ISgVKRBqUTPj8h1EtrpYLOcxhF2j_Sxv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-23_15,2024-01-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 mlxlogscore=898 mlxscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 adultscore=0 impostorscore=0 priorityscore=1501
+ clxscore=1011 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2401190000 definitions=main-2401240016
 
-From: Rafał Miłecki <rafal@milecki.pl>
+If the alarm is triggered before the driver gets probed, the alarm
+interrupt will be missed and it won't be detected, and the stale
+alarm settings will be still retained because of not being cleared.
+Check this condition during driver probe, retrigger the alarm and
+clear the settings manually if it's such case.
 
-This helps validating DTS files. Introduced changes:
-1. Reworded title
-2. Dropper redundant properties descriptions
-3. Added required #include-s and adjusted "reg" in example
+Changes in v2:
+*Adapt the V1 patch according to the newest rtc-pm8xxx
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Changes in v1:
+*During driver probe: read ALARM_EN, read ALARM_DATA, read RTC_RDATA,
+if (ALARM_DATA < RTC_DATA), Trigger the alarm event and clear the alarm settins
+Link to v1:https://lore.kernel.org/linux-rtc/20220321090514.4523-1-quic_jianbinz@quicinc.com/
+
+Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
 ---
- .../bindings/rtc/mediatek,mt7622-rtc.yaml     | 52 +++++++++++++++++++
- .../devicetree/bindings/rtc/rtc-mt7622.txt    | 21 --------
- 2 files changed, 52 insertions(+), 21 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml
- delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
+ drivers/rtc/rtc-pm8xxx.c | 57 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 53 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml
-new file mode 100644
-index 000000000000..e74dfc161cfc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/mediatek,mt7622-rtc.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/mediatek,mt7622-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+index f6b779c12ca7..eac4e7f23aaa 100644
+--- a/drivers/rtc/rtc-pm8xxx.c
++++ b/drivers/rtc/rtc-pm8xxx.c
+@@ -309,21 +309,33 @@ static int pm8xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	return 0;
+ }
+ 
++static int pm8xxx_rtc_read_alarm_raw(struct pm8xxx_rtc *rtc_dd, u32 *secs)
++{
++	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
++	u8 value[NUM_8_BIT_RTC_REGS];
++	int rc;
 +
-+title: MediaTek MT7622 on-SoC RTC
++	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
++	if (rc)
++		return rc;
 +
-+allOf:
-+  - $ref: rtc.yaml#
++	*secs = get_unaligned_le32(value);
 +
-+maintainers:
-+  - Sean Wang <sean.wang@mediatek.com>
++	return 0;
++}
 +
-+properties:
-+  compatible:
-+    items:
-+      - const: mediatek,mt7622-rtc
-+      - const: mediatek,soc-rtc
+ static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ {
+ 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+ 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+-	u8 value[NUM_8_BIT_RTC_REGS];
+ 	unsigned int ctrl_reg;
+ 	u32 secs;
+ 	int rc;
+ 
+-	rc = regmap_bulk_read(rtc_dd->regmap, regs->alarm_rw, value,
+-			      sizeof(value));
++	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &secs);
+ 	if (rc)
+ 		return rc;
+ 
+-	secs = get_unaligned_le32(value);
+ 	secs += rtc_dd->offset;
+ 	rtc_time64_to_tm(secs, &alarm->time);
+ 
+@@ -398,6 +410,39 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
++/*
++ * Trigger the alarm event and clear the alarm settings
++ * if the alarm data has been behind the RTC data which
++ * means the alarm has been triggered before the driver
++ * is probed.
++ */
++static int pm8xxx_rtc_init_alarm(struct pm8xxx_rtc *rtc_dd)
++{
++	int rc;
++	u32 alarm_sec, rtc_sec;
++	unsigned int ctrl_reg, alarm_en;
++	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
 +
-+  reg:
-+    maxItems: 1
++	rc = pm8xxx_rtc_read_raw(rtc_dd, &rtc_sec);
++	if (rc)
++		return rc;
 +
-+  interrupts:
-+    maxItems: 1
++	rc = pm8xxx_rtc_read_alarm_raw(rtc_dd, &alarm_sec);
++	if (rc)
++		return rc;
 +
-+  clocks:
-+    maxItems: 1
++	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
++	if (rc)
++		return rc;
 +
-+  clock-names:
-+    const: rtc
++	alarm_en = !!(ctrl_reg & PM8xxx_RTC_ALARM_ENABLE);
 +
-+required:
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
++	if (alarm_en && rtc_sec >= alarm_sec)
++		pm8xxx_alarm_trigger(0, rtc_dd);
 +
-+unevaluatedProperties: false
++	return 0;
++}
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt7622-clk.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
+ static int pm8xxx_rtc_enable(struct pm8xxx_rtc *rtc_dd)
+ {
+ 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+@@ -527,6 +572,10 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
+ 
++	rc = pm8xxx_rtc_init_alarm(rtc_dd);
++	if (rc)
++		return rc;
 +
-+    rtc@10212800 {
-+        compatible = "mediatek,mt7622-rtc", "mediatek,soc-rtc";
-+        reg = <0x10212800 0x200>;
-+        interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_LOW>;
-+        clocks = <&topckgen CLK_TOP_RTC>;
-+        clock-names = "rtc";
-+    };
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt7622.txt b/Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
-deleted file mode 100644
-index 09fe8f51476f..000000000000
---- a/Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Device-Tree bindings for MediaTek SoC based RTC
--
--Required properties:
--- compatible	    : Should be
--			"mediatek,mt7622-rtc", "mediatek,soc-rtc" : for MT7622 SoC
--- reg 		    : Specifies base physical address and size of the registers;
--- interrupts	    : Should contain the interrupt for RTC alarm;
--- clocks	    : Specifies list of clock specifiers, corresponding to
--		      entries in clock-names property;
--- clock-names	    : Should contain "rtc" entries
--
--Example:
--
--rtc: rtc@10212800 {
--	compatible = "mediatek,mt7622-rtc",
--		     "mediatek,soc-rtc";
--	reg = <0 0x10212800 0 0x200>;
--	interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_LOW>;
--	clocks = <&topckgen CLK_TOP_RTC>;
--	clock-names = "rtc";
--};
+ 	return 0;
+ }
+ 
 -- 
-2.35.3
+2.17.1
 
 
