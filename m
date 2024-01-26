@@ -1,120 +1,176 @@
-Return-Path: <linux-rtc+bounces-585-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-586-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4389C83D27E
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jan 2024 03:22:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E0B483D54B
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jan 2024 10:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F37F728BA03
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jan 2024 02:22:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71F741F2680A
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jan 2024 09:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E63B8BF3;
-	Fri, 26 Jan 2024 02:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEAEC14277;
+	Fri, 26 Jan 2024 07:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGB82Fq9"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177AA15B7
-	for <linux-rtc@vger.kernel.org>; Fri, 26 Jan 2024 02:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2507D11CB9;
+	Fri, 26 Jan 2024 07:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706235750; cv=none; b=iWNlH1zjZq8iWdxoNV6bGVsmRy4otqQkVOqBmMObcODBGeNvJ9u6PnHx3repj/HTEo4XyxrsjMj0YR7/5yJ/kqzY5OCtLwhFzgQQ6N2BTxykF7xL/A9IuX4q/Y3633DYAtFsJTNvAOeGEd18iUmeAIx4OcQsvGj1q0n3p5RJUZc=
+	t=1706255307; cv=none; b=EGHmDGeN5DTpLF9tJ14S0R0PMMf2P9m204UoWXF1LTslhqrl4T1BnmDHgKVnLSE7f0chKfc3S42tjIAmfHV+0fqcU1FEhgFn5kDu844P/gbnJuPwLtM+LtKkUnmuBXeiopuxAdTqMkOK1j4URYgG/lvvZqDAVLVFhXQTpMVy/2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706235750; c=relaxed/simple;
-	bh=cgBR38TJwFWOrst3omJ+4iSijSjOLH9MK/17RMaPCGc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=o10lGJcxn3UuPpvbN4zZ6c/uobdO0wIMiw2EgG2SR0DNN91SfgqfVnFVoyqxEgjEw6wdfjaMNGif7deXz8dxuT27aYARPZbNTyQCULUKqJpcN5RHYv2b/YgxhWyrU83vWz0kGWN1qrhEdVP7fyr+CySy0L8PxHrpDPDl/v1mbcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (unknown [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EF52D2C1077;
-	Fri, 26 Jan 2024 15:22:16 +1300 (NZDT)
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65b317580001>; Fri, 26 Jan 2024 15:22:16 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Fri, 26 Jan 2024 15:22:16 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.040; Fri, 26 Jan 2024 15:22:16 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Ibrahim Tilki <Ibrahim.Tilki@analog.com>, "a.zummo@towertech.it"
-	<a.zummo@towertech.it>, "alexandre.belloni@bootlin.com"
-	<alexandre.belloni@bootlin.com>, "jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@roeck-us.net" <linux@roeck-us.net>, "robh+dt@kernel.org"
-	<robh+dt@kernel.org>, "krzysztof.kozlowski+dt@linaro.org"
-	<krzysztof.kozlowski+dt@linaro.org>
-CC: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+	s=arc-20240116; t=1706255307; c=relaxed/simple;
+	bh=nYaM+eFCc2CUTL1AfV7wPYK+r1bZG5+OH4v+qgvzIGQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VgMERGEn28bgZmv/5Yc1T49yMS57cAfQe6akDHyR6FGnbVQSIoZNcEBqkgVUxu0m8VKImdGYr/wOyAIoe/I6GikRe0ugVVlQDu2UEIyAu65ubV90ikwoRM1j5va4tRY9Ydlmdynpkg6U3cRU9qJUoomaniX2BKHswPJN8THWyEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jGB82Fq9; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2cf205dc075so654271fa.2;
+        Thu, 25 Jan 2024 23:48:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706255304; x=1706860104; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nYaM+eFCc2CUTL1AfV7wPYK+r1bZG5+OH4v+qgvzIGQ=;
+        b=jGB82Fq9GCLsifxulBLtrdJQQAgit0vmdVtEkQ4yiwvvoZp7P5c6S7jpuW41xJkiLB
+         Zjcpc85kMKORX55UjDpdjMgT8p59Hp1hvu3IeHpjJW/LKP68w/1hQT8EAHTZFPx+z1lK
+         imaIBoOjmdeEN7lZKKQffCiLp20idLiVQZXz4BZbloxJhE7uF7e37xXpa8kSBsinnThB
+         QrUea/oj0elDE1KTw7IDXGxPRLO1JLK8+0ujpzmYAbauu9u+/60iRuGpUJJwUdaBHmyH
+         h21IibJV2skoPVeECy925ubaPIOjBAq+3s2x5cHkzQ+8fvRf7lj9p/jav+ou4ikWAZ8F
+         7l9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706255304; x=1706860104;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nYaM+eFCc2CUTL1AfV7wPYK+r1bZG5+OH4v+qgvzIGQ=;
+        b=v8XdcvzaqYh1Gcj23GOq3BE0/FMOq7Pi9RApEzsF5i9fWJcf95BzWkhB93d51WJhMX
+         j5wFZo7WqkHUO+JuVZhKwEpFKPCvSRzaDf3eGh3opu3ve20kWMFO552RTPIDT3SAnqjF
+         Uaq12NKrSd2JA4lNPRu0A2RASbGaziXDW83kaUe1ZHVzgv2zjyTcKnGIXbZK1Zx15RVq
+         fnCAG56eAkpzHZz+wTDySS+KCGPJD62pgkpqTQDj/HeOa5lmZuWx2erOgZPcL9AyBaj6
+         LG6HOuuf8Ll/Fa6F/WTx2fApNPU74ZnOldLM9wmw7bjK+BD2b2aAml9JGl7qEOvub6G8
+         EItg==
+X-Gm-Message-State: AOJu0YyAnQ6cIqvHIJMcPVyNr6rVkhWR+ldoxEDAa/IgUJWwt+zlytOK
+	ta5MrmBRD0Lo4SuUZ8h4DjZ6TAHBFpbHXs8v7Wwkvc75+fyLDi1h
+X-Google-Smtp-Source: AGHT+IEe5J4EYeLJ8Vv/ijVi4P+M0YFf3nSnwunChGQtF21FjqrjDnRudXi7kRj+KYCOKUAaQEeS3w==
+X-Received: by 2002:a2e:8715:0:b0:2cf:495a:1396 with SMTP id m21-20020a2e8715000000b002cf495a1396mr185263lji.17.1706255303652;
+        Thu, 25 Jan 2024 23:48:23 -0800 (PST)
+Received: from ?IPv6:2003:f6:ef1b:2000:15d4:fc17:481e:8afe? (p200300f6ef1b200015d4fc17481e8afe.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:15d4:fc17:481e:8afe])
+        by smtp.gmail.com with ESMTPSA id l30-20020a50d6de000000b0055c875c2095sm330324edj.96.2024.01.25.23.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 23:48:23 -0800 (PST)
+Message-ID: <1b42866bb6f05b7d68e9b8304e42359fccdf2bad.camel@gmail.com>
 Subject: Re: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
-Thread-Topic: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
-Thread-Index: AQHaT/57pfs9+wriS028zs2/xPWJRw==
-Date: Fri, 26 Jan 2024 02:22:16 +0000
-Message-ID: <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>, Ibrahim Tilki
+ <Ibrahim.Tilki@analog.com>, "a.zummo@towertech.it" <a.zummo@towertech.it>, 
+ "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+ "jdelvare@suse.com" <jdelvare@suse.com>,  "linux@roeck-us.net"
+ <linux@roeck-us.net>, "robh+dt@kernel.org" <robh+dt@kernel.org>, 
+ "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>
+Cc: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>, "linux-hwmon@vger.kernel.org"
+	 <linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
+	 <devicetree@vger.kernel.org>
+Date: Fri, 26 Jan 2024 08:51:39 +0100
+In-Reply-To: <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
 References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
-In-Reply-To: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DFAEA80C4FBAF146B167D37EF2B114EB@atlnz.lc>
-Content-Transfer-Encoding: base64
+	 <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=LZFCFQXi c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dEuoMetlWLkA:10 a=QyXUC8HyAAAA:8 a=y9Ms7NjFG32jJv2empEA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
 
-SGkgQWxsLA0KDQpPbiA0LzA0LzIzIDAzOjQzLCBJYnJhaGltIFRpbGtpIHdyb3RlOg0KPiBjaGFu
-Z2Vsb2c6DQo+IHNpbmNlIHY1Og0KPiAgICAtIGR0LWJpbmRpbmc6IGFkZCBlbnVtIHZhbHVlICIy
-IiB0byBhdXgtdm9sdGFnZS1jaGFyZ2FibGUNCj4gICAgLSBkdC1iaW5kaW5nOiByZW1vdmUgYWRp
-LHRyaWNrbGUtZGlvZGUtZW5hYmxlDQo+ICAgIC0gZHQtYmluZGluZzogY2hhbmdlIGRlc2NyaXB0
-aW9uIG9mIHRyaWNrbGUtcmVzaXN0b3Itb2htcw0KPiAgICAtIGR0LWJpbmRpbmc6IHJlb3JkZXIg
-YXMgaW4gZXhhbXBsZSBzY2hlbWENCj4gICAgLSBwYXJzZSAid2FrZXVwLXNvdXJjZSIgd2hlbiBp
-cnEgbm90IHJlcXVlc3RlZA0KPiAgICAtIHJlbW92ZSBsaW1pdGF0aW9uIG9uIG1heDMxMzI4IGly
-cSBhbmQgY2xva291dA0KPiAgICAtIHJlbW92ZSBlcnJvciBhbmQgd2FybmluZyBtZXNzYWdlcyBk
-dXJpbmcgdHJpY2tsZSBjaGFyZ2VyIHNldHVwDQo+DQo+IHNpbmNlIHY0Og0KPiAgICAtIGR0LWJp
-bmRpbmc6IHJlbW92ZSBpbnRlcnJ1cHQgbmFtZXMuDQo+ICAgIC0gZHQtYmluZGluZzogYWRkIGRl
-c2NyaXB0aW9uIGZvciAiaW50ZXJydXB0cyIgcHJvcGVydHkNCj4gICAgLSBkdC1iaW5kaW5nOiBy
-ZXBsYWNlIGRlcHJlY2F0ZWQgcHJvcGVydHkgInRyaWNrbGUtZGlvZGUtZGlzYWJsZSINCj4gICAg
-ICAgIGJ5ICJhdXgtdm9sdGFnZS1jaGFyZ2VhYmxlIg0KPiAgICAtIGR0LWJpbmRpbmc6IGFkZCBu
-ZXcgcHJvcGVydHkgImFkaSx0cmlja2xlLWRpb2RlLWVuYWJsZSINCj4gICAgLSBkdC1iaW5kaW5n
-OiByZW1vdmUgIndha2V1cC1zb3VyY2UiDQo+ICAgIC0gdXNlIGNsZWFyX2JpdCBpbnN0ZWFkIG9m
-IF9fY2xlYXJfYml0DQo+ICAgIC0gdXNlIGRldm1fb2ZfY2xrX2FkZF9od19wcm92aWRlciBpbnN0
-ZWFkIG9mIG9mX2Nsa19hZGRfcHJvdmlkZXINCj4gICAgLSB1c2UgY2hpcF9kZXNjIHBvaW50ZXIg
-YXMgZHJpdmVyIGRhdGEgaW5zdGVhZCBvZiBlbnVtLg0KPg0KPiBzaW5jZSB2MzoNCj4gICAgLSBh
-ZGQgImJyZWFrIiB0byBmaXggd2FybmluZzogdW5hbm5vdGF0ZWQgZmFsbC10aHJvdWdoDQo+ICAg
-ICAgUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPg0KPiBz
-aW5jZSB2MjoNCj4gICAgLSBkdC1iaW5kaW5nOiB1cGRhdGUgdGl0bGUgYW5kIGRlc2NyaXB0aW9u
-DQo+ICAgIC0gZHQtYmluZGluZzogcmVtb3ZlIGxhc3QgZXhhbXBsZQ0KPiAgICAtIGRyb3Agd2F0
-Y2hkb2cgc3VwcG9ydA0KPiAgICAtIHN1cHBvcnQgcmVhZGluZyAxMkhyIGZvcm1hdCBpbnN0ZWFk
-IG9mIGZvcmNpbmcgMjRociBhdCBwcm9iZSB0aW1lDQo+ICAgIC0gdXNlICJ0bV95ZWFyICUgMTAw
-IiBpbnN0ZWFkIG9mIHJhbmdlIGNoZWNrDQo+ICAgIC0gcmVmYWN0b3IgbWF4MzEzeHhfaW5pdCBm
-b3IgcmVhZGFiaWxpdHkNCj4NCj4gSWJyYWhpbSBUaWxraSAoMik6DQo+ICAgIGRyaXZlcnM6IHJ0
-YzogYWRkIG1heDMxM3h4IHNlcmllcyBydGMgZHJpdmVyDQo+ICAgIGR0LWJpbmRpbmdzOiBydGM6
-IGFkZCBtYXgzMTN4eCBSVENzDQo+DQo+ICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvcnRjL2Fk
-aSxtYXgzMTN4eC55YW1sIHwgIDE0NCArKysNCj4gICBkcml2ZXJzL3J0Yy9LY29uZmlnICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgfCAgIDExICsNCj4gICBkcml2ZXJzL3J0Yy9NYWtlZmlsZSAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAxICsNCj4gICBkcml2ZXJzL3J0Yy9ydGMtbWF4
-MzEzeHguYyAgICAgICAgICAgICAgICAgICAgfCAxMDUzICsrKysrKysrKysrKysrKysrDQo+ICAg
-NCBmaWxlcyBjaGFuZ2VkLCAxMjA5IGluc2VydGlvbnMoKykNCj4gICBjcmVhdGUgbW9kZSAxMDA2
-NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3J0Yy9hZGksbWF4MzEzeHgueWFt
-bA0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL3J0Yy9ydGMtbWF4MzEzeHguYw0KDQpX
-aGF0IGhhcHBlbmVkIHRvIHRoaXMgc2VyaWVzIGluIHRoZSBlbmQ/IEl0IGtpbmQgb2Ygd2VudCBv
-ZmYgbXkgcmFkYXIgDQphbmQgSSBmb3Jnb3QgYWJvdXQgaXQuDQoNCldlJ3ZlIGJlZW4gY2Fycnlp
-bmcgYSB2ZXJzaW9uIG9mIHRoZXNlIGNoYW5nZXMgaW4gb3VyIGxvY2FsIHRyZWUgZm9yIGEgDQp3
-aGlsZSAoYW5kIHVzaW5nIGl0IHF1aXRlIGhhcHBpbHkgSSBzaG91bGQgYWRkKS4NCg0K
+On Fri, 2024-01-26 at 02:22 +0000, Chris Packham wrote:
+> Hi All,
+>=20
+> On 4/04/23 03:43, Ibrahim Tilki wrote:
+> > changelog:
+> > since v5:
+> > =C2=A0=C2=A0 - dt-binding: add enum value "2" to aux-voltage-chargable
+> > =C2=A0=C2=A0 - dt-binding: remove adi,trickle-diode-enable
+> > =C2=A0=C2=A0 - dt-binding: change description of trickle-resistor-ohms
+> > =C2=A0=C2=A0 - dt-binding: reorder as in example schema
+> > =C2=A0=C2=A0 - parse "wakeup-source" when irq not requested
+> > =C2=A0=C2=A0 - remove limitation on max31328 irq and clokout
+> > =C2=A0=C2=A0 - remove error and warning messages during trickle charger=
+ setup
+> >=20
+> > since v4:
+> > =C2=A0=C2=A0 - dt-binding: remove interrupt names.
+> > =C2=A0=C2=A0 - dt-binding: add description for "interrupts" property
+> > =C2=A0=C2=A0 - dt-binding: replace deprecated property "trickle-diode-d=
+isable"
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 by "aux-voltage-chargeable"
+> > =C2=A0=C2=A0 - dt-binding: add new property "adi,trickle-diode-enable"
+> > =C2=A0=C2=A0 - dt-binding: remove "wakeup-source"
+> > =C2=A0=C2=A0 - use clear_bit instead of __clear_bit
+> > =C2=A0=C2=A0 - use devm_of_clk_add_hw_provider instead of of_clk_add_pr=
+ovider
+> > =C2=A0=C2=A0 - use chip_desc pointer as driver data instead of enum.
+> >=20
+> > since v3:
+> > =C2=A0=C2=A0 - add "break" to fix warning: unannotated fall-through
+> > =C2=A0=C2=A0=C2=A0=C2=A0 Reported-by: kernel test robot <lkp@intel.com>
+> >=20
+> > since v2:
+> > =C2=A0=C2=A0 - dt-binding: update title and description
+> > =C2=A0=C2=A0 - dt-binding: remove last example
+> > =C2=A0=C2=A0 - drop watchdog support
+> > =C2=A0=C2=A0 - support reading 12Hr format instead of forcing 24hr at p=
+robe time
+> > =C2=A0=C2=A0 - use "tm_year % 100" instead of range check
+> > =C2=A0=C2=A0 - refactor max313xx_init for readability
+> >=20
+> > Ibrahim Tilki (2):
+> > =C2=A0=C2=A0 drivers: rtc: add max313xx series rtc driver
+> > =C2=A0=C2=A0 dt-bindings: rtc: add max313xx RTCs
+> >=20
+> > =C2=A0 .../devicetree/bindings/rtc/adi,max313xx.yaml |=C2=A0 144 +++
+> > =C2=A0 drivers/rtc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 11 +
+> > =C2=A0 drivers/rtc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 1 +
+> > =C2=A0 drivers/rtc/rtc-max313xx.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 1053 +++++++++++++++++
+> > =C2=A0 4 files changed, 1209 insertions(+)
+> > =C2=A0 create mode 100644 Documentation/devicetree/bindings/rtc/adi,max=
+313xx.yaml
+> > =C2=A0 create mode 100644 drivers/rtc/rtc-max313xx.c
+>=20
+> What happened to this series in the end? It kind of went off my radar=20
+> and I forgot about it.
+>=20
+> We've been carrying a version of these changes in our local tree for a=
+=20
+> while (and using it quite happily I should add).
+>=20
+
+Hi Chris,
+
+Also not sure.... In the meantime Ibrahim left ADI so if this is not in sha=
+pe to
+be merged he won't be able to re-spin. If there's a need for a re-spin, ple=
+ase
+let me know so I can see internally if there's someone who can continue thi=
+s
+work. I would do it myself if I had the HW.
+
+- Nuno S=C3=A1
 
