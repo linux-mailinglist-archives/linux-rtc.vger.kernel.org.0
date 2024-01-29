@@ -1,176 +1,141 @@
-Return-Path: <linux-rtc+bounces-586-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-587-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E0B483D54B
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jan 2024 10:03:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F60183FCB8
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jan 2024 04:28:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71F741F2680A
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jan 2024 09:03:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A38E01C212E7
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jan 2024 03:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEAEC14277;
-	Fri, 26 Jan 2024 07:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGB82Fq9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5AC0FC12;
+	Mon, 29 Jan 2024 03:28:14 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2507D11CB9;
-	Fri, 26 Jan 2024 07:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1448C18B1B
+	for <linux-rtc@vger.kernel.org>; Mon, 29 Jan 2024 03:28:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706255307; cv=none; b=EGHmDGeN5DTpLF9tJ14S0R0PMMf2P9m204UoWXF1LTslhqrl4T1BnmDHgKVnLSE7f0chKfc3S42tjIAmfHV+0fqcU1FEhgFn5kDu844P/gbnJuPwLtM+LtKkUnmuBXeiopuxAdTqMkOK1j4URYgG/lvvZqDAVLVFhXQTpMVy/2w=
+	t=1706498894; cv=none; b=iRlul6K/U3ri12DVTDFI/BF/2G3dnZQjSpKmu2iTXypy/K2izZuac8P9zS1sAZUwJmCTXiuk3Nd5FZYKIjCWUWKCgG2EM37MsngXO8qMMT9vQlSnIoejxXo49OZNE+i67itxpWmKLNX68d3usi/zekitRmfuk7VcgYinKG3H3/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706255307; c=relaxed/simple;
-	bh=nYaM+eFCc2CUTL1AfV7wPYK+r1bZG5+OH4v+qgvzIGQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VgMERGEn28bgZmv/5Yc1T49yMS57cAfQe6akDHyR6FGnbVQSIoZNcEBqkgVUxu0m8VKImdGYr/wOyAIoe/I6GikRe0ugVVlQDu2UEIyAu65ubV90ikwoRM1j5va4tRY9Ydlmdynpkg6U3cRU9qJUoomaniX2BKHswPJN8THWyEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jGB82Fq9; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2cf205dc075so654271fa.2;
-        Thu, 25 Jan 2024 23:48:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706255304; x=1706860104; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nYaM+eFCc2CUTL1AfV7wPYK+r1bZG5+OH4v+qgvzIGQ=;
-        b=jGB82Fq9GCLsifxulBLtrdJQQAgit0vmdVtEkQ4yiwvvoZp7P5c6S7jpuW41xJkiLB
-         Zjcpc85kMKORX55UjDpdjMgT8p59Hp1hvu3IeHpjJW/LKP68w/1hQT8EAHTZFPx+z1lK
-         imaIBoOjmdeEN7lZKKQffCiLp20idLiVQZXz4BZbloxJhE7uF7e37xXpa8kSBsinnThB
-         QrUea/oj0elDE1KTw7IDXGxPRLO1JLK8+0ujpzmYAbauu9u+/60iRuGpUJJwUdaBHmyH
-         h21IibJV2skoPVeECy925ubaPIOjBAq+3s2x5cHkzQ+8fvRf7lj9p/jav+ou4ikWAZ8F
-         7l9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706255304; x=1706860104;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nYaM+eFCc2CUTL1AfV7wPYK+r1bZG5+OH4v+qgvzIGQ=;
-        b=v8XdcvzaqYh1Gcj23GOq3BE0/FMOq7Pi9RApEzsF5i9fWJcf95BzWkhB93d51WJhMX
-         j5wFZo7WqkHUO+JuVZhKwEpFKPCvSRzaDf3eGh3opu3ve20kWMFO552RTPIDT3SAnqjF
-         Uaq12NKrSd2JA4lNPRu0A2RASbGaziXDW83kaUe1ZHVzgv2zjyTcKnGIXbZK1Zx15RVq
-         fnCAG56eAkpzHZz+wTDySS+KCGPJD62pgkpqTQDj/HeOa5lmZuWx2erOgZPcL9AyBaj6
-         LG6HOuuf8Ll/Fa6F/WTx2fApNPU74ZnOldLM9wmw7bjK+BD2b2aAml9JGl7qEOvub6G8
-         EItg==
-X-Gm-Message-State: AOJu0YyAnQ6cIqvHIJMcPVyNr6rVkhWR+ldoxEDAa/IgUJWwt+zlytOK
-	ta5MrmBRD0Lo4SuUZ8h4DjZ6TAHBFpbHXs8v7Wwkvc75+fyLDi1h
-X-Google-Smtp-Source: AGHT+IEe5J4EYeLJ8Vv/ijVi4P+M0YFf3nSnwunChGQtF21FjqrjDnRudXi7kRj+KYCOKUAaQEeS3w==
-X-Received: by 2002:a2e:8715:0:b0:2cf:495a:1396 with SMTP id m21-20020a2e8715000000b002cf495a1396mr185263lji.17.1706255303652;
-        Thu, 25 Jan 2024 23:48:23 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef1b:2000:15d4:fc17:481e:8afe? (p200300f6ef1b200015d4fc17481e8afe.dip0.t-ipconnect.de. [2003:f6:ef1b:2000:15d4:fc17:481e:8afe])
-        by smtp.gmail.com with ESMTPSA id l30-20020a50d6de000000b0055c875c2095sm330324edj.96.2024.01.25.23.48.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 23:48:23 -0800 (PST)
-Message-ID: <1b42866bb6f05b7d68e9b8304e42359fccdf2bad.camel@gmail.com>
+	s=arc-20240116; t=1706498894; c=relaxed/simple;
+	bh=KWCHUJoh8IiYfejTXfjkt9Z9W02ztrWXN4doyhLMwao=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=suObErQl8cCeYRizNmo0coAluof7cIVJsv43jWxX7slWFTOBwmvpHN4NK1u7lkIVjJyzdXNPCAQw3OthPsFrCqU8A5cAZbhhY7b+eJQzgqwWaNuw8hJSRokEJ5mer5QODUj9Ei3C7HY9FBbltPBMcHlL9hYR/n77yJD8aWDu05g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (unknown [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9A6A32C0191;
+	Mon, 29 Jan 2024 16:28:03 +1300 (NZDT)
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65b71b430001>; Mon, 29 Jan 2024 16:28:03 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 29 Jan 2024 16:28:03 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Mon, 29 Jan 2024 16:28:03 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: =?utf-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>, "a.zummo@towertech.it"
+	<a.zummo@towertech.it>, "alexandre.belloni@bootlin.com"
+	<alexandre.belloni@bootlin.com>, "jdelvare@suse.com" <jdelvare@suse.com>,
+	"linux@roeck-us.net" <linux@roeck-us.net>, "robh+dt@kernel.org"
+	<robh+dt@kernel.org>, "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>
+CC: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 Subject: Re: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>, Ibrahim Tilki
- <Ibrahim.Tilki@analog.com>, "a.zummo@towertech.it" <a.zummo@towertech.it>, 
- "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
- "jdelvare@suse.com" <jdelvare@suse.com>,  "linux@roeck-us.net"
- <linux@roeck-us.net>, "robh+dt@kernel.org" <robh+dt@kernel.org>, 
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>
-Cc: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org"
-	 <linux-kernel@vger.kernel.org>, "linux-hwmon@vger.kernel.org"
-	 <linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
-	 <devicetree@vger.kernel.org>
-Date: Fri, 26 Jan 2024 08:51:39 +0100
-In-Reply-To: <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
+Thread-Topic: [PATCH v5 0/2] drivers: rtc: add max313xx series rtc driver
+Thread-Index: AQHaT/57pfs9+wriS028zs2/xPWJR7Dq3xGAgARtWAA=
+Date: Mon, 29 Jan 2024 03:28:03 +0000
+Message-ID: <170c8d6b-3246-493f-8cd9-6ac580cabc28@alliedtelesis.co.nz>
 References: <20230403154342.3108-1-Ibrahim.Tilki@analog.com>
-	 <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+ <147c92f9-b42b-4a51-a6f9-2d90bfe63aa0@alliedtelesis.co.nz>
+ <1b42866bb6f05b7d68e9b8304e42359fccdf2bad.camel@gmail.com>
+In-Reply-To: <1b42866bb6f05b7d68e9b8304e42359fccdf2bad.camel@gmail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <52903D981EE19B4C887AAA6F5E877544@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=LZFCFQXi c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dEuoMetlWLkA:10 a=QyXUC8HyAAAA:8 a=y8u1kND1RjNfctyeU1UA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-On Fri, 2024-01-26 at 02:22 +0000, Chris Packham wrote:
-> Hi All,
->=20
-> On 4/04/23 03:43, Ibrahim Tilki wrote:
-> > changelog:
-> > since v5:
-> > =C2=A0=C2=A0 - dt-binding: add enum value "2" to aux-voltage-chargable
-> > =C2=A0=C2=A0 - dt-binding: remove adi,trickle-diode-enable
-> > =C2=A0=C2=A0 - dt-binding: change description of trickle-resistor-ohms
-> > =C2=A0=C2=A0 - dt-binding: reorder as in example schema
-> > =C2=A0=C2=A0 - parse "wakeup-source" when irq not requested
-> > =C2=A0=C2=A0 - remove limitation on max31328 irq and clokout
-> > =C2=A0=C2=A0 - remove error and warning messages during trickle charger=
- setup
-> >=20
-> > since v4:
-> > =C2=A0=C2=A0 - dt-binding: remove interrupt names.
-> > =C2=A0=C2=A0 - dt-binding: add description for "interrupts" property
-> > =C2=A0=C2=A0 - dt-binding: replace deprecated property "trickle-diode-d=
-isable"
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 by "aux-voltage-chargeable"
-> > =C2=A0=C2=A0 - dt-binding: add new property "adi,trickle-diode-enable"
-> > =C2=A0=C2=A0 - dt-binding: remove "wakeup-source"
-> > =C2=A0=C2=A0 - use clear_bit instead of __clear_bit
-> > =C2=A0=C2=A0 - use devm_of_clk_add_hw_provider instead of of_clk_add_pr=
-ovider
-> > =C2=A0=C2=A0 - use chip_desc pointer as driver data instead of enum.
-> >=20
-> > since v3:
-> > =C2=A0=C2=A0 - add "break" to fix warning: unannotated fall-through
-> > =C2=A0=C2=A0=C2=A0=C2=A0 Reported-by: kernel test robot <lkp@intel.com>
-> >=20
-> > since v2:
-> > =C2=A0=C2=A0 - dt-binding: update title and description
-> > =C2=A0=C2=A0 - dt-binding: remove last example
-> > =C2=A0=C2=A0 - drop watchdog support
-> > =C2=A0=C2=A0 - support reading 12Hr format instead of forcing 24hr at p=
-robe time
-> > =C2=A0=C2=A0 - use "tm_year % 100" instead of range check
-> > =C2=A0=C2=A0 - refactor max313xx_init for readability
-> >=20
-> > Ibrahim Tilki (2):
-> > =C2=A0=C2=A0 drivers: rtc: add max313xx series rtc driver
-> > =C2=A0=C2=A0 dt-bindings: rtc: add max313xx RTCs
-> >=20
-> > =C2=A0 .../devicetree/bindings/rtc/adi,max313xx.yaml |=C2=A0 144 +++
-> > =C2=A0 drivers/rtc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 11 +
-> > =C2=A0 drivers/rtc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 1 +
-> > =C2=A0 drivers/rtc/rtc-max313xx.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 1053 +++++++++++++++++
-> > =C2=A0 4 files changed, 1209 insertions(+)
-> > =C2=A0 create mode 100644 Documentation/devicetree/bindings/rtc/adi,max=
-313xx.yaml
-> > =C2=A0 create mode 100644 drivers/rtc/rtc-max313xx.c
->=20
-> What happened to this series in the end? It kind of went off my radar=20
-> and I forgot about it.
->=20
-> We've been carrying a version of these changes in our local tree for a=
-=20
-> while (and using it quite happily I should add).
->=20
-
-Hi Chris,
-
-Also not sure.... In the meantime Ibrahim left ADI so if this is not in sha=
-pe to
-be merged he won't be able to re-spin. If there's a need for a re-spin, ple=
-ase
-let me know so I can see internally if there's someone who can continue thi=
-s
-work. I would do it myself if I had the HW.
-
-- Nuno S=C3=A1
+DQpPbiAyNi8wMS8yNCAyMDo1MSwgTnVubyBTw6Egd3JvdGU6DQo+IE9uIEZyaSwgMjAyNC0wMS0y
+NiBhdCAwMjoyMiArMDAwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IEhpIEFsbCwNCj4+DQo+
+PiBPbiA0LzA0LzIzIDAzOjQzLCBJYnJhaGltIFRpbGtpIHdyb3RlOg0KPj4+IGNoYW5nZWxvZzoN
+Cj4+PiBzaW5jZSB2NToNCj4+PiAgwqDCoCAtIGR0LWJpbmRpbmc6IGFkZCBlbnVtIHZhbHVlICIy
+IiB0byBhdXgtdm9sdGFnZS1jaGFyZ2FibGUNCj4+PiAgwqDCoCAtIGR0LWJpbmRpbmc6IHJlbW92
+ZSBhZGksdHJpY2tsZS1kaW9kZS1lbmFibGUNCj4+PiAgwqDCoCAtIGR0LWJpbmRpbmc6IGNoYW5n
+ZSBkZXNjcmlwdGlvbiBvZiB0cmlja2xlLXJlc2lzdG9yLW9obXMNCj4+PiAgwqDCoCAtIGR0LWJp
+bmRpbmc6IHJlb3JkZXIgYXMgaW4gZXhhbXBsZSBzY2hlbWENCj4+PiAgwqDCoCAtIHBhcnNlICJ3
+YWtldXAtc291cmNlIiB3aGVuIGlycSBub3QgcmVxdWVzdGVkDQo+Pj4gIMKgwqAgLSByZW1vdmUg
+bGltaXRhdGlvbiBvbiBtYXgzMTMyOCBpcnEgYW5kIGNsb2tvdXQNCj4+PiAgwqDCoCAtIHJlbW92
+ZSBlcnJvciBhbmQgd2FybmluZyBtZXNzYWdlcyBkdXJpbmcgdHJpY2tsZSBjaGFyZ2VyIHNldHVw
+DQo+Pj4NCj4+PiBzaW5jZSB2NDoNCj4+PiAgwqDCoCAtIGR0LWJpbmRpbmc6IHJlbW92ZSBpbnRl
+cnJ1cHQgbmFtZXMuDQo+Pj4gIMKgwqAgLSBkdC1iaW5kaW5nOiBhZGQgZGVzY3JpcHRpb24gZm9y
+ICJpbnRlcnJ1cHRzIiBwcm9wZXJ0eQ0KPj4+ICDCoMKgIC0gZHQtYmluZGluZzogcmVwbGFjZSBk
+ZXByZWNhdGVkIHByb3BlcnR5ICJ0cmlja2xlLWRpb2RlLWRpc2FibGUiDQo+Pj4gIMKgwqDCoMKg
+wqDCoCBieSAiYXV4LXZvbHRhZ2UtY2hhcmdlYWJsZSINCj4+PiAgwqDCoCAtIGR0LWJpbmRpbmc6
+IGFkZCBuZXcgcHJvcGVydHkgImFkaSx0cmlja2xlLWRpb2RlLWVuYWJsZSINCj4+PiAgwqDCoCAt
+IGR0LWJpbmRpbmc6IHJlbW92ZSAid2FrZXVwLXNvdXJjZSINCj4+PiAgwqDCoCAtIHVzZSBjbGVh
+cl9iaXQgaW5zdGVhZCBvZiBfX2NsZWFyX2JpdA0KPj4+ICDCoMKgIC0gdXNlIGRldm1fb2ZfY2xr
+X2FkZF9od19wcm92aWRlciBpbnN0ZWFkIG9mIG9mX2Nsa19hZGRfcHJvdmlkZXINCj4+PiAgwqDC
+oCAtIHVzZSBjaGlwX2Rlc2MgcG9pbnRlciBhcyBkcml2ZXIgZGF0YSBpbnN0ZWFkIG9mIGVudW0u
+DQo+Pj4NCj4+PiBzaW5jZSB2MzoNCj4+PiAgwqDCoCAtIGFkZCAiYnJlYWsiIHRvIGZpeCB3YXJu
+aW5nOiB1bmFubm90YXRlZCBmYWxsLXRocm91Z2gNCj4+PiAgwqDCoMKgwqAgUmVwb3J0ZWQtYnk6
+IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPj4+DQo+Pj4gc2luY2UgdjI6DQo+
+Pj4gIMKgwqAgLSBkdC1iaW5kaW5nOiB1cGRhdGUgdGl0bGUgYW5kIGRlc2NyaXB0aW9uDQo+Pj4g
+IMKgwqAgLSBkdC1iaW5kaW5nOiByZW1vdmUgbGFzdCBleGFtcGxlDQo+Pj4gIMKgwqAgLSBkcm9w
+IHdhdGNoZG9nIHN1cHBvcnQNCj4+PiAgwqDCoCAtIHN1cHBvcnQgcmVhZGluZyAxMkhyIGZvcm1h
+dCBpbnN0ZWFkIG9mIGZvcmNpbmcgMjRociBhdCBwcm9iZSB0aW1lDQo+Pj4gIMKgwqAgLSB1c2Ug
+InRtX3llYXIgJSAxMDAiIGluc3RlYWQgb2YgcmFuZ2UgY2hlY2sNCj4+PiAgwqDCoCAtIHJlZmFj
+dG9yIG1heDMxM3h4X2luaXQgZm9yIHJlYWRhYmlsaXR5DQo+Pj4NCj4+PiBJYnJhaGltIFRpbGtp
+ICgyKToNCj4+PiAgwqDCoCBkcml2ZXJzOiBydGM6IGFkZCBtYXgzMTN4eCBzZXJpZXMgcnRjIGRy
+aXZlcg0KPj4+ICDCoMKgIGR0LWJpbmRpbmdzOiBydGM6IGFkZCBtYXgzMTN4eCBSVENzDQo+Pj4N
+Cj4+PiAgwqAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvcnRjL2FkaSxtYXgzMTN4eC55YW1sIHzC
+oCAxNDQgKysrDQo+Pj4gIMKgIGRyaXZlcnMvcnRjL0tjb25maWfCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDExICsNCj4+PiAgwqAgZHJp
+dmVycy9ydGMvTWFrZWZpbGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB8wqDCoMKgIDEgKw0KPj4+ICDCoCBkcml2ZXJzL3J0Yy9ydGMtbWF4MzEzeHgu
+Y8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTA1MyArKysrKysrKysr
+KysrKysrKw0KPj4+ICDCoCA0IGZpbGVzIGNoYW5nZWQsIDEyMDkgaW5zZXJ0aW9ucygrKQ0KPj4+
+ICDCoCBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L3J0Yy9hZGksbWF4MzEzeHgueWFtbA0KPj4+ICDCoCBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVy
+cy9ydGMvcnRjLW1heDMxM3h4LmMNCj4+IFdoYXQgaGFwcGVuZWQgdG8gdGhpcyBzZXJpZXMgaW4g
+dGhlIGVuZD8gSXQga2luZCBvZiB3ZW50IG9mZiBteSByYWRhcg0KPj4gYW5kIEkgZm9yZ290IGFi
+b3V0IGl0Lg0KPj4NCj4+IFdlJ3ZlIGJlZW4gY2FycnlpbmcgYSB2ZXJzaW9uIG9mIHRoZXNlIGNo
+YW5nZXMgaW4gb3VyIGxvY2FsIHRyZWUgZm9yIGENCj4+IHdoaWxlIChhbmQgdXNpbmcgaXQgcXVp
+dGUgaGFwcGlseSBJIHNob3VsZCBhZGQpLg0KPj4NCj4gSGkgQ2hyaXMsDQo+DQo+IEFsc28gbm90
+IHN1cmUuLi4uIEluIHRoZSBtZWFudGltZSBJYnJhaGltIGxlZnQgQURJIHNvIGlmIHRoaXMgaXMg
+bm90IGluIHNoYXBlIHRvDQo+IGJlIG1lcmdlZCBoZSB3b24ndCBiZSBhYmxlIHRvIHJlLXNwaW4u
+IElmIHRoZXJlJ3MgYSBuZWVkIGZvciBhIHJlLXNwaW4sIHBsZWFzZQ0KPiBsZXQgbWUga25vdyBz
+byBJIGNhbiBzZWUgaW50ZXJuYWxseSBpZiB0aGVyZSdzIHNvbWVvbmUgd2hvIGNhbiBjb250aW51
+ZSB0aGlzDQo+IHdvcmsuIEkgd291bGQgZG8gaXQgbXlzZWxmIGlmIEkgaGFkIHRoZSBIVy4NCkkn
+dmUgZ290IGEgYm9hcmQgd2l0aCBhIG1heDMxMzMxIHNvIEkgY2FuIHRlc3QgdGhhdC4gSSBkb24n
+dCBoYXZlIGFueSBvZiANCnRoZSBpbnRlcnJ1cHRzIGhvb2tlZCB1cCBzbyBJIHdvbid0IGJlIGFi
+bGUgdG8gdGVzdCB0aGF0LiBMb29rcyBsaWtlIA0KdGhlcmUgd2FzIHNvbWUgb3V0c3RhbmRpbmcg
+ZGlzY3Vzc2lvbiBhcm91bmQgdGhlIHRyaWNrbGUtY2hhcmdlIA0KZGV2aWNldHJlZSBwcm9wZXJ0
+aWVzIHNvIEknZCBuZWVkIHRvIGZpZ3VyZSBvdXQgd2hhdCB3YXMgd2FudGVkIHRoZXJlLiANCkkn
+bGwgdHJ5IHRvIHBpY2sgdXAgdGhlIGxhc3Qgc2VyaWVzIGZyb20gdGhlIG1haWxpbmcgbGlzdCBh
+bmQgZ28gZnJvbSB0aGVyZS4NCg==
 
