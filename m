@@ -1,367 +1,217 @@
-Return-Path: <linux-rtc+bounces-670-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-672-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79B4585AE48
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Feb 2024 23:18:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F5785B990
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Feb 2024 11:52:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C54C284F37
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Feb 2024 22:18:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF206B2160E
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Feb 2024 10:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C93E55E47;
-	Mon, 19 Feb 2024 22:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02AE165190;
+	Tue, 20 Feb 2024 10:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="cd/vqplH"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Rn5vXNPc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2074.outbound.protection.outlook.com [40.107.220.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D3254FA7
-	for <linux-rtc@vger.kernel.org>; Mon, 19 Feb 2024 22:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708381114; cv=none; b=CxNEBG1rKVXoywgSI2WIkZU05nPyqLyYFNpK5XkwKgSIAfAyGkmnXo7SvM5lKBpgfP2rkF7ZCIB2IM8+dH3+xjLYKvqk0dfmPhxYRbbfSoln/9D0cTlCxG/xPnV4cHK7HqmjBGWQuWVLPvP3y2OpTxuw9CxII65e3IgrJb5jwlM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708381114; c=relaxed/simple;
-	bh=3KLuTROTcuIG8ts2TGB7kpawKU3BuHsxiX3BpUeVXPA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TaqwSuJUP1Vfn3roIpcenJfHpJJnMwAAXrwnC1NilgygEjlFB7UBSlCEsSaNN1ewXYlg9OYf3LOvvoCMVcqOdgLbZkt2pIow/Pq0L8bOa2Qel3MDngongJ39+3AVw1o+h4FgfkEmhFaNyXW3TpTd/clPjhIb7rfSq7ehRI+amOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=cd/vqplH; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D8BF72C03CF;
-	Tue, 20 Feb 2024 11:18:28 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1708381108;
-	bh=oyWkRtqqsv+aKaLBRLeW55YBTClyGJKuCBoRSiD+nCA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cd/vqplHdk3I+7F+YSv2d9a1tRYD7GiPMPg1bYsD6PBppdzVVC4ESI9SBhyaVZb50
-	 lCTLxk+UEa23yL97YoQhKO/9RNv5KKUY9mBCSTh7RppHIlMg+4a7J8kIETY8BmJGHy
-	 +OGZmeL+VyRdqoUhWKzuG9QLPq0uxc6yY0uUYEAoy8L4++EvfBDNxryunLTKWWtpDs
-	 wZ+Ep4LFsE3cwxOjk/vUQpT3oHZIiW2tBoMqHR5OmFmXKENzWA/8rzyS2TVzZHaIhM
-	 pgV2LZ5AvrmTS6+feseG/LyxaYdhKU8SltwuIvK/8XtXrPnjpMTXp/FgRcwVPEAJtD
-	 a6loSDeew1hlw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65d3d3b40002>; Tue, 20 Feb 2024 11:18:28 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 92FB213EE85;
-	Tue, 20 Feb 2024 11:18:28 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 8BFF2280ADF; Tue, 20 Feb 2024 11:18:28 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: antoniu.miclaus@analog.com,
-	alexandre.belloni@bootlin.com,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v7 2/2] dt-bindings: rtc: add max313xx RTCs
-Date: Tue, 20 Feb 2024 11:18:24 +1300
-Message-ID: <20240219221827.3821415-3-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240219221827.3821415-1-chris.packham@alliedtelesis.co.nz>
-References: <20240219221827.3821415-1-chris.packham@alliedtelesis.co.nz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F6264A80;
+	Tue, 20 Feb 2024 10:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708426321; cv=fail; b=ScERMmVv+cb+uz0GVZzSGzxVC6d73LDMXYMAWN2v9UhdzM7lVQq8z3sv6pBu85HdDYqZUHBNWElFHetmuUehaJhA7rQOMiE+5loNB7tAO8ULn4evzcMKtB3OUgsT96w6XRAqUZqbMTzTEf23tHdgKT+TctUxbUa+eRBMpEU8h3c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708426321; c=relaxed/simple;
+	bh=UnuLSRAzU1fv8HFUS/nYyFQsCNjpYapCFMZkC8qDgv8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=oIKVt3r+hHwT6WBndKjRTWTyCFKepPM0WDcIn3bI57xdc+5//0rPvlofXcdD1Jx0pNEYqcW8/hGjY1UWHcQgJ8JS4eAZdrvrCdrwnx6J+cr8E6W5gi2nZETpeaLxs+zpmTvIrC2gt1ri4m/zfpaYJ6Z5nd26Q3BjZMyQo2vBvSY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Rn5vXNPc; arc=fail smtp.client-ip=40.107.220.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XgKcVojOUwwrp7WUUKXr4HJaD8UVaMSeN7g8mu9Dm0n/D0jDmqm7AR20l9gHbFpCC1kJzJz91yOMxFZIkkR7YzoOo26H2sO7uM3u3oiAzSnPrMx/hLBa6vUh8ISr2SrRfTwo6J6eAQtTfU3FiuZx6kVp5l8dNG0zGDkyNm9OvWEXXbuHC+RQf3+HBfad0xXSjgEcDcT6Unmqem2HUsglqCqMYWd5at7LBIl56R8KJIT108pY0BN6IxYRLsZIeX0JE1aIoI/cxya/cI5cbWSMjZqKMXoXjtpc29QHvhJBnLlsjrM3s1lc5mVQL61O0Q2BEEGYZlpyWGkJhrwF6QGegg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e5Bod2J9Mqu0N5RimJ/vdIA/RXbhRlIKtWnOwprHC24=;
+ b=lWJ9Wc1gjfAZwkSN0dXWuSZsCXe44lRhOvXF+apUrUPeJGa7UJYabBydP7iL9i6PPpDj0s/QnVuVjjHJq2tJfy6L00e7uWCIC1vYdsdqR4VwFU/rwrpERT3YBezavRQlqmMWHSiIX/nZLcwIamKEN0JTNdjSS9PfwlgbDr2ZcpqJMZLlkFFtImRjqj+Fj+SxZJeSiJ2pGDRxOOGTUgo1JvRI5eEvGhMoR5HdIU4E+RsK8uhHjMZj2qCvI3aHb92r5w0M/09xSi3AothAGxh2qjARgnyg/36LEhDnUUf4+Ifh7pjskQWJLo4OP5ypqtDWkzPG0TK8yPO0Idm56FGbig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e5Bod2J9Mqu0N5RimJ/vdIA/RXbhRlIKtWnOwprHC24=;
+ b=Rn5vXNPcQeaXCK/7+KtBWwtTP/Kez6/u8osLY3Pqt+4x+vQpJc+zXxChYAE3lRCRRS2gxooQC1MWjSwZeDBbqa7ZkyF4PZGn9dt3jK0qPAXQYSTeaPGZZ1hj4I2dvA45xjrdOrDuXnmoZOWP14dg+TtJCrry2LklRCCx9+NBOlw=
+Received: from DM6PR12MB4465.namprd12.prod.outlook.com (2603:10b6:5:28f::17)
+ by IA1PR12MB9064.namprd12.prod.outlook.com (2603:10b6:208:3a8::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.17; Tue, 20 Feb
+ 2024 10:51:57 +0000
+Received: from DM6PR12MB4465.namprd12.prod.outlook.com
+ ([fe80::3d54:20fd:bfee:7fc6]) by DM6PR12MB4465.namprd12.prod.outlook.com
+ ([fe80::3d54:20fd:bfee:7fc6%4]) with mapi id 15.20.7316.018; Tue, 20 Feb 2024
+ 10:51:57 +0000
+From: "Buddhabhatti, Jay" <jay.buddhabhatti@amd.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, "Simek, Michal"
+	<michal.simek@amd.com>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"monstr@monstr.eu" <monstr@monstr.eu>, "michal.simek@xilinx.com"
+	<michal.simek@xilinx.com>, "git@xilinx.com" <git@xilinx.com>, Conor Dooley
+	<conor+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh@kernel.org>, "open
+ list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+	<devicetree@vger.kernel.org>, "moderated list:ARM/ZYNQ ARCHITECTURE"
+	<linux-arm-kernel@lists.infradead.org>, "open list:REAL TIME CLOCK (RTC)
+ SUBSYSTEM" <linux-rtc@vger.kernel.org>
+Subject: RE: [PATCH] dt-bindings: rtc: zynqmp: Describe power-domains property
+Thread-Topic: [PATCH] dt-bindings: rtc: zynqmp: Describe power-domains
+ property
+Thread-Index: AQHaY+ZmsRZsdu8zXkqO0n0tzvdoobETDdZQ
+Date: Tue, 20 Feb 2024 10:51:57 +0000
+Message-ID:
+ <DM6PR12MB4465FAF7AB3F9CE15FAC6C879D502@DM6PR12MB4465.namprd12.prod.outlook.com>
+References: <202402192019160b9c4120@mail.local>
+In-Reply-To: <202402192019160b9c4120@mail.local>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR12MB4465:EE_|IA1PR12MB9064:EE_
+x-ms-office365-filtering-correlation-id: 8fdd2701-0b31-4568-0ed9-08dc3201f54d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ GOPsAMXFUnwlK0gocFjQKsyKpFnrj9fuvmbyqR9X2awjcO4TFjQy74KBPcirRM1seo60oD2A7kwy/K3YWlMkHbbTqnHCA4rhaq4IJ2Lw5MizJnyLqc2EgMyZly4EINB2k+L6MbyNVoRiSzOjjR1wyA7hCP23D8iFr/agVpSu4XrHhdORvE+0nX5hOgXvC3Tl8leMHTtvN0QBR7uc95x+JPRsf2Ao5ILpsbCUAyDmZS1w3gDddJTGJIH5CRfP593Bncprucx8hy83gT5D9d7XLPerPsbLyRAZRoGrPP0amMAF+C0GZLWOQyto8bPzsqvSBoX/VmdyB9RpE7LC/olmB4CBREqT/kF+1z5/jbaPd/8UcS7KiKKAQf8+OQSz/N/TtTZgutSDq2d8OVPBFVm1WdCArL1RZaI5VzBSgklJRwoR5XrKulqZOs7uTuhdxGO/PtUrfvuAAM87m+8jr/0ZcMcYurePVhPq88tJtXEqbK8S3l09Qfyn4UO28P8DQWglSNjWgNoyVzdJwK/xdSFVCuH7BfNVrYbosGIwhZoJUoVOxgiDvwAXITRRk/4Iy2PEp9ANQfUzwce6k4AWCp6qsqfHNSJ1peg51xgFdCLtY5I=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4465.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?IUZvNUk99KzoegISlhA5OP77sRz4ERaffjNUZ4TKtp+P1CfKuL2MY2ElJIdH?=
+ =?us-ascii?Q?xA6v0FAJwk045qzCp8DUpXrgbUg35pGgV3bCZobAGcbNjRHyDhFnYntbgm+C?=
+ =?us-ascii?Q?dfMosuv7bmk5rJdjEqn6/MoXhohZyVhSaqPfTy0hWw75ZjkAY/9YhjWmHrJ1?=
+ =?us-ascii?Q?eUZdHyvcRGozsKHkn7GzvqPzGyCAr3OSrUV3XwBTmIFWFJGU/2xSk+0CKJfw?=
+ =?us-ascii?Q?leN8dDf4UcsgNSxMkeCbsocd2F4Haz1KB+lV2DiEMDjVuBQ9xl2iy0l3ZWKS?=
+ =?us-ascii?Q?JTad1RiTm+O+2F/owGLrUC/Qg15KgojgdFk7pnl7bcjE7qZ3ZE9cdasD1U59?=
+ =?us-ascii?Q?wLeYqF78mmmcm+FU9gqnFEhLyPeK210Kto45FKHCsZdk6Vn1nko+tYX2Bm6K?=
+ =?us-ascii?Q?ORsmhExfr5WwhWbnB6v5oSdw8Ik80HdWjQfOdp3IMec6WyEh/ASD5ezE1oJP?=
+ =?us-ascii?Q?kLTSKWv8MSEfiz0UTcLAK2+QQadrO2F/8KdXvr4mMYsF5D/YOSRXhPxf521n?=
+ =?us-ascii?Q?dgwKr3hagGbr3L3o0rx5H2hKRCNkbNAt6SX9lPhOotVqAfpBJ0zA7oUEFj6c?=
+ =?us-ascii?Q?W5OCzhsEIcEbJwwchtQHy+cMR1E09bsvQxVO5+wHLTf0ybOLH2EeZICR1EmZ?=
+ =?us-ascii?Q?IxD3Kb4rP+Dux5fqIx8sYdQ/41O9qeOW7javFP7QvMWqfgTvjtsJHNqYTwGh?=
+ =?us-ascii?Q?PX7RZYPW1OqpoRNcC2wFejbaaIYFy47lPvsHMK/TDsecRuqrsd/Cs9BrCUGT?=
+ =?us-ascii?Q?DGtZEGm/ksnbxSF8lGDvBepCxOOenplDAnscG7PDLDDNpwR4t9vVDkBf192w?=
+ =?us-ascii?Q?E03liYK/66cKutUT7CMNvLQ0Z7fIcNyaducGKmEEOzNBkizF+Va8z1Dg7AaE?=
+ =?us-ascii?Q?/FicUjx0xV5eGO3h+wGbFG7jbpZm61wDQc1RwHj1KSY6MrHHyVJPYEkB2JfU?=
+ =?us-ascii?Q?yknN3VuoxTYxAwW5EKRL8Knp1IS/AImm63xdeenkBkd3GPdn2ST1Gqz6N1bh?=
+ =?us-ascii?Q?89wrpEopKYmXZJPL1JD0NESv9Glqtde48QhDZPcKHTWTu2IA3DsinMitHR6D?=
+ =?us-ascii?Q?fqaDcFkQoFhnwbuPray2elhQiOEad9FhUkEvtaUCKvi3oejftO1Ds0Kn+KgT?=
+ =?us-ascii?Q?SxEE9xDNmkXw4xroWbNtLy/9VVqSDx5IEafgqeQ28BMkXEqye3FrKuzre6Bd?=
+ =?us-ascii?Q?frs0MDbjFGa59VzyyCNSMZ7QJzqxLZXpuyuhBxO9jWJGLZqdYx9G36JccjOP?=
+ =?us-ascii?Q?lUahVonrko5fa6Z3Xbb3AHEkRazpJFHBxBcp1/8/QtkQjZv3PjcoYuIBi8cQ?=
+ =?us-ascii?Q?PkZ5VX09HT6ZC+PKh6c+QSp26419p05B424ddE3nVlDX1sNB0HIHgmMnw3N7?=
+ =?us-ascii?Q?bxLk2uRBUzsaevqHr5pzckKfKFVDKlczACt8n4FbZzG7te7dOkph+f7ZcmYo?=
+ =?us-ascii?Q?++7cmV3iYI42pwZRL2aFehiM3iCOf0ror2aYq9Pgpl+lpfcPjWxzngPXuVfu?=
+ =?us-ascii?Q?Yf5Kyhv5fHDb/z15/2/6I7hI18r/U6soCFL7rU00llwKzrm2SGrpDCrhOXyk?=
+ =?us-ascii?Q?T5zTeUYXMXDRFO5dxjc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65d3d3b4 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=k7vzHIieQBIA:10 a=gAnH3GRIAAAA:8 a=gEfo2CItAAAA:8 a=2mgWcbLM5WXxDnXTRRQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=oVHKYsEdi7-vN-J5QA_j:22 a=sptkURWiP4Gy88Gu7hUp:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4465.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8fdd2701-0b31-4568-0ed9-08dc3201f54d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2024 10:51:57.1190
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0hcgKYXxqGR8R0vyz/x8dyrkHhcJaug/X7p27WbAVVQ/i1/9G1tHwPWoMJfN6yZG/r3dmNFl4M26GW/RexUHZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9064
 
-From: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+Hi Alexandre,
 
-Add devicetree binding documentation for Analog Devices MAX313XX RTCs.
-This combines the new models with the existing max31335 binding.
+> -----Original Message-----
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Sent: Tuesday, February 20, 2024 1:49 AM
+> To: Simek, Michal <michal.simek@amd.com>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; linux-
+> kernel@vger.kernel.org; monstr@monstr.eu; michal.simek@xilinx.com;
+> git@xilinx.com; Conor Dooley <conor+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; Rob Herring <robh@kernel.org>; open
+> list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
+> <devicetree@vger.kernel.org>; moderated list:ARM/ZYNQ ARCHITECTURE
+> <linux-arm-kernel@lists.infradead.org>; open list:REAL TIME CLOCK (RTC)
+> SUBSYSTEM <linux-rtc@vger.kernel.org>
+> Subject: Re: [PATCH] dt-bindings: rtc: zynqmp: Describe power-domains
+> property
+>=20
+> On 19/02/2024 14:11:50+0100, Michal Simek wrote:
+> >
+> >
+> > On 2/17/24 09:26, Krzysztof Kozlowski wrote:
+> > > On 16/02/2024 10:42, Michal Simek wrote:
+> > > >
+> > > >
+> > > > On 2/16/24 10:19, Krzysztof Kozlowski wrote:
+> > > > > On 16/02/2024 09:51, Michal Simek wrote:
+> > > > > > RTC has its own power domain on Xilinx Versal SOC that's why
+> > > > > > describe it as optional property.
+> > > > > >
+> > > > > > Signed-off-by: Michal Simek <michal.simek@amd.com>
+> > > > > > ---
+> > > > > >
+> > > > > >    Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml |=
+ 3
+> +++
+> > > > > >    1 file changed, 3 insertions(+)
+> > > > > >
+> > > > >
+> > > > > But Versal is not described in this binding, is it? I see only
+> > > > > one compatible.
+> > > >
+> > > > It is the same IP only as is on zynqmp with own power rail.
+> > >
+> > > Then you should have separate compatible, because they are not
+> > > identical. It would also allow you to narrow the domains to versal
+> > > and also require it (on versal).
+> >
+> > I can double check with HW guys but I am quite sure IP itself is
+> > exactly the same. What it is different is that there is own power
+> > domain to it (not shared one as is in zynqmp case).
+> >
+> > Also Linux is non secure sw and if secure firmware won't allow to
+> > change setting of it it can't be required. I am just saying that Linux
+> > doesn't need to be owner of any power domain that's why it shouldn't
+> > be required property.
+>=20
+> I guess because the integration is different, you still need a differente
+> compatible so you can forbid the property on non-Versal.
 
-Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- .../devicetree/bindings/rtc/adi,max31335.yaml |  70 --------
- .../devicetree/bindings/rtc/adi,max313xx.yaml | 167 ++++++++++++++++++
- 2 files changed, 167 insertions(+), 70 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/adi,max31335.ya=
-ml
- create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.ya=
-ml
+[Jay] RTC has its own power domain in case of Versal and ZynqMP both that w=
+e double check it.
 
-diff --git a/Documentation/devicetree/bindings/rtc/adi,max31335.yaml b/Do=
-cumentation/devicetree/bindings/rtc/adi,max31335.yaml
-deleted file mode 100644
-index 0125cf6727cc..000000000000
---- a/Documentation/devicetree/bindings/rtc/adi,max31335.yaml
-+++ /dev/null
-@@ -1,70 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/rtc/adi,max31335.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Analog Devices MAX31335 RTC
--
--maintainers:
--  - Antoniu Miclaus <antoniu.miclaus@analog.com>
--
--description:
--  Analog Devices MAX31335 I2C RTC =C2=B12ppm Automotive Real-Time Clock =
-with
--  Integrated MEMS Resonator.
--
--allOf:
--  - $ref: rtc.yaml#
--
--properties:
--  compatible:
--    const: adi,max31335
--
--  reg:
--    maxItems: 1
--
--  interrupts:
--    maxItems: 1
--
--  "#clock-cells":
--    description:
--      RTC can be used as a clock source through its clock output pin.
--    const: 0
--
--  adi,tc-diode:
--    description:
--      Select the diode configuration for the trickle charger.
--      schottky - Schottky diode in series.
--      standard+schottky - standard diode + Schottky diode in series.
--    enum: [schottky, standard+schottky]
--
--  trickle-resistor-ohms:
--    description:
--      Selected resistor for trickle charger. Should be specified if tric=
-kle
--      charger should be enabled.
--    enum: [3000, 6000, 11000]
--
--required:
--  - compatible
--  - reg
--
--unevaluatedProperties: false
--
--examples:
--  - |
--    #include <dt-bindings/interrupt-controller/irq.h>
--    i2c {
--        #address-cells =3D <1>;
--        #size-cells =3D <0>;
--
--        rtc@68 {
--            compatible =3D "adi,max31335";
--            reg =3D <0x68>;
--            pinctrl-0 =3D <&rtc_nint_pins>;
--            interrupts-extended =3D <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
--            aux-voltage-chargeable =3D <1>;
--            trickle-resistor-ohms =3D <6000>;
--            adi,tc-diode =3D "schottky";
--        };
--    };
--...
-diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Do=
-cumentation/devicetree/bindings/rtc/adi,max313xx.yaml
-new file mode 100644
-index 000000000000..e56e5394aa86
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
-@@ -0,0 +1,167 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+# Copyright 2022 Analog Devices Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices MAX313XX series I2C RTCs
-+
-+maintainers:
-+  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-+  - Chris Packham <chris.packham@alliedtelesis.co.nz>
-+
-+description: Analog Devices MAX313XX series I2C RTCs.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,max31328
-+      - adi,max31329
-+      - adi,max31331
-+      - adi,max31334
-+      - adi,max31335
-+      - adi,max31341
-+      - adi,max31342
-+      - adi,max31343
-+
-+  reg:
-+    description: I2C address of the RTC
-+    items:
-+      - enum: [0x68, 0x69]
-+
-+  interrupts:
-+    description:
-+      Alarm1 interrupt line of the RTC. Some of the RTCs have two interr=
-upt
-+      lines and alarm1 interrupt muxing depends on the clockin/clockout
-+      configuration.
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    description:
-+      RTC can be used as a clock source through its clock output pin whe=
-n
-+      supplied.
-+    const: 0
-+
-+  clocks:
-+    description:
-+      RTC uses this clock for clock input when supplied. Clock has to pr=
-ovide
-+      one of these four frequencies - 1Hz, 50Hz, 60Hz or 32.768kHz.
-+    maxItems: 1
-+
-+  adi,tc-diode:
-+    description:
-+      Select the diode configuration for the trickle charger.
-+      schottky - Schottky diode in series.
-+      standard+schottky - standard diode + Schottky diode in series.
-+    enum: [schottky, standard+schottky]
-+
-+  trickle-resistor-ohms:
-+    description:
-+      Selected resistor for trickle charger. Should be specified if tric=
-kle
-+      charger should be enabled.
-+    enum: [3000, 6000, 11000]
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - adi,max31328
-+              - adi,max31342
-+
-+    then:
-+      properties:
-+        aux-voltage-chargeable: false
-+        trickle-resistor-ohms: false
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - adi,max31328
-+              - adi,max31331
-+              - adi,max31334
-+              - adi,max31335
-+              - adi,max31343
-+
-+    then:
-+      properties:
-+        clocks: false
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - adi,max31341
-+              - adi,max31342
-+
-+    then:
-+      properties:
-+        reg:
-+          items:
-+            - const: 0x69
-+
-+    else:
-+      properties:
-+        reg:
-+          items:
-+            - const: 0x68
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells =3D <1>;
-+        #size-cells =3D <0>;
-+
-+        rtc@68 {
-+            reg =3D <0x68>;
-+            compatible =3D "adi,max31329";
-+            clocks =3D <&clkin>;
-+            interrupt-parent =3D <&gpio>;
-+            interrupts =3D <26 IRQ_TYPE_EDGE_FALLING>;
-+            aux-voltage-chargeable =3D <1>;
-+            trickle-resistor-ohms =3D <6000>;
-+            adi,tc-diode =3D "schottky";
-+        };
-+    };
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells =3D <1>;
-+        #size-cells =3D <0>;
-+
-+        rtc@68 {
-+            compatible =3D "adi,max31335";
-+            reg =3D <0x68>;
-+            pinctrl-0 =3D <&rtc_nint_pins>;
-+            interrupts-extended =3D <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
-+            aux-voltage-chargeable =3D <1>;
-+            trickle-resistor-ohms =3D <6000>;
-+            adi,tc-diode =3D "schottky";
-+        };
-+    };
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells =3D <1>;
-+        #size-cells =3D <0>;
-+
-+        rtc@68 {
-+            reg =3D <0x68>;
-+            compatible =3D "adi,max31331";
-+            #clock-cells =3D <0>;
-+        };
-+    };
-+...
---=20
-2.43.2
+Thanks,
+Jay
+>=20
+> >
+> > Thanks,
+> > Michal
+>=20
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin Embedded Linux and Kernel
+> engineering https://bootlin.com
 
 
