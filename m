@@ -1,160 +1,121 @@
-Return-Path: <linux-rtc+bounces-700-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-701-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B373285DA4C
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 14:30:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2D8C85DA9B
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 14:33:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D05D31C21914
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 13:30:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7925A1F230D8
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 13:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF88780617;
-	Wed, 21 Feb 2024 13:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C64C7EEEB;
+	Wed, 21 Feb 2024 13:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NPCRgmP6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HpCSp0C4"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55C377A03;
-	Wed, 21 Feb 2024 13:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABFA7BB02;
+	Wed, 21 Feb 2024 13:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708522009; cv=none; b=tUBhex5rP2D2nlxGxBpuPs6H+fjYscESmLK7uHEDdzJ5L/pAKdk1Pp2aD8qnBMJE//nEadaiMb1E7PwqGOz1IzKOKoagy9knsBlos6SgY4UPIqJJC87a7qJpmHK01wdSWEfpi6mLF+Q/9q2oDwtMoRd6OrapXShNdC00tNtXlew=
+	t=1708522208; cv=none; b=JqHyO7l6+dfEGRW0ZCfn+BCkN8lya3OB31HbyMABG1XEFdFcNKz8Ns8ohSgY/e4PgjyW9pIzRwVFHOOTrCaU3KEySJj80zIVNBnzz037KfB9Y03+wE5ljwlM/zG9pm242QKk8ULuKtLBgrke+JeciGAPOR+rCE66KI7V3bRrYP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708522009; c=relaxed/simple;
-	bh=F+O2jT8N2BIEGIYwYUqoDBWQmBTa2NMIDug/qqNZ5Hk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r04yEurEDpr3HyNMrW9P76bBshc2fjFDTXNjjmH8DE4ifk6b61Y3EoexiF+7ZL5I3sHilsu08vDWHlHeE+7z4xoqVQazurRC21fNW96puGXjKnSxXY5G/h7ROFEkML/xsC+1uyeR7WMZNVpbUXxDgJVkBvGIIPcL69AMGxxBrvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NPCRgmP6; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1708522208; c=relaxed/simple;
+	bh=MKnx+HXKlirFBLUQ2I+mJ953wzPrfYFshtnekzUBBAA=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uSM+OmRTYpe40rwwb939L6VmKOKFMJtCmWKMe2ADhimfCPt/pb1bY+WKYTKP0/S5DazpkMPns09xoszFKfEfrnFa2bnZK8ZLSdwsx+t3EmpdgPfhTZ/YeW0ZTUKxKB/2HIM7Xj2BEW1RJTWrPrVNFFxQtN+daOBau4v94N/8KeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HpCSp0C4; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d731314e67so47519845ad.1;
-        Wed, 21 Feb 2024 05:26:47 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-563d56ee65cso6953086a12.2;
+        Wed, 21 Feb 2024 05:30:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708522007; x=1709126807; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FIcGpMiTUFuShIJcNZW3Z6nnK/vjwEkJ2H69Fs4AHDY=;
-        b=NPCRgmP6U42OtlkgqwEWc6Rt5ApAtn4Z8GzHJ0ECxDbWb4EKPx/2r4SHjW0Avbfk8p
-         Zk7Wd02iO/qlmC8A2xm9jjiOxeo6Aitn4YqnHLaETgWC9iPRIwE1VYy9aUIL1M/4XN4/
-         2uEyuYER3WuVaDfxYbcticsRCZL7mOeRB/uYmeJjsguCA5zHETBMw2J5qd6TBZu3nSaC
-         R7sBOgvSH2QfB/Ua19ZJDfgU+SbvJaKBfAYlcStr3A0uvFQpZfzD1nSeGLUNOEPZAfp5
-         S0vc6Xzzc/9mTj8ExmtawE4V+FFal7dX1X727PaYl3cGzcWJDaAHkruVIFMFTAXJSa0x
-         Ambg==
+        d=gmail.com; s=20230601; t=1708522205; x=1709127005; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9sMk7pCc4KFEHJ/2shHIB1CnrDU0xlIevri3Vo/5ORI=;
+        b=HpCSp0C4HoYYvTB5JHc+W5LCtL4FLIAo8jR+iOJYYznkiUw60eV1cNUBrZ6LZwZ2xx
+         sUHl/8d4znmq/iLNoNplet49kTaUPzJ9DM5WW2MRPuHLOg9kglIr1F9XLZ8EMXlGOuFd
+         OJPjfqI2uPST/OxijqaAwUHimRairqt46yWvhOtLUSkCEhEkvBBL8kqkezar+w4BIB+5
+         RryW0wUhibNUTL6Ytv/Jzgb7H24f+hqrpY3UDRKRBJIpcVKZcH2wqcLXifsWY9VW1lrr
+         hHKR5pUQApynksnlzaJ4S7HXzRtnXtSylM7eHJGwYqjgte0OD9879xPbGdizWJiRR4r2
+         6+3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708522007; x=1709126807;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FIcGpMiTUFuShIJcNZW3Z6nnK/vjwEkJ2H69Fs4AHDY=;
-        b=bZ3lacwWWojrYnGaC8w1zvAdIA9DGpv5kN2bb1GYI5/khh7A3DvmBUBpJzAtNkcAJ6
-         9t8DxNWROUk8ymVIkiaPwiyne7ZZ0Qum8dqtnDnSoMR1cBAYmyntP3zGwDNfCEvxD73c
-         FIE/OdoxOI37jrAufCJYLAxUdtSx42AT/bkPeGwlDM3EonD91sbJXOLAVR04HgaEawLO
-         ZimtWRUGOqAg4QQFwNTArfNA/oJobItNmYQ8wOMpJ4EMi/bfa7NA2/oFfSfGcXTpx8FF
-         m/jEi6rZdwzShJVLcerHqCyHFgkiMcEbF/VFDocliGJR2YA7We1VScI4iyqqyNbvvO4Q
-         X+1A==
-X-Forwarded-Encrypted: i=1; AJvYcCXJJwznjKjIxLDgvJgIFwKiBJA9sHCIYnkIqMPSgLhpiPnbkXTbPSjjmjYhi2jMJ9G8pJolzGVzMsisd0nysMe20AXFaAJiSiaFsOpX/Cl/B1S+DuG7vm0Vr6WuQ28VAcmBf60NzjbsT6UTCfML/hNY5nArxdu39XudaBcEv0OsBgsx6I1lVblvzMAL07BGr0mMd7EobL3dLVUV1mw8GD/7jDondWS+Od7cUaR2Qs3JC3VW5J3fZP8+uXgowUYriXgv
-X-Gm-Message-State: AOJu0YwHZNjWjrqxU5vCWDIRGyTmNsT/gbIFxYR+IIXO/ICwOH3f5HIk
-	knuw6lSKKuF0s1YqWA85rEkYIGkGky0q2FMxqaJFEhey8DdVrvCP
-X-Google-Smtp-Source: AGHT+IFE0VdYohKERbDpngNjL2p6AnzRx2gY/8gsbGjsig+sWD9GvuWZ3WTfrhlLRHdoubZSLlvgUQ==
-X-Received: by 2002:a17:90b:3b50:b0:299:6c4a:c5f0 with SMTP id ot16-20020a17090b3b5000b002996c4ac5f0mr8381795pjb.9.1708522007304;
-        Wed, 21 Feb 2024 05:26:47 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h23-20020a17090aea9700b00298c633bd5fsm1699769pjz.30.2024.02.21.05.26.46
+        d=1e100.net; s=20230601; t=1708522205; x=1709127005;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9sMk7pCc4KFEHJ/2shHIB1CnrDU0xlIevri3Vo/5ORI=;
+        b=b86YykqfplxnGRvyrkrsFT/mbzvBpKKJvEW1nZsV83lTi7pSH76bKW56WXkf1vJzKB
+         yvOoZonAbOfOpJWTQNeCq7ltKXD+5QDHCc7ysMhBHcSBvXnK5BXwOS77s9iiqmIwydp7
+         NS6AQ8Ni2USRcX7JEzpwFIOqSMo8Y1U5Jjv/RuHqn2yIpET9vsJbSNx0wVUvJ5lM4v2d
+         pnFxTK9fxAuc9zAJLa0YbY7LGqR21ZK/1oVCgcrm5wbUhKD0O5KaxHrp7yZ4aP851CoK
+         FNF0XeIUimgC6lyKUBmUftlW6CFHjf18sZHdLawkXtog7YQc0sBMCxYfqOxozXYXvpwo
+         ZnCA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBJf1U4kRT8+2xR5RM8Y6ZFgCXnwNDZAKLfjNx1NqZQZ0fP/DzpyyaEGDwkYK6wwwLxNOO08WLIE+Co9oh4rXH3Gk3IAlDczcU0CaOTbkj5Q9WbJQMK/UNhjkg6KHmgg0GXL1DPyHt
+X-Gm-Message-State: AOJu0YwxeCUlfL3WaEn0pqm8eQQU/EYuse2hygGnjg2wruX1gmWSVpXr
+	9ZCGcS9pkumtvKozmmCLscJPMeJ8JnFBI2iQn3T5L4dyM2c+N03bqZBYO/3BkUsHeg==
+X-Google-Smtp-Source: AGHT+IGFjfW9XLQYDQFYluJYn0eYpzaN4sblNQQWTap+w3Hdd/Km5Gn3+nyTi8maDIRWk9O3JRDJuA==
+X-Received: by 2002:aa7:d4d9:0:b0:564:4f6f:a7ff with SMTP id t25-20020aa7d4d9000000b005644f6fa7ffmr6659629edr.20.1708522204138;
+        Wed, 21 Feb 2024 05:30:04 -0800 (PST)
+Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
+        by smtp.gmail.com with ESMTPSA id v7-20020aa7dbc7000000b00564e489ce9asm891449edt.12.2024.02.21.05.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 05:26:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 21 Feb 2024 05:26:45 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: David Gow <davidgow@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Shuah Khan <skhan@linuxfoundation.org>, Rae Moar <rmoar@google.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Kees Cook <keescook@chromium.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Cassio Neri <cassio.neri@gmail.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Arthur Grillo <arthur.grillo@usp.br>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Daniel Latypov <dlatypov@google.com>,
-	Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	intel-xe@lists.freedesktop.org, linux-rtc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 9/9] kunit: Annotate _MSG assertion variants with gnu
- printf specifiers
-Message-ID: <678b4b1b-6319-448b-b6a7-7692b368bf31@roeck-us.net>
-References: <20240221092728.1281499-1-davidgow@google.com>
- <20240221092728.1281499-10-davidgow@google.com>
+        Wed, 21 Feb 2024 05:30:03 -0800 (PST)
+Message-ID: <ca7d78f6cffc49eba7bb44134c85e94279f1ce95.camel@gmail.com>
+Subject: Re: [PATCH] rtc: max31335: fix interrupt status reg
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>, Alexandre Belloni
+	 <alexandre.belloni@bootlin.com>, Guenter Roeck <linux@roeck-us.net>, 
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 21 Feb 2024 14:30:03 +0100
+In-Reply-To: <20240219091616.24480-1-antoniu.miclaus@analog.com>
+References: <20240219091616.24480-1-antoniu.miclaus@analog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240221092728.1281499-10-davidgow@google.com>
 
-On Wed, Feb 21, 2024 at 05:27:22PM +0800, David Gow wrote:
-> KUnit's assertion macros have variants which accept a printf format
-> string, to allow tests to specify a more detailed message on failure.
-> These (and the related KUNIT_FAIL() macro) ultimately wrap the
-> __kunit_do_failed_assertion() function, which accepted a printf format
-> specifier, but did not have the __printf attribute, so gcc couldn't warn
-> on incorrect agruments.
-> 
-> It turns out there were quite a few tests with such incorrect arguments.
-> 
-> Add the __printf() specifier now that we've fixed these errors, to
-> prevent them from recurring.
-> 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: David Gow <davidgow@google.com>
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
+On Mon, 2024-02-19 at 11:16 +0200, Antoniu Miclaus wrote:
+> Fix the register value comparison in the `max31335_volatile_reg`
+> function for the interrupt status register.
+>=20
+> MAX31335_STATUS1 macro definition corresponds to the actual
+> interrupt status register.
+>=20
+> Fixes: dedaf03b99d6 ("rtc: max31335: add driver support")
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 > ---
->  include/kunit/test.h | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index fcb4a4940ace..61637ef32302 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -579,12 +579,12 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
->  
->  void __noreturn __kunit_abort(struct kunit *test);
->  
-> -void __kunit_do_failed_assertion(struct kunit *test,
-> -			       const struct kunit_loc *loc,
-> -			       enum kunit_assert_type type,
-> -			       const struct kunit_assert *assert,
-> -			       assert_format_t assert_format,
-> -			       const char *fmt, ...);
-> +void __printf(6, 7) __kunit_do_failed_assertion(struct kunit *test,
-> +						const struct kunit_loc *loc,
-> +						enum kunit_assert_type type,
-> +						const struct kunit_assert *assert,
-> +						assert_format_t assert_format,
-> +						const char *fmt, ...);
->  
->  #define _KUNIT_FAILED(test, assert_type, assert_class, assert_format, INITIALIZER, fmt, ...) do { \
->  	static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;	       \
-> -- 
-> 2.44.0.rc0.258.g7320e95886-goog
-> 
+
+Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+
+> =C2=A0drivers/rtc/rtc-max31335.c | 2 +-
+> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
+> index 402fda8fd548..a2441e5c2c74 100644
+> --- a/drivers/rtc/rtc-max31335.c
+> +++ b/drivers/rtc/rtc-max31335.c
+> @@ -204,7 +204,7 @@ static bool max31335_volatile_reg(struct device *dev,=
+ unsigned
+> int reg)
+> =C2=A0		return true;
+> =C2=A0
+> =C2=A0	/* interrupt status register */
+> -	if (reg =3D=3D MAX31335_INT_EN1_A1IE)
+> +	if (reg =3D=3D MAX31335_STATUS1)
+> =C2=A0		return true;
+> =C2=A0
+> =C2=A0	/* temperature registers */
+
 
