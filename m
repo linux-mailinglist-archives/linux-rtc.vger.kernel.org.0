@@ -1,121 +1,149 @@
-Return-Path: <linux-rtc+bounces-701-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-702-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D8C85DA9B
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 14:33:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AE3B85E527
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 19:04:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7925A1F230D8
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 13:33:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA496284AEC
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Feb 2024 18:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C64C7EEEB;
-	Wed, 21 Feb 2024 13:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF7D85264;
+	Wed, 21 Feb 2024 18:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HpCSp0C4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQt+VtgO"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABFA7BB02;
-	Wed, 21 Feb 2024 13:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAF184FAD;
+	Wed, 21 Feb 2024 18:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708522208; cv=none; b=JqHyO7l6+dfEGRW0ZCfn+BCkN8lya3OB31HbyMABG1XEFdFcNKz8Ns8ohSgY/e4PgjyW9pIzRwVFHOOTrCaU3KEySJj80zIVNBnzz037KfB9Y03+wE5ljwlM/zG9pm242QKk8ULuKtLBgrke+JeciGAPOR+rCE66KI7V3bRrYP0=
+	t=1708538683; cv=none; b=XfVkWY6JCBMIqDOhTe0Kmzo8G9PfiYd3BjRjK5Sx0DQKMIw4QcLriEwMOpGcyGB8KpOpvex+VjkS+V8l0txaMyKXv+m0yWKvM7USA1O8dqOhOwrx4TDjYLUtUiVU7F5LUvMgY7Y8U1Fp/d8TLt33tMIyuyJ/NoFY7nJp1nOpl5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708522208; c=relaxed/simple;
-	bh=MKnx+HXKlirFBLUQ2I+mJ953wzPrfYFshtnekzUBBAA=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uSM+OmRTYpe40rwwb939L6VmKOKFMJtCmWKMe2ADhimfCPt/pb1bY+WKYTKP0/S5DazpkMPns09xoszFKfEfrnFa2bnZK8ZLSdwsx+t3EmpdgPfhTZ/YeW0ZTUKxKB/2HIM7Xj2BEW1RJTWrPrVNFFxQtN+daOBau4v94N/8KeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HpCSp0C4; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-563d56ee65cso6953086a12.2;
-        Wed, 21 Feb 2024 05:30:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708522205; x=1709127005; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9sMk7pCc4KFEHJ/2shHIB1CnrDU0xlIevri3Vo/5ORI=;
-        b=HpCSp0C4HoYYvTB5JHc+W5LCtL4FLIAo8jR+iOJYYznkiUw60eV1cNUBrZ6LZwZ2xx
-         sUHl/8d4znmq/iLNoNplet49kTaUPzJ9DM5WW2MRPuHLOg9kglIr1F9XLZ8EMXlGOuFd
-         OJPjfqI2uPST/OxijqaAwUHimRairqt46yWvhOtLUSkCEhEkvBBL8kqkezar+w4BIB+5
-         RryW0wUhibNUTL6Ytv/Jzgb7H24f+hqrpY3UDRKRBJIpcVKZcH2wqcLXifsWY9VW1lrr
-         hHKR5pUQApynksnlzaJ4S7HXzRtnXtSylM7eHJGwYqjgte0OD9879xPbGdizWJiRR4r2
-         6+3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708522205; x=1709127005;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9sMk7pCc4KFEHJ/2shHIB1CnrDU0xlIevri3Vo/5ORI=;
-        b=b86YykqfplxnGRvyrkrsFT/mbzvBpKKJvEW1nZsV83lTi7pSH76bKW56WXkf1vJzKB
-         yvOoZonAbOfOpJWTQNeCq7ltKXD+5QDHCc7ysMhBHcSBvXnK5BXwOS77s9iiqmIwydp7
-         NS6AQ8Ni2USRcX7JEzpwFIOqSMo8Y1U5Jjv/RuHqn2yIpET9vsJbSNx0wVUvJ5lM4v2d
-         pnFxTK9fxAuc9zAJLa0YbY7LGqR21ZK/1oVCgcrm5wbUhKD0O5KaxHrp7yZ4aP851CoK
-         FNF0XeIUimgC6lyKUBmUftlW6CFHjf18sZHdLawkXtog7YQc0sBMCxYfqOxozXYXvpwo
-         ZnCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVBJf1U4kRT8+2xR5RM8Y6ZFgCXnwNDZAKLfjNx1NqZQZ0fP/DzpyyaEGDwkYK6wwwLxNOO08WLIE+Co9oh4rXH3Gk3IAlDczcU0CaOTbkj5Q9WbJQMK/UNhjkg6KHmgg0GXL1DPyHt
-X-Gm-Message-State: AOJu0YwxeCUlfL3WaEn0pqm8eQQU/EYuse2hygGnjg2wruX1gmWSVpXr
-	9ZCGcS9pkumtvKozmmCLscJPMeJ8JnFBI2iQn3T5L4dyM2c+N03bqZBYO/3BkUsHeg==
-X-Google-Smtp-Source: AGHT+IGFjfW9XLQYDQFYluJYn0eYpzaN4sblNQQWTap+w3Hdd/Km5Gn3+nyTi8maDIRWk9O3JRDJuA==
-X-Received: by 2002:aa7:d4d9:0:b0:564:4f6f:a7ff with SMTP id t25-20020aa7d4d9000000b005644f6fa7ffmr6659629edr.20.1708522204138;
-        Wed, 21 Feb 2024 05:30:04 -0800 (PST)
-Received: from ?IPv6:2001:a61:3456:4e01:6ae:b55a:bd1d:57fc? ([2001:a61:3456:4e01:6ae:b55a:bd1d:57fc])
-        by smtp.gmail.com with ESMTPSA id v7-20020aa7dbc7000000b00564e489ce9asm891449edt.12.2024.02.21.05.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 05:30:03 -0800 (PST)
-Message-ID: <ca7d78f6cffc49eba7bb44134c85e94279f1ce95.camel@gmail.com>
-Subject: Re: [PATCH] rtc: max31335: fix interrupt status reg
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Antoniu Miclaus <antoniu.miclaus@analog.com>, Alexandre Belloni
-	 <alexandre.belloni@bootlin.com>, Guenter Roeck <linux@roeck-us.net>, 
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 21 Feb 2024 14:30:03 +0100
-In-Reply-To: <20240219091616.24480-1-antoniu.miclaus@analog.com>
-References: <20240219091616.24480-1-antoniu.miclaus@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	s=arc-20240116; t=1708538683; c=relaxed/simple;
+	bh=N3hyQeCD6IQBf8tWP+/hKiWNxUyx+FYv+Qik7aMVPn8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RfVru2FI34IFWdF1gnKooEWaYgGHXIGXUV9TJ5W3heK2enSNcKFxXf2wxdLM1IEtuEgMstOrAOm3ChbLhRh7iIADikiq9gZumjXIyYXmPl6aHtvrxtPYp4LRBpWb/zQKPm6ptrcZoIbYBVNq8awPBMoBcoh2vSu9atrcAZB2cts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQt+VtgO; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708538682; x=1740074682;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N3hyQeCD6IQBf8tWP+/hKiWNxUyx+FYv+Qik7aMVPn8=;
+  b=cQt+VtgOuFecBhjBLeA3z/jGGPVXZmbLde5sBJSHaaT2GciMMyexjCB+
+   QE5hqZ0mXZfuY5jJ5hX3kVqkKDPG5oDLbC7D4fMdEbYoQD1aVQFgFg7hs
+   DUdWpdmFO9MS+0/U+UInzOc72wArD2Uzzflq3ol1aU8PSrg5PBDMxFbTr
+   /AEePP6XLzsvzPLvTlnUkIYeyZhd6Sh14OZqqd5V59sb/j4pWMOnvsmw6
+   HEkoR2D4f9xcFAbDNb4A1kcb7MpsmTEZzStaSmvaCcube+GAVUuk4TKnx
+   UHcmpVVROOrPNxJ8sZiQYcK/IXe7BHNQbdYlnxTENJSByCTh6+FDfRN0s
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10991"; a="13845918"
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="13845918"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 10:04:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,176,1705392000"; 
+   d="scan'208";a="5420455"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 21 Feb 2024 10:04:29 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rcqwz-0005ZM-24;
+	Wed, 21 Feb 2024 18:04:26 +0000
+Date: Thu, 22 Feb 2024 02:04:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	antoniu.miclaus@analog.com, alexandre.belloni@bootlin.com,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v7 1/2] drivers: rtc: add max313xx series rtc driver
+Message-ID: <202402220139.EmXyZO4Q-lkp@intel.com>
+References: <20240219221827.3821415-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240219221827.3821415-2-chris.packham@alliedtelesis.co.nz>
 
-On Mon, 2024-02-19 at 11:16 +0200, Antoniu Miclaus wrote:
-> Fix the register value comparison in the `max31335_volatile_reg`
-> function for the interrupt status register.
->=20
-> MAX31335_STATUS1 macro definition corresponds to the actual
-> interrupt status register.
->=20
-> Fixes: dedaf03b99d6 ("rtc: max31335: add driver support")
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> ---
+Hi Chris,
 
-Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+kernel test robot noticed the following build warnings:
 
-> =C2=A0drivers/rtc/rtc-max31335.c | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
-> index 402fda8fd548..a2441e5c2c74 100644
-> --- a/drivers/rtc/rtc-max31335.c
-> +++ b/drivers/rtc/rtc-max31335.c
-> @@ -204,7 +204,7 @@ static bool max31335_volatile_reg(struct device *dev,=
- unsigned
-> int reg)
-> =C2=A0		return true;
-> =C2=A0
-> =C2=A0	/* interrupt status register */
-> -	if (reg =3D=3D MAX31335_INT_EN1_A1IE)
-> +	if (reg =3D=3D MAX31335_STATUS1)
-> =C2=A0		return true;
-> =C2=A0
-> =C2=A0	/* temperature registers */
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on linus/master v6.8-rc5 next-20240221]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/drivers-rtc-add-max313xx-series-rtc-driver/20240220-062057
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20240219221827.3821415-2-chris.packham%40alliedtelesis.co.nz
+patch subject: [PATCH v7 1/2] drivers: rtc: add max313xx series rtc driver
+config: x86_64-randconfig-123-20240220 (https://download.01.org/0day-ci/archive/20240222/202402220139.EmXyZO4Q-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240222/202402220139.EmXyZO4Q-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402220139.EmXyZO4Q-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/rtc/rtc-max31335.c:727:22: sparse: sparse: symbol 'max313xx_clk_init' was not declared. Should it be static?
+>> drivers/rtc/rtc-max31335.c:750:21: sparse: sparse: symbol 'max313xx_nvmem_cfg' was not declared. Should it be static?
+
+vim +/max313xx_clk_init +727 drivers/rtc/rtc-max31335.c
+
+   726	
+ > 727	struct clk_init_data max313xx_clk_init = {
+   728		.name = "max313xx-clkout",
+   729		.ops = &max313xx_clkout_ops,
+   730	};
+   731	
+   732	static int max313xx_nvmem_reg_read(void *priv, unsigned int offset,
+   733					   void *val, size_t bytes)
+   734	{
+   735		struct max313xx *rtc = priv;
+   736		unsigned int reg = rtc->chip->ram_reg + offset;
+   737	
+   738		return regmap_bulk_read(rtc->regmap, reg, val, bytes);
+   739	}
+   740	
+   741	static int max313xx_nvmem_reg_write(void *priv, unsigned int offset,
+   742					    void *val, size_t bytes)
+   743	{
+   744		struct max313xx *rtc = priv;
+   745		unsigned int reg = rtc->chip->ram_reg + offset;
+   746	
+   747		return regmap_bulk_write(rtc->regmap, reg, val, bytes);
+   748	}
+   749	
+ > 750	struct nvmem_config max313xx_nvmem_cfg = {
+   751		.reg_read = max313xx_nvmem_reg_read,
+   752		.reg_write = max313xx_nvmem_reg_write,
+   753		.word_size = 8,
+   754	};
+   755	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
