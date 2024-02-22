@@ -1,144 +1,146 @@
-Return-Path: <linux-rtc+bounces-720-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-721-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C4A186002B
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Feb 2024 18:57:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89177860439
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Feb 2024 21:59:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB800B2548E
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Feb 2024 17:57:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 273141F24956
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Feb 2024 20:59:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8798156990;
-	Thu, 22 Feb 2024 17:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41ACA73F05;
+	Thu, 22 Feb 2024 20:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="C/GZKSCx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MOHJAqqc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF349155A4D
-	for <linux-rtc@vger.kernel.org>; Thu, 22 Feb 2024 17:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836316E601
+	for <linux-rtc@vger.kernel.org>; Thu, 22 Feb 2024 20:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708624642; cv=none; b=Qcy0+hKg7TkmcFaCTzwe9e9pmEzcU/GDv31/hFfpAu90P3rlgFSfm/Z/AWUdccH1pYk4XKC2PYP5owcNtKScecGdJJQ+EwZ4KwETjPWFkgRbzTF9WRGO0LRZvjqawd0gr2h0Q/4IUPd3xS/IOU6E2xIv+sGMmE/hjQiWs8w5R6s=
+	t=1708635549; cv=none; b=HR7JgQz7AIWop81M6EIQQlsU+ZFbbEkFnfjKdgXgylfqbWJBr4WDt8qnhaSQp8f5SDv5y5qh0k1YzCdjnUaSWZoeSOAJTR6S7OS9Spd4qLPdcMWNjq2zPjkTgA4pnZRsMR3yC8qyM4jX7VwfZETQkz0cfEMxXgUNCKpO7g0lzzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708624642; c=relaxed/simple;
-	bh=hlPKjlQSc0kMs/W05kmcLVH3IEjiTit6toh7GkaAPKU=;
+	s=arc-20240116; t=1708635549; c=relaxed/simple;
+	bh=C4F7mlB1MqkcQcSyoJUPRfFHjf+dal0cew/+pSwHCXo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vE63tDdK2Vgnho4uoyQD+Go0w/n2TKwtoUohuMl8Wu90vE9L7iUg+PpiavEjP5klGgLdWtSFG1MGxEwx54w3qskE7onFIezg9ekk/aT2Hp0XqVjKyfB3k9tt3xNxPwxxG48ovjWMhWa3yXv9g++cd4ACJhk2SKSf2PGWfd6gj6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=C/GZKSCx; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-512e39226efso98447e87.0
-        for <linux-rtc@vger.kernel.org>; Thu, 22 Feb 2024 09:57:20 -0800 (PST)
+	 To:Cc:Content-Type; b=G/7w5mP3socPkXCcNQIj64kW36pZQZTvBXFOYnOqBwyxd70ZT33Zn6/CvUDFyPDTY8Z5rXIoDyCARy/KqtMR+TvrZCDomkGr6XvZF4Sc1K8xJY/JLnG98KKUt/CXoBfyEX/xYbNDaVNTJO63GvPlYhZxou04P7YMmpOFcq4BfOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MOHJAqqc; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-42e2507c6e1so82271cf.1
+        for <linux-rtc@vger.kernel.org>; Thu, 22 Feb 2024 12:59:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1708624639; x=1709229439; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2n36AeyXiuh8a+bUOx1L+r2cwQosoX8vn/3R6qLfBBs=;
-        b=C/GZKSCx9krnzW/91GYSpXCFzd4lSh/fVce4znbLwfR8AxIHeSj99gMXHqiEgt+MYl
-         zhUlkyyYyhXJ47/KDPwISDkS/uDO9DYrfAXEN7Yefz03EBkVymKB3ugTh4dKQ2oIbS8P
-         BRSLPUJqVNlkHCSOQDeDKklgoNgB2P8ZbIQD0=
+        d=google.com; s=20230601; t=1708635546; x=1709240346; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/zEWuRWWHcJcQcinmF9Ig0PacXm/lMdwIIHptRGDzpU=;
+        b=MOHJAqqcAnRE2NSLZhyESs/g5WAAwqx5bZyPaxifPADGalK3WQEz1I3/0pCW5PdqkI
+         ppGl1SyQhYFGzNy3SRnVVLTY8Q1L8ClG3FqEJkJFXqganGsY65/lTMo5K9QmgtbfBQBT
+         /MeX8JzP/yxOS/GN9tRwdo5b9tqFO67Q3SN5n3ZFQmGAOoKwdOojExjprnKpJnkBuAye
+         J/xcM0eZbNV01MeMB6Zn38/zOZ0fXEcY92HQMr85IBGcDe7q1sFoYO+RTn8ebga0c6zy
+         PEdTG+3lch6bIe0ZKqq+1kwFgOLk1lc9vRg49EcN0d0xSJgE9xzi9uGljq5REEQ/s7/E
+         Vqew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708624639; x=1709229439;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2n36AeyXiuh8a+bUOx1L+r2cwQosoX8vn/3R6qLfBBs=;
-        b=jwFcurxAOdNBDznw4dOVTc6vl2kS2RyS1XVs45JgBkuDI+CfcIvufKa90u+HhnZk/m
-         AJVcTJ/pA9ZsyUf3TnjE08BC5ULBlNxCRKtDh3u8ouv/H2hqrOsvuXHlnULeg71tc6Rr
-         nKzXqJPW34HXbt7N3Lg3ElySRgjtiuvE4CklBf67sTIwDkMuGrwG9pzQZGomekrlkMoG
-         TfV/0ZO2iNyl9uvGXHgJNRHOpiAg67E9FQfCx7kkSwm+jneo1/tzbuE7QAwTcpq2JD8C
-         QQonWc21kL4qLUI7sVFyHS9kE6M9MrxmNFXezvDH3ZXYpEs5cudyLp4Ttg+nf3vcKWxK
-         gPIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU0pL4Lo0JptD5cZCCRkJXGvETjWWgOyKLeKbjexmRAaprRlvjYWB/I6P59DUJjuwM8nU1Kzwwl3p6HfB9IfncOCfjd6D32SB9G
-X-Gm-Message-State: AOJu0YzVH3V9PVomiuWI8ODe5VTdBukuN1FppJBT8cFVpiz9d1HQoAPo
-	Wc1O4z8Hfyn9teeUuxGwyFwtmM+nqwVKDEZjIU1nP4+mbSfurTgXclfJzpVldiAJ6tDRRLzN2Zt
-	jwdtiiA==
-X-Google-Smtp-Source: AGHT+IGha16Cc6di+mtfR6tyTBFVi/ki4raMtPUN3Wu7WyE+kZ8lHcSbRLqodvkBRl2/lg5FYmroOg==
-X-Received: by 2002:a05:6512:3d9e:b0:512:e0a8:39d8 with SMTP id k30-20020a0565123d9e00b00512e0a839d8mr1469632lfv.43.1708624638781;
-        Thu, 22 Feb 2024 09:57:18 -0800 (PST)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id y19-20020a197513000000b0051121bedf76sm2135177lfe.34.2024.02.22.09.57.18
-        for <linux-rtc@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 09:57:18 -0800 (PST)
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-512e39226efso98409e87.0
-        for <linux-rtc@vger.kernel.org>; Thu, 22 Feb 2024 09:57:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXgbpeiF7TyPYlB0Ia0Uv3x7QRdZO56ODKSki7qTFvVtYVzlYB/n3DGIb5n1GrILdpFtqXxDXO3gcbIalqlH2nBCYiK1xDfI6Vs
-X-Received: by 2002:a05:6512:3089:b0:512:acf1:6970 with SMTP id
- z9-20020a056512308900b00512acf16970mr11555378lfd.35.1708624617484; Thu, 22
- Feb 2024 09:56:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708635546; x=1709240346;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/zEWuRWWHcJcQcinmF9Ig0PacXm/lMdwIIHptRGDzpU=;
+        b=uKNhbUcof3SFQ2Cm83hINKPNw+BFSUdftlPMgWfqcdttlBvcsMLpAVrucdBzyZN+Eo
+         Ul9vJ4RJoQLF37EXPpQHCXxwFgt7FAxbxnhOn/8JF960+L6xmi9hRaEpzUnRbIzDwcci
+         UAQAi+Uql4w8nvSXYT7Wmd8T35wlHOdOv5+jjQYY2pnCDZShN4FamlqWlAhuavVJL29S
+         JYkbhPqZWDDWuo5FF75vRAkzKfZoYBVF9WHROaQtwqbyBllOrp9exlSMgU+XO1gtyvm4
+         /zYVoAgtYr0wJ9cHLDIVEtR3vQbtajvYYeL/GSc+EgcUuhcwwPCD1tRD89QuMrCD/8Ug
+         tnEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnCHWFbS1sSCB6pyI02qHsu0742K2fNntTqs7g3zSPBglAtg87qV304iOPikDaw4afEtj6oxsuJ/1fZBhqzJ0gtvAqmWTwOBYO
+X-Gm-Message-State: AOJu0YxT6caCBKzFeZ2NuXw2PYC2rW/fSkeypXBRMmIRTqenX2d18p/P
+	7hpKD5Kt+sR97R5zt+7I254rtryonaam/cSk3JZxsbqm+rD+WYiViR8FIf3agyI+CMys8vWgOJd
+	Wavr3G8b5giH9fGibQw+oZ3DsyjQgwZ1D9klf
+X-Google-Smtp-Source: AGHT+IFSpfaLdIKihK3iEVOja+3Eqku3dKQtV6o3yrUl8zcXbBHUkfm22S3h1VkUJApYDgRUGbJE0TXcXoTj3FcGfX4=
+X-Received: by 2002:ac8:7643:0:b0:42e:1260:c4e6 with SMTP id
+ i3-20020ac87643000000b0042e1260c4e6mr732606qtr.10.1708635546371; Thu, 22 Feb
+ 2024 12:59:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240221092728.1281499-1-davidgow@google.com> <20240221092728.1281499-3-davidgow@google.com>
- <20240221201008.ez5tu7xvkedtln3o@google.com> <CABVgOSn+VxTb5TOmZd82HN04j_ZG9J2G-AoJmdxWG8QDh9xGxg@mail.gmail.com>
- <CAGS_qxoW0v0eM646zLu=SWL1O5UUp5k08SZsQO51gCDx_LnhcQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxoW0v0eM646zLu=SWL1O5UUp5k08SZsQO51gCDx_LnhcQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 22 Feb 2024 09:56:40 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiODww51Kz-TTWn0ka5T8oMtt0AfbO9t0U3iJqfLZO+8w@mail.gmail.com>
-Message-ID: <CAHk-=wiODww51Kz-TTWn0ka5T8oMtt0AfbO9t0U3iJqfLZO+8w@mail.gmail.com>
-Subject: Re: [PATCH 2/9] lib/cmdline: Fix an invalid format specifier in an
- assertion msg
-To: Daniel Latypov <dlatypov@google.com>
-Cc: David Gow <davidgow@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Rae Moar <rmoar@google.com>, Matthew Auld <matthew.auld@intel.com>, 
+References: <20240221092728.1281499-1-davidgow@google.com> <20240221092728.1281499-2-davidgow@google.com>
+In-Reply-To: <20240221092728.1281499-2-davidgow@google.com>
+From: Rae Moar <rmoar@google.com>
+Date: Thu, 22 Feb 2024 15:58:54 -0500
+Message-ID: <CA+GJov6GyU0t0D5quhroCgEQOJgk0PCjVn5LROifBcNMx-ovcQ@mail.gmail.com>
+Subject: Re: [PATCH 1/9] kunit: test: Log the correct filter string in executor_test
+To: David Gow <davidgow@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Matthew Auld <matthew.auld@intel.com>, 
 	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>, 
 	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
 	Kees Cook <keescook@chromium.org>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
 	Rodrigo Vivi <rodrigo.vivi@intel.com>, Matthew Brost <matthew.brost@intel.com>, 
 	Willem de Bruijn <willemb@google.com>, Florian Westphal <fw@strlen.de>, Cassio Neri <cassio.neri@gmail.com>, 
 	Javier Martinez Canillas <javierm@redhat.com>, Arthur Grillo <arthur.grillo@usp.br>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Stephen Boyd <sboyd@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Daniel Latypov <dlatypov@google.com>, 
+	Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
 	"David S . Miller" <davem@davemloft.net>, dri-devel@lists.freedesktop.org, 
 	linux-kernel@vger.kernel.org, intel-xe@lists.freedesktop.org, 
 	linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com, linux-hardening@vger.kernel.org, 
 	netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 22 Feb 2024 at 09:36, Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, Feb 21, 2024 at 4:28=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
 >
-> Copying the line for context, it's about `p-r` where
->   p = memchr_inv(&r[1], 0, sizeof(r) - sizeof(r[0]));
-> `p-r` should never be negative unless something has gone horribly
-> horribly wrong.
+> KUnit's executor_test logs the filter string in KUNIT_ASSERT_EQ_MSG(),
+> but passed a random character from the filter, rather than the whole
+> string.
+>
+> This was found by annotating KUNIT_ASSERT_EQ_MSG() to let gcc validate
+> the format string.
+>
+> Fixes: 76066f93f1df ("kunit: add tests for filtering attributes")
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Sure it would - if 'p' is NULL.
+Hello!
 
-Of course, then a negative value wouldn't be helpful either, and in
-this case that's what the EXPECT_PTR_EQ checking is testing in the
-first place, so it's a non-issue.
+This change looks good to me. Thanks for fixing this mistake.
 
-IOW, in practice clearly the sign should simply not matter here.
+Thanks!
+-Rae
 
-I do think that the default case for pointer differences should be
-that they are signed, because they *can* be.
+Reviewed-by: Rae Moar <rmoar@google.com>
 
-Just because of that "default case", unless there's some actual reason
-to use '%tu', I think '%td' should be seen as the normal case to use.
-
-That said, just as a quick aside: be careful with pointer differences
-in the kernel.
-
-For this particular case, when we're talking about just 'char *', it's
-not a big deal, but we've had code where people didn't think about
-what it means to do a pointer difference in C, and how it can be often
-unnecessarily expensive due to the implied "divide by the size of the
-pointed object".
-
-Sometimes it's actually worth writing the code in ways that avoids
-pointer differences entirely (which might involve passing around
-indexes instead of pointers).
-
-                 Linus
+> ---
+>  lib/kunit/executor_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> index 22d4ee86dbed..3f7f967e3688 100644
+> --- a/lib/kunit/executor_test.c
+> +++ b/lib/kunit/executor_test.c
+> @@ -129,7 +129,7 @@ static void parse_filter_attr_test(struct kunit *test=
+)
+>                         GFP_KERNEL);
+>         for (j =3D 0; j < filter_count; j++) {
+>                 parsed_filters[j] =3D kunit_next_attr_filter(&filter, &er=
+r);
+> -               KUNIT_ASSERT_EQ_MSG(test, err, 0, "failed to parse filter=
+ '%s'", filters[j]);
+> +               KUNIT_ASSERT_EQ_MSG(test, err, 0, "failed to parse filter=
+ from '%s'", filters);
+>         }
+>
+>         KUNIT_EXPECT_STREQ(test, kunit_attr_filter_name(parsed_filters[0]=
+), "speed");
+> --
+> 2.44.0.rc0.258.g7320e95886-goog
+>
 
