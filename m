@@ -1,128 +1,124 @@
-Return-Path: <linux-rtc+bounces-724-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-725-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 911E38621CF
-	for <lists+linux-rtc@lfdr.de>; Sat, 24 Feb 2024 02:19:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B463C862722
+	for <lists+linux-rtc@lfdr.de>; Sat, 24 Feb 2024 20:51:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E75328585F
-	for <lists+linux-rtc@lfdr.de>; Sat, 24 Feb 2024 01:19:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E98B0281B59
+	for <lists+linux-rtc@lfdr.de>; Sat, 24 Feb 2024 19:51:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2045398;
-	Sat, 24 Feb 2024 01:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586FA4C63F;
+	Sat, 24 Feb 2024 19:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ff/ekrVk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eqxq4AUL"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7579F23BF;
-	Sat, 24 Feb 2024 01:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6EC4CB20;
+	Sat, 24 Feb 2024 19:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708737553; cv=none; b=e7378TQsdXd1L6BUxPy62hU37FMkHsrV+sn/NCr9JeZBOCl3zWs4SBtxJczkefvKOS7S2d1xbonxItQYlyG9WPi4vNEwMGicoT3p7tT0KZB/9akoEZ5YJqr4RDN6yUF6FgnoMkFm6H7uBFhNhbfWvhrvKA1lK+KYYX79aLOSN5U=
+	t=1708804307; cv=none; b=S+ngmPVOHKHZvrga3sH5eAvWTvK84orDa5BKhbjxMbO4bc612PvPslMLfCYGxUlgUL8JWgjpbsvrcbFq5q2iOkUPW6Pvd8bFLgl7l2p3EAAF0cdJHRlKJmdsuEP8OrK4WmEsDzeGMsNZ++wcLmpJP+SNcA6ip7G7YL6++TTQq0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708737553; c=relaxed/simple;
-	bh=0W8qjJDpYcgYroDsZAHS1ygwFOJj7ZrezH6oMeip5ik=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Iwd8YPN/o0YuuBIpQjzcHLXtDfkR+tePZNQDip86CpbBpF7CaGHo09oTkQektsAjM3ldm3qRb4FOehMgtvqwRr8R8SGar3qyQ5Muoxl2nDLTaLD5HMlqicP8TuN73nxkj9tuS7hbHKh97D5S7Hxhw9yOOJvDLaV/G2kxWMfB0g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ff/ekrVk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506E6C433C7;
-	Sat, 24 Feb 2024 01:18:59 +0000 (UTC)
+	s=arc-20240116; t=1708804307; c=relaxed/simple;
+	bh=3FCTdNX2pfFEE6oEI8MTGFLwkAbKa1ZZICUDgcqmLYo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ig2dcSrppgQmJqDCPK1QnNMVe8/T9HjzyvOY+Q+lVs+NpS53WkifZuty7TQ9eYrc34Fz+8kxFr1W/7kEjF7Rh6pzITXqhWDucICoj1TfBGSI9UzEO/5EGqV3Ld6/3/HxiMMnjqVznR2KXBGw1kHEiFLEYKsHh175ChXzgrL2ATM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eqxq4AUL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66849C433C7;
+	Sat, 24 Feb 2024 19:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708737553;
-	bh=0W8qjJDpYcgYroDsZAHS1ygwFOJj7ZrezH6oMeip5ik=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=Ff/ekrVkMNWJBDGkpsP/ovqQh2yy1ijB5ftoTK+/UMaqJWDxNbNOKDQ24y0qlURiT
-	 N86GGDRMnW5AEO+3RHaO2XaXOYxDA4ibfnVDmk9OplY/pQbkQdRWg0E13BTRhyo/Ey
-	 E7GKyzybhjWoin88WA6LDL8n39i41+9gmBImeMju6zTBmw38Z6z8mKdPpWm1Cai1Dh
-	 tLR7TBInqGjbW6nemQL6B37MrpxV1aa2e6/jocEVz4mmQME8ahbk6OREfwpjeHQwqx
-	 7OGusmZWog/eiFdepXGySC4Gi90Xc7Qb6ZzLMm5U/Vj7pI5DjSk+10zDXroo9bbYdH
-	 4E1uvU+UVBQNg==
-From: Mark Brown <broonie@kernel.org>
-To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
- conor+dt@kernel.org, nicolas.ferre@microchip.com, 
- alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
- mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
- davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de, 
- tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at, 
- vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
- linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
- p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
- richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
- lgirdwood@gmail.com, wim@linux-watchdog.org, linux@roeck-us.net, 
- linux@armlinux.org.uk, andrei.simion@microchip.com, 
- mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
- tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
- arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
- vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
- eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
- linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- Varshini Rajendran <varshini.rajendran@microchip.com>
-In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+	s=k20201202; t=1708804306;
+	bh=3FCTdNX2pfFEE6oEI8MTGFLwkAbKa1ZZICUDgcqmLYo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Eqxq4AUL+C7sFnFmN2FLP1rMotpWmsntp1ICACch7naFVB5Zr1cpS7gd3xRC9D0O0
+	 +TGUrD8Tfr+guIkqulUyjOCJCJktiIS3x2GwI8JDTaOt+8TLH1m86udRtxt9lwc3Cz
+	 vEEsXZgnrbFscCEI+7yw1WhMQBEpkaUm6JlICbGrxk6VUMm+yY+Qn/cn9Bxo/4LcQA
+	 axOyt61zjc82rwSti5TYNecFhJhnFPZ5D7x75NAjje9OMsad+J3iIg+qW/7opS5iPN
+	 cfVLJ4GdY4PWC7bQwPE3uuczPNu8ZtqvK9+v+MtAH6Z9AHn6ULf7cVz434QYLbVeUe
+	 cOehlcUS+7HBg==
+Date: Sat, 24 Feb 2024 19:51:42 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc: alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	nicolas.ferre@microchip.com, claudiu.beznea@tuxon.dev,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 11/39] dt-bindings: rtt: at91rm9260: add sam9x7
+ compatible
+Message-ID: <20240224-unmasking-gracious-8d2734d28fea@spud>
 References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
-Message-Id: <170873753899.4074329.1874365978346259745.b4-ty@kernel.org>
-Date: Sat, 24 Feb 2024 01:18:58 +0000
+ <20240223172552.672094-1-varshini.rajendran@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-0438c
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="g6zluE1BE81oDQMG"
+Content-Disposition: inline
+In-Reply-To: <20240223172552.672094-1-varshini.rajendran@microchip.com>
 
-On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
-> 
->  Changes in v4:
->  --------------
-> 
-> [...]
 
-Applied to
+--g6zluE1BE81oDQMG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+On Fri, Feb 23, 2024 at 10:55:52PM +0530, Varshini Rajendran wrote:
+> Add compatible for SAM9X7 RTT.
+>=20
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 
-Thanks!
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-[13/39] ASoC: dt-bindings: atmel-classd: add sam9x7 compatible
-        commit: 89f3180d5915d4ea40e044ee102cd5c1ec81e7ef
-[17/39] ASoC: dt-bindings: microchip: add sam9x7
-        commit: c06a7a8e885753a024163bbb0dfd7349e8054643
+Cheers,
+Conor.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> ---
+> Changes in v4:
+> - Made sam9x7 compatible as an enum with sam9x60 compatible as
+>   suggested
+> ---
+>  .../devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml        | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.=
+yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> index b80b85c394ac..a7f6c1d1a08a 100644
+> --- a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> @@ -19,7 +19,9 @@ properties:
+>        - items:
+>            - const: atmel,at91sam9260-rtt
+>        - items:
+> -          - const: microchip,sam9x60-rtt
+> +          - enum:
+> +              - microchip,sam9x60-rtt
+> +              - microchip,sam9x7-rtt
+>            - const: atmel,at91sam9260-rtt
+>        - items:
+>            - const: microchip,sama7g5-rtt
+> --=20
+> 2.25.1
+>=20
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--g6zluE1BE81oDQMG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdpIzgAKCRB4tDGHoIJi
+0jAdAQC2ZwVSNgzyiiECpqHHTXdrbzfZ4WBMrumaRAZvuraVVgD3Y+OseCnhk9Na
+mcyfR4/K2oD+/wcsNxVHDAO4+2tsBQ==
+=Vrmd
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
-
+--g6zluE1BE81oDQMG--
 
