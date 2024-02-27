@@ -1,117 +1,125 @@
-Return-Path: <linux-rtc+bounces-729-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-730-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A98788685ED
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 02:33:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3E64868718
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 03:29:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 925321C25A30
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 01:33:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 235C7B2168A
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 02:29:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 753D7F505;
-	Tue, 27 Feb 2024 01:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E179B107A9;
+	Tue, 27 Feb 2024 02:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SOXiHVhg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from 2.mo560.mail-out.ovh.net (2.mo560.mail-out.ovh.net [188.165.53.149])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94ABCF4FC
-	for <linux-rtc@vger.kernel.org>; Tue, 27 Feb 2024 01:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.53.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F878836;
+	Tue, 27 Feb 2024 02:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708997435; cv=none; b=C/550bYoJFlzhYMtmgRrRcfYIZn9Uvw6rVX0v91UmUrMHWvw+BXNJ2Xwc2Jt0dm5PDsSlnq0ITRcYS/7X5c9S4DrIFqTdxICVoDTmXrBfNGmeQcYmXc05ESQzbWtS9Vrp/B0YEy/JFJhNIJ8bxuRAePRGUWh1kB59YDFQgntD+g=
+	t=1709000966; cv=none; b=C9Aeglheb1WLX2xW/fmYurVzQqMGY0Elf6ZkT89e0QkC3zeWDUuJiaYggImJF2ueibasMqf0uJN98zBGqhY6fgDKGhbb58xbP509WG25z9akeK6n4TQdqAIMMovrAo8w5IXUSBYPlcdM24reFqtkkdXhiys+vzGLRZZfXCch0UU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708997435; c=relaxed/simple;
-	bh=oP+NUZOFqM2E6ptm+fLs9NHiWljY1OQX7Li7+FuOHyQ=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=LgcL2g9msEvh0CASwcwj6KIsWvJCzdFAenZNCfEzOsUypNEHoOO4TC6iGrLtF2QiMBjB7FEo9GykmqTJctKiefiP/GUpzcjxdeXbo4Ls+yR6SoYIhEgmmyJlqjPmOEjG6ASLKSewQ8DNJv0zIS3xgspWRBfw+4LWtdI1Kj4uMbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.53.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.109.139.198])
-	by mo560.mail-out.ovh.net (Postfix) with ESMTP id 4TkKTD3Hjbz1SFk
-	for <linux-rtc@vger.kernel.org>; Tue, 27 Feb 2024 01:21:52 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-f4n6p (unknown [10.111.174.252])
-	by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 605D91FD7C;
-	Tue, 27 Feb 2024 01:21:40 +0000 (UTC)
-Received: from etezian.org ([37.59.142.108])
-	by ghost-submission-6684bf9d7b-f4n6p with ESMTPSA
-	id uPD7FCQ53WXtyQAAxDwYeA
-	(envelope-from <andi@etezian.org>); Tue, 27 Feb 2024 01:21:40 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-108S002fe1109a9-1c88-4d0a-8ee4-2e8d2b473102,
-                    9285090D84508773EC2C25A4099646E261C64314) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:89.217.109.169
-From: Andi Shyti <andi.shyti@kernel.org>
-To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
- conor+dt@kernel.org, nicolas.ferre@microchip.com, 
- alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
- mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
- davem@davemloft.net, tglx@linutronix.de, tudor.ambarus@linaro.org, 
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
- linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
- p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
- richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
- lgirdwood@gmail.com, broonie@kernel.org, wim@linux-watchdog.org, 
- linux@roeck-us.net, linux@armlinux.org.uk, andrei.simion@microchip.com, 
- mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
- tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
- arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
- vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
- eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
- linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- Varshini Rajendran <varshini.rajendran@microchip.com>
-In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
-Message-Id: <170899689860.412407.545047377007032928.b4-ty@kernel.org>
-Date: Tue, 27 Feb 2024 02:21:38 +0100
+	s=arc-20240116; t=1709000966; c=relaxed/simple;
+	bh=CQcmSdTnqpd5Qmt10ywYmhJACCjuD+iFxTpjCNEa6hg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HxQhkqKwhDL7LSaNFZQVoNcbu+BrwE6P6+PyCCE7WGLJCzB3IquNfabtqA5WaexofV/kow88xW09XOxFjbrBq7SoDhYxkArII2cZXpbvoSNEWYYPkNELQSB1w9uVdENPTN0hUz7eJuJIJQmX1vA38vZTM2uKGPlqHqHYN3EtuaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SOXiHVhg; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A5331C0002;
+	Tue, 27 Feb 2024 02:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709000961;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vZzMbQBkiSynWHTc4VGxbpzP64pxHR1xQp2R1cnNObQ=;
+	b=SOXiHVhgdPkKz9IKFPA/936mLdWKmqPFcFgHeEDXrN+aYV+dNz5c7gGaS2fmyrsgfOayJb
+	4bjdSkGGpXIVpbmk6f2WuLvPQ/2RSwIMEp+NxKH0upywF4XdLELYS3ZgdyboF0YuPSBBkG
+	3oFZPexAAMbqZUKcNvmn3S0Xi8iZHztG8UbnnPwumT5vvvMT289TpAlHLHNwrUw4UWerhx
+	YW7T4X1PC6lmdvNbwj3Dw4aRBh7OnVpdJBK8+xMN8kKLycvy94If0DZgBuUwzLEJ7J17DW
+	n0yy5w8KWo11GDciU78Gg4cxj+0AkJn/acCPWKExizuKaMEv8Obs/vU9jisIHg==
+Date: Tue, 27 Feb 2024 03:29:19 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: antoniu.miclaus@analog.com, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	jdelvare@suse.com, linux@roeck-us.net, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH v8 1/2] rtc:  max31335: Add support for additional chips
+Message-ID: <20240227022919856ffa1d@mail.local>
+References: <20240227010312.3305966-1-chris.packham@alliedtelesis.co.nz>
+ <20240227010312.3305966-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 4120793662683875913
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrgeefgdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfgjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeelkefhieeljeejffdtvddthfffleffueekkefgieelveejjedtudettdeghfdutdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240227010312.3305966-2-chris.packham@alliedtelesis.co.nz>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hi
+On 27/02/2024 14:03:09+1300, Chris Packham wrote:
+> -	max31335->clkout.clk = devm_clk_get_enabled(dev, NULL);
+> -	if (IS_ERR(max31335->clkout.clk))
+> -		return dev_err_probe(dev, PTR_ERR(max31335->clkout.clk),
+> -				     "cannot enable clkout\n");
 
-On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
-> 
->  Changes in v4:
->  --------------
-> 
-> [...]
+This is so ugly and should have never passed. I went weak in front of
+Antoniu's insistance but I'm very close from ripping out the whole
+driver from the kernel now.
 
-Applied to i2c/i2c-host on
+Seriously, read all the comments that have been made around the IRQ/clk
+stuff and come back with a proper solution.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+> +static int max31335_irq_init(struct device *dev, const char *devname)
+> +{
+> +	struct max31335_data *max31335 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	switch (max31335->id) {
+> +	case ID_MAX31328:
+> +		break;
+> +	case ID_MAX31331:
+> +	case ID_MAX31334:
+> +		if (max31335->clkout.clk) {
+> +			/*
+> +			 * interrupt muxing depends on clkout so enable clkout
+> +			 * if configured before requesting interrupt
+> +			 */
+> +			ret = clk_prepare_enable(max31335->clkout.clk);
 
-Thank you,
-Andi
+Do I get this right that this is about enabling its own output clock?
+Why would you need to do that? Something else must be the consumer, not
+the provider itself.
 
-Patches applied
-===============
-[06/39] dt-bindings: i2c: at91: Add sam9x7 compatible string
-        commit: a856c9e6104f7b4619f09e19ab95903c7888da96
+> +			if (ret)
+> +				return dev_err_probe(dev, ret,
+> +						     "cannot enable clkout\n");
+> +		}
+> +		break;
+> +	default:
+> +		if (max31335->clkin) {
+> +			if (max31335->clkout.clk && max31335->irq > 0)
+> +				return dev_err_probe(dev, -EOPNOTSUPP,
+> +						     "irq not possible when both clkin and clkout are configured\n");
 
+This is not true, the RTC is always a clock provider. What is not
+possible is muxing the clock on the pin in a few configurations.
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
