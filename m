@@ -1,128 +1,118 @@
-Return-Path: <linux-rtc+bounces-734-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-735-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4FA486A0E1
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 21:33:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A19F886A174
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 22:18:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A71E1F2B95B
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 20:33:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D30841C2102B
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 21:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C7A14AD0C;
-	Tue, 27 Feb 2024 20:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6222E14EFE0;
+	Tue, 27 Feb 2024 21:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hERC8G3L"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mPzYVbWF"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D134DA0C;
-	Tue, 27 Feb 2024 20:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773B038DE7;
+	Tue, 27 Feb 2024 21:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709065975; cv=none; b=jPdNN2XF9gj4Iaq58FhPvXuFa6w3aO5PjwfqM6o5rqhC4S+rdTMuWaUnZ3VrlQgOybwST4uSCTHG1beIqtSmkvADDo0XR3PrVFA6MpNY8VYIgeREderJP8lE3BXmpuFljv1ht+t13xL8ueeuBdp0dpArZTEO9Az1n6lbKoXoJFg=
+	t=1709068726; cv=none; b=gW/SZM3urE8h2SE+56BS3mwHF8Nh+dU3fcq+TRhsaP21HfJDUpIXui9PMZmkq8087cRrwAiQsCVHnDuSLzGhHA6Q8Nvy9v5G7Xzo9Ytq4lO7iPmkOnU7lSD2iiXDGJs9Rg7cuLV2Y+VHPdMkzTwQ1J5/bLrIgwrqaY1ZJ8GufWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709065975; c=relaxed/simple;
-	bh=myVqhclYaoWabykXKhyPBJrb51yvHqqkiErwFvJjMk4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZOjSz11kTybERg17NwmdpvmfJd/iUTz1xmSIAcEggZReXTUaLv39aZIwAmg5gdXSvxXFdO+Qd6YaMa5qEUOqIaQQuCREGpwijuA/U8qQGcSVAmRxvHtuVIQSxmtN8cQIYc+YE/z5XlyDCPHvXQzXui+qLNm7nDFJ9niUaoHW1i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hERC8G3L; arc=none smtp.client-ip=217.70.183.201
+	s=arc-20240116; t=1709068726; c=relaxed/simple;
+	bh=Ok728L3hHJA0zGGTLXQ6pyu51bOeCtQqVFNe1uXUOpE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XOUYGMXe+VpOKStf4zpuLXKgVJRVKJO4O/yB9TUzxIEkH5n5fdGZF4fi/jAvX6eZSZwSCYCvF+bxP20rQbDTKX+ESLe6qBUC7wgmWkCk5Shxi42uEYr51+d7C68xfulEVUXokNnZD3rjSgf30CwkXabrDwmbuzvfG0Oiq3SpOBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mPzYVbWF; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DE5001BF204;
-	Tue, 27 Feb 2024 20:32:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A02F4FF80B;
+	Tue, 27 Feb 2024 21:18:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709065969;
+	t=1709068721;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wvxfxWjaLutlzwBuNGZe/hZYj/M5jqDhw7tveByHAzE=;
-	b=hERC8G3LaA8JY7wMbCyhJKrjL4sPlqLlanim3qsGSCgJw5Dl1oT5pZcsXGkVC0cWuGMOcU
-	j+ofXy4OyaXeQpxREaWY6IPtb+yupGSYwKfByF7MPTbFflprTXL6aDLQ7ARST491n4ykMh
-	TyB9G8z6wFuiAN2sm15XUMgWe3NKOFVr2DrPPs5JOlv4KCeAi026PEfUMCVxIBut/YEWne
-	mZqvk8vuGznc2J9QmsdTn+fkXzTPKzOjHT5Qp55HUuStQOd+ytAO3QwH87yxDEqEMePaR0
-	InWrTLvihxQ3e7Hw82nSd1SIpOr8QPhzxBofMlGmbbxPvCT/YskO5LBQWBfujA==
-Date: Tue, 27 Feb 2024 21:32:43 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: David Gow <davidgow@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rae Moar <rmoar@google.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Kees Cook <keescook@chromium.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Cassio Neri <cassio.neri@gmail.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Arthur Grillo <arthur.grillo@usp.br>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Daniel Latypov <dlatypov@google.com>,
-	Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	intel-xe@lists.freedesktop.org, linux-rtc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 5/9] rtc: test: Fix invalid format specifier.
-Message-ID: <20240227203243070e7d85@mail.local>
-References: <20240221092728.1281499-1-davidgow@google.com>
- <20240221092728.1281499-6-davidgow@google.com>
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=v0Q7f5YZOavW5gvORY5KlMV7Hgztn8PzK/Piadt892c=;
+	b=mPzYVbWFqPXV/lzJRm1RIScu3Zt2fgRv6UKCaDHGoGy9c+zJNHmkLD+RVNg3UvhMv2V4xY
+	O32jZdx5aJ2kWdy/DPpDdHaO37kcMmH0uKBA017iUwusmGN29cQF+gkFcUxitTzE/H+z9S
+	yo3B1X3E5t5sbf4k/tv0mC79iJawQlPr/Q40kC4Z+qZaqX+NQm0PtlifmcUC3SE0rdHqOX
+	MlsV8tPXWiNMTOEAj2GiYXP2c/dtxISV9NyL4CUfpdqTcqU95+Sa9L8iaPnxNitHLG5WA7
+	dX+TzNkoB68GD/2cR7skgm6xQCNyqq4/9iTVJ3VVutt8ndm+xz7DG9NhRIDAnQ==
+From: alexandre.belloni@bootlin.com
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: pcf8523: add suspend handlers for alarm IRQ
+Date: Tue, 27 Feb 2024 22:18:32 +0100
+Message-ID: <20240227211833.1820800-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240221092728.1281499-6-davidgow@google.com>
+Content-Transfer-Encoding: 8bit
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello,
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-On 21/02/2024 17:27:18+0800, David Gow wrote:
-> 'days' is a s64 (from div_s64), and so should use a %lld specifier.
-> 
-> This was found by extending KUnit's assertion macros to use gcc's
-> __printf attribute.
-> 
-> Fixes: 1d1bb12a8b18 ("rtc: Improve performance of rtc_time64_to_tm(). Add tests.")
-> Signed-off-by: David Gow <davidgow@google.com>
+Ensure the RTC is able to wake up the system from suspend.
 
-Who do you expect to take this patch?
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-pcf8523.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-> ---
->  drivers/rtc/lib_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/lib_test.c b/drivers/rtc/lib_test.c
-> index d5caf36c56cd..225c859d6da5 100644
-> --- a/drivers/rtc/lib_test.c
-> +++ b/drivers/rtc/lib_test.c
-> @@ -54,7 +54,7 @@ static void rtc_time64_to_tm_test_date_range(struct kunit *test)
->  
->  		days = div_s64(secs, 86400);
->  
-> -		#define FAIL_MSG "%d/%02d/%02d (%2d) : %ld", \
-> +		#define FAIL_MSG "%d/%02d/%02d (%2d) : %lld", \
->  			year, month, mday, yday, days
->  
->  		KUNIT_ASSERT_EQ_MSG(test, year - 1900, result.tm_year, FAIL_MSG);
-> -- 
-> 2.44.0.rc0.258.g7320e95886-goog
-> 
-> 
-
+diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+index d1efde3e7a80..98b77f790b0c 100644
+--- a/drivers/rtc/rtc-pcf8523.c
++++ b/drivers/rtc/rtc-pcf8523.c
+@@ -370,6 +370,30 @@ static int pcf8523_rtc_set_offset(struct device *dev, long offset)
+ 	return regmap_write(pcf8523->regmap, PCF8523_REG_OFFSET, value);
+ }
+ 
++#ifdef CONFIG_PM_SLEEP
++static int pcf8523_suspend(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++
++	if (client->irq > 0 && device_may_wakeup(dev))
++		enable_irq_wake(client->irq);
++
++	return 0;
++}
++
++static int pcf8523_resume(struct device *dev)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++
++	if (client->irq > 0 && device_may_wakeup(dev))
++		disable_irq_wake(client->irq);
++
++	return 0;
++}
++#endif
++
++static SIMPLE_DEV_PM_OPS(pcf8523_pm, pcf8523_suspend, pcf8523_resume);
++
+ static const struct rtc_class_ops pcf8523_rtc_ops = {
+ 	.read_time = pcf8523_rtc_read_time,
+ 	.set_time = pcf8523_rtc_set_time,
+@@ -487,6 +511,7 @@ static struct i2c_driver pcf8523_driver = {
+ 	.driver = {
+ 		.name = "rtc-pcf8523",
+ 		.of_match_table = pcf8523_of_match,
++		.pm = &pcf8523_pm,
+ 	},
+ 	.probe = pcf8523_probe,
+ 	.id_table = pcf8523_id,
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 
