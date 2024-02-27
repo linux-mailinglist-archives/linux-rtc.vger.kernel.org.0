@@ -1,155 +1,129 @@
-Return-Path: <linux-rtc+bounces-732-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-733-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D68CD86882A
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 05:22:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CB78869185
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 14:16:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A6112859AF
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 04:22:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1B061F26ABA
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Feb 2024 13:16:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F08A4D5AC;
-	Tue, 27 Feb 2024 04:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BB113B790;
+	Tue, 27 Feb 2024 13:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="iDThSa7G"
+	dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b="eCuzhSel"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32E24D131
-	for <linux-rtc@vger.kernel.org>; Tue, 27 Feb 2024 04:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB7813B29A
+	for <linux-rtc@vger.kernel.org>; Tue, 27 Feb 2024 13:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709007761; cv=none; b=ZB7jt43q8yYlU1zpoBNtgGcg1QWlJwif8cQMf+7FWWItD4E+pJei6wYsWC5LY7//cJB9+SuwG4leL3JPUr7MJ05yGmHaY5yOUEOT6SxiX/+/jaGXPzHv3HnrAzi2+EvJz4GzJEDMGaYHX8xUwVQTFOcnQ1ukiJrrD/Rc+et+fAs=
+	t=1709039724; cv=none; b=BOLhJtO9MaCR0qCQ8R4CKYpqFYKFfpRGyagZm9cod0PWklteWBHXST1gMRyyyYoXGl7k+mX2lxP13xN0xbJR+HABqxNSu2B/7PwZIbyOmYQIHHGI1r37RUi7KpnlUSodc9YOh1jX27z2DO1ZqYG43ldq1nFeQ1J6ekk9d63LfG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709007761; c=relaxed/simple;
-	bh=6jNFMRONjBC5hI101lH7xzU+lTU1NDVXO/PbyiENPmk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=r+CQbTG0kvwTuWf54dWvY/sPwSo9KlFAqkur1eoLwIzy4+VcI8K6lu1GlzJr1HEta7ksBFhIMnKP/GMGQUyCE6GDS1aU4Nk/hWR7qCigRN8RwgmOZFCP1O/90+n0qe0H9MTKoQMnN2/YLb0zCDkbWAbGe5KB5NswCFHZ9JcSAUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=iDThSa7G; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A4B112C0546;
-	Tue, 27 Feb 2024 17:22:36 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1709007756;
-	bh=6jNFMRONjBC5hI101lH7xzU+lTU1NDVXO/PbyiENPmk=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=iDThSa7GAGxVyVFYzyylfpzl7NK13suc3cJNBGsZ2Ljiluqw7jzeZJJaQ3USXreL8
-	 +Kcn2S5R7msC1inaG9ytTxDMUaGCHiaFM5Qdy0ybvBQD/vtmUZW169xVD3SqhK5LuI
-	 zQWgPhU1Y7R1L/zzVEhVm9/jsb8DxyhzM92jRkYksdJ7IZ/dZmmzVho6ISL6VC6+pi
-	 pJEkKS9PsC1wo00CZvpQLJn3yP5svYnldDA8HlLL2I983t/NNFVfLDm54u9wDdAZHu
-	 fsZvlVB0qBQfnSp/Chiq8QocMCENhEcwqTxmLGF4JqQBgfKMAZYAexQTSE/6tE+8u9
-	 cvNX3ZI+OW56Q==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65dd638c0001>; Tue, 27 Feb 2024 17:22:36 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.40; Tue, 27 Feb 2024 17:22:36 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Tue, 27 Feb 2024 17:22:36 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.040; Tue, 27 Feb 2024 17:22:36 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC: "antoniu.miclaus@analog.com" <antoniu.miclaus@analog.com>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "jdelvare@suse.com"
-	<jdelvare@suse.com>, "linux@roeck-us.net" <linux@roeck-us.net>,
-	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Ibrahim Tilki
-	<Ibrahim.Tilki@analog.com>, Zeynep Arslanbenzer
-	<Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v8 1/2] rtc: max31335: Add support for additional chips
-Thread-Topic: [PATCH v8 1/2] rtc: max31335: Add support for additional chips
-Thread-Index: AQHaaTSXXsc2JlLE/USpTZyAh1r7Yg==
-Date: Tue, 27 Feb 2024 04:22:35 +0000
-Message-ID: <ce50b1bc-0786-454e-9498-0b5ddbea0e2a@alliedtelesis.co.nz>
-References: <20240227010312.3305966-1-chris.packham@alliedtelesis.co.nz>
- <20240227010312.3305966-2-chris.packham@alliedtelesis.co.nz>
- <20240227022919856ffa1d@mail.local>
-In-Reply-To: <20240227022919856ffa1d@mail.local>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <225F68B96E1BA144A07C34DCAF01936C@atlnz.lc>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1709039724; c=relaxed/simple;
+	bh=FP6AjnY6lykXcHHYUiN/iTD0OoHVJjRqhJvevTgWu7k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b84QvtFh7OE68rUr+ddYNPjDKnIe5SOc5qbEA4cwOKOJeuazGv2MOdO1nrOl+6LO7L8xxB+kwA4CtKkHPw3F1+hmq8S2OHwVoFFZSFOy8OqDKrOY1i0YDNlARENRDEP5FDDXP1jNwTykWgztjnsW+62BPdbr/qQs3lNJDhl8aK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b=eCuzhSel; arc=none smtp.client-ip=185.136.65.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 2024022713151412cec11aca1c62b4af
+        for <linux-rtc@vger.kernel.org>;
+        Tue, 27 Feb 2024 14:15:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=alexander.sverdlin@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=gx92jGR/bM3wlQtlpHTsHDgQzGr0Puey6WoEtzn4I0A=;
+ b=eCuzhSelNHUz20au0aROGtgres048/b9fq80IOQZyW7fUcqgF6IMwNn3u9rMYt3wZ5mvYX
+ ikQhMyy2f1Fwtg8aqH13f1l3tZ1gEB7L+jVatBQhuYMmlQ85+1hm1oZ6WhNtw+bT1OHyy7L+
+ vNbcsOUwgQcDp4EUro2PIoG60VOgw=;
+From: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+To: linux-rtc@vger.kernel.org
+Cc: Lukas Stockmann <lukas.stockmann@siemens.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-kernel@vger.kernel.org,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Subject: [PATCH] rtc: pcf85063: do a SW reset after rtc power fail
+Date: Tue, 27 Feb 2024 14:14:32 +0100
+Message-ID: <20240227131436.3342807-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65dd638c a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=k7vzHIieQBIA:10 a=sVLDwT0inrkDDW06gAMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-456497:519-21489:flowmailer
 
-SGkgQWxleGFuZHJlLA0KDQpGaXJzdCBvZmYgYXBvbG9naWVzIGlmIEkndmUgc3RydWNrIGEgbmVy
-dmUsIHRoYXQgd2FzIG5ldmVyIG15IGludGVudGlvbi4gDQpJIHRob3VnaHQgY2xlYW5pbmcgdXAg
-YW4gaW5mbGlnaHQgcGF0Y2ggc2VyaWVzIHRvIGdldCBpdCBsYW5kZWQgd291bGQgYmUgDQphIHN0
-cmFpZ2h0IGZvcndhcmQgdGhpbmcuDQoNCk9uIDI3LzAyLzI0IDE1OjI5LCBBbGV4YW5kcmUgQmVs
-bG9uaSB3cm90ZToNCj4gT24gMjcvMDIvMjAyNCAxNDowMzowOSsxMzAwLCBDaHJpcyBQYWNraGFt
-IHdyb3RlOg0KPj4gLQltYXgzMTMzNS0+Y2xrb3V0LmNsayA9IGRldm1fY2xrX2dldF9lbmFibGVk
-KGRldiwgTlVMTCk7DQo+PiAtCWlmIChJU19FUlIobWF4MzEzMzUtPmNsa291dC5jbGspKQ0KPj4g
-LQkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCBQVFJfRVJSKG1heDMxMzM1LT5jbGtvdXQuY2xr
-KSwNCj4+IC0JCQkJICAgICAiY2Fubm90IGVuYWJsZSBjbGtvdXRcbiIpOw0KPiBUaGlzIGlzIHNv
-IHVnbHkgYW5kIHNob3VsZCBoYXZlIG5ldmVyIHBhc3NlZC4gSSB3ZW50IHdlYWsgaW4gZnJvbnQg
-b2YNCj4gQW50b25pdSdzIGluc2lzdGFuY2UgYnV0IEknbSB2ZXJ5IGNsb3NlIGZyb20gcmlwcGlu
-ZyBvdXQgdGhlIHdob2xlDQo+IGRyaXZlciBmcm9tIHRoZSBrZXJuZWwgbm93Lg0KPg0KPiBTZXJp
-b3VzbHksIHJlYWQgYWxsIHRoZSBjb21tZW50cyB0aGF0IGhhdmUgYmVlbiBtYWRlIGFyb3VuZCB0
-aGUgSVJRL2Nsaw0KPiBzdHVmZiBhbmQgY29tZSBiYWNrIHdpdGggYSBwcm9wZXIgc29sdXRpb24u
-DQoNClllYWggSSdtIG9ubHkganVzdCBnZXR0aW5nIHRvIGdyaXBzIHdpdGggdGhpcy4NCg0KTm8g
-aWRlYSBhYm91dCB0aGUgTUFYMzEzMzUgaXRzZWxmIGJ1dCBmcm9tIHRoZSBNQVgzMTMzNCBpdCBs
-b29rcyBsaWtlIA0KdGhlIGFsYXJtMSBpbnRlcnJ1cHQgd2lsbCBtb3ZlIGZyb20gSU5UQSB0byBJ
-TlRCLiBJIHRoaW5rIHJhdGhlciB0aGFuIA0KbWVzc2luZyBhYm91dCB3aXRoIHRoZSBjbG9jayBz
-dHVmZiB3ZSdkIGJlIGJldHRlciBvZmYgd2l0aCBhIA0KcGluLTYtZnVuY3Rpb24gPSAiYWxhcm0x
-IiB8ICJjbGtvdXQiIHByb3BlcnR5Lg0KDQo+DQo+PiArc3RhdGljIGludCBtYXgzMTMzNV9pcnFf
-aW5pdChzdHJ1Y3QgZGV2aWNlICpkZXYsIGNvbnN0IGNoYXIgKmRldm5hbWUpDQo+PiArew0KPj4g
-KwlzdHJ1Y3QgbWF4MzEzMzVfZGF0YSAqbWF4MzEzMzUgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsN
-Cj4+ICsJaW50IHJldDsNCj4+ICsNCj4+ICsJc3dpdGNoIChtYXgzMTMzNS0+aWQpIHsNCj4+ICsJ
-Y2FzZSBJRF9NQVgzMTMyODoNCj4+ICsJCWJyZWFrOw0KPj4gKwljYXNlIElEX01BWDMxMzMxOg0K
-Pj4gKwljYXNlIElEX01BWDMxMzM0Og0KPj4gKwkJaWYgKG1heDMxMzM1LT5jbGtvdXQuY2xrKSB7
-DQo+PiArCQkJLyoNCj4+ICsJCQkgKiBpbnRlcnJ1cHQgbXV4aW5nIGRlcGVuZHMgb24gY2xrb3V0
-IHNvIGVuYWJsZSBjbGtvdXQNCj4+ICsJCQkgKiBpZiBjb25maWd1cmVkIGJlZm9yZSByZXF1ZXN0
-aW5nIGludGVycnVwdA0KPj4gKwkJCSAqLw0KPj4gKwkJCXJldCA9IGNsa19wcmVwYXJlX2VuYWJs
-ZShtYXgzMTMzNS0+Y2xrb3V0LmNsayk7DQo+IERvIEkgZ2V0IHRoaXMgcmlnaHQgdGhhdCB0aGlz
-IGlzIGFib3V0IGVuYWJsaW5nIGl0cyBvd24gb3V0cHV0IGNsb2NrPw0KPiBXaHkgd291bGQgeW91
-IG5lZWQgdG8gZG8gdGhhdD8gU29tZXRoaW5nIGVsc2UgbXVzdCBiZSB0aGUgY29uc3VtZXIsIG5v
-dA0KPiB0aGUgcHJvdmlkZXIgaXRzZWxmLg0KDQpJIGRvbid0IHRoaW5rIGl0IGRvZXMuIEl0J3Mg
-anVzdCB0aGF0IGJhc2VkIG9uIHRoZSBFTkNMS08gc2V0dGluZyBhbGFybTEgDQp3aWxsIGJlIG91
-dHB1dCBvbiBhIGRpZmZlcmVudCBwaW4uIEkgZG9uJ3QgdGhpbmsgdGhlcmUncyByZWFsbHkgYSBw
-cm9wZXIgDQp3YXkgb2YgZGlzYWJsaW5nIENMS09VVCBkeW5hbWljYWxseS4gRWl0aGVyIGl0J3Mg
-ZW5hYmxlZCBhbmQgYWxsIHRoZSANCmludGVycnVwdHMgYXJlIG9uIHRoZSBJTlRBIHBpbiBvciBp
-dCdzIGRpc2FibGVkIGFuZCBhbGFybTEgaXMgbW92ZWQgdG8gDQp0aGUgSU5UQi4gWW91IGNhbiBj
-aGFuZ2UgdGhlIGNsa291dCBmcmVxdWVuY3kgYnV0IG5vdCBvdXRyaWdodCBkaXNhYmxlIA0KaXQg
-KHdpdGhvdXQgaGF2aW5nIGEgc2lkZS1lZmZlY3QgdGhhdCBpbXBhY3RzIHRoZSBpbnRlcnJ1cHQg
-YXNzaWdubWVudCkuDQoNClNvIEkgdGhpbmsgbXkgc3VnZ2VzdGlvbiBvZiBtYWtpbmcgaXQgcGFy
-dCBvZiB0aGUgaGFyZHdhcmUgZGVzY3JpcHRpb24gDQppcyBwcm9iYWJseSB0aGUgc2Vuc2libGUg
-dGhpbmcgdG8gZG8uIEl0IGFmZmVjdHMgaG93IHRoZSBpbnRlcnJ1cHRzIGFyZSANCnBoeXNpY2Fs
-bHkgY29ubmVjdGVkIHNvIEkgdGhpbmsgaXQgZG9lcyBiZWxvbmcgaW4gdGhlIGRldmljZSB0cmVl
-Lg0KDQo+DQo+PiArCQkJaWYgKHJldCkNCj4+ICsJCQkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2
-LCByZXQsDQo+PiArCQkJCQkJICAgICAiY2Fubm90IGVuYWJsZSBjbGtvdXRcbiIpOw0KPj4gKwkJ
-fQ0KPj4gKwkJYnJlYWs7DQo+PiArCWRlZmF1bHQ6DQo+PiArCQlpZiAobWF4MzEzMzUtPmNsa2lu
-KSB7DQo+PiArCQkJaWYgKG1heDMxMzM1LT5jbGtvdXQuY2xrICYmIG1heDMxMzM1LT5pcnEgPiAw
-KQ0KPj4gKwkJCQlyZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIC1FT1BOT1RTVVBQLA0KPj4gKwkJ
-CQkJCSAgICAgImlycSBub3QgcG9zc2libGUgd2hlbiBib3RoIGNsa2luIGFuZCBjbGtvdXQgYXJl
-IGNvbmZpZ3VyZWRcbiIpOw0KPiBUaGlzIGlzIG5vdCB0cnVlLCB0aGUgUlRDIGlzIGFsd2F5cyBh
-IGNsb2NrIHByb3ZpZGVyLiBXaGF0IGlzIG5vdA0KPiBwb3NzaWJsZSBpcyBtdXhpbmcgdGhlIGNs
-b2NrIG9uIHRoZSBwaW4gaW4gYSBmZXcgY29uZmlndXJhdGlvbnMuDQoNClllYWggSSBkb24ndCB1
-bmRlcnN0YW5kIHRoYXQgZWl0aGVyLiBOb3Qgc3VyZSB3aGF0IGNsa2luIGhhcyB0byBkbyB3aXRo
-IA0KYW55dGhpbmcgaGVyZS4gVGhlIGNsa291dCBzdHVmZiBhZmZlY3RzIHdoaWNoIGlycSBwaW5z
-IGFyZSBpbiBwbGF5Lg0K
+From: Lukas Stockmann <lukas.stockmann@siemens.com>
+
+From PCF85063A datasheet, section "Software reset":
+
+"There is a low probability that some devices will have corruption of the
+registers after the automatic power-on reset if the device is powered up
+with a residual VDD level. It is required that the VDD starts at zero volts
+at power up or upon power cycling to ensure that there is no corruption of
+the registers. If this is not possible, a reset must be initiated after
+power-up (i.e. when power is stable) with the software reset command"
+
+Trigger SW reset if a power loss is detected.
+
+Link: https://www.nxp.com/docs/en/data-sheet/PCF85063A.pdf
+Signed-off-by: Lukas Stockmann <lukas.stockmann@siemens.com>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+---
+ drivers/rtc/rtc-pcf85063.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
+index fdbc07f14036..edfd75d18e19 100644
+--- a/drivers/rtc/rtc-pcf85063.c
++++ b/drivers/rtc/rtc-pcf85063.c
+@@ -35,6 +35,7 @@
+ #define PCF85063_REG_CTRL1_CAP_SEL	BIT(0)
+ #define PCF85063_REG_CTRL1_STOP		BIT(5)
+ #define PCF85063_REG_CTRL1_EXT_TEST	BIT(7)
++#define PCF85063_REG_CTRL1_SWR		0x58
+ 
+ #define PCF85063_REG_CTRL2		0x01
+ #define PCF85063_CTRL2_AF		BIT(6)
+@@ -580,7 +581,7 @@ static int pcf85063_probe(struct i2c_client *client)
+ 
+ 	i2c_set_clientdata(client, pcf85063);
+ 
+-	err = regmap_read(pcf85063->regmap, PCF85063_REG_CTRL1, &tmp);
++	err = regmap_read(pcf85063->regmap, PCF85063_REG_SC, &tmp);
+ 	if (err) {
+ 		dev_err(&client->dev, "RTC chip is not present\n");
+ 		return err;
+@@ -590,6 +591,22 @@ static int pcf85063_probe(struct i2c_client *client)
+ 	if (IS_ERR(pcf85063->rtc))
+ 		return PTR_ERR(pcf85063->rtc);
+ 
++	/*
++	 * If a Power loss is detected, SW reset the device.
++	 * From PCF85063A datasheet:
++	 * There is a low probability that some devices will have corruption
++	 * of the registers after the automatic power-on reset...
++	 */
++	if (tmp & PCF85063_REG_SC_OS) {
++		dev_warn(&client->dev,
++			 "Power loss detected, send a SW reset to the device\n");
++		err = regmap_write(pcf85063->regmap, PCF85063_REG_CTRL1,
++				PCF85063_REG_CTRL1_SWR);
++		if (err < 0)
++			dev_err(&client->dev,
++				"SW reset failed, trying to continue\n");
++	}
++
+ 	err = pcf85063_load_capacitance(pcf85063, client->dev.of_node,
+ 					config->force_cap_7000 ? 7000 : 0);
+ 	if (err < 0)
+-- 
+2.43.2
+
 
