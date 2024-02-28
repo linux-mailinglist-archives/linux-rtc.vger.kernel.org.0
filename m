@@ -1,107 +1,126 @@
-Return-Path: <linux-rtc+bounces-754-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-755-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E3C886AE86
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 Feb 2024 13:00:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A28F286B3CB
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 Feb 2024 16:53:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90E311C24AAD
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 Feb 2024 12:00:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3E271C23BE5
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 Feb 2024 15:53:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D562D70CC0;
-	Wed, 28 Feb 2024 11:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38D8815D5B7;
+	Wed, 28 Feb 2024 15:53:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gCuvCf8J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fH/VpNsC"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47E473507;
-	Wed, 28 Feb 2024 11:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCE615CD6E;
+	Wed, 28 Feb 2024 15:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709121486; cv=none; b=oLmw2MDtOeKRKpjFQGh3frp0ZL8WqBIsMf+zdHUpPff9T6ZXW/bnvSYv9UDlAjVnTApdQeHzPpO5npAzLw07JFBy4/aajtb/GjYN/ve1biGU1I/0fG4QBuCeCvJYQNLwqH21CnszJ4Tl7sHPwOM29fksmVd7hjc0HlWvNDSK6Dk=
+	t=1709135630; cv=none; b=Rc0iRWJ8YCDxdaHLxX9hgYK8K709KlFkfOAISTfaQjH7oN0+j8Ij4fEv1EilEi6MSwi4eAwJTo7vzhjbjwYAn5/h2Z9unKzPvj8adcZHinh4IYDYY5ItE9k3IfBE6lPv5WCfIYGIvsaoZWw0fzwfPXH1SqQepR4YS1/KJpNy6T0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709121486; c=relaxed/simple;
-	bh=2i57F2bwd8MFtlPkyg5+cTyjkGeR5xF3YTz9mn9FMPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mEkRUGYqOty0CYIcmOgMuMEk39oZTaMdqiyUt/ebs/5dPYzWJEVPV81RgfHJgOcvi+3pb6iFPbzCp4qT11hNeNpEeZrvLjft3ffZgkRs6oY6DxwTpBykQQDqziMvL6iusks7M97hm7uZApvg/0Bz5bL8RAdhMLv2YC151WWnAGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gCuvCf8J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BF6C433C7;
-	Wed, 28 Feb 2024 11:58:03 +0000 (UTC)
+	s=arc-20240116; t=1709135630; c=relaxed/simple;
+	bh=vxRLRVprDDB/c/3M41BNMbhxG1UwYXmCdbjUbmB3KKE=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=N9Wr/wmzXUbn8xDF9Uds8NtC7iTGnjmBuOuTOtXQX0ugoeRjV7PBjhdjyNXpsuLa91uqToBkLDkAqehOi2OFTWKgSPvRZ2mtn/PRVqb4oU54k7tLY/DgghAzgw0VwOZFXs+MSs489mwhE8zxum4BwtJzHm4oo/Q3KyVWaaGHA7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fH/VpNsC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C4CC433F1;
+	Wed, 28 Feb 2024 15:53:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709121486;
-	bh=2i57F2bwd8MFtlPkyg5+cTyjkGeR5xF3YTz9mn9FMPo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gCuvCf8JLm/G3hyf82omkF/EFRSEDdsMPz+k8PJOUXPTs19x4IjEhAC7IjvarNarp
-	 f2mfRJuQBszQyCddyAoxMKEO/9uwRxfdk6t0vPR6/B77rKJ8uYagYgTj8UDlHozlPd
-	 8Hpor3xdVOWiOQ4gKx0b8I8KNTfnrdIOZ34vxV/QAc5cupuKmdFWXXDYqHSBUgLkH/
-	 9tnS4u6/BKc/7Pny26ZvnLLv3Q4dOw/mpLwnExI+DCB7ZSaQ2CAiFYxEuIDNtIIWD/
-	 rQRqY267+OLRb0coDAzBmqVFIoEfgFqLDHvjMGJbqn2heiodlXXBROnYWoaAmK43kE
-	 zgzYtrx4vvqfg==
-Date: Wed, 28 Feb 2024 11:58:01 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: antoniu.miclaus@analog.com, alexandre.belloni@bootlin.com,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-	Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v8 2/2] dt-bindings: rtc: add max313xx RTCs
-Message-ID: <20240228-embark-rimmed-d81bab3d42b8@spud>
-References: <20240227010312.3305966-1-chris.packham@alliedtelesis.co.nz>
- <20240227010312.3305966-3-chris.packham@alliedtelesis.co.nz>
+	s=k20201202; t=1709135629;
+	bh=vxRLRVprDDB/c/3M41BNMbhxG1UwYXmCdbjUbmB3KKE=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=fH/VpNsCC6yrehn5cwmf2mjsgU1Ga7kLFvddPlrtSi5Jr4CqpQYnnimGO6HSWNh3O
+	 P1sksEi+taf0EXpKgvTWOTnRbkQja9l+bSOOMPcaOGxOgSq88KAUk6A8OE94ZgekUk
+	 PKdQLGs/2dsH+cPT3ecRVpohSJXMsiWDkMudBu1wj0oL9BuvtO87S4FKrMnmaXAGxp
+	 SG4Uzyv1B5O67FmVmHVGx4IRrSCy5EQ9LvQB1aqs1ZQfSHMSBrY3mVj+nFOJNScIHn
+	 h/H6FZUVqL4iXcGgFr9D757QehRG1OTvDYME//d5Zi8AqSrdF6Nofkun3/EW0W2f+w
+	 hJcYB3olR0OOg==
+From: Mark Brown <broonie@kernel.org>
+To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+ conor+dt@kernel.org, nicolas.ferre@microchip.com, 
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+ mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
+ davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de, 
+ tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at, 
+ vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+ linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
+ p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+ richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+ lgirdwood@gmail.com, wim@linux-watchdog.org, linux@roeck-us.net, 
+ linux@armlinux.org.uk, andrei.simion@microchip.com, 
+ mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
+ tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
+ arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
+ vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
+ eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>
+In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
+Message-Id: <170913561744.333382.15677696645878162142.b4-ty@kernel.org>
+Date: Wed, 28 Feb 2024 15:53:37 +0000
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="t4gB6YKl63pmWb0L"
-Content-Disposition: inline
-In-Reply-To: <20240227010312.3305966-3-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-a684c
 
+On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
+> 
+>  Changes in v4:
+>  --------------
+> 
+> [...]
 
---t4gB6YKl63pmWb0L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Tue, Feb 27, 2024 at 02:03:10PM +1300, Chris Packham wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
->    interrupts:
-> +    description:
-> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
-> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
-> +      configuration.
->      maxItems: 1
+Thanks!
 
-The maxItems: 1 looks odd here when you state "some of the RTCs have two
-interrupt lines", which makes it sound as if there are actually two
-interrupts that should be exposed here. If those two interrupts get
-muxed to the same pin for output I'd suggest that you clarify that here.
+[16/39] spi: dt-bindings: atmel,at91rm9200-spi: remove 9x60 compatible from list
+        commit: 666db8fd4265f938795004838d2a9335ce7b9da1
 
-Otherwise, this looks good to me - although I do wonder if the
-authorship on the commit (attributed to the analog guys) is still
-accurate.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Conor.
+Mark
 
---t4gB6YKl63pmWb0L
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd8fyQAKCRB4tDGHoIJi
-0tDSAQD7rkCjY+O1QQKDOVfrzBf54VpRC0g+H4OnP8QHO8tvcAEAve/lMLAJY/bw
-qykf1vJWluXsxzAdd6/12T1WX8A94Qs=
-=7JwR
------END PGP SIGNATURE-----
-
---t4gB6YKl63pmWb0L--
 
