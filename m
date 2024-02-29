@@ -1,62 +1,57 @@
-Return-Path: <linux-rtc+bounces-762-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-763-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 585C186D625
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2989F86D62A
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:29:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 076311F21DF3
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 21:27:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCB2D1F23E73
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 21:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6FB16FF52;
-	Thu, 29 Feb 2024 21:27:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 609E816FF50;
+	Thu, 29 Feb 2024 21:29:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mQ1XDIc0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ObwgrMCy"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060F316FF21;
-	Thu, 29 Feb 2024 21:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B53110EF
+	for <linux-rtc@vger.kernel.org>; Thu, 29 Feb 2024 21:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709242026; cv=none; b=a3jyIJ8Yzp2IRIAd0P0Cp5PA3bAGNz5GyipZJdFyDdC7wMrzGl82YPJBbdw++ZqjxDA8Bxt4R7s4RT2RRNU/ULiLHW0frAos18YQtc6twblAn8d16R1xNzdHiMNvfTiRehdGIofXS9oiap+PdXl+T21o2RPgVtg6mry0CHTZ7eU=
+	t=1709242181; cv=none; b=X30s/QwHnlpiTLYJeTY8KkdWKIuYnGLIxpO6jSDqJGOz8iq7nOqR618hgYAzthmfdRufUscjpCsMJADNHEntGTtYFBiExx+NZdg6KNpTDirwkkXS38/1x7Jpmic2m0FMjZKbL4pCch38w83q5qO2RQiXvJATsq4flRUwkh/t8dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709242026; c=relaxed/simple;
-	bh=mblvUOQ7TqSTXupgS1wYol+Cwc1GOHntbxz2wgg057o=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=puvd8fu++7vjl29gvIOxLPPvgDpCr/4HRsnsBBxlOFeC6ZqhJeBr2SZpPy6CWzzj9JiA7BJVloKxdMOLEUQDd4ZHIt7xJhhJmIBHX5YXmSDchrPqLVehcVAITrmu8WOMBuM7r9jzPAEhycPthhFGVXcIlYPfQknKZffW+10TZzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mQ1XDIc0; arc=none smtp.client-ip=217.70.183.195
+	s=arc-20240116; t=1709242181; c=relaxed/simple;
+	bh=OGcArJMIJd4y/6626ogxy7+Jii3xU9c5Ri+tC6OEeW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PBXkvBu5JL+lvWsdFugntTK8J09cYxC5OEY0Hpecqpo0flreX/ZHn6paeTCTKTkXcqIYTHL/R/34bhoOW6GenspP+3AdRB3Sxob0sdGIoGaSH9pj+Dmv+wSNummcKPHbmb9M5b0dCbcX/VsSHwvs8Xr7k3unEK56j9ihf/CYh2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ObwgrMCy; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A3F0560005;
-	Thu, 29 Feb 2024 21:27:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 20FEA60006;
+	Thu, 29 Feb 2024 21:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709242022;
+	t=1709242177;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=91a9iOCe0C2brpFvtJay073OL0BwTlq7iXQAv8uj7GU=;
-	b=mQ1XDIc0BXJfwzuAOAFJvi0pZ6HSdDJW6hzqvTVvhM0wEOUXe5CdYbRo5NZel09ZnoI2kT
-	lBVQNziVg1Tj6NIbLFPwX1rUvjpAjbJ3X7QFTwodRX2A2zUfHLsgNVgi4jpRLLcjmShhWr
-	gnJeboq38lMwyrnQXsqe+wah+cKpIvkI2UdCv2AiyEthRcf3w0SLiMZ6UtB7A+PeYtjYs2
-	QMOfBTZ8zBFDI7v+nUe82L72f9FjfhfUpx9hjOA95TRdNSdKPAcjx9RXiH4S5jqlCf38HT
-	1mOuz1Rq3IzvxPexD+Py8LwCmDHk+7pmHLE7Wa5aznVASevEwdD+QNJooIHN+Q==
-Date: Thu, 29 Feb 2024 22:27:00 +0100
+	bh=hHwgTPW06kFF/pKVHrJJas3uXFQf1OvJWa7UmlCUI3g=;
+	b=ObwgrMCyYCJRea1vZbPoTtUpXIBbTaSCoTOjKGDtkCuqwqoxk/GjJ7OojQ0nnGB14izlZx
+	f2y1uWGKK98VhZjtyk1q9Df2R49+v7wpiOUI4EIcrUu0oumtBDSensik8aYJntSBE/82vU
+	+UgSFoqpwBtyuLQJxrDzPCY6pkNBwIzuGZULrEQaQhxfH2oRoZFH/P9iFsfB6F0YUYzoxC
+	i6N2JWAmHLPX/Lz5CXoLlW6fZeklgUq7X4IdpPzKNRYP8P7WveW/WY5MZ8w4U1Spojm9hi
+	AxFh10HX8mfuZiNOBfvBHrMWQBA17ANeumk5Q9spkLgrFTkuPh2LGlPZ93xwcw==
+Date: Thu, 29 Feb 2024 22:29:36 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, nicolas.ferre@microchip.com,
-	claudiu.beznea@tuxon.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Varshini Rajendran <varshini.rajendran@microchip.com>
-Subject: Re: (subset) [PATCH v4 11/39] dt-bindings: rtt: at91rm9260: add
- sam9x7 compatible
-Message-ID: <170924199301.1874122.10917718116731060869.b4-ty@bootlin.com>
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
- <20240223172552.672094-1-varshini.rajendran@microchip.com>
+To: linux-rtc@vger.kernel.org, Curtis Klein <curtis.klein@hpe.com>
+Cc: trivial@kernel.org
+Subject: Re: [PATCH] rtc: m41t80: Use the unified property API get the
+ wakeup-source property
+Message-ID: <170924210561.1874336.5868427380809075053.b4-ty@bootlin.com>
+References: <20240222011129.79241-1-curtis.klein@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -65,18 +60,19 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240223172552.672094-1-varshini.rajendran@microchip.com>
+In-Reply-To: <20240222011129.79241-1-curtis.klein@hpe.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Fri, 23 Feb 2024 22:55:52 +0530, Varshini Rajendran wrote:
-> Add compatible for SAM9X7 RTT.
+On Wed, 21 Feb 2024 17:11:29 -0800, Curtis Klein wrote:
+> This allows both ACPI and Device Tree systems to specify the m41t80 as a
+> wakeup-source.
 > 
 > 
 
 Applied, thanks!
 
-[11/39] dt-bindings: rtt: at91rm9260: add sam9x7 compatible
-        https://git.kernel.org/abelloni/c/16816e6a3693
+[1/1] rtc: m41t80: Use the unified property API get the wakeup-source property
+      https://git.kernel.org/abelloni/c/3100fd1aa8e4
 
 Best regards,
 
