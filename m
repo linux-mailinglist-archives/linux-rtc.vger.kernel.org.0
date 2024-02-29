@@ -1,57 +1,58 @@
-Return-Path: <linux-rtc+bounces-767-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-768-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAAB186D671
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:59:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE9EF86D692
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 23:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DE28284705
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 21:59:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFE3C1C224F3
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92F46D527;
-	Thu, 29 Feb 2024 21:58:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A6C96D53B;
+	Thu, 29 Feb 2024 22:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Vufomjse"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ex91U2FX"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0352B16FF46;
-	Thu, 29 Feb 2024 21:58:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5775E2FC35;
+	Thu, 29 Feb 2024 22:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709243938; cv=none; b=i7Obq1iFF8iCkYCHxFVb1V6j1UIEw1fo9iSZ+ccMLQ3nr6gVAr98grd59uHI0SQ0DCfYUpv7Z5P7+Mr4nZUj/dXpYXvOzuwikL7cvnyHqgV4k0HzTNjElo3T4TR8o/eEBDQ4sDowsOyxmEb0g9YmrU0Mp6xHUszFUO6lLAiMDAs=
+	t=1709244488; cv=none; b=tAYc6sqJYKcrVDeRMQOfuwxT4jfR5jDeYqC0qwXNiJBcu6XiH38UKTiiofwIpK+5ePn0tKsMl/2F/XTmQI5CHnCYCTsOHDNjhL9943Nr3ahZ4ReWm5Q1btsIItkNCyCs4PzF5mle7qdSWzZGjuMhuZpG8Ix2Hy1XE7jvhPG9Pfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709243938; c=relaxed/simple;
-	bh=5JVabrlMLe/1NI62rmzy/ei3KAtCFMI1zLcwOM4J3wA=;
+	s=arc-20240116; t=1709244488; c=relaxed/simple;
+	bh=uY0SdBM/VL4JmHHpdHpZrHSim56nTzaGwt5Kz9E62dI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eZx7KXFi9bs9Z9QwfBwpTSyCX85p5KPjjO7gk501CTQdY475mE5ry5CemuPSTvNH8uLI5XxwqjOZDVGJNsszFV5EWj9NcXYY5akVUUjJQZEtQ6AXhV0SWCf8uN00LYis3KsR5pFLb3WIKY26p73mNDflmBNGot6I8qTLa0wClNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Vufomjse; arc=none smtp.client-ip=217.70.183.194
+	 Content-Type:Content-Disposition:In-Reply-To; b=d4B/cIZ33EEngZHEqUytWpSjYzjDovT5jeRt2Fq4BjZw68KQ7or2AQV30DfEFeKPt43Nvg7OOLZsVA7NQVDIvXaWuA2HY2kJi5p7/fzwTvzqh3iTdhFnIikMXSQJNM25JkxlFpaX5vF+Hj0xS2Yx8mYw7S/SXTjpr2DzmLh0xhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ex91U2FX; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9AEDF40003;
-	Thu, 29 Feb 2024 21:58:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 14D6B40003;
+	Thu, 29 Feb 2024 22:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709243934;
+	t=1709244483;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DiJQ8IEdW2Jkk/S4jOTeOO3q8QRmk15ZcHgGmWobrwI=;
-	b=Vufomjser0fMBgkFugDyP7xz2NZDrANrKG05Os5lRiWQQXwpRfMzls1U5UVZfCj5mGCYba
-	5aJ3QYmmc8fc0/4bxjHolLYyp6+I0mYpkgOkagq1VAy9ei7hF5XdFt9KRU8p7qKO5AFnSI
-	IDmHMn7xkIikioGrvhOglf1pB1piCcIgXRwijdx3iZwFVhiQWk0Z/Zc120AtPSiUql9bAZ
-	5Og6pScc2s5MeWAL+U4EWkNgFn//q4vYRkZ8AF6ALxhFwbXShvYnMej6r4x9QOp+qJYnwW
-	VB/q3oYjxHjy6ekb6CGKYrGj8M6OBOg3WeuUyEmA5yDBbTs4iyxSNx8tLH8WUw==
-Date: Thu, 29 Feb 2024 22:58:50 +0100
+	bh=lxqQl5JTSihBQCaBo7S//KD0ZOrQomn+RcL0KtFjsNA=;
+	b=ex91U2FX0jOv717asqGerNnjDv8U2tCTG4E+jk1iseh7/OnPOIckArxVkitEyHGy1vjeEw
+	QFwQfHjtjAvW1lOqt1m4Xf17gwNSGK+HUU7LsDjQ9g3WO9pBaC9+Sy5yZm9P4pYd1nCgKt
+	Blxnv6hlTUlvor3ff1S8aNawNJwMzL6r/V5w1AJMKHJCU30B/POs4672vC4vildRRtQoZ7
+	dtSkryTNdVn4oNnqUTjlPJWioBAI45kS8VQng1J/1a0vfw7GVA8yUjnasE9Kx9PZ9vQkeH
+	DDH76pcdRotIDH2JlrLEJfK8eUVzkIJ1sniuGyxToOalKv1h2lsIIuWMvdebrQ==
+Date: Thu, 29 Feb 2024 23:08:02 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Nicholas Miehlbradt <nicholas@linux.ibm.com>
-Cc: a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+To: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc: linux-rtc@vger.kernel.org,
+	Lukas Stockmann <lukas.stockmann@siemens.com>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: fix uninitialized read of rtc_wkalrm.time
-Message-ID: <20240229215850a1990100@mail.local>
-References: <20231129073647.2624497-1-nicholas@linux.ibm.com>
+Subject: Re: [PATCH] rtc: pcf85063: do a SW reset after rtc power fail
+Message-ID: <2024022922080217cbe165@mail.local>
+References: <20240227131436.3342807-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -60,68 +61,79 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231129073647.2624497-1-nicholas@linux.ibm.com>
+In-Reply-To: <20240227131436.3342807-1-alexander.sverdlin@siemens.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello,
-
-On 29/11/2023 07:36:47+0000, Nicholas Miehlbradt wrote:
-> If either of the first two branches of the if statement in
-> rtc_read_alarm_internal are taken the fields of alarm->time are not
-> initialized but are subsequently read by the call to rtc_tm_to_time64.
+On 27/02/2024 14:14:32+0100, A. Sverdlin wrote:
+> From: Lukas Stockmann <lukas.stockmann@siemens.com>
 > 
-> Refactor so that the time field is only read if the final branch of the
-> if statment which initializes the field is taken.
+> From PCF85063A datasheet, section "Software reset":
 > 
-
-While the problem description is correct, the solution is not because
-you have no guarantee that the fields have been initialized if
-->read_alarm returns a value different from 0
-
-So, instead of avoiding the conversion unless the final branch is taken,
-it should be avoided as long as err != 0.
-
-But, I'm also wondering whether there is actually an issue. mktime64
-can be fed whatever value without bugging out and the value of err will
-be part of the trace so userspace knows that it shouldn't trust the
-value.
-
-So, what is the actual issue? :)
-
-> Signed-off-by: Nicholas Miehlbradt <nicholas@linux.ibm.com>
+> "There is a low probability that some devices will have corruption of the
+> registers after the automatic power-on reset if the device is powered up
+> with a residual VDD level. It is required that the VDD starts at zero volts
+> at power up or upon power cycling to ensure that there is no corruption of
+> the registers. If this is not possible, a reset must be initiated after
+> power-up (i.e. when power is stable) with the software reset command"
+> 
+> Trigger SW reset if a power loss is detected.
+> 
+> Link: https://www.nxp.com/docs/en/data-sheet/PCF85063A.pdf
+> Signed-off-by: Lukas Stockmann <lukas.stockmann@siemens.com>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 > ---
->  drivers/rtc/interface.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/rtc/rtc-pcf85063.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> index 1b63111cdda2..f40e76d2fe2b 100644
-> --- a/drivers/rtc/interface.c
-> +++ b/drivers/rtc/interface.c
-> @@ -179,6 +179,7 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
->  				   struct rtc_wkalrm *alarm)
->  {
->  	int err;
-> +	time64_t trace_time = -1;
+> diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
+> index fdbc07f14036..edfd75d18e19 100644
+> --- a/drivers/rtc/rtc-pcf85063.c
+> +++ b/drivers/rtc/rtc-pcf85063.c
+> @@ -35,6 +35,7 @@
+>  #define PCF85063_REG_CTRL1_CAP_SEL	BIT(0)
+>  #define PCF85063_REG_CTRL1_STOP		BIT(5)
+>  #define PCF85063_REG_CTRL1_EXT_TEST	BIT(7)
+> +#define PCF85063_REG_CTRL1_SWR		0x58
 >  
->  	err = mutex_lock_interruptible(&rtc->ops_lock);
->  	if (err)
-> @@ -201,11 +202,12 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
->  		alarm->time.tm_yday = -1;
->  		alarm->time.tm_isdst = -1;
->  		err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
-> +		trace_time = rtc_tm_to_time64(&alarm->time);
->  	}
+>  #define PCF85063_REG_CTRL2		0x01
+>  #define PCF85063_CTRL2_AF		BIT(6)
+> @@ -580,7 +581,7 @@ static int pcf85063_probe(struct i2c_client *client)
 >  
->  	mutex_unlock(&rtc->ops_lock);
+>  	i2c_set_clientdata(client, pcf85063);
 >  
-> -	trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
-> +	trace_rtc_read_alarm(trace_time, err);
->  	return err;
->  }
+> -	err = regmap_read(pcf85063->regmap, PCF85063_REG_CTRL1, &tmp);
+> +	err = regmap_read(pcf85063->regmap, PCF85063_REG_SC, &tmp);
+>  	if (err) {
+>  		dev_err(&client->dev, "RTC chip is not present\n");
+>  		return err;
+> @@ -590,6 +591,22 @@ static int pcf85063_probe(struct i2c_client *client)
+>  	if (IS_ERR(pcf85063->rtc))
+>  		return PTR_ERR(pcf85063->rtc);
 >  
-> -- 
-> 2.37.2
-> 
+> +	/*
+> +	 * If a Power loss is detected, SW reset the device.
+> +	 * From PCF85063A datasheet:
+> +	 * There is a low probability that some devices will have corruption
+> +	 * of the registers after the automatic power-on reset...
+> +	 */
+> +	if (tmp & PCF85063_REG_SC_OS) {
+> +		dev_warn(&client->dev,
+> +			 "Power loss detected, send a SW reset to the device\n");
+> +		err = regmap_write(pcf85063->regmap, PCF85063_REG_CTRL1,
+> +				PCF85063_REG_CTRL1_SWR);
+> +		if (err < 0)
+> +			dev_err(&client->dev,
+> +				"SW reset failed, trying to continue\n");
+> +	}
+
+Doing this in probe is putting a band-aid on a wooden leg as you are not
+guaranteed you will have a probe to catch this case. This should be
+rather done in pcf85063_rtc_set_time but it comes with its own set of
+issues because this probably requires to reconfigure most of the chip
+which is conveniently done in probe. And then it will introduce varance
+in the time taken to set_time which is generally bad if you care about
+sub second precision.
+
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
