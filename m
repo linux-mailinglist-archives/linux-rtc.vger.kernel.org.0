@@ -1,57 +1,57 @@
-Return-Path: <linux-rtc+bounces-766-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-767-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A7E986D649
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:43:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAAB186D671
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:59:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDDC81F22BA4
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 21:43:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DE28284705
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 21:59:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE0B63CAE;
-	Thu, 29 Feb 2024 21:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92F46D527;
+	Thu, 29 Feb 2024 21:58:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Zrosst/R"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Vufomjse"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7515516FF2B;
-	Thu, 29 Feb 2024 21:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0352B16FF46;
+	Thu, 29 Feb 2024 21:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709242991; cv=none; b=EYato30pkr9uLRJe7l8bkTyyyK16edtshz+QsJ9RJo4TGLmQsOxkAB7bGeghCUDfG4KZ188oOSMTdZWGR/+bMBzE634B695tOK7CD1GlWQon6mr8kdfQe4hmm0vMWp3vtZ1nHBi3hYmi77wj7O4pXEvX8S5dn4OGik1kcC1YDMM=
+	t=1709243938; cv=none; b=i7Obq1iFF8iCkYCHxFVb1V6j1UIEw1fo9iSZ+ccMLQ3nr6gVAr98grd59uHI0SQ0DCfYUpv7Z5P7+Mr4nZUj/dXpYXvOzuwikL7cvnyHqgV4k0HzTNjElo3T4TR8o/eEBDQ4sDowsOyxmEb0g9YmrU0Mp6xHUszFUO6lLAiMDAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709242991; c=relaxed/simple;
-	bh=TN7ukpRAnvDh6NBrd7p6obmiLiecfrTl5mJrQ0iRthU=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lc/sbd2s7VeFFtHcriTDd3eQUUyJ1nlH/kGuVpa0zodMEhXUH3XwbWEX1rOMiUYYNzZBNx7WMFQDP2yw/9UQOYRl/fLTDS1FQNyVbvOnrD9DhexXzlpB5slFB1bVn8KkRsHUy4Ppe17DtLj/9lGgKNYDdzo81kFtusAe/MkV1HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Zrosst/R; arc=none smtp.client-ip=217.70.183.195
+	s=arc-20240116; t=1709243938; c=relaxed/simple;
+	bh=5JVabrlMLe/1NI62rmzy/ei3KAtCFMI1zLcwOM4J3wA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eZx7KXFi9bs9Z9QwfBwpTSyCX85p5KPjjO7gk501CTQdY475mE5ry5CemuPSTvNH8uLI5XxwqjOZDVGJNsszFV5EWj9NcXYY5akVUUjJQZEtQ6AXhV0SWCf8uN00LYis3KsR5pFLb3WIKY26p73mNDflmBNGot6I8qTLa0wClNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Vufomjse; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8EBF260005;
-	Thu, 29 Feb 2024 21:43:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9AEDF40003;
+	Thu, 29 Feb 2024 21:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709242987;
+	t=1709243934;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OShvIFfEdMeWCoFCfPRr8zGu3Ce+ntI0blKGZdKOKZ4=;
-	b=Zrosst/RLgBz/8e6Xq91zLKNnC8Qh301tjNQ6ZiiwD9MKqHD9opx0D6D250TBV3ZYqcdvb
-	XVtHoP03RdGKqgfvKd4/Sp6gEjyzzFjYER0Fq+5D8vjvVSs4yQ6darMI8IBWk88VEXbuU1
-	dAcEIL1lTHxtDTtB3lofzYVAp7gZt1rSooGgp5eINeby3pAWycP2P5GdkoL93mqoWOoTMO
-	dTrXwxVthwa+H9MJXWgppI9HV+49u3L7c/ZB5LRXuJsqaqfd35EM/pwjBNqaOeS8gFbV4B
-	RNRiVNCZRJvGfBMCRU7uVDKd1xgldhKLqESdPtEgNNWdETprmoeF7/ALG8pWdw==
-Date: Thu, 29 Feb 2024 22:43:06 +0100
+	bh=DiJQ8IEdW2Jkk/S4jOTeOO3q8QRmk15ZcHgGmWobrwI=;
+	b=Vufomjser0fMBgkFugDyP7xz2NZDrANrKG05Os5lRiWQQXwpRfMzls1U5UVZfCj5mGCYba
+	5aJ3QYmmc8fc0/4bxjHolLYyp6+I0mYpkgOkagq1VAy9ei7hF5XdFt9KRU8p7qKO5AFnSI
+	IDmHMn7xkIikioGrvhOglf1pB1piCcIgXRwijdx3iZwFVhiQWk0Z/Zc120AtPSiUql9bAZ
+	5Og6pScc2s5MeWAL+U4EWkNgFn//q4vYRkZ8AF6ALxhFwbXShvYnMej6r4x9QOp+qJYnwW
+	VB/q3oYjxHjy6ekb6CGKYrGj8M6OBOg3WeuUyEmA5yDBbTs4iyxSNx8tLH8WUw==
+Date: Thu, 29 Feb 2024 22:58:50 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: Re: [PATCH] rtc: max31335: fix interrupt status reg
-Message-ID: <170924288521.1876058.17039410988641228858.b4-ty@bootlin.com>
-References: <20240219091616.24480-1-antoniu.miclaus@analog.com>
+To: Nicholas Miehlbradt <nicholas@linux.ibm.com>
+Cc: a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: fix uninitialized read of rtc_wkalrm.time
+Message-ID: <20240229215850a1990100@mail.local>
+References: <20231129073647.2624497-1-nicholas@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -60,34 +60,68 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240219091616.24480-1-antoniu.miclaus@analog.com>
+In-Reply-To: <20231129073647.2624497-1-nicholas@linux.ibm.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Mon, 19 Feb 2024 11:16:15 +0200, Antoniu Miclaus wrote:
-> Fix the register value comparison in the `max31335_volatile_reg`
-> function for the interrupt status register.
+Hello,
+
+On 29/11/2023 07:36:47+0000, Nicholas Miehlbradt wrote:
+> If either of the first two branches of the if statement in
+> rtc_read_alarm_internal are taken the fields of alarm->time are not
+> initialized but are subsequently read by the call to rtc_tm_to_time64.
 > 
-> MAX31335_STATUS1 macro definition corresponds to the actual
-> interrupt status register.
+> Refactor so that the time field is only read if the final branch of the
+> if statment which initializes the field is taken.
 > 
+
+While the problem description is correct, the solution is not because
+you have no guarantee that the fields have been initialized if
+->read_alarm returns a value different from 0
+
+So, instead of avoiding the conversion unless the final branch is taken,
+it should be avoided as long as err != 0.
+
+But, I'm also wondering whether there is actually an issue. mktime64
+can be fed whatever value without bugging out and the value of err will
+be part of the trace so userspace knows that it shouldn't trust the
+value.
+
+So, what is the actual issue? :)
+
+> Signed-off-by: Nicholas Miehlbradt <nicholas@linux.ibm.com>
+> ---
+>  drivers/rtc/interface.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> [...]
-
-I hope you realize that this is exactly what Guenter was referring to
-when he said:
-
-"It seems to be quite common for automotive chips, though, that they are held
-tightly under wrap, making it all but impossible to properly review their drivers.
-I have observed several times now that information not available to reviewers
-resulted in bad or buggy drivers."
-
-
-Applied
-
-[1/1] rtc: max31335: fix interrupt status reg
-      https://git.kernel.org/abelloni/c/c12e67e076cb
-
-Best regards,
+> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+> index 1b63111cdda2..f40e76d2fe2b 100644
+> --- a/drivers/rtc/interface.c
+> +++ b/drivers/rtc/interface.c
+> @@ -179,6 +179,7 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
+>  				   struct rtc_wkalrm *alarm)
+>  {
+>  	int err;
+> +	time64_t trace_time = -1;
+>  
+>  	err = mutex_lock_interruptible(&rtc->ops_lock);
+>  	if (err)
+> @@ -201,11 +202,12 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
+>  		alarm->time.tm_yday = -1;
+>  		alarm->time.tm_isdst = -1;
+>  		err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
+> +		trace_time = rtc_tm_to_time64(&alarm->time);
+>  	}
+>  
+>  	mutex_unlock(&rtc->ops_lock);
+>  
+> -	trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
+> +	trace_rtc_read_alarm(trace_time, err);
+>  	return err;
+>  }
+>  
+> -- 
+> 2.37.2
+> 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
