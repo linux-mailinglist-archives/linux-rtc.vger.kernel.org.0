@@ -1,142 +1,114 @@
-Return-Path: <linux-rtc+bounces-768-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-769-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE9EF86D692
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 23:08:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C998B86D6C7
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 23:22:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFE3C1C224F3
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:08:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E9A3282774
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Feb 2024 22:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A6C96D53B;
-	Thu, 29 Feb 2024 22:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B37074BED;
+	Thu, 29 Feb 2024 22:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ex91U2FX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BboKlfR0"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5775E2FC35;
-	Thu, 29 Feb 2024 22:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941AC74BEF;
+	Thu, 29 Feb 2024 22:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709244488; cv=none; b=tAYc6sqJYKcrVDeRMQOfuwxT4jfR5jDeYqC0qwXNiJBcu6XiH38UKTiiofwIpK+5ePn0tKsMl/2F/XTmQI5CHnCYCTsOHDNjhL9943Nr3ahZ4ReWm5Q1btsIItkNCyCs4PzF5mle7qdSWzZGjuMhuZpG8Ix2Hy1XE7jvhPG9Pfo=
+	t=1709245330; cv=none; b=B9uMO04+CItIN/QUPuSpAMjEzudZ6IVu9JRdA7lYkKwbDMde4rce32wTx4y5UAQ+uIqY9p3E6qvXgFKLSkKx3vnHVXjyhd/LXsIeNu3crN8jEx5HdLKC3oVcA4gdxV1RDQqCIRDtpqmW7GlgP788ZCVaG8CjeoY+m/DIDaqwsHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709244488; c=relaxed/simple;
-	bh=uY0SdBM/VL4JmHHpdHpZrHSim56nTzaGwt5Kz9E62dI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d4B/cIZ33EEngZHEqUytWpSjYzjDovT5jeRt2Fq4BjZw68KQ7or2AQV30DfEFeKPt43Nvg7OOLZsVA7NQVDIvXaWuA2HY2kJi5p7/fzwTvzqh3iTdhFnIikMXSQJNM25JkxlFpaX5vF+Hj0xS2Yx8mYw7S/SXTjpr2DzmLh0xhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ex91U2FX; arc=none smtp.client-ip=217.70.183.194
+	s=arc-20240116; t=1709245330; c=relaxed/simple;
+	bh=x18bamUUPpeftryab9h32Jt2kASCNEMw/tFEjiNtjOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mcurYwLQaobd8aHYl34efM9ndgraQziRIrmqD5WroNukNJ8D/LtmlP5oowXfxVZDcfTrBzXwGbhDyFBYIg+4tPqD1X0uGy0AhKIZZT6UxWnXK3+FIXKlxnHsPV/dGdy8QI1K/Z7EWRGEPn2zHX/SLdCK7Szco0lq7/qf0TGVLYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BboKlfR0; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 14D6B40003;
-	Thu, 29 Feb 2024 22:08:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 594DC1BF205;
+	Thu, 29 Feb 2024 22:22:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709244483;
+	t=1709245324;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lxqQl5JTSihBQCaBo7S//KD0ZOrQomn+RcL0KtFjsNA=;
-	b=ex91U2FX0jOv717asqGerNnjDv8U2tCTG4E+jk1iseh7/OnPOIckArxVkitEyHGy1vjeEw
-	QFwQfHjtjAvW1lOqt1m4Xf17gwNSGK+HUU7LsDjQ9g3WO9pBaC9+Sy5yZm9P4pYd1nCgKt
-	Blxnv6hlTUlvor3ff1S8aNawNJwMzL6r/V5w1AJMKHJCU30B/POs4672vC4vildRRtQoZ7
-	dtSkryTNdVn4oNnqUTjlPJWioBAI45kS8VQng1J/1a0vfw7GVA8yUjnasE9Kx9PZ9vQkeH
-	DDH76pcdRotIDH2JlrLEJfK8eUVzkIJ1sniuGyxToOalKv1h2lsIIuWMvdebrQ==
-Date: Thu, 29 Feb 2024 23:08:02 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: "A. Sverdlin" <alexander.sverdlin@siemens.com>
-Cc: linux-rtc@vger.kernel.org,
-	Lukas Stockmann <lukas.stockmann@siemens.com>,
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vXQti813qjlmOLifixiuae4rGnXkl/dZRgzemhLIIuI=;
+	b=BboKlfR0io6uhoSX9M/qXIXMRpbuvsG8ZMbNg98I66b0NOSB14mbHaVQn2B2noqZOXW9GN
+	Jjy4nI02E+iAMD1ECCTRwYTNYFHqSDxq6mDCGWMcAHhzevWvTSJuWMYLIvoMsvIFwOvp6O
+	RFEGJVXRWrJsgMy0GBDH1sOtAgfDKceOJhHXb2dqsd4Hz150sv4rqye/a9UM5pj6j88TmF
+	aem+3qWJPn8mBsfTbH7+RP3jR5S14Ou4Rvwfw5Tvbz51wuTJMXvtpJobkypGc/LojAQKzN
+	iftBgEP+ZeGuJ5suGgi/mGdIgf2Ae2UzNlC+Ek4gMyiWOLtN4OG21a7AA9kOxw==
+From: alexandre.belloni@bootlin.com
+To: Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>,
+	Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: kernel test robot <lkp@intel.com>,
+	Dan Carpenter <error27@gmail.com>,
+	openbmc@lists.ozlabs.org,
+	linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf85063: do a SW reset after rtc power fail
-Message-ID: <2024022922080217cbe165@mail.local>
-References: <20240227131436.3342807-1-alexander.sverdlin@siemens.com>
+Subject: [PATCH] rtc: nct3018y: fix possible NULL dereference
+Date: Thu, 29 Feb 2024 23:21:27 +0100
+Message-ID: <20240229222127.1878176-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240227131436.3342807-1-alexander.sverdlin@siemens.com>
+Content-Transfer-Encoding: 8bit
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 27/02/2024 14:14:32+0100, A. Sverdlin wrote:
-> From: Lukas Stockmann <lukas.stockmann@siemens.com>
-> 
-> From PCF85063A datasheet, section "Software reset":
-> 
-> "There is a low probability that some devices will have corruption of the
-> registers after the automatic power-on reset if the device is powered up
-> with a residual VDD level. It is required that the VDD starts at zero volts
-> at power up or upon power cycling to ensure that there is no corruption of
-> the registers. If this is not possible, a reset must be initiated after
-> power-up (i.e. when power is stable) with the software reset command"
-> 
-> Trigger SW reset if a power loss is detected.
-> 
-> Link: https://www.nxp.com/docs/en/data-sheet/PCF85063A.pdf
-> Signed-off-by: Lukas Stockmann <lukas.stockmann@siemens.com>
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> ---
->  drivers/rtc/rtc-pcf85063.c | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-> index fdbc07f14036..edfd75d18e19 100644
-> --- a/drivers/rtc/rtc-pcf85063.c
-> +++ b/drivers/rtc/rtc-pcf85063.c
-> @@ -35,6 +35,7 @@
->  #define PCF85063_REG_CTRL1_CAP_SEL	BIT(0)
->  #define PCF85063_REG_CTRL1_STOP		BIT(5)
->  #define PCF85063_REG_CTRL1_EXT_TEST	BIT(7)
-> +#define PCF85063_REG_CTRL1_SWR		0x58
->  
->  #define PCF85063_REG_CTRL2		0x01
->  #define PCF85063_CTRL2_AF		BIT(6)
-> @@ -580,7 +581,7 @@ static int pcf85063_probe(struct i2c_client *client)
->  
->  	i2c_set_clientdata(client, pcf85063);
->  
-> -	err = regmap_read(pcf85063->regmap, PCF85063_REG_CTRL1, &tmp);
-> +	err = regmap_read(pcf85063->regmap, PCF85063_REG_SC, &tmp);
->  	if (err) {
->  		dev_err(&client->dev, "RTC chip is not present\n");
->  		return err;
-> @@ -590,6 +591,22 @@ static int pcf85063_probe(struct i2c_client *client)
->  	if (IS_ERR(pcf85063->rtc))
->  		return PTR_ERR(pcf85063->rtc);
->  
-> +	/*
-> +	 * If a Power loss is detected, SW reset the device.
-> +	 * From PCF85063A datasheet:
-> +	 * There is a low probability that some devices will have corruption
-> +	 * of the registers after the automatic power-on reset...
-> +	 */
-> +	if (tmp & PCF85063_REG_SC_OS) {
-> +		dev_warn(&client->dev,
-> +			 "Power loss detected, send a SW reset to the device\n");
-> +		err = regmap_write(pcf85063->regmap, PCF85063_REG_CTRL1,
-> +				PCF85063_REG_CTRL1_SWR);
-> +		if (err < 0)
-> +			dev_err(&client->dev,
-> +				"SW reset failed, trying to continue\n");
-> +	}
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Doing this in probe is putting a band-aid on a wooden leg as you are not
-guaranteed you will have a probe to catch this case. This should be
-rather done in pcf85063_rtc_set_time but it comes with its own set of
-issues because this probably requires to reconfigure most of the chip
-which is conveniently done in probe. And then it will introduce varance
-in the time taken to set_time which is generally bad if you care about
-sub second precision.
+alarm_enable and alarm_flag are allowed to be NULL but will be dereferenced
+later by the dev_dbg call.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Closes: https://lore.kernel.org/r/202305180042.DEzW1pSd-lkp@intel.com/
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-nct3018y.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
+index f488a189a465..076d8b99f913 100644
+--- a/drivers/rtc/rtc-nct3018y.c
++++ b/drivers/rtc/rtc-nct3018y.c
+@@ -102,6 +102,8 @@ static int nct3018y_get_alarm_mode(struct i2c_client *client, unsigned char *ala
+ 		if (flags < 0)
+ 			return flags;
+ 		*alarm_enable = flags & NCT3018Y_BIT_AIE;
++		dev_dbg(&client->dev, "%s:alarm_enable:%x\n", __func__, *alarm_enable);
++
+ 	}
+ 
+ 	if (alarm_flag) {
+@@ -110,11 +112,9 @@ static int nct3018y_get_alarm_mode(struct i2c_client *client, unsigned char *ala
+ 		if (flags < 0)
+ 			return flags;
+ 		*alarm_flag = flags & NCT3018Y_BIT_AF;
++		dev_dbg(&client->dev, "%s:alarm_flag:%x\n", __func__, *alarm_flag);
+ 	}
+ 
+-	dev_dbg(&client->dev, "%s:alarm_enable:%x alarm_flag:%x\n",
+-		__func__, *alarm_enable, *alarm_flag);
+-
+ 	return 0;
+ }
+ 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 
