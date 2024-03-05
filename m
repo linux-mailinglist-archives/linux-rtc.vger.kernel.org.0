@@ -1,83 +1,241 @@
-Return-Path: <linux-rtc+bounces-783-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-784-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E54787224C
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Mar 2024 16:01:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF5F872675
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Mar 2024 19:22:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2ACEB23D0D
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Mar 2024 15:01:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C9131C267F0
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Mar 2024 18:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEC2886AE6;
-	Tue,  5 Mar 2024 15:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 135F718AEA;
+	Tue,  5 Mar 2024 18:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mKUQi8RM"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="WCLK0IiB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E8D1DFF8;
-	Tue,  5 Mar 2024 15:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B7A182C3;
+	Tue,  5 Mar 2024 18:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709650907; cv=none; b=r1Hn/xkmLg0DJ9Z6RLBKaECW6np075TBGx/q1JyogdYV5LQ4AZLjkwRAr85KBlilyCj0wN9bDZ15iLgf8MLEPdH3k/s1KpBLYZhDDOgErsyScrviUGu7uHG9r/knns6Xfcpit+W+k7PaZxrpTxggU727DLj/Wmim3DBI8N2ZpUQ=
+	t=1709662955; cv=none; b=Mgjqwg6yeg33rxICquDbOh4uu6akcJ9RtUlAVIUCVknV/1/yQezLDUHV1IpHi4rVN4e395d19R3qbPcr1RVfv3BKUfzPTHwdzRT2WUBOQSxB5X+dmhrQd3Kaiiv6/XxV7Cho8JkP1Cr0uilo/4TJskF43PhAcDYcxDo/0rEVzLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709650907; c=relaxed/simple;
-	bh=e87NwRJGWy0SVGjs+bNh2DbVpGF51XuuFEqWeG9BeKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KdOV/+qHVnmp3HIyIvDH8g8BdynoNYjG2qB2chR0BRZffR2L25TJSVoSdkPUwPtNRnINeNNPVlHxoKYAgTFDmJJfJgW2bwJxgFwEcK3J3dxPa2wZEwVkiRGOe8sVNLJ4c7ED4NvECQ5ntJLr4+yuut2lqx6FMw6VT5rjg1PUFtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mKUQi8RM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09597C433F1;
-	Tue,  5 Mar 2024 15:01:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709650907;
-	bh=e87NwRJGWy0SVGjs+bNh2DbVpGF51XuuFEqWeG9BeKo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mKUQi8RMxreckjl7MgMe54nOuDMdTJZGV7nvBwxAGQG18udU8CVCbM0nMauXmaLnN
-	 4JGkuxxyUGlsZjmzAHXK6jxyVSVflj1VZDT3mv/9qGCaEMUeCzJUrexa/fS0CZk2uW
-	 rNCXVftE5SXJ1zkbrc+q+ajQSg4xBBuQZrM1mLfpb0C60Jn6yE/Obe0m5STq83DkVr
-	 k4x82jSgo4fNjbd3txnP5esqQFRLm0dHo2GaJQ1MmGVR8C/6HrBUQs9oJDun4S1mTv
-	 o1ydWPDMIXS08/VIILQpT3914RMxVtr0SNqYS9o7Qvypka535DAdnI+gtgmudjJkQL
-	 3IrkPaxqzzimw==
-Date: Tue, 5 Mar 2024 09:01:45 -0600
-From: Rob Herring <robh@kernel.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] dt-bindings: rtc: abx80x: Improve checks on trickle
- charger constraints
-Message-ID: <170965090456.3350146.17689695719804122950.robh@kernel.org>
-References: <20240305080944.17991-1-laurent.pinchart@ideasonboard.com>
+	s=arc-20240116; t=1709662955; c=relaxed/simple;
+	bh=/TaGQkNgv+WehsCdP1uUe99SU9J60OJW6NxPtZhftlA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EPTa6lSbNqdxvg1TgZqtqFKhDUsFHMVzNZ6BwAfBNeF6M05FMFz7JoU5bi/ZPefGVUKBL6EbbEwhkpDF6FsETRIN2mrC8d/I3BHqOhJZeDwkc95FfFklOraXw0Xe75+fh7d+5hjIOo8JxAEWfhYmppOenFKUovfw9AHgD3oq1cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=WCLK0IiB; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1dc29f1956cso47243815ad.0;
+        Tue, 05 Mar 2024 10:22:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709662954; x=1710267754;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HJuRzX0DshA7DJQkMwc6c7MdI4/qFDvgYzp1zH77e+0=;
+        b=KDfqfLUdAU2dOlJZjHhAddoUkL8nAtYkUrLuUlAcnrBWkDihaLekzKX9++IfQA9Zew
+         E57yZqE8GWueIMlC1CDMiHf6gsqh8DRRJoHlupilC0D+P0nL+tqunKTNCMnUUVYVgPF2
+         F7As2Gv5SVlW2RsLs4JEBj40i/GEKXz2S08sQ1AVR5GYxy46Qj70XJKpPuzfpizXLFjE
+         nIxWLE9UIThdDYb27Cg51szSakgRFjoRJfjfYSDyr/NYjrM6xvdEeroWIJquD2XIHJML
+         aEqkzng6G4yohXKZ/YZ8bPlbd80exluopD67xXzkFc7LhcwJ+uusJrFM72qca9rY5MTT
+         Fdfw==
+X-Forwarded-Encrypted: i=1; AJvYcCV2ZdxUcd7qGPMlYe2Nk7Wso84wmfpGsLyANJ0N+HWnAlieWSWAf7AgmziFFTElKuqcbzpqZMGm4Pq9/CJkkMpFIwPznq2Fnj+I5dAnk5kRNqNUTW0VkBrBoseGFChJP/kLHXsxurw=
+X-Gm-Message-State: AOJu0YyV5KlKRLx/s+xLyheiaFyBzdJMHraqgfYja9aayJgRhauNtn2z
+	WRzzqGpddOGpBdUtiIf9InBidmMGxZsAv6NHApFGCe41xXHBvHTZ
+X-Google-Smtp-Source: AGHT+IGgfqIGDyCN231Y3kIbmeRcbKPODC2viJDJiu0m93MdQzj/dVMU5PpG1kNzMOCiUgtVx7bYJg==
+X-Received: by 2002:a17:902:e88f:b0:1dc:b73b:ec35 with SMTP id w15-20020a170902e88f00b001dcb73bec35mr2961813plg.4.1709662953655;
+        Tue, 05 Mar 2024 10:22:33 -0800 (PST)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id y6-20020a17090322c600b001d9edac54b1sm10912800plg.171.2024.03.05.10.22.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Mar 2024 10:22:33 -0800 (PST)
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1709662952;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HJuRzX0DshA7DJQkMwc6c7MdI4/qFDvgYzp1zH77e+0=;
+	b=WCLK0IiBBWlI1C7toSxPyZYdWcazsF85vHbRmFEP712FxV37u6MRvmXmoxRJCsZsxdHYsz
+	oLQpbT8Rcg2Ds2ubvAI2rWAa+YaWukXA2fNzYlBlb/6w2zqUzBdte50SCJOsrYks5QMYuK
+	3n2NQjMrKPv15iEDNgy+SRE4u7HxLRZfrtXp1RbGdFLxfGXO3OQQvDeWYVP/IjDtxO5dyU
+	nYXU+9Thsjgilb7H5LsLMMUSedYmjrYMRXELY7EBabIc1xDFk7tBG7UGn2Nim0GqU+/GHS
+	3KLy/IY52ept9HAKmqGp0/QIElr5X9713hC1kGkGDiIMKyvgghOKIEiybDq1WA==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+Date: Tue, 05 Mar 2024 15:22:28 -0300
+Subject: [PATCH] rtc: class: make rtc_class constant
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305080944.17991-1-laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240305-class_cleanup-abelloni-v1-1-944c026137c8@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAONi52UC/x3MQQqEMAxA0auUrC1ER3H0KiJDbKMTKLU0KAPi3
+ ae4fIv/L1DOwgqjuSDzKSp7LKgrA+5LcWMrvhgabFp8YWddINWPC0zxSJYWDmGPYv2wvMmvPQ4
+ tQolT5lV+z3ia7/sPhh0glmgAAAA=
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+ Len Brown <len.brown@intel.com>, John Stultz <jstultz@google.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4311; i=ricardo@marliere.net;
+ h=from:subject:message-id; bh=/TaGQkNgv+WehsCdP1uUe99SU9J60OJW6NxPtZhftlA=;
+ b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl52LliPDiee8Qvtmvb4+HA8gqOufoGzHNRq/st
+ lcOSofQXyaJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZedi5QAKCRDJC4p8Y4ZY
+ pubdEACi9HK1bzFnE49fGZ+B2s245YLjtqLPVFsAjn2zEOPaNgl4ceqFpcnu2uGVJ0PHNZcNh8+
+ A5eiR/A//xXBN+A9Z/hF9i4BJRvy69TiJgn36ST1PiUo5kLv4dHvMpGuXwSIe4ZGUkzPmJ+fg+Z
+ Urg2z8t7Gn4SArsAe4YbRLTEDxrK3wEDm1dYHtm/4ng0Nj7IG6IloHWNH1EKtogrXn1YFQhAYU+
+ ZuUgEKpEd4AyFgSrumVtmiFf+wQbBGhQLQ+1dd4OW2ECccKJzS9hM+g947exVxdxNN3UKMN0Ovx
+ LlR/0K5WmsYXM3l5EZeivrisLcWz3P6ejDW5HGHJ4gbWLveU3/+tKRWnkUvKZoUbwV27lnJGB1h
+ rIfuolQSoC5ma5zCy2AiuLg3PbHDWZFf8Cv/Qhi7Oc1ThkaekrP1FuIbwEyq+Cl8RYDbHUl2sVX
+ i2cIgc0kwlFWRmfcSMrNPF3p3R9Vcr6hKocMZnm4ZDgthuypvTknnB3llX078Uk9HEc0lFtcynr
+ GJ3VsgIEHRxss4Ei7RFa46lX+uTt+HJ+gPO4isK7DgugYVhdjCtFys+Ee11G/8YO0nJfCtDk7T+
+ GP7I90LMqLBKXBiIc09eVs8IA/SlhGCuA5DnGVLS9iRUmQq12Pr4ERit6yyVvb89nXePTMwGekC
+ ZciQCNc+YYoRlnA==
+X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
+ fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
+Since commit 43a7206b0963 ("driver core: class: make class_register() take
+a const *"), the driver core allows for struct class to be in read-only
+memory, so move the rtc_class structure to be declared at build time
+placing it into read-only memory, instead of having to be dynamically
+allocated at boot time.
 
-On Tue, 05 Mar 2024 10:09:44 +0200, Laurent Pinchart wrote:
-> The abracon,tc-diode and abracon,tc-resistor DT properties are only
-> valid for the ABx0804 and ABx0805. Furthermore, they must both be
-> present, or neither of them must be specified. Add rules to check this.
-> 
-> The generic abracon,abx08x compatible string doesn't indicate which chip
-> variant is used, but performs auto-detection at runtime. It must this
-> also allow the two above properties.
-> 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
->  .../bindings/rtc/abracon,abx80x.yaml          | 25 ++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
-> 
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+---
+ drivers/rtc/class.c         | 21 +++++++++++++--------
+ drivers/rtc/interface.c     |  2 +-
+ include/linux/rtc.h         |  2 +-
+ kernel/power/suspend_test.c |  2 +-
+ kernel/time/alarmtimer.c    |  2 +-
+ 5 files changed, 17 insertions(+), 12 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 921ee1827974..e31fa0ad127e 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -21,7 +21,6 @@
+ #include "rtc-core.h"
+ 
+ static DEFINE_IDA(rtc_ida);
+-struct class *rtc_class;
+ 
+ static void rtc_device_release(struct device *dev)
+ {
+@@ -199,6 +198,11 @@ static SIMPLE_DEV_PM_OPS(rtc_class_dev_pm_ops, rtc_suspend, rtc_resume);
+ #define RTC_CLASS_DEV_PM_OPS	NULL
+ #endif
+ 
++const struct class rtc_class = {
++	.name = "rtc",
++	.pm = RTC_CLASS_DEV_PM_OPS,
++};
++
+ /* Ensure the caller will set the id before releasing the device */
+ static struct rtc_device *rtc_allocate_device(void)
+ {
+@@ -220,7 +224,7 @@ static struct rtc_device *rtc_allocate_device(void)
+ 
+ 	rtc->irq_freq = 1;
+ 	rtc->max_user_freq = 64;
+-	rtc->dev.class = rtc_class;
++	rtc->dev.class = &rtc_class;
+ 	rtc->dev.groups = rtc_get_dev_attribute_groups();
+ 	rtc->dev.release = rtc_device_release;
+ 
+@@ -475,13 +479,14 @@ EXPORT_SYMBOL_GPL(devm_rtc_device_register);
+ 
+ static int __init rtc_init(void)
+ {
+-	rtc_class = class_create("rtc");
+-	if (IS_ERR(rtc_class)) {
+-		pr_err("couldn't create class\n");
+-		return PTR_ERR(rtc_class);
+-	}
+-	rtc_class->pm = RTC_CLASS_DEV_PM_OPS;
++	int err;
++
++	err = class_register(&rtc_class);
++	if (err)
++		return err;
++
+ 	rtc_dev_init();
++
+ 	return 0;
+ }
+ subsys_initcall(rtc_init);
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index 1b63111cdda2..5faafb4aa55c 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -696,7 +696,7 @@ struct rtc_device *rtc_class_open(const char *name)
+ 	struct device *dev;
+ 	struct rtc_device *rtc = NULL;
+ 
+-	dev = class_find_device_by_name(rtc_class, name);
++	dev = class_find_device_by_name(&rtc_class, name);
+ 	if (dev)
+ 		rtc = to_rtc_device(dev);
+ 
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 5f8e438a0312..3f4d315aaec9 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -42,7 +42,7 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
+ #include <linux/timerqueue.h>
+ #include <linux/workqueue.h>
+ 
+-extern struct class *rtc_class;
++extern const struct class rtc_class;
+ 
+ /*
+  * For these RTC methods the device parameter is the physical device
+diff --git a/kernel/power/suspend_test.c b/kernel/power/suspend_test.c
+index b663a97f5867..d4856ec61570 100644
+--- a/kernel/power/suspend_test.c
++++ b/kernel/power/suspend_test.c
+@@ -201,7 +201,7 @@ static int __init test_suspend(void)
+ 	}
+ 
+ 	/* RTCs have initialized by now too ... can we use one? */
+-	dev = class_find_device(rtc_class, NULL, NULL, has_wakealarm);
++	dev = class_find_device(&rtc_class, NULL, NULL, has_wakealarm);
+ 	if (dev) {
+ 		rtc = rtc_class_open(dev_name(dev));
+ 		put_device(dev);
+diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+index 4657cb8e8b1f..5abfa4390673 100644
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -134,7 +134,7 @@ static struct class_interface alarmtimer_rtc_interface = {
+ 
+ static int alarmtimer_rtc_interface_setup(void)
+ {
+-	alarmtimer_rtc_interface.class = rtc_class;
++	alarmtimer_rtc_interface.class = &rtc_class;
+ 	return class_interface_register(&alarmtimer_rtc_interface);
+ }
+ static void alarmtimer_rtc_interface_remove(void)
+
+---
+base-commit: c12e67e076cbcb86fd9c3cb003a344ec684138a6
+change-id: 20240305-class_cleanup-abelloni-d9b8adf70940
+
+Best regards,
+-- 
+Ricardo B. Marliere <ricardo@marliere.net>
 
 
