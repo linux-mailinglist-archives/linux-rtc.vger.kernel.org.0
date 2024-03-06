@@ -1,241 +1,169 @@
-Return-Path: <linux-rtc+bounces-784-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-785-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECF5F872675
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Mar 2024 19:22:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A6C0873693
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Mar 2024 13:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C9131C267F0
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Mar 2024 18:22:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53764281151
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Mar 2024 12:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 135F718AEA;
-	Tue,  5 Mar 2024 18:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056618592D;
+	Wed,  6 Mar 2024 12:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="WCLK0IiB"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="od99JTtw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B7A182C3;
-	Tue,  5 Mar 2024 18:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709662955; cv=none; b=Mgjqwg6yeg33rxICquDbOh4uu6akcJ9RtUlAVIUCVknV/1/yQezLDUHV1IpHi4rVN4e395d19R3qbPcr1RVfv3BKUfzPTHwdzRT2WUBOQSxB5X+dmhrQd3Kaiiv6/XxV7Cho8JkP1Cr0uilo/4TJskF43PhAcDYcxDo/0rEVzLs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709662955; c=relaxed/simple;
-	bh=/TaGQkNgv+WehsCdP1uUe99SU9J60OJW6NxPtZhftlA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EPTa6lSbNqdxvg1TgZqtqFKhDUsFHMVzNZ6BwAfBNeF6M05FMFz7JoU5bi/ZPefGVUKBL6EbbEwhkpDF6FsETRIN2mrC8d/I3BHqOhJZeDwkc95FfFklOraXw0Xe75+fh7d+5hjIOo8JxAEWfhYmppOenFKUovfw9AHgD3oq1cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=WCLK0IiB; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1dc29f1956cso47243815ad.0;
-        Tue, 05 Mar 2024 10:22:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709662954; x=1710267754;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HJuRzX0DshA7DJQkMwc6c7MdI4/qFDvgYzp1zH77e+0=;
-        b=KDfqfLUdAU2dOlJZjHhAddoUkL8nAtYkUrLuUlAcnrBWkDihaLekzKX9++IfQA9Zew
-         E57yZqE8GWueIMlC1CDMiHf6gsqh8DRRJoHlupilC0D+P0nL+tqunKTNCMnUUVYVgPF2
-         F7As2Gv5SVlW2RsLs4JEBj40i/GEKXz2S08sQ1AVR5GYxy46Qj70XJKpPuzfpizXLFjE
-         nIxWLE9UIThdDYb27Cg51szSakgRFjoRJfjfYSDyr/NYjrM6xvdEeroWIJquD2XIHJML
-         aEqkzng6G4yohXKZ/YZ8bPlbd80exluopD67xXzkFc7LhcwJ+uusJrFM72qca9rY5MTT
-         Fdfw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2ZdxUcd7qGPMlYe2Nk7Wso84wmfpGsLyANJ0N+HWnAlieWSWAf7AgmziFFTElKuqcbzpqZMGm4Pq9/CJkkMpFIwPznq2Fnj+I5dAnk5kRNqNUTW0VkBrBoseGFChJP/kLHXsxurw=
-X-Gm-Message-State: AOJu0YyV5KlKRLx/s+xLyheiaFyBzdJMHraqgfYja9aayJgRhauNtn2z
-	WRzzqGpddOGpBdUtiIf9InBidmMGxZsAv6NHApFGCe41xXHBvHTZ
-X-Google-Smtp-Source: AGHT+IGgfqIGDyCN231Y3kIbmeRcbKPODC2viJDJiu0m93MdQzj/dVMU5PpG1kNzMOCiUgtVx7bYJg==
-X-Received: by 2002:a17:902:e88f:b0:1dc:b73b:ec35 with SMTP id w15-20020a170902e88f00b001dcb73bec35mr2961813plg.4.1709662953655;
-        Tue, 05 Mar 2024 10:22:33 -0800 (PST)
-Received: from mail.marliere.net ([24.199.118.162])
-        by smtp.gmail.com with ESMTPSA id y6-20020a17090322c600b001d9edac54b1sm10912800plg.171.2024.03.05.10.22.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 10:22:33 -0800 (PST)
-From: "Ricardo B. Marliere" <ricardo@marliere.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=2024; t=1709662952;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HJuRzX0DshA7DJQkMwc6c7MdI4/qFDvgYzp1zH77e+0=;
-	b=WCLK0IiBBWlI1C7toSxPyZYdWcazsF85vHbRmFEP712FxV37u6MRvmXmoxRJCsZsxdHYsz
-	oLQpbT8Rcg2Ds2ubvAI2rWAa+YaWukXA2fNzYlBlb/6w2zqUzBdte50SCJOsrYks5QMYuK
-	3n2NQjMrKPv15iEDNgy+SRE4u7HxLRZfrtXp1RbGdFLxfGXO3OQQvDeWYVP/IjDtxO5dyU
-	nYXU+9Thsjgilb7H5LsLMMUSedYmjrYMRXELY7EBabIc1xDFk7tBG7UGn2Nim0GqU+/GHS
-	3KLy/IY52ept9HAKmqGp0/QIElr5X9713hC1kGkGDiIMKyvgghOKIEiybDq1WA==
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
-Date: Tue, 05 Mar 2024 15:22:28 -0300
-Subject: [PATCH] rtc: class: make rtc_class constant
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2536E78668;
+	Wed,  6 Mar 2024 12:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709728604; cv=fail; b=tM8SZHvJnQvdMhm8FBXtbJOzh5YmpykJJKxKedKIeZ+dK0TcuSv8h7bICfVYhDsIeTIRiKvfc5ljK0AP5U9BrAu1mcTzApQKMXPASCCHphe+6v0/NttZjQN2OeugM0BCXY281oNocU4ZqfYgQEHCd22fNesNHXV7q3UPEhRY3JQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709728604; c=relaxed/simple;
+	bh=9rDt8nQ3W5Y4xImUWElwF5DeypMJhLPCykZ/I9I6QH4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DA9rWKZoKMYIkrXzX3xKc+pppbisVHXS3B/5wwBI6eKxTSaX+e8VdpCmZUl2lVNCd7PDaXJvGN7b/YD043ESIUKh1mopAcBv6golZKw1pylvTWjPk+7vM+IXQvHGWf2w0exm+h4d18+Gth7HCfj6HN8LVlBrtqVjVE6qGRHglOA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=od99JTtw; arc=fail smtp.client-ip=40.107.236.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d+CwHODgdMn6/JPg6jwt3yz/hD8OReikFjvuGhhVymA4o/FXVWnZFOT8sJql4aulY3OWW5FoyJnXKi1ctFpuEgrdd4BWaKKXVjE0our65zLCQN85XIUxIjrhhXewLnDkBDv2jXTYTbc1AUB6yAQH+Dxj2ZdL6SmSd+39TpTL43NAGwZBeQnP8R+bT1SBfEEj2iROYu/035MLOwjJNtS4tOx+HZlO35FgeYIsG+IuwcFgQPriKGZtNyxWYjdB8nie5+RszPgVWNLmVzTf93/rffss6JSu6PXlBhSBXX9aEpzhEHGVVB+A4m+OyKUy10PvU/4xlksPYynjeYuFy/l5WQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tVX9fdPoysdSt81EOf5/+5ZZYambiGlESAAXPgHCuzk=;
+ b=Qqi0cOvLcKJ7/3svINZQXvzS/OkoTJFUQudhiWT9yONWqX39hO7gO9gz0Fg3omx1OK1I1bxYu/e1bZCdFd3OuMxMfG+tCsU4Yn/BUkNMr9CrxvA2nvmx6/pcd0A+14dxKQMa6B8fx9RzLBRwxMvtXf+jTm8RWxrPdLDeLhccLv0k4LQImhmtdCJVt6fSdNsJysS1wAfzx1Fyta2SbtSye67CRQxYgPCcEPFM3pkDPrfJOCKI6sfJl3zybWnIcJ5YJXu+YWqh0spNAfggEFLUF6x0etfqj1AhuGeLZDUTn+KKwgBRYW5IkDjhLqQ0gfIpuOoYyXsJcy/oQTxgnd/JDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tVX9fdPoysdSt81EOf5/+5ZZYambiGlESAAXPgHCuzk=;
+ b=od99JTtwYUa51t3+K3gXka9D1NN6U5OO+lthQAbhreOnm6SeRknmIxdV38lL3oKpFzBGZSVAs1l3nZvC7AoFYddzZ0FS292++TJ+r+9YOqDUKxk/2WR08ApWBiZgM2vy+QvWUI17NFWfUmfVj5ZZXDKGhFA3hfI9YHvEowzW++M=
+Received: from BN0PR04CA0006.namprd04.prod.outlook.com (2603:10b6:408:ee::11)
+ by DM3PR12MB9349.namprd12.prod.outlook.com (2603:10b6:0:49::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Wed, 6 Mar
+ 2024 12:36:38 +0000
+Received: from BN1PEPF00004685.namprd03.prod.outlook.com
+ (2603:10b6:408:ee:cafe::d1) by BN0PR04CA0006.outlook.office365.com
+ (2603:10b6:408:ee::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.24 via Frontend
+ Transport; Wed, 6 Mar 2024 12:36:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN1PEPF00004685.mail.protection.outlook.com (10.167.243.86) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7362.11 via Frontend Transport; Wed, 6 Mar 2024 12:36:38 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 6 Mar
+ 2024 06:36:36 -0600
+From: Michal Simek <michal.simek@amd.com>
+To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+	<michal.simek@xilinx.com>, <git@xilinx.com>
+CC: Alexandre Belloni <alexandre.belloni@bootlin.com>, Conor Dooley
+	<conor+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>, "open
+ list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+	<devicetree@vger.kernel.org>, "moderated list:ARM/ZYNQ ARCHITECTURE"
+	<linux-arm-kernel@lists.infradead.org>, "open list:REAL TIME CLOCK (RTC)
+ SUBSYSTEM" <linux-rtc@vger.kernel.org>
+Subject: [PATCH v2] dt-bindings: rtc: zynqmp: Add support for Versal/Versal NET SoCs
+Date: Wed, 6 Mar 2024 13:36:34 +0100
+Message-ID: <70b646d60f53cccc734afbc7f22245d53394075e.1709728587.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240305-class_cleanup-abelloni-v1-1-944c026137c8@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAONi52UC/x3MQQqEMAxA0auUrC1ER3H0KiJDbKMTKLU0KAPi3
- ae4fIv/L1DOwgqjuSDzKSp7LKgrA+5LcWMrvhgabFp8YWddINWPC0zxSJYWDmGPYv2wvMmvPQ4
- tQolT5lV+z3ia7/sPhh0glmgAAAA=
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
- Len Brown <len.brown@intel.com>, John Stultz <jstultz@google.com>, 
- Thomas Gleixner <tglx@linutronix.de>, Stephen Boyd <sboyd@kernel.org>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Ricardo B. Marliere" <ricardo@marliere.net>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4311; i=ricardo@marliere.net;
- h=from:subject:message-id; bh=/TaGQkNgv+WehsCdP1uUe99SU9J60OJW6NxPtZhftlA=;
- b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl52LliPDiee8Qvtmvb4+HA8gqOufoGzHNRq/st
- lcOSofQXyaJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZedi5QAKCRDJC4p8Y4ZY
- pubdEACi9HK1bzFnE49fGZ+B2s245YLjtqLPVFsAjn2zEOPaNgl4ceqFpcnu2uGVJ0PHNZcNh8+
- A5eiR/A//xXBN+A9Z/hF9i4BJRvy69TiJgn36ST1PiUo5kLv4dHvMpGuXwSIe4ZGUkzPmJ+fg+Z
- Urg2z8t7Gn4SArsAe4YbRLTEDxrK3wEDm1dYHtm/4ng0Nj7IG6IloHWNH1EKtogrXn1YFQhAYU+
- ZuUgEKpEd4AyFgSrumVtmiFf+wQbBGhQLQ+1dd4OW2ECccKJzS9hM+g947exVxdxNN3UKMN0Ovx
- LlR/0K5WmsYXM3l5EZeivrisLcWz3P6ejDW5HGHJ4gbWLveU3/+tKRWnkUvKZoUbwV27lnJGB1h
- rIfuolQSoC5ma5zCy2AiuLg3PbHDWZFf8Cv/Qhi7Oc1ThkaekrP1FuIbwEyq+Cl8RYDbHUl2sVX
- i2cIgc0kwlFWRmfcSMrNPF3p3R9Vcr6hKocMZnm4ZDgthuypvTknnB3llX078Uk9HEc0lFtcynr
- GJ3VsgIEHRxss4Ei7RFa46lX+uTt+HJ+gPO4isK7DgugYVhdjCtFys+Ee11G/8YO0nJfCtDk7T+
- GP7I90LMqLBKXBiIc09eVs8IA/SlhGCuA5DnGVLS9iRUmQq12Pr4ERit6yyVvb89nXePTMwGekC
- ZciQCNc+YYoRlnA==
-X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
- fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1391; i=michal.simek@amd.com; h=from:subject:message-id; bh=9rDt8nQ3W5Y4xImUWElwF5DeypMJhLPCykZ/I9I6QH4=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhtQXyT75q2Svi+xxVr/6vZxvQfSE3HUCDzx32wc6995lS wyZ7erQEcvCIMjEICumyCJtc+XM3soZU4QvHpaDmcPKBDKEgYtTACay9xHDgokvm6fZl/fpbp+e P6/84fE5VysnujLMsylV1Lwtxtx5d5akn9X33U9CZn21BAA=
+X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004685:EE_|DM3PR12MB9349:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54edb976-9a99-4e94-6a04-08dc3dda1165
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	gXLftvnIPGp9VbrpqaYNCs1gdBmK61suBxk8qzruXkXrAl2rRkcCdVJvFZZMcDQ+WCMrbKxNL4SmH/rE0xToaFbZe9bU4cRr57H3EFUwnUQWAUMcwhCo6DegcgYzo4ItNybsSzWdv1t4oo9Prbs19Sa6i4RTOGPfZ8zKOf1JMyKkuaa/vbJNuUjfwFSvrawq3TxnvPdNVXh4sHzruSBSmJSYiK85ovqIzM4zr8dWTEWhrt9no4zzxJLNQVrHY+N4k96S1aABxJuS07SDStQ004MCJt16wW/qnXsyKpj0hlZmKkbyDbVj9vMlsmeXRTbvO0CcfDTMoLvC0eLzkbgPhqmGTTDCnCdi62Rw6LEtQfBLaOXkBo5ipUrrh7EJ9yrv1EqKoBZv2+wq+vK5eJEx+tcC52cIFmyzrzt4xR9mXDaw5mTPdqb+PYnXWPeZT55DwW+5/bkv6XKxrY6vIjo3EumXpUVFAv5IpMlV9f6DXZc4J1wQ0/P+qgqnfmMd9u0BnxPX1E4n3deXitdo7DZ26YqFdbeE6+EpI5yxvQRE/rUJTEi/LjDDrbYadiSXuxGu1LY07XBQMWMXOfs5w64zjxkCR6cIVoC6GXDxZloB6lCNbjusaGKORJ0gdVnff60ctjPzCSpfoDPV9NEeF7Y6X1LCD4SZNne7qwBOVva7H3KeTEb2zsdBk+iBrT736rTpUiI+nzsAtoYkdR47KhIP0GaTqWAkeWx84dQ0CMvyudW3GGMS9eMrDk5/UwGE6Gqa
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(36860700004)(82310400014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2024 12:36:38.3322
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54edb976-9a99-4e94-6a04-08dc3dda1165
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004685.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9349
 
-Since commit 43a7206b0963 ("driver core: class: make class_register() take
-a const *"), the driver core allows for struct class to be in read-only
-memory, so move the rtc_class structure to be declared at build time
-placing it into read-only memory, instead of having to be dynamically
-allocated at boot time.
+Add support for Versal and Versal NET SoCs. Both of them should use the
+same IP core but differences can be in integration part that's why create
+separate compatible strings.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+Also describe optional power-domains property. It is optional because power
+domain doesn't need to be onwed by non secure firmware hence no access to
+control it via any driver.
+
+Signed-off-by: Michal Simek <michal.simek@amd.com>
 ---
- drivers/rtc/class.c         | 21 +++++++++++++--------
- drivers/rtc/interface.c     |  2 +-
- include/linux/rtc.h         |  2 +-
- kernel/power/suspend_test.c |  2 +-
- kernel/time/alarmtimer.c    |  2 +-
- 5 files changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-index 921ee1827974..e31fa0ad127e 100644
---- a/drivers/rtc/class.c
-+++ b/drivers/rtc/class.c
-@@ -21,7 +21,6 @@
- #include "rtc-core.h"
- 
- static DEFINE_IDA(rtc_ida);
--struct class *rtc_class;
- 
- static void rtc_device_release(struct device *dev)
- {
-@@ -199,6 +198,11 @@ static SIMPLE_DEV_PM_OPS(rtc_class_dev_pm_ops, rtc_suspend, rtc_resume);
- #define RTC_CLASS_DEV_PM_OPS	NULL
- #endif
- 
-+const struct class rtc_class = {
-+	.name = "rtc",
-+	.pm = RTC_CLASS_DEV_PM_OPS,
-+};
-+
- /* Ensure the caller will set the id before releasing the device */
- static struct rtc_device *rtc_allocate_device(void)
- {
-@@ -220,7 +224,7 @@ static struct rtc_device *rtc_allocate_device(void)
- 
- 	rtc->irq_freq = 1;
- 	rtc->max_user_freq = 64;
--	rtc->dev.class = rtc_class;
-+	rtc->dev.class = &rtc_class;
- 	rtc->dev.groups = rtc_get_dev_attribute_groups();
- 	rtc->dev.release = rtc_device_release;
- 
-@@ -475,13 +479,14 @@ EXPORT_SYMBOL_GPL(devm_rtc_device_register);
- 
- static int __init rtc_init(void)
- {
--	rtc_class = class_create("rtc");
--	if (IS_ERR(rtc_class)) {
--		pr_err("couldn't create class\n");
--		return PTR_ERR(rtc_class);
--	}
--	rtc_class->pm = RTC_CLASS_DEV_PM_OPS;
-+	int err;
-+
-+	err = class_register(&rtc_class);
-+	if (err)
-+		return err;
-+
- 	rtc_dev_init();
-+
- 	return 0;
- }
- subsys_initcall(rtc_init);
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index 1b63111cdda2..5faafb4aa55c 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -696,7 +696,7 @@ struct rtc_device *rtc_class_open(const char *name)
- 	struct device *dev;
- 	struct rtc_device *rtc = NULL;
- 
--	dev = class_find_device_by_name(rtc_class, name);
-+	dev = class_find_device_by_name(&rtc_class, name);
- 	if (dev)
- 		rtc = to_rtc_device(dev);
- 
-diff --git a/include/linux/rtc.h b/include/linux/rtc.h
-index 5f8e438a0312..3f4d315aaec9 100644
---- a/include/linux/rtc.h
-+++ b/include/linux/rtc.h
-@@ -42,7 +42,7 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
- #include <linux/timerqueue.h>
- #include <linux/workqueue.h>
- 
--extern struct class *rtc_class;
-+extern const struct class rtc_class;
- 
- /*
-  * For these RTC methods the device parameter is the physical device
-diff --git a/kernel/power/suspend_test.c b/kernel/power/suspend_test.c
-index b663a97f5867..d4856ec61570 100644
---- a/kernel/power/suspend_test.c
-+++ b/kernel/power/suspend_test.c
-@@ -201,7 +201,7 @@ static int __init test_suspend(void)
- 	}
- 
- 	/* RTCs have initialized by now too ... can we use one? */
--	dev = class_find_device(rtc_class, NULL, NULL, has_wakealarm);
-+	dev = class_find_device(&rtc_class, NULL, NULL, has_wakealarm);
- 	if (dev) {
- 		rtc = rtc_class_open(dev_name(dev));
- 		put_device(dev);
-diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
-index 4657cb8e8b1f..5abfa4390673 100644
---- a/kernel/time/alarmtimer.c
-+++ b/kernel/time/alarmtimer.c
-@@ -134,7 +134,7 @@ static struct class_interface alarmtimer_rtc_interface = {
- 
- static int alarmtimer_rtc_interface_setup(void)
- {
--	alarmtimer_rtc_interface.class = rtc_class;
-+	alarmtimer_rtc_interface.class = &rtc_class;
- 	return class_interface_register(&alarmtimer_rtc_interface);
- }
- static void alarmtimer_rtc_interface_remove(void)
+Changes in v2:
+- Change subject
+- Add compatible string for versal and versal NET
+- Update commit message to reflect why power domain is optional.
 
----
-base-commit: c12e67e076cbcb86fd9c3cb003a344ec684138a6
-change-id: 20240305-class_cleanup-abelloni-d9b8adf70940
+ .../devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml          | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Best regards,
+diff --git a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+index d1f5eb996dba..5652df8ec121 100644
+--- a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+@@ -18,7 +18,10 @@ allOf:
+ 
+ properties:
+   compatible:
+-    const: xlnx,zynqmp-rtc
++    enum:
++      - xlnx,versal-rtc
++      - xlnx,versal-net-rtc
++      - xlnx,zynqmp-rtc
+ 
+   reg:
+     maxItems: 1
+@@ -48,6 +51,9 @@ properties:
+     default: 0x198233
+     deprecated: true
+ 
++  power-domains:
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
 -- 
-Ricardo B. Marliere <ricardo@marliere.net>
+2.36.1
 
 
