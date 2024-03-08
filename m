@@ -1,62 +1,59 @@
-Return-Path: <linux-rtc+bounces-798-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-799-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1540987693D
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 18:04:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68C57876954
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 18:08:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 461BC1C22AB2
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 17:04:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22CAD281B12
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 17:08:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329D3241E4;
-	Fri,  8 Mar 2024 17:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0810C24A18;
+	Fri,  8 Mar 2024 17:08:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NxDOJFxH"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jrWFndom"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B786133CC;
-	Fri,  8 Mar 2024 17:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549482420C;
+	Fri,  8 Mar 2024 17:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709917386; cv=none; b=D4xUewWX43S2IStk6qw+JKYkYmLRIXSbFnjq7e4LcS6spepz3V8RZJd0FQ4BTUXVALSoShKpKW8PfOLYdNnoRHSTJ95jQFOHaK07IFctCzvT7SWmCiAWyChHtw5D77TDi6f+4g/+FMt09bPx9vT0pbO6zhol1kPndjm6JjFL9eg=
+	t=1709917701; cv=none; b=jMRRA3MnI7OEsAjeIAaecPG51cvdsl4BXhM0MlS/lf5NI5Oe4lMOIuCHDYxJ3IEfSamjfQ3JNsZj0NyIuYjXXhfUadG8Mdr0u9+FevtSRsKOYy/lLSfGzAoiRhQPw5OV0KOY2CLuNXRsvcWKQ5AyadQMEUf6W3Knewv06Z3qFyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709917386; c=relaxed/simple;
-	bh=x+BSDaogTlTx6HExeJr2kY2Xre214xK5ve/7vns2ivI=;
+	s=arc-20240116; t=1709917701; c=relaxed/simple;
+	bh=yjkgaWbfvxOAOJ8/GrcE5ERV6Xdug+DVVLT7XjhOlTk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QV/5EJ4+FqhYFDbq/Wp/Ogr53knqXXm9aUeK6IBLLHHSkznogovv34q8nJt8oUZQRL/M0EeWCQ4byeMBM36vNlZBn/g2a3AST8VZYvMp2rSx08zusU1JGr2lxAwcvk0yqCMli9IlaVflzeEnurhom0eJYwqJfLKRK06PqsfZgf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NxDOJFxH; arc=none smtp.client-ip=217.70.183.196
+	 Content-Type:Content-Disposition:In-Reply-To; b=uPq9rxy8qun47y8VVcJGkH8qVck79FNRw3U5ZbLmB1FHJkjt2qB4HTJVC/alBuBIuk+3xzR//7QwO3WHxhXja5ciwxdYgO4rZ2k2ptp8gDLCrazicNy0K3SUOCXY618pNIysIg74qN51VTnt4h0CZWh2TNvRnC1wyxhSlG1lTiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jrWFndom; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D209E000C;
-	Fri,  8 Mar 2024 17:03:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8CE101BF208;
+	Fri,  8 Mar 2024 17:08:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709917382;
+	t=1709917690;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f9DxpRYK3Ncnn+zC+8VF/kBAVFbc4p7Pz1eQkOUJfqs=;
-	b=NxDOJFxHZZQpII8j4FhRtWaaVeu2+jnA4DKtp2VDRbX22TNJqYWjrpQ12j2mdhrtyNmbsQ
-	OLVJgJr/Px/rZAuJY4K2+H1shQUaEz8LbDrP4qJ6SyY7lIx7BJ42s6iMN7eL6ctGvU00KU
-	HR4VjODLrN2jsSGEUOWtCCrjtwJoKBvCafH6hoMvcZttd/5HnV8g1QtFvHJWI6SYt2ah5q
-	XfAHg5DWx0565aYzdYhnCnvKq+7YqC2VANQAyswcCuNbeleE1Yhegk8bsxEwivvNTMYI6+
-	tlD4s/maYzK1CoW3AvgbOXbgBzhMYRYWgHaGJCnp/0FYQNHjCISidhKvtsoGBQ==
-Date: Fri, 8 Mar 2024 18:03:00 +0100
+	bh=SVSOVMM++kpSS7mrO6vPo+8T0YiZCKLh1YcyRU4PU+0=;
+	b=jrWFndomKXlOKifh8SJu/xxEkVdtVmr98MEjZ+7hFRthTHJKujWCykaljnvIvOdtm7Dok6
+	M5tjTkWxhcWVLR0ib0dwtzRbmM11eEqG5foA9pKwMy/DXOg4uUggHkmFvEaQY100sS/+Bp
+	pYaikC+wimyQPKjSNwhgfeVMhVXpOGlVMaVzeT6+bf/kqrKuhov+Afv8A5Gw+uPjZF+ekD
+	aAR07y5nHuo2+++FZbpPxmXO5XbPt08sNYX9ChZpYhxl/4TddBcUBnt7CB4XYeBgpboqZN
+	OxtD+TGlSCuakbxbSCTP3XXoc69X0TmpYm1qLJ/scQ+Yp+jUu3MY8tnLiY3dfw==
+Date: Fri, 8 Mar 2024 18:08:10 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Peter Hilber <peter.hilber@opensynergy.com>
-Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	virtio-dev@lists.oasis-open.org, linux-rtc@vger.kernel.org,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [RFC PATCH v3 7/7] virtio_rtc: Add RTC class driver
-Message-ID: <2024030817030063a909f0@mail.local>
-References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
- <20231218073849.35294-8-peter.hilber@opensynergy.com>
+To: Nicholas Miehlbradt <nicholas@linux.ibm.com>
+Cc: a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: fix uninitialized read of rtc_wkalrm.time
+Message-ID: <2024030817081059be4ef2@mail.local>
+References: <20231129073647.2624497-1-nicholas@linux.ibm.com>
+ <20240229215850a1990100@mail.local>
+ <66a2c8b3-b1e8-4d2c-8a19-09e62099a2d7@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -65,115 +62,91 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231218073849.35294-8-peter.hilber@opensynergy.com>
+In-Reply-To: <66a2c8b3-b1e8-4d2c-8a19-09e62099a2d7@linux.ibm.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello,
-
-I'll start by saying that I'm sorry, I have a very very high level
-knowledge about what virtio is.
-
-On 18/12/2023 08:38:45+0100, Peter Hilber wrote:
-> Expose the virtio-rtc UTC clock as an RTC clock to userspace, if it is
-> present. Support RTC alarm if the virtio-rtc alarm feature is present. The
-> virtio-rtc device signals an alarm by marking an alarmq buffer as used.
+On 08/03/2024 11:53:13+1100, Nicholas Miehlbradt wrote:
 > 
-> Peculiarities
-> -------------
 > 
-> A virtio-rtc clock is a bit special for an RTC clock in that
+> On 1/3/2024 8:58 am, Alexandre Belloni wrote:
+> > Hello,
+> > 
+> > On 29/11/2023 07:36:47+0000, Nicholas Miehlbradt wrote:
+> > > If either of the first two branches of the if statement in
+> > > rtc_read_alarm_internal are taken the fields of alarm->time are not
+> > > initialized but are subsequently read by the call to rtc_tm_to_time64.
+> > > 
+> > > Refactor so that the time field is only read if the final branch of the
+> > > if statment which initializes the field is taken.
+> > > 
+> > 
+> > While the problem description is correct, the solution is not because
+> > you have no guarantee that the fields have been initialized if
+> > ->read_alarm returns a value different from 0
+> > 
+> > So, instead of avoiding the conversion unless the final branch is taken,
+> > it should be avoided as long as err != 0.
+> > 
+> > But, I'm also wondering whether there is actually an issue. mktime64
+> > can be fed whatever value without bugging out and the value of err will
+> > be part of the trace so userspace knows that it shouldn't trust the
+> > value.
+> > 
+> > So, what is the actual issue? :)
 > 
-> - the clock may step (also backwards) autonomously at any time and
+> Thank you for your feedback.
+> I found this issue during my implementation of KMSAN for powerpc. The goal
+> with this patch is to eliminate use of undefined memory which leads to
+> undefined behaviour, I should have made this more clear in my original
+> message. You can find the KMSAN patch series here:
+> https://lore.kernel.org/linuxppc-dev/20231214055539.9420-1-nicholas@linux.ibm.com/
 > 
-> - the device, and its notification mechanism, will be reset during boot or
->   resume from sleep.
-> 
-> The virtio-rtc device avoids that the driver might miss an alarm. The
-> device signals an alarm whenever the clock has reached or passed the alarm
-> time, and also when the device is reset (on boot or resume from sleep), if
-> the alarm time is in the past.
-> 
-> Open Issue
-> ----------
-> 
-> The CLOCK_BOOTTIME_ALARM will use the RTC clock to wake up from sleep, and
-> implicitly assumes that no RTC clock steps will occur during sleep. The RTC
-> class driver does not know whether the current alarm is a real-time alarm
-> or a boot-time alarm.
-> 
-> Perhaps this might be handled by the driver also setting a virtio-rtc
-> monotonic alarm (which uses a clock similar to CLOCK_BOOTTIME_ALARM). The
-> virtio-rtc monotonic alarm would just be used to wake up in case it was a
-> CLOCK_BOOTTIME_ALARM alarm.
-> 
-> Otherwise, the behavior should not differ from other RTC class drivers.
-> 
+> I can make the changes suggested and fold this patch into the next version
+> of my KMSAN series if that would help to add context as to why I am
+> submitting this patch?
 
-What I don't quite get is how this is actually related to RTCs. This
-would be a super imprecise mechanism to get the current time and date
-from the host to the guest which is what I think your are trying to do,
-especially since this is not supporting UIE.
-The host system clock may come from reading the RTC at some point in
-time but more likely from another source so is it really the best
-synchronization mechanism?
+Please do but I must say I don't really like "defensive" programming
+just to please a static checker. There is no actual issue here, even if
+the memory is not initialized, the result will never be incorrect and
+the various checks that are being added everywhere are just bloating the
+kernel, making it slower to boot and run. Now, we even have useless CVEs
+that are assigned for this kind of issues...
 
-The other thing is that I don't quite get the point of the RTC alarm
-versus a regular timer in this context.
+Maybe it would be better to ensure the correctness of the result rather
+than having a look at whether the memory was initialized or not.
 
-
-[...]
-
-> +static const struct rtc_class_ops viortc_class_with_alarm_ops = {
-> +	.read_time = viortc_class_read_time,
-> +	.read_alarm = viortc_class_read_alarm,
-> +	.set_alarm = viortc_class_set_alarm,
-> +	.alarm_irq_enable = viortc_class_alarm_irq_enable,
-> +};
-> +
-> +static const struct rtc_class_ops viortc_class_no_alarm_ops = {
-> +	.read_time = viortc_class_read_time,
-> +};
-> +
-
-[...]
-
-> +/**
-> +/**
-> + * viortc_class_init() - init RTC class wrapper and device
-> + * @viortc: device data
-> + * @vio_clk_id: virtio_rtc clock id
-> + * @have_alarm: expose alarm ops
-> + * @parent_dev: virtio device
-> + *
-> + * Context: Process context.
-> + * Return: RTC class wrapper on success, ERR_PTR otherwise.
-> + */
-> +struct viortc_class *viortc_class_init(struct viortc_dev *viortc,
-> +				       u16 vio_clk_id, bool have_alarm,
-> +				       struct device *parent_dev)
-> +{
-> +	struct viortc_class *viortc_class;
-> +	struct rtc_device *rtc;
-> +
-> +	viortc_class =
-> +		devm_kzalloc(parent_dev, sizeof(*viortc_class), GFP_KERNEL);
-> +	if (!viortc_class)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	viortc_class->viortc = viortc;
-> +
-> +	rtc = devm_rtc_allocate_device(parent_dev);
-> +	if (IS_ERR(rtc))
-> +		return ERR_PTR(PTR_ERR(rtc));
-> +
-> +	viortc_class->rtc = rtc;
-> +
-> +	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
-> +
-> +	rtc->ops = have_alarm ? &viortc_class_with_alarm_ops :
-> +				&viortc_class_no_alarm_ops;
-
-Don't do this, simply clear the alarm feature.
+> > 
+> > > Signed-off-by: Nicholas Miehlbradt <nicholas@linux.ibm.com>
+> > > ---
+> > >   drivers/rtc/interface.c | 4 +++-
+> > >   1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+> > > index 1b63111cdda2..f40e76d2fe2b 100644
+> > > --- a/drivers/rtc/interface.c
+> > > +++ b/drivers/rtc/interface.c
+> > > @@ -179,6 +179,7 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
+> > >   				   struct rtc_wkalrm *alarm)
+> > >   {
+> > >   	int err;
+> > > +	time64_t trace_time = -1;
+> > >   	err = mutex_lock_interruptible(&rtc->ops_lock);
+> > >   	if (err)
+> > > @@ -201,11 +202,12 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
+> > >   		alarm->time.tm_yday = -1;
+> > >   		alarm->time.tm_isdst = -1;
+> > >   		err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
+> > > +		trace_time = rtc_tm_to_time64(&alarm->time);
+> > >   	}
+> > >   	mutex_unlock(&rtc->ops_lock);
+> > > -	trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
+> > > +	trace_rtc_read_alarm(trace_time, err);
+> > >   	return err;
+> > >   }
+> > > -- 
+> > > 2.37.2
+> > > 
+> > 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
