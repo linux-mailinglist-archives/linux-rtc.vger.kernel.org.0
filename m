@@ -1,63 +1,62 @@
-Return-Path: <linux-rtc+bounces-795-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-796-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2855E8762B3
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 12:07:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46EB08762B9
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 12:07:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6ACD281FCB
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 11:06:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 789641C210E8
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 11:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C82B55E67;
-	Fri,  8 Mar 2024 11:06:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2791855E50;
+	Fri,  8 Mar 2024 11:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NYEEnRP4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UQkr6lrk"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310702263A;
-	Fri,  8 Mar 2024 11:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE4E55794;
+	Fri,  8 Mar 2024 11:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709896006; cv=none; b=S9vBjSTw3tt7VoMxXt+gzpW+5FjgQPDsgWIDR80c+ut+jU2Atc2bJYjR/3uyl2W9hKP7WsZFj1VQLFDVa4HHGZxh7+trjgTszwdr7RMOTY/twh9z66XOF+nv4cZ/NPpVpMax6l0wj4bgpzhLDQLygX6LEy07r895bEdxyYNWckg=
+	t=1709896019; cv=none; b=YXYWT86X/2UwHCGbJ7got9JBi3nZ4NHsF6TxEPS02TUbCB67bQ9TtOUGwXGOr1Lh2fTdu4fZ2Hn1cFvT6MzT6VKzCWqIwRY9/PpZ46GfAfxUAo8S43AVIKnBZQ+BAsolyBgOsr6r2uN8ztj5eXabDel0MAQ2JHKNzpvopdZpGU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709896006; c=relaxed/simple;
-	bh=+r0sFlglxilGxfgPsCjx0wujxdaFgwxOaU0Nw8l+Gzc=;
+	s=arc-20240116; t=1709896019; c=relaxed/simple;
+	bh=pc96kTjeHyJOxzJAi5zGl8BN9tRRP9Rz2uvIYxGZGKM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HUtKYn6xcdD/8glAiOj/mT9aRjVVVLTyiENguXk23GSIjvbUFFq+mo/s4xxMnJwRw+Yn/tt0omcXcTaliqgVqBkXkXcq83PdfUs1l3n7gopqnht54ccyVD4bWcz8Hp/Y19bvfnXBhvHFVaktSz3AWkEpJ47ar2yFcfm50ytBqMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NYEEnRP4; arc=none smtp.client-ip=217.70.183.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+omBaSImzTRnjpOkZQ/YxVBrRSEYzKb/OPnSE4kHUl9j1mxWTY48IgZSrfSanIbl85AH2VOr58lFPXBqHpVHhvIUppk7CLjMFWgaU3xIouVLxtkVXMDYkPa30/iiSsAi2xDwsMvtQIDaLuO4m6L31UeDLDDC1icv/Fac8s1qyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UQkr6lrk; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0ABD31BF206;
-	Fri,  8 Mar 2024 11:06:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F2171240004;
+	Fri,  8 Mar 2024 11:06:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709896002;
+	t=1709896014;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1Qw6Ut14GxMOVcxSyr6oHQhiQFQ+lkJyhyWsKUTrcvc=;
-	b=NYEEnRP4SpUqkQYB3am+XxAn558jt7SSeH4PT3fs4EmVsco550GmQ4otEA1WjsCm8HGsxp
-	wOs9JWfcbfsSoQXRFYxGJHqSc8jhTKR5m5C+YHnychjURmfJodjgFwgCCjI3TqFyVgRYqP
-	weR3kQ2zfpa3ZdZC9nlsBCpGuLUacoip/OZdYXb9K2eh6ampQDJpeloedUmIsvgsniKKOs
-	eeAiyVEckmCnaM8uxNpm46/y4C5R8dchxz3vjoMgF/PmRc+S/12ewkSW/tWt7ejFMfdnZ0
-	8oCyHnExiZcD5OT7rniA5hTcxKg46+NPFPcx94Wu5y7T/5qVeryCc1TADRgyNw==
-Date: Fri, 8 Mar 2024 12:06:40 +0100
+	bh=RHOOcTFio23d7bm8Wr7cdw51uo9YXpicRkSrd+GIRrc=;
+	b=UQkr6lrko6Gm8/773ZrwzIlSqPd2WV2F4OMyqgCd1LBqwi1UgVNwbEFvp1ho+SwfIELAPj
+	u9xSY/Uaej8yNKpfkQiqyWG2cjz6PgnIqrWM98VD167XSazSUSI1UrV3aDEZqIwZQRj+PK
+	Jki7jc+w+kGcOdhc/vXpPQx0o5kbFa8cumucBfZGN/mCbEFyjNFpXcE7v+p4ZoNXso4ThK
+	Th4ehp2DAOgXHddMTSiAgR4e7yMD3eb8pqkp/1G9turKImS/6bNNVvhQ3r8IAGDPw20qWD
+	LTg514C9RoyhPAGNViJpo5jZkRhpwS4YEGPUXOqAHT//52OK55DZRrEQH5Exgw==
+Date: Fri, 8 Mar 2024 12:06:53 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
-	Michal Simek <michal.simek@amd.com>
-Cc: Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	"moderated list:ARM/ZYNQ ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH v3] dt-bindings: rtc: zynqmp: Add support for
- Versal/Versal NET SoCs
-Message-ID: <170989597160.2150728.2241720169557341707.b4-ty@bootlin.com>
-References: <5ecd775e6083f86aa744c4e9dfb7f6a13082c78a.1709804617.git.michal.simek@amd.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>, John Stultz <jstultz@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	"Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] rtc: class: make rtc_class constant
+Message-ID: <170989597159.2150728.7175155089515338956.b4-ty@bootlin.com>
+References: <20240305-class_cleanup-abelloni-v1-1-944c026137c8@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,24 +65,23 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5ecd775e6083f86aa744c4e9dfb7f6a13082c78a.1709804617.git.michal.simek@amd.com>
+In-Reply-To: <20240305-class_cleanup-abelloni-v1-1-944c026137c8@marliere.net>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Thu, 07 Mar 2024 10:43:46 +0100, Michal Simek wrote:
-> Add support for Versal and Versal NET SoCs. Both of them should use the
-> same IP core but differences can be in integration part that's why create
-> separate compatible strings.
+On Tue, 05 Mar 2024 15:22:28 -0300, Ricardo B. Marliere wrote:
+> Since commit 43a7206b0963 ("driver core: class: make class_register() take
+> a const *"), the driver core allows for struct class to be in read-only
+> memory, so move the rtc_class structure to be declared at build time
+> placing it into read-only memory, instead of having to be dynamically
+> allocated at boot time.
 > 
-> Also describe optional power-domains property. It is optional because power
-> domain doesn't need to be onwed by non secure firmware hence no access to
-> control it via any driver.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] dt-bindings: rtc: zynqmp: Add support for Versal/Versal NET SoCs
-      https://git.kernel.org/abelloni/c/f0109900462d
+[1/1] rtc: class: make rtc_class constant
+      https://git.kernel.org/abelloni/c/6b6ca096115e
 
 Best regards,
 
