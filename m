@@ -1,60 +1,59 @@
-Return-Path: <linux-rtc+bounces-793-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-794-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61B918762AD
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E00C8762AE
 	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 12:06:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43EC0B21394
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 11:06:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A4391F25BD2
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Mar 2024 11:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CDA355794;
-	Fri,  8 Mar 2024 11:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B4F155C15;
+	Fri,  8 Mar 2024 11:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lCprmHlN"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="le04kcLe"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556E654BD5;
-	Fri,  8 Mar 2024 11:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93E82263A;
+	Fri,  8 Mar 2024 11:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709895991; cv=none; b=N7cilZ/91w4idim1lZa4R2pvSgUN7Wiqs/K56eAReWav3JNitqbAB3K8mDcJ1vTUgFCNaywJauR2EtXkEL9N7MA+fuSpolzZH+t+x/5+rf+mnLNeI32AAQekNmnbg/ReqiwRBoCC+3B48ABrlvePf6pupDxOQto84t3IUM63VU0=
+	t=1709895998; cv=none; b=Zx4Y6WPFq6nDHjMU4uprCFIKsIJ1nGCc1W35PT8D3UKIZxRQWLqjy/UJB5SEfYGmcLYefruIY8zYwD3SnbXASDfBtTIyjvUaxcm7SBa9V8zxsjuioJ2mL4EgMAHNFCQe1RchL9N8n06y+8lnKM6q1qibFLmLTprWz+cGrZs+ChY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709895991; c=relaxed/simple;
-	bh=D7U9+tMnd/xl+mH9tfKy3+P7ulSxJqwq7CvbIhbVsp8=;
+	s=arc-20240116; t=1709895998; c=relaxed/simple;
+	bh=Dlic2xdJ/4Lp/BC+kW2Kll6aPOhh2E5AospJCmpw9rw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FV70B6FQ6SUTN7s0zr85F2ztIYfEqu3i17pyH0joHB08yqTA27L+CvX7pph9bHZIWibTpOeq3PFGkhr+7WHm5C69bCn1TWWZU5w5SQpRZsA5NcwISafR41da0Ym6hq6VwNYTJkNc/OH0hQr2v6TjkUqhApvBZzaMctZcLLam9OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lCprmHlN; arc=none smtp.client-ip=217.70.183.195
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ms7A7T8ei6LMf1/VodIkXdB6/l6tdpqWeb1SkJ1+O25M3ZTyL7tivZNUKOtmG6DMBGMZ4pH0TC+gZkn/slHEXbmMwKYzeLOQ3uJzJIAnqI20+p3u4DfFHd+arFU3lYt2BgBGZlknM1O8p+VsU89DidmvOx+DqCiOWN90HCseJRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=le04kcLe; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2CF8160005;
-	Fri,  8 Mar 2024 11:06:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 881F220005;
+	Fri,  8 Mar 2024 11:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709895986;
+	t=1709895994;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MWTlYsFPqqGs6BQfbZL4kDb0oUDuYdY4Ec1V08TF/6M=;
-	b=lCprmHlNEKg+93HlYVWUYDtFKPaps8NzZh5JGqce+pV6RvBxNY/FdX+hcMXriOJTUavLpG
-	ybJluwxn63vPhcZknIjEf/2k41/NsvjvFwyCZT4wn3wV1ajmIxUGhc1N4r473PkZlnoCtZ
-	peAQdfTsv+GoyKcmbVnoBj14Vb3KYQV1yWSddPwfdM/UuAwQOMt1uv1Z4rxkqoZFJMEVMR
-	tNyei4I19Ok6MN1m9tbsiC1SrK8BokwyJ+GMoK3sDdC1n1gofqxBn1l6TX71tFCugmWO1G
-	2Tx1HK8GRxeoC0rpqQoATI6vNydi/7QCPx/9xpHhCabB+aX7IOZYe4z0rWA8eA==
-Date: Fri, 8 Mar 2024 12:06:25 +0100
+	bh=yDokQE8eDevsZTVbL+J84sEhjfKF7F3KjE3ssol2SRA=;
+	b=le04kcLei1b9u0cNrGSc+7mmEjWxFYNIWNuBCBWBXInJiPoZ6dlCTkQt7rZqKgROC6JuwV
+	xrwL/JvruFTsA/EevlSdi9X0Fvfu8hJlOWo7p9vPEYiYAFt4JX/35zlsRJIlNsayoRcgQc
+	eYYJoL5T1c1Khei+Lvc93IBsTk3raSIrSto5PP/M6Yeti8PwNRwQ+dngj658YOBDr+TJDr
+	tipL8rnYTgA6Vbb2FoMlDb6i/3dj9kXjrrJQmMdpwgIMVvL32/awV7ykHIAXn1MaZZguoF
+	ckUJ1lR13iP4H5aZoXjcC5K4QnWmh1DJv1rjvZ8InmYk1olzO8UVjmicP08dzQ==
+Date: Fri, 8 Mar 2024 12:06:33 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: rtc: abx80x: Improve checks on trickle
- charger constraints
-Message-ID: <170989597157.2150728.15920920464980842331.b4-ty@bootlin.com>
-References: <20240305080944.17991-1-laurent.pinchart@ideasonboard.com>
+To: =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	linux-rtc@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc: Eddie Huang <eddie.huang@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: adjust file entry in ARM/Mediatek RTC DRIVER
+Message-ID: <170989597157.2150728.2892505588638437856.b4-ty@bootlin.com>
+References: <20240301145907.32732-1-lukas.bulwahn@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -63,24 +62,25 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240305080944.17991-1-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20240301145907.32732-1-lukas.bulwahn@gmail.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, 05 Mar 2024 10:09:44 +0200, Laurent Pinchart wrote:
-> The abracon,tc-diode and abracon,tc-resistor DT properties are only
-> valid for the ABx0804 and ABx0805. Furthermore, they must both be
-> present, or neither of them must be specified. Add rules to check this.
+On Fri, 01 Mar 2024 15:59:07 +0100, Lukas Bulwahn wrote:
+> Commit e8c0498505b0 ("dt-bindings: rtc: convert MT2717 RTC to the
+> json-schema") and commit aef3952ec13f ("dt-bindings: rtc: convert MT7622
+> RTC to the json-schema") convert rtc-mt{2712,7622}.txt to
+> mediatek,mt{2712,7622}-rtc.yaml, but misses to adjust the file entries in
+> MAINTAINERS.
 > 
-> The generic abracon,abx08x compatible string doesn't indicate which chip
-> variant is used, but performs auto-detection at runtime. It must this
-> also allow the two above properties.
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> broken reference.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] dt-bindings: rtc: abx80x: Improve checks on trickle charger constraints
-      https://git.kernel.org/abelloni/c/32a6be085835
+[1/1] MAINTAINERS: adjust file entry in ARM/Mediatek RTC DRIVER
+      https://git.kernel.org/abelloni/c/1e60ac6b8b57
 
 Best regards,
 
