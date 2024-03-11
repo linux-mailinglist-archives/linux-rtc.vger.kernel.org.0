@@ -1,83 +1,72 @@
-Return-Path: <linux-rtc+bounces-802-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-803-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2851C878738
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Mar 2024 19:25:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE71878751
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Mar 2024 19:29:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 780B1B2113D
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Mar 2024 18:25:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 038C3B21E34
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Mar 2024 18:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016D4537FB;
-	Mon, 11 Mar 2024 18:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCBD95466B;
+	Mon, 11 Mar 2024 18:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="h3n1Bum3"
+	dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b="dAPNR3GF"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from refb01.tmes.trendmicro.eu (refb01.tmes.trendmicro.eu [18.185.115.53])
+Received: from refb02.tmes.trendmicro.eu (refb02.tmes.trendmicro.eu [18.185.115.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D60C53819
-	for <linux-rtc@vger.kernel.org>; Mon, 11 Mar 2024 18:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585E153E22
+	for <linux-rtc@vger.kernel.org>; Mon, 11 Mar 2024 18:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.185.115.58
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710181513; cv=fail; b=NhWVDE49oKeBcxzfPdoMoEKWpsgopk187HZ+hK2XSHwHz8m9pOuxKcNevNSqarN2Fkv6Okw+kfU2sZdDLfMlxAaVGFMohM1RSnQcCdked/rjr2LniIly9JA+eubxPIg1hxwic/uVfE/oBSjFYh+c66XHM0PUtgklJto3WadCIGw=
+	t=1710181752; cv=fail; b=NqSWQM1TBR+PGuOEFMDIUs1aphUsHDsKEY4NBtJLExCaPH8QUeulFDPjj09B4r9ROiXSwXPNgHlxhZfcBnzsMkk37jFxn8zQ6SGdgtuxVv4my5SYfIa1/WcznbOVn09zLEbIZ0CFElrSrUjeMihzfFn3nbyeh4HVBiofxzv5aBo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710181513; c=relaxed/simple;
-	bh=Ex6kQSh+BJ6TaKBdRR2u1rlDDSt1BtZZYgQiTlB5OPA=;
+	s=arc-20240116; t=1710181752; c=relaxed/simple;
+	bh=qVg5zNro04J/Qp8HEvKilQCutULBeLA3srmn0vBK6Co=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=KCQF2516AycRtFpvX+NMVk+Bifs0wCu0dbzx99HiyBFXpPXlTCgcU+9dXVE8ZfdGeZwcBmrOuYGUDEYffp6n3OHaEs7DLBrcYPfiTQmn2cPGP/DHnh+SNbCIfr0n8Fz4HD+aiKTQyWm8PsHv8M4RZUynyqNjno0tjhGVvpfjcpM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=h3n1Bum3; arc=fail smtp.client-ip=18.185.115.53
+	 Content-Type:MIME-Version; b=mCozZMVQavU5R+JpFptM4k597kIPt5z/LbN+m24ju6DwQkWx2J9zWhhlhWuZD608aRf1zi59/BbiHuTLV39YLhVcZYDrkpdVJbdRVGEUULymroLaBjzj7IFmO0jMinKQRTW+0j3G/pvz3htZwuDxGDRCh2XtErrDKc8LtTKC08w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com; spf=pass smtp.mailfrom=opensynergy.com; dkim=pass (2048-bit key) header.d=opensynergy.com header.i=@opensynergy.com header.b=dAPNR3GF; arc=fail smtp.client-ip=18.185.115.58
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensynergy.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensynergy.com
-Received: from 104.47.11.168_.trendmicro.com (unknown [172.21.19.58])
-	by refb01.tmes.trendmicro.eu (Postfix) with ESMTPS id 9AC491002ED1D
-	for <linux-rtc@vger.kernel.org>; Mon, 11 Mar 2024 18:24:48 +0000 (UTC)
-Received: from 104.47.11.168_.trendmicro.com (unknown [172.21.187.21])
-	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id BE03210000625;
-	Mon, 11 Mar 2024 18:24:40 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1710181478.839000
-X-TM-MAIL-UUID: f4f61e02-d1be-4e7c-9b9f-a16c46525819
-Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.168])
-	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id CD032100010D9;
-	Mon, 11 Mar 2024 18:24:38 +0000 (UTC)
+Received: from 104.47.11.169_.trendmicro.com (unknown [172.21.10.233])
+	by refb02.tmes.trendmicro.eu (Postfix) with ESMTPS id 115041011DD0B;
+	Mon, 11 Mar 2024 18:29:08 +0000 (UTC)
+Received: from 104.47.11.169_.trendmicro.com (unknown [172.21.197.65])
+	by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 7D2291000049D;
+	Mon, 11 Mar 2024 18:29:00 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1710181735.682000
+X-TM-MAIL-UUID: 5a03fc81-81df-4f98-a45e-097de836e455
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.169])
+	by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id A6CC210047C37;
+	Mon, 11 Mar 2024 18:28:55 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=avZ5uSc0/FOjNMlD1KShEY+3rxMOk4kf/gK/vex7Y/sVURKRD9p0w8t5+F/iSY0YD9+44l1o86rVps9j46eRcAdbmoi3A2Sl/Lkz8Eimn8JD4YFV8C1+yg2CkBVHV7YVhZsX9bZpEkU0ycLabkCxal9+aCdjWVAs1yh4kn0NNethZ4X+lklNQ4+o+RA4kw6NBWTy1X+TH9GX0sJSmznnvqob3AhabU5lmDV7hl4GODQsguO/3UFYYOeZgorpQZi26Io3xS+T7ZCQxGwjQ0nWoiA/gRcnNYTOEahGD1loxSkrQcvuYAz/BV/V0dCXC8m3Ywf84fWfoeee0TXMHsr3RQ==
+ b=hmkSuS/KPXD/JO4WXuFDBOeCmxfZjg3N7wrayluAOwSDdwDKSNqxmNhfUWSBVxa0/f0VtuMXzYtN/XHDGKt+iJ5xtiLUYYJVK4otYBHhYzaHGDMCAnNtCdtufmw0iuydoBozciLXwXAahczPRJpDH1vkIDAQIqe9XO69DHGsqbi46TZG9jROXDuCqXQmUGVFwA28rUEIWEWZ5+FyPWqotRyBb6kXJKyJToJsb0MX6Ydbe4rs8k1Yg4b1nkeDBEQ+g5a/su3Gh/oyrS4vE5vgMl9yz8iAcjgTdVd/x0Oa9Hl9M1mwYby34vYzoYMlwYnpqU1s4Hk5fqz7Ox/c6vpPXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ex6kQSh+BJ6TaKBdRR2u1rlDDSt1BtZZYgQiTlB5OPA=;
- b=R37yv3Tv+ENOilYKet5BGvkhBcmvp//LC1N/KD2VytKicZld0hmCpp/7/PN4h+bo2aY7qHHEp8iTePEuJaG9aJicGhlQWIejO8gGkJaSTD8nm5KZOEbLuwBFdzRMLc37S3d/my3vuplDl20mdpsVZF4d9wlqa2IFfT0aK3sASawo08HuXlA0X9IqIl5fH7Xq9CVHP2HkeaYKyChQVE85L9i4KgXGU4mcVJdlypmENZmYV3sAeJjkM7/7pJOhzOGn9wjqUvkwuVpaPQ+jiMsSnbxgZ9DPMBtr0Iwqy3g9253P0O+nBWZGMsjsrdD/9qFLNGfBaFezEtf9v5yP4BT4ew==
+ bh=zQ+rToqkRmitiaiU6nancbJeFVM6IQFsCWhqFmh3brw=;
+ b=Td1W9SKlMIfz1ybdLxAe0rqaszq9TiMZ3HXJ5lXLQgXu9Xklo3I3nIeSFQtDrU7Nx6PHQGbi6x1NHsOHbIzQuG9t9a6lByUCQREhd9l0n/gDtx+Zgk2y6pwTc27DweDu6hQ2MJcxLYE3a8ain1nlVFuzywAmxFn/ylewrTNC1hMJlBrHaWbbK2B2QrnugUfAZRcjOmagFb4xnbB0R29j7HyaH86GGvfO/u9JUVg38p4a0TZ7UX2w7KA7CWXdGrGGYXDCIvK0xkxPovzSHGEmVwF1F21sHCv6ZGNU78NO8BFv4wTSEc1uOFu8NkWGsJnk9kaYPCg5fIiQE5KQJbrYsg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=opensynergy.com; dmarc=pass action=none
  header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=opensynergy.com;
-Message-ID: <f6940954-334a-458b-af32-f03d8efbe607@opensynergy.com>
-Date: Mon, 11 Mar 2024 19:24:33 +0100
-Subject: Re: [RFC PATCH v3 0/7] Add virtio_rtc module and related changes
+Message-ID: <a4babfc9-f4da-4dfe-8431-eb819f5801eb@opensynergy.com>
+Date: Mon, 11 Mar 2024 19:28:50 +0100
+Subject: Re: [RFC PATCH v3 7/7] virtio_rtc: Add RTC class driver
 Content-Language: en-US
-To: David Woodhouse <dwmw2@infradead.org>,
- Peter Hilber <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, virtio-dev@lists.oasis-open.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
- "virtio-comment@lists.oasis-open.org" <virtio-comment@lists.oasis-open.org>
-Cc: "Christopher S. Hall" <christopher.s.hall@intel.com>,
- Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
- Richard Cochran <richardcochran@gmail.com>, Stephen Boyd <sboyd@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Marc Zyngier <maz@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- "Ridoux, Julien" <ridouxj@amazon.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ virtio-dev@lists.oasis-open.org, linux-rtc@vger.kernel.org,
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Alessandro Zummo <a.zummo@towertech.it>
 References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
- <0e21e3e2be26acd70b5575b9932b3a911c9fe721.camel@infradead.org>
- <204c6339-e80d-4a98-8d07-a11eeb729497@opensynergy.com>
- <667c8d944ce9ea5c570b82b1858a70cc67b2f3e4.camel@infradead.org>
+ <20231218073849.35294-8-peter.hilber@opensynergy.com>
+ <2024030817030063a909f0@mail.local>
 From: Peter Hilber <peter.hilber@opensynergy.com>
 Autocrypt: addr=peter.hilber@opensynergy.com; keydata=
  xsDNBFuyHTIBDAClsxKaykR7WINWbw2hd8SjAU5Ft7Vx2qOyRR3guringPRMDvc5sAQeDPP4
@@ -113,11 +102,11 @@ Autocrypt: addr=peter.hilber@opensynergy.com; keydata=
  wHFeXHw4NXR7mYeX/eftz/9GFMVU29c72NTw8UihOy9qJgNo19wroRYKHLz1eWtMVcqS3hbX
  m0/QcrG9+C9qCPXVxpC/L0YLAtmdvEIyaFtXWRyW7UQ3us6klHh4XUvSpsQhOgzLHFJ1Lpfc
  upeBYECJQdxgIYyhgFAwRHeLGIPxjlvUmk22C0ualbekkuPTQs/m
-In-Reply-To: <667c8d944ce9ea5c570b82b1858a70cc67b2f3e4.camel@infradead.org>
+In-Reply-To: <2024030817030063a909f0@mail.local>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BE1P281CA0158.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:67::7) To BEZP281MB3267.DEUP281.PROD.OUTLOOK.COM
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE0P281CA0024.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:14::11) To BEZP281MB3267.DEUP281.PROD.OUTLOOK.COM
  (2603:10a6:b10:77::8)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -127,334 +116,248 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BEZP281MB3267:EE_|BEZP281MB2947:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3881e1f2-b116-480d-d1bf-08dc41f88140
+X-MS-Office365-Filtering-Correlation-Id: 6011367b-c9c5-4063-aaf8-08dc41f919c7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	FGnJQTWjTg+pXgU5V5cMmGvX8PCueAlKNiA87u2y5H1jCk0lNNgXUcwKQ7yHiX6HRN05wniA8wnPo8ltb9T/omYeUN5hLSoxlZWxtexeNYRJsFe4R+BaEVbcDN5gJzmROoLBfDLqGkxuzaxmKMmk5sJ663OC9bQpjjY3F7yWH7emRDPzcTuyVariFmJObNWqOOwRAV+kA6jLSJfx9R16YL916498mja7uS8LVA6gzhMGljtIEqJ8WXTB3u0ifdnN4Aj4v6MHOMAod0HOskabQBTL7rkqxogYKsTQctgHCZF1TONCcmpblMj43r8LEcINjv712DdQXOi9F4TZDyoFb+yOr7Bt9Q0UgVi6o3yEOzn4appHzJYPZ9aPPB6eAWlJC8F2ExQeuBMyaABbavC3Mi71zhDyp21L5BqLLTF92LHhRn5HhSNPCE1WFujW9zpT43OvvtUcsyGu+3Abhunv9deE9WIqXxwp/QaozFMLAixflkxMgoHCuSMhavkJ2sf4mYiEKrUg9AXdatbgpUpa2pEbcwxT0LzOZ81gWq4mk0lU+9CQ+G14B3v0L8NFw4749s32Wc6pzD4gCfHjjc7wG6eE+5xQo1BeDSPzXWIYajw=
+	eHCoPt1noziRqYMucg3fB8SitqW/7ySy257y1uNEZHfYA9YwdvCbe3yIXVKlX60PLWtxbBmri8iapUKbV8xcoLAcfv69OTjcoclZoDAg+dv6MctlGQbVGUTLsog1uSoRewhx+C6Ohe/ED5oEMlQzkiVYutdHxYpJUSL+hngNROxM1olv5hhgmjSS2NMsPz7Exxp5sRqYgpM9aiJ+hOo9g3k6uVf49pSEeZxpI6fN/i1WzNSqK48aL8kDQ+wpM1SXXYbKIkgFtBenRJ/sO4R7qoeKnK4x/jiL/yCXeWITjjQkqlsSnnJGLspuoXH8jxhq26VDZoFPHUOXgGD4S9Ce1g4dTCIe/EnT0Ltla9Qapy/pUZOwN1luzdN7GhmSy3eIvBoY2tvcoc2eacAKTsdjQiP10W/3szkxuoOb3RRuZOVwuYXe7yqGjfazzJJfBi6JZAJwS1L2R0AjvtKSWLf8kumNp0JKHw9YlwUfDiCy6dG/Wpih/LnwO9gs3dERxOt3Wn0S7zH51OPimftuJXDnYwHX2uqv1PxTvfERilV9+cqxWHSxzi3vYAGpLNGJOy0vyuUOPuMTrOhvlJNAh7L0bJH1SME1PxE47hRTIdcCLxw=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB3267.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB3267.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TThlblhZMGRxMDY1MTFkMExBOWU5ditMbXVsS2NFbm8rRjVtdkUxRWI2TjVS?=
- =?utf-8?B?MGRjS3c1MWpjNHhndVRyZXNFVkRoQjJwMWdLQUR3SzNiOGNRSG4zTU1ZNEt6?=
- =?utf-8?B?NkdPZ3ZsekROZmt4anhvWjhBZ0RneURKWUlIK2lBRS9nM01CZkFVckN3RTZO?=
- =?utf-8?B?eHpHSjZ3MEMvODRqMUthZU5zZWt1cW8rZjNaWWRRWkhwRjY3T1RVVS9NOXlZ?=
- =?utf-8?B?bk1NOEttMTU5dnpEVFhRamV1bUlMTkNtQzl0VWhyRGJIZkRpelROWWszT29V?=
- =?utf-8?B?dCtZNi9EbW80TGFuVExhZ2pTQ3E0VERQbzk0MjZZMm05SDVNRjkyM3dCMEpn?=
- =?utf-8?B?ZUlMR3J1QWdvODVkQTh3aGVZVkpQWnFjOEdvOWJtQWpIeFd4c1U1a0FZLy9C?=
- =?utf-8?B?MGNldE80VWs5ZllkdE92cFBtUktiL0RtYTVhcU1WMVZBQWlmZWJBc2oyekxS?=
- =?utf-8?B?eElFWnhCU25hSWlidkZMczRJb2dhMGFMRTAyaENvTGxsWEwzeUxPREVqY2Vy?=
- =?utf-8?B?SnhuelBYcndzNksvMVpMWlFvNGRMZWJ6aWZsYlY2QWxRcm1mUjhjT1dUU3li?=
- =?utf-8?B?RWFqSFM2Ykw1ejlGWWE3TFFnRmQ5ZWUySm5kQ3JxdExaNTJFS1Nac29SOGl0?=
- =?utf-8?B?SHZHb0N2RVIyLzhHK3ZvWWhrbC9EWnZhVW5ualZ4Y3h3MFNjZURTZjc0MklV?=
- =?utf-8?B?Sys3S0xOVTQrY3hrQjlFaXA1R2F3eXliYUVYZlFPK0lkZjc4TXUzc3ZTUGpB?=
- =?utf-8?B?Q2dmbnZNUWZidG00cGNVT21icUM1dEJmR0hLVUltNUE1YVBtMjJNWGY0QWRN?=
- =?utf-8?B?R240WVpMbGkzVlkvdlAvenh2VzN1OTZ2WGROR1RrS0Q3M2crTGRrUEFPUTY3?=
- =?utf-8?B?QVFUanRnK2VnSjdRNCtFUk4rWHVCUXJGTWNockUvNU82bFZ0SVE2MWNwNHBv?=
- =?utf-8?B?dG5sSHBtU0FXclR4K3VhNmRwcXN1NFZmNVJPOEtZenJrYkhsZUYyRXJNeFVl?=
- =?utf-8?B?Zk9DOENiWlgvZ2lYTDgrV3QzMkUwcTJpWlRFZnYzMENSSDRUdnkzdmVvSE5H?=
- =?utf-8?B?S0tQU3I0ckI4RGluOGpaaFdPTUZvN1NoM3k3WFU0SVFLOE1IbFBocHY2cmQx?=
- =?utf-8?B?cDVMb0NCZGFtWTRRQ1UxcFdnNGJSRkt1K21vUVBGeFN4M090Wi9DWU1FamNo?=
- =?utf-8?B?ODQ0YzJDMkVZbFM3ZEdEeDRES0xaRWlycWZBWkcvVjlVQ0duY0tRd0RrNnlw?=
- =?utf-8?B?Wm9uUmxDZUU3bG9CZmRrU3J4dGpMeW9wMGZWWGFLRSszODdEdGVLTzZzWU9B?=
- =?utf-8?B?V1VRNU5qVjFHc3RmamFNRTFUOTkxM0xlTUppZ1RoQ0ZTL2ZRdlgwQWFoMm5M?=
- =?utf-8?B?UmtPVDRNVDllbGtDK2NacnVxd2xvTWpUQ1NCWWJLcUpDUVowbUZhNmtnS3My?=
- =?utf-8?B?RDZOS0hvcFlHUnc2a0ZVekZ1enJqcUxadm1iSlZqZ002WnRMenFXdVF2SUJE?=
- =?utf-8?B?Vzczdm15bGE3Z29qTnBxWkc3UnR1czdkR1krZlpteXkyaWhRZVRQcVRObW5r?=
- =?utf-8?B?RTBLOU9SQlIxQnFjdFVoYmsrOXBZM1NnQXBybkVaVGdzWXZ1WElnSFhqMXdD?=
- =?utf-8?B?RHhwc3h2eFVUU1VxZnVBVHVpODNtZkVzd1ZrYTVtNHFwcmdiZ0l6R3Y0enNp?=
- =?utf-8?B?OHA5UVJ6WWZOSWFyUS95ajZWVEFVTjZVQWZjNmF6aGQ2WmRVR0pmSkFxdGN6?=
- =?utf-8?B?b2h4bTJjcEQvaDRXV0pTYk1SdmRMUEowMHN2RExZallCZ2dJdGU4cDM1ZHdM?=
- =?utf-8?B?M3Z2OE1XakF2T1FEdjAzTVJOVHlQZ2hNa0p0bVNXSFZvdXdZOFo1T016SG5Z?=
- =?utf-8?B?cXUwQ1RlNXU3dWxIalo5T3FyOWRnMXJCOFBsWlZwVU5jV3daLzFxcFZlUHg1?=
- =?utf-8?B?c0FpMkRibThNanE1S3A1WlcwUFI4dEZXL1NsRWpDTEp5T3RWTm5hWDlvVGli?=
- =?utf-8?B?VStUYXF6YmhyVCtZYWZDcWVMd0NMTEpnS2xBUW1oZ2FObjJqVTNEUmtxRlQ3?=
- =?utf-8?B?WlROa05WeUdSWHR2Sk1RT25SV2hpSnZhQ3FNVmI1YTA4WUhKeENWaXA0Qngw?=
- =?utf-8?B?NFZJVjVyMldQaFNCbFdnTWpwU2JCN1B5Rys2cjFhRk1DeXcxMzNIeFYzTmdt?=
- =?utf-8?Q?ZSC7rUEQSmDzBD9QMmVW562L3QAKT6BQc0I2f3ScdcfE?=
+	=?utf-8?B?ZjJ0VTdzZmhoTGlOOVdhVlQ4RUN0N1RvSE4xcE1CMzUrQXEzaUY2UjY4b3RD?=
+ =?utf-8?B?OWFOUDhjUTljc2E4TElOeWJsL2xEOFdjcDJBR3dpaXZJVW40RlV4NE4veENC?=
+ =?utf-8?B?bFRHd0gwbXE1SVZnc05jR1VHejFaMTBFUWlnYzJuRDIreXVBRzgwRlE0dkl5?=
+ =?utf-8?B?ZHpNQ3BQTVkvSEhNVW9lSVgxQ1JXZEc1ZkpnMmZWa3o1M0JtYTNNandMcXFw?=
+ =?utf-8?B?b0JGaHpyUGNiS2xEemVWUXAxOFlzUWhTbVFoTktUSzNON3JRSG5hbFlQZG13?=
+ =?utf-8?B?ZVQxUFFFNDBmdnNPVzJ4cFRjbGlsSnZhSWQxU2Y0NytlVXhoenJuYzZiL3Nh?=
+ =?utf-8?B?SGRHV0tKWUpwRGZrcGVXZXNCWjM1VDNDWmo1a2VhTXNWM3lqL3ZCNDVSQlVM?=
+ =?utf-8?B?VHMwZW1TWFU5cGFGMC8yaG5tWkxLWm1XNDhYVENoZWVCa212eXRNbEdncGlp?=
+ =?utf-8?B?T21rb2trYTBQR2hFVUNGWmUyOTBqV0pXM2loWHZQVGlwSHE4YkhxT2FDeFpY?=
+ =?utf-8?B?MjU2V0dZYVlBL0ZwRldSTHVLRGpteWxoUlN0aURKRDdnb2xUV3NOK21uRTdI?=
+ =?utf-8?B?ZzdHaGdTZy9MWDRXVlBzS1V5cG1pbDg3NDBrc00yRFRKN0ozZk1mRjVpSDZT?=
+ =?utf-8?B?WXZaendNakdLTng0L0s4NkxaOC9QdGhFQ2c1aUFEZnRYZ1lLNzZPaGRvTnd0?=
+ =?utf-8?B?OEVRTUNBeExqVlRvTS8wMDlEbnhjN0c3V1lmTzhwdXQyWDU0REdxblJxR2E5?=
+ =?utf-8?B?dzZKRE9NZk9MZTkxOUlpK0diZUtaL2N0dWlBV3ppcDhjdnErU1V6L2NOSFY1?=
+ =?utf-8?B?WmJubC9PeVZIN1h5cHNBeGM0eWNLaGFlQ3VkY2JwUTFySlEwTG1UTjJkWTFJ?=
+ =?utf-8?B?NUhFTmVJZUc0UThYMkhBckFzNmFHVnFUbVIwLyt6aUl0ZGR3SlJwL0hUSnF1?=
+ =?utf-8?B?cGZmTjk3SGFXTFp0MWlqNll1cXZXUk9CZ3M2TmU2aFNrN1JqOGlONk9COXBM?=
+ =?utf-8?B?RzJrNzlSQ0hpazhSRTBQL3RGVmxlVkpaUzNBbGJvNHlPN3BFbXpqb0c2aGVl?=
+ =?utf-8?B?bElIbUYyQnRZL2VRMzVIM0k5T00yU2ZVak5kaDJaSlZsTk03ZUNja0Qzd05O?=
+ =?utf-8?B?Y1duWldsRXF3L0hRbWJObTkxam9YU245dDdTaDVzWHQ4T2QxUi8vU2xXTGtB?=
+ =?utf-8?B?YnNPeVRaRTE5N3hxd2x3RlJMVnUyeEdRL0ZzemZyRFUwZUVuV3gySStoamZZ?=
+ =?utf-8?B?V1lscFRJSnNpZE1QUW50aGVkR1FQRkVTQTBuSFdvb1lydGR0a3hPdjcyS25y?=
+ =?utf-8?B?bG5GNFN2YkNwZklPczJmbVZvaU5INmV3OXFIWTh6dzhnaWFqM2xnY3d4UjFS?=
+ =?utf-8?B?VkNKcUR6VlB1UEJOUitkZmJFNWplaTNMYmVvcGpSdU9pcUpaTTkzVzJ1eEdq?=
+ =?utf-8?B?NWw1RDdaVHdvYmFWWmRmeVZhWWNoMXptczJ2Zm1nekZieGJ1WkJFYzRJcHhS?=
+ =?utf-8?B?d0E0ZWFHbjZ4Q1VkQmhpRFZkT1hySWdPY0hNVUhCRnBjOTJHOWt3Ni8ybjN6?=
+ =?utf-8?B?eGIvOFFhdi9jdTZwY3JNYzBUWkxQY0NOZkppQmFNMmJTT1RQdzhuZng4R2Vx?=
+ =?utf-8?B?ZkpvZ29ERW1TbkVVZUJab1JTT2lkZHB1VEF0MVB2YlRtREllSUVPOVhkaUh4?=
+ =?utf-8?B?YjJoTDVrR0pURlNyRFBOSHUySGd2R0g1QWJvWkI0azJybTZFa2dmUWc0MHFX?=
+ =?utf-8?B?cnM3eHNZQXpDemZDZ2JFS0lNOTZZNG5SYzFoLzZQYWNtTGZJVWwreGdid2h0?=
+ =?utf-8?B?V1IxUDRqUExqblRSNUhUeEVrZklzbUlaOXJndWFWblhpNkNTZXBiak5DYlRa?=
+ =?utf-8?B?Q2dBejNiUlZwakl4VTBMd0ZVQTdPZDExQUZHSnBEVkVsNThCMkZERnNFcU5j?=
+ =?utf-8?B?eGFwWm9pRWJFSVFYMEpDeUdFeG1UOUdIRGNoNmFBcWYraEQ3dVJONStBY0xt?=
+ =?utf-8?B?NzVva0ppMVlZeHVKUFFidE91eWZQdjlHdE5OMGdLUDFlcmhESTN2dWhTcmF1?=
+ =?utf-8?B?Z3V2VXV0RUlhdk5KZW8vVkxJMzR1RmVrcTE1ZFh0cklzU2crK1N3YmdXdmRs?=
+ =?utf-8?B?c1NJOGpmL3NlbTFBUnYzWllPZW0rVG5GUWRvK1c5YkZDMnJJUjdSaVBJTEE3?=
+ =?utf-8?Q?t/vYCczOzzBBD5fM+jsnUFKg5X3yD8JXxti2U2JtWDjr?=
 X-OriginatorOrg: opensynergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3881e1f2-b116-480d-d1bf-08dc41f88140
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6011367b-c9c5-4063-aaf8-08dc41f919c7
 X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB3267.DEUP281.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2024 18:24:35.6959
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2024 18:28:51.5836
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W08giiVrbwAk0co7r+wEADa8SnGpqHeD9G/hSVYOaVfZMmjG1pmxXeEufGuBnKcNk+YnElNhunNNrZCdLngLdw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9UOAtlAgzUbuJV22s3A/A7cbH4fVWd6mk7L2xOd/X5QX8S+FQI5wJ8LZzl+OmRnkck7jdP80C1uwlmJWAgpdfQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB2947
-X-TM-AS-ERS: 104.47.11.168-0.0.0.0
+X-TM-AS-ERS: 104.47.11.169-0.0.0.0
 X-TMASE-Version: StarCloud-1.3-9.1.1015-28246.001
-X-TMASE-Result: 10--26.983900-4.000000
-X-TMASE-MatchedRID: iKTMlETJ4pvEeENaa6f3ikrGcidkX4jxGG92L3YEEC5S1vM/0iAx5V1M
-	xC0QiRRduJCIQB6CcSCKIRdh6isgq2I+gkCLWlUfQpItReB73a+Py64lcz7n+UeBlUNiDTPPEVN
-	ldKVKxLoiUo9Ped35EVqUubEdSJrZm33Op+lSBVuztRfzg5OZ2p1hE3UvZVrYm8lEjXZMqs7Uxx
-	aDlU1Cj0uQGiU2JHeTE6lhXBQcyrXKeq/WFUOWj8aEQ9gLcB6RbImvEGrHk0LcHWFKCmADczOBF
-	H8ycPGeqh53G06xlXMkVMBG8+936xEScWb8rW5xXbJxOaDPVmF30OoatKKbkqShSnDUR7KDMAnZ
-	fG3yI691zoCkuKv3zasiUpUJTGC8zosRFwFNleEwZSTP8c3RQgINeImKjrIZ3jDoEywIWbNrJ2a
-	YUZsUt9baJGR5hZp8IQ/W2xt0OWSI01ikZq7Q6lpwh/JdR4ULNeXdnhDHWRFNMNY2L2K/D/tElL
-	Nv9ka6oOcN6pqWAKtGxkRNnAqNIRrbtgMizVcHqfCRRGd/z+dbLHSUK6sTGk9Xke28M87NhyxRF
-	qxgsXWej+zCcPqh8d0e5ULp3htMVigPU+iAgvAe1ctGtD1nVAvpq/ti8dx85o80t5u6voNR8jV1
-	6J37NviZZN0os1WwgnaKsEJf9fGRRDMCama/3JCns0JewFL6yw8IwVE96j7XT+yjPvIHsU0R2PV
-	jOgnpbFw7vqSqGw9H7ZApsQ6TPybIkqsaYWDfI6FLyA9WHv9Fg2HO5lmNEPB0Elm/TLuFTSZ/cB
-	kh2RDHMkDvTEt1wi7V4HcHHgDR2S/Qf9ZCwzrOOyksIfrfLaqJbIe5fXLQn8cUfSHIwCASCDdzA
-	MeX/U7zklyhPTD9b11gIyjf/wsz98W5VRR2G6JYuGaIjh0/IOKWWMbJYW0ONKiUWfcjWwP90fJP
-	9eHt
-X-TMASE-XGENCLOUD: 9a7d3620-82e3-4dd2-8ecc-9c4e0214c3f2-0-0-200-0
-X-TM-Deliver-Signature: 19A70B52745240733C5099E2495E766E
-X-TM-Addin-Auth: zNNV0nENlFEQGSFmxVsdr5PVso2cN9SkgakV1+zqWB/QmN8OESamnuniJIF
-	l/OCzsoMk+T3FjQE1G7LUbNbnugMMdnrE1pCTllTQxgAb5L4rk69gAiak8XHMxjyCne9Fqcf6Nw
-	++/XLjvPa1pfi++xrbsC1Ai/Wy7QLWvGJzLkDBatwQ/sK49k5EgmWDpRJcFTMO7hIMnymN+ZFL/
-	apzqFj0sn86OEvBEuk4S9pN3WkHv92xV/h34fP8QWbIFyc8NLLsTs5Me383Ertkdqvz6D7o+q30
-	tUG+T+0UDGmTY2U=.zq5t6O1Kx2KKKaeJvswOiO0qpLH9Fraj+Vyuto9clWSXym5Hs2Ih2obwAC
-	zP6kd3dwO250QLAXDMHyebw6kCB01X1nHDn/uxHIYFoG521TQk+MBeyNqG6U1v6rKu7btFsotuw
-	I4dDWDkJryOEFZ8atD6qYzdCIoIXdKjyeGAzWAkCj58rkck3Y19UCTZ+dnV/oIqzGJxTT4bdRMb
-	70JaVHINj1LOK+TQmanw4Dh47Db25vRrnoeg77WZs6AbcgSJrFtSaELMFQ6uFi7mVN9LhZGXqQ+
-	C+pXod3F0tjWXV2q5Sro10AKCSQRwYlcXpckPC1oQmS6uPlmbTgLWfMj6Bg==
+X-TMASE-Result: 10--27.836900-4.000000
+X-TMASE-MatchedRID: H0/uSqZo4D75ETspAEX/ngw4DIWv1jSVbU+XbFYs1xKhgsXxlmwopgln
+	xsqTOcV2AY7kuYRZSdTJg79EYBBhLZEIC93suCa5Ftp2NONUJDbgOJe9wsMrC7dQknz6f/hFXR+
+	HDhMBn8cCw1sSxKVRyvBGuWOvGYCIemLHeUHHKFLxjWAMewuQQmgHItrnhZs1zNDP87/xT8bDmd
+	nLZf43HglbZ9hc61BY89Z7bNo8rwF9UbIZwV24pJHnqg+UkwTPB4BMfq4SzeJleIkVxMgTA81cE
+	mgnltzMORoZNSkXTnpkhLIWZXteUtKh0uXRKp2yS74sGh2G9bF2Tr80kEaYUKyC+kQhC2Di6iGp
+	UBCWjnQ2ChKBhrtiFuPgI/uZv8ez3SA8Rq7EslFe5ee5ItEt/LioBo3qy9pIfN5l7ipRk4geM/O
+	6FDx6AvV7jalSHEIp0Tjgls/gy++kKR9NwAkvVp1hE3UvZVrYYk1isaGgL9Lb/SYbCfi2f/x6mK
+	cE52cQ8YgxAgr12MgKEYTMq1mpJIdBoDXHz1XDRYNhzuZZjRAZ8/pDtedih5zYnFsPfA8Xpomw7
+	owLzeySIg51D4kFcZXWHqKOxvV4rQDJT+IEXRbE70Mejctgq/rDHrB5YKTLqBDcOVrGCjOwuuqc
+	48T663ht3q2IwW5dftwZ3X11IV0=
+X-TMASE-XGENCLOUD: ba6a55ff-214b-48a0-aeb1-f9e23957a267-0-0-200-0
+X-TM-Deliver-Signature: 2BAFF5F16DDEEED15BDFF351669B6237
+X-TM-Addin-Auth: FscEKb+oAPksLlSkuvWU7hi0hb+E1/+zaALwZo4U2Hkj9o7PjGPMzyK4Tkr
+	oJv4hBwc5DTfYXY6wKCi72xNUuyNn4r1fdFkOXwMhABXqjvmsIORX79sujBzHrBgVerNKj8HHYh
+	3R1q/+yXhTGLvqVPI/Rx8Y3NhjgyVbJ7vyjRmx/nFLLrWcaSEZm7zsqQyaRp2bmvRricZhSwOTc
+	uA47JVbvJaO4UPeTmlZnYLOTuojSVmytC3Z0wo2dlQbOMr6cATgkVag/FvmNTke1mF6Wvl6aTiI
+	JsK2Gvcp0uUpuBI=.WJv1BC2bv1JXN8aowuhS08y0x957Uh+hS8R7jWA8OMkFy2bVLtMBu4sPdq
+	1Agj88MFgymbxZDgWp0Y/myFt7ZcU6yTr9kzhEhs6ctjwCQ/tGlryn3TsEzjfPBwq7tUze5RIHi
+	dQXMZ4oHLQostrXcTUDvbBMXUKRhdCs61IGDrlNfmxTXP3OOoThk1KeuCEBjktu8nCotJJ9uDxq
+	9UVyRJM9I2oqOazqPVpIo9XEb1X5SYlOy52tjxdi3hcKR9Ua6LR23BL2yueazXo8kcH67p3JfhO
+	nCDR/8gLBCaxYhmc8a3d9Q6kpdyPd51kIncHDpf4BMLlMMEDpuwSI9YJKmw==
 X-TM-Addin-ProductCode: EMS
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
-	s=TM-DKIM-20210503141657; t=1710181480;
-	bh=Ex6kQSh+BJ6TaKBdRR2u1rlDDSt1BtZZYgQiTlB5OPA=; l=10480;
+	s=TM-DKIM-20210503141657; t=1710181740;
+	bh=qVg5zNro04J/Qp8HEvKilQCutULBeLA3srmn0vBK6Co=; l=4988;
 	h=Date:To:From;
-	b=h3n1Bum3nCQASeW97VesvHimI08fHNANFXhqxMdvdImjFYhIAnZ/2vsTzxcUiiOwT
-	 OoAFdcAVFRsmasLBmIiLlV2gGNmUQxn7Nx2ZII5Ir732HQV/eAPjAYLcxiz9qk82yq
-	 55B6uucHzwiGf7wQW2pYMiytn35aZaY/ZLctysIqyYQMCEZoYFDDgvvQLT/SR9HW2b
-	 sIWNOUPawkpaJTGLHiVTgfygON7aVqr/52+DgQWRZOg9GioSimG11fnizAUJXel0rJ
-	 PuvsXVwLv4/8PZ7FK1Ru9Xzpa6yoaqGcchJVx+n7U2jjDGD4OZ+1mg6LT1VM512W0a
-	 U15urJZjX1GIw==
+	b=dAPNR3GFKnoMpPzbfk8cy19J8LU6KcDd/3G/hJ/zwwS+M7fvoI8UKS3QKkuksg2KS
+	 O6AxTY+9JKT760mJR0r9KDoT8vBT7iZQvkIiZCfCUN0YpptDtvvLgKAQVGSzlfkgha
+	 P38bJ504L28YcAQzU8XuVqR0yQTmjG76cKp6WVIzgbG0K+9KHwNKoUjGhiTQzbrzbd
+	 EKU6pukqFX3guKXOd9anL8yuC+Vd0EFF6BNL1VAeJzoJIQx7cuqrdzngNRkVS0jkET
+	 Yp79f19Gq03zEPLTimE+wR97xajiFJcSEm0WeveyZq2a8vwUHhuHh8hEAXEgvh0hl2
+	 FHaoT6cy6Ai6w==
 
-On 08.03.24 13:33, David Woodhouse wrote:
-> On Fri, 2024-03-08 at 11:32 +0100, Peter Hilber wrote:
->> On 07.03.24 15:02, David Woodhouse wrote:
->>> On Mon, 2023-12-18 at 08:38 +0100, Peter Hilber wrote:
->>>> RFC v3 updates
->>>> --------------
->>>>
->>>> This series implements a driver for a virtio-rtc device conforming to
->>>> spec
->>>> RFC v3 [1]. It now includes an RTC class driver with alarm, in
->>>> addition to
->>>> the PTP clock driver already present before.
->>>>
->>>> This patch series depends on the patch series "treewide: Use
->>>> clocksource id
->>>> for get_device_system_crosststamp()" [3]. Pull [4] to get the combined
->>>> series on top of mainline.
->>>>
->>>> Overview
->>>> --------
->>>>
->>>> This patch series adds the virtio_rtc module, and related bugfixes.
->>>> The
->>>> virtio_rtc module implements a driver compatible with the proposed
->>>> Virtio
->>>> RTC device specification [1]. The Virtio RTC (Real Time Clock) device
->>>> provides information about current time. The device can provide
->>>> different
->>>> clocks, e.g. for the UTC or TAI time standards, or for physical time
->>>> elapsed since some past epoch.
->>>
->>> Hm, should we allow UTC? If you tell me the time in UTC, then
->>> (sometimes) I still don't actually know what the time is, because some
->>> UTC seconds occur twice. UTC only makes sense if you provide the TAI
->>> offset, surely? Should the virtio_rtc specification make it mandatory
->>> to provide such?
->>>
->>> Otherwise you're just designing it to allow crappy hypervisors to
->>> expose incomplete information.
->>>
->>
->> Hi David,
->>
->> (adding virtio-comment@lists.oasis-open.org for spec discussion),
->>
->> thank you for your insightful comments. I think I take a broadly similar
->> view. The reason why the current spec and driver is like this is that I
->> took a pragmatic approach at first and only included features which work
->> out-of-the-box for the current Linux ecosystem.
->>
->> The current virtio_rtc features work similar to ptp_kvm, and therefore
->> can
->> work out-of-the-box with time sync daemons such as chrony.
->>
->> As of RFC spec v3, UTC clock only is allowed. If mandating a TAI clock
->> as
->> well, I am afraid that
->>
->> - in some (embedded) scenarios, the TAI clock may not be available
->>
->> - crappy hypervisors will pass off the UTC clock as the TAI clock.
->>
->> For the same reasons, I am also not sure about adding a *mandatory* TAI
->> offset to each readout. I don't know user-space software which would
->> leverage this already (at least not through the PTP clock interface).
->> And
->> why would such software not go straight for the TAI clock instead?
->>
->> How about adding a requirement to the spec that the virtio-rtc device
->> SHOULD expose the TAI clock whenever it is available - would this
->> address
->> your concerns?
->
-> I think that would be too easy for implementors to miss, or decide not
-> to obey. Or to get *wrong*, by exposing a TAI clock but actually
-> putting UTC in it.
->
-> I think I prefer to mandate the tai_offset field with the UTC clock.
-> Crappy implementations will just set it to zero, but at least that
-> gives a clear signal to the guests that it's *their* problem to
-> resolve.
-
-To me there are some open questions regarding how this would work. Is there
-a use case for this with the v3 clock reading methods, or would it be
-enough to address this with the Virtio timekeeper?
-
-Looking at clock_adjtime(2), the tai_offset could be exposed, but probably
-best alongside some additional information about leap seconds. I am not
-aware about any user-space user. In addition, leap second smearing should
-also be addressed.
-
->
->
->
->
->>>> PTP clock interface
->>>> -------------------
->>>>
->>>> virtio_rtc exposes clocks as PTP clocks to userspace, similar to
->>>> ptp_kvm.
->>>> If both the Virtio RTC device and this driver have special support for
->>>> the
->>>> current clocksource, time synchronization programs can use
->>>> cross-timestamping using ioctl PTP_SYS_OFFSET_PRECISE2 aka
->>>> PTP_SYS_OFFSET_PRECISE. Similar to ptp_kvm, system time
->>>> synchronization
->>>> with single-digit ns precision is possible with a quiescent reference
->>>> clock
->>>> (from the Virtio RTC device). This works even when the Virtio device
->>>> response is slow compared to ptp_kvm hypercalls.
->>>
->>> Is PTP the right mechanism for this? As I understand it, PTP is a way
->>> to precisely synchronize one clock with another. But in the case of
->>> virt guests synchronizing against the host, it isn't really *another*
->>> clock. It really is the *same* underlying clock. As the host clock
->>> varies with temperature, for example, so does the guest clock. The only
->>> difference is an offset and (on x86 perhaps) a mathematical scaling of
->>> the frequency.
->>>
->>> I was looking at this another way, when I came across this virtio-rtc
->>> work.
->>>
->>> My idea was just for the hypervisor to expose its own timekeeping
->>> information — the counter/TSC value and TAI time at a given moment,
->>> frequency of the counter, and the precision of both that frequency
->>> (±PPM) and the TAI timestamp (±µs).
->>>
->>> By putting that in a host/guest shared data structure with a seqcount
->>> for lockless updates, we can update it as time synchronization on the
->>> host is refined, and we can even cleanly handle live migration where
->>> the guest ends up on a completely different host. It allows for use
->>> cases which *really* care (e.g. timestamping financial transactions) to
->>> ensure that there is never even a moment of getting *wrong* timestamps
->>> if they haven't yet resynced after a migration.
->>
->> I considered a similar approach as well, but integrating that with the
->> kernel timekeeping seemed too much effort for the first step. However,
->> reading the clock from user space would be much simpler.
->
-> Right. In fact my *first* use case was userspace, specifically in the
-> context of https://github.com/aws/clock-bound — but anything we design
-> for this absolutely has to be usable for kernel timekeeping too.
->
-> It's also critical to solve the Live Migration problem.
->
-> But is it so hard to integrate into the kernel timekeeping? My plan
-> would have given us effectively an infinite number of cross-reads of
-> the realtime clock vs. TSC. You don't have to actually read from a
-> virtio device; you just read the TSC and do the maths, using the values
-> in the shared memory region. Couldn't that be used to present a PTP
-> device to the guest kernel just the same as you do at the moment?
-
-Yes, and it would also decrease the clock reading overhead (saving at least
-the Virtio response interrupt and associated scheduling). Would make sense
-to me.
-
-To be clear, with "kernel timekeeping integration" I meant to have
-timekeeping.c derive the time directly from the Virtio timekeeper.
-
->
-> You could probably even simulate PPS with it. Typically with PPS we
-> have to catch the hardware interrupt and then read the TSC as soon as
-> possible thereafter. With this, you'd be able to *calculate* the TSC
-> value at the start of the next second, and wouldn't have to suffer the
-> real hardware latency :)
->
->>>
->>> Now I'm trying to work out if I should attempt to reconcile with your
->>> existing virtio-rtc work, or just decide that virtio-rtc isn't trying
->>> to solve the actual problem that we have, and go ahead with something
->>> different... ?
->>>
->>
->> We are certainly interested into the discussed, say, "virtual
->> timekeeper"
->> mechanism, which would also solve a lot of problems for us (especially
+On 08.03.24 18:03, Alexandre Belloni wrote:
+> Hello,
+> 
+> I'll start by saying that I'm sorry, I have a very very high level
+> knowledge about what virtio is.
+> 
+> On 18/12/2023 08:38:45+0100, Peter Hilber wrote:
+>> Expose the virtio-rtc UTC clock as an RTC clock to userspace, if it is
+>> present. Support RTC alarm if the virtio-rtc alarm feature is present.
+>> The
+>> virtio-rtc device signals an alarm by marking an alarmq buffer as used.
+>> 
+>> Peculiarities
+>> -------------
+>> 
+>> A virtio-rtc clock is a bit special for an RTC clock in that
+>> 
+>> - the clock may step (also backwards) autonomously at any time and
+>> 
+>> - the device, and its notification mechanism, will be reset during boot
+>> or
+>>   resume from sleep.
+>> 
+>> The virtio-rtc device avoids that the driver might miss an alarm. The
+>> device signals an alarm whenever the clock has reached or passed the
+>> alarm
+>> time, and also when the device is reset (on boot or resume from sleep),
 >> if
->> it would be integrated with kernel timekeeping). Even without Linux
->> kernel
->> timekeeping, the virtual timekeeper would be useful to us for guests
->> with
->> simpler timekeeping, and potentially for user space applications.
->>
->> Our current intent is to at first try to upstream the current (RFC spec
->> v3)
->> feature set. I think the virtual timekeeper would be suitable as an
->> optional feature of virtio_rtc (with Virtio, this could easily be added
->> after initial upstreaming). It is also possible to have a virtio-rtc
->> device
->> only implement the virtual timekeeper, but not the other clock reading
->> methods, if these are of no interest.
->
-> Yeah, that might make sense. I was thinking of a simple ACPI/DT device
-> exposing a page of memory and *maybe* an interrupt for when an update
-> happens. (With the caveat that the interrupt would always occur too
-> late by definition, so it's no substitute for using the seqlock
-> correctly in applications that *really* care and are going to get fined
-> millions of dollars for mis-timestamping their transactions.)
->
-> But using the virtio-rtc device as the vehicle for that shared memory
-> page is reasonable too. It's not even mutually exclusive; we could
-> expose the *same* data structure in memory via whatever mechanisms we
-> wanted.
->
-> One other thing to note is I think we're being very naïve about the TSC
-> on x86 hosts. Theoretically, the TSC for every vCPU might run at a
-> different frequency, and even if they run at the same frequency they
-> might be offset from each other. I'm happy to be naïve but I think we
-> should be *explicitly* so, and just say for example that it's defined
-> against vCPU0 so if other vCPUs are different then all bets are off.
+>> the alarm time is in the past.
+>> 
+>> Open Issue
+>> ----------
+>> 
+>> The CLOCK_BOOTTIME_ALARM will use the RTC clock to wake up from sleep,
+>> and
+>> implicitly assumes that no RTC clock steps will occur during sleep. The
+>> RTC
+>> class driver does not know whether the current alarm is a real-time
+>> alarm
+>> or a boot-time alarm.
+>> 
+>> Perhaps this might be handled by the driver also setting a virtio-rtc
+>> monotonic alarm (which uses a clock similar to CLOCK_BOOTTIME_ALARM).
+>> The
+>> virtio-rtc monotonic alarm would just be used to wake up in case it was
+>> a
+>> CLOCK_BOOTTIME_ALARM alarm.
+>> 
+>> Otherwise, the behavior should not differ from other RTC class drivers.
+>> 
+> 
+> What I don't quite get is how this is actually related to RTCs. This
+> would be a super imprecise mechanism to get the current time and date
+> from the host to the guest which is what I think your are trying to do,
+> especially since this is not supporting UIE.
+> The host system clock may come from reading the RTC at some point in
+> time but more likely from another source so is it really the best
+> synchronization mechanism?
 
-ATM Virtio has no notion of vCPUs, or vCPU topology. So I wonder if you
-have an opinion on how to represent this in a platform-independent way.
+Hello,
 
-Thank you for the comments,
+thank you for your comments.
+
+The main motivation to have the RTC class driver is the RTC alarm
+(discussed below).
+
+As for synchronization, virtio_rtc also offers a PTP clock [1] which will
+be more precise, but which needs a user space daemon. As for RTC-based
+initial synchronization, my idea was to propose, in a second step, an
+optional op for rtc_class_ops, which would read the clock with nanosecond
+precision. This optional op could then be used in rtc_hctosys(), so there
+would be no need for UIE waiting.
+
+[1] https://lore.kernel.org/all/20231218073849.35294-6-peter.hilber@opensynergy.com/
+
+> 
+> The other thing is that I don't quite get the point of the RTC alarm
+> versus a regular timer in this context.
+
+RTC alarms allow to resume from suspend and poweroff (esp. also through
+alarmtimers), which is of interest in embedded virtualization. In my
+understanding RTC is ATM the only way to do this.
+
+(I was indeed thinking about adding an alternate alarmtimer backend for
+CLOCK_BOOTTIME_ALARM, which should deal with the CLOCK_REALTIME_ALARM vs
+CLOCK_BOOTTIME_ALARM issue which is described in the commit message.)
+
+> 
+> 
+> [...]
+> 
+>> +static const struct rtc_class_ops viortc_class_with_alarm_ops = {
+>> +	.read_time = viortc_class_read_time,
+>> +	.read_alarm = viortc_class_read_alarm,
+>> +	.set_alarm = viortc_class_set_alarm,
+>> +	.alarm_irq_enable = viortc_class_alarm_irq_enable,
+>> +};
+>> +
+>> +static const struct rtc_class_ops viortc_class_no_alarm_ops = {
+>> +	.read_time = viortc_class_read_time,
+>> +};
+>> +
+> 
+> [...]
+> 
+>> +/**
+>> +/**
+>> + * viortc_class_init() - init RTC class wrapper and device
+>> + * @viortc: device data
+>> + * @vio_clk_id: virtio_rtc clock id
+>> + * @have_alarm: expose alarm ops
+>> + * @parent_dev: virtio device
+>> + *
+>> + * Context: Process context.
+>> + * Return: RTC class wrapper on success, ERR_PTR otherwise.
+>> + */
+>> +struct viortc_class *viortc_class_init(struct viortc_dev *viortc,
+>> +				       u16 vio_clk_id, bool have_alarm,
+>> +				       struct device *parent_dev)
+>> +{
+>> +	struct viortc_class *viortc_class;
+>> +	struct rtc_device *rtc;
+>> +
+>> +	viortc_class =
+>> +		devm_kzalloc(parent_dev, sizeof(*viortc_class),
+>> GFP_KERNEL);
+>> +	if (!viortc_class)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	viortc_class->viortc = viortc;
+>> +
+>> +	rtc = devm_rtc_allocate_device(parent_dev);
+>> +	if (IS_ERR(rtc))
+>> +		return ERR_PTR(PTR_ERR(rtc));
+>> +
+>> +	viortc_class->rtc = rtc;
+>> +
+>> +	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
+>> +
+>> +	rtc->ops = have_alarm ? &viortc_class_with_alarm_ops :
+>> +				&viortc_class_no_alarm_ops;
+> 
+> Don't do this, simply clear the alarm feature.
+> 
+
+OK (sorry, was obviously very inelegant).
+
+Best regards,
 
 Peter
-
->
-> We *can* cope with TSC frequencies changing. Fundamentally, that's the
-> whole *point*; NTP calibrates itself as the underlying frequency does
-> change due to temperature changes, etc. — so a deliberate frequency
-> scaling, or even a live migration, are just a slightly special case of
-> the same thing.
->
-> One thing I have added to the memory region is a migration counter. In
-> the ideal case, guests will be happy just to use the hypervisor's
-> synchronization. But in some cases the guests may want to do NTP (or
-> PPS, PTP or something else) for themselves, to have more precise
-> timekeeping than the host. Even if the host is advertising itself as
-> stratum 16, the guest still needs to know of *migration*, because it
-> has to consider itself unsynchronized when that happens
 
