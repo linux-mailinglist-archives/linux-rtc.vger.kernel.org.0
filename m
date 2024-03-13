@@ -1,114 +1,170 @@
-Return-Path: <linux-rtc+bounces-814-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-815-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F2E87A9C6
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 15:51:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B71987B038
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 19:47:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4870A1C21D31
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 14:51:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55FAB28D325
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 18:47:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244A44A0C;
-	Wed, 13 Mar 2024 14:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7109495F0;
+	Wed, 13 Mar 2024 17:42:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NanRpLdQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WfdT3VKn"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF4F4A07;
-	Wed, 13 Mar 2024 14:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB8153E03;
+	Wed, 13 Mar 2024 17:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710341467; cv=none; b=UNaV2iMBFxr0Ae+dFlFaw7GM9d5lNo3+jQLqmmwzkTYirNixvg9OFk2rILCeDHx45HNsw6l9hluIGR0QW+jhbiGyo7VRP1bPYFUmRoODgQ8pQmx9uMgPml/KsJHFZ7kxHfnTlkCrIsbA0zuNKmKLKr5gM/6E7wKkPCBo0HVtosM=
+	t=1710351746; cv=none; b=Yi5ul2S6NN8BQB2zEiFt8CBQ1Fd+kMrxn9lz226lcW6gzegIjaH4hxMOf1rdYISavaPzEyOdxA14yWL8MTX7KbEd+RAfLExGXW95miEstf4CaKdzF0aFmrjueNC3S/sTcJSQ58TmMLxqqKmBMTuCkCLfppYfeYCJmdJn+9z3yVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710341467; c=relaxed/simple;
-	bh=XoSkEQZquKyZCCzKctPvka6Uyyakyksn1egML4TSArQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mJJtamQ3ED8Vh40HM8/Xl8LZeS3A+1uJIx4mTjZFOAVLSXdtYBsZdkMqJ3r9fa7RRLJAGvF/LVsjdQFQgr3RzzD4oKYWLy3buhMLUupQ8147kITJ4IUg8ewokYp8FneZYX3xMKui6zCU/MsKXFm3/S6EzG0QYZ6PsZ/5QBkr08A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NanRpLdQ; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 31F8F1C0009;
-	Wed, 13 Mar 2024 14:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1710341457;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8VJkHw9Sd5alOnv5C50Y3H8ffoBOxoKu755mmz9UUEI=;
-	b=NanRpLdQ1MKcQhvI41Tc50fWxjFE6Ck2VgQfOtWkPRHoqBld3vHI/Df6Mt37+cqK3PfJSa
-	4zJ/kPmXzvsfOvjrZ7OupGuHiG0S78UA2iKK9Wkc+DUWGnjxUpWckZ2Rk6q+KWUEGJPVef
-	lSW/qwmCFjWiBShrjbjamuTxCqNpaAf1fdyeVwCJyZ0V1UBbzHAiWDEWCscClK4Le61Om/
-	A38TN5xhY+0WJIBKLCkD7KKFIo7jHhQIpy36lWks5LyFUG0yAJCtwQx2RhVnRXtKXxm64X
-	iQT301CSo1jomtMpFfVDud/Tppvvx2d9Y8bbHkN0yTPFMwJo1e8Yaj9WXKoflg==
-Date: Wed, 13 Mar 2024 15:50:54 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Peter Hilber <peter.hilber@opensynergy.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	virtio-dev@lists.oasis-open.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	"virtio-comment@lists.oasis-open.org" <virtio-comment@lists.oasis-open.org>,
-	"Christopher S. Hall" <christopher.s.hall@intel.com>,
-	Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	"Ridoux, Julien" <ridouxj@amazon.com>
-Subject: Re: [RFC PATCH v3 0/7] Add virtio_rtc module and related changes
-Message-ID: <202403131450547f373268@mail.local>
-References: <0e21e3e2be26acd70b5575b9932b3a911c9fe721.camel@infradead.org>
- <204c6339-e80d-4a98-8d07-a11eeb729497@opensynergy.com>
- <667c8d944ce9ea5c570b82b1858a70cc67b2f3e4.camel@infradead.org>
- <f6940954-334a-458b-af32-f03d8efbe607@opensynergy.com>
- <57704b2658e643fce30468dffd8c1477607f59fb.camel@infradead.org>
- <d796d9a5-8eda-4528-a6d8-1c4eba24aa1e@opensynergy.com>
- <202403131118010e7ed5bf@mail.local>
- <dcd07f0b733a90ac3f3c43a4614967bbb3ef14ad.camel@infradead.org>
- <20240313125813ec78d5a9@mail.local>
- <96be7312f7bddaf06c690e082a8028fa8b511deb.camel@infradead.org>
+	s=arc-20240116; t=1710351746; c=relaxed/simple;
+	bh=l4aa7dMZOppEVtMCbeeOP1g60YPKOSk0JjgK6J6Vn3s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pWuEmlNCIQ5xqL5JvadtrprnZ3ZogsdQ7ziRYB1fpbZhJykt9QbfdUjF9vkLpFULUwD3mnQyJpx6jgyjw/zl47PAYEasZXbJ3re1DDR3UyVbqQcQlZLThCx9AFB37xp22A0bUgGpl7n+c0fFre2ClUIhz3xce/yo7rDOYJE0UfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WfdT3VKn; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e649a2548cso123583b3a.3;
+        Wed, 13 Mar 2024 10:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710351744; x=1710956544; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=xb6wljFD0LnTtDE1JnDzedxQZT1gVS3KdmlKFwDQbVE=;
+        b=WfdT3VKnxoRcGPT6aw4DKsD1Yrei1a40qw8S9E1YTFXeBraAPvgkiy+bosEllTId1y
+         18s2VnxeaD8OBmvuQDdJ/MwFZIVDPoOmDgyyHXz2cErqEYwDOJwsOSfuqjnSOkTfq6KP
+         iky289xvNcGqw9DGfUZ1CTOrrH36jNUi9Dv5aP1oTVBm4qXCJlAwf6cd0cCpLhkweFJB
+         tDYCTLJSNCEYHTHf6HLFqDMGHHdaVldhTdRZrNACyb/jgeVQcFGcVRwAP6/xIbWW8mfg
+         vVoKBqCZxrIQmdfos4GLaz2vwKiaVvCfKtUV5uzKTdws6RP4AKLULUSPzdAQLrjhmRw7
+         d1aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710351744; x=1710956544;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xb6wljFD0LnTtDE1JnDzedxQZT1gVS3KdmlKFwDQbVE=;
+        b=cggH9WrJGHOAmlATbZFyyARNiu+djUbFnVLt0Jt9spuwpDLkxOe8+FMcksdrzYQvpn
+         C9w65lzi2fz09mTQBXMs3A47GN61MPA/CgQa97a1yKOzxGTfcE3qzpiSazNjjkPXlVSr
+         2hDv2+a0k97OopcL7/R1lV5oibNDfVC3cA4AtvAaNGKuVjZL7TKbQEHEclEz3OruxEHn
+         oR9qIlaSp4kBPGHQli9gjbOB4oBO0pGNXv5dGZLtHnwMQh5iLgUh5caxppmeE6AhG67J
+         EnsC8CRmHbeXcjxi9AzUD5dkxXjPs763q+LxKeBQwKuhgAXue+Kjw+DOV600sZ3EZiJI
+         PXKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXx2jhubBBCZTEVVwrlP55Zg8b/G0XN+Tcl8fqBPH8BTYrwwfCAORxvvaphNRL0sZWhD1pMZm4nO+pxicscdZ1XzjsoPTgk9nZWEx1eZqoqYA/IQ8t/AllqKEVp7eofNXbyzsnZy+fa
+X-Gm-Message-State: AOJu0YzU9/TkqIsiHoip3anTMOYk4YJWLgYkUusb0OibdNCnD5aLyRmL
+	mDA/sVJVfrpNlKlxYOaijRm4RjMYiYw3ewqrg4sjzcE7mS5xf0Lc
+X-Google-Smtp-Source: AGHT+IGOeJoSUTHWkZZ/rIXW/FE2nS2JJ2xO6TnUe79InVgeF6RitaqxvJQPu2fxsJDwAI2GVO7b5w==
+X-Received: by 2002:a05:6a00:2e9d:b0:6e6:4ebc:3cd with SMTP id fd29-20020a056a002e9d00b006e64ebc03cdmr3236804pfb.27.1710351744140;
+        Wed, 13 Mar 2024 10:42:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c26-20020aa78c1a000000b006e3b868b8b8sm8162797pfd.130.2024.03.13.10.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Mar 2024 10:42:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Daniel Diaz <daniel.diaz@linaro.org>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] rtc: test: Split rtc unit test into slow and normal speed test
+Date: Wed, 13 Mar 2024 10:42:21 -0700
+Message-Id: <20240313174221.1999654-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96be7312f7bddaf06c690e082a8028fa8b511deb.camel@infradead.org>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-On 13/03/2024 14:06:42+0000, David Woodhouse wrote:
-> If you're asking why patch 7/7 in Peter's series exists to expose the
-> virtio clock through RTC, and you're not particularly interested in the
-> first six, I suppose that's a fair question. As is the question of "why
-> is it called virtio_rtc not virtio_ptp?". 
-> 
+On slow systems, the rtc unit test may result in soft lockups and/or
+generate messages such as
 
-Exactly my question, thanks :)
+ # rtc_time64_to_tm_test_date_range: Test should be marked slow (runtime: 34.253230015s)
+ # rtc_time64_to_tm_test_date_range: pass:1 fail:0 skip:0 total:1
 
-> But let me turn it around: if the kernel has access to this virtio
-> device and *not* any other RTC, why *wouldn't* the kernel use the time
-> from it? The fact that it can optionally *also* provide paired readings
-> with the CPU counter doesn't actually *hurt* for the RTC use case, does
-> it?
+The test covers a date range of 160,000 years, resulting in the long
+runtime.
 
-As long as it doesn't behave differently from the other RTC, I'm fine
-with this. This is important because I don't want to carry any special
-infrastructure for this driver or to have to special case this driver
-later on because it is incompatible with some evolution of the
-subsystem.
+Unit tests running for more than 1 second are supposed to be marked as
+slow. Just marking the test as slow would prevent it from running when
+slow tests are disabled, which would not be desirable. At the same time,
+the current test range of 160,000 years seems to be of limited value.
 
+Split the test into two parts, one covering a range of 1,000 years and
+the other covering the current range of 160,000 years. Mark the 160,000
+year test as slow to be able to separate it from the faster test.
+
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/rtc/lib_test.c | 33 ++++++++++++++++++++++++++-------
+ 1 file changed, 26 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/rtc/lib_test.c b/drivers/rtc/lib_test.c
+index 225c859d6da5..3893a202e9ea 100644
+--- a/drivers/rtc/lib_test.c
++++ b/drivers/rtc/lib_test.c
+@@ -27,17 +27,17 @@ static void advance_date(int *year, int *month, int *mday, int *yday)
+ }
+ 
+ /*
+- * Checks every day in a 160000 years interval starting on 1970-01-01
++ * Check every day in specified number of years interval starting on 1970-01-01
+  * against the expected result.
+  */
+-static void rtc_time64_to_tm_test_date_range(struct kunit *test)
++static void rtc_time64_to_tm_test_date_range(struct kunit *test, int years)
+ {
+ 	/*
+-	 * 160000 years	= (160000 / 400) * 400 years
+-	 *		= (160000 / 400) * 146097 days
+-	 *		= (160000 / 400) * 146097 * 86400 seconds
++	 * years	= (years / 400) * 400 years
++	 *		= (years / 400) * 146097 days
++	 *		= (years / 400) * 146097 * 86400 seconds
+ 	 */
+-	time64_t total_secs = ((time64_t) 160000) / 400 * 146097 * 86400;
++	time64_t total_secs = ((time64_t)years) / 400 * 146097 * 86400;
+ 
+ 	int year	= 1970;
+ 	int month	= 1;
+@@ -66,8 +66,27 @@ static void rtc_time64_to_tm_test_date_range(struct kunit *test)
+ 	}
+ }
+ 
++/*
++ * Checks every day in a 160000 years interval starting on 1970-01-01
++ * against the expected result.
++ */
++static void rtc_time64_to_tm_test_date_range_160000(struct kunit *test)
++{
++	rtc_time64_to_tm_test_date_range(test, 160000);
++}
++
++/*
++ * Checks every day in a 1000 years interval starting on 1970-01-01
++ * against the expected result.
++ */
++static void rtc_time64_to_tm_test_date_range_1000(struct kunit *test)
++{
++	rtc_time64_to_tm_test_date_range(test, 1000);
++}
++
+ static struct kunit_case rtc_lib_test_cases[] = {
+-	KUNIT_CASE(rtc_time64_to_tm_test_date_range),
++	KUNIT_CASE(rtc_time64_to_tm_test_date_range_1000),
++	KUNIT_CASE_SLOW(rtc_time64_to_tm_test_date_range_160000),
+ 	{}
+ };
+ 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.2
+
 
