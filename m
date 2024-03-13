@@ -1,169 +1,99 @@
-Return-Path: <linux-rtc+bounces-818-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-819-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5642087B14D
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 20:12:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6074B87B29F
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 21:12:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E80EB24470
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 19:06:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8D4B28C0DC
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 20:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA796E601;
-	Wed, 13 Mar 2024 18:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2AF24D108;
+	Wed, 13 Mar 2024 20:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K5lk+tMh"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="uyO/mUu3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573306E5F8;
-	Wed, 13 Mar 2024 18:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F03E225AF;
+	Wed, 13 Mar 2024 20:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710353926; cv=none; b=LRsCXmMsrYRDuUu/D6pk2iBVr4xurarmvEk2PM8Vh3YIoyofVzxxo3CYGsyxgeOZ8FgH3/86QLKbQVIpNbWex0oqJA/DDXQy3bsOntWgWXESf0N9wtOD5XQA+GqjZsezXGJSkF/dDXQY1Kg1zbhSncCBWzBCDNaw6EM5JumjZGM=
+	t=1710360731; cv=none; b=knbnzCY8VMT1+6hbzRejxNX5dc28qz+FsOg7CLeTXdPP9QSWY/jh4B8hmhED1rUq39c2g0ZPhScNxNqPfs9++cBgxazdcWYaJGOl4yCSLuNx3xWPDC2tCOlZTkWyMMKHdGDXoxjEEiNmrTzHYk8cJmPUfVJtKXP6KnmMV3ZcIvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710353926; c=relaxed/simple;
-	bh=j4RkNzplLs9576Ucdv2wSRJ6anZyubu7F7JHevpn1lw=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=V92iaEZyPCVHqsXEVedNe5E19iOpNYrasWCcjuG0QfpQ1djKzv+ntlAJDVcxp3NI0/lpOtvdvIWIDTxq0y2JcLIOl3iocR9l8Gw2nNlBqwMebvSYNjTFSlTImCi4Iygbhy8UfVQnIJQgbM8GkYzsNC9CkIDvV2gxrZcp9Uylcz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=K5lk+tMh; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=5+MK1q3QTmns8nfY5HZNCopdbKSZ21Tc/bjtiTp4oRc=; b=K5lk+tMhwdeSzTuJ8d27O76dee
-	LV/ZWfmzaCs4Yd+dKhKZcaeWJhSopVXbW12MHQMbAf5n4Z/8fzhoC3B4ytSmOwv/neZhIFyo6UyU7
-	lZfx3ZslUF/66yof/vxBqwaCGoHxIKvTznoGFJ++ui2YqcNV4cvTydHbD67YMZors0DbKNNm7m91N
-	q2mZ5qO4G4IZD8Ib54JbbOAg1kMaO7wcm8iR/d6oDABlDQKAgcnLhWE0CZxGUjw/Y8RDj3XHW/K86
-	Upi76UdV7rw8Dl6aSCwOSYbkFJOdRbmaoEgZ0+NwwZokgN4tOR1Z8b7g+KWydqaxV2C0W5H1XITGQ
-	i3GwRkYQ==;
-Received: from [2a00:23ee:1400:c5e0:79a9:c9e8:9823:feca] (helo=[IPv6:::1])
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rkTBS-00000005yG2-1ztJ;
-	Wed, 13 Mar 2024 18:18:37 +0000
-Date: Wed, 13 Mar 2024 18:18:31 +0000
-From: David Woodhouse <dwmw2@infradead.org>
-To: Peter Hilber <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, virtio-dev@lists.oasis-open.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
- "virtio-comment@lists.oasis-open.org" <virtio-comment@lists.oasis-open.org>
-CC: "Christopher S. Hall" <christopher.s.hall@intel.com>,
- Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
- Richard Cochran <richardcochran@gmail.com>, Stephen Boyd <sboyd@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- "Ridoux, Julien" <ridouxj@amazon.com>
+	s=arc-20240116; t=1710360731; c=relaxed/simple;
+	bh=vxiSIG1jZQwlWtR6AV5q/3NgPvGpxmDe0qfJ03T7J/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ugvHWAn7wYkK6pouxzkfDHXmb464PSxAVf8JEetUepNvw/PAZcoiD9fxDh9LooOnRkQUueyg0MbBmVzE7bvd9f059qzt90AoYDWvSiNuM0GTxFOH1o4LxpiYQeILcKHg/lRFfix6G+roN9lNF/b9TgnVHNdg+GDrLuDeKcPdhIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=uyO/mUu3; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=Xp82gEIbZeLnmlswzlNrQpFNfajF/0oeJJd0n1Kue3M=; b=uyO/mUu37qErfYKSWEqKd3wmSq
+	R92vQ0Yv/x3wGFeS61sdERP3c8R58AiQJcDKZWMDD2tYjU7aAfpuSODq8UsXekoI0N+bYq8lpWfoj
+	5mZtGQ4mTrXRiz83cgieU7Sw/vfr469Fi6WdYPCEebdmgUvvXdQsJhMbOrBqKgYnW6CI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1rkUxr-00AGOu-Ik; Wed, 13 Mar 2024 21:12:39 +0100
+Date: Wed, 13 Mar 2024 21:12:39 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: David Woodhouse <dwmw2@infradead.org>,
+	Peter Hilber <peter.hilber@opensynergy.com>,
+	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+	virtio-dev@lists.oasis-open.org,
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+	"virtio-comment@lists.oasis-open.org" <virtio-comment@lists.oasis-open.org>,
+	"Christopher S. Hall" <christopher.s.hall@intel.com>,
+	Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+	Richard Cochran <richardcochran@gmail.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	"Ridoux, Julien" <ridouxj@amazon.com>
 Subject: Re: [RFC PATCH v3 0/7] Add virtio_rtc module and related changes
-User-Agent: K-9 Mail for Android
-In-Reply-To: <60607bcc-93c5-4a6f-832d-ea4dbd81178e@opensynergy.com>
-References: <20231218073849.35294-1-peter.hilber@opensynergy.com> <0e21e3e2be26acd70b5575b9932b3a911c9fe721.camel@infradead.org> <204c6339-e80d-4a98-8d07-a11eeb729497@opensynergy.com> <667c8d944ce9ea5c570b82b1858a70cc67b2f3e4.camel@infradead.org> <f6940954-334a-458b-af32-f03d8efbe607@opensynergy.com> <57704b2658e643fce30468dffd8c1477607f59fb.camel@infradead.org> <d796d9a5-8eda-4528-a6d8-1c4eba24aa1e@opensynergy.com> <47bf0757de3268c420d2cd3bbffaf5897b67b661.camel@infradead.org> <60607bcc-93c5-4a6f-832d-ea4dbd81178e@opensynergy.com>
-Message-ID: <89268C36-E8FB-4A17-8F81-1DED4BF47400@infradead.org>
+Message-ID: <04246331-e890-4c9a-95fb-9673580e6d30@lunn.ch>
+References: <204c6339-e80d-4a98-8d07-a11eeb729497@opensynergy.com>
+ <667c8d944ce9ea5c570b82b1858a70cc67b2f3e4.camel@infradead.org>
+ <f6940954-334a-458b-af32-f03d8efbe607@opensynergy.com>
+ <57704b2658e643fce30468dffd8c1477607f59fb.camel@infradead.org>
+ <d796d9a5-8eda-4528-a6d8-1c4eba24aa1e@opensynergy.com>
+ <202403131118010e7ed5bf@mail.local>
+ <dcd07f0b733a90ac3f3c43a4614967bbb3ef14ad.camel@infradead.org>
+ <20240313125813ec78d5a9@mail.local>
+ <96be7312f7bddaf06c690e082a8028fa8b511deb.camel@infradead.org>
+ <202403131450547f373268@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202403131450547f373268@mail.local>
 
-On 13 March 2024 17:50:48 GMT, Peter Hilber <peter=2Ehilber@opensynergy=2Ec=
-om> wrote:
->On 13=2E03=2E24 13:45, David Woodhouse wrote:
->> Surely the whole point of this effort is to provide guests with precise
->> and *unambiguous* knowledge of what the time is?=20
->
->I would say, a fundamental point of this effort is to enable such
->implementations, and to detect if a device is promising to support this=
-=2E
->
->Where we might differ is as to whether the Virtio clock *for every
->implementation* has to be *continuously* accurate w=2Er=2Et=2E a time sta=
-ndard,
->or whether *for some implementations* it could be enough that all guests =
-in
->the local system have the same, precise local notion of time, which might
->be off from the actual time standard=2E
+> As long as it doesn't behave differently from the other RTC, I'm fine
+> with this. This is important because I don't want to carry any special
+> infrastructure for this driver or to have to special case this driver
+> later on because it is incompatible with some evolution of the
+> subsystem.
 
-That makes sense, but remember I don't just want {X, Y, Z} but *also* the =
-error bounds of =C2=B1deltaY and =C2=B1deltaZ too=2E
+Maybe deliberately throw away all the sub-second accuracy when
+accessing the time via the RTC API? That helps to make it look like an
+RTC. And when doing the rounding, add a constant offset of 10ms to
+emulate the virtual i2c bus it is hanging off, like most RTCs?
 
-So your example just boils down to "I'm calling it UTC, and it's really pr=
-ecise, but we make no promises about its *accuracy*"=2E And that's fine=2E
-
->Also, cf=2E ptp_kvm, which AFAIU doesn't address leap seconds at all=2E=
-=2E=2E
-
-KVM is not an exemplar of good time practices=2E=20
-Not in *any* respect :)
-
->With your described use case the UTC_SMEARED clock should of course not b=
-e
->used=2E The UTC_SMEARED clock would get a distinct name through udev, lik=
-e
->/dev/ptp_virtio_utc_smeared, so the incompatibility could at least be
->detected=2E
-
-As long as it's clear to all concerned that this is fundamentally not usab=
-le as an accurate time source, and is only for the local-sync case you desc=
-ribed, sure=2E
-
->> Using UTC is bad enough, because for a UTC timestamp in the middle of a
->> leap second the guest can't know know *which* occurrence of that leap
->> second it is, so it might be wrong by a second=2E To resolve that
->> ambiguity needs a leap indicator and/or tai_offset field=2E
->
->I agree that virtio-rtc should communicate this=2E The question is, what
->exactly, and for which clock read request?
-
-Are we now conflating software architecture (and Linux in particular) with=
- "hardware" design?
-
-To a certain extent, as long as the virtio-rtc device is designed to expos=
-e time precisely and unambiguously, it's less important if the Linux kernel=
- *today* can use that=2E Although of course we should strive for that=2E Le=
-t's be=2E=2E=2Ewell, *unambiguous*, I suppose=2E=2E=2E that we've changed t=
-opics to discuss that though=2E
-
->As for PTP clocks:
->
->- It doesn't fit into the ioctl PTP_SYS_OFFSET_PRECISE2=2E
->
->- The clock_adjtime(2) tai_offset and return value could be set (if
->  upstream will accept this)=2E Would this help? As discussed, user space
->  would need to interpret this (and currently no dynamic POSIX clock sets
->  this)=2E
-
-Hm, maybe?
-
-
->>> I think I can add a SHOULD requirement which vaguely refers to vCPU 0,=
- or
->>> boot vCPU=2E But the Virtio device is not necessarily hosted by a hype=
-rvisor,
->>> so the device might not even know which vCPUs there are=2E E=2Eg=2E th=
-ere is even
->>> interest to make virtio-rtc work as part of the virtio-net device (whi=
-ch
->>> might be implemented in hardware)=2E
->>=20
->> Sure, but those implementations aren't going to offer the TSC pairing
->> at all, are they?
->>=20
->
->They could offer an Intel ART pairing (some physical PTP NICs are already
->doing this, look for the convert_art_to_tsc() users)=2E
-
-Right, but isn't that software's problem? The time pairing is defined agai=
-nst the ART in that case=2E
+	  Andrew
 
