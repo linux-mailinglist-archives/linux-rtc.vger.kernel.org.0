@@ -1,69 +1,69 @@
-Return-Path: <linux-rtc+bounces-809-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-810-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC24E87A791
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 13:30:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1046A87A7BF
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 13:45:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B41E283916
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 12:30:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 336771C20CE2
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 12:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69472405EB;
-	Wed, 13 Mar 2024 12:29:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 209CA6AD6;
+	Wed, 13 Mar 2024 12:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lrKCXQl5"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WnQwD8MT"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250A43FB8B;
-	Wed, 13 Mar 2024 12:29:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCAF1DFD5;
+	Wed, 13 Mar 2024 12:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710332998; cv=none; b=eKh5gqO5bUQuBR9FBqU0dzNo9kelcNUWrW0aRh5BjLwbkEVWy9Er0AGOGcTi4ghL/xnpmaVIWpzNBfBRrs0ysWStOl0hjOXOO9xP4s/U1qYlB6CLpAcC/2xpRPaGAfmmMGwdmo6N1I/Djrtb5AXssFCXuhs9sAiZ5NGczkAG4PA=
+	t=1710333932; cv=none; b=bEQ7C3plETuiQveMOYnkH/Yr/PGloNYckjgcTVjHT/dUuBRlYGQYlV4bEca1xylli37nTW/wRumF2vEf148lL+cJOnjZCJWsmw86+FdopPNYkhkzuU6rOQOtGMrXhmvSQgg98i950kjx4/xch257nA7/5KARUeXjtxCo5lUo4yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710332998; c=relaxed/simple;
-	bh=9v0rxFMbZiPiTqEzClMsgXppZXsYj8IAtB29mqlmKc8=;
+	s=arc-20240116; t=1710333932; c=relaxed/simple;
+	bh=UJG9B8VTquoMVfTZrDUy9iSOlwplmRUSKw9DKvlkc8E=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fyNmwxhFHike9yEXCkSTfFhANhk4UHRnkov65PUtFJuYJnod2FFILJeZX4+HGkSAdYz59cBPKeqTsUf97XN4O2kaW7YUgPNcD8F0AKlEePul0XfSQMrgjGujrbeLZcVIgoOZI9rmB0XRgIxRbsTJggBNlj7xplOIQ1zwQgw4usQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lrKCXQl5; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=qf5aBiU4Vdt8H18hVGAZ45dLdnvK07HafPzg3wQDl/KlczqiKSv0tl8Q4Gj2xKhDew7X9i0w9AXZRR2Ljob05Fznad4skp7OkLCbQuAF9KjCwQw1HOn+EyimmCNbAVIVBAxoZzVFQcoy5fnSIdwDWryyf89Bi+J4Q4DtlpyZvw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WnQwD8MT; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9v0rxFMbZiPiTqEzClMsgXppZXsYj8IAtB29mqlmKc8=; b=lrKCXQl5SlN/2oSv979Vj2FuKa
-	OCzJUCYc6IhKjyYhfZt9FbkFYUpS8Gp/Be++u7RJm6ciEBy4kLsHC14WSyWy73ieVaoI4YoWSGdwx
-	CQgs/FGE+pYzLYV8KyQLMWnjiDWnvdCnQgKuQCUh1OlOeCKwsn9+JYGh1PskYf3iUCSVghjydwaAk
-	t0VbpRwMjdIfvrH+J038EhMvY8NqTaRAlBDdNpwTBfrQV/WbA8C7dw/B7wwfym9+SuF1DejX1t1fZ
-	PZdcyiyKZKbHVwC96mv+DbbpWeHhlekrPYFKwM7V6WT9M24upRJEErPOkjxIV6Xim3MR0pMMlZmJy
-	SW3lmB9w==;
+	bh=UJG9B8VTquoMVfTZrDUy9iSOlwplmRUSKw9DKvlkc8E=; b=WnQwD8MTeWUDo4TyH+Ea0tyC5A
+	Pr+60BasYakUw1MlFPH3Rtn70F3YSJPw5cdoDqXEhW03cA67erUAoK5+j6d4O6vHci50zzAEAwXsJ
+	YtSSdpVozQCRhU6kEYuk5i4e1IX5QEV4pgjSUkSQWDX7mfHboTj48OpV+uAUnYTCSfY82h7D7Pdwk
+	hghmX1ZT/mCnVoBU1XJIn2+O0fTYzbkIAGUpplcElMltXuTWhjO7Aa5beLTumWCUgtHyw/eGqiAZ4
+	m87yo4xU76CtLZbtCeleAiL0ontoY0piR2jrWmU1iXnzoP4nCoshtS/75u2VxS3jtqkICW7KPFuNF
+	kvLwcFYA==;
 Received: from [2001:8b0:10b:5:4f46:ad9a:6045:e619] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rkNjn-00000005NWB-1LVJ;
-	Wed, 13 Mar 2024 12:29:39 +0000
-Message-ID: <dcd07f0b733a90ac3f3c43a4614967bbb3ef14ad.camel@infradead.org>
+	id 1rkNz2-00000005PI4-2bK8;
+	Wed, 13 Mar 2024 12:45:24 +0000
+Message-ID: <47bf0757de3268c420d2cd3bbffaf5897b67b661.camel@infradead.org>
 Subject: Re: [RFC PATCH v3 0/7] Add virtio_rtc module and related changes
 From: David Woodhouse <dwmw2@infradead.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Peter Hilber
-	 <peter.hilber@opensynergy.com>
-Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, 
- virtio-dev@lists.oasis-open.org, linux-arm-kernel@lists.infradead.org, 
- linux-rtc@vger.kernel.org, "virtio-comment@lists.oasis-open.org"
- <virtio-comment@lists.oasis-open.org>, "Christopher S. Hall"
- <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>, John
- Stultz <jstultz@google.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
- netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>, Stephen
- Boyd <sboyd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Marc Zyngier <maz@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Alessandro Zummo <a.zummo@towertech.it>, "Ridoux, Julien"
- <ridouxj@amazon.com>
-Date: Wed, 13 Mar 2024 12:29:38 +0000
-In-Reply-To: <202403131118010e7ed5bf@mail.local>
+To: Peter Hilber <peter.hilber@opensynergy.com>,
+ linux-kernel@vger.kernel.org,  virtualization@lists.linux.dev,
+ virtio-dev@lists.oasis-open.org,  linux-arm-kernel@lists.infradead.org,
+ linux-rtc@vger.kernel.org,  "virtio-comment@lists.oasis-open.org"
+ <virtio-comment@lists.oasis-open.org>
+Cc: "Christopher S. Hall" <christopher.s.hall@intel.com>, Jason Wang
+ <jasowang@redhat.com>, John Stultz <jstultz@google.com>, "Michael S.
+ Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org, Richard Cochran
+ <richardcochran@gmail.com>, Stephen Boyd <sboyd@kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Marc
+ Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Alessandro Zummo
+ <a.zummo@towertech.it>,  Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ "Ridoux, Julien" <ridouxj@amazon.com>
+Date: Wed, 13 Mar 2024 12:45:23 +0000
+In-Reply-To: <d796d9a5-8eda-4528-a6d8-1c4eba24aa1e@opensynergy.com>
 References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
 	 <0e21e3e2be26acd70b5575b9932b3a911c9fe721.camel@infradead.org>
 	 <204c6339-e80d-4a98-8d07-a11eeb729497@opensynergy.com>
@@ -71,9 +71,8 @@ References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
 	 <f6940954-334a-458b-af32-f03d8efbe607@opensynergy.com>
 	 <57704b2658e643fce30468dffd8c1477607f59fb.camel@infradead.org>
 	 <d796d9a5-8eda-4528-a6d8-1c4eba24aa1e@opensynergy.com>
-	 <202403131118010e7ed5bf@mail.local>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-GnAUQoYP6vamVcEoFTpW"
+	boundary="=-AyPYrkpyYIHtXZh0BtUn"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -84,51 +83,211 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-GnAUQoYP6vamVcEoFTpW
+--=-AyPYrkpyYIHtXZh0BtUn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2024-03-13 at 12:18 +0100, Alexandre Belloni wrote:
+On Wed, 2024-03-13 at 10:45 +0100, Peter Hilber wrote:
+> On 12.03.24 18:15, David Woodhouse wrote:
+> > On Mon, 2024-03-11 at 19:24 +0100, Peter Hilber wrote:
+> > > On 08.03.24 13:33, David Woodhouse wrote:
+> > > > On Fri, 2024-03-08 at 11:32 +0100, Peter Hilber wrote:
+> > > > > On 07.03.24 15:02, David Woodhouse wrote:
+> > > > > > Hm, should we allow UTC? If you tell me the time in UTC, then
+> > > > > > (sometimes) I still don't actually know what the time is, becau=
+se some
+> > > > > > UTC seconds occur twice. UTC only makes sense if you provide th=
+e TAI
+> > > > > > offset, surely? Should the virtio_rtc specification make it man=
+datory
+> > > > > > to provide such?
+> > > > > >=20
+> > > > > > Otherwise you're just designing it to allow crappy hypervisors =
+to
+> > > > > > expose incomplete information.
+> > > > > >=20
+> > > > >=20
+> > > > > Hi David,
+> > > > >=20
+> > > > > (adding virtio-comment@lists.oasis-open.org=C2=A0for spec discuss=
+ion),
+> > > > >=20
+> > > > > thank you for your insightful comments. I think I take a broadly =
+similar
+> > > > > view. The reason why the current spec and driver is like this is =
+that I
+> > > > > took a pragmatic approach at first and only included features whi=
+ch work
+> > > > > out-of-the-box for the current Linux ecosystem.
+> > > > >=20
+> > > > > The current virtio_rtc features work similar to ptp_kvm, and ther=
+efore
+> > > > > can work out-of-the-box with time sync daemons such as chrony.
+> > > > >=20
+> > > > > As of RFC spec v3, UTC clock only is allowed. If mandating a TAI =
+clock
+> > > > > as well, I am afraid that
+> > > > >=20
+> > > > > - in some (embedded) scenarios, the TAI clock may not be availabl=
+e
+> > > > >=20
+> > > > > - crappy hypervisors will pass off the UTC clock as the TAI clock=
+.
+> > > > >=20
+> > > > > For the same reasons, I am also not sure about adding a *mandator=
+y* TAI
+> > > > > offset to each readout. I don't know user-space software which wo=
+uld
+> > > > > leverage this already (at least not through the PTP clock interfa=
+ce).
+> > > > > And why would such software not go straight for the TAI clock ins=
+tead?
+> > > > >=20
+> > > > > How about adding a requirement to the spec that the virtio-rtc de=
+vice
+> > > > > SHOULD expose the TAI clock whenever it is available - would this
+> > > > > address your concerns?
+> > > >=20
+> > > > I think that would be too easy for implementors to miss, or decide =
+not
+> > > > to obey. Or to get *wrong*, by exposing a TAI clock but actually
+> > > > putting UTC in it.
+> > > >=20
+> > > > I think I prefer to mandate the tai_offset field with the UTC clock=
+.
+> > > > Crappy implementations will just set it to zero, but at least that
+> > > > gives a clear signal to the guests that it's *their* problem to
+> > > > resolve.
+> > >=20
+> > > To me there are some open questions regarding how this would work. Is=
+ there
+> > > a use case for this with the v3 clock reading methods, or would it be
+> > > enough to address this with the Virtio timekeeper?
+> > >=20
+> > > Looking at clock_adjtime(2), the tai_offset could be exposed, but pro=
+bably
+> > > best alongside some additional information about leap seconds. I am n=
+ot
+> > > aware about any user-space user. In addition, leap second smearing sh=
+ould
+> > > also be addressed.
+> > >=20
+> >=20
+> > Is there even a standard yet for leap-smearing? Will it be linear over
+> > 1000 seconds like UTC-SLS? Or semi-raised-cosine over 24 hours, which I
+> > think is what Google does? Meta does something different again, don't
+> > they?
+> >=20
+> > Exposing UTC as the only clock reference is bad enough; when leap
+> > seconds happen there's a whole second during which you don't *know*
+> > which second it is. It seems odd to me, for a precision clock to be
+> > deliberately ambiguous about what the time is!
 >=20
-> I still don't know anything about virtio but under Linux, an RTC is
-> always UTC (or localtime when dual booting but let's not care) and never
-> accounts for leap seconds. Having an RTC and RTC driver behaving
-> differently would be super inconvenient. Why don't you leave this to
-> userspace?
+> Just to be clear, the device can perfectly expose only a TAI reference
+> clock (or both UTC and TAI), the spec is just completely open about this,
+> as it tries to work for diverse use cases.
 
-Well yes, we don't need to expose *anything* from the hypervisor and we
-can leave it all to guest userspace. We can run NTP on every single one
-of *hundreds* of guests, leaving them all to duplicate the work of
-calibrating the *same* underlying oscillator.
+As long as the guest *knows* what it's getting, sure.
 
-I thought we were trying to avoid that, by having the hypervisor tell
-them what the time was. If we're going to do that, we need it to be
-sufficiently precise (and some clients want to *know* the precision),
-and above all we need it to be *unambiguous*.
+> >=20
+> > But if the virtio-rtc clock is defined as UTC and then expose something
+> > *different* in it, that's even worse. You potentially end up providing
+> > inaccurate time for a whole *day* leading up to the leap second.
+> >=20
+> > I think you're right that leap second smearing should be addressed. At
+> > the very least, by making it clear that the virtio-rtc clock which
+> > advertises UTC shall be used *only* for UTC, never UTC-SLS or any other
+> > yet-to-be-defined variant.
+> >=20
+>=20
+> Agreed.
+>=20
+> > Please make it explicit that any hypervisor which wants to advertise a
+> > smeared clock shall define a new type which specifies the precise
+> > smearing algorithm and cannot be conflated with the one you're defining
+> > here.
+> >=20
+>=20
+> I will add a requirement that the UTC clock can never have smeared/smooth=
+ed
+> leap seconds.
 
-If the hypervisor says that the time is 3692217600.001, then the guest
-doesn't actually know *which* 3692217600.001 it is, and thus it still
-doesn't know the time to an accuracy better than 1 second.
+Thanks.
 
-And if we start allowing the hypervisor to smear clocks in some other
-underspecified ways, then we end up with errors of up to 1 second in
-the clock for long periods of time *around* the leap second.
+> I think that not every vendor would bother to first add a definition of a
+> smearing algorithm. Also, I think in some cases knowing the precise
+> smearing algorithm might not be important (when having the same time as t=
+he
+> hypervisor is enough and accuracy w.r.t. actual time is less important).
+>=20
+> So maybe I should add a VIRTIO_RTC_CLOCK_UTC_SMEARED clock type, which fo=
+r
+> now could catch every UTC-like clock which smears/smoothes leap seconds,
+> where the vendor cannot be bothered to add the smearing algorithm to spec
+> and implementations.
 
-We need to avoid that ambiguity.
+Please $DEITY no.
 
-> I guess I'm still questioning whether this is the correct interface to
-> expose the host system time instead of an actual RTC.
+Surely the whole point of this effort is to provide guests with precise
+and *unambiguous* knowledge of what the time is?=20
 
-If an RTC device is able to report '23:59:60' as the time of day, I
-suppose that *could* resolve the ambiguity. But talking to a device is
-slow; we want guests to be able to know the time =E2=80=94 accurately =E2=
-=80=94 with a
-simple counter/tsc read and some arithmetic. Which means *paired* reads
-of 'RTC' and the counter, and a precise indication of the counter
-frequency.
+Using UTC is bad enough, because for a UTC timestamp in the middle of a
+leap second the guest can't know know *which* occurrence of that leap
+second it is, so it might be wrong by a second. To resolve that
+ambiguity needs a leap indicator and/or tai_offset field.
+
+But if you allow and encourage the use of smeared time without even a
+specification of *how* it's smeared... that's even worse. You have an
+unknown inaccuracy of up to a second for whole periods of time around a
+leap second. That's surely the *antithesis* of what we're trying to do
+here? Without an actual definition of the smearing, how is a guest
+actually supposed to know what time it is?
+
+(I suppose you could add a tai_offset_nanoseconds field? I don't know
+that I want to *encourage* that thought process...)
+
+> As for UTC-SLS, this *could* also be added, although [1] says
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0It is inappropriate to us=
+e Internet-Drafts as reference material or
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0to cite them other than a=
+s "work in progress."
+>=20
+> [1] https://datatracker.ietf.org/doc/html/draft-kuhn-leapsecond-00
+>=20
+> > > > One other thing to note is I think we're being very na=C3=AFve abou=
+t the TSC
+> > > > on x86 hosts. Theoretically, the TSC for every vCPU might run at a
+> > > > different frequency, and even if they run at the same frequency the=
+y
+> > > > might be offset from each other. I'm happy to be na=C3=AFve but I t=
+hink we
+> > > > should be *explicitly* so, and just say for example that it's defin=
+ed
+> > > > against vCPU0 so if other vCPUs are different then all bets are off=
+.
+> > >=20
+> > > ATM Virtio has no notion of vCPUs, or vCPU topology. So I wonder if y=
+ou
+> > > have an opinion on how to represent this in a platform-independent wa=
+y.
+> >=20
+> > Well, it doesn't have a notion of TSCs either; you include that by
+> > implicit reference don't you?
+>=20
+> I think I can add a SHOULD requirement which vaguely refers to vCPU 0, or
+> boot vCPU. But the Virtio device is not necessarily hosted by a hyperviso=
+r,
+> so the device might not even know which vCPUs there are. E.g. there is ev=
+en
+> interest to make virtio-rtc work as part of the virtio-net device (which
+> might be implemented in hardware).
+
+Sure, but those implementations aren't going to offer the TSC pairing
+at all, are they?
 
 
---=-GnAUQoYP6vamVcEoFTpW
+--=-AyPYrkpyYIHtXZh0BtUn
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -220,25 +379,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwMzEzMTIyOTM4WjAvBgkqhkiG9w0BCQQxIgQgvbUPIBy0
-7cZ9Z1msLfq9T8mTnT9Hiz+ysOZdJyZkJqIwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwMzEzMTI0NTIzWjAvBgkqhkiG9w0BCQQxIgQg71NcpAh+
+IHq1dAHXLv53eyAxAehjIKhnLe592O5S9oYwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgB6D5+ynTjkVokjmzbXSk1mqykKlhr+kY/I
-4fKguoI3e5IVL5nzPJ9UlfYtEJP8P3D2FUxXtuahWISe4gB2bAhEJoaWO4vrGxc67AfGOTM81N/q
-nTYxZ1Ycr3ZRweHc+jRanAw3nRP9wviqf7My4n5VVHICF9IUg1iLhtbLAt99r2N5DBl5WX5olscb
-GpDHc7hLAmz1rOiVbcLhJFbA0emJH+oUQDh8jsbd+MpJKXA0aWCxf2d3J2EOXMvgRMX32d9a88fg
-oIl49FPkuR7OddvICROvtLrUWBR4uoEvHfJ61wdWlKi2ulbZDawldEQS9WN7ZtRN8LlzKGcP5FQB
-Gu+tcBZhbbIPn2xA67a8GuIudP2BEndgzJqJ55dDZ2LPIkog64A95ZMcbdX1sPoRAqV5imd1ZokY
-4tVXNpl58UVfX2H1MCj9PGjXjmqRwMgI83rnRw3yHfsQppLkpdkWbDlDGyMAgYSyNtGV98VYZug/
-eFxC50XSUZUDhTXgdFiUZ9i2H3Ee4f4CX77J+1wUsERlGXP7ZFlS7u9hvOVB+5q5wZ3TlnCWF3lS
-/Fbno/vttmN2scOXJj+fsrSxBkophHN9EvCnRtbnelu8w3c0IT/c4zrW4gp/9y1lsjdcNnBqJ+cs
-aJAe6wNC6LcgfQe861/QthpE4Fg1npznzP1lrVrwEgAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBiU9t83YRrhpUOrneXR15v+Vd51yZfuew9
+repY4XgjfRcIP0UPeL5HbphWviitkG4BRlgQe4E37TDEConF5S06gYJiwp6fgsuB9RNV0gcxoc/G
+iN/eA03JK/RTMzUM1MMLDSjZaDWTl/czW2SfvG3C9rO2hEHfX9bmVWBJyzKfPXiTEFdkYil/2PT6
+01q1qoZCnUhgzx7tgXHiDOkiqW2vYJwh/krz1ypHBuQ5SiqSXeMff7a6uuOeUqFf2JUU1cYQJgso
+FP4ZMfSrH+C9iuHOuLas7uEvTjTQo6YGc1diy8j3xXETwKsvnSsYQGvuQSxz5u6MlJbrT5Dc0LfX
+NugnDECh8q2tpSoex9AGoStB7sLdwJnIH3f7dDK1t3/CgWo4AmxyyuFe3DY2MVwQ2uvjcsjUpYW1
+j795HOAjTFikwCABSQnrZhPy1EAv/QoaomR432VJY7j0VZJ3kxKQcZf56qw1nCQeimpLFj3JFflI
+OjoGRcfB7M7/EdcZd5uMDno09vEP+1DUMaRErTXqRJIO++mHh4fg8beQChtfvoqQ1OmEC5hJy/QB
+Z6dPNBoASXhg0dvAB7TTnXBG5l71rgCvYeiELNzc0aE5vs2bxSclUx/Om9Om0m9PAyetLEeVssX1
+s9MGN+6/QXWj9HRd+SwJoQJmFShwJjG9+8Sd3uw6eAAAAAAAAA==
 
 
---=-GnAUQoYP6vamVcEoFTpW--
+--=-AyPYrkpyYIHtXZh0BtUn--
 
