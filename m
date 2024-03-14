@@ -1,99 +1,129 @@
-Return-Path: <linux-rtc+bounces-819-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-820-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6074B87B29F
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 21:12:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEADD87B6DE
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Mar 2024 04:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8D4B28C0DC
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Mar 2024 20:12:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D85C1F21D5F
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Mar 2024 03:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2AF24D108;
-	Wed, 13 Mar 2024 20:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4173D46A0;
+	Thu, 14 Mar 2024 03:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="uyO/mUu3"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="im4JxuWT"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F03E225AF;
-	Wed, 13 Mar 2024 20:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8A22C9E;
+	Thu, 14 Mar 2024 03:34:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710360731; cv=none; b=knbnzCY8VMT1+6hbzRejxNX5dc28qz+FsOg7CLeTXdPP9QSWY/jh4B8hmhED1rUq39c2g0ZPhScNxNqPfs9++cBgxazdcWYaJGOl4yCSLuNx3xWPDC2tCOlZTkWyMMKHdGDXoxjEEiNmrTzHYk8cJmPUfVJtKXP6KnmMV3ZcIvQ=
+	t=1710387266; cv=none; b=AtoEHtAiwmBNwmXAZzPZxWcM5hckZ7NjfmOoTGQ1q6sFcPVOLug9kmmEv7+n7FiexZ7Gr2EI+Ac8SORLFjKgYQT1WagErM3jRO6sjm8593t7WrMeNqAXegMYTrlDdcU8TSDmR/tAbR+7GIQkcy8pFQ37ZZgflcO8pM0VZqlQJMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710360731; c=relaxed/simple;
-	bh=vxiSIG1jZQwlWtR6AV5q/3NgPvGpxmDe0qfJ03T7J/I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ugvHWAn7wYkK6pouxzkfDHXmb464PSxAVf8JEetUepNvw/PAZcoiD9fxDh9LooOnRkQUueyg0MbBmVzE7bvd9f059qzt90AoYDWvSiNuM0GTxFOH1o4LxpiYQeILcKHg/lRFfix6G+roN9lNF/b9TgnVHNdg+GDrLuDeKcPdhIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=uyO/mUu3; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=Xp82gEIbZeLnmlswzlNrQpFNfajF/0oeJJd0n1Kue3M=; b=uyO/mUu37qErfYKSWEqKd3wmSq
-	R92vQ0Yv/x3wGFeS61sdERP3c8R58AiQJcDKZWMDD2tYjU7aAfpuSODq8UsXekoI0N+bYq8lpWfoj
-	5mZtGQ4mTrXRiz83cgieU7Sw/vfr469Fi6WdYPCEebdmgUvvXdQsJhMbOrBqKgYnW6CI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rkUxr-00AGOu-Ik; Wed, 13 Mar 2024 21:12:39 +0100
-Date: Wed, 13 Mar 2024 21:12:39 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: David Woodhouse <dwmw2@infradead.org>,
-	Peter Hilber <peter.hilber@opensynergy.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	virtio-dev@lists.oasis-open.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	"virtio-comment@lists.oasis-open.org" <virtio-comment@lists.oasis-open.org>,
-	"Christopher S. Hall" <christopher.s.hall@intel.com>,
-	Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	"Ridoux, Julien" <ridouxj@amazon.com>
-Subject: Re: [RFC PATCH v3 0/7] Add virtio_rtc module and related changes
-Message-ID: <04246331-e890-4c9a-95fb-9673580e6d30@lunn.ch>
-References: <204c6339-e80d-4a98-8d07-a11eeb729497@opensynergy.com>
- <667c8d944ce9ea5c570b82b1858a70cc67b2f3e4.camel@infradead.org>
- <f6940954-334a-458b-af32-f03d8efbe607@opensynergy.com>
- <57704b2658e643fce30468dffd8c1477607f59fb.camel@infradead.org>
- <d796d9a5-8eda-4528-a6d8-1c4eba24aa1e@opensynergy.com>
- <202403131118010e7ed5bf@mail.local>
- <dcd07f0b733a90ac3f3c43a4614967bbb3ef14ad.camel@infradead.org>
- <20240313125813ec78d5a9@mail.local>
- <96be7312f7bddaf06c690e082a8028fa8b511deb.camel@infradead.org>
- <202403131450547f373268@mail.local>
+	s=arc-20240116; t=1710387266; c=relaxed/simple;
+	bh=sMCI+Eki3k6bMGoPCwpX7UtcUSX85eB7VdABW3sdS88=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oByWZhCHydl7TN0wj864rRRzvcwpoEHfa4OCFPvtdjyz52iNzM53E4WeEULrd3v/FpUTEpdNqRrMVsxmOd0PFN2tUf6HhujcUO/fNI5eMVvVFOWyCOvbXQrKYhCpXEtrmW5V0lit0YYP7PTCOsGa8apqwHd8iICGs/maDB6MLPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=im4JxuWT; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42E3ME3L023173;
+	Thu, 14 Mar 2024 03:34:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=V25r6/TDI+6iO9K99zk/ZBZ3Oe1/Km8mgnWrUIzMNsk=; b=im
+	4JxuWTgopI3LU1c74HSp0PQ16oeXEIPAnBa1+NRc1p2InAGpSFXvhzku6ZQTqDMP
+	2zJqvtpUDLf+DoJCFz65OGEjVLTi57BT81UrhA6U6R2aK4cv9BTsynwbJNqilbCT
+	X5iwANRcrozc2eIUnlARkJRR8LqwLml7edORHRMFnwcVz+hmvmUxLGmqIKaLRcdM
+	728RDa+Zaj2N/+oqRo1v6kt+xAMOPBoh8SilhLkoh7w2dMvytmY1L52wAYTTVsNe
+	CRkwAxLw5i5kBTDQW+sX7DNWbpKl8ekLycUnksZCZzTeEkMs/BVUFqKa/cbkNuPs
+	uRn/1f9srWRkkKTHvcfg==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wuggr15d6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Mar 2024 03:34:14 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42E3YDLi029515
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Mar 2024 03:34:13 GMT
+Received: from jianbinz-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 13 Mar 2024 20:34:11 -0700
+From: jianbinz <quic_jianbinz@quicinc.com>
+To: <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
+CC: jianbinz <quic_jianbinz@quicinc.com>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 1/2] rtc: rtc-pm8xxx: clear the interrupt in probe
+Date: Thu, 14 Mar 2024 11:33:44 +0800
+Message-ID: <20240314033344.10775-1-quic_jianbinz@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202403131450547f373268@mail.local>
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: GvA417Q_5vJcp1ApofK7cPTS919vEJVB
+X-Proofpoint-ORIG-GUID: GvA417Q_5vJcp1ApofK7cPTS919vEJVB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-13_11,2024-03-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 impostorscore=0 spamscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=901 malwarescore=0 phishscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403140021
 
-> As long as it doesn't behave differently from the other RTC, I'm fine
-> with this. This is important because I don't want to carry any special
-> infrastructure for this driver or to have to special case this driver
-> later on because it is incompatible with some evolution of the
-> subsystem.
+If the alarm is triggered before the driver gets probed, the alarm
+interrupt will be missed and it won't be detected, so clear the
+stale interrupt in probe.
 
-Maybe deliberately throw away all the sub-second accuracy when
-accessing the time via the RTC API? That helps to make it look like an
-RTC. And when doing the rounding, add a constant offset of 10ms to
-emulate the virtual i2c bus it is hanging off, like most RTCs?
+Changes in v3:
+*clear the interrupt in driver probe
 
-	  Andrew
+Changes in v2:
+*Adapt the V1 patch according to the newest rtc-pm8xxx
+link to v2: https://lore.kernel.org/linux-rtc/20240124024023df15ef6e@mail.local/
+
+Changes in v1:
+*During driver probe: read ALARM_EN, read ALARM_DATA, read RTC_RDATA,
+if (ALARM_DATA < RTC_DATA), Trigger the alarm event and clear the alarm settins
+Link to v1:https://lore.kernel.org/linux-rtc/20220321090514.4523-1-quic_jianbinz@quicinc.com/
+
+Changes in original:
+link to original: https://lore.kernel.org/linux-rtc/YTusgJlMUdXOKQaL@piout.net/
+
+Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
+---
+ drivers/rtc/rtc-pm8xxx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+index f6b779c12ca7..1b5a96924e57 100644
+--- a/drivers/rtc/rtc-pm8xxx.c
++++ b/drivers/rtc/rtc-pm8xxx.c
+@@ -527,6 +527,10 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
+ 
++	rc = regmap_update_bits(rtc_dd->regmap, rtc_dd->regs->alarm_ctrl2, PM8xxx_RTC_ALARM_CLEAR, 1);
++	if (rc)
++		return rc;
++
+ 	return 0;
+ }
+ 
+-- 
+2.17.1
+
 
