@@ -1,79 +1,158 @@
-Return-Path: <linux-rtc+bounces-835-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-836-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 848F188645C
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Mar 2024 01:32:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE058887975
+	for <lists+linux-rtc@lfdr.de>; Sat, 23 Mar 2024 17:44:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A73AA1C21E1C
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Mar 2024 00:32:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78A7CB21708
+	for <lists+linux-rtc@lfdr.de>; Sat, 23 Mar 2024 16:44:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F037C38D;
-	Fri, 22 Mar 2024 00:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F7F47A6F;
+	Sat, 23 Mar 2024 16:44:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fx5wcy2/"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BSpS9Eg/"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A14383;
-	Fri, 22 Mar 2024 00:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235747483;
+	Sat, 23 Mar 2024 16:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711067559; cv=none; b=qtPvunAbipjdP8emEvlmdtjqFDi/2qoR/OK2MblBCBQaBwdE/Sas4A5o32Lf4OYuHpjbiUPhHtnm7rwpbzV4xIxSLaIF7IjoRDEnlTBjXOJUvxthoFOuFAQIcZ2u+xOM+fQPxd9Uq71rhrDdR+p2l9aVSxUcEo9Yc5U196MKv3k=
+	t=1711212247; cv=none; b=bz4da+t3XFa5+t3/yuscuMBkvTzhljJMpDDuO1E4i+XvlYeOENqOeVOqfZsGMzhgihdi5OnYwf/wF8ZO9eHljfLOZv4yyuABuyDdHpwceU5YKrQIMkJToFqjdqxeOoMi20v/+q5A6WMQQmIM35zgzes48zzaAQA903e/41bn/hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711067559; c=relaxed/simple;
-	bh=x0+8AmzBRGviO8IPcOrFG2bqhWkOhGq4CzF5UveoHmY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=IQ+dTerDWrtTwnU0w8C42bAQ7dp3J85QZBvRtFskwj/U/WN+zvEgP5pKQftAQ712/ES43MOtbE7Xy0zqhipNpOnL9TVmzyRmMxAxGTS72Q8tvyh/T0BQW6ZbldtVI3OwOhgaSoz7tvb5LKZigs+aloF/DE5PNArDTOcbx+Vm4m0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fx5wcy2/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 587E7C433C7;
-	Fri, 22 Mar 2024 00:32:39 +0000 (UTC)
+	s=arc-20240116; t=1711212247; c=relaxed/simple;
+	bh=6kri9cAqdeLQSwynoX/Mgs7Zl64zCLiK2ixhjODz/Ms=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EbzVuUUQbH+ql94A7C30/jYNA3s0iUUggBPbZAredasR2ksQUXCAt8hSS0OokgclHLvpWb152jbKcksQrEjn0t1jtQe701DFG8sWtMvjDs/Yy+3joYI7L6HAnNkiSpvRybBKIXl0WTYqMwLVSB/H+O7DrI7nQwYw3lOS87xmGr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BSpS9Eg/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F63C433F1;
+	Sat, 23 Mar 2024 16:44:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711067559;
-	bh=x0+8AmzBRGviO8IPcOrFG2bqhWkOhGq4CzF5UveoHmY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=fx5wcy2/JvFVK7RrPOjA7SC2kGcZqjcA+ANfF/zWJUu5oMl4F/2wGWrMQkTeEf6n2
-	 vaYmE3NZGoukyhsPx1koaMD3P+DL7eGk4xlF+DgNTqHyapfEkK9ie2H4MtrrRHha+n
-	 4ggbfkBp4GJcVA5t8XkQO3FUAmIa/z+oHjH/wF+REcqGvWRC3Txxjy1j8FpORn36R9
-	 6uzI0AjDgF4TZj0SZI9v+hvWxyVZ70Gspsyb1MwvaC4Q6fZsUH6pO67Ox0xPQDa01o
-	 d+tSbLk5HdWWE/1THFNLUxIb/vXYA3EDIovRmiOmv6c2DkOdJoKN+3jAt0hjgoqcp2
-	 M9MAIaioQrtqQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4FD74D95060;
-	Fri, 22 Mar 2024 00:32:39 +0000 (UTC)
-Subject: Re: [GIT PULL] RTC for 6.9
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <202403212253279f152664@mail.local>
-References: <202403212253279f152664@mail.local>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <202403212253279f152664@mail.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.9
-X-PR-Tracked-Commit-Id: f7cee094fb3b370e56b3c8aac89038de818d7aec
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3faae16b5aaed284c7de6f4c12240da67497d3a3
-Message-Id: <171106755931.26768.15494070991255004797.pr-tracker-bot@kernel.org>
-Date: Fri, 22 Mar 2024 00:32:39 +0000
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=k20201202; t=1711212246;
+	bh=6kri9cAqdeLQSwynoX/Mgs7Zl64zCLiK2ixhjODz/Ms=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=BSpS9Eg/l+jRAko4Tz+ZMN4JCRwHeQdIYDpwIFJvgc226TRfGH4lO7KFm0HfyEk4N
+	 QHc+jaFbJbeJiqblewqW6zH8z311yjUlRYbc8QwrovBl8/iHMp/qfBAYHeRk7oLhdP
+	 5IiBfQzDjXjsCXYQrG9kf7QF/htVTR19FxpQSkB9Zsw3c0mmpSEwLMczirzljbgrWx
+	 sPhY3/3j56aA886Q3ykqgJ3Hga9PU8kyd1Q+FxjDo58YxSUGjuV+z8109u6Ddplcyi
+	 ks2EQegxrXkJvon8ZBFpuoQRquk4cyc/ytK6z0WZ+MvxZ8zzfZeB1se0xXW/QShgFv
+	 f7tmL5+5HfinQ==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	soc@kernel.org,
+	arm@kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH v5 00/11] Turris Omnia MCU driver
+Date: Sat, 23 Mar 2024 17:43:48 +0100
+Message-ID: <20240323164359.21642-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Thu, 21 Mar 2024 23:53:27 +0100:
+Hello Andy, Linus, Arnd, Gregory, and others,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.9
+I am sending v5 of the series adding Turris Omnia MCU driver.
+See the cover letters for v1, v2, v3 and v4:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3faae16b5aaed284c7de6f4c12240da67497d3a3
+Changes since v4:
+- added new patches
+    06/11 devm-helpers: Add resource managed version of irq_create_mapping()
+    07/11 platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+    08/11 devm-helpers: Add resource managed version of debugfs directory create
+          function
+    09/11 platform: cznic: turris-omnia-mcu: Add support for digital message
+          signing via debugfs
+- for changes specific to patches which were also sent in previous versions see
+  the notes in those patches
 
-Thank you!
+Marek Behún (11):
+  dt-bindings: arm: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  devm-helpers: Add resource managed version of irq_create_mapping()
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  devm-helpers: Add resource managed version of debugfs directory create
+    function
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing via debugfs
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
+
+ .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
+ .../bindings/arm/cznic,turris-omnia-mcu.yaml  |   86 ++
+ MAINTAINERS                                   |    5 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/crypto/caam/ctrl.c                    |   16 +-
+ drivers/crypto/caam/jr.c                      |    8 +-
+ drivers/gpio/gpio-mockup.c                    |   11 +-
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c         |   13 +-
+ drivers/hwmon/hp-wmi-sensors.c                |   15 +-
+ drivers/hwmon/mr75203.c                       |   15 +-
+ drivers/hwmon/pmbus/pmbus_core.c              |   16 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   51 +
+ drivers/platform/cznic/Makefile               |   10 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  406 +++++++
+ .../platform/cznic/turris-omnia-mcu-debugfs.c |  216 ++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1056 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |   89 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  122 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  214 ++++
+ include/linux/devm-helpers.h                  |   94 ++
+ include/linux/turris-omnia-mcu-interface.h    |  238 ++++
+ 25 files changed, 3044 insertions(+), 72 deletions(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.2
+
 
