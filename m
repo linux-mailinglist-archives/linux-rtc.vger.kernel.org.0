@@ -1,219 +1,267 @@
-Return-Path: <linux-rtc+bounces-846-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-847-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCD1A887C65
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 Mar 2024 12:02:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6526B887D63
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 Mar 2024 16:04:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4017D2816F6
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 Mar 2024 11:02:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0D91B20B40
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 Mar 2024 15:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A80C9175AD;
-	Sun, 24 Mar 2024 11:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE0DD17BD8;
+	Sun, 24 Mar 2024 15:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rgZW4C6i"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE7B17589
-	for <linux-rtc@vger.kernel.org>; Sun, 24 Mar 2024 11:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB26182BF;
+	Sun, 24 Mar 2024 15:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711278120; cv=none; b=bwMi4uVdNSey3NG9iLmCrr630ogSTPFYzwuW/ng0XWuPdj7Ztjry8jsD8vNpL5QezHGgya6DBcvvea08+g1VKBk1bBVKvxR3f9kvSDCzpCxvCYxjHge0E8oy7TvrQUgBLve9478xiIv/OBkHutoenJ2xLS1E08VZiA2rL2l4XkA=
+	t=1711292663; cv=none; b=P/B4e4mVJw1KQQYcZDW2didvV3JRgxfeaHumGSykd8eooLc99/rCbcG7BIO31IuLBVwLeFAEzQRpOY330vJffw3C7P2JWRmbMnMJ2ZsVpmP+eDUDuMyDfHVKbFLJGcb2XXVabYjUZ0chHzYOUBgmpq+0GQJ54TiiV7RjSSwM4oU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711278120; c=relaxed/simple;
-	bh=lNW864cvfYqn2OeFEfu2Vz3ViVE9lz6fktyhQFwFVhA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fCCGGcrZNM5sO6i2icAJENudoTxo5hUkW+ucyZB4H4kqUYkg1HwwBDwqAgBruVXVr8t/iRW/pxzBwbQn+IBOdYiObjNqHmVzIuUE1zsVEOQVpld3mNhZKiyoH4XefJhpN3efkhoR27eMjjns0DVyMzpiXJk/3j52wCVBEyXXMCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-Received: from localhost (88-113-26-217.elisa-laajakaista.fi [88.113.26.217])
-	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-	id ed5c59f1-e9cd-11ee-abf4-005056bdd08f;
-	Sun, 24 Mar 2024 13:01:56 +0200 (EET)
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 24 Mar 2024 13:01:55 +0200
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>, soc@kernel.org,
-	arm@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+	s=arc-20240116; t=1711292663; c=relaxed/simple;
+	bh=rf3b26KuECC9MTFW/pddYxruswZh6tBWvG0s53kSfzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RwVoAfoBOKh1sRAWmkunIlmRY5oqdj1pJQbKRWXU1DbcUNI2I9Ta1udirNF1ry/OHXlsHbvglX3Z3a5lfB78kswANxHAbbzaL1o4CCa1Nh23aKaJnkdvI3OxS1lXJpEBQ+0kZTOVExXoaiXkkI0z7xowUEKQcMXhB2ai/lrMltU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rgZW4C6i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113AEC433F1;
+	Sun, 24 Mar 2024 15:04:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711292663;
+	bh=rf3b26KuECC9MTFW/pddYxruswZh6tBWvG0s53kSfzQ=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=rgZW4C6iXaOLkEa+zKmkO76TnGVu1vqFEV1NHyarlK01d+Dh4DgoA1NdrvSMuzEkb
+	 eeIMQ3zfm0SbxPIPhF7LKfQImYKUlSy/GxMHUDA8EaW7ih2vQSO6CaWPu108XT2mum
+	 SM6nE2PwD5XPS0EcAgfHmdyHTC/ppv8jNY3Rq7gqbZGql3ziYSZrvDzZ8VVn5oJ5z0
+	 WT3eT3MZyRjJz4gc7pKmHEla/gOk+StjmzwD3H698CFd5BKsqCePolVQ/Fe3w75FOs
+	 dvgyxMVfqKwBolJ8XXJS0SydynGR4nALWDJ4vIA3H68DP3UPsRoSqyeGMDYkTN5bNG
+	 J10G//JxY1zkg==
+Date: Sun, 24 Mar 2024 16:04:08 +0100
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT
+ <gregory.clement@bootlin.com>, soc@kernel.org, arm@kernel.org, Linus
+ Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, Alessandro
+ Zummo <a.zummo@towertech.it>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, Wim Van
+ Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-watchdog@vger.kernel.org
 Subject: Re: [PATCH v5 02/11] platform: cznic: Add preliminary support for
  Turris Omnia MCU
-Message-ID: <ZgAII1B03bLUisWr@surfacebook.localdomain>
+Message-ID: <20240324160408.77c8574e@thinkpad>
+In-Reply-To: <ZgAII1B03bLUisWr@surfacebook.localdomain>
 References: <20240323164359.21642-1-kabel@kernel.org>
- <20240323164359.21642-3-kabel@kernel.org>
+	<20240323164359.21642-3-kabel@kernel.org>
+	<ZgAII1B03bLUisWr@surfacebook.localdomain>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240323164359.21642-3-kabel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Sat, Mar 23, 2024 at 05:43:50PM +0100, Marek Behún kirjoitti:
-> Add the basic skeleton for a new platform driver for the microcontroller
-> found on the Turris Omnia board.
+Hi Andy,
 
-...
+thank you very much for the review. I have some notes and some
+questions, see below.
 
-> +++ b/drivers/platform/cznic/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
-> +turris-omnia-mcu-objs		:= turris-omnia-mcu-base.o
+On Sun, 24 Mar 2024 13:01:55 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-'objs' is for user space. You need to use 'y'. Same applies to the entire
-series.
+> Sat, Mar 23, 2024 at 05:43:50PM +0100, Marek Beh=C3=BAn kirjoitti:
+> > Add the basic skeleton for a new platform driver for the microcontroller
+> > found on the Turris Omnia board. =20
+>=20
+> ...
+>=20
+> > +++ b/drivers/platform/cznic/Makefile
+> > @@ -0,0 +1,4 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +obj-$(CONFIG_TURRIS_OMNIA_MCU)	+=3D turris-omnia-mcu.o
+> > +turris-omnia-mcu-objs		:=3D turris-omnia-mcu-base.o =20
+>=20
+> 'objs' is for user space. You need to use 'y'. Same applies to the entire
+> series.
 
-...
+Fixed for v6.
 
-+ array_size.h
-+ bits.h
+>=20
+> + array_size.h
+> + bits.h
 
-> +#include <linux/device.h>
-> +#include <linux/hex.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/turris-omnia-mcu-interface.h>
-> +#include <linux/types.h>
+Fixed for v6. Is there some tool for this?
 
-+ string.h
+> + string.h
 
-> +#include <linux/sysfs.h>
+Fixed for v6.
+>=20
+> > +#include <linux/sysfs.h> =20
+>=20
+> ...
+>=20
+> > +	err =3D omnia_cmd_read(mcu->client, bootloader ? CMD_GET_FW_VERSION_B=
+OOT :
+> > +						       CMD_GET_FW_VERSION_APP,
+> > +			     reply, sizeof(reply)); =20
+>=20
+> Wouldn't be better to have a logical split?
+>=20
+> 	err =3D omnia_cmd_read(mcu->client,
+> 			     bootloader ? CMD_GET_FW_VERSION_BOOT : CMD_GET_FW_VERSION_APP,
+> 			     reply, sizeof(reply));
 
-...
+Changed for v6 to
 
-> +	err = omnia_cmd_read(mcu->client, bootloader ? CMD_GET_FW_VERSION_BOOT :
-> +						       CMD_GET_FW_VERSION_APP,
-> +			     reply, sizeof(reply));
+> 	err =3D omnia_cmd_read(mcu->client,
+> 			     bootloader ? CMD_GET_FW_VERSION_BOOT
+> 					: CMD_GET_FW_VERSION_APP,
+> 			     reply, sizeof(reply));
 
-Wouldn't be better to have a logical split?
+There are still some people wanting only 80 columns, and the whole
+driver is written that way.
 
-	err = omnia_cmd_read(mcu->client,
-			     bootloader ? CMD_GET_FW_VERSION_BOOT : CMD_GET_FW_VERSION_APP,
-			     reply, sizeof(reply));
+>=20
+> ?
+>=20
+> ...
+>=20
+> > +	struct omnia_mcu *mcu =3D i2c_get_clientdata(to_i2c_client(dev)); =20
+>=20
+> What's wrong with dev_get_drvdata()?
 
-?
+Fixed for v6.
 
-...
+> ...
+>=20
+> > +static ssize_t fw_features_show(struct device *dev, struct device_attr=
+ibute *a,
+> > +				char *buf) =20
+>=20
+> One line?
 
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
-
-What's wrong with dev_get_drvdata()?
-
-...
-
-> +static ssize_t fw_features_show(struct device *dev, struct device_attribute *a,
-> +				char *buf)
-
-One line?
-
-...
-
-> +	struct omnia_mcu *mcu = i2c_get_clientdata(to_i2c_client(dev));
-
-Use direct call (see above). Same applies to all such constructions in your
-code.
-
-...
-
-> +static const struct attribute_group omnia_mcu_base_group = {
-> +	.attrs = omnia_mcu_base_attrs,
-> +	.is_visible = omnia_mcu_base_attrs_visible,
-> +};
-> +
-> +static const struct attribute_group *omnia_mcu_groups[] = {
-> +	&omnia_mcu_base_group,
-> +	NULL
-> +};
-
-__ATTRIBUTE_GROUPS()
-
-...
-
-> +static struct i2c_driver omnia_mcu_driver = {
-> +	.probe		= omnia_mcu_probe,
-> +	.driver		= {
-> +		.name	= "turris-omnia-mcu",
-> +		.of_match_table = of_omnia_mcu_match,
-> +		.dev_groups = omnia_mcu_groups,
-> +	},
-> +};
-
-> +
-
-Redundant blank line.
-
-> +module_i2c_driver(omnia_mcu_driver);
+80 columns...
 
 ...
 
-> +#ifndef __TURRIS_OMNIA_MCU_H
-> +#define __TURRIS_OMNIA_MCU_H
+> > +static const struct attribute_group omnia_mcu_base_group =3D {
+> > +	.attrs =3D omnia_mcu_base_attrs,
+> > +	.is_visible =3D omnia_mcu_base_attrs_visible,
+> > +};
+> > +
+> > +static const struct attribute_group *omnia_mcu_groups[] =3D {
+> > +	&omnia_mcu_base_group,
+> > +	NULL
+> > +}; =20
+>=20
+> __ATTRIBUTE_GROUPS()
 
-+ array_size.h
+The next patches add more groups into this array, after the whole
+series it looks like this:
 
-> +#include <linux/i2c.h>
-> +#include <linux/if_ether.h>
-> +#include <linux/types.h>
-> +#include <asm/byteorder.h>
+static const struct attribute_group *omnia_mcu_groups[] =3D {
+	&omnia_mcu_base_group,
+	&omnia_mcu_gpio_group,
+	&omnia_mcu_poweroff_group,
+	NULL
+};
 
-...
+There is no macro for that. Should I still use __ATTRIBUTE_GROUPS() in
+the first patch and than change it in the next one?
 
-> +static inline int omnia_cmd_read(const struct i2c_client *client, u8 cmd,
-> +				 void *reply, unsigned int len)
-> +{
+>=20
+> ...
+>=20
+> > +static struct i2c_driver omnia_mcu_driver =3D {
+> > +	.probe		=3D omnia_mcu_probe,
+> > +	.driver		=3D {
+> > +		.name	=3D "turris-omnia-mcu",
+> > +		.of_match_table =3D of_omnia_mcu_match,
+> > +		.dev_groups =3D omnia_mcu_groups,
+> > +	},
+> > +}; =20
+>=20
+> > + =20
+>=20
+> Redundant blank line.
+>=20
 
-Why is this in the header?
+Fixed for v6.
 
-> +	struct i2c_msg msgs[2];
-> +	int ret;
-> +
-> +	msgs[0].addr = client->addr;
-> +	msgs[0].flags = 0;
-> +	msgs[0].len = 1;
-> +	msgs[0].buf = &cmd;
-> +	msgs[1].addr = client->addr;
-> +	msgs[1].flags = I2C_M_RD;
-> +	msgs[1].len = len;
-> +	msgs[1].buf = reply;
-> +
-> +	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret != ARRAY_SIZE(msgs))
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
+> > +module_i2c_driver(omnia_mcu_driver); =20
+>=20
+> ...
+>=20
+> > +#ifndef __TURRIS_OMNIA_MCU_H
+> > +#define __TURRIS_OMNIA_MCU_H =20
+>=20
+> + array_size.h
 
-...
+Fixed for v6.
 
-> +#ifndef __TURRIS_OMNIA_MCU_INTERFACE_H
-> +#define __TURRIS_OMNIA_MCU_INTERFACE_H
-> +
-> +#include <linux/bits.h>
+>=20
+> > +#include <linux/i2c.h>
+> > +#include <linux/if_ether.h>
+> > +#include <linux/types.h>
+> > +#include <asm/byteorder.h> =20
+>=20
+> ...
+>=20
+> > +static inline int omnia_cmd_read(const struct i2c_client *client, u8 c=
+md,
+> > +				 void *reply, unsigned int len)
+> > +{ =20
+>=20
+> Why is this in the header?
 
-+ bitfield.h
+I considered it a helper function that should be defined in the header
+file, like the rest of the cmd helpers in this file. If you disagree, I
+will put it into the -base.c file.
 
-> +#endif /* __TURRIS_OMNIA_MCU_INTERFACE_H */
+>=20
+> > +	struct i2c_msg msgs[2];
+> > +	int ret;
+> > +
+> > +	msgs[0].addr =3D client->addr;
+> > +	msgs[0].flags =3D 0;
+> > +	msgs[0].len =3D 1;
+> > +	msgs[0].buf =3D &cmd;
+> > +	msgs[1].addr =3D client->addr;
+> > +	msgs[1].flags =3D I2C_M_RD;
+> > +	msgs[1].len =3D len;
+> > +	msgs[1].buf =3D reply;
+> > +
+> > +	ret =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+> > +	if (ret < 0)
+> > +		return ret;
+> > +	if (ret !=3D ARRAY_SIZE(msgs))
+> > +		return -EIO;
+> > +
+> > +	return 0;
+> > +} =20
+>=20
+> ...
+>=20
+> > +#ifndef __TURRIS_OMNIA_MCU_INTERFACE_H
+> > +#define __TURRIS_OMNIA_MCU_INTERFACE_H
+> > +
+> > +#include <linux/bits.h> =20
+>=20
+> + bitfield.h
 
--- 
-With Best Regards,
-Andy Shevchenko
+Fixed for v6.
 
+>=20
+> > +#endif /* __TURRIS_OMNIA_MCU_INTERFACE_H */ =20
+>=20
 
 
