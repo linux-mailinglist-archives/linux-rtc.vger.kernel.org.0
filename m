@@ -1,179 +1,144 @@
-Return-Path: <linux-rtc+bounces-844-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-845-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D823A887B1B
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 Mar 2024 00:38:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5B2F887B24
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 Mar 2024 01:02:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 723C21F216BA
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 Mar 2024 23:38:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A780281DD1
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 Mar 2024 00:02:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F085B697;
-	Sat, 23 Mar 2024 23:37:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C492A38C;
+	Sun, 24 Mar 2024 00:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gh7qhQyh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mblCrbov"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF41CEECC;
-	Sat, 23 Mar 2024 23:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EF7EC4;
+	Sun, 24 Mar 2024 00:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711237075; cv=none; b=YJREvp7ahfKf0SkjfmHdaN3x2MvqvDeAqygudE4zX37Y8f+v6g3yga+OP2yr451GnnKnnZv9piZrVW4nMR7B0O04VW1stvWqpHiX34zRDWoaTlFP4cMf8BZk+96O5TPqhY7HCejNfnLjozdiUeVZSkZVkLlIDteIfolnNqVwOZA=
+	t=1711238557; cv=none; b=qhB7mRDX39+5rzoejonqIoRZa5Aqz+7wEeFGyEKuc1fqWlr9sGPll/xvl6ri8XmiYdxY5O6YF+sCSuZ1x3KPoJjGBysTdzHFtPH+BwKEqoOFl4dzXdCqpNZ4l94suJtwpNj+IV95yBn46eS8GCEtzm6OSVxHbEN+dI3/Tq021iQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711237075; c=relaxed/simple;
-	bh=6ljQUXWnYOT6gSYK/RZsytm8Zc8/8u/MMm0rwQMMkXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XsXw0ymU4A87rywdhha8yrS5a0vWcYeOMofggfFksh/AA3W00iUnEww9CqM8hcgUGHKWwdQ8LasMxWspuqXEci40Sjf0oiqPKnuBP0LASA+qABQNO7f9PlhUI7e67ZkFQag3TcBmQux6k7xxgTWPC4LehMvxPBdu0SlDrg5mb+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gh7qhQyh; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 23E521BF203;
-	Sat, 23 Mar 2024 23:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1711237064;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=stKi4Bkqfr5EzqU694IOdv3g32Vm41AKq7z++NU6pOI=;
-	b=gh7qhQyhVJVw9LXRfT6Besv2z0z9uXjECJ5BD7c8RrlHoQ5fiOzv2ZwEd0VHiVIEWDhd+e
-	r0IGe+5hLwYhiPl1s5hY3gng13mZpebFUD3oaCn03mVDGOJAk0dymkYfxgKImruWJZcnX3
-	O+jfHqZVqFHOWz67PGkJrpcDhdlpO+ALdg5x4N+PfqG0fK+AUmtyDVY5UaI2qYWO59e1bM
-	JIzfT/XxTiTkN3JE6gg71WAVvEBqq8h+DAHaV4lBTDoe6yExJYEeufdHkcxIBTm8gkWXWr
-	P3rUFQ5DegtIsayEqH8URuggon7lkoHMWvWYTynT81jQmuGlE8X4adsEu4wY8g==
-Date: Sun, 24 Mar 2024 00:37:42 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Baruch Siach <baruch@tkos.co.il>, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/4] dt-bindings: rtc: armada-380-rtc: convert to dtschema
-Message-ID: <20240323233742bfb9ba4a@mail.local>
-References: <20240323-rtc-yaml-v1-0-0c5d12b1b89d@gmail.com>
- <20240323-rtc-yaml-v1-1-0c5d12b1b89d@gmail.com>
+	s=arc-20240116; t=1711238557; c=relaxed/simple;
+	bh=Fi9jn9xhea3Eqr2Fwon3wNGvHYW3Esicm6biLdBkR+s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F/YMGBftXXpyOtkUWtTiVW4NfIXQ4IpzbMsZsIPKuPP2LrYFEdo0qM2mKHOKeTAxAQ/3l5DY7t9/oRIL/5Jsn/B348QPN5bf0G6YjKodhE9lslxbhzm3WKRxa43y6mRIs6lbWqJpRkY8x097AUuz/0eIHxysdaWJtK6XHeI2C2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mblCrbov; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a46cd9e7fcaso382602766b.1;
+        Sat, 23 Mar 2024 17:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711238554; x=1711843354; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NrERVl7fRobrwC10yk2s2onot9WRsDJnDzX1zxJyjwk=;
+        b=mblCrbov0d6HgLCOGECkakEzlVJ8vN4+W+ARF6SfS0LMBt+fKxvKY+7P9scexEK0mH
+         6LI8RLLB3Bvf2405PiocW9sqz6UQizgSBfDCwMV4qISpOngNW3gufXmPW9ysOPoxx6gz
+         aGAoRjtLGs8v5Vl8KODFOIveIBGsfntlPf+XoL/ms5N5ZH+8PY70fnvZlB/j4ppBz+39
+         1Q2vyjOucuGjHfrUxrlw7a1OsMX2JJwfYkQw2c1YZwIhEJbf0/uskfaZdwlyQfCRCcn8
+         CRjy8M+CG7M5LBNKsEiQEstIiIwwmAIAM15o3d9/pcnfkK12BTH1+zR4OBUSq68wkCN0
+         3Ftw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711238554; x=1711843354;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NrERVl7fRobrwC10yk2s2onot9WRsDJnDzX1zxJyjwk=;
+        b=Hbz/3f13jYTJDjE3e2CxOWdIe37/zz1GMraQIuIFwy7GwkP995aXIRbqPUx4bWs6ZL
+         uUWc4HTe9Heot7KgJ2p6gw+u/d3jDYPt2M9k+Hxeme9pUgjV3g7UU2AR0LReeG4cGjk5
+         A4AHOaeg3PTt99Ofq4kH73t5Iw5UQvX1mdsmoQvFmTAgep6Ui9YvCzbW6M18KUhaR2vi
+         TLxdRNnIwZfS1CF6c2OebtrqzEgQ8MjJKx7wexwZFAytq0Sabq8thmIbZfzY91b5SDe5
+         5PwzbWmJxDgQ8H3h5Izpj5t6WNcToHTkv2sB8rOhdQgtnRzarYHYLUE8/6awgqClgrv4
+         MtQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXEEvVSQ7Kh6MbYG1b+3laeS6xNw7pCfR3N2GM/ivRASmAriKqqGiaZVwW+Mz7fIbODO6PqXViY87VoG/uckJQsyBaaUy4Ms0ZVbn2BuFx52iqUN+j35HG9PddREGwiyUlgKd2LsD69ouFTnd8tOJAXT5CIkUUde20tL9n1TCUHACn4Xg==
+X-Gm-Message-State: AOJu0Yz4DNjmUqwGPerYpeFahTxlKKH/vAcnLK4dV3tk9ePE1TtCuuH0
+	6tuZxcGf7SNu/bqTp9pUjrOVtNb9QR3ynP0of68S5gvdZPyEOL/s
+X-Google-Smtp-Source: AGHT+IFhO6YVTUasRqpMP/iFm84HriWglmNUAWmJyzycChzZD235X9oPbIcfDaXRaGTIhzAhvr36qw==
+X-Received: by 2002:a17:906:240c:b0:a46:bd1d:d9c9 with SMTP id z12-20020a170906240c00b00a46bd1dd9c9mr2383059eja.31.1711238554112;
+        Sat, 23 Mar 2024 17:02:34 -0700 (PDT)
+Received: from ?IPV6:2a02:8389:41cf:e200:5b00:ff22:8933:f27e? (2a02-8389-41cf-e200-5b00-ff22-8933-f27e.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:5b00:ff22:8933:f27e])
+        by smtp.gmail.com with ESMTPSA id bh9-20020a170906a0c900b00a461b1e814asm1401032ejb.130.2024.03.23.17.02.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Mar 2024 17:02:33 -0700 (PDT)
+Message-ID: <6e68e0ca-2f3e-41a7-bb96-00fbdadc4436@gmail.com>
+Date: Sun, 24 Mar 2024 01:02:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240323-rtc-yaml-v1-1-0c5d12b1b89d@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: rtc: armada-380-rtc: convert to dtschema
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Baruch Siach <baruch@tkos.co.il>,
+ linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240323-rtc-yaml-v1-0-0c5d12b1b89d@gmail.com>
+ <20240323-rtc-yaml-v1-1-0c5d12b1b89d@gmail.com>
+ <20240323233742bfb9ba4a@mail.local>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <20240323233742bfb9ba4a@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 23/03/2024 23:46:13+0100, Javier Carrasco wrote:
-> Convert existing binding to dtschema to support validation.
+On 3/24/24 00:37, Alexandre Belloni wrote:
+> On 23/03/2024 23:46:13+0100, Javier Carrasco wrote:
+>> Convert existing binding to dtschema to support validation.
+>>
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - reg-names
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
 > 
-> This is a direct conversion with no additions.
-> 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> ---
->  .../devicetree/bindings/rtc/armada-380-rtc.txt     | 24 -----------
->  .../bindings/rtc/marvell,armada-380-rtc.yaml       | 48 ++++++++++++++++++++++
->  2 files changed, 48 insertions(+), 24 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/armada-380-rtc.txt b/Documentation/devicetree/bindings/rtc/armada-380-rtc.txt
-> deleted file mode 100644
-> index c3c9a1226f9a..000000000000
-> --- a/Documentation/devicetree/bindings/rtc/armada-380-rtc.txt
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -* Real Time Clock of the Armada 38x/7K/8K SoCs
-> -
-> -RTC controller for the Armada 38x, 7K and 8K SoCs
-> -
-> -Required properties:
-> -- compatible : Should be one of the following:
-> -	"marvell,armada-380-rtc" for Armada 38x SoC
-> -	"marvell,armada-8k-rtc" for Aramda 7K/8K SoCs
-> -- reg: a list of base address and size pairs, one for each entry in
-> -  reg-names
-> -- reg names: should contain:
-> -  * "rtc" for the RTC registers
-> -  * "rtc-soc" for the SoC related registers and among them the one
-> -    related to the interrupt.
-> -- interrupts: IRQ line for the RTC.
-> -
-> -Example:
-> -
-> -rtc@a3800 {
-> -	compatible = "marvell,armada-380-rtc";
-> -	reg = <0xa3800 0x20>, <0x184a0 0x0c>;
-> -	reg-names = "rtc", "rtc-soc";
-> -	interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/rtc/marvell,armada-380-rtc.yaml b/Documentation/devicetree/bindings/rtc/marvell,armada-380-rtc.yaml
-> new file mode 100644
-> index 000000000000..388c7d7a044d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/marvell,armada-380-rtc.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/marvell,armada-380-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: RTC controller for the Armada 38x, 7K and 8K SoCs
-> +
-> +maintainers:
-> +  - Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - marvell,armada-380-rtc
-> +      - marvell,armada-8k-rtc
-> +
-> +  reg:
-> +    items:
-> +      - description: RTC base address size
-> +      - description: Base address and size of SoC related registers
-> +
-> +  reg-names:
-> +    items:
-> +      - const: rtc
-> +      - const: rtc-soc
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +
-> +additionalProperties: false
-
-This is not correct because at least start-year is supported. Please
-check for all your other submissions too.
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    rtc@a3800 {
-> +        compatible = "marvell,armada-380-rtc";
-> +        reg = <0xa3800 0x20>, <0x184a0 0x0c>;
-> +        reg-names = "rtc", "rtc-soc";
-> +        interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> 
-> -- 
-> 2.40.1
+> This is not correct because at least start-year is supported. Please
+> check for all your other submissions too.
 > 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+allOf:
+  - $ref: rtc.yaml#
+
+is missing, and then
+
+unvealuatedProperties: false
+
+to account for that.
+
+"start-year" is read in the RTC base class, so I wonder why so many RTC
+bindings add a reference to rtc.yaml, but then use
+
+additionalProperties: false
+
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +
+>> +    rtc@a3800 {
+>> +        compatible = "marvell,armada-380-rtc";
+>> +        reg = <0xa3800 0x20>, <0x184a0 0x0c>;
+>> +        reg-names = "rtc", "rtc-soc";
+>> +        interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+>> +    };
+>>
+>> -- 
+>> 2.40.1
+>>
+> 
+
+Thanks and best regards,
+Javier Carrasco
 
