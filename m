@@ -1,46 +1,46 @@
-Return-Path: <linux-rtc+bounces-854-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-856-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EE84888C95
-	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 05:25:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7B5F889E10
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 13:01:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE6EF28DC0C
-	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 04:24:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 059751C348ED
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 12:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5A021C17F4;
-	Mon, 25 Mar 2024 00:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F99A184EE6;
+	Mon, 25 Mar 2024 03:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKlrWTLm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LTGxOBzM"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C2A17D257;
-	Sun, 24 Mar 2024 23:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E795628ECDD;
+	Sun, 24 Mar 2024 23:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711323837; cv=none; b=nzdxPuydBmxf4Y4FkR4vBzMbMQwtC7KlSafFjNLd0Xk/MQxopro4YIZi6wkeQ928tAQnAptLd4YQdRfedI5rnGCngfie67Q3gwarc27n7a+ZpyzTpHmFME1QWedXV7sKeKw8pcGtFiSZx44UosKJgOuZzgeAn04VMc7pX3ffK30=
+	t=1711324174; cv=none; b=qlrUG+NxoVXgitvF5sh9LaVvjM71aGtyo9DeL0RpHt81HsP8IsINduMzwqFJREQnUM/mrdqolNxzOdlbt+usGtW8C3x032/V0cHRtnhNTAQ3sG1qULJZsUlAegbxnmVU9O3fUdxJzCthrn9b6dzNyhofwh2lkOu9oTFKGDUwWik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711323837; c=relaxed/simple;
-	bh=epx3Knk9RNJ4Vo/NPzLzQAq4psMUnGkQ7mnl0Vhi1Sc=;
+	s=arc-20240116; t=1711324174; c=relaxed/simple;
+	bh=B16OLgDJ2vIDMaCBoBbJgafklwHkdpKCJzzjn0IAS6c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k9u+aDCDE91jeF9K7G2f643vJUeHj4fP5zzgC/B3pr00Yo/S226fdfIAMndiK6oQV7Sc0H4/1gkTUGRu56phqFrXuj5VxAZJckSeAXzaxdB0yLTd9WZ7Bo39nt0zyExORZd8ftEC8YUBIVmo05Gveacjx53z1+WWr/gp/CVLeqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKlrWTLm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78AFC433C7;
-	Sun, 24 Mar 2024 23:43:54 +0000 (UTC)
+	 MIME-Version; b=VLwrjMv3TBne6Tc6M11axuVkkUZY31FAwo/GLCuUA7mZsNLvSXt0ZWzjwTEKFOz2BrhhG6GKWlkCa/nXy6tCFdEYbg5Bnc7fYZISYobZXAbxhtXu+nQKsdPRB4yrURrU3JjnG4Sb7gZIWqAQd4tpg2NC8Jsyz+Ofe+w54VwbEDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LTGxOBzM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14243C433F1;
+	Sun, 24 Mar 2024 23:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711323836;
-	bh=epx3Knk9RNJ4Vo/NPzLzQAq4psMUnGkQ7mnl0Vhi1Sc=;
+	s=k20201202; t=1711324173;
+	bh=B16OLgDJ2vIDMaCBoBbJgafklwHkdpKCJzzjn0IAS6c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hKlrWTLmEscDOfPpWVywVvVIZU2bGAYt34gz+mDRWZPTettUsCAAwMDgCjaaITnM3
-	 iqcTmCmliLdmI3PusAQ7bqM7g7XqmHwLv/a+XzcjtSfGea8IcDvuNX+ti4lb9hrbVB
-	 UO4PmfHtjqREQW6y3ypUVBSGrt0+grqHT/8zNNOMREmKc1kW31jCqYDIxuAbNh6Oaf
-	 MNRCfAQY3KvvSo7MRDeCDWR4OZitjXG36MqmTjw1SAOa0DFg38tWGLSyVzhSO2MkDF
-	 PPN2rlE7Iwe4PFQKIVps7g9Q425T0zBz0b5/VSwc9MwnGUggw0QtlEk8DMRjmESyKG
-	 fueQjfBW1/SBQ==
+	b=LTGxOBzMQH2xTbfCgoS4925pRK7nr+plYw08rDdgxol5GLFzNP4g6F3f1TSqWdCO2
+	 x9ly+e2pv/Yzc5puTC3VhB/Gz9L9MKBovVRE3JLAgVCm9uz+AWKKxtHgEEypXV/vwf
+	 R6v9v/ejnQ7m/Nqt2wkHgpfQsU20GxjHSvqe3Yqg0lVX8yGTn/Tzhek+cV94ICDOri
+	 iL6XXLU3JG47rA2wxwLo+3ukrbnOrmn/0ZUQt4D1SOa8tfYgHr5IJFZBCb3QrPs8q1
+	 t6/wwrRBwuD9meYUntA8wJ10x8KLFQ2un9PybQHV7LF0fThAPgm128PBoAv0GKLBCB
+	 Pu8GahqTyQCHA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -59,12 +59,12 @@ Cc: Randy Dunlap <rdunlap@infradead.org>,
 	Peter Rosin <peda@axentia.se>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 214/238] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
-Date: Sun, 24 Mar 2024 19:40:02 -0400
-Message-ID: <20240324234027.1354210-215-sashal@kernel.org>
+Subject: [PATCH 5.4 165/183] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
+Date: Sun, 24 Mar 2024 19:46:18 -0400
+Message-ID: <20240324234638.1355609-166-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240324234027.1354210-1-sashal@kernel.org>
-References: <20240324234027.1354210-1-sashal@kernel.org>
+In-Reply-To: <20240324234638.1355609-1-sashal@kernel.org>
+References: <20240324234638.1355609-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -113,10 +113,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 54cf5ec8f4019..8ddd334e049e1 100644
+index 0ad8d84aeb339..22638878c9819 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
-@@ -1833,7 +1833,8 @@ config RTC_DRV_MT2712
+@@ -1811,7 +1811,8 @@ config RTC_DRV_MOXART
  
  config RTC_DRV_MT6397
  	tristate "MediaTek PMIC based RTC"
