@@ -1,132 +1,113 @@
-Return-Path: <linux-rtc+bounces-855-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-857-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B36B888F04
-	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 06:34:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB6C88A48E
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 15:31:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26FB9B25656
-	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 05:04:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CDA81F626FF
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 Mar 2024 14:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A773165CA;
-	Mon, 25 Mar 2024 01:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6089A15ADBE;
+	Mon, 25 Mar 2024 11:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqV+wOtY"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FwkU4T1u"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD98A22F4F4;
-	Sun, 24 Mar 2024 23:52:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845B517C65F;
+	Mon, 25 Mar 2024 10:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711324372; cv=none; b=mYPCGqGoYd8fonViOLcvrm1AsHfw7jMbnZMeb3TMgGRlgTjtnJ6EJaPMBdpgjkF3hQn9ZWmh/PcWtBIfRim0ZlvtttTFMyBBlmMaOncQQwnb/G1zAnU4/+9xDUrl4VTJGVRGWESNZ/ms9PftC/YaGouxo47fVMlINVI++SA/4qM=
+	t=1711363203; cv=none; b=jNgDlVVJv6V74r3bHfHMljwb2A3nmK4pDhtjnVtko7Z48cpgc1wLobmDNhzn5jl4CHdgQt5bwD9B/HNzQNj6Z3O0HvUb9Nqp4Q5ldkd7PiNN/zpuu20+wM7MkF0WCt1v+h8BEkxTVuP/kskH5WleCWqzJxLSlfLvc0Z35UFzYmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711324372; c=relaxed/simple;
-	bh=jhQcHsM9X+UJssCBHLAu+ithg8EyBjUhqhmuoeH74BI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SaNV17eb0yv866zSqPMh9eFzVaGNAPxpOBfC7OzF7XSsV9pHsCe1kEZ7PnCmyD9CCzkSlxcPWSIXuSU7MMYLkb686pn60R93PTRJ9KPuPCagUi7Yd9o4lBztOcg5Hy38r6/eq4SoPnqzvw0wIjWzgnaJLeYY0VGBfJGUcddWaCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqV+wOtY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C051CC43394;
-	Sun, 24 Mar 2024 23:52:50 +0000 (UTC)
+	s=arc-20240116; t=1711363203; c=relaxed/simple;
+	bh=1kjdqR5hsduSp6QR7U3kFDUoSJ+njpkloL6RmW5726U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TfosKN6NmeuOWhDym4OdfPRX5WgsZtLzQXgsFoTladl6P6m8NMyMr/TeRU6j9QqzIn17BG9Ar0c3MRC4+ln60zB0iH3rACMyd7XOQlZYLJi/eh+v5YI6FMANrCcDZItprdR+fr3x3Lbub4fKGQjVCtBjs0YupfmtpfyrlfCNTzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FwkU4T1u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF6FC433F1;
+	Mon, 25 Mar 2024 10:40:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711324372;
-	bh=jhQcHsM9X+UJssCBHLAu+ithg8EyBjUhqhmuoeH74BI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oqV+wOtYRbfSXUKF3XwUhPj8a37YwiEMs0jHPSRrHdVz/GzKmRg/Uw57pAvv0F/5j
-	 4OhAc9BoMp+ZfFJ0AjhbtbYlB0r4TqINdHeMLNTUtNqEow1v/+dfd617HXFC8ByVg+
-	 VH8jpfzUNGzmgh7Q5renlNRz+J/iKP3N2QpRwuaPgUdAW+jjrHuj5yY0SZGM+fNaxN
-	 X1MTCvqcdV/BZGoOZjEkOaGuxMs70PjZzYs6VoigYtC+26CyckEupre/5JNymQnoFt
-	 sjANFqz0E8ZbJq7AhOX1TRWoWXS5D6FLk+o7bOioHMaYkUF+eYYgiAp2o/lh7y5/Jz
-	 LE0/yEadCxitQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Eddie Huang <eddie.huang@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Marc Zyngier <maz@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Peter Rosin <peda@axentia.se>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 138/148] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
-Date: Sun, 24 Mar 2024 19:50:02 -0400
-Message-ID: <20240324235012.1356413-139-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240324235012.1356413-1-sashal@kernel.org>
-References: <20240324235012.1356413-1-sashal@kernel.org>
+	s=k20201202; t=1711363203;
+	bh=1kjdqR5hsduSp6QR7U3kFDUoSJ+njpkloL6RmW5726U=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=FwkU4T1u/wN6jSTzwB12KysXpLxkLz1uLie4n666O/NjfsK84S6UDZGZxp71WAkuf
+	 ZmIbq2TtIxNW3y+YBAZ2xlyEr3m8bT2k7GZdfAqu0Z1pSBjUvXEdIYgpl4MdvRpUH/
+	 ViuWHmeT8AdIsJkTIC9zAfcYDRgMU3GHAqiHuMvDTiSHyzRljiFgfQHDzr7iqqyxxM
+	 L5ZvJ3qJP8njs4njJmwAHQaDQMb0WSB23GCilNdZmyvH6V+G++2nBwVqhmP6wkdzMz
+	 hYuDZhxuBkJkO2nStrgej1SHqp/xv7bMMrVFXTibbokY2Tx1nq3ielOAhfGfKpLaAe
+	 vRlgZyJSiI/Cw==
+Date: Mon, 25 Mar 2024 11:39:57 +0100
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT
+ <gregory.clement@bootlin.com>, soc@kernel.org, arm@kernel.org, Linus
+ Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, Alessandro
+ Zummo <a.zummo@towertech.it>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, Wim Van
+ Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v5 02/11] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <20240325113957.7a83e093@dellmb>
+In-Reply-To: <CAHp75VesxrOdm4H3TYUtfEJx=i3Zpd6a=yzbkUFismnzW=nE-g@mail.gmail.com>
+References: <20240323164359.21642-1-kabel@kernel.org>
+	<20240323164359.21642-3-kabel@kernel.org>
+	<ZgAII1B03bLUisWr@surfacebook.localdomain>
+	<20240324160408.77c8574e@thinkpad>
+	<CAHp75VesxrOdm4H3TYUtfEJx=i3Zpd6a=yzbkUFismnzW=nE-g@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Sun, 24 Mar 2024 17:30:39 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-[ Upstream commit 544c42f798e1651dcb04fb0395219bf0f1c2607e ]
+> On Sun, Mar 24, 2024 at 5:04=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.or=
+g> wrote:
+> >
+> > Hi Andy,
+> >
+> > thank you very much for the review. I have some notes and some
+> > questions, see below. =20
+>=20
+> Btw, I'll look into other patches next week.
 
-IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
-it directly thru "make *config", so drivers should select it instead
-of depending on it if they need it.
-Relying on it being set for a dependency is risky.
+Thx.
 
-Consistently using "select" or "depends on" can also help reduce
-Kconfig circular dependency issues.
+...
 
-Therefore, change the use of "depends on" for IRQ_DOMAIN to
-"select" for RTC_DRV_MT6397.
+> >
+> > There are still some people wanting only 80 columns, and the whole
+> > driver is written that way. =20
+>=20
+> Hmm... Is it still a hard limit for drivers/platform/cznic for the _new_ =
+code?
 
-Fixes: 04d3ba70a3c9 ("rtc: mt6397: add IRQ domain dependency")
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Eddie Huang <eddie.huang@mediatek.com>
-Cc: Sean Wang <sean.wang@mediatek.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Peter Rosin <peda@axentia.se>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20240213050258.6167-1-rdunlap@infradead.org
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/rtc/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I don't think so, but I personally would also prefer leaving this at 80
+columns. Is this a problem?
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index b5845f16a3a26..199cc39459198 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1719,7 +1719,8 @@ config RTC_DRV_MOXART
- 
- config RTC_DRV_MT6397
- 	tristate "MediaTek PMIC based RTC"
--	depends on MFD_MT6397 || (COMPILE_TEST && IRQ_DOMAIN)
-+	depends on MFD_MT6397 || COMPILE_TEST
-+	select IRQ_DOMAIN
- 	help
- 	  This selects the MediaTek(R) RTC driver. RTC is part of MediaTek
- 	  MT6397 PMIC. You should enable MT6397 PMIC MFD before select
--- 
-2.43.0
+> > I considered it a helper function that should be defined in the header
+> > file, like the rest of the cmd helpers in this file. If you disagree, I
+> > will put it into the -base.c file. =20
+>=20
+> I don't see the technical justification to hold it in the *.h rather
+> than *.c. To me this one is big enough in C and likely in assembly to
+> be copied to each user. Besides that aspect, it slows down the build a
+> lot (mostly due to i2c.h inclusion which otherwise is not needed).
 
+OK, I moved it into -base.c.
+
+Marek
 
