@@ -1,59 +1,60 @@
-Return-Path: <linux-rtc+bounces-880-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-881-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5558088CC52
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 19:48:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03FB188CD05
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 20:21:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBF8FB29789
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 18:48:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEB1830394F
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 19:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8EC13D27B;
-	Tue, 26 Mar 2024 18:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5910B13CFB6;
+	Tue, 26 Mar 2024 19:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RA6SgSHV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCe7TINc"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F02713CC60;
-	Tue, 26 Mar 2024 18:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C68713C9AA;
+	Tue, 26 Mar 2024 19:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711478856; cv=none; b=ePTvPUIXctcFqHhNwbtLYptJE57QzW8CRvJUfyPvA1htz2Ch5/03qYYQVM9RansNaPR9oU8cIpMnwH5oWRYEQu53SzRDeo5iGO8rKHGbMB/J5jJM8/IOu2U0/gseF9F/Mk2I4omB8JyY/wl2n6LZgDNm85fev8R17QXBzvFS1UY=
+	t=1711480836; cv=none; b=GODNIc3nUICnOzdK/2Pc2k60xOVnEzy1hvZn6rulvJJMzTUZ+D5VglSD7GorO0rs4sljDZZjInzk77JISf7VvzMI+Qxs6CurlQWFDyuE08CvxemSpIR7+JEiyRELo7NggOgffNTKVNvsMDFCdBFHZxTdBOvHNt/4OjTWOmOMrVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711478856; c=relaxed/simple;
-	bh=8FHSNGxQm7QBTQTAwc2r5ZwdqOJ+94idlj4A8yLD6bw=;
+	s=arc-20240116; t=1711480836; c=relaxed/simple;
+	bh=4pVK3zwjf7q3/wKz/a7Bedi8s68WPvTFAqBMDraigKc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=herKU3nKv7Hpn8GB8a6cmuhY+RHsSrGUua2FeK7CsG46XLRD2DGjDvTKaqZnmINIu9q7Mr9gdFAEwbX2SrjACjoc8HwiexPfoqWWh4wIXcO6ADJRZNU2X28hslKm+OtW/i/L8GFbTyQ0aPt1zqIgjzUSd33Rkhh7Pwf9QdFrf/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RA6SgSHV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 891AFC433C7;
-	Tue, 26 Mar 2024 18:47:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QkFAkhKg8/RyslwDBqhWxGenhgjSDYCVvk1yNLnHQnUnWScHOlJIOz+j3+iR8eCrHdJBXRGwzx12cfaQQttChqYfpXMFEfKriQ9nokGByyskAjhopQfkzssVloNLmsn9WZ1JInTeQdBMvNGq6YiMj077jRAfgFZujIZ2Z2uQsGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCe7TINc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D96C433F1;
+	Tue, 26 Mar 2024 19:20:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711478855;
-	bh=8FHSNGxQm7QBTQTAwc2r5ZwdqOJ+94idlj4A8yLD6bw=;
+	s=k20201202; t=1711480835;
+	bh=4pVK3zwjf7q3/wKz/a7Bedi8s68WPvTFAqBMDraigKc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RA6SgSHVS7EZzjbf3Ox2Dx9xuEj43jIL1s/GhxNT8VyRalMPP+IZ0U5SVf7hXbRiZ
-	 odonEeY/joyiungjBc4WQnT8w2r7PuxR0ZeK6EbPOxcmdcnRZHb3XWIveaoH8ugz0E
-	 7p+h2NTehRuJvXuun7mmbzP6+QfOGwA0T9oNoKyOMRyebViTUQXXm2IE0CZ1ucovqW
-	 HX+hP1bt3jV28HbtaD5BW6Kg+cbdWrUWsUSv563DvPoY1IOaveU+tS8YOxPYuqOvVT
-	 +mcEX0utAoHVihwq0ZRQaGxq+3VfOv2BxxULN6DIFA2vU68LS1l0Sy7btcxRimHYaE
-	 mVboKkibluQaw==
-Date: Tue, 26 Mar 2024 13:47:33 -0500
+	b=eCe7TINcTy+1o3JIqbJXojYzmEPUcxoZurMQyELBJWt8YFZgezRoZSdmSfAx7Ld1O
+	 3ycKqWa8N9qaPE0ErPQXt1k27L7joNAi+NeF4foSMdiEWCa+cSsmDWjHocv6i96k5K
+	 2mE3w2jmK9iTcfibNmDuC63Z16znTCwoBIKjNRDY0vD8YVPZab27rnIBrmjfKGgstT
+	 aMdylAK4/cnlGsHHZtPHb9z7p1pmzhZY6gD4ysH9OaEnoTDICtBALUwcqNSrpXBU6T
+	 wdjFDMSWTHhS1Rv6l/63LTR6lTW7Ce7RolYpaTBw+3L7IGgg8ORXExxJgDGTJ6xRaF
+	 g+Fsa2Leg36Fg==
+Date: Tue, 26 Mar 2024 14:20:33 -0500
 From: Rob Herring <robh@kernel.org>
 To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Conor Dooley <conor+dt@kernel.org>, Baruch Siach <baruch@tkos.co.il>,
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v2 4/4] dt-bindings: rtc: nxp,lpc1788-rtc: convert to
+	Conor Dooley <conor+dt@kernel.org>,
+	Baruch Siach <baruch@tkos.co.il>, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 0/4] dt-bindings: rtc: convert multiple devices to
  dtschema
-Message-ID: <171147885251.3182791.7036006082588130342.robh@kernel.org>
-References: <20240325-rtc-yaml-v2-0-ff9f68f43dbc@gmail.com>
- <20240325-rtc-yaml-v2-4-ff9f68f43dbc@gmail.com>
+Message-ID: <20240326192033.GA3240297-robh@kernel.org>
+References: <20240326-rtc-yaml-v3-0-caa430ecace7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,21 +63,43 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240325-rtc-yaml-v2-4-ff9f68f43dbc@gmail.com>
+In-Reply-To: <20240326-rtc-yaml-v3-0-caa430ecace7@gmail.com>
 
-
-On Mon, 25 Mar 2024 22:10:11 +0100, Javier Carrasco wrote:
-> Convert existing binding to dtschema to support validation.
+On Tue, Mar 26, 2024 at 02:03:22PM +0100, Javier Carrasco wrote:
+> This series converts the following existing bindings to dtschema:
 > 
-> This is a direct conversion with no additions.
+> - armada-380-rtc
+> - alphascale,asm9260-rtc
+> - digicolor-rtc (moved to trivial-rtc)
+> - nxp,lpc1788-rtc
+> 
+> All bindings include at least one compatible that is referenced in the
+> existing dts (arch/arm). Those dts could be tested against the new
+> bindings.
+> 
+> It might be worth mentioning that the reference to nxp,lpc1788-rtc in
+> arch/arm/boot/dts/nxp/lpc/lpc18xx.dtsi also includes another compatible
+> called nxp,lpc1850-rtc, which is not documented or supported by existing
+> drivers. That generates a warning when testing against nxp,lpc1788-rtc.
 > 
 > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 > ---
->  .../devicetree/bindings/rtc/nxp,lpc1788-rtc.txt    | 21 --------
->  .../devicetree/bindings/rtc/nxp,lpc1788-rtc.yaml   | 60 ++++++++++++++++++++++
->  2 files changed, 60 insertions(+), 21 deletions(-)
+> Changes in v3:
+> - alphascale-asm9260-rtc: drop unnecessary reg description.
+> - nxp,lpc1788-rtc: drop unnecessary reg description.
+> - Link to v2: https://lore.kernel.org/r/20240325-rtc-yaml-v2-0-ff9f68f43dbc@gmail.com
 > 
+> Changes in v2:
+> - General: reference to rtc.yaml
+> - digicolor-rtc: move to trivial-rtc
+> - Link to v1: https://lore.kernel.org/r/20240323-rtc-yaml-v1-0-0c5d12b1b89d@gmail.com
+> 
+> ---
+> Javier Carrasco (4):
+>       dt-bindings: rtc: armada-380-rtc: convert to dtschema
+>       dt-bindings: rtc: alphascale,asm9260-rtc: convert to dtschema
+>       dt-bindings: rtc: digicolor-rtc: move to trivial-rtc
+>       dt-bindings: rtc: nxp,lpc1788-rtc: convert to dtschema
 
 Reviewed-by: Rob Herring <robh@kernel.org>
-
 
