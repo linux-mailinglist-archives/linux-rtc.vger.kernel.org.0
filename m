@@ -1,60 +1,60 @@
-Return-Path: <linux-rtc+bounces-878-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-879-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3A9888CC4A
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 19:48:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A6A88CC4E
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 19:48:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A392B29360
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 18:47:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D60901C65D6C
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Mar 2024 18:48:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E870413CAB5;
-	Tue, 26 Mar 2024 18:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57DF513CA91;
+	Tue, 26 Mar 2024 18:47:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ttMtnRQf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlFdgaNg"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8A213C836;
-	Tue, 26 Mar 2024 18:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A00F13C9BA;
+	Tue, 26 Mar 2024 18:47:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711478834; cv=none; b=qkA4V3GIf6jRAPeI8LzhZB/xOM2Bci3L85vMrmByHoNQj2TcFNWkIGk7zws+cWDft2SCe3qiLYoJLzjsDVLFa8PrR4dxu3VZhu0E0QJvyQ3zJ1hDkOftI1ZkJAtQg5H9xjJHC6Ay3XSNQNWgmuud8CJRWZmrRPSXlLn1cujBr5o=
+	t=1711478844; cv=none; b=H/0PB4jy16MIouLnVXWwWcg9bmLb8cMVL1NmraoOcS9q270VN0m2+QXMr8+tvkBMafzU0+2Mb1RiCqTR29mNtfq6eZcf1WUEoXgZSIO6I0lIaGKUOvXapvwcQTL+LNe4ulByKWD9JMPk9OI8yW5EgLr7XbGgv0VcfSOEDPT12Zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711478834; c=relaxed/simple;
-	bh=mluiAor2f4Fl8dUvJLJjVtfHfDF4072q/JzfzNuHlmY=;
+	s=arc-20240116; t=1711478844; c=relaxed/simple;
+	bh=yLFy0pMPO69Aun53ynYkbVRY3qnekKy9hgrSlXDTycE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i3ih9tNghvlRNzVR7Fly3PU18SOL6HcGi7v+4mKi1XkE7z7JxemkFjbTgmV4RcVcfwk9Dfwn0i/vMT0ykvm9eR0QEQEr/F8KZ8HE4fUsrY+SiWZlcauHyYCaQHM99BbO10GOu13KzHYoXDQ24IxAlal785luwbfUs0iJJU1g25c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ttMtnRQf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21122C433F1;
-	Tue, 26 Mar 2024 18:47:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2wdqXt5AtkA89KC32KmyAuk6TSAs6ILxY3wrJoC+DpNfw2CTMCixS7oqJmGq5Joxgg+PgNjyuyJIU8AuR2yGweLBDG7eUz5tcsL+0C4v5h35o6w1D6sgwM/1yPvtoamtV+cDFUx3A4VSV3npy6NPgMPV2biDB0Tcn/cMAjozDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlFdgaNg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A6F2C433F1;
+	Tue, 26 Mar 2024 18:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711478834;
-	bh=mluiAor2f4Fl8dUvJLJjVtfHfDF4072q/JzfzNuHlmY=;
+	s=k20201202; t=1711478843;
+	bh=yLFy0pMPO69Aun53ynYkbVRY3qnekKy9hgrSlXDTycE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ttMtnRQfhgQML3Fqaz/fiMB5dyPi7L9fT6L48b8tuOBsNTpPmoT6/RQqE2b0CspNV
-	 6idDQSUT1KuZcUb6ij2DnBtwczb4kuXTz69S8cwpVJI3aOtZ4Nc21YuON6TLV/AbKr
-	 i/3mrFZK7XdqXmd6Qzz6GPuhqFgujXEhIigNkiBZtn284P9wU8Fm34hEiTizah5Htb
-	 8PsnCkKtZLR8x5ACQ4GvlcQlDIf3LRbAA+3+bBdeoOPv+s668cZ7z6S3Lw51w1E/uO
-	 LvcbWXnKh9TSkKH/967NAIEQtpRQ8r+qJwySdHg5uETOuc2YjHAJechuzSdzRdT0wP
-	 tHbDKRvt2A0WA==
-Date: Tue, 26 Mar 2024 13:47:12 -0500
+	b=dlFdgaNggHAXTZqWdWbnKDL1UXA99fQtbN0FOQ8fWhKdax3O+EMWQitF4TCJRcUO5
+	 M1gB47L515GUJZ5Tu0GV+yHpHX2gCjlruRv7bvIs9yKGJZewGohmTugQCmaqcskUIT
+	 qQhr1c3nLFrzDiNbCUgXPQiiVGCZwSHYrsycQzEROwmXX76diqjmhxgTiaonMILIXz
+	 UFQI/7k+KMxbwhVRQlW3kwqfJa6021B5NhOvp+lW/YER9RoI2XOYb/XTSYTQHHgRTH
+	 aX9MR/XIEVqIinSMxWZ6h1NerlF4szMTgCfuLN04plJULFSaVGUmDNQvwYj7E1GgVk
+	 N9OhzT+o7Oe5g==
+Date: Tue, 26 Mar 2024 13:47:21 -0500
 From: Rob Herring <robh@kernel.org>
 To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	Baruch Siach <baruch@tkos.co.il>,
-	Conor Dooley <conor+dt@kernel.org>,
+Cc: linux-arm-kernel@lists.infradead.org,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	Baruch Siach <baruch@tkos.co.il>, linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v2 2/4] dt-bindings: rtc: alphascale,asm9260-rtc: convert
- to dtschema
-Message-ID: <171147883150.3182142.14773258890447359682.robh@kernel.org>
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] dt-bindings: rtc: digicolor-rtc: move to
+ trivial-rtc
+Message-ID: <171147884025.3182443.161090976508685252.robh@kernel.org>
 References: <20240325-rtc-yaml-v2-0-ff9f68f43dbc@gmail.com>
- <20240325-rtc-yaml-v2-2-ff9f68f43dbc@gmail.com>
+ <20240325-rtc-yaml-v2-3-ff9f68f43dbc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -63,19 +63,20 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240325-rtc-yaml-v2-2-ff9f68f43dbc@gmail.com>
+In-Reply-To: <20240325-rtc-yaml-v2-3-ff9f68f43dbc@gmail.com>
 
 
-On Mon, 25 Mar 2024 22:10:09 +0100, Javier Carrasco wrote:
+On Mon, 25 Mar 2024 22:10:10 +0100, Javier Carrasco wrote:
 > Convert existing binding to dtschema to support validation.
 > 
-> This is a direct conversion with no additions.
+> This device meets the requirements to be moved to trivial-rtc
+> (compatible, reg and a single interrupt).
 > 
 > Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 > ---
->  .../bindings/rtc/alphascale,asm9260-rtc.txt        | 19 --------
->  .../bindings/rtc/alphascale,asm9260-rtc.yaml       | 52 ++++++++++++++++++++++
->  2 files changed, 52 insertions(+), 19 deletions(-)
+>  Documentation/devicetree/bindings/rtc/digicolor-rtc.txt | 17 -----------------
+>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml  |  2 ++
+>  2 files changed, 2 insertions(+), 17 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
