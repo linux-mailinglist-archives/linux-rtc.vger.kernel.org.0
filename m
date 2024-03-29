@@ -1,48 +1,66 @@
-Return-Path: <linux-rtc+bounces-924-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-925-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D188892102
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 16:55:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EC2689212A
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 17:04:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E36828790C
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 15:55:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 972BA1C22DF0
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 16:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F34D6A347;
-	Fri, 29 Mar 2024 15:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FED654676;
+	Fri, 29 Mar 2024 16:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blQQS/ze"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="JjdG2ubE"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6BA5B1E6;
-	Fri, 29 Mar 2024 15:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385CF17E
+	for <linux-rtc@vger.kernel.org>; Fri, 29 Mar 2024 16:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711727727; cv=none; b=rituFX7wKtr5JDGVl4LmNgy4Mk/wxsC48bqdazUj7bB7bJovNsdDZOnW7WXUKw5faFhOispUbNPMvfe/nAyUbok8zMLkbECUyZVabq9fc/aiWT/3ks24dxCyObeAvkERxOF5xJyeaguUhvjXjSC746PLPDf4iT91ZaaVc+4s6h0=
+	t=1711728246; cv=none; b=JbM0FL+O2xW/BPi+x5yJarSjVSdyACKH2HO2yhfpMdtBPRfCUufJG6LJE2ahhQ/Ll1/1JfcNS6zCGpsWWWI01rkl6vFaR8YWPqxexCJcCMJ189Vds7It4ADspQ1vgjKCqR7UYB/8gMuiwUOUdSk/9Ytcah0/NboPF1dXtF2fFa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711727727; c=relaxed/simple;
-	bh=8QThFo/0MRq+6GYzg5ufLVNNjLX3N2qhGYo08JHWd2A=;
+	s=arc-20240116; t=1711728246; c=relaxed/simple;
+	bh=732K/XnBNH6TMeCPYvn8g4FYNQ0rWfv8ASum/ByW3l0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cc1d89kDvClGv+IO61jDaF1agmrxpSMnQ/USdilWvEaShYgO+S8lcSPwLtjg75YUVjVD/1bAxk9mfRApTNRdd06PNrRh9YZi8jAN5kRQbGp6zDxqQher0Gs6YclfDEy8AO0aCfvieFuh4g98elWTWMjcsC3Hjw/8RgNLDlcnVO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blQQS/ze; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E676EC433F1;
-	Fri, 29 Mar 2024 15:55:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711727726;
-	bh=8QThFo/0MRq+6GYzg5ufLVNNjLX3N2qhGYo08JHWd2A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=blQQS/zeN3+uXmnUMM3+vvTObyLgXtGaisN2WOrV+P+eMGnZnoXXKLINyoO6G+r6E
-	 Rav5i8To3y3KFJSJyZKEtW5x4saNmCbRfFkBPihys++bniGm07F4fiFdUSaFYmMAnv
-	 T1482wUb/ZmrE/DPkzzXwfAQ4EZ/E6AkYy8VF5bK5UnHa4O27nzc98Lt7snwRaFMLK
-	 SQNTZZDgmxUilQIWdMofF1BqWRnRqnRKJ+H63L+ZPQQZLZqq8uTdOpBZSJQdiT+hpm
-	 oXVOmfUVLbpXktGQUpl8wDQxg3M67dX7u4wsnD71+mvw4x9NQVceyg153dRybvxCzH
-	 CnGGgEZt4ec8w==
-Message-ID: <b927ea54-ba02-4410-8cc6-4f1258d03fce@kernel.org>
-Date: Fri, 29 Mar 2024 16:55:20 +0100
+	 In-Reply-To:Content-Type; b=X1sdOGYrkd2HaTnIbmtJqBCYjO+Qt8Xn5cn/G/6xQKJyFuBHEF6zw7JafO7vUBFy5ZIaAgCMTqJiSXV6LhXjpSgVC9rI27tm6yb/2v53oCew7uDd1M5RS8aD0oEVVdBDzDB1GdvpYEp7AQWXfg7VDgLsYvRsgPycyJvEHML95FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=JjdG2ubE; arc=none smtp.client-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
+Received: from eig-obgw-6010a.ext.cloudfilter.net ([10.0.30.248])
+	by cmsmtp with ESMTPS
+	id pgkvrLAVjl9dRqEhyr3UlP; Fri, 29 Mar 2024 16:03:58 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+	by cmsmtp with ESMTPS
+	id qEhvrR4AUQufZqEhwrQ5Xd; Fri, 29 Mar 2024 16:03:57 +0000
+X-Authority-Analysis: v=2.4 cv=eK4Vjmp1 c=1 sm=1 tr=0 ts=6606e66d
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
+ a=IkcTkHD0fZMA:10 a=K6JAEmCyrfEA:10 a=oz0wMknONp8A:10 a=vU9dKmh3AAAA:8
+ a=BvONN35OqgEy8-QZpXoA:9 a=QEXdDO2ut3YA:10 a=rsP06fVo5MYu2ilr0aT5:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+	; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=aHU8LaL+HMkC/1OFnSc7IMvxGqZxLbVRl1K9ttHFCuk=; b=JjdG2ubE8kQ0vnURdpRSxuFi9j
+	hew5YEwCvcFJQCeC1F0aVmXfPPtSWmpqayZ8wRSXMK4LrroQxU+LKk+YDDEDVJFxbE9AdPAig0mmP
+	JCl88WOOagVOfQC6lTcsILDnY0F5ObS/FxRa8Mn4rsTWI8d0LIRISmBNOnC03Favnjd+h6G9pbQmV
+	x4w0WPtv4JGyDaJ66k7xmoDjlptWQOKSnvG82dRwXJVk/pAGxNoCVEgxq9bq5nIbw3OgvMuemrJec
+	+BHyUIgie74lobCIO4mbIPhtfK1P4HPGRJqcbbbT//VfDwGVF7/sA4s/c6DD6ZgKKKIfURcUuPOq8
+	yFRhWkEA==;
+Received: from [122.165.245.213] (port=60658 helo=[192.168.1.32])
+	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <karthikeyan@linumiz.com>)
+	id 1rqEhu-001jxe-04;
+	Fri, 29 Mar 2024 21:33:54 +0530
+Message-ID: <1823735f-d677-4f5a-ae39-713f0c9b7777@linumiz.com>
+Date: Fri, 29 Mar 2024 21:33:50 +0530
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,79 +68,80 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/18] platform/chrome: cros_ec_vbc: provide ID table for
- avoiding fallback match
-To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
- groeck@chromium.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org,
- alexandre.belloni@bootlin.com
-Cc: chrome-platform@lists.linux.dev, pmalani@chromium.org,
- linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20240329075630.2069474-1-tzungbi@kernel.org>
- <20240329075630.2069474-14-tzungbi@kernel.org>
+Subject: Re: [PATCH] drivers: rtc: rv3028: check and update PORF flag during
+ probe
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240329075630.2069474-14-tzungbi@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ parthiban@linumiz.com, saravanan@linumiz.com
+References: <20240329101940.1424643-1-karthikeyan@linumiz.com>
+ <20240329102847fcdca1cf@mail.local>
+From: karthikeyan <karthikeyan@linumiz.com>
+In-Reply-To: <20240329102847fcdca1cf@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 122.165.245.213
+X-Source-L: No
+X-Exim-ID: 1rqEhu-001jxe-04
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.32]) [122.165.245.213]:60658
+X-Source-Auth: karthikeyan@linumiz.com
+X-Email-Count: 2
+X-Org: HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfBNQBpSwjROis7KDcbOY5cuUaJ1LGS0LuOH1awuTFKfqGwF6EXPvHktK9PlJMzjodVZ8fNkgcvCyAf58t0XJz5Qum0dKtghsQ+P122iLB7GzSCWs9+qG
+ I5Uxbh4iCHeTBoIKKCAp/HYBHQgZnTLU5vGAj2Y83j9Q1KJvY0R9nVATByyvEfodNF4ICk4gigUP0sygPmU/SqUQDOtXGftKP6Q=
 
-On 29/03/2024 08:56, Tzung-Bi Shih wrote:
-> Instead of using fallback driver name match, provide ID table[1] for the
-> primary match.
+Agreed. Thanks for clarification.
+
+Regards,
+Karthikeyan Krishnasamy
+
+
+On 3/29/24 15:58, Alexandre Belloni wrote:
+> On 29/03/2024 15:49:40+0530, Karthikeyan Krishnasamy wrote:
+>> PORF flag is set during power reset and voltage drop below Vpor
+>> data in rtc device is no longer valid if PORF flag is set
+>> and software must reset to 0, in order to perform sanity
+>> check on rtc data
+>>
+>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+>> ---
+>>   drivers/rtc/rtc-rv3028.c | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+>> index 2f001c59c61d..e9699ff0c4e8 100644
+>> --- a/drivers/rtc/rtc-rv3028.c
+>> +++ b/drivers/rtc/rtc-rv3028.c
+>> @@ -951,6 +951,13 @@ static int rv3028_probe(struct i2c_client *client)
+>>   	if (ret < 0)
+>>   		return ret;
+>>   
+>> +	if (status & RV3028_STATUS_PORF) {
+>> +		ret = regmap_update_bits(rv3028->regmap, RV3028_STATUS,
+>> +					 RV3028_STATUS_PORF, 0);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +	}
+>> +
 > 
-> [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
+> This breaks the workflow, you must set the time to reset PORF.
 > 
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
->  drivers/platform/chrome/cros_ec_vbc.c | 9 ++++++++-
-
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-
-Best regards,
-Krzysztof
-
+>>   	if (status & RV3028_STATUS_AF)
+>>   		dev_warn(&client->dev, "An alarm may have been missed.\n");
+>>   
+>> -- 
+>> 2.34.1
+>>
+> 
 
