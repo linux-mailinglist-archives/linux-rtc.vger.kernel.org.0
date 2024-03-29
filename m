@@ -1,69 +1,74 @@
-Return-Path: <linux-rtc+bounces-900-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-901-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 391388914EA
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 08:59:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97CDF89169E
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 11:20:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E21191F2318B
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 07:59:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 975B31C22071
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Mar 2024 10:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C7154BE0;
-	Fri, 29 Mar 2024 07:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8289952F79;
+	Fri, 29 Mar 2024 10:20:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W6Ro7Iyp"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="QWUo2zVz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B695142A89;
-	Fri, 29 Mar 2024 07:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4CA535A4
+	for <linux-rtc@vger.kernel.org>; Fri, 29 Mar 2024 10:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711699085; cv=none; b=W5z8j+YJEAGMSUziOkpEMi0WA0VbHM4Io+KFhr1f/L04CIn5hrH9DiUU+1CRW+xX7HKwmhFYqP3kYTk/YjNi6HO31DZ7W1pS8hFt7DRwbigR1myhgdqKYx0l1yEUUWduF95tHN1MsWAlqQozltP3X/Ay+XY38hR66MPkp7T2YOw=
+	t=1711707615; cv=none; b=FCYt3tK1vICC8S4qIN1KQVOgS5EWVwhk5YSJmyPcLvqWgM99a4plNKnBbFlizS8k8fkEa6P900EksNliJvycH9JMufyF8vjAonHobF2EkqITePUneJZbSB3YkrnvYdYYSZ3qcOoCBt14bMOxq6SVdtYdebWe/gBZeVnnvK4Lb/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711699085; c=relaxed/simple;
-	bh=/0ERKwQzbBcB03sGj+BkH3NQoyRfCHwh6GJ4EJSb/CY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IteTTMdtt33yvJUZ5vsr5/AqXjCAOTVjTRKiteTbqk2oC5JK2r4msrS72Xiwoai/2ltelwrGRMxH4fkzqEJsds+96QYdEimvjIlXEWu65aTO22opG5sqHAUXRqBxLoLeU2Fmzy0p1+vbPm6rusvBHS4TpsYVTdBN37zaf8FJj0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W6Ro7Iyp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88EAC433A6;
-	Fri, 29 Mar 2024 07:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711699085;
-	bh=/0ERKwQzbBcB03sGj+BkH3NQoyRfCHwh6GJ4EJSb/CY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W6Ro7IypfmmWT7+JB6cNSgt06PrnA0g9HQADZagCxBLlztHncSV7w6D4WThSgswst
-	 /cEg1NxBMmp/JmhYRSnp1pMsjTMEepimEnC4gLM6i5hDunE+9FThU2Nemev6020fZG
-	 FvYHgFezABxppwogbspyV0tRUzxgV6r1zb+gdyrZGGhNunruycYy4zphPgyFWdvXIv
-	 6CsMxQKPtVANGXFdlnOae7pCC0ujLvp84US4cghLp8CVfzRtFY9AIlxxgyvYHFSS+E
-	 bNgcf/igsA8CEvB2UnIv7BRu8Res/4KuF4JNjH/lw+sErxxaI0qID3tC4Vj62vxwBw
-	 lycphMMQ1P1/Q==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: bleung@chromium.org,
-	groeck@chromium.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	hverkuil-cisco@xs4all.nl,
-	mchehab@kernel.org,
-	sre@kernel.org,
-	alexandre.belloni@bootlin.com
-Cc: tzungbi@kernel.org,
-	chrome-platform@lists.linux.dev,
-	pmalani@chromium.org,
-	linux-gpio@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	krzk@kernel.org
-Subject: [PATCH 18/18] platform/chrome/wilco_ec: core: provide ID table for avoiding fallback match
-Date: Fri, 29 Mar 2024 15:56:30 +0800
-Message-ID: <20240329075630.2069474-19-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
-References: <20240329075630.2069474-1-tzungbi@kernel.org>
+	s=arc-20240116; t=1711707615; c=relaxed/simple;
+	bh=fuZByx8fzLgKEPKGZasvkuC5RywOXYCpi/Dnn5CXt2M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CsPfTtVceH0QfZrxZbDUDaFU/7GvzvfCpGjoDI1T2KCRf6AFf0QFISUdc887FJhE9Elt1CDuu3tm1J8pWvMQ2/s7/ma9mpEqLgYOlHNo/7oKDvnNOE0nZ2vrbzQ+83+14D7oVNDKbCKMkljLqOlWFktbuMsfkbfQus34kBJ1Y6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=QWUo2zVz; arc=none smtp.client-ip=44.202.169.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
+Received: from eig-obgw-6010a.ext.cloudfilter.net ([10.0.30.248])
+	by cmsmtp with ESMTPS
+	id pgkvrXEqQs4yTq9LGrTzMO; Fri, 29 Mar 2024 10:20:10 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+	by cmsmtp with ESMTPS
+	id q9LDrN3UzQufZq9LFrMPjc; Fri, 29 Mar 2024 10:20:10 +0000
+X-Authority-Analysis: v=2.4 cv=eK4Vjmp1 c=1 sm=1 tr=0 ts=660695da
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
+ a=K6JAEmCyrfEA:10 a=oz0wMknONp8A:10 a=vU9dKmh3AAAA:8 a=fbhHIwXGltMNw4B7xfYA:9
+ a=kn2rRUdfO8ZCmn3LMDoc:22 a=rsP06fVo5MYu2ilr0aT5:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+	; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+	:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=UBMulemZbzLE4JR+qzWiUaTzOCoEImChdUYi/0nrLrA=; b=QWUo2zVzH8RFssCyT7ReqUEgxQ
+	Bm1KEbEqkVhPypR7j2sbbgBaQSx9GWYbGENFRB+lPPSaxmpTPpAvV5DlH2d99bZVewKgaaEZyqCuG
+	kZn/Yib/ex1ZY4WA9JrGG22vC65YVlYyGzVxJL9jEQ187vAr6AJy56WKkYu7n3aQCN/sjuEIqblTa
+	41sUb2GNrZUG9osmiIrLHVfabpTjUuNPnFSowgzGuv8VHksQqe6+BFNc3YYnafAs9LEmYRVsuNIpl
+	6x+Dc5vQJmFiQ/vO1iUZuQcc5P7j/7ePhQU4ZscosVzdsKpQProrAOMD+RkJ35eKFC9HR6SJzdUDL
+	8dIkwQaQ==;
+Received: from [122.165.245.213] (port=37812 helo=localhost.localdomain)
+	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <karthikeyan@linumiz.com>)
+	id 1rq9LC-000Rqk-2q;
+	Fri, 29 Mar 2024 15:50:07 +0530
+From: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+To: alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	parthiban@linumiz.com,
+	saravanan@linumiz.com,
+	Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+Subject: [PATCH] drivers: rtc: rv3028: check and update PORF flag during probe
+Date: Fri, 29 Mar 2024 15:49:40 +0530
+Message-Id: <20240329101940.1424643-1-karthikeyan@linumiz.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -71,56 +76,56 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 122.165.245.213
+X-Source-L: No
+X-Exim-ID: 1rq9LC-000Rqk-2q
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (localhost.localdomain) [122.165.245.213]:37812
+X-Source-Auth: karthikeyan@linumiz.com
+X-Email-Count: 2
+X-Org: HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfNeHMApd4aviA2uAnkg91S4J6cFHdRNf8WzqPjIa/2lHYKTRZcMCEKJ7w7vjISLlo8xNUF5F2GDNqkfcGCZp7iNMdTrEWDttPfXMKL2l76ytzAW2TGiu
+ 5AYD+5yjDHS4v7YbPqHp0d/WJ0F2JDeICyr+1M4fOVYrYUU5wTwh21VcKCt13ldZtYtai/qRINZTTHpQbc58pO7s25bPhrJe2XY=
 
-Instead of using fallback driver name match, provide ID table[1] for the
-primary match.
+PORF flag is set during power reset and voltage drop below Vpor
+data in rtc device is no longer valid if PORF flag is set
+and software must reset to 0, in order to perform sanity
+check on rtc data
 
-[1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
-
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
 ---
- drivers/platform/chrome/wilco_ec/core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-rv3028.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/platform/chrome/wilco_ec/core.c b/drivers/platform/chrome/wilco_ec/core.c
-index 9b59a1bed286..3e6b6cd81a9b 100644
---- a/drivers/platform/chrome/wilco_ec/core.c
-+++ b/drivers/platform/chrome/wilco_ec/core.c
-@@ -10,6 +10,7 @@
- #include <linux/acpi.h>
- #include <linux/device.h>
- #include <linux/ioport.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_data/wilco-ec.h>
- #include <linux/platform_device.h>
-@@ -150,6 +151,12 @@ static const struct acpi_device_id wilco_ec_acpi_device_ids[] = {
- };
- MODULE_DEVICE_TABLE(acpi, wilco_ec_acpi_device_ids);
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 2f001c59c61d..e9699ff0c4e8 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -951,6 +951,13 @@ static int rv3028_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		return ret;
  
-+static const struct platform_device_id wilco_ec_id[] = {
-+	{ DRV_NAME, 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(platform, wilco_ec_id);
++	if (status & RV3028_STATUS_PORF) {
++		ret = regmap_update_bits(rv3028->regmap, RV3028_STATUS,
++					 RV3028_STATUS_PORF, 0);
++		if (ret < 0)
++			return ret;
++	}
 +
- static struct platform_driver wilco_ec_driver = {
- 	.driver = {
- 		.name = DRV_NAME,
-@@ -157,6 +164,7 @@ static struct platform_driver wilco_ec_driver = {
- 	},
- 	.probe = wilco_ec_probe,
- 	.remove_new = wilco_ec_remove,
-+	.id_table = wilco_ec_id,
- };
+ 	if (status & RV3028_STATUS_AF)
+ 		dev_warn(&client->dev, "An alarm may have been missed.\n");
  
- module_platform_driver(wilco_ec_driver);
-@@ -165,4 +173,3 @@ MODULE_AUTHOR("Nick Crews <ncrews@chromium.org>");
- MODULE_AUTHOR("Duncan Laurie <dlaurie@chromium.org>");
- MODULE_LICENSE("GPL v2");
- MODULE_DESCRIPTION("ChromeOS Wilco Embedded Controller driver");
--MODULE_ALIAS("platform:" DRV_NAME);
 -- 
-2.44.0.478.gd926399ef9-goog
+2.34.1
 
 
