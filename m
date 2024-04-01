@@ -1,130 +1,88 @@
-Return-Path: <linux-rtc+bounces-950-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-951-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF1C8936F8
-	for <lists+linux-rtc@lfdr.de>; Mon,  1 Apr 2024 04:30:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61F998937B4
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Apr 2024 05:11:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A5951C20B05
-	for <lists+linux-rtc@lfdr.de>; Mon,  1 Apr 2024 02:30:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 014551F2172A
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Apr 2024 03:11:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244223C39;
-	Mon,  1 Apr 2024 02:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 572C24A34;
+	Mon,  1 Apr 2024 03:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYZqSz11"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mm5oCHMM"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29C07F;
-	Mon,  1 Apr 2024 02:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DBA138C;
+	Mon,  1 Apr 2024 03:11:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711938630; cv=none; b=TCCiN7mQ3I0y0sSkhv1rLUrPo8GS1h6aNoObgQWK9pgVzWJ/JylHkoMSdGqOdmEhj656G/DusTQgAhtd48mvS7QFuNDL9CxgRySmFFLRv0mlxp02FDvHVFhH5yL1PW2CJSFsGl0pcy6jdVevojC/gqzEt5J1OzcVd07WQ8JwaR4=
+	t=1711941092; cv=none; b=W0gQWtm8QvnF6PC2Nej72Tcr677/WDG+/qbLJ7h05n4RD+35saWTLrcbunKDBvBrPIF/trUXRwzwtBXEkBJ4iT4e5ljWP79Z6e2nv+BlGI+diomeNwOZmwyRZ+cKV++csTKxWC0mS5YVp5/CDlp5GCh/0I0+sO80LZWNJs1FQKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711938630; c=relaxed/simple;
-	bh=gSDh6j0mPdh6Tj2aafDUWkyS+e7+NO1FN3memgDF1Yg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=C4zh9K7uuGEV3ZOj2Boc6Ze/HLdt6oR60hph93u0qg00d4F+8tQqzP1Gu0uBct4EKwT8ybZtjVb42D64jcqqqdjtLrqVDoSm2a1zE0LEEm47NPuQWm/q38sjl/o6WnN6yExBp0dUIIU0HOjzM7UQT9JHTq380kVCYdblj7Zos3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYZqSz11; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73C1DC433B1;
-	Mon,  1 Apr 2024 02:30:29 +0000 (UTC)
+	s=arc-20240116; t=1711941092; c=relaxed/simple;
+	bh=4vMlevL0VYNfLajuRPYgB2jzajxU3dD9vRrfIKDvjic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W2KQT/6myugit+c0QujdKD9AETXQqPRwnox6idZ/s4PybdYeS2bsW5G9fMKMVOp8HmZoLllFKzF/K/9K+Vaf8Mpl2G3B9rvQu6/2SpINf3if1dHrDmydgzwdLjXO6n8Xw/ND4bqFhz0Saoy/lYOee4WqC6Pf6ZbK2IDG/HxTIN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mm5oCHMM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752D7C433C7;
+	Mon,  1 Apr 2024 03:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711938629;
-	bh=gSDh6j0mPdh6Tj2aafDUWkyS+e7+NO1FN3memgDF1Yg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=XYZqSz11iTPXQBvEkCvp8h+uug23RL3NSbcZdlgUYGsKPiCQyFu0a5597q0WdXGsZ
-	 jqWwJSK5n15aKwUff7MT4AASjCXT5/blsp3mpcxW1ozUsw6tLEUrHOlm6Zfow/VMxq
-	 AZsIwdiESqCOa1PIkQSNAZds2qTaukPw/UaUWB23/LUnrP7Vhh8tDkYOvPMeF65U9Q
-	 p+J/mZ4tMvh6ZBMwVqH0B9Oo1CfmvChPc3+gW35T3k2GVE48Ofaoj2ybOEeLHi0Ck7
-	 AX1Pi998T6SBls9ExRcq3nYhMtqDthuX1WWO9pmch9/U5bbNMUG2spA1Cra970vzmW
-	 QqDE4DdXieiyA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6BBA8D9A152;
-	Mon,  1 Apr 2024 02:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1711941091;
+	bh=4vMlevL0VYNfLajuRPYgB2jzajxU3dD9vRrfIKDvjic=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mm5oCHMMBhw6AMloVj1sWWg8vk5E6y/OgXYqAHaE5OmhW6Zni8wkFlA3/FKzk0v2u
+	 7RhaPSa/xsooRdO6LaHhi2DwLZnLvQCjNSUgiKzfD/v0F5/eMbM5+XhpAzIVhBGFdd
+	 HEPwusABI7bhi8B1lfvXH60xE120PIRqH2ji6qL9Wb6Ft5m93w1GdKiR6eKp8rYAPX
+	 42/Vn2wq2ShYhnGKe9WjGle1ZHTADNlQPmkxNQ1DWzo1e4JdtRQB+7J00SzCuaVknm
+	 PAqgdMoymK3s/nB36n2zOksTl+R0heltN9Y178T7gt7Cq75r3txo/LLEjELALwhCT5
+	 mhsMz2R3FW9mg==
+Date: Mon, 1 Apr 2024 11:11:27 +0800
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: bleung@chromium.org, groeck@chromium.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, hverkuil-cisco@xs4all.nl, mchehab@kernel.org,
+	sre@kernel.org, alexandre.belloni@bootlin.com,
+	chrome-platform@lists.linux.dev, pmalani@chromium.org,
+	linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 14/18] platform/chrome: cros_kbd_led_backlight: provide
+ ID table for avoiding fallback match
+Message-ID: <Zgol3-ZLbqBx-oIN@google.com>
+References: <20240329075630.2069474-1-tzungbi@kernel.org>
+ <20240329075630.2069474-15-tzungbi@kernel.org>
+ <680ff14e-97b8-4baf-a2a3-a5b7859517f9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/18] platform/chrome: provide ID table for avoiding fallback
- match
-From: patchwork-bot+chrome-platform@kernel.org
-Message-Id: 
- <171193862943.2149.8328845003202233556.git-patchwork-notify@kernel.org>
-Date: Mon, 01 Apr 2024 02:30:29 +0000
-References: <20240329075630.2069474-1-tzungbi@kernel.org>
-In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: bleung@chromium.org, groeck@chromium.org, linus.walleij@linaro.org,
- brgl@bgdev.pl, hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org,
- alexandre.belloni@bootlin.com, chrome-platform@lists.linux.dev,
- pmalani@chromium.org, linux-gpio@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rtc@vger.kernel.org, krzk@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <680ff14e-97b8-4baf-a2a3-a5b7859517f9@kernel.org>
 
-Hello:
-
-This series was applied to chrome-platform/linux.git (for-next)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
-
-On Fri, 29 Mar 2024 15:56:12 +0800 you wrote:
-> Inspired by [1].  Turn all MODULE_ALIAS() in ChromeOS EC platform drivers into
-> proper platform_device_id table and MODULE_DEVICE_TABLE().
+On Fri, Mar 29, 2024 at 04:53:48PM +0100, Krzysztof Kozlowski wrote:
+> On 29/03/2024 08:56, Tzung-Bi Shih wrote:
+> > Instead of using fallback driver name match, provide ID table[1] for the
+> > primary match.
+> > 
+> > Also shrink the name for fitting to [2].
+> > 
+> > [1]: https://elixir.bootlin.com/linux/v6.8/source/drivers/base/platform.c#L1353
+> > [2]: https://elixir.bootlin.com/linux/v6.8/source/include/linux/mod_devicetable.h#L608
+> > 
 > 
-> The series is basically looking for drivers from:
-> - `struct mfd_cell` in drivers/mfd/cros_ec_dev.c.
-> - grep -R MODULE_ALIAS drivers/platform/chrome/.
-> 
-> [...]
+> I think this should be two commits, where the first one is a fix (Fixes
+> tag) for the size of name.
 
-Here is the summary with links:
-  - [01/18] media: platform: cros-ec: provide ID table for avoiding fallback match
-    (no matching commit)
-  - [02/18] gpio: cros-ec: provide ID table for avoiding fallback match
-    (no matching commit)
-  - [03/18] rtc: cros-ec: provide ID table for avoiding fallback match
-    (no matching commit)
-  - [04/18] platform/chrome: cros_ec_sensorhub: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/12e981d4d643
-  - [05/18] power: supply: cros_usbpd: provide ID table for avoiding fallback match
-    (no matching commit)
-  - [06/18] platform/chrome: cros_usbpd_logger: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/2b895835bd56
-  - [07/18] platform/chrome: cros_usbpd_notify: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/522b9910fa25
-  - [08/18] platform/chrome: cros_ec_chardev: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/e4d063f262df
-  - [09/18] platform/chrome: cros_ec_debugfs: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/e26205b5728f
-  - [10/18] platform/chrome: cros_ec_sysfs: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/6e92e7f792eb
-  - [11/18] power: supply: cros_pchg: provide ID table for avoiding fallback match
-    (no matching commit)
-  - [12/18] platform/chrome: cros_ec_lightbar: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/4f6b823b5caa
-  - [13/18] platform/chrome: cros_ec_vbc: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/883030dae2d2
-  - [14/18] platform/chrome: cros_kbd_led_backlight: provide ID table for avoiding fallback match
-    (no matching commit)
-  - [15/18] platform/chrome: wilco_ec: telemetry: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/b17dd111645b
-  - [16/18] platform/chrome: wilco_ec: debugfs: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/c0649ca22fe8
-  - [17/18] platform/chrome: wilco_ec: event: remove redundant MODULE_ALIAS
-    https://git.kernel.org/chrome-platform/c/fc87ba8e4525
-  - [18/18] platform/chrome/wilco_ec: core: provide ID table for avoiding fallback match
-    https://git.kernel.org/chrome-platform/c/d8db2c6d7b0e
+Splitted to 2 commits in v2[3].  It doesn't include a Fixes tag as the compiler
+complaints the oversize only if putting the original driver name to struct
+platform_device_id.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+[3]: https://patchwork.kernel.org/project/chrome-platform/patch/20240401030052.2887845-6-tzungbi@kernel.org/
 
