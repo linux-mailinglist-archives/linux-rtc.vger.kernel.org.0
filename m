@@ -1,160 +1,151 @@
-Return-Path: <linux-rtc+bounces-972-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-973-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B35D89BB7F
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 11:20:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2D6889C8D8
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 17:53:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1271B24045
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 09:19:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 550ED1F254F3
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 15:53:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F41A446A9;
-	Mon,  8 Apr 2024 09:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEEEE1420D2;
+	Mon,  8 Apr 2024 15:53:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="T1DeOK/Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J2eiPAPK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D805B3F9FA;
-	Mon,  8 Apr 2024 09:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1051420A9;
+	Mon,  8 Apr 2024 15:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712567989; cv=none; b=QJVBp7mpKwp4nq6wA5Ja8wDMQm2C6mBr5sRWgSuuhPTx2xpiruAVjfXPY8MyYQugMbBf8JBBgk6dCYgpDWj4i9zpqvDmIMDqgg3r3YfT97aoQI0DwsJaHiQ0NnYYmu/8Zb+c5rhOkKQdIb7REB4/yQpd/N5TWzF/TM377sY/VLM=
+	t=1712591592; cv=none; b=KPDASXCBHX3FcTJNn5sqktQtS6r3ULjaccife3Ll9JlGrSCUSRfKCkP+sJC/ZtunsBNZ4geUAydTimCuUZ/YgzlBCUEWI7pHTyfkhqcOlzghy/Tvw1CYUVqzHfVrj6C6bikXFFAN2PLSbeD0Z+imWw7N29S4Z7ly9KiMsSjlm8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712567989; c=relaxed/simple;
-	bh=ofbbhjOcn3gokpPZJXWug0E1Se7nblKWJlzQsqVrdiw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NnXGmOYq3mKArgG/egXW+mNXBs8xnKUXYUlo7yJ+Jj6+P+/y5vcVpTnvcoaoJtPL1WEKU6hl36sBb0gk7iY4qGvCgy+SmCcPZgK3z3QkUdIsSXIk9zzCXBS90iE5XzWwIySumEDy7ECf5j5ajsNV90BxwdoeN3zjK1VTEgPz8nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=T1DeOK/Z; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4386c1Tu030644;
-	Mon, 8 Apr 2024 09:19:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=bxHJFz7JARPgNmGRmpA2i8VMFIvKy301v4ZlZfnTBK0=; b=T1
-	DeOK/ZUTBxQfvCbOOeQQIayXgxxP1mI5Ly29rR/KfcvPSkh7Gon8QugU3JOj7joM
-	LPbBsfUqhu/fvzCyRVekc/o06yvSARfiWESBWFdAHf27MZjn2boZVTswB+iv7nAL
-	Ofpl2UbyvmbUB0kF6OeBh7yklev3CRQJaGtEyUUA4vzHhvYvXy0Ui/57iZ5RA7Kw
-	AC2tAefUBShpj9JSATUHBwpwOmrHK+wVr+HKnMqOMMsju2LRO/pSB+COqrb8uonp
-	WY3mcRrO2sPHXJ2PnETGnjg1oTRZFCz8lXbwOKhZxhlOC9NtuvZa/jaRvWGCuD/r
-	yGKlRKhlGIGpFVBNpl3w==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xcbg1ga73-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Apr 2024 09:19:42 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4389JfQL006266
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 8 Apr 2024 09:19:41 GMT
-Received: from [10.238.176.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 8 Apr 2024
- 02:19:39 -0700
-Message-ID: <7c13cb26-0a0d-b73e-443a-b83264cf482b@quicinc.com>
-Date: Mon, 8 Apr 2024 17:19:36 +0800
+	s=arc-20240116; t=1712591592; c=relaxed/simple;
+	bh=paSRMDlNckWuA66r0WKViWnghhZr2E5Sml0Yhn2MVmA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FJ+Sgf0Qdd85zDoCCnBdCN373oCXsmT2b7eYloeaqGH2XIYSLWK9IvIFjG/nZrGgghnoWKIshjSrw0bnRKbydMk7ly7bAaA2rT6cfdMeqd9EucJ9FqzUTGGtv/P/4QYBs1Yu10WWe1l0nvvLSrSHiRVxuaeNmvV6qT55yZQLnkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J2eiPAPK; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-516d6e23253so3175169e87.1;
+        Mon, 08 Apr 2024 08:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712591589; x=1713196389; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xVLdz4RCZPpmOoRrLeAZgIbqKfFqmRWvMYiTDdq2jAw=;
+        b=J2eiPAPK+hgXMUWxjJn2lh60J7bxKloBuB2Y6XLKm+9HAM+DW3iagAqz/nHbUPdA11
+         bvehRGtq06yoQQwAlCizv04fuvzBXhhwkK7fflHMCQXMb/mPVXj0lVrN3sTmSdC0I4Um
+         gfud9VfyHYv3WLdU+jk4W9wW5fB/RHwSol91Byxk30x2hFNbAIAJbC/fij+rNNgajz47
+         cqFnQR14D9vqz/fFkI2iRgQyq+CP3TN7Jk1U+s4TtYiJTV9r2/E9aPTiM/oRrVJvgQAu
+         3Z2j8Y4uwdGf2d50GrVHEAJoC9+tbmnkBhveO186hH06SkMAczfhkfVz/WDhDGDM94uh
+         kkRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712591589; x=1713196389;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xVLdz4RCZPpmOoRrLeAZgIbqKfFqmRWvMYiTDdq2jAw=;
+        b=ASBgrK9NVSG2tmFEDFy7eceW/aRmhaFh0jARiUR58pfhjSqWDwjyZMEBF7xL8/OC50
+         puCsjIXvGXg1C49WDdcF4ZCZirVBWWULnwf6AyMhM6tKEX3jjAWe5xZRGPI6sMPC2xsk
+         Qup+ecH8x+rNQ/nTGeFgmYcl/0YSFOTcK9S9lLlcYdxRGQ/vvDd4sCtPRBxCGgVG4DEh
+         y2mByIqGNiSQKC1Ygg7NxZPelhog02Y485YIxl94qMXdhUrCkAKIEpPK1k+L0N0GTXDT
+         C6ZX9LKNCV3Os40N8uAxUN/exML8d70ELXFzOop2heFnpnemKMWvMlrmtln7Xqa1ulCM
+         GWfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX9+2f1h56yW+i1D4xtOxegpxazdNz8DIlBitISSc9Z+4Wwa50ORerdmZGo69WezzHxFLKHGuJSl+tc+yJVQAc3Fs19esx0XSYSGxj27rpzvL9HalMwYCx8Jsecn93cTotNVBFWXfUf0A==
+X-Gm-Message-State: AOJu0YziImzfKyT4BRiC9qYyHt+d46K7Yinxof0CUktI/1ZVFaqijkCd
+	XkEMFJnGq/U7EGlH2p8zzMkFqEPHfgPJfYa2ZF2PKuhZZbRr+fbT+hkLI7RtaQ44tA==
+X-Google-Smtp-Source: AGHT+IGzkzf5ZrBVW/uel17iRj5iBd72o+sCS+boDhbrVpfv/k6Y+8z0gJzljcMw4rpZZlrNTvlNDw==
+X-Received: by 2002:a05:6512:48d3:b0:516:d4c2:5410 with SMTP id er19-20020a05651248d300b00516d4c25410mr6728199lfb.64.1712591589101;
+        Mon, 08 Apr 2024 08:53:09 -0700 (PDT)
+Received: from [127.0.1.1] ([213.208.157.67])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170906794d00b00a46a2779475sm4547849ejo.101.2024.04.08.08.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Apr 2024 08:53:08 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/9] rtc: convert multiple bindings into dtschema
+Date: Mon, 08 Apr 2024 17:53:00 +0200
+Message-Id: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V4 2/2] rtc-pm8xxx: Correct the value written into the
- PM8xxx_RTC_ALARM_CLEAR
-Content-Language: en-US
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Alexandre Belloni
-	<alexandre.belloni@bootlin.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20240401-fix-rtc-alarm-which-fired-before-driver-probe-not-be-cleard-v1-0-aab2cd6ddab8@quicinc.com>
- <20240401-fix-rtc-alarm-which-fired-before-driver-probe-not-be-cleard-v1-2-aab2cd6ddab8@quicinc.com>
- <Zg9mKnPrhTTNafdb@hu-bjorande-lv.qualcomm.com>
-From: jianbin zhang <quic_jianbinz@quicinc.com>
-In-Reply-To: <Zg9mKnPrhTTNafdb@hu-bjorande-lv.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BjYveIFvFL8tZJy-Em57oF0k8eeVD6Gy
-X-Proofpoint-GUID: BjYveIFvFL8tZJy-Em57oF0k8eeVD6Gy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-08_07,2024-04-05_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- impostorscore=0 adultscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
- definitions=main-2404080072
+X-B4-Tracking: v=1; b=H4sIANwSFGYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDEwMz3aKS5PiUkuLkjNTcRF1jAyMLI5MUw9RkIwMloJaCotS0zAqwcdG
+ xtbUADZmsIV4AAAA=
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+ Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>, 
+ Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-aspeed@lists.ozlabs.org, linux-stm32@st-md-mailman.stormreply.com, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712591586; l=2339;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=paSRMDlNckWuA66r0WKViWnghhZr2E5Sml0Yhn2MVmA=;
+ b=GAJVhgkJAZP0MyB/TYi4TIjAYjqRazVZe7IXvjdW4YgRzeNyvEn4Ew/bDpudVVhHq2CSqzfUY
+ +sNcF1axU/XCPPo3HkltSviKDTQIXOLzo27aEU2RSX7PEaEuMfS/VOD
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
+This series converts the following bindings into dtschema, moving them
+to trivial-rtc whenever possible:
 
-On 4/5/24 10:47, Bjorn Andersson wrote:
-> On Mon, Apr 01, 2024 at 09:56:30AM +0800, jianbin zhang wrote:
->> Writing 1 to the PM8xxx_RTC_ALARM_CLEAR register is expected to clear
->> the triggered alarm status. In patch v2, the value written to the
-> I'm not sure what "in patch v2" refers to here.
+- orion-rtc: trival-rtc, referenced in arm arch.
+- google,goldfish-rtc: trivial-rtc, referenced in mips arch.
+- lpc32xx-rtc: trival-rtc, referenced in arm arch.
+- maxim,ds1742: trivial-rtc, not referenced in arch, cheap conversion.
+- rtc-aspeed: 3 devices to trivial-rtc, all referenced in arm arch.
+- pxa-rtc: add missing properties and convert. Referenced in arm arch.
+- st,spear600-rtc: trivial-rtc, referenced in arm arch.
+- stmp3xxx-rtc: convert, referenced in arm arch.
+- via,vt8500-rtc: trivial-rtc, referenced in arm arch.
 
-Thanks for reviewing, "In patch v2" refers to https://lore.kernel.org/lkml/20230202155448.6715-4-johan+linaro@kernel.org/ which siwtch to use regmap_update_bits.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (9):
+      dt-bindings: rtc: orion-rtc: move to trivial-rtc
+      dt-bindings: rtc: google,goldfish-rtc: move to trivial-rtc
+      dt-bindings: rtc: lpc32xx-rtc: move to trivial-rtc
+      dt-bindings: rtc: maxim,ds1742: move to trivial-rtc
+      dt-bindings: rtc: rtc-aspeed: move to trivial-rtc
+      dt-bindings: rtc: pxa-rtc: convert to dtschema
+      dt-bindings: rtc: spear-rtc: move to trivial-rtc
+      dt-bindings: rtc: stmp3xxx-rtc: convert to dtschema
+      dt-bindings: rtc: via,vt8500-rtc: move to trivial-rtc
 
-> Also, as with patch 1, please fix your subject line and use internal
-> review list.
->
-> Regards,
-> Bjorn
-Sure, Will fix the subject line and use internal review list in next 
-patch version.
->> PM8xxx_RTC_ALARM_CLEAR register in the trigger function is incorrectly
->> written as 0. So correct the value written to PM8xxx_RTC_ALARM_CLEAR
->> register into 1.
->>
->> Signed-off-by: jianbin zhang <quic_jianbinz@quicinc.com>
->> ---
->> Changess in v4:
->> - add the cover letter
->> - modify the patch to conform to the specification
->>
->> Changes in v3:
->> - Correct the value written into the PM8xxx_RTC_ALARM_CLEAR to 1.
->> - link: https://lore.kernel.org/linux-rtc/20240319191216.GB3796206@hu-bjorande-lv.qualcomm.com/T/#t
->>
->> Changes in v2:
->> - Switch to using regmap_update_bits() instead of open coding
->>    read-modify-write accesses.
->> - link: https://lore.kernel.org/lkml/20230202155448.6715-4-johan+linaro@kernel.org/
->>
->> Changes in v1:
->> -link: https://lore.kernel.org/linux-rtc/20230126142057.25715-4-johan+linaro@kernel.org/
->> ---
->>   drivers/rtc/rtc-pm8xxx.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
->> index e4e2307445cf..806c99cdac9a 100644
->> --- a/drivers/rtc/rtc-pm8xxx.c
->> +++ b/drivers/rtc/rtc-pm8xxx.c
->> @@ -391,7 +391,7 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
->>   
->>   	/* Clear alarm status */
->>   	rc = regmap_update_bits(rtc_dd->regmap, regs->alarm_ctrl2,
->> -				PM8xxx_RTC_ALARM_CLEAR, 0);
->> +				PM8xxx_RTC_ALARM_CLEAR, 1);
->>   	if (rc)
->>   		return IRQ_NONE;
->>   
->>
->> -- 
->> 2.43.2
->>
+ .../devicetree/bindings/rtc/fsl,stmp3xxx-rtc.yaml  | 45 ++++++++++++++++++++++
+ .../bindings/rtc/google,goldfish-rtc.txt           | 17 --------
+ .../devicetree/bindings/rtc/lpc32xx-rtc.txt        | 15 --------
+ .../devicetree/bindings/rtc/marvell,pxa-rtc.yaml   | 40 +++++++++++++++++++
+ .../devicetree/bindings/rtc/maxim,ds1742.txt       | 12 ------
+ .../devicetree/bindings/rtc/orion-rtc.txt          | 18 ---------
+ Documentation/devicetree/bindings/rtc/pxa-rtc.txt  | 14 -------
+ .../devicetree/bindings/rtc/rtc-aspeed.txt         | 22 -----------
+ .../devicetree/bindings/rtc/spear-rtc.txt          | 15 --------
+ .../devicetree/bindings/rtc/stmp3xxx-rtc.txt       | 21 ----------
+ .../devicetree/bindings/rtc/trivial-rtc.yaml       | 18 +++++++++
+ .../devicetree/bindings/rtc/via,vt8500-rtc.txt     | 15 --------
+ 12 files changed, 103 insertions(+), 149 deletions(-)
+---
+base-commit: fec50db7033ea478773b159e0e2efb135270e3b7
+change-id: 20240406-rtc_dtschema-302824d1ec20
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
 
