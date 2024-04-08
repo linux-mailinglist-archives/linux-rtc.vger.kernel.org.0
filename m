@@ -1,227 +1,179 @@
-Return-Path: <linux-rtc+bounces-969-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-970-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF2D89B744
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 07:49:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A51689B746
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 07:55:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D4511F21518
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 05:49:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 914E11F21586
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 05:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A67A79D2;
-	Mon,  8 Apr 2024 05:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34F4B79F0;
+	Mon,  8 Apr 2024 05:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="JKGDZ3H4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tvRVasim"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2124.outbound.protection.outlook.com [40.107.13.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC77D1773D;
-	Mon,  8 Apr 2024 05:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.13.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712555382; cv=fail; b=R1LPA9rkDJkXh3bS0DTvAEzBkToNa2opKs8LoT2Z0/Hy2zf+IwQIL1mP1j3wmdCBUB0P+uxGx3Jf5PSfTbtvlX3XUcvAp0DyZPzBdt0Xh5l/mOaVex3190XPnRsueExhMg95tgs6ZO9+RViiZfW2N01kozdrI16yDgyWYJsiFkA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712555382; c=relaxed/simple;
-	bh=D5ahDcSDk7gHN9GOAff0np6Fjzs44f0OybgE+ki/ixE=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=FAdPH1C7co1DthSimCoCkRhRLU0m47mFEU1CYIxIHN0jpn0bHLjQHChCOmxbX/E2ug8WlsbUpfe2k6h4nIT2GixvjMFuq10URitVFe6vPFgtYcSRC1qg8/OD9mGUvyHuJ+e9TRR8YtrAwqJK/7AYi1FGwJd/s50RNhaukkWNJqs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=pass smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=JKGDZ3H4; arc=fail smtp.client-ip=40.107.13.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BTF01GKwFl0e2RYkUDThj+4W4KjsHBgorNRICK6X/Q18dJ/h+84sr9QkIHn+RnMVaI8Py2zpZKiqGHrwITlBD/Gs9QfiCM3C/XMXyx/ObVwAanF8748Vlbc/xetnux5Y1428cySHEHH/Q1+lGezhsgMzTwZn9eVkiEh13SFb27EfTQ5POf6CNVP3mNDSdmYxpiKLJ/Ud/ZtRf0C5vLf73fhXYdKgdWS0fwq2N4NOUyQ77wzRih/N8hvPXXajVDZ6/sQDsgEZ0dXW+Nm1zuC7rKpk3VRv3ezy1mQxEQMUPnHTGVmdV4sJ58pvPptmGhxySDa14LznrfzbuhG2658ukQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7R74q/PYwo8E7ftL5fEKBrmr7hTWP/kQVWOlMEznQmw=;
- b=RAd1sd/zFH/MtyNvwHi6iWZshSx6sUcpIZPw/Rp6tAjkZ/GyXZIHA3xAHDIkgFNWJhtAjvXlQKH1g4iX8wMM/HzynbqscdVxACfISG8pcy8l9FJ859fo3ZKWA7RVt8mtuAazfQ28Lab+9txpbvKVGeB03KRgkodkG6ZKCA1B5rDjqG+ZFsJY0HiOJm4GiSRJVU4RkcaGgmiwlphe+NKChll2losTPepZNik2gu3bcX7qp3lE7THxku2JvMIOvIliPwXyBupchcso5zP/NwH7BON6aEOcbj+uWa7Mld3pFuv1dfoJsephOxOoon18bGiNCKPu44KhUsU+CqRxYODmhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
- header.d=mt.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7R74q/PYwo8E7ftL5fEKBrmr7hTWP/kQVWOlMEznQmw=;
- b=JKGDZ3H45Z5iSAF6qA+X5S7ZULxVEqxQ+scNjSwX++OCo1mT850ub5lT+LegUmERRuzyhe+1iY5tbijCD0ISl0P3ggHOqss5Q5nxEKeyvUBd0ptupVIrcAiKc0WRLW68Ymk2qd3nXzS1gSsO33hIzV/6b8rzIxURPpbgz9vs75Ms7x5alndkjF5+QqwmHYlIH8SdeUz64x2r4eYuPy8kwsuChzugTXAsEsZH1B+0OA9W/FNyZcWOFZT6eq54bzzmm6A4/Oh0DI+M7L/LLybqMtOsS6Yb95IDBj/OXrA/ZtUFRYIHn73NMKbnPzIe36d6KhV6H0iBdXwFk1rrpchZsA==
-Received: from DB9PR03MB7513.eurprd03.prod.outlook.com (2603:10a6:10:224::17)
- by AS8PR03MB8498.eurprd03.prod.outlook.com (2603:10a6:20b:53a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Mon, 8 Apr
- 2024 05:49:35 +0000
-Received: from DB9PR03MB7513.eurprd03.prod.outlook.com
- ([fe80::99b5:2449:1fc2:b78e]) by DB9PR03MB7513.eurprd03.prod.outlook.com
- ([fe80::99b5:2449:1fc2:b78e%6]) with mapi id 15.20.7409.042; Mon, 8 Apr 2024
- 05:49:35 +0000
-From: Markus Burri <markus.burri@mt.com>
-To: linux-kernel@vger.kernel.org
-Cc: Markus Burri <markus.burri@mt.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH v1] rtc: pcf2127: configurable power management function
-Date: Mon,  8 Apr 2024 07:49:26 +0200
-Message-Id: <20240408054926.3994-1-markus.burri@mt.com>
-X-Mailer: git-send-email 2.39.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZR0P278CA0073.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:22::6) To DB9PR03MB7513.eurprd03.prod.outlook.com
- (2603:10a6:10:224::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA6C79D2
+	for <linux-rtc@vger.kernel.org>; Mon,  8 Apr 2024 05:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712555714; cv=none; b=MRZPCxT1l3+b+ZKY16cAnVNA8Y5ZyT6yak86/99R8xs0AzOWHchMKmp/D4zMfoqMXW4XSrpfDNgF9vqtV4lqJs89BUyuV4oZdY8lKV2pWwnr4D9AQj3CQby7009aoYTOVSykE8y32wMnxx0yylQ0ocCjfv1MljigfnMr7eKiUgM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712555714; c=relaxed/simple;
+	bh=jcoIomp/z6kD9KMZlxXtkgrBsId7jYabDWZvbuXZvAQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZHtGQAO8E+6s007w+2/+kUc7E7WgkfOk49JOK4C7Y/ZwqRR+T2E1VmAjYlFgtBYI/zfPBwTavJsz+lMiJM30kQQ+ZtT3YxGz4CrYLXhnRrGDYba7hS0SfmUim6YPoKSZgkTxxLPf3zmheSyae+lTHD9VkxKYj8++CBk0jYtzV+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tvRVasim; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56e4a148aecso1103941a12.1
+        for <linux-rtc@vger.kernel.org>; Sun, 07 Apr 2024 22:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712555711; x=1713160511; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=C++ToI958gqnXfhfFAlqE16hWGsT6uqgEY4ZriDanL4=;
+        b=tvRVasimfpfPR/dVTz1R6vDQLdaUkXUWqvif+CScR/dP+RhdzJfLtiwIAT7Jy+gUWj
+         WJ/OJPsOmzJvXns6vBr6o0tQY0Fvw7ahFaGvByPl1v223QvxFN3BnTeCWEP8TBvjYD+A
+         yXuaCoEVcDhWTmpiK1ToW5qU+WoVOZ0F2i2twilnUKkortSE7u+m7/hl6rzPViJT1lyp
+         603MJURzuBawThfma5dOuldqB56D+qaAqOv5k/iNkuABkqZduty5KZ9kVZplhiNoNHkV
+         skS9f0HQkr/Qe/lndX2QQrqVfdTZj+qv7ApbCU0fmqn7JJxE9wr0C7L6GN40HyN9Ex8j
+         t9bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712555711; x=1713160511;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C++ToI958gqnXfhfFAlqE16hWGsT6uqgEY4ZriDanL4=;
+        b=olHTBbkk6bqhI9A924UqmwvNBkLuF8Xmantq2gM6gekcsgl+VgA39JYykQEK/MuTl2
+         EccwCS/zfrtUFcJ55sP4zAT56/Fq6jbMHw4Jx4luSJkzGSDTi9zUBwVzlC1abnB6ro/Q
+         yy8l/Yh0R5mRS1bLm3NOwGuRIFl8BBDm/gogyCC+YpUb3qBgSS52P5izE0ppcWsp7E1P
+         moyyidRAUcKetV8AK2exg5tkk/PfzZ17bQmDpyrzPaCeYhqsrKXUCV2vdXUgWO1bUCGx
+         mK1uhM/JCtYrXLPw9arp7Akwx/TuIpB0lHCtwE5Fzu8z4+nLge5ew/X1ExfSEeoF8uxN
+         t94Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV8cfg0ZsyGUz16JCrr6plKYawiMJm+JsD6cB8h+BcbapkSv+A3Pifmb1N5el1XlUeA12DWZaomTBGrSMshO5pkm9gQDgws35yJ
+X-Gm-Message-State: AOJu0YwWNcq5oBOkLFa+uUfIEtaqjqKyJpaPdc4AfrKJj4hMdgNYxxbO
+	nIZITEbLIvFDfZCOOXAlbZ4qeAH89VOBKC39L1KLt4lk7vOXr+tbSgB3+VBz5pg=
+X-Google-Smtp-Source: AGHT+IHg5RpKdnO/NhaYi3t3QkFGhwgzVkVzdw/kxI5hQtKos19dkXtEeugqLBmNVOOE08hvO400fA==
+X-Received: by 2002:a50:d60f:0:b0:56e:2452:f864 with SMTP id x15-20020a50d60f000000b0056e2452f864mr5799865edi.35.1712555710875;
+        Sun, 07 Apr 2024 22:55:10 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id j23-20020aa7c357000000b0056bf7f92346sm3696581edr.50.2024.04.07.22.55.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Apr 2024 22:55:10 -0700 (PDT)
+Message-ID: <3a60c2e8-1eea-4d04-96e7-965db96e8bb6@linaro.org>
+Date: Mon, 8 Apr 2024 07:55:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR03MB7513:EE_|AS8PR03MB8498:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	oMkc/vyKeUdm9X2V+Curiq3tty/oO11B5Pm4+Zp8EcLHRoscuzYY8cb7JZt6St3prG8dZ6SnZBEKb+4Eg5qJfsE7nbNkQiz1uweQYSSyw8u426uCHW0AgFgj+nHRiSkJAl5mc/3xzryvtBrNZLtaRxGspIjp1Awe59ynv4Almk2q+IvzJLHVQl3FDRK+7gnCURge0sNS0xbO9x4W0brZaAIh5x3FeHoDUD4p+HK6oYLLnS0EKyhHzL87gp8NhteJiW14FHJYH5pctnTFtMlu88mYAAM/gH9PEXz4Xf4qJhcxHlL4oBvBuPZ4FRmRuhz0f4YIe6pCadOoroJ5WKl9vqgqo3usbmOyV9/lrKOMPgj+RUQAbNTXv6JNJ3TOvGAcZeD8qvyTACJMFJQS9cfuxK3llYUM7cXteND3CrC+y4HxnW3yWndJENRyVj3krpaLfJmmwa+zr44oJRMhn+sR3nvtJ+3mHWlyV09yqsbJqng+Y/l7d8Ek1Ls7/5SnFA0uQefKwiv6k4Vz7UELd1OIFnoDROodtfep9VpdXdnscXkIkkXKZGdNtOBo3w0COC3cKE2Z1w2TKhW7kraHxwzmWD1uqBoLMCJTjdY5Y0uFXQOTfKmuGf+AWBki+Bq7DTZWXQUj/+Z3NwRRWkaPLuvV6PUs2cGmfDayJaDAstuRc/NjPe2NoXy+aibDXpsK+q6JIR1rrvpqBx8wfKbBim6hZTTc94lGdczBGXKDOQLIoUs=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB7513.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(52116005)(366007)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?musl8BnmQigEcE1n2hNU+w+SOI0NZ2niBJt6qz+Fto6zo0UuPEs01PnLoieO?=
- =?us-ascii?Q?4ee8zhmf6+dOlDYvr9EieZ5zi7gH1NpuMAFZzHcQULTrWR/D9sm1zHZpQqkH?=
- =?us-ascii?Q?0SkUTYEkFk6veku8GvWY08lK8IyWeAZlwxlN/0UfQFMhTOrwJSPgXzzVUbrm?=
- =?us-ascii?Q?vbWUi5YBLVmmopTGR5w+quwxg0206NM6gvFkMnZ9N2fTKa/c7lk4uwlq08I7?=
- =?us-ascii?Q?SNwDsSX6CpxNiCkn/rMDqfC/NhWG0J72L01pWnefdeSAFrLTN6AimPE0qDrE?=
- =?us-ascii?Q?gorRLF1Vktp7NyjIWWJdwPlLnJnFe9ysrCeit0bsvowVDDnI+ME9j2DTi6co?=
- =?us-ascii?Q?+xQohxBh5h+d4YNJVvxQXSus725JW/L9lYDIc/02o4S+o/deAvANktaOQeKK?=
- =?us-ascii?Q?H7wqiwW7YsL/AnvuCYc43/T4Yg/i9y5vykirWPvNT+byDV3LiOLUGlI9mRmy?=
- =?us-ascii?Q?y5TiNY3nfoK2zxR6k3J32wIcfDD10C9XxOtotIOKC+x0HbBNB+QQD8UQmgww?=
- =?us-ascii?Q?zYyapeog3BBu80VteYXu/BckMxwrTIG4ZRGspbAou+cS3uetAizjCS6/9Lwh?=
- =?us-ascii?Q?WMwnklx+LqKta9IfwkCt+JkyAxmnopoYW7c/cVQI3qa3NMH8gD6Gm6Q5fXME?=
- =?us-ascii?Q?iMZOnjcb3l4vK40MG/TFqFGNKKjSyj1OfHxXyyS2EumTV0re+ivVeB1mbipF?=
- =?us-ascii?Q?qRiav9b/zVnobQLZCAe5SJNTwymhDholyPQzd9FCkw3nJP4acVl4D7QZM69H?=
- =?us-ascii?Q?J4CfLpRn/FNrtybepSeNEaHXyS+8HxvoOLRkEXn57lMUA54STNdoszYM3nC9?=
- =?us-ascii?Q?L/VynwxkQmUR3hlnE95yvRiCoU7hohGMCTB54zMjsPlxQArmJ9M78i5u6Ah3?=
- =?us-ascii?Q?B3A8pamjJnInqBATMTAiODkiE1Q2dW/GsjjLAsDYxiPvMsEtGDbTkWMA48NY?=
- =?us-ascii?Q?ETXqYx+dEjLDw6m7ss1vkXoD9SmD1wZh5rLLsBbexVh/gfSGs2yepXKUVs2z?=
- =?us-ascii?Q?ACtqF4SKsN12cVZz8GCeWUNCjx5OHEPFvhlj8c2fBsw/VcEWmWE5xmj4hzjY?=
- =?us-ascii?Q?O/P7Cj791nL/sWlcO1DUw3z7dnK7/EOUzfGUWINHuK8pq5Ro2sJKbL8lGPua?=
- =?us-ascii?Q?jKD+fZL6A3q4U9XEaQHbKKBN3iFZzyVktYD9SyuTjiFsmDVYoAzu63yzug32?=
- =?us-ascii?Q?VBukMi82h1Z4jDuq9sNJFNVsViRMsoQbfyTRJcxLnJ2Fb06Ts4FZ/6rGwmB0?=
- =?us-ascii?Q?hrE5vs0y8gMq8HdDSmrLoMtQJFGeOSZl/K5d42oWUXyXB6qvGYy/5QXQY5Ml?=
- =?us-ascii?Q?wUiAK9MW8F3xR3/I1iR0oDTO2HrwQ+ey4Pysld6QGjC2ZjkJoeq+miOJkmHr?=
- =?us-ascii?Q?DElj+rpB47lhFOKOTKlu6X9pWZzCcsIrkjnzp9kx5VAUGKNM0QcRuYNfDzKB?=
- =?us-ascii?Q?TNOsJBM09sXvsn/9xd/IFTTYSeB3FbAFDqWL/GC/nqdw8A7WMBFj+WiEsBFF?=
- =?us-ascii?Q?x+YTn16agg1IS/Ui3R/qSxPFWEtgtgC9Z7ctqK2TPOPDZXdfptFHXXxCsqw6?=
- =?us-ascii?Q?RJNZC6chmyphz4bEzq4SUU9XZxSHqM5Wf0LSZZCY?=
-X-OriginatorOrg: mt.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fd1067e-e56e-4c6d-ac79-08dc578fabd0
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB7513.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2024 05:49:35.5022
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DbG4jrouq7LigTWsovp3aR12APw58Pw2AjZs/F/0MFizbUYkhdaSV7aiy6kxsZBtJBrovay701eHL8pbON95SQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB8498
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] rtc: pcf2127: configurable power management function
+To: Markus Burri <markus.burri@mt.com>, linux-kernel@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20240408054926.3994-1-markus.burri@mt.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240408054926.3994-1-markus.burri@mt.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-In the PCF2131 power management the battery switch-over function is
-disabled by default.
-After a power cycle the rtc clock is wrong because of that.
-Add a device-tree property to configure the power management function
-and enable battery switch-over.
+On 08/04/2024 07:49, Markus Burri wrote:
+> In the PCF2131 power management the battery switch-over function is
+> disabled by default.
+> After a power cycle the rtc clock is wrong because of that.
+> Add a device-tree property to configure the power management function
+> and enable battery switch-over.
+> 
+> Signed-off-by: Markus Burri <markus.burri@mt.com>
+> ---
+>  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |  3 +++
+>  drivers/rtc/rtc-pcf2127.c                     | 22 +++++++++++++++++++
 
-Signed-off-by: Markus Burri <markus.burri@mt.com>
----
- .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |  3 +++
- drivers/rtc/rtc-pcf2127.c                     | 22 +++++++++++++++++++
- 2 files changed, 25 insertions(+)
+Please run scripts/checkpatch.pl and fix reported warnings. Then please
+run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
+Some warnings can be ignored, especially from --strict run, but the code
+here looks like it needs a fix. Feel free to get in touch if the warning
+is not clear.
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-index 2d9fe5a75b06..5ce0ca6dcedc 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-@@ -30,6 +30,9 @@ properties:
- 
-   reset-source: true
- 
-+  pwrmng-function:
-+    description: Set power management function for PCF2131
-+
- required:
-   - compatible
-   - reg
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 9c04c4e1a49c..30d56538c11e 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -48,6 +48,7 @@
- #define PCF2127_BIT_CTRL3_BLF			BIT(2)
- #define PCF2127_BIT_CTRL3_BF			BIT(3)
- #define PCF2127_BIT_CTRL3_BTSE			BIT(4)
-+#define PCF2131_BIT_CTRL3_PWRMNG_MASK   GENMASK(7, 5)
- /* Time and date registers */
- #define PCF2127_REG_TIME_BASE		0x03
- #define PCF2127_BIT_SC_OSF			BIT(7)
-@@ -187,6 +188,7 @@ struct pcf21xx_config {
- 	unsigned int has_bit_wd_ctl_cd0:1;
- 	unsigned int wd_val_reg_readable:1; /* If watchdog value register can be read. */
- 	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
-+	unsigned int has_pwrmng:1; /* PCF2131 supports power management. */
- 	u8 reg_time_base; /* Time/date base register. */
- 	u8 regs_alarm_base; /* Alarm function base registers. */
- 	u8 reg_wd_ctl; /* Watchdog control register. */
-@@ -926,6 +928,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_bit_wd_ctl_cd0 = 1,
- 		.wd_val_reg_readable = 1,
- 		.has_int_a_b = 0,
-+		.has_pwrmng = 0,
- 		.reg_time_base = PCF2127_REG_TIME_BASE,
- 		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
- 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-@@ -954,6 +957,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_bit_wd_ctl_cd0 = 0,
- 		.wd_val_reg_readable = 1,
- 		.has_int_a_b = 0,
-+		.has_pwrmng = 0,
- 		.reg_time_base = PCF2127_REG_TIME_BASE,
- 		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
- 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-@@ -982,6 +986,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_bit_wd_ctl_cd0 = 0,
- 		.wd_val_reg_readable = 0,
- 		.has_int_a_b = 1,
-+		.has_pwrmng = 1,
- 		.reg_time_base = PCF2131_REG_TIME_BASE,
- 		.regs_alarm_base = PCF2131_REG_ALARM_BASE,
- 		.reg_wd_ctl = PCF2131_REG_WD_CTL,
-@@ -1241,6 +1246,23 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		return ret;
- 	}
- 
-+	if (pcf2127->cfg->has_pwrmng) {
-+		uint32_t pwrmng;
-+		if (!device_property_read_u32(dev, "pwrmng-function", &pwrmng)) {
-+			if (!FIELD_FIT(PCF2131_BIT_CTRL3_PWRMNG_MASK, pwrmng)) {
-+				dev_err(dev, "invalid power management function\n");
-+				return ret;
-+			}
-+			ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+						 PCF2131_BIT_CTRL3_PWRMNG_MASK,
-+						 FIELD_PREP(PCF2131_BIT_CTRL3_PWRMNG_MASK, pwrmng));
-+			if (ret) {
-+				dev_err(dev, "%s: pwrmng (ctrl3) failed\n",	__func__);
-+				return ret;
-+			}
-+		}
-+	}
-+
- 	/*
- 	 * Enable timestamp functions 1 to 4.
- 	 */
--- 
-2.39.2
+>  2 files changed, 25 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> index 2d9fe5a75b06..5ce0ca6dcedc 100644
+> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> @@ -30,6 +30,9 @@ properties:
+>  
+>    reset-source: true
+>  
+> +  pwrmng-function:
+> +    description: Set power management function for PCF2131
+
+It does not look like you tested the bindings, at least after quick
+look. Please run `make dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Maybe you need to update your dtschema and yamllint.
+
+
+
+Best regards,
+Krzysztof
 
 
