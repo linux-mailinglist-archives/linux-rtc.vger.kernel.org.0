@@ -1,153 +1,105 @@
-Return-Path: <linux-rtc+bounces-982-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-983-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53C8789C8FF
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 17:55:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F106189CFCA
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 03:29:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85BDD1C21999
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Apr 2024 15:55:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6452EB21460
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 01:29:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D73A144D3A;
-	Mon,  8 Apr 2024 15:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEBD479E1;
+	Tue,  9 Apr 2024 01:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dWuMHZHd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvNhYGDI"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15C81448E0;
-	Mon,  8 Apr 2024 15:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17A02F3B;
+	Tue,  9 Apr 2024 01:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712591614; cv=none; b=g/cIUEP7tj2x0EF9VZv65K9CXiDOllX+ItiEsAInkwI0GW+pX0AJ/Jamh3uOn0judbJPeV120j36fSEqs35N0kSkFIFCDK3LlVJ6G6XzO7lduPxvpm6GmtDi5O6VwX00ebytoWHSUuDWhO4Zu2QrDVsd4wn5w54hBfJbC+WCScc=
+	t=1712626144; cv=none; b=Zg2iJ6wQhdNC/Hrax1m0R31VhJ3r1N9p6WbaxS7Xgt4prkn03rBKCVrS4PnCSu2CR35Suwe/caNrabJRpgx0KJTP8TEC+KbOeeUN60UFqV2JB8Wx8RQPRDjXv4aBwxQSdT3UzcoGKj8R+aHYCXK5mcAueC4tJ+85C6EFY40QyWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712591614; c=relaxed/simple;
-	bh=vM6749OZUGmuUGhDa/POZy+5vZeS+6APRIR0QdxNkUs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SBWyDbbuGrfa0znfKw9W+fJ4evAR9XfhMrjEOtZjzY0AiwWfmWGNDzlkGBogFWo+UTbyaeP48Oe6F0vEV0NvOyB13iC/qgT1OF6WD4C2VdfP3PTyARdCIIARZpatHAeJlRG4YFcMcGF+ahJM3pkUgkLJHw/iYpZdP5Vs0hBAaLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dWuMHZHd; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-56e136cbcecso6298739a12.3;
-        Mon, 08 Apr 2024 08:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712591611; x=1713196411; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j3jReaO8bBGw6JBZ1RkUcA4thqN9iUeRzORfBO64Zek=;
-        b=dWuMHZHdhTXL0FtBZkVIm79kudogcTEPnnl18Hcw4bDDZbnSKmTzSCNQWUyE6dTFJo
-         tH/7Y7AKKyN3t6x/VQA334k8A7HKzcKTWe+LMgWrHeoO4yXh3MdcTsDwYYxZhqEqh1fw
-         /h/iFIDlk9uTwBPlvzZFCuRnsMzi316rIy8XJhldE+c6LGq8VTr5mHIfpCKT9ajZMFUB
-         GYNJmIq31IhzDZvc9P3XDFPqKtuCc1jvHv3JksTNzpbYh9CGALP3O9CQvg72lfIECAQV
-         +GlKWzE+fW/oBJtoIYJwGkkt518XCAWc2MZlQVWqQuZmRe44DlBDcoWZwnODKjaN0/bc
-         XVBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712591611; x=1713196411;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j3jReaO8bBGw6JBZ1RkUcA4thqN9iUeRzORfBO64Zek=;
-        b=tk7Y3gFC8JLfNwdDz562RpSN/Xdt25Opzu7HOlLASJtCl5ikkfF5DEeQ+bb6GcgmIt
-         4jLlUs3S+zzxa/faoTKDktBdHqyIhKqlPGrEgr4v19xZrAknySVnd01kFOGPJ5OQ7Lo9
-         u938Q+hHBpdjsWnOVDrolwPC+N/6OOmhMfIcEdNHnVfh9u8XEO/uM64kynmAfU5wstP4
-         3QHmfnPwKx/hY56mGQk/oK2OLeWFOzGaNKAhZPQyOdidQ68ExdUYSPpZlgODn47YoX9j
-         QD05RsRhorKXpHnUsvX/qtEUi+sGxMGCUh8WLIRXTTu8MXYVc6Vbq3fCS6HEoQ59tzJt
-         5feQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXMyl0bvQd8rFt4ViT6m+fp0DNTkCooQb4oCeatu6a0tAS1ppXwbajoLvBN0OqJYhfKP6mHtXY2V9VtDiVT0QEucf8nPa4GQqHKeT8i45OLDYW5fStI8ffJokz8ibm/2N0NglypEyL1+Q==
-X-Gm-Message-State: AOJu0Yw5hYJxbiB4SCa8UDVWCF7943MpgzSMK16KYaa9Lwm2Jpp0rKdN
-	4Hy7hkaEB5cG8gM9s3KpQX3ZWcQ+UVQEQ3i17iHQwYEaSetBfTm7
-X-Google-Smtp-Source: AGHT+IHDUn7lM+m3JJro1I7sX1HqWbE56mUHHewyuVneCeBjUwlfT2HuBoGiCiRi+8XMgC8ngOpekg==
-X-Received: by 2002:a17:907:9485:b0:a4e:375d:2573 with SMTP id dm5-20020a170907948500b00a4e375d2573mr9215871ejc.37.1712591611213;
-        Mon, 08 Apr 2024 08:53:31 -0700 (PDT)
-Received: from [127.0.1.1] ([213.208.157.67])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170906794d00b00a46a2779475sm4547849ejo.101.2024.04.08.08.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 08:53:30 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Mon, 08 Apr 2024 17:53:09 +0200
-Subject: [PATCH 9/9] dt-bindings: rtc: via,vt8500-rtc: move to trivial-rtc
+	s=arc-20240116; t=1712626144; c=relaxed/simple;
+	bh=c8Yo2XAsQZGc5uDL8HxfN5ZZtLS+obj/SZlYC+epWVE=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=WMqctILjvFpaKsNn31muKgZBIfkw1WUN6URkC+Y7lzT43aO7ouGPMNky2h/QoF3WHJVKovCWegEvlF7nekrkgQ2Rr1OnOIZ+I/TObWIR6tKt8KcKx1lL4gWuerVLASLNfWBW2BQ3+n5Cynb/vX7wndjM9QPnlntnc8Twy8G4jpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvNhYGDI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C8EC433F1;
+	Tue,  9 Apr 2024 01:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712626144;
+	bh=c8Yo2XAsQZGc5uDL8HxfN5ZZtLS+obj/SZlYC+epWVE=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=gvNhYGDILKosYsoAAqa7O+vnIML2zKpZ5DAG69m2twyNGTnvJ2BWsSeQp+IUmEJBa
+	 iIpdUlHg5AHii8kw0i6YUnbnZgUQQi7KR0QQl0ecywH/7cM+fn/TqSvFsj0RMgl3+S
+	 E88nwOB9CJCvLH2WpNnY6pKH4kS1mhJeA4IJomVjvSDIFG0mFc8HbZN9wR3ebV5op/
+	 SBEEIfGF1+vJIYBcYTSTjqOlQXUCWS1XrLmG2tBEXieh6OGXC5S8LT9ZM9c2BobKPR
+	 n9fpM7lDmj1Ka8I3GhdK2vAZpUY1P7VeTYVb6v9UmHxZyPWLuMEF56bYyfV3V88Vcd
+	 QIO61bzermwNg==
+Date: Mon, 08 Apr 2024 20:29:02 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240408-rtc_dtschema-v1-9-c447542fc362@gmail.com>
-References: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
-In-Reply-To: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Rob Herring <robh@kernel.org>, 
+From: Rob Herring <robh@kernel.org>
+To: Markus Burri <markus.burri@mt.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>, 
- Andrew Jeffery <andrew@codeconstruct.com.au>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-aspeed@lists.ozlabs.org, linux-stm32@st-md-mailman.stormreply.com, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1712591586; l=1714;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=vM6749OZUGmuUGhDa/POZy+5vZeS+6APRIR0QdxNkUs=;
- b=g1Gbrdrf/K3DdsRveFmOObYxG1SgqzZ8jrKc7OFyd6Mhf+VVcEjwfoBwytdkuegPork4KUfuS
- X+/UsMcNJb0DUbXRodaJxuNiEAk9sWd0n6FZbuyavNg+PpigpZoRRlR
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org
+In-Reply-To: <20240408054926.3994-1-markus.burri@mt.com>
+References: <20240408054926.3994-1-markus.burri@mt.com>
+Message-Id: <171262614115.5376.868367860569840766.robh@kernel.org>
+Subject: Re: [PATCH v1] rtc: pcf2127: configurable power management
+ function
 
-The RTC documented in this binding requires a compatible, a reg
-and a single interrupt, which makes it suitable for a direct
-conversion into trivial-rtc.
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- Documentation/devicetree/bindings/rtc/trivial-rtc.yaml   |  2 ++
- Documentation/devicetree/bindings/rtc/via,vt8500-rtc.txt | 15 ---------------
- 2 files changed, 2 insertions(+), 15 deletions(-)
+On Mon, 08 Apr 2024 07:49:26 +0200, Markus Burri wrote:
+> In the PCF2131 power management the battery switch-over function is
+> disabled by default.
+> After a power cycle the rtc clock is wrong because of that.
+> Add a device-tree property to configure the power management function
+> and enable battery switch-over.
+> 
+> Signed-off-by: Markus Burri <markus.burri@mt.com>
+> ---
+>  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |  3 +++
+>  drivers/rtc/rtc-pcf2127.c                     | 22 +++++++++++++++++++
+>  2 files changed, 25 insertions(+)
+> 
 
-diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-index d75c93ad2e92..c48d0dfa28b2 100644
---- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-@@ -83,6 +83,8 @@ properties:
-       - sii,s35390a
-       # ST SPEAr Real-time Clock
-       - st,spear600-rtc
-+      # VIA/Wondermedia VT8500 Real-time Clock
-+      - via,vt8500-rtc
-       # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-       - whwave,sd3078
-       # Xircom X1205 I2C RTC
-diff --git a/Documentation/devicetree/bindings/rtc/via,vt8500-rtc.txt b/Documentation/devicetree/bindings/rtc/via,vt8500-rtc.txt
-deleted file mode 100644
-index 3c0484c49582..000000000000
---- a/Documentation/devicetree/bindings/rtc/via,vt8500-rtc.txt
-+++ /dev/null
-@@ -1,15 +0,0 @@
--VIA/Wondermedia VT8500 Realtime Clock Controller
-------------------------------------------------------
--
--Required properties:
--- compatible : "via,vt8500-rtc"
--- reg : Should contain 1 register ranges(address and length)
--- interrupts : alarm interrupt
--
--Example:
--
--	rtc@d8100000 {
--		compatible = "via,vt8500-rtc";
--		reg = <0xd8100000 0x10000>;
--		interrupts = <48>;
--	};
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-2.40.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml: pwrmng-function: missing type definition
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240408054926.3994-1-markus.burri@mt.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
