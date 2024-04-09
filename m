@@ -1,210 +1,132 @@
-Return-Path: <linux-rtc+bounces-996-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-997-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08FA589D5C5
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 11:43:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42FED89D6F0
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 12:27:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B8F01F241B1
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 09:43:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73F4D1C2093B
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 10:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C76380639;
-	Tue,  9 Apr 2024 09:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDAB780BE3;
+	Tue,  9 Apr 2024 10:27:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XbvmNkrK"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="B4iPBcOV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352DA8003F
-	for <linux-rtc@vger.kernel.org>; Tue,  9 Apr 2024 09:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E836FE35;
+	Tue,  9 Apr 2024 10:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712655775; cv=none; b=QkU0bhxVEgUzg/WheP15llPPNsqSFIrNP2AFZZjUEnE9xhBFjmRnXIPhDY/Qg41ZSMdMAMUU+dckvE8jzoszMQRbSsjf6OkUgqjBAnwdAIjdaK1eCl2VYAi4zjMM49oBrOvnN73sJHgL/vML7wKqxcZXr6JZeByzCRZfep3v8BU=
+	t=1712658431; cv=none; b=VLDYfALFonhQKfd98aqvQ+O9iJAN0yNqWxiD/AmRpwxPLMkqvuJoqK/hBbFH1eLebfdU9PUvWVExjvr9U9RsgXJwnBkpby4CGuWxO7mvFPvHR0vH4bVFUiyZhZzmxRDGZ9zL697MskkJiGd1ZtmsCqdB/MTAU7cnsCLUOl3vhdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712655775; c=relaxed/simple;
-	bh=8vvOLQD5ZsaS2XUNwp5Pg+n59sKcIvNp2xo0fkfekN0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VB3UQQMzWruPOnJCh+nKCYzeU2kI/qBVnt/GKGTyey5JpeFvX28a8MLRAYibR1/H/9/Ade4WzkMZM5uGA+lzeItSUdNqUFevZV+dhHpBaQi6u6IpIAQJhTQ02SezLzx7mvnWrY12Xu1zhx8pEhaLEp5vpVi00YNztprCfExbTWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XbvmNkrK; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4155819f710so42127005e9.2
-        for <linux-rtc@vger.kernel.org>; Tue, 09 Apr 2024 02:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712655771; x=1713260571; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=A6uDAqyEhHRvdZlwpXxXFcdgG+rDJbSomin1pngZPKM=;
-        b=XbvmNkrKmYnieSSnT/TaDwTmJUqD/62QHOQqFWBRLgOCYFIpliKAYUzkA2p4Zr/FgB
-         FX8AxPslqJrbCcTsHxXU69eQBLdSKfXxXMsEoBBo1J4ia3HDgzFYQd5oFxw6synv76xv
-         6ZO3ShtCMiJz1jZszHmztI/pK59xaL7YuCjmD4zUSZiyWgs2S3/ZX9Xz/L/Hopufzkjb
-         d912O5QMH/3CaugSxEKMzXNn8e16878wo1KIxc64WDvhsmbSaj75oHro48EBsVBawrsA
-         5CRdzB1BZErYYU8b5VvvS1NR3ljg/aSE9hHgHDs+fWPta8jvL3zknbvpkMIsm+b++s22
-         ru5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712655771; x=1713260571;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A6uDAqyEhHRvdZlwpXxXFcdgG+rDJbSomin1pngZPKM=;
-        b=e/ENpXmJ7mUzFclHYmg1v+V31AVpM2UqzNtgM1CtV7LD7ziOmAK1qoOcUwSyLVNcCX
-         9goSRAklvxMKEnJ76utt2WEPwQe2Igz7Jeg4qUVcsWJD4aaz6LQG2H0je3LbmvRIZ+vd
-         7AfU0hQs5Fvt21T4lve+suqCfBP9OaXkQ++WrKtQPnD3WoKl7lwMXe9ekiK4CADyh7uD
-         W/5TrwbntIBxoC0ygK75pKM4e4LQx4tVzxg6Cd0KZXd/SGe3XQNEJnwpAtN47uEiU9z2
-         4OpuBIj9Hx1WpemUh6Ds3JY2PBbsfT/8fY7nFEBjRhDqN3xWKe33yIBdf+rSyXGFnS/b
-         N48Q==
-X-Gm-Message-State: AOJu0Yxh9c/ZAB+fqJ+gv3RtiwxukqZBiguf2MllHLFXm7r/lDgUqEfn
-	m8Tyqn6AkHH/dzyJUCfdZfpvAeCZGEzUChezQw9arKVrGD8X2u2h2SjRoe0R7qQ=
-X-Google-Smtp-Source: AGHT+IGpPPbz11kQsh+3NVfgfOFdIrZTnyJtzHQKO40Gmlg8uys/Ra3Ti+Bs76LJNPYnQOQ+yDtn+A==
-X-Received: by 2002:a05:600c:4505:b0:413:ef8e:4cc with SMTP id t5-20020a05600c450500b00413ef8e04ccmr9259111wmo.40.1712655771528;
-        Tue, 09 Apr 2024 02:42:51 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id n11-20020a05600c3b8b00b00416aca5ff66sm1329775wms.19.2024.04.09.02.42.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Apr 2024 02:42:51 -0700 (PDT)
-Message-ID: <89492719-f8ce-4cda-a5b2-ca09d57203bb@linaro.org>
-Date: Tue, 9 Apr 2024 11:42:49 +0200
+	s=arc-20240116; t=1712658431; c=relaxed/simple;
+	bh=WmagiJuSAVjdMNloWBpK+TLWohCiwSPpkN8213t8NFo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OSgvFmgvSQr7K6wuJNqG4SmhRWJkbhdR2uQ6HrNWtyc7ri0lV5mY8yVXdEFwXFHmKXUj9CloRSBKKU9haZ7gIE+XzRCb/qPFOyMeVTsSRb12MDTWw/g0mtLkxPS2eD3ynhVNAvToBWfdV6Qh1hEtwU5p53VtFArm+AoMuUWqzJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=B4iPBcOV; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 12DC6240008;
+	Tue,  9 Apr 2024 10:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712658421;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IgLT556EQ1sZdDx/D7AZFOXHnmen1aI83W1NiohbSlY=;
+	b=B4iPBcOVkx3mfxd+rg95RkbF9UEK4k+DdgW7xqj7tT7F/2vpHwnjQmDQ01ZtZ2oPa6qb4o
+	09hXRQXlI1bqDHQc7MN0KzWmcS8dC3mmiBR3PcE1J4p1rg96l1Z2iHM1zoIv581lXIUG8K
+	NfCKCTjkTH2u2kWQgbzhk5E9pvoWfSAHVii0/ZMTyKKOcRkJR7qjWrv6ImsjDKaWJStKgs
+	ZSueTSYdbsYsNielAvIp9rUoLonaww1JS5vne6O47pRkr+IIEkMbjlzieJrNosCxKvivb1
+	YyKnTxhiVH2u+bOnBIuKc3KzzumhN9k6vojpT6uYw0Vz5TWnPch2JjL1wVrwzg==
+Date: Tue, 9 Apr 2024 12:26:58 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 0/9] rtc: convert multiple bindings into dtschema
+Message-ID: <20240409102658d86fb2bd@mail.local>
+References: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/9] dt-bindings: rtc: stmp3xxx-rtc: convert to dtschema
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
- <20240408-rtc_dtschema-v1-8-c447542fc362@gmail.com>
- <f0467c4f-45e2-4cae-b1b5-3867e5b9bf08@linaro.org>
- <89e7db2d-1de0-4e2e-a2d2-f00d45399b11@gmail.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <89e7db2d-1de0-4e2e-a2d2-f00d45399b11@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 09/04/2024 11:22, Javier Carrasco wrote:
-> On 4/9/24 09:40, Krzysztof Kozlowski wrote:
->> On 08/04/2024 17:53, Javier Carrasco wrote:
->>> Convert existing binding to dtschema to support validation.
->>>
->>> The 'fsl,imx28-rtc' compatible is currently not supported, and it is
->>> only referenced in this binding and in nxp/mxs/imx28.dtsi. Therefore,
->>> that compatible has been dropped, which triggers a warning when testing
->>> the DT against the new binding.
->>
->> Instead document missing compatibles and mention this in commit msg.
->>
+On 08/04/2024 17:53:00+0200, Javier Carrasco wrote:
+> This series converts the following bindings into dtschema, moving them
+> to trivial-rtc whenever possible:
 > 
-> 
-> There is no driver that will match 'fsl,imx28-rtc', only
-> 'fsl,stmp3xxx-rtc', so I am not sure how to document the missing
-> compatible in a sensible way. My first suggestion to account for
+> - orion-rtc: trival-rtc, referenced in arm arch.
+> - google,goldfish-rtc: trivial-rtc, referenced in mips arch.
+> - lpc32xx-rtc: trival-rtc, referenced in arm arch.
+> - maxim,ds1742: trivial-rtc, not referenced in arch, cheap conversion.
+> - rtc-aspeed: 3 devices to trivial-rtc, all referenced in arm arch.
+> - pxa-rtc: add missing properties and convert. Referenced in arm arch.
+> - st,spear600-rtc: trivial-rtc, referenced in arm arch.
+> - stmp3xxx-rtc: convert, referenced in arm arch.
+> - via,vt8500-rtc: trivial-rtc, referenced in arm arch.
 
-I don't understand what driver matching to it has anything to do with
-the problem discussed here.
-
-You have DTS, so you can see how it should be written.
-
-> undocumented strings would be:
-> 
->   compatible:
->     oneOf:
->       - items:
->           - enum:
->               - fsl,imx23-rtc
->               - fsl,imx28-rtc
->           - const: fsl,stmp3xxx-rtc
->       - const: fsl,stmp3xxx-rtc
-> 
-> Any suggestions or improvements?
-> 
->>>
->>> There is another reference to fsl,stmp3xxx-rtc in nxp/mxs/imx23.dtsi,
->>> where another unsupported compatible 'fsl,imx23-rtc' is used, and the
->>> same problem would arise when testing the file against the new binding.
->>
->> Please write concise messages... you have to paragraphs about the same?
->> What is the difference here?
->>
-> The difference is that 'fsl,imx23-rtc' was not even mentioned in any
-> binding, and it can only be found in imx23.dtsi. 'fsl,imx28-rtc' was
-> indeed mentioned in the txt binding.
-
-Bindings are not correct. Many times.
+Probably all the moves to trivial-rtc can be squashed.
 
 > 
-> My understanding after your comment is that we should gather
-> undocumented compatibles and add them to the bindings they would belong
-> to,no matter if they are used anywhere or not. I added this one to the
-> suggestion above as well.
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+> Javier Carrasco (9):
+>       dt-bindings: rtc: orion-rtc: move to trivial-rtc
+>       dt-bindings: rtc: google,goldfish-rtc: move to trivial-rtc
+>       dt-bindings: rtc: lpc32xx-rtc: move to trivial-rtc
+>       dt-bindings: rtc: maxim,ds1742: move to trivial-rtc
+>       dt-bindings: rtc: rtc-aspeed: move to trivial-rtc
+>       dt-bindings: rtc: pxa-rtc: convert to dtschema
+>       dt-bindings: rtc: spear-rtc: move to trivial-rtc
+>       dt-bindings: rtc: stmp3xxx-rtc: convert to dtschema
+>       dt-bindings: rtc: via,vt8500-rtc: move to trivial-rtc
+> 
+>  .../devicetree/bindings/rtc/fsl,stmp3xxx-rtc.yaml  | 45 ++++++++++++++++++++++
+>  .../bindings/rtc/google,goldfish-rtc.txt           | 17 --------
+>  .../devicetree/bindings/rtc/lpc32xx-rtc.txt        | 15 --------
+>  .../devicetree/bindings/rtc/marvell,pxa-rtc.yaml   | 40 +++++++++++++++++++
+>  .../devicetree/bindings/rtc/maxim,ds1742.txt       | 12 ------
+>  .../devicetree/bindings/rtc/orion-rtc.txt          | 18 ---------
+>  Documentation/devicetree/bindings/rtc/pxa-rtc.txt  | 14 -------
+>  .../devicetree/bindings/rtc/rtc-aspeed.txt         | 22 -----------
+>  .../devicetree/bindings/rtc/spear-rtc.txt          | 15 --------
+>  .../devicetree/bindings/rtc/stmp3xxx-rtc.txt       | 21 ----------
+>  .../devicetree/bindings/rtc/trivial-rtc.yaml       | 18 +++++++++
+>  .../devicetree/bindings/rtc/via,vt8500-rtc.txt     | 15 --------
+>  12 files changed, 103 insertions(+), 149 deletions(-)
+> ---
+> base-commit: fec50db7033ea478773b159e0e2efb135270e3b7
+> change-id: 20240406-rtc_dtschema-302824d1ec20
+> 
+> Best regards,
+> -- 
+> Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> 
 
-What do you mean "unused"? If these you call unused, then shall we
-remove 90% of such "unused" compatibles from the binding? No. See
-writing bindings or hundreds of other bindings as examples. You need
-specific part.
-
-
-Best regards,
-Krzysztof
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
