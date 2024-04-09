@@ -1,122 +1,132 @@
-Return-Path: <linux-rtc+bounces-999-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1000-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC5E889D8BF
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 14:03:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8125889D8FE
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 14:12:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 197251C20EE8
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 12:03:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 374031F220F8
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Apr 2024 12:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D2F12B16C;
-	Tue,  9 Apr 2024 12:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 463EC12BEBE;
+	Tue,  9 Apr 2024 12:12:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UF7CxQlp"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="my38CGIS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD74F129E93;
-	Tue,  9 Apr 2024 12:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DFC12E1D5;
+	Tue,  9 Apr 2024 12:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712664154; cv=none; b=izAqqE8zR72pBR8GcoV+ozADZgio+Gz3TZuQD7nZTYmlnzetrS0Alc/qJYKauN6aK5bizP9I2sozLdIMLwzoKHahM8pOD7pWxwqjP4j1fdtm9h8Uc9j/hhNZrkkDuwegvtE1J/nhDaCPn4FX8ztmI7JsTbZYAZBhzMa0mgrm7VI=
+	t=1712664730; cv=none; b=t6/RzBczYBqZJ8hznpBk7xAQgNGJQ8wotiDehabC+kM+vWmMP/efDmhet/3bkOXU7CQgv5GM2nPMpLsxRfJcYuBjyiXvCLCRJzEnbzkzxMGRVG0dr9rewl1Dh68rSwUQqw/lhkg2zXSd3ka4ddArW9Y2x6gDO3KiQl9oZj4vmM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712664154; c=relaxed/simple;
-	bh=vSvmTJBZXXJEgR7mOloXSqA3+8JPuGp6x3/LLxCsGBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OtDAX1dFUpAk8klrOpfH+h9e6VKOPXxooU4ctRqUtPHcueQ664jcB7yk2OCVSdHtQEljTxn4WOyLrFT982ZXP85bKEEkHqODfkVIYd5435l6yw7WpQT1ZEXDlh05ZDc/LdsKq+BGeLErR/TAkAxRH1zqSi4OMO9SrhxyW5JNL6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UF7CxQlp; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-56c404da0ebso8215170a12.0;
-        Tue, 09 Apr 2024 05:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712664151; x=1713268951; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AkRKDf5GLr5pj942wy9NJKid+umpjbRA7GynacZfPEQ=;
-        b=UF7CxQlpen+fzohtmyluYOFznEXC0udM8O1ZGdLYhMK+so/LuvMSo6ix5a4ZZRrVZw
-         8VzFbKfYQH/SbYQc2l3GZBWOdkW7W35TA/T7FPE8ZIdCQASV12HZ4pqG6BygoKKNW3gC
-         8aQmKQg6rsC0oUuxBloP5bMBga3jcNZkv7sxlEI5uuCpk7p+wUmt6cJZCsIyD+bJvZI0
-         w/fQA7I/tq3OZfebOSOSGxTr7VyBAltEgxFFG+3/4bVDyelprbcmku5Z5MweWbeWmNF0
-         +XV1j1KAVvA53Cz5iZ7xTmgMgFvZRPiioItXao9UIryBvpdBZ6+OPQOue8rtJYXN49al
-         ZJJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712664151; x=1713268951;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AkRKDf5GLr5pj942wy9NJKid+umpjbRA7GynacZfPEQ=;
-        b=dRMD/fEVWx2c+5ODsX9n2OV0xOcTVmOl59YjA3dJ7cOhOg2lqpOOz2aQhLIP9czVvo
-         8F+Hj/VeHXdbEed37EFDbIWtQxwq5k0okrDEE9Qz0nNgtqsuLt+61wyE0na0NgdkjaaY
-         pWkl3xRQAKjXRiofKs637UDWH4YJ2x2CHfBhnmM+0mAdiFFPmeaw84YFR72I1u2GRdJV
-         5SSpKTP4tBvPfbrIyFCDYCp4BHQPo06Q4dV7iniqt63aMoHoWIs2lOCjgq4AucBd91uc
-         UwdmYTUwQz+RyF0UQf+kmb5CO8g3v20ZVrBIImuc7trCNcyO35kP+67IZgaIgI7T1Asd
-         7UIg==
-X-Forwarded-Encrypted: i=1; AJvYcCWK7dy9sFepMwBTmE7OVGRkQytwNB/pZQMOqs5BcJRx6LQp9yKbGeOFpZa7suopZHSMIgyMQY0uzP2ryy348k8Xo+ysPbH9PT2sU5REmpWcsOKscsHAdr8mgA1TGMAug8bGrKGcGijRAJ/MYREIv48TjgoGHknSal6cfo2D+e48OuG5QQ==
-X-Gm-Message-State: AOJu0YwCSVeqEEROS+YsrdUEJy8ubDJjUIQvn7CorJBR+iGcd/Y+RSDq
-	pxhmEsO6u6z0gnbXSre3hHsjNGa7//8Of6xIQUtuaRyaYex0Eyp9
-X-Google-Smtp-Source: AGHT+IH3wXGsiaRiem9EQMmXVabh3sBI1WiYbDC3AT/ATTb2okPbMfexW2j0doktw3Yi0bClXEyv6Q==
-X-Received: by 2002:a17:907:31c9:b0:a51:ddc6:edc1 with SMTP id xf9-20020a17090731c900b00a51ddc6edc1mr3751319ejb.28.1712664150849;
-        Tue, 09 Apr 2024 05:02:30 -0700 (PDT)
-Received: from [192.168.0.31] (84-115-213-64.cable.dynamic.surfer.at. [84.115.213.64])
-        by smtp.gmail.com with ESMTPSA id jg18-20020a170907971200b00a51a60bf400sm5466509ejc.76.2024.04.09.05.02.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Apr 2024 05:02:30 -0700 (PDT)
-Message-ID: <a4283479-2c4a-4f8f-b224-999dd12ba009@gmail.com>
-Date: Tue, 9 Apr 2024 14:02:28 +0200
+	s=arc-20240116; t=1712664730; c=relaxed/simple;
+	bh=bhAcDsX84r6euMWAqs9kSNF7o9zm3Y8Ymy+vrq4eEHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qj8BpNnvZC9d2rKWlNvezf5nsaBWbpE6mChTr+623MDzuFWTsdRSwgBUx/ol1bASzIBp01sOUdIailkzoRLfW5jbuKGbdRJjlsejNbGWPAein9269n6XdTP/JOGr5ELce2usGJ21Fd1fHIAq90EfBldeBEhO5Wrx7xnQ+crOAMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=my38CGIS; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 91EBBE0004;
+	Tue,  9 Apr 2024 12:11:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712664719;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZfWm8vYO3mDEuNQxKWMBm2paN+K8NdDcQizKVDcIoC4=;
+	b=my38CGISljwiJ5IwyCJK8F66IO6v+ZQoKG8dNf48uMYkp6aWgPzFutmbt0GJP2xSYK/Rh3
+	JoJ2t/QZruB2XuoNFZYqXUDc6qtPUp4rIvI1DzmCi2bZikWmYcXYKkgwd3f2UN3nO7xxIr
+	Ma/RleoaEAPuSsj5A4rI8Y+gWy3Sns0quh7Ybo8dgjGo9Cxt9DRPHs7Exum5rnesjLwAYR
+	kmnZD0ZMLoiE5GM95Atw5sZLGKYDX6xVVWai8iv/ggPqDuohI90RnD7DwDxJTJju27cmHm
+	m88JatRVGUgGG27aqS4R/sNXVBrzXc6j2xkGm1yse3fhIeDkcR9RLbvy/TcF5Q==
+Date: Tue, 9 Apr 2024 14:11:53 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 3/9] dt-bindings: rtc: lpc32xx-rtc: move to trivial-rtc
+Message-ID: <20240409121153e2941468@mail.local>
+References: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
+ <20240408-rtc_dtschema-v1-3-c447542fc362@gmail.com>
+ <dd5e9837-0dcf-4b0e-8d11-f8bed868cdf2@linaro.org>
+ <6dc808bf-682f-4e91-aac7-7ce6f05a0ab4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/9] rtc: convert multiple bindings into dtschema
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-rtc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-stm32@st-md-mailman.stormreply.com
-References: <20240408-rtc_dtschema-v1-0-c447542fc362@gmail.com>
- <20240409102658d86fb2bd@mail.local>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <20240409102658d86fb2bd@mail.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6dc808bf-682f-4e91-aac7-7ce6f05a0ab4@gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 4/9/24 12:26, Alexandre Belloni wrote:
-> On 08/04/2024 17:53:00+0200, Javier Carrasco wrote:
->> This series converts the following bindings into dtschema, moving them
->> to trivial-rtc whenever possible:
->>
->> - orion-rtc: trival-rtc, referenced in arm arch.
->> - google,goldfish-rtc: trivial-rtc, referenced in mips arch.
->> - lpc32xx-rtc: trival-rtc, referenced in arm arch.
->> - maxim,ds1742: trivial-rtc, not referenced in arch, cheap conversion.
->> - rtc-aspeed: 3 devices to trivial-rtc, all referenced in arm arch.
->> - pxa-rtc: add missing properties and convert. Referenced in arm arch.
->> - st,spear600-rtc: trivial-rtc, referenced in arm arch.
->> - stmp3xxx-rtc: convert, referenced in arm arch.
->> - via,vt8500-rtc: trivial-rtc, referenced in arm arch.
+On 09/04/2024 10:52:54+0200, Javier Carrasco wrote:
+> On 4/9/24 09:34, Krzysztof Kozlowski wrote:
+> > On 08/04/2024 17:53, Javier Carrasco wrote:
+> >> This RTC requires a compatible, a reg and a single interrupt,
+> >> which makes it suitable for a direct conversion into trivial-rtc.
+> >>
+> >> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> >> ---
+> >>  Documentation/devicetree/bindings/rtc/lpc32xx-rtc.txt  | 15 ---------------
+> >>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml |  2 ++
+> >>  2 files changed, 2 insertions(+), 15 deletions(-)
+> > 
+> > This one no... and if you tested DTS you would see errors, although you
+> > need to test specific lpc config, not multi_v7.
+> > 
+> > It does not look like you tested the DTS against bindings. Please run
+> > `make dtbs_check W=1` (see
+> > Documentation/devicetree/bindings/writing-schema.rst or
+> > https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+> > for instructions).
+> > 
+> > Anyway, you *must* check all DTS before moving anything to trivial.
+> > 
+> > Does it mean all other bindings were not checked against DTS at all?
+> > 
+> > Best regards,
+> > Krzysztof
+> > 
+> Hi,
 > 
-> Probably all the moves to trivial-rtc can be squashed.
+> I did check the conversion against nxp/lpc/lpc3250-phy3250.dts, which
+> throws a message about the 'clocks' property.
 > 
+> That property is not documented in the original binding, and even though
+> it could be missing, I could not find any function to get a clock (i.e.
+> any form of clk_get()) in rtc-lpc32xx.c, which is the only file where
+> the compatible can be found.
+> 
+> Is therefore the property not useless in the dts? My apologies if I am
+> missing something here.
 
-Sure, I will squash them for v2.
+The bindings doesn't document the driver but the hardware. In this case,
+the only input clock seems to be a 32kHz crystal.
 
-Best regards,
-Javier Carrasco
+> 
+> Thanks and best regards,
+> Javier Carrasco
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
