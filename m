@@ -1,133 +1,177 @@
-Return-Path: <linux-rtc+bounces-1027-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1028-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B428E8A2B8C
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 11:49:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F9EA8A3805
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 23:43:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E07121C20E80
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 09:49:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F43C1F2317A
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 21:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB1051C54;
-	Fri, 12 Apr 2024 09:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A9715217A;
+	Fri, 12 Apr 2024 21:43:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="MlsbreRH"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DUsOkhGf"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1238D3A1DE;
-	Fri, 12 Apr 2024 09:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33257152164;
+	Fri, 12 Apr 2024 21:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712915370; cv=none; b=SgWNKd4lWhF/9IFOafHmrWtfv/y+k9Gn/MNf63i2Jx2V3jRmfhH+++iQV0aTIMjQuoRN25fvOWDl8cfPgEcyNEKI18k+KZWBMXUEJtnaQ6bXasvbZgGv1BrGI0PFRp6GiAOqdPQ4BwLUb26BVbe92IfbkJlhqu/ocmPzU/Fgfug=
+	t=1712958188; cv=none; b=UEyBU1LgJuhoWTFroINI6P/sMsiXX64zXpu7Yr2GliQmV35yb+vK7IZRMhhwpxNzdb4jdJgFNVewGCV1FJIbTy0I3UEOP2xRfuL40WVp7J+12EyGUOf1pDK0oRjceVgo7MQIu4RVCYHerpYDUtIIlLns9RwU7K4I5BY7qOmriZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712915370; c=relaxed/simple;
-	bh=6owmbQFyX2Ns1f9TuwGmcwHTt0ZOyFfydguyhh8Vl7U=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RTzTqJXQ7OTp9JEt40yvbjNrx51zBLcJQ2myfH8o5VVe6wKIEiaSIvbuCARwtRIaq5hYIem/S42m/Zn+nNAZgIuD7UQO4QPv2GJbZPHQirZAGmCX2zTM1aYEdVClmCt8Rv4tddAzMR3GrHd0E9UKhgAEUzvny8yOIVRMK//6pDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=MlsbreRH; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1712915368; x=1744451368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6owmbQFyX2Ns1f9TuwGmcwHTt0ZOyFfydguyhh8Vl7U=;
-  b=MlsbreRHcmTInJvfw7m9oyvf/oE+jdJUK0/tBhurAjNmUIcEx5GjnMPW
-   Q/h5TtbhJXoLiSQpkDldGysxcWcVZNc0hI2CAaPpxKGvi2qZNr0HkXLko
-   5bIa5P+2A2E3a4By9l82X6mfE+fDJPGkT5yoxwmlRlnGjLMPAMiT1maGO
-   sjPxiRG5gr19QyFBmdhlvHnzpBOjki9nBstfX3YmvRrjlN/oSV9fmnCmn
-   K7KoTnXQ4NaME30qaDXkBvGAdOybF1uPHkuFM7E6wJlPOh0EcXaQHmyer
-   GoC3WmfWuwuJTyiLxNLX7xrVR0EPLko0n10eG5jJwR6FENULp7Xf5c56G
-   g==;
-X-CSE-ConnectionGUID: CriWT839Tiya/FLJiLrKhg==
-X-CSE-MsgGUID: W2UCeI60TdOdUEqyUVu4cg==
-X-IronPort-AV: E=Sophos;i="6.07,195,1708412400"; 
-   d="asc'?scan'208";a="20722576"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Apr 2024 02:49:20 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 12 Apr 2024 02:48:30 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 12 Apr 2024 02:48:27 -0700
-Date: Fri, 12 Apr 2024 10:47:36 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: <wefu@redhat.com>
-CC: <jszhang@kernel.org>, <alexandre.belloni@bootlin.com>, <robh@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-	<guoren@kernel.org>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH 4/5] Kconfig: Enable APM X-Gene RTC for XuanTie TH1520
-Message-ID: <20240412-ogle-daily-c18bc6e7ddd5@wendy>
-References: <20240412080238.134191-1-wefu@redhat.com>
- <20240412080238.134191-5-wefu@redhat.com>
+	s=arc-20240116; t=1712958188; c=relaxed/simple;
+	bh=fJFJt/O18YOy06weCmALUUpTwY9csI4YS3ZZnqltSDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+yuk4eRc3sTMBc3Vgfk/dRcAVuIlR8bNadsFW7q645PQs5EBE2dJ5njC8UwozV0mWjywwuPIn2yczJGJ2KDMd9BagbwcEiRJ2xMjxxZ9lco+2cxqPa4B3rpagF6YpraL2IS0kPI57aksnvrdl564LaJfRMhPeK6GLT1LTeejWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DUsOkhGf; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 73CB91BF204;
+	Fri, 12 Apr 2024 21:43:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712958183;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tMFYGKt8Bu7x5uUg4ZkcdxFN8tZOkh1RWzacUVnLx1k=;
+	b=DUsOkhGfs+S2lL7ghtnZAlYaMa/6YzxDPAfXVDsfCduvFfqDAn1+oFwiLOwhRa+G0iYJ4R
+	FBqhmwxd0i05VS21hI6J2WpEuWVxQbIjR8/p1nM2pUZJXmlaiTvZV1FpHt+TJFcOlgZ85d
+	p+e+CPOWYZoisQg0bgLRMjPVwJMKp2DCmOBAcZnyOKU8nJD21FwHCKIR8H/UA1wE02SBMu
+	pyRpXCEhR9h22YYQLOnXy4UWMoKl4SR3P970yt2wpWhaw4649CAhRRFPdjOhlL2fZeK7mL
+	ylZGNopM3wEuBSQN9J2L+B0PA3csLYO/8sf+MrZ/6qMaHtGRBv8ZM3/OWZo4vA==
+Date: Fri, 12 Apr 2024 23:43:00 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v2 2/4] dt-bindings: rtc: lpc32xx-rtc: convert to dtschema
+Message-ID: <20240412214300a31799c2@mail.local>
+References: <20240410-rtc_dtschema-v2-0-d32a11ab0745@gmail.com>
+ <20240410-rtc_dtschema-v2-2-d32a11ab0745@gmail.com>
+ <202404102043571b7450b5@mail.local>
+ <130d47d8-3294-44be-9a8c-8474d342cb12@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="rrezwGm8P4r68fCr"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240412080238.134191-5-wefu@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <130d47d8-3294-44be-9a8c-8474d342cb12@linaro.org>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
---rrezwGm8P4r68fCr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 11/04/2024 08:17:55+0200, Krzysztof Kozlowski wrote:
+> On 10/04/2024 22:43, Alexandre Belloni wrote:
+> > On 10/04/2024 17:55:34+0200, Javier Carrasco wrote:
+> >> Convert existing binding to dtschema to support validation.
+> >>
+> >> Add the undocumented 'clocks' property.
+> >>
+> >> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> >> ---
+> >>  .../devicetree/bindings/rtc/lpc32xx-rtc.txt        | 15 --------
+> >>  .../devicetree/bindings/rtc/nxp,lpc32xx-rtc.yaml   | 41 ++++++++++++++++++++++
+> >>  2 files changed, 41 insertions(+), 15 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/rtc/lpc32xx-rtc.txt b/Documentation/devicetree/bindings/rtc/lpc32xx-rtc.txt
+> >> deleted file mode 100644
+> >> index a87a1e9bc060..000000000000
+> >> --- a/Documentation/devicetree/bindings/rtc/lpc32xx-rtc.txt
+> >> +++ /dev/null
+> >> @@ -1,15 +0,0 @@
+> >> -* NXP LPC32xx SoC Real Time Clock controller
+> >> -
+> >> -Required properties:
+> >> -- compatible: must be "nxp,lpc3220-rtc"
+> >> -- reg: physical base address of the controller and length of memory mapped
+> >> -  region.
+> >> -- interrupts: The RTC interrupt
+> >> -
+> >> -Example:
+> >> -
+> >> -	rtc@40024000 {
+> >> -		compatible = "nxp,lpc3220-rtc";
+> >> -		reg = <0x40024000 0x1000>;
+> >> -		interrupts = <52 0>;
+> >> -	};
+> >> diff --git a/Documentation/devicetree/bindings/rtc/nxp,lpc32xx-rtc.yaml b/Documentation/devicetree/bindings/rtc/nxp,lpc32xx-rtc.yaml
+> >> new file mode 100644
+> >> index 000000000000..62ddeef961e9
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/rtc/nxp,lpc32xx-rtc.yaml
+> >> @@ -0,0 +1,41 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/rtc/nxp,lpc32xx-rtc.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: NXP LPC32xx SoC Real Time Clock
+> >> +
+> >> +maintainers:
+> >> +  - Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> >> +
+> >> +allOf:
+> >> +  - $ref: rtc.yaml#
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: nxp,lpc3220-rtc
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  interrupts:
+> >> +    maxItems: 1
+> >> +
+> >> +  clocks:
+> >> +    maxItems: 1
+> > 
+> > As I explained the clock doesn't really exist, there is no control over
+> > it, it is a fixed 32768 Hz crystal, there is no point in describing it
+> > as this is already the input clock of the SoC.
+> 
+> That's common for many SoCs but it is still (at least for them) input to
+> the RTC. On some SoC boards 32 kHz is controllable.
+> 
 
-On Fri, Apr 12, 2024 at 04:01:46PM +0800, wefu@redhat.com wrote:
-> From: Wei Fu <wefu@redhat.com>
->=20
-> This patch enables APM X-Gene RTC for XuanTie TH1520.
->=20
-> Signed-off-by: Wei Fu <wefu@redhat.com>
-> ---
->  drivers/rtc/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 3a89f1e6095d..b219aeef4ce9 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1880,7 +1880,7 @@ config RTC_DRV_MT7622
->  config RTC_DRV_XGENE
->  	tristate "APM X-Gene RTC"
->  	depends on HAS_IOMEM
-> -	depends on ARCH_XGENE || COMPILE_TEST
-> +	depends on ARCH_XGENE || ARCH_THEAD || COMPILE_TEST
->  	help
->  	  If you say yes here you get support for the APM X-Gene SoC real time
->  	  clock.
+There is n way this can be controlled at the board level as the soc
+mandates a crystal. There is a control for the oscillator but it is not
+functional. This would be bit 5 of RTC_CTRL which is documented as such:
 
-If I was configuring my system by reading menuconfig, I would have
-absolutely no idea that this driver supports platforms other than the
-X-Gene one. I think the Kconfig stuff for this likely needs an update to
-convey that it's no longer just one SoC family that's supported here.
+"5 Not used. Write is don’t care, Read returns random value."
 
---rrezwGm8P4r68fCr
-Content-Type: application/pgp-signature; name="signature.asc"
+Even so, the clock wouldn't be an input to the RTC but it is provided by
+the RTC.
 
------BEGIN PGP SIGNATURE-----
+I guess because it was easer to d so, the clock is defined in the clock
+controller driver:
+https://elixir.bootlin.com/linux/latest/source/drivers/clk/nxp/clk-lpc32xx.c#L1222
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZhkDOAAKCRB4tDGHoIJi
-0mNyAP9KxQ4U9S5RMOVtCU2/kCBefOY/cpPKf8icvcFiSV8+zQEAtUzy/SD4CsMb
-eHL+pw8s6mfIChq7hPkxKZlv8QtVrgk=
-=nx9k
------END PGP SIGNATURE-----
+but, from an HW point of view, this is not correct.
 
---rrezwGm8P4r68fCr--
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
