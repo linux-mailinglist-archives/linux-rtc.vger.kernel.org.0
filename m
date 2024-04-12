@@ -1,50 +1,50 @@
-Return-Path: <linux-rtc+bounces-1022-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1023-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E69288A2930
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 10:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 696EE8A2938
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 10:23:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A365E2846E4
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 08:21:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 255F02812AC
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 08:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F304F200;
-	Fri, 12 Apr 2024 08:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 073E750286;
+	Fri, 12 Apr 2024 08:23:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HBJnRm4K"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dPKmMVyY"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7552022606;
-	Fri, 12 Apr 2024 08:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FE24F20A;
+	Fri, 12 Apr 2024 08:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712910116; cv=none; b=B3VaGlKqnzpdzo1xulcMZECXjXcYWZMuG6gmovGvFrGLt1zdDJ7KJXnGRhhgMNP14uDzi6ysJicz4KeX21ACZeXdDCM/9HrOHp2DghLhMPivDHvQoQV5OmrE6t+hfEQFp2Dr+kt84LTO8dEPXn0j2fZIhDvYUMEwa1txr/w6+QE=
+	t=1712910203; cv=none; b=GhxvpcDf2QUkVCTVjOFF1/ZcKRWBnrcBGCrldv3i4kNYC42pIwZKc0yKAibHXMzZDIcvq9QmRe8BbEBIyQoOEmEit5BKmudIc1XWGFJbXOs0eIfOJG1g0Q0E/bPNTxTFy2dtUszf62xO+4dtqFjp/tC4v1lA0aF2YBQgdClbtag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712910116; c=relaxed/simple;
-	bh=dMvfufHeUkxZzXlJdk1qiATkZtsbN4RCI5YFOljiONA=;
+	s=arc-20240116; t=1712910203; c=relaxed/simple;
+	bh=JQsL3l+lpII2c4u6mU33BzB6l2saKrxBERfMXjR3I+Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u39i7nWURp5DeCu4ZvieWMT9XH9cHwX7Es6dtyS8U2Qj9iyOhNLtzuR9WmFtV3en5O/bCbAUxSa+NxPlnTPIcr+0SsfRt3UieoBkoXGX7P0rYrOwM/4XeGtrORDAh82PH7lprfk9gzdJyvENPoh8ba0BpGgQp7mqSMZS5NYCBT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HBJnRm4K; arc=none smtp.client-ip=217.70.183.200
+	 Content-Type:Content-Disposition:In-Reply-To; b=K3/tyilW26dAY1GoNzD8HwtCm5F44u+LrbrjOaEbqjrupdBfZHctsXQZHAxKyJBb2F/NOooTgpRDehaMUPIuZYCl3zR9xVaFWrzvFnxIiHWztkOFwJcEHVCm6z+d6IJfMDVYfZikhqvtohlo3c0i9HNYb6klvSVTRBqbmMkjAtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dPKmMVyY; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 398302000A;
-	Fri, 12 Apr 2024 08:21:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9AB23240002;
+	Fri, 12 Apr 2024 08:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1712910107;
+	t=1712910199;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nG1yXB1XEUMftHkpIGuydKh68O6oshqMzKBjchWUWDI=;
-	b=HBJnRm4KJwgoJG/yw+/A62Pxo7TJ9fF307KWhyPxNW6XlyblM1LsFtqnIJVxKMW9pgFeKd
-	Kyct1zJOUrAeuPp9jEG2vftsgxAfHY4hLp8fdpw0kGJrgK/AZjR0AJu6WsDT4bUlBIyNm8
-	r4DB4j3ZWZ7q3V8wGji13KKrBdSQVS3IDqOnwbFG9I3mX02TVhSKRA0N7rIFdfuKilXL2r
-	5whRGiSrTfRMO0zz4dgp+hITgM0yslOxNcdupC3yHfFSKcAD7WxXpEZwiO7idRhNg8h05e
-	o7IsN5zlJQzuTBuBvp57Nr8M8b7z4IJx5fQfzGWhzmlkxxOaf5jr6kU41Ev7og==
-Date: Fri, 12 Apr 2024 10:21:44 +0200
+	bh=WClP5G2kcne2eneGfMBtJOI0aNW9KDauYWuKR9jT1z4=;
+	b=dPKmMVyYATklsYzaKp5rf8tkpd+f8IfUhBwqPg7KpvV0hJVLgglFurhnD9lDD9pp5jb2BJ
+	EVpvAgSIhTCZuuB1OvUya3PUnL3Of0JjnBLw65HaPawxCiA9cFsr4TQgKpho7BDCght/0X
+	IgyV6JqdpIEKwTiwHRc0jwxsfMpPJAVf/Uq21A5FbA8F5X41Qcm1pCLfK0YQh9Cpvy4GY8
+	e9HY7QaJhLZloTZ8GX+53+ZiuS11njbK9QqEATLSLYyPH60o3RVKD20bvNiyoCJlNWVFqx
+	aLwOgDa0jeU9IHB/ezZs02Ex1epHDZbeGhMeAqpFfCcm6iPgLyTTWWa0ckt1zA==
+Date: Fri, 12 Apr 2024 10:23:15 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 To: wefu@redhat.com
 Cc: jszhang@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -52,10 +52,11 @@ Cc: jszhang@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 	palmer@dabbelt.com, aou@eecs.berkeley.edu,
 	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 5/5] riscv: dts: thead: Add XuanTie TH1520 RTC device node
-Message-ID: <20240412082144c4a3d9b2@mail.local>
+Subject: Re: [PATCH 1/5] drivers/rtc/rtc-xgene: Add prescaler support in APM
+ X-Gene RTC driver
+Message-ID: <20240412082315682039eb@mail.local>
 References: <20240412080238.134191-1-wefu@redhat.com>
- <20240412080238.134191-6-wefu@redhat.com>
+ <20240412080238.134191-2-wefu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -64,47 +65,44 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240412080238.134191-6-wefu@redhat.com>
+In-Reply-To: <20240412080238.134191-2-wefu@redhat.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 12/04/2024 16:01:47+0800, wefu@redhat.com wrote:
+On 12/04/2024 16:01:43+0800, wefu@redhat.com wrote:
 > From: Wei Fu <wefu@redhat.com>
 > 
-> Add nodes for the XuanTie TH1520 RTC device node on the XuanTie TH1520 Soc.
+> This patch add Counter Prescaler support in APM X-Gene RTC driver by
+> getting prescaler (Optional) property value from dtb.
 > 
 > Signed-off-by: Wei Fu <wefu@redhat.com>
 > ---
->  arch/riscv/boot/dts/thead/th1520.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  drivers/rtc/Kconfig     | 10 ++++++++++
+>  drivers/rtc/rtc-xgene.c | 31 +++++++++++++++++++++++++++++++
+>  2 files changed, 41 insertions(+)
 > 
-> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-> index cd6bc89a240c..62e588dbc942 100644
-> --- a/arch/riscv/boot/dts/thead/th1520.dtsi
-> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-> @@ -463,6 +463,17 @@ timer7: timer@ffffc3303c {
->  			status = "disabled";
->  		};
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index c63e32d012f2..3a89f1e6095d 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -1888,6 +1888,16 @@ config RTC_DRV_XGENE
+>  	  This driver can also be built as a module, if so, the module
+>  	  will be called "rtc-xgene".
 >  
-> +		rtc: rtc@fffff40000 {
-> +			compatible = "snps,dw-apb-rtc";
-> +			reg = <0xff 0xfff40000 0x0 0x1000>;
-> +			interrupts = <74 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&osc_32k>;
-> +			clock-names = "osc_32k";
-> +			wakeup-source;
-
-The wakeup-source and interrupts properties are mutually exclusive.
-
-> +			prescaler = <0x8000>;
-> +			status = "okay";
-> +		};
+> +config RTC_DRV_XGENE_PRESCALER
+> +	bool "Pre-scaler Counter support for APM X-Gene RTC driver"
+> +	depends on RTC_DRV_XGENE
+> +	depends on ARCH_THEAD
+> +	default y
+> +	help
+> +	  Say Y here if your Soc has Pre-scaler Counter support on rtc-xgene.
 > +
->  		gpio@fffff41000 {
->  			compatible = "snps,dw-apb-gpio";
->  			reg = <0xff 0xfff41000 0x0 0x1000>;
-> -- 
-> 2.44.0
-> 
+> +	  This hardware support can only be found in DW_apb_rtc after v2.06a.
+> +
+
+I don't feel like this needs a config option, rather you should have a
+proper compatible string that will tell the driver whether the feature
+is available.
+
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
