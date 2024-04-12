@@ -1,111 +1,162 @@
-Return-Path: <linux-rtc+bounces-1023-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1024-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 696EE8A2938
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 10:23:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55C468A2AC3
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 11:17:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 255F02812AC
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 08:23:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B7CD1C20F02
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Apr 2024 09:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 073E750286;
-	Fri, 12 Apr 2024 08:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF3C4D13F;
+	Fri, 12 Apr 2024 09:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dPKmMVyY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TKFX4Z1X"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FE24F20A;
-	Fri, 12 Apr 2024 08:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B2314006
+	for <linux-rtc@vger.kernel.org>; Fri, 12 Apr 2024 09:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712910203; cv=none; b=GhxvpcDf2QUkVCTVjOFF1/ZcKRWBnrcBGCrldv3i4kNYC42pIwZKc0yKAibHXMzZDIcvq9QmRe8BbEBIyQoOEmEit5BKmudIc1XWGFJbXOs0eIfOJG1g0Q0E/bPNTxTFy2dtUszf62xO+4dtqFjp/tC4v1lA0aF2YBQgdClbtag=
+	t=1712913463; cv=none; b=VGYDEJW5plub43BIXgVpJ3trd/Ru5Sn5JCcMfkiucT7/hixtdz+bbgkEVeMGlEYqVjCL0ANU90oJA+jTeWOp+uJryAiD51DmiwrlXWfDk755P3j0QlGhD45AzVVQC0XpKVdQ+PIucE+ESpGsk+wGb9BfCcrAp8e/B3KBmEhp7fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712910203; c=relaxed/simple;
-	bh=JQsL3l+lpII2c4u6mU33BzB6l2saKrxBERfMXjR3I+Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K3/tyilW26dAY1GoNzD8HwtCm5F44u+LrbrjOaEbqjrupdBfZHctsXQZHAxKyJBb2F/NOooTgpRDehaMUPIuZYCl3zR9xVaFWrzvFnxIiHWztkOFwJcEHVCm6z+d6IJfMDVYfZikhqvtohlo3c0i9HNYb6klvSVTRBqbmMkjAtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dPKmMVyY; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9AB23240002;
-	Fri, 12 Apr 2024 08:23:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1712910199;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WClP5G2kcne2eneGfMBtJOI0aNW9KDauYWuKR9jT1z4=;
-	b=dPKmMVyYATklsYzaKp5rf8tkpd+f8IfUhBwqPg7KpvV0hJVLgglFurhnD9lDD9pp5jb2BJ
-	EVpvAgSIhTCZuuB1OvUya3PUnL3Of0JjnBLw65HaPawxCiA9cFsr4TQgKpho7BDCght/0X
-	IgyV6JqdpIEKwTiwHRc0jwxsfMpPJAVf/Uq21A5FbA8F5X41Qcm1pCLfK0YQh9Cpvy4GY8
-	e9HY7QaJhLZloTZ8GX+53+ZiuS11njbK9QqEATLSLYyPH60o3RVKD20bvNiyoCJlNWVFqx
-	aLwOgDa0jeU9IHB/ezZs02Ex1epHDZbeGhMeAqpFfCcm6iPgLyTTWWa0ckt1zA==
-Date: Fri, 12 Apr 2024 10:23:15 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: wefu@redhat.com
-Cc: jszhang@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, guoren@kernel.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 1/5] drivers/rtc/rtc-xgene: Add prescaler support in APM
- X-Gene RTC driver
-Message-ID: <20240412082315682039eb@mail.local>
-References: <20240412080238.134191-1-wefu@redhat.com>
- <20240412080238.134191-2-wefu@redhat.com>
+	s=arc-20240116; t=1712913463; c=relaxed/simple;
+	bh=FUKtKtdq36Vt1r49LS8QSvI7oP2R7ODnRMLXyosQE2g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=euf+t+O5QtfT+s/vVo/7Fej2vgZUyXqKrLClZ2NJkh7ZP/9OOyuuEeKjEAYomFoFGvpIkVi0kiFLJbqKUW4WIQ2fohG99/RPsBssKTzLSU4AQzKt16ZrZTHlGMMwFwmwgjBWr9wLsVbzLr0XtbThtfv9wm/9aEoEmFtojjktvZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TKFX4Z1X; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56e1bbdb362so700630a12.1
+        for <linux-rtc@vger.kernel.org>; Fri, 12 Apr 2024 02:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712913460; x=1713518260; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=NpTqhd0B9/xzNoER4WA8UDMsth7BUMydRvViv6uQMmo=;
+        b=TKFX4Z1XJWkQ9N4MhCD1f73C1dbDhjWbELbrHG+BfRwZ/jJlCSV4tCzZl3CviydKMf
+         RIBmsiog/28zIBS4juJKek9QmZ8CffYyiputBrLfPNZe7xmvvEyGWoXfwWjRc122MrbO
+         oabKaUJHviRzJnYDbJhbsD3J5pP5aG0CL+iSeCgXvYZP3Fb3cfcUY4WVVryH0A79nmpB
+         Uu4AncipQUvveomsgWxbohkonzuT2aKaT1lSWg6XMKwBg20iM+mTi+b8DTo8bKfzkVI2
+         OUv1PvPgF/lMnyDrB3me6+YR8y6dEF2M9BVtNTy7Mcubc74f6Eu7p/uczxX08kgDHm00
+         l0PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712913460; x=1713518260;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NpTqhd0B9/xzNoER4WA8UDMsth7BUMydRvViv6uQMmo=;
+        b=uuag9l2XaBebpyisdoZavy9yNsPjM+4C5FZ2sEpPOwSZhx0kmdzw5ggLzapdvGMYCu
+         7/46fVErem//vVMjK8XMT07WvNkINJf+Hg4gyMgZfoFNyvcRR65wyxmcLd/m7e6I53e0
+         hzk0Ge54wCOzrJcXZ5LKImcf9+xChX++HJhj6c/3HMQV0MufyTWu29+M+iQ+fyRIWukm
+         U3N4CJTI8qJ3SOCTbfOGuVmqhtKz3CDWV8ZHiNIus3XPBxt3XEh0EkFCRfO98ruViCDJ
+         uvCkn+VcN0fgR1pC9g5toOXIhAiy7rM5LTh4CSt9KZAVMFDceg8tOKqmR9ls1jobBxyf
+         bNGA==
+X-Forwarded-Encrypted: i=1; AJvYcCX9uE/jYlCAtuMu0PCRPLdT8YIx1MSu2QDec0lPTFSG+Eh1dEaJ0b8EyfSQFumzki5w92mR0Q2LYrQYPO0skI0MY/maLmiVJbQA
+X-Gm-Message-State: AOJu0YzRRGFcm3/6TB6izHhrDYjzwbDl+W7ioWdgyik25tUmXwh+QHCe
+	WUUNnXlhaYmmx2FTb9UXSJjEnWktM303r/YOekUbJmExBSZ3isArnXiRcSe26J4=
+X-Google-Smtp-Source: AGHT+IHq4nDOY9BE7wVDb1XOnSrleY4Dv23ThXeV1lFWTOEAGTh75Q6EpVDt8PPWewS00Yu7y3phRA==
+X-Received: by 2002:a50:d542:0:b0:56f:e489:471a with SMTP id f2-20020a50d542000000b0056fe489471amr1659588edj.5.1712913460463;
+        Fri, 12 Apr 2024 02:17:40 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id k20-20020aa7c054000000b0056ff82e54a0sm675063edo.31.2024.04.12.02.17.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Apr 2024 02:17:40 -0700 (PDT)
+Message-ID: <86bf8248-2443-4ced-a67c-7845fef98fd3@linaro.org>
+Date: Fri, 12 Apr 2024 11:17:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240412080238.134191-2-wefu@redhat.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/5] drivers/rtc/rtc-xgene: Add "snps,dw-apb-rtc" into the
+ "compatible"
+To: wefu@redhat.com, jszhang@kernel.org, alexandre.belloni@bootlin.com,
+ robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ guoren@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu
+Cc: linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+References: <20240412080238.134191-1-wefu@redhat.com>
+ <20240412080238.134191-4-wefu@redhat.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240412080238.134191-4-wefu@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 12/04/2024 16:01:43+0800, wefu@redhat.com wrote:
+On 12/04/2024 10:01, wefu@redhat.com wrote:
 > From: Wei Fu <wefu@redhat.com>
 > 
-> This patch add Counter Prescaler support in APM X-Gene RTC driver by
-> getting prescaler (Optional) property value from dtb.
-> 
-> Signed-off-by: Wei Fu <wefu@redhat.com>
-> ---
->  drivers/rtc/Kconfig     | 10 ++++++++++
->  drivers/rtc/rtc-xgene.c | 31 +++++++++++++++++++++++++++++++
->  2 files changed, 41 insertions(+)
-> 
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index c63e32d012f2..3a89f1e6095d 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1888,6 +1888,16 @@ config RTC_DRV_XGENE
->  	  This driver can also be built as a module, if so, the module
->  	  will be called "rtc-xgene".
->  
-> +config RTC_DRV_XGENE_PRESCALER
-> +	bool "Pre-scaler Counter support for APM X-Gene RTC driver"
-> +	depends on RTC_DRV_XGENE
-> +	depends on ARCH_THEAD
-> +	default y
-> +	help
-> +	  Say Y here if your Soc has Pre-scaler Counter support on rtc-xgene.
-> +
-> +	  This hardware support can only be found in DW_apb_rtc after v2.06a.
-> +
-
-I don't feel like this needs a config option, rather you should have a
-proper compatible string that will tell the driver whether the feature
-is available.
+> This patch add "snps,dw-apb-rtc" into the "compatible".
 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Please do not use "This commit/patch/change", but imperative mood. See
+longer explanation here:
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+This we see from the patch. Say what hardware are you adding?
+
+Please run scripts/checkpatch.pl and fix reported warnings. Then please
+run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
+Some warnings can be ignored, especially from --strict run, but the code
+here looks like it needs a fix. Feel free to get in touch if the warning
+is not clear.
+
+
+Best regards,
+Krzysztof
+
 
