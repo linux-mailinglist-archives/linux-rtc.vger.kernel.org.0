@@ -1,105 +1,140 @@
-Return-Path: <linux-rtc+bounces-1036-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1037-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 919EE8A464F
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 02:19:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE40C8A482B
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 08:35:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EF25281E6C
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 00:19:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43D241F21CB1
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 06:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D1E817;
-	Mon, 15 Apr 2024 00:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29D91CAAF;
+	Mon, 15 Apr 2024 06:35:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="giUT0sXr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Geqt+IpH"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223CF193;
-	Mon, 15 Apr 2024 00:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2182F18E1E;
+	Mon, 15 Apr 2024 06:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713140365; cv=none; b=I6LIDAiuEtRHUt+V8yE7q3Tjy5knPZedncNIS1oKge/T0x18NPLX+kj4L0nfCszuGR6jWtlHh+jzZvWmIpyRPMAUd+WeR+JmiABaE5222c6k68DzjXcKIFOqxhXLbAhclI6qx6iXMKf495EdMBXcMz01B18j2OzMD3tvKn+rBg8=
+	t=1713162911; cv=none; b=hK8JVoO4Ky47hA4r3kFLIlY3WDbqtmPGyWNLNTDm9dG4CtlPpouf3Utd+U0HxWh8zek/jQfXYQF6JJBVXFFy3n3M+1G43eGeP/Zma48aA1Ickg7C72zC1JgJt66ajDuM7EcV+0xoWPW0Q6YTgKRkgU6yHPMltHG5DW8UYeFHr88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713140365; c=relaxed/simple;
-	bh=fn0cP6jHQy9x0E71RjlI6piVigamd0rjnbvWW/k3m8c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ru9kLuWLIiFrH5vVtSl4e0aNMJ+gXJQT6gMmlk0in4/GvKh55MOYodFvLJZNKQHnG0GBrj5kOCGePTkNyragTuPPW8L6vbnyWsVDgDKtCnP3f8EJiv2bXLLtix4fYuTG5vKJ4fvgMvrPvv4DJATBLMGqWnwW4SI5X7vHk2IgDmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=giUT0sXr; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-Received: from [192.168.68.112] (ppp14-2-127-66.adl-apt-pir-bras32.tpg.internode.on.net [14.2.127.66])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 0901020178;
-	Mon, 15 Apr 2024 08:09:23 +0800 (AWST)
+	s=arc-20240116; t=1713162911; c=relaxed/simple;
+	bh=Q5TbGZ1jPTv4uMeeTm7Q5TrJJ+oKc4OwR2nN0yuvZHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s8SER6kfU9I3S8E4+a7vhUzL9fGRWGzmaSZVTg5oBxswyRG2Mop4lJ3mOawHtinxIEL9OhpwuszFuPCeGT3GJHBnigMVZRDYztHqC/FzfO5wfDB6rBoMfQ71gb/X+wyw9DL6/iiaI1aEUhey0T/5toU//H4qD7NRF0K+Cu5wSdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Geqt+IpH; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a44f2d894b7so286446866b.1;
+        Sun, 14 Apr 2024 23:35:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1713139768;
-	bh=fn0cP6jHQy9x0E71RjlI6piVigamd0rjnbvWW/k3m8c=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=giUT0sXrneLxTzQYgCq5jqn57d27IX2/GFoKfYX+JCY8+ofHGvxXcFgdIfpxcmJTn
-	 jUmOlCOv3LHdaojgs/5Mzh0YddGrpC/RI8UKg9WasG4onjtXOCgZeJ0JmvkuX7kyBT
-	 qz8a8dKkJZTsgtx0O8IXrmztq4QkGmza6igXPyoAJXvC2xE+8+q0QINGwDdgm7rHbw
-	 7PxzbgURR818zIPA/v+KFKWEdMy5Lf2/1JBBHWdmvgiAszW21rCh/k5WAW0DihhNrC
-	 po1vlz/3HZjNlDp4ySUp8tF886a4EpMd+c9olDGwtPDCt3+Zehl2h+zvYTqRJR6pt7
-	 maoIywYca5U8A==
-Message-ID: <82fcd7a4532df119f82ea55208f592460ba5358e.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v3 2/4] dt-bindings: rtc: convert trivial devices into
- dtschema
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Vladimir
- Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>, Maxime Coquelin
- <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-stm32@st-md-mailman.stormreply.com, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Mon, 15 Apr 2024 09:39:22 +0930
-In-Reply-To: <20240413-rtc_dtschema-v3-2-eff368bcc471@gmail.com>
-References: <20240413-rtc_dtschema-v3-0-eff368bcc471@gmail.com>
-	 <20240413-rtc_dtschema-v3-2-eff368bcc471@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        d=gmail.com; s=20230601; t=1713162907; x=1713767707; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eO+zx6q8xRqWwJnnrLSN3wSPdu79Tj6Uc62vZSkTLvo=;
+        b=Geqt+IpH3EHL65dkbPMIdxJtBbWUeDjDyxVJMpvVQYprDlTpX1nSZLSjoXdyinz9oT
+         rVwn7lRt1wHzUMLSUBCW1upaamy4pMrekpmSb3wKjLgdkfLDAQ9+fuLhPEV8AByNl+RO
+         VR2TlT7wUadE8+UbzwSxsKx/0Ly3/2gcQasxQKXpvLBCNSX2laSRLgpWDe8B8DLOuHR9
+         8AhS/70/xLNdOtVcpGOHaj05nXw/uFHvDYKX14C0IKYDHCFxaBGpKK/nJGKpu6eS8QTs
+         B7Udtj+OBy56Op1kP34PsVlIzoD0onvnr06gdfaDO7sqUlV1yRuRqCtNefhcRcUuD1/N
+         +ohw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713162907; x=1713767707;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eO+zx6q8xRqWwJnnrLSN3wSPdu79Tj6Uc62vZSkTLvo=;
+        b=rCT4sFKkie96B0Yp43UMSjIIL0Tq+/Q//8bT5Dle1BgG+ppa7yl4oHoe7d4MFHbYeE
+         KNT4WMyQlpGHxfZD4FzbwefLzaWKL11KzJxkd6FnyjmGupXWj+ZyVUg2RxTw/75JHuOC
+         CnkkE+pXdQa4kkNUfWuz04v/GAJu1uKMZpzoTuwhoDV29EGh6xXBx9hktESW874wGIUG
+         1+6HaQ9WiKqRCXSrfNySUNo10vkRySBLhTYRN1wIEruDgpIOTXWQ0jh3wVIVCKNqo+hq
+         Ocu2Xl0FDoqhVT43KuzEFIkwVGgR/d6eZ7paGBpc4CQSSrXsBP00em3v9CvOHHXQVkMK
+         FMdw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQH/7wmgJo33rrwtbGmVf0XlTyAXvk9KIPwrLqEPim6wCHwM6sRnj9gcYKNUP+uQPRlHk6evCND6ddZ4Kj7NicNCECmjlGDV/OAtLL1PPiimf7/0yqrkCxi1hgvLsIIhALx8mRYVL1oQ==
+X-Gm-Message-State: AOJu0YyfNVYanic5P3KJDmmAYnWACS2UtzTRSkHcGnEOfIHscdBhMF/v
+	WHY1Q/9Qtdx/JHJc2TeCjTsis/sJUAEmnDY2SzSGFGWfu/Dfhjbz
+X-Google-Smtp-Source: AGHT+IFBOaepaDHEEJj8Porx550BDTPgEDltcVsWd0z0QitZDRqQ83vy5NmfqW3SvdZYQ/SrAz8Q5A==
+X-Received: by 2002:a17:906:b80c:b0:a54:3e6c:c9d7 with SMTP id dv12-20020a170906b80c00b00a543e6cc9d7mr271692ejb.65.1713162907275;
+        Sun, 14 Apr 2024 23:35:07 -0700 (PDT)
+Received: from [10.10.12.27] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id ae12-20020a17090725cc00b00a529aeb4eccsm412271ejc.140.2024.04.14.23.35.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Apr 2024 23:35:06 -0700 (PDT)
+Message-ID: <9b33192d-6245-45e1-bcba-c2339e18f77c@gmail.com>
+Date: Mon, 15 Apr 2024 08:35:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] dt-bindings: rtc: convert trivial devices into
+ dtschema
+To: Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-stm32@st-md-mailman.stormreply.com,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20240413-rtc_dtschema-v3-0-eff368bcc471@gmail.com>
+ <20240413-rtc_dtschema-v3-2-eff368bcc471@gmail.com>
+ <82fcd7a4532df119f82ea55208f592460ba5358e.camel@codeconstruct.com.au>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <82fcd7a4532df119f82ea55208f592460ba5358e.camel@codeconstruct.com.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, 2024-04-13 at 22:22 +0200, Javier Carrasco wrote:
-> These RTCs meet the requirements for a direct conversion into
-> trivial-rtc:
->=20
-> - google,goldfish-rtc
-> - maxim,ds1742
-> - lpc32xx-rtc
-> - orion-rtc
-> - rtc-aspeed
-> - spear-rtc
-> - via,vt8500-rtc
->=20
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+On 4/15/24 02:09, Andrew Jeffery wrote:
+> On Sat, 2024-04-13 at 22:22 +0200, Javier Carrasco wrote:
+>> These RTCs meet the requirements for a direct conversion into
+>> trivial-rtc:
+>>
+>> - google,goldfish-rtc
+>> - maxim,ds1742
+>> - lpc32xx-rtc
+>> - orion-rtc
+>> - rtc-aspeed
+>> - spear-rtc
+>> - via,vt8500-rtc
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> 
+> We have trailers above but then there's more commit message content
+> below. Looks like what's below should be trimmed out (bad squash)?
+> Maybe the trimming could be done as its applied?
+> 
+>>
+>> dt-bindings: rtc: lpc32xx-rtc: convert to dtschema
+>>
+>> Convert existing binding to dtschema to support validation.
+>>
+>> Add the undocumented 'clocks' property.
+>>
+>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> 
+> Andrew
 
-We have trailers above but then there's more commit message content
-below. Looks like what's below should be trimmed out (bad squash)?
-Maybe the trimming could be done as its applied?
 
->=20
-> dt-bindings: rtc: lpc32xx-rtc: convert to dtschema
->=20
-> Convert existing binding to dtschema to support validation.
->=20
-> Add the undocumented 'clocks' property.
->=20
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+You are right, the commit message content below your comment should not
+be there. I can send a new version to trim it away if that is preferred.
 
-Andrew
+Best regards,
+Javier Carrasc
 
