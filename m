@@ -1,81 +1,105 @@
-Return-Path: <linux-rtc+bounces-1035-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1036-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C428A438D
-	for <lists+linux-rtc@lfdr.de>; Sun, 14 Apr 2024 17:49:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 919EE8A464F
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 02:19:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0A4E281DE5
-	for <lists+linux-rtc@lfdr.de>; Sun, 14 Apr 2024 15:49:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EF25281E6C
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 00:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B751350C0;
-	Sun, 14 Apr 2024 15:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D1E817;
+	Mon, 15 Apr 2024 00:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZPjXU7W"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="giUT0sXr"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F95134CC7;
-	Sun, 14 Apr 2024 15:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223CF193;
+	Mon, 15 Apr 2024 00:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713109755; cv=none; b=O1b5Uf+1BV2K2sMGs7Cx4E4XqC7/joMeATmsgf6WbkZR6bTz/guQECRaZxM6QHJd0SpurSGXmDESO1P9pzXOLM+kpD0n3FniYPQ0vqWzNAA+T3owsrd/TWPKSPLLKFgwQRzZPm4VR6KeUqwLV2TDg4eTZVkjjirHnCCsMwzrq30=
+	t=1713140365; cv=none; b=I6LIDAiuEtRHUt+V8yE7q3Tjy5knPZedncNIS1oKge/T0x18NPLX+kj4L0nfCszuGR6jWtlHh+jzZvWmIpyRPMAUd+WeR+JmiABaE5222c6k68DzjXcKIFOqxhXLbAhclI6qx6iXMKf495EdMBXcMz01B18j2OzMD3tvKn+rBg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713109755; c=relaxed/simple;
-	bh=34SiSDZmYoSCnzn+MGvb0W5lkGNJkoDDUf/EzBsQsCs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O6TDhrxRs4573DLW6KxhdNQEgYjCRvnzAEHKbsTUSO9VnYCcWNW0uIk0r5nNE0R7VAw5fytivn+U7w+pnRvX9iSBBvgRkqxzCijtQFxO7uNDsJ9X2HsZ0hjAfYrPz8ksMtZEG8KVSvTdklh07bM07c/e3E2o+2fIP2A3Rnpzwq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZPjXU7W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AC0C072AA;
-	Sun, 14 Apr 2024 15:49:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713109755;
-	bh=34SiSDZmYoSCnzn+MGvb0W5lkGNJkoDDUf/EzBsQsCs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=lZPjXU7W7oxvFN9ssZdptZzsSWQUud/aNLnYdiGz+WlmGvan+TvLFBQcM/6n0DMC8
-	 dNzr3+UJ1xyvMjbu5ATYjt1OcRF94lc2TDvw0of88Z34kAOl2oeu5Qqn4K5JhhASly
-	 aYz9G/611jpUOj+99PgsgeMMRb4qSPFIwWoqcZaUNjdoOsitc0k/msJ2f4uNMIE6eb
-	 vht7Zmp4BxXajqewvBEw85/WbLhSIAx/Eg+4MY0NgD/181rFfs+G0WcxkkZs9miGDN
-	 6daIOlRXiqzODOKe7FiLiuZwUlgcd1Ez53tKxbWKxYeTY64sNaxxsbPrn9w0KI3ODn
-	 KHjV7KokLTJ3w==
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] rtc: mcp795: drop unneeded MODULE_ALIAS
-Date: Sun, 14 Apr 2024 17:49:10 +0200
-Message-Id: <20240414154910.126991-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1713140365; c=relaxed/simple;
+	bh=fn0cP6jHQy9x0E71RjlI6piVigamd0rjnbvWW/k3m8c=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ru9kLuWLIiFrH5vVtSl4e0aNMJ+gXJQT6gMmlk0in4/GvKh55MOYodFvLJZNKQHnG0GBrj5kOCGePTkNyragTuPPW8L6vbnyWsVDgDKtCnP3f8EJiv2bXLLtix4fYuTG5vKJ4fvgMvrPvv4DJATBLMGqWnwW4SI5X7vHk2IgDmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=giUT0sXr; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+Received: from [192.168.68.112] (ppp14-2-127-66.adl-apt-pir-bras32.tpg.internode.on.net [14.2.127.66])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 0901020178;
+	Mon, 15 Apr 2024 08:09:23 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1713139768;
+	bh=fn0cP6jHQy9x0E71RjlI6piVigamd0rjnbvWW/k3m8c=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=giUT0sXrneLxTzQYgCq5jqn57d27IX2/GFoKfYX+JCY8+ofHGvxXcFgdIfpxcmJTn
+	 jUmOlCOv3LHdaojgs/5Mzh0YddGrpC/RI8UKg9WasG4onjtXOCgZeJ0JmvkuX7kyBT
+	 qz8a8dKkJZTsgtx0O8IXrmztq4QkGmza6igXPyoAJXvC2xE+8+q0QINGwDdgm7rHbw
+	 7PxzbgURR818zIPA/v+KFKWEdMy5Lf2/1JBBHWdmvgiAszW21rCh/k5WAW0DihhNrC
+	 po1vlz/3HZjNlDp4ySUp8tF886a4EpMd+c9olDGwtPDCt3+Zehl2h+zvYTqRJR6pt7
+	 maoIywYca5U8A==
+Message-ID: <82fcd7a4532df119f82ea55208f592460ba5358e.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v3 2/4] dt-bindings: rtc: convert trivial devices into
+ dtschema
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Vladimir
+ Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-stm32@st-md-mailman.stormreply.com, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Mon, 15 Apr 2024 09:39:22 +0930
+In-Reply-To: <20240413-rtc_dtschema-v3-2-eff368bcc471@gmail.com>
+References: <20240413-rtc_dtschema-v3-0-eff368bcc471@gmail.com>
+	 <20240413-rtc_dtschema-v3-2-eff368bcc471@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The ID table already has respective entry and MODULE_DEVICE_TABLE and
-creates proper alias for SPI driver.  Having another MODULE_ALIAS causes
-the alias to be duplicated.
+On Sat, 2024-04-13 at 22:22 +0200, Javier Carrasco wrote:
+> These RTCs meet the requirements for a direct conversion into
+> trivial-rtc:
+>=20
+> - google,goldfish-rtc
+> - maxim,ds1742
+> - lpc32xx-rtc
+> - orion-rtc
+> - rtc-aspeed
+> - spear-rtc
+> - via,vt8500-rtc
+>=20
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/rtc/rtc-mcp795.c | 1 -
- 1 file changed, 1 deletion(-)
+We have trailers above but then there's more commit message content
+below. Looks like what's below should be trimmed out (bad squash)?
+Maybe the trimming could be done as its applied?
 
-diff --git a/drivers/rtc/rtc-mcp795.c b/drivers/rtc/rtc-mcp795.c
-index 0d515b3df571..e12f0f806ec4 100644
---- a/drivers/rtc/rtc-mcp795.c
-+++ b/drivers/rtc/rtc-mcp795.c
-@@ -450,4 +450,3 @@ module_spi_driver(mcp795_driver);
- MODULE_DESCRIPTION("MCP795 RTC SPI Driver");
- MODULE_AUTHOR("Josef Gajdusek <atx@atx.name>");
- MODULE_LICENSE("GPL");
--MODULE_ALIAS("spi:mcp795");
--- 
-2.34.1
+>=20
+> dt-bindings: rtc: lpc32xx-rtc: convert to dtschema
+>=20
+> Convert existing binding to dtschema to support validation.
+>=20
+> Add the undocumented 'clocks' property.
+>=20
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
+Andrew
 
