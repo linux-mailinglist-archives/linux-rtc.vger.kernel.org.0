@@ -1,140 +1,125 @@
-Return-Path: <linux-rtc+bounces-1037-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1038-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE40C8A482B
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 08:35:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97EE88A781C
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 00:50:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43D241F21CB1
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Apr 2024 06:35:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44C141F2127E
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Apr 2024 22:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29D91CAAF;
-	Mon, 15 Apr 2024 06:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44AB13AD0E;
+	Tue, 16 Apr 2024 22:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Geqt+IpH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IKGpzXwE"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2182F18E1E;
-	Mon, 15 Apr 2024 06:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E81813A896;
+	Tue, 16 Apr 2024 22:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713162911; cv=none; b=hK8JVoO4Ky47hA4r3kFLIlY3WDbqtmPGyWNLNTDm9dG4CtlPpouf3Utd+U0HxWh8zek/jQfXYQF6JJBVXFFy3n3M+1G43eGeP/Zma48aA1Ickg7C72zC1JgJt66ajDuM7EcV+0xoWPW0Q6YTgKRkgU6yHPMltHG5DW8UYeFHr88=
+	t=1713307579; cv=none; b=Yq2ePhj3+G1F70ErphWbOvSyPhwobU1DCoui+2y61FvUrB2SDEcnc5eENpo60n53dOoF+2LjrkTC28DUuELVO6LqJdhHWIfppyY0Toj7Zzx98rZH//CD22VOZ2jFTM9J5bdf2QcbQ7b9So8lv1bSvJfkFR3oJUhiUE7rJ03jPtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713162911; c=relaxed/simple;
-	bh=Q5TbGZ1jPTv4uMeeTm7Q5TrJJ+oKc4OwR2nN0yuvZHA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s8SER6kfU9I3S8E4+a7vhUzL9fGRWGzmaSZVTg5oBxswyRG2Mop4lJ3mOawHtinxIEL9OhpwuszFuPCeGT3GJHBnigMVZRDYztHqC/FzfO5wfDB6rBoMfQ71gb/X+wyw9DL6/iiaI1aEUhey0T/5toU//H4qD7NRF0K+Cu5wSdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Geqt+IpH; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a44f2d894b7so286446866b.1;
-        Sun, 14 Apr 2024 23:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713162907; x=1713767707; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eO+zx6q8xRqWwJnnrLSN3wSPdu79Tj6Uc62vZSkTLvo=;
-        b=Geqt+IpH3EHL65dkbPMIdxJtBbWUeDjDyxVJMpvVQYprDlTpX1nSZLSjoXdyinz9oT
-         rVwn7lRt1wHzUMLSUBCW1upaamy4pMrekpmSb3wKjLgdkfLDAQ9+fuLhPEV8AByNl+RO
-         VR2TlT7wUadE8+UbzwSxsKx/0Ly3/2gcQasxQKXpvLBCNSX2laSRLgpWDe8B8DLOuHR9
-         8AhS/70/xLNdOtVcpGOHaj05nXw/uFHvDYKX14C0IKYDHCFxaBGpKK/nJGKpu6eS8QTs
-         B7Udtj+OBy56Op1kP34PsVlIzoD0onvnr06gdfaDO7sqUlV1yRuRqCtNefhcRcUuD1/N
-         +ohw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713162907; x=1713767707;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eO+zx6q8xRqWwJnnrLSN3wSPdu79Tj6Uc62vZSkTLvo=;
-        b=rCT4sFKkie96B0Yp43UMSjIIL0Tq+/Q//8bT5Dle1BgG+ppa7yl4oHoe7d4MFHbYeE
-         KNT4WMyQlpGHxfZD4FzbwefLzaWKL11KzJxkd6FnyjmGupXWj+ZyVUg2RxTw/75JHuOC
-         CnkkE+pXdQa4kkNUfWuz04v/GAJu1uKMZpzoTuwhoDV29EGh6xXBx9hktESW874wGIUG
-         1+6HaQ9WiKqRCXSrfNySUNo10vkRySBLhTYRN1wIEruDgpIOTXWQ0jh3wVIVCKNqo+hq
-         Ocu2Xl0FDoqhVT43KuzEFIkwVGgR/d6eZ7paGBpc4CQSSrXsBP00em3v9CvOHHXQVkMK
-         FMdw==
-X-Forwarded-Encrypted: i=1; AJvYcCUQH/7wmgJo33rrwtbGmVf0XlTyAXvk9KIPwrLqEPim6wCHwM6sRnj9gcYKNUP+uQPRlHk6evCND6ddZ4Kj7NicNCECmjlGDV/OAtLL1PPiimf7/0yqrkCxi1hgvLsIIhALx8mRYVL1oQ==
-X-Gm-Message-State: AOJu0YyfNVYanic5P3KJDmmAYnWACS2UtzTRSkHcGnEOfIHscdBhMF/v
-	WHY1Q/9Qtdx/JHJc2TeCjTsis/sJUAEmnDY2SzSGFGWfu/Dfhjbz
-X-Google-Smtp-Source: AGHT+IFBOaepaDHEEJj8Porx550BDTPgEDltcVsWd0z0QitZDRqQ83vy5NmfqW3SvdZYQ/SrAz8Q5A==
-X-Received: by 2002:a17:906:b80c:b0:a54:3e6c:c9d7 with SMTP id dv12-20020a170906b80c00b00a543e6cc9d7mr271692ejb.65.1713162907275;
-        Sun, 14 Apr 2024 23:35:07 -0700 (PDT)
-Received: from [10.10.12.27] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id ae12-20020a17090725cc00b00a529aeb4eccsm412271ejc.140.2024.04.14.23.35.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Apr 2024 23:35:06 -0700 (PDT)
-Message-ID: <9b33192d-6245-45e1-bcba-c2339e18f77c@gmail.com>
-Date: Mon, 15 Apr 2024 08:35:04 +0200
+	s=arc-20240116; t=1713307579; c=relaxed/simple;
+	bh=ruPLZtboEM5XulxQNfwB0Bs5ITsVQhPBESRc6EcWqdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GKPul9k9zB+aAmNVkzG5rjt9zHXsNTuouI/xIwGDUId+k3uEiBcYGhaM/v0jZ8WfOrsqhNRhBcQLNw0sxPwqPg1tJbzNKnZ+mECoOdDqHxsdBl2sFa8Wbp8NDFwF9gGKXPcSbI7HNuoHrIPYgRZVbe6mYCRWVB9hkW48qqA2W6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IKGpzXwE; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713307578; x=1744843578;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ruPLZtboEM5XulxQNfwB0Bs5ITsVQhPBESRc6EcWqdU=;
+  b=IKGpzXwEz3Gwj7we2JskIYoln9tEzt17Z3+u4L/K2r4j8bGgOsbw904U
+   oktCaro/dqg4+49yeh8ZOF0L8ZW86JFbnU2ZTUFfnsoAmc1P3LkGy742s
+   muLwDqLHOCICh8VmBYHNKX/f5T59+IbHiFpdiHeVbU6zEZbkeURK9iJpp
+   basWn5/D/g4mkbedSr+G3qh/hEa3lYxIj9XKk+1ZE3Scs2zyrkGAFu8ru
+   3vHhXwF4QIme9B1olwQFBvYB1p/YNq58aBlwiJFIPdvoK4yJKv7WCrenV
+   WsC/m5VXBapNZd8VzN0yBS5fJAX2/peUTiBWLJSAhWgcxYZk+nT/NgExs
+   g==;
+X-CSE-ConnectionGUID: zUFkkrnpQwGYTjm/B+6n5Q==
+X-CSE-MsgGUID: JFtylfR1RACGwxCgQpA+vA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="19336462"
+X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
+   d="scan'208";a="19336462"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 15:46:17 -0700
+X-CSE-ConnectionGUID: XGtGOWL5S2adDgWQ0szi3g==
+X-CSE-MsgGUID: ljDqj6luS4yibYyUZCSvJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
+   d="scan'208";a="53381544"
+Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 16 Apr 2024 15:46:13 -0700
+Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rwrZ5-0005nw-0D;
+	Tue, 16 Apr 2024 22:46:11 +0000
+Date: Wed, 17 Apr 2024 06:45:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: Re: [PATCH 2/9] dt-bindings: rtc: google,goldfish-rtc: move to
+ trivial-rtc
+Message-ID: <202404170656.LoL9eBYs-lkp@intel.com>
+References: <20240408-rtc_dtschema-v1-2-c447542fc362@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] dt-bindings: rtc: convert trivial devices into
- dtschema
-To: Andrew Jeffery <andrew@codeconstruct.com.au>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-stm32@st-md-mailman.stormreply.com,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20240413-rtc_dtschema-v3-0-eff368bcc471@gmail.com>
- <20240413-rtc_dtschema-v3-2-eff368bcc471@gmail.com>
- <82fcd7a4532df119f82ea55208f592460ba5358e.camel@codeconstruct.com.au>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <82fcd7a4532df119f82ea55208f592460ba5358e.camel@codeconstruct.com.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240408-rtc_dtschema-v1-2-c447542fc362@gmail.com>
 
-On 4/15/24 02:09, Andrew Jeffery wrote:
-> On Sat, 2024-04-13 at 22:22 +0200, Javier Carrasco wrote:
->> These RTCs meet the requirements for a direct conversion into
->> trivial-rtc:
->>
->> - google,goldfish-rtc
->> - maxim,ds1742
->> - lpc32xx-rtc
->> - orion-rtc
->> - rtc-aspeed
->> - spear-rtc
->> - via,vt8500-rtc
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> 
-> We have trailers above but then there's more commit message content
-> below. Looks like what's below should be trimmed out (bad squash)?
-> Maybe the trimming could be done as its applied?
-> 
->>
->> dt-bindings: rtc: lpc32xx-rtc: convert to dtschema
->>
->> Convert existing binding to dtschema to support validation.
->>
->> Add the undocumented 'clocks' property.
->>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> 
-> Andrew
+Hi Javier,
 
+kernel test robot noticed the following build warnings:
 
-You are right, the commit message content below your comment should not
-be there. I can send a new version to trim it away if that is preferred.
+[auto build test WARNING on fec50db7033ea478773b159e0e2efb135270e3b7]
 
-Best regards,
-Javier Carrasc
+url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Carrasco/dt-bindings-rtc-orion-rtc-move-to-trivial-rtc/20240408-235612
+base:   fec50db7033ea478773b159e0e2efb135270e3b7
+patch link:    https://lore.kernel.org/r/20240408-rtc_dtschema-v1-2-c447542fc362%40gmail.com
+patch subject: [PATCH 2/9] dt-bindings: rtc: google,goldfish-rtc: move to trivial-rtc
+reproduce: (https://download.01.org/0day-ci/archive/20240417/202404170656.LoL9eBYs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404170656.LoL9eBYs-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   Warning: Documentation/devicetree/bindings/power/wakeup-source.txt references a file that doesn't exist: Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
+   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+   Warning: Documentation/devicetree/bindings/sound/fsl-asoc-card.txt references a file that doesn't exist: Documentation/devicetree/bindings/sound/fsl,asrc.txt
+   Warning: Documentation/gpu/amdgpu/display/display-contributing.rst references a file that doesn't exist: Documentation/GPU/amdgpu/display/mpo-overview.rst
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/rtc/google,goldfish-rtc.txt
+   Using alabaster theme
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
