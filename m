@@ -1,88 +1,56 @@
-Return-Path: <linux-rtc+bounces-1038-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1039-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97EE88A781C
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 00:50:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D3188A794D
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 01:44:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44C141F2127E
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Apr 2024 22:50:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C931B21A84
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Apr 2024 23:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44AB13AD0E;
-	Tue, 16 Apr 2024 22:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F9713A890;
+	Tue, 16 Apr 2024 23:43:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IKGpzXwE"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CkAuQl5G"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E81813A896;
-	Tue, 16 Apr 2024 22:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD16313A869;
+	Tue, 16 Apr 2024 23:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713307579; cv=none; b=Yq2ePhj3+G1F70ErphWbOvSyPhwobU1DCoui+2y61FvUrB2SDEcnc5eENpo60n53dOoF+2LjrkTC28DUuELVO6LqJdhHWIfppyY0Toj7Zzx98rZH//CD22VOZ2jFTM9J5bdf2QcbQ7b9So8lv1bSvJfkFR3oJUhiUE7rJ03jPtU=
+	t=1713311032; cv=none; b=DdKc9gb/zPtvS2C/UG01s0yXiDN2II515/0HFJkOAih4hvq7e93Y+up8YtGUviL2pKPEEhph+DzcY9vWUXg9rgI++cxe0ecMmARnBcHQbs0s15FW50c+o2QW4BOivqkzBMvJM36r6BPbDkoNI4RN2sg/Udrs2Y1uV6/rsdbPuJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713307579; c=relaxed/simple;
-	bh=ruPLZtboEM5XulxQNfwB0Bs5ITsVQhPBESRc6EcWqdU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GKPul9k9zB+aAmNVkzG5rjt9zHXsNTuouI/xIwGDUId+k3uEiBcYGhaM/v0jZ8WfOrsqhNRhBcQLNw0sxPwqPg1tJbzNKnZ+mECoOdDqHxsdBl2sFa8Wbp8NDFwF9gGKXPcSbI7HNuoHrIPYgRZVbe6mYCRWVB9hkW48qqA2W6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IKGpzXwE; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713307578; x=1744843578;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ruPLZtboEM5XulxQNfwB0Bs5ITsVQhPBESRc6EcWqdU=;
-  b=IKGpzXwEz3Gwj7we2JskIYoln9tEzt17Z3+u4L/K2r4j8bGgOsbw904U
-   oktCaro/dqg4+49yeh8ZOF0L8ZW86JFbnU2ZTUFfnsoAmc1P3LkGy742s
-   muLwDqLHOCICh8VmBYHNKX/f5T59+IbHiFpdiHeVbU6zEZbkeURK9iJpp
-   basWn5/D/g4mkbedSr+G3qh/hEa3lYxIj9XKk+1ZE3Scs2zyrkGAFu8ru
-   3vHhXwF4QIme9B1olwQFBvYB1p/YNq58aBlwiJFIPdvoK4yJKv7WCrenV
-   WsC/m5VXBapNZd8VzN0yBS5fJAX2/peUTiBWLJSAhWgcxYZk+nT/NgExs
-   g==;
-X-CSE-ConnectionGUID: zUFkkrnpQwGYTjm/B+6n5Q==
-X-CSE-MsgGUID: JFtylfR1RACGwxCgQpA+vA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="19336462"
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="19336462"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 15:46:17 -0700
-X-CSE-ConnectionGUID: XGtGOWL5S2adDgWQ0szi3g==
-X-CSE-MsgGUID: ljDqj6luS4yibYyUZCSvJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,207,1708416000"; 
-   d="scan'208";a="53381544"
-Received: from unknown (HELO 23c141fc0fd8) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 16 Apr 2024 15:46:13 -0700
-Received: from kbuild by 23c141fc0fd8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rwrZ5-0005nw-0D;
-	Tue, 16 Apr 2024 22:46:11 +0000
-Date: Wed, 17 Apr 2024 06:45:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Subject: Re: [PATCH 2/9] dt-bindings: rtc: google,goldfish-rtc: move to
- trivial-rtc
-Message-ID: <202404170656.LoL9eBYs-lkp@intel.com>
-References: <20240408-rtc_dtschema-v1-2-c447542fc362@gmail.com>
+	s=arc-20240116; t=1713311032; c=relaxed/simple;
+	bh=YEGQ8CgrUzK0nrt4Ie8QLISTZQV93JSwBQbWnBMJILI=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C12si8hQOMgs9q4bpQc7kkJwFnotYlpY/pLfBIF+uB576VM1NLNNpjKJNEnbwJrSPTGN4yIKZpBiZ64bt/j6J//8mlURG5WTmbwkdK6KnKnihkSExTqC1cf7/HMDVmDTbSl8xuDlxSjAW2f8gWsyHuP8X16Q76G5tcyC1iqz4I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CkAuQl5G; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 876A61BF203;
+	Tue, 16 Apr 2024 23:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1713311029;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CNDZdf/uKaX+WgPhUphRKuqSwi/q4yBAoxXLi2+EWYs=;
+	b=CkAuQl5GbM1DukqBkJHugmme5K2t5dVxJU+RlFEP9U5jtQO1+svXT44hB1PbfU4oHhqROu
+	iVmles8c4/AZAaCxiQvZq7Xl+jhCu+TCIOrwywxf6XRsipB3d0+OumsStdeURaRodS7eua
+	SpaEPCsPHz9s8rIBZb3J5bQtjxwuJrj5wgHTq7u31FfTErOmYdIpBupaToi9bjIg5afbu7
+	WVnXfEDJ/oKsa8cOfJL/lCqpcxnHK1aeNrIdSQUl75kq0+8NaFl5lHsgY743uWGHhqGX8H
+	SrYPGFTOL4OPL/PvozJKxyQ3YOXmkxpn7DASTtTNqBeA7vxQUfECY3N5P31RZQ==
+Date: Wed, 17 Apr 2024 01:43:45 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] rtc: mcp795: drop unneeded MODULE_ALIAS
+Message-ID: <171331101619.12461.12401501300609641415.b4-ty@bootlin.com>
+References: <20240414154910.126991-1-krzk@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -91,35 +59,25 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240408-rtc_dtschema-v1-2-c447542fc362@gmail.com>
+In-Reply-To: <20240414154910.126991-1-krzk@kernel.org>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hi Javier,
+On Sun, 14 Apr 2024 17:49:10 +0200, Krzysztof Kozlowski wrote:
+> The ID table already has respective entry and MODULE_DEVICE_TABLE and
+> creates proper alias for SPI driver.  Having another MODULE_ALIAS causes
+> the alias to be duplicated.
+> 
+> 
 
-kernel test robot noticed the following build warnings:
+Applied, thanks!
 
-[auto build test WARNING on fec50db7033ea478773b159e0e2efb135270e3b7]
+[1/1] rtc: mcp795: drop unneeded MODULE_ALIAS
+      https://git.kernel.org/abelloni/c/393e3d290f61
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Carrasco/dt-bindings-rtc-orion-rtc-move-to-trivial-rtc/20240408-235612
-base:   fec50db7033ea478773b159e0e2efb135270e3b7
-patch link:    https://lore.kernel.org/r/20240408-rtc_dtschema-v1-2-c447542fc362%40gmail.com
-patch subject: [PATCH 2/9] dt-bindings: rtc: google,goldfish-rtc: move to trivial-rtc
-reproduce: (https://download.01.org/0day-ci/archive/20240417/202404170656.LoL9eBYs-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202404170656.LoL9eBYs-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   Warning: Documentation/devicetree/bindings/power/wakeup-source.txt references a file that doesn't exist: Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
-   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-   Warning: Documentation/devicetree/bindings/sound/fsl-asoc-card.txt references a file that doesn't exist: Documentation/devicetree/bindings/sound/fsl,asrc.txt
-   Warning: Documentation/gpu/amdgpu/display/display-contributing.rst references a file that doesn't exist: Documentation/GPU/amdgpu/display/mpo-overview.rst
->> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/rtc/google,goldfish-rtc.txt
-   Using alabaster theme
+Best regards,
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
