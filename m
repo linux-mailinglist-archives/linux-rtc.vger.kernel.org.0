@@ -1,118 +1,113 @@
-Return-Path: <linux-rtc+bounces-1043-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1044-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F828A8C00
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 21:20:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 738ED8A8C32
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 21:36:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5ED8288510
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 19:20:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AE4C1F230DB
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 19:36:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC42241E7;
-	Wed, 17 Apr 2024 19:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C7C2C6A3;
+	Wed, 17 Apr 2024 19:36:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oIgRsW3U"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ghgGf2f4"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B1A2BB16;
-	Wed, 17 Apr 2024 19:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E100922324;
+	Wed, 17 Apr 2024 19:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713381599; cv=none; b=F78zuYr/oLOAD2ONQRVPCKIR3iS17hXQXLSgNBc9Y+8CDEmZQKHBcm3krwTThHBZXR9RtZNxFHSs/QFoHW/CkM1DWVa5vonrYicO4XborJbAUlE9tzF1sVV3X4OzJSFdS5MDSsVZ4xqgtAVfNkBERGNJHnGJjYem91Uy59VWNpA=
+	t=1713382601; cv=none; b=A2EKMwKDXvhOnStVxKxhPrbOzddFYne95bnGT3Mw+XfDP4XsFx0jev2C6T2DER55AP35vAIH2r6a/YdFFdsceOlfZ7MC3sbKZCZhdoemGpB8Lx5tJikWF4XlF/uiPEaecUPCdh2Ws4U6UUGSDaE6vwlZ0M3sVQHAA0/+8X2upXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713381599; c=relaxed/simple;
-	bh=1WkTOQjl0bt6iavNqrnDeQegNFNYwXSEDpYVQxuGjJ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LbLZ/9SzyGRYbUJMrMMi3l1M0aUWOrPw+Z/tXqEtjg9/SFR616gXotypVzXSS5ydZ5xMK1MGnR3M6wN+8RrC0+Q82UwOjANyxlHgIUwMl/xOM+kYJ+EVlFWNkr37ZLV4FBUW/2d69iZhtJClFXXvKCU8FXEX4y9scHd8oJEO6MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oIgRsW3U; arc=none smtp.client-ip=217.70.183.195
+	s=arc-20240116; t=1713382601; c=relaxed/simple;
+	bh=mdIICzU9KMKGrDG62N4QjQo6wwR0iXVse0i1Pf1HNq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t/dZCarocHkc9TMfu9sf82FTeznknS8WNL8LQaCGPfCSN+l02PH7k/ArLSX+QmqHb3SaJQ0M93VCi/o+sT6hI2ywRrJZ0Cyey4IEdNQta4xoQdjsc3zmyFXBrVQGnpdz1oZCFL+ijvKod7Cym6geg4Pgs/9KcXf53r+48Ihhm8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ghgGf2f4; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4FB9460002;
-	Wed, 17 Apr 2024 19:19:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 897C81C0004;
+	Wed, 17 Apr 2024 19:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1713381595;
+	t=1713382596;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=jQo9vcuwNFak9EahRUpeiFOj0bXZpNg5mHU6fet7Il4=;
-	b=oIgRsW3UbIUkZDmclmiZaDkSJLJ7avJgIK/ktpfLzl05AZRllOBSQFqJaaYSZwKWFpTGMH
-	tnW98VdSuTYN2q0RO298pBc9j+23NzAzm6xeovJUTiy9DcRFfNQcHCcWj78Dzzs517bocA
-	hQLFlp0KV67qLvRR5rpxytjQ/icmuvGVAyW+rkgZaEJkR9+lcp4lVoLn98DZDFVBgyMWPB
-	X1sz8emUKahIZ++XYFsnuWwW0YHrX2wFVoLsrIx7OoWJgaHZ5Vvu5nbShRrAfb+9L9S7eq
-	I4n0qazoUj3C8A7sdxjmk1ayRgJHZGi8dciuNpowoay0e4+kPExrpesO/cvbuA==
-From: alexandre.belloni@bootlin.com
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Waqar Hameed <waqar.hameed@axis.com>,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] rtc: rx8111: handle VLOW flag
-Date: Wed, 17 Apr 2024 21:19:36 +0200
-Message-ID: <20240417191937.33790-2-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240417191937.33790-1-alexandre.belloni@bootlin.com>
-References: <20240417191937.33790-1-alexandre.belloni@bootlin.com>
+	bh=X7evEF4M6GPcsPmLEVtaklRbN3oddZv23iJJ5uZYo1w=;
+	b=ghgGf2f45IeZTXjBpsGdPMuWd1ncRBP1tqlf2U9a+XPR5jSAhD4+4upvFNHMlyVPsCQSXS
+	ZPMUAxlsZe3Poc2g1mfKVxsHZjKyzZcY/CSKtT+wx13A8fDkhPEb5OBekyEVmGq2Vi3IxQ
+	HkCZ1eX5JNxCCh2Bx2gfvDdeI4XIxZrWbMKh9s1R/eoKAqhaZteRCf7jhRvpDk00wfo9fL
+	ukWFfn4bFOfXq8NxS4XWkIaJFfj9dArEtefST2GeJiGv6jbjmWvlpWehVC+fM9nTM62le2
+	vhXQnW/jGpc9fBEz0qUqKZHeEmP0LtHv/0qxVErouShhNPVwHO3jsflfEiWGeQ==
+Date: Wed, 17 Apr 2024 21:36:31 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH v3 0/4] rtc: convert multiple bindings into
+ dtschema
+Message-ID: <171338250318.37347.8193747079895691565.b4-ty@bootlin.com>
+References: <20240413-rtc_dtschema-v3-0-eff368bcc471@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240413-rtc_dtschema-v3-0-eff368bcc471@gmail.com>
+X-Spam-Flag: yes
+X-Spam-Level: **************************
+X-GND-Spam-Score: 400
+X-GND-Status: SPAM
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Sat, 13 Apr 2024 22:22:15 +0200, Javier Carrasco wrote:
+> This series converts the following bindings into dtschema, moving them
+> to trivial-rtc whenever possible:
+> 
+> - google,goldfish-rtc: trivial-rtc, referenced in mips arch.
+> - lpc32xx-rtc: trivial-rtc, referenced in arm arch.
+> - maxim,ds1742: trivial-rtc, not referenced in arch, cheap conversion.
+> - orion-rtc: trival-rtc, referenced in arm arch.
+> - pxa-rtc: add missing properties and convert. Referenced in arm arch.
+> - rtc-aspeed: 3 devices to trivial-rtc, all referenced in arm arch.
+> - st,spear600-rtc: trivial-rtc, referenced in arm arch.
+> - stmp3xxx-rtc: add compatibles and convert, referenced in arm arch.
+> - via,vt8500-rtc: trivial-rtc, referenced in arm arch.
+> 
+> [...]
 
-Allow userspace to get battery status information and be able to warn when
-battery is low and has to be replaced.
+Applied, thanks!
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-rx8111.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+[3/4] dt-bindings: rtc: pxa-rtc: convert to dtschema
+      https://git.kernel.org/abelloni/c/bbd3e43662d7
+[4/4] dt-bindings: rtc: stmp3xxx-rtc: convert to dtschema
+      https://git.kernel.org/abelloni/c/c3a0ee85f6e3
+[2/4] dt-bindings: rtc: convert trivial devices into dtschema
+      https://git.kernel.org/abelloni/c/1c431b92e21b
 
-diff --git a/drivers/rtc/rtc-rx8111.c b/drivers/rtc/rtc-rx8111.c
-index 4a35bd921b33..8450d9f0b566 100644
---- a/drivers/rtc/rtc-rx8111.c
-+++ b/drivers/rtc/rtc-rx8111.c
-@@ -95,6 +95,9 @@ enum rx8111_regfield {
- 	RX8111_REGF_INIEN,
- 	RX8111_REGF_CHGEN,
- 
-+	/* RX8111_REG_STATUS_MON. */
-+	RX8111_REGF_VLOW,
-+
- 	/* Sentinel value. */
- 	RX8111_REGF_MAX
- };
-@@ -129,6 +132,8 @@ static const struct reg_field rx8111_regfields[] = {
- 	[RX8111_REGF_SWSEL1] = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 3, 3),
- 	[RX8111_REGF_INIEN]  = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 6, 6),
- 	[RX8111_REGF_CHGEN]  = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 7, 7),
-+
-+	[RX8111_REGF_VLOW]  = REG_FIELD(RX8111_REG_STATUS_MON, 1, 1),
- };
- 
- static const struct regmap_config rx8111_regmap_config = {
-@@ -276,6 +281,13 @@ static int rx8111_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
- 
- 		vlval = regval ? RTC_VL_DATA_INVALID : 0;
- 
-+		ret = regmap_field_read(data->regfields[RX8111_REGF_VLOW],
-+					&regval);
-+		if (ret)
-+			return ret;
-+
-+		vlval |= regval ? RTC_VL_BACKUP_LOW : 0;
-+
- 		return put_user(vlval, (typeof(vlval) __user *)arg);
- 	default:
- 		return -ENOIOCTLCMD;
+Best regards,
+
 -- 
-2.44.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
