@@ -1,111 +1,110 @@
-Return-Path: <linux-rtc+bounces-1041-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1042-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 837938A8ACD
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 20:08:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBF6A8A8BFE
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 21:19:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 236881F22E0B
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 18:08:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F6301F22C97
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 19:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39CA173325;
-	Wed, 17 Apr 2024 18:08:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A591241E7;
+	Wed, 17 Apr 2024 19:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L8iZ/xHi"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jiz9GMMY"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B11172BBA;
-	Wed, 17 Apr 2024 18:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B764182AF;
+	Wed, 17 Apr 2024 19:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713377317; cv=none; b=oRNpSICrtxZkqxsSus7MdE5f3h68wxR3K+joLUxKsl3rolVxMBbZWM9IuDHspAFEAuF3/MWbywKKsY/dFG5qV2+PrJdj6LSWLe++5TZXk8pxPN++g8uW2/KGmU8js0eUtlv0nzb5CqNknCQrf40u5QBK5NEHrAM2WM7YDa5Z0fY=
+	t=1713381593; cv=none; b=Hgm0C2B/sQfybCVyYzCkuc63xPiiGAAun3KaWanBC0RhBFDI+g1GGEOaBguQ601sFuUCpLPJl53urpdKPOODm/QJ0uAkvvEbksxvx22tuq1gQ6jvj0LNIE22rg5kKzIL8Pp6tUuQDIgsdCh71RVmLf4kNpItiDHVo1Ed804sVHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713377317; c=relaxed/simple;
-	bh=yScqRp0Jg2+VouccAT2Uycta3VO03GkGoJ4Bu4O9Mj0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BpczYNrbJTl4xBavgt9bAUQMDvmk/CR6VB5eXvWknCZ+aF7D6jV2r+ogUZwRUoEaTIQN9SmGHJX3mdFR2HTWYVp/Xu2hVnjxCZJs99sDOAiBM7bAh5KQug4/7Dub8Fv+ijxWa2JY+GoBigpHRwcZfw4vWSz0bftOP9vDqb9jHf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L8iZ/xHi; arc=none smtp.client-ip=217.70.183.196
+	s=arc-20240116; t=1713381593; c=relaxed/simple;
+	bh=AeUpsW2kfdTLP8cytZxJnozfmR5aDxkpG7wLSKBxCCM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=auHbSDcWdToOInAa/O2kGE0zEet7dyzU4g242xe/HehWzPVJA79NzX3/P6Zsf6zTqKoW1p450i1iJApJhxzyaJnk7IeezHSxfJTXBaI8EnN/Be15DpkYbs2VHklPJ8TZUIoqqMT2Ynd7Uk3RYJ7bgWC66Gbl3DnYlp4Au2+CAJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jiz9GMMY; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4793CE0003;
-	Wed, 17 Apr 2024 18:08:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 090FA240006;
+	Wed, 17 Apr 2024 19:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1713377307;
+	t=1713381588;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zYtwhfXVLaMvnCqB5/9WQLxlola4N7x55igQ2xpirys=;
-	b=L8iZ/xHiqXbrS0rt1SLs+GnYBh9FQO1sk3Ozm/KX8WEp20h9jl86Obe6kfW/QQ2ggZ4vud
-	oTS9gFDRPg53gYCgUYiKACit6tcxV+IYwCl1wWpTNeFXW4p/RyoKAo0eY7dD4DAKB3+Yng
-	PEiulenBD+o1VWy+qxesEr3FYRiOOpe1ZQ/lq22OIPCj/GPEmARFc5BbwHAGIcb4pMUhfN
-	/kRJqioj8ySTutMfW1xUxZez3A0S8d7lOLnHsc35R8CKHeH+IucfOmvCYazkbuBlx5ag8m
-	zXWel3C7U1vQgoOgeMwBckWHoAK7mb5Lb+41ljZsX75M+HvRyChgt0au87y2FA==
-Date: Wed, 17 Apr 2024 20:08:23 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Alessandro Zummo <a.zummo@towertech.it>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Waqar Hameed <waqar.hameed@axis.com>
-Cc: kernel@axis.com, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Add a driver for Epson RX8111 RTC
-Message-ID: <171337729016.24784.6697230911963690244.b4-ty@bootlin.com>
-References: <cover.1700491765.git.waqar.hameed@axis.com>
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qnegySRP2t/rhTa6N++GcpoVh6UOOmzaniiw8ruo3KU=;
+	b=jiz9GMMYydwERXWFLzxGKwFo1BrJj+wOXaf5lzHHANvPOPALLlLe5cDtPEfAoiioIsJR9Q
+	bjVdwExgBRaCHztfdrra3HSHixE4BG5bEJxjf15yar53iiLOPiODV3eQYaad09rt8bKcki
+	QvvSmHJrKj0TbGR2eYXtmPlHrrgJVs10ufXVJfFnHDXYs+biSLWBJxesJuoVHHPnMOXZFQ
+	AeNagQGR4sHwjyNnE47+P9X0t8C62uqO5OvPMETHB/JnAI9MOTkfIo3t39hUxDbKWlxb6I
+	uMrgtlAr7umZ0W4DM01wj2x2JiyxOsmyEkELQVXY7MD42UeJqXr6GDgfW5xlJg==
+From: alexandre.belloni@bootlin.com
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Waqar Hameed <waqar.hameed@axis.com>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] rtc: rx8111: demote warnings to debug level
+Date: Wed, 17 Apr 2024 21:19:35 +0200
+Message-ID: <20240417191937.33790-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1700491765.git.waqar.hameed@axis.com>
-X-Spam-Flag: yes
-X-Spam-Level: **************************
-X-GND-Spam-Score: 400
-X-GND-Status: SPAM
+Content-Transfer-Encoding: 8bit
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Mon, 20 Nov 2023 15:49:25 +0100, Waqar Hameed wrote:
-> In this patch series we add a basic driver for Epson RX8111 RTC with
-> support for only reading/writing the time and the `ioctl`s `RTC_VL_READ`
-> and `RTC_VL_CLR`.
-> 
-> Datasheet: https://support.epson.biz/td/api/doc_check.php?dl=app_RX8111CE&lang=en
-> 
-> Changes in v3:
-> * Remove macro define `RX8111_DRV_NAME` for the driver name.
-> * Remove macro function `RX8111_TIME_BUF_IDX` and instead use the
->   offsets as indices directly.
-> * Remove `rx8111_setup()` that disabled extended functionality and
->   interrupts.
-> * Remove comments explaining register value conversions in
->   `rx8111_read/set_time()`.
-> * Check/clear register flag XST (oscillation stoppage) in
->   `rx8111_read/set_time()`.
-> * Change `vlval` to `unsigned int` in `rx8111_ioctl()`.
-> * Remove `case RTC_VL_CLR` in `rx8111_ioctl()`.
-> * Convert all `dev_err()` to `dev_dbg()`.
-> * Convert all `dev_err_probe()` to `dev_dbg()` in probe.
-> * Return without printing from `devm_rtc_register_device()` in probe.
-> 
-> [...]
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Applied, thanks!
+The proper way for userspace to react on a read time error is to have a
+look at the voltage low information. There is no point in cluttering dmesg
+as it is often not even visible to the end user.
 
-[1/2] dt-bindings: rtc: Add Epson RX8111
-      https://git.kernel.org/abelloni/c/c6a2fb6d14bf
-[2/2] rtc: Add driver for Epson RX8111
-      https://git.kernel.org/abelloni/c/f8c81d15f4bb
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-rx8111.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Best regards,
-
+diff --git a/drivers/rtc/rtc-rx8111.c b/drivers/rtc/rtc-rx8111.c
+index 62d2352de102..4a35bd921b33 100644
+--- a/drivers/rtc/rtc-rx8111.c
++++ b/drivers/rtc/rtc-rx8111.c
+@@ -170,14 +170,14 @@ static int rx8111_read_time(struct device *dev, struct rtc_time *tm)
+ 	}
+ 
+ 	if (FIELD_GET(RX8111_FLAG_XST_BIT, regval)) {
+-		dev_warn(data->dev,
+-			 "Crystal oscillation stopped, time is not reliable\n");
++		dev_dbg(data->dev,
++			"Crystal oscillation stopped, time is not reliable\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (FIELD_GET(RX8111_FLAG_VLF_BIT, regval)) {
+-		dev_warn(data->dev,
+-			 "Low voltage detected, time is not reliable\n");
++		dev_dbg(data->dev,
++			"Low voltage detected, time is not reliable\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -188,7 +188,7 @@ static int rx8111_read_time(struct device *dev, struct rtc_time *tm)
+ 	}
+ 
+ 	if (regval) {
+-		dev_warn(data->dev, "Clock stopped, time is not reliable\n");
++		dev_dbg(data->dev, "Clock stopped, time is not reliable\n");
+ 		return -EINVAL;
+ 	}
+ 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.44.0
+
 
