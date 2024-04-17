@@ -1,83 +1,133 @@
-Return-Path: <linux-rtc+bounces-1039-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1040-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3188A794D
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 01:44:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C428A7E05
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 10:19:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C931B21A84
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Apr 2024 23:44:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF4A2B24ACB
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Apr 2024 08:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F9713A890;
-	Tue, 16 Apr 2024 23:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3DC7D405;
+	Wed, 17 Apr 2024 08:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CkAuQl5G"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUVAjLy3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD16313A869;
-	Tue, 16 Apr 2024 23:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E927D3E4;
+	Wed, 17 Apr 2024 08:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713311032; cv=none; b=DdKc9gb/zPtvS2C/UG01s0yXiDN2II515/0HFJkOAih4hvq7e93Y+up8YtGUviL2pKPEEhph+DzcY9vWUXg9rgI++cxe0ecMmARnBcHQbs0s15FW50c+o2QW4BOivqkzBMvJM36r6BPbDkoNI4RN2sg/Udrs2Y1uV6/rsdbPuJM=
+	t=1713341950; cv=none; b=V5Kx8Gglp3J6y3m/z0HdtFASb0cZPjE+URmZtMQ1LvtMiYvaKSfPV8F1l7LMgcBOWtE9IsgY6X6Y13JKLrztN57NZHOP9KWG+SPYiBxr0axe7RxOsyerSJrpyY7ptx3vF26j1khyLv4DA7YsPSKiXfPmi4DqiEEsbAMnnre0dBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713311032; c=relaxed/simple;
-	bh=YEGQ8CgrUzK0nrt4Ie8QLISTZQV93JSwBQbWnBMJILI=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C12si8hQOMgs9q4bpQc7kkJwFnotYlpY/pLfBIF+uB576VM1NLNNpjKJNEnbwJrSPTGN4yIKZpBiZ64bt/j6J//8mlURG5WTmbwkdK6KnKnihkSExTqC1cf7/HMDVmDTbSl8xuDlxSjAW2f8gWsyHuP8X16Q76G5tcyC1iqz4I0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CkAuQl5G; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 876A61BF203;
-	Tue, 16 Apr 2024 23:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1713311029;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CNDZdf/uKaX+WgPhUphRKuqSwi/q4yBAoxXLi2+EWYs=;
-	b=CkAuQl5GbM1DukqBkJHugmme5K2t5dVxJU+RlFEP9U5jtQO1+svXT44hB1PbfU4oHhqROu
-	iVmles8c4/AZAaCxiQvZq7Xl+jhCu+TCIOrwywxf6XRsipB3d0+OumsStdeURaRodS7eua
-	SpaEPCsPHz9s8rIBZb3J5bQtjxwuJrj5wgHTq7u31FfTErOmYdIpBupaToi9bjIg5afbu7
-	WVnXfEDJ/oKsa8cOfJL/lCqpcxnHK1aeNrIdSQUl75kq0+8NaFl5lHsgY743uWGHhqGX8H
-	SrYPGFTOL4OPL/PvozJKxyQ3YOXmkxpn7DASTtTNqBeA7vxQUfECY3N5P31RZQ==
-Date: Wed, 17 Apr 2024 01:43:45 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH] rtc: mcp795: drop unneeded MODULE_ALIAS
-Message-ID: <171331101619.12461.12401501300609641415.b4-ty@bootlin.com>
-References: <20240414154910.126991-1-krzk@kernel.org>
+	s=arc-20240116; t=1713341950; c=relaxed/simple;
+	bh=vQ0bSBSXVcW7woDznB4l2mZtCtQ6d2dmKIq6OArUyRQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AcY0QiAievZcd3h9BMMHy5gu3ZMWQIVwR6G/rMZzhISypZFVxrH7G5Xg8VcUuywsQhjQhbdqAOandvo1YKI+F6XGLmAhzgI5aJ+1uX07nEnP7dWv/1KVFuvhsdItnilILL6nbbRXeiTJbbmOPX+LZi3ehoTbbBXMV2yXIUjJjHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUVAjLy3; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-518c9ff3e29so3962449e87.0;
+        Wed, 17 Apr 2024 01:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713341947; x=1713946747; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3WVqvTWkSJuMK42oCBd4QTeLpoVUswiSt5bNCxSQhCk=;
+        b=bUVAjLy32mUGt//z1Tk46VDz+ZN2Yuvc+bHMeeVtOHuyEBOwT2Y8TBFF/WRz6ueCHR
+         pjJ/AbXKq2FBuE7JEr7UYMUw0GpcjRv2Gt+PXq2IuUZjWJv13suPvldwGTpgLE96STSz
+         jkue8eH/ifoA1mEloAL9zE7vx0jCIDGYHk77ZZ4q/BkDumXN15SiMQ3uYMf3J7yIIWvB
+         RW/3nYU5w9+YI3kNaSualwwbLVaPqweUdVTWd9py9iXqd2rScZS7TKe98CUOSyxy8Fiy
+         bUn7FG3nw6mOiE80SzeDHKfXtYv80cHB7uwp19Mda+MmXy/jSHNReSoN+zkrkLvPR6Jg
+         vCQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713341947; x=1713946747;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3WVqvTWkSJuMK42oCBd4QTeLpoVUswiSt5bNCxSQhCk=;
+        b=ByKaG5cRV0KEuOca7gIRiD+nMXrnmXu+R1w1aSbi7a0lgbJJZ2rcqyhqVhTUfBiP+7
+         KrgW7LBB1PFot+VjgSwpr1qD/leyVdzXjWUhfqRk2GE8qDDIJrRZomRKsT2+QA5xDIh5
+         4jgp+xevJC9cKVmbYKf8t/A4Y//RgXovrDHz9OLSEQaEMdSgrrcKi8/r9eX9NP/kGLQD
+         d6rAMLwTTmJn0/GsSTLJbKCjyVKCNCH6hPgIxbfEE+Vc8zLkRqnf6T8d5AtMuAYLu4Bo
+         8gMkBk1c67E1J3aY/5Hao3SW1IFoY6FjWtSE3CbcfbHbZCKOQ+WRyoq9U4V6wtceHSt9
+         GBsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWc/hLOsnm3L8SaSr704x4BdY26H+mDQk+MqDRTHn5iaFg6IkvvHcSViMYQ7qsU1Ry1Ooa2ANXWLTMsylHAnQR8e87I5BmBO8doskfajLOFIF54D49EsnjVxs3J+S16S/1ybQSOKbfqVm/H9oPvo1AxWBsjnoAgRqT6bVx5IAdmCN/j1A==
+X-Gm-Message-State: AOJu0YyvsY2iZoRFpd4XDi6MbJVPO6gwp5SJS8NJJ166++NmLwaOent3
+	dSax1kQl4Xgq5P3Wom3lyXK1ITkR1yWzq37OYa7Il9POiMNcXrKP
+X-Google-Smtp-Source: AGHT+IEZH+ylq78IQkJNfP5FDxkXscm3aRgH3ubDyx46wNRqQbkl2T+2tyX+4h0ejdbXrQysINo+Vg==
+X-Received: by 2002:ac2:5106:0:b0:518:8c8c:db33 with SMTP id q6-20020ac25106000000b005188c8cdb33mr8624693lfb.7.1713341946952;
+        Wed, 17 Apr 2024 01:19:06 -0700 (PDT)
+Received: from [10.10.12.27] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id p27-20020ac246db000000b00518948d6910sm1446525lfo.205.2024.04.17.01.19.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Apr 2024 01:19:06 -0700 (PDT)
+Message-ID: <04f71d99-aad2-4e56-8f92-89469c159b48@gmail.com>
+Date: Wed, 17 Apr 2024 10:19:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240414154910.126991-1-krzk@kernel.org>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/9] dt-bindings: rtc: google,goldfish-rtc: move to
+ trivial-rtc
+To: kernel test robot <lkp@intel.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Vladimir Zapolskiy <vz@mleia.com>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-stm32@st-md-mailman.stormreply.com
+References: <20240408-rtc_dtschema-v1-2-c447542fc362@gmail.com>
+ <202404170656.LoL9eBYs-lkp@intel.com>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <202404170656.LoL9eBYs-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, 14 Apr 2024 17:49:10 +0200, Krzysztof Kozlowski wrote:
-> The ID table already has respective entry and MODULE_DEVICE_TABLE and
-> creates proper alias for SPI driver.  Having another MODULE_ALIAS causes
-> the alias to be duplicated.
+On 4/17/24 00:45, kernel test robot wrote:
+> Hi Javier,
 > 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on fec50db7033ea478773b159e0e2efb135270e3b7]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Carrasco/dt-bindings-rtc-orion-rtc-move-to-trivial-rtc/20240408-235612
+> base:   fec50db7033ea478773b159e0e2efb135270e3b7
+> patch link:    https://lore.kernel.org/r/20240408-rtc_dtschema-v1-2-c447542fc362%40gmail.com
+> patch subject: [PATCH 2/9] dt-bindings: rtc: google,goldfish-rtc: move to trivial-rtc
+> reproduce: (https://download.01.org/0day-ci/archive/20240417/202404170656.LoL9eBYs-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202404170656.LoL9eBYs-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    Warning: Documentation/devicetree/bindings/power/wakeup-source.txt references a file that doesn't exist: Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
+>    Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+>    Warning: Documentation/devicetree/bindings/sound/fsl-asoc-card.txt references a file that doesn't exist: Documentation/devicetree/bindings/sound/fsl,asrc.txt
+>    Warning: Documentation/gpu/amdgpu/display/display-contributing.rst references a file that doesn't exist: Documentation/GPU/amdgpu/display/mpo-overview.rst
+>>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/rtc/google,goldfish-rtc.txt
+>    Using alabaster theme
 > 
 
-Applied, thanks!
-
-[1/1] rtc: mcp795: drop unneeded MODULE_ALIAS
-      https://git.kernel.org/abelloni/c/393e3d290f61
+This issue has already been addressed in v2, which was sent a week ago.
 
 Best regards,
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Javier Carrasco
 
