@@ -1,170 +1,143 @@
-Return-Path: <linux-rtc+bounces-1050-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1051-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E13B8AAD4A
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Apr 2024 13:05:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A37B68AC0CB
+	for <lists+linux-rtc@lfdr.de>; Sun, 21 Apr 2024 20:45:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3226C1C21003
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Apr 2024 11:05:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08A902815E5
+	for <lists+linux-rtc@lfdr.de>; Sun, 21 Apr 2024 18:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4685681AC1;
-	Fri, 19 Apr 2024 11:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="glzH7MHu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE053CF79;
+	Sun, 21 Apr 2024 18:45:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2041.outbound.protection.outlook.com [40.107.104.41])
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A2581741;
-	Fri, 19 Apr 2024 11:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713524682; cv=fail; b=bjAK0mBJjeTv6Ymb0+UV8FB3bwW2lJzSZGO34IVkSka1G90bEvYoGQj/Ha1QyQev8dEDpWDfHI+ycRDj0Ze/Q16BZjg437VvyvjTmLtfEMQ6T4InMOcT8BWIM8A7QnVbz7rRTef9ioMNEiE6umPOmfmXW+CV2sxphNMZmDbKfAE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713524682; c=relaxed/simple;
-	bh=+NMzllU1Ih/P6Uo5cJB4oCGVUYQVX8mRsbLoPvbn+68=;
-	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rZ56d/7yWhmYknlXzjoAu74ht7s22yc/44+ULBWWHBHs/r8WmyAiexPrF7FreKHUzU9boWgy7XFwlqYAwWys4UzSwAvh2OXRBIT9gai69M9IPhbqnGZd5ssjv1vPNuHbSz4HUm6N78lcRcYYQx5Ft4N8oCieayU3pA7R7T2L76Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=glzH7MHu; arc=fail smtp.client-ip=40.107.104.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EYuJEs2WbKI8tyf1RIpK2ni4Wd1FIhN7fuayNpEWoIUPxiwbbX72TxGDz5VnBPghI5OIPPOuZXHPEybG8YApvTv0AnJdQdCrfKbzUCKixuKXdW+b9LCUAqKiEaBn29IDTMMlJYwEeaE0EKCes2+xHrqtWVdrPBFec+h8iGLG0kgnlDkLSvXOw0MR6lTRF5Gupi4NKrHBJVabmTDzvGCNbGEKZZPIcbRWfEW6QA6mXS80YymsXg+Lf6op6DZJ71PSNnHWwEROsfufRbZJXKxfNmn4YIJpEdomXuvk9XoJew5Mb6zmo7VsJpWlDcS62o9/R8XJ2h+kT77abKK5kcVfFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eWlXJkyHiagNZOaKtxq2/DnTaGvgp/A9NOXHSqOA910=;
- b=Mm2tob0hXovHJeHsppgNKrji+5zpdfP3SMw/VCTvRHAnaHrKWmUKt9wURpOusvYhLnpR+Fl7LswsjRBdPom5ycuxu09f6oLYTpA6De50ndgUD3aCA9TONxRhP4cL12cut7t+DGH7QEc1YTRDqqzRvN/5POuSA4vQN8SGhhiL3v+Ilrl1DHGeZSF41B5X7FGqc8kNXicuO1tIx9Bn3GZX4P4wL6fJ/6RlcTjvISlmc71wwBEeEN5L+kI7mqYsu3hFXd+dC2B+EHwZL3jds314rtxrMVov7hGAcvVoN2jVaTqOQ996hCstVufB7uz6rg4JBmnWXSZfxpcyOA0Ll7YYUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eWlXJkyHiagNZOaKtxq2/DnTaGvgp/A9NOXHSqOA910=;
- b=glzH7MHug1E9I0zpfkeDDJ/EOfCpn+0Q+5r/7BHn+5irNCYXU4oGVWlzkyBPLwSnmWTWafvWZaH1xZ14t6L4Y+NALEhUVnqzctmTgEkFbCYDE8oKbl3ayDBIeKBlrMbP17IzPebT/7TlE/ioXQuPc5lwffPWFwN2qalx0St4NtA=
-Received: from DB8PR03CA0016.eurprd03.prod.outlook.com (2603:10a6:10:be::29)
- by AS2PR02MB9143.eurprd02.prod.outlook.com (2603:10a6:20b:5fa::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.43; Fri, 19 Apr
- 2024 11:04:36 +0000
-Received: from DB5PEPF00014B9B.eurprd02.prod.outlook.com
- (2603:10a6:10:be:cafe::f3) by DB8PR03CA0016.outlook.office365.com
- (2603:10a6:10:be::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7495.30 via Frontend
- Transport; Fri, 19 Apr 2024 11:04:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=axis.com;
-Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
- 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com; pr=C
-Received: from mail.axis.com (195.60.68.100) by
- DB5PEPF00014B9B.mail.protection.outlook.com (10.167.8.168) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7452.22 via Frontend Transport; Fri, 19 Apr 2024 11:04:35 +0000
-Received: from pc52311-2249 (10.0.5.60) by se-mail01w.axis.com (10.20.40.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 19 Apr
- 2024 13:04:35 +0200
-From: Waqar Hameed <waqar.hameed@axis.com>
-To: <alexandre.belloni@bootlin.com>
-CC: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] rtc: rx8111: handle VLOW flag
-In-Reply-To: <20240417191937.33790-2-alexandre.belloni@bootlin.com> (alexandre
-	belloni's message of "Wed, 17 Apr 2024 21:19:36 +0200")
-References: <20240417191937.33790-1-alexandre.belloni@bootlin.com>
-	<20240417191937.33790-2-alexandre.belloni@bootlin.com>
-User-Agent: a.out
-Date: Fri, 19 Apr 2024 13:04:34 +0200
-Message-ID: <pndh6fxmx4t.fsf@axis.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC29AD29B;
+	Sun, 21 Apr 2024 18:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.25.134.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713725138; cv=none; b=RiJMA3bjSqLiC4mN0ddJ12jlm4I7BgZp3AknS8i200w14k6P4iRiVP4p1/w3ALiVSr1q7rteTNYk7/F3b8cnRFDnpDzCpZg4lE0a5T6881o/5W+pdWPhGLbsdbmQAmahf3gXHlwJLh5xHclTePGt2kzXhMR8DeMdsYwrUbIytiI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713725138; c=relaxed/simple;
+	bh=uwuQxXfc3+VpnllN8xxeGxr+2TTZclCSi/3gmfaTrms=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d8N4lA/pJsJiVHWrq1ljYqhwINMeBu/67dUi8tkwCqJfnOui6UldiJKiN4woqONMd4ij8VL6sBF8H0p9MaB1FVOacTtTPS9DbEyJ/vIjf0qCMuDYGq5jlyA7culOy0Tk0KS/9w+19zII0Kg8TbMB+8GHUljXXDY+S5yRGfpOSFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de; spf=pass smtp.mailfrom=t-online.de; arc=none smtp.client-ip=194.25.134.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-online.de
+Received: from fwd82.aul.t-online.de (fwd82.aul.t-online.de [10.223.144.108])
+	by mailout02.t-online.de (Postfix) with SMTP id E10DB2BE50;
+	Sun, 21 Apr 2024 20:37:21 +0200 (CEST)
+Received: from dino2.dhome ([77.47.123.226]) by fwd82.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1ryc41-3gruld0; Sun, 21 Apr 2024 20:37:21 +0200
+From: Alois Fertl <a.fertl@t-online.de>
+To: a.zummo@towertech.it
+Cc: alexandre.belloni@bootlin.com,
+	wens@csie.org,
+	jernej.skrabec@gmail.com,
+	samuel@sholland.org,
+	linux-rtc@vger.kernel.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	a.fertl@t-online.de
+Subject: [PATCH v2 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC Clock
+Date: Sun, 21 Apr 2024 20:36:33 +0200
+Message-Id: <20240421183633.117326-1-a.fertl@t-online.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail01w.axis.com
- (10.20.40.7)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB5PEPF00014B9B:EE_|AS2PR02MB9143:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d138189-877c-4374-285d-08dc60607fc6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	xyRuidlXrGbkVY/HTnHxF0J1YXwJwjIY+/DLE7MPHuW1UKEJasNFPxyhFgEGwdTmCOZ5RkKTsZvVxKS8dMZJvSsUO0To1XtwBR6swvVzQQ3/N/7Yrpz3Imxx00mSvOKR06dOCM4GV+9xu7s1cCBIawkDgo5Ff69qYyhJnvOGVGJ5PCMp3brvf1nsPME3g+XKJVrMh7nPd4URpxBBTQVxBe7RX6dn6+r+zju5Lz7MZoAl/xqTTpWlnOoR2jsxUMk4RGJ9ATB3XhcQrasd4gfSkPxpwW1yitziiwEiEdlDpo2YulUfrK4ugR8EYY77+9hRYqkoVUJpkpH0Mclj5hWi7H7ex7Wj+aZU1HP5uKEXnRIz69LX0olzAFXQQzLRVvzE5goNNesYCmqeMbBvXFZtaUOT0M6Q+psVlS5lzGpqgULKg3mwf5XmJmoJwE/MOg0O9XhS/VdKaGcUCoikVTlbtzd7yxBRw7utPQf2D9ZDor23uQGrVFTBZmSPCDP19AVuIsvozquBBdBeO5Zzwhs9jZu2StzWQ/3vAR2TbXds+/yJDIb6W/6s2aRbuD3EZLYa5mq23WzhiK1MV++RKg+LrusXIrimVrgtKbX0UNJt3t+g8qkw9uYWfHmHa6V0D8r5G9yPwHnO3gLAqjYGZS0dIoBXvjpEoUu1fQGbM8wBgYUvDuooN49zV2XWdF41Tx9MvzeCxcq3nJ/XOTHlbVpcY0RKFkUZxkd3HLHJFJ3qZgspVSZeYO+7mVlVhOeAy9Fk
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(376005)(1800799015)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2024 11:04:35.5806
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d138189-877c-4374-285d-08dc60607fc6
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB5PEPF00014B9B.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR02MB9143
+Content-Transfer-Encoding: 8bit
+X-TOI-EXPURGATEID: 150726::1713724641-697A1D74-E65BC247/0/0 CLEAN NORMAL
+X-TOI-MSGID: 9465a6aa-8077-4264-8533-ee6f1a1eb176
 
-On Wed, Apr 17, 2024 at 21:19 +0200 alexandre.belloni@bootlin.com wrote:
+I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618 SOC.
+On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
+operate correctly. Without this change the clock from the SOC is
+~29kHz and BT module does not start up. The patch enables the Internal
+OSC Clock Auto Calibration of the H616/H618 which than provides the
+necessary 32kHz and the BT module initializes successfully.
+Add a flag and set it for H6 AND H616. The H618 is the same as H616
+regarding rtc.
 
-> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
->
-> Allow userspace to get battery status information and be able to warn when
-> battery is low and has to be replaced.
->
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
->  drivers/rtc/rtc-rx8111.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/rtc/rtc-rx8111.c b/drivers/rtc/rtc-rx8111.c
-> index 4a35bd921b33..8450d9f0b566 100644
-> --- a/drivers/rtc/rtc-rx8111.c
-> +++ b/drivers/rtc/rtc-rx8111.c
-> @@ -95,6 +95,9 @@ enum rx8111_regfield {
->  	RX8111_REGF_INIEN,
->  	RX8111_REGF_CHGEN,
->  
-> +	/* RX8111_REG_STATUS_MON. */
-> +	RX8111_REGF_VLOW,
-> +
->  	/* Sentinel value. */
->  	RX8111_REGF_MAX
->  };
-> @@ -129,6 +132,8 @@ static const struct reg_field rx8111_regfields[] = {
->  	[RX8111_REGF_SWSEL1] = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 3, 3),
->  	[RX8111_REGF_INIEN]  = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 6, 6),
->  	[RX8111_REGF_CHGEN]  = REG_FIELD(RX8111_REG_PWR_SWITCH_CTRL, 7, 7),
-> +
-> +	[RX8111_REGF_VLOW]  = REG_FIELD(RX8111_REG_STATUS_MON, 1, 1),
->  };
->  
->  static const struct regmap_config rx8111_regmap_config = {
-> @@ -276,6 +281,13 @@ static int rx8111_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
->  
->  		vlval = regval ? RTC_VL_DATA_INVALID : 0;
->  
-> +		ret = regmap_field_read(data->regfields[RX8111_REGF_VLOW],
-> +					&regval);
-> +		if (ret)
-> +			return ret;
-> +
-> +		vlval |= regval ? RTC_VL_BACKUP_LOW : 0;
-> +
->  		return put_user(vlval, (typeof(vlval) __user *)arg);
->  	default:
->  		return -ENOIOCTLCMD;
+v1->v2
+- add flag and activate for H6 AND H616
 
-Looks good to me!
+Signed-off-by: Alois Fertl <a.fertl@t-online.de>
+---
+ drivers/rtc/rtc-sun6i.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-Tested-by: Waqar Hameed <waqar.hameed@axis.com>
-Reviewed-by: Waqar Hameed <waqar.hameed@axis.com>
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index e0b85a0d5645..5d0c917b2099 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -42,6 +42,11 @@
+ 
+ #define SUN6I_LOSC_CLK_PRESCAL			0x0008
+ 
++#define SUN6I_LOSC_CLK_AUTO_CAL			0x000c
++#define SUN6I_LOSC_CLK_AUTO_CAL_16MS		BIT(2)
++#define SUN6I_LOSC_CLK_AUTO_CAL_EANABLE		BIT(1)
++#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL		BIT(0)
++
+ /* RTC */
+ #define SUN6I_RTC_YMD				0x0010
+ #define SUN6I_RTC_HMS				0x0014
+@@ -126,7 +131,6 @@
+  *     registers (R40, H6)
+  *   - SYS power domain controls (R40)
+  *   - DCXO controls (H6)
+- *   - RC oscillator calibration (H6)
+  *
+  * These functions are not covered by this driver.
+  */
+@@ -138,6 +142,7 @@ struct sun6i_rtc_clk_data {
+ 	unsigned int has_losc_en : 1;
+ 	unsigned int has_auto_swt : 1;
+ 	unsigned int no_ext_losc : 1;
++	unsigned int has_auto_cal : 1;
+ };
+ 
+ #define RTC_LINEAR_DAY	BIT(0)
+@@ -268,6 +273,13 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 	}
+ 	writel(reg, rtc->base + SUN6I_LOSC_CTRL);
+ 
++	if (rtc->data->has_auto_cal) {
++		/* Enable internal OSC clock auto calibration */
++		reg = (SUN6I_LOSC_CLK_AUTO_CAL_16MS | SUN6I_LOSC_CLK_AUTO_CAL_EANABLE |
++				SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL);
++		writel(reg, rtc->base + SUN6I_LOSC_CLK_AUTO_CAL);
++	}
++
+ 	/* Yes, I know, this is ugly. */
+ 	sun6i_rtc = rtc;
+ 
+@@ -380,6 +392,7 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
+ 	.has_out_clk = 1,
+ 	.has_losc_en = 1,
+ 	.has_auto_swt = 1,
++	.has_auto_cal = 1,
+ };
+ 
+ static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
+@@ -395,6 +408,7 @@ static const struct sun6i_rtc_clk_data sun50i_h616_rtc_data = {
+ 	.has_prescaler = 1,
+ 	.has_out_clk = 1,
+ 	.no_ext_losc = 1,
++	.has_auto_cal = 1,
+ };
+ 
+ static void __init sun50i_h616_rtc_clk_init(struct device_node *node)
+-- 
+2.39.2
+
 
