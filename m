@@ -1,189 +1,194 @@
-Return-Path: <linux-rtc+bounces-1052-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1053-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D31778AC121
-	for <lists+linux-rtc@lfdr.de>; Sun, 21 Apr 2024 21:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B53978AC130
+	for <lists+linux-rtc@lfdr.de>; Sun, 21 Apr 2024 22:20:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42EFF1F2102B
-	for <lists+linux-rtc@lfdr.de>; Sun, 21 Apr 2024 19:57:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D2B11F20FF4
+	for <lists+linux-rtc@lfdr.de>; Sun, 21 Apr 2024 20:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DD141C87;
-	Sun, 21 Apr 2024 19:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XFpOl9nC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE0443AC8;
+	Sun, 21 Apr 2024 20:20:46 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630653DB9A;
-	Sun, 21 Apr 2024 19:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C461BF20;
+	Sun, 21 Apr 2024 20:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.25.134.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713729449; cv=none; b=Zx1wcMn9+pOkSBRVDyqupvdoiQfAHC3FbO1+fIV/kelKM7ArYVXvSkQj0uBQ8ar7c41f4yoQVxBu43mQmJ8lACfNca4NCFKyPsbYRxuUqLnngs/J1bUSmJFR4zBR9wUl1Ok9Ysjcn8nhDoWAG26FwPHck4gg6Xg9qlBPZ2fqiP4=
+	t=1713730846; cv=none; b=nyl8F9ym+YFW8O0u39hDEt6pyhbyJoX2gWjp0RiDsLRta4e8wkaChTPNKeoTOvhthrZ/VCYRdkSZUInUPe/1KMUvpQhAxRFuKXIWLCoUwvU8laQPE1yfmT7XEt2wWTRPAtoNDq0lptfxtzwzLcDq6S9jFcVH6i1Ij29B4wLMsuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713729449; c=relaxed/simple;
-	bh=efXD1Qv/kAEdBkbZzyouDJ1rmUvO0imo3+ybv0v75PA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OoqRzWrTb0lLwMcEBJEElbUuzW4I1GdYAbuL+fPEPiPnE5VZhtLfdImkUKuOQKANFBoKx2pEI6Ciy9Q6hpSA23F3/cN/xd5JIb+OUU2warRgvGa63y8BHnD8/u4D+DuTf2MZHMUVkBuIr275jh/ZJN6rMnJiARlTtNog4YuPIP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XFpOl9nC; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-41a4f291f9dso1886695e9.2;
-        Sun, 21 Apr 2024 12:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713729446; x=1714334246; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MWdX/Fk775nBpYl4rDPq0H/p5QVPSKIZBRRPn4D/xoc=;
-        b=XFpOl9nCC89PO0/AqtvCu/99I7rhoH43hCbDG1iFArmJBAjl/sjFXBUzEnBJ6V71jr
-         JK0oIsg/Dejrw7QS43aj72mKHpUaX+0wVBFXaC6ZMslAi6qPXLhkGj+R7LjoYAvXEuX7
-         iyoGoykFkTcFIg6ETqJaz9TyHTKOEeeYgiA2YrfWMJKL3PCeCIfw2k4VaSkE+868nuxk
-         tmq7RC9XEAQaOP9a/ws3mdStFeDkfq3xK2/vH7t4YMJs1l3SwhZYYEK8x47UY9zkcw+l
-         RGgR02FxtUKQoaav0q9/aR5VIIajsqJMe0cQ/93TNRUWv9fg9JVA57WfRNNG2E14GnBF
-         n8BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713729446; x=1714334246;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MWdX/Fk775nBpYl4rDPq0H/p5QVPSKIZBRRPn4D/xoc=;
-        b=CicGzoFlKO1rOp8EW/lshO+Fc+bi9mx2GONELpOtvQdoQ/949gp+eOsKE+rRKH+Hf4
-         aYI7wOhtRPMSBAx26MC0RFSRk/R+Gt8CczAYJzxSsgyqbLL6I2j6p2eIDNVEPDeTQo29
-         D/mSbbEVPWCufSbXFTL2LCJpBmn4fOxJ+tg8NqdzgXtybnZrhSxykAXOuY6f18HhDQJr
-         UoF/JN3xlkgUJSePxdTJa7s68g9iu+snk0r+ccjyHlMUK8T4mlkAY9UeBjIOqttYQ6XZ
-         VC/on40+wvmRYaGEageaHSKcv27fxCaqlAnEiUzzdrTwXyJ/5tEQYrnsK5phaT9IEat5
-         I0jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWrLOXpZTLW5uvObk60NLYs97Lpf5mm/e1KWHQgnCUxmXUg9P+jKmvhkEXShicTdAHf7LamRFDjre+7y2jAjqPbMlTGY53bA4oP5d/Hb9KlVptkrQ2SVMvAM8EMPdjROh+mtav2Nb49
-X-Gm-Message-State: AOJu0Yz7cjxJHtlFk3qILX98xxfDvm/aniJHVvM4CfC2yb/0WPSq0lM4
-	QqqzOY75GfXFtu4no73kTY95BMsKAfpGHRMIUYMisC8QlHvQdTPY
-X-Google-Smtp-Source: AGHT+IE/u/1wW4JDdI97bb6vvTW1FRs57v0KjrCXVMCAkW2tNn2qGf7AQtcRuQ9M7lKhchv08tZE2Q==
-X-Received: by 2002:a05:600c:4686:b0:418:201f:f991 with SMTP id p6-20020a05600c468600b00418201ff991mr4181483wmo.40.1713729445408;
-        Sun, 21 Apr 2024 12:57:25 -0700 (PDT)
-Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
-        by smtp.gmail.com with ESMTPSA id j10-20020a05600c190a00b00418a9961c47sm14260154wmq.47.2024.04.21.12.57.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Apr 2024 12:57:25 -0700 (PDT)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: a.zummo@towertech.it, Alois Fertl <a.fertl@t-online.de>
-Cc: alexandre.belloni@bootlin.com, wens@csie.org, samuel@sholland.org,
- linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, a.fertl@t-online.de
-Subject: Re: [PATCH v2 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC Clock
-Date: Sun, 21 Apr 2024 21:57:24 +0200
-Message-ID: <6035510.lOV4Wx5bFT@jernej-laptop>
-In-Reply-To: <20240421183633.117326-1-a.fertl@t-online.de>
+	s=arc-20240116; t=1713730846; c=relaxed/simple;
+	bh=7ulEOlS3JkhNXQTRzN6bH+s/Benk94+XyHnjn00QtVU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=orhREMwFudQkmRU58ZIhkyxsSc98xHtuozmFL0VK87eU9DypqbPga83QrZK3B6smg7YZwHiCDTS+ZkhPYfAZbzkXbDr8kO8eNNlansNjugGx3VqMjTDSHQlwXza5wsClOD9y7JODiHmru+5ULCbHMOPsjP3f0EZohvIMB2ylk18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de; spf=pass smtp.mailfrom=t-online.de; arc=none smtp.client-ip=194.25.134.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-online.de
+Received: from fwd78.aul.t-online.de (fwd78.aul.t-online.de [10.223.144.104])
+	by mailout12.t-online.de (Postfix) with SMTP id 2E71317285;
+	Sun, 21 Apr 2024 22:15:06 +0200 (CEST)
+Received: from delle.local ([77.47.123.226]) by fwd78.t-online.de
+	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
+	esmtp id 1rydaZ-2KqNDU0; Sun, 21 Apr 2024 22:15:03 +0200
+Message-ID: <1422c0bcf359a0dcbe09c8954aa4c723511463d0.camel@t-online.de>
+Subject: Re: [PATCH v2 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC
+ Clock
+From: Alois Fertl <A.Fertl@t-online.de>
+To: Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>, 
+	a.zummo@towertech.it
+Cc: alexandre.belloni@bootlin.com, wens@csie.org, samuel@sholland.org, 
+	linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Date: Sun, 21 Apr 2024 22:14:55 +0200
+In-Reply-To: <6035510.lOV4Wx5bFT@jernej-laptop>
 References: <20240421183633.117326-1-a.fertl@t-online.de>
+	 <6035510.lOV4Wx5bFT@jernej-laptop>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+X-TOI-EXPURGATEID: 150726::1713730503-1FFFCD4A-8CF207E9/0/0 CLEAN NORMAL
+X-TOI-MSGID: 428dd07f-58e2-4c9b-a4dc-ecb5c5a5ae97
 
-Dne nedelja, 21. april 2024 ob 20:36:33 GMT +2 je Alois Fertl napisal(a):
-> I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618 SOC.
-> On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
-> operate correctly. Without this change the clock from the SOC is
-> ~29kHz and BT module does not start up. The patch enables the Internal
-> OSC Clock Auto Calibration of the H616/H618 which than provides the
-> necessary 32kHz and the BT module initializes successfully.
-> Add a flag and set it for H6 AND H616. The H618 is the same as H616
-> regarding rtc.
-> 
-> v1->v2
-> - add flag and activate for H6 AND H616
-
-Please move changelog below --- line.
-
-> 
-> Signed-off-by: Alois Fertl <a.fertl@t-online.de>
-> ---
->  drivers/rtc/rtc-sun6i.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> index e0b85a0d5645..5d0c917b2099 100644
-> --- a/drivers/rtc/rtc-sun6i.c
-> +++ b/drivers/rtc/rtc-sun6i.c
-> @@ -42,6 +42,11 @@
->  
->  #define SUN6I_LOSC_CLK_PRESCAL			0x0008
->  
-> +#define SUN6I_LOSC_CLK_AUTO_CAL			0x000c
-> +#define SUN6I_LOSC_CLK_AUTO_CAL_16MS		BIT(2)
-> +#define SUN6I_LOSC_CLK_AUTO_CAL_EANABLE		BIT(1)
-
-EANABLE -> ENABLE
-
-> +#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL		BIT(0)
-> +
->  /* RTC */
->  #define SUN6I_RTC_YMD				0x0010
->  #define SUN6I_RTC_HMS				0x0014
-> @@ -126,7 +131,6 @@
->   *     registers (R40, H6)
->   *   - SYS power domain controls (R40)
->   *   - DCXO controls (H6)
-> - *   - RC oscillator calibration (H6)
->   *
->   * These functions are not covered by this driver.
->   */
-> @@ -138,6 +142,7 @@ struct sun6i_rtc_clk_data {
->  	unsigned int has_losc_en : 1;
->  	unsigned int has_auto_swt : 1;
->  	unsigned int no_ext_losc : 1;
-> +	unsigned int has_auto_cal : 1;
->  };
->  
->  #define RTC_LINEAR_DAY	BIT(0)
-> @@ -268,6 +273,13 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
->  	}
->  	writel(reg, rtc->base + SUN6I_LOSC_CTRL);
->  
-> +	if (rtc->data->has_auto_cal) {
-> +		/* Enable internal OSC clock auto calibration */
-> +		reg = (SUN6I_LOSC_CLK_AUTO_CAL_16MS | SUN6I_LOSC_CLK_AUTO_CAL_EANABLE |
-> +				SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL);
-
-Remove parenthesis and fix indentation. Since macro names are pretty long,
-maybe put one per line.
-
-Is this safe to be done even on the boards with external 32k crystal?
-
-Best regards,
-Jernej
-
-> +		writel(reg, rtc->base + SUN6I_LOSC_CLK_AUTO_CAL);
-> +	}
-> +
->  	/* Yes, I know, this is ugly. */
->  	sun6i_rtc = rtc;
->  
-> @@ -380,6 +392,7 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
->  	.has_out_clk = 1,
->  	.has_losc_en = 1,
->  	.has_auto_swt = 1,
-> +	.has_auto_cal = 1,
->  };
->  
->  static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
-> @@ -395,6 +408,7 @@ static const struct sun6i_rtc_clk_data sun50i_h616_rtc_data = {
->  	.has_prescaler = 1,
->  	.has_out_clk = 1,
->  	.no_ext_losc = 1,
-> +	.has_auto_cal = 1,
->  };
->  
->  static void __init sun50i_h616_rtc_clk_init(struct device_node *node)
-> 
-
-
-
+On Sun, 2024-04-21 at 21:57 +0200, Jernej =A6krabec wrote:
+> Dne nedelja, 21. april 2024 ob 20:36:33 GMT +2 je Alois Fertl
+> napisal(a):
+> > I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618
+> > SOC.
+> > On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
+> > operate correctly. Without this change the clock from the SOC is
+> > ~29kHz and BT module does not start up. The patch enables the
+> > Internal
+> > OSC Clock Auto Calibration of the H616/H618 which than provides the
+> > necessary 32kHz and the BT module initializes successfully.
+> > Add a flag and set it for H6 AND H616. The H618 is the same as H616
+> > regarding rtc.
+> >=20
+> > v1->v2
+> > - add flag and activate for H6 AND H616
+>=20
+> Please move changelog below --- line.
+Thanks for reviewing, will move the changelog
+>=20
+> >=20
+> > Signed-off-by: Alois Fertl <a.fertl@t-online.de>
+> > ---
+> > =A0drivers/rtc/rtc-sun6i.c | 16 +++++++++++++++-
+> > =A01 file changed, 15 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> > index e0b85a0d5645..5d0c917b2099 100644
+> > --- a/drivers/rtc/rtc-sun6i.c
+> > +++ b/drivers/rtc/rtc-sun6i.c
+> > @@ -42,6 +42,11 @@
+> > =A0
+> > =A0#define SUN6I_LOSC_CLK_PRESCAL=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A00x0008
+> > =A0
+> > +#define SUN6I_LOSC_CLK_AUTO_CAL=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00x000c
+> > +#define SUN6I_LOSC_CLK_AUTO_CAL_16MS=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0B=
+IT(2)
+> > +#define SUN6I_LOSC_CLK_AUTO_CAL_EANABLE=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0BIT(1)
+>=20
+> EANABLE -> ENABLE
+yes sure
+>=20
+> > +#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0BIT(0)
+> > +
+> > =A0/* RTC */
+> > =A0#define SUN6I_RTC_YMD=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00x0010
+> > =A0#define SUN6I_RTC_HMS=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00x0014
+> > @@ -126,7 +131,6 @@
+> > =A0 *=A0=A0=A0=A0 registers (R40, H6)
+> > =A0 *=A0=A0 - SYS power domain controls (R40)
+> > =A0 *=A0=A0 - DCXO controls (H6)
+> > - *=A0=A0 - RC oscillator calibration (H6)
+> > =A0 *
+> > =A0 * These functions are not covered by this driver.
+> > =A0 */
+> > @@ -138,6 +142,7 @@ struct sun6i_rtc_clk_data {
+> > =A0=A0=A0=A0=A0=A0=A0=A0unsigned int has_losc_en : 1;
+> > =A0=A0=A0=A0=A0=A0=A0=A0unsigned int has_auto_swt : 1;
+> > =A0=A0=A0=A0=A0=A0=A0=A0unsigned int no_ext_losc : 1;
+> > +=A0=A0=A0=A0=A0=A0=A0unsigned int has_auto_cal : 1;
+> > =A0};
+> > =A0
+> > =A0#define RTC_LINEAR_DAY=A0BIT(0)
+> > @@ -268,6 +273,13 @@ static void __init sun6i_rtc_clk_init(struct
+> > device_node *node,
+> > =A0=A0=A0=A0=A0=A0=A0=A0}
+> > =A0=A0=A0=A0=A0=A0=A0=A0writel(reg, rtc->base + SUN6I_LOSC_CTRL);
+> > =A0
+> > +=A0=A0=A0=A0=A0=A0=A0if (rtc->data->has_auto_cal) {
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/* Enable internal OSC cl=
+ock auto calibration */
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0reg =3D (SUN6I_LOSC_CLK_A=
+UTO_CAL_16MS |
+> > SUN6I_LOSC_CLK_AUTO_CAL_EANABLE |
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL);
+>=20
+> Remove parenthesis and fix indentation. Since macro names are pretty
+> long,
+> maybe put one per line.
+will do so
+>=20
+> Is this safe to be done even on the boards with external 32k crystal?
+Can't tell for sure. I don't have a H6 board. But I would think that
+it's even required because H6 has a feature to autoswitch clock source
+if the external is detected to have failed.
+>=20
+> Best regards,
+> Jernej
+Thanks and regards,
+Alois
+>=20
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0writel(reg, rtc->base + S=
+UN6I_LOSC_CLK_AUTO_CAL);
+> > +=A0=A0=A0=A0=A0=A0=A0}
+> > +
+> > =A0=A0=A0=A0=A0=A0=A0=A0/* Yes, I know, this is ugly. */
+> > =A0=A0=A0=A0=A0=A0=A0=A0sun6i_rtc =3D rtc;
+> > =A0
+> > @@ -380,6 +392,7 @@ static const struct sun6i_rtc_clk_data
+> > sun50i_h6_rtc_data =3D {
+> > =A0=A0=A0=A0=A0=A0=A0=A0.has_out_clk =3D 1,
+> > =A0=A0=A0=A0=A0=A0=A0=A0.has_losc_en =3D 1,
+> > =A0=A0=A0=A0=A0=A0=A0=A0.has_auto_swt =3D 1,
+> > +=A0=A0=A0=A0=A0=A0=A0.has_auto_cal =3D 1,
+> > =A0};
+> > =A0
+> > =A0static void __init sun50i_h6_rtc_clk_init(struct device_node
+> > *node)
+> > @@ -395,6 +408,7 @@ static const struct sun6i_rtc_clk_data
+> > sun50i_h616_rtc_data =3D {
+> > =A0=A0=A0=A0=A0=A0=A0=A0.has_prescaler =3D 1,
+> > =A0=A0=A0=A0=A0=A0=A0=A0.has_out_clk =3D 1,
+> > =A0=A0=A0=A0=A0=A0=A0=A0.no_ext_losc =3D 1,
+> > +=A0=A0=A0=A0=A0=A0=A0.has_auto_cal =3D 1,
+> > =A0};
+> > =A0
+> > =A0static void __init sun50i_h616_rtc_clk_init(struct device_node
+> > *node)
+> >=20
+>=20
+>=20
+>=20
+>=20
 
 
