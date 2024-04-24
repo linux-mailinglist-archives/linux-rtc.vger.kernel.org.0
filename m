@@ -1,126 +1,167 @@
-Return-Path: <linux-rtc+bounces-1058-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1059-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 923E88B0344
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Apr 2024 09:36:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19A98B1137
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Apr 2024 19:38:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDFC2B2110F
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Apr 2024 07:36:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77F9628BA36
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Apr 2024 17:38:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B19E157E82;
-	Wed, 24 Apr 2024 07:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F9E16C848;
+	Wed, 24 Apr 2024 17:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QOir8rRj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HDG0W1y7"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FB7154BF4;
-	Wed, 24 Apr 2024 07:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEF515B55C;
+	Wed, 24 Apr 2024 17:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713944171; cv=none; b=aiX+ekNIb2vQd9PB6a4hL7wyniMQ1j4ProUq6uNjFr1Wv15Vq/jb8i7GCeMu6ArKcwyJn/anYejoVQH9IZ4qwLWqexmRgMmVAeJD7fqW/LhxPS4JWRaBu0UP1Yc5jq4MeBGm39Pr3alXXDWcDAvhITIuoCkQFNhmgcixHq+tWkM=
+	t=1713980300; cv=none; b=U5JtoKf/DQlYa094Xe7ebmcMmJzpG+lVD+sQmQ4JdTtxwJf6IZDFaEGopbUf94SOTuRotej6dGoQhmRBlsvYwcrAiYaV/zTEggKFxOcQBi1Len2wsFKd2n4i7jn03TTGtxHpqhsA7n5cJCjiZ6/2UkqBtDSE2JilDJV8LdE0WuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713944171; c=relaxed/simple;
-	bh=c/z07zNFy6l9O4ym8awrACppZadOXaOZ6v3/h1Fkyng=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s0HJgsj9jMAySh1k2jl1VH+VE9k6W8feETxvQshJVw75s3Bt5jzSza8DdKTN3LXVhhdQ43HNIU3MXbUqaDqU8HROOupOWddsftBeLwVHchqz+j4zXz7q8hEMrO/72fcMw0O2Cynop8FgZsqxun6mGWKU1i/7U3Eg6dObD08CJUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QOir8rRj; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5af3035825eso276945eaf.0;
-        Wed, 24 Apr 2024 00:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713944168; x=1714548968; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d5dN4385UM8t68mi8BSqnB4iLyD9REN5+SY7+ouxH44=;
-        b=QOir8rRjRvnUlIZ6hTAliGL7cQSniqBswXLdE4j0gnVT50l9a16OG6Vkdw0YE6DlPD
-         HSzJZ1X/kGl9f3b/M/jfrXz7mVYEN0cFhm0uiVigRg2Q+jWpVnlFeGZ34KkKo2vrFWae
-         95fHQ9p95oMa8r4eLw3xCguW4J0kNfTNKm8RhprGsBXMInFGyHJXliLN4FvSc2DgtZHQ
-         aDpuEKfkRsRksk90WxdQ+/Apbe3oWJt4lU9ZE09bHhJNPHHUZaNnfVwwc1UTBUiKMW7E
-         B8iYXuBUb0toISAzZCEA3rX2GstgCLEvFSB2Ep3GITFJTP8DMbw7BUyh9qGOQt4DH2Jt
-         5dGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713944168; x=1714548968;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d5dN4385UM8t68mi8BSqnB4iLyD9REN5+SY7+ouxH44=;
-        b=e/a+z5KynMU/tEybEyqzaLHMBKPXJP/z5WcM/fD88YQNwGN39Pv4Xupe76As6nO+4l
-         QLiqstjmFdN/Pjrzo2+C91MeDS/Ai4SR5oO+q4LrejQtG/W+BMXFihCDtAgEO4y//EPr
-         N6BdrlbZXfmsnpgAr3SVJcqO6l0GzvOMSVUm3wzNMrlQQlQVKf0EcYzqmzUBZsjuQIwm
-         tQICGX+t+FHZRxpfnxYva+XFyMHAE+x8HwZSNnF2+IKyCkGNAdDdc9a6a53EU8p4LGZR
-         5B2yWbJHVMCb/yO4Hvie0BUvH4SWmYLYaSQBqxwG0IVl2SXGh9lU03vQTR5fDqWV600m
-         HuxA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAeEogpkv1qnxO16dPxX+oif0io6gIT3zmzXpJa5F73zSbTSq50er570ECvLVskXUwnAOfzVWDe3CeLOpI1vJdtvdNtZxKbgvhMWnn+aFL/cJuDMv/qTL7gNfaU+a6IGipJ7Oo6t0OUu6cdHFiH9xKTPCjuH0K5mtbK1ECsxKCELB+LQ==
-X-Gm-Message-State: AOJu0YxLw6VMu82fF0r7G7Jc50Oy27TuO6sQRZke3pwM9giM63wjhxYV
-	qKiUyNfXorcAXx+ZxTbhjyxoQbJoOsmPAjVJ5GPVT2ciTQVJqDxwW1QO9ACnPCuJLVBYVKXwnNd
-	UJ7r/LF14ThJqHgH6IIj6bQZfR9E=
-X-Google-Smtp-Source: AGHT+IH8pQbWlnm86dUfyzLUDG+dIloZwFnWYhwofqcI+AzW8x1xs/F4YtCqrgpl7S6KlC4rUUM+cjf4cTYA+FGUU/A=
-X-Received: by 2002:a05:6870:9d96:b0:22e:b331:b564 with SMTP id
- pv22-20020a0568709d9600b0022eb331b564mr754227oab.5.1713944168226; Wed, 24 Apr
- 2024 00:36:08 -0700 (PDT)
+	s=arc-20240116; t=1713980300; c=relaxed/simple;
+	bh=aod6ewur68dhk71qakXSy0qZ7PztmoQeNVY9RZWrBCU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FlniCpuocnP6KHl34KnMZZaAiXfxWPoTEOjlpguTXRf1lQq9X/s3ODImOqSEmTHKIhl720nDATQM8FEow+Mylk1pnZ/66mHfyQVJs7aAT4U7ZUYfCjlBS6qXK0irrjNy6quAZKWWm5qmVLSXCUKa71nn5xHdoLFknHAg86VbHHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HDG0W1y7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84AC5C113CD;
+	Wed, 24 Apr 2024 17:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713980299;
+	bh=aod6ewur68dhk71qakXSy0qZ7PztmoQeNVY9RZWrBCU=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=HDG0W1y7dJs8jROaJ/vATkjVSzyAjoCUm+TErmO1j8gYqoSjV/n+N1UdArZSqTT0S
+	 Yy4S0CF2xmBBySJ5CNvdZ4gN3awJ/zPdFTxFL0id+DjOgaHTtdRwFSCFz/SL0Htd84
+	 cR15vC+wO9i1c1Gvr1YZpDGGUCRLdwcKC2LkXN88Z/xH+Vc/hgfj6M5ENg24b2sLP5
+	 /AFXu7OnXn00jivZ3aB7U3fBOSwmZvYCRVjSPhYRwX92KN8GmI6IHCspwjRa6zJkxu
+	 eFS+y3XWM0+Ilq6XsmipaFi6vxXWDliZV6+2RrJQig9WIR8TcR2J+YTwOfFqzWrULK
+	 SccO/07dU2yaw==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v7 0/9] Turris Omnia MCU driver
+Date: Wed, 24 Apr 2024 19:37:59 +0200
+Message-ID: <20240424173809.7214-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240204044143.415915-1-qiujingbao.dlmu@gmail.com>
- <20240204044143.415915-3-qiujingbao.dlmu@gmail.com> <202404172121325952016a@mail.local>
-In-Reply-To: <202404172121325952016a@mail.local>
-From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Date: Wed, 24 Apr 2024 15:35:57 +0800
-Message-ID: <CAJRtX8Ttwfj4+TcXu34ecNZjkdsrcb6rjovGMwpiwJhzcneB6Q@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] rtc: sophgo: add rtc support for Sophgo CV1800 SoC
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dlan@gentoo.org, inochiama@outlook.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi, Alexandre
+Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
 
-I'm glad to receive your reply.
+this is v7 of the series adding Turris Omnia MCU driver.
 
-> I don't feel like these two macros make your code clearer, you should
-> probably simply use 0 and 1 in the proper locations.
->
+This series depends on the immutable branch between LEDs and locking,
+introducing devm_mutex_init(), see the PR
+  https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
 
-I will use 0/1 replace this macros.
+See also cover letters for v1, v2, v3, v4, v5 and v6:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
 
-> > +static irqreturn_t cv1800_rtc_irq_handler(int irq, void *dev_id)
-> > +{
-> > +     struct rtc_device *rtc = dev_id;
-> > +
-> > +     rtc_update_irq(rtc, 1, RTC_IRQF | RTC_AF);
->
-> I'm pretty sure this would result in a crash...
+Changes since v6:
+- moved the DT binding from arm/cznic,turris-omnia-mcu.yaml to
+  firmware/cznic,turris-omnia-mcu.yaml, as suggested by Conor Dooley
+  (patch 1)
+- dropped the devm-helpers.h additions, for the reasons see
+  https://lore.kernel.org/soc/20240423184346.37eb0915@thinkpad/
+- use gpiod_to_irq(gpiochip_get_desc(...)) instead of
+  irq_create_mapping(), as suggested by Andy Shevchenko (patches 6 and
+  7)
+- added a dummy read of TRNG entropy when registering TRNG, in case
+  someone cleared the TRNG interrupt before probing the driver, but did
+  not read the entropy (the MCU won't send a new TRNG interrupt if the
+  entropy is not collected) (patch 6)
+- fixed a bug in TRNG probing, wherein if the 
 
-Yes, it did happen. Because I inserted an incorrect pointer.
+Marek Behún (9):
+  dt-bindings: arm: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing via debugfs
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
 
->
-> > +
-> > +     return IRQ_HANDLED;
-> > +}
-> > +
-> > +     ret = devm_request_irq(&pdev->dev, rtc->irq, cv1800_rtc_irq_handler,
-> > +                            IRQF_TRIGGER_HIGH, "alarm", &pdev->dev);
->
-> ... you probably want to use rtc->rtc_dev here to fix this.
->
-> This also means that you have to request the irq late, else you are open
-> t a race condition anyway.
+ .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
+ .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
+ MAINTAINERS                                   |    5 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   51 +
+ drivers/platform/cznic/Makefile               |    9 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  439 +++++++
+ .../platform/cznic/turris-omnia-mcu-debugfs.c |  216 ++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1047 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |  109 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  123 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  188 +++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 17 files changed, 2956 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
 
-I am very sorry about this bug.
-I will use rtc->rtc_dev to fix it and request irq after
-devm_rtc_allocate_device.
+-- 
+2.43.2
 
-Best regards
-Jingbao Qiu
 
