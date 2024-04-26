@@ -1,182 +1,111 @@
-Return-Path: <linux-rtc+bounces-1063-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1064-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EED68B3C89
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Apr 2024 18:13:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 820E88B426D
+	for <lists+linux-rtc@lfdr.de>; Sat, 27 Apr 2024 00:58:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 164CD28151E
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Apr 2024 16:13:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D021028264B
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Apr 2024 22:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88ED152511;
-	Fri, 26 Apr 2024 16:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 090733A1C4;
+	Fri, 26 Apr 2024 22:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fNojwqBb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cpHqITMH"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D66E14EC4C;
-	Fri, 26 Apr 2024 16:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25503987D;
+	Fri, 26 Apr 2024 22:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714148028; cv=none; b=DfBAB5Dcog/quTFai6GvPUMm7ZCoU33dzUltkB4l/uho7Cx5Gf1vJHGHyJ7GMrE2PlmphrF5btNrZ0k5DXa0IA2UovjZaExls4TaHHD4qVz6JjkJr3YTYZwFWOxRrhq8+qK2ik90yQYJXjaLYf0o9U6lsxqM/sUL8nVrxv9ZKWs=
+	t=1714172317; cv=none; b=WDiQ9CYJa8sXymTBnehNCy8nphF/rTZ+wXmjcBYW2054dfvMINdGEL5geShoEaBZNetjwu8xq52jsR8Kc0K1NbolJ1LDeU65ENqNOMr76OyhW+8/TRAUb2lfAGf99HX9ndY2AwmpLM9ueZrK05RVCeSfxI9nZjNG7+HJKFoDEGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714148028; c=relaxed/simple;
-	bh=KAubqwrj4NqoRfG/h9VYz+cm7v93zo2oflPFobx0vQc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=J1AxrKQ92/LFGHvFAI4RTNuNUtMgckfjYZSP9dS07rdNHy/A4h4oCgJhYXjsXg+PEju4+MuGvzzrubPZPor7mGFwTGvYbWhvzj2CsFXQlkh2Ttex4C97f4Ia0H9ecyOa9a2MZmhPoYEkbN9YrNzFQJFjkYMqHL0xttY/SzbGp/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fNojwqBb; arc=none smtp.client-ip=217.70.183.200
+	s=arc-20240116; t=1714172317; c=relaxed/simple;
+	bh=R0PXi5BpxTvbIeMG6WGSdqMAjrlasJh2Yznaym73TCw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jEWxLQSo4Vvo/NH1qnql+H8NYbekpYvgjtVD5vxlPFY4ZFGRuUIxJym4IdPY/gaOGzxPGG/UWT5jM1jMeB2SQyoVKOlMlZ6eNX2/8MCcE+0TD+HdbqbcetMXNjp7G1MwWopFqv+oyX+xUEwYgAa/LIzCneONCSqEUPW9DCbeC1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cpHqITMH; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 949E120002;
-	Fri, 26 Apr 2024 16:13:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 59D14240002;
+	Fri, 26 Apr 2024 22:58:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1714148018;
+	t=1714172307;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iHq0a5TYFF7yrLXeX6BIAdFUmvRofAskO9re+BiJUcg=;
-	b=fNojwqBbgjVi8+uUgbS7dQ3VT+jboqmKA/OOumXC1o+9UTHoXNi5NIM+IKveAdoe8uVZ/H
-	8FNblc7Ig09gQOhAFQmDasKExhFMRaCAruTqEO51OwdvHCCPe8QsiyqqQEKoCNMPj2xAoc
-	XEC5yvUoNDkMZ8mXylxxj0vkheELgBQGMRd8uqI0hOCI/Ht+xSIsJrmm2fzSFlUsDELyK7
-	wH22z+CBJpLHGhpaiYFfysHrio67/bxr8BHnYcgM9T6JEpza4io6OEGnaEJqEzPgOY/vU9
-	9izwgVmU8xG9NCEDX3OncYDEjpODVCEkAxsV0RZYsTFzD8FOcGzklzZS2XmTdA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>, Arnd Bergmann
- <arnd@arndb.de>,
- soc@kernel.org, arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de
- Goede <hdegoede@redhat.com>, Ilpo =?utf-8?Q?J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Dan
- Carpenter <dan.carpenter@linaro.org>, devicetree@vger.kernel.org, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck
- <linux@roeck-us.net>, Herbert Xu <herbert@gondor.apana.org.au>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Linus Walleij
- <linus.walleij@linaro.org>, linux-crypto@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, Olivia Mackall <olivia@selenic.com>, Rob
- Herring <robh+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>, Andrew Lunn
- <andrew@lunn.ch>, Conor
- Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Rob Herring <robh@kernel.org>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
- <uwe@kleine-koenig.org>
-Subject: Re: [PATCH v7 0/9] Turris Omnia MCU driver
-In-Reply-To: <20240424173809.7214-1-kabel@kernel.org>
-References: <20240424173809.7214-1-kabel@kernel.org>
-Date: Fri, 26 Apr 2024 18:13:32 +0200
-Message-ID: <875xw45cgj.fsf@BLaptop.bootlin.com>
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=e5EJs5OFkMMXkOQseHxFbsNg9C5+grICpRc78loD/PQ=;
+	b=cpHqITMHeOEzVRUDjQbpOXDU6jwoQKHRfmG+uy9dodK8w3hWC6V3XKZoYoDUtr07y5E/53
+	Ap9ddkRAofy3uzH2yApsS2SW7Wga5ueYu8SA2JrkBhI0bps/SNk3toDo/F9eRTAUVuYyfS
+	1cAjl/guJk864hVWMJNY7HBWXjlTgZ3LXYSldND/tasOJEBCescevt2SSLTuzYcVCTNola
+	OGa+9oGe+sVGxKpBZG91a8br97veKyw0BErv6nsiP79LR4bRRwHQ2YaGaxpcJTDiACGuBl
+	qViJnWNxUvGOyJLEK15fGLR1sU5wBLkKo1RnBE06S0dgzVR5RLoYM9kjtF8TAQ==
+From: alexandre.belloni@bootlin.com
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] pcf8563: add wakeup-source support
+Date: Sat, 27 Apr 2024 00:58:21 +0200
+Message-ID: <20240426225821.448963-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello all,
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-> Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
->
-> this is v7 of the series adding Turris Omnia MCU driver.
->
-> This series depends on the immutable branch between LEDs and locking,
-> introducing devm_mutex_init(), see the PR
->   https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
->
-> See also cover letters for v1, v2, v3, v4, v5 and v6:
->   https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.698=
-6-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.168=
-18-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.116=
-02-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.167=
-50-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.216=
-42-1-kabel@kernel.org/
->   https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.221=
-84-1-kabel@kernel.org/
->
-> Changes since v6:
-> - moved the DT binding from arm/cznic,turris-omnia-mcu.yaml to
->   firmware/cznic,turris-omnia-mcu.yaml, as suggested by Conor Dooley
->   (patch 1)
-> - dropped the devm-helpers.h additions, for the reasons see
->   https://lore.kernel.org/soc/20240423184346.37eb0915@thinkpad/
-> - use gpiod_to_irq(gpiochip_get_desc(...)) instead of
->   irq_create_mapping(), as suggested by Andy Shevchenko (patches 6 and
->   7)
-> - added a dummy read of TRNG entropy when registering TRNG, in case
->   someone cleared the TRNG interrupt before probing the driver, but did
->   not read the entropy (the MCU won't send a new TRNG interrupt if the
->   entropy is not collected) (patch 6)
-> - fixed a bug in TRNG probing, wherein if the=20
->
-> Marek Beh=C3=BAn (9):
->   dt-bindings: arm: add cznic,turris-omnia-mcu binding
->   platform: cznic: Add preliminary support for Turris Omnia MCU
->   platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
->   platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
->   platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
->   platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
->   platform: cznic: turris-omnia-mcu: Add support for digital message
->     signing via debugfs
+In some platforms, the RTC is able to wake up the system but is not
+directly connected to an IRQ. Add wakeup-source property support to be able
+to express this in the Device Tree.
 
-It is still early as there are some comment pending but I wonder who
-will responsible of merging all theses patches ?
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-pcf8563.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Arnd ? Hans ? Ilpo ? me ?
+diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+index ea82b89d8929..1949d7473310 100644
+--- a/drivers/rtc/rtc-pcf8563.c
++++ b/drivers/rtc/rtc-pcf8563.c
+@@ -527,7 +527,6 @@ static int pcf8563_probe(struct i2c_client *client)
+ 
+ 	i2c_set_clientdata(client, pcf8563);
+ 	pcf8563->client = client;
+-	device_set_wakeup_capable(&client->dev, 1);
+ 
+ 	/* Set timer to lowest frequency to save power (ref Haoyu datasheet) */
+ 	buf = PCF8563_TMRC_1_60;
+@@ -553,6 +552,7 @@ static int pcf8563_probe(struct i2c_client *client)
+ 	/* the pcf8563 alarm only supports a minute accuracy */
+ 	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, pcf8563->rtc->features);
+ 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf8563->rtc->features);
++	clear_bit(RTC_FEATURE_ALARM, pcf8563->rtc->features);
+ 	pcf8563->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+ 	pcf8563->rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 	pcf8563->rtc->set_start_time = true;
+@@ -573,7 +573,12 @@ static int pcf8563_probe(struct i2c_client *client)
+ 			return err;
+ 		}
+ 	} else {
+-		clear_bit(RTC_FEATURE_ALARM, pcf8563->rtc->features);
++		client->irq = 0;
++	}
++
++	if (client->irq > 0 || device_property_read_bool(&client->dev, "wakeup-source")) {
++		device_init_wakeup(&client->dev, true);
++		set_bit(RTC_FEATURE_ALARM, pcf8563->rtc->features);
+ 	}
+ 
+ 	err = devm_rtc_register_device(pcf8563->rtc);
+-- 
+2.44.0
 
-Gregory
-
-
->   ARM: dts: turris-omnia: Add MCU system-controller node
->   ARM: dts: turris-omnia: Add GPIO key node for front button
->
->  .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
->  .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
->  .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
->  MAINTAINERS                                   |    5 +
->  .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
->  drivers/platform/Kconfig                      |    2 +
->  drivers/platform/Makefile                     |    1 +
->  drivers/platform/cznic/Kconfig                |   51 +
->  drivers/platform/cznic/Makefile               |    9 +
->  .../platform/cznic/turris-omnia-mcu-base.c    |  439 +++++++
->  .../platform/cznic/turris-omnia-mcu-debugfs.c |  216 ++++
->  .../platform/cznic/turris-omnia-mcu-gpio.c    | 1047 +++++++++++++++++
->  .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
->  .../platform/cznic/turris-omnia-mcu-trng.c    |  109 ++
->  .../cznic/turris-omnia-mcu-watchdog.c         |  123 ++
->  drivers/platform/cznic/turris-omnia-mcu.h     |  188 +++
->  include/linux/turris-omnia-mcu-interface.h    |  249 ++++
->  17 files changed, 2956 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turri=
-s-omnia-mcu
->  create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turr=
-is-omnia-mcu.yaml
->  create mode 100644 drivers/platform/cznic/Kconfig
->  create mode 100644 drivers/platform/cznic/Makefile
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeu=
-p.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
->  create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
->  create mode 100644 include/linux/turris-omnia-mcu-interface.h
->
-> --=20
-> 2.43.2
 
