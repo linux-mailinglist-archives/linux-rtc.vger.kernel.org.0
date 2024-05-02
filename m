@@ -1,155 +1,217 @@
-Return-Path: <linux-rtc+bounces-1098-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1099-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E8018BA004
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2024 20:08:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44CEA8BA0A7
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2024 20:40:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C03CB23E01
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2024 18:08:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABD661F21AA4
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2024 18:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D11C171E4D;
-	Thu,  2 May 2024 18:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C7B174ED3;
+	Thu,  2 May 2024 18:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAHFP/NA"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mailout06.t-online.de (mailout06.t-online.de [194.25.134.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B134D16FF2B;
-	Thu,  2 May 2024 18:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.25.134.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35223155350;
+	Thu,  2 May 2024 18:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714673297; cv=none; b=IyDyDswhaUtYcqL/njMfk1xYNm/TibufLoUcG2KRQRRRfgWdZUbOb2//wSEuFy+aNd2T0r9qc/pcSwR+15uTHJxjMfPEExtVi1K6tVnMxqZ0CesJZepoN7sbw5dX1gRoeo3gKI5KAsafzgFzW3yto8UGGU6huUg9VGDeRfnraDw=
+	t=1714675217; cv=none; b=sLu3e4YTKVTKkF7uwg84bJclVlmEKmH0Oqkzd9dgS/+ABR6DTMSCmpcyivv1lE5CZUEk7gz6XrdJXGKA3O0RCGzi/U2cLtTwP44+tRHgnqnkD2sYuz46NW2P+e6aPvt98Y21AMAxyI2rI+gQ+zJKBxnKaz2goHGM/niGp7wq1jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714673297; c=relaxed/simple;
-	bh=e3YLMIQIvdxhBBSMKk4ioEXXnAYqSPIZQKGl0Ph+Nps=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WrCv22k2WkZkBF0erBXog0RXPJdXMR/NcQF5LLVNg/HEshNp6uxRfQL0RNuFmIt+ok2mH+uhbVmIV7ggRiz4sBIolIm+1RfRKWv4EtUb+Omkcm3igcKkd/F/iMesiWJwZ7X/UMw2mrgVaHFOnD3TNjYweUBr5TmGv6XYRpl271M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de; spf=pass smtp.mailfrom=t-online.de; arc=none smtp.client-ip=194.25.134.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-online.de
-Received: from fwd79.aul.t-online.de (fwd79.aul.t-online.de [10.223.144.105])
-	by mailout06.t-online.de (Postfix) with SMTP id BFCDAF41E;
-	Thu,  2 May 2024 20:08:07 +0200 (CEST)
-Received: from dino2.dhome ([77.47.123.226]) by fwd79.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1s2aqk-1HSaDx0; Thu, 2 May 2024 20:08:06 +0200
-From: Alois Fertl <a.fertl@t-online.de>
-To: a.zummo@towertech.it
-Cc: alexandre.belloni@bootlin.com,
-	wens@csie.org,
-	jernej.skrabec@gmail.com,
-	samuel@sholland.org,
+	s=arc-20240116; t=1714675217; c=relaxed/simple;
+	bh=W5wFylu4znY7p5AjANG4/Vgp7FEQmDmVli7qKcbQo0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n9tq39OE0upbwtoGw74p1zc7+Cl6+PEhFENCIzwpubbjv4dBYzVTtyeWGYhh2jTbrC7QILVodI1u8QLyGK2Ah7GyNrykUuOvtLucrp7Tt+WyTu3O/0xcNlj1VnCtx7O7tSczMe0lzRN3goJjhAv1Hb/7y/Wk67g5HYhHODfhGL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAHFP/NA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C06C113CC;
+	Thu,  2 May 2024 18:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714675216;
+	bh=W5wFylu4znY7p5AjANG4/Vgp7FEQmDmVli7qKcbQo0w=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=cAHFP/NAPrl6DEg1/PnJaQHHzpc25KBPSl0vd1n4bja55GlysooyOy8Xwj3g5aF1K
+	 jEIkwC/c6x6Gw0Pqtu2cEhTfpa7TC4H4Zw1XZQFaR1ZtZpiRgG5nOxx3PP2DW0KUPZ
+	 Dx5UugTDy5Ntkm2RcI53D0/5A7vHNK4MdZRDogb43iTohT2jll08PRIus1IbhAysxN
+	 7aaXaZFQnNl08iTAaeD2GE41y9Ofy7TN7DRqAkeS/bvKj22wFCoSUld7QJj0cxgCMZ
+	 8huqKspTP8GZHrY23BLRCIUsaHzDLJm9IFHMsSXPfjhtMk6Q2AuA48nz123A/CEHh1
+	 hz5X4CdzvrUBw==
+Date: Thu, 2 May 2024 20:40:05 +0200
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-rtc@vger.kernel.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alois Fertl <a.fertl@t-online.de>
-Subject: [PATCH v3 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC Clock
-Date: Thu,  2 May 2024 20:07:36 +0200
-Message-Id: <20240502180736.7330-1-a.fertl@t-online.de>
-X-Mailer: git-send-email 2.39.2
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <20240502184005.fsdbwrbzmv5gshxh@kandell>
+References: <20240430115111.3453-1-kabel@kernel.org>
+ <20240430115111.3453-3-kabel@kernel.org>
+ <CAHp75VcgfvyZ9rcNev9CpQEN3CkUVozEkv+ycaQggPbE4tx+1Q@mail.gmail.com>
+ <20240430160507.45f1f098@dellmb>
+ <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TOI-EXPURGATEID: 150726::1714673287-68D8B3C7-D18CE117/0/0 CLEAN NORMAL
-X-TOI-MSGID: 0047e4c5-c64c-4673-96e8-5d78ab731061
+In-Reply-To: <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
 
-I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618 SOC.
-On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
-operate correctly. Without this change the clock from the SOC is
-~29kHz and BT module does not start up. The patch enables the Internal
-OSC Clock Auto Calibration of the H616/H618 which than provides the
-necessary 32kHz and the BT module initializes successfully.
-Add a flag and set it for H6 AND H616. The H618 is the same as H616
-regarding rtc.
+On Tue, Apr 30, 2024 at 06:17:45PM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek Behún wrote:
+> > On Tue, 30 Apr 2024 15:53:51 +0300
+> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > On Tue, Apr 30, 2024 at 2:51 PM Marek Behún <kabel@kernel.org> wrote:
+> 
+> ...
+> 
+> > > > +static int omnia_get_version_hash(struct omnia_mcu *mcu, bool bootloader,
+> > > > +                                 u8 version[static OMNIA_FW_VERSION_HEX_LEN])
+> > > 
+> > > Interesting format of the last parameter. Does it make any difference
+> > > to the compiler if you use u8 *version?
+> > 
+> > The compiler will warn if an array with not enough space is passed as
+> > argument.
+> 
+> Really?
 
-Signed-off-by: Alois Fertl <a.fertl@t-online.de>
----
+Indeed:
 
-v1->v2
-- add flag and activate for H6 AND H616
+  extern void a(char *x);
 
-v2->v3
-- correct findings from review
+  static void b(char x[static 10]) {
+      a(x);
+  }
 
-I was hoping to get some feedback regarding the situation on H6,
-where an external 32k crystal can be present.
-From what I understand from the H6 manual there should be no
-conflict as one can select which souce will drive the output.
-Should certainly be tested but I don`t have H6 hardware.
+  void c(void) {
+      char x[5] = "abcd";
+      b(x);
+  }
 
- drivers/rtc/rtc-sun6i.c | 17 ++++++++++++++++-
+says:
+  test.c: In function ‘c’:
+  test.c:9:9: warning: ‘b’ accessing 10 bytes in a region of size 5 [-Wstringop-overflow=]
+      9 |         b(x);
+        |         ^~~~
+  test.c:9:9: note: referencing argument 1 of type ‘char[10]’
+  test.c:3:13: note: in a call to function ‘b’
+      3 | static void b(char x[static 10]) {
+        |
 
- 1 file changed, 16 insertions(+), 1 deletion(-)
+...
 
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index e0b85a0d5645..20e81ccdef29 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -42,6 +42,11 @@
+> > > > +               dev_err(dev, "Cannot read MCU %s firmware version: %d\n", type,
+> > > > +                       err);  
+> > > 
+> > > One  line?
+> > 
+> > I'd like to keep this driver to 80 columns.
+> 
+> Then better to have a logical split then?
+> 
+> 			dev_err(dev, "Cannot read MCU %s firmware version: %d\n",
+> 				type, err);
+
+OK
+
+> > > > +               omnia_info_missing_feature(dev, "feature reading");  
+> > > 
+> > > Tautology. Read the final message. I believe you wanted to pass just
+> > > "reading" here.
+> > 
+> > No, I actually wanted it to print
+> >   Your board's MCU firmware does not support the feature reading
+> >   feature.
+> > as in the feature "feature reading" is not supported.
+> > I guess I could change it to
+> >   Your board's MCU firmware does not support the feature reading.
+> > but that would complicate the code: either I would need to add
+> > " feature" suffix to all the features[].name, or duplicate the
+> > info string from the omnia_info_missing_feature() function.
+> 
+> From point of a mere user (as I am towards this driver) I consider
+> the tautology confusing.
+> 
+> 	...the 'reading' feature
+> 
+> may be a good compromise.
+
+I have rewritten it to use another dev_info:
+  dev_info(dev,
+           "Your board's MCU firmware does not support feature reading.\n");
+
+> 
+> ...
+> 
+> > > > +       memcpy(mcu->board_first_mac, &reply[9], ETH_ALEN);  
+> > > 
+> > > There is an API ether_copy_addr() or so, don't remember by heart.
+> > > You also need an include for ETH_ALEN definition.
+> > 
+> > Doc for ether_addr_copy says:
+> >   Please note: dst & src must both be aligned to u16.
+> > since the code does:
+> >   u16 *a = (u16 *)dst;
+> >   const u16 *b = (const u16 *)src;
+> > 
+> >   a[0] = b[0];
+> >   a[1] = b[1];
+> >   a[2] = b[2]
+> > 
+> > Since I am copying from &reply[9], which is not u16-aligned, this won't
+> > work.
+> 
+> It would work on architectures that support misaligned accesses, but in general
+> you are right. Perhaps a comment on top to avoid "cleanup" patches like this?
+
+
+OK
  
- #define SUN6I_LOSC_CLK_PRESCAL			0x0008
- 
-+#define SUN6I_LOSC_CLK_AUTO_CAL			0x000c
-+#define SUN6I_LOSC_CLK_AUTO_CAL_16MS		BIT(2)
-+#define SUN6I_LOSC_CLK_AUTO_CAL_ENABLE		BIT(1)
-+#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL		BIT(0)
-+
- /* RTC */
- #define SUN6I_RTC_YMD				0x0010
- #define SUN6I_RTC_HMS				0x0014
-@@ -126,7 +131,6 @@
-  *     registers (R40, H6)
-  *   - SYS power domain controls (R40)
-  *   - DCXO controls (H6)
-- *   - RC oscillator calibration (H6)
-  *
-  * These functions are not covered by this driver.
-  */
-@@ -138,6 +142,7 @@ struct sun6i_rtc_clk_data {
- 	unsigned int has_losc_en : 1;
- 	unsigned int has_auto_swt : 1;
- 	unsigned int no_ext_losc : 1;
-+	unsigned int has_auto_cal : 1;
- };
- 
- #define RTC_LINEAR_DAY	BIT(0)
-@@ -268,6 +273,14 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 	}
- 	writel(reg, rtc->base + SUN6I_LOSC_CTRL);
- 
-+	if (rtc->data->has_auto_cal) {
-+		/* Enable internal OSC clock auto calibration */
-+		reg = SUN6I_LOSC_CLK_AUTO_CAL_16MS |
-+			SUN6I_LOSC_CLK_AUTO_CAL_ENABLE |
-+			SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL;
-+		writel(reg, rtc->base + SUN6I_LOSC_CLK_AUTO_CAL);
-+	}
-+
- 	/* Yes, I know, this is ugly. */
- 	sun6i_rtc = rtc;
- 
-@@ -380,6 +393,7 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
- 	.has_out_clk = 1,
- 	.has_losc_en = 1,
- 	.has_auto_swt = 1,
-+	.has_auto_cal = 1,
- };
- 
- static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
-@@ -395,6 +409,7 @@ static const struct sun6i_rtc_clk_data sun50i_h616_rtc_data = {
- 	.has_prescaler = 1,
- 	.has_out_clk = 1,
- 	.no_ext_losc = 1,
-+	.has_auto_cal = 1,
- };
- 
- static void __init sun50i_h616_rtc_clk_init(struct device_node *node)
--- 
-2.39.2
+> > > > +enum omnia_ctl_byte_e {
+> > > > +       CTL_LIGHT_RST           = BIT(0),
+> > > > +       CTL_HARD_RST            = BIT(1),
+> > > > +       /* BIT(2) is currently reserved */
+> > > > +       CTL_USB30_PWRON         = BIT(3),
+> > > > +       CTL_USB31_PWRON         = BIT(4),
+> > > > +       CTL_ENABLE_4V5          = BIT(5),
+> > > > +       CTL_BUTTON_MODE         = BIT(6),
+> > > > +       CTL_BOOTLOADER          = BIT(7)  
+> > > 
+> > > Keep trailing comma as it might be extended (theoretically). And you
+> > > do the similar in other enums anyway.
+> > 
+> > ctl_byt is 8-bit, so this enum really can't be extended.
+> 
+> I understand that (even before writing the previous reply).
+> 
+> > In fact I need
+> > to drop the last comma from omnia_ext_sts_dword_e and omnia_int_e.
+> 
+> Who prevents from having in a new firmware let's say
+> 
+>  BIT(31) | BIT(1)
+> 
+> as a new value?
+> 
+> From Linux perspective these are not terminating lines.
 
+OK
 
