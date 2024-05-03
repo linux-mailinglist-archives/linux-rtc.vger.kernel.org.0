@@ -1,127 +1,163 @@
-Return-Path: <linux-rtc+bounces-1106-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1107-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE4EA8BA50C
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 03:46:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 396AD8BA5DB
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 06:00:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61F181F213A0
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 01:46:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FF3E283EE4
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 04:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864ED101F2;
-	Fri,  3 May 2024 01:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540AA1F934;
+	Fri,  3 May 2024 04:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PPjALbxq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S4l4M156"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B95DF5B;
-	Fri,  3 May 2024 01:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A790957C97;
+	Fri,  3 May 2024 03:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714700811; cv=none; b=hRq6vBYf9cFOof9/+Twza/+vVQJejzZSlzxN+ln2C0CQcDspjuN9iF9AQv3oHYIylt8M9fE9/fyywwLNXapcWfgdr66hWlLFqirC2GXIxcmZo844P95+epZZAFL9bDB31e9TyETuZ60KZziG6d0369jMSSNXo8vyC95O1UCdOhM=
+	t=1714708801; cv=none; b=r1bqP1DRlGN02hvCy4ySmZTFe/sAP7dd0nSWXvqu4B+nQU1nW3OzbuYbz/yeuWeZ1gmuUafR8GAjaVI7sc9X8236GfunxtFw/XjvLTn9nDCjdumhJZKzRAYpdVJdbPTZmrPtaF0teq3FnG/OyXsjKjn38h1DiHG09HbPvTY0GhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714700811; c=relaxed/simple;
-	bh=JKgTE6YUHTKq659Fh+4WxOwvtYqFaO/UHPdHf0PyxU8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=RJ4/L/ZJJSRT/o+dlvt/gOFYSILX/mwZESqCh5/MzQeJPNZgvPkPR5RRIYomfkwQBmtfnvVogUrmlWqyAKlFOINpp5ULJaz3xKJf0UzXy3MSm/geQAinPyMhsqix4iyq3chN5hufVf39WImVSpQsbVu/ML3KR+YqnD9V6mxcMEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PPjALbxq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D76EC113CC;
-	Fri,  3 May 2024 01:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714700810;
-	bh=JKgTE6YUHTKq659Fh+4WxOwvtYqFaO/UHPdHf0PyxU8=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=PPjALbxqtye4I1DIDKjHVl3qcro5MlE9tek/ju94lTHQ9wY/pjbVv71TylRbsvFvW
-	 CreAHaLMHr1FL/n18IY54+vHGoxxHhpj2LSSdkdGE2XA5WU4uy97Bq/ZcEdTxqTaJu
-	 Nr5j403GWzpYiPXxaJV0a73HDuaPrDeeRiTQAyNx0x50uJCVjldPII9JL+L7BRBCF7
-	 VOEwB9bAfcnBooec5W605A00+FEMqc97nE1f9fjytDNUkxb0cxbgGBDl+GZY4E4r6t
-	 Qqc4adGqWtNz7GkLUA41T2o/j6mF1PCbadNmSnqlRreB2PpKAqYryTJoC3Nnbgq+N7
-	 BCl62C/NQ2Row==
+	s=arc-20240116; t=1714708801; c=relaxed/simple;
+	bh=aGKiw2tNfJj/B09OfrEFVun/96bRLGZeaAPbQLST/S4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CafvlRMwQ7yE0b+wOTtFhDNXhBg45PfZ6AKk8UuvY1sbHC2Qh+De6AvVJ7hC99TCpDZFBS2/2pl+DN7ysXpVYmuV4gAymqt7xJwnLiJiQ0pjNFGuIAdOs+gTAw/TFcQKJOYGepTHWquR1w3RZz0B+GvCvdvrcvAciml93BZMQaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S4l4M156; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a51addddbd4so1032101066b.0;
+        Thu, 02 May 2024 20:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714708798; x=1715313598; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lV5QJtATJH3udYqZkh4GKglvbY5CEqoLqxh1pEW+0os=;
+        b=S4l4M156tI+iwIuWECusIAkVncTCK5saapAJk4JzgC+lCpZI7EHEIRZD4uCjtcJ6nH
+         7Q+Q69bhZ1fLOAwFqmUhyn52eJR8ueyQg6lLVnh8CRsD5Nt+ReEpxNMuTO+tIgNBBhSg
+         Hskjceb1ypf6q9IN7IOduOXKJvmgeg+nhxDK1M3JjYfVWqRcslytM1oB10cOmpYLuy33
+         Esj6TDOxuq1ltwGFl09rVFEJGIaMtJNu6GzvfbP4YzuLmwA/o5yLbcLSfEpwz/eNjm+G
+         gx4SDGeCYxut/sKs13GbJSHMBU2FSjFp4GOwny3KphLD+9gOh76jydbqKhOaZity3gqX
+         DM9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714708798; x=1715313598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lV5QJtATJH3udYqZkh4GKglvbY5CEqoLqxh1pEW+0os=;
+        b=q6xKFikP2rEawSLsGit8bHQRSB3lvnvM0VkIYfcfhVeLg+qDh1wc1T9zYSDHblCZ/j
+         MlHYfLr3V0rpaf6MqXFlhOJd8Frxwg3tROP413YMzy4xtj7Has7WVlpoRWVu+LgHHY1J
+         ZLLYcxiAK8wrtxO604gFXif7oOhYC+yQWemAJH88jIwSRGHKXlqXRdY1TFB819ICuD51
+         lPA63yOxhWWngpHo75POafnPFdz8y5mBtZQHPEQlZe1rL2pwGgHuN+6K7ecTzd49ZNJV
+         WWCz0MltSfO0cMz82U/2A9XTpqhUmVMYoVi4NKMRWoyeiM+SQX5CgC95J+vfZW6S/y2K
+         3sGg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZkKINdyOkA7s3yIhLUwsEjbNMrdx5mSm5jO+HH9rJrujYi9abI2pSbbO6VwUAblOAdMXsUIjxF6Phj5sFK0GdoqQNJe27e39lAuXdljlDsQP3WUAohjgjCYEXDg6+dx3CrKNyx3DGiW2lU4//Kdie6XgfVmI9h1zNpDexr6xZDmPgLPxI
+X-Gm-Message-State: AOJu0Yzf9KRWACWM3mzzra/CwlyEXzm2R2f1tCAmQkybfYIicAlgfjLd
+	FRke87dIG9URTqi4L53MAble0K3SNnv1U5o/mWt5uvNsSNPpwicHXArDvVU/c61/8qjOrU1ryp2
+	K34jqaaJuvRmAbJKTOXXVtYv7+34=
+X-Google-Smtp-Source: AGHT+IFBiPQ7H0X8hwY8QcSaSdp+fVMaQ0cgmNra5IDf6cHwrabjJCBmZEcj9mQ+TgxfPzYxRNuPc0IYidPKogUi6KE=
+X-Received: by 2002:a17:906:c7d7:b0:a58:ee4e:1329 with SMTP id
+ dc23-20020a170906c7d700b00a58ee4e1329mr784943ejb.35.1714708797860; Thu, 02
+ May 2024 20:59:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20240430115111.3453-1-kabel@kernel.org> <20240430115111.3453-3-kabel@kernel.org>
+ <CAHp75VcgfvyZ9rcNev9CpQEN3CkUVozEkv+ycaQggPbE4tx+1Q@mail.gmail.com>
+ <20240430160507.45f1f098@dellmb> <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
+ <20240502184005.fsdbwrbzmv5gshxh@kandell> <CAHp75VfktKyGUNBz18TUQknF-5YZDOTgh2WLJhTs-_Ay-wgQoA@mail.gmail.com>
+ <20240502191756.ynwmp74yybat57my@kandell>
+In-Reply-To: <20240502191756.ynwmp74yybat57my@kandell>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 3 May 2024 06:59:20 +0300
+Message-ID: <CAHp75VcNDv=it_H8xt2p2J63UEqBpX_9qO3LxvQ3V_ZP0eStug@mail.gmail.com>
+Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
+	arm@kernel.org, Hans de Goede <hdegoede@redhat.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org, 
+	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	linux-rtc@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 03 May 2024 04:46:43 +0300
-Message-Id: <D0ZMPEICUP93.YHFFOSJBS27X@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kernel-team@android.com>, <linux-sound@vger.kernel.org>,
- <linux-input@vger.kernel.org>, <kvm@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
- <linux-sgx@vger.kernel.org>, "kernel test robot" <oliver.sang@intel.com>
-Subject: Re: [PATCH v1 01/10] selftests/sgx: Compile with -D_GNU_SOURCE
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Edward Liaw" <edliaw@google.com>, <shuah@kernel.org>, "Mark Brown"
- <broonie@kernel.org>, "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai"
- <tiwai@suse.com>, "Jiri Kosina" <jikos@kernel.org>, "Benjamin Tissoires"
- <bentiss@kernel.org>, "Sean Christopherson" <seanjc@google.com>, "Paolo
- Bonzini" <pbonzini@redhat.com>, "Bongsu Jeon" <bongsu.jeon@samsung.com>,
- "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Muhammad Usama Anjum"
- <usama.anjum@collabora.com>
-X-Mailer: aerc 0.17.0
-References: <20240430235057.1351993-1-edliaw@google.com>
- <20240430235057.1351993-2-edliaw@google.com>
-In-Reply-To: <20240430235057.1351993-2-edliaw@google.com>
 
-On Wed May 1, 2024 at 2:50 AM EEST, Edward Liaw wrote:
-> 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
-> asprintf into kselftest_harness.h, which is a GNU extension and needs
-> _GNU_SOURCE to either be defined prior to including headers or with the
-> -D_GNU_SOURCE flag passed to the compiler.
->
-> Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202404301040.3bea5782-oliver.sang@=
-intel.com
-> Signed-off-by: Edward Liaw <edliaw@google.com>
-> ---
->  tools/testing/selftests/sgx/Makefile    | 2 +-
->  tools/testing/selftests/sgx/sigstruct.c | 2 --
->  2 files changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftes=
-ts/sgx/Makefile
-> index 867f88ce2570..272da790d9ae 100644
-> --- a/tools/testing/selftests/sgx/Makefile
-> +++ b/tools/testing/selftests/sgx/Makefile
-> @@ -12,7 +12,7 @@ OBJCOPY :=3D $(CROSS_COMPILE)objcopy
->  endif
->
->  INCLUDES :=3D -I$(top_srcdir)/tools/include
-> -HOST_CFLAGS :=3D -Wall -Werror -g $(INCLUDES) -fPIC
-> +HOST_CFLAGS :=3D -Wall -Werror -g $(INCLUDES) -fPIC -D_GNU_SOURCE
->  HOST_LDFLAGS :=3D -z noexecstack -lcrypto
->  ENCL_CFLAGS +=3D -Wall -Werror -static-pie -nostdlib -ffreestanding -fPI=
-E \
->  	       -fno-stack-protector -mrdrnd $(INCLUDES)
-> diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/self=
-tests/sgx/sigstruct.c
-> index d73b29becf5b..a0c2de7c5302 100644
-> --- a/tools/testing/selftests/sgx/sigstruct.c
-> +++ b/tools/testing/selftests/sgx/sigstruct.c
-> @@ -1,7 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*  Copyright(c) 2016-20 Intel Corporation. */
-> -
-> -#define _GNU_SOURCE
->  #include <assert.h>
->  #include <getopt.h>
->  #include <stdbool.h>
-> --
-> 2.45.0.rc0.197.gbae5840b3b-goog
+On Thu, May 2, 2024 at 10:18=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
+ wrote:
+> On Thu, May 02, 2024 at 09:47:25PM +0300, Andy Shevchenko wrote:
+> > On Thu, May 2, 2024 at 9:40=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.o=
+rg> wrote:
+> > > On Tue, Apr 30, 2024 at 06:17:45PM +0300, Andy Shevchenko wrote:
+> > > > On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek Beh=C3=BAn wrote:
+> > > > > On Tue, 30 Apr 2024 15:53:51 +0300
+> > > > > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > > > > On Tue, Apr 30, 2024 at 2:51=E2=80=AFPM Marek Beh=C3=BAn <kabel=
+@kernel.org> wrote:
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+...
 
-BR, Jarkko
+> > > > > > > +static int omnia_get_version_hash(struct omnia_mcu *mcu, boo=
+l bootloader,
+> > > > > > > +                                 u8 version[static OMNIA_FW_=
+VERSION_HEX_LEN])
+> > > > > >
+> > > > > > Interesting format of the last parameter. Does it make any diff=
+erence
+> > > > > > to the compiler if you use u8 *version?
+> > > > >
+> > > > > The compiler will warn if an array with not enough space is passe=
+d as
+> > > > > argument.
+> > > >
+> > > > Really?
+> > >
+> > > Indeed:
+> > >
+> > >   extern void a(char *x);
+> > >
+> > >   static void b(char x[static 10]) {
+> > >       a(x);
+> > >   }
+> > >
+> > >   void c(void) {
+> > >       char x[5] =3D "abcd";
+> >
+> > >       b(x);
+> >
+> > It's not the example I was talking about. Here should be a(x).
+>
+> Somehow I got lost. Let's return to my function, where I have
+>   int omnia_get_version_hash(..., u8 version[static 40]);
+>
+> and then I use this function:
+>
+>   u8 version[40];
+>   omnia_get_version_hash(..., version);
+>
+> If somehow I made a mistake and declared the version array shorter:
+>   u8 version[20];
+>   omnia_get_version_hash(..., version);
+> I would get a warning.
+
+Yes. Would you get the same warning if you replace the parameter to a point=
+er?
+
+> So the purpose is to get warned if the compiler can prove that there is
+> not enough space in the destination buffer.
+
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
