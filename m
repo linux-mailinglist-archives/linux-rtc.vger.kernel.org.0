@@ -1,189 +1,288 @@
-Return-Path: <linux-rtc+bounces-1113-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1114-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9D5D8BAB6B
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 13:13:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDA608BAB81
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 13:22:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06C3D1C21717
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 11:13:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14F2C282814
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 11:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED08F15216F;
-	Fri,  3 May 2024 11:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCBC715218F;
+	Fri,  3 May 2024 11:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jHk+/Bbg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18202F9EB;
-	Fri,  3 May 2024 11:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714734797; cv=none; b=Zf0+zTrozjqR/3qT/Ws/Ie2uWHit2pbwrNCW5FSNiPEqFeEyiGhc6Tpr1BzWnM/z/K1dMAJQxOP0ErU3GAwDLvgYfE7/bEvrUdowXyObunY0KIFtTtx2XDxlZl7UVjW4kY3nvX2Y0tlQukWiNJGP7dpvs1bcEjGwJc8o4qjzW98=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714734797; c=relaxed/simple;
-	bh=ON9EuF/kfQrrlVsD3lIzJIMaCvPZdPofeSBKWj6O2Q8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bASYgZFTX7vVsyTwKD6HW1uXhIFGdv8sAzGSVezCokW088zRHhLFsx4O9kNIwXu7oucaU9E5RGrCq74Wxx59SfPo/8YW1PrElx/BHKlEBPTT1kT7YNZcWyYZVqfdUc5U7qIusxic0jiSUpRjDiMsWdfx6EoBnsqxvCSu5SQSzxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 076C42F4;
-	Fri,  3 May 2024 04:13:35 -0700 (PDT)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 597993F793;
-	Fri,  3 May 2024 04:13:08 -0700 (PDT)
-Date: Fri, 3 May 2024 12:13:04 +0100
-From: Andre Przywara <andre.przywara@arm.com>
-To: Alois Fertl <a.fertl@t-online.de>
-Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, wens@csie.org,
- jernej.skrabec@gmail.com, samuel@sholland.org, linux-rtc@vger.kernel.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, Ryan Walklin
- <ryan@testtoast.com>
-Subject: Re: [PATCH v3 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC
- Clock
-Message-ID: <20240503121304.5fc6add5@donnerap.manchester.arm.com>
-In-Reply-To: <20240502180736.7330-1-a.fertl@t-online.de>
-References: <20240502180736.7330-1-a.fertl@t-online.de>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2083.outbound.protection.outlook.com [40.107.223.83])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD86139587;
+	Fri,  3 May 2024 11:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714735330; cv=fail; b=FWkzKZqiezLzg9ck6+TUKhHWdTcVaIwDVXX36bt47t7RitYJZF2NNHWLhQ0H/O045v+I/q13o8wJRwe+sNuN9IHpk3uQYroQJhgw/TfmtRm6Ng0ZxnO45B47ULyGGTmQQbXm1boaUnvJcDRXd9PwLSZOEYz99+QbqIuskFTntHM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714735330; c=relaxed/simple;
+	bh=fW9iny2zAZuIfmt8PXOvE4nNb37wdQv5V4MZNPExokI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=pdCrxjOQw2/VqawYBwjL9PMj5cPC8kWpQmJ3nVVFSWk6+fBB3rzrfyDOHDMbSh+KratXSQHohBuKh8h0XO/okd2obW2L6vES+wsc2esmhudnEzexTTd0TvNNuguzK5jJ/2J/FcRyFzQK1AOBkgOy+5jHgBLqGsr3Uj+4P2pr/+s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jHk+/Bbg; arc=fail smtp.client-ip=40.107.223.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZHE80wvsP7cCjxIfkUxg/ZMEurgkdg4vvQ7hV+tvF9/5OK7HYQANPoWXUzBb8x9fpDcru9xMpr7Q8W/JYyWSTdGJeFQx7pNe1UUydEFDuDY27kEjvSLasec820wbukJlUn+ictna5AtnSe9qnkt/oKaOk28R+Q83zY8pANsHtvdp+6jcAlsZo6Jan/uvEWggCzH6WBvJ3wmmZa9eZbIJzdkDPX3LUEnlmeVVVomobOLw2d1U2E6QeotYd1YAKGPz15UPpS00nz9TP3LO44ZM0swqkwYMWIYb7fJQlMx+Q0el8pCvaONYZNlfnMTlROzGYnjqR2Y2o7K6mJIYB7XBag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aPrYvl/MiNRc2zDLlOxwfOni+KleHEb/Q2o1QgOfdQM=;
+ b=WA0PHbrbN20SMMZUEqTcy3dD2eI6ODnzhzzY5jFAgT2S+118rc5qJaLrDPyBphT+/7AmzLkPVI2gGdX4g0lQSXKBQi40g1aaqsP1tEUBnwNDvcKwCz92GfS1YSSvJImIQvqPMP7Z+EGTQqBzTv8NAyq/gmogdCoNbGTdQ81TJFdXcXknx7M69Yi4jxo3DBKws3U4dnAdm0cfQFZ4UiXPrhfQp7v4a0bQFaE4wn3vBYPqlJcS/DHnSG3Lq65DumWXpRSDhYfc5FuIgcBghA/nTw7yhNf6gROHpoPWvCfjrbu0lMsfKT7DCPjTF/nuMqwZ3wA8D/hSRIeoCS9U6hqu+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aPrYvl/MiNRc2zDLlOxwfOni+KleHEb/Q2o1QgOfdQM=;
+ b=jHk+/Bbg3RHblUop7MuxNVRjEwUmaEB3nSW/rC6WGPcjq5p8+ZuwF/N78eqI55g/JxM6EwKL2zi+zNCSKl1MkHPksAMTC9cDNZUrTA35bFB9M9zUVuFzhehectEMxUthQV6+wcQ+RP0V9Kvs6hoanaTk19i0uIvk0UFJdseouQvsdb702ujQjyXAd6XWgrnJH3kxGlFKq3quD4/q2WDotKgFMHHXypOhRVuJMOr5PsVdsKt4Lt0iqi+2cSEjWNTbCVOs98+5HiFdCeUG1Pt6fn4eLCcco2SpHomMcWWWONHNQ4h31aIHALbNO5KfmfFJJHwHREJeiewzJLhEVKnQUQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by MN2PR12MB4405.namprd12.prod.outlook.com (2603:10b6:208:26d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.28; Fri, 3 May
+ 2024 11:22:05 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::bbac:e733:5c7e:19c6]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::bbac:e733:5c7e:19c6%5]) with mapi id 15.20.7544.029; Fri, 3 May 2024
+ 11:22:05 +0000
+Message-ID: <a8f36d5a-a109-4683-abf1-47f8e7f8a7f0@nvidia.com>
+Date: Fri, 3 May 2024 19:21:58 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] selftest: rtc: Add support rtc alarm content check
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: shuah@kernel.org, avagin@google.com, amir73il@gmail.com,
+ brauner@kernel.org, mochs@nvidia.com, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ sdonthineni@nvidia.com, treding@nvidia.com, linux-tegra@vger.kernel.org
+References: <20240503014102.3568130-1-jjang@nvidia.com>
+ <20240503014102.3568130-2-jjang@nvidia.com>
+ <202405030649157e9de2ac@mail.local>
+Content-Language: en-US
+From: Joseph Jang <jjang@nvidia.com>
+In-Reply-To: <202405030649157e9de2ac@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TYAPR01CA0037.jpnprd01.prod.outlook.com
+ (2603:1096:404:28::25) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|MN2PR12MB4405:EE_
+X-MS-Office365-Filtering-Correlation-Id: e6f132c0-4a42-4e8a-14da-08dc6b634355
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|1800799015|366007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?R0Z2bFBDNm5naEFhNVNKVHZBbC9GUEtQVFhSWDJtSGMxY202QWVUWXRDc3lT?=
+ =?utf-8?B?Qk44ZGlBQ1B0QTF3K1RHZVBDTXBibHRtSFlXKzVYYWpNRFB4WXhadG5uK2hO?=
+ =?utf-8?B?WktaTHN5VHJ4WGxFKzRJenZXMStab29WRFRiOEdQU3JlbmdoTG45R3lWMDNZ?=
+ =?utf-8?B?ZmhtSURzam5kN002aU00M2RjVVRSYWRlZlBqTzZCNGx2dFFUckVOQmpDN2sx?=
+ =?utf-8?B?aFVRNmNDTzdXU1l0cDJMT2ZzKzhNWWwyTndrM2dMUFZhaGtHN2lWSG0xZlJC?=
+ =?utf-8?B?S2xsVDQrZXBITWhSZDRXTVo4US9PN0ZVUWJtTHJtQ0hnbng4NmdrNzFaL3o1?=
+ =?utf-8?B?bzNFVjdSZGcyS1Z4OVhXNWhSQTNMeDFmVGZ0dlpKVy9wU2Q2YXVjNUdqWFhp?=
+ =?utf-8?B?K0gxcFVkbmw1a2RkdGxndXc2Ujk1N1dDZFR3Sm9KQm9XZE9pYVFwNHQ0MVBq?=
+ =?utf-8?B?aTZlTUtvaHZSM1dXQjFSbTFzNy9pcFlZcXY3TnMxZExZdWZQVzZjUStZcFR0?=
+ =?utf-8?B?TW5rdktORTJvNHFwMVNBMWhDQTN1YVBHZVJ6bUVZRjgzS2FyUXVyVWo0NEFo?=
+ =?utf-8?B?eXhJdUVSTFdqK2diQ0VRS1hnS2dkS0dDeENybjRkYkVGQThhM0pBTDZCWWtp?=
+ =?utf-8?B?NmNZN0c0Z2lkRVJKb0tTUGdoeHROaGY4TWthSHlFZ1dWQWxQMGlRS25sVmJT?=
+ =?utf-8?B?SlpmTFVrdTcwbW5iY1luZ216U1VaMVYzS3ByRnhqaUNZd3V0WHJDMU1pSkxs?=
+ =?utf-8?B?SzM5Y1RraFc4TjQ1WjVrVUV6K3NpbTZScUprbkxEQ21BTVRDSHFkZWR4UGZZ?=
+ =?utf-8?B?Ri8wUTZXZjg1VXZqOHZYNE1lR0RXZm5hZmhBaGZHRVIreEZ0Z05XLzMyelRV?=
+ =?utf-8?B?OC9XQ1J3VTFocXgvbEtvSzI5N0pqaE15T08zWWlVcndYNWcvT0JOWW85ejFR?=
+ =?utf-8?B?aENNS0ozTnAwdW0yMnBna09QYkY0WHFCcVZIcXI4TkhTS2o1UzhRU1lrWEN2?=
+ =?utf-8?B?d2w5U3lFdndGWjkrbWdHcEVhc2lrRThDallVQnNaTTVNeWNOb0pncWVSUHhx?=
+ =?utf-8?B?RUNERytZcnEwNDBoOThiS1FLOEYrbVRzNVhNdkliUEF2WVFjdjVQOUQvVENj?=
+ =?utf-8?B?d01zakZ3R2NrcjV6TTNCMjlVckE5R3BvYlVkYjRRYXg0RUtaelNMK2hXUUNP?=
+ =?utf-8?B?SjJheWtrdW40eEM0dzQxd1A0Y3BrSnpUZ2JIUVBBQjVUdWNrK2R6VW5BazhD?=
+ =?utf-8?B?SHJsaU1JV3Z0bUFIL29TZ1d1aUZiVDQzdTI0MWxFQ3l1MU5LTkNhbEhzRTNM?=
+ =?utf-8?B?dHFVREpIZS9NQTJvODNzSWtOeHh0Q1B2T3FXcGRWS2FObDJTM0cwd0dkVjE2?=
+ =?utf-8?B?dUN2UkNGbTBobVVqT1hNdmVjaHJBOWQ3TG9kR1pBc1FNcW1ESGR1MVhXUm5x?=
+ =?utf-8?B?ZFliN1dlUnczblNJRS9kWnZiWlRGVHhmVzhtcit5eHdxYmdXOUIyWEE5ZUNQ?=
+ =?utf-8?B?dlExOWlKakNHN3NxOGZUdEM1Z3FYRUxGVHhaWi9haFViQWViZStIcG5SUmZJ?=
+ =?utf-8?B?dWhWNlVXZlJIMW9Bd0dRb2s2OWYwMHZ1Y2kzemV3aCttZ2dLWWNuV05RVzZH?=
+ =?utf-8?B?Z3dmMWRwdFZsMmR1THVOVVgzd2Q3SWE3OHF1Q0l4ZWJWUG5MRlU1ZHJxb3lt?=
+ =?utf-8?B?eGI0ZkJuZXJSV2JtRlR4QmlNaWh6Q2p0RitpOW4zS2hhbURqSG5ud2ZBPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UUhUVlJhQ253cUU4eTFYZ3pEY1o0eWVDY3BYZC9jMm1OVWJZYW14V0t2alBV?=
+ =?utf-8?B?dFBwenpXVnpoS0kvMjIxVDhyVTh5a00vbzB3TVdTK3hjTG54bEpnTEpZLzJa?=
+ =?utf-8?B?OFg2R1BVelU1cXFvbittNFdKWC9uSFJsL2hTSWUzalE3UEJ2MVFjcFR1TjRB?=
+ =?utf-8?B?Y0ZWSVpETFBPTXlleVJsUVpMSzBNK1kvYmZXMXcwSFF4Q0JWYVhmUXBzbUd0?=
+ =?utf-8?B?LysxK0gwN0orRW5pNjBKQ0I5Sm9XTnpaaml0WU5pR09EeGQ4dWFvV3lXNi8y?=
+ =?utf-8?B?NE1nSWlDMkxLK21aYTdhMjJCOS9XalRqTWZvTFpUQkd4RkNQNnFiaC9FUTJW?=
+ =?utf-8?B?ZzJreVNSc1RnTDRiYzhaRWVWdlVhVVFHNmFqanVxdmIzVDQrelNOTkhFY1FJ?=
+ =?utf-8?B?bUVkZE93SmpGT2VlY2pOamp1UFhoNGxkSE1udEVLK3l3Y1dxNDhleUZod1ho?=
+ =?utf-8?B?L2cvdno3S0pjOTFCTktITnpZRTJ1RENHVUhpWUVvaEgwcGs4bGxCNVY5Z0hl?=
+ =?utf-8?B?SU5rR1BwODJoc1dFQ1lZY2hjbEtWeGF4bVpkTFFxajhtVmY4ZU52ai9zZ2xV?=
+ =?utf-8?B?RmRsckJUOFlpSDA2MGlDMlk2Q3EvM1djZWY5ZGRmR0xncGdkdWhBek5EOEs5?=
+ =?utf-8?B?cUlua1FlSDl5SzQxaytKc0hZRjQ2ZWF4ekorSFZXdnFBN3pOU1BFaE1rRWhM?=
+ =?utf-8?B?SDU2aUVOOURsRVl6R1c3R21YTEMzT3RMTVcwdUhxZmpLK0hlRGJJNG1LYWdS?=
+ =?utf-8?B?TUpuM1NuRXZpR25DUlhYczVZUldxVHpBTkRxbmlRYkRjRHdIb0ExLzNLN0hR?=
+ =?utf-8?B?QnFWb0tmMWliaE1vYXpVdVg3SjFuTklMZ1NPbUQwOXVzSExwdEdzYzROUHdj?=
+ =?utf-8?B?UnV5UFJxeGRZNFZQZ0tLNlQwQzVFQ0QybU9BK0FiM0pFUzRJcENOcnZITXAy?=
+ =?utf-8?B?OHMxUWpwZUFYS2FSMkxFSWtMS2ZDbDJ6YUxuWi9DdWZNcG1hUEJ5ZWp5M0RX?=
+ =?utf-8?B?V0tMZ1BHdURxcm1rb1o5N3lHcTZGdzlTWENCOEYxQlhQZmVBbTg0U0szRmJZ?=
+ =?utf-8?B?UExnUzRwWXl5L1U3TWtKcjJYcEgwdStKN1NEZVRkRStEcHYwSi9CT1kreVZm?=
+ =?utf-8?B?SmN4TnkzbUNPckFtSHZuNU9keVBtcjhoeHRtS2ovTmkvQXZoaTZZbkNnMG9Y?=
+ =?utf-8?B?ZUlUbHl6MUNGeTg2c2JOV09jQVdiOVdhVEpaM2VpN084OGQwRDN1aTV0Y0Rp?=
+ =?utf-8?B?VUwrblNkRE5td1prVkd3Z0l0UnltM1R4bmN1eFkvTXZ1U2ZjQS9MMGJIMFBV?=
+ =?utf-8?B?Nk40Q3lRSlVId2liejhEK1doY0hTMk1rSk5iOXJ1TDVwVkNRTmtNMjlIbmJY?=
+ =?utf-8?B?R3I0N3psMzE0OW1PRVhlL2ZWdUp4UXgvdC9jMUJIb1N0MGM0S3R4Vlhabm9M?=
+ =?utf-8?B?UWRQU2ZyblJUTCswUE1ja1JTbTZ2Wnl6dDRDZ1dnaHFQWFlIU2NLUUhxOU9l?=
+ =?utf-8?B?bC9mQUFCbGhsWFBCYWVnTkFPSWJmbnZiL1UvZk1IN2ZQM0FvUFpVdld5NXZK?=
+ =?utf-8?B?cEFpQS8yc2t5empibVNQZWpoemgyZE9aaVlDUm80OWEzS3BDK1pNclEvRDA0?=
+ =?utf-8?B?SmM1K25wY21ucm0yeGMwSXN1eUJ6cFl2WDZGekQ0SlZ0dU4zR05ZaVZNZ3Bq?=
+ =?utf-8?B?U0tIT2ltQUkxQ3FTVnh5dWxDSEYreWJ5d2E0V2dNc2pxT21IMU44U0txVE9a?=
+ =?utf-8?B?SGFHTkc1d1orMFdsZGs0UWl1Q0Q2VXRmK0xFS09sV0VTcmhSSkpzYWtsRjNw?=
+ =?utf-8?B?Sy93eVhKeEFkeHlPS1Q4RUswQmpKRFQ2Q2dTU2ZxeHk3MDlpb1c0SWhweVEx?=
+ =?utf-8?B?U3I5UHpQRkdSVUpSTWNaZzlBWFhhRHhXRmlaLzBiTWpUUDhxVXNPeFlZd2xn?=
+ =?utf-8?B?MG9DekdPbGRmY3BNZWppaXA1TjlhU0JnaUdqM3BPTkNuODFFNytPZVAxaDVr?=
+ =?utf-8?B?U0ZvYWhwVmNnRURETjBSNHY1ZlppVEV1djJiWFQ2aHNQK0lwRlV0ZXlBcTZr?=
+ =?utf-8?B?NTZDWi9nMFlpOXhJaGgxV01jckc0aEdzb04zYzhGaUkzRTlpOVI3V2ZESFFm?=
+ =?utf-8?Q?bxlYCIK51pQ3nbcoRGSiD79Wu?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6f132c0-4a42-4e8a-14da-08dc6b634355
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2024 11:22:05.6137
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TbbXcWjmnsooduCLFxKIImQ12a/VUhy4rWB9U1YwI5JEtqSrBq9+DLnntwdy+mWWwgn6m5vLDNqI/vxyRyL/bA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4405
 
-On Thu,  2 May 2024 20:07:36 +0200
-Alois Fertl <a.fertl@t-online.de> wrote:
+Hi Alexandre,
 
-Hi Alois,
+Thanks for your promptly response, I try to re-send the email again and 
+avoid the security scanner to disrupt the external link.
 
-many thanks for taking care and sending a patch! I think this problem is
-plaguing some people.
 
-> I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618 SOC.
-> On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
-> operate correctly. Without this change the clock from the SOC is
-> ~29kHz and BT module does not start up. The patch enables the Internal
-> OSC Clock Auto Calibration of the H616/H618 which than provides the
-> necessary 32kHz and the BT module initializes successfully.
-> Add a flag and set it for H6 AND H616. The H618 is the same as H616
-> regarding rtc.
+ > procfs for the RTC has been deprecated for a while, don't use it.
+ >
+ > Instead, you can use the RTC_PARAM_GET ioctl to get RTC_PARAM_FEATURES
+ > and then look at RTC_FEATURE_ALARM.
 
-(many thanks to Ryan for the head up on this)
+I found old version kernel doesn't support RTC_PARAM_GET ioctl. In order
+support old version kernel testing, is it possible to use rtc procfs to
+validate wakealarm function for old version kernel ?
 
-So what tree is this patch based on? It certainly is not mainline, is it?
-Mainline never supported the H616 RTC clocks via the RTC driver, this was
-only through the new driver in the clk
-directory, in drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8a93720329d4d2
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d91612d7f01aca
+Can I move this rtc alarm validation to
+<linux_root>/tools/testing/selftests/rtc/rtctest.c ? So we could try to
+use RTC_PARAM_GET ioctl first and then roll back to use rtc procfs if 
+RTC_PARAM_GET ioctl was not supported.
 
-Please note that the H6 RTC clocks were intended to be handled via the new
-driver as well, but this part was reverted:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=60d9f050da63b
+Thank you,
+Joseph.
 
-Please only send patches based on the mainline tree.
 
-I doesn't look that hard to adjust the patch to mainline, though to cover
-the H6 is well this would require this code in both drivers. So when we
-want to address the H6 as well, it might make sense to solve the problem
-that triggered the revert first, to only have that change only in one
-file. 
 
-> Signed-off-by: Alois Fertl <a.fertl@t-online.de>
-> ---
+On 2024/5/3 2:49 PM, Alexandre Belloni wrote:
+> On 02/05/2024 18:41:02-0700, Joseph Jang wrote:
+>> Some platforms do not support WAKEUP service by default, we use a shell
+>> script to check the absence of alarm content in /proc/driver/rtc.
 > 
-> v1->v2
-> - add flag and activate for H6 AND H616
+> procfs for the RTC has been deprecated for a while, don't use it.
 > 
-> v2->v3
-> - correct findings from review
+> Instead, you can use the RTC_PARAM_GET ioctl to get RTC_PARAM_FEATURES
+> and then look at RTC_FEATURE_ALARM.
+> See https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/tree/rtc.c
 > 
-> I was hoping to get some feedback regarding the situation on H6,
-> where an external 32k crystal can be present.
-> From what I understand from the H6 manual there should be no
-> conflict as one can select which souce will drive the output.
-> Should certainly be tested but I don`t have H6 hardware.
-
-I think I should have H6 boards both with and without an external crystal
-oscillator, so can check the situation there, but only next week.
-
->  drivers/rtc/rtc-sun6i.c | 17 ++++++++++++++++-
+>>
+>> The script will validate /proc/driver/rtc when it is not empty and then
+>> check if could find alarm content in it according to the rtc wakealarm
+>> is supported or not.
+>>
+>> Requires commit 101ca8d05913b ("rtc: efi: Enable SET/GET WAKEUP services
+>> as optional")
+>>
+>> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+>> Signed-off-by: Joseph Jang <jjang@nvidia.com>
+>> ---
+>>   tools/testing/selftests/Makefile              |  1 +
+>>   tools/testing/selftests/rtc/property/Makefile |  5 ++++
+>>   .../selftests/rtc/property/rtc-alarm-test.sh  | 27 +++++++++++++++++++
+>>   3 files changed, 33 insertions(+)
+>>   create mode 100644 tools/testing/selftests/rtc/property/Makefile
+>>   create mode 100755 tools/testing/selftests/rtc/property/rtc-alarm-test.sh
+>>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index e1504833654d..f5d43e2132e8 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -80,6 +80,7 @@ TARGETS += riscv
+>>   TARGETS += rlimits
+>>   TARGETS += rseq
+>>   TARGETS += rtc
+>> +TARGETS += rtc/property
+>>   TARGETS += rust
+>>   TARGETS += seccomp
+>>   TARGETS += sgx
+>> diff --git a/tools/testing/selftests/rtc/property/Makefile b/tools/testing/selftests/rtc/property/Makefile
+>> new file mode 100644
+>> index 000000000000..c6f7aa4f0e29
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/rtc/property/Makefile
+>> @@ -0,0 +1,5 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +TEST_PROGS := rtc-alarm-test.sh
+>> +
+>> +include ../../lib.mk
+>> +
+>> diff --git a/tools/testing/selftests/rtc/property/rtc-alarm-test.sh b/tools/testing/selftests/rtc/property/rtc-alarm-test.sh
+>> new file mode 100755
+>> index 000000000000..3bee1dd5fbd0
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/rtc/property/rtc-alarm-test.sh
+>> @@ -0,0 +1,27 @@
+>> +#!/bin/bash
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +if [ ! -f /proc/driver/rtc ]; then
+>> +	echo "SKIP: the /proc/driver/rtc is empty."
+>> +	exit 4
+>> +fi
+>> +
+>> +# Check if could find alarm content in /proc/driver/rtc according to
+>> +# the rtc wakealarm is supported or not.
+>> +if [ -n "$(ls /sys/class/rtc/rtc* | grep -i wakealarm)" ]; then
+>> +	if [ -n "$(grep -i alarm /proc/driver/rtc)" ]; then
+>> +		exit 0
+>> +	else
+>> +		echo "ERROR: The alarm content is not found."
+>> +		cat /proc/driver/rtc
+>> +		exit 1
+>> +	fi
+>> +else
+>> +	if [ -n "$(grep -i alarm /proc/driver/rtc)" ]; then
+>> +		echo "ERROR: The alarm content is found."
+>> +		cat /proc/driver/rtc
+>> +		exit 1
+>> +	else
+>> +		exit 0
+>> +	fi
+>> +fi
+>> -- 
+>> 2.34.1
+>>
 > 
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> index e0b85a0d5645..20e81ccdef29 100644
-> --- a/drivers/rtc/rtc-sun6i.c
-> +++ b/drivers/rtc/rtc-sun6i.c
-> @@ -42,6 +42,11 @@
->  
->  #define SUN6I_LOSC_CLK_PRESCAL			0x0008
->  
-> +#define SUN6I_LOSC_CLK_AUTO_CAL			0x000c
-> +#define SUN6I_LOSC_CLK_AUTO_CAL_16MS		BIT(2)
-> +#define SUN6I_LOSC_CLK_AUTO_CAL_ENABLE		BIT(1)
-> +#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL		BIT(0)
-> +
->  /* RTC */
->  #define SUN6I_RTC_YMD				0x0010
->  #define SUN6I_RTC_HMS				0x0014
-> @@ -126,7 +131,6 @@
->   *     registers (R40, H6)
->   *   - SYS power domain controls (R40)
->   *   - DCXO controls (H6)
-> - *   - RC oscillator calibration (H6)
->   *
->   * These functions are not covered by this driver.
->   */
-> @@ -138,6 +142,7 @@ struct sun6i_rtc_clk_data {
->  	unsigned int has_losc_en : 1;
->  	unsigned int has_auto_swt : 1;
->  	unsigned int no_ext_losc : 1;
-> +	unsigned int has_auto_cal : 1;
->  };
->  
->  #define RTC_LINEAR_DAY	BIT(0)
-> @@ -268,6 +273,14 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
->  	}
->  	writel(reg, rtc->base + SUN6I_LOSC_CTRL);
->  
-> +	if (rtc->data->has_auto_cal) {
-> +		/* Enable internal OSC clock auto calibration */
-> +		reg = SUN6I_LOSC_CLK_AUTO_CAL_16MS |
-> +			SUN6I_LOSC_CLK_AUTO_CAL_ENABLE |
-> +			SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL;
-> +		writel(reg, rtc->base + SUN6I_LOSC_CLK_AUTO_CAL);
-> +	}
-> +
->  	/* Yes, I know, this is ugly. */
->  	sun6i_rtc = rtc;
->  
-> @@ -380,6 +393,7 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
->  	.has_out_clk = 1,
->  	.has_losc_en = 1,
->  	.has_auto_swt = 1,
-> +	.has_auto_cal = 1,
->  };
->  
->  static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
-> @@ -395,6 +409,7 @@ static const struct sun6i_rtc_clk_data sun50i_h616_rtc_data = {
-
-For the records: this whole struct does not exist in mainline.
-
-Cheers,
-Andre
-
->  	.has_prescaler = 1,
->  	.has_out_clk = 1,
->  	.no_ext_losc = 1,
-> +	.has_auto_cal = 1,
->  };
->  
->  static void __init sun50i_h616_rtc_clk_init(struct device_node *node)
-
 
