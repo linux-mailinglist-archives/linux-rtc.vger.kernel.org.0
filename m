@@ -1,112 +1,189 @@
-Return-Path: <linux-rtc+bounces-1112-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1113-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23AB98BAB5C
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 13:07:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9D5D8BAB6B
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 13:13:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4AAE7B21032
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 11:07:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06C3D1C21717
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2024 11:13:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE421514C1;
-	Fri,  3 May 2024 11:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=testtoast.com header.i=@testtoast.com header.b="elb+q/N0";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LUJl5Rb0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED08F15216F;
+	Fri,  3 May 2024 11:13:17 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fhigh1-smtp.messagingengine.com (fhigh1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FA2139587;
-	Fri,  3 May 2024 11:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18202F9EB;
+	Fri,  3 May 2024 11:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714734430; cv=none; b=iBrFaBtMYUamH49JVsanAwXDD99/fnS7VpNw5YFxtadpyk4DgvJE3U6L3xBKU/8APP6uQQWTDNlIGvrYH64RGC+OkaHb61p7l6dJ5eTMPpBh/sdbfdXdITmq0r++JCdK6hiELaPBHOJu80bbTl+g8NEc6VYYVshC5e66fdRxoJ8=
+	t=1714734797; cv=none; b=Zf0+zTrozjqR/3qT/Ws/Ie2uWHit2pbwrNCW5FSNiPEqFeEyiGhc6Tpr1BzWnM/z/K1dMAJQxOP0ErU3GAwDLvgYfE7/bEvrUdowXyObunY0KIFtTtx2XDxlZl7UVjW4kY3nvX2Y0tlQukWiNJGP7dpvs1bcEjGwJc8o4qjzW98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714734430; c=relaxed/simple;
-	bh=GvR9uzfRiZCjQFolJpRQOkcSbc2rF79IzZKOQLzwZaM=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=Czt0UGl5vmRHZc8wrhCDkYoVvITFA61OtKHtzT1erqR6xM0/a+Me9sl855xJ0UaEbJliybEsW4gAwkC7ukUfSGOWsnWAHEw7u6bYh4txRFoQx6sXDCAmKuSZrnvhjycMxX5YM0APcR3/Pe7ekT0JNJYDIijK0MzbtpzMdtjqbas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=testtoast.com; spf=pass smtp.mailfrom=testtoast.com; dkim=pass (2048-bit key) header.d=testtoast.com header.i=@testtoast.com header.b=elb+q/N0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LUJl5Rb0; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=testtoast.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=testtoast.com
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 39E311140148;
-	Fri,  3 May 2024 07:07:08 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute5.internal (MEProxy); Fri, 03 May 2024 07:07:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=testtoast.com;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1714734428; x=
-	1714820828; bh=VI2w/AE2L3MjKz4U4N+Q/2y3K/jjX1RHLKw3XFlsV5I=; b=e
-	lb+q/N0iihnBJ33hctMernYc+ZR18AcJXy4gLZf5+CjPyPjR62m08Bebp2KMzi29
-	3DtL2U7u+7g3tmUqU3swRxHgimCgkuGWfloK7jNlCHvGLJ49cdJzeZxFPySI19f3
-	TSLQ0d8+bFA/4Bvv2ayyQTDqdn8bK3QzruZ1Sy8DZ3JQxJ31Nl4wAPJVOxlZAsr/
-	YV8kOFgD3CqgzPtWlnWKezI2WfCy6PTrehFwbR7HCnfjMaBO8afMsK6BDT+cvvSW
-	WwoafdOQLdf21f/eixquqxiwu8kUmKpCd6vnbAcGZ9p/iYbDxGCagb14wCobeaCt
-	yMcbJjLtkszMxRIlDVl8w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1714734428; x=1714820828; bh=VI2w/AE2L3MjKz4U4N+Q/2y3K/jj
-	X1RHLKw3XFlsV5I=; b=LUJl5Rb0mAsszQnonIblVOmLZ93ja8UCz/7DpnA1hKMe
-	wNUTVTsH9i+9dunfgz5I4dDkRBFL5mpiZ5ROsRGoGTx9Pql6lPPFD6gYkBJ1FdyX
-	2vH47UgES98NVHay381abZbRnjOJUd/EPIKlkreGiC3F7hPbqyzjDzLQkGh6d/C7
-	lLaXc9M5JhHkMbmYnZLe7134UyWjC4rFdcSWuirWRHl44R3z5YDF/JEvY2JrAQ5n
-	C9u+Sn2q1va8JYpNko36GNEnYFmnDflz/tNKmWu3JjyYhgDBSeb7QMHnoHg3HYwa
-	E5RyXZIxTUmLBgLrrKZKBm2bUqKcggBxd6rmmuVlrA==
-X-ME-Sender: <xms:W8U0ZrcF9DfUcu3i9ew-JCI-q43oy2LMp5b8kNEmChZ53UX2MIIbrg>
-    <xme:W8U0ZhP1sk7j1RkUh6QWgvHFwV-2PCDkMKWdOKSEO-VyRy-obtn8lsm_djtrpd94e
-    qC_3Kwz8Xo6ABR_FA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddvtddgfeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftfih
-    rghnucghrghlkhhlihhnfdcuoehrhigrnhesthgvshhtthhorghsthdrtghomheqnecugg
-    ftrfgrthhtvghrnhephedvveeigedujeeufeegffehhfffveduhfeijefgtdffteelgfet
-    ueevieduieejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprhihrghnsehtvghsthhtohgrshhtrdgtohhm
-X-ME-Proxy: <xmx:W8U0ZkjDRal_SfaHcAn2hl_8rlg1UMMo2NwRY8jbWAe38a3Jyft37Q>
-    <xmx:W8U0Zs9BanujQeodhLfMiKeUACvOTXDOLF9KZyARDCc77FWK_qy0Gw>
-    <xmx:W8U0ZnvDdWzKnr0B8F7jxtr8pvxzXQhRWqx5DQoei_cah8XsSJ9UCw>
-    <xmx:W8U0ZrFZD1wERCvoPPdw3UcxtfEZM2-3jvCg7mIVYNH9VDhMxfYz8A>
-    <xmx:XMU0ZtANjDrpg-Rb5cYXBWbQPhDaAHJUWdDfh4N8Qe5_2LN0eKLc39l2>
-Feedback-ID: idc0145fc:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 98257A60079; Fri,  3 May 2024 07:07:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-417-gddc99d37d-fm-hotfix-20240424.001-g2c179674
+	s=arc-20240116; t=1714734797; c=relaxed/simple;
+	bh=ON9EuF/kfQrrlVsD3lIzJIMaCvPZdPofeSBKWj6O2Q8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bASYgZFTX7vVsyTwKD6HW1uXhIFGdv8sAzGSVezCokW088zRHhLFsx4O9kNIwXu7oucaU9E5RGrCq74Wxx59SfPo/8YW1PrElx/BHKlEBPTT1kT7YNZcWyYZVqfdUc5U7qIusxic0jiSUpRjDiMsWdfx6EoBnsqxvCSu5SQSzxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 076C42F4;
+	Fri,  3 May 2024 04:13:35 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 597993F793;
+	Fri,  3 May 2024 04:13:08 -0700 (PDT)
+Date: Fri, 3 May 2024 12:13:04 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Alois Fertl <a.fertl@t-online.de>
+Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, wens@csie.org,
+ jernej.skrabec@gmail.com, samuel@sholland.org, linux-rtc@vger.kernel.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, Ryan Walklin
+ <ryan@testtoast.com>
+Subject: Re: [PATCH v3 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC
+ Clock
+Message-ID: <20240503121304.5fc6add5@donnerap.manchester.arm.com>
+In-Reply-To: <20240502180736.7330-1-a.fertl@t-online.de>
+References: <20240502180736.7330-1-a.fertl@t-online.de>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <178dbfc7-31cf-4cfa-a466-08ba5e7302b1@app.fastmail.com>
-In-Reply-To: <fde9c98a-e14d-4c03-91ab-0cdc209a1763@app.fastmail.com>
-References: <20240502180736.7330-1-a.fertl@t-online.de>
- <fde9c98a-e14d-4c03-91ab-0cdc209a1763@app.fastmail.com>
-Date: Fri, 03 May 2024 23:06:45 +1200
-From: "Ryan Walklin" <ryan@testtoast.com>
-To: "Alois Fertl" <a.fertl@t-online.de>, a.zummo@towertech.it
-Cc: alexandre.belloni@bootlin.com, "Chen-Yu Tsai" <wens@csie.org>,
- "Jernej Skrabec" <jernej.skrabec@gmail.com>,
- "Samuel Holland" <samuel@sholland.org>, linux-rtc@vger.kernel.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC Clock
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Thu,  2 May 2024 20:07:36 +0200
+Alois Fertl <a.fertl@t-online.de> wrote:
 
->> 
->>  static void __init sun50i_h616_rtc_clk_init(struct device_node *node)
+Hi Alois,
 
-Sorry, this struct. The H6 struct is present. 
+many thanks for taking care and sending a patch! I think this problem is
+plaguing some people.
 
->
-> Ryan
+> I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618 SOC.
+> On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
+> operate correctly. Without this change the clock from the SOC is
+> ~29kHz and BT module does not start up. The patch enables the Internal
+> OSC Clock Auto Calibration of the H616/H618 which than provides the
+> necessary 32kHz and the BT module initializes successfully.
+> Add a flag and set it for H6 AND H616. The H618 is the same as H616
+> regarding rtc.
+
+(many thanks to Ryan for the head up on this)
+
+So what tree is this patch based on? It certainly is not mainline, is it?
+Mainline never supported the H616 RTC clocks via the RTC driver, this was
+only through the new driver in the clk
+directory, in drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8a93720329d4d2
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d91612d7f01aca
+
+Please note that the H6 RTC clocks were intended to be handled via the new
+driver as well, but this part was reverted:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=60d9f050da63b
+
+Please only send patches based on the mainline tree.
+
+I doesn't look that hard to adjust the patch to mainline, though to cover
+the H6 is well this would require this code in both drivers. So when we
+want to address the H6 as well, it might make sense to solve the problem
+that triggered the revert first, to only have that change only in one
+file. 
+
+> Signed-off-by: Alois Fertl <a.fertl@t-online.de>
+> ---
+> 
+> v1->v2
+> - add flag and activate for H6 AND H616
+> 
+> v2->v3
+> - correct findings from review
+> 
+> I was hoping to get some feedback regarding the situation on H6,
+> where an external 32k crystal can be present.
+> From what I understand from the H6 manual there should be no
+> conflict as one can select which souce will drive the output.
+> Should certainly be tested but I don`t have H6 hardware.
+
+I think I should have H6 boards both with and without an external crystal
+oscillator, so can check the situation there, but only next week.
+
+>  drivers/rtc/rtc-sun6i.c | 17 ++++++++++++++++-
+> 
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index e0b85a0d5645..20e81ccdef29 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -42,6 +42,11 @@
+>  
+>  #define SUN6I_LOSC_CLK_PRESCAL			0x0008
+>  
+> +#define SUN6I_LOSC_CLK_AUTO_CAL			0x000c
+> +#define SUN6I_LOSC_CLK_AUTO_CAL_16MS		BIT(2)
+> +#define SUN6I_LOSC_CLK_AUTO_CAL_ENABLE		BIT(1)
+> +#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL		BIT(0)
+> +
+>  /* RTC */
+>  #define SUN6I_RTC_YMD				0x0010
+>  #define SUN6I_RTC_HMS				0x0014
+> @@ -126,7 +131,6 @@
+>   *     registers (R40, H6)
+>   *   - SYS power domain controls (R40)
+>   *   - DCXO controls (H6)
+> - *   - RC oscillator calibration (H6)
+>   *
+>   * These functions are not covered by this driver.
+>   */
+> @@ -138,6 +142,7 @@ struct sun6i_rtc_clk_data {
+>  	unsigned int has_losc_en : 1;
+>  	unsigned int has_auto_swt : 1;
+>  	unsigned int no_ext_losc : 1;
+> +	unsigned int has_auto_cal : 1;
+>  };
+>  
+>  #define RTC_LINEAR_DAY	BIT(0)
+> @@ -268,6 +273,14 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+>  	}
+>  	writel(reg, rtc->base + SUN6I_LOSC_CTRL);
+>  
+> +	if (rtc->data->has_auto_cal) {
+> +		/* Enable internal OSC clock auto calibration */
+> +		reg = SUN6I_LOSC_CLK_AUTO_CAL_16MS |
+> +			SUN6I_LOSC_CLK_AUTO_CAL_ENABLE |
+> +			SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL;
+> +		writel(reg, rtc->base + SUN6I_LOSC_CLK_AUTO_CAL);
+> +	}
+> +
+>  	/* Yes, I know, this is ugly. */
+>  	sun6i_rtc = rtc;
+>  
+> @@ -380,6 +393,7 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
+>  	.has_out_clk = 1,
+>  	.has_losc_en = 1,
+>  	.has_auto_swt = 1,
+> +	.has_auto_cal = 1,
+>  };
+>  
+>  static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
+> @@ -395,6 +409,7 @@ static const struct sun6i_rtc_clk_data sun50i_h616_rtc_data = {
+
+For the records: this whole struct does not exist in mainline.
+
+Cheers,
+Andre
+
+>  	.has_prescaler = 1,
+>  	.has_out_clk = 1,
+>  	.no_ext_losc = 1,
+> +	.has_auto_cal = 1,
+>  };
+>  
+>  static void __init sun50i_h616_rtc_clk_init(struct device_node *node)
+
 
