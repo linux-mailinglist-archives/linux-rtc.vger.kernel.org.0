@@ -1,257 +1,303 @@
-Return-Path: <linux-rtc+bounces-1118-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1119-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C5028BC08D
-	for <lists+linux-rtc@lfdr.de>; Sun,  5 May 2024 15:37:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 675558BDBA4
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 May 2024 08:38:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A35A5B20E66
-	for <lists+linux-rtc@lfdr.de>; Sun,  5 May 2024 13:37:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A9AE1C2139E
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 May 2024 06:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E401BC5C;
-	Sun,  5 May 2024 13:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040E578685;
+	Tue,  7 May 2024 06:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BcQvIL6y"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mailout01.t-online.de (mailout01.t-online.de [194.25.134.80])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957D01CF8F;
-	Sun,  5 May 2024 13:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.25.134.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AEA74267;
+	Tue,  7 May 2024 06:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714916248; cv=none; b=CAp4qaqDTNzrKo2B6fFFydfDTMa9fjtwvsqEtNF7K0XQA/P9fmI94C1yEqb36AC0iy3V4OSNonfvLUrqw/LIlrPSnyeLhWYb7UkcpqTld48aJ2FJkEYs/JUpuww44kWIxRy89gRfyj1pCDeBgmuzBCPpDSFtRKC9wD9aK5uqGZY=
+	t=1715063888; cv=none; b=ilaes5hP+JPTyTM3riSDfOK4R06O78mMLy5DqJLyGycNFfRmdUv2AmqNYhXyI9CtDpfW6WCzBIDD/l7D+Tciyr7nCcFTWMJF9Y3DccozL356OAe2Bci1JzxZvnrcTojVZmx/g1EvE7IdVTQ+21zGgUere1k+HqDWZYqNEzth/gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714916248; c=relaxed/simple;
-	bh=8MWH3jY9drwF3ETc0Bgb/plxlh0m2NIwn+SbPNG0UiQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=l3//HZARJtEhJ52F2O3USGJiy+7xiubGzyl9lUP6F/pHVCikAP87NhKfgf0LfnFSkCUCiOqWl7nXmwBMmRd5ss4/etDTOvNZWL54QiSWYQ0B9+OC9v4cJMJscyUpSqG2xGx8mS6U7RwngGPHK3Dfq5kkgZqCDq8TTX4quxN0bzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de; spf=pass smtp.mailfrom=t-online.de; arc=none smtp.client-ip=194.25.134.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=t-online.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-online.de
-Received: from fwd75.aul.t-online.de (fwd75.aul.t-online.de [10.223.144.101])
-	by mailout01.t-online.de (Postfix) with SMTP id 4613A10240;
-	Sun,  5 May 2024 15:27:15 +0200 (CEST)
-Received: from dino2.dhome ([77.47.123.226]) by fwd75.t-online.de
-	with (TLSv1.3:TLS_AES_256_GCM_SHA384 encrypted)
-	esmtp id 1s3bta-06MK8H0; Sun, 5 May 2024 15:27:14 +0200
-Message-ID: <6d872479ea873d25bd1f0d893439c6ceafd11327.camel@t-online.de>
-Subject: Re: [PATCH v3 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC
- Clock
-From: Alois Fertl <A.Fertl@t-online.de>
-Reply-To: 20240503121304.5fc6add5@donnerap.manchester.arm.com
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, wens@csie.org, 
-	jernej.skrabec@gmail.com, samuel@sholland.org, linux-rtc@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, Ryan Walklin
-	 <ryan@testtoast.com>
-Date: Sun, 05 May 2024 15:27:05 +0200
-In-Reply-To: <20240503121304.5fc6add5@donnerap.manchester.arm.com>
-References: <20240502180736.7330-1-a.fertl@t-online.de>
-	 <20240503121304.5fc6add5@donnerap.manchester.arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1715063888; c=relaxed/simple;
+	bh=al2uTCbUkaO+YN6iS/CsFF1oIj/GnxrR8GTTZRDImpY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=m1q59kGR3dpkG7TvmKQKatHUciC/m7i2/TMMfo4uju+MTEooYd0pOHgpygWx/h7nv6Q2krAzitY22W18eVj+93PJbQnHaXb3FQZh3kfAv0pjqkoWo+GKWxTkpUV6I9Q5BrKqv4SNNVI3FOqlKeXfnYtCVjf3LhgBftLrGkpG6vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BcQvIL6y; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715063887; x=1746599887;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=al2uTCbUkaO+YN6iS/CsFF1oIj/GnxrR8GTTZRDImpY=;
+  b=BcQvIL6yQcsTT3xBivU+wKVFTzJGuB/n0/87nk5kf4Srm7vRn4kpqWx2
+   T0sb8OOg7vPWyRu4wpKwa/4uflLF+Iq879gRJlXoBl2f/dop+3skUH6J7
+   jlRT9w08ol9Qkh0N6R1XdC/LtHfFeGyIeREGWVcNerlk4+gO6JUmsCKl7
+   CUqYuy6/thrjQRAw85ay2lGvB02ONtG4nEReeI30jSqm2Sj1+I3A3ncM+
+   85ADFyhJYj7WPy5nxQa5xhbJYB+0tU8IiUQvmyL0J9CZLfq01ldR68aFj
+   thTqp6CcEWzS1goEvlqf+v0cvmUc3grqqntOjtyLG57DiKd6/oudWM/Ab
+   g==;
+X-CSE-ConnectionGUID: ytcKcyc+Q5SmMDe+NMFAZQ==
+X-CSE-MsgGUID: 7RdM4LPVSzCnnBv5DrS6lA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="28360753"
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="28360753"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2024 23:38:06 -0700
+X-CSE-ConnectionGUID: 0rO5EyK9SOGK0zZ0OrTZ8w==
+X-CSE-MsgGUID: d7fc7jBVRbqxLmJn3Qedww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,260,1708416000"; 
+   d="scan'208";a="65861231"
+Received: from unknown (HELO st-server.bj.intel.com) ([10.240.193.102])
+  by orviesa001.jf.intel.com with ESMTP; 06 May 2024 23:38:00 -0700
+From: Tao Su <tao1.su@linux.intel.com>
+To: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	kvm@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-sgx@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	edliaw@google.com,
+	ivan.orlov0322@gmail.com,
+	broonie@kernel.org,
+	perex@perex.cz,
+	tiwai@suse.com,
+	shuah@kernel.org,
+	seanjc@google.com,
+	pbonzini@redhat.com,
+	bongsu.jeon@samsung.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	alexandre.belloni@bootlin.com,
+	jarkko@kernel.org,
+	dave.hansen@linux.intel.com,
+	tao1.su@linux.intel.com
+Subject: [PATCH] selftests: Add _GNU_SOURCE definition when including kselftest_harness.h
+Date: Tue,  7 May 2024 14:35:34 +0800
+Message-Id: <20240507063534.4191447-1-tao1.su@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1714915634-3F9E2C7B-0934CFAC/0/0 CLEAN NORMAL
-X-TOI-MSGID: 75600d42-4875-4f16-b473-b116d7b38c45
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2024-05-03 at 12:13 +0100, Andre Przywara wrote:
+asprintf() is declared in stdio.h when defining _GNU_SOURCE, but stdio.h
+is so common that many files don’t define _GNU_SOURCE before including
+stdio.h, and defining _GNU_SOURCE after including stdio.h will no longer
+take effect.
 
-Hi Andre and Ryan, thanks for responding, and sorry.
-Andre's reply was somehow lost and I just found it on the
-archive mirror. So hopefully my reply is correct.
+Since kselftest_harness.h introduces asprintf(), it is necessary to add
+_GNU_SOURCE definition in all selftests including kselftest_harness.h,
+otherwise, there will be warnings or even errors during compilation.
+There are already many selftests that define _GNU_SOURCE or put the
+include of kselftest_harness.h at the very beginning of the .c file, just
+add the _GNU_SOURCE definition in the tests that have compilation warnings.
 
-And it is my first journey to do a patch.
+Fixes: 809216233555 ("selftests/harness: remove use of LINE_MAX")
+Signed-off-by: Tao Su <tao1.su@linux.intel.com>
+---
+ tools/testing/selftests/alsa/test-pcmtest-driver.c      | 1 +
+ tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c | 1 +
+ tools/testing/selftests/nci/nci_dev.c                   | 1 +
+ tools/testing/selftests/net/bind_wildcard.c             | 1 +
+ tools/testing/selftests/net/ip_local_port_range.c       | 1 +
+ tools/testing/selftests/net/reuseaddr_ports_exhausted.c | 1 +
+ tools/testing/selftests/prctl/set-anon-vma-name-test.c  | 1 +
+ tools/testing/selftests/prctl/set-process-name.c        | 1 +
+ tools/testing/selftests/rtc/rtctest.c                   | 1 +
+ tools/testing/selftests/sgx/main.c                      | 1 +
+ tools/testing/selftests/tdx/tdx_guest_test.c            | 1 +
+ tools/testing/selftests/user_events/dyn_test.c          | 1 +
+ tools/testing/selftests/user_events/ftrace_test.c       | 1 +
+ tools/testing/selftests/user_events/perf_test.c         | 1 +
+ 14 files changed, 14 insertions(+)
 
-> On Thu,=C2=A0 2 May 2024 20:07:36 +0200
-> Alois Fertl <a.fertl@t-online.de> wrote:
->=20
-> Hi Alois,
->=20
-> many thanks for taking care and sending a patch! I think this problem
-> is
-> plaguing some people.
->=20
-> > I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618
-> > SOC.
-> > On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
-> > operate correctly. Without this change the clock from the SOC is
-> > ~29kHz and BT module does not start up. The patch enables the
-> > Internal
-> > OSC Clock Auto Calibration of the H616/H618 which than provides the
-> > necessary 32kHz and the BT module initializes successfully.
-> > Add a flag and set it for H6 AND H616. The H618 is the same as H616
-> > regarding rtc.
->=20
-> (many thanks to Ryan for the head up on this)
->=20
-> So what tree is this patch based on? It certainly is not mainline, is
-> it?
-I'm running armbian based on linux-kernel-worktree/6.7__sunxi64__arm64=20
-which has one other rtc/rtc-sun6i.c patch applied before.
- "[PATCH] drv:rtc:sun6i: support RTCs without external LOSCs"
+diff --git a/tools/testing/selftests/alsa/test-pcmtest-driver.c b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+index ca81afa4ee90..5a01100d459d 100644
+--- a/tools/testing/selftests/alsa/test-pcmtest-driver.c
++++ b/tools/testing/selftests/alsa/test-pcmtest-driver.c
+@@ -5,6 +5,7 @@
+  *
+  * Copyright 2023 Ivan Orlov <ivan.orlov0322@gmail.com>
+  */
++#define _GNU_SOURCE
+ #include <string.h>
+ #include <alsa/asoundlib.h>
+ #include "../kselftest_harness.h"
+diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+index f3c2239228b1..40f3e81b1a6c 100644
+--- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
++++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+@@ -4,6 +4,7 @@
+  *
+  * Tests for KVM paravirtual feature disablement
+  */
++#define _GNU_SOURCE
+ #include <asm/kvm_para.h>
+ #include <linux/kvm_para.h>
+ #include <linux/stringify.h>
+diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
+index 1562aa7d60b0..7cf18aced644 100644
+--- a/tools/testing/selftests/nci/nci_dev.c
++++ b/tools/testing/selftests/nci/nci_dev.c
+@@ -6,6 +6,7 @@
+  * Test code for nci
+  */
+ 
++#define _GNU_SOURCE
+ #include <stdlib.h>
+ #include <errno.h>
+ #include <string.h>
+diff --git a/tools/testing/selftests/net/bind_wildcard.c b/tools/testing/selftests/net/bind_wildcard.c
+index b7b54d646b93..f271e2ee6c7a 100644
+--- a/tools/testing/selftests/net/bind_wildcard.c
++++ b/tools/testing/selftests/net/bind_wildcard.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright Amazon.com Inc. or its affiliates. */
+ 
++#define _GNU_SOURCE
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ 
+diff --git a/tools/testing/selftests/net/ip_local_port_range.c b/tools/testing/selftests/net/ip_local_port_range.c
+index 193b82745fd8..fadefb0ab147 100644
+--- a/tools/testing/selftests/net/ip_local_port_range.c
++++ b/tools/testing/selftests/net/ip_local_port_range.c
+@@ -7,6 +7,7 @@
+  * Don't run these directly but with ip_local_port_range.sh script.
+  */
+ 
++#define _GNU_SOURCE
+ #include <fcntl.h>
+ #include <netinet/ip.h>
+ 
+diff --git a/tools/testing/selftests/net/reuseaddr_ports_exhausted.c b/tools/testing/selftests/net/reuseaddr_ports_exhausted.c
+index 066efd30e294..4f6fb2fbb96d 100644
+--- a/tools/testing/selftests/net/reuseaddr_ports_exhausted.c
++++ b/tools/testing/selftests/net/reuseaddr_ports_exhausted.c
+@@ -17,6 +17,7 @@
+  *
+  * Author: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+  */
++#define _GNU_SOURCE
+ #include <arpa/inet.h>
+ #include <netinet/in.h>
+ #include <sys/socket.h>
+diff --git a/tools/testing/selftests/prctl/set-anon-vma-name-test.c b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+index 4275cb256dce..e5ea821be241 100644
+--- a/tools/testing/selftests/prctl/set-anon-vma-name-test.c
++++ b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+@@ -3,6 +3,7 @@
+  * This test covers the anonymous VMA naming functionality through prctl calls
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <sys/prctl.h>
+ #include <stdio.h>
+diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
+index 562f707ba771..9cbfe9d38d72 100644
+--- a/tools/testing/selftests/prctl/set-process-name.c
++++ b/tools/testing/selftests/prctl/set-process-name.c
+@@ -3,6 +3,7 @@
+  * This test covers the PR_SET_NAME functionality of prctl calls
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <sys/prctl.h>
+ #include <string.h>
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 63ce02d1d5cc..2ace7a75c638 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2018 Alexandre Belloni <alexandre.belloni@bootlin.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <linux/rtc.h>
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 9820b3809c69..bb6e795d06e2 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*  Copyright(c) 2016-20 Intel Corporation. */
+ 
++#define _GNU_SOURCE
+ #include <cpuid.h>
+ #include <elf.h>
+ #include <errno.h>
+diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
+index 81d8cb88ea1a..f966467d1ef1 100644
+--- a/tools/testing/selftests/tdx/tdx_guest_test.c
++++ b/tools/testing/selftests/tdx/tdx_guest_test.c
+@@ -7,6 +7,7 @@
+  * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <sys/ioctl.h>
+ 
+ #include <errno.h>
+diff --git a/tools/testing/selftests/user_events/dyn_test.c b/tools/testing/selftests/user_events/dyn_test.c
+index bdf9ab127488..9d090ba3bfc3 100644
+--- a/tools/testing/selftests/user_events/dyn_test.c
++++ b/tools/testing/selftests/user_events/dyn_test.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 Beau Belgrave <beaub@linux.microsoft.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/user_events.h>
+ #include <stdio.h>
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index dcd7509fe2e0..25adef590a94 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 Beau Belgrave <beaub@linux.microsoft.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/user_events.h>
+ #include <stdio.h>
+diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
+index 5288e768b207..176740a0fc02 100644
+--- a/tools/testing/selftests/user_events/perf_test.c
++++ b/tools/testing/selftests/user_events/perf_test.c
+@@ -5,6 +5,7 @@
+  * Copyright (c) 2021 Beau Belgrave <beaub@linux.microsoft.com>
+  */
+ 
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <linux/user_events.h>
+ #include <linux/perf_event.h>
 
-> Mainline never supported the H616 RTC clocks via the RTC driver, this
-> was
-> only through the new driver in the clk
-> directory, in drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3D8a93720329d4d2
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3Dd91612d7f01aca
-I have found some code in for calibration in the sunxi-ng directory
-that was never called and I doubt that it gives working calibration.
-Should a kernel then use exclusively use the one or the other driver?
+base-commit: dccb07f2914cdab2ac3a5b6c98406f765acab803
+-- 
+2.34.1
 
->=20
-> Please note that the H6 RTC clocks were intended to be handled via
-> the new
-> driver as well, but this part was reverted:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3D60d9f050da63b
->=20
-> Please only send patches based on the mainline tree.
->=20
-> I doesn't look that hard to adjust the patch to mainline, though to
-> cover
-> the H6 is well this would require this code in both drivers. So when
-> we
-> want to address the H6 as well, it might make sense to solve the
-> problem
-> that triggered the revert first, to only have that change only in one
-> file.=20
-Yes, the code would be useful for H6 when no external crystal is
-present.
-
->=20
-> > Signed-off-by: Alois Fertl <a.fertl@t-online.de>
-> > ---
-> >=20
-> > v1->v2
-> > - add flag and activate for H6 AND H616
-> >=20
-> > v2->v3
-> > - correct findings from review
-> >=20
-> > I was hoping to get some feedback regarding the situation on H6,
-> > where an external 32k crystal can be present.
-> > From what I understand from the H6 manual there should be no
-> > conflict as one can select which souce will drive the output.
-> > Should certainly be tested but I don`t have H6 hardware.
->=20
-> I think I should have H6 boards both with and without an external
-> crystal
-> oscillator, so can check the situation there, but only next week.
->=20
-> > =C2=A0drivers/rtc/rtc-sun6i.c | 17 ++++++++++++++++-
-> >=20
-> > =C2=A01 file changed, 16 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> > index e0b85a0d5645..20e81ccdef29 100644
-> > --- a/drivers/rtc/rtc-sun6i.c
-> > +++ b/drivers/rtc/rtc-sun6i.c
-> > @@ -42,6 +42,11 @@
-> > =C2=A0
-> > =C2=A0#define SUN6I_LOSC_CLK_PRESCAL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x0008
-> > =C2=A0
-> > +#define SUN6I_LOSC_CLK_AUTO_CAL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x000c
-> > +#define SUN6I_LOSC_CLK_AUTO_CAL_16MS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(2)
-> > +#define SUN6I_LOSC_CLK_AUTO_CAL_ENABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0BIT(1)
-> > +#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(0)
-> > +
-> > =C2=A0/* RTC */
-> > =C2=A0#define SUN6I_RTC_YMD=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x0010
-> > =C2=A0#define SUN6I_RTC_HMS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x0014
-> > @@ -126,7 +131,6 @@
-> > =C2=A0 *=C2=A0=C2=A0=C2=A0=C2=A0 registers (R40, H6)
-> > =C2=A0 *=C2=A0=C2=A0 - SYS power domain controls (R40)
-> > =C2=A0 *=C2=A0=C2=A0 - DCXO controls (H6)
-> > - *=C2=A0=C2=A0 - RC oscillator calibration (H6)
-> > =C2=A0 *
-> > =C2=A0 * These functions are not covered by this driver.
-> > =C2=A0 */
-> > @@ -138,6 +142,7 @@ struct sun6i_rtc_clk_data {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int has_losc_e=
-n : 1;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int has_auto_s=
-wt : 1;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int no_ext_los=
-c : 1;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int has_auto_cal : =
-1;
-> > =C2=A0};
-> > =C2=A0
-> > =C2=A0#define RTC_LINEAR_DAY=C2=A0BIT(0)
-> > @@ -268,6 +273,14 @@ static void __init sun6i_rtc_clk_init(struct
-> > device_node *node,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel(reg, rtc->base +=
- SUN6I_LOSC_CTRL);
-> > =C2=A0
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rtc->data->has_auto_cal)=
- {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0/* Enable internal OSC clock auto calibration */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0reg =3D SUN6I_LOSC_CLK_AUTO_CAL_16MS |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SUN6I_=
-LOSC_CLK_AUTO_CAL_ENABLE |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SUN6I_=
-LOSC_CLK_AUTO_CAL_SEL_CAL;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0writel(reg, rtc->base + SUN6I_LOSC_CLK_AUTO_CAL);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Yes, I know, this is=
- ugly. */
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sun6i_rtc =3D rtc;
-> > =C2=A0
-> > @@ -380,6 +393,7 @@ static const struct sun6i_rtc_clk_data
-> > sun50i_h6_rtc_data =3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.has_out_clk =3D 1,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.has_losc_en =3D 1,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.has_auto_swt =3D 1,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.has_auto_cal =3D 1,
-> > =C2=A0};
-> > =C2=A0
-> > =C2=A0static void __init sun50i_h6_rtc_clk_init(struct device_node
-> > *node)
-> > @@ -395,6 +409,7 @@ static const struct sun6i_rtc_clk_data
-> > sun50i_h616_rtc_data =3D {
->=20
-> For the records: this whole struct does not exist in mainline.
->=20
-> Cheers,
-> Andre
->=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.has_prescaler =3D 1,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.has_out_clk =3D 1,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.no_ext_losc =3D 1,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.has_auto_cal =3D 1,
-> > =C2=A0};
-> > =C2=A0
-> > =C2=A0static void __init sun50i_h616_rtc_clk_init(struct device_node
-> > *node)
->=20
-Cheers,
-Alois
 
