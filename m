@@ -1,177 +1,114 @@
-Return-Path: <linux-rtc+bounces-1130-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1131-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 026A88BF2E7
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 02:02:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B648BF4C7
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 04:58:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E81D1F22B55
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 00:02:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9080BB220C8
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 02:58:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87DAF12BF34;
-	Tue,  7 May 2024 23:28:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178D91427B;
+	Wed,  8 May 2024 02:57:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YSKyRV2q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fK6K0Qbc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45A37FBC4
-	for <linux-rtc@vger.kernel.org>; Tue,  7 May 2024 23:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CCB14003;
+	Wed,  8 May 2024 02:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715124536; cv=none; b=GcSIdYFIjbJAPTYX008cgKmUGWkqyhjyWrwzoHiN4C6G9mXsOcMmgjUtUR5kdWF9djU+x3P6B2IzZx3O493R1D2QSrq4I66BFwjchBltU+EFg5jCc+7+IHv83AVOxOMHIx7PlbO0CKaWaulk//ZKUxN2kgBozOvCA/8TImnSDoQ=
+	t=1715137078; cv=none; b=S5BBO08m6oydZ1ELyQvOnQJy4y/UgidHh0XrKqgm7b80cDsHIH4SdBqpjnHIAJKBE9Ef6yQhpq9tyfrftqF2iSwPWjNTglFvTLigSjxUVPLDFaBV/6nGVZ0yc4N3l2AKjH2/EiGj5KE3zUpWD4GO40TyUY5pgzlCGP2kCIyboOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715124536; c=relaxed/simple;
-	bh=JX0XCKXr1thgDPxaTecjtKr6rIsRQAHKTIazy9OBhDc=;
+	s=arc-20240116; t=1715137078; c=relaxed/simple;
+	bh=7Fb40uljgKsFnE1FzE9EeCrT6mqgfdQY5bkG3RtT+n0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7VZsiaWmxh5B8Rd605vpzaee1r33ZLxZ5/x3qAqyUd79CXWFC7MEr43FBEuXqJKE/gaKgfwdY5iEDB1hxWUcauUcGFgpbMQMlRx2nXrp0hScoZPC5YphALsCnAG6jqU/Au9dvxWvTjBkFRKyS9FkKF+qY688aefUf6mDqBl7Eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YSKyRV2q; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso2805362a12.3
-        for <linux-rtc@vger.kernel.org>; Tue, 07 May 2024 16:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715124534; x=1715729334; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tt8XgRQm+eA+VmBxGqEcvvy66oE9R2AfbLeL3WkCPuU=;
-        b=YSKyRV2qjy0ljrYgd0U6Ch3uzgizQZe+4pSJYHsZSP01gcra909Tiz1I1roMahHF4f
-         R02+dz1KaKB4os+ZuM06R3OW4OuuE5O+jtzs5QpwOMbe9ciAbxWjG0HBoTz/GjMb/HTS
-         JZzkAPMzRCPpiJPnaz9ioUHMig2uiUqQfpOOs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715124534; x=1715729334;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tt8XgRQm+eA+VmBxGqEcvvy66oE9R2AfbLeL3WkCPuU=;
-        b=VInUc0VsFcHvJLK0/3vinsfNUmzjhr3zWPS3Z3WeN0fkPxbgKqoUHh0wCMxVb43LfR
-         6aTA8dHI3PZ5fSu3iwoEJB+NYcavOtwGM7VUTC+TVVpi+jbqulccNum9ljEaPRQBusQ3
-         zdl7+XOQG2hL+ZeYsH5sc93FcSTVt9bp6Xyy/7uvxeF3vnKOwQA7/j0zxR87m1a6jqM4
-         ox4wxi//sYn45K1OnvXAv+/yN2IjN+obKWi9++Gid+qNQ1QZ3Ce1O/ccb3u1XvpqIOhR
-         xL1hKXL5VSFVPhXVHEwBA9NCOxiVMGEgLZS+jjbSReOOv/f3bEtgT3tpOwmzemq6EYR+
-         ZpDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAUhruwcV2rv05SQ0/VIoeCu8FNOcB6sq2xfaZi0mmOcRtx60XzlvpxFfse5jpJHNWKS6rJccertq+8BUbnop/0vq74OBIL4gR
-X-Gm-Message-State: AOJu0YwXNAHwF+RD0HLkAGeXvcI+X5DDpti63OIxnf75NEULtSAPPM4N
-	5QGHsBk9zRv6z4MO7MgEILtLaeTPS0gdvhrdI46+ful/OF2Is2HXVBUV9U2Ieg==
-X-Google-Smtp-Source: AGHT+IElkYKkPF9F5WlZiOfJXRbgeCSMUqbJ3Z1JrZ5HzzcuDvdHCUlR3LVeoTae63dQgTdtTlamYA==
-X-Received: by 2002:a05:6a20:9f88:b0:1ad:6c5:4ea1 with SMTP id adf61e73a8af0-1afc8db5479mr1525582637.41.1715124534335;
-        Tue, 07 May 2024 16:28:54 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 60-20020a17090a09c200b002b624b0161fsm80422pjo.19.2024.05.07.16.28.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 May 2024 16:28:53 -0700 (PDT)
-Date: Tue, 7 May 2024 16:28:53 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Edward Liaw <edliaw@google.com>
-Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Eric Biederman <ebiederm@xmission.com>,
-	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	David Hildenbrand <david@redhat.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Seth Forshee <sforshee@kernel.org>,
-	Bongsu Jeon <bongsu.jeon@samsung.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@android.com, linux-sound@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-	linux-input@vger.kernel.org, iommu@lists.linux.dev,
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-	linux-security-module@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-actions@lists.infradead.org, mptcp@lists.linux.dev,
-	linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Define _GNU_SOURCE for sources using
-Message-ID: <202405071628.7F8C3EC@keescook>
-References: <20240507214254.2787305-1-edliaw@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rSXIDtOLhexXPSqwZujs3PHMQxocgCsL616EcqYRIN87mVnm3g/JkGNuBLVkY95j1fLW3j/zK36wTsldQ1Pp4phtru4lMTwewf/DHl6xcUOhyaL4YQiV6srLoOX1zZ2asywyCCGi/yib03E2mGxCwstiHXvR098TjlE8KkLonWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fK6K0Qbc; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715137077; x=1746673077;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7Fb40uljgKsFnE1FzE9EeCrT6mqgfdQY5bkG3RtT+n0=;
+  b=fK6K0Qbc4uz0oW5sTJlmm4SmZVTrgSJP+E90a5X45dzSwXnF/WeFtDBU
+   S5mVFCVc8pMLtywTsqvgNSzZ4RmDTmTBmpi9u4t7x3uPSxCw/MXRXGoZ5
+   Tg3gN/Y4zh8+zx31/viPwKG7P6osqAoAKu30ILUuFW2DtYXEFTcc/S/Lp
+   zSc3IBrNsF08ljT3+CkRfM5vYH/MM2m0hwj1ckJhbsO7vyeL17CrkOZDP
+   m+RLRyb5aAK+yzQ4EMrUJkvOXIZyrHyThqk3EsjzvvO6VceqmhDxA7LKW
+   wY/SPpNdBwR3PH093OkFiuw9IMEXaAQRaHFIXeaWDgyru81SE4qVEaKil
+   g==;
+X-CSE-ConnectionGUID: tuIqC/l+RV2/JCk90SpOTQ==
+X-CSE-MsgGUID: CMd0MxKaTP+9d9m4HDkS1w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="21533526"
+X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
+   d="scan'208";a="21533526"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 19:57:56 -0700
+X-CSE-ConnectionGUID: anmJjyLiR6S4ei743rWx4w==
+X-CSE-MsgGUID: SLR/iHPIS5Wre20AGIkdTQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,143,1712646000"; 
+   d="scan'208";a="33291964"
+Received: from linux.bj.intel.com ([10.238.157.71])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 19:57:50 -0700
+Date: Wed, 8 May 2024 10:55:05 +0800
+From: Tao Su <tao1.su@linux.intel.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-sound@vger.kernel.org, kvm@vger.kernel.org,
+	netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-sgx@vger.kernel.org, edliaw@google.com,
+	ivan.orlov0322@gmail.com, broonie@kernel.org, perex@perex.cz,
+	tiwai@suse.com, shuah@kernel.org, seanjc@google.com,
+	pbonzini@redhat.com, bongsu.jeon@samsung.com, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	alexandre.belloni@bootlin.com, jarkko@kernel.org,
+	dave.hansen@linux.intel.com
+Subject: Re: [PATCH] selftests: Add _GNU_SOURCE definition when including
+ kselftest_harness.h
+Message-ID: <ZjrpieLKXFhklVwR@linux.bj.intel.com>
+References: <20240507063534.4191447-1-tao1.su@linux.intel.com>
+ <20240507100651.8faca09c7af34de28f830f03@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240507214254.2787305-1-edliaw@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240507100651.8faca09c7af34de28f830f03@linux-foundation.org>
 
-On Tue, May 07, 2024 at 09:38:25PM +0000, Edward Liaw wrote:
-> 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
-> asprintf into kselftest_harness.h, which is a GNU extension and needs
-> _GNU_SOURCE to either be defined prior to including headers or with the
-> -D_GNU_SOURCE flag passed to the compiler.
+On Tue, May 07, 2024 at 10:06:51AM -0700, Andrew Morton wrote:
+> On Tue,  7 May 2024 14:35:34 +0800 Tao Su <tao1.su@linux.intel.com> wrote:
 > 
-> v1: https://lore.kernel.org/linux-kselftest/20240430235057.1351993-1-edliaw@google.com/
-> v2: add -D_GNU_SOURCE to KHDR_INCLUDES so that it is in a single
-> location.  Remove #define _GNU_SOURCE from source code to resolve
-> redefinition warnings.
+> > asprintf() is declared in stdio.h when defining _GNU_SOURCE, but stdio.h
+> > is so common that many files don’t define _GNU_SOURCE before including
+> > stdio.h, and defining _GNU_SOURCE after including stdio.h will no longer
+> > take effect.
+> > 
+> > Since kselftest_harness.h introduces asprintf(), it is necessary to add
+> > _GNU_SOURCE definition in all selftests including kselftest_harness.h,
+> > otherwise, there will be warnings or even errors during compilation.
+> > There are already many selftests that define _GNU_SOURCE or put the
+> > include of kselftest_harness.h at the very beginning of the .c file, just
+> > add the _GNU_SOURCE definition in the tests that have compilation warnings.
 > 
-> Edward Liaw (5):
->   selftests: Compile kselftest headers with -D_GNU_SOURCE
->   selftests/sgx: Include KHDR_INCLUDES in Makefile
->   selftests: Include KHDR_INCLUDES in Makefile
->   selftests: Drop define _GNU_SOURCE
->   selftests: Drop duplicate -D_GNU_SOURCE
+> That asprintf() continues to cause problems.  How about we just remove
+> it? Do the malloc(snprintf(str, 0, ...)) separately?
 
-It's a lot of churn, but I don't see a way to do it differently. :)
+Removing asprintf() is indeed an good option, but using snprintf(str, 0, ...)
+to get string size may go against the original intention of commit 38c957f07038.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Back to commit 38c957f07038, I don't see any advantage in using LINE_MAX.
+Can we use a fixed value instead of LINE_MAX? E.g., 1024, 2048. Then we
+just need to revert commit 809216233555.
 
