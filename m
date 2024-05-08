@@ -1,82 +1,83 @@
-Return-Path: <linux-rtc+bounces-1152-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1153-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 072E78C0411
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 20:04:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C37368C059F
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 22:28:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56072B24B19
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 18:03:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37277B23187
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 20:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9631112E1E5;
-	Wed,  8 May 2024 18:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC6F131190;
+	Wed,  8 May 2024 20:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MDO9ZEE/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NyX9IHCr"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4334612BF3A
-	for <linux-rtc@vger.kernel.org>; Wed,  8 May 2024 18:03:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58D8130E27
+	for <linux-rtc@vger.kernel.org>; Wed,  8 May 2024 20:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715191421; cv=none; b=ZD9yoEwhQYjJK6iHXx5vHXmBMVyFLv2BZEpRwtzrDfzg4G/tNMjhYxSHrYbHpcUMZJOola7p9OazNuWZConbCeha1qBzf/AAE80nP5DuE9f4HQqTwYbrTULQPmuqKiovPoePYB5abjiCC3zUDOiUMeALWXh0+z7dX48TYGSqcbg=
+	t=1715200092; cv=none; b=Te5YagIvRSZU2NFxV3BGwFTxn0OEQs7rXA8XIbftr5WJneMTjPmmK/r1eLwDq6Z64/z/Mwjjsy+4n4l1l2fFv6l54Wb1ey+fUPPpGInct8UFEQ0o4Bd+7zYK1dAco/DQsSEkcgyO8AcMuUPH/AX9vgojHvYrqR4NFRj1bwOPRKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715191421; c=relaxed/simple;
-	bh=QnIGcOGbV4cqrx4Nx/huveAV3Zfk93aDR5GKJzn4mog=;
+	s=arc-20240116; t=1715200092; c=relaxed/simple;
+	bh=o2NLQhPztuDZ4rTiTDFMEINRFzrqOs93EXYAp0RXtiY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KmCKqt78tvFD/eQgKE+Ql+GV+fGXYC9jXvzh6T7rDJD7LczEeqmYzn/Zissx9Pet7LfA2NK44FXtLQwClHJqXj0R5AMqRNg/Ivz/rcna0jTppeAJHcFUJpbL+ya1PGYRtMvkRdHVe1mWaxUmeDJAMV2wbz882gp+QZ6gLrNDYQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MDO9ZEE/; arc=none smtp.client-ip=209.85.208.50
+	 To:Cc:Content-Type; b=BloAhkzIGIGhSC2JAhxbO7ifaxq8lQ+3l/MDIesiyy3eG4cbMkxzaZOvTLfgrxsuiJKiI3LpuKSGB451m3gl5pdoCcWmLLG8YygAcq9jN07UmnMLSnQ23L4UrnzajB6VoiHBxAJ6g9dRfbmy4KVbCoaVrqEP7A7csGtFsIl5Wn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NyX9IHCr; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-572a1b3d6baso1760a12.1
-        for <linux-rtc@vger.kernel.org>; Wed, 08 May 2024 11:03:38 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-572aad902baso3794a12.0
+        for <linux-rtc@vger.kernel.org>; Wed, 08 May 2024 13:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715191417; x=1715796217; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715200088; x=1715804888; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NKy0w8SAVZYo27FpU6ZBovVv7b8KWTwyUtyfvoxHua4=;
-        b=MDO9ZEE/likR2ckWoxMuwmX5XuJpo/MliTsQTLkYJvbAeHL7DxxsuckjkF+BmCoheE
-         nI4TPXOaddA+VAPpry4jgJ9TZFm+fGpdlUFbCe2Hi5OVLXB26jgay0ATo1UKiat4DSXc
-         7bNIY1d42xd0bQ1Hmuaa19nXyq1uclJVNa+e8jY55trNWJ1W5XuERkT+FNKxQuUMd/HB
-         EbWcEX0XqZKEAlBapGeXFyJFxLvpGmMutsDTLwezfrn9SEcHRVMhSc27h2ibw+GEGdSO
-         4AedWVLB7yZgKERzgE2wVJhpiAZv8prVhJ7E9w/BlZQyf71jLfj8hbSJSUqzrxBgTrRL
-         d+1Q==
+        bh=VxBCT1ZV/EGWLKjxVs7FXcKu7sqjJfkKsVJ1w+mU1+0=;
+        b=NyX9IHCrSC9Je83Z/MnO8GwYzmpBLZE12Oh7P0WFKvTalU2Ciei+SR4yfrdbmQXps+
+         uWt/vjgQ+p0u6FKAcDDdqRciXtxpn1eAn1RRbxJrfD7/D6dUWWiyHNmgyOHtkeETq02t
+         YGSf7tHygxWbjyaDE4tFQH/tNyN+kiFydGC4Sf/vS3eO7m6sUlailV45R5eKKxcUYq0J
+         aW/UI7mnxqPAUJ+IEgeMuC8o5GtFG8x1++zBxQVDeD5vc9pjheIIRF7IN7vbtVWA/fD2
+         KDdFmbJEMXi4XdMUBM8YFeX7KpKa9V5dExWXQepqMrbkr5Fy3psYGVyoCv4bI3hNGEoQ
+         uD6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715191417; x=1715796217;
+        d=1e100.net; s=20230601; t=1715200088; x=1715804888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NKy0w8SAVZYo27FpU6ZBovVv7b8KWTwyUtyfvoxHua4=;
-        b=nkGjVS1E3BjuKeXB9KamP+RqIK/IEGBokOTziAgnfNw/0Tbbr36O3ibRyqGr7AxRUp
-         3AA5BxEYzbCa5by6TYMdXxirSpO835iMYjvNNoobj0QJlAB1dDXvpdmkYxzB9lTGl8Ef
-         7bs59IcrS0xpLCb4ZpplAoE7FnXUkSr2BbJaIZcNftV6lbRToRN+jfJFE5yNuWcKPdEd
-         jhs55CqOHvGC/LEppct53L2J/RmoO4QhhZ0xhfjs0um7pIwMPXX7BGb4rHurIxwSBp19
-         glC+L7c+3G+N1FIc8EihWAVwOSxDRsK7NTTNr6pZRQj0DM7zPw3JzVDQ96DZ9TF6D/Jp
-         rLqw==
-X-Forwarded-Encrypted: i=1; AJvYcCWRPYVDyBz2U5Ec+8d+Va8NC97HX4LqhiP+Lh/IXrWG2om7kPIvUpUndnG79y4aDC2paKOi1EPvbh/fxTqQY2Bp2E+WPbhwVU11
-X-Gm-Message-State: AOJu0Yxn8KueupBThAmcqJ4EdEOgQtYq+Ee8RmTZ5fZsq5x2yip8qVMT
-	8DUiblRgPI10bPm9sM8u+1kE756Hmtlu6jzAqZ3ThVUWl3j3gUZWwyJj1LSe7T1ctk4pI5CMA9s
-	dyLO3ANBiq1+qi2MDEHcILlf12v52Q9TnNyDP
-X-Google-Smtp-Source: AGHT+IFdyxKHKBA5RxjNJeg0nvw+PuOv0TpVA43qYYBbq4FC0UUJLuiCzYnH7rV9IAgiFwYJSHM5Q/yPLhYa7GrUbHY=
-X-Received: by 2002:a05:6402:1763:b0:572:554b:ec66 with SMTP id
- 4fb4d7f45d1cf-57334b922acmr1088a12.3.1715191416289; Wed, 08 May 2024 11:03:36
- -0700 (PDT)
+        bh=VxBCT1ZV/EGWLKjxVs7FXcKu7sqjJfkKsVJ1w+mU1+0=;
+        b=q9QR40GpPIco5qfHcV9JMdvj/tvwLxFgX5Ug+pL8Yr/aCS79djUS6hy+0tmEfoFboN
+         1Sr8IHu/xA3EBTiYpWsVLWfNBQpcnJno6p02/4elABcu5oDko+WS19gr1gy6vsEjHd5L
+         X4IPOwtlBCqJFt6aERCVQFv9tXE+2DUJRA5xMNDZEyqzmefWkbwFBGE5pfdLVlkzyTjv
+         +1vFyiS3cQFtLVJzp+e7eYd8h3ZZmwDL10mbM5nFVX1NNb0i9dv+vvFe7QjSZa2dSj1y
+         COORfyL10ze6bRxjHRkDXAawEFWKbb2bvZBIF+Z5/cdIyyZmGU6wE9apvJWOaH4KJ2Ad
+         sBxA==
+X-Forwarded-Encrypted: i=1; AJvYcCWb3tvEYSdUTgAyKJ+FKtVNJAMXZidYPYINLjA8dnUeelI3aze4pDtqM8oYKdwXGDdJmxQmvzL2BbMGsSNR1o1c4H2pyNPrIOe4
+X-Gm-Message-State: AOJu0Yy2l4AY0dgLB6Sn3KIkjCs8h8f3HojJnIMkyXdAkfs6H83FiiWW
+	SZshLscOyMNZvowct12y+CdlYZbQ0vp8HoibBTuQENZOLj7Btu3bw3jSHTnVn/iDgK3jskj0CBl
+	5dBHbbsUZnqGuseekglcMmnejzPG1rzKBloUV
+X-Google-Smtp-Source: AGHT+IG0Nkg3RjjAAyj+n+Ew0xyy8RnKsH20og6+OrFEWYycNhxXEo9VK176FECewK/2EQxZ5XFepnMJQqWDZY6gYdE=
+X-Received: by 2002:a05:6402:228b:b0:572:a33d:437f with SMTP id
+ 4fb4d7f45d1cf-573341614e1mr44879a12.2.1715200087751; Wed, 08 May 2024
+ 13:28:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507214254.2787305-1-edliaw@google.com> <ZjuA3aY_iHkjP7bQ@google.com>
-In-Reply-To: <ZjuA3aY_iHkjP7bQ@google.com>
+References: <20240507214254.2787305-1-edliaw@google.com> <20240507214254.2787305-5-edliaw@google.com>
+ <ZjuEILj0SZRuTL9I@google.com>
+In-Reply-To: <ZjuEILj0SZRuTL9I@google.com>
 From: Edward Liaw <edliaw@google.com>
-Date: Wed, 8 May 2024 11:03:07 -0700
-Message-ID: <CAG4es9V1578h2EgpztcoEv3CPGftbgA+HNfhgaPxBqOxP6-CrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] Define _GNU_SOURCE for sources using
+Date: Wed, 8 May 2024 13:27:39 -0700
+Message-ID: <CAG4es9VWuY4Z5HoU_SQCDaSrDC0s1knDfGvLNEa1YxhC0RZ2ZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] selftests: Drop define _GNU_SOURCE
 To: Sean Christopherson <seanjc@google.com>
 Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
 	Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
@@ -122,56 +123,44 @@ Cc: shuah@kernel.org, Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@pe
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 8, 2024 at 6:47=E2=80=AFAM Sean Christopherson <seanjc@google.c=
+On Wed, May 8, 2024 at 6:54=E2=80=AFAM Sean Christopherson <seanjc@google.c=
 om> wrote:
 >
 > On Tue, May 07, 2024, Edward Liaw wrote:
-> > 809216233555 ("selftests/harness: remove use of LINE_MAX") introduced
-> > asprintf into kselftest_harness.h, which is a GNU extension and needs
-> > _GNU_SOURCE to either be defined prior to including headers or with the
-> > -D_GNU_SOURCE flag passed to the compiler.
-> >
-> > v1: https://lore.kernel.org/linux-kselftest/20240430235057.1351993-1-ed=
-liaw@google.com/
-> > v2: add -D_GNU_SOURCE to KHDR_INCLUDES so that it is in a single
-> > location.  Remove #define _GNU_SOURCE from source code to resolve
-> > redefinition warnings.
-> >
-> > Edward Liaw (5):
-> >   selftests: Compile kselftest headers with -D_GNU_SOURCE
-> >   selftests/sgx: Include KHDR_INCLUDES in Makefile
-> >   selftests: Include KHDR_INCLUDES in Makefile
-> >   selftests: Drop define _GNU_SOURCE
-> >   selftests: Drop duplicate -D_GNU_SOURCE
+> > _GNU_SOURCE is provided by KHDR_INCLUDES, so it should be dropped to
+> > prevent _GNU_SOURCE redefined warnings.
 >
-> Can you rebase this on top of linux-next?  I have a conflicting fix[*] fo=
-r the
-> KVM selftests queued for 6.10, and I would prefer not to drop that commit=
- at
-> this stage as it would require a rebase of a pile of other commits.
-
-Ok, I'll do that.
-
+> ...
 >
-> And I doubt KVM is the only subsystem that has a targeted fix for the _GN=
-U_SOURCE
-> mess.
+> > diff --git a/tools/testing/selftests/x86/test_syscall_vdso.c b/tools/te=
+sting/selftests/x86/test_syscall_vdso.c
+> > index 8965c311bd65..5cd13279bba5 100644
+> > --- a/tools/testing/selftests/x86/test_syscall_vdso.c
+> > +++ b/tools/testing/selftests/x86/test_syscall_vdso.c
+> > @@ -8,10 +8,6 @@
+> >   * Can be built statically:
+> >   * gcc -Os -Wall -static -m32 test_syscall_vdso.c thunks_32.S
+> >   */
+> > -#undef _GNU_SOURCE
+> > -#define _GNU_SOURCE 1
+> > -#undef __USE_GNU
+> > -#define __USE_GNU 1
 >
-> If we want/need to get a fix into 6.9, then IMO we should just revert 809=
-216233555
-> ("selftests/harness: remove use of LINE_MAX"), as that came in quite late=
- in the
-> 6.9 cycle, and I don't think it's feasible to be 100% confident that glob=
-ally
-> defining _GNU_SOURCE works for all selftests, i.e. we really should have =
-a full
-> cycle for folks to test.
+> AFAICT, manually defining __USE_GNU is frowned upon, so I'm guessing the =
+__USE_GNU
+> stuff is just the result of misguided copy+paste.  But it would be nice t=
+o get
+> confirmation that this test isn't doing something clever.  Or at the very=
+ least,
+> explain the removal of __USE_GNU in the changelog.
 
-That sounds reasonable to me.  In this thread Tao suggested reverting
-back to 809216233555 and using a fixed value in place of LINE_MAX to
-fix 38c957f07038
-https://lore.kernel.org/linux-kselftest/20240508070003.2acdf9b4@kernel.org/
+It looks like test_syscall_vdso, test_FCMOV, test_FCOMI, and
+test_FISTTP don't actually use any GNU extensions.  I'll add that to
+the commit message.
+
 
 >
-> [*] https://github.com/kvm-x86/linux/commit/730cfa45b5f4
+> >  #include <unistd.h>
+> >  #include <stdlib.h>
+> >  #include <string.h>
 
