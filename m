@@ -1,67 +1,83 @@
-Return-Path: <linux-rtc+bounces-1141-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1142-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3526E8BFB96
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 13:07:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20DB18BFBB9
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 13:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A741D1F2287C
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 11:07:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE9062838E4
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 11:17:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60834823CE;
-	Wed,  8 May 2024 11:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lAYSy4Zx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE5281AD0;
+	Wed,  8 May 2024 11:17:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3646226AFF;
-	Wed,  8 May 2024 11:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFF581ABF;
+	Wed,  8 May 2024 11:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715166458; cv=none; b=Ttu/REyI7HpF9uJlMtu/tpVk+iFM0WWNHf3p3b5a42Q3orzB2m1xaeRVrnFaRKG7sUe6bNZ/QuQdvCnA0bJdrq9OxVCtG/iN1MIXtTbqrpuePMTH4hwJqftluqbWGWkN/Eezq/4koJ/bMrWNGj9DS2IiYtCF/XYwBrqK7mi7iLw=
+	t=1715167058; cv=none; b=sefvklo4AM4vvzSXYNu3RvLc+thirgFsk47tOUb4URth69Ja+5I655krx+7SxkddYdehsKHPwP8tNEA8X36HCswi9KO5dW+j+L5IeVXoxsuLqlyS+Vc5AYWCkeHTtTVAaFlYTMBUGsdXnM9i/8Ae2PtV6P5J4opNBbxkMyJGg0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715166458; c=relaxed/simple;
-	bh=V7GBnBDkMXB1vDOsItRAYKimjv5+T9+PIhMfKKHaH2w=;
+	s=arc-20240116; t=1715167058; c=relaxed/simple;
+	bh=hoBw8RlPKlZhiTIisWaNwFJrb/JCUldr/F60EG7LQJQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nwKm+Mz90CR56MOFerJuo47im9YLbS9Lt6MY99/zFgi4s6llEVb32zy2OFsvVqBTLxivJEeKfnHE+tQWEBOrkYit6QrLNZRghJIJcdx9TGAPGTZTzLzXQcTIX4k0ty7IpjxQAe+meIK3XNDl4bF8wt7i2lGbqDs++41Vrfm7Nd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lAYSy4Zx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64790C3277B;
-	Wed,  8 May 2024 11:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715166457;
-	bh=V7GBnBDkMXB1vDOsItRAYKimjv5+T9+PIhMfKKHaH2w=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=lAYSy4Zxsn6uP/+yZKic3Wfy9yyDBv+3uRAog4Z4Nb5H4z390AkxIv09TmHqQOenx
-	 A/nH1z1Zr3SWErMlgDzlPSZrkLYBC2kWWnKMZ1db5ydlx2ZZmR2pIfWc8Gdb6U5mfy
-	 zCVc0XXjiSfUQk+KFJCdlxeT3B3nYeT0Z1HCyQ592EHQiMzRNPKUFqy/KTyQjRpDLP
-	 ldsQw3MhCatdeZHUCMOJV7CLawVEDvlOiKc7HT7SApau0qhap3mZFailiLUo9bPr/u
-	 O963FmZ7Bow3D5/KLzsdkfAiySVLW8tIsygp6iAWaeJLaPcrjU8b2hqtTVhYta3I6G
-	 yl4MT1cg+1rMw==
-Date: Wed, 8 May 2024 13:07:22 +0200
-From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=PuR+t3VWHJOm5OoH7jjxGSPAxVhsYKx25SmgfBtT+OXzHR5QkI89FMIOUFFwqJtsGBkefeEejVjg1Ymz96TtV0ZR+h01k7vJi17sco4GS9rt30wKhToNraR8wb1hI/jp14ysQQFJT0Fgtz2cf/pXrAVC9JH3P7rW4vmDEYqz+s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: VUMQeUu1ThelLdiCQj1P0A==
+X-CSE-MsgGUID: jDz7RiiVQa2Hswi9evx1og==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="28535463"
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="28535463"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 04:17:36 -0700
+X-CSE-ConnectionGUID: FYQYL4JjTrmMh8A84hJPDA==
+X-CSE-MsgGUID: tFsKdhskQxen+Pk2x3TCSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="28949322"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 04:17:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy@kernel.org>)
+	id 1s4fIa-00000005PLq-33pb;
+	Wed, 08 May 2024 14:17:24 +0300
+Date: Wed, 8 May 2024 14:17:24 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
 	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Alessandro Zummo <a.zummo@towertech.it>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v9 2/9] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-Message-ID: <20240508110652.myapaorbdbgfwquo@kandell>
+	Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Subject: Re: [PATCH v9 0/9] Turris Omnia MCU driver
+Message-ID: <ZjtfRIykefGlqRF9@smile.fi.intel.com>
 References: <20240508103118.23345-1-kabel@kernel.org>
- <20240508103118.23345-3-kabel@kernel.org>
- <Zjta1vXG0Yak3vz-@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -71,79 +87,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Zjta1vXG0Yak3vz-@smile.fi.intel.com>
+In-Reply-To: <20240508103118.23345-1-kabel@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, May 08, 2024 at 01:58:30PM +0300, Andy Shevchenko wrote:
-> On Wed, May 08, 2024 at 12:31:11PM +0200, Marek Behún wrote:
-> > Add the basic skeleton for a new platform driver for the microcontroller
-> > found on the Turris Omnia board.
+On Wed, May 08, 2024 at 12:31:09PM +0200, Marek Behún wrote:
+> Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
 > 
-> Some cosmetics in case you need a new version.
-> Possibly can be done as follow up(s).
+> this is v9 of the series adding Turris Omnia MCU driver.
 > 
-> ...
+> This series still depends on the immutable branch between LEDs and
+> locking, introducing devm_mutex_init(), see the PR
+>   https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
 > 
-> > +Date:		July 2024
-> > +KernelVersion:	6.10
-> 
-> TBH, I'm not sure you manage to squeeze this rather big driver to v6.10.
-> 
-> ...
-> 
-> > +static const struct attribute_group *omnia_mcu_groups[] = {
-> > +	&omnia_mcu_base_group,
-> > +	NULL
-> > +};
-> 
-> __ATTRIBUTE_GROUPS()
+> See also cover letters for v1, v2, v3, v4, v5, v6, v7 and v8:
+>   https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+>   https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+>   https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+>   https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+>   https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+>   https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
+>   https://patchwork.kernel.org/project/linux-soc/cover/20240424173809.7214-1-kabel@kernel.org/
+>   https://patchwork.kernel.org/project/linux-soc/cover/20240430115111.3453-1-kabel@kernel.org/
 
-I think we already discussed this one. __ATTRIBUTE_GROUPS defines only
-one group, and I am adding to the array in subsequent patches.
+From GPIO implementation perspective, it's good enough in my opinion. The rest
+can be amended later on.
 
-> 
-> ...
-> 
-> Perhaps also
-> 
-> 	struct i2c_client *client = mcu->client;
-> 
-> > +	struct device *dev = &mcu->client->dev;
-> 
-> 	struct device *dev = &client->dev;
-> 
-> > +	bool suggest_fw_upgrade = false;
-> > +	u16 status;
-> > +	int err;
-> > +
-> > +	/* status word holds MCU type, which we need below */
-> > +	err = omnia_cmd_read_u16(mcu->client, OMNIA_CMD_GET_STATUS_WORD,
-> > +				 &status);
-> 
-> 	err = omnia_cmd_read_u16(client, OMNIA_CMD_GET_STATUS_WORD, &status);
-> 
-> and so on...
-> 
-> 
-> > +	if (err)
-> > +		return err;
-> 
-> ...
-> 
-> > +	/*
-> > +	 * check whether MCU firmware supports the OMNIA_CMD_GET_FEATURES
-> 
-> Check
-> 
-> > +	 * command
-> 
-> command.
-> 
-> > +	 */
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-> 
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
