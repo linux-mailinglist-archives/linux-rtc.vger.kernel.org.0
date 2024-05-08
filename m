@@ -1,192 +1,192 @@
-Return-Path: <linux-rtc+bounces-1136-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1137-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83ED58BF7D4
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 09:58:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69BDD8BFB00
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 12:31:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B206285BEE
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 07:58:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FCAC2816AC
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 10:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EED53D0B3;
-	Wed,  8 May 2024 07:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1277C8121F;
+	Wed,  8 May 2024 10:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="d+6Wlldu"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dGTUv4qd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE503F8F0;
-	Wed,  8 May 2024 07:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA04D33CD2;
+	Wed,  8 May 2024 10:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715155104; cv=none; b=gQ4T2L0LXhqW/pB+iPtxRhC2vQXpUkZORoctNgSKFqiwpu82JG31vKlnrXFkq5gS1NUDo3zNgLjfHCumcCS8W1PpwNK7H8ckUIzBfWJ2kDZWQzZvlDhg3d3v0L4VBmsMw80dDmbO5s7GQyBalxCj+Gks06aXedKEu9V1B+fGf8E=
+	t=1715164287; cv=none; b=rbwofM8Nl+2VYrlCu7vzzkfS0Naef23bzaVEjeOZ2Lc/ck/5NEg5xk/GEu9lyMvGhSYjqFKID8Yw6UAUsduFrurGWUOQNzWCoScDGewSJxboCXwCDmfT2w6zNOJljKVG5yH6c/5tyCdLtUpFaWSZH+CUMlgIvMfVoAO5GTDmrCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715155104; c=relaxed/simple;
-	bh=W8h0zv7fM5rho2qCrJQe63u3RrkuJY8jHMl1xzQ0llk=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IjU25Xg9gPe5MqgyNQI+U3t/5SVR1EJeHEUhkho0498dTu6O/PwyMaXW/1V8dqTMNciDI3/Ib7JxDW4bGVwTxeFpb9L0irSuXYBlYHPO7p5/4qsnQIxnJ3cc+vzZGpmgGXU6AJRQn8PXpSLDRpfFxbisyejQSs7AqMsrCk1ga40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=d+6Wlldu; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1715155100;
-	bh=W8h0zv7fM5rho2qCrJQe63u3RrkuJY8jHMl1xzQ0llk=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=d+6WlldukdN+eWmS3sBsn4libaX2zcJvXa/ngL+dhdc+DchosZSUl43ALM0fKrizz
-	 ysZ99uHC/8UpNmyFE4hOPapdp0NUzrlzrQjGLrkMDMqYNps7lgHGiCM7grlVWeqvuL
-	 e5HkvXoNYPhMwpb30PKIuWAHw1A/b8v33oat12Wn15tu738O33/VYc94jtdztajScu
-	 4J+5rFyzWIZ90H5CzrX9B4Ib32RGjnbcFX2KDX2Cv9yM6dA7sRVQyStsK2OIpLFTHR
-	 MsAgmoQsx7QhT2c2rNTU9MLlxEjijsJQpah0OPot4l0rd5cOVPx4wu8rShkkg7Xmln
-	 rRM76zFaWDvsw==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5163A378107C;
-	Wed,  8 May 2024 07:57:56 +0000 (UTC)
-Message-ID: <e3f6bb2a-a9bd-43c2-9468-85242eab0390@collabora.com>
-Date: Wed, 8 May 2024 12:58:20 +0500
+	s=arc-20240116; t=1715164287; c=relaxed/simple;
+	bh=ElHEynA8rsJ2bTq8jeNso8DeLwGwXvebWz8OvwP/J3c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I3zCy3kVJ0Bt1CE/y2XeczaRrsU1L3VW4SxBpUNaLk+oXKN4XCWQBL0RlqNSW99El74JK1P0R+qQvGV1YEw0x61LCille3Rmw+PLJI8v0ymJVtKeTj9pLKA0oKrh5szvdUGV6N9X8TAKAwtz7OOF6pW+dDepByU4bAgUVLdJCP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dGTUv4qd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2A0C113CC;
+	Wed,  8 May 2024 10:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715164287;
+	bh=ElHEynA8rsJ2bTq8jeNso8DeLwGwXvebWz8OvwP/J3c=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=dGTUv4qdc5MbZfI1fVgooTtxxj058JZWli/4uOAVHvSOOjlN69blvBBEkTJD46zCv
+	 Fe6/S1nPyKEJHz9MhA3Y6r9b3vzLfsE6vq6KC8+0fpAWmPiTjjGSI2+4C4nWVIIRwz
+	 g0LTtMn9+XX7mPsf8yTGn/g6iddzDT909bOHaUGS4VufIWje7qqZ3dc7dSTrVo/+Os
+	 whXV2rvO1ron6LBqHha1OUqGmwvA+dd4EvEq4iVvNbCt4qNjUwKg0x9I3WFLR2Nj+F
+	 9S7JynCRzb1cG741Ju86dZYJGkSiTOGdE0TpakBehlqzwnV8qwrjTxCS9W5OqLiZk9
+	 QWrHgNbs0FpvA==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v9 0/9] Turris Omnia MCU driver
+Date: Wed,  8 May 2024 12:31:09 +0200
+Message-ID: <20240508103118.23345-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, linux-sound@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
- linux-input@vger.kernel.org, iommu@lists.linux.dev, kvmarm@lists.linux.dev,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
- linux-actions@lists.infradead.org, mptcp@lists.linux.dev,
- linux-rtc@vger.kernel.org, linux-sgx@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] selftests: Drop duplicate -D_GNU_SOURCE
-To: Edward Liaw <edliaw@google.com>, shuah@kernel.org,
- Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Christian Brauner
- <brauner@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
- Kees Cook <keescook@chromium.org>,
- OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?=
- <andrealmeid@igalia.com>, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Kevin Tian <kevin.tian@intel.com>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- David Hildenbrand <david@redhat.com>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Andrew Morton <akpm@linux-foundation.org>, Seth Forshee
- <sforshee@kernel.org>, Bongsu Jeon <bongsu.jeon@samsung.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, =?UTF-8?Q?Andreas_F=C3=A4rber?=
- <afaerber@suse.de>, Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>, Matthieu Baerts <matttbe@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Fenghua Yu <fenghua.yu@intel.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>
-References: <20240507214254.2787305-1-edliaw@google.com>
- <20240507214254.2787305-6-edliaw@google.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240507214254.2787305-6-edliaw@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/8/24 2:38 AM, Edward Liaw wrote:
-> -D_GNU_SOURCE can be de-duplicated here, as it is added by
-> KHDR_INCLUDES.
-> 
-> Signed-off-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
 
-> ---
->  tools/testing/selftests/futex/functional/Makefile | 2 +-
->  tools/testing/selftests/iommu/Makefile            | 2 --
->  tools/testing/selftests/net/tcp_ao/Makefile       | 2 +-
->  tools/testing/selftests/resctrl/Makefile          | 2 +-
->  4 files changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-> index a392d0917b4e..f79f9bac7918 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
-> -CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-> +CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread $(INCLUDES) $(KHDR_INCLUDES)
->  LDLIBS := -lpthread -lrt
->  
->  LOCAL_HDRS := \
-> diff --git a/tools/testing/selftests/iommu/Makefile b/tools/testing/selftests/iommu/Makefile
-> index 32c5fdfd0eef..fd6477911f24 100644
-> --- a/tools/testing/selftests/iommu/Makefile
-> +++ b/tools/testing/selftests/iommu/Makefile
-> @@ -2,8 +2,6 @@
->  CFLAGS += -Wall -O2 -Wno-unused-function
->  CFLAGS += $(KHDR_INCLUDES)
->  
-> -CFLAGS += -D_GNU_SOURCE
-> -
->  TEST_GEN_PROGS :=
->  TEST_GEN_PROGS += iommufd
->  TEST_GEN_PROGS += iommufd_fail_nth
-> diff --git a/tools/testing/selftests/net/tcp_ao/Makefile b/tools/testing/selftests/net/tcp_ao/Makefile
-> index 522d991e310e..c608b1ec02e6 100644
-> --- a/tools/testing/selftests/net/tcp_ao/Makefile
-> +++ b/tools/testing/selftests/net/tcp_ao/Makefile
-> @@ -26,7 +26,7 @@ LIB	:= $(LIBDIR)/libaotst.a
->  LDLIBS	+= $(LIB) -pthread
->  LIBDEPS	:= lib/aolib.h Makefile
->  
-> -CFLAGS	:= -Wall -O2 -g -D_GNU_SOURCE -fno-strict-aliasing
-> +CFLAGS	:= -Wall -O2 -g -fno-strict-aliasing
->  CFLAGS	+= $(KHDR_INCLUDES)
->  CFLAGS	+= -iquote ./lib/ -I ../../../../include/
->  
-> diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-> index 2deac2031de9..5073dbc96125 100644
-> --- a/tools/testing/selftests/resctrl/Makefile
-> +++ b/tools/testing/selftests/resctrl/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE
-> +CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
->  CFLAGS += $(KHDR_INCLUDES)
->  
->  TEST_GEN_PROGS := resctrl_tests
+this is v9 of the series adding Turris Omnia MCU driver.
+
+This series still depends on the immutable branch between LEDs and
+locking, introducing devm_mutex_init(), see the PR
+  https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
+
+See also cover letters for v1, v2, v3, v4, v5, v6, v7 and v8:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240424173809.7214-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240430115111.3453-1-kabel@kernel.org/
+
+Changes since v8:
+- removed the MACH_ARMADA_38X || COMPILE_TEST dependency for the
+  CZNIC_PLATFORMS Kconfig option in the Kconfig file, as suggested
+  by Andy (patch 2)
+- fixed the issues in the global header turris-omnia-mcu-interface.h
+  pointed out by Andy and Ilpo: added the "OMNIA_" prefix to all
+  enumerator entries, added trailing commas, converted to use
+  FIELD_PREP_CONST() (patches 2-7)
+- added comment why we can't use ether_addr_copy(), as requested by
+  Andy (patch 2)
+- rewritten the error message for when the MCU does not support
+  reporting features, requested by Andy (patch 2)
+- changed how the nul-byte is assigned to the end of bin2hex() result,
+  requested by Andy (patch 2)
+- made the omnia_cmd_write_read() function final in patch 2, instead of
+  updating it in subsequent patches, requested by Andy
+- in order to be more consistent, changed the omnia_cmd_read_u8() and
+  omnia_cmd_read_u16() functions to return zero on success and the read
+  value is passed into a pointer, and then added a new function
+  omnia_cmd_read_u32(), as requested by Ilpo (he did not like the
+  inconsistency in omnia_mcu_read_features(), where the
+  omnia_cmd_read_u16() hid the le16_to_cpu() call, but then we did an
+  explicit call to le32_to_cpu() when reading 32-bit features) (patch 2)
+- some other minor tweaks (changed the version type from u8[] to char[],
+  changed len type from size_t to unsigned int in omnia_cmd_write())
+  (patches 2 & 3)
+- dropped the "gpio%u." prefix from GPIO line names, Andy pointed out
+  why this is wrong (patch 3)
+- decoupled GPIOs information struct definition and assignment and put
+  filling macros before the assignment, requested by Andy (patch 3)
+- moved return value check into the guarded scope, suggested by Andy
+  (patch 3)
+- put some assignments into the definition lines, suggested by Andy
+  (patch 3)
+- fixed some typos (patches 2 & 3)
+- refactored the reply length computation into a new function
+  omnia_compute_reply_length(), as requested by Andy (patch 3)
+
+Marek Behún (9):
+  dt-bindings: firmware: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing via debugfs
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
+
+ .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
+ .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
+ MAINTAINERS                                   |    5 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   50 +
+ drivers/platform/cznic/Makefile               |    9 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  451 +++++++
+ .../platform/cznic/turris-omnia-mcu-debugfs.c |  207 ++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1040 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |  103 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  127 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  210 ++++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 17 files changed, 2971 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.43.2
+
 
