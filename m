@@ -1,490 +1,148 @@
-Return-Path: <linux-rtc+bounces-1139-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1140-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2EFC8BFB08
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 12:31:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60F068BFB65
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 12:58:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 221AB1C20F1A
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 10:31:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CD54282C33
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 May 2024 10:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8131C81745;
-	Wed,  8 May 2024 10:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G0cBkyBC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9238C8172A;
+	Wed,  8 May 2024 10:58:39 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C88C8172A
-	for <linux-rtc@vger.kernel.org>; Wed,  8 May 2024 10:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186DD7EF1E;
+	Wed,  8 May 2024 10:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715164303; cv=none; b=d8PJSsm778n6zA1JzXdUhXz9xXb50asR8qgRQ/0SpJg97CS+kr2iaPIWf3Gsur6OSWu7kbk0iFfsHsb8RCOMGMZPkAcl3Cyg+cF4drrYQA85Boj9m/gC/kiT/8zUQT+ihwb5IaXiipnOGjwKCH8DwdsdU3mueW+jg4SER6D6gbM=
+	t=1715165919; cv=none; b=i/10MwcdAsGB10KLWrOXkp1P4pWaRpTznZYbhHw5l/h9f4C+zDcO1PDZVRYN22oJj2dPhxdYgBqxCZRSvN8GRIJFuHRQWBUOyhzVX4VrnzBfwwidGYxc/nqD6M4MFU+NkfhpO8IYLKOq90bP9St9sY2wv1oPhoU0jkz8BsGyRsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715164303; c=relaxed/simple;
-	bh=TgY/364IpY7t2boFV5cNN3vfrkuY72+Q2EZt/QEcr/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W0Hn8ec+kbwx88LhAVy8JmXteK3q8y3AqbrMXHlR01zSAT3UErTx35s+BXgO9GBFKsOnhbNp0Gr+jvrSEtLe18yyk6pa7NkxIeDALRJdDP3c39ns0kfbHHUq7VB6ZTjaWdwhZXyoauFcxZKh7dIYqhEhUIV4iuzH+nr1EVAqWus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G0cBkyBC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEC7C4AF18;
-	Wed,  8 May 2024 10:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715164302;
-	bh=TgY/364IpY7t2boFV5cNN3vfrkuY72+Q2EZt/QEcr/Y=;
-	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G0cBkyBCsFcAsWdjE/se4dq/TBmy0ejQvQcP5ufOFL9rlT6bM4Z8KHVbcphukvGV9
-	 D2lIRBlJ4QrzrovhMJK/Pd7Lp6XaPTVZB12eCMXaUENdbxQqbTIhKPRBYicHzvxQ5+
-	 O98FCb16fhyZG3GeI1BSN64bENhPMDCAaEHWPBttJ1Sfmy+xYM34Lvypff/1c8k+Fn
-	 7qSCP2g7ndp019B6onFIgdVOjJm3fpxQa2Hxhy/cgsQ/jl98iYBD3T4P8KY764iZvw
-	 e7k1+BtS6fRiQkGbnDiHrBGc6n38hSvQdl2t4l+u/j2ff9lge/IkomBoE2NAjxntSL
-	 mxDq4lm297m4g==
-From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	soc@kernel.org,
-	arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
+	s=arc-20240116; t=1715165919; c=relaxed/simple;
+	bh=oK8Ps5pWIiXzvtTq6erCKYqbUyIACm90iS5WcjxXyqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ASfnc34rPjqSnuxe+jz1DLoPdH2xrz7vwLgUl665TNkSjmSDAOnjZqy4Rwl+2XlvB8nR1ddIKrGyxLgdaXHOyOPaPj5flr+7Svcy7q1EdrLHu0Z4hRZwumkx364uSkcx2C9DSZ2Y8fUhqKlUA6MTMmGChqkg4yLLSeR5PnucS2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: L9VJsnbOQtakB9K3seseIA==
+X-CSE-MsgGUID: MyFZIttzQX6dqpLFdxk7BQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="22171413"
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="22171413"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 03:58:37 -0700
+X-CSE-ConnectionGUID: Ja0uQrJvRyaRl45hGG6lAw==
+X-CSE-MsgGUID: OU+OvBErQyWZ2HLb66rDRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
+   d="scan'208";a="28821136"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 03:58:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy@kernel.org>)
+	id 1s4f0I-00000005P1l-21SC;
+	Wed, 08 May 2024 13:58:30 +0300
+Date: Wed, 8 May 2024 13:58:30 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
 	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
 	Alessandro Zummo <a.zummo@towertech.it>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-rtc@vger.kernel.org
-Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v9 4/9] platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
-Date: Wed,  8 May 2024 12:31:13 +0200
-Message-ID: <20240508103118.23345-5-kabel@kernel.org>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240508103118.23345-1-kabel@kernel.org>
+	linux-rtc@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v9 2/9] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <Zjta1vXG0Yak3vz-@smile.fi.intel.com>
 References: <20240508103118.23345-1-kabel@kernel.org>
+ <20240508103118.23345-3-kabel@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240508103118.23345-3-kabel@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Add support for true board poweroff (MCU can disable all unnecessary
-voltage regulators) and wakeup at a specified time, implemented via a
-RTC driver so that the rtcwake utility can be used to configure it.
+On Wed, May 08, 2024 at 12:31:11PM +0200, Marek Beh�n wrote:
+> Add the basic skeleton for a new platform driver for the microcontroller
+> found on the Turris Omnia board.
 
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  16 ++
- drivers/platform/cznic/Kconfig                |   4 +
- drivers/platform/cznic/Makefile               |   1 +
- .../platform/cznic/turris-omnia-mcu-base.c    |   5 +
- .../cznic/turris-omnia-mcu-sys-off-wakeup.c   | 258 ++++++++++++++++++
- drivers/platform/cznic/turris-omnia-mcu.h     |  20 ++
- 6 files changed, 304 insertions(+)
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+Some cosmetics in case you need a new version.
+Possibly can be done as follow up(s).
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-index 3fb998c8ae26..5e2d8ec52374 100644
---- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-+++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-@@ -38,6 +38,22 @@ Description:	(RW) The front button on the Turris Omnia router can be
- 
- 		Format: %s.
- 
-+What:		/sys/bus/i2c/devices/<mcu_device>/front_button_poweron
-+Date:		July 2024
-+KernelVersion:	6.10
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RW) Newer versions of the microcontroller firmware of the
-+		Turris Omnia router support powering off the router into true
-+		low power mode. The router can be powered on by pressing the
-+		front button.
-+
-+		This file configures whether front button power on is enabled.
-+
-+		This file is present only if the power off feature is supported
-+		by the firmware.
-+
-+		Format: %i.
-+
- What:		/sys/bus/i2c/devices/<mcu_device>/fw_features
- Date:		July 2024
- KernelVersion:	6.10
-diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
-index d95e7c83c7ae..c1e719235517 100644
---- a/drivers/platform/cznic/Kconfig
-+++ b/drivers/platform/cznic/Kconfig
-@@ -18,10 +18,14 @@ config TURRIS_OMNIA_MCU
- 	depends on I2C
- 	select GPIOLIB
- 	select GPIOLIB_IRQCHIP
-+	select RTC_CLASS
- 	help
- 	  Say Y here to add support for the features implemented by the
- 	  microcontroller on the CZ.NIC's Turris Omnia SOHO router.
- 	  The features include:
-+	  - board poweroff into true low power mode (with voltage regulators
-+	    disabled) and the ability to configure wake up from this mode (via
-+	    rtcwake)
- 	  - GPIO pins
- 	    - to get front button press events (the front button can be
- 	      configured either to generate press events to the CPU or to change
-diff --git a/drivers/platform/cznic/Makefile b/drivers/platform/cznic/Makefile
-index 53fd8f1777a3..a185ef882e44 100644
---- a/drivers/platform/cznic/Makefile
-+++ b/drivers/platform/cznic/Makefile
-@@ -3,3 +3,4 @@
- obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
- turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
- turris-omnia-mcu-y		+= turris-omnia-mcu-gpio.o
-+turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
-index 45971228e343..32d187e12261 100644
---- a/drivers/platform/cznic/turris-omnia-mcu-base.c
-+++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-@@ -197,6 +197,7 @@ static const struct attribute_group omnia_mcu_base_group = {
- static const struct attribute_group *omnia_mcu_groups[] = {
- 	&omnia_mcu_base_group,
- 	&omnia_mcu_gpio_group,
-+	&omnia_mcu_poweroff_group,
- 	NULL
- };
- 
-@@ -372,6 +373,10 @@ static int omnia_mcu_probe(struct i2c_client *client)
- 					     "Cannot read board info\n");
- 	}
- 
-+	err = omnia_mcu_register_sys_off_and_wakeup(mcu);
-+	if (err)
-+		return err;
-+
- 	return omnia_mcu_register_gpiochip(mcu);
- }
- 
-diff --git a/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
-new file mode 100644
-index 000000000000..043c02c8d61d
---- /dev/null
-+++ b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
-@@ -0,0 +1,258 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * CZ.NIC's Turris Omnia MCU system off and RTC wakeup driver
-+ *
-+ * This is not a true RTC driver (in the sense that it does not provide a
-+ * real-time clock), rather the MCU implements a wakeup from powered off state
-+ * at a specified time relative to MCU boot, and we expose this feature via RTC
-+ * alarm, so that it can be used via the rtcwake command, which is the standard
-+ * Linux command for this.
-+ *
-+ * 2024 by Marek Behún <kabel@kernel.org>
-+ */
-+
-+#include <linux/crc32.h>
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/reboot.h>
-+#include <linux/rtc.h>
-+#include <linux/sysfs.h>
-+#include <linux/turris-omnia-mcu-interface.h>
-+#include <linux/types.h>
-+
-+#include "turris-omnia-mcu.h"
-+
-+static int omnia_get_uptime_wakeup(const struct i2c_client *client, u32 *uptime,
-+				   u32 *wakeup)
-+{
-+	__le32 reply[2];
-+	int err;
-+
-+	err = omnia_cmd_read(client, OMNIA_CMD_GET_UPTIME_AND_WAKEUP, reply,
-+			     sizeof(reply));
-+	if (err)
-+		return err;
-+
-+	if (uptime)
-+		*uptime = le32_to_cpu(reply[0]);
-+
-+	if (wakeup)
-+		*wakeup = le32_to_cpu(reply[1]);
-+
-+	return 0;
-+}
-+
-+static int omnia_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	u32 uptime;
-+	int err;
-+
-+	err = omnia_get_uptime_wakeup(to_i2c_client(dev), &uptime, NULL);
-+	if (err)
-+		return err;
-+
-+	rtc_time64_to_tm(uptime, tm);
-+
-+	return 0;
-+}
-+
-+static int omnia_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-+	u32 wakeup;
-+	int err;
-+
-+	err = omnia_get_uptime_wakeup(client, NULL, &wakeup);
-+	if (err)
-+		return err;
-+
-+	alrm->enabled = !!wakeup;
-+	rtc_time64_to_tm(wakeup ?: mcu->rtc_alarm, &alrm->time);
-+
-+	return 0;
-+}
-+
-+static int omnia_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-+
-+	mcu->rtc_alarm = rtc_tm_to_time64(&alrm->time);
-+
-+	if (alrm->enabled)
-+		return omnia_cmd_write_u32(client, OMNIA_CMD_SET_WAKEUP,
-+					   mcu->rtc_alarm);
-+
-+	return 0;
-+}
-+
-+static int omnia_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct omnia_mcu *mcu = i2c_get_clientdata(client);
-+
-+	return omnia_cmd_write_u32(client, OMNIA_CMD_SET_WAKEUP,
-+				   enabled ? mcu->rtc_alarm : 0);
-+}
-+
-+static const struct rtc_class_ops omnia_rtc_ops = {
-+	.read_time		= omnia_read_time,
-+	.read_alarm		= omnia_read_alarm,
-+	.set_alarm		= omnia_set_alarm,
-+	.alarm_irq_enable	= omnia_alarm_irq_enable,
-+};
-+
-+static int omnia_power_off(struct sys_off_data *data)
-+{
-+	struct omnia_mcu *mcu = data->cb_data;
-+	__be32 tmp;
-+	u8 cmd[9];
-+	u16 arg;
-+	int err;
-+
-+	if (mcu->front_button_poweron)
-+		arg = OMNIA_CMD_POWER_OFF_POWERON_BUTTON;
-+	else
-+		arg = 0;
-+
-+	cmd[0] = OMNIA_CMD_POWER_OFF;
-+	put_unaligned_le16(OMNIA_CMD_POWER_OFF_MAGIC, &cmd[1]);
-+	put_unaligned_le16(arg, &cmd[3]);
-+
-+	/*
-+	 * Although all values from and to MCU are passed in little-endian, the
-+	 * MCU's CRC unit uses big-endian CRC32 polynomial (0x04c11db7), so we
-+	 * need to use crc32_be() here.
-+	 */
-+	tmp = cpu_to_be32(get_unaligned_le32(&cmd[1]));
-+	put_unaligned_le32(crc32_be(0xffffffff, (void *)&tmp, sizeof(tmp)),
-+			   &cmd[5]);
-+
-+	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-+	if (err)
-+		dev_err(&mcu->client->dev,
-+			"Unable to send the poweroff command: %d\n", err);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int omnia_restart(struct sys_off_data *data)
-+{
-+	struct omnia_mcu *mcu = data->cb_data;
-+	u8 cmd[3];
-+	int err;
-+
-+	cmd[0] = OMNIA_CMD_GENERAL_CONTROL;
-+
-+	if (reboot_mode == REBOOT_HARD)
-+		cmd[1] = cmd[2] = OMNIA_CTL_HARD_RST;
-+	else
-+		cmd[1] = cmd[2] = OMNIA_CTL_LIGHT_RST;
-+
-+	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
-+	if (err)
-+		dev_err(&mcu->client->dev,
-+			"Unable to send the restart command: %d\n", err);
-+
-+	/*
-+	 * MCU needs a little bit to process the I2C command, otherwise it will
-+	 * do a light reset based on SOC SYSRES_OUT pin.
-+	 */
-+	mdelay(1);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static ssize_t front_button_poweron_show(struct device *dev,
-+					 struct device_attribute *a, char *buf)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", mcu->front_button_poweron);
-+}
-+
-+static ssize_t front_button_poweron_store(struct device *dev,
-+					  struct device_attribute *a,
-+					  const char *buf, size_t count)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+	bool val;
-+	int err;
-+
-+	err = kstrtobool(buf, &val);
-+	if (err)
-+		return err;
-+
-+	mcu->front_button_poweron = val;
-+
-+	return count;
-+}
-+static DEVICE_ATTR_RW(front_button_poweron);
-+
-+static struct attribute *omnia_mcu_poweroff_attrs[] = {
-+	&dev_attr_front_button_poweron.attr,
-+	NULL
-+};
-+
-+static umode_t poweroff_attrs_visible(struct kobject *kobj, struct attribute *a,
-+				      int n)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	if (mcu->features & OMNIA_FEAT_POWEROFF_WAKEUP)
-+		return a->mode;
-+
-+	return 0;
-+}
-+
-+const struct attribute_group omnia_mcu_poweroff_group = {
-+	.attrs = omnia_mcu_poweroff_attrs,
-+	.is_visible = poweroff_attrs_visible,
-+};
-+
-+int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu)
-+{
-+	struct device *dev = &mcu->client->dev;
-+	int err;
-+
-+	/* MCU restart is always available */
-+	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART,
-+					    SYS_OFF_PRIO_FIRMWARE,
-+					    omnia_restart, mcu);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot register system restart handler\n");
-+
-+	/*
-+	 * Poweroff and wakeup are available only if POWEROFF_WAKEUP feature is
-+	 * present.
-+	 */
-+	if (!(mcu->features & OMNIA_FEAT_POWEROFF_WAKEUP))
-+		return 0;
-+
-+	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
-+					    SYS_OFF_PRIO_FIRMWARE,
-+					    omnia_power_off, mcu);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot register system power off handler\n");
-+
-+	mcu->rtcdev = devm_rtc_allocate_device(dev);
-+	if (IS_ERR(mcu->rtcdev))
-+		return dev_err_probe(dev, PTR_ERR(mcu->rtcdev),
-+				     "Cannot allocate RTC device\n");
-+
-+	mcu->rtcdev->ops = &omnia_rtc_ops;
-+	mcu->rtcdev->range_max = U32_MAX;
-+	set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, mcu->rtcdev->features);
-+
-+	err = devm_rtc_register_device(mcu->rtcdev);
-+	if (err)
-+		return dev_err_probe(dev, err, "Cannot register RTC device\n");
-+
-+	mcu->front_button_poweron = true;
-+
-+	return 0;
-+}
-diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
-index b62afc663c07..4b49736d6d3f 100644
---- a/drivers/platform/cznic/turris-omnia-mcu.h
-+++ b/drivers/platform/cznic/turris-omnia-mcu.h
-@@ -12,9 +12,11 @@
- #include <linux/gpio/driver.h>
- #include <linux/if_ether.h>
- #include <linux/mutex.h>
-+#include <linux/rtc.h>
- #include <linux/types.h>
- #include <linux/workqueue.h>
- #include <asm/byteorder.h>
-+#include <asm/unaligned.h>
- 
- struct i2c_client;
- 
-@@ -36,6 +38,11 @@ struct omnia_mcu {
- 	struct delayed_work button_release_emul_work;
- 	u16 last_status;
- 	bool button_pressed_emul;
-+
-+	/* RTC device for configuring wake-up */
-+	struct rtc_device *rtcdev;
-+	u32 rtc_alarm;
-+	bool front_button_poweron;
- };
- 
- int omnia_cmd_write_read(const struct i2c_client *client,
-@@ -48,6 +55,17 @@ static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
- 	return omnia_cmd_write_read(client, cmd, len, NULL, 0);
- }
- 
-+static inline int omnia_cmd_write_u32(const struct i2c_client *client, u8 cmd,
-+				      u32 val)
-+{
-+	u8 buf[5];
-+
-+	buf[0] = cmd;
-+	put_unaligned_le32(val, &buf[1]);
-+
-+	return omnia_cmd_write(client, buf, sizeof(buf));
-+}
-+
- static inline int omnia_cmd_read(const struct i2c_client *client, u8 cmd,
- 				 void *reply, unsigned int len)
- {
-@@ -129,7 +147,9 @@ static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd,
- }
- 
- extern const struct attribute_group omnia_mcu_gpio_group;
-+extern const struct attribute_group omnia_mcu_poweroff_group;
- 
- int omnia_mcu_register_gpiochip(struct omnia_mcu *mcu);
-+int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
- 
- #endif /* __TURRIS_OMNIA_MCU_H */
+...
+
+> +Date:		July 2024
+> +KernelVersion:	6.10
+
+TBH, I'm not sure you manage to squeeze this rather big driver to v6.10.
+
+...
+
+> +static const struct attribute_group *omnia_mcu_groups[] = {
+> +	&omnia_mcu_base_group,
+> +	NULL
+> +};
+
+__ATTRIBUTE_GROUPS()
+
+...
+
+Perhaps also
+
+	struct i2c_client *client = mcu->client;
+
+> +	struct device *dev = &mcu->client->dev;
+
+	struct device *dev = &client->dev;
+
+> +	bool suggest_fw_upgrade = false;
+> +	u16 status;
+> +	int err;
+> +
+> +	/* status word holds MCU type, which we need below */
+> +	err = omnia_cmd_read_u16(mcu->client, OMNIA_CMD_GET_STATUS_WORD,
+> +				 &status);
+
+	err = omnia_cmd_read_u16(client, OMNIA_CMD_GET_STATUS_WORD, &status);
+
+and so on...
+
+
+> +	if (err)
+> +		return err;
+
+...
+
+> +	/*
+> +	 * check whether MCU firmware supports the OMNIA_CMD_GET_FEATURES
+
+Check
+
+> +	 * command
+
+command.
+
+> +	 */
+
 -- 
-2.43.2
+With Best Regards,
+Andy Shevchenko
+
 
 
