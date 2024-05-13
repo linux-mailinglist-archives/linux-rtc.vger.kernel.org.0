@@ -1,112 +1,164 @@
-Return-Path: <linux-rtc+bounces-1180-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1181-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A5C8C281B
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 May 2024 17:44:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A58908C451C
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 May 2024 18:29:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A6F9B26668
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 May 2024 15:44:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6C441C214FD
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 May 2024 16:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B86172762;
-	Fri, 10 May 2024 15:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3762715535A;
+	Mon, 13 May 2024 16:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Z95o1QHt"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5BF171657;
-	Fri, 10 May 2024 15:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172A814D2BF;
+	Mon, 13 May 2024 16:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715355871; cv=none; b=k+/03CDYmGEo20+LAZ6hoR8mWgyDocjg5mAsFK4+4A9E//2OZzQP/0uu6V0yRybYyzdQDhs4NzP8AW1wTyPwbMA1RCX5fk2xmjvzAZcjJNisrp7tbYvx4yYUBkz+Mwqvghgjv3hWBsQfyz/an/mqKTlyg7t+eFdzUqhgc2EvztM=
+	t=1715617790; cv=none; b=Fxh1T1ZI0rEr1wwTC7Dz53BbjdAPwJvgN/WUFrmIyyY8B+dU/Kdo/JfXZwfTSaxmWQcsf0o4IKTOnWSXiPVlt3Yh1YAb6iEzdN0UXip82LDH81qVEqm3CsdAaiapIHPxxw7pI5PP4wM+ZZwr0o/wYiGrl6Iq5Vujx6wew73By2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715355871; c=relaxed/simple;
-	bh=a/+7r1DFyfr6biTbFWHHIWfRzKDpLn+3QlJZv2BY4UE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pNIio7lgeWXE+jLaFpKFIZKt7gwi2Rw+p/l0/+kvR34uAlruz7LGPQb/5pLA5Wh6dwN5MLexbpnTlRfMq8wKllEGtGF18yJ9ju5p7eKnqqwCdSqCX7gYrLpyuGmeWh773HTsapwI16wnCqp/nc+P4XAlPxZ75y2z8VjDU4t5/BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-CSE-ConnectionGUID: xOqRiDVnSgC5YlEHSDx5Ww==
-X-CSE-MsgGUID: xHkAJ3zKRV6BbpfzMDlwrw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="28827417"
-X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="28827417"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:44:30 -0700
-X-CSE-ConnectionGUID: h1YPf0ejRC+t5782D2zuPg==
-X-CSE-MsgGUID: 9IoXcfQ8SiSQ5S13wD4zPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="29760828"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:44:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy.shevchenko@gmail.com>)
-	id 1s5SQ2-000000069NR-1xrl;
-	Fri, 10 May 2024 18:44:22 +0300
-Date: Fri, 10 May 2024 18:44:22 +0300
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	s=arc-20240116; t=1715617790; c=relaxed/simple;
+	bh=P5p3YJgaSryQWCWTT7Yw2Cx0iDBf43rEw9xJhuxZSOQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LfmAw4G2LM0DhQRsGtJPOuZGbVvpc0Z6iGFEtGVdsAIowbAjX2OaASVA8WFNWXt/e28qYkiwqPtEWILj4TiAg5yQPJAtGNn9CaNIyyHezzb907+KtvW3P54sZ+RraONj7iALZx5dZUXf7Q2ZOBuvQNh0sfsRm/K3tHAj/jni4ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Z95o1QHt; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9CFD8C0006;
+	Mon, 13 May 2024 16:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1715617784;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rGyJ9+fBQ8mBfRdwi06YujJsGzmctZRxczZm1z9IHuM=;
+	b=Z95o1QHtJyY9muhfAuCZ77XJ226rG84KnkvCO51HCCcAH8QtwR8LrUwze8xucvkTSn3kr9
+	glKvgzCUnLPZHd+jsPt2KN46k2yEVoTojuspEdwubHLABSo3VwJ/yeWLyilLlQogCSHcFJ
+	3p2WqWYEPk84g3j0GXZk1Utpn/FplJW0lueaS3OpkaxQlfsmrMRnwpstio0hKOoR3NDZmq
+	S1BlxQLNyicprYr/JAOfNAlhs7ktuUOZVSFlZKgVbEjbhdq5+XMdRhfi0Bo2z8+E1VZHc0
+	QeBMLIDrSCHFobIiP9yjsvq2p/dKkIaASjakF0QWX8hcXi0BzWe8cxcWI6gjPg==
+From: Richard Genoud <richard.genoud@bootlin.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Esteban Blanc <eblanc@baylibre.com>,
 	linux-rtc@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v10 2/9] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-Message-ID: <Zj5A1qoH-aWbT3XU@smile.fi.intel.com>
-References: <20240510101819.13551-1-kabel@kernel.org>
- <20240510101819.13551-3-kabel@kernel.org>
- <CAHp75VfdSqRbhek3eCPtdPtrv2FJyhpG0XvKFMfT9yrDsCjY2Q@mail.gmail.com>
- <20240510153629.bd3gkfm4he2rybui@kandell>
+	Lee Jones <lee@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Richard Genoud <richard.genoud@bootlin.com>
+Subject: [PATCH] rtc: tps6594: Add power management support
+Date: Mon, 13 May 2024 18:29:42 +0200
+Message-ID: <20240513162942.68484-1-richard.genoud@bootlin.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240510153629.bd3gkfm4he2rybui@kandell>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-GND-Sasl: richard.genoud@bootlin.com
 
-On Fri, May 10, 2024 at 05:36:29PM +0200, Marek Behún wrote:
-> On Fri, May 10, 2024 at 04:41:20PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 10, 2024 at 1:18 PM Marek Behún <kabel@kernel.org> wrote:
+Add power management support to the driver. This allows a SoC to wake
+from suspend using the nINT provided by the RTC.
+It takes care of the case when the interrupt has not been caught because
+the kernel has not yet woke up.
+(This is the case when only edges interrupt are caught)
 
-...
+Signed-off-by: Richard Genoud <richard.genoud@bootlin.com>
+---
+ drivers/rtc/rtc-tps6594.c   | 46 +++++++++++++++++++++++++++++++++++++
+ include/linux/mfd/tps6594.h |  1 +
+ 2 files changed, 47 insertions(+)
 
-> > > +       err = omnia_cmd_read(client, cmd, &reply, sizeof(reply));
-> > > +       if (!err)
-> > > +               *dst = le32_to_cpu(reply);
-> > > +
-> > > +       return err;
-> > 
-> > Introduced here and "fixed" in the next patch. Something wrong with
-> > rebasing / squashing?
-> > 
-> > You will need a v11 anyway. And you have now much more time for it,
-> > don't forget to update the kernel version and date in the ABI
-> > documentation.
-> 
-> It would seem so. I will send v11 also with the GPIO changes (to use
-> __set_bit() and friends).
-
-I hope it will make v6.11.
-
+diff --git a/drivers/rtc/rtc-tps6594.c b/drivers/rtc/rtc-tps6594.c
+index 838ae8562a35..b769d120c624 100644
+--- a/drivers/rtc/rtc-tps6594.c
++++ b/drivers/rtc/rtc-tps6594.c
+@@ -415,6 +415,8 @@ static int tps6594_rtc_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return dev_err_probe(dev, irq, "Failed to get irq\n");
+ 
++	tps->irq_rtc = irq;
++
+ 	ret = devm_request_threaded_irq(dev, irq, NULL, tps6594_rtc_interrupt,
+ 					IRQF_ONESHOT, TPS6594_IRQ_NAME_ALARM,
+ 					dev);
+@@ -434,6 +436,49 @@ static int tps6594_rtc_probe(struct platform_device *pdev)
+ 	return devm_rtc_register_device(rtc);
+ }
+ 
++static int tps6594_rtc_resume(struct device *dev)
++{
++	struct tps6594 *tps = dev_get_drvdata(dev->parent);
++	struct rtc_device *rtc_dev = dev_get_drvdata(dev);
++	int ret;
++
++	ret = regmap_test_bits(tps->regmap, TPS6594_REG_INT_STARTUP,
++			       TPS6594_BIT_RTC_INT);
++	if (ret < 0) {
++		dev_err(dev, "failed to read REG_INT_STARTUP: %d\n", ret);
++		goto out;
++	}
++
++	if (ret > 0) {
++		/*
++		 * If the alarm bit is set, it means that the IRQ has been
++		 * fired. But, the kernel may not have woke up yet when it
++		 * happened. So, we have to clear it.
++		 */
++		ret = regmap_write(tps->regmap, TPS6594_REG_RTC_STATUS,
++				   TPS6594_BIT_ALARM);
++		if (ret < 0)
++			dev_err(dev, "error clearing alarm bit: %d", ret);
++
++		rtc_update_irq(rtc_dev, 1, RTC_IRQF | RTC_AF);
++	}
++out:
++	disable_irq_wake(tps->irq_rtc);
++
++	return 0;
++}
++
++static int tps6594_rtc_suspend(struct device *dev)
++{
++	struct tps6594 *tps = dev_get_drvdata(dev->parent);
++
++	enable_irq_wake(tps->irq_rtc);
++
++	return 0;
++}
++
++SIMPLE_DEV_PM_OPS(tps6594_rtc_pm_ops, tps6594_rtc_suspend, tps6594_rtc_resume);
++
+ static const struct platform_device_id tps6594_rtc_id_table[] = {
+ 	{ "tps6594-rtc", },
+ 	{}
+@@ -444,6 +489,7 @@ static struct platform_driver tps6594_rtc_driver = {
+ 	.probe		= tps6594_rtc_probe,
+ 	.driver		= {
+ 		.name	= "tps6594-rtc",
++		.pm = pm_sleep_ptr(&tps6594_rtc_pm_ops),
+ 	},
+ 	.id_table = tps6594_rtc_id_table,
+ };
+diff --git a/include/linux/mfd/tps6594.h b/include/linux/mfd/tps6594.h
+index 3f7c5e23cd4c..85933f1519c4 100644
+--- a/include/linux/mfd/tps6594.h
++++ b/include/linux/mfd/tps6594.h
+@@ -1011,6 +1011,7 @@ struct tps6594 {
+ 	bool use_crc;
+ 	struct regmap *regmap;
+ 	int irq;
++	int irq_rtc;
+ 	struct regmap_irq_chip_data *irq_data;
+ };
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
 
