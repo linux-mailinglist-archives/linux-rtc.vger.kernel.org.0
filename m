@@ -1,105 +1,417 @@
-Return-Path: <linux-rtc+bounces-1185-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1186-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADAC18C6A4B
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 May 2024 18:11:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66CB08C6CED
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 May 2024 21:43:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 682C72812B9
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 May 2024 16:11:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B737283C67
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 May 2024 19:43:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A2A915624D;
-	Wed, 15 May 2024 16:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="K5Ctx+8x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5551F15AADE;
+	Wed, 15 May 2024 19:43:57 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B65313EFE5
-	for <linux-rtc@vger.kernel.org>; Wed, 15 May 2024 16:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DA23BBEA
+	for <linux-rtc@vger.kernel.org>; Wed, 15 May 2024 19:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715789511; cv=none; b=LzqIgbp7/vVhBXToPlBiFWliAzIKS/CF9ANCvbqP4FaaK22n/2iFmNTdxjwuBfLWh2Wk8LNrK6mf1nYTIfLWdWjo8LJXHD66hP0P95DFxGl0huB4aYgK00S5ERUYMz+RTWhfp8xzb20MWYbuP5A+GX6uYSG+Uk18Ujk+GarahzE=
+	t=1715802237; cv=none; b=hamkcrDJfnXL3PaAhoYUPuhz6BAPfQqePdfgV1m+4PjJBOm6A1ZYuH1agaUUXhP6oe30AP0mjUFDh4xnvOOhAWDZFjSZv243bP3Imug8A9jssg2eCdtyhepA8ga0fAUDiBPGYqek3tXluV5KmVT+tZPiVCK+ibWdnMiSH+j+b+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715789511; c=relaxed/simple;
-	bh=VyPo9EZPTWGia1hDWfa6Ul+IiF/Q/cUsbeyb7RAuis8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=mOjH6MmIwUnguXm1Dgx0lNQnF2vgRL+HWzAAt7gwruSPaIrV7kjUR2LqXTWtbp6Im0lARtryyntZ100TILCc4O1gZjz5jN5O8OmikS6Q8YipwuNgijBdiWy8qFIYafDlCXPrAgNc6OpJisElWYv9mMJeBZ5c7nyQ+qyStMl4bGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=K5Ctx+8x; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2e0a34b2899so106503481fa.3
-        for <linux-rtc@vger.kernel.org>; Wed, 15 May 2024 09:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715789507; x=1716394307; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VyPo9EZPTWGia1hDWfa6Ul+IiF/Q/cUsbeyb7RAuis8=;
-        b=K5Ctx+8x4uvQ2QwXesTElorxXh6gOyfLi5lEemyUsuE/NIgjfcJjTUvFPOA8INWbcM
-         TVeR2VZYNayfpJFGXHqH2eLYg5bNJbvw2dr6GFniXH8T5Z9o5mo44i6vetOIPA+PIe1+
-         3CQP3vkXu46p35nxxa1umRBTnZ5+XbCpCg94Lz5mWKWsIs/23ZW9qy+ApeUpRQgxOTaJ
-         DQcHl5+/WCZ6b/4CtHl41SjkQ8OCy3HpiR07h3dEQ0JET8snLv5J//TsPNPNySymJ0A0
-         fv2qXBoRtax4M2duMRzx7cRpMQjTjVRT5T1liTDfKuciS3IYC8udHw6Hjd+dr4sY14qM
-         R9Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715789507; x=1716394307;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VyPo9EZPTWGia1hDWfa6Ul+IiF/Q/cUsbeyb7RAuis8=;
-        b=orxFQdju8XCUsGMY5c1hlI8P+zSOwp0KzWNYvx5Wc1QeXNQeUDkReffIp4UU49j/8G
-         Veyf0Hl3T1cmSvia5nP4KRVqQxydAxDo30Ie1KhozDPg39h7Eker3hc5ZKisPZ5uBvUp
-         qX4SkUk8kkCbIAZDDAT0uY/HCbaLO+Dt/KwrOvHBC0utqI1RnQLwuJoz/W3pgBIrb5p3
-         +ZiWF6ylCbk2nKPEAPZlCRA4Tjaa69sUWZNIN3/U6Abg+5WF9RvA7R33qHdNWZo4Wc1r
-         vaFHqO4qiaAJgFDO8yuEKs4MmiJQrGlFpPYnZ+uNOoq4jtKCY8ehs8IIoADcLBV9J6si
-         gmCA==
-X-Forwarded-Encrypted: i=1; AJvYcCXj17mvtH45NNZGo/sh7zuahgJlYAh3/v6A57QIlPDNiTWHXEPjnD9L8lfmgLsSBHSLTyQDfTbIjShULr/uzkSthR41dzKslR4m
-X-Gm-Message-State: AOJu0YyJgyFYDqhWBdLNOSJSPRFeFhDrIQT0XNPIPOMQfkSYbtmqx/5n
-	6P5Q0/VtBkf+DBvFEAAxYzeUDspcQ3mWR1/FIo3j6aubHjr5nw4zKDUhcFaQcBZUmdud8RyTAl1
-	9
-X-Google-Smtp-Source: AGHT+IEj/uLKh1PeNOsv2M6njD+iG6o754ZO04BrFMM5ikkzxMn6kpsym7eV05B7aFuyIhLBxeAXKA==
-X-Received: by 2002:a2e:7c0d:0:b0:2e3:7121:aba6 with SMTP id 38308e7fff4ca-2e5205c61a3mr134524761fa.46.1715789506504;
-        Wed, 15 May 2024 09:11:46 -0700 (PDT)
-Received: from localhost ([2a01:e0a:448:76e0:599c:db2f:fac4:6e1c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4201088fe8csm157460515e9.32.2024.05.15.09.11.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 May 2024 09:11:46 -0700 (PDT)
+	s=arc-20240116; t=1715802237; c=relaxed/simple;
+	bh=X9KneUlKZEuiBO3Oy57Z5oYstrxjiTvq+SgWw+JQKnE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lwHFUg4Sep7JD7t242U7USocKt9J0i4lIjyMErTOXytN/8VVuNOu4dxwvowHp43HWHTMbTNTKm9pFOBpt7JOGiWFulxRZTCx6HpKYWiHTL8H10F1X7S5jCoLWQiRxoWjLa6fD4WhCZBIGyKFeg3Sp5DXRRr3MQLVuHX8+v2F6WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s7KXQ-00043M-5Y; Wed, 15 May 2024 21:43:44 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s7KXO-001aSm-DQ; Wed, 15 May 2024 21:43:42 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s7KXO-005Rto-14;
+	Wed, 15 May 2024 21:43:42 +0200
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH] rtc: Drop explicit initialization of struct i2c_device_id::driver_data to 0
+Date: Wed, 15 May 2024 21:43:37 +0200
+Message-ID: <20240515194336.58342-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 May 2024 18:11:45 +0200
-Message-Id: <D1ACM943BLGZ.1YOGPZ48VVL6V@baylibre.com>
-From: "Esteban Blanc" <eblanc@baylibre.com>
-To: "Richard Genoud" <richard.genoud@bootlin.com>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>
-Cc: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Udit Kumar"
- <u-kumar1@ti.com>, "Thomas Richard" <thomas.richard@bootlin.com>, "Gregory
- CLEMENT" <gregory.clement@bootlin.com>, <linux-rtc@vger.kernel.org>, "Lee
- Jones" <lee@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] rtc: tps6594: Add power management support
-X-Mailer: aerc 0.15.2
-References: <20240515152827.80185-1-richard.genoud@bootlin.com>
- <20240515152827.80185-2-richard.genoud@bootlin.com>
-In-Reply-To: <20240515152827.80185-2-richard.genoud@bootlin.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10685; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=X9KneUlKZEuiBO3Oy57Z5oYstrxjiTvq+SgWw+JQKnE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmRRBoW7xduGMZ7nf0REmTzlsfS8pNgJmWGzS/L dQqDKY60W6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZkUQaAAKCRCPgPtYfRL+ TvBCB/47ULqAvGxKQ+Jg2nrCJwAAv/x7lrwptlZ0ujtUaLwS5JEPQpQXgWCdkeFDiVliTb5Vxgr VcyUNnuCe+76iXSaVsnXhRt9fBCvbBm2oQ+znjAVc7Pa+XCZsowDTy4FZjzRZWMqz4i/emO1DHp PBT7msCspwJpILP4M8AF3Xmf2akWUfMCPkg0kUWyEibir8bdxqlM9Xm7b9pZBf8nVXsfSjxZ5sZ VjnKBvGJhuy4ChU7ySfCXi62SgotCusKsl1eWXglXXjIv7S/A/A1AQuOf9wZsquXRvKx2bVx3HB 3D7FA4FNtXDNaNG1TXGUsVYy+TM/Wapc4De6AJmIGSPrLNHi
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 
-Hi Richard,
+These drivers don't use the driver_data member of struct i2c_device_id,
+so don't explicitly initialize this member.
 
-This looks good to me.
+This prepares putting driver_data in an anonymous union which requires
+either no initialization or named designators. But it's also a nice
+cleanup on its own.
 
-Reviewed-by: Esteban Blanc <eblanc@baylibre.com>
+While add it, also remove a comma after the sentinel entry in
+rtc-hym8563.
 
-Best regards,
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/rtc/rtc-ab-b5ze-s3.c | 2 +-
+ drivers/rtc/rtc-ab-eoz9.c    | 2 +-
+ drivers/rtc/rtc-bq32k.c      | 2 +-
+ drivers/rtc/rtc-ds1374.c     | 2 +-
+ drivers/rtc/rtc-ds1672.c     | 2 +-
+ drivers/rtc/rtc-ds3232.c     | 2 +-
+ drivers/rtc/rtc-em3027.c     | 2 +-
+ drivers/rtc/rtc-fm3130.c     | 2 +-
+ drivers/rtc/rtc-hym8563.c    | 4 ++--
+ drivers/rtc/rtc-isl12022.c   | 2 +-
+ drivers/rtc/rtc-max31335.c   | 2 +-
+ drivers/rtc/rtc-max6900.c    | 2 +-
+ drivers/rtc/rtc-nct3018y.c   | 2 +-
+ drivers/rtc/rtc-pcf8523.c    | 2 +-
+ drivers/rtc/rtc-pcf8563.c    | 6 +++---
+ drivers/rtc/rtc-pcf8583.c    | 2 +-
+ drivers/rtc/rtc-rv3029c2.c   | 4 ++--
+ drivers/rtc/rtc-rx6110.c     | 2 +-
+ drivers/rtc/rtc-rx8010.c     | 2 +-
+ drivers/rtc/rtc-rx8581.c     | 2 +-
+ drivers/rtc/rtc-s35390a.c    | 2 +-
+ drivers/rtc/rtc-sd3078.c     | 2 +-
+ drivers/rtc/rtc-x1205.c      | 2 +-
+ 23 files changed, 27 insertions(+), 27 deletions(-)
 
---=20
-Esteban "Skallwar" Blanc
-BayLibre
+diff --git a/drivers/rtc/rtc-ab-b5ze-s3.c b/drivers/rtc/rtc-ab-b5ze-s3.c
+index 100062001831..684f9898d768 100644
+--- a/drivers/rtc/rtc-ab-b5ze-s3.c
++++ b/drivers/rtc/rtc-ab-b5ze-s3.c
+@@ -933,7 +933,7 @@ MODULE_DEVICE_TABLE(of, abb5zes3_dt_match);
+ #endif
+ 
+ static const struct i2c_device_id abb5zes3_id[] = {
+-	{ "abb5zes3", 0 },
++	{ "abb5zes3" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, abb5zes3_id);
+diff --git a/drivers/rtc/rtc-ab-eoz9.c b/drivers/rtc/rtc-ab-eoz9.c
+index 04e1b8e93bc1..02f7d0711287 100644
+--- a/drivers/rtc/rtc-ab-eoz9.c
++++ b/drivers/rtc/rtc-ab-eoz9.c
+@@ -575,7 +575,7 @@ MODULE_DEVICE_TABLE(of, abeoz9_dt_match);
+ #endif
+ 
+ static const struct i2c_device_id abeoz9_id[] = {
+-	{ "abeoz9", 0 },
++	{ "abeoz9" },
+ 	{ }
+ };
+ 
+diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
+index 591e42391747..7ad34539be4d 100644
+--- a/drivers/rtc/rtc-bq32k.c
++++ b/drivers/rtc/rtc-bq32k.c
+@@ -304,7 +304,7 @@ static void bq32k_remove(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id bq32k_id[] = {
+-	{ "bq32000", 0 },
++	{ "bq32000" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, bq32k_id);
+diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
+index 4a5005cb23f5..c2359eb86bc9 100644
+--- a/drivers/rtc/rtc-ds1374.c
++++ b/drivers/rtc/rtc-ds1374.c
+@@ -52,7 +52,7 @@
+ #define DS1374_REG_TCR		0x09 /* Trickle Charge */
+ 
+ static const struct i2c_device_id ds1374_id[] = {
+-	{ "ds1374", 0 },
++	{ "ds1374" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ds1374_id);
+diff --git a/drivers/rtc/rtc-ds1672.c b/drivers/rtc/rtc-ds1672.c
+index 641799f30baa..6e5314215d00 100644
+--- a/drivers/rtc/rtc-ds1672.c
++++ b/drivers/rtc/rtc-ds1672.c
+@@ -133,7 +133,7 @@ static int ds1672_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id ds1672_id[] = {
+-	{ "ds1672", 0 },
++	{ "ds1672" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ds1672_id);
+diff --git a/drivers/rtc/rtc-ds3232.c b/drivers/rtc/rtc-ds3232.c
+index 1485a6ae51e6..dd37b055693c 100644
+--- a/drivers/rtc/rtc-ds3232.c
++++ b/drivers/rtc/rtc-ds3232.c
+@@ -586,7 +586,7 @@ static int ds3232_i2c_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id ds3232_id[] = {
+-	{ "ds3232", 0 },
++	{ "ds3232" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ds3232_id);
+diff --git a/drivers/rtc/rtc-em3027.c b/drivers/rtc/rtc-em3027.c
+index fc772eae5da5..dc1ccbc65dcb 100644
+--- a/drivers/rtc/rtc-em3027.c
++++ b/drivers/rtc/rtc-em3027.c
+@@ -129,7 +129,7 @@ static int em3027_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id em3027_id[] = {
+-	{ "em3027", 0 },
++	{ "em3027" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, em3027_id);
+diff --git a/drivers/rtc/rtc-fm3130.c b/drivers/rtc/rtc-fm3130.c
+index 400ce4ad0c49..f82728ebac0c 100644
+--- a/drivers/rtc/rtc-fm3130.c
++++ b/drivers/rtc/rtc-fm3130.c
+@@ -53,7 +53,7 @@ struct fm3130 {
+ 	int			data_valid;
+ };
+ static const struct i2c_device_id fm3130_id[] = {
+-	{ "fm3130", 0 },
++	{ "fm3130" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, fm3130_id);
+diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
+index b018535c842b..63f11ea3589d 100644
+--- a/drivers/rtc/rtc-hym8563.c
++++ b/drivers/rtc/rtc-hym8563.c
+@@ -559,8 +559,8 @@ static int hym8563_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id hym8563_id[] = {
+-	{ "hym8563", 0 },
+-	{},
++	{ "hym8563" },
++	{}
+ };
+ MODULE_DEVICE_TABLE(i2c, hym8563_id);
+ 
+diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+index 4eef7afcc8bc..6fa9a68af9d9 100644
+--- a/drivers/rtc/rtc-isl12022.c
++++ b/drivers/rtc/rtc-isl12022.c
+@@ -366,7 +366,7 @@ static const struct of_device_id isl12022_dt_match[] = {
+ MODULE_DEVICE_TABLE(of, isl12022_dt_match);
+ 
+ static const struct i2c_device_id isl12022_id[] = {
+-	{ "isl12022", 0 },
++	{ "isl12022" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, isl12022_id);
+diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
+index a2441e5c2c74..9a456f537d3b 100644
+--- a/drivers/rtc/rtc-max31335.c
++++ b/drivers/rtc/rtc-max31335.c
+@@ -669,7 +669,7 @@ static int max31335_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id max31335_id[] = {
+-	{ "max31335", 0 },
++	{ "max31335" },
+ 	{ }
+ };
+ 
+diff --git a/drivers/rtc/rtc-max6900.c b/drivers/rtc/rtc-max6900.c
+index 31b910e4d91a..7be31fce5bc7 100644
+--- a/drivers/rtc/rtc-max6900.c
++++ b/drivers/rtc/rtc-max6900.c
+@@ -215,7 +215,7 @@ static int max6900_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id max6900_id[] = {
+-	{ "max6900", 0 },
++	{ "max6900" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, max6900_id);
+diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
+index 7a8b4de893b8..76c5f464b2da 100644
+--- a/drivers/rtc/rtc-nct3018y.c
++++ b/drivers/rtc/rtc-nct3018y.c
+@@ -567,7 +567,7 @@ static int nct3018y_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id nct3018y_id[] = {
+-	{ "nct3018y", 0 },
++	{ "nct3018y" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, nct3018y_id);
+diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+index 98b77f790b0c..2c63c0ffd05a 100644
+--- a/drivers/rtc/rtc-pcf8523.c
++++ b/drivers/rtc/rtc-pcf8523.c
+@@ -495,7 +495,7 @@ static int pcf8523_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id pcf8523_id[] = {
+-	{ "pcf8523", 0 },
++	{ "pcf8523" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, pcf8523_id);
+diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+index ea82b89d8929..af140bde6b53 100644
+--- a/drivers/rtc/rtc-pcf8563.c
++++ b/drivers/rtc/rtc-pcf8563.c
+@@ -589,9 +589,9 @@ static int pcf8563_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id pcf8563_id[] = {
+-	{ "pcf8563", 0 },
+-	{ "rtc8564", 0 },
+-	{ "pca8565", 0 },
++	{ "pcf8563" },
++	{ "rtc8564" },
++	{ "pca8565" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, pcf8563_id);
+diff --git a/drivers/rtc/rtc-pcf8583.c b/drivers/rtc/rtc-pcf8583.c
+index a7e0fc360b6a..652b9dfa7566 100644
+--- a/drivers/rtc/rtc-pcf8583.c
++++ b/drivers/rtc/rtc-pcf8583.c
+@@ -297,7 +297,7 @@ static int pcf8583_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id pcf8583_id[] = {
+-	{ "pcf8583", 0 },
++	{ "pcf8583" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, pcf8583_id);
+diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
+index 4a81feeb00ff..83331d1fcab0 100644
+--- a/drivers/rtc/rtc-rv3029c2.c
++++ b/drivers/rtc/rtc-rv3029c2.c
+@@ -807,8 +807,8 @@ static int rv3029_i2c_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id rv3029_id[] = {
+-	{ "rv3029", 0 },
+-	{ "rv3029c2", 0 },
++	{ "rv3029" },
++	{ "rv3029c2" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, rv3029_id);
+diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
+index 834274db8c3f..6f4cde803f3e 100644
+--- a/drivers/rtc/rtc-rx6110.c
++++ b/drivers/rtc/rtc-rx6110.c
+@@ -451,7 +451,7 @@ static const struct acpi_device_id rx6110_i2c_acpi_match[] = {
+ MODULE_DEVICE_TABLE(acpi, rx6110_i2c_acpi_match);
+ 
+ static const struct i2c_device_id rx6110_i2c_id[] = {
+-	{ "rx6110", 0 },
++	{ "rx6110" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, rx6110_i2c_id);
+diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
+index f44e212c07de..2b6198d1cf81 100644
+--- a/drivers/rtc/rtc-rx8010.c
++++ b/drivers/rtc/rtc-rx8010.c
+@@ -50,7 +50,7 @@
+ #define RX8010_ALARM_AE		BIT(7)
+ 
+ static const struct i2c_device_id rx8010_id[] = {
+-	{ "rx8010", 0 },
++	{ "rx8010" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, rx8010_id);
+diff --git a/drivers/rtc/rtc-rx8581.c b/drivers/rtc/rtc-rx8581.c
+index 48efd61a114d..b18c12887bdc 100644
+--- a/drivers/rtc/rtc-rx8581.c
++++ b/drivers/rtc/rtc-rx8581.c
+@@ -307,7 +307,7 @@ static int rx8581_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id rx8581_id[] = {
+-	{ "rx8581", 0 },
++	{ "rx8581" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, rx8581_id);
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index 90a3028ac574..2d6b655a4b25 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -50,7 +50,7 @@
+ #define S35390A_INT2_MODE_PMIN		(BIT(3) | BIT(2)) /* INT2FE | INT2ME */
+ 
+ static const struct i2c_device_id s35390a_id[] = {
+-	{ "s35390a", 0 },
++	{ "s35390a" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, s35390a_id);
+diff --git a/drivers/rtc/rtc-sd3078.c b/drivers/rtc/rtc-sd3078.c
+index 7760394ccd2d..fe27b54beaad 100644
+--- a/drivers/rtc/rtc-sd3078.c
++++ b/drivers/rtc/rtc-sd3078.c
+@@ -201,7 +201,7 @@ static int sd3078_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id sd3078_id[] = {
+-	{"sd3078", 0},
++	{ "sd3078" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, sd3078_id);
+diff --git a/drivers/rtc/rtc-x1205.c b/drivers/rtc/rtc-x1205.c
+index 807f953ae0ae..4bcd7ca32f27 100644
+--- a/drivers/rtc/rtc-x1205.c
++++ b/drivers/rtc/rtc-x1205.c
+@@ -663,7 +663,7 @@ static void x1205_remove(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id x1205_id[] = {
+-	{ "x1205", 0 },
++	{ "x1205" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, x1205_id);
+
+base-commit: 82d92a9a1b9ea0ea52aff27cddd05009b4edad49
+-- 
+2.43.0
+
 
