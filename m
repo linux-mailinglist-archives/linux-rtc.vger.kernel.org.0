@@ -1,417 +1,346 @@
-Return-Path: <linux-rtc+bounces-1186-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1187-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66CB08C6CED
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 May 2024 21:43:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCCCE8C7FE3
+	for <lists+linux-rtc@lfdr.de>; Fri, 17 May 2024 04:29:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B737283C67
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 May 2024 19:43:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F05D21C211FF
+	for <lists+linux-rtc@lfdr.de>; Fri, 17 May 2024 02:29:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5551F15AADE;
-	Wed, 15 May 2024 19:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5612C4C91;
+	Fri, 17 May 2024 02:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tDmk9a2R"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2045.outbound.protection.outlook.com [40.107.102.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DA23BBEA
-	for <linux-rtc@vger.kernel.org>; Wed, 15 May 2024 19:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715802237; cv=none; b=hamkcrDJfnXL3PaAhoYUPuhz6BAPfQqePdfgV1m+4PjJBOm6A1ZYuH1agaUUXhP6oe30AP0mjUFDh4xnvOOhAWDZFjSZv243bP3Imug8A9jssg2eCdtyhepA8ga0fAUDiBPGYqek3tXluV5KmVT+tZPiVCK+ibWdnMiSH+j+b+w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715802237; c=relaxed/simple;
-	bh=X9KneUlKZEuiBO3Oy57Z5oYstrxjiTvq+SgWw+JQKnE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lwHFUg4Sep7JD7t242U7USocKt9J0i4lIjyMErTOXytN/8VVuNOu4dxwvowHp43HWHTMbTNTKm9pFOBpt7JOGiWFulxRZTCx6HpKYWiHTL8H10F1X7S5jCoLWQiRxoWjLa6fD4WhCZBIGyKFeg3Sp5DXRRr3MQLVuHX8+v2F6WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s7KXQ-00043M-5Y; Wed, 15 May 2024 21:43:44 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s7KXO-001aSm-DQ; Wed, 15 May 2024 21:43:42 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1s7KXO-005Rto-14;
-	Wed, 15 May 2024 21:43:42 +0200
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org,
-	kernel@pengutronix.de
-Subject: [PATCH] rtc: Drop explicit initialization of struct i2c_device_id::driver_data to 0
-Date: Wed, 15 May 2024 21:43:37 +0200
-Message-ID: <20240515194336.58342-2-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280234C69;
+	Fri, 17 May 2024 02:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715912952; cv=fail; b=OnFNGjPrI1yX7ylcjQ8DbWQVRWUrCQI6X1lDuOlf595eUWQ+J+EHUYTXzVwwIoXPA89etPjg4YmPfwIJ1Y0LqhV91/v9BIQc132N4knjEAj9fLqiC1MOokPTmpMHE6hRXpF2wE6Qr4PL9ArXSMjk6PtLdkqidfOekddmWoXF65Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715912952; c=relaxed/simple;
+	bh=iVeckCrz9wx4B/iNYMquEQI+UKZo+viljmgf0EIzlns=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=h2Z0JN6ux/iqGrpKGIxt/FX7DQrGHwEVRkvfZ8XTTd8xj8SmO8MEqzoRfxfvl3ZnQff14t86fTwZBpxDqG4x8xgB8g/MvKW5DQdSvfAN3pGHjommAJ4nECKXDq+/Fcv2gwIRyE9Yg0sk6MHkkknaMqGa4dIqcgUPdSRCDdOqQZw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tDmk9a2R; arc=fail smtp.client-ip=40.107.102.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KA925Vr7Ha+R6zP1tHWFmCp526q9TNMeTZuLwB3CNYBhvpZ/UcXIIXGe7TyzMgr/WeOU8FDX5EHN+Axk7OcGeFn0ToK0pDaJBAQ6A2AI88spYPuL+LBTfdXG9Ppb65qhqjEDZ6/kFhrlGNAqF2XV8gBuaNFlyx3MDc2W5aCgCahqSQxJeGMRQVRQeAnjLM+OwQbFpNbLHeMwu973EybU+X0Jg4vjYeZTvaoSm20QsCx9g2LbUZ5rj3jY3j4RRkTZfkWqfrlPpqCDhVsLuKNloeXeG7bOdUn38Cx8pBbhop3NAXWRyUuWDsjm1y3OkhSspZ7cuVqkqmheau59w3M1LQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9/FwjHpSnA2BxQLK7KBOKHljoABJta8/kVCJTSfpUW0=;
+ b=Nx6z0m61dykjoozEEHG/pqd34gcokyEvR6QBsqR78BT2p1fPGRETWhrnhDH9cpSCu7hlxCkTF57YXPHZlky0IT2A8IpK4UFy0E3NnGOd4SFAzIa9WiaHluXLhuGds2Hz7A3ptMpOWAg1FjVwTuQWmT4OvNOQbUIqAMABtXp0PYTibJ5E8iyT2m+qZYcKFNHEUqfGMllj7/BVLMCAn/oKeatax3/C9kxujg/Gtb7iI3lmXGiQ6WgFc5lM7H/GhwftowddYbSX5DlfWESa1G16/N0CHo5eVtHHA+bPMsK/HG6Gec6gfXf5Fj4THqH0OclF8ztA4E3KPIfpfbCJLYW1XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9/FwjHpSnA2BxQLK7KBOKHljoABJta8/kVCJTSfpUW0=;
+ b=tDmk9a2RXq3LbB1ptVujpuKIQGicmcRfcuxvfP96P2c3axb78O/ycit2IkMvgqKrb5/5eNcA5qQ0O0C32aoUQSGgtxquk0bktZyD7Fw7lUSSj+XquX2iUiQIidOFKC0wHlykMGGrNDIbtpXhXth0JnibHe+x77sklvapmhBI4C6wdYgw8h15S71y1KB2BIQ15w6BpfWgofriw6RMpBJ935Srp/QQVet4OyoeFar5+IngK7pJTxV4l2pckvNTjHnk7CAEPL/oEaXmVrqKMplcCXiL5ULfUOpEujHupZbsD/UUAKvbmvxyd5r+NXgv5FwJNzg8tiQ3x5w2MjfQ3VsLSA==
+Received: from MN2PR19CA0054.namprd19.prod.outlook.com (2603:10b6:208:19b::31)
+ by IA0PR12MB8349.namprd12.prod.outlook.com (2603:10b6:208:407::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.26; Fri, 17 May
+ 2024 02:29:06 +0000
+Received: from BL6PEPF0001AB77.namprd02.prod.outlook.com
+ (2603:10b6:208:19b:cafe::bb) by MN2PR19CA0054.outlook.office365.com
+ (2603:10b6:208:19b::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.28 via Frontend
+ Transport; Fri, 17 May 2024 02:29:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL6PEPF0001AB77.mail.protection.outlook.com (10.167.242.170) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7587.21 via Frontend Transport; Fri, 17 May 2024 02:29:05 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 16 May
+ 2024 19:28:50 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 16 May
+ 2024 19:28:49 -0700
+Received: from jjang.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server id 15.2.1544.4 via Frontend Transport; Thu, 16 May
+ 2024 19:28:49 -0700
+From: Joseph Jang <jjang@nvidia.com>
+To: <shuah@kernel.org>, <alexandre.belloni@bootlin.com>, <avagin@google.com>,
+	<jjang@nvidia.com>, <amir73il@gmail.com>, <brauner@kernel.org>,
+	<mochs@nvidia.com>, <jszu@nvidia.com>, <linux-kernel@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>
+Subject: [PATCH] selftest: rtc: Add to check rtc alarm status for alarm related test
+Date: Thu, 16 May 2024 19:28:47 -0700
+Message-ID: <20240517022847.4094731-1-jjang@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10685; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=X9KneUlKZEuiBO3Oy57Z5oYstrxjiTvq+SgWw+JQKnE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmRRBoW7xduGMZ7nf0REmTzlsfS8pNgJmWGzS/L dQqDKY60W6JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZkUQaAAKCRCPgPtYfRL+ TvBCB/47ULqAvGxKQ+Jg2nrCJwAAv/x7lrwptlZ0ujtUaLwS5JEPQpQXgWCdkeFDiVliTb5Vxgr VcyUNnuCe+76iXSaVsnXhRt9fBCvbBm2oQ+znjAVc7Pa+XCZsowDTy4FZjzRZWMqz4i/emO1DHp PBT7msCspwJpILP4M8AF3Xmf2akWUfMCPkg0kUWyEibir8bdxqlM9Xm7b9pZBf8nVXsfSjxZ5sZ VjnKBvGJhuy4ChU7ySfCXi62SgotCusKsl1eWXglXXjIv7S/A/A1AQuOf9wZsquXRvKx2bVx3HB 3D7FA4FNtXDNaNG1TXGUsVYy+TM/Wapc4De6AJmIGSPrLNHi
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB77:EE_|IA0PR12MB8349:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c48c816-1edb-4fdb-332c-08dc76191fd9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230031|376005|1800799015|82310400017|36860700004|921011;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7hjjmt90gjULxT+EKyuujiTlh1qDcYvWTixfateAYk+IYrctbXWsn/xXT3hF?=
+ =?us-ascii?Q?OBQqh7syEbZogzTAZqb/sGLfHU79egJOUiw4mMY7JucilN+Yf9neewBZlY/K?=
+ =?us-ascii?Q?eFxOyruX0ElTqBiD/OP+G85eS+CkgNsuxaXJXXMtvj3uPhjCumdjmw4L6Aii?=
+ =?us-ascii?Q?1y7BovAA2FAbhNG6O4vT0o+sB/I1eFsQJmjf70BOo/x4xafbQQmn840TGCYL?=
+ =?us-ascii?Q?5BL8wIn1axDNnqemx0PNOUyRZVnKUS4pHKf5sdzUVdGeKgf0HdQWH8eARaYC?=
+ =?us-ascii?Q?SDhoGWzkJ8mO8dVoYH//w4RJxp8sGCm8i9Y4oG8qVLITks0xCf/dc7zSMNoC?=
+ =?us-ascii?Q?AKqe26pIJzWD2nVrNESVFP4mmCcbcChCv6pOofqNXZANhu3tg4UaSLZhtB9R?=
+ =?us-ascii?Q?/0ScrdeX1HAHkXos8cj5OvI3faLklYl9n++LvhLoEWh/wNba4Qcij0nx9pqC?=
+ =?us-ascii?Q?AoTaqRNJuVwW2Mz/0Z/g5TO21rpDJx3YZBAmuqRpEBhBQdJrmvDLo2ejq2iU?=
+ =?us-ascii?Q?2UfdVLL3KOaKBwIpdjsr7a+b9MulHI5huNof2t58h1909F1Z2O7OkNR/E074?=
+ =?us-ascii?Q?gn3hihBEz2SgUg9StuAzczYDLgoZuuU26SKOQjapZo6zVyC3MhoMKV8yL2lZ?=
+ =?us-ascii?Q?qNvUlHAY6DZ8bVkfrVkCrI+7LoZyEIn7fDyosJS8dEY/Zzx/L7ZeH4Py2wwG?=
+ =?us-ascii?Q?BOoS2kWU0ssHmIkKZWp4ygq+I67UKULPk8uMI4pBxYe3UddW9PgvTTZhrSXC?=
+ =?us-ascii?Q?nQilB71CfCOEOv/7d2/ktV7BLu9N+h33WFOep5j2YrvHcnzCLlQpKrENBnsz?=
+ =?us-ascii?Q?GZaPaiIPuxizdclhXU361YNFtHMSSXFlgfxV7DkWwm3WGWD2dRfXY17X0uwg?=
+ =?us-ascii?Q?my3BecmVau5pdC/L5q6cd7/r2F8uc5FMZVasEGhD74ELr+qe5tj/cPV899RH?=
+ =?us-ascii?Q?7omaAryvsulL5IRy8NZwzyU8KDWcV3z8lAYWzp1i21/hGXF0s0blhRaDmKfH?=
+ =?us-ascii?Q?KyvF1m4CgQchcpwIR+V+j0LEhckK8Ag/+ko0dkFsJ8CWbHFs4V91zzErBWnD?=
+ =?us-ascii?Q?65OwYc+8m7ZqLF+Ycm1ANf61zk+SHmRQPdiGLK5oTFqSDRh0JYUDmNzGFxtW?=
+ =?us-ascii?Q?XU1fawAwq5XMHyTLK7lXA+j1csgV9pFxOhVfhT4iGHeYQ0V0TujNp2VsgmBJ?=
+ =?us-ascii?Q?LTKvGd0h5gNb5XIY2ySBMBfrU+IeguVX0eMj7LLNAaa/RC+s84HQ+iP7cFzW?=
+ =?us-ascii?Q?qkGExH07XrGaVPzRO4q9mlxTXN4tBqs2wVDMZWLgB+UL6LKZo2dDAlnkV8z8?=
+ =?us-ascii?Q?y5mIZIP86C4k82RkPe6vG7JLrEkMAT1d3jv3Lbh0oZyJTDM+X6xZiP2MMpFP?=
+ =?us-ascii?Q?17PuCtG22TzeAt09o7c8Qj9chnOx?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(376005)(1800799015)(82310400017)(36860700004)(921011);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2024 02:29:05.8324
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c48c816-1edb-4fdb-332c-08dc76191fd9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB77.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8349
 
-These drivers don't use the driver_data member of struct i2c_device_id,
-so don't explicitly initialize this member.
+In alarm_wkalm_set and alarm_wkalm_set_minute test, they use different
+ioctl (RTC_ALM_SET/RTC_WKALM_SET) for alarm feature detection. They will
+skip testing if RTC_ALM_SET/RTC_WKALM_SET ioctl returns an EINVAL error
+code. This design may miss detecting real problems when the
+efi.set_wakeup_time() return errors and then RTC_ALM_SET/RTC_WKALM_SET
+ioctl returns an EINVAL error code with RTC_FEATURE_ALARM enabled.
 
-This prepares putting driver_data in an anonymous union which requires
-either no initialization or named designators. But it's also a nice
-cleanup on its own.
+In order to make rtctest more explicit and robust, we propose to use
+RTC_PARAM_GET ioctl interface to check rtc alarm feature state before
+running alarm related tests. If the kernel does not support RTC_PARAM_GET
+ioctl interface, we will fallback to check the presence of "alarm" in
+/proc/driver/rtc.
 
-While add it, also remove a comma after the sentinel entry in
-rtc-hym8563.
+The rtctest requires the read permission on /dev/rtc0. The rtctest will
+be skipped if the /dev/rtc0 is not readable.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Requires commit 101ca8d05913b ("rtc: efi: Enable SET/GET WAKEUP services
+as optional")
+
+Reviewed-by: Jeremy Szu <jszu@nvidia.com>
+Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+Signed-off-by: Joseph Jang <jjang@nvidia.com>
 ---
- drivers/rtc/rtc-ab-b5ze-s3.c | 2 +-
- drivers/rtc/rtc-ab-eoz9.c    | 2 +-
- drivers/rtc/rtc-bq32k.c      | 2 +-
- drivers/rtc/rtc-ds1374.c     | 2 +-
- drivers/rtc/rtc-ds1672.c     | 2 +-
- drivers/rtc/rtc-ds3232.c     | 2 +-
- drivers/rtc/rtc-em3027.c     | 2 +-
- drivers/rtc/rtc-fm3130.c     | 2 +-
- drivers/rtc/rtc-hym8563.c    | 4 ++--
- drivers/rtc/rtc-isl12022.c   | 2 +-
- drivers/rtc/rtc-max31335.c   | 2 +-
- drivers/rtc/rtc-max6900.c    | 2 +-
- drivers/rtc/rtc-nct3018y.c   | 2 +-
- drivers/rtc/rtc-pcf8523.c    | 2 +-
- drivers/rtc/rtc-pcf8563.c    | 6 +++---
- drivers/rtc/rtc-pcf8583.c    | 2 +-
- drivers/rtc/rtc-rv3029c2.c   | 4 ++--
- drivers/rtc/rtc-rx6110.c     | 2 +-
- drivers/rtc/rtc-rx8010.c     | 2 +-
- drivers/rtc/rtc-rx8581.c     | 2 +-
- drivers/rtc/rtc-s35390a.c    | 2 +-
- drivers/rtc/rtc-sd3078.c     | 2 +-
- drivers/rtc/rtc-x1205.c      | 2 +-
- 23 files changed, 27 insertions(+), 27 deletions(-)
+ tools/testing/selftests/rtc/Makefile  |  2 +-
+ tools/testing/selftests/rtc/rtctest.c | 72 +++++++++++++++++++--------
+ 2 files changed, 53 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/rtc/rtc-ab-b5ze-s3.c b/drivers/rtc/rtc-ab-b5ze-s3.c
-index 100062001831..684f9898d768 100644
---- a/drivers/rtc/rtc-ab-b5ze-s3.c
-+++ b/drivers/rtc/rtc-ab-b5ze-s3.c
-@@ -933,7 +933,7 @@ MODULE_DEVICE_TABLE(of, abb5zes3_dt_match);
- #endif
+diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
+index 55198ecc04db..6e3a98fb24ba 100644
+--- a/tools/testing/selftests/rtc/Makefile
++++ b/tools/testing/selftests/rtc/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -O3 -Wl,-no-as-needed -Wall
++CFLAGS += -O3 -Wl,-no-as-needed -Wall -I../../../../usr/include/
+ LDLIBS += -lrt -lpthread -lm
  
- static const struct i2c_device_id abb5zes3_id[] = {
--	{ "abb5zes3", 0 },
-+	{ "abb5zes3" },
- 	{ }
+ TEST_GEN_PROGS = rtctest
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 63ce02d1d5cc..aa47b17fbd1a 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -8,6 +8,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <linux/rtc.h>
++#include <stdbool.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <sys/ioctl.h>
+@@ -24,12 +25,17 @@
+ #define READ_LOOP_SLEEP_MS 11
+ 
+ static char *rtc_file = "/dev/rtc0";
++static char *rtc_procfs = "/proc/driver/rtc";
+ 
+ FIXTURE(rtc) {
+ 	int fd;
  };
- MODULE_DEVICE_TABLE(i2c, abb5zes3_id);
-diff --git a/drivers/rtc/rtc-ab-eoz9.c b/drivers/rtc/rtc-ab-eoz9.c
-index 04e1b8e93bc1..02f7d0711287 100644
---- a/drivers/rtc/rtc-ab-eoz9.c
-+++ b/drivers/rtc/rtc-ab-eoz9.c
-@@ -575,7 +575,7 @@ MODULE_DEVICE_TABLE(of, abeoz9_dt_match);
- #endif
  
- static const struct i2c_device_id abeoz9_id[] = {
--	{ "abeoz9", 0 },
-+	{ "abeoz9" },
- 	{ }
- };
- 
-diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
-index 591e42391747..7ad34539be4d 100644
---- a/drivers/rtc/rtc-bq32k.c
-+++ b/drivers/rtc/rtc-bq32k.c
-@@ -304,7 +304,7 @@ static void bq32k_remove(struct i2c_client *client)
+ FIXTURE_SETUP(rtc) {
++	if (access(rtc_file, R_OK) != 0)
++		SKIP(return, "Skipping test since cannot access %s, perhaps miss sudo",
++			 rtc_file);
++
+ 	self->fd = open(rtc_file, O_RDONLY);
  }
  
- static const struct i2c_device_id bq32k_id[] = {
--	{ "bq32000", 0 },
-+	{ "bq32000" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, bq32k_id);
-diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
-index 4a5005cb23f5..c2359eb86bc9 100644
---- a/drivers/rtc/rtc-ds1374.c
-+++ b/drivers/rtc/rtc-ds1374.c
-@@ -52,7 +52,7 @@
- #define DS1374_REG_TCR		0x09 /* Trickle Charge */
- 
- static const struct i2c_device_id ds1374_id[] = {
--	{ "ds1374", 0 },
-+	{ "ds1374" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, ds1374_id);
-diff --git a/drivers/rtc/rtc-ds1672.c b/drivers/rtc/rtc-ds1672.c
-index 641799f30baa..6e5314215d00 100644
---- a/drivers/rtc/rtc-ds1672.c
-+++ b/drivers/rtc/rtc-ds1672.c
-@@ -133,7 +133,7 @@ static int ds1672_probe(struct i2c_client *client)
+@@ -82,6 +88,36 @@ static void nanosleep_with_retries(long ns)
+ 	}
  }
  
- static const struct i2c_device_id ds1672_id[] = {
--	{ "ds1672", 0 },
-+	{ "ds1672" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, ds1672_id);
-diff --git a/drivers/rtc/rtc-ds3232.c b/drivers/rtc/rtc-ds3232.c
-index 1485a6ae51e6..dd37b055693c 100644
---- a/drivers/rtc/rtc-ds3232.c
-+++ b/drivers/rtc/rtc-ds3232.c
-@@ -586,7 +586,7 @@ static int ds3232_i2c_probe(struct i2c_client *client)
- }
++static bool is_rtc_alarm_supported(int fd)
++{
++	struct rtc_param param = { 0 };
++	int rc;
++	char buf[1024] = { 0 };
++
++	/* Validate kernel reflects unsupported RTC alarm state */
++	param.param = RTC_PARAM_FEATURES;
++	param.index = 0;
++	rc = ioctl(fd, RTC_PARAM_GET, &param);
++	if (rc < 0) {
++		/* Fallback to read rtc procfs */
++		fd = open(rtc_procfs, O_RDONLY);
++		if (fd != -1) {
++			rc = read(fd, buf, sizeof(buf));
++			close(fd);
++
++			/* Check for the presence of "alarm" in the buf */
++			if (strstr(buf, "alarm") == NULL)
++				return false;
++		} else
++			return false;
++	} else {
++		if ((param.uvalue & _BITUL(RTC_FEATURE_ALARM)) == 0)
++			return false;
++	}
++
++	return true;
++}
++
+ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
+ 	int rc;
+ 	long iter_count = 0;
+@@ -202,6 +238,9 @@ TEST_F(rtc, alarm_alm_set) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
  
- static const struct i2c_device_id ds3232_id[] = {
--	{ "ds3232", 0 },
-+	{ "ds3232" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, ds3232_id);
-diff --git a/drivers/rtc/rtc-em3027.c b/drivers/rtc/rtc-em3027.c
-index fc772eae5da5..dc1ccbc65dcb 100644
---- a/drivers/rtc/rtc-em3027.c
-+++ b/drivers/rtc/rtc-em3027.c
-@@ -129,7 +129,7 @@ static int em3027_probe(struct i2c_client *client)
- }
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
++
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+ 	ASSERT_NE(-1, rc);
  
- static const struct i2c_device_id em3027_id[] = {
--	{ "em3027", 0 },
-+	{ "em3027" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, em3027_id);
-diff --git a/drivers/rtc/rtc-fm3130.c b/drivers/rtc/rtc-fm3130.c
-index 400ce4ad0c49..f82728ebac0c 100644
---- a/drivers/rtc/rtc-fm3130.c
-+++ b/drivers/rtc/rtc-fm3130.c
-@@ -53,7 +53,7 @@ struct fm3130 {
- 	int			data_valid;
- };
- static const struct i2c_device_id fm3130_id[] = {
--	{ "fm3130", 0 },
-+	{ "fm3130" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, fm3130_id);
-diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
-index b018535c842b..63f11ea3589d 100644
---- a/drivers/rtc/rtc-hym8563.c
-+++ b/drivers/rtc/rtc-hym8563.c
-@@ -559,8 +559,8 @@ static int hym8563_probe(struct i2c_client *client)
- }
+@@ -209,11 +248,7 @@ TEST_F(rtc, alarm_alm_set) {
+ 	gmtime_r(&secs, (struct tm *)&tm);
  
- static const struct i2c_device_id hym8563_id[] = {
--	{ "hym8563", 0 },
--	{},
-+	{ "hym8563" },
-+	{}
- };
- MODULE_DEVICE_TABLE(i2c, hym8563_id);
+ 	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
  
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index 4eef7afcc8bc..6fa9a68af9d9 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -366,7 +366,7 @@ static const struct of_device_id isl12022_dt_match[] = {
- MODULE_DEVICE_TABLE(of, isl12022_dt_match);
+ 	rc = ioctl(self->fd, RTC_ALM_READ, &tm);
+ 	ASSERT_NE(-1, rc);
+@@ -260,6 +295,9 @@ TEST_F(rtc, alarm_wkalm_set) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
  
- static const struct i2c_device_id isl12022_id[] = {
--	{ "isl12022", 0 },
-+	{ "isl12022" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, isl12022_id);
-diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
-index a2441e5c2c74..9a456f537d3b 100644
---- a/drivers/rtc/rtc-max31335.c
-+++ b/drivers/rtc/rtc-max31335.c
-@@ -669,7 +669,7 @@ static int max31335_probe(struct i2c_client *client)
- }
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
++
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+ 	ASSERT_NE(-1, rc);
  
- static const struct i2c_device_id max31335_id[] = {
--	{ "max31335", 0 },
-+	{ "max31335" },
- 	{ }
- };
+@@ -269,11 +307,7 @@ TEST_F(rtc, alarm_wkalm_set) {
+ 	alarm.enabled = 1;
  
-diff --git a/drivers/rtc/rtc-max6900.c b/drivers/rtc/rtc-max6900.c
-index 31b910e4d91a..7be31fce5bc7 100644
---- a/drivers/rtc/rtc-max6900.c
-+++ b/drivers/rtc/rtc-max6900.c
-@@ -215,7 +215,7 @@ static int max6900_probe(struct i2c_client *client)
- }
+ 	rc = ioctl(self->fd, RTC_WKALM_SET, &alarm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
  
- static const struct i2c_device_id max6900_id[] = {
--	{ "max6900", 0 },
-+	{ "max6900" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, max6900_id);
-diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
-index 7a8b4de893b8..76c5f464b2da 100644
---- a/drivers/rtc/rtc-nct3018y.c
-+++ b/drivers/rtc/rtc-nct3018y.c
-@@ -567,7 +567,7 @@ static int nct3018y_probe(struct i2c_client *client)
- }
+ 	rc = ioctl(self->fd, RTC_WKALM_RD, &alarm);
+ 	ASSERT_NE(-1, rc);
+@@ -312,6 +346,9 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
  
- static const struct i2c_device_id nct3018y_id[] = {
--	{ "nct3018y", 0 },
-+	{ "nct3018y" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, nct3018y_id);
-diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
-index 98b77f790b0c..2c63c0ffd05a 100644
---- a/drivers/rtc/rtc-pcf8523.c
-+++ b/drivers/rtc/rtc-pcf8523.c
-@@ -495,7 +495,7 @@ static int pcf8523_probe(struct i2c_client *client)
- }
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
++
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+ 	ASSERT_NE(-1, rc);
  
- static const struct i2c_device_id pcf8523_id[] = {
--	{ "pcf8523", 0 },
-+	{ "pcf8523" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, pcf8523_id);
-diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
-index ea82b89d8929..af140bde6b53 100644
---- a/drivers/rtc/rtc-pcf8563.c
-+++ b/drivers/rtc/rtc-pcf8563.c
-@@ -589,9 +589,9 @@ static int pcf8563_probe(struct i2c_client *client)
- }
+@@ -319,11 +356,7 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
+ 	gmtime_r(&secs, (struct tm *)&tm);
  
- static const struct i2c_device_id pcf8563_id[] = {
--	{ "pcf8563", 0 },
--	{ "rtc8564", 0 },
--	{ "pca8565", 0 },
-+	{ "pcf8563" },
-+	{ "rtc8564" },
-+	{ "pca8565" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, pcf8563_id);
-diff --git a/drivers/rtc/rtc-pcf8583.c b/drivers/rtc/rtc-pcf8583.c
-index a7e0fc360b6a..652b9dfa7566 100644
---- a/drivers/rtc/rtc-pcf8583.c
-+++ b/drivers/rtc/rtc-pcf8583.c
-@@ -297,7 +297,7 @@ static int pcf8583_probe(struct i2c_client *client)
- }
+ 	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
  
- static const struct i2c_device_id pcf8583_id[] = {
--	{ "pcf8583", 0 },
-+	{ "pcf8583" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, pcf8583_id);
-diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
-index 4a81feeb00ff..83331d1fcab0 100644
---- a/drivers/rtc/rtc-rv3029c2.c
-+++ b/drivers/rtc/rtc-rv3029c2.c
-@@ -807,8 +807,8 @@ static int rv3029_i2c_probe(struct i2c_client *client)
- }
+ 	rc = ioctl(self->fd, RTC_ALM_READ, &tm);
+ 	ASSERT_NE(-1, rc);
+@@ -370,6 +403,9 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+ 	ASSERT_NE(-1, self->fd);
  
- static const struct i2c_device_id rv3029_id[] = {
--	{ "rv3029", 0 },
--	{ "rv3029c2", 0 },
-+	{ "rv3029" },
-+	{ "rv3029c2" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, rv3029_id);
-diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
-index 834274db8c3f..6f4cde803f3e 100644
---- a/drivers/rtc/rtc-rx6110.c
-+++ b/drivers/rtc/rtc-rx6110.c
-@@ -451,7 +451,7 @@ static const struct acpi_device_id rx6110_i2c_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, rx6110_i2c_acpi_match);
++	if (!is_rtc_alarm_supported(self->fd))
++		SKIP(return, "Skipping test since alarms are not supported.");
++
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+ 	ASSERT_NE(-1, rc);
  
- static const struct i2c_device_id rx6110_i2c_id[] = {
--	{ "rx6110", 0 },
-+	{ "rx6110" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, rx6110_i2c_id);
-diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
-index f44e212c07de..2b6198d1cf81 100644
---- a/drivers/rtc/rtc-rx8010.c
-+++ b/drivers/rtc/rtc-rx8010.c
-@@ -50,7 +50,7 @@
- #define RX8010_ALARM_AE		BIT(7)
+@@ -379,11 +415,7 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+ 	alarm.enabled = 1;
  
- static const struct i2c_device_id rx8010_id[] = {
--	{ "rx8010", 0 },
-+	{ "rx8010" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, rx8010_id);
-diff --git a/drivers/rtc/rtc-rx8581.c b/drivers/rtc/rtc-rx8581.c
-index 48efd61a114d..b18c12887bdc 100644
---- a/drivers/rtc/rtc-rx8581.c
-+++ b/drivers/rtc/rtc-rx8581.c
-@@ -307,7 +307,7 @@ static int rx8581_probe(struct i2c_client *client)
- }
+ 	rc = ioctl(self->fd, RTC_WKALM_SET, &alarm);
+-	if (rc == -1) {
+-		ASSERT_EQ(EINVAL, errno);
+-		TH_LOG("skip alarms are not supported.");
+-		return;
+-	}
++	ASSERT_NE(-1, rc);
  
- static const struct i2c_device_id rx8581_id[] = {
--	{ "rx8581", 0 },
-+	{ "rx8581" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, rx8581_id);
-diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index 90a3028ac574..2d6b655a4b25 100644
---- a/drivers/rtc/rtc-s35390a.c
-+++ b/drivers/rtc/rtc-s35390a.c
-@@ -50,7 +50,7 @@
- #define S35390A_INT2_MODE_PMIN		(BIT(3) | BIT(2)) /* INT2FE | INT2ME */
- 
- static const struct i2c_device_id s35390a_id[] = {
--	{ "s35390a", 0 },
-+	{ "s35390a" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, s35390a_id);
-diff --git a/drivers/rtc/rtc-sd3078.c b/drivers/rtc/rtc-sd3078.c
-index 7760394ccd2d..fe27b54beaad 100644
---- a/drivers/rtc/rtc-sd3078.c
-+++ b/drivers/rtc/rtc-sd3078.c
-@@ -201,7 +201,7 @@ static int sd3078_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id sd3078_id[] = {
--	{"sd3078", 0},
-+	{ "sd3078" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, sd3078_id);
-diff --git a/drivers/rtc/rtc-x1205.c b/drivers/rtc/rtc-x1205.c
-index 807f953ae0ae..4bcd7ca32f27 100644
---- a/drivers/rtc/rtc-x1205.c
-+++ b/drivers/rtc/rtc-x1205.c
-@@ -663,7 +663,7 @@ static void x1205_remove(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id x1205_id[] = {
--	{ "x1205", 0 },
-+	{ "x1205" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, x1205_id);
-
-base-commit: 82d92a9a1b9ea0ea52aff27cddd05009b4edad49
+ 	rc = ioctl(self->fd, RTC_WKALM_RD, &alarm);
+ 	ASSERT_NE(-1, rc);
 -- 
-2.43.0
+2.34.1
 
 
