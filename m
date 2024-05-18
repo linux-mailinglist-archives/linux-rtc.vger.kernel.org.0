@@ -1,274 +1,316 @@
-Return-Path: <linux-rtc+bounces-1196-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1197-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1F8E8C8ED5
-	for <lists+linux-rtc@lfdr.de>; Sat, 18 May 2024 02:17:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97CBB8C8F75
+	for <lists+linux-rtc@lfdr.de>; Sat, 18 May 2024 05:29:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FCE9282931
-	for <lists+linux-rtc@lfdr.de>; Sat, 18 May 2024 00:17:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DDBB1F21F3E
+	for <lists+linux-rtc@lfdr.de>; Sat, 18 May 2024 03:29:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF331FBA;
-	Sat, 18 May 2024 00:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04954C96;
+	Sat, 18 May 2024 03:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UStHqVo3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rjoNvqOz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68389637
-	for <linux-rtc@vger.kernel.org>; Sat, 18 May 2024 00:17:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C041A2C03;
+	Sat, 18 May 2024 03:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715991423; cv=none; b=ujy3WcrPDv8XPoWxBCOHaceWctpwO4cio3U+ARl4M8paSHAEn3p7IXnwvGYMUePt+luc5X+mp42P0XhkNlw3T5WWBVMmubwQEU7D0AGtMEw1cWRxOvqz6AFD9EHjiTG4QxgYw861OalA+Jyy9at96TYbaAevDUd73mMEq6fmaPU=
+	t=1716002978; cv=none; b=RicBhEVF2uIsn08zrPJAvlUjpiFBSSvoXA3LkvXwVMZdcgRg/KdEHZxoc1RvwDGlvfq8P78w5hswuFtnGhACuLdr+wS7ddaZOgS/yPGoa6l1YPA9C4DJ7y3NSnyPhBe8o3uxDMBFG525r571iE0FTIUA2jTXWPpzr2ao09ewOlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715991423; c=relaxed/simple;
-	bh=psb/9cAnhp+Xzaq8lXVTJ+5ogfgNeGdZpdDamrOEPi8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EEEY/LEvojZo/FAo/7OpPau61sxnAbbfpG/s0emEOWVybbVF4eiBIDbm1yOmrhwE/ZbOR2NdwBUSleZs4Lgni8kiEnS4Qp8sz+KRwET8miQdvCOJzEoR3FgjKu4MJqatI+vLJuL9MdN4yUA+RWvADKV4WEKNAq0I97f2GR68zrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=UStHqVo3; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1ee38966529so8205395ad.1
-        for <linux-rtc@vger.kernel.org>; Fri, 17 May 2024 17:17:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715991422; x=1716596222; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=irkVL93e2r7C0Hy5+trw8pmsG8779sgzCHeX9n3CiN0=;
-        b=UStHqVo3wPfQ6HcIsDMF5je4Krpa6DYNHvc+Mt2pIrNdhO+8Xg+4dyqNWpt+5z7h9B
-         OnhYLqPbmpstanrboHbljEM5WcDuZFHRrsmpr6eY+EMv3SOI+9vqApWyI0gbywmC5Ayo
-         /qrUvWWX6cr9JfMnBPf9vcObNemy1ZLY+W90w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715991422; x=1716596222;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=irkVL93e2r7C0Hy5+trw8pmsG8779sgzCHeX9n3CiN0=;
-        b=v+gP1vJQbeQxiESYty0ai66zl5HIdL30JYi04/hQEcSpYUsAyo4lwxQIrFwX+rTmEf
-         gVrlMrGtTxZtZ05rpc6ViB2yZzi91pVms49BnB0JZsLyHUlG9dcgnRqurqryJyJf96s1
-         CTbrIUzVdsyCVMmKvXjNtTwUmi8mzZqq0QgI2TIctfGNNKtVfqbIIEV4ZaWhJt28CQ3X
-         Ril97hDQRQm1Z5cBMvILgHIkMGgoWbprhTnPHuqmGGOIRglxhdCUIV/VbrOGCm7clJqg
-         KswIscuoH0dbr0KZ6ZyBd6NBbnmT/j8QsITFUatnbM2sOuVvxsBUAZyK0xwiXg6W4rEx
-         W4+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUzBMTim8/gpWDlyVuyEKmYq9uxq/VjXAFdXUXNzFFUX8bbVsu9FPFAjlFQ8sqs1QGlgJzAcUw/YkR/ehGFa7GJdA1JdPxTVISZ
-X-Gm-Message-State: AOJu0Yx7qDFe99Is5P06ww9gdB0ZtWxCo6WI0A57OfNPnZRwaeXVIJVa
-	+vSZVPaUJh/a1cehusdXEKoyIa1YLPUFGaFuPo8VU7nkEgeMBwBKd1o/VFkwiA==
-X-Google-Smtp-Source: AGHT+IGFPQYGhMI5mu4WIG762rhacma10jrth4Odmj51T3CbNjI91oKmi+chX3KkEDy/JeJ4Brsldg==
-X-Received: by 2002:a17:902:e752:b0:1e5:5760:a6c1 with SMTP id d9443c01a7336-1f2ed2ebe08mr7151825ad.21.1715991421580;
-        Fri, 17 May 2024 17:17:01 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bad9da4sm162348915ad.107.2024.05.17.17.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 May 2024 17:17:00 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-rtc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] selftests: rtc: rtctest: Do not open-code TEST_HARNESS_MAIN
-Date: Fri, 17 May 2024 17:16:58 -0700
-Message-Id: <20240518001655.work.053-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1716002978; c=relaxed/simple;
+	bh=kkyl4Oabc5KFglNOe80Nz61jeWKai1MJfXMkEUXwnmU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b1kDV2Zn9OHarVbYodo8HNMgC0zbwriS2pfF0HaJKfFqmJCdzCN8dwsOD01XoGabxXbQh9p70HnGCQQgwaX+jUZ4pHqVF0qBORPNfDdXfpOMYkIjDZC2clgVxdE1BbmccxA1dS+LNQb2RVJugbRtHO1qq8ee8HpnsCqdhMaPfrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rjoNvqOz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DD6C113CC;
+	Sat, 18 May 2024 03:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716002978;
+	bh=kkyl4Oabc5KFglNOe80Nz61jeWKai1MJfXMkEUXwnmU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rjoNvqOzo3HdnCeU+KmVqyS7dlVzyuiOyXi+GfeZT+PrEdOGm5eXgAKqNBDjCP74i
+	 KdN3NnxQRn1nlaoug/cLc+tKQtZPi3M3u3wr3tz/cg6DJ4FygUGUNzwquCe873tVFF
+	 KnyYkspXItQ8KzSNo3hAcGrC0ugmx6+45rNT0iLJ8ERFnZQHABzMCWtO1igPTr9QX1
+	 D7ND6kmhn6HxddN7fuB1ZETN6kKhjmNlYtyMaCkaCv1bpMqGXecXRK06lr57C8Y15E
+	 +u1bWRz8msvvNg7DbCgQ/7pu+0ll9aSJZrPlvavVisdii/k12lVdzq9RlcwzV4yKuW
+	 ShT7OB+k3qYdQ==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51fcb7dc722so2402308e87.1;
+        Fri, 17 May 2024 20:29:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUpD4v8a+xMIMnnTahEfVSRuTTwy9NYDIS9AlBJ8RtK5rNfFyFjqohjw4lBNorJ64W0UEpKSqMWBusee1ZFFU+Deg3UPe5zFjvky+gG1y778ilbl6uq0N/ULpMD1IBKENOAvoprCbW1ZRNSQ+zrwFxZieTSMxmJwwTDq/+78832lGTVx5gZi3LNXJvTqenNcDoHpv8wsqATOJNed9UVcL4piF2Qkr7z9lavF/uy5hPaKKDoYl3ILo7t4h1M2U8I85lLv4jNbTTFs489lnjZ01s=
+X-Gm-Message-State: AOJu0YwamY5BkZLPU4VsvnCiXgGbFMcwDn6lkadrlrYnzA2AgiiveVjv
+	LAHpJTCOo69+QdwXq7MgP7Ax6Ke+9kFXSY98NaduHh4nq+pnB8QBC62CicSVVjaKRd4EIhOnhFd
+	VBDnnIYOMVjujSWKq7qa3as5Vj3Y=
+X-Google-Smtp-Source: AGHT+IHjKSQhzhnm8QEyFc5lZeQyVnNhe9kiBHVN3rnespbtU+DOI88/Xq5mDvMdVlJFl+tDAt3va5hG2q/WRWWlhDk=
+X-Received: by 2002:ac2:514d:0:b0:51f:5f6d:3fba with SMTP id
+ 2adb3069b0e04-52407cddc4amr204791e87.27.1716002976823; Fri, 17 May 2024
+ 20:29:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5223; i=keescook@chromium.org;
- h=from:subject:message-id; bh=psb/9cAnhp+Xzaq8lXVTJ+5ogfgNeGdZpdDamrOEPi8=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmR/N6s/j5oZN920PNFTll/WpzqmtBDGQzJiKQO
- WN+Gr07bhaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZkfzegAKCRCJcvTf3G3A
- JjXID/wMzWXl2uBgZBj8D9wl0hC56WI14SrF0DqQnjVVOg7LoM/vvq3w1s4e2+ZXB/S3ILG7bmj
- MU6ATJTr3PXZ8D2KLL0HjPnjAHXetcJ6zsbNbfuPsydkqbAt35MDp0uoAePnq3vEzRWLZdnMpCX
- 75F/1XL6Nm9f4xFfmq9chfi5Z47h0Zt+UyWhs+udLvtadqk3M6nz3xVg67N9N8RvmpqgAOXVAM8
- wL4V3CxKhiamcqGuaUmOqQG5ISBPxUPm56WMM/FD524JaiRRv0YKQPU71Xf5wqfh+2idJvoNIG7
- 1F3KWiieBCi0Hyyy1l8GivFac0+RbslIiHtS6oC4XtqnLn1M1FpsaoeRT3oAYTMaDa4ch8t8wnB
- GtUxMnCShZyT+DU8/x4WYr2wP1LzT4cEIktWX/Y7uMS0Y4zNDwJCN/lqQAUkZy8nOtFxNvvRGaP
- DszsKzBQQiBFpq4msqQn8TK2baNbnr97VkD3hu553LBpJlLIIW2AFZj2vWM+8NJE50JOKv6LpY7
- Sqh7k3tUNxdyzpC8rLKRzXj16sWpdHEohdTmzKcjSk7N/phEwMhraCx7Y1Rr0q59ASm4fx1Udzj
- 9vUjis3AFvsmdsm1kyESB1sGYgAKnQRnTdWgjmmilHeC/x6DG+U3mELMcmhq+EBtFhhhmD0Nxut
- uzugFPC 4cjHaSJg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20240517114506.1259203-1-masahiroy@kernel.org>
+ <20240517114506.1259203-2-masahiroy@kernel.org> <202405171621.A178606D8@keescook>
+In-Reply-To: <202405171621.A178606D8@keescook>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 18 May 2024 12:29:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARpvZ5AeH9HXFPupD_Jj0Gw4D6MZ5iR7uvVwnm9nSg9CA@mail.gmail.com>
+Message-ID: <CAK7LNARpvZ5AeH9HXFPupD_Jj0Gw4D6MZ5iR7uvVwnm9nSg9CA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests: harness: remove unneeded __constructor_order_last()
+To: Kees Cook <keescook@chromium.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	David Hildenbrand <david@redhat.com>, Janosch Frank <frankja@linux.ibm.com>, Jiri Kosina <jikos@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Argument processing is specific to the test harness code. Any optional
-information needs to be passed via environment variables. Move alternate
-path to the RTC_DEV environment variable. Also do not open-code
-TEST_HARNESS_MAIN because its definition may change.
+On Sat, May 18, 2024 at 8:26=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Fri, May 17, 2024 at 08:45:05PM +0900, Masahiro Yamada wrote:
+> > __constructor_order_last() is unneeded.
+> >
+> > If __constructor_order_last() is not called on reverse-order systems,
+> > __constructor_order will remain 0 instead of being set to
+> > _CONSTRUCTOR_ORDER_BACKWARD (=3D -1).
+> >
+> > __LIST_APPEND() will still take the 'else' branch, so there is no
+> > difference in the behavior.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  .../selftests/drivers/s390x/uvdevice/test_uvdevice.c   |  6 ------
+> >  tools/testing/selftests/hid/hid_bpf.c                  |  6 ------
+> >  tools/testing/selftests/kselftest_harness.h            | 10 +---------
+> >  tools/testing/selftests/rtc/rtctest.c                  |  7 -------
+> >  4 files changed, 1 insertion(+), 28 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevi=
+ce.c b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+> > index ea0cdc37b44f..7ee7492138c6 100644
+> > --- a/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+> > +++ b/tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+> > @@ -257,12 +257,6 @@ TEST_F(attest_fixture, att_inval_addr)
+> >       att_inval_addr_test(&self->uvio_attest.meas_addr, _metadata, self=
+);
+> >  }
+> >
+> > -static void __attribute__((constructor)) __constructor_order_last(void=
+)
+> > -{
+> > -     if (!__constructor_order)
+> > -             __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWARD;
+> > -}
+> > -
+> >  int main(int argc, char **argv)
+> >  {
+> >       int fd =3D open(UV_PATH, O_ACCMODE);
+> > diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/self=
+tests/hid/hid_bpf.c
+> > index 2cf96f818f25..f47feef2aced 100644
+> > --- a/tools/testing/selftests/hid/hid_bpf.c
+> > +++ b/tools/testing/selftests/hid/hid_bpf.c
+> > @@ -853,12 +853,6 @@ static int libbpf_print_fn(enum libbpf_print_level=
+ level,
+> >       return 0;
+> >  }
+> >
+> > -static void __attribute__((constructor)) __constructor_order_last(void=
+)
+> > -{
+> > -     if (!__constructor_order)
+> > -             __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWARD;
+> > -}
+> > -
+> >  int main(int argc, char **argv)
+> >  {
+> >       /* Use libbpf 1.0 API mode */
+> > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testin=
+g/selftests/kselftest_harness.h
+> > index ba3ddeda24bf..60c1cf5b0f0d 100644
+> > --- a/tools/testing/selftests/kselftest_harness.h
+> > +++ b/tools/testing/selftests/kselftest_harness.h
+> > @@ -444,12 +444,6 @@
+> >   * Use once to append a main() to the test file.
+> >   */
+> >  #define TEST_HARNESS_MAIN \
+> > -     static void __attribute__((constructor)) \
+> > -     __constructor_order_last(void) \
+> > -     { \
+> > -             if (!__constructor_order) \
+> > -                     __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWA=
+RD; \
+> > -     } \
+> >       int main(int argc, char **argv) { \
+> >               return test_harness_run(argc, argv); \
+> >       }
+>
+> This won't work. All constructors are executed, so we have to figure
+> out which is run _first_. Switching this to a boolean means we gain no
+> information about ordering: it'll always be set to "true".
 
-Additionally, setup checking can be done in the FIXTURE_SETUP(). With
-this adjustment, also improve the error reporting when the device cannot
-be opened.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/rtc/Makefile  |  2 +-
- tools/testing/selftests/rtc/rtctest.c | 66 +++++----------------------
- 2 files changed, 13 insertions(+), 55 deletions(-)
 
-diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
-index 55198ecc04db..654f9d58da3c 100644
---- a/tools/testing/selftests/rtc/Makefile
-+++ b/tools/testing/selftests/rtc/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--CFLAGS += -O3 -Wl,-no-as-needed -Wall
-+CFLAGS += -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
- LDLIBS += -lrt -lpthread -lm
- 
- TEST_GEN_PROGS = rtctest
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 63ce02d1d5cc..41cfefcc20e1 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -30,7 +30,18 @@ FIXTURE(rtc) {
- };
- 
- FIXTURE_SETUP(rtc) {
-+	char *alternate = getenv("RTC_DEV");
-+
-+	if (alternate)
-+		rtc_file = alternate;
-+
- 	self->fd = open(rtc_file, O_RDONLY);
-+
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	EXPECT_NE(-1, self->fd) {
-+		TH_LOG("%s: %s\n", rtc_file, strerror(errno));
-+	}
- }
- 
- FIXTURE_TEARDOWN(rtc) {
-@@ -41,10 +52,6 @@ TEST_F(rtc, date_read) {
- 	int rc;
- 	struct rtc_time rtc_tm;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	/* Read the RTC time/date */
- 	rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
- 	ASSERT_NE(-1, rc);
-@@ -88,10 +95,6 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
- 	struct rtc_time rtc_tm;
- 	time_t start_rtc_read, prev_rtc_read;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	TH_LOG("Continuously reading RTC time for %ds (with %dms breaks after every read).",
- 	       READ_LOOP_DURATION_SEC, READ_LOOP_SLEEP_MS);
- 
-@@ -126,10 +129,6 @@ TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
- 	int i, rc, irq = 0;
- 	unsigned long data;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	/* Turn on update interrupts */
- 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
- 	if (rc == -1) {
-@@ -155,10 +154,6 @@ TEST_F(rtc, uie_select) {
- 	int i, rc, irq = 0;
- 	unsigned long data;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	/* Turn on update interrupts */
- 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
- 	if (rc == -1) {
-@@ -198,10 +193,6 @@ TEST_F(rtc, alarm_alm_set) {
- 	time_t secs, new;
- 	int rc;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
- 	ASSERT_NE(-1, rc);
- 
-@@ -256,10 +247,6 @@ TEST_F(rtc, alarm_wkalm_set) {
- 	time_t secs, new;
- 	int rc;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
- 	ASSERT_NE(-1, rc);
- 
-@@ -308,10 +295,6 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
- 	time_t secs, new;
- 	int rc;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
- 	ASSERT_NE(-1, rc);
- 
-@@ -366,10 +349,6 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
- 	time_t secs, new;
- 	int rc;
- 
--	if (self->fd == -1 && errno == ENOENT)
--		SKIP(return, "Skipping test since %s does not exist", rtc_file);
--	ASSERT_NE(-1, self->fd);
--
- 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
- 	ASSERT_NE(-1, rc);
- 
-@@ -410,25 +389,4 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
- 	ASSERT_EQ(new, secs);
- }
- 
--static void __attribute__((constructor))
--__constructor_order_last(void)
--{
--	if (!__constructor_order)
--		__constructor_order = _CONSTRUCTOR_ORDER_BACKWARD;
--}
--
--int main(int argc, char **argv)
--{
--	switch (argc) {
--	case 2:
--		rtc_file = argv[1];
--		/* FALLTHROUGH */
--	case 1:
--		break;
--	default:
--		fprintf(stderr, "usage: %s [rtcdev]\n", argv[0]);
--		return 1;
--	}
--
--	return test_harness_run(argc, argv);
--}
-+TEST_HARNESS_MAIN
--- 
-2.34.1
+It will be set to "true" eventually,
+but __LIST_APPEND() still sees "false"
+on backward-order systems.
 
+
+
+
+Let's see how the following is expanded.
+
+
+ #include "kselftest_harness.h"
+
+ TEST(foo) { ... }
+
+ TEST(bar) { ... }
+
+
+
+You will get something as follows:
+
+
+
+void _attribute__((constructor)) __constructor_order_first(void)
+{
+        __constructor_order_forward =3D true;
+}
+
+void __attribute__((constructor)) _register_foo(void)
+{
+      __register_test(&foo_object); // call __LIST_APPEND() for foo
+}
+
+
+void __attribute__((constructor)) _register_bar(void)
+{
+      __register_test(&bar_object); // call __LIST_APPEND() for bar
+}
+
+
+
+
+On forward-order systems, the constructors are executed in this order:
+
+
+  __constructor_order_first() -> _register_foo() -> _register_bar()
+
+
+So, __LIST_APPEND will see "true".
+
+
+
+
+On backward-order systems, the constructors are executed in this order:
+
+
+  _register_bar() -> _register_foo() -> __constructor_order_first()
+
+
+So, __LIST_APPEND will see "false" since __construtor_order_first()
+has not been called yet.
+
+
+
+Correct me if I am wrong.
+
+
+
+
+> We need to
+> detect which constructor sets it first so that we can walk the lists
+> (that are built via all the constructors in between)
+
+
+You have a wrong assumption here.
+
+TEST() macros may not be placed in-between.
+
+
+   #include "kselftest_harness.h"
+
+   TEST_HARNESS_MAIN
+   TEST(foo) { ... }
+   TEST(bar) { ... }
+
+
+This is perfectly correct code, because there is no reason to force
+"Please put TEST_HARNESS_MAIN at the end of the file".
+
+It is just a "coding style".
+
+
+If the test code were written in such style with
+the current harness implementation, __constructor_order
+would be zero instead of _CONSTRUCTOR_ORDER_BACKWARD
+on backward-order systems.
+__LIST_APPEND() still works correctly, though.
+
+
+
+
+
+
+
+
+
+> >  #endif  /* __KSELFTEST_HARNESS_H */
+> > diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/self=
+tests/rtc/rtctest.c
+> > index 63ce02d1d5cc..9647b14b47c5 100644
+> > --- a/tools/testing/selftests/rtc/rtctest.c
+> > +++ b/tools/testing/selftests/rtc/rtctest.c
+> > @@ -410,13 +410,6 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+> >       ASSERT_EQ(new, secs);
+> >  }
+> >
+> > -static void __attribute__((constructor))
+> > -__constructor_order_last(void)
+> > -{
+> > -     if (!__constructor_order)
+> > -             __constructor_order =3D _CONSTRUCTOR_ORDER_BACKWARD;
+> > -}
+> > -
+> >  int main(int argc, char **argv)
+> >  {
+> >       switch (argc) {
+>
+> A better question is why these tests are open-coding the execution of
+> "main"...
+
+
+
+It is open __unnecessary__ coding.
+
+
+
+If __constructor_order_last() had not existed in the first place,
+such things would not have occured.
+
+
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
 
