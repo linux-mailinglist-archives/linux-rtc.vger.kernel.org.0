@@ -1,102 +1,179 @@
-Return-Path: <linux-rtc+bounces-1226-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1227-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC1188D4D19
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 May 2024 15:50:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E82FD8D5099
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 May 2024 19:10:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 969B8289742
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 May 2024 13:50:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2505A1C2189B
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 May 2024 17:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D89A186E38;
-	Thu, 30 May 2024 13:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="g2sQEk/E"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E078E4436C;
+	Thu, 30 May 2024 17:10:31 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECF8186E39
-	for <linux-rtc@vger.kernel.org>; Thu, 30 May 2024 13:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6963F41A94;
+	Thu, 30 May 2024 17:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717076834; cv=none; b=mvVobZeYu3xrQz216Fbvv7ZI/Thjn0SNJ6jEq6Peuz9C3FoWTDB+oc9Z11sznyWultvT0vg138+Qze17eS3lj0lwbJrORcGlHQ2Yo79U9QPazwjaN92hCXDvI3wPMw3cFvbSVv6XLkdT+w1+Jj6fTdHXViq1cxl2PqRddD+qBgI=
+	t=1717089031; cv=none; b=jyc+NkEFmcWYauUT/JxwkYvuyf643ClEdXMDpyYZ4r0Gbm9GijfDy7VGWmznAAPgBgOGgtPVnf6TAra63Gnbgr3jyVX68UZ5ybZJNlm96iiJnZcPDx/WdlqjuVdgp2Sg2KUJ23+c3Z7CuqG9/ey9QkrRBa2XirGfXzckMGMTryA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717076834; c=relaxed/simple;
-	bh=9ye2wqPTLgZ3v8FFSRNCMxgsja3q/h8ax/CD6OS+8jU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=PAXDIUVB+5OeBVf8AVH984zYmzWxZVngcr4yh60je1GTecIjcJU3TknLxCPirmSM8RbbuGE+Z/nAIzQSGK4ciKmYbhWWcVuce+QmQTOhKPTrgekN6DnpgOJ47dn69m0hRO6y8Qp2IWycr4WF/h2EqqX2QdR2wl+rHKxiDii/Um4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=g2sQEk/E; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id E40D5A06AD;
-	Thu, 30 May 2024 15:47:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=+6gtvOOMtg++bUJUZyBG
-	2yMUKtl8hONpobWZYHkU90M=; b=g2sQEk/Ei56YiEp0QOkD2zxaRKYNWylt5saW
-	TE4NVOnB2IQtGhbMvJuoaFSZQAZNy611Fc5Pg2MbE/uRVFRW5qGm+OMGFrHRIFSI
-	d/ZiWUhT9hEI1gxbxIg0G4V7glc2t0Yhc9Ifd//n6Oc3Dle4BuX4U4iuLnN8ARLB
-	OZgtoYWOhdNcqK8yTLKf7k9tsQYDeAGJQp8ISrFqSPiRY9B+2u1MPTwTGY1kVSQe
-	1kosD56i+f6iGTxo+im7oQQt3bX9QX5XD9+QedAhuZi4yWmL97JI3q5NW6UCXhDU
-	zUXxykBLp/wKTe4i1AeOxLUAhJEZfbDW715/klNTVmQBHttBIOTr27oAazByls0R
-	/nq8D2exMmOpQpGMccVte9s/wmruTRGOjePzvl2cGx+qMEg2IEk1HjLFmhFsUCKU
-	eBtGQkeylJcGpHIBwguorLtc+DFC9vOBc6iNlGWIhW4KnYD2T6PrlzFC+Oe6aqBK
-	/u0lk1eJ2A7bMNqnVVDyq5EO32NyK1HsYwdq8bCGC0FCq6EBYU0zVFI7eeLQ5d+u
-	+s/m7nQ3NghZuPXsi1BsGjT8AVojZo8yh+9U29W57Yw/PSbdZm8DmqYHbE19u3bD
-	DqlWXId9fWYk8daVc9XjaFJ2L6C+SWzRey9fDXaMR4hDlmEX341C0Pa923IwkxxL
-	55+VSb8=
-Message-ID: <4947fa9b-a8bf-40b8-83ce-d365cf917a95@prolan.hu>
-Date: Thu, 30 May 2024 15:47:01 +0200
+	s=arc-20240116; t=1717089031; c=relaxed/simple;
+	bh=0Hx1kCDf4CrTRIi/fOADLuEHpwsUT9fMTzXzqZC5WgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xb9gxdEtufVo6H3X9nHtZr6PMLvOOdFGAjYzJC9K5q8RrN/JKJ2DmvWp81TBlcT9A7z8xFp/KOFlFX9THG6Oxymnp+lh3CnbFV8L/5yJOS1x/++EXkIyNuNkrzv0Ind6ksj2C5XxNkb1KJ28GThJhbURPiJBYcdJ8D/jVsFn4pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF5AA339;
+	Thu, 30 May 2024 10:10:51 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 358163F792;
+	Thu, 30 May 2024 10:10:26 -0700 (PDT)
+Date: Thu, 30 May 2024 18:10:22 +0100
+From: Andre Przywara <andre.przywara@arm.com>
+To: Alois Fertl <a.fertl@t-online.de>
+Cc: a.zummo@towertech.it, alexandre.belloni@bootlin.com, wens@csie.org,
+ jernej.skrabec@gmail.com, samuel@sholland.org, linux-rtc@vger.kernel.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/1] drivers/rtc: rtc-sun6i: AutoCal Internal OSC
+Message-ID: <20240530181022.6fbc5a7d@donnerap.manchester.arm.com>
+In-Reply-To: <20240522182826.6824-1-a.fertl@t-online.de>
+References: <20240522182826.6824-1-a.fertl@t-online.de>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] rtc: Add UIE handling ability to rtc_class_ops
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC: <linux-rtc@vger.kernel.org>
-References: <20240528161314.404383-2-csokas.bence@prolan.hu>
- <202405281756543dfd3a39@mail.local>
- <81184944-5012-41da-a596-220b74437552@prolan.hu>
- <20240530103532e6d4f421@mail.local>
-Content-Language: en-US
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <20240530103532e6d4f421@mail.local>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2945A1295763736B
 
-Hi!
+On Wed, 22 May 2024 20:28:26 +0200
+Alois Fertl <a.fertl@t-online.de> wrote:
 
-On 5/30/24 12:35, Alexandre Belloni wrote:
-> Well, you didn't answer my question which is why do you need UIE and
-> especially UIE from the RTC? Using the timer emulation is probably what
-> you want because it is in sync with your system time.
+> I have a M98-8K PLUS Magcubic TV-Box based on the Allwinner H618 SOC.
+> On board is a Sp6330 wifi/bt module that requires a 32kHz clock to
+> operate correctly. Without this change the clock from the SOC is
+> ~29kHz and BT module does not start up. The patch enables the Internal
+> OSC Clock Auto Calibration of the H616/H618 which than provides the
+> necessary 32kHz and the BT module initializes successfully.
+> Add a flag and set it for H6.
+> Also the code is developed on the H618 board it only modifies the H6 as
+> there is no support for H616/H618 in the current code.
 
-We set up `chrony` to use UI events as a time reference. Upon startup, 
-`chrony` opens the RTC with UIE_ON, reads the initial RTC value on the 
-first transition, then keeps the system clock in sync with the RTC using 
-the interrupt signal. So we want to synchronize the system time to UIE, 
-not the other way around.
+I am a bit confused: so this patch doesn't fix your problem then, because
+the code you touch is not used on the H616/H618?
+Actually I would have expected your patch to only change
+drivers/clk/sunxi-ng/ccu-sun6i-rtc.c, since that's the only RTC clock
+driver relevant for the H616.
 
- >> So my question would instead be: what was the rationale of removing 
-it in
- >> the first place?
+> Signed-off-by: Alois Fertl <a.fertl@t-online.de>
+> ---
+> 
+> v1->v2
+> - add flag and activate for H6 AND H616
+> 
+> v2->v3
+> - correct findings from review
+> 
+> v3->v4
+> - adjust to mainline tree
+> 
+> I have also tried to test this using the new driver in sunxi-ng
+> manually injecting the reverted patch
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=60d9f050da63b
 
-I was genuinely asking, because I couldn't find the original letter, 
-only subsequent ones from 2-4 years ago, removing bits and pieces from 
-individual RTC device drivers.
+So this was done on a H6 device? Because out of the box rtc-sun6i.c is
+used on the H6 only, and ccu-sun6i-rtc.c is only used on the H616.
 
-Bence
+Maybe I am missing something here ...
+
+> The code in drivers/clk/sunxi-ng/ccu-sun6i-rtc.c is being called and it
+> initializes the relevant registers to the same values as the old driver,
+> but the change ends up with a system that often hangs during booting and
+> only ocasionally reaches the login state (one out of 10).
+> The main difference I see adhoc is that the old drivers init is done
+> using CLK_OF_DECLARE_DRIVER so initialization is done very early.
+> The new driver does the initialisation via probe which is quite some
+> time later.
+> Can't tell if this is the cause for the problems.
+
+That sounds odd, can you post your changes somewhere?
+
+Generally, without a proper problem and without further testing, I would
+not like to touch the H6 RTC code needlessly.
+For the H616 we have a concrete problem at hand, that justifies a change,
+also it's the proper driver for new devices, so that's where the change
+should happen.
+
+Cheers,
+Andre
+
+> 
+> ---
+>  drivers/rtc/rtc-sun6i.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index 8e0c66906..57aa52d3b 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -42,6 +42,11 @@
+>  
+>  #define SUN6I_LOSC_CLK_PRESCAL			0x0008
+>  
+> +#define SUN6I_LOSC_CLK_AUTO_CAL			0x000c
+> +#define SUN6I_LOSC_CLK_AUTO_CAL_16MS		BIT(2)
+> +#define SUN6I_LOSC_CLK_AUTO_CAL_ENABLE		BIT(1)
+> +#define SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL		BIT(0)
+> +
+>  /* RTC */
+>  #define SUN6I_RTC_YMD				0x0010
+>  #define SUN6I_RTC_HMS				0x0014
+> @@ -126,7 +131,6 @@
+>   *     registers (R40, H6)
+>   *   - SYS power domain controls (R40)
+>   *   - DCXO controls (H6)
+> - *   - RC oscillator calibration (H6)
+>   *
+>   * These functions are not covered by this driver.
+>   */
+> @@ -137,6 +141,7 @@ struct sun6i_rtc_clk_data {
+>  	unsigned int has_out_clk : 1;
+>  	unsigned int has_losc_en : 1;
+>  	unsigned int has_auto_swt : 1;
+> +	unsigned int has_auto_cal : 1;
+>  };
+>  
+>  #define RTC_LINEAR_DAY	BIT(0)
+> @@ -267,6 +272,14 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+>  	}
+>  	writel(reg, rtc->base + SUN6I_LOSC_CTRL);
+>  
+> +	if (rtc->data->has_auto_cal) {
+> +		/* Enable internal OSC clock auto calibration */
+> +		reg = SUN6I_LOSC_CLK_AUTO_CAL_16MS |
+> +			SUN6I_LOSC_CLK_AUTO_CAL_ENABLE |
+> +			SUN6I_LOSC_CLK_AUTO_CAL_SEL_CAL;
+> +		writel(reg, rtc->base + SUN6I_LOSC_CLK_AUTO_CAL);
+> +	}
+> +
+>  	/* Yes, I know, this is ugly. */
+>  	sun6i_rtc = rtc;
+>  
+> @@ -374,6 +387,7 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
+>  	.has_out_clk = 1,
+>  	.has_losc_en = 1,
+>  	.has_auto_swt = 1,
+> +	.has_auto_cal = 1,
+>  };
+>  
+>  static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
 
 
