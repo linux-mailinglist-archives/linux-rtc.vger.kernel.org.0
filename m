@@ -1,48 +1,56 @@
-Return-Path: <linux-rtc+bounces-1222-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1223-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66AE98D3696
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 May 2024 14:42:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 619018D490B
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 May 2024 12:00:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F040285503
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 May 2024 12:42:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D5A71C21C18
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 May 2024 10:00:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B308818131A;
-	Wed, 29 May 2024 12:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1346B6F2E8;
+	Thu, 30 May 2024 10:00:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCJWBFiM"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="sv0E1FNM"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68795142E68;
-	Wed, 29 May 2024 12:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353C715ADBE
+	for <linux-rtc@vger.kernel.org>; Thu, 30 May 2024 09:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716986554; cv=none; b=HFdsiOj3YKF5bWpZ9YW8xfaSBGj0Cx8aftW2ZtSWh99GJI9d5tTNaIiGYch+9QXkBipvM1FCVZk7dIWCU3RfVcGHr8ZX1roKp8WdI7IOeABIt7mBtpRcId5K2xLNoX2balmpnNzHxjqJU19eWMXbLU2lfO1mJvpLJKZIAwlwMJ8=
+	t=1717063203; cv=none; b=nH4JvgRmMGqqbfTS1kpzF3rQp6jCx9PNftOe+wSHf/6DYxB65mu9U4bFJ/BUtZyg+aALabSdV+2JKkw00gAq/ZHPLW144eRPteVvFTFI9Bz2j8wWPew1ry58WJBY0HaJx8SgnLG/+QWoZkl3/5zh4fwGv4upnZfGVXljEx7BdJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716986554; c=relaxed/simple;
-	bh=V07Xk4BXjw/sAB5xBCQyqi+Ks84h/AAGIe3cdwowxTA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GZCZAUMD7+TwKWupt0Yu93qa/u24IDDJFnITXwSf0VaqkjD1DTYV0glsqg7QejNM3OxdezQ5UawgayYjf53PxpOpq9NzmcE9r/RIH7TZ666Ck0NscWbNeFIni0d2lWdEfrhPifZisw/v2+XeZ1y8q0EHBnueoVpYhag4H0MGlQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCJWBFiM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8957C2BD10;
-	Wed, 29 May 2024 12:42:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716986553;
-	bh=V07Xk4BXjw/sAB5xBCQyqi+Ks84h/AAGIe3cdwowxTA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DCJWBFiMqS5zwPldS6W8McoviTD1DCM0N+X2j4BsWJkZQGql4xa8hyKu/6ZkLU/Qa
-	 g2vPl87XxWmLnmCu1h/SdvrYx2JatU4HtIxscU8djSwLGfoEiX+sa+1+h/PAieKHS3
-	 2k6APo9Ghh+CvfqRmh+oOWynKnZnn8DTZyrooeXiXFYH/MLACmqnkmPFfLUbPSYEzG
-	 8B2iuh0c22ujkIkorLFpVc99NyjW8usuesjof1+8OBQVcaGWZHKBCRScSotG6UJ7sI
-	 EBPU1+QJ9v19ZIITkYIoaeUuOOaM2x+ECeCdNHicX4/n7tLqKIf1+GQbdrY1/ji9ef
-	 KbnPYxZUgxSbw==
-Message-ID: <a9f419a3-967f-44b6-b91e-c4fe27834e9a@kernel.org>
-Date: Wed, 29 May 2024 14:42:28 +0200
+	s=arc-20240116; t=1717063203; c=relaxed/simple;
+	bh=T+WfVEtrxN8Y6I741XF9v5G1GnHUGOwmZGjQbVMLMiQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=f5bqba/QBa2D76aBweh6d0EItWSMwdmrBGzG4oKdyxxDfhn6AOrq6N/9xvJrQaHmvzcGQx0BPhD3t/EfSlc41vXgAmADf8bvtmM6/geqrstKSoP0FG01U5wXac4N5vj/PFZWra1BnmtbjrgZ/7iE4PV0v2sZPbNJBI7to+PEJhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=sv0E1FNM; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 198D9A0748;
+	Thu, 30 May 2024 11:59:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:content-transfer-encoding:content-type:content-type:date:from
+	:from:in-reply-to:message-id:mime-version:references:reply-to
+	:subject:subject:to:to; s=mail; bh=9xqPcVaDIoISYZRzF73btIv+n+8Ax
+	GAzvGSGlHIcbLo=; b=sv0E1FNMBji68YJuYJfLkgoyg6sQAkB9vJempvMVHQJ7m
+	U4dSxD5vTfr9s4ZYTEeoJUloMZhBtAslv9+tCSUFoAg4Uhu0FqUKbZ2961eC7l1h
+	LGydbxP911ZYig0wMVRRDJOzCy0kqk6aYaz9i0RVgZ1gqQ9ZJC+B2/rRj0vkDNHs
+	5oHcvkpfaIhqzeIiM0t0269at9vBonqWtfyvgqZ/mzpCZUVM39etWyizzIYDBGyV
+	7xPIxPTFx410u5eTJzFpvu/p4JU/n0gRVuEevMyShwilEYHB8gNr/YUTnW6aG0Bn
+	bDTsrMTj+hxP0HEQBZrJ/XHaxw877sKmDpPPe4WDcbsvIdYUxl5Jg+GvLIAlb0qk
+	W8LwU855oXlQHgWxtoqGJAjWlRtgzRuQkwoTtYuh8qnumxfGkADy64Y2YUq3TW6q
+	+bu8pEmK44WbcKdyPs8NIkZLs4uWq6dNMQWUGM0w8mNUtQuZ/9/iDuc8YufSeJki
+	D0Q7PqKyfxWV3B1NUPsTq0dpKO9QAn/2UwMb7y1fitDaPg3esY4LZe5LWHFvmJc1
+	x3I7zu6v2OlhqGDcS2kLzSHfTMOeQF1t7g8h7Rp+RzMLieIH47cmxIZLe2olhR+8
+	dcFCOPMnWMBlMkwTcMLLA4G0p5a+qo1URSINLuO3tlEg85lilPNYRAb4etMt7E=
+Message-ID: <81184944-5012-41da-a596-220b74437552@prolan.hu>
+Date: Thu, 30 May 2024 11:59:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,73 +58,43 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] dt-bindings: rtc: Convert rtc-fsl-ftm-alarm.txt to
- yaml format
-To: Frank Li <Frank.Li@nxp.com>
-Cc: alexandre.belloni@bootlin.com, conor+dt@kernel.org,
- devicetree@vger.kernel.org, imx@lists.linux.dev, krzk+dt@kernel.org,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, robh@kernel.org
-References: <20240528184359.2685109-1-Frank.Li@nxp.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 1/2] rtc: Add UIE handling ability to rtc_class_ops
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	<linux-rtc@vger.kernel.org>
+References: <20240528161314.404383-2-csokas.bence@prolan.hu>
+ <202405281756543dfd3a39@mail.local>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240528184359.2685109-1-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <202405281756543dfd3a39@mail.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2945A12957637365
 
-On 28/05/2024 20:43, Frank Li wrote:
-> Convert dt-binding doc "rtc-fsl-ftm-alarm.txt" to yaml format.
+Hi!
+
+On 5/28/24 19:56, Alexandre Belloni wrote:
+> Hello,
 > 
-> Change example's reg to 32bit address and length.
-> Remove unrelated rcpm@1e34040 in example.
+> On 28/05/2024 18:13:14+0200, Csókás, Bence wrote:
+>> Currently, Update Interrupt Enable is performed by emulating
+>> it with either polling, or alarm interrupts. Some RTCs, however,
+>> can directly provide Update Interrupts.
+>>
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> This has been removed from the kernel 13 years ago. What is your use
+> case to reintroduce it?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The rationale was in the cover letter. Currently, the RTC core uses the 
+alarm system to implement UI, but this causes lost updates on PCF2129. 
+However, it has built-in Update Interrupt capabilities in the form of 
+the Second Interrupt, therefore we should just use that.
 
-Best regards,
-Krzysztof
+So my question would instead be: what was the rationale of removing it 
+in the first place?
+
+Bence
 
 
