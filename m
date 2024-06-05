@@ -1,142 +1,114 @@
-Return-Path: <linux-rtc+bounces-1251-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1252-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A8CB8FD56A
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 20:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DE0A8FD589
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 20:14:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92842B273AB
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 18:11:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8C2BB299BE
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 18:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD9D313DDAA;
-	Wed,  5 Jun 2024 18:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A82913AD3A;
+	Wed,  5 Jun 2024 18:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a3iHTze9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="StPsqxqh"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155B613D8BB;
-	Wed,  5 Jun 2024 18:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8D813A87A
+	for <linux-rtc@vger.kernel.org>; Wed,  5 Jun 2024 18:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717610707; cv=none; b=JvY6RxNMBH2BiKh4o5aaXwB2WlwHRBoAY24BFIZuVoSnvn6XDXahmFBxqXoOFui18k+pTtMYmnx45TXxgJPJNs7vJgWyCd7NGGKiiqMYyF9SXtkWiwqoBvcLFvzkLQj2ra6MUXH+akT47/Q+NHCUjT1zKAnLTHhxjp7SKf/R3ww=
+	t=1717611132; cv=none; b=pWCbAvQAlVD2x4WpH5tONovNX4GXYWmVrqS0+VrGGeKDi/l3OCY9wpflJyJ5PPlcwHYPWXk7msx+PtQJHlyhCHCKNK7X3MJxUMEz4jtJVzsCU1fP6hsrlLPdwfyoACZcY/7p+hCI68k3KOHJ8QDQhVZZu6DqNNgOGfhTDYtTMwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717610707; c=relaxed/simple;
-	bh=VKzLBb0OSi2baRcPQk322AjysnqqpqQj3xhCYr7x5f0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hnIeXA2Y/o05YdVLJGf7a2pyRgKqmFFoOOqUs3TycxuNmZ8WkIs6kYpNKaLDUbu3cKJn8B8t1S/M69aVZw7n6qB5kQepLvLYEvNcI1a+BXXClS77YLVgl7C5I2tD+6+uGKXin2yrZuyeeg5KrtWlhWk1w4EMCtQefKslloNNznQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a3iHTze9; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a68ee841138so13395266b.1;
-        Wed, 05 Jun 2024 11:05:05 -0700 (PDT)
+	s=arc-20240116; t=1717611132; c=relaxed/simple;
+	bh=z9OkqguqeJwlzfT4o/NLntU6DYYfOLDylgpwXRTP5l0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Znb6tokgcjM/SDk6GxTXqhQCDP2QyoIjgSdt1Cwea/4FPizTWl0kNxJ234dlj+tzyqidwDH4HYFLxmXIBivq7YUqnr63DsfTF/eH1/2Xr6ggpgjv4V0yF5ckGV+dDSlJc8qgDICsEzLXMxQ7/cxJ7btCiwXkAt+ekFZ30zkDD6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=StPsqxqh; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42155143cb0so1736805e9.2
+        for <linux-rtc@vger.kernel.org>; Wed, 05 Jun 2024 11:12:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717610704; x=1718215504; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=my3UZfUe7kM4u8AuhMa7F42Fri1dYIgy1VNRL62itHU=;
-        b=a3iHTze9RBw5XKyuTX1cwOkqKgzPqmQxXaQfmgh5ynMWmCEf5L0vB2tM1OFw4gDs/p
-         H3aIw7Xvzj3pDqMV9+vIn6UqiHe4db/MgExr5y3EXRYjO/PlaJp4M7Zhowk55n1HzvNn
-         rxTNd92k2JEO76Xc5AsPffNtGtDQxYOxz0zq8SUODhQaBih0FHM0EkwoQ0mW3Qo9UlBm
-         dnbIrHDTxsf8s1p6iIUadOfTWiEiD9uOzhyCEfABuEYRBciQHOBfwvGEO7UdCV6KoQB5
-         NQqqyVbcN9YwxeuxqP893OmGACAwxKcd2aU+OiXd2qiBwRT9LuyBQwiDnS1lFO3xPeGS
-         1nGA==
+        d=linaro.org; s=google; t=1717611128; x=1718215928; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z9OkqguqeJwlzfT4o/NLntU6DYYfOLDylgpwXRTP5l0=;
+        b=StPsqxqh1CxQ9wqgQg1u5dUOhRs2nnMAQSLON0oZJoIGdTTe3gHEzHdZt5m/paNn3Z
+         S7O01aRIraCjOJpt0PcvLOLZNG1egk2wJBRGDTwAkPhBPYu1BLZomG+uvop7+evSU8Zm
+         AVijTvOwxorlyfUnZPsHgGygByuyrmJ3Sux3cG2fTLvN+c9DZMQoLmt1Tf+Mbr1FKzTd
+         5KL/0Q814gIMcJfbd00XY31+FoNGhl63xiLCD82ijQklw+4ukMjLMePkd+ZEu8U5qBi7
+         VYimq5WWzyDHGt80k+DwO16oxN9YGsL/ojtP7gJnD2VgSSCMi4hppzuY1fWrcWGDbPTc
+         UhAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717610704; x=1718215504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=my3UZfUe7kM4u8AuhMa7F42Fri1dYIgy1VNRL62itHU=;
-        b=hH/ZpiTLwoKe+lQTYb+et0Ed0zENPv4VQZifjbrpu1CbsQMD3a7yRdGTyPt2N+qt9r
-         wi/hdKgCRPfHwcp/dU8hh9hQw20AhQr8KjVacW/xXTqagWz7Ul+WChWK6EdVdUcE34Dz
-         VA/4iL0+eWqRoKEz5AitjWZEmBRvd9sESzLhTWk8nmPa5n8G/8dmIY2Q9MKKW/srAxU3
-         2LUBjH8yfEtHO6L/Ls0S6uSROhtyCrcXx8HYBcWnFFY1q7Tg38RrWpDdIUzsGgO42roI
-         8Nlbjdt1Nz5Xecz5MU7PJfRDBhoulxOKwYMaDRsvKGhhloZbPgLFtQZbYPjcWipBrQza
-         Y4+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ4nOl8ZojSqMHGZ3Hr1IDs/b5LD1hTbehP2KKgrkczWyWd9x3DGI/daDjR/Fsfs6o07EBKeGwHkdnwC1tuDXptjQjgug9MikY0skp3drJx5PFE+VYGxyh0BmaKn3JgII9EDoQdr8nm2hIZXXwL+ChKNQI+arqqxOsoIZejLuOdutUDsOI
-X-Gm-Message-State: AOJu0Yxh7wECgu7sZQkmfujRT8qMagLhBuj2vdhTunNHvHTcntxCywdO
-	CldrobvruJEk6Myj+qhpJOx27/33dGV1/O2HxMDEkoyYH4G33RZE0tvi204XbzAUjXQa2WmZCSj
-	upDzGr2wbM4/dhzd0kysCox4WzpflN8+U
-X-Google-Smtp-Source: AGHT+IGhWTYwKt5+UnLZMLgA3WGENZ6y+3VeysAk+PsADmfk/ucAPuWrvI0YWMvgkFEa9EoLpDzWeoDtKMznAZZxEUo=
-X-Received: by 2002:a17:906:ee89:b0:a68:379d:d623 with SMTP id
- a640c23a62f3a-a699fac0c4amr245842366b.36.1717610704188; Wed, 05 Jun 2024
- 11:05:04 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717611128; x=1718215928;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z9OkqguqeJwlzfT4o/NLntU6DYYfOLDylgpwXRTP5l0=;
+        b=H1FyprvRh/PgtTyqv1Pca6DICI1TkQNgYjqKuDDnNwrCqPCTVZU/4mZ1qsPvQ1DIKf
+         Xh4MLhlEw9k8z2m/09pOS1UrZCvO+tsnicHnhDmnmNzD97pFw6moPgrFpqvp3V3arZAS
+         GzjEWN+hW+7Bb525eY8XVascP8dtb6hIG1nhKqRIHeSTggKq0wOjR34AsRrlWmNk1nh3
+         PaOP0oa2iKOLihCFPRDGYkVcaic9jomF/I/sLjh6K5e41Q2DATqZHVnj5zx/fDWT6qvI
+         cmQSc9+/RniiUW+B8gagUB43fvDHcXkk3TfwwjfweNoz+jA4+Br1sCCdGm2xPJUTH9Jm
+         mWfA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKw5q1ojYWCfB4fPSEZdCy4BAH/lk45Ir9688SH6o26CUVy8AloTm0YKKu4EC3GdnDz9TYezqLQKhY2VJ9Np0IHIc3RkB52iol
+X-Gm-Message-State: AOJu0Yz55HJ8B5elvLu+tjLDMmYxBI1WjP+y7iQbcnTpCtKd90cdboJm
+	KkdHF3cXEosvjzz5n2263lBfA6GW9v6ZC/Q84wo17ohTytldG37g85JN8SBtAw4=
+X-Google-Smtp-Source: AGHT+IEvaA8Q5QYjqCVUDlFHwF6aq9tSqiBZFVHoOS8pIX0aZ0OJo7FFt2ruymdqoNfkRUE1c/CDUw==
+X-Received: by 2002:a05:600c:4e92:b0:421:29cd:5c95 with SMTP id 5b1f17b1804b1-421562ccd31mr34249765e9.10.1717611128459;
+        Wed, 05 Jun 2024 11:12:08 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-35dd04d9c68sm15224191f8f.56.2024.06.05.11.12.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jun 2024 11:12:07 -0700 (PDT)
+Message-ID: <d7cfe53e-533a-4c39-b4d8-cdbee3617294@linaro.org>
+Date: Wed, 5 Jun 2024 19:12:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605161851.13911-1-kabel@kernel.org> <20240605161851.13911-3-kabel@kernel.org>
-In-Reply-To: <20240605161851.13911-3-kabel@kernel.org>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 5 Jun 2024 21:04:27 +0300
-Message-ID: <CAHp75VccGwei9XE9vp04or7dbjOSvN7Hb0kvD06_H7=sFTKy_g@mail.gmail.com>
-Subject: Re: [PATCH v11 2/8] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
-	arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org, 
-	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-rtc@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 00/17] nvmem: Handle change of return type in
+ reg_read/write() definition
+To: Joy Chakraborty <joychakr@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Lars-Peter Clausen <lars@metafoo.de>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Bingbu Cao <bingbu.cao@intel.com>, Zhihao Cheng <chengzhihao1@huawei.com>,
+ Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+ linux-usb@vger.kernel.org, manugautam@google.com
+References: <20240605175953.2613260-1-joychakr@google.com>
+Content-Language: en-US
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20240605175953.2613260-1-joychakr@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 5, 2024 at 7:19=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org> =
-wrote:
->
-> Add the basic skeleton for a new platform driver for the microcontroller
-> found on the Turris Omnia board.
 
-...
 
-I paid attention to this block because of ETH_ALEN, see below.
+On 05/06/2024 18:59, Joy Chakraborty wrote:
+> Currently the nvmem core change is picked on
+> https://git.kernel.org/pub/scm/linux/kernel/git/srini/nvmem.git/log/?h=for-next
+This patch is reverted due to next build failures.
 
-> +#include <linux/array_size.h>
-> +#include <linux/bits.h>
-> +#include <linux/device.h>
-> +#include <linux/hex.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
+Please resend the series with this included.
 
-> +#include <linux/turris-omnia-mcu-interface.h>
 
-This is part of the niche of the driver, I would move it
-
-> +#include <linux/types.h>
-
-t is followed by s :-)
-
-> +#include <linux/string.h>
-> +#include <linux/sysfs.h>
-
-...here as a separate group.
-
-> +#include "turris-omnia-mcu.h"
-
-...
-
-> +       /* we can't use ether_addr_copy() because reply is not u16-aligne=
-d */
-> +       memcpy(mcu->board_first_mac, &reply[9], ETH_ALEN);
-
-The inclusion block misses the header for ETH_ALEN, but I realise that
-instead it's better to use sizeof() as it makes this rely to the real
-size of the buffer and header is not needed either.
-
-...
-
-Other than above LGTM, FWIW,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
-
---=20
-With Best Regards,
-Andy Shevchenko
+--srini
 
