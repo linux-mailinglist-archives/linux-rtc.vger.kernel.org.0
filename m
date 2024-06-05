@@ -1,70 +1,70 @@
-Return-Path: <linux-rtc+bounces-1239-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1240-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD6C68FD4E1
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 20:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 603118FD4EA
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 20:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 575F51F228CC
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 18:02:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E151A1F258E2
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2024 18:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18D9195B2C;
-	Wed,  5 Jun 2024 18:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31CAF195F31;
+	Wed,  5 Jun 2024 18:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yW9iJgkc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xh8vf0dA"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A582B195991
-	for <linux-rtc@vger.kernel.org>; Wed,  5 Jun 2024 18:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B989190490
+	for <linux-rtc@vger.kernel.org>; Wed,  5 Jun 2024 18:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717610430; cv=none; b=GxDHDjFk7hocX1CzVfM8VCMeWEFPXxDj7dVnlqjr+cpGDrzBmX/Q3Cl77B+rmKIx2D88D2Kyohe10j6jlde8jX8GNLr663OITcRRHFMreN33OZamezhy+P+04vvqpO58Vj1B5pqKgtsnHskyenzVmNk0nWx7WSogMF/iNg+kDFI=
+	t=1717610434; cv=none; b=YzVd0LyVrrWHIwDUnIKIATxLSQhacVMxxZFhbD+W0hUSrl7HDH2ePz1eGn7fbWajrbFkKY9nrP/Ih7qHmmWhO2xlEhvrRmpowK7Cdtn7VxrDKyj0TNhsrE34yPJFcIuzNPlqqPNK1LIXJGp5vAVTvPTb80QFoWuOZgnsBRJ+EkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717610430; c=relaxed/simple;
-	bh=7s5ualCvDc0GEz4419Gj42eDU6iSkCy4DM1JO8Cp5kE=;
+	s=arc-20240116; t=1717610434; c=relaxed/simple;
+	bh=7YntdTNu7aMZ5zLGGRpR3JsfAB0rBOtanC3KQe4XBYY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gcXwjRHPLIHjd38770jg7TbChVOCtqayc11pdcTBCPKWvXyYYvubiLUPbcumBzl/6l11OkLfoTMllG45z0DdEXv8UacfYDMsb474qhgfL+PsEV6cL2FaINcq7m2NqCioPal0SvCbeapCoUar/zupckoWfsPLOOKLVZBf2DMTA+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yW9iJgkc; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=ClYL1mDCR+gZQ7HkuiqHAfO2Quov9kbmzJs5KUmR/CrbtTonxbQ+dvQOistNFz1Sl0xKQu/u8o3GV4GrvReoQBaVWVHIlsp+BPmHIRlwg7+fFt7LiDH4bnwJjGQ/qCxXhaxnD+Nlp+tlXwxvqiFX/Km+6aLxJatiKzVtAeh5Yo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xh8vf0dA; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62a3dec382eso601767b3.1
-        for <linux-rtc@vger.kernel.org>; Wed, 05 Jun 2024 11:00:27 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-62a3dec382eso603287b3.1
+        for <linux-rtc@vger.kernel.org>; Wed, 05 Jun 2024 11:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717610426; x=1718215226; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1717610430; x=1718215230; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kq8gN9PC4V0/WUeYJD+ngNL2/82oznUqnDRsVCEUyhc=;
-        b=yW9iJgkcljzKSnVxoazsYECi5fP6QNHHLJ9IlEuTsYQL+RlaWWDmJD2d4e+DNhDTlm
-         KIfryHEvd7FtNm8eHNyqjTI1XXd9/8uhvtg7pv/6kGvV3N26EfwVy000lhOWFWeeOYca
-         tJ5tYDQzM0o210kyrr+IgjNfC2CA3bJ/iL77N6LlXzTEq98PU3R3wL/25tRG7uPbotgU
-         cpbVNwzhr6IKc2fqP3RBBaMQHVM8jgX0F5gRXjSonWVCOuoyDtvr1Rlg6q+Zn0PJq947
-         LFpzYOwiH3TGEwZZHterdbmrVBOoTZV4ppyVHdrpANxTOrfCSPzqLu+DJ+cBDsXOimAK
-         gLiw==
+        bh=GabZAVwK9FSl0VODpa0rRnhc7Hb5WIAFsUpyNY/Jkgw=;
+        b=xh8vf0dA+TFlUnkkazIa6Em6KzJbbntuGamI4Gn8Wj1jFYYx5ZYFkn2tA0alpWg68u
+         9jhNXfx2DxL9m7tqmgthqmC1rUSflk24zLEIHrstf3mW39EvFDR2FeelUhLsupY30DEi
+         /gVZrfJA0Slzv9rEogcUVgXiY8hLFc0E46E+FUZ/X8hWU6PYTTTOsgDQPMK44rgcyi4X
+         g7UTGxktSZ/IcwoGFDfvWXQYzCbWyLYks/FVJWCMOKozF5JwJ5koJWgZ7381pzPo2fKz
+         JwnKZftDOTv9WkuxVVV5rBvZHglYy9BQThw/il2JbfCMaxHpHsqQPdwDUsOxRCnGKcAo
+         B5jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717610426; x=1718215226;
+        d=1e100.net; s=20230601; t=1717610430; x=1718215230;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kq8gN9PC4V0/WUeYJD+ngNL2/82oznUqnDRsVCEUyhc=;
-        b=WjDV1kqtsEjKklP3HlJnfYMm2u3+ExZNzKltSEWLO4wTIFYGJggoeUaGGEtJ9ANAsx
-         n4Yx1l7bromTMNYfGyOutolG2C2DtO69l6xf42g4lEw/a6UFPBfWo3X4ugcNJm6BIxiN
-         xYk0Azf5kkFJtzaufBDn56p28n2rDu1CwKOqgf+rm2rZDvV2HL3TluTXqT7F1XDWi12H
-         Fld9yWeZdhwgp4pz3chyTm91DzRUanXFgUicWQ7erTl1U1AcV6Ecjj4onZfslaonsEYk
-         i0Hli677nMQHNIeK0fC86VfnejT6vXllDTP79p3x8Pg+utBHNiTdKjTZ0ujLMJks1D8m
-         UPLw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVdi8b47V+DDD+8GxY/9QJDM8/N6Py3o9Su5g2Q+jEG5W09ttpn3gd8gnwKBf0kxWew7cEBwhu1yklyqrJzL8hb3uHyIoAASl5
-X-Gm-Message-State: AOJu0YxCr2XM7vfR3p7KODOe9FcZUveiZb8olVydHgfmVq9BhOzMEfuv
-	bP5DDlQ7958Ak8f1EckMPGSu5qyUCCJeN50nT0MBesX6oFUwvREMC5Q0hxmamAr4QkMa1H+jZJL
-	tvKS/ipILXQ==
-X-Google-Smtp-Source: AGHT+IGpQQ4ibO82CB++j7EQg4rT4P/RHw0r35tzLXXxO3B/dL6yEQW14Z2L0s1fkq9sPWcVhlzFxs8YqockaA==
+        bh=GabZAVwK9FSl0VODpa0rRnhc7Hb5WIAFsUpyNY/Jkgw=;
+        b=VQB/WliDPq1YO2GAFWOTPGSF3rS0XAWvhL8wPLx9kdvwoHEQbTMFD/iZCP4oGpnl2O
+         24vKbWRopfe1zhTE4QPEhzA5FMrKwJXPOwEdCLgspU6le2Mxh+F9m05Kufxp23/wxiN5
+         OZfw7xC3y09kLmoBF3drdCqCnBh5kaAUBoOUIa67725ejjOr5hiikpB5vraRwP92rCyG
+         W6SYVMUBja8AwuEdyKaiKJFVcgtA34ZzVnHz6RJ9e1U443JgvX3BWqNopTSf42cViEWW
+         dD4yi4GQmwJWZy7MmZsjHnO4ck7zJgoRbneslbr2/R0iLVd+ui+P8wAoxnEFDXOpWGD2
+         xJBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/2d/n3DRjOVzaWJsMtsWeddAw4UL7ZjBX4M+XTXsR2a04nxMidkm7TNu9vZTYgWgjLf/jI0NmkjDgywD3e993Hq1m2NR9+DrK
+X-Gm-Message-State: AOJu0YxU5fBaKwd8eLVuItJoNndn2qosJhaPkFpyvZLKiTjR38KcnflE
+	fAe3aKhN/vE53E8gLPZboKSLEGUIZ9r+ykktbAMzv2z5tVva2yQm+WrBvftkofdb110k8YzJY6L
+	ljrhI+/Fkyg==
+X-Google-Smtp-Source: AGHT+IEja+GLVOpS7V2U0r8IR9Z9ZB6nAf9rPU6225JSB7wTRYk1qUU4QFIkeBtYF/8VHx1IHDowrDp0WPzcZg==
 X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a0d:d4ca:0:b0:623:be6:d5e4 with SMTP id
- 00721157ae682-62cc71784bdmr605497b3.4.1717610426639; Wed, 05 Jun 2024
- 11:00:26 -0700 (PDT)
-Date: Wed,  5 Jun 2024 17:59:50 +0000
+ (user=joychakr job=sendgmr) by 2002:a0d:d952:0:b0:627:de82:8077 with SMTP id
+ 00721157ae682-62cc709af05mr798057b3.2.1717610430440; Wed, 05 Jun 2024
+ 11:00:30 -0700 (PDT)
+Date: Wed,  5 Jun 2024 17:59:51 +0000
 In-Reply-To: <20240605175953.2613260-1-joychakr@google.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240605175953.2613260-1-joychakr@google.com>
 X-Mailer: git-send-email 2.45.1.467.gbab1589fc0-goog
-Message-ID: <20240605175953.2613260-7-joychakr@google.com>
-Subject: [PATCH v1 06/17] misc: eeprom: at24: Change nvmem reg_read/write
+Message-ID: <20240605175953.2613260-8-joychakr@google.com>
+Subject: [PATCH v1 07/17] misc: eeprom: at25: Change nvmem reg_read/write
  return type
 From: Joy Chakraborty <joychakr@google.com>
 To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
@@ -99,48 +99,55 @@ Change nvmem read/write function definition return type to ssize_t.
 
 Signed-off-by: Joy Chakraborty <joychakr@google.com>
 ---
- drivers/misc/eeprom/at24.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/misc/eeprom/at25.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 4bd4f32bcdab..0e8d92d6ab1e 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -424,8 +424,9 @@ static ssize_t at24_regmap_write(struct at24_data *at24, const char *buf,
- 	return -ETIMEDOUT;
- }
+diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
+index 595ceb9a7126..73d60f80aea8 100644
+--- a/drivers/misc/eeprom/at25.c
++++ b/drivers/misc/eeprom/at25.c
+@@ -74,8 +74,8 @@ struct at25_data {
  
--static int at24_read(void *priv, unsigned int off, void *val, size_t count)
-+static ssize_t at24_read(void *priv, unsigned int off, void *val, size_t count)
+ #define	io_limit	PAGE_SIZE	/* bytes */
+ 
+-static int at25_ee_read(void *priv, unsigned int offset,
+-			void *val, size_t count)
++static ssize_t at25_ee_read(void *priv, unsigned int offset,
++			    void *val, size_t count)
  {
-+	size_t bytes_read = count;
- 	struct at24_data *at24;
- 	struct device *dev;
+ 	struct at25_data *at25 = priv;
  	char *buf = val;
-@@ -465,11 +466,12 @@ static int at24_read(void *priv, unsigned int off, void *val, size_t count)
- 	if (unlikely(at24->read_post))
- 		at24->read_post(off, buf, i);
+@@ -147,7 +147,7 @@ static int at25_ee_read(void *priv, unsigned int offset,
  
+ 	dev_dbg(&at25->spi->dev, "read %zu bytes at %d\n",
+ 		count, offset);
 -	return 0;
-+	return bytes_read;
++	return count;
  }
  
--static int at24_write(void *priv, unsigned int off, void *val, size_t count)
-+static ssize_t at24_write(void *priv, unsigned int off, void *val, size_t count)
+ /* Read extra registers as ID or serial number */
+@@ -195,10 +195,11 @@ static struct attribute *sernum_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(sernum);
+ 
+-static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
++static ssize_t at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
  {
+ 	struct at25_data *at25 = priv;
+ 	size_t maxsz = spi_max_transfer_size(at25->spi);
 +	size_t bytes_written = count;
- 	struct at24_data *at24;
- 	struct device *dev;
- 	char *buf = val;
-@@ -509,7 +511,7 @@ static int at24_write(void *priv, unsigned int off, void *val, size_t count)
+ 	const char *buf = val;
+ 	int			status = 0;
+ 	unsigned		buf_size;
+@@ -313,7 +314,7 @@ static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+ 	mutex_unlock(&at25->lock);
  
- 	pm_runtime_put(dev);
- 
--	return 0;
-+	return bytes_written;
+ 	kfree(bounce);
+-	return status;
++	return status < 0 ? status : bytes_written;
  }
  
- static int at24_make_dummy_client(struct at24_data *at24, unsigned int index,
+ /*-------------------------------------------------------------------------*/
 -- 
 2.45.1.467.gbab1589fc0-goog
 
