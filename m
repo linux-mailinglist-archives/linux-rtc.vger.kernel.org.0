@@ -1,183 +1,367 @@
-Return-Path: <linux-rtc+bounces-1266-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1267-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 401DC8FE456
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jun 2024 12:32:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 475AF900350
+	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jun 2024 14:20:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAEAC287F2F
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jun 2024 10:32:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC6911F237E7
+	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jun 2024 12:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1781C194C9A;
-	Thu,  6 Jun 2024 10:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C42CA18F2E8;
+	Fri,  7 Jun 2024 12:20:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ij9/iU/U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rp0ZF0fe"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10709194C63
-	for <linux-rtc@vger.kernel.org>; Thu,  6 Jun 2024 10:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9D415B127;
+	Fri,  7 Jun 2024 12:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717669927; cv=none; b=m0DdgUYfO44V9sfGMT+K06y3ClfTfvNw7tm+yDPLF+OOj26u3VEackpMq7Bx15SYkQAJfvQCGoy4l8z9NcSsxEEXlm7aSxu1qA9+Zb5eTHr8AEXMzXQMfK3j1GuUrFBSJWnlW8dUNSnFBbLlLTvOJu8G/p0ZjojWUZiM8j5w5pk=
+	t=1717762855; cv=none; b=F3kkCnBOiwuRVqkgCTtJKD8lADDpkVAQe3oqLm85KaGdSK4asH+IHkup5Wio6P657wJnUA7FzeVbNBl/iutJU4Y2N2BpvGPbSLzVxCC+AaIHmx3REYSrkUy0gvKSP5Fay1Vg+Or949BFR/m1g6k1AH37xZRCw62PaIz4P4C01OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717669927; c=relaxed/simple;
-	bh=n0hrzdYnBksW+DamHG6BupTO1J0YAJybs/VDL2sugrE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UFXOJ6IC8115Ghh2GmwfMsUKCcGf8N1Ao2WbYj8IPzjDErYaaT9iBdOE9paqCiYOUKrcPQMDiFjjEtXFthuQhJguwePjRPFoI6PtP1jHFzTEr1/7jCcihxgEST8BJe8t9/9wJgQexQNE5usRAXcWato8cfhD7TVkkVB0qrSRC84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ij9/iU/U; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2eaae2a6dc1so14457131fa.0
-        for <linux-rtc@vger.kernel.org>; Thu, 06 Jun 2024 03:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717669923; x=1718274723; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2yOK4FlQCW+JMOCwnWP72jJymCtr5dD6IgIpna60BCY=;
-        b=Ij9/iU/Uyo6fcf8LONJ7xC09lvYBG8qaaeEz4vBXq2BTPZbQ2/pF3yyQBM4fRbFGfh
-         G2YVI79pdecNzRewdbn8sACLDUSzd7rOjlh6zMMORYPcVD1QveoeZ2kHNSsE+9FRNNbv
-         STcLcfiwZHhGsSEvRFW5mX9h4B8YphLBoSkl78uJsHCRnl9eDwrE59GFqtGknBB9mMy1
-         OSPuYgWTVQS8j2w3KVuq+5S7UftcTUbs1qQVWVzbjEhqRqb3+fKICTURvn7oWD734yHM
-         ft1saZpU5WP1Di0/lkFYY358dTnV3FFIlPJYisX1EUMUoYuw+wFXKiytWhGLxoNHAlTO
-         IcBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717669923; x=1718274723;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2yOK4FlQCW+JMOCwnWP72jJymCtr5dD6IgIpna60BCY=;
-        b=qC2hI6zIWyYhKdLjxT+ZeNP8rxg8GGnY/wX7GCL4/cFoRNOOql/JQUxwaLsakIS0aG
-         fk2e8hWO4KDQIX09TU+FKHtUC7XjH+DJZB0KWbWxsZRrqNMejoscfP2oy+dZYk644ebJ
-         AqlkCm4OFjfxH3BFUEuNSk5UOfcs3ludZMh8SNp2K0b2mJ49yTUKNrk/eRPdpMARR3zU
-         49J4zQMExjAeQ6Qt/jhjXuF5wIYpuWliOiK5eCAy9pDUE6n+jTzZe2id3CBvciFPA/D2
-         mEapencKCCWK86heplzXLqc3Gzxk+QouwBf7cGiRZtRUsbkhYepK7+j15/5NTlgka6Cy
-         X2TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX3HzS706mGxmZ/5IsD6DZdf/ddxIAMjoKQGp7lkLW2J/Mofjhs6RKGlqlIci+6TlJ4NoPxyiIXpGfgjNZkUu2K83xrkRt7rniP
-X-Gm-Message-State: AOJu0YxeVdUmEm53TS6+2dg8mjxEfpKLQQOlV/Kpk1HWckofyMQlfuck
-	STSkDlsUtfVqh2kS1SnVcSS1YID7tYfdKqlegHnitPmdmrlHaTaYK/xBHKLlx0vpUz+jVhe+ctw
-	ADzd8UF/88UwgOZL8+BoT+CHKHk68rYMQ0KBZ
-X-Google-Smtp-Source: AGHT+IHb92CvWzY0UMLIO3bnYXJ9lrbqmbf5jFApgNniI36TJ0LubnwynaglXsT5ps/3HCuaPh8FvkYR0EYkfnbTRiI=
-X-Received: by 2002:a2e:9643:0:b0:2e1:9c57:195a with SMTP id
- 38308e7fff4ca-2eac7a5fd4dmr33302121fa.32.1717669922881; Thu, 06 Jun 2024
- 03:32:02 -0700 (PDT)
+	s=arc-20240116; t=1717762855; c=relaxed/simple;
+	bh=eMCw1IJr5I1Ox93r2LuUPDZWr/JmobXcdGHWi8w1PYo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XyYk+LVk1+8O0zNVtrDCGIvOdVnJSZPPZov6n19f5H7D0ggHCJ+9+GxwOFDuTq22H2R0riJ5n0wJ6hogaNeBpWS4Km3SxMJXUhjBXrB+3t8CAcgCvCNLUKol5pAHcYLBN1AZh6Pf/pcFSvvyJcPrEsdKFr3H+OYPU36S+z1BWTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rp0ZF0fe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2BF57C2BBFC;
+	Fri,  7 Jun 2024 12:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717762855;
+	bh=eMCw1IJr5I1Ox93r2LuUPDZWr/JmobXcdGHWi8w1PYo=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=rp0ZF0feWKUuvnL2SQriowxww73pGlCowcru8mpw+DWcETKrnfHWsDGr8VN+bS4Y2
+	 GU5bUgSqm081/Exi0c9ZbDmd2QGfU+naJibNEUXe/jXs05CjTQCOsP6Ri2EVxLqKqQ
+	 cHwm3ekbItti0XyO9is149VAX7E8vKmkdpPaEvbyfIEcsrYgqn1769q+BtiJgUswrw
+	 07M5iUttsE9398UpPe5FqOoeFzYn5aNXZQ8rfhzGWP12zOUBTT/iISAXIeSx2GGKsA
+	 2C/YTwEqJciywA+oF5Meuv+921ep/lXPa2kbbPAVh7n7J2wc4+M0cMIuIjFxeo8ajV
+	 5rU9mRQoiQC6g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D20C27C53;
+	Fri,  7 Jun 2024 12:20:55 +0000 (UTC)
+From: =?utf-8?q?T=C3=B3th_J=C3=A1nos_via_B4_Relay?= <devnull+gomba007.gmail.com@kernel.org>
+Date: Fri, 07 Jun 2024 14:20:41 +0200
+Subject: [PATCH] drivers: rtc: Add driver for SD2405AL.
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605175953.2613260-1-joychakr@google.com> <20240605175953.2613260-8-joychakr@google.com>
- <f98a1d8f-e936-4798-8447-c642e8fe11d5@moroto.mountain> <CAOSNQF0Qj2CnRDWAGM8Y1wyEdgWP04RDJx1TKO-Ge4nUH=qxoQ@mail.gmail.com>
- <2b979aa4-3a63-4010-9670-294ce7624e18@moroto.mountain>
-In-Reply-To: <2b979aa4-3a63-4010-9670-294ce7624e18@moroto.mountain>
-From: Joy Chakraborty <joychakr@google.com>
-Date: Thu, 6 Jun 2024 16:01:42 +0530
-Message-ID: <CAOSNQF02nUPZ=8re=uyruhxReQSjPoc8L-9yTnWMe4EfJ0-huA@mail.gmail.com>
-Subject: Re: [PATCH v1 07/17] misc: eeprom: at25: Change nvmem reg_read/write
- return type
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Lars-Peter Clausen <lars@metafoo.de>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Bingbu Cao <bingbu.cao@intel.com>, Zhihao Cheng <chengzhihao1@huawei.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org, manugautam@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240607-rtc-sd2405al-v1-1-535971e7a866@gmail.com>
+X-B4-Tracking: v=1; b=H4sIABj7YmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDMwNz3aKSZN3iFCDHNDFHN9HA0sTc2Nw82dw4RQmopaAoNS2zAmxcdGx
+ tLQAkhCUBXgAAAA==
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1717762854; l=8656;
+ i=gomba007@gmail.com; s=20230706; h=from:subject:message-id;
+ bh=o55Vp0mMCEzpw/fLJzQQKvJN8c5V9EiKu+siRTYRlmU=;
+ b=9ehydTPKxYu6pmN23RlaoZdAHUK9vz83IGqJ6+Qk5AnvtxrZS0Lw+PE4ZN61aTiLnwQwj7mC2
+ NCUlfFbWiU9BqUGaKAKtFWCxwdGVmgebhFTRmU2xvAENzDgolYs0RAO
+X-Developer-Key: i=gomba007@gmail.com; a=ed25519;
+ pk=iY9MjPCbud82ULS2PQJIq3QwjKyP/Sg730I6T2M8Y5U=
+X-Endpoint-Received: by B4 Relay for gomba007@gmail.com/20230706 with
+ auth_id=60
+X-Original-From: =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
+Reply-To: gomba007@gmail.com
 
-On Thu, Jun 6, 2024 at 3:41=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro.=
-org> wrote:
->
-> On Thu, Jun 06, 2024 at 03:12:03PM +0530, Joy Chakraborty wrote:
-> > > These functions are used internally and exported to the user through
-> > > sysfs via bin_attr_nvmem_read/write().  For internal users partial re=
-ads
-> > > should be treated as failure.  What are we supposed to do with a part=
-ial
-> > > read?  I don't think anyone has asked for partial reads to be support=
-ed
-> > > from sysfs either except Greg was wondering about it while reading th=
-e
-> > > code.
-> > >
-> > > Currently, a lot of drivers return -EINVAL for partial read/writes bu=
-t
-> > > some return success.  It is a bit messy.  But this patchset doesn't
-> > > really improve anything.  In at24_read() we check if it's going to be=
- a
-> > > partial read and return -EINVAL.  Below we report a partial read as a
-> > > full read.  It's just a more complicated way of doing exactly what we
-> > > were doing before.
-> >
-> > Currently what drivers return is up to their interpretation of int
-> > return type, there are a few drivers which also return the number of
-> > bytes written/read already like
-> > drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c .
->
-> Returning non-zero is a bug.  It won't break bin_attr_nvmem_read/write()
-> but it will break other places like nvmem_access_with_keepouts(),
-> __nvmem_cell_read() and nvmem_cell_prepare_write_buffer() where all
-> non-zero returns from nvmem_reg_read() are treated as an error.
->
+From: Tóth János <gomba007@gmail.com>
 
-Yes, I will resend the patch to fix that.
+Add support for the DFRobot SD2405AL I2C RTC Module.
 
-> > The objective of the patch was to handle partial reads and errors at
-> > the nvmem core and instead of leaving it up to each nvmem provider by
-> > providing a better return value to nvmem providers.
-> >
-> > Regarding drivers/misc/eeprom/at25.c which you pointed below, that is
-> > a problem in my code change. I missed that count was modified later on
-> > and should initialize bytes_written to the new value of count, will
-> > fix that when I come up with the new patch.
-> >
-> > I agree that it does not improve anything for a lot of nvmem providers
-> > for example the ones which call into other reg_map_read/write apis
-> > which do not return the number of bytes read/written but it does help
-> > us do better error handling at the nvmem core layer for nvmem
-> > providers who can return the valid number of bytes read/written.
->
-> If we're going to support partial writes, then it needs to be done all
-> the way.  We need to audit functions like at24_read() and remove the
-> -EINVAL lines.
->
->    440          if (off + count > at24->byte_len)
->    441                  return -EINVAL;
->
-> It should be:
->
->         if (off + count > at24->byte_len)
->                 count =3D at24->byte_len - off;
->
-> Some drivers handle writing zero bytes as -EINVAL and some return 0.
-> Those changes could be done before we change the API.
->
+Datasheet:
+	https://image.dfrobot.com/image/data/TOY0021/SD2405AL%20datasheet%20(Angelo%20v0.1).pdf
 
-Sure, we can do it in a phased manner like you suggested in another
-reply by creating new pointers and slowly moving each driver to the
-new pointer and then deprecating the old one.
+Product:
+	https://www.dfrobot.com/product-1600.html
 
-> You updated nvmem_access_with_keepouts() to handle negative returns but
-> not zero returns so it could lead to a forever loop.
->
+To instantiate (assuming device is connected to I2C-1)
+as root:
+	echo sd2405al 0x32 > /sys/bus/i2c/devices/i2c-1/new_device
+as user:
+	echo 'sd2405al 0x32' | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
 
-Yes, that is a possible case. Will rework it.
+The driver is tested with:
+	+ hwclock
+	+ tools/testing/selftests/rtc/setdate
+	+ tools/testing/selftests/rtc/rtctest
 
-> regards,
-> dan carpenter
->
-Thanks
-Joy
+Signed-off-by: Tóth János <gomba007@gmail.com>
+---
+ MAINTAINERS                |   6 ++
+ drivers/rtc/Kconfig        |  10 +++
+ drivers/rtc/Makefile       |   1 +
+ drivers/rtc/rtc-sd2405al.c | 195 +++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 212 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8754ac2c259d..c78587811433 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6337,6 +6337,12 @@ F:	include/net/devlink.h
+ F:	include/uapi/linux/devlink.h
+ F:	net/devlink/
+ 
++DFROBOT SD2405AL RTC DRIVER
++M:	Tóth János <gomba007@gmail.com>
++L:	linux-rtc@vger.kernel.org
++S:	Maintained
++F:	drivers/rtc/rtc-sd2405al.c
++
+ DH ELECTRONICS IMX6 DHCOM/DHCOR BOARD SUPPORT
+ M:	Christoph Niedermaier <cniedermaier@dh-electronics.com>
+ L:	kernel@dh-electronics.com
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 2a95b05982ad..15f1c0ba5759 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -743,6 +743,16 @@ config RTC_DRV_S5M
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-s5m.
+ 
++config RTC_DRV_SD2405AL
++	tristate "DFRobot SD2405AL"
++	select REGMAP_I2C
++	help
++	  If you say yes here you will get support for the
++	  DFRobot SD2405AL I2C RTC Module.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called rtc-sd2405al.
++
+ config RTC_DRV_SD3078
+ 	tristate "ZXW Shenzhen whwave SD3078"
+ 	select REGMAP_I2C
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 3004e372f25f..3d19feba1e1c 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -162,6 +162,7 @@ obj-$(CONFIG_RTC_DRV_S3C)	+= rtc-s3c.o
+ obj-$(CONFIG_RTC_DRV_S5M)	+= rtc-s5m.o
+ obj-$(CONFIG_RTC_DRV_SA1100)	+= rtc-sa1100.o
+ obj-$(CONFIG_RTC_DRV_SC27XX)	+= rtc-sc27xx.o
++obj-$(CONFIG_RTC_DRV_SD2405AL)	+= rtc-sd2405al.o
+ obj-$(CONFIG_RTC_DRV_SD3078)   += rtc-sd3078.o
+ obj-$(CONFIG_RTC_DRV_SH)	+= rtc-sh.o
+ obj-$(CONFIG_RTC_DRV_SNVS)	+= rtc-snvs.o
+diff --git a/drivers/rtc/rtc-sd2405al.c b/drivers/rtc/rtc-sd2405al.c
+new file mode 100644
+index 000000000000..3250c4616aa3
+--- /dev/null
++++ b/drivers/rtc/rtc-sd2405al.c
+@@ -0,0 +1,195 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * RTC driver for the SD2405AL Real-Time Clock
++ *
++ * Datasheet:
++ * https://image.dfrobot.com/image/data/TOY0021/SD2405AL%20datasheet%20(Angelo%20v0.1).pdf
++ *
++ * Copyright (C) 2024 Tóth János <gomba007@gmail.com>
++ * Copyright (C) 2018 Zoro Li <long17.cool@163.com>
++ */
++
++#include <linux/bcd.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++#include <linux/rtc.h>
++
++#define SD2405AL_REG_T_SEC	0x00
++#define SD2405AL_REG_T_MIN	0x01
++#define SD2405AL_REG_T_HOUR	0x02
++#define SD2405AL_REG_T_WEEK	0x03
++#define SD2405AL_REG_T_DAY	0x04
++#define SD2405AL_REG_T_MON	0x05
++#define SD2405AL_REG_T_YEAR	0x06
++
++#define SD2405AL_REG_A_SEC	0x07
++#define SD2405AL_REG_A_MIN	0x08
++#define SD2405AL_REG_A_HOUR	0x09
++#define SD2405AL_REG_A_WEEK	0x0A
++#define SD2405AL_REG_A_DAY	0x0B
++#define SD2405AL_REG_A_MON	0x0C
++#define SD2405AL_REG_A_YEAR	0x0D
++#define SD2405AL_REG_A_EN	0x0E
++
++#define SD2405AL_REG_CTR1	0x0F
++#define SD2405AL_REG_CTR2	0x10
++#define SD2405AL_REG_CTR3	0x11
++#define SD2405AL_REG_TTF	0x12
++#define SD2405AL_REG_CTR	0x13	/* count down register */
++
++#define SD2405AL_REG_M_START	0x14	/* general RAM start */
++#define SD2405AL_REG_M_END	0x1F	/* general RAM end */
++
++#define SD2405AL_NUM_T_REGS	(SD2405AL_REG_T_YEAR - SD2405AL_REG_T_SEC + 1)
++
++#define SD2405AL_BIT_24H	0x80
++#define SD2405AL_BIT_12H_PM	0x20
++
++struct sd2405al {
++	struct rtc_device	*rtc;
++	struct regmap		*regmap;
++};
++
++static int sd2405al_read_time(struct device *dev, struct rtc_time *time)
++{
++	u8 hour;
++	u8 data[SD2405AL_NUM_T_REGS] = { 0 };
++	struct i2c_client *client = to_i2c_client(dev);
++	struct sd2405al *sd2405al = i2c_get_clientdata(client);
++	int ret;
++
++	ret = regmap_bulk_read(sd2405al->regmap, SD2405AL_REG_T_SEC, data,
++			       SD2405AL_NUM_T_REGS);
++	if (ret < 0) {
++		printk(KBUILD_MODNAME ": reading failed: %d\n", ret);
++		return ret;
++	}
++
++	time->tm_sec = bcd2bin(data[SD2405AL_REG_T_SEC] & 0x7F);
++	time->tm_min = bcd2bin(data[SD2405AL_REG_T_MIN] & 0x7F);
++
++	hour = data[SD2405AL_REG_T_HOUR];
++	if (hour & SD2405AL_BIT_24H)
++		time->tm_hour = bcd2bin(hour & 0x3F);
++	else
++		if (hour & SD2405AL_BIT_12H_PM)
++			time->tm_hour = bcd2bin(hour & 0x1F) + 12;
++		else /* 12 hour mode, AM */
++			time->tm_hour = bcd2bin(hour & 0x1F);
++
++	time->tm_mday = bcd2bin(data[SD2405AL_REG_T_DAY] & 0x3F);
++	time->tm_wday = data[SD2405AL_REG_T_WEEK] & 0x07;
++	time->tm_mon = bcd2bin(data[SD2405AL_REG_T_MON] & 0x1F) - 1;
++	time->tm_year = bcd2bin(data[SD2405AL_REG_T_YEAR]) + 100;
++
++	return 0;
++}
++
++static int sd2405al_set_time(struct device *dev, struct rtc_time *time)
++{
++	u8 data[SD2405AL_NUM_T_REGS];
++	struct i2c_client *client = to_i2c_client(dev);
++	struct sd2405al *sd2405al = i2c_get_clientdata(client);
++	int ret;
++
++	data[SD2405AL_REG_T_SEC] = bin2bcd(time->tm_sec);
++	data[SD2405AL_REG_T_MIN] = bin2bcd(time->tm_min);
++	data[SD2405AL_REG_T_HOUR] = bin2bcd(time->tm_hour) | SD2405AL_BIT_24H;
++	data[SD2405AL_REG_T_DAY] = bin2bcd(time->tm_mday);
++	data[SD2405AL_REG_T_WEEK] = time->tm_wday & 0x07;
++	data[SD2405AL_REG_T_MON] = bin2bcd(time->tm_mon) + 1;
++	data[SD2405AL_REG_T_YEAR] = bin2bcd(time->tm_year - 100);
++
++	ret = regmap_bulk_write(sd2405al->regmap, SD2405AL_REG_T_SEC, data,
++				SD2405AL_NUM_T_REGS);
++	if (ret < 0) {
++		printk(KBUILD_MODNAME ": writing failed: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct rtc_class_ops sd2405al_rtc_ops = {
++	.read_time = sd2405al_read_time,
++	.set_time = sd2405al_set_time,
++};
++
++static const struct regmap_config sd2405al_regmap_conf = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = SD2405AL_REG_M_END,
++};
++
++static int sd2405al_probe(struct i2c_client *client)
++{
++	struct sd2405al *sd2405al;
++	int func;
++	int ret;
++
++	func = i2c_check_functionality(client->adapter, I2C_FUNC_I2C);
++	if (!func) {
++		printk(KBUILD_MODNAME ": invalid adapter\n");
++		return -ENODEV;
++	}
++
++	sd2405al = devm_kzalloc(&client->dev, sizeof(*sd2405al), GFP_KERNEL);
++	if (!sd2405al) {
++		printk(KBUILD_MODNAME ": unable to allocate memory\n");
++		return -ENOMEM;
++	}
++
++	sd2405al->regmap = devm_regmap_init_i2c(client, &sd2405al_regmap_conf);
++	if (IS_ERR(sd2405al->regmap)) {
++		printk(KBUILD_MODNAME ": unable to allocate regmap\n");
++		return PTR_ERR(sd2405al->regmap);
++	}
++
++	i2c_set_clientdata(client, sd2405al);
++
++	sd2405al->rtc = devm_rtc_allocate_device(&client->dev);
++	if (IS_ERR(sd2405al->rtc)) {
++		printk(KBUILD_MODNAME ": unable to allocate device\n");
++		return PTR_ERR(sd2405al->rtc);
++	}
++
++	sd2405al->rtc->ops = &sd2405al_rtc_ops;
++	sd2405al->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	sd2405al->rtc->range_max = RTC_TIMESTAMP_END_2099;
++
++	ret = devm_rtc_register_device(sd2405al->rtc);
++	if (ret < 0) {
++		printk(KBUILD_MODNAME ": unable to register device: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct i2c_device_id sd2405al_id[] = {
++	{ "sd2405al", 0 },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(i2c, sd2405al_id);
++
++static const __maybe_unused struct of_device_id sd2405al_of_match[] = {
++	{ .compatible = "dfrobot,sd2405al" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, sd2405al_of_match);
++
++static struct i2c_driver sd2405al_driver = {
++	.driver = {
++		.name = "sd2405al",
++		.of_match_table = of_match_ptr(sd2405al_of_match),
++	},
++	.probe = sd2405al_probe,
++	.id_table = sd2405al_id,
++};
++
++module_i2c_driver(sd2405al_driver);
++
++MODULE_AUTHOR("Tóth János");
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("SD2405AL RTC driver");
+
+---
+base-commit: c3f38fa61af77b49866b006939479069cd451173
+change-id: 20240607-rtc-sd2405al-a0947377c73d
+
+Best regards,
+-- 
+Tóth János <gomba007@gmail.com>
+
+
 
