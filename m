@@ -1,151 +1,121 @@
-Return-Path: <linux-rtc+bounces-1283-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1284-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49A2A904E41
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 10:36:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA584904EF1
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 11:16:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D261C229AD
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 08:36:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C1B1281AC7
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 09:16:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70EC16D31E;
-	Wed, 12 Jun 2024 08:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE5716D9BB;
+	Wed, 12 Jun 2024 09:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sskzFJ1s"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="rk0dAULC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF83169ACD
-	for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 08:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63989B651;
+	Wed, 12 Jun 2024 09:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718181405; cv=none; b=RFqmkK+R1Gh2a5WDTjiAIEFiXuWvvfNukwpeHcTDuZn5dkYvwFf4CFmTgePQCFRsT9m9nKL6L9Hy9lMRcg/x/x/dythSqCBsqapmUZucnjqnVFBeaah3HNT++QOKc9q/PPJypNuxzwdhS55nQgn0LmW41BtnnjlB3lXu+6J4u8o=
+	t=1718183773; cv=none; b=ftGqYZ4uVm+v1vn7Yxc0YSnukyThVsi1prLHkb6eOesshjl30JIbMAZYSxwqQEU7otXVUZAEcVfLoeXhnu7bAhXICDa4ksNDMZei3dMrugTyHuvBi1KNFi9DIjQsWc8JhUEFEqsJ1r4e9ZUPg1z+OsmYHPibt5lkvPMTwXDmLek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718181405; c=relaxed/simple;
-	bh=t8vj4Z8K291bSOoqidlQpdF9N7ccu19T5Ou01u6zNgs=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qlTFepBrCeZAXljrnKKcYAFSQSvB5R1DyHbqNCAyLbVmVkqtN3ChKDFLiEb1bF5LKOCsSVIWa21DOfWdDg9f5Rm+SOZHYnImO+kHIlS/jHzcprHWQj+TnUsD/oRPZa+Y6zKy9DD/UB9QsGiQcNw+9s7txLd0/lgQj6gylimngUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sskzFJ1s; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dfe5863ca2cso892493276.0
-        for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 01:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718181403; x=1718786203; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=y2uwFL7y38zzuOIY6yZzuRuyB/ucVnnJQUO1JVoJCq4=;
-        b=sskzFJ1sZWSEe6Iw3TMAwHTqO4GfBf60xA73ZznmIyEaBHRWfCjMaR6DaASqSaETam
-         E4bs3aEYBAPKEOmJ3r+chYmhTsJ3qjBalv4TQBn+4mfNTI9hNpsUB6wo87lkQ4Syot39
-         +ldQmp8S7QsK6Ua1/liW/KPNEHXV9K9AASGRCC9PC29DRgJaXAreQxIv4znjZS51b1zO
-         pdWlkg69NG80Qb4CI9gFCQSMKu4AFv6CJFwxlig0BJtGdKIrZeGKw5LAF2aicKMRjXqz
-         e29cnV+3UFnUOnXHKnRY39U5y7truGnMQuTbkTxUfBcnIQxbAEE24r5xPmU1q3UK7SfY
-         zTow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718181403; x=1718786203;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y2uwFL7y38zzuOIY6yZzuRuyB/ucVnnJQUO1JVoJCq4=;
-        b=Luo/RVv9+QSgm0GYQZTng23C7KDGRRanyrzAhibaZ7kPPHWrnQgeeUa33fN8Vd+W7j
-         eaVjGkTz44jytLWX7AZIIdmSYgsh7YTsUb0xIji+Le4iGoNCLtZtqNbfy+VT8mcRbtZL
-         lZhjV4DYjbXPN5P/cgd+nKgj/IOy3IVPhhO/SSlLBtaLTCw/NwiKlvt1Cu4bcGQeIfaQ
-         gdcFfJYryhgAr+jJQxzw1JdoGCNVgcYnDpVGbWCxUXIlLS0ThNBmgafxG+vWPGDft7Wx
-         Tt3yzMXy/ijI05XxxSCbqg0M2if0OV8NOL/ZtSHLZdlY2TVQlyO/i0+IlCaKSMU8pGVA
-         a85A==
-X-Gm-Message-State: AOJu0YwHXihJIvQVoEL0ouIuv0scMUQSH0FFvLuPOft3On+vXa8C/Gh8
-	jJl2VY6CvsqQtqMFgGRAHl91gWbCCS4KJLgGJOtItFOqLDjWh3TOAalgxihfcbthQIJ5JxHUwEK
-	HtLfVvgBIqw==
-X-Google-Smtp-Source: AGHT+IFIUVbh5Q1k3pO2RFjm8lrFGgxO8nKpG5vXdnLpOD1v7TpsJ/omxJ/hn/IlNpFIU9wvgTbQ8u8NRFYnbQ==
-X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a05:6902:2d03:b0:dfe:6bd5:21f4 with SMTP
- id 3f1490d57ef6-dfe6bd52823mr340249276.0.1718181403279; Wed, 12 Jun 2024
- 01:36:43 -0700 (PDT)
-Date: Wed, 12 Jun 2024 08:36:35 +0000
+	s=arc-20240116; t=1718183773; c=relaxed/simple;
+	bh=xdbpE2JCMKwdKOF8sjjQ6y8Q3Mxyjf77mkVC2M2aTaI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jfd+Z3eoWYgJu9ClFt67pVGvzmLHH1ckz4TUF8g4A76no2MWJvgclC4XwDPcYATEuDUMEMt7w3yDuCgM32mIyS0GjV11zwOp1emqDannVTEv6lDoqXpbDWu127xCcG5ZoYoaYOR+QR7By10VBkpaWZJvEo7xi59noCxxdSyUEhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=rk0dAULC; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 97165A079B;
+	Wed, 12 Jun 2024 11:16:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=mmPk5kCKWrmDVuiuhfZm
+	ueQWwvGTObFOeHEn10Q851Y=; b=rk0dAULCGDj84NLQzN8snUnDjM2QlRWlutrD
+	lmCtBcV7SL6csL55N7Ks+sDiEZKHXxzWuF18+GzyO9/rrZyOzK2LwJ7FdB/FtfwU
+	kPt+K+33LKFL6kH8J8unzwb5o5bBUcn3hnjrz05IoGp0K8NDltfTUP3nkpUTiuVn
+	k4fb6cozj4Dp0BMJdBJY2y9q7sMgaNBwDNTrZ/d3qr71yhTw2uA13AIUDyihUVR7
+	jtcfoqW1WXhJvXEyCJo+4s9ir1nlmtDV8SduIVOQBjEyPOSce2GmcJSDdAyu4Ca9
+	TxpcNekweSS9oEFzA1iEg4PvwBl9gBX2EpPhd3Y1rt5saNVvhoSXNkB7xKipbHQQ
+	qXuiaIDQqhePNy00jlWO9CRZebZz9K1D+qBb/1Ids6MelpxqvcUzZuUKdYz+vAGj
+	hazCeK537yyZdrrbi2wDCBSzZska2g+CSyerYSXaX734gKmq6yrCWazR0HfoCjGi
+	Cgx3jNDjBTexvG2sOmKfae5Iv0Bo7dQIBBw7bvhOiHGekArn92T0LgSBS8/iOelU
+	qGDA7bn9r3YDehXCGCjk/cxVNrramCmY/xqsbcUghK3DBkas4e8NmmMNM6G6umBH
+	lWjsi8fnyo17SgW+F6mDVIPc3ZJj/c3zzmrtpTYUfbrvcpZZif713BpdmPtT4RMG
+	63ivsg4=
+Message-ID: <c0b6ad83-b9d4-43e7-8c1a-14b71a2060f8@prolan.hu>
+Date: Wed, 12 Jun 2024 11:16:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
-Message-ID: <20240612083635.1253039-1-joychakr@google.com>
-Subject: [PATCH] rtc: cmos: Fix return value of nvmem callbacks
-From: Joy Chakraborty <joychakr@google.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Joy Chakraborty <joychakr@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2] rtc: pcf2127: Add PPS capability through Seconds
+ Interrupt
+To: Miroslav Lichvar <mlichvar@redhat.com>, Richard Cochran
+	<richardcochran@gmail.com>
+CC: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	=?UTF-8?Q?Szentendrei=2C_Tam=C3=A1s?= <szentendrei.tamas@prolan.hu>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20240611150458.684349-1-csokas.bence@prolan.hu>
+ <Zmks31shpsnoLQ3k@hoboy.vegasvil.org> <ZmlTQsgRiW9fmYcB@localhost>
+Content-Language: en-US
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <ZmlTQsgRiW9fmYcB@localhost>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2945A129576D7567
 
-Read/write callbacks registered with nvmem core expect 0 to be returned
-on success and a negative value to be returned on failure.
+On 6/12/24 09:50, Miroslav Lichvar wrote:
+> On Tue, Jun 11, 2024 at 10:06:39PM -0700, Richard Cochran wrote:
+>> On Tue, Jun 11, 2024 at 05:04:57PM +0200, Csókás, Bence wrote:
+>>
+>>> PCF2127/29/31 is capable of generating an interrupt on every
+>>> second (SI) or minute (MI) change. It signals this through
+>>> the Minute/Second Flag (MSF) as well, which needs to be cleared.
+>>
+>> This is a RFC, and my comment is that a PPS from an RTC is not useful
+>> to the Linux kernel.
+> 
+> I think a TCXO-based RTC can be useful to user space to improve
+> holdover performance with NTP/PTP.
 
-cmos_nvram_read()/cmos_nvram_write() currently return the number of
-bytes read or written, fix to return 0 on success and -EIO incase number
-of bytes requested was not read or written.
+Exactly.
 
-Fixes: 8b5b7958fd1c ("rtc: cmos: use generic nvmem")
-Cc: stable@vger.kernel.org
-Signed-off-by: Joy Chakraborty <joychakr@google.com>
----
- drivers/rtc/rtc-cmos.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+> There already is the RTC_UIE_ON
+> ioctl to enable interrupts and receive them in user space.
+> 
+> The advantage of the PPS device over the ioctl would be more accurate
+> timestamping (kernel vs user-space). Should PPS be supported, it would
+> be nice if it worked generally with all drivers that support RTC_UIE_ON.
 
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 7d99cd2c37a0..35dca2accbb8 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -643,11 +643,10 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
- 			   size_t count)
- {
- 	unsigned char *buf = val;
--	int	retval;
- 
- 	off += NVRAM_OFFSET;
- 	spin_lock_irq(&rtc_lock);
--	for (retval = 0; count; count--, off++, retval++) {
-+	for (; count; count--, off++) {
- 		if (off < 128)
- 			*buf++ = CMOS_READ(off);
- 		else if (can_bank2)
-@@ -657,7 +656,7 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
- 	}
- 	spin_unlock_irq(&rtc_lock);
- 
--	return retval;
-+	return count ? -EIO : 0;
- }
- 
- static int cmos_nvram_write(void *priv, unsigned int off, void *val,
-@@ -665,7 +664,6 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
- {
- 	struct cmos_rtc	*cmos = priv;
- 	unsigned char	*buf = val;
--	int		retval;
- 
- 	/* NOTE:  on at least PCs and Ataris, the boot firmware uses a
- 	 * checksum on part of the NVRAM data.  That's currently ignored
-@@ -674,7 +672,7 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
- 	 */
- 	off += NVRAM_OFFSET;
- 	spin_lock_irq(&rtc_lock);
--	for (retval = 0; count; count--, off++, retval++) {
-+	for (; count; count--, off++) {
- 		/* don't trash RTC registers */
- 		if (off == cmos->day_alrm
- 				|| off == cmos->mon_alrm
-@@ -689,7 +687,7 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
- 	}
- 	spin_unlock_irq(&rtc_lock);
- 
--	return retval;
-+	return count ? -EIO : 0;
- }
- 
- /*----------------------------------------------------------------*/
--- 
-2.45.2.505.gda0bf45e8d-goog
+As we've discussed in v1, UIE hardware support is being removed from the 
+RTC subsystem, which I tried to optionally re-introduce. Since there was 
+no response since then, I assumed that there is no willingness to do 
+that, so I chose the next best option, the PPS subsystem.
+
+On 5/28/24 19:56, Alexandre Belloni wrote:
+ > This has been removed from the kernel 13 years ago. What is your use
+ > case to reintroduce it?
+
+I also agree that multiple RTCs would benefit from this feature. 
+However, we should only add it to those which *have* hardware support 
+for a "one second has elapsed" signal. UIE is currently implemented by 
+setting an alarm to the next second, which didn't work well with the 
+PCF2129.
+
+Bence
 
 
