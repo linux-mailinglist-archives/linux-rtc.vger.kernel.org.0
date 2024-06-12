@@ -1,68 +1,68 @@
-Return-Path: <linux-rtc+bounces-1282-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1283-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 781CB904DAA
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 10:09:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49A2A904E41
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 10:36:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14153B27557
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 08:09:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D261C229AD
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 08:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10CF816C86F;
-	Wed, 12 Jun 2024 08:08:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70EC16D31E;
+	Wed, 12 Jun 2024 08:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X2FX80A+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sskzFJ1s"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7780E16C84B
-	for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 08:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF83169ACD
+	for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 08:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718179720; cv=none; b=YCzI5cETcBE1ivvGx7nkq5s6k3DES/GYMwIPSZosnFO8G7okyI4ZvuLbQNUYOLPC3ulH3pEIEUtZVyR1YUTzpOfy9Cf27PC6i1wqbpI7DHcA8mlQCbc7jgZz5iAbeGTs9SGSgRovSyuebP1cnp9E8ZLlxtGQZ6A3E3VvSfNPLa4=
+	t=1718181405; cv=none; b=RFqmkK+R1Gh2a5WDTjiAIEFiXuWvvfNukwpeHcTDuZn5dkYvwFf4CFmTgePQCFRsT9m9nKL6L9Hy9lMRcg/x/x/dythSqCBsqapmUZucnjqnVFBeaah3HNT++QOKc9q/PPJypNuxzwdhS55nQgn0LmW41BtnnjlB3lXu+6J4u8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718179720; c=relaxed/simple;
-	bh=em6ArzsA1tRoEmAp99yMuwK6zz4EyOuG0naI3YxS0zY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=IjumMsrkWOlP3QdZecp7U/QWte2ojibFJN4fTM0K4tNgN9sv3uM1koiX5/VO1G+dSiZQnWivWMn2/DwiiTkfYADVesDB0sidWwVO1uS+UiHahhG+WvA7xN5zCVLO47f7BpRkEMi8uTRV3WKhHLTpFKSyvvRNGsrMnWvXbUw1IV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X2FX80A+; arc=none smtp.client-ip=209.85.128.201
+	s=arc-20240116; t=1718181405; c=relaxed/simple;
+	bh=t8vj4Z8K291bSOoqidlQpdF9N7ccu19T5Ou01u6zNgs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qlTFepBrCeZAXljrnKKcYAFSQSvB5R1DyHbqNCAyLbVmVkqtN3ChKDFLiEb1bF5LKOCsSVIWa21DOfWdDg9f5Rm+SOZHYnImO+kHIlS/jHzcprHWQj+TnUsD/oRPZa+Y6zKy9DD/UB9QsGiQcNw+9s7txLd0/lgQj6gylimngUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sskzFJ1s; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-62cf6040b72so76045487b3.1
-        for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 01:08:38 -0700 (PDT)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dfe5863ca2cso892493276.0
+        for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 01:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718179717; x=1718784517; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1718181403; x=1718786203; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=D7wZcftQ9M/yW4wOMYmHU4YilbwPgD+FPr90gUkx4Jo=;
-        b=X2FX80A+3BD6G4gmpv671EYunMRBPnvJ8Xs7m1GmjKbnGPCoMmvAkPFqZEpyFfTUfD
-         OOutjUz0OX1gnPhq9YdAssUmRF4IUcjJC96U148zEBBfmci3sFSdI8Gt6umYkmjvCHsY
-         9CCX8Gg6xYBfLoHZ2JxH2BE3tGCLxXgN1g2R4LFeienEQGLx6qWb3p7RNgygaFSGGpqP
-         ynrob8T9rk4P1cm65W+xUaRb69+NeSYbOgUHHJ7YsowjSQ80sJOVYCMu5nKsF71at0QV
-         UxTeh1irB3MUeG0oeKNfCL0bbT2Pld6jQxvnCsS/WcNF7G3pR0L3NP202Dhva0Jw86bj
-         nHcA==
+        bh=y2uwFL7y38zzuOIY6yZzuRuyB/ucVnnJQUO1JVoJCq4=;
+        b=sskzFJ1sZWSEe6Iw3TMAwHTqO4GfBf60xA73ZznmIyEaBHRWfCjMaR6DaASqSaETam
+         E4bs3aEYBAPKEOmJ3r+chYmhTsJ3qjBalv4TQBn+4mfNTI9hNpsUB6wo87lkQ4Syot39
+         +ldQmp8S7QsK6Ua1/liW/KPNEHXV9K9AASGRCC9PC29DRgJaXAreQxIv4znjZS51b1zO
+         pdWlkg69NG80Qb4CI9gFCQSMKu4AFv6CJFwxlig0BJtGdKIrZeGKw5LAF2aicKMRjXqz
+         e29cnV+3UFnUOnXHKnRY39U5y7truGnMQuTbkTxUfBcnIQxbAEE24r5xPmU1q3UK7SfY
+         zTow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718179717; x=1718784517;
+        d=1e100.net; s=20230601; t=1718181403; x=1718786203;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=D7wZcftQ9M/yW4wOMYmHU4YilbwPgD+FPr90gUkx4Jo=;
-        b=GHHk8RNP+1oZaSLrK9Kx/jdcpakJX8ORmtSlm/J81adONy9ZkfPHkxRVMq2FSczv20
-         7sP2IwSTp4W0HuIbwv09qjyBCUwWupRIbRGHxpd4eFK6bdiVdlLfZTvjLn1lrGQDRKD8
-         7aGj0MosgBZ4xMt6j0teuTpcVWzOzo7q5d3QlAS1YlR1LypWsSkk38PhvUY/BJUOMS1F
-         fqB+z+9z/iOaJHMxCwMEwJriZljIcswB6BJRV1p68XDwCwfSNV/gVPaVQa/PIm7qRddt
-         ZLxKzt3zkebskv9+/DuOqEmD+XiVn6l4im2V+Hfm7kGNHFnw5YR1NCFYALfljZLC3D4A
-         wAiQ==
-X-Gm-Message-State: AOJu0YyXtEUt+zqIt76QuzOPbTmeeQ8jxwaGFs2ESWwa5w0XYgo7Ytia
-	6GkVXcThXsCCRWzBbATrkeHLAmhk3cO5KSbIHPKd7IPvJxjQRGPDJrX75Gb0+oVPpYeh6gKfJDk
-	HW2OhzufYYA==
-X-Google-Smtp-Source: AGHT+IFih9KOCmkvGDr3QYIZoisL4WxR63SjUfwB6+Hinvi4meZpmIs024F5z0kQ/rRtn5JXq3yWrK9EA3jC2Q==
+        bh=y2uwFL7y38zzuOIY6yZzuRuyB/ucVnnJQUO1JVoJCq4=;
+        b=Luo/RVv9+QSgm0GYQZTng23C7KDGRRanyrzAhibaZ7kPPHWrnQgeeUa33fN8Vd+W7j
+         eaVjGkTz44jytLWX7AZIIdmSYgsh7YTsUb0xIji+Le4iGoNCLtZtqNbfy+VT8mcRbtZL
+         lZhjV4DYjbXPN5P/cgd+nKgj/IOy3IVPhhO/SSlLBtaLTCw/NwiKlvt1Cu4bcGQeIfaQ
+         gdcFfJYryhgAr+jJQxzw1JdoGCNVgcYnDpVGbWCxUXIlLS0ThNBmgafxG+vWPGDft7Wx
+         Tt3yzMXy/ijI05XxxSCbqg0M2if0OV8NOL/ZtSHLZdlY2TVQlyO/i0+IlCaKSMU8pGVA
+         a85A==
+X-Gm-Message-State: AOJu0YwHXihJIvQVoEL0ouIuv0scMUQSH0FFvLuPOft3On+vXa8C/Gh8
+	jJl2VY6CvsqQtqMFgGRAHl91gWbCCS4KJLgGJOtItFOqLDjWh3TOAalgxihfcbthQIJ5JxHUwEK
+	HtLfVvgBIqw==
+X-Google-Smtp-Source: AGHT+IFIUVbh5Q1k3pO2RFjm8lrFGgxO8nKpG5vXdnLpOD1v7TpsJ/omxJ/hn/IlNpFIU9wvgTbQ8u8NRFYnbQ==
 X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a05:690c:d8f:b0:62d:42d:5f73 with SMTP id
- 00721157ae682-62fbb6fb1b8mr3478157b3.5.1718179717496; Wed, 12 Jun 2024
- 01:08:37 -0700 (PDT)
-Date: Wed, 12 Jun 2024 08:08:31 +0000
+ (user=joychakr job=sendgmr) by 2002:a05:6902:2d03:b0:dfe:6bd5:21f4 with SMTP
+ id 3f1490d57ef6-dfe6bd52823mr340249276.0.1718181403279; Wed, 12 Jun 2024
+ 01:36:43 -0700 (PDT)
+Date: Wed, 12 Jun 2024 08:36:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -70,10 +70,10 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
-Message-ID: <20240612080831.1227131-1-joychakr@google.com>
-Subject: [PATCH] rtc: isl1208: Fix return value of nvmem callbacks
+Message-ID: <20240612083635.1253039-1-joychakr@google.com>
+Subject: [PATCH] rtc: cmos: Fix return value of nvmem callbacks
 From: Joy Chakraborty <joychakr@google.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Trent Piepho <tpiepho@impinj.com>, 
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
 	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>
 Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Joy Chakraborty <joychakr@google.com>, stable@vger.kernel.org
@@ -82,56 +82,69 @@ Content-Type: text/plain; charset="UTF-8"
 Read/write callbacks registered with nvmem core expect 0 to be returned
 on success and a negative value to be returned on failure.
 
-isl1208_nvmem_read()/isl1208_nvmem_write() currently return the number of
-bytes read/written on success, fix to return 0 on success and negative on
-failure.
+cmos_nvram_read()/cmos_nvram_write() currently return the number of
+bytes read or written, fix to return 0 on success and -EIO incase number
+of bytes requested was not read or written.
 
-Fixes: c3544f6f51ed ("rtc: isl1208: Add new style nvmem support to driver")
+Fixes: 8b5b7958fd1c ("rtc: cmos: use generic nvmem")
 Cc: stable@vger.kernel.org
 Signed-off-by: Joy Chakraborty <joychakr@google.com>
 ---
- drivers/rtc/rtc-isl1208.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ drivers/rtc/rtc-cmos.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index e50c23ee1646..206f96b90f58 100644
---- a/drivers/rtc/rtc-isl1208.c
-+++ b/drivers/rtc/rtc-isl1208.c
-@@ -775,14 +775,13 @@ static int isl1208_nvmem_read(void *priv, unsigned int off, void *buf,
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 7d99cd2c37a0..35dca2accbb8 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -643,11 +643,10 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
+ 			   size_t count)
  {
- 	struct isl1208_state *isl1208 = priv;
- 	struct i2c_client *client = to_i2c_client(isl1208->rtc->dev.parent);
--	int ret;
+ 	unsigned char *buf = val;
+-	int	retval;
  
- 	/* nvmem sanitizes offset/count for us, but count==0 is possible */
- 	if (!count)
- 		return count;
--	ret = isl1208_i2c_read_regs(client, ISL1208_REG_USR1 + off, buf,
-+
-+	return isl1208_i2c_read_regs(client, ISL1208_REG_USR1 + off, buf,
- 				    count);
--	return ret == 0 ? count : ret;
+ 	off += NVRAM_OFFSET;
+ 	spin_lock_irq(&rtc_lock);
+-	for (retval = 0; count; count--, off++, retval++) {
++	for (; count; count--, off++) {
+ 		if (off < 128)
+ 			*buf++ = CMOS_READ(off);
+ 		else if (can_bank2)
+@@ -657,7 +656,7 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
+ 	}
+ 	spin_unlock_irq(&rtc_lock);
+ 
+-	return retval;
++	return count ? -EIO : 0;
  }
  
- static int isl1208_nvmem_write(void *priv, unsigned int off, void *buf,
-@@ -790,15 +789,13 @@ static int isl1208_nvmem_write(void *priv, unsigned int off, void *buf,
+ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
+@@ -665,7 +664,6 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
  {
- 	struct isl1208_state *isl1208 = priv;
- 	struct i2c_client *client = to_i2c_client(isl1208->rtc->dev.parent);
--	int ret;
+ 	struct cmos_rtc	*cmos = priv;
+ 	unsigned char	*buf = val;
+-	int		retval;
  
- 	/* nvmem sanitizes off/count for us, but count==0 is possible */
- 	if (!count)
- 		return count;
--	ret = isl1208_i2c_set_regs(client, ISL1208_REG_USR1 + off, buf,
--				   count);
+ 	/* NOTE:  on at least PCs and Ataris, the boot firmware uses a
+ 	 * checksum on part of the NVRAM data.  That's currently ignored
+@@ -674,7 +672,7 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
+ 	 */
+ 	off += NVRAM_OFFSET;
+ 	spin_lock_irq(&rtc_lock);
+-	for (retval = 0; count; count--, off++, retval++) {
++	for (; count; count--, off++) {
+ 		/* don't trash RTC registers */
+ 		if (off == cmos->day_alrm
+ 				|| off == cmos->mon_alrm
+@@ -689,7 +687,7 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
+ 	}
+ 	spin_unlock_irq(&rtc_lock);
  
--	return ret == 0 ? count : ret;
-+	return isl1208_i2c_set_regs(client, ISL1208_REG_USR1 + off, buf,
-+				   count);
+-	return retval;
++	return count ? -EIO : 0;
  }
  
- static const struct nvmem_config isl1208_nvmem_config = {
+ /*----------------------------------------------------------------*/
 -- 
 2.45.2.505.gda0bf45e8d-goog
 
