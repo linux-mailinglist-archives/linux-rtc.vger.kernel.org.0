@@ -1,129 +1,126 @@
-Return-Path: <linux-rtc+bounces-1286-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1287-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74F4A905104
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 13:01:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B340F905A54
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 20:06:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E289286A8C
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 11:01:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEA341C2163B
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jun 2024 18:06:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25D581534EA;
-	Wed, 12 Jun 2024 11:01:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310DC1822E4;
+	Wed, 12 Jun 2024 18:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JUuagIPQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2jJIbQOd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A444B3D388;
-	Wed, 12 Jun 2024 11:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9887C181312
+	for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 18:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718190092; cv=none; b=k4m0LDn5jU+PQRTPSjTDVH3PPZzfJsNDaiA/3CesgwaRdlag0lbon1tfkYyedKpKjaZV+CGywcLOCWG70Yzosh1HQSr3iA5AYVMUxLaUaOv668B5prkulozXk86Kq1+9qTbHRrfgLF5mh2Yq1Bdzn/iu6Lq8cGdd3W65fVSQu/w=
+	t=1718215563; cv=none; b=TETndGb1jn4rH60Yrn8TV4t7mg+T1PMk3Sd6vEjLoQBDXGn9+LRGS08hhuqYKKveWITiep4K02Ciq9XukRq1aptUbIylu78KJETo8fMSdMPc6YgExZlbY9ezVs77LPAscPiUJlC43cNE9Tix/p10r5MUNxAXxg8kOFA0fZjrz6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718190092; c=relaxed/simple;
-	bh=NNQLKjgkGeccMfGsnuL1MDtgD5ZRTMQ0Y1kyLbDsTFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xou+eBTek2I/U7qPs3HwX3WvG/vAYOpXvm/FvcD85NZmkZS+LclcV+Kq0wt2g6hg9Q5dXtvqd5SLMaNNpOthAph4JwIOLtoPYZnK8VvvzFu3lno6dZ5H5p+I2uJP/0FzrS6ig7R8Z9K2ymnU3HPm6QQP8uavlfpI6vbLZG3ho1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JUuagIPQ; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B5DF60002;
-	Wed, 12 Jun 2024 11:01:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1718190087;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/7rG/GEjvXPlerb9QqvuKiLbAOCohc8u7hrLFYRHIqM=;
-	b=JUuagIPQ9RTp9a9IV0xljGSyy8wwd2k1OZFvNFHuJ6ONMVsu/dfLEGHpkaxcYCjnjrv7OH
-	Sx6WSA3PcfQZqWT+2RFTJ58iUihfwVAx2kOXbpHzGqAtft7rTW7cRJc3TV8cxPLnapMt55
-	R8ftNVmv//tdeDjSdCbw7LiD6XvS6yvxtbOEdcCQoxXnnMl5C1pp+cbbvjcwRegQPh0qWp
-	CHBhwG7+310/n3k4kQTwTTBrM8Dg1mGZx/flP9uN/8opPXvXIgHhyM1J2v1CxOsf5bYKK9
-	On8ZW8SEZ7/dTA4Aw1UsZwIHYqZ0d2N/5VgS9vypygFnTZn29VlOh8FKBeXJ9Q==
-Date: Wed, 12 Jun 2024 13:01:27 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: =?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>
-Cc: Miroslav Lichvar <mlichvar@redhat.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	=?iso-8859-1?Q?Szentendrei=2C_Tam=E1s?= <szentendrei.tamas@prolan.hu>
-Subject: Re: [RFC PATCH v2] rtc: pcf2127: Add PPS capability through Seconds
- Interrupt
-Message-ID: <202406121101270f7d84a9@mail.local>
-References: <20240611150458.684349-1-csokas.bence@prolan.hu>
- <Zmks31shpsnoLQ3k@hoboy.vegasvil.org>
- <ZmlTQsgRiW9fmYcB@localhost>
- <c0b6ad83-b9d4-43e7-8c1a-14b71a2060f8@prolan.hu>
+	s=arc-20240116; t=1718215563; c=relaxed/simple;
+	bh=Gd82Zk9HO0FaelXqjYb+95hIZHZ1fOFMGTGfcVbJ/Uo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=OpNyN20KUkdIrvASUqNyxxMImKUhp0qJMCENIWl9aGH6+QXVKcoALLqLwcwNNi5l7ksT8QXIWYxdJjSy2zPydyEt9Q4adxGCvaQRzlYZKt7Vn+SENy1PvzkQ3+b0l8uM4QaE+1HdWY3TnG4WOE4Lb611u540DpxLZBMlvzhO53I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2jJIbQOd; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joychakr.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dfb2fc8ca5dso198466276.1
+        for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 11:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1718215560; x=1718820360; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DK2lnuC9xeLQB13VAfnEGsxTqF4Q5It1ZYUuF9NnW6w=;
+        b=2jJIbQOdVZu4gvWzSQG/Ui3G5YTzOi2GgXJXSTArpPXgoKTcQGl0RXex7RxR5lBZJY
+         qu7IOlPunyFEpKiwHF2XKT88qZQg/z7TW7ABb9t8T/wGvAdGtXHdu4/HcRTAQ9bfWxDl
+         pJdNNrVNdN4AZ6ndwkt5iI298qNkZWWLq3O5ji4dmcwqexwSnjw9N/xl2C167R2Ywp9+
+         n9VAG3BjosAJ1ZyyqYhWBfTIn90Babl6szqTLOzG7M0VPggE6z0LjZqqXlTqXHgblXJ1
+         5kEMUopDx2b0cScKcKIO3pRWl9VZV67Lcw4tPVP/Em8zYpXqbD9YLosVLptOjKWU2lVS
+         I6LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718215560; x=1718820360;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DK2lnuC9xeLQB13VAfnEGsxTqF4Q5It1ZYUuF9NnW6w=;
+        b=K44OaqiDqmh81dhjA9tKM0ZKSY+PiXafdrOkTYjKTlCsfISrNone+EHAxg6bCTyVU2
+         9iH/lwfGaXfXdseTDoxImM9doHxij5rDzr5g3ehzQYkST4ccchPlNUlDWCkiiU75Bfbw
+         iJtf0KREkyEnVe+OoiNf4L/b3+1l0lSDAJHDJjqUU+f1+9eru2ONGltgTSgJg/Ai26Em
+         W1JfM88E2EB8eCLGpyn8FAgIYgxU/aGBJGE/zq00uouky9O4d1iOJjOyvXtE3suft/1+
+         a1FcnTEV3Me6rK6h4BOLkEPT6QYuplfykMxluwt113WEzwCP4dUB/G/q86SDlCahPk81
+         aN6A==
+X-Gm-Message-State: AOJu0YwcOLgaLtOeFbyyq4CqxqQ60t2qVVjYwNSg0aT8AakdiAzKn1vi
+	QBNWDb+uE+sBrJGU/dKlL6X56nwJoa6Nu+ywvMkU3QX8+v/WJcdBPtbhpr3p8Bqi6w9CZb90Nxw
+	XSmHl3wmO/w==
+X-Google-Smtp-Source: AGHT+IHf2XeMCGmx6fbqkkJUp1H+CkPxzQ7NkEfYAzK80CjQTOiAo90nx+YcVMfx8SJXrPOo4VzjcIJUz4RbCA==
+X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
+ (user=joychakr job=sendgmr) by 2002:a25:aba8:0:b0:de6:bf2:b026 with SMTP id
+ 3f1490d57ef6-dfe690fbcbfmr93737276.13.1718215560613; Wed, 12 Jun 2024
+ 11:06:00 -0700 (PDT)
+Date: Wed, 12 Jun 2024 18:05:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c0b6ad83-b9d4-43e7-8c1a-14b71a2060f8@prolan.hu>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
+Message-ID: <20240612180554.1328409-1-joychakr@google.com>
+Subject: [PATCH] rtc: abx80x: Fix return value of nvmem callback on read
+From: Joy Chakraborty <joychakr@google.com>
+To: Sean Anderson <sean.anderson@seco.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Joy Chakraborty <joychakr@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 12/06/2024 11:16:02+0200, Csókás Bence wrote:
-> On 6/12/24 09:50, Miroslav Lichvar wrote:
-> > On Tue, Jun 11, 2024 at 10:06:39PM -0700, Richard Cochran wrote:
-> > > On Tue, Jun 11, 2024 at 05:04:57PM +0200, Csókás, Bence wrote:
-> > > 
-> > > > PCF2127/29/31 is capable of generating an interrupt on every
-> > > > second (SI) or minute (MI) change. It signals this through
-> > > > the Minute/Second Flag (MSF) as well, which needs to be cleared.
-> > > 
-> > > This is a RFC, and my comment is that a PPS from an RTC is not useful
-> > > to the Linux kernel.
-> > 
-> > I think a TCXO-based RTC can be useful to user space to improve
-> > holdover performance with NTP/PTP.
-> 
-> Exactly.
-> 
-> > There already is the RTC_UIE_ON
-> > ioctl to enable interrupts and receive them in user space.
-> > 
-> > The advantage of the PPS device over the ioctl would be more accurate
-> > timestamping (kernel vs user-space). Should PPS be supported, it would
-> > be nice if it worked generally with all drivers that support RTC_UIE_ON.
-> 
-> As we've discussed in v1, UIE hardware support is being removed from the RTC
-> subsystem, which I tried to optionally re-introduce. Since there was no
-> response since then, I assumed that there is no willingness to do that, so I
-> chose the next best option, the PPS subsystem.
+Read callbacks registered with nvmem core expect 0 to be returned on
+success and a negative value to be returned on failure.
 
-I won't reintroduce UIE but I'm going to fix the issue you see with the
-pcf2129.
+abx80x_nvmem_xfer() on read calls i2c_smbus_read_i2c_block_data() which
+returns the number of bytes read on success as per its api description,
+this return value is handled as an error and returned to nvmem even on
+success.
 
-> 
-> On 5/28/24 19:56, Alexandre Belloni wrote:
-> > This has been removed from the kernel 13 years ago. What is your use
-> > case to reintroduce it?
-> 
-> I also agree that multiple RTCs would benefit from this feature. However, we
-> should only add it to those which *have* hardware support for a "one second
-> has elapsed" signal. UIE is currently implemented by setting an alarm to the
-> next second, which didn't work well with the PCF2129.
+Fix to handle all possible values that would be returned by
+i2c_smbus_read_i2c_block_data().
 
-I agree with Miroslav that if done, this should be subsystem wise and
-not just for individual drivers.
+Fixes: e90ff8ede777 ("rtc: abx80x: Add nvmem support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Joy Chakraborty <joychakr@google.com>
+---
+ drivers/rtc/rtc-abx80x.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-
-
-> 
-> Bence
-> 
-
+diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+index fde2b8054c2e..0f5847d1ca2a 100644
+--- a/drivers/rtc/rtc-abx80x.c
++++ b/drivers/rtc/rtc-abx80x.c
+@@ -711,9 +711,16 @@ static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
+ 		else
+ 			ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
+ 							    len, val);
+-		if (ret)
++		if (ret < 0)
+ 			return ret;
+ 
++		if (!write) {
++			if (ret)
++				len = ret;
++			else
++				return -EIO;
++		}
++
+ 		offset += len;
+ 		val += len;
+ 		bytes -= len;
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.45.2.505.gda0bf45e8d-goog
+
 
