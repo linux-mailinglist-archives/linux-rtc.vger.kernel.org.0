@@ -1,156 +1,164 @@
-Return-Path: <linux-rtc+bounces-1290-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1291-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E26F39063F4
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Jun 2024 08:20:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0219906430
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Jun 2024 08:38:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88B8A284FC9
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Jun 2024 06:20:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54B521F2465C
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Jun 2024 06:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D43313AD27;
-	Thu, 13 Jun 2024 06:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1FC137767;
+	Thu, 13 Jun 2024 06:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Vt0HP0gF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AXEuLiE/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7FC137928
-	for <linux-rtc@vger.kernel.org>; Thu, 13 Jun 2024 06:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32923137753
+	for <linux-rtc@vger.kernel.org>; Thu, 13 Jun 2024 06:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718259529; cv=none; b=iaVnr67gV/cBeaTHx5hw1WEExtvef+oKEMQBS4BHyqCUCekm6JdaDYGpf7TD/bcpYn/dLMN45unIPZ6qpp3mPbqvT/iQwdrCXQblgmpSnP7vCN7y9qm8TbGMw/WDH/I+5+xmN/IvT/0DcDh6unkcDQYYyQ4rvgJXD5N4eG55kQ8=
+	t=1718260683; cv=none; b=CFUepoXhZzzKMPjL88ofZ9F5ym+1vb5SU+H3ajsHbvIaWJ/H6QLEdoM2lehgLV4wDeheqkhN9kZSfJ5zaICQvF6RxH6IrHBrALbXRzd/MDkT9LP3SU5fHrm+K9K9Wg3zNvrCxmp8XJkp+xhlXqxPfQA2g6kaH4zGGAd3K5nroCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718259529; c=relaxed/simple;
-	bh=3Z53dCKnXADH8Fw5ImCagIWN6dJCq2ct9xcffJ8kRjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O2wNCk+xK4LHn9OAY2oeAb7K1Q06EyNwP1AV4S7eoUG/o+PVlEVnBYWZRJhGf8X4ncY75r6/SJr4sxNmJa2AGRYPZ4bh+ZBGDMe8kZ/7j+in1VfTnLVAymS/2qKz/lVWyI8zufUUB663ygJFepRFT8Qj5MPjOQ9KM/jgdFnlUpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Vt0HP0gF; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-35f236a563cso595581f8f.2
-        for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 23:18:47 -0700 (PDT)
+	s=arc-20240116; t=1718260683; c=relaxed/simple;
+	bh=D4H9WEaybswir/ij5ZUvHUvZ3BrEX8LaPweXhA6txCQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tFIpw5vm16mcwMOnx71KVs4uPggZ8nNNqyCmiChtHurLwdxxEBaEYrk599HajvEW5B8HetvtLrtPHPPt/P3l5HQVnCVbEE9mgGh+uchM3ChmBwro/aAZzDF+DJH54/IHSwKcXQuCirA+1Ar3JUeMKghDb1jNYiPc79XOJ8OKuw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AXEuLiE/; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5751bcb3139so520281a12.1
+        for <linux-rtc@vger.kernel.org>; Wed, 12 Jun 2024 23:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718259526; x=1718864326; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U+orkaLah96MSYcST73OEUrcKzMMY5Uv1LAki9HT0H0=;
-        b=Vt0HP0gFxCku7boGCuiVmQs/ZxsbujqngOA1liUur5p0BeaouB6EHht6RP78L8tCAH
-         vg2ChfpjCLDAOkfCZKm/dH+RxtrE9KVQjs2u0XxnHBfd7DN5N4CS+cP2d7YysdDwS9uA
-         D7KE3HNgOoqlsUpc1BBQww8xXHBZfKH+5dTg8VlFhvEWYT8BgIvPVUjbST8076wj/Gq0
-         ENZ62Wjn59VtWuFuTYnXx/2DkOLJNf4yTcfvW3XLRmjY4rlk5SbacuBnoSZdC9VHQIh7
-         F11ZhWr5IcYpb94rXhF0N1+8dLDwMy8bNUmkhjf0M0pNJNAT9h6baQIcob5v8Qghtefh
-         Sdkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718259526; x=1718864326;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1718260680; x=1718865480; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U+orkaLah96MSYcST73OEUrcKzMMY5Uv1LAki9HT0H0=;
-        b=mASjUEhOmghtHKUKakwMXtvPW9wNFiFzxlYA+DDrPfQiwueEdmkH1WFfwwh5GLJxSg
-         NX0UPzE3PhXIhzCFb1uX6trWdDIQlIsvVI05dPLrx0wrnxkPp+FpsPcnAKfHNRDdb0AK
-         U4S1IqjXKTgI0h8I5PKaAFdYthb09HYJ/0mOlpxs8M/9za/mjOjdjjx85hLqvHHkRxCK
-         TcPd8IaPwjA2qpR510UOvYOeJxZEphsyn9Fvr+jUiQLw+X6beSDIOMdr6mY+aFNTECgN
-         JLHPQUqscvjglNzAgd+3ss+v2YQxYVN1uMPg2WOr5oIymj1P+qus8NQid0KsNASIu2op
-         L+9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVDhijMLYzCgJ7AYFUKPkhHQaC24qZdIfVF+hpvB2poKNu+h/0MkynIjBrKuHXNcUZdENzC47xZpirHWcHeSWNcjpEvoF/jYiiC
-X-Gm-Message-State: AOJu0YwCKEyIrMc1hJu4ElwtiAly529mE2H1CrKT/eIT+UYz6VhJoOt6
-	ZiqCHxxIHVNsrb0WW1vMe+hRN7g3syjANT0GKxoL1cchTeTAZ7BCTlcFfu3dOaQ=
-X-Google-Smtp-Source: AGHT+IEKdhomx8kt/PH3knZBe5enTq8waWMbEj1dCXb77V0AT8udraQcqI/cxnxbfkjPvMadq95X7A==
-X-Received: by 2002:a05:6000:136a:b0:35f:f32:49d7 with SMTP id ffacd0b85a97d-35fe892ea05mr2784940f8f.55.1718259525425;
-        Wed, 12 Jun 2024 23:18:45 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3607509c8c2sm706089f8f.31.2024.06.12.23.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jun 2024 23:18:45 -0700 (PDT)
-Date: Thu, 13 Jun 2024 09:18:41 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Joy Chakraborty <joychakr@google.com>
-Cc: Sean Anderson <sean.anderson@seco.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] rtc: abx80x: Fix return value of nvmem callback on read
-Message-ID: <f0dbf963-bfd9-4a0b-8284-d141999da184@moroto.mountain>
-References: <20240612180554.1328409-1-joychakr@google.com>
+        bh=nSxaLeoUF2GB1Ynl8GPq9r0Ie6ml6kc6+0f2KJsgPRI=;
+        b=AXEuLiE/uoqR6/G8TRtZ7Fthaw3ew+CCyLh8U8snXL54+PPjXidFKllyGOk7zlkgZv
+         Haxg+yCqc3teH9EoVzDJ4UO8uo0NqPtiml+p7ejaZwi4HfAXFWlCUwXIk38Ff/bbbQfe
+         8Lvi91ngAvc941Ec8M2eHQGb0wQPivU7s1rT/uXMbXeGDoJk4QMiYWynOk5bsCUHedrK
+         RSD2ANuTVd8505LC25cyLVVKv65xOKW9GFm+sQ5J8TNsSHV97HZOyziPVx8CqjDAMvg2
+         zrbzDWCRuFDRaYKR47rbc20qvsC22ZAfdWsGEDYZHzyy1RVo3fTtOPcdjoH74/IsGHkq
+         9LWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718260680; x=1718865480;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nSxaLeoUF2GB1Ynl8GPq9r0Ie6ml6kc6+0f2KJsgPRI=;
+        b=EYGt/A8w5yg6uIqLVLPS1+T3guLB9Jdw6H5U1a9eD/d9/xkFdjpq49YuQzagQ15msE
+         jm7f/TsGJd8SvRfUAz44vgAdyCo+M2KfUblwGNAxPzH0hZjMCiTjorBUU+oHXbTKZgAR
+         HbGTdfO9w2QiUBwlQdC78RFz1OcXOLiNPvu2dwuBSavb9HGaqqSFt1wEaBZg3L07/XWD
+         OyaZRiBNugcywosc9OExoLUO5lLjd0z26pgxQTckKE8eh/5qV7c83ZsnhMOkt5S349e7
+         +TYUukIENjlSbAKd4NQ8hm/yLPyx7mUsbRKYirfQKaRh756D14y0yhzKamDhV8sJpOQA
+         DJig==
+X-Forwarded-Encrypted: i=1; AJvYcCUciQOPevM5phdmG0Fd8JCyE6+BFpltEan+zTlMxyIyaxwMTsRezwGxhz0i16UGviF2nxaMOOdU2Yk92rFAFxauRqznbe00Vxat
+X-Gm-Message-State: AOJu0YyMr6IMOO7MaVASxnEtRXrD1IDuM0YGzi35rOQUrLX5qcSCXtSc
+	ctH5BSIznLc/8oVTrmYiRVtFgcek20/H+p2Sn3hzVoxoRp4IbA2hSZgTYByrRtKRrVcK3Wm2y/K
+	A9Ek3dfyr1h0zY1rqGe7ygdsSxheyap/gElrz
+X-Google-Smtp-Source: AGHT+IEqcKmqMMras1IdQ4mwQeBPhF+tSokCQR7CyHJU0B0QtGnxu+D8T/n28pxb8A+jM+mpThteZ/Rdl1GC9K4JyBE=
+X-Received: by 2002:a17:907:e91:b0:a68:fb0c:b294 with SMTP id
+ a640c23a62f3a-a6f47d622d0mr247392466b.77.1718260680210; Wed, 12 Jun 2024
+ 23:38:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612180554.1328409-1-joychakr@google.com>
+References: <20240612180554.1328409-1-joychakr@google.com> <f0dbf963-bfd9-4a0b-8284-d141999da184@moroto.mountain>
+In-Reply-To: <f0dbf963-bfd9-4a0b-8284-d141999da184@moroto.mountain>
+From: Joy Chakraborty <joychakr@google.com>
+Date: Thu, 13 Jun 2024 12:07:46 +0530
+Message-ID: <CAOSNQF1AiD5rcpJr=c8Dov=j-g4=xOZXViX+Xibu_kBA=2rzgA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: abx80x: Fix return value of nvmem callback on read
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Sean Anderson <sean.anderson@seco.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, linux-rtc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 12, 2024 at 06:05:54PM +0000, Joy Chakraborty wrote:
-> Read callbacks registered with nvmem core expect 0 to be returned on
-> success and a negative value to be returned on failure.
-> 
-> abx80x_nvmem_xfer() on read calls i2c_smbus_read_i2c_block_data() which
-> returns the number of bytes read on success as per its api description,
-> this return value is handled as an error and returned to nvmem even on
-> success.
-> 
-> Fix to handle all possible values that would be returned by
-> i2c_smbus_read_i2c_block_data().
-> 
-> Fixes: e90ff8ede777 ("rtc: abx80x: Add nvmem support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Joy Chakraborty <joychakr@google.com>
-> ---
->  drivers/rtc/rtc-abx80x.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
-> index fde2b8054c2e..0f5847d1ca2a 100644
-> --- a/drivers/rtc/rtc-abx80x.c
-> +++ b/drivers/rtc/rtc-abx80x.c
-> @@ -711,9 +711,16 @@ static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
->  		else
->  			ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
->  							    len, val);
-> -		if (ret)
-> +		if (ret < 0)
->  			return ret;
->  
-> +		if (!write) {
-> +			if (ret)
-> +				len = ret;
-> +			else
-> +				return -EIO;
-> +		}
+On Thu, Jun 13, 2024 at 11:48=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
+o.org> wrote:
+>
+> On Wed, Jun 12, 2024 at 06:05:54PM +0000, Joy Chakraborty wrote:
+> > Read callbacks registered with nvmem core expect 0 to be returned on
+> > success and a negative value to be returned on failure.
+> >
+> > abx80x_nvmem_xfer() on read calls i2c_smbus_read_i2c_block_data() which
+> > returns the number of bytes read on success as per its api description,
+> > this return value is handled as an error and returned to nvmem even on
+> > success.
+> >
+> > Fix to handle all possible values that would be returned by
+> > i2c_smbus_read_i2c_block_data().
+> >
+> > Fixes: e90ff8ede777 ("rtc: abx80x: Add nvmem support")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> > ---
+> >  drivers/rtc/rtc-abx80x.c | 9 ++++++++-
+> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+> > index fde2b8054c2e..0f5847d1ca2a 100644
+> > --- a/drivers/rtc/rtc-abx80x.c
+> > +++ b/drivers/rtc/rtc-abx80x.c
+> > @@ -711,9 +711,16 @@ static int abx80x_nvmem_xfer(struct abx80x_priv *p=
+riv, unsigned int offset,
+> >               else
+> >                       ret =3D i2c_smbus_read_i2c_block_data(priv->clien=
+t, reg,
+> >                                                           len, val);
+> > -             if (ret)
+> > +             if (ret < 0)
+> >                       return ret;
+> >
+> > +             if (!write) {
+> > +                     if (ret)
+> > +                             len =3D ret;
+> > +                     else
+> > +                             return -EIO;
+> > +             }
+>
+> I guess this is the conservative approach.  Ie.  Don't break things
+> which aren't already broken.  But I suspect the correct approach is to
+> say:
+>
+>         if (ret !=3D len)
+>                 return -EIO;
+>
+> Ah well.  Being conservative is good.  It probably doesn't ever happen
+> in real life so it probably doesn't matter either way.
+>
+> I don't really like the if (write) follow by and if (!write)...  It
+> would add more lines, but improve readability if we just duplicate the
+> code a big:
+>
+>         if (write) {
+>                 ret =3D write();
+>                 if (ret)
+>                         return ret;
+>         } else {
+>                 ret =3D read();
+>                 if (ret <=3D 0)
+>                         return ret ?: -EIO;
+>                 len =3D ret;
+>         }
+>
 
-I guess this is the conservative approach.  Ie.  Don't break things
-which aren't already broken.  But I suspect the correct approach is to
-say:
+Sure, I'll do this in a follow up patch.
 
-	if (ret != len)
-		return -EIO;
-
-Ah well.  Being conservative is good.  It probably doesn't ever happen
-in real life so it probably doesn't matter either way.
-
-I don't really like the if (write) follow by and if (!write)...  It
-would add more lines, but improve readability if we just duplicate the
-code a big:
-
-	if (write) {
-		ret = write();
-		if (ret)
-			return ret;
-	} else {
-		ret = read();
-		if (ret <= 0)
-			return ret ?: -EIO;
-		len = ret;
-	}
-
-regards,
-dan carpenter
-
+Thanks
+Joy
+> regards,
+> dan carpenter
+>
 
