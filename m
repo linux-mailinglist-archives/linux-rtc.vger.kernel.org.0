@@ -1,74 +1,62 @@
-Return-Path: <linux-rtc+bounces-1316-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1317-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9D9A90982D
-	for <lists+linux-rtc@lfdr.de>; Sat, 15 Jun 2024 14:16:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28E5E909831
+	for <lists+linux-rtc@lfdr.de>; Sat, 15 Jun 2024 14:17:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E7D8B214AB
-	for <lists+linux-rtc@lfdr.de>; Sat, 15 Jun 2024 12:16:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA28928157D
+	for <lists+linux-rtc@lfdr.de>; Sat, 15 Jun 2024 12:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB0E45027;
-	Sat, 15 Jun 2024 12:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93754502F;
+	Sat, 15 Jun 2024 12:17:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mrB4kDMm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7A6z8tz"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60BB45020;
-	Sat, 15 Jun 2024 12:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC3B3C062;
+	Sat, 15 Jun 2024 12:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718453792; cv=none; b=J5TdKdrRTchUHDLV34f1tOO2tyrv7GfVSQv4huRgVLgm6iey7yqn05EM/Aq6Snxt2HdaGa3gM4zbjmYHb74zdnSKF+vil11qdUKkUEg6nTwzhAmVHpWUUurHhG9NWoz8wNBblMMKJtNTPS2T+8IssllWozHh4sD030Uw1lVELZ0=
+	t=1718453869; cv=none; b=T6YDR+7KOeTzpfhifVUXNnxAWlZAesuryQG+tGsR75tc9tReZU93J0vg2MQ26780fasFVsKYODa3H7Li8Mr/AHwVDSq85qzqHeQa/uq+YsptsKAB0HveGJbd/BERvlbv9ipIGpsSr+PTYTPRAsrRiGL0z8Y1PHLbDCIAamMF0kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718453792; c=relaxed/simple;
-	bh=fIa7Fu5rfI4MXQKrG+JnjbyVR+srNml2BpZ8EMMTVxQ=;
+	s=arc-20240116; t=1718453869; c=relaxed/simple;
+	bh=jvQAeWCdVaD0BjCP05AvOEcJtz935J6YiPM0ZLxh6iQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SYA2245R8iybNI+XqM+zQzD0xplkCqd7lI1k4Hd++QIRzTBZ8gO4Zvsk7K/7y8z67uaNb2vBzgo1181RvXWrwPMxpxYHj8FPhBz6DJNLrLvcQ1kt0xeX22ywNfwu4hk+7cmf5eplM3B1BkvNoos31LnSNMUPRsEJjEtmWYkCj70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mrB4kDMm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7662C116B1;
-	Sat, 15 Jun 2024 12:16:28 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=RmYc91JbFYQrNdTSXZqFXiVpYozFssE8ira+toYE+hi9JTCB49zfjYmjXikre0cS6wdKB69oflyPa/S7B27xmg7R0OEUanH5nsWyGe05GqdVRjtnVo2+guSaOWQTD6PKcsqVfjO2egPm7ee9g+qCpi65EVvJ1+U9zzDWbC0Yp+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7A6z8tz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8E7C116B1;
+	Sat, 15 Jun 2024 12:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718453792;
-	bh=fIa7Fu5rfI4MXQKrG+JnjbyVR+srNml2BpZ8EMMTVxQ=;
+	s=k20201202; t=1718453868;
+	bh=jvQAeWCdVaD0BjCP05AvOEcJtz935J6YiPM0ZLxh6iQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mrB4kDMmJTeiuyQOOkCj4Q1LDTg4yuNd0/ZYAsOv8J0waSVa1ZXik2Bpm2P4CK4rf
-	 YbcrrqGPDTKuwAvoo0Hes0ybEH1p8RdUfg2WjrdtedCpK9UeFZtOsXjeCuOxK6IDeZ
-	 s7cvjwzbYhS/QTkz614TYaOT4ab00my2nxTtvQ55BZgrLZKOgynNA/3p+BQ5RQvi03
-	 WW4kobYsc/6i0tNLMEnDhQe6k9BUn2JOzdn/CKL3u3ihIzwO+qFJgpH8RLwG4HmpdF
-	 H3p5uK6C6WjN4UFeAC69RiaY9PUL5gYmHJZd6Heef94qATd7ocJGPNLaFQpmsa5fGM
-	 cHVCMxPnoflIA==
-Date: Sat, 15 Jun 2024 13:16:26 +0100
+	b=b7A6z8tziamb8sri2a2XV1owVztyaG5/O1VaCMT1FXpTcMWyu4QMhWHzz6ra46Q/b
+	 HBGJ7uWpvp9TH1FtAa3Tbgo2WoGxSltneXHKgwW3EXMvR/mfkR+96Ay9Ne2UCXcj0Z
+	 1TEfrM2YQCtpTCUuxOQJnKLj9FO8wFqEYDLVwdzUrj9uFtOxXfhgDMXsRXnxcswdSZ
+	 w8fXAFDcoM1Qla88Tv4GFJ4yXYOu3/6yC6GH/F1hOguRztqxNSl7+MDejqJFN4dUEW
+	 lO8NXRtI4EiKFsagjfnxJ+NDZ/unNCTjvhi6fanQBhy9lNUnJ0/Xjq7C3tbjqRtOhQ
+	 PKMOkfuzL7AQQ==
+Date: Sat, 15 Jun 2024 13:17:42 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: "Claudiu.Beznea" <claudiu.beznea@tuxon.dev>,
-	"geert+renesas@glider.be" <geert+renesas@glider.be>,
-	"mturquette@baylibre.com" <mturquette@baylibre.com>,
-	"sboyd@kernel.org" <sboyd@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"lee@kernel.org" <lee@kernel.org>,
-	"alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-	"magnus.damm@gmail.com" <magnus.damm@gmail.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	lee@kernel.org, alexandre.belloni@bootlin.com,
+	magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 05/12] dt-bindings: rtc: renesas,rzg3s-rtc: Document the
- Renesas RZ/G3S RTC
-Message-ID: <20240615-unwell-hardcover-e95af7c4a43b@spud>
+Subject: Re: [PATCH 02/12] dt-bindings: clock: renesas,rzg3s-vbattb-clk:
+ Document the VBATTB clock driver
+Message-ID: <20240615-angler-occupier-6188a3187655@spud>
 References: <20240614071932.1014067-1-claudiu.beznea.uj@bp.renesas.com>
- <20240614071932.1014067-6-claudiu.beznea.uj@bp.renesas.com>
- <TY3PR01MB113464811F43F19115FCF62A786C22@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <d6b4e0cc-c16e-4ea7-bbc4-ddbaaadc9a25@tuxon.dev>
- <TY3PR01MB113468BB7BC53E43F41C6D65386C22@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <20240614071932.1014067-3-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -76,47 +64,101 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="clAPQ20Y+OV8szeS"
+	protocol="application/pgp-signature"; boundary="nsLO3LjWINDswJxd"
 Content-Disposition: inline
-In-Reply-To: <TY3PR01MB113468BB7BC53E43F41C6D65386C22@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <20240614071932.1014067-3-claudiu.beznea.uj@bp.renesas.com>
 
 
---clAPQ20Y+OV8szeS
+--nsLO3LjWINDswJxd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 14, 2024 at 08:22:57AM +0000, Biju Das wrote:
-
-> > >> +$id: http://devicetree.org/schemas/rtc/renesas,rzg3s-rtc.yaml#
-> > >
-> > > Please make it generic renesas,rtca3-rtc.yaml. Future SoCs may use th=
-is IP.
-> > > So use IP name instead.
-> >=20
-> > From what I know the file name should correspond with the compatible th=
-at file was introduced with,
-> > and this one shouldn't be generic but SoC specific.
+On Fri, Jun 14, 2024 at 10:19:22AM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >=20
-> I maybe wrong, I was under the impression, we should use "vendor,ipname" =
-for the filename
-> and compatible should use vendor,ipname as generic compatible.
-> If there are differences between SoCs, then use SoC specific compatible.
+> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock that feeds
+> the RTC and the tamper detector. Add documentation for the VBATTB clock
+> driver.
 >=20
-> Currently there is one device, so not sure??
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>  .../clock/renesas,rzg3s-vbattb-clk.yaml       | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/renesas,rzg3s=
+-vbattb-clk.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/clock/renesas,rzg3s-vbattb=
+-clk.yaml b/Documentation/devicetree/bindings/clock/renesas,rzg3s-vbattb-cl=
+k.yaml
+> new file mode 100644
+> index 000000000000..ef52a0c0f874
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/renesas,rzg3s-vbattb-clk.ya=
+ml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/renesas,rzg3s-vbattb-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas VBATTB clock
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> +
+> +description:
+> +  Renesas VBATTB module is an always on powered module (backed by batter=
+y) which
+> +  generates a clock (VBATTCLK). This clocks feeds the RTC and the tamper=
+ detector
+> +  modules.
+> +
+> +properties:
+> +  compatible:
+> +    const: renesas,rzg3s-vbattb-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: VBATTB module clock
+> +      - description: VBATTB input xtal
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bclk
+> +      - const: vbattb_xtal
+> +
+> +  '#clock-cells':
+> +    const: 0
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  renesas,vbattb-load-nanofarads:
+> +    description: load capacitance of the on board xtal
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 4000, 7000, 9000, 12500 ]
+> +
+> +  renesas,vbattb-osc-bypass:
+> +    description: set when external clock is connected to RTXOUT pin
+> +    type: boolean
 
-The usual policy for new files is "filename matching a compatible".
+When you say "external clock", is that an input or an output?
 
---clAPQ20Y+OV8szeS
+--nsLO3LjWINDswJxd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZm2GGgAKCRB4tDGHoIJi
-0ihkAP42Coh08F/VL7TmA4JWvrf8daBenjco1rVFZ1mSY5Q7iAD8COSVRjBudGDs
-xPkSHl85M/MiNRb4aFC6H8d+g8qECAY=
-=P/zh
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZm2GZgAKCRB4tDGHoIJi
+0rtkAQCi6OWcwXo4FHX+1PWlyVi63NIjfF9JgLRdiachrjUaFAEAtuwUzfHaFzsm
+8P+5obAmJteBZtgVJyrjtHfszACu3Ak=
+=BI4B
 -----END PGP SIGNATURE-----
 
---clAPQ20Y+OV8szeS--
+--nsLO3LjWINDswJxd--
 
