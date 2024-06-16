@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-1322-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1323-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E028909C35
-	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jun 2024 09:38:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C272909C3E
+	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jun 2024 09:39:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0FF01F21324
-	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jun 2024 07:38:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C536A1F21326
+	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jun 2024 07:39:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396BD17DE17;
-	Sun, 16 Jun 2024 07:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E80181300;
+	Sun, 16 Jun 2024 07:38:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i054XHwT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VLIBAVWL"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDFC181335;
-	Sun, 16 Jun 2024 07:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61D8179641;
+	Sun, 16 Jun 2024 07:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718523491; cv=none; b=KGjB183aZ7ag3+gI+dPGKPaipfafVVB38IvvnqaTqsnwmgcjkQ8fG5apVrCKVh/z5+M8okO+Hk9DtU0mkGuaMxGaExTzJ0MeMwfh4cci0a4BlqyZXAXl0BmKkP1Ey1BAPk32/SaT/WJIe0B9V+D5VE/uJ1jvjpGwdO9ERGztlz4=
+	t=1718523539; cv=none; b=YFp7IH/22Yk/kbEspxRh/3WMcyQiXSmRtDfd5cJY7zSzSIozlF1efOZASXuJqQ3Pq3E10HwmKapWYa9ctDohblR5wqju1I71PFLUYfNXgIkBV4KAMdjU/P5OW2E9qiFM9YS/nWtxV2Awhyk4lDLJOQs2K8OjHj1qNJVLyQWlWJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718523491; c=relaxed/simple;
-	bh=Wfs1Oi936Q78/s0AH2TiYpj+5LyCrX1AJWUL91zSuGI=;
+	s=arc-20240116; t=1718523539; c=relaxed/simple;
+	bh=4mwidQTXwfgeYhLaHI9m5Gn10E9Ua0e5edHki8BtQnA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ue3GaEzJzVlkcoDZgM3Dam+Y8dBltdlRC0G/fYmgWZI4h5v7fmJoafY9PJorVZPM8Dzg4r5o7+38i59eYLBCN++AdoVd+X/9iPuJOxx798tyQ2m+j56odw6r2ygv5upi/V42oxeiaN8BWNzI/fG3eXL82rQxOZ99lseHBxKa5aE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i054XHwT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F690C32786;
-	Sun, 16 Jun 2024 07:38:06 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bhiJsUggfP2em6Q05bH6nZjuaKsjKnEjrMYixQjn+2yDtnOGk16LMR+9qu+5IWnBIC+xPxSUvzXlkV3A4p7Mf1kr3iQU2suVLgzOT8qotTVd56g495infiX/gk+Tq84zE/RiG9Ugkpmx+yIioXsCtw8HgnIYvWjlRIrhqjDwYeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VLIBAVWL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3144EC2BBFC;
+	Sun, 16 Jun 2024 07:38:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718523490;
-	bh=Wfs1Oi936Q78/s0AH2TiYpj+5LyCrX1AJWUL91zSuGI=;
+	s=k20201202; t=1718523538;
+	bh=4mwidQTXwfgeYhLaHI9m5Gn10E9Ua0e5edHki8BtQnA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=i054XHwTSBl2QP79McswBsOEqOdJ6nnbAQNfLHyBxEs422eIRsy20AWufyQxQ44Q8
-	 lZmvHFiJjJrHkYpwBpD2yfF+2PDS7mXedGtQhzHaCmHMjvqR31qifLsltZTUxHzha5
-	 2VCk6dgqmgPE3yE7tq7XQ5RoLo+RncHJv9AurvLZUhTgblkNq89GhkeJJcftKQQNpa
-	 l+8h0rPNw51rYuPPgD09YJ5brQYc/Rp4EfyB2oIuDD6l+4wQq6DnU+9bMDmmle4LUP
-	 axKX2OReE3mDpoKQjeWP0q2jUetszKN70T52UGdixAQ61ySTR8P4n68D+EKQUWLAYh
-	 A/kpye8jxVYjQ==
-Message-ID: <936beb9a-2701-476c-8f5a-4b6b06d4f87d@kernel.org>
-Date: Sun, 16 Jun 2024 09:38:04 +0200
+	b=VLIBAVWLAI2wLD/LUgvN+WC8EeWAVwKkryNOK3R60B3cLpxl8phG6o+BXALg325dq
+	 H1GlYe8By8dAbUMTVi6WimTq6ZODRcopt7HdUhm0iyj+/hpy4bwwlj8S4sV9CJK4We
+	 SxedlMOhuEhpCL4jy9gX+vYVbZoNnK+7QYgoOLoESskVIdFfp7pP7RYkMLwZKdW/Xr
+	 HyErfjR//HxprIGEbrRd1CFSwIik0MT3kJGtYGr0E17GmurhQuN4aI+Qnpe/lydD/k
+	 scuMDf+f7pj2hFh29AW81fadOOajoDapnjfvN+3U7RHnLeYh+gHAVTmBdXb0ziGrxU
+	 cldZ/nyFXD8Ww==
+Message-ID: <dfb0680e-7592-48dc-b4a3-5aec3a6bb188@kernel.org>
+Date: Sun, 16 Jun 2024 09:38:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/12] dt-bindings: mfd: renesas,rzg3s-vbattb: Document
- VBATTB
+Subject: Re: [PATCH 02/12] dt-bindings: clock: renesas,rzg3s-vbattb-clk:
+ Document the VBATTB clock driver
 To: Claudiu <claudiu.beznea@tuxon.dev>, geert+renesas@glider.be,
  mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, lee@kernel.org,
@@ -61,7 +61,7 @@ Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 References: <20240614071932.1014067-1-claudiu.beznea.uj@bp.renesas.com>
- <20240614071932.1014067-4-claudiu.beznea.uj@bp.renesas.com>
+ <20240614071932.1014067-3-claudiu.beznea.uj@bp.renesas.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,37 +107,11 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240614071932.1014067-4-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240614071932.1014067-3-claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 14/06/2024 09:19, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: renesas,rzg3s-vbattb
-> +      - const: syscon
-> +      - const: simple-mfd
-
-No, mfd does no look good. That's not a simple device anymore and you
-claim here child does not need vbat bclk, power domains and resets? That
-would be a big surprise, although technically possible.
-
-Please clarify: which of parent resources are needed for children?
-
-...
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
 > +    #include <dt-bindings/clock/r9a08g045-cpg.h>
 > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
 > +
@@ -155,24 +129,11 @@ Please clarify: which of parent resources are needed for children?
 > +        #size-cells = <2>;
 > +        status = "disabled";
 
-Drop
+Drop.
 
-> +
-> +        vbattclk: clock-controller@1c {
-> +            compatible = "renesas,rzg3s-vbattb-clk";
-> +            reg = <0 0x1c 0 0x10>;
-> +            clocks = <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&vbattb_xtal>;
-> +            clock-names = "bclk", "vbattb_xtal";
-> +            #clock-cells = <0>;
-> +            power-domains = <&cpg>;
-> +            status = "disabled";
+And keep only one complete example, instead of two. See other complex
+devices as example.
 
-Drop
-
-> +        };
-> +    };
-> +
-> +...
 
 Best regards,
 Krzysztof
