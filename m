@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-1338-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1339-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C79E90A8CA
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jun 2024 10:52:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E59090A8D0
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jun 2024 10:55:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABC361F23DCF
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jun 2024 08:52:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FA9A1C229D3
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jun 2024 08:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD45B190660;
-	Mon, 17 Jun 2024 08:52:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38713190685;
+	Mon, 17 Jun 2024 08:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C1y7Ve9B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JQ9MBm2P"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9334190476
-	for <linux-rtc@vger.kernel.org>; Mon, 17 Jun 2024 08:52:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11043190684
+	for <linux-rtc@vger.kernel.org>; Mon, 17 Jun 2024 08:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718614334; cv=none; b=Fm4bLQCFbqISEgNS81lbKE6h0j4QFM+staraUHVLOaBHSENelxNbHq85tF8fe/2HQX0qBiCEs0aXRRnQwhZ4frt7IsU2BcRSZKK9intJKFUrPWs77VUp8pBhhWNtSQk1/Xx08/d9ZkFrXQq9f18W6RSPAdr/I4zQpSCsiRm+Sqc=
+	t=1718614492; cv=none; b=YtsG9jYtuuzpUf+EezOcFuoTSQ2lKtL1Jx5xfNLVOO5fRSrMX+OrTKbVYwJzEsi0q6E2pq8OM/gEu94NpP+lx6zDhAw3+uTx92ZkuU81+X18/XxG4DJkV5B5jJ8FDoaQzKzYaXCCLWPKEFOi+rgdtrHr49rgwFZyHIGf3Js8DcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718614334; c=relaxed/simple;
-	bh=WEe6NS0GsSK6iJwHCfoKkh/BilTZ/WYIEAsC88h2uNM=;
+	s=arc-20240116; t=1718614492; c=relaxed/simple;
+	bh=dpYFQGh9hAjPzFIaHuP0UnxFK9MeTkOELy5F/qotEPM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LkMWNq0aNnuC8lEuC03iYDldTE3uNagRkFqbhgAcvKFhXJ+C2/qBVr5QS3gDqUBHmNkqlOh6rdF+Xpd/9M6EHVBe+ohXs1bCOtSFm4tep+zZigrt04PdaaDToKL49ljlk6HgJpYB2Pc4NXy4D2OVXi7WXJlsP3EmMvNBfny332U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C1y7Ve9B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5702C2BD10;
-	Mon, 17 Jun 2024 08:52:12 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=HHim2MdKTDt1ZmBcF7gywECfO7QHCpTtUhxqSKrsQD5z7BwMY35Uhi94+QX35oyXaflH/D2LgHLYxlA5YaQ/A6mQPe62b0QWbKetPAD4AXqa59ZUe2b7EUiK6IJz+CziEiu4iPuaabexz3z2dljh1tcuKLlvXWuks4Kj2wiuWk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JQ9MBm2P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DFBFC3277B;
+	Mon, 17 Jun 2024 08:54:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718614334;
-	bh=WEe6NS0GsSK6iJwHCfoKkh/BilTZ/WYIEAsC88h2uNM=;
+	s=k20201202; t=1718614491;
+	bh=dpYFQGh9hAjPzFIaHuP0UnxFK9MeTkOELy5F/qotEPM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=C1y7Ve9BbS83ds3TEbnkyryLP49WvY0EwH+R8pqOLh0ftKrM0vvLs3wyrk6IXNPj9
-	 pub6nKxOCN0euRh/hE8tJ/3/5SGu+5R2kmgUTZwxdks9xXD2tZDv+BQ9EfZNGFw8s8
-	 +iwZjrdcFGUlOulU3MUmAWxYxwkGrEfUcS6OTskgzeMmTEKW/UDCiTi7wmoRQjJxaS
-	 e2fwH/KOvfOV2yw46O2TRye/DomWJLS38MtgRYpiLwU3nINKBSF8+pRuFlyPmBIPMn
-	 6dVpRbQCqjZcwOs2E8EEroMMJGIonIBuiRmUBdJxd5OE6Qo/Osh0TjdrHmvHENabud
-	 RXtNpfr1hCBfQ==
-Message-ID: <32002a2f-cb2c-44ac-b1ed-69325fbd1632@kernel.org>
-Date: Mon, 17 Jun 2024 10:52:11 +0200
+	b=JQ9MBm2PuAuavIDdYX9EowkK53h8tS4HKIRNib9/YF205yfFxT+yG8L2aWvYT2OQv
+	 3wOuKPZI/XgBU5MKpphCHonrFi1LwAlS1XPKWSdv0wBcQb7NSo7JC8QjP/XX6aqEKQ
+	 AkCcFQ1p8yzld0i/7LxkwSp4dPVD2hxllTlB1yBawX6rGAJcpzjhYRCH0ZDHoGBM21
+	 S5WgHV+qurzqXUTBuCFbbABWvVq+WhCKOFzA7NNEFSncUO8PiZYOZ1pynRlznRK14m
+	 nn8y8J/azP03/uqAbK33C4v9f2YRouqxjI4/saPPZXDM/Egw4rDH6OwTP2qtenb7Rq
+	 Ur7RaVIBdnqew==
+Message-ID: <f99e1b56-1870-49fb-ad6a-8d828548df02@kernel.org>
+Date: Mon, 17 Jun 2024 10:54:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,15 +50,14 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/2] dt-bindings: rtc: atcrtc100: Add atcrtc100
- bindings
+Subject: Re: [PATCH V2 2/2] rtc: atcrtc100: Add andes atcrtc100 RTC driver
 To: CL Wang <cl634@andestech.com>, alexandre.belloni@bootlin.com,
  linux-rtc@vger.kernel.org
 Cc: tim609@andestech.com
 References: <20240617082507.3968910-1-cl634@andestech.com>
- <20240617082507.3968910-2-cl634@andestech.com>
-Content-Language: en-US
+ <20240617082507.3968910-3-cl634@andestech.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -102,77 +101,157 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240617082507.3968910-2-cl634@andestech.com>
+In-Reply-To: <20240617082507.3968910-3-cl634@andestech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/06/2024 10:25, CL Wang wrote:
-> Add YAML bindings for Andes atcrtc100 RTC.
-
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
-See also:
-https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-
+> The atcrtc100 module includes a real time counter with alarm.
+> Add a RTC driver for this function.
 > 
 > Signed-off-by: CL Wang <cl634@andestech.com>
-> ---
->  .../bindings/rtc/andes,atcrtc100-rtc.yaml     | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/andes,atcrtc100-rtc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/andes,atcrtc100-rtc.yaml b/Documentation/devicetree/bindings/rtc/andes,atcrtc100-rtc.yaml
-> new file mode 100644
-> index 000000000000..86cecb30c889
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/andes,atcrtc100-rtc.yaml
 
-Use compatible as filename.
 
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/andes,atcrtc100-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Andes, ATCRTC100 on-SoC RTC
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-
-allOf goes after maintainers.
+...
 
 > +
-> +maintainers:
-> +  - CL Wang <cl634@andestech.com>
+> +static int atc_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct atc_rtc *atc_rtc;
+> +	void __iomem *reg_base;
+> +	int ret = 0;
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - andestech,atcrtc100
+> +	atc_rtc = devm_kzalloc(&pdev->dev, sizeof(*atc_rtc), GFP_KERNEL);
+> +	if (!atc_rtc)
+> +		return -ENOMEM;
+> +	platform_set_drvdata(pdev, atc_rtc);
+> +	spin_lock_init(&atc_rtc->lock);
 > +
-> +  reg:
-> +    maxItems: 1
+> +	reg_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(reg_base)) {
+> +		dev_err(&pdev->dev, "couldn't map io space\n");
+> +		return PTR_ERR(atc_rtc->regmap);
+> +	}
 > +
-> +  interrupts:
-> +    minItems: 2
-
-This must be specific. Describe the items instead (items: with -
-description: for each).
-
+> +	atc_rtc->regmap = devm_regmap_init_mmio(&pdev->dev, reg_base,
+> +						&atc_rtc_regmap_config);
+> +	if (IS_ERR(atc_rtc->regmap)) {
+> +		dev_err(&pdev->dev, "regmap init failed\n");
+> +		ret = PTR_ERR(atc_rtc->regmap);
+> +	}
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
+> +	ret = atc_rtc_hw_init(atc_rtc);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "atc_rtc HW initialize failed\n");
+> +		return ret;
+> +	}
 > +
-> +additionalProperties: false
+> +	atc_rtc->alarm_irq = platform_get_irq(pdev, 1);
+> +	if (atc_rtc->alarm_irq < 0) {
+> +		dev_err(&pdev->dev, "failed to get irq %d for alarm\n",
+> +			atc_rtc->alarm_irq);
+> +	}
+> +	atc_rtc->time_irq = platform_get_irq(pdev, 0);
+> +	if (atc_rtc->time_irq < 0) {
+> +		dev_err(&pdev->dev, "failed to get irq %d for RTC\n",
+> +			atc_rtc->time_irq);
+> +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev, atc_rtc->alarm_irq, rtc_alarm,
+> +			       0, "rtc alarm", atc_rtc);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "failed to request irq %d: %d for alarm\n",
+> +			atc_rtc->alarm_irq, ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev, atc_rtc->time_irq, rtc_interrupt,
+> +			       0, "rtc time", atc_rtc);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "failed to request irq %d: %d\n",
+> +			atc_rtc->time_irq, ret);
+> +		return ret;
+> +	}
+> +
+> +	atc_rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(atc_rtc->rtc_dev)) {
+> +		dev_err(&pdev->dev, "Could not allocate rtc device\n");
+> +		return PTR_ERR(atc_rtc->rtc_dev);
+> +	}
+> +
+> +	if (of_property_read_bool(pdev->dev.of_node, "wakeup-source")) {
 
-Instead:
-unevaluatedProperties: false
+Test your DTS (dtbs_check). This should fail.
 
 
+> +		device_init_wakeup(&pdev->dev, true);
+> +		ret = dev_pm_set_wake_irq(&pdev->dev, atc_rtc->alarm_irq);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "failed to enable irq wake\n");
+> +			device_init_wakeup(&pdev->dev, false);
+> +			atc_alarm_wakeup_enable(&pdev->dev, false);
+> +			clear_bit(RTC_FEATURE_ALARM, atc_rtc->rtc_dev->features);
+> +		} else {
+> +			atc_alarm_wakeup_enable(&pdev->dev, true);
+> +			set_bit(RTC_FEATURE_ALARM, atc_rtc->rtc_dev->features);
+> +		}
+> +	} else {
+> +		atc_alarm_wakeup_enable(&pdev->dev, false);
+> +		clear_bit(RTC_FEATURE_ALARM, atc_rtc->rtc_dev->features);
+> +	}
+> +	atc_rtc->rtc_dev->ops = &rtc_ops;
+> +	atc_rtc->rtc_dev->range_min = ATCRTC_RTC_TIMESTAMP_BEGIN_2000;
+> +	atc_rtc->rtc_dev->range_max = ATCRTC_RTC_TIMESTAMP_END_2089;
+> +
+> +	return devm_rtc_register_device(atc_rtc->rtc_dev);
+> +}
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +static int atc_rtc_resume(struct device *dev)
+> +{
+> +	struct atc_rtc *rtc = dev_get_drvdata(dev);
+> +
+> +	if (device_may_wakeup(dev))
+> +		disable_irq_wake(rtc->alarm_irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int atc_rtc_suspend(struct device *dev)
+> +{
+> +	struct atc_rtc *rtc = dev_get_drvdata(dev);
+> +
+> +	if (device_may_wakeup(dev))
+> +		enable_irq_wake(rtc->alarm_irq);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +static SIMPLE_DEV_PM_OPS(atc_rtc_pm_ops, atc_rtc_suspend, atc_rtc_resume);
+> +
+> +static const struct of_device_id atc_rtc_dt_match[] = {
+> +	{ .compatible = "andestech,atcrtc100" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, atc_rtc_dt_match);
+> +
+> +static struct platform_driver atc_rtc_platform_driver = {
+> +	.driver		= {
+> +		.name	= "atcrtc100",
+> +		.of_match_table	= of_match_ptr(atc_rtc_dt_match),
+
+Drop of_match_ptr(), leads to warnings.
+
+> +		.pm = &atc_rtc_pm_ops,
+> +	},
+> +	.probe		= atc_rtc_probe,
+> +};
+> +
+> +module_platform_driver(atc_rtc_platform_driver);
+> +
+> +MODULE_AUTHOR("CL Wang <cl634@andestech.com>");
+> +MODULE_DESCRIPTION("Andes ATCRTC100 driver");
+> +MODULE_LICENSE("GPL");
 
 Best regards,
 Krzysztof
