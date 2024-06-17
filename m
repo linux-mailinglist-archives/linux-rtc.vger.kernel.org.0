@@ -1,48 +1,74 @@
-Return-Path: <linux-rtc+bounces-1324-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1325-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1857C909C48
-	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jun 2024 09:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A83E190A662
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jun 2024 09:04:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F00521C209E8
-	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jun 2024 07:40:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0C251C26D05
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Jun 2024 07:04:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0ECD184129;
-	Sun, 16 Jun 2024 07:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18FE0188CBE;
+	Mon, 17 Jun 2024 07:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOvOe7r+"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="cnmXkdaK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6F91836FB;
-	Sun, 16 Jun 2024 07:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CCC1862BB
+	for <linux-rtc@vger.kernel.org>; Mon, 17 Jun 2024 07:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718523607; cv=none; b=L+Yk3inF/vRkA2hmwlIZf0a+QYIrjqKAmBH447c4lgp0/wS7X7/mrrkva6Gqh3p30vlk2SZ2ADhcsnmTlx9MTzhmoyE8odg857o59G55F/eb7sej/yWGL0QQx6mS6Y7FPhSHBjWGXYi2DhLML+8625o5PqguNf/SOK28rXqLE9U=
+	t=1718607775; cv=none; b=Cb+aynLC1Pz5Y+2TnqMtLlkWPJZBlPLqH4npjT7RpQgrtsaMqzWkfCdvDnVy/iZm9z9q0Z0mMNaPF/CopgzrdVCJyMt4DEPfozHeSrN4B1C9B3j7V/hKEQ0OOXETOgOoaS6keDWkwqZEGTaRzetnyrTb9FNTKeVg13Y+aNDskMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718523607; c=relaxed/simple;
-	bh=9/cAdGYrdwaI/4y1JqtVx9mdosaD9ipTezgsP7O70KI=;
+	s=arc-20240116; t=1718607775; c=relaxed/simple;
+	bh=l5h3MIVf25ta1g+7xz8zPHHRBq5FFSM31NaiWYap4Uc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ewzEmVBr3Lrmi/li5gFh5hWysJhCf9ovdrV6KmSqNDcc3YkUMwIWvqBCwkhu2axc5TLB9BQf5kOMpgLiQIg/roCQzgFhsS4Lm0/mA3v7nQlHI06XFLKCvCYuLLoejHvOcGi2s6B65Jv8LA5L0svSTTb5+1zYqued+qioVFSqcJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOvOe7r+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03369C2BBFC;
-	Sun, 16 Jun 2024 07:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718523607;
-	bh=9/cAdGYrdwaI/4y1JqtVx9mdosaD9ipTezgsP7O70KI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vOvOe7r+p5KApeZ5sDQE+mNN2B8K8rE1/dYYLfFH6GusifJLh/MThj+IczxwRoi0X
-	 8q4v8mXXHdh2h6N2AaHI5SEvDVuTV0ywPgmgPygnCcYpQEnK9un9MH+6V6/VMBnYBK
-	 S6lpT27lDVF9D5f6nY6DmYOczWKzdW2kC+dpXRs3hEI837S4jJL+8KTMxoAoPmh712
-	 LUwQYF0uTnAH6TWE1DR1TbjH0TZgSRi4wfqtXLb4AYXg5HCp71kITOeWfDw7FFR+20
-	 JM4s3zMNFsmAkad9zGSkQdKPeahY50CA5KSwJkcIbGXwjsCeHuBpH90m0+L+I/vpet
-	 gd0jakcveqI5Q==
-Message-ID: <de1077de-baa4-42aa-84c1-6ab629088a07@kernel.org>
-Date: Sun, 16 Jun 2024 09:40:01 +0200
+	 In-Reply-To:Content-Type; b=KbbQwaumMdUbPl5rAvEvSZT5nLX9/UE3F3PMtLtM58ug4iswRBsZmbDz458gqZKXXCxt9ojaieivVlsOvNcWAoJ/6Tli3stKjrVVf42Qv7U++xdXgvL9Sl6foEkSYSnU7WgaDp+qGxuf4xxbRe6BQtMDahlNOkA6/DBRZ4a9CJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=cnmXkdaK; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-57ccd1111aeso1632515a12.0
+        for <linux-rtc@vger.kernel.org>; Mon, 17 Jun 2024 00:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1718607770; x=1719212570; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z9u5RgFlaJzJI59pGIkMpx9evCqFOfmt+BUqY3LGf4Q=;
+        b=cnmXkdaKNR4w9BFG8yjkU+AN8oEzApBCAlDVG8SlHRUNtuKwm4eiC9e4aE3CCZ1IYN
+         W+SAuyM5V/Hc+ILGmz2tQz699Bs1zkCbMHKjzWaPwdi32AWeZWBnjkaLPK5f/UNgBd1c
+         cOi8MS5OZyJPJ97nAdeh69eUuDkVwA5VWqD+fruAr4c/XXIsaUm5MuTwSMnYae1pAq2Z
+         Mu0lfY441KZxjyT4ISjRS1lJDU70M90apG5c0rWIb4jaFjv1kR9Hnxb1WPCymTsQYxuV
+         r6qTvkxelEDlUh3B1l5fbXMtHn6iuWqbV8W2oXs+emLBcdEd5Z4EO6J2qaaLNZfrZo9n
+         +dog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718607770; x=1719212570;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z9u5RgFlaJzJI59pGIkMpx9evCqFOfmt+BUqY3LGf4Q=;
+        b=P/sC1538G1g/+NV7WEK5UXiLmS4wW9MVZ7KOQgqSWkC1i/h5v675ygEvEdTPN1nJGV
+         vBpNEYGsUTzPF26MiHKuLxuhwQ+Hq69sEiP+SAH4s1wxMTuPVgg1i7RF7MlSMiF8mgWX
+         Y26hLnX2E0H9RP9Ym1ayKb7paWHp9swNOJugUqDxtc9Q4qCyqHj58imdPEB/CLleq+YV
+         doqrx/mrU9HUD6yZvzBWfkme/jqQteUO/0TAn1CoU0REtkXe/GM/Y327BTFAVybaTtOm
+         yDxI9sYTqQRFE0uL8cUGEEtmlVzvdhHCt+KqjbZhImNm/PLRaxhORqrv3Su0+2te2Z1p
+         45CA==
+X-Forwarded-Encrypted: i=1; AJvYcCWrJRBYmzIEeF1XAN3VpiRcoyFQwgC3gCOdwle+5eQceN9omS0y/65pk4V5NLtXT2pUUc5vt3d1O0agJqZ5iaxg7Jonp/16kZC4
+X-Gm-Message-State: AOJu0YwMgAmOAyWIaawLK11AvqZIyUrX+aH9odiK8P6ZGBUo3prXwiMj
+	MossWsAeqRN3+H6btqgkEYJH3WcKh8hNX0jjS++VmJ+IPpL01UJzANOCsA+pvlY=
+X-Google-Smtp-Source: AGHT+IG+pcKbD9FHXOBzC2Vl0cLGum5HEC0ycJQ5ARdqsW469VQEuDJs55UUPa0z1vAk4z7J+hn3+A==
+X-Received: by 2002:a50:ccd9:0:b0:57c:6740:f47c with SMTP id 4fb4d7f45d1cf-57cbd69c7e9mr5872718a12.27.1718607769728;
+        Mon, 17 Jun 2024 00:02:49 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.189])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb72da785sm5972959a12.28.2024.06.17.00.02.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jun 2024 00:02:49 -0700 (PDT)
+Message-ID: <3d9ed0ec-ca9a-45b4-a633-8f7051d13cff@tuxon.dev>
+Date: Mon, 17 Jun 2024 10:02:47 +0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,118 +76,101 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/12] dt-bindings: rtc: renesas,rzg3s-rtc: Document the
- Renesas RZ/G3S RTC
-To: Claudiu <claudiu.beznea@tuxon.dev>, geert+renesas@glider.be,
- mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, lee@kernel.org,
- alexandre.belloni@bootlin.com, magnus.damm@gmail.com
-Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+Subject: Re: [PATCH 02/12] dt-bindings: clock: renesas,rzg3s-vbattb-clk:
+ Document the VBATTB clock driver
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, lee@kernel.org,
+ alexandre.belloni@bootlin.com, magnus.damm@gmail.com,
+ linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 References: <20240614071932.1014067-1-claudiu.beznea.uj@bp.renesas.com>
- <20240614071932.1014067-6-claudiu.beznea.uj@bp.renesas.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240614071932.1014067-6-claudiu.beznea.uj@bp.renesas.com>
+ <20240614071932.1014067-3-claudiu.beznea.uj@bp.renesas.com>
+ <20240615-angler-occupier-6188a3187655@spud>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20240615-angler-occupier-6188a3187655@spud>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 14/06/2024 09:19, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+
+
+On 15.06.2024 15:17, Conor Dooley wrote:
+> On Fri, Jun 14, 2024 at 10:19:22AM +0300, Claudiu wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock that feeds
+>> the RTC and the tamper detector. Add documentation for the VBATTB clock
+>> driver.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>  .../clock/renesas,rzg3s-vbattb-clk.yaml       | 90 +++++++++++++++++++
+>>  1 file changed, 90 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/clock/renesas,rzg3s-vbattb-clk.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/renesas,rzg3s-vbattb-clk.yaml b/Documentation/devicetree/bindings/clock/renesas,rzg3s-vbattb-clk.yaml
+>> new file mode 100644
+>> index 000000000000..ef52a0c0f874
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/renesas,rzg3s-vbattb-clk.yaml
+>> @@ -0,0 +1,90 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/clock/renesas,rzg3s-vbattb-clk.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Renesas VBATTB clock
+>> +
+>> +maintainers:
+>> +  - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> +
+>> +description:
+>> +  Renesas VBATTB module is an always on powered module (backed by battery) which
+>> +  generates a clock (VBATTCLK). This clocks feeds the RTC and the tamper detector
+>> +  modules.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: renesas,rzg3s-vbattb-clk
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: VBATTB module clock
+>> +      - description: VBATTB input xtal
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: bclk
+>> +      - const: vbattb_xtal
+>> +
+>> +  '#clock-cells':
+>> +    const: 0
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  renesas,vbattb-load-nanofarads:
+>> +    description: load capacitance of the on board xtal
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [ 4000, 7000, 9000, 12500 ]
+>> +
+>> +  renesas,vbattb-osc-bypass:
+>> +    description: set when external clock is connected to RTXOUT pin
+>> +    type: boolean
 > 
-> Document the RTC IP (RTCA-3) available on the Renesas RZ/G3S SoC.
+> When you say "external clock", is that an input or an output?
 
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: RTC counter clock
+I took that statement from the HW manual. As of the HW manual [1], table
+42.2, that would be an input.
 
-Just items: with description instead.
-
-> +
-> +  clock-names:
-> +    maxItems: 1
-
-Nope, it must be specifc. Or just drop. This applies to all your patches.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    rtc: rtc@1004ec00 {
-
-Drop label, not used.
-
-> +        compatible = "renesas,rzg3s-rtc";
-> +        reg = <0x1004ec00 0x400>;
-> +        interrupts = <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-names = "alarm", "period", "carry";
-> +        clocks = <&vbattclk>;
-> +        clock-names = "counter";
-> +        status = "disabled";
-
-Why do you paste it eevrywhere? It does no really make sense.
-
-Best regards,
-Krzysztof
+[1]
+https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzg3s-general-purpose-microprocessors-single-core-arm-cortex-a55-11-ghz-cpu-and-dual-core-cortex-m33-250
 
 
