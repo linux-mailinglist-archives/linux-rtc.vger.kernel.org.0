@@ -1,484 +1,122 @@
-Return-Path: <linux-rtc+bounces-1358-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1359-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AB0190EA07
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jun 2024 13:49:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3F9D90EBF5
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jun 2024 15:02:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A95E1C212F3
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jun 2024 11:49:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 503231F2198F
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jun 2024 13:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E461F13C3CC;
-	Wed, 19 Jun 2024 11:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3965A14D6E4;
+	Wed, 19 Jun 2024 13:01:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvO0af2X"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="ihpkXdXe"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA8212FF63;
-	Wed, 19 Jun 2024 11:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0916F13DB90;
+	Wed, 19 Jun 2024 13:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718797740; cv=none; b=B3WwgjAMEWTVtS8KNqzM64HBZxCSk2c6ZiN0PElTUuia1B83pGkfhyHCeDJDEhriWMsbUyqn91+y8SEk+SVe4wZg6EHMx92gDJFedq0WnAImbdz9hPHVF1dB8Dk0+rEjBFkEdTpVLlRibHW2mlSJ+0hwWlaJ6RhsUFIt1TnrpFI=
+	t=1718802117; cv=none; b=DlHmNBwkj3ngpzsKm5sfrIbz/OjL9d32Cvxuwjk6oJo78EHdbtXb3JJgolkh9RYJKk4ked49ztK06u3wS8nBmQcnfABo+gxwHNYuLZWCmVuVKpVOV0KDoHbcFRETjNoXzlOuqQ9QEzHety51OcV2dQx8/BO0lOINQ4SyEKuzDn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718797740; c=relaxed/simple;
-	bh=Y7d6YCxPwQw2LEZebDL8fVcGc333N+fJnoUOBHGjuJw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=u5iMOeWwo4IPP8F2QRlYyFo/xMQ+zGfotdQfeI3Fn8Dn5Ie1Z5rkKsm0sSGW1ed+CelP2mFiNhkdF6czIktFh+ZFDtwMgEA+UfavbrwM0HZtQEXhNdxisRE5d8PaJEgVUr/i64ddgxzi8Ap2noByshYMu+gbBP3IgznBgzznQAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dvO0af2X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55C37C2BBFC;
-	Wed, 19 Jun 2024 11:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718797740;
-	bh=Y7d6YCxPwQw2LEZebDL8fVcGc333N+fJnoUOBHGjuJw=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=dvO0af2XAaBiJgFosEUfAqyY/EZJbjGdoqcPfzFDHsVnbQPvbz/UkM/fLSO7IpuKf
-	 p21SsLOnybSZ8PreOsiz+N0gfPfV/VlKlMwFBxHxyYYaCli6Acr7UuUcPvBUVhAH3J
-	 Pp67Xcx1BBpoxB9Vx9vHEMkdodkRczgmVmGSH6n11DNV33/MopdH4On7RciCDlG9WI
-	 rW9LslNZcLDsOOlS1syDdoFZ1o+Mt85dchiZG56yhXJwrqZW1F5cssvnvc4JIU7C+o
-	 v0P/NxmTcbu/27d/oyn+CFav+opuBf9gf9syDIxdM2hg4RdEzQMqS9T158H4iz4F5e
-	 7O1Z5QP3YqEcA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4283EC27C53;
-	Wed, 19 Jun 2024 11:49:00 +0000 (UTC)
-From: =?utf-8?q?T=C3=B3th_J=C3=A1nos_via_B4_Relay?= <devnull+gomba007.gmail.com@kernel.org>
-Date: Wed, 19 Jun 2024 13:48:52 +0200
-Subject: [PATCH v2] drivers: rtc: Add driver for SD2405AL.
+	s=arc-20240116; t=1718802117; c=relaxed/simple;
+	bh=Wqj4fkKWDCEh/pzYyA3u8TD2BiyQQ36+PhN66S75nf8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hB0rtRXazHYqdEnZ+B3E24fGpuf6Lrk1VwpOZ3YtQX3UXa3W/i3t3w4ZRLp/5sc5E2V6+C6m3iMQE/ubNZFSlG4j2iMiIjDmHcCddYVuHEEuUaPBJcsostT24YSlRtg1t7eOisD6FBW/GMum4MSrQOIkcvhV4QY4uGPHp14AW08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=ihpkXdXe; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id A32EAA0B51;
+	Wed, 19 Jun 2024 15:01:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=xC0P4So+IH1EdQB9fWJmhxeSCfO4o+MbyG70cV7lM6E=; b=
+	ihpkXdXeHFk3LSVzjH9VgfW2HFy6e7K4WA8Vn0MsHeakxqZp9xTDvnbw8CxYbBCN
+	vi/zOjB36qnXkR95fcSe0OwPg/2V+DIt5lFnCx1/qV6OEa2c+lQX49NfS0R+9Mwn
+	hsVisuZRzvYZ+NqQgNPBkDj6a1mxfBCmK5qDfzB0vjHVvJmQrdkAANVRXarC/Odw
+	Qs6Sx1IQNsUjq/hbF8FEm6ESDz0Q97GEMROvXkCu6qjSSHPCwG5aAhMWz07DIBPN
+	t8DUCleKUKU1xdXVBw7u6ZYLGDlpJj4vfsnrUQSTHguUrUgLHetf8WHP12ugnLzs
+	35a90OqY/1+KKPZgd4n86asE5A/TWc+JHOluiwr1QEkURBB8uDWlHiVup49pTAiI
+	zBKVFXPCW9CuM0STk9ZUn0rJJQLltgoPrWLl5YjH2vyBxZ3Hu4fZXqiv2U3yDR0F
+	1eWy4uHPRZ4V+bDnvyp5NragSedOPBJAnqDtyJVRz0a5HCeuEniDgN70n/AA7nM0
+	TWlHidR4Y/G0yUVtZoJwwoG1ftlvIrAs+bFmuXig6Xyg5EM8tvTjAfF8xNZqoVqE
+	syAFMxKcaTn+krzyqeI43NehvQdPKfURKBvL3T/n6w1R3+om9+22syKaWANQOm+j
+	Zm8eENMnldNCLH+y/5tDs79a3p1q6cFMuI1NBvS2xBY=
+From: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	<linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>
+Subject: [PATCH resubmit] rtc: interface: Add RTC offset to alarm after fix-up
+Date: Wed, 19 Jun 2024 15:01:16 +0200
+Message-ID: <20240619130115.2799118-1-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240619-rtc-sd2405al-v2-1-39bea29bd2a5@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAKPFcmYC/3XMSw6DIBSF4a2YOy4ND+HWjrqPxgEBqjdRMWBMG
- 8PeS513+J3k/AfkkChkuDcHpLBTprhUyEsDbrTLEBj5apBcttxwZGlzLPsKbSdmedeiQnSoPNT
- LmsKL3mfu2VePlLeYPmd9F7/1T2gXTDCtdIcioL0Z8xhmS9PVxRn6UsoXHPgswKgAAAA=
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
- csokas.bence@prolan.hu, 
- =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718797739; l=11932;
- i=gomba007@gmail.com; s=20230706; h=from:subject:message-id;
- bh=+XaMZEQFyX4YehZFthAMIa9nxIRXWMDM5QNHScjl5uY=;
- b=N0iCkk+GkOvH3JNJ8wB3vuA1P9NP1zyIW29aThgCbC7lPzM8+8QUJQg+opCSeDrRjnGJaRmJo
- /V6K4sf0qciC9Nd9uB/DvdbLns2XKLOcpZRimFa7hQ4+GTQTxVf1z+z
-X-Developer-Key: i=gomba007@gmail.com; a=ed25519;
- pk=iY9MjPCbud82ULS2PQJIq3QwjKyP/Sg730I6T2M8Y5U=
-X-Endpoint-Received: by B4 Relay for gomba007@gmail.com/20230706 with
- auth_id=60
-X-Original-From: =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
-Reply-To: gomba007@gmail.com
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1718802111;VERSION=7972;MC=2560499276;ID=565953;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2945A129576D7D61
 
-From: Tóth János <gomba007@gmail.com>
+`rtc_add_offset()` is called by `__rtc_read_time()`
+and `__rtc_read_alarm()` to add the RTC's offset to
+the raw read-outs from the device drivers. However,
+in the latter case, a fix-up algorithm is run if
+the RTC device does not report a full `struct rtc_time`
+alarm value. In that case, the offset was forgot to be
+added.
 
-Add support for the DFRobot SD2405AL I2C RTC Module.
+Fixes: fd6792bb022e ("rtc: fix alarm read and set offset")
 
-Datasheet:
-	https://image.dfrobot.com/image/data/TOY0021/SD2405AL%20datasheet%20(Angelo%20v0.1).pdf
-
-Product:
-	https://www.dfrobot.com/product-1600.html
-
-To instantiate (assuming device is connected to I2C-1)
-as root:
-	echo sd2405al 0x32 > /sys/bus/i2c/devices/i2c-1/new_device
-as user:
-	echo 'sd2405al 0x32' | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
-
-The driver is tested with:
-	+ hwclock
-	+ tools/testing/selftests/rtc/setdate
-	+ tools/testing/selftests/rtc/rtctest
-
-Signed-off-by: Tóth János <gomba007@gmail.com>
+Signed-off-by: Csókás, Bence <csokas.bence@prolan.hu>
 ---
-Changes in v2:
-- Refactored based on reviewer's suggestions.
-- I couldn't get the I2C IRQ to work on Raspberry Pi 4, so alarm is
-  skipped.
-- Link to v1: https://lore.kernel.org/r/20240607-rtc-sd2405al-v1-1-535971e7a866@gmail.com
----
- MAINTAINERS                |   6 +
- drivers/rtc/Kconfig        |  10 ++
- drivers/rtc/Makefile       |   1 +
- drivers/rtc/rtc-sd2405al.c | 305 +++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 322 insertions(+)
+ drivers/rtc/interface.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8754ac2c259d..c78587811433 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6337,6 +6337,12 @@ F:	include/net/devlink.h
- F:	include/uapi/linux/devlink.h
- F:	net/devlink/
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index 1b63111cdda2..db8dffffed91 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -273,12 +273,11 @@ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ 		if (err)
+ 			return err;
  
-+DFROBOT SD2405AL RTC DRIVER
-+M:	Tóth János <gomba007@gmail.com>
-+L:	linux-rtc@vger.kernel.org
-+S:	Maintained
-+F:	drivers/rtc/rtc-sd2405al.c
-+
- DH ELECTRONICS IMX6 DHCOM/DHCOR BOARD SUPPORT
- M:	Christoph Niedermaier <cniedermaier@dh-electronics.com>
- L:	kernel@dh-electronics.com
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 2a95b05982ad..15f1c0ba5759 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -743,6 +743,16 @@ config RTC_DRV_S5M
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-s5m.
+ 		/* full-function RTCs won't have such missing fields */
+ 		if (rtc_valid_tm(&alarm->time) == 0) {
+-			rtc_add_offset(rtc, &alarm->time);
+-			return 0;
++			goto done;
+ 		}
  
-+config RTC_DRV_SD2405AL
-+	tristate "DFRobot SD2405AL"
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you will get support for the
-+	  DFRobot SD2405AL I2C RTC Module.
+ 		/* get the "after" timestamp, to detect wrapped fields */
+ 		err = rtc_read_time(rtc, &now);
+ 		if (err < 0)
+@@ -378,10 +377,12 @@ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ done:
+ 	if (err && alarm->enabled)
+ 		dev_warn(&rtc->dev, "invalid alarm value: %ptR\n",
+ 			 &alarm->time);
+ 
++	rtc_add_offset(rtc, &alarm->time);
 +
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-sd2405al.
-+
- config RTC_DRV_SD3078
- 	tristate "ZXW Shenzhen whwave SD3078"
- 	select REGMAP_I2C
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 3004e372f25f..3d19feba1e1c 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -162,6 +162,7 @@ obj-$(CONFIG_RTC_DRV_S3C)	+= rtc-s3c.o
- obj-$(CONFIG_RTC_DRV_S5M)	+= rtc-s5m.o
- obj-$(CONFIG_RTC_DRV_SA1100)	+= rtc-sa1100.o
- obj-$(CONFIG_RTC_DRV_SC27XX)	+= rtc-sc27xx.o
-+obj-$(CONFIG_RTC_DRV_SD2405AL)	+= rtc-sd2405al.o
- obj-$(CONFIG_RTC_DRV_SD3078)   += rtc-sd3078.o
- obj-$(CONFIG_RTC_DRV_SH)	+= rtc-sh.o
- obj-$(CONFIG_RTC_DRV_SNVS)	+= rtc-snvs.o
-diff --git a/drivers/rtc/rtc-sd2405al.c b/drivers/rtc/rtc-sd2405al.c
-new file mode 100644
-index 000000000000..ccaa90b7eaf7
---- /dev/null
-+++ b/drivers/rtc/rtc-sd2405al.c
-@@ -0,0 +1,305 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * RTC driver for the SD2405AL Real-Time Clock
-+ *
-+ * Datasheet:
-+ * https://image.dfrobot.com/image/data/TOY0021/SD2405AL%20datasheet%20(Angelo%20v0.1).pdf
-+ *
-+ * Copyright (C) 2024 Tóth János <gomba007@gmail.com>
-+ * Copyright (C) 2018 Zoro Li <long17.cool@163.com> (rtc-sd3078.c)
-+ * Copyright (C) 2005 James Chapman (rtc-ds1307.c)
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/rtc.h>
-+
-+/* Real time clock registers */
-+#define SD2405AL_REG_T_BASE	0x00
-+#define SD2405AL_REG_T_SEC	0x00
-+#define SD2405AL_REG_T_MIN	0x01
-+#define SD2405AL_REG_T_HOUR	0x02
-+#	define SD2405AL_BIT_12H_PM	BIT(5)
-+#	define SD2405AL_BIT_24H		BIT(7)
-+#define SD2405AL_REG_T_WEEK	0x03
-+#define SD2405AL_REG_T_DAY	0x04
-+#define SD2405AL_REG_T_MON	0x05
-+#define SD2405AL_REG_T_YEAR	0x06
-+
-+#define SD2405AL_NUM_T_REGS	(SD2405AL_REG_T_YEAR - SD2405AL_REG_T_SEC + 1)
-+
-+/* Control registers */
-+#define	SD2405AL_REG_CTR_BASE	0x0F
-+#define SD2405AL_REG_CTR1	0x00
-+#	define SD2405AL_BIT_WRTC2	BIT(2)
-+#	define SD2405AL_BIT_WRTC3	BIT(6)
-+#define SD2405AL_REG_CTR2	0x01
-+#	define SD2405AL_BIT_WRTC1	BIT(7)
-+#define SD2405AL_REG_CTR3	0x02
-+#define SD2405AL_REG_TTF	0x03
-+#define SD2405AL_REG_CNTDWN	0x04
-+
-+/* General RAM */
-+#define SD2405AL_REG_M_START	0x14
-+#define SD2405AL_REG_M_END	0x1F
-+
-+struct sd2405al {
-+	struct device		*dev;
-+	struct rtc_device	*rtc;
-+	struct regmap		*regmap;
-+};
-+
-+static int sd2405al_setup(struct sd2405al *sd2405al)
-+{
-+	unsigned int reg;
-+	unsigned int val;
-+	int ret;
-+
-+	/* enable write, order is important */
-+	reg = SD2405AL_REG_CTR_BASE + SD2405AL_REG_CTR2;
-+	val = SD2405AL_BIT_WRTC1;
-+	/*
-+	 * CTR2.IM = 0, single event alarm
-+	 * CTR2.S{1,0} = 0, disable INT pin
-+	 * CTR2.FOBAT = 0, interrupt enabled during battery backup mode
-+	 * CTR2.INTDE = 0, countdown interrupt disabled
-+	 * CTR2.INTAE = 0, alarm interrupt disabled
-+	 * CTR2.INTFE = 0, frequency interrupt disabled
-+	 */
-+	ret = regmap_write(sd2405al->regmap, reg, val);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "write failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	reg = SD2405AL_REG_CTR_BASE + SD2405AL_REG_CTR1;
-+	val = SD2405AL_BIT_WRTC2 | SD2405AL_BIT_WRTC3;
-+	/*
-+	 * CTR1.INTAF = 0, clear alarm interrupt flag
-+	 * CTR2.INTDF = 0, clear countdown interrupt flag
-+	 */
-+	ret = regmap_write(sd2405al->regmap, reg, val);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "write failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	reg = SD2405AL_REG_CTR_BASE + SD2405AL_REG_CTR3;
-+	val = 0;
-+	/*
-+	 * CRT3.ARTS = 0, disable auto reset of interrupt flags
-+	 * CTR3.TDS{1,0} = 0, unused, since countdown interrupt is disabled
-+	 * CTR3.FS{3,0} = 0, unused since frequency interrupt is disabled
-+	 */
-+	ret = regmap_write(sd2405al->regmap, reg, val);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "write failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(sd2405al->dev, "setup done\n");
-+
-+	return 0;
-+}
-+
-+static int sd2405al_check_writable(struct sd2405al *sd2405al)
-+{
-+	u8 data[2] = { 0 };
-+	int w32, w1;
-+	int ret;
-+
-+	ret = regmap_bulk_read(sd2405al->regmap,
-+			       SD2405AL_REG_CTR_BASE, data, 2);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "read failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	w32 = data[SD2405AL_REG_CTR1];
-+	w32 &= (SD2405AL_BIT_WRTC2 | SD2405AL_BIT_WRTC3);
-+
-+	w1 = data[SD2405AL_REG_CTR2];
-+	w1 &= SD2405AL_BIT_WRTC1;
-+
-+	return (w32 != 0) && (w1 != 0);
-+}
-+
-+static int sd2405al_read_time(struct device *dev, struct rtc_time *time)
-+{
-+	u8 hour;
-+	u8 data[SD2405AL_NUM_T_REGS] = { 0 };
-+	struct sd2405al *sd2405al = dev_get_drvdata(dev);
-+	int ret;
-+
-+	/* check if the device is powered on/working */
-+	ret = sd2405al_check_writable(sd2405al);
-+	if (ret == 0) {
-+		dev_err(sd2405al->dev, "invalid device status\n");
-+		return -EINVAL;
-+	} else if (ret < 0) {
-+		return ret;
-+	} else {
-+		dev_dbg(sd2405al->dev, "device status is valid\n");
-+	}
-+
-+	ret = regmap_bulk_read(sd2405al->regmap, SD2405AL_REG_T_BASE, data,
-+			       SD2405AL_NUM_T_REGS);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "read failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	time->tm_sec = bcd2bin(data[SD2405AL_REG_T_SEC] & 0x7F);
-+	time->tm_min = bcd2bin(data[SD2405AL_REG_T_MIN] & 0x7F);
-+
-+	hour = data[SD2405AL_REG_T_HOUR];
-+	if (hour & SD2405AL_BIT_24H)
-+		time->tm_hour = bcd2bin(hour & 0x3F);
-+	else
-+		if (hour & SD2405AL_BIT_12H_PM)
-+			time->tm_hour = bcd2bin(hour & 0x1F) + 12;
-+		else /* 12 hour mode, AM */
-+			time->tm_hour = bcd2bin(hour & 0x1F);
-+
-+	time->tm_mday = bcd2bin(data[SD2405AL_REG_T_DAY] & 0x3F);
-+	time->tm_wday = data[SD2405AL_REG_T_WEEK] & 0x07;
-+	time->tm_mon = bcd2bin(data[SD2405AL_REG_T_MON] & 0x1F) - 1;
-+	time->tm_year = bcd2bin(data[SD2405AL_REG_T_YEAR]) + 100;
-+
-+	dev_dbg(sd2405al->dev, "read time: %d-%02d-%02d %02d:%02d:%02d\n",
-+			       time->tm_year, time->tm_mon, time->tm_mday,
-+			       time->tm_hour, time->tm_min, time->tm_sec);
-+
-+	return 0;
-+}
-+
-+static int sd2405al_set_time(struct device *dev, struct rtc_time *time)
-+{
-+	u8 data[SD2405AL_NUM_T_REGS];
-+	struct sd2405al *sd2405al = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = sd2405al_check_writable(sd2405al);
-+	if (ret == 0) {
-+		dev_err(sd2405al->dev, "device is not writable\n");
-+		return -EINVAL;
-+	} else if (ret < 0) {
-+		return ret;
-+	} else {
-+		dev_dbg(sd2405al->dev, "device is writable\n");
-+	}
-+
-+	data[SD2405AL_REG_T_SEC] = bin2bcd(time->tm_sec);
-+	data[SD2405AL_REG_T_MIN] = bin2bcd(time->tm_min);
-+	data[SD2405AL_REG_T_HOUR] = bin2bcd(time->tm_hour) | SD2405AL_BIT_24H;
-+	data[SD2405AL_REG_T_DAY] = bin2bcd(time->tm_mday);
-+	data[SD2405AL_REG_T_WEEK] = time->tm_wday & 0x07;
-+	data[SD2405AL_REG_T_MON] = bin2bcd(time->tm_mon) + 1;
-+	data[SD2405AL_REG_T_YEAR] = bin2bcd(time->tm_year - 100);
-+
-+	ret = regmap_bulk_write(sd2405al->regmap, SD2405AL_REG_T_BASE, data,
-+				SD2405AL_NUM_T_REGS);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "write failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(sd2405al->dev, "set time: %d-%02d-%02d %02d:%02d:%02d\n",
-+			       time->tm_year, time->tm_mon, time->tm_mday,
-+			       time->tm_hour, time->tm_min, time->tm_sec);
-+
-+	return 0;
-+}
-+
-+static const struct rtc_class_ops sd2405al_rtc_ops = {
-+	.read_time = sd2405al_read_time,
-+	.set_time = sd2405al_set_time,
-+};
-+
-+static const struct regmap_config sd2405al_regmap_conf = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = SD2405AL_REG_M_END,
-+};
-+
-+static int sd2405al_probe(struct i2c_client *client)
-+{
-+	struct sd2405al *sd2405al;
-+	int func;
-+	int ret;
-+
-+	func = i2c_check_functionality(client->adapter, I2C_FUNC_I2C);
-+	if (!func) {
-+		dev_err(&client->dev, "invalid adapter\n");
-+		return -ENODEV;
-+	}
-+
-+	sd2405al = devm_kzalloc(&client->dev, sizeof(*sd2405al), GFP_KERNEL);
-+	if (!sd2405al) {
-+		dev_err(&client->dev, "unable to allocate memory\n");
-+		return -ENOMEM;
-+	}
-+
-+	sd2405al->dev = &client->dev;
-+
-+	sd2405al->regmap = devm_regmap_init_i2c(client, &sd2405al_regmap_conf);
-+	if (IS_ERR(sd2405al->regmap)) {
-+		dev_err(sd2405al->dev, "unable to allocate regmap\n");
-+		return PTR_ERR(sd2405al->regmap);
-+	}
-+
-+	ret = sd2405al_setup(sd2405al);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "unable to setup device\n");
-+		return ret;
-+	}
-+
-+	sd2405al->rtc = devm_rtc_allocate_device(&client->dev);
-+	if (IS_ERR(sd2405al->rtc)) {
-+		dev_err(sd2405al->dev, "unable to allocate device\n");
-+		return PTR_ERR(sd2405al->rtc);
-+	}
-+
-+	sd2405al->rtc->ops = &sd2405al_rtc_ops;
-+	sd2405al->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	sd2405al->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	dev_set_drvdata(&client->dev, sd2405al);
-+
-+	ret = devm_rtc_register_device(sd2405al->rtc);
-+	if (ret < 0) {
-+		dev_err(sd2405al->dev, "unable to register device: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id sd2405al_id[] = {
-+	{ "sd2405al", 0 },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(i2c, sd2405al_id);
-+
-+static const __maybe_unused struct of_device_id sd2405al_of_match[] = {
-+	{ .compatible = "dfrobot,sd2405al" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sd2405al_of_match);
-+
-+static struct i2c_driver sd2405al_driver = {
-+	.driver = {
-+		.name = "sd2405al",
-+		.of_match_table = of_match_ptr(sd2405al_of_match),
-+	},
-+	.probe = sd2405al_probe,
-+	.id_table = sd2405al_id,
-+};
-+
-+module_i2c_driver(sd2405al_driver);
-+
-+MODULE_AUTHOR("Tóth János");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("SD2405AL RTC driver");
-
----
-base-commit: c3f38fa61af77b49866b006939479069cd451173
-change-id: 20240607-rtc-sd2405al-a0947377c73d
-
-Best regards,
+ 	return err;
+ }
+ 
+ int rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ {
 -- 
-Tóth János <gomba007@gmail.com>
+2.34.1
 
 
 
