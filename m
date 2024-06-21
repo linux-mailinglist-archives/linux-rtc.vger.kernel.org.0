@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-1381-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1382-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D3D8911F28
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 10:45:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3228912735
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 16:03:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA5E0B21034
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 08:45:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C0871F286CD
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 14:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FE9216D4DF;
-	Fri, 21 Jun 2024 08:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4FB125C1;
+	Fri, 21 Jun 2024 14:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HKtZZyum"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DhMaNpbu"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E2484E0D;
-	Fri, 21 Jun 2024 08:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE7955769;
+	Fri, 21 Jun 2024 14:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718959545; cv=none; b=W9V149LTYZwZPBY1nGyNejcR0Am39/pJvCgYKmhmW+D0tRREhBqLc28H7OYM8QH5NbAyUgMBRVxDZv1IaHILCusZmmpEzaz312SpVDF7u0wfNSjXzfC+S08HsBTS4NgmN6poiVjEgQl3wQFZqiqp7bD7MD2QICq+Wcpns7UCh3M=
+	t=1718978533; cv=none; b=PIVmnt0fYwAIw+1arJKFG60cYLFtqwxKvL4qj+L/1z7d6vN6zrEnpUCW27o+F5lV5IBpLv5vjglLGz00/oII9YFXKmr1/nQuOeIsCkHZdZ9WPg1BCzyOzEo0cJ/mTQ9tBgS4JyOOGsqOx8vJ3/E1u1MJrRacyAIn1HapVpgzFjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718959545; c=relaxed/simple;
-	bh=octImp/hbb6hih4Mkyk7R+jtYPhN783CY6AS6qpoGjc=;
+	s=arc-20240116; t=1718978533; c=relaxed/simple;
+	bh=xSSGo27fvpVUQZd6TXXNi6BiUzNCmLmjNfLaF+T2WEU=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=P8STFBCg1Lx+TuCmmCVkWJqSd4hdZr36SRfSWR1p3UC8rrEqScCTv8qmmrbWU2RfQaS1VduNYLsbZ6p3Skk7C6nE2tHfmkVcSQjRWqLiPNDWYy/XKNKdVK9t7ArCYDVm80Ei7x2gpa40ag2pAQzbb603/Flj6v5btzwjh6XodXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HKtZZyum; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=aKW9g7TWDvb2e+5sc2S2+GjtvjCjfNYf1ZPG27aeH/21LqT/HfwTwQA7awQ4YMlPgSGZYn41FjWhBkihoshW+G4vogFyKIHkiQ5m7LCvItvN+2zwUlFBAd3BsttvUzBZP6krdJjWCahhUGEtaAhWuwUAEuxSjhOtRPaw1scsbhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DhMaNpbu; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=octImp/hbb6hih4Mkyk7R+jtYPhN783CY6AS6qpoGjc=; b=HKtZZyum0/94YbgKn50jGSF+TP
-	nNEuEZJ2F+79HcuhkwG3gwZirNbNzoYdet3BSdpTT4y1rbjelXNBaPF4Wpx9wHIuP5Lf+J9DG0/sb
-	9BlSxsQZZqppfOAmu39n1ZSj0SdNboIMj4KLdVRX3ZRmqk6G9RnZKxqvTSeP2hB441/SXM1RhyE1E
-	R8z0LgWyXQqFBUvKC+aBU5L13zANwdJSRiiXvtOREYBsXiJzSFC6ydbwn5lRb0WNKIPbyYy7h/rRM
-	akzZ2s8oTULtKixjByUdfVs69/JJjIRQNlsgmnRhks660IL0qb3c67tWUATZpBsXXo/Ym2fRxMeyO
-	eMrFbXVw==;
+	bh=QGwpAthtGFLljvINfPkZWerIXgUjeM8V33v42QEVbOs=; b=DhMaNpbuLWxo2kEsDD68UAfxNd
+	/UpU4Nq6iCI6XOFucGaBr4s8ef3tSt85/bRx5C2TN4XC+O7BdRGtksNDO5kd75iAoP10R736sE932
+	sbQ+7RJKTlzJ0y3srKl0eFRgpM53k+eYN6C1FzyfZt0ov5kXNuUrAJO/nbivjRaKshA8EpNxMhgu0
+	m4nE964ZSjlkkWjQBtfzut3rNZWI0AudVrviXevMer9pN6dMsKCyaGywEtCufqL0NUXhCSu1UQqOB
+	NZ+NbbRkY6v/AlKriBieZ3gxtyHK8saFASqF/YiXy75xVHfB1ORKa37m67RgLq9luwJ5Nb/3WjqdT
+	wsJxgp8A==;
 Received: from [2001:8b0:10b:5:79ed:809d:f17f:46e5] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sKZte-00000006z9e-0ZVX;
-	Fri, 21 Jun 2024 08:45:26 +0000
-Message-ID: <c0ae63fc88365c93d5401972683a41112c094704.camel@infradead.org>
+	id 1sKeq2-00000007GIn-24TE;
+	Fri, 21 Jun 2024 14:02:02 +0000
+Message-ID: <9f2d0a1ca9997cad98b45f6e36dbef929a9aa186.camel@infradead.org>
 Subject: Re: [RFC PATCH v3 0/7] Add virtio_rtc module and related changes
 From: David Woodhouse <dwmw2@infradead.org>
 To: Peter Hilber <peter.hilber@opensynergy.com>,
@@ -60,14 +60,13 @@ Cc: "Christopher S. Hall" <christopher.s.hall@intel.com>, Jason Wang
  Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Daniel
  Lezcano <daniel.lezcano@linaro.org>, Alessandro Zummo
  <a.zummo@towertech.it>,  Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date: Fri, 21 Jun 2024 09:45:25 +0100
-In-Reply-To: <db594efd5a5774748a9ef07cc86741f5a677bdbf.camel@infradead.org>
+Date: Fri, 21 Jun 2024 15:02:01 +0100
+In-Reply-To: <671a784b-234f-4be6-80bf-5135e257ed40@opensynergy.com>
 References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
 	 <684eac07834699889fdb67be4cee09319c994a42.camel@infradead.org>
 	 <671a784b-234f-4be6-80bf-5135e257ed40@opensynergy.com>
-	 <db594efd5a5774748a9ef07cc86741f5a677bdbf.camel@infradead.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-HR2p0POzl1PQKfx5bxjB"
+	boundary="=-534Kw2nvt6LhAkQL8Yp3"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -78,67 +77,127 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-HR2p0POzl1PQKfx5bxjB
+--=-534Kw2nvt6LhAkQL8Yp3
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2024-06-20 at 17:19 +0100, David Woodhouse wrote:
->=20
-> >=20
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Counter frequency, and =
-error margin. Units of (second >> 64) */
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0uint64_t counter_period_fr=
-ac_sec;
-> >=20
-> > AFAIU this might limit the precision in case of high counter frequencie=
-s.
-> > Could the unit be aligned to the expected frequency band of counters?
->=20
-> This field indicates the period of a single tick, in units of 1>>64 of
-> a second. That's about 5.4e-20 seconds, or 54 zeptoseconds?=20
->=20
-> Can you walk me through a calculation where you believe that level of
-> precision is insufficient?
->=20
-> I guess the precision matters if the structure isn't updated for a long
-> period of time, and the delta between the current counter and the
-> snapshot is high? That's a *lot* of 54 zeptosecondses? But you really
-> would need a *lot* of them before you care? And if nobody's been
-> calibrating your counter for that long, surely you have bigger worries?
->=20
-> Am I missing something there?
+On Thu, 2024-06-20 at 14:37 +0200, Peter Hilber wrote:
+> Should implement .gettimex64 instead.
 
-Hm, that was a bit rushed at the end of the day; let's take a better look..=
-.
+Thanks. This look sane?
 
-Let's take a hypothetical example of a 100GHz counter. That's two
-orders of magnitude more than today's Arm arch counter.
+As noted in the code comment, in the *ideal* case we just build all
+three pre/post/device timestamps from the very same counter read. So
+sts->pre_ts =3D=3D sts->post_ts.
 
-The period of such a counter would be 10 picoseconds.=20
+In the less ideal case (which will happen on x86 when kvmclock is being
+used for the system time), we use the time from ktime_get_snapshot() as
+the pre_ts and take a new snapshot immediately after the get_cycles().
 
-(Let's ignore the question of how far light actually travels in that
-time and how *realistic* that example is, for the moment.)
 
-It turns out that at that rate, there *are* a lot of 54 zeptosecondses
-of precision loss in the day. It could be half a millisecond a day, or
-20=C2=B5s an hour.
+diff --git a/drivers/ptp/ptp_vmclock.c b/drivers/ptp/ptp_vmclock.c
+index e8c65405a8f3..07a81a94d29a 100644
+--- a/drivers/ptp/ptp_vmclock.c
++++ b/drivers/ptp/ptp_vmclock.c
+@@ -96,9 +96,11 @@ static inline uint64_t mul_u64_u64_add_u64(uint64_t *res=
+_hi, uint64_t delta,
+ }
+=20
+ static int vmclock_get_crosststamp(struct vmclock_state *st,
++				   struct ptp_system_timestamp *sts,
+ 				   struct system_counterval_t *system_counter,
+ 				   struct timespec64 *tspec)
+ {
++	struct system_time_snapshot systime_snapshot;
+ 	uint64_t cycle, delta, seq, frac_sec;
+ 	int ret =3D 0;
+=20
+@@ -119,7 +121,17 @@ static int vmclock_get_crosststamp(struct vmclock_stat=
+e *st,
+ 			continue;
+ 		}
+=20
+-		cycle =3D get_cycles();
++		if (sts) {
++			ktime_get_snapshot(&systime_snapshot);
++
++			if (systime_snapshot.cs_id =3D=3D st->cs_id) {
++				cycle =3D systime_snapshot.cycles;
++			} else {
++				cycle =3D get_cycles();
++				ptp_read_system_postts(sts);
++			}
++		} else
++			cycle =3D get_cycles();
+=20
+ 		delta =3D cycle - st->clk->counter_value;
+=20
+@@ -139,6 +151,21 @@ static int vmclock_get_crosststamp(struct vmclock_stat=
+e *st,
+ 	if (ret)
+ 		return ret;
+=20
++	/*
++	 * When invoked for gettimex64, fill in the pre/post system times.
++	 * The ideal case is when system time is based on the the same
++	 * counter as st->cs_id, in which case all three pre/post/device
++	 * times are derived from the *same* counter value. If cs_id does
++	 * not match, then the value from ktime_get_snapshot() is used as
++	 * pre_ts, and ptp_read_system_postts() was already called above
++	 * for the post_ts. Those are either side of the get_cycles() call.
++	 */
++	if (sts) {
++		sts->pre_ts =3D ktime_to_timespec64(systime_snapshot.real);
++		if (systime_snapshot.cs_id =3D=3D st->cs_id)
++			sts->post_ts =3D sts->pre_ts;
++	}
++
+ 	if (system_counter) {
+ 		system_counter->cycles =3D cycle;
+ 		system_counter->cs_id =3D st->cs_id;
+@@ -155,7 +182,7 @@ static int ptp_vmclock_get_time_fn(ktime_t *device_time=
+,
+ 	struct timespec64 tspec;
+ 	int ret;
+=20
+-	ret =3D vmclock_get_crosststamp(st, system_counter, &tspec);
++	ret =3D vmclock_get_crosststamp(st, NULL, system_counter, &tspec);
+ 	if (!ret)
+ 		*device_time =3D timespec64_to_ktime(tspec);
+=20
+@@ -198,7 +225,16 @@ static int ptp_vmclock_gettime(struct ptp_clock_info *=
+ptp, struct timespec64 *ts
+ 	struct vmclock_state *st =3D container_of(ptp, struct vmclock_state,
+ 						ptp_clock_info);
+=20
+-	return vmclock_get_crosststamp(st, NULL, ts);
++	return vmclock_get_crosststamp(st, NULL, NULL, ts);
++}
++
++static int ptp_vmclock_gettimex(struct ptp_clock_info *ptp, struct timespe=
+c64 *ts,
++				struct ptp_system_timestamp *sts)
++{
++	struct vmclock_state *st =3D container_of(ptp, struct vmclock_state,
++						ptp_clock_info);
++
++	return vmclock_get_crosststamp(st, sts, NULL, ts);
+ }
+=20
+ static int ptp_vmclock_enable(struct ptp_clock_info *ptp,
+@@ -216,6 +252,7 @@ static const struct ptp_clock_info ptp_vmclock_info =3D=
+ {
+ 	.adjfine	=3D ptp_vmclock_adjfine,
+ 	.adjtime	=3D ptp_vmclock_adjtime,
+ 	.gettime64	=3D ptp_vmclock_gettime,
++	.gettimex64	=3D ptp_vmclock_gettimex,
+ 	.settime64	=3D ptp_vmclock_settime,
+ 	.enable		=3D ptp_vmclock_enable,
+ 	.getcrosststamp =3D ptp_vmclock_getcrosststamp,
 
-That particular example of 10 picoseconds is 184467440.7370955
-(seconds>>64) which could be truncated to 184467440 =E2=80=94 losing about =
-4PPB
-(a third of a millisecond a day; 14=C2=B5s an hour).
 
-So yeah, I suppose a 'shift' field could make sense. It's easy enough
-to consume on the guest side as it doesn't really perturb the 128-bit
-multiplication very much; especially if we don't let it be negative.
 
-And implementations *can* just set it to zero. It hurts nobody.
-
-Or were you thinking of just using a fixed shift like (seconds>>80)
-instead?
-
---=-HR2p0POzl1PQKfx5bxjB
+--=-534Kw2nvt6LhAkQL8Yp3
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -230,25 +289,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNjIxMDg0NTI1WjAvBgkqhkiG9w0BCQQxIgQgFa1+VUXy
-bvd36nqVLYst8a8mfk6937WX6f9fVPlR83kwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNjIxMTQwMjAxWjAvBgkqhkiG9w0BCQQxIgQg7YxV0eMW
+25bwLv8PUXnVIENdg6iIwfEfj/4ehzJfbAswgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCa5tbBSK+VqSe6c334kH2p+fRExvEYKNM1
-cksmG5hhPywHjVmb4HFokpVRNXfCEdH1q/aQT415AWmK8jjk2nVNPxQ/cxmwjRqxooKVpoRdWJsh
-e4WexDgJV9dctZ48zZltYwwD3OqQvS7pISPN708a/do6y4BC7Ttx6LhQPMauOec8qz4aO7ruEXpi
-Z09FeyMopAe9pjOa0Ox66s5/TaTF7pEPIJoYrRVLr2IXOFG2BqTS2PhXCsIGJ738vhhLFDPcP0NC
-7RwqPlKdexlrGt0Vt+wAKfbmrEqPgcRJuu2wmXZV+ejKunhIZ5OyO1Nj6eQ7sISwJ7uO5+EDgCBh
-3tR1LrhHOaF9Hmu8VLhmpgtLHdBHMjezTFgFTKngmCX9XADjcqHWIeLQvToC7ScwEN6e/JweKBIs
-orV0Bm9wewSppA9GwZnubc5ZtdRhbgFmbbWZiyXXSSGuSnojr2FEudmHNHKxMfq9lWNpucQnjKT2
-poHU3YFyzHqFytPBh33svfVBvpNHvxoCAClkp8hfGjv//nwrkazmMnuHKEWZ0ZDi0RxLAA0vTEzG
-jfJoctbV+XJJ7m7dRonZ5UPBs4QL+CLqtDRGvuqJfsW+4ht5kfFziZ/7ArSgHoa9QbqF0ymiYO5q
-FrimJKpe/Mhl8mEIf+AGDIG2AeWGWNYAR7uexTg5DAAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCm0tyPmiNAMqQgLW0LHFBRZj+oRctnV5OX
+JzaxaAcyY2+lJH3iG5oqT8WmDFeF2p5EjVlFUf7Lalqc0YPlMnE1HsGX8pFxHSDDtdKkPWp7JXzg
+vg3W2VA64HrkSLkkLEk1JSHXAFmmfsAslxZ/wcDkB+8DH2KDoqW05z/d8kTN6UQ/F2QlUlgqufP+
+sMgHtSuKeUn9C6XJrTWDGNUENqcktK1mowbJmFpyjJhlOXxUNYl+FTrYvO9XHbToHAPNcIBIU2Cg
+7tNBADsUDbBWmL0LoSfDeSJHpkPiLp6Gosa5vMtb16asAZwd4EMEABm+leIKpq1pHa7NMQltcqFV
+WSbk3f7dIcont7Jy0+G1tffcCpfphGrR5VEq7jmievvkRnqtmtdgrYkI6phy9gFYIa9MQxURDtxD
+tT1Zq8jWd6WZLt0P8EihVjj3e6ACqLE46qNCAvoE46FN++T0HxycnITh8DYLG7vwWQx/LCuZLWZE
+g/1Sl160XHZi2XpYt6oQl4gSDxXGJcEauMxVK6kQuFWxAG1r0LTha2WlZV18bMqYMx42zcMREBZ3
+/VoMu0Trbs26JfA2ZvD3btU7wTnMntPu7nqLRmVG3zlJiZioC0nHH8GbuUvdfiwmEPLDSY2fXb9A
+yHtCWM9v/ZBBQFRz7DuJ6nQKxdr0cuIfpmwtEUwjKAAAAAAAAA==
 
 
---=-HR2p0POzl1PQKfx5bxjB--
+--=-534Kw2nvt6LhAkQL8Yp3--
 
