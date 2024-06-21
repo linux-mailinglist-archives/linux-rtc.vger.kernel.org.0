@@ -1,68 +1,68 @@
-Return-Path: <linux-rtc+bounces-1378-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1379-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC571911C48
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 08:57:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 728F8911C50
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 08:57:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF1541C23CDC
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 06:57:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D65BBB24A15
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 06:57:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA7E16D337;
-	Fri, 21 Jun 2024 06:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F254716D4D7;
+	Fri, 21 Jun 2024 06:56:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="UI/3inGG"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="e1C1w/sA"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2088.outbound.protection.outlook.com [40.107.22.88])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2079.outbound.protection.outlook.com [40.107.22.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD16716D334;
-	Fri, 21 Jun 2024 06:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F0716C436;
+	Fri, 21 Jun 2024 06:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.79
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718952984; cv=fail; b=hYNzpVLDBgVAZK4r67UAHI4C+P5Th6gspBrAzMvfd1ZZFLGGQE10RJ06NHFgsX9BZWBN2weS2PLlDXN+EKoNNYV8RMfjnz75X3orfMpFArfuAELoxAFL9l7LSTzk0eJpIO1ytB0oIGAs+264TgOcTK/B/DtQdRO/Vf/7dxmT5v0=
+	t=1718952991; cv=fail; b=iZg9UZnXXXJv7gYMiufwIkqgEiblxy0C8CVO7GZ0ZC28ofkEC2RmQbayAY+3JV+D/BAIA7p0C70xwPAZqCsrbvt29I1oJbeweCNsENjB+31VNKWB/oPHNeS0a14dm1hOpZgAn68xosRPifTPWFjo/aJGHSbt5Ht3TtSmpijrxsk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718952984; c=relaxed/simple;
-	bh=CqMGW21wLzQwHCQSMNma+Vvw2YS/kHx8/LptB3z0aIg=;
+	s=arc-20240116; t=1718952991; c=relaxed/simple;
+	bh=BQjEWFs3tn1kJ3gHqry+33Y19uPuh+IDbf4sSa4/dBE=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=NXqkQIvofFZkVNajR+eCirrBmErOQ4eyJyPSuCFaaslBzmMupehhvWUSWPoUeXw2GUAdUIkegH2CZ5al8myWTA0S2mkEsTks0k7nkxrDMVnd6bpbgwmkKqrApNN21RMcvaZ3kOB3SwZv6Tab3xGc0TgtLZznMqUzAiF9YrVBdCI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=UI/3inGG; arc=fail smtp.client-ip=40.107.22.88
+	 To:Cc:MIME-Version; b=lwI5/nOhBG3BRjc8nPmaWRAuw383KV8IOBiT0/MhRfAGsYxR3ZJ+6V05nwx8tq9Ehs7r5e9QUMgRmLMrK7UTPuNAcjxdHFdCC4QFlESgNCKHE7k5UEa+BKCzlTUVP3RJzglNXVt02Lc2gKhMS6qVSj3PiTpVlpEqFZhK7+/mWus=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=e1C1w/sA; arc=fail smtp.client-ip=40.107.22.79
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eFg9s5Dp1r8m7WtLpXbg9/Rim8aWoLZbOEzJ2uhPhMjlSBD/QA1F86i+OZzmhduAsKI8EPVtEP/I72N2/s1g5lMeccdSNUDVQlrkkENw4jtiC2ACAFgRiuYicM5Qq6ROUor5zwOD6wi2NmPuKsorGlwpq2NgMShV+OZN518lccVa1NqJYRk06lOwhb6vXn7oJIuHauL8yN8MScggP8ueddQJMjdiwREPjodrcAaq2ni31UIxlIH1kP1t5g/lsbcTnr7oRJ8sglFB97zb+kDU/MGVzmEBDZ/OB8bzzMsVMa0Gn1q9qnxwIVIkqdPUVjyKnnzkTvoloQyvpLVqt1W1DQ==
+ b=UU0/0mE/X+O4K5UjG1TcSkT5OUab5vVdoPOn3BlVWk9g/kPhXLx8dl5LsOqnRM2mG2OjsDWKvXWLethoWjc19u5igx32QDMculzwlfuGc8oArswDLdN9IcIM6TILFt2VDTWWIHOI4VaXdEnoN1p1Yy48slVb7qOuuiuYtE3PE7nYDqbMJdWALGnDXvd5qdSATBP3QNTFhECc4upGSsfF9v5pbgsIbgT9AXdDu5Ky/MateZQR0TyYlKQAqm+tfDjwhFJHP8TSFBBANzYvQ2vIJIuvFJHJVZAOGfbg6ZYzI6tYo2kKMuTZ5zpmFgN0UWBWhbmjvKSc/kW/1+vahp7wxA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fWJNKk3jgwCNHoMe46PPOkniwkqxONFBhlGDDTjK5QU=;
- b=BHMCPHjApc9HKIE4tM9BJcdo5wiTBDH3hr1uaHXJmIE4jxRyPNscBltfFgsBzctvatE7Y7tGFTa/2bR3JRtidK7s00Yjs4vvuMBiUiwk0xgMmwSai5MW4nCrDXDAv5sK3j9T1Pk4EckYDtoPE0QjoWUZmkA3/3XcLkDuGIEZNlkAswPs8JLliG75EW3tPZGDqXw85OiNWhC5OSmOIrvG/bImm9mI4aaL4aSTdfcc9kjqGA8MW9U6tXPRZn2VMq0m7wJ6FzhiIkHf9VlqW997ZpxoVlj9q8Nd5v5miTFpBTL7OVH7SXEvWl/GSIKLaT2JipchUuM3Thwu0sb9s09cFw==
+ bh=C0ggd5wKMv4U80GyDOSu2OoINrWdvdDCP012GJn8Wwo=;
+ b=Y4F7JYzIlkNCS547gfRhNWOuWH5j9fnaIj7nNMFvGpshPO6+l/i/xT1ZQlMugO1DogCg7AJ2vy0ANvE9ev2wkc0WB26mn/CwRRI4GBwq9qD5ymkG8v+fPP/NyMHDSJEhkKl70bU3S5kyrDgrCZ25X3GX3EIFnhjML8HVa5ck2XAkay9ObNbflKt/HPfh7IR+oWng6rsZNuv1aE4TV1uJmcm7lbuZN0VIvGMhD008Wq6vvPXUp4c73Gi/udi8mVoawIb+H4/xQ98KOuWpA8Ai9r4MAV6Vb+zkreW+DoUknNDqFEwGigTbTzwSO8dtBsmBke0VMW+FzBMLX5yhcW1yWQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fWJNKk3jgwCNHoMe46PPOkniwkqxONFBhlGDDTjK5QU=;
- b=UI/3inGGSJJVA5PAgngl0YDhFRixMCY1Nxm3d56QQoKSxAA8vP3EpRmliYeQaW4rV59uKieBjtNT6jV9plXC+HQn6kJuw5/frvliVLXZs8PSnXOCRk+e+TTQMORwQPpzLxsSPax5Ss84LByqgfqQi9UpzoJJAeY+Xkw1yshD/4M=
+ bh=C0ggd5wKMv4U80GyDOSu2OoINrWdvdDCP012GJn8Wwo=;
+ b=e1C1w/sAWUm7Ru2rMJ3VfPnkm/TC+thyHFIOqCYlHdbM/oPyjLdXxL6t8zxMQtAtLhM9aqHG0bhi0aakk0wdWMajxAQ9E+POMXKJNjyizW7YaQfPpWwzIR1idPpv+H+XZkWvQ4MUaQ004EoNT0riHQLxSiGHklkbcfZPchz0Vv0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM6PR04MB5941.eurprd04.prod.outlook.com (2603:10a6:20b:9e::16)
  by GV1PR04MB10426.eurprd04.prod.outlook.com (2603:10a6:150:1cc::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.19; Fri, 21 Jun
- 2024 06:56:18 +0000
+ 2024 06:56:26 +0000
 Received: from AM6PR04MB5941.eurprd04.prod.outlook.com
  ([fe80::9f4e:b695:f5f0:5256]) by AM6PR04MB5941.eurprd04.prod.outlook.com
  ([fe80::9f4e:b695:f5f0:5256%4]) with mapi id 15.20.7698.017; Fri, 21 Jun 2024
- 06:56:18 +0000
+ 06:56:25 +0000
 From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Date: Fri, 21 Jun 2024 15:04:41 +0800
-Subject: [PATCH v5 6/7] rtc: support i.MX95 BBM RTC
+Date: Fri, 21 Jun 2024 15:04:42 +0800
+Subject: [PATCH v5 7/7] input: keyboard: support i.MX95 BBM module
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240621-imx95-bbm-misc-v2-v5-6-b85a6bf778cb@nxp.com>
+Message-Id: <20240621-imx95-bbm-misc-v2-v5-7-b85a6bf778cb@nxp.com>
 References: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
 In-Reply-To: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
 To: Jonathan Corbet <corbet@lwn.net>, Shawn Guo <shawnguo@kernel.org>, 
@@ -79,11 +79,11 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, arm-scmi@vger.kernel.org, 
  linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718953487; l=6289;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718953487; l=8179;
  i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=3stfAX6GDrY2yBI8qtkGNlp9Yy53JQgBChIeJkCcYsU=;
- b=lpdaEaKWf70vtixuRA2/MHtFiMqlaDNTv4mxP597gAdLj+D7yFjG77tszgA3/F0QA6nT8PB4L
- RVmgTlu91HDCIpJ6UHizg/MMCKLbUR/YE+VmrIpFO0sknoivOiK2t2S
+ bh=ChfkEJX/72hXEL9g1a8O55kYUMOihK4KW1T6yM6QP7s=;
+ b=478Kz2I4jFt9FPxkAK98lmXfjQPwSEDRoU4ChGwdkT9MAJDo+jB1gg6nuORaR7bm8I4KVBzUT
+ JqOZH3l/a+MBl6n63yUIcLj2DjBKNKzwAa0dT3pjhv+bJ+NRxUa3F+5
 X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
  pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
 X-ClientProxiedBy: SG2PR01CA0122.apcprd01.prod.exchangelabs.com
@@ -98,270 +98,311 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB5941:EE_|GV1PR04MB10426:EE_
-X-MS-Office365-Filtering-Correlation-Id: d5e00da9-c5ad-49c4-f526-08dc91bf4082
+X-MS-Office365-Filtering-Correlation-Id: d4a72654-60e5-466f-3f9f-08dc91bf448f
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230037|1800799021|366013|52116011|7416011|376011|921017|38350700011;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RnYxY2VaSEN4enAzeG84dEhCZUN4TlpJUDBsWmFRTjRVaFh4bFlNaUZWNjlU?=
- =?utf-8?B?eGJnUFNubWI4dGlkeGdlZXdzTHlmeloreHFDYy9ucFltM0NHOXpWeE1KVkZy?=
- =?utf-8?B?WjNMS1hSVVVVMTdTS2FlcHM3WUdEckkrSnlMTFVEa1gyQjg3QkZJamk5MG13?=
- =?utf-8?B?RkMvY2xNRVBPUlR2Y1ZQb3ozRUtZR0lHbUdLZmtMdE9MZW5mM3lkNEY5OHRW?=
- =?utf-8?B?YVE0cE5YbUFLazNpbklhR0tDQW9mSkd6NkprQmVDNEVmMGZqWjNCUTNJblJj?=
- =?utf-8?B?Q1A4MXo0aTlYTkhhL0Y1QTZTV3g2VzhTbk1ub1lWcVA5RjUrK1FmbzBhVWVS?=
- =?utf-8?B?OFJwalppN2s1QS92eUZEQlRma2FYajFFRmVpOW9kRWV0dG9TaXJSam9GNERz?=
- =?utf-8?B?K0hOaTZMZCt2Nk9NbHJIMkUxU2xqbHhxdkZOUS9QeTV2UG1RODZxMFhReWdl?=
- =?utf-8?B?L0psZTFWYlFQRzN3T3Ivd3dvdU9ja2NxTzZMY3FhY25rOEQzMldLY3gvcElP?=
- =?utf-8?B?VU4xT2Q4ZnhCaHc4em9hWGFpa3VyZjVaeFFvUGJoQ3dUY0FxR1lXZTIwZ2t6?=
- =?utf-8?B?MnJTOE1wRjlQcHdodEgxUk1FN3pWSk9ucHhXNG8wK0xKWUpZanRmUk9NV2xq?=
- =?utf-8?B?NzlPMzRRYjV1YzlHOXJoeTNRUWg3Vi9jbmcwRVRlMlBOTUpPNWQyVVJmY3JD?=
- =?utf-8?B?VDBNbjVScmQzS0p2QjJUVlAvUzJvbHpEeVpTZFhWdGliUnk2MFZ4a0tLRG01?=
- =?utf-8?B?YjUvMXBGRktKSWlMeUFLcTNSZ3ZRaEpiU2ZWYTlLazdpbVZQUEdkOUlkbnRP?=
- =?utf-8?B?T2VSaDRWYjRFR3Bsb2ZSa2JaQjZ5OGx3QmhuMUdEYzd5NFRiOVorN3ExZUpy?=
- =?utf-8?B?dVFISnJvL0NvSElQTGhFVEJQYURJRDcrTmZSWkprc1ZqcVBRN2NNcmFwOU4v?=
- =?utf-8?B?bE5UZWJYS0E3WmEvNDh0c3FLNzdSa2ZtTUVjMkU5NS96V1NTdWZvUEszZDBr?=
- =?utf-8?B?MUFNUkkwSTg1M2ZRbnFHWkFxR3dXeGcwVkFEUjg1VzhXd1FIZlZiQU9YZEdz?=
- =?utf-8?B?ZG84SEdENlRzYUNkcDAxcTAvTEsxdFdNb01VN1JNNElWVE9pdDB2QWJqL1Ux?=
- =?utf-8?B?c3Yxb0NhTFFpZU1DSlZBYnNIWjk5cXJocUEwWkhORkVSdkZXRTRzcENXbEdo?=
- =?utf-8?B?LzZodHkveTIyeGNlVTFqREJoczNzeXJ1KzFLdmp4NjEzZGJzY011QUZlYmlT?=
- =?utf-8?B?U0o3R1RsUHpzRGRObjZWYjZGb2tldVk2NlNpNWtucGtuRU9vcWxSUnpUTitC?=
- =?utf-8?B?TSt5a2k5LzdtbEdQYThCTlNyU2ZSQmhwL0tDVFUyRFJWZEtLa2t6Vm9aYWRP?=
- =?utf-8?B?WnEvM2FTbkIwbHA5cWovSVdWZkNkZlpjdERqM3dZSm9ZdGhDRVd3MDlGMVNn?=
- =?utf-8?B?MmRKMmV0Z0NNR3VrSHBKcXVGck9jaUFmb0FmNTBXMTR5NWUxOVBZQ0c3ckxK?=
- =?utf-8?B?aFh3RkNGajNWMUYyN1BTdTh0em5BMDdVT3B5NzRmbDBBM1NuMzVVNGlTbnRJ?=
- =?utf-8?B?R3ZtOFlqOHJ5c2FVN2Y3VGw0WisxRmtFbW9RTWNLWFJmRXZMTlQyT1dnSUlx?=
- =?utf-8?B?TGxkZjNBNlM4SDBaaFh1ZVp4MTJoUE1Nam5QYnM4eUxKaFBrUVJadlNlRGpk?=
- =?utf-8?B?dXJoOFFhaFJFU2xyY2x5ZGhLc3krcEd1aEZGclEzaUVFdzlZUjRxOTVmZHFS?=
- =?utf-8?B?Z0gweTBnTTROeHI3VVJhcGh6NGhFRVNVaS9zZ1NDUjNDek1xbWZOdWlpcjg2?=
- =?utf-8?B?MnhLMU1veG9oVVdBZ2F3TGgxckYyV3RQeWxTdlBOaEhtVk9iVG45T0hHTFRw?=
- =?utf-8?Q?BSdPvjGWecvX+?=
+	=?utf-8?B?QUZ1WXpBOGRGT0dubW9OUzROSVJSOStLRnMvQ3A0SGFxWnlodXEzWE5LYUc4?=
+ =?utf-8?B?S1ZVWWVkanFhejF2d2JkMXdWRGVaYWN5b2pHdjBESGFzNzVHY09mU3BtRXpm?=
+ =?utf-8?B?bzBTYmk5N1FKdUhoNjVITWkzK2hwd1BiUmkzY2RXS0UzWE5ZZmNUcW1paWRF?=
+ =?utf-8?B?OWZkbUxBWERPNXR0VkhueHZNbFBVVWlrYmdiNk5iMTFIb25mc2tKZCtuWkNp?=
+ =?utf-8?B?aGM2cnE5MCtha2tOblNTSTFxWW5MR09Qc0dxRFlZNWtiVmFRVHMyRXJ4aW9V?=
+ =?utf-8?B?UlZxbVVxSUVWNHFGSVBKRzl4Zkk2aXk2eTRkZ3RrVDVGNWtZcVNkeStwcHE5?=
+ =?utf-8?B?M3EvRDNKZml0d0doMG1NVUd6dXJqNFFQb3RDcnhQK1lZMThTaU9TcmtwYzla?=
+ =?utf-8?B?a3QrRWxlUE45SEg4Tk9yMkplQ1VwWm1hckRWdWE5ZkJZRjhBMURFMjg0aE1k?=
+ =?utf-8?B?cll0ZDRWQkI4L0NvaXB5QVl2bWxPd3gyM0lETytOREtmcDZFUzNZbWNSVUxU?=
+ =?utf-8?B?anJxdUpTM1Q4SXJyTzc2R0NKV2ZrZFQyMnFOcUtrbDYrM0grd3RzYjFMOUNJ?=
+ =?utf-8?B?eHE3aE1uWVBxcHJxOHpWZW4xekxjZGVuejJGMDVZb1Q2ZFFnUGNScy9WajV6?=
+ =?utf-8?B?QlBySGpuTGh6bXJpbEJHY3lpM1pITDZPSHIySGZaZ0Y0eURjQjdVc0xiTGpR?=
+ =?utf-8?B?MmpQT0M1cG96MTI0R05VQ0JYcklXc2pSeGdscU5lL3RHRTZPdHM3Y0ZIR2Nz?=
+ =?utf-8?B?V2JWdzdWb290ejlId0V0RmlHRUpUaFh5eFhXWVM0ZDB4ODN1YnlnVW5aZFhK?=
+ =?utf-8?B?M2tWckE1QnBsUnpraDlRbVRiNitEMlg1RUFQaSswbDhJMFN1QkVpeFVjclJV?=
+ =?utf-8?B?OENnai9oRlFJc001R0kzWHhWbTI3Zi9uUFZ2aUFjSDlGM0twZW1kOFArRWtK?=
+ =?utf-8?B?akVhcHlQVmRvVEdXaUpIWGpJTkh1MHluYVFPVDROaGpEbW9uaG80c3I1R1pO?=
+ =?utf-8?B?YkhQWEkzTEE3WkYzbkJFdjFzMldCWDhqc1AvU24yWXRacFN2dlhGWnF0MlIv?=
+ =?utf-8?B?VUFvMWRTenpyMDlWWEt2M09aa0tnRHkyeDREVS9vT1ArQVppclkxNE5JTUhF?=
+ =?utf-8?B?TGFDSHp3VnNWQW5va3NvOVIvQ3g3Mi9jdXF1U2w1NGgza3VYSmhHY1dudk1u?=
+ =?utf-8?B?WVk3K3QwcS9iYWV5ZnBocmdGakNkNFR3TmJMNUF3aEM5MVJxNGxWaFo4a0JB?=
+ =?utf-8?B?ZkQwa3ExcnRwV3paMEVNWkVwY3Vzd2t1ejI3TTk5RkdoZHhsc3hOZnZjaUZY?=
+ =?utf-8?B?QThYVXdXbWo3dkZUVGVNaXhCZ0pWU1gyU3NCZTY2TWV6RXZjSStVdmZOQ2lM?=
+ =?utf-8?B?KzZOZmdKcGlVelpFNHYrWTIvRGR6UnV3YmxCdUhLaEhqbGdvdWdyaHYyN1FQ?=
+ =?utf-8?B?RjAxY052WERxaWdXV2UwMmZ1UzBDUy8zSkttOExKQVNmSFFCY1FEL2dJWFFO?=
+ =?utf-8?B?dXJhRDZZenNDTk1CS21vMmsvWjhWa0FrY2YxRXlhSlcxbkhlTDd1ZEhEUDBF?=
+ =?utf-8?B?NVZYaW5taXpyQ2g5WXdqUmFoMkhVNlFwcEJQanV6NTRna2d6cU1RNkw2VVNB?=
+ =?utf-8?B?eTJTN3lHczZ1MW5DUGErZ29oSkRuK2w5eEEzT0EwdktOZnMrSjFkK2duOTFv?=
+ =?utf-8?B?K2ZOVWlocVE0UGlHNFpGa1ZKNWx6U2dmWStsaXBzcGdHMzNZMmF6L21yNHVv?=
+ =?utf-8?B?UjhnaHVlL3U1VXFiWWxLK1owU3VSem5zWTlUZDUxdTZJaE5EVm1CM0NhQ1Vw?=
+ =?utf-8?B?c1U3MWg1TENIYXFRb210cE05WUJMSVlueWlFbVQxZXdRblV2OXdkSkpmbTNS?=
+ =?utf-8?Q?SXC9Ucfurwpn1?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5941.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(1800799021)(366013)(52116011)(7416011)(376011)(921017)(38350700011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aEFXZFdvRmw2UTQxbGRvOGJadW82ZnZtREtFcFNGSDlxTEpjQnJGQWQvY2Nx?=
- =?utf-8?B?RUd4clJnK09vVytrR3owUGFJaG90bFZ5MzF6QzlnUWxLTmZ0c3ZxQlI1ZWIy?=
- =?utf-8?B?WXhkTGx4bG9lMXlmenNmemFVcE9KRTI2T1RqeTUyUDJ1c243TDBvQXZ0UTQ3?=
- =?utf-8?B?R0czc0JBcVZmckRpT1NZdlg0WVh4VW5Pekl5cjFsRmMvYTB2K0dSWVZzZUJu?=
- =?utf-8?B?c1VJa2E1K0orWXhlWDR1b05nU3hVNHBxcVBQZWdiWHY1R1ZKMlFBR20ra2Yw?=
- =?utf-8?B?RnIzeXNrSXZER2VxcmlPWGRKcGswZzUzZmg5MFNiT29UcG9zalczSVdPb2lw?=
- =?utf-8?B?dWhWems5V2xpK0pUbXNkc1N6M1JzWXkrVmxlOWJmb21PQlNHRnRVN1c3eTJx?=
- =?utf-8?B?akE4aG5TczdTcWJWVjBaYmhIUUZTNndIWHhWSjNEMllvVkN1cEY5UVlwdXcr?=
- =?utf-8?B?cjhvZWJDUm5zUmxpL3hRZG5iUUp4TUhvQUhIUFRVdU5DOVM4R25aK2NLMXVs?=
- =?utf-8?B?all3VW9HMGo5ZXdwVVpRVEROdDlzS2hrclM0a3lDUHVFSE93RXZiNDFhK21s?=
- =?utf-8?B?dWd3QXVXM1pQTWRaa01Ha2daamRkRnBTZXpiOUVYMHh6UEE3b2tFcUJTTTQy?=
- =?utf-8?B?SldhM0I5bUUyNUEyYmFUT0FScmIzSTQrY0VSZVN0RklRaitYRGVmSkxHaFdT?=
- =?utf-8?B?NnJ2MXlVdWd5M09XK01mbzh1MlNQcXZrYzRQZE5ZWEo1OTljZDVORGFsTU5p?=
- =?utf-8?B?Z1oyUGtPMHI5VGVqSG1YVkpHbmlCeU9ZSjFQZWxOazRGV1VyWkRNeG00R3V2?=
- =?utf-8?B?cndNeE5TdG1mMzJUbDNMd1UwVXRIZHUrYk5QY2JiUEx0MmcybXpLb0ZaSGJT?=
- =?utf-8?B?TURLZjhHWHBEbW9tSGIveDh1MEdSRTNLdjBxRlZqeEpEcWJJWklpZ0oyMUxP?=
- =?utf-8?B?K0d4R3ZVNDgzckRJRzRSZXlGditDWHAzRnpKVjh3UE1hSWhKVGxCL0Y4dEZJ?=
- =?utf-8?B?OHhmbHRlYlhnMzcxeHlnNVQrUzRsUXNPQTF0cm9Da0JPdDZRQjFMMGNYR0I3?=
- =?utf-8?B?ejllSi9SQnNlcXFuSWdxVlpGQzQzNVlacWw0Z0pFcWFOd0NzaEVjTU5lOEZP?=
- =?utf-8?B?VFZmRDhPTmRSUVpwVFd2VkdldmdVUDhzZ2hWZ3QxTXQ5UEo1amtlaGovQ2NH?=
- =?utf-8?B?dlRWZDlXTkhQK1B2eHVOYWVVaGVtLzUzYmp6L1VPS3VZMENJOHoyQ0U2cVBl?=
- =?utf-8?B?TStWT2prekNSSEEzMGdHdGNQMk11U2s1VExRLzhuNWw1dnBkYXBPdUo3M0dy?=
- =?utf-8?B?MDBXSGNjUkhJODJ0RTB4d1ZhcFYxV1luVEtXMlhaaUFXc3FyMEl6NWJHaEhN?=
- =?utf-8?B?ZjFxdGhmSVpNUEhCUERVT1Z5VzRyNjhJRnVaSFhTV01DeHpSQmgvTTlkNHNH?=
- =?utf-8?B?ZEM4aVNieC9KeWRmaXJEYnU4elhna3R6bGlEWkpIeFhTZ2FOTHd0R2JFa0RB?=
- =?utf-8?B?TEVNNjJVUVpBNjhpckdZYWJGU1JTVkhLdERLa0JsTmUwa1h0U014YWxiZ1F6?=
- =?utf-8?B?ODF4M25yM0VvNDFKci9vd0FCS3pHY01HUGNBaHJnWU1JNEExcVFQbDFMVDJq?=
- =?utf-8?B?alFiaFJnWDA4ZjkwQjFRdUhnTGpMTVNnR0xzeEdLK0xWVERXWFZyY2lYNkZV?=
- =?utf-8?B?MGZXWkswZG9rYTJyeDVFYTVhSllFNXlERld0cXNJRXU4SE9mMldSQWJneHZC?=
- =?utf-8?B?QmkzUHRZT2RjTHA0cTMzL1RDWHgyUkRmUjkzcktWbVpPcE55SVNXTlJleFBM?=
- =?utf-8?B?UkRDL1VycTVaVWM2amtvNzlETHlaMm40QzFtZGRkZFFSRWdHdUM1QWE5dm03?=
- =?utf-8?B?aFdQQmJvNWZBMEtWeERTeTUzOVI3eU91UXpqOXFrNFdiUXlFWlVZK2E3dUpk?=
- =?utf-8?B?ZjJjdFA5eFc5ZVJhdlBBRVFkTkVIR1RiZ3RqeGlNU29PRXJ4Q2NqZnp0MXJY?=
- =?utf-8?B?VkV2ME9xcTRpT00yU1pIZ3R1eDZ4S1JUYkRpRlJZaUptRGlMS0hobWJwWnVP?=
- =?utf-8?B?bStNSkNPMnFweXU4TFQ4c09wbzQ5bE9oSmpzakZiRFJUelhteGNtNkRmZko1?=
- =?utf-8?Q?VAzwUUmDUqI5/pOY509uTPJV4?=
+	=?utf-8?B?U0MyYXJ2N29QUERSdWs1UStJQlNQOTA0ZjRhUkxyTWcxTTBZUFBES1RXY2R4?=
+ =?utf-8?B?UTRsSXpWbHhkdGtDMWZZWG1wMDdpVjZnN0dUYTQzUTIyNU9ZYU5VbE12K2w0?=
+ =?utf-8?B?ZDN5UnlnWnRQdDFzNllCT1pRanVpTzQ2UDJhREMybExuZ25WTWFra3RyMjRF?=
+ =?utf-8?B?Z3BsMDFsYUd3ODhBT0V2eFhudG5BMXVSVkhvQitHa3YxNEIxL01vc2R4MEZp?=
+ =?utf-8?B?SnJBMkxycDl2a0dPbkdjV1FRT1d2aUNlWC96VVpldW9oMjNwaE9qOGR0VDRx?=
+ =?utf-8?B?OFpQZ3FtbUVGYlQ0c1FHYmZMSDM5M3lNbnJlQjJqZmtwS1NNSFpnRXJkVHBQ?=
+ =?utf-8?B?Qi9zTTBWUHBkRXd3WmNucFU0RHptUm9iVkl2NW1GWitvTEN4Njlxb0RyRkdr?=
+ =?utf-8?B?MkpPa0wwR0dnVzJSbEFhNlBVTlZxR1NYTy9Rb2VTWEpNejFtMHFrVzZJT0Ex?=
+ =?utf-8?B?amRZaVJhSG9nNkE1eWdrZC9LQms2WEhKYXl2NWlhNDVDNXF6ZXp1YkQ0ajVL?=
+ =?utf-8?B?WGJralhCaXN6ODZLT0tObjZNdG1Wc2ZQTEtlM2hsRDc1ZXlzc202eXJCOWlB?=
+ =?utf-8?B?T2RPN1E1WG5GL1FsT3BDVG83dDU4VWtoeStDdzV1ZmVrNTU5QzZ5YUdRNHh0?=
+ =?utf-8?B?dStiTm1oZmpIK3pXelpYUHFMSE5KMFQ5WVR5ZElEN3BqMDdXZi9rc20zQkJW?=
+ =?utf-8?B?cHErc2hWUHlDdlFIKzVoS24ydWE0ekxsaHI5dncxUEhtemYvbFoxeTYrWUR6?=
+ =?utf-8?B?cEFUYW5YM3d3VElNOUZoeHZEQXZSVTlCS05XMEFLRFV6TXpZRWsvbUxvai9m?=
+ =?utf-8?B?Njl0dmNDWjk1ZlYyaG95d1gxSEhyNEZNQmxneEFXZkJNTXJDUmxObVlBaWRa?=
+ =?utf-8?B?QkpUNXQxTzRQS3VWbFN6djBSU2MrUjJxQUFqTWZZZkM2ZDhGSmM3NFlpYkty?=
+ =?utf-8?B?anlsYmoxU3lqSDFuaENQK0JqU0RGVUoxeTVLK3dYS2doeXlua3VjR20vVExD?=
+ =?utf-8?B?RUtMRDZkVVdCUXY1bFU3aXNzeklyZzhmeWZEb2tTdkJkYjJSMndmTkxicFNF?=
+ =?utf-8?B?dGJYYzZNMnFSM2RUclEzeW5wdXdoUkRmWFAzbjRBOXNwNG1pQjZMQzVodlZO?=
+ =?utf-8?B?bTQwR1pUMlQ4VG1iOGdDN0RCUzg0VlI3UElidVZ4S011Ujl5Tjd4ZVdHYkh5?=
+ =?utf-8?B?M001bkpZRE54RTlrS2paZG51WDh6aEkrNjZMMFo1MGhqdWRqYmZndE5pMzVS?=
+ =?utf-8?B?ZUFTZDFzR3oxZ0J5SmplZGE3TVdOamEwaWJ2NXdVY0FYTVQ1NXdQVndWYjE1?=
+ =?utf-8?B?bnFFWGpmUVpKZUZVVmRyaHZmU05zNFlnK2o5d241YXBYdDd3bkpVM2tTTWs2?=
+ =?utf-8?B?RXUyL0lsVzZRT1p6cVlIYUFXRlVMZFRsVzBZZGxsYmFhZnZ6bjJyWVVZYnM3?=
+ =?utf-8?B?SGRyYkJHSnFVWjBpQ0dOUERHL0ZSeVVLUlNOMHJYYitZTlE4cCtpV0RoL0lS?=
+ =?utf-8?B?YUZNdExTTlA2N1BzRkNzdEFFZHpOUDV1cFdKVXhVMVNaekpRTTdGNXdXbzVh?=
+ =?utf-8?B?cWV1WmsvcjZrNE43T1RuMngxR2xhZDhyNGhJTVI5dEQ0bExOSzJFTDkrZTg0?=
+ =?utf-8?B?YWJ1bDd4dlVDeE54Nk9Wbjk3ZnNrdFBPL0pFTzhjZGlxaFBicEtFc1ZNUVEx?=
+ =?utf-8?B?d28yQnNLTTBPdmVCclFEUzZOU0lFeEpZYW52VFBMQ09lNmM5R1FESzFVTnJu?=
+ =?utf-8?B?MGZ2MklRK21udFF5SVhVK3JLT1VPcGltZjlYdjdmSTVSVXQzemtsb2x1OUFZ?=
+ =?utf-8?B?R2FtMUNjYlFULzBYazBwVHlwQWc3WnpiRGxBZ2x2bStjY1lmOEsveVQ1WnRk?=
+ =?utf-8?B?NmFJS0JVajJkUFc1L2ZjbWhWbGdVdEZTSWNndlhoT1pmQk9FcGRQczZLVHpZ?=
+ =?utf-8?B?TzFVQjNIbDY0ZlJEWjF2Y3UrYzJocmFvY0MvbmFCdTVoK1hqWEdkYi9PendD?=
+ =?utf-8?B?c1h6a0pvdHVJY1lnZTM1bksxQXlVQTZOenlodVlNTldBTjJ2WTBMQnhvN1di?=
+ =?utf-8?B?c3VqdWtERUcvL0FJdXQ2R2pNb0lRYlkwRnJKVm4ranF3VitTUEtnVWJ3MFMy?=
+ =?utf-8?Q?Ztox0FzBeEDD48CEhJMEkk7PY?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5e00da9-c5ad-49c4-f526-08dc91bf4082
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4a72654-60e5-466f-3f9f-08dc91bf448f
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5941.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 06:56:18.8318
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 06:56:25.5987
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3+2tW1uSKcaq430a3oHeOaKlc/rrJ2Rcc1D7+ZmCt8X26sCMVAHg+V4MVJHU80mlftxHa7LrCUKA5HwRIKihZw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: SmTeL7EWNsEbLfOuXKP+NFRvyoE5Stss07R2Nnwa9hzyawP3qzhdO7EGgjkCNJd6jsKUxVnvuNg7LInI1tyxcA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10426
 
 From: Peng Fan <peng.fan@nxp.com>
 
-The BBM module provides RTC feature. To i.MX95, this module is managed by
-System Manager and exported System Control Management Interface(SCMI).
-Linux could use i.MX SCMI BBM Extension protocol to use RTC feature.
+The BBM module provides BUTTON feature. To i.MX95, this module
+is managed by System Manager and exported using System Management
+Control Interface(SCMI). Linux could use i.MX SCMI BBM Extension
+protocol to use BUTTON feature.
 
-This driver is to use SCMI interface to get/set RTC.
+This driver is to use SCMI interface to enable pwrkey.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/rtc/Kconfig          |   8 +++
- drivers/rtc/Makefile         |   1 +
- drivers/rtc/rtc-imx-sm-bbm.c | 168 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 177 insertions(+)
+ drivers/input/keyboard/Kconfig          |  11 ++
+ drivers/input/keyboard/Makefile         |   1 +
+ drivers/input/keyboard/imx-sm-bbm-key.c | 225 ++++++++++++++++++++++++++++++++
+ 3 files changed, 237 insertions(+)
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 2a95b05982ad..8122bfeba8c0 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1827,6 +1827,14 @@ config RTC_DRV_BBNSM
- 	   This driver can also be built as a module, if so, the module
- 	   will be called "rtc-bbnsm".
+diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
+index 1d0c5f4c0f99..1c3fef7d34af 100644
+--- a/drivers/input/keyboard/Kconfig
++++ b/drivers/input/keyboard/Kconfig
+@@ -466,6 +466,17 @@ config KEYBOARD_IMX
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called imx_keypad.
  
-+config RTC_DRV_IMX_BBM_SCMI
++config KEYBOARD_IMX_BBM_SCMI
++	tristate "IMX BBM SCMI Key Driver"
 +	depends on IMX_SCMI_BBM_EXT || COMPILE_TEST
 +	default y if ARCH_MXC
-+	tristate "NXP i.MX BBM SCMI RTC support"
 +	help
-+	   If you say yes here you get support for the NXP i.MX BBSM SCMI
-+	   RTC module.
++	  This is the BBM key driver for NXP i.MX SoCs managed through
++	  SCMI protocol.
 +
- config RTC_DRV_IMX_SC
++	  To compile this driver as a module, choose M here: the
++	  module will be called scmi-imx-bbm-key.
++
+ config KEYBOARD_IMX_SC_KEY
+ 	tristate "IMX SCU Key Driver"
  	depends on IMX_SCU
- 	depends on HAVE_ARM_SMCCC
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 3004e372f25f..8ee79cb18322 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -74,6 +74,7 @@ obj-$(CONFIG_RTC_DRV_HID_SENSOR_TIME) += rtc-hid-sensor-time.o
- obj-$(CONFIG_RTC_DRV_HYM8563)	+= rtc-hym8563.o
- obj-$(CONFIG_RTC_DRV_IMXDI)	+= rtc-imxdi.o
- obj-$(CONFIG_RTC_DRV_IMX_SC)	+= rtc-imx-sc.o
-+obj-$(CONFIG_RTC_DRV_IMX_BBM_SCMI)	+= rtc-imx-sm-bbm.o
- obj-$(CONFIG_RTC_DRV_ISL12022)	+= rtc-isl12022.o
- obj-$(CONFIG_RTC_DRV_ISL12026)	+= rtc-isl12026.o
- obj-$(CONFIG_RTC_DRV_ISL1208)	+= rtc-isl1208.o
-diff --git a/drivers/rtc/rtc-imx-sm-bbm.c b/drivers/rtc/rtc-imx-sm-bbm.c
+diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
+index aecef00c5d09..624c90adde89 100644
+--- a/drivers/input/keyboard/Makefile
++++ b/drivers/input/keyboard/Makefile
+@@ -31,6 +31,7 @@ obj-$(CONFIG_KEYBOARD_IPAQ_MICRO)	+= ipaq-micro-keys.o
+ obj-$(CONFIG_KEYBOARD_IQS62X)		+= iqs62x-keys.o
+ obj-$(CONFIG_KEYBOARD_IMX)		+= imx_keypad.o
+ obj-$(CONFIG_KEYBOARD_IMX_SC_KEY)	+= imx_sc_key.o
++obj-$(CONFIG_KEYBOARD_IMX_BBM_SCMI)	+= imx-sm-bbm-key.o
+ obj-$(CONFIG_KEYBOARD_HP6XX)		+= jornada680_kbd.o
+ obj-$(CONFIG_KEYBOARD_HP7XX)		+= jornada720_kbd.o
+ obj-$(CONFIG_KEYBOARD_LKKBD)		+= lkkbd.o
+diff --git a/drivers/input/keyboard/imx-sm-bbm-key.c b/drivers/input/keyboard/imx-sm-bbm-key.c
 new file mode 100644
-index 000000000000..a634e5915d2b
+index 000000000000..907dad383b8f
 --- /dev/null
-+++ b/drivers/rtc/rtc-imx-sm-bbm.c
-@@ -0,0 +1,168 @@
++++ b/drivers/input/keyboard/imx-sm-bbm-key.c
+@@ -0,0 +1,225 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
 + * Copyright 2024 NXP.
 + */
 +
++#include <linux/input.h>
 +#include <linux/jiffies.h>
 +#include <linux/module.h>
++#include <linux/of.h>
 +#include <linux/platform_device.h>
 +#include <linux/rtc.h>
 +#include <linux/scmi_protocol.h>
 +#include <linux/scmi_imx_protocol.h>
++#include <linux/suspend.h>
++
++#define DEBOUNCE_TIME		30
++#define REPEAT_INTERVAL		60
 +
 +struct scmi_imx_bbm {
-+	const struct scmi_imx_bbm_proto_ops *ops;
-+	struct rtc_device *rtc_dev;
 +	struct scmi_protocol_handle *ph;
++	const struct scmi_imx_bbm_proto_ops *ops;
 +	struct notifier_block nb;
++	int keycode;
++	int keystate;  /* 1:pressed */
++	bool suspended;
++	struct delayed_work check_work;
++	struct input_dev *input;
 +};
 +
-+static int scmi_imx_bbm_read_time(struct device *dev, struct rtc_time *tm)
++static void scmi_imx_bbm_pwrkey_check_for_events(struct work_struct *work)
 +{
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
++	struct scmi_imx_bbm *bbnsm = container_of(to_delayed_work(work),
++						  struct scmi_imx_bbm, check_work);
 +	struct scmi_protocol_handle *ph = bbnsm->ph;
-+	u64 val;
++	struct input_dev *input = bbnsm->input;
++	u32 state = 0;
 +	int ret;
 +
-+	ret = bbnsm->ops->rtc_time_get(ph, 0, &val);
++	ret = bbnsm->ops->button_get(ph, &state);
 +	if (ret) {
-+		dev_err(dev, "%s: %d\n", __func__, ret);
-+		return ret;
++		pr_err("%s: %d\n", __func__, ret);
++		return;
 +	}
 +
-+	rtc_time64_to_tm(val, tm);
++	pr_debug("%s: state: %d, keystate %d\n", __func__, state, bbnsm->keystate);
++
++	/* only report new event if status changed */
++	if (state ^ bbnsm->keystate) {
++		bbnsm->keystate = state;
++		input_event(input, EV_KEY, bbnsm->keycode, state);
++		input_sync(input);
++		pm_relax(bbnsm->input->dev.parent);
++		pr_debug("EV_KEY: %x\n", bbnsm->keycode);
++	}
++
++	/* repeat check if pressed long */
++	if (state)
++		schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(REPEAT_INTERVAL));
++}
++
++static int scmi_imx_bbm_pwrkey_event(struct scmi_imx_bbm *bbnsm)
++{
++	struct input_dev *input = bbnsm->input;
++
++	pm_wakeup_event(input->dev.parent, 0);
++
++	schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(DEBOUNCE_TIME));
++
++	/*
++	 * Directly report key event after resume to make no key press
++	 * event is missed.
++	 */
++	if (READ_ONCE(bbnsm->suspended)) {
++		bbnsm->keystate = 1;
++		input_event(input, EV_KEY, bbnsm->keycode, 1);
++		input_sync(input);
++		WRITE_ONCE(bbnsm->suspended, false);
++	}
 +
 +	return 0;
 +}
 +
-+static int scmi_imx_bbm_set_time(struct device *dev, struct rtc_time *tm)
++static void scmi_imx_bbm_pwrkey_act(void *pdata)
 +{
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-+	struct scmi_protocol_handle *ph = bbnsm->ph;
-+	u64 val;
-+	int ret;
++	struct scmi_imx_bbm *bbnsm = pdata;
 +
-+	val = rtc_tm_to_time64(tm);
-+
-+	ret = bbnsm->ops->rtc_time_set(ph, 0, val);
-+	if (ret)
-+		dev_err(dev, "%s: %d\n", __func__, ret);
-+
-+	return ret;
++	cancel_delayed_work_sync(&bbnsm->check_work);
 +}
 +
-+static int scmi_imx_bbm_alarm_irq_enable(struct device *dev, unsigned int enable)
-+{
-+	return 0;
-+}
-+
-+static int scmi_imx_bbm_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-+	struct scmi_protocol_handle *ph = bbnsm->ph;
-+	struct rtc_time *alrm_tm = &alrm->time;
-+	u64 val;
-+	int ret;
-+
-+	val = rtc_tm_to_time64(alrm_tm);
-+
-+	ret = bbnsm->ops->rtc_alarm_set(ph, 0, val);
-+	if (ret)
-+		dev_err(dev, "%s: %d\n", __func__, ret);
-+
-+	return ret;
-+}
-+
-+static const struct rtc_class_ops smci_imx_bbm_rtc_ops = {
-+	.read_time = scmi_imx_bbm_read_time,
-+	.set_time = scmi_imx_bbm_set_time,
-+	.set_alarm = scmi_imx_bbm_set_alarm,
-+	.alarm_irq_enable = scmi_imx_bbm_alarm_irq_enable,
-+};
-+
-+static int scmi_imx_bbm_rtc_notifier(struct notifier_block *nb, unsigned long event, void *data)
++static int scmi_imx_bbm_key_notifier(struct notifier_block *nb, unsigned long event, void *data)
 +{
 +	struct scmi_imx_bbm *bbnsm = container_of(nb, struct scmi_imx_bbm, nb);
 +	struct scmi_imx_bbm_notif_report *r = data;
 +
-+	if (r->is_rtc)
-+		rtc_update_irq(bbnsm->rtc_dev, 1, RTC_AF | RTC_IRQF);
-+	else
-+		pr_err("Unexpected bbm event: %s\n", __func__);
++	if (r->is_button) {
++		pr_debug("BBM Button Power key pressed\n");
++		scmi_imx_bbm_pwrkey_event(bbnsm);
++	} else {
++		/* Should never reach here */
++		pr_err("Unexpected BBM event: %s\n", __func__);
++	}
 +
 +	return 0;
 +}
 +
-+static int scmi_imx_bbm_rtc_init(struct scmi_device *sdev)
++static int scmi_imx_bbm_pwrkey_init(struct scmi_device *sdev)
 +{
 +	const struct scmi_handle *handle = sdev->handle;
 +	struct device *dev = &sdev->dev;
 +	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
++	struct input_dev *input;
 +	int ret;
 +
-+	bbnsm->rtc_dev = devm_rtc_allocate_device(dev);
-+	if (IS_ERR(bbnsm->rtc_dev))
-+		return PTR_ERR(bbnsm->rtc_dev);
++	if (device_property_read_u32(dev, "linux,code", &bbnsm->keycode)) {
++		bbnsm->keycode = KEY_POWER;
++		dev_warn(dev, "key code is not specified, using default KEY_POWER\n");
++	}
 +
-+	bbnsm->rtc_dev->ops = &smci_imx_bbm_rtc_ops;
-+	bbnsm->rtc_dev->range_min = 0;
-+	bbnsm->rtc_dev->range_max = U32_MAX;
++	INIT_DELAYED_WORK(&bbnsm->check_work, scmi_imx_bbm_pwrkey_check_for_events);
 +
-+	ret = devm_rtc_register_device(bbnsm->rtc_dev);
-+	if (ret)
++	input = devm_input_allocate_device(dev);
++	if (!input) {
++		dev_err(dev, "failed to allocate the input device for SCMI IMX BBM\n");
++		return -ENOMEM;
++	}
++
++	input->name = dev_name(dev);
++	input->phys = "bbnsm-pwrkey/input0";
++	input->id.bustype = BUS_HOST;
++
++	input_set_capability(input, EV_KEY, bbnsm->keycode);
++
++	ret = devm_add_action_or_reset(dev, scmi_imx_bbm_pwrkey_act, bbnsm);
++	if (ret) {
++		dev_err(dev, "failed to register remove action\n");
 +		return ret;
++	}
 +
-+	bbnsm->nb.notifier_call = &scmi_imx_bbm_rtc_notifier;
-+	return handle->notify_ops->devm_event_notifier_register(sdev, SCMI_PROTOCOL_IMX_BBM,
-+								SCMI_EVENT_IMX_BBM_RTC,
-+								NULL, &bbnsm->nb);
++	bbnsm->input = input;
++
++	bbnsm->nb.notifier_call = &scmi_imx_bbm_key_notifier;
++	ret = handle->notify_ops->devm_event_notifier_register(sdev, SCMI_PROTOCOL_IMX_BBM,
++							       SCMI_EVENT_IMX_BBM_BUTTON,
++							       NULL, &bbnsm->nb);
++
++	if (ret)
++		dev_err(dev, "Failed to register BBM Button Events %d:", ret);
++
++	ret = input_register_device(input);
++	if (ret) {
++		dev_err(dev, "failed to register input device\n");
++		return ret;
++	}
++
++	return 0;
 +}
 +
-+static int scmi_imx_bbm_rtc_probe(struct scmi_device *sdev)
++static int scmi_imx_bbm_key_probe(struct scmi_device *sdev)
 +{
 +	const struct scmi_handle *handle = sdev->handle;
 +	struct device *dev = &sdev->dev;
@@ -386,28 +427,48 @@ index 000000000000..a634e5915d2b
 +
 +	dev_set_drvdata(dev, bbnsm);
 +
-+	ret = scmi_imx_bbm_rtc_init(sdev);
++	ret = scmi_imx_bbm_pwrkey_init(sdev);
 +	if (ret)
 +		device_init_wakeup(dev, false);
 +
 +	return ret;
 +}
 +
++static int __maybe_unused scmi_imx_bbm_key_suspend(struct device *dev)
++{
++	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
++
++	WRITE_ONCE(bbnsm->suspended, true);
++
++	return 0;
++}
++
++static int __maybe_unused scmi_imx_bbm_key_resume(struct device *dev)
++{
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(scmi_imx_bbm_pm_key_ops, scmi_imx_bbm_key_suspend,
++			 scmi_imx_bbm_key_resume);
++
 +static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_IMX_BBM, "imx-bbm-rtc" },
++	{ SCMI_PROTOCOL_IMX_BBM, "imx-bbm-key" },
 +	{ },
 +};
 +MODULE_DEVICE_TABLE(scmi, scmi_id_table);
 +
-+static struct scmi_driver scmi_imx_bbm_rtc_driver = {
-+	.name = "scmi-imx-bbm-rtc",
-+	.probe = scmi_imx_bbm_rtc_probe,
++static struct scmi_driver scmi_imx_bbm_key_driver = {
++	.driver = {
++		.pm = &scmi_imx_bbm_pm_key_ops,
++	},
++	.name = "scmi-imx-bbm-key",
++	.probe = scmi_imx_bbm_key_probe,
 +	.id_table = scmi_id_table,
 +};
-+module_scmi_driver(scmi_imx_bbm_rtc_driver);
++module_scmi_driver(scmi_imx_bbm_key_driver);
 +
 +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-+MODULE_DESCRIPTION("IMX SM BBM RTC driver");
++MODULE_DESCRIPTION("IMX SM BBM Key driver");
 +MODULE_LICENSE("GPL");
 
 -- 
