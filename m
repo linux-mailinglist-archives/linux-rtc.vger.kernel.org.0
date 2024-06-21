@@ -1,69 +1,68 @@
-Return-Path: <linux-rtc+bounces-1376-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1377-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFAB5911C3E
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 08:56:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C217E911C46
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 08:57:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E32D81C23B96
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 06:56:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EBE2B24932
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 06:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5F216C858;
-	Fri, 21 Jun 2024 06:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6369A16D306;
+	Fri, 21 Jun 2024 06:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="cG6m1w3+"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="R9t8s0Uu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2086.outbound.protection.outlook.com [40.107.22.86])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2050.outbound.protection.outlook.com [40.107.22.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E5216B3A5;
-	Fri, 21 Jun 2024 06:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E19116C87C;
+	Fri, 21 Jun 2024 06:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718952970; cv=fail; b=CkhH8hqEH635wRuWRvibNZbmTr9UB2WO3UHWvwPrAlRDo1Yk/PyFOQBbaBvq97/iox9ghCKbQ/BfT6oPMcLhW0neHyv5bW5l1nxMX7lV1rkaAHA/ss+ZwdIVVCuNxfYWsY2trkIPWNkzb1nzccdmTaim5Gd5UG5yUHPaZ9i+XR0=
+	t=1718952977; cv=fail; b=uQTFebu5jpvnCbYCrqjjEkiFwDxquipk4ZC7OQUw/fetMY5MPjz1ULDNbo0OjkCmlzSLR5HnLiBL/WyO4vePiU2j5TzCEaGfYiQ1dlJfMWHbb89aOIDoLYQL7gZt4Ox2rAfOmDgMgYz9Gx+qRSmgksOcHh+HAqcoDkKhfjN8dG0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718952970; c=relaxed/simple;
-	bh=6va5vkFBCgl5PL/a5ZQoCqeFFLZsb6k2yDH9hHDBRyY=;
+	s=arc-20240116; t=1718952977; c=relaxed/simple;
+	bh=znwwOZYcZ/cOQiRbIjSJ/wWzMCcmPndge6mLJ8jCWiQ=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=CiBWO5Y94uXqLriOSxlezfZAV5r7s8/ZfywF8uL+1YI65ivFgseaTBZuXm2b1isQ2Tq1pCjv6kWDgCRQKqTxSehcmCXQ0a4KtTwrKdhOFNM+bcIOSSz3y9Snz4UmTGuN+a7R72B9Q8+C9wS1DyDytiFEA/uQiv5KN01v0PSoIVQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=cG6m1w3+; arc=fail smtp.client-ip=40.107.22.86
+	 To:Cc:MIME-Version; b=CZ7VJf5wFi5zeXztirQ/h5RbJtoCGvIHwXCHXKoUjTW0gEzY0ZWOZC3HqTspeX2nsxp07jvc0MybRK0fE0QFxtzqVv0pciEUf1o+4VNZEyiCkPHBfbWL+M1xGL78D+whs5//9BVRFN+nHiqjAgLUj5oArFUAal0HrtIsLNUMmKk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=R9t8s0Uu; arc=fail smtp.client-ip=40.107.22.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nb8Pwb7pjb/swvRNiMSCMoKVSBqKXqcmq7Xt6f5dfKAs/Ujn5a9DktmDLR9WlgIsAZm6PfjJ6CWp5ajYuUDeo3bzGMWYcJAM1NJy3H3duvhnxLRhI2bwgquNiRorp+cY2CjDbyPXHXxh9zP5/5kuHXVTyvawNajCbLg2vlielkxKXlDI3Evu8hRbkRPjGQayXRjb8FBhwcVw3FgSEEZPxtKYzqQwM+W5N3KzDXRLA2hXBh96Q14ami75/V88P+zVuWk81p02eWQzVEziJx1dldC23t+9qQxHwOC/vD57E35lFkc32bb4V48IceVKOCevz4TvGz/pW0H8QCfACgR7/Q==
+ b=P/vPhHHiC7Xi6JRXjisKdhkhg1WAcjV8kq5CfirTgRg9aE8GLE/P6J2lunzsrF+6EvsPtfCpmELp9jFWkNubcdCRELZGeGHTU2ZvLEV8wbM6bxi16xoiYm53N9oXadaF8yylvTbHk6KwxFR4e9cvjCKyJHGX+LY76qlfbnOUrxTzbROzulzqv4IHvuAaVwSTENa0Qx/xWFdnHbD2XMS8iKlp9At7Rz6C8Aimt4oa86hTj86vCReRaQr9w0zf+vm7gkSky2S+p6LvisgqM/yeSDdFjPCclTcH53kyghY3l9bwgUEoGHsD6eo5ceDrqr9FicufGXARUrqgawGh74SOqQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b6D2tsyHnxa1BpBzxQCLu8hcG+zpSWBn6jX61FKApko=;
- b=RD0m5OvJfro4sTzQDs/gYRZwQ/6mVzwmWeBhJFFipwh4y9TFKCee29lrPBY8T+IZWmMbxuhB3GqNNljtsvleaMDoNw8WdQ3TYE7eqm8qSmrNhC2se5eq0ML/VBL2Ko8EFTo7iVY45oTjMsF0ddXTYrLsmbjjf4aALnN0fP6j6AfgiK51wcJ89GkHs1zHg+AgEYvSSZio7b0pvQOIeTrA+mgn2+wiudwIT/73qkKgr4+fWst6fBjOA5NYuWyF5Q0zCLqXttKGiMEWliEjrBtHHP5iH8FsclxmTbJ9LTmn0bmcCZYIiAcVDWU0FwnpCRLzWD6U6Zn+taI4GojRoXjWnA==
+ bh=7LVaQmxewtWgDieWlVI4F6SboEGpS/btxQN0knD2YWM=;
+ b=Jo8sq/SnrBBw2qd5j1b7ZUNobA9ae0HrRd9pEjPO/X10HBZH1C4mayZktNf0RjDJQgIvfbeciMC7YYPKW7hgIB0b7kc7ZTAGO/nChmHZrdwC7wYdHAaBNSvbMR40wWl4Pg0rOMMzKP3pLm6/QtkrQC/sE8OzFMRJvvPI4NViaFUXhko1Le3qWS9s4LtxV1kCu/QGvbw2Eh3Zz0OuIBjwhO+jzr3ILJpA1t5fRiqST4T8DNIln1x8WMUOG46h5lhcTjWMFXDHa3jlR28eIiyqrjnEmzPKM/JH/+Q1te/B1VSyo2RjuFrbtDGVE1YLpAIASWsoGgFjzUTbTk+W9BARuw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b6D2tsyHnxa1BpBzxQCLu8hcG+zpSWBn6jX61FKApko=;
- b=cG6m1w3+8NOZ1y01enwYEamSqA3d9LL62RLIwGHxKFfJlMX4PRVlx4EQpGmjv2O+2nYuzk45vOfcDRCTT31EmHniJonLG9HWqg20Ftes3SGT+KOXL77SMkCUvbphF8QnrUsflRhKe6ODmDysfmWFUP5Ka+3pN21DKjapAze1D4c=
+ bh=7LVaQmxewtWgDieWlVI4F6SboEGpS/btxQN0knD2YWM=;
+ b=R9t8s0Uu/QrFyhQmeWs05Pnf7WYkvgZxC5jlOmzv2gx0hZiBGiKuxEpXX+UaVjCCZeQlltNbu89JMiW6YYqdK1XYRIxw/Bpvrv8xgxY8jvWpqJ8HJg+QVWMkZBrATVpLoN6o4SJAGeD9dfUXBk0q8iN2mmd1LuDrGi5DDl5QPBg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM6PR04MB5941.eurprd04.prod.outlook.com (2603:10a6:20b:9e::16)
  by GV1PR04MB10426.eurprd04.prod.outlook.com (2603:10a6:150:1cc::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.19; Fri, 21 Jun
- 2024 06:56:05 +0000
+ 2024 06:56:12 +0000
 Received: from AM6PR04MB5941.eurprd04.prod.outlook.com
  ([fe80::9f4e:b695:f5f0:5256]) by AM6PR04MB5941.eurprd04.prod.outlook.com
  ([fe80::9f4e:b695:f5f0:5256%4]) with mapi id 15.20.7698.017; Fri, 21 Jun 2024
- 06:56:05 +0000
+ 06:56:12 +0000
 From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Date: Fri, 21 Jun 2024 15:04:39 +0800
-Subject: [PATCH v5 4/7] firmware: arm_scmi: add initial support for i.MX
- MISC protocol
+Date: Fri, 21 Jun 2024 15:04:40 +0800
+Subject: [PATCH v5 5/7] firmware: imx: add i.MX95 MISC driver
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240621-imx95-bbm-misc-v2-v5-4-b85a6bf778cb@nxp.com>
+Message-Id: <20240621-imx95-bbm-misc-v2-v5-5-b85a6bf778cb@nxp.com>
 References: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
 In-Reply-To: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
 To: Jonathan Corbet <corbet@lwn.net>, Shawn Guo <shawnguo@kernel.org>, 
@@ -80,11 +79,11 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, arm-scmi@vger.kernel.org, 
  linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718953487; l=11404;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718953487; l=6433;
  i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=TUMkdIZMCjh7xQDIbhQnprsPSDQiIPMHfHmaWUsZEbE=;
- b=55Whg98PqDfS9bPemuxyJXZ+gJ0B4aCE3IDPPuQY5MxfAnNNA8jrmniQ0u6vZi9iuVlgrDPWg
- 4y7zzwN2lZ1BdlsekonmpjTkE6bb+sc/LPMBlP0+YVTP6/7domIZXL8
+ bh=6mJryA2gjuHsLRyd9bfAMdNInUOb690lV8nR15s/uP4=;
+ b=HVOZ0M8O0QK/VT0rwIgpBNRRnE0B9sW7iPNmUNYOQTEdL4mZm93qBOKNC9gs+nnxVOxTYJqPJ
+ tDYyzIuTPblBuZi/ZkizIxInPuhc5Ug0dojz8M4dy3pPhpOaSdp3Ad4
 X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
  pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
 X-ClientProxiedBy: SG2PR01CA0122.apcprd01.prod.exchangelabs.com
@@ -99,501 +98,304 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB5941:EE_|GV1PR04MB10426:EE_
-X-MS-Office365-Filtering-Correlation-Id: 56570eb3-d838-4b48-0dac-08dc91bf3824
+X-MS-Office365-Filtering-Correlation-Id: f217f2de-d50a-46e6-06b5-08dc91bf3c75
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230037|1800799021|366013|52116011|7416011|376011|921017|38350700011;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SksvbWcyTm9VamFlQmVSemdUOGdGYnJpUjR0bGlPNGhIRURNdGV6ei9VYWZq?=
- =?utf-8?B?MldoRnFIL0hZWi9VUERoT1pmbXkwdElBdkRFNm91cS9nUGpHNFdPQ0hOdCs2?=
- =?utf-8?B?dm5hQmI5aXFxcTlENGhLbHdDVFlEQ3B4WkdlZVRyWFZCT2ljUC9HT3c3ZFJ1?=
- =?utf-8?B?Zjl4Y25OYmR1c1JOTWNIb3owNXdGTjhZTjNIbDQreEdLWWpZRjhRQ2hESkQw?=
- =?utf-8?B?QWNwamlqS2tJcHhwM0F4dnJacWJmT0xITFBCeWR3cXhiMnNtLzgxZDN4RjhE?=
- =?utf-8?B?OWpWUVZ6dzJFRkFHN2hYOXRCbFNkdkpVTWl0TGh0NTlNZXVlN0c4dWRGQ3hP?=
- =?utf-8?B?TENKNFZkZTZXNFB2a0VIRDBhbUY1aVZZTmhubHJwYlE4UG8zQUl1cVNBZ09j?=
- =?utf-8?B?d3c4a0hBNGhxSGJvSWJaeWd5dzV3QWVVYkE4WjhoMjNzZEwrcE1DZ2k1OWVl?=
- =?utf-8?B?OVRjempMNk1zcGFibm85S1BEYmdvQ1J4R3R5b0NBWnBKRVFyNXFZaVRCRW9E?=
- =?utf-8?B?cHNmdDU2ZlNZak8ycEwwNjUzdW0vOHlWTkR3cjRlZGNDTFZ2N2R1d1VaU3hI?=
- =?utf-8?B?MlJSQ293QkdjampkMFExcGtwcElLbWxOUXhsUnBpOUFpOFlSalZlcm1DeEJS?=
- =?utf-8?B?aU53ZDFmbjhMNk5weXhmRzZrb0t1Y1J2UFVSQ05KTGtwWjdXRmhobTBhaGpa?=
- =?utf-8?B?aUhsSVpORkhzcnpDSjBUSlVudTZ1L2hsZHdPMUNWV0Z1dHI5WVBGTDkwcUh2?=
- =?utf-8?B?YUNoTHZXM2ZFcWVObVAxRnV4YStDSGVkaVNKNHg5Q2VqWTkrSzZVZmhaYTY3?=
- =?utf-8?B?cmQxMG5va1dOZkpSNlI2T1BYTVBlMUwzME5xeUpMd3pGZXByTm5VWW1WUTFW?=
- =?utf-8?B?L0lleE5wQjAyTGxPRWY1K0NDTXBseERnYysvNDd3UzN3U3plV2drL2F1VU40?=
- =?utf-8?B?akFYZmwzOXdkcG5nMGdGN05HZjlOcjZNd1N4OGs1NTJ0Z1FCYjhEU0hjRzVl?=
- =?utf-8?B?Y0FWWDlsYVI3QTFoMzJ0ZkJaYkNYblNFcjU1aHF2Y1ppT3FlZmpucmlwRWlD?=
- =?utf-8?B?TDF2TTFUdkc1RCtDMldIMi9oQ3F4a0gzMHJqQ3hqQzRwbHo3ZVFWTmFWWmpU?=
- =?utf-8?B?K1huOTNxbVl6WnRMakhGMGhmUytEbG9lUXZxRHUyVmtWd2Nja0VEL1Y4emhp?=
- =?utf-8?B?VWFSYzBjRlFjQ1h1YlBRaVU5OEoySkdUMXo0MkhtN2ZQSlR1aEhJQW1udVh2?=
- =?utf-8?B?WWFVS1JEWW5YQW40VEFWeWY3M1docTR0QXFxb3VWTk5odTN3Q0lQV1lHOTZQ?=
- =?utf-8?B?Wkl2VisrejN5SkNLUHNMendRNU4xcFQrOUl4K2IwZzlzV3dYc1Rsd1Uxc09U?=
- =?utf-8?B?WXZXV1BVVkl5L21XSnptM1A4THc0V0FYVkZvTWo3VWYvNS9Qci94Y3loTkdW?=
- =?utf-8?B?YXJkVkVGSXlIVGxmSmVraW9MbG9PZUlLVW5CZVZ3TEpiRnB1ZXh3dW9DS2xj?=
- =?utf-8?B?MnMxdGI1cEkzOThsWnA3UlUxWGM0VFNEZzlDeWhtb3dOK3dZelZxTUl1OXVI?=
- =?utf-8?B?MFc1cDhVVmNtMGFVZ0ltaU95bE9CZWk3NnM5MllmK09taklEKzA5aXI1Sklz?=
- =?utf-8?B?UkQxM3JYTEc3SU9wZVN1c3M2WnpVK3pyelgwRHROTitiNkhZUVpyaTZUdTJT?=
- =?utf-8?B?cjNzMy8vb1lzQWEwd3ZqRHpkSk9QeVFvQkJTYU1IbFVjVnJlNjlNV045WVNa?=
- =?utf-8?B?czFyek0yeGpwN2lkSXVWMTdHeHRqVWEwTFp6d29lZkhYdFlRZE5mb00rUC92?=
- =?utf-8?B?L3lGcU85VERNK1IyVHJHVGhnN0Fxbks4NUxrTGVReWJWZVltU3RWNDBQaGVT?=
- =?utf-8?Q?ym5n19uR+FW6t?=
+	=?utf-8?B?azdiL1lsaFRnWFZKZmJkMkxSeUR5dnlsZ2IrZ2ZkOFRsQ3ZaZ3N1Umsrb2J4?=
+ =?utf-8?B?TU9wV1hHblozK2NnZTEybUh4WGhVNk1XRlNvTjlQV29KaVBzQS8wSk9JWkNY?=
+ =?utf-8?B?Z05Td3J6OEsvemQzRlZVcDM4NTRMeWgzVC9WbU82blFMaCs4VnREM1hJa2I5?=
+ =?utf-8?B?RVVGdVQ4WVVWcDl6YzhHQTJUK3I5NmZDQWtNU2hFMEpUVHJPMlp1WHdWZmdu?=
+ =?utf-8?B?WG0xS09Eb1ozMTZMRG8xUVJRSlRrNUVhYnNxVG5mNmpSRjcrVGk2VXVGMU9J?=
+ =?utf-8?B?QlE2STd0QU9xb0szMzJKWk1OLzFIU3NZeVF1SG96MTViOUxrdkp4K3FCdlNv?=
+ =?utf-8?B?S0tiK3hYS1pJSFlTcmRBTzlUd1V6K2sxUHBXWjJPQ0ZpR1VMVVc2aTFwNzdh?=
+ =?utf-8?B?QnNmNDBuRGtyNzZUQndBdUxiaTVoUXRrd3BTeEQxeXlEa2VIUjFJNHNvNmR6?=
+ =?utf-8?B?Q21VZUxIZzEyZHluWHdQdXM4cVpzZ2l2c0hXTjBQdHBxbytlbUZlUmZjUTJ0?=
+ =?utf-8?B?NXVrcExpSEZ2bnI0YStMNUcyclNxNkZIalMxNENCZDVnR3QzTUEwc2FkUlFn?=
+ =?utf-8?B?T3JqRFQ1MDhzRE11NUZFc21rMzY5by90aVFzcm5JZzBlLzZ5ZTkrcUptcHls?=
+ =?utf-8?B?UHR6QnlpakZrejZ3ajZGUkRqWVJWY0ZCRXA4d1djNEZZYm56dkU0UUc3V0to?=
+ =?utf-8?B?aHFmdFZvTC9kSkRZQXBxdDVvYlYvUGNYSXpxSm50SDhhZDhqbkhVbjl0d0E3?=
+ =?utf-8?B?UDRmcU1adWpwR01GOVQrcWRwZ1RkVUdISTJKY2NreEJQeTYxc2NzcncwM0tH?=
+ =?utf-8?B?ZHFQNWw5Uit0SjlCNTdPazNYN3NRVGd4a0xwbmtBbXRyNnBpSUJqbDFycHhH?=
+ =?utf-8?B?amNmUU1leURoQkRNYmx2TVJyNHVZVXF4VDhkUG9XN2ZVTjR1b2VZWU9QSFlM?=
+ =?utf-8?B?UnB5cy90WVRRelIwbVl1K3RSYzc1RjRpK3ltaHMzcnMxVjRRWmtOeSthOTNF?=
+ =?utf-8?B?TXdIV3BzUUVlSldINTgwWHplVTVybmVMYkJDU0VyakRmZW5WblRtak1qRWZP?=
+ =?utf-8?B?Vjdtdm1pczRaaVFUK1hvL0NTS2tKRm9MVGh3MjVKdnhpL290RFh5Q1E2NFM3?=
+ =?utf-8?B?V0NrSy8ybjBvUlRFZE1wMnZZMmRZeHI2TnpPODJKR1lHWEVjd3poWEZ1Qm1w?=
+ =?utf-8?B?TlB5OWNQU3ZRUStFSm5HT0FvdFczUVhLWEMrb2s3RUFVRzRWd2RwcWN1ZGFz?=
+ =?utf-8?B?TEZ3VENSbFZ4amQ4NVpoNThETGlZVG9UM0F2ZXJUMEtaVzlMa3hLRlVEd0FM?=
+ =?utf-8?B?aDdnYzhkOFhtektJUjZDMkFTdUp2b1FqSExNRThKVXF0S21xdUZtOXBwdldE?=
+ =?utf-8?B?REdtc3NwQUJRZVhvNU1nU3Jhdnp1M0EyWDExRnY3VkR1QVQxREpyczUwMGtJ?=
+ =?utf-8?B?U3AxWWlQY3dJMkVyUituRlJwUitSUjBHeXBnNXdPSGZFc3U1dk5OblJ0NVUw?=
+ =?utf-8?B?YW5yWFZ2dWpwd2hBYndFZEY3emdQQm01a0U5RWxRdTBpUGx2VUdLS0RoN0pV?=
+ =?utf-8?B?RkZqNmdDVlBFNDMwS0x2ak4rSlhFUC9RZHVvUXNhWjB0QkRIWWlQTEVIcEg1?=
+ =?utf-8?B?NmZhM0E5ZERmWEtOZCtNMWdDTXp0U3J1KyswNVhmSjZWQ2hEc0tHVTV3QkZB?=
+ =?utf-8?B?eXN2YW1QWUtoS1N5Z0dGSldtTk9LMGtMMklLa1VTeXE5YnhOR1F2WmRBZ0c3?=
+ =?utf-8?B?QUJLRmduZGFNVXZVLzVkT0g2d1Bzd2JMTGZsRWFJZy9yR0RFdHJyT2hoVXV5?=
+ =?utf-8?B?Y3V6OFNTZGNSV3JmaUpydzc5UUxnb0daOU1ELy9uTitmZk9lSXRha2taZk8x?=
+ =?utf-8?Q?rsa3hJl0nsKza?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5941.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(1800799021)(366013)(52116011)(7416011)(376011)(921017)(38350700011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SWlkTUM4ajQ3Q1dyUXRNQzVWZlFTcFM3dldxTkhibC8rUjJhdWRaOWVJb00v?=
- =?utf-8?B?RG9SVGY1NkFTSE14VjF6M3ZrUTloSEtQSW84YzVLdG92R0V2a2h5OVNoTWlk?=
- =?utf-8?B?SnpHMVZ0dy83dzFNaFNNK0dWQXYxVU5kdWdPSGxhRmUvSHF4ZzdJbjZ2TXNv?=
- =?utf-8?B?OThoZ3ZINm93KytVQ2xpVkNaMDZ6OHFDd05oRHJIZXh3NG1UNm5mZVVGS1k3?=
- =?utf-8?B?cmQrd2pWOS8wMTd4M09jQTdsZ3dvUzI5dENoTWVsejlRalU1bTd1T0N5NnVh?=
- =?utf-8?B?a2FrQU92bm9ieW8xTFhhYUkyOS9hZWdsN2ZhREpITStRN1pUbUpPU25xL1NJ?=
- =?utf-8?B?R0Q3bFVNTGVWT0ZOclJSRGJuOGRFdFoxbWxHSjFsVlE5M01MMktZSWZ4UjdG?=
- =?utf-8?B?M20rZGlSRGFYM0hqdFNzYWxMLzhZMFd0MHpldXBXVklZTjdrOWd3S3B6SFRX?=
- =?utf-8?B?M1l0YnFrenJsT2hPaTRCcVNpTG83VE1kOHRFVG1kdElTYmIvRnpJaDJQRlhZ?=
- =?utf-8?B?S1NFOWFqOHhVOUVUUEhFT3UyM0xCTm9DeGpBVHIzMDUwODhGa2JqbzNSa0x2?=
- =?utf-8?B?enBSN0hqMlh1bm1KaEU4ZjMyaW9Nci95THBrQlp5UVhsTmlBanBMU0xXcXVv?=
- =?utf-8?B?MWR0Vk02VkhPVXRLT1VNRExhd0NKWXZLSnZ0VzVkbnpsSmxObjZCS0VnMFpS?=
- =?utf-8?B?Mkc4N1JLTVQ3bis2NW9maUk0SVlYNkdvSVVwNVh4TDNKR0k5L1U3MmxQdVU4?=
- =?utf-8?B?N3Q3Q2RpQnpCNmJkRXZFM001VTJBTXE2b3VxTnYyMExDRHNhazk4dXM3dVRv?=
- =?utf-8?B?R1cvT1piWFd0MWJScXFUYjdmaGVzeUtHU05FTkI1eHJRMUgrZjc3aVVpZEJM?=
- =?utf-8?B?SlU5cjJjZUFlTTVlWmhkYzhmYmkwU21WNWVGRDVvL0tXNHk1dDQ1SjFwd3BM?=
- =?utf-8?B?eEJrQkZpcDZpNlRxMVNjNmZ5K3c3NnpHTHRkVytMWHo2MU5HS0ZVbEZLOFh1?=
- =?utf-8?B?VUVtY0pMQS93d2xVY1k1T3RjUThaOGo2Mllsb1d0L2x1UkFrZjJKcElDMGNP?=
- =?utf-8?B?ZkdWT2x4eUYrclNENWlabCtHQVd5Zk9mUXRtaXVTcDhOdlRXMHp2cmFqV3Fw?=
- =?utf-8?B?WXlpV0RPQ01OTTczM0ZvVzYyUk1kR2ZCeUo2TkRFam1NU2orcm9FeUZjZ2o5?=
- =?utf-8?B?ekIycDZURDFVVmhMVU9TajNKS1FYd3RHbEdtenhMYk01Q3FNZDBHWkxDSit0?=
- =?utf-8?B?Y3VpVG9CZGtib2w0OU02MEk0RWt1SGdmSmhzU1lKNUhPYWd4Y0Ewd2k3em5S?=
- =?utf-8?B?RFBhQnV3Y3FmRlNBYUxwV0pyYmdFZklieDR2dEdITGlacXYxOWFZejlpYUdr?=
- =?utf-8?B?akw0Wk1Oc2ZabklqSzRtMG4wVU5KTkZ2VGNNd1JDaU44cURZTTJsNXZZd3Zk?=
- =?utf-8?B?eGV3SmlYYUZsLzVkL1JjL1dxem5XSVF5YkkwL3c1RW1xTld4dkg3ZkxpTDBo?=
- =?utf-8?B?N0R1amNhalFGWjRzYjVoNHgzV1NHRGZWZUMyemU3Z1hlaEVCNkd6cndBRFhj?=
- =?utf-8?B?U25vWTUzMEphNmp3aGZsYVlWb3o0OW9lVmNTNVYrcG5XM2k2MUJGZURZdTNI?=
- =?utf-8?B?NTh2YitQMnFwUmZSbXRLQ2ZmR3Uvd0ZmNGJRZDl4RGQwOVZudjBNUWNjeXpF?=
- =?utf-8?B?ZnQxZ0NFaERqNzhOQm5xQUxUUDJqWm56TGw0eStXMzNUUFhxYlRyaWNUbTJ4?=
- =?utf-8?B?R3l3NFFSNGJOYnBic2U3eFRRT0RKYW0vUGRuYUhwWEpZeU1uLzBhZGFNMVVn?=
- =?utf-8?B?VnE4aS9iTTVXRWJtN3NsY013OWtIMUhhMTAzV3R4T0xPNHRkdEhRMGF0WXZU?=
- =?utf-8?B?Slc5TnpRVEwwYlBXQTVzZm11ZEx2RHQ0aVpoWnpYMURKVFE1endOdHBSNUd3?=
- =?utf-8?B?UVUyTW9tV3hQVTJvR2xHRGlSRm1aZW14cmFGYnRlbzRpSFJkeVF6bElWbDc2?=
- =?utf-8?B?UHc1eHN3QTF2M2FEcm5vcUVIS2hmUTRWemw3TUY0aDUwR0xub0I5ay85bDdt?=
- =?utf-8?B?a01RZWJqWWtTTFRaeUVZZldzeDVkSkozZUxGQk92N0cyRDloK3lmMlBOUCs2?=
- =?utf-8?Q?qtEJxZn6JMcjiIXeAevRN4DEB?=
+	=?utf-8?B?enJ5N0VQZ0VOSUF5VUhEQm56b0hZUzhKSDAzc0x0UUc5cEZDSnJSelVqbnVq?=
+ =?utf-8?B?dDRydFNRalNnQkhQSENkZWx2ZmV5UFQ1clBXVUpBbDhJdi9TTjl2Rm1LZ2dQ?=
+ =?utf-8?B?VFdha2xDcXl0MURjamM5VVhQUnl5eHFqcTBtR1hIM0U1T25WZWo1WEdJZnBI?=
+ =?utf-8?B?d1h2R3dTSXBpbnNtRGJuaEJPSUtLY0dwNDhpUDgyRlhaTFdCTExKRGdTRWpv?=
+ =?utf-8?B?RzVFRW9jOGFrVm0rZU9mUWNhWEY5NHNyeEc0ZzNVRTJoOU4yL0lFcThUQSsr?=
+ =?utf-8?B?OEEvRkRwb1NmVDRsTnJWWC81SHZZdVRtVHFwcnh3ZFVwemtlQ3Z6TmpWK1Bx?=
+ =?utf-8?B?NWNWU3BZMGFaOGdQTXFXZlA2aGY3NnFNTkdrM1RHK3NWVzkyWEd1d0gvMFBI?=
+ =?utf-8?B?WXphZDNYdVJjU0tzTExBUUVMTmp5SlZkYTUvSTFCVFBNUXRxcGxVelVNbUV2?=
+ =?utf-8?B?bzhWU21FTVFTUzZWcnVtUlV3MldadTlTOEFwTUdXOWcxM0R0ZFpTTHNKYTFV?=
+ =?utf-8?B?VFZsMklRdk9qZS9jRWFKdUJoSEtDTWtOUGVvbmJmS29tMzlER01mZ0hRYXRH?=
+ =?utf-8?B?bmtjOEZBQVl2Y2cySUU2c0kySXljU3dsTzBMQ1dNQ1BzTEF0clJpTnNvejU4?=
+ =?utf-8?B?T2liS1Y2am9PajBJR2RPOXgxMWVYanIrbXV3VTUxRUNqcmUvVFJFQWEyMmlv?=
+ =?utf-8?B?d283VElNR1Vpa2twaUg1SExscGM2R256SmFoTSt0SENuZ0RzQ0dFdnJQa3FI?=
+ =?utf-8?B?emNObWFrU2ZoV3A4YmV0NkZuSXkyVEpabzdNYnhqTXRvdk50YUVVL1hrZExs?=
+ =?utf-8?B?OVdhNC9iYTZ6RVk4akRmVzA1YnJIdDh4dGY1UTM5RFd5ZHpGR0hSSm5qK0xh?=
+ =?utf-8?B?ODFNUWZJQ0NNeXIyd0REaTVjeEQ4dkZzWU12UUUxdnFwRVZUVWQ0T2dBMmRP?=
+ =?utf-8?B?K0VTRkU4cW1qNlQ0SmlhRTBHQmE5RlAveHF2M0FzeENWMm16NzBGSktCdVdM?=
+ =?utf-8?B?TTVScnZ4ZVBLSEdiT0xjdURTWFlsNWJhOHlkd04zaTBrMk11bld5U0hGMnlX?=
+ =?utf-8?B?Wnlya3YxL0FFa2tUckhzbHpHRTRRaUc1ZFdlTU9HbjBWa21QeDVQSTU1aEhm?=
+ =?utf-8?B?MlRCc2U1Rkprd0FINExYVGF4dWJvdkYyZlY0aHBxSFFtNGFINGJjZnVGczBZ?=
+ =?utf-8?B?VUJtU0tDL3dMUGd3TG5oOFRmQXdDbXp5WDlVMXVXZm1NRFpNdWpXQmZYaW15?=
+ =?utf-8?B?K2h3MGtHdmkyUTZ1S08zeXAvdGRxTEx4ckhwTDM5TWZHTnEyM1hOV2ZXVnhp?=
+ =?utf-8?B?N2lyOW1DdnV5Wk9YMUZ2dytNRHlMVnlRUDhBOWhGb2M5OGhiZGhMVks1WTh3?=
+ =?utf-8?B?S20rOXA1TFpXRW1EUThwWnlUbE1VaWVIcnQ4cmRYNVI0dE9rSW12eXRSbkxW?=
+ =?utf-8?B?UVpaakdYbFhqS3RmeG5BYjFPZHhxLzBDTDZSb09oMjBrb2g0Z3Eyb1ladWZL?=
+ =?utf-8?B?TXNIRUpMN3pPNlhQUm1acEROTGRPZ0ZRMHJ0SmZ2Vlo5Vjl2SEo1ZTNWNVh4?=
+ =?utf-8?B?RDhxMUMyV0NyZDZ4RllKTDN2VVF2UHZXc2t5RDdMMkJNSjBVcmlFREhSYzN6?=
+ =?utf-8?B?THI3QmpFQTNoVlNXZlVMOENGYkRRdG1mY2M5T051cUFlNzEwbWJnS2pFQlo4?=
+ =?utf-8?B?UUM4VnZWK2E2cStmaC9JSUJwakdHclhBZTVvSHJDb1IwN0FhT1p4aTdzQ05D?=
+ =?utf-8?B?OFZMNVMyZ21IRUl0cGdMSTVTQzIvdXhpdFpwd25PNDlXTW1nWndOdHdoTzZO?=
+ =?utf-8?B?ZmFOeXVLeFRLRjFXMXlpT2hxb0RXQTVJakI0N0RPZkhTaThQV2NaNkxRZTNu?=
+ =?utf-8?B?UDVKcHo2RTkwWHYxZHF0SEF6eUV3RDhRY3JQbW4rdWx4RlJuQXFpRTd0d0pY?=
+ =?utf-8?B?aEFmdm5MOUVpVkE5OS9MNVlGVkpTbzBqRERZUEpSUWhjL1dkOUNlaVZBOUpk?=
+ =?utf-8?B?bGRoaWVGUEJ6U1RHSmVtVnZUMnl4dnR2VzQrOVBiMWhucXdGRkxFbVZWQTJC?=
+ =?utf-8?B?b1FZdU9YSXRFODRYMldyd0xWdFNNbDgxbzJZR2IwbnhkZ0dzb1hJQzlNTmRp?=
+ =?utf-8?Q?eARGRCIk6M6pfGacZfKcUxgbX?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56570eb3-d838-4b48-0dac-08dc91bf3824
+X-MS-Exchange-CrossTenant-Network-Message-Id: f217f2de-d50a-46e6-06b5-08dc91bf3c75
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5941.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 06:56:04.9892
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 06:56:12.1161
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2MsZ0g1jhd2EwuHTZtzScdfSD8ZcPBZTmlvP6/I4kKsjE7sLrpXa0SG0T7FpXSgUrV6ppvxoccCnivmW/0sEQA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ppkx2QiVEH+EDgOBCe8Pu3ZnnvUnJptFzTPsmbMoIrOvb2Oz8k7ecZMdnk+ikCu72fZq0TBEiDP8Nim7s4DA9A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10426
 
 From: Peng Fan <peng.fan@nxp.com>
 
-i.MX95 System Manager(SM) firmware includes a SCMI vendor protocol, SCMI
-MISC protocol which includes controls that are misc settings/actions that
-must be exposed from the SM to agents. They are device specific and are
-usually define to access bit fields in various mix block control modules,
-IOMUX_GPR, and other General Purpose registers, Control Status Registers
-owned by the SM.
+The i.MX95 System manager exports SCMI MISC protocol for linux to do
+various settings, such as set board gpio expander as wakeup source.
+
+The driver is to add the support.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/firmware/arm_scmi/imx/Kconfig       |   9 +
- drivers/firmware/arm_scmi/imx/Makefile      |   1 +
- drivers/firmware/arm_scmi/imx/imx-sm-misc.c | 315 ++++++++++++++++++++++++++++
- include/linux/scmi_imx_protocol.h           |  17 ++
- 4 files changed, 342 insertions(+)
+ drivers/firmware/imx/Kconfig    |  11 ++++
+ drivers/firmware/imx/Makefile   |   1 +
+ drivers/firmware/imx/sm-misc.c  | 119 ++++++++++++++++++++++++++++++++++++++++
+ include/linux/firmware/imx/sm.h |  33 +++++++++++
+ 4 files changed, 164 insertions(+)
 
-diff --git a/drivers/firmware/arm_scmi/imx/Kconfig b/drivers/firmware/arm_scmi/imx/Kconfig
-index 4b6ac7febe8f..e9d015859eaa 100644
---- a/drivers/firmware/arm_scmi/imx/Kconfig
-+++ b/drivers/firmware/arm_scmi/imx/Kconfig
-@@ -11,4 +11,13 @@ config IMX_SCMI_BBM_EXT
+diff --git a/drivers/firmware/imx/Kconfig b/drivers/firmware/imx/Kconfig
+index 183613f82a11..477d3f32d99a 100644
+--- a/drivers/firmware/imx/Kconfig
++++ b/drivers/firmware/imx/Kconfig
+@@ -22,3 +22,14 @@ config IMX_SCU
  
- 	  This driver can also be built as a module.
- 
-+config IMX_SCMI_MISC_EXT
-+	tristate "i.MX SCMI MISC EXTENSION"
-+	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
+ 	  This driver manages the IPC interface between host CPU and the
+ 	  SCU firmware running on M4.
++
++config IMX_SCMI_MISC_DRV
++	tristate "IMX SCMI MISC Protocol driver"
++	depends on IMX_SCMI_MISC_EXT || COMPILE_TEST
 +	default y if ARCH_MXC
 +	help
-+	  This enables i.MX System MISC control logic such as gpio expander
-+	  wakeup
++	  The System Controller Management Interface firmware (SCMI FW) is
++	  a low-level system function which runs on a dedicated Cortex-M
++	  core that could provide misc functions such as board control.
 +
 +	  This driver can also be built as a module.
- endmenu
-diff --git a/drivers/firmware/arm_scmi/imx/Makefile b/drivers/firmware/arm_scmi/imx/Makefile
-index a7dbdd20dbb9..d3ee6d544924 100644
---- a/drivers/firmware/arm_scmi/imx/Makefile
-+++ b/drivers/firmware/arm_scmi/imx/Makefile
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_IMX_SCMI_BBM_EXT) += imx-sm-bbm.o
-+obj-$(CONFIG_IMX_SCMI_MISC_EXT) += imx-sm-misc.o
-diff --git a/drivers/firmware/arm_scmi/imx/imx-sm-misc.c b/drivers/firmware/arm_scmi/imx/imx-sm-misc.c
+diff --git a/drivers/firmware/imx/Makefile b/drivers/firmware/imx/Makefile
+index 8f9f04a513a8..8d046c341be8 100644
+--- a/drivers/firmware/imx/Makefile
++++ b/drivers/firmware/imx/Makefile
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_IMX_DSP)		+= imx-dsp.o
+ obj-$(CONFIG_IMX_SCU)		+= imx-scu.o misc.o imx-scu-irq.o rm.o imx-scu-soc.o
++obj-${CONFIG_IMX_SCMI_MISC_DRV}	+= sm-misc.o
+diff --git a/drivers/firmware/imx/sm-misc.c b/drivers/firmware/imx/sm-misc.c
 new file mode 100644
-index 000000000000..ca79d86d542c
+index 000000000000..342e1254a356
 --- /dev/null
-+++ b/drivers/firmware/arm_scmi/imx/imx-sm-misc.c
-@@ -0,0 +1,315 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/firmware/imx/sm-misc.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * System control and Management Interface (SCMI) NXP MISC Protocol
-+ *
 + * Copyright 2024 NXP
 + */
 +
-+#define pr_fmt(fmt) "SCMI Notifications MISC - " fmt
-+
-+#include <linux/bits.h>
-+#include <linux/io.h>
++#include <linux/firmware/imx/sm.h>
 +#include <linux/module.h>
 +#include <linux/of.h>
 +#include <linux/platform_device.h>
 +#include <linux/scmi_protocol.h>
 +#include <linux/scmi_imx_protocol.h>
 +
-+#include "../protocols.h"
-+#include "../notify.h"
++static const struct scmi_imx_misc_proto_ops *imx_misc_ctrl_ops;
++static struct scmi_protocol_handle *ph;
++struct notifier_block scmi_imx_misc_ctrl_nb;
 +
-+#define SCMI_PROTOCOL_SUPPORTED_VERSION		0x10000
-+
-+#define MAX_MISC_CTRL_SOURCES			GENMASK(15, 0)
-+
-+enum scmi_imx_misc_protocol_cmd {
-+	SCMI_IMX_MISC_CTRL_SET	= 0x3,
-+	SCMI_IMX_MISC_CTRL_GET	= 0x4,
-+	SCMI_IMX_MISC_CTRL_NOTIFY = 0x8,
-+};
-+
-+struct scmi_imx_misc_info {
-+	u32 version;
-+	u32 nr_dev_ctrl;
-+	u32 nr_brd_ctrl;
-+	u32 nr_reason;
-+};
-+
-+struct scmi_msg_imx_misc_protocol_attributes {
-+	__le32 attributes;
-+};
-+
-+#define GET_BRD_CTRLS_NR(x)	le32_get_bits((x), GENMASK(31, 24))
-+#define GET_REASONS_NR(x)	le32_get_bits((x), GENMASK(23, 16))
-+#define GET_DEV_CTRLS_NR(x)	le32_get_bits((x), GENMASK(15, 0))
-+#define BRD_CTRL_START_ID	BIT(15)
-+
-+struct scmi_imx_misc_ctrl_set_in {
-+	__le32 id;
-+	__le32 num;
-+	__le32 value[];
-+};
-+
-+struct scmi_imx_misc_ctrl_notify_in {
-+	__le32 ctrl_id;
-+	__le32 flags;
-+};
-+
-+struct scmi_imx_misc_ctrl_notify_payld {
-+	__le32 ctrl_id;
-+	__le32 flags;
-+};
-+
-+struct scmi_imx_misc_ctrl_get_out {
-+	__le32 num;
-+	__le32 val[];
-+};
-+
-+static int scmi_imx_misc_attributes_get(const struct scmi_protocol_handle *ph,
-+					struct scmi_imx_misc_info *mi)
++int scmi_imx_misc_ctrl_set(u32 id, u32 val)
 +{
-+	int ret;
-+	struct scmi_xfer *t;
-+	struct scmi_msg_imx_misc_protocol_attributes *attr;
++	if (!ph)
++		return -EPROBE_DEFER;
 +
-+	ret = ph->xops->xfer_get_init(ph, PROTOCOL_ATTRIBUTES, 0,
-+				      sizeof(*attr), &t);
-+	if (ret)
-+		return ret;
++	return imx_misc_ctrl_ops->misc_ctrl_set(ph, id, 1, &val);
++};
++EXPORT_SYMBOL(scmi_imx_misc_ctrl_set);
 +
-+	attr = t->rx.buf;
++int scmi_imx_misc_ctrl_get(u32 id, u32 *num, u32 *val)
++{
++	if (!ph)
++		return -EPROBE_DEFER;
 +
-+	ret = ph->xops->do_xfer(ph, t);
-+	if (!ret) {
-+		mi->nr_dev_ctrl = GET_DEV_CTRLS_NR(attr->attributes);
-+		mi->nr_brd_ctrl = GET_BRD_CTRLS_NR(attr->attributes);
-+		mi->nr_reason = GET_REASONS_NR(attr->attributes);
-+		dev_info(ph->dev, "i.MX MISC NUM DEV CTRL: %d, NUM BRD CTRL: %d,NUM Reason: %d\n",
-+			 mi->nr_dev_ctrl, mi->nr_brd_ctrl, mi->nr_reason);
-+	}
++	return imx_misc_ctrl_ops->misc_ctrl_get(ph, id, num, val);
++}
++EXPORT_SYMBOL(scmi_imx_misc_ctrl_get);
 +
-+	ph->xops->xfer_put(ph, t);
-+
-+	return ret;
++static int scmi_imx_misc_ctrl_notifier(struct notifier_block *nb,
++				       unsigned long event, void *data)
++{
++	/*
++	 * notifier_chain_register requires a valid notifier_block and
++	 * valid notifier_call. SCMI_EVENT_IMX_MISC_CONTROL is needed
++	 * to let SCMI firmware enable control events, but the hook here
++	 * is just a dummy function to avoid kernel panic as of now.
++	 */
++	return 0;
 +}
 +
-+static int scmi_imx_misc_ctrl_validate_id(const struct scmi_protocol_handle *ph,
-+					  u32 ctrl_id)
++static int scmi_imx_misc_ctrl_probe(struct scmi_device *sdev)
 +{
-+	struct scmi_imx_misc_info *mi = ph->get_priv(ph);
++	const struct scmi_handle *handle = sdev->handle;
++	struct device_node *np = sdev->dev.of_node;
++	u32 src_id, flags;
++	int ret, i, num;
 +
-+	/*
-+	 * [0,      BRD_CTRL_START_ID) is for Dev Ctrl which is SOC related
-+	 * [BRD_CTRL_START_ID, 0xffff) is for Board Ctrl which is board related
-+	 */
-+	if ((ctrl_id < BRD_CTRL_START_ID) && (ctrl_id > mi->nr_dev_ctrl))
++	if (!handle)
++		return -ENODEV;
++
++	if (imx_misc_ctrl_ops) {
++		dev_err(&sdev->dev, "misc ctrl already initialized\n");
++		return -EEXIST;
++	}
++
++	imx_misc_ctrl_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_IMX_MISC, &ph);
++	if (IS_ERR(imx_misc_ctrl_ops))
++		return PTR_ERR(imx_misc_ctrl_ops);
++
++	num = of_property_count_u32_elems(np, "nxp,ctrl-ids");
++	if (num % 2) {
++		dev_err(&sdev->dev, "Invalid wakeup-sources\n");
 +		return -EINVAL;
-+	if (ctrl_id >= BRD_CTRL_START_ID + mi->nr_brd_ctrl)
-+		return -EINVAL;
++	}
++
++	scmi_imx_misc_ctrl_nb.notifier_call = &scmi_imx_misc_ctrl_notifier;
++	for (i = 0; i < num; i += 2) {
++		ret = of_property_read_u32_index(np, "nxp,ctrl-ids", i, &src_id);
++		if (ret) {
++			dev_err(&sdev->dev, "Failed to read ctrl-id: %i\n", i);
++			continue;
++		}
++
++		ret = of_property_read_u32_index(np, "nxp,ctrl-ids", i + 1, &flags);
++		if (ret) {
++			dev_err(&sdev->dev, "Failed to read ctrl-id value: %d\n", i + 1);
++			continue;
++		}
++
++		ret = handle->notify_ops->devm_event_notifier_register(sdev, SCMI_PROTOCOL_IMX_MISC,
++								       SCMI_EVENT_IMX_MISC_CONTROL,
++								       &src_id,
++								       &scmi_imx_misc_ctrl_nb);
++		if (ret)
++			dev_err(&sdev->dev, "Failed to register scmi misc event: %d\n", src_id);
++		else {
++			ret = imx_misc_ctrl_ops->misc_ctrl_req_notify(ph, src_id,
++								      SCMI_EVENT_IMX_MISC_CONTROL,
++								      flags);
++			if (ret)
++				dev_err(&sdev->dev, "Failed to req notify: %d\n", src_id);
++		}
++	}
 +
 +	return 0;
 +}
 +
-+static int scmi_imx_misc_ctrl_notify(const struct scmi_protocol_handle *ph,
-+				     u32 ctrl_id, u32 evt_id, u32 flags)
++static const struct scmi_device_id scmi_id_table[] = {
++	{ SCMI_PROTOCOL_IMX_MISC, "imx-misc-ctrl" },
++	{ },
++};
++MODULE_DEVICE_TABLE(scmi, scmi_id_table);
++
++static struct scmi_driver scmi_imx_misc_ctrl_driver = {
++	.name = "scmi-imx-misc-ctrl",
++	.probe = scmi_imx_misc_ctrl_probe,
++	.id_table = scmi_id_table,
++};
++module_scmi_driver(scmi_imx_misc_ctrl_driver);
++
++MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
++MODULE_DESCRIPTION("IMX SM MISC driver");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/firmware/imx/sm.h b/include/linux/firmware/imx/sm.h
+new file mode 100644
+index 000000000000..daad4bdf7d1c
+--- /dev/null
++++ b/include/linux/firmware/imx/sm.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Copyright 2024 NXP
++ */
++
++#ifndef _SCMI_IMX_H
++#define _SCMI_IMX_H
++
++#include <linux/bitfield.h>
++#include <linux/types.h>
++
++#define SCMI_IMX_CTRL_PDM_CLK_SEL	0	/* AON PDM clock sel */
++#define SCMI_IMX_CTRL_MQS1_SETTINGS	1	/* AON MQS settings */
++#define SCMI_IMX_CTRL_SAI1_MCLK		2	/* AON SAI1 MCLK */
++#define SCMI_IMX_CTRL_SAI3_MCLK		3	/* WAKE SAI3 MCLK */
++#define SCMI_IMX_CTRL_SAI4_MCLK		4	/* WAKE SAI4 MCLK */
++#define SCMI_IMX_CTRL_SAI5_MCLK		5	/* WAKE SAI5 MCLK */
++
++#if IS_ENABLED(CONFIG_IMX_SCMI_MISC_EXT)
++int scmi_imx_misc_ctrl_get(u32 id, u32 *num, u32 *val);
++int scmi_imx_misc_ctrl_set(u32 id, u32 val);
++#else
++static inline int scmi_imx_misc_ctrl_get(u32 id, u32 *num, u32 *val)
 +{
-+	struct scmi_imx_misc_ctrl_notify_in *in;
-+	struct scmi_xfer *t;
-+	int ret;
-+
-+	ret = scmi_imx_misc_ctrl_validate_id(ph, ctrl_id);
-+	if (ret)
-+		return ret;
-+
-+	ret = ph->xops->xfer_get_init(ph, SCMI_IMX_MISC_CTRL_NOTIFY,
-+				      sizeof(*in), 0, &t);
-+	if (ret)
-+		return ret;
-+
-+	in = t->tx.buf;
-+	in->ctrl_id = cpu_to_le32(ctrl_id);
-+	in->flags = cpu_to_le32(flags);
-+
-+	ret = ph->xops->do_xfer(ph, t);
-+
-+	ph->xops->xfer_put(ph, t);
-+
-+	return ret;
++	return -EOPNOTSUPP;
 +}
 +
-+static int
-+scmi_imx_misc_ctrl_set_notify_enabled(const struct scmi_protocol_handle *ph,
-+				      u8 evt_id, u32 src_id, bool enable)
++static inline int scmi_imx_misc_ctrl_set(u32 id, u32 val);
 +{
-+	int ret;
-+
-+	/* misc_ctrl_req_notify is for enablement */
-+	if (enable)
-+		return 0;
-+
-+	ret = scmi_imx_misc_ctrl_notify(ph, src_id, evt_id, 0);
-+	if (ret)
-+		dev_err(ph->dev, "FAIL_ENABLED - evt[%X] src[%d] - ret:%d\n",
-+			evt_id, src_id, ret);
-+
-+	return ret;
++	return -EOPNOTSUPP;
 +}
-+
-+static void *
-+scmi_imx_misc_ctrl_fill_custom_report(const struct scmi_protocol_handle *ph,
-+				      u8 evt_id, ktime_t timestamp,
-+				      const void *payld, size_t payld_sz,
-+				      void *report, u32 *src_id)
-+{
-+	const struct scmi_imx_misc_ctrl_notify_payld *p = payld;
-+	struct scmi_imx_misc_ctrl_notify_report *r = report;
-+
-+	if (sizeof(*p) != payld_sz)
-+		return NULL;
-+
-+	r->timestamp = timestamp;
-+	r->ctrl_id = p->ctrl_id;
-+	r->flags = p->flags;
-+	if (src_id)
-+		*src_id = r->ctrl_id;
-+	dev_dbg(ph->dev, "%s: ctrl_id: %d flags: %d\n", __func__,
-+		r->ctrl_id, r->flags);
-+
-+	return r;
-+}
-+
-+static const struct scmi_event_ops scmi_imx_misc_event_ops = {
-+	.set_notify_enabled = scmi_imx_misc_ctrl_set_notify_enabled,
-+	.fill_custom_report = scmi_imx_misc_ctrl_fill_custom_report,
-+};
-+
-+static const struct scmi_event scmi_imx_misc_events[] = {
-+	{
-+		.id = SCMI_EVENT_IMX_MISC_CONTROL,
-+		.max_payld_sz = sizeof(struct scmi_imx_misc_ctrl_notify_payld),
-+		.max_report_sz = sizeof(struct scmi_imx_misc_ctrl_notify_report),
-+	},
-+};
-+
-+static struct scmi_protocol_events scmi_imx_misc_protocol_events = {
-+	.queue_sz = SCMI_PROTO_QUEUE_SZ,
-+	.ops = &scmi_imx_misc_event_ops,
-+	.evts = scmi_imx_misc_events,
-+	.num_events = ARRAY_SIZE(scmi_imx_misc_events),
-+	.num_sources = MAX_MISC_CTRL_SOURCES,
-+};
-+
-+static int scmi_imx_misc_ctrl_get(const struct scmi_protocol_handle *ph,
-+				  u32 ctrl_id, u32 *num, u32 *val)
-+{
-+	struct scmi_imx_misc_ctrl_get_out *out;
-+	struct scmi_xfer *t;
-+	int ret, i;
-+	int max_msg_size = ph->hops->get_max_msg_size(ph);
-+	int max_num = (max_msg_size - sizeof(*out)) / sizeof(__le32);
-+
-+	ret = scmi_imx_misc_ctrl_validate_id(ph, ctrl_id);
-+	if (ret)
-+		return ret;
-+
-+	ret = ph->xops->xfer_get_init(ph, SCMI_IMX_MISC_CTRL_GET, sizeof(u32),
-+				      0, &t);
-+	if (ret)
-+		return ret;
-+
-+	put_unaligned_le32(ctrl_id, t->tx.buf);
-+	ret = ph->xops->do_xfer(ph, t);
-+	if (!ret) {
-+		out = t->rx.buf;
-+		*num = le32_to_cpu(out->num);
-+
-+		if (*num >= max_num ||
-+		    *num * sizeof(__le32) > t->rx.len - sizeof(__le32)) {
-+			ph->xops->xfer_put(ph, t);
-+			return -EINVAL;
-+		}
-+
-+		for (i = 0; i < *num; i++)
-+			val[i] = le32_to_cpu(out->val[i]);
-+	}
-+
-+	ph->xops->xfer_put(ph, t);
-+
-+	return ret;
-+}
-+
-+static int scmi_imx_misc_ctrl_set(const struct scmi_protocol_handle *ph,
-+				  u32 ctrl_id, u32 num, u32 *val)
-+{
-+	struct scmi_imx_misc_ctrl_set_in *in;
-+	struct scmi_xfer *t;
-+	int ret, i;
-+	int max_msg_size = ph->hops->get_max_msg_size(ph);
-+	int max_num = (max_msg_size - sizeof(*in)) / sizeof(__le32);
-+
-+	ret = scmi_imx_misc_ctrl_validate_id(ph, ctrl_id);
-+	if (ret)
-+		return ret;
-+
-+	if (num > max_num)
-+		return -EINVAL;
-+
-+	ret = ph->xops->xfer_get_init(ph, SCMI_IMX_MISC_CTRL_SET, sizeof(*in),
-+				      0, &t);
-+	if (ret)
-+		return ret;
-+
-+	in = t->tx.buf;
-+	in->id = cpu_to_le32(ctrl_id);
-+	in->num = cpu_to_le32(num);
-+	for (i = 0; i < num; i++)
-+		in->value[i] = cpu_to_le32(val[i]);
-+
-+	ret = ph->xops->do_xfer(ph, t);
-+
-+	ph->xops->xfer_put(ph, t);
-+
-+	return ret;
-+}
-+
-+static const struct scmi_imx_misc_proto_ops scmi_imx_misc_proto_ops = {
-+	.misc_ctrl_set = scmi_imx_misc_ctrl_set,
-+	.misc_ctrl_get = scmi_imx_misc_ctrl_get,
-+	.misc_ctrl_req_notify = scmi_imx_misc_ctrl_notify,
-+};
-+
-+static int scmi_imx_misc_protocol_init(const struct scmi_protocol_handle *ph)
-+{
-+	struct scmi_imx_misc_info *minfo;
-+	u32 version;
-+	int ret;
-+
-+	ret = ph->xops->version_get(ph, &version);
-+	if (ret)
-+		return ret;
-+
-+	dev_info(ph->dev, "NXP SM MISC Version %d.%d\n",
-+		 PROTOCOL_REV_MAJOR(version), PROTOCOL_REV_MINOR(version));
-+
-+	minfo = devm_kzalloc(ph->dev, sizeof(*minfo), GFP_KERNEL);
-+	if (!minfo)
-+		return -ENOMEM;
-+
-+	ret = scmi_imx_misc_attributes_get(ph, minfo);
-+	if (ret)
-+		return ret;
-+
-+	return ph->set_priv(ph, minfo, version);
-+}
-+
-+static const struct scmi_protocol scmi_imx_misc = {
-+	.id = SCMI_PROTOCOL_IMX_MISC,
-+	.owner = THIS_MODULE,
-+	.instance_init = &scmi_imx_misc_protocol_init,
-+	.ops = &scmi_imx_misc_proto_ops,
-+	.events = &scmi_imx_misc_protocol_events,
-+	.supported_version = SCMI_PROTOCOL_SUPPORTED_VERSION,
-+	.vendor_id = "NXP",
-+	.sub_vendor_id = "IMX",
-+};
-+module_scmi_protocol(scmi_imx_misc);
-diff --git a/include/linux/scmi_imx_protocol.h b/include/linux/scmi_imx_protocol.h
-index e59aedaa4aec..321064514778 100644
---- a/include/linux/scmi_imx_protocol.h
-+++ b/include/linux/scmi_imx_protocol.h
-@@ -15,6 +15,7 @@
- 
- enum scmi_nxp_protocol {
- 	SCMI_PROTOCOL_IMX_BBM = 0x81,
-+	SCMI_PROTOCOL_IMX_MISC = 0x84,
- };
- 
- struct scmi_imx_bbm_proto_ops {
-@@ -30,6 +31,7 @@ struct scmi_imx_bbm_proto_ops {
- enum scmi_nxp_notification_events {
- 	SCMI_EVENT_IMX_BBM_RTC = 0x0,
- 	SCMI_EVENT_IMX_BBM_BUTTON = 0x1,
-+	SCMI_EVENT_IMX_MISC_CONTROL = 0x0,
- };
- 
- struct scmi_imx_bbm_notif_report {
-@@ -39,4 +41,19 @@ struct scmi_imx_bbm_notif_report {
- 	unsigned int		rtc_id;
- 	unsigned int		rtc_evt;
- };
-+
-+struct scmi_imx_misc_ctrl_notify_report {
-+	ktime_t			timestamp;
-+	unsigned int		ctrl_id;
-+	unsigned int		flags;
-+};
-+
-+struct scmi_imx_misc_proto_ops {
-+	int (*misc_ctrl_set)(const struct scmi_protocol_handle *ph, u32 id,
-+			     u32 num, u32 *val);
-+	int (*misc_ctrl_get)(const struct scmi_protocol_handle *ph, u32 id,
-+			     u32 *num, u32 *val);
-+	int (*misc_ctrl_req_notify)(const struct scmi_protocol_handle *ph,
-+				    u32 ctrl_id, u32 evt_id, u32 flags);
-+};
- #endif
++#endif
++#endif
 
 -- 
 2.37.1
