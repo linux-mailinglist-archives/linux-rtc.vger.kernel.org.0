@@ -1,69 +1,69 @@
-Return-Path: <linux-rtc+bounces-1374-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1375-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD19D911C35
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 08:56:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0670911C3A
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 08:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 592BE1F24CBF
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 06:56:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75B4D285AC2
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jun 2024 06:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A579016B3B5;
-	Fri, 21 Jun 2024 06:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5018A16C69C;
+	Fri, 21 Jun 2024 06:56:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="flODI7lk"
+	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="UniJaokW"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2058.outbound.protection.outlook.com [40.107.22.58])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2085.outbound.protection.outlook.com [40.107.22.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93611168C17;
-	Fri, 21 Jun 2024 06:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D0A169AD5;
+	Fri, 21 Jun 2024 06:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718952955; cv=fail; b=kt2MMGe0lXdLUP3SBuya1ILQXLubpfRrF3+xNTJcGn+NFzHTHNixJ5Fk0fvHyXYCBNphY9a/hXgAnJ+ZgMOPDc4jSeDYSTd7un9qXJ/JK5O/XVHsUqwdiF8bC/ivuqPNThZfcoFMM4oCWsQtL1fkZvd/CfimS2ZiPgxaswB0vFg=
+	t=1718952965; cv=fail; b=hdm2y9RfqRRNRIq9vulSnkbC4rCLBmQi5D/t2hzMQxRHbf4ilak59VcaEyOV0WqI0OiQX7qpgsaBuw9r20xcem6d0GJybC+f44iecjBjOFT5OhFc0Qn0k6EaTttyGtaV5GpDBXTFLrHXfWq3ZvlN+lOoTAx6glstBSHNmS01Jo8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718952955; c=relaxed/simple;
-	bh=G4nGSdnZXL5YrqPNc+JpT348+bi1RjrP7YsaFpTG4aY=;
+	s=arc-20240116; t=1718952965; c=relaxed/simple;
+	bh=xR9UW4Jdz0yuYEI1aBoF4HryZ/pqGfpyfS/4R150Ms0=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=WiVaeInFHxx3aJpb9b3zvQ+Nc4Y/yeQgPkoqRaEm38H9y1Jcayc57YeQH+g4TCkCUowPVReHv1N9E60zRuaATbEJgc+jHQmuiTEsEGJ2EndhQ6Jk+vlPsd+qW8Z/5h/wA7ipFQg8BFTzbwbhTH1RL83qnNSG3v3UjXVna5Rax4c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=flODI7lk; arc=fail smtp.client-ip=40.107.22.58
+	 To:Cc:MIME-Version; b=IZTI1lpVma/Lsf8xgLZJ5+c1FaAhBLCUsIQuzmhkdTQAzuAT/aJDcchUFFfrYFqhsilSu6B6aLK9bnG7nZlBkn3GyTrof2r5P81N/bn4dGBkijMh1QxMyDxfiLdmtkLrqY0d84kfKV/GAJlaqoUjS57PdfhoqwNwUW922Ec6UcY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=UniJaokW; arc=fail smtp.client-ip=40.107.22.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xa+/fpXcm3iFaj6/e0BIzmblGFK6UVbAguJraf5JrOfSxaW+r2qGvbGRXI4kSNAWUyaMv51Z4QwMu7X8PHejKxekIMBSgSTx/3UJ+gZzhLTylB/rpHh1hsRn7F8Wj+4A8KL9ORJ0YBYa7964NDeM0cP9uRJE5BqQN6W2XazRaRTdOa4/iN4MSGYR32Q/Qc2N+4KtAs7yAk3+tArLf7PDtOwyKBNjkhWrSNwbnkqGyhkXm+UknZg5xWIkuBewC/THN5+C+J+rugC04OaGXuix2c59iL+x3CytmcgU8vpGUMgmDeBehqzCB8NezPVffHM8wgb2T0FHnlUf1qQYVzcLXw==
+ b=dTVE9j7jQCTeuWuTkUx31QNKXDr+geqw6ldGCHszBZGIzJxRiKRtiSoic1YQv2zFJfeym+D+DZlq70e3pWComRUurGj3ByAHXPeJweAB5kFh25qeRpPx0itEmUvsaNV1Tgk8CIo9mnWZZ3hegDdzEFUGU2pLz19O+SyoXRDNcyT6uV9autFRjT+ece646aoUKCnb0S6iLF4r9wB3/ahpNjKTheCXIz2abZQqIZZoOI4Nt4Hs4uKuy7GHSmESkG9Wy+2IOuOzsd35+9nPIvfs0jmxiI+p4aGcaqXqgK7kmUJVAu/n8KfQ4naiqMakErguf7cy2NAWDNkqGnKsFW5oBA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3QoauDQxxFBenh0iSUn2b3RJUCaW1ML4tL550SXdj6g=;
- b=Je64J+fsuq38ire+7vx0AnW67M+zW5DT5Fp0ti/0vkElSValnccnsd/Oz1/TWGfifZufwF48JVTSX7lsd85zFtL0WA7r5Ql2/0+Ck3zo6/vcKnohWQVs089acw2GgjlV8a1ipkeV8G84GLRU8wlhLH9oOEkCCpO2zcLSFo2nJ/muKHeY22yH6gwf2jciWMyT6xDZ4HqSe/53L1p2xnnsn83F5eeWCczfv1Lupk3Ujfml/4Yy9LWslb4goihhCfi7lwTReWNGhMdLe7LUIZYvgcc4T0z2Ybx+TNB5Q7wbgtI/xCYKC5KBSG+2Hrewo5w3kLfQY6gEj3V9DCObPRQN1A==
+ bh=QAZe/XpfLU5x78InrIRx8wxQbwTt+69hCuXdxwFNfvE=;
+ b=L1wL5Xe0L7vV5h80SZoiSuHHkjIu0UYP+FDynKEbJpqTXRkUXEqMvrmiaq+rvWYhIJ6xYeYOBSzlas0bLQq3r04MylU+egs6Ql0Ehgtl+2FXKaUWD74Xm9ayiDZWfWcpzpvNKAw55Bac2o8QjRvZnj4Jt6FZLUESJD7KoA3QWx2HLFx3Xh8IKpct4YkgtM6dGMclYaNPA8pOq6SGEFP7O5CIlXhjMHSySnjR5zGAxB2oPDcnTvQnRBZO8yecmhF9hFh3bZrREYKHCeN3B824vfzynCKk12CAAXqR6c+0gyXuDIVVh8dTMWIv9b3QEudtiEJ0j+5+4b1tq008U7uDqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3QoauDQxxFBenh0iSUn2b3RJUCaW1ML4tL550SXdj6g=;
- b=flODI7lkJaa+W4NWrIt5V1ong9RG0pl/mQRVmp72ARG/09B2sUcd6qteJlCY1i1qZlMmsV8K31DbTFzdgS2a39zUKWy8pr7+Fcz393v7V74pOZhyds6+yQpJZh2JKnYV7InnAFFiMgwiWyXc2RCDisw4ORAWb/4jqtlT0vHYU0Q=
+ bh=QAZe/XpfLU5x78InrIRx8wxQbwTt+69hCuXdxwFNfvE=;
+ b=UniJaokWFDKFbSYo4N5FU2wvKZUtMOq8Q96++NZluMoEP49CP5DAykaTvQxeHIiTL0NXv9y9GW6gNoVyT4/nQqRKEF2aR7jRRx9iFYnw4BK1KLESHDy7/+w++BJ+5hE+PH7asOoSiYkJNNroTHodJjoCznOXpvwfSqpOyIcjlgQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from AM6PR04MB5941.eurprd04.prod.outlook.com (2603:10a6:20b:9e::16)
  by GV1PR04MB10426.eurprd04.prod.outlook.com (2603:10a6:150:1cc::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.19; Fri, 21 Jun
- 2024 06:55:50 +0000
+ 2024 06:55:58 +0000
 Received: from AM6PR04MB5941.eurprd04.prod.outlook.com
  ([fe80::9f4e:b695:f5f0:5256]) by AM6PR04MB5941.eurprd04.prod.outlook.com
  ([fe80::9f4e:b695:f5f0:5256%4]) with mapi id 15.20.7698.017; Fri, 21 Jun 2024
- 06:55:50 +0000
+ 06:55:58 +0000
 From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Date: Fri, 21 Jun 2024 15:04:37 +0800
-Subject: [PATCH v5 2/7] dt-bindings: firmware: add i.MX95 SCMI Extension
- protocol
+Date: Fri, 21 Jun 2024 15:04:38 +0800
+Subject: [PATCH v5 3/7] firmware: arm_scmi: add initial support for i.MX
+ BBM protocol
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240621-imx95-bbm-misc-v2-v5-2-b85a6bf778cb@nxp.com>
+Message-Id: <20240621-imx95-bbm-misc-v2-v5-3-b85a6bf778cb@nxp.com>
 References: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
 In-Reply-To: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
 To: Jonathan Corbet <corbet@lwn.net>, Shawn Guo <shawnguo@kernel.org>, 
@@ -80,11 +80,11 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, arm-scmi@vger.kernel.org, 
  linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718953487; l=3120;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718953487; l=13884;
  i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=XkeqFAGjNHOKfoWCkbUZAUkgOf7T6GEG5kbFMiWO5cE=;
- b=evh5Cwt3Yx42Ap7J/WIZLUu1fj85CvDAkAWvSR/udDvf/zZ20Lm3CYBLvW5qtnW3kJWC1Ujqk
- jLfnFUjXAJeDIblXyt+hVj1uHR2uILB2IVOVhTePO9r713BHG3vqsjd
+ bh=qf3BvGVUQfUDNPRd2U+n/wlDtywN4BIpyG9Mq65nrws=;
+ b=apGCZPhiN53JTpgT+P0ea8VkUib3ZGs1/MDFvxRPwZFzc56zuBGpGfc3uEOJc26H+ook2OBsC
+ BSe8I8sDFLqBtwVTzX2ytop69Tt7rmr5W5DeIlhW1wvfTDJvFMie9+3
 X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
  pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
 X-ClientProxiedBy: SG2PR01CA0122.apcprd01.prod.exchangelabs.com
@@ -99,188 +99,599 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB5941:EE_|GV1PR04MB10426:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e28bfc7-114a-4c27-ae9d-08dc91bf2fb3
+X-MS-Office365-Filtering-Correlation-Id: ec9fdc89-9fd5-41d1-06b9-08dc91bf33c6
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230037|1800799021|366013|52116011|7416011|376011|921017|38350700011;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UngrbXBad2hOcDI4czhhMzkrbWpZc1QybGFNN201MVd1dE1kV0EvMWJHRkZs?=
- =?utf-8?B?aGdwdm5VWEJ5Q0Urc2owSFl3V1FYWGFjOFBhcGVWZVJBeUVBcHNrNVQxRFo4?=
- =?utf-8?B?bm5RdmFSR2VGMmpINktPR252MlNGcGQzR25La09qVXJOM0NXemxNa2lqaHJC?=
- =?utf-8?B?ZXorU1pWN1pWSjVHV0JYNFpYNCtBdGNaTWR3dS9GeUZUa1lkajVVakliQU4r?=
- =?utf-8?B?VWpNVERPd3N6eWR4ZCsxSlhvTXFQbElta2xSMlZMSVM3eHVCOE9lVkNMMDVs?=
- =?utf-8?B?eDVHSXlwZG5Ba2wxajB3MUlmRE1TUDlNM3Y4YkFHTU81SlUyRmNPeUVHdGhy?=
- =?utf-8?B?M0E2NEZGM3JFNmtVVjJqN2RuTFBpQnZoZFVzQk9NWkJ6NXdsZ3VoZ0RyUElV?=
- =?utf-8?B?MDVLVzFwTGFKUnZZZkh4ODVqcVA1aTVLbFlDeVdFSXVaUXl6SGZHZWRsa3Vq?=
- =?utf-8?B?MFdjVW5Ea01Kd2dQNFR3UXhlekhkMGV5alpBaVVQQ09GRC9rbzdvWHB0TFFR?=
- =?utf-8?B?Ums2SmxlcnBaTmQ2cmFlVlp1dG1CSVRzaFY3TUlqQmlBQU1IZFhUQTJZUkhr?=
- =?utf-8?B?REREYWdDdE15UVc0LzBlSmtlME5QQkNNaFdmTFBzME5Ob21KV1ArQU9JTWd2?=
- =?utf-8?B?WUI4eU9ER0ZhYTFtUFpOanRoc3YvQXZFaHlXTzZTSGpyaE5RTDg0N0pQU1hZ?=
- =?utf-8?B?amNkOTM5eXJwODU0TFJ4dXNSRHdaM0xDKzJWcEFCZ3Q1WHlvQjZORjJtTVU2?=
- =?utf-8?B?ZDBtUXRTQzJIWWltN3lpQkh4WDM5dnpXTGszc1ptNlFDMHhNd29yWUZ6R1o3?=
- =?utf-8?B?WTJDV0s2dnlRTmUyMFgzMyttVW9pajFObTY5SFpTUzd2RC9IRnppTjd3SkJ4?=
- =?utf-8?B?eWdRTWp5OHQ4eUNYWUtwdHVNbHBISWhmMFlZS2dmWnVqUzRxR1BpVjk4N3Zk?=
- =?utf-8?B?b1pNNE5NZGF2eDhCM0c0R09qNVdzRk1oRDdYY3FTQWZDZGVRbTk4dXZlMDhK?=
- =?utf-8?B?TnhDSWFBQUVYcng3dTJnc0VXT3ZyOXltYUVUZEJjR3JDV2hncUYyVWdobDYz?=
- =?utf-8?B?OFdxN0xIUTQ5OXRsM0IvZmlpSEdBL3lFdi9HdXRScm00NE05ZjFCS3VZRDF0?=
- =?utf-8?B?azJJeWplN1lPRTJlT2JZR0JWQU50V3EvdDdTZ0pqSC9qZDV5WjRGM2JlcEVK?=
- =?utf-8?B?WGcwbHdTN2pJczVmMm9WdmFxY0tpS1lCc1BqU2RYTWR0ME1RSG5OQVc3Tzlu?=
- =?utf-8?B?SS9RbXdIS2ZzMFV1M1ppOENFaWNGU1k2YlFLNlVXNVcwRmtmR0NDU3d1SEhE?=
- =?utf-8?B?K09SV2NQWUpYbnYyeWRySEpSK0lwSWFnalp4VTJaOGh1YVdlaFcyTnFTeTlY?=
- =?utf-8?B?SEdhRUgySGVYWGpTVm1CV2FvbWJHYW50OE1ZZlNvb05zTUlLTFhlT0dlUExZ?=
- =?utf-8?B?bFNEb2pHL1c4aFhRUEI3eUJuME5yZkdhVjdrSElESnhwbVNpZWdIRGh3ZDZ6?=
- =?utf-8?B?TlNjNnhCVmtUaGFSY1BYSWMyVGQ4UW1uZU8xVUhGdXdRaTJSUWQ0VUFLOWNh?=
- =?utf-8?B?OFNzSFFpTk5FQkx4ZmRxejR1eEhJUVoxZ29QUXV3N2YyeGVIWkRlQlluL3Fa?=
- =?utf-8?B?KzkzdjhiTmlWdUlQRW5DazdYZjFTMnUyOXhOUGN4WTZKWlZxcS83K0dDdVhq?=
- =?utf-8?B?SWVvWm56aU9ROWVvNDdmbEtKNGlENGROamVORWpNdmF1R1ZFSmdIdTljOTZi?=
- =?utf-8?B?cms1QzQrbTRqSkt5RitlRlJUNXIyWk5qRDlUUlNtTktISTQxc3djaEFqTkY0?=
- =?utf-8?B?NlJjQUpqUmpCcCtUeUlVdz09?=
+	=?utf-8?B?ZFA4WjhoQThNY0EvNlQwRXRjMFh4cGRHR2RPc0xuSGo3d2hQZnJ2STJ4bjRj?=
+ =?utf-8?B?R1BHN2hmVFFZQ25iSWhEZHA1Zkp2Zmg2Q2NVQ3NWdnUzSzhrcUZaMkVLNEpC?=
+ =?utf-8?B?bHZWQjFEbnc1VUEveUwvRzNnRTNCMFlvZjRTM1Z3QUM0SjlmQUtWRFJUU0FI?=
+ =?utf-8?B?NVpPQ253N3dhSi9sTytCM3R2ejkvdjhhNUxsZnVkd0hIYStRcUFYM3VLdGRj?=
+ =?utf-8?B?Zy82S1ZaN2liVldjQmNuTlNWUEdTODdIVTczbEQvR0hpVGhGQ0J0Z0dkUC8v?=
+ =?utf-8?B?Z3VESGdyOVBZWnUvbk1jM3hsMkJpbmlvbTlPM0VMSE10c0VhNnJrcU1mRlhv?=
+ =?utf-8?B?R0pWaktxZHQ2VDIwOG5RVlRSQlkzK3JRWUtQdGg5dllDUUluT2UxNE1iR21U?=
+ =?utf-8?B?TWJscFhqMElmNXpxT1VQZHBMNm81TldtVEdkYnNkZWwvR0VZTUlTYURTTjVj?=
+ =?utf-8?B?U1Y2WEt1c0NoakY4ZEFoaC9yRDNET2NxZHNFQm9ZV3dsbUFMV2M0cXdPSHJz?=
+ =?utf-8?B?L2ppZ1I0NjhOVlA0UmxrdThmRGlSYUl4bDB4ajZKWE5oUG44R1ZkR2h1bUZo?=
+ =?utf-8?B?alc0S01pSzdhaGNpa0tid1FCYzBMdng3ZUY5ZmVOeENNYyt2ekxzQkk0LzRH?=
+ =?utf-8?B?TC91NVlRMHk2TlNCM3RoNXNqeTBUd1FqOFEyajdVUmZwbkcwZjRnK0pLL3M3?=
+ =?utf-8?B?WFBYcjIxVzVMVW5USy9sclRmVE45b0NiY0U0NVZCT2JYcWlqRnRHbFVnSG5G?=
+ =?utf-8?B?SHpZN0wwVmlWcmM2TUdEL1RMSDl5ZDdncTllVDlQNmpSc1ZHQjN6THk0RUsz?=
+ =?utf-8?B?a0lRcEllMFlaajQ4dlV5S3M3ckhBWlRiRlZUcW5BbkNwWjd3SkFEcm9jNDJJ?=
+ =?utf-8?B?akVrYjVNZ2hFSjJoS3N3dklOS3ZRaG5YR29TZ01JRHliaVFtNDBieHpVSVVo?=
+ =?utf-8?B?amtUTWZwYWFCUC85eWIrZ0h0OXR0ZEF6NGMrdC9jM2ZrT3d2Rm1ISmtrL1JE?=
+ =?utf-8?B?QXhORy9sZnpvTTlEcFhES05zRXRIMFhjRXJiS0ZXZ3cvOEF5ZXl1M2YxUDBm?=
+ =?utf-8?B?V0hRREUrT1BydFhBWlk1VURidTV2QVFyUFNKOFNEQTlKM25lM1ltc2x6ZWVm?=
+ =?utf-8?B?M0xmTHBzd3dxQ2lzS3gvT3NCeVlXakcyV1pBL2Y2aDZkNGswNlQ4NjFxOGEx?=
+ =?utf-8?B?aWxsT3VIUkFaSmJaYTBIckpMcVU3WTBZZ2VjZ09SZ3VJTWlpbGl0V245elYy?=
+ =?utf-8?B?dGthZmMyR0EwTGRHSGg2WVBoMmR1Z3VReStIVEcrdC9WYU0xemF6MlorK3NP?=
+ =?utf-8?B?QitxL3VPczc0MlZOdXpia21zb2JEZkRRMXRoNSt6b3NFYi9uVlgxVVVaM3Fu?=
+ =?utf-8?B?SUNLR1V1bEl5K0JydnQyOUY1SXYzSkthTy9MeVo5UUJVdjg1VTFiRzVpZ0FI?=
+ =?utf-8?B?T2tGNWZESW9wajJJKzA1RVBsVitHbzZRYlVZOVlub2xCYVRHMXVXaTdnNlBm?=
+ =?utf-8?B?RXNmMXhMZWVMV2pGUVRXRHFMTHhjU010dU9kNUxlNEo3YWhNa2RRYUlmZWhz?=
+ =?utf-8?B?cThpUE9TckNyU1RsaE1UTC9LaHhGOHNCSFBYaTJKZVJ4MFB2blcycVc4Y09l?=
+ =?utf-8?B?Ti9Lb3BmNEd3YVlnTzBTVXZWUWVaVHNSOHhVcXpNaEhRQWtRZkJsY2lJNnhy?=
+ =?utf-8?B?MFpXdGphU2p3ZGpTS2w4SzlNWERKN2NqZE43Z0NwTDZQQnR6YmpxcjBtSHho?=
+ =?utf-8?B?NjRwOStBbVlERGxQdUZxamtCT2FiVE5rekg4RWxDdUthY3Z6YU9UL29YdGow?=
+ =?utf-8?B?SmJzVHhrV0lOaHk2VTA2Y2NLSzFpaXI2Zmk4WnFpNkkzZzk4ZXRIMlI3dlpY?=
+ =?utf-8?Q?CGm9lQ9PJXNUF?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5941.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(1800799021)(366013)(52116011)(7416011)(376011)(921017)(38350700011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aFp6NS9vSWJYNFk2d2xnWEJWenA1NXd1MU5ERFNERUxId093ZW1jb05rNWM1?=
- =?utf-8?B?cGVKaHA4OFVKY2xuSEp0ZjZJTE1TSnEyY28yZ0RRSlRoNk1rVTdUUktENEt2?=
- =?utf-8?B?RnNEbGFVOXY5TGx4TStOSURwanBqaUMzVU1aVEswWHQra1hHT3JjdUIvaVRy?=
- =?utf-8?B?azJRL0NrWkhwcm0rMnBxUGdYTTg1WmxZaVFFYjl0a1hTNTRSQmFYc2FFbXlS?=
- =?utf-8?B?b1pscEpGdysyS0lOc3dXbjVBaXlKNXBjWVpkZDBIMW9GSDBDRS80emU1Y1lY?=
- =?utf-8?B?SUlqUHJhMHByVElndzNTaHNpWE8zSllTb3JnL3o0Y2l6Wnl2cWE0TXc1czFp?=
- =?utf-8?B?elF6cWpWZWIyTXZWdDlXU0d5YWdYMSttb2pBQzlvWXdsOVd2TzhYRHdxQVg3?=
- =?utf-8?B?TnlRRXR0eng1NGtNRHNTYWQ5bVVxWlNBSGVHOHJUTE5sdm1Gb1JrekZYMjBl?=
- =?utf-8?B?UEZycVRYRUo2VDMxVHZBWlF6ZmUvNHRaT1lWUTM4aitSVG9vbUw4czVEMzRV?=
- =?utf-8?B?dmc3RDlubTJwenpLNXpmS1Z5YnhOQ2VjcC85WDFHaTZMeS9rS3hHOUZzWnNI?=
- =?utf-8?B?TCtkRXNJVFQ4SnBRS29vMm1kVmhvbVNQOVovRVpqa2pIeEd6SjV0MUY4U0k0?=
- =?utf-8?B?K1RiMXlOOUVzdklGTHFTemFyOHA3L0VXek1iYnZleHpoYkFia2R5bFhhWkpm?=
- =?utf-8?B?UWQwSUtsay9UTWZCTUNLVndMODVzSUs4eGNxSnh1VzUxRGFxQ3JBd3p3WEpY?=
- =?utf-8?B?Q1NQaUtSZGZtVmVuSFQxRytaUUV1TUdRakdqMERLY2h3bEt1WHFuaWUwVVZH?=
- =?utf-8?B?SjNyNmJwQXUvMStMYUJFRXN4U1MrV2ZhUkRLdCtnY1VJYmhDd2Y3Y0hSeVB0?=
- =?utf-8?B?Zi81aFdPOEhFbTNkM0YzOVNjazZUa3hzU0JXZDU4Wlg2REQ4WU53RkJDR1dX?=
- =?utf-8?B?c25UdTNWTGZsZWhPVVdKYktIV3Foa3VzUXlra0JhOHNsQ1YwSFpxTGZkZ2VO?=
- =?utf-8?B?eHRoQjVDOUNnS3lPTXYzYkZkNWlXYncydDhhZ2UwTFFUKzRld01CRnhFa0ha?=
- =?utf-8?B?UU1jVDBDV0ludkNUdzZ2RDhXQVRxZ2I4eVBJQTRVUjlNT3NKNVVnbnF5Qmx4?=
- =?utf-8?B?Q3RiMzFTMjJqYXNJN3F2ZEtieGFGbitkY3lrNnh5Y3EvQVErNCtzV3l4MWZM?=
- =?utf-8?B?VEh6QXY5WENlaEJhUXhuQjRZMzViWTBhOXNob2ZYUThOOHlCU3JudDVJT3lm?=
- =?utf-8?B?aCtsL2F4ZjRtS3FvUkphejJkUGdHTDkrYnMvKzl0dUFJNzd1U0NURzNEYTdn?=
- =?utf-8?B?aE5WSHZIYUI2YUV2U0tGRmtlTU95ZWNNSFF3Y0NTWmJTaUVva1BJQU04M2xw?=
- =?utf-8?B?MEhOVnFxdG9CZjRuNTF4YWszL244eDFsT0RvVElSMnhWRyt5QUZFMnQ1QnE3?=
- =?utf-8?B?WkJQcEZ3bmU0eGt3dFNFQWFXK2RJd2kvOEFNUGJyeWtMUE5YTFlVZ0lOdSti?=
- =?utf-8?B?dGVQZkxwM0hZaEhCZWR3bmQ3bWJmeEVXRDhiaytNajRUZnVzeVd1NTA2UTI1?=
- =?utf-8?B?b0lhYVB3WTFSYU5RcEZxcnU0WER6aGxpS2Fabm1RSTNuNVVJZXNyc3dkd0JW?=
- =?utf-8?B?UXkzT3V3UWVMMWtnb3p0Q05zSi9VcVpHOXRUdlRIWUpGU0xHc092QnVYd1Fz?=
- =?utf-8?B?Yno3eVJhWkVqVW4vbkxOOXVJMTJZbUFQMjQrblRJMjFrTVlZR3g2RCt0NGho?=
- =?utf-8?B?WUViSDlUN2RKOTRVR21PVVVFRldKS1J3QWlBbXJWUTJqZ3ZVM1ZmZjRzRUZ2?=
- =?utf-8?B?QTN5NG1PMGtlZ3R5ZG1pcXNqbnpMNXB6Z3AxbEsrRUtCbWlBMUdIa29JK2lQ?=
- =?utf-8?B?VHA5MGN5NEN4dE5laG1ocmdSQjhSNzVGb3JWbXJWQUkrSGg4c2JUaElRRnE4?=
- =?utf-8?B?YkJKdlVJUGErc09RMzVSSExzaS9kWVpvZGpldVYzT3FlaWU2NjRYY1Zjc2pt?=
- =?utf-8?B?eWN0QXk0ZVBFbWlacUg2aDhmdzNqS0YyTkh6Q2EvNTZ6dHhRZ2JlanNNdjFp?=
- =?utf-8?B?OWVXV054UnRtcG1Lemh1SUhmVC9kbDM2VEdQQ2hSN2l6eVdmWXh5Wjc1YzFp?=
- =?utf-8?Q?/dnTyYyp6J1fXNRICKnVkNjfZ?=
+	=?utf-8?B?Q2UyQ0J4d2JFOFc3dCtJWVVwdndTYkVFMkhCdWtwTHdPTzZOK1RmMWFZKytN?=
+ =?utf-8?B?enFvSUtEVTd0VEtNdjVRSVUzZVl1YUZoUzdXcVhmY3FQZm9KNlBKMG56NzFo?=
+ =?utf-8?B?TjUwekNGeDRML3YrMjZCcXlGUlk2UDl3RFpUOGVqQzFHSlpVMTZGNEhPczFy?=
+ =?utf-8?B?ZWROcnRCR1NhZ3ZrSkMvdi9yT3orbGhWYzlUaG0zSGlFV053ek1PdlRjL2FG?=
+ =?utf-8?B?MmZXZjFVUUUzallTcDhoNEl3M1lnSjNzb1puL1NCZXdyeE5hcElrUUI1cFJo?=
+ =?utf-8?B?N3R5YWRNUEJLeUdyVXIrT3ZLOGNzYUJHVnQxY2FTaUUrU0FYOWsvYkEzdjN2?=
+ =?utf-8?B?dFVrYzZlMC9WVW5WRXZrbE03d3ZwdFlhcjdyanhZcFowVWVnUE8wY1pRQmJ6?=
+ =?utf-8?B?dENOd0Z3SDRkUmc1MVhoUEJkOXBOYW1oUW02bXBOSkJWa3d2MVRWc2xzYW1J?=
+ =?utf-8?B?ajdpMThhZlVMTUNTdHZQSkFQam9USGlyUnUzanlTQnRDTmtpTmQ5bFdzV0JF?=
+ =?utf-8?B?MjhuQzJwYXRmV1VSYnlkS3ZsbVZxQ2hwQ1Myd0tHTTRPNkdnK2Z2T3NDcWxp?=
+ =?utf-8?B?ZDVwSUYxQlJYOTVBaDN2ZVFzOXdvV3dVT2dBQnNCanFrZmpYQ2JlSHRJS0Vp?=
+ =?utf-8?B?ZVAvVzB6LyszZWNmbXhIUmljWTRQdzFxZG9WYXRKOTNnSUtmVXBvWHNVY0lU?=
+ =?utf-8?B?ZDFwY2N5cDRZZ0pGZE1kY2k4VDNOdHYyZ2dvZHJjNFpTKzRlMWNLbFNhZWl3?=
+ =?utf-8?B?blc4N21zUWx4ZDgwSExpaUJXM0ZnVllyT1EvRnlXQlUvZ24yUG5NcnV6ekdC?=
+ =?utf-8?B?S1pEUCtVcWVhN3BFVExCeUt2b2hmS0lJWFpsdFJ4VVdHeUN1Rk5QejhvTTV5?=
+ =?utf-8?B?aURFWXdkcmI5OG1salZaMjVoR1VWbjVEUUpETW42VU9WRllHdlpBTUozVi9m?=
+ =?utf-8?B?UG8wQk8yYmIwbVVEVWEyaTZFczNjd253WHV5QWJQTTFFdmdsNW5SUk1kaWhS?=
+ =?utf-8?B?NnVzRFBLUnYvQTIzRTZuOEM4eG8rNzNVMjFlWTIxVmRLQUUwSE8xc0d3TEJu?=
+ =?utf-8?B?OEhpMEVwNTJtbHBxT20vc2wvemphS0VSRjRhU1BRTUJib09uQ2s4Tnk0emwv?=
+ =?utf-8?B?aHlKbzZINFN6NTUyczFHRXh3cWVkUktWZnphTWw5TUZsaFc5ZHZzSUtrbHlz?=
+ =?utf-8?B?c3ZrZUhVaThad0dMekJIKzVMcUttdDJqUHBpZVhYYi9RS2xGakUvdHRoMFY1?=
+ =?utf-8?B?ODFBdUdzL1FPUW1UbWR1dWJMZ2RXbm81N2hnL0J6cng3VzQwM21GR2E4SUJK?=
+ =?utf-8?B?dnpRZW9MT2RSWS9JTlpmRS9zRm0ydjMzaFRvc0hVYlgwcEhxd1pPc25RV3Yv?=
+ =?utf-8?B?cDZMMWdCVGlKK3c4eld2SVB1Ulg2TVRqdTR2T2NndkhNZ0xKRHVEWmRKeFBD?=
+ =?utf-8?B?VzhiZHRwQnFGNmxHM2RrRmtCMzJtekhudlVhNWFXUVFuR1g5SE5FakdDNGpj?=
+ =?utf-8?B?MUd2aXptVVBvZlNLR3UyME0wNVBEM2t1T1lkRVVqaTlTZmVFS01DYXdWTGJC?=
+ =?utf-8?B?YXIwVktXQWdQOVVlM1NjSTlLb0tzL0txRHhhSlh0MFdWaWZod2xLcy9zQmh1?=
+ =?utf-8?B?eWJYdzVPdW4vZDlFaVgwdzJaUVkwbFNwY1hOL2NSN3RMVk9TNVh4KzRFN25q?=
+ =?utf-8?B?cnhpdkpRN204RFVLNEtVUEFlb1VPRDdOQ1RaNkdPWkRBT3FNWDZrYjZPRkI1?=
+ =?utf-8?B?ckxIVTI0K3pvL0NCYnptUzNKNStEWC90MlRJbUJjZWNpdGNaSlorMmVzL3BV?=
+ =?utf-8?B?ZUtlUkgxSmNoQlhxZlAwSi9lMlU4VmxoRHJCelp1VGo0SWFDSWNjbXZzWWpq?=
+ =?utf-8?B?dWNMOGRFWDJrUzdXdml0VzlSUTlOV3hSTllHbm5DdGFlVTZYRnYrZEoxZjB6?=
+ =?utf-8?B?aHNDNDkyTkEzc2JBVytRN04xdnR2UktPUit2S21USDFLZ0NhOUpQcmQxakJZ?=
+ =?utf-8?B?QW80dmM2WTlPNi9KZzJHSkdHU3pZMGxWRUlOU2dqS3FsQzZMeXdDKzRoL1dt?=
+ =?utf-8?B?TElIMU1vbWJzWk5kTmYxUjUyS1puYWwxS0VnZnNuTzZVVXFPWmkxeTkwNjNs?=
+ =?utf-8?Q?ui4H+J/CYkvTC5s0evQku2PaJ?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e28bfc7-114a-4c27-ae9d-08dc91bf2fb3
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec9fdc89-9fd5-41d1-06b9-08dc91bf33c6
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5941.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 06:55:50.6673
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2024 06:55:58.0997
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ij2s4Uq1Sj7fND8rw/rhQWlrNsZMGUKM5NEYKohiLuqFRo9nR+P6jwMNgllcdi11EYR2BmNC3VGOoR63gyTggw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: J4uqN5bj6nKMiormAF8k73VDuclKo1wu7XiINyI3v4LmK4at7QSo2cCW3Hs3UXH7uRYMzGqvyt6+KyoJzD90tg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10426
 
 From: Peng Fan <peng.fan@nxp.com>
 
-Add i.MX SCMI Extension protocols bindings for:
-- Battery Backed Module(BBM) Protocol
-  This contains persistent storage (GPR), an RTC, and the ON/OFF button.
-  The protocol can also provide access to similar functions implemented via
-  external board components.
-- MISC Protocol.
-  This includes controls that are misc settings/actions that must be exposed
-  from the SM to agents. They are device specific and are usually define to
-  access bit fields in various mix block control modules, IOMUX_GPR, and
-  other GPR/CSR owned by the SM.
+i.MX95 has a battery-backed module(BBM), which has persistent storage (GPR),
+an RTC, and the ON/OFF button. The System Manager(SM) firmware use SCMI vendor
+protocol(SCMI BBM) to let agent be able to use GPR, RTC and ON/OFF
+button.
 
-Reviewed-by: "Rob Herring (Arm)" <robh@kernel.org>
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- .../devicetree/bindings/firmware/arm,scmi.yaml     |  5 ++-
- .../bindings/firmware/nxp,imx95-scmi.yaml          | 43 ++++++++++++++++++++++
- 2 files changed, 47 insertions(+), 1 deletion(-)
+ drivers/firmware/arm_scmi/Kconfig          |   2 +
+ drivers/firmware/arm_scmi/Makefile         |   1 +
+ drivers/firmware/arm_scmi/imx/Kconfig      |  14 ++
+ drivers/firmware/arm_scmi/imx/Makefile     |   2 +
+ drivers/firmware/arm_scmi/imx/imx-sm-bbm.c | 379 +++++++++++++++++++++++++++++
+ include/linux/scmi_imx_protocol.h          |  42 ++++
+ 6 files changed, 440 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-index 4d823f3b1f0e..47f0487e35de 100644
---- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-+++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
-@@ -22,6 +22,9 @@ description: |
+diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
+index aa5842be19b2..79846cbaf71b 100644
+--- a/drivers/firmware/arm_scmi/Kconfig
++++ b/drivers/firmware/arm_scmi/Kconfig
+@@ -180,4 +180,6 @@ config ARM_SCMI_POWER_CONTROL
+ 	  called scmi_power_control. Note this may needed early in boot to catch
+ 	  early shutdown/reboot SCMI requests.
  
-   [0] https://developer.arm.com/documentation/den0056/latest
- 
-+anyOf:
-+  - $ref: /schemas/firmware/nxp,imx95-scmi.yaml
++source "drivers/firmware/arm_scmi/imx/Kconfig"
 +
- properties:
-   $nodename:
-     const: scmi
-@@ -284,7 +287,7 @@ properties:
-     required:
-       - reg
+ endmenu
+diff --git a/drivers/firmware/arm_scmi/Makefile b/drivers/firmware/arm_scmi/Makefile
+index fd59f58ce8a2..fb9407fef60c 100644
+--- a/drivers/firmware/arm_scmi/Makefile
++++ b/drivers/firmware/arm_scmi/Makefile
+@@ -16,6 +16,7 @@ scmi-module-objs := $(scmi-driver-y) $(scmi-protocols-y) $(scmi-transport-y)
  
--additionalProperties: false
-+unevaluatedProperties: false
+ obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-core.o
+ obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-module.o
++obj-$(CONFIG_ARM_SCMI_PROTOCOL) += imx/
  
- $defs:
-   protocol-node:
-diff --git a/Documentation/devicetree/bindings/firmware/nxp,imx95-scmi.yaml b/Documentation/devicetree/bindings/firmware/nxp,imx95-scmi.yaml
+ obj-$(CONFIG_ARM_SCMI_POWER_CONTROL) += scmi_power_control.o
+ 
+diff --git a/drivers/firmware/arm_scmi/imx/Kconfig b/drivers/firmware/arm_scmi/imx/Kconfig
 new file mode 100644
-index 000000000000..1a95010a546b
+index 000000000000..4b6ac7febe8f
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/firmware/nxp,imx95-scmi.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2024 NXP
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/firmware/nxp,imx95-scmi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/firmware/arm_scmi/imx/Kconfig
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0-only
++menu "ARM SCMI NXP i.MX Vendor Protocols"
 +
-+title: i.MX95 System Control and Management Interface(SCMI) Vendor Protocols Extension
++config IMX_SCMI_BBM_EXT
++	tristate "i.MX SCMI BBM EXTENSION"
++	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
++	default y if ARCH_MXC
++	help
++	  This enables i.MX System BBM control logic which supports RTC
++	  and BUTTON.
 +
-+maintainers:
-+  - Peng Fan <peng.fan@nxp.com>
++	  This driver can also be built as a module.
 +
-+properties:
-+  protocol@81:
-+    $ref: '/schemas/firmware/arm,scmi.yaml#/$defs/protocol-node'
-+    unevaluatedProperties: false
++endmenu
+diff --git a/drivers/firmware/arm_scmi/imx/Makefile b/drivers/firmware/arm_scmi/imx/Makefile
+new file mode 100644
+index 000000000000..a7dbdd20dbb9
+--- /dev/null
++++ b/drivers/firmware/arm_scmi/imx/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_IMX_SCMI_BBM_EXT) += imx-sm-bbm.o
+diff --git a/drivers/firmware/arm_scmi/imx/imx-sm-bbm.c b/drivers/firmware/arm_scmi/imx/imx-sm-bbm.c
+new file mode 100644
+index 000000000000..559ad9f7088c
+--- /dev/null
++++ b/drivers/firmware/arm_scmi/imx/imx-sm-bbm.c
+@@ -0,0 +1,379 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * System Control and Management Interface (SCMI) NXP BBM Protocol
++ *
++ * Copyright 2024 NXP
++ */
 +
-+    properties:
-+      reg:
-+        const: 0x81
++#define pr_fmt(fmt) "SCMI Notifications BBM - " fmt
 +
-+  protocol@84:
-+    $ref: '/schemas/firmware/arm,scmi.yaml#/$defs/protocol-node'
-+    unevaluatedProperties: false
++#include <linux/bits.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/scmi_protocol.h>
++#include <linux/scmi_imx_protocol.h>
 +
-+    properties:
-+      reg:
-+        const: 0x84
++#include "../protocols.h"
++#include "../notify.h"
 +
-+      nxp,ctrl-ids:
-+        description:
-+          Each entry consists of 2 integers, represents the ctrl id and the value
-+        items:
-+          items:
-+            - description: the ctrl id index
-+              enum: [0, 1, 2, 3, 4, 5, 6, 7, 0x8000, 0x8001, 0x8002, 0x8003,
-+                     0x8004, 0x8005, 0x8006, 0x8007]
-+            - description: the value assigned to the ctrl id
-+        minItems: 1
-+        maxItems: 16
-+        $ref: /schemas/types.yaml#/definitions/uint32-matrix
++#define SCMI_PROTOCOL_SUPPORTED_VERSION		0x10000
 +
-+additionalProperties: true
++enum scmi_imx_bbm_protocol_cmd {
++	IMX_BBM_GPR_SET = 0x3,
++	IMX_BBM_GPR_GET = 0x4,
++	IMX_BBM_RTC_ATTRIBUTES = 0x5,
++	IMX_BBM_RTC_TIME_SET = 0x6,
++	IMX_BBM_RTC_TIME_GET = 0x7,
++	IMX_BBM_RTC_ALARM_SET = 0x8,
++	IMX_BBM_BUTTON_GET = 0x9,
++	IMX_BBM_RTC_NOTIFY = 0xA,
++	IMX_BBM_BUTTON_NOTIFY = 0xB,
++};
++
++#define GET_RTCS_NR(x)	le32_get_bits((x), GENMASK(23, 16))
++#define GET_GPRS_NR(x)	le32_get_bits((x), GENMASK(15, 0))
++
++#define SCMI_IMX_BBM_NOTIFY_RTC_UPDATED		BIT(2)
++#define SCMI_IMX_BBM_NOTIFY_RTC_ROLLOVER	BIT(1)
++#define SCMI_IMX_BBM_NOTIFY_RTC_ALARM		BIT(0)
++
++#define SCMI_IMX_BBM_RTC_ALARM_ENABLE_FLAG	BIT(0)
++
++#define SCMI_IMX_BBM_NOTIFY_RTC_FLAG	\
++	(SCMI_IMX_BBM_NOTIFY_RTC_UPDATED | SCMI_IMX_BBM_NOTIFY_RTC_ROLLOVER | \
++	 SCMI_IMX_BBM_NOTIFY_RTC_ALARM)
++
++#define SCMI_IMX_BBM_EVENT_RTC_MASK		GENMASK(31, 24)
++
++struct scmi_imx_bbm_info {
++	u32 version;
++	int nr_rtc;
++	int nr_gpr;
++};
++
++struct scmi_msg_imx_bbm_protocol_attributes {
++	__le32 attributes;
++};
++
++struct scmi_imx_bbm_set_time {
++	__le32 id;
++	__le32 flags;
++	__le32 value_low;
++	__le32 value_high;
++};
++
++struct scmi_imx_bbm_get_time {
++	__le32 id;
++	__le32 flags;
++};
++
++struct scmi_imx_bbm_alarm_time {
++	__le32 id;
++	__le32 flags;
++	__le32 value_low;
++	__le32 value_high;
++};
++
++struct scmi_msg_imx_bbm_rtc_notify {
++	__le32 rtc_id;
++	__le32 flags;
++};
++
++struct scmi_msg_imx_bbm_button_notify {
++	__le32 flags;
++};
++
++struct scmi_imx_bbm_notify_payld {
++	__le32 flags;
++};
++
++static int scmi_imx_bbm_attributes_get(const struct scmi_protocol_handle *ph,
++				       struct scmi_imx_bbm_info *pi)
++{
++	int ret;
++	struct scmi_xfer *t;
++	struct scmi_msg_imx_bbm_protocol_attributes *attr;
++
++	ret = ph->xops->xfer_get_init(ph, PROTOCOL_ATTRIBUTES, 0, sizeof(*attr), &t);
++	if (ret)
++		return ret;
++
++	attr = t->rx.buf;
++
++	ret = ph->xops->do_xfer(ph, t);
++	if (!ret) {
++		pi->nr_rtc = GET_RTCS_NR(attr->attributes);
++		pi->nr_gpr = GET_GPRS_NR(attr->attributes);
++	}
++
++	ph->xops->xfer_put(ph, t);
++
++	return ret;
++}
++
++static int scmi_imx_bbm_notify(const struct scmi_protocol_handle *ph,
++			       u32 src_id, int message_id, bool enable)
++{
++	int ret;
++	struct scmi_xfer *t;
++
++	if (message_id == IMX_BBM_RTC_NOTIFY) {
++		struct scmi_msg_imx_bbm_rtc_notify *rtc_notify;
++
++		ret = ph->xops->xfer_get_init(ph, message_id,
++					      sizeof(*rtc_notify), 0, &t);
++		if (ret)
++			return ret;
++
++		rtc_notify = t->tx.buf;
++		rtc_notify->rtc_id = cpu_to_le32(0);
++		rtc_notify->flags =
++			cpu_to_le32(enable ? SCMI_IMX_BBM_NOTIFY_RTC_FLAG : 0);
++	} else if (message_id == IMX_BBM_BUTTON_NOTIFY) {
++		struct scmi_msg_imx_bbm_button_notify *button_notify;
++
++		ret = ph->xops->xfer_get_init(ph, message_id,
++					      sizeof(*button_notify), 0, &t);
++		if (ret)
++			return ret;
++
++		button_notify = t->tx.buf;
++		button_notify->flags = cpu_to_le32(enable ? 1 : 0);
++	} else {
++		return -EINVAL;
++	}
++
++	ret = ph->xops->do_xfer(ph, t);
++
++	ph->xops->xfer_put(ph, t);
++	return ret;
++}
++
++static enum scmi_imx_bbm_protocol_cmd evt_2_cmd[] = {
++	IMX_BBM_RTC_NOTIFY,
++	IMX_BBM_BUTTON_NOTIFY
++};
++
++static int scmi_imx_bbm_set_notify_enabled(const struct scmi_protocol_handle *ph,
++					   u8 evt_id, u32 src_id, bool enable)
++{
++	int ret, cmd_id;
++
++	if (evt_id >= ARRAY_SIZE(evt_2_cmd))
++		return -EINVAL;
++
++	cmd_id = evt_2_cmd[evt_id];
++	ret = scmi_imx_bbm_notify(ph, src_id, cmd_id, enable);
++	if (ret)
++		pr_debug("FAIL_ENABLED - evt[%X] dom[%d] - ret:%d\n",
++			 evt_id, src_id, ret);
++
++	return ret;
++}
++
++static void *scmi_imx_bbm_fill_custom_report(const struct scmi_protocol_handle *ph,
++					     u8 evt_id, ktime_t timestamp,
++					     const void *payld, size_t payld_sz,
++					     void *report, u32 *src_id)
++{
++	const struct scmi_imx_bbm_notify_payld *p = payld;
++	struct scmi_imx_bbm_notif_report *r = report;
++
++	if (sizeof(*p) != payld_sz)
++		return NULL;
++
++	if (evt_id == SCMI_EVENT_IMX_BBM_RTC) {
++		r->is_rtc = true;
++		r->is_button = false;
++		r->timestamp = timestamp;
++		r->rtc_id = le32_get_bits(p->flags, SCMI_IMX_BBM_EVENT_RTC_MASK);
++		r->rtc_evt = le32_get_bits(p->flags, SCMI_IMX_BBM_NOTIFY_RTC_FLAG);
++		dev_dbg(ph->dev, "RTC: %d evt: %x\n", r->rtc_id, r->rtc_evt);
++		*src_id = r->rtc_evt;
++	} else if (evt_id == SCMI_EVENT_IMX_BBM_BUTTON) {
++		r->is_rtc = false;
++		r->is_button = true;
++		r->timestamp = timestamp;
++		dev_dbg(ph->dev, "BBM Button\n");
++		*src_id = 0;
++	} else {
++		WARN_ON_ONCE(1);
++		return NULL;
++	}
++
++	return r;
++}
++
++static const struct scmi_event scmi_imx_bbm_events[] = {
++	{
++		.id = SCMI_EVENT_IMX_BBM_RTC,
++		.max_payld_sz = sizeof(struct scmi_imx_bbm_notify_payld),
++		.max_report_sz = sizeof(struct scmi_imx_bbm_notif_report),
++	},
++	{
++		.id = SCMI_EVENT_IMX_BBM_BUTTON,
++		.max_payld_sz = sizeof(struct scmi_imx_bbm_notify_payld),
++		.max_report_sz = sizeof(struct scmi_imx_bbm_notif_report),
++	},
++};
++
++static const struct scmi_event_ops scmi_imx_bbm_event_ops = {
++	.set_notify_enabled = scmi_imx_bbm_set_notify_enabled,
++	.fill_custom_report = scmi_imx_bbm_fill_custom_report,
++};
++
++static const struct scmi_protocol_events scmi_imx_bbm_protocol_events = {
++	.queue_sz = SCMI_PROTO_QUEUE_SZ,
++	.ops = &scmi_imx_bbm_event_ops,
++	.evts = scmi_imx_bbm_events,
++	.num_events = ARRAY_SIZE(scmi_imx_bbm_events),
++	.num_sources = 1,
++};
++
++static int scmi_imx_bbm_rtc_time_set(const struct scmi_protocol_handle *ph,
++				     u32 rtc_id, u64 sec)
++{
++	struct scmi_imx_bbm_info *pi = ph->get_priv(ph);
++	struct scmi_imx_bbm_set_time *cfg;
++	struct scmi_xfer *t;
++	int ret;
++
++	if (rtc_id >= pi->nr_rtc)
++		return -EINVAL;
++
++	ret = ph->xops->xfer_get_init(ph, IMX_BBM_RTC_TIME_SET, sizeof(*cfg), 0, &t);
++	if (ret)
++		return ret;
++
++	cfg = t->tx.buf;
++	cfg->id = cpu_to_le32(rtc_id);
++	cfg->flags = 0;
++	cfg->value_low = cpu_to_le32(lower_32_bits(sec));
++	cfg->value_high = cpu_to_le32(upper_32_bits(sec));
++
++	ret = ph->xops->do_xfer(ph, t);
++
++	ph->xops->xfer_put(ph, t);
++
++	return ret;
++}
++
++static int scmi_imx_bbm_rtc_time_get(const struct scmi_protocol_handle *ph,
++				     u32 rtc_id, u64 *value)
++{
++	struct scmi_imx_bbm_info *pi = ph->get_priv(ph);
++	struct scmi_imx_bbm_get_time *cfg;
++	struct scmi_xfer *t;
++	int ret;
++
++	if (rtc_id >= pi->nr_rtc)
++		return -EINVAL;
++
++	ret = ph->xops->xfer_get_init(ph, IMX_BBM_RTC_TIME_GET, sizeof(*cfg),
++				      sizeof(u64), &t);
++	if (ret)
++		return ret;
++
++	cfg = t->tx.buf;
++	cfg->id = cpu_to_le32(rtc_id);
++	cfg->flags = 0;
++
++	ret = ph->xops->do_xfer(ph, t);
++	if (!ret)
++		*value = get_unaligned_le64(t->rx.buf);
++
++	ph->xops->xfer_put(ph, t);
++
++	return ret;
++}
++
++static int scmi_imx_bbm_rtc_alarm_set(const struct scmi_protocol_handle *ph,
++				      u32 rtc_id, u64 sec)
++{
++	struct scmi_imx_bbm_info *pi = ph->get_priv(ph);
++	struct scmi_imx_bbm_alarm_time *cfg;
++	struct scmi_xfer *t;
++	int ret;
++
++	if (rtc_id >= pi->nr_rtc)
++		return -EINVAL;
++
++	ret = ph->xops->xfer_get_init(ph, IMX_BBM_RTC_ALARM_SET, sizeof(*cfg), 0, &t);
++	if (ret)
++		return ret;
++
++	cfg = t->tx.buf;
++	cfg->id = cpu_to_le32(rtc_id);
++	cfg->flags = SCMI_IMX_BBM_RTC_ALARM_ENABLE_FLAG;
++	cfg->value_low = cpu_to_le32(lower_32_bits(sec));
++	cfg->value_high = cpu_to_le32(upper_32_bits(sec));
++
++	ret = ph->xops->do_xfer(ph, t);
++
++	ph->xops->xfer_put(ph, t);
++
++	return ret;
++}
++
++static int scmi_imx_bbm_button_get(const struct scmi_protocol_handle *ph, u32 *state)
++{
++	struct scmi_xfer *t;
++	int ret;
++
++	ret = ph->xops->xfer_get_init(ph, IMX_BBM_BUTTON_GET, 0, sizeof(u32), &t);
++	if (ret)
++		return ret;
++
++	ret = ph->xops->do_xfer(ph, t);
++	if (!ret)
++		*state = get_unaligned_le32(t->rx.buf);
++
++	ph->xops->xfer_put(ph, t);
++
++	return ret;
++}
++
++static const struct scmi_imx_bbm_proto_ops scmi_imx_bbm_proto_ops = {
++	.rtc_time_get = scmi_imx_bbm_rtc_time_get,
++	.rtc_time_set = scmi_imx_bbm_rtc_time_set,
++	.rtc_alarm_set = scmi_imx_bbm_rtc_alarm_set,
++	.button_get = scmi_imx_bbm_button_get,
++};
++
++static int scmi_imx_bbm_protocol_init(const struct scmi_protocol_handle *ph)
++{
++	u32 version;
++	int ret;
++	struct scmi_imx_bbm_info *binfo;
++
++	ret = ph->xops->version_get(ph, &version);
++	if (ret)
++		return ret;
++
++	dev_info(ph->dev, "NXP SM BBM Version %d.%d\n",
++		 PROTOCOL_REV_MAJOR(version), PROTOCOL_REV_MINOR(version));
++
++	binfo = devm_kzalloc(ph->dev, sizeof(*binfo), GFP_KERNEL);
++	if (!binfo)
++		return -ENOMEM;
++
++	ret = scmi_imx_bbm_attributes_get(ph, binfo);
++	if (ret)
++		return ret;
++
++	return ph->set_priv(ph, binfo, version);
++}
++
++static const struct scmi_protocol scmi_imx_bbm = {
++	.id = SCMI_PROTOCOL_IMX_BBM,
++	.owner = THIS_MODULE,
++	.instance_init = &scmi_imx_bbm_protocol_init,
++	.ops = &scmi_imx_bbm_proto_ops,
++	.events = &scmi_imx_bbm_protocol_events,
++	.supported_version = SCMI_PROTOCOL_SUPPORTED_VERSION,
++	.vendor_id = "NXP",
++	.sub_vendor_id = "IMX",
++};
++module_scmi_protocol(scmi_imx_bbm);
+diff --git a/include/linux/scmi_imx_protocol.h b/include/linux/scmi_imx_protocol.h
+new file mode 100644
+index 000000000000..e59aedaa4aec
+--- /dev/null
++++ b/include/linux/scmi_imx_protocol.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * SCMI Message Protocol driver NXP extension header
++ *
++ * Copyright 2024 NXP.
++ */
++
++#ifndef _LINUX_SCMI_NXP_PROTOCOL_H
++#define _LINUX_SCMI_NXP_PROTOCOL_H
++
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/notifier.h>
++#include <linux/types.h>
++
++enum scmi_nxp_protocol {
++	SCMI_PROTOCOL_IMX_BBM = 0x81,
++};
++
++struct scmi_imx_bbm_proto_ops {
++	int (*rtc_time_set)(const struct scmi_protocol_handle *ph, u32 id,
++			    uint64_t sec);
++	int (*rtc_time_get)(const struct scmi_protocol_handle *ph, u32 id,
++			    u64 *val);
++	int (*rtc_alarm_set)(const struct scmi_protocol_handle *ph, u32 id,
++			     u64 sec);
++	int (*button_get)(const struct scmi_protocol_handle *ph, u32 *state);
++};
++
++enum scmi_nxp_notification_events {
++	SCMI_EVENT_IMX_BBM_RTC = 0x0,
++	SCMI_EVENT_IMX_BBM_BUTTON = 0x1,
++};
++
++struct scmi_imx_bbm_notif_report {
++	bool			is_rtc;
++	bool			is_button;
++	ktime_t			timestamp;
++	unsigned int		rtc_id;
++	unsigned int		rtc_evt;
++};
++#endif
 
 -- 
 2.37.1
