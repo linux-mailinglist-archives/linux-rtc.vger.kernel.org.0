@@ -1,114 +1,101 @@
-Return-Path: <linux-rtc+bounces-1395-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1396-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 432E1914EAD
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 15:34:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A18AC914F76
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 16:01:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFD371F20F80
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 13:34:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51FEA1F21077
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 14:01:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3C61422CD;
-	Mon, 24 Jun 2024 13:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183EC20330;
+	Mon, 24 Jun 2024 14:01:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="IboTz0Ds"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHGiWIT6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFB41411CA;
-	Mon, 24 Jun 2024 13:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280841E511
+	for <linux-rtc@vger.kernel.org>; Mon, 24 Jun 2024 14:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719235834; cv=none; b=MqRityaFLnUVGBqzz/OHTFiu0YgSLufKFYQPsvYEawz4fY7n/ubLanoDAllZW4VlEcPhwoYybCr8NPtUAJaajYbfZSanYYnbkze8xuWOVb7Oi/DmjoWr+Hqy5f1KtAIJUCevKWO6qLk3Py3tF5x3l+rgAVkfKasfor+yaj1ED3o=
+	t=1719237694; cv=none; b=ku38BgboC9Qt4vVqO66ZjxUuFx8h62T4Z+tFDqj8kZSD22t1sqXtxU4Hk83PXwBnLNaGC0H/9eC1slJXpMajmI0wby9Teob2w+rZ+Y0PWKxPoG5cmLC6DVE02JniPsae8Q3JtnMFs8o22hrkqTVQ9U9vN3VMliMngY5wpEhBk6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719235834; c=relaxed/simple;
-	bh=UBleO9zGqUi+EOpv9VyXpenOVwlXiPyerA711f0tXZE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=frJH/OM9kuEZzb83hPOiDQFZWN5KJjcU0/AvfFJPk42xTbhSeP5Jhnb24oclUdTM5BGI5D0FeSuIPNicpvZeLEkXjs+75VtRFRNIz1lLoDodIgm0yhKSsJLtFCZSx7ilXDhqQOC/ydmMBKf9B9QkeR4hvwglZu25RJEb4vWkbKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=IboTz0Ds; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 8EA26A07A2;
-	Mon, 24 Jun 2024 15:30:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=MJYDT4HIlCNB5xOSytgI
-	kxpSZMauGlsPUwwfIaNASJ0=; b=IboTz0DsQN+Np2VtWClGtYdlL/zLrJfUOncI
-	ekAPMzoBf5Vvt0Ezo6FYIxCouVuvVQkN7WXJKGHKjDrjcDQWgVBn2ANla0x0NfE+
-	0xjr6zNUBQKBud2Kv7FY/EcS/vQ9Mg8RdCfYjsOBbCKn3We6wkCVSYLwFfbncDaJ
-	QLE/iYCBGfhRHyRwenJhANWyT4NhK+VR0ggSBqoULqRdZQU5Xl1Cd8IxewmjrML4
-	LyRPRooydhGRDcfY8CU8Uns0OoF7vJS6Jtjpgg7Uc5xLhYWroUT66G4FuqLpgL97
-	4NRWv257uDSjeT1jycW76awYhKa9NTr5yzHdpE3HfPTilEgMPTPBif0Hgf6tetFT
-	rr8jy0ihYOJwWKo3easV7QaDDlGfCPOBRbXr1t60V2KreCoRVA0b8lZGGu/fFBid
-	jh92SCQf0P/ftcGy5VNNmhAjIPX8GHW3knFFINUJXK/AMI6OkHZY6HStR7gDgh3e
-	CadYN56Oe5UQyMOvSUnL7nbNgkSByewqqG5AsDGVDbpILcHs+LsmcJ5MiLtYwwvW
-	b1ryr16bTFHRMO8hDBS6UDSrD4TelVuEoJTHWUQLTLeyA28wjip/5EK+fursG5xJ
-	zsVzDus4Zwnt3OsRWIfeuflso2G9pGNb7gk8pk+7FKAf3cCP/vHCz3uAGINkFW0a
-	9Zda5DI=
-Message-ID: <de896abc-aa93-4886-a414-ad992605ba91@prolan.hu>
-Date: Mon, 24 Jun 2024 15:30:25 +0200
+	s=arc-20240116; t=1719237694; c=relaxed/simple;
+	bh=vTMD0I/uF9P38RZWO64q+lixudVrw+D6GXCczK5PXXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=esX/TgWB3pJdb6NK/KFBlZ7DX6bRg5MeFu8CKW4eFZ0S3kLe94anwQZJ1L+nAZyaMl6nCMm+P5kAFG3Fenfj2EDJPOUWIGv2hz554laJ0syXQmVh3o6lC+QM6obVnQAbH90X03NcrGaEM7lw6ggWOJlYmLwm9rjc+TSFmP9lkr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kHGiWIT6; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42122ac2f38so25726085e9.1
+        for <linux-rtc@vger.kernel.org>; Mon, 24 Jun 2024 07:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719237690; x=1719842490; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vTMD0I/uF9P38RZWO64q+lixudVrw+D6GXCczK5PXXQ=;
+        b=kHGiWIT6432/505KFQcOWQp4/7qyFuGqsh77i426AIchi7Y06x9YOrGiblkULoIlOb
+         SKibjbRCEnsGFTCgKepTyL5tuPuw0TmNPqCoCsNXBOZNOyn2chKCkC7i7YyKuTjor42J
+         Zpg/+FOTpFd/h6tJP7iNrQOwc0QJnubCgILIZUuVz9RaM3vIk/KyjClHAQjpRf3oEnkK
+         q8k2gUu3afq8gZgNjT82NBqA2MYyYjWT3d5U9C6/MqUAXcG6u5TWQBw8R7ITmJaaPrua
+         pP48rSR1PPOdb7qqAJq+UuBbAUzpo7XL8x0b/VihzrWQl1+HmTVM+I65PrWDUyghXkJD
+         I/SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719237690; x=1719842490;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vTMD0I/uF9P38RZWO64q+lixudVrw+D6GXCczK5PXXQ=;
+        b=HLLBjJ1pYukpcn6V7y1+dm4S3kGcxEqnrOHwCPYewSJcCDWK2MgM/jvBG0/HvvZPG0
+         bWXyCwP6CQa2Ox9Y27J9LjBa6wCexrK/VFXEbg+zvqxz5kQnSjRkur42D9o+ge70X7Ii
+         trHVoL25fkawIMbZJZTigj6VUNzXZZJEYAgWsJL6Hgfik0lVtJFYrfLBi9JXiQLMgcqH
+         EymTFeythDwMBreYBhG14+tmihUToM2V2spwUesnBqQRvsxLwx8GFENC1YgYeYP7yCY2
+         VxCK++pGGLXvfNfyjhXyvOvYXKpV4mTeQG2yclZkMJIwAmeWZCa4O7vN6QzBbGhlFgUU
+         hRAA==
+X-Gm-Message-State: AOJu0Yy4tA/g2TYggAzMX2YbXmqe5dX5D3tjBBK+rZHkyb4vwe3UdQOS
+	EM9UZbf6X1+1LTNoLGb6+AOta8TIq0IqrK3RpOxdHDbzA/af9Hfh
+X-Google-Smtp-Source: AGHT+IHBoK7bl5JpRd2kqvTViSO0VqjGI4tPuShP/YU4qE8ypw8DlRDwXTWkjsQprVK3si78d11w2w==
+X-Received: by 2002:a05:600c:4e8a:b0:424:71f7:77f2 with SMTP id 5b1f17b1804b1-42489533eacmr46657945e9.16.1719237690198;
+        Mon, 24 Jun 2024 07:01:30 -0700 (PDT)
+Received: from ubuntu2204 (fgw-godollo.uni-mate.hu. [192.188.242.165])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42481910fa7sm139031195e9.29.2024.06.24.07.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 07:01:29 -0700 (PDT)
+Date: Mon, 24 Jun 2024 16:01:28 +0200
+From: =?utf-8?B?VMOzdGggSsOhbm9z?= <gomba007@gmail.com>
+To: csokas.bence@prolan.hu, alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v4] drivers: rtc: Add driver for SD2405AL.
+Message-ID: <lmr2wpyqxprizxdk6jilhdhokp2spimfojtwkbbapkpkom25sr@lvoj7yifrxq3>
+References: <20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com>
+ <de896abc-aa93-4886-a414-ad992605ba91@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] drivers: rtc: Add driver for SD2405AL.
-To: <gomba007@gmail.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-References: <20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com>
-Content-Language: en-US
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2945A129576C7665
+In-Reply-To: <de896abc-aa93-4886-a414-ad992605ba91@prolan.hu>
 
 Hi!
-As per my last email,
 
-On 6/24/24 13:25, T贸th J谩nos via B4 Relay wrote:
-> From: T贸th J谩nos <gomba007@gmail.com>
-> 
-> Add support for the DFRobot SD2405AL I2C RTC Module.
-> 
-> Datasheet:
-> 	https://image.dfrobot.com/image/data/TOY0021/SD2405AL%20datasheet%20(Angelo%20v0.1).pdf
-> 
-> Product:
-> 	https://www.dfrobot.com/product-1600.html
-> 
-> To instantiate (assuming device is connected to I2C-1)
-> as root:
-> 	echo sd2405al 0x32 > /sys/bus/i2c/devices/i2c-1/new_device
-> as user:
-> 	echo 'sd2405al 0x32' | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
-> 
-> The driver is tested with:
-> 	+ hwclock
-> 	+ tools/testing/selftests/rtc/setdate
-> 	+ tools/testing/selftests/rtc/rtctest
-> 
-> Signed-off-by: T贸th J谩nos <gomba007@gmail.com>
+> Reviewed-by: Cs髃醩, Bence <csokas.bence@prolan.hu>
 
-Reviewed-by: Cs贸k谩s, Bence <csokas.bence@prolan.hu>
+Thank you for your help!
 
- > ---
- > Changes in v4:
- > - Implement more comprehensive data validation.
+> BTW why did you decide to add this? Did you have problems with these high
+> bits getting set?
 
-BTW why did you decide to add this? Did you have problems with these 
-high bits getting set?
+I wasn't satisfied with the previous check. The mentioned bits must be 0
+if the time is valid. I think this is a better way to check for correctness.
 
-Bence
-
+J醤os
 
