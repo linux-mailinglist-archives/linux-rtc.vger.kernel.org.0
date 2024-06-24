@@ -1,101 +1,114 @@
-Return-Path: <linux-rtc+bounces-1394-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1395-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 568729148F8
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 13:42:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 432E1914EAD
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 15:34:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EBB81F226C9
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 11:42:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFD371F20F80
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 Jun 2024 13:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FED139587;
-	Mon, 24 Jun 2024 11:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3C61422CD;
+	Mon, 24 Jun 2024 13:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=phytec.de header.i=@phytec.de header.b="NDUT33qo"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="IboTz0Ds"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8709E125D6
-	for <linux-rtc@vger.kernel.org>; Mon, 24 Jun 2024 11:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.26.50.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFB41411CA;
+	Mon, 24 Jun 2024 13:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719229315; cv=none; b=Cxky2zmycLigSIz1TNdr8Xz58KWIgn7k0sKRY0zQ/AUK7/sHKJGInBD3WZeBxtqwr7O5Y8/I9Wbo/rojLJNwNnXc6IUH77E4UL7GHPgNMgsllOtnpmuGRj+lHtsZJoTqq3MwflYFzUPV8gMKe3CbZMa5LAoRJXOjehl26GafmBg=
+	t=1719235834; cv=none; b=MqRityaFLnUVGBqzz/OHTFiu0YgSLufKFYQPsvYEawz4fY7n/ubLanoDAllZW4VlEcPhwoYybCr8NPtUAJaajYbfZSanYYnbkze8xuWOVb7Oi/DmjoWr+Hqy5f1KtAIJUCevKWO6qLk3Py3tF5x3l+rgAVkfKasfor+yaj1ED3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719229315; c=relaxed/simple;
-	bh=AijBxoAfmMIAkX73H7vl3+78cSiJ+jq7pp7HVYLFovg=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=DYZVwqC4frKEP32YQkK4DxuEiNWdWQkwD9mkV87SaM1m6pXsHnCgmQK3vl5Mb+DnEaCmQi0XXIx2XfS/oNbxlG5hY+10DgUWiRzA57JsSFPXbYPTcwTnO6aN8wdoNk1ORZAsqJm6994lYXAfd+HVdKyLN+GwPuXhuOVL1PmThWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytec.de; spf=pass smtp.mailfrom=phytec.de; dkim=pass (1024-bit key) header.d=phytec.de header.i=@phytec.de header.b=NDUT33qo; arc=none smtp.client-ip=91.26.50.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=phytec.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=phytec.de
-DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
-	q=dns/txt; i=@phytec.de; t=1719229301; x=1721821301;
-	h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=AijBxoAfmMIAkX73H7vl3+78cSiJ+jq7pp7HVYLFovg=;
-	b=NDUT33qo3EilyGayT3njKZnpW84oPETD3HZrFJoQLo41ts19bUoLinpqr12Qhrxt
-	Z7b8gHQV2JzI/X5NqMOJBIjzdz97iygTrkcsrafJDCKMtvdbqm+kWGVQltaILuWs
-	wymXOSCioZaw489NNs+A5h/X8iqpK2nbGBN6Q2ZfG2A=;
-X-AuditID: ac14000a-03251700000021bc-c4-66795b750406
-Received: from florix.phytec.de (Unknown_Domain [172.25.0.13])
-	(using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(Client did not present a certificate)
-	by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 93.C2.08636.57B59766; Mon, 24 Jun 2024 13:41:41 +0200 (CEST)
-Received: from Berlix.phytec.de (172.25.0.12) by Florix.phytec.de
- (172.25.0.13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Mon, 24 Jun
- 2024 13:41:41 +0200
-Received: from Berlix.phytec.de ([fe80::197e:d26b:2ca:c7b4]) by
- berlix.phytec.de ([fe80::197e:d26b:2ca:c7b4%4]) with mapi id 15.01.2507.006;
- Mon, 24 Jun 2024 13:41:41 +0200
-From: Leonard Anderweit <L.Anderweit@phytec.de>
-To: "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-	"arnd@arndb.de" <arnd@arndb.de>
-CC: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"upstream@phytec.de" <upstream@phytec.de>
-Subject: Question about [PATCH] [RFC] rtc: y2038: remove broken RTC_HCTOSYS
- workaround
-Thread-Topic: Question about [PATCH] [RFC] rtc: y2038: remove broken
- RTC_HCTOSYS workaround
-Thread-Index: AQHaxit7Na9swo4O+UmGER8BNQyYMw==
-Date: Mon, 24 Jun 2024 11:41:41 +0000
-Message-ID: <cf6ac9542f58a33b146ad7b0f5577e1dff3becab.camel@phytec.de>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0FEC28AE4A6F8B48B788FEA61D7C15EE@phytec.de>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1719235834; c=relaxed/simple;
+	bh=UBleO9zGqUi+EOpv9VyXpenOVwlXiPyerA711f0tXZE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=frJH/OM9kuEZzb83hPOiDQFZWN5KJjcU0/AvfFJPk42xTbhSeP5Jhnb24oclUdTM5BGI5D0FeSuIPNicpvZeLEkXjs+75VtRFRNIz1lLoDodIgm0yhKSsJLtFCZSx7ilXDhqQOC/ydmMBKf9B9QkeR4hvwglZu25RJEb4vWkbKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=IboTz0Ds; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 8EA26A07A2;
+	Mon, 24 Jun 2024 15:30:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=MJYDT4HIlCNB5xOSytgI
+	kxpSZMauGlsPUwwfIaNASJ0=; b=IboTz0DsQN+Np2VtWClGtYdlL/zLrJfUOncI
+	ekAPMzoBf5Vvt0Ezo6FYIxCouVuvVQkN7WXJKGHKjDrjcDQWgVBn2ANla0x0NfE+
+	0xjr6zNUBQKBud2Kv7FY/EcS/vQ9Mg8RdCfYjsOBbCKn3We6wkCVSYLwFfbncDaJ
+	QLE/iYCBGfhRHyRwenJhANWyT4NhK+VR0ggSBqoULqRdZQU5Xl1Cd8IxewmjrML4
+	LyRPRooydhGRDcfY8CU8Uns0OoF7vJS6Jtjpgg7Uc5xLhYWroUT66G4FuqLpgL97
+	4NRWv257uDSjeT1jycW76awYhKa9NTr5yzHdpE3HfPTilEgMPTPBif0Hgf6tetFT
+	rr8jy0ihYOJwWKo3easV7QaDDlGfCPOBRbXr1t60V2KreCoRVA0b8lZGGu/fFBid
+	jh92SCQf0P/ftcGy5VNNmhAjIPX8GHW3knFFINUJXK/AMI6OkHZY6HStR7gDgh3e
+	CadYN56Oe5UQyMOvSUnL7nbNgkSByewqqG5AsDGVDbpILcHs+LsmcJ5MiLtYwwvW
+	b1ryr16bTFHRMO8hDBS6UDSrD4TelVuEoJTHWUQLTLeyA28wjip/5EK+fursG5xJ
+	zsVzDus4Zwnt3OsRWIfeuflso2G9pGNb7gk8pk+7FKAf3cCP/vHCz3uAGINkFW0a
+	9Zda5DI=
+Message-ID: <de896abc-aa93-4886-a414-ad992605ba91@prolan.hu>
+Date: Mon, 24 Jun 2024 15:30:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmkeLIzCtJLcpLzFFi42JZI8nAq1saXZlmcGu9rkX7u2XsFn8nHWO3
-	uLxrDpvFsdVX2BxYPH7/msToMW9NtcfnTXIBzFFcNimpOZllqUX6dglcGTNefWUruMNScXLb
-	YpYGxjMsXYycHBICJhKv7p1k7mLk4hASWMIkceLxRyYI5z6jxIHrf6CcDYwSS38tYwJpYRPQ
-	l1i54ikziC0ikCbxvHMmI0gRs8BKRomPU5axdzFycAgLREh0v7OCqImVOHflNRtIWERAT2Ld
-	QwOQMIuAqkTXmbfsIDavgJvEo/btbCA2o4CsxIYN58HGMwuIS2x69p0V4lIBiSV7IOISAqIS
-	Lx//g4rLS5y4NY0JZDyzgKbE+l36EK0WEtN3v2KDsBUlpnQ/hFolKHFy5hOWCYyis5BsmIXQ
-	PQtJ9ywk3bOQdC9gZF3FKJSbmZydWpSZrVeQUVmSmqyXkrqJERRRIgxcOxj75ngcYmTiYDzE
-	KMHBrCTCO72+LE2INyWxsiq1KD++qDQntfgQozQHi5I47+qO4FQhgfTEktTs1NSC1CKYLBMH
-	p1QDo366lernqzz7nb7a5We3yRZt6JupGxDstzFq9XyrcE5lp81d3At/M827sO2VjknvjiXe
-	amJxaowrJDcxldk/YWdkUX9Q/0qr7KJpSvCz5kObntxauPuU1s5vXMEzI7lnTlzl/W+NznHl
-	WQUcc7zEmLfUMZZG7+/qZrN4vmmH54znkiZMzld/KrEUZyQaajEXFScCAPQzlQmWAgAA
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] drivers: rtc: Add driver for SD2405AL.
+To: <gomba007@gmail.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
+References: <20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com>
+Content-Language: en-US
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2945A129576C7665
 
-SGksDQoNCkkgZm91bmQgdGhpcyBwYXRjaCBbMV0gd2hpY2ggaXMgbmVjZXNzYXJ5IGZvciBhIHBy
-b2plY3QgSSdtIGN1cnJlbnRseQ0Kd29ya2luZyBvbi4gSSdtIHVzaW5nIHBoeWJvYXJkLXdlZ2Eg
-WzJdIHdpdGggYW4gYW0zMzUgQVJNIFNvQyB3aGljaCBJDQp3YW50IHRvIG1ha2UgeTIwMzggcHJv
-b2YuDQpJcyB0aGVyZSBhbnkgcmVhc29uIGl0IHdhcyBuZXZlciBhY2NlcHRlZD8NCg0KWzFdaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjIwOTA4MTE1MzM3LjE2MDQyNzctMS1hcm5kQGtl
-cm5lbC5vcmcvDQoNCg0KWzJdaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tl
-cm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC90cmVlL2FyY2gvYXJtL2Jvb3QvZHRzL3RpL29tYXAv
-YW0zMzV4LXdlZ2EtcmRrLmR0cw0KDQpSZWdhcmRzDQpMZW9uYXJkDQo=
+Hi!
+As per my last email,
+
+On 6/24/24 13:25, Tóth János via B4 Relay wrote:
+> From: Tóth János <gomba007@gmail.com>
+> 
+> Add support for the DFRobot SD2405AL I2C RTC Module.
+> 
+> Datasheet:
+> 	https://image.dfrobot.com/image/data/TOY0021/SD2405AL%20datasheet%20(Angelo%20v0.1).pdf
+> 
+> Product:
+> 	https://www.dfrobot.com/product-1600.html
+> 
+> To instantiate (assuming device is connected to I2C-1)
+> as root:
+> 	echo sd2405al 0x32 > /sys/bus/i2c/devices/i2c-1/new_device
+> as user:
+> 	echo 'sd2405al 0x32' | sudo tee /sys/class/i2c-adapter/i2c-1/new_device
+> 
+> The driver is tested with:
+> 	+ hwclock
+> 	+ tools/testing/selftests/rtc/setdate
+> 	+ tools/testing/selftests/rtc/rtctest
+> 
+> Signed-off-by: Tóth János <gomba007@gmail.com>
+
+Reviewed-by: Csókás, Bence <csokas.bence@prolan.hu>
+
+ > ---
+ > Changes in v4:
+ > - Implement more comprehensive data validation.
+
+BTW why did you decide to add this? Did you have problems with these 
+high bits getting set?
+
+Bence
+
 
