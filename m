@@ -1,90 +1,90 @@
-Return-Path: <linux-rtc+bounces-1412-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1413-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56F9091B22A
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 00:23:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2E4891B241
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 00:35:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1208E28245A
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jun 2024 22:23:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC5B0B20CB4
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jun 2024 22:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F6EC1A2C3A;
-	Thu, 27 Jun 2024 22:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59841A255F;
+	Thu, 27 Jun 2024 22:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JVyPk31/"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hLOML0Kt"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114CF1A2572;
-	Thu, 27 Jun 2024 22:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0B619B590;
+	Thu, 27 Jun 2024 22:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719526972; cv=none; b=pvww03BcyQ1uq9opdK+tLFf1U8zO6vMxmUvoogwD1JiUE/jlmJb3xwhsqqPGlbbcVjN6ZfXhOWNHArR6dFMLrWZMJHrHxlS81RIkPWSN5AL3SHYXA8KBKSCRtU5u6DZz8OzrSYFxMQthnh2DWCTNaBjRuRh8God5Qy3DCSJ1eRA=
+	t=1719527701; cv=none; b=C5UTIEBcb+Q7i1GGXgMpg57dxBIE8yjGD5eqeYnqq9/o46AoOO08Ig7N8b0OCIjQRlpTTTKad2mnlc2gUxnTxKgLIR93C0fsHnkmlGV2ZqsweVvNlIBrzzRUcYeHBf8X39+PFIx6ha7cIsSxhwTi3dPikYTNixd8fOYEYbREQDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719526972; c=relaxed/simple;
-	bh=P/R/XclvRTQG9UOj5wLHoY4ELYddOw315pivumemjKA=;
+	s=arc-20240116; t=1719527701; c=relaxed/simple;
+	bh=K2kDsg52vVz9RUL430PcnuYfab9jZLTP0mf/Z1Zl4PQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KDD1qZqZST8hZRYXR/ddOeaIvN2+UFCuD67RRcPTANO92p8k6QrrxqOQ9l93DyBiRIH+kaUiEBF5GclLaBJUlM65dXvBPsLHOt4WDO3BLoGrfhJ4P3GQy6gjfI20vtOXjAhd6UJaqcSaJt+SfDeFT1SE5N4aO8Q12gVy+5fnt54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JVyPk31/; arc=none smtp.client-ip=217.70.183.199
+	 Content-Type:Content-Disposition:In-Reply-To; b=hSbX1xGpfv+O3ocqX1ZoKOY9jorOeqIex0LGYBu+fL9INYx8/7SmNcrAZzYvXagOM/HGnzWdP5Jq/TbSI4VcMmlHv6GtecuVcbYgx+ZR+3kbKmycUGsdWAZb+IBZkMijPsR9Wu4f1bsCQp4ttGHQ8kitQIioZMc4Hysh2G2LTks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hLOML0Kt; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1F899FF803;
-	Thu, 27 Jun 2024 22:22:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D96E71C0002;
+	Thu, 27 Jun 2024 22:34:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1719526968;
+	t=1719527697;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=WxKgGfDQehzp1iUgUUGOCUkEwku2cVfuL5zbBLx3j0M=;
-	b=JVyPk31/pm8Xu2mnaPsuukmL8vt+083cuM3QQr40cV+y6KxSpMEfMHn1luJoh1O+asMTvX
-	6ar4ljlyZ7OqT5KzMjkXojfJYZzuqMpjxeHMGOjw4T8umdkLcUTYJCaliKT/5zX/Zlq7Yh
-	iZcdVgM9jRm/34YZ6LiIwu7jI7+IJ7I4u+/QCBC6Bwm98Tm9Hn6WT4MgcNayI4PJLsHpSM
-	WHeC4I2QCLc5DNlFOEbJripfvjfa6zMM1BsCUDle5zpjodE2bR80Cd2E85AvKG7Eko119V
-	7HbaGMIS/GLWgtmtaa2nWoSmj3Mt1wOqfCV/nEE5PI+To6wJ39pDn58BAIdBIg==
-Date: Fri, 28 Jun 2024 00:22:47 +0200
+	bh=QhSN+gswhJhYzZia9AYJut7HAbSQRvAwzrg+PCmSmQg=;
+	b=hLOML0KtDtKfaRf7RqxU1K8yIhgZH6jOSbHRSK40nbAGr47i5o68SGEy86JnBM2Cd7ObvK
+	LmUH31SIn5tjkpO6JLPBtVjcA/HuBZd8dHiG5+VLRsoNX+JEwgUURebij6sbzP/27f//Wf
+	y6kXy1bWog2vmnxVyqsSeoJgNIkHq9MwNrL3S3dfNNMhx1B0fDPDrT8vP4tkDQfP72LqPD
+	6tKag9eajICMekEwAMSCQX66NTlALcK6HF047VHhhd+rEkZHXhRVPbvfw04G9P66Oyzb4H
+	+lgOO10dPRpCLV+HaqMEAqbWLCHfwB7ivwGYGa/WRts69Eug50wj3e/fiUiD2g==
+Date: Fri, 28 Jun 2024 00:34:54 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Richard Genoud <richard.genoud@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Udit Kumar <u-kumar1@ti.com>,
-	Thomas Richard <thomas.richard@bootlin.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Esteban Blanc <eblanc@baylibre.com>, linux-rtc@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] rtc: tps6594: Add power management support
-Message-ID: <171952691796.520431.13640268921597343270.b4-ty@bootlin.com>
-References: <20240618141851.1810000-1-richard.genoud@bootlin.com>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: linux-rtc@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 0/2] Update correct procedure for clearing alarm
+Message-ID: <171952768202.522224.991669838508358396.b4-ty@bootlin.com>
+References: <20240618152635.48956-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240618141851.1810000-1-richard.genoud@bootlin.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240618152635.48956-1-biju.das.jz@bp.renesas.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, 18 Jun 2024 16:18:48 +0200, Richard Genoud wrote:
-> This series add power management support for tps6594_rtc.
-> 
-> The 1st patch fixes a memleak found in the probe()
-> The 2nd patch simply introduce a private structure as drvdata that will
-> be used in the 3rd patch. (no functionnal change)
-> The 3rd patch introduce the power management support.
+On Tue, 18 Jun 2024 16:26:29 +0100, Biju Das wrote:
+> As per the latest HW manual[1], the INT# output is pulled low after the
+> alarm is triggered. After the INT# output is pulled low, it is low for at
+> least 250ms, even if the correct action is taken to clear it. It is
+> impossible to clear ALM if it is still active. The host must wait for the
+> RTC to progress past the alarm time plus the 250ms delay before clearing
+> ALM. Apart from this, there is an internal delay(~250 microsec) from
+> setting ALME = 0 to disabling the alarm function, so the user must add a
+> short delay of greater than 250µs between setting ALME = 0 and clearing
+> ALM.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] rtc: tps6594: Fix memleak in probe
-      https://git.kernel.org/abelloni/c/94d4154792ab
-[2/3] rtc: tps6594: introduce private structure as drvdata
-      https://git.kernel.org/abelloni/c/29bf97586f18
-[3/3] rtc: tps6594: Add power management support
-      https://git.kernel.org/abelloni/c/c88014c7aa5c
+[1/2] rtc: isl1208: Add a delay for clearing alarm
+      https://git.kernel.org/abelloni/c/0dbd610c426e
+[2/2] rtc: isl1208: Update correct procedure for clearing alarm
+      https://git.kernel.org/abelloni/c/43696b3a9e46
 
 Best regards,
 
