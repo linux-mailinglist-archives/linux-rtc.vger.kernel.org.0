@@ -1,90 +1,83 @@
-Return-Path: <linux-rtc+bounces-1413-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1414-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2E4891B241
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 00:35:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F14B491B243
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 00:35:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC5B0B20CB4
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jun 2024 22:35:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C7481C22780
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jun 2024 22:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59841A255F;
-	Thu, 27 Jun 2024 22:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6781A2572;
+	Thu, 27 Jun 2024 22:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hLOML0Kt"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HGuGbMVO"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0B619B590;
-	Thu, 27 Jun 2024 22:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59281A255F;
+	Thu, 27 Jun 2024 22:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719527701; cv=none; b=C5UTIEBcb+Q7i1GGXgMpg57dxBIE8yjGD5eqeYnqq9/o46AoOO08Ig7N8b0OCIjQRlpTTTKad2mnlc2gUxnTxKgLIR93C0fsHnkmlGV2ZqsweVvNlIBrzzRUcYeHBf8X39+PFIx6ha7cIsSxhwTi3dPikYTNixd8fOYEYbREQDY=
+	t=1719527713; cv=none; b=QmVxC2osuu1HecOn6jmxB+cl2b6R5zP1Rbvw7yzy1Ki7WxvxafuAbSDbzowAyQ5M0JH5yU/DnVNoETH6hVrNBYoGcDtoPBL6wEnx40vW3AvWOZo0cMPycazenx8kQTSk9sMau/jJ621gQ3EO7zk7LQCIVVEeMJtMse5HRlU2X1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719527701; c=relaxed/simple;
-	bh=K2kDsg52vVz9RUL430PcnuYfab9jZLTP0mf/Z1Zl4PQ=;
+	s=arc-20240116; t=1719527713; c=relaxed/simple;
+	bh=9CuEBe6zrHcEN9lEnP7x5jJ7DI8h0/UB+6346Z0mPGU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hSbX1xGpfv+O3ocqX1ZoKOY9jorOeqIex0LGYBu+fL9INYx8/7SmNcrAZzYvXagOM/HGnzWdP5Jq/TbSI4VcMmlHv6GtecuVcbYgx+ZR+3kbKmycUGsdWAZb+IBZkMijPsR9Wu4f1bsCQp4ttGHQ8kitQIioZMc4Hysh2G2LTks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hLOML0Kt; arc=none smtp.client-ip=217.70.183.197
+	 Content-Type:Content-Disposition:In-Reply-To; b=LhUfYfTWfQmJRsMctduDXyVT2FSClqJVv9Vj6F8X1iZ5otlUOXs2ESKMy8ApYjGlkska2uKx2yrcJAuy1CzJnb/gyN7XVE5Myn316YVMfhSkh8A+81J4QodmKIRFih1qvB43VAImir3mmrQehy83ptPDlddgZLOOJlUjCG16zIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HGuGbMVO; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D96E71C0002;
-	Thu, 27 Jun 2024 22:34:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 014EFE0003;
+	Thu, 27 Jun 2024 22:35:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1719527697;
+	t=1719527704;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QhSN+gswhJhYzZia9AYJut7HAbSQRvAwzrg+PCmSmQg=;
-	b=hLOML0KtDtKfaRf7RqxU1K8yIhgZH6jOSbHRSK40nbAGr47i5o68SGEy86JnBM2Cd7ObvK
-	LmUH31SIn5tjkpO6JLPBtVjcA/HuBZd8dHiG5+VLRsoNX+JEwgUURebij6sbzP/27f//Wf
-	y6kXy1bWog2vmnxVyqsSeoJgNIkHq9MwNrL3S3dfNNMhx1B0fDPDrT8vP4tkDQfP72LqPD
-	6tKag9eajICMekEwAMSCQX66NTlALcK6HF047VHhhd+rEkZHXhRVPbvfw04G9P66Oyzb4H
-	+lgOO10dPRpCLV+HaqMEAqbWLCHfwB7ivwGYGa/WRts69Eug50wj3e/fiUiD2g==
-Date: Fri, 28 Jun 2024 00:34:54 +0200
+	bh=8mKAZqsaxRvdEmL/mKpUjcOj85cPifIRu9RTJdJ3AXc=;
+	b=HGuGbMVOVUE4re88qsg+OWO+lFU1KxgLh4QNbkeTlc8drgBNFCY9CsIOyFfwa0Wh+QBoRH
+	nObpKSki8QKgE1Li9GWnS3Z4l3NTUbQQNn61g0+226+SBbwGzV3Q1o4jy70gocGq4x2ThI
+	smM7rQCZWWM6WhlQV91TzWXNRWTIn98ffIJfPJ78n/G4Ycd+eyQf//rkUB1j4lSlnYSi8Q
+	sQMmBAxaWU0v2O1M/3iixBQfmFhv+bPdYAw1PGKCOM87/s7VJf3398qsve91mwxMdhYmUi
+	qPuXhGrsf++rpIg1JllNMvwBY0jtJcdUZvcq7SO0hQMJe4Dz+rZxao754/D6cw==
+Date: Fri, 28 Jun 2024 00:35:03 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: linux-rtc@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 0/2] Update correct procedure for clearing alarm
-Message-ID: <171952768202.522224.991669838508358396.b4-ty@bootlin.com>
-References: <20240618152635.48956-1-biju.das.jz@bp.renesas.com>
+To: krzk@kernel.org, Frank Li <Frank.Li@nxp.com>
+Cc: Frank.li@nxp.com, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, krzk+dt@kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	robh@kernel.org
+Subject: Re: [PATCH v2 1/1] dt-bindings: rtc: Convert rtc-fsl-ftm-alarm.txt
+ to yaml format
+Message-ID: <171952768200.522224.7730380973476273215.b4-ty@bootlin.com>
+References: <20240528184359.2685109-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240618152635.48956-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20240528184359.2685109-1-Frank.Li@nxp.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, 18 Jun 2024 16:26:29 +0100, Biju Das wrote:
-> As per the latest HW manual[1], the INT# output is pulled low after the
-> alarm is triggered. After the INT# output is pulled low, it is low for at
-> least 250ms, even if the correct action is taken to clear it. It is
-> impossible to clear ALM if it is still active. The host must wait for the
-> RTC to progress past the alarm time plus the 250ms delay before clearing
-> ALM. Apart from this, there is an internal delay(~250 microsec) from
-> setting ALME = 0 to disabling the alarm function, so the user must add a
-> short delay of greater than 250µs between setting ALME = 0 and clearing
-> ALM.
+On Tue, 28 May 2024 14:43:59 -0400, Frank Li wrote:
+> Convert dt-binding doc "rtc-fsl-ftm-alarm.txt" to yaml format.
 > 
-> [...]
+> Change example's reg to 32bit address and length.
+> Remove unrelated rcpm@1e34040 in example.
+> 
+> 
 
 Applied, thanks!
 
-[1/2] rtc: isl1208: Add a delay for clearing alarm
-      https://git.kernel.org/abelloni/c/0dbd610c426e
-[2/2] rtc: isl1208: Update correct procedure for clearing alarm
-      https://git.kernel.org/abelloni/c/43696b3a9e46
+[1/1] dt-bindings: rtc: Convert rtc-fsl-ftm-alarm.txt to yaml format
+      https://git.kernel.org/abelloni/c/840ac611fbbe
 
 Best regards,
 
