@@ -1,99 +1,149 @@
-Return-Path: <linux-rtc+bounces-1417-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1418-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54FD591B259
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 00:43:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9525891B69D
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 08:02:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EE15284D5C
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jun 2024 22:43:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01A55B22A3E
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 06:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A0701A2C05;
-	Thu, 27 Jun 2024 22:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 546C23FB88;
+	Fri, 28 Jun 2024 06:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="h0BcoNEn"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="updtDB9r";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rFvx7AVt"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899231A2573;
-	Thu, 27 Jun 2024 22:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C559B5339D;
+	Fri, 28 Jun 2024 06:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719528205; cv=none; b=O2cS3pUXV8+dMM54/ZDkUUD5ByfwzcMM6fdzBkIxD4PIo3Vhwc8RX3id60NWjsFplfeGGrreEiwVpvXG6Jo7YyQ8jnLG7OzfKMUyzIF+637PZEM+cHWofjT/005YzmttF3JTwqdXTIg0w4Ho5aS2z9uVNNChbj3UCQ/5wPzzd1k=
+	t=1719554528; cv=none; b=Ur0sNwHPyZ3YwhqDc4nMOcZq8AVsdCADPY9LLtpeLrfIX6wXZYFqiDPZg1jy+R5PjibxRBiB1HI/HPPmfm7e2d7srHzcJxbmKa+GOnnLkJchS3VLKLt//aJmVmd7ik2plVpYS0FKVW/q/fiOS7T9DvFvrVc9p4en6lhT7vM8/So=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719528205; c=relaxed/simple;
-	bh=dSJoKrKoj9w0AJNQKBShni8tquEeO1Iztv2NUPIFACc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ixhVBxbuTQfE5MNfCjm4yaikAHWkwai4dVxNHSJjRineYKPUUQUH7c6xfuC0b9pXnNHDOMRGz5TUWFl83IFDR5StlabPl3/L3Gxo0TzhD0NbE2/hX7ZJKfHMdl1FV48L5ioE7Vq3eS9RX7EbQX4Pwr032eisB23LfJe2TrktSh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=h0BcoNEn; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A7CC6E0002;
-	Thu, 27 Jun 2024 22:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1719528202;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dLEu0TIlpm/jNlDq8RrtIfscO374jrNyb9NXvdvHY4A=;
-	b=h0BcoNEn7E8GXUTHSPQW+fKSsWO+4XTUpakYbbwg+81+j34QbKePN+Ur/MMIsfNdNuNTlq
-	Fsf2oCFlg/cN91C7Va/AFNbW3OG20u8Cko5bD6aq9iozSLAYub3dzu+xLe47+s5yrif0ir
-	rQhDWwfxkJyuz/RxOuTerfxf2HwP/ZC+GQIDqv63is+p8z3HHbgy5Pck2cA1/HH9qXYQXo
-	yL2DEDaVFWuwW07T/kti7WLXsv5qmFwHbNPX2/A/8aDbSLNSGEf4PqEeLy4A4BArlrz/W5
-	hACWG7fiexEYGpqBP8IF8qo3qnFi5XEAo0X1vN/ubd3PVh7wDXdqTcG3jg2DBA==
-Date: Fri, 28 Jun 2024 00:43:21 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Leonard Anderweit <L.Anderweit@phytec.de>
-Cc: "arnd@arndb.de" <arnd@arndb.de>,
-	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"upstream@phytec.de" <upstream@phytec.de>
-Subject: Re: Question about [PATCH] [RFC] rtc: y2038: remove broken
- RTC_HCTOSYS workaround
-Message-ID: <20240627224321db4557b2@mail.local>
-References: <cf6ac9542f58a33b146ad7b0f5577e1dff3becab.camel@phytec.de>
+	s=arc-20240116; t=1719554528; c=relaxed/simple;
+	bh=zuWah5kZxS3pZarT8R17vunXfD+W32qerb5RNvhglH0=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=ZLYQ+pokp3AVZBxEWalkX5h9BqSNH6YSkhfRNObvHJ3O7oHld45PWGlLIzaAF/r3odnh3EcbQI/U1XnEQ2+yMzEKCQzcDzO6rGg9JFw0rwG1TrDIGPZcqtHNDjBqO/ApvvqTNyvT5jlXQNusbjHpLn86gWF01DM4o7kJft7DSvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=updtDB9r; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rFvx7AVt; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id A880C114034E;
+	Fri, 28 Jun 2024 02:02:04 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 28 Jun 2024 02:02:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1719554524; x=1719640924; bh=4SpXJxdF2J
+	M31Xlhpwa+WUi534LwLf04YEhMqMWuizA=; b=updtDB9r6x1SULisZC2ytkI5+8
+	RLEWde4H5ifpqSJ67IjREPob9gA1Bpvm24fhp2c/bdb2LTxhxJ1jLhk4kQM1ht82
+	35GMtLbq1W6fmd5eRU8q0AaMO4zDwnc34Qw78GNq2GnZE6FNbo2DiKK8DRCPmrrR
+	T0wcxjSOTgUHjbK00Krzy0eBiIC0v1joogq4rPmCFe6lQeBw35jJwcVvS+Kk63C6
+	CLrnFaciaIybcH18kK/wJs1GcoIBIqicz1LEgpCSo0CnSuba8N7lQydeBoYkfFhY
+	TjT9QW8n+fUZC/i24CPgIg4agfPSbVx5JzuH1IJvVnyvDkM09MZpvppFWg/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1719554524; x=1719640924; bh=4SpXJxdF2JM31Xlhpwa+WUi534Lw
+	Lf04YEhMqMWuizA=; b=rFvx7AVtspBJNVsuTn6h4Y/MObReH3kzZWYz3MHDV/sR
+	7ZaPLnAKc3YaiEJMc5gP/IPKjs2AgqUFLlsNtwMx8NtmOcNENnP4K23z32SqGV1U
+	jO6a8ToLDNqYAKa7wUDtPK+KVJymndD6B0trwAj05cq2jpSOI3yVSNiE7W+ynFQc
+	i76jCpYQWlCahLLwmCcJhaORlt6ZnrtaOh0Aul3KuZ3pQ1kcjoHcoz7HX6Fz+f+P
+	DBnW5ojh+xxCEPVBlcUn5H5sXRt3Z7jwG41rGr23OA6i8CHO5sSv15NFsPBjagE/
+	2PVEq6FwRyDW/KEAR7xvARqziwLxsBjY+Iu1XGZ1vA==
+X-ME-Sender: <xms:3FF-ZmFi-0wEFJrEtNWcNxB5iP56CR0_BBE32xRL-jxl6EIA2pNNTg>
+    <xme:3FF-ZnUlzrhCwUvDMLRjt-OH3MPkP7WMIS96cqU_OaoCSe-ZO03FQKeRu9dFbB02a
+    PDFjoiXLV7St-yC8_w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrtdehgddutdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:3FF-ZgJpqdpT1a1mRI-L1MrqyOPErGiDigMsdlscL1jvXZ1_J319Ug>
+    <xmx:3FF-ZgHuNB0viBDC9f7DMP-1CDlvY_gX4MTInuDLkxQyfr-_5WhNSw>
+    <xmx:3FF-ZsUAjoBPnAa9dvtDCxvFazRpiNyWF6b9L_cdOro22cvBneHOaQ>
+    <xmx:3FF-ZjPuqV2KW1ip3FutqTBlp6xGsZDi2nW1rvKrDroNcwDjLu74qw>
+    <xmx:3FF-ZqwoMcBBY6fq1mhfJILN7DVr8W9BP-29Vh9m9kb5wbZ6KF6eHbUE>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0F603B6008D; Fri, 28 Jun 2024 02:02:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-538-g1508afaa2-fm-20240616.001-g1508afaa
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf6ac9542f58a33b146ad7b0f5577e1dff3becab.camel@phytec.de>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Message-Id: <1d82ecbb-c9fa-49e0-8432-7fd152e01440@app.fastmail.com>
+In-Reply-To: <20240627224321db4557b2@mail.local>
+References: <cf6ac9542f58a33b146ad7b0f5577e1dff3becab.camel@phytec.de>
+ <20240627224321db4557b2@mail.local>
+Date: Fri, 28 Jun 2024 08:01:30 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Leonard Anderweit" <L.Anderweit@phytec.de>
+Cc: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "upstream@phytec.de" <upstream@phytec.de>
+Subject: Re: Question about [PATCH] [RFC] rtc: y2038: remove broken RTC_HCTOSYS
+ workaround
+Content-Type: text/plain
 
-On 24/06/2024 11:41:41+0000, Leonard Anderweit wrote:
-> Hi,
-> 
-> I found this patch [1] which is necessary for a project I'm currently
-> working on. I'm using phyboard-wega [2] with an am335 ARM SoC which I
-> want to make y2038 proof.
-> Is there any reason it was never accepted?
-> 
+On Fri, Jun 28, 2024, at 00:43, Alexandre Belloni wrote:
+> On 24/06/2024 11:41:41+0000, Leonard Anderweit wrote:
+>> Hi,
+>> 
+>> I found this patch [1] which is necessary for a project I'm currently
+>> working on. I'm using phyboard-wega [2] with an am335 ARM SoC which I
+>> want to make y2038 proof.
+>> Is there any reason it was never accepted?
 
-The systemd maintainer think the kernel is well placed to take a
-decision it can't actually take so they won't fix a bug where systemd is
-crashing when userspace is 32bit.
+Sorry for not having replied earlier. I'm definitely interested
+in helping to make this work better, having spent a lot of time
+on the kernel side of the y2038 work.
 
-The whole situation is frustrating and honestly, nobody should use the
-hctosys insanity anyway. Obviously systemd mandates its usage and this
-is yet another topic on which they think the kernel is better placed to
-take decisions that are actually userspace policy.
+Which combination of distro, libc and init system are you using
+in your work?
 
-I've been arguing for a while and gave up.
+Are you running with COMPAT_32BIT_TIME disabled? This is something
+you probably want in order to better test for corner cases that
+still use time32 kernel ABIs somewhere, but it still requires
+adding a few more workarounds in libc and other userspace
+sources.
 
-> [1]https://lore.kernel.org/all/20220908115337.1604277-1-arnd@kernel.org/
-> [2]https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/arm/boot/dts/ti/omap/am335x-wega-rdk.dts
-> 
-> Regards
-> Leonard
+> The systemd maintainer think the kernel is well placed to take a
+> decision it can't actually take so they won't fix a bug where systemd is
+> crashing when userspace is 32bit.
+>
+> The whole situation is frustrating and honestly, nobody should use the
+> hctosys insanity anyway. Obviously systemd mandates its usage and this
+> is yet another topic on which they think the kernel is better placed to
+> take decisions that are actually userspace policy.
+>
+> I've been arguing for a while and gave up.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I thought that systemd had at least fix the bug where it would
+crash when a random 64-bit time was set, so we could try again
+with this patch and see what breaks?
+
+An important difference now is that Debian is finally changing
+to a time64 userspace, which both avoids the problem that
+the broken rtc_hctosys() time truncation was trying to work
+around (all times returned here are now valid) and it means
+that there is a much higher incentive to actually make
+a systemd based userland work past 2038.
+
+      Arnd
 
