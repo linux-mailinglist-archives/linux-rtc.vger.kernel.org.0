@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-1424-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1425-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA36C91BDA9
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 13:41:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 503A291BE48
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 14:16:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 098981C20C31
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 11:41:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE153283D34
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Jun 2024 12:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF3915697A;
-	Fri, 28 Jun 2024 11:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9F77BAF4;
+	Fri, 28 Jun 2024 12:16:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kk6eLC0F"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FVkRt8Rz"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84CA1865A;
-	Fri, 28 Jun 2024 11:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6345B1CF9B;
+	Fri, 28 Jun 2024 12:15:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719574907; cv=none; b=ZViRztaFBNthGQ5YuabbzE4m/d0dgWiK4XMTg1xThIdkOked+1tFH2eYaVUzajt9m8dAqCYf0+Kd09w0ANdULUycFdwT/cXjWf7JdeVAOVq8W12BJddaWIds+BOyJbEU+fwM0wMtPBQaAoakItl2JP7FrP8P0hdhuTC/BTb6zIs=
+	t=1719576960; cv=none; b=VfWXdEABxbV7ZIEPD3nAOZgOqXrb9MZ8W1e2ZEi53oetdSOQ0PMhlcimUw/6/e0gmIWsSLfAH21ppQ3lsSYFBqpOg8nlx1IMRIJlry27RsPRovcmb0fKsaZhicYTUXavuJfyulnQBRdR1uWEi4lEFbs/KO73795/ronFKdfn814=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719574907; c=relaxed/simple;
-	bh=zvPUo0sRC2Sq9BzSc7HXlwJX0VOuuf5pyDan4+EiN0c=;
+	s=arc-20240116; t=1719576960; c=relaxed/simple;
+	bh=0cJeN0/HAoSHiXOdrpLhvVfCMZB2rLvNBDTaDOWEc8I=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G0DwuyvX1zCKU9epMMkW9vMJBqGNXRPfQQc47PZ1kDZNrHN9exdVUc8YsCnT6HtPC3EqDSVT1nYppfdIX/DCkL8haHRyJ3Ii3qQvdyJ8HHPtB29LNSPo7OUenDNYcEFyaVKe7o6KbV+FfQf5KUWPZTXPAEtTs3bci55GtALnI0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kk6eLC0F; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=VnMFO9gEq0E4eiQ87v6/Srk0GnNsohjrecPgkGhKz+d2WyI/xKhlARTthBOJRkXNAYr8cNBS4beenHLjWuGwhiNzdyePDbK1qcUbTni3/bkpjxMPYb3mfHpE+1IbmqdpZd9LeZZmCqXFyxZOg5QFQbkmxDQVrdtMEmbhdSSqvk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FVkRt8Rz; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zvPUo0sRC2Sq9BzSc7HXlwJX0VOuuf5pyDan4+EiN0c=; b=kk6eLC0FEIehsWSisKLBbtxeTM
-	7/IOAYWLcDNYHXGOz7XxYw+K/rJ057Mb3Lgfp19AHjTQbN9BvtPMdcvZ9DajtNZbPCrwIL2oeWY/j
-	zX6PzyIm460k2jD4INsaji3wNI0aFD87uBSbE9UaAU3eqrOY69P0ar25Of5Bm+SXNJwnuGsJNbQh3
-	jR2/PniPV8EzEZZn+JnsPMumhPOMAp8cMIi3th64dOS2USrWM8WsCGEsc6+JgdTUrk1GEs+FRAxLF
-	llicgYqh+iBqk/1gPvnm+qEdr5hbL1l/7fPgFNoZv5KSTMsrc2WD0QvMz/F1BNlI/wI35E5XYgOgI
-	i7sGoCOw==;
+	bh=0cJeN0/HAoSHiXOdrpLhvVfCMZB2rLvNBDTaDOWEc8I=; b=FVkRt8RzGwKre0CJkSRn6r9alu
+	XnIjyQPZcee/G7nqkfURJkc/VVfp5zUHc7uSkDYBBh2X+LujVuuHM5DOUesIO69HglWeK5u8ycRz/
+	UT/3Qk1FXIT33rc2iEZUgoHDrmvLX9tqe7xL4N1dKncOZy1pBXeFWX/KuxrP9BUy21OCKCUyAJ67G
+	u0vHMmeJr/MF5twIeq7kVZZvlpEt/HfOZQaPumKkKCbcTEphEAn2VYAOWp9wzCRjsSXfssfpgcKuW
+	QhZDv+jaGvk1sV79pfSt/MRGoKo0+KkehHldqL9yDjQdGGx9ZCGZ5XJjdGSVVzaKMDjxFLUI/GXxL
+	t14bq9mg==;
 Received: from [2001:8b0:10b:5:2b2d:df20:7441:40a4] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sN9yn-0000000EdPo-0nbm;
-	Fri, 28 Jun 2024 11:41:25 +0000
-Message-ID: <3da4fc7b8ea0d596848d64b8dfaf9d84dac9f657.camel@infradead.org>
+	id 1sNAW4-0000000Ef3c-2Ute;
+	Fri, 28 Jun 2024 12:15:48 +0000
+Message-ID: <c69d7d380575e49bd9cb995e060d205fb41aef8f.camel@infradead.org>
 Subject: Re: [RFC PATCH v2] ptp: Add vDSO-style vmclock support
 From: David Woodhouse <dwmw2@infradead.org>
 To: Peter Hilber <peter.hilber@opensynergy.com>,
@@ -61,8 +61,8 @@ Cc: "Christopher S. Hall" <christopher.s.hall@intel.com>, Jason Wang
  Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Daniel
  Lezcano <daniel.lezcano@linaro.org>, Alessandro Zummo
  <a.zummo@towertech.it>,  Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date: Fri, 28 Jun 2024 12:41:24 +0100
-In-Reply-To: <03d4652d-5bc5-439e-ba32-b17170709584@opensynergy.com>
+Date: Fri, 28 Jun 2024 13:15:47 +0100
+In-Reply-To: <db1113d5-a427-4eb7-b5d1-8174a71e63b6@opensynergy.com>
 References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
 	 <684eac07834699889fdb67be4cee09319c994a42.camel@infradead.org>
 	 <671a784b-234f-4be6-80bf-5135e257ed40@opensynergy.com>
@@ -70,10 +70,10 @@ References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
 	 <c0ae63fc88365c93d5401972683a41112c094704.camel@infradead.org>
 	 <4a0a240dffc21dde4d69179288547b945142259f.camel@infradead.org>
 	 <8d9d7ce2-4dd1-4f54-a468-79ef5970a708@opensynergy.com>
-	 <51dcda5b675fb68c54b74fd19c408a3a086fc412.camel@infradead.org>
-	 <03d4652d-5bc5-439e-ba32-b17170709584@opensynergy.com>
+	 <bdcafc76ea44db244b52f8a092287cb33950d5d6.camel@infradead.org>
+	 <db1113d5-a427-4eb7-b5d1-8174a71e63b6@opensynergy.com>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-cU612ccteDZzatLwWBjN"
+	boundary="=-BcDvxfM9pAJOAfVfuMaK"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -84,45 +84,123 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-cU612ccteDZzatLwWBjN
+--=-BcDvxfM9pAJOAfVfuMaK
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-T24gRnJpLCAyMDI0LTA2LTI4IGF0IDEzOjMzICswMjAwLCBQZXRlciBIaWxiZXIgd3JvdGU6Cj4g
-Cj4gPiAKPiA+IMKgwqDCoMKgwqDCoMKgwqAvKgo+ID4gwqDCoMKgwqDCoMKgwqDCoCAqIFdoYXQg
-dGltZSBpcyBleHBvc2VkIGluIHRoZSB0aW1lX3NlYy90aW1lX2ZyYWNfc2VjIGZpZWxkcz8KPiA+
-IMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoMKgwqDCoMKgwqB1aW50OF90IHRpbWVfdHlw
-ZTsKPiA+ICNkZWZpbmUgVk1DTE9DS19USU1FX1VOS05PV07CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAwwqDCoMKgwqDCoMKgwqAvKiBJbnZhbGlkIC8gbm8gdGltZSBleHBvc2VkICovCj4gPiAjZGVm
-aW5lIFZNQ0xPQ0tfVElNRV9VVEPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDHCoMKg
-wqDCoMKgwqDCoC8qIFNpbmNlIDE5NzAtMDEtMDEgMDA6MDA6MDB6ICovCj4gPiAjZGVmaW5lIFZN
-Q0xPQ0tfVElNRV9UQUnCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoDLCoMKgwqDCoMKg
-wqDCoC8qIFNpbmNlIDE5NzAtMDEtMDEgMDA6MDA6MDB6ICovCj4gPiAjZGVmaW5lIFZNQ0xPQ0tf
-VElNRV9NT05PVE9OSUPCoMKgwqDCoMKgwqDCoMKgwqDCoDPCoMKgwqDCoMKgwqDCoC8qIFNpbmNl
-IHVuZGVmaW5lZCBlcG9jaCAqLwo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoMKgLyogQml0IHNoaWZ0
-IGZvciBjb3VudGVyX3BlcmlvZF9mcmFjX3NlYyBhbmQgaXRzIGVycm9yIHJhdGUgKi8KPiA+IMKg
-wqDCoMKgwqDCoMKgwqB1aW50OF90IGNvdW50ZXJfcGVyaW9kX3NoaWZ0Owo+ID4gCj4gPiDCoMKg
-wqDCoMKgwqDCoMKgLyoKPiA+IMKgwqDCoMKgwqDCoMKgwqAgKiBVbmxpa2UgaW4gTlRQLCB0aGlz
-IGNhbiBpbmRpY2F0ZSBhIGxlYXAgc2Vjb25kIGluIHRoZSBwYXN0LiBUaGlzCj4gPiDCoMKgwqDC
-oMKgwqDCoMKgICogaXMgbmVlZGVkIHRvIGFsbG93IGd1ZXN0cyB0byBkZXJpdmUgYW4gaW1wcmVj
-aXNlIGNsb2NrIHdpdGgKPiA+IMKgwqDCoMKgwqDCoMKgwqAgKiBzbWVhcmVkIGxlYXAgc2Vjb25k
-cyBmb3IgdGhlbXNlbHZlcywgYXMgc29tZSBtb2RlcyBvZiBzbWVhcmluZwo+ID4gwqDCoMKgwqDC
-oMKgwqDCoCAqIG5lZWQgdGhlIGFkanVzdG1lbnRzIHRvIGNvbnRpbnVlIGV2ZW4gYWZ0ZXIgdGhl
-IG1vbWVudCBhdCB3aGljaAo+ID4gwqDCoMKgwqDCoMKgwqDCoCAqIHRoZSBsZWFwIHNlY29uZCBz
-aG91bGQgaGF2ZSBvY2N1cnJlZC4KPiA+IMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoMKg
-wqDCoMKgwqBpbnQ4X3QgbGVhcHNlY29uZF9kaXJlY3Rpb247Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
-dWludDY0X3QgbGVhcHNlY29uZF90YWlfc2VjOyAvKiBTaW5jZSAxOTcwLTAxLTAxIDAwOjAwOjAw
-eiAqLwo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoMKgLyoKPiA+IMKgwqDCoMKgwqDCoMKgwqAgKiBQ
-YWlyZWQgdmFsdWVzIG9mIGNvdW50ZXIgYW5kIFVUQyBhdCBhIGdpdmVuIHBvaW50IGluIHRpbWUu
-Cj4gPiDCoMKgwqDCoMKgwqDCoMKgICovCj4gPiDCoMKgwqDCoMKgwqDCoMKgdWludDY0X3QgY291
-bnRlcl92YWx1ZTsKPiA+IMKgwqDCoMKgwqDCoMKgwqB1aW50NjRfdCB0aW1lX3NlYzsgLyogU2lu
-Y2UgMTk3MC0wMS0wMSAwMDowMDowMHogKi8KPiAKPiBOaXRwaWNrOiBUaGUgY29tbWVudCBpcyBu
-b3QgdmFsaWQgYW55IG1vcmUgZm9yIFRJTUVfTU9OT1RPTklDLgoKQWggeWVzLCBJICJtb3ZlZCIg
-dGhhdCBjb21tZW50IHVwIHRvIHRoZSBVVEMvVEFJIHRpbWVfdHlwZSB2YWx1ZXMsIGJ1dApuZWds
-ZWN0ZWQgdG8gYWN0dWFsbHkgZGVsZXRlIGl0IGZyb20gaGVyZS4gRml4ZWQ7IHRoYW5rcy4K
+On Fri, 2024-06-28 at 13:33 +0200, Peter Hilber wrote:
+> On 27.06.24 16:52, David Woodhouse wrote:
+> > I already added a flags field, so this might look something like:
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Smearing flags. The =
+UTC clock exposed through this structure
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * is only ever true UT=
+C, but a guest operating system may
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * choose to offer a mo=
+notonic smeared clock to its users. This
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * merely offers a hint=
+ about what kind of smearing to perform,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * for consistency with=
+ systems in the nearby environment.
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > #define VMCLOCK_FLAGS_SMEAR_UTC_SLS (1<<5) /* draft-kuhn-leapsecond-00.=
+txt */
+> >=20
+> > (UTC-SLS is probably a bad example but are there formal definitions for
+> > anything else?)
+>=20
+> I think it could also be more generic, like flags for linear smearing,
+> cosine smearing(?), and smear_start_sec and smear_end_sec fields (relativ=
+e
+> to the leap second start). That could also represent UTC-SLS, and
+> noon-to-noon, and it would be well-defined.
+>=20
+> This should reduce the likelihood that the guest doesn't know the smearin=
+g
+> variant.
+
+I'm wary of making it too generic. That would seem to encourage a
+*proliferation* of false "UTC-like" clocks.
+
+It's bad enough that we do smearing at all, let alone that we don't
+have a single definition of how to do it.
+
+I made the smearing hint a full uint8_t instead of using bits in flags,
+in the end. That gives us a full 255 ways of lying to users about what
+the time is, so we're unlikely to run out. And it's easy enough to add
+a new VMCLOCK_SMEARING_XXX type to the 'registry' for any new methods
+that get invented.
 
 
---=-cU612ccteDZzatLwWBjN
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * This field changes to=
+ another non-repeating value when the CPU
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * counter is disrupted,=
+ for example on live migration.
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0uint64_t disruption_mark=
+er;
+> > >=20
+> > > The field could also change when the clock is stepped (leap seconds
+> > > excepted), or when the clock frequency is slewed.
+> >=20
+> > I'm not sure. The concept of the disruption marker is that it tells the
+> > guest to throw away any calibration of the counter that the guest has
+> > done for *itself* (with NTP, other PTP devices, etc.).
+> >=20
+> > One mode for this device would be not to populate the clock fields at
+> > all, but *only* to signal disruption when it occurs. So the guest can
+> > abort transactions until it's resynced its clocks (to avoid incurring
+> > fines if breaking databases, etc.).
+> >=20
+> > Exposing the host timekeeping through the structure means that the
+> > migrated guest can keep working because it can trust the timekeeping
+> > performed by the (new) host and exposed to it.
+> >=20
+> > If the counter is actually varying in frequency over time, and the host
+> > is slewing the clock frequency that it reports, that *isn't* a step
+> > change and doesn't mean that the guest should throw away any
+> > calibration that it's been doing for itself. One hopes that the guest
+> > would have detected the *same* frequency change, and be adapting for
+> > itself. So I don't think that should indicate a disruption.
+> >=20
+> > I think the same is even true if the clock is stepped by the host. The
+> > actual *counter* hasn't changed, so the guest is better off ignoring
+> > the vacillating host and continuing to derive its idea of time from the
+> > hardware counter itself, as calibrated against some external NTP/PTP
+> > sources. Surely we actively *don't* to tell the guest to throw its own
+> > calibrations away, in this case?
+>=20
+> In case the guest is also considering other time sources, it might indeed
+> not be a good idea to mix host clock changes into the hardware counter
+> disruption marker.
+>=20
+> But if the vmclock is the authoritative source of time, it can still be
+> helpful to know about such changes, maybe through another marker.
+
+Could that be the existing seq_count field?
+
+Skewing the counter_period_frac_sec as the underlying oscillator speeds
+up and slows down is perfectly normal and expected, and we already
+expect the seq_count to change=C2=A0when that happens.
+
+Maybe step changes are different, but arguably if the time advertised
+by the host steps *outside* the error bounds previously advertised,
+that's just broken?
+
+Depending on how the clock information is fed, a change in seq_count
+may even result in non-monotonicity. If the underlying oscillator has
+sped up and the structure is updated accordingly, the time calculated
+the moment *before* that update may appear later than the time
+calculated immediately after it.
+
+It's up to the guest operating system to feed that information into its
+own timekeeping system and skew towards correctness instead of stepping
+the time it reports to its users.
+
+
+--=-BcDvxfM9pAJOAfVfuMaK
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -214,25 +292,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNjI4MTE0MTI0WjAvBgkqhkiG9w0BCQQxIgQgra/27Aeu
-W0UZ6o+VN03oCuy8oHSawk9qVPiEGeFO0G8wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNjI4MTIxNTQ3WjAvBgkqhkiG9w0BCQQxIgQgJUYHch1n
+WmQeqlo/3kudZwNrA5AoS5zJAKPVzK+QGa0wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgA9nY8y1jk5qvQYuIxu+kENS/It0WIlGqsn
-MqPyTc5iLEd3iDkFafFQlcMpEA0DLka4yRPf7PPWSXV50XydusoHAkGrmFaf4ffh020ARqBJzlwd
-r1y19OP1fekB20+v3yRSH6xjxYA/m+5ORT4HNe1LLEX4fGgry7mA4tm1LkrgkXBAoLpEH/YEurAe
-1K5nuUUZ0gO7CS60vJg87JGEYA+MC5/G0ScZ6WCK4kTWAC6LJ4CTwXdzkCVpj6TTG73DDt/2GXSZ
-IlFSQ4IGi03F3ynm3bCaKQKPeDZ4o2ONQpsYv/iIH28tyfbT85sD9Tno5923Z4UneUSJa3LiVR45
-qhyQKNmYeshh3aF/1wFPNpw/6UWu/hhwpi9qTEnBE+BXuhlcJRR3B7v90Xgthy+L1RR5f/1MYZIW
-lDI7JJaUY37mpV7N1t7tPFdx+GQzYQ4Aa9QNKzGG8BlrhgSPk3sIIj9Mi1N9aH9Uv57pDHYtfGz2
-5fPSrHUlSGhFF/sg3fzSAltVAqCLEVBXpE7AfQhri6Ff2m/VuLWX8bZCRfLimgIbow8Gga2ddbTQ
-+A+4OLBDCaOpRtvgzIVT0x5e9Tr+RZu0jY4NCdhiJo0VG9o6krz8G6vpx+5nUy58QnjI0ZLbpyBO
-OugAbUL0O+qNi7MZMD2B/WNclETpYjssAoxOrttR5AAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAGPDCn8z5Z31hqK3qSJ6T5g37u0uhBAuV7
+0aSICu1zz4xLc5+pdYhSK5HqtyXYOKmhliXmlIj6IKdVznUruOG/CsR3vm/+kRttzoj/75M+xX2Q
+ohj2b3FDqx10LW/7KwLjs6NUm0rf3gOGyaRx6pFHhPqvNfwDXE2xk/YiRQYIqn2RSJqSPbWYoW9Z
+2jPkBWrmskTTc+Yq/SyfsWBzl0mvdXTVqj6OOAKDgi/Qi8uwSuBQzTlO4eiPJHeIXdkZMVHO6F1L
+y/eKYsnZDPOO/55IHjDUX7feCZmi3VMTfzxaws5V1ME+xIeJJ568oBEDgthsag7cX+yTxiX2zx16
+aEWUf5tfMg+v8tDhpfTJ9KdCsWndKDaAnyg1YgI8spFtetR7/NETnftlagLUllEZlgJEwu3B3/CB
+wK0nqJbXpd96qYhXEw1x2eMAUiRG5y2ZeH9KuUUo78GUPQyccuinyDG84vXw+vy8/zxLC01GEoK2
+WgwDz3DADPM7BeMa1copQm1IITUvfYkSTh7AhtIZgJLFNj3NGachyFQ4s3V83yQkHH1aVOYz45FH
+GUxBjXEdYPYutGQHHpU0CBuarWA5bf0uMgOplPC+9gBk302hZYXUNWNGVwj24Vr/S8NOUnjBglJ8
+ysinstFTOugQKrpQhCl2kdw5OfxGjRi/OLvjMMTp0QAAAAAAAA==
 
 
---=-cU612ccteDZzatLwWBjN--
+--=-BcDvxfM9pAJOAfVfuMaK--
 
