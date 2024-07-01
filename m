@@ -1,142 +1,215 @@
-Return-Path: <linux-rtc+bounces-1428-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1429-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4372F91D1C6
-	for <lists+linux-rtc@lfdr.de>; Sun, 30 Jun 2024 15:29:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21C9D91D991
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jul 2024 10:02:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC7EE281CB8
-	for <lists+linux-rtc@lfdr.de>; Sun, 30 Jun 2024 13:29:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42F1F1C209BC
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jul 2024 08:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0802013DBBE;
-	Sun, 30 Jun 2024 13:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271EB75804;
+	Mon,  1 Jul 2024 08:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ifzeGgc1"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XZTMj6xC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA9E01E49F;
-	Sun, 30 Jun 2024 13:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D74282485;
+	Mon,  1 Jul 2024 08:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719754146; cv=none; b=TPhjj/Rehe5RxjBbhD9AXOnfcZYDD4WQ5azbiQK1rxOYphx6yYV929kq6xLCCPmM5tXt/t+O+m/z8TV1eRTbPG/F4g9vf2wJrCbA75V5y+I18HmFiFXy6vRUhbkXsuvdJrx6zn4B06l3zaH/sfKXH3O6guAbAjOUweLSIE1jS6o=
+	t=1719820970; cv=none; b=YN3zSuezKH9NRTdumu/skXQq58/wqVjeC/DtnQudYI2sGW9HKmgipau8joOZHpd8kkkl/mHetrQCj5+iieHmYaEDNBFse+CVFMuHtmfzSFuxPdf++FO96I3sd4rKyCjul32HoDNpGv/A/jyruusWcKEKguYSJ71acdVeMvcH7Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719754146; c=relaxed/simple;
-	bh=ChFb8w15BttkA8Gd38P/acg2lX8jxg3AeR6dCf7FnUk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QBvUGr4HB3JJrmeO7qrycIYDKzXD9JjqPomNMxSxkdcpfmRTfn3M7jjo6HdVgi89xAYeO0T20VePjJxLyTdIeRv9w9jJWHqAvpX09hIeVsk5Yc6QL9145JPW6XDSfrG4mV7qzKslHGDpGJnOUOFETZ9qAAfzsV8I55dmwJD1Ojc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ifzeGgc1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DADC2BD10;
-	Sun, 30 Jun 2024 13:29:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719754146;
-	bh=ChFb8w15BttkA8Gd38P/acg2lX8jxg3AeR6dCf7FnUk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ifzeGgc1XPqx+MtSb9wIhYQKdSYS+/J+fwqGorROaN67YFRM/STdky6UuWpNhVyLw
-	 z8GC43AJg4Im2K/Ryq0gJG2Pyu32+fx49gEeQnQRCPPCWA+7b0HvR367HICrhYrdbu
-	 hs2MwLJhopRfIyNColSNZ5x5W1OjkUQ1Kzxc7XD5/14Z1Bgi3tUB18SX48HBLS6TrN
-	 tuyw5sk9l5P13hiWKilWIwQekNuQJ8c0tGUD3VF5ajg94CmRe1EU6qjYYdAROTsarG
-	 695L5QuZsPICkubKeh5Wl45ajosLI9iRdkXL1Keg2/r5NegBHWHpJZfAOpj/ue7OxN
-	 QulWDHuDUXqoA==
-Date: Sun, 30 Jun 2024 14:28:59 +0100
-From: Simon Horman <horms@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Peter Hilber <peter.hilber@opensynergy.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	"Ridoux, Julien" <ridouxj@amazon.com>, virtio-dev@lists.linux.dev,
-	"Luu, Ryan" <rluu@amazon.com>,
-	"Christopher S. Hall" <christopher.s.hall@intel.com>,
-	Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org
+	s=arc-20240116; t=1719820970; c=relaxed/simple;
+	bh=YNU8xeKCxGMYOgi3xzqQWTx9+rgNkvKSAEHaxN2NjcA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s7M73kevTbRlvuseCOKyoHKD+z0BIvMQ1OQDxcmJXLlds1Xbxo8BESk2bPfsHT5qetxQ6chZ2aHYs6AS448UUwF4kyD9FwLX5EaHuJjadRSs45XhtFfyqoXPF8gAFQ91nnQxQucVE/1BRGDF834C4nrAwQIuIQ/yKKS1gxqTqSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XZTMj6xC; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=YNU8xeKCxGMYOgi3xzqQWTx9+rgNkvKSAEHaxN2NjcA=; b=XZTMj6xCryltA/GYdja4rlKrow
+	y6qfdpaowMC8aBtSaptN7myKSewDw3hZ5MmK9tMq6MKqXA4T2gkEp80AQCXsAHlTg9rQ/2oB0/SS6
+	Fxr+ezyjoDtMXkGJ7lYLa2YoLpj9rDuG7glULRzAEb/Z9ew3tFBSTwPRjNApJH2HmFQDUPCBO23JY
+	5EVurNStpQCogDOTprP44IFpLPhOvRpbIBXGmoHiQg66C4SP2I9rxNMQQY34vxiL9JutAa/4BVuTl
+	E/TyD1cVWzAaZeA6bmqwnXaDHIs85vx2MKXkWzv6+3/j0SAs0nVq28iedzqm/M+CiPKueWNAegblI
+	LrlnoEYg==;
+Received: from [2001:8b0:10b:5:8143:6283:9375:d9e] (helo=u3832b3a9db3152.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sOBzi-0000000H7Kb-3UCz;
+	Mon, 01 Jul 2024 08:02:38 +0000
+Message-ID: <4d49e640143a557861a75a65678485965611b638.camel@infradead.org>
 Subject: Re: [RFC PATCH v2] ptp: Add vDSO-style vmclock support
-Message-ID: <20240630132859.GC17134@kernel.org>
+From: David Woodhouse <dwmw2@infradead.org>
+To: Simon Horman <horms@kernel.org>
+Cc: Peter Hilber <peter.hilber@opensynergy.com>,
+ linux-kernel@vger.kernel.org,  virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org,  linux-rtc@vger.kernel.org, "Ridoux,
+ Julien" <ridouxj@amazon.com>,  virtio-dev@lists.linux.dev, "Luu, Ryan"
+ <rluu@amazon.com>, "Christopher S. Hall" <christopher.s.hall@intel.com>,
+ Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>,  netdev@vger.kernel.org, Richard
+ Cochran <richardcochran@gmail.com>, Stephen Boyd <sboyd@kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Marc
+ Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>,  Alessandro Zummo
+ <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org
+Date: Mon, 01 Jul 2024 09:02:38 +0100
+In-Reply-To: <20240630132859.GC17134@kernel.org>
 References: <20231218073849.35294-1-peter.hilber@opensynergy.com>
- <684eac07834699889fdb67be4cee09319c994a42.camel@infradead.org>
- <671a784b-234f-4be6-80bf-5135e257ed40@opensynergy.com>
- <db594efd5a5774748a9ef07cc86741f5a677bdbf.camel@infradead.org>
- <c0ae63fc88365c93d5401972683a41112c094704.camel@infradead.org>
- <4a0a240dffc21dde4d69179288547b945142259f.camel@infradead.org>
+	 <684eac07834699889fdb67be4cee09319c994a42.camel@infradead.org>
+	 <671a784b-234f-4be6-80bf-5135e257ed40@opensynergy.com>
+	 <db594efd5a5774748a9ef07cc86741f5a677bdbf.camel@infradead.org>
+	 <c0ae63fc88365c93d5401972683a41112c094704.camel@infradead.org>
+	 <4a0a240dffc21dde4d69179288547b945142259f.camel@infradead.org>
+	 <20240630132859.GC17134@kernel.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-2VcdSTZ+DgjOCXYR0Rnr"
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a0a240dffc21dde4d69179288547b945142259f.camel@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-+ Kees Cook, linux-hardening
 
-On Tue, Jun 25, 2024 at 08:01:56PM +0100, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> The vmclock "device" provides a shared memory region with precision clock
-> information. By using shared memory, it is safe across Live Migration.
-> 
-> Like the KVM PTP clock, this can convert TSC-based cross timestamps into
-> KVM clock values. Unlike the KVM PTP clock, it does so only when such is
-> actually helpful.
-> 
-> The memory region of the device is also exposed to userspace so it can be
-> read or memory mapped by application which need reliable notification of
-> clock disruptions.
-> 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+--=-2VcdSTZ+DgjOCXYR0Rnr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-...
+On Sun, 2024-06-30 at 14:28 +0100, Simon Horman wrote:
+>=20
+> W=3D1 allmodconfig builds with gcc-13 flag the following.
+> Reading the documentation of strncpy() in fortify-string.h,
+> I wonder if strscpy() would be more appropriate in this case.
 
-> diff --git a/drivers/ptp/ptp_vmclock.c b/drivers/ptp/ptp_vmclock.c
+It's never going to matter in practice, as the buffer is 32 bytes, so
+"vmclock%d" would never get to the end even if was a 64-bit integer.
 
-...
+But as a matter of hygiene and best practice, yes strscpy() would be
+more appropriate. Fixed in git, thanks.
 
-> +static int vmclock_probe(struct platform_device *pdev)
-> +{
+--=-2VcdSTZ+DgjOCXYR0Rnr
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-...
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzAxMDgwMjM4WjAvBgkqhkiG9w0BCQQxIgQg9GmkiwxO
+tEV92cwzYVz0/CbM4P0e7vWEr2A/RSyqfkIwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBrKW5XB3J5dLeqFxFw3IlX12pgFjL9ihjR
+LvtBNCfn9OTScKRFId8eajb7GyrDbyyFIBLJw1oEtuEIij3r3knH+2zh2MYiGKzL6rYsvRy1pghh
+P8a1VXVxG0DtBjDT7/9C9Oe9TMOChnu5kuYseSGIH/XHghIkDZ982xusBCoZXmnA6SDCOJDVY50k
+f49PGxG5D1pVcfbYmqkyg0dbWqfawqO556Apx0FbvDCYFnpxaiJquYDhZLuKSfq8TuBfE2VP1Das
+hUxxYeTxdlDgzVT+JC61Eim/vuZ7oxVFU9x+UFo+K/lWJfU9JUpzTjZV5ayTmzp9mkdYDgm31oT1
+eenl/5XhZSfbeyP/L2LAUhppiqq8Mu2ZSYzMlEX9cLMb1CjAVubGLLw+7G6XFCQgoZuuTumWKdoB
+s+dkHfpXrsnvAr2zifjnykPNdc0t0m3VYnrFpOgi0zzSmbIDnxL22HWHwaie6WPGOIVXi3Ky24Nf
+RprnlnUB8ijTVqNixqufNejJwneOUvjNvzaGyVfj7e1r7H7uj6EkrtiIeSMGFfmq35g82oFT6+mx
+Q+Y7UAaNeaJe2IIUse4I/zbNpE1oBCmMU/zxXfo4uuizZ1I1O45MLj7LMjS/gyjiU5f9PF0frz5x
+z4HYze7jf8Nb4d5md6XnY159XqfuHzheiP5FQCVrHgAAAAAAAA==
 
-> +	/* If there is valid clock information, register a PTP clock */
-> +	if (st->cs_id) {
-> +		st->ptp_clock_info = ptp_vmclock_info;
-> +		strncpy(st->ptp_clock_info.name, st->name, sizeof(st->ptp_clock_info.name));
 
-Hi David,
-
-W=1 allmodconfig builds with gcc-13 flag the following.
-Reading the documentation of strncpy() in fortify-string.h,
-I wonder if strscpy() would be more appropriate in this case.
-
-In file included from ./include/linux/string.h:374,
-                 from ./include/linux/bitmap.h:13,
-                 from ./include/linux/cpumask.h:13,
-                 from ./arch/x86/include/asm/paravirt.h:21,
-                 from ./arch/x86/include/asm/cpuid.h:62,
-                 from ./arch/x86/include/asm/processor.h:19,
-                 from ./include/linux/sched.h:13,
-                 from ./include/linux/ratelimit.h:6,
-                 from ./include/linux/dev_printk.h:16,
-                 from ./include/linux/device.h:15,
-                 from drivers/ptp/ptp_vmclock.c:8:
-In function 'strncpy',
-    inlined from 'vmclock_probe' at drivers/ptp/ptp_vmclock.c:480:3:
-./include/linux/fortify-string.h:125:33: warning: '__builtin_strncpy' specified bound 32 equals destination size [-Wstringop-truncation]
-  125 | #define __underlying_strncpy    __builtin_strncpy
-      |                                 ^
-./include/linux/fortify-string.h:205:16: note: in expansion of macro '__underlying_strncpy'
-  205 |         return __underlying_strncpy(p, q, size);
-
-...
+--=-2VcdSTZ+DgjOCXYR0Rnr--
 
