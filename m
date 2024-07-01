@@ -1,67 +1,63 @@
-Return-Path: <linux-rtc+bounces-1433-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1434-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57DD591DDE3
-	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jul 2024 13:30:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0D7A91DDE7
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jul 2024 13:30:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8ED61F222B6
-	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jul 2024 11:30:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87BBD2810BF
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jul 2024 11:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF4B13D509;
-	Mon,  1 Jul 2024 11:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45BBC143864;
+	Mon,  1 Jul 2024 11:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dd0S1yC0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zwp5gSjd"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100F084A27;
-	Mon,  1 Jul 2024 11:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2200114374E
+	for <linux-rtc@vger.kernel.org>; Mon,  1 Jul 2024 11:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719833433; cv=none; b=FrdEWVa+6/FzlZhOV+VqfGNwzObEPqx9SnVkMxtUtsID969L4N4JYfgjY+nHjpSEFdFPibl7spAH5ogHV7ENRLnPIZ5uRa5eQLPayU6uyYsdlxra24fGVSTDZi8zLZ0LriVDAEpFi0Ke0hNTWqR7iPrbsEYoR8GqRb3ZuqmXUJI=
+	t=1719833439; cv=none; b=ZBi+RBo/q31lY4wtsUa3FhbFhZCVQTZUSQwOQWU3we3jc+Va0jUr6xNX11IwwB7j6T4EtWHa4Zg99oy2WmSMa9mBRoUNlkxqQ/aqJk+N41ZW4WVcpQNr2aLQGl+RV07NwMppvCDIjM7M5UoBaqfG5NBxo2tDACYrhqjDrtiadbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719833433; c=relaxed/simple;
-	bh=uJt+LcMeQ4bdITY1XRcpWQkQRZTaf/sm44jIsiJEhzw=;
+	s=arc-20240116; t=1719833439; c=relaxed/simple;
+	bh=GDefUOLKa6HZ+jn19hPuXZP0AbTmSP1rTIsRqlXAh7w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JswheWxQsiMC9bC3zy8gz9IKWGGaCob9o4eMZonWMxKYMvk28OF8jrnFk9F+qj+7Qwq2UTh97qVWs0FXKn7b/rcUHE/garY+Czgjlz48rqjUox12YdBEqrhpUm81HrxsNDlr667GbmmhfJNmVOyTrahnNq6Q0v0YFOPtBiygSPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dd0S1yC0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A93C4AF0D;
-	Mon,  1 Jul 2024 11:30:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=fpjOy48cI6p/qgQrSVBSCX975mXHIvNaApzG3DbeP/q7IKjOKFXz+gk9wX88p7FJWWYDdvSZzbWFm8l39pGWlzeloIdxle64Cme+oUWdTeXvjyVsbaa0ibrFe4cwUK7FpyHDvSj/e4p43wOoXdFAi0wFo1IE+vBFlzPeXK8SN2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zwp5gSjd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BE1C116B1;
+	Mon,  1 Jul 2024 11:30:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719833432;
-	bh=uJt+LcMeQ4bdITY1XRcpWQkQRZTaf/sm44jIsiJEhzw=;
+	s=k20201202; t=1719833439;
+	bh=GDefUOLKa6HZ+jn19hPuXZP0AbTmSP1rTIsRqlXAh7w=;
 	h=From:List-Id:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Dd0S1yC0l7pEoxL3wWSGaTG9CuwfqDMrJ55Qc62gqCU9WLkVoPjdOyxieb054m/L4
-	 gDIhcDHGom5fxwlIPympbrxezj5qMbObDdUbm3PeQwdYW209yzD6URZDk+s86ycZS9
-	 en2ahwzKBwF3VOFdBjs1PZTmn4zn+nFvg7UNh9LrNPp4LfLSKRx5H/jXzqOBZ7YGgD
-	 aPN7EEeq1ZBz8TvGt5LGRj9gMBdY9h14rebbEo/xWChM0wtw6NgyPkqj9nUV1rCJLK
-	 29GWponOcWqmlskJFgPNnVnN3etRNbqRCjX0oSD7C66LAFZRF36dMqEHq+PdCa6sVZ
-	 Uaz5XE8xFPpwQ==
+	b=Zwp5gSjdLVnOljJ17L5cM8l0oNpWQC/nrW//9DhhNlScANJSF1xPXh/0gSihdtKYx
+	 jjIVoR1B4EadDxa+QRErcD2vd7tkkhyZzbZBt05WDHlxyG+EnUO9JYCgvBn7QoO6hW
+	 sfyXOqp0TpuU6IVJr8IxjJvgeArErG0YAbzCd2Fq9ehE2f62k/uc/IGodgZjZuNwvg
+	 BG2JRqNWYYSMXXTW/Es0duvC7T1R6MkZpCyXH37f7/4LCe5uCMuIhv+/UpYDfuQvS0
+	 PRlwluz8z2QHvbkC5xGBhx0HUapDPlAQuKHzyuYPIfGdHLWNXefY/hSKEyrbKKkwIH
+	 za3u7THUpZh7g==
 From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To: Arnd Bergmann <arnd@arndb.de>,
 	soc@kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>,
-	linux-gpio@vger.kernel.org,
 	Alessandro Zummo <a.zummo@towertech.it>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-watchdog@vger.kernel.org
+	Andy Shevchenko <andy@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-rtc@vger.kernel.org
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	arm@kernel.org,
 	Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v13 2/8] platform: cznic: Add preliminary support for Turris Omnia MCU
-Date: Mon,  1 Jul 2024 13:30:04 +0200
-Message-ID: <20240701113010.16447-3-kabel@kernel.org>
+Subject: [PATCH v13 4/8] platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+Date: Mon,  1 Jul 2024 13:30:06 +0200
+Message-ID: <20240701113010.16447-5-kabel@kernel.org>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240701113010.16447-1-kabel@kernel.org>
 References: <20240701113010.16447-1-kabel@kernel.org>
@@ -74,941 +70,422 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add the basic skeleton for a new platform driver for the microcontroller
-found on the Turris Omnia board.
+Add support for true board poweroff (MCU can disable all unnecessary
+voltage regulators) and wakeup at a specified time, implemented via a
+RTC driver so that the rtcwake utility can be used to configure it.
 
 Signed-off-by: Marek Behún <kabel@kernel.org>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Reviewed-by: Andy Shevchenko <andy@kernel.org>
 ---
- .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  81 ++++
- MAINTAINERS                                   |   3 +
- drivers/platform/Kconfig                      |   2 +
- drivers/platform/Makefile                     |   1 +
- drivers/platform/cznic/Kconfig                |  25 ++
- drivers/platform/cznic/Makefile               |   4 +
- .../platform/cznic/turris-omnia-mcu-base.c    | 394 ++++++++++++++++++
- drivers/platform/cznic/turris-omnia-mcu.h     |  74 ++++
- include/linux/turris-omnia-mcu-interface.h    | 249 +++++++++++
- 9 files changed, 833 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
- create mode 100644 drivers/platform/cznic/Kconfig
- create mode 100644 drivers/platform/cznic/Makefile
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
- create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
- create mode 100644 include/linux/turris-omnia-mcu-interface.h
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  16 ++
+ drivers/platform/cznic/Kconfig                |   4 +
+ drivers/platform/cznic/Makefile               |   1 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |   5 +
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   | 260 ++++++++++++++++++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  20 ++
+ 6 files changed, 306 insertions(+)
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
 
 diff --git a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-new file mode 100644
-index 000000000000..9bc5aad00de0
---- /dev/null
+index 86360249080c..307a55f599cb 100644
+--- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
 +++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
-@@ -0,0 +1,81 @@
-+What:		/sys/bus/i2c/devices/<mcu_device>/board_revision
+@@ -38,6 +38,22 @@ Description:	(RW) The front button on the Turris Omnia router can be
+ 
+ 		Format: %s.
+ 
++What:		/sys/bus/i2c/devices/<mcu_device>/front_button_poweron
 +Date:		September 2024
 +KernelVersion:	6.11
 +Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Contains board revision number.
++Description:	(RW) Newer versions of the microcontroller firmware of the
++		Turris Omnia router support powering off the router into true
++		low power mode. The router can be powered on by pressing the
++		front button.
 +
-+		Only available if board information is burned in the MCU (older
-+		revisions have board information burned in the ATSHA204-A chip).
++		This file configures whether front button power on is enabled.
 +
-+		Format: %u.
-+
-+What:		/sys/bus/i2c/devices/<mcu_device>/first_mac_address
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Contains device first MAC address. Each Turris Omnia is
-+		allocated 3 MAC addresses. The two additional addresses are
-+		computed from the first one by incrementing it.
-+
-+		Only available if board information is burned in the MCU (older
-+		revisions have board information burned in the ATSHA204-A chip).
-+
-+		Format: %pM.
-+
-+What:		/sys/bus/i2c/devices/<mcu_device>/fw_features
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Newer versions of the microcontroller firmware report the
-+		features they support. These can be read from this file. If the
-+		MCU firmware is too old, this file reads 0x0.
-+
-+		Format: 0x%x.
-+
-+What:		/sys/bus/i2c/devices/<mcu_device>/fw_version_hash_application
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Contains the version hash (commit hash) of the application
-+		part of the microcontroller firmware.
-+
-+		Format: %s.
-+
-+What:		/sys/bus/i2c/devices/<mcu_device>/fw_version_hash_bootloader
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Contains the version hash (commit hash) of the bootloader
-+		part of the microcontroller firmware.
-+
-+		Format: %s.
-+
-+What:		/sys/bus/i2c/devices/<mcu_device>/mcu_type
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Contains the microcontroller type (STM32, GD32, MKL).
-+
-+		Format: %s.
-+
-+What:		/sys/bus/i2c/devices/<mcu_device>/reset_selector
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Contains the selected factory reset level, determined by
-+		how long the rear reset button was held by the user during board
-+		reset.
++		This file is present only if the power off feature is supported
++		by the firmware.
 +
 +		Format: %i.
 +
-+What:		/sys/bus/i2c/devices/<mcu_device>/serial_number
-+Date:		September 2024
-+KernelVersion:	6.11
-+Contact:	Marek Behún <kabel@kernel.org>
-+Description:	(RO) Contains the 64-bit board serial number in hexadecimal
-+		format.
-+
-+		Only available if board information is burned in the MCU (older
-+		revisions have board information burned in the ATSHA204-A chip).
-+
-+		Format: %016X.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 37da14d4fb4f..f35252c88463 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2206,6 +2206,7 @@ M:	Marek Behún <kabel@kernel.org>
- S:	Maintained
- W:	https://www.turris.cz/
- F:	Documentation/ABI/testing/debugfs-moxtet
-+F:	Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
- F:	Documentation/ABI/testing/sysfs-bus-moxtet-devices
- F:	Documentation/ABI/testing/sysfs-firmware-turris-mox-rwtm
- F:	Documentation/devicetree/bindings/bus/moxtet.txt
-@@ -2219,10 +2220,12 @@ F:	drivers/firmware/turris-mox-rwtm.c
- F:	drivers/gpio/gpio-moxtet.c
- F:	drivers/leds/leds-turris-omnia.c
- F:	drivers/mailbox/armada-37xx-rwtm-mailbox.c
-+F:	drivers/platform/cznic/
- F:	drivers/watchdog/armada_37xx_wdt.c
- F:	include/dt-bindings/bus/moxtet.h
- F:	include/linux/armada-37xx-rwtm-mailbox.h
- F:	include/linux/moxtet.h
-+F:	include/linux/turris-omnia-mcu-interface.h
- 
- ARM/FARADAY FA526 PORT
- M:	Hans Ulli Kroll <ulli.kroll@googlemail.com>
-diff --git a/drivers/platform/Kconfig b/drivers/platform/Kconfig
-index 81a298517df2..960fd6a82450 100644
---- a/drivers/platform/Kconfig
-+++ b/drivers/platform/Kconfig
-@@ -7,6 +7,8 @@ source "drivers/platform/goldfish/Kconfig"
- 
- source "drivers/platform/chrome/Kconfig"
- 
-+source "drivers/platform/cznic/Kconfig"
-+
- source "drivers/platform/mellanox/Kconfig"
- 
- source "drivers/platform/olpc/Kconfig"
-diff --git a/drivers/platform/Makefile b/drivers/platform/Makefile
-index fbbe4f77aa5d..bf69cc8d7429 100644
---- a/drivers/platform/Makefile
-+++ b/drivers/platform/Makefile
-@@ -10,5 +10,6 @@ obj-$(CONFIG_MIPS)		+= mips/
- obj-$(CONFIG_OLPC_EC)		+= olpc/
- obj-$(CONFIG_GOLDFISH)		+= goldfish/
- obj-$(CONFIG_CHROME_PLATFORMS)	+= chrome/
-+obj-$(CONFIG_CZNIC_PLATFORMS)	+= cznic/
- obj-$(CONFIG_SURFACE_PLATFORMS)	+= surface/
- obj-$(CONFIG_ARM64)		+= arm64/
+ What:		/sys/bus/i2c/devices/<mcu_device>/fw_features
+ Date:		September 2024
+ KernelVersion:	6.11
 diff --git a/drivers/platform/cznic/Kconfig b/drivers/platform/cznic/Kconfig
-new file mode 100644
-index 000000000000..db5f4a673d28
---- /dev/null
+index d95e7c83c7ae..c1e719235517 100644
+--- a/drivers/platform/cznic/Kconfig
 +++ b/drivers/platform/cznic/Kconfig
-@@ -0,0 +1,25 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# For a description of the syntax of this configuration file,
-+# see Documentation/kbuild/kconfig-language.rst.
-+#
-+
-+menuconfig CZNIC_PLATFORMS
-+	bool "Platform support for CZ.NIC's Turris hardware"
-+	help
-+	  Say Y here to be able to choose driver support for CZ.NIC's Turris
-+	  devices. This option alone does not add any kernel code.
-+
-+if CZNIC_PLATFORMS
-+
-+config TURRIS_OMNIA_MCU
-+	tristate "Turris Omnia MCU driver"
-+	depends on MACH_ARMADA_38X || COMPILE_TEST
-+	depends on I2C
-+	help
-+	  Say Y here to add support for the features implemented by the
-+	  microcontroller on the CZ.NIC's Turris Omnia SOHO router.
-+	  To compile this driver as a module, choose M here; the module will be
-+	  called turris-omnia-mcu.
-+
-+endif # CZNIC_PLATFORMS
+@@ -18,10 +18,14 @@ config TURRIS_OMNIA_MCU
+ 	depends on I2C
+ 	select GPIOLIB
+ 	select GPIOLIB_IRQCHIP
++	select RTC_CLASS
+ 	help
+ 	  Say Y here to add support for the features implemented by the
+ 	  microcontroller on the CZ.NIC's Turris Omnia SOHO router.
+ 	  The features include:
++	  - board poweroff into true low power mode (with voltage regulators
++	    disabled) and the ability to configure wake up from this mode (via
++	    rtcwake)
+ 	  - GPIO pins
+ 	    - to get front button press events (the front button can be
+ 	      configured either to generate press events to the CPU or to change
 diff --git a/drivers/platform/cznic/Makefile b/drivers/platform/cznic/Makefile
-new file mode 100644
-index 000000000000..31adca73bb94
---- /dev/null
+index 53fd8f1777a3..a185ef882e44 100644
+--- a/drivers/platform/cznic/Makefile
 +++ b/drivers/platform/cznic/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
-+turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
+@@ -3,3 +3,4 @@
+ obj-$(CONFIG_TURRIS_OMNIA_MCU)	+= turris-omnia-mcu.o
+ turris-omnia-mcu-y		:= turris-omnia-mcu-base.o
+ turris-omnia-mcu-y		+= turris-omnia-mcu-gpio.o
++turris-omnia-mcu-y		+= turris-omnia-mcu-sys-off-wakeup.o
 diff --git a/drivers/platform/cznic/turris-omnia-mcu-base.c b/drivers/platform/cznic/turris-omnia-mcu-base.c
-new file mode 100644
-index 000000000000..47513ba9b128
---- /dev/null
+index 4481484b2f94..338a7ab12bd0 100644
+--- a/drivers/platform/cznic/turris-omnia-mcu-base.c
 +++ b/drivers/platform/cznic/turris-omnia-mcu-base.c
-@@ -0,0 +1,394 @@
+@@ -198,6 +198,7 @@ static const struct attribute_group omnia_mcu_base_group = {
+ static const struct attribute_group *omnia_mcu_groups[] = {
+ 	&omnia_mcu_base_group,
+ 	&omnia_mcu_gpio_group,
++	&omnia_mcu_poweroff_group,
+ 	NULL
+ };
+ 
+@@ -372,6 +373,10 @@ static int omnia_mcu_probe(struct i2c_client *client)
+ 					     "Cannot read board info\n");
+ 	}
+ 
++	err = omnia_mcu_register_sys_off_and_wakeup(mcu);
++	if (err)
++		return err;
++
+ 	return omnia_mcu_register_gpiochip(mcu);
+ }
+ 
+diff --git a/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+new file mode 100644
+index 000000000000..0e8ab15b6037
+--- /dev/null
++++ b/drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+@@ -0,0 +1,260 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * CZ.NIC's Turris Omnia MCU driver
++ * CZ.NIC's Turris Omnia MCU system off and RTC wakeup driver
++ *
++ * This is not a true RTC driver (in the sense that it does not provide a
++ * real-time clock), rather the MCU implements a wakeup from powered off state
++ * at a specified time relative to MCU boot, and we expose this feature via RTC
++ * alarm, so that it can be used via the rtcwake command, which is the standard
++ * Linux command for this.
 + *
 + * 2024 by Marek Behún <kabel@kernel.org>
 + */
 +
-+#include <linux/array_size.h>
-+#include <linux/bits.h>
++#include <linux/crc32.h>
++#include <linux/delay.h>
 +#include <linux/device.h>
-+#include <linux/errno.h>
-+#include <linux/hex.h>
++#include <linux/err.h>
 +#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/string.h>
++#include <linux/kstrtox.h>
++#include <linux/reboot.h>
++#include <linux/rtc.h>
 +#include <linux/sysfs.h>
 +#include <linux/types.h>
 +
 +#include <linux/turris-omnia-mcu-interface.h>
 +#include "turris-omnia-mcu.h"
 +
-+#define OMNIA_FW_VERSION_LEN		20
-+#define OMNIA_FW_VERSION_HEX_LEN	(2 * OMNIA_FW_VERSION_LEN + 1)
-+#define OMNIA_BOARD_INFO_LEN		16
-+
-+int omnia_cmd_write_read(const struct i2c_client *client,
-+			 void *cmd, unsigned int cmd_len,
-+			 void *reply, unsigned int reply_len)
++static int omnia_get_uptime_wakeup(const struct i2c_client *client, u32 *uptime,
++				   u32 *wakeup)
 +{
-+	struct i2c_msg msgs[2];
-+	int ret, num;
-+
-+	msgs[0].addr = client->addr;
-+	msgs[0].flags = 0;
-+	msgs[0].len = cmd_len;
-+	msgs[0].buf = cmd;
-+	num = 1;
-+
-+	if (reply_len) {
-+		msgs[1].addr = client->addr;
-+		msgs[1].flags = I2C_M_RD;
-+		msgs[1].len = reply_len;
-+		msgs[1].buf = reply;
-+		num++;
-+	}
-+
-+	ret = i2c_transfer(client->adapter, msgs, num);
-+	if (ret < 0)
-+		return ret;
-+	if (ret != num)
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static int omnia_get_version_hash(struct omnia_mcu *mcu, bool bootloader,
-+				  char version[static OMNIA_FW_VERSION_HEX_LEN])
-+{
-+	u8 reply[OMNIA_FW_VERSION_LEN];
-+	char *p;
++	__le32 reply[2];
 +	int err;
 +
-+	err = omnia_cmd_read(mcu->client,
-+			     bootloader ? OMNIA_CMD_GET_FW_VERSION_BOOT
-+					: OMNIA_CMD_GET_FW_VERSION_APP,
-+			     reply, sizeof(reply));
-+	if (err)
-+		return err;
-+
-+	p = bin2hex(version, reply, OMNIA_FW_VERSION_LEN);
-+	*p = '\0';
-+
-+	return 0;
-+}
-+
-+static ssize_t fw_version_hash_show(struct device *dev, char *buf,
-+				    bool bootloader)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+	char version[OMNIA_FW_VERSION_HEX_LEN];
-+	int err;
-+
-+	err = omnia_get_version_hash(mcu, bootloader, version);
-+	if (err)
-+		return err;
-+
-+	return sysfs_emit(buf, "%s\n", version);
-+}
-+
-+static ssize_t fw_version_hash_application_show(struct device *dev,
-+						struct device_attribute *a,
-+						char *buf)
-+{
-+	return fw_version_hash_show(dev, buf, false);
-+}
-+static DEVICE_ATTR_RO(fw_version_hash_application);
-+
-+static ssize_t fw_version_hash_bootloader_show(struct device *dev,
-+					       struct device_attribute *a,
-+					       char *buf)
-+{
-+	return fw_version_hash_show(dev, buf, true);
-+}
-+static DEVICE_ATTR_RO(fw_version_hash_bootloader);
-+
-+static ssize_t fw_features_show(struct device *dev, struct device_attribute *a,
-+				char *buf)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "0x%x\n", mcu->features);
-+}
-+static DEVICE_ATTR_RO(fw_features);
-+
-+static ssize_t mcu_type_show(struct device *dev, struct device_attribute *a,
-+			     char *buf)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%s\n", mcu->type);
-+}
-+static DEVICE_ATTR_RO(mcu_type);
-+
-+static ssize_t reset_selector_show(struct device *dev,
-+				   struct device_attribute *a, char *buf)
-+{
-+	u8 reply;
-+	int err;
-+
-+	err = omnia_cmd_read_u8(to_i2c_client(dev), OMNIA_CMD_GET_RESET,
-+				&reply);
-+	if (err)
-+		return err;
-+
-+	return sysfs_emit(buf, "%d\n", reply);
-+}
-+static DEVICE_ATTR_RO(reset_selector);
-+
-+static ssize_t serial_number_show(struct device *dev,
-+				  struct device_attribute *a, char *buf)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%016llX\n", mcu->board_serial_number);
-+}
-+static DEVICE_ATTR_RO(serial_number);
-+
-+static ssize_t first_mac_address_show(struct device *dev,
-+				      struct device_attribute *a, char *buf)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%pM\n", mcu->board_first_mac);
-+}
-+static DEVICE_ATTR_RO(first_mac_address);
-+
-+static ssize_t board_revision_show(struct device *dev,
-+				   struct device_attribute *a, char *buf)
-+{
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%u\n", mcu->board_revision);
-+}
-+static DEVICE_ATTR_RO(board_revision);
-+
-+static struct attribute *omnia_mcu_base_attrs[] = {
-+	&dev_attr_fw_version_hash_application.attr,
-+	&dev_attr_fw_version_hash_bootloader.attr,
-+	&dev_attr_fw_features.attr,
-+	&dev_attr_mcu_type.attr,
-+	&dev_attr_reset_selector.attr,
-+	&dev_attr_serial_number.attr,
-+	&dev_attr_first_mac_address.attr,
-+	&dev_attr_board_revision.attr,
-+	NULL
-+};
-+
-+static umode_t omnia_mcu_base_attrs_visible(struct kobject *kobj,
-+					    struct attribute *a, int n)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct omnia_mcu *mcu = dev_get_drvdata(dev);
-+
-+	if ((a == &dev_attr_serial_number.attr ||
-+	     a == &dev_attr_first_mac_address.attr ||
-+	     a == &dev_attr_board_revision.attr) &&
-+	    !(mcu->features & OMNIA_FEAT_BOARD_INFO))
-+		return 0;
-+
-+	return a->mode;
-+}
-+
-+static const struct attribute_group omnia_mcu_base_group = {
-+	.attrs = omnia_mcu_base_attrs,
-+	.is_visible = omnia_mcu_base_attrs_visible,
-+};
-+
-+static const struct attribute_group *omnia_mcu_groups[] = {
-+	&omnia_mcu_base_group,
-+	NULL
-+};
-+
-+static void omnia_mcu_print_version_hash(struct omnia_mcu *mcu, bool bootloader)
-+{
-+	const char *type = bootloader ? "bootloader" : "application";
-+	struct device *dev = &mcu->client->dev;
-+	char version[OMNIA_FW_VERSION_HEX_LEN];
-+	int err;
-+
-+	err = omnia_get_version_hash(mcu, bootloader, version);
-+	if (err) {
-+		dev_err(dev, "Cannot read MCU %s firmware version: %d\n",
-+			type, err);
-+		return;
-+	}
-+
-+	dev_info(dev, "MCU %s firmware version hash: %s\n", type, version);
-+}
-+
-+static const char *omnia_status_to_mcu_type(u16 status)
-+{
-+	switch (status & OMNIA_STS_MCU_TYPE_MASK) {
-+	case OMNIA_STS_MCU_TYPE_STM32:
-+		return "STM32";
-+	case OMNIA_STS_MCU_TYPE_GD32:
-+		return "GD32";
-+	case OMNIA_STS_MCU_TYPE_MKL:
-+		return "MKL";
-+	default:
-+		return "unknown";
-+	}
-+}
-+
-+static void omnia_info_missing_feature(struct device *dev, const char *feature)
-+{
-+	dev_info(dev,
-+		 "Your board's MCU firmware does not support the %s feature.\n",
-+		 feature);
-+}
-+
-+static int omnia_mcu_read_features(struct omnia_mcu *mcu)
-+{
-+	static const struct {
-+		u16 mask;
-+		const char *name;
-+	} features[] = {
-+#define _DEF_FEAT(_n, _m) { OMNIA_FEAT_ ## _n, _m }
-+		_DEF_FEAT(EXT_CMDS,		"extended control and status"),
-+		_DEF_FEAT(WDT_PING,		"watchdog pinging"),
-+		_DEF_FEAT(LED_STATE_EXT_MASK,	"peripheral LED pins reading"),
-+		_DEF_FEAT(NEW_INT_API,		"new interrupt API"),
-+		_DEF_FEAT(POWEROFF_WAKEUP,	"poweroff and wakeup"),
-+		_DEF_FEAT(TRNG,			"true random number generator"),
-+#undef _DEF_FEAT
-+	};
-+	struct i2c_client *client = mcu->client;
-+	struct device *dev = &client->dev;
-+	bool suggest_fw_upgrade = false;
-+	u16 status;
-+	int err;
-+
-+	/* status word holds MCU type, which we need below */
-+	err = omnia_cmd_read_u16(client, OMNIA_CMD_GET_STATUS_WORD, &status);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * Check whether MCU firmware supports the OMNIA_CMD_GET_FEATURES
-+	 * command.
-+	 */
-+	if (status & OMNIA_STS_FEATURES_SUPPORTED) {
-+		/* try read 32-bit features */
-+		err = omnia_cmd_read_u32(client, OMNIA_CMD_GET_FEATURES,
-+					 &mcu->features);
-+		if (err) {
-+			/* try read 16-bit features */
-+			u16 features16;
-+
-+			err = omnia_cmd_read_u16(client, OMNIA_CMD_GET_FEATURES,
-+						 &features16);
-+			if (err)
-+				return err;
-+
-+			mcu->features = features16;
-+		} else {
-+			if (mcu->features & OMNIA_FEAT_FROM_BIT_16_INVALID)
-+				mcu->features &= GENMASK(15, 0);
-+		}
-+	} else {
-+		dev_info(dev,
-+			 "Your board's MCU firmware does not support feature reading.\n");
-+		suggest_fw_upgrade = true;
-+	}
-+
-+	mcu->type = omnia_status_to_mcu_type(status);
-+	dev_info(dev, "MCU type %s%s\n", mcu->type,
-+		 (mcu->features & OMNIA_FEAT_PERIPH_MCU) ?
-+			", with peripheral resets wired" : "");
-+
-+	omnia_mcu_print_version_hash(mcu, true);
-+
-+	if (mcu->features & OMNIA_FEAT_BOOTLOADER)
-+		dev_warn(dev,
-+			 "MCU is running bootloader firmware. Was firmware upgrade interrupted?\n");
-+	else
-+		omnia_mcu_print_version_hash(mcu, false);
-+
-+	for (unsigned int i = 0; i < ARRAY_SIZE(features); i++) {
-+		if (mcu->features & features[i].mask)
-+			continue;
-+
-+		omnia_info_missing_feature(dev, features[i].name);
-+		suggest_fw_upgrade = true;
-+	}
-+
-+	if (suggest_fw_upgrade)
-+		dev_info(dev,
-+			 "Consider upgrading MCU firmware with the omnia-mcutool utility.\n");
-+
-+	return 0;
-+}
-+
-+static int omnia_mcu_read_board_info(struct omnia_mcu *mcu)
-+{
-+	u8 reply[1 + OMNIA_BOARD_INFO_LEN];
-+	int err;
-+
-+	err = omnia_cmd_read(mcu->client, OMNIA_CMD_BOARD_INFO_GET, reply,
++	err = omnia_cmd_read(client, OMNIA_CMD_GET_UPTIME_AND_WAKEUP, reply,
 +			     sizeof(reply));
 +	if (err)
 +		return err;
 +
-+	if (reply[0] != OMNIA_BOARD_INFO_LEN)
-+		return -EIO;
++	if (uptime)
++		*uptime = le32_to_cpu(reply[0]);
 +
-+	mcu->board_serial_number = get_unaligned_le64(&reply[1]);
-+
-+	/* we can't use ether_addr_copy() because reply is not u16-aligned */
-+	memcpy(mcu->board_first_mac, &reply[9], sizeof(mcu->board_first_mac));
-+
-+	mcu->board_revision = reply[15];
++	if (wakeup)
++		*wakeup = le32_to_cpu(reply[1]);
 +
 +	return 0;
 +}
 +
-+static int omnia_mcu_probe(struct i2c_client *client)
++static int omnia_read_time(struct device *dev, struct rtc_time *tm)
 +{
-+	struct device *dev = &client->dev;
-+	struct omnia_mcu *mcu;
++	u32 uptime;
 +	int err;
 +
-+	if (!client->irq)
-+		return dev_err_probe(dev, -EINVAL, "IRQ resource not found\n");
-+
-+	mcu = devm_kzalloc(dev, sizeof(*mcu), GFP_KERNEL);
-+	if (!mcu)
-+		return -ENOMEM;
-+
-+	mcu->client = client;
-+	i2c_set_clientdata(client, mcu);
-+
-+	err = omnia_mcu_read_features(mcu);
-+	if (err)
-+		return dev_err_probe(dev, err,
-+				     "Cannot determine MCU supported features\n");
-+
-+	if (mcu->features & OMNIA_FEAT_BOARD_INFO) {
-+		err = omnia_mcu_read_board_info(mcu);
-+		if (err)
-+			return dev_err_probe(dev, err,
-+					     "Cannot read board info\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id of_omnia_mcu_match[] = {
-+	{ .compatible = "cznic,turris-omnia-mcu" },
-+	{}
-+};
-+
-+static struct i2c_driver omnia_mcu_driver = {
-+	.probe		= omnia_mcu_probe,
-+	.driver		= {
-+		.name	= "turris-omnia-mcu",
-+		.of_match_table = of_omnia_mcu_match,
-+		.dev_groups = omnia_mcu_groups,
-+	},
-+};
-+module_i2c_driver(omnia_mcu_driver);
-+
-+MODULE_AUTHOR("Marek Behun <kabel@kernel.org>");
-+MODULE_DESCRIPTION("CZ.NIC's Turris Omnia MCU");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
-new file mode 100644
-index 000000000000..3d0daa6f13ef
---- /dev/null
-+++ b/drivers/platform/cznic/turris-omnia-mcu.h
-@@ -0,0 +1,74 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * CZ.NIC's Turris Omnia MCU driver
-+ *
-+ * 2024 by Marek Behún <kabel@kernel.org>
-+ */
-+
-+#ifndef __TURRIS_OMNIA_MCU_H
-+#define __TURRIS_OMNIA_MCU_H
-+
-+#include <linux/if_ether.h>
-+#include <linux/types.h>
-+#include <asm/byteorder.h>
-+
-+struct i2c_client;
-+
-+struct omnia_mcu {
-+	struct i2c_client *client;
-+	const char *type;
-+	u32 features;
-+
-+	/* board information */
-+	u64 board_serial_number;
-+	u8 board_first_mac[ETH_ALEN];
-+	u8 board_revision;
-+};
-+
-+int omnia_cmd_write_read(const struct i2c_client *client,
-+			 void *cmd, unsigned int cmd_len,
-+			 void *reply, unsigned int reply_len);
-+
-+static inline int omnia_cmd_read(const struct i2c_client *client, u8 cmd,
-+				 void *reply, unsigned int len)
-+{
-+	return omnia_cmd_write_read(client, &cmd, 1, reply, len);
-+}
-+
-+static inline int omnia_cmd_read_u32(const struct i2c_client *client, u8 cmd,
-+				     u32 *dst)
-+{
-+	__le32 reply;
-+	int err;
-+
-+	err = omnia_cmd_read(client, cmd, &reply, sizeof(reply));
++	err = omnia_get_uptime_wakeup(to_i2c_client(dev), &uptime, NULL);
 +	if (err)
 +		return err;
 +
-+	*dst = le32_to_cpu(reply);
++	rtc_time64_to_tm(uptime, tm);
 +
 +	return 0;
 +}
 +
-+static inline int omnia_cmd_read_u16(const struct i2c_client *client, u8 cmd,
-+				     u16 *dst)
++static int omnia_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
 +{
-+	__le16 reply;
++	struct i2c_client *client = to_i2c_client(dev);
++	struct omnia_mcu *mcu = i2c_get_clientdata(client);
++	u32 wakeup;
 +	int err;
 +
-+	err = omnia_cmd_read(client, cmd, &reply, sizeof(reply));
++	err = omnia_get_uptime_wakeup(client, NULL, &wakeup);
 +	if (err)
 +		return err;
 +
-+	*dst = le16_to_cpu(reply);
++	alrm->enabled = !!wakeup;
++	rtc_time64_to_tm(wakeup ?: mcu->rtc_alarm, &alrm->time);
 +
 +	return 0;
 +}
 +
-+static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd,
-+				    u8 *reply)
++static int omnia_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
 +{
-+	return omnia_cmd_read(client, cmd, reply, sizeof(*reply));
++	struct i2c_client *client = to_i2c_client(dev);
++	struct omnia_mcu *mcu = i2c_get_clientdata(client);
++
++	mcu->rtc_alarm = rtc_tm_to_time64(&alrm->time);
++
++	if (alrm->enabled)
++		return omnia_cmd_write_u32(client, OMNIA_CMD_SET_WAKEUP,
++					   mcu->rtc_alarm);
++
++	return 0;
 +}
 +
-+#endif /* __TURRIS_OMNIA_MCU_H */
-diff --git a/include/linux/turris-omnia-mcu-interface.h b/include/linux/turris-omnia-mcu-interface.h
-new file mode 100644
-index 000000000000..2da8cbeb158a
---- /dev/null
-+++ b/include/linux/turris-omnia-mcu-interface.h
-@@ -0,0 +1,249 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * CZ.NIC's Turris Omnia MCU I2C interface commands definitions
-+ *
-+ * 2024 by Marek Behún <kabel@kernel.org>
-+ */
++static int omnia_alarm_irq_enable(struct device *dev, unsigned int enabled)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct omnia_mcu *mcu = i2c_get_clientdata(client);
 +
-+#ifndef __TURRIS_OMNIA_MCU_INTERFACE_H
-+#define __TURRIS_OMNIA_MCU_INTERFACE_H
++	return omnia_cmd_write_u32(client, OMNIA_CMD_SET_WAKEUP,
++				   enabled ? mcu->rtc_alarm : 0);
++}
 +
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+
-+enum omnia_commands_e {
-+	OMNIA_CMD_GET_STATUS_WORD		= 0x01, /* slave sends status word back */
-+	OMNIA_CMD_GENERAL_CONTROL		= 0x02,
-+	OMNIA_CMD_LED_MODE			= 0x03, /* default/user */
-+	OMNIA_CMD_LED_STATE			= 0x04, /* LED on/off */
-+	OMNIA_CMD_LED_COLOR			= 0x05, /* LED number + RED + GREEN + BLUE */
-+	OMNIA_CMD_USER_VOLTAGE			= 0x06,
-+	OMNIA_CMD_SET_BRIGHTNESS		= 0x07,
-+	OMNIA_CMD_GET_BRIGHTNESS		= 0x08,
-+	OMNIA_CMD_GET_RESET			= 0x09,
-+	OMNIA_CMD_GET_FW_VERSION_APP		= 0x0A, /* 20B git hash number */
-+	OMNIA_CMD_SET_WATCHDOG_STATE		= 0x0B, /* 0 - disable
-+							 * 1 - enable / ping
-+							 * after boot watchdog is started
-+							 * with 2 minutes timeout
-+							 */
-+
-+	/* OMNIA_CMD_WATCHDOG_STATUS		= 0x0C, not implemented anymore */
-+
-+	OMNIA_CMD_GET_WATCHDOG_STATE		= 0x0D,
-+	OMNIA_CMD_GET_FW_VERSION_BOOT		= 0x0E, /* 20B Git hash number */
-+	OMNIA_CMD_GET_FW_CHECKSUM		= 0x0F, /* 4B length, 4B checksum */
-+
-+	/* available if FEATURES_SUPPORTED bit set in status word */
-+	OMNIA_CMD_GET_FEATURES			= 0x10,
-+
-+	/* available if EXT_CMD bit set in features */
-+	OMNIA_CMD_GET_EXT_STATUS_DWORD		= 0x11,
-+	OMNIA_CMD_EXT_CONTROL			= 0x12,
-+	OMNIA_CMD_GET_EXT_CONTROL_STATUS	= 0x13,
-+
-+	/* available if NEW_INT_API bit set in features */
-+	OMNIA_CMD_GET_INT_AND_CLEAR		= 0x14,
-+	OMNIA_CMD_GET_INT_MASK			= 0x15,
-+	OMNIA_CMD_SET_INT_MASK			= 0x16,
-+
-+	/* available if FLASHING bit set in features */
-+	OMNIA_CMD_FLASH				= 0x19,
-+
-+	/* available if WDT_PING bit set in features */
-+	OMNIA_CMD_SET_WDT_TIMEOUT		= 0x20,
-+	OMNIA_CMD_GET_WDT_TIMELEFT		= 0x21,
-+
-+	/* available if POWEROFF_WAKEUP bit set in features */
-+	OMNIA_CMD_SET_WAKEUP			= 0x22,
-+	OMNIA_CMD_GET_UPTIME_AND_WAKEUP		= 0x23,
-+	OMNIA_CMD_POWER_OFF			= 0x24,
-+
-+	/* available if USB_OVC_PROT_SETTING bit set in features */
-+	OMNIA_CMD_SET_USB_OVC_PROT		= 0x25,
-+	OMNIA_CMD_GET_USB_OVC_PROT		= 0x26,
-+
-+	/* available if TRNG bit set in features */
-+	OMNIA_CMD_TRNG_COLLECT_ENTROPY		= 0x28,
-+
-+	/* available if CRYPTO bit set in features */
-+	OMNIA_CMD_CRYPTO_GET_PUBLIC_KEY		= 0x29,
-+	OMNIA_CMD_CRYPTO_SIGN_MESSAGE		= 0x2A,
-+	OMNIA_CMD_CRYPTO_COLLECT_SIGNATURE	= 0x2B,
-+
-+	/* available if BOARD_INFO it set in features */
-+	OMNIA_CMD_BOARD_INFO_GET		= 0x2C,
-+	OMNIA_CMD_BOARD_INFO_BURN		= 0x2D,
-+
-+	/* available only at address 0x2b (LED-controller) */
-+	/* available only if LED_GAMMA_CORRECTION bit set in features */
-+	OMNIA_CMD_SET_GAMMA_CORRECTION		= 0x30,
-+	OMNIA_CMD_GET_GAMMA_CORRECTION		= 0x31,
-+
-+	/* available only at address 0x2b (LED-controller) */
-+	/* available only if PER_LED_CORRECTION bit set in features */
-+	/* available only if FROM_BIT_16_INVALID bit NOT set in features */
-+	OMNIA_CMD_SET_LED_CORRECTIONS		= 0x32,
-+	OMNIA_CMD_GET_LED_CORRECTIONS		= 0x33,
++static const struct rtc_class_ops omnia_rtc_ops = {
++	.read_time		= omnia_read_time,
++	.read_alarm		= omnia_read_alarm,
++	.set_alarm		= omnia_set_alarm,
++	.alarm_irq_enable	= omnia_alarm_irq_enable,
 +};
 +
-+enum omnia_flashing_commands_e {
-+	OMNIA_FLASH_CMD_UNLOCK		= 0x01,
-+	OMNIA_FLASH_CMD_SIZE_AND_CSUM	= 0x02,
-+	OMNIA_FLASH_CMD_PROGRAM		= 0x03,
-+	OMNIA_FLASH_CMD_RESET		= 0x04,
-+};
++static int omnia_power_off(struct sys_off_data *data)
++{
++	struct omnia_mcu *mcu = data->cb_data;
++	__be32 tmp;
++	u8 cmd[9];
++	u16 arg;
++	int err;
 +
-+enum omnia_sts_word_e {
-+	OMNIA_STS_MCU_TYPE_MASK			= GENMASK(1, 0),
-+	OMNIA_STS_MCU_TYPE_STM32		= FIELD_PREP_CONST(OMNIA_STS_MCU_TYPE_MASK, 0),
-+	OMNIA_STS_MCU_TYPE_GD32			= FIELD_PREP_CONST(OMNIA_STS_MCU_TYPE_MASK, 1),
-+	OMNIA_STS_MCU_TYPE_MKL			= FIELD_PREP_CONST(OMNIA_STS_MCU_TYPE_MASK, 2),
-+	OMNIA_STS_FEATURES_SUPPORTED		= BIT(2),
-+	OMNIA_STS_USER_REGULATOR_NOT_SUPPORTED	= BIT(3),
-+	OMNIA_STS_CARD_DET			= BIT(4),
-+	OMNIA_STS_MSATA_IND			= BIT(5),
-+	OMNIA_STS_USB30_OVC			= BIT(6),
-+	OMNIA_STS_USB31_OVC			= BIT(7),
-+	OMNIA_STS_USB30_PWRON			= BIT(8),
-+	OMNIA_STS_USB31_PWRON			= BIT(9),
-+	OMNIA_STS_ENABLE_4V5			= BIT(10),
-+	OMNIA_STS_BUTTON_MODE			= BIT(11),
-+	OMNIA_STS_BUTTON_PRESSED		= BIT(12),
-+	OMNIA_STS_BUTTON_COUNTER_MASK		= GENMASK(15, 13),
-+};
++	if (mcu->front_button_poweron)
++		arg = OMNIA_CMD_POWER_OFF_POWERON_BUTTON;
++	else
++		arg = 0;
 +
-+enum omnia_ctl_byte_e {
-+	OMNIA_CTL_LIGHT_RST	= BIT(0),
-+	OMNIA_CTL_HARD_RST	= BIT(1),
-+	/* BIT(2) is currently reserved */
-+	OMNIA_CTL_USB30_PWRON	= BIT(3),
-+	OMNIA_CTL_USB31_PWRON	= BIT(4),
-+	OMNIA_CTL_ENABLE_4V5	= BIT(5),
-+	OMNIA_CTL_BUTTON_MODE	= BIT(6),
-+	OMNIA_CTL_BOOTLOADER	= BIT(7),
-+};
-+
-+enum omnia_features_e {
-+	OMNIA_FEAT_PERIPH_MCU		= BIT(0),
-+	OMNIA_FEAT_EXT_CMDS		= BIT(1),
-+	OMNIA_FEAT_WDT_PING		= BIT(2),
-+	OMNIA_FEAT_LED_STATE_EXT_MASK	= GENMASK(4, 3),
-+	OMNIA_FEAT_LED_STATE_EXT	= FIELD_PREP_CONST(OMNIA_FEAT_LED_STATE_EXT_MASK, 1),
-+	OMNIA_FEAT_LED_STATE_EXT_V32	= FIELD_PREP_CONST(OMNIA_FEAT_LED_STATE_EXT_MASK, 2),
-+	OMNIA_FEAT_LED_GAMMA_CORRECTION	= BIT(5),
-+	OMNIA_FEAT_NEW_INT_API		= BIT(6),
-+	OMNIA_FEAT_BOOTLOADER		= BIT(7),
-+	OMNIA_FEAT_FLASHING		= BIT(8),
-+	OMNIA_FEAT_NEW_MESSAGE_API	= BIT(9),
-+	OMNIA_FEAT_BRIGHTNESS_INT	= BIT(10),
-+	OMNIA_FEAT_POWEROFF_WAKEUP	= BIT(11),
-+	OMNIA_FEAT_CAN_OLD_MESSAGE_API	= BIT(12),
-+	OMNIA_FEAT_TRNG			= BIT(13),
-+	OMNIA_FEAT_CRYPTO		= BIT(14),
-+	OMNIA_FEAT_BOARD_INFO		= BIT(15),
++	cmd[0] = OMNIA_CMD_POWER_OFF;
++	put_unaligned_le16(OMNIA_CMD_POWER_OFF_MAGIC, &cmd[1]);
++	put_unaligned_le16(arg, &cmd[3]);
 +
 +	/*
-+	 * Orginally the features command replied only 16 bits. If more were
-+	 * read, either the I2C transaction failed or 0xff bytes were sent.
-+	 * Therefore to consider bits 16 - 31 valid, one bit (20) was reserved
-+	 * to be zero.
++	 * Although all values from and to MCU are passed in little-endian, the
++	 * MCU's CRC unit uses big-endian CRC32 polynomial (0x04c11db7), so we
++	 * need to use crc32_be() here.
 +	 */
++	tmp = cpu_to_be32(get_unaligned_le32(&cmd[1]));
++	put_unaligned_le32(crc32_be(~0, (void *)&tmp, sizeof(tmp)), &cmd[5]);
 +
-+	/* Bits 16 - 19 correspond to bits 0 - 3 of status word */
-+	OMNIA_FEAT_MCU_TYPE_MASK		= GENMASK(17, 16),
-+	OMNIA_FEAT_MCU_TYPE_STM32		= FIELD_PREP_CONST(OMNIA_FEAT_MCU_TYPE_MASK, 0),
-+	OMNIA_FEAT_MCU_TYPE_GD32		= FIELD_PREP_CONST(OMNIA_FEAT_MCU_TYPE_MASK, 1),
-+	OMNIA_FEAT_MCU_TYPE_MKL			= FIELD_PREP_CONST(OMNIA_FEAT_MCU_TYPE_MASK, 2),
-+	OMNIA_FEAT_FEATURES_SUPPORTED		= BIT(18),
-+	OMNIA_FEAT_USER_REGULATOR_NOT_SUPPORTED	= BIT(19),
++	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
++	if (err)
++		dev_err(&mcu->client->dev,
++			"Unable to send the poweroff command: %d\n", err);
 +
-+	/* must not be set */
-+	OMNIA_FEAT_FROM_BIT_16_INVALID	= BIT(20),
++	return NOTIFY_DONE;
++}
 +
-+	OMNIA_FEAT_PER_LED_CORRECTION	= BIT(21),
-+	OMNIA_FEAT_USB_OVC_PROT_SETTING	= BIT(22),
++static int omnia_restart(struct sys_off_data *data)
++{
++	struct omnia_mcu *mcu = data->cb_data;
++	u8 cmd[3];
++	int err;
++
++	cmd[0] = OMNIA_CMD_GENERAL_CONTROL;
++
++	if (reboot_mode == REBOOT_HARD)
++		cmd[1] = cmd[2] = OMNIA_CTL_HARD_RST;
++	else
++		cmd[1] = cmd[2] = OMNIA_CTL_LIGHT_RST;
++
++	err = omnia_cmd_write(mcu->client, cmd, sizeof(cmd));
++	if (err)
++		dev_err(&mcu->client->dev,
++			"Unable to send the restart command: %d\n", err);
++
++	/*
++	 * MCU needs a little bit to process the I2C command, otherwise it will
++	 * do a light reset based on SOC SYSRES_OUT pin.
++	 */
++	mdelay(1);
++
++	return NOTIFY_DONE;
++}
++
++static ssize_t front_button_poweron_show(struct device *dev,
++					 struct device_attribute *a, char *buf)
++{
++	struct omnia_mcu *mcu = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", mcu->front_button_poweron);
++}
++
++static ssize_t front_button_poweron_store(struct device *dev,
++					  struct device_attribute *a,
++					  const char *buf, size_t count)
++{
++	struct omnia_mcu *mcu = dev_get_drvdata(dev);
++	bool val;
++	int err;
++
++	err = kstrtobool(buf, &val);
++	if (err)
++		return err;
++
++	mcu->front_button_poweron = val;
++
++	return count;
++}
++static DEVICE_ATTR_RW(front_button_poweron);
++
++static struct attribute *omnia_mcu_poweroff_attrs[] = {
++	&dev_attr_front_button_poweron.attr,
++	NULL
 +};
 +
-+enum omnia_ext_sts_dword_e {
-+	OMNIA_EXT_STS_SFP_nDET		= BIT(0),
-+	OMNIA_EXT_STS_LED_STATES_MASK	= GENMASK(31, 12),
-+	OMNIA_EXT_STS_WLAN0_MSATA_LED	= BIT(12),
-+	OMNIA_EXT_STS_WLAN1_LED		= BIT(13),
-+	OMNIA_EXT_STS_WLAN2_LED		= BIT(14),
-+	OMNIA_EXT_STS_WPAN0_LED		= BIT(15),
-+	OMNIA_EXT_STS_WPAN1_LED		= BIT(16),
-+	OMNIA_EXT_STS_WPAN2_LED		= BIT(17),
-+	OMNIA_EXT_STS_WAN_LED0		= BIT(18),
-+	OMNIA_EXT_STS_WAN_LED1		= BIT(19),
-+	OMNIA_EXT_STS_LAN0_LED0		= BIT(20),
-+	OMNIA_EXT_STS_LAN0_LED1		= BIT(21),
-+	OMNIA_EXT_STS_LAN1_LED0		= BIT(22),
-+	OMNIA_EXT_STS_LAN1_LED1		= BIT(23),
-+	OMNIA_EXT_STS_LAN2_LED0		= BIT(24),
-+	OMNIA_EXT_STS_LAN2_LED1		= BIT(25),
-+	OMNIA_EXT_STS_LAN3_LED0		= BIT(26),
-+	OMNIA_EXT_STS_LAN3_LED1		= BIT(27),
-+	OMNIA_EXT_STS_LAN4_LED0		= BIT(28),
-+	OMNIA_EXT_STS_LAN4_LED1		= BIT(29),
-+	OMNIA_EXT_STS_LAN5_LED0		= BIT(30),
-+	OMNIA_EXT_STS_LAN5_LED1		= BIT(31),
++static umode_t poweroff_attrs_visible(struct kobject *kobj, struct attribute *a,
++				      int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct omnia_mcu *mcu = dev_get_drvdata(dev);
++
++	if (mcu->features & OMNIA_FEAT_POWEROFF_WAKEUP)
++		return a->mode;
++
++	return 0;
++}
++
++const struct attribute_group omnia_mcu_poweroff_group = {
++	.attrs = omnia_mcu_poweroff_attrs,
++	.is_visible = poweroff_attrs_visible,
 +};
 +
-+enum omnia_ext_ctl_e {
-+	OMNIA_EXT_CTL_nRES_MMC		= BIT(0),
-+	OMNIA_EXT_CTL_nRES_LAN		= BIT(1),
-+	OMNIA_EXT_CTL_nRES_PHY		= BIT(2),
-+	OMNIA_EXT_CTL_nPERST0		= BIT(3),
-+	OMNIA_EXT_CTL_nPERST1		= BIT(4),
-+	OMNIA_EXT_CTL_nPERST2		= BIT(5),
-+	OMNIA_EXT_CTL_PHY_SFP		= BIT(6),
-+	OMNIA_EXT_CTL_PHY_SFP_AUTO	= BIT(7),
-+	OMNIA_EXT_CTL_nVHV_CTRL		= BIT(8),
-+};
++int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu)
++{
++	struct device *dev = &mcu->client->dev;
++	int err;
 +
-+enum omnia_int_e {
-+	OMNIA_INT_CARD_DET		= BIT(0),
-+	OMNIA_INT_MSATA_IND		= BIT(1),
-+	OMNIA_INT_USB30_OVC		= BIT(2),
-+	OMNIA_INT_USB31_OVC		= BIT(3),
-+	OMNIA_INT_BUTTON_PRESSED	= BIT(4),
-+	OMNIA_INT_SFP_nDET		= BIT(5),
-+	OMNIA_INT_BRIGHTNESS_CHANGED	= BIT(6),
-+	OMNIA_INT_TRNG			= BIT(7),
-+	OMNIA_INT_MESSAGE_SIGNED	= BIT(8),
++	/* MCU restart is always available */
++	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART,
++					    SYS_OFF_PRIO_FIRMWARE,
++					    omnia_restart, mcu);
++	if (err)
++		return dev_err_probe(dev, err,
++				     "Cannot register system restart handler\n");
 +
-+	OMNIA_INT_LED_STATES_MASK	= GENMASK(31, 12),
-+	OMNIA_INT_WLAN0_MSATA_LED	= BIT(12),
-+	OMNIA_INT_WLAN1_LED		= BIT(13),
-+	OMNIA_INT_WLAN2_LED		= BIT(14),
-+	OMNIA_INT_WPAN0_LED		= BIT(15),
-+	OMNIA_INT_WPAN1_LED		= BIT(16),
-+	OMNIA_INT_WPAN2_LED		= BIT(17),
-+	OMNIA_INT_WAN_LED0		= BIT(18),
-+	OMNIA_INT_WAN_LED1		= BIT(19),
-+	OMNIA_INT_LAN0_LED0		= BIT(20),
-+	OMNIA_INT_LAN0_LED1		= BIT(21),
-+	OMNIA_INT_LAN1_LED0		= BIT(22),
-+	OMNIA_INT_LAN1_LED1		= BIT(23),
-+	OMNIA_INT_LAN2_LED0		= BIT(24),
-+	OMNIA_INT_LAN2_LED1		= BIT(25),
-+	OMNIA_INT_LAN3_LED0		= BIT(26),
-+	OMNIA_INT_LAN3_LED1		= BIT(27),
-+	OMNIA_INT_LAN4_LED0		= BIT(28),
-+	OMNIA_INT_LAN4_LED1		= BIT(29),
-+	OMNIA_INT_LAN5_LED0		= BIT(30),
-+	OMNIA_INT_LAN5_LED1		= BIT(31),
-+};
++	/*
++	 * Poweroff and wakeup are available only if POWEROFF_WAKEUP feature is
++	 * present.
++	 */
++	if (!(mcu->features & OMNIA_FEAT_POWEROFF_WAKEUP))
++		return 0;
 +
-+enum omnia_cmd_poweroff_e {
-+	OMNIA_CMD_POWER_OFF_POWERON_BUTTON	= BIT(0),
-+	OMNIA_CMD_POWER_OFF_MAGIC		= 0xdead,
-+};
++	err = devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF,
++					    SYS_OFF_PRIO_FIRMWARE,
++					    omnia_power_off, mcu);
++	if (err)
++		return dev_err_probe(dev, err,
++				     "Cannot register system power off handler\n");
 +
-+enum omnia_cmd_usb_ovc_prot_e {
-+	OMNIA_CMD_xET_USB_OVC_PROT_PORT_MASK	= GENMASK(3, 0),
-+	OMNIA_CMD_xET_USB_OVC_PROT_ENABLE	= BIT(4),
-+};
++	mcu->rtcdev = devm_rtc_allocate_device(dev);
++	if (IS_ERR(mcu->rtcdev))
++		return dev_err_probe(dev, PTR_ERR(mcu->rtcdev),
++				     "Cannot allocate RTC device\n");
 +
-+#endif /* __TURRIS_OMNIA_MCU_INTERFACE_H */
++	mcu->rtcdev->ops = &omnia_rtc_ops;
++	mcu->rtcdev->range_max = U32_MAX;
++	set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, mcu->rtcdev->features);
++
++	err = devm_rtc_register_device(mcu->rtcdev);
++	if (err)
++		return dev_err_probe(dev, err, "Cannot register RTC device\n");
++
++	mcu->front_button_poweron = true;
++
++	return 0;
++}
+diff --git a/drivers/platform/cznic/turris-omnia-mcu.h b/drivers/platform/cznic/turris-omnia-mcu.h
+index 3d2dd0054499..2a1c68ba9b7f 100644
+--- a/drivers/platform/cznic/turris-omnia-mcu.h
++++ b/drivers/platform/cznic/turris-omnia-mcu.h
+@@ -15,8 +15,10 @@
+ #include <linux/types.h>
+ #include <linux/workqueue.h>
+ #include <asm/byteorder.h>
++#include <asm/unaligned.h>
+ 
+ struct i2c_client;
++struct rtc_device;
+ 
+ struct omnia_mcu {
+ 	struct i2c_client *client;
+@@ -36,6 +38,11 @@ struct omnia_mcu {
+ 	struct delayed_work button_release_emul_work;
+ 	unsigned long last_status;
+ 	bool button_pressed_emul;
++
++	/* RTC device for configuring wake-up */
++	struct rtc_device *rtcdev;
++	u32 rtc_alarm;
++	bool front_button_poweron;
+ };
+ 
+ int omnia_cmd_write_read(const struct i2c_client *client,
+@@ -48,6 +55,17 @@ static inline int omnia_cmd_write(const struct i2c_client *client, void *cmd,
+ 	return omnia_cmd_write_read(client, cmd, len, NULL, 0);
+ }
+ 
++static inline int omnia_cmd_write_u32(const struct i2c_client *client, u8 cmd,
++				      u32 val)
++{
++	u8 buf[5];
++
++	buf[0] = cmd;
++	put_unaligned_le32(val, &buf[1]);
++
++	return omnia_cmd_write(client, buf, sizeof(buf));
++}
++
+ static inline int omnia_cmd_read(const struct i2c_client *client, u8 cmd,
+ 				 void *reply, unsigned int len)
+ {
+@@ -136,7 +154,9 @@ static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 cmd,
+ }
+ 
+ extern const struct attribute_group omnia_mcu_gpio_group;
++extern const struct attribute_group omnia_mcu_poweroff_group;
+ 
+ int omnia_mcu_register_gpiochip(struct omnia_mcu *mcu);
++int omnia_mcu_register_sys_off_and_wakeup(struct omnia_mcu *mcu);
+ 
+ #endif /* __TURRIS_OMNIA_MCU_H */
 -- 
 2.44.2
 
