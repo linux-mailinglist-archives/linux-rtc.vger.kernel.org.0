@@ -1,59 +1,59 @@
-Return-Path: <linux-rtc+bounces-1456-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1457-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 081F192A5D3
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2024 17:36:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F4DD92A5D6
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2024 17:36:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1B411F21F1F
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2024 15:36:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60A741C21516
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2024 15:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF80143749;
-	Mon,  8 Jul 2024 15:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52976144D11;
+	Mon,  8 Jul 2024 15:36:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="NQTZYweo"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="FvIN2spM"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0A013B7A3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0E8142E80;
 	Mon,  8 Jul 2024 15:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720452973; cv=none; b=AECyHCd04Wl/xOUD1MdvKcwM2Xvmx52b3E3iZGWcM5ox4snOuO2wSYx0YnKbORjcoXzcNgA/uZJk3KHW8MmdBiHBh29LUWLOuM8RjdnMDh3NwhRAm1Gc59Ub83Im272ulO69HQrdUq2JtKO1Pfj3aPY2sSS2u8goTBnQqrBkvl4=
+	t=1720452974; cv=none; b=Agt/xtKlPLFgZbyJbOVg3COVLx2raBwPMcX0qEcnTzsHyNJt3njcgRxHVU9u2WNrtrj2Y8+Lrr+lHhto0U0ypcdQaLIQ4p5fBctZMFqAHLN3II+5k/GeCHU8N2d3KqxReMNPlWArUh3vnh0zHTv6DR4sViqlUNIqGMfj3CBDXtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720452973; c=relaxed/simple;
-	bh=WIlof8VjpgjVgNkQc1mbQXwNMHJWaQAci0Mrn0sTF6E=;
+	s=arc-20240116; t=1720452974; c=relaxed/simple;
+	bh=mspshzsk4qCcQkDJFLcNj/FhNKlRqUzNiUciBZ3Kpb0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NLOG7Zmv5jHVuZXvEqBD0Shcou1dQaaQHd5mJjD666DNcXUPpouVHcAFAGjqt2GKR6oqgJtgglt19KsJWGYJcoc0D3ldU2LuRalWWukYuq+Ee20Vy5RaXiE6XuPGRGFEMlsMvPJ9dE2jKRwvjCC8XJ6ilq0UZMvXO4Tj5X2JZjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=NQTZYweo; arc=none smtp.client-ip=91.207.212.93
+	 MIME-Version:Content-Type; b=E7or1a7f/pN+gsuIz3earpJ73GqhqgDFe9OME1TqnqcgOnVn+wpm4mDYeVFoKN5fxtCH86brjv1sh7hzNZGZ/kFVAYE5L0v3W0QnxjATVlJtBOFFtlIGOcgdGAPZOSMgOXMIS4DvlzAMkvkhQRe8t9hrDul+mkfVZu6TqPCHVgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=FvIN2spM; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 468CGusT001000;
-	Mon, 8 Jul 2024 17:35:50 +0200
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 468CNpqB021626;
+	Mon, 8 Jul 2024 17:35:51 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	1DVExvBU3bSjiW2RLNK5c5mGCbP+StnD6nA+NGlK9LA=; b=NQTZYweosV0vBP6j
-	v/5n5nOXEZe+hPLNMAyj2EOkikD494cH6Y1u02eSaCbThpACCGtHCNA/xtB8Pjxi
-	R/kvJizpDBgGUOTNQ5vv1nrFGtZ02AQaB5QuGQWi3JfPKuqjTHX4BJ7sVxEP1XeS
-	JgNSoT/Ke1VQMFFkrPbCC7YTKH3BWORHlt7m3mXPm6/J2b9dBUAQjJr6Up84ZTXe
-	JSakcyWm3CiS44OR8OjbwFcmLWPeyDKLUjvPvY19Wlr+cBvgiys9coDTr2QzrZgx
-	BGvRYyLgfjWt3YPlbGjiM0xIAiIK1MsDJKMBu7iuyxz3ldkJsnctBkJhI2nHfb7Y
-	lVJp9g==
+	J1GYQoG/MOzUks6R/F0NbZqXAOFjwLwk5Y99MtlLrsM=; b=FvIN2spMKl3qjXzf
+	hMqdVuleorPi9LcAjikRn9LTr8KWXmxUC+9vKjD23UelWaWAI84sEh80koUBsMJd
+	AyqbFsWru6F6isJ1Co/PBzZRqLAED/YzY6FZX4tYC8WCz9U/s5GgrvlGV1y2gFQ4
+	FdigcwG2gYSN7esmz7FYtRUCHiRyO+I1i4GAEupsM8O6BttRRRs71l09x35EGR6d
+	afDByyp3S9np7ofbNrGStUovJ8Q/vtRY9jmjZz5oedYOk8WvFTvVz3V1wrZzTT3V
+	8ZRlXuTyRbm8SrJK0CWOK/bqwFoNP1xGkjDNK64hP/vJYRWA0EWDY1QUCLOHSIbL
+	fDKwyg==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 407gvhngyx-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 406wqt7h00-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 08 Jul 2024 17:35:50 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 3001540049;
-	Mon,  8 Jul 2024 17:35:44 +0200 (CEST)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 02FEA40044;
+	Mon,  8 Jul 2024 17:35:47 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5FCAB22D0F8;
-	Mon,  8 Jul 2024 17:35:07 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5209422D0F2;
+	Mon,  8 Jul 2024 17:35:08 +0200 (CEST)
 Received: from localhost (10.48.86.111) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 8 Jul
@@ -70,9 +70,9 @@ CC: <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH v2 1/2] dt-bindings: rtc: stm32: introduce new st,stm32mp25-rtc compatible
-Date: Mon, 8 Jul 2024 17:34:33 +0200
-Message-ID: <20240708153434.416287-2-valentin.caron@foss.st.com>
+Subject: [PATCH v2 2/2] rtc: stm32: add new st,stm32mp25-rtc compatible and check RIF configuration
+Date: Mon, 8 Jul 2024 17:34:34 +0200
+Message-ID: <20240708153434.416287-3-valentin.caron@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240708153434.416287-1-valentin.caron@foss.st.com>
 References: <20240708153434.416287-1-valentin.caron@foss.st.com>
@@ -100,35 +100,172 @@ registers:
 This driver will now check theses configurations before probing to avoid
 exceptions and fake reads on register.
 
+At this time, driver needs only to check two resources: INIT and ALARM_A.
+Other resources are not used.
+
+Resource isolation framework (RIF) is a comprehensive set of hardware
+blocks designed to enforce and manage isolation of STM32 hardware
+resources, like memory and peripherals.
+
 Link: https://www.st.com/resource/en/reference_manual/rm0457-stm32mp25xx-advanced-armbased-3264bit-mpus-stmicroelectronics.pdf#page=4081
 Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
 ---
- Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-stm32.c | 78 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-index 4703083d1f11..7a0fab721cf1 100644
---- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-@@ -15,6 +15,7 @@ properties:
-       - st,stm32-rtc
-       - st,stm32h7-rtc
-       - st,stm32mp1-rtc
-+      - st,stm32mp25-rtc
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index 76753c71d92e..98b07969609d 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -5,6 +5,7 @@
+  */
  
-   reg:
-     maxItems: 1
-@@ -90,7 +91,9 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: st,stm32mp1-rtc
-+            enum:
-+              - st,stm32mp1-rtc
-+              - st,stm32mp25-rtc
+ #include <linux/bcd.h>
++#include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/errno.h>
+ #include <linux/iopoll.h>
+@@ -83,6 +84,18 @@
+ #define STM32_RTC_VERR_MAJREV_SHIFT	4
+ #define STM32_RTC_VERR_MAJREV		GENMASK(7, 4)
  
-     then:
-       properties:
++/* STM32_RTC_SECCFGR bit fields */
++#define STM32_RTC_SECCFGR		0x20
++#define STM32_RTC_SECCFGR_ALRA_SEC	BIT(0)
++#define STM32_RTC_SECCFGR_INIT_SEC	BIT(14)
++#define STM32_RTC_SECCFGR_SEC		BIT(15)
++
++/* STM32_RTC_RXCIDCFGR bit fields */
++#define STM32_RTC_RXCIDCFGR(x)		(0x80 + 0x4 * (x))
++#define STM32_RTC_RXCIDCFGR_CFEN	BIT(0)
++#define STM32_RTC_RXCIDCFGR_CID		GENMASK(6, 4)
++#define STM32_RTC_RXCIDCFGR_CID1	1
++
+ /* STM32_RTC_WPR key constants */
+ #define RTC_WPR_1ST_KEY			0xCA
+ #define RTC_WPR_2ND_KEY			0x53
+@@ -120,6 +133,7 @@ struct stm32_rtc_data {
+ 	bool has_pclk;
+ 	bool need_dbp;
+ 	bool need_accuracy;
++	bool rif_protected;
+ };
+ 
+ struct stm32_rtc {
+@@ -134,6 +148,14 @@ struct stm32_rtc {
+ 	int irq_alarm;
+ };
+ 
++struct stm32_rtc_rif_resource {
++	unsigned int num;
++	u32 bit;
++};
++
++static const struct stm32_rtc_rif_resource STM32_RTC_RES_ALRA = {0, STM32_RTC_SECCFGR_ALRA_SEC};
++static const struct stm32_rtc_rif_resource STM32_RTC_RES_INIT = {5, STM32_RTC_SECCFGR_INIT_SEC};
++
+ static void stm32_rtc_wpr_unlock(struct stm32_rtc *rtc)
+ {
+ 	const struct stm32_rtc_registers *regs = &rtc->data->regs;
+@@ -553,6 +575,7 @@ static const struct stm32_rtc_data stm32_rtc_data = {
+ 	.has_pclk = false,
+ 	.need_dbp = true,
+ 	.need_accuracy = false,
++	.rif_protected = false,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -575,6 +598,7 @@ static const struct stm32_rtc_data stm32h7_rtc_data = {
+ 	.has_pclk = true,
+ 	.need_dbp = true,
+ 	.need_accuracy = false,
++	.rif_protected = false,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -606,6 +630,7 @@ static const struct stm32_rtc_data stm32mp1_data = {
+ 	.has_pclk = true,
+ 	.need_dbp = false,
+ 	.need_accuracy = true,
++	.rif_protected = false,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -624,14 +649,57 @@ static const struct stm32_rtc_data stm32mp1_data = {
+ 	.clear_events = stm32mp1_rtc_clear_events,
+ };
+ 
++static const struct stm32_rtc_data stm32mp25_data = {
++	.has_pclk = true,
++	.need_dbp = false,
++	.need_accuracy = true,
++	.rif_protected = true,
++	.regs = {
++		.tr = 0x00,
++		.dr = 0x04,
++		.cr = 0x18,
++		.isr = 0x0C, /* named RTC_ICSR on stm32mp25 */
++		.prer = 0x10,
++		.alrmar = 0x40,
++		.wpr = 0x24,
++		.sr = 0x50,
++		.scr = 0x5C,
++		.verr = 0x3F4,
++	},
++	.events = {
++		.alra = STM32_RTC_SR_ALRA,
++	},
++	.clear_events = stm32mp1_rtc_clear_events,
++};
++
+ static const struct of_device_id stm32_rtc_of_match[] = {
+ 	{ .compatible = "st,stm32-rtc", .data = &stm32_rtc_data },
+ 	{ .compatible = "st,stm32h7-rtc", .data = &stm32h7_rtc_data },
+ 	{ .compatible = "st,stm32mp1-rtc", .data = &stm32mp1_data },
++	{ .compatible = "st,stm32mp25-rtc", .data = &stm32mp25_data },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, stm32_rtc_of_match);
+ 
++static int stm32_rtc_check_rif(struct stm32_rtc *stm32_rtc,
++			       struct stm32_rtc_rif_resource res)
++{
++	u32 rxcidcfgr = readl_relaxed(stm32_rtc->base + STM32_RTC_RXCIDCFGR(res.num));
++	u32 seccfgr;
++
++	/* Check if RTC available for our CID */
++	if ((rxcidcfgr & STM32_RTC_RXCIDCFGR_CFEN) &&
++	    (FIELD_GET(STM32_RTC_RXCIDCFGR_CID, rxcidcfgr) != STM32_RTC_RXCIDCFGR_CID1))
++		return -EACCES;
++
++	/* Check if RTC available for non secure world */
++	seccfgr = readl_relaxed(stm32_rtc->base + STM32_RTC_SECCFGR);
++	if ((seccfgr & STM32_RTC_SECCFGR_SEC) | (seccfgr & res.bit))
++		return -EACCES;
++
++	return 0;
++}
++
+ static int stm32_rtc_init(struct platform_device *pdev,
+ 			  struct stm32_rtc *rtc)
+ {
+@@ -787,6 +855,16 @@ static int stm32_rtc_probe(struct platform_device *pdev)
+ 		regmap_update_bits(rtc->dbp, rtc->dbp_reg,
+ 				   rtc->dbp_mask, rtc->dbp_mask);
+ 
++	if (rtc->data->rif_protected) {
++		ret = stm32_rtc_check_rif(rtc, STM32_RTC_RES_INIT);
++		if (!ret)
++			ret = stm32_rtc_check_rif(rtc, STM32_RTC_RES_ALRA);
++		if (ret) {
++			dev_err(&pdev->dev, "Failed to probe RTC due to RIF configuration\n");
++			goto err;
++		}
++	}
++
+ 	/*
+ 	 * After a system reset, RTC_ISR.INITS flag can be read to check if
+ 	 * the calendar has been initialized or not. INITS flag is reset by a
 -- 
 2.25.1
 
