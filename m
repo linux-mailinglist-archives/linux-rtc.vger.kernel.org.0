@@ -1,104 +1,126 @@
-Return-Path: <linux-rtc+bounces-1470-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1469-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5870492D8D1
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 21:12:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46A6492D870
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 20:43:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 899851C21F52
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 19:12:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E174280846
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 18:43:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAF6197A61;
-	Wed, 10 Jul 2024 19:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D388E197A9B;
+	Wed, 10 Jul 2024 18:42:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b="A7ZmCc8l"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cAi16r+V"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp88.iad3b.emailsrvr.com (smtp88.iad3b.emailsrvr.com [146.20.161.88])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF07F197555
-	for <linux-rtc@vger.kernel.org>; Wed, 10 Jul 2024 19:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=146.20.161.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7C4197A8B;
+	Wed, 10 Jul 2024 18:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720638722; cv=none; b=K6VV/cNviL03b2oEohaWp+aTcChCciN4BSMIfwKNVs+8HIZwdh1Y4UqQbhDmr70xD+4i60l+QrEB5BewPriG7MeX7ZQbURIu2EbeMVkOoGIv/XsnZuee5DrFfyVHHXsKjqGlxWECydU8K9KDoGeN6SVjCFD/ecX1y3bR6xOWlPA=
+	t=1720636943; cv=none; b=lPHvuWr/zi3z/t6qytO1a3oYcVBANEi2n2KfYALLulujXvgQuNMZ0I/TSgKfRn/YMAm0oOtfptYzEbugfUyvbN9eGV4QAlqFVeENE1jFRipSXbJVjvM38d/5xMqfiuspqdThlTwJBM7G1CYEjTRio1GYlEPG1TytvWwm7UZhqW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720638722; c=relaxed/simple;
-	bh=HoXdi8YDPzKPfOk1K5QZ/YKUnApGodxvc1GCh+obPAw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mhpSiarLhfT6iAXUSuwzHpVWeG/7gtteq4Ni+CDhvsy5aRxBjozEYUT2zBpc0d/sjpF+rqBHPIlx7KbKmSM63R0KJlTxfZBHvcNCAnBAb/trYthX/ndeE2lOKy10QPIn969nsMXCWtLLn+IrrVNRYE79dWxNpP6+y/IIktaOTJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk; spf=pass smtp.mailfrom=mev.co.uk; dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b=A7ZmCc8l; arc=none smtp.client-ip=146.20.161.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mev.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-	s=20221208-6x11dpa4; t=1720633977;
-	bh=HoXdi8YDPzKPfOk1K5QZ/YKUnApGodxvc1GCh+obPAw=;
-	h=From:To:Subject:Date:From;
-	b=A7ZmCc8li9EupPTQhsSsAfWXZ10ZKV0ajZ3P6AGlhKtifUZavAL1wXVjDUbILoOxL
-	 14xV39isjJN5WoT7gzx06zxypGTHvsSzmBHj7waYdV34bw6g2XOTQbhUt2gLlX2qIw
-	 REz+SVd+4g2KMx85vYfdYHYZnaySs09S63BQfBZ8=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp20.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id D7C82A019C;
-	Wed, 10 Jul 2024 13:52:56 -0400 (EDT)
-From: Ian Abbott <abbotti@mev.co.uk>
-To: linux-rtc@vger.kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-kernel@vger.kernel.org,
-	Ian Abbott <abbotti@mev.co.uk>,
-	stable@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
+	s=arc-20240116; t=1720636943; c=relaxed/simple;
+	bh=UBu6fNm0fFDtfeL4anOeREnljKnH0D+6HaR0FyPhXqI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fr2Y/JgTNfp+oSEK+cVvSX7S10sl6FJPm3lMzzz+s7/j/wvLrkdxoxqK8KfqmuPraTSU4ay/XCV3TX+m0mH/52mH85Gg3oxOS0UfPf3IX6yVxwk8AlJfdMSEK5blQNqvKsjJwREKySlU5nWFFCbTFwPNjzo0FV0rTMONNC4qybc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cAi16r+V; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay2-d.mail.gandi.net (unknown [217.70.183.194])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 846BCC6403;
+	Wed, 10 Jul 2024 18:40:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3078A40003;
+	Wed, 10 Jul 2024 18:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1720636854;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UVyLxSxzZ2x0jPokebkjMz+UYcnUJCbspPQMiJ0vc+s=;
+	b=cAi16r+VyFjc9REQFquEJqdJIo4HevFwHTvVD6vMCJfU/79XUgKRMtuBCkPAea3A3Jbl8P
+	NXLfc4HpeblPQ/rOxEtA7y583QkaCuHXnJUmA5VsQk3iNy36Zbe83iOhUQjd6b1pb5Ip5o
+	QiJHfxWEmU/na7kP/1WVIRVMqbJua2z+zNYYgVl0+m5MQhh2K3CzFNwwyHJXDnc8scDm61
+	KDoTMVj+sovoWJlvw/7OaCVjaMQK9yE7cLsPBkHKrCWfsPrvOHXLzqsQSUhs2OgHWuOFwX
+	loIyyi9Rvp26qwai9wseMcfF33r6AJ5ZP4W7RYbcLSKfiCVr7ZA5ucTHQIrNXA==
+Date: Wed, 10 Jul 2024 20:40:53 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Ian Abbott <abbotti@mev.co.uk>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
 	Mark Brown <broonie@kernel.org>
-Subject: [RESEND PATCH] rtc: ds1343: Force SPI chip select to be active high
-Date: Wed, 10 Jul 2024 18:52:07 +0100
-Message-ID: <20240710175246.3560207-1-abbotti@mev.co.uk>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [RESEND PATCH] rtc: ds1343: Force SPI chip select to be active
+ high
+Message-ID: <20240710184053c34201f0@mail.local>
+References: <20240710175246.3560207-1-abbotti@mev.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Classification-ID: cd498383-a11f-45b4-a4c9-74a0458dea8a-1-1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240710175246.3560207-1-abbotti@mev.co.uk>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Commit 3b52093dc917 ("rtc: ds1343: Do not hardcode SPI mode flags")
-bit-flips (^=) the existing SPI_CS_HIGH setting in the SPI mode during
-device probe.  This will set it to the wrong value if the spi-cs-high
-property has been set in the devicetree node.  Just force it to be set
-active high and get rid of some commentary that attempted to explain why
-flipping the bit was the correct choice.
+Hello,
 
-Fixes: 3b52093dc917 ("rtc: ds1343: Do not hardcode SPI mode flags")
-Cc: <stable@vger.kernel.org> # 5.6+
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>
-Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
----
- drivers/rtc/rtc-ds1343.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+On 10/07/2024 18:52:07+0100, Ian Abbott wrote:
+> Commit 3b52093dc917 ("rtc: ds1343: Do not hardcode SPI mode flags")
+> bit-flips (^=) the existing SPI_CS_HIGH setting in the SPI mode during
+> device probe.  This will set it to the wrong value if the spi-cs-high
+> property has been set in the devicetree node.  Just force it to be set
+> active high and get rid of some commentary that attempted to explain why
+> flipping the bit was the correct choice.
+> 
+> Fixes: 3b52093dc917 ("rtc: ds1343: Do not hardcode SPI mode flags")
+> Cc: <stable@vger.kernel.org> # 5.6+
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
+> ---
+>  drivers/rtc/rtc-ds1343.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-ds1343.c b/drivers/rtc/rtc-ds1343.c
+> index ed5a6ba89a3e..484b5756b55c 100644
+> --- a/drivers/rtc/rtc-ds1343.c
+> +++ b/drivers/rtc/rtc-ds1343.c
+> @@ -361,13 +361,10 @@ static int ds1343_probe(struct spi_device *spi)
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> -	/* RTC DS1347 works in spi mode 3 and
+> -	 * its chip select is active high. Active high should be defined as
+> -	 * "inverse polarity" as GPIO-based chip selects can be logically
+> -	 * active high but inverted by the GPIO library.
+> +	/*
+> +	 * RTC DS1347 works in spi mode 3 and its chip select is active high.
+>  	 */
+> -	spi->mode |= SPI_MODE_3;
+> -	spi->mode ^= SPI_CS_HIGH;
+> +	spi->mode |= SPI_MODE_3 | SPI_CS_HIGH;
 
-diff --git a/drivers/rtc/rtc-ds1343.c b/drivers/rtc/rtc-ds1343.c
-index ed5a6ba89a3e..484b5756b55c 100644
---- a/drivers/rtc/rtc-ds1343.c
-+++ b/drivers/rtc/rtc-ds1343.c
-@@ -361,13 +361,10 @@ static int ds1343_probe(struct spi_device *spi)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	/* RTC DS1347 works in spi mode 3 and
--	 * its chip select is active high. Active high should be defined as
--	 * "inverse polarity" as GPIO-based chip selects can be logically
--	 * active high but inverted by the GPIO library.
-+	/*
-+	 * RTC DS1347 works in spi mode 3 and its chip select is active high.
- 	 */
--	spi->mode |= SPI_MODE_3;
--	spi->mode ^= SPI_CS_HIGH;
-+	spi->mode |= SPI_MODE_3 | SPI_CS_HIGH;
- 	spi->bits_per_word = 8;
- 	res = spi_setup(spi);
- 	if (res)
+Linus being the gpio maintainer and Mark being the SPI maintainer, I'm
+pretty sure this was correct at the time.
+
+Are you sure you are not missing an active high/low flag on a gpio
+definition?
+
+>  	spi->bits_per_word = 8;
+>  	res = spi_setup(spi);
+>  	if (res)
+> -- 
+> 2.43.0
+> 
+
 -- 
-2.43.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
