@@ -1,98 +1,109 @@
-Return-Path: <linux-rtc+bounces-1466-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1467-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ABEF92D4CD
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 17:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C0D8992D59F
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 18:00:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7BA6283F62
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 15:16:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BE9928A037
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2024 16:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10BBA1940B3;
-	Wed, 10 Jul 2024 15:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88572194ACD;
+	Wed, 10 Jul 2024 16:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XqnjmAhV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e9SKrC+m"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064525F876;
-	Wed, 10 Jul 2024 15:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0638219345E
+	for <linux-rtc@vger.kernel.org>; Wed, 10 Jul 2024 16:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720624596; cv=none; b=do+ywkLlGKuLfaLIlXJzPmBHGBYr5PFad8PaSNbbSX2IQ3nkk0VZ3VujN1+OEx3EOFGPxwVieFemo4o+epvs7p0Nh5q9xL5OIwu1bccu08D0CAynq8wbfsu5dFgOfSqks20QVXBtBH4MWEVgbb6EdBIiC/URN/zCdau3uXw9aZY=
+	t=1720627219; cv=none; b=DotuTJMRQMnixnrJh3oC+QKQKe2jCvsBH12C69OEO7eLBGX4S7q9N4QrjT5o5IpRsKkTpDBQNFpmkz/bZlPaXtCD7sKpp9txbW6vguEhKXK+o4lfE/fDCGBs3YOk8k3U6tNUsOHbf/YTQtI51VSXL3o3FPcJ3xW7aqfXQv48Ays=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720624596; c=relaxed/simple;
-	bh=AYv6yPEPs+Fc8HE3p2w3GLepnn0qXgtWjShco6gHbT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ris5+/UsWa/gbZ0VHjPejuD3wGoGrdEIHadhRrQL16048eo1VO+mv27m/Y/4QfZe6iRmb78lcTvKi/PfiMG6P/kZwg92O7GZxpuYaGXEC3V/Cy0ucxIRmFAOb6uZ1WJMPHU0Dkg1F00SMVpKzGT8lTQrJIe7/f8IFN5UI+fEER0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XqnjmAhV; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DEAC71C0004;
-	Wed, 10 Jul 2024 15:16:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720624583;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qbzKLd7ErNBgkbYzecOVb1namw7uD3ODB1goMPPdBkM=;
-	b=XqnjmAhVOuJsiBws3R+w+psrQpNgCAdH+iSYZDUagZ+SAu6rZKt6jQtkwDFDoJNEMTdAGX
-	vCdWn2og/C/5eDOVYsxTRpC7d+wHRM+Q6RdI/TuaHNzSP02/8NWg+Bgm2jakSQ916rTEb+
-	yGrZCBll5elU5JByE4C4u3uj8lQJ0zCWxwKXg8juJ8ZqzTML2bJV1IAz0TX95+qlMK4Rd1
-	q4vW/Qk2ZuEpZM9bxoWCU77NVHXZrzLpsP2GmBsi4UD3rQjnoL+t+BxM178Zj4IDaB1WC7
-	9caRRFE5hkYDUNf1gU/zohoRVpFIrERn4hSgdMSX1TpWkLxPIpWhp39kXruALQ==
-Date: Wed, 10 Jul 2024 17:16:21 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Valentin Caron <valentin.caron@foss.st.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] rtc: stm32: introduce new st,stm32mp25-rtc
- compatible
-Message-ID: <172062457006.735991.3860839372097638119.b4-ty@bootlin.com>
-References: <20240708153434.416287-1-valentin.caron@foss.st.com>
+	s=arc-20240116; t=1720627219; c=relaxed/simple;
+	bh=3h57l/y6Mvn1rG8ezXrXhQIZRIOJHBI21s0g0oMIXdk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Is0ctw+AcZz22b/lMdLo9ePIkDmnW4jYXffCzY1OTyHUZs7nTZY33GAIZvcn+sOh+sqo+VGNVeuH79O6EwnupOXiGgNwQB5B5DkQPWmzgC3T4x+X6fj/WPIyKH9AH1p1OOoWZ3T8PHerdHpScLG0sBqs2bZkcEUts8PgATN4NAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e9SKrC+m; arc=none smtp.client-ip=209.85.166.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7f90be41bbcso12330039f.0
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Jul 2024 09:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720627217; x=1721232017; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1gbmGNAwMwrZPiyjPeTzrjzknJ3xgxQs7BtZS2IrL3g=;
+        b=e9SKrC+mmKPaz+ZDPQRSM7jVa45VafcKj7nA2zyTM3IkBOglEYrn/2tF7nCE/YkDpq
+         3Mi66j/dCfVsSTVIf9FfOC53sHF8xUCxLrYdv/8xQGkfYOd30PBmXSewImcGSWPCnrbN
+         RFiPJqebetZwuwIvnpaMSN+dlCcEqNeXF0+Is=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720627217; x=1721232017;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gbmGNAwMwrZPiyjPeTzrjzknJ3xgxQs7BtZS2IrL3g=;
+        b=dWD0CbLSdCDZjPKHsSY4A926MwlSCinKDtcc8sQqrTn3UC8YQgc5oxTZ4VBXQwTtFO
+         5TS7j85qJhej2KZxeoR226WbIMx7YBN/xj6NKhWX8DtCJOJElLO57L00dE4AGz4sOns0
+         zbcXMGErS7nljN2ZthIA6QCmb0z/CXTX9jyfi356p4EpcjCWV+vjbMM2/rCAEEqBJhHV
+         wpktvRSSKtA/njjUiEdj63xA376JaEC1zeus2ZODXUSJle8B0YDBo2XXEzIbU4pZOS8O
+         vCUUP3x6u8g6Z72jPig/Ytd6SgpKGrE7SSt9K3MtU3Y0tGSi/JKrQtxap9vuosgXy9/g
+         HgEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW2sO+h+Mg/XS8/s2Sw3obfAXLp0IAtr9XQPjWZvb8HnYt3V3ct4uKJYkwjo/+2ykFd8IDHTOm4/dr8K/yimnEpKsUrQK035AqS
+X-Gm-Message-State: AOJu0YxX8chrdKVDa4ubHovI8/uuriFvWVxNCQbcaOkUmcNpyL0A/clh
+	YW6ZJe0wn6O7U72S6I1rI85+h+449sJdKgL7t8Ki2ZOSJFZocW54ie+PVZroVEHvoBnn7V1jTJk
+	q
+X-Google-Smtp-Source: AGHT+IE9+Wnqh1spYJTooseA0lSNUqCfK7Pe1jdrMZSx8SbhIcReIP8jiY3PtdkaoIvnEKyUOYV+gg==
+X-Received: by 2002:a6b:d117:0:b0:7eb:2c45:4688 with SMTP id ca18e2360f4ac-8000311edffmr535758439f.2.1720627217027;
+        Wed, 10 Jul 2024 09:00:17 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1af8763sm1221907173.9.2024.07.10.09.00.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jul 2024 09:00:16 -0700 (PDT)
+Message-ID: <8e4d88f3-a45b-4d30-bec6-75636c854d43@linuxfoundation.org>
+Date: Wed, 10 Jul 2024 10:00:16 -0600
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240708153434.416287-1-valentin.caron@foss.st.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/rtc:Fix a resource leak
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Zhu Jun <zhujun2@cmss.chinamobile.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rtc@vger.kernel.org, shuah@kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240710071650f7265b40@mail.local>
+ <20240710074309.6647-1-zhujun2@cmss.chinamobile.com>
+ <20240710075513332c564f@mail.local>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240710075513332c564f@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 08 Jul 2024 17:34:32 +0200, Valentin Caron wrote:
-> Introduce new st,stm32mp25-rtc compatible. It is based on st,stm32mp1-rtc.
+On 7/10/24 01:55, Alexandre Belloni wrote:
+> On 10/07/2024 00:43:09-0700, Zhu Jun wrote:
+>> The opened file should be closed before exit, otherwise resource leak
+>> will occur that this problem was discovered by code reading
 > 
-> Difference is that stm32mp25 SoC implements a triple protection on RTC
-> registers:
-> - Secure bit based protection
-> - Privileged context based protection
-> - Compartment ID filtering based protection
-> This driver will now check theses configurations before probing to avoid
-> exceptions and fake reads on register.
+> The question is still why should it be closed before exit as it will be
+> closed on exit?
 > 
-> [...]
 
-Applied, thanks!
+Zhu Jun,
 
-[1/2] dt-bindings: rtc: stm32: introduce new st,stm32mp25-rtc compatible
-      https://git.kernel.org/abelloni/c/1746a61a0248
-[2/2] rtc: stm32: add new st,stm32mp25-rtc compatible and check RIF configuration
-      https://git.kernel.org/abelloni/c/efa9c5be2cae
++1 on this. I have responded to your other patches that do the same
+in other tests. There is no need to make such changes.
 
-Best regards,
+thanks,
+-- Shuah
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
