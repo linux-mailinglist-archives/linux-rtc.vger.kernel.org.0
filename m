@@ -1,242 +1,173 @@
-Return-Path: <linux-rtc+bounces-1472-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1473-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64E1592E142
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 09:51:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 705E992E8E0
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 15:08:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FF3B282D1C
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 07:51:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B2071F22FCB
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 13:08:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1762214A612;
-	Thu, 11 Jul 2024 07:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="KpOK5RN3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481FE15F402;
+	Thu, 11 Jul 2024 13:05:14 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8C113B59F;
-	Thu, 11 Jul 2024 07:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD7215EFA5;
+	Thu, 11 Jul 2024 13:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720684265; cv=none; b=ugziZhRtuA6AkTg47fQFCv28/Xcbm/tpwsjTpDJ2keuSLTLVgbnv6MrTOmYuY9QZLiva3P4ymvKfvRuXuW0HGukVxfmk6MzvbBsL+G7eCiMJqGjA0IU8s5Yj3I12P9DomDAgybL8aHFjdMvMKTOPBP8XOYz1MFIJEnu83f0ExoI=
+	t=1720703114; cv=none; b=snJui1ZSB08k0vIhDWIMJI9MnAelQbvltRGs2rIt0BYJdUisByr9JiiWQNogVsQyEmnJaPFjKzBkn2weTzzwe6beamYXW8Tn3H4OZFcalGmgZS0G1nHV1Njfi3zuEcUEYJO+oekPdz/rZOg1M2vgRUkSVSBhEtEjcXXhRq9MwM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720684265; c=relaxed/simple;
-	bh=aBMWfL9S0NHck9r+KNooix+YRBh5KuaDoHcFTaN78+Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AVJ2W0VZlIX7xmCM/jj/udR2z76UlfzpJM8Vo2Cx44kFy9asZbDhaV/6iG9XftE8mVQeJ4OrvFMmm/CeWSR14I5ifV87t8ufdgWWjGqJ9ljSeUTt3LaWIqkDBQg37RxWeXqTifTgyxt1DluSwEOUu79Ixke1BLpLCi9E8IZojfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=KpOK5RN3; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=aBMWfL9S0NHck9r+KNooix+YRBh5KuaDoHcFTaN78+Q=; b=KpOK5RN3HKNZMX++xpPoZ5cfAU
-	EThYI8XLBG+prdIE9ip5XBtBV7BXI7BKjwO0A8hZ1PwSAIuLtQXo6JS4MZwE7ebzjCTyyJtsuG/6S
-	Ft9TZhCRrLpCAghPumSPlCIDv4zuIQ1npmTcgqKx2SPbV7ZQD782Z4E3MZBuOlJm08Q3VDn80YZqb
-	S6/E9IsYezbWZVZMN8rjgH3Iv9h9YKkYV7puo1IuG+22Olrb4SRqNSpmUWN98PtXcNL6/3Jo5fzeL
-	nVyq6TnPi+bpEFo+kSQhRjnd1DVwht51bwyl31xnMGf5U09cEex7kp6r6lz1jfNwazJXIR7WScvD2
-	JMxNdXWw==;
-Received: from [2001:8b0:10b:5:daed:e261:1c9e:7a77] (helo=u3832b3a9db3152.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sRoZk-0000000Ahrj-2TL4;
-	Thu, 11 Jul 2024 07:50:48 +0000
-Message-ID: <1ca48fb47723ed16f860611ac230ded7a1ca07f1.camel@infradead.org>
-Subject: Re: [RFC PATCH v4] ptp: Add vDSO-style vmclock support
-From: David Woodhouse <dwmw2@infradead.org>
-To: Peter Hilber <peter.hilber@opensynergy.com>,
- linux-kernel@vger.kernel.org,  virtualization@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org,  linux-rtc@vger.kernel.org, "Ridoux,
- Julien" <ridouxj@amazon.com>,  virtio-dev@lists.linux.dev, "Luu, Ryan"
- <rluu@amazon.com>, "Chashper, David" <chashper@amazon.com>
-Cc: "Christopher S . Hall" <christopher.s.hall@intel.com>, Jason Wang
- <jasowang@redhat.com>, John Stultz <jstultz@google.com>, "Michael S .
- Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org, Richard Cochran
- <richardcochran@gmail.com>, Stephen Boyd <sboyd@kernel.org>, Thomas
- Gleixner <tglx@linutronix.de>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Marc
- Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, Alessandro Zummo
- <a.zummo@towertech.it>,  Alexandre Belloni <alexandre.belloni@bootlin.com>,
- qemu-devel <qemu-devel@nongnu.org>, Simon Horman <horms@kernel.org>
-Date: Thu, 11 Jul 2024 08:50:47 +0100
-In-Reply-To: <1c24e450-5180-46c2-8892-b10709a881e5@opensynergy.com>
-References: <20240708092924.1473461-1-dwmw2@infradead.org>
-	 <060f392c-7ba9-4ff6-be82-c64f542abaa1@opensynergy.com>
-	 <98b20feebf4e7a11870dca725c03ee4e411b1aa3.camel@infradead.org>
-	 <1c24e450-5180-46c2-8892-b10709a881e5@opensynergy.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-RRBst/xmrXyF8ehtSxnt"
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1720703114; c=relaxed/simple;
+	bh=eMvRGonZwmikOscaqZfGaScC+ufpuldxLid5Fo5rzTs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lAmwOUFAIQFZIR4uYFCLjP3GY3S7D9yKrtxcN1X+2hlBYZUaRVC2b2uXhhkszb+2eBybXHXpdfim3XmaZQJnZ3gdRqVCgx/uh3Y1s4YGBjFdC6yik3R9P/MTxgsiQ9ZkcSHvqnpAz47h8h8RZN90jbai/XKik+FLEoQakBmEY+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A97C1007;
+	Thu, 11 Jul 2024 06:05:35 -0700 (PDT)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D3C33F766;
+	Thu, 11 Jul 2024 06:05:06 -0700 (PDT)
+Date: Thu, 11 Jul 2024 14:04:58 +0100
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, arm-scmi@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH v5 2/7] dt-bindings: firmware: add i.MX95 SCMI Extension
+ protocol
+Message-ID: <Zo_Yen-dsozJtugS@pluto>
+References: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
+ <20240621-imx95-bbm-misc-v2-v5-2-b85a6bf778cb@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240621-imx95-bbm-misc-v2-v5-2-b85a6bf778cb@nxp.com>
 
+On Fri, Jun 21, 2024 at 03:04:37PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
 
---=-RRBst/xmrXyF8ehtSxnt
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+LGTM.
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
 
-On Thu, 2024-07-11 at 09:25 +0200, Peter Hilber wrote:
->=20
-> IMHO this phrasing is better, since it directly refers to the state of th=
-e
-> structure.
+Thanks,
+Cristian
 
-Thanks. I'll update it.
-
-> AFAIU if there would be abnormal delays in store buffers, causing some
-> driver to still see the old clock for some time, the monotonicity could b=
-e
-> violated:
->=20
-> 1. device writes new, much slower clock to store buffer
-> 2. some time passes
-> 3. driver reads old, much faster clock
-> 4. device writes store buffer to cache
-> 5. driver reads new, much slower clock
->=20
-> But I hope such delays do not occur.
-
-For the case of the hypervisor=E2=86=90=E2=86=92guest interface this should=
- be handled
-by the use of memory barriers and the seqcount lock.
-
-The guest driver reads the seqcount, performs a read memory barrier,
-then reads the contents of the structure. Then performs *another* read
-memory barrier, and checks the seqcount hasn't changed:
-https://git.infradead.org/?p=3Dusers/dwmw2/linux.git;a=3Dblob;f=3Ddrivers/p=
-tp/ptp_vmclock.c;hb=3Dvmclock#l351
-
-The converse happens with write barriers on the hypervisor side:
-https://git.infradead.org/?p=3Dusers/dwmw2/qemu.git;a=3Dblob;f=3Dhw/acpi/vm=
-clock.c;hb=3Dvmclock#l68
-
-Do we need to think harder about the ordering across a real PCI bus? It
-isn't entirely unreasonable for this to be implemented in hardware if
-we eventually add a counter_id value for a bus-visible counter like the
-Intel Always Running Timer (ART). I'm also OK with saying that device
-implementations may only provide the shared memory structure if they
-can ensure memory ordering.
-
---=-RRBst/xmrXyF8ehtSxnt
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzExMDc1MDQ3WjAvBgkqhkiG9w0BCQQxIgQgyKAJ52BW
-5ByrfEPDnH1JABysjogtP686tBr/RaCR/zkwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgA4nT6rrL2rSbGGAguQ4LyTrcnE3gNiw5p1
-DTfzZV8gEYaOaOE9jqT9s7kE/09f7lBQebA9g1z2Ezfk8RJW3jMkqHkNnUEmFps2JAmXsRGzpb9w
-Z4rMSXARcJXgN/C3Vr8ohDkqB4snWakQpnBPZ7LT5gB8bCywxnRtwHlEZxj0qA7LlQpKV27BK5vp
-O0d+YrHniSBvGbBpKy8CldlqXqJMw3x22LBLPeLbh1atWTU73Tfc8HMXDCJPVffrD2u+vs6+d+4V
-zE065sakQTG/t2ThQo0ha1hXjxkzaBeQgTy8oJXn+RgPejxDjtAzKRPTtAOqvJ78DKQm2mlDWEbh
-rQ7pGBSusQ/3GDsG+QU2zTAJD7etdAaiqJCoccdKLb/QDNTDzcQyvnKDLk0SUMWSqRawwhtfeRWu
-o4JhfaxuHvlJGZK0XcgjHmBgHu7YO/qSLKwZDfrO8QNvFgzgP3nR1vhptbWVc6rHXvM8aOZJYC09
-U+ezBICOHnjU7xrOnRcBZZHOezdfU2tHEEHIeqTqyDGFl4YEVkyVcg71Q107H4jz4xquv7w/2EzQ
-UGPdAtnDTDeLtSAFlnWvxzpJQTBoK8k7jcf8/+Lvo7dHh3ibi0C9hfvZx+EjjMzNEVhXO1r5b0NG
-OvqPW1f6HbjOT3uambUmxsga57xeN9JcD5skHypfMwAAAAAAAA==
-
-
---=-RRBst/xmrXyF8ehtSxnt--
+> Add i.MX SCMI Extension protocols bindings for:
+> - Battery Backed Module(BBM) Protocol
+>   This contains persistent storage (GPR), an RTC, and the ON/OFF button.
+>   The protocol can also provide access to similar functions implemented via
+>   external board components.
+> - MISC Protocol.
+>   This includes controls that are misc settings/actions that must be exposed
+>   from the SM to agents. They are device specific and are usually define to
+>   access bit fields in various mix block control modules, IOMUX_GPR, and
+>   other GPR/CSR owned by the SM.
+> 
+> Reviewed-by: "Rob Herring (Arm)" <robh@kernel.org>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/firmware/arm,scmi.yaml     |  5 ++-
+>  .../bindings/firmware/nxp,imx95-scmi.yaml          | 43 ++++++++++++++++++++++
+>  2 files changed, 47 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> index 4d823f3b1f0e..47f0487e35de 100644
+> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> @@ -22,6 +22,9 @@ description: |
+>  
+>    [0] https://developer.arm.com/documentation/den0056/latest
+>  
+> +anyOf:
+> +  - $ref: /schemas/firmware/nxp,imx95-scmi.yaml
+> +
+>  properties:
+>    $nodename:
+>      const: scmi
+> @@ -284,7 +287,7 @@ properties:
+>      required:
+>        - reg
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  $defs:
+>    protocol-node:
+> diff --git a/Documentation/devicetree/bindings/firmware/nxp,imx95-scmi.yaml b/Documentation/devicetree/bindings/firmware/nxp,imx95-scmi.yaml
+> new file mode 100644
+> index 000000000000..1a95010a546b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/nxp,imx95-scmi.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2024 NXP
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/firmware/nxp,imx95-scmi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: i.MX95 System Control and Management Interface(SCMI) Vendor Protocols Extension
+> +
+> +maintainers:
+> +  - Peng Fan <peng.fan@nxp.com>
+> +
+> +properties:
+> +  protocol@81:
+> +    $ref: '/schemas/firmware/arm,scmi.yaml#/$defs/protocol-node'
+> +    unevaluatedProperties: false
+> +
+> +    properties:
+> +      reg:
+> +        const: 0x81
+> +
+> +  protocol@84:
+> +    $ref: '/schemas/firmware/arm,scmi.yaml#/$defs/protocol-node'
+> +    unevaluatedProperties: false
+> +
+> +    properties:
+> +      reg:
+> +        const: 0x84
+> +
+> +      nxp,ctrl-ids:
+> +        description:
+> +          Each entry consists of 2 integers, represents the ctrl id and the value
+> +        items:
+> +          items:
+> +            - description: the ctrl id index
+> +              enum: [0, 1, 2, 3, 4, 5, 6, 7, 0x8000, 0x8001, 0x8002, 0x8003,
+> +                     0x8004, 0x8005, 0x8006, 0x8007]
+> +            - description: the value assigned to the ctrl id
+> +        minItems: 1
+> +        maxItems: 16
+> +        $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +
+> +additionalProperties: true
+> 
+> -- 
+> 2.37.1
+> 
 
