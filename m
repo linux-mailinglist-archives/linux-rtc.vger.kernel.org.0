@@ -1,95 +1,100 @@
-Return-Path: <linux-rtc+bounces-1487-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1488-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4251F92EBEA
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 17:46:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F66D92EC65
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 18:12:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 734D11C21FF6
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 15:46:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C79EE2850EA
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2024 16:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0F4156F39;
-	Thu, 11 Jul 2024 15:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B211216C862;
+	Thu, 11 Jul 2024 16:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b="M0D1OhMD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKgJRwIh"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp82.iad3a.emailsrvr.com (smtp82.iad3a.emailsrvr.com [173.203.187.82])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02F18479
-	for <linux-rtc@vger.kernel.org>; Thu, 11 Jul 2024 15:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.203.187.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8320016B392;
+	Thu, 11 Jul 2024 16:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720712811; cv=none; b=BGjRGLVh3e4j1aWts4dNS2UaRItsRFGIoLlQtVxTjXIUl/VkG4/U6+nXkQbef89llnb4epusom5/02wWnuKKHJuJQZSrq3qXxZQ1sZNrOo/RVJS9ZaQHnXnmiCWI7mqz7jv/dpdi6LJRRBg9p/v1j8JXiL4oVGQqIozHLx+MZAM=
+	t=1720714334; cv=none; b=NiXdK7i/PK859xpOyP1EhwFU9AnbZWZanKTVuVGIfRyYG793rNIKe/BqIxVP157T3R5VCWbQ7y4jjQH+zwbc+riqyhqgVTBzt+4Us3+LIuPH+a9aTQRI4caObKyXxCAIZHXx1ynDyG3ngl+RDXo6VRpFCDpSYJZhP0mfm2HFH+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720712811; c=relaxed/simple;
-	bh=0uwD1M9nJAbWVzYpgSCZB5Zm24KRaWsiQ4PiDZVyuS0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oq5hCvWq+Ps6HcoEWLqr76b5QNSrCEG67gjDEwEkDw8S/BUER/r3+Lc/WaPZTRRtejWhBWGXX0Gc6VbMldWHMORYaGEKiurNMfreBF2IEDXEf9PS9iIZ4CqZwtaug4CDCrM8GRVNTZB3+aj6v+NxhUbHOM9FfutOltED4NH1rco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk; spf=pass smtp.mailfrom=mev.co.uk; dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b=M0D1OhMD; arc=none smtp.client-ip=173.203.187.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mev.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-	s=20221208-6x11dpa4; t=1720711749;
-	bh=0uwD1M9nJAbWVzYpgSCZB5Zm24KRaWsiQ4PiDZVyuS0=;
-	h=Date:Subject:To:From:From;
-	b=M0D1OhMDuM2DuydxSuNKRB+6Q24adcgvzEH3brk9cnPXCOVG/2nEKpqwDe/STM8gk
-	 tkvwA7BA/20IiQUMrrfNvv5HKB9jukCxCwVLoOitaFY9OHLFfkEELnIs1RE3hHRSmi
-	 bFcucWYRX5AYntFPCaikvfPhxqoQHwE/4+CcYVWM=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp19.relay.iad3a.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 887565150;
-	Thu, 11 Jul 2024 11:29:08 -0400 (EDT)
-Message-ID: <6f122282-1675-497f-bc2f-0bbfba6640aa@mev.co.uk>
-Date: Thu, 11 Jul 2024 16:29:07 +0100
+	s=arc-20240116; t=1720714334; c=relaxed/simple;
+	bh=vDhm4iKUhB3g5WYPqXvLPS4hLGM8VplEQMGAsbyCkEw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fCmifenK9Bq7AfX6OKTkNtB9TSR8StxkTYtBDO/+vZiWpNgv+K8kpIxBOURXo3+kC7MCYx4EJthfJKNNAGvoe5Os5dlRT3yIJPDdHKwYlbiiKNCI4m4mz8dn/dIXCCLlKGb1RG4FMfedpxrs9QEFSnsH0iJ7Rar+ITgbWW3vq8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKgJRwIh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBA9C116B1;
+	Thu, 11 Jul 2024 16:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720714334;
+	bh=vDhm4iKUhB3g5WYPqXvLPS4hLGM8VplEQMGAsbyCkEw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IKgJRwIhs1DxJsnIDW1XFs/XqXJ85ch+U8aMK0q0GD0pOVZ1B8BkefqWY8YLItxbY
+	 UO0jpyURbrtaWDa0QlbCtHUdF6YDcvlOHWkXxTUi+SB0G9bKYO3vNoBeo/G5SZtUC4
+	 lzu7rHIScDEgYeYH0V4+HA6xKfHOK5QfmSX785nNfw2YcSZht7+4II+9e7A/k8X4GF
+	 +QSDHFFZ4HL+0TAI/4U35OBuje9l2Hl8wJo7EWqvF5w7xi5yZ1UUhcig+ShxQg8tax
+	 d0oYNtiVeV0JSOYOHb+Yjum6mHCNEE067XEOc+aCyo/x9jPNXaA9MHKXU3NlFXOXkb
+	 mtGZ8misgBGnw==
+Date: Thu, 11 Jul 2024 17:12:08 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Ian Abbott <abbotti@mev.co.uk>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [RESEND PATCH] rtc: ds1343: Force SPI chip select to be active
+ high
+Message-ID: <37049fbe-6a7f-49df-a093-2f4f7351592e@sirena.org.uk>
+References: <20240710175246.3560207-1-abbotti@mev.co.uk>
+ <20240710184053c34201f0@mail.local>
+ <2b0e8a6c-f89e-4d71-a816-9da46ea695eb@mev.co.uk>
+ <bd7c0eb9-bcb6-42e3-8be6-3d07452e3fd5@sirena.org.uk>
+ <6f122282-1675-497f-bc2f-0bbfba6640aa@mev.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH] rtc: ds1343: Force SPI chip select to be active
- high
-To: Mark Brown <broonie@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-References: <20240710175246.3560207-1-abbotti@mev.co.uk>
- <20240710184053c34201f0@mail.local>
- <2b0e8a6c-f89e-4d71-a816-9da46ea695eb@mev.co.uk>
- <bd7c0eb9-bcb6-42e3-8be6-3d07452e3fd5@sirena.org.uk>
-Content-Language: en-GB
-From: Ian Abbott <abbotti@mev.co.uk>
-Organization: MEV Ltd.
-In-Reply-To: <bd7c0eb9-bcb6-42e3-8be6-3d07452e3fd5@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: 43f7e90d-b81b-44ea-bc3d-341a7d3df9f3-1-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="XjwW/yTPZkLPBfeP"
+Content-Disposition: inline
+In-Reply-To: <6f122282-1675-497f-bc2f-0bbfba6640aa@mev.co.uk>
+X-Cookie: Individualists unite!
 
-On 11/07/2024 15:21, Mark Brown wrote:
-> On Thu, Jul 11, 2024 at 03:05:01PM +0100, Ian Abbott wrote:
-> 
->> I think the devicetree node for the RTC device ought to be setting
->> `spi-cs-high` but cannot do so at the moment because the driver clobbers it.
-> 
-> Specifying spi-cs-high in the device tree should almost always be
-> redundant or a mistake, if the device needs a high chip select then we
-> already know that from the compatible.  The property is adding nothing
-> but potential confusion, in the normal course of affairs the driver
-> should just specify the configuration it needs for the bus.
 
-So `spi->mode |= SPI_CS_HIGH;` is safer than `spi->mode ^= SPI_CS_HIGH;`?
+--XjwW/yTPZkLPBfeP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Regarding `spi-cs-high` in the device tree, what about the compatibility 
-table for `spi-cs-high` and `cs-gpio` active level in 
-"Documentation/devicetree/bindings/spi/spi-controller.yaml"?
+On Thu, Jul 11, 2024 at 04:29:07PM +0100, Ian Abbott wrote:
 
--- 
--=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
--=( registered in England & Wales.  Regd. number: 02862268.  )=-
--=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
--=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+> Regarding `spi-cs-high` in the device tree, what about the compatibility
+> table for `spi-cs-high` and `cs-gpio` active level in
+> "Documentation/devicetree/bindings/spi/spi-controller.yaml"?
 
+Specifying spi-cs-high should be equivalent to setting the mode in the
+driver, it's just a redundant way of saying the same thing.
+
+--XjwW/yTPZkLPBfeP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaQBFcACgkQJNaLcl1U
+h9CGJAf/c51MoOBzHFY//zUxIpeTgnJGKUmKPEYKHU7ChwWW4lT+r591AY0ZXH26
+la0QF+IJVfDu0DnedCc9v/6+nBZMRrbuZOTLsYsr00+81/zlJc0Hccc1j0zmm7HH
+lQd8+HzTtPJ58wbVgI/hAebpa16+bUTEJOu+Q3HLl4/XZs3IdHrO3ZJJFcrFadNN
+EvL0HxIH5RgDlV9cPyFv0w+qADJv3L+tT6pxfhwjjlebEuVCfAPARGGeBD79gMtj
+bloPG5AFKhwjv7eurs++K3XsaO4D3f+ztW5e+cJt3YbomXZWhWkm5PCMtik+W8O+
+dolfsWp/5CA2O5/8V6moGqF2RWgoWA==
+=0+8q
+-----END PGP SIGNATURE-----
+
+--XjwW/yTPZkLPBfeP--
 
