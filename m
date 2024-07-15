@@ -1,120 +1,105 @@
-Return-Path: <linux-rtc+bounces-1502-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1503-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB1D9313D3
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jul 2024 14:15:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20FB4931545
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jul 2024 15:00:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DB811C21407
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jul 2024 12:15:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97A60B23B72
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jul 2024 13:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D98F187357;
-	Mon, 15 Jul 2024 12:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qy4gIjGw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA6E18D4D6;
+	Mon, 15 Jul 2024 12:59:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293361862AC
-	for <linux-rtc@vger.kernel.org>; Mon, 15 Jul 2024 12:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D95918C341;
+	Mon, 15 Jul 2024 12:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721045721; cv=none; b=gqD3c/buVggeRbqGGkG2G93+8RPEEAEudXB6GDQSEeKZaJQys0eteDv2HtcnZuLKqSit2c2TQ6TETJaeZms/H1Q0Qe2cQ0qZsFUaY1N0GrDbHEKvGhp7YO87gX5I9Flqxu4hIZ+kEZkrvEJqFDBNpl/+vEaZP42aQeylVbqtQ/I=
+	t=1721048378; cv=none; b=Fzh/PGSa4BEe/Z9DWDUyLZzNtBSxgdDNLM3ihFoK+wTVAbhJBf+JFtE2d9DrkcY1ORh/sjih1z0Yv8c05YVa2oqbUnl5ZhQBb43Y4iD9P9UmoJhBz0k0xR+OAPvarQ8528Bd2Edt+LnjocVaDltV8bm8TSkVABqiFYAAs+6kq0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721045721; c=relaxed/simple;
-	bh=5xQhG8nlXIRtYqjYTvRs/WOOIOO6JKvWOMa1sLZcaEY=;
+	s=arc-20240116; t=1721048378; c=relaxed/simple;
+	bh=tCAUoz16SFgMtRJJXCi3TzLWuHeXMPwnhI3T1kOUIJQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=slGxON1iAA3dnEqk77OAC/6YRyXT0t6wf0wvr47i2ZdHjKTBlNJ3zCfT3ehjkXoK8pkm0qzz4orxqg+cnOaOpft1x0j44Il5aDQF3X2X7v/fdD1r2ZdnIaPzZmgtzJC5eoKLBSoFa+1ZASNiS/i6cUVromW/DFPoaOFwNAktp7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qy4gIjGw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC8BC32782;
-	Mon, 15 Jul 2024 12:15:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721045720;
-	bh=5xQhG8nlXIRtYqjYTvRs/WOOIOO6JKvWOMa1sLZcaEY=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=qy4gIjGwqtIyw0dHtIViEc2qyYpBZO7O6981IfKdACXOOGCZgh268dn+kcZsu91fC
-	 id/rax7ugkMLpgHAVZvxesBDCU6DS6Zmli0FvcNLEcACQNkQpB2RNC022GHv30MQur
-	 dMytBO5K32dERFA2uUxNP/HBNfE9k0GltjaTXxzv1JFIZwtzkoFEmLQevN6UZpUu8z
-	 6SauGqTVPULbzazpgsPtb0bBgSuV+f/e0Bn4gHn+CcNy5kvEvnp7hMjSQZV4egOZnK
-	 JZfuvEqTsv8e+vtOYi1U2H3t9MgrpTwuX4d+55nFM1qHXlc+BN2a4WN6w4AREtBsg9
-	 enRV4W6BJ2tgw==
-Date: Mon, 15 Jul 2024 14:15:15 +0200
-From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
-	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, Gregory Clement <gregory.clement@bootlin.com>, soc@kernel.org, 
-	arm <arm@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>, 
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v12 4/8] platform: cznic: turris-omnia-mcu: Add support
- for poweroff and wakeup
-Message-ID: <mnviqych4f3g2xexnnf5pt6ashprda5cmtbv6mkuwgcco7oabt@kz3ztt4gnfvi>
-References: <20240617152606.26191-1-kabel@kernel.org>
- <20240617152606.26191-5-kabel@kernel.org>
- <20240715032402.GA2968547@thelio-3990X>
- <c7cdd2a7-4201-47bb-b31e-d0279e96fcdb@app.fastmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rpH3daOH9B+Ik8dwKzoXl799EkgbPHc+XsLSDZCsHeHefsnn8/k0gTtgeEiHGL+AlZvI8ZUC169kWABZ3fIkZ/C2YFyFIG/rhgu0TyslMr2gaXgOAP2FsmKO6MQTIyypyigdUXiKwWmDWrylXo48pJCcJploJNElNtygkOttVps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC521DA7;
+	Mon, 15 Jul 2024 06:00:00 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11C1A3F73F;
+	Mon, 15 Jul 2024 05:59:32 -0700 (PDT)
+Date: Mon, 15 Jul 2024 13:59:30 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Peng Fan <peng.fan@nxp.com>
+Cc: Cristian Marussi <cristian.marussi@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
+	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>
+Subject: Re: [PATCH v5 1/7] Documentation: firmware-guide: add NXP i.MX95
+ SCMI documentation
+Message-ID: <ZpUdMmvucei9lLPI@bogus>
+References: <20240621-imx95-bbm-misc-v2-v5-0-b85a6bf778cb@nxp.com>
+ <20240621-imx95-bbm-misc-v2-v5-1-b85a6bf778cb@nxp.com>
+ <Zo_bFnjWixZF6seV@pluto>
+ <DB9PR04MB8461684315E753DAFDDBACA788A12@DB9PR04MB8461.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c7cdd2a7-4201-47bb-b31e-d0279e96fcdb@app.fastmail.com>
+In-Reply-To: <DB9PR04MB8461684315E753DAFDDBACA788A12@DB9PR04MB8461.eurprd04.prod.outlook.com>
 
-On Mon, Jul 15, 2024 at 08:12:39AM +0200, Arnd Bergmann wrote:
-> On Mon, Jul 15, 2024, at 05:24, Nathan Chancellor wrote:
-> > On Mon, Jun 17, 2024 at 05:26:02PM +0200, Marek Behún wrote:
-...
-> >
-> > I am seeing the following Kconfig warning from ARCH=s390 allmodconfig:
-> >
-> > WARNING: unmet direct dependencies detected for RTC_CLASS
-> >   Depends on [n]: !S390 [=y]
-> >   Selected by [m]:
-> >   - TURRIS_OMNIA_MCU [=m] && CZNIC_PLATFORMS [=y] && (MACH_ARMADA_38X 
-> > || COMPILE_TEST [=y]) && I2C [=m] && OF [=y] && WATCHDOG [=y]
-> >
-> > because of:
-> >
-> > menuconfig RTC_CLASS
-> >     bool "Real Time Clock"
-> >     default n
-> >     depends on !S390
-> >
-> > which appears to have ultimately come from commit 9556fb73edfc ("[S390]
-> > Kconfig: unwanted menus for s390."). No other driver appears to
-> > unconditionally select this (I only see it selected within
-> > arch/*/Kconfig), so it does not look like this has come up before.
-> > Should s390 be excluded from the COMPILE_TEST dependency?
+On Mon, Jul 15, 2024 at 11:47:56AM +0000, Peng Fan wrote:
+> > Subject: Re: [PATCH v5 1/7] Documentation: firmware-guide: add NXP
+> > i.MX95 SCMI documentation
+> > 
+> > On Fri, Jun 21, 2024 at 03:04:36PM +0800, Peng Fan (OSS) wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > Add NXP i.MX95 System Control Management Interface(SCMI)
+> > vendor
+> > > extensions protocol documentation.
+> > >
+> > 
+> > Hi,
+> > 
+> > beside the final location of this file in the tree, and a few nitpicks down
+> > below.
 > 
-> There is really no reason for a driver to select another subsystem,
-> it not just causes problems like this one but also leads to
-> circular dependencies and surprises when someone turns on
-> a random driver and then turns it off again, leaving the
-> the other subsystems accidentally enabled.
+> Thanks for reviewing the patches. Except Documentation/firmware-guide,
+> I not have good idea where to put the API doc.
+> 
+> Sudeep,
+>   Do you have any suggestions?
+>
 
-Makes sense.
+Not really. But I am OK to keep it under drivers/firmware/arm_scmi/vendor/docs
+or something similar.
 
-> I've applied the fixup below now, leaving GPIOLIB_IRQCHIP
-> as the only selected symbol since this is not user-visible.
-
-Thanks.
-
-> Marek, you could consider changing the driver so it doesn't
-> actually require all those subsystems at build time but instead
-> just leaves out the functionality. Some subsystems actually
-> have a stub implementation that makes it work by just dropping
-> the dependency, but I did not try that here.
-
-I will look into that.
-
-Marek
+--
+Regards,
+Sudeep
 
