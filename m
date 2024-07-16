@@ -1,126 +1,97 @@
-Return-Path: <linux-rtc+bounces-1504-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1505-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D16A931C79
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jul 2024 23:12:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CEDF931F15
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jul 2024 05:03:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B400C2821DC
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jul 2024 21:12:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 033B0B20DE3
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jul 2024 03:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5657213C81B;
-	Mon, 15 Jul 2024 21:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZBKx2m7Q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2BE4BA2F;
+	Tue, 16 Jul 2024 03:03:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5538013B5B6;
-	Mon, 15 Jul 2024 21:12:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AA2101D4;
+	Tue, 16 Jul 2024 03:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721077942; cv=none; b=rNBlwA/N0DsG8gmxVyOHNQgMXZLjVGENZbaAfjJeHha8hmELYMpJPZwlxDmNmwxqwPBJxIkoi4dLOP+0XEsvVDjgc2P2lEtfPlAoZ8PR6lhOLTNIuMZFmxXo1BNPpkpOAG1WKfF2s9AgJSQELJiq024/IjztSpnYHqRn/NpUYfw=
+	t=1721099018; cv=none; b=VhsB9rk+h+PAA9gxQRtvwEiofJVphx+/jBfMuItTXB/cATU3/Vuvt99BfILfZcO1QXBdiSoDLA3tJ22viDLumY5hM+cLEatY2fmM9AoFt2p2ok3J9mWChY7AbNZ5d+TCO0/0bvGtPxPe+cPGjB9fc16p5fHW3macmCg66Fnq8C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721077942; c=relaxed/simple;
-	bh=zyGFrn/K6g9HJ0UNtwo4DiISe8PYQj+w1yIz1L/7LwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KPFJwaRH9Ft9dbIWx3r8pRZOW4TqfyAvFAx1PTuPYIx9LHMgULvLW/YudptZlWeD4zPwPDulBXm0Ac0khR5GBqU50mwO0WCnM39/4IkwSY5nzo1Ntsf03ouAbFzOyjrDSacNmj5b1EX5NVFvCJdwALZLQrOr0NdYL0mXW8b2bq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZBKx2m7Q; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 27A70FF803;
-	Mon, 15 Jul 2024 21:12:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1721077937;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PrFsaEY3YFVMERSSxHwPf6/7rkdQhgSWQ843FPXb6VM=;
-	b=ZBKx2m7QZN1wibY9E26Du5teUQrGS6KveFuXrHhyhD5Pq/PNKteH13nR6Vm6Zyc0jFXUi1
-	Ac/u8zVk8E7U0h25euNwSPZKva97q6TrnO/87Wp5bxLf1xYuzdNyrvr33Sfrxc0Ua6jInH
-	0W49CA1vq/OeH7PRcgK9U9asubq8oTaq/4naZR/Wk1px6FIZpF+NgESEjCkXjoNeYNlWnA
-	ZsnAZMEVSk0dOo3YTq2qDPWrzaI9vXy0nS+2JAZUzUscTH8ZbXJ9HBC6ZK84xi+WoHHqxt
-	WQb4Lc2807kqw4QBnUD8jcD2x2VL2jBI/SPYMaC4kDA495T6XqUeuoxI4nsTmA==
-Date: Mon, 15 Jul 2024 23:12:16 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Valentin Caron <valentin.caron@foss.st.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: Re: [PATCH 0/4] rtc: stm32: add pinctrl interface to handle RTC outs
-Message-ID: <2024071521121650db391a@mail.local>
-References: <20240711140843.3201530-1-valentin.caron@foss.st.com>
+	s=arc-20240116; t=1721099018; c=relaxed/simple;
+	bh=Qpb/xQXuIOKgJiuFgZVFJH4zCl5bOj+M3rTyJeLsIxw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ugrvQLxWUXzoXyXrGXqt8Pag/4F7jr7XHAzQEIbNRavlGIOOv8mLipBpB89EKbAaSLtuqDYbojr2dWOrlTtD3YO38SGK1sf40lAPuBV1ddgf/GsIwb1GMyFqU9kpK4c/q+3G9eKiUEj+iggbxFr/A6rJc3eQUBvp3ky1Sw8alhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-05 (Coremail) with SMTP id zQCowACHj+f54pVmJS+NAw--.51704S2;
+	Tue, 16 Jul 2024 11:03:22 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: alexandre.belloni@bootlin.com,
+	ladis@linux-mips.org,
+	tony@atomide.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] rtc: twl: convert comma to semicolon
+Date: Tue, 16 Jul 2024 11:02:52 +0800
+Message-Id: <20240716030252.400340-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240711140843.3201530-1-valentin.caron@foss.st.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowACHj+f54pVmJS+NAw--.51704S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4UZF18Ww1xKr1xur4xXrb_yoWfAFg_Cw
+	1YqF4xJ3WkJr1qy3W8Aw45u34jyayjgF1kZr1jgasxA3y2qr18ZasFvrWDAryfXw48GF93
+	JwnrXrWkuFW7WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+	Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbV
+	WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK
+	6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+	0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
+	0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+	IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjoKZJUUUU
+	U==
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-Hello,
+Replace a comma between expression statements by a semicolon.
 
-On 11/07/2024 16:08:39+0200, Valentin Caron wrote:
-> This series adds a pinctrl/pinmux interface to control STM32 RTC outputs.
-> 
-> Theses two signals output are possible:
->  - LSCO (Low Speed Clock Output) that allow to output LSE clock on a pin.
->    On STM32MPU Discovery boards, this feature is used to generate a clock
->    to Wifi/Bluetooth module.
->  - Alarm out that allow to send a pulse on a pin when alarm A of the RTC
->    expires.
-> 
-> First attempt [1] was based on 'st,' vendor properties, this one is based
-> on pinctrl and pinmux framework.
-> 
-> As device-trees will be upstreamed separately, here is an example:
-> 
-> stm32-pinctrl {
->     rtc_rsvd_pins_a: rtc-rsvd-0 {
->         pins {
->             pinmux = <STM32_PINMUX('B', 2, AF1)>, /* OUT2 */
->                      <STM32_PINMUX('I', 8, ANALOG)>; /* OUT2_RMP */
->         };
->     };
-> };
-> 
-> stm32-rtc {
->     pinctrl-0 = <&rtc_rsvd_pins_a &rtc_alarma_pins_a>;
-> 
->     /* Enable by foo-device */
->     rtc_lsco_pins_a: rtc-lsco-0 {
->         pins = "out2_rmp";
->         function = "lsco";
->     };
-> 
->     /* Enable by stm32-rtc hog */
->     rtc_alarma_pins_a: rtc-alarma-0 {
->         pins = "out2";
->         function = "alarm-a";
->     };
-> };
-> 
-> foo-device {
->     pinctrl-0 = <&rtc_lsco_pins_a>;
-> };
-> 
+Fixes: 7130856f5605 ("rtc: twl: add NVRAM support")
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+---
+ drivers/rtc/rtc-twl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This all seems good to me, I let you fix the various issues that have
-been reported. I was just wondering whether the LSCO clock was registered
-early enough to be used but I guess you tested that.
-
+diff --git a/drivers/rtc/rtc-twl.c b/drivers/rtc/rtc-twl.c
+index 2cfacdd37e09..4e24c12004f1 100644
+--- a/drivers/rtc/rtc-twl.c
++++ b/drivers/rtc/rtc-twl.c
+@@ -591,8 +591,8 @@ static int twl_rtc_probe(struct platform_device *pdev)
+ 	memset(&nvmem_cfg, 0, sizeof(nvmem_cfg));
+ 	nvmem_cfg.name = "twl-secured-";
+ 	nvmem_cfg.type = NVMEM_TYPE_BATTERY_BACKED;
+-	nvmem_cfg.reg_read = twl_nvram_read,
+-	nvmem_cfg.reg_write = twl_nvram_write,
++	nvmem_cfg.reg_read = twl_nvram_read;
++	nvmem_cfg.reg_write = twl_nvram_write;
+ 	nvmem_cfg.word_size = 1;
+ 	nvmem_cfg.stride = 1;
+ 	if (twl_class_is_4030()) {
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
 
