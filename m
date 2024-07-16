@@ -1,72 +1,72 @@
-Return-Path: <linux-rtc+bounces-1515-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1516-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E39D8932409
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jul 2024 12:31:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57943932411
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jul 2024 12:32:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F132B20FDA
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jul 2024 10:31:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 875E71C21F26
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jul 2024 10:32:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEDA6199E87;
-	Tue, 16 Jul 2024 10:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7656519A298;
+	Tue, 16 Jul 2024 10:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="McCHhfkb"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="oOdrnT2j"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7DA19939E
-	for <linux-rtc@vger.kernel.org>; Tue, 16 Jul 2024 10:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90E5199E91
+	for <linux-rtc@vger.kernel.org>; Tue, 16 Jul 2024 10:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721125850; cv=none; b=n4vnQptdhZBiUV1T2xU4z+yyFrflyFzG7hJa8sdUCS94BogYFXuToQAf2LQoHYJL6OdJ+T9hLP43zKmX9/b1/INOWTyp7cNP4ZLySfsAuVRvM2bpi21elovfpvgSgFoI+jHCOPR7zDCI5ggMU3RUrRTSL56ICp4O9yQRtLMnc14=
+	t=1721125853; cv=none; b=fH5nAIEYmycAWYSVr34Uq1/+a0L/GtWjHvA9MUPwmNx7ChcKL7wylmfXBnWQmyn9JTVJvlDLp0G0ztMibZfrP+XJQ+fLvXrf04VtcIe7A+MdvUVr5tqGXn3oL0KdkVoT1lUXIQEPqBBO9RtHGxkS/jQ1xnt0amfhINvqx/N5+HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721125850; c=relaxed/simple;
-	bh=+Mc+13b2z80oCG9v0Z12Pko9uuqMsx9D9wsAYYdr2Iw=;
+	s=arc-20240116; t=1721125853; c=relaxed/simple;
+	bh=kHYvG6Jmfou0a/3H3JPJCy+a3te9zYGMB7WNF7i3CEI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AMvSjJkeCwuREllXyyuMOeBPGrTHr3TuTrgDb+I9Oa/C7J2vrYeczHqsbLRhml5m0hcVdYWO4u7voT2wlBjnkSQmmxmTi/hJao/W18BE/B57bdL52BLjZO/Mo1olnam2C+XG66FHalBS57Su5YCfN+LuKXOAUBN+Z4gKb1GlhRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=McCHhfkb; arc=none smtp.client-ip=209.85.128.47
+	 MIME-Version; b=DluUJGKqvTIjt7qZ3/H+sVxMWQ+FUvLeMByj6WWPEHtVJrNFBYyzGFfKfadCq0VGJpq8ous7CvLXBskkVcG0Bu+EDK36I6eIG19aaMX1aw9HmzbF/43W9H/CWro7c3MyT+toIpLsycldpZYNiIlr/mrqZYEfV5MEr/TTvvlGoHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=oOdrnT2j; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-427b1d4da32so9883095e9.0
-        for <linux-rtc@vger.kernel.org>; Tue, 16 Jul 2024 03:30:48 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2eebc76119aso60036511fa.2
+        for <linux-rtc@vger.kernel.org>; Tue, 16 Jul 2024 03:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1721125847; x=1721730647; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1721125849; x=1721730649; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=havjViSFqkpX2ZEw/deHEcNpYtCxaTiY0eUvmPFnuY4=;
-        b=McCHhfkbz6e4ZnwGv0BIMeRF7vJSGQ768vJCGG2+FWKdVbQzTjbfU/V5egZYAtbHE7
-         /nyA5AbPC/r4EsicYZubvKuUepjpU4/Uwoxetq8Y/TvCEJxZLyDNChvBpPLXO0COLrE4
-         a5ybVmxe2LamqOssrVTEsVQW1DNytqoonwc4h2I4MaROap1rIuX+N2YzFyebwHrxPGFi
-         +YwhKi2quhIdKOA1AIUFEY/wH3d+aHszhQlOSrOn2z2GvpMMWYxpdBG/ttppdSCx3MDl
-         afgYA72SlahfQNwNlwoP4zvzpbxG1z4XBtx1zkE6jUWjthJNb6iPx4wyr7agKhMfiPL/
-         Q8zA==
+        bh=SgEFJU9TqEeEi7v4UfFzMf6SUYm8BDlnIzCjSGdepnE=;
+        b=oOdrnT2jlbBMpxuKx3C0WXIRN4heqySo5g9u45cJHalGbz/kK0wpmpgg4xzpStvp2n
+         omNnvyDO2vgDq5lY1yniqfUOiAd784/GJIc00gk/zaxDmAEVIrIWW0tG5dC7R98Ui45p
+         FFy2zXBlWdGKcoZWotI39hVEy3FUwQ4HorhV3tVhvwDqE5ENL6PF3lO/6MNf/Tcif4y0
+         Uhz0iBxTnQpThrHwIzwSmdYhMy/DK8EZSSdB1whVlpYutT/pq7OUPBMVIXzjli0eGcef
+         zHdHqzvlJC1K5wBu562357GNLliijHt2ikXQ8omDzAY37zdSlFu5U7C/vpN29zZsykXk
+         vmxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721125847; x=1721730647;
+        d=1e100.net; s=20230601; t=1721125849; x=1721730649;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=havjViSFqkpX2ZEw/deHEcNpYtCxaTiY0eUvmPFnuY4=;
-        b=Ykc16LwzmSCkS5cc6GqOl6nLSi1H3joA+uyipQx9G/al2mJO0dANX5SnYHSe/2a3D6
-         ggMNn8oqQMJgXK/JxEfzcxY9XQbhw1vL3eggH1Fx/q77cYCwLRcsAI7m1P9tJ0gOtD+H
-         h4ae0/nf9XSljBSlex61wrrggUgWyWGfVBQDnWDvtvviBL4pqbZCJixE3Xa0SO5MTj09
-         DPnToXKdHkTAESArpuLpxQdB25w18m/U22nDsNOVw8/ceOZuOT4l0rldVvdbaks+kH3c
-         4F3iDf3uzuNqba1jcgb8HJoRyBPSOSufze4fM/sXaOCzEXbPzYDesLGoxYT/8ejYf8Xn
-         mf6g==
-X-Forwarded-Encrypted: i=1; AJvYcCU+eGmswsbQXSebPhdFtpQktFuDd3+Gmk7sK/8N7qwgEJivZnzc29D3RuI2o21eS/hSk1/qln8UwPSAxVUkkFbKYpvYhZbOISTS
-X-Gm-Message-State: AOJu0YwGBKUJOJV+nCjCk0gGw3PrI3ZimiQ52Ho4KjwZOqu82Yq2888o
-	DoxdOu8OwjkigCyeM9cVxDtytGG219r0kxOqekRGpzy/+uM3on+UbBZy2fDHwbI=
-X-Google-Smtp-Source: AGHT+IG5nj05P3SaIbAeAjYYqU7ltlxGNASeUqz3/IbArKcpEVPxuAGunWSshG97PaegXbchwypLPA==
-X-Received: by 2002:a5d:6d0f:0:b0:362:ff95:5697 with SMTP id ffacd0b85a97d-36827591cafmr1044592f8f.28.1721125847401;
-        Tue, 16 Jul 2024 03:30:47 -0700 (PDT)
+        bh=SgEFJU9TqEeEi7v4UfFzMf6SUYm8BDlnIzCjSGdepnE=;
+        b=tB4rIiPyjkKalXSQX+ZYXXNPx+SSaECdrz68iXY2PXR1x2n2m/nK2c1J/PGKGDnz92
+         9lgDC2gcMSk8k/IccUQYoBcgJHp4hG26Rms6rwFgGk/6MoZ6hYPEIev8AhyY79Hy+Nl/
+         RhADYGVTvFSmyQYL0IfNd1+29aBseKBoqCYDuFLnia2kwzqNNG/38C05J03iOkaXq9n/
+         twkF6dqK7fq2s39kEZqT7s0DuSFdvkUH2LSF3CawaZwwmR59sxVXEK2KNz5NNUx2JX0z
+         pZilAAuRCioFurVaV8OOZJfY0oiDf5UmtZ+/SYynkiEr2UgylS6KwhVS/6itT0ZKfx2A
+         sJaA==
+X-Forwarded-Encrypted: i=1; AJvYcCU26QIv8YY/zoDI+z6RA9sUL2vffBgKjOyMBtzuwqXechBT7S0c4BZaEPZTCb0xNFWs/JF9X7OywFov7Q2HZgG6qGW0F2rSWU5R
+X-Gm-Message-State: AOJu0YxIHgR9pb4kqWnXszPn+0je2h59H/jodKhDY7S7TZoNnZ4AkPgx
+	qZJmDtXnNoVxxWfOOY4KHaTQdPHHup/jT8T3Va3Ix9/kc3cDfenBZzq3mAORdsE=
+X-Google-Smtp-Source: AGHT+IE4UrP8ocZy8DYCRi6ljSVc7gUaTDEwV0MlfP0Wt1LcKXTzKRIXgiUNL8wbFViSdsnBD2NBxA==
+X-Received: by 2002:a2e:9ed9:0:b0:2ec:5699:5e6 with SMTP id 38308e7fff4ca-2eef4190aedmr11234431fa.26.1721125848934;
+        Tue, 16 Jul 2024 03:30:48 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.171])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-427a5e77488sm121546145e9.9.2024.07.16.03.30.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-427a5e77488sm121546145e9.9.2024.07.16.03.30.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jul 2024 03:30:47 -0700 (PDT)
+        Tue, 16 Jul 2024 03:30:48 -0700 (PDT)
 From: Claudiu <claudiu.beznea@tuxon.dev>
 X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
 To: lee@kernel.org,
@@ -87,9 +87,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	claudiu.beznea@tuxon.dev,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v2 07/11] arm64: dts: renesas: r9a08g045: Add RTC node
-Date: Tue, 16 Jul 2024 13:30:21 +0300
-Message-Id: <20240716103025.1198495-8-claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v2 08/11] arm64: dts: renesas: rzg3s-smarc-som: Enable VBATTB clock
+Date: Tue, 16 Jul 2024 13:30:22 +0300
+Message-Id: <20240716103025.1198495-9-claudiu.beznea.uj@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com>
 References: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com>
@@ -103,40 +103,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Add the DT node for the RTC IP available on the Renesas RZ/G3S SoC.
+Enable the VBATTB clock controller.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
 
 Changes in v2:
-- updated compatibles
+- none
 
- arch/arm64/boot/dts/renesas/r9a08g045.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-index 78b4e088a3a5..22008407848c 100644
---- a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-@@ -72,6 +72,18 @@ scif0: serial@1004b800 {
- 			status = "disabled";
- 		};
+diff --git a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
+index 8a3d302f1535..517ce275916a 100644
+--- a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
++++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
+@@ -341,6 +341,19 @@ mux {
+ 	};
+ };
  
-+		rtc: rtc@1004ec00 {
-+			compatible = "renesas,r9a08g045-rtca3", "renesas,rz-rtca3";
-+			reg = <0 0x1004ec00 0 0x400>;
-+			interrupts = <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "alarm", "period", "carry";
-+			clocks = <&vbattclk>;
-+			clock-names = "counter";
-+			status = "disabled";
-+		};
++&vbattb_xtal {
++	clock-frequency = <32768>;
++};
 +
- 		vbattb: vbattb@1005c000 {
- 			compatible = "renesas,r9a08g045-vbattb";
- 			reg = <0 0x1005c000 0 0x1000>;
++&vbattb {
++	status = "okay";
++};
++
++&vbattclk {
++	renesas,vbattb-load-nanofarads = <12500>;
++	status = "okay";
++};
++
+ &wdt0 {
+ 	timeout-sec = <60>;
+ 	status = "okay";
 -- 
 2.39.2
 
