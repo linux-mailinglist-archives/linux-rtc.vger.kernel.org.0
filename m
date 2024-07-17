@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-1540-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1541-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 954479338BA
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jul 2024 10:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 009E49338C4
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jul 2024 10:16:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B91741C20FA1
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jul 2024 08:14:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 237E91C22B30
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jul 2024 08:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78560224F2;
-	Wed, 17 Jul 2024 08:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B44B22F1E;
+	Wed, 17 Jul 2024 08:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vrObCVMQ"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s4H2zIyk"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500FA22611;
-	Wed, 17 Jul 2024 08:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845601CAA4;
+	Wed, 17 Jul 2024 08:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721204066; cv=none; b=bG8ZimjsgkadQuvcO1N6koImRp5fNHfM8SWk2VuellID8haY/f7tMznFBj1jzyHnIwjNBG/Zv19pDaepLZQUNotwcrsJkmQX2rNpvUGYW5/MI8VbbWkCTixFio+BmzldRL99YAXwy/rEZ5BlDX6OZtQy6RegGOgt/N6Ua7Mpjeg=
+	t=1721204213; cv=none; b=meSwULna5zgC/926WyoJYHYuFs2Nl3hMhW/EOFGbtmF672lO3FEIKC1lpdzX6F882k8NfPA2Mo2/IjEtsiUdSEq5gDqqEE3rvnM/u/Wrklxy2NKZEpY9op6oRFylqG10oJuZRcRzllEuFFRQvLYpXQV66/+uveKxdLAfL28b95g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721204066; c=relaxed/simple;
-	bh=/LcEwFo5dCKWN5CEl3wy88DX64OeviEY2d/0UK8NeII=;
+	s=arc-20240116; t=1721204213; c=relaxed/simple;
+	bh=Ubxr2HkffdDfbaVcxMhcSzsYcYW5gclo6c8pnhBSBTo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EG45QcDBsh9PYEsCrubAktsc+iTUZTBkHSVZZXyoub2fCUS7iEYyB6HIGfB5QL7lKY4grTijiTXi7z88aYDO9xMwsKytxMGQs4v4qRofxM5xsdvzmqvfhvt5ug71dJ/RLgyeYiYr1w8l1XdQwHS22olIWK0rMOFDOtv9o913Aqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vrObCVMQ; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=fbnBraa+v1+Ajof0Ygk5jAmV0xC4QXbHldFuoOCO54BCCsjhaGGed1BJa2sZ3T0FnXPfpl5SPyazzOPdDauPWgRNMQaczxImrhA3Kijjfmj0Y5dRcvtUzM8q1VT1MynFYivfGePDeeu1mcXsOskBWd/WtmEHUU5wmMIl1or7gjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=s4H2zIyk; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=/LcEwFo5dCKWN5CEl3wy88DX64OeviEY2d/0UK8NeII=; b=vrObCVMQhW5TWe/VVPfts+2eb+
-	/WbHpOnWe9I+xnapcSw/l+BT8Gkyn0vlWj5qE/Vx91iDgK5IVQCVN3gSy69+zgBu8kHceVDQHwnb9
-	2MRxIK0MvL4VPSCIwGdslaQI3GgkacV36Xy7brsJCmZlilS6eDpIdHLlOJjrDhSdwPli2zJCKBQ8a
-	NM41F1fN1UbLHkvdJaInP14PMVW6tywY2sPLH9wAhf9U3WZXT3nH0t/ckmH21yd92xVJDkaqq7IIh
-	xzWwNVBaP4tCAVe2t0CpurAh3F2ktliX+bGWMiinp6auXyNr1RUX4L6Z7xkcHbE245FurCqw2Elfp
-	GmXgWXxQ==;
-Received: from 54-240-197-233.amazon.com ([54.240.197.233] helo=freeip.amazon.com)
+	bh=Ubxr2HkffdDfbaVcxMhcSzsYcYW5gclo6c8pnhBSBTo=; b=s4H2zIykYAdHu2e12j8bWR+lA+
+	bFe0KKcSZ5gayA4MRqNRYIvLkSl0l5Nt7sBnGBoHWdcJOIwwfwqN0NMO3aUjPMjLYTqB8x1/3rgGq
+	DrgMtgj3KCYLTvVnAVQWVaXoqd54sHyl+ugb8MKZJcjEXXkBYk/yO2lEepUmyjOKI4idGn/68Bz2p
+	9mQ9s4K2ijqTBdI6aaddI0GomF/uOf5t+Ol7d6dbKmpE25H+w0Jcraz0Vt9p1kN98bopYHtix8La1
+	wMWqOJeGCmbR1a6/j2RF0xVtQbm5zT3Z3QIyhMsbt0806F+AmqlIme13FQWolG4PnwlvUFsjE3pFM
+	PwQZLKmA==;
+Received: from 54-240-197-225.amazon.com ([54.240.197.225] helo=freeip.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sTzng-00000000ZBV-2bcA;
-	Wed, 17 Jul 2024 08:14:13 +0000
-Message-ID: <e90998e35275e1a53db4dc028d3f78eacb64a113.camel@infradead.org>
+	id 1sTzqD-00000000ZPB-0hAP;
+	Wed, 17 Jul 2024 08:16:49 +0000
+Message-ID: <bd22215e26f79daa1b5da3482118a6f4c38a124b.camel@infradead.org>
 Subject: Re: [RFC PATCH v4] ptp: Add vDSO-style vmclock support
 From: David Woodhouse <dwmw2@infradead.org>
 To: Peter Hilber <peter.hilber@opensynergy.com>,
@@ -62,12 +62,18 @@ Cc: "Christopher S . Hall" <christopher.s.hall@intel.com>, Jason Wang
  Lezcano <daniel.lezcano@linaro.org>, Alessandro Zummo
  <a.zummo@towertech.it>,  Alexandre Belloni <alexandre.belloni@bootlin.com>,
  qemu-devel <qemu-devel@nongnu.org>, Simon Horman <horms@kernel.org>
-Date: Wed, 17 Jul 2024 09:14:10 +0100
-In-Reply-To: <2e875592-f6e7-4694-8f51-655d0b9a2988@opensynergy.com>
+Date: Wed, 17 Jul 2024 09:16:47 +0100
+In-Reply-To: <10db46e9-b753-43bb-a826-14d4c11026bd@opensynergy.com>
 References: <20240708092924.1473461-1-dwmw2@infradead.org>
-	 <2e875592-f6e7-4694-8f51-655d0b9a2988@opensynergy.com>
+	 <060f392c-7ba9-4ff6-be82-c64f542abaa1@opensynergy.com>
+	 <98b20feebf4e7a11870dca725c03ee4e411b1aa3.camel@infradead.org>
+	 <1c24e450-5180-46c2-8892-b10709a881e5@opensynergy.com>
+	 <1ca48fb47723ed16f860611ac230ded7a1ca07f1.camel@infradead.org>
+	 <9f132922-2bf7-4749-b8c7-4c57445f9cde@opensynergy.com>
+	 <DD886A0D-B8E2-4749-AB21-7B26A4B70374@infradead.org>
+	 <10db46e9-b753-43bb-a826-14d4c11026bd@opensynergy.com>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-7aI71VoZ9P3azYLQFroL"
+	boundary="=-Hyh+17g2MeZ+GIA0VPiP"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -78,29 +84,88 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-7aI71VoZ9P3azYLQFroL
+--=-Hyh+17g2MeZ+GIA0VPiP
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-T24gVHVlLCAyMDI0LTA3LTE2IGF0IDEzOjU0ICswMjAwLCBQZXRlciBIaWxiZXIgd3JvdGU6Cj4g
-T24gMDguMDcuMjQgMTE6MjcsIERhdmlkIFdvb2Rob3VzZSB3cm90ZToKPiA+ICsKPiA+ICvCoMKg
-wqDCoMKgwqDCoC8qCj4gPiArwqDCoMKgwqDCoMKgwqAgKiBUaW1lIGFjY29yZGluZyB0byB0aW1l
-X3R5cGUgZmllbGQgYWJvdmUuCj4gPiArwqDCoMKgwqDCoMKgwqAgKi8KPiA+ICvCoMKgwqDCoMKg
-wqDCoHVpbnQ2NF90IHRpbWVfc2VjO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKiBTZWNv
-bmRzIHNpbmNlIHRpbWVfdHlwZSBlcG9jaCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgdWludDY0X3Qg
-dGltZV9mcmFjX3NlYzvCoMKgwqDCoMKgwqDCoMKgwqAvKiAoc2Vjb25kcyA+PiA2NCkgKi8KPiA+
-ICvCoMKgwqDCoMKgwqDCoHVpbnQ2NF90IHRpbWVfZXN0ZXJyb3JfcGljb3NlYzvCoC8qICjCsSBw
-aWNvc2Vjb25kcykgKi8KPiA+ICvCoMKgwqDCoMKgwqDCoHVpbnQ2NF90IHRpbWVfbWF4ZXJyb3Jf
-cGljb3NlYzvCoC8qICjCsSBwaWNvc2Vjb25kcykgKi8KPiAKPiBJcyB0aGlzIHVuc2lnbmVkIG9y
-IHNpZ25lZD8KClRoZSBmaWVsZCBpdHNlbGYgaXMgdW5zaWduZWQsIGFzIGl0IHByb3ZpZGVzIHRo
-ZSBhYnNvbHV0ZSB2YWx1ZSBvZiB0aGUKZXJyb3IgKHdoaWNoIGNhbiBiZSBpbiBlaXRoZXIgZGly
-ZWN0aW9uKS4gUHJvYmFibHkgYmV0dGVyIGp1c3QgdG8gZHJvcAp0aGUgwrEgZnJvbSB0aGUgY29t
-bWVudC4KCkp1bGllbiBpcyBub3cgYmFjayBmcm9tIHZhY2F0aW9uIGFuZCBJJ20gZXhwZWN0aW5n
-IHRvIHNlZSBoaXMgb3BpbmlvbgpvbiB3aGV0aGVyIHdlIGNhbiBjaGFuZ2UgdGhhdCB0byBuYW5v
-c2Vjb25kcyBmb3IgY29uc2lzdGVuY3kuCg==
+On Tue, 2024-07-16 at 15:20 +0200, Peter Hilber wrote:
+> On 16.07.24 14:32, David Woodhouse wrote:
+> > On 16 July 2024 12:54:52 BST, Peter Hilber <peter.hilber@opensynergy.co=
+m> wrote:
+> > > On 11.07.24 09:50, David Woodhouse wrote:
+> > > > On Thu, 2024-07-11 at 09:25 +0200, Peter Hilber wrote:
+> > > > >=20
+> > > > > IMHO this phrasing is better, since it directly refers to the sta=
+te of the
+> > > > > structure.
+> > > >=20
+> > > > Thanks. I'll update it.
+> > > >=20
+> > > > > AFAIU if there would be abnormal delays in store buffers, causing=
+ some
+> > > > > driver to still see the old clock for some time, the monotonicity=
+ could be
+> > > > > violated:
+> > > > >=20
+> > > > > 1. device writes new, much slower clock to store buffer
+> > > > > 2. some time passes
+> > > > > 3. driver reads old, much faster clock
+> > > > > 4. device writes store buffer to cache
+> > > > > 5. driver reads new, much slower clock
+> > > > >=20
+> > > > > But I hope such delays do not occur.
+> > > >=20
+> > > > For the case of the hypervisor=E2=86=90=E2=86=92guest interface thi=
+s should be handled
+> > > > by the use of memory barriers and the seqcount lock.
+> > > >=20
+> > > > The guest driver reads the seqcount, performs a read memory barrier=
+,
+> > > > then reads the contents of the structure. Then performs *another* r=
+ead
+> > > > memory barrier, and checks the seqcount hasn't changed:
+> > > > https://git.infradead.org/?p=3Dusers/dwmw2/linux.git;a=3Dblob;f=3Dd=
+rivers/ptp/ptp_vmclock.c;hb=3Dvmclock#l351
+> > > >=20
+> > > > The converse happens with write barriers on the hypervisor side:
+> > > > https://git.infradead.org/?p=3Dusers/dwmw2/qemu.git;a=3Dblob;f=3Dhw=
+/acpi/vmclock.c;hb=3Dvmclock#l68
+> > >=20
+> > > My point is that, looking at the above steps 1. - 5.:
+> > >=20
+> > > 3. read HW counter, smp_rmb, read seqcount
+> > > 4. store seqcount, smp_wmb, stores, smp_wmb, store seqcount become ef=
+fective
+> > > 5. read seqcount, smp_rmb, read HW counter
+> > >=20
+> > > AFAIU this would still be a theoretical problem suggesting the use of
+> > > stronger barriers.
+> >=20
+> > This seems like a bug on the guest side. The HW counter needs to be rea=
+d *within* the (paired, matching) seqcount reads, not before or after.
+> >=20
+> >=20
+>=20
+> There would be paired reads:
+>=20
+> 1. device writes new, much slower clock to store buffer
+> 2. some time passes
+> 3. read seqcount, smp_rmb, ..., read HW counter, smp_rmb, read seqcount
+> 4. store seqcount, smp_wmb, stores, smp_wmb, store seqcount all become
+> =C2=A0=C2=A0 effective only now
+> 5. read seqcount, smp_rmb, read HW counter, ..., smp_rmb, read seqcount
+>=20
+> I just omitted the parts which do not necessarily need to happen close to
+> 4. for the monotonicity to be violated. My point is that 1. could become
+> visible to other cores long after it happened on the local core (during
+> 4.).
+
+Oh, I see. That would be a bug on the device side then. And as you say,
+it could be fixed by using the appropriate barriers. Or my alternative
+of just documenting "Don't Do That Then".
 
 
---=-7aI71VoZ9P3azYLQFroL
+--=-Hyh+17g2MeZ+GIA0VPiP
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -192,25 +257,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzE3MDgxNDEwWjAvBgkqhkiG9w0BCQQxIgQgpDLccVzy
-NFY6hIOp63c67afPeKRKJ8ikkSvzZe2e4Uswgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzE3MDgxNjQ3WjAvBgkqhkiG9w0BCQQxIgQgf22pgYrq
+GhXZGTzWg3OaHlGHl9lO7vtt+2OiqKtMKU8wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgA69SbbM8x3fiC47jFJp9nOMmwUNMe/LDfh
-ngQr8h8zfvHq0CmNUpy5WNFPBjIKzQ8vEPDqSaBVfqvPvOvoYgGch0QcbzSze0h6lSxJUMLz5vXt
-aDz+IfH+JCb57ITRS12CYc+xfHY648U82UAf+sxEqOIkYiDB9MsOlB4OhobTElvkUss8ScCB8tKD
-2wlmoeXBGS4T72cRHVneoC2XZYnBYIPYyLYa9MzSX42kS3fBrTVSkq0Jtjx0jbjgNeEkgbjLxTI1
-fyeTH2dygXvDRU/zIZfv9BaWPlX39G95STpPYpFA+8COoGSvdQ0RcIUjskiR0uv76Gok+NwZ110I
-bHgTsqE1/+4qIedRTe6IOqZ0L5WdBlmjjDbK6xs1xPilroIQJD40ecEH5krbERnwvEw/rc+UTUfG
-SprAP+uNYh5XMnpdRdB3eXGaLRSPtmwBM/vYOO1K+QUmwS/jMBHGf00qzPjf19HSY0OIsECssiJv
-t13wPfCmrLGm0aYJGBp+8IURrwemeaS/VAc93hjHCRAgApbLGpn+LuLSBrdCCucGHHlSxWlQK3mB
-/ASd6+N4PTfc+Zt6+ZqHGgFECZ3xfebOt3QtYMcqHR8EPVxf//1hpZmTwFbfTllYg5alYpruMJal
-FN2qql2QoLpYMV4RLbG3+KCn3iMdVh4zUR1VUridJwAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAjitrHv53ZXQEvtaUKAVW0R+5m1FI/MtGC
+M+sBTrHyVweJgj3lbDcG7rBMXZ+oO4HAD/Tf/AMmoq8mucTnTSQWul/zz2e8PBEJHJ77diFcxeez
+IQ5bIYFs4nDw4dUaA4u2O6ZKnRWJj7zK7oqqZv+ipwW+NoHdA+0zBYptyYgT9y3RQ4gXh6jb7C76
+AfNwo6WwJzcZ0VB67IWaJpAiHPs3SoHPAd+iYhKQve5HOZGBhfWqbQQqD0n4K1hOdwouXJFW1NFK
+SOrusnzCC4Q2U7i6gWIGSSY2WLJCOinBmDUn9JD8VJ+2IafPTA9zIUjHwtBF0kzRAorqJZ+Ua+9D
+97dJTzGl6NS2dXmKAAvBCy28BA15HzZ2PA2UaIhhvsYJ1Dd0wX33kQ/fqZ2ud5ku/mGoOTlneqTg
+Sf9itka2jWUaVpwuTVIFckPhIWnqneV6JcMWfzskZ20ALzeber/O/CIIOSjlCvv8qQmsHBFldGOd
+IEQfg+k2x7ZNqdMivuRiWx37QiyGNmlzIseSpCZaEFhjZI1vnDxhuo0VCle6CPrCpqap8QBrU6m6
+vAhjQMjyUSueGmN8gK3Kzgd9zA7g96rOBf8xtt/PCbCIcpbhzSNgPMoCe1877bIvFta8SuNPFI7+
+tjY69i3E64LODqch+51R2Nahh1Rf4dJu0HmjJVI8bQAAAAAAAA==
 
 
---=-7aI71VoZ9P3azYLQFroL--
+--=-Hyh+17g2MeZ+GIA0VPiP--
 
