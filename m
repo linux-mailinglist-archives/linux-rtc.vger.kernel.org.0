@@ -1,489 +1,295 @@
-Return-Path: <linux-rtc+bounces-1552-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1554-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE55A9348F6
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 09:35:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F9E4934F3E
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 16:41:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DC341F23729
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 07:35:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 035D4B23B84
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 14:41:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7E682495;
-	Thu, 18 Jul 2024 07:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB3E14373E;
+	Thu, 18 Jul 2024 14:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="DG0hbsbj"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="HgVax8GW"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012008.outbound.protection.outlook.com [52.101.66.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FC078C7F;
-	Thu, 18 Jul 2024 07:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721288025; cv=fail; b=oXroBv4QbPb4ccNrBxQ4cvLS/fnyAQ97/QuKF5jFjVoD8WHver2PAZkZpF2q7CdshgHMVJPQl+Cb2QwDnhgDd3Lzkvl6y9g4OCAw6BZdHZRjKAtiGkVOXC7YF2fbh/Z1XUIWt7ESv8jg+NqA+ph+g5MIvV8afg4rDyKhFnU0seo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721288025; c=relaxed/simple;
-	bh=QQUxD+WrZ1BoCEejLUiFnTZSyCOU5Rftc8RYqexva2U=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=EaKvY+oXsW99A73HV1uZefB3ZMXJlGvfpjS14Hlr//5tbiM2hA9+tQk1ghI961RmqIxvHnTnCys4pxo8gkhTHeOJIKO67HqPc8cqrMywkbbFzs4Cpq9ttLOUNDeBywdT9orfz4XsVn3tRoca8PDGz4szY05xCcMdzmYEbZhDlxs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=DG0hbsbj; arc=fail smtp.client-ip=52.101.66.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hiwiWVLkC7dwXmJ/adWmM0Y5GJmhq3HJCpc4nhkm1UGyM5fFMqpHN4nji+Sd4F3SBoQtULPKCJh7bvzDzPw2F2/T2rUQj8b6qX7rVmCFlQx7351+j8UyBeQUsGsUb++0vjR/VY15ED6zaUDFh5ryQ5JINC31CjZS1FKUuhWQ/ge/vZWbfYys/lc+hKRZhBTTcQZHQD8sZ8/kwnUFtdx1ZXjzujqB5fbIknOoz9HAQZFXNL6a5gYB+nrKURp31MuLQ04ynVM+5w1oGhL96oWB6P/qb27fWPaPTp5q3wPX7EHL3jzwtrdZZH/hiKkfx3yimVoRicD+EM31uzbAYqk9hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4WPWBl+UNIF8UJOX1QJA+qTKK8dUxDTksPWRgdZNkUI=;
- b=aS+BdSN3NqLADKNj1nlmWVrgegNOsTP8HGqb/PTXwg/GO59dYTLzUwAd8xLoaPRl1NjW189gQOOJjxZ6hxam3es5+zNcbCLL7c/X3+Ft6P0dU5VBjS3060onAcqDOHN5YzDoHomquQJpUq2sDU8lL3GWzKryw8cwLyoE3gLYTjQv35SssKg560PUhndHBnFabG1BNLx87ue1zWFV+OLgE2YsQNLiw2xZflYhLGg18Bcc64hBsRUqYqLNfxG/9JIDSbYImuLihOj8x+qj1XcMrwEozHMWqJHDOZKL4NBEnrcw1G6xwrRp2e9uk2gTImmoxN/get7y69F9AacY4vgb6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4WPWBl+UNIF8UJOX1QJA+qTKK8dUxDTksPWRgdZNkUI=;
- b=DG0hbsbjchVgWlJv49SQOCRhEUXWHckJP0bCt9HnA/5O5x6diZtfNybVxbb+0PM1m9bakVTxhYBgJU9MiyowvAdytMCEFj6WIYv58Tu16269pe+BTCNOGelFuiZratVEl2T6Mc+/9vY/3Fibj7CrQfNHB8NssvXlObyCEMYPUdc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by DU4PR04MB10457.eurprd04.prod.outlook.com (2603:10a6:10:561::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.16; Thu, 18 Jul
- 2024 07:33:40 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.7762.020; Thu, 18 Jul 2024
- 07:33:40 +0000
-From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Date: Thu, 18 Jul 2024 15:41:59 +0800
-Subject: [PATCH v6 7/7] input: keyboard: support i.MX95 BBM module
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240718-imx95-bbm-misc-v2-v6-7-18f008e16e9d@nxp.com>
-References: <20240718-imx95-bbm-misc-v2-v6-0-18f008e16e9d@nxp.com>
-In-Reply-To: <20240718-imx95-bbm-misc-v2-v6-0-18f008e16e9d@nxp.com>
-To: Sudeep Holla <sudeep.holla@arm.com>, 
- Cristian Marussi <cristian.marussi@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Peng Fan <peng.fan@nxp.com>, arm-scmi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
- linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1721288528; l=8472;
- i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=nWz3HeeWJlo8Xe0FnLKszmcU0B0giCY0FEpvD/2NDGs=;
- b=2LwFJyfPwkShGF6fAE7m8kv76JyQbnZ9LjRRuVpVoHPTCyrD0KHGdQZkeZAOVFX5GNRDkCMME
- lBejm0vpv6fCVbMqseqIXsLXc3bpnC04W22h2XXTZ35Fffiut2vminC
-X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
- pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
-X-ClientProxiedBy: SI1PR02CA0046.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::14) To PAXPR04MB8459.eurprd04.prod.outlook.com
- (2603:10a6:102:1da::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F17140E30
+	for <linux-rtc@vger.kernel.org>; Thu, 18 Jul 2024 14:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721313671; cv=none; b=lIAxk6/mBiHdJ97W5Wkj1rNx7HQbvMHeRr1Tp/ZGjbFHoosbG+RFqgy/EYD3C2Bbu03LVuvOi2bVE+Tdb3Tm61oaKkzjKv4Xqv5gzYUNu0LkCxGX3jgqnwVTkdVNpa0pBU80D3K0iaPnX4dn7rJBf5aUeRiYkZLBmUq8htmc26A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721313671; c=relaxed/simple;
+	bh=8iksS6ZFnv53ZcAghL65KYmsNJMU8ft6S6eoiAhZaOk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=mnuCkVFr0c/lZ1eAN1AiBW+XveLFP2gmuTSFY6r7dqkKm8rR8+WDjEv8xZ86lV2tieTStfXES1bRsYjI2Gk5oarpxS5/lL6iN5UUt/yk2QHXC3gUafL5k6jJBmOWo/siYRlPlv8TnxeBE1ObxLVADUVrd1OetOj5OtT1Jj2kV5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=HgVax8GW; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3685b9c8998so310565f8f.0
+        for <linux-rtc@vger.kernel.org>; Thu, 18 Jul 2024 07:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1721313666; x=1721918466; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=d5zeQJ5Ow3UH0+RdZ7WJRjKIJGbUGTjL+v0QPQ6ApNI=;
+        b=HgVax8GWSB4R1kltVA/DXD5F3bYvs9nzcMo1TE75KXYE4mZNQsa7M4YXog31whlRoO
+         wNpaLOwqMIHbGcmstQU2Lwzp/khKUTLoQrZlz8tz7F1FjAaRghMZcuraCYbOHfDMPcXF
+         1vGgXDVJu6f+/Xp8nynyuzd6GYuaMZCE+flQ9LqUTKTh/KeuSM4Ym5BJ3qoDeukfrlIq
+         0XEzsmF2M/5Mp978T+woQvLKlkhiv3Vlnck+HETRVLcZKjLKhFJapu2Dd4UjxbW8vurn
+         OiRCcDf+Ch0B8yRglLobsL7MeCFPGSb8WyqQkVctOeRGzW540/rf0v/d/cFFWXIM5ArV
+         FyMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721313666; x=1721918466;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d5zeQJ5Ow3UH0+RdZ7WJRjKIJGbUGTjL+v0QPQ6ApNI=;
+        b=YKxPqtzixxjYXkJwHbpedQy2KcYnrAQUQZaZoLR1DC7Oh3yk1yReCHCINMdaU8n7aO
+         0XPB319Qwct6GMlmAjcEieEkqr1U5yDJhuiQAqAPkOnCk80CKCmVpeTdS0HXFY8JusLC
+         iR+8mehTsm+ianIxkLT5lb/ulMrkPQanVBvupIZJE9e++e5/lEbxypk7ukEsZOo1kW7d
+         o+q25cuoN53o9yPzAUmlVcQ/bR5QhoegisO9wfie11YNp2UviWvmAdLlnKOFtvius1o2
+         Mo+ndPOONectZdSXg/o5xHlLiy5ftV/DRWrJLb4X3R5Ny+VwIwKvQjnjReALxk95LwPL
+         xtQg==
+X-Forwarded-Encrypted: i=1; AJvYcCXcC+3yD8c5Kg/stIP3MLSesBajli72ruPockFj1SjG52kVDP4frBo/OrW6NqZoe8WvaHSdDpQDV5GJ1YhHhOazoSsq4uD4poZS
+X-Gm-Message-State: AOJu0Yz0ynRRHNkm/8OSqFxMvCSW4LOdfJQTQRs4KODu96UNSidI7ZCA
+	icrvK3qG76/VvDk6FQnzY22BPaAi1Z4MyqP3+625SHtSYM6Rk1rqfLLVhnhrhDlWLoZrf2mjDl3
+	j
+X-Google-Smtp-Source: AGHT+IHLLY7FV8d3TW5DeDftcP9CR4qKgZexsCdXD1McSEmqtB8zHI2JozSns5pNcAAnLe1mJiEB7g==
+X-Received: by 2002:a5d:59a2:0:b0:367:9073:3496 with SMTP id ffacd0b85a97d-3683160e527mr4242349f8f.29.1721313666237;
+        Thu, 18 Jul 2024 07:41:06 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3685043637fsm1903132f8f.66.2024.07.18.07.41.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jul 2024 07:41:05 -0700 (PDT)
+Message-ID: <fd8078cb-fe1c-4aef-9e83-be2baa529720@tuxon.dev>
+Date: Thu, 18 Jul 2024 17:41:03 +0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|DU4PR04MB10457:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffd4a4cf-0137-479a-73c1-08dca6fbf195
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|52116014|376014|7416014|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Y0l2TFdIblEzMEs3OUxiL3JZMG1JVEdPa0dYckthREExU1NjZ2pwTGlybzNx?=
- =?utf-8?B?aGp6UFdNdVRvM3ZBQkQ4c0hmaHlLaHJaZVAwY1FNNUJodzRDRmoydFRxNXlo?=
- =?utf-8?B?cEdWdUNmb2xTcjh2ZzNtTHE2TGVhOFZtdnljeUVreGs5Y2MyWTc2QVA1L1E4?=
- =?utf-8?B?NDRqdU5LNEMwOTZTWEtqVVhyT0F2NExCdU1Wa1E0TFdueEVad2I0UUl2QlhU?=
- =?utf-8?B?L0xHNW5DdkNUTG1UeWU4eXREaHlGUmRpM0FvbEZ5YXFPQnZ6VWp2VUFhQWNO?=
- =?utf-8?B?RDNjZ3AvMWpUN3Rwb1BqR3Bja3JoYnA2dU4wQ2UrRGpxWmRkQkx2YTJJVjNO?=
- =?utf-8?B?OEhGdDZGTjMzVU5GRUNFMUh1cjlQanhRblRneUwycWVKYnNyZWREbUNUVWQz?=
- =?utf-8?B?aDVia0tGbUxCOTFacjRWWHdzNU1HVFN3cnZKSnB4MGRycVVFZit3ZVFxMkpF?=
- =?utf-8?B?YkNubHRHYTFzWWlXN3RsdWVtMzgzcXhnSDJ6SVc2c1FFY1ljbWlubEZVMC8r?=
- =?utf-8?B?eEhObGdEVEV6QTBmRmpBZU9tdzRZRkhQaktFVitsT1ZzY0FmeG9GK1ZGM1VE?=
- =?utf-8?B?QzR2OGxLd0lBS1JPSFZjSDNpY1BZUG9RdTZ6QVJXcUdvdUpSMGYrRlQrajEr?=
- =?utf-8?B?QW8yS3NRMzdzMFFQcmJoTlNJSVpCVi9ITERoUTh3MW85Y3Z1TGdrejFJaEQ0?=
- =?utf-8?B?ZmdnV1ZRWHlYRjk2aVJRMEVuYmN4V2NhNkQ5bEwzbjVlbzh0bkZLSkxFNjNV?=
- =?utf-8?B?N1RmV29BVnpNVFpLVzVwL2ljYUxyMGNRTk5pcEQ4TlVRN2cxZEZNakxRWmhW?=
- =?utf-8?B?Y0JYTnZheU1kRVhSdGY1Mno3NDR0OThJbEhTT09NY2pzdndZSStvZ3JIallE?=
- =?utf-8?B?cjFtVkYxZmc1K3UyVUlMbDg4VEFCbGppYTEwZFYzdVpiZmpCRklxdUlQTk1T?=
- =?utf-8?B?ekpnL0hRaDhRQkJVTnBIbXJwblZVUjhub3NtNllBZDcwUW1md1RseHV6NmlY?=
- =?utf-8?B?UmRWRGFHelBXOHBzbW5zYVIrMjhkZk54VzdzZ3pUcUsvVlprNzNFWFg2RlBr?=
- =?utf-8?B?SGtZdEFGRzNNbStiaHZ2b0pRaGNIQnRwT2g5Y2pzK3p6UzVBdnVzYmV0bVpR?=
- =?utf-8?B?ZFVoZUVkajZyOHMyRmUvNE14YmJZb3ZZbDl2Tmhwcm1Cc1lsYjVwdzBnWUdp?=
- =?utf-8?B?KzhhanB5TjlkODlsb3UvU1hQc25iZm1WYjI0TUtrNzBrTk5TNTNXVlN1aWNH?=
- =?utf-8?B?ZEJ5THI3alF6VjhSU3lFQjVFdi8yemNrWE9EbzNSSi9wRlFnM3dpMWxUdGZW?=
- =?utf-8?B?dGdaa2F5Zlk5Z29KMzNQODhyVEtpOEpuNG5ybUEwUkNneExIN0VKOHNYRjNH?=
- =?utf-8?B?S0IwTmxWKzZLK0pRRUE5aWFFTnlKZ2pqd0M4ajgveWFDaVkvSlM0V3g3dllr?=
- =?utf-8?B?MFNaZTVMRnVicTBKTnUvQURQaG1hVGhVaGhOdlF5SVF4Njl6NjBZS25FRUNs?=
- =?utf-8?B?L0JyMUlNbFdLR1hZOWh0c3lPNFJ4NlNXQ1NaWGE4c3RwY2tIODVsL002SDVM?=
- =?utf-8?B?aGxGWCtlaHBFM1JlaVY5S1dBT1Y2Tms3TFdiYWZHdjdjTmpFNVcrRzJCTnd5?=
- =?utf-8?B?aEltUzVuRS9icURxYnNJUEZRNjRNNUxiZ0xBdmJmSFFrSHZyMFRjWWRkbDRU?=
- =?utf-8?B?RmFtVFFCUjYvdGhWemRReUR2YkJ2M0libXQ5ZG9SR3ljMXJqdFkxWE5wSWph?=
- =?utf-8?B?YWNtcnRXdFh5RGNOUFRRaTBlamZ2UXNESnMzRFZhU0RrcGY2aXJRTm5kYXRh?=
- =?utf-8?B?VGZhaHlnRHhpQktSRFRCMmk1ektsUmg0REUwcmVsZ1ZXWHIwK25Vc3M2cGdJ?=
- =?utf-8?B?VzE4T0ZhYng5OXpFdkdyZC9rWStSOTZvTFoxZTRiZUdGUkpuRWYrUUtpblJV?=
- =?utf-8?Q?ZHViVFF3nLY=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(376014)(7416014)(921020)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NjBaMUtHQm15dU1xMDlRTUpCOFE1Rm1lQzdMMTJqWDBKZ3VLeUZsVENYYnZ2?=
- =?utf-8?B?dWYvcldMS1IxdzZSTzlkeWRneC85MENHTk9RdzNtSGlQVmp1a2xjTUZ6ek9G?=
- =?utf-8?B?ZTZQSENXb3J0Tk1RbjBBS1JadVJSakwyaSszbm01WHBYdGZMdmFRVnF3bHFs?=
- =?utf-8?B?cWFacUsrZm01aDZnNGVHSG5XZzlvamVSOTl6ZW5BdXdpZzcyaVhOR2Jtc0hS?=
- =?utf-8?B?ZzZEUThscFlFb1MvVlNPcWtFdzg4c3ZOdk9Fajg3WkxWK3dvV1NUZzVuMTJa?=
- =?utf-8?B?cDgvZFc5azBveHk4d1hJS2xsYWdycDZ1NVdhR3N1em9FZ2NyM0k0cFUwc1hS?=
- =?utf-8?B?WEp2WjlkdjdkWFVPVTlsTnU5Qy9uUHlFYXlFcU9jWDFuSllxM09sTHNRSHFC?=
- =?utf-8?B?YTRCaEhzRzFHRTdPRWQrSnNOazNjbGFnRFcrTHBBVDNaU01sZkE4dEVJbnF5?=
- =?utf-8?B?NGdMTnNtdWhUZVA2ejNPVDRPTzdSZ29NeHMwMWlLUk04OS8yWHgvNHhTb1V0?=
- =?utf-8?B?UkNGLzhCR21PN0hHdlNNZ2NRV1piL1h0ZTErd01rZ0svUUx2UmdDK2I3UlYz?=
- =?utf-8?B?eWVwOXJYczViOWRMTHBIZnJPNE1NcWZDallUKyszY2xBYk9ud3ZQaWVNWnRr?=
- =?utf-8?B?RFBzdHV2a2k0b1JSWEZ6ZEhueDRKeTAvUjU0T0lFZXhOWEpoZ09uVmR3Tlh3?=
- =?utf-8?B?bkZ1UEhQRXdENXhpaDNzQWtOV0R4QVErVmtQWU5aQS82UUhBUGJ3dWhDM0Jy?=
- =?utf-8?B?RTE2SkptMzRBQXN0U1JCZmtjSEdBQ20yVVRjWSsvejZJKzJUYmtlY1hYVGF6?=
- =?utf-8?B?R29BZE1NcEpUNXR4WnVybzEzQ2ZGLzY0YUh1WVdZdC95N1p5TUZJYWY5Wmpr?=
- =?utf-8?B?b3ZLZkJmRVFsS2lPNG8vcEJmNDl2UEVrVFZvc3FmL0haS0pJamxUL1FNRHNU?=
- =?utf-8?B?ck5BamZDaEw2b2Q5L1AxRklBMGxCQ2xndkgyWFZ0ZGtNSC9Wek0rT0Era3Bv?=
- =?utf-8?B?NVhxN09Nbk1rOVdsdXplYzdyK09IWThIRFdIVzJqM25PWmxZWFo1dWtFbklG?=
- =?utf-8?B?dUovSkgwekRDTWJ5Vm5LYklPQTJuYXd5WnBEQjZ6SEQvU2d6NjA5RnprTHpZ?=
- =?utf-8?B?TWdxd0syWUR1VW5PT0hCUDBzYlVLdGdUNG1HT0h2ZFNDUTk3MU9Lc2swa3pt?=
- =?utf-8?B?VFROMjBMNi9ud1VoS2lsVVZZc0dTY043WTlNZzdSUnB4c0pQcUFvemlYRkVa?=
- =?utf-8?B?YisraFdoWVgzNU1waEVoakY3ZGc1V0t4V3pLYmxqSVphTHdRRkM5cWpiaWRP?=
- =?utf-8?B?c083Tk1qNSsybEJSdEJYSzJSZlR3bUUrYWtaK3NhdlN6QVVXbmRST0ZFM2Y0?=
- =?utf-8?B?YUN6a0dUbTVFSVhKTjI4NWphTWpJemRZM3RML2d2ODdyYUJHa0dFT3BDNHo0?=
- =?utf-8?B?ZzVYdWl0SmRXU2VWY2xEcGRtSmRlVHZ3d0ZlMHkySmlodk1Yd0duR1Bwc0lO?=
- =?utf-8?B?MXVpVUZwc0hkeXlSL3VnNnFGbHNPOUNqZE1KSldrUFlnQndXa3ZmTHVTcEha?=
- =?utf-8?B?NE9ad2E0aDdRTHErSWdnMWlidVFMVHZPY2ZrRkJpbkNxSWo1RUpFZ0pzNWFn?=
- =?utf-8?B?N3k0MU5VQmxhV3dXSFRRYWdFRnNFTVFXNGFsMjZGcmhGYS9GcEYwMWQyWDZV?=
- =?utf-8?B?WkluQW9GQ1lPU2JkMlN2dXk0bXFjMjlBOVVXRGVmWC9XTEI3NG9zT2Y0REVH?=
- =?utf-8?B?Rk16ZW1ReWZjM1puR2hwSzFMU3V6dkhyQUh2ZlZoWisrZ2pROVBuTS92MUky?=
- =?utf-8?B?QkxtUWZuN1ZWVjJQV0x1WDJ3eUZYUy9qblI5bm5IM29UNmZRaStjc2hoTHJH?=
- =?utf-8?B?R21VK1VuWDNQRm90eEF2REJ0QXFnUE41M1M3L3FxT25oOEtNSGpoeGt6TytV?=
- =?utf-8?B?TnlPM1NSRGZBWkdmNDBOYng0L0t5T2wxT3k3V1ZrZzM1MlpsOTNFejJ0MjNV?=
- =?utf-8?B?VzZidWxuMkVHaUVLZ01mZDRhYWZyNjM1MHRyWTFocGFrdVg5YmhzNGZMSmpq?=
- =?utf-8?B?VzlTZUJoN3NoTGtyWjA4bW1nRmRVdThZYU1aRm05ZU5tbVJ5Y3I1cmN0dDZC?=
- =?utf-8?Q?22Hugj3KM9vvxMSZMtJyVVDZl?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffd4a4cf-0137-479a-73c1-08dca6fbf195
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2024 07:33:40.1177
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gWdzkB4hZSegQuDweBotwSZqJK0aYUA2ADUHv7EJnR6FWIsGnqG8vj/foNvGryqVX8zHaEAtLYfV12j9LnIl9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB10457
+User-Agent: Mozilla Thunderbird
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH v2 03/11] clk: renesas: clk-vbattb: Add VBATTB clock
+ driver
+To: Stephen Boyd <sboyd@kernel.org>, alexandre.belloni@bootlin.com,
+ conor+dt@kernel.org, geert+renesas@glider.be, krzk+dt@kernel.org,
+ lee@kernel.org, magnus.damm@gmail.com, mturquette@baylibre.com,
+ p.zabel@pengutronix.de, robh@kernel.org
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240716103025.1198495-4-claudiu.beznea.uj@bp.renesas.com>
+ <2abcd440664067d95b1ac0e765ad55a3.sboyd@kernel.org>
+ <e3103f07-ce8a-4c34-af5c-bb271c7ec99a@tuxon.dev>
+ <4cacf090dc56c3ffd15bccd960065769.sboyd@kernel.org>
+Content-Language: en-US
+In-Reply-To: <4cacf090dc56c3ffd15bccd960065769.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Peng Fan <peng.fan@nxp.com>
 
-The BBM module provides BUTTON feature. To i.MX95, this module
-is managed by System Manager and exported using System Management
-Control Interface(SCMI). Linux could use i.MX SCMI BBM Extension
-protocol to use BUTTON feature.
 
-This driver is to use SCMI interface to enable pwrkey.
+On 18.07.2024 03:39, Stephen Boyd wrote:
+> Quoting claudiu beznea (2024-07-17 01:31:20)
+>> Hi, Stephen,
+>>
+>> On 17.07.2024 01:28, Stephen Boyd wrote:
+>>> Quoting Claudiu (2024-07-16 03:30:17)
+>>>> diff --git a/drivers/clk/renesas/clk-vbattb.c b/drivers/clk/renesas/clk-vbattb.c
+>>>> new file mode 100644
+>>>> index 000000000000..8effe141fc0b
+>>>> --- /dev/null
+>>>> +++ b/drivers/clk/renesas/clk-vbattb.c
+>>>> @@ -0,0 +1,212 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>> +/*
+>>>> + * VBATTB clock driver
+>>>> + *
+>>>> + * Copyright (C) 2024 Renesas Electronics Corp.
+>>>> + */
+>>>> +
+>>>> +#include <linux/cleanup.h>
+>>>> +#include <linux/clk.h>
+>>>
+>>> Prefer clk providers to not be clk consumers.
+>>
+>> I added it here to be able to use devm_clk_get_optional() as it was
+>> proposed to me in v1 to avoid adding a new binding for bypass and detect if
+>> it's needed by checking the input clock name.
+>>
+> 
+> Understood.
+> 
+>>
+>>>
+>>> I also wonder if this is really a mux, 
+>>
+>> It's a way to determine what type of clock (crystal oscillator or device
+>> clock) is connected to RTXIN/RTXOUT pins of the module
+>> (the module block diagram at [1]) based on the clock name. Depending on the
+>> type of the clock connected to RTXIN/RTXOUT we need to select the XC or
+>> XBYP as input for the mux at [1].
+>>
+>> [1] https://gcdnb.pbrd.co/images/QYsCvhfQlX6n.png
+> 
+> That diagram shows a mux block, so at least something in there is a mux.
+> From what I can tell the binding uses clock-names to describe the mux.
+> What I'd like to avoid is using clk_get() to determine how to configure
+> the mux. That's because clk_get() is a clk consumer API, and because we
+> want clk providers to be able to register clks without making sure that
+> the entire parent chain has been registered first. Eventually, we'd like
+> clk_get() to probe defer if the clk is an orphan. Having clk providers
+> use clk_get() breaks that pretty quickly.
+> 
+>>
+>>
+>>> and either assigned-clock-parents should be used, 
+>>> or the clk_ops should have an init routine that looks at
+>>> which parent is present by determining the index and then use that to
+>>> set the mux. The framework can take care of failing to set the other
+>>> parent when it isn't present.
+>>
+>>
+>> On the board, at any moment, it will be only one clock as input to the
+>> VBATTB clock (either crystal oscillator or a clock device). If I'm getting
+>> you correctly, this will involve describing both clocks in some scenarios.
+>>
+>> E.g. if want to use crystal osc, I can use this DT description:
+>>
+>> vbattclk: clock-controller@1c {
+>>         compatible = "renesas,r9a08g045-vbattb-clk";
+>>         reg = <0 0x1c 0 0x10>;
+>>         clocks = <&vbattb_xtal>;
+>>         clock-names = "xin";
+>>         #clock-cells = <0>;
+>>         status = "disabled";
+>> };
+>>
+>> vbattb_xtal: vbattb-xtal {
+>>         compatible = "fixed-clock";
+>>         #clock-cells = <0>;
+>>         clock-frequency = <32768>;
+>> };
+>>
+>> If external clock device is to be used, I should describe a fake clock too:
+>>
+>> vbattclk: clock-controller@1c {
+>>         compatible = "renesas,r9a08g045-vbattb-clk";
+>>         reg = <0 0x1c 0 0x10>;
+>>         clocks = <&vbattb_xtal>, <&ext_clk>;
+> 
+> Is vbattb_xtal the fake clk? If so, I'd expect this to be
+> 
+> 	clocks = <0>, <&ext_clk>;
+> 
+> so that we don't have a useless clk node.
+> 
+>>         clock-names = "xin", "clkin";
+>>         #clock-cells = <0>;
+>>         status = "disabled";
+>> };
+>>
+>> vbattb_xtal: vbattb-xtal {
+>>         compatible = "fixed-clock";
+>>         #clock-cells = <0>;
+>>         clock-frequency = <0>;
+>> };
+>>
+>> ext_clk: ext-clk {
+>>         compatible = "fixed-clock";
+>>         #clock-cells = <0>;
+>>         clock-frequency = <32768>;
+>> };
+>>
+>> Is this what you are suggesting?
+>>
+> 
+> Sort of. Ignoring the problem with the subnode for the clk driver, I
+> don't really like having clock-names that don't match the hardware pin
+> names. From the diagram you provided, it looks like clock-names should
+> be "bclk" and "rtxin" for the bus clock and the rtxin signal. Then the
+> clock-cells should be "1" instead of "0", and the mux should be one of
+> those provided clks and "xc" and "xbyp" should be the other two. If that
+> was done, then assigned-clocks could be used to assign the parent of the
+> mux.
+> 
+> #define VBATTBCLK          0
+> #define VBATTB_XBYP        1
+> #define VBATTB_XC          2
+> 
+>     vbattb: vbattb@1005c000 {
+>         compatible = "renesas,r9a08g045-vbattb";
+>         reg = <0x1005c000 0x1000>;
+>         ranges = <0 0 0x1005c000 0 0x1000>;
+>         interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+>         interrupt-names = "tampdi";
+>         clocks = <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&ext_clk>;
+>         clock-names = "bclk", "rtxin";
+>         power-domains = <&cpg>;
+>         resets = <&cpg R9A08G045_VBAT_BRESETN>;
+>         #clock-cells = <1>;
+>         assigned-clocks = <&vbattb VBATTBCLK>;
+> 	assigned-clock-parents = <&vbattb VBATTB_XBYP>;
+>         renesas,vbattb-load-nanofarads = <12500>;
+>     };
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/input/keyboard/Kconfig          |  11 ++
- drivers/input/keyboard/Makefile         |   1 +
- drivers/input/keyboard/imx-sm-bbm-key.c | 236 ++++++++++++++++++++++++++++++++
- 3 files changed, 248 insertions(+)
+I think I got it now. Thank you for the detailed explanation.
 
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index 72f9552cb571..a3301239b9a6 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -454,6 +454,17 @@ config KEYBOARD_IMX
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called imx_keypad.
- 
-+config KEYBOARD_IMX_BBM_SCMI
-+	tristate "IMX BBM SCMI Key Driver"
-+	depends on IMX_SCMI_BBM_EXT || COMPILE_TEST
-+	default y if ARCH_MXC
-+	help
-+	  This is the BBM key driver for NXP i.MX SoCs managed through
-+	  SCMI protocol.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called scmi-imx-bbm-key.
-+
- config KEYBOARD_IMX_SC_KEY
- 	tristate "IMX SCU Key Driver"
- 	depends on IMX_SCU
-diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-index b8d12a0524e0..5915e52eac28 100644
---- a/drivers/input/keyboard/Makefile
-+++ b/drivers/input/keyboard/Makefile
-@@ -31,6 +31,7 @@ obj-$(CONFIG_KEYBOARD_IPAQ_MICRO)	+= ipaq-micro-keys.o
- obj-$(CONFIG_KEYBOARD_IQS62X)		+= iqs62x-keys.o
- obj-$(CONFIG_KEYBOARD_IMX)		+= imx_keypad.o
- obj-$(CONFIG_KEYBOARD_IMX_SC_KEY)	+= imx_sc_key.o
-+obj-$(CONFIG_KEYBOARD_IMX_BBM_SCMI)	+= imx-sm-bbm-key.o
- obj-$(CONFIG_KEYBOARD_HP6XX)		+= jornada680_kbd.o
- obj-$(CONFIG_KEYBOARD_HP7XX)		+= jornada720_kbd.o
- obj-$(CONFIG_KEYBOARD_LKKBD)		+= lkkbd.o
-diff --git a/drivers/input/keyboard/imx-sm-bbm-key.c b/drivers/input/keyboard/imx-sm-bbm-key.c
-new file mode 100644
-index 000000000000..ca430dbb61d0
---- /dev/null
-+++ b/drivers/input/keyboard/imx-sm-bbm-key.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2024 NXP.
-+ */
-+
-+#include <linux/input.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/scmi_protocol.h>
-+#include <linux/scmi_imx_protocol.h>
-+#include <linux/suspend.h>
-+
-+#define DEBOUNCE_TIME		30
-+#define REPEAT_INTERVAL		60
-+
-+struct scmi_imx_bbm {
-+	struct scmi_protocol_handle *ph;
-+	const struct scmi_imx_bbm_proto_ops *ops;
-+	struct notifier_block nb;
-+	int keycode;
-+	int keystate;  /* 1:pressed */
-+	bool suspended;
-+	struct delayed_work check_work;
-+	struct input_dev *input;
-+};
-+
-+static void scmi_imx_bbm_pwrkey_check_for_events(struct work_struct *work)
-+{
-+	struct scmi_imx_bbm *bbnsm = container_of(to_delayed_work(work),
-+						  struct scmi_imx_bbm, check_work);
-+	struct scmi_protocol_handle *ph = bbnsm->ph;
-+	struct input_dev *input = bbnsm->input;
-+	u32 state = 0;
-+	int ret;
-+
-+	ret = bbnsm->ops->button_get(ph, &state);
-+	if (ret) {
-+		pr_err("%s: %d\n", __func__, ret);
-+		return;
-+	}
-+
-+	pr_debug("%s: state: %d, keystate %d\n", __func__, state, bbnsm->keystate);
-+
-+	/* only report new event if status changed */
-+	if (state ^ bbnsm->keystate) {
-+		bbnsm->keystate = state;
-+		input_event(input, EV_KEY, bbnsm->keycode, state);
-+		input_sync(input);
-+		pm_relax(bbnsm->input->dev.parent);
-+		pr_debug("EV_KEY: %x\n", bbnsm->keycode);
-+	}
-+
-+	/* repeat check if pressed long */
-+	if (state)
-+		schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(REPEAT_INTERVAL));
-+}
-+
-+static int scmi_imx_bbm_pwrkey_event(struct scmi_imx_bbm *bbnsm)
-+{
-+	struct input_dev *input = bbnsm->input;
-+
-+	pm_wakeup_event(input->dev.parent, 0);
-+
-+	/*
-+	 * Directly report key event after resume to make no key press
-+	 * event is missed.
-+	 */
-+	if (READ_ONCE(bbnsm->suspended)) {
-+		bbnsm->keystate = 1;
-+		input_event(input, EV_KEY, bbnsm->keycode, 1);
-+		input_sync(input);
-+		WRITE_ONCE(bbnsm->suspended, false);
-+	}
-+
-+	schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(DEBOUNCE_TIME));
-+
-+	return 0;
-+}
-+
-+static void scmi_imx_bbm_pwrkey_act(void *pdata)
-+{
-+	struct scmi_imx_bbm *bbnsm = pdata;
-+
-+	cancel_delayed_work_sync(&bbnsm->check_work);
-+}
-+
-+static int scmi_imx_bbm_key_notifier(struct notifier_block *nb, unsigned long event, void *data)
-+{
-+	struct scmi_imx_bbm *bbnsm = container_of(nb, struct scmi_imx_bbm, nb);
-+	struct scmi_imx_bbm_notif_report *r = data;
-+
-+	if (r->is_button) {
-+		pr_debug("BBM Button Power key pressed\n");
-+		scmi_imx_bbm_pwrkey_event(bbnsm);
-+	} else {
-+		/* Should never reach here */
-+		pr_err("Unexpected BBM event: %s\n", __func__);
-+	}
-+
-+	return 0;
-+}
-+
-+static int scmi_imx_bbm_pwrkey_init(struct scmi_device *sdev)
-+{
-+	const struct scmi_handle *handle = sdev->handle;
-+	struct device *dev = &sdev->dev;
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-+	struct input_dev *input;
-+	int ret;
-+
-+	if (device_property_read_u32(dev, "linux,code", &bbnsm->keycode)) {
-+		bbnsm->keycode = KEY_POWER;
-+		dev_warn(dev, "key code is not specified, using default KEY_POWER\n");
-+	}
-+
-+	INIT_DELAYED_WORK(&bbnsm->check_work, scmi_imx_bbm_pwrkey_check_for_events);
-+
-+	input = devm_input_allocate_device(dev);
-+	if (!input) {
-+		dev_err(dev, "failed to allocate the input device for SCMI IMX BBM\n");
-+		return -ENOMEM;
-+	}
-+
-+	input->name = dev_name(dev);
-+	input->phys = "bbnsm-pwrkey/input0";
-+	input->id.bustype = BUS_HOST;
-+
-+	input_set_capability(input, EV_KEY, bbnsm->keycode);
-+
-+	ret = devm_add_action_or_reset(dev, scmi_imx_bbm_pwrkey_act, bbnsm);
-+	if (ret) {
-+		dev_err(dev, "failed to register remove action\n");
-+		return ret;
-+	}
-+
-+	bbnsm->input = input;
-+
-+	bbnsm->nb.notifier_call = &scmi_imx_bbm_key_notifier;
-+	ret = handle->notify_ops->devm_event_notifier_register(sdev, SCMI_PROTOCOL_IMX_BBM,
-+							       SCMI_EVENT_IMX_BBM_BUTTON,
-+							       NULL, &bbnsm->nb);
-+
-+	if (ret)
-+		dev_err(dev, "Failed to register BBM Button Events %d:", ret);
-+
-+	ret = input_register_device(input);
-+	if (ret) {
-+		dev_err(dev, "failed to register input device\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int scmi_imx_bbm_key_probe(struct scmi_device *sdev)
-+{
-+	const struct scmi_handle *handle = sdev->handle;
-+	struct device *dev = &sdev->dev;
-+	struct scmi_protocol_handle *ph;
-+	struct scmi_imx_bbm *bbnsm;
-+	int ret;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	bbnsm = devm_kzalloc(dev, sizeof(*bbnsm), GFP_KERNEL);
-+	if (!bbnsm)
-+		return -ENOMEM;
-+
-+	bbnsm->ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_IMX_BBM, &ph);
-+	if (IS_ERR(bbnsm->ops))
-+		return PTR_ERR(bbnsm->ops);
-+
-+	bbnsm->ph = ph;
-+
-+	device_init_wakeup(dev, true);
-+
-+	dev_set_drvdata(dev, bbnsm);
-+
-+	ret = scmi_imx_bbm_pwrkey_init(sdev);
-+	if (ret)
-+		device_init_wakeup(dev, false);
-+
-+	return ret;
-+}
-+
-+static void scmi_imx_bbm_key_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-+
-+	device_init_wakeup(dev, false);
-+
-+	cancel_delayed_work_sync(&bbnsm->check_work);
-+}
-+
-+static int __maybe_unused scmi_imx_bbm_key_suspend(struct device *dev)
-+{
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-+
-+	WRITE_ONCE(bbnsm->suspended, true);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused scmi_imx_bbm_key_resume(struct device *dev)
-+{
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(scmi_imx_bbm_pm_key_ops, scmi_imx_bbm_key_suspend,
-+			 scmi_imx_bbm_key_resume);
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_IMX_BBM, "imx-bbm-key" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static struct scmi_driver scmi_imx_bbm_key_driver = {
-+	.driver = {
-+		.pm = &scmi_imx_bbm_pm_key_ops,
-+	},
-+	.name = "scmi-imx-bbm-key",
-+	.probe = scmi_imx_bbm_key_probe,
-+	.remove = scmi_imx_bbm_key_remove,
-+	.id_table = scmi_id_table,
-+};
-+module_scmi_driver(scmi_imx_bbm_key_driver);
-+
-+MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-+MODULE_DESCRIPTION("IMX SM BBM Key driver");
-+MODULE_LICENSE("GPL");
+> 
+> One last thing that I don't really understand is why this needs to be a
+> clk provider. In the diagram, the RTC is also part of vbattb, so it
+> looks odd to have this node be a clk provider with #clock-cells at all.
 
--- 
-2.37.1
+I did it like this because the RTC is a different IP mapped at it's own
+address and considering the other VBATTB functionalities (tamper, SRAM)
+might be implemented at some point.
 
+I also failed to notice that RTC might not work w/o bclk being enabled
+(thanks for pointing it).
+
+I saw that diagram more like describing the always-on power domain
+(PD_VBATTB) where the VBATTB logic and RTC resides. That power domain is
+backed by battery. From HW manual [1]: "PD_VBATT domain is the area where
+the RTC/backup register is located, works on battery power when the power
+of PD_VCC and PD_ISOVCC domain are turned off."
+
+[1]
+https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzg3s-general-purpose-microprocessors-single-core-arm-cortex-a55-11-ghz-cpu-and-dual-core-cortex-m33-250
+
+> Is it the case that if the rtxin pin is connected, you mux that over,
+> and if the pin is disconnected you mux over the internal oscillator? 
+
+From the description here at [2] I'm getting that the "32-KHz clock
+oscillator" block is used when crystal oscillator is connected to RTXIN,
+RTXOUT pins and it is skipped if external clock device is connected.
+
+[2] https://i2.paste.pics/RFKJ0.png?rand=Xq8w1RLDvZ
+
+> I'm
+> really wondering why a clk provider is implemented at all. Why not just
+> hit the registers directly from the RTC driver depending on a
+> devm_clk_get_optional() call?
+
+I did it like this because the RTC is a different IP mapped at it's own
+address with it's own interrupts, clock, power domain and considering that
+the other VBATTB functionalities (tamper, SRAM) might be used at some point
+in future. At the same time I failed to noticed the VBATTB clock might be
+needed for RTC.
+
+Do you consider better to just take a regmap to VBATTB from RTC driver and
+set the VBATTB from RTC driver itself?
+
+Thank you,
+Claudiu Beznea
 
