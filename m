@@ -1,217 +1,138 @@
-Return-Path: <linux-rtc+bounces-1544-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1553-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA70593456E
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 02:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6704B934908
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 09:39:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 025101C21688
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 00:39:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B0701C22D34
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jul 2024 07:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0059810FA;
-	Thu, 18 Jul 2024 00:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6586770E5;
+	Thu, 18 Jul 2024 07:39:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2KwpPmU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ClVq7udQ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA9911FA3;
-	Thu, 18 Jul 2024 00:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFA755886;
+	Thu, 18 Jul 2024 07:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721263157; cv=none; b=qiFzmaLcVd4bD9p4ZLkvupI7sPj4x24didiLhhcehAw77+HkABe/CLVD+I/leOjblgGslWXw5XYFKKRl/hd+s/N+OBDL41E4BIHZSEBDb0rvpC/Dh0EN1OFSsd5Jk50iz7GbzHCRH0OaORdKDheB9W3uVda70ibHyIU+18QKzuM=
+	t=1721288376; cv=none; b=j13W1/5WBk3GTowrw7XY59XerzGHx40+Iun+ehq5qkeZkoUZOiDXpek8gJ4ZjRPlhK7uMDuqfFzC3Rb0uDB/qMC45IgXJYuBPQkx1+QAZo560OxJLr2G6KPcBFxt24LlkHL1xo+b3sDtcNIyGfbRKVdSodCyJ0StGAMCM6pAEbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721263157; c=relaxed/simple;
-	bh=q0p1lGORvpOF1Z0/NFbmLqzuOehoaT6QsYiDkqPI4AU=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=WJ1TE1aECMe1SRgLFC8heuEcSo/ztld8YSHzNZN2oEBhnjjBymt+fCBRdHjPVJy1zjns9yrDITbNkcRZjSgDLBLtfl8VZqU/kiGLkuOCacOn5aWCVVtr9gTUk1lrrX7OjF5D7xnTrtfIwNAFbX7d36MxX/9DxFbF9TqxPQC4WkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2KwpPmU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2DFC4AF0B;
-	Thu, 18 Jul 2024 00:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721263157;
-	bh=q0p1lGORvpOF1Z0/NFbmLqzuOehoaT6QsYiDkqPI4AU=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=r2KwpPmU+W7hAxnlAdOuiRgYgE7yxb6DdPs/gm35QxQogv+05JHUph0GiF/Qw18KJ
-	 yC6nnzjXCf2/ANay177iI2v2cjYdhg05ZZht3uQZ5t+sUJPoM02marz/hKjtwhPF+Q
-	 JquCBIf+WWJfVbmmFry1WI5KkUFRpoIIc0x39TfiqHm/EPcRuRU/HIr/LAcpZIxQSx
-	 CShfdZY1d/2N6jae0YgdsE3iwUJWAmN/tstqV0l7VJlFoLZCv59ZdAbYetIfgotDxF
-	 7/pVXL9wBN11m71YDowNNMoqqeG2BTxJ3k2R96gv0iILYeuDxb8Vqh5rKLk8R0l8tK
-	 I5sl9upWK2o8Q==
-Message-ID: <4cacf090dc56c3ffd15bccd960065769.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1721288376; c=relaxed/simple;
+	bh=iqfx6zox9avcJL4qEVcecuVKJ0q9C/Pqzb6XRU+217o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aR91a813sJ1Q5eEppg57QITm5uOK7bzN1NdXPijUu7GZLpsicyVdSUWuunRW/S0Dhecg0Y0i8LxChXz5UAiO2eZfJPYWBNac3j1jjIeIPUZeJ3jtgnmSPf6lHh7q01PrS752CyEOf30I26OiPzSPMhvSRB8aQbhLeUQ/m301yz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ClVq7udQ; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721288375; x=1752824375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iqfx6zox9avcJL4qEVcecuVKJ0q9C/Pqzb6XRU+217o=;
+  b=ClVq7udQpbMTFdGtuTbrXvk2ZnWqJ9utWo39e5iCFkMg5Ff/zT9mUzCU
+   VnPDhBqOyp9KvMT525T7gGM3b0y5CctTDyIoDNvkTbf4p4nW2nKyQlwbg
+   rnG3QG6LkylmAZGCAlQ4uMgVPV15SCQgKWYESAGaipCuMs37vZ9iqWjiH
+   jsOxjb0qFFR1ETqAUoiz/e+JBEF9usSaqayp/X+k1m8M0LEmBpxB+1AK6
+   aSyDlz/Ma2R0OhSaemo+ra7geYfwwmJaSBxb6iccS79tUGrz0I/3hjBLk
+   CTt+p/19PKDj/62E7myqsTbhQzSYwljASkYGjQ2i6XZ22k/VPmhSwxcLR
+   w==;
+X-CSE-ConnectionGUID: 8I+HqRdUR8K/RGCWc+fRwg==
+X-CSE-MsgGUID: QnjoyPRURJKR3mo85nddzw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="18454001"
+X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
+   d="scan'208";a="18454001"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 00:39:34 -0700
+X-CSE-ConnectionGUID: yT08ISXWRJCI4SRoa9C4MQ==
+X-CSE-MsgGUID: uIJrFzPSR+CHS3+kTqfs1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
+   d="scan'208";a="81324210"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 18 Jul 2024 00:39:30 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sULjb-000h3w-1J;
+	Thu, 18 Jul 2024 07:39:27 +0000
+Date: Thu, 18 Jul 2024 15:39:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Valentin Caron <valentin.caron@foss.st.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Amelie Delaunay <amelie.delaunay@foss.st.com>,
+	Valentin Caron <valentin.caron@foss.st.com>
+Subject: Re: [PATCH v2 3/4] rtc: stm32: add Low Speed Clock Output (LSCO)
+ support
+Message-ID: <202407181525.BRNKqmNf-lkp@intel.com>
+References: <20240717074835.2210411-4-valentin.caron@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <e3103f07-ce8a-4c34-af5c-bb271c7ec99a@tuxon.dev>
-References: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com> <20240716103025.1198495-4-claudiu.beznea.uj@bp.renesas.com> <2abcd440664067d95b1ac0e765ad55a3.sboyd@kernel.org> <e3103f07-ce8a-4c34-af5c-bb271c7ec99a@tuxon.dev>
-Subject: Re: [PATCH v2 03/11] clk: renesas: clk-vbattb: Add VBATTB clock driver
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-To: alexandre.belloni@bootlin.com, claudiu beznea <claudiu.beznea@tuxon.dev>, conor+dt@kernel.org, geert+renesas@glider.be, krzk+dt@kernel.org, lee@kernel.org, magnus.damm@gmail.com, mturquette@baylibre.com, p.zabel@pengutronix.de, robh@kernel.org
-Date: Wed, 17 Jul 2024 17:39:15 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240717074835.2210411-4-valentin.caron@foss.st.com>
 
-Quoting claudiu beznea (2024-07-17 01:31:20)
-> Hi, Stephen,
->=20
-> On 17.07.2024 01:28, Stephen Boyd wrote:
-> > Quoting Claudiu (2024-07-16 03:30:17)
-> >> diff --git a/drivers/clk/renesas/clk-vbattb.c b/drivers/clk/renesas/cl=
-k-vbattb.c
-> >> new file mode 100644
-> >> index 000000000000..8effe141fc0b
-> >> --- /dev/null
-> >> +++ b/drivers/clk/renesas/clk-vbattb.c
-> >> @@ -0,0 +1,212 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * VBATTB clock driver
-> >> + *
-> >> + * Copyright (C) 2024 Renesas Electronics Corp.
-> >> + */
-> >> +
-> >> +#include <linux/cleanup.h>
-> >> +#include <linux/clk.h>
-> >=20
-> > Prefer clk providers to not be clk consumers.
->=20
-> I added it here to be able to use devm_clk_get_optional() as it was
-> proposed to me in v1 to avoid adding a new binding for bypass and detect =
-if
-> it's needed by checking the input clock name.
->=20
+Hi Valentin,
 
-Understood.
+kernel test robot noticed the following build warnings:
 
->=20
-> >=20
-> > I also wonder if this is really a mux,=20
->=20
-> It's a way to determine what type of clock (crystal oscillator or device
-> clock) is connected to RTXIN/RTXOUT pins of the module
-> (the module block diagram at [1]) based on the clock name. Depending on t=
-he
-> type of the clock connected to RTXIN/RTXOUT we need to select the XC or
-> XBYP as input for the mux at [1].
->=20
-> [1] https://gcdnb.pbrd.co/images/QYsCvhfQlX6n.png
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on next-20240718]
+[cannot apply to atorgue-stm32/stm32-next robh/for-next linus/master v6.10]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-That diagram shows a mux block, so at least something in there is a mux.
-From what I can tell the binding uses clock-names to describe the mux.
-What I'd like to avoid is using clk_get() to determine how to configure
-the mux. That's because clk_get() is a clk consumer API, and because we
-want clk providers to be able to register clks without making sure that
-the entire parent chain has been registered first. Eventually, we'd like
-clk_get() to probe defer if the clk is an orphan. Having clk providers
-use clk_get() breaks that pretty quickly.
+url:    https://github.com/intel-lab-lkp/linux/commits/Valentin-Caron/dt-bindings-rtc-stm32-describe-pinmux-nodes/20240717-193541
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20240717074835.2210411-4-valentin.caron%40foss.st.com
+patch subject: [PATCH v2 3/4] rtc: stm32: add Low Speed Clock Output (LSCO) support
+config: m68k-kismet-CONFIG_COMMON_CLK-CONFIG_RTC_DRV_STM32-0-0 (https://download.01.org/0day-ci/archive/20240718/202407181525.BRNKqmNf-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20240718/202407181525.BRNKqmNf-lkp@intel.com/reproduce)
 
->=20
->=20
-> > and either assigned-clock-parents should be used,=20
-> > or the clk_ops should have an init routine that looks at
-> > which parent is present by determining the index and then use that to
-> > set the mux. The framework can take care of failing to set the other
-> > parent when it isn't present.
->=20
->=20
-> On the board, at any moment, it will be only one clock as input to the
-> VBATTB clock (either crystal oscillator or a clock device). If I'm getting
-> you correctly, this will involve describing both clocks in some scenarios.
->=20
-> E.g. if want to use crystal osc, I can use this DT description:
->=20
-> vbattclk: clock-controller@1c {
->         compatible =3D "renesas,r9a08g045-vbattb-clk";
->         reg =3D <0 0x1c 0 0x10>;
->         clocks =3D <&vbattb_xtal>;
->         clock-names =3D "xin";
->         #clock-cells =3D <0>;
->         status =3D "disabled";
-> };
->=20
-> vbattb_xtal: vbattb-xtal {
->         compatible =3D "fixed-clock";
->         #clock-cells =3D <0>;
->         clock-frequency =3D <32768>;
-> };
->=20
-> If external clock device is to be used, I should describe a fake clock to=
-o:
->=20
-> vbattclk: clock-controller@1c {
->         compatible =3D "renesas,r9a08g045-vbattb-clk";
->         reg =3D <0 0x1c 0 0x10>;
->         clocks =3D <&vbattb_xtal>, <&ext_clk>;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407181525.BRNKqmNf-lkp@intel.com/
 
-Is vbattb_xtal the fake clk? If so, I'd expect this to be
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for COMMON_CLK when selected by RTC_DRV_STM32
+   WARNING: unmet direct dependencies detected for COMMON_CLK
+     Depends on [n]: !HAVE_LEGACY_CLK [=y]
+     Selected by [y]:
+     - RTC_DRV_STM32 [=y] && RTC_CLASS [=y] && (ARCH_STM32 || COMPILE_TEST [=y])
+   
+   WARNING: unmet direct dependencies detected for GENERIC_PINCONF
+     Depends on [n]: PINCTRL [=n]
+     Selected by [y]:
+     - RTC_DRV_STM32 [=y] && RTC_CLASS [=y] && (ARCH_STM32 || COMPILE_TEST [=y])
+   
+   WARNING: unmet direct dependencies detected for PINMUX
+     Depends on [n]: PINCTRL [=n]
+     Selected by [y]:
+     - RTC_DRV_STM32 [=y] && RTC_CLASS [=y] && (ARCH_STM32 || COMPILE_TEST [=y])
 
-	clocks =3D <0>, <&ext_clk>;
-
-so that we don't have a useless clk node.
-
->         clock-names =3D "xin", "clkin";
->         #clock-cells =3D <0>;
->         status =3D "disabled";
-> };
->=20
-> vbattb_xtal: vbattb-xtal {
->         compatible =3D "fixed-clock";
->         #clock-cells =3D <0>;
->         clock-frequency =3D <0>;
-> };
->=20
-> ext_clk: ext-clk {
->         compatible =3D "fixed-clock";
->         #clock-cells =3D <0>;
->         clock-frequency =3D <32768>;
-> };
->=20
-> Is this what you are suggesting?
->=20
-
-Sort of. Ignoring the problem with the subnode for the clk driver, I
-don't really like having clock-names that don't match the hardware pin
-names. From the diagram you provided, it looks like clock-names should
-be "bclk" and "rtxin" for the bus clock and the rtxin signal. Then the
-clock-cells should be "1" instead of "0", and the mux should be one of
-those provided clks and "xc" and "xbyp" should be the other two. If that
-was done, then assigned-clocks could be used to assign the parent of the
-mux.
-
-#define VBATTBCLK          0
-#define VBATTB_XBYP        1
-#define VBATTB_XC          2
-
-    vbattb: vbattb@1005c000 {
-        compatible =3D "renesas,r9a08g045-vbattb";
-        reg =3D <0x1005c000 0x1000>;
-        ranges =3D <0 0 0x1005c000 0 0x1000>;
-        interrupts =3D <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
-        interrupt-names =3D "tampdi";
-        clocks =3D <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&ext_clk>;
-        clock-names =3D "bclk", "rtxin";
-        power-domains =3D <&cpg>;
-        resets =3D <&cpg R9A08G045_VBAT_BRESETN>;
-        #clock-cells =3D <1>;
-        assigned-clocks =3D <&vbattb VBATTBCLK>;
-	assigned-clock-parents =3D <&vbattb VBATTB_XBYP>;
-        renesas,vbattb-load-nanofarads =3D <12500>;
-    };
-
-One last thing that I don't really understand is why this needs to be a
-clk provider. In the diagram, the RTC is also part of vbattb, so it
-looks odd to have this node be a clk provider with #clock-cells at all.
-Is it the case that if the rtxin pin is connected, you mux that over,
-and if the pin is disconnected you mux over the internal oscillator? I'm
-really wondering why a clk provider is implemented at all. Why not just
-hit the registers directly from the RTC driver depending on a
-devm_clk_get_optional() call?
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
