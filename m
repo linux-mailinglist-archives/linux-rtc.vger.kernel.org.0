@@ -1,84 +1,84 @@
-Return-Path: <linux-rtc+bounces-1557-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1558-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C3AA9372C5
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 05:29:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 061FD937309
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 06:43:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEC48B215FC
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 03:29:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F6051F21D99
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 04:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437601863E;
-	Fri, 19 Jul 2024 03:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7496C2BB0D;
+	Fri, 19 Jul 2024 04:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VLn/mw/O"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C4UGrH8f"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182D028F5;
-	Fri, 19 Jul 2024 03:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38154DDB2;
+	Fri, 19 Jul 2024 04:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721359752; cv=none; b=bJbxrWm8nKb6h6M78EqL7jmmOapmiKGx0xAqWTC6ARK5R4sf02jTGI8wuzrggbUSB53XZOo7d5HZOkWxf++7i6MNkBIFb8fiShyZm90FjvOoITk/XIr+vQOf8wmMKGmKOY6zqP++MgCs83zycVr/t0psBFsCzYjCnhR0WS2/d1Y=
+	t=1721364192; cv=none; b=DRzmZ7p3GqCqaUXCUEpejyE6538fsbLUrxoaHK05FXmQsOoJ+KFaE+4XowyS2rCmdK+SYizBBMED+67u3i82UA1vx84wzj1k3hiesjtiMlb4JUeltVS9QqmBQPMb/Zp+S7EYbE4p20I+PpjCqNPEPKVAp9x9r+nXt1SLPEBp7rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721359752; c=relaxed/simple;
-	bh=p0UYlXZ5KxjXXwnf7VwGSnBq8RKpWMeA4U4IRIUfl8A=;
+	s=arc-20240116; t=1721364192; c=relaxed/simple;
+	bh=jZI+/VIxxS0wT5Bwv6KgoCwo5BwT0zoMeOcEanJWAy8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=adILw+I2Fc2hsW68MyCO+JYyFGytecwaTCRlKYiPJOXcAUo5NXaM8trDySziRldBn/WaY1k80xsZg8XmmDhjK9yhnOsdnCJ8dtmsHnZ4PIGossaaygri5Ri7TeBbgKDp/S38KSxpgbeAh0vjUuwQHPPJt4a/L9OsQN1r08qJ2Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VLn/mw/O; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=gYHKnMOZmymet8+eGfl+pyNWKV1Sa/LtRhfROSdLQMf8o5C2r5ZSYTHswvRDtB71iGKCyUKbJakec7814NxESk6XQ6JEMRefHjk2PTg+RQdFP6N/+8LOLmsmYtAuIwYj+Nuhv9BixdJk6uWsklwda0cQoQ9gAeCGpylYWUv8Knk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C4UGrH8f; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721359749; x=1752895749;
+  t=1721364190; x=1752900190;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=p0UYlXZ5KxjXXwnf7VwGSnBq8RKpWMeA4U4IRIUfl8A=;
-  b=VLn/mw/OotfI+SF5THxi6/ts0WAONo98aiA1JxhX0WUy5JF3KXuA3Tg7
-   i1PSLP+j9R2m2dqcTfoUfA+RMlsFcLEwHP7+jLtmFu16tzd354mtEeOlV
-   elKLQkLmzSkFgxFKdAJ/CXL2xzTgFGD81xDsAqtwpL7tlJhlJ5kCPRllT
-   Qu1+Gzxi9E4w/nH5eDyPLFUcHc+TSlDpTiBUUZEkm8q+fAn9sx58adg3J
-   CbslrlIY1NxBhlIzc8nQEGDWqXs32XftvLIvb82dLbZjJa1n2NXrAMPIP
-   KYn8F3uHVowKUSdJwReeZHM5K10O0ltpGWSzL4+FMrRNGwATEGQElE0hB
+  bh=jZI+/VIxxS0wT5Bwv6KgoCwo5BwT0zoMeOcEanJWAy8=;
+  b=C4UGrH8fI98xcQ34WLplmV5guE0XXyYZdNh35GQU83lMMMsPXKrirZSn
+   IkmvIFe4/TbCPb4RFgvdpzN8gWusDItOohmSTTMwlVaW+uEWP41/CGile
+   7JpkpL7v2ViZKABb8eJ2dr77jSn5x2pbQMvzDdzo4FI2Y4fqOEQeOIIkT
+   IBcwg7MZ/J86cr6L4SnAcuVgyC9pAke+3hqhO5LkGN33PN3+lPrY8cNEt
+   TtECDXwZswhzqyQKSgbXeGjgOXn+wq0hdW7vKOiHb5Ny9QLWRG8OU8Sja
+   ajgQhmH3UXKBMjFgHcIt37ucBe8jNMKHysLB+m3HqYSznrh+sCKOl8/Dh
    A==;
-X-CSE-ConnectionGUID: AlutsdKHSdGzGoAWPSf8Nw==
-X-CSE-MsgGUID: cjzGdPYQQwqvanBW5drWXQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="22768883"
+X-CSE-ConnectionGUID: cvZ8iO72QNafItqdsjInwg==
+X-CSE-MsgGUID: liopX4/OQZuV2eZH0ITU1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="29544141"
 X-IronPort-AV: E=Sophos;i="6.09,219,1716274800"; 
-   d="scan'208";a="22768883"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 20:29:09 -0700
-X-CSE-ConnectionGUID: WVUNQpIJQkmMjfqeAak7Hw==
-X-CSE-MsgGUID: PgF5ppTRQQ6noa1BWQoxlw==
+   d="scan'208";a="29544141"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 21:43:08 -0700
+X-CSE-ConnectionGUID: MTMt9FegT8+/hd/wmCd2Mg==
+X-CSE-MsgGUID: zzoQZ0onT2Ci9XQcXVLW3g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,219,1716274800"; 
-   d="scan'208";a="55832565"
+   d="scan'208";a="81628235"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 18 Jul 2024 20:29:04 -0700
+  by orviesa002.jf.intel.com with ESMTP; 18 Jul 2024 21:43:05 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sUeIn-000hoA-0R;
-	Fri, 19 Jul 2024 03:29:01 +0000
-Date: Fri, 19 Jul 2024 11:28:49 +0800
+	id 1sUfSR-000hrS-0v;
+	Fri, 19 Jul 2024 04:43:03 +0000
+Date: Fri, 19 Jul 2024 12:42:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Claudiu <claudiu.beznea@tuxon.dev>, lee@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org,
-	alexandre.belloni@bootlin.com, geert+renesas@glider.be,
-	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
-	p.zabel@pengutronix.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v2 05/11] rtc: renesas-rtca3: Add driver for RTCA-3
- available on Renesas RZ/G3S SoC
-Message-ID: <202407191156.wJPjHtKG-lkp@intel.com>
-References: <20240716103025.1198495-6-claudiu.beznea.uj@bp.renesas.com>
+To: Valentin Caron <valentin.caron@foss.st.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Amelie Delaunay <amelie.delaunay@foss.st.com>,
+	Valentin Caron <valentin.caron@foss.st.com>
+Subject: Re: [PATCH v2 2/4] rtc: stm32: add pinctrl and pinmux interfaces
+Message-ID: <202407191258.1oitwwMV-lkp@intel.com>
+References: <20240717074835.2210411-3-valentin.caron@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -87,163 +87,151 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240716103025.1198495-6-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240717074835.2210411-3-valentin.caron@foss.st.com>
 
-Hi Claudiu,
+Hi Valentin,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on next-20240716]
-[also build test ERROR on v6.10]
-[cannot apply to geert-renesas-devel/next lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes abelloni/rtc-next linus/master v6.10 v6.10-rc7 v6.10-rc6]
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on atorgue-stm32/stm32-next robh/for-next linus/master v6.10 next-20240718]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu/dt-bindings-mfd-renesas-r9a08g045-vbattb-Document-VBATTB/20240716-190833
-base:   next-20240716
-patch link:    https://lore.kernel.org/r/20240716103025.1198495-6-claudiu.beznea.uj%40bp.renesas.com
-patch subject: [PATCH v2 05/11] rtc: renesas-rtca3: Add driver for RTCA-3 available on Renesas RZ/G3S SoC
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240719/202407191156.wJPjHtKG-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Valentin-Caron/dt-bindings-rtc-stm32-describe-pinmux-nodes/20240717-193541
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20240717074835.2210411-3-valentin.caron%40foss.st.com
+patch subject: [PATCH v2 2/4] rtc: stm32: add pinctrl and pinmux interfaces
+config: um-randconfig-r063-20240718 (https://download.01.org/0day-ci/archive/20240719/202407191258.1oitwwMV-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407191156.wJPjHtKG-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407191258.1oitwwMV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407191156.wJPjHtKG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407191258.1oitwwMV-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/rtc/rtc-renesas-rtca3.c:433:3: error: cannot jump from this goto statement to its label
-     433 |                 goto setup_failed;
-         |                 ^
-   drivers/rtc/rtc-renesas-rtca3.c:436:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     436 |         guard(spinlock_irqsave)(&priv->lock);
-         |         ^
-   include/linux/cleanup.h:167:15: note: expanded from macro 'guard'
-     167 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
-     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:67:1: note: expanded from here
-      67 | __UNIQUE_ID_guard738
-         | ^
-   drivers/rtc/rtc-renesas-rtca3.c:426:3: error: cannot jump from this goto statement to its label
-     426 |                 goto setup_failed;
-         |                 ^
-   drivers/rtc/rtc-renesas-rtca3.c:436:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     436 |         guard(spinlock_irqsave)(&priv->lock);
-         |         ^
-   include/linux/cleanup.h:167:15: note: expanded from macro 'guard'
-     167 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
-     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:67:1: note: expanded from here
-      67 | __UNIQUE_ID_guard738
-         | ^
-   2 errors generated.
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/irqchip/irq-ts4800.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/irqchip/irq-meson-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-mc33880.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/platform_lcd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/matrox/matroxfb_accel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/matrox/matroxfb_DAC1064.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/matrox/matroxfb_Ti3026.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/macmodes.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/kyro/kyrofb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/goldfishfb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6765-audio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6779.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6779-mm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6779-img.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6779-vdec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6779-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6779-aud.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6797-img.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6797-vdec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt6797-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-apmixedsys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-bdp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-mfg.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-vdec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7622-eth.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7622-aud.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7988-apmixed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7988-topckgen.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7988-infracfg.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-apmixedsys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-cam.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-img.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-ipu0.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-ipu_conn.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-mm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-vdec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-apmixedsys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-topckgen.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-infra_ao.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-imp_iic_wrap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-mdp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-mfg.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-mm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-apmixedsys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-topckgen.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-peri_ao.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-infra_ao.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo0.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo1.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-aud.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-cam.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-img.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-ipe.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-mdp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-msdc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-scp_adsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-cam.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-ccu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-mfg.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vpp0.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vpp1.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-apu.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sophgo/clk-sophgo-cv1800.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/reset/hisilicon/hi6220_reset.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/8250/8250_base.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/8250/8250_pxa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/owl-uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/n_hdlc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/goldfish.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-auo-a030jtn01.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-sccb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_mem.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-omap2-mcspi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_netx.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/yenta_socket.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ccgx-ucsi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-qup.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/dvb-frontends/au8522_decoder.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/dvb-frontends/mb86a16.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/menz69_wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/tmio_mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/renesas_sdhi_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/crypto/xilinx/zynqmp-aes-gcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem-apple-efuses.o
+>> ERROR: modpost: "devm_pinctrl_register_and_init" [drivers/rtc/rtc-stm32.ko] undefined!
+>> ERROR: modpost: "pinctrl_enable" [drivers/rtc/rtc-stm32.ko] undefined!
+ERROR: modpost: "pinconf_generic_dt_node_to_map" [drivers/rtc/rtc-stm32.ko] undefined!
+ERROR: modpost: "pinconf_generic_dt_free_map" [drivers/rtc/rtc-stm32.ko] undefined!
+WARNING: modpost: EXPORT symbol "csum_partial" [vmlinux] version generation failed, symbol will not be versioned.
+Is "csum_partial" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "csum_partial_copy_generic" [vmlinux] version generation failed, symbol will not be versioned.
+Is "csum_partial_copy_generic" prototyped in <asm/asm-prototypes.h>?
 
-
-vim +433 drivers/rtc/rtc-renesas-rtca3.c
-
-   376	
-   377	static int rtca3_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
-   378	{
-   379		struct rtca3_priv *priv = dev_get_drvdata(dev);
-   380		struct rtc_time *tm = &wkalrm->time;
-   381		u8 rcr1, tmp;
-   382		int ret;
-   383	
-   384		scoped_guard(spinlock_irqsave, &priv->lock) {
-   385			tmp = readb(priv->base + RTCA3_RCR2);
-   386			if (!(tmp & RTCA3_RCR2_START))
-   387				return -EPERM;
-   388	
-   389			/* Disable AIE to prevent false interrupts. */
-   390			rcr1 = readb(priv->base + RTCA3_RCR1);
-   391			rcr1 &= ~RTCA3_RCR1_AIE;
-   392			writeb(rcr1, priv->base + RTCA3_RCR1);
-   393			ret = readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp,
-   394							!(tmp & RTCA3_RCR1_AIE),
-   395							10, RTCA3_DEFAULT_TIMEOUT_US);
-   396			if (ret)
-   397				return ret;
-   398	
-   399			/* Set the time and enable the alarm. */
-   400			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_sec), priv->base + RTCA3_RSECAR);
-   401			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_min), priv->base + RTCA3_RMINAR);
-   402			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_hour), priv->base + RTCA3_RHRAR);
-   403			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_wday), priv->base + RTCA3_RWKAR);
-   404			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_mday), priv->base + RTCA3_RDAYAR);
-   405			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_mon + 1), priv->base + RTCA3_RMONAR);
-   406	
-   407			writew(bin2bcd(tm->tm_year % 100), priv->base + RTCA3_RYRAR);
-   408			writeb(RTCA3_AR_ENB, priv->base + RTCA3_RYRAREN);
-   409	
-   410			/* Make sure we can read back the counters. */
-   411			rtca3_prepare_cntalrm_regs_for_read(priv, false);
-   412	
-   413			/* Need to wait for 2 * 1/64 periodic interrupts to be generated. */
-   414			atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_INIT);
-   415			reinit_completion(&priv->set_alarm_completion);
-   416	
-   417			/* Enable periodic interrupt. */
-   418			rcr1 |= RTCA3_RCR1_PIE;
-   419			writeb(rcr1, priv->base + RTCA3_RCR1);
-   420			ret = readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp,
-   421							(tmp & RTCA3_RCR1_PIE),
-   422							10, RTCA3_IRQSET_TIMEOUT_US);
-   423		}
-   424	
-   425		if (ret)
-   426			goto setup_failed;
-   427	
-   428		/* Wait for the 2 * 1/64 periodic interrupts. */
-   429		ret = wait_for_completion_interruptible_timeout(&priv->set_alarm_completion,
-   430								msecs_to_jiffies(500));
-   431		if (ret <= 0) {
-   432			ret = -ETIMEDOUT;
- > 433			goto setup_failed;
-   434		}
-   435	
-   436		guard(spinlock_irqsave)(&priv->lock);
-   437	
-   438		ret = rtca3_alarm_irq_enable_helper(priv, wkalrm->enabled);
-   439		atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_DONE);
-   440	
-   441		return ret;
-   442	
-   443	setup_failed:
-   444		scoped_guard(spinlock_irqsave, &priv->lock) {
-   445			/*
-   446			 * Disable PIE to avoid interrupt storm in case HW needed more than
-   447			 * specified timeout for setup.
-   448			 */
-   449			writeb(rcr1 & ~RTCA3_RCR1_PIE, priv->base + RTCA3_RCR1);
-   450			readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp, !(tmp & ~RTCA3_RCR1_PIE),
-   451						  10, RTCA3_DEFAULT_TIMEOUT_US);
-   452			atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_DONE);
-   453		}
-   454	
-   455		return ret;
-   456	}
-   457	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GENERIC_PINCONF
+   Depends on [n]: PINCTRL [=n]
+   Selected by [m]:
+   - RTC_DRV_STM32 [=m] && RTC_CLASS [=y] && (ARCH_STM32 || COMPILE_TEST [=y])
+   WARNING: unmet direct dependencies detected for PINMUX
+   Depends on [n]: PINCTRL [=n]
+   Selected by [m]:
+   - RTC_DRV_STM32 [=m] && RTC_CLASS [=y] && (ARCH_STM32 || COMPILE_TEST [=y])
 
 -- 
 0-DAY CI Kernel Test Service
