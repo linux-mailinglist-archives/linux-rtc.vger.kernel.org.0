@@ -1,192 +1,251 @@
-Return-Path: <linux-rtc+bounces-1556-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1557-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E1FD9371D1
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 03:08:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C3AA9372C5
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 05:29:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A76992823DF
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 01:08:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEC48B215FC
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2024 03:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED74E15CB;
-	Fri, 19 Jul 2024 01:08:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437601863E;
+	Fri, 19 Jul 2024 03:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sdCtC4eS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VLn/mw/O"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68A41362;
-	Fri, 19 Jul 2024 01:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182D028F5;
+	Fri, 19 Jul 2024 03:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721351318; cv=none; b=XVRSSWYP8tdfo4fOAOugpl4YzgnMLhEuuYun29qskGtZpus03UxBH494aVVtvquAWaQq0owC86A29qJYTpMqCuF+hk+bsXV3yfquWcF07dVPzP7U5AQAqOZU2SNumrtUfvnD9QT+PGH+Y3pJtMOZdFKPMHDMh3KS+jCTFLFnA9g=
+	t=1721359752; cv=none; b=bJbxrWm8nKb6h6M78EqL7jmmOapmiKGx0xAqWTC6ARK5R4sf02jTGI8wuzrggbUSB53XZOo7d5HZOkWxf++7i6MNkBIFb8fiShyZm90FjvOoITk/XIr+vQOf8wmMKGmKOY6zqP++MgCs83zycVr/t0psBFsCzYjCnhR0WS2/d1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721351318; c=relaxed/simple;
-	bh=laS8KpgNXmOqI9x98Dwxup3xExT3T+m9nrqsUudLSkM=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=tYB0rIcWM2XWDUsdisX+tGlIdMIlpiQdv9essyuF4AdyXC/UrDEL5eKjNn8e2H1z7F8msyOt+sMZaEkLDvO8lVvQ+E2HFOhpT10Of/5ODEvWnGRWpB5y3n5xM7jTZyXtHxre8Qk1tz5iQ7V6TZw1mxvRstmWYosIy/3UpGxcTwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sdCtC4eS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49016C4AF0A;
-	Fri, 19 Jul 2024 01:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721351318;
-	bh=laS8KpgNXmOqI9x98Dwxup3xExT3T+m9nrqsUudLSkM=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=sdCtC4eSieRC9x78sjYCL0fnKGAAWqdI91XAtQUnF1kM1oGRqoIilMk7dkjiI3MWE
-	 9FafSd2Ha/z7nDvcjtcYtMMee3E1H/oNyFMA5aQ3om6f/2yb4C08UG5kEejNym0CCc
-	 GfLAskHC8xD9H5t0VTpNSapSFavTlmtPauXLBsvwSNlnY+K0xjCNyLklERZyjGb8wT
-	 p21WQe32xyS4PR0ec0RPf8RaoL1nLJXkwrFNYjns7MrXp51Wc7NFlhIbGCclA8pagM
-	 uB5ZxxCJ018QcKgfV0xgMWggjoM97NtKcbEMu36esUlRfAs//FW0SGpA+2jevyYEF5
-	 y0IPM+BoanGJw==
-Message-ID: <ad8037bca3a99de58c4ef251d3288c15.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1721359752; c=relaxed/simple;
+	bh=p0UYlXZ5KxjXXwnf7VwGSnBq8RKpWMeA4U4IRIUfl8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=adILw+I2Fc2hsW68MyCO+JYyFGytecwaTCRlKYiPJOXcAUo5NXaM8trDySziRldBn/WaY1k80xsZg8XmmDhjK9yhnOsdnCJ8dtmsHnZ4PIGossaaygri5Ri7TeBbgKDp/S38KSxpgbeAh0vjUuwQHPPJt4a/L9OsQN1r08qJ2Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VLn/mw/O; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721359749; x=1752895749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p0UYlXZ5KxjXXwnf7VwGSnBq8RKpWMeA4U4IRIUfl8A=;
+  b=VLn/mw/OotfI+SF5THxi6/ts0WAONo98aiA1JxhX0WUy5JF3KXuA3Tg7
+   i1PSLP+j9R2m2dqcTfoUfA+RMlsFcLEwHP7+jLtmFu16tzd354mtEeOlV
+   elKLQkLmzSkFgxFKdAJ/CXL2xzTgFGD81xDsAqtwpL7tlJhlJ5kCPRllT
+   Qu1+Gzxi9E4w/nH5eDyPLFUcHc+TSlDpTiBUUZEkm8q+fAn9sx58adg3J
+   CbslrlIY1NxBhlIzc8nQEGDWqXs32XftvLIvb82dLbZjJa1n2NXrAMPIP
+   KYn8F3uHVowKUSdJwReeZHM5K10O0ltpGWSzL4+FMrRNGwATEGQElE0hB
+   A==;
+X-CSE-ConnectionGUID: AlutsdKHSdGzGoAWPSf8Nw==
+X-CSE-MsgGUID: cjzGdPYQQwqvanBW5drWXQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="22768883"
+X-IronPort-AV: E=Sophos;i="6.09,219,1716274800"; 
+   d="scan'208";a="22768883"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 20:29:09 -0700
+X-CSE-ConnectionGUID: WVUNQpIJQkmMjfqeAak7Hw==
+X-CSE-MsgGUID: PgF5ppTRQQ6noa1BWQoxlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,219,1716274800"; 
+   d="scan'208";a="55832565"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 18 Jul 2024 20:29:04 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sUeIn-000hoA-0R;
+	Fri, 19 Jul 2024 03:29:01 +0000
+Date: Fri, 19 Jul 2024 11:28:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudiu <claudiu.beznea@tuxon.dev>, lee@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org,
+	alexandre.belloni@bootlin.com, geert+renesas@glider.be,
+	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
+	p.zabel@pengutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v2 05/11] rtc: renesas-rtca3: Add driver for RTCA-3
+ available on Renesas RZ/G3S SoC
+Message-ID: <202407191156.wJPjHtKG-lkp@intel.com>
+References: <20240716103025.1198495-6-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <fd8078cb-fe1c-4aef-9e83-be2baa529720@tuxon.dev>
-References: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com> <20240716103025.1198495-4-claudiu.beznea.uj@bp.renesas.com> <2abcd440664067d95b1ac0e765ad55a3.sboyd@kernel.org> <e3103f07-ce8a-4c34-af5c-bb271c7ec99a@tuxon.dev> <4cacf090dc56c3ffd15bccd960065769.sboyd@kernel.org> <fd8078cb-fe1c-4aef-9e83-be2baa529720@tuxon.dev>
-Subject: Re: [PATCH v2 03/11] clk: renesas: clk-vbattb: Add VBATTB clock driver
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-To: alexandre.belloni@bootlin.com, claudiu beznea <claudiu.beznea@tuxon.dev>, conor+dt@kernel.org, geert+renesas@glider.be, krzk+dt@kernel.org, lee@kernel.org, magnus.damm@gmail.com, mturquette@baylibre.com, p.zabel@pengutronix.de, robh@kernel.org
-Date: Thu, 18 Jul 2024 18:08:36 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240716103025.1198495-6-claudiu.beznea.uj@bp.renesas.com>
 
-Quoting claudiu beznea (2024-07-18 07:41:03)
->=20
->=20
-> On 18.07.2024 03:39, Stephen Boyd wrote:
-> >=20
-> > Sort of. Ignoring the problem with the subnode for the clk driver, I
-> > don't really like having clock-names that don't match the hardware pin
-> > names. From the diagram you provided, it looks like clock-names should
-> > be "bclk" and "rtxin" for the bus clock and the rtxin signal. Then the
-> > clock-cells should be "1" instead of "0", and the mux should be one of
-> > those provided clks and "xc" and "xbyp" should be the other two. If that
-> > was done, then assigned-clocks could be used to assign the parent of the
-> > mux.
-> >=20
-> > #define VBATTBCLK          0
-> > #define VBATTB_XBYP        1
-> > #define VBATTB_XC          2
-> >=20
-> >     vbattb: vbattb@1005c000 {
-> >         compatible =3D "renesas,r9a08g045-vbattb";
-> >         reg =3D <0x1005c000 0x1000>;
-> >         ranges =3D <0 0 0x1005c000 0 0x1000>;
-> >         interrupts =3D <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
-> >         interrupt-names =3D "tampdi";
-> >         clocks =3D <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&ext_clk>;
-> >         clock-names =3D "bclk", "rtxin";
-> >         power-domains =3D <&cpg>;
-> >         resets =3D <&cpg R9A08G045_VBAT_BRESETN>;
-> >         #clock-cells =3D <1>;
-> >         assigned-clocks =3D <&vbattb VBATTBCLK>;
-> >       assigned-clock-parents =3D <&vbattb VBATTB_XBYP>;
-> >         renesas,vbattb-load-nanofarads =3D <12500>;
-> >     };
->=20
-> I think I got it now. Thank you for the detailed explanation.
->=20
-> >=20
-> > One last thing that I don't really understand is why this needs to be a
-> > clk provider. In the diagram, the RTC is also part of vbattb, so it
-> > looks odd to have this node be a clk provider with #clock-cells at all.
->=20
-> I did it like this because the RTC is a different IP mapped at it's own
-> address and considering the other VBATTB functionalities (tamper, SRAM)
-> might be implemented at some point.
->=20
-> I also failed to notice that RTC might not work w/o bclk being enabled
-> (thanks for pointing it).
+Hi Claudiu,
 
->=20
-> I saw that diagram more like describing the always-on power domain
-> (PD_VBATTB) where the VBATTB logic and RTC resides. That power domain is
-> backed by battery. From HW manual [1]: "PD_VBATT domain is the area where
-> the RTC/backup register is located, works on battery power when the power
-> of PD_VCC and PD_ISOVCC domain are turned off."
+kernel test robot noticed the following build errors:
 
-Ah ok, so PD_VBATTB is like a power domain/wrapper and not an IP block
-mapped on the bus at the same address as the RTC that it wraps. That
-changes things a bit.
+[auto build test ERROR on next-20240716]
+[also build test ERROR on v6.10]
+[cannot apply to geert-renesas-devel/next lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes abelloni/rtc-next linus/master v6.10 v6.10-rc7 v6.10-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->=20
-> [1]
-> https://www.renesas.com/us/en/products/microcontrollers-microprocessors/r=
-z-mpus/rzg3s-general-purpose-microprocessors-single-core-arm-cortex-a55-11-=
-ghz-cpu-and-dual-core-cortex-m33-250
->=20
-> > Is it the case that if the rtxin pin is connected, you mux that over,
-> > and if the pin is disconnected you mux over the internal oscillator?=20
->=20
-> From the description here at [2] I'm getting that the "32-KHz clock
-> oscillator" block is used when crystal oscillator is connected to RTXIN,
-> RTXOUT pins and it is skipped if external clock device is connected.
->=20
-> [2] https://i2.paste.pics/RFKJ0.png?rand=3DXq8w1RLDvZ
+url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu/dt-bindings-mfd-renesas-r9a08g045-vbattb-Document-VBATTB/20240716-190833
+base:   next-20240716
+patch link:    https://lore.kernel.org/r/20240716103025.1198495-6-claudiu.beznea.uj%40bp.renesas.com
+patch subject: [PATCH v2 05/11] rtc: renesas-rtca3: Add driver for RTCA-3 available on Renesas RZ/G3S SoC
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240719/202407191156.wJPjHtKG-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407191156.wJPjHtKG-lkp@intel.com/reproduce)
 
-It looks like in both cases something is connected to the pins. XC is to
-use an external crystal connected to both pins and XBYP is to use a
-single clk. Given that, perhaps naming the clk "rtx" is simplest and
-then using assigned-clock-parents is most direct because there's only
-really one "logical" clk input for this device. That means the XC and
-XBYP clks have the same parent, "rtx", and the XC clk is a gateable
-fixed rate clk while the XBYP clk is a fixed factor clk that does
-nothing besides pass on the rate of the "rtx" clk.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407191156.wJPjHtKG-lkp@intel.com/
 
->=20
-> > I'm
-> > really wondering why a clk provider is implemented at all. Why not just
-> > hit the registers directly from the RTC driver depending on a
-> > devm_clk_get_optional() call?
->=20
-> I did it like this because the RTC is a different IP mapped at it's own
-> address with it's own interrupts, clock, power domain and considering that
-> the other VBATTB functionalities (tamper, SRAM) might be used at some poi=
-nt
-> in future. At the same time I failed to noticed the VBATTB clock might be
-> needed for RTC.
+All errors (new ones prefixed by >>):
 
-The docs say VBATT in some places. Not sure if you want to rename it to
-vbatt and drop the extra b which probably stands for "backup"?
-
->=20
-> Do you consider better to just take a regmap to VBATTB from RTC driver and
-> set the VBATTB from RTC driver itself?
-
-No, don't do that. The only change from the above DT node is that the
-assigned-clocks and assigned-clock-parents property should be moved to
-the RTC node.
+>> drivers/rtc/rtc-renesas-rtca3.c:433:3: error: cannot jump from this goto statement to its label
+     433 |                 goto setup_failed;
+         |                 ^
+   drivers/rtc/rtc-renesas-rtca3.c:436:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     436 |         guard(spinlock_irqsave)(&priv->lock);
+         |         ^
+   include/linux/cleanup.h:167:15: note: expanded from macro 'guard'
+     167 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:67:1: note: expanded from here
+      67 | __UNIQUE_ID_guard738
+         | ^
+   drivers/rtc/rtc-renesas-rtca3.c:426:3: error: cannot jump from this goto statement to its label
+     426 |                 goto setup_failed;
+         |                 ^
+   drivers/rtc/rtc-renesas-rtca3.c:436:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     436 |         guard(spinlock_irqsave)(&priv->lock);
+         |         ^
+   include/linux/cleanup.h:167:15: note: expanded from macro 'guard'
+     167 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:67:1: note: expanded from here
+      67 | __UNIQUE_ID_guard738
+         | ^
+   2 errors generated.
 
 
-     vbattb: vbattb@1005c000 {
-         compatible =3D "renesas,r9a08g045-vbattb";
-         reg =3D <0x1005c000 0x1000>;
-         ranges =3D <0 0 0x1005c000 0 0x1000>;
-         interrupts =3D <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
-         interrupt-names =3D "tampdi";
-         clocks =3D <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&ext_clk>;
-         clock-names =3D "bclk", "rtx";
-         power-domains =3D <&cpg>;
-         resets =3D <&cpg R9A08G045_VBAT_BRESETN>;
-         #clock-cells =3D <1>;
-         renesas,vbattb-load-nanofarads =3D <12500>;
-     };
+vim +433 drivers/rtc/rtc-renesas-rtca3.c
 
-     rtc@1004ec00 {
-         compatible =3D "renesas,r9a08g045-rtc";
-         reg =3D <0x1004ec00 0x400>;
-         clocks =3D <&vbattb VBATTBCLK>;
-         assigned-clocks =3D <&vbattb VBATTBCLK>;
-         assigned-clock-parents =3D <&vbattb VBATTB_XBYP>; // Or VBATTB_XC =
-if external crystal connected
-     };
+   376	
+   377	static int rtca3_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+   378	{
+   379		struct rtca3_priv *priv = dev_get_drvdata(dev);
+   380		struct rtc_time *tm = &wkalrm->time;
+   381		u8 rcr1, tmp;
+   382		int ret;
+   383	
+   384		scoped_guard(spinlock_irqsave, &priv->lock) {
+   385			tmp = readb(priv->base + RTCA3_RCR2);
+   386			if (!(tmp & RTCA3_RCR2_START))
+   387				return -EPERM;
+   388	
+   389			/* Disable AIE to prevent false interrupts. */
+   390			rcr1 = readb(priv->base + RTCA3_RCR1);
+   391			rcr1 &= ~RTCA3_RCR1_AIE;
+   392			writeb(rcr1, priv->base + RTCA3_RCR1);
+   393			ret = readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp,
+   394							!(tmp & RTCA3_RCR1_AIE),
+   395							10, RTCA3_DEFAULT_TIMEOUT_US);
+   396			if (ret)
+   397				return ret;
+   398	
+   399			/* Set the time and enable the alarm. */
+   400			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_sec), priv->base + RTCA3_RSECAR);
+   401			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_min), priv->base + RTCA3_RMINAR);
+   402			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_hour), priv->base + RTCA3_RHRAR);
+   403			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_wday), priv->base + RTCA3_RWKAR);
+   404			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_mday), priv->base + RTCA3_RDAYAR);
+   405			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_mon + 1), priv->base + RTCA3_RMONAR);
+   406	
+   407			writew(bin2bcd(tm->tm_year % 100), priv->base + RTCA3_RYRAR);
+   408			writeb(RTCA3_AR_ENB, priv->base + RTCA3_RYRAREN);
+   409	
+   410			/* Make sure we can read back the counters. */
+   411			rtca3_prepare_cntalrm_regs_for_read(priv, false);
+   412	
+   413			/* Need to wait for 2 * 1/64 periodic interrupts to be generated. */
+   414			atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_INIT);
+   415			reinit_completion(&priv->set_alarm_completion);
+   416	
+   417			/* Enable periodic interrupt. */
+   418			rcr1 |= RTCA3_RCR1_PIE;
+   419			writeb(rcr1, priv->base + RTCA3_RCR1);
+   420			ret = readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp,
+   421							(tmp & RTCA3_RCR1_PIE),
+   422							10, RTCA3_IRQSET_TIMEOUT_US);
+   423		}
+   424	
+   425		if (ret)
+   426			goto setup_failed;
+   427	
+   428		/* Wait for the 2 * 1/64 periodic interrupts. */
+   429		ret = wait_for_completion_interruptible_timeout(&priv->set_alarm_completion,
+   430								msecs_to_jiffies(500));
+   431		if (ret <= 0) {
+   432			ret = -ETIMEDOUT;
+ > 433			goto setup_failed;
+   434		}
+   435	
+   436		guard(spinlock_irqsave)(&priv->lock);
+   437	
+   438		ret = rtca3_alarm_irq_enable_helper(priv, wkalrm->enabled);
+   439		atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_DONE);
+   440	
+   441		return ret;
+   442	
+   443	setup_failed:
+   444		scoped_guard(spinlock_irqsave, &priv->lock) {
+   445			/*
+   446			 * Disable PIE to avoid interrupt storm in case HW needed more than
+   447			 * specified timeout for setup.
+   448			 */
+   449			writeb(rcr1 & ~RTCA3_RCR1_PIE, priv->base + RTCA3_RCR1);
+   450			readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp, !(tmp & ~RTCA3_RCR1_PIE),
+   451						  10, RTCA3_DEFAULT_TIMEOUT_US);
+   452			atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_DONE);
+   453		}
+   454	
+   455		return ret;
+   456	}
+   457	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
