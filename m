@@ -1,242 +1,244 @@
-Return-Path: <linux-rtc+bounces-1565-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1569-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9E4393922D
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2024 18:02:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CED20939830
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2024 04:17:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AC9B1F22449
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2024 16:02:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7F591C2196F
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2024 02:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560BD16E897;
-	Mon, 22 Jul 2024 16:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4AC137C2A;
+	Tue, 23 Jul 2024 02:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="7rtboh3r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RxOuDL3m"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFC716D9A2;
-	Mon, 22 Jul 2024 16:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DB214287;
+	Tue, 23 Jul 2024 02:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721664134; cv=none; b=N8zqxP34Ry4U+sz5FAGgThu/mL38YqB4CyiOsow1O4TZQ959F/oqBqaLZ3oBi9xB0ov6uUHXKfFASURewLHn8UKgsifvJq1y5XGnP7Is32a65dT04irfoWWFu22iV1Tb3+tz81n7UEEgdQeqZelyQsDezUxS8jgWbLpBhr/fkuI=
+	t=1721701036; cv=none; b=H+opDT/Gg5HySoRyM5FBsdv/vQqhEITPFZYWqkGFx4hwA8+Yyw6VZz8EmAn2uyVp7wGjJoP0VmCQnE0hsqqwIMnZs6TeiVYA6SpoTbRzX036n8HecPe1n5YAfe6LggJeFkAL1cS7/ThPzR4fkm4VKYYVJgZmaUkufRtM29L8YrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721664134; c=relaxed/simple;
-	bh=SLUV51RvtIWgXuM7MBTSJv2TYkDWKXLtsIRRZESaCLo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RD96wZAl3AgjMpKp1poF69RfDnnnYnZ/axRak8SGWrSjnaVRaedT4dZUHczHHgX4K+94zn9R6nKH5Xuvn82FwYuNyKKzbmj3zIXT9KkwNO6LK9DXjgsA43FHKsj7tQ2zOCSI76Olsti/f9IKAEau7UGhy0DGOctPDmK/aaLy1eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=7rtboh3r; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46MB5Uue032426;
-	Mon, 22 Jul 2024 18:01:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	1DknkizxVV/IH/bP7HOHWWENUi7tH+dKqef25hsU4VU=; b=7rtboh3rEWrmFhUU
-	x7NpEUsDEaMU0zWdmAkPE8S1MYb/OWFhbW3nfFVnVcOc6eiVTKi1HQpopTFVpxv6
-	Ad+tv36PtUE6d6AH/wm9akxNi9NX+esB3KmPctOcLjBXQYFsQHoc4QhJN07gNrbB
-	RR1ENU0lDytz0KTg1SgnA9RlzfMkMiSDdU5ee0mdDj6itCOINwnKi6oSBk/Rus1D
-	OdJrhWOQNHgWqJtOdaGmfWQDeblnXTS0OR1IUEjcjS3SFaINpEp9jTqGeo10Fa8I
-	Lw4RKtz5OXflA9yLeg470hA4rUeisttZx/3z8Z1Q/6jhvuLgjKlYR00Z9BuBzebx
-	tXfZUA==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 40g4jxee6k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Jul 2024 18:01:43 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 1FBAF40048;
-	Mon, 22 Jul 2024 18:01:39 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BFE372786FD;
-	Mon, 22 Jul 2024 18:01:01 +0200 (CEST)
-Received: from localhost (10.48.86.111) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 22 Jul
- 2024 18:01:01 +0200
-From: Valentin Caron <valentin.caron@foss.st.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC: <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Valentin Caron
-	<valentin.caron@foss.st.com>
-Subject: [PATCH v3 4/4] rtc: stm32: add alarm A out feature
-Date: Mon, 22 Jul 2024 18:00:22 +0200
-Message-ID: <20240722160022.454226-5-valentin.caron@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240722160022.454226-1-valentin.caron@foss.st.com>
-References: <20240722160022.454226-1-valentin.caron@foss.st.com>
+	s=arc-20240116; t=1721701036; c=relaxed/simple;
+	bh=gnkOYbEfx9zPzHePEL/WxD5v0iNAO66aAz2aJlnJpSU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XORJ/B1ApskxL9ZQ2+ZgoyOT0pjZ3N6+fznxRg/tvAI61O8j4GvtvuQpUXzLwatpWOm55yQkKKRyEvN96evFwaGluZg4n8/tTF8slPJQwRrQgoqaVCcn+EoTVCGOX3jF3fPfTZUGvxts1bbvQXT6j5N8Sj7a42/yQHYXxkNCswg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RxOuDL3m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C68D9C116B1;
+	Tue, 23 Jul 2024 02:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721701036;
+	bh=gnkOYbEfx9zPzHePEL/WxD5v0iNAO66aAz2aJlnJpSU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RxOuDL3mrORghbGY9jTuWQjgd2SP7GcjAZPVyjp3hU2M1TmgBi6NwPp8D9X5eUY/s
+	 FaQ0XUpyCBoHtPyz3lY2HoOUMew0FAxFxtLotpL5EqZXj+D+Fx/HQ4YQQd+FejrfEI
+	 Q9QT3y/Rdoy31gJeM1kqGRz1biqv/Lxy7q8mNEGCSlS9sivsTwN7lOpkoywP1llddd
+	 jtiuFux3oh+090v6KBkgxvS0y1ou+qfNYv8hED6vpiWHbs4/qb2qD2g0XdbkiQZIDY
+	 tKBvRxCBrN9e+2vQJ540AT1JpCsHiO6dQfhmuFnYxhSRyTj+ouGuc9cVSOIatcKgwi
+	 UxvT5COn+7daQ==
+Date: Mon, 22 Jul 2024 20:17:13 -0600
+From: Rob Herring <robh@kernel.org>
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: lee@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	alexandre.belloni@bootlin.com, geert+renesas@glider.be,
+	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
+	p.zabel@pengutronix.de, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v2 01/11] dt-bindings: mfd: renesas,r9a08g045-vbattb:
+ Document VBATTB
+Message-ID: <20240723021713.GA40385-robh@kernel.org>
+References: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240716103025.1198495-2-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-22_10,2024-07-22_01,2024-05-17_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240716103025.1198495-2-claudiu.beznea.uj@bp.renesas.com>
 
-STM32 RTC can pulse some SOC pins when an RTC alarm expires.
-This patch adds this functionality for alarm A. The pulse can out on three
-pins RTC_OUT1, RTC_OUT2, RTC_OUT2_RMP (PC13, PB2, PI8 on stm32mp15)
-(PC13, PB2, PI1 on stm32mp13) (PC13, PF4/PF6, PI8 on stm32mp25).
+On Tue, Jul 16, 2024 at 01:30:15PM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock for RTC,
+> the tamper detector and a small general usage memory of 128B. Add
+> documentation for it.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+> 
+> Changes in v2:
+> - changed file name and compatible
+> - updated title, description sections
+> - added clock controller part documentation and drop dedicated file
+>   for it included in v1
+> - used items to describe interrupts, interrupt-names, clocks, clock-names,
+>   resets
+> - dropped node labels and status
+> - updated clock-names for clock controller to cope with the new
+>   logic on detecting the necessity to setup bypass
+> 
+>  .../mfd/renesas,r9a08g045-vbattb.yaml         | 136 ++++++++++++++++++
+>  1 file changed, 136 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/renesas,r9a08g045-vbattb.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/renesas,r9a08g045-vbattb.yaml b/Documentation/devicetree/bindings/mfd/renesas,r9a08g045-vbattb.yaml
+> new file mode 100644
+> index 000000000000..30e4da65e2f6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/renesas,r9a08g045-vbattb.yaml
+> @@ -0,0 +1,136 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/renesas,r9a08g045-vbattb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas Battery Backup Function (VBATTB)
+> +
+> +description:
+> +  Renesas VBATTB is an always on powered module (backed by battery) which
+> +  controls the RTC clock (VBATTCLK), tamper detection logic and a small
+> +  general usage memory (128B).
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: renesas,r9a08g045-vbattb
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ranges: true
+> +
+> +  interrupts:
+> +    items:
+> +      - description: tamper detector interrupt
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: tampdi
 
-This patch only adds the functionality for devices which are using
-st,stm32mp1-rtc and st,stm32mp25-rtc compatible.
+Don't really need -names with only 1 entry.
 
-Add "alarm-a" in pinmux functions.
+> +
+> +  clocks:
+> +    items:
+> +      - description: VBATTB module clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bclk
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    items:
+> +      - description: VBATTB module reset
+> +
+> +  '#address-cells':
+> +    const: 2
+> +
+> +  '#size-cells':
+> +    const: 2
+> +
+> +patternProperties:
+> +  "^clock-controller@1c+$":
+> +    type: object
+> +    description: VBATTCLK clock
+> +
+> +    properties:
+> +      compatible:
+> +        const: renesas,r9a08g045-vbattb-clk
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +      clocks:
+> +        items:
+> +          - description: input clock for VBATTCLK
+> +
+> +      clock-names:
+> +        description: |
+> +          Use xin if connected to an external crystal oscillator.
+> +          Use clkin if connected to an external hardware device generating the
+> +          clock.
+> +        enum:
+> +          - xin
+> +          - clkin
+> +
+> +      '#clock-cells':
+> +        const: 0
+> +
+> +      renesas,vbattb-load-nanofarads:
+> +        description: load capacitance of the on board xtal
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [ 4000, 7000, 9000, 12500 ]
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - clocks
+> +      - clock-names
+> +      - '#clock-cells'
+> +      - renesas,vbattb-load-nanofarads
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +  - resets
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r9a08g045-cpg.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    vbattb@1005c000 {
+> +        compatible = "renesas,r9a08g045-vbattb";
+> +        reg = <0x1005c000 0x1000>;
+> +        ranges = <0 0 0x1005c000 0 0x1000>;
+> +        interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-names = "tampdi";
+> +        clocks = <&cpg CPG_MOD R9A08G045_VBAT_BCLK>;
+> +        clock-names = "bclk";
+> +        power-domains = <&cpg>;
+> +        resets = <&cpg R9A08G045_VBAT_BRESETN>;
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@1c {
+> +            compatible = "renesas,r9a08g045-vbattb-clk";
+> +            reg = <0 0x1c 0 0x10>;
+> +            clocks = <&vbattb_xtal>;
+> +            clock-names = "xin";
+> +            #clock-cells = <0>;
+> +            renesas,vbattb-load-nanofarads = <12500>;
+> +        };
 
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
----
- drivers/rtc/rtc-stm32.c | 60 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+Is this really a separate device? Doesn't really look like it. This can 
+all be moved to the parent node.
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 675860a13051..3e4f2ee22b0b 100644
---- a/drivers/rtc/rtc-stm32.c
-+++ b/drivers/rtc/rtc-stm32.c
-@@ -47,8 +47,10 @@
- #define STM32_RTC_CR_ALRAE		BIT(8)
- #define STM32_RTC_CR_ALRAIE		BIT(12)
- #define STM32_RTC_CR_OSEL		GENMASK(22, 21)
-+#define STM32_RTC_CR_OSEL_ALARM_A	FIELD_PREP(STM32_RTC_CR_OSEL, 0x01)
- #define STM32_RTC_CR_COE		BIT(23)
- #define STM32_RTC_CR_TAMPOE		BIT(26)
-+#define STM32_RTC_CR_TAMPALRM_TYPE	BIT(30)
- #define STM32_RTC_CR_OUT2EN		BIT(31)
- 
- /* STM32_RTC_ISR/STM32_RTC_ICSR bit fields */
-@@ -158,6 +160,7 @@ struct stm32_rtc_data {
- 	bool need_accuracy;
- 	bool rif_protected;
- 	bool has_lsco;
-+	bool has_alarm_out;
- };
- 
- struct stm32_rtc {
-@@ -245,6 +248,47 @@ struct stm32_rtc_pinmux_func {
- 	int (*action)(struct pinctrl_dev *pctl_dev, unsigned int pin);
- };
- 
-+static int stm32_rtc_pinmux_action_alarm(struct pinctrl_dev *pctldev, unsigned int pin)
-+{
-+	struct stm32_rtc *rtc = pinctrl_dev_get_drvdata(pctldev);
-+	struct stm32_rtc_registers regs = rtc->data->regs;
-+	unsigned int cr = readl_relaxed(rtc->base + regs.cr);
-+	unsigned int cfgr = readl_relaxed(rtc->base + regs.cfgr);
-+
-+	if (!rtc->data->has_alarm_out)
-+		return -EPERM;
-+
-+	cr &= ~STM32_RTC_CR_OSEL;
-+	cr |= STM32_RTC_CR_OSEL_ALARM_A;
-+	cr &= ~STM32_RTC_CR_TAMPOE;
-+	cr &= ~STM32_RTC_CR_COE;
-+	cr &= ~STM32_RTC_CR_TAMPALRM_TYPE;
-+
-+	switch (pin) {
-+	case OUT1:
-+		cr &= ~STM32_RTC_CR_OUT2EN;
-+		cfgr &= ~STM32_RTC_CFGR_OUT2_RMP;
-+		break;
-+	case OUT2:
-+		cr |= STM32_RTC_CR_OUT2EN;
-+		cfgr &= ~STM32_RTC_CFGR_OUT2_RMP;
-+		break;
-+	case OUT2_RMP:
-+		cr |= STM32_RTC_CR_OUT2EN;
-+		cfgr |= STM32_RTC_CFGR_OUT2_RMP;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	stm32_rtc_wpr_unlock(rtc);
-+	writel_relaxed(cr, rtc->base + regs.cr);
-+	writel_relaxed(cfgr, rtc->base + regs.cfgr);
-+	stm32_rtc_wpr_lock(rtc);
-+
-+	return 0;
-+}
-+
- static int stm32_rtc_pinmux_lsco_available(struct pinctrl_dev *pctldev, unsigned int pin)
- {
- 	struct stm32_rtc *rtc = pinctrl_dev_get_drvdata(pctldev);
-@@ -307,6 +351,7 @@ static int stm32_rtc_pinmux_action_lsco(struct pinctrl_dev *pctldev, unsigned in
- 
- static const struct stm32_rtc_pinmux_func stm32_rtc_pinmux_functions[] = {
- 	STM32_RTC_PINMUX("lsco", &stm32_rtc_pinmux_action_lsco, "out1", "out2_rmp"),
-+	STM32_RTC_PINMUX("alarm-a", &stm32_rtc_pinmux_action_alarm, "out1", "out2", "out2_rmp"),
- };
- 
- static int stm32_rtc_pinmux_get_functions_count(struct pinctrl_dev *pctldev)
-@@ -763,6 +808,7 @@ static const struct stm32_rtc_data stm32_rtc_data = {
- 	.need_accuracy = false,
- 	.rif_protected = false,
- 	.has_lsco = false,
-+	.has_alarm_out = false,
- 	.regs = {
- 		.tr = 0x00,
- 		.dr = 0x04,
-@@ -788,6 +834,7 @@ static const struct stm32_rtc_data stm32h7_rtc_data = {
- 	.need_accuracy = false,
- 	.rif_protected = false,
- 	.has_lsco = false,
-+	.has_alarm_out = false,
- 	.regs = {
- 		.tr = 0x00,
- 		.dr = 0x04,
-@@ -822,6 +869,7 @@ static const struct stm32_rtc_data stm32mp1_data = {
- 	.need_accuracy = true,
- 	.rif_protected = false,
- 	.has_lsco = true,
-+	.has_alarm_out = true,
- 	.regs = {
- 		.tr = 0x00,
- 		.dr = 0x04,
-@@ -847,6 +895,7 @@ static const struct stm32_rtc_data stm32mp25_data = {
- 	.need_accuracy = true,
- 	.rif_protected = true,
- 	.has_lsco = true,
-+	.has_alarm_out = true,
- 	.regs = {
- 		.tr = 0x00,
- 		.dr = 0x04,
-@@ -878,6 +927,17 @@ MODULE_DEVICE_TABLE(of, stm32_rtc_of_match);
- static void stm32_rtc_clean_outs(struct stm32_rtc *rtc)
- {
- 	struct stm32_rtc_registers regs = rtc->data->regs;
-+	unsigned int cr = readl_relaxed(rtc->base + regs.cr);
-+
-+	cr &= ~STM32_RTC_CR_OSEL;
-+	cr &= ~STM32_RTC_CR_TAMPOE;
-+	cr &= ~STM32_RTC_CR_COE;
-+	cr &= ~STM32_RTC_CR_TAMPALRM_TYPE;
-+	cr &= ~STM32_RTC_CR_OUT2EN;
-+
-+	stm32_rtc_wpr_unlock(rtc);
-+	writel_relaxed(cr, rtc->base + regs.cr);
-+	stm32_rtc_wpr_lock(rtc);
- 
- 	if (regs.cfgr != UNDEF_REG) {
- 		unsigned int cfgr = readl_relaxed(rtc->base + regs.cfgr);
--- 
-2.25.1
-
+Rob
 
