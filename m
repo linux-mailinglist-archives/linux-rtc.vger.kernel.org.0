@@ -1,129 +1,218 @@
-Return-Path: <linux-rtc+bounces-1571-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1572-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 003DA939CF1
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2024 10:49:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC8CF93B32A
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2024 16:54:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8ADC91F222DF
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2024 08:49:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8190C281D3D
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2024 14:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37A314D290;
-	Tue, 23 Jul 2024 08:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD3F415B14E;
+	Wed, 24 Jul 2024 14:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cXralWaC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8w/ulxe"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FD014B09C;
-	Tue, 23 Jul 2024 08:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C3115B12F;
+	Wed, 24 Jul 2024 14:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721724539; cv=none; b=PMDWUdbnHIpvs2NQmk8koOWokwI6QIGm38TKaig1fnNxX8n5bNIWwKDb5avhFBex0l90aRrmoIrjZe55J0Zfa6UbTKaV63E/drni9vYx0/z0K4V6Ml1rzJPU6oML0GpwuV5avdqEcH4fxRPTp4JGsSSN0xyBvpS0V2XzxaRAlcI=
+	t=1721832827; cv=none; b=uRsPGAK8ucUKrKEZJvWVCHc3by50Ht41MMtSY0g1jAL68B9eRaRtOwzSCA2fZkOBPmUjVrp4Toepqt6Gk6sDTJjAsniPc8bMh1DlryapKa7F8VsmRqoRU/i6EINPAlurCd/gAEJlsWicanrgsYGSnCDSsuG4Rm41ab2KfqemtyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721724539; c=relaxed/simple;
-	bh=jrMuFQGiXzYxmIPzY2YWQ2zH6mX3tWn8vuwLi1lQ5UY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DKCkLYgNwZQN3SzzSaNAXETjf4SFUgIPre+ROd+/0GueSsXxMoDKDisP8GtR7Pfgp3ZbzHK0MD51ASd27cXGaBRHQFE8iGUpYXUFJbD3xgxDMJ7pYBigeRoZQ+wdZLNXuE6Nb7wyQG6KGja6DEREkGjnwsY5G2/h5xld2rlKWL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cXralWaC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69250C4AF09;
-	Tue, 23 Jul 2024 08:48:55 +0000 (UTC)
+	s=arc-20240116; t=1721832827; c=relaxed/simple;
+	bh=EhGs3QHFWEAF4yCV+iWV8W/2NsVyT7nTpnaTm8KpojA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n4TPLW3PoBoV2oagfvfpPaMMks5mgeTg8fcgHsiI/qHHlnZmoNU9UnBZjBunN5jF1GKwxKO776+wDQ8mEmFRnNOGDZMyfU5kevFlykUQnfkL6f8BgwbBgbgrqV8OTV//Avq+suIXhSi00VpglV7oP0ampzDkPhjJpEx4m3DDZsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8w/ulxe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0E0C32781;
+	Wed, 24 Jul 2024 14:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721724539;
-	bh=jrMuFQGiXzYxmIPzY2YWQ2zH6mX3tWn8vuwLi1lQ5UY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cXralWaC+KyDAXdRMgXUVzCtrVXZumme+0YvaJxjki7J1MsRl/wiSaF9XgBHYChRF
-	 16Hn7ajehK+W/o1RGC1POAxx044XR0wuisGKcuGbxjyMTx5j49hi9asieA71Zz6xkF
-	 LTD0Jl9gckjUvN57r7OpdrNl6GfRpbR0h4wpg3FaX0M4RsXOkHh9uI4ZWBAeB+Tb+p
-	 knetWN7bdgr0JHlcaTOKtLrMWXUR3h64QaKpgi+VP/tPZur4RAlCxGGlIcNY9/Z0WR
-	 sTuqhxopkUBQZKUMKmzsM5tH6HzShZ4Cqi9H++jPC73vIv04hRpF8Xa2/aOtffCVWk
-	 jeHUZMnNnwvaw==
-Message-ID: <b7fe0dcf-f1a9-4da9-898d-aadd40255007@kernel.org>
-Date: Tue, 23 Jul 2024 10:48:53 +0200
+	s=k20201202; t=1721832827;
+	bh=EhGs3QHFWEAF4yCV+iWV8W/2NsVyT7nTpnaTm8KpojA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y8w/ulxe88J1URS6wQyFwZkVk96GQDqEdMvZ/kNvD5gdyiNEYnmjJpdp3UfGhJaO1
+	 ep0Wa8g0j2Rcto37s2A1/9Vsh4PodRY3AelZyYEARm5OOIH4OSWPLgaElb9FYPgRYA
+	 wf2gEc8rjccb2jqMqDvjnzjKe5Zr0G1fU5aHjfCv1rlsLJ3V1gINaoc1+2Ku6b6YUM
+	 lc1UiY3+ugOFBLyDazhUrEB5XtjAdAwZjfuh9UEI+N4VQElhqL1RQEzkOJTRqyusj5
+	 Ss28XcUpzbYB4BrvWqE7syKnqiySR/RjW1SBbJO8bYUEMm3dNSyYBtrfoD35h91M0h
+	 TwkxB5OIhh1SA==
+Date: Wed, 24 Jul 2024 15:53:40 +0100
+From: Lee Jones <lee@kernel.org>
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	alexandre.belloni@bootlin.com, geert+renesas@glider.be,
+	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
+	p.zabel@pengutronix.de, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v2 02/11] mfd: renesas-vbattb: Add a MFD driver for the
+ Renesas VBATTB IP
+Message-ID: <20240724145340.GZ501857@google.com>
+References: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240716103025.1198495-3-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] dt-bindings: rtc: stm32: describe pinmux nodes
-To: Valentin Caron <valentin.caron@foss.st.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Amelie Delaunay <amelie.delaunay@foss.st.com>
-References: <20240722160022.454226-1-valentin.caron@foss.st.com>
- <20240722160022.454226-2-valentin.caron@foss.st.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240722160022.454226-2-valentin.caron@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240716103025.1198495-3-claudiu.beznea.uj@bp.renesas.com>
 
-On 22/07/2024 18:00, Valentin Caron wrote:
-> STM32 RTC is capable to handle 3 specific pins of the soc (out1, out2,
-> out2_rmp) and to outputs 2 signals (LSCO, alarm-a).
+On Tue, 16 Jul 2024, Claudiu wrote:
+
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> This feature is configured thanks to pinmux nodes and pinctrl framework.
-> This feature is available with compatible st,stm32mp1-rtc and
-> st,stm32mp25-rtc only.
+> Renesas VBATTB IP has logic to control the RTC clock, tamper detection
+> and a small 128B memory. Add a MFD driver to do the basic initialization
+> of the VBATTB IP for the inner components to work.
 > 
-> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+> 
+> Changes in v2:
+> - none; this driver is new
+> 
+>  drivers/mfd/Kconfig          |  8 ++++
+>  drivers/mfd/Makefile         |  1 +
+>  drivers/mfd/renesas-vbattb.c | 78 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 87 insertions(+)
+>  create mode 100644 drivers/mfd/renesas-vbattb.c
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index bc8be2e593b6..df93e8b05065 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1383,6 +1383,14 @@ config MFD_SC27XX_PMIC
+>  	  This driver provides common support for accessing the SC27xx PMICs,
+>  	  and it also adds the irq_chip parts for handling the PMIC chip events.
+>  
+> +config MFD_RENESAS_VBATTB
+> +	tristate "Renesas VBATTB driver"
+> +	depends on (ARCH_RZG2L && OF) || COMPILE_TEST
+> +	select MFD_CORE
+> +	help
+> +	  Select this option to enable Renesas RZ/G3S VBATTB driver which
+> +	  provides support for the RTC clock, tamper detector and 128B SRAM.
+> +
+>  config RZ_MTU3
+>  	tristate "Renesas RZ/G2L MTU3a core driver"
+>  	depends on (ARCH_RZG2L && OF) || COMPILE_TEST
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 02b651cd7535..cd2f27492df2 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -186,6 +186,7 @@ pcf50633-objs			:= pcf50633-core.o pcf50633-irq.o
+>  obj-$(CONFIG_MFD_PCF50633)	+= pcf50633.o
+>  obj-$(CONFIG_PCF50633_ADC)	+= pcf50633-adc.o
+>  obj-$(CONFIG_PCF50633_GPIO)	+= pcf50633-gpio.o
+> +obj-$(CONFIG_MFD_RENESAS_VBATTB)	+= renesas-vbattb.o
+>  obj-$(CONFIG_RZ_MTU3)		+= rz-mtu3.o
+>  obj-$(CONFIG_ABX500_CORE)	+= abx500-core.o
+>  obj-$(CONFIG_MFD_DB8500_PRCMU)	+= db8500-prcmu.o
+> diff --git a/drivers/mfd/renesas-vbattb.c b/drivers/mfd/renesas-vbattb.c
+> new file mode 100644
+> index 000000000000..5d71565b8cbf
+> --- /dev/null
+> +++ b/drivers/mfd/renesas-vbattb.c
+> @@ -0,0 +1,78 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * VBATTB driver
+> + *
+> + * Copyright (C) 2024 Renesas Electronics Corp.
+> + */
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/reset.h>
+> +
+> +static int vbattb_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct reset_control *rstc;
+> +	int ret;
+> +
+> +	rstc = devm_reset_control_array_get_exclusive(dev);
+> +	if (IS_ERR(rstc))
+> +		return PTR_ERR(rstc);
+> +
+> +	ret = devm_pm_runtime_enable(dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pm_runtime_resume_and_get(dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = reset_control_deassert(rstc);
+> +	if (ret)
+> +		goto rpm_put;
+> +
+> +	platform_set_drvdata(pdev, rstc);
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Where is this consumed?
 
-Best regards,
-Krzysztof
+> +	ret = devm_of_platform_populate(dev);
 
+
+Which devices will this probe?
+
+> +	if (ret)
+> +		goto reset_assert;
+> +
+> +	return 0;
+> +
+> +reset_assert:
+> +	reset_control_assert(rstc);
+> +rpm_put:
+> +	pm_runtime_put(dev);
+> +	return ret;
+> +}
+> +
+> +static void vbattb_remove(struct platform_device *pdev)
+> +{
+> +	struct reset_control *rstc = platform_get_drvdata(pdev);
+> +
+> +	reset_control_assert(rstc);
+> +	pm_runtime_put(&pdev->dev);
+> +}
+> +
+> +static const struct of_device_id vbattb_match[] = {
+> +	{ .compatible = "renesas,r9a08g045-vbattb" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, vbattb_match);
+> +
+> +static struct platform_driver vbattb_driver = {
+> +	.probe = vbattb_probe,
+> +	.remove_new = vbattb_remove,
+> +	.driver = {
+> +		.name = "renesas-vbattb",
+> +		.of_match_table = vbattb_match,
+> +	},
+> +};
+> +module_platform_driver(vbattb_driver);
+> +
+> +MODULE_ALIAS("platform:renesas-vbattb");
+> +MODULE_AUTHOR("Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>");
+> +MODULE_DESCRIPTION("Renesas VBATTB driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.39.2
+> 
+
+-- 
+Lee Jones [李琼斯]
 
