@@ -1,218 +1,176 @@
-Return-Path: <linux-rtc+bounces-1572-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1574-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8CF93B32A
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2024 16:54:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45DF493B665
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2024 20:02:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8190C281D3D
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2024 14:54:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E404E1F22887
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2024 18:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD3F415B14E;
-	Wed, 24 Jul 2024 14:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D195B16B3B6;
+	Wed, 24 Jul 2024 18:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8w/ulxe"
+	dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b="yzVreoqU"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp99.iad3b.emailsrvr.com (smtp99.iad3b.emailsrvr.com [146.20.161.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C3115B12F;
-	Wed, 24 Jul 2024 14:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E8515E5C2
+	for <linux-rtc@vger.kernel.org>; Wed, 24 Jul 2024 18:02:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=146.20.161.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721832827; cv=none; b=uRsPGAK8ucUKrKEZJvWVCHc3by50Ht41MMtSY0g1jAL68B9eRaRtOwzSCA2fZkOBPmUjVrp4Toepqt6Gk6sDTJjAsniPc8bMh1DlryapKa7F8VsmRqoRU/i6EINPAlurCd/gAEJlsWicanrgsYGSnCDSsuG4Rm41ab2KfqemtyI=
+	t=1721844128; cv=none; b=Z+Dk3/VGxxWdIXnlcEvoGlFiFpsQAN5XXlm5AnDusWJ+j2VrrNxx4+LCy9S0tr1jx4maDE5pJeJE1qEb+KGGa/Dvxv0jgxgofs4ITkmjprHiPpcodjDhyNo+hWCqJpLqRzViBqjeFLK0hHBSw71o2CBfqNMkB3/tiyquH0ZBkJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721832827; c=relaxed/simple;
-	bh=EhGs3QHFWEAF4yCV+iWV8W/2NsVyT7nTpnaTm8KpojA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n4TPLW3PoBoV2oagfvfpPaMMks5mgeTg8fcgHsiI/qHHlnZmoNU9UnBZjBunN5jF1GKwxKO776+wDQ8mEmFRnNOGDZMyfU5kevFlykUQnfkL6f8BgwbBgbgrqV8OTV//Avq+suIXhSi00VpglV7oP0ampzDkPhjJpEx4m3DDZsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8w/ulxe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0E0C32781;
-	Wed, 24 Jul 2024 14:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721832827;
-	bh=EhGs3QHFWEAF4yCV+iWV8W/2NsVyT7nTpnaTm8KpojA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y8w/ulxe88J1URS6wQyFwZkVk96GQDqEdMvZ/kNvD5gdyiNEYnmjJpdp3UfGhJaO1
-	 ep0Wa8g0j2Rcto37s2A1/9Vsh4PodRY3AelZyYEARm5OOIH4OSWPLgaElb9FYPgRYA
-	 wf2gEc8rjccb2jqMqDvjnzjKe5Zr0G1fU5aHjfCv1rlsLJ3V1gINaoc1+2Ku6b6YUM
-	 lc1UiY3+ugOFBLyDazhUrEB5XtjAdAwZjfuh9UEI+N4VQElhqL1RQEzkOJTRqyusj5
-	 Ss28XcUpzbYB4BrvWqE7syKnqiySR/RjW1SBbJO8bYUEMm3dNSyYBtrfoD35h91M0h
-	 TwkxB5OIhh1SA==
-Date: Wed, 24 Jul 2024 15:53:40 +0100
-From: Lee Jones <lee@kernel.org>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	alexandre.belloni@bootlin.com, geert+renesas@glider.be,
-	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
-	p.zabel@pengutronix.de, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v2 02/11] mfd: renesas-vbattb: Add a MFD driver for the
- Renesas VBATTB IP
-Message-ID: <20240724145340.GZ501857@google.com>
-References: <20240716103025.1198495-1-claudiu.beznea.uj@bp.renesas.com>
- <20240716103025.1198495-3-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1721844128; c=relaxed/simple;
+	bh=p8MHJqgFJTHWju+ZY7FnEi6FhVkz7AcqLJ0K66xW1pA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WfwmfkHj2AB9ltqGKD1i2JRS4P1MyxgIdHRkQ4SYA82CepDkQ+7Aj0AReDDNRYX/LqlUV+UPjHVVXIWREpkJRTtqxtm6EJBL/0zL5TVRffV7haX0OB/mZyjd3TwsAN9ZYIYCdVuTl2ANDa07Jaru+G6U1fxbK2ckwxjxe++Ilwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk; spf=pass smtp.mailfrom=mev.co.uk; dkim=pass (1024-bit key) header.d=mev.co.uk header.i=@mev.co.uk header.b=yzVreoqU; arc=none smtp.client-ip=146.20.161.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mev.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mev.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+	s=20221208-6x11dpa4; t=1721839600;
+	bh=p8MHJqgFJTHWju+ZY7FnEi6FhVkz7AcqLJ0K66xW1pA=;
+	h=Date:Subject:To:From:From;
+	b=yzVreoqUx4GpGVMpHmpmAJhohhrCegMzxXBs6hVqNzP16evAOHqYL585PWA5LdXmM
+	 ztjO/H64aE1etWC4L1nFQ4PNt5M/4b0BYfkMuZ9USwEaNyB06c9jEIVP89NnqBU4AA
+	 JPt/sUJrDvB2QUGQHbK/YauAZ+6oKyiVke2bE6Rc=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp5.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 12F6D402F8;
+	Wed, 24 Jul 2024 12:46:39 -0400 (EDT)
+Message-ID: <128fc360-39c6-49d7-ba48-66914b1bfe06@mev.co.uk>
+Date: Wed, 24 Jul 2024 17:46:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240716103025.1198495-3-claudiu.beznea.uj@bp.renesas.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH] rtc: ds1343: Force SPI chip select to be active
+ high
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+ Mark Brown <broonie@kernel.org>
+References: <20240710175246.3560207-1-abbotti@mev.co.uk>
+ <20240710184053c34201f0@mail.local>
+Content-Language: en-GB
+From: Ian Abbott <abbotti@mev.co.uk>
+Organization: MEV Ltd.
+In-Reply-To: <20240710184053c34201f0@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 691722cb-01d0-4a2a-a931-9818d622def5-1-1
 
-On Tue, 16 Jul 2024, Claudiu wrote:
+Greetings,
 
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On 10/07/2024 19:40, Alexandre Belloni wrote:
+> Hello,
 > 
-> Renesas VBATTB IP has logic to control the RTC clock, tamper detection
-> and a small 128B memory. Add a MFD driver to do the basic initialization
-> of the VBATTB IP for the inner components to work.
+> On 10/07/2024 18:52:07+0100, Ian Abbott wrote:
+>> Commit 3b52093dc917 ("rtc: ds1343: Do not hardcode SPI mode flags")
+>> bit-flips (^=) the existing SPI_CS_HIGH setting in the SPI mode during
+>> device probe.  This will set it to the wrong value if the spi-cs-high
+>> property has been set in the devicetree node.  Just force it to be set
+>> active high and get rid of some commentary that attempted to explain why
+>> flipping the bit was the correct choice.
+>>
+>> Fixes: 3b52093dc917 ("rtc: ds1343: Do not hardcode SPI mode flags")
+>> Cc: <stable@vger.kernel.org> # 5.6+
+>> Cc: Linus Walleij <linus.walleij@linaro.org>
+>> Cc: Mark Brown <broonie@kernel.org>
+>> Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
+>> ---
+>>   drivers/rtc/rtc-ds1343.c | 9 +++------
+>>   1 file changed, 3 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/rtc/rtc-ds1343.c b/drivers/rtc/rtc-ds1343.c
+>> index ed5a6ba89a3e..484b5756b55c 100644
+>> --- a/drivers/rtc/rtc-ds1343.c
+>> +++ b/drivers/rtc/rtc-ds1343.c
+>> @@ -361,13 +361,10 @@ static int ds1343_probe(struct spi_device *spi)
+>>   	if (!priv)
+>>   		return -ENOMEM;
+>>   
+>> -	/* RTC DS1347 works in spi mode 3 and
+>> -	 * its chip select is active high. Active high should be defined as
+>> -	 * "inverse polarity" as GPIO-based chip selects can be logically
+>> -	 * active high but inverted by the GPIO library.
+>> +	/*
+>> +	 * RTC DS1347 works in spi mode 3 and its chip select is active high.
+>>   	 */
+>> -	spi->mode |= SPI_MODE_3;
+>> -	spi->mode ^= SPI_CS_HIGH;
+>> +	spi->mode |= SPI_MODE_3 | SPI_CS_HIGH;
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
+> Linus being the gpio maintainer and Mark being the SPI maintainer, I'm
+> pretty sure this was correct at the time.
 > 
-> Changes in v2:
-> - none; this driver is new
+> Are you sure you are not missing an active high/low flag on a gpio
+> definition?
 > 
->  drivers/mfd/Kconfig          |  8 ++++
->  drivers/mfd/Makefile         |  1 +
->  drivers/mfd/renesas-vbattb.c | 78 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 87 insertions(+)
->  create mode 100644 drivers/mfd/renesas-vbattb.c
+>>   	spi->bits_per_word = 8;
+>>   	res = spi_setup(spi);
+>>   	if (res)
+>> -- 
+>> 2.43.0
+>>
 > 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index bc8be2e593b6..df93e8b05065 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1383,6 +1383,14 @@ config MFD_SC27XX_PMIC
->  	  This driver provides common support for accessing the SC27xx PMICs,
->  	  and it also adds the irq_chip parts for handling the PMIC chip events.
->  
-> +config MFD_RENESAS_VBATTB
-> +	tristate "Renesas VBATTB driver"
-> +	depends on (ARCH_RZG2L && OF) || COMPILE_TEST
-> +	select MFD_CORE
-> +	help
-> +	  Select this option to enable Renesas RZ/G3S VBATTB driver which
-> +	  provides support for the RTC clock, tamper detector and 128B SRAM.
-> +
->  config RZ_MTU3
->  	tristate "Renesas RZ/G2L MTU3a core driver"
->  	depends on (ARCH_RZG2L && OF) || COMPILE_TEST
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 02b651cd7535..cd2f27492df2 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -186,6 +186,7 @@ pcf50633-objs			:= pcf50633-core.o pcf50633-irq.o
->  obj-$(CONFIG_MFD_PCF50633)	+= pcf50633.o
->  obj-$(CONFIG_PCF50633_ADC)	+= pcf50633-adc.o
->  obj-$(CONFIG_PCF50633_GPIO)	+= pcf50633-gpio.o
-> +obj-$(CONFIG_MFD_RENESAS_VBATTB)	+= renesas-vbattb.o
->  obj-$(CONFIG_RZ_MTU3)		+= rz-mtu3.o
->  obj-$(CONFIG_ABX500_CORE)	+= abx500-core.o
->  obj-$(CONFIG_MFD_DB8500_PRCMU)	+= db8500-prcmu.o
-> diff --git a/drivers/mfd/renesas-vbattb.c b/drivers/mfd/renesas-vbattb.c
-> new file mode 100644
-> index 000000000000..5d71565b8cbf
-> --- /dev/null
-> +++ b/drivers/mfd/renesas-vbattb.c
-> @@ -0,0 +1,78 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * VBATTB driver
-> + *
-> + * Copyright (C) 2024 Renesas Electronics Corp.
-> + */
-> +
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/reset.h>
-> +
-> +static int vbattb_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct reset_control *rstc;
-> +	int ret;
-> +
-> +	rstc = devm_reset_control_array_get_exclusive(dev);
-> +	if (IS_ERR(rstc))
-> +		return PTR_ERR(rstc);
-> +
-> +	ret = devm_pm_runtime_enable(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = pm_runtime_resume_and_get(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = reset_control_deassert(rstc);
-> +	if (ret)
-> +		goto rpm_put;
-> +
-> +	platform_set_drvdata(pdev, rstc);
 
-Where is this consumed?
+I now have an actual SPI controller using cs-gpios with a DS1343 
+connected.  I have tested all 8 combinations of: 
+GPIO_ACTIVE_LOW/GPIO_ACTIVE_HIGH, with/without spi-cs-high, without/with 
+my patch.  Here are my results and observations:
 
-> +	ret = devm_of_platform_populate(dev);
+                                  Final        Final
+GPIO_ACTIVE  spi-cs-high  Patcb  GPIO active  CS high  Works?
+===========  ===========  =====  ===========  =======  =======
+    LOW           No        No      LOW         Yes      No
+    LOW           No        Yes     LOW         Yes      No
+    LOW           Yes       No      HIGH(1)     No       Yes(3)
+    LOW           Yes       Yes     HIGH(1)     Yes      Yes
+    HIGH          No        No      LOW(2)      Yes      No
+    HIGH          No        Yes     LOW(2)      Yes      No
+    HIGH          Yes       No      HIGH        No       Yes(3)
+    HIGH          Yes       Yes     HIGH        Yes      Yes
 
+The "Final GPIO active" column refers to the GPIO active state after any 
+quirks have been applied.  The "Final CS High" column refers to whether 
+SPI_CS_HIGH is set in spi->mode when spi_setup() is called.
 
-Which devices will this probe?
+Notes:
 
-> +	if (ret)
-> +		goto reset_assert;
-> +
-> +	return 0;
-> +
-> +reset_assert:
-> +	reset_control_assert(rstc);
-> +rpm_put:
-> +	pm_runtime_put(dev);
-> +	return ret;
-> +}
-> +
-> +static void vbattb_remove(struct platform_device *pdev)
-> +{
-> +	struct reset_control *rstc = platform_get_drvdata(pdev);
-> +
-> +	reset_control_assert(rstc);
-> +	pm_runtime_put(&pdev->dev);
-> +}
-> +
-> +static const struct of_device_id vbattb_match[] = {
-> +	{ .compatible = "renesas,r9a08g045-vbattb" },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, vbattb_match);
-> +
-> +static struct platform_driver vbattb_driver = {
-> +	.probe = vbattb_probe,
-> +	.remove_new = vbattb_remove,
-> +	.driver = {
-> +		.name = "renesas-vbattb",
-> +		.of_match_table = vbattb_match,
-> +	},
-> +};
-> +module_platform_driver(vbattb_driver);
-> +
-> +MODULE_ALIAS("platform:renesas-vbattb");
-> +MODULE_AUTHOR("Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>");
-> +MODULE_DESCRIPTION("Renesas VBATTB driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.39.2
-> 
+(1) GPIO was forced active high by of_gpio_flags_quirks() before RTC 
+device probed.
+
+(2) GPIO was forced active low by of_gpio_flags_quirks() before RTC 
+device probed.
+
+(3) Works if cs-gpios being used, but probably will not work for SPI 
+controllers that do not use cs-gpios because SPI_CS_HIGH is not set.
+
+In summary:
+
+1. Without the patch, the RTC device node requires the spi-cs-high 
+property to be present if the SPI controller uses cs-gpios, and requires 
+the spi-cs-high property to be omitted if the SPI controller does not 
+use cs-gpios.  (I think that is a confusing situation.)
+
+2. With the patch, the RTC device node requires the spi-cs-high property 
+to be present if the SPI controller uses cs-gpios, and it does not care 
+about the spi-cs-high property if the SPI controller does not use 
+cs-gpios.  (I therefore think that the patch should be applied so that 
+the device node can just set spi-cs-high without caring whether ht SPI 
+controller uses cs-gpios or not.)
 
 -- 
-Lee Jones [李琼斯]
+-=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
+-=( registered in England & Wales.  Regd. number: 02862268.  )=-
+-=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
+-=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+
 
