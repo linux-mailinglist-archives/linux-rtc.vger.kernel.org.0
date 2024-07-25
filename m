@@ -1,75 +1,77 @@
-Return-Path: <linux-rtc+bounces-1582-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1583-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F159093C11A
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 13:50:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3578E93C128
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 13:53:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A779D28222E
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 11:50:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58C9A1C21538
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 11:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70017199380;
-	Thu, 25 Jul 2024 11:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3D01991A9;
+	Thu, 25 Jul 2024 11:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JfT4L9OF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QEqZE6uv"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CA012B64;
-	Thu, 25 Jul 2024 11:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41B23C3C;
+	Thu, 25 Jul 2024 11:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721908205; cv=none; b=GnwwK6v4KvGdi+NuWEuK/cxuuFwfkTE3Bgv7GaF/SuzrNWGVC391AZzVlZarcvZDfwlg0CCs3S63SDbvXdATTNhT/D2pSwJShNgFJRflLZAvGIROZRjZ6A1A6oNZGwuvReuznMTwCquej9HLxY41AFO0tOR4fAluVpxQa14ExVk=
+	t=1721908422; cv=none; b=nkfLe6xKnjA6yOWTH7aV/usAtuHRbDxcLga2fDySwy1puQtem3sXQDuoBp+PeDBOaL//R/JYn3WDSk7lZ2JUozfp6PUQl07Oejl9+TYgVSJ7mX7dZb0vE4PSkZZyFmj4jxXkjDmqTZFeJAS9p0SzQL+7S+p61b8/oRDAeSlYOEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721908205; c=relaxed/simple;
-	bh=dOMuI0KOfYdadFjPpCQ6nhBfr9GpmTphMFJg3+Rl+/8=;
+	s=arc-20240116; t=1721908422; c=relaxed/simple;
+	bh=ObR/iQuiyC6gSvuy6fRSU1r6dpBFdZBMR5ZrD0LD6Ts=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OiAi8Oee+DFSbFmahRVXAYCvFIpQeZnAUI7vrS27Xcq9o6+lBZGJGMvXd1fylAcbrjmLfqUXLf5IlqcMH3xnkjr7YJKDvzZfnrYM1tMS/VqiUbwk/ouQxqOJbjbUiACPwkbWxJ941PavBlQoD1b04uptzV2CXOG0RS9wLvmI49E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JfT4L9OF; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=kPq3aoaPKrGPiKFFc+NpC/pRwNXbXldbZPeULypMzi3TtJxF06a61NdFxsE8N+e8BVJBXckW4n9JHOuRZV6JPq5s2vd/qOR2PLl2HuHfVEjIHcHuWtrvSQNzwIFcnqzj6Jnl8eZBtHBl4Nc+GGWk+QCLtnvPWPYTx5k8ualwH4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QEqZE6uv; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=dOMuI0KOfYdadFjPpCQ6nhBfr9GpmTphMFJg3+Rl+/8=; b=JfT4L9OFqiYLUWe4Tc4X/S2wu9
-	G6FeTUnd37d6c49pRv36hOW0YHufHP5l+TVzCmwGDsMnFYqu+XGfhNDcASr92xry/bf1BNsjDjD4K
-	OSNamL3oT3PyS4MsMu1Vo48vGv7SKG9devhujr/2IPDR+M9Gq56RA9sCHKb980aBt7y8uhT7KsLkK
-	u3D59Ag8wJeHjbCm/8Zt80hQMpAyZ+/lm+DMZru4qRHV3ZXgp/6ClxIQEBI/LfW1hxWf/QIMRU25i
-	aBGx+qVWKYdSRAp9Ea1C9RTWTwa8HTxPTZ4f3gZJ8cVxNKeu6NxCKofp9zjOuzlW61u6aa6wEtGfb
-	HjXpf6tQ==;
+	bh=ObR/iQuiyC6gSvuy6fRSU1r6dpBFdZBMR5ZrD0LD6Ts=; b=QEqZE6uvAmoxnPOoHLg8LHaAe6
+	7JZmsgL9TZ0XzBytBR0baHvhp+jfYtCVs2gPhBbTXEWfvVm23dLFC64FcVcDUIq7EnJJPkZsVMYGO
+	L+9v+owqPSpJV/ebsTqvdVTmZwmxiJEIDx/kuFB0v8e5OqMZk0E95fHkrh4W+vLwJPkcO82X8O+G3
+	drH+ixsd8W3GWlusyYmgoSFe28KAKDLJLcUH47EHijsPvxyBeHY6lgdEOl7TI5hc0XuaMIma+0jB2
+	CIZre6jDD0JPavHuWi36igoFKj/QDyyKrmoOvxSugaSJJp6xrFYFrRjGreHt1rjG1y/w+hN4GhtLm
+	zsk6n5og==;
 Received: from [2001:8b0:10b:5:25df:2ae1:4889:ee99] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sWwyn-00000008rrj-2FvO;
-	Thu, 25 Jul 2024 11:49:53 +0000
-Message-ID: <78ae9403ac4f507819c46ed831c714bca966e5a4.camel@infradead.org>
+	id 1sWx2N-00000008s3P-366V;
+	Thu, 25 Jul 2024 11:53:35 +0000
+Message-ID: <603aa858ca961a5c4fdfc9b44834343adf1c73d2.camel@infradead.org>
 Subject: Re: [PATCH] ptp: Add vDSO-style vmclock support
 From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Abeni <pabeni@redhat.com>, Richard Cochran
- <richardcochran@gmail.com>,  Peter Hilber <peter.hilber@opensynergy.com>,
+To: "Daniel P." =?ISO-8859-1?Q?Berrang=E9?= <berrange@redhat.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>, Richard Cochran
+ <richardcochran@gmail.com>, Peter Hilber <peter.hilber@opensynergy.com>, 
  linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, 
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, "Ridoux,
  Julien" <ridouxj@amazon.com>, virtio-dev@lists.linux.dev, "Luu, Ryan"
  <rluu@amazon.com>,  "Chashper, David" <chashper@amazon.com>, "Mohamed
- Abuelfotoh, Hazem" <abuehaze@amazon.com>
-Cc: "Christopher S . Hall" <christopher.s.hall@intel.com>, Jason Wang
- <jasowang@redhat.com>, John Stultz <jstultz@google.com>, "Michael S .
- Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org, Stephen Boyd
+ Abuelfotoh, Hazem" <abuehaze@amazon.com>, "Christopher S . Hall"
+ <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>, John
+ Stultz <jstultz@google.com>, netdev@vger.kernel.org, Stephen Boyd
  <sboyd@kernel.org>,  Thomas Gleixner <tglx@linutronix.de>, Xuan Zhuo
  <xuanzhuo@linux.alibaba.com>, Marc Zyngier <maz@kernel.org>,  Mark Rutland
  <mark.rutland@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
  Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni
  <alexandre.belloni@bootlin.com>,  qemu-devel <qemu-devel@nongnu.org>, Simon
  Horman <horms@kernel.org>
-Date: Thu, 25 Jul 2024 12:49:52 +0100
-In-Reply-To: <541d338f-bffc-4393-a501-92d01e5c8edb@redhat.com>
+Date: Thu, 25 Jul 2024 12:53:34 +0100
+In-Reply-To: <ZqI3ntUR6bfY1kxo@redhat.com>
 References: <14d1626bc9ddae9d8ad19d3c508538d10f5a8e44.camel@infradead.org>
-	 <541d338f-bffc-4393-a501-92d01e5c8edb@redhat.com>
+	 <20240725012730-mutt-send-email-mst@kernel.org>
+	 <7de7da1122e61f8c64bbaab04a35af93fafac454.camel@infradead.org>
+	 <ZqI3ntUR6bfY1kxo@redhat.com>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-SY3unfSx3iaL3ixPrA/+"
+	boundary="=-yHEbMx6aY/Kb8Okm0xam"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -80,23 +82,34 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-SY3unfSx3iaL3ixPrA/+
+--=-yHEbMx6aY/Kb8Okm0xam
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2024-07-25 at 13:20 +0200, Paolo Abeni wrote:
+On Thu, 2024-07-25 at 12:31 +0100, Daniel P. Berrang=C3=A9 wrote:
+> On Thu, Jul 25, 2024 at 10:56:05AM +0100, David Woodhouse wrote:
+> > Hi Michael, thanks for the review!
+> >=20
+> > On Thu, 2024-07-25 at 01:48 -0400, Michael S. Tsirkin wrote:
+> > > Do you want to just help complete virtio-rtc then? Would be easier th=
+an
+> > > trying to keep two specs in sync.
+> >=20
+> > The ACPI version is much more lightweight and doesn't take up a
+> > valuable PCI slot#. (I know, you can do virtio without PCI but that's
+> > complex in other ways).
 >=20
->=20
-> Just a bunch of 'nits below
+> In general it shouldn't have to take up a PCI slot, that's just
+> a common default policy. virtio-devices only need a dedicated
+> slot if there's a need to do hotplug/unplug of them. There is a
+> set of core devices for which hotplug doesn't make sense, which
+> could all be put as functions in the same slot. ie virtio-rng,
+> virtio-balloon and virtio-rtc, could all live in one slot.
 
-Thank you. Fixed in
-https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/vmclock
+But if you don't have any virtio devices already, you still need one
+slot to put them in.
 
-I'll post a new version once I've finished resolving mst's and any
-other feedback.
-
-
---=-SY3unfSx3iaL3ixPrA/+
+--=-yHEbMx6aY/Kb8Okm0xam
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -188,25 +201,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI1MTE0OTUyWjAvBgkqhkiG9w0BCQQxIgQgJr9pTDJ6
-2pqUfwMJ+PXFWtqHecWdxEEUUbpYTArJLv4wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI1MTE1MzM0WjAvBgkqhkiG9w0BCQQxIgQgsOWYPioU
+OQiPurpLagh4+1FA0IhkfOdJAoWoTMc+gsEwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgByTwtaYFwJNc1k+De4/GpwAGU/YAXuhXQo
-uiyaHIbnGT6Peo2jHT0dBt4dCUerw27IK1LU1nNmZvBOaCuBxk/aVnyRQYRzB8Qhj3LhUZD5C0u4
-Z3AcWY4YT+Me+i65kiCwuNeYaAGuiVfRVP3lwd8pVexWPFPAaTqCZrvRrPtcbkuqABZaGVdc/QlS
-71KDoBQxqAvt+JcAVG28kAaht8qVPM0Ae0WW8s2rwF8s/mTV2G32JjHPQkkf4an7b0ER9e99/Szi
-F5oLyHXbM+0wVU6q7MXx4Ky6EGOEpatyNzPlK2W/kF0iw8j7uPToOYL2HdbxYULhYLqzXEdjszbF
-Ow5EhzPxRhUlHpmbRj9FUYrheG7CweqH53UOaAOh2ZprcRNuTBiKCXavl+n6Mhx6Q4UC+LLYdzpB
-riXrk5TG35G0WjUsqC+/Puf7aNH0RYHXQ2Y7HdKyDtR3Vh1r7dxBWCiOHqUjqjYbK8sCDdeZXjL0
-ZH2m55GNXvi5nxr7pJUBdUcdNR1uZos3ZEVh08+4dkK+92jTWfEfTo0J+CStkVfU7owPJhtFqu0y
-87DkxVjTY3m90CFSOp/q86L0buEPBhUHbss0IzvlkWpCRnsk3STGLCDMqGS3Zf6IKhEnWEQYPZ6W
-qXXz6+YMla/M9bGEu7punkNzJNj0i9PE4sCvPgBkywAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAuMbe8hW1ufV1yqiORqfrUM2NKrfxAvcym
+xA7OeiWayrcwGsxHPEeVrpzZIkKYvV0cDI3HRYFcSvPWzYbQVYpFhr7fkiyGJVU8WGXoGuhF4m+W
+49pBIPqTllFgg2h/hhb6KCF8qA22rN9ODpUEoSAyLeU3MIyFDJTR6fOxVPzqf+CkJ/hY5wqQUuYJ
+vWjcYa12y4uG+vFgtfx2T9EhOPPEnZsXtzWyV48ryoDfw1/np1W8P6R73h0uBQ2wFPllNtvmUH8c
+PEQyEmJBSBc3ei5cv+X6nCwR8nFC0QTSygOF9rYKcLM7XaOpMnkho8zUlLKHwjN69Be6Krg72IN/
+qiGguRms8zWk1rHxB19KxWSKMoPXTKENdfzw0VfmPuTWNUwNuk1N0uG91TfMP9Aa6gx3itZ2aVWO
+OHQlhRYqJxguRXbQCt1PY2RgMdSlqraopZrfVU3h30G+GrVAOmR28kPyAh2OSHgt2MnTQJkVFmKb
+hWejJ0eN9R/+m4tmJM4L/PY1CJT1C3+TaZcJMZSVFdAi5NBGPqsx7myOqAvx+TSOd6NwGVGL8gr7
+/cTePZDTPkm26jVKYXYSOW4YF/6iYiBHVVEfJbPvLruGsHVWhjSXt+IEFon5Rlb6sp2/JLs5DEq6
+G4Fo5UOKUhqGEZbvghGx4sH0+5ATTc8kFRy6XhEq5gAAAAAAAA==
 
 
---=-SY3unfSx3iaL3ixPrA/+--
+--=-yHEbMx6aY/Kb8Okm0xam--
 
