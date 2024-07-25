@@ -1,219 +1,252 @@
-Return-Path: <linux-rtc+bounces-1579-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1580-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9305093BF8D
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 12:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2CCC93C0A7
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 13:21:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FF852810EF
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 10:00:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B77D282A0F
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 11:21:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35B1172BAC;
-	Thu, 25 Jul 2024 10:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2358E19924E;
+	Thu, 25 Jul 2024 11:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bpJALwyM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mgf3u5nz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AA31386C0;
-	Thu, 25 Jul 2024 10:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE75199242
+	for <linux-rtc@vger.kernel.org>; Thu, 25 Jul 2024 11:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721901622; cv=none; b=CdnqiuDfox65DLuTGo2ieBZXgmLnCiixZLmUM0ywIo0GZ/+hQOksYbWuWG7v1r5SNYSkIboubfEWUZkxdJJnuJmxrEL8p/dVlenr+528GRjstEXG3tjVV7fnXe+hkX5mjtcZEG+6ETk7NWnP1ZM7vouBkWpA5rzfofEC0t3dOes=
+	t=1721906466; cv=none; b=LPp4OWi2DaxPoWK6IHukJOm+zt0OCJDfs4RS8ZR7IxK9375QDGBDeI6CVBCNeQeEVlRa5uPO/GLaWrbM+IpBCEqkLZMfo2mwcMi8E1iaaaCwqg4EYgPMYIEgh5II1tHT2ep4BjrX2kHucVuKoVmYIY5d+W6Coquixng/xTPjznM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721901622; c=relaxed/simple;
-	bh=/7IxyE746tB7gLFGUryPRx7FJ/Ne/kURVczteivoMWM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=j55rnWHyYXvmnKNC6wdMRMQxT39cxgQUI5EVtTEYShAfVKHi3L8RaobMHruchI0nAYlcwIqYygtzkk1D7dGlK8UiEb2H0G82lqLse22OZ+8cGjqOIEhrzj28g5Gm25MlyJ73PD5Cpz/mYlbRimfJE8jvDkKhdKiQOziKRCG6Uys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bpJALwyM; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=/7IxyE746tB7gLFGUryPRx7FJ/Ne/kURVczteivoMWM=; b=bpJALwyMZsq53PsnZIrXIlUtAQ
-	GlFdwp5W+vrYM69gwsbF83dXtsKoI0bE0jFv7hLrllcjxa4ck4U8LWqApf7YXKCr2I1P4UxKzGOHs
-	9BeC34FMYVTq6OSyWZSJBPFIAF+/C17CiQtsa9s45ATAE0Q3UDJ6qLkLirUQKfYgggP9IHkFKcVNc
-	+q/shmWUZUxxazV3QvNYl0FpJgiWxK+x1SdD0tbEi8tsroerdvsGXYVmvOMLZGIH/Te3UqFElLTj7
-	rBz5WNPr5G8HQ+nTlv8X//fAOnxHovAB9bY4v1dcPJjdVXpkhkt+orEe4114RVlECsucd8LQ0nGHV
-	DSzsy2mQ==;
-Received: from [2001:8b0:10b:5:25df:2ae1:4889:ee99] (helo=u3832b3a9db3152.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sWvGi-00000008mHI-1oqA;
-	Thu, 25 Jul 2024 10:00:16 +0000
-Message-ID: <ebabe603a497391a1671b44ae5579ced281b8333.camel@infradead.org>
-Subject: Re: [PATCH] ptp: Add vDSO-style vmclock support
-From: David Woodhouse <dwmw2@infradead.org>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
- <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org, 
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-rtc@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>, 
- virtio-dev@lists.linux.dev, "Luu, Ryan" <rluu@amazon.com>, "Chashper,
- David" <chashper@amazon.com>, "Mohamed Abuelfotoh, Hazem"
- <abuehaze@amazon.com>,  "Christopher S . Hall"
- <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>, John
- Stultz <jstultz@google.com>,  netdev@vger.kernel.org, Stephen Boyd
- <sboyd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Marc Zyngier <maz@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Alessandro Zummo <a.zummo@towertech.it>,  Alexandre Belloni
- <alexandre.belloni@bootlin.com>, qemu-devel <qemu-devel@nongnu.org>, Simon
- Horman <horms@kernel.org>
-Date: Thu, 25 Jul 2024 11:00:15 +0100
-In-Reply-To: <20240725015120-mutt-send-email-mst@kernel.org>
-References: <14d1626bc9ddae9d8ad19d3c508538d10f5a8e44.camel@infradead.org>
-	 <20240725015120-mutt-send-email-mst@kernel.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-mX6aQ5w+mkWSt01+2kjl"
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1721906466; c=relaxed/simple;
+	bh=E393x25IIG2PjHFTyTTWubra+t3kSqI48PhdEqj3xsw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iJE2QtTTHl3plEHJ6FSVmnGGCAz8cYaRMxLmGrsASMFYTwvpwdakqhMFn6Ic1bszOVxMbXCzwDDmpt6EeBHPuFZ714Qb5/aeYxaFtGUuxWOKok26777nRfVP1pMqlO4WDwBHrKQyIIV+uwL03UZXOzYc/1arPExon07JzRw/+OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mgf3u5nz; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721906463;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W/RcU6ENJ/Nt41p8RxOylXqN7jgSp+MCYSjVSMYB2J4=;
+	b=Mgf3u5nzIYlNjJLXNtHpEwy0jSpD3NFLteFy5pRZo/GPsVAuLQOlR3AHkPRgaF/dy2pEmK
+	M5J65qyZkjz9eYtyJ3X9ubMqn882QJPmjE18PYH5pvHEzUf/PMYjMHSLkBphy8etB4UxEW
+	WGtTWWyJME8/0xKdKfopHMOj+xjs+1c=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-59-d36yZUu5McCTjvuz_ROGSw-1; Thu, 25 Jul 2024 07:21:01 -0400
+X-MC-Unique: d36yZUu5McCTjvuz_ROGSw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-36b34f628f8so113676f8f.0
+        for <linux-rtc@vger.kernel.org>; Thu, 25 Jul 2024 04:21:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721906460; x=1722511260;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W/RcU6ENJ/Nt41p8RxOylXqN7jgSp+MCYSjVSMYB2J4=;
+        b=IRyEABgBtES9TPiheQ2TVgrJuo0wooDx+Qa018Kfg2uucBlPQ3NXfAbCK8LayFtVZv
+         FGvG8n5NIJUp4MHjwO2oqLt6e8Z2jPl1jw5CxAOUGHilNuHd0pvIZNmytdYBpYaVXgmh
+         yQAxZfA1jjNHt6p3xic0/bs2kHBSzCPYcqxV6zWRTKXDLqp20aiTtceNVueybpQ+Pt6H
+         iBLI5SZLzvZ3Oy3FbHyGaldrif1SZNCPCU01Y7n508f2IUbLvTE0IZPI+6TDDwGzRR0B
+         JXIVGsGN6vE/PexNxwM3IAJp6rhuDli6Um2NsgbUBw7WeVsTSCI9PhDGRKVCcagjKdM0
+         uhfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWltxYvIxgf5hK4SzlGtWx4sMu5MXibQnW95oEC4ic/G8tZ9e8tRyXCI9Pf3M+p2gbD+J5TAAFVZSk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgL4cQUKrS1cMFSNZq6/iScNKPbAjhneOK73TkoVRVBOUHTAIy
+	d048SQ1sjJuIPBdjzLkNX6DOuf93k2eoDOw12guw+S+RNY1i8vUD3eDrgXORKMto7qGUfwt4fpQ
+	iTmn0goLbTjjsE0oRj81lsw0sU4l0NJ3HLl2XkxLBfwe8/fOkO/4R1o/a0A==
+X-Received: by 2002:a05:600c:4511:b0:425:7ac6:96f9 with SMTP id 5b1f17b1804b1-428053c0936mr8553365e9.0.1721906460442;
+        Thu, 25 Jul 2024 04:21:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFs0hS+4jr12gekyxSSo+/sBI5EgsvR7qp+YV72mbT4WUmt0CTs2xCHVE2M9xlSdygkPfJGjA==
+X-Received: by 2002:a05:600c:4511:b0:425:7ac6:96f9 with SMTP id 5b1f17b1804b1-428053c0936mr8553185e9.0.1721906459941;
+        Thu, 25 Jul 2024 04:20:59 -0700 (PDT)
+Received: from ?IPV6:2a0d:3341:b231:be10::f71? ([2a0d:3341:b231:be10::f71])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42807246ca4sm22683535e9.11.2024.07.25.04.20.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jul 2024 04:20:59 -0700 (PDT)
+Message-ID: <541d338f-bffc-4393-a501-92d01e5c8edb@redhat.com>
+Date: Thu, 25 Jul 2024 13:20:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ptp: Add vDSO-style vmclock support
+To: David Woodhouse <dwmw2@infradead.org>,
+ Richard Cochran <richardcochran@gmail.com>,
+ Peter Hilber <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-rtc@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>,
+ virtio-dev@lists.linux.dev, "Luu, Ryan" <rluu@amazon.com>,
+ "Chashper, David" <chashper@amazon.com>,
+ "Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com>
+Cc: "Christopher S . Hall" <christopher.s.hall@intel.com>,
+ Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
+ "Michael S . Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+ Stephen Boyd <sboyd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Marc Zyngier <maz@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Alessandro Zummo <a.zummo@towertech.it>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ qemu-devel <qemu-devel@nongnu.org>, Simon Horman <horms@kernel.org>
+References: <14d1626bc9ddae9d8ad19d3c508538d10f5a8e44.camel@infradead.org>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <14d1626bc9ddae9d8ad19d3c508538d10f5a8e44.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi,
 
---=-mX6aQ5w+mkWSt01+2kjl
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Just a bunch of 'nits below
 
-On Thu, 2024-07-25 at 01:54 -0400, Michael S. Tsirkin wrote:
-> one other thing worth mentioning is that this design can't work
-> with confidential computing setups. By comparison, mapping e.g. a
-> range in a PCI BAR would work for these setups.
+On 7/24/24 19:16, David Woodhouse wrote:
+> diff --git a/drivers/ptp/ptp_vmclock.c b/drivers/ptp/ptp_vmclock.c
+> new file mode 100644
+> index 000000000000..9c508c21c062
+> --- /dev/null
+> +++ b/drivers/ptp/ptp_vmclock.c
 
-Why so? This is just like mapping a PCI BAR, isn't it? It's cacheable
-MMIO space, *not* part of the encrypted guest RAM ranges. It just
-happens to be discovered through the _CRS of an ACPI device, not the
-BAR of a PCI device.
+[...]
 
-> Is there a reason this functionality is not interesting for
-> confidential VMs?
+> +/*
+> + * Multiply a 64-bit count by a 64-bit tick 'period' in units of seconds >> 64
+> + * and add the fractional second part of the reference time.
+> + *
+> + * The result is a 128-bit value, the top 64 bits of which are seconds, and
+> + * the low 64 bits are (seconds >> 64).
+> + *
+> + * If __int128 isn't available, perform the calculation 32 bits at a time to
+> + * avoid overflow.
+> + */
+> +static inline uint64_t mul_u64_u64_shr_add_u64(uint64_t *res_hi, uint64_t delta,
+> +					       uint64_t period, uint8_t shift,
+> +					       uint64_t frac_sec)
 
-It is. In fact, that was one of the reasons for doing it as mappable
-MMIO space, instead of having the guest allocate a portion of its own
-RAM and invoke a hypervisor enlightenment to populate it. (Although the
-latter *can* work with CC too, as demonstrated by e.g. ptp_kvm).
+Please, no 'inline' in \.c files
 
+> +{
+> +	unsigned __int128 res = (unsigned __int128)delta * period;
+> +
+> +	res >>= shift;
+> +	res += frac_sec;
+> +	*res_hi = res >> 64;
+> +	return (uint64_t)res;
+> +}
+> +
+> +static inline bool tai_adjust(struct vmclock_abi *clk, uint64_t *sec)
+> +{
 
---=-mX6aQ5w+mkWSt01+2kjl
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+Same here
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI1MTAwMDE1WjAvBgkqhkiG9w0BCQQxIgQg/Pogwdsa
-I+AQajbR9tZnIybvrBv8lF3CXljBfY6eI/Iwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCid0KlEQXamGekc2GM0NJgSFRwlq2qjHFH
-o4c+2XpvTu1xoWlWFdIDo6e3RWD12fNQx7bt7mPFN93Ec1n8lXKA2Rbw51rJUa7PuDgD3cnYXfao
-9jOiVEmp7aQEJ/aa6eo09TycflIlpqqhIbBVx0ivC2OuxXlVxcRHM+RLAosNVGx1tgwDlx7vhY0P
-bUbckZS29YIdJsLlplbW+wTXdTXdhOyw9mti5DMLBCcWQaQpOMvt6hEl/D7Snv83H5z6Vn/ySWE2
-/q5qmkjUAEuUURhr800RlfY+z+eOt5IEn0HQ5aMlDEn+NXZ6BoLFQEQl8C6/lp4feSzYJt4gGsEq
-2eDtBULUphKM3FtHaluhOffhXYPOZMoSorPDKhj6moeyKyOctEMl9st/jdciQ43SQj2tDhdrBEFk
-vqYWe1+Qyi19+p8JbjEBCqN0uxYrIP2skh5x+RE4p1GJ5mwdlaUxMZPQ1ZKGPNof8y2AkdcvtLUJ
-C2Ix41CPJ0Y7rN3VLwyHdgv7I7Q6VYBWfhVXlZmfPq+WRrdvZlYikkUdTRxTOeszYTXcNjjNdeig
-pGUBswjEaOAmOJ7Nnd3EJzRLZYf2Fq1CjpujyfQeajjXl4sf+f7GOv+GJMAfll7SK5odZ/iGyWaH
-aIMAsyOP7Nq3r68A6uiLdDNiCogpZ6WRbQltOetiGwAAAAAAAA==
+> +	if (likely(clk->time_type == VMCLOCK_TIME_UTC))
+> +		return true;
+> +
+> +	if (clk->time_type == VMCLOCK_TIME_TAI &&
+> +	    (clk->flags & VMCLOCK_FLAG_TAI_OFFSET_VALID)) {
+> +		if (sec)
+> +			*sec += clk->tai_offset_sec;
+> +		return true;
+> +	}
+> +	return false;
+> +}
+> +
+> +static int vmclock_get_crosststamp(struct vmclock_state *st,
+> +				   struct ptp_system_timestamp *sts,
+> +				   struct system_counterval_t *system_counter,
+> +				   struct timespec64 *tspec)
+> +{
+> +	ktime_t deadline = ktime_add(ktime_get(), VMCLOCK_MAX_WAIT);
+> +	struct system_time_snapshot systime_snapshot;
+> +	uint64_t cycle, delta, seq, frac_sec;
+> +
+> +#ifdef CONFIG_X86
+> +	/*
+> +	 * We'd expect the hypervisor to know this and to report the clock
+> +	 * status as VMCLOCK_STATUS_UNRELIABLE. But be paranoid.
+> +	 */
+> +	if (check_tsc_unstable())
+> +		return -EINVAL;
+> +#endif
+> +
+> +	while (1) {
+> +		seq = st->clk->seq_count & ~1ULL;
+> +		virt_rmb();
 
+Please document which other barrier pair witht this one
 
---=-mX6aQ5w+mkWSt01+2kjl--
+> +
+> +		if (st->clk->clock_status == VMCLOCK_STATUS_UNRELIABLE)
+> +			return -EINVAL;
+> +
+> +		/*
+> +		 * When invoked for gettimex64(), fill in the pre/post system
+> +		 * times. The simple case is when system time is based on the
+> +		 * same counter as st->cs_id, in which case all three times
+> +		 * will be derived from the *same* counter value.
+> +		 *
+> +		 * If the system isn't using the same counter, then the value
+> +		 * from ktime_get_snapshot() will still be used as pre_ts, and
+> +		 * ptp_read_system_postts() is called to populate postts after
+> +		 * calling get_cycles().
+> +		 *
+> +		 * The conversion to timespec64 happens further down, outside
+> +		 * the seq_count loop.
+> +		 */
+> +		if (sts) {
+> +			ktime_get_snapshot(&systime_snapshot);
+> +			if (systime_snapshot.cs_id == st->cs_id) {
+> +				cycle = systime_snapshot.cycles;
+> +			} else {
+> +				cycle = get_cycles();
+> +				ptp_read_system_postts(sts);
+> +			}
+> +		} else
+> +			cycle = get_cycles();
+
+Please use the brackets even for the else case
+
+[...]
+> +static int ptp_vmclock_get_time_fn(ktime_t *device_time,
+> +				   struct system_counterval_t *system_counter,
+> +				   void *ctx)
+> +{
+> +	struct vmclock_state *st = ctx;
+> +	struct timespec64 tspec;
+> +	int ret;
+> +
+> +#ifdef SUPPORT_KVMCLOCK
+> +	if (READ_ONCE(st->sys_cs_id) == CSID_X86_KVM_CLK)
+> +		ret = vmclock_get_crosststamp_kvmclock(st, NULL, system_counter,
+> +						       &tspec);
+> +	else
+> +#endif
+> +		ret = vmclock_get_crosststamp(st, NULL, system_counter, &tspec);
+> +
+> +	if (!ret)
+> +		*device_time = timespec64_to_ktime(tspec);
+> +
+> +	return ret;
+> +}
+> +
+> +
+
+Please, don't add 2 consecutive blank lines.
+
+Cheers,
+
+Paolo
+
 
