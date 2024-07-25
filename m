@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-1578-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1579-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C84093BF7A
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 11:56:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9305093BF8D
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 12:00:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FD0A1C212E6
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 09:56:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FF852810EF
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Jul 2024 10:00:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3596A19885B;
-	Thu, 25 Jul 2024 09:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35B1172BAC;
+	Thu, 25 Jul 2024 10:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="G37yyxeg"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bpJALwyM"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86973197A77;
-	Thu, 25 Jul 2024 09:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AA31386C0;
+	Thu, 25 Jul 2024 10:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721901387; cv=none; b=AMPW9rS8Vf2QnfeTkr69a9cyYjHi0k/MCeq1+dJWt+H98l6O9GNPNPYbMhnyMNDyL/sqnP5H7AHNfBNmOwCUZyw9J+kGxfHSiSoObBRLBJiqB8A2WtQZdJWJ+E0qtL0zU3KAfkXcpemyKPNif6l848cXC0H+PifVQlgXob/vZV8=
+	t=1721901622; cv=none; b=CdnqiuDfox65DLuTGo2ieBZXgmLnCiixZLmUM0ywIo0GZ/+hQOksYbWuWG7v1r5SNYSkIboubfEWUZkxdJJnuJmxrEL8p/dVlenr+528GRjstEXG3tjVV7fnXe+hkX5mjtcZEG+6ETk7NWnP1ZM7vouBkWpA5rzfofEC0t3dOes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721901387; c=relaxed/simple;
-	bh=NoHdoUNeLmfHI5iwlppoWV2frr16ZLxf2s8E8Afs+u8=;
+	s=arc-20240116; t=1721901622; c=relaxed/simple;
+	bh=/7IxyE746tB7gLFGUryPRx7FJ/Ne/kURVczteivoMWM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cGy7k1TsOesKvziFjrWCMCHcrbFQnSe0kt07dYswWMaCL5jmrsRC5IdaNLrkDNlUczPVI8PcCsgLUPIlLPeUNkU1rBiRJkj8n1tzZxt1IE0iDiAKmVrJSDoo9+1Qyeq9WrrG3ecSNDv1Rb4JLhi85DVzAcVGGNooKPiwNNNtqkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=G37yyxeg; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=j55rnWHyYXvmnKNC6wdMRMQxT39cxgQUI5EVtTEYShAfVKHi3L8RaobMHruchI0nAYlcwIqYygtzkk1D7dGlK8UiEb2H0G82lqLse22OZ+8cGjqOIEhrzj28g5Gm25MlyJ73PD5Cpz/mYlbRimfJE8jvDkKhdKiQOziKRCG6Uys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bpJALwyM; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=NoHdoUNeLmfHI5iwlppoWV2frr16ZLxf2s8E8Afs+u8=; b=G37yyxegAudRmueUo2y6ZXfpBT
-	WbK78Xl8vVglPstTZQ0vjn7VmExgtloGfXSm3A4ZMDLJ2TI2OWUoTtkW976dLqXOTdie9EfqDNn+1
-	jVsjvDEncj1nWY0/11TFKLt878zVCtClmZyZ7vYBDnUHa+5+JK1V4ZWcL7xidRj8tnZtDNcVVeKau
-	8PtZO18vh3uNcJZZJQWGtAVucFoB7ATWQjR/tZ7FzEe9UfhKNWw7oMOg0eAzvPQ2H7oCG59JbLzMY
-	KQjo+LpxwX7LIBjJxsy01o5/jrxpsMBfNivcjqIy2G723PV+wbxyAYQcLTDsDHHhyxU1r8mYlI5s0
-	13keeUKQ==;
+	bh=/7IxyE746tB7gLFGUryPRx7FJ/Ne/kURVczteivoMWM=; b=bpJALwyMZsq53PsnZIrXIlUtAQ
+	GlFdwp5W+vrYM69gwsbF83dXtsKoI0bE0jFv7hLrllcjxa4ck4U8LWqApf7YXKCr2I1P4UxKzGOHs
+	9BeC34FMYVTq6OSyWZSJBPFIAF+/C17CiQtsa9s45ATAE0Q3UDJ6qLkLirUQKfYgggP9IHkFKcVNc
+	+q/shmWUZUxxazV3QvNYl0FpJgiWxK+x1SdD0tbEi8tsroerdvsGXYVmvOMLZGIH/Te3UqFElLTj7
+	rBz5WNPr5G8HQ+nTlv8X//fAOnxHovAB9bY4v1dcPJjdVXpkhkt+orEe4114RVlECsucd8LQ0nGHV
+	DSzsy2mQ==;
 Received: from [2001:8b0:10b:5:25df:2ae1:4889:ee99] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sWvCh-00000008ltP-3FON;
-	Thu, 25 Jul 2024 09:56:07 +0000
-Message-ID: <7de7da1122e61f8c64bbaab04a35af93fafac454.camel@infradead.org>
+	id 1sWvGi-00000008mHI-1oqA;
+	Thu, 25 Jul 2024 10:00:16 +0000
+Message-ID: <ebabe603a497391a1671b44ae5579ced281b8333.camel@infradead.org>
 Subject: Re: [PATCH] ptp: Add vDSO-style vmclock support
 From: David Woodhouse <dwmw2@infradead.org>
 To: "Michael S. Tsirkin" <mst@redhat.com>
@@ -64,12 +64,12 @@ Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
  Alessandro Zummo <a.zummo@towertech.it>,  Alexandre Belloni
  <alexandre.belloni@bootlin.com>, qemu-devel <qemu-devel@nongnu.org>, Simon
  Horman <horms@kernel.org>
-Date: Thu, 25 Jul 2024 10:56:05 +0100
-In-Reply-To: <20240725012730-mutt-send-email-mst@kernel.org>
+Date: Thu, 25 Jul 2024 11:00:15 +0100
+In-Reply-To: <20240725015120-mutt-send-email-mst@kernel.org>
 References: <14d1626bc9ddae9d8ad19d3c508538d10f5a8e44.camel@infradead.org>
-	 <20240725012730-mutt-send-email-mst@kernel.org>
+	 <20240725015120-mutt-send-email-mst@kernel.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-Hh5AJCYJEgXbGuGNszvM"
+	boundary="=-mX6aQ5w+mkWSt01+2kjl"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -80,202 +80,30 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-Hh5AJCYJEgXbGuGNszvM
+--=-mX6aQ5w+mkWSt01+2kjl
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Michael, thanks for the review!
+On Thu, 2024-07-25 at 01:54 -0400, Michael S. Tsirkin wrote:
+> one other thing worth mentioning is that this design can't work
+> with confidential computing setups. By comparison, mapping e.g. a
+> range in a PCI BAR would work for these setups.
 
-On Thu, 2024-07-25 at 01:48 -0400, Michael S. Tsirkin wrote:
-> On Wed, Jul 24, 2024 at 06:16:37PM +0100, David Woodhouse wrote:
-> > From: David Woodhouse <dwmw@amazon.co.uk>
-> >=20
-> > The vmclock "device" provides a shared memory region with precision clo=
-ck
-> > information. By using shared memory, it is safe across Live Migration.
-> >=20
-> > Like the KVM PTP clock, this can convert TSC-based cross timestamps int=
-o
-> > KVM clock values. Unlike the KVM PTP clock, it does so only when such i=
-s
-> > actually helpful.
-> >=20
-> > The memory region of the device is also exposed to userspace so it can =
-be
-> > read or memory mapped by application which need reliable notification o=
-f
-> > clock disruptions.
-> >=20
-> > Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> > ---
-> > QEMU implementation at
-> > https://git.infradead.org/users/dwmw2/qemu.git/shortlog/refs/heads/vmcl=
-ock
-> >=20
-> > Although the ACPI device implemented in QEMU (and some other
-> > hypervisor) stands alone, most of the fields and values herein are
-> > aligned as much as possible with the nascent virtio-rtc specification,
-> > with the intent that a version of the same structure can be
-> > incorporated into that standard.
->=20
-> Do you want to just help complete virtio-rtc then? Would be easier than
-> trying to keep two specs in sync.
+Why so? This is just like mapping a PCI BAR, isn't it? It's cacheable
+MMIO space, *not* part of the encrypted guest RAM ranges. It just
+happens to be discovered through the _CRS of an ACPI device, not the
+BAR of a PCI device.
 
-The ACPI version is much more lightweight and doesn't take up a
-valuable PCI slot#. (I know, you can do virtio without PCI but that's
-complex in other ways).
+> Is there a reason this functionality is not interesting for
+> confidential VMs?
 
-So I do see these existing in parallel, and I'm happy for the VMCLOCK
-device to defer to the shared memory structure in the virtio-rtc
-specification once that's final.
-
-I've done my best to ensure we have a fair chance of it being adopted
-as-is, and it's versioned so if virtio-rtc gets published with v2 of
-the structure, that's also OK.
->=20
-
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (st->clk->magic !=3D VMCL=
-OCK_MAGIC ||
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 st->clk->=
-size < sizeof(*st->clk) ||
->=20
->=20
-> This is a problem and what I mention below.
-> As structure will evolve, sizeof(*st->clk) will grow,
-> then it will fail on old hosts.
-
-Potentially, yes. At the time a guest starts to support a larger
-version of the struct, it would need to check for the size of the v1
-structure.
-
-We certainly *allow* for the structure to evolve, but as you say this
-is ABI. So we've tried to plan ahead and avoid having to change it
-unless something *really* surprising happens in the field of leap
-seconds.
+It is. In fact, that was one of the reasons for doing it as mappable
+MMIO space, instead of having the guest allocate a portion of its own
+RAM and invoke a hypervisor enlightenment to populate it. (Although the
+latter *can* work with CC too, as demonstrated by e.g. ptp_kvm).
 
 
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* If the structure is big e=
-nough, it can be mapped to userspace */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (st->clk->size >=3D PAGE_=
-SIZE) {
->=20
-> This is also part of ABI. And a problematic one since linux can
-> increase PAGE_SIZE at any time for its own reasons.
-
-Yes. For it to be mapped to userspace, the hypervisor has to put it
-into a memory region which is large enough for the page granularity
-that the guest happens to use.
-
-The hypervisor implementations so far (for x86 in QEMU since there
-seems to be no ACPI support for Arm?, and for x86+Arm in my other pet
-hypervisor) expose a 4KiB region.
-
-So if the guest uses larger pages (and can't cope with using 4KiB PTEs
-for MMIO mappings), then it can't use this feature unless the
-hypervisor gives it a larger region. I think that's OK.
-
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0st->miscdev.minor =3D MISC_DYNAMIC_MINOR;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0st->miscdev.fops =3D &vmclock_miscdev_fops;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0st->miscdev.name =3D st->name;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ret =3D misc_register(&st->miscdev);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (ret)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto o=
-ut;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
->=20
-> Hmm so you want to map a page to userspace, but who will
-> keep the clock in that memory page up to date?
-> Making hypervisor do it will mean stealing a bunch
-> of hypervisor time and we don't *know* userspace is
-> going to use it.
-
-I think it should scale OK. The bulk of the actual *calculations* are
-done only once by the hypervisor on an NTP skew adjustment anyway,
-rather than per-VM. That gives the period of the actual host counter,
-and the reference time.
-
-Where TSC scaling *isn't* occurring, all that the VMM needs to do is
-copy that information, applying the appropriate TSC offset. I think it
-should be mostly in the noise compared with other VMM overhead?
-
-Where TSC scaling is in use, it's a little more complex. The counter
-value at the reference time needs to be converted using the standard
-mul-and-shift TSC scaling method. But the counter *period* needs to
-undergo the reverse conversion. That would be a bit more work if done
-na=C3=AFvely with a right shift and then a *division*, but an appropriate
-efficient conversion to match the frequency scaling could be
-precalculated, much as KVM already does in kvm_get_time_scale()? Then
-the conversion of the counter period could just be a mul and shift too.
-
-If it's just the TSC scaling which pushes it over the edge, then
-*maybe* we could add the raw host=E2=86=92guest TSC scaling information to =
-the
-structure and make it the guest's problem? I'm not sure I'm overly fond
-of that approach.
-
-(You mention feature negotiation later, so we'll come back to that...)
-
-> > +static const struct acpi_device_id vmclock_acpi_ids[] =3D {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ "VMCLOCK", 0 },
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{}
-> > +};
-> > +MODULE_DEVICE_TABLE(acpi, vmclock_acpi_ids);
->=20
-> This is also part of ABI.
-> How do we know no one in the world happens to have a CID like this?
-> We should just reserve a valid HID, I think.
-
-Ack. This was largely just based on the existing VMGENID code. Can I
-assign a QEMUxxxx HID for it?
-
-> > +struct vmclock_abi {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* CONSTANT FIELDS */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0uint32_t magic;
-> > +#define VMCLOCK_MAGIC=C2=A0=C2=A00x4b4c4356 /* "VCLK" */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0uint32_t size;=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Size of region containin=
-g this structure */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0uint16_t version;=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* 1 */
->=20
-> I think we need to document how will compatibility be handled,
-> otherwise people will just go
-> (assert(size =3D=3D sizeof(struct vmclock_abi))
-> and we can't extend it ever.
-
-As you noted, the existing guest code only checks for it being large
-*enough*. I've let this "specification" be implementation-led for the
-time being, as I'm planning for Peter to accept it into the virtio-rtc
-spec and for *that* to be the formal definition, where such admonitions
-would reside.=20
-
-> I also feel some kind of negotiation so host can detect guest
-> expectations would be a good idea, basically a la virtio feature
-> negotiation.
->=20
-> Also, I think it's not great that host is just expected to
-> poke at this memory at all times. Being able to know that e.g.
-> system is being shut down and so no need to poke
-> at memory would be good.
-
-Fair enough. I think that when used in virtio-rtc, doing it through
-feature negotiation is probably the right answer?
-
-For the ACPI device, perhaps we can just add an ACPI method to
-enable/disable the timekeeping (the disruption signal can always be
-operational).
-
-
---=-Hh5AJCYJEgXbGuGNszvM
+--=-mX6aQ5w+mkWSt01+2kjl
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -367,25 +195,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI1MDk1NjA1WjAvBgkqhkiG9w0BCQQxIgQgJctIkNkm
-+V4R2hSCHZrJtXI51BoiKnAP69cBtgsFW08wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI1MTAwMDE1WjAvBgkqhkiG9w0BCQQxIgQg/Pogwdsa
+I+AQajbR9tZnIybvrBv8lF3CXljBfY6eI/Iwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgB6sZLebi3i3k3Fv1IcDx6pBo7R4pt+LUCb
-6Mdx90Afjqat7bM5OoycqvlBhSgmdIqredfrHLtyLhkswlrWjnR58XWOJgBL/euT6R9IsQB2bJHP
-uVWu5vtZOn3kYjvDX2W7JERgwdZ8dDRTbjuI6r5V1lkTOw2tg0wCxtDZgoD4uPLxsw0GkkEWEsgT
-orqa+C9kwKgzwUm97BQFyLO7F1zjo9BR2MPCFLeGuNkLtHg/JYOW1UIGIJ+m1chazpP26xSfe2Us
-496slGAe+6incFZz14vHJwazfPImJ20tNumd1jHihmTt2lLeHcpme8A9IjwI1QXTDNA2vcpMGA+0
-/jjDc5aLJsyGESvZnyO8MAMkLHSwHGU3Hhs6JCrOc4IAbO5BmoPq0me7eyjDhY1lworePKLZV4pY
-Q/lpQFLJX4x4A0DC0tp0a1SDN3cBn2/P0rA5ZNb7E40qd4nNo6F2d7sZLbJ3JpOjdYth3QmonTJ6
-0ZShE3A1f/I7bgfH+C/E9xl1FrPY/yTRGcoZKeEu6Zg6xONpd9KqhrK6VNCK5TTsNK2bxqSUA3tQ
-Wforp95dmnm4Bd+jSgNLVlMueh2JG2J7ha/nca2YTP3ZM7T02op+Zc6Hd4PCIZHx3l8uaF0k1B6o
-eOiCuSdM2WUEn/wxKRBSCkLah8d7JHpIJ+fB8O9IwQAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCid0KlEQXamGekc2GM0NJgSFRwlq2qjHFH
+o4c+2XpvTu1xoWlWFdIDo6e3RWD12fNQx7bt7mPFN93Ec1n8lXKA2Rbw51rJUa7PuDgD3cnYXfao
+9jOiVEmp7aQEJ/aa6eo09TycflIlpqqhIbBVx0ivC2OuxXlVxcRHM+RLAosNVGx1tgwDlx7vhY0P
+bUbckZS29YIdJsLlplbW+wTXdTXdhOyw9mti5DMLBCcWQaQpOMvt6hEl/D7Snv83H5z6Vn/ySWE2
+/q5qmkjUAEuUURhr800RlfY+z+eOt5IEn0HQ5aMlDEn+NXZ6BoLFQEQl8C6/lp4feSzYJt4gGsEq
+2eDtBULUphKM3FtHaluhOffhXYPOZMoSorPDKhj6moeyKyOctEMl9st/jdciQ43SQj2tDhdrBEFk
+vqYWe1+Qyi19+p8JbjEBCqN0uxYrIP2skh5x+RE4p1GJ5mwdlaUxMZPQ1ZKGPNof8y2AkdcvtLUJ
+C2Ix41CPJ0Y7rN3VLwyHdgv7I7Q6VYBWfhVXlZmfPq+WRrdvZlYikkUdTRxTOeszYTXcNjjNdeig
+pGUBswjEaOAmOJ7Nnd3EJzRLZYf2Fq1CjpujyfQeajjXl4sf+f7GOv+GJMAfll7SK5odZ/iGyWaH
+aIMAsyOP7Nq3r68A6uiLdDNiCogpZ6WRbQltOetiGwAAAAAAAA==
 
 
---=-Hh5AJCYJEgXbGuGNszvM--
+--=-mX6aQ5w+mkWSt01+2kjl--
 
