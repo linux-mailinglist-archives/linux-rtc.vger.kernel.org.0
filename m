@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-1605-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1606-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE16793CF44
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jul 2024 10:06:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52DC393CFAB
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jul 2024 10:36:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AFF11F22B54
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jul 2024 08:06:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4147284365
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jul 2024 08:36:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A89DE176AAE;
-	Fri, 26 Jul 2024 08:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80CF3176ABB;
+	Fri, 26 Jul 2024 08:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="md7sEusU"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OC5FGgAh"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC46524B4;
-	Fri, 26 Jul 2024 08:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC3536D;
+	Fri, 26 Jul 2024 08:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721981201; cv=none; b=sqR26VHnUBFRLMN701GxGQi5XLo0osipl4ctzctgO9OgCWf9NuT6AsXREOwfas7nAes64Up5ai2/r9ijz2tSEFHvrUnFDBqZmpbT9t5hDVWYMe96z5oiEQU0C22LMeanis/SNhov+D5VWgzVxoYgu7kM66xQmaos08mlyUNSXq0=
+	t=1721982968; cv=none; b=emS6M0+yQ9vmbVtvPE/sPc5bZU/YrlJ3fwK8Y6lW5bRSTcZmCjpG4YeE9oxAhN4OumzrX2VdfRctyjQpNf092nh6J2ZU774bjKkqxrs7g2MOtGrT3TrfQr1YF17c2DoZxQFxryC1AeMuUHUb+dbfM54S+GX8P9X+8UPgdXrJkPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721981201; c=relaxed/simple;
-	bh=qfdQz5tgAeoXIsg582eeHawCk4Yz9pI+3nthNoq1W88=;
+	s=arc-20240116; t=1721982968; c=relaxed/simple;
+	bh=85cBYllamqTcXCiv+VunlSklHkzoOhwmSgejCU8bFos=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IxSKkFp3IaXqm8J8/VlAku5MWHhO0Tbqo6V37ETXLFSB0Vz3Ev3ieIQkNmud5kEMVy0GnkVdHTUzXSw89Na92+XEOzqOrzvUfaU32ArQlj/R3HFCmXCqYCWJ/2VEkWC7JTWIWz6lcfZxecxZjDnjQzaC4Ejuo5q7jGDCTi45SLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=md7sEusU; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=nmxSv0WpftrIsQqQZR05k0APXFP4MraMcvl3+zQN0emsrqSlKYUSWm0jczPMsHZn0jUv3m78SX7ibFrdFQVTsSKYm1sN6JvFK7ZSJx5lStL1YcU6jcunR3IH/ar/wnmtFdF/FhMV1+MNE7bTRazWgo2Lknf16v+zNL0kDwf19ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OC5FGgAh; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=qfdQz5tgAeoXIsg582eeHawCk4Yz9pI+3nthNoq1W88=; b=md7sEusUC5kbxf4ny+jloNSQdK
-	iAJWp2XTOAObMa4o8YcrDSK+8hIvT9hpW7jKt0MUAusuAuQdh6rwwprS+iF2gEE5kve9r2f/k/Pyu
-	FNQn4/xhn6HKycd4WzurOYwEAd8CleUNrScK7rRRqWkdc/0twIWmu4PIwIT58Zb+JIwixtejRfDJP
-	mPKWEjpphWTWUgqXakOYNhmPv0HUz+HfDukwEekGJ8R86amjNMN7Un7LXYLsepOR/F93t/A5b5Mvo
-	ZNZhivPjBTuIn0cMqXqJpdzVA7shGapFipHhFUi15GC8avSxeNbonSC4elIBjVdMbfGo+SUiKm/+C
-	tGyy4wJg==;
-Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.ant.amazon.com)
+	bh=85cBYllamqTcXCiv+VunlSklHkzoOhwmSgejCU8bFos=; b=OC5FGgAh1/cxek/X7NakiZIqAo
+	xDlsHzR1Q0p5fjrfznrZnxYkxjHcEKQkKcr+vu0GePoKDy9zZAtUDtSd47jw/uo47/kU67hO75p/Z
+	d0Jz6sa0Xy7XDe4Rm4IfbxW0/alnyiinHMsQ8vW7ZR114wTcQQ2XUN9cq15ySh3gy5kR1BncnxWV/
+	KnHFjV59Ipsjk7PMllp6bVEIgB/eN0EKBlcP5HyajPuPyzc9NFQ/ErJ7hbMYpqivSCKqrXY6HRBhu
+	MAtJVaH12GrLoQNAJhuaMnj9Nx1wf5QOjEDgtwpkeljgY0g5gfYyL/Z15vD1sBMQzF/T8s6ljviNZ
+	4QhZ8zQg==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sXFyA-00000009xRm-2dk6;
-	Fri, 26 Jul 2024 08:06:30 +0000
-Message-ID: <f2e85f8f568f8a21b2178e59d8387d7a52a843bd.camel@infradead.org>
+	id 1sXGQZ-00000009z63-3mUd;
+	Fri, 26 Jul 2024 08:35:52 +0000
+Message-ID: <2e427b102d8fd899a9a3db2ec17a628beb24bc01.camel@infradead.org>
 Subject: Re: [PATCH] ptp: Add vDSO-style vmclock support
 From: David Woodhouse <dwmw2@infradead.org>
 To: "Michael S. Tsirkin" <mst@redhat.com>
@@ -64,10 +64,9 @@ Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
  Alessandro Zummo <a.zummo@towertech.it>,  Alexandre Belloni
  <alexandre.belloni@bootlin.com>, qemu-devel <qemu-devel@nongnu.org>, Simon
  Horman <horms@kernel.org>
-Date: Fri, 26 Jul 2024 09:06:29 +0100
-In-Reply-To: <20240726012933-mutt-send-email-mst@kernel.org>
-References: <98813a70f6d3377d3a9d502fd175be97334fcc87.camel@infradead.org>
-	 <20240725100351-mutt-send-email-mst@kernel.org>
+Date: Fri, 26 Jul 2024 09:35:51 +0100
+In-Reply-To: <20240726015613-mutt-send-email-mst@kernel.org>
+References: <20240725100351-mutt-send-email-mst@kernel.org>
 	 <2a27205bfc61e19355d360f428a98e2338ff68c3.camel@infradead.org>
 	 <20240725122603-mutt-send-email-mst@kernel.org>
 	 <0959390cad71b451dc19e5f9396d3f4fdb8fd46f.camel@infradead.org>
@@ -75,10 +74,11 @@ References: <98813a70f6d3377d3a9d502fd175be97334fcc87.camel@infradead.org>
 	 <d62925d94a28b4f8e07d14c1639023f3b78b0769.camel@infradead.org>
 	 <20240725170328-mutt-send-email-mst@kernel.org>
 	 <c5a48c032a2788ecd98bbcec71f6f3fb0fb65e8c.camel@infradead.org>
-	 <20240726010511-mutt-send-email-mst@kernel.org>
-	 <20240726012933-mutt-send-email-mst@kernel.org>
+	 <20240725174327-mutt-send-email-mst@kernel.org>
+	 <9261e393083bcd151a017a5af3345a1364b3e0f3.camel@infradead.org>
+	 <20240726015613-mutt-send-email-mst@kernel.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-5QFMrEWP7li55HicbeTs"
+	boundary="=-+mguHz5HxDPwbduP8QmY"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -89,177 +89,75 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-5QFMrEWP7li55HicbeTs
+--=-+mguHz5HxDPwbduP8QmY
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-07-26 at 01:55 -0400, Michael S. Tsirkin wrote:
-> On Fri, Jul 26, 2024 at 01:09:24AM -0400, Michael S. Tsirkin wrote:
-> > On Thu, Jul 25, 2024 at 10:29:18PM +0100, David Woodhouse wrote:
-> > > > > > Then can't we fix it by interrupting all CPUs right after LM?
-> > > > > >=20
-> > > > > > To me that seems like a cleaner approach - we then compartmenta=
-lize
-> > > > > > the ABI issue - kernel has its own ABI against userspace,
-> > > > > > devices have their own ABI against kernel.
-> > > > > > It'd mean we need a way to detect that interrupt was sent,
-> > > > > > maybe yet another counter inside that structure.
-> > > > > >=20
-> > > > > > WDYT?
-> > > > > >=20
-> > > > > > By the way the same idea would work for snapshots -
-> > > > > > some people wanted to expose that info to userspace, too.
-> > >=20
-> > > Those people included me. I wanted to interrupt all the vCPUs, even t=
-he
-> > > ones which were in userspace at the moment of migration, and have the
-> > > kernel deal with passing it on to userspace via a different ABI.
-> > >=20
-> > > It ends up being complex and intricate, and requiring a lot of new
-> > > kernel and userspace support. I gave up on it in the end for snapshot=
-s,
-> > > and didn't go there again for this.
-> >=20
-> > Maybe become you insist on using ACPI?
-> > I see a fairly simple way to do it. For example, with virtio:
-> >=20
-> > one vq per CPU, with a single outstanding buffer,
-> > callback copies from the buffer into the userspace
-> > visible memory.
-> >=20
-> > Want me to show you the code?
+On Fri, 2024-07-26 at 02:06 -0400, Michael S. Tsirkin wrote:
+> On Thu, Jul 25, 2024 at 11:20:56PM +0100, David Woodhouse wrote:
+> > We're rolling out the AMZNVCLK device for internal use cases, and plan
+> > to add it in public instances some time later.
 >=20
-> Couldn't resist, so I wrote a bit of this code.
-> Fundamentally, we keep a copy of the hypervisor abi
-> in the device:
+> Let's be real. If amazon does something in its own hypervisor, and the
+> only way to use that is to expose the interface to userspace, there is
+> very little the linux community can do.=C2=A0 Moreover, userspace will be
+> written to this ABI, and be locked in to the specific hypervisor. It
+> might be a win for amazon short term but long term you will want to
+> extend things and it will be a mess.
 >=20
-> struct virtclk_info *vci {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct vmclock_abi abi;
-> };
->=20
-> each vq will has its own copy:
->=20
-> struct virtqueue_info {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct scatterlist sg[];
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct vmclock_abi abi;
-> }
->=20
-> we add it during probe:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sg_init_one(vqi->sg, &vqi->abi=
-, sizeof(vqi->abi));
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0virtqueue_add_inbuf(vq,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vqi->sg,=
- 1,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &vq->vab=
-i,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 GFP_ATOM=
-IC);
->=20
->=20
->=20
-> We set the affinity for each vq:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < num_online_cpus();=
- i++)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 virtqueue_set_affinity(vi->vq[i], i);
->=20
-> (virtio net does it, and it handles cpu hotplug as well)
->=20
-> each vq callback would do:
->=20
-> static void vmclock_cb(struct virtqueue *vq)
-> {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct virtclk_info *vci =3D v=
-q->vdev->priv;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct virtqueue_info *vqi =3D=
- vq->priv;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void *buf;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int len;
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0buf =3D virtqueue_get_buf=
-(vq, &len);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!buf)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return;
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BUG_ON(buf !=3D &vq->abi)=
-;
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_lock(vci->lock);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (memcmp(&vci->abi, &vq=
-i->abi, sizeof(vqi->abi))) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0memcpy(&vci->abi, &vqi->abi, sizeof(vqi->abi));
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Update the userspace v=
-isible structure now */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.....
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Re-add the buffer */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0virtqueue_add_inbuf(vq,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vqi->sg,=
- 1,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &vqi->ab=
-i,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 GFP_ATOM=
-IC);
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_unlock(vi->lock);
-> }
->=20
-> That's it!
-> Where's the problem here?
+> So I feel you have chosen ACPI badly.=C2=A0 It just does not have the API=
+s
+> that you need. Virtio does, and would not create a userpspace lock-in
+> to a specific hypervisor. It's not really virtio specific either,
+> you can write a bare pci device with a BAR and a bunch of msix
+> vectors and it will get you the same effect.
 
-That's great. You don't even need it to be per-vCPU if you let the
-hypervisor write directly to the single physical location that's mapped
-to userspace. It can do that before it even starts *running* the vCPUs
-after migration. It's a whole lot simpler.=20
+I *am* as bad as the next person for taking the "I have a hammer,
+therefore everything is a nail" approach. For you that hammer is
+virtio, and I respect that. But mine isn't ACPI =E2=80=94 quite the opposit=
+e,
+it's DT.
 
-Even if we were to insist one having two *different* ABIs, one for
-hypervisor=E2=86=90=E2=86=92guest kernel, and another for kernel=E2=86=90=
-=E2=86=92userspace, then you
-still only need the hypervisor to write one copy. It's just that you do
-need to interrupt to all the other vCPUs to ensure they aren't running
-userspace before the data are updated. So yes, we can do the above and
-(ab)use gratuitous data transfers to trigger those IRQs, and then the
-handler has some kind of locking to ensure that we can't reenter
-userspace until the user-visible structure is updated?=C2=A0
+I *hate* ACPI. I hate everything about it. I hate that Arm started
+using it for Arm64 instead of going with Device Tree.
 
-Obviously the "interrupt all CPUs" doesn't work well for hardware
-implementations but those won't have to deal with live migration, so
-that's OK. A hypothetical hardware implementation would map something
-like the ART to reference time. Obviously there's no LM but are they
-any other causes of 'disruption' in the same sense? Not that I can
-think of.
+That's why we have the DSM method for obtaining properties, and the
+PRP0001 ACPI HID which means "look for the compatible property and
+treat it like a DT node". So people can make DT bindings and hey, if
+you're on a system which is afflicted with ACPI, you can still use
+them. Which I'm still proselytising today, as you saw.
 
-But I don't think we actually do want to have separate ABIs for
-hypervisor-kernel and kernel-user. The ABI we have in the structure is
-just fine, and extensible. And having the hypervisor update it directly
-is fine. It means that applications can use it with a *simple*
-externally buildable kernel driver, which is easy to persuade OSVs to
-add to their product kernels.=20
+But for this use case, we only need a memory region that the hypervisor
+can update. We don't need any of that complexity of gratuitously
+interrupting all the vCPUs just to ensure that none of them can be
+running userspace while one of them does an update for itself,
+potentially translating from one ABI to another. The hypervisor can
+just update the user-visible memory in place.
 
-If Linux wants to adopt it and map it directly into the vDSO area and
-use it from vDSO functions, that *great*, and still entirely possible.
-But there's no need for us to take a dependency on Linux doing that
-kind of thing before this functionality is even usable at all.
+In this case, exposing a simple MMIO memory region in _CRS of an ACPI
+device was the simplest and most compatible solution.=C2=A0
 
-I think something like the above could well be how we expose the
-pvclock_abi struct in virtio-rtc, and that's fine. It even fixes the
-PAGE_SIZE problem that the ACPI model has.
+Yes, we can add a virtio transport for that where the hypervisor is
+invited to DMA into (unencrypted) guest memory, and it solves the
+PAGE_SIZE problem of the trivial ACPI method. But there's still a place
+in this world for the ACPI method, and it doesn't *hurt* virtio.
 
-But I see it as just another transport, completely orthogonal to the
-actual contents of the pvclock_abi.
+The important part is the vmclock_abi structure; the transport is just
+fluff. And I do not agree that this is a lock-in to a specific
+hypervisor. I've literally rewritten the fields in the structure to
+align to what virtio-rtc does and accommodate Peter's feedback (to the
+dismay of my internal team who just wanted to stick with the initial
+straw man struct and didn't want to keep up, and haven't even engaged
+with the public threads which have been ongoing since March=C2=B9, even whe=
+n
+I've beaten them with a big stick). I've added a QEMU implementation
+too. We absolutely *don't* want this to be hypervisor-specific.
 
---=-5QFMrEWP7li55HicbeTs
+
+=C2=B9 https://lore.kernel.org/all/0e21e3e2be26acd70b5575b9932b3a911c9fe721=
+.camel@infradead.org
+
+--=-+mguHz5HxDPwbduP8QmY
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -351,25 +249,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI2MDgwNjI5WjAvBgkqhkiG9w0BCQQxIgQgJ/MmCgD4
-yDtaaOKjHzJo/wvCN9RVspnt8d8aLreyleswgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI2MDgzNTUxWjAvBgkqhkiG9w0BCQQxIgQg3LqxtPMj
+7Kg9FXGFhONF3RhHk4KoFU0a1eGT0iWl4nUwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCmHgSulN05l2P2RHOV2uZvOFI1IbIMtQkz
-0cVdne6JxXz4RiGNAeaMTV19Ftt/dS8JkyXRqXaQWWG/lcu+PivJGGG7LtKT/lzzydZzdUXp3PDi
-9xgYttUJ+4S0f1hDlguE2y5rQbU6JBsvDAa1E7XhbRRZC7KLh+1iulAMMVvqEyUjV2+EKqGXzERd
-W9tD1lslmD6pisvxb40Dj125VKdBEH8lNAY9xuNKNlfV2AudSGyYGGMuKRO7rzIo4qwN5VqisMNq
-XJq5lhyo2wURJxBlVCNgMH9ufgWwqZDivsG5nB4T4WpymfFtb51WkkzPb3o3/0D9KJ/MLbUxETck
-zpc5pYUbR9QQ/xKlqZ4cJHBOo7bgnu/qwVFY0XklPXZGO1qrrNfj78+LsIyvvzF8JygPh7xnL90h
-79JsZMG3xBxWWcbVTeVAsXOFKLOfaZSCYQdR7a2uTRXGdIIkdctz/uqKqz7V08e3+umajS72n2uc
-KxizZFwS/X1HDMR4ojeC61sQNgJFBYyhI3ou+d6mXgc9zhPSO0nVczuvirjJQUSFnHiT105k551+
-3SeUCrBWfXmgb9gLqpZDHNUM6fWvQzHIPVRR0CDEqzkWwON7KTQLJ7M8Fpgn6mqpcy7/AgWl6L/K
-zpnHB6Ev1/6K5OHZdwkUsV6Rnd4aevrPVoWxOhOsfAAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCg9WkLyHpW1e4jcaL8f9F4323Nvcp7Yef1
+CL04c3K3W7N7OvwvpJctZW+3A5bTj7PU+n7fl2SODTb1gRsnrBpxdSYlAp43f56+K0FIagU9c3Nh
+RDLlttB6KG7pg762h25ptT4uxEXFdwtOqfbOVA5AhMd1S3+rbv5P1gfbw7yDKu+BVOKcMThmrQ21
+76mBaybY0yMohFLk/eviveWBFwJDiFjJl2brjgLyysCCjj1fUpdi+KD4R2oB2NeTgmUhLxHjGBEf
+YNqvmhm+a0vLHo0X2II3DCiJul+hl1hmfHOoGV0FAZL3WlqVkbtXlNvvrYL4v3e4YlZT02tT5Y/p
+2OISR3a2YTKjJqa1u+j+hxcHQ+V8sWhBka50Y+kEaSf6WzkSkId8W9DucCbgT/N2JBNm4u1S0Uu5
+tmmm1WU/fUZLEe8T9l29PP2rfFDPamJJ/ELEf3Qfj0jPuxV01gynFw4+/CLkeTCAMSFfEnu9sQew
+58z46NNIqqX9HZJfyYqK6atr6jGSs1AEgO9W+Wny8AQoT9r3RZSSSWJV3t2znP+qmmzCOZ2/lLxa
+EP6Pur6kJCvFomAKpbDICQDeuY7cV/0NepipskO9MTz2OVnMndvDSRmjyHf2XlJqwnImGgZw0UcZ
+vNOAttMe3aScpNz14A/l5WepsEFyFqF0LV84v4AlrwAAAAAAAA==
 
 
---=-5QFMrEWP7li55HicbeTs--
+--=-+mguHz5HxDPwbduP8QmY--
 
