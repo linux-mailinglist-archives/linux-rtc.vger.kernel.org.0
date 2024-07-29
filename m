@@ -1,240 +1,209 @@
-Return-Path: <linux-rtc+bounces-1633-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1634-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B6C93F985
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 17:34:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C93AF93FA6A
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 18:16:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DAFC282DD1
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 15:34:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 486FF1F2318D
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 16:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04C115A4B5;
-	Mon, 29 Jul 2024 15:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC33155CB3;
+	Mon, 29 Jul 2024 16:16:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xftx+XWX"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="i5DUlSjW"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC30B157A41
-	for <linux-rtc@vger.kernel.org>; Mon, 29 Jul 2024 15:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DDB8172D;
+	Mon, 29 Jul 2024 16:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722267231; cv=none; b=M4tef7eoX1rTbwBLZgymNILSt2rOJDTC5MG64NRX2zWwcvpFfUjGkXwP5Dt+2WbxwwExgBi1jX1dpIw/qeNUGP34iXk2Hi0Yf6xRmsp43ZXkcOHIfESHFDz5e0Pd1y8zgvoxwA+D+SbJ3ULS6az43ch6f6QpOefGYw+cdOBO7yY=
+	t=1722269785; cv=none; b=AiowrehwtMg8jDbnq7hM7vbKm1OkURegpYmIZGICh9M24ZoWHQpMQ6Dh5eqY5LCgHktY/SaVd1esjIKKKmp/HdvmTfytmgelGv+VzkqxqtJ+f7dHSeg96CLdqUHWjkB3wcbt3smPmYJzdaEW9L8/6UEeZJ7bge3Cw4m1EWcuHck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722267231; c=relaxed/simple;
-	bh=wqWUVlf7aP1OH80LKZ4ptLvsSw+/kbCzCArTFsf8Z2Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UXr52ssbDNXDCK7mw7INUBtY4DY6OcCpWMloMS8cK1e0kM+VIfGB9LXqHb2VjpIBS/+oQMvDs3giLN8SltYmrOec+dsrv8Yi7aArX3t15vhEfTBH42x8NO57YRStG1DESn9JUttuOkTcu0w2W/5ElPKSWs+6wkQLIgXEB3r9bdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Xftx+XWX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722267228;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gOdxuhlC0hKorSyQVfDMKmXgVB7ow0l5OK4sY+cYrK0=;
-	b=Xftx+XWXDBAi/79OEYEQjV+nyIaKO+S2yUDbd059r7SQz/YrjuaUprsg7P9eAHbgu9c66a
-	FuuPE0MWThNGCChuPwd/rHeXJBrUuFFBAw9wTI/zcHAH9SgK1jAKdSZ1kfyAqcfvnp4x0A
-	+4+HSjli4iWbW8JYf4K3Ohm6oGvMt94=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-633-mo791ykeOdOU_yrk0j0Tbg-1; Mon, 29 Jul 2024 11:33:45 -0400
-X-MC-Unique: mo791ykeOdOU_yrk0j0Tbg-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4280b119a74so19835895e9.3
-        for <linux-rtc@vger.kernel.org>; Mon, 29 Jul 2024 08:33:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722267225; x=1722872025;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gOdxuhlC0hKorSyQVfDMKmXgVB7ow0l5OK4sY+cYrK0=;
-        b=ZK7c1FN5Jc/ruEbsiyTBNCmTWqyaUieqMscFks5MeTW3/+/ZIdNS2xx/xczhADLFD9
-         9O08OJDvcOiA+ELUhFGPmofmCMvNrGPWIk/C4nfU1FYVLSenWDY3D0c4fWw/OSDTuh4j
-         BC0dmSFoipSrLL+XdlabboXF1bchlSu35U4XDbGArhkcuOg9DkyF18rKMCpa3ZV8SxRE
-         443cTrzL1jP6Y87ovvjd7nThf6bChRdmMqBg8LLM+mKYHiUWRnVUzvsEMwxo29RShBpy
-         kJsJYbJvSPrfleI5aLX26De/2Q26OebFvpNPQ5sL/U8DIyLuhHfOEE0+2skUuGHk2D4D
-         VeYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWguE5D2/4i5RxpkjFVgoriqcTACWl6tKSKxgrH/0ZNF0f28OpjTIVzkhIxFbTttsPZ9WHQNpLNL86fuSLj9K2nKCy1VUYDnMVh
-X-Gm-Message-State: AOJu0YxTtmPpXL8WOrJHu8VuVnfHK7v60X2pgy20QwQA2ec1ox0y4ZKY
-	pqGmktou+GsPXxVczJVxQLWmZ4SPBfo6WDoxd5XLDhUqQdT04yh2uXQq1DMyvEFceEcyzNn+Shw
-	rvO040WpOvDweaQpJued4HMHNnd5rg+ciLpC/hCa7n5aLEpaCIJ8zZEP2zw==
-X-Received: by 2002:a05:600c:3b99:b0:426:5269:9827 with SMTP id 5b1f17b1804b1-42811a94590mr60054375e9.0.1722267224672;
-        Mon, 29 Jul 2024 08:33:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH11CwyPhlrH2xJ/R5zuEwuK8l7eeYYGyXEbvzQ/zeQzSr5tEaXptiR7TnM3lG3ZWRGuUwuXg==
-X-Received: by 2002:a05:600c:3b99:b0:426:5269:9827 with SMTP id 5b1f17b1804b1-42811a94590mr60053985e9.0.1722267223937;
-        Mon, 29 Jul 2024 08:33:43 -0700 (PDT)
-Received: from redhat.com ([2a0d:6fc7:55d:98c4:742e:26be:b52d:dd54])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4281fd617desm21464125e9.35.2024.07.29.08.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 08:33:43 -0700 (PDT)
-Date: Mon, 29 Jul 2024 11:33:36 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Richard Cochran <richardcochran@gmail.com>,
-	Peter Hilber <peter.hilber@opensynergy.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	"Ridoux, Julien" <ridouxj@amazon.com>, virtio-dev@lists.linux.dev,
-	"Luu, Ryan" <rluu@amazon.com>,
-	"Chashper, David" <chashper@amazon.com>,
-	"Mohamed Abuelfotoh, Hazem" <abuehaze@amazon.com>,
-	"Christopher S . Hall" <christopher.s.hall@intel.com>,
-	Jason Wang <jasowang@redhat.com>, John Stultz <jstultz@google.com>,
-	netdev@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	qemu-devel <qemu-devel@nongnu.org>, Simon Horman <horms@kernel.org>
+	s=arc-20240116; t=1722269785; c=relaxed/simple;
+	bh=O5xu19o258Ib04orIyiSUj8L179KeCKaavNUzMnaTCk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lUU2X9ykLjCLMD+cYSg9fYsV2olj6H3KojZ5DG4zBeMJ0qmGwg5r2fwkUX8Y6u6T2NA+4L4Ae3sUZKff/Kph9w3Y2uKeARQetOBF3jBhujhGZwWHfXpEZroUuZJETpxC++j9vwQ2iVKkICDzcEoyHUdxULyOcbzdpWJvgvXuVr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=i5DUlSjW; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=O5xu19o258Ib04orIyiSUj8L179KeCKaavNUzMnaTCk=; b=i5DUlSjWGWtpIhmIGok/hhU54z
+	WFjemev1q9Q/drK1OMBqq0pgqMtMLGvd7y6Sso4Xpah7fZ0dY8ebtLzmDhpd6ubopv+74EYXkuTvC
+	iyZOYGjiYn2AhfWQCa1rcbdgSv5xuAer8UYcFDfTFT+Y+FYYGYVPXTExGV4c2tuXB/VzYXTlYK4vZ
+	gbBet/s5qziuK36X8BBUGDgnpPHDi3YUnhaZ8ZbqB756tuFEAG0BbXsMbPmIiYO+KysYmPS+WNsrH
+	IZOiZd1rD2Flw6w0krWvZGnYAdCkOi6bk84wUGQH4Ohszy54gblvOXQzZKLCpr3YczdPVmWU7mhg9
+	9wuC2OnA==;
+Received: from [2001:8b0:10b:5:4b1f:b2b1:6fd8:9dfe] (helo=u3832b3a9db3152.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sYT2i-0000000DkwQ-3gcu;
+	Mon, 29 Jul 2024 16:16:12 +0000
+Message-ID: <a471215e85b1d59f9214ce081f5ca1f2ed6a75ef.camel@infradead.org>
 Subject: Re: [PATCH v3] ptp: Add vDSO-style vmclock support
-Message-ID: <20240729113320-mutt-send-email-mst@kernel.org>
+From: David Woodhouse <dwmw2@infradead.org>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
+ <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org, 
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-rtc@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>, 
+ virtio-dev@lists.linux.dev, "Luu, Ryan" <rluu@amazon.com>, "Chashper,
+ David" <chashper@amazon.com>, "Mohamed Abuelfotoh, Hazem"
+ <abuehaze@amazon.com>,  "Christopher S . Hall"
+ <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>, John
+ Stultz <jstultz@google.com>,  netdev@vger.kernel.org, Stephen Boyd
+ <sboyd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Marc Zyngier <maz@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Alessandro Zummo <a.zummo@towertech.it>,  Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, qemu-devel <qemu-devel@nongnu.org>, Simon
+ Horman <horms@kernel.org>
+Date: Mon, 29 Jul 2024 17:16:11 +0100
+In-Reply-To: <20240729113320-mutt-send-email-mst@kernel.org>
 References: <e3164fc80e21336cbf13e24f98c9e5706afb77ab.camel@infradead.org>
+	 <20240729113320-mutt-send-email-mst@kernel.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-VwTlaoX6quXk8Rk7E7vw"
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3164fc80e21336cbf13e24f98c9e5706afb77ab.camel@infradead.org>
-
-On Mon, Jul 29, 2024 at 11:42:22AM +0100, David Woodhouse wrote:
-> +struct vmclock_abi {
-> +	/* CONSTANT FIELDS */
-> +	uint32_t magic;
-> +#define VMCLOCK_MAGIC	0x4b4c4356 /* "VCLK" */
-> +	uint32_t size;		/* Size of region containing this structure */
-> +	uint16_t version;	/* 1 */
-> +	uint8_t counter_id; /* Matches VIRTIO_RTC_COUNTER_xxx except INVALID */
-> +#define VMCLOCK_COUNTER_ARM_VCNT	0
-> +#define VMCLOCK_COUNTER_X86_TSC		1
-> +#define VMCLOCK_COUNTER_INVALID		0xff
-> +	uint8_t time_type; /* Matches VIRTIO_RTC_TYPE_xxx */
-> +#define VMCLOCK_TIME_UTC			0	/* Since 1970-01-01 00:00:00z */
-> +#define VMCLOCK_TIME_TAI			1	/* Since 1970-01-01 00:00:00z */
-> +#define VMCLOCK_TIME_MONOTONIC			2	/* Since undefined epoch */
-> +#define VMCLOCK_TIME_INVALID_SMEARED		3	/* Not supported */
-> +#define VMCLOCK_TIME_INVALID_MAYBE_SMEARED	4	/* Not supported */
-> +
-> +	/* NON-CONSTANT FIELDS PROTECTED BY SEQCOUNT LOCK */
-> +	uint32_t seq_count;	/* Low bit means an update is in progress */
-> +	/*
-> +	 * This field changes to another non-repeating value when the CPU
-> +	 * counter is disrupted, for example on live migration. This lets
-> +	 * the guest know that it should discard any calibration it has
-> +	 * performed of the counter against external sources (NTP/PTP/etc.).
-> +	 */
-> +	uint64_t disruption_marker;
-> +	uint64_t flags;
-> +	/* Indicates that the tai_offset_sec field is valid */
-> +#define VMCLOCK_FLAG_TAI_OFFSET_VALID		(1 << 0)
-> +	/*
-> +	 * Optionally used to notify guests of pending maintenance events.
-> +	 * A guest which provides latency-sensitive services may wish to
-> +	 * remove itself from service if an event is coming up. Two flags
-> +	 * indicate the approximate imminence of the event.
-> +	 */
-> +#define VMCLOCK_FLAG_DISRUPTION_SOON		(1 << 1) /* About a day */
-> +#define VMCLOCK_FLAG_DISRUPTION_IMMINENT	(1 << 2) /* About an hour */
-> +#define VMCLOCK_FLAG_PERIOD_ESTERROR_VALID	(1 << 3)
-> +#define VMCLOCK_FLAG_PERIOD_MAXERROR_VALID	(1 << 4)
-> +#define VMCLOCK_FLAG_TIME_ESTERROR_VALID	(1 << 5)
-> +#define VMCLOCK_FLAG_TIME_MAXERROR_VALID	(1 << 6)
-> +	/*
-> +	 * If the MONOTONIC flag is set then (other than leap seconds) it is
-> +	 * guaranteed that the time calculated according this structure at
-> +	 * any given moment shall never appear to be later than the time
-> +	 * calculated via the structure at any *later* moment.
-> +	 *
-> +	 * In particular, a timestamp based on a counter reading taken
-> +	 * immediately after setting the low bit of seq_count (and the
-> +	 * associated memory barrier), using the previously-valid time and
-> +	 * period fields, shall never be later than a timestamp based on
-> +	 * a counter reading taken immediately before *clearing* the low
-> +	 * bit again after the update, using the about-to-be-valid fields.
-> +	 */
-> +#define VMCLOCK_FLAG_TIME_MONOTONIC		(1 << 7)
-> +
-> +	uint8_t pad[2];
-> +	uint8_t clock_status;
-> +#define VMCLOCK_STATUS_UNKNOWN		0
-> +#define VMCLOCK_STATUS_INITIALIZING	1
-> +#define VMCLOCK_STATUS_SYNCHRONIZED	2
-> +#define VMCLOCK_STATUS_FREERUNNING	3
-> +#define VMCLOCK_STATUS_UNRELIABLE	4
-> +
-> +	/*
-> +	 * The time exposed through this device is never smeared. This field
-> +	 * corresponds to the 'subtype' field in virtio-rtc, which indicates
-> +	 * the smearing method. However in this case it provides a *hint* to
-> +	 * the guest operating system, such that *if* the guest OS wants to
-> +	 * provide its users with an alternative clock which does not follow
-> +	 * UTC, it may do so in a fashion consistent with the other systems
-> +	 * in the nearby environment.
-> +	 */
-> +	uint8_t leap_second_smearing_hint; /* Matches VIRTIO_RTC_SUBTYPE_xxx */
-> +#define VMCLOCK_SMEARING_STRICT		0
-> +#define VMCLOCK_SMEARING_NOON_LINEAR	1
-> +#define VMCLOCK_SMEARING_UTC_SLS	2
-> +	int16_t tai_offset_sec;
-> +	uint8_t leap_indicator;
-> +	/*
-> +	 * This field is based on the the VIRTIO_RTC_LEAP_xxx values as
-> +	 * defined in the current draft of virtio-rtc, but since smearing
-> +	 * cannot be used with the shared memory device, some values are
-> +	 * not used.
-> +	 *
-> +	 * The _POST_POS and _POST_NEG values allow the guest to perform
-> +	 * its own smearing during the day or so after a leap second when
-> +	 * such smearing may need to continue being applied for a leap
-> +	 * second which is now theoretically "historical".
-> +	 */
-> +#define VMCLOCK_LEAP_NONE	0x00	/* No known nearby leap second */
-> +#define VMCLOCK_LEAP_PRE_POS	0x01	/* Positive leap second at EOM */
-> +#define VMCLOCK_LEAP_PRE_NEG	0x02	/* Negative leap second at EOM */
-> +#define VMCLOCK_LEAP_POS	0x03	/* Set during 23:59:60 second */
-> +#define VMCLOCK_LEAP_POST_POS	0x04
-> +#define VMCLOCK_LEAP_POST_NEG	0x05
-> +
-> +	/* Bit shift for counter_period_frac_sec and its error rate */
-> +	uint8_t counter_period_shift;
-> +	/*
-> +	 * Paired values of counter and UTC at a given point in time.
-> +	 */
-> +	uint64_t counter_value;
-> +	/*
-> +	 * Counter period, and error margin of same. The unit of these
-> +	 * fields is 1/2^(64 + counter_period_shift) of a second.
-> +	 */
-> +	uint64_t counter_period_frac_sec;
-> +	uint64_t counter_period_esterror_rate_frac_sec;
-> +	uint64_t counter_period_maxerror_rate_frac_sec;
-> +
-> +	/*
-> +	 * Time according to time_type field above.
-> +	 */
-> +	uint64_t time_sec;		/* Seconds since time_type epoch */
-> +	uint64_t time_frac_sec;		/* Units of 1/2^64 of a second */
-> +	uint64_t time_esterror_nanosec;
-> +	uint64_t time_maxerror_nanosec;
-> +};
-> +
-> +#endif /*  __VMCLOCK_ABI_H__ */
-> -- 
-> 2.44.0
-> 
-> 
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
+--=-VwTlaoX6quXk8Rk7E7vw
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-you said you will use __le here?
+On Mon, 2024-07-29 at 11:33 -0400, Michael S. Tsirkin wrote:
+> you said you will use __le here?
 
+I hadn't intended to bother until we add the virtio discovery and
+negotiation paths; it would basically be cosmetic for now.
+
+Although I *will* do so with the QEMU side before posting the latest
+version of that patch.
+
+--=-VwTlaoX6quXk8Rk7E7vw
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI5MTYxNjExWjAvBgkqhkiG9w0BCQQxIgQgdKPpCRc1
+gHz1WeSgswpm9cELCpMPtJwmYfF8cfl+nB8wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBoyo9r0qsmA4cyTozUk990cv8s3dQktILe
+YEQhYQuGF5u2fAZW1FH+ynMtJBtEL5VF4aHEBS7BbaK374cB8lHRPS4ttEWb7v0c5FQ2Sm4SaJpK
+Unco1IRKCVNQItxK1X4SSpWwYwqd9qK5d1Ct519BCa0GBK4mUlsD6wP/u5cv+AMHrG1HKqyilYnJ
+BUJ2oXIhO2tSnUM38VauYA5c9VEsRdAHfbsJHSMDGdReFE2ziv5hTaZqCE6mYaQHpueemFviTd9g
+evBegb02EjlUTDrqC1LBWTWP2JJsjHA0fo9Q2t79+OJ84gWnLtY0pjXf7lxfb7GnprDxCHXHXaeg
+nmyjJtI/4qlFhlEcr9U7/psLBS0XyErpRB09cpBbSRMP+Gcmsm5HmIgzNRyoDZGw8yy7yrNZLu08
+CzGJEPY4TqjdfwDo6VMcdN5F2T7HsPDSyF/G6pPylwsecOiZbyjH+QMvAOnkS0Opj2PgBVXGqrMu
+J22+0thau1juVnSxjpwMrpDE52A+VF2bWzv1Igc+SwEGGVCPtnEKcMes1G+9k686Ro4zg1eDucgK
+VCFSAMeJJMMfHSoDzn0DiCshKwCtT1Q7xyNAjAiAF1dyDLMIc/8pb+YkV/Cc/s0CTIdfL4aJ04Zb
+XW2979EhYdbP2LHtr0H1Fay0aLhqymkpyGdC9Ih3FAAAAAAAAA==
+
+
+--=-VwTlaoX6quXk8Rk7E7vw--
 
