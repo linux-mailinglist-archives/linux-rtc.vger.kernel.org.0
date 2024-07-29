@@ -1,209 +1,360 @@
-Return-Path: <linux-rtc+bounces-1634-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1635-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C93AF93FA6A
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 18:16:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CDD393FE16
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 21:12:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 486FF1F2318D
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 16:16:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00E32282B01
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2024 19:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC33155CB3;
-	Mon, 29 Jul 2024 16:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2007216F265;
+	Mon, 29 Jul 2024 19:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="i5DUlSjW"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="WRbnqhgg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11011052.outbound.protection.outlook.com [52.101.65.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DDB8172D;
-	Mon, 29 Jul 2024 16:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722269785; cv=none; b=AiowrehwtMg8jDbnq7hM7vbKm1OkURegpYmIZGICh9M24ZoWHQpMQ6Dh5eqY5LCgHktY/SaVd1esjIKKKmp/HdvmTfytmgelGv+VzkqxqtJ+f7dHSeg96CLdqUHWjkB3wcbt3smPmYJzdaEW9L8/6UEeZJ7bge3Cw4m1EWcuHck=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722269785; c=relaxed/simple;
-	bh=O5xu19o258Ib04orIyiSUj8L179KeCKaavNUzMnaTCk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lUU2X9ykLjCLMD+cYSg9fYsV2olj6H3KojZ5DG4zBeMJ0qmGwg5r2fwkUX8Y6u6T2NA+4L4Ae3sUZKff/Kph9w3Y2uKeARQetOBF3jBhujhGZwWHfXpEZroUuZJETpxC++j9vwQ2iVKkICDzcEoyHUdxULyOcbzdpWJvgvXuVr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=i5DUlSjW; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=O5xu19o258Ib04orIyiSUj8L179KeCKaavNUzMnaTCk=; b=i5DUlSjWGWtpIhmIGok/hhU54z
-	WFjemev1q9Q/drK1OMBqq0pgqMtMLGvd7y6Sso4Xpah7fZ0dY8ebtLzmDhpd6ubopv+74EYXkuTvC
-	iyZOYGjiYn2AhfWQCa1rcbdgSv5xuAer8UYcFDfTFT+Y+FYYGYVPXTExGV4c2tuXB/VzYXTlYK4vZ
-	gbBet/s5qziuK36X8BBUGDgnpPHDi3YUnhaZ8ZbqB756tuFEAG0BbXsMbPmIiYO+KysYmPS+WNsrH
-	IZOiZd1rD2Flw6w0krWvZGnYAdCkOi6bk84wUGQH4Ohszy54gblvOXQzZKLCpr3YczdPVmWU7mhg9
-	9wuC2OnA==;
-Received: from [2001:8b0:10b:5:4b1f:b2b1:6fd8:9dfe] (helo=u3832b3a9db3152.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sYT2i-0000000DkwQ-3gcu;
-	Mon, 29 Jul 2024 16:16:12 +0000
-Message-ID: <a471215e85b1d59f9214ce081f5ca1f2ed6a75ef.camel@infradead.org>
-Subject: Re: [PATCH v3] ptp: Add vDSO-style vmclock support
-From: David Woodhouse <dwmw2@infradead.org>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
- <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org, 
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-rtc@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>, 
- virtio-dev@lists.linux.dev, "Luu, Ryan" <rluu@amazon.com>, "Chashper,
- David" <chashper@amazon.com>, "Mohamed Abuelfotoh, Hazem"
- <abuehaze@amazon.com>,  "Christopher S . Hall"
- <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>, John
- Stultz <jstultz@google.com>,  netdev@vger.kernel.org, Stephen Boyd
- <sboyd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Marc Zyngier <maz@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Alessandro Zummo <a.zummo@towertech.it>,  Alexandre Belloni
- <alexandre.belloni@bootlin.com>, qemu-devel <qemu-devel@nongnu.org>, Simon
- Horman <horms@kernel.org>
-Date: Mon, 29 Jul 2024 17:16:11 +0100
-In-Reply-To: <20240729113320-mutt-send-email-mst@kernel.org>
-References: <e3164fc80e21336cbf13e24f98c9e5706afb77ab.camel@infradead.org>
-	 <20240729113320-mutt-send-email-mst@kernel.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-VwTlaoX6quXk8Rk7E7vw"
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1AB8F6E;
+	Mon, 29 Jul 2024 19:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722280325; cv=fail; b=APfg/EMCCooKVKSX7uBG1SATS/arN3N3zVaDKm9IZzBESRvFRAz3ZpzMPxFEuA+9wWxAjqWBTOCHpHvHwP+gGVmhRhKtIVPBDs8HEpN+TRRKIphP8oo2Vv3jj3No6LrbqxXb0Zq9oyv9ZU6V6gKy3i3qUFPqcDJpzZg46Ar+CQQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722280325; c=relaxed/simple;
+	bh=/RogscTK2/eFMWy5hCLda6Rka08tIQv6wYoGxfQP1xA=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=T5sl62xqND9o37rIL1A4GaRx6Ero/83SKjfjY2aaTQN7BK/B/pQ7Lz9PwPJXHPQ+yaOwvgx4NRTSkfDebIQIgS9gP5W4wqvyTnITKTD8TmWNys+SrufYmPriKl0a/1WeS88rYfvz2ORCM4LndTrSUP6Uv7YadBlb/oTyYV5zq1g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=WRbnqhgg; arc=fail smtp.client-ip=52.101.65.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=e652HF/JEDQPW4Ssd2XH2hID1EpV3Fd8EQOioUwCAc0cuK5yWE3kfvY3B0fIvSFrV6Jy8SvEVI7emSPXeot96eoMojPpsoV3E5wbnpRwdXnND0uFma7qP3rs3mF2t6LSXI1f145/gUIaQokY4SkQXsLnMHxH6ZUOemXVjuvOVionti4tp0TpknUZQVocuUPptZklhjhUGZtyyzzSkvW7EYEd3yxeXyVpMTymwYeFI13YxdDcc+Kuo9UJ4BuHnG+tu3OBuuXbuLf1gCf9OH+4pqRYFB6rTXDRr0IVxqXOWhe36pkuaplXgBumvWkcs7SJJsHpESleMZfltx+LEOa0xQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JCsi7YEvLI9ZylUJ9nzGtVjkEG917DqbNXG+mkLGto8=;
+ b=fsZ0qtY9F8LPSbXpD/s3Z4BEy+HW8GdGh63x0ZWlk9cAnewbXZWA+DJnuKzwf1X82ZZMyy/XdLgicct235f8V0Pzukj3ObtpXsf+nhHyt0W+4vyMD1DUkngeJ66PLaENCUMyiEcufChmGvQDfIgVSe+JDdDDHptTZwcr8Y0Y4QoDI0N43mWXqq3HTtSvjOuUJGUrbKZ/y9jNjbg1CxCRb5GyeReHH5JaoygxJYTXCyYlzNaSgY7Iu0g4WTsF/2Mfq6HvZ2FtsGsE0rBjp8KzLYUaKLgAyZ6xiAiPlOcUAsYFkSMBGbjjIIwK7xVysY+N6t5pLI2zFmg7zLp06jlGOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCsi7YEvLI9ZylUJ9nzGtVjkEG917DqbNXG+mkLGto8=;
+ b=WRbnqhgg0m05vo/2bk4gkYYouezqJuke+X9U3B0Upj7AWH2h2wnjr1A6GygcvFmaq3zG0S8ilgXHWfX9pJOUO7VCdafT0eWzDcVaWthPMqIfD4PEQtl+eZiyQiM0J15VlNvAJMSBgq0IXg8hKG9v2yLb5xRSWeWRtihkATVvbdRoJXCtfMUKCCebB3paT57Xnt8kIJPn4HmT1zi8GjFLSPrT5rvomjZUw+yxa70f+TjkSX+2bKI1s9wOssSgOU+bTbllBy0I6Ns3P2uiBDx4+WiPdsEDqjSspz9BwRXTq9Hqh4l23+U8pbcbEL0apnSj5UjBpXrXaimKksmvaurKbQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AS8PR04MB7557.eurprd04.prod.outlook.com (2603:10a6:20b:294::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Mon, 29 Jul
+ 2024 19:12:00 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.7807.026; Mon, 29 Jul 2024
+ 19:12:00 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list),
+	linuxppc-dev@lists.ozlabs.org (open list:FREESCALE SOC DRIVERS),
+	linux-arm-kernel@lists.infradead.org (moderated list:FREESCALE SOC DRIVERS)
+Cc: imx@lists.linux.dev
+Subject: [PATCH 1/1] dt-bindings: soc: fsl: Convert rcpm to yaml format
+Date: Mon, 29 Jul 2024 15:11:42 -0400
+Message-Id: <20240729191143.1826125-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR05CA0041.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::16) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AS8PR04MB7557:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a61ad68-8192-403a-587b-08dcb0025266
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|52116014|366016|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?BtJOyh2Suhgalp3PFNlzZd2I+X89QGuiw5iu06Sfdv1c8VvpIZbPHw2ljyXu?=
+ =?us-ascii?Q?fMMSVMPe1fhAbWwQex6Xxx8Ua4/2GbECzVakUZmn6B7zfnMsax5yvOKW3TFt?=
+ =?us-ascii?Q?xp9/KUxM00xlHsFuwFUI9OkRqLCFgfCkapOwHeJqaeAmUv1oaF4Ii6ydiCGo?=
+ =?us-ascii?Q?mvdccExI1yFnz3GtpQYnftQszEdUZdGdhY60Q0yFZUgsECOUZyot0vS7iybH?=
+ =?us-ascii?Q?SGeyI4qH0URxoiz0Xu4tWzslZ/iSpV2gvAEQol4pwH3CNpGtZTDRUcOiG4Ep?=
+ =?us-ascii?Q?fNaSQq8zCufnUf4eKjnCmtpI+2amiViuWl7Wwl6RYjHbNngS4fezuE/LAUbB?=
+ =?us-ascii?Q?6LQvg5sL13VzRl75wN/a+MWsZlaIhdzUlRqAEWCtZhxNBEIOCHOQjLPGsYOl?=
+ =?us-ascii?Q?J6o43fUb2e+Ey9lvMcGwlAcm/SNCyPvW1BKpnkfvQ23BwAQrcqFFYMnSaXs5?=
+ =?us-ascii?Q?kLRFy/yz/shS44kYFBbvw4yQ9BPUKGQQPnXmgXSu5pE/KfvisZ4aai3V4dyi?=
+ =?us-ascii?Q?Xf1f/uBi0t0RR7HbvU3GABOAYCUXW8BA5W/whTK5mKi1JuemKzRdU3uEi7Gg?=
+ =?us-ascii?Q?bCG0ThCisarr9OvIibUBJ3gpisRzWpHXpYBNUssfmr72i3x8DrNnRL2WR9K1?=
+ =?us-ascii?Q?vWA8CGbxGHi5SIHTkO+OKRtM3wGQT11ZuH+x3hyacWd1uUGCgQ6dOC4bAto4?=
+ =?us-ascii?Q?U0FaaN/Hu2AI0Qv9Z7VfYMmr8u9TmAANZMFfDArLmxQXwBXlEm19GeIGxock?=
+ =?us-ascii?Q?hGHGr/fyHDNki6/DdGb2wAOByUqMph+jLelHlliGRDobiiFLuF760PIWGC/l?=
+ =?us-ascii?Q?fxagolvTdwIMEx/FTP8Hwxp2lrEtbYnlj70gXJWCh0CmwZpVj1jUU8pCCa1R?=
+ =?us-ascii?Q?nvHYicDPWgesNRv7xeE2Em5S1UqnOnZOZriigiUapV06r56Y/wjZ/KAEIed1?=
+ =?us-ascii?Q?XqmGyQjaVFsh9jcU07mVl5YduKG0QNHj0j9ubeQluILFlV48I6mp3mGboxZi?=
+ =?us-ascii?Q?z8R+mCHn87MbUWwnizVUx5hrvnSbMWw5TkG7sbnl0KMJ6whX6JEXScrFgpk+?=
+ =?us-ascii?Q?sEqeUFUsAKtNC8GNkE1x5dLjV9lnKiUbVt/pmRtOcgYt1JJSN6OSVggsqzSP?=
+ =?us-ascii?Q?9WaoEdsTM3geo3VBLKAf7hoS2Xkkkkdsm08YuwOHFghh98UACCvytZ4HXVs8?=
+ =?us-ascii?Q?vvdOi8OZFgDtY/euB12GgCDtwMtAyPRqrzf7/6fwXHiOipIGsScNYjHyDjc6?=
+ =?us-ascii?Q?em66Kdb/wtdGZm/yoTWEq+0dYNlUu66F7vkVlsYKngzp20kGeE0I1CoxTH2D?=
+ =?us-ascii?Q?ItuO6q/tdj90mYFmr0/BdR0Qup3xDp7gcUbtMkn0YSZNAFbre7COYMEDcmOZ?=
+ =?us-ascii?Q?N8qu8itP47h0xNGgQJz0wHfhjEZi?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(52116014)(366016)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?el+yGtakbAF7x32ItC8Bb7npe3yQ/0R8wsaeiTr01DV7gw89bWOCDynIAImc?=
+ =?us-ascii?Q?j7/3vIA0EJooKD2OrF87mLuvjBgXwf+JuyoFM06rN+lhG4w6kIhQ/5eJQp58?=
+ =?us-ascii?Q?vhVA7GegmLbCw47PIZoXii1pfzo3l0yzjgNJs3zFeMFxXrDZqJIHlKhe1P1Y?=
+ =?us-ascii?Q?oLjWYbcVHcNVF7RmRKwHL+HBwEsVm+f/p7kwLgpWmPDlIaIpDrJw4ce9XSq2?=
+ =?us-ascii?Q?TGvgcx0cOjGdDuIS3Vq04lYTtiDOQ8BFSlglXOIxo4WZ1KGq6xGB/VKCwzKZ?=
+ =?us-ascii?Q?OXrRhTo8V2CRcjNKPCTwKJUuxYZYe94vGK5oHLgmsNGALyHYvkbSVHAD0sIK?=
+ =?us-ascii?Q?F7yQLpF3hS47l6YIrdWndPis/ZSS4PwmdJY8bH7oMHRyOmPjk4a2tQwuukra?=
+ =?us-ascii?Q?ZV9lY7TynZa3mZeZaUL923+huQ0/c11negt+laRi5NzVhCH1YqV9ZRDaEcUq?=
+ =?us-ascii?Q?9IUdedZtNbi1TuftI9+NpJSvONtTR5GicmA6lke+nK74kzL8K8jhnpgsFxq2?=
+ =?us-ascii?Q?ELKMDL3d+OFOaf3aXBunRsrpOY52WiNn/rBBAATDTJE4CssrVjDMery1uHzM?=
+ =?us-ascii?Q?WQl44ufp8w2vCFC+l703bzbcJi/5ijwwiPlELWxE4GkXS6yifIA9rjLSBdbr?=
+ =?us-ascii?Q?ntGQe2/rC3HuYrqaxkATQlmXmc50XAyQQnSrWHPp+LDjNAstkqLEdt7CNS7/?=
+ =?us-ascii?Q?Dryax5T/5soeDTPP2aG3+xp/3ZBawo/17auOkhe7o9PPETF0KpVURbohGY52?=
+ =?us-ascii?Q?7bSerJfvl8YDzu9YdOjPYqW5dTZY0BEHuK39BvIf9OFXecpIv6U8ia9RoKrV?=
+ =?us-ascii?Q?LhWnd1yMcn3fSNmXGA0OZfDgUkYpWwP6gK9jsodxANtRFNeJM/NCQX2TwYxN?=
+ =?us-ascii?Q?3L1wfLdGBiImo4ODuUV7tCln2POjbYGbCbPIdpwxYEcX3N6Nz5/Kx9GKDd/U?=
+ =?us-ascii?Q?HHp3vHkxlAQwTQkk0DZ64kKjBsyN8mb+UkVobMO7hORmVCWdztuaUCWIvtBq?=
+ =?us-ascii?Q?LLMOY2Djoa7eInhVP2Qxd3D07W2e/vTDcAz3OyzJRZbC2Ywx/Xwjix3kYGFY?=
+ =?us-ascii?Q?nVwbZ+1GM97vJ1LGRX2wn76TQZi2NLAoqV6l3PDObGX6uoH7m1ln4oIC4Vle?=
+ =?us-ascii?Q?jmCB0erNGcl3ELTSWSQyL/oPCRwtyWzb/vnDqvDC/ENhxGr5IJkK1dmdHM9G?=
+ =?us-ascii?Q?ZsqvE975DPQStu7JJZCtUapWaMQtohT455fv1NLnB+cH3ScWi9fwL4z25Ryb?=
+ =?us-ascii?Q?dSD0xKEkzz6d0JVVSkulykAGEuQu6LSWZ1cxHHBvyu9VZPMRfJ9Xu1J/3Rt0?=
+ =?us-ascii?Q?k4zm5SkLMFtn4PcyoRjvAxqXc1xx2EiRduuqlyjgrYLkUa7E0wqpfMkImQzF?=
+ =?us-ascii?Q?q6XNYig1z5Ae+mdZZgaBWqFwpQrZ4h/HeY27cY/sPFwn9GbIEOWb188ya/NE?=
+ =?us-ascii?Q?FyNdRHxhRUlFvuhFMMIeVpzYLoX4A5p2ODLgIezHvhK6UbW1prSFIGOMuwIn?=
+ =?us-ascii?Q?Q7Lr3L8AvtKVKqeOMQXa4Wio5s5Opu0GVrl2gpNYU87dIE9axIT+vSOKNwwK?=
+ =?us-ascii?Q?rvZ7vUQHZd34f6v77Yaqp0IunkfOiYHTG82EOQGb?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a61ad68-8192-403a-587b-08dcb0025266
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2024 19:11:59.9919
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HyOzITQ9HYW6yMmEqniN+zvMNdTAfhW36EFJE1mls22249Z3XTFnywyuls49L0Ac5XGobZZy9/wjGknnksmHjA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7557
 
+Convert dt-binding rcpm from txt to yaml format.
+Add fsl,ls1028a-rcpm compatible string.
 
---=-VwTlaoX6quXk8Rk7E7vw
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ .../bindings/rtc/fsl,ls-ftm-alarm.yaml        |  2 +-
+ .../devicetree/bindings/soc/fsl/fsl,rcpm.yaml | 91 +++++++++++++++++++
+ .../devicetree/bindings/soc/fsl/rcpm.txt      | 69 --------------
+ 3 files changed, 92 insertions(+), 70 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/fsl/rcpm.txt
 
-On Mon, 2024-07-29 at 11:33 -0400, Michael S. Tsirkin wrote:
-> you said you will use __le here?
+diff --git a/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml b/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
+index 388102ae30cd8..3ec111f2fdc40 100644
+--- a/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
++++ b/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
+@@ -42,7 +42,7 @@ properties:
+         minItems: 1
+     description:
+       phandle to rcpm node, Please refer
+-      Documentation/devicetree/bindings/soc/fsl/rcpm.txt
++      Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+ 
+   big-endian:
+     $ref: /schemas/types.yaml#/definitions/flag
+diff --git a/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml b/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+new file mode 100644
+index 0000000000000..6c6cda7f2b220
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+@@ -0,0 +1,91 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/fsl/fsl,rcpm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Run Control and Power Management
++
++description:
++  The RCPM performs all device-level tasks associated with device run control
++  and power management.
++
++maintainers:
++  - Frank Li <Frank.Li@nxp.com>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - fsl,ls1012a-rcpm
++          - fsl,ls1021a-rcpm
++          - fsl,ls1028a-rcpm
++          - fsl,ls1043a-rcpm
++          - fsl,ls1045a-rcpm
++          - fsl,p2041-rcpm
++          - fsl,p5020-rcpm
++          - fsl,t4240-rcpm
++      - enum:
++          - fsl,qoriq-rcpm-1.0
++          - fsl,qoriq-rcpm-2.0
++          - fsl,qoriq-rcpm-2.1
++          - fsl,qoriq-rcpm-2.1+
++    minItems: 1
++    description: |
++      All references to "1.0" and "2.0" refer to the QorIQ chassis version to
++      which the chip complies.
++      Chassis Version         Example Chips
++      ---------------         -------------------------------
++      1.0                     p4080, p5020, p5040, p2041, p3041
++      2.0                     t4240, b4860, b4420
++      2.1                     t1040,
++      2.1+                    ls1021a, ls1012a, ls1043a, ls1046a
++
++  reg:
++    maxItems: 1
++
++  "#fsl,rcpm-wakeup-cells":
++    description: |
++      The number of IPPDEXPCR register cells in the
++      fsl,rcpm-wakeup property.
++
++      Freescale RCPM Wakeup Source Device Tree Bindings
++
++      Required fsl,rcpm-wakeup property should be added to a device node if
++      the device can be used as a wakeup source.
++
++      fsl,rcpm-wakeup: Consists of a phandle to the rcpm node and the IPPDEXPCR
++      register cells. The number of IPPDEXPCR register cells is defined in
++      "#fsl,rcpm-wakeup-cells" in the rcpm node. The first register cell is
++      the bit mask that should be set in IPPDEXPCR0, and the second register
++      cell is for IPPDEXPCR1, and so on.
++
++      Note: IPPDEXPCR(IP Powerdown Exception Control Register) provides a
++      mechanism for keeping certain blocks awake during STANDBY and MEM, in
++      order to use them as wake-up sources.
++
++  little-endian:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      RCPM register block is Little Endian. Without it RCPM
++      will be Big Endian (default case).
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    rcpm: global-utilities@e2000 {
++          compatible = "fsl,t4240-rcpm", "fsl,qoriq-rcpm-2.0";
++          reg = <0xe2000 0x1000>;
++          #fsl,rcpm-wakeup-cells = <2>;
++    };
++
++    serial@2950000 {
++         compatible = "fsl,ls1021a-lpuart";
++         reg = <0x2950000 0x1000>;
++         interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
++         clocks = <&sysclk>;
++         clock-names = "ipg";
++         fsl,rcpm-wakeup = <&rcpm 0x0 0x40000000>;
++    };
+diff --git a/Documentation/devicetree/bindings/soc/fsl/rcpm.txt b/Documentation/devicetree/bindings/soc/fsl/rcpm.txt
+deleted file mode 100644
+index 5a33619d881d0..0000000000000
+--- a/Documentation/devicetree/bindings/soc/fsl/rcpm.txt
++++ /dev/null
+@@ -1,69 +0,0 @@
+-* Run Control and Power Management
+--------------------------------------------
+-The RCPM performs all device-level tasks associated with device run control
+-and power management.
+-
+-Required properites:
+-  - reg : Offset and length of the register set of the RCPM block.
+-  - #fsl,rcpm-wakeup-cells : The number of IPPDEXPCR register cells in the
+-	fsl,rcpm-wakeup property.
+-  - compatible : Must contain a chip-specific RCPM block compatible string
+-	and (if applicable) may contain a chassis-version RCPM compatible
+-	string. Chip-specific strings are of the form "fsl,<chip>-rcpm",
+-	such as:
+-	* "fsl,p2041-rcpm"
+-	* "fsl,p5020-rcpm"
+-	* "fsl,t4240-rcpm"
+-
+-	Chassis-version strings are of the form "fsl,qoriq-rcpm-<version>",
+-	such as:
+-	* "fsl,qoriq-rcpm-1.0": for chassis 1.0 rcpm
+-	* "fsl,qoriq-rcpm-2.0": for chassis 2.0 rcpm
+-	* "fsl,qoriq-rcpm-2.1": for chassis 2.1 rcpm
+-	* "fsl,qoriq-rcpm-2.1+": for chassis 2.1+ rcpm
+-
+-All references to "1.0" and "2.0" refer to the QorIQ chassis version to
+-which the chip complies.
+-Chassis Version		Example Chips
+----------------		-------------------------------
+-1.0				p4080, p5020, p5040, p2041, p3041
+-2.0				t4240, b4860, b4420
+-2.1				t1040,
+-2.1+				ls1021a, ls1012a, ls1043a, ls1046a
+-
+-Optional properties:
+- - little-endian : RCPM register block is Little Endian. Without it RCPM
+-   will be Big Endian (default case).
+-
+-Example:
+-The RCPM node for T4240:
+-	rcpm: global-utilities@e2000 {
+-		compatible = "fsl,t4240-rcpm", "fsl,qoriq-rcpm-2.0";
+-		reg = <0xe2000 0x1000>;
+-		#fsl,rcpm-wakeup-cells = <2>;
+-	};
+-
+-* Freescale RCPM Wakeup Source Device Tree Bindings
+--------------------------------------------
+-Required fsl,rcpm-wakeup property should be added to a device node if the device
+-can be used as a wakeup source.
+-
+-  - fsl,rcpm-wakeup: Consists of a phandle to the rcpm node and the IPPDEXPCR
+-	register cells. The number of IPPDEXPCR register cells is defined in
+-	"#fsl,rcpm-wakeup-cells" in the rcpm node. The first register cell is
+-	the bit mask that should be set in IPPDEXPCR0, and the second register
+-	cell is for IPPDEXPCR1, and so on.
+-
+-	Note: IPPDEXPCR(IP Powerdown Exception Control Register) provides a
+-	mechanism for keeping certain blocks awake during STANDBY and MEM, in
+-	order to use them as wake-up sources.
+-
+-Example:
+-	lpuart0: serial@2950000 {
+-		compatible = "fsl,ls1021a-lpuart";
+-		reg = <0x0 0x2950000 0x0 0x1000>;
+-		interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&sysclk>;
+-		clock-names = "ipg";
+-		fsl,rcpm-wakeup = <&rcpm 0x0 0x40000000>;
+-	};
+-- 
+2.34.1
 
-I hadn't intended to bother until we add the virtio discovery and
-negotiation paths; it would basically be cosmetic for now.
-
-Although I *will* do so with the QEMU side before posting the latest
-version of that patch.
-
---=-VwTlaoX6quXk8Rk7E7vw
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwNzI5MTYxNjExWjAvBgkqhkiG9w0BCQQxIgQgdKPpCRc1
-gHz1WeSgswpm9cELCpMPtJwmYfF8cfl+nB8wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBoyo9r0qsmA4cyTozUk990cv8s3dQktILe
-YEQhYQuGF5u2fAZW1FH+ynMtJBtEL5VF4aHEBS7BbaK374cB8lHRPS4ttEWb7v0c5FQ2Sm4SaJpK
-Unco1IRKCVNQItxK1X4SSpWwYwqd9qK5d1Ct519BCa0GBK4mUlsD6wP/u5cv+AMHrG1HKqyilYnJ
-BUJ2oXIhO2tSnUM38VauYA5c9VEsRdAHfbsJHSMDGdReFE2ziv5hTaZqCE6mYaQHpueemFviTd9g
-evBegb02EjlUTDrqC1LBWTWP2JJsjHA0fo9Q2t79+OJ84gWnLtY0pjXf7lxfb7GnprDxCHXHXaeg
-nmyjJtI/4qlFhlEcr9U7/psLBS0XyErpRB09cpBbSRMP+Gcmsm5HmIgzNRyoDZGw8yy7yrNZLu08
-CzGJEPY4TqjdfwDo6VMcdN5F2T7HsPDSyF/G6pPylwsecOiZbyjH+QMvAOnkS0Opj2PgBVXGqrMu
-J22+0thau1juVnSxjpwMrpDE52A+VF2bWzv1Igc+SwEGGVCPtnEKcMes1G+9k686Ro4zg1eDucgK
-VCFSAMeJJMMfHSoDzn0DiCshKwCtT1Q7xyNAjAiAF1dyDLMIc/8pb+YkV/Cc/s0CTIdfL4aJ04Zb
-XW2979EhYdbP2LHtr0H1Fay0aLhqymkpyGdC9Ih3FAAAAAAAAA==
-
-
---=-VwTlaoX6quXk8Rk7E7vw--
 
