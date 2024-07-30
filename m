@@ -1,199 +1,99 @@
-Return-Path: <linux-rtc+bounces-1636-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1637-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F5EC9420E3
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jul 2024 21:45:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E79942107
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jul 2024 21:49:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 422FF1C2361C
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jul 2024 19:45:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE5CF281869
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jul 2024 19:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BEE818CBE4;
-	Tue, 30 Jul 2024 19:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44FA18B479;
+	Tue, 30 Jul 2024 19:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h16IfaV0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X64ADXox"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2029118C938;
-	Tue, 30 Jul 2024 19:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845C4189904;
+	Tue, 30 Jul 2024 19:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722368614; cv=none; b=QNGINuuJL7OWe9Eh2K16+gvWGfbWpj0QNCJvjp+A4J9HiNwvQ/GYP7rIqBhWB2kYbj3huvYdLu0o0/qkDQa4bTTz9e9lF/VHmFLMomgIVIFr4q2DeJ4HSmTFOFsXIWLclxxr9hDuEQd2OuUpPTq9ATgeuwzCD1x4Qn5RKS9Zuhk=
+	t=1722368955; cv=none; b=cWkXzgTf6ni6eLLmSKexJtO9D0Wg836Rhm1SVNktW7GZVMOCa2XjB0Z9ziAXX/PhnYdvbAGxJ40MO31j9utA3yDaAvos1zh2ld5NEk5JpMObpwpNNqrY94qf4aF8XY4Am8kHK0xN2HoKuQsH2hpmO3l8m0hRAmCWYThIxVD+j/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722368614; c=relaxed/simple;
-	bh=7ZWS8u9aPiBFISBPRpifvY/WoT4OE1+Bi2YojbT+WFI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MuqWHs+m38mYa5SKnIoOweiimzUaJapsJZD/qMnqkZwODtCwJIGeBI2XHlhR9IVGbwYmX5aeieCKdZmtuWUMpKhEkjtUG87gvj04miwVdJI2h3xCUc9vQohpgyGUc7LDFOs9wnGhfeNbf/uk3AX+Y+1f5iWGy1G3FmLSsYNSlkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h16IfaV0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED71C32782;
-	Tue, 30 Jul 2024 19:43:33 +0000 (UTC)
+	s=arc-20240116; t=1722368955; c=relaxed/simple;
+	bh=ZRU/ils+M3BtFnjH9dt3Gff4powKMpDinTqwXofED/o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MuTZAXZekdBKWzuHn+DxYJhia4jEryiknUw92XXm6TU/dJPczuRSj+wUzGG4nP8O1LHd2AhrZfsqtk1WAUHd20xB/BE/PKWJpd354+nyw8MH7BU+JB8G2hmJ/jzvjVL4eE8cDX7H6+CVUq9v+wsVs73v5PplMGmpaBHOhByv44M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X64ADXox; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E8CC32782;
+	Tue, 30 Jul 2024 19:49:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722368613;
-	bh=7ZWS8u9aPiBFISBPRpifvY/WoT4OE1+Bi2YojbT+WFI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h16IfaV09C1EP1HeYxv9Lfjjb2QZyn6y/AGl00vvL51gux3ZdTtCtkgu1PIeevz3U
-	 YrtJ9cB2kTu+C92kK9ODdHm62FWdQ9kRPww0iYG2WF2JZNknNKf7OJ4pBS+3Ra3ZUm
-	 TLrcthVrzu2tpe2tHmCZayfZLHjFltdbNsnyxOaO4LmqVyj1w+bYWGy8ONNaxa3MT3
-	 BqEVfWi00ONraIbPRf+advZiGJIkjyui2jnFDq/0hSCCWxMoRgmjqyHGJfDjvgL0dF
-	 78gLkeyOjG83pes5QNqVGE+uugTbXEdwA/Ewsoz0mC6xJ4W6104pzswLOYoh/YY9Q2
-	 rBxV0kM3qlooA==
-Date: Tue, 30 Jul 2024 13:43:32 -0600
-From: Rob Herring <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:FREESCALE SOC DRIVERS" <linuxppc-dev@lists.ozlabs.org>,
-	"moderated list:FREESCALE SOC DRIVERS" <linux-arm-kernel@lists.infradead.org>,
-	imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] dt-bindings: soc: fsl: Convert rcpm to yaml format
-Message-ID: <20240730194332.GA2029820-robh@kernel.org>
-References: <20240729191143.1826125-1-Frank.Li@nxp.com>
+	s=k20201202; t=1722368955;
+	bh=ZRU/ils+M3BtFnjH9dt3Gff4powKMpDinTqwXofED/o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=X64ADXox43umdsDRtMUpRKW31HQ1ZHNTX4onNoU0QNchkN4AhaVjUWfA07xu2aLC4
+	 b9rEySAXMLu/tBW3zYfvpShp6p4Nx9QMdz6CcsoTWNZeNXIKVbExJ+nEdRyd/MAHTJ
+	 gtU2z5iBWHnU/F9XU3nKc78GBxyyDRRoOXgp57GwQsWnL0e+sQTT21mm5MetY0pk6D
+	 OonsdH0B0qzyonZ9PpZwRVp3ZPDELzoxXhOocWCk9VagG77Vy80usKCpGRVj/GjYA3
+	 dt8I7zbc30I/IOyQ/0nd3FPce4fuPKvnP7B1r70YdQWd9q70iG7AkequpgsUIMAJlx
+	 brMr/Et78jltg==
+From: Michael Walle <mwalle@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Michael Walle <mwalle@kernel.org>
+Subject: [PATCH] rtc: sun6i: disable automatic clock input switching
+Date: Tue, 30 Jul 2024 21:49:05 +0200
+Message-Id: <20240730194905.2587202-1-mwalle@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729191143.1826125-1-Frank.Li@nxp.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 29, 2024 at 03:11:42PM -0400, Frank Li wrote:
-> Convert dt-binding rcpm from txt to yaml format.
-> Add fsl,ls1028a-rcpm compatible string.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  .../bindings/rtc/fsl,ls-ftm-alarm.yaml        |  2 +-
->  .../devicetree/bindings/soc/fsl/fsl,rcpm.yaml | 91 +++++++++++++++++++
->  .../devicetree/bindings/soc/fsl/rcpm.txt      | 69 --------------
->  3 files changed, 92 insertions(+), 70 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
->  delete mode 100644 Documentation/devicetree/bindings/soc/fsl/rcpm.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml b/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
-> index 388102ae30cd8..3ec111f2fdc40 100644
-> --- a/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
-> @@ -42,7 +42,7 @@ properties:
->          minItems: 1
->      description:
->        phandle to rcpm node, Please refer
-> -      Documentation/devicetree/bindings/soc/fsl/rcpm.txt
-> +      Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
->  
->    big-endian:
->      $ref: /schemas/types.yaml#/definitions/flag
-> diff --git a/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml b/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
-> new file mode 100644
-> index 0000000000000..6c6cda7f2b220
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
-> @@ -0,0 +1,91 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/fsl/fsl,rcpm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Run Control and Power Management
-> +
-> +description:
-> +  The RCPM performs all device-level tasks associated with device run control
-> +  and power management.
-> +
-> +maintainers:
-> +  - Frank Li <Frank.Li@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - fsl,ls1012a-rcpm
-> +          - fsl,ls1021a-rcpm
-> +          - fsl,ls1028a-rcpm
-> +          - fsl,ls1043a-rcpm
-> +          - fsl,ls1045a-rcpm
-> +          - fsl,p2041-rcpm
-> +          - fsl,p5020-rcpm
-> +          - fsl,t4240-rcpm
-> +      - enum:
-> +          - fsl,qoriq-rcpm-1.0
-> +          - fsl,qoriq-rcpm-2.0
-> +          - fsl,qoriq-rcpm-2.1
-> +          - fsl,qoriq-rcpm-2.1+
+The V3(s) will detect a valid external low frequency clock and if it is
+not present will automatically switch to the internal one. This might
+hide bugs and (hardware) configuration errors. It's even worse because
+the internal RTC runs significantly slower (32.000Hz vs 32.768Hz).
+Fortunately for us, the V3(s) has an (undocumented) bypass of this
+switching and the driver already supports it by setting the
+.has_auto_swt flag.
 
-You can't just allow any combination.
+Signed-off-by: Michael Walle <mwalle@kernel.org>
+---
+This is not tagged as a Fixes commit, because it might break boards with
+an incorrect device tree. That is, if the device tree lists the external
+crystal but the board doesn't have it the RTC will stop running. I don't
+think this is likely though, because the user manual requires the
+external clock.
+---
+ drivers/rtc/rtc-sun6i.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +    minItems: 1
-> +    description: |
-> +      All references to "1.0" and "2.0" refer to the QorIQ chassis version to
-> +      which the chip complies.
-> +      Chassis Version         Example Chips
-> +      ---------------         -------------------------------
-> +      1.0                     p4080, p5020, p5040, p2041, p3041
-> +      2.0                     t4240, b4860, b4420
-> +      2.1                     t1040,
-> +      2.1+                    ls1021a, ls1012a, ls1043a, ls1046a
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index 8e0c66906103..e681c1745866 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -402,6 +402,7 @@ CLK_OF_DECLARE_DRIVER(sun8i_r40_rtc_clk, "allwinner,sun8i-r40-rtc",
+ static const struct sun6i_rtc_clk_data sun8i_v3_rtc_data = {
+ 	.rc_osc_rate = 32000,
+ 	.has_out_clk = 1,
++	.has_auto_swt = 1,
+ };
+ 
+ static void __init sun8i_v3_rtc_clk_init(struct device_node *node)
+-- 
+2.39.2
 
-The compatible lists above needs to match this.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#fsl,rcpm-wakeup-cells":
-> +    description: |
-> +      The number of IPPDEXPCR register cells in the
-> +      fsl,rcpm-wakeup property.
-> +
-> +      Freescale RCPM Wakeup Source Device Tree Bindings
-> +
-> +      Required fsl,rcpm-wakeup property should be added to a device node if
-> +      the device can be used as a wakeup source.
-> +
-> +      fsl,rcpm-wakeup: Consists of a phandle to the rcpm node and the IPPDEXPCR
-> +      register cells. The number of IPPDEXPCR register cells is defined in
-> +      "#fsl,rcpm-wakeup-cells" in the rcpm node. The first register cell is
-> +      the bit mask that should be set in IPPDEXPCR0, and the second register
-> +      cell is for IPPDEXPCR1, and so on.
-> +
-> +      Note: IPPDEXPCR(IP Powerdown Exception Control Register) provides a
-> +      mechanism for keeping certain blocks awake during STANDBY and MEM, in
-> +      order to use them as wake-up sources.
-> +
-> +  little-endian:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      RCPM register block is Little Endian. Without it RCPM
-> +      will be Big Endian (default case).
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    rcpm: global-utilities@e2000 {
-> +          compatible = "fsl,t4240-rcpm", "fsl,qoriq-rcpm-2.0";
-> +          reg = <0xe2000 0x1000>;
-> +          #fsl,rcpm-wakeup-cells = <2>;
-> +    };
-> +
-> +    serial@2950000 {
-> +         compatible = "fsl,ls1021a-lpuart";
-> +         reg = <0x2950000 0x1000>;
-> +         interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
-> +         clocks = <&sysclk>;
-> +         clock-names = "ipg";
-> +         fsl,rcpm-wakeup = <&rcpm 0x0 0x40000000>;
-> +    };
 
