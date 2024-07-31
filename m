@@ -1,337 +1,381 @@
-Return-Path: <linux-rtc+bounces-1652-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1653-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 404DD94317F
-	for <lists+linux-rtc@lfdr.de>; Wed, 31 Jul 2024 15:57:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 342B19432A6
+	for <lists+linux-rtc@lfdr.de>; Wed, 31 Jul 2024 17:04:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63B941C218C3
-	for <lists+linux-rtc@lfdr.de>; Wed, 31 Jul 2024 13:57:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF05728270E
+	for <lists+linux-rtc@lfdr.de>; Wed, 31 Jul 2024 15:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5024B1B3741;
-	Wed, 31 Jul 2024 13:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7064313FFC;
+	Wed, 31 Jul 2024 15:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="NtNKPUre"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BE61B3721;
-	Wed, 31 Jul 2024 13:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722434248; cv=none; b=Y9oFIQnEmqU/U2x7XBAPS7+7gYdFuawxEhV8N81J/Qu/W69XB8aftWO5A7Al9hNGBW0D2Gtd8GAO3S8ZIM7n+hWiZ1l3Xa0Pa1boKK3pL2CdY3qgn9Dj/4ryjs7o+vDXQwawiKfnQEccJNEzkchnIK11HbEo06XLm/o3So1El0s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722434248; c=relaxed/simple;
-	bh=hzrRb1VEDbEgu4z8enVUXqH9fEC/Ml8eIv3eRX06X+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FZ0UyvgiGx2B6W9zSE7VQ4G6OGjgwltCju8LtFia9dRFbj+7nI1aExDMv6AA/9L5/3yGrLP1ixf6JVv7ob3XyQKqP17+qp7MsBy4s4+SKsa1mvEoCHG4OtNZj2sFXl+/fptSUPDYQ7+auMuoVEnvNXQODWw1Ccjmj75joC9GRRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 711451007;
-	Wed, 31 Jul 2024 06:57:51 -0700 (PDT)
-Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 31DEB3F5A1;
-	Wed, 31 Jul 2024 06:57:23 -0700 (PDT)
-Date: Wed, 31 Jul 2024 14:57:20 +0100
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, linux-rtc@vger.kernel.org,
-	linux-input@vger.kernel.org
-Subject: Re: [PATCH v7 7/7] input: keyboard: support i.MX95 BBM module
-Message-ID: <ZqpCwOhXiLzxK43-@pluto>
-References: <20240731-imx95-bbm-misc-v2-v7-0-a41394365602@nxp.com>
- <20240731-imx95-bbm-misc-v2-v7-7-a41394365602@nxp.com>
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012006.outbound.protection.outlook.com [52.101.66.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A629B14A8B;
+	Wed, 31 Jul 2024 15:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722438284; cv=fail; b=gjqVQ6eSq/HjONnrdFNcRUdP//T3xRBlD1yrZz+EZYRrlVCwjjguhK/Qsq0pHjUql4BACUv22K2jmPWtuVAW65e/sdgt6Do0g/AFKszjyEuJ0gL1rbMslnaf7Xlv0n3zocGwr77OjdETYNOMN036G54Upd0ZLBGpyDvDbCNAS/c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722438284; c=relaxed/simple;
+	bh=ilN0lyFX/i6NSqDe5x6Riafp3zUs3GKHG0KJ4TcDumA=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=ZoEeBdjM5fvkvTmSuQ6iN5z5W4LzBs16yaqnQlZRn5Ab9C+4RbN6l1D4Hto1hKmE8/ogY3XY7ROC0gL5s4fFLPUfJ7lGjZdyux2O1UWpc8f/2+WFeJKb/x9df9MdPJZWgjMxlI0dnsrZ7/cHkoOLQa8n5Ix32Hxdu6A0ch6v98E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=NtNKPUre; arc=fail smtp.client-ip=52.101.66.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JfPJn39UDSJQpl1oP+JnPlRunRonc1Y/unhcLtdEI5rJE7LMhdfb2wm13kDyEKtywbqd74PfE17Uo9btOfmOJftmoI/SDLjWTIi51xaxJBFZ0An+4jCqNDsGKj/a9xv8UDm1efKi5a2qHV0tescVg9cVO0DBPUhRjCJqQ4H1eYHGX3auT6K59TkAAIMLF3M01hHCpkIx+peFfvFFCBmOgPzhu0hFh7/p+VNbPxE0HlcvO/LbH6ksx7yI5NwjaJjGUK6hR7aEwzyA+qEfPm3SPTQwhAIuRFbJzFtjpVGW39f2AkNQyfAb3+dVMXbMEM6s6cKSd0eYg9JH2O0CL8sADA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=60KRb2GKTzaPOVBx0dWjAp9lQc9Vt9jLYjF5/7sfktI=;
+ b=zJcZCwpJRn8IYf0Y9FN+1YV5IWr7+jkHCNyKRnjHtOqzRDPXX8fvOgqPd9kRCTNocnCruXMRoEMg7gigwB+Fmp54+NUCcgAmTNjJu9n9RNEMK9g3nrMO1fHyMmjmlIofIb+a0ghsl0VQDvSB/nLczIZGpVwTUih3rzo4wkwWpKphDncBQa1ihlw3FH/V+402vCd0oaMorJKi2zp+aj+lhdl8NahwZmzbE1ULBzNmN+Y58ygNQ0+kcAOgPUaAoKn4J/mfj5BbfsCc3/SlietIlfg3QVAG0ZO3soFoVzQhHz11mQYwJk7q1BgDgHOSZn56IorFD/j9infGBataXmmYyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=60KRb2GKTzaPOVBx0dWjAp9lQc9Vt9jLYjF5/7sfktI=;
+ b=NtNKPUreOwSgiqtSbSdCgdg3zr5oBxztNnEI02xWjd6+Px3VtIckL/8jJaj5JQuWuc3F470mL00oKX/om3HniKQc3HinuvY9xLRewxI2fTnqxvf5cYitV7yyqbwNaAg0WJcjfN1T64SPvqyk6hZhIvf89bbQPJ/t6FCds2r0dQPKLP7pM+dTwf6WGk7vpIXaJhWuXsC2h3dw3CGK4vkWsMVjNesNqMz2zofv4fCdxLm306vwWExBlXbDUGCA4WnMLmv6Gk7eWkiWjKUah1XBvHHlZC3w/5CARi/bDGX01PEGaUKNpzi6/F7SmgnD87UeQn6Uz3SBLDeNxoTHMyU09g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by PAXPR04MB9092.eurprd04.prod.outlook.com (2603:10a6:102:22a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.19; Wed, 31 Jul
+ 2024 15:04:38 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.7807.026; Wed, 31 Jul 2024
+ 15:04:38 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: robh@kernel.org
+Cc: Frank.Li@nxp.com,
+	alexandre.belloni@bootlin.com,
+	christophe.leroy@csgroup.eu,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	krzk+dt@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 1/1] dt-bindings: soc: fsl: Convert rcpm to yaml format
+Date: Wed, 31 Jul 2024 11:04:20 -0400
+Message-Id: <20240731150420.2217925-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR08CA0005.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::18) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240731-imx95-bbm-misc-v2-v7-7-a41394365602@nxp.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|PAXPR04MB9092:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79408280-ec48-4f66-9b82-08dcb17218f5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|52116014|7416014|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?jqQmIFyFOKVwxeuM8RtApPrY0q6x0pOPvQay4bncB+UK3k/mAccQKPVO1BQk?=
+ =?us-ascii?Q?y3bpumJ9LCp+SoJ0O0m8pyCHGwZMba+TpIo+rxtrWBTCfaLRDqiukDrk2vc5?=
+ =?us-ascii?Q?XMCVTqRQ1nMSkYVgMcWNPFWPJkK5bUOw1IzhGBpSQc1Ha61rn0i4tEJ7w2HK?=
+ =?us-ascii?Q?Uf8XOXBtG/S/hP2NBdhPqUPe/vKYkHPEeUMnBubb8OOpabOQKuyqzRP7LBFf?=
+ =?us-ascii?Q?tKfixsLDlleIMTZ+r9k+V2YJ0WRe0f12zAiHBGPoQbA8RktoBSTRNfwMHKRD?=
+ =?us-ascii?Q?a0ArGT1+D2PSP4eWY2FWaPGOTDTB6F8XHA26AhcC9bHIgImByepBiaxk7HGP?=
+ =?us-ascii?Q?1uvWGgXq97y+5KaNUbji8oTVCdQCEP+3OX4A9vMxm8tNbhyFgfNWHZVzTLR7?=
+ =?us-ascii?Q?tgk92FjdXitfoJzAOhO++p0j6yEmflwwRyS+jQiW+zqzsJ8XBNl9dbrUBocZ?=
+ =?us-ascii?Q?A5gdE2JlbGaSzQGp5vdSiwej9vh1BARaHrL0lKkmG9aRaaWYm61Xb6RlJSxm?=
+ =?us-ascii?Q?jJEorebFnvnkpWzI9wutAntZuLQQeBtbLPoBLhJSgnRjwFTSb35Ni8gWCemS?=
+ =?us-ascii?Q?zSfxTkVoW2UhbhXpkPgRaXqb0gPIkgPKPL/l34QlV+zdf2UnAFy7F8487A7L?=
+ =?us-ascii?Q?8USlcZ4mXRIubysym/ExbCpAvF6vdXzBLRX/ltuHQH6xSGK7OtDHXBcDdpua?=
+ =?us-ascii?Q?UEp1YPR5wRCqaIHTNQ5JrUgsjPILirP2iRpV0IgpZTTlJw/6IxqGxanlMCbj?=
+ =?us-ascii?Q?NkQOX1qCAp/FIHlDCEYCWjdMLG3x/VDotA1coLtUx8f0K2QsNcRFNl929Lpt?=
+ =?us-ascii?Q?cC21BhEGLDzNjTGXMQAARUkvtYawxate29z/P2cosmD2Nzd+ZukJIX9oiTn2?=
+ =?us-ascii?Q?iGBYgwzbbhZqJD4gLvkMyQTpT5074oxD25/8iVxzT17+6uarcbJ7bAfQS9+t?=
+ =?us-ascii?Q?LsFD31MzTspQGxfPXcVJogYrES8MGOManmNLoqaX9UfSg4nF9NNkSmKDe9ko?=
+ =?us-ascii?Q?OOTalD0qU/8rRoAqSoZqrR5z6v0txOOJhRpTHAVgW99slNX2PDlGjHtK0OXk?=
+ =?us-ascii?Q?yAHeUaNbZ81rxp+XAUpPHPPmFOuRiFdBcHJeOX7sEfSjYwp5EQO2t5H9UbyP?=
+ =?us-ascii?Q?8R+PQxwpFopOVYvfSiMgsqv5vFbUO5ZtvpKLv2ATbpklCU6zoLtjLLr+rC/m?=
+ =?us-ascii?Q?QHRoUAvcpqnCkmc5qDJoVQVepF9ucFYUGjilsL9DzuoVB2hzEk9dnzOzhz2W?=
+ =?us-ascii?Q?MBqApQu0gEXALifotk7jXVjKrp42a2mxSNfF2W9oF42st31uJgSWl2zpDQ4/?=
+ =?us-ascii?Q?7WX5SxTIs5r5NCvl1gZvk1Nk8CMMdy6ACB4bj3O9rms67qskSDp42RYxrEDR?=
+ =?us-ascii?Q?AmOJw3Y=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(52116014)(7416014)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?6daUwNWoG0mc+LvNhCI/TFQuPAGQp6aVo//AA9Bxd4xJxjJh3orG89Umni7U?=
+ =?us-ascii?Q?bjO9pEHFyqOLptikSBEgnD84PbtA1c7x99UQ4EdYaHniS+h+ZZ19CYgFKwUT?=
+ =?us-ascii?Q?dGeOHTJKuVzo0b2Bo+VANd4GD2MG2RqsY3UVp9SvHbfuXLJM6iNdgfZqwrJ2?=
+ =?us-ascii?Q?4XZ9NKQ4BNJDmf2eGQdu63yAXKyrO6/BhcR1ObmO4kE1Wumqf8hlGr/XA1nD?=
+ =?us-ascii?Q?9DD83Sf+Yt20LpzuPLGX1Xhx+gh0WbF0YxpAV71ZPyCfwZheYFC1Zau9bDcl?=
+ =?us-ascii?Q?tWQdPCUViejNJ9lhqZ3P2tuyFrsYmmoazXFc2zPOJq76ZKZL2rrvq90sbzNa?=
+ =?us-ascii?Q?e8jbRAHaLTiX+yW7wBCd58LHz3bUtUG6i8G1OYlFwjU56rioIcZGLfCxHVUF?=
+ =?us-ascii?Q?cGkhjMr07wsHNFcpRz9jdthMJvsDPnd40Cm/OvyW+yZ5B7ymvqcsyzAgBGk1?=
+ =?us-ascii?Q?MQu3z2avbocbLZ+XOkqoe2QN8YA6cf14bJzyJl0DwcYM1CPJgfaPjnogZ/yB?=
+ =?us-ascii?Q?RjHjkXAnMf9wugi0xHMkf0i8hgxZi2x2Ep2YrKFDazV0wIzfoQ2myaKjovu7?=
+ =?us-ascii?Q?i5yMti1O5b5e7emZp6aJ9+Ee331yQ+e05Kmj61yehCxjaPjGPm4x7H1eZwju?=
+ =?us-ascii?Q?DOvqoT278PSHwS/vqa7tUrSrZ3mFyaoGNFLE8uYdrYkqoQoGD2reDCNIN4Il?=
+ =?us-ascii?Q?Dq5djqUGLbF3h7c4b4RbzYeth42xmC+im2bf2WHYMKgHHj1AyS6+pKu8olL4?=
+ =?us-ascii?Q?wHoJ6dKyIXbPW7KMdcmXKogG4GvkuP8z8IUUugAPcn4lM5+PaJ6VeEr3w+vs?=
+ =?us-ascii?Q?RUqfICL9g5CkbpeElS2geCPKQupVYMz/Wwn4KAKJPOfP5/TzKtcPFNPsbqLq?=
+ =?us-ascii?Q?crXWBOaG0WkitUZUUpCPwE0fuLCw9nzegQY0h3E1WMVIoFmLt+DzV0It3f7Y?=
+ =?us-ascii?Q?m/41A5/sb/1juDoV5JXJ2FngJcuKXO0FvKKDyJP07knrws1lN3gOzq3XG3aQ?=
+ =?us-ascii?Q?7BZkdApFr6LGfDQHODM6Fks6hYt7CHs6giWQrPK6hhDzqYUHwWHWTysyrgYL?=
+ =?us-ascii?Q?2rj7MO0GADK22UA/Xi84mWtxMtFyl/IPUXkuXfo72HUlWrohuM86ekBxc1OY?=
+ =?us-ascii?Q?djkWR2vgxMQeANfsPIUEUvKP9SSzoS6Dkgfa9RwJE7396szPAf+ZHoC/NFD0?=
+ =?us-ascii?Q?PQJFsqtBMpeqVt96JYjYLFxjfPgRc1fmLlEN1DTeiij/2dsCHSk3m48pK1h9?=
+ =?us-ascii?Q?pW5jTqsVbxs0YpJc3G4u1Oj46C3ILmFnNNq6vedZwcd/xiQaNV2OBWhF2Kk7?=
+ =?us-ascii?Q?GupxjKN8PiwLD4u9cnfpc6tOePFtwzO/Ur0p4uWVAwP/+Bx5zzrKHtzO9cOQ?=
+ =?us-ascii?Q?OyBOWudnBmUlLw/B5tnQm6L7PXFeqlnChMEwH9Wxh5SaQKkSDVHF53IXGUmi?=
+ =?us-ascii?Q?Giz/yGdltDqL893yzN7qPVz3JOLfZoD1iFse6544z0qg39Y6Fdex3g1LJb8R?=
+ =?us-ascii?Q?sx7BnOeKnAxYCHOGu0CLD8osx+SrQ/HbpoUgluRV+YId5BOypbh/dMhu2TNM?=
+ =?us-ascii?Q?CIH2UnyzFvG1XhbxnvE=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79408280-ec48-4f66-9b82-08dcb17218f5
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 15:04:38.4216
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SYVPB8Qn6vhxnrP5TNZbya8fhYFNBTs3kUyEcUCKvNpmvmicMjZbW5YPs7GKDwVYN3TC6nSMpyh10OBUGOuq2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9092
 
-On Wed, Jul 31, 2024 at 08:56:11PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The BBM module provides BUTTON feature. To i.MX95, this module
-> is managed by System Manager and exported using System Management
-> Control Interface(SCMI). Linux could use i.MX SCMI BBM Extension
-> protocol to use BUTTON feature.
-> 
-> This driver is to use SCMI interface to enable pwrkey.
-> 
+Convert dt-binding rcpm from txt to yaml format.
+Add fsl,ls1028a-rcpm compatible string.
 
-Hi Peng,
+Additional changes:
+- Add missed compatible string fsl,<chip>-rcpm.
+- Remove map fsl,<chip>-rcpm to fsl,qoriq-rcpm-<version>.
 
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Change from v1 to v2
+- add missed compatible string
+- Remove compatible string map table
+- use oneof Item to align compatible string map table
+- Fix typo 1045a
+---
+ .../bindings/rtc/fsl,ls-ftm-alarm.yaml        |   2 +-
+ .../devicetree/bindings/soc/fsl/fsl,rcpm.yaml | 101 ++++++++++++++++++
+ .../devicetree/bindings/soc/fsl/rcpm.txt      |  69 ------------
+ 3 files changed, 102 insertions(+), 70 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/fsl/rcpm.txt
 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/input/keyboard/Kconfig          |  11 ++
->  drivers/input/keyboard/Makefile         |   1 +
->  drivers/input/keyboard/imx-sm-bbm-key.c | 236 ++++++++++++++++++++++++++++++++
->  3 files changed, 248 insertions(+)
-> 
-> diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-> index 72f9552cb571..a3301239b9a6 100644
-> --- a/drivers/input/keyboard/Kconfig
-> +++ b/drivers/input/keyboard/Kconfig
-> @@ -454,6 +454,17 @@ config KEYBOARD_IMX
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called imx_keypad.
->  
-> +config KEYBOARD_IMX_BBM_SCMI
-> +	tristate "IMX BBM SCMI Key Driver"
-> +	depends on IMX_SCMI_BBM_EXT || COMPILE_TEST
-> +	default y if ARCH_MXC
-> +	help
-> +	  This is the BBM key driver for NXP i.MX SoCs managed through
-> +	  SCMI protocol.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called scmi-imx-bbm-key.
-> +
->  config KEYBOARD_IMX_SC_KEY
->  	tristate "IMX SCU Key Driver"
->  	depends on IMX_SCU
-> diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-> index b8d12a0524e0..5915e52eac28 100644
-> --- a/drivers/input/keyboard/Makefile
-> +++ b/drivers/input/keyboard/Makefile
-> @@ -31,6 +31,7 @@ obj-$(CONFIG_KEYBOARD_IPAQ_MICRO)	+= ipaq-micro-keys.o
->  obj-$(CONFIG_KEYBOARD_IQS62X)		+= iqs62x-keys.o
->  obj-$(CONFIG_KEYBOARD_IMX)		+= imx_keypad.o
->  obj-$(CONFIG_KEYBOARD_IMX_SC_KEY)	+= imx_sc_key.o
-> +obj-$(CONFIG_KEYBOARD_IMX_BBM_SCMI)	+= imx-sm-bbm-key.o
->  obj-$(CONFIG_KEYBOARD_HP6XX)		+= jornada680_kbd.o
->  obj-$(CONFIG_KEYBOARD_HP7XX)		+= jornada720_kbd.o
->  obj-$(CONFIG_KEYBOARD_LKKBD)		+= lkkbd.o
-> diff --git a/drivers/input/keyboard/imx-sm-bbm-key.c b/drivers/input/keyboard/imx-sm-bbm-key.c
-> new file mode 100644
-> index 000000000000..ca430dbb61d0
-> --- /dev/null
-> +++ b/drivers/input/keyboard/imx-sm-bbm-key.c
-> @@ -0,0 +1,236 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright 2024 NXP.
-> + */
-> +
-> +#include <linux/input.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/rtc.h>
-> +#include <linux/scmi_protocol.h>
-> +#include <linux/scmi_imx_protocol.h>
-> +#include <linux/suspend.h>
-> +
-> +#define DEBOUNCE_TIME		30
-> +#define REPEAT_INTERVAL		60
-> +
-> +struct scmi_imx_bbm {
-> +	struct scmi_protocol_handle *ph;
-> +	const struct scmi_imx_bbm_proto_ops *ops;
-> +	struct notifier_block nb;
-> +	int keycode;
-> +	int keystate;  /* 1:pressed */
-> +	bool suspended;
-> +	struct delayed_work check_work;
-> +	struct input_dev *input;
-> +};
-> +
-> +static void scmi_imx_bbm_pwrkey_check_for_events(struct work_struct *work)
-> +{
-> +	struct scmi_imx_bbm *bbnsm = container_of(to_delayed_work(work),
-> +						  struct scmi_imx_bbm, check_work);
-> +	struct scmi_protocol_handle *ph = bbnsm->ph;
-> +	struct input_dev *input = bbnsm->input;
-> +	u32 state = 0;
-> +	int ret;
-> +
-> +	ret = bbnsm->ops->button_get(ph, &state);
-> +	if (ret) {
-> +		pr_err("%s: %d\n", __func__, ret);
-> +		return;
-> +	}
-> +
-> +	pr_debug("%s: state: %d, keystate %d\n", __func__, state, bbnsm->keystate);
-> +
-> +	/* only report new event if status changed */
-> +	if (state ^ bbnsm->keystate) {
-> +		bbnsm->keystate = state;
-> +		input_event(input, EV_KEY, bbnsm->keycode, state);
-> +		input_sync(input);
-> +		pm_relax(bbnsm->input->dev.parent);
-> +		pr_debug("EV_KEY: %x\n", bbnsm->keycode);
-> +	}
-> +
-> +	/* repeat check if pressed long */
-> +	if (state)
-> +		schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(REPEAT_INTERVAL));
-> +}
-> +
-> +static int scmi_imx_bbm_pwrkey_event(struct scmi_imx_bbm *bbnsm)
-> +{
-> +	struct input_dev *input = bbnsm->input;
-> +
-> +	pm_wakeup_event(input->dev.parent, 0);
-> +
-> +	/*
-> +	 * Directly report key event after resume to make no key press
-> +	 * event is missed.
-> +	 */
-> +	if (READ_ONCE(bbnsm->suspended)) {
-> +		bbnsm->keystate = 1;
-> +		input_event(input, EV_KEY, bbnsm->keycode, 1);
-> +		input_sync(input);
-> +		WRITE_ONCE(bbnsm->suspended, false);
-> +	}
-> +
-> +	schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(DEBOUNCE_TIME));
-> +
-> +	return 0;
-> +}
-> +
-> +static void scmi_imx_bbm_pwrkey_act(void *pdata)
-> +{
-> +	struct scmi_imx_bbm *bbnsm = pdata;
-> +
-> +	cancel_delayed_work_sync(&bbnsm->check_work);
-> +}
-> +
-> +static int scmi_imx_bbm_key_notifier(struct notifier_block *nb, unsigned long event, void *data)
-> +{
-> +	struct scmi_imx_bbm *bbnsm = container_of(nb, struct scmi_imx_bbm, nb);
-> +	struct scmi_imx_bbm_notif_report *r = data;
-> +
-> +	if (r->is_button) {
-> +		pr_debug("BBM Button Power key pressed\n");
-> +		scmi_imx_bbm_pwrkey_event(bbnsm);
-> +	} else {
-> +		/* Should never reach here */
-> +		pr_err("Unexpected BBM event: %s\n", __func__);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int scmi_imx_bbm_pwrkey_init(struct scmi_device *sdev)
-> +{
-> +	const struct scmi_handle *handle = sdev->handle;
-> +	struct device *dev = &sdev->dev;
-> +	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-> +	struct input_dev *input;
-> +	int ret;
-> +
-> +	if (device_property_read_u32(dev, "linux,code", &bbnsm->keycode)) {
-> +		bbnsm->keycode = KEY_POWER;
-> +		dev_warn(dev, "key code is not specified, using default KEY_POWER\n");
-> +	}
-> +
-> +	INIT_DELAYED_WORK(&bbnsm->check_work, scmi_imx_bbm_pwrkey_check_for_events);
-> +
-> +	input = devm_input_allocate_device(dev);
-> +	if (!input) {
-> +		dev_err(dev, "failed to allocate the input device for SCMI IMX BBM\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	input->name = dev_name(dev);
-> +	input->phys = "bbnsm-pwrkey/input0";
-> +	input->id.bustype = BUS_HOST;
-> +
-> +	input_set_capability(input, EV_KEY, bbnsm->keycode);
-> +
-> +	ret = devm_add_action_or_reset(dev, scmi_imx_bbm_pwrkey_act, bbnsm);
-> +	if (ret) {
-> +		dev_err(dev, "failed to register remove action\n");
-> +		return ret;
-> +	}
-> +
-> +	bbnsm->input = input;
-> +
-> +	bbnsm->nb.notifier_call = &scmi_imx_bbm_key_notifier;
-> +	ret = handle->notify_ops->devm_event_notifier_register(sdev, SCMI_PROTOCOL_IMX_BBM,
-> +							       SCMI_EVENT_IMX_BBM_BUTTON,
-> +							       NULL, &bbnsm->nb);
-> +
-> +	if (ret)
-> +		dev_err(dev, "Failed to register BBM Button Events %d:", ret);
-> +
-> +	ret = input_register_device(input);
-> +	if (ret) {
-> +		dev_err(dev, "failed to register input device\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int scmi_imx_bbm_key_probe(struct scmi_device *sdev)
-> +{
-> +	const struct scmi_handle *handle = sdev->handle;
-> +	struct device *dev = &sdev->dev;
-> +	struct scmi_protocol_handle *ph;
-> +	struct scmi_imx_bbm *bbnsm;
-> +	int ret;
-> +
-> +	if (!handle)
-> +		return -ENODEV;
-> +
-> +	bbnsm = devm_kzalloc(dev, sizeof(*bbnsm), GFP_KERNEL);
-> +	if (!bbnsm)
-> +		return -ENOMEM;
-> +
-> +	bbnsm->ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_IMX_BBM, &ph);
-> +	if (IS_ERR(bbnsm->ops))
-> +		return PTR_ERR(bbnsm->ops);
-> +
-> +	bbnsm->ph = ph;
-> +
-> +	device_init_wakeup(dev, true);
-> +
-> +	dev_set_drvdata(dev, bbnsm);
-> +
-> +	ret = scmi_imx_bbm_pwrkey_init(sdev);
-> +	if (ret)
-> +		device_init_wakeup(dev, false);
-> +
-> +	return ret;
-> +}
-> +
-> +static void scmi_imx_bbm_key_remove(struct scmi_device *sdev)
-> +{
-> +	struct device *dev = &sdev->dev;
-> +	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-> +
-> +	device_init_wakeup(dev, false);
-> +
-> +	cancel_delayed_work_sync(&bbnsm->check_work);
-> +}
-> +
+diff --git a/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml b/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
+index 388102ae30cd8..3ec111f2fdc40 100644
+--- a/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
++++ b/Documentation/devicetree/bindings/rtc/fsl,ls-ftm-alarm.yaml
+@@ -42,7 +42,7 @@ properties:
+         minItems: 1
+     description:
+       phandle to rcpm node, Please refer
+-      Documentation/devicetree/bindings/soc/fsl/rcpm.txt
++      Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+ 
+   big-endian:
+     $ref: /schemas/types.yaml#/definitions/flag
+diff --git a/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml b/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+new file mode 100644
+index 0000000000000..762316ef4d150
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/fsl/fsl,rcpm.yaml
+@@ -0,0 +1,101 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/fsl/fsl,rcpm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Run Control and Power Management
++
++description:
++  The RCPM performs all device-level tasks associated with device run control
++  and power management.
++
++maintainers:
++  - Frank Li <Frank.Li@nxp.com>
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - fsl,ls1012a-rcpm
++              - fsl,ls1021a-rcpm
++              - fsl,ls1028a-rcpm
++              - fsl,ls1043a-rcpm
++              - fsl,ls1045a-rcpm
++          - enum:
++              - fsl,qoriq-rcpm-2.1+
++        minItems: 1
++      - items:
++          - enum:
++              - fsl,p2041-rcpm
++              - fsl,p3041-rcpm
++              - fsl,p4080-rcpm
++              - fsl,p5020-rcpm
++              - fsl,p5040-rcpm
++          - enum:
++              - fsl,qoriq-rcpm-1.0
++        minItems: 1
++      - items:
++          - enum:
++              - fsl,b4420-rcpm
++              - fsl,b4860-rcpm
++              - fsl,t4240-rcpm
++          - enum:
++              - fsl,qoriq-rcpm-2.0
++        minItems: 1
++      - items:
++          - enum:
++              - fsl,t1040-rcpm
++          - enum:
++              - fsl,qoriq-rcpm-2.1
++        minItems: 1
++
++  reg:
++    maxItems: 1
++
++  "#fsl,rcpm-wakeup-cells":
++    description: |
++      The number of IPPDEXPCR register cells in the
++      fsl,rcpm-wakeup property.
++
++      Freescale RCPM Wakeup Source Device Tree Bindings
++
++      Required fsl,rcpm-wakeup property should be added to a device node if
++      the device can be used as a wakeup source.
++
++      fsl,rcpm-wakeup: Consists of a phandle to the rcpm node and the IPPDEXPCR
++      register cells. The number of IPPDEXPCR register cells is defined in
++      "#fsl,rcpm-wakeup-cells" in the rcpm node. The first register cell is
++      the bit mask that should be set in IPPDEXPCR0, and the second register
++      cell is for IPPDEXPCR1, and so on.
++
++      Note: IPPDEXPCR(IP Powerdown Exception Control Register) provides a
++      mechanism for keeping certain blocks awake during STANDBY and MEM, in
++      order to use them as wake-up sources.
++
++  little-endian:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      RCPM register block is Little Endian. Without it RCPM
++      will be Big Endian (default case).
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    rcpm: global-utilities@e2000 {
++          compatible = "fsl,t4240-rcpm", "fsl,qoriq-rcpm-2.0";
++          reg = <0xe2000 0x1000>;
++          #fsl,rcpm-wakeup-cells = <2>;
++    };
++
++    serial@2950000 {
++         compatible = "fsl,ls1021a-lpuart";
++         reg = <0x2950000 0x1000>;
++         interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
++         clocks = <&sysclk>;
++         clock-names = "ipg";
++         fsl,rcpm-wakeup = <&rcpm 0x0 0x40000000>;
++    };
+diff --git a/Documentation/devicetree/bindings/soc/fsl/rcpm.txt b/Documentation/devicetree/bindings/soc/fsl/rcpm.txt
+deleted file mode 100644
+index 5a33619d881d0..0000000000000
+--- a/Documentation/devicetree/bindings/soc/fsl/rcpm.txt
++++ /dev/null
+@@ -1,69 +0,0 @@
+-* Run Control and Power Management
+--------------------------------------------
+-The RCPM performs all device-level tasks associated with device run control
+-and power management.
+-
+-Required properites:
+-  - reg : Offset and length of the register set of the RCPM block.
+-  - #fsl,rcpm-wakeup-cells : The number of IPPDEXPCR register cells in the
+-	fsl,rcpm-wakeup property.
+-  - compatible : Must contain a chip-specific RCPM block compatible string
+-	and (if applicable) may contain a chassis-version RCPM compatible
+-	string. Chip-specific strings are of the form "fsl,<chip>-rcpm",
+-	such as:
+-	* "fsl,p2041-rcpm"
+-	* "fsl,p5020-rcpm"
+-	* "fsl,t4240-rcpm"
+-
+-	Chassis-version strings are of the form "fsl,qoriq-rcpm-<version>",
+-	such as:
+-	* "fsl,qoriq-rcpm-1.0": for chassis 1.0 rcpm
+-	* "fsl,qoriq-rcpm-2.0": for chassis 2.0 rcpm
+-	* "fsl,qoriq-rcpm-2.1": for chassis 2.1 rcpm
+-	* "fsl,qoriq-rcpm-2.1+": for chassis 2.1+ rcpm
+-
+-All references to "1.0" and "2.0" refer to the QorIQ chassis version to
+-which the chip complies.
+-Chassis Version		Example Chips
+----------------		-------------------------------
+-1.0				p4080, p5020, p5040, p2041, p3041
+-2.0				t4240, b4860, b4420
+-2.1				t1040,
+-2.1+				ls1021a, ls1012a, ls1043a, ls1046a
+-
+-Optional properties:
+- - little-endian : RCPM register block is Little Endian. Without it RCPM
+-   will be Big Endian (default case).
+-
+-Example:
+-The RCPM node for T4240:
+-	rcpm: global-utilities@e2000 {
+-		compatible = "fsl,t4240-rcpm", "fsl,qoriq-rcpm-2.0";
+-		reg = <0xe2000 0x1000>;
+-		#fsl,rcpm-wakeup-cells = <2>;
+-	};
+-
+-* Freescale RCPM Wakeup Source Device Tree Bindings
+--------------------------------------------
+-Required fsl,rcpm-wakeup property should be added to a device node if the device
+-can be used as a wakeup source.
+-
+-  - fsl,rcpm-wakeup: Consists of a phandle to the rcpm node and the IPPDEXPCR
+-	register cells. The number of IPPDEXPCR register cells is defined in
+-	"#fsl,rcpm-wakeup-cells" in the rcpm node. The first register cell is
+-	the bit mask that should be set in IPPDEXPCR0, and the second register
+-	cell is for IPPDEXPCR1, and so on.
+-
+-	Note: IPPDEXPCR(IP Powerdown Exception Control Register) provides a
+-	mechanism for keeping certain blocks awake during STANDBY and MEM, in
+-	order to use them as wake-up sources.
+-
+-Example:
+-	lpuart0: serial@2950000 {
+-		compatible = "fsl,ls1021a-lpuart";
+-		reg = <0x0 0x2950000 0x0 0x1000>;
+-		interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&sysclk>;
+-		clock-names = "ipg";
+-		fsl,rcpm-wakeup = <&rcpm 0x0 0x40000000>;
+-	};
+-- 
+2.34.1
 
-..so in v6 I asked you to add a cancel_delayed_work_sync() on the
-removal path, BUT I missed, my bad, that indeed above there was already
-a call to cancel_delayed_work_sync() associated to a
-devm_add_action_or_reset....so now we have 2....also you should try not
-to mix devm_add_action_or_reset and plain .remove methods..use one or
-the other.
-
-Thanks,
-Cristian
 
