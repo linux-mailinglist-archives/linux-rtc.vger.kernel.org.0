@@ -1,84 +1,64 @@
-Return-Path: <linux-rtc+bounces-1663-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1664-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3834994755C
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Aug 2024 08:39:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 793CA94885B
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 Aug 2024 06:27:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AD8AB20C69
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Aug 2024 06:39:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 308EF1F234DF
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 Aug 2024 04:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271B614386C;
-	Mon,  5 Aug 2024 06:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872211BA880;
+	Tue,  6 Aug 2024 04:27:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TS8qDyov"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gIXyXEq6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8501E4B2;
-	Mon,  5 Aug 2024 06:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5F3EADC;
+	Tue,  6 Aug 2024 04:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722839967; cv=none; b=cMYNz+wOrfxEOi6GvPdkLIaG2XyVXkTHlokIT4NXkDDfOIlsq2pb5ljBc7BNE6wWNfka5oQ+xjdzbGQGQ8ipoH68AE9ourM8JEBS8FoNXvfXQvWdAW2s78YfemeeMu/oO5WTpImOpNMpwdiO90KaY8e6Pfy0UixsTCoX8Xmy+a0=
+	t=1722918444; cv=none; b=a6j+KnlwrIZRV/TKYX7plJ6RPVvi8cn3gVRXhWRLW7SvxyxhWkcnuYxUy9vi4Aw4Y6qKhdW4Z0O1NqWipNm31kvTD+itwsq4ujlfi9AcPcd8OznzcwJEZgXdlewZRyL4DrKDh9i6IMgFryXjb4z8IZy6BziATRiWU6sUfJoXRtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722839967; c=relaxed/simple;
-	bh=bn0AatgpkDgkHcuUtx+tw+p/9a2qNxd7D4R5b72zfzw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QEA+VoDi1s8vsN5tVWvuL7eGqbGrzPtlOZqpW+dEL7yGhDUiBkpGGn6xf8zkydo/h9NdLsI/+78LWVHan6lLlHPDRu18O7P4o9xVJIPCs3ZnOafFSk5qkM/ZMtrw+jPbBz2UrVkRAmaEH7tvE5yZRZdhCuk9ytM+i9640EJr9C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TS8qDyov; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42816ca782dso68249145e9.2;
-        Sun, 04 Aug 2024 23:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722839964; x=1723444764; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4z+UOba0eJ/ZXfIeErXsQjYD7+Z5Me9jIMp/Hk00nSM=;
-        b=TS8qDyov+jhT8TnrHt0VH9wAUrDejwY2JRuDNFBA4oB7J7phbERta3oNGB+zzZKoK0
-         mjBgQmigdlltAtMkfIGOMgBzK283l9vn3StUQYMm//eOArP3R1JsrYtvyH/orBh1uK6c
-         2i5kyri9DlyJ1BMVHEOZFmy/zXB896psFrODAwXVqNQc6pr5xL+ZCs+2iCxvF0JcAl47
-         7bHFR3PMz7F0iYoNeci3lzi0D+gHG+iBxYrYNc/BcZlZR5ujN7BqAk2H78i1YjJ7zZkN
-         JZ/ehT1WMWZvbmwTyeVgzbKs4/qWya95DbT69G0E6brYkkkhuKfRrENkWZaR3kH9mm3G
-         uLpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722839964; x=1723444764;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4z+UOba0eJ/ZXfIeErXsQjYD7+Z5Me9jIMp/Hk00nSM=;
-        b=IleVAWK7kusFVK3PVh27wXnq14QAE11/e0ztdwjQjbCyZN+EqSPoumlUTJpJ4/vs6F
-         r1u+FIZEEQ+pPtG67Rn1tWyhF9pEsHVJ6ThORfq3Ja0c3SLmOe3qR94nbBv6BkDwFiKT
-         7QtXNtJPPw+7Xo2MVGWI0afzNbIk/yN/93fmtuBjROdHrMl69DQjYF/dMc+wtyK5rSOu
-         8K1mTonxOSBaZkh2qGg0RGPSb8lvAf30r7T8jLmd/34Rql51x2ozJUCc3bDBUpdW8Dgr
-         weZIuM6uFB2RUn0SwNEJJ4TyquU9LOYzs2N5vE6wi3cBvGxGocH5LAqnK4j5NF46dSAw
-         Cx0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVnKaZ28THKH3nThXv2v0tAJ8rDHwvdyfmsFhjN3fxTS2PftSOVhxqNnDFoA/sQxBKusiEK6xYxIKGx5l+R0++6xXkG6+XfhKml2uu9FaJGzX8VrLgaz976PlycoBz26MAHkXueb1nozg==
-X-Gm-Message-State: AOJu0YwLHbk9F3/Ffdlf6tN+sxJt1XfBUt3VtOqdWX3QptpyQKsXxXid
-	x3GEtBrBJK1j43BbVJzPvMvA3VAHsbUgM1DEvXi9S8mILN7PEz3jf8lyfA==
-X-Google-Smtp-Source: AGHT+IG/ZujxIH2LNQw66CFBbrvHSl0lK/dRB9AccVwO9ui5EgFWDEWE1uVDMfINMD02ngQ4M6Lk3A==
-X-Received: by 2002:a05:600c:1c93:b0:426:5216:3247 with SMTP id 5b1f17b1804b1-428e6ae9f05mr71770275e9.6.1722839963358;
-        Sun, 04 Aug 2024 23:39:23 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP (lu-nat-113-247.ehs.sk. [188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-428e6e9cd4esm122844085e9.44.2024.08.04.23.39.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Aug 2024 23:39:22 -0700 (PDT)
-Date: Mon, 5 Aug 2024 08:39:21 +0200
-From: Stanislav Jakubek <stano.jakubek@gmail.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Baolin Wang <baolin.wang7@gmail.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: rtc: sprd,sc2731-rtc: convert to YAML
-Message-ID: <ZrBzmQI0IAL7LI3e@standask-GA-A55M-S2HP>
+	s=arc-20240116; t=1722918444; c=relaxed/simple;
+	bh=AZzy/I51vgXjxJSQvB6NDee/pSQvkl/ELAdj2zwi0es=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n/rLMS40l1HmwRLMxUZvmVqmSvZLjR7SXoDDKDeeZpcUYLkICtOgMVN8BeTOi9yaY+zwLjNM89P7fb0/jREmAQ0KrkOh8ywtD4anqYHt9ivrz6a2TMvI/8hLKd9mmqIIoMIvNs/MTdoTeRX5o/HYf99rk88QRVzAJgOnc8fevRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gIXyXEq6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8FAC32786;
+	Tue,  6 Aug 2024 04:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722918443;
+	bh=AZzy/I51vgXjxJSQvB6NDee/pSQvkl/ELAdj2zwi0es=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gIXyXEq6bDAqnFjFEN3iXLi/wiYv8IqNv2XLV5j2si3yZCU7rnzJISPVX/dgFq0NS
+	 Vqhm+P/Cu4PxAaXoEOfgNenZMAo72oEeFUsibER62z7/MawhvCeE9iSFzJ+gTTkLv0
+	 Rqi1KQi4PH9FPXLs52Lu1geS8Nmr2yWiXAyhhBk+lEV+yuUFun913JJQMxOhon5V1t
+	 /nAQSjDOxbrJi4pQiCn3XzHlFGO2qcWVL0CzY/cZSHxRYnyr7Q/gsTTHiUZW3buyvm
+	 4qAXewx7CPGy9dRB7I/8h3HALw6kxjFQ7OJmllUIJoHDfIcGTG7uyM3omyYkp3dMIu
+	 iRgHG/EyuiSMQ==
+Date: Mon, 5 Aug 2024 21:27:23 -0700
+From: Kees Cook <kees@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+	linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	David Hildenbrand <david@redhat.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org, kvm@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] selftests: harness: refactor __constructor_order
+Message-ID: <202408052126.E8A8120C1@keescook>
+References: <20240727143816.1808657-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -87,113 +67,29 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240727143816.1808657-1-masahiroy@kernel.org>
 
-Convert the Spreadtrum SC2731 RTC bindings to DT schema.
-Rename file to match compatible.
+On Sat, Jul 27, 2024 at 11:37:35PM +0900, Masahiro Yamada wrote:
+> 
+> This series refactors __constructor_order because
+> __constructor_order_last() is unneeded.
+> 
+> No code change since v1.
+> I reworded "reverse-order" to "backward-order" in commit description.
+> 
+> 
+> Masahiro Yamada (2):
+>   selftests: harness: remove unneeded __constructor_order_last()
+>   selftests: harness: rename __constructor_order for clarification
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
----
-Changes in V2:
-  - add Krzystof's R-b
-  - rebase on next-20240805
+Thanks for resending this!
 
-Link to V1: https://lore.kernel.org/lkml/ZolsyEC8eeJWNIb6@standask-GA-A55M-S2HP/
+Reviewed-by: Kees Cook <kees@kernel.org>
 
- .../bindings/rtc/sprd,sc2731-rtc.yaml         | 49 +++++++++++++++++++
- .../bindings/rtc/sprd,sc27xx-rtc.txt          | 26 ----------
- 2 files changed, 49 insertions(+), 26 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/sprd,sc2731-rtc.yaml
- delete mode 100644 Documentation/devicetree/bindings/rtc/sprd,sc27xx-rtc.txt
+Shuah, do you want to take this via kselftest? If not, I can carry it...
 
-diff --git a/Documentation/devicetree/bindings/rtc/sprd,sc2731-rtc.yaml b/Documentation/devicetree/bindings/rtc/sprd,sc2731-rtc.yaml
-new file mode 100644
-index 000000000000..f3d20e976965
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/sprd,sc2731-rtc.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/sprd,sc2731-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Spreadtrum SC2731 Real Time Clock
-+
-+maintainers:
-+  - Orson Zhai <orsonzhai@gmail.com>
-+  - Baolin Wang <baolin.wang7@gmail.com>
-+  - Chunyan Zhang <zhang.lyra@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: sprd,sc2731-rtc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    pmic {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      rtc@280 {
-+        compatible = "sprd,sc2731-rtc";
-+        reg = <0x280>;
-+        interrupt-parent = <&sc2731_pmic>;
-+        interrupts = <2 IRQ_TYPE_LEVEL_HIGH>;
-+      };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/rtc/sprd,sc27xx-rtc.txt b/Documentation/devicetree/bindings/rtc/sprd,sc27xx-rtc.txt
-deleted file mode 100644
-index 1f5754299d31..000000000000
---- a/Documentation/devicetree/bindings/rtc/sprd,sc27xx-rtc.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Spreadtrum SC27xx Real Time Clock
--
--Required properties:
--- compatible: should be "sprd,sc2731-rtc".
--- reg: address offset of rtc register.
--- interrupts: rtc alarm interrupt.
--
--Example:
--
--	sc2731_pmic: pmic@0 {
--		compatible = "sprd,sc2731";
--		reg = <0>;
--		spi-max-frequency = <26000000>;
--		interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
--		interrupt-controller;
--		#interrupt-cells = <2>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		rtc@280 {
--			compatible = "sprd,sc2731-rtc";
--			reg = <0x280>;
--			interrupt-parent = <&sc2731_pmic>;
--			interrupts = <2 IRQ_TYPE_LEVEL_HIGH>;
--		};
--	};
+-Kees
+
 -- 
-2.34.1
-
+Kees Cook
 
