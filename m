@@ -1,116 +1,101 @@
-Return-Path: <linux-rtc+bounces-1669-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1670-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A52094D40A
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 Aug 2024 17:57:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F2C9517D7
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Aug 2024 11:39:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B461B21627
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 Aug 2024 15:57:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2249285ABF
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Aug 2024 09:39:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C01198A06;
-	Fri,  9 Aug 2024 15:57:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 971C616131A;
+	Wed, 14 Aug 2024 09:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GujSMncl"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QyWuE/h8"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B134168B8;
-	Fri,  9 Aug 2024 15:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4406165EE6;
+	Wed, 14 Aug 2024 09:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723219057; cv=none; b=gd+roCva5XmykL0n61MXZese+OTFWMMgwkBBSs5nYWZXwOCSyIIjrWj5WZNHUSdYwLoQm0uWIrx6xAtAScxGD1Pu1FVI74/NSjGhZl9rE5EePeHwwRXQKwpBUFTcJlf1qYF2UWmQagfSh0LoWQfJ/RxNvRIdVJNoqCgO7bal41o=
+	t=1723628378; cv=none; b=XrAOmz1ERBe4/HU9WWGEDfxNcjlLREoJ3lb1QtLZjngUMohvc+anlNnvyvS5fxL3BAkTGO5L4R0PE71fN2JhR6abED3cdi2muvbc+QhOvOq1cnPEhmbWy8FEHQp3EnB0v9apLONZ6VxjY2/fbCZH9aVeq/+km6FAZ4pRXo+rEv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723219057; c=relaxed/simple;
-	bh=aupWW4PudjT0riYrRXYHfSbERNtSjKDoPxOKPQ4Jz3U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tx3oEf98ucUJoIp+yDB5zT0raE2qeP7giqnLkm0DVSZH2dA1medN102nAYBm/Ju+vKGx6jYsxOfN5oHo2v8H0z632GPJpLaRfLZxdR8Ebegtc5OnZiT+OAvmyqxakEJ7KSKAvkMA5P4SG/5QwF94BI9+/sAAY8KmIn3BfheHHrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GujSMncl; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-70d1c655141so1840326b3a.1;
-        Fri, 09 Aug 2024 08:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723219055; x=1723823855; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQbheJKaZzimqi2nM1cZ0ksDOovJ28S86O+Xj2+eZ34=;
-        b=GujSMncl9kDoHaMs2sjeRZj4xzWKo2BRiVpkBt4485Tf/P0rtX0pV6OS1H2ESw0T9R
-         XGcqwow1q/oKmuIuSpK/IHJGlOHPaeala15COdnSYfwdV+BcgXUo+8stt4sgV3y1g0X7
-         VRTvLlYGNHto46JW0zy8gKt2f4VM83n8NmXdzrEiNUVIrIplnw8t9UR5sdwwNCX9tbcl
-         4Z4MBJ77Y08nnBhsmpXFCkz19aZ60ylh1XxaRJXeQs0pwliW9A0LtEeo1Qxm0zHTSGOm
-         GwE6pQKN12X8j8FZB4A62NpXYf3j+uSe+PSoud7IkJxumzShTteHOc/kisv9zUrgLM59
-         EA1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723219055; x=1723823855;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AQbheJKaZzimqi2nM1cZ0ksDOovJ28S86O+Xj2+eZ34=;
-        b=dAq8K3sylRv8B7tcHcyZYr/wHFiO4W6Lxr16qrY9S/4Rk+5zMZ5aaae3huNbjHBjdf
-         RMwAnM0fm1cmUrHh0MzhOSedC0IGsRb2DKVJeoo0yVYulftQ1mXaLl4bl8uiHUqutQON
-         qKdK6ID0ZWoc6G7BY7XVYLfjmkA0CCwJ40OgfzKVC+mztbw0GLs++03Tp9TRRWZqfSQv
-         hvh/C5Uu286wK9eiS+boLra1HEAtIBq5kTEyjfhcSzhQY5m3M1EHVYPYf3GxkYT6RSV+
-         pXY6ct0NmJ7DBChBsXKciLwem1WFW8nRecdkjp79lIanGtlB1pOyBG96tbPqpg7wNPLt
-         V2Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCVgT2BFk/540uIvSnQewoIjNnE/KYbyyOuNfvYLb6ExuYCIJ+6+6eUDeQE6cX4DiG3M77Re2c1Dk1jKjirP4Lh0YK/mMANWGvW3Qe5/
-X-Gm-Message-State: AOJu0YydTANLDwicfj95xCJ1Eiwd/0bShDWkKeHvoSHN71pP7QhqEMCt
-	//lX7cwPlc3cUj9vHTTobd05BCo3NYT0ogh7AaLmkDBkcVdz8SyeZqFVlBAd
-X-Google-Smtp-Source: AGHT+IG8JAzFFhDJpXp5iBbOS/4CTp1mY7URlH5eSwuMsh8ncTmLK8FtAeFexWHo5ZBxFFWnFAvk0w==
-X-Received: by 2002:a05:6a00:14c4:b0:70d:2b1b:a37f with SMTP id d2e1a72fcca58-710dcaec5cdmr2119906b3a.24.1723219055254;
-        Fri, 09 Aug 2024 08:57:35 -0700 (PDT)
-Received: from embed-PC.. ([110.225.178.109])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-710cb2e7490sm2774842b3a.164.2024.08.09.08.57.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Aug 2024 08:57:34 -0700 (PDT)
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] rtc: m48t59: Remove division condition with direct comparison
-Date: Fri,  9 Aug 2024 21:26:31 +0530
-Message-Id: <20240809155631.548044-1-abhishektamboli9@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1723628378; c=relaxed/simple;
+	bh=pAIuaobLu99XMAUHdxa2PKr7FA4p97jqsRB7Qb1ubKA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WGaqiIwXXnCdqae18VE4z22mgbaNeuqpmfLTNanV63SRep47752B+aPhq9ceeUNmwt6Bk41eZyqKVN4a+eOI5ydJkvXi6cmKR5sFspOHL9hbbDvrDxW+ZdeYIZ381ullt2u5DuEH0KzFMorYL5FoDxz1et/Z0IjEMa97Ttd94mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QyWuE/h8; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 69F1B60006;
+	Wed, 14 Aug 2024 09:39:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1723628374;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E7PpVU2JAYLxKsnkxtdTr7GFE8pxjv8qTyuS3hDNH+Q=;
+	b=QyWuE/h8cmYYLNBdFzDeXZuImHX6/0ZCaGkoN2n9uZIojGLqzZ28P8Lkj4qqSVh6jZyXyJ
+	iEAFvNjeQ9THhunepKlqhY/tvLoEQ5ZdrcV6X1Akgs/8Yftgdz+v98VWYiizXhPkVdAlWr
+	jo9Ugb9Fl96+8jV6sqnD4Ua/cXXC02+DQTOy/jyyS6Aljfmp8eYrQ6YFry0DdOFdSuv4+z
+	At5DFincINzpg9GEPgiWuGEIsE/4mZ/FEdGwDyE8+tKpIQUPzzj6MvfR0255bPTdsEX41t
+	/GwIN+VMs2mFzkAyz72hRO6JpKZ1xMHKuB1Cw+iyCzbC9QwrQFwboEiJ3qumTA==
+Date: Wed, 14 Aug 2024 11:39:32 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Valentin Caron <valentin.caron@foss.st.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: Re: [PATCH v3 0/4] rtc: stm32: add pinctrl interface to handle RTC
+ outs
+Message-ID: <172362832901.24631.16096665387858981074.b4-ty@bootlin.com>
+References: <20240722160022.454226-1-valentin.caron@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240722160022.454226-1-valentin.caron@foss.st.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Replace 'year / 100' with a direct comparison 'year >= 100'
-in m48t59_rtc_set_time() function. Improve the code clarity
-and eliminate division overhead.
+On Mon, 22 Jul 2024 18:00:18 +0200, Valentin Caron wrote:
+> This series adds a pinctrl/pinmux interface to control STM32 RTC outputs.
+> 
+> Theses two signals output are possible:
+>  - LSCO (Low Speed Clock Output) that allow to output LSE clock on a pin.
+>    On STM32MPU Discovery boards, this feature is used to generate a clock
+>    to Wifi/Bluetooth module.
+>  - Alarm out that allow to send a pulse on a pin when alarm A of the RTC
+>    expires.
+> 
+> [...]
 
-Fix the following smatch warning:
-drivers/rtc/rtc-m48t59.c:135 m48t59_rtc_set_time() warn:
-replace divide condition 'year / 100' with 'year >= 100'
+Applied, thanks!
 
-Signed-off-by: Abhishek Tamboli <abhishektamboli9@gmail.com>
----
- drivers/rtc/rtc-m48t59.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1/4] dt-bindings: rtc: stm32: describe pinmux nodes
+      https://git.kernel.org/abelloni/c/5b19519d4e6f
+[2/4] rtc: stm32: add pinctrl and pinmux interfaces
+      https://git.kernel.org/abelloni/c/16ad2bc09efb
+[3/4] rtc: stm32: add Low Speed Clock Output (LSCO) support
+      https://git.kernel.org/abelloni/c/bb7b0df2be5c
+[4/4] rtc: stm32: add alarm A out feature
+      https://git.kernel.org/abelloni/c/04dcadb87da6
 
-diff --git a/drivers/rtc/rtc-m48t59.c b/drivers/rtc/rtc-m48t59.c
-index f0f6b9b6daec..cd2ca49805d8 100644
---- a/drivers/rtc/rtc-m48t59.c
-+++ b/drivers/rtc/rtc-m48t59.c
-@@ -132,7 +132,7 @@ static int m48t59_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	M48T59_WRITE((bin2bcd(tm->tm_mon + 1) & 0x1F), M48T59_MONTH);
- 	M48T59_WRITE(bin2bcd(year % 100), M48T59_YEAR);
+Best regards,
 
--	if (pdata->type == M48T59RTC_TYPE_M48T59 && (year / 100))
-+	if (pdata->type == M48T59RTC_TYPE_M48T59 && (year >= 100))
- 		val = (M48T59_WDAY_CEB | M48T59_WDAY_CB);
- 	val |= (bin2bcd(tm->tm_wday) & 0x07);
- 	M48T59_WRITE(val, M48T59_WDAY);
---
-2.34.1
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
