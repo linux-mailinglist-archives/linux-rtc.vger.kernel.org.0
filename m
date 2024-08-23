@@ -1,478 +1,280 @@
-Return-Path: <linux-rtc+bounces-1705-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1707-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E48AF95C8A4
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2024 10:59:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B67695C8EE
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2024 11:12:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B727287954
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2024 08:59:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D83F02811E3
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2024 09:12:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B75E1187330;
-	Fri, 23 Aug 2024 08:57:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B999114A08F;
+	Fri, 23 Aug 2024 09:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="FsEEpEbR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GOqxw9zE"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013006.outbound.protection.outlook.com [52.101.67.6])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628D3185E7A;
-	Fri, 23 Aug 2024 08:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.6
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724403447; cv=fail; b=KnmFdCRXqk5sERcFYjOB8SuG2MMypa+5h2uaf6/65c156Dl6qN/pFEAIKneCdZ97+fEnFQflj+ORk8J5cXHh9mfnn2MNYQHwmtBPIucWQ3JZ8aDCjh6B9D64bT7TKHr6B0/L+D3euiPfX3ihSVPzZrpmOe+79BMjCepncOwhlfQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724403447; c=relaxed/simple;
-	bh=kxc2eMKo0SVpN4AB/VCrof0om0KnqGLBnf+CDyaUvMI=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=QebUt3CUvkHryxWD1F5tlx3iDUYvkr0YRxXUFnHDb/Y/Blk+u8iwtJULMgp1IbN8LPnn9GvNLWDQ+2dhH97KNLW0o9DgIkIZYm5yfuCduiKeEzA80xFaoeDGj4DH/zsKa1Ha8DwOWl56khtAuOpfu6psf2v75nOVi/lZ527XvEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=FsEEpEbR; arc=fail smtp.client-ip=52.101.67.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kpij4SS1cQ54AW18dYMCid13TI+bny1rpx9XE/yAQD/tl8nj9gbufppNN3DLQya8xPbaTAckFI6/rZs9Vzp9+FcmnZXhCyPYiFuF+cIcuAj71i+/yINeiq3lVDRqudfw61BDLcB39038dQZbcZCGbCLS7RO1gLfid1bkNNBK9Ov6QXHh8wkphhFrk5DAtIlwNu6hUAOZym1lG/Jq+nHwfvLu/1oQu2NtjAuYvRXRFTjwA0csp2jPOJONeBHzUZ9z7qeEteoMzphDEi6v++0dpEiei0ApJ1zoRQaS673JW+RaQzbu33uPf+VKg0tNm/ud1/W3zf/Ce59kcdVGhj1lIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VwVO40Kbuaig/BZztDwJec5em76QDLNVCraOKEbMZg0=;
- b=qALvMGGBoIc0rmpTqOxIxw37JH6YiTdyCTrWv0I40f6ZvzVn+cRE+fZMzr2gOZzYhXbjKbXlZxFi5B30+HK+Zw7eArccmQK5AsGpqqPEd7Moxu2UCnnfD0cC+7F2cT5SjtHne5VPBHQwp8jeDZTyA9YJTRLZoHgOcqjj0J/H0I2LJHcplUgkKiyRmZccpGL9bDrJ9okVov8YEXhWMZ8UpuCPfgL1JuxAIy6CUUNErec7re1OgsDVjeheOJZNsXk7ztTWVryxu4hc8pNCfx+kTdhJGsPlJ0yJYDFDGWxOGGxBSyRDhtzxTTTWBb/InH5PLtRl0LWEt9NnTsPxwdaRCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VwVO40Kbuaig/BZztDwJec5em76QDLNVCraOKEbMZg0=;
- b=FsEEpEbRCaUcGGbeP9PGJ63XpVeUmMWAY8pw5Oj8fsjBZE/1CQrZzexol6YTZylmxF/yp7c58zV+Ohg54s7yvmI67aWZ8mbsMp32mPlVGPcmwsNPicyGJ7/7s8kkroRWTKvECGLWlJWuNCea9pWq5d3ItP3qMzVFdbxogkQBQsqAHIFXKWFC3RxEenRn+P3fhwA2QfWxUQuV6dY0etdFA+m34rddzIaaOmOaB1KYXd5x/84BWPhfeQY8/GdljT9j1wDSMISzGHigwefzBu7XlKSK10DoqRsv40zTtxdzMb9fzW18H7SBzYOmm15wHWVdaAj8K4/VvbedkvMEWhS7LA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by DBAPR04MB7271.eurprd04.prod.outlook.com (2603:10a6:10:1a6::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Fri, 23 Aug
- 2024 08:57:22 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%6]) with mapi id 15.20.7897.014; Fri, 23 Aug 2024
- 08:57:22 +0000
-From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Date: Fri, 23 Aug 2024 17:05:23 +0800
-Subject: [PATCH v8 7/7] input: keyboard: support i.MX95 BBM module
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240823-imx95-bbm-misc-v2-v8-7-e600ed9e9271@nxp.com>
-References: <20240823-imx95-bbm-misc-v2-v8-0-e600ed9e9271@nxp.com>
-In-Reply-To: <20240823-imx95-bbm-misc-v2-v8-0-e600ed9e9271@nxp.com>
-To: Sudeep Holla <sudeep.holla@arm.com>, 
- Cristian Marussi <cristian.marussi@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- imx@lists.linux.dev, linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1724403944; l=8234;
- i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=sBgFKxgc7cdv86yg3Whp2f3mLa6n9LiELZb9Y0Qgs7w=;
- b=3W6TfSHzhGlTGIFXb/Sq/VuSvXyypK5QU2RUIMyP1lXLuhiXl3qxqa1iQzJO4cLJpppoy7wvL
- NmlVg2jAf1rBN+IVFIxDgoefBntCoOw8z4sWnCFI5MCaASTwp5Okj7P
-X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
- pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
-X-ClientProxiedBy: SG2PR01CA0173.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::29) To PAXPR04MB8459.eurprd04.prod.outlook.com
- (2603:10a6:102:1da::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BA2149002;
+	Fri, 23 Aug 2024 09:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724404347; cv=none; b=FuVsFRm8Fn/g+MdukkYDaecG8kiMdtzSqkcE14RtlpCTs6qhWZqQaPQ1/ja1tzu1Yc0M+WcNN9GokX99+Ap7gSTi28JkHLmr3pAP0C2fktGJ4Cqe+HUgydIPnaeHcpIEPv7gJKnLl5+U5ctjGHYa5F/IjBOYDQk43j81A5nJB8Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724404347; c=relaxed/simple;
+	bh=eHJm1q1OOWYK8xxi+RglQ6jSRl5S5FTqCzDh314fzKI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WaFYORk/CjU4PgVmndKIA2PaNjZKLjRjyTgwqJBQuVzdYF7+NfLHXbr++QsZVRsBhmRLZ58mqEPuvVQS4IxHkbVEDJK1MwmHP/lqCvRyF/VfLfziShNVHNYS35h6RTWQF0BLp01Y0iDtiFpQnssKXOYxUUTU9ftxeuRw/4b6S2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GOqxw9zE; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724404345; x=1755940345;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eHJm1q1OOWYK8xxi+RglQ6jSRl5S5FTqCzDh314fzKI=;
+  b=GOqxw9zE0w9OH9u9OenuskQfO+/ilrqgBhQUh9U/ID0SVNPxPb9q9lCw
+   jHb2WNAWsm0Z79hY/YZ2ZsFfiyYD9lTu2Fumjwoty7B0FlZrraLrFasAV
+   u4nuRUgSDOFcXk4+wSurncFKz+qITa15OPA2A3JHwDx4yCXNvADp9Ln+E
+   YL61wDS41w5+ri0FfQD8FogOWh37kVhx0NOAyPhLaERld4w0v26VFp7pu
+   r8APYhdo8BDa6lBiJH5Tw+usZqdhsfZNUAdyFuzrhAiTV0kpAzUXxkuhU
+   f3IsKzvV4SO1XMq4v4WV5cy3Z1cEeVde/JwpkAu8t2yXzjfk0+jXbRGI4
+   A==;
+X-CSE-ConnectionGUID: In5zubQwSF65Xkjv3WfH9g==
+X-CSE-MsgGUID: Nbzzku6uQoGNHEB+JMCloA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22384862"
+X-IronPort-AV: E=Sophos;i="6.10,169,1719903600"; 
+   d="scan'208";a="22384862"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 02:12:24 -0700
+X-CSE-ConnectionGUID: vxD6szCLRNa+rUFcKl3fQg==
+X-CSE-MsgGUID: 8JLwp4AkTVWqEYRrnZgS8g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,169,1719903600"; 
+   d="scan'208";a="92463441"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 23 Aug 2024 02:12:23 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1shQLD-000Dbg-2e;
+	Fri, 23 Aug 2024 09:12:19 +0000
+Date: Fri, 23 Aug 2024 17:11:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liao Yuanhong <liaoyuanhong@vivo.com>, alexandre.belloni@bootlin.com,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Liao Yuanhong <liaoyuanhong@vivo.com>
+Subject: Re: [PATCH 1/7] rtc:rtc-at91rm9200:Use devm_clk_get_enabled() helpers
+Message-ID: <202408231607.RHujmOKI-lkp@intel.com>
+References: <20240821092846.20138-2-liaoyuanhong@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|DBAPR04MB7271:EE_
-X-MS-Office365-Filtering-Correlation-Id: bbbebbe4-0d6c-4260-a3cd-08dcc35199f5
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|52116014|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bHRwSGlEbGY4cVJheGtsZVZ1VGRXbW9acTN6Yk42VUxRREw2Skc1eU9nZmo4?=
- =?utf-8?B?QzhreDNzR2Q1a0FDaE9IWnY5S1JqNXpxTExXSmtiSGxvSFVQTTBMdHRIR3Jo?=
- =?utf-8?B?NHFFZkJBb3YzQVVLNnRObFZKTmtSclVLSEFQOXkvZHNuKzgybmhPTVhVSVNo?=
- =?utf-8?B?QWU4UzhSWUJPQkl5REJubFMzVjVBK2x0cW5IeVpwczI1Y09mWVIvWW9NOVgw?=
- =?utf-8?B?UGhXa2dYK2RKMlRydlFpdTExVlR3QjVGb2xubHZWOGcxVG8zS3N2dnY1a1Zs?=
- =?utf-8?B?UDBZVnZsMFlLOVBhNzFtaWFVUVBSTVBMV24rdDlkVGpmeGxCVndCRHZ2azV1?=
- =?utf-8?B?ZytRREU4aXJKd0xMREJTak5CSjFxem9kMkxhVW8yM2dXVWhqeVpCc2psdUt2?=
- =?utf-8?B?UTUyQXkvbVd5SXV0TVpHVklnMTFQN1E4NktVZnJwQW1iVE5RL0dPTGJjRE9X?=
- =?utf-8?B?TkNHMndFYy91b3pOUnFpZTd6ODJudVdScG84bWE5bWVlUk1XK0ticzhjbS9j?=
- =?utf-8?B?QVdIS2h5MzJWN2c1ZUhUVkR2TTJYVTVYT28zQlo1cExjWjkzWFhxQ2p3S3Q3?=
- =?utf-8?B?WGVnNEpIYXpRUjJFTkgyNjEyaXlSQms2Qy8yRUQzajNCcjliNmRaMDJkK25j?=
- =?utf-8?B?Yko5VEhxTkZGTlF3UWR0dnpSUUN3ZmpaZ2ZDUVBCR29YWU9WWS9jZkJxRno2?=
- =?utf-8?B?TGE0TEs2bTVtemFNVjJxTEkzR3lXYkZvWmJnUjFTUXV0cTFCRjRnOStwRm80?=
- =?utf-8?B?N3Y4b290djd6MDU5SnowNzhWWG1rODljTUZNUmRieGdrZjJkVnp4QUNBLzQv?=
- =?utf-8?B?K0Y2RHVmUi8xVjR4amw3VFFFaDdScThLUXhtMjVtekViNE9MUk04UW4yVDNI?=
- =?utf-8?B?aHozOXZick1zTWVvRjJGUEFMVU8yakVBTDFweEs1blhmTFFKTmVQTlZyNmpt?=
- =?utf-8?B?Ym9TN01YZUFDUU9zMDJBMDlDNE5VTUNYV3hwNE9GRlhxV2RlU1I3Y2k1d25K?=
- =?utf-8?B?cWlqSURNbFFzUVVmNG85TTBubGdGdkk2V0ZTOGFHV3Z6amtHZnBKeHNNLzl1?=
- =?utf-8?B?QTQrYjRHY3VWVERvZ3dkTk42djJ4aXArWExyQVh2ZEFDLzF4SENCV0tSWkxO?=
- =?utf-8?B?NzlheExobzhTbkd2eXE5Z2JyWDFISzZZQWF2S3pHNlZEbjRRdldBcGswbllE?=
- =?utf-8?B?MUNsbkVxWWtFZGFId1QrZDNJL2xBaTUwYzdKM0FodE9jaTh4QkRjdjlaVXBK?=
- =?utf-8?B?Ykg1YkttT3EvMVhpOHU5OFFac29VR1NvdjA2cnlaU0VuM1RUdUVWbjliS1Uv?=
- =?utf-8?B?WGxPK2dYZ0Z2biszeDFJbTl6YkQyVk4xWHNXMnVmQ3hyaGsvOGVUSXI1Smdp?=
- =?utf-8?B?Nm01SGJGOHpnY0x2cHh2K3UyUnVMU1pQM200aWk1bmdBOFdEdm5lb3Z0RmxL?=
- =?utf-8?B?Sll0dHU0TnQvSjc4b0dCWmdPK3E1UFgxY2NhbEJJdFpROHdWVXBWalVJTUsv?=
- =?utf-8?B?UFpNYytQS09MTzdrYkNwMnoxVlIvclhpZW9HeDhHaVhUcVdTV3JjZ1V5c3J3?=
- =?utf-8?B?eit4TVZRMmJQeEZBZjZDWnNNUmYzU2xmeENIbUlpL3poZXFnaXRNSnI5cEhX?=
- =?utf-8?B?N21kSEs3U2h1WC95K3ZueThkc0kvRVRldWhtcXBuY00rdXNZS2lmSXpCeFVq?=
- =?utf-8?B?emF1WkIxUUg3ejFNQ2N5SHRWa085RXJVUjFFK2JzSXI3RFUwSHJibURoc2Yr?=
- =?utf-8?B?YlorQ1pRRFBvL1RFcXpxNmJJTmNpUW9XMG9Hb2xzMHVDYnhpTlU1bmZBQ1Er?=
- =?utf-8?B?dzVxRGRrOGZ4U3lCWkYyR3k1VSsrMTd6azhjakVOdnhKTjc2eFVRSmZmSnNt?=
- =?utf-8?B?UFRaMTV4K0xzcEV1WGpjaHBGQnYxejdQYmVEUllvUFdJa1oxeGhyUzNzSjVC?=
- =?utf-8?Q?MKYbL/lnXso=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UjMxQkIzc3dFd1ZJcWVXZkFqSVdkT25QcHJ3eDJSUTdCZlJGSkdkZ3c3cHBP?=
- =?utf-8?B?WUdGa1NLbVlFWjB1d3BCRXVvVk9SNXZuZjdOcVZUSmwzN2ZMeXpMMHNlancz?=
- =?utf-8?B?RkFDZndrOFc5SHBYdWNIQWdUZUU5ZEFabGpaSC9PTjFxRlY3TXFyNzFXa0Uy?=
- =?utf-8?B?Z3hrejZHemVZMy94OWZaQWQxLy9QWGRTWFI3QkNDZ0w0bmg4MzkrME9DdHc1?=
- =?utf-8?B?dHBJa1JFUjBjNHF6OHc0dzRYOUIrNE9TTXpEMDVwRlJ5MURQQnlNZi9kR0dS?=
- =?utf-8?B?VEJpTGltU2w1b21oSGZiSTZSNjZtS1huUStTMDJhcVZRenlCM21jVElUMjM4?=
- =?utf-8?B?VnlIeE5FWG92UGFlb0xCWVhHa0hlRXNtU1YrczhPcW1XZHFLS3hidlVtVkFx?=
- =?utf-8?B?WnNmcjc5SHJhMERjU1dtWnE4c01Wemdxd2F0VnZMVVIrQXh4UmdDRTBoL1h2?=
- =?utf-8?B?WTZDSEF5ZWFBY0pxRURENHBkWHUrc2JudnFjU3pOTDVYQWYzSWJaOWhIOG5Z?=
- =?utf-8?B?ZitwR0J5ZEZiUlRjTUJ5WEMyUWROcHM4MWxwT2JGZTFENnNIeHlMb05LWVVi?=
- =?utf-8?B?clRxNHM4ZlBXdUNGMUJtSFYrays0dU0wTjhHZHBEN3JFSlhyTks1d3hoMkcw?=
- =?utf-8?B?SFd3blB5Y2NiMm1mTGFGZUhPd2t4QTcvVmFkTjhmbi82RndVVU03TnV1dVR5?=
- =?utf-8?B?UjF4K295MUhETjN6QXUxVGJYR3huMTNadE1mQlNCSzFFMFlnWjR3cUExUzI3?=
- =?utf-8?B?RnpUY0NVK214MSsrMk5jU1ViQ0cyRU9mMkhmZ2lKUENXeG5Wc25MRnhndjZu?=
- =?utf-8?B?VjVOb0cvWVFrS2d4RXkzUTVIUFNDUFdmeDhwQ09DblNCOWNjRWhOZ1FPZzBl?=
- =?utf-8?B?MTRNTEx4ZXdmblJEZ1A3TTBvRmxROTVkYjg5RGExeStBcDJ4STBCZWhEbjF3?=
- =?utf-8?B?ZElLN0tNNHpJczlaZys4aHJhSFpNQ2pEdE92NFFoMjJFK3BaZlFWNkZiK3h6?=
- =?utf-8?B?eHBrYzE0UXpkQmFZNjl4Y2xDWW1Zd2ZkRXVoWkdxRDF5d2F5Z3JkMVhhbVpD?=
- =?utf-8?B?di9MMFdTeE5LaE5xcGFoOVFSWFBBU1I0MGduUW5ySWJOVHVXN0YwUWFGUms0?=
- =?utf-8?B?MTFINXp1c21tMGJUWEthQXBBM3JtZERIZ2RQeFN0OW1DWnZSNXMrM0UvMm03?=
- =?utf-8?B?WjVCSmtpeGZRc25PaUd3VjVUNE9iTEFYbVp0NTVwLzRNNnpuVGhDdVBLYjFR?=
- =?utf-8?B?ZFhxS2IyaS8wUU1oNTg1NlZQeHRKYmVGejU3OEU4bVg4UEN3aEF6K2F3d0RV?=
- =?utf-8?B?T0Z1cHA5ZXc3aEIyeTZSOTEyZVlaWGVuQmVHMG1uK3ZzdFBoS3ArSzlHWFhl?=
- =?utf-8?B?Q1BaZVdseE5DNVR4UVg2NXFBZFFUQkNwWDdWYmE4eGVPMFYxN3NPdlFNODdx?=
- =?utf-8?B?UDJFZVZBRjBVOFROZWFmVjRHRXUzRHpIWUdpcmcrOXhkKzk0czU4VVhvSUpR?=
- =?utf-8?B?b1REdDZPUGZta2JpeXoxNnI5L2ZrcXVkeDZ0Q2pMOUE1ejNBeXc2ME9LTlF3?=
- =?utf-8?B?R3BkcW5qWTNaODA0dTQ1YjVIdkpadXg4NmNSWE5uQWhUamNLYWpQNlpVanRj?=
- =?utf-8?B?aktNWHB0cDE2VnZrZTROalBWNnhiQWttT21wYm1iV2p1RHp1ek9PdVFMRU9R?=
- =?utf-8?B?RTNtNXJNdWhZenhlR0FpcmRnMTVHejYyTXY5SVM3L3FIaktvVkpWbGQ5UXlK?=
- =?utf-8?B?ZTY3RW9DYWlIMFh5Q3NTK3l3dnBXaEVVdzJSQ0pWRFhRaDBzVHVNOTl0ZW5t?=
- =?utf-8?B?VGc3VThBZEdDQUVsV0o1WUszTVFnMGFlbDRuRytITzhBbjluUE9OR3Q2T1Mv?=
- =?utf-8?B?WmZDdGdYd1pEclNXVjVNMDd2aDlpdmVTVzFRTnVyWW5lakZpSFpremdVUEFS?=
- =?utf-8?B?c0lpTG5VYnkwOWpMeXNSZEU4MjdldXVzREJWMmpaajg2d01IblVuMldyUURN?=
- =?utf-8?B?UDYzN2RUL1pTMy9URXpCVG9yY2Vuc21mSWN5L1dNclBLQ1gwUUlSWjgzYk5w?=
- =?utf-8?B?VjVSNU1pOXRJUDh1L0FKOXJOMFNSTGdhZlZtYWRPTUpOUS9nVm1GV1B1V0c1?=
- =?utf-8?Q?GBLOvLisuxhloGQyBNXSVyLRL?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbbebbe4-0d6c-4260-a3cd-08dcc35199f5
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2024 08:57:22.3720
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NX6BawmhwsvRj7fCFTggvMsyyjGYapeA0GnX72h39q4sPcZbPXW4m7OgLHERFHYVpZfitbI6iNZfpmGkAultfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7271
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240821092846.20138-2-liaoyuanhong@vivo.com>
 
-From: Peng Fan <peng.fan@nxp.com>
+Hi Liao,
 
-The BBM module provides BUTTON feature. To i.MX95, this module
-is managed by System Manager and exported using System Management
-Control Interface(SCMI). Linux could use i.MX SCMI BBM Extension
-protocol to use BUTTON feature.
+kernel test robot noticed the following build errors:
 
-This driver is to use SCMI interface to enable pwrkey.
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on tegra/for-next linus/master v6.11-rc4 next-20240823]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/input/keyboard/Kconfig          |  11 ++
- drivers/input/keyboard/Makefile         |   1 +
- drivers/input/keyboard/imx-sm-bbm-key.c | 225 ++++++++++++++++++++++++++++++++
- 3 files changed, 237 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Liao-Yuanhong/rtc-rtc-at91rm9200-Use-devm_clk_get_enabled-helpers/20240822-150754
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20240821092846.20138-2-liaoyuanhong%40vivo.com
+patch subject: [PATCH 1/7] rtc:rtc-at91rm9200:Use devm_clk_get_enabled() helpers
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20240823/202408231607.RHujmOKI-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408231607.RHujmOKI-lkp@intel.com/reproduce)
 
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index 72f9552cb571..a3301239b9a6 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -454,6 +454,17 @@ config KEYBOARD_IMX
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called imx_keypad.
- 
-+config KEYBOARD_IMX_BBM_SCMI
-+	tristate "IMX BBM SCMI Key Driver"
-+	depends on IMX_SCMI_BBM_EXT || COMPILE_TEST
-+	default y if ARCH_MXC
-+	help
-+	  This is the BBM key driver for NXP i.MX SoCs managed through
-+	  SCMI protocol.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called scmi-imx-bbm-key.
-+
- config KEYBOARD_IMX_SC_KEY
- 	tristate "IMX SCU Key Driver"
- 	depends on IMX_SCU
-diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
-index b8d12a0524e0..5915e52eac28 100644
---- a/drivers/input/keyboard/Makefile
-+++ b/drivers/input/keyboard/Makefile
-@@ -31,6 +31,7 @@ obj-$(CONFIG_KEYBOARD_IPAQ_MICRO)	+= ipaq-micro-keys.o
- obj-$(CONFIG_KEYBOARD_IQS62X)		+= iqs62x-keys.o
- obj-$(CONFIG_KEYBOARD_IMX)		+= imx_keypad.o
- obj-$(CONFIG_KEYBOARD_IMX_SC_KEY)	+= imx_sc_key.o
-+obj-$(CONFIG_KEYBOARD_IMX_BBM_SCMI)	+= imx-sm-bbm-key.o
- obj-$(CONFIG_KEYBOARD_HP6XX)		+= jornada680_kbd.o
- obj-$(CONFIG_KEYBOARD_HP7XX)		+= jornada720_kbd.o
- obj-$(CONFIG_KEYBOARD_LKKBD)		+= lkkbd.o
-diff --git a/drivers/input/keyboard/imx-sm-bbm-key.c b/drivers/input/keyboard/imx-sm-bbm-key.c
-new file mode 100644
-index 000000000000..96486bd23d60
---- /dev/null
-+++ b/drivers/input/keyboard/imx-sm-bbm-key.c
-@@ -0,0 +1,225 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright 2024 NXP.
-+ */
-+
-+#include <linux/input.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/scmi_protocol.h>
-+#include <linux/scmi_imx_protocol.h>
-+#include <linux/suspend.h>
-+
-+#define DEBOUNCE_TIME		30
-+#define REPEAT_INTERVAL		60
-+
-+struct scmi_imx_bbm {
-+	struct scmi_protocol_handle *ph;
-+	const struct scmi_imx_bbm_proto_ops *ops;
-+	struct notifier_block nb;
-+	int keycode;
-+	int keystate;  /* 1:pressed */
-+	bool suspended;
-+	struct delayed_work check_work;
-+	struct input_dev *input;
-+};
-+
-+static void scmi_imx_bbm_pwrkey_check_for_events(struct work_struct *work)
-+{
-+	struct scmi_imx_bbm *bbnsm = container_of(to_delayed_work(work),
-+						  struct scmi_imx_bbm, check_work);
-+	struct scmi_protocol_handle *ph = bbnsm->ph;
-+	struct input_dev *input = bbnsm->input;
-+	u32 state = 0;
-+	int ret;
-+
-+	ret = bbnsm->ops->button_get(ph, &state);
-+	if (ret) {
-+		pr_err("%s: %d\n", __func__, ret);
-+		return;
-+	}
-+
-+	pr_debug("%s: state: %d, keystate %d\n", __func__, state, bbnsm->keystate);
-+
-+	/* only report new event if status changed */
-+	if (state ^ bbnsm->keystate) {
-+		bbnsm->keystate = state;
-+		input_event(input, EV_KEY, bbnsm->keycode, state);
-+		input_sync(input);
-+		pm_relax(bbnsm->input->dev.parent);
-+		pr_debug("EV_KEY: %x\n", bbnsm->keycode);
-+	}
-+
-+	/* repeat check if pressed long */
-+	if (state)
-+		schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(REPEAT_INTERVAL));
-+}
-+
-+static int scmi_imx_bbm_pwrkey_event(struct scmi_imx_bbm *bbnsm)
-+{
-+	struct input_dev *input = bbnsm->input;
-+
-+	pm_wakeup_event(input->dev.parent, 0);
-+
-+	/*
-+	 * Directly report key event after resume to make no key press
-+	 * event is missed.
-+	 */
-+	if (READ_ONCE(bbnsm->suspended)) {
-+		bbnsm->keystate = 1;
-+		input_event(input, EV_KEY, bbnsm->keycode, 1);
-+		input_sync(input);
-+		WRITE_ONCE(bbnsm->suspended, false);
-+	}
-+
-+	schedule_delayed_work(&bbnsm->check_work, msecs_to_jiffies(DEBOUNCE_TIME));
-+
-+	return 0;
-+}
-+
-+static void scmi_imx_bbm_pwrkey_act(void *pdata)
-+{
-+	struct scmi_imx_bbm *bbnsm = pdata;
-+
-+	cancel_delayed_work_sync(&bbnsm->check_work);
-+}
-+
-+static int scmi_imx_bbm_key_notifier(struct notifier_block *nb, unsigned long event, void *data)
-+{
-+	struct scmi_imx_bbm *bbnsm = container_of(nb, struct scmi_imx_bbm, nb);
-+	struct scmi_imx_bbm_notif_report *r = data;
-+
-+	if (r->is_button) {
-+		pr_debug("BBM Button Power key pressed\n");
-+		scmi_imx_bbm_pwrkey_event(bbnsm);
-+	} else {
-+		/* Should never reach here */
-+		pr_err("Unexpected BBM event: %s\n", __func__);
-+	}
-+
-+	return 0;
-+}
-+
-+static int scmi_imx_bbm_pwrkey_init(struct scmi_device *sdev)
-+{
-+	const struct scmi_handle *handle = sdev->handle;
-+	struct device *dev = &sdev->dev;
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-+	struct input_dev *input;
-+	int ret;
-+
-+	if (device_property_read_u32(dev, "linux,code", &bbnsm->keycode)) {
-+		bbnsm->keycode = KEY_POWER;
-+		dev_warn(dev, "key code is not specified, using default KEY_POWER\n");
-+	}
-+
-+	INIT_DELAYED_WORK(&bbnsm->check_work, scmi_imx_bbm_pwrkey_check_for_events);
-+
-+	input = devm_input_allocate_device(dev);
-+	if (!input) {
-+		dev_err(dev, "failed to allocate the input device for SCMI IMX BBM\n");
-+		return -ENOMEM;
-+	}
-+
-+	input->name = dev_name(dev);
-+	input->phys = "bbnsm-pwrkey/input0";
-+	input->id.bustype = BUS_HOST;
-+
-+	input_set_capability(input, EV_KEY, bbnsm->keycode);
-+
-+	ret = devm_add_action_or_reset(dev, scmi_imx_bbm_pwrkey_act, bbnsm);
-+	if (ret) {
-+		dev_err(dev, "failed to register remove action\n");
-+		return ret;
-+	}
-+
-+	bbnsm->input = input;
-+
-+	bbnsm->nb.notifier_call = &scmi_imx_bbm_key_notifier;
-+	ret = handle->notify_ops->devm_event_notifier_register(sdev, SCMI_PROTOCOL_IMX_BBM,
-+							       SCMI_EVENT_IMX_BBM_BUTTON,
-+							       NULL, &bbnsm->nb);
-+
-+	if (ret)
-+		dev_err(dev, "Failed to register BBM Button Events %d:", ret);
-+
-+	ret = input_register_device(input);
-+	if (ret) {
-+		dev_err(dev, "failed to register input device\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int scmi_imx_bbm_key_probe(struct scmi_device *sdev)
-+{
-+	const struct scmi_handle *handle = sdev->handle;
-+	struct device *dev = &sdev->dev;
-+	struct scmi_protocol_handle *ph;
-+	struct scmi_imx_bbm *bbnsm;
-+	int ret;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	bbnsm = devm_kzalloc(dev, sizeof(*bbnsm), GFP_KERNEL);
-+	if (!bbnsm)
-+		return -ENOMEM;
-+
-+	bbnsm->ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_IMX_BBM, &ph);
-+	if (IS_ERR(bbnsm->ops))
-+		return PTR_ERR(bbnsm->ops);
-+
-+	bbnsm->ph = ph;
-+
-+	device_init_wakeup(dev, true);
-+
-+	dev_set_drvdata(dev, bbnsm);
-+
-+	ret = scmi_imx_bbm_pwrkey_init(sdev);
-+	if (ret)
-+		device_init_wakeup(dev, false);
-+
-+	return ret;
-+}
-+
-+static int __maybe_unused scmi_imx_bbm_key_suspend(struct device *dev)
-+{
-+	struct scmi_imx_bbm *bbnsm = dev_get_drvdata(dev);
-+
-+	WRITE_ONCE(bbnsm->suspended, true);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused scmi_imx_bbm_key_resume(struct device *dev)
-+{
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(scmi_imx_bbm_pm_key_ops, scmi_imx_bbm_key_suspend,
-+			 scmi_imx_bbm_key_resume);
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_IMX_BBM, "imx-bbm-key" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static struct scmi_driver scmi_imx_bbm_key_driver = {
-+	.driver = {
-+		.pm = &scmi_imx_bbm_pm_key_ops,
-+	},
-+	.name = "scmi-imx-bbm-key",
-+	.probe = scmi_imx_bbm_key_probe,
-+	.id_table = scmi_id_table,
-+};
-+module_scmi_driver(scmi_imx_bbm_key_driver);
-+
-+MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-+MODULE_DESCRIPTION("IMX SM BBM Key driver");
-+MODULE_LICENSE("GPL");
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408231607.RHujmOKI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/rtc/rtc-at91rm9200.c: In function 'at91_rtc_probe':
+   drivers/rtc/rtc-at91rm9200.c:473:13: warning: unused variable 'ret' [-Wunused-variable]
+     473 |         int ret = 0;
+         |             ^~~
+   In file included from include/linux/io.h:14,
+                    from include/linux/irq.h:20,
+                    from include/asm-generic/hardirq.h:17,
+                    from arch/sh/include/asm/hardirq.h:9,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from drivers/rtc/rtc-at91rm9200.c:20:
+   drivers/rtc/rtc-at91rm9200.c: At top level:
+>> arch/sh/include/asm/io.h:46:35: error: expected identifier or '(' before 'void'
+      46 | #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)ioswabl(v),c))
+         |                                   ^~~~
+   drivers/rtc/rtc-at91rm9200.c:89:9: note: in expansion of macro 'writel_relaxed'
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |         ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:506:9: note: in expansion of macro 'at91_rtc_write'
+     506 |         at91_rtc_write(AT91_RTC_CR, 0);
+         |         ^~~~~~~~~~~~~~
+>> arch/sh/include/asm/io.h:31:33: error: expected ')' before '(' token
+      31 | #define __raw_writel(v,a)       (__chk_io_ptr(a), *(volatile u32 __force *)(a) = (v))
+         |                                 ^
+   arch/sh/include/asm/io.h:46:40: note: in expansion of macro '__raw_writel'
+      46 | #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)ioswabl(v),c))
+         |                                        ^~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:89:9: note: in expansion of macro 'writel_relaxed'
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |         ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:506:9: note: in expansion of macro 'at91_rtc_write'
+     506 |         at91_rtc_write(AT91_RTC_CR, 0);
+         |         ^~~~~~~~~~~~~~
+>> arch/sh/include/asm/io.h:46:35: error: expected identifier or '(' before 'void'
+      46 | #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)ioswabl(v),c))
+         |                                   ^~~~
+   drivers/rtc/rtc-at91rm9200.c:89:9: note: in expansion of macro 'writel_relaxed'
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |         ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:507:9: note: in expansion of macro 'at91_rtc_write'
+     507 |         at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+         |         ^~~~~~~~~~~~~~
+>> arch/sh/include/asm/io.h:31:33: error: expected ')' before '(' token
+      31 | #define __raw_writel(v,a)       (__chk_io_ptr(a), *(volatile u32 __force *)(a) = (v))
+         |                                 ^
+   arch/sh/include/asm/io.h:46:40: note: in expansion of macro '__raw_writel'
+      46 | #define writel_relaxed(v,c)     ((void)__raw_writel((__force u32)ioswabl(v),c))
+         |                                        ^~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:89:9: note: in expansion of macro 'writel_relaxed'
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |         ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:507:9: note: in expansion of macro 'at91_rtc_write'
+     507 |         at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+         |         ^~~~~~~~~~~~~~
+   In file included from include/linux/bits.h:6,
+                    from include/linux/bitops.h:6,
+                    from include/linux/kernel.h:23,
+                    from include/linux/clk.h:13,
+                    from drivers/rtc/rtc-at91rm9200.c:18:
+   include/vdso/bits.h:7:33: error: expected declaration specifiers or '...' before '(' token
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                 ^
+   drivers/rtc/rtc-at91rm9200.c:66:41: note: in expansion of macro 'BIT'
+      66 | #define         AT91_RTC_ACKUPD         BIT(0)          /* Acknowledge for Update */
+         |                                         ^~~
+   drivers/rtc/rtc-at91rm9200.c:510:28: note: in expansion of macro 'AT91_RTC_ACKUPD'
+     510 |         at91_rtc_write_idr(AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+         |                            ^~~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:514:9: warning: data definition has no type or storage class
+     514 |         ret = devm_request_irq(&pdev->dev, irq, at91_rtc_interrupt,
+         |         ^~~
+   drivers/rtc/rtc-at91rm9200.c:514:9: error: type defaults to 'int' in declaration of 'ret' [-Wimplicit-int]
+   drivers/rtc/rtc-at91rm9200.c:514:33: error: 'pdev' undeclared here (not in a function); did you mean 'cdev'?
+     514 |         ret = devm_request_irq(&pdev->dev, irq, at91_rtc_interrupt,
+         |                                 ^~~~
+         |                                 cdev
+   drivers/rtc/rtc-at91rm9200.c:517:9: error: expected identifier or '(' before 'if'
+     517 |         if (ret) {
+         |         ^~
+   drivers/rtc/rtc-at91rm9200.c:525:9: error: expected identifier or '(' before 'if'
+     525 |         if (!device_can_wakeup(&pdev->dev))
+         |         ^~
+   drivers/rtc/rtc-at91rm9200.c:528:9: error: expected identifier or '(' before 'if'
+     528 |         if (at91_rtc_config->has_correction)
+         |         ^~
+   drivers/rtc/rtc-at91rm9200.c:530:9: error: expected identifier or '(' before 'else'
+     530 |         else
+         |         ^~~~
+   drivers/rtc/rtc-at91rm9200.c:533:12: error: expected '=', ',', ';', 'asm' or '__attribute__' before '->' token
+     533 |         rtc->range_min = RTC_TIMESTAMP_BEGIN_1900;
+         |            ^~
+   drivers/rtc/rtc-at91rm9200.c:534:12: error: expected '=', ',', ';', 'asm' or '__attribute__' before '->' token
+     534 |         rtc->range_max = RTC_TIMESTAMP_END_2099;
+         |            ^~
+   drivers/rtc/rtc-at91rm9200.c:535:9: warning: data definition has no type or storage class
+     535 |         ret = devm_rtc_register_device(rtc);
+         |         ^~~
+   drivers/rtc/rtc-at91rm9200.c:535:9: error: type defaults to 'int' in declaration of 'ret' [-Wimplicit-int]
+   drivers/rtc/rtc-at91rm9200.c:535:9: error: redefinition of 'ret'
+   drivers/rtc/rtc-at91rm9200.c:514:9: note: previous definition of 'ret' with type 'int'
+     514 |         ret = devm_request_irq(&pdev->dev, irq, at91_rtc_interrupt,
+         |         ^~~
+   In file included from drivers/rtc/rtc-at91rm9200.c:27:
+   drivers/rtc/rtc-at91rm9200.c:535:40: error: 'rtc' undeclared here (not in a function)
+     535 |         ret = devm_rtc_register_device(rtc);
+         |                                        ^~~
+   include/linux/rtc.h:246:49: note: in definition of macro 'devm_rtc_register_device'
+     246 |         __devm_rtc_register_device(THIS_MODULE, device)
+         |                                                 ^~~~~~
+   drivers/rtc/rtc-at91rm9200.c:536:9: error: expected identifier or '(' before 'if'
+     536 |         if (ret)
+         |         ^~
+   include/vdso/bits.h:7:33: error: expected declaration specifiers or '...' before '(' token
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                 ^
+   drivers/rtc/rtc-at91rm9200.c:68:41: note: in expansion of macro 'BIT'
+      68 | #define         AT91_RTC_SECEV          BIT(2)          /* Second Event */
+         |                                         ^~~
+   drivers/rtc/rtc-at91rm9200.c:542:28: note: in expansion of macro 'AT91_RTC_SECEV'
+     542 |         at91_rtc_write_ier(AT91_RTC_SECEV);
+         |                            ^~~~~~~~~~~~~~
+   In file included from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from drivers/rtc/rtc-at91rm9200.c:26:
+   include/linux/dev_printk.h:108:10: error: expected identifier or '(' before '{' token
+     108 |         ({                                                              \
+         |          ^
+   include/linux/dev_printk.h:160:9: note: in expansion of macro 'dev_printk_index_wrap'
+     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:544:9: note: in expansion of macro 'dev_info'
+     544 |         dev_info(&pdev->dev, "AT91 Real Time Clock driver.\n");
+         |         ^~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:545:9: error: expected identifier or '(' before 'return'
+     545 |         return 0;
+         |         ^~~~~~
+   drivers/rtc/rtc-at91rm9200.c:546:1: error: expected identifier or '(' before '}' token
+     546 | }
+         | ^
+   drivers/rtc/rtc-at91rm9200.c: In function 'at91_rtc_probe':
+   drivers/rtc/rtc-at91rm9200.c:504:9: warning: control reaches end of non-void function [-Wreturn-type]
+     504 |         }
+         |         ^
+
+
+vim +46 arch/sh/include/asm/io.h
+
+b66c1a3919abb4 include/asm-sh/io.h      Paul Mundt 2006-01-16  28  
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  29  #define __raw_writeb(v,a)	(__chk_io_ptr(a), *(volatile u8  __force *)(a) = (v))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  30  #define __raw_writew(v,a)	(__chk_io_ptr(a), *(volatile u16 __force *)(a) = (v))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04 @31  #define __raw_writel(v,a)	(__chk_io_ptr(a), *(volatile u32 __force *)(a) = (v))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  32  #define __raw_writeq(v,a)	(__chk_io_ptr(a), *(volatile u64 __force *)(a) = (v))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  33  
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  34  #define __raw_readb(a)		(__chk_io_ptr(a), *(volatile u8  __force *)(a))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  35  #define __raw_readw(a)		(__chk_io_ptr(a), *(volatile u16 __force *)(a))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  36  #define __raw_readl(a)		(__chk_io_ptr(a), *(volatile u32 __force *)(a))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  37  #define __raw_readq(a)		(__chk_io_ptr(a), *(volatile u64 __force *)(a))
+14866543ad2201 arch/sh/include/asm/io.h Paul Mundt 2008-10-04  38  
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  39  #define readb_relaxed(c)	({ u8  __v = ioswabb(__raw_readb(c)); __v; })
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  40  #define readw_relaxed(c)	({ u16 __v = ioswabw(__raw_readw(c)); __v; })
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  41  #define readl_relaxed(c)	({ u32 __v = ioswabl(__raw_readl(c)); __v; })
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  42  #define readq_relaxed(c)	({ u64 __v = ioswabq(__raw_readq(c)); __v; })
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  43  
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  44  #define writeb_relaxed(v,c)	((void)__raw_writeb((__force  u8)ioswabb(v),c))
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  45  #define writew_relaxed(v,c)	((void)__raw_writew((__force u16)ioswabw(v),c))
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29 @46  #define writel_relaxed(v,c)	((void)__raw_writel((__force u32)ioswabl(v),c))
+b7e68d6876dfba arch/sh/include/asm/io.h Paul Mundt 2012-03-29  47  #define writeq_relaxed(v,c)	((void)__raw_writeq((__force u64)ioswabq(v),c))
+37b7a97884ba64 arch/sh/include/asm/io.h Paul Mundt 2010-11-01  48  
 
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
