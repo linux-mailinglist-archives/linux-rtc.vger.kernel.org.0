@@ -1,216 +1,327 @@
-Return-Path: <linux-rtc+bounces-1697-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1706-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3950895B509
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2024 14:32:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B6FF95C8BF
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2024 11:02:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67A54B21A1E
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2024 12:32:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0DF71C2120F
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2024 09:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A3831E895;
-	Thu, 22 Aug 2024 12:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85185149C6A;
+	Fri, 23 Aug 2024 09:02:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YxKG9fCE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fBkRvtU/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF431DFD1;
-	Thu, 22 Aug 2024 12:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F951494D6;
+	Fri, 23 Aug 2024 09:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724329924; cv=none; b=h3j3gNhhcuVXFaGjcEB8pvTafyavbtImyh2adDuYfONWmcKI+IxoEuULS6FzEPPNcAKY7yNRVtsvfEre8H0GF/vpr7NJjL04PnD0k1VLfxLKdwAdR07GChuzmC2N4cLbx0o8wVirtLHBP5AwYD0XAVNpHy9wWs7Imd3VOJuXDbE=
+	t=1724403747; cv=none; b=lVIs4E6XYCTtbuGmSrY6LPMr48jIPWoYGUuqb2L2OjcF4a+kG6tyDU79FtvmKB4sRGzc7YQj86VyUFEnRa9Z8k2BwgoDnvwsiwYMJAXkxBgNVGAtMZ1ZpSkfrMxYddt9Ggyk21xIBa8FCEdylavrohwlPdkrtZHV+IDTJnweFrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724329924; c=relaxed/simple;
-	bh=4uxiuLTKLHawT7wDqEVlFKtVPFfcxrN5u48M9OUoVaE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Z+92GUD5KllJCNgTqzVg6XkbRMkYgHFLbqEBBo5a/SgnISlF2LErWKeaPkfiXhCHDK2lR18k/+LAfqh1cA/0aidO7268d5CNkAq80Deywx4k+v9odaa6Wkez5fU/7jqutVxL/GcesFNK6gACV1RvT9oEuJjgpiegGIAZ12kFFT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YxKG9fCE; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=4uxiuLTKLHawT7wDqEVlFKtVPFfcxrN5u48M9OUoVaE=; b=YxKG9fCEbBq0X7msuYnRzHnJm3
-	Gux43yJfY1hhffL5OThtvqMD5tkGX0V0jwmDgGfyY7dLJWO9o81LX8X2WIRvJDmdgxoeymoOuhUvY
-	XwXrOxFcrKG5fUhX3ouyacL/Lr/kBKIXSJOq8nKojpRbCj5VxSwUbYLjs4IvIDg81rJIkB2Ubpx40
-	7z1kDCX3OR8UUAiNIHoSFlRBtWoLQBBIQxbtBesTUrU+fH/k/7msQ8eejYa/dqbJKbf46Z6cKYLgc
-	9Fh+NBya8CofYWK9XU3lowmCoZSbEhp5cxtRZIAaZ3iq2+gtNBhRTDFyYcKxh5XtRvDJ+QZu68fv9
-	KRXYJHlw==;
-Received: from [2001:8b0:10b:5:bebd:4b39:e979:6fb2] (helo=u3832b3a9db3152.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sh6yn-0000000AV83-3NMo;
-	Thu, 22 Aug 2024 12:31:53 +0000
-Message-ID: <f60d1102726643a176fca8ffbc9f2f49408c6d78.camel@infradead.org>
-Subject: Re: [PATCH v4] ptp: Add vDSO-style vmclock support
-From: David Woodhouse <dwmw2@infradead.org>
-To: Simon Horman <horms@kernel.org>
-Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
- <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org, 
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- linux-rtc@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>, 
- virtio-dev@lists.linux.dev, "Luu, Ryan" <rluu@amazon.com>, "Chashper,
- David" <chashper@amazon.com>, "Mohamed Abuelfotoh, Hazem"
- <abuehaze@amazon.com>,  "Christopher S . Hall"
- <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>, John
- Stultz <jstultz@google.com>,  "Michael S . Tsirkin" <mst@redhat.com>,
- netdev@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,  Thomas Gleixner
- <tglx@linutronix.de>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Marc Zyngier
- <maz@kernel.org>,  Mark Rutland <mark.rutland@arm.com>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,  qemu-devel
- <qemu-devel@nongnu.org>
-Date: Thu, 22 Aug 2024 13:31:52 +0100
-In-Reply-To: <20240822114948.GM2164@kernel.org>
-References: <410bbef9771ef8aa51704994a70d5965e367e2ce.camel@infradead.org>
-	 <20240822114948.GM2164@kernel.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-2BKhMcDSuFYoWBpZ5zC+"
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1724403747; c=relaxed/simple;
+	bh=bNAz38XBI+Ew8emwZS9IZZmsuKD/DTYDcohoAnwBhU0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTaP5ggHM358tPaGCI4Y9Q/OHpCOO8lu8p+R91Q3R/MzXPYx8nV312nJ3Pq23wZZGIazK+JreI4tYiDl6XCFOG9c7+bLJkRx0XTSOOFGMkOcKUV9FMXg8xEbu00csAIgUJ9QxdgIa9kHgnoJXkHURCRSHtyZSzwhYR7vqIcmzus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fBkRvtU/; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724403746; x=1755939746;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bNAz38XBI+Ew8emwZS9IZZmsuKD/DTYDcohoAnwBhU0=;
+  b=fBkRvtU/F3zSwImOlKxyUBGGgFeBLc8utz0cymt9q2zfLR6JaIGN/Tr+
+   a4nkdj31UQz9swIEN6Uek/L8wpZpHtVBNyuUKkFzbP47OekYCYnPgFtsH
+   VbKi4hEbFNEYDcXANIcp7jyUgbzFKSgcdVhPP8FlmNn+r+lpWQ3lcNseV
+   ZqdGZABkvn3yLEAKWgEyB92OlHCmPTRsQcqVu08FdwZJkN92ftPwJabAs
+   i7E91w7/xr5IU8nHnHz+K2tYBIi7kldrkudkSQiScmaoS0RStEQtgK9vx
+   3HkLIHdCJmFQhfEnX0KC44A7p980289stkjIXsXOT4+Z4iVXvNq1zxdsN
+   w==;
+X-CSE-ConnectionGUID: Ig4QxkQ6SoKd20XjDz3ISw==
+X-CSE-MsgGUID: f+dMSUlAQyud8qen/0KYNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="26617982"
+X-IronPort-AV: E=Sophos;i="6.10,169,1719903600"; 
+   d="scan'208";a="26617982"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 02:02:24 -0700
+X-CSE-ConnectionGUID: xamOvUGWRheSqddhL0HklQ==
+X-CSE-MsgGUID: EHRKSNtNSFSlB1bo2yDmqA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,169,1719903600"; 
+   d="scan'208";a="92529962"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 23 Aug 2024 02:02:21 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1shQBX-000DbM-1n;
+	Fri, 23 Aug 2024 09:02:19 +0000
+Date: Fri, 23 Aug 2024 17:01:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liao Yuanhong <liaoyuanhong@vivo.com>, alexandre.belloni@bootlin.com,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Liao Yuanhong <liaoyuanhong@vivo.com>
+Subject: Re: [PATCH 1/7] rtc:rtc-at91rm9200:Use devm_clk_get_enabled() helpers
+Message-ID: <202408231657.ZitX62vV-lkp@intel.com>
+References: <20240821092846.20138-2-liaoyuanhong@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240821092846.20138-2-liaoyuanhong@vivo.com>
+
+Hi Liao,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on tegra/for-next linus/master v6.11-rc4 next-20240823]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liao-Yuanhong/rtc-rtc-at91rm9200-Use-devm_clk_get_enabled-helpers/20240822-150754
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20240821092846.20138-2-liaoyuanhong%40vivo.com
+patch subject: [PATCH 1/7] rtc:rtc-at91rm9200:Use devm_clk_get_enabled() helpers
+config: sparc64-randconfig-r064-20240823 (https://download.01.org/0day-ci/archive/20240823/202408231657.ZitX62vV-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408231657.ZitX62vV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408231657.ZitX62vV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/rtc/rtc-at91rm9200.c: In function 'at91_rtc_probe':
+   drivers/rtc/rtc-at91rm9200.c:473:13: warning: unused variable 'ret' [-Wunused-variable]
+     473 |         int ret = 0;
+         |             ^~~
+   drivers/rtc/rtc-at91rm9200.c: At top level:
+   drivers/rtc/rtc-at91rm9200.c:89:24: error: expected declaration specifiers or '...' before '(' token
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |                        ^
+   drivers/rtc/rtc-at91rm9200.c:506:9: note: in expansion of macro 'at91_rtc_write'
+     506 |         at91_rtc_write(AT91_RTC_CR, 0);
+         |         ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:89:31: error: expected declaration specifiers or '...' before 'at91_rtc_regs'
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |                               ^~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:506:9: note: in expansion of macro 'at91_rtc_write'
+     506 |         at91_rtc_write(AT91_RTC_CR, 0);
+         |         ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:89:24: error: expected declaration specifiers or '...' before '(' token
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |                        ^
+   drivers/rtc/rtc-at91rm9200.c:507:9: note: in expansion of macro 'at91_rtc_write'
+     507 |         at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+         |         ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:89:31: error: expected declaration specifiers or '...' before 'at91_rtc_regs'
+      89 |         writel_relaxed((val), at91_rtc_regs + field)
+         |                               ^~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:507:9: note: in expansion of macro 'at91_rtc_write'
+     507 |         at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+         |         ^~~~~~~~~~~~~~
+   In file included from include/linux/bits.h:6,
+                    from include/linux/bitops.h:6,
+                    from include/linux/kernel.h:23,
+                    from include/linux/clk.h:13,
+                    from drivers/rtc/rtc-at91rm9200.c:18:
+   include/vdso/bits.h:7:33: error: expected declaration specifiers or '...' before '(' token
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                 ^
+   drivers/rtc/rtc-at91rm9200.c:66:41: note: in expansion of macro 'BIT'
+      66 | #define         AT91_RTC_ACKUPD         BIT(0)          /* Acknowledge for Update */
+         |                                         ^~~
+   drivers/rtc/rtc-at91rm9200.c:510:28: note: in expansion of macro 'AT91_RTC_ACKUPD'
+     510 |         at91_rtc_write_idr(AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+         |                            ^~~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:514:9: warning: data definition has no type or storage class
+     514 |         ret = devm_request_irq(&pdev->dev, irq, at91_rtc_interrupt,
+         |         ^~~
+   drivers/rtc/rtc-at91rm9200.c:514:9: error: type defaults to 'int' in declaration of 'ret' [-Wimplicit-int]
+   drivers/rtc/rtc-at91rm9200.c:514:33: error: 'pdev' undeclared here (not in a function); did you mean 'cdev'?
+     514 |         ret = devm_request_irq(&pdev->dev, irq, at91_rtc_interrupt,
+         |                                 ^~~~
+         |                                 cdev
+   In file included from include/linux/bcd.h:5,
+                    from drivers/rtc/rtc-at91rm9200.c:16:
+>> include/linux/compiler.h:55:23: error: expected identifier or '(' before 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^~
+   drivers/rtc/rtc-at91rm9200.c:517:9: note: in expansion of macro 'if'
+     517 |         if (ret) {
+         |         ^~
+>> include/linux/compiler.h:71:2: error: expected identifier or '(' before ')' token
+      71 | })
+         |  ^
+   include/linux/compiler.h:57:69: note: in expansion of macro '__trace_if_value'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ^~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: in expansion of macro '__trace_if_var'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:517:9: note: in expansion of macro 'if'
+     517 |         if (ret) {
+         |         ^~
+>> include/linux/compiler.h:55:23: error: expected identifier or '(' before 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^~
+   drivers/rtc/rtc-at91rm9200.c:525:9: note: in expansion of macro 'if'
+     525 |         if (!device_can_wakeup(&pdev->dev))
+         |         ^~
+>> include/linux/compiler.h:71:2: error: expected identifier or '(' before ')' token
+      71 | })
+         |  ^
+   include/linux/compiler.h:57:69: note: in expansion of macro '__trace_if_value'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ^~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: in expansion of macro '__trace_if_var'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:525:9: note: in expansion of macro 'if'
+     525 |         if (!device_can_wakeup(&pdev->dev))
+         |         ^~
+>> include/linux/compiler.h:55:23: error: expected identifier or '(' before 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^~
+   drivers/rtc/rtc-at91rm9200.c:528:9: note: in expansion of macro 'if'
+     528 |         if (at91_rtc_config->has_correction)
+         |         ^~
+>> include/linux/compiler.h:71:2: error: expected identifier or '(' before ')' token
+      71 | })
+         |  ^
+   include/linux/compiler.h:57:69: note: in expansion of macro '__trace_if_value'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ^~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: in expansion of macro '__trace_if_var'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:528:9: note: in expansion of macro 'if'
+     528 |         if (at91_rtc_config->has_correction)
+         |         ^~
+   drivers/rtc/rtc-at91rm9200.c:530:9: error: expected identifier or '(' before 'else'
+     530 |         else
+         |         ^~~~
+   drivers/rtc/rtc-at91rm9200.c:533:12: error: expected '=', ',', ';', 'asm' or '__attribute__' before '->' token
+     533 |         rtc->range_min = RTC_TIMESTAMP_BEGIN_1900;
+         |            ^~
+   drivers/rtc/rtc-at91rm9200.c:534:12: error: expected '=', ',', ';', 'asm' or '__attribute__' before '->' token
+     534 |         rtc->range_max = RTC_TIMESTAMP_END_2099;
+         |            ^~
+   drivers/rtc/rtc-at91rm9200.c:535:9: warning: data definition has no type or storage class
+     535 |         ret = devm_rtc_register_device(rtc);
+         |         ^~~
+   drivers/rtc/rtc-at91rm9200.c:535:9: error: type defaults to 'int' in declaration of 'ret' [-Wimplicit-int]
+   drivers/rtc/rtc-at91rm9200.c:535:9: error: redefinition of 'ret'
+   drivers/rtc/rtc-at91rm9200.c:514:9: note: previous definition of 'ret' with type 'int'
+     514 |         ret = devm_request_irq(&pdev->dev, irq, at91_rtc_interrupt,
+         |         ^~~
+   In file included from drivers/rtc/rtc-at91rm9200.c:27:
+   drivers/rtc/rtc-at91rm9200.c:535:40: error: 'rtc' undeclared here (not in a function)
+     535 |         ret = devm_rtc_register_device(rtc);
+         |                                        ^~~
+   include/linux/rtc.h:246:49: note: in definition of macro 'devm_rtc_register_device'
+     246 |         __devm_rtc_register_device(THIS_MODULE, device)
+         |                                                 ^~~~~~
+>> include/linux/compiler.h:55:23: error: expected identifier or '(' before 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^~
+   drivers/rtc/rtc-at91rm9200.c:536:9: note: in expansion of macro 'if'
+     536 |         if (ret)
+         |         ^~
+>> include/linux/compiler.h:71:2: error: expected identifier or '(' before ')' token
+      71 | })
+         |  ^
+   include/linux/compiler.h:57:69: note: in expansion of macro '__trace_if_value'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ^~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: in expansion of macro '__trace_if_var'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:536:9: note: in expansion of macro 'if'
+     536 |         if (ret)
+         |         ^~
+   include/vdso/bits.h:7:33: error: expected declaration specifiers or '...' before '(' token
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                 ^
+   drivers/rtc/rtc-at91rm9200.c:68:41: note: in expansion of macro 'BIT'
+      68 | #define         AT91_RTC_SECEV          BIT(2)          /* Second Event */
+         |                                         ^~~
+   drivers/rtc/rtc-at91rm9200.c:542:28: note: in expansion of macro 'AT91_RTC_SECEV'
+     542 |         at91_rtc_write_ier(AT91_RTC_SECEV);
+         |                            ^~~~~~~~~~~~~~
+   In file included from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from drivers/rtc/rtc-at91rm9200.c:26:
+   include/linux/dev_printk.h:108:10: error: expected identifier or '(' before '{' token
+     108 |         ({                                                              \
+         |          ^
+   include/linux/dev_printk.h:160:9: note: in expansion of macro 'dev_printk_index_wrap'
+     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:544:9: note: in expansion of macro 'dev_info'
+     544 |         dev_info(&pdev->dev, "AT91 Real Time Clock driver.\n");
+         |         ^~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:545:9: error: expected identifier or '(' before 'return'
+     545 |         return 0;
+         |         ^~~~~~
+   drivers/rtc/rtc-at91rm9200.c:546:1: error: expected identifier or '(' before '}' token
+     546 | }
+         | ^
+   drivers/rtc/rtc-at91rm9200.c: In function 'at91_rtc_probe':
+   drivers/rtc/rtc-at91rm9200.c:504:9: warning: control reaches end of non-void function [-Wreturn-type]
+     504 |         }
+         |         ^
+   drivers/rtc/rtc-at91rm9200.c: At top level:
+   drivers/rtc/rtc-at91rm9200.c:456:35: warning: 'sama5d4_rtc_ops' defined but not used [-Wunused-const-variable=]
+     456 | static const struct rtc_class_ops sama5d4_rtc_ops = {
+         |                                   ^~~~~~~~~~~~~~~
+   drivers/rtc/rtc-at91rm9200.c:448:35: warning: 'at91_rtc_ops' defined but not used [-Wunused-const-variable=]
+     448 | static const struct rtc_class_ops at91_rtc_ops = {
+         |                                   ^~~~~~~~~~~~
 
 
---=-2BKhMcDSuFYoWBpZ5zC+
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+vim +55 include/linux/compiler.h
 
-On Thu, 2024-08-22 at 12:49 +0100, Simon Horman wrote:
-> Hi David,
->=20
-> Sorry to be always the one with the nit-pick.
-> Sparse complains about the line above, I believe because the
-> type of st->clk->size is __le32.
->=20
-> .../ptp_vmclock.c:562:13: warning: restricted __le32 degrades to integer
+2bcd521a684cc9 Steven Rostedt 2008-11-21  49  
+2bcd521a684cc9 Steven Rostedt 2008-11-21  50  #ifdef CONFIG_PROFILE_ALL_BRANCHES
+2bcd521a684cc9 Steven Rostedt 2008-11-21  51  /*
+2bcd521a684cc9 Steven Rostedt 2008-11-21  52   * "Define 'is'", Bill Clinton
+2bcd521a684cc9 Steven Rostedt 2008-11-21  53   * "Define 'if'", Steven Rostedt
+2bcd521a684cc9 Steven Rostedt 2008-11-21  54   */
+a15fd609ad53a6 Linus Torvalds 2019-03-20 @55  #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+a15fd609ad53a6 Linus Torvalds 2019-03-20  56  
+a15fd609ad53a6 Linus Torvalds 2019-03-20  57  #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+a15fd609ad53a6 Linus Torvalds 2019-03-20  58  
+a15fd609ad53a6 Linus Torvalds 2019-03-20  59  #define __trace_if_value(cond) ({			\
+2bcd521a684cc9 Steven Rostedt 2008-11-21  60  	static struct ftrace_branch_data		\
+e04462fb82f8dd Miguel Ojeda   2018-09-03  61  		__aligned(4)				\
+33def8498fdde1 Joe Perches    2020-10-21  62  		__section("_ftrace_branch")		\
+a15fd609ad53a6 Linus Torvalds 2019-03-20  63  		__if_trace = {				\
+2bcd521a684cc9 Steven Rostedt 2008-11-21  64  			.func = __func__,		\
+2bcd521a684cc9 Steven Rostedt 2008-11-21  65  			.file = __FILE__,		\
+2bcd521a684cc9 Steven Rostedt 2008-11-21  66  			.line = __LINE__,		\
+2bcd521a684cc9 Steven Rostedt 2008-11-21  67  		};					\
+a15fd609ad53a6 Linus Torvalds 2019-03-20  68  	(cond) ?					\
+a15fd609ad53a6 Linus Torvalds 2019-03-20  69  		(__if_trace.miss_hit[1]++,1) :		\
+a15fd609ad53a6 Linus Torvalds 2019-03-20  70  		(__if_trace.miss_hit[0]++,0);		\
+a15fd609ad53a6 Linus Torvalds 2019-03-20 @71  })
+a15fd609ad53a6 Linus Torvalds 2019-03-20  72  
 
-Oops, thanks for catching that!
-
-Fixed in
-https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/vmclock
-
-I'll wait a little while before sending a new version.
-
---=-2BKhMcDSuFYoWBpZ5zC+
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQwODIyMTIzMTUyWjAvBgkqhkiG9w0BCQQxIgQgMjKkUYnl
-Qb9xNOYCH2wbdkhUi+JX/WAuLZlNM1EI0MAwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBbBymRDUyO4+wM5JKBrNvoQHIx5vkxJB+O
-IRHCBBYp3hc9OaEBHuSch2sQJMCTJ6mA76o5XuMYVlquLsjtPGifgmk+yzTzKTI5EMkEf2UvlM9H
-a2Z1QBNmjlj1xDXdyPW+aX0FGVQt7KP4ovfSaLZNnV3LtwATdAXvf6ZXco5afkN13vsrjtDe275v
-FbNN/5m9/GWercY0H/kaYuavsrayz/tH6BqkIOBdcj5dFJhMRE5kNvO9h3qHlMDd2+2mjXn1KzSQ
-nduf4qICu9jTkYI1car4VHegyPHSCLfwTdTLi+ber/pB1XoFsc/Ftd/1CuOQajNNsQX92IsSA5La
-PCwcpQw75yce22fgVOBoNg8VftVKsGKKu0tzl/ZiuUloeHBjcMqiPYoylhis2Mcv4Rvkfg3iQIy2
-TwbIBSxj4qiRv9JJ1L8SjxBzQswSFk3tGqpMXMCqaOJ87HV/TtvYMtU2Oo+CEp+yd1f6Psmw4Bmb
-sedQZ6sPR/VYW2m0lfhfKdxSLxajzMqUr2N/iJkBP2cT9Z/3CyoI40XttjhypksMsWKtmMY+ilpn
-fTcHTLds3JswsbVdv3SmAqqxoP8lQjp14b0DW5NbsieHwzjJmEsabvhpC64g0soXR+0O+UpxMv9Q
-3uHhuMIzGKXVuhD4St4h/MOGtnijKrat4gLpCHh6AgAAAAAAAA==
-
-
---=-2BKhMcDSuFYoWBpZ5zC+--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
