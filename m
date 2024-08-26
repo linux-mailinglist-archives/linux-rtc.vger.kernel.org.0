@@ -1,158 +1,436 @@
-Return-Path: <linux-rtc+bounces-1738-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1739-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6339295EC14
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 10:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CE8395ED9B
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 11:45:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BC2F282D04
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 08:34:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7201282404
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 09:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59F013EFF3;
-	Mon, 26 Aug 2024 08:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A208145A01;
+	Mon, 26 Aug 2024 09:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bh4IoI9J"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jIr7X3Zs"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C3613C9A2;
-	Mon, 26 Aug 2024 08:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5046F335B5;
+	Mon, 26 Aug 2024 09:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724661226; cv=none; b=PAFwr+DWGu7fQaxXTRrEykgwFRZC6BQCCrwL1zSqM/X6kXeKXKKZW3uETynXSJ0fEqTZ1XbBpiPMmISlK/raLLWe72i91re6jILBURwdxmCXBWvUoacDXkEAJsTkETulI3xbPRyKQW+TzR6rbgQHmH8e5BimqQeQnV8SBiJ0rXs=
+	t=1724665525; cv=none; b=ERDmYh/hs9XfAuPKsS+DiU7jXp2H9X71sqnAJ6UASBpYyWs1VbLxmlqU3G3jMtTVRmB8n8jkSYr4dykjnRw8VGvQ0ER/RWLxd53P+vl84iJLmxGAUIRTUTVHNVNh1ep1tiJH1B6PbaMe+ZEcDF5ZQzCPEAftpBdgZwj5twRTJJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724661226; c=relaxed/simple;
-	bh=U1tJ1/ULEzBvcZ47ZFvB/rVYnyeyMrzi27GGYRy1N2k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WBExTBrae21v9OeUJ6RGnt3Bxz/RndPp4VI+J3pE8i5NGYwhtGx2T0cpn8e4LL7zXMC8Gbl95dZDMwb1L9tbSzB57ZMShal2fqyg5xPY9A2xUOBU0lS9zGW2XGqw4SPqjgb7FT+E+M6iSO9k566w3Y6rK6AlSqwHkLjfwDXRC3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bh4IoI9J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF89C567C3;
-	Mon, 26 Aug 2024 08:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724661226;
-	bh=U1tJ1/ULEzBvcZ47ZFvB/rVYnyeyMrzi27GGYRy1N2k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Bh4IoI9J/w8IFTdTXrdD1sDrWDbvyXf7/Jo2QjABGam5mCuOGg6AiFHB2etNFndJi
-	 +v88wG4ATTA/C8yE0cTqxmRameI1L9QG/CugVOrrLpmm9gBOWFVeBwSG+vkx3F7ud5
-	 HKrmt31Vpbvp6E3sEj8WpE04x++r47itJsprVY2+T+exmIphAPqtyF+REgkLhsK7Sy
-	 Fn6sJaFU0L8xWT/7Mo2oHe2JFfpLS3Au0tXS394S4dMgQa0qkmFhXdPZg/O+unswoG
-	 n/A56xvKx8sX4HeIX72y6hUWNWCJogPhYH4k+udSw5FcKUDAmptE0KCSbqMcZ5QFg4
-	 ewY8LB1Hmu7tQ==
-Message-ID: <9537c866-cddc-4958-86a8-d097982067cd@kernel.org>
-Date: Mon, 26 Aug 2024 10:33:39 +0200
+	s=arc-20240116; t=1724665525; c=relaxed/simple;
+	bh=PhNJCnEqWAf5tOQ3VBj/FIzLFFYPizMxoaqPArGK5Ts=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GyE2hS6llbg/y2H0DQfWKnZIEhKPRo7nEcb5j9zWVx0Fed+LLKWfToGW7ie10uU2ptse8rKwSdrm7sSXiJuIbwU50a1eBSOxtgGWRWWQo0w49ldWp/vwSi+DtsJXcgmrIGShVeQrAuP6hGO1VD9TLe1jtI0BExozHq9kXgDQPiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jIr7X3Zs; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3FE78240005;
+	Mon, 26 Aug 2024 09:45:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1724665520;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cm7pTcmop+B8Zg+nbYiYBBLjbkVuEU6sN7SIS3TJIAQ=;
+	b=jIr7X3ZsNbaWgwn/2FZVB/qWjVAkCNv627YiNOV9EtsFgJ8rbmPK83G6X0KIU1OgmkTBur
+	QOGMoEcVVWOc3XLyLft0yKn1L6Xzrs9ZBtfLa9MCBT4MZ/N3+cNM/U4TUAzwXxYr/6v6+R
+	wOYm6+42QY4/T1cVe9afQNPxJr1L32STAD0qG2QvZCEzfOAzajcaK9U3PX8wson2RfEtKj
+	+DtDByZNvPGY1KibzpEPyiinuXufj2Af/DkPLu2QPDiNKcVe75KY88EAqM+eWezH968g7v
+	4FN/h768YMHUa+PUsP3MwlTSeqCJXw3wlrfDfiZJfwElYnd/jLyDKyixJ/KKjg==
+Date: Mon, 26 Aug 2024 11:45:19 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: xianwei.zhao@amlogic.com
+Cc: Yiting Deng <yiting.deng@amlogic.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] rtc: support for the Amlogic on-chip RTC
+Message-ID: <2024082609451907fd19e2@mail.local>
+References: <20240823-rtc-v1-0-6f70381da283@amlogic.com>
+ <20240823-rtc-v1-2-6f70381da283@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/8] dt-bindings: arm: rockchip: Add Relfor Saib
-To: karthikeyan <karthikeyan@linumiz.com>, Conor Dooley <conor@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- heiko@sntech.de, alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20240823153528.3863993-1-karthikeyan@linumiz.com>
- <20240823153528.3863993-8-karthikeyan@linumiz.com>
- <20240823-lark-regime-0d3ab4215d69@spud>
- <a5d4f421-5120-4421-944e-d39d67e482bb@linumiz.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <a5d4f421-5120-4421-944e-d39d67e482bb@linumiz.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240823-rtc-v1-2-6f70381da283@amlogic.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 24/08/2024 14:48, karthikeyan wrote:
-> On 8/23/24 21:51, Conor Dooley wrote:
->> On Fri, Aug 23, 2024 at 09:05:27PM +0530, Karthikeyan Krishnasamy wrote:
->>> Add devicetree binding documentation for Relfor Saib
->>> board which uses Rockchip RV1109 SoC
->>>
->>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
->>> ---
->>>   Documentation/devicetree/bindings/arm/rockchip.yaml | 6 ++++++
->>>   1 file changed, 6 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
->>> index 1ef09fbfdfaf..29f7e09ae443 100644
->>> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
->>> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
->>> @@ -848,6 +848,12 @@ properties:
->>>                 - radxa,zero-3w
->>>             - const: rockchip,rk3566
->>>   
->>> +      - description: Relfor SAIB board
->>> +        items:
->>> +          - const: relfor,saib
->>> +          - enum:
->>> +              - rockchip,rv1109
->>
->> This does not make sense to me. Why do you have an enum for the SoC
->> model, implying that this SAIB board would have more than one possible
->> SoC? I'd expect to see - const: rockvhip,rv1109
->>
-> There is an upcoming version of SAIB board based on Rockchip RV1103.
+On 23/08/2024 17:19:45+0800, Xianwei Zhao via B4 Relay wrote:
+> From: Yiting Deng <yiting.deng@amlogic.com>
+> 
+> Support for the on-chip RTC found in some of Amlogic's SoCs such as the
+> A113L2 and A113X2.
+> 
+> Signed-off-by: Yiting Deng <yiting.deng@amlogic.com>
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> ---
+>  drivers/rtc/Kconfig       |  12 +
+>  drivers/rtc/Makefile      |   1 +
+>  drivers/rtc/rtc-amlogic.c | 589 ++++++++++++++++++++++++++++++++++++++++++++++
 
-Still wrong form multiple points of view:
-1. Not logical, we never expect such entry in top level bindings,
-2. Same board or different? If same, how is it possible to have two
-different SoCs (not modules!) in the same board? These are different
-boards. Or maybe this uses some SoM, but your commit msg explained
-nothing about this.
+As pointed out, this is the third amlogic driver so the name of the file
+must be more specific.
 
-You have entire commit msg to explain the hardware. Use it, so you don't
-get such questions.
+> +static void aml_set_time(struct aml_rtc_data *rtc, u32 time_sec)
 
-The code above: NAK
+Is indirection necessary, this function is used only once
 
-Best regards,
-Krzysztof
+> +{
+> +	if (rtc->config->gray_stored)
+> +		time_sec = binary_to_gray(time_sec);
+> +	regmap_write(rtc->map, RTC_COUNTER_REG, time_sec);
+> +}
+> +
+> +static u32 aml_read_time(struct aml_rtc_data *rtc)
+Ditto
 
+> +{
+> +	u32 time_sec;
+> +
+> +	regmap_read(rtc->map, RTC_REAL_TIME, &time_sec);
+> +	if (rtc->config->gray_stored)
+> +		time_sec = gray_to_binary(time_sec);
+> +	return time_sec;
+> +}
+> +
+> +static u32 aml_read_alarm(struct aml_rtc_data *rtc)
+Ditto
+
+> +{
+> +	u32 alarm_sec;
+> +
+> +	regmap_read(rtc->map, RTC_ALARM0_REG, &alarm_sec);
+> +	if (rtc->config->gray_stored)
+> +		alarm_sec = gray_to_binary(alarm_sec);
+> +	return alarm_sec;
+> +}
+> +
+> +static void aml_set_alarm(struct aml_rtc_data *rtc, u32 alarm_sec)
+Ditto
+
+> +{
+> +	if (rtc->config->gray_stored)
+> +		alarm_sec = binary_to_gray(alarm_sec);
+> +	regmap_write(rtc->map, RTC_ALARM0_REG, alarm_sec);
+> +}
+> +
+> +static int aml_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev);
+> +	time64_t alarm_sec;
+> +
+> +	if (alarm->enabled) {
+
+Why aren't you setting the alarm when it is not enabled?
+
+> +		regmap_update_bits(rtc->map, RTC_CTRL,
+> +				   RTC_ALRM0_EN, RTC_ALRM0_EN);
+> +		regmap_update_bits(rtc->map, RTC_INT_MASK,
+> +				   RTC_ALRM0_IRQ_MSK, 0);
+> +
+> +		alarm_sec = rtc_tm_to_time64(&alarm->time);
+> +		if (alarm_sec > U32_MAX) {
+
+This is never going to happen, the test and error message are not
+necessary.
+
+> +			dev_err(dev, "alarm value invalid!\n");
+> +			return -EINVAL;
+> +		}
+> +		aml_set_alarm(rtc, alarm_sec);
+> +	}
+> +	dev_dbg(dev, "%s: alarm->enabled=%d alarm_set=%llds\n", __func__,
+> +		alarm->enabled, alarm_sec);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aml_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev);
+> +	u32 alarm_sec;
+> +	u32 reg_val;
+> +	int alarm_enable, alarm_mask;
+> +
+> +	alarm_sec = aml_read_alarm(rtc);
+> +	rtc_time64_to_tm(alarm_sec, &alarm->time);
+> +
+> +	regmap_read(rtc->map, RTC_CTRL, &reg_val);
+> +	alarm_enable = FIELD_GET(RTC_ALRM0_EN, reg_val);
+> +
+> +	regmap_read(rtc->map, RTC_INT_MASK, &reg_val);
+> +	alarm_mask = FIELD_GET(RTC_ALRM0_IRQ_MSK, reg_val);
+> +
+> +	alarm->enabled = (alarm_enable && !alarm_mask) ? 1 : 0;
+> +	dev_dbg(dev, "%s: alarm->enabled=%d alarm=%us\n", __func__,
+> +		alarm->enabled, alarm_sec);
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t aml_rtc_handler(int irq, void *data)
+> +{
+> +	struct aml_rtc_data *rtc = (struct aml_rtc_data *)data;
+> +
+> +	regmap_write(rtc->map, RTC_ALARM0_REG, 0);
+> +	regmap_update_bits(rtc->map, RTC_INT_CLR,
+> +			   RTC_ALRM0_IRQ_STATUS, RTC_ALRM0_IRQ_STATUS);
+
+Are you sure regmap_update_bits is necessary here?
+
+> +
+> +	rtc_update_irq(rtc->rtc_dev, 1, RTC_AF | RTC_IRQF);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+
+
+> +static int aml_rtc_adjust_sec(struct device *dev, u32 match_counter,
+> +			      int ops, int enable)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev->parent);
+> +	u32 reg_val;
+> +
+> +	if (!FIELD_FIT(RTC_MATCH_COUNTER, match_counter)) {
+> +		pr_err("%s: invalid match_counter\n", __func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	reg_val = FIELD_PREP(RTC_SEC_ADJUST_CTRL, ops)
+> +		  | FIELD_PREP(RTC_MATCH_COUNTER, match_counter)
+> +		  | FIELD_PREP(RTC_ADJ_VALID, enable);
+> +	/* Set sec_adjust_ctrl, match_counter and Valid adjust */
+> +	regmap_write(rtc->map, RTC_SEC_ADJUST_REG, reg_val);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aml_rtc_set_calibration(struct device *dev, u32 calibration)
+> +{
+> +	int cal_ops, enable, match_counter;
+> +	int ret;
+> +
+> +	match_counter = FIELD_GET(RTC_MATCH_COUNTER, calibration);
+> +	cal_ops = FIELD_GET(RTC_SEC_ADJUST_CTRL, calibration);
+> +	enable = FIELD_GET(RTC_ADJ_VALID, calibration);
+> +
+> +	ret = aml_rtc_adjust_sec(dev, match_counter, cal_ops, enable);
+> +	dev_dbg(dev, "%s: Success to store RTC calibration attribute\n",
+> +		__func__);
+> +
+> +	return ret;
+> +}
+> +
+> +static int aml_rtc_get_calibration(struct device *dev, u32 *calibration)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev->parent);
+> +	u32 reg_val;
+> +
+> +	regmap_read(rtc->map, RTC_SEC_ADJUST_REG, &reg_val);
+> +	*calibration = FIELD_GET(RTC_SEC_ADJUST_CTRL | RTC_MATCH_COUNTER, reg_val);
+> +	/* BIT is only UL defined，and GENMASK has no type, its' donot used together */
+> +	*calibration |= FIELD_PREP(RTC_ADJ_VALID, FIELD_GET(RTC_ADJ_VALID, reg_val));
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * The calibration value transferred from buf takes bit[18:0] to represent
+> + * match_counter, while takes bit[20:19] to represent sec_adjust_ctrl, bit[23]
+> + * to represent adj_valid. enable/disable sec_adjust_ctrl and match_counter.
+> + * @buf: Separate buf to match_counter, sec_adjust_ctrl and adj_valid
+> + *	 match_counter: bit[18:0], value is 0 ~ 0x7fff
+> + *	 sec_adjust_ctrl: bit[20:19], value is 0 ~ 2. 3 to insert a second once every
+> + *	 match_counter+1 seconds, 2 to swallow a second once every match_counter+1 seconds
+> + *	 0 or 1 to no adjustment
+> + *	 adj_valid: bit[23], value is 0 or 1, 0 to disable sec_adjust_ctrl and
+> + *	 match_counter, and 1 to enable them.
+> + */
+> +static ssize_t rtc_calibration_store(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     const char *buf, size_t count)
+> +{
+> +	int retval;
+> +	int calibration = 0;
+> +
+> +	if (sscanf(buf, " %i ", &calibration) != 1) {
+> +		dev_err(dev, "Failed to store RTC calibration attribute\n");
+> +		return -EINVAL;
+> +	}
+> +	retval = aml_rtc_set_calibration(dev, calibration);
+> +
+> +	return retval ? retval : count;
+> +}
+> +
+> +static ssize_t rtc_calibration_show(struct device *dev,
+> +				    struct device_attribute *attr, char *buf)
+> +{
+> +	int  retval = 0;
+> +	u32  calibration = 0;
+> +
+> +	retval = aml_rtc_get_calibration(dev, &calibration);
+> +	if (retval < 0) {
+> +		dev_err(dev, "Failed to read RTC calibration attribute\n");
+> +		sprintf(buf, "0\n");
+> +		return retval;
+> +	}
+> +
+> +	return sprintf(buf, "0x%x\n", calibration);
+> +}
+> +static DEVICE_ATTR_RW(rtc_calibration);
+> +
+> +static int rtc_set_div256_adjust(struct device *dev, u32 *value)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev->parent);
+> +	u32 div256_adj;
+> +
+> +	div256_adj = FIELD_PREP(RTC_DIV256_ADJ_DSR | RTC_DIV256_ADJ_VAL, *value);
+> +	/*
+> +	 * AO_RTC_SEC_ADJUST_REG bit 24 insert/remove(1/0) a div256 cycle,
+> +	 * bit 25 valid/invalid(1/0) div256_adj_val
+> +	 */
+> +	regmap_write_bits(rtc->map, RTC_SEC_ADJUST_REG,
+> +			  RTC_DIV256_ADJ_DSR | RTC_DIV256_ADJ_VAL, div256_adj);
+> +	/* rtc need about 30ms to adjust its time after written */
+> +	mdelay(30);
+> +
+> +	return 0;
+> +}
+> +
+> +static int rtc_get_div256_adjust(struct device *dev, u32 *value)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev->parent);
+> +	u32 reg_val;
+> +
+> +	regmap_read(rtc->map, RTC_SEC_ADJUST_REG, &reg_val);
+> +	*value = FIELD_GET(RTC_DIV256_ADJ_DSR | RTC_DIV256_ADJ_VAL, reg_val);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * div256 adjust function is controlled using bit[24] and bit[25].
+> + * transferred buf takes bit[0] to represent div256 adj val, bit[1]
+> + * to represent div256 adj enable/disable. div256 cycle means that adjust
+> + * 1/32768/256 once by written once, it's val is equal to 1/128s
+> + * @buf: 3: enable div256 adjust and insert a div256 cycle
+> + *	 2: enable div256 adjust and remove a div256 cycle
+> + *	 1 or 0: disable div256 adjust
+> + */
+> +static ssize_t rtc_div256_adjust_store(struct device *dev,
+> +				       struct device_attribute *attr,
+> +				       const char *buf, size_t count)
+> +{
+> +	int retval;
+> +	u32 value = 0;
+> +
+> +	if (sscanf(buf, " %i ", &value) != 1) {
+> +		dev_err(dev, "Failed to store RTC div256 adjust attribute\n");
+> +		return -EINVAL;
+> +	}
+> +	retval = rtc_set_div256_adjust(dev, &value);
+> +
+> +	return retval ? retval : count;
+> +}
+> +
+> +static ssize_t rtc_div256_adjust_show(struct device *dev,
+> +				      struct device_attribute *attr, char *buf)
+> +{
+> +	int retval = 0;
+> +	u32 value = 0;
+> +
+> +	retval = rtc_get_div256_adjust(dev, &value);
+> +	if (retval < 0) {
+> +		dev_err(dev, "Failed to read RTC div256 adjust attribute\n");
+> +		sprintf(buf, "0\n");
+> +		return retval;
+> +	}
+> +
+> +	return sprintf(buf, "0x%x\n", value);
+> +}
+> +static DEVICE_ATTR_RW(rtc_div256_adjust);
+> +
+> +static struct attribute *aml_rtc_attrs[] = {
+> +	&dev_attr_rtc_calibration.attr,
+> +	&dev_attr_rtc_div256_adjust.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group aml_rtc_sysfs_files = {
+> +	.attrs	= aml_rtc_attrs,
+> +};
+> +
+
+You must use the standard RTC API to handle calibration, see
+.read_offset and .set_offset
+
+> +static void aml_rtc_init(struct device *dev, struct aml_rtc_data *rtc)
+> +{
+> +	u32 reg_val;
+> +	u32 rtc_enable;
+> +
+> +	regmap_read(rtc->map, RTC_CTRL, &reg_val);
+> +	rtc_enable = FIELD_GET(RTC_ENABLE, reg_val);
+> +	if (!rtc_enable) {
+> +		if (clk_get_rate(rtc->sclk) == OSC_24M) {
+> +			/* select 24M oscillator */
+> +			regmap_update_bits(rtc->map, RTC_CTRL, RTC_OSC_SEL, RTC_OSC_SEL);
+> +
+> +			/*
+> +			 * Set RTC oscillator to freq_out to freq_in/((N0*M0+N1*M1)/(M0+M1))
+> +			 * Enable clock_in gate of oscillator 24MHz
+> +			 * Set N0 to 733, N1 to 732
+> +			 */
+> +			reg_val = FIELD_PREP(RTC_OSCIN_IN_EN, 1)
+> +				  | FIELD_PREP(RTC_OSCIN_OUT_CFG, 1)
+> +				  | FIELD_PREP(RTC_OSCIN_OUT_N0M0, RTC_OSCIN_OUT_32K_N0)
+> +				  | FIELD_PREP(RTC_OSCIN_OUT_N1M1, RTC_OSCIN_OUT_32K_N1);
+> +			regmap_write_bits(rtc->map, RTC_OSCIN_CTRL0, RTC_OSCIN_IN_EN
+> +					  | RTC_OSCIN_OUT_CFG | RTC_OSCIN_OUT_N0M0
+> +					  | RTC_OSCIN_OUT_N1M1, reg_val);
+> +
+> +			/* Set M0 to 2, M1 to 3, so freq_out = 32768 Hz*/
+> +			reg_val = FIELD_PREP(RTC_OSCIN_OUT_N0M0, RTC_OSCIN_OUT_32K_M0)
+> +				  | FIELD_PREP(RTC_OSCIN_OUT_N1M1, RTC_OSCIN_OUT_32K_M1);
+> +			regmap_write_bits(rtc->map, RTC_OSCIN_CTRL1, RTC_OSCIN_OUT_N0M0
+> +					  | RTC_OSCIN_OUT_N1M1, reg_val);
+> +		} else {
+> +			/* select 32K oscillator */
+> +			regmap_write_bits(rtc->map, RTC_CTRL, RTC_OSC_SEL, 0);
+> +		}
+> +		/* Enable RTC */
+> +		regmap_write_bits(rtc->map, RTC_CTRL, RTC_ENABLE, RTC_ENABLE);
+
+		This must not be done at probe time, else you loose the
+		important information taht the time has never been set. Instead,
+		it should only be enabled on the first .set_time invocation do
+		you could now in .read_time that the time is currently invalid.
+
+> +		usleep_range(100, 200);
+> +	}
+> +	regmap_write_bits(rtc->map, RTC_INT_MASK,
+> +			  RTC_ALRM0_IRQ_MSK, RTC_ALRM0_IRQ_MSK);
+> +	regmap_write_bits(rtc->map, RTC_CTRL, RTC_ALRM0_EN, 0);
+> +}
+> +
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
