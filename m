@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-1737-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1738-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89A5F95EBF8
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 10:31:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6339295EC14
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 10:34:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF7F4B25927
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 08:31:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BC2F282D04
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2024 08:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2FE144D27;
-	Mon, 26 Aug 2024 08:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59F013EFF3;
+	Mon, 26 Aug 2024 08:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5FoIFx9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bh4IoI9J"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485F214430E;
-	Mon, 26 Aug 2024 08:28:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C3613C9A2;
+	Mon, 26 Aug 2024 08:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724660893; cv=none; b=hZrkl90NgoPDy3dCQd+rRsEjcSnDU4DjcnLGESnsKuGiFPbYG1+jSh7a7c60bf1anfDbX1JJxEJ3hF6xuBfGJhbgEmekeZgw4iZEX0PduC653CRrmNwOVitPfQErsL5E4/69cpZuWqBPIQz0CLUq/T/v8CwF/+EV5Dks1UgJjFU=
+	t=1724661226; cv=none; b=PAFwr+DWGu7fQaxXTRrEykgwFRZC6BQCCrwL1zSqM/X6kXeKXKKZW3uETynXSJ0fEqTZ1XbBpiPMmISlK/raLLWe72i91re6jILBURwdxmCXBWvUoacDXkEAJsTkETulI3xbPRyKQW+TzR6rbgQHmH8e5BimqQeQnV8SBiJ0rXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724660893; c=relaxed/simple;
-	bh=7Qq82oZd6o//DLFgkm7qZCVzpy7uvlZ7P8q3GhGE8ww=;
+	s=arc-20240116; t=1724661226; c=relaxed/simple;
+	bh=U1tJ1/ULEzBvcZ47ZFvB/rVYnyeyMrzi27GGYRy1N2k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SmrcdCzJx6Q5Lzm8rKNs/CC/HskhEUvm7H+HoegoFlHUiHL+OPFN1GgSfIQFDPuf03fvp0EGivHOELzl51/6Zb+zvDncZGHp1ngJr5hgYDjtDugjevvpSZDzWItZkkQYyQ/gMgbeLuhYtfw79K6AyW3yNuHACzTADvXbyBPZb1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5FoIFx9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1997C8CDC3;
-	Mon, 26 Aug 2024 08:28:08 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=WBExTBrae21v9OeUJ6RGnt3Bxz/RndPp4VI+J3pE8i5NGYwhtGx2T0cpn8e4LL7zXMC8Gbl95dZDMwb1L9tbSzB57ZMShal2fqyg5xPY9A2xUOBU0lS9zGW2XGqw4SPqjgb7FT+E+M6iSO9k566w3Y6rK6AlSqwHkLjfwDXRC3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bh4IoI9J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF89C567C3;
+	Mon, 26 Aug 2024 08:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724660892;
-	bh=7Qq82oZd6o//DLFgkm7qZCVzpy7uvlZ7P8q3GhGE8ww=;
+	s=k20201202; t=1724661226;
+	bh=U1tJ1/ULEzBvcZ47ZFvB/rVYnyeyMrzi27GGYRy1N2k=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=a5FoIFx9E3aTrtdwnwfPTfW77rc0TEeQmUIayNtsCUFWpFWyChUjQ4erfBksI+pYj
-	 +k4gsI+eoWklq3NlL509oJoI+c5xhCSDG2Jqa4x41eitd3HrrzVDTyJ3dOKsq9kmmA
-	 H9Kgr1fNQYVAEZ8N0ZceK1hVOA5pb3/LDe2n34yu+hdOh+0I3U5Xn/20CcSbiwhusw
-	 IZVXsHodBfHoT5iArSwlhBZN07j9shqHc0by1tqYhoxRXH+v6VRijtfv07Sz1iDNRV
-	 6R2QmQyP/ItWbgBkUqO7WMlG8E+vqvd2KAHkI1PmEh4A38OdvLppPA9G7qf7kxc7by
-	 oESIIdR3XFV/g==
-Message-ID: <4b79fb7e-7ff6-499b-b615-e1bd69a46d0b@kernel.org>
-Date: Mon, 26 Aug 2024 10:28:06 +0200
+	b=Bh4IoI9J/w8IFTdTXrdD1sDrWDbvyXf7/Jo2QjABGam5mCuOGg6AiFHB2etNFndJi
+	 +v88wG4ATTA/C8yE0cTqxmRameI1L9QG/CugVOrrLpmm9gBOWFVeBwSG+vkx3F7ud5
+	 HKrmt31Vpbvp6E3sEj8WpE04x++r47itJsprVY2+T+exmIphAPqtyF+REgkLhsK7Sy
+	 Fn6sJaFU0L8xWT/7Mo2oHe2JFfpLS3Au0tXS394S4dMgQa0qkmFhXdPZg/O+unswoG
+	 n/A56xvKx8sX4HeIX72y6hUWNWCJogPhYH4k+udSw5FcKUDAmptE0KCSbqMcZ5QFg4
+	 ewY8LB1Hmu7tQ==
+Message-ID: <9537c866-cddc-4958-86a8-d097982067cd@kernel.org>
+Date: Mon, 26 Aug 2024 10:33:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,15 +50,16 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] MAINTAINERS: Add an entry for Amlogic RTC driver
-To: xianwei.zhao@amlogic.com, Yiting Deng <yiting.deng@amlogic.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240823-rtc-v1-0-6f70381da283@amlogic.com>
- <20240823-rtc-v1-3-6f70381da283@amlogic.com>
+Subject: Re: [PATCH 7/8] dt-bindings: arm: rockchip: Add Relfor Saib
+To: karthikeyan <karthikeyan@linumiz.com>, Conor Dooley <conor@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ heiko@sntech.de, alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+References: <20240823153528.3863993-1-karthikeyan@linumiz.com>
+ <20240823153528.3863993-8-karthikeyan@linumiz.com>
+ <20240823-lark-regime-0d3ab4215d69@spud>
+ <a5d4f421-5120-4421-944e-d39d67e482bb@linumiz.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,35 +105,52 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240823-rtc-v1-3-6f70381da283@amlogic.com>
+In-Reply-To: <a5d4f421-5120-4421-944e-d39d67e482bb@linumiz.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23/08/2024 11:19, Xianwei Zhao via B4 Relay wrote:
-> From: Yiting Deng <yiting.deng@amlogic.com>
-> 
-> Add Amlogic RTC entry to MAINTAINERS to clarify the maintainers
-> 
-> Signed-off-by: Yiting Deng <yiting.deng@amlogic.com>
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 42decde38320..672290dddaaa 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2481,6 +2481,14 @@ F:	drivers/irqchip/irq-mvebu-*
->  F:	drivers/pinctrl/mvebu/
->  F:	drivers/rtc/rtc-armada38x.c
->  
-> +ARM/Amlogic RTC Driver
+On 24/08/2024 14:48, karthikeyan wrote:
+> On 8/23/24 21:51, Conor Dooley wrote:
+>> On Fri, Aug 23, 2024 at 09:05:27PM +0530, Karthikeyan Krishnasamy wrote:
+>>> Add devicetree binding documentation for Relfor Saib
+>>> board which uses Rockchip RV1109 SoC
+>>>
+>>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/arm/rockchip.yaml | 6 ++++++
+>>>   1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+>>> index 1ef09fbfdfaf..29f7e09ae443 100644
+>>> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
+>>> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+>>> @@ -848,6 +848,12 @@ properties:
+>>>                 - radxa,zero-3w
+>>>             - const: rockchip,rk3566
+>>>   
+>>> +      - description: Relfor SAIB board
+>>> +        items:
+>>> +          - const: relfor,saib
+>>> +          - enum:
+>>> +              - rockchip,rv1109
+>>
+>> This does not make sense to me. Why do you have an enum for the SoC
+>> model, implying that this SAIB board would have more than one possible
+>> SoC? I'd expect to see - const: rockvhip,rv1109
+>>
+> There is an upcoming version of SAIB board based on Rockchip RV1103.
 
-"ARM" is for Soc entries, not individual drivers. Drop. Place it
-correctly and use capital letters.
+Still wrong form multiple points of view:
+1. Not logical, we never expect such entry in top level bindings,
+2. Same board or different? If same, how is it possible to have two
+different SoCs (not modules!) in the same board? These are different
+boards. Or maybe this uses some SoM, but your commit msg explained
+nothing about this.
 
+You have entire commit msg to explain the hardware. Use it, so you don't
+get such questions.
 
+The code above: NAK
 
 Best regards,
 Krzysztof
