@@ -1,106 +1,97 @@
-Return-Path: <linux-rtc+bounces-1747-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1748-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FB9C9614A7
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2024 18:54:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10B48961519
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2024 19:09:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C853286238
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2024 16:54:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E8091F21FB9
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2024 17:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775F61D0DDF;
-	Tue, 27 Aug 2024 16:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A281C1D2F67;
+	Tue, 27 Aug 2024 17:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AY/jtpSn"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="o6D/HTrs"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38DE1CDFBD;
-	Tue, 27 Aug 2024 16:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262A61CFEB3;
+	Tue, 27 Aug 2024 17:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724777578; cv=none; b=NEPzPimm2nOEwjaLq7ImQtr7KeGIUaweK8y2YlJkKW2FLKls07/c31Hoq/2BB73u0fpe7hh82NFR9lX6QZnejKjIVxWEyf/KtrdhLU2qZfxmvCkAhetIpzJQBfQb6Cum2o2UB2pZX6Mu4PWXPI0Th5Q2IVqWMNhlBufJOC3+bV0=
+	t=1724778204; cv=none; b=Ya8SXHQqUV0JODuUvyYKEQ7Ty+t/uBUYOuMgzNPuCifWJq6YziHY4tz/1CzZLC4f47UF024Tc+FQ5qmG2RvnhGK5Z2su0SaAOMaX8Xuiq6mqOFrYMqLNOcjIzGXGbeLb0uGs/F+H3iUpApb1t4qZwgoJUDmFjdswMlI/s1ZBPDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724777578; c=relaxed/simple;
-	bh=fbFu4tV7WKNsBzDksuuyxwl/QdiXcuuMStHtiLt1olY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lDuUZrf/2NJisOc5EJkeHyaW+wGsEwi/RbDHUnPoG5XL+wC08ycIcBZOPCzcCYj6udgw782FRjvFvVb77zHlMvhxu11oRPm4KVd9Q8pL6UAHzcCoETQIzpv44nyLtnRo6Ye+r5Y2PeFkgrVplu7BikYlvEQyb9mYRWQZnrZt9Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AY/jtpSn; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2d3c08541cdso4493710a91.2;
-        Tue, 27 Aug 2024 09:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724777576; x=1725382376; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cgufQIEOckAZWWO2W51+cL+ZYcIhyk1JdZ2OgFTRv3Y=;
-        b=AY/jtpSnWOtJ20g6w3EcvZ2rwl3SAIxkCbDi6WYIhaizehnzWpgIjkCPCG3iVjHNGH
-         TEzqAEVi4YVBnlwwvrdtJ2kPzw2SdV8cYJUqtdzO1xdGF+/enlrfMbhy3SBPNGAyXnEL
-         KmsXe2nYpSi758yqfVVNRdXw+DT3R9KChA+Un22BcInzaSFHz+psFjdKu9/LAmsdzFQS
-         Ue+owPQN/sKiqnhD/bbd48a6CMgYrK7C+BfD67YQ+ZCRPj/YN1G2+9zj7+V+T8OKQJv5
-         bKqkfU7PpbzpJ8DJgtNtOMAvAGVGox/9MMnVeI/XQLIo6sl6HP3D6L7uoqEBJbMnxxJS
-         XQGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724777576; x=1725382376;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cgufQIEOckAZWWO2W51+cL+ZYcIhyk1JdZ2OgFTRv3Y=;
-        b=HrKrU61eAhYjyZzCb6RmBazVkRWuiCHu8lNsYqNiWNXEMHlSUuEO8YbhLx9DVFzqWh
-         zJtT6P+IIGxLglqvwLwPtGe0u8tF4MLxdQxKRUDiwqY37h6eYMxGg/1IgaDpJvSrSoIE
-         5dz9I78loGJUf9FvM/m9eALzEEiXns+slb3XicEqcjWaV8SIncO85yNEcHrpxg14zKG+
-         46z5DwvpqzcSb9kgfGxZxsfjOGkDklMfM1e9lh7tXTlZ2lIuP+yoUX1OuCBNrshRpMJ5
-         LmOoVDwHgHIfjx9fx/go/TeU52x68gzJllJ4GU9LM8lysjp6k4LAhNG0FU/UkpAmJlI2
-         rP5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW52dYpbVwnDzaPtlGEeKONgcZA+ZQoKoLCpQx0Fd2NZxO+vmTUwbDyqZYk8nScC410tZdbmTFUVvmr@vger.kernel.org, AJvYcCWYNvidBfBUevpWpnUEY/E4wb05U09vIfO+tUqYsHWqmIVQb3veZ+45Y3e7XSG6mkUKl7ba0yqoqHUX5AE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBBLE/G3hNJATmmh6w18anJ3+DOl1Syleyy+lF626ivVnmQCuj
-	0bp76FQfwLRm6sAtIMkzuhgXH6LINkP4rTb9MBAGH5rq9uuh9aEu
-X-Google-Smtp-Source: AGHT+IEL4IxrVWd7WYCyCWbVkrBhxEhWWuzch3KnZ8hA9ZodiW+9hzqIj+K0j0RA3JErddA2hi0JHg==
-X-Received: by 2002:a17:90a:5ac4:b0:2d4:6ef:cb14 with SMTP id 98e67ed59e1d1-2d646d386admr14347548a91.28.1724777575847;
-        Tue, 27 Aug 2024 09:52:55 -0700 (PDT)
-Received: from embed-PC.. ([106.222.235.177])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d613a6123fsm12333081a91.33.2024.08.27.09.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 09:52:55 -0700 (PDT)
-From: Abhishek Tamboli <abhishektamboli9@gmail.com>
-To: alexandre.belloni@bootlin.com
-Cc: linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	rbmarliere@gmail.com,
-	skhan@linuxfoundation.org,
-	abhishektamboli9@gmail.com
-Subject: [PATCH] rtc: m48t59: Remove division condition with direct comparison
-Date: Tue, 27 Aug 2024 22:21:31 +0530
-Message-Id: <20240827165131.34592-1-abhishektamboli9@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240809155631.548044-1-abhishektamboli9@gmail.com>
-References: <20240809155631.548044-1-abhishektamboli9@gmail.com>
+	s=arc-20240116; t=1724778204; c=relaxed/simple;
+	bh=YUXMtWpI/vSrwfGyZ1++T220Xr31JngpoQ/COuBLjrU=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=bEBt/wMl2d94RRXf+nNhmRBPpsywY9AhF20L4tOxz7miGAAwnHaOSkJWMWKCy5Z62gcubhr7Y56gf4B6eZcVrOvYqnDAvZq1jcVpagq6d0k88bDMmyptOD0ppELzAZwbYakTo1AhUrVZWaa8RmdNAYprwLiRV76U7QQ1SrV0LTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=o6D/HTrs; arc=none smtp.client-ip=212.227.15.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1724778192; x=1725382992; i=markus.elfring@web.de;
+	bh=YUXMtWpI/vSrwfGyZ1++T220Xr31JngpoQ/COuBLjrU=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=o6D/HTrst7d4TlC7NSdAsI/EXf+2ku4KplkpFBFwASzSZYY6RmlF5EyKxt34703K
+	 kNMbA1qvKN7gBpa1yE3NVB66q3mKBFL5cdhkcQCRP0FTEHt+Z6Qahcc379Khbgz1f
+	 M9ZYYOD/zpudPJH27b8eDqmXLaZbcc9Gy9A6D7XxL+JP7RizN/763m2Iuxv8yuUY6
+	 C6dxvwXxOUh3pm91jx1HMzhZO+wA8+z1NbsfhLZI+ySGLyVNhxIaffHCaqtb+j5QP
+	 MWR3ZqVeHU4s8k3y+cCEar+jSipkfQjzmfh475htjbsFE8fmEyLe53lBflX9a1P65
+	 /4KJXBwNW3m+P6bi8g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MhFhe-1sDnRS0tuc-00n9pY; Tue, 27
+ Aug 2024 19:03:12 +0200
+Message-ID: <770322bc-bd52-425d-a79f-93fde6157548@web.de>
+Date: Tue, 27 Aug 2024 19:03:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?B?VMOzdGggSsOhbm9z?= <gomba007@gmail.com>,
+ linux-rtc@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?=
+ <csokas.bence@prolan.hu>
+References: <20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com>
+Subject: Re: [PATCH v4] drivers: rtc: Add driver for SD2405AL.
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:v7VvrcKDYQtNeLN8nKSmhuoNpictKeXbuR9Pj8TAZN3Pm+LNo0u
+ K/adZufBfB5FSuTle1V66G8POOZsGWqKvxLwHXLd9Z1PL4ph55115wGe3LMCNrGV9GUQdOc
+ 2Ld920n5e/7I8+WSC7erm9No8jGyQ/p2srQTKxpBJuWDH/BXig+qtFWS+N0/zQiEsCTIX34
+ Ied3nQ4+8ngJs86S1+uIg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:DwH89asBcxk=;+hGZYn/GS5qbuSCTRvqRp1wdS5R
+ Pth43UEziipdvfFdSExcuuz3a9kCBYKaRllfXE0pSeX0kXIBeEtn/ZKjlyfByImdhN379ESKS
+ mYH3hebUUsGtFM2ReFSE39xJuaBH/84SZFs0zuWxSOz0LjBgCKDvneM7IO2YljgmEdisJtx0g
+ OAYMHH++JBdL8XEwph6yK55khr/WYZcVVJStnugWtnTmZl+JC2A7kXfyIW559z0APtFgbDLJr
+ DcKDDW9aPkMQ7K6Nrxd8wEqJPSnRPYwvI/SBdraRuxkt1iRcVeYshDaOTLi+vI0zUAdljQh4k
+ HSnBO8fIQW7fjPMicYUR3qyvLhIRTGADc6Y3rd0CJC7kyKlPhz+Ni8dPrAodLhK6Yvta1GSMi
+ kwtf4Rs1vL/Wxgscx5xXnjJk8G2uwjR1Tumc6UB4EI6jTBapJP47wKaS9QPSurcp42XQ+717E
+ wr3hWt+BAGVgw2M0L/yPioXLcETWwopKxv+oLLrTXlqTwYgcpyDdir8SV3MIP1hoTdHYgklsq
+ NJzBTIhEgelgAx9RAGCfSb1CxLh4yMk79HY8ww4vxHgsGhgEEL1rUQyqnINqmGVZl+nL/tQF/
+ 72EvBb5uyGcSVD1IJ8RG4nz8DTu8wGOr7O8QG0NiJSvVnfAsPHpb+yKph1RahVHbmdrkLMirB
+ +Qn65oysU33MxpJTRECwNkJcful+ciDPJXCdP62QvYRgNFO4MaQ0kIjD7YheK8DlybcfLn8QJ
+ GBZ7IzuHdVJfukWVlLZ+rjgmhJBidVt5ZVeRjdXM4niTtpUYmW5BNm2wlQhYk1uNvKmSccnMs
+ 0CZ95deHjmR3txoW2jFVvaCQ==
 
-Hi Alexandre,
+=E2=80=A6
+> +MODULE_AUTHOR("T=C3=B3th J=C3=A1nos");
 
-I wanted to check if you had a chance to review the patch I sent to you [1]. 
-I understand you may have a busy schedule, but I would appreciate 
-any feedback you can provide when you have time.
+Would you like to add an email address here?
 
-The patch is available here:
-[1]: https://lore.kernel.org/all/20240809155631.548044-1-abhishektamboli9@gmail.com/
-
-Thank you for your time. 
-
-Best regards,
-Abhishek
-
+Regards,
+Markus
 
