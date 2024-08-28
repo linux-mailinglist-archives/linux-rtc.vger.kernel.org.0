@@ -1,161 +1,185 @@
-Return-Path: <linux-rtc+bounces-1753-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1754-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AD37962352
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 Aug 2024 11:23:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F267B962706
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 Aug 2024 14:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13B16B222AA
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 Aug 2024 09:23:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C8631F23D4E
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 Aug 2024 12:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCE7615B141;
-	Wed, 28 Aug 2024 09:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D7B176248;
+	Wed, 28 Aug 2024 12:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="l2gyZteW"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="dXxDIhaT"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from omta034.useast.a.cloudfilter.net (omta034.useast.a.cloudfilter.net [44.202.169.33])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2071.outbound.protection.outlook.com [40.107.215.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE2F16087B
-	for <linux-rtc@vger.kernel.org>; Wed, 28 Aug 2024 09:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.33
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724836996; cv=none; b=FYNIigX1T4IPPyDCOeqQo4odE4bdTSG/vTY/zVUoVMaqmD1rALnAMoRnRfKUT0IHwlMg+GjLZ9dkWrYhEOyrwM6HvpeUGuPwT7y0hm5L/4876gEoF1nSbwyw67ggqWed5xEU9dSEQgEmladJt9MN1LaFa4ZTTibd+opvEfV4wuE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724836996; c=relaxed/simple;
-	bh=jxYnIslH6HYkg4T0/mYqNw1DQIwt8CU5u74tlXFV1aE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=THzHVIdVMXt3enPe+BQYXL9Mzp7DcBHFVrXRKbxcoh/h9BiLRLO1KkFNaCyEVD1YNnShC4CeQDgR0duLmTYoC2EeEOLl/kQPxYTTT/uztFiEIvVdNgDs7TuAkkxWHJ7M4UwbUcLxOSbvR/vXh7gkZAmd+o7VBnVK2IgGh26NwJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=l2gyZteW; arc=none smtp.client-ip=44.202.169.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
-Received: from eig-obgw-6006a.ext.cloudfilter.net ([10.0.30.182])
-	by cmsmtp with ESMTPS
-	id jCI9s6MAP1zuHjEtVsySgX; Wed, 28 Aug 2024 09:23:14 +0000
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-	by cmsmtp with ESMTPS
-	id jEtSslvrhZcP5jEtTsgrxE; Wed, 28 Aug 2024 09:23:12 +0000
-X-Authority-Analysis: v=2.4 cv=eubZzJpX c=1 sm=1 tr=0 ts=66ceec80
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
- a=IkcTkHD0fZMA:10 a=yoJbH4e0A30A:10 a=-pn6D5nKLtMA:10 a=vU9dKmh3AAAA:8
- a=M-OHScM7UXdo8wPXp2IA:9 a=QEXdDO2ut3YA:10 a=rsP06fVo5MYu2ilr0aT5:22
- a=ZCPYImcxYIQFgLOT52_G:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-	; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=7MLyh0ZMj/waRkEMqu5NvgdgV0+LWDWuoIenoixpKGw=; b=l2gyZteWv7EYdzX/4or9dLknID
-	RGoc9pGyxup2y0WQL0LOCFxAwDcJT6z145RenV3kVY4TT9/cXoQYHu4TztYLqo6wpoFfv8HiLOh2h
-	B9bqQoAhbyQWcjwmfIGTfHakVJFKSPNUut76T9i6QxRkPK2ARorZWRyvxrEe0PLSHsCw94eB7Fdbi
-	GXdbT0sIeBapRRyJYFn6j+ObD/Yoih/cXdwPJ9A2PQRzngGoczHALepITGf7opJ2MKYTipvdoFJdK
-	e6r6STKaBCZWBFCODAblZJAasuSlQ8IdxiDcmm+wlvKRMnUBDH02HARr32cKNXTaKFbUo6OxTEQdb
-	gzwgc8BQ==;
-Received: from [122.165.245.213] (port=38254 helo=[192.168.1.106])
-	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <karthikeyan@linumiz.com>)
-	id 1sjEtM-002IZN-1L;
-	Wed, 28 Aug 2024 14:53:04 +0530
-Message-ID: <207109b6-0b07-45dd-8143-f6e07cc427d8@linumiz.com>
-Date: Wed, 28 Aug 2024 14:53:01 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03334175D28;
+	Wed, 28 Aug 2024 12:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724847923; cv=fail; b=uaoQRkw9018kl94n29Wv6MyrokC9PBz4Fa2+uB8Vm0Vo6Gok6VZmTvv/zQim0F7aCtFEpJNFuxdsc4/X9MBjhd+nMJAG/eQYavIRATvvQXxciIv7UDwXjRSgp8Otwr+PTdmT/PoOA2XP0lC4VWSLFU49X+Bu9ysbz0cEmPQcgAI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724847923; c=relaxed/simple;
+	bh=o6NdZHjbJ5fXKeUxkEp7C4vpsCSlc+Z3r1Q4TIuQLrg=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=ADztXJLnJw57THfVONltiL9hJXG3qIiToj7O9JwbaTHUqkTRM1oyvvLygqjZ13RR+T+xrCK+SH6t1XQL9dL9lnXVGKFlRnJlUIgu3pnwfTjKFP0z/rlz09imEpvpHIeJ1WgupC+Fx7bi20hhoOiTCeW9NUYihbHTqo8FtOUG0VA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=dXxDIhaT; arc=fail smtp.client-ip=40.107.215.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HG3aNLYQrnh9csDHnkaNxWmFQbsK0lVtKmTd1+AmpwWgiHRCqULJC1+BRhANw6PoAuW2iZLIKtoE2PLZAqQ3T0f09Ak7X6zyj011qXpUu3SUY5PVWUM5kW/nDRhQ1iBJqGm2zvlelNz6mrxEzodtD3efGLZGmvJvdWaVV8yJ36ZyDpR3ghXPjoQVxoJnvK2CMMwURq4wdVwIxo5MRK8/wcwi3Vbxc+s81G5xTtOEYswlYH7+KymGRzgzerm8lzcClgM07UsGYLcHt7j+3SAjeDGezYOEgXpM1+QK+UIfP1hzT3BiWmd8Hz5iLii/KUM92XCXpqdXYUUu1sUt9ECq0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ojy4rbHwUy1jJhwVF5dBJZzOpMUBmKIqj2Otzsnr1T4=;
+ b=Cx6a5hdOOC/7901rFBvm0RPwVGDPVM22cj40tL+APpMVti7uZ81xOfvbdkGQhprs+8cJDT2pMuZsLA27NNrZhGeDmLL6BfOvtJGCSty92ZqW9j5R7zfDxfqrhYFNBMSj046Wfc7U31ZJiQ8aCft7EoAJnbUIyeIQNULafi8shspWtDFuMV8DamS8ECedqaDiA4gEuvccHpf2sxOVuWjj280NSOGZiPz2C1/UOz4LBD9rPfxxVXFtpJYMyPABjvEmVxl2Dwb4IZQLzVnl5cmSL8AeRvPqvLVoVkEJ79XUdkUoQPA/m3ItmdZ1Ifn0rCAsh8Q6K/91bTXE2uPaEPqFdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ojy4rbHwUy1jJhwVF5dBJZzOpMUBmKIqj2Otzsnr1T4=;
+ b=dXxDIhaTWmVIKNDsyxotwBRzGZ6iOGGrPhS5BBOGJ+WyNWkE2f1NAQy5vjG2/I0BPciKD2mWVGiVAbNMRYvhunzlWxenylMudocd1+I8tLjn/XH7a5kFiSdgUzc2PMAQy6SgHVeGO43LqqWgvLzfAqTpWSZS57EFTdLhRsFrmJibr3eSFZD/1VHoMOPvBkmchKXv4HHwY/s0o8+jzxUI24htxQ7zpgIyhnFT6OP7vCPWxBHFL6KinxeBnITufTO9I3cNe5ZtGr3GjmLHCC6qFoeyHAJY5Nq6w3JutSYjveFNLXgFar+OFBVje+p5xF+yYDV/ssLcsgrrESyCiydZDA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6263.apcprd06.prod.outlook.com (2603:1096:400:33d::14)
+ by TY0PR06MB5625.apcprd06.prod.outlook.com (2603:1096:400:32d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Wed, 28 Aug
+ 2024 12:25:18 +0000
+Received: from TYZPR06MB6263.apcprd06.prod.outlook.com
+ ([fe80::bd8:d8ed:8dd5:3268]) by TYZPR06MB6263.apcprd06.prod.outlook.com
+ ([fe80::bd8:d8ed:8dd5:3268%6]) with mapi id 15.20.7897.021; Wed, 28 Aug 2024
+ 12:25:18 +0000
+From: Yang Ruibin <11162571@vivo.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: opensource.kernel@vivo.com,
+	Yang Ruibin <11162571@vivo.com>
+Subject: [PATCH v1] rtc: rtc-asm9260: Switch to use dev_err_probe()
+Date: Wed, 28 Aug 2024 20:25:07 +0800
+Message-Id: <20240828122507.1323928-1-11162571@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SE2P216CA0053.KORP216.PROD.OUTLOOK.COM
+ (2603:1096:101:115::6) To TYZPR06MB6263.apcprd06.prod.outlook.com
+ (2603:1096:400:33d::14)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/8] dt-bindings: arm: rockchip: Add Relfor Saib
-To: Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- heiko@sntech.de, alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20240823153528.3863993-1-karthikeyan@linumiz.com>
- <20240823153528.3863993-8-karthikeyan@linumiz.com>
- <20240823-lark-regime-0d3ab4215d69@spud>
- <a5d4f421-5120-4421-944e-d39d67e482bb@linumiz.com>
- <9537c866-cddc-4958-86a8-d097982067cd@kernel.org>
-Content-Language: en-US
-From: karthikeyan <karthikeyan@linumiz.com>
-In-Reply-To: <9537c866-cddc-4958-86a8-d097982067cd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 122.165.245.213
-X-Source-L: No
-X-Exim-ID: 1sjEtM-002IZN-1L
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.106]) [122.165.245.213]:38254
-X-Source-Auth: karthikeyan@linumiz.com
-X-Email-Count: 3
-X-Org: HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfMQ2J2MpT4N6il8Mja8a8opec5aB/cWMfxTnpACi+if5Zsx2k7jFbwkeKp1SGrWSsVQ2w9fCH9jD1IytrNdv7NgQrJq1hV/hmgHDPJ44tgfzzE0lgGXT
- Y7cbkWo+YTUCbHSkqPsnzZJrCMcTlS+uApikWondytxqO0/tXhDgE/YXZ86jJvLPP9O0Rmfti6G20Mvp09fVV1+Kv7C0sPsmLjA=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6263:EE_|TY0PR06MB5625:EE_
+X-MS-Office365-Filtering-Correlation-Id: a89fa828-05c8-48fd-2b99-08dcc75c7a94
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|366016|1800799024|376014|38350700014|81742002;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?wTtbtWi609/ZAH+1ubJWixWW7hUjSWAaYgaCTx1CtEWjGO+nkZXIndMKbUE0?=
+ =?us-ascii?Q?5hEl0JF/1v5o3yU1V/TvKIJPq5W0zZFJyj2KHfAtynhx/5onL6RYljdy5EKh?=
+ =?us-ascii?Q?H//9KnYGAibdn5UKBbbHipFOWDcOmOgnMZsvp2rXYVprgk6Qb76SiOO3TaD6?=
+ =?us-ascii?Q?EwPyP4iJOaMZbDXTXU+q14NbDfIRswqSR7jCv9jX7ZYo37APYoyGwItFB9c9?=
+ =?us-ascii?Q?YmT9D2nt1KHfBAPy8Lc82KlrTXa7AFe4WlTfOiTIpbg7QoLbS7suPtnzr2lq?=
+ =?us-ascii?Q?pGGS6Sj95eRTbBag0vvUdQTv7FEQDWHOKhkbuOvffkOBH4ockuI+JLghC77h?=
+ =?us-ascii?Q?QFRZc5fyXitxzB/DbXU2zRn+2KCCPqXlDISUBofVmyKNn3cg6DloGOJ7mvju?=
+ =?us-ascii?Q?F9r2U3aSiUjVn7IPBsfpy5o5Hk409sv73/SppA9B6D2vH+olOd1RoCjMvYIT?=
+ =?us-ascii?Q?/rEIsr5rxIl2Ad/XeKfPq6yPYBXYsfNTsIeQS3sDhwoITDevrTjoKOWBLnHa?=
+ =?us-ascii?Q?ItchIyVHjDJoPkbcv3f7MQv74LEZHLZ0lqXX6G5DNo9D57qa4qaDF4gFr0fT?=
+ =?us-ascii?Q?Tw49xSTqFrJqZuq4Z16gAeN551zmWVXGS0Z5Ie3YWW0WRddLAa8QyKgbxRE3?=
+ =?us-ascii?Q?Olo0WOSecBVu07XzC+GNumrFu2iSx67tGpHVbAP6DhND2Epiy3rd2deACl5O?=
+ =?us-ascii?Q?L2MOaqh204cexAZmozm/oTWFqg8aEHcwx+8QWkB39P0OlPoMuTli9MQ9s0Xi?=
+ =?us-ascii?Q?hwJevhU6ZmblKf1s5aDcB5IfZ87yzN4PmT3B88oQWKjwYkE9EcCA+9FIYKTo?=
+ =?us-ascii?Q?mtGiIgZr+1gnoLB0PH7venJCRTTS/gztpAQmS9fcELo+DgfS2AwzHwGgSuua?=
+ =?us-ascii?Q?kWxYaqP3ujY3rP+tVI/8UpZ+kuchipwczGj+sQIBDhna0rvPgra8h2q8R2U2?=
+ =?us-ascii?Q?Fmcwc0taUgHfbBebv4PtMv0kyVGuNB9xqVZHVdzvH8vfTAam+WoNpWto6AVY?=
+ =?us-ascii?Q?6KxS4aDrCYqKx8s4SHhpJkj4P0EBFAc6T9dVQhsxvYUJPW6bikB9gwEP3ZRm?=
+ =?us-ascii?Q?47//rEB0yztaLmTuY7JtsCIDMfen+3aTXYCc7Tl4UmFchyabOe0c/tGZNlIH?=
+ =?us-ascii?Q?gk7HXEc9E8NkFIb5/gDVuCnnSQ+VwU7ygjRveSiPo1Uoyua78RvjboK+594G?=
+ =?us-ascii?Q?+4K1/aAv9jgZEId8B3GtFSc+Mp8Vrrzmd6MBAUT+EnG35yChku5wpA1gzMkO?=
+ =?us-ascii?Q?KN655LPhE2jtrfgChskNRb3JmaV9jNMpVqS3iLneH914MIRCRBTk/GJgnYk4?=
+ =?us-ascii?Q?pBMphwgmPEXLJQVyFQkUa1h6is01aYBvtu4MWuNV1B3v2NADWLERTT4LbSj6?=
+ =?us-ascii?Q?gMY4wFaxcm+QkW8kKM0jD/YVpO2yxffSMZo8b0D8WEJ1j0m5joeZPBNRkzJ6?=
+ =?us-ascii?Q?6rQlLaF6mcU=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6263.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(366016)(1800799024)(376014)(38350700014)(81742002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?TIIyEGxn/5+ADlJFw43xIRXwXymLk9hFeK0vCvOGwztf9LJbRo8LHWA0ru0y?=
+ =?us-ascii?Q?RCg6Xq1zPs2tJlVvYFu11hAgsYtlaIF5c/w5V6TdpsZTOZwsp1PBmOGOthBZ?=
+ =?us-ascii?Q?OU4lbu7d/i/lwpP7lmM/iBeMbhuz+mzMH/kDI/+j5qXPIZ2ujlsU1kpSdtVW?=
+ =?us-ascii?Q?RAJ06jtQ1P9C9XpfpDXJdbhRW322VvDfqFfS/Nu7FtrtEw3WtWvIXLBia9Hf?=
+ =?us-ascii?Q?mkMuS3TIflmbIuN4FuBqndFKmt/ahxl4Pdo7O51NvXmmjMXCaZ+FfQhwaCM1?=
+ =?us-ascii?Q?Gkpl9KzxYGqy1LG05jncXR1YiL6CovTZS2ASbczxwXd6oFUz3TgllzIUkHr9?=
+ =?us-ascii?Q?yotBIBMi9WBTqlG6G8Mh9fpRFuxOTZs12I2uBRKJSyo26qriawgPvQaJg5Id?=
+ =?us-ascii?Q?s5rbLlesxckZ4WE1yJ9s+gWes+hyapevAiM5OV/JrhTp85OhmSXlXRhgdcIX?=
+ =?us-ascii?Q?gJBUNArEpDU366tK9U6HdC7rvfs3SPFqXeOzTdY8dJpWWC8KQFGbXvx8JJWf?=
+ =?us-ascii?Q?/Unw6bS4/OKqaKEe7Dwbdy9ywOE2LXfpwS7x/b48B+YhuXyUxtDa9+2SngUT?=
+ =?us-ascii?Q?yugjHtM9EXywcFHDtXMI9slDRv+8kGQ5d6rOAM+0NRcMPzFTezPYjl3BAWWO?=
+ =?us-ascii?Q?wW3VjboWS1WvU6p0RmSdfcFlIcNKRlfs/AYyGNYMgglvF09No9UwMNTAolgu?=
+ =?us-ascii?Q?x+Xge4n8Ul0Zzh0ooJYOfsMKPuvCx/nAOCBf8GJ9pYmo+OZ92ae8eLjiNB/o?=
+ =?us-ascii?Q?KMvmrxHCK8ZrAJHjp/od8c00ilaFJHMHQFrunoIzoyfEfBP+uijujtznI5sy?=
+ =?us-ascii?Q?+ax9QMYOAOX578DCK//bpABhS8dv8BCg32F/Lk79sV7GDzdNAcCNjH2DO/3l?=
+ =?us-ascii?Q?KSaIGBLBkoMPNMQawF/TwmHZhBKDLsEBV5UzVrp/UmMPVfQBZgb/LN+p2bNY?=
+ =?us-ascii?Q?fxjVROZnkS7BI+odzVVaVb5ECfyuE34uk4RfuBdITzX1ZUvBM0w+NGiO+IVq?=
+ =?us-ascii?Q?fqyFvjljROPPJN8rmzbtA/RWEHF8CWDVMjcJuhsHg6WSopi/sFaIKgmklcut?=
+ =?us-ascii?Q?b96VIlq9wMFa2jYvBFNiaj2tDjLuw827tzCd+JLMV6CW0POieHmUNJxsMOkw?=
+ =?us-ascii?Q?wzN3hZgnM9eKnaYLJEx+XZsK941XIcxaWFNrah2kHtswlo9HZdYkLVKrcF8K?=
+ =?us-ascii?Q?IE6Nh5u7DKrc26th/0r6fvyaYJe/NPw9bkTWafBr+RJOfLzIloMzMHilQWlq?=
+ =?us-ascii?Q?wO956+MImAyHxzezVGWIe2lXXBhlMJCduCZgtVeo5iKf80QOYCVicAmvnFU5?=
+ =?us-ascii?Q?JWK8dMRPwYv4XKX9Qj3+so0Kw53LBb3llNCNRMWaUTvwZNmXDe7FBvbxMlVZ?=
+ =?us-ascii?Q?c6uSWJBeAWN+cKskvIvoIE/Cx8YZdonpMqT8seOhYoBunIu/H+ZYRq1XDLN6?=
+ =?us-ascii?Q?iXYvTh6d4BVKx8Dt8G1evzfBZ1SUCHfb/MlU+RKU/qyTdZIyxPaiGZAABg1t?=
+ =?us-ascii?Q?7+IxhhLEejUkhtgUQJgZ19gqNYeVJErp8BMtAL5CNPrpCJvXtZoj4j0NDv1k?=
+ =?us-ascii?Q?/mle0mW3R+YkYVl7jOb5ihEw2dqQd9yXA+/MAXzG?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a89fa828-05c8-48fd-2b99-08dcc75c7a94
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6263.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2024 12:25:18.8949
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /ygZZ3k2A6bbahkWEqtbXH5bZKSIWYNFQmQwof3KINJCd4e7cjCL91Hn1LtgDgwcl5z3AlwyQkBfvexQCymq2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5625
 
+use dev_err_probe() instead of dev_err() to simplify the error path and
+standardize the format of the error code.
 
+Signed-off-by: Yang Ruibin <11162571@vivo.com>
+---
+ drivers/rtc/rtc-asm9260.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-On 8/26/24 14:03, Krzysztof Kozlowski wrote:
-> On 24/08/2024 14:48, karthikeyan wrote:
->> On 8/23/24 21:51, Conor Dooley wrote:
->>> On Fri, Aug 23, 2024 at 09:05:27PM +0530, Karthikeyan Krishnasamy wrote:
->>>> Add devicetree binding documentation for Relfor Saib
->>>> board which uses Rockchip RV1109 SoC
->>>>
->>>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
->>>> ---
->>>>    Documentation/devicetree/bindings/arm/rockchip.yaml | 6 ++++++
->>>>    1 file changed, 6 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
->>>> index 1ef09fbfdfaf..29f7e09ae443 100644
->>>> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
->>>> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
->>>> @@ -848,6 +848,12 @@ properties:
->>>>                  - radxa,zero-3w
->>>>              - const: rockchip,rk3566
->>>>    
->>>> +      - description: Relfor SAIB board
->>>> +        items:
->>>> +          - const: relfor,saib
->>>> +          - enum:
->>>> +              - rockchip,rv1109
->>>
->>> This does not make sense to me. Why do you have an enum for the SoC
->>> model, implying that this SAIB board would have more than one possible
->>> SoC? I'd expect to see - const: rockvhip,rv1109
->>>
->> There is an upcoming version of SAIB board based on Rockchip RV1103.
-> 
-> Still wrong form multiple points of view:
-> 1. Not logical, we never expect such entry in top level bindings,
-> 2. Same board or different? If same, how is it possible to have two
-> different SoCs (not modules!) in the same board? These are different
-> boards. Or maybe this uses some SoM, but your commit msg explained
-> nothing about this.
-> 
-> You have entire commit msg to explain the hardware. Use it, so you don't
-> get such questions.
-> 
-> The code above: NAK
-It's my mistake, previously my understanding about this binding was 
-wrong. I will change it in v2 patch.>
-> Best regards,
-> Krzysztof
-> 
-Thanks,
-Karthikeyan
+diff --git a/drivers/rtc/rtc-asm9260.c b/drivers/rtc/rtc-asm9260.c
+index a83b47e0d..2b7058ebb 100644
+--- a/drivers/rtc/rtc-asm9260.c
++++ b/drivers/rtc/rtc-asm9260.c
+@@ -268,10 +268,8 @@ static int asm9260_rtc_probe(struct platform_device *pdev)
+ 		return PTR_ERR(priv->clk);
+ 
+ 	ret = clk_prepare_enable(priv->clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to enable clk!\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to prepare clk!\n");
+ 
+ 	ccr = ioread32(priv->iobase + HW_CCR);
+ 	/* if dev is not enabled, reset it */
+-- 
+2.34.1
+
 
