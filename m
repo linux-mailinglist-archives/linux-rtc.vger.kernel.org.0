@@ -1,98 +1,143 @@
-Return-Path: <linux-rtc+bounces-1766-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1767-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05CA49642BF
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2024 13:11:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF6E3964305
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2024 13:32:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6859281880
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2024 11:11:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 698D41F21D57
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2024 11:32:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C955C18E020;
-	Thu, 29 Aug 2024 11:10:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEEC5191F91;
+	Thu, 29 Aug 2024 11:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmCH6dss"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Orc+pkkG"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CB7190674;
-	Thu, 29 Aug 2024 11:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C427618EFC0;
+	Thu, 29 Aug 2024 11:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724929857; cv=none; b=W40282aiJg2licgWSN+LUcmoMa94feNBLMlHy8y+FgAnFUPBJrIxNxMd+Fwdy1MiiQ/7XNiQXUCYmbl8UFKupBwDDx1KJrdQF+4jaD7end2szxAfwCbO04UKb+QfUgMi3lVaKvmVyf6DwO+28P6O29IKRi8H7TRE97UzVAzFPGk=
+	t=1724931118; cv=none; b=mURe1N4xEvm76nPrIRqARFOVmBFbMAC23rg83T8k2gyjxp2tSZdu8NOd7Ld7uD0m6nUVIDciqDs/sUMShCuDwa9sOPincw7QynUaHWhkWpRsZiBF5I0gtPig++bfvgKmhMmDJsOvVLIseLToVRYuRyPjgS3TSjTi7D2WpIDzhAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724929857; c=relaxed/simple;
-	bh=6SI2/lyqhaIoUJGj02tkJ25nXbbSPE8tjotNBrHjFRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MjTwbMATdyCXR8E14Z6s1dQW2S6thHco4Tp9aco0N3Piw3EMSVQ+vZV57o0R2rBmA25km+lHl4LB1N7CzOHIaTUDLum96l/eYF3RploymLXMAOTyizC4ryo3jxQrvFjtyrLeTz7/6tM/WhN5EVJ57rR9tKnNHmHi5PYMo+wFosk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LmCH6dss; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-37193ef72a4so361155f8f.1;
-        Thu, 29 Aug 2024 04:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724929854; x=1725534654; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6SI2/lyqhaIoUJGj02tkJ25nXbbSPE8tjotNBrHjFRs=;
-        b=LmCH6dss9G5T/GKowTME8OkVjYfUpRhR1vTrNyX5xG1Acj5jTIiudBWs7K5tLG/ax8
-         N+nmPzoVY65bdsVmhxuvR8dVCL7UtyhXp6x9rsgm2IRKdB5hbB7zM+kQnBcHUU+9Czte
-         a+lVYw7mu0udvV/CNN0WKW8Ay9qvyDhryIdcQhIgsQFhSSkI+w+8+h3ginYQ6jL7p5qp
-         nhVx+3Gec9oYVh1IF6EuA07PqhOGvqdSS6JihdJk4UTeEXCWVKCIC6fKAeROVdY6h8sC
-         /RCh6OKcvC4f47i6aApQ2cb4/tQLnmNnLbwN4dyMcsb9/TMZ9MZH6mzYQD96Td46ogrH
-         OEsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724929854; x=1725534654;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6SI2/lyqhaIoUJGj02tkJ25nXbbSPE8tjotNBrHjFRs=;
-        b=PD7nEXPd0JGr9+LGWjZ4vi68IuHkEIlMBDyEk0X53MrLXXsPNb/JLLQ12LG4/bBvBp
-         f/13AtvbZ63T8h+GVX7UyHgWtfoLc14ZKKCIvUccu+5WolP1tZQuc+RReOrfD0any4lN
-         cDzoH5HwjibIP6Vu9VlSkcY27kXuwCg6BRxgclMq763aIpY8+OIjnudPi3V29XsFLYPJ
-         7SjMdTaJP7/TJfircT0tk5OkBz41adsAoEPj3RrsGCtNDvJSKB2jcBik+Zi3gwy5Bboi
-         d1qEG1ryHR6ZqlsTEvr5/qHtfIUVOa9lPS3c9oGL/KSTsNwf69+v3f104cQxUxu7rsUv
-         XSWA==
-X-Forwarded-Encrypted: i=1; AJvYcCWLj/rbgzOqSQXRi5DCp0o3HbuVkHWq01O1a7PpWv4MsOS3QNBFalStUOrO7a6UEQ1fOXKL4KOncYKO@vger.kernel.org, AJvYcCXlh2fQzhnen0wIKzsKp8aqm8aoUA3E/bPCguKP872/y/BeXKUrzLvPMZ5eVWoQ3HS0gDBd7PIfcQCsZ3w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzMgBtmEC/a/h7qdKHx3wMWM1cg//ynGukE6WTljXdyvHTsBof
-	32laRIDx9TWcqDyYndfbaBgyifL0bOi/CxKDv4wZ88/eW5Rd4AuE2basIY8l
-X-Google-Smtp-Source: AGHT+IG9s3hpkv6OK/W1x8fPf5JzfVj+jZ5LiyGMPxmRcTThesjyrHRmAq/ziTdoVEhmXxZMx7YCDQ==
-X-Received: by 2002:a5d:59a9:0:b0:35f:cd7:5ba1 with SMTP id ffacd0b85a97d-3749b585ddamr2083795f8f.60.1724929853785;
-        Thu, 29 Aug 2024 04:10:53 -0700 (PDT)
-Received: from ubuntu2204 (fgw-godollo.uni-mate.hu. [192.188.242.165])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6deb2f5sm13912935e9.2.2024.08.29.04.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 04:10:53 -0700 (PDT)
-Date: Thu, 29 Aug 2024 13:10:51 +0200
-From: =?utf-8?B?VMOzdGggSsOhbm9z?= <gomba007@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, csokas.bence@prolan.hu
-Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: Add support for SD2405AL.
-Message-ID: <xtauzwfdqeg6scijjhg2khd6jd2tyfjjyf7dtpaj53esnvlki6@qaix4scw2f4l>
-References: <20240828-rtc-sd2405al-v5-0-9e3f8fa5ea6b@gmail.com>
- <20240828-rtc-sd2405al-v5-2-9e3f8fa5ea6b@gmail.com>
- <0f328688-99e1-41c0-9300-c7ff847ebabc@kernel.org>
+	s=arc-20240116; t=1724931118; c=relaxed/simple;
+	bh=uYxpjHp9Ljf845Tzrl395BhPRS0C3P+4ZbcnfLa0518=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hpTjdBVYNY2OSSL82V/BaCi5KE2cCT23G1nvL/wZptZMMRgBr3ZTmIMekYtlauTx8sMOYVZPdxtgRaU6NetnSOavmen7L0sp4i4oDsrs9iMPwkrAtpvXx6yUkET6X6Ul4K0eza3jlb1sRfcs/0RZdq3RFLjYunRrJIIdIIRyaaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Orc+pkkG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 488D7C4CEC7;
+	Thu, 29 Aug 2024 11:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724931118;
+	bh=uYxpjHp9Ljf845Tzrl395BhPRS0C3P+4ZbcnfLa0518=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Orc+pkkGEjQVwBspcloJbSE3I6asjeuT9/p80tBbMmEJwDdJHtC7++im0h5dK6kPa
+	 hb/fyCGrX7ifBUIjM1zMtLqDk/nEcleppxxQ0qzhVa+ehjWqqJgouRHOPTgu7SuSQF
+	 0oMV1WDA+0UZwPW/R27koBajKUZ9noO3Uz5uyJ/2Qvaaj8STaa/m65EQQEIOp3ORJI
+	 ljfW/GmkHe35plUxW66GdFJuuMc1bi9lmFVTXOIZNaa0lovJaCKdvVGOEAGVRVn6Mw
+	 6ay/eO/lhZDCxIkpuF2ldKVZUdAgW/agNhcnjXtPm7PsazhpblpW0jqBtVxP5VvXfJ
+	 egiMSOMZp5CNQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D95CC7EE33;
+	Thu, 29 Aug 2024 11:31:58 +0000 (UTC)
+From: =?utf-8?q?T=C3=B3th_J=C3=A1nos_via_B4_Relay?= <devnull+gomba007.gmail.com@kernel.org>
+Subject: [PATCH v6 0/2] Add support for the DFRobot SD2405AL I2C RTC
+ Module.
+Date: Thu, 29 Aug 2024 13:31:43 +0200
+Message-Id: <20240829-rtc-sd2405al-v6-0-4fbfe2624aa7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0f328688-99e1-41c0-9300-c7ff847ebabc@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAB9c0GYC/3XMy2pDIRSF4VcJjmvRrdtLR32P0sH2lghJTtFwa
+ Ann3Wsy6UHo8F/wrTvrudXc2dvhzlpea6/LdYR5ObB4ousx85pGMxCghRGWt1vkPY1AOnMSXlt
+ lbbQqsUG+Wi71+3n38Tn6VPttaT/P91U+1n+OVsklR4XeymzJGfN+vFA9v8blwh5HK+yw9BOGg
+ ZUPmcCHBIQzVjsMYsJqYIMJQxCSCooZ6z3WE9YDQ4AQLfriXZkx/mEHbsLIBfdZFVcIM5mwx9u
+ 2/QLvNL/xnAEAAA==
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ csokas.bence@prolan.hu, devicetree@vger.kernel.org, 
+ =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724931117; l=2200;
+ i=gomba007@gmail.com; s=20230706; h=from:subject:message-id;
+ bh=uYxpjHp9Ljf845Tzrl395BhPRS0C3P+4ZbcnfLa0518=;
+ b=+6ciJKwZqbyFv342MwIvlx2S8zq7YDYGcrHQwIIiGxQu6/LipLy0u+BPGryhDAXy1iHaN/h4Y
+ nGppAMpYNUgAfpfSdMZ5d4igjME1VmgFu55V0FKDqyWnGUXBQSIrTXr
+X-Developer-Key: i=gomba007@gmail.com; a=ed25519;
+ pk=iY9MjPCbud82ULS2PQJIq3QwjKyP/Sg730I6T2M8Y5U=
+X-Endpoint-Received: by B4 Relay for gomba007@gmail.com/20230706 with
+ auth_id=60
+X-Original-From: =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>
+Reply-To: gomba007@gmail.com
 
-Dear Krzysztof,
+This patch series adds a driver and the documentation for the SD2405AL I2C RTC.
 
-Thank you for the advice, and sorry for the inconvenience.
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Cc: csokas.bence@prolan.hu
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Tóth János <gomba007@gmail.com>
+
+Changes in v6:
+- Add missing To-s and Cc-s.
+- Rebased onto v6.11-rc5
+- Link to v5: https://lore.kernel.org/r/20240828-rtc-sd2405al-v5-0-9e3f8fa5ea6b@gmail.com
+
+Changes in v5:
+- Rework based on Alexandre Belloni's suggestions.
+- Drop explicit initialization of struct i2c_device_id::driver_data.
+- Add documentation.
+- Link to v4: https://lore.kernel.org/r/20240624-rtc-sd2405al-v4-1-2b2bc759f98f@gmail.com
+
+Changes in v4:
+- Implement more comprehensive data validation.
+- Inline some temporary variables.
+- Link to v3: https://lore.kernel.org/r/20240620-rtc-sd2405al-v3-1-65d5bb01af50@gmail.com
+
+Changes in v3:
+- #define-s of registers are reworked.
+- Minor revisions based on the reviewer's suggestions.
+- Link to v2: https://lore.kernel.org/r/20240619-rtc-sd2405al-v2-1-39bea29bd2a5@gmail.com
+
+Changes in v2:
+- Refactored based on reviewer's suggestions.
+- I couldn't get the I2C IRQ to work on Raspberry Pi 4, so alarm is
+  skipped.
+- Link to v1: https://lore.kernel.org/r/20240607-rtc-sd2405al-v1-1-535971e7a866@gmail.com
+
+---
+Tóth János (2):
+      drivers: rtc: Add driver for SD2405AL.
+      dt-bindings: rtc: Add support for SD2405AL.
+
+ .../devicetree/bindings/rtc/trivial-rtc.yaml       |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   6 +
+ drivers/rtc/Kconfig                                |  10 +
+ drivers/rtc/Makefile                               |   1 +
+ drivers/rtc/rtc-sd2405al.c                         | 227 +++++++++++++++++++++
+ 6 files changed, 248 insertions(+)
+---
+base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
+change-id: 20240607-rtc-sd2405al-a0947377c73d
 
 Best regards,
-J�nos
+-- 
+Tóth János <gomba007@gmail.com>
+
 
 
