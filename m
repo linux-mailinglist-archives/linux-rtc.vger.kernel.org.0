@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-1756-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1757-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D9D6962741
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 Aug 2024 14:37:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89507963A0D
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2024 07:55:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1761F1F23ABF
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 Aug 2024 12:37:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46A6B282890
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2024 05:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D55F916C865;
-	Wed, 28 Aug 2024 12:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C72813211F;
+	Thu, 29 Aug 2024 05:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wb4v/lcO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iN9vLDkE"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA24915A86D;
-	Wed, 28 Aug 2024 12:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FBAA92D;
+	Thu, 29 Aug 2024 05:55:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724848655; cv=none; b=Z9BU4ycMOtO22lFcyLtDza+xRgLgPa9qPlDOiAF80djRVAPfl5fly39suxkTGHsSa5sZJWYfS/AprQBLZC85cZn27XdHoH0+gJ6++UfTKA4TVd1mE9csVK+/+L4AaYUDJwXqe8eGKRyovqfy4a8x+DFxybh6zSPfU3wgj0MxI3o=
+	t=1724910937; cv=none; b=giZM/KmLxPZTqcVGlkgG9bk0nqS3KoX4b9RR++kxCXcF+HlDNvptQ3qAAVmShlJpSQ6lhlvwp5LA+/YfbwbxismT396RsW1H/YjhxUGRI49U/dzFHFYNLcbAqWkOSefFGyp90d5C5A7Zl0w3pBlh5RkgObU03PrkFaXj1MOmVg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724848655; c=relaxed/simple;
-	bh=AHEmeQC4ZvX4X3hXr//lgesKQkQaYFYQXhLjAS9nCiM=;
+	s=arc-20240116; t=1724910937; c=relaxed/simple;
+	bh=m0sLqD4F0XmyIjQ3fdzvKm3ZYLx6AYwrt92vuNrEF9o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RvDe8NhbIX36ucow+2icHsofBS4vZzgn6YYXL9CqxZar1Xy8XQEkagOYG/3MwLpIL/ATCFg0SQOPUm0q0gfk9mTsQfK3eLN7vtf7jWHUJaWEaoTDclOg/UmXY2wqCcoKGxXzHBERNceSoDysxPUrE7DnUvst2feFpwZM+jeJwdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wb4v/lcO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB69C98EC0;
-	Wed, 28 Aug 2024 12:37:32 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=u/rlLhOffFrEMUn7B6JyD5AZqi0KM5Dl6skPOfwhhQbVJn75E+A5DKwhvrcZx/1Hr1rrM7IPlnHXvGCjD7kAG+I/8sNk9/Q1EU9x4zx4QzMjopZmMqU3F9QF9iebXmhATkfgGM9XxbZw0ifk01NjJvkzcY5BACSYDmnwaDDRRDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iN9vLDkE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF87DC4CEC1;
+	Thu, 29 Aug 2024 05:55:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724848655;
-	bh=AHEmeQC4ZvX4X3hXr//lgesKQkQaYFYQXhLjAS9nCiM=;
+	s=k20201202; t=1724910936;
+	bh=m0sLqD4F0XmyIjQ3fdzvKm3ZYLx6AYwrt92vuNrEF9o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Wb4v/lcOniOa9RLkuqPWZEf5E3uQBjmhBxfcY0e1UolYQsOVxXBAmK1lCSphDN6jX
-	 Jb0fAMfAKSr5xWqzPiCkH1DBEPgg6jAofp6xeRaVxOi+1/q8A32XqBzX4Pwmmwo+lI
-	 z5yFYb+aH8cWOT0p0tkRCbwEDa7WvyMOhmr3qhnIQSc3/mWVeMdaeQPkjg2KguysZw
-	 mZqWLEuSTXE2uWpUGpzbLxXOwwsFKaz3DlqwLQz0yyM4um1keXCCQKLk4xCbieVA1p
-	 Awdy5Twnw0/vJsWqiP69/zXv52ZQiGMRG5Cssu3mVyPM+VaSulhczRgxVjSAq0CHpm
-	 lcNB4gBE8TeyA==
-Message-ID: <5e8d8441-ea4f-4da7-b55c-156da7fb0331@kernel.org>
-Date: Wed, 28 Aug 2024 14:37:30 +0200
+	b=iN9vLDkEGIKs5wvc2//iMWzAoF5AyH3kz73yetKq7C8V1KNLTEmEeBt1E0EIIyv8B
+	 fy074g6lhgTW4YBOeThJwYaR/8enw0A9Zd39GcWk4qMMIjEdqZ2RrOq2kT2F3RO2zG
+	 C/5/x59WXfb4h1nPTUmfwhUfv08I6m9DXSOlLhf21tqXz3b36vIlO90ZJeNGt7eku2
+	 qUh5ifNk5mwSjJYslHt+d911ANBCzTzLWBwXV27VSD3Yk1fwqJx/Mk2VWRyYZB1COK
+	 333kZSD8tXK1Ux+7H0+mMKa5uhC9wtq3cr6k3wZ0w0Tg7tC8t6ydkO1gWw88roxhZu
+	 yfq9PK1dYX3iQ==
+Message-ID: <0f328688-99e1-41c0-9300-c7ff847ebabc@kernel.org>
+Date: Thu, 29 Aug 2024 07:55:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,13 +50,12 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] rtc: rtc-asm9260: Switch to use dev_err_probe()
-To: Yang Ruibin <11162571@vivo.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: opensource.kernel@vivo.com
-References: <20240828122507.1323928-1-11162571@vivo.com>
+Subject: Re: [PATCH v5 2/2] dt-bindings: rtc: Add support for SD2405AL.
+To: gomba007@gmail.com, Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+ csokas.bence@prolan.hu
+References: <20240828-rtc-sd2405al-v5-0-9e3f8fa5ea6b@gmail.com>
+ <20240828-rtc-sd2405al-v5-2-9e3f8fa5ea6b@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,38 +101,41 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240828122507.1323928-1-11162571@vivo.com>
+In-Reply-To: <20240828-rtc-sd2405al-v5-2-9e3f8fa5ea6b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 28/08/2024 14:25, Yang Ruibin wrote:
-> use dev_err_probe() instead of dev_err() to simplify the error path and
-> standardize the format of the error code.
+On 28/08/2024 10:22, Tóth János via B4 Relay wrote:
+> From: Tóth János <gomba007@gmail.com>
 > 
-> Signed-off-by: Yang Ruibin <11162571@vivo.com>
+> Add the necessary documentation for SD2405AL.
+> 
+> Signed-off-by: Tóth János <gomba007@gmail.com>
 > ---
->  drivers/rtc/rtc-asm9260.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-asm9260.c b/drivers/rtc/rtc-asm9260.c
-> index a83b47e0d..2b7058ebb 100644
-> --- a/drivers/rtc/rtc-asm9260.c
-> +++ b/drivers/rtc/rtc-asm9260.c
-> @@ -268,10 +268,8 @@ static int asm9260_rtc_probe(struct platform_device *pdev)
->  		return PTR_ERR(priv->clk);
->  
->  	ret = clk_prepare_enable(priv->clk);
-> -	if (ret) {
-> -		dev_err(dev, "Failed to enable clk!\n");
-> -		return ret;
-> -	}
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to prepare clk!\n");
->  
 
-There is little simplification here, plus this cannot really defer. I
-think it would be fine as part of other cleanups but as standalone
-single patch I see no benefits of this.
+The patch is trivial but I don't understand why opting out of automated
+testing. People still make mistakes in for example white-spaces, so no
+review from me, sorry.
+
+<form letter>
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
+
+Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+people, so fix your workflow. Tools might also fail if you work on some
+ancient tree (don't, instead use mainline) or work on fork of kernel
+(don't, instead use mainline). Just use b4 and everything should be
+fine, although remember about `b4 prep --auto-to-cc` if you added new
+patches to the patchset.
+
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time.
+
+Please kindly resend and include all necessary To/Cc entries.
+</form letter>
 
 Best regards,
 Krzysztof
