@@ -1,134 +1,150 @@
-Return-Path: <linux-rtc+bounces-1810-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1811-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB153966276
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 15:05:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E082966481
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 16:51:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EDAE1F26F8B
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 13:05:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AD2A1C23E09
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 14:51:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239BC1B5815;
-	Fri, 30 Aug 2024 13:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3AE21B2ED0;
+	Fri, 30 Aug 2024 14:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="cESEC9vG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UoElR0+B"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F4B1B4C29
-	for <linux-rtc@vger.kernel.org>; Fri, 30 Aug 2024 13:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CF71B1D64;
+	Fri, 30 Aug 2024 14:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725022979; cv=none; b=Dw8FrJU/8dffRHcFcszYyJ8nzXG2aaQnY2lbi6YCeFhyhZHkjm8X/IzR5GsE/0Vr4KwL0uVS7qSuQinUUBK9bR2W1VsbntCED0NdUz9Y/SMvKOfy/9jp3Gpjybci3NNBaCXi4mF9HOvXBZtKneM+nJFd96ryFWu030wxLca8y38=
+	t=1725029458; cv=none; b=mw2f7xLp2ly4cwwnFf7nsnz4Vcu5Vu5HZvD5fA5aXm/gFXaCag0gs9DtI9gU5fpVzIy+k7Z2vh2QKkEvFHDHyxC3FZo89iMXF5gMemNRZCw5ki/TyDPxLrwBv4/UVHPgpohZdKpQ4+8gQwxGxY+9avf3qvpR8SZU3eIbaEiCw3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725022979; c=relaxed/simple;
-	bh=d8WVePSthW+dxNncbWzycUowwJpITS4AMD6P6eg6HFU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Nq9vE0zesRb0iszmGo8PGGO9uwhBwNpiRj4L3QHb0fKBxdPGAwgf2boUY+XKsY7T6oEr48te1ciba53FNHEnp3oyTM+DA3VALbZw96o8FVzwKyL8+iaF3iq/OKmzajgdsfapeHZz2mJ4ZLX8GcdounPgdvsYeg45hcnpKiCpYQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=cESEC9vG; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-374ba74e9b6so61877f8f.0
-        for <linux-rtc@vger.kernel.org>; Fri, 30 Aug 2024 06:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1725022976; x=1725627776; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iop8qqO9jUR8G5l7F3wNru9rj99Z66kVWofgsuIec1s=;
-        b=cESEC9vGQf1G6itm3a/lOG0+UjmBw0Nk1SegWTZQ7FTJf+/g+HKpiDnxAtQeWRfbUC
-         CT9kjOIOG3BzZrAqqy3X0cwrdqsj51KWa+W0SgHTpbR+l8mCk1sOT6LwShlwGLI3zGnW
-         vY83neW2T9V76ghaqUmte3jwKue9NW+f5LpE6Pp34tpWGe7WjfQnQNY6htOJfhxO11kB
-         PL81/0s44UsRGg5zyXPtiRYAEti8CYMFYbofSrLqAKaLy/Gp8WZJs2eFgnXVrvLROulp
-         Jszert7N+MEJ3TZZ6vMJStCSP/63uAU/f/TO2q62/PMmh/Vnf1FKTLMvB70f5Kiju0Qo
-         u+vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725022976; x=1725627776;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iop8qqO9jUR8G5l7F3wNru9rj99Z66kVWofgsuIec1s=;
-        b=Ti2utYXpJUmSH/wHXvdShcIJ5TFtDuwz/aOCoXQ1xi+2bugZWk03mpp8whJowiXCFA
-         Sl5Ig1L7Hv8LIz/lry2EAc8+f09wZNdXHtIgylWWeHrxWUEw61Mrd3ZQmiyT4FiTZH34
-         g1uRIBVAbKeUAkypKoDlpNlvL4LCES6Px5zB+X/TWpluwgJdDSROP9fcedDR5tDM2ggy
-         YStYspkZjORBASUoXtc/qPMajIdAZmYK9hKkGllN0lkJVsCyHRygI+W+WChebevZHPFa
-         x+a4rRJU2KeSYOotBgLyhH3ZJ/MSmfrLI9/NOWbNrjd5lUKm+N9ApZVPyjbKTnuXkHJ2
-         IWNw==
-X-Forwarded-Encrypted: i=1; AJvYcCVTdSTWgZYpS0puSE/ZEFotjObwiXm7QLzIoWGdq6HJT4W93Ny2N+8M5V/ue0q+25GV4uhybIaeJ1g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7RcJOFeoh7z2Ab64xzAIxpsr521k09ZREJdYHErJQhRQm5L3p
-	Zmv8UUDp3qD15owsHtJ0UE6JXw/QDEQLH1KwptDu8OiaRpbne2pRqG9DUbiBqwE=
-X-Google-Smtp-Source: AGHT+IFISbcD0awVc8lknv+LxPpsY6H/AUOiGEDJsMkyVLmTSYhBZOirNNAhX9KU4dogrvwFZ9Xx1Q==
-X-Received: by 2002:a5d:5351:0:b0:374:ba2b:4d1c with SMTP id ffacd0b85a97d-374ba2b4ea9mr332013f8f.31.1725022975647;
-        Fri, 30 Aug 2024 06:02:55 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba642594dsm80361785e9.47.2024.08.30.06.02.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2024 06:02:55 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	alexandre.belloni@bootlin.com,
-	magnus.damm@gmail.com,
-	p.zabel@pengutronix.de
-Cc: claudiu.beznea@tuxon.dev,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v3 12/12] arm64: defconfig: Enable Renesas RTCA-3 flag
-Date: Fri, 30 Aug 2024 16:02:18 +0300
-Message-Id: <20240830130218.3377060-13-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1725029458; c=relaxed/simple;
+	bh=kRMCF26wuGa6fCppevhtQabJCmV3ZfyXGSTCv60EXrc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QI8iyc6qXOyg9JfHNG4Y1rBD5oRbDiww1fKOotZc3Lj/i5GHshQCYZNfk769QKhovDZX1EHwQpFMLKwFxgrn01XAP1uyt8u8diM8hIbk5Yf+1wTBQ7gTGX+jzsPA+S0HG6EBzKpHraBvuDTYEh6tuq+a47W9xj3lMEchD5Jnfyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UoElR0+B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4B2C4CEC2;
+	Fri, 30 Aug 2024 14:50:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725029457;
+	bh=kRMCF26wuGa6fCppevhtQabJCmV3ZfyXGSTCv60EXrc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UoElR0+BEKAItp3ZltAJ4hfx15LW5ZCBAIc7a1KybMqxjcIKMC67E4rWLEpWHvb4a
+	 G6dOkp47XunRM8zTYmFTInlOIdnkF66zoiAgixQyarenRCAkfIKMLyVYsDuU9o/kCS
+	 f231oaHLP7VFwo8EsZ56fhIJTKsgzpO2kLD+FJETFf/hCbHS2PhN7sckV2nvwO3W0u
+	 HJIRer6USNXJJK1SS4jTdiHTgYeKKaMKjKg3mlngzLVgu1OzQgocT4PNsMxNQsmUKc
+	 xobBZQAtAVWC14jVsyb3ZpYLWIhBBpxe9LjJbsDFMaeiqyHU/hAJD+Mgocba0Dv/Jm
+	 W8f85o2c7pE6g==
+Date: Fri, 30 Aug 2024 09:50:56 -0500
+From: Rob Herring <robh@kernel.org>
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-leds@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>,
+	Lee Jones <lee@kernel.org>,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Flora Fu <flora.fu@mediatek.com>,
+	Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
+	Sen Chu <sen.chu@mediatek.com>,
+	Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
+	devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v2 1/7] regulator: dt-bindings: mt6323: Convert to DT
+ schema
+Message-ID: <20240830145056.GA4170065-robh@kernel.org>
+References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240830110732.30080-1-macpaul.lin@mediatek.com>
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Fri, Aug 30, 2024 at 07:07:26PM +0800, Macpaul Lin wrote:
+> Convert this from the old style text based binding to the new DT schema
+> style.
+> 
+> The examples have been trimmed down and move to parent schema
+> mfd/mediatek,mt6397.yaml.
+> 
+> Add new maintainers and submitter from MediaTek.
+> 
+> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+>  .../regulator/mediatek,mt6323-regulator.yaml  |  84 +++++++
+>  .../bindings/regulator/mt6323-regulator.txt   | 237 ------------------
+>  2 files changed, 84 insertions(+), 237 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+> 
+> Changes for v1 and v2:
+>  - This is the first version of converting mt6323-regulator.
+>    This is because converting mt6323-regulator together
+>    with mfd/mediatek,mt6397.yaml, so we've create a patch set
+>    instead of single patch for each skydives.
+>  - This patch has been made base on linux-next/master git repo.
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
+> new file mode 100644
+> index 0000000..f7c2a03
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
+> @@ -0,0 +1,84 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/mediatek,mt6323-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT6323 Regulator
+> +
+> +maintainers:
+> +  - John Crispin <john@phrozen.org>
+> +  - Sen Chu <sen.chu@mediatek.com>
+> +  - Macpaul Lin <macpaul.lin@mediatek.com>
+> +
+> +description:
+> +  Regulator node of the PMIC. This node should under the PMIC's device node.
+> +  All voltage regulators provided by the PMIC are described as sub-nodes of
+> +  this node.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: mediatek,mt6323-regulator
+> +
+> +patternProperties:
+> +  "^(buck_)?v(pa|proc|sys)$":
+> +    description: Buck regulators
+> +    type: object
+> +    $ref: regulator.yaml#
+> +    properties:
+> +      regulator-allowed-modes: false
+> +    unevaluatedProperties: false
+> +
+> +  "^(ldo_)?v(camio|cn18)$":
 
-Enable Renesas RTCA-3 flag for the Renesas RZ/G3S SoC.
+Why are buck_ and ldo_ prefixes optional? The old binding didn't reflect 
+actual (upstream) users? If so, that's fine, but mention that in the 
+commit message.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
-
-Changes in v3:
-- none
-
-Changes in v2:
-- none
-
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 465b70a06c33..40165e06c98f 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1215,6 +1215,7 @@ CONFIG_RTC_DRV_IMX_SC=m
- CONFIG_RTC_DRV_MT6397=m
- CONFIG_RTC_DRV_XGENE=y
- CONFIG_RTC_DRV_TI_K3=m
-+CONFIG_RTC_DRV_RENESAS_RTCA3=y
- CONFIG_DMADEVICES=y
- CONFIG_DMA_BCM2835=y
- CONFIG_DMA_SUN6I=m
--- 
-2.39.2
-
+Rob
 
