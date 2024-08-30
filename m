@@ -1,73 +1,61 @@
-Return-Path: <linux-rtc+bounces-1813-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1814-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F39A69665CF
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 17:38:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 280C89665EE
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 17:44:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 325531C23B1A
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 15:38:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C667C1F22F06
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 15:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3181B86D1;
-	Fri, 30 Aug 2024 15:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E201B6532;
+	Fri, 30 Aug 2024 15:44:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BGu2EEG4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVAtELA0"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E242D1B81C3;
-	Fri, 30 Aug 2024 15:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFF0EEC9;
+	Fri, 30 Aug 2024 15:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725032080; cv=none; b=spG/sW/SxmriZnDPHpzU6zhbRZLMxUSa05BpP/RvF/ynWLO995f4N3FhSbt8PobHYETUJB4arl7vfMZ0JzRD1FYqB9TzbCwtjJrtvOYpsQ93GCXqmhzgPiBUDY1xfJqxtlCngLbnXpc4rp0un6L7NknPFGvgQ/qfTdHVfTreFS0=
+	t=1725032647; cv=none; b=iHqLgOmPqHeF/Jw2+Y8oTc//69UigQlwwJJCWl//RHKUmD53aPqPUMW53lcG/67sYecFFustIsYkfDjtj4ktNypWjI6AiFMvixuAIiVjIufd467iBcI+hBHrcx+CosygfVwQne7iGEjcmTy/VsDLEulmlSQdbpftzg3A8wqY4vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725032080; c=relaxed/simple;
-	bh=sMhjK2G93E8pRdOEGgRej93yB0F8vhk+6uOsJO083iE=;
+	s=arc-20240116; t=1725032647; c=relaxed/simple;
+	bh=VkZDandq3JSMzzDGwRJwhrbaal1xkOQ+HGnJE8SjBsM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ePSaY+++/UeV/Xinn+MwY22BXxlllp5flPtoRTbACmlUkC5pSwKgxC8OS5zdKErMPpWclGUOQkw16JWRCFV6/OgiV1A8VeAqbpGmCTiHux1PwgMKuUfvid6NHiDxmsv7N4B+7Qt45oMUAUDkgQnvtlhx6rTcFQMMpfV0MJjjcGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BGu2EEG4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36455C4CEC2;
-	Fri, 30 Aug 2024 15:34:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nGthhWUH0Mq/XQ0w6r9Y+d2AjwBGXdGOgtNeiblUuszVW+FlnCsuib9AqkQUZKArW0i+Cn9qmldrM1UY7FBIRzcVcNKMLgJQEC7K2icCm6L9iLe7yHdGzrQdqhGyUhfD0xOCIkG4BrxEH6FFs3LUQquLrCE6sDb/Go8HXoGt/oE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVAtELA0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5152AC4CEC2;
+	Fri, 30 Aug 2024 15:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725032079;
-	bh=sMhjK2G93E8pRdOEGgRej93yB0F8vhk+6uOsJO083iE=;
+	s=k20201202; t=1725032646;
+	bh=VkZDandq3JSMzzDGwRJwhrbaal1xkOQ+HGnJE8SjBsM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BGu2EEG4qNddC56ktd+1VgcidfLuPMPi9DcvYjB8+u+ih72S9+0T0da4r8ynZnk3g
-	 uR/6O5p6dBovtm452fMouESkWIiCaWQUfBRivhC/tUQ64Np56kzACgQ+N5XZ+qxpVJ
-	 e2QXDNUpP+7nKL9d3OlS3Rwkz4Tq04Ccw/3LjyXnfdQqgefQt1EAS2K682LY4cetbV
-	 N1y5WDQj4SEetgbGNmagrg5ajX/6/W5ZmL4qsIapmKNu1lpl3iqkTybW/MclgMf9vf
-	 Qwa7DbNb4yqKc4qE0/ylwDVkqcbTik4pTgPG9Cq20KDSUbfiXsxUUScfIlMlLegBaw
-	 xMaFmb9Ds0C7A==
-Date: Fri, 30 Aug 2024 10:34:37 -0500
-From: Rob Herring <robh@kernel.org>
-To: Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-leds@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>,
-	Lee Jones <lee@kernel.org>,
-	Alexandre Mergnat <amergnat@baylibre.com>,
-	Flora Fu <flora.fu@mediatek.com>,
-	Bear Wang <bear.wang@mediatek.com>,
-	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
-	Sen Chu <sen.chu@mediatek.com>,
-	Chris-qj chen <chris-qj.chen@mediatek.com>,
-	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
-	devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v2 3/7] dt-bindings: rtc: mt6397: merge to MFD
- mediatek,mt6397 DT schema
-Message-ID: <20240830153437.GB4175444-robh@kernel.org>
-References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
- <20240830110732.30080-3-macpaul.lin@mediatek.com>
+	b=tVAtELA0KeGQegt8ntHg1wiWQe7Yv26xq5TPF9n0MGbMbz0OjOvp/IEvp42gC7FMt
+	 M2w1ikHzeSKcH4HY4PGnn3ITcMVi1HSNOVeWBTdj0OwFgwapDVRBt07X4HZrrobXsM
+	 X6YkkTfa8VFe0f4EBgqnSC59+9AVv9wNWLDzIJ2Fpm9LsjnJ0YZZPnYZmEHGnOCQzI
+	 o1RUx06J0fkqlIpIrw/uKoZ0x/HAlviXUlVCYOVZVqYpaEtDiq5P283J0LHCnEjGU6
+	 cj18RjP/lmR2MuIcNX7Tl6OPQRuBPgHdbZukp94IyESyQ3vydIFWnLCtIN00gSyAet
+	 Poy6op0SOty0w==
+Date: Fri, 30 Aug 2024 10:44:04 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: linux-rtc@vger.kernel.org, p.zabel@pengutronix.de, krzk+dt@kernel.org,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, geert+renesas@glider.be,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	mturquette@baylibre.com, magnus.damm@gmail.com, conor+dt@kernel.org,
+	sboyd@kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v3 05/12] dt-bindings: rtc: renesas,rzg3s-rtc: Document
+ the Renesas RTCA-3 IP
+Message-ID: <172503263744.44904.9725810011067270873.robh@kernel.org>
+References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240830130218.3377060-6-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -76,21 +64,46 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240830110732.30080-3-macpaul.lin@mediatek.com>
+In-Reply-To: <20240830130218.3377060-6-claudiu.beznea.uj@bp.renesas.com>
 
-On Fri, Aug 30, 2024 at 07:07:28PM +0800, Macpaul Lin wrote:
-> Convert rtc-mt6397.txt be compatible with the DT schema.
-> Since this is a simple RTC device node, merge it into parent
-> mediatek,mt6397.yaml. Subsequently, remove rtc-mt6397.txt with a
-> separate patch.
 
-This doesn't match what the patch does. You can just squash this into 
-the MFD patch where you add the schema.
-
+On Fri, 30 Aug 2024 16:02:11 +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Document the RTC IP (RTCA-3) available on the Renesas RZ/G3S SoC.
+> The RTC IP available on Renesas RZ/V2H is almost identical with the
+> one found on Renesas RZ/G3S (it misses the time capture functionality
+> which is not yet implemented on proposed driver). For this, added also a
+> generic compatible that will be used at the moment as fallback for both
+> RZ/G3S and RZ/V2H.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > ---
->  .../devicetree/bindings/rtc/rtc-mt6397.txt    | 31 -------------------
->  1 file changed, 31 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> 
+> Changes in v3:
+> - added RTC bus clock, reset and power-domain; it has been detected
+>   by reverse engineering that RTC and VBATTB clock, reset and power
+>   domain are shared; HW manual doesn't mention it
+> - updated example with these and with assigned-clock properties
+>   needed to configure the VBATTCLK MUX with proper parent
+> - updated example section with dt-bindings/clock/r9a08g045-cpg.h
+>   and dt-bindings/clock/r9a08g045-vbattb.h includes
+> - for all these, dropped Conor's Rb tag
+> 
+> Changes in v2:
+> - updated patch description and title
+> - included reference to rtc.yaml
+> - updated compatible list with a generic compatible as explained in
+>   patch description; with this the node in examples section has also been
+>   updated
+> - used items to describe interrupts, interrupt-names, clock, clock-names
+> - updated title section
+> 
+>  .../bindings/rtc/renesas,rz-rtca3.yaml        | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
+> 
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+
 
