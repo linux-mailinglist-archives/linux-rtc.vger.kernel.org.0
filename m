@@ -1,47 +1,47 @@
-Return-Path: <linux-rtc+bounces-1811-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1812-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E082966481
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 16:51:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF2109665BF
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 17:37:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AD2A1C23E09
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 14:51:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D45F31C221BB
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 15:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3AE21B2ED0;
-	Fri, 30 Aug 2024 14:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00941BDA95;
+	Fri, 30 Aug 2024 15:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UoElR0+B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p9qaZLeM"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CF71B1D64;
-	Fri, 30 Aug 2024 14:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0661BD51C;
+	Fri, 30 Aug 2024 15:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725029458; cv=none; b=mw2f7xLp2ly4cwwnFf7nsnz4Vcu5Vu5HZvD5fA5aXm/gFXaCag0gs9DtI9gU5fpVzIy+k7Z2vh2QKkEvFHDHyxC3FZo89iMXF5gMemNRZCw5ki/TyDPxLrwBv4/UVHPgpohZdKpQ4+8gQwxGxY+9avf3qvpR8SZU3eIbaEiCw3E=
+	t=1725032025; cv=none; b=aHHgI6kcGADiCCMD0Mpts77g+pDrSMPap5G5rBkrFqF8XEXoVg8PA/vxUVT1bskZLYYUwHaJ676Z7Deu6Kd53+49mFqBRPbLhXGyopYUKw57F42QmLAoJIKLBdQ/IAjCAV3ApdTKCmV64KfqZUvQqBMLUDAqcD86z+zK3KYNATw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725029458; c=relaxed/simple;
-	bh=kRMCF26wuGa6fCppevhtQabJCmV3ZfyXGSTCv60EXrc=;
+	s=arc-20240116; t=1725032025; c=relaxed/simple;
+	bh=4I1SF9MlKPLJEAdurQCU+q1uEFvlwjJbG9qMUIIDxvM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QI8iyc6qXOyg9JfHNG4Y1rBD5oRbDiww1fKOotZc3Lj/i5GHshQCYZNfk769QKhovDZX1EHwQpFMLKwFxgrn01XAP1uyt8u8diM8hIbk5Yf+1wTBQ7gTGX+jzsPA+S0HG6EBzKpHraBvuDTYEh6tuq+a47W9xj3lMEchD5Jnfyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UoElR0+B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4B2C4CEC2;
-	Fri, 30 Aug 2024 14:50:57 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QO0Q6YOoPnOpm0ljsJ0nFKwUOn6hpEKANaUSqwWTZwEITfixGnq0CV+nKoCXGs2wr3CWO5MojXBlXTF+IzBx95TQwdBYpwPeB3HhC9ogZD9rdmPcV2owZA0dp94/8/mQRInRG8Pgid+dIdGVA6yaCCoGlsB4joZjRl0Kt4LNKIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p9qaZLeM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0043C4CEC5;
+	Fri, 30 Aug 2024 15:33:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725029457;
-	bh=kRMCF26wuGa6fCppevhtQabJCmV3ZfyXGSTCv60EXrc=;
+	s=k20201202; t=1725032025;
+	bh=4I1SF9MlKPLJEAdurQCU+q1uEFvlwjJbG9qMUIIDxvM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UoElR0+BEKAItp3ZltAJ4hfx15LW5ZCBAIc7a1KybMqxjcIKMC67E4rWLEpWHvb4a
-	 G6dOkp47XunRM8zTYmFTInlOIdnkF66zoiAgixQyarenRCAkfIKMLyVYsDuU9o/kCS
-	 f231oaHLP7VFwo8EsZ56fhIJTKsgzpO2kLD+FJETFf/hCbHS2PhN7sckV2nvwO3W0u
-	 HJIRer6USNXJJK1SS4jTdiHTgYeKKaMKjKg3mlngzLVgu1OzQgocT4PNsMxNQsmUKc
-	 xobBZQAtAVWC14jVsyb3ZpYLWIhBBpxe9LjJbsDFMaeiqyHU/hAJD+Mgocba0Dv/Jm
-	 W8f85o2c7pE6g==
-Date: Fri, 30 Aug 2024 09:50:56 -0500
+	b=p9qaZLeMzRtO4nSWAaulicPoRXBOiYa0PuN9kGLl1fjH13XCgNavYSxe5CILoZ6N7
+	 OA5TXnbxcdlR3SgCd2w9sYHQ3y9hHKAfxtei1fVHBGZzf879Px6qy5PNimRdlAuA1l
+	 9mKTqLYG6MrR1qyNMtiCRcyTZaMSiTUTLTuXODkaX3cGikMMli/8BgUsrPrgx/cHsc
+	 3Supb1AWFrc0AGsWxFAxZTcp4zwgdiawvKVvGWNHWsipwj4G2UEQ0zOit23064NL5i
+	 egv3vBfBXxc0WGo+qoNhUWLfTFInfJVi1rMAaSr2ZYvD13MT2QdHbvmX3hbiPvr19t
+	 D7IWVRtp58OtA==
+Date: Fri, 30 Aug 2024 10:33:43 -0500
 From: Rob Herring <robh@kernel.org>
 To: Macpaul Lin <macpaul.lin@mediatek.com>
 Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
@@ -63,10 +63,11 @@ Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
 	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
 	devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v2 1/7] regulator: dt-bindings: mt6323: Convert to DT
- schema
-Message-ID: <20240830145056.GA4170065-robh@kernel.org>
+Subject: Re: [PATCH v2 2/7] dt-bindings: mfd: mediatek: mt6397: Convert to DT
+ schema format
+Message-ID: <20240830153343.GA4175444-robh@kernel.org>
 References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
+ <20240830110732.30080-2-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -75,76 +76,359 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240830110732.30080-1-macpaul.lin@mediatek.com>
+In-Reply-To: <20240830110732.30080-2-macpaul.lin@mediatek.com>
 
-On Fri, Aug 30, 2024 at 07:07:26PM +0800, Macpaul Lin wrote:
-> Convert this from the old style text based binding to the new DT schema
-> style.
+On Fri, Aug 30, 2024 at 07:07:27PM +0800, Macpaul Lin wrote:
+> Convert the mfd: mediatek: mt6397 binding to DT schema format.
 > 
-> The examples have been trimmed down and move to parent schema
-> mfd/mediatek,mt6397.yaml.
+> MT6323/MT6358/MT6397 are PMIC devices with multiple function of
+> subdevices. They have some variant of the combinations of subdevices
+> but share a common PMIC design.
 > 
-> Add new maintainers and submitter from MediaTek.
+> New updates in this conversion:
+>  - RTC:
+>   - Convert rtc-mt6397.txt and add it into parent's mt6397 PMIC DT schema.
+>  - regulators:
+>   - Align generic names "regulators" instead of origin names.
+>   - mt6323-regulator: Replace "txt" reference with mt6323-regulaotr.yaml
+>   - mt6358-regulator: Replace "txt" reference with mt6358-regulator.yaml
+>   - mt6397-regulator: Replace "txt" reference with mt6397-reuglator.yaml
+>  - audio-codec:
+>   - Align generic name "audio-codec" for codec and sound subdevices.
+>   - Add "mediatek,dmic-mode" and "Avdd-supply".
+>  - clocks:
+>   - Align generic name "clocks" for clockbuffer subdevices.
+>  - leds:
+>   - Convert leds-mt6323.txt and add it into parent's mt6397 PMIC DT schema.
+>  - keys:
+>   - Add more specific descriptions for power and home keys.
+>   - Add compatible: mediatek,mt6358-keys
+>  - power-controller:
+>   - Add property #power-domain-cells for fixing dt-binding check error.
+>   - Add "Baseband power up" as the explaination of abbrevitation "BBPU".
+>  - pinctrl:
+>   - Align generic name "pinctrl" instead of "pin-controller".
 > 
 > Signed-off-by: Sen Chu <sen.chu@mediatek.com>
 > Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
 > ---
->  .../regulator/mediatek,mt6323-regulator.yaml  |  84 +++++++
->  .../bindings/regulator/mt6323-regulator.txt   | 237 ------------------
->  2 files changed, 84 insertions(+), 237 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
->  delete mode 100644 Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+>  .../bindings/mfd/mediatek,mt6397.yaml         | 1026 +++++++++++++++++
+>  .../devicetree/bindings/mfd/mt6397.txt        |  110 --
+>  2 files changed, 1026 insertions(+), 110 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/mt6397.txt
 > 
-> Changes for v1 and v2:
->  - This is the first version of converting mt6323-regulator.
->    This is because converting mt6323-regulator together
->    with mfd/mediatek,mt6397.yaml, so we've create a patch set
->    instead of single patch for each skydives.
+> Changes for v1:
+>  - This patch depends on conversion of mediatek,mt6397-regulator.yaml
+>    [1] https://lore.kernel.org/lkml/20240807091738.18387-1-macpaul.lin@mediatek.com/T/
+> 
+> Changes for v2:
 >  - This patch has been made base on linux-next/master git repo.
+>  - Keep the parent and child relationship with mediatek,pwrap in description.
+>    [2] https://lore.kernel.org/all/20240826-slurp-earphone-0d5173923ae8@spud/
+>  - Keep the $ref for regulators since dt_binding_check didn't report any issue
+>    based on linux-next/master repo.  
+>  - Fix description of mt6397/mt6323 devices, use "power management chip"
+>    instead of "multifunction device"
+>  - Drop unnecessary comments or description according to the review.
+>  - Convert sub-modules to DT Schema:
+>   - RTC, LEDs, power-controllers, regulators
+>  - Drop duplicate sub node name and description for sub-modules
+>   - RTC, Keys
+>  - examples: 
+>   - drop parent pwrap node
+>   - Add examples from mediatek,mt6323-regulator.yaml
+>   - Add examples from mediatek,mt6358-regulator.yaml
+>   - Add examples from mediatek,mt6397-regulator.yaml
+>   - Complete the examples as could as possible.
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
+> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
 > new file mode 100644
-> index 0000000..f7c2a03
+> index 0000000..f5bea33
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6323-regulator.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+> @@ -0,0 +1,1026 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/regulator/mediatek,mt6323-regulator.yaml#
+> +$id: http://devicetree.org/schemas/mfd/mediatek,mt6397.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: MediaTek MT6323 Regulator
+> +title: MediaTek MT6397/MT6323 Multifunction Device (PMIC)
 > +
 > +maintainers:
-> +  - John Crispin <john@phrozen.org>
 > +  - Sen Chu <sen.chu@mediatek.com>
 > +  - Macpaul Lin <macpaul.lin@mediatek.com>
 > +
-> +description:
-> +  Regulator node of the PMIC. This node should under the PMIC's device node.
-> +  All voltage regulators provided by the PMIC are described as sub-nodes of
-> +  this node.
+> +description: |
+> +  MT6397/MT6323 is a power management system chip.
+> +  Please see the sub-modules below for supported features.
+> +
+> +  MT6397/MT6323 is a multifunction device with the following sub modules:
+> +  - Regulators
+> +  - RTC
+> +  - Audio codec
+> +  - GPIO
+> +  - Clock
+> +  - LED
+> +  - Keys
+> +  - Power controller
+> +
+> +  It is interfaced to host controller using SPI interface by a proprietary hardware
+> +  called PMIC wrapper or pwrap. MT6397/MT6323 PMIC is a child device of pwrap.
+> +  See the following for pwrap node definitions:
+> +  Documentation/devicetree/bindings/soc/mediatek/mediatek,pwrap.yaml
 > +
 > +properties:
 > +  compatible:
-> +    items:
-> +      - const: mediatek,mt6323-regulator
+> +    oneOf:
+> +      - enum:
+> +          - mediatek,mt6323
+> +          - mediatek,mt6331 # "mediatek,mt6331" for PMIC MT6331 and MT6332.
+> +          - mediatek,mt6357
+> +          - mediatek,mt6358
+> +          - mediatek,mt6359
+> +          - mediatek,mt6397
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt6366
+> +          - const: mediatek,mt6358
 > +
-> +patternProperties:
-> +  "^(buck_)?v(pa|proc|sys)$":
-> +    description: Buck regulators
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  rtc:
 > +    type: object
-> +    $ref: regulator.yaml#
-> +    properties:
-> +      regulator-allowed-modes: false
+> +    $ref: /schemas/rtc/rtc.yaml#
 > +    unevaluatedProperties: false
+> +    description:
+> +      MT6397 Real Time Clock.
+
+Blank line
+
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6323-rtc
+> +              - mediatek,mt6331-rtc
+> +              - mediatek,mt6358-rtc
+> +              - mediatek,mt6397-rtc
+> +          - items:
+> +              - enum:
+> +                  - mediatek,mt6366-rtc
+> +              - const: mediatek,mt6358-rtc
+
+Blank line between DT properties
+
+> +      start-year: true
+> +    required:
+> +      - compatible
 > +
-> +  "^(ldo_)?v(camio|cn18)$":
+> +  regulators:
+> +    type: object
+> +    oneOf:
+> +      - $ref: /schemas/regulator/mediatek,mt6323-regulator.yaml
+> +      - $ref: /schemas/regulator/mediatek,mt6358-regulator.yaml
+> +      - $ref: /schemas/regulator/mediatek,mt6397-regulator.yaml
+> +    unevaluatedProperties: false
+> +    description:
+> +      List of child nodes that specify the regulators.
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6323-regulator
+> +              - mediatek,mt6358-regulator
+> +              - mediatek,mt6397-regulator
+> +          - items:
+> +              - enum:
+> +                  - mediatek,mt6366-regulator
+> +              - const: mediatek,mt6358-regulator
 
-Why are buck_ and ldo_ prefixes optional? The old binding didn't reflect 
-actual (upstream) users? If so, that's fine, but mention that in the 
-commit message.
+You need the references or compatible, but not both. It's more efficient 
+if you list the compatibles along with a 'additionalProperties: true'. 
+Otherwise, the referenced schemas have to all be applied and the 
+matching one will be applied twice.
 
-Rob
+Also, for compatible here, just use 'contains' and list all possible 
+compatibles. The exact combinations are enforced in the regulator 
+schemas.
+
+
+> +
+> +  audio-codec:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      Audio codec support with MT6397 and MT6358.
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6397-codec
+> +              - mediatek,mt6358-sound
+> +          - items:
+> +              - enum:
+> +                  - mediatek,mt6366-sound
+> +              - const: mediatek,mt6358-sound
+> +
+> +      mediatek,dmic-mode:
+> +        description: |
+> +          Indicates how many data pins are used to transmit two channels of PDM
+> +          signal.
+> +          0 - two wires;
+> +          1 - one wire;
+> +          Default value is 0.
+> +        enum: [0, 1]
+> +        default: 0
+> +
+> +      Avdd-supply:
+> +        description: Power source of AVDD.
+> +
+> +    required:
+> +      - compatible
+> +
+> +  clocks:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      This is a clock buffer node for mt6397. However, there are no sub nodes
+> +      or any public document exposed in public.
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt6397-clk
+> +      '#clock-cells':
+> +        const: 1
+> +    required:
+> +      - compatible
+> +
+> +  leds:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+
+You need '|' or '>' to preserve line breaks.
+
+> +      MT6323 LED controller is subfunction provided by MT6323 PMIC, so the LED
+> +      controllers are defined as the subnode of the function node provided by MT6323
+> +      PMIC controller that is being defined as one kind of Muti-Function Device (MFD)
+> +      using shared bus called PMIC wrapper for each subfunction to access remote
+> +      MT6323 PMIC hardware.
+> +
+> +      Each led is represented as a child node of the mediatek,mt6323-led that
+> +      describes the initial behavior for each LED physically and currently only four
+> +      LED child nodes can be supported.
+> +
+> +    properties:
+> +      compatible:
+> +        oneOf:
+
+Only 1 entry, don't need oneOf.
+
+> +          - enum:
+> +              - mediatek,mt6323-led
+> +              - mediatek,mt6331-led
+> +              - mediatek,mt6332-led
+> +      "#address-cells":
+> +        const: 1
+
+blank line
+
+> +      "#size-cells":
+> +        const: 0
+
+blank line. And so on...
+
+> +      reg:
+> +        description:
+> +          LED channel number (0..3)
+> +        minimum: 0
+> +        maximum: 3
+
+Doesn't use the led binding?
+
+> +
+> +  keys:
+> +    type: object
+> +    $ref: /schemas/input/mediatek,pmic-keys.yaml
+> +    unevaluatedProperties: false
+> +    description:
+> +      Power and Home keys.
+> +    properties:
+> +      compatible:
+> +        oneOf:
+> +          - enum:
+> +              - mediatek,mt6323-keys
+> +              - mediatek,mt6331-keys
+> +              - mediatek,mt6358-keys
+> +              - mediatek,mt6397-keys
+> +
+> +  power-controller:
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      The power controller which could be found on PMIC is responsible for
+> +      externally powering off or on the remote MediaTek SoC through the
+> +      circuit BBPU (baseband power up).
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt6323-pwrc
+> +      '#power-domain-cells':
+> +        const: 0
+> +
+> +  pinctrl:
+> +    type: object
+> +    $ref: /schemas/pinctrl/mediatek,mt65xx-pinctrl.yaml
+> +    unevaluatedProperties: false
+> +    description:
+> +      Pin controller
+> +    properties:
+> +      compatible:
+> +        const: mediatek,mt6397-pinctrl
+> +
+> +required:
+> +  - compatible
+> +  - regulators
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    mt6323_pmic: pmic {
+
+Drop unused labels.
+
+> +        compatible = "mediatek,mt6323";
+> +        interrupt-parent = <&pio>;
+> +        interrupts = <150 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-controller;
+> +        #interrupt-cells = <2>;
+> +
+> +        mt6323_leds: leds {
+> +                compatible = "mediatek,mt6323-led";
+> +                #address-cells = <1>;
+> +                status = "disabled";
+
+Examples shouldn't be disabled.
+
+> +        };
+> +
+> +        mt6323_regulator: regulators {
+> +            compatible = "mediatek,mt6323-regulator";
+> +            mt6323_vproc_reg: buck_vproc {
+> +                regulator-name = "vproc";
+> +                regulator-min-microvolt = < 700000>;
+> +                regulator-max-microvolt = <1350000>;
+> +                regulator-ramp-delay = <12500>;
+> +                regulator-always-on;
+> +                regulator-boot-on;
+> +            };
 
