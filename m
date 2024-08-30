@@ -1,148 +1,106 @@
-Return-Path: <linux-rtc+bounces-1792-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1795-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E4C2966033
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 13:11:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A15E6966054
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 13:15:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABDA71C21EBC
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 11:11:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ACB5289811
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 11:15:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49EB1AF4D8;
-	Fri, 30 Aug 2024 11:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="A3p4XWMw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661B2196C86;
+	Fri, 30 Aug 2024 11:12:11 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5259A1AD5D6;
-	Fri, 30 Aug 2024 11:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104D518E370;
+	Fri, 30 Aug 2024 11:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725016126; cv=none; b=FcgKVYJK6qFZalaS3crCrZxLpEW10X79g8bv+fkm0eExPSQbPVOuRZhlLVXn54+Gx3HaHwl2hYEYTSY4sY+QpY00HpvdLmOISwWkvFR1GNiWBpHASYhR8EL62/AII0wmOOaWHUZ4XahgeMpi2GLZbaxGgqRHCgCxH/5mdY07TPg=
+	t=1725016331; cv=none; b=Kp7le7mD5TsvwTYDnajfSzZAVbdojLJDFsLLkoRGpnlUoyXFr+EC1cRfXsF6Fe6Gwsmt2Z8g/xG95jmgbquO2kbmGeOgfTyrnWowaO6ilt9skFVaMid6zMe+gYW8qFOpX0k+wF5Uj1bdXCqcR+ZayZjQmE+fjQ8NCCGTyb7nbMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725016126; c=relaxed/simple;
-	bh=/Fb5pZToC3tAN1tu7MCACdn0yLrFT2nb9lJ4ahlghS0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OhdUjkz1PTZDxJFgs/EemmxgT3g11zmWBlS7b1t3wua7w0W9f/u5RwFMYOLcAtpqWnsqnw7PS7HXCqhXj0p1KQdVpRVJ3yqRG5mYxDg8SMt5IY9+hpYUA0GcK97nSxshtt+i8GYmv+S0sVWV7rjdLQmjS37fpz+u8L5Lo7NTfHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=A3p4XWMw; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 2ff440d866c011ef8593d301e5c8a9c0-20240830
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=DipCJgAWyMm6MFO6I1vTU2aLQjwa5Kl2TSY0FW5qvoQ=;
-	b=A3p4XWMw4d04ZQtqSGgDGifhf7iZ7Wlitat9b3ylOuR3mGSCy0/Mxe97kT52qAzBl3ZAFdc5jL1lM7KgvIPcNDP/DkPqMVhXZYTqX+zM11RtflObYS3NT/dKghW5mdpWRxY4VsaEj+8BTbJNJs3Pikt3K0tJUJOJxUFZhrxeU6Q=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:1af36010-1799-43d8-a43b-af36f01b5a9a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:35356fcf-7921-4900-88a1-3aef019a55ce,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2ff440d866c011ef8593d301e5c8a9c0-20240830
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 510421618; Fri, 30 Aug 2024 19:08:29 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 30 Aug 2024 04:08:29 -0700
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 30 Aug 2024 19:08:29 +0800
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	<linux-leds@vger.kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
-	<broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>, Pavel Machek
-	<pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>, Lee Jones
-	<lee@kernel.org>, Alexandre Mergnat <amergnat@baylibre.com>, Flora Fu
-	<flora.fu@mediatek.com>
-CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>, Macpaul Lin <macpaul@gmail.com>, Sen
- Chu <sen.chu@mediatek.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
-	MediaTek Chromebook Upstream
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linux-rtc@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, Chen-Yu Tsai <wenst@chromium.org>
-Subject: [PATCH v2 7/7] dt-bindings: sound: mt6358: merge to MFD mediatek,mt6397 DT schema
-Date: Fri, 30 Aug 2024 19:07:32 +0800
-Message-ID: <20240830110732.30080-7-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240830110732.30080-1-macpaul.lin@mediatek.com>
-References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
+	s=arc-20240116; t=1725016331; c=relaxed/simple;
+	bh=ACVRDK5MKKiC/ptkkN4ovtss5KjkflVraIVTd8aCdVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=c9TjWOVEaqRrj9qXOC2iTuNL15r50a+3I4vgpiKkId0pl9CxvVd8Krt6gEkQrQNT4LfikY95LujMXYMSHFoCVVvSPeVZ2cECHurSvK6YTj1JReBmg5ABbn8SutURtEW1u1gJ3QNsyjVU1UjuurcLonhAf1bLpUKZE03X9+WtLfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 935711063;
+	Fri, 30 Aug 2024 04:12:33 -0700 (PDT)
+Received: from usa.arm.com (e107155-lin.cambridge.arm.com [10.1.198.42])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 019D93F66E;
+	Fri, 30 Aug 2024 04:12:04 -0700 (PDT)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Cristian Marussi <cristian.marussi@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-rtc@vger.kernel.org,
+	linux-input@vger.kernel.org
+Subject: Re: [PATCH v8 0/7] firmware: support i.MX95 SCMI BBM/MISC Extenstion
+Date: Fri, 30 Aug 2024 12:12:01 +0100
+Message-ID: <172501620010.2362412.13911228276992325036.b4-ty@arm.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240823-imx95-bbm-misc-v2-v8-0-e600ed9e9271@nxp.com>
+References: <20240823-imx95-bbm-misc-v2-v8-0-e600ed9e9271@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-Convert "sound/mt6358.txt" to be compatible with the DT schema.
-Since this is a simple audio codec device node, merge it into the
-parent file mediatek,mt6397.yaml. Subsequently, remove mt6358.txt
-with a separate patch.
+On Fri, 23 Aug 2024 17:05:16 +0800, Peng Fan (OSS) wrote:
+> i.MX95 System Manager Firmware source: https://github.com/nxp-imx/imx-sm
+> To generate html from the repo: make html
+>
+> i.MX95 System Manager Firmware support vendor extension protocol:
+> - Battery Backed Module(BBM) Protocol
+>   This protocol is intended provide access to the battery-backed module.
+>   This contains persistent storage (GPR), an RTC, and the ON/OFF button.
+>   The protocol can also provide access to similar functions implemented via
+>   external board components. The BBM protocol provides functions to:
+>
+> [...]
 
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
----
- .../devicetree/bindings/sound/mt6358.txt      | 26 -------------------
- 1 file changed, 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/mt6358.txt
+Applied to sudeep.holla/linux (for-next/scmi/updates), thanks!
+(with various minor changes to fix the build and sparse errors reported)
 
-Changes for v1 and v2:
- - This is the first version of converting "sound/mt6358.txt".
-   This is because converting sound/mt6358.txt together
-   with mfd/mediatek,mt6397.yaml, so we've create a patch set
-   instead of submitting single patch for each subdevice.
- - This patch has been made base on linux-next/master git repo.
-
-diff --git a/Documentation/devicetree/bindings/sound/mt6358.txt b/Documentation/devicetree/bindings/sound/mt6358.txt
-deleted file mode 100644
-index fbe9e55..0000000
---- a/Documentation/devicetree/bindings/sound/mt6358.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Mediatek MT6358 Audio Codec
--
--The communication between MT6358 and SoC is through Mediatek PMIC wrapper.
--For more detail, please visit Mediatek PMIC wrapper documentation.
--
--Must be a child node of PMIC wrapper.
--
--Required properties:
--
--- compatible - "string" - One of:
--    "mediatek,mt6358-sound"
--    "mediatek,mt6366-sound"
--- Avdd-supply : power source of AVDD
--
--Optional properties:
--- mediatek,dmic-mode : Indicates how many data pins are used to transmit two
--	channels of PDM signal. 0 means two wires, 1 means one wire. Default
--	value is 0.
--
--Example:
--
--mt6358_snd {
--	compatible = "mediatek,mt6358-sound";
--	Avdd-supply = <&mt6358_vaud28_reg>;
--	mediatek,dmic-mode = <0>;
--};
--- 
-2.45.2
+[1/7] dt-bindings: firmware: add i.MX95 SCMI Extension protocol
+      https://git.kernel.org/sudeep.holla/c/7d2b23fda996
+[2/7] firmware: arm_scmi: add initial support for i.MX BBM protocol
+      https://git.kernel.org/sudeep.holla/c/41845541adeb
+[3/7] firmware: arm_scmi: add initial support for i.MX MISC protocol
+      https://git.kernel.org/sudeep.holla/c/61c9f03e22fc
+[4/7] firmware: arm_scmi: add NXP i.MX95 SCMI documentation
+      https://git.kernel.org/sudeep.holla/c/c66beeab7436
+[5/7] firmware: imx: add i.MX95 MISC driver
+      https://git.kernel.org/sudeep.holla/c/0b4f8a68b292
+[6/7] rtc: support i.MX95 BBM RTC
+      https://git.kernel.org/sudeep.holla/c/3008598ef3b0
+[7/7] input: keyboard: support i.MX95 BBM module
+      https://git.kernel.org/sudeep.holla/c/d17baf052cbb
+--
+Regards,
+Sudeep
 
 
