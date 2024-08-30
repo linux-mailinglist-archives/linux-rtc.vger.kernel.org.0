@@ -1,185 +1,197 @@
-Return-Path: <linux-rtc+bounces-1797-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1798-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDB909661BC
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 14:30:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2C53966236
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 15:02:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A650C282E1A
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 12:30:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 141651C23473
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 13:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 639D81AD5CE;
-	Fri, 30 Aug 2024 12:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3D11A4B6D;
+	Fri, 30 Aug 2024 13:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IcNF3l3W"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="NqrzlCHR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C531ACDFD;
-	Fri, 30 Aug 2024 12:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27E1192D69
+	for <linux-rtc@vger.kernel.org>; Fri, 30 Aug 2024 13:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725020968; cv=none; b=B/oW/kB/MTUX7W+Q/BaFlDySneNrlC+Xwo+CaDpWtFZhPQVzGC5satER6tNRpZSeCaFqHF89Fn63a1x8pb1NeoECuV3D7fghALk9rFtj+nMb3yM0iuZnSq3ghZw2MDhsHB2gNitstcDwKeGTP/fcE/WBaGo1le70jAwZzxK+/6s=
+	t=1725022955; cv=none; b=JuFiaVy1b0C6jRbSmvIb0QCPzEaI+iUtck7KzELbAxh5srghIcDJZImGeU6hXHAjx9UoiiunUOJNKoAhFygqmlnGxyrFzl567ridFT5/qVuSFx/7uxGyXVMGO22T+J73x/n6zmcP4rauG6wYYZUfczRf+2JQ1YZ8xWV2Pg+e8Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725020968; c=relaxed/simple;
-	bh=Mk2LUXTuEiIRSthKQD//mtV7WNBhG5yEj/aMTBvTTr8=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=KAavWZkBJpGLhxL+e1gKPp5aIGgyUxV9ZVpFvFkrfmc/xN8JypILT4ggKxFCPJXCiPOkaTOhwa2Wo09fPJcOBtNUE6SUUIzLSRtFXGX5XgiQilT3YlIx1AsHUF8p0QWaFG6TPbGKcdGkdq65jMFVeMPz5BR1+3r8T78xQpLUpsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IcNF3l3W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A7CC4CEC6;
-	Fri, 30 Aug 2024 12:29:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725020967;
-	bh=Mk2LUXTuEiIRSthKQD//mtV7WNBhG5yEj/aMTBvTTr8=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=IcNF3l3W0QnpKoqb3ySavCF49EncHG5TSDDRyIwCY+ZLYpZi4Z4BlwlmlyLAozqCl
-	 U4xVapcn7+QUrOM5RlFfq7+7vqulfBdNTuYEPSP0E9xa1YclOKvqaIfp45pKWYOk3X
-	 3lkuPlQX89SbUCAssvFBXGTYVR/9lTyR4asjxYXSCChgAx8cvXnHXTvdo68qheJIJZ
-	 0z7ySPmVBSu+xmM1sfo63wJucldECPO8hWkzJ9LcGLhVtBPIs4k41DIAawQ3qM0d4d
-	 U8DiP+Rwr2SAs95Puakw1EE1jyp1957DLHagDZsu5kpG7HyZ0GI2dOVORHQfYy+zYi
-	 fCFBNuPyewiNw==
-Date: Fri, 30 Aug 2024 07:29:26 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1725022955; c=relaxed/simple;
+	bh=dt4FKbEMYk/rV0y2plQpOfZYZE9i1bk/j6bo4oeHAGc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f+cZkKi8dRRmaJQZ4qPylvzs52Gd2DOz4vnRWOdyL9roUeExaJXFBKovpYnoVeIUwiU+Xvks12lU1FmcVi8S9mvuZ44VwZBufQnpFO5IBw025HvBaZ3FOTjPiVuv+6WfW18hTYjAMCsy8OanUEAxCh3XEyt59x+7v/ABOmkAdSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=NqrzlCHR; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42bbc70cc19so4813315e9.0
+        for <linux-rtc@vger.kernel.org>; Fri, 30 Aug 2024 06:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1725022951; x=1725627751; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W6nGKHTlsaYnNPo28i56acvgAz+0LehleKY7G1KLCDM=;
+        b=NqrzlCHREA+tW6Z0OtQbQVWgX39SHyuSboB92i+EOKDL5K+MfmwZO7k4OQsRWb16HI
+         QL5axEW2zjfj4DWxYr4z5IEFb1hVElEFvatCuMlx6cSXGZIcYj6zGUzOyrY5LqMg54Lq
+         ZxMk2Zpu5WwPee54ECjiztstAcIeF/R2GtWL5ldZW8hZ3/1h6wqYcjLuzn7lWq1HK22t
+         j0s4gYHWXTSQ7459uwj1LH3zyhll0cK1TMDh4/vy1UWEoZQrTgcr/Vh0X5R7n71gqgDG
+         HifOLyNJ2gqc1RgmQxDe/2tDH0amS2wMGW0D43QEUFqvbK/22Lw0suEj9OwqAfqdqUOH
+         FccA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725022951; x=1725627751;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W6nGKHTlsaYnNPo28i56acvgAz+0LehleKY7G1KLCDM=;
+        b=YKg65gw8kz+IzLhVqXsYiQF1BgB2z50UR92dnCh/lgUEqlZ27qZMsHl+axjbUkO//r
+         7uGhzlTgqqxFUCtUPB/c34OWvIVuYMyuqlVSodF1OYRU58HjREVfxeBG919wH2jKUim1
+         btMoA+QsZmR5z36rjqxsYTnqt0OGwe6JoG5mMvrt80XtYoyY6+B8fPQyFMMGbdZEG8eo
+         jTQiSwIFOKWRTDR3M5Iudu3Akr/1Mg9ZqfZzMh9p9rLUXg/WvpUSB/Uk3gvjN4rg/ipo
+         Ldta2qbRVQPpW2zGwIRTMro8ZTTk0kS76CnFKtRlXx+jEJJYJP0t3OzVaphs0zHXPdJv
+         SVng==
+X-Forwarded-Encrypted: i=1; AJvYcCUiemwj6dWMmFOCrY+gjkLDVDHYEgFwO1msNLFtXpzK9KHMqyoqJUBNNP704q//mroyJTHB+ajidk4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaJfVoJXWx8sTkCee+GEiQlZaK0kzxZlSrWceFEjAuNCXVijgK
+	ofsj6ae0UTTFarUJRTaWYh/iYM2Xbw2JuJuTL3nzflXVdmnYx64WerIKQNuwqZk=
+X-Google-Smtp-Source: AGHT+IFf90G7UI94oipmrsRGbRwetRqyjDJaZ1p7GkAjuXdmmZqJgfa2LrZRlu4lQdJfeM0ibK0EqQ==
+X-Received: by 2002:a05:600c:3b89:b0:426:6688:2421 with SMTP id 5b1f17b1804b1-42bb02ee44amr47400445e9.11.1725022950478;
+        Fri, 30 Aug 2024 06:02:30 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba642594dsm80361785e9.47.2024.08.30.06.02.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2024 06:02:30 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: geert+renesas@glider.be,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	alexandre.belloni@bootlin.com,
+	magnus.damm@gmail.com,
+	p.zabel@pengutronix.de
+Cc: claudiu.beznea@tuxon.dev,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v3 00/12] Add RTC support for the Renesas RZ/G3S SoC
+Date: Fri, 30 Aug 2024 16:02:06 +0300
+Message-Id: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, devicetree@vger.kernel.org, 
- linux-sound@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wenst@chromium.org>, 
- Sebastian Reichel <sre@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- Pablo Sun <pablo.sun@mediatek.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-rtc@vger.kernel.org, Bear Wang <bear.wang@mediatek.com>, 
- Sean Wang <sean.wang@mediatek.com>, linux-mediatek@lists.infradead.org, 
- Sen Chu <sen.chu@mediatek.com>, Lee Jones <lee@kernel.org>, 
- MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>, 
- linux-leds@vger.kernel.org, Matthias Brugger <matthias.bgg@gmail.com>, 
- Pavel Machek <pavel@ucw.cz>, Flora Fu <flora.fu@mediatek.com>, 
- Mark Brown <broonie@kernel.org>, Chris-qj chen <chris-qj.chen@mediatek.com>, 
- Macpaul Lin <macpaul@gmail.com>, Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20240830110732.30080-2-macpaul.lin@mediatek.com>
-References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
- <20240830110732.30080-2-macpaul.lin@mediatek.com>
-Message-Id: <172502096435.3785893.9921485411926968976.robh@kernel.org>
-Subject: Re: [PATCH v2 2/7] dt-bindings: mfd: mediatek: mt6397: Convert to
- DT schema format
+Content-Transfer-Encoding: 8bit
 
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-On Fri, 30 Aug 2024 19:07:27 +0800, Macpaul Lin wrote:
-> Convert the mfd: mediatek: mt6397 binding to DT schema format.
-> 
-> MT6323/MT6358/MT6397 are PMIC devices with multiple function of
-> subdevices. They have some variant of the combinations of subdevices
-> but share a common PMIC design.
-> 
-> New updates in this conversion:
->  - RTC:
->   - Convert rtc-mt6397.txt and add it into parent's mt6397 PMIC DT schema.
->  - regulators:
->   - Align generic names "regulators" instead of origin names.
->   - mt6323-regulator: Replace "txt" reference with mt6323-regulaotr.yaml
->   - mt6358-regulator: Replace "txt" reference with mt6358-regulator.yaml
->   - mt6397-regulator: Replace "txt" reference with mt6397-reuglator.yaml
->  - audio-codec:
->   - Align generic name "audio-codec" for codec and sound subdevices.
->   - Add "mediatek,dmic-mode" and "Avdd-supply".
->  - clocks:
->   - Align generic name "clocks" for clockbuffer subdevices.
->  - leds:
->   - Convert leds-mt6323.txt and add it into parent's mt6397 PMIC DT schema.
->  - keys:
->   - Add more specific descriptions for power and home keys.
->   - Add compatible: mediatek,mt6358-keys
->  - power-controller:
->   - Add property #power-domain-cells for fixing dt-binding check error.
->   - Add "Baseband power up" as the explaination of abbrevitation "BBPU".
->  - pinctrl:
->   - Align generic name "pinctrl" instead of "pin-controller".
-> 
-> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->  .../bindings/mfd/mediatek,mt6397.yaml         | 1026 +++++++++++++++++
->  .../devicetree/bindings/mfd/mt6397.txt        |  110 --
->  2 files changed, 1026 insertions(+), 110 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/mt6397.txt
-> 
-> Changes for v1:
->  - This patch depends on conversion of mediatek,mt6397-regulator.yaml
->    [1] https://lore.kernel.org/lkml/20240807091738.18387-1-macpaul.lin@mediatek.com/T/
-> 
-> Changes for v2:
->  - This patch has been made base on linux-next/master git repo.
->  - Keep the parent and child relationship with mediatek,pwrap in description.
->    [2] https://lore.kernel.org/all/20240826-slurp-earphone-0d5173923ae8@spud/
->  - Keep the $ref for regulators since dt_binding_check didn't report any issue
->    based on linux-next/master repo.
->  - Fix description of mt6397/mt6323 devices, use "power management chip"
->    instead of "multifunction device"
->  - Drop unnecessary comments or description according to the review.
->  - Convert sub-modules to DT Schema:
->   - RTC, LEDs, power-controllers, regulators
->  - Drop duplicate sub node name and description for sub-modules
->   - RTC, Keys
->  - examples:
->   - drop parent pwrap node
->   - Add examples from mediatek,mt6323-regulator.yaml
->   - Add examples from mediatek,mt6358-regulator.yaml
->   - Add examples from mediatek,mt6397-regulator.yaml
->   - Complete the examples as could as possible.
-> 
+Hi,
 
-My bot found errors running 'make dt_binding_check' on your patch:
+On the Renesas RZ/G3S SoC the RTC clock is provided by the VBATTB
+IP. A 32 KHz crystall oscillator could be connected to the VBATTB
+input pins. The logic to control this clock (and pass it to RTC)
+is inside the VBATTB IP. For this, the clk-vbattb driver was added
+(patches 01-04/12).
 
-yamllint warnings/errors:
+Patches 05-06/12 add the RTC driver.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/mediatek,mt6397.example.dtb: pmic: regulators: 'oneOf' conditional failed, one must be fixed:
-	'buck_vcore', 'buck_vdrm', 'buck_vgpu', 'buck_vio18', 'buck_vpca15', 'buck_vpca7', 'buck_vsramca15', 'buck_vsramca7', 'ldo_va28', 'ldo_vgp4', 'ldo_vgp5', 'ldo_vgp6' do not match any of the regexes: '^(buck_)?v(pa|proc|sys)$', '^(ldo_)?v((io|rf)18)$', '^(ldo_)?v(a|rtc|tcxo|(cn|io)28)$', '^(ldo_)?v(cama|camaf|camd|emc3v3|gp[123]|ibr|m|mc|mch|sim[12])$', '^(ldo_)?v(camio|cn18)$', '^(ldo_)?v(cn33_(bt|wifi))$', '^(ldo_)?vusb$', 'pinctrl-[0-9]+'
-	'buck_vdrm', 'buck_vio18', 'buck_vpca15', 'buck_vpca7', 'buck_vsramca15', 'buck_vsramca7', 'ldo_va28', 'ldo_vcama', 'ldo_vemc3v3', 'ldo_vgp1', 'ldo_vgp2', 'ldo_vgp3', 'ldo_vgp4', 'ldo_vgp5', 'ldo_vgp6', 'ldo_vtcxo' do not match any of the regexes: '^(buck_)?v(core|dram1|gpu|modem|pa|proc1[12]|s[12])$', '^(ldo_)?v((aux|cn|io|rf)18|camio)$', '^(ldo_)?v(aud|bif|cn|fe|io)28$', '^(ldo_)?v(a|rf)12$', '^(ldo_)?v(cama[12]|camd|cn33|dram2|efuse|emc|ibr|ldo28|m18|mc|mch|mddr|sim[12])$', '^(ldo_)?vsram[_-](core|gpu|others|proc1[12])$', '^(ldo_)?vusb$', '^(ldo_)?vxo22$', 'pinctrl-[0-9]+'
-	False schema does not allow {'compatible': ['mediatek,mt6397-regulator'], 'buck_vpca15': {'regulator-name': ['vpca15'], 'regulator-min-microvolt': [[850000]], 'regulator-max-microvolt': [[1350000]], 'regulator-ramp-delay': 12500, 'regulator-enable-ramp-delay': 200}, 'buck_vpca7': {'regulator-name': ['vpca7'], 'regulator-min-microvolt': [[850000]], 'regulator-max-microvolt': [[1350000]], 'regulator-ramp-delay': 12500, 'regulator-enable-ramp-delay': 115}, 'buck_vsramca15': {'regulator-name': ['vsramca15'], 'regulator-min-microvolt': [[850000]], 'regulator-max-microvolt': [[1350000]], 'regulator-ramp-delay': 12500, 'regulator-enable-ramp-delay': 115}, 'buck_vsramca7': {'regulator-name': ['vsramca7'], 'regulator-min-microvolt': [[850000]], 'regulator-max-microvolt': [[1350000]], 'regulator-ramp-delay': 12500, 'regulator-enable-ramp-delay': 115}, 'buck_vcore': {'regulator-name': ['vcore'], 'regulator-min-microvolt': [[850000]], 'regulator-max-microvolt': [[1350000]], 'regulator-ramp-dela
- y': 12500, 'regulator-enable-ramp-delay': 115}, 'buck_vgpu': {'regulator-name': ['vgpu'], 'regulator-min-microvolt': [[700000]], 'regulator-max-microvolt': [[1350000]], 'regulator-ramp-delay': 12500, 'regulator-enable-ramp-delay': 115}, 'buck_vdrm': {'regulator-name': ['vdrm'], 'regulator-min-microvolt': [[800000]], 'regulator-max-microvolt': [[1400000]], 'regulator-ramp-delay': 12500, 'regulator-enable-ramp-delay': 500}, 'buck_vio18': {'regulator-name': ['vio18'], 'regulator-min-microvolt': [[1500000]], 'regulator-max-microvolt': [[2120000]], 'regulator-ramp-delay': 12500, 'regulator-enable-ramp-delay': 500}, 'ldo_vtcxo': {'regulator-name': ['vtcxo'], 'regulator-min-microvolt': [[2800000]], 'regulator-max-microvolt': [[2800000]], 'regulator-enable-ramp-delay': 90}, 'ldo_va28': {'regulator-name': ['va28'], 'regulator-enable-ramp-delay': 218}, 'ldo_vcama': {'regulator-name': ['vcama'], 'regulator-min-microvolt': [[1500000]], 'regulator-max-microvolt': [[2800000]], 'regulator-enable-r
- amp-delay': 218}, 'ldo_vio28': {'regulator-name': ['vio28'], 'regulator-enable-ramp-delay': 240}, 'ldo_vusb': {'regulator-name': ['vusb'], 'regulator-enable-ramp-delay': 218}, 'ldo_vmc': {'regulator-name': ['vmc'], 'regulator-min-microvolt': [[1800000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vmch': {'regulator-name': ['vmch'], 'regulator-min-microvolt': [[3000000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vemc3v3': {'regulator-name': ['vemc_3v3'], 'regulator-min-microvolt': [[3000000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vgp1': {'regulator-name': ['vcamd'], 'regulator-min-microvolt': [[1220000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 240}, 'ldo_vgp2': {'regulator-name': ['vcamio'], 'regulator-min-microvolt': [[1000000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vgp3': {'regulator
- -name': ['vcamaf'], 'regulator-min-microvolt': [[1200000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vgp4': {'regulator-name': ['vgp4'], 'regulator-min-microvolt': [[1200000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vgp5': {'regulator-name': ['vgp5'], 'regulator-min-microvolt': [[1200000]], 'regulator-max-microvolt': [[3000000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vgp6': {'regulator-name': ['vgp6'], 'regulator-min-microvolt': [[1200000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}, 'ldo_vibr': {'regulator-name': ['vibr'], 'regulator-min-microvolt': [[1200000]], 'regulator-max-microvolt': [[3300000]], 'regulator-enable-ramp-delay': 218}}
-	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/mediatek,mt6397.example.dtb: pmic: regulators:compatible: 'oneOf' conditional failed, one must be fixed:
-		['mediatek,mt6397-regulator'] is too short
-		'mediatek,mt6358-regulator' was expected
-		'mediatek,mt6366-regulator' was expected
-	'mediatek,mt6323-regulator' was expected
-	from schema $id: http://devicetree.org/schemas/mfd/mediatek,mt6397.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/mediatek,mt6397.example.dtb: pmic: regulators: Unevaluated properties are not allowed ('buck_vcore', 'buck_vdrm', 'buck_vgpu', 'buck_vio18', 'buck_vpca15', 'buck_vpca7', 'buck_vsramca15', 'buck_vsramca7', 'ldo_va28', 'ldo_vcama', 'ldo_vemc3v3', 'ldo_vgp1', 'ldo_vgp2', 'ldo_vgp3', 'ldo_vgp4', 'ldo_vgp5', 'ldo_vgp6', 'ldo_vibr', 'ldo_vio28', 'ldo_vmc', 'ldo_vmch', 'ldo_vtcxo', 'ldo_vusb' were unexpected)
-	from schema $id: http://devicetree.org/schemas/mfd/mediatek,mt6397.yaml#
+Patches 07-10/12 update the device trees with proper nodes to enable RTC.
 
-doc reference errors (make refcheckdocs):
-Warning: Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/mt6397.txt
-Warning: Documentation/devicetree/bindings/leds/leds-mt6323.txt references a file that doesn't exist: Documentation/devicetree/bindings/mfd/mt6397.txt
-Documentation/devicetree/bindings/input/mediatek,pmic-keys.yaml: Documentation/devicetree/bindings/mfd/mt6397.txt
-Documentation/devicetree/bindings/leds/leds-mt6323.txt: Documentation/devicetree/bindings/mfd/mt6397.txt
+Patches 11-12/12 enable proper config flags for RTC to work on RZ/G3S SoC.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240830110732.30080-2-macpaul.lin@mediatek.com
+Merge strategy, if any:
+- clock patches (01-04/12) need to go though the same tree because of
+  patch 04/12 using the devm_clk_hw_register_gate_parent_hw() introduced
+  in patch 03/12
+- RTC patches (03-04/12) can go though RTC tree
+- DTS and defconfig patches can go though Renesas tree
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Thank you,
+Claudiu Beznea
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Changes in v3:
+- dropped patches "mfd: renesas-vbattb: Add a MFD driver for the Renesas
+  VBATTB IP"
+- added patches:
+-- dt-bindings: clock: r9a08g045-vbattb: Add clock IDs for
+   the VBATTB controller
+-- clk: linux/clk-provider.h: Add devm_clk_hw_register_gate_parent_hw()
+- moved Documentation/devicetree/bindings/mfd/renesas,r9a08g045-vbattb.yaml
+  to Documentation/devicetree/bindings/clock/renesas,r9a08g045-vbattb.yaml
+- addressed review comments
+- per patch changes are listed in individual patches
 
-pip3 install dtschema --upgrade
+Changes in v2:
+- dropped patch "clk: renesas: r9a08g045: Add clock, reset and power domain
+  support for the VBATTB IP" as it was already integrated
+- kept only a documentation file for both VBATT MFD and clock drivers as
+  suggested
+- addressed review comments
+- used cleanup.h lock helpers
+- update startup sequence for the RTC driver
+- switch to 24 hours mode on the RTC driver
+- fixed range for the RTC driver
+- added a generic compatible for the RTC driver as this will also be
+  used by RZ/V2H
+- used clkin/xin clock names for the VBATTB clock driver to determine
+  if bypass should be configured on registers instead of having
+  dedicated DT property
+- added mfd driver for VBATTB
+- updated Kconfig flag names to include vendor name
+- removed DT node labels from Documentation files
+- used items to describe the interrupts and clocks
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Claudiu Beznea (12):
+  dt-bindings: clock: renesas,r9a08g045-vbattb: Document VBATTB
+  dt-bindings: clock: r9a08g045-vbattb: Add clock IDs for the VBATTB
+    controller
+  clk: linux/clk-provider.h: Add devm_clk_hw_register_gate_parent_hw()
+  clk: renesas: clk-vbattb: Add VBATTB clock driver
+  dt-bindings: rtc: renesas,rzg3s-rtc: Document the Renesas RTCA-3 IP
+  rtc: renesas-rtca3: Add driver for RTCA-3 available on Renesas RZ/G3S
+    SoC
+  arm64: dts: renesas: r9a08g045: Add VBATTB node
+  arm64: dts: renesas: r9a08g045: Add RTC node
+  arm64: dts: renesas: rzg3s-smarc-som: Enable VBATTB
+  arm64: dts: renesas: rzg3s-smarc-som: Enable RTC
+  arm64: defconfig: Enable VBATTB clock
+  arm64: defconfig: Enable Renesas RTCA-3 flag
+
+ .../clock/renesas,r9a08g045-vbattb.yaml       |  81 ++
+ .../bindings/rtc/renesas,rz-rtca3.yaml        |  86 ++
+ MAINTAINERS                                   |   8 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  36 +
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |  13 +
+ arch/arm64/configs/defconfig                  |   2 +
+ drivers/clk/renesas/Kconfig                   |   4 +
+ drivers/clk/renesas/Makefile                  |   1 +
+ drivers/clk/renesas/clk-vbattb.c              | 204 ++++
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-renesas-rtca3.c               | 892 ++++++++++++++++++
+ include/dt-bindings/clock/r9a08g045-vbattb.h  |  13 +
+ include/linux/clk-provider.h                  |  18 +
+ 14 files changed, 1369 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/renesas,r9a08g045-vbattb.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
+ create mode 100644 drivers/clk/renesas/clk-vbattb.c
+ create mode 100644 drivers/rtc/rtc-renesas-rtca3.c
+ create mode 100644 include/dt-bindings/clock/r9a08g045-vbattb.h
+
+-- 
+2.39.2
 
 
