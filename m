@@ -1,65 +1,95 @@
-Return-Path: <linux-rtc+bounces-1818-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1819-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23A4A966C48
-	for <lists+linux-rtc@lfdr.de>; Sat, 31 Aug 2024 00:26:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A459D966F85
+	for <lists+linux-rtc@lfdr.de>; Sat, 31 Aug 2024 07:52:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97A29B219A4
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2024 22:25:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCDE81C21BC9
+	for <lists+linux-rtc@lfdr.de>; Sat, 31 Aug 2024 05:52:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7820A1C175C;
-	Fri, 30 Aug 2024 22:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5D41531F2;
+	Sat, 31 Aug 2024 05:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="i6DCz8Df"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MXDV2zZr"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C535136337;
-	Fri, 30 Aug 2024 22:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05581531D0;
+	Sat, 31 Aug 2024 05:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725056754; cv=none; b=jfdNJGJcWyjQFAol7Uf7phTSisBLfHfhcYZeLYxuMxrTJ65WRk+pDfOoASgixRD+Jxs0QvpIRD5RHUXu08LiULLNxC+lUuh45gCHfSJTWUbQ8ITPBHHFGIpPbBcvZu/YeilyZ/1EtBANjiWpb2GLyKbBHTSjAjo3ZRP6VMQYCmk=
+	t=1725083519; cv=none; b=Y6vZ0N1AR1aP/Fjck9KJl98tPd7n4gpdwwsNHs55tUAcUBBI7aX0GqIanllM2LAtUnjd8SIKHubWeOhs1RlLqqLRlkric67cUjxTSw3J7a0NlwCc0eJVYO2FOlDmEKxeTrxl/yqqg5kL/demMtt1+z/ClyHcVFCZ6lpCZS2k550=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725056754; c=relaxed/simple;
-	bh=f2XKavdW1vhVPPhblS1ZTY7s6BzocYVLygaWMIG4E8U=;
+	s=arc-20240116; t=1725083519; c=relaxed/simple;
+	bh=gPZnJLAmb2ixn8ewvoBsQp1uqRI1JfKOKD/pMy6DPEs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mlkc5q9sjlwhLU4TF54e9ghj3XkIteoOH+EPC4KcbN8ENKh6rR4/Hx0dXnT3vkXYmhR3Sx6NAsC3WC6ZmkkLASBflbRohLE67AXcIaI4Z/xtzL9YRLhOTwg5LqT20NB2bSadZVIVOlw0ZpNEc9ksmlDjHhLNzR6UIZhY7687TmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=i6DCz8Df; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E80FAE0002;
-	Fri, 30 Aug 2024 22:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1725056743;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bdFbgMzvJfpDhPePQ3r4tXcwVqtf83V3DSLfXhWmeh4=;
-	b=i6DCz8Df3DS85Yq0zFUf7EEIoONfr6gr2r9oB4Ay9Kx3Tm9eLlszQ+nmQlYYQyozSnV/lO
-	I8wvFRcRbAyBxV+1jgT86KlYUS4JjTbYQpzZnFUmViYmBnLVU9vp7jaLmZoAgCbNIEYlEw
-	riRw3LDrJ2HDtXPfTaCcctoG+IO2iQDWHDDs69PlHf08cLLZ344FCtXR3ydIEv6/X90c2w
-	tL051qgA6Hlu8O235aadAdFtrsdsmh44Gp0UBwOl/jnVtta922z5lpmODpAIcUT+suPbP5
-	YGk/HJn7ZE8+ogAoSLmnIi1AP2BN+2FPtIfOZVzCi+lmWWEspAWRUpNYJTyCjA==
-Date: Sat, 31 Aug 2024 00:25:41 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	magnus.damm@gmail.com, p.zabel@pengutronix.de,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 06/12] rtc: renesas-rtca3: Add driver for RTCA-3
- available on Renesas RZ/G3S SoC
-Message-ID: <202408302225417622f1e7@mail.local>
-References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
- <20240830130218.3377060-7-claudiu.beznea.uj@bp.renesas.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=n3DWvOzAfGedBafrPr00W3hd3khzxagbFkFt7kaEOu3ReSvpqqkXaPbrD3bNQvswTr3Yixy1lM9Vx6HL773CouhXMCWFfzAYqSnz34AJ8CUB2mvxNHaRVBXV6IpVWongnlfRPa+OapCg41+RBPEG4IKsp53Bas6nkRgVsy9/CeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MXDV2zZr; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725083515; x=1756619515;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gPZnJLAmb2ixn8ewvoBsQp1uqRI1JfKOKD/pMy6DPEs=;
+  b=MXDV2zZrjOs73n8Ig9wrrUsz71Zyj6zmpUDV+p0NrXjWy5H4aTwGG225
+   6edJGq3cJK+pzQEwrkLEZZRPvvyUE8qvXMayA/e6tUrhRVmDFSnRp/iVJ
+   /C/Smb8h2b8qGeCY4HrV0pK4+1C7Aoxgp70l+r8R1cedomtr3VQo8f0dq
+   7ujdqxxlEpl0ylxB1hQtO+wAbPEknXiE8gyuKcMx+ENYAw3NrewMX9nWv
+   ALlT3+fSJqQbeJ6/Ok1WeC2q8BVdvQOtJdiyrIzSSrKA8FXV8BNFbKZGz
+   IPduqnidWEqj4hq9I+hETcwpO0pPeDd/4X2oW37cFs75CChgXXwbWY7o5
+   Q==;
+X-CSE-ConnectionGUID: Rcq+VS/qQXWF1fs44yHyVg==
+X-CSE-MsgGUID: LB2NTPwCQTim/yXiJb7cwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="26641534"
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="26641534"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 22:51:55 -0700
+X-CSE-ConnectionGUID: Lmh+3MbJTRatYH3r/JoKcg==
+X-CSE-MsgGUID: rVRYx+vlQuis3rwFQlpgeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="68996526"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 30 Aug 2024 22:51:48 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1skH1V-0002NU-2w;
+	Sat, 31 Aug 2024 05:51:45 +0000
+Date: Sat, 31 Aug 2024 13:51:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Macpaul Lin <macpaul.lin@mediatek.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-leds@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Sean Wang <sean.wang@mediatek.com>,
+	Lee Jones <lee@kernel.org>,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Flora Fu <flora.fu@mediatek.com>
+Cc: oe-kbuild-all@lists.linux.dev, Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>,
+	Sen Chu <sen.chu@mediatek.com>,
+	Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
+	devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v2 1/7] regulator: dt-bindings: mt6323: Convert to DT
+ schema
+Message-ID: <202408311355.zKsAfb64-lkp@intel.com>
+References: <20240830110732.30080-1-macpaul.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -68,129 +98,39 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240830130218.3377060-7-claudiu.beznea.uj@bp.renesas.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <20240830110732.30080-1-macpaul.lin@mediatek.com>
 
-On 30/08/2024 16:02:12+0300, Claudiu wrote:
-> +	priv->rtc_dev->range_min = mktime64(2000, 1, 1, 0, 0, 0);
+Hi Macpaul,
 
-RTC_TIMESTAMP_BEGIN_2000
+kernel test robot noticed the following build warnings:
 
-> +	priv->rtc_dev->range_max = mktime64(2099, 12, 31, 23, 59, 59);
+[auto build test WARNING on broonie-regulator/for-next]
+[also build test WARNING on lee-mfd/for-mfd-next robh/for-next lee-mfd/for-mfd-fixes linus/master v6.11-rc5 next-20240830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-RTC_TIMESTAMP_END_2099
+url:    https://github.com/intel-lab-lkp/linux/commits/Macpaul-Lin/dt-bindings-mfd-mediatek-mt6397-Convert-to-DT-schema-format/20240830-191309
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20240830110732.30080-1-macpaul.lin%40mediatek.com
+patch subject: [PATCH v2 1/7] regulator: dt-bindings: mt6323: Convert to DT schema
+reproduce: (https://download.01.org/0day-ci/archive/20240831/202408311355.zKsAfb64-lkp@intel.com/reproduce)
 
-> +
-> +	return devm_rtc_register_device(priv->rtc_dev);
-> +}
-> +
-> +static void rtca3_remove(struct platform_device *pdev)
-> +{
-> +	struct rtca3_priv *priv = platform_get_drvdata(pdev);
-> +
-> +	guard(spinlock_irqsave)(&priv->lock);
-> +
-> +	/* Disable alarm, periodic interrupts. */
-> +	rtca3_alarm_irq_set_helper(priv, RTCA3_RCR1_AIE | RTCA3_RCR1_PIE, 0);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408311355.zKsAfb64-lkp@intel.com/
 
-Why do you disable alarms on driver remove? I think you need to add a
-comment if this is because it can't system up, else this is a bad
-practice.
+All warnings (new ones prefixed by >>):
 
-> +
-> +static int rtca3_clean_alarm(struct rtca3_priv *priv)
-> +{
-> +	struct rtc_device *rtc_dev = priv->rtc_dev;
-> +	time64_t alarm_time, now;
-> +	struct rtc_wkalrm alarm;
-> +	struct rtc_time tm;
-> +	u8 pending;
-> +	int ret;
-> +
-> +	ret = rtc_read_alarm(rtc_dev, &alarm);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!alarm.enabled)
-> +		return 0;
-> +
-> +	ret = rtc_read_time(rtc_dev, &tm);
-> +	if (ret)
-> +		return ret;
-> +
-> +	alarm_time = rtc_tm_to_time64(&alarm.time);
-> +	now = rtc_tm_to_time64(&tm);
-> +	if (alarm_time >= now)
-> +		return 0;
-> +
-> +	/*
-> +	 * Heuristically, it has been determined that when returning from deep
-> +	 * sleep state the RTCA3_RSR.AF is zero even though the alarm expired.
-> +	 * Call again the rtc_update_irq() if alarm helper detects this.
-> +	 */
-> +
-> +	guard(spinlock_irqsave)(&priv->lock);
-> +
-> +	pending = rtca3_alarm_handler_helper(priv);
-> +	if (!pending)
-> +		rtc_update_irq(priv->rtc_dev, 1, RTC_AF | RTC_IRQF);
-> +
-> +	return 0;
-> +}
-> +
-> +static int rtca3_resume(struct device *dev)
-> +{
-> +	struct rtca3_priv *priv = dev_get_drvdata(dev);
-> +
-> +	if (!device_may_wakeup(dev))
-> +		return 0;
-> +
-> +	disable_irq_wake(priv->wakeup_irq);
-> +
-> +	/*
-> +	 * According to the HW manual (section 22.6.4 Notes on writing to
-> +	 * and reading from registers) we need to wait 1/128 seconds while
-> +	 * RCR2.START = 1 to be able to read the counters after a return from low
-> +	 * power consumption state.
-> +	 */
-> +	mdelay(8);
-> +
-> +	/*
-> +	 * The alarm cannot wake the system from deep sleep states. In case
-> +	 * we return from deep sleep states and the alarm expired we need
-> +	 * to disable it to avoid failures when setting another alarm.
-> +	 */
-> +	return rtca3_clean_alarm(priv);
-> +}
-> +
-> +static DEFINE_SIMPLE_DEV_PM_OPS(rtca3_pm_ops, rtca3_suspend, rtca3_resume);
-> +
-> +static const struct of_device_id rtca3_of_match[] = {
-> +	{ .compatible = "renesas,rz-rtca3", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, rtca3_of_match);
-> +
-> +static struct platform_driver rtca3_platform_driver = {
-> +	.driver = {
-> +		.name = "rtc-rtca3",
-> +		.pm = pm_ptr(&rtca3_pm_ops),
-> +		.of_match_table = rtca3_of_match,
-> +	},
-> +	.probe = rtca3_probe,
-> +	.remove_new = rtca3_remove,
-> +};
-> +module_platform_driver(rtca3_platform_driver);
-> +
-> +MODULE_DESCRIPTION("Renesas RTCA-3 RTC driver");
-> +MODULE_AUTHOR("Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.39.2
-> 
+>> Warning: Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml references a file that doesn't exist: Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+   Warning: Documentation/devicetree/bindings/power/wakeup-source.txt references a file that doesn't exist: Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
+   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+   Warning: Documentation/hwmon/g762.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/g762.txt
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/reserved-memory/qcom
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/display/exynos/
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
