@@ -1,216 +1,220 @@
-Return-Path: <linux-rtc+bounces-1824-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1825-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D9E9681BC
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 10:27:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A292968A42
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 16:49:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C27B91C21DF5
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 08:27:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C66602833CD
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 14:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A708D185B68;
-	Mon,  2 Sep 2024 08:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400CB19F135;
+	Mon,  2 Sep 2024 14:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="OlSfwIUs"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="ZIXITCE2"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2118.outbound.protection.outlook.com [40.107.215.118])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FFA17A5BD;
-	Mon,  2 Sep 2024 08:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.118
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725265660; cv=fail; b=F/SonbYXItE7FAvLFs0uVafDslN4sCYE2zRgEa8r1oBWFOnklI5I1VHFCISnEciHoWk1YhiLmuoWKxeINAhcpZW3OS8Oz+3HIqABaOCxp2ydsVyS0vQtf4jKYuxgLt06YB9afiZnYsH/6NFbri89YcSMvtUXI7GJopR9jNFYc7I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725265660; c=relaxed/simple;
-	bh=SF3efS6JJddd4KZqFw7MQUWZPF57NG3CvKygWzI+DcI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=cqKjr4JBJZIQl+LjwxtofKPAg154J+MMaxDqIf/FEUWoFkwNynSXzb/tN2yJS9ECLn1qm489nTkAXk2ZQGVqVuyRevCQXA5SkmlnS02itMCqClWt7UBFMZiHOnrNxH5SgMN6Ge8rznGe7tJK8uq3eOBGWs3NPtGtPsT1gaO0hps=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=OlSfwIUs; arc=fail smtp.client-ip=40.107.215.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eD4hZqg3sEZ9RKRHCTmFV4wMZz0w6lZvbuH4VTdkr3hz2SK02dXIzel0OhyhdYEZX9wxyUq8/N/YETw0eIct2UiPlDO9mCI8hA4EBUcqROvWcs6FbOyZmh5+M9P5UE8ppnW2jmn+Lk7ksEbt2vmKe5fIFE448hBctWhfZdp3HcHvg92HHOX+ec1ymUzOuPrhVeO1cxDYipFe0h4+eCfsJZM9oGKjfIgV4XeNlvVcV2dal6YcKgF2D4RfYBpd3rk096eS7o/BdPp3AhQf4LfVEve+vRt6E9uJUo8pIClFB5US0xzHXnQvzEsGPvOHmYrdg1NWHMyN03Kxm9AQK4ZN5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sUZeETGtmA5nZjcPbblvs/z0HFESX80PF/sLS3KmaWg=;
- b=SH0FcCdVvTscPrOAGGY+OfpTlteXrNRvnzTLyKE6UegK60MncweCyXNEO+lVfwpTE2RvqDpAHyGUrpFrSNZB0GdSR3BvAlf3YC2hVSPbc/vz1JCsKhD58DhFD7rTkGxnVNcgjz1lNTSVyTBtVfVHP64auSacPexycuS1fYuVOFqvNho+E3U6G0IfvMoUceRKucOS/3N8gj0GS8mtuXaVVM0MUU1toAjq4YgSwgAYZDUBttul1osTda52krYfqEF5H0LIl6nuB/wpmV2v3oGIqKRYa8P1rgR1YKj+byqICqxpqDhofajvUfReH7ts5KTUhQsXacmG0JwDtc58gR1j9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sUZeETGtmA5nZjcPbblvs/z0HFESX80PF/sLS3KmaWg=;
- b=OlSfwIUsZqX/yVveTawido0+B5JDOO/5I2d2iiLxWUK4uui3LjWtEuSWrWdnHsF2QySXEUsBUDciS3Sq87JpASpNnA95OfAzWyo9E3OFjewjoRF98ZrF6N3CV/2giovCOdOETneR5Sfuz7hVeQy4iOovJ4DAMjDuOokBBs1pFp/6ggv/0YmWqCjUSOxqLGKmnGTdCyPPkBHjuIeFL6G/ZWQqE5t3PR1ZiITKoYRv1w0bKEUeIuW1O4CmraGhZMUp6BbwFqfA4tCkgywP/ffarl4DdIruhZJI3TMNyEbcwrbQ/QzjTV/TYSlgKNS3AHG8vT45rwCrkU4Y6xs740nJlw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com (2603:1096:400:289::14)
- by TYSPR03MB8592.apcprd03.prod.outlook.com (2603:1096:405:83::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.23; Mon, 2 Sep
- 2024 08:27:34 +0000
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::ac4e:718:3b03:3123]) by TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::ac4e:718:3b03:3123%4]) with mapi id 15.20.7918.020; Mon, 2 Sep 2024
- 08:27:34 +0000
-Message-ID: <3e889ca9-e124-413a-a672-c7369cd2b3c0@amlogic.com>
-Date: Mon, 2 Sep 2024 16:27:28 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] MAINTAINERS: Add an entry for Amlogic RTC driver
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Yiting Deng <yiting.deng@amlogic.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240823-rtc-v1-0-6f70381da283@amlogic.com>
- <20240823-rtc-v1-3-6f70381da283@amlogic.com>
- <4b79fb7e-7ff6-499b-b615-e1bd69a46d0b@kernel.org>
-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-In-Reply-To: <4b79fb7e-7ff6-499b-b615-e1bd69a46d0b@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0051.apcprd02.prod.outlook.com
- (2603:1096:4:196::10) To TYZPR03MB6896.apcprd03.prod.outlook.com
- (2603:1096:400:289::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4403419F10E
+	for <linux-rtc@vger.kernel.org>; Mon,  2 Sep 2024 14:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725288560; cv=none; b=vF9PXNxC2DfgGW0GNX3N2vYLuthks2Za41yIhPIIy16kLFSk704QsmCr2NRJ3dCVehGTqWm/V+Jbcw2Y942Pe7OjB+AKqgZUk5B+cQUqi/+hbttkZh97ixrTdI/O2wDAcOm4kJiVpiKs01ybEz7Z6uQjhwBzDXkapv5NMedXZkg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725288560; c=relaxed/simple;
+	bh=QQZENDYNrRjI++TX2FvbFKcTFkPxKoaouTHAXGq0ZcU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Kj62LQl7UGL6NBGqG+RSaDF30KWiF/gB57JoWXIt3holj/Kj1bv1RHZpKptE06MKzIMv6F9ke3b9dEJIZgmyVOZLEZTx+9VjFfTym3Km52ajGyii6ALZtye4AFPYNVCupdPwOcXOGL3sZY8XNv62JXAeB+0MqMiVMnUP/RFaoZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=ZIXITCE2; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a89c8db505bso231061566b.0
+        for <linux-rtc@vger.kernel.org>; Mon, 02 Sep 2024 07:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1725288556; x=1725893356; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CSQrcrRl/wp02A0vZtdvQLT9FR6csXZc/MPrC7MM8Pc=;
+        b=ZIXITCE2ZaCsEoD7RzdcqsZ0EtaIGXnrb1QHOEdBFFJ718x75RzVvO19cIm8WA+ZWy
+         EKB+u6Up2AGE8xipnIfAgmJs4NUmQyZ4kv0ZOOsMsctbG7aJNksr02ATtQd7X8MOOgLv
+         L3lMlCwLlg3GmJj2J1mvycCfj/p0I/9U2PTczJtfw5YE12QZaCBuJKowjZY61iW/3HBS
+         L5CHqHkbdNrWyXKM7zQI25rBUQvUxVIkRb14YMnV4ZyAcLjy1yfmnxQaAW9YuateGcU1
+         +PZZbLfs2QXH9TTBv/+1fysE8klqR/XxH7hPslQg8VJ2pmcoMmJsu7t78fL8WX07AX1P
+         lcyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725288556; x=1725893356;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CSQrcrRl/wp02A0vZtdvQLT9FR6csXZc/MPrC7MM8Pc=;
+        b=X8u6X3xCFe4zNiw5miJ1gaOkgMZXl0RwOAUTZXn9ITN9LA936lazXS2NX/6fNtoDZO
+         EWbui4WyxAF3rAYd3cMN3Gc5PiczvUu1n2rpN6OISc3vZyMErynmnhkjJWYzRQzKXQPt
+         WE5LI4ujXwHUrY4m3H6ccbhVOvuPXy9AogDpd0fWcpYrW/OWS/OA+7l7F5dNIJhDWGxq
+         TpUbdDnd/mXmLGJBBqFPFd+tysyToi2iXHOhZKHqnD+K7O7C2sNumI/nUJkmWWSAGX6m
+         URQZU2rwrLvhqfmIR+xUML189VmifLBeIPS/mkz9ahyIARcGW4+IBdX+nRgFPVR41ceH
+         JT1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVCGehbXjqs6zdtetXSbPdnH2fk3NVRkq2ln0uBk5Hqe+o7sndh1dU7JIZTg5zYJGbbaZR2d36MQN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUP7yFf+29kAAyL2Lyrgvo4gpp5JZdUYJBNYxWRdHLm6eIMUKI
+	SfLAyCmHt/Rho905W3ugQF0B7GQrW93/dtt20jNl+1E4e06tGkdgpOuYEwUhogA=
+X-Google-Smtp-Source: AGHT+IGIdweTIHy3ncGoNoDMZ2ce0XHLLrTLA/WGs9kWHo0EafRW0/Aqg+sXCH6Br5tMoRggnn9Gtw==
+X-Received: by 2002:a17:907:7da0:b0:a7a:8da1:eb00 with SMTP id a640c23a62f3a-a897f7904d4mr1009653166b.7.1725288556372;
+        Mon, 02 Sep 2024 07:49:16 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8989196c88sm566746966b.102.2024.09.02.07.49.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Sep 2024 07:49:15 -0700 (PDT)
+Message-ID: <a7f0a36b-3169-45f8-9169-50bb0c6c04dd@tuxon.dev>
+Date: Mon, 2 Sep 2024 17:49:14 +0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR03MB6896:EE_|TYSPR03MB8592:EE_
-X-MS-Office365-Filtering-Correlation-Id: c389c5d8-dc68-4a34-46f1-08dccb29182b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ckNVQzFtaHlmU294Y1A5RFVSaWU2dDN0ODZycFBNWnExMU9pRExRcWlRejRY?=
- =?utf-8?B?TCs2dmtadFlKSUpGWUVIZjBzZnVyeWZoTFZ0L1ZMaSs0M3Q4anV3Y1oxOHh5?=
- =?utf-8?B?UERuc1JhV2VUK0tEemF3TWtSZjI1TnE3VFQ0ZFVlUWErNVA4M0xqQ3lHYkl1?=
- =?utf-8?B?bjgrNzQ3dEYvelRQbFJTSC9yeC8zdUZpcGpUV1hsZEdqdEVmaFo4L1kxUTRB?=
- =?utf-8?B?MHZQRHNxV0IzK09CMFppMzJFS0U3VzIrVXBwUjcvYnJwWmlBNDFCMk5DdzF3?=
- =?utf-8?B?elN4M1BIVWxFV01NMVdSdTllajdqa1JJS1o2Q3VrMThUbGN2THdxcm1tRmF2?=
- =?utf-8?B?Mm9SNlA0ZnZUUkJOMHVhNS82RzRFSTl1bGxCZ0NHaEpPdmNTOGZoTTVNMEVu?=
- =?utf-8?B?QUtTUHpDNjdncU52WEdqWk56SEc0QnVuLzYwSm9nNkRyZ1ZlK1V1Wk43NE1t?=
- =?utf-8?B?WHd3Z0ZWL1MzQWxscVN6dkxxN3FwL0JIRlR3MXZXSnZZeHhtYnphQmJlc1du?=
- =?utf-8?B?RXhRNHBEMkptTTVSRC85WkV2cnhkaTVGK09JS1BIamZsNmNXNndvaHBqSzVN?=
- =?utf-8?B?K202Rkd4WHZHTWtmMXhpN1VRbjdvdzFkVWlqenhBaG8vK3Q2bm5aMldKckRt?=
- =?utf-8?B?V2h4bXg0aXpjOXFBVnU4TzNWTHdFNlhVOHl1ejhTZjU5bzRMZndkM0lvYmNs?=
- =?utf-8?B?MGRWVEI2a0ZqVDY3T3N4VVUvV3dMWWk1NDlmbkgvbHFnWk5yYWNvS2V5TXV0?=
- =?utf-8?B?MHUxQWpyLzMxaVNITGxUSEdWT2ZzK3R3c2d0MzVpQlF0T05LelFVNFZ0K0s1?=
- =?utf-8?B?SzByUUZZaDVMKzA4NmRwMVkzR25DN0lVM2x1VkhZTVM3aENHK3Q4ZWVGa21C?=
- =?utf-8?B?UmxIUnBDVXM4Vzh5KzNWYTk2THFwSVY1WTZPMm9IWXhlOEhWQkNqSXphVGN5?=
- =?utf-8?B?ZFhTNXdTL0dRWVI0ekRzeHoyR1FvY3gxQnVpYk12L3hhUUFva3BtQTNiR01i?=
- =?utf-8?B?YXZlWWFsbTN4NFRKaiticlB1WDllK3lXSGJwdzE1K1piamdFNnRuR0Y4Z0Rl?=
- =?utf-8?B?N3F5WFNlb1RZb01TRXRZUzd1bTdod0E0MWdWOGZyanliUlU0bWJxS3VOT0hD?=
- =?utf-8?B?WkFCcW00bnhJOHpES0hUV21ac0lGUXNhYmtxZDd0YTVEbi9zSGRLL1pMRHZG?=
- =?utf-8?B?cndjNnhjMzZ4eDB0c0dCd0V0ejAvQUZBM2VYWVpGUHZKNlBnaGoybmJuaHJI?=
- =?utf-8?B?cXIrYmhKcDBuVDA5VGczR21JT2kwQnFHYm91azUwK05zYkxnMS9tc1RzcXB4?=
- =?utf-8?B?RmZnYXhwR2pBSDVhUnZZY3JILzZDNXNxSFg5YlJnVlM3TUhkeVhvRnRvNWFn?=
- =?utf-8?B?b1g5SzlIZ1Y1NkdENkdZRGRPRG5MeDlwRXZ1Mk5zeUordW51S21GRUFWVDc1?=
- =?utf-8?B?c3kyMnJ4VlFjN2xyVXdoeXJ6dEdSOFI4TjN0NThCSW5yZjBWT0U1U3pTRGFE?=
- =?utf-8?B?cDZvWkpBQ0JDQWc5MUNLdzhZeC9odVdicnNRTnMxVUZKeW5BN2tRNjZFUFVN?=
- =?utf-8?B?cDZNQ0xaVmVXRzdpOWQ3bVRtK2lpY3dRd3gwWlNFQWJvM2FsdWxmQ25iSFky?=
- =?utf-8?B?MUdOM3lyOVF1cjB3ZzcvSkxBemNYbFdZa2FxMlJSZ29ocTJsNmtDMlFJQytu?=
- =?utf-8?B?YmNzUWRBT2FDbkFxYWFDOHNabWVzcmVrRVJKd0VqV1VFdEp1dDByN3M2eVp4?=
- =?utf-8?B?cnpKajJHRmsvOHJ1MkgyQm10Y3E4cnZ3SUZsejk2YmU3bFJPZTJVbVVBc3hP?=
- =?utf-8?B?bGpTSXdEblB0SWd3Vm42UT09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6896.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MzFscHdkbnhhTVl0WGxRYXB1MDRGRmJnMGc4czF4TmRCNHNSYWcyZlFzcy82?=
- =?utf-8?B?dlc5SmF4RnA3cDJxNkRFSytFSGIyS1d1Zk9wdXhwaXU4a3ZUenVPdkJRU1lI?=
- =?utf-8?B?OGVxRERWbHIzREdxbkRPZmE4RC8rTzRKWHR4anpXVllrU2l0cGthMXFBcGRR?=
- =?utf-8?B?NURHam1mVVJCOVZjMVhWazd1Q25GTG1oREFpYWVQb3M5RlZTdWFWQVY3MThY?=
- =?utf-8?B?ME9BblNKUHU4eG5EMnNyVjkwb3FOY0pNZFhQL0FhRG1EczRUaTllYUtaa2l4?=
- =?utf-8?B?a0lJUDRJSnRTcGlXKzl4TDlsQ1NlOXdnaWJVTmpUQzRhY0hvM1FKdkdtVGs5?=
- =?utf-8?B?NEYxTGxZdk9UWDZPUlV4WUZYem5JNlVCYTJKaXNWV09QRkZESVhrZjBVL0Fi?=
- =?utf-8?B?NGlxZmk0UU14UjBYdDQwZERnRzhOTUJEemxhZVZ6Q3ZEUkdUZ3ZqbnArdTZL?=
- =?utf-8?B?Rk9qYjZ3MTdVbVRxc3hDZzhlOTlVdUlWemJQZ09UUzdwSUhJWDN0ampueDRq?=
- =?utf-8?B?UVhERWZpUVRFajBlUmpoMWRaRHNXaGVOQXFWZGZzaCswMzhLem91QjZQOEZD?=
- =?utf-8?B?YUhQYzFscjBMQzJ4M2JHYnBYbzk3ZmtwWjRYdFYzUTF3dDVFZUVkSzkzZCtW?=
- =?utf-8?B?NTBZYzQ0NkVyU2JXSlE1S2dEdi9tMjc4a3ZpbmdSVDdSREVHOU1UTWxsdDRa?=
- =?utf-8?B?Zk81dmc2WGhlK0lmQmxobXRMR3RIYVduMFBqTy8vSEVFcjloWkRSRXVRZmNj?=
- =?utf-8?B?MXJVR3RRSCtaTnoxNHY5dEJDai85SS9tMVR3alNZM3JqblhXdGdyYndPWXBT?=
- =?utf-8?B?WG1Sc0Q4dXdNQnRmMndQTVNTYzlVbCtnVXdRY0YxTjJGYXRsemNBblB6aFNB?=
- =?utf-8?B?YitROGFCbEJTdVNsSDdadU5KMnhQTnZIZTJJRUNHTzVmajVTS0Jxdmw2SzFa?=
- =?utf-8?B?YzFLVHlyWmxqRFV1N1BvSFhoejBzZUxhNGwrUytodXhMa0hwMFZBK3NQbkx1?=
- =?utf-8?B?VmhHbGRvQTV3dTRmSk42ZWE0VUtaZWZXbVZHaDJXTlB6bWsrRndpekl6dmhj?=
- =?utf-8?B?UzJ1THVsOExqNFJNcEllRnVIcEtWVGJCR0YxREVncXF3VDhJa01XQnNDbVZU?=
- =?utf-8?B?Uk5SZmtCclNjblJuL1F0cXhSd2E4TWxGZ0lQMy9ZbXlzYmZVR3BVOGw2dVE2?=
- =?utf-8?B?TmtseXo2TTNUeVFCc3NOYmc4MWwrQ01abnRQWk95eDAvNWt0QURQaDRTaTlM?=
- =?utf-8?B?a0s3d2sxWjY5TzZZV3V1U1F3cTF0Tkg0SlhXU3ZGcVBkeUhyRkVqUCtkemFH?=
- =?utf-8?B?Y1kxZjFWSHdDUUlCWERCN25sNUlsMUhTVjYwanBURG1yYjA2TXd1RVlmTXpD?=
- =?utf-8?B?Ui9oaElHSEZUZk9tZEk2VHVzSnBNRVpGS3FkSEhaSUlsblpkcjVpMEtHRjZY?=
- =?utf-8?B?eVp1ZkV0RDlNRWI4QnE4VkNSelNudmVmU3lKZlV2U2pLSktrRFBSZERFQlNB?=
- =?utf-8?B?TUxXNC9XOUNUTVF3WjhNNGltekNpR204NmZpY01wMHN2eVBsNm1HZFV1bTJT?=
- =?utf-8?B?MElwRTZWcDduc0JYckZ5Wk03cmZ0ZHFicU13SCtKcmpuSkh4cEZUQjNDcWdv?=
- =?utf-8?B?WWxaQ2R2Y0tOa2JPbEIweGVDVmxOaWR1amZPeGlKZUlFZWlmblZ4ZzVVcGdC?=
- =?utf-8?B?cU9yMHZ4bzAxTTUxelBOeU45ak9zcVRaemQxOWJHdlZQOXJpYnQ3Q0JPL25P?=
- =?utf-8?B?ZkxGNWxDWHBZZ3VyWjJRSlBUMld0OTVPZlppRUw3WHdiYmZoMm80c1dtcWNr?=
- =?utf-8?B?R3RQNzRxeWdWUGFrQm1ER2FzMGdkNGVtOEpjYXBTZEFNaWdXNEsyclNnamRp?=
- =?utf-8?B?OUZhMXlMRk4yODRKR0pRS0VQWDhFUjJBMkJNM1ZySnZuQys1RVVVUjd2TGVk?=
- =?utf-8?B?bzN4Mmd3ajlGT1FLS2RMVjlWQjNQRmNlRFRTTldZcnVmbGpWZFZrNXVKaDRX?=
- =?utf-8?B?S0lXWFdNNDU0NmtkYVE0V201Zk9WSndYMnZJQ1hUMXBHeXZoK3FQc2dQeUNS?=
- =?utf-8?B?TlB6WUhUdERPQUdHMXoxM1dhVllBS3crVmUweUNOK0xQZUxJVW90dDdsMHFR?=
- =?utf-8?B?dCtRNFdOejZ3SmluWGlQR3B0ZVhqU2wzTHhaZ3RSU3pETExaVEdxcnhnWXpu?=
- =?utf-8?B?Qnc9PQ==?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c389c5d8-dc68-4a34-46f1-08dccb29182b
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6896.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2024 08:27:34.1165
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Txhji8aepdIrw8fE7dz2QAX5fMKd6O85tQxr/vYK6gRAP2SyZ8OUrkQ1aZ8ZQRJi88A25IaAGowDfGwhCaTXWOSZRAZ1NpTReyCkhP+PaMc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR03MB8592
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 06/12] rtc: renesas-rtca3: Add driver for RTCA-3
+ available on Renesas RZ/G3S SoC
+Content-Language: en-US
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ magnus.damm@gmail.com, p.zabel@pengutronix.de,
+ linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ kernel test robot <lkp@intel.com>
+References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240830130218.3377060-7-claudiu.beznea.uj@bp.renesas.com>
+ <202408302225417622f1e7@mail.local>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <202408302225417622f1e7@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
-    Thanks for your reply.
+Hi, Alexandre,
 
-On 2024/8/26 16:28, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
+On 31.08.2024 01:25, Alexandre Belloni wrote:
+> On 30/08/2024 16:02:12+0300, Claudiu wrote:
+>> +	priv->rtc_dev->range_min = mktime64(2000, 1, 1, 0, 0, 0);
 > 
-> On 23/08/2024 11:19, Xianwei Zhao via B4 Relay wrote:
->> From: Yiting Deng <yiting.deng@amlogic.com>
->>
->> Add Amlogic RTC entry to MAINTAINERS to clarify the maintainers
->>
->> Signed-off-by: Yiting Deng <yiting.deng@amlogic.com>
->> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
->> ---
->>   MAINTAINERS | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 42decde38320..672290dddaaa 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -2481,6 +2481,14 @@ F:     drivers/irqchip/irq-mvebu-*
->>   F:   drivers/pinctrl/mvebu/
->>   F:   drivers/rtc/rtc-armada38x.c
->>
->> +ARM/Amlogic RTC Driver
-> 
-> "ARM" is for Soc entries, not individual drivers. Drop. Place it
-> correctly and use capital letters.
-> 
+> RTC_TIMESTAMP_BEGIN_2000
 
-Will do.
+OK
+
 > 
+>> +	priv->rtc_dev->range_max = mktime64(2099, 12, 31, 23, 59, 59);
 > 
-> Best regards,
-> Krzysztof
+> RTC_TIMESTAMP_END_2099
+
+OK
+
 > 
+>> +
+>> +	return devm_rtc_register_device(priv->rtc_dev);
+>> +}
+>> +
+>> +static void rtca3_remove(struct platform_device *pdev)
+>> +{
+>> +	struct rtca3_priv *priv = platform_get_drvdata(pdev);
+>> +
+>> +	guard(spinlock_irqsave)(&priv->lock);
+>> +
+>> +	/* Disable alarm, periodic interrupts. */
+>> +	rtca3_alarm_irq_set_helper(priv, RTCA3_RCR1_AIE | RTCA3_RCR1_PIE, 0);
+> 
+> Why do you disable alarms on driver remove? I think you need to add a
+> comment if this is because it can't system up, else this is a bad
+> practice.
+
+The RTC cannot power on the system after a power off. It can't also resume
+it from a deep sleep state (when only the SoC area where the RTC resides
+remains power on (there is no way to signal from RTC to the power supply
+chain that an alarm happened)). It can only wake it up from s2idle mode
+where all SoC components remains powered on.
+
+Also, w/o this change the RTC remains blocked under the following scenarios
+if the interrupts are not disabled in remove:
+
+1/ Configure wake alarm and unbind the RTC driver with the following commands:
+# echo +10 > /sys/class/rtc/rtc0/wakealarm
+# echo /sys/bus/platform/drivers/rtc-rtca3/1004ec00.rtc > unbind
+# sleep 12
+# echo /sys/bus/platform/drivers/rtc-rtca3/1004ec00.rtc > bind
+
+When rebinding the re-configuration of the RTC device times out:
+[  121.854190] rtc-rtca3 1004ec00.rtc: error -ETIMEDOUT: Failed to setup
+the RTC!
+[  121.861511] rtc-rtca3 1004ec00.rtc: probe with driver rtc-rtca3 failed
+with error -110
+-sh: echo: write error: Connection timed out
+
+2/ Configure wake alarm, unbind the RTC driver and switch to s2idle with
+the following commands:
+# echo s2idle > /sys/power/mem_sleep
+# echo +10 > /sys/class/rtc/rtc0/wakealarm
+# echo /sys/bus/platform/drivers/rtc-rtca/31004ec00.rtc > unbind
+# echo mem > /sys/power/state
+# #system is resumed by non RTC wakeup source (as the RTC alarm is not
+working anymore in this case)
+# echo /sys/bus/platform/drivers/rtc-rtca/1004ec00.rtc > bind
+
+The system is not waked up from RTC alarm (as expected) and the rebinding
+fails again:
+
+[  172.483688] rtc-rtca3 1004ec00.rtc: error -ETIMEDOUT: Failed to setup
+the RTC!
+[  172.491003] rtc-rtca3 1004ec00.rtc: probe with driver rtc-rtca3 failed
+with error -110
+-sh: echo: write error: Connection timed out
+
+3/ configure the RTC alarm, unbind and power off (with the following commands):
+# echo +60 > /sys/class/rtc/rtc0/wakealarm
+# echo /sys/bus/platform/drivers/rtc-rtca/1004ec00.rtc > unbind
+# poweroff
+
+The system is not started after 60 seconds and at the next reboot the RTC
+configuration on probe is failing the same:
+
+[    0.292068] rtc-rtca3 1004ec00.rtc: error -ETIMEDOUT: Failed to setup
+the RTC!
+[    0.292182] rtc-rtca3 1004ec00.rtc: probe with driver rtc-rtca3 failed
+with error -110
+
+In all scenarios the RTC is recovered only if removing/re-applying the
+power to the SoC area where it resides.
+
+These tests were done with the patches in this series and then I tried it
+with the following diff on top of the patches in this series. The results
+were the same:
+
+diff --git a/drivers/rtc/rtc-renesas-rtca3.c b/drivers/rtc/rtc-renesas-rtca3.c
+index 822c055b6e4d..720fdac3adc6 100644
+--- a/drivers/rtc/rtc-renesas-rtca3.c
++++ b/drivers/rtc/rtc-renesas-rtca3.c
+@@ -586,7 +586,7 @@ static int rtca3_initial_setup(struct clk *clk, struct
+rtca3_priv *priv)
+        usleep_range(sleep_us, sleep_us + 10);
+
+        /* Disable alarm and carry interrupts. */
+-       mask = RTCA3_RCR1_AIE | RTCA3_RCR1_CIE;
++       mask = RTCA3_RCR1_AIE | RTCA3_RCR1_CIE | RTCA3_RCR1_PIE;
+        ret = rtca3_alarm_irq_set_helper(priv, mask, 0);
+        if (ret)
+                return ret;
+@@ -784,7 +784,7 @@ static void rtca3_remove(struct platform_device *pdev)
+        guard(spinlock_irqsave)(&priv->lock);
+
+        /* Disable alarm, periodic interrupts. */
+-       rtca3_alarm_irq_set_helper(priv, RTCA3_RCR1_AIE | RTCA3_RCR1_PIE, 0);
++       //rtca3_alarm_irq_set_helper(priv, RTCA3_RCR1_AIE | RTCA3_RCR1_PIE, 0);
+ }
+
+Thank you,
+Claudiu Beznea
+
 
