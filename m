@@ -1,63 +1,67 @@
-Return-Path: <linux-rtc+bounces-1827-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1828-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F99A968ECC
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 22:20:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF470968EDD
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 22:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 726F81C21DCC
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 20:20:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52332B22425
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2024 20:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7491A3AAF;
-	Mon,  2 Sep 2024 20:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26A31C62B4;
+	Mon,  2 Sep 2024 20:28:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eiNxWOC5"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="F3Qc+8AX"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E251A3AA5;
-	Mon,  2 Sep 2024 20:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724CB19CC04;
+	Mon,  2 Sep 2024 20:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725308406; cv=none; b=fOETq4XXKVSQmY9pGBIOpUoYyP3AKxep0tD6BUBBwjm5wmYmIp8vRqMsRDTpGjSCzrIhGP1uJdsOVMnxsCHiRhOHkD1glhUOaaIzwURWP91ETEho+j7Xfl6vim3B0xo1yoGUMiT96tdx51Rsi/Ai6BGz2iBhFoirSaMYN4RTCyA=
+	t=1725308906; cv=none; b=nuzs90xHmvx8KvrNH1g3oVpMA8QrBlMv9ArJ8OV4sVY78deThWPvReN9eED8S0MtEvOCTk8KqyXHKMYFIBueXAAtkXOf821stVuAWN5qbuopVmhDdxwAbep9wHDEsRP2KIol8LB+N5Q3qgO7q/EKPmTBxmbFLJn9M/4BBlWNUZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725308406; c=relaxed/simple;
-	bh=CpfGXUsaMycF4jl2l9nIICgEeKqNYaKOEAKloppFIw8=;
+	s=arc-20240116; t=1725308906; c=relaxed/simple;
+	bh=byvMvMs6cQe+rkDvGuGDD5gUm8DvBPi1Lovd4gjQBhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cbyt4y4zgh/5dp5N2nMpqFfWfKMQvw+h9zKi5Poggce0uT7to84YvQjm2wn5Jaiol7nXj/+8qiEvaTUzjAnD43JcRYSOiaFCeeeZKWvx2sxJ2ZjrY4gu8Gr0eAJazmQCnwZpFjU/fWPFViIH4ML0z8bRgtrExGXlrkMyNTLcxBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eiNxWOC5; arc=none smtp.client-ip=217.70.183.200
+	 Content-Type:Content-Disposition:In-Reply-To; b=ejNTgAgW3OAGEmLBz9E2VFn8pIydnhce2qXvC+f+bhvshnQkjb/4P+LkkYexLdASCYxs5VNPnmMuTKq+QbwhhDfkFpAEmhvFuOnYiSKaGfk4x7u0gEIRfxagAEVmWEduXKYoRqjsEcdyzMzmFwp2Jqv9yyDR5gMA7to7nZONV98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=F3Qc+8AX; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1EF2C20004;
-	Mon,  2 Sep 2024 20:19:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B9FA60002;
+	Mon,  2 Sep 2024 20:28:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1725308396;
+	t=1725308901;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5LLNc9i9feX+98+maMNyDk10kJ8aqshRdCfXQ8V0pLQ=;
-	b=eiNxWOC55M5AEZpFSO0e8abL2V1c2pzRlSTOUG4KQeaHLtV9KJF5Ei0vXoD9LYpnqFYL+u
-	2EXwfinJDj27LsxrLtLnU8XiBb08C/AIaRW0ZKkpa+x1w/i+NTpg7Ry/nRUuxpGAtkcqWd
-	i14o5IJ4sr/dgMdHexG0J7ZEhBibIUqmN6l5tH6SvdR15LA3HfNA8hnKjwfwHdIyPnMJRT
-	uC+KbPv9sat1yNnFgMG1SBMhuhV0TBND9jd6+NlawQlE0YmV8gpMyR/9dKIz/ypmCU8CSr
-	Y+DkoZK3DQEUDBg5+YdwAcyJsh2ATkjJVxrUJzw7JeRQYjjMJDl8ajVyr+VxYA==
-Date: Mon, 2 Sep 2024 22:19:54 +0200
+	bh=/acNWIGC7J/l+lCj9xbwfTsap0VDe5s6cnY9+w/1Cgo=;
+	b=F3Qc+8AXy4XVfyxeE/R7AjyxDNhZStf4Ngzq3cE/0udfpTXLq5utZIhTRlno2r5HNxDqFW
+	7FYsHvNI2HirrQv1DaQjwcuBZmNSDzFcz9CxhEiebQYoCy+gfOJ1k0jarbgqFu22bbaOb6
+	tFlKj00ASPoxjX4Lc1JOzAnRHtjPVzDuHY42HxzOtCqemhBOtE7G7Y8LOm1dL2UYQyzxKP
+	0AQEna6l8JcAoX7cFb43qflsYcmmYoMZs5aTfU7KEFdxqlrNUEJ654L+/DOz7negI+iw0D
+	ctLVRyaFGnT/XT/FPCu2zeftLhyP90QGqO6j8prD0p4RtcUoLB+7bMrWA6ja5w==
+Date: Mon, 2 Sep 2024 22:28:19 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc: Yiting Deng <yiting.deng@amlogic.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] rtc: support for the Amlogic on-chip RTC
-Message-ID: <2024090220195462df6c95@mail.local>
-References: <20240823-rtc-v1-0-6f70381da283@amlogic.com>
- <20240823-rtc-v1-2-6f70381da283@amlogic.com>
- <2024082609451907fd19e2@mail.local>
- <20ffd260-3c24-460f-bdbc-965573e110e3@amlogic.com>
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	magnus.damm@gmail.com, p.zabel@pengutronix.de,
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 06/12] rtc: renesas-rtca3: Add driver for RTCA-3
+ available on Renesas RZ/G3S SoC
+Message-ID: <20240902202819e2bf5630@mail.local>
+References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240830130218.3377060-7-claudiu.beznea.uj@bp.renesas.com>
+ <202408302225417622f1e7@mail.local>
+ <a7f0a36b-3169-45f8-9169-50bb0c6c04dd@tuxon.dev>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,72 +70,104 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20ffd260-3c24-460f-bdbc-965573e110e3@amlogic.com>
+In-Reply-To: <a7f0a36b-3169-45f8-9169-50bb0c6c04dd@tuxon.dev>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 02/09/2024 16:14:45+0800, Xianwei Zhao wrote:
-> Hi Alexandre,
->     Thanks for your reply.
-> 
-> On 2024/8/26 17:45, Alexandre Belloni wrote:
-> > [ EXTERNAL EMAIL ]
+On 02/09/2024 17:49:14+0300, claudiu beznea wrote:
+> >> +	/* Disable alarm, periodic interrupts. */
+> >> +	rtca3_alarm_irq_set_helper(priv, RTCA3_RCR1_AIE | RTCA3_RCR1_PIE, 0);
 > > 
-> > On 23/08/2024 17:19:45+0800, Xianwei Zhao via B4 Relay wrote:
-> > > From: Yiting Deng <yiting.deng@amlogic.com>
-> > > 
-> > > Support for the on-chip RTC found in some of Amlogic's SoCs such as the
-> > > A113L2 and A113X2.
-> > > 
-> > > Signed-off-by: Yiting Deng <yiting.deng@amlogic.com>
-> > > Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> > > ---
-> > >   drivers/rtc/Kconfig       |  12 +
-> > >   drivers/rtc/Makefile      |   1 +
-> > >   drivers/rtc/rtc-amlogic.c | 589 ++++++++++++++++++++++++++++++++++++++++++++++
-> > 
-> > As pointed out, this is the third amlogic driver so the name of the file
-> > must be more specific.
-> > 
+> > Why do you disable alarms on driver remove? I think you need to add a
+> > comment if this is because it can't system up, else this is a bad
+> > practice.
 > 
-> This RTC hardware includes a timing function and an alarm function.
-> But the existing has only timing function, alarm function is using the
-> system clock to implement a virtual alarm. And the relevant register access
-> method is also different.
+> The RTC cannot power on the system after a power off. It can't also resume
+> it from a deep sleep state (when only the SoC area where the RTC resides
+> remains power on (there is no way to signal from RTC to the power supply
+> chain that an alarm happened)). It can only wake it up from s2idle mode
+> where all SoC components remains powered on.
 > 
-> The "meson" string is meaningless, it just keeps going, and now the new
-> hardware uses the normal naming.
-
-The proper naming is then definitively not just amlogic, because in 5
-year, you are going to say the exact same thing about this driver
-"register access is different, this is for old SoCs, etc"
-
-amlogc-a4 would be more appropriate.
-
-> > > +             /* Enable RTC */
-> > > +             regmap_write_bits(rtc->map, RTC_CTRL, RTC_ENABLE, RTC_ENABLE);
-> > 
-> >                  This must not be done at probe time, else you loose the
-> >                  important information taht the time has never been set. Instead,
-> >                  it should only be enabled on the first .set_time invocation do
-> >                  you could now in .read_time that the time is currently invalid.
-> > 
-> There are some doubts about this place.
+> Also, w/o this change the RTC remains blocked under the following scenarios
+> if the interrupts are not disabled in remove:
 > 
-> You mean that after the system is up, unless the time is set, it will fail
-> to read the time at any time, and the alarm clock will also fail.
-> In this case, the system must set a time.
-
-Exactly, reading the time must not succeed if the time is known to be
-bad.
-
+> 1/ Configure wake alarm and unbind the RTC driver with the following commands:
+> # echo +10 > /sys/class/rtc/rtc0/wakealarm
+> # echo /sys/bus/platform/drivers/rtc-rtca3/1004ec00.rtc > unbind
+> # sleep 12
+> # echo /sys/bus/platform/drivers/rtc-rtca3/1004ec00.rtc > bind
 > 
-> When read time invlalid, system is will set time.
-> This part of the logic I see the kernel part has not been implemented, so
-> only the user application has been implemented. Whether this is reasonable,
-> if not set time, you will never use RTC module.
+> When rebinding the re-configuration of the RTC device times out:
+> [  121.854190] rtc-rtca3 1004ec00.rtc: error -ETIMEDOUT: Failed to setup
+> the RTC!
+> [  121.861511] rtc-rtca3 1004ec00.rtc: probe with driver rtc-rtca3 failed
+> with error -110
+> -sh: echo: write error: Connection timed out
+> 
+> 2/ Configure wake alarm, unbind the RTC driver and switch to s2idle with
+> the following commands:
+> # echo s2idle > /sys/power/mem_sleep
+> # echo +10 > /sys/class/rtc/rtc0/wakealarm
+> # echo /sys/bus/platform/drivers/rtc-rtca/31004ec00.rtc > unbind
+> # echo mem > /sys/power/state
+> # #system is resumed by non RTC wakeup source (as the RTC alarm is not
+> working anymore in this case)
+> # echo /sys/bus/platform/drivers/rtc-rtca/1004ec00.rtc > bind
+> 
+> The system is not waked up from RTC alarm (as expected) and the rebinding
+> fails again:
+> 
+> [  172.483688] rtc-rtca3 1004ec00.rtc: error -ETIMEDOUT: Failed to setup
+> the RTC!
+> [  172.491003] rtc-rtca3 1004ec00.rtc: probe with driver rtc-rtca3 failed
+> with error -110
+> -sh: echo: write error: Connection timed out
+> 
+> 3/ configure the RTC alarm, unbind and power off (with the following commands):
+> # echo +60 > /sys/class/rtc/rtc0/wakealarm
+> # echo /sys/bus/platform/drivers/rtc-rtca/1004ec00.rtc > unbind
+> # poweroff
+> 
+> The system is not started after 60 seconds and at the next reboot the RTC
+> configuration on probe is failing the same:
+> 
+> [    0.292068] rtc-rtca3 1004ec00.rtc: error -ETIMEDOUT: Failed to setup
+> the RTC!
+> [    0.292182] rtc-rtca3 1004ec00.rtc: probe with driver rtc-rtca3 failed
+> with error -110
+> 
+> In all scenarios the RTC is recovered only if removing/re-applying the
+> power to the SoC area where it resides.
+> 
+> These tests were done with the patches in this series and then I tried it
+> with the following diff on top of the patches in this series. The results
+> were the same:
+> 
+> diff --git a/drivers/rtc/rtc-renesas-rtca3.c b/drivers/rtc/rtc-renesas-rtca3.c
+> index 822c055b6e4d..720fdac3adc6 100644
+> --- a/drivers/rtc/rtc-renesas-rtca3.c
+> +++ b/drivers/rtc/rtc-renesas-rtca3.c
+> @@ -586,7 +586,7 @@ static int rtca3_initial_setup(struct clk *clk, struct
+> rtca3_priv *priv)
+>         usleep_range(sleep_us, sleep_us + 10);
+> 
+>         /* Disable alarm and carry interrupts. */
+> -       mask = RTCA3_RCR1_AIE | RTCA3_RCR1_CIE;
+> +       mask = RTCA3_RCR1_AIE | RTCA3_RCR1_CIE | RTCA3_RCR1_PIE;
+>         ret = rtca3_alarm_irq_set_helper(priv, mask, 0);
+>         if (ret)
+>                 return ret;
+> @@ -784,7 +784,7 @@ static void rtca3_remove(struct platform_device *pdev)
+>         guard(spinlock_irqsave)(&priv->lock);
+> 
+>         /* Disable alarm, periodic interrupts. */
+> -       rtca3_alarm_irq_set_helper(priv, RTCA3_RCR1_AIE | RTCA3_RCR1_PIE, 0);
+> +       //rtca3_alarm_irq_set_helper(priv, RTCA3_RCR1_AIE | RTCA3_RCR1_PIE, 0);
+>  }
 
-This is not going to be implemented in the kernel. The kernel can't know
-what is the proper time to set unless userspace tells it.
+Thanks for the detailed explanation. Can you add a small comment, I
+really want t avoid people cargo-culting this behavior as this has
+already been the case.
+
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
