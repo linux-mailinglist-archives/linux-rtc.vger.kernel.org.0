@@ -1,48 +1,67 @@
-Return-Path: <linux-rtc+bounces-1854-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1855-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4B34969E5B
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 14:51:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75623969F09
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 15:29:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 911C91F241D3
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 12:51:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34C8228663B
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 13:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D701CA6B5;
-	Tue,  3 Sep 2024 12:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B179E1C2432;
+	Tue,  3 Sep 2024 13:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UVC0b0NQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="OpBi4fYX"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE841CA687;
-	Tue,  3 Sep 2024 12:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E302A1C2420
+	for <linux-rtc@vger.kernel.org>; Tue,  3 Sep 2024 13:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725367910; cv=none; b=jEGokaDzu6x4LetYebBucIQV/S/Px1UsH0SpQnIPwtKx27hg1oHR3MU3GKmeKUyjZFa3U8BK5K3JbkrzID2GGMLZtXH25miFg+oKR7dz6WCRk1WEC0GMAUX09NNhiYp1UKRUpWCx5DRnxbbeQbP2Jt/qJcp87laVV9mhW1t39pE=
+	t=1725370184; cv=none; b=NhjfCHyg2Ny6M+Gy9awZvUwSBCiqs0l8KqKZso9jkdhgJuQ9fQ4wOhx/bFBQ23wCa8wWQ9nZqoVMF2/ij4akkYix6q8zi0QMTJ+ptR5bji4NP3O1HmsqMxljjzEmAMaN7We5wE8T5dHCZiJ68Vsjc1/nL5WmQ5xPtXsYG4h3USE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725367910; c=relaxed/simple;
-	bh=O1/2050F39XQfvPLXCTizegImM8YWOlhzXwUWl0cmGc=;
+	s=arc-20240116; t=1725370184; c=relaxed/simple;
+	bh=sUFoHKHsNtlpiEkAg1QiZApjgXML3bAHfXiEy3+lhsE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ghBmBWcVoUrdROecbWYx5vamBzFfbXqq0rtzVvKRJqpM44eoYc0E5IXxv/hUMFHXqSP9iCsVpCPL3Bojl91focyJtxAc/MUkfy+1NRPA7fXCYuj02cDE6LhgSaVEoxXKdUxseO6eX2R34q4+alq4yv0tgiCjG83NdnNEjVx9+tM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UVC0b0NQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B26D8C4CEC8;
-	Tue,  3 Sep 2024 12:51:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725367909;
-	bh=O1/2050F39XQfvPLXCTizegImM8YWOlhzXwUWl0cmGc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UVC0b0NQj7rgTFak72/K9eNJK53Q/LY20+pdBaml/kH3932/NnVhKhTs2pwDi49mP
-	 37DpJeBWYNWqe8gIfuoVVB0nYjYID0ZJPxuY/01jDlqgcDSkkOkpdxKPWEYkTRRTEm
-	 7r4P4BmCHGVgyAH28hoc5UIoyBtz/2R95vJXgcrjYQ83gVK18S73YmvwAlkAo9kIur
-	 w6PVeG5Q05GIgwWqxrf0ISdswgNBBQxTJPB5jxb79iH4lOztZT34D+E1Up3oBxBYao
-	 gleCTnUrHgUsMxH9XQGGNAvADbVYuO66wCq1tRN9YdsB4vaWONy8KNZTkAiGti2bjR
-	 2QZms2dkKEAmQ==
-Message-ID: <558d6214-b408-484c-992e-bbb58ffd161b@kernel.org>
-Date: Tue, 3 Sep 2024 14:51:43 +0200
+	 In-Reply-To:Content-Type; b=ga/burw98hePxrBg02U+SpuOSONILZGukcOahvxeFNlnW9pV8A5THk9yZH9R63QiSvooaFksw0gpr002nDqEYno28og0vunZZ2tC5IBOUQLivcqdzlGWVI8GIKqN2+8flY6Nr2gRGMrEvPVpDfKq6+0mPl4LP62+fXLH/tzZI2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=OpBi4fYX; arc=none smtp.client-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
+Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
+	by cmsmtp with ESMTPS
+	id l6JQszfrYnNFGlTbJsVdFf; Tue, 03 Sep 2024 13:29:41 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+	by cmsmtp with ESMTPS
+	id lTbHsZjWOJxsOlTbIscKCv; Tue, 03 Sep 2024 13:29:41 +0000
+X-Authority-Analysis: v=2.4 cv=LsmUyGdc c=1 sm=1 tr=0 ts=66d70f45
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
+ a=IkcTkHD0fZMA:10 a=EaEq8P2WXUwA:10 a=-pn6D5nKLtMA:10 a=vU9dKmh3AAAA:8
+ a=P-IC7800AAAA:8 a=HSDmG33uGC2uzMr5-wEA:9 a=QEXdDO2ut3YA:10
+ a=rsP06fVo5MYu2ilr0aT5:22 a=d3PnA9EDa4IxuAV0gXij:22 a=ZCPYImcxYIQFgLOT52_G:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+	; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=EjfaqFqF+XmogTpsGQkFuU8JUSJBnI7pUXSKmfynpwM=; b=OpBi4fYXDVLm0dvEsGWGdc3T6p
+	hRQh5liMUUNo5hOBsz/2Cj7JJMDgYTsRrMRkgSOUP+w3K6p3iedTqLQ38rHqyUbEfsy96WGpNsiYr
+	jrXPATJ+oOwe45v6GvbdC5pu8f/Fik3npp3nXw0CsZ4iqt7vl4LCtVxcWLxhHfnatvls21gIjV77h
+	qju6o2emyvn5z6lULd9qvk1G5liL3Ogu/9Hu47fWCzltVpQAmdPGqu6dC+uLPfSMfOecTnydLOUjn
+	OvrcUnSbO6VYA04LwEvN8zlFEqi9/xkd+HFocDdu2B3uOtsJY4Q5VO/6MWuH9eW/HjuJTA6zBxA0X
+	37ZE9kjg==;
+Received: from [122.165.245.213] (port=37192 helo=[192.168.1.106])
+	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <karthikeyan@linumiz.com>)
+	id 1slTbC-00282Z-1y;
+	Tue, 03 Sep 2024 18:59:34 +0530
+Message-ID: <2374e41a-0ba2-4a99-906d-8c165baa6344@linumiz.com>
+Date: Tue, 3 Sep 2024 18:59:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,91 +69,84 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/8] dt-bindings: vendor-prefixes: Add Relfor labs
-To: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>, robh@kernel.org,
+Subject: Re: [PATCH v2 5/8] dt-bindings: rtc: microcrystal,rv3028: add
+ clock-cells property
+To: Krzysztof Kozlowski <krzk@kernel.org>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de,
  alexandre.belloni@bootlin.com
 Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-rtc@vger.kernel.org
 References: <20240903105245.715899-1-karthikeyan@linumiz.com>
- <20240903105245.715899-7-karthikeyan@linumiz.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240903105245.715899-6-karthikeyan@linumiz.com>
+ <e1513eb7-4ac5-4703-b4ff-2791908f1ec8@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240903105245.715899-7-karthikeyan@linumiz.com>
-Content-Type: text/plain; charset=UTF-8
+From: karthikeyan <karthikeyan@linumiz.com>
+In-Reply-To: <e1513eb7-4ac5-4703-b4ff-2791908f1ec8@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 122.165.245.213
+X-Source-L: No
+X-Exim-ID: 1slTbC-00282Z-1y
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.106]) [122.165.245.213]:37192
+X-Source-Auth: karthikeyan@linumiz.com
+X-Email-Count: 1
+X-Org: HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfIHktvZDY5K8GBsd6VhpnIk7JE9r+wK1s/TZChKzGutnnJnD2V+2/Pze8cbNs7xrKJa4vD7N0ChM6m2YWxz9CkBU9QnefSFiikCCETiq3U5WQxR3nRXd
+ 9v1B/A+kkj6T7a0fSni0BLhc2jBg+L5Yl4oVxgwN30r0VENlengNZnLVLCphQoZyMlXZUsPWRhZH5rjeRxxovyh9h8WIU3d6X3s=
 
-On 03/09/2024 12:52, Karthikeyan Krishnasamy wrote:
-> Add Relfor Labs Pvt. Ltd. vendor prefixes
-> https://www.relfor.com/
+
+
+On 9/3/24 18:21, Krzysztof Kozlowski wrote:
+> On 03/09/2024 12:52, Karthikeyan Krishnasamy wrote:
+>> consume clkout from rv3028 rtc which is able to provide
+>> different clock frequency upon configuration
+>>
+>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+>> ---
+>>
+>> Notes:
+>>      v2:
+>>      - fix commit message subject
 > 
-> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
-> ---
+> <form letter>
+> This is a friendly reminder during the review process.
+> 
+> It looks like you received a tag and forgot to add it.
+> 
+> If you do not know the process, here is a short explanation:
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions, under or above your Signed-off-by tag. Tag is "received", when
+> provided in a message replied to you on the mailing list. Tools like b4
+> can help here. However, there's no need to repost patches *only* to add
+> the tags. The upstream maintainer will do that for tags received on the
+> version they apply.
+> 
+> https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
+> 
+> If a tag was not added on purpose, please state why and what changed.
+> </form letter>
+> 
+> Best regards,
+> Krzysztof
 > 
 
-<form letter>
-This is a friendly reminder during the review process.
+Apologies. I'm new to the process, somewhat i'm missing this 
+information. I will change it in the future patches.
 
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
-
-If a tag was not added on purpose, please state why and what changed.
-</form letter>
+Thanks for suggesting b4, i will look into it.
 
 Best regards,
-Krzysztof
-
+Karthikeyan
 
