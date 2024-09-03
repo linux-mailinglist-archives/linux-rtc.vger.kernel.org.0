@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-1853-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1854-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 670BB969E57
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 14:51:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4B34969E5B
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 14:51:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E5C4288613
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 12:51:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 911C91F241D3
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 12:51:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E4DD1CA6B2;
-	Tue,  3 Sep 2024 12:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D701CA6B5;
+	Tue,  3 Sep 2024 12:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ho05xSgr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UVC0b0NQ"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD121CA687;
-	Tue,  3 Sep 2024 12:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE841CA687;
+	Tue,  3 Sep 2024 12:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725367903; cv=none; b=HojSGj3nvZiKYI8O6ySNld32C1am6IhU3Cg+CA2tJDzCSrx3FJXcOVXJQtLZGx2284dBGLuHMOM8COGjrLyZve0AF0qpNkbnB1tghAU/t4VLW11aU65rpwKdYl7ozgm09LBTNYsS11TmWEhV3Tb5hQkrzJn/IfgW2Ey3DHd40WQ=
+	t=1725367910; cv=none; b=jEGokaDzu6x4LetYebBucIQV/S/Px1UsH0SpQnIPwtKx27hg1oHR3MU3GKmeKUyjZFa3U8BK5K3JbkrzID2GGMLZtXH25miFg+oKR7dz6WCRk1WEC0GMAUX09NNhiYp1UKRUpWCx5DRnxbbeQbP2Jt/qJcp87laVV9mhW1t39pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725367903; c=relaxed/simple;
-	bh=WdD25MY3O6Qs8Wn8SHi5GZCMGF2zWhsiSNgJz1FNdlk=;
+	s=arc-20240116; t=1725367910; c=relaxed/simple;
+	bh=O1/2050F39XQfvPLXCTizegImM8YWOlhzXwUWl0cmGc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KdiBsqdgjKcFL1+suzv4GD3wkEBLAu9DbkSNVB4xReDYfCwm9eRjP0/qcoLCZXHhxuXQvieFpRC13GP3lsHzzLscUAPxNGlYoAuoRS8Rojxby32KP4+g74I+Bq3KOKTR4+bzTwy+9VaritnRl/JkLNpyqBr826pZl+uSRhc6dVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ho05xSgr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B222C4CEC7;
-	Tue,  3 Sep 2024 12:51:38 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ghBmBWcVoUrdROecbWYx5vamBzFfbXqq0rtzVvKRJqpM44eoYc0E5IXxv/hUMFHXqSP9iCsVpCPL3Bojl91focyJtxAc/MUkfy+1NRPA7fXCYuj02cDE6LhgSaVEoxXKdUxseO6eX2R34q4+alq4yv0tgiCjG83NdnNEjVx9+tM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UVC0b0NQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B26D8C4CEC8;
+	Tue,  3 Sep 2024 12:51:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725367902;
-	bh=WdD25MY3O6Qs8Wn8SHi5GZCMGF2zWhsiSNgJz1FNdlk=;
+	s=k20201202; t=1725367909;
+	bh=O1/2050F39XQfvPLXCTizegImM8YWOlhzXwUWl0cmGc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ho05xSgrslgH6U5HNgp6vpWqSUk/WVhmkmjsugYTKHzqzIBlCI4ElvZMqqaKfsjKD
-	 3+e5C7WYX8plsmfpS4ky/W856coAoUtGT9hk7JdETFksQLoYkNeqCcxErgl4jLJsnr
-	 AEyqE6dH60SbauS4nG61ssY0+MF4KcFpr/bURozju5q5Mvf6/0MOZWosnG7DcF9LVw
-	 vCRgkclYbsuDcrfMxU4VwhwDqSbeF7J9sG9KSIGcGB/G3vbY3ihnGQ/easLhXH+rzq
-	 No+YP4IAS49c8i9o3wWcdYINWK7PmeE84kjZ9LFVnJXwWzQns+NuQqjz92DMiibGLg
-	 wNyeAi69ke+5Q==
-Message-ID: <e1513eb7-4ac5-4703-b4ff-2791908f1ec8@kernel.org>
-Date: Tue, 3 Sep 2024 14:51:35 +0200
+	b=UVC0b0NQj7rgTFak72/K9eNJK53Q/LY20+pdBaml/kH3932/NnVhKhTs2pwDi49mP
+	 37DpJeBWYNWqe8gIfuoVVB0nYjYID0ZJPxuY/01jDlqgcDSkkOkpdxKPWEYkTRRTEm
+	 7r4P4BmCHGVgyAH28hoc5UIoyBtz/2R95vJXgcrjYQ83gVK18S73YmvwAlkAo9kIur
+	 w6PVeG5Q05GIgwWqxrf0ISdswgNBBQxTJPB5jxb79iH4lOztZT34D+E1Up3oBxBYao
+	 gleCTnUrHgUsMxH9XQGGNAvADbVYuO66wCq1tRN9YdsB4vaWONy8KNZTkAiGti2bjR
+	 2QZms2dkKEAmQ==
+Message-ID: <558d6214-b408-484c-992e-bbb58ffd161b@kernel.org>
+Date: Tue, 3 Sep 2024 14:51:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] dt-bindings: rtc: microcrystal,rv3028: add
- clock-cells property
+Subject: Re: [PATCH v2 6/8] dt-bindings: vendor-prefixes: Add Relfor labs
 To: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de,
  alexandre.belloni@bootlin.com
@@ -59,7 +58,7 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-rtc@vger.kernel.org
 References: <20240903105245.715899-1-karthikeyan@linumiz.com>
- <20240903105245.715899-6-karthikeyan@linumiz.com>
+ <20240903105245.715899-7-karthikeyan@linumiz.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,20 +104,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240903105245.715899-6-karthikeyan@linumiz.com>
+In-Reply-To: <20240903105245.715899-7-karthikeyan@linumiz.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 03/09/2024 12:52, Karthikeyan Krishnasamy wrote:
-> consume clkout from rv3028 rtc which is able to provide
-> different clock frequency upon configuration
+> Add Relfor Labs Pvt. Ltd. vendor prefixes
+> https://www.relfor.com/
 > 
 > Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
 > ---
 > 
-> Notes:
->     v2:
->     - fix commit message subject
 
 <form letter>
 This is a friendly reminder during the review process.
