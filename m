@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-1858-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1859-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C86AE969FC7
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 16:04:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17231969FD1
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 16:05:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06E4D1C20C83
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 14:04:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79275B25917
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 14:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A467B1CA6BF;
-	Tue,  3 Sep 2024 14:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4004776E;
+	Tue,  3 Sep 2024 14:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KjMmgsSO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AerwbmcO"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CD88C07;
-	Tue,  3 Sep 2024 14:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB743FE55;
+	Tue,  3 Sep 2024 14:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725372270; cv=none; b=g7uG7hCDKrZisGY1H/r1Ci82u/brOyfqXI7PO9VnARF0JBx5HEo9g4sg9LRa2REsnxDmMvLN6S89ez7UUQWIr24PCY335FqKwzIAU8ha8/IBaJH13D93imLCDdwIeV1kfBh/IKBvIqxCioCG2DSF+FNx6IZ6GZXjCx6KEOwouo4=
+	t=1725372314; cv=none; b=kPlFdQtDCupNe5g1g8vfIS3lN8t/eYqD1ypvXopzMMU7JrMlyd8rcmb15FqYBl7pzBfQdaYh8WJc3el9XKyfIn4894FtbdPvkMLCI/3Pq2tqpRjSP+UNUgRCu7CPfivB4oSQCDStBwEU+2JkMnZldjC/7Xhxh4yekkq/sDzvBRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725372270; c=relaxed/simple;
-	bh=gUet/OBDK9ET7BiQLWA6gTEm0i9Y32UiFVRt1CJERgU=;
+	s=arc-20240116; t=1725372314; c=relaxed/simple;
+	bh=EB4Qn8QfYNvDbrC1h25pHRe0otvOHZqa46a2972CPJs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VcYbpLIx96I+SUTiaY/NIa68rOfrEhICm/kMznoa++wXNi/1xtNpLN+1auUjlDcyfe0EJXYC0FrIuPmC2MdbH5m1Z0lfXvdDPpHMwThW0OGWymL4EFycFfl/dGE07XeC3Nq8mstuQKrYBJu332dPE/YznSo3KKM+iOL18r/i7ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KjMmgsSO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B777DC4CEC7;
-	Tue,  3 Sep 2024 14:04:27 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=grWVNcOtCw/BKl4fwmYE592cNYFqaQF/ntM0oYnE5iouzBZurEO3nbrUlYevAjiFX+aI9GzOfzfrOs9wUuOp5d+f2HHrCOY0IFjKIqGrUsHFWa2F2Ipo/teLeW/y3bv0H63HzuOGgWSYQg+trwGUWXBFBeVIksQ4SCAk2LX4zb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AerwbmcO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BFEC4CEC4;
+	Tue,  3 Sep 2024 14:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725372270;
-	bh=gUet/OBDK9ET7BiQLWA6gTEm0i9Y32UiFVRt1CJERgU=;
+	s=k20201202; t=1725372314;
+	bh=EB4Qn8QfYNvDbrC1h25pHRe0otvOHZqa46a2972CPJs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KjMmgsSOegZelumsSDy730Orwbow9QKBJ3M3+uupedtCGChYcbZe3gGbxeyAx8Az7
-	 om7KYK/0T96miNtZbw1+CSAPkbCS3qxibo3CPqTKJBAoAOr3+SBS2jFxl0obzYaaq9
-	 66dAQ0TX4cu4ssrGDutkVmpN+dPhn8Ru0rBN64ZMg/mTqPUePDvhZIr9JMotaRZf+c
-	 80tl6ccIfdJGumjFU0RZ2d9K92vp+ulT6mHGnrGIgQlNT6swGG397gg8agY6KMfIC0
-	 gW9U3ICQ8z1XrPAPLny6kx317oFjgonUoFAkx8A3Ps6BzUU6J4kHfzvIoEtKzlJPQ0
-	 PvxP+VJRvHCDA==
-Message-ID: <7560bdd0-aafc-4c6a-b5a8-f50e9aa3124b@kernel.org>
-Date: Tue, 3 Sep 2024 16:04:25 +0200
+	b=AerwbmcOGrydYlAzihg7843x/7HSBRksRCRLEwKSv8/F/N3gtr0caALyj8o54Md5+
+	 fjsgmNfCHUVOTcnK3JnwEcOl4Pd0e+7K3dTQfW43xkVTQEWMhMkHxF0dYxTr7yyss2
+	 g5bMmqRPY1SSOSRXa8KPQ3A+kST2WYstcOTCmsRKvGIs6ilFXZlFQ3zO+IFnHhcjbW
+	 RJbC/2XGKv8ZvdWexJEnCIDBhnddPtiA+rTlU68XGUh0IB+4AG1nm+15ncqfnPmifn
+	 VMZ0kbhYmAXxodW5JuSL622RDE9P8xt6vF95aI2N2CZ9o6c96Ip+KIckeKvRj2re3D
+	 bVRKj9Zd5WW4w==
+Message-ID: <2804a57d-fb92-4317-b4c4-e1811a915265@kernel.org>
+Date: Tue, 3 Sep 2024 16:05:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] rtc: support for the Amlogic on-chip RTC
+Subject: Re: [PATCH v2 3/3] MAINTAINERS: Add an entry for Amlogic RTC driver
 To: xianwei.zhao@amlogic.com, Yiting Deng <yiting.deng@amlogic.com>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -58,9 +58,9 @@ To: xianwei.zhao@amlogic.com, Yiting Deng <yiting.deng@amlogic.com>,
 Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240903-rtc-v2-0-05da5755b8d9@amlogic.com>
- <20240903-rtc-v2-2-05da5755b8d9@amlogic.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240903-rtc-v2-3-05da5755b8d9@amlogic.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -104,34 +104,32 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240903-rtc-v2-2-05da5755b8d9@amlogic.com>
+In-Reply-To: <20240903-rtc-v2-3-05da5755b8d9@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 03/09/2024 09:00, Xianwei Zhao via B4 Relay wrote:
 > From: Yiting Deng <yiting.deng@amlogic.com>
 > 
+> Add Amlogic RTC entry to MAINTAINERS to clarify the maintainers
+> 
+> Signed-off-by: Yiting Deng <yiting.deng@amlogic.com>
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> ---
+>  MAINTAINERS | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 42decde38320..cdcd23456567 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2481,6 +2481,14 @@ F:	drivers/irqchip/irq-mvebu-*
+>  F:	drivers/pinctrl/mvebu/
+>  F:	drivers/rtc/rtc-armada38x.c
+>  
+> +AMLOGIC RTC DRIVER
 
-...
-
-> +	rtc->map = devm_regmap_init_mmio(&pdev->dev, base, &aml_rtc_regmap_config);
-> +	if (IS_ERR(rtc->map)) {
-> +		dev_err_probe(&pdev->dev, PTR_ERR(rtc->map), "regmap init failed\n");
-> +		return PTR_ERR(rtc->map);
-
-Nothing improved. Read the comment. Use git grep to see how this is done
-if the comment is somehow unclear.
-
-<form letter>
-This is a friendly reminder during the review process.
-
-It seems my or other reviewer's previous comments were not fully
-addressed. Maybe the feedback got lost between the quotes, maybe you
-just forgot to apply it. Please go back to the previous discussion and
-either implement all requested changes or keep discussing them.
-
-Thank you.
-</form letter>
+Nope. Read the note in the file about order.
 
 Best regards,
 Krzysztof
