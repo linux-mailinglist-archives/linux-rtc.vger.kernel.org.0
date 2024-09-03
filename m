@@ -1,59 +1,58 @@
-Return-Path: <linux-rtc+bounces-1860-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1861-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3119596A0FB
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 16:45:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5434B96A2AF
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 17:32:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA2731F238C3
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 14:45:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 004021F2945C
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Sep 2024 15:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E43C9154C1D;
-	Tue,  3 Sep 2024 14:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68BB1189539;
+	Tue,  3 Sep 2024 15:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uFwX5QNs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pspOMxW0"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84741547DA;
-	Tue,  3 Sep 2024 14:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C791189533;
+	Tue,  3 Sep 2024 15:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725374743; cv=none; b=nJ9SYl3xbad/WecOv0xk7oHGZJTL0D7tWQ3AwE+HHC7Xun9Xd4m2qtxaZYBa04PkFKzL/ubs9dIAs4YWlxHdpzVjU1KR3PkdvR++KBMKejfScshN7lCHvZOQqLHOjWaFosrdoiM3i8h1dTzMFohjUAN0Fy2upeEM2KHMxd95Gzo=
+	t=1725377338; cv=none; b=Js8vC9hFTMVZpdp42E+N/1Y2xwvxzXBER5Lccg7aKAvm5+thR95tmBO+XHMPz4GaBo8ZY/GP2CKHFyiGljqYuf8wqTVwbJznZntCzwfkwlRUY5dwX/yYGjvLkV/6vOeztc/gtPy+vkzwDfk2zN0zpLP9B953rlFKmkyE3Z9Lqr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725374743; c=relaxed/simple;
-	bh=iSDAPXcfXfi99MJkJaU478Nz0GEXXstJ4Q3Am5fSk+U=;
+	s=arc-20240116; t=1725377338; c=relaxed/simple;
+	bh=ALtY1uTGvm73ECIw1cW5WXPk2oh6kLs/WkkEuo01ZUs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ul4UF9QUCsF1aCtfZBLpv/y1DTVv3txZEIKj36Iqo+wE311GOMh8va7QXf5v9DFqVgLkiZcqyvJpBMC0xFOYfVhALcqVtU+ExuR1YhsX/rUopost6Mu+mDTdzR9xv2tp4KpdTJIWycrUGYjwf+jxQ+sGPXC5O54/dRODF1F8NNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uFwX5QNs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 153E1C4CEC7;
-	Tue,  3 Sep 2024 14:45:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oA7TjkqD8HisT6OndxfYJgjnbGSKH7wntwZ6w8T9rwYBjO+hxQ8lA05PwgWfDRGj5SdMPT51rA7cBVz90o98FJk8I6qjRbru5mwLo8ozfTHEgsTSxs46vESfuSdG63B+4CRWdD9SEK+uYti6ZcfkhXKon6Q1bGGykBkBqJps9AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pspOMxW0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD206C4CEC4;
+	Tue,  3 Sep 2024 15:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725374743;
-	bh=iSDAPXcfXfi99MJkJaU478Nz0GEXXstJ4Q3Am5fSk+U=;
+	s=k20201202; t=1725377338;
+	bh=ALtY1uTGvm73ECIw1cW5WXPk2oh6kLs/WkkEuo01ZUs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uFwX5QNs7hy9CFQx6BrFceUzU381Ex4ft3CHyRWKb6VMideDik8I7r4S8s8J5edC0
-	 XYs8gbnz1hRDvGh0qgbsnlpyPexKgxqGiULFprJHMC/zJh1HwWswe1AmSn0buV4GSo
-	 v5o5XiS/456Dr7W9EP7C8ZlOF09s/p/Fjfeh7exl/OTvIMrtwoENk018lBrPgfhBEz
-	 oW8iWpC/Z27HPBAr/kzJkTbHLeMuk6V1EG5bF2Ljgckd0okY05AXfI9ymzbVWRS67w
-	 FyWwI1S4a8WOHuU7+jemqYWUWxzRST1rKdonquAkpwaxR7rwt3neLL4c2+wQfqIDhw
-	 lC4KDofd7NYQw==
-Date: Tue, 3 Sep 2024 09:45:42 -0500
-From: Rob Herring <robh@kernel.org>
+	b=pspOMxW0pmWJxTJ4aiM+lyXKx17oey5qAUhcCxk7nC6mjvhzW6iA708Z9v7x6j6J5
+	 mcrblk+qCr7l7xazH6r7VAOweNCxy6mAJrGoYYSwVTe+7993xiAroPsRdrsWNnIA1M
+	 +BROm2gBmQS4BlEdvYypSd9WmlHNFRB6TxLNEQNDgJ7cPH3+2gVburrdpLy6dh6RYG
+	 jRnoE4S1mbkhL1AmKNVs8OAr6KIXIwNE5T+I+QCUxNdAgXu9a/tqDQsUXVK2bvyZpy
+	 2gTfWzEuLFi0xt9cc8AojJ9rTEYLUbtikv+12BXm++8JAFKA4Vhath36nCHioFuTuV
+	 JkI+Qx68p2fGg==
+Date: Tue, 3 Sep 2024 10:28:56 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
-Cc: krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de,
-	alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] dt-bindings: rtc: microcrystal,rv3028: add
- clock-cells property
-Message-ID: <20240903144542.GA985263-robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+	conor+dt@kernel.org, krzk+dt@kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	alexandre.belloni@bootlin.com, heiko@sntech.de,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2 7/8] dt-bindings: arm: rockchip: Add Relfor Saib
+Message-ID: <172537733571.1049795.2978620254243576563.robh@kernel.org>
 References: <20240903105245.715899-1-karthikeyan@linumiz.com>
- <20240903105245.715899-6-karthikeyan@linumiz.com>
+ <20240903105245.715899-8-karthikeyan@linumiz.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,42 +61,24 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240903105245.715899-6-karthikeyan@linumiz.com>
+In-Reply-To: <20240903105245.715899-8-karthikeyan@linumiz.com>
 
-On Tue, Sep 03, 2024 at 04:22:42PM +0530, Karthikeyan Krishnasamy wrote:
-> consume clkout from rv3028 rtc which is able to provide
-> different clock frequency upon configuration
 
-Please write complete sentences.
-
-The subject is wrong. There is no such property 'clock-cells'.
-
+On Tue, 03 Sep 2024 16:22:44 +0530, Karthikeyan Krishnasamy wrote:
+> Add devicetree binding for the Relfor saib board which
+> is based on Rockchip RV1109
 > 
 > Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
 > ---
 > 
 > Notes:
 >     v2:
->     - fix commit message subject
+>     - fix wrong usage of SoC enum
 > 
->  Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
-> index 5ade5dfad048..cda8ad7c1203 100644
-> --- a/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
-> @@ -22,6 +22,9 @@ properties:
->    interrupts:
->      maxItems: 1
->  
-> +  "#clock-cells":
-> +    const: 0
-> +
->    trickle-resistor-ohms:
->      enum:
->        - 3000
-> -- 
-> 2.39.2
-> 
+
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+
 
