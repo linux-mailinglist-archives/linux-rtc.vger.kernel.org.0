@@ -1,98 +1,81 @@
-Return-Path: <linux-rtc+bounces-1875-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1876-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 097A896C11C
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Sep 2024 16:47:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8425E96E19E
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Sep 2024 20:10:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45AA7B20D54
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Sep 2024 14:47:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E7F21F22F0C
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Sep 2024 18:10:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D68021DA2FD;
-	Wed,  4 Sep 2024 14:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7052B17A938;
+	Thu,  5 Sep 2024 18:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UKR11tVw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C0426AED;
-	Wed,  4 Sep 2024 14:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0021C2E;
+	Thu,  5 Sep 2024 18:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725461236; cv=none; b=c1WwcVdQrxIOeL+sIMUlniwfllciJQxEawVaz3zySP5YvIvcLIdQ9zfvAnSggoEU/1dMptpAgVzIpAuRFz9MPzaxyh+SiTy0a7C9u5+1pdISkcQceTe4xcnecFLVfKbpI67CwFy71iU2cbZ+z9znnb9iSG9rMS07ZLo0xUZ2XLw=
+	t=1725559795; cv=none; b=Xr18FvXjTNR/LfSXmUlkMIEhJzfFUTwWaAli3JLtuZ8H7Z2IbqWCPW1EWYBSRQjeUE8ucY/pL6bufVDUp3oDiDguMlydiFe1l+rsAMkL/SYlqYOahtXKogxIxSYT0R+RROmePbp79UjCvH9/R+H/R2hHYm7rYVzvE4tg2cVaeNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725461236; c=relaxed/simple;
-	bh=AKet6FBn6erAGoQQYdu36m7bdCrh3rvMBwarDpAMcrk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nFEHlB+enhoi8iaIX4rXD9UVd3Qnp5znMyXU4C/rkrUlSoIPSba0bT8SnSGxKcGAYcd8dPEka1KqH1vUjo20NrctqV4cbL8tMguvPI1P+ZXojaLzGTCnaJrLiwvv/1aCuV9pBSqaTGcJKXF3Kqk9sApQeooRqT00JsXQcN9bgg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f409c87b07so85498511fa.0;
-        Wed, 04 Sep 2024 07:47:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725461232; x=1726066032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AKet6FBn6erAGoQQYdu36m7bdCrh3rvMBwarDpAMcrk=;
-        b=Z9QvfR2ZJEjdabaU1fe/UKOg7Ku8LKaZC59oDU9ZmJ5wmBGp/6HPnSvlaoES+PXU96
-         n9qE2HJDMjYw8kdByzitGYaiYjDW69G5/GgWTT5+nGAopQdhxBki07hM2vHsWAIjWHXT
-         N/rEMVMapPS6YeKkvq9HHVPq1Siq5Om9FKiCMHRELhFXPNoyZjaNS4AuSQGnuaCgLgwL
-         /HznCCB2OON2GUjSaXzOVr/yE1wkR5vgBKxnXaOeLvF1ZnnAe4VC/Wsvq03715JZCpDZ
-         jzmE9H8ew3nZoluHJEfO0HQq/Rq8iNbQ6KIeiwgU9+dDCDt3uF3aLjMmEzYysszr0F2e
-         bwWw==
-X-Forwarded-Encrypted: i=1; AJvYcCU3Kv6tDMFaJVJFVtHbEnmGX+kRJa1XcAYYPMafNU6dcyUWidbD9s7u9FXL7Ibc0R+OO/WDlF519fxe@vger.kernel.org, AJvYcCXV4PADS9MwMgGFqnKwH948jNra3MyQmNMEUfzjORWK0BwmgtqF8096i7nPnkVk/JaA+4wZ3dXpjQXtwyM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXjSkA4AKAYBCWDHYMk3c0dXt393HVO8UzYM+UR2mbIpGTsi5N
-	qY7ffLMypZsWyBf8Bexd+8Pod7rYzkojoMxx7SQ4yBTDiqH9kcJEMNKExoWA
-X-Google-Smtp-Source: AGHT+IFgHtRvCcjHvQ9ujMjU3x5BIGydGDr6ZD3YCgJqy8xeKbeSNLstFPzSCZ7hi8q9WTgnxBmauw==
-X-Received: by 2002:a05:6512:2214:b0:533:47ca:9773 with SMTP id 2adb3069b0e04-53546bb84d8mr12533396e87.57.1725461230571;
-        Wed, 04 Sep 2024 07:47:10 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5354084d879sm2387334e87.257.2024.09.04.07.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 07:47:10 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2f4f505118fso75494351fa.3;
-        Wed, 04 Sep 2024 07:47:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW/SlIhMbKebZIYxanRazU0j+KFC5gSOiasLQNca00wy6rQoUQ/iixFYdp72wLRqMlSmF2U4uYNgLfm@vger.kernel.org, AJvYcCWc2dxqFg3gXc38VstpuK9TvbJeP1tKpbCL6MVsQA0gCVZinTZnKeikptSdrCs6IAKbSR1+tzVRzW1iMDY=@vger.kernel.org
-X-Received: by 2002:a05:651c:4cb:b0:2f6:2858:a0b4 with SMTP id
- 38308e7fff4ca-2f62858a308mr101592101fa.19.1725461230260; Wed, 04 Sep 2024
- 07:47:10 -0700 (PDT)
+	s=arc-20240116; t=1725559795; c=relaxed/simple;
+	bh=2Kr5c7ACVjf3HcGMzj4Ae2HcwBKC3Tm5MDry+iTMW38=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=ncsa0QWPhGIojKTQTXaTwPsWrSmjatGxWjafnwzmP0bdHgoUlKbmlkwhJoOmk1pTOK3ZuRFbp6blaqrPoRTNblkMxT0bsOwsQ8W3Dr1jehpya6hrhHICj/GN1JJX1E8Nf3CCHltJZDmyUmG3Yskc2Ja/ZuHHc8k8Lkc5e1Y0ud4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UKR11tVw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BC0C4CEC3;
+	Thu,  5 Sep 2024 18:09:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725559795;
+	bh=2Kr5c7ACVjf3HcGMzj4Ae2HcwBKC3Tm5MDry+iTMW38=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=UKR11tVwN3Zct+7Kpwpg3CyRWI5i1xe8rko66a7OD+OeS8dNzNoXqQraqnH7UkXON
+	 llTaJnxjE8a7pHBO+qymvjgm8Qf0li/2UOlE9tL8+2SZaKzZzGJFTpP2BJrlN4sydQ
+	 t9Dce5y+RNcRXHEXUKxeMMjM34TlxUw6X5DrSo/3OJ6NNJqs8Pfb/woYdq7Rm4KJix
+	 3VBGG2KdTl+laUl3dWgKr0nUrJTtMliwTTdMW9ac6HHXqgHe7ZqLdxbORgW/fPtFv/
+	 aFdOVk7aM9P0q8d63lNxngpAVozVVjcP72O/9PW+F0qchbCNeuHYu5p828OviQo4HK
+	 bbGPFUPpAAHxA==
+Message-ID: <c744cf7a70a3f97722146215a7620cfb.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240730194905.2587202-1-mwalle@kernel.org>
-In-Reply-To: <20240730194905.2587202-1-mwalle@kernel.org>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Wed, 4 Sep 2024 22:46:57 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64SCQbfW=kKU5306fk8MrhBtsjpXX1YaWsXHV5fso-dcA@mail.gmail.com>
-Message-ID: <CAGb2v64SCQbfW=kKU5306fk8MrhBtsjpXX1YaWsXHV5fso-dcA@mail.gmail.com>
-Subject: Re: [PATCH] rtc: sun6i: disable automatic clock input switching
-To: Michael Walle <mwalle@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <d8303146-89e0-4229-a3fe-9f3c42434045@tuxon.dev>
+References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com> <20240830130218.3377060-8-claudiu.beznea.uj@bp.renesas.com> <83fac884d749bda0cf0b346e4e869bc8.sboyd@kernel.org> <d8303146-89e0-4229-a3fe-9f3c42434045@tuxon.dev>
+Subject: Re: [PATCH v3 07/12] arm64: dts: renesas: r9a08g045: Add VBATTB node
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+To: alexandre.belloni@bootlin.com, claudiu beznea <claudiu.beznea@tuxon.dev>, conor+dt@kernel.org, geert+renesas@glider.be, krzk+dt@kernel.org, magnus.damm@gmail.com, mturquette@baylibre.com, p.zabel@pengutronix.de, robh@kernel.org
+Date: Thu, 05 Sep 2024 11:09:52 -0700
+User-Agent: alot/0.10
 
-On Wed, Jul 31, 2024 at 3:49=E2=80=AFAM Michael Walle <mwalle@kernel.org> w=
-rote:
->
-> The V3(s) will detect a valid external low frequency clock and if it is
-> not present will automatically switch to the internal one. This might
-> hide bugs and (hardware) configuration errors. It's even worse because
-> the internal RTC runs significantly slower (32.000Hz vs 32.768Hz).
-> Fortunately for us, the V3(s) has an (undocumented) bypass of this
-> switching and the driver already supports it by setting the
-> .has_auto_swt flag.
->
-> Signed-off-by: Michael Walle <mwalle@kernel.org>
+Quoting claudiu beznea (2024-09-04 05:17:30)
+> On 03.09.2024 22:48, Stephen Boyd wrote:
+> >=20
+> > The node name should be something like clock-<frequency> but if the
+> > frequency is different per-board then I don't know what should happen
+> > here.
+>=20
+> The frequency should be always around 32768 Hz but not necessarily exactly
+> 32768 Hz. It depends on what is installed on the board, indeed. RTC can do
+> time error adjustments based on the variations around 32768 Hz.
+>=20
+> > Can you leave the vbattb_xtal phandle up above and then require
+> > the node to be defined in the board with the proper frequency after the
+> > dash?
+>=20
+> Is it OK for you something like this (applied on top of this series)?
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+Yes, it's too bad we can't append to a property in DT, or somehow leave
+alone certain cells and only modify one of them.
 
