@@ -1,133 +1,156 @@
-Return-Path: <linux-rtc+bounces-1877-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1878-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BC6796EBF0
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Sep 2024 09:28:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDBAF96EF7C
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Sep 2024 11:38:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5979D1C20DF6
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Sep 2024 07:28:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23C4D1C24034
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Sep 2024 09:38:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9E6614BF8A;
-	Fri,  6 Sep 2024 07:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5818E1C871F;
+	Fri,  6 Sep 2024 09:38:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="drSg8Fhk"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7365913E898;
-	Fri,  6 Sep 2024 07:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+Received: from classfun.cn (unknown [129.204.178.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481241C870B;
+	Fri,  6 Sep 2024 09:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725607735; cv=none; b=md65/aYP96iCJjVEo1IhDtiM7oHvVI4cSYvpAsDEbB9wU+nigGJdKPzDpGBny6JW0BadxZ8nsaKJsEpo+WXvCarHcjyySbk3LKNez6eB+GPeQ45q0/ld1UfP23A1SdpmoWSzfKW2757iY0tstqQkzM4UOpcmQN1oGJBE3CH6ilg=
+	t=1725615485; cv=none; b=XWOizhqOdW73iniJP62hXN8uMORcIBEk1kkt8Eayvvm+ZIz3gLQD/tSMDhonKRrslgEJJ0eyKAdFw0oZYhNL7tIiAU4t6hU0ziPAwOND5d93cQH99qL9sUp4VOFROkgBx6ucWs5UePmGqe97WC4phfJ+RlKOrlal2vM0U7hdOu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725607735; c=relaxed/simple;
-	bh=6XBwn2hugRbWAd5VsP7HVR5H6Ag2j9H4A9SlK666470=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qBzgRIRLCEqLNfqcBU1bS0+HHJOY6FIx2VogoFBNa88h9TftiVH8SGjqTaJ6jlIW+oQDFPwL68Haf0vzV+SR386VK33UuHZhep4oj8hJEdi4SmUtMObMUo0noFKJnAzUy0EadJNacBEehEFHGyL7FNfy38raMHMNq73EOPhXMZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6daf46ee332so16974377b3.0;
-        Fri, 06 Sep 2024 00:28:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725607732; x=1726212532;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xuzw7zJ2WWQZhbbGEQc9vSAGZuPiQIjz91qfszNVDqE=;
-        b=XvBx4r9vouuBBmRzH1VXedpwKxe6YvcqjVMGBL1dBDEVoBVKOUAKuyBLcSpiLcWJLb
-         3J0HxufYOL+7DQMxByCCW1dtJHa/fdXi/22tr8EHu+OHTAxu9xA1KzrFGkQNomQAF701
-         TVJmc38pKRgx0OEbIWv50eVLifS1XU12t0l5qARQ8o7UNdzCby3koiq//JuorkuG5A3K
-         3hNiX6e4MKQZaosG3Qxc5Ov/5QWCLxxIxfthT6sDotRljjno7rwiK2UUHz9/L7h2lGGp
-         tjODaJ5CVhqQljtd2JrIJs/zPE6JhW+XQbGZYAbUIBIv5z53JCTlsvLzZkpOF4+WbTLJ
-         Xdmg==
-X-Forwarded-Encrypted: i=1; AJvYcCUewtGBMcEWiZkXOx22UV4emwVsMdo/GmQ30vlMZMNRAgAE5ywzUF4I/EnavpecsUxAHUzRACeRKCsbFmFk@vger.kernel.org, AJvYcCV0zNpYf8hea+2a/ZFrQ54pld+f6VYTF8zC7NM5R8t7ZmorfvvOs85eKNP5u6nL5j2h/xm9hkW9NoBf@vger.kernel.org, AJvYcCVVeteaCY4TFBMJiIe1NleObqNsZ8NG8aids8uBdSaeWN/BWMFIacKZ6FZdpMmy5nu/pEsmTaLcFiNj@vger.kernel.org, AJvYcCW5ufjzKsPx5TgotR1IR+K4x1XYvSERbvpO/y1DV8GjsOPtjfEb+fcApQWP/nCQLKiMMJBRJfix9CQsWSn/GINwF+A=@vger.kernel.org, AJvYcCXoTWwNfWUX5EAC5zBm/Vf0HePvRZzUBBMAMNUGxPWkfyMtZOr6ozeqL2UpYaC9u+zjCXd59M4JfIYr@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHgCG6wcT/hsef1aiQKaFCa6C6azwJUv2Jaygdcz0FhydPHf6N
-	z10/LUAhj/K0T7WWGOGt6W3tPEO7OhbktEzuuZ0trZBRB/y14yViwPIEpx5o
-X-Google-Smtp-Source: AGHT+IEWLkp5V8/D7wdzEil1VKsHw98JWqy9UNByuten1XWqiU0DRfTGfSBOpIqC/dNcoLDg7dBWfg==
-X-Received: by 2002:a05:690c:688c:b0:6d3:b708:7b1a with SMTP id 00721157ae682-6db45165782mr19861737b3.42.1725607732012;
-        Fri, 06 Sep 2024 00:28:52 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d40f24aafcsm27836357b3.89.2024.09.06.00.28.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2024 00:28:51 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6d3f017f80eso14443407b3.1;
-        Fri, 06 Sep 2024 00:28:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUA9j0xvlPxJYoL8e9I09mdmqh3W28OZhcIwXiKP2kk/YVYoOC+RXXdArW0HCojqHoC+63DYnfIYTpz@vger.kernel.org, AJvYcCUsQPfpWni/xzSKycRS9hRjY7zbAk/zfSl6SY/4vaaS9xghI66pJEDtb4xOetDQu3ay0kHJMyVJfbVM@vger.kernel.org, AJvYcCWmwVdhPmSbX+bf4tbUdUbuDhxC1+hHgb9cVztyJY75S1CDgAaXRc1ulg4s+8LDwsM23mP20cBo3+XlAzsaVk0TCpA=@vger.kernel.org, AJvYcCXRDOz4cRMI6Yq5rghWpR5Ed4PDprNov9Dq7ij6iI79pTWyiQ7oEXDuhKQac6+dQsSsrJLezuQStrek@vger.kernel.org, AJvYcCXWi8WINbPHT+gJBbOdGpB3w0djwpn5re5CBdcBkhB7iTFDYHs357Ql8gpFTWB1JDFXk9jBbAE9Xppi6CO4@vger.kernel.org
-X-Received: by 2002:a05:690c:4391:b0:6b0:e93b:7179 with SMTP id
- 00721157ae682-6db44f41516mr13823817b3.26.1725607731490; Fri, 06 Sep 2024
- 00:28:51 -0700 (PDT)
+	s=arc-20240116; t=1725615485; c=relaxed/simple;
+	bh=0cWAEMyIHMK5hKqCiTZBW3Hcb6kQYvI3HtqeHMi2no4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CdDCt7uXIqD4QC9/cvrm0Uu8++2BAxM5+GcDt0p6chN0HMS6EuoVNdy3n5+eKQppkyWGj3lvQlYDYmN183ScjcmrCDt9WpquzkgxYEJSbK8cz6ubg8ZM7qTvJ4Ab4dtvWYcOadryVIx+ahX2ZmxOp77g0SQQyLCFWTYSZm/s2aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=drSg8Fhk; arc=none smtp.client-ip=129.204.178.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
+Received: from bigfoot-server-storage.classfun.cn (unknown [124.72.163.35])
+	(Authenticated sender: bigfoot)
+	by classfun.cn (Postfix) with ESMTPSA id 1447F789FD;
+	Fri,  6 Sep 2024 17:37:42 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 1447F789FD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
+	s=default; t=1725615473;
+	bh=tyBtwkNnhg6jrvb3pwGGUkiw4PdPR9/Ska2BS2U9HwQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=drSg8FhkBGDvt0ogiXR5j9FZTpSiNbJJ0Vg4jDlDzlUVLImcJFq6oI7EFl/IyaB6Q
+	 UI4/HSsbUgIfntf02tMCCIX6gZHsoPotBcIOKeo2h08l6hD4qIF7a9GNG0udfQ9mGu
+	 E1L9SlY3LJFxoFLLIej8DpWdiqUQsUeClziaoHZE=
+From: Junhao Xie <bigfoot@classfun.cn>
+To: devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Chukun Pan <amadeus@jmu.edu.cn>,
+	Junhao Xie <bigfoot@classfun.cn>
+Subject: [PATCH 0/9] Introduce Photonicat power management MCU driver
+Date: Fri,  6 Sep 2024 17:36:21 +0800
+Message-ID: <20240906093630.2428329-1-bigfoot@classfun.cn>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
- <20240830130218.3377060-8-claudiu.beznea.uj@bp.renesas.com>
- <83fac884d749bda0cf0b346e4e869bc8.sboyd@kernel.org> <d8303146-89e0-4229-a3fe-9f3c42434045@tuxon.dev>
- <c744cf7a70a3f97722146215a7620cfb.sboyd@kernel.org>
-In-Reply-To: <c744cf7a70a3f97722146215a7620cfb.sboyd@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 6 Sep 2024 09:28:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX40ROk2vZe9VHoiPDJCvtrjto+swkicv29LFyQ7zoVng@mail.gmail.com>
-Message-ID: <CAMuHMdX40ROk2vZe9VHoiPDJCvtrjto+swkicv29LFyQ7zoVng@mail.gmail.com>
-Subject: Re: [PATCH v3 07/12] arm64: dts: renesas: r9a08g045: Add VBATTB node
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: alexandre.belloni@bootlin.com, claudiu beznea <claudiu.beznea@tuxon.dev>, 
-	conor+dt@kernel.org, krzk+dt@kernel.org, magnus.damm@gmail.com, 
-	mturquette@baylibre.com, p.zabel@pengutronix.de, robh@kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Stephen,
+Initial support for the power management MCU in the Ariaboard Photonicat
+This patch series depends on Add support for Ariaboard Photonicat RK3568 [1]
 
-On Thu, Sep 5, 2024 at 8:09=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wrot=
-e:
-> Quoting claudiu beznea (2024-09-04 05:17:30)
-> > On 03.09.2024 22:48, Stephen Boyd wrote:
-> > > The node name should be something like clock-<frequency> but if the
-> > > frequency is different per-board then I don't know what should happen
-> > > here.
-> >
-> > The frequency should be always around 32768 Hz but not necessarily exac=
-tly
-> > 32768 Hz. It depends on what is installed on the board, indeed. RTC can=
- do
-> > time error adjustments based on the variations around 32768 Hz.
-> >
-> > > Can you leave the vbattb_xtal phandle up above and then require
-> > > the node to be defined in the board with the proper frequency after t=
-he
-> > > dash?
-> >
-> > Is it OK for you something like this (applied on top of this series)?
->
-> Yes, it's too bad we can't append to a property in DT, or somehow leave
-> alone certain cells and only modify one of them.
+Currently implemented features:
+  Implement serial communication protocol with MCU [2].
+  Support watchdog in MCU.
+  Shutdown by power button and system notifies MCU to power-off.
+  Read charger and battery supply voltage and simply calculate capacity.
+  Read board temperature sensor.
+  Set status of the network status LED.
+  Read and set the MCU real-time clock date time.
 
-My main objections are that (1) this approach is different than the one use=
-d
-for all other external clock inputs on Renesas SoCs, and (2) this requires
-duplicating part of the clocks property in all board DTS files.
+[1] https://lore.kernel.org/linux-arm-kernel/20240906045706.1004813-1-bigfoot@classfun.cn/
+[2] https://photonicat.com/wiki/PMU_Protocol
 
-Gr{oetje,eeting}s,
+Junhao Xie (9):
+  mfd: Add driver for Photonicat power management MCU
+  power: reset: add Photonicat PMU poweroff driver
+  watchdog: Add Photonicat PMU watchdog driver
+  power: supply: photonicat-supply: Add Photonicat PMU battery and
+    charger
+  rtc: Add Photonicat PMU real-time clock
+  hwmon: Add support for Photonicat PMU board temperature sensor
+  leds: add Photonicat PMU LED driver
+  dt-bindings: Add documentation for Photonicat PMU
+  arm64: dts: rockchip: add Photonicat PMU support for Ariaboard
+    Photonicat
 
-                        Geert
+ .../hwmon/ariaboard,photonicat-pmu-hwmon.yaml |  40 ++
+ .../leds/ariaboard,photonicat-pmu-leds.yaml   |  41 ++
+ .../mfd/ariaboard,photonicat-pmu.yaml         | 107 ++++
+ .../ariaboard,photonicat-pmu-poweroff.yaml    |  34 ++
+ .../ariaboard,photonicat-pmu-supply.yaml      |  55 ++
+ .../rtc/ariaboard,photonicat-pmu-rtc.yaml     |  37 ++
+ .../ariaboard,photonicat-pmu-watchdog.yaml    |  37 ++
+ .../boot/dts/rockchip/rk3568-photonicat.dts   |  43 ++
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/photonicat-hwmon.c              | 129 +++++
+ drivers/leds/Kconfig                          |  11 +
+ drivers/leds/Makefile                         |   1 +
+ drivers/leds/leds-photonicat.c                |  75 +++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/photonicat-pmu.c                  | 501 ++++++++++++++++++
+ drivers/power/reset/Kconfig                   |  12 +
+ drivers/power/reset/Makefile                  |   1 +
+ drivers/power/reset/photonicat-poweroff.c     |  95 ++++
+ drivers/power/supply/Kconfig                  |  12 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/photonicat-supply.c      | 250 +++++++++
+ drivers/rtc/Kconfig                           |  12 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-photonicat.c                  | 190 +++++++
+ drivers/watchdog/Kconfig                      |  12 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/photonicat-wdt.c             | 124 +++++
+ include/linux/mfd/photonicat-pmu.h            |  86 +++
+ 30 files changed, 1933 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ariaboard,photonicat-pmu-hwmon.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/ariaboard,photonicat-pmu-leds.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/ariaboard,photonicat-pmu.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/reset/ariaboard,photonicat-pmu-poweroff.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/ariaboard,photonicat-pmu-supply.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/ariaboard,photonicat-pmu-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/ariaboard,photonicat-pmu-watchdog.yaml
+ create mode 100644 drivers/hwmon/photonicat-hwmon.c
+ create mode 100644 drivers/leds/leds-photonicat.c
+ create mode 100644 drivers/mfd/photonicat-pmu.c
+ create mode 100644 drivers/power/reset/photonicat-poweroff.c
+ create mode 100644 drivers/power/supply/photonicat-supply.c
+ create mode 100644 drivers/rtc/rtc-photonicat.c
+ create mode 100644 drivers/watchdog/photonicat-wdt.c
+ create mode 100644 include/linux/mfd/photonicat-pmu.h
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+-- 
+2.46.0
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
