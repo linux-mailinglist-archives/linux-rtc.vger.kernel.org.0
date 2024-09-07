@@ -1,99 +1,138 @@
-Return-Path: <linux-rtc+bounces-1902-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1903-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76C3996FE45
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Sep 2024 01:01:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 968989700C1
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 Sep 2024 10:17:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E21D1C210B0
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Sep 2024 23:01:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91E1A1C21EFD
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 Sep 2024 08:17:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E6FF15A4B0;
-	Fri,  6 Sep 2024 23:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36B8149005;
+	Sat,  7 Sep 2024 08:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V9JGbMWo"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="hVLvXf3W"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E9C1B85DC;
-	Fri,  6 Sep 2024 23:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11E71B85E5;
+	Sat,  7 Sep 2024 08:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725663663; cv=none; b=Mxof9P7s2rUTbMymIIT/yjCB/xL/Pa4ayc9Pxhmpew0qxL1R+1f73TZJ08EE1ccE+IZZD7YF5bsAtaLlkrgQJa5TcOTeaTX37mchjxmeXGsKborNCftqKtn9hxm9jWyrcDE9VEsZw2rZKZDwtX/xxv2uu1cRi5K7JF0CYO53pVI=
+	t=1725697030; cv=none; b=WPZZ5x1Ej8mCdnKEFsBkJHlMmiU8wyEiMquPoj0Go5EoTpK7mnbKPeompjwCZNPXBbip/t55u9nm+iiTjacRnOW5/UH1qUAPgTnmM51T/A3tmzfh2h5hDlQPGal5usvnVvQ0NxY9nY6/ilyshjLkkJ4e4qmO9mQZM/gRfAqgyEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725663663; c=relaxed/simple;
-	bh=KAS/Rwnc7T0eZM71tzNaAc3sWj4LOqmY83CNc7otz+k=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=a5kZMcKWUtijiwa2d5g2olNyz8Ix2s5P9T1c5WPBUPhI0NLL5EoGAF2+FvQ0zIjddQ3QaR3xXtqTSeygrzG6mA+lnIbURqJ3Q2Y4KMil++50eHggSok2T6TjivYROCwcjETRl3lzcLimjTC6TDe9+mCX8LBSnpX9d/NGChdFUxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V9JGbMWo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA8FC4CEC4;
-	Fri,  6 Sep 2024 23:01:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725663662;
-	bh=KAS/Rwnc7T0eZM71tzNaAc3sWj4LOqmY83CNc7otz+k=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=V9JGbMWoTcRD+R7JyDvalu0KM0ftwD1NewkIvjjoXLdwmSTIv4ql+UD7IusXhbXw3
-	 C4Awf5d0kXFiXSFVoQIP/Ozn+dVnMI9XZAuMFRumtmsoJZD4C8cbbDrN/nom748O+U
-	 t9vNhe4N+QvEgPVi1cpvkmSSriqlPpZ3za/vquA22K/5IDlT3UCBBJ7QtAIHPErkMH
-	 pErs/lY+Fppj2KJsSQqW2rBQQ9dkd22FY9D56Nn5PbmU7KErcCNaVLkjtN/ZJblDqd
-	 yQgnoN6M9fYmYho+njxn3tlDKKWtoK2NC7lvwYqFUBRaOSGdBuyxarHuK2mtIInTSC
-	 VLHPd17TElaHg==
-Message-ID: <951b5c09c3ca2de3f0a28a078084f7dd.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1725697030; c=relaxed/simple;
+	bh=gvsW8BNIX7ljcrGWrKD6clzUjbfdkYMLn3v7uub/6MQ=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=izZkvzfm2bgO0AbUy73MfOVt9p6RZi9HBZYN78JKdjOyuK8fz91iUyIv+9S/xcoqqWkDrPXq8p1XyiQHzfmdway1rhJV8u8veIGrQTgg2uIB2AUgQ5WpfZl0cHztRz8LG9vMFVx5NJ8lkVTq3/5GXTUFuLRD3yUNS8SU2X3kNEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=hVLvXf3W; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1725697009; x=1726301809; i=markus.elfring@web.de;
+	bh=1Mu96APm/7R/w7K+9IvvOwhZsTEP32teqBSIVibe/dU=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=hVLvXf3WFsdgdiJPtcuSILojs7qpt2WHEdbgdm5cVtsG4xon+vSeZLZnhXniazQk
+	 vv5pm3O2k+FcAMYOhlufRRjNTcEVfqDvc+cPrz+Un0QQXuGuNyIVSLFSATWxc8U6r
+	 Cxc5HHgJgp77LpT5gUf4W83AwXdVW1u78GCWRcHGg5r1Sho9t9zHTGPPzg7kIotiC
+	 pCSitXocBLx0kJ0N9a+Os4tRML0+sKXCIaEmuVvNdPfg9s8qnO/UdDwRULDs5b4pb
+	 +Vgw7yeFpbJMx/WHaTsv66k/GBTVRi78QU0Di3V/7apVmqlJYsiJMOGMxx7FNQf2+
+	 FlgP1xpQuFeXDLMyqw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MSZHv-1scDWM0IH3-00PRSE; Sat, 07
+ Sep 2024 10:10:27 +0200
+Message-ID: <d79dbfae-d50b-45e5-b430-be8106bbb03c@web.de>
+Date: Sat, 7 Sep 2024 10:10:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Chukun Pan <amadeus@jmu.edu.cn>, Conor Dooley <conor+dt@kernel.org>,
+ =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Jean Delvare <jdelvare@suse.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20240906093630.2428329-2-bigfoot@classfun.cn>
+Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240906093630.2428329-2-bigfoot@classfun.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAMuHMdX40ROk2vZe9VHoiPDJCvtrjto+swkicv29LFyQ7zoVng@mail.gmail.com>
-References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com> <20240830130218.3377060-8-claudiu.beznea.uj@bp.renesas.com> <83fac884d749bda0cf0b346e4e869bc8.sboyd@kernel.org> <d8303146-89e0-4229-a3fe-9f3c42434045@tuxon.dev> <c744cf7a70a3f97722146215a7620cfb.sboyd@kernel.org> <CAMuHMdX40ROk2vZe9VHoiPDJCvtrjto+swkicv29LFyQ7zoVng@mail.gmail.com>
-Subject: Re: [PATCH v3 07/12] arm64: dts: renesas: r9a08g045: Add VBATTB node
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: alexandre.belloni@bootlin.com, claudiu beznea <claudiu.beznea@tuxon.dev>, conor+dt@kernel.org, krzk+dt@kernel.org, magnus.damm@gmail.com, mturquette@baylibre.com, p.zabel@pengutronix.de, robh@kernel.org, linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 06 Sep 2024 16:01:00 -0700
-User-Agent: alot/0.10
+X-Provags-ID: V03:K1:3sDZvZ572CstfLRiymj0OEa2v50uxQRQS5dGEo6EFlvxjxYXotF
+ iqSgsOe0U9L+cf9Xd7SKvjmB4Ob5MfVx3nFns3ltwbXYO6Zvkj3hqOxCWZDHFKgRP2B5l7s
+ dnGTu2+IcVzqaedRB5bfzg4zd4MslQitWJZMwCfnV+eEszme1/BaaIf8r3D0eu7hwTiiX2C
+ bc+jMBkrtEYHS4L0Oa85Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:hQwvtSihhyM=;ZvsDh+ewC/rGs/AQZ4pUdxKdguu
+ /7Dlmmzgx7ViXxl9CTTAadFCgTm91BJX01+CMVanf86teKHwyxK7SkgfzcxZPyve5XX+BYTeF
+ oXnMG4+wx5/wIzRHIWE0hJZCJiCFKQ/p/UZ6F5NvVyyXYftPNxq4vQ9IGpc/+P653j9zrguhA
+ +Pj4916QdVnjdR0tkSKf++3qStUvAH5GMcJdpVID7c67Qh6Tk7M3BqB3YiFcbt0KUUzBtxPHU
+ 7gVf2awH+qCdGxzuGg0cIg6XShFH2FVeYk58i5ICM0V97v7X5YDFyUDt1io1TpQu26QekifgJ
+ Cm5pMDya9q2US3bNQWpg1Mc/HF/pqrYN1f05qa0rL2KUgayeT/kXQR4+WOMmfM2hoT5Z2gnw+
+ Uzjy02T697sGHOruySceLgBXsWCA249FnKqinrJYYjEO0vKjihdlywxrjkt8EUOZiFGIQ+qhm
+ 7D64lLz/WllzrR/SpFBsyMSy1CBj/jRoV/2rgywR8vRFZ/X2QegTm/QcRE9Nlv4edn2SrJNfp
+ Mt69oeHmHVQFMVbU6+ZblpjNZqk+otxn/G4wm41jJp1s7vWAca7l6N4MQ3+Db5IUWkaXTspXd
+ Bm8AAtRGtWKFFn8bKs9VxZHJvVOCFHetcuQDg75OeCRXwnAj3mzgfceboyahv2KgO5Vr+rlTp
+ oDvaVc8HMFq55qiNRjJjsIkjOfkTMxYgff3VwssoK9A9UuFffZ7Ao5UjcMDVRM1z6iF8jPNL9
+ vwQ6cSWf4lZAdcOIeup2zLFUoH7YzAMT5Wu43LBnW3tTo+Ab+U3nGmf4qh3X9n4ubmph3dh8d
+ Xe13PuDCHS/ZPGfSqe264SyA==
 
-Quoting Geert Uytterhoeven (2024-09-06 00:28:38)
-> Hi Stephen,
->=20
-> On Thu, Sep 5, 2024 at 8:09=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wr=
-ote:
-> > Quoting claudiu beznea (2024-09-04 05:17:30)
-> > > On 03.09.2024 22:48, Stephen Boyd wrote:
-> > > > The node name should be something like clock-<frequency> but if the
-> > > > frequency is different per-board then I don't know what should happ=
-en
-> > > > here.
-> > >
-> > > The frequency should be always around 32768 Hz but not necessarily ex=
-actly
-> > > 32768 Hz. It depends on what is installed on the board, indeed. RTC c=
-an do
-> > > time error adjustments based on the variations around 32768 Hz.
-> > >
-> > > > Can you leave the vbattb_xtal phandle up above and then require
-> > > > the node to be defined in the board with the proper frequency after=
- the
-> > > > dash?
-> > >
-> > > Is it OK for you something like this (applied on top of this series)?
-> >
-> > Yes, it's too bad we can't append to a property in DT, or somehow leave
-> > alone certain cells and only modify one of them.
->=20
-> My main objections are that (1) this approach is different than the one u=
-sed
-> for all other external clock inputs on Renesas SoCs, and (2) this requires
-> duplicating part of the clocks property in all board DTS files.
->=20
+=E2=80=A6
+> +++ b/drivers/mfd/photonicat-pmu.c
+> @@ -0,0 +1,501 @@
+=E2=80=A6
+> +int pcat_pmu_execute(struct pcat_request *request)
+> +{
+=E2=80=A6
 
-Can 'clock-ranges' be used here? Leave the cell as null in the SoC dtsi
-file and then fill it in with clocks property at the parent node. I
-think you'd have to use clock-names for this though.
+Under which circumstances would you become interested to apply statements
+like the following?
+
+
+> +	mutex_lock(&pmu->reply_lock);
+> +	if (request->frame_id =3D=3D 0)
+> +		request->frame_id =3D atomic_inc_return(&pmu->frame);
+> +	pmu->reply =3D request;
+> +	mutex_unlock(&pmu->reply_lock);
+=E2=80=A6
+
+A) guard(mutex)(&pmu->reply_lock);
+   https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/mutex.h=
+#L196
+
+
+
+> +		spin_lock_irqsave(&pmu->bus_lock, flags);
+> +		ret =3D pcat_pmu_raw_write(pmu, request->frame_id, req->cmd,
+> +					 true, req->data, req->size);
+> +		spin_unlock_irqrestore(&pmu->bus_lock, flags);
+=E2=80=A6
+
+B) guard(spinlock_irqsave)(&pmu->bus_lock);
+   https://elixir.bootlin.com/linux/v6.11-rc6/source/include/linux/spinloc=
+k.h#L572
+
+
+Regards,
+Markus
 
