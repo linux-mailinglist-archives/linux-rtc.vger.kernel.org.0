@@ -1,85 +1,88 @@
-Return-Path: <linux-rtc+bounces-1947-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1948-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F1B3975D44
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 00:31:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1AE7975D5E
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 00:48:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 259451F244C4
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 22:31:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13AEB2816AB
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 22:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05031BB684;
-	Wed, 11 Sep 2024 22:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3746E15442D;
+	Wed, 11 Sep 2024 22:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c6WBmUPo"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hikR++6v"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5DD1BA894;
-	Wed, 11 Sep 2024 22:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC32383B1;
+	Wed, 11 Sep 2024 22:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726093849; cv=none; b=hl2kkMEoVDLrjZ9VCGyZdIv/zk6ZfkuUwIHmuXj5rPJbrOhBacMoCljdE8wIf8Q/OdN7wdQKe/D8NJRA+xW+P91HUMEpP+FMQRv8HOq9G775TsQijApqmWLHAg0RfNvXDdaTlwqa4Das32gWKIUWOK1/XvofV0QBQYXNucYZk6U=
+	t=1726094927; cv=none; b=rRHSdhsJPC18GYhusBB/4aF1CVqjaTdJo0M4Yo3nrN7oLqK8cYaNcAPi8baBkC0bws1FCtLvkOIUegyDq4Zb1HJfPBmXOwmHHcFpF20yxyXvYRhj4tWup+cfUg+C8TApOIAzawCLGmyTjDozENF1Mg6tmA+5GbGGy4wu6ZLIYTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726093849; c=relaxed/simple;
-	bh=3yA1fLCRb88ToRCRxO/u7OC8Tvw0CXJoSnokE63e36c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eDs5qU1lVV8nROQTpxRjW2hTpb3CLi4E28pDexdmLk3gpkbjEO6XvuVWFSw/6gCbzIYCtI1UEyP/vG0VsnRPIJbpx+oOsKxH33ZSbkqIv4zU84nx0TAmcfwA0uk/prhfzKrZFGEGdUpnHOWQclKcoBapO/6dHKhXTqz6yhW0V28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c6WBmUPo; arc=none smtp.client-ip=217.70.183.197
+	s=arc-20240116; t=1726094927; c=relaxed/simple;
+	bh=Tc5shuOMZzW+/88t+jVa/Nub4HUlcTbmsCipiki5lHo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oVGbvy5WO2+ENCvoRmjKcUCNUIJk/6VDAOLi3vVg7k3Cvg8AYfjkgfLMLdmpcLEiybyrdyaDJWXhzH3UyOBhkIPGPg93UsnIJ9/AmLZv65LZO6VO7OCI1PbiEDJkrfn11WcnqiFZxVTWUfqmHjAp8xXz43ZX10dRCTZia0Y/YYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hikR++6v; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C80F41C0002;
-	Wed, 11 Sep 2024 22:30:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D6F0E60002;
+	Wed, 11 Sep 2024 22:48:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1726093846;
+	t=1726094923;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kSbquAOSSb9L6U3YXl0vG2FZny6Oz3AeoJa+Pl75X0Y=;
-	b=c6WBmUPoGo3EMNV70VLBKDjN0FALnRVP8ZEuEBbegkhCAnaSvL2aBV9PHzmuR3SuqszG1d
-	aeq5ujT6/F/PZflecW/eHvQ0hZbJ/rdBLwzuw01quPJNNPz0vt6wBVLk2z3ConrrTMfzbQ
-	cE3w6sUBnQdStbkKWUjFhk9NADdZ81ge/PY5lQu5CyP3n8ZVMbhBpJ7VSM0UgLRKtD7fts
-	rbdf0wKmBsMQ5auhDUBn0srMfaXpSb98FHu5aFWgFdclIRJ6rd3nR1oozaw+HKpNl/wKlN
-	pHtUtbvNCBYvBmwCuA3xj8djQd4IDmKcPQd/mqdrIjrNy6HeWUL9Xu61RVK35w==
-Date: Thu, 12 Sep 2024 00:30:45 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rob Herring (Arm)" <robh@kernel.org>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MlI9ZRyINMGOiAAIe2LMITH3pB8V1yKOxVxs3JxK3Pw=;
+	b=hikR++6vYCfe52Aw1uux0wyUlhKZJdiygOHYwJje8sY/t+6uzGRjFM+0c+hi9KOI6nKnl+
+	NAQxmqd1VTPRr1PX8IIpiey3TvYzQ09pqmR86CJutBI/um5iECV6FM/cUcIRXYufT2Y4Jm
+	nlNbZKNFBX+7QpT43dkdwHysFWvIY/QjvPtDU+BzYjCG8314K1gG9h4evirUgmiMrQkUMb
+	uWfHBeFlR9TAzGQFaX+WhH4Uzi+q3TlqZWBBa+Sfzp+94Aci03+z3Iq5zq0m8nY5mitnKW
+	KZCkbrNR8TuVWw5gZujSi1Sdk+2btKbOGhfAv775iHZxZYFHje+wcGctyKA/yw==
+From: alexandre.belloni@bootlin.com
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: rtc: Drop non-trivial duplicate compatibles
-Message-ID: <172609381391.1549758.12600929420614564199.b4-ty@bootlin.com>
-References: <20240910234431.1043923-1-robh@kernel.org>
+Subject: [PATCH] rtc: m48t59: set range
+Date: Thu, 12 Sep 2024 00:48:36 +0200
+Message-ID: <20240911224836.1571831-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240910234431.1043923-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, 10 Sep 2024 18:44:31 -0500, Rob Herring (Arm) wrote:
-> Several compatibles documented in trivial-rtc.yaml are documented
-> elsewhere and are not trivial, so drop them.
-> 
-> 
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Applied, thanks!
+The m48t59 leap year calculation will fail in 2100
 
-[1/1] dt-bindings: rtc: Drop non-trivial duplicate compatibles
-      https://git.kernel.org/abelloni/c/bf12e99b8342
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-m48t59.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-
+diff --git a/drivers/rtc/rtc-m48t59.c b/drivers/rtc/rtc-m48t59.c
+index cd2ca49805d8..5d30ce8e13ca 100644
+--- a/drivers/rtc/rtc-m48t59.c
++++ b/drivers/rtc/rtc-m48t59.c
+@@ -458,6 +458,8 @@ static int m48t59_rtc_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, m48t59);
+ 
+ 	m48t59->rtc->ops = &m48t59_rtc_ops;
++	m48t59->rtc->range_min = RTC_TIMESTAMP_BEGIN_1900;
++	m48t59->rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 
+ 	nvmem_cfg.size = pdata->offset;
+ 	ret = devm_rtc_nvmem_register(m48t59->rtc, &nvmem_cfg);
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.46.0
+
 
