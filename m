@@ -1,59 +1,59 @@
-Return-Path: <linux-rtc+bounces-1946-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1947-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5784975D40
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 00:31:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F1B3975D44
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 00:31:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BCF6B24F52
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 22:31:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 259451F244C4
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 22:31:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B40E1AED49;
-	Wed, 11 Sep 2024 22:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05031BB684;
+	Wed, 11 Sep 2024 22:30:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eLTAOgnK"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c6WBmUPo"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89051A3047;
-	Wed, 11 Sep 2024 22:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5DD1BA894;
+	Wed, 11 Sep 2024 22:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726093842; cv=none; b=gBbsf2KyiaFSkKQKhBil9vPQjPzpFx/msmafQDyyGwmCGrqMt3FSy3jToEueCBQhMDdR36WCZxwQ7tLg9pSgpDgRX1N1gMM/WVWG50boEfihmp6/VewtIIo+0XMpnOZVHtt2wtkHeoOP232FhZDJXVwGa7mY1Rr3l8+gdO3TiAA=
+	t=1726093849; cv=none; b=hl2kkMEoVDLrjZ9VCGyZdIv/zk6ZfkuUwIHmuXj5rPJbrOhBacMoCljdE8wIf8Q/OdN7wdQKe/D8NJRA+xW+P91HUMEpP+FMQRv8HOq9G775TsQijApqmWLHAg0RfNvXDdaTlwqa4Das32gWKIUWOK1/XvofV0QBQYXNucYZk6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726093842; c=relaxed/simple;
-	bh=npOevJMDfW/arh3BY6Od23R/CP3junI1c4HvN1FSpL4=;
+	s=arc-20240116; t=1726093849; c=relaxed/simple;
+	bh=3yA1fLCRb88ToRCRxO/u7OC8Tvw0CXJoSnokE63e36c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IqqVkwyS6I17mDNA1ZW3CssdxIRKnlOtT48IS2GmtpikbSaoatxtjLTAXpoCgWr3ChdSOS3uA1DwFXXuqauFE71Az20lE0WGBJJ1xSXu1HeGgrPn7GXd6DlnhyFKQymGGYdHzSlqGDYNlm+xHQ00DPhFChTU2iXz1wOlXIvlDkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eLTAOgnK; arc=none smtp.client-ip=217.70.183.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eDs5qU1lVV8nROQTpxRjW2hTpb3CLi4E28pDexdmLk3gpkbjEO6XvuVWFSw/6gCbzIYCtI1UEyP/vG0VsnRPIJbpx+oOsKxH33ZSbkqIv4zU84nx0TAmcfwA0uk/prhfzKrZFGEGdUpnHOWQclKcoBapO/6dHKhXTqz6yhW0V28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c6WBmUPo; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9ACB41BF204;
-	Wed, 11 Sep 2024 22:30:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C80F41C0002;
+	Wed, 11 Sep 2024 22:30:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1726093839;
+	t=1726093846;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8qU4uYN5RMPRB/LA33aUfiA2ctd0kCy7zU3BPdp1ZL4=;
-	b=eLTAOgnK4EYIldY+QvnYQYy2sTaoqt5lefdcseKFntQT+ffxxiISq8axnZ3bneGGYqYe3R
-	6KkLyUDlWslhX6o/0bfuNw89vrmJuGnm5D5J3U8MSdTvnOGSXtC6f4MEj/4GXMn4RFdd+p
-	TKUNCh8sa7x34ixoUpLOpA6b2E8/2acNVfIjtOnICo1wSkhOAR+ZwnVpDvOeAVH9ilasRY
-	N6Qi6HswkU25Fwm6C1PywOdWDEpJKXuXeWLiThN09/WB8fMUVZlBZSi3YURUBgQHlb/6Tn
-	0wokkx/hNonyI6UdB4OgO15dm1muaVr7TFmHcYDz/qEN+NIxue/kIabG2rZJYw==
-Date: Thu, 12 Sep 2024 00:30:38 +0200
+	bh=kSbquAOSSb9L6U3YXl0vG2FZny6Oz3AeoJa+Pl75X0Y=;
+	b=c6WBmUPoGo3EMNV70VLBKDjN0FALnRVP8ZEuEBbegkhCAnaSvL2aBV9PHzmuR3SuqszG1d
+	aeq5ujT6/F/PZflecW/eHvQ0hZbJ/rdBLwzuw01quPJNNPz0vt6wBVLk2z3ConrrTMfzbQ
+	cE3w6sUBnQdStbkKWUjFhk9NADdZ81ge/PY5lQu5CyP3n8ZVMbhBpJ7VSM0UgLRKtD7fts
+	rbdf0wKmBsMQ5auhDUBn0srMfaXpSb98FHu5aFWgFdclIRJ6rd3nR1oozaw+HKpNl/wKlN
+	pHtUtbvNCBYvBmwCuA3xj8djQd4IDmKcPQd/mqdrIjrNy6HeWUL9Xu61RVK35w==
+Date: Thu, 12 Sep 2024 00:30:45 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Michael Walle <mwalle@kernel.org>
-Cc: linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: sun6i: disable automatic clock input switching
-Message-ID: <172609381393.1549758.1447288374525041880.b4-ty@bootlin.com>
-References: <20240730194905.2587202-1-mwalle@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: rtc: Drop non-trivial duplicate compatibles
+Message-ID: <172609381391.1549758.12600929420614564199.b4-ty@bootlin.com>
+References: <20240910234431.1043923-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,24 +62,19 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240730194905.2587202-1-mwalle@kernel.org>
+In-Reply-To: <20240910234431.1043923-1-robh@kernel.org>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, 30 Jul 2024 21:49:05 +0200, Michael Walle wrote:
-> The V3(s) will detect a valid external low frequency clock and if it is
-> not present will automatically switch to the internal one. This might
-> hide bugs and (hardware) configuration errors. It's even worse because
-> the internal RTC runs significantly slower (32.000Hz vs 32.768Hz).
-> Fortunately for us, the V3(s) has an (undocumented) bypass of this
-> switching and the driver already supports it by setting the
-> .has_auto_swt flag.
+On Tue, 10 Sep 2024 18:44:31 -0500, Rob Herring (Arm) wrote:
+> Several compatibles documented in trivial-rtc.yaml are documented
+> elsewhere and are not trivial, so drop them.
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[1/1] rtc: sun6i: disable automatic clock input switching
-      https://git.kernel.org/abelloni/c/2cd71297070b
+[1/1] dt-bindings: rtc: Drop non-trivial duplicate compatibles
+      https://git.kernel.org/abelloni/c/bf12e99b8342
 
 Best regards,
 
