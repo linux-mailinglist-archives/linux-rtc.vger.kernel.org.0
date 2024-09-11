@@ -1,88 +1,76 @@
-Return-Path: <linux-rtc+bounces-1941-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1942-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E2B4975CF9
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 00:18:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27AB6975CFB
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 00:18:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D990E285B22
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 22:18:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 573A71C222CC
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 22:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9691B9B45;
-	Wed, 11 Sep 2024 22:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E5E6183088;
+	Wed, 11 Sep 2024 22:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QDUaeIFv"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="U0gbmCae"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7B28F6D;
-	Wed, 11 Sep 2024 22:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBE21714DD;
+	Wed, 11 Sep 2024 22:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726093079; cv=none; b=LppHh6xT2GFR3ET79ZUyUrLmVlVQooa3Q++qCg84sZuqDValbZuM8bYCSDIp0nC1LlBPdCj7dRMH3Gu2ToKRykJ/hgVZlmQGGI0q6VmsfMd6Xne9EyW488RPFv+VWkLjkhKliq61q546yZJCzRFN5gVA17HK2EaWc38ARQJf4gE=
+	t=1726093111; cv=none; b=q+MbiDS7jUvkPbv9E0he2Cb70+mIQSCDD/dk7KsgrB22du8kL4LwNeDQP/kSx1Stoo6azH6Ml1QxsyAhFZnAOV/FYyIpaOKoxIYieX8enAQ2qlQyNd/qpTGdnjIxwgWRwMRQi2dCw3DJvNzXOnHs/cNLoJaXPso6xazChouJme0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726093079; c=relaxed/simple;
-	bh=li9v6yiviwnt3ovdHj3DZYZuBaKKid6ePo/ZNpVli4M=;
+	s=arc-20240116; t=1726093111; c=relaxed/simple;
+	bh=1USpe0n/W2zW0Qc+brfMbvrdVwUPcFTycr7f4S3U8j4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uKY+QFmi5DvQAiygU2DKy3Cmv7ydROj8ZQr2xLkOA0LcmrfvQ3Wdk9YL4QewRZOyD707Xivtpr/vnATsdCTFxRPqs3wgImOk7vB0XCi4x8rYygKYBs/llMJW9O3d5oQqe5X0jlebipRh8N5vLYrkfgwOxiclsVPjyUVfYQZvddo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QDUaeIFv; arc=none smtp.client-ip=217.70.183.196
+	 Content-Type:Content-Disposition:In-Reply-To; b=GAwUmL/mOKGfcu8hAGF5/A0p0SZvtlYgiklSmhMceYUmrAZskzqtD/r63lrDkqLQm+ONBKlv85+L56zIYq1tRJzsTl1kxZkggJYriiAhzEkO7HWR+tDMmVhRaWwv2vYYZlK2bNs/bHBJzeIw3dhwfF0t2o1kxmPvlt9TIJfYptk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=U0gbmCae; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 39BAFE0004;
-	Wed, 11 Sep 2024 22:17:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AA09440002;
+	Wed, 11 Sep 2024 22:18:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1726093074;
+	t=1726093106;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4/4ea5b68JNPpQkoa0RULHniTfxnkj3aB4lpW/s58/o=;
-	b=QDUaeIFvNqDCAAhDfB5zrYg6uCK3f8KemwxBFAImkWY5povnSa4PVoSR5uKHiuyGCzf6JO
-	wcMS6tY0VbyzNETqOT2JIf5u/y3DR6xHVbesDkz4MLTkqoRQilIXJW7azoyeWhrVqUP1Sl
-	zHe1kYWJsinMSmsy6OOH8uMRoboRfMevFApgYfcbsnCGP/YMK/mo9FumHF1iSTIxphQwi6
-	aL32QwGmGWlgW6GUL4kViY25osOZpPk1b+Nfgl3MMHThlhfxRXXfxMRN6OU6WOlT0EuLTn
-	x4tZCVGv4bZvQmwYiUmtIPqdjIw03S2A4fJtrN+hhdHsLyxj/K+1AZg4VPFY7g==
-Date: Thu, 12 Sep 2024 00:17:53 +0200
+	bh=fyCM/YaJqrx4b+ECD8EcT6WiqqWLFpqMCtcVzj6djrY=;
+	b=U0gbmCaeTRExLw8iBzPmxwWeh4nLZ8aaznf0CL7FazWjGvxOjnpIlKrsio3X04xHYfsifU
+	rv4MEY70H9MejTBVat1TsMQFklTh/x80sfzdhVZuzappkXHNLwv91Vc3GdFztrKWhPFcvM
+	lFoIq/54CudOZ1RPSX5US8LJ1zOBU38CjNIwxBZxHRpzR6oGtWU2M1FEsHR3WclJ5NtNNC
+	YeTpNX2sSnZQSNNWtfh8SpMwKkWTpH/cnzj+7iWjQiL5WWv+5xGlk1elCcRUFnl/9URTkZ
+	hfAUKSqWlmZ08l9gwaEKjPRCD984Am3KER84MkhvKR4Td2dSHrU99YvY/VGOsw==
+Date: Thu, 12 Sep 2024 00:18:25 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?T=F3th_J=E1nos?= <gomba007@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	=?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v7 0/3] Add support for the DFRobot SD2405AL I2C RTC
- Module.
-Message-ID: <172609305464.1547920.8314811462806286244.b4-ty@bootlin.com>
-References: <20240830-rtc-sd2405al-v7-0-2f7102621b1d@gmail.com>
+To: tony@atomide.com, Chen Ni <nichen@iscas.ac.cn>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: twl: convert comma to semicolon
+Message-ID: <172609305462.1547920.5064447854215657634.b4-ty@bootlin.com>
+References: <20240716030252.400340-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240830-rtc-sd2405al-v7-0-2f7102621b1d@gmail.com>
+In-Reply-To: <20240716030252.400340-1-nichen@iscas.ac.cn>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Fri, 30 Aug 2024 10:36:38 +0200, Tóth János wrote:
-> This patch series adds a driver and the documentation for the SD2405AL I2C RTC.
+On Tue, 16 Jul 2024 11:02:52 +0800, Chen Ni wrote:
+> Replace a comma between expression statements by a semicolon.
 > 
 > 
 
 Applied, thanks!
 
-[1/3] drivers: rtc: Add driver for SD2405AL.
-      https://git.kernel.org/abelloni/c/b4ce83671973
-[2/3] dt-bindings: rtc: Add support for SD2405AL.
-      https://git.kernel.org/abelloni/c/0eb6d12a2bc1
-[3/3] dt-bindings: vendor-prefixes: Add DFRobot.
-      https://git.kernel.org/abelloni/c/6894ed34666f
+[1/1] rtc: twl: convert comma to semicolon
+      https://git.kernel.org/abelloni/c/2d611fbe9a85
 
 Best regards,
 
