@@ -1,86 +1,81 @@
-Return-Path: <linux-rtc+bounces-1925-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1926-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDFE197470F
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 02:00:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AFEC974A5A
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 08:23:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9931328762F
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 00:00:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7932EB23A3B
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 06:23:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E3811AC450;
-	Tue, 10 Sep 2024 23:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CFE7DA82;
+	Wed, 11 Sep 2024 06:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=noa-labs.com header.i=@noa-labs.com header.b="F4QweBeU"
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="q4bx29TG"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFBC15C156
-	for <linux-rtc@vger.kernel.org>; Tue, 10 Sep 2024 23:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+Received: from classfun.cn (unknown [129.204.178.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B3D1DA5E;
+	Wed, 11 Sep 2024 06:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726012743; cv=none; b=fRsZS5aSotO/YvZY/OtDWhn8PCDxXkOdOTRAwYUaclF0PZCUeqAp4g4l1ksImi0dYVOhinv2vurEh7zbkXRBWDSbS69X8Mip5b5/rU8vDSwKUYGtUGtsjYxbnL3jEiuTGfcHlFOuJEqAb4QSDwmv2pUMLiBMIyEIO5iRXW9g980=
+	t=1726035813; cv=none; b=ONhkGZ9SUO4xA/fZ7RFSLTdPdI7eKE7tqBNOB1lFhWdL/ewpYhXXsm/PcJu/Lmu3qZxb/bMZigb9rgbCykXiDG98jitkF3w06oqKa5yPPOEpHLGUYZesSWBLdoD/POqEgRljKIBnqkQX3CBBLYgQBiKFWbkRmWTDGW+dTYKPnoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726012743; c=relaxed/simple;
-	bh=U2UbwCbXDaKbSYH6swG7PmY2C2FunT/2oxA9VuaIv/c=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=fjFgkuzW/+DNWs2K38+zBBiKd4DtrjiyAQz9ZyZyqbKnAXE4AH9wWg7Y3K2j3fGBU5o4hVynJZTYmABG+lCD0ZVeDZphDmFOdhM4VTEJ4JKj1f8rOa8Fvjcg4X2RzpKN5/37H/kI7aMv3xfx2TjQgfgTTWQVEFMODh8vPQ2A+wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=noa-labs.com; spf=pass smtp.mailfrom=noa-labs.com; dkim=pass (1024-bit key) header.d=noa-labs.com header.i=@noa-labs.com header.b=F4QweBeU; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=noa-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=noa-labs.com
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dff1ccdc17bso6344561276.0
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Sep 2024 16:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=noa-labs.com; s=google; t=1726012739; x=1726617539; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=U2UbwCbXDaKbSYH6swG7PmY2C2FunT/2oxA9VuaIv/c=;
-        b=F4QweBeUKJ6CkqLAD+fU/i+EyNVGSd5UvSnIvQjw7d4YQmKacYI2TtPfUgx6IZZOvo
-         bpXEaezjWeF1Ejahi9k9DU19ZDhnuMaZuHYXe95oev43wXjXAkULod1n5A3uhpvKeI2n
-         a5YgMGm+zUVk2c7cTiUtkFmDebW/w1/5q4vtE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726012739; x=1726617539;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U2UbwCbXDaKbSYH6swG7PmY2C2FunT/2oxA9VuaIv/c=;
-        b=Dywvqqij6KeqFsgpIB8SE1RlUxwA3l119cnV1l/ylU/7i03e1LDQ3oGua4mMiYFBNa
-         fVRPadBQzxKYjCFThzs55VGRJEY9QvAtjOI1egxVlFKiFpVtqXg19EJqgBj4iIG3CHfr
-         iIcwFiXF00lgPN4EeKfcFdaBr2/Q7Pa/D/d0Ha/+7Zu/soOrJBXYgIhbifnlr9w47rJ2
-         lLFne0DXXZawy2RMf+nNzEJYMn0RyYTRtUAlObQfsqvNU/4dM1d5dK9YZyIQl/Mimsfz
-         2U4ZkMmEm9et1v5Xk+JxHFBFSjtgTCr3M1qtkqPivUEqXC0FWd0dVPs7w6/Hl55RXIWq
-         I+Dg==
-X-Forwarded-Encrypted: i=1; AJvYcCXPJVMcUVwx13qXSD/K54FhCenR6jzWQ4RoGbFn9XDXneExDaHtko0OIqlPigPcggipDYbLJa5qzoI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7DzCw0xstLu6bmm9y3XXqRozNdwwRGe33ggW6fn7OehdGG0WP
-	T08jfuy9P8JMumfF9K20o9gM4JA09nb1NTnmWlRIoYlOmmOynWM1kO644vtob+RoKMlLGuVyfGB
-	T4Fa2mjruXwYfrBKW7o9PMthn0znX5bMyXMBOEeahhznh9j10ka02MQ==
-X-Google-Smtp-Source: AGHT+IEfbGIeXED36wupqOboqFnHeRt1U6SUbwiLArYRZEk42oWse6mfU322KE+vjnJOlKzDX3sU3vOESPOhF4dz3Mg=
-X-Received: by 2002:a05:6902:1707:b0:e13:cb77:5fda with SMTP id
- 3f1490d57ef6-e1d3486658fmr15475234276.12.1726012738792; Tue, 10 Sep 2024
- 16:58:58 -0700 (PDT)
+	s=arc-20240116; t=1726035813; c=relaxed/simple;
+	bh=4wgafjl/GF7A9Wh1sZeg2hoiXJBXDO/q6k6MudD+87I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UbFUo+mHwkC619YlbDNuv5umHhlngpb8oU0r48/YT/SOe311RttgWYTy0KVLkCrZl3IhWUst/ibNt+Srw8T5G9nJwC7mubm0ga6yR+0sTLWXLJLyUgZnC1mjK/+bJjAuwVn96jfhUXjP43Ce3fcItMiOaULEAU3hN30zF5flZDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=q4bx29TG; arc=none smtp.client-ip=129.204.178.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
+Received: from [192.168.0.160] (unknown [220.162.71.13])
+	(Authenticated sender: bigfoot)
+	by classfun.cn (Postfix) with ESMTPSA id 9DCEC78909;
+	Wed, 11 Sep 2024 14:23:16 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 9DCEC78909
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
+	s=default; t=1726035798;
+	bh=G6ZlhgSqLu1jIrj4ZJvMQOKzybekvd6XIOY3ry0RzrI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=q4bx29TGnWLvZaZywL9HFJeY/ltajfcnMykw73XRyhlnBf4+sHCa7aFUr3rmDjGUB
+	 WjKAwHBYa3FITUg2c364dnLwlTip/8o25Fy7swUc5BwzQRF+URpqpcRZ2Es/aP/837
+	 n2PW5QHy83Ysm1FMrVoGxqVgAqytD+Gfl6yKUfUw=
+Message-ID: <50537ca6-2324-4cbf-8036-a8c5cadd52be@classfun.cn>
+Date: Wed, 11 Sep 2024 14:23:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Pavel Nikulin <pavel@noa-labs.com>
-Date: Wed, 11 Sep 2024 03:58:49 +0400
-Message-ID: <CAG-pW8EGsxV85J+QcP4yKnngutdPoMBGWNN8LnAM3nU+7DKPnA@mail.gmail.com>
-Subject: Re-enabling EFI RTC on X86 for modern systems
-To: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/9] Introduce Photonicat power management MCU driver
+To: Chukun Pan <amadeus@jmu.edu.cn>
+Cc: linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux@roeck-us.net, wim@linux-watchdog.org
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
+ <20240908093002.26317-1-amadeus@jmu.edu.cn>
+Content-Language: en-US
+From: Junhao Xie <bigfoot@classfun.cn>
+In-Reply-To: <20240908093002.26317-1-amadeus@jmu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 2024/9/8 17:30, Chukun Pan wrote:
+>> Initial support for the power management MCU in the Ariaboard Photonicat
+>> This patch series depends on Add support for Ariaboard Photonicat RK3568 [1]
+> 
+> The official website says it's "Renesas RA2E1 cortex M23 ultra-low power MCU"
+> Perhaps renaming the 'Photonicat MCU' to 'Renesas RA2E1 MCU' would be better?
 
-I noticed that EFI RTC was disabled on X86 really long time ago due to
-Intel reference firmwares coming with broken EFI.
+Renesas RA2E1 is a MCU product line, and Ariaboard wrote firmware for this MCU.
+Maybe "Renesas RA2E1 MCU in Photonicat" would be better?
 
-I edited the Kconfig to enable it, and see how it works on my laptop
-(AMD HX370). I can confirm that it boots well. I have not done any
-more extensive tests than that.
 
-What do you think about re-enabling EFI RTC behind some expert config
-flag, and ask more people to test it on modern X86 hardware?
+Best regards,
+Junhao
 
