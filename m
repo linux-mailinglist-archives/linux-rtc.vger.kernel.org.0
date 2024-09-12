@@ -1,90 +1,99 @@
-Return-Path: <linux-rtc+bounces-1949-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1950-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4982975D60
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 00:49:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDC38975FAA
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 05:28:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D73751C22350
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2024 22:49:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B83C283828
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 03:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D8817C200;
-	Wed, 11 Sep 2024 22:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gHAsIhjm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB371126C0F;
+	Thu, 12 Sep 2024 03:28:23 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AAA383B1;
-	Wed, 11 Sep 2024 22:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1809524D7
+	for <linux-rtc@vger.kernel.org>; Thu, 12 Sep 2024 03:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726094969; cv=none; b=BwItgDD02/turPLhrJB+1gOju7+TVhjCOScOVHqphe8eNvlUZDhjjhz3bFoV3hwDFqUR4nCPTu0y8g5klTy3TDPIzlNp96zY40ju/G+y+igucjI5dHAGDsDlbm+RhobRTXX4Wcf9D7UphgUOH1o9RxA/7ZmG68/MC2+oNaO/zUc=
+	t=1726111703; cv=none; b=IFeebS60M2kEOJzcUV3HmMTuXawz+tk/1ToTkzvA+K0UXT4nzl4L+JmUNl8GSVMOixrb3lKLGiRZMYjorKwX21cs0LD3dQF/w68HYZNE3cqJHqFS00E+jwWdrxAOFTaMLeQSN519EbpH4PeIAVrVs0KqIEa97nTOGchvdU0xm24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726094969; c=relaxed/simple;
-	bh=OXUQXUpLdD82PoL0H0ysJsAEVyqb6IeigzdKnbw+L84=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y+PUcrhMhxNyNXgnFQLDjMXdEjKw9R91YhPA06lP7GjEbQV5EUBqzUZEXNHRy9cqkesH5CwT5mEq13p6QkDpHQLCYyBkvXwpaxNTm8xphwwmaJ4i/fxM2/QwuEO/SvE7KIcCHdvqeK4nnD42c+w249s+JGqoWTLGL9QYA/L5kCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gHAsIhjm; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A884FF802;
-	Wed, 11 Sep 2024 22:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1726094957;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qyNislHaCUJw7mzyf1B4jvIcfhaPLsCGQhSJYjqzSrI=;
-	b=gHAsIhjmz32JvHLP/2aJsUBRuppIbeLZPhnYHLSQ1ZG4WJAkw3+EtkdsMNp/KbBw8GaQF+
-	Jn69IEeKa7ICi3wjNLRVj9a2U9ipqnJF8psnYeX3ZcfbogkQ5UYxQRrXwwFbzJb5afD4hz
-	Rpw0EHpSHMNuEZSfN2H8TNlPfO01G9YXuRPBzhK9qCWK9ROPinr2uramTLfb21wKXXJ1HK
-	1ZMqyCAlDv7lR4+4lRsdq5Beq5HqXjFlFbG1eJzGRXWgkGTX7p/rpS3lLeV4CBszhjEh4o
-	19QXH7ODI7K5bJHKSUUMDTfuUStHCXq7eF3hVnjx3TMeR4pkwfPPX7X9F9+nog==
-Date: Thu, 12 Sep 2024 00:49:17 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Abhishek Tamboli <abhishektamboli9@gmail.com>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org, rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] rtc: m48t59: Remove division condition with direct
- comparison
-Message-ID: <172609494901.1572134.91739607625534933.b4-ty@bootlin.com>
-References: <20240809155631.548044-1-abhishektamboli9@gmail.com>
+	s=arc-20240116; t=1726111703; c=relaxed/simple;
+	bh=5xhQse/oV7xIWj6GsS6Wlv9y7st1HmtCZO05W6xnT1E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G9/A/lk0vb4gk9yxUSM5OeyxezNX0yvzndK0kuo5Lu63sdv8tHiQ3u55ZFbzd9LdcoZyJ1WeXtI+/WrHGkZjxZ+CbaYh2UQWji9UtNBYXP7gny6IFP7o3Zx2kBEGBhPArVtvxRcrco/T21j3i4+L8JKRQAMU0jL6HbAzQ11b1Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4X42tR1tBKzyRSm;
+	Thu, 12 Sep 2024 11:27:11 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0FAD81400E3;
+	Thu, 12 Sep 2024 11:28:19 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
+ (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 12 Sep
+ 2024 11:28:18 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <patrice.chotard@foss.st.com>, <alexandre.belloni@bootlin.com>,
+	<lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-rtc@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH] rtc: st-lpc: Use IRQF_NO_AUTOEN flag in request_irq()
+Date: Thu, 12 Sep 2024 11:37:27 +0800
+Message-ID: <20240912033727.3013951-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240809155631.548044-1-abhishektamboli9@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
-On Fri, 09 Aug 2024 21:26:31 +0530, Abhishek Tamboli wrote:
-> Replace 'year / 100' with a direct comparison 'year >= 100'
-> in m48t59_rtc_set_time() function. Improve the code clarity
-> and eliminate division overhead.
-> 
-> Fix the following smatch warning:
-> drivers/rtc/rtc-m48t59.c:135 m48t59_rtc_set_time() warn:
-> replace divide condition 'year / 100' with 'year >= 100'
-> 
-> [...]
+If request_irq() fails in st_rtc_probe(), there is no need to enable
+the irq, and if it succeeds, disable_irq() after request_irq() still has
+a time gap in which interrupts can come.
 
-Applied, thanks!
+request_irq() with IRQF_NO_AUTOEN flag will disable IRQ auto-enable when
+request IRQ.
 
-[1/1] rtc: m48t59: Remove division condition with direct comparison
-      https://git.kernel.org/abelloni/c/60a06efc56d7
+Fixes: b5b2bdfc2893 ("rtc: st: Add new driver for ST's LPC RTC")
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+ drivers/rtc/rtc-st-lpc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Best regards,
-
+diff --git a/drivers/rtc/rtc-st-lpc.c b/drivers/rtc/rtc-st-lpc.c
+index d492a2d26600..c6d4522411b3 100644
+--- a/drivers/rtc/rtc-st-lpc.c
++++ b/drivers/rtc/rtc-st-lpc.c
+@@ -218,15 +218,14 @@ static int st_rtc_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
+-	ret = devm_request_irq(&pdev->dev, rtc->irq, st_rtc_handler, 0,
+-			       pdev->name, rtc);
++	ret = devm_request_irq(&pdev->dev, rtc->irq, st_rtc_handler,
++			       IRQF_NO_AUTOEN, pdev->name, rtc);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to request irq %i\n", rtc->irq);
+ 		return ret;
+ 	}
+ 
+ 	enable_irq_wake(rtc->irq);
+-	disable_irq(rtc->irq);
+ 
+ 	rtc->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(rtc->clk))
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 
