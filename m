@@ -1,117 +1,162 @@
-Return-Path: <linux-rtc+bounces-1953-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1954-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D886976398
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 09:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B99C97645D
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 10:22:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03651C23557
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 07:55:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4ED701C238E2
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 08:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52EA818F2F6;
-	Thu, 12 Sep 2024 07:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BE7191F7C;
+	Thu, 12 Sep 2024 08:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RE4Jpos0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IDwF6+Ex"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035FA18E349;
-	Thu, 12 Sep 2024 07:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1186D1917E8;
+	Thu, 12 Sep 2024 08:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726127732; cv=none; b=dacyhsAvLjOykFXReeU6h9OecENu81642d0tVC5M5Nm4A18QHAjt6g6990Bnqpar/RGvlHQA2LSkXKIBsqD5mrwTQODaiRLKXbNWX0TBCWugVeVQGL1St4SyhKUwjcI0TIeOMTEHDDE/0dYQcIvyEOaR6DOYITRPuXeupX2TNo8=
+	t=1726129288; cv=none; b=oYDm8l1WbfEoASrUOOtmEzAWTWv8pyNFWK2x05lDfo2mZIciyrircoCUqReyJzjxew1dipZumFdapGF5+9zHgpzCY6SFINRaD8S4K71wwSKmaBDq69TBdQvrqFwQVVGEbvgwJFOJfhhF4xSjTSHDkHgNTyomke7VLmYOPUUHZPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726127732; c=relaxed/simple;
-	bh=4s+VuwhVbNSAVesYDsrgOzVFuC3dn4Fh96NjWQHHSd4=;
+	s=arc-20240116; t=1726129288; c=relaxed/simple;
+	bh=7R4e3nnIXpLRZ8k/IYYqykk4SdReC+fkYDBpv+JBQVk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T6c1sWxW5fA2B1SCV5IYRE/M97KXKOLAexRDTrIf17CQUHWmvnfRe6FQIoPmsD0HPKH3tqmqpx7zGyPJf6ClV7B5S3lWkVSZkvQUOkWdpJaSVebTbRRcwaOjjhN/VbKPFlYjDO6HgLFA2XHJYy84rQsYYenCm4IfA7u+vX5R7rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RE4Jpos0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BDB5C4CEC3;
-	Thu, 12 Sep 2024 07:55:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726127730;
-	bh=4s+VuwhVbNSAVesYDsrgOzVFuC3dn4Fh96NjWQHHSd4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RE4Jpos0PNEzX+j4gvv4HnNOrUggjKzwMILkyBwl0ysVmjqAOlVX/mQhrIQNly6u5
-	 D4cMLo65bYBMzWlE/3MbcvaGJgeSBNYdVepAt76I+DLSY7juHCYtKFtFSF+NxXRLnf
-	 nw0U9baOT3m36ADEOMsC52DEtH41CuFRaJgFalbX5iXcl4IyQp85V7KiijKjx0cNGT
-	 6KayroEwMI5tGGbabloSBt1YK8gCKXHgprPzBlO8p/mD27xX6IExuLkytas4cCy+Lx
-	 FeyB97LCD7R1E9Adejrws3/2lIKYd4KEQJJgQvTdJ/MZTah6JaIHWY/t17UQPpDuJl
-	 ey2Ge3BBptu3g==
-Date: Thu, 12 Sep 2024 08:55:23 +0100
-From: Lee Jones <lee@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Junhao Xie <bigfoot@classfun.cn>, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Chukun Pan <amadeus@jmu.edu.cn>, Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?G=FCnter_R=F6ck?= <linux@roeck-us.net>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Rob Herring <robh@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH 1/9] mfd: Add driver for Photonicat power management MCU
-Message-ID: <20240912075523.GB24460@google.com>
-References: <20240906093630.2428329-2-bigfoot@classfun.cn>
- <de5c9c27-56fa-4163-98e1-9a98400d2408@web.de>
- <43918eda-c4e8-471a-9de4-ea72bb090803@classfun.cn>
- <917ac8d8-a483-422c-a408-cdd44793e910@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cBa5WAamtC5g68ovRqF0qfMzWscwXQHJRYa6CHUq4eDlSgQNYIcmB15RDh+iAekWn6Pr8VyfMrcWXQxq5nYwIoAVSqF72OT5JwcdsN9cDTX83GOx8zD1SKq+SgkD4hU5PJhe8/pPtNsyFovhkwg5rDvnoayO06LZP46+5J2SedE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IDwF6+Ex; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 11D9BE0002;
+	Thu, 12 Sep 2024 08:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1726129284;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qSphxjECBCoInb+jgBYfvCmHBRhwkizrGcHNSqeJrKA=;
+	b=IDwF6+ExsFRWJL10EYmhOfEi9p1j0hRMB7Q4+ybs5nw3aErdsqYS9MK/S6htW5I5m14b+w
+	pcvgGKRWwyatC7qcZatZSHJcVHar6hiwpg/XUDOiVnZdYm9DUGx1b9bnCLMFH2g5e8QyOZ
+	tJaTSfUlntX+g5rC9UdrKhgn3uhZf7jc8PcvST9X+wW5NKLCGCRZX9VXq+edTnrmS+oji1
+	eqXWdtyd7AE0luf/XI33dt5rDO7KjWUcy1h5qj36rsP92QuugKDw4Ht97wJ74KZEquBYyT
+	0qg8YVpDghwvdbxik4YhW//hUtpABXrADV2o/TQfdiGZgEW0LcrRu4nUXtAwDw==
+Date: Thu, 12 Sep 2024 10:21:23 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Esben Haabendal <esben@geanix.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] rtc: isl12022: Add alarm support
+Message-ID: <20240912082123f10c07cf@mail.local>
+References: <20240910-rtc-isl12022-alarm-irq-v1-0-d875cedc997f@geanix.com>
+ <20240910-rtc-isl12022-alarm-irq-v1-2-d875cedc997f@geanix.com>
+ <202409101939448128973d@mail.local>
+ <87mske7gaw.fsf@geanix.com>
+ <20240911122417388bd35c@mail.local>
+ <87h6almjpn.fsf@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <917ac8d8-a483-422c-a408-cdd44793e910@kernel.org>
+In-Reply-To: <87h6almjpn.fsf@geanix.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Sun, 08 Sep 2024, Krzysztof Kozlowski wrote:
+On 12/09/2024 09:09:40+0200, Esben Haabendal wrote:
+> Alexandre Belloni <alexandre.belloni@bootlin.com> writes:
+> 
+> > On 11/09/2024 10:20:07+0200, Esben Haabendal wrote:
+> >> Alexandre Belloni <alexandre.belloni@bootlin.com> writes:
+> >> > On 10/09/2024 12:27:11+0200, Esben Haabendal wrote:
+> >> 
+> >> >> +static int isl12022_rtc_read_alarm(struct device *dev,
+> >> >> +				   struct rtc_wkalrm *alarm)
+> >> >> +{
+> >> >> +	struct rtc_time *const tm = &alarm->time;
+> >> >> +	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+> >> >> +	struct regmap *regmap = isl12022->regmap;
+> >> >> +	uint8_t buf[ISL12022_ALARM_SECTION_LEN];
+> >> >> +	int ret, yr, i;
+> >> >> +
+> >> >> +	ret = regmap_bulk_read(regmap, ISL12022_ALARM_SECTION,
+> >> >> +			       buf, sizeof(buf));
+> >> >> +	if (ret) {
+> >> >> +		dev_err(dev, "%s: reading ALARM registers failed\n",
+> >> >> +			__func__);
+> >> >
+> >> > I don't really like those error messages because there is nothing the
+> >> > user can actually do apart from trying again and this bloats the
+> >> > kernel.
+> >> 
+> >> Ok. Maybe keep it as dev_dbg() then?
+> >
+> > This is fine, there are other I didn't point out.
+> 
+> Ok. I will change all of these type of error messages to dev_dbg. No problem.
+> 
+> >> >> +	isl12022->rtc = rtc;
+> >> >>  
+> >> >>  	rtc->ops = &isl12022_rtc_ops;
+> >> >>  	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> >> >>  	rtc->range_max = RTC_TIMESTAMP_END_2099;
+> >> >>  
+> >> >> +	if (client->irq > 0) {
+> >> >> +		ret = isl12022_setup_irq(isl12022, client->irq);
+> >> >
+> >> > You can't do this in probe, the RTC lifecycle is longer than the linux
+> >> > system. Or said differently: "oh no, my linux has rebooted and now I
+> >> > lost my future alarm" ;)
+> >> 
+> >> Oh.
+> >> 
+> >> We do need to setup the irq here, so I assume you mean I need to drop
+> >> the part of _setup_irq() that clears alarm registers.
+> >
+> > Yes, this is the main problematic part. The other one being disabling
+> > the IRQ output when in battery backup mode as this will surely prevent
+> > wakeup of some devices.
+> 
+> I know. I did this on purpose, as I don't have a setup where I can test
+> wakeup, so I thought it was better to start out without this instead of
+> shipping something that is most likely broken.
+> 
+> If I leave IRQ output from RTC chip enabled during battery backup mode,
+> I assume I have to add working suspend/resume also. Or do you just want
+> me to flip the bit?
 
-> On 07/09/2024 16:33, Junhao Xie wrote:
-> > On 2024/9/7 16:44, Markus Elfring wrote:
-> >> …
-> >>> +++ b/include/linux/mfd/photonicat-pmu.h
-> >>> @@ -0,0 +1,86 @@
-> >> …
-> >>> +#ifndef _PHOTONICAT_PMU_H
-> >>> +#define _PHOTONICAT_PMU_H
-> >> …
-> >>
-> >> I suggest to omit leading underscores from such identifiers.
-> >> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+define+a+reserved+identifier
-> >>
-> >> Regards,
-> >> Markus
-> > 
-> > Thanks for your suggestion, does this look better?
-> > #ifndef MFD_PHOTONICAT_PMU_H
-> > #define MFD_PHOTONICAT_PMU_H
+The issue is still about the lifecycle. The RTC will remember the
+setting so if you change it from the default value without providing a
+control, there is no way to change back the driver behavior in the
+future because this is going to break a use case and there is no way to
+win. So my preference is that you leave the bit to its default value.
+You don't necessarily need the suspend/resume callbacks.
 
-Yes, this is better.
+> 
+> >> And I guess we need to enable irq in probe as well. At least if/when an
+> >> alarm is set. I think it should be safe to enable irq unconditionally in
+> >> _probe()...
+> >
+> > I guess you mean requesting the interrupt on the SoC side.
+> 
+> Yes.
+> 
+> > Enabling the RTC interrupt should be left untouched in the probe.
+> 
+> Ok, so if/when an alarm is already set before probe, do application need
+> to enable it using RTC_AIE_ON?
 
-> <form letter>
-> Feel free to ignore all comments from Markus, regardless whether the
-> suggestion is reasonable or not. This person is banned from LKML and
-> several maintainers ignore Markus' feedback, because it is just a waste
-> of time.
-> </form letter>
+If the alarm is on on boot, it must be kept on without any user
+intervention.
 
-If you really _must_ do this, at least keep it factual.
-
-To the best of my knowledge Markus is not banned from LKML.
 
 -- 
-Lee Jones [李琼斯]
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
