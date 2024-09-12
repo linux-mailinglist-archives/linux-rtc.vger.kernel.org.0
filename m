@@ -1,137 +1,155 @@
-Return-Path: <linux-rtc+bounces-1951-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1952-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23312976019
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 06:41:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47945976244
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 09:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD77B2856E7
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 04:41:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7A0C1F24064
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2024 07:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 454DF1885AD;
-	Thu, 12 Sep 2024 04:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 041A818BB9F;
+	Thu, 12 Sep 2024 07:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eyjbzGUw"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="owuQHHL6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F0CA47;
-	Thu, 12 Sep 2024 04:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521E5189BB8;
+	Thu, 12 Sep 2024 07:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726116099; cv=none; b=sY5lZqI8LkCxEUuIRil3TGhxXSbxFhAm5COjNnURaNHjXk46GLz7YmodwfzFvkFzBJd+70bRUlJdwLP3X5OafFr1gR5MQmVf65zweYBuEerZQJDe7XdNHol1LYCaxr1fbAmwxjnMkVjscgrJl9Ok0S+Wm8axxzK9WRvEH/HqcSc=
+	t=1726124986; cv=none; b=M7dLLVwv1xD8pFq3E4RerRbYNVnFjfAuDhmzlBTtBashOb16goDMlOoass2HuFTFvX9Rb/kvgthJcuzSS/dRhisG18bHRzYgUr21penBQjEYkmlAZpyqUv54SIbaU01ToH0TrvOYcTJViwXG0cr0Np60W3IsHj6UcVdavogtVn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726116099; c=relaxed/simple;
-	bh=J+voR34oci4p2IIVjc3qd0YparHlcuZTim//SkaanKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FOkjP5rKW3CGq9iEWpUhjU73FfevahILjZE5PkGo4w1MHbX9HBUprzzZWQr836g7A4YJxh/ASz5FrnXVso1T+oJNEqTJqShTdoEbHOmv3IoqaWXbXH7ksaj3nM1+sZdm9bU2a9w09LicGtz449AvUufGebfNkD6tA3v3i1n9yyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eyjbzGUw; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726116097; x=1757652097;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J+voR34oci4p2IIVjc3qd0YparHlcuZTim//SkaanKw=;
-  b=eyjbzGUwP1GKQ4eBBwoFd2UzDTWgN9y9cHylvnUaRFDhoggC7u8yj3GU
-   VcjG9T0Q0uXyOfeynrEZXqS8QmVFPiwo/fNKqfMhPi1zIXyAf53r8K1X4
-   3wvCPRQ+BfiNFGVQPbjteD1H1o/I7BDb5tjtqYLEdkXLeUb3ykbMWdhMh
-   4hxvypnE5s4n/CDcssRmSqoZr6vaELGTRV/p1LHy2cDcEJkPyuimVKAPG
-   vSvp+3M26ZWEgoe8YA13UGxDKqAZAkfn102Hs5kDNJO/H+CD+7NOGIYp7
-   xAeansf3aj18fWGBclmc8O7lj4zYJNunoUS2ixDrK6PEq8jhFNZnSmAHV
-   w==;
-X-CSE-ConnectionGUID: 2VkQ9vXvSrakro1FHA+pfw==
-X-CSE-MsgGUID: X6bj7WsBTJinA+bvPauhkg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="25051008"
-X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
-   d="scan'208";a="25051008"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 21:41:36 -0700
-X-CSE-ConnectionGUID: CwOQcPi0Rqy9ZzuC58xUVQ==
-X-CSE-MsgGUID: bv3X29aXRbWeaiGw38nICg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
-   d="scan'208";a="67822998"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 11 Sep 2024 21:41:32 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sobe6-0004XK-1J;
-	Thu, 12 Sep 2024 04:41:30 +0000
-Date: Thu, 12 Sep 2024 12:41:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
-	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
-	Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>,
-	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
-Subject: Re: [PATCH 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-Message-ID: <202409121103.EX9BTDFT-lkp@intel.com>
-References: <20240911070028.127659-3-ciprianmarian.costea@oss.nxp.com>
+	s=arc-20240116; t=1726124986; c=relaxed/simple;
+	bh=nlaQUDijimhZ9ltftznidmZfhgbG8UmY758gUKku/xU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=iP/dLopCVJWuD6a6CW/KFrA/7leYapBWLUPVAOv7rNylCjk8G0VgcLpCYqT6Xlxgdn033bltq/SgBQf8crrPI02qIlN7sYrZQJqPZ/+xrtp+nn+XRo20tZyVePLNimQbLQsruAKPNu6PCBiFXcljhDI+GyvnTDHMY6RWD/W3Yas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=owuQHHL6; arc=none smtp.client-ip=188.40.30.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+	s=default2211; h=Content-Type:MIME-Version:Message-ID:Date:References:
+	In-Reply-To:Subject:Cc:To:From:Sender:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=lZoL+rXRiYfw+HVYvj6ZQhn5B0gneZ/cg43LQpgeFv4=; b=owuQHHL6yKnS6GeJlrVYnrSz9y
+	fqW4b/tanXe5SrnMxBXWbRqmGDm/5XoKmYJ+814bxYe4g+eNJNPUbxd56yAra2vJ55jP9EcdCBzT3
+	VoHcruwALhiyS0vAYJ6FFdjClgPX2kgIHS0NPfxGB+bx3h+BTEqPuvIeNElXInUDdri3XQsE10Ari
+	yp5lx5znJcj79X/7+T07C9lkdGD5hEDT1phvIQKzWUdwh6nuQ6+JY+Ytm7HGkZRpODe8YDD4Tj/WK
+	PvJ/Py8ClUoezyr5LodWcv28R94R6zgNDVV+g856i5gWI2KV8CMIzEl5/fIXoWvr2PJbD6du5jGfN
+	swDnl/uw==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <esben@geanix.com>)
+	id 1sodxV-000Lls-0i; Thu, 12 Sep 2024 09:09:41 +0200
+Received: from [185.17.218.86] (helo=localhost)
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <esben@geanix.com>)
+	id 1sodxU-0009KH-10;
+	Thu, 12 Sep 2024 09:09:40 +0200
+From: Esben Haabendal <esben@geanix.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,  linux-rtc@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] rtc: isl12022: Add alarm support
+In-Reply-To: <20240911122417388bd35c@mail.local> (Alexandre Belloni's message
+	of "Wed, 11 Sep 2024 14:24:17 +0200")
+References: <20240910-rtc-isl12022-alarm-irq-v1-0-d875cedc997f@geanix.com>
+	<20240910-rtc-isl12022-alarm-irq-v1-2-d875cedc997f@geanix.com>
+	<202409101939448128973d@mail.local> <87mske7gaw.fsf@geanix.com>
+	<20240911122417388bd35c@mail.local>
+Date: Thu, 12 Sep 2024 09:09:40 +0200
+Message-ID: <87h6almjpn.fsf@geanix.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911070028.127659-3-ciprianmarian.costea@oss.nxp.com>
+Content-Type: text/plain
+X-Authenticated-Sender: esben@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27395/Wed Sep 11 10:32:20 2024)
 
-Hi Ciprian,
+Alexandre Belloni <alexandre.belloni@bootlin.com> writes:
 
-kernel test robot noticed the following build warnings:
+> On 11/09/2024 10:20:07+0200, Esben Haabendal wrote:
+>> Alexandre Belloni <alexandre.belloni@bootlin.com> writes:
+>> > On 10/09/2024 12:27:11+0200, Esben Haabendal wrote:
+>> 
+>> >> +static int isl12022_rtc_read_alarm(struct device *dev,
+>> >> +				   struct rtc_wkalrm *alarm)
+>> >> +{
+>> >> +	struct rtc_time *const tm = &alarm->time;
+>> >> +	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+>> >> +	struct regmap *regmap = isl12022->regmap;
+>> >> +	uint8_t buf[ISL12022_ALARM_SECTION_LEN];
+>> >> +	int ret, yr, i;
+>> >> +
+>> >> +	ret = regmap_bulk_read(regmap, ISL12022_ALARM_SECTION,
+>> >> +			       buf, sizeof(buf));
+>> >> +	if (ret) {
+>> >> +		dev_err(dev, "%s: reading ALARM registers failed\n",
+>> >> +			__func__);
+>> >
+>> > I don't really like those error messages because there is nothing the
+>> > user can actually do apart from trying again and this bloats the
+>> > kernel.
+>> 
+>> Ok. Maybe keep it as dev_dbg() then?
+>
+> This is fine, there are other I didn't point out.
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on robh/for-next arm64/for-next/core linus/master v6.11-rc7 next-20240911]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Ok. I will change all of these type of error messages to dev_dbg. No problem.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Costea/dt-bindings-rtc-add-schema-for-NXP-S32G2-S32G3-SoCs/20240911-150205
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20240911070028.127659-3-ciprianmarian.costea%40oss.nxp.com
-patch subject: [PATCH 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-config: sh-randconfig-r073-20240912 (https://download.01.org/0day-ci/archive/20240912/202409121103.EX9BTDFT-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240912/202409121103.EX9BTDFT-lkp@intel.com/reproduce)
+>> >> +	isl12022->rtc = rtc;
+>> >>  
+>> >>  	rtc->ops = &isl12022_rtc_ops;
+>> >>  	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+>> >>  	rtc->range_max = RTC_TIMESTAMP_END_2099;
+>> >>  
+>> >> +	if (client->irq > 0) {
+>> >> +		ret = isl12022_setup_irq(isl12022, client->irq);
+>> >
+>> > You can't do this in probe, the RTC lifecycle is longer than the linux
+>> > system. Or said differently: "oh no, my linux has rebooted and now I
+>> > lost my future alarm" ;)
+>> 
+>> Oh.
+>> 
+>> We do need to setup the irq here, so I assume you mean I need to drop
+>> the part of _setup_irq() that clears alarm registers.
+>
+> Yes, this is the main problematic part. The other one being disabling
+> the IRQ output when in battery backup mode as this will surely prevent
+> wakeup of some devices.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409121103.EX9BTDFT-lkp@intel.com/
+I know. I did this on purpose, as I don't have a setup where I can test
+wakeup, so I thought it was better to start out without this instead of
+shipping something that is most likely broken.
 
-All warnings (new ones prefixed by >>):
+If I leave IRQ output from RTC chip enabled during battery backup mode,
+I assume I have to add working suspend/resume also. Or do you just want
+me to flip the bit?
 
->> drivers/rtc/rtc-s32g.c:668:34: warning: 'rtc_dt_ids' defined but not used [-Wunused-const-variable=]
-     668 | static const struct of_device_id rtc_dt_ids[] = {
-         |                                  ^~~~~~~~~~
+>> And I guess we need to enable irq in probe as well. At least if/when an
+>> alarm is set. I think it should be safe to enable irq unconditionally in
+>> _probe()...
+>
+> I guess you mean requesting the interrupt on the SoC side.
 
+Yes.
 
-vim +/rtc_dt_ids +668 drivers/rtc/rtc-s32g.c
+> Enabling the RTC interrupt should be left untouched in the probe.
 
-   667	
- > 668	static const struct of_device_id rtc_dt_ids[] = {
-   669		{.compatible = "nxp,s32g-rtc" },
-   670		{ /* sentinel */ },
-   671	};
-   672	
+Ok, so if/when an alarm is already set before probe, do application need
+to enable it using RTC_AIE_ON?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+/Esben
 
