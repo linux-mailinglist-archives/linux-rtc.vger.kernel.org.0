@@ -1,119 +1,177 @@
-Return-Path: <linux-rtc+bounces-1979-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1980-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B38DE977D72
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Sep 2024 12:31:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5572977F11
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Sep 2024 13:59:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8148288245
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Sep 2024 10:31:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 080E31C20D4F
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Sep 2024 11:59:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F17B1DA2F9;
-	Fri, 13 Sep 2024 10:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D04F1D88BC;
+	Fri, 13 Sep 2024 11:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="huaAeVWN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O6O9F7NP"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB141DA112;
-	Fri, 13 Sep 2024 10:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9187B1D88A0;
+	Fri, 13 Sep 2024 11:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726223364; cv=none; b=AeJn3REIti0q7CkmYfP0eIZXUINVS32yCAysm0nBwvCIgzQoZ752IlDVN55vGfzIKwRnNn5GWqCUwwo/ZeqtvQ+NdIJs0Vv5ukRTGctrtGPDQ49TG+fjvfMUHd1igafPHUJaKYVCBuJglOmi89tOE0lmeJSXtO5+a6G7CHpDHqY=
+	t=1726228742; cv=none; b=aTLet/EDjW5ED4gTiaLeUT3BIK29ypu3EVwW6xfyCj62RadETTy3md13aRfaP9fxX8LlMnidjsUP0yV7sjTKTe3ZT3dBsYDcW5ZxmpT2vlzRD6qK0YTyD4gYKfGnpOjvDHakyopIlZql5KaPueWUh7HhWy9RmFL5/HKXfzN+/lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726223364; c=relaxed/simple;
-	bh=1oXD4NzVC1bjitr4jBpT8V7XG4g08+jepLpFv68RC5o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U2STdpmcaH/gVQUZZVs2URu7Bquy5gFXuPn4oqu+6LXCqOKUt9vRbvrW+KFS5jCp+VPWKk9wWWDTAJEwF31Xq6Ada/+HUjt07ztIfDzYON8vlTiH4JKa2Zgj3+p7E7XBi1GdDXBOKZrTnXtNVTyl8XQRUxwhaZozslwAmRUGV/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=huaAeVWN; arc=none smtp.client-ip=188.40.30.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-	s=default2211; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=fKWpOn1LSJqL+d1QyUQwAruHGeHxwd3osLSyeITf/gI=; b=huaAeVWNDeeB1GyOSvYGoC5W71
-	CRaoEYa0W4OojAO8q6NoBan1/LpH32sprDx3Ra4IoBm0rSiuFgy5hhTjlp9JdoS6r1UjDvEMKCEB3
-	FpoNDpfMAJaMzkgGu6zHneu3b9RmyJaoWmj2XQqWidMylpwBp2rtxDUmmHFaTZ9GQ29WakQAUb8TT
-	yamJOezQMpCWiEnKGFD92RbxXrG4e0W8Xo7DKivg2nF9qUX1RDAKOsUoTywMfohAKrBjOk5MclvMQ
-	T1eBn/JuI3kEc7JhYvcS4GgCi2b/XQz0LsXKk0vODWsVlk+rFHRV6RJXdKWLKxkfI+r9Teu3X71ZS
-	XdpIoYGA==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <esben@geanix.com>)
-	id 1sp3YF-0006Os-RL; Fri, 13 Sep 2024 12:29:19 +0200
-Received: from [80.62.117.18] (helo=localhost)
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <esben@geanix.com>)
-	id 1sp3YF-00072R-0G;
-	Fri, 13 Sep 2024 12:29:19 +0200
-From: Esben Haabendal <esben@geanix.com>
-Date: Fri, 13 Sep 2024 12:29:14 +0200
-Subject: [PATCH v2 3/3] rtc: isl12022: Replace uint8_t types with u8
+	s=arc-20240116; t=1726228742; c=relaxed/simple;
+	bh=AZHXRLJsSTYEt/qjTqze+Z2qsR1But2NuNPf/jl1ZSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r4nZfEJeOBkeO1EXb1NcyK/tY+gku43SV1FacP0Kt/L43nCTLKIgoLB7zlRBCn5A98PQwapdbL6raAlSDWIgsfLQjA1pEgQrybuwjYZWPtSl2Vg3V83ooiQvYCoPVhrtMin1cBlNeFD/vS3UWCoLQp48kNcAteHZI251dnSBAmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O6O9F7NP; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726228739; x=1757764739;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AZHXRLJsSTYEt/qjTqze+Z2qsR1But2NuNPf/jl1ZSE=;
+  b=O6O9F7NPA+7S+3ATB4HpmWV0A4VIzXWwVo+gmCzGp2y5nBkwBzGfbyqG
+   DMxcYpLyAUORhnqXMS11+7npMnif8rBpGZox+BpUeWHEavZlD/PlhCZHZ
+   4Co/o7jLU3wWTu+f9WxnVURTMJgvZGd4WPXjubLdUWMNQcsnk8dMwjsYR
+   1ummXs9Dg4uUrRovF/cfF+dyLvJ3QBexkbKE0TBqI0/1YpW2WX5iCIuSw
+   4A7ejSU3JfuwpMCwZhCnvWoJOFE4DTdFe3FLBu3DcN73W1aDh4i6GnEPk
+   XRJw8TgtXPXtymIZKCnd9NQSdMucwS0ShwQsOMTn/eepCuBH/mFEd1eDR
+   g==;
+X-CSE-ConnectionGUID: 8GsT5SAhRYyzWHFIXrhD7w==
+X-CSE-MsgGUID: sm6e1E2eQOqtt6Jh2J+Zwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="35792061"
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="35792061"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 04:58:59 -0700
+X-CSE-ConnectionGUID: 8HlKHWXsR5K6uLQzqnwe+g==
+X-CSE-MsgGUID: +RAOk1pZTYq/Yzxlq5UnWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,225,1719903600"; 
+   d="scan'208";a="72797822"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 13 Sep 2024 04:58:55 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sp4wu-0006UY-1n;
+	Fri, 13 Sep 2024 11:58:52 +0000
+Date: Fri, 13 Sep 2024 19:58:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
+	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
+	Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>,
+	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+Subject: Re: [PATCH 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
+Message-ID: <202409131950.ozDVVv5X-lkp@intel.com>
+References: <20240911070028.127659-3-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240913-rtc-isl12022-alarm-irq-v2-3-37309d939723@geanix.com>
-References: <20240913-rtc-isl12022-alarm-irq-v2-0-37309d939723@geanix.com>
-In-Reply-To: <20240913-rtc-isl12022-alarm-irq-v2-0-37309d939723@geanix.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Esben Haabendal <esben@geanix.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726223357; l=1110;
- i=esben@geanix.com; s=20240523; h=from:subject:message-id;
- bh=1oXD4NzVC1bjitr4jBpT8V7XG4g08+jepLpFv68RC5o=;
- b=BSJemiw0uCbOxTEeFBGp3qPpj8wtMCfMBaW+pi14jb+0o6cTwDlD8UyEpqckE0CMzz2amx6F0
- gnjmF1oCy65AL4FyuxPU9tt6MUbi7CtduLB0KEBpTBE79ZTGYMDYg3V
-X-Developer-Key: i=esben@geanix.com; a=ed25519;
- pk=PbXoezm+CERhtgVeF/QAgXtEzSkDIahcWfC7RIXNdEk=
-X-Authenticated-Sender: esben@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27397/Fri Sep 13 10:48:01 2024)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240911070028.127659-3-ciprianmarian.costea@oss.nxp.com>
 
-Keep coding style consistent, by using kernel integer types instead of
-standard types.
+Hi Ciprian,
 
-Signed-off-by: Esben Haabendal <esben@geanix.com>
----
- drivers/rtc/rtc-isl12022.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index 8001e3c5da76..9b44839a7402 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -172,7 +172,7 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct isl12022 *isl12022 = dev_get_drvdata(dev);
- 	struct regmap *regmap = isl12022->regmap;
--	uint8_t buf[ISL12022_REG_INT + 1];
-+	u8 buf[ISL12022_REG_INT + 1];
- 	int ret;
- 
- 	ret = regmap_bulk_read(regmap, ISL12022_REG_SC, buf, sizeof(buf));
-@@ -209,7 +209,7 @@ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	struct isl12022 *isl12022 = dev_get_drvdata(dev);
- 	struct regmap *regmap = isl12022->regmap;
- 	int ret;
--	uint8_t buf[ISL12022_REG_DW + 1];
-+	u8 buf[ISL12022_REG_DW + 1];
- 
- 	dev_dbg(dev, "%s: %ptR\n", __func__, tm);
- 
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on robh/for-next arm64/for-next/core linus/master v6.11-rc7 next-20240912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Costea/dt-bindings-rtc-add-schema-for-NXP-S32G2-S32G3-SoCs/20240911-150205
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20240911070028.127659-3-ciprianmarian.costea%40oss.nxp.com
+patch subject: [PATCH 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
+config: hexagon-randconfig-r112-20240913 (https://download.01.org/0day-ci/archive/20240913/202409131950.ozDVVv5X-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce: (https://download.01.org/0day-ci/archive/20240913/202409131950.ozDVVv5X-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409131950.ozDVVv5X-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/rtc/rtc-s32g.c:7:
+   In file included from include/linux/of_irq.h:7:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/rtc/rtc-s32g.c:7:
+   In file included from include/linux/of_irq.h:7:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/rtc/rtc-s32g.c:7:
+   In file included from include/linux/of_irq.h:7:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/rtc/rtc-s32g.c:668:34: warning: unused variable 'rtc_dt_ids' [-Wunused-const-variable]
+     668 | static const struct of_device_id rtc_dt_ids[] = {
+         |                                  ^~~~~~~~~~
+   7 warnings generated.
+
+
+vim +/rtc_dt_ids +668 drivers/rtc/rtc-s32g.c
+
+   667	
+ > 668	static const struct of_device_id rtc_dt_ids[] = {
+   669		{.compatible = "nxp,s32g-rtc" },
+   670		{ /* sentinel */ },
+   671	};
+   672	
 
 -- 
-2.46.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
