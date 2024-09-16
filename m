@@ -1,135 +1,90 @@
-Return-Path: <linux-rtc+bounces-1994-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-1995-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04669979E99
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Sep 2024 11:43:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4AEE97A23D
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Sep 2024 14:26:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF2DF283589
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Sep 2024 09:43:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6AF7286F91
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Sep 2024 12:26:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80744149E0B;
-	Mon, 16 Sep 2024 09:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE697156F3B;
+	Mon, 16 Sep 2024 12:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPvHXqk/"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CW58NGkS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5540B140E50;
-	Mon, 16 Sep 2024 09:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227D713DBA0
+	for <linux-rtc@vger.kernel.org>; Mon, 16 Sep 2024 12:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726479829; cv=none; b=sxkqgAZZdgx+cYL+ievEkcxhzWJe+83MdRHzwBBq2dMCz87wvwGGWentMKZbNgAh0Mu4Bh1eAxeBT/Ve+W7QiomyT67U2stSxJOhp++IFVBTTDTZgt5c4958raQg5YDjBMV9R9lqvBUGJvj1ceR1S7BjQr3LitPyXTjaE9HJDvs=
+	t=1726489507; cv=none; b=J7qGpDHpoeKVItZdNMveSRk9S3WSfvhfYg8fTzYRHEXp/QFdJW/TNH6n3YDT+zl6S8aU/m2q/8UT6klPLjQNZwuU+GHPFVvA/i4wk6jBzw/wTXokkfPstdKxSlju7g5L9a/N+ZTBbXG3KUF/8aMZ1KRu+9t3YjbNgRtdvjt8Nh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726479829; c=relaxed/simple;
-	bh=uSLjVMOFtjZ6RN5n2oEbfcv69+hcDB7RedYfY0m4J3c=;
+	s=arc-20240116; t=1726489507; c=relaxed/simple;
+	bh=SPnD3RvAPtVOEVrDrD+aiFawOqWU8C66/fKxvB+0WFk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X1ZoqvhxNeEAlDm7PbNzCwh+q+UHXY99j1bPLO02lKWrv0akvPDhAgALizoSNF9mABD7jyMBZOiXjxHtbgS22j5xrL+tXwZQlC57fkw1ValIkQ+G5v6JVFBV2BibTTRyDjbp8AFhodwIzpvERD26hITYttfUbhodAi+Hr1JqGMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPvHXqk/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAD8C4CEC4;
-	Mon, 16 Sep 2024 09:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726479828;
-	bh=uSLjVMOFtjZ6RN5n2oEbfcv69+hcDB7RedYfY0m4J3c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VPvHXqk/f8+eUm3LxYMPvdkcxy7SbCr6raEVx58xFF5uuoMAdjmOor+HmP+kpR4uQ
-	 S5rJi/E+pDizyB24Sdqd/VhkL5bvN1P+oLHkU8SJ/0aT+NBngwKxvyuycU3vsfBLOI
-	 2uq9egVifX2vRvfqUMgQjXf/q5X5nkrVAbo6nznPKKYl3KTUe7rcw3XOKZtFqzkeHQ
-	 GiUm7lkvEPgLkW8s6O0NhV/I1p5gP4rVYHoq1zRGODBIHW1/dANXaFqHzhrM4Qoz5V
-	 itDaOFF18Ft9W6Cj3+D73zeznIMWEsbAScczDZYMyfk/MvxqcTnqFt6AHCXvkdkUcY
-	 ON0dvyU0QobXQ==
-Date: Mon, 16 Sep 2024 11:43:44 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc: Yiting Deng <yiting.deng@amlogic.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: rtc: Add Amlogic A4 and A5 RTC
-Message-ID: <u5dtpbnnfrjwf5nmpxfug4fd5argwdu5oi4cogu2wiexkw3l5p@qxjxu52w3pea>
-References: <20240910-rtc-v3-0-1fa077a69a20@amlogic.com>
- <20240910-rtc-v3-1-1fa077a69a20@amlogic.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JNmJi7EOBLB2Y3Gst9B9XX+FaWI1GMEpS+Pqc7078HoRFiAuUaXlWIjtBPIJT50jdSd/Xrj4o0SKjhnClGI65NWZDqJAHi50RuvTVuEVdlfS4/+ZIFapU6fuQAdkg5vlhpiUNjgvhAMssDXdMBnlDIxitOmydC5pJMyeyWcumj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CW58NGkS; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1168224000E;
+	Mon, 16 Sep 2024 12:24:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1726489497;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1eM5HL1our5CzIrBZnK/imY8wGAB4RNhuKwNPR6sSrY=;
+	b=CW58NGkSSusfsLPmaOJairjmIYIJJb9IFEYpytXYI3g1OEAYkKtPTTAvc5xkTgCNI13JPS
+	XRsw34L13mLjPnkQIw+MlW51ia2xUxMLbW7YSboWOem9wY3MyUbPn4/j2ETWbcXgkoHOR2
+	LJ0fFtEHo1JVbb8zmmBS8hqsy2FuUqELoCgOj+d+c8QJpZwzDMbKSRpSQ+ii/iXli1yrMK
+	TmxwcRAXBXi3G3bee2wx9idHhBacpREAl8csu93t1+4BWf6ouYLrvpgUYUFo0y9eKPfTZy
+	xA+giWLh/onrcQV6fatG9lluRQ64syhN7I8x11hYxAQuddGKzrcq4XKN2Vai6Q==
+Date: Mon, 16 Sep 2024 14:24:56 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Pavel Nikulin <pavel@noa-labs.com>
+Cc: linux-rtc@vger.kernel.org
+Subject: Re: Re-enabling EFI RTC on X86 for modern systems
+Message-ID: <2024091612245674417535@mail.local>
+References: <CAG-pW8EGsxV85J+QcP4yKnngutdPoMBGWNN8LnAM3nU+7DKPnA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240910-rtc-v3-1-1fa077a69a20@amlogic.com>
+In-Reply-To: <CAG-pW8EGsxV85J+QcP4yKnngutdPoMBGWNN8LnAM3nU+7DKPnA@mail.gmail.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, Sep 10, 2024 at 06:14:18PM +0800, Xianwei Zhao wrote:
-> From: Yiting Deng <yiting.deng@amlogic.com>
+Hello,
+
+On 11/09/2024 03:58:49+0400, Pavel Nikulin wrote:
+> Hello,
 > 
-> Add documentation describing the Amlogic A4(A113L2) and A5(A113X2) RTC.
+> I noticed that EFI RTC was disabled on X86 really long time ago due to
+> Intel reference firmwares coming with broken EFI.
 > 
-> Signed-off-by: Yiting Deng <yiting.deng@amlogic.com>
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> ---
->  .../devicetree/bindings/rtc/amlogic,a4-rtc.yaml    | 63 ++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
+> I edited the Kconfig to enable it, and see how it works on my laptop
+> (AMD HX370). I can confirm that it boots well. I have not done any
+> more extensive tests than that.
 > 
-> diff --git a/Documentation/devicetree/bindings/rtc/amlogic,a4-rtc.yaml b/Documentation/devicetree/bindings/rtc/amlogic,a4-rtc.yaml
-> new file mode 100644
-> index 000000000000..eee994753a12
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/amlogic,a4-rtc.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2024 Amlogic, Inc. All rights reserved
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/amlogic,a4-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic A4 and A5 RTC
-> +
-> +maintainers:
-> +  - Yiting Deng <yiting.deng@amlogic.com>
-> +  - Xianwei Zhao <xianwei.zhao@amlogic.com>
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,a4-rtc
-> +      - amlogic,a5-rtc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: RTC clock source, available 24M or 32K crystal
-> +          oscillator source. when using 24M, need to divide 24M into 32K.
-> +      - description: RTC module accesses the clock of the apb bus.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: osc
-> +      - const: sys
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
+> What do you think about re-enabling EFI RTC behind some expert config
+> flag, and ask more people to test it on modern X86 hardware?
 
-If there is going to be a new version, keep the same order as in
-properties: section.
+I don't mind do that, I believe the issue is that this is going to break
+the users that have a broken EFI and rely on CMOS. Please copy the x86
+maintainers on your patch.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Regards,
 
-Best regards,
-Krzysztof
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
