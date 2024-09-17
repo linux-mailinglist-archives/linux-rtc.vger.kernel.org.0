@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-2009-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2010-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 486A497B3A2
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 19:36:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D32EC97B3A6
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 19:37:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00C981F22E39
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 17:36:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C0911F231F9
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 17:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739A017C990;
-	Tue, 17 Sep 2024 17:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D362183CD6;
+	Tue, 17 Sep 2024 17:37:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnMV7Gs5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oyy10bB4"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CD2182;
-	Tue, 17 Sep 2024 17:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8DB182;
+	Tue, 17 Sep 2024 17:37:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726594573; cv=none; b=qksxu/Rv7kQerQjQvohyFqs2q0sslC0f9TsxPFlxkVlVJlPEJ1sm49B6RG83iippNmANOX6+eJXxmyqHHhC4XYBrDc6HztkmPO9UvwUDLM59rArWQLtqRZNqHIMHIQOJZqxmr8pVRPdxXm6mdwRxAYFV8uwlPOzypJV8zDtDrMo=
+	t=1726594671; cv=none; b=LHJbZ1bnEsox+cxhx5Xl8nHJ6jKpByLwT22X+g5L3jC9cF45czldZlWoy7FeWVYMV96ffzzszLFOqA6CQ9AIapTsM4OerDmmQ1f2AoYhQYXsGyIpfOpujisAYZhmXcv02kMyjcc1lvwkhQcnTL17NOkmz3oGAAyJbh+qiSgy1ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726594573; c=relaxed/simple;
-	bh=/r3lZgA0K8dFIfRNt3dRyl5F1WVj4N3lg1mU48m1d+Q=;
+	s=arc-20240116; t=1726594671; c=relaxed/simple;
+	bh=Ss/tG/VcJ8Bh3kRu0STrQcuJlSGpvWoKELQo8KPoUYc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gtzCr9qN8zKlpBrC98lbN0XKxxKfJ89NvcW444ltL8dY+IZNpXG7OoAOuiZ2IwyVoVdZY6GZ/EFvJvGFB58buHl3KCLGGsN+bAvbghJ59iljEw4W5XfJjHad9rEP2sZiGxf7TAdEQclL6wICPzRG+qmhVebc3lUSbnxohWyOhD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnMV7Gs5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85FC7C4CEC5;
-	Tue, 17 Sep 2024 17:36:09 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=kgb2w5oRuuAIsAC6v/iJWXyQQWxQykenxsd3gKBOUFbk8UsHcACmz4+CO0dJYPVW4U2fZMnuaRe2Mv9ny1XlrEv4CnBU/rUPL39yEUsdQr65GhoPxGjK6LddJ4C6USFtFfagDPsHA5bKTNJoyd1TOqdeStVhFRAVSZ+Hnmt26yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oyy10bB4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 322CAC4CEC5;
+	Tue, 17 Sep 2024 17:37:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726594572;
-	bh=/r3lZgA0K8dFIfRNt3dRyl5F1WVj4N3lg1mU48m1d+Q=;
+	s=k20201202; t=1726594670;
+	bh=Ss/tG/VcJ8Bh3kRu0STrQcuJlSGpvWoKELQo8KPoUYc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BnMV7Gs5fxZUsVS9o4cvhpxHEBEb1FUXo0tu+NgaJGP44Rsu3pZ2tdl1ibDTTB1pN
-	 cJ+cjas//tzYmvcLfB7JmQrB8x/kMS8jZRWYp7cQtdD5oiRgnoKU3Ym9bSpLCd6iNI
-	 5QRs/+oiPpwcKDdyHcj6rvuDHobgE0pX3L2D+gzyZM/vTDAoZ4J6IaT+PBz/UEBqXe
-	 S44h6Gsf9Ot5UwINX+ylYN8rM791+mUcobDP1lrxuFYhqeewX0Z0VK/TaHuypHBX1N
-	 969sTnD/5sqllhiiCRekpuKEwLkFD5tzNK8sGsN56P/vNXm/37Zu9W6HRz9//11LwZ
-	 YlE9163l9Ev4Q==
-Message-ID: <f39900f0-f99a-4a31-88bc-13d459392ffc@kernel.org>
-Date: Tue, 17 Sep 2024 19:36:06 +0200
+	b=Oyy10bB4f7v2e/wiZCpZhUmezXfVZnCtv8cTfqlc7NjP8spBmL0zSBG/j9egGUVnN
+	 nwNaGblTuJo1jMPTpVygB6dWE3MMfoHLIOY7oHjZZSx+QkBGu7UfnXKvdmUJzsSgaG
+	 QQ2dgHgWbi0s8eQeBBtXWv5aPOXpS0/j9Sqo3Bp/UAHkZmIgaA8/ErZbfhZM1WP7L2
+	 1IargEPgngsaq9TAAuyRr7bkgohwKdEoNYPNqk0/NTg7U1WECb2vr3xGAjDPuZEo8u
+	 Mx+I/1DwgxDpK6CHOp3wn98Ocd5yCjw5fLtmnpNuj2ZsV2YMkWsbd0NuuP7kkPACc5
+	 7I8CSTWA6tz0Q==
+Message-ID: <56c16398-faeb-4c99-9eaf-66ac5a872072@kernel.org>
+Date: Tue, 17 Sep 2024 19:37:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] arm64: defconfig: add S32G RTC module support
+Subject: Re: [PATCH 4/4] MAINTAINERS: add MAINTAINER for S32G2/S32G3 RTC
+ driver
 To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -60,7 +61,7 @@ Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  NXP S32 Linux Team <s32@nxp.com>
 References: <20240911070028.127659-1-ciprianmarian.costea@oss.nxp.com>
- <20240911070028.127659-4-ciprianmarian.costea@oss.nxp.com>
+ <20240911070028.127659-5-ciprianmarian.costea@oss.nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,16 +107,38 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240911070028.127659-4-ciprianmarian.costea@oss.nxp.com>
+In-Reply-To: <20240911070028.127659-5-ciprianmarian.costea@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/09/2024 09:00, Ciprian Costea wrote:
 > From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 > 
-> This patch enables CONFIG_RTC_DRV_S32G as module by default.
+> Now that a RTC driver was added for S32G2/S32G3 SoC, update
+> the mainainters list for it.
 
-We see this from the diff. We do not see why we would like this.
+Why? You don't do that alone. You add yourself for entire platform!
+
+> 
+> Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+> ---
+>  MAINTAINERS | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f328373463b0..a6d91101ec43 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2686,11 +2686,13 @@ ARM/NXP S32G ARCHITECTURE
+>  R:	Chester Lin <chester62515@gmail.com>
+>  R:	Matthias Brugger <mbrugger@suse.com>
+>  R:	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
+
+If you are touching someone's maintainer entry, at least you could do is
+to CC them.
+
+And how many reviewers do you want to have in that platform? Are all
+entries real or some are stale?
 
 Best regards,
 Krzysztof
