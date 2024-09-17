@@ -1,117 +1,134 @@
-Return-Path: <linux-rtc+bounces-2006-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2007-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 663E097AD84
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 11:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37AF097B032
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 14:37:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19E8B28323B
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 09:04:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F34C22877C7
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 12:37:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6D715958E;
-	Tue, 17 Sep 2024 09:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F9E1714B5;
+	Tue, 17 Sep 2024 12:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="S5RMeAyL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KMRLDQ4p"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B50150990;
-	Tue, 17 Sep 2024 09:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC3D16FF37;
+	Tue, 17 Sep 2024 12:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726563881; cv=none; b=CYyON8CekeyrDP76HlJBp7l5++G+vONTwY8B5hc0cX4rfWG12VhjU7kclQHeDanaJybEf5v0T6J0D9bFyNAjD/3h6APpW7U4bLR8piGKKMgNFchAliMnhtAPY3AiPOegPiWhf7xeKVmcow2u+QDXNDFZtufEyZSJwcuR5kzdDPU=
+	t=1726576648; cv=none; b=JVCC+csWyqFaukBztP4EuCmU/GhbO2C0rVKUSkjJyZ7XET/mnvvTY6ELDGaIN1iBak0MvswwEmSiyWWruIIISt+F7fUD+9r13NEDd9Hya7bSXk4j6Rs+2L9t8Dpca4x8yQHeZYEO+82dNTriSHNtx8K7/YKEu7QXXdCoTPrQKzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726563881; c=relaxed/simple;
-	bh=5NCGPiERJ+Jw5qTfwSzmHF6iCdF89H70h6XEILDhTIE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i/Pnp9DC411k1ssPzZJK3nXdGPGila/tMSTbGu9N2R/Tm8jrsVraFkFYhkfQz55a804Moh2E0iwt2UbBEiaJWD381/OTFfupR7Skz4ELc21HtcNCdYAPFP6TofbLhbGK1VYMzuFZ5qqifXVwcXsmfhshxK4IpO+jOjs/pOdtUDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=S5RMeAyL; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1726563878;
-	bh=5NCGPiERJ+Jw5qTfwSzmHF6iCdF89H70h6XEILDhTIE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=S5RMeAyLuLMXAZ2qIVHPpQd+yUU7hN6A9HmCHPyK3f/Qm4sqiXA2P5IDtgTO6x+CA
-	 gY9CznaCeUisJIeO7nOfj9MvveNWSI96sSPNWHDMTf3HO1lOXXEQRXgs5Yqo/VIw5X
-	 3EzWC/6RCGN4xCicPAKEqbaYzsy4XIpR/EkE432JijXfSsEhiXKuuC9+tPDNxLdUP9
-	 P2OUxIR7t8sYk+AtNUm9IrY+oLh5bnYHNEyiwHQBNPsef5b7lGbZhtNkygfnOFy3FJ
-	 TBSgxGOyL/YUvetV7okyLSdFBN4RSsA5Dt9gxfphjhOQY1Y6C7zN9zLm2AD/oWg5TP
-	 R4jGK++Gne67w==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id ADEF717E107A;
-	Tue, 17 Sep 2024 11:04:34 +0200 (CEST)
-Message-ID: <08bdcc19-023b-4c7d-9e01-2b04cac00a08@collabora.com>
-Date: Tue, 17 Sep 2024 11:04:33 +0200
+	s=arc-20240116; t=1726576648; c=relaxed/simple;
+	bh=PxFeReBWYByWEhz9w7Zs65d5ILcBl+w1tBhDo4/j68M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F4zhSdJzp63ohr+NkrZ6OzHIr+ZzxWDAsI6z5DQs6kCowrbLvPKHdww6VImpcGqKVHMrlQm/oX0G1ophqn3EbEbjR0SptZ5PJ5CCSdKh4jwrxXpV3JSIgI57nMKYXGfKud4FIq/VG0c8fsV000WtcD3Q/PsWEtXVJvxinFX+cPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KMRLDQ4p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E32C4CECD;
+	Tue, 17 Sep 2024 12:37:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726576647;
+	bh=PxFeReBWYByWEhz9w7Zs65d5ILcBl+w1tBhDo4/j68M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KMRLDQ4poM7iWjNXRF02ALzeCHaoslI3yakhyXDDROTugPn1tljmXw3sNmWKENCmw
+	 zj8ASnmrPfgZMoJ+N60pzOtA/cx+7lbZU3lGsibXRS46Ar98eUmPXgvze5cRLLSwg6
+	 xeRXgPuoxN6qVlnso2F70eF9ZKm4Oipzg5pS4jAFZYPwh0ymrHOVH075z0Xnv11FtK
+	 JjRju4cyhD+oVIaGHjlwJdFsfDaXucDh1w492Uk3aOV3xRq6B59GMvUhsho4ZbTZjo
+	 klGSLkEGoN1ELjicRTDBlsKIh+ytCMv3bv3BgLUQWHYd5N9rM5Y46YJj2pQ6lhwra/
+	 B/6QTho9UTovg==
+Date: Tue, 17 Sep 2024 13:37:30 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+Subject: Re: [PATCH 1/4] dt-bindings: rtc: add schema for NXP S32G2/S32G3 SoCs
+Message-ID: <20240917-cola-cloak-5dcaa083a0ef@squawk>
+References: <20240911070028.127659-1-ciprianmarian.costea@oss.nxp.com>
+ <20240911070028.127659-2-ciprianmarian.costea@oss.nxp.com>
+ <20240911-racism-playmaker-71cb87d1260f@spud>
+ <62ba70ca-429e-476c-bb7b-78f743574a68@oss.nxp.com>
+ <2024091212260302903af7@mail.local>
+ <2815dcf8-bb90-4e3f-837d-2c2a36a8744e@oss.nxp.com>
+ <202409121403232ab1295b@mail.local>
+ <c51a8065-2052-4a4e-b871-c0bd8d834548@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 3/3] regulator: dt-bindings: mt6397: move examples to
- parent PMIC mt6397
-To: Macpaul Lin <macpaul.lin@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
- Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
- <olteanv@gmail.com>, "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Sean Wang <sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
- Alexandre Mergnat <amergnat@baylibre.com>
-Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
- Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
- MediaTek Chromebook Upstream
- <Project_Global_Chrome_Upstream_Group@mediatek.com>,
- Chen-Yu Tsai <wenst@chromium.org>
-References: <20240916151132.32321-1-macpaul.lin@mediatek.com>
- <20240916151132.32321-3-macpaul.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20240916151132.32321-3-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3BeO3tzMmChdpin/"
+Content-Disposition: inline
+In-Reply-To: <c51a8065-2052-4a4e-b871-c0bd8d834548@oss.nxp.com>
 
-Il 16/09/24 17:11, Macpaul Lin ha scritto:
-> Since the DT schema of multiple function PMIC mt6397 has been converted,
-> move the examples in "mediatek,mt6397-regulator.yaml" to the parent schema
-> "mediatek,mt6397.yaml".
-> 
 
-You can instead just keep a reference to mediatek,mt6397-regulator.yaml in the
-"MFD" (pmic) schema instead.
+--3BeO3tzMmChdpin/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It's true that for MT6397 you can possibly have only MT6397's regulator and not
-others, but still, the logic is to:
-  - Say that MT6397 supports regulator subnode(s) in mediatek,mt6397.yaml
-    - Refer to the regulator schema (mediatek,mt6397-regulator.yaml)
-  - Keep the regulator schema (providing only regulator HW specific info)
-    in the regulator folder.
+On Tue, Sep 17, 2024 at 10:21:32AM +0300, Ciprian Marian Costea wrote:
+> On 9/12/2024 5:03 PM, Alexandre Belloni wrote:
+> > On 12/09/2024 15:36:46+0300, Ciprian Marian Costea wrote:
+> > > > Then should this mux be registered in the CCF so you can use the us=
+ual
+> > > > clock node properties?
+> > >=20
+> > > Hello Alexandre,
+> > >=20
+> > > In hardware, these clock muxes and divisors are part of the RTC module
+> > > itself and not external. Therefore, I would say no.
+> >=20
+> > This is irrelevant, if this is a clock mux, it must be in the CCF, just
+> > as when the RTC has a clock output.
+> >=20
+> >=20
+>=20
+> I understand your point, but taking into account the fact that FIRC clock
+> should be used in most scenarios, would it be acceptable to not export th=
+is
+> 'clksel' property in the devicetree bindings and simply use the FIRC clock
+> by default in the RTC driver ?
 
-Besides that, this also makes the main mediatek,mt6397.yaml schema a bit more
-human readable... :-)
+Devices should be described in full in the bindings, regardless of
+whether or not the driver for the device makes use of that information.
 
 Cheers,
-Angelo
+Conor,
 
+>=20
+> At least for this patchset, in order to ease the review process. If
+> configurable clock source support would want to be enabled and exported v=
+ia
+> bindings for this S32G2/S32G3 RTC driver, then CCF registration for this =
+clk
+> mux could be added in future patches.
 
+--3BeO3tzMmChdpin/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZul4BwAKCRB4tDGHoIJi
+0rabAP4utycadhKijKcCpjsXmcNUL/rYEJ9wsiGlj1v+vYZIYgEA91U1l8tZhMjG
+99iEztEIFWyUsVElcZrTg5RCUGZ2FwE=
+=032Y
+-----END PGP SIGNATURE-----
+
+--3BeO3tzMmChdpin/--
 
