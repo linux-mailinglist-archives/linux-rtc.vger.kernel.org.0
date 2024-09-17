@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-2010-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2011-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D32EC97B3A6
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 19:37:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97C4A97B3BB
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 19:40:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C0911F231F9
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 17:37:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC8F51C220F7
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Sep 2024 17:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D362183CD6;
-	Tue, 17 Sep 2024 17:37:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF897185E6E;
+	Tue, 17 Sep 2024 17:40:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oyy10bB4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPAT2ZBc"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8DB182;
-	Tue, 17 Sep 2024 17:37:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6B1174EFA;
+	Tue, 17 Sep 2024 17:40:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726594671; cv=none; b=LHJbZ1bnEsox+cxhx5Xl8nHJ6jKpByLwT22X+g5L3jC9cF45czldZlWoy7FeWVYMV96ffzzszLFOqA6CQ9AIapTsM4OerDmmQ1f2AoYhQYXsGyIpfOpujisAYZhmXcv02kMyjcc1lvwkhQcnTL17NOkmz3oGAAyJbh+qiSgy1ZY=
+	t=1726594854; cv=none; b=jnGw/SzOefdeY9vt3UM34wF2PJCJfEAoahaxHcaheO3eu7V0WByDyBF8Zoc3zKUDsQ3C52Y4WPIbZk05NSBnwVS5g598giJBL5wUNvXXILqBiCXqEeWD798DdYTDiI1SR/xTdHMImhVY4Hp6fS6dJus40MGHblT7Q28fgkPf1z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726594671; c=relaxed/simple;
-	bh=Ss/tG/VcJ8Bh3kRu0STrQcuJlSGpvWoKELQo8KPoUYc=;
+	s=arc-20240116; t=1726594854; c=relaxed/simple;
+	bh=CfyC31sh4NSND8jyoQX6OKo7Of16jGTsc/7R0TCHy14=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kgb2w5oRuuAIsAC6v/iJWXyQQWxQykenxsd3gKBOUFbk8UsHcACmz4+CO0dJYPVW4U2fZMnuaRe2Mv9ny1XlrEv4CnBU/rUPL39yEUsdQr65GhoPxGjK6LddJ4C6USFtFfagDPsHA5bKTNJoyd1TOqdeStVhFRAVSZ+Hnmt26yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oyy10bB4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 322CAC4CEC5;
-	Tue, 17 Sep 2024 17:37:45 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Is58fo34ivdzc8Ah+7JG5okpHqos6xOaj0hSnIs/5QhghU/LN7q+WAhbgCpNDNxkirMZWO+W95Y+lKveEmoiXot1+WX1x3UUu+YNxv3qd6tLZD7tRXA7k9agGJoDnw95A9dNFN6OQI27sxKelVB2a5pjzTe7BXqLj8r8vQGpxDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPAT2ZBc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93371C4CEC5;
+	Tue, 17 Sep 2024 17:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726594670;
-	bh=Ss/tG/VcJ8Bh3kRu0STrQcuJlSGpvWoKELQo8KPoUYc=;
+	s=k20201202; t=1726594854;
+	bh=CfyC31sh4NSND8jyoQX6OKo7Of16jGTsc/7R0TCHy14=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Oyy10bB4f7v2e/wiZCpZhUmezXfVZnCtv8cTfqlc7NjP8spBmL0zSBG/j9egGUVnN
-	 nwNaGblTuJo1jMPTpVygB6dWE3MMfoHLIOY7oHjZZSx+QkBGu7UfnXKvdmUJzsSgaG
-	 QQ2dgHgWbi0s8eQeBBtXWv5aPOXpS0/j9Sqo3Bp/UAHkZmIgaA8/ErZbfhZM1WP7L2
-	 1IargEPgngsaq9TAAuyRr7bkgohwKdEoNYPNqk0/NTg7U1WECb2vr3xGAjDPuZEo8u
-	 Mx+I/1DwgxDpK6CHOp3wn98Ocd5yCjw5fLtmnpNuj2ZsV2YMkWsbd0NuuP7kkPACc5
-	 7I8CSTWA6tz0Q==
-Message-ID: <56c16398-faeb-4c99-9eaf-66ac5a872072@kernel.org>
-Date: Tue, 17 Sep 2024 19:37:44 +0200
+	b=gPAT2ZBcYkkmfij4hHj6TqXn87KujkWns8I1H5A90IiyVWgQCy08tmzrGTjEMlYWU
+	 26nEMVuEDNT7T1wyp3ksvQhxHRuR2SnrXDyFBFFGMpcpnXPk/zZ+8fKbU8+JxyKxd+
+	 blzIQhfpehzA1xVdD8N+GAMGG8UEogQiakNY5xQh8XSsRk67uvm0+eXKrNwcovZbZU
+	 eTKkF0+8Y9ELuxy/0paY4pRi0UXgStru5A5wdVjYbhbVVRcVTOY1OoS2VbirvEtmMX
+	 A6vzre362IqIlhLOicebbv7IWK6DmxGR+ekn/DBOwpUGCzyyTRJdU6QO/A/JiAEJWj
+	 TlmA2ApFpVJUw==
+Message-ID: <51888969-5b0f-42de-8bbf-bcb325f642ea@kernel.org>
+Date: Tue, 17 Sep 2024 19:40:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] MAINTAINERS: add MAINTAINER for S32G2/S32G3 RTC
- driver
+Subject: Re: [PATCH 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
 To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -59,9 +58,11 @@ To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
  <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
 Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- NXP S32 Linux Team <s32@nxp.com>
+ NXP S32 Linux Team <s32@nxp.com>, Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
+ Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>,
+ Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
 References: <20240911070028.127659-1-ciprianmarian.costea@oss.nxp.com>
- <20240911070028.127659-5-ciprianmarian.costea@oss.nxp.com>
+ <20240911070028.127659-3-ciprianmarian.costea@oss.nxp.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,38 +108,269 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240911070028.127659-5-ciprianmarian.costea@oss.nxp.com>
+In-Reply-To: <20240911070028.127659-3-ciprianmarian.costea@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/09/2024 09:00, Ciprian Costea wrote:
 > From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 > 
-> Now that a RTC driver was added for S32G2/S32G3 SoC, update
-> the mainainters list for it.
-
-Why? You don't do that alone. You add yourself for entire platform!
-
+> Add a RTC driver for NXP S32G2/S32G3 SoCs.
 > 
-> Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
-> ---
->  MAINTAINERS | 2 ++
->  1 file changed, 2 insertions(+)
+> The RTC module is used to enable Suspend to RAM (STR) support
+> on NXP S32G2/S32G3 SoC based boards.
+> RTC tracks clock time during system suspend.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f328373463b0..a6d91101ec43 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2686,11 +2686,13 @@ ARM/NXP S32G ARCHITECTURE
->  R:	Chester Lin <chester62515@gmail.com>
->  R:	Matthias Brugger <mbrugger@suse.com>
->  R:	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
 
-If you are touching someone's maintainer entry, at least you could do is
-to CC them.
+...
 
-And how many reviewers do you want to have in that platform? Are all
-entries real or some are stale?
+> +	priv->div512 = !!div[0];
+> +	priv->div32 = !!div[1];
+> +
+> +	switch (clksel) {
+> +	case S32G_RTC_SOURCE_SIRC:
+> +	case S32G_RTC_SOURCE_FIRC:
+> +		priv->clk_source = clksel;
+> +		break;
+> +	default:
+> +		dev_err(dev, "Unsupported clksel: %d\n", clksel);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct rtc_priv *priv;
+> +	int ret = 0;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(struct rtc_priv),
+
+sizeof(*)
+
+> +			    GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->rtc_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->rtc_base)) {
+> +		dev_err(dev, "Failed to map registers\n");
+> +		return PTR_ERR(priv->rtc_base);
+
+return dev_err_probe
+
+> +	}
+> +
+> +	device_init_wakeup(dev, true);
+> +	priv->dev = dev;
+> +
+> +	ret = priv_dts_init(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = rtc_init(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +	rtc_enable(priv);
+> +
+> +	priv->rdev = devm_rtc_device_register(dev, "s32g_rtc",
+> +					      &rtc_ops, THIS_MODULE);
+> +	if (IS_ERR_OR_NULL(priv->rdev)) {
+> +		dev_err(dev, "Error registering RTC device, err: %ld\n",
+> +			PTR_ERR(priv->rdev));
+> +		ret = PTR_ERR(priv->rdev);
+> +		goto disable_rtc;
+> +	}
+> +
+> +	ret = devm_request_irq(dev, priv->dt_irq_id,
+> +			       rtc_handler, 0, dev_name(dev), pdev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Request interrupt %d failed, error: %d\n",
+> +			priv->dt_irq_id, ret);
+> +		goto disable_rtc;
+> +	}
+> +
+> +	return 0;
+> +
+> +disable_rtc:
+> +	rtc_disable(priv);
+> +	return ret;
+> +}
+> +
+> +static void rtc_remove(struct platform_device *pdev)
+> +{
+> +	struct rtc_priv *priv = platform_get_drvdata(pdev);
+> +
+> +	rtc_disable(priv);
+> +}
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +static void enable_api_irq(struct device *dev, unsigned int enabled)
+> +{
+> +	struct rtc_priv *priv = dev_get_drvdata(dev);
+> +	u32 api_irq = RTCC_APIEN | RTCC_APIIE;
+> +	u32 rtcc;
+> +
+> +	rtcc = ioread32(priv->rtc_base + RTCC_OFFSET);
+> +	if (enabled)
+> +		rtcc |= api_irq;
+> +	else
+> +		rtcc &= ~api_irq;
+> +	iowrite32(rtcc, priv->rtc_base + RTCC_OFFSET);
+> +}
+> +
+> +static int adjust_dividers(u32 sec, struct rtc_priv *priv)
+> +{
+> +	u64 rtcval_max = U32_MAX;
+> +	u64 rtcval;
+> +
+> +	priv->div32 = 0;
+> +	priv->div512 = 0;
+> +
+> +	rtcval = sec * priv->rtc_hz;
+> +	if (rtcval < rtcval_max)
+> +		return 0;
+> +
+> +	if (rtcval / 32 < rtcval_max) {
+> +		priv->div32 = 1;
+> +		return 0;
+> +	}
+> +
+> +	if (rtcval / 512 < rtcval_max) {
+> +		priv->div512 = 1;
+> +		return 0;
+> +	}
+> +
+> +	if (rtcval / (512 * 32) < rtcval_max) {
+> +		priv->div32 = 1;
+> +		priv->div512 = 1;
+> +		return 0;
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int rtc_suspend(struct device *dev)
+> +{
+> +	struct rtc_priv *init_priv = dev_get_drvdata(dev);
+> +	struct rtc_priv priv;
+> +	long long base_sec;
+> +	int ret = 0;
+> +	u32 rtcval;
+> +	u32 sec;
+> +
+> +	if (!device_may_wakeup(dev))
+> +		return 0;
+> +
+> +	/* Save last known timestamp before we switch clocks and reinit RTC */
+> +	ret = s32g_rtc_read_time(dev, &priv.base.tm);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (init_priv->clk_source == S32G_RTC_SOURCE_SIRC)
+> +		return 0;
+> +
+> +	/*
+> +	 * Use a local copy of the RTC control block to
+> +	 * avoid restoring it on resume path.
+> +	 */
+> +	memcpy(&priv, init_priv, sizeof(priv));
+> +
+> +	/* Switch to SIRC */
+> +	priv.clk_source = S32G_RTC_SOURCE_SIRC;
+> +
+> +	ret = get_time_left(dev, init_priv, &sec);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Adjust for the number of seconds we'll be asleep */
+> +	base_sec = rtc_tm_to_time64(&init_priv->base.tm);
+> +	base_sec += sec;
+> +	rtc_time64_to_tm(base_sec, &init_priv->base.tm);
+> +
+> +	rtc_disable(&priv);
+> +
+> +	ret = adjust_dividers(sec, &priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to adjust RTC dividers to match a %u seconds delay\n", sec);
+> +		return ret;
+> +	}
+> +
+> +	ret = rtc_init(&priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = sec_to_rtcval(&priv, sec, &rtcval);
+> +	if (ret) {
+> +		dev_warn(dev, "Alarm is too far in the future\n");
+> +		return ret;
+> +	}
+> +
+> +	s32g_rtc_alarm_irq_enable(dev, 0);
+> +	enable_api_irq(dev, 1);
+> +	iowrite32(rtcval, priv.rtc_base + APIVAL_OFFSET);
+> +	iowrite32(0, priv.rtc_base + RTCVAL_OFFSET);
+> +
+> +	rtc_enable(&priv);
+> +
+> +	return ret;
+> +}
+> +
+> +static int rtc_resume(struct device *dev)
+> +{
+> +	struct rtc_priv *priv = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	if (!device_may_wakeup(dev))
+> +		return 0;
+> +
+> +	/* Disable wake-up interrupts */
+> +	enable_api_irq(dev, 0);
+> +
+> +	/* Reinitialize the driver using the initial settings */
+> +	ret = rtc_init(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	rtc_enable(priv);
+> +
+> +	/*
+> +	 * Now RTCCNT has just been reset, and is out of sync with priv->base;
+> +	 * reapply the saved time settings
+> +	 */
+> +	return s32g_rtc_set_time(dev, &priv->base.tm);
+> +}
+> +#endif /* CONFIG_PM_SLEEP */
+> +
+> +static const struct of_device_id rtc_dt_ids[] = {
+> +	{.compatible = "nxp,s32g-rtc" },
+> +	{ /* sentinel */ },
+> +};
+> +
+> +static SIMPLE_DEV_PM_OPS(rtc_pm_ops,
+> +			 rtc_suspend, rtc_resume);
+> +
+> +static struct platform_driver rtc_driver = {
+> +	.driver		= {
+> +		.name			= "s32g-rtc",
+> +		.pm				= &rtc_pm_ops,
+> +		.of_match_table = of_match_ptr(rtc_dt_ids),
+
+Drop of_match_ptr, you have here warning.
+
+> +	},
+> +	.probe		= rtc_probe,
+> +	.remove_new	= rtc_remove,
+> +};
+> +module_platform_driver(rtc_driver);
+> +
+> +MODULE_AUTHOR("NXP");
+> +MODULE_DESCRIPTION("NXP RTC driver for S32G2/S32G3");
+> +MODULE_LICENSE("GPL");
 
 Best regards,
 Krzysztof
