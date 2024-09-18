@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-2024-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2025-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B607C97BAF6
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Sep 2024 12:36:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C20397BAFE
+	for <lists+linux-rtc@lfdr.de>; Wed, 18 Sep 2024 12:38:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46AC22845AB
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Sep 2024 10:36:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3DB85B2A597
+	for <lists+linux-rtc@lfdr.de>; Wed, 18 Sep 2024 10:38:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B0D188006;
-	Wed, 18 Sep 2024 10:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B4D18952B;
+	Wed, 18 Sep 2024 10:37:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oe8fEsfa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZ3UHD9l"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6588B17E46E;
-	Wed, 18 Sep 2024 10:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080231891C3;
+	Wed, 18 Sep 2024 10:37:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726655794; cv=none; b=glOrQZUMkADls+2lwYNlB/LinMrd+9wBoaNJRsptIrvVY7z7pDhgHb220BOX8H5Q6kvFN4psN624bUNMKSnXHqhzPtLbPrhcJ2qmnZev3nFAM5uFOfeVFXQbD/CllNiuV2/cLTWaCbtWGokX6rroRl+OinEk0Giul8qoJZFDem0=
+	t=1726655866; cv=none; b=p0b4dRWoigMqW5PU6M92vHDRkreKudJrJO+fO8TjYLIN2atWWwsbZEiIgNXnZmMF+INg0TTgfnrTelkppOKBFIzLfWpcttt4F/DBjjOHnKhlnfrDcY8YstYtTgIzp6iQQpuBm0XRy333UtfHaVq8q/is/sFHgVGynpi3M9K2pQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726655794; c=relaxed/simple;
-	bh=eTS3gc/BmkF4XpBhvFZQ8aG/m3nfMsOJGf7bwOqJ/Q4=;
+	s=arc-20240116; t=1726655866; c=relaxed/simple;
+	bh=CTOcKEgY8jlNQ+MQfkCHYV1DkzEiLwX7P5+oZbdhIgc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FCjzi2I0IFQ4LGYII1WOzMatiK6O0fH69S0zI62osu1RqzXTMRvy/BkHxiosTtMpI7oDwEMySnw0FrpM2UP4r0hEmU+DoO/p4XsErayIifKDIbKGVWimy59Rm78TntRb8zp4ja1EI0Cgb/KS/hP8LTDTh/cURRO/x/Zyo0kcitE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oe8fEsfa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB87BC4CECE;
-	Wed, 18 Sep 2024 10:36:31 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=stiGO2cEiXHBlKUcoanABldiDFEot6XmhCwKgVw4wCX7YveQNmnZn/BcXwdKYCwvFuIhyZXqWtJwhxytHBSRqM1ayXLw8AdE27709/rZfRT9MQfGjzKwI10Es6EeTzEfkPnDILTZdhFqmrKprcyyrLeicAYZyz4cN5dyurmFS/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZ3UHD9l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 042C8C4CEC7;
+	Wed, 18 Sep 2024 10:37:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726655794;
-	bh=eTS3gc/BmkF4XpBhvFZQ8aG/m3nfMsOJGf7bwOqJ/Q4=;
+	s=k20201202; t=1726655865;
+	bh=CTOcKEgY8jlNQ+MQfkCHYV1DkzEiLwX7P5+oZbdhIgc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Oe8fEsfajVU+mpBu5m19PkX0miGKUfcaJX51dE8Uih2n3hLW0rwlfm220XC9pUBAA
-	 riYwCpwjlvDY/1UB2oppP58KVcsEDtygoZRKVE2NrNj8k/K4636+Gbs13bJxqqh+2V
-	 sRHOpBKunYwjFIZ2Sy51h5eryZU0yyaSfMVQ+pKJpn30cg+2Oo1v6eNFWFvQSu4miM
-	 AHUhAyf9w9irvL2iwQQYrZwQIChSTpbFLhGoeFv7I8NyBY7KtJLUZSd2MziBqa+Umh
-	 WNa1P0Q5Cgg/8VvFPKd18VEbOCt6NRDIRkmasD/fNXp/OFBphwTajeQKr8vu5T1HQi
-	 zmmA6R1CZ/pzQ==
-Message-ID: <8406f507-ceb6-42cf-af20-62bdad0255f6@kernel.org>
-Date: Wed, 18 Sep 2024 12:36:29 +0200
+	b=SZ3UHD9lG/YMqqUGJEJ77qacsEmbMTK3iXizTHgwF83KRCbDGCRVfsJQhPJQ6SoGx
+	 mbbXW8QcFZ7UXNJpDnPV/ohUkx9vNDYIxDwYmI36/PxEHkc+LDE/KM+X8Uqc8PTsTs
+	 76xuWD/qcgj2+3i2pgAMfGRgK+DgDZ/1RWzZTiw42kLQgi25r4F/Moud1816wkqC3o
+	 vwJzTqLUra8BRIgXtOYTqlDSkmpUmb1faj04JQUv2Y6irhZytq78FtymR8gJRkJzNz
+	 QvQUc4z+tXDM5SFnVaI78ru0LjvkAmgxzsPC/ZCYdzobXSqUfUGjfbfCeJoGvPTpa7
+	 GyVvRRRCHgzdw==
+Message-ID: <c50905e4-1f99-4b17-b932-f28aa6d1a7c3@kernel.org>
+Date: Wed, 18 Sep 2024 12:37:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,20 +50,38 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] MAINTAINERS: add MAINTAINER for S32G2/S32G3 RTC
- driver
-To: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
+Subject: Re: [PATCH v5 3/3] regulator: dt-bindings: mt6397: move examples to
+ parent PMIC mt6397
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>,
+ Vladimir Oltean <olteanv@gmail.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Sean Wang <sean.wang@mediatek.com>, Sen Chu <sen.chu@mediatek.com>,
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- NXP S32 Linux Team <s32@nxp.com>
-References: <20240911070028.127659-1-ciprianmarian.costea@oss.nxp.com>
- <20240911070028.127659-5-ciprianmarian.costea@oss.nxp.com>
- <56c16398-faeb-4c99-9eaf-66ac5a872072@kernel.org>
- <85a13ce0-d821-4afa-ae69-6ce8e2e3edf7@oss.nxp.com>
+ linux-mediatek@lists.infradead.org,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
+ Alexandre Mergnat <amergnat@baylibre.com>, Bear Wang
+ <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+ Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
+ MediaTek Chromebook Upstream
+ <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+ Chen-Yu Tsai <wenst@chromium.org>
+References: <20240916151132.32321-1-macpaul.lin@mediatek.com>
+ <20240916151132.32321-3-macpaul.lin@mediatek.com>
+ <ev4kqtbjwglrti3mk2cnayilj4muy7ll7ux2uwlekcwu73dy5e@h4wvpucmyepw>
+ <9caff3d5-22af-3481-d2af-6afb4abd49d7@mediatek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,67 +127,37 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <85a13ce0-d821-4afa-ae69-6ce8e2e3edf7@oss.nxp.com>
+In-Reply-To: <9caff3d5-22af-3481-d2af-6afb4abd49d7@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 18/09/2024 10:13, Ciprian Marian Costea wrote:
-> On 9/17/2024 8:37 PM, Krzysztof Kozlowski wrote:
->> On 11/09/2024 09:00, Ciprian Costea wrote:
->>> From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
->>>
->>> Now that a RTC driver was added for S32G2/S32G3 SoC, update
->>> the mainainters list for it.
+On 18/09/2024 04:44, Macpaul Lin wrote:
+> 
+> On 9/17/24 15:01, Krzysztof Kozlowski wrote:
+>> 	
 >>
->> Why? You don't do that alone. You add yourself for entire platform!
+>> External email : Please do not click links or open attachments until you 
+>> have verified the sender or the content.
 >>
->>>
->>> Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
->>> ---
->>>   MAINTAINERS | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index f328373463b0..a6d91101ec43 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -2686,11 +2686,13 @@ ARM/NXP S32G ARCHITECTURE
->>>   R:	Chester Lin <chester62515@gmail.com>
->>>   R:	Matthias Brugger <mbrugger@suse.com>
->>>   R:	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>
+>> On Mon, Sep 16, 2024 at 11:11:32PM +0800, Macpaul Lin wrote:
+>>> Since the DT schema of multiple function PMIC mt6397 has been converted,
+>>> move the examples in "mediatek,mt6397-regulator.yaml" to the parent schema
+>>> "mediatek,mt6397.yaml".
 >>
->> If you are touching someone's maintainer entry, at least you could do is
->> to CC them.
->>
->> And how many reviewers do you want to have in that platform? Are all
->> entries real or some are stale?
+>> Is there any error otherwise? Why this cannot stay here, since it is
+>> already there?
 >>
 >> Best regards,
 >> Krzysztof
 >>
 > 
-> Hello Krzysztof,
-> 
-> My intention was to add myself as a reviewer for the S32G Architecture 
-> and not as a maintainer.
-> 
-> I plan to send more patches targeting this architecture and I would like 
-> to review any other changes to them in the future.
-> 
-> On the other hand I understand your point, already having a list of 
-> reviewers. If its unacceptable, I can only add myself as a maintainer 
-> for the S32G RTC driver, in V2 of this patchset.
-> 
+> I previously thought that all regulator examples needed to have a 
+> complete version placed centrally in the main MFD. In that case, this 
+> patch 3/3 should not need to be required. This will be dropped in the 
+> next version.
 
-Folks:
-1. It is okay to have more maintainers or reviewers
-2. Document the express, be explicit in commit msg, provide some reasoning
-3. Be sure BEFORE you talked with existing maintainers and they are
-onboard, unless they are not responsive
-4. Explain why the list of three has to grow to list of 5 (or you did
-not align it with your colleagues, either). Yes, I see your other emails
-and it is very confusing that two of such events happen independently.
-It is not community task to coordinate your team activities...
+That's the preference for new bindings, but there is no harm if existing
+and functional example stays, even if it is partial.
 
 Best regards,
 Krzysztof
