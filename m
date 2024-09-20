@@ -1,115 +1,142 @@
-Return-Path: <linux-rtc+bounces-2033-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2037-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3747A97D00F
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 05:11:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5472B97D1C1
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 09:31:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C98B61F24CAC
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 03:11:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D33D285077
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 07:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFBDF9CF;
-	Fri, 20 Sep 2024 03:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80807433CF;
+	Fri, 20 Sep 2024 07:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4U8/yxe"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="P8CfZv+B"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBECD10E5;
-	Fri, 20 Sep 2024 03:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB695475C;
+	Fri, 20 Sep 2024 07:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726801858; cv=none; b=h3lQnYU9lB6gSWdJZpandHzFimlK14ml/mBqv9JBgk7hr+hXiht4bgHJjNZuU/C8d82mEP9awcGasl00u3sF/9dn1FT6Bq3tOVDFFCpVUC8/pV15FI07KLB8ZMbiSqZ7xJzGKugQlKWSbuRzGrxbVSh8I0CXCJRCJ50UGAAtzls=
+	t=1726817490; cv=none; b=TBXXTKbJgmBbC0kyb6rN6gQ/RyXqBgbRdvT7q0YlIzqeffEtHeWExizowV/NgmifBYaOoPzBRmoAf9phVNaojbvhPMrcSI021T+Xn7uNo5iUI6zkUjvWuigE91H3bUMACdbrOcI7j74yyEnm/4Jv3GRYjL26TNcAEwUe6gUoQ6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726801858; c=relaxed/simple;
-	bh=a/hFCgDZqsbnUBYLjL3wvxEJ7t4hBd6dwDs0Oy9yB58=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZL/iMz4hY57KKpmzokJ3Ae+DYK3d3PeWVPX1SptxfjaVRsYE6NeuuZXBnjHFHPDGuX9ZSvy5Llas8VydS4F93HrtwDEF8OIm0SR15uhwQmf9ZhzRaZL0uYUpn31IW8lfCms2h5zJ4Hhgp1yS8o0RWvPJH+nH28Tl5+iuWbxEV7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4U8/yxe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DBD5C4CED0;
-	Fri, 20 Sep 2024 03:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726801858;
-	bh=a/hFCgDZqsbnUBYLjL3wvxEJ7t4hBd6dwDs0Oy9yB58=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=J4U8/yxen4D8YM7iisKEdcQ5GJyH79XM7di0TDTXzM/bxGbMYyfbbDNaWU9rQUsGJ
-	 zpbkJajaIKrP+e5/MMbM74iW6ytKSMxno0PmrilaTEYiMRlGu/N0x0nehEy8TUrSsK
-	 MNnShEweIJMTPIfafyM5yaqhLKVBbkX1A6wpRVHnkpWDeY9zMt4zEtsSo9K/O35Y2I
-	 98nxwMra6eVXcs9QmgPHCX6UcFUImpAXEiPLj+mB1Gpig1ibS1Kogx22qqmN0Eokn6
-	 3fvYKQoMuSooSOhp0MTRHf2kRmDPkVi6/Vf/wzXc1cf7iCzFBjliE5eYW1CJIs0UwG
-	 40CdfobfRtejA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81BACCE8D75;
-	Fri, 20 Sep 2024 03:10:58 +0000 (UTC)
-From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
-Date: Fri, 20 Sep 2024 11:10:58 +0800
-Subject: [PATCH v4 3/3] MAINTAINERS: Add an entry for Amlogic RTC driver
+	s=arc-20240116; t=1726817490; c=relaxed/simple;
+	bh=m7PBRT27J+9/iK8yrsDqlPtfv2hVtsUYjoWCit4BGLc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mMiJ0b5JB7+pAaBOpF0bkNPCY5a8VX0S1xvyz77/Iwm+tMEse8l7f5cn5TQJYm9Pi8WNPJZdoCujRURlyNA9xQwPjX4qaQXbBt2RtZN+A2TU/BnKIoT2XWSQSUMQyxjXBtPCNPd0eGIpM3cSFNT7UPMCulz+uaalL63Ejac+9FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=P8CfZv+B; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1726817486;
+	bh=m7PBRT27J+9/iK8yrsDqlPtfv2hVtsUYjoWCit4BGLc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=P8CfZv+B3eGpCJ6fpLODZfBGZCJWTI4cOrnApghRY3jVfi84T+nQzcj8rOR4gcUUB
+	 nKX2/r0oUGaHQn/nbzXlBITh5PnqeeukhXfeXKAUvWFwDcDUxl5tlVmDnYbNENK+kt
+	 BofNtmpzl8+c7X3ccNRMruofrXHcSUP6RWQ5SK3hQ00OtP3hAOGCeiketBOKsnAoFU
+	 Kt6J7db/Ra9Vcl+1Xn+M6rQJ3JWKl3q2jQR2V3+KPoXOx8Lx0Y9yXT0CGJCpSiU5Cs
+	 KMPjJLOuAdIOppfsMayex80G2njTULEIJZXWsiQwCftKasWAtxOrLIu/32bD83qXgE
+	 3Xgj9sibirUVQ==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0D81017E0FD6;
+	Fri, 20 Sep 2024 09:31:25 +0200 (CEST)
+Message-ID: <d8b90ddf-efbc-4434-9ad0-4be6942d51a5@collabora.com>
+Date: Fri, 20 Sep 2024 09:31:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240920-rtc-v4-3-91ae5fb4e3d5@amlogic.com>
-References: <20240920-rtc-v4-0-91ae5fb4e3d5@amlogic.com>
-In-Reply-To: <20240920-rtc-v4-0-91ae5fb4e3d5@amlogic.com>
-To: Yiting Deng <yiting.deng@amlogic.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Xianwei Zhao <xianwei.zhao@amlogic.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726801856; l=931;
- i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
- bh=dltl4Bg5cOWUNAG/8WRhVbXcztZ3rrpVcPR+gcSx/Bg=;
- b=Yx3qxfnCd8BhpKgGeHbhtCGrW6gTAHLOfhsHGGU1QIRV2w/mGl+7JUluQ3zbldVjy/MnjEzXd
- w4izZZ/GnX9CeGWhwbsfQHBVWygA2eBKdvuSItHkUUNyVfuDl5Yp46r
-X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
- pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
-X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
- auth_id=107
-X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Reply-To: xianwei.zhao@amlogic.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 2/2] dt-bindings: mfd: mediatek: mt6397: Convert to DT
+ schema format
+To: Macpaul Lin <macpaul.lin@mediatek.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>,
+ Vladimir Oltean <olteanv@gmail.com>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Sean Wang <sean.wang@mediatek.com>,
+ Sen Chu <sen.chu@mediatek.com>, netdev@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
+ Alexandre Mergnat <amergnat@baylibre.com>, Bear Wang
+ <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+ Macpaul Lin <macpaul@gmail.com>, Chris-qj chen <chris-qj.chen@mediatek.com>,
+ MediaTek Chromebook Upstream
+ <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+ Chen-Yu Tsai <wenst@chromium.org>
+References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
+ <20240918064955.6518-2-macpaul.lin@mediatek.com>
+ <20240918115151c896f33f@mail.local> <20240918115651c1475d36@mail.local>
+ <2af0621d-14ac-b7f3-b28d-2df698931121@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <2af0621d-14ac-b7f3-b28d-2df698931121@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Yiting Deng <yiting.deng@amlogic.com>
+Il 18/09/24 16:18, Macpaul Lin ha scritto:
+> 
+> On 9/18/24 19:56, Alexandre Belloni wrote:
+>>
+>> On 18/09/2024 13:51:51+0200, Alexandre Belloni wrote:
+>>> > Changes for v4:
+>>> >  - Remove "mediatek,mt6357" from PMIC's compatible string since there is a
+>>> >    seperated DT schema for PMIC mt6357.
+>>> > > Changes for v5:
+>>> >  - Rebase to next-20240913 (linux-next/master).
+>>> >  - Fix the "title" (device type) of mfd/mediatek,mt6397.yaml to "PMIC".
+>>> >  - RTC:
+>>> >   - Drop "start-year"
+>>>
+>>> Maybe, instead of dropping the property, you should add support in the
+>>> driver by setting range_min and range_max.
+>>
+>> Looking at this even more, the driver can probably be simplified by
+>> setting start_year in probe and dropping RTC_MIN_YEAR_OFFSET.
+> 
+> Thank you for pointing out where and how the driver should be changed.
+> However, I'm wondering if this should be a fix with a separated
+> patchset (bindings and the driver)? The board or SoC's device trees
+> should be reviewed as well. I'll need to get someone's help (permission) inside 
+> MediaTek to check those dts and construct the patch for RTC driver.
+> That will take sometime.
+> 
 
-Add Amlogic RTC entry to MAINTAINERS to clarify the maintainers.
+Alexandre, I definitely agree with you on the fact that the MTK PMIC RTC driver
+can (and needs to) be improved, and that it can make use of some nice cleanup...
 
-Signed-off-by: Yiting Deng <yiting.deng@amlogic.com>
-Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+... but!
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 42decde38320..f595715eb3e3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1163,6 +1163,14 @@ F:	Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
- F:	drivers/perf/amlogic/
- F:	include/soc/amlogic/
- 
-+AMLOGIC RTC DRIVER
-+M:	Yiting Deng <yiting.deng@amlogic.com>
-+M:	Xianwei Zhao <xianwei.zhao@amlogic.com>
-+L:	linux-amlogic@lists.infradead.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/rtc/amlogic,a4-rtc.yaml
-+F:	drivers/rtc/rtc-amlogic-a4.c
-+
- AMPHENOL CHIPCAP 2 HUMIDITY-TEMPERATURE IIO DRIVER
- M:	Javier Carrasco <javier.carrasco.cruz@gmail.com>
- L:	linux-hwmon@vger.kernel.org
+This series performs a conversion to schema, and the previous txt file didn't
+say anything about the start-year property - which was not mandatory to support
+at that time (nor now, afaik?), so adding support for that is out of scope for
+this series.
 
--- 
-2.37.1
+Eventually, that can come as a series on top, adding support for that in the
+binding (and, of course, in the driver).
 
+I should be able to tackle that... most probably next week - but still, the
+improvements would come as a series on top of this one.
 
+Cheers,
+Angelo
 
