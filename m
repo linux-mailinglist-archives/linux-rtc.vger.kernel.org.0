@@ -1,156 +1,110 @@
-Return-Path: <linux-rtc+bounces-2041-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2043-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40CF997D642
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 15:38:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4779997D87D
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 18:45:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41FFB1C20FA9
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 13:38:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9655284034
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 16:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A6517A583;
-	Fri, 20 Sep 2024 13:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27721428E3;
+	Fri, 20 Sep 2024 16:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UXs9/D0D"
+	dkim=pass (2048-bit key) header.d=mff.cuni.cz header.i=@mff.cuni.cz header.b="VdfzrC8H"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from smtp1.ms.mff.cuni.cz (smtp-in1.ms.mff.cuni.cz [195.113.20.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D24617839C;
-	Fri, 20 Sep 2024 13:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3053413AA3F;
+	Fri, 20 Sep 2024 16:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.113.20.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726839479; cv=none; b=byEwPmUxJC5Uxx1s6g7NyPxJCPqNtY+zEhy2QXbKmX+bzuHe/ggbQAp4MEowNHCL3+xfRTvsdwU8EO1j3IdiGRFchkV9p3l3tMdyQJkNCDYTghv0qN9xhyNFw33aZDx+hgugeniQ18xiLKlSv8KVZz7TPd+wo9mKka2oTeWpza8=
+	t=1726850736; cv=none; b=IJa8v3eHQpCkOx8yRdJ0B+JqVi4sjPui1cuQwGOxm4NQekdawLz0fNLIvGuv03dyspGOzdqEi0oTVb7rYLz2dw8mouoL0aKPNopS+EUASHfWPqOzFNZ1bXWQ6v3HKAlLxdqWuHN09bP/0R2VgqhABle8HGfkyHn7hzE9xqDvuXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726839479; c=relaxed/simple;
-	bh=kgWb5kRwz1iKoDUmfC8iUWF0tLM8l/Q9bdKBzrkGBxE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bsMcYkCFupkBifFaqzZc2Z1d9+uWpE2of9O39oqxPyjjqrfH48BRxCnltX/tjzHE0EcUqS6+ZZzE7SQ/j8feGPMMdqLeoQ1aNPeMRd9zVuuhXSmbOTtTJ0SB4yeB4cf3fMSpV7Pow+UdRnWdOllYOq7ydRTjZh8UEKN1eeLaBMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UXs9/D0D; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00CCE240003;
-	Fri, 20 Sep 2024 13:37:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1726839473;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VlxQbVI6GjsZePKg/GpEB4+lUld/JLjhc7SjBhbTe4Q=;
-	b=UXs9/D0DtqVUffHhaaWz9qCOw/YcTM1Da9aftLEfmybPoIbNYYchtTL63Nv0L731M/G8/u
-	m/kgvm1ljyop99J/70lQJKwq1y4Ey3TwCNEW51rZ3TLJcb2Efbi6+vblOwv+FlLGcVxJIu
-	sR9XtjpZDrhyXa1yPyG6LVN/IVgh1cYd9HbBIF43LtOxYg3geiazifHUSsyCnv61VYijua
-	5zmxBLG9zHiaseTmUMaOOege3taJZ7w6TH0KN46RL6i/MgQD/eQWXaOq9JkSBx7HEkZCZe
-	g8lOObN72EGjYEwtc9w0du8y50UWLZ5en31dBX8U5NCUNekmjK3goVGk1qJsVA==
-Date: Fri, 20 Sep 2024 15:37:50 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Macpaul Lin <macpaul.lin@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Sean Wang <sean.wang@mediatek.com>,
-	Sen Chu <sen.chu@mediatek.com>, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-sound@vger.kernel.org,
-	Alexandre Mergnat <amergnat@baylibre.com>,
-	Bear Wang <bear.wang@mediatek.com>,
-	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
-	Chris-qj chen <chris-qj.chen@mediatek.com>,
-	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v6 2/2] dt-bindings: mfd: mediatek: mt6397: Convert to DT
- schema format
-Message-ID: <202409201337500284902d@mail.local>
-References: <20240918064955.6518-1-macpaul.lin@mediatek.com>
- <20240918064955.6518-2-macpaul.lin@mediatek.com>
- <20240918115151c896f33f@mail.local>
- <20240918115651c1475d36@mail.local>
- <2af0621d-14ac-b7f3-b28d-2df698931121@mediatek.com>
- <d8b90ddf-efbc-4434-9ad0-4be6942d51a5@collabora.com>
+	s=arc-20240116; t=1726850736; c=relaxed/simple;
+	bh=cLMGwBDbHOwlp6l2fxlf5v0qFNWyzYBnuy3KDrHgc1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VOQfgZCx/MpN9IZs85ceTrPC8vfd7YR0jJlYT2bj16SCoqUVD2iZjbXGuRFraHXt7SjzwB/reXGrB9aXFlwALAIPWPfn4t/4eXw9BDwWW7Nus3uLobjgsQGn6ZYuRJmyvMdMAJK4gO2jZ3Z7BOA4BuzpTN5WVdywbR9Bzf+7hOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz; spf=pass smtp.mailfrom=matfyz.cz; dkim=pass (2048-bit key) header.d=mff.cuni.cz header.i=@mff.cuni.cz header.b=VdfzrC8H; arc=none smtp.client-ip=195.113.20.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=matfyz.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mff.cuni.cz;
+	s=submission; t=1726849008; x=1728149008;
+	bh=sTV3/3SaZ+NJbD9hQE/+9IHDpO4DnCnmNCh4a+dGmAM=; h=From;
+	b=VdfzrC8H86sUNAxt/CMOl4apHFbHQDTYR0+ECZDDpmkA+SvAfpEVJYFoiF5PxLCls
+	 qbubCNHf6VB9NYeC9MJRerZ6gvaW1TRGGD+cSj69j/iRbpq7EXAHPj7ted09WfkOmT
+	 ecyTD6BTfB2MM8VBn3syady7wjWlX0H4qSC2UnaAYvLT80/C+wpaxENzvInhlS3D9b
+	 yU8azb6hmJ7cAIHtbMv3JIBJW88e2GW4Uh2CX0uOJYTC4YBXHiA4bq2ePZOGwBy1ll
+	 s1tv3c5EO8A9W6xtsOf8nS4Ym3niQDRlODUoq26bWpPBV7Oy28fJLphKEs0I/AAH+i
+	 enq+5RMXBxmjQ==
+Received: from localhost (internet5.mraknet.com [185.200.108.250])
+	(authenticated)
+	by smtp1.ms.mff.cuni.cz (8.16.1/8.16.1) with ESMTPS id 48KGGjEg017529
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Fri, 20 Sep 2024 18:16:47 +0200 (CEST)
+	(envelope-from balejk@matfyz.cz)
+From: Karel Balej <balejk@matfyz.cz>
+To: Lee Jones <lee@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc: duje.mihanovic@skole.hr, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [RFC PATCH 1/2] mfd: 88pm886: add the RTC cell and relevant definitions
+Date: Fri, 20 Sep 2024 18:12:34 +0200
+Message-ID: <20240920161518.32346-1-balejk@matfyz.cz>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d8b90ddf-efbc-4434-9ad0-4be6942d51a5@collabora.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 20/09/2024 09:31:24+0200, AngeloGioacchino Del Regno wrote:
-> Il 18/09/24 16:18, Macpaul Lin ha scritto:
-> > 
-> > On 9/18/24 19:56, Alexandre Belloni wrote:
-> > > 
-> > > On 18/09/2024 13:51:51+0200, Alexandre Belloni wrote:
-> > > > > Changes for v4:
-> > > > >  - Remove "mediatek,mt6357" from PMIC's compatible string since there is a
-> > > > >    seperated DT schema for PMIC mt6357.
-> > > > > > Changes for v5:
-> > > > >  - Rebase to next-20240913 (linux-next/master).
-> > > > >  - Fix the "title" (device type) of mfd/mediatek,mt6397.yaml to "PMIC".
-> > > > >  - RTC:
-> > > > >   - Drop "start-year"
-> > > > 
-> > > > Maybe, instead of dropping the property, you should add support in the
-> > > > driver by setting range_min and range_max.
-> > > 
-> > > Looking at this even more, the driver can probably be simplified by
-> > > setting start_year in probe and dropping RTC_MIN_YEAR_OFFSET.
-> > 
-> > Thank you for pointing out where and how the driver should be changed.
-> > However, I'm wondering if this should be a fix with a separated
-> > patchset (bindings and the driver)? The board or SoC's device trees
-> > should be reviewed as well. I'll need to get someone's help (permission)
-> > inside MediaTek to check those dts and construct the patch for RTC
-> > driver.
-> > That will take sometime.
-> > 
-> 
-> Alexandre, I definitely agree with you on the fact that the MTK PMIC RTC driver
-> can (and needs to) be improved, and that it can make use of some nice cleanup...
-> 
-> ... but!
-> 
-> This series performs a conversion to schema, and the previous txt file didn't
-> say anything about the start-year property - which was not mandatory to support
-> at that time (nor now, afaik?), so adding support for that is out of scope for
-> this series.
+RTC lives on the base register page of the chip. Add definitions of the
+registers needed for a basic set/read time functionality.
 
-It is mandatory now. I agree this can be done in a subsequent series.
+Signed-off-by: Karel Balej <balejk@matfyz.cz>
+---
+ drivers/mfd/88pm886.c       | 1 +
+ include/linux/mfd/88pm886.h | 9 +++++++++
+ 2 files changed, 10 insertions(+)
 
-> 
-> Eventually, that can come as a series on top, adding support for that in the
-> binding (and, of course, in the driver).
-> 
-> I should be able to tackle that... most probably next week - but still, the
-> improvements would come as a series on top of this one.
-> 
-> Cheers,
-> Angelo
-
+diff --git a/drivers/mfd/88pm886.c b/drivers/mfd/88pm886.c
+index dbe9efc027d2..891fdce5d8c1 100644
+--- a/drivers/mfd/88pm886.c
++++ b/drivers/mfd/88pm886.c
+@@ -37,6 +37,7 @@ static struct resource pm886_onkey_resources[] = {
+ static struct mfd_cell pm886_devs[] = {
+ 	MFD_CELL_RES("88pm886-onkey", pm886_onkey_resources),
+ 	MFD_CELL_NAME("88pm886-regulator"),
++	MFD_CELL_NAME("88pm886-rtc"),
+ };
+ 
+ static int pm886_power_off_handler(struct sys_off_data *sys_off_data)
+diff --git a/include/linux/mfd/88pm886.h b/include/linux/mfd/88pm886.h
+index 133aa302e492..85eca44f39ab 100644
+--- a/include/linux/mfd/88pm886.h
++++ b/include/linux/mfd/88pm886.h
+@@ -31,6 +31,15 @@
+ #define PM886_INT_WC			BIT(1)
+ #define PM886_INT_MASK_MODE		BIT(2)
+ 
++#define PM886_REG_RTC_CNT1		0xd1
++#define PM886_REG_RTC_CNT2		0xd2
++#define PM886_REG_RTC_CNT3		0xd3
++#define PM886_REG_RTC_CNT4		0xd4
++#define PM886_REG_RTC_SPARE1		0xea
++#define PM886_REG_RTC_SPARE2		0xeb
++#define PM886_REG_RTC_SPARE3		0xec
++#define PM886_REG_RTC_SPARE4		0xed
++#define PM886_REG_RTC_SPARE5		0xee
+ #define PM886_REG_RTC_SPARE6		0xef
+ 
+ #define PM886_REG_BUCK_EN		0x08
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.46.0
+
 
