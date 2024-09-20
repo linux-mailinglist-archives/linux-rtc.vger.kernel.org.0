@@ -1,100 +1,125 @@
-Return-Path: <linux-rtc+bounces-2032-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2036-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9C597C158
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Sep 2024 23:22:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15AB897D016
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 05:11:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3019C282D60
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Sep 2024 21:22:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 714C8B2299A
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Sep 2024 03:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B6A178361;
-	Wed, 18 Sep 2024 21:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A9B918EB0;
+	Fri, 20 Sep 2024 03:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="IQC91YB1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FfdGNfJs"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F9915853D;
-	Wed, 18 Sep 2024 21:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B02125A9;
+	Fri, 20 Sep 2024 03:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726694534; cv=none; b=eVeEpqZQLCEhXHgIZhnBVIYQE5q6bysBknZT93iswYK7GkZY9G3ao/M2VABk15z2mpvIBvwn20+QRSSMYuBynSZKy8NHRIPOo0i+awrtbJI+UjCl5lhzVTLkiXnhecardsg39vtHnNXQZ9E6vp9mWC6pjdAqG0zyCFHiScS9jig=
+	t=1726801859; cv=none; b=aFTy2PY/cudQ2J//PwWzLnPO7iTnzUyzTMWi6CxWNG2NENzxjWHK5ICl/bgRht/cLKzVoYLEirrQ6N8c8Q+ZmAn/P8MP1TaJmzcYpQnSC4i9gRsqZcZrlCqNiYAHAP5bqrC2/x+3tsfHVEbI7Ifov/qWSrcXBZZ8NPf4UBky+tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726694534; c=relaxed/simple;
-	bh=iVycWfR4xJRkWVCjsEBSXiz6ESvrHs61SGDmRu1+Grw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k4Tsw056wbNzaMrYPHtmImHEfcdZEWrpBW7iTCEV4EdyR75XjFyvKq6x1twrerCD+oHMnPzqX7tai3C72ZkBhUqsa0oVJlqibFTbKc+J90jEni/0rejoHSEd23+UcX+SZTV38KnWw2Q6kLehIjJgskNzw3iy91BiBplZnOABvJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=IQC91YB1; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=mwc6ebWioCgeWz0QZ7Mw5ijqvCT+qQorOR7T1FVkDWk=; b=IQC91YB1sF4h/i+v5SCU5nLETM
-	BJAbXSyOZzI4OMfw1GwTNrEaKsZZbzaX8iPOg9mmteN7FO8ubCEmEWGDmsAx5FJTqxfiiVHiGMQKT
-	wqF9pTwNyyb4lkfd8q4UE5K2K27Xgpv+De0RmGXFYIk8JVWeJsBTg27WM5gkOh4kDKIFf+yPF7utY
-	J/UGlSt0UTvAqxskj+MAoAI7o2Nn7rIyqpnwhX+LBv7Mr8zG18KVVWTO9DtL9526buLQrnUxQ1w7u
-	grARnMpx/KUqyVb+q+Bf0fdgqbN8Zp2XQ98z4BqrBedwWlQnDMftn0T63FiUj0wNhqd8mw3cw3tAX
-	jigEM8IQ==;
-From: Andreas Kemnade <andreas@kemnade.info>
-To: alexandre.belloni@bootlin.com,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH] rtc: rc5t619: use proper module tables
-Date: Wed, 18 Sep 2024 23:21:59 +0200
-Message-Id: <20240918212159.1191637-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1726801859; c=relaxed/simple;
+	bh=g8Fx5TTJzV1MuTCeRPULLGaYpS2ORG7ZcWbYMH2W/Ds=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YjPfr7qMgE70znuSfg4YtuMmQcW+j+2cfRvSupajybnzli3LB6Q102kxhQbjm9KAlXJDLBWyl1OaZGaoaHM0mAfE2kyamoLW/8IziI26+wgc8GAtLjKYQshWvGSL8JYm9o9L347SF2XLYFWSvjfj5bBm1OEeDlkPsZ6yVIxNYqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FfdGNfJs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6A4E3C4CEC7;
+	Fri, 20 Sep 2024 03:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726801858;
+	bh=g8Fx5TTJzV1MuTCeRPULLGaYpS2ORG7ZcWbYMH2W/Ds=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=FfdGNfJs3xXrogoLROEuJoEXYY+YfKX+S+FpOH8f31+FsKqApheF+v8ga1Xm0iWOK
+	 ScRiCJ5XFNoP1E01uvRBj7NnVRUkEEgAoqkAE17160V37FxUlqrHfqkVXzJz7VH9NG
+	 ImMCkjPNxHDhrU7l3umu52l8Fc2BES8uIk2tTNLliKguFbBcjeLHBQ1e5WDl2ful+L
+	 TuSq5zSXX6hiKH3PiBPqH4w+n0nUfrxctIPKBkRNNZt6foO6ZlC9WOLDeIJ5JrFG+0
+	 XE0qG3YcCsF/cHWAHr3eIaei9VOrjv9xXhHVUOrUdrdOhJwj8odfMM4twRrUPxfwjU
+	 3AoMiZpIhdz8w==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59307CE8D62;
+	Fri, 20 Sep 2024 03:10:58 +0000 (UTC)
+From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Subject: [PATCH v4 0/3] support for amlogic rtc
+Date: Fri, 20 Sep 2024 11:10:55 +0800
+Message-Id: <20240920-rtc-v4-0-91ae5fb4e3d5@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMDn7GYC/2XM0Q6CIBTG8VdpXEc7HESgq96jdUGAypbS0Lma8
+ 91DayvX5Xd2fv+J9D4F35PjbiLJj6EPscuj2O+IbUxXexpc3gQBC1DIaRosZSitU0yjYZzkz3v
+ yVXislfMl7yb0Q0zPNTqy5br1I6NAy0oCV8wZVPxk2lusgz3Y2JKlMOJXafgozAqEM0IKcVVO/
+ yv+oxi8Fc+KVQakNKU2CFs1z/MLl/npkwQBAAA=
+To: Yiting Deng <yiting.deng@amlogic.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726801856; l=1589;
+ i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
+ bh=g8Fx5TTJzV1MuTCeRPULLGaYpS2ORG7ZcWbYMH2W/Ds=;
+ b=uJD6SDKCaARt2GvUkVjfOKpc3p7WmcpKrCtYamVgKYVkmUJ8p1FcbSC4CVK4F9Ux1yqBEhbFw
+ 6RjgR8C9736B16+Tc8Ez4mzGpMAqE8qnuEJpdWbEb+vCysWBazzrZTE
+X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
+ pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
+X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
+ auth_id=107
+X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Reply-To: xianwei.zhao@amlogic.com
 
-Avoid requiring MODULE_ALIASES by declaring proper device id tables.
+Add rtc driver and bindigns for the amlogic A4(A113L2) and A5(A113X2) SoCs.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 ---
- drivers/rtc/rtc-rc5t619.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Changes in v4:
+- Keep the same order as as in properties.
+- Link to v3: https://lore.kernel.org/r/20240910-rtc-v3-0-1fa077a69a20@amlogic.com
 
-diff --git a/drivers/rtc/rtc-rc5t619.c b/drivers/rtc/rtc-rc5t619.c
-index e73102a39f1b..711f62eecd79 100644
---- a/drivers/rtc/rtc-rc5t619.c
-+++ b/drivers/rtc/rtc-rc5t619.c
-@@ -429,14 +429,23 @@ static int rc5t619_rtc_probe(struct platform_device *pdev)
- 	return devm_rtc_register_device(rtc->rtc);
- }
- 
-+static const struct platform_device_id rc5t619_rtc_id[] = {
-+	{
-+		.name = "rc5t619-rtc",
-+	}, {
-+		/* sentinel */
-+	}
-+};
-+MODULE_DEVICE_TABLE(platform, rc5t619_rtc_id);
-+
- static struct platform_driver rc5t619_rtc_driver = {
- 	.driver	= {
- 		.name	= "rc5t619-rtc",
- 	},
- 	.probe	= rc5t619_rtc_probe,
-+	.id_table = rc5t619_rtc_id,
- };
--
- module_platform_driver(rc5t619_rtc_driver);
--MODULE_ALIAS("platform:rc5t619-rtc");
-+
- MODULE_DESCRIPTION("RICOH RC5T619 RTC driver");
- MODULE_LICENSE("GPL");
+Changes in v3:
+- Perfect the binding description and rename binding.
+- Using dev_err_probe function correctly, and modify commit message.
+- Change placement about MAINTAINERS.
+- Link to v2: https://lore.kernel.org/r/20240903-rtc-v2-0-05da5755b8d9@amlogic.com
+
+Changes in v2:
+- Modify bindings clock name and perfect the example.
+- Fix some bug in driver, and use dev_err_probe instead of dev_err in probe process.
+- Use RTC API to handle calibration.
+- Remove unused func and rename driver file name.
+- Link to v1: https://lore.kernel.org/r/20240823-rtc-v1-0-6f70381da283@amlogic.com
+
+---
+Yiting Deng (3):
+      dt-bindings: rtc: Add Amlogic A4 and A5 RTC
+      rtc: support for the Amlogic on-chip RTC
+      MAINTAINERS: Add an entry for Amlogic RTC driver
+
+ .../devicetree/bindings/rtc/amlogic,a4-rtc.yaml    |  63 +++
+ MAINTAINERS                                        |   8 +
+ drivers/rtc/Kconfig                                |  12 +
+ drivers/rtc/Makefile                               |   1 +
+ drivers/rtc/rtc-amlogic-a4.c                       | 473 +++++++++++++++++++++
+ 5 files changed, 557 insertions(+)
+---
+base-commit: 658b3fec5fc0ef3c016c4a7eedac1a5f3b8c0151
+change-id: 20240823-rtc-127cd8192a13
+
+Best regards,
 -- 
-2.39.2
+Xianwei Zhao <xianwei.zhao@amlogic.com>
+
 
 
