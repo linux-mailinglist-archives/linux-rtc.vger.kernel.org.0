@@ -1,55 +1,71 @@
-Return-Path: <linux-rtc+bounces-2056-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2057-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9531C984244
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Sep 2024 11:34:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A121898493A
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Sep 2024 18:09:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A269B2A1CB
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Sep 2024 09:30:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5740928616F
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Sep 2024 16:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65CB1537D4;
-	Tue, 24 Sep 2024 09:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB4671B012B;
+	Tue, 24 Sep 2024 16:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="JmAz/RIM"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="aDsJt7w5"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC85684A2C;
-	Tue, 24 Sep 2024 09:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2ECD1AC451
+	for <linux-rtc@vger.kernel.org>; Tue, 24 Sep 2024 16:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727170230; cv=none; b=BG7HEuL6zAmceOzZXUn/pLR+Ilk/0hWD5wSd5D49k/oLB2QMFLvO+M8kcb6IIBE1qXlsP0h7xqFy1+Q/R3LX1iGPDuSyOABdIbmM54AveSiYCPfOJz4ODpCt5US8mBtF+8q6CU3HjTTWu3VwcVeDZjvdwlclqfm9ZFzx0STpZxM=
+	t=1727193949; cv=none; b=VrHiynyxnSEIo1R9RrzPXfCxfHObQtAcOtlw60ENRWoyL5aIYnXYXHp7pveh6CAfCmbV2vJog7pVHztFe5+YXwGIzB9Iqq7LOpE7Ws4bq7xexvqfuJDtFW03iJHtA6KdU1odtdL5+Bi7x7J1iosx7EjBgbFoLxE6dBS/ZwEjOBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727170230; c=relaxed/simple;
-	bh=yYGyQa85Hiy1PX0vqwd7dAOmJNDEEsVqTrx6k8biPY0=;
+	s=arc-20240116; t=1727193949; c=relaxed/simple;
+	bh=nQQTZtX6roW+dxYDtbGKL2XfIHd9IcnhpKNBQ/mM4sM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KOFpATO8Tvrcu1agb6Tsv5kkJZrpXhWQFCBp5c10Cr0Zz5yuOvewec1evBpXnH2PCgRaqEBAIBs9IuNhTz8dH31zcMDIcDbq7sOiPfBxUPQdAMx+iN8tZw8gfgaPFXLODXS0re3f+vZAoQPwiXnXx3cSMQvvsYc6Cszqr8+wYrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=JmAz/RIM; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1727170226;
-	bh=yYGyQa85Hiy1PX0vqwd7dAOmJNDEEsVqTrx6k8biPY0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JmAz/RIMcfvnkfrzc76Ve42Qwh1mrdn89jlizJg0cYIOINFLr+kOfLxDbtn0fs3u8
-	 4C5At/kPvKrNwaHCBU90aVOFzE03G6vd9Wo4u+Q7SZula5SDL7lMK1rjztXLm5l7QZ
-	 DmhRUtN0KEP/DlFZULU20Gz8ucEb7FEGqaQYPd852giT16O8fXik2ff3BQT72XIBd8
-	 zbiNL9HGNPhpTvZaplBZmMo0vipYN72q3OckbhUEOjALMmeax5aR4k0ACtshCC2vPL
-	 3KbUCcuc5xfh3VwzuWx57oXXpu3VIa7a9vH/9skGPjGJXhw9rN2LieXPc+Raab7uiQ
-	 kzxm9x570OxHQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2E1AA17E10AA;
-	Tue, 24 Sep 2024 11:30:26 +0200 (CEST)
-Message-ID: <72ce817e-63de-40a7-b7e9-a5b44b67e207@collabora.com>
-Date: Tue, 24 Sep 2024 11:30:25 +0200
+	 In-Reply-To:Content-Type; b=O8RHeaKxwAnO/sOb3MdKk3JbdwWBmPja6QSbHRsjeUDR6BW8+pySUda2alyp6laFsqFquRVuuQmgQ8LYPO26MSsOu96QZcgBHCFeM1fo2T/cyr383AGb3gV1yDsKfnmG/pFMKddn33WJV3GJp4U4I/UBGyMHC3VXp6tD7WIicJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=aDsJt7w5; arc=none smtp.client-ip=209.85.166.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82cf3286261so212596439f.0
+        for <linux-rtc@vger.kernel.org>; Tue, 24 Sep 2024 09:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1727193947; x=1727798747; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nGgZC++q2AtpmgeIvTiFEAi7y/z7fLmypkiCbl8bJao=;
+        b=aDsJt7w5d9h35SWMTWffR5560CMLtzic7xKjKbV+6bLyx2x5YFD+ADl0PHAepFlIPD
+         J/6aAWRC73ZbjshLOwq0vRZ1+xRR7cK6+aenp6SlwH6/ZS1RyM9e5K9Ql/Stu6xzQTe2
+         2CL5qcS6cIDVXBnL8DYhCISbBb8gZzuLlr9zo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727193947; x=1727798747;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nGgZC++q2AtpmgeIvTiFEAi7y/z7fLmypkiCbl8bJao=;
+        b=EIcdJEQ7SBay2ywIPhJnuL5TfCrbB4lfAow6jJ3NYQX7h/pzihxLujuIbeX/44KHkj
+         Ghlpq/5349/jH0CheWkoFzr/cPO3WNuFT3DTCx9x92Hzh3cGaRI/2yHfjcleofysHemc
+         W3r0g4tzkiRxmb54Pao6p5M232plsGTEQ/GQenHyaqaa2TvyPAONBzgWzLWqxx37Wlrl
+         rf/6TI4FKU65tF3qgzHzkYe9fJ//NOsLfjFxGjMo2IlVHu7SEDouF8Rp/kXBtuhCRSzZ
+         PhFUC62AuBzzOns1oseRDLkNz27eSnUHVnkO0kZlZ5zLupnLp7xkjj1p0IvTlPZaHli9
+         l7Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCX67su7ob+ZpKtF0LUZAGhQ/jzf7sWCm8eBMG6FD+zLX8uKf2SCSFcoXOYF38b+fL8bg4SUK28I+Fs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyI5W5sWbVZWmbreIJojUVOFcQzS0vVZ+uM4DmXwCQ8vq5rl3AI
+	HQ3k3gv4zusL0g3WQlUN3paSEO5sL5b/XxMhII754nQzi1RRFHwhxgjA0+yjl+s=
+X-Google-Smtp-Source: AGHT+IG3L22c5EIpJXprkBEjnN4zhBqDpV3boF4+NP3bngxIQ6cQR4CJBuuc7PHkPDw7nlC0RNP3Xg==
+X-Received: by 2002:a05:6e02:194d:b0:3a0:c820:c5f0 with SMTP id e9e14a558f8ab-3a0c9d90ba0mr145533015ab.24.1727193946584;
+        Tue, 24 Sep 2024 09:05:46 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a1a5713af6sm4633385ab.60.2024.09.24.09.05.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Sep 2024 09:05:45 -0700 (PDT)
+Message-ID: <05f24dbb-cfe6-4a75-9382-273c9c734b22@linuxfoundation.org>
+Date: Tue, 24 Sep 2024 10:05:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -57,96 +73,59 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/3] rtc: mt6359: Add RTC hardware range and add
- support for start-year
-To: Macpaul Lin <macpaul.lin@mediatek.com>, lee@kernel.org,
- ZhanZhan.ge@mediatek.com
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- matthias.bgg@gmail.com, eddie.huang@mediatek.com, sean.wang@mediatek.com,
- alexandre.belloni@bootlin.com, sen.chu@mediatek.com,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-rtc@vger.kernel.org, kernel@collabora.com, yong.mao@mediatek.com
-References: <20240923100010.97470-1-angelogioacchino.delregno@collabora.com>
- <20240923100010.97470-3-angelogioacchino.delregno@collabora.com>
- <0748868d-4789-fcaa-e70f-6a4508411b36@mediatek.com>
- <247abc15-d82f-3e8f-5202-edc6099707df@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH 2/2] selftest: rtc: Check if could access /dev/rtc0 before
+ testing
+To: Joseph Jang <jjang@nvidia.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: "shuah@kernel.org" <shuah@kernel.org>,
+ "avagin@google.com" <avagin@google.com>,
+ "amir73il@gmail.com" <amir73il@gmail.com>,
+ "brauner@kernel.org" <brauner@kernel.org>, Matt Ochs <mochs@nvidia.com>,
+ Koba Ko <kobak@nvidia.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240524013807.154338-1-jjang@nvidia.com>
+ <20240524013807.154338-3-jjang@nvidia.com>
+ <202406201937464fc96b1c@mail.local>
+ <8c92ef18-6648-4348-9008-4f646d8b6956@nvidia.com>
 Content-Language: en-US
-In-Reply-To: <247abc15-d82f-3e8f-5202-edc6099707df@mediatek.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <8c92ef18-6648-4348-9008-4f646d8b6956@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Il 24/09/24 09:05, Macpaul Lin ha scritto:
+On 9/23/24 23:37, Joseph Jang wrote:
+> Hi Alexandre,
 > 
-> On 9/24/24 12:08, Macpaul Lin wrote:
->>
->> On 9/23/24 18:00, AngeloGioacchino Del Regno wrote:
->>> Add the RTC hardware range parameters to enable the possibility
->>> of using the `start-year` devicetree property which, if present,
->>> will set the start_secs parameter by overriding the defaults
->>> that this driver is setting;
->>>
->>> To keep compatibility with (hence have the same date/time reading
->>> as) the old behavior, set:
->>>   - range_min to 1900-01-01 00:00:00
->>>   - range_max to 2027-12-31 23:59:59 (HW year max range is 0-127)
->>>   - start_secs defaulting to 1968-01-02 00:00:00
->>>
->>> Please note that the oddness of starting from January 2nd is not
->>> a hardware quirk and it's done only to get the same date/time
->>> reading as an RTC which time was set before this commit.
->>>
->>> Also remove the RTC_MIN_YEAR_OFFSET addition and subtraction in
->>> callbacks set_time() and read_time() respectively, as now this
->>> is already done by the API.
->>>
->>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>> ---
->>>   drivers/rtc/rtc-mt6397.c | 13 ++++---------
->>>   1 file changed, 4 insertions(+), 9 deletions(-)
->>
->> [snip]
->>
->> Thanks for helping add new patch fix for RTC.
->>
->>> @@ -302,6 +293,10 @@ static int mtk_rtc_probe(struct platform_device *pdev)
->>>       device_init_wakeup(&pdev->dev, 1);
->>>       rtc->rtc_dev->ops = &mtk_rtc_ops;
->>> +    rtc->rtc_dev->range_min = RTC_TIMESTAMP_BEGIN_1900;
->>> +    rtc->rtc_dev->range_max = mktime64(2027, 12, 31, 23, 59, 59);
->>> +    rtc->rtc_dev->start_secs = mktime64(1968, 1, 2, 0, 0, 0);
->>> +    rtc->rtc_dev->set_start_time = true;
->>>       return devm_rtc_register_device(rtc->rtc_dev);
->>>   }
->>
->> Dear @Zhanhan, Please help to leave comment if you think there is something need 
->> to be clarify. For example, I've found some relate origin defines
->> in "include/linux/mfd/mt6397/rtc.h"
->> #define RTC_MIN_YEAR    1968
->> #define RTC_BASE_YEAR    1900
->> #define RTC_NUM_YEAR    128
->> #define RTC_MIN_YEAR_OFFSET    (RTC_MIN_YEAR - RTC_BASE_YEAR)
->>
->> Should MediaTek remove RTC_MIN_YEAR and RTC_BASE_YEAR in next patch?
->> And since there may not exist any smartphone/tablet/TV using mt6397
->> RTC earlier than 2010? Is it possible to change
->> RTC_TIMESTAMP_BEGIN_1900 to RTC_TIMESTAMP_BEGIN_2000 without breaking
->> compatibility for these devices?
->>
->> Thanks
->> Macpaul Lin
->>
+> Thank you for looking at the rtc patch.
+> I saw you Acked the [PATCH 2/2], not sure when could we see the patch
+> in kernel master or next branch ?
 > 
-> After discussing these change with ZhanZhan, MediaTek think use 
-> RTC_TIMESTAMP_BEGIN_1900 and the other changes are okay.
-> 
-> Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Reviewed-by: ZhanZhan Ge <zhanzhan.ge@mediatek.com>
+> Thank you,
+> Joseph.
 > 
 
-Thank you Macpaul, ZhanZhan :-)
+Please don't top post. It is hard to follow the thread.
 
-Cheers,
-Angelo
+> On 2024/6/21 3:37 AM, Alexandre Belloni wrote:
+>> On 23/05/2024 18:38:07-0700, Joseph Jang wrote:
+>>> The rtctest requires the read permission on /dev/rtc0. The rtctest will
+>>> be skipped if the /dev/rtc0 is not readable.
+>>>
+>>> Reviewed-by: Koba Ko <kobak@nvidia.com>
+>>> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+>>> Signed-off-by: Joseph Jang <jjang@nvidia.com>
+>>
+>> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>
+
+Alexandre, I can take this patch through kselftest. Might have
+slipped through my Inbox or the assumption that this will go
+through rtc tree.
+
+thanks,
+-- Shuah
 
