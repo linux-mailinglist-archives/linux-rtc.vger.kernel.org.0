@@ -1,237 +1,122 @@
-Return-Path: <linux-rtc+bounces-2090-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2091-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 630F998DF4D
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Oct 2024 17:35:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CB3098E8D0
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2024 05:27:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85FAF1C24E91
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Oct 2024 15:35:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96CEDB25BFF
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2024 03:27:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1021F1D0DF3;
-	Wed,  2 Oct 2024 15:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A7A11EA80;
+	Thu,  3 Oct 2024 03:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvZ48ukx"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dRFUVKnE"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FC51D0DD9;
-	Wed,  2 Oct 2024 15:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B6017C77;
+	Thu,  3 Oct 2024 03:27:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727883344; cv=none; b=RYnwtZjO0O+ZFZUIMbf1jmfQUc0dfaONa8+bKtCihN5Wxxcjc8fqJ6dQjcnNOZa4tcwOpRLHZCVdX00/eDwEopBxoR/kQv4RqUi0qSf9j0JQz8TAUhOvK/L4vJJa8qkxaVnrEfplMPFCqIQrlneHsYjsQBDmnYJ5YnNFh71cByo=
+	t=1727926063; cv=none; b=UOWss8dKCzPGSoBxwPsW64pzhV1/EMGXuGSWsKjzcsMRmjvjtghWx9UizuPKUpEcBu/92Zi3JlsKVoh0AoSYHwgPTv/Ta7QfTU+6ESaDQFyk/rmTmGZU0n79IqJdXthtTdbQHCEsWxhZXX2KqVxfEWCtxaTg0wKAU7qSSnNEAvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727883344; c=relaxed/simple;
-	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQ5iwQ/2ABMp30aiiUKMjLqvalzp4G8Jdu+R3KMqHwN0w+qPsrEDsoL/9TLj34Ri7yvKlnUvxezwlsRR6lhdyVula/HAoJgQ25kff4XkrLPXk1KZ5voP4/O8BQSQ2KIo0/h7AhuDRwJAFibA7JOrJLjebK3/il36ize+xN/IiBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvZ48ukx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF281C4CECD;
-	Wed,  2 Oct 2024 15:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727883343;
-	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gvZ48ukxkvlA/tROM+XWQCC+GQjn1xdlFnYHeifEYVq3bNZE7U+/awWbv/IXObCLK
-	 Ysc1gbU85mEH1o377fQn2byyXFnnUwqVzaCVMUJDVsA8bKlOmU5vmNabqZmvyRGbGc
-	 X/7kX4t1SPLDknV2pBJAyf8aXxdc31pTUtOn2E1xJQ91H6DmdnOUL0nKg75YA48ga8
-	 /xwVQ+krKvfrEpXXbqzBZXcjjpO8Rpksw4EdnWB1XquWOMs6zS79szHrzEoSX0ZE31
-	 jvaKCO00kXJudpcVy4IoBnDzj6q4gdEc1EpMNZp4UTrHDbHjavRHXl1tGXmhrSbzdl
-	 mkgFXnebCgzIw==
-Date: Wed, 2 Oct 2024 16:35:36 +0100
-From: Lee Jones <lee@kernel.org>
-To: Junhao Xie <bigfoot@classfun.cn>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-	Sebastian Reichel <sre@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Heiko Stuebner <heiko@sntech.de>, Chukun Pan <amadeus@jmu.edu.cn>
-Subject: Re: [PATCH 7/9] leds: add Photonicat PMU LED driver
-Message-ID: <20241002153536.GG7504@google.com>
-References: <20240906093630.2428329-1-bigfoot@classfun.cn>
- <20240906093630.2428329-8-bigfoot@classfun.cn>
+	s=arc-20240116; t=1727926063; c=relaxed/simple;
+	bh=o+3jrKW7b7kFBJRKWePVxzV/UhWLYrB9mPeX8rVWu+g=;
+	h=Message-Id:From:Subject:Date:To:Cc; b=pyy4w1rEPK2hGZcn+8q1w9s23iFVfvbZSTFbKAc9+OgrxPT5C/ctEvlXcoExhgYAFDiqt9J/XF8GBrU4IhBZSfq7LZbBlT1TIXv9cgHr+wvoa2EGOKQ2P7YtJhMtBfHN1GH22mKqD3cqhwO2j1y1uszGo/jyuZEzA49lKON5PUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dRFUVKnE; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfout.phl.internal (Postfix) with ESMTP id AA20B13804B7;
+	Wed,  2 Oct 2024 23:27:39 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Wed, 02 Oct 2024 23:27:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:message-id:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1727926059; x=1728012459; bh=JxvPYPBns9YkU
+	mhU8vnRGYX0kJFFoS3PbWqDIlFrT5Q=; b=dRFUVKnEQOmDWF0lTtzX+fZRgxh4x
+	LibkEdnyf+rDtEuNiiUB0xZjdlTRfoWD3/ppVH6fUjYqwxCKN7GmBlUNTDJK6I2f
+	iPrp3B4UqpWfl/1NFP6iuE62COdfx/6Y1NUgRSgiKPuKTibO3ka7OkqQegZdkQGb
+	CNbWM8VOhvLsHS+W8YsttkMpQOYdPBCjsuDgzcequGUmIuFyNGjVU6QXpNwF6Qk2
+	PCpcBtTROSv2Dhphq/VjFJ4nHJosJ57Iem2s86sp5PEsvu21XIHdBIXI38Z0bQX4
+	FsPKhWOi7g0K0bGNlH1U7Qie5h1a5dxOWXGS0IpheGUCuRCmoPv4zgVJA==
+X-ME-Sender: <xms:Kg_-ZoIsxZoquFVOFDu06PJYqjiA_r-BelkmrEw37DJUzxzV87-hZQ>
+    <xme:Kg_-ZoLbvhfgPCNpymRKtYvigEfV4NIrnUKHmjnQatauYhZHCfIL0Mc0CTTd-x6n-
+    plVOpWB7S1L2Mkn-jQ>
+X-ME-Received: <xmr:Kg_-ZouasqQhQaHQ6kDn0AH_oUC9ec36dIkMCJ9CjpDG_-2ZMJa9jdg4gwhAiE6aIN7uhnLRQCN0LPqFBP69yn4UWhm4-IKVEYo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvtddgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepkffhufffvfevsedttdertddttddtnecuhfhrohhm
+    pefhihhnnhcuvfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqe
+    enucggtffrrghtthgvrhhnpeehffdukeetffdutedvffffheegtdetkeekfeevgfeitefh
+    vedvtdelhfduudettdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgpdhnsggprhgtphht
+    thhopeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrlhgvgigrnhgurhgvrd
+    gsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepghgvvghrtheslhhi
+    nhhugidqmheikehkrdhorhhgpdhrtghpthhtohepuggrnhhivghlsedtgidtfhdrtghomh
+    dprhgtphhtthhopehprghvohhnvgesrhgvthhrohguvghvrdgtohhmpdhrtghpthhtohep
+    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    eplhhinhhugidqmheikehksehlihhsthhsrdhlihhnuhigqdhmieekkhdrohhrghdprhgt
+    phhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:Kg_-ZlYb7N13r24bkQPRwOSqd18zLoXBztkdnIPoHM-A8KFifZpLaQ>
+    <xmx:Kg_-ZvaroqHXpAAMu1RvrOo7rAajhiuNYkqdsl4Qd58mlVqsiRqLkA>
+    <xmx:Kg_-ZhDYcFSoLLjLJqbEeS3eKCmGXsKLCcSmxJvQ5TgiNs4ePoiwNQ>
+    <xmx:Kg_-Zlbwh9c_s0YY1jWc49wFuc0chuM-9HfVzKhSPGi1H8hPy3xKcQ>
+    <xmx:Kw_-ZkO2vmwKI7WDf4SsTMKIj7mGd69ZSWPYf1PcH_BgKhXFnQbD2zNZ>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Oct 2024 23:27:35 -0400 (EDT)
+Message-Id: <cover.1727925802.git.fthain@linux-m68k.org>
+From: Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH 0/2] 
+Date: Thu, 03 Oct 2024 13:23:22 +1000
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+    Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Daniel Palmer <daniel@0x0f.com>,
+    Michael Pavone <pavone@retrodev.com>,
+    linux-kernel@vger.kernel.org,
+    linux-m68k@lists.linux-m68k.org,
+    linux-rtc@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240906093630.2428329-8-bigfoot@classfun.cn>
 
-On Fri, 06 Sep 2024, Junhao Xie wrote:
+This series removes some duplicate RTC driver code. rtc-m48t59 is tweaked
+to bring it into equivalence with the RTC drivers in arch/m68k/mvme*.
+Then the latter drivers are removed and platform devices added to make use
+of the former.
 
-> Photonicat has a network status LED that can be controlled by system.
-> The LED status can be set through command 0x19.
-> 
-> Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
-> ---
->  drivers/leds/Kconfig           | 11 +++++
->  drivers/leds/Makefile          |  1 +
->  drivers/leds/leds-photonicat.c | 75 ++++++++++++++++++++++++++++++++++
->  3 files changed, 87 insertions(+)
->  create mode 100644 drivers/leds/leds-photonicat.c
-> 
-> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-> index 8d9d8da376e4..539adb5944e6 100644
-> --- a/drivers/leds/Kconfig
-> +++ b/drivers/leds/Kconfig
-> @@ -381,6 +381,17 @@ config LEDS_PCA9532_GPIO
->  	  To use a pin as gpio pca9532_type in pca9532_platform data needs to
->  	  set to PCA9532_TYPE_GPIO.
->  
-> +config LEDS_PHOTONICAT_PMU
-> +	tristate "LED Support for Photonicat PMU"
-> +	depends on LEDS_CLASS
-> +	depends on MFD_PHOTONICAT_PMU
-> +	help
-> +	  Photonicat has a network status LED that can be controlled by system,
+The second patch depends upon the first, which will require some
+coordination between the maintainers of the RTC and m68k subsystems.
 
-"the system"
 
-> +	  this option enables support for LEDs connected to the Photonicat PMU.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called leds-photonicat.
-> +
->  config LEDS_GPIO
->  	tristate "LED Support for GPIO connected LEDs"
->  	depends on LEDS_CLASS
-> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-> index 18afbb5a23ee..dcd5312aee12 100644
-> --- a/drivers/leds/Makefile
-> +++ b/drivers/leds/Makefile
-> @@ -76,6 +76,7 @@ obj-$(CONFIG_LEDS_PCA9532)		+= leds-pca9532.o
->  obj-$(CONFIG_LEDS_PCA955X)		+= leds-pca955x.o
->  obj-$(CONFIG_LEDS_PCA963X)		+= leds-pca963x.o
->  obj-$(CONFIG_LEDS_PCA995X)		+= leds-pca995x.o
-> +obj-$(CONFIG_LEDS_PHOTONICAT_PMU)	+= leds-photonicat.o
->  obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
->  obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
->  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
-> diff --git a/drivers/leds/leds-photonicat.c b/drivers/leds/leds-photonicat.c
-> new file mode 100644
-> index 000000000000..3aa5ce525b83
-> --- /dev/null
-> +++ b/drivers/leds/leds-photonicat.c
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
-> + */
-> +
-> +#include <linux/mfd/photonicat-pmu.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/leds.h>
+Finn Thain (2):
+  rtc: m48t59: Accommodate chips that lack a century bit
+  m68k: mvme147, mvme16x: Adopt rtc-m48t59 platform driver
 
-Alphabetical.
-
-> +struct pcat_leds {
-> +	struct device *dev;
-
-Where is this used?
-
-> +	struct pcat_pmu *pmu;
-
-Why do you need to store this?
-
-Can't you get this at the call-site by:
-
-  dev_get_drvdata(cdev->dev->parent)
-
-> +	struct led_classdev cdev;
-> +};
-> +
-> +static int pcat_led_status_set(struct led_classdev *cdev,
-> +			       enum led_brightness brightness)
-> +{
-> +	struct pcat_leds *leds = container_of(cdev, struct pcat_leds, cdev);
-> +	struct pcat_data_cmd_led_setup setup = { 0, 0, 0 };
-> +
-> +	if (brightness)
-> +		setup.on_time = 100;
-> +	else
-> +		setup.down_time = 100;
-> +	return pcat_pmu_write_data(leds->pmu, PCAT_CMD_NET_STATUS_LED_SETUP,
-> +				   &setup, sizeof(setup));
-> +}
-> +
-> +static int pcat_leds_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-
-Small sized variables at the bottom please.
-
-> +	struct device *dev = &pdev->dev;
-> +	struct pcat_leds *leds;
-> +	const char *label;
-> +
-> +	leds = devm_kzalloc(dev, sizeof(*leds), GFP_KERNEL);
-> +	if (!leds)
-> +		return -ENOMEM;
-> +
-> +	leds->dev = dev;
-
-Where is this used?
-
-> +	leds->pmu = dev_get_drvdata(dev->parent);
-> +	platform_set_drvdata(pdev, leds);
-
-Where do you platform_get_drvdata()
-
-> +	ret = of_property_read_string(dev->of_node, "label", &label);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "No label property\n");
-> +
-> +	leds->cdev.name = label;
-> +	leds->cdev.max_brightness = 1;
-> +	leds->cdev.brightness_set_blocking = pcat_led_status_set;
-> +
-> +	return devm_led_classdev_register(dev, &leds->cdev);
-> +}
-> +
-> +static const struct of_device_id pcat_leds_dt_ids[] = {
-> +	{ .compatible = "ariaboard,photonicat-pmu-leds", },
-
-How many LEDs are there?
-
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, pcat_leds_dt_ids);
-> +
-> +static struct platform_driver pcat_leds_driver = {
-> +	.driver = {
-> +		.name = "photonicat-leds",
-> +		.of_match_table = pcat_leds_dt_ids,
-> +	},
-> +	.probe = pcat_leds_probe,
-> +};
-> +module_platform_driver(pcat_leds_driver);
-> +
-> +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
-> +MODULE_DESCRIPTION("Photonicat PMU Status LEDs");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.46.0
-> 
+ arch/m68k/configs/multi_defconfig   |   1 +
+ arch/m68k/configs/mvme147_defconfig |   1 +
+ arch/m68k/configs/mvme16x_defconfig |   1 +
+ arch/m68k/include/asm/mvme147hw.h   |  19 +---
+ arch/m68k/include/asm/mvme16xhw.h   |  18 +--
+ arch/m68k/mvme147/config.c          |  54 ++++-----
+ arch/m68k/mvme16x/Makefile          |   2 +-
+ arch/m68k/mvme16x/config.c          |  56 ++++------
+ arch/m68k/mvme16x/rtc.c             | 165 ----------------------------
+ drivers/rtc/rtc-m48t59.c            |  31 +++---
+ 10 files changed, 67 insertions(+), 281 deletions(-)
+ delete mode 100644 arch/m68k/mvme16x/rtc.c
 
 -- 
-0)
-Lee Jones [李琼斯]
+2.39.5
+
 
