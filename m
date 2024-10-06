@@ -1,274 +1,112 @@
-Return-Path: <linux-rtc+bounces-2098-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2099-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDCE8991444
-	for <lists+linux-rtc@lfdr.de>; Sat,  5 Oct 2024 06:23:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E430A991B83
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Oct 2024 02:16:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A5721F23F08
-	for <lists+linux-rtc@lfdr.de>; Sat,  5 Oct 2024 04:23:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BD4B1F21BA6
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Oct 2024 00:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA58B28371;
-	Sat,  5 Oct 2024 04:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7649442F;
+	Sun,  6 Oct 2024 00:16:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Wn9PiuAn"
+	dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b="m6Gk5ffH"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CBE22067;
-	Sat,  5 Oct 2024 04:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966E22582
+	for <linux-rtc@vger.kernel.org>; Sun,  6 Oct 2024 00:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728102208; cv=none; b=u2QLrrYMBnAqovO00u6mXPWygghVk3XWct87srGBAQtF63LudSJGTPWD9NfX7g2sgSlZI74ET3n37y/fN5QhanvxHDHblwHLgFIttT6CJD7DxxwFlJFh70ggDv5EEODEcRf5iNPfQyL4DsMQDSHDp88ShNPqwlq1qccOrMgDBMQ=
+	t=1728173771; cv=none; b=L20SHxoQdcwDudHVgo1XjO05dmop0lYK0TLGv8lS+dftE3DNHOqt6FpIH8W4vnimHJrEH8w0bWN5jklU5BODVXBCPOtTFexXoCl2ejPIF1krhwS+1KEHt3dj+Cc3TCa8oM71bTJLwIYBeb17gsmrTb2+P8HwtwDU5xGQDsDXAJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728102208; c=relaxed/simple;
-	bh=VAfiyok4ugjEw6q/iwc9bfeTDqFqka9uuOrMe40BkaA=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ot2uRer8bXI5A220spYbmeO93YMNwIGCMATPjitZDj12IYEcrX4P/jVrcYFAzAztthnJ86C2ELHK/KtdGopCqpEeG+ZvY/BOFZZqQK4OGrz4mdEjreWn95EvCM0J6ZtStnY+aeUWCVTW+6Rprd5QZs7BoKIba9LWV9lya9GxG8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Wn9PiuAn; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id E3C5A1140301;
-	Sat,  5 Oct 2024 00:23:24 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Sat, 05 Oct 2024 00:23:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1728102204; x=1728188604; bh=MQ2TI9weLpwwO0u3vLYut9X87Z79
-	bgN+EXOdenFrMyY=; b=Wn9PiuAnHaaB8CT77L5YyhFrW4ZHwJrBM4BwnFZspAkI
-	/v/cASqPNhlxep4hrUJmo8o842nmeZkw+UfYbW9QhP5jSXo0yk0RsDMcBSNsNkX/
-	AxsWOqIfQDKXpdilBE/9fBU7J2Y0IaRAPU8NBcIof5253ok65vqE/GvgOAUaOQyh
-	fHJICRBWYtGoAEVUOsBYR8BnoL30aOV14TSmLytiNb1x0IQOgg26EHwhJJ8tEJE8
-	SaSbClIjbK808DKA4z125mouu59OqNcIXTnBtnsjb2siB6YZWgCVXedqZC0/EqV8
-	LkJQNhqVNgBXbRVIvekc4Z/gL+zTf5m7uM711bQe9A==
-X-ME-Sender: <xms:O78AZ_awfMEVu-yh76vBTqQ60o9mN7VhJBtvy0jUbUN-e0Q7wxqSRg>
-    <xme:O78AZ-Z40icowB7U3TbxMs7sC399Tq8Dj3XvyJEecXQnsMy30t_43Y4WtdvTyoJaz
-    810hlTeba6li7LzjV8>
-X-ME-Received: <xmr:O78AZx92pOwax0FBMaN-ZVp0r_w-i0_tA1E0rkzGNS1wFeFBQr6prvhdGcCXPDoKkVkukdzKJCkAYugtoXZ--cflDU-o1BGlxO0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvgedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecu
-    hfhrohhmpefhihhnnhcuvfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrd
-    horhhgqeenucggtffrrghtthgvrhhnpeelueehleehkefgueevtdevteejkefhffekfeff
-    ffdtgfejveekgeefvdeuheeuleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgpdhnsggp
-    rhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrlhgvgigrnh
-    gurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepghgvvghr
-    theslhhinhhugidqmheikehkrdhorhhgpdhrtghpthhtohepuggrnhhivghlsedtgidtfh
-    drtghomhdprhgtphhtthhopehprghvohhnvgesrhgvthhrohguvghvrdgtohhmpdhrtghp
-    thhtoheplhhinhhugidqmheikehksehlihhsthhsrdhlihhnuhigqdhmieekkhdrohhrgh
-    dprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:O78AZ1qRnY9yDfsBoMBEGJBcqXYc2Inz8jY-yRMhqZqX01JXUTp_7w>
-    <xmx:O78AZ6qD6f0WVqRwIv5cvNwt1Gfzn7prknyL2l79Hb52gz1RFxaIMg>
-    <xmx:O78AZ7RnVjbOqLa2FRlVNXCShB9FmzvUlGkllmqdiG678yzeuz6xbg>
-    <xmx:O78AZypxg-ih3-mLPd-qw9ApCD7VmiRhvI_MuzqMdAZGHovNDEoyPw>
-    <xmx:PL8AZ7c_8DSccgMzH2tp1ED5hVn4KSXg-6Hu0y_4TjV4wx8CfMSzC2fJ>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 5 Oct 2024 00:23:20 -0400 (EDT)
-Date: Sat, 5 Oct 2024 14:23:28 +1000 (AEST)
-From: Finn Thain <fthain@linux-m68k.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-cc: Geert Uytterhoeven <geert@linux-m68k.org>, Daniel Palmer <daniel@0x0f.com>, 
-    Michael Pavone <pavone@retrodev.com>, linux-m68k@lists.linux-m68k.org, 
-    linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rtc: m48t59: Accommodate chips that lack a century
- bit
-In-Reply-To: <20241003081015363ed024@mail.local>
-Message-ID: <10bb949d-07f5-5cea-b658-8969b5bda6ae@linux-m68k.org>
-References: <cover.1727925802.git.fthain@linux-m68k.org> <f9eedf61f64906006f57ac88bdc160e55bc40c8a.1727925802.git.fthain@linux-m68k.org> <20241003081015363ed024@mail.local>
+	s=arc-20240116; t=1728173771; c=relaxed/simple;
+	bh=SNBxoV1rx6uFdlVgmTwwErdFQ5cAR0hkFCq8CC88gyE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BrmMBMvPiQP8Hp0EM4eIsrUvDTL/Zfv7VFYblyRYY59OpCIUNM4OUu5YRCPR92Mkd3LQVGCMCwDrtrMJWVKS5ghriytDhwe5Jk5st15FLMkg1oumLqKbA82GL/ncVDuXtOziwYMqO9eajPowR+u8toXQMaUx7uTE7z+W86z7U2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org; spf=none smtp.mailfrom=nigauri.org; dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b=m6Gk5ffH; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nigauri.org
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20bb92346caso20804465ad.0
+        for <linux-rtc@vger.kernel.org>; Sat, 05 Oct 2024 17:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nigauri-org.20230601.gappssmtp.com; s=20230601; t=1728173769; x=1728778569; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ATYw0gTgPQjnSXPvhq4TIhUlRS9Y7ceSuAlHJE+uPHc=;
+        b=m6Gk5ffHncL6K+7CCmjEXMlpiH9LU+95M16pnNatwGqiU3JIPzWoAhkKQszAI0SHeL
+         01pJ3CBfxRe3BjegiNLk1RR/roZ/06eQfwdFS9QjO6A5iyjEA6hRj8EFXCCePYZkQNP5
+         uv/ca0CEmoJc8tcgDr282d/8IHHW7dvOnEsq6EfnHDl+QxSDCx+a6HhHSnesr13rcfAA
+         oKQUsvCjAWHkiyKsXlBKImC80OCbU4lYbKw1TxmgE4n3OtqI0YTpIRco0qBPIpeXSdap
+         bcX9fnx0ejHFM9BA86YoZ//Aj/Gw9+Ji6GFIeGZURX8KIZX7frj3IE9LFygTa+cXEX0D
+         KcgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728173769; x=1728778569;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ATYw0gTgPQjnSXPvhq4TIhUlRS9Y7ceSuAlHJE+uPHc=;
+        b=fGndFgKAp6xrdCjhtv9DyAnN6rJxbbbzdNW5X3pln2oASL20zP6ha/bwskzFJe0jcZ
+         Xp4rT/mtG7Sv91FhFjqn62Lbw7dTIT5nfzFQWjItHLSPqk/ECW+rpgAYkM7/I2Ncn0Z9
+         ViB030dl/L2Qs1T42kCZL/TQYvUWDWMr2CDbxqdsWVtzog2P7QnD8dRPqM7hsKZlkrsC
+         41en4NY2C872O3zrBpk1DIuuYiikszzn6+mc1323zB9XlvkoIrADtwYqqO+oZNk8DpiN
+         WsYqQM1V5kq1EsChgcr8yeod9EVy5f8dLouWJpCN8oNzVuwJSKk9S/Qv/BOsJ89WxqHW
+         dUiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1qG6rV6eJChGfokoBKvk4f3LS3jgy/NsnH7zVgfCjJ/wr8zZTfJDcaN1/q5OgX8i2x9/tqyByLFI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2m0UKHDD0/SECMYx0C5/GyX7/RZFBaHoUlFDVzHGijX39cq8y
+	r8oQvbrGisMmAf3voLG+CyR+L3Xj6I+5370fhqnGu6lXte1hGC95FysDZYtFxE5xVpZNg8pxgA=
+	=
+X-Google-Smtp-Source: AGHT+IGGWRUojFmci0UIq/ow6y0T5+wd0QojcdIZhftIf4PjECAcDzsFAmXC8zdXQtzaDdHFCmkqcA==
+X-Received: by 2002:a17:902:e751:b0:20b:5e34:1842 with SMTP id d9443c01a7336-20bff5517a5mr114758455ad.25.1728173768654;
+        Sat, 05 Oct 2024 17:16:08 -0700 (PDT)
+Received: from localhost ([2405:6581:5360:1800:5ccd:eb23:b5da:b9df])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c138cec92sm18231435ad.101.2024.10.05.17.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Oct 2024 17:16:08 -0700 (PDT)
+From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+To: alexandre.belloni@bootlin.com,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Subject: [PATCH] rtc: rtc-mc146818-lib: Use is_leap_year instead of calculate leap years
+Date: Sun,  6 Oct 2024 09:15:53 +0900
+Message-ID: <20241006001553.7430-1-iwamatsu@nigauri.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 
+The is_leap_year() for determining leap year is provided in rtc lib.
+This uses is_leap_year() instead of its own leap year determination
+routine.
 
-On Thu, 3 Oct 2024, Alexandre Belloni wrote:
+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+---
+ drivers/rtc/rtc-mc146818-lib.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> 
-> ... while you are it, can you use m48t59->rtc->start_secs and 
-> m48t59->rtc->set_start_time in probe instead of offsetting tm_year in 
-> read_time/set_time so we can later use device tree or any other 
-> mechanism to extend the range?
-> 
-
-That didn't work out as I'd hoped. I booted a patched kernel (diff below) 
-under qemu-system-sparc64:
-
-~ # for yyyy in 1970 1971 1999 2000 2024 2025 2068 2069 ; do 
-date 01010101$yyyy ; hwclock --systohc --utc && hwclock --utc ; echo ; done
-Thu Jan  1 01:01:00 UTC 1970
-Thu Jan  1 01:01:00 1970  0.000000 seconds
-
-Fri Jan  1 01:01:00 UTC 1971
-Tue Nov 24 18:32:44 1998  0.000000 seconds
-
-Fri Jan  1 01:01:00 UTC 1999
-Tue Nov 24 18:32:44 2026  0.000000 seconds
-
-Sat Jan  1 01:01:00 UTC 2000
-Sun Jan  2 23:29:16 2000  0.000000 seconds
-
-Mon Jan  1 01:01:00 UTC 2024
-Tue Jan  2 23:29:16 2024  0.000000 seconds
-
-Wed Jan  1 01:01:00 UTC 2025
-Thu Jan  2 23:29:16 2025  0.000000 seconds
-
-Sun Jan  1 01:01:00 UTC 2068
-hwclock: RTC_SET_TIME: Numerical result out of range
-
-Tue Jan  1 01:01:00 UTC 2069
-hwclock: RTC_SET_TIME: Numerical result out of range
-
-~ # 
-
-Here's the result from an unpatched kernel (v6.11):
-
-~ # for yyyy in 1970 1971 1999 2000 2024 2025 2068 2069 ; do 
-date 01010101$yyyy ; hwclock --systohc --utc && hwclock --utc ; echo ; done
-Thu Jan  1 01:01:00 UTC 1970
-Thu Jan  1 01:01:00 1970  0.000000 seconds
-
-Fri Jan  1 01:01:00 UTC 1971
-Fri Jan  1 01:01:00 1971  0.000000 seconds
-
-Fri Jan  1 01:01:00 UTC 1999
-Fri Jan  1 01:01:01 1999  0.000000 seconds
-
-Sat Jan  1 01:01:00 UTC 2000
-Sat Jan  1 01:01:00 2000  0.000000 seconds
-
-Mon Jan  1 01:01:00 UTC 2024
-Mon Jan  1 01:01:00 2024  0.000000 seconds
-
-Wed Jan  1 01:01:00 UTC 2025
-Wed Jan  1 01:01:00 2025  0.000000 seconds
-
-Sun Jan  1 01:01:00 UTC 2068
-hwclock: RTC_RD_TIME: Invalid argument
-
-Tue Jan  1 01:01:00 UTC 2069
-hwclock: RTC_RD_TIME: Invalid argument
-
-~ # 
-
-
-I'm afraid I don't see how we might avoid adding/subtracting in 
-read_time/set_time given that we must avoid messing up the present date 
-when users boot into an upgraded kernel.
-
-
-diff --git a/arch/sparc/kernel/time_32.c b/arch/sparc/kernel/time_32.c
-index 08bbdc458596..41ae3d1aa12e 100644
---- a/arch/sparc/kernel/time_32.c
-+++ b/arch/sparc/kernel/time_32.c
-@@ -255,6 +255,7 @@ static void mostek_write_byte(struct device *dev, u32 ofs, u8 val)
- static struct m48t59_plat_data m48t59_data = {
- 	.read_byte = mostek_read_byte,
- 	.write_byte = mostek_write_byte,
-+	.start_year = 1968,
- };
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index 651bf3c279c74..ce4d68de05831 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -232,8 +232,7 @@ int mc146818_set_time(struct rtc_time *time)
  
- /* resource is set at runtime */
-diff --git a/arch/sparc/kernel/time_64.c b/arch/sparc/kernel/time_64.c
-index 60f1c8cc5363..eceb3fadb71a 100644
---- a/arch/sparc/kernel/time_64.c
-+++ b/arch/sparc/kernel/time_64.c
-@@ -544,6 +544,7 @@ static void mostek_write_byte(struct device *dev, u32 ofs, u8 val)
- static struct m48t59_plat_data m48t59_data = {
- 	.read_byte	= mostek_read_byte,
- 	.write_byte	= mostek_write_byte,
-+	.start_year	= 1968,
- };
+ #ifdef CONFIG_MACH_DECSTATION
+ 	real_yrs = yrs;
+-	leap_yr = ((!((yrs + 1900) % 4) && ((yrs + 1900) % 100)) ||
+-			!((yrs + 1900) % 400));
++	leap_yr = is_leap_year(yrs + 1900);
+ 	yrs = 72;
  
- static struct platform_device m48t59_rtc = {
-diff --git a/drivers/rtc/rtc-m48t59.c b/drivers/rtc/rtc-m48t59.c
-index f0f6b9b6daec..d7e1f79cd52b 100644
---- a/drivers/rtc/rtc-m48t59.c
-+++ b/drivers/rtc/rtc-m48t59.c
-@@ -82,10 +82,6 @@ static int m48t59_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 		dev_dbg(dev, "Century bit is enabled\n");
- 		tm->tm_year += 100;	/* one century */
- 	}
--#ifdef CONFIG_SPARC
--	/* Sun SPARC machines count years since 1968 */
--	tm->tm_year += 68;
--#endif
- 
- 	tm->tm_wday	= bcd2bin(val & 0x07);
- 	tm->tm_hour	= bcd2bin(M48T59_READ(M48T59_HOUR) & 0x3F);
-@@ -108,11 +104,6 @@ static int m48t59_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	u8 val = 0;
- 	int year = tm->tm_year;
- 
--#ifdef CONFIG_SPARC
--	/* Sun SPARC machines count years since 1968 */
--	year -= 68;
--#endif
--
- 	dev_dbg(dev, "RTC set time %04d-%02d-%02d %02d/%02d/%02d\n",
- 		year + 1900, tm->tm_mon, tm->tm_mday,
- 		tm->tm_hour, tm->tm_min, tm->tm_sec);
-@@ -163,10 +154,7 @@ static int m48t59_rtc_readalarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	M48T59_SET_BITS(M48T59_CNTL_READ, M48T59_CNTL);
- 
- 	tm->tm_year = bcd2bin(M48T59_READ(M48T59_YEAR));
--#ifdef CONFIG_SPARC
--	/* Sun SPARC machines count years since 1968 */
--	tm->tm_year += 68;
--#endif
-+
- 	/* tm_mon is 0-11 */
- 	tm->tm_mon = bcd2bin(M48T59_READ(M48T59_MONTH)) - 1;
- 
-@@ -199,11 +187,6 @@ static int m48t59_rtc_setalarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	unsigned long flags;
- 	int year = tm->tm_year;
- 
--#ifdef CONFIG_SPARC
--	/* Sun SPARC machines count years since 1968 */
--	year -= 68;
--#endif
--
- 	/* If no irq, we don't support ALARM */
- 	if (m48t59->irq == NO_IRQ)
- 		return -EIO;
-@@ -458,6 +441,10 @@ static int m48t59_rtc_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, m48t59);
- 
- 	m48t59->rtc->ops = &m48t59_rtc_ops;
-+	m48t59->rtc->range_min = mktime64(1900, 1, 1, 0, 0, 0);
-+	m48t59->rtc->range_max = mktime64(1999, 12, 31, 23, 59, 59);
-+	m48t59->rtc->start_secs = mktime64(pdata->start_year, 1, 1, 0, 0, 0);
-+	m48t59->rtc->set_start_time = true;
- 
- 	nvmem_cfg.size = pdata->offset;
- 	ret = devm_rtc_nvmem_register(m48t59->rtc, &nvmem_cfg);
-diff --git a/include/linux/rtc/m48t59.h b/include/linux/rtc/m48t59.h
-index 9465d5405fe2..b01c514d7079 100644
---- a/include/linux/rtc/m48t59.h
-+++ b/include/linux/rtc/m48t59.h
-@@ -56,6 +56,9 @@ struct m48t59_plat_data {
- 	void __iomem *ioaddr;
- 	/* offset to RTC registers, automatically set according to the type */
- 	unsigned int offset;
-+
-+	/* value to be used to initialize rtc->start_secs */
-+	time64_t start_year;
- };
- 
- #endif /* _LINUX_RTC_M48T59_H_ */
+ 	/*
+-- 
+2.45.2
+
 
