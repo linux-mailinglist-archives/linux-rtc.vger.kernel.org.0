@@ -1,81 +1,79 @@
-Return-Path: <linux-rtc+bounces-2110-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2111-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5087993B41
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 01:36:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47C89993DDC
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 06:18:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79C431C233A2
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Oct 2024 23:36:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFB521F246D7
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 04:18:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D9318C908;
-	Mon,  7 Oct 2024 23:36:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B983F9FB;
+	Tue,  8 Oct 2024 04:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b="B0/EKPly"
+	dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b="X9xPEK23"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C893318C00D
-	for <linux-rtc@vger.kernel.org>; Mon,  7 Oct 2024 23:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDF33C0C
+	for <linux-rtc@vger.kernel.org>; Tue,  8 Oct 2024 04:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728344215; cv=none; b=V0Z7ESTT24kAJgJOmdcPvLB82F1mESJuKcIp9z/C+k3j+fzHtCs3es6v5xwJHbIE5oA91/zAQmjA8tKdgPt2leVi1A1YW5VUP7dW7pzHbcI1146EszW3+rc8atagYCEp0NAmmJHoo4PFre+vkTTmwFiKOYYLculQ6IfDNn77OHA=
+	t=1728361078; cv=none; b=dD0d2dD4EQQggnFm2pF2qlnVXW8Xb2MIFdZJ+QqGz8vdvbux1IFsGMAFvD9hUVZgR90blZHN3p+qp9CtuWlZLqCa2z/FXC0r3S+vn8k/D/Qi4T/oZbiN1f6v2P/D2kMLNPGeTigBMndgqD8alWlUPHjKJlG7NZHK1eUSQxVcefE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728344215; c=relaxed/simple;
-	bh=PQH80u4PFX9rxrGkb6hXV+uCtwBOPCjXw0gCaRJULNg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iuxi2myipzHsMpQMB/dh69kSbK3CtnEzg2y/dB5fJpSGxJy3xhBwWsxLO2pDXVotiIhiazymN8O/fFQSSiVgPcXWHrF/gF2rxTy9ralOX8N/Rb9OD+Y74UUehumPwKH6QiFN+qZzKO54PIL8NM299t2keoOC0zdnCxd4An9vpAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org; spf=none smtp.mailfrom=nigauri.org; dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b=B0/EKPly; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1728361078; c=relaxed/simple;
+	bh=6HfLF08HYL3p3XfIceMe4VbK2ifsfg79xObxJmr0sVI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OPqDSlj+vcD2faMeTasKg7RM2+5U9F2K+AJuJRF5NpwiPaBQXOxlzeaO2LiBE1epAQHRnBeI9HKXAfor+fCGT1TG1lO1OZlkW1Zw8bu15ZJMejyR7+4uWO4B2CcMsmG+/WOjH3ZH7L6ofxuqMBHhMwFFOn0yIqefui0XZlz7kP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org; spf=none smtp.mailfrom=nigauri.org; dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b=X9xPEK23; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nigauri.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71df0dbee46so1796122b3a.0
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Oct 2024 16:36:53 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20b90984971so53407005ad.3
+        for <linux-rtc@vger.kernel.org>; Mon, 07 Oct 2024 21:17:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20230601.gappssmtp.com; s=20230601; t=1728344213; x=1728949013; darn=vger.kernel.org;
+        d=nigauri-org.20230601.gappssmtp.com; s=20230601; t=1728361076; x=1728965876; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DEyzLMemmqq/dWbd7xuJOCvbVaFumTMHAO9VHuJszJg=;
-        b=B0/EKPlygNC0g8byT3qEqoih3m1zxphIpo4DEKaPZBiuWu1MKOlhay6kDG0vTuKjOK
-         4L8zzsb4HtKuMmE4rgPhTSN7vhhtieajH3OAOtoudndgKkPMgWzaUAEh4Qo/RXsFHGkT
-         bWc7QElP65TKo7hfKhvUzuiM9kX2CE1HHFR5NCnrERqHvsrm2hhVuMO+lXDMrLs+PQ9L
-         eBrDky331Wqvcu48HOdiU+YGz12qrsZZi48ivJF+LuMYfMoL0/fqU+sHykwDg76/BVVz
-         76eYFz2wrdjKmXBKyXatyP9rgOpXCXg6LdpQknLd4ph1s42vuxu08SyCSfal+Qp4i5rM
-         2Ypw==
+        bh=qwcy1Q3TMls1bnUmrpkwAG4GSqExbl+rH8vmvD0fjhY=;
+        b=X9xPEK23SW43+dcrRSn+rF4DTvv2wzUX5KsgQgMghvXn9IDox+9c+5in4u5f3Q90hb
+         aSiE8tCCtPcDXlUs9OTKpy2OjfqzIjxupPlK9d7IH2L/k6O+H16T4McTZgm8cume1DNZ
+         zLYhaEbp0Kc4KSvrAsleLrTVx5pbE0USuvDoc/TUGsomB1gJHbJpPC448C8jEXGW9PM6
+         OkxfrRyJDE8anTF+LB94gSbKY1nFsGW3S3AVeU10otGrda7C0Y2sroULBtdcvFbREcmN
+         nH2Ppjz6RWPt/bEWrizUNtOveVFGzBkfTh4kh0ZF73Mg3FCRqiVrzLi3+tCx7huZxqBb
+         tyaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728344213; x=1728949013;
+        d=1e100.net; s=20230601; t=1728361076; x=1728965876;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DEyzLMemmqq/dWbd7xuJOCvbVaFumTMHAO9VHuJszJg=;
-        b=BEfg65n3G0v3/SSgtfof3lL3Cv4cIHW4sv3kCXSg2597ufrLTpqcGPXffaqN+gFJIR
-         fudbyIy0JRzqY77QwGy08Bq7sKVlaLJZXTppV8UJCIim8VrabUoQZ3LNegSmkuTJolG6
-         yos+uEoRQ1EA9yqi5ZtrYhZHrx6ZcFBj/KxThdGHL2SvHuyLBIls4f1wdzlXlc7Ks7SM
-         Bsud6kP5S6DjJbBc1D+Es+ufTlgdiuCTdksObw4+fhuOmV5IkLpzG0UiUsbNNwppLWri
-         B1QwuVM5itNwSj5nFmeMejHF5jYJFBYXS4JQ77dmO5dAGwM5gImN4baLvIjYNCnVWiSf
-         +QCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX3N2phzU2FeE721WXUUswxnSV+UQ9AwYruu+GMAleT3GwPg+q5v5Qy9dlU8JUa8M14KNk6bj2mM90=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4olHA1V6+9sNkZbS+ItYKlgor89PdahaiZBVdXTQ0U+FlW6jq
-	5yNj5QS/KemEU2EuRGp5UsQNuqsFMjdPk/XeQl3GpzQ7GufoCOvIg02+sZEJVM+Y+NcGI7HjTA=
-	=
-X-Google-Smtp-Source: AGHT+IHGf31XYd45H99S839jS0sgv7aRpe+oG52gA7j9zvRgNAQb26bmDm+0JSgzPF1FVShyapC4gA==
-X-Received: by 2002:a05:6a00:1406:b0:71e:69e:596b with SMTP id d2e1a72fcca58-71e069e5bc5mr5786386b3a.17.1728344213023;
-        Mon, 07 Oct 2024 16:36:53 -0700 (PDT)
-Received: from localhost ([2405:6581:5360:1800:6658:dcfc:245b:dd1e])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71df0d6243asm4954286b3a.151.2024.10.07.16.36.52
+        bh=qwcy1Q3TMls1bnUmrpkwAG4GSqExbl+rH8vmvD0fjhY=;
+        b=RPbcmkWd31cQ6EN4reGo1O73ZRDyq9tT/UjtE5Tr1Jkq28UXjJ1qC02AdABenmeOyD
+         WBIsAXC9rGSGK128vat0zMySjHwefP9z/x6RstdRiPNnHS/JpwocMz+JZd0EP7fnPaz/
+         GvtcRuIrCuMw9Bui+G7HdB55cJNnaJgnfhxpFMi2yZfDMgHgd315mGtV4pXIx9HGHNBY
+         cnuVnszRyjoRhY9jsvi8cAs80/9w+pkHjNKGoiuksgP9a+6Cbz0o8la3XpV0YogTeT1f
+         S6/RZGGNahMXdZI7M5FQhlCbSzbti94MTAPnGy25QU/AO0dmmIFr6DdmCOUq/JbuCNaV
+         o/bg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2F5Ard45z7nblVt2uzehPZKjf05DpTFzkh+qalaQe2w6UvqxrB9AAneblMHaYT7NnGJbvdJvGvX4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVdpCl4HccAmQM4gsZkPhGoWSfQRg3cRozch157WKF1bvv+Uo/
+	1u9+AjOU1UBYh+YlvdieVivB47gmg+1cUH0f8fNqzL3XVHEwxDtMviQ95Wdx
+X-Google-Smtp-Source: AGHT+IEh8+JdOX8UEHE73IwMV3DO/pt3CS+IqKhGFGP7T+L5b5Z16aHIMvyypjInsvw7o9r7iTWVIg==
+X-Received: by 2002:a17:902:e80c:b0:205:5d12:3f24 with SMTP id d9443c01a7336-20bfdfc0557mr191055685ad.20.1728361075664;
+        Mon, 07 Oct 2024 21:17:55 -0700 (PDT)
+Received: from localhost ([2405:6581:5360:1800:5cd1:adf7:7fbd:8a98])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c138cec9dsm47168085ad.103.2024.10.07.21.17.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2024 16:36:52 -0700 (PDT)
+        Mon, 07 Oct 2024 21:17:55 -0700 (PDT)
 From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-X-Google-Original-From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 To: alexandre.belloni@bootlin.com,
 	linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: macro@orcam.me.uk,
-	Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: [PATCH v2] rtc: rtc-mc146818-lib: Use is_leap_year instead of calculate leap years
-Date: Tue,  8 Oct 2024 08:36:18 +0900
-Message-ID: <20241007233618.1442937-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
+	Jeremy Gebben <jgebben@sweptlaser.com>
+Subject: [PATCH] rtc: abx80x: Fix WDT bit position of the status register
+Date: Tue,  8 Oct 2024 13:17:37 +0900
+Message-ID: <20241008041737.1640633-1-iwamatsu@nigauri.org>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -85,52 +83,30 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+The WDT bit in the status register is 5, not 6. This fixes from 6 to 5.
 
-The is_leap_year() for determining leap year is provided in rtc lib.
-This uses is_leap_year() instead of its own leap year determination
-routine.
-
+Link: https://abracon.com/Support/AppsManuals/Precisiontiming/AB08XX-Application-Manual.pdf
+Link: https://www.microcrystal.com/fileadmin/Media/Products/RTC/App.Manual/RV-1805-C3_App-Manual.pdf
+Fixes: 749e36d0a0d7 ("rtc: abx80x: add basic watchdog support")
+Cc: Jeremy Gebben <jgebben@sweptlaser.com>
 Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
 ---
- drivers/rtc/rtc-mc146818-lib.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/rtc/rtc-abx80x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  v2: Add Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-      Eliminate the leap_yr variable.
-
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 651bf3c279c746..dbd2d5835f002c 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -216,7 +216,7 @@ int mc146818_set_time(struct rtc_time *time)
- 	unsigned char save_control, save_freq_select;
- 	unsigned int yrs;
- #ifdef CONFIG_MACH_DECSTATION
--	unsigned int real_yrs, leap_yr;
-+	unsigned int real_yrs;
- #endif
- 	unsigned char century = 0;
+diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+index 1298962402ff47..3fee27914ba805 100644
+--- a/drivers/rtc/rtc-abx80x.c
++++ b/drivers/rtc/rtc-abx80x.c
+@@ -39,7 +39,7 @@
+ #define ABX8XX_REG_STATUS	0x0f
+ #define ABX8XX_STATUS_AF	BIT(2)
+ #define ABX8XX_STATUS_BLF	BIT(4)
+-#define ABX8XX_STATUS_WDT	BIT(6)
++#define ABX8XX_STATUS_WDT	BIT(5)
  
-@@ -232,8 +232,6 @@ int mc146818_set_time(struct rtc_time *time)
- 
- #ifdef CONFIG_MACH_DECSTATION
- 	real_yrs = yrs;
--	leap_yr = ((!((yrs + 1900) % 4) && ((yrs + 1900) % 100)) ||
--			!((yrs + 1900) % 400));
- 	yrs = 72;
- 
- 	/*
-@@ -241,7 +239,7 @@ int mc146818_set_time(struct rtc_time *time)
- 	 * for non-leap years, so that Feb, 29th is handled
- 	 * correctly.
- 	 */
--	if (!leap_yr && mon < 3) {
-+	if (!is_leap_year(real_yrs + 1900) && mon < 3) {
- 		real_yrs--;
- 		yrs = 73;
- 	}
+ #define ABX8XX_REG_CTRL1	0x10
+ #define ABX8XX_CTRL_WRITE	BIT(0)
 -- 
 2.45.2
 
