@@ -1,113 +1,130 @@
-Return-Path: <linux-rtc+bounces-2111-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2112-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47C89993DDC
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 06:18:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC4D799403C
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 10:00:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFB521F246D7
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 04:18:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0B091C26307
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 07:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B983F9FB;
-	Tue,  8 Oct 2024 04:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b="X9xPEK23"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D301EF923;
+	Tue,  8 Oct 2024 06:57:51 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDF33C0C
-	for <linux-rtc@vger.kernel.org>; Tue,  8 Oct 2024 04:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FC71EF0BD;
+	Tue,  8 Oct 2024 06:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728361078; cv=none; b=dD0d2dD4EQQggnFm2pF2qlnVXW8Xb2MIFdZJ+QqGz8vdvbux1IFsGMAFvD9hUVZgR90blZHN3p+qp9CtuWlZLqCa2z/FXC0r3S+vn8k/D/Qi4T/oZbiN1f6v2P/D2kMLNPGeTigBMndgqD8alWlUPHjKJlG7NZHK1eUSQxVcefE=
+	t=1728370671; cv=none; b=VAYQ0DtJJY2yNJw9DdE3kDo0Ma7vzl0egA/0QQkZbpqqanxkNfZ+efps83GrlR1QtIlVzHeCmN/4LMVU2sNQezN0vTDZswN8X7ohwlABN6vQ6kAp7nM2PllEQZSkadPM+blmgEhutTCk2lbxNYRrQL/1fruWQTjYLF2+FdygoVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728361078; c=relaxed/simple;
-	bh=6HfLF08HYL3p3XfIceMe4VbK2ifsfg79xObxJmr0sVI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OPqDSlj+vcD2faMeTasKg7RM2+5U9F2K+AJuJRF5NpwiPaBQXOxlzeaO2LiBE1epAQHRnBeI9HKXAfor+fCGT1TG1lO1OZlkW1Zw8bu15ZJMejyR7+4uWO4B2CcMsmG+/WOjH3ZH7L6ofxuqMBHhMwFFOn0yIqefui0XZlz7kP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org; spf=none smtp.mailfrom=nigauri.org; dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b=X9xPEK23; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nigauri.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20b90984971so53407005ad.3
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Oct 2024 21:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20230601.gappssmtp.com; s=20230601; t=1728361076; x=1728965876; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qwcy1Q3TMls1bnUmrpkwAG4GSqExbl+rH8vmvD0fjhY=;
-        b=X9xPEK23SW43+dcrRSn+rF4DTvv2wzUX5KsgQgMghvXn9IDox+9c+5in4u5f3Q90hb
-         aSiE8tCCtPcDXlUs9OTKpy2OjfqzIjxupPlK9d7IH2L/k6O+H16T4McTZgm8cume1DNZ
-         zLYhaEbp0Kc4KSvrAsleLrTVx5pbE0USuvDoc/TUGsomB1gJHbJpPC448C8jEXGW9PM6
-         OkxfrRyJDE8anTF+LB94gSbKY1nFsGW3S3AVeU10otGrda7C0Y2sroULBtdcvFbREcmN
-         nH2Ppjz6RWPt/bEWrizUNtOveVFGzBkfTh4kh0ZF73Mg3FCRqiVrzLi3+tCx7huZxqBb
-         tyaQ==
+	s=arc-20240116; t=1728370671; c=relaxed/simple;
+	bh=SyU94rkfKoXJiBl0fN8X11JbU7QWwLK7QcH2b+/qBfM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JAs4exZPLnWpZUZ17QC32zgiTdqHiahCg3S5y7yzLeScBhblM4/qcjiATcVnMeplq1jHOXQd7m1AsmdI62j5q8nbrw9SYVNAkhdP/SE42Ouw2WJRDIaZDAe65ESOLgQzmc49dBG7YJ1S8nLnxa7Yu46IxOQtMnqzkOMvAXsopRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6e2772f7df9so41406577b3.2;
+        Mon, 07 Oct 2024 23:57:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728361076; x=1728965876;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qwcy1Q3TMls1bnUmrpkwAG4GSqExbl+rH8vmvD0fjhY=;
-        b=RPbcmkWd31cQ6EN4reGo1O73ZRDyq9tT/UjtE5Tr1Jkq28UXjJ1qC02AdABenmeOyD
-         WBIsAXC9rGSGK128vat0zMySjHwefP9z/x6RstdRiPNnHS/JpwocMz+JZd0EP7fnPaz/
-         GvtcRuIrCuMw9Bui+G7HdB55cJNnaJgnfhxpFMi2yZfDMgHgd315mGtV4pXIx9HGHNBY
-         cnuVnszRyjoRhY9jsvi8cAs80/9w+pkHjNKGoiuksgP9a+6Cbz0o8la3XpV0YogTeT1f
-         S6/RZGGNahMXdZI7M5FQhlCbSzbti94MTAPnGy25QU/AO0dmmIFr6DdmCOUq/JbuCNaV
-         o/bg==
-X-Forwarded-Encrypted: i=1; AJvYcCU2F5Ard45z7nblVt2uzehPZKjf05DpTFzkh+qalaQe2w6UvqxrB9AAneblMHaYT7NnGJbvdJvGvX4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVdpCl4HccAmQM4gsZkPhGoWSfQRg3cRozch157WKF1bvv+Uo/
-	1u9+AjOU1UBYh+YlvdieVivB47gmg+1cUH0f8fNqzL3XVHEwxDtMviQ95Wdx
-X-Google-Smtp-Source: AGHT+IEh8+JdOX8UEHE73IwMV3DO/pt3CS+IqKhGFGP7T+L5b5Z16aHIMvyypjInsvw7o9r7iTWVIg==
-X-Received: by 2002:a17:902:e80c:b0:205:5d12:3f24 with SMTP id d9443c01a7336-20bfdfc0557mr191055685ad.20.1728361075664;
-        Mon, 07 Oct 2024 21:17:55 -0700 (PDT)
-Received: from localhost ([2405:6581:5360:1800:5cd1:adf7:7fbd:8a98])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c138cec9dsm47168085ad.103.2024.10.07.21.17.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2024 21:17:55 -0700 (PDT)
-From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-To: alexandre.belloni@bootlin.com,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
-	Jeremy Gebben <jgebben@sweptlaser.com>
-Subject: [PATCH] rtc: abx80x: Fix WDT bit position of the status register
-Date: Tue,  8 Oct 2024 13:17:37 +0900
-Message-ID: <20241008041737.1640633-1-iwamatsu@nigauri.org>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1728370667; x=1728975467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AHYT7MBmSOZv+u8sV5s5vdJ0rOWyrq6tZ659w5YChk8=;
+        b=vAqEJqWC9cQkBu2TxSvbmkU4fYIv6YHk+OIWoyKU73cbYIBjjqBOPj6bo0+2TBiZfn
+         4zzCh4BmtdtC+INgx45wSTybk39a8rhm0eoqEEqddiSiy668OPU8Q2oU/+fyjYYn8E9D
+         qI9iUVZ5CzIRouGeEk0Hqfe6v8VecEOBui5ywfCEEerReGoayPlSwZvU98PPf75hLFpE
+         1AnV0mfsqdfARDyUe4riyVYCSr5zp9CQ/dF+vMBg/CDmTGG4szvDH4AasDhaLneE/SxO
+         gbkGhXKRxJOC9SOEiUnK6f5mpqT1zdoBJczC8yAtcJkEO92ImmpLWaeIeWehNvcParGu
+         lLRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUCiSsUS8/Onhi687vxRLNn2Oo2irsJWyHQhGJMG9SeVpf1zO7lHfUWCB6sMw6ac0omtaYtRz2VFqLN@vger.kernel.org, AJvYcCW8Q+FVD7pEidhTWxC8s7jZK06YgB56HsCPEKXjwMjfrGLhi9lDjIDoyF+GUAm+CPbCCV60cUJ7LTW71g==@vger.kernel.org, AJvYcCWWNTUjLrSqOLNTrgwNnz/KZGgJ7Oy+8KyaEmrkOpzIpcZ6YXmGPXEC7JNiwrJ7S/WeCnDyEgYwuGeULRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrKRyekrD1xuvKF4A5E6wwdgCQfVYJac56fnL5yCHCUyUOZjvU
+	jwAq5Vr/rHSjND08+2EW7GgH4Fea/+mO2tbSNd/ZHaCfrKxwmFKCajLsOfYm
+X-Google-Smtp-Source: AGHT+IF+Rwufm2zeBqOf2GqImZX3Y7Nm0zjF8kuNu+0GS07U0u63pZLtDIx3B1/oIQTbDnU4Jgroug==
+X-Received: by 2002:a05:690c:6610:b0:6e2:4682:c641 with SMTP id 00721157ae682-6e2c6fcb709mr120868397b3.4.1728370667178;
+        Mon, 07 Oct 2024 23:57:47 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e312f6da74sm911537b3.67.2024.10.07.23.57.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Oct 2024 23:57:46 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6dbb24ee2ebso52261527b3.1;
+        Mon, 07 Oct 2024 23:57:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWauI+iH/tylzLK6Tdr+9TBPCnYQnbZYhxUqtQdoRgw7wpODEwjMO4QTtWe3xQ86SyaOUX1UwHvCR8FHNQ=@vger.kernel.org, AJvYcCXwyZ06hnDCDgMlk0ZJNwg7CJLOTLewW4tBspbb9MCsiktC9AJBHseDUIc9nbAII2zjHlsuZP7xyzti@vger.kernel.org, AJvYcCXz1Wn0R/mny3rqOP25PURsPHLp0P5/lQPweQWKPitZBXIFQXaJsZx5udcpdwzClEXpci0bfol/YNNcPw==@vger.kernel.org
+X-Received: by 2002:a05:690c:2a93:b0:6af:eaaf:2527 with SMTP id
+ 00721157ae682-6e2c7024d93mr81351197b3.18.1728370665811; Mon, 07 Oct 2024
+ 23:57:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1728340717.git.fthain@linux-m68k.org> <fb25eb97521363ab8a18d2fd499cb4c76209cebf.1728340717.git.fthain@linux-m68k.org>
+In-Reply-To: <fb25eb97521363ab8a18d2fd499cb4c76209cebf.1728340717.git.fthain@linux-m68k.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 8 Oct 2024 08:57:32 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXsekSXJOEf6chaMBHiRt_4nNvKYOOmQVC=ODg0qccKKA@mail.gmail.com>
+Message-ID: <CAMuHMdXsekSXJOEf6chaMBHiRt_4nNvKYOOmQVC=ODg0qccKKA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] rtc: m48t59: Use platform_data struct for year
+ offset value
+To: Finn Thain <fthain@linux-m68k.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Daniel Palmer <daniel@0x0f.com>, 
+	Michael Pavone <pavone@retrodev.com>, linux-m68k@lists.linux-m68k.org, 
+	linux-rtc@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The WDT bit in the status register is 5, not 6. This fixes from 6 to 5.
+Hi Finn,
 
-Link: https://abracon.com/Support/AppsManuals/Precisiontiming/AB08XX-Application-Manual.pdf
-Link: https://www.microcrystal.com/fileadmin/Media/Products/RTC/App.Manual/RV-1805-C3_App-Manual.pdf
-Fixes: 749e36d0a0d7 ("rtc: abx80x: add basic watchdog support")
-Cc: Jeremy Gebben <jgebben@sweptlaser.com>
-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
----
- drivers/rtc/rtc-abx80x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Oct 8, 2024 at 12:43=E2=80=AFAM Finn Thain <fthain@linux-m68k.org> =
+wrote:
+> Instead of hard-coded values and ifdefs, store the year offset in the
+> platform_data struct.
+>
+> Tested-by: Daniel Palmer <daniel@0x0f.com>
+> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 
-diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
-index 1298962402ff47..3fee27914ba805 100644
---- a/drivers/rtc/rtc-abx80x.c
-+++ b/drivers/rtc/rtc-abx80x.c
-@@ -39,7 +39,7 @@
- #define ABX8XX_REG_STATUS	0x0f
- #define ABX8XX_STATUS_AF	BIT(2)
- #define ABX8XX_STATUS_BLF	BIT(4)
--#define ABX8XX_STATUS_WDT	BIT(6)
-+#define ABX8XX_STATUS_WDT	BIT(5)
- 
- #define ABX8XX_REG_CTRL1	0x10
- #define ABX8XX_CTRL_WRITE	BIT(0)
--- 
-2.45.2
+Thanks for your patch!
 
+> --- a/include/linux/rtc/m48t59.h
+> +++ b/include/linux/rtc/m48t59.h
+> @@ -56,6 +56,9 @@ struct m48t59_plat_data {
+>         void __iomem *ioaddr;
+>         /* offset to RTC registers, automatically set according to the ty=
+pe */
+>         unsigned int offset;
+> +
+> +       /* YY digits (in RTC) are offset, i.e. year is 1900 + yy_offset +=
+ YY */
+> +       time64_t yy_offset;
+
+time64_t sounds like overkill to me...
+
+>  };
+>
+>  #endif /* _LINUX_RTC_M48T59_H_ */
+
+The rest LGTM.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
