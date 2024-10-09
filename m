@@ -1,101 +1,95 @@
-Return-Path: <linux-rtc+bounces-2130-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2131-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C62D99687D
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2024 13:21:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84210996C81
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2024 15:44:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BB671C22100
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2024 11:21:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 044E9B21670
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2024 13:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A9A1925A9;
-	Wed,  9 Oct 2024 11:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95DFF1990DD;
+	Wed,  9 Oct 2024 13:44:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PeESnne9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikULBheg"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E86192590;
-	Wed,  9 Oct 2024 11:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB191990A7;
+	Wed,  9 Oct 2024 13:44:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728472836; cv=none; b=o+R1SU4eeZ0wlYRqGsojOxpiY+3/qp7rRkahjuD0ymxbR+fhZ8urxdPGWanpatbIDSLMO8G4z4nP8DAZEuv1iGw2ujLMBgv0cAb7u/dn3AdSImpQ+jB3C0hrY8myjyAtYLAUhQ+khCE+2lSeTQ4OmzbTV+aWle+Z6hhi78mIVCI=
+	t=1728481461; cv=none; b=Mo5BnfQfLF5ZEb3jnazrYiAKX8eDYI4+mu1tCZvfyJonRe+eA1l066c/g9cu3S0aTOSpHdg2HADMu1yn4rBKim0jrwbKJzi6KnPTMFAUUrpq7h611sHwL09vbchx5J2RAmekngcDTJPMKbXnxjiFT9aM2Gx/0HDAapcMa5qJ7a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728472836; c=relaxed/simple;
-	bh=PO8I+wMbjxk9wJfkhxRi+SCshRAINl3eIBujy6ev3Ls=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fMbm+WsHhTwMtMNVFWBBhmOcJbBxaZ1Pumu7KdXIbXI7OZ9RDyo75UkF9uW4c5As9qIdz1l72aLuUp3S4JhTcabA+LPmQfRd8e0qEsNOzal/hJmVhxfNRtRDZfcQ8oZvqy8TMGjLiKD/I4bSZEsE9HcDimQf2+RvTEMYIjCYfMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PeESnne9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0266BC4CEC5;
-	Wed,  9 Oct 2024 11:20:36 +0000 (UTC)
+	s=arc-20240116; t=1728481461; c=relaxed/simple;
+	bh=4s3Ll570CEXXXOM35CmndjfaF+lPBtnfxA2ujcrrsec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XEy8iqaQfqVqiJnIalKWhmqbkVtqxR5hlX6EJ1c0/D3Jec5LqtNJPgY1+ETfASh17evztW6xHKUo82uBETXBF8Tdq7LLCzbQZNmO4fkq9RXkHMUab1Ru3Xh8zoQri/J90jOmodj+F2F2J7teJSL99l88G1Xtq2TNLj+eoFeqRd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikULBheg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9E6C4CEC5;
+	Wed,  9 Oct 2024 13:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728472836;
-	bh=PO8I+wMbjxk9wJfkhxRi+SCshRAINl3eIBujy6ev3Ls=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=PeESnne9gUBTqt1NgQA+awNIHrQWQTICrFJrCONIO3tOGkbY/2LmnOhHfDZSYfTgR
-	 cph7avFYYMzp+p1RYXzh1ibKqxQOU1IJNokN8s/KhovSMS1GWpHXYlwMctZR9wchsL
-	 T8TIEEMKdnkygw0j70wYKL6ojUHV8zd99fDLP3EFGE3CN/nLNzZxciE51NVgXCmCsv
-	 3IDlMd41VXau/Kbj9+i+R53gKepIZpI88SszBWGmlTAY0HuLBAV8/tmjKqjjsA/ZTO
-	 6QxFNXZnjTElDshCgCE5B1Jb0NwpHjFPPG+dD3DQplF3yfE/UQ9USOoB/yyckfofv1
-	 yUJkB24Uq9/Rg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D3D3806644;
-	Wed,  9 Oct 2024 11:20:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1728481460;
+	bh=4s3Ll570CEXXXOM35CmndjfaF+lPBtnfxA2ujcrrsec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ikULBheg5mrkdUjA0NV2K5MP8cAcKv2Qf0js3IZ8aV8wRKu2zKNc4k2+gsq/vhTqS
+	 MWP62VtedEWtDo70hGjETHLT953VYZEjZqa41K9wHudEGcrqvc272wiF+xFX2lipTf
+	 CdkySdGSX+rnP/GbO0MkNWg+Sc98REQ/zMABlZF4YSo0yVxCw2QcBL7czHlzIBru2W
+	 pEBKoFMVeuvI+rYz0LS9Ydjs6EwvIqwzmJRsWC0uMOO+WnNw0ILsF6ikQwoYxE/pY0
+	 wLUYFbOpz29woAm8k4NGpkLWA0tCIE14AjwGEtTC1sH4/SSKUE/AcSc2lsquabnnrF
+	 cTTtRjYxO5ikA==
+Date: Wed, 9 Oct 2024 14:44:16 +0100
+From: Lee Jones <lee@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] mfd: rtc: bd7xxxx Drop IC name from IRQ
+Message-ID: <20241009134416.GJ276481@google.com>
+References: <ZvVNCfk10ih0YFLW@fedora>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7] ptp: Add support for the AMZNC10C 'vmclock'
- device
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172847284000.1228916.8770974683503977940.git-patchwork-notify@kernel.org>
-Date: Wed, 09 Oct 2024 11:20:40 +0000
-References: <78969a39b51ec00e85551b752767be65f6794b46.camel@infradead.org>
-In-Reply-To: <78969a39b51ec00e85551b752767be65f6794b46.camel@infradead.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: richardcochran@gmail.com, peter.hilber@opensynergy.com,
- linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
- ridouxj@amazon.com, virtio-dev@lists.linux.dev, rluu@amazon.com,
- chashper@amazon.com, abuehaze@amazon.com, pabeni@redhat.com,
- christopher.s.hall@intel.com, jasowang@redhat.com, jstultz@google.com,
- mst@redhat.com, netdev@vger.kernel.org, sboyd@kernel.org, tglx@linutronix.de,
- xuanzhuo@linux.alibaba.com, maz@kernel.org, mark.rutland@arm.com,
- daniel.lezcano@linaro.org, a.zummo@towertech.it,
- alexandre.belloni@bootlin.com, qemu-devel@nongnu.org, horms@kernel.org
+In-Reply-To: <ZvVNCfk10ih0YFLW@fedora>
 
-Hello:
+On Thu, 26 Sep 2024, Matti Vaittinen wrote:
 
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Sun, 06 Oct 2024 08:17:58 +0100 you wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+> A few ROHM PMICs have an RTC block which can be controlled by the
+> rtc-bd70528 driver. The RTC driver needs the alarm interrupt information
+> from the parent MFD driver. The MFD driver provides the interrupt
+> information as a set of named interrupts, where the name is of form:
+> <PMIC model>-rtc-alm-<x>, where x is an alarm block number.
 > 
-> The vmclock device addresses the problem of live migration with
-> precision clocks. The tolerances of a hardware counter (e.g. TSC) are
-> typically around ±50PPM. A guest will use NTP/PTP/PPS to discipline that
-> counter against an external source of 'real' time, and track the precise
-> frequency of the counter as it changes with environmental conditions.
+> From the RTC driver point of view it is irrelevant what the PMIC name
+> is. It is sufficient to know this is alarm interrupt for a block X. The
+> PMIC model information is carried to RTC via the platform device ID.
+> Hence, having the PMIC model in the interrupt name is only making things
+> more complex because the RTC driver needs to request differently named
+> interrupts on different PMICs, making code unnecessary complicated.
 > 
-> [...]
+> Simplify this slightly by always using the RTC driver name 'bd70528' as
+> the prefix for alarm interrupts, no matter what the exact PMIC model is,
+> and always request the alarm interrupts of same name no matter what the
+> PMIC model is.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> ---
+> This contains both the RTC and MFD changes in order to not break the
+> functionality between commits to different subsystems.
 
-Here is the summary with links:
-  - [net-next,v7] ptp: Add support for the AMZNC10C 'vmclock' device
-    https://git.kernel.org/netdev/net-next/c/205032724226
+I can take it with an RTC Ack and an indication whether an immutable
+branch should be created and shared.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Lee Jones [李琼斯]
 
