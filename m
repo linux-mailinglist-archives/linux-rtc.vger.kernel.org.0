@@ -1,117 +1,85 @@
-Return-Path: <linux-rtc+bounces-2120-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2121-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8273D995793
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 21:26:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 836FE995FB6
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2024 08:24:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDD3A1C24951
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2024 19:26:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41E69282178
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2024 06:24:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6792139A6;
-	Tue,  8 Oct 2024 19:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Y7poJ758"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688221547DB;
+	Wed,  9 Oct 2024 06:24:22 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7851E0DCC;
-	Tue,  8 Oct 2024 19:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+Received: from cmccmta3.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4173328EF;
+	Wed,  9 Oct 2024 06:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728415595; cv=none; b=g+siMHSmM/P65BZtDmLzq9TFDydnvcA6DwJkJOykH8v9y47Pa+OcGrWaZBlwJB9gEOlpC1B+joNLtoPAciNMSAmVFaBAJ5MKbiwg+xou2Eo4tui+9XDtRmUgF9VzpPy92CNAO/LIhoY0FxEj4PSYRmSCPWqsg/FygtDY+UCE+KU=
+	t=1728455062; cv=none; b=HgaaGilk1t14xTs/IzPHpcr+ll1wVK0GVF5+cCElRq563FE9AcEKaCfXenDHCSvwo67RDABzEtwU42pQVlU+M6Dwi6O3hjpbyEhp78OeYuDiaJY4UfzDlaO+0B9Z9XmyftCi9VjHtKmc8sgDdu2wrMtnYUmTWGeRb+wH/JYizcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728415595; c=relaxed/simple;
-	bh=UN60g7ok2txVfjib6VFzxF/hYlvmRSU7ESVjdEIV/FI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rIqIS/kFiXNJZBMlwMg88lZMSsdDm+gvIrIygIqEnVozj9pZB2R4B+EpT35CeW63Xc9QRBkj/WlJtJhskwChg0bbMqyG+4s5ZPLtQgHKqw+hF3swgQbeo4KwF56UT8YED0tpwaqZy6KhaYT71bDkDWiD9zTcMigKf27Mufzqf10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Y7poJ758; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=FhQkehwGj9tY7Cfu+3fe0KEsL4p9cA3gfskuGZndKuQ=; b=Y7poJ7581kZPvGWRfvLw6odq0I
-	oanEKm52hlcmfBdwCH7A7AGCcZQyVN+YeDXa4nMGgWOxWGs3+d9b8XHFgEgdZ4laRXfVpgKTizsIi
-	DCk8WCL3QtSoNiA2daFRIuG9N5K0GxOGRBz3bAHU+MrNc/HBVDAeIdB5H1u+kixyLO7xbntHzo6n7
-	KT7o1xj07cOfaQBTe3/On3T16SDifk4jA0ZYCjzzJ3Z8fePjVkeyZR/ikKYV3omW2pEbKfIyyxNnB
-	TwyCn7CuZ4SLgsBMC59d0W21NuY19UDRZaVZ35lx12fO/LVZtJwRI2VOQK4hfm9XhWITt+SXdV37p
-	yYIqLWpg==;
-Received: from i53875ad9.versanet.de ([83.135.90.217] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1syFqV-0006zK-1L; Tue, 08 Oct 2024 21:26:11 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux@roeck-us.net,
- karthikeyan <karthikeyan@linumiz.com>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject:
- Re: [PATCH v3 1/6] dt-bindings: watchdog: rockchip: Add rockchip,rv1126-wdt
- string
-Date: Tue, 08 Oct 2024 21:26:10 +0200
-Message-ID: <1988046.PYKUYFuaPT@diego>
-In-Reply-To: <37e26b46-2f6a-4db4-b003-59088ef1dcc1@linumiz.com>
-References:
- <20240912142451.2952633-1-karthikeyan@linumiz.com>
- <ddca4051-0e83-4d39-8654-12210ffa5685@linumiz.com>
- <37e26b46-2f6a-4db4-b003-59088ef1dcc1@linumiz.com>
+	s=arc-20240116; t=1728455062; c=relaxed/simple;
+	bh=HSzLRu4rlAzUXa822g0yZptvXKcn+fq2g6R4jxo3hjw=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=oHAbi3X0gDtkyRCN9ifHL/hPDUMX0ECqHO9eB0+1sDjsvII56IKBjjR6AWCkyQT//Dlq/RUXdatc0o3UIzimA9VV0USkk7Z6oyc9s+NID0dmKIFBA04Z2x2OPQLuuE6r0lBzHNtoX7MhHde8AY2i/2G3JqydwlEIf84nmL2Sii8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96706219058d-f059a;
+	Wed, 09 Oct 2024 14:24:17 +0800 (CST)
+X-RM-TRANSID:2ee96706219058d-f059a
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from ubuntu.localdomain (unknown[10.55.1.71])
+	by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee967062190625-da049;
+	Wed, 09 Oct 2024 14:24:16 +0800 (CST)
+X-RM-TRANSID:2ee967062190625-da049
+From: Zhu Jun <zhujun2@cmss.chinamobile.com>
+To: alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhujun2@cmss.chinamobile.com
+Subject: [PATCH v1] rtc: rv3028: Fix wrong format specifier in timestamp0_count_show
+Date: Tue,  8 Oct 2024 23:24:15 -0700
+Message-Id: <20241009062415.5987-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
 
-Hi,
+The format specifier of "int" in sprintf() should be "%d", not
+"%u".
 
-Am Montag, 7. Oktober 2024, 15:56:58 CEST schrieb karthikeyan:
-> 
-> On 9/18/24 12:59, karthikeyan wrote:
-> > 
-> > 
-> > On 9/18/24 04:46, Heiko Stuebner wrote:
-> >> Hey,
-> >>
-> >> Am Donnerstag, 12. September 2024, 16:24:46 CEST schrieb Karthikeyan 
-> >> Krishnasamy:
-> >>> Add rockchip,rv1126-wdt compatible string.
-> >>>
-> >>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
-> >>
-> >> I think this patch misses some recipients because neither
-> >> the watchdog maintainers nor the watchdog list is included.
-> >>
-> >> We'll need for them to at least Ack this patch, so they'll
-> >> need to be included. Please check your scripts/get_maintainer.pl
-> >> call
-> >>
-> >>
-> >> Thanks
-> >> Heiko
-> >>
-> > Apologies for missing them. Adding them in this reply mail.
+Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+---
+Changes:
+v1:fix the subject line, it has to be in the subsystem style
 
-I don't think that will have worked.
+ drivers/rtc/rtc-rv3028.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ideally can you include Conor's Ack and resend only the watchdog binding
-patch to the watchdog maintainers (and lists and me too please) .
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 2f001c59c61d..c79fad316119 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -162,7 +162,7 @@ static ssize_t timestamp0_count_show(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	return sprintf(buf, "%u\n", count);
++	return sprintf(buf, "%d\n", count);
+ };
+ 
+ static DEVICE_ATTR_RO(timestamp0_count);
+-- 
+2.17.1
 
-Because just adding more people to a reply probably won't tell them
-that some action is expected.
-
-Heiko
 
 
 
