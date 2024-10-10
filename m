@@ -1,125 +1,147 @@
-Return-Path: <linux-rtc+bounces-2149-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2150-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB0DA998572
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 14:01:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A549A998C2D
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 17:46:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80D7E1F249B1
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 12:01:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3602BB30D16
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 15:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED64B1BE238;
-	Thu, 10 Oct 2024 12:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HHOkBTiG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1851CBEB6;
+	Thu, 10 Oct 2024 15:17:30 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D689F9CB;
-	Thu, 10 Oct 2024 12:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1821CB312;
+	Thu, 10 Oct 2024 15:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728561677; cv=none; b=b+kYGaOQWfKfc5/PiDVoH9qX9jTzikUH8sgAYsu9NINIYulCj5J7LJg5FV3JBHL/+8FKYQjYXbTwRBjE4eqDOBGAG69hUQJZuW0sslZjz/AfDsw0a1HRFHJpzB0zxwufD/65BfyjdQosd2UgEouY7ph8cAA+kF9My50livi3rKc=
+	t=1728573450; cv=none; b=Kc6XVjoTUaQrx7J81CPuavoYt7s00U6xq9qhcW2G6IR+eDJWxCy5hXCtyNb+hHNtmmBBgr4IsZ2jZAjTf+jPhMO08K6ME2AtkcvXPslzrKhNupxS0EwBxd8P+v92J9L53kBeUlLKwG8YJr/3/pNdHMHydEV8Jsyvr95IZPeSs5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728561677; c=relaxed/simple;
-	bh=6g9mOo19AYOMVRmXYgwpFhUUOKlGAvvrbbrhSF/VARU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jmd8laf0Zu2Q3SJP1pZSLJjAPqV8QOSkt7qU03A4xDYnXLPhz5rXxSivdCHx/Q/AEbA5xSsnr3BBCLR6EHIVv2S7ER7duANyawPO+pXxGdr2BShVryM0HwbkYo0ENpxdihvFc/8zRWf4SAXNFtW4nBwDj3kMP6k5xTUkr45R/T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HHOkBTiG; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1728573450; c=relaxed/simple;
+	bh=kAelzetrqpcRN5dm4O6YQ1TH+k97O3PeD6wil9BatBc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lcN3tbCsCOQBd97kIOVVut1UrgkAi/f5AORNyge9T5dQiykDA6YKkZod1KcF2wlNdClswzo8JxGqjRyDFK3eaK2Ay4xukkT7g0EovHD4RnrRPmq9425KKun2uvDMrOWGGDMl4FKEXzLkE8qbAjMKTnajAzoO3fKjHmL7rz9H1K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5398fb1a871so892730e87.3;
-        Thu, 10 Oct 2024 05:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728561674; x=1729166474; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eckU/GttqS7MJiCuGilLlaB6wPKcxsXpqOb1heDWKyU=;
-        b=HHOkBTiGWgaSwKW4xZJleImvt1FDmCfW9WbQOw1cyli5d+QotNCURkZqfXhb1nmvwO
-         VLPwWfK/hG7RrnWncE9uO/YVx+hZHOrGKamPPf+klDO/NnG42m+n9DrtGtrTqj/uImSm
-         NzJ0jco0RLz3ys6vx6vplMQ5daqMp1TMvFX59JjjE9UB7rel4gXS4DhcdJyI9ts6uKMf
-         rwH69/wXvF2KWFS+3GKKkl5M4e1i2hD/VdtRzMly5Evs/TulFcKQafOXC7CUov5v4YgZ
-         7Lz+m6+Zqo0CYNyu7k0aZuh9L5HL266JPqaWcNiVF7LP1ic1kiqohu0R2A/gQeswEvIE
-         Nt6Q==
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6e2e4237da4so10363437b3.1;
+        Thu, 10 Oct 2024 08:17:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728561674; x=1729166474;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eckU/GttqS7MJiCuGilLlaB6wPKcxsXpqOb1heDWKyU=;
-        b=xJdlP8nszdB3BbvtOIzJqDJzAv+oGc8tUFKOjTC7dwhD8h/08gPlvhR7gtHW7ueX8u
-         v7IIb7Aw9mztBVU3l/AOCm3qZahEvaubrKEuVOL/xgUKTQ9GCTz417hxBGMMA3vbGVM4
-         E/RgP6gLY29WhSQGkLcTocGhvem1jC1UKyN7eEUKMj6qHC/KCwM6CoLQEjOT+u6od/Ky
-         4CzPJw7/pfW9CR/iODBwqjLU/Bd7XXdpsC6Ea/z67rqLtJqYP2Hea4dXo9vqMeHsEuYy
-         ti0CuxX2qV13ug9p6SBXB25rQJlCf7EpocNsnNaicGweHtk1HhVl5kUO3AUgBaRNOmHj
-         JdZg==
-X-Forwarded-Encrypted: i=1; AJvYcCUyPCMB11DG8wZ1KvAfJaHylXAbJH5A7I+F69luiZN5xkW0OKk/1c89wJAyf5h+aU6uhgfVowh2JqRa@vger.kernel.org, AJvYcCXR1lTg0NtSFoQDUSgHgPSJ1CmXoWcSlsXLleLpBtEop/5Iiv2i9gdDeV/EIe80LT5nQjUjuhDmgjslQfM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6eYGvvWudnVu4szq4ZVo4ADz0pf/xECJvZpnTZFrGX6thOuMZ
-	npFeKrY/nHpwIw40hJROE2v/1IhBp6p32HaK+H+ajiK+w3zFRhkolPB3zw==
-X-Google-Smtp-Source: AGHT+IGhn5nFZMTKO8hfNH5mc7dun49yImb/znbCuz/H9+1jIaT/8AsDkri0UxlW697/kp0hszUbKQ==
-X-Received: by 2002:a05:6512:3b13:b0:539:94b7:d713 with SMTP id 2adb3069b0e04-539c495e9damr4165440e87.45.1728561673857;
-        Thu, 10 Oct 2024 05:01:13 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539cb6c13e1sm229903e87.58.2024.10.10.05.01.09
+        d=1e100.net; s=20230601; t=1728573445; x=1729178245;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w+Dll4htdUB23BCtM34CclguCZewJgpq4mv0+9yv+gs=;
+        b=GScR9ECKDf7vlokr5bVKCnNAlXbEgFYVlKKq+Ynv2E2rnX1yyCdv8COS6gNyev4H6D
+         ZLX9ISBl+5yLGwjbrnrQV4oov7XKoMVl6GuwoY2ihUZpcWZWWAbCM3+n4YPLuMtae9R+
+         NzUXJ76puhSrVBixE6RnotUbjE81g6DohIhEGDS5y4BboQgyjnkvfpU5DO0LAz44y+95
+         A33CFBT9J+VOgjqDOlb4brpD6MfaEfFvuOg9AGpkTvsGCbcq9twFePZwgG/sELpjn435
+         Rq7ZV0OsLGCjywZseeXHHV0SrByYreVu8n0RjurkLET4SysNGiZm6H4ibAnxKcjkMnAB
+         dxCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqlrJjLgQDfJm159kmHf6RlUxucicsmjQzMvP0Sx5Q3q3vsGN2ZjXYmvMYl5NYUNL0G78mEE2uZz7V@vger.kernel.org, AJvYcCVcc6unLiQ5Tt7v2oR8CO5RfYPfgeZVM5zLs15iLagXUg0CUt8CHy2sEevNgd86Xnpj1tWtu6hzx3v/@vger.kernel.org, AJvYcCVg8MpXM+l0pzwnvaMhNl9K5XtNHsOgO/XFFEg7+E6T4tJDgyKeY/+P0S1wZAXMIn7EF3VUNclhBEdw@vger.kernel.org, AJvYcCWDBZ9iYUiguHwz2hwttAPrW1sgI9RYAm4Azlk98uft5vG2vDcfG6Mx7MbPMraQhkeyO/8ByRelyRHX7zgFjjTK3Mk=@vger.kernel.org, AJvYcCXhcQI6k07fGMOqG0W76nXg4Q0dW0iBq49M/Hyt7lhYicrDedKmHWvDZM/GmfbvjI2pQe8odoLjCg3aaOiL@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaOqdtXW4jZRPugAvczkwTNDKh384B9/W39cVcMBYOO4OUSwVR
+	6Q7c/EGnVVl/RlqjNXV4mjM0g6Zh5jf6MIrax2ymR7VnjCdPL4ImkLxnU4Bq
+X-Google-Smtp-Source: AGHT+IH91kgKmCZOzY7Bbhg6gRS3DlpUaEddKN7XcqQDDxdpnNqSvn0tZplJ0LLJGUJs+c23XET1wg==
+X-Received: by 2002:a05:690c:3007:b0:6af:6762:eba1 with SMTP id 00721157ae682-6e32e20e20bmr31969927b3.20.1728573444918;
+        Thu, 10 Oct 2024 08:17:24 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e332bad8afsm2394907b3.59.2024.10.10.08.17.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 05:01:11 -0700 (PDT)
-Message-ID: <2d48be5a-a259-4ab8-89dd-e662110d4d68@gmail.com>
-Date: Thu, 10 Oct 2024 15:01:08 +0300
+        Thu, 10 Oct 2024 08:17:24 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6e305c2987bso10215917b3.0;
+        Thu, 10 Oct 2024 08:17:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVCVicTQBCo/ydHilSvQudrLjFBlS7XIOFQ4Nh3jW1jjVeQDl2iRzYenvXRC9lu6XlkdOvfTzBdxEsZLkKfH8+UyXU=@vger.kernel.org, AJvYcCVmZd4YDU0x56o3Wciw97cbU48auevTPraKHGzRnC4hctKbavZVdQq59GtTrNrMZU/bWHjcwInKQub8@vger.kernel.org, AJvYcCW10ujH9qKHEgwDYzqYbwYuW7jEBGfBza5fGW3kYkbMumwz4OewBXTvxfD9T7+0wYerQ6MVHRL32cx5TC6o@vger.kernel.org, AJvYcCWC3K424Md3KaHoCUqWejEA7MNiWE92jvYGzec1Tc85MePjT2M7ZD+KBqhMGhghzhWfKKK0x68IpaJ0@vger.kernel.org, AJvYcCWzmP47cNYBwBhU7bKFYTftMI7pLeL5m6FLevwS/bLAjBnoCkEN40WZx/YsmffLdr7fasAcPCgsSQx1@vger.kernel.org
+X-Received: by 2002:a05:690c:5605:b0:6e2:b263:105b with SMTP id
+ 00721157ae682-6e32e445686mr46318437b3.41.1728573443947; Thu, 10 Oct 2024
+ 08:17:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: (subset) [PATCH] mfd: rtc: bd7xxxx Drop IC name from IRQ
-To: Lee Jones <lee@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <ZvVNCfk10ih0YFLW@fedora>
- <172848415740.588729.14326036177340227520.b4-ty@kernel.org>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <172848415740.588729.14326036177340227520.b4-ty@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com> <20240830130218.3377060-8-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240830130218.3377060-8-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 10 Oct 2024 17:17:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXVOZ22N6KXFdHgPQQnqs0ujBbmQR+CQ4-ekdpQCzFUHA@mail.gmail.com>
+Message-ID: <CAMuHMdXVOZ22N6KXFdHgPQQnqs0ujBbmQR+CQ4-ekdpQCzFUHA@mail.gmail.com>
+Subject: Re: [PATCH v3 07/12] arm64: dts: renesas: r9a08g045: Add VBATTB node
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com, 
+	magnus.damm@gmail.com, p.zabel@pengutronix.de, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 09/10/2024 17:29, Lee Jones wrote:
-> On Thu, 26 Sep 2024 15:01:13 +0300, Matti Vaittinen wrote:
->> A few ROHM PMICs have an RTC block which can be controlled by the
->> rtc-bd70528 driver. The RTC driver needs the alarm interrupt information
->> from the parent MFD driver. The MFD driver provides the interrupt
->> information as a set of named interrupts, where the name is of form:
->> <PMIC model>-rtc-alm-<x>, where x is an alarm block number.
->>
->> >From the RTC driver point of view it is irrelevant what the PMIC name
->> is. It is sufficient to know this is alarm interrupt for a block X. The
->> PMIC model information is carried to RTC via the platform device ID.
->> Hence, having the PMIC model in the interrupt name is only making things
->> more complex because the RTC driver needs to request differently named
->> interrupts on different PMICs, making code unnecessary complicated.
->>
->> [...]
-> 
-> Applied, thanks!
-> 
-> [1/1] mfd: rtc: bd7xxxx Drop IC name from IRQ
->        commit: cd49b605779b4fea8224650eeba70b258c5cc8cc
+Hi Claudiu,
 
-Hello Lee, Alexandre,
+On Fri, Aug 30, 2024 at 3:02=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> Add the DT node for the VBATTB IP along with DT bindings for the clock
+> it provides.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>
+> Changes in v3:
+> - dropped the child nodes of vbattb; along with this dropped ranges,
+>   interrupt-names, #address-cells, #size-cells
+> - added vbattb_xtal as input clock for vbattb
 
-Nothing pleases me more than having this quickly merged but...
-... I don't think I saw ack from Alexandre yet. Furthermore, the 
-(subset) makes me wonder because I sent RTC and MFD changes in a single 
-patch - which might've been a mistake...
+Thanks for the update!
 
-I tried finding the cd49b605779b4fea8224650eeba70b258c5cc8cc from MFD 
-tree and failed. Hence I'm a bit unsure where we are going.
+> --- a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
+> @@ -160,6 +160,18 @@ i2c3: i2c@10090c00 {
+>                         status =3D "disabled";
+>                 };
+>
+> +               vbattb: vbattb@1005c000 {
 
-Yours,
-	-- Matti
+Please insert this after serial@1004b800, to preserve sort order.
+
+> +                       compatible =3D "renesas,r9a08g045-vbattb";
+> +                       reg =3D <0 0x1005c000 0 0x1000>;
+> +                       interrupts =3D <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+> +                       clocks =3D <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&=
+vbattb_xtal>;
+> +                       clock-names =3D "bclk", "rtx";
+> +                       #clock-cells =3D <1>;
+> +                       power-domains =3D <&cpg>;
+> +                       resets =3D <&cpg R9A08G045_VBAT_BRESETN>;
+> +                       status =3D "disabled";
+> +               };
+> +
+>                 cpg: clock-controller@11010000 {
+>                         compatible =3D "renesas,r9a08g045-cpg";
+>                         reg =3D <0 0x11010000 0 0x10000>;
+
+The rest LGTM, so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
