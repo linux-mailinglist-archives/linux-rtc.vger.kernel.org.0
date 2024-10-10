@@ -1,126 +1,125 @@
-Return-Path: <linux-rtc+bounces-2148-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2149-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60176998329
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 12:09:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0DA998572
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 14:01:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AD871C222B7
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 10:09:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80D7E1F249B1
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 12:01:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6821BE23D;
-	Thu, 10 Oct 2024 10:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED64B1BE238;
+	Thu, 10 Oct 2024 12:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HHOkBTiG"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB0F18C03D;
-	Thu, 10 Oct 2024 10:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D689F9CB;
+	Thu, 10 Oct 2024 12:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728554943; cv=none; b=kFTHddJwM65LpCyNUwWJBaDGim3AuMRToc0SE5HfHQIqFNKoBZxP0RyDhzMCOwdXULnNwGIdLbH4qPHw2QudvfMazs1bPdJpUDiKyRbzUAx60/q9NNpZB5Oh1Hhzu08GgYoeSbsbD9SHcFAu1I7sKtIeHHqQpJoFVEUooiDMbYk=
+	t=1728561677; cv=none; b=b+kYGaOQWfKfc5/PiDVoH9qX9jTzikUH8sgAYsu9NINIYulCj5J7LJg5FV3JBHL/+8FKYQjYXbTwRBjE4eqDOBGAG69hUQJZuW0sslZjz/AfDsw0a1HRFHJpzB0zxwufD/65BfyjdQosd2UgEouY7ph8cAA+kF9My50livi3rKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728554943; c=relaxed/simple;
-	bh=YWHB+my37muquSy1XkY//hgr5fEDz/6DVNflN1m/7dI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EXFduuPenDVfLtMcA2ZDWYS9AleOZUOm+GMItD0mdvP7FQ76GvQ2efYjMsmdDxXNnNoI0mrqXUakZIdN2fW0o0BTmMsnxjXeoMff0/S+cIQQ9WmOmfs9IldghQlsxxeYPzcNMgkpEmmAv794Nrd0WPAXXU3T5xvZjt/Lt+vkAuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1728561677; c=relaxed/simple;
+	bh=6g9mOo19AYOMVRmXYgwpFhUUOKlGAvvrbbrhSF/VARU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jmd8laf0Zu2Q3SJP1pZSLJjAPqV8QOSkt7qU03A4xDYnXLPhz5rXxSivdCHx/Q/AEbA5xSsnr3BBCLR6EHIVv2S7ER7duANyawPO+pXxGdr2BShVryM0HwbkYo0ENpxdihvFc/8zRWf4SAXNFtW4nBwDj3kMP6k5xTUkr45R/T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HHOkBTiG; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e02c4983bfaso743655276.2;
-        Thu, 10 Oct 2024 03:09:02 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5398fb1a871so892730e87.3;
+        Thu, 10 Oct 2024 05:01:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728561674; x=1729166474; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eckU/GttqS7MJiCuGilLlaB6wPKcxsXpqOb1heDWKyU=;
+        b=HHOkBTiGWgaSwKW4xZJleImvt1FDmCfW9WbQOw1cyli5d+QotNCURkZqfXhb1nmvwO
+         VLPwWfK/hG7RrnWncE9uO/YVx+hZHOrGKamPPf+klDO/NnG42m+n9DrtGtrTqj/uImSm
+         NzJ0jco0RLz3ys6vx6vplMQ5daqMp1TMvFX59JjjE9UB7rel4gXS4DhcdJyI9ts6uKMf
+         rwH69/wXvF2KWFS+3GKKkl5M4e1i2hD/VdtRzMly5Evs/TulFcKQafOXC7CUov5v4YgZ
+         7Lz+m6+Zqo0CYNyu7k0aZuh9L5HL266JPqaWcNiVF7LP1ic1kiqohu0R2A/gQeswEvIE
+         Nt6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728554941; x=1729159741;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=miJ8/WzZit7AkjMUZIt04ikXcWEMhi6CNqSN9WbGjyg=;
-        b=Jd7g8E/Kh9q2xUfNGiQ8wWKxKrsVweZf2hWK1aPYE9KUd+GaK8rxtRKJ7MTbbYj/A2
-         FEj6CfMML7ygxKl2IGXRbXslOVPcrpiSRC6yFtqDC1tddqh9W4AJ7lrOcoMNCUFc2CO4
-         JI1Y9e0ha1sVPqDb2lVKrsoKp75mSlGC66wbgMIzRCMJ0rbiAG/xBGdBzWVnCwiBRa3t
-         p/AApLsJxJiu+LyY1a3c91EZcp/iUFHsDHgaHxnulB2UvTivqGJiwKNi8h5J9wonjYyP
-         lKMJ7Va5upxnPvv+Ucc6kZKEp5QjBR1mW5vAcirZXxblvVZ4rkr4EAr9M+lEYQHsgAa9
-         Ae5w==
-X-Forwarded-Encrypted: i=1; AJvYcCU+c71rM5RvP2W/pJGctk6axYnIiK0IPFp+bimtYcxnINhmFLlzwDXMFAh1aaV983qJCNh4I7FqSJr8@vger.kernel.org, AJvYcCUluKuFUuUMH5EX7Tz62tPhzzB9+EyMREVK1tkcrDkWPRUNj+N0xsUjk742f1aleC5mHUulPECgEZoP@vger.kernel.org, AJvYcCUxfOlJZWmlUhuD5Is2kO/zjHh842aFYaxrZcr+mchJ7qqR3ewcmQcWOReDjy2+sq9Ocgow3gBsJL93@vger.kernel.org, AJvYcCVpPwpAncVDar78EViUrHsT36kCUrMCE2UsIe0QyxOWLq3uB9J5bHLxZUaxyFPID3Qvx6yH7O7wD8koRZio@vger.kernel.org, AJvYcCXaDDQk0P0LJUFcbvxZaL1bkSOrvARC4bzQAr/uokEslUG+PWAf+4AXSy8qaTu3yC3sTCkiI/p7LRekxKI1Z2fkYKY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYtTYr1l4QiwkthSFcurmj0PYbPwdpFKIRyzv/Y7Eh2llhWvDp
-	6YbA+dC8VD4ZKcf5kJ7qUrnXfjv9jcnsL2cSv936Kc49lwAOZUoEPpwvIDvf
-X-Google-Smtp-Source: AGHT+IFrm/zOqEfnuzkypReNrsnt9tcpSHCmbAaV9smH5Qz/Mis/RZGuPK4g5EmS6mGU4fyWKRvo3w==
-X-Received: by 2002:a05:6902:1609:b0:e29:6b8:af2 with SMTP id 3f1490d57ef6-e2906b80e18mr3622607276.55.1728554940782;
-        Thu, 10 Oct 2024 03:09:00 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e290ee18b5csm238374276.37.2024.10.10.03.09.00
+        d=1e100.net; s=20230601; t=1728561674; x=1729166474;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eckU/GttqS7MJiCuGilLlaB6wPKcxsXpqOb1heDWKyU=;
+        b=xJdlP8nszdB3BbvtOIzJqDJzAv+oGc8tUFKOjTC7dwhD8h/08gPlvhR7gtHW7ueX8u
+         v7IIb7Aw9mztBVU3l/AOCm3qZahEvaubrKEuVOL/xgUKTQ9GCTz417hxBGMMA3vbGVM4
+         E/RgP6gLY29WhSQGkLcTocGhvem1jC1UKyN7eEUKMj6qHC/KCwM6CoLQEjOT+u6od/Ky
+         4CzPJw7/pfW9CR/iODBwqjLU/Bd7XXdpsC6Ea/z67rqLtJqYP2Hea4dXo9vqMeHsEuYy
+         ti0CuxX2qV13ug9p6SBXB25rQJlCf7EpocNsnNaicGweHtk1HhVl5kUO3AUgBaRNOmHj
+         JdZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyPCMB11DG8wZ1KvAfJaHylXAbJH5A7I+F69luiZN5xkW0OKk/1c89wJAyf5h+aU6uhgfVowh2JqRa@vger.kernel.org, AJvYcCXR1lTg0NtSFoQDUSgHgPSJ1CmXoWcSlsXLleLpBtEop/5Iiv2i9gdDeV/EIe80LT5nQjUjuhDmgjslQfM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6eYGvvWudnVu4szq4ZVo4ADz0pf/xECJvZpnTZFrGX6thOuMZ
+	npFeKrY/nHpwIw40hJROE2v/1IhBp6p32HaK+H+ajiK+w3zFRhkolPB3zw==
+X-Google-Smtp-Source: AGHT+IGhn5nFZMTKO8hfNH5mc7dun49yImb/znbCuz/H9+1jIaT/8AsDkri0UxlW697/kp0hszUbKQ==
+X-Received: by 2002:a05:6512:3b13:b0:539:94b7:d713 with SMTP id 2adb3069b0e04-539c495e9damr4165440e87.45.1728561673857;
+        Thu, 10 Oct 2024 05:01:13 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539cb6c13e1sm229903e87.58.2024.10.10.05.01.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 03:09:00 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6e2346f164cso7099017b3.3;
-        Thu, 10 Oct 2024 03:09:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUUnqcLRpIrCBfJrreWpL/4xbj8Q3GPIdMYNzl0t5UzEu+Ei70bLqZwnYIzcqyPCIADN9OY8UJWRtUqYoxuAkbXvVc=@vger.kernel.org, AJvYcCUdWeUYo3HZQet2Anju9vF/OkjEenDucXALmajBe4Jwwtczcl0VA2L93CYBlKEZnG5N8lOEthZdg2S7@vger.kernel.org, AJvYcCVAR4bGPLhz2TVpOqvOxdk+ehA2QFIpaU7TUPCEppt9D/RgPqGz4WTk9zJMpuDpx/9VxzfV8cZpZ2a4@vger.kernel.org, AJvYcCVSGM6rZc2Ez4C20DuXc9ZsKBT+czbugrq0ozUy/AN8hf/f53kiwDq5AbjE6mXlSHPHmKu5NmmqN1pt@vger.kernel.org, AJvYcCXw1y28P1Mr7MZZ0bq2VNOGmaVr6IufruyPk+V0CdZWOnccgE2Tr4QTg+aw8KiB/rdxMqgeac9tqhEXgsD/@vger.kernel.org
-X-Received: by 2002:a05:690c:4e89:b0:6e3:17b4:aeee with SMTP id
- 00721157ae682-6e322491428mr39513197b3.43.1728554940009; Thu, 10 Oct 2024
- 03:09:00 -0700 (PDT)
+        Thu, 10 Oct 2024 05:01:11 -0700 (PDT)
+Message-ID: <2d48be5a-a259-4ab8-89dd-e662110d4d68@gmail.com>
+Date: Thu, 10 Oct 2024 15:01:08 +0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com> <20240830130218.3377060-2-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240830130218.3377060-2-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 10 Oct 2024 12:08:48 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVqWdFmLAgXmieBjFgj8Rz1cJqVbdFDn0Ep76UawqsU2Q@mail.gmail.com>
-Message-ID: <CAMuHMdVqWdFmLAgXmieBjFgj8Rz1cJqVbdFDn0Ep76UawqsU2Q@mail.gmail.com>
-Subject: Re: [PATCH v3 01/12] dt-bindings: clock: renesas,r9a08g045-vbattb:
- Document VBATTB
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com, 
-	magnus.damm@gmail.com, p.zabel@pengutronix.de, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: (subset) [PATCH] mfd: rtc: bd7xxxx Drop IC name from IRQ
+To: Lee Jones <lee@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+References: <ZvVNCfk10ih0YFLW@fedora>
+ <172848415740.588729.14326036177340227520.b4-ty@kernel.org>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <172848415740.588729.14326036177340227520.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Claudiu,
+On 09/10/2024 17:29, Lee Jones wrote:
+> On Thu, 26 Sep 2024 15:01:13 +0300, Matti Vaittinen wrote:
+>> A few ROHM PMICs have an RTC block which can be controlled by the
+>> rtc-bd70528 driver. The RTC driver needs the alarm interrupt information
+>> from the parent MFD driver. The MFD driver provides the interrupt
+>> information as a set of named interrupts, where the name is of form:
+>> <PMIC model>-rtc-alm-<x>, where x is an alarm block number.
+>>
+>> >From the RTC driver point of view it is irrelevant what the PMIC name
+>> is. It is sufficient to know this is alarm interrupt for a block X. The
+>> PMIC model information is carried to RTC via the platform device ID.
+>> Hence, having the PMIC model in the interrupt name is only making things
+>> more complex because the RTC driver needs to request differently named
+>> interrupts on different PMICs, making code unnecessary complicated.
+>>
+>> [...]
+> 
+> Applied, thanks!
+> 
+> [1/1] mfd: rtc: bd7xxxx Drop IC name from IRQ
+>        commit: cd49b605779b4fea8224650eeba70b258c5cc8cc
 
-On Fri, Aug 30, 2024 at 3:02=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock for RTC,
-> the tamper detector and a small general usage memory of 128B. Add
-> documentation for it.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v3:
-> - moved the file to clock dt bindings directory as it is the
->   only functionality supported at the moment; the other functionalities
->   (tamper detector, SRAM) are offered though register spreaded
->   though the address space of the VBATTB IP and not actually
->   individual devices; the other functionalities are not
->   planned to be supported soon and if they will be I think they
->   fit better on auxiliary bus than MFD
+Hello Lee, Alexandre,
 
-The battery-backed-up SRAM could be exported through the
-NVMEM framework. I am not sure it offers some way to export the tamper
-flag (to indicate it's erased, i.e. empty).
+Nothing pleases me more than having this quickly merged but...
+... I don't think I saw ack from Alexandre yet. Furthermore, the 
+(subset) makes me wonder because I sent RTC and MFD changes in a single 
+patch - which might've been a mistake...
 
-Gr{oetje,eeting}s,
+I tried finding the cd49b605779b4fea8224650eeba70b258c5cc8cc from MFD 
+tree and failed. Hence I'm a bit unsure where we are going.
 
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Yours,
+	-- Matti
 
