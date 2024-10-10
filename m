@@ -1,84 +1,107 @@
-Return-Path: <linux-rtc+bounces-2135-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2136-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50C5D9979A0
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 02:33:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D8C49980A3
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 10:48:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 060511F21AAB
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 00:33:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFAF7283636
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 08:48:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2C0D2E5;
-	Thu, 10 Oct 2024 00:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D18CF1E9086;
+	Thu, 10 Oct 2024 08:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGn0J00H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z5/mWpCY"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80972A1D2;
-	Thu, 10 Oct 2024 00:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914FE1E883D;
+	Thu, 10 Oct 2024 08:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728520375; cv=none; b=DCV+zrALAmDI5lIEkBTjP76AMsJJJRqhosKVFYTUCCnW8Xr4EKrgfyhT8rIBJc5CxJrm/XTgawMnzn6sN7itJo5Ca9LQyzswyjR+TZ0tD2HSgTwpTxZBeYyzGlIjo3NxeoHnBj+4V2CYY+GtTqTtrdQ+Mv45NhUiOrYLd8eRzqQ=
+	t=1728549065; cv=none; b=rzvTJv66skJKJv8y4dHiy2NEO6W3A2J6tQi/wbQ1kJY+YQCmFMPIrImPoYcdGj0YdQFvWPrYyXKAhUO98Z+OWrZxFeaZF5FymzHmf4BProysSOrt8Ao2O+xJQ4jhbQIP6oSHOZQs9AV+YQSKdQ6AL9PLZwGYw5We3bVZy7xHceo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728520375; c=relaxed/simple;
-	bh=QarAG9OsS0S7oXws7XJsQIFCQAcnaMCbtsh+DM35Fcw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YBwI5hacrjs5G900x33xyknx5XzAPvVsrSu3vTIv1XFAjyn2+bUBNFA9H5Z/ytdM93DnUxeNPUSBKzjF74QhtRXaJIh6RFEJK1tMCkvnaFJNzDOZ/HNy/ouCnf+8rygNH/MlgfmhjOOhFpFORNqc6VlSg9mp5t0mwSjq99MSeG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGn0J00H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6633CC4CEC3;
-	Thu, 10 Oct 2024 00:32:54 +0000 (UTC)
+	s=arc-20240116; t=1728549065; c=relaxed/simple;
+	bh=hMyP0iqE4jdi89c9Hcn12/5V6EDBQa1FCfu88DXZVWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oV/900hTAG/iIBSKWUPLnBrG8WCiZLkwTjlbtrRGo7nyGnEnd/+ne7i/ZS7zNVAJLfGai0zC8/h4u1aRwdk6fchrvuI+yrehSgDQzPQFExrAf70vTDu8mfQqE1Aeoo9hWO5k/KPDQWu1VqhHASe4T0Mygn7nb8phMcSO29RCr7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z5/mWpCY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30769C4CECE;
+	Thu, 10 Oct 2024 08:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728520375;
-	bh=QarAG9OsS0S7oXws7XJsQIFCQAcnaMCbtsh+DM35Fcw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=FGn0J00HfbQ3QOMVUqk1P7sFWmH62grr/Lc9+Ar39iMKi+ib9tL6BLhCpOB1ZxllE
-	 0MRu42N7V/iGB9cBbdJfiOwSrsdTdPn9NwUypq52PfjxzpFXlkEinsT7EEDfvrNRzb
-	 nXmCqlafauZ46G5rrpSPV+rUEZE82Ux0wGJWns13gCl7f/La5N026MaRT4hHcTFvfe
-	 tKxX77Y0gwrEKnMPMJYe6QSgQ1FOHg8/8C1cCfAuBbez7m+eCCrHicLjxZzIrFkuNb
-	 PVKAHtJnkdlmyu1fKMNRcxPyIZ5CmvG2vp3tw9AP0i1TQBMI9i3oJM27PgPVmhYMrT
-	 Km5smAzOMfAcQ==
-Date: Wed, 9 Oct 2024 17:32:53 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
- <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-rtc@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>,
- virtio-dev@lists.linux.dev, "Luu, Ryan" <rluu@amazon.com>, "Chashper,
- David" <chashper@amazon.com>, "Mohamed Abuelfotoh, Hazem"
- <abuehaze@amazon.com>, Paolo Abeni <pabeni@redhat.com>, "Christopher S .
- Hall" <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>,
- John Stultz <jstultz@google.com>, "Michael S . Tsirkin" <mst@redhat.com>,
- netdev@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Marc Zyngier
- <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, qemu-devel
- <qemu-devel@nongnu.org>, Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH net-next v7] ptp: Add support for the AMZNC10C 'vmclock'
- device
-Message-ID: <20241009173253.5eb545db@kernel.org>
-In-Reply-To: <78969a39b51ec00e85551b752767be65f6794b46.camel@infradead.org>
-References: <78969a39b51ec00e85551b752767be65f6794b46.camel@infradead.org>
+	s=k20201202; t=1728549065;
+	bh=hMyP0iqE4jdi89c9Hcn12/5V6EDBQa1FCfu88DXZVWI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z5/mWpCY7/+rOk132CtYiOVK4aiQxwl6d0jgfd6ewE5p5QxdWRPNxi0LZ8l9E1l6s
+	 mSJTH7n6pjHa98hICIDfAIds9ZT84N6mzKDbyLijUxIYObXDh/bzdT33RirIRdhpcp
+	 VAUAX+AVmsLGxuyB3W8cMGfW+o5wqqcXZN2PZ2zImaALb22It/rJePD05B/3AAJi2S
+	 MQBcDeTXiYznMs1nOaiFwf66LiThj5Iugwvw4csIW6vnn/QIaxhRloRcNu/AWqIMZa
+	 e6EhD7xRGU27PdpC3Wrm5KnPqr7Mry+nLtbdblmzjmjQvF2h9dqnb5Uhz7dojphoZN
+	 57NUtuB45kTyw==
+Date: Thu, 10 Oct 2024 09:31:00 +0100
+From: Lee Jones <lee@kernel.org>
+To: Karel Balej <balejk@matfyz.cz>
+Cc: duje.mihanovic@skole.hr, phone-devel@vger.kernel.org,
+	~postmarketos/upstreaming@lists.sr.ht,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: (subset) [RFC PATCH 1/2] mfd: 88pm886: add the RTC cell and
+ relevant definitions
+Message-ID: <20241010083100.GB661995@google.com>
+References: <20240920161518.32346-1-balejk@matfyz.cz>
+ <172846840369.471299.4136306941601177946.b4-ty@kernel.org>
+ <D4RIBTPD0W5Y.198XNBY2OIDGL@matfyz.cz>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <D4RIBTPD0W5Y.198XNBY2OIDGL@matfyz.cz>
 
-On Sun, 06 Oct 2024 08:17:58 +0100 David Woodhouse wrote:
-> +config PTP_1588_CLOCK_VMCLOCK
-> +	tristate "Virtual machine PTP clock"
-> +	depends on X86_TSC || ARM_ARCH_TIMER
-> +	depends on PTP_1588_CLOCK && ACPI && ARCH_SUPPORTS_INT128
-> +	default y
+On Wed, 09 Oct 2024, Karel Balej wrote:
 
-Why default to enabled? Linus will not be happy..
+> Lee Jones, 2024-10-09T11:06:43+01:00:
+> > On Fri, 20 Sep 2024 18:12:34 +0200, Karel Balej wrote:
+> > > RTC lives on the base register page of the chip. Add definitions of the
+> > > registers needed for a basic set/read time functionality.
+> > > 
+> > > 
+> >
+> > Applied, thanks!
+> 
+> Thank you, however I'm a little perplexed.
+> 
+> It was my understanding that RFC patches should not be applied without
+> further agreement, is that not the case? Obviously this patch was very
+> simple and I used RFC mainly because of the RTC driver itself, but I'm
+> curious to know for future submissions.
+
+I missed the fact that this was an RFC.  I can unapply it if you like?
+
+> Also, I expected the entire series to go at once through the rtc tree
+> with your ack as while it is not a strict dependency in terms of
+> breakage, the first patch seems rather pointless without the follow-up
+> which could theoretically take a long time to get applied and even some
+> requested changes could require changes to this patch. Could you please
+> explain what the policy is on this?
+
+The policy is flexible.  However, the generally accepted rule is that if
+there are build-time dependencies between patches, then one maintainer
+(usually me since MFD is usually at the centre of these cross-subsystem
+patch-sets) takes them and sends out a pull-request for an immutable
+branch for the other maintainers to pull from.
+
+However in this case, there are no build-time dependencies so the
+patches are able to and therefore should go in via their respective
+repos.
+
+-- 
+Lee Jones [李琼斯]
 
