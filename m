@@ -1,156 +1,107 @@
-Return-Path: <linux-rtc+bounces-2151-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2157-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDC49998CEF
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 18:13:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96BF9998D2E
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 18:22:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8C0CB2CCF3
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 15:22:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C8B51F21A78
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2024 16:22:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185EA1CC888;
-	Thu, 10 Oct 2024 15:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0BED1CDA3F;
+	Thu, 10 Oct 2024 16:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m2L3IVx/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2801CC147;
-	Thu, 10 Oct 2024 15:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74C57DA62;
+	Thu, 10 Oct 2024 16:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728573746; cv=none; b=YvWLsvzZJHGULe6z2TFLJloG9EkgwjBytEJd+mxGKf8TIABWjqgwxgs+P6GEaQSr9hBU7n8pf4BFJ2loK9xpvMyZ+QqOWb01KKVO6sgXCslCM+P2+j6wsQy4IQbPx4STFJg0xgjGp1c+yt7k/VydMrmcvCwTp8+T7wQki04Thpo=
+	t=1728577357; cv=none; b=YSIFkmTKszfh8mzLKwIuAa6c6kQGDByh/hPsy3Yx9UNVKmA4+IKgHUAENxk5mh2/kNs2s4Ni53jAGuxf9AEot/CRI2KL/phqwKOMv6HJQGXFfvVPENSJ3oRNNRXX6GeTKW7hs0KbFEwJ8Ddeith3GaTtFpMPH7Li6uuJ3153m64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728573746; c=relaxed/simple;
-	bh=s+8oKw9lYbGlfDOOh5Vzq21tMDHsDkvtvta/qIpwP5g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nLJCgu2OmFUHsMq0xj8xSzSDZi9/1bYycDr52Ae5rzwlbvzKJvvtgcuM3akjQyD6q63M09P2VhuvzSCyK3kfXjqYKtycklS1x0b/fEougP1RpgFPE4W8BDnhLqF2jNKW18L8R4Vf+jfE9WQqUR1qgg70kGgc/lQQpwDxdQlwnpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6e25f3748e0so12423947b3.0;
-        Thu, 10 Oct 2024 08:22:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728573742; x=1729178542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jao0Svc0n55kg/+w0la34Wpf1syzLSX8vW8f7gdO0JU=;
-        b=l1fGS1cwmCbUX0GNduwyHZaUEhPoKZvCu9wYU0yI6xtHTDr/zueWN/UqXFAPAALRyg
-         T4B/uXfLIJG/YmmmBA6Tav9HiYcfsOMdkQ7lxYIo396Ptr7WJ1jct3NLWOixwmnZ/Xgt
-         XFAyvUeDmFzEVb7ReVU+BPZCC7cCu7AmXxDvXxP/9c3TBWMfY7uuRxIqWbFKWacwBSfO
-         AkHd0oQ3rFHUwUed13SF7lCIpjwyHh6h8xBigoSNyA5uBCroX+MFvuW8LJ2+2b/KNVph
-         YvybPAhSUHuJkQRm/fvr3fG41E9e4iAFQLpUsk2rUuq2BTo4M4849+t6C4VhPZUmeWeh
-         Mcow==
-X-Forwarded-Encrypted: i=1; AJvYcCV1Jq13xRcGDXWT6FfkGxG05A0dfsNF5T0JzzK1gL5Qo5rJMnTYUiexvK78Cs8OlUBpk8Nvdybb2TAJ@vger.kernel.org, AJvYcCWCTZcQMTbkmvMZJ6cBQAnbSKZBkfjWCFL/RGIk4RNUJoW0Hz3GxUSOOEnSZDcSWayQ9gdvk6borXaKlFxA@vger.kernel.org, AJvYcCXil3BNsaGChils0SOQSr3IRiW43VLx3tl5BN6eymiXWR0/vjmF0wQwvDaFlVnLKQWKM0QVykVKrB8s@vger.kernel.org, AJvYcCXnxjcMPbPpzy8hgkjYVo7PV7JqqE9dCZjReJhC4+aiupUKnCb+w0GhGMZtSO4ubsOJczs4jCtC9bDA@vger.kernel.org, AJvYcCXsiPulz2UWDoBhWSKUGa+vhx0drRTrcJo8KuH4OrU2mvgnxYip3rMvEhnxfikVIv71CW6wuvDa+qBmdAIVSciqYLA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqjW3LGSEQ2RDZf5ORXyuLLK/wsqMLVODbeA/BHiCTNHwW42Er
-	HdmCUJMJX9kCj5kkpP7o4i6xiQBUQ2uGbeBxrV6//TwBsTxCs+zuL7IU48Z/
-X-Google-Smtp-Source: AGHT+IGi2lqjdHiYuBMfImEnw66tasFC/37QTnDnra998ZrrgJyc4jpTeigb0L62IUL4na2Ugq+7Pw==
-X-Received: by 2002:a05:690c:85:b0:6e2:1a26:2974 with SMTP id 00721157ae682-6e3224ed762mr58939827b3.39.1728573742141;
-        Thu, 10 Oct 2024 08:22:22 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e332b618b7sm2439047b3.3.2024.10.10.08.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 08:22:21 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e2908e8d45eso912241276.2;
-        Thu, 10 Oct 2024 08:22:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVOIeH+NZooRpc/cZi8MJnhrk4KUmQvYvoBJFexrG6Byost/j9BTs8fuzgF6cLshI4Uj15Ro6Ga7VTF@vger.kernel.org, AJvYcCVqaAADrQzkxESdzFb9WZqg6+qrnfD7LFHqHL55Ke3F8K+CYMXppYwiVEx7nnbGWBKVqs/RQ03q5LKF@vger.kernel.org, AJvYcCW2HZXxd4e5YEvMbUQQSu8Lrq0laA80C+WHNx8JJzDXUXT0BBV0k28UwTZVMj0tcHKN6ConpuLmK9s7@vger.kernel.org, AJvYcCW8+N/lsgwe536TMgYPwVLVBzkw+i7HNYvjunQcAuEgqTaQ756IAdCKUVNiatIUn/KpaKUUFPtNZBFHIdk7fJtPhwE=@vger.kernel.org, AJvYcCWvYIbIvqw7XR6u6ws606IUiLvRHdFxr9uQdiGETsiepj/SzZrz8vfcmBialrLx/wTcFkPmTWWf6i//AqZp@vger.kernel.org
-X-Received: by 2002:a05:690c:47c1:b0:6e3:1837:4860 with SMTP id
- 00721157ae682-6e3221c2589mr45632497b3.13.1728573741351; Thu, 10 Oct 2024
- 08:22:21 -0700 (PDT)
+	s=arc-20240116; t=1728577357; c=relaxed/simple;
+	bh=wfNXoBUE/fKR4ZCx4sn7qg+tVZJPZmlq6y1KBKZ2avo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fx/9o3xXpoZQLwzyofk1Zuph5ta/Obu37Mrdmb1ueqSO6Lu1uHWMOonjjEKPmEg3C6D4RikbWi3hK2zVfjI5eQe+6OdJEkoeUtgeClflt5SXdh+DkMtJ3mtug2Llkm4+tws7ucMmd3+2lNf3+6zOdNPrKy1j3fex0KtrLQ5AwSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m2L3IVx/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5475CC4CEC5;
+	Thu, 10 Oct 2024 16:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728577357;
+	bh=wfNXoBUE/fKR4ZCx4sn7qg+tVZJPZmlq6y1KBKZ2avo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m2L3IVx/hhk6gSw2T5URJmZJcBS2aR686SoslCcr/f37i4Gb1b5i8OUQkGjI+Szjn
+	 ih23HxaYI2SZNuN+oY+6lRnlJZpERlRO4+HrUj1vBdMOLOCVJZUG1GEXTumI8hX3pp
+	 NfdYDW3FrUFOxiBowAsF+yZjfFIRrxawgFNIFh9zrKAscKOCUFwWJcIQCPLVV9iKeF
+	 UmwSmfDl2kSjOJJFaAK0kZxY5n3ZAbJdUZC7s32hi90FucfP074placO6m38+fPcxB
+	 g/B83xgZRqacO0YSrtgnNK0H+Frl/yLNtw6pkUo8lTf7ZtAik2NhuiwStUXtNbskyj
+	 JCg+b6iJlAQrg==
+Date: Thu, 10 Oct 2024 17:22:33 +0100
+From: Lee Jones <lee@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: (subset) [PATCH] mfd: rtc: bd7xxxx Drop IC name from IRQ
+Message-ID: <20241010162233.GH661995@google.com>
+References: <ZvVNCfk10ih0YFLW@fedora>
+ <172848415740.588729.14326036177340227520.b4-ty@kernel.org>
+ <2d48be5a-a259-4ab8-89dd-e662110d4d68@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com> <20240830130218.3377060-9-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240830130218.3377060-9-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 10 Oct 2024 17:22:09 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVqno3vO9T0FtHnNL2afWP4abSE4vmf8vkLRRndg=ws7A@mail.gmail.com>
-Message-ID: <CAMuHMdVqno3vO9T0FtHnNL2afWP4abSE4vmf8vkLRRndg=ws7A@mail.gmail.com>
-Subject: Re: [PATCH v3 08/12] arm64: dts: renesas: r9a08g045: Add RTC node
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com, 
-	magnus.damm@gmail.com, p.zabel@pengutronix.de, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2d48be5a-a259-4ab8-89dd-e662110d4d68@gmail.com>
 
-Hi Claudiu,
+On Thu, 10 Oct 2024, Matti Vaittinen wrote:
 
-On Fri, Aug 30, 2024 at 3:02=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Add the DT node for the RTC IP available on the Renesas RZ/G3S SoC.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v3:
-> - added CPG clock, power domain, reset
-> - and assigned-clocks, assigned-clock-parents to configure the
->   VBATTCLK
-> - included dt-bindings/clock/r9a08g045-vbattb.h
+> On 09/10/2024 17:29, Lee Jones wrote:
+> > On Thu, 26 Sep 2024 15:01:13 +0300, Matti Vaittinen wrote:
+> > > A few ROHM PMICs have an RTC block which can be controlled by the
+> > > rtc-bd70528 driver. The RTC driver needs the alarm interrupt information
+> > > from the parent MFD driver. The MFD driver provides the interrupt
+> > > information as a set of named interrupts, where the name is of form:
+> > > <PMIC model>-rtc-alm-<x>, where x is an alarm block number.
+> > > 
+> > > >From the RTC driver point of view it is irrelevant what the PMIC name
+> > > is. It is sufficient to know this is alarm interrupt for a block X. The
+> > > PMIC model information is carried to RTC via the platform device ID.
+> > > Hence, having the PMIC model in the interrupt name is only making things
+> > > more complex because the RTC driver needs to request differently named
+> > > interrupts on different PMICs, making code unnecessary complicated.
+> > > 
+> > > [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [1/1] mfd: rtc: bd7xxxx Drop IC name from IRQ
+> >        commit: cd49b605779b4fea8224650eeba70b258c5cc8cc
+> 
+> Hello Lee, Alexandre,
+> 
+> Nothing pleases me more than having this quickly merged but...
+> ... I don't think I saw ack from Alexandre yet. Furthermore, the (subset)
+> makes me wonder because I sent RTC and MFD changes in a single patch - which
+> might've been a mistake...
+> 
+> I tried finding the cd49b605779b4fea8224650eeba70b258c5cc8cc from MFD tree
+> and failed. Hence I'm a bit unsure where we are going.
 
-Thanks for your patch!
+Applying this was a key-binding mistake.
 
-> --- a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-> @@ -160,6 +161,22 @@ i2c3: i2c@10090c00 {
->                         status =3D "disabled";
->                 };
->
-> +               rtc: rtc@1004ec00 {
+This was my real intention:
 
-Please insert this after serial@1004b800, to preserve sort order.
+  https://lore.kernel.org/all/20241009134416.GJ276481@google.com/
 
-> +                       compatible =3D "renesas,r9a08g045-rtca3", "renesa=
-s,rz-rtca3";
-> +                       reg =3D <0 0x1004ec00 0 0x400>;
-> +                       interrupts =3D <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +                                    <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +                                    <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>;
-> +                       interrupt-names =3D "alarm", "period", "carry";
-> +                       clocks =3D <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&=
-vbattb VBATTB_VBATTCLK>;
-> +                       clock-names =3D "bus", "counter";
-> +                       assigned-clocks =3D <&vbattb VBATTB_MUX>;
-> +                       assigned-clock-parents =3D <&vbattb VBATTB_XC>;
-
-Don't the assigned-clock* properties belong in the board DTS?
-In addition, I think they should be documented in the DT bindings,
-and be made required, so board developers don't forget about them.
-
-> +                       power-domains =3D <&cpg>;
-> +                       resets =3D <&cpg R9A08G045_VBAT_BRESETN>;
-> +                       status =3D "disabled";
-> +               };
-> +
->                 vbattb: vbattb@1005c000 {
->                         compatible =3D "renesas,r9a08g045-vbattb";
->                         reg =3D <0 0x1005c000 0 0x1000>;
-
-The rest LGTM.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+-- 
+Lee Jones [李琼斯]
 
