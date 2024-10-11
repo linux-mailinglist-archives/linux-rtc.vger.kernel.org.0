@@ -1,130 +1,140 @@
-Return-Path: <linux-rtc+bounces-2160-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2161-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D636999BB2
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 06:34:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA92C999E1C
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 09:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E246A283A81
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 04:34:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75DAB28A7F6
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 07:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586D01CCEC2;
-	Fri, 11 Oct 2024 04:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3593209689;
+	Fri, 11 Oct 2024 07:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SUKHiPyv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdj7QnNb"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ot1-f68.google.com (mail-ot1-f68.google.com [209.85.210.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14E08F58;
-	Fri, 11 Oct 2024 04:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943A6207A30;
+	Fri, 11 Oct 2024 07:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728621265; cv=none; b=CIJi8Bygk4Mxlwsom86FKpCk8fVgqhf45NojNMidl9UvwjD7/MTEvvdVoPdKyF5UZrCXH0lor1IGOdwVjczBwbkFeSh/wY3ULPH4lo9bogt2ZKKNNSvG2WyaBPTKAQ2xMY4jqefA5ABSGxxALHH/BxxFFgPa/4/E/W9XaaHDYGA=
+	t=1728632414; cv=none; b=j1GhOfnaoS1PG1zKuGxDEP1wcecFAyZ+i4zxXL70zXMAKtvHJS6uJRFjrBVkg+Z8Ruc5SNXb/+nqADAB/YxhlNq/00jaI4AWh9qKk0c+c7AQuWywt38cZf3yUW8Qn18SzJE5kf1hXIuzi7RIk9DfiRyGbwzB1i01/GCNgFbQh4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728621265; c=relaxed/simple;
-	bh=NajNb/I6k/6ZiFsURaEaC5lig7HGp3Cceim03PLo6c0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sQethlv4zEM9NlRnI7k7Wudgl4Z7hKqgzWrtRDx3wf/2vGtIT85TR6cR0o35ANVEbd933tpCBMraVtKwsYUh2PJCC3tRqGW1nvQsOTXB/LUylyBTDbAygS7Dd0LHlRWSeW5E+AsekXXqkw6yCMJmzzTkADK0kixbu+VAzt7Hrxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SUKHiPyv; arc=none smtp.client-ip=209.85.210.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f68.google.com with SMTP id 46e09a7af769-716a3e50a81so980494a34.3;
-        Thu, 10 Oct 2024 21:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728621263; x=1729226063; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gTjmxcfMzkPqRPKWj2sOMpOalolsk+eot2aDuccwuS8=;
-        b=SUKHiPyvIf6bubcaQlL33wmsa4q6MbbX/GZl5KA6VSM6vI7q1T8/csKn3cWNyZ4W0p
-         EUk58tMUScEZkIo4EDXP8vRIIwfFAfRbBepjSy5cpNizm3B5tqPuaJLzXcVFE4SDEoNM
-         bB1QG5mTuY3A7fpXywSXsXNusSxUK1Z5fayQva4O0LYgwcfGBaJeEQxg3e1/0oZCtHql
-         MSFtf7aZu+oq+lhe6JqoRj26fDHPHUcn3iL/vOWtu/0twP2ZDKxE40al+xa/J4EWPDa5
-         ArttOF/gIMYP+runeN/lNSEBLtKnVCZWcS+rzIB34o5EftTiSDbZPfr1H1n3nkcmLHgx
-         14sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728621263; x=1729226063;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gTjmxcfMzkPqRPKWj2sOMpOalolsk+eot2aDuccwuS8=;
-        b=lHXmsuFpDwhgtNzfOCTDI3u0XSwtFy2epdUD5xgy+sL1mTlmEWzcOvZrRkrhus+29t
-         AELQ8cuUg0c78cthS4yVKCqz1rcTDZu7rI5EKoE+/2p9V+kpmAgO1CzkXEB0S6FgooY4
-         n0fS8nPtB7loDRpeA8JHmb8R2xuJZVDqLH2GScaIWxI2LBkdyfEIhlI3LM65PjFdce1F
-         OTUQPUYAxs7cDUKneJ4iAUVKZSNJWo2zAHkacwc6iPXms1rEzp8HbOSHp7KuG9pBvQLM
-         P3WwB5dtW6nQkzxDKwqd9n9w32qjRtPWnIlS0lHcIsWr5S8r/sZ/mcsJrwclg+jlKL2y
-         f4tg==
-X-Forwarded-Encrypted: i=1; AJvYcCUe7R6wELR1uBQ4SJlUhFj2hON7ruU96wLQPkekCYy+mom6dUgsn0fyGkmPbnW55LOkKVkiTagnCY0Uoiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsRhRQDdlj8DEe3FvzcvqbAgxpdNsLG0AcjvKzbUGJCNBRjt4S
-	Uie5kzoiauNDASvcpKnUCYlFOigXaBerZT/ZeyHkSqmrO90Dy6tKMhWwdL3z424=
-X-Google-Smtp-Source: AGHT+IH8Zw8FYpCDh1vwV2hfKQzUQm4N1CVHuFmC+2X1ytWSMQo/dJ40wFJB5avhJcQ+1dh0bJR30g==
-X-Received: by 2002:a05:6830:6e17:b0:70a:94b4:6e67 with SMTP id 46e09a7af769-717d647b8efmr1455296a34.23.1728621262745;
-        Thu, 10 Oct 2024 21:34:22 -0700 (PDT)
-Received: from VM-119-80-tencentos.localdomain ([14.22.11.161])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea448f9440sm1821668a12.30.2024.10.10.21.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 21:34:22 -0700 (PDT)
-From: Yongliang Gao <leonylgao@gmail.com>
-To: alexandre.belloni@bootlin.com,
-	john.stultz@linaro.org
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yongliang Gao <leonylgao@tencent.com>,
-	Jingqun Li <jingqunli@tencent.com>
-Subject: [PATCH] rtc: check if __rtc_read_time was successful in rtc_timer_do_work()
-Date: Fri, 11 Oct 2024 12:31:53 +0800
-Message-Id: <20241011043153.3788112-1-leonylgao@gmail.com>
-X-Mailer: git-send-email 2.39.3
+	s=arc-20240116; t=1728632414; c=relaxed/simple;
+	bh=ufe1xPjenN3eDVYHCnQkY7klh2kLErGpDUiRsq7Aygw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UN/e5quBbcDzsSlPecJcGru/ybodBCpIcJczH6c6KMlzKBcM6TVVBriV/I8JrlInZlvdoHJFlqFEOxKo2lWLhmFSTMZ4uzRqMwBuGvTD8F25CUlYVX5A8RTaep6FoiDMQcEgPacrLS72mvMRnfsB37DxW7UzbyiLASzWBO03OjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdj7QnNb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BFA3C4CEC3;
+	Fri, 11 Oct 2024 07:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728632414;
+	bh=ufe1xPjenN3eDVYHCnQkY7klh2kLErGpDUiRsq7Aygw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gdj7QnNbS+n42PAUJAwDuz5+0Vwz+wKsoXpey0YtbomEQzGZV8tFN39xZfOkxF2ys
+	 ZI6Bxxw8ubCw/mRkjd7ExwOSIxyJ9iWNH1BO1/AcAz1tB3elvRW8v08dzSVu35dfua
+	 M27wFxddC5poYu3O2rsMjTbdrVpISZY+W2qN1ykiFCjJkbCyjwalVCh+83gtEItOdO
+	 Zs9zwBHvkHQ09kYMoTtiKf9weBydE8uvBpqGIv/NlL1TUaNCySPI+5POLjO6Y/8rtm
+	 cBtNLr2To/Tu9D3N1pxj+U+qqxzOr+YMlYEG3WXx2HF3RDYl2k4RW8o3QVfpo1WEyM
+	 0a4JcFIKG37Cw==
+Date: Fri, 11 Oct 2024 08:40:09 +0100
+From: Lee Jones <lee@kernel.org>
+To: Karel Balej <balejk@matfyz.cz>
+Cc: duje.mihanovic@skole.hr, phone-devel@vger.kernel.org,
+	~postmarketos/upstreaming@lists.sr.ht,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: (subset) [RFC PATCH 1/2] mfd: 88pm886: add the RTC cell and
+ relevant definitions
+Message-ID: <20241011074009.GM661995@google.com>
+References: <20240920161518.32346-1-balejk@matfyz.cz>
+ <172846840369.471299.4136306941601177946.b4-ty@kernel.org>
+ <D4RIBTPD0W5Y.198XNBY2OIDGL@matfyz.cz>
+ <20241010083100.GB661995@google.com>
+ <20241010083519.GC661995@google.com>
+ <D4S9WUGGL00V.16E4ARKMPS1JJ@matfyz.cz>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <D4S9WUGGL00V.16E4ARKMPS1JJ@matfyz.cz>
 
-From: Yongliang Gao <leonylgao@tencent.com>
+On Thu, 10 Oct 2024, Karel Balej wrote:
 
-If the __rtc_read_time call fails,, the struct rtc_time tm; may contain
-uninitialized data, or an illegal date/time read from the RTC hardware.
+> Lee Jones, 2024-10-10T09:35:19+01:00:
+> > On Thu, 10 Oct 2024, Lee Jones wrote:
+> >
+> > > On Wed, 09 Oct 2024, Karel Balej wrote:
+> > > 
+> > > > Lee Jones, 2024-10-09T11:06:43+01:00:
+> > > > > On Fri, 20 Sep 2024 18:12:34 +0200, Karel Balej wrote:
+> > > > > > RTC lives on the base register page of the chip. Add definitions of the
+> > > > > > registers needed for a basic set/read time functionality.
+> > > > > > 
+> > > > > > 
+> > > > >
+> > > > > Applied, thanks!
+> > > > 
+> > > > Thank you, however I'm a little perplexed.
+> > > > 
+> > > > It was my understanding that RFC patches should not be applied without
+> > > > further agreement, is that not the case? Obviously this patch was very
+> > > > simple and I used RFC mainly because of the RTC driver itself, but I'm
+> > > > curious to know for future submissions.
+> > > 
+> > > I missed the fact that this was an RFC.  I can unapply it if you like?
+> > > 
+> > > > Also, I expected the entire series to go at once through the rtc tree
+> > > > with your ack as while it is not a strict dependency in terms of
+> > > > breakage, the first patch seems rather pointless without the follow-up
+> > > > which could theoretically take a long time to get applied and even some
+> > > > requested changes could require changes to this patch. Could you please
+> > > > explain what the policy is on this?
+> > > 
+> > > The policy is flexible.  However, the generally accepted rule is that if
+> > > there are build-time dependencies between patches, then one maintainer
+> > > (usually me since MFD is usually at the centre of these cross-subsystem
+> > > patch-sets) takes them and sends out a pull-request for an immutable
+> > > branch for the other maintainers to pull from.
+> > > 
+> > > However in this case, there are no build-time dependencies so the
+> > > patches are able to and therefore should go in via their respective
+> > > repos.
+> >
+> > Actually, it looks like there are build-time deps between them.
+> 
+> Indeed, I didn't realize that yesterday. What I had in mind before was
+> in fact the other part of the patch: I was wondering about the policy of
+> applying a patch adding a MFD cell for which there is no driver
+> available. That's what I meant by "not a strict dependency in terms of
+> breakage".
 
-When calling rtc_tm_to_ktime later, the result may be a very large value
-(possibly KTIME_MAX). If there are periodic timers in rtc->timerqueue,
-they will continually expire, may causing kernel softlockup.
+I've become less strict about that over the years.  The chances of the
+accompanying driver not going in over the next release or so is usually
+very small.
 
-Fixes: 6610e0893b8b ("RTC: Rework RTC code to use timerqueue for events")
-Signed-off-by: Yongliang Gao <leonylgao@tencent.com>
-Acked-by: Jingqun Li <jingqunli@tencent.com>
----
- drivers/rtc/interface.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+> > Please break out the inclusion of the additional defines and place them
+> > into the RTC patch.  I will then Ack that one.  The patch making changes
+> > to driver/mfd will still go in via the MFD repo.
+> 
+> So the above in other words: it sounds like you would apply this updated
+> patch independently of the RTC driver because otherwise you could just
+> ack the current version, is that correct? If so, I cannot see why this
+> would be preferable given what I wrote before about the RTC driver being
+> possibly delayed or eventually given up on (not that I would expect that
+> to be the case here :-). Could you please still comment on this then?
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index cca650b2e0b9..aaf76406cd7d 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -904,13 +904,18 @@ void rtc_timer_do_work(struct work_struct *work)
- 	struct timerqueue_node *next;
- 	ktime_t now;
- 	struct rtc_time tm;
-+	int err;
- 
- 	struct rtc_device *rtc =
- 		container_of(work, struct rtc_device, irqwork);
- 
- 	mutex_lock(&rtc->ops_lock);
- again:
--	__rtc_read_time(rtc, &tm);
-+	err = __rtc_read_time(rtc, &tm);
-+	if (err) {
-+		mutex_unlock(&rtc->ops_lock);
-+		return;
-+	}
- 	now = rtc_tm_to_ktime(tm);
- 	while ((next = timerqueue_getnext(&rtc->timerqueue))) {
- 		if (next->expires > now)
+As above.  I trust you. :)
+
 -- 
-2.39.3
-
+Lee Jones [李琼斯]
 
