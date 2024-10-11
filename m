@@ -1,87 +1,89 @@
-Return-Path: <linux-rtc+bounces-2162-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2163-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 375D899A0C4
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 12:06:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 615CF99A0E1
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 12:10:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9C99286799
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 10:06:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9E03B24F1A
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 10:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1BD021018E;
-	Fri, 11 Oct 2024 10:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378DD210C08;
+	Fri, 11 Oct 2024 10:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jC8jiq+9"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EPJ3lKWr"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9776C210182;
-	Fri, 11 Oct 2024 10:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7750210C27;
+	Fri, 11 Oct 2024 10:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728641189; cv=none; b=fSALJFZOUDvDDTvOJ81oMOIynTe5xWxuYZEO0lEmC1In0Xyqa0WXkdYDSElvGxpLgeHU+f0OpQLmS6mkrDDg95lWs2Df+4PFzpChqOSqG7gi2myoRRN6tg+myyMbOWK2AOh99LAgWnmD/FNQ7ktFptnr9ly6E61QVyKUMAkyTws=
+	t=1728641425; cv=none; b=a8iZADKrQVfvf99vqxrCirD9P8nPSjv/vM4Gy3B1ZJbV1TKGi8FoL0N8SlhtF6Qi0YwUihqx9safHrIzjUsr/Yt5XDRICPDQ4bZzH9KAn0G+HTe3/PHdboyblpaSak2r1TPk0kgnc5nVwV13q22qZN7euFVu1+tJ9pjOE4p2B9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728641189; c=relaxed/simple;
-	bh=ot4KLXxpVH1GyNQkw3EICpCPCfdy03J3mg1Eh5iQbwI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rljRxc3xU1eYzrCSSQFY/PQr7y9aApqdntBGaArVQo1VI99d/vYS9DCbLRTuQ+aDjQnWgkPyKVp4seHsrhi2djbN+6GrTbR+U2ykqy4BLEQMbHy6N9scpcRjew0gtKZL4VchS/xvoC2FeIq05xQCicaSR8akp2/GZRhw2io+jrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jC8jiq+9; arc=none smtp.client-ip=217.70.183.193
+	s=arc-20240116; t=1728641425; c=relaxed/simple;
+	bh=tdmDXej+rruq9iIm4BoqsPRVc/PA6H40VSSFlvwIaTw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PajXbTPjoED2qVVOWoITt1R2R39NmwTH1MPPMof9gnF+gBhFXwpBNSwu3HEzBx3BFf/dO2WpxceuUeumBA0ATZ1UFFLJtyu9SJ+gpAbCEHSBjYxvonxcokZm02DxdfI7b/qNd44tF9xemdbAWB9NavdFaFTjaKwrx3fpKf+4oIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EPJ3lKWr; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B4A56240004;
-	Fri, 11 Oct 2024 10:06:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02A7AE0005;
+	Fri, 11 Oct 2024 10:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728641178;
+	t=1728641415;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=QJes2rbn2pJz+0Oi4GVIkquqy9jeHRdMg66UuPtATlM=;
-	b=jC8jiq+9Sy50LXD4a29Ebf36Ig3hQl08AcLZBQl6SG6UAa66DJGS7+dwNRV0yaHHgXM3dY
-	WUsZYslOVI16jHBOTjYyku+B5nyqQJurBond3xDbmk0Z6aEIl+4s8L1qztv8DIA0HBFlzs
-	v42GKFQitMsCVdsgLhR5n9z2KR5DWFL2SuY7j4l426dA8f3U1akKD5jr126VgF8Tt/JsmJ
-	A1DWjULQIxF8Tq2fFNNnOG+UbhXAVMLEli0b7aac7yHP62a/q9NbxseTayXL04LGISXG3J
-	er0iWrpjbghkZF0Ez2maJjn17PIVJ73AmQ+MfdVdk1ePenM6kmUBTR0od65OTg==
-From: alexandre.belloni@bootlin.com
-To: pierre-henry.moussay@microchip.com,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4i8ziNlMdl8ESAarVBofsjoLASi00Z6Fpv46DYhhRFw=;
+	b=EPJ3lKWr8jcFNYNEXo75/BSGhR0Mf7KNanp/+hQcwp99pScQEHSBH2Ajrvz0bxfh4OQKtp
+	klX+JrkXmUwtKlVvZ3bxVSTHI14mhnG8tVbluOxsr9g2YukEAjsL+RfWXshGMSIxO0pyXv
+	jZwZVUBBsMEO3SqAQhNwA8HcXL3dWz4xRDBljOJFdBYLByUQWdU9N79NpIJ43yM40bgnHL
+	ijV1JORHtHi3ELUQR3XI/3oj9bZ6NnPNpAkZmQlDg2/Dj5+EwWMz5nODDzcaG3ISiZXbbp
+	MDuWi8DqyT9VmkyQ9cOUZ78KE9HckDTJSaC9/7vKm6L5Gig9dhIkDymNJVmKqQ==
+Date: Fri, 11 Oct 2024 12:10:14 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Linux4Microchip@microchip.com, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Daire McNamara <daire.mcnamara@microchip.com>,
-	Lewis Hanly <lewis.hanly@microchip.com>
-Cc: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	Lewis Hanly <lewis.hanly@microchip.com>,
+	pierre-henry.moussay@microchip.com
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: rtc: mpfs-rtc: Properly name file
-Date: Fri, 11 Oct 2024 12:06:07 +0200
-Message-ID: <20241011100608.862428-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.46.2
+Subject: Re: (subset) [linux][PATCH v2 13/20] dt-bindings: rtc: mfps-rtc: Add
+ PIC64GX compatibility
+Message-ID: <172864134907.862705.466406904401257658.b4-ty@bootlin.com>
+References: <20240930095449.1813195-1-pierre-henry.moussay@microchip.com>
+ <20240930095449.1813195-14-pierre-henry.moussay@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240930095449.1813195-14-pierre-henry.moussay@microchip.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Mon, 30 Sep 2024 10:54:42 +0100, pierre-henry.moussay@microchip.com wrote:
+> PIC64GX is compatible with mfps-rtc without any additional feature
+> 
+> 
 
-The actual compatible string is microchip,mpfs-rtc, not microchip,mfps-rtc.
+Applied, thanks!
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- .../rtc/{microchip,mfps-rtc.yaml => microchip,mpfs-rtc.yaml}      | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename Documentation/devicetree/bindings/rtc/{microchip,mfps-rtc.yaml => microchip,mpfs-rtc.yaml} (100%)
+[13/20] dt-bindings: rtc: mfps-rtc: Add PIC64GX compatibility
+        https://git.kernel.org/abelloni/c/78f57f8c7a81
 
-diff --git a/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml b/Documentation/devicetree/bindings/rtc/microchip,mpfs-rtc.yaml
-similarity index 100%
-rename from Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-rename to Documentation/devicetree/bindings/rtc/microchip,mpfs-rtc.yaml
+Best regards,
+
 -- 
-2.46.2
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
