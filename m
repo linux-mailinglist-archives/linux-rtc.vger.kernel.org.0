@@ -1,89 +1,170 @@
-Return-Path: <linux-rtc+bounces-2163-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2164-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 615CF99A0E1
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 12:10:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D72D199A15E
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 12:29:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9E03B24F1A
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 10:10:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5ECDB1F23BA9
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2024 10:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 378DD210C08;
-	Fri, 11 Oct 2024 10:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03789216425;
+	Fri, 11 Oct 2024 10:29:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EPJ3lKWr"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Ul1OhfFg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7750210C27;
-	Fri, 11 Oct 2024 10:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0875E21503B
+	for <linux-rtc@vger.kernel.org>; Fri, 11 Oct 2024 10:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728641425; cv=none; b=a8iZADKrQVfvf99vqxrCirD9P8nPSjv/vM4Gy3B1ZJbV1TKGi8FoL0N8SlhtF6Qi0YwUihqx9safHrIzjUsr/Yt5XDRICPDQ4bZzH9KAn0G+HTe3/PHdboyblpaSak2r1TPk0kgnc5nVwV13q22qZN7euFVu1+tJ9pjOE4p2B9Y=
+	t=1728642542; cv=none; b=pwS0HglOZW0hSPsZ61HYqdh0g2CC6v+Cr/BX+XJpRnx5mPPjxfVRmpvywZEh7dEorJlPTHxQh8yzvLTjExN5n2JZvrBialOCNTtb3n5w0WTYTJWB+zi/BfL8JxDaVsrb374XNfB3HlzMABHiVXOuC4Ba+Lpcd0ps5JEN7tzlKR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728641425; c=relaxed/simple;
-	bh=tdmDXej+rruq9iIm4BoqsPRVc/PA6H40VSSFlvwIaTw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PajXbTPjoED2qVVOWoITt1R2R39NmwTH1MPPMof9gnF+gBhFXwpBNSwu3HEzBx3BFf/dO2WpxceuUeumBA0ATZ1UFFLJtyu9SJ+gpAbCEHSBjYxvonxcokZm02DxdfI7b/qNd44tF9xemdbAWB9NavdFaFTjaKwrx3fpKf+4oIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EPJ3lKWr; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 02A7AE0005;
-	Fri, 11 Oct 2024 10:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728641415;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4i8ziNlMdl8ESAarVBofsjoLASi00Z6Fpv46DYhhRFw=;
-	b=EPJ3lKWr8jcFNYNEXo75/BSGhR0Mf7KNanp/+hQcwp99pScQEHSBH2Ajrvz0bxfh4OQKtp
-	klX+JrkXmUwtKlVvZ3bxVSTHI14mhnG8tVbluOxsr9g2YukEAjsL+RfWXshGMSIxO0pyXv
-	jZwZVUBBsMEO3SqAQhNwA8HcXL3dWz4xRDBljOJFdBYLByUQWdU9N79NpIJ43yM40bgnHL
-	ijV1JORHtHi3ELUQR3XI/3oj9bZ6NnPNpAkZmQlDg2/Dj5+EwWMz5nODDzcaG3ISiZXbbp
-	MDuWi8DqyT9VmkyQ9cOUZ78KE9HckDTJSaC9/7vKm6L5Gig9dhIkDymNJVmKqQ==
-Date: Fri, 11 Oct 2024 12:10:14 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Linux4Microchip@microchip.com, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Lewis Hanly <lewis.hanly@microchip.com>,
-	pierre-henry.moussay@microchip.com
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [linux][PATCH v2 13/20] dt-bindings: rtc: mfps-rtc: Add
- PIC64GX compatibility
-Message-ID: <172864134907.862705.466406904401257658.b4-ty@bootlin.com>
-References: <20240930095449.1813195-1-pierre-henry.moussay@microchip.com>
- <20240930095449.1813195-14-pierre-henry.moussay@microchip.com>
+	s=arc-20240116; t=1728642542; c=relaxed/simple;
+	bh=CpzP4jIAsLQFOci9vd7nVdcZrPbqR5o+VO25hWfgfVg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ViBsS/LDwRLr7+oXGA4CAP7OgvCK9IlLRKB4ZUe9ZZFFY+zRIvyn66Jq7Q+/t1c3SnY6wZE3jVJc/pEnGTtviAygJDdX4krAu4AMWV2QTsON6UK6h4vIRRgnCCP019a7jcXB4HHphZ9S0e5Upq01LaoXfRUE2xTkgFO8y94wdJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Ul1OhfFg; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5c915308486so2547719a12.0
+        for <linux-rtc@vger.kernel.org>; Fri, 11 Oct 2024 03:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1728642539; x=1729247339; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nQe1ygN5+gjUxEVF95q+XKGxLHi73x/RYXOsryhpwc0=;
+        b=Ul1OhfFgKMDiv/FHEGkYzhnIHRQpv8gpU7oc6KOsD038O4Ow3Mf4R5Ehlx8YIsTKLV
+         LTcyF54jBm7u9f3owYIQkceei22FD2Fn2zgRRM3vPRJgtWkDa+/q4meSr+GE1VAL2AAD
+         TLEKFTpYk/C6zjua/MiStTJnmVajH+sVoyCFHC3NAIdF3zbZB27T9AQblhOpw8r7Ms0n
+         eQitOMZYbGAoOMbsXMRXGq5VOyhpl4OEgErCVuYBsFNyDU65nvR4f9pWEuQEnKFjZSYZ
+         1gc7H2wQ+JuS0dG9NQkWJO6mpHdC5MZUtKlrhyD57nipadPyk0gU6Ca2fOBDxSKt/aVr
+         wIiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728642539; x=1729247339;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nQe1ygN5+gjUxEVF95q+XKGxLHi73x/RYXOsryhpwc0=;
+        b=VoAWDqxJTie7gvim8OwYVZ4/GSj7b16dRmi504anH5UyflOliSGt+r7W3cqJBamqQd
+         9HDn7ab27haTZ1034DHrFp/Qvq3PfI2PnLVOE0E4bPoaqvX0SZMFiXNVy/lezpSQPQ4T
+         3QD7Cx1cgHFaRdYq6KQ3tfo2TWVQGOZA9aQRnUDRmja4KjWHYkdFigdMJwGLjo+io3lS
+         uFdNnQbdIPmi/DIfKT2RupC221ncd8Ki1CA0SEZZ1Dyth0L/VNN36Jw63LHV7KHLBdc1
+         0d2EDGE9JbQfnU5+Fo/6HWQ7oTCXJeQSV7T7GmL3emx11ODR09q1iCyWp2pRJgqp4PVh
+         yucg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmQq1hq7GFqldOssr+MHI2m4FKSpbWqgfOv2blIzUQ6PSitl77cvH24iF1q1LMhdRJYOA40Xcun/k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynGr5e0LjX+hanyi9476aOblmaGBhTn834/fdxCawyUkbhMXWv
+	9qdhJtmvlZJc8rToScLYyaSBuY4Y9CXX1t4o5Aee1EWMuw7olyCLjHhvoWhax9g=
+X-Google-Smtp-Source: AGHT+IGpFSe9PPuejO0Ed6dL5vV8hMNLXlFVjY2ecCHqdlPf7/F9v+d3+Yof8NsZqf50BjGWowvvQA==
+X-Received: by 2002:a05:6402:348c:b0:5c8:8416:cda7 with SMTP id 4fb4d7f45d1cf-5c948ccf04fmr1246559a12.15.1728642539131;
+        Fri, 11 Oct 2024 03:28:59 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.23])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c9371533c4sm1763989a12.54.2024.10.11.03.28.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Oct 2024 03:28:57 -0700 (PDT)
+Message-ID: <4ff318b0-cd7c-4857-888c-a07c8985fce9@tuxon.dev>
+Date: Fri, 11 Oct 2024 13:28:55 +0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240930095449.1813195-14-pierre-henry.moussay@microchip.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/12] arm64: dts: renesas: r9a08g045: Add RTC node
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com,
+ magnus.damm@gmail.com, p.zabel@pengutronix.de,
+ linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240830130218.3377060-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240830130218.3377060-9-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdVqno3vO9T0FtHnNL2afWP4abSE4vmf8vkLRRndg=ws7A@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdVqno3vO9T0FtHnNL2afWP4abSE4vmf8vkLRRndg=ws7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 30 Sep 2024 10:54:42 +0100, pierre-henry.moussay@microchip.com wrote:
-> PIC64GX is compatible with mfps-rtc without any additional feature
+Hi, Geert,
+
+On 10.10.2024 18:22, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
+> On Fri, Aug 30, 2024 at 3:02 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Add the DT node for the RTC IP available on the Renesas RZ/G3S SoC.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>
+>> Changes in v3:
+>> - added CPG clock, power domain, reset
+>> - and assigned-clocks, assigned-clock-parents to configure the
+>>   VBATTCLK
+>> - included dt-bindings/clock/r9a08g045-vbattb.h
 > 
+> Thanks for your patch!
+> 
+>> --- a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
+>> +++ b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
+>> @@ -160,6 +161,22 @@ i2c3: i2c@10090c00 {
+>>                         status = "disabled";
+>>                 };
+>>
+>> +               rtc: rtc@1004ec00 {
+> 
+> Please insert this after serial@1004b800, to preserve sort order.
 
-Applied, thanks!
+You're right. I though I have already checked this.
 
-[13/20] dt-bindings: rtc: mfps-rtc: Add PIC64GX compatibility
-        https://git.kernel.org/abelloni/c/78f57f8c7a81
+> 
+>> +                       compatible = "renesas,r9a08g045-rtca3", "renesas,rz-rtca3";
+>> +                       reg = <0 0x1004ec00 0 0x400>;
+>> +                       interrupts = <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
+>> +                                    <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
+>> +                                    <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>;
+>> +                       interrupt-names = "alarm", "period", "carry";
+>> +                       clocks = <&cpg CPG_MOD R9A08G045_VBAT_BCLK>, <&vbattb VBATTB_VBATTCLK>;
+>> +                       clock-names = "bus", "counter";
+>> +                       assigned-clocks = <&vbattb VBATTB_MUX>;
+>> +                       assigned-clock-parents = <&vbattb VBATTB_XC>;
+> 
+> Don't the assigned-clock* properties belong in the board DTS?
 
-Best regards,
+It makes sense to be in the board DTS, indeed.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> In addition, I think they should be documented in the DT bindings,
+> and be made required, so board developers don't forget about them.
+
+It would be better, indeed.
+
+Thank you,
+Claudiu Beznea
+
+> 
+>> +                       power-domains = <&cpg>;
+>> +                       resets = <&cpg R9A08G045_VBAT_BRESETN>;
+>> +                       status = "disabled";
+>> +               };
+>> +
+>>                 vbattb: vbattb@1005c000 {
+>>                         compatible = "renesas,r9a08g045-vbattb";
+>>                         reg = <0 0x1005c000 0 0x1000>;
+> 
+> The rest LGTM.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
