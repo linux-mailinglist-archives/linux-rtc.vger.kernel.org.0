@@ -1,134 +1,128 @@
-Return-Path: <linux-rtc+bounces-2191-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2192-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D562E99DC5D
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 04:43:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FD1B99DD86
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 07:34:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7962DB21BE4
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 02:43:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AC27283721
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 05:34:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8883216DEAA;
-	Tue, 15 Oct 2024 02:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690E7175568;
+	Tue, 15 Oct 2024 05:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Yae3PdeC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSfT8FMd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81A816A92D;
-	Tue, 15 Oct 2024 02:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268893C3C;
+	Tue, 15 Oct 2024 05:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728960220; cv=none; b=ploLB5EVO/Q+fygHQd4KhVlagYl6/QWz9cnn5vyfDGr1SFNlmypaLSCvVITBmIr+0XJG7TKZIO8G1uPRp+7SwrTt4IDEaINEVR0ukvThBQRiJDgRdVHVjScjYqbRfOQs+wXocNkx0az5A5ib9QE3e3wHC+WZzxnf/jFMwEQU9kg=
+	t=1728970438; cv=none; b=Cuv7qbMxkwaAn80BRHKbdEv/uL/jKQ9wljgFxRMjTYSxsob/oh+Bo3nVvMaI7y+//qfkVnR1Y4tkQPJSayicx7479yail64Mlmp2bCFYL0R9J7NzKdoAKPbSzLXH4USkP2uLmMALnfZNJ05XYRsBzK6wTm178lUEUUQJQhQPzIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728960220; c=relaxed/simple;
-	bh=fu4tV/Ybuw5z2VSKw3uQ2W+FpVaaobIFmxfAkGSDrv4=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=H03CWuf8znAbWVBlT85pH7XAvVAjZ/x+vZAs+wPpuKhP4NJ93hX7B3lcRgrrBSrpLghMXbqL+xO6pq8w5/2x/9PLnmv1CLlGekKJS2KJj2+i3NSfRVeMYWymB1LgkAhdlzYC8kj/H740mr+E7Dg7HSlKA6+t4g5MvdXaorjrAXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Yae3PdeC; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=YHoulzNfEf/3cchh2O
-	p7Oha0dOhZ4RRfuu2b6gpk1XQ=; b=Yae3PdeCU6cpDz4x/SeXTr60D65nDQRV6P
-	M8KAdX6reL3MDZ+JKdTXkHrLwIO4R/JKlCCiSB0eoCSPEbbukUtIq8juRRpBbGfd
-	YIfX7u7LoHj7D8xjhOe9vcDQa5Fr+S+LKqQYU4PZ2O2nE2M/CeTP1BCuoKNpg8U2
-	SGBz8roNc=
-Received: from localhost.localdomain (unknown [111.48.58.10])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3vwnM1g1nGs7RBA--.775S2;
-	Tue, 15 Oct 2024 10:43:25 +0800 (CST)
-From: huanglei814 <huanglei814@163.com>
-To: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	huanglei <huanglei@kylinos.cn>
-Subject: [PATCH] rtc: add prefix modalias for rtc modules
-Date: Tue, 15 Oct 2024 10:43:22 +0800
-Message-Id: <20241015024322.15272-1-huanglei814@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:_____wD3vwnM1g1nGs7RBA--.775S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF4xuF13CF48KFyUAFyxKrg_yoW5CrW5pa
-	15Ar15ur17Krs3GaykGrZ8uFW5K3W7KrWjkF1UJa9I9a4fAFn7ZwnxJFyrXF1DXrn5Ww42
-	qw1jkr15GFykJFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UE9aPUUUUU=
-X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbixwx59mcNzu-iFAAAs5
+	s=arc-20240116; t=1728970438; c=relaxed/simple;
+	bh=lVkzCwpPPzfQ/BJvc5k6fW9QSs78IwHbRAO9HHb9aII=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RYNeFDaTzp3P0pxN2uFRq9jGztbRymluTY9fYRHGifVQGti966LSZ6B5WRdBsEHKzvHu9rCcKn0scUXFS6XO57cdAxjr1aMGZYMQgmTYgSdV0uvndFtZlA8guKnlH/BnlwtRenfnGHDdVHt7Qf4i16Y97Ka0vwbBGq6f2NwjkuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSfT8FMd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D7BCC4CEC7;
+	Tue, 15 Oct 2024 05:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728970437;
+	bh=lVkzCwpPPzfQ/BJvc5k6fW9QSs78IwHbRAO9HHb9aII=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZSfT8FMdFkBR9EH2Kg7wOQBVDNWqw+M6Fp/9lJzHRlnyFyZMeEyuCHn3kVhvUOKVP
+	 6KSgFO5gqywmsX8H/Nz/sJqblm0TdqWQI+WDNq8bMwgyojjUtk/i7lMOeY7QFJ84f5
+	 JLhjnAOHmKMeqWyavzqBhNBwfi0wLYC+pgbA3KizVj9T8/S3k5/dgua1dg4dJ8YFan
+	 5rT4up/aBpKV7D2cWzSH1dpbnot2+XoPOysvxaz1IfF9NNu5637wxbDcajU4lTUmL9
+	 h4RsgaHuayj+BN5lNVMqnnLcqVpJoypjw12O5G5fRa4SMiqCMyYF6LKf4IBlU7KP6f
+	 LI3jkE8q3pwhQ==
+Message-ID: <a79274b9-d8f2-484e-9455-01834f7ff2c6@kernel.org>
+Date: Tue, 15 Oct 2024 07:33:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/5] dt-bindings: rtc: qcom-pm8xxx: document
+ qcom,no-alarm flag
+To: Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Satya Priya <quic_c_skakit@quicinc.com>,
+ "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20241015004945.3676-1-jonathan@marek.ca>
+ <20241015004945.3676-3-jonathan@marek.ca>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241015004945.3676-3-jonathan@marek.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: huanglei <huanglei@kylinos.cn>
+On 15/10/2024 02:47, Jonathan Marek wrote:
+> Qualcomm x1e80100 firmware sets the ownership of the RTC alarm to ADSP.
+> Thus writing to RTC alarm registers and receiving alarm interrupts is not
+> possible.
+> 
+> Add a qcom,no-alarm flag to support RTC on this platform.
+> 
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> ---
 
-When these rtc drivers is built as a module, To wire it up to udev,
-and let the module be loaded automatically, we need to export these
-alias from the modules.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: huanglei <huanglei@kylinos.cn>
----
- drivers/rtc/rtc-ds1302.c | 1 +
- drivers/rtc/rtc-ds1307.c | 1 +
- drivers/rtc/rtc-ds1343.c | 1 +
- drivers/rtc/rtc-ds1347.c | 1 +
- drivers/rtc/rtc-ds1374.c | 1 +
- drivers/rtc/rtc-ds1672.c | 1 +
- 6 files changed, 6 insertions(+)
-
-diff --git a/drivers/rtc/rtc-ds1302.c b/drivers/rtc/rtc-ds1302.c
-index ecc7d0307932..cc82f8e6326b 100644
---- a/drivers/rtc/rtc-ds1302.c
-+++ b/drivers/rtc/rtc-ds1302.c
-@@ -211,3 +211,4 @@ module_spi_driver(ds1302_driver);
- MODULE_DESCRIPTION("Dallas DS1302 RTC driver");
- MODULE_AUTHOR("Paul Mundt, David McCullough");
- MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("spi:rtc-ds1302");
-diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 872e0b679be4..c402ab5cf383 100644
---- a/drivers/rtc/rtc-ds1307.c
-+++ b/drivers/rtc/rtc-ds1307.c
-@@ -2024,3 +2024,4 @@ module_i2c_driver(ds1307_driver);
- 
- MODULE_DESCRIPTION("RTC driver for DS1307 and similar chips");
- MODULE_LICENSE("GPL");
-+MODULE_ALIAS("i2c:rtc-ds1307");
-diff --git a/drivers/rtc/rtc-ds1343.c b/drivers/rtc/rtc-ds1343.c
-index ed5a6ba89a3e..e9183f745922 100644
---- a/drivers/rtc/rtc-ds1343.c
-+++ b/drivers/rtc/rtc-ds1343.c
-@@ -481,3 +481,4 @@ MODULE_DESCRIPTION("DS1343 RTC SPI Driver");
- MODULE_AUTHOR("Raghavendra Chandra Ganiga <ravi23ganiga@gmail.com>,"
- 		"Ankur Srivastava <sankurece@gmail.com>");
- MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("spi:ds1343");
-diff --git a/drivers/rtc/rtc-ds1347.c b/drivers/rtc/rtc-ds1347.c
-index a40c1a52df65..babdd35cd82d 100644
---- a/drivers/rtc/rtc-ds1347.c
-+++ b/drivers/rtc/rtc-ds1347.c
-@@ -181,3 +181,4 @@ module_spi_driver(ds1347_driver);
- MODULE_DESCRIPTION("DS1347 SPI RTC DRIVER");
- MODULE_AUTHOR("Raghavendra C Ganiga <ravi23ganiga@gmail.com>");
- MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("spi:ds1347");
-diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
-index c2359eb86bc9..3d61ab23c41c 100644
---- a/drivers/rtc/rtc-ds1374.c
-+++ b/drivers/rtc/rtc-ds1374.c
-@@ -582,3 +582,4 @@ module_i2c_driver(ds1374_driver);
- MODULE_AUTHOR("Scott Wood <scottwood@freescale.com>");
- MODULE_DESCRIPTION("Maxim/Dallas DS1374 RTC Driver");
- MODULE_LICENSE("GPL");
-+MODULE_ALIAS("i2c:rtc-ds1374");
-diff --git a/drivers/rtc/rtc-ds1672.c b/drivers/rtc/rtc-ds1672.c
-index 6e5314215d00..a2240cd92774 100644
---- a/drivers/rtc/rtc-ds1672.c
-+++ b/drivers/rtc/rtc-ds1672.c
-@@ -158,3 +158,4 @@ module_i2c_driver(ds1672_driver);
- MODULE_AUTHOR("Alessandro Zummo <a.zummo@towertech.it>");
- MODULE_DESCRIPTION("Dallas/Maxim DS1672 timekeeper driver");
- MODULE_LICENSE("GPL");
-+MODULE_ALIAS("i2c:rtc-ds1672");
--- 
-2.17.1
+Best regards,
+Krzysztof
 
 
