@@ -1,47 +1,47 @@
-Return-Path: <linux-rtc+bounces-2204-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2205-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0847F99F893
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 23:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20D3D99F8D2
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 23:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1274281368
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 21:04:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A83C0281EDE
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 21:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D54A1FAEF2;
-	Tue, 15 Oct 2024 21:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 051811F81AF;
+	Tue, 15 Oct 2024 21:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ttInMuNZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERO0r4Z3"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4FA1F81AE;
-	Tue, 15 Oct 2024 21:04:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA632176228;
+	Tue, 15 Oct 2024 21:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729026294; cv=none; b=mZCy3xc/lPDCM2X132k0xEeA7g0km2480D0tMTRhn6AWlqL1NbmzSTp5PHxyGrPqU1LmzPSo9jupZy0Gf5LGgrpBSIPefeW3Q2KIP25QCoDNH2CP2ApMXEn45X//abDM66rHu3yYx+fnBbUoRLm0mJko0EGMSEBsqm6tx+O2I2c=
+	t=1729026941; cv=none; b=nEe8gBb8wEE82YegoXS90sTE4oMc6WjDCPOrHVqRkcKV12esby9v1gyatKCjRSNo7meyS3sdlDeGQ8+kVpAkf5ntFFrfkiYXdSmVkcVKZh1xjc3h4cNDN6khahNjkhfQ3WNrr2UV3QI7fKfeVdSqz/KIkndGkcIawRtn4Js03rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729026294; c=relaxed/simple;
-	bh=BUYL9DCxlqZBPQ7mv1XPuRWD5L3cs0jleTVBGzzkhXs=;
+	s=arc-20240116; t=1729026941; c=relaxed/simple;
+	bh=yt1duf2stz7fs97tAvuTo8dAcFpcYAXJM9L9Chn7CT4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VQ9R7b1Nlx605hG/V/7vWmb7psl9AxCTb7InhKCK37NZB08N2tXsECQlta8bfuyFhSxCjl0F0yegEZFlz+uZxpjgLAOfIN1WAGca2vZ9X1C8x4Www4TimbCmFaF6bW4TdvMlLV3U1NwT1R+8Jzq8P0xfj5uu0TG5c3mxnwt7Fi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ttInMuNZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63711C4CECF;
-	Tue, 15 Oct 2024 21:04:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MkyiJy7cDY4ja+aUAEnjJAElZntkPR2e1cTFs45Mvdw16Pf2ZMvgJlXJRESMZnJOZGALXN00XyfwVhFuLb0NZJIAHfdc9A4iYV1NQoHZnLUTDjbbL11B7WV0TxwoxpfQUZC2iUhsFWv9H6cPHEqby8gK8mwwyuTL7oawtvSav2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERO0r4Z3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A42C4CEC6;
+	Tue, 15 Oct 2024 21:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729026293;
-	bh=BUYL9DCxlqZBPQ7mv1XPuRWD5L3cs0jleTVBGzzkhXs=;
+	s=k20201202; t=1729026941;
+	bh=yt1duf2stz7fs97tAvuTo8dAcFpcYAXJM9L9Chn7CT4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ttInMuNZhQyT9mQjpBo4HjV5z17nWbUD2dkhzKu3h2EinXQY2ATAebbICxfx/2YCN
-	 jAEZwj0XPLuLlgnqmUbIy4tOGdpdZkI2yGezk7iU3Sqrsu9R2L26xTRDOUh5yKvsPF
-	 4Yh17X3w44S59uwHVfiRWnyuDwjNoMajzq5UrPNUy8fBy/BWug6K9Nzfa0m3uRlPU1
-	 1iTw1uoysxPkNSnmApk6pglWHHrhNmNds/NLKI45iPoW/w2jtjR6BNJC/8+0HnCs8/
-	 cdBhs7reBwKmaNPMeDhlaDJaLXbBDsn7KaHiKq8X7jD+7KfhgtJYvr61Azy2Iqm/Q/
-	 vPBDqV8F5TzVg==
-Date: Tue, 15 Oct 2024 16:04:52 -0500
+	b=ERO0r4Z3F5D5H7CgQQTyalc+ktI+5et0ohuCLLEY3huL03Gv6adY2tCwwpZMivDyK
+	 IXAi0h2c2ZW5yBCcUxVuvE/eWf3H5vYzAaEwTqLL/qic7IxS/+09vfCjz/0nYKkhJP
+	 9q0peZGIMq3YLOJ169VSUu+CTkCqrta8spYdlHnaukR5U6hA/GZF+5kAKrqxUUM/j4
+	 tDIqBwEQdTqmXRPM5AcGJaYes4lpzGmtJaYucHTZ6x6uvnHI6zUjDMuNlpm7nvsve9
+	 k66n24EFU+7ibzHbRK3rS9Esv+71ZuqhtICHHS9mI7cdOFLxwnTtHw6SQx9Z90JNBs
+	 SAcsDl4RIyX0g==
+Date: Tue, 15 Oct 2024 16:15:40 -0500
 From: Rob Herring <robh@kernel.org>
 To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -55,12 +55,13 @@ Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Christophe Lizzi <clizzi@redhat.com>,
 	Alberto Ruiz <aruizrui@redhat.com>,
 	Enric Balletbo <eballetb@redhat.com>,
-	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
-	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
-Subject: Re: [PATCH v2 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-Message-ID: <20241015210452.GA1942395-robh@kernel.org>
+	Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: rtc: add schema for NXP S32G2/S32G3
+ SoCs
+Message-ID: <20241015211540.GA1968867-robh@kernel.org>
 References: <20241015105133.656360-1-ciprianmarian.costea@oss.nxp.com>
- <20241015105133.656360-3-ciprianmarian.costea@oss.nxp.com>
+ <20241015105133.656360-2-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -69,62 +70,152 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015105133.656360-3-ciprianmarian.costea@oss.nxp.com>
+In-Reply-To: <20241015105133.656360-2-ciprianmarian.costea@oss.nxp.com>
 
-On Tue, Oct 15, 2024 at 01:51:31PM +0300, Ciprian Costea wrote:
+On Tue, Oct 15, 2024 at 01:51:30PM +0300, Ciprian Costea wrote:
 > From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 > 
-> Add a RTC driver for NXP S32G2/S32G3 SoCs.
+> This patch adds the dt-bindings for NXP S32G2/S32G3 SoCs RTC driver.
 > 
-> The RTC module is used to enable Suspend to RAM (STR) support
-> on NXP S32G2/S32G3 SoC based boards.
-> RTC tracks clock time during system suspend.
-> 
-> RTC from S32G2/S32G3 is not battery-powered and it is not
-> kept alive during system reset.
-> 
-> Co-developed-by: Bogdan Hamciuc <bogdan.hamciuc@nxp.com>
-> Signed-off-by: Bogdan Hamciuc <bogdan.hamciuc@nxp.com>
-> Co-developed-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
-> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+> Co-developed-by: Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>
+> Signed-off-by: Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>
+> Co-developed-by: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
+> Signed-off-by: Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
 > Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 > ---
->  drivers/rtc/Kconfig    |  11 +
->  drivers/rtc/Makefile   |   1 +
->  drivers/rtc/rtc-s32g.c | 778 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 790 insertions(+)
->  create mode 100644 drivers/rtc/rtc-s32g.c
-
-
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 8ee79cb18322..a63d010a753c 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -158,6 +158,7 @@ obj-$(CONFIG_RTC_DRV_RX8025)	+= rtc-rx8025.o
->  obj-$(CONFIG_RTC_DRV_RX8111)	+= rtc-rx8111.o
->  obj-$(CONFIG_RTC_DRV_RX8581)	+= rtc-rx8581.o
->  obj-$(CONFIG_RTC_DRV_RZN1)	+= rtc-rzn1.o
-> +obj-$(CONFIG_RTC_DRV_S32G)	+= rtc-s32g.o
->  obj-$(CONFIG_RTC_DRV_S35390A)	+= rtc-s35390a.o
->  obj-$(CONFIG_RTC_DRV_S3C)	+= rtc-s3c.o
->  obj-$(CONFIG_RTC_DRV_S5M)	+= rtc-s5m.o
-> diff --git a/drivers/rtc/rtc-s32g.c b/drivers/rtc/rtc-s32g.c
+>  .../devicetree/bindings/rtc/nxp,s32g-rtc.yaml | 102 ++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/nxp,s32g-rtc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/nxp,s32g-rtc.yaml b/Documentation/devicetree/bindings/rtc/nxp,s32g-rtc.yaml
 > new file mode 100644
-> index 000000000000..d6502d8bf616
+> index 000000000000..3a77d4dd8f3d
 > --- /dev/null
-> +++ b/drivers/rtc/rtc-s32g.c
+> +++ b/Documentation/devicetree/bindings/rtc/nxp,s32g-rtc.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/nxp,s32g-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP S32G2/S32G3 Real Time Clock (RTC)
+> +
+> +maintainers:
+> +  - Bogdan Hamciuc <bogdan.hamciuc@nxp.com>
+> +  - Ciprian Marian Costea <ciprianmarian.costea@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - nxp,s32g2-rtc
+> +      - items:
+> +          - const: nxp,s32g3-rtc
+> +          - const: nxp,s32g2-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: ipg clock drives the access to the
+> +          RTC iomapped registers
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ipg
+> +
+> +  assigned-clocks:
+> +    minItems: 1
+> +    items:
+> +      - description: Runtime clock source. It must be a clock
+> +            source for the RTC module. It will be disabled by hardware
+> +            during Standby/Suspend.
+> +      - description: Standby/Suspend clock source. It is optional
+> +            and can be used in case the RTC will continue ticking during
+> +            platform/system suspend. RTC hardware module contains a
+> +            hardware mux for clock source selection.
 
+If the RTC h/w contains a mux, then your mux inputs should be listed in 
+'clocks', not here.
 
-> +static const struct of_device_id rtc_dt_ids[] = {
-> +	{ .compatible = "nxp,s32g2-rtc", .data = &rtc_s32g2_data},
-> +	{ .compatible = "nxp,s32g3-rtc", .data = &rtc_s32g2_data},
+> +
+> +  assigned-clock-parents:
+> +    description: List of phandles to each parent clock.
+> +
+> +  assigned-clock-rates:
+> +    description: List of frequencies for RTC clock sources.
+> +            RTC module contains 2 hardware divisors which can be
+> +            enabled or not. Hence, available frequencies are the following
+> +            parent_freq, parent_freq / 512, parent_freq / 32 or
+> +            parent_freq / (512 * 32)
 
-Considering the data is the same and g3 has a fallback to g2 in the 
-binding, you can drop this line.
+In general, assigned-clocks* do not need to be documented and should 
+never be required.
 
-And really you don't need rtc_s32g2_data because there is only 1 
-possible value. But maybe you know some differences which are coming 
-soon? Then it's probably okay. Up to the RTC maintainer though.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#clock-cells"
+> +  - clocks
+> +  - clock-names
+> +  - assigned-clocks
+> +  - assigned-clock-parents
+> +  - assigned-clock-rates
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    rtc0: rtc@40060000 {
+> +        compatible = "nxp,s32g3-rtc",
+> +                   "nxp,s32g2-rtc";
+> +        reg = <0x40060000 0x1000>;
+> +        interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
+> +        #clock-cells = <1>;
+> +        clocks = <&clks 54>;
+> +        clock-names = "ipg";
+> +        /*
+> +         * Configuration of default parent clocks.
+> +         * 'assigned-clocks' 0-3 IDs are Runtime clock sources
+> +         * 4-7 IDs are Suspend/Standby clock sources.
+> +         */
+> +        assigned-clocks = <&rtc0 2>, <&rtc0 4>;
 
-Rob
+That's weird...
+
+> +        assigned-clock-parents = <&clks 56>, <&clks 55>;
+
+I'd expect these should be in 'clocks'. I don't think this node should 
+be a clock provider unless it provides a clock to something outside the 
+RTC.
+
+Looks like you are just using assigned-clocks to configure the clock mux 
+in the RTC. That's way over complicated. Just define a vendor specific 
+property with the mux settings. 
+
+> +        /*
+> +         * Clock frequency can be divided by value
+> +         * 512 or 32 (or both) via hardware divisors.
+> +         * Below configuration:
+> +         * Runtime clock source: FIRC (51 MHz) / 512 (DIV512)
+> +         * Suspend/Standby clock source: SIRC (32 KHz)
+> +         */
+> +        assigned-clock-rates = <99609>, <32000>;
+> +    };
+> -- 
+> 2.45.2
+> 
 
