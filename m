@@ -1,96 +1,117 @@
-Return-Path: <linux-rtc+bounces-2187-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2188-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B965B99D7F8
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Oct 2024 22:12:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E830199DAE5
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 02:53:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52E50B20D3E
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Oct 2024 20:12:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B0F4B219D9
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2024 00:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE9431CF7B4;
-	Mon, 14 Oct 2024 20:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F113B1A1;
+	Tue, 15 Oct 2024 00:53:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l4xDbyNF"
+	dkim=pass (2048-bit key) header.d=marek.ca header.i=@marek.ca header.b="BOcee/EW"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9415314A4E7;
-	Mon, 14 Oct 2024 20:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321E542048
+	for <linux-rtc@vger.kernel.org>; Tue, 15 Oct 2024 00:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728936760; cv=none; b=SbPps0Uj3ukZiT3PnEBt/1lY/9JXRa8GdN0+fOlBObaAyzvo7mhazBYpDkiEi8TEkmHRxi7dB0TkV9EnHMq8b3cJ6Dy00jQ38/8Ulo6VveN6flVulmqSYA/k8cukV9jVGFchyRWjkLTZDBY8399reAraBlYlGlHuw6lPCuAYwBQ=
+	t=1728953604; cv=none; b=pZ6+HzBoZENe0DAVvHzQvPRhWJSIfIz9aCL87dCpNA8VapxxTKE9N9BOetrGcoEFN+uVAvbICEzYYiAf9/I2mn4EcuB5zPqnNUnSqFy+4kdDIScmPl749W/I/yAF1yxSM5QJ5rder1m6ty+tV2spaOnf6/+I37v8bhcjcBuO3FY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728936760; c=relaxed/simple;
-	bh=ZTBxdRUCQr80BBF8O7VYgUYSjhbIYghb8AV3U3WUn/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ccCTEMyPXLLmqLa7wFZ4FAfEdBSs+1G7X4J7GAnx32pFtHVJaEDFY28aKA/HDuOE0Q0sjvLd/Yy9ocpBcRa5rUnavgsCQXh1ptv+o4DV2Tc1UItCRFMi1e2RVYogSkY3DsWf+HSptUyIk7gwNc89M3WB4GLQafwTsHtNF48KOgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l4xDbyNF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2ED4C4CEC3;
-	Mon, 14 Oct 2024 20:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728936760;
-	bh=ZTBxdRUCQr80BBF8O7VYgUYSjhbIYghb8AV3U3WUn/o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=l4xDbyNFEt5AbgSRRn6USSqmX4KqbacdsJnmKr1iUXlZc1hV+G0tPUz4bLCpYhrU7
-	 1BMbEuAzxNfPY5HZGTq27URh+n5VJQzOtXE8F/ArHmPO7Ou0nb1hRLM7QgX4rA1mZX
-	 +4WQHPIw3WKobqtPu13Gspjw8UOssLPxFXSpgSXtuUxoNAkgPTKp9rI+FvTPEFgKo/
-	 5t862vqDQuUfEMXaPyafwXPIhNAOpVsTdkPNSiA1wkib4U/fSIaItErgNbKNbUQEwN
-	 YilCTnDOxiI/0ehc/aBqZvVKjefh2pUgSyerPStonPQJ6dJ8hs+BnIterzf75wLWfD
-	 gS1zONSrqmJqQ==
-Date: Mon, 14 Oct 2024 13:12:37 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Richard Cochran <richardcochran@gmail.com>, Peter Hilber
- <peter.hilber@opensynergy.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-rtc@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>,
- virtio-dev@lists.linux.dev, "Luu, Ryan" <rluu@amazon.com>, "Chashper,
- David" <chashper@amazon.com>, "Mohamed Abuelfotoh, Hazem"
- <abuehaze@amazon.com>, Paolo Abeni <pabeni@redhat.com>, "Christopher S .
- Hall" <christopher.s.hall@intel.com>, Jason Wang <jasowang@redhat.com>,
- John Stultz <jstultz@google.com>, "Michael S . Tsirkin" <mst@redhat.com>,
- netdev@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Marc Zyngier
- <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Alessandro Zummo <a.zummo@towertech.it>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, qemu-devel
- <qemu-devel@nongnu.org>, Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH net-next v7] ptp: Add support for the AMZNC10C 'vmclock'
- device
-Message-ID: <20241014131238.405c1e58@kernel.org>
-In-Reply-To: <c20d5f27c9106f3cb49e2d8467ade680f0092f91.camel@infradead.org>
-References: <78969a39b51ec00e85551b752767be65f6794b46.camel@infradead.org>
-	<20241009173253.5eb545db@kernel.org>
-	<c20d5f27c9106f3cb49e2d8467ade680f0092f91.camel@infradead.org>
+	s=arc-20240116; t=1728953604; c=relaxed/simple;
+	bh=7/bYDZwG5gQSOjxXtGNG+aCpL4QOwMiPuf40BsF41LE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Geiv3ptDvAIH0OiOJXJn81Gx/Y7K2utWBqXayYtI5FRTrknZwj1bBiL5IAl4CCOkQX/vI7iKiRFhn5EnXhzkTJiVG4AYlamt33x75BkcKoEolDSrjZ8/RMa9Wjc6jBKrxCcpXH8SR+sRuo3EM4zeOPMzpNu/RAKj9a1wEl9Jaxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=marek.ca; spf=pass smtp.mailfrom=marek.ca; dkim=pass (2048-bit key) header.d=marek.ca header.i=@marek.ca header.b=BOcee/EW; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=marek.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marek.ca
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6cbe8119e21so39930896d6.1
+        for <linux-rtc@vger.kernel.org>; Mon, 14 Oct 2024 17:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek.ca; s=google; t=1728953602; x=1729558402; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jqrv9fCsGQoNutoN42YBjCpBp+qUvSGmeJ+vISLCIE8=;
+        b=BOcee/EWfRL62xc3R8JZB/z5H2B1+MQQcatjXln8iEWlwnIDVaAk1+rJ4MOBMLXsdk
+         +r9SjQAVtPM/mfGFC2zjEDC0g4cLqui383J+SZYwL6pVKLRz9W63vtagr8UR/fYiYorh
+         AUFLAg22HRg3YDC0br1mDNg++EHu/4d4TXEdFpZcb+WNeSLcLlbD0XdN4FLWbeQ8d+pE
+         MpNOFtC5g8uBU06B9CuMwW/75Z1Zz/e/HwMD7lS3eIS+6KZCiuUsNgdRTxI6gsLsRlNo
+         sScOUaYJGecTr+K2uutwNrBc9t+tuwDPVgJycWc8+ycl3I2KpZzGHspB29hByepGtmlm
+         28ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728953602; x=1729558402;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jqrv9fCsGQoNutoN42YBjCpBp+qUvSGmeJ+vISLCIE8=;
+        b=WeEQa6AovWnf3b2nLJ4w8RK3p1iOm5KBa/lLsTh47Z5uBAq1f8Ww0wiwe7pkdycLQ7
+         0pOVqxjWa/UT5+QjzrMr1RIIYNiHD8HFgGAfj7Q3cTVoH2snOrcZGm2rAxdR1hNBv0vi
+         ca8v5jkQOqEs6T1S5CIlf9PSWbYtXef90LBRilVOQZSPNvZnzPRe9849zU1F2FvqC5wd
+         MnHJyvJlzk7hyBgv9/T/X6VPANMvvbJG9TWXWD02gbsiwBxwozdjS9UiCJa4bj/1HVv1
+         IM65YiRqyh9q9uNNb8EOqOSzyZHqhEvHKhzz85x5C99yavbDVQwIb6/Ats2eiTRB52bq
+         TOUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUS/C960lQX9Q3hd9Zt/BP4Lo4wOHhdCbfOXhbzqYSrgqQeBk0kGxUq0y02PrJdaZd83VcuCjckwt8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjh7t2fpjutobAN8NeCDMFaPmK0JvA/3/TBT7BIv54LKcuBVVo
+	PLxZkv/K9UqRdc8g0Zh5rKVcAVFntPqDmUeYJXhfQoWWXypjT2tk8p4GFcA2X5U=
+X-Google-Smtp-Source: AGHT+IFfCoP9g5esUnZD9NdkTUNwRKk5/mdnFQRGMYxzk4NzOKyEkw7d+u0WCrNS3asHWRpShXg3EQ==
+X-Received: by 2002:a05:6214:3a8c:b0:6cb:f654:55ac with SMTP id 6a1803df08f44-6cbf6545880mr201576446d6.11.1728953602008;
+        Mon, 14 Oct 2024 17:53:22 -0700 (PDT)
+Received: from localhost.localdomain (modemcable125.110-19-135.mc.videotron.ca. [135.19.110.125])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cc22910f0bsm1213956d6.16.2024.10.14.17.53.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 17:53:21 -0700 (PDT)
+From: Jonathan Marek <jonathan@marek.ca>
+To: linux-arm-msm@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
+	Rob Herring <robh@kernel.org>,
+	Satya Priya <quic_c_skakit@quicinc.com>
+Subject: [PATCH v3 0/5] x1e80100 RTC support
+Date: Mon, 14 Oct 2024 20:47:25 -0400
+Message-ID: <20241015004945.3676-1-jonathan@marek.ca>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, 14 Oct 2024 08:25:35 +0100 David Woodhouse wrote:
-> On Wed, 2024-10-09 at 17:32 -0700, Jakub Kicinski wrote:
-> > On Sun, 06 Oct 2024 08:17:58 +0100 David Woodhouse wrote: =20
-> > > +config PTP_1588_CLOCK_VMCLOCK
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tristate "Virtual machine =
-PTP clock"
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on X86_TSC || ARM_=
-ARCH_TIMER
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on PTP_1588_CLOCK =
-&& ACPI && ARCH_SUPPORTS_INT128
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default y =20
-> >=20
-> > Why default to enabled? Linus will not be happy.. =20
->=20
-> Want an incremental patch to change that?
+x1e80100 needs a workaround because the RTC alarm is not owned by HLOS.
+It also needs the same offset workaround as sc8280xp/etc.
 
-Yes please and thank you! We gotta straighten it out before=20
-the merge window.
+v2: remove duplicated ops and use RTC_FEATURE_ALARM instead
+v3:
+ - renamed flag to qcom,no-alarm
+ - don't remove alarm registers/interrupt from dts
+
+Jonathan Marek (5):
+  rtc: pm8xxx: implement qcom,no-alarm flag for non-HLOS owned alarm
+  dt-bindings: rtc: qcom-pm8xxx: document qcom,no-alarm flag
+  arm64: dts: qcom: x1e80100-pmics: enable RTC
+  arm64: dts: qcom: x1e80100-crd: add rtc offset to set rtc time
+  arm64: dts: qcom: x1e78100-t14s: add rtc offset to set rtc time
+
+ .../bindings/rtc/qcom-pm8xxx-rtc.yaml         |  5 +++
+ .../qcom/x1e78100-lenovo-thinkpad-t14s.dts    | 11 +++++
+ arch/arm64/boot/dts/qcom/x1e80100-crd.dts     | 11 +++++
+ arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi  |  3 +-
+ drivers/rtc/rtc-pm8xxx.c                      | 44 +++++++++++++------
+ 5 files changed, 58 insertions(+), 16 deletions(-)
+
+-- 
+2.45.1
+
 
