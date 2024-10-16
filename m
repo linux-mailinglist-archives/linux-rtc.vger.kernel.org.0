@@ -1,155 +1,174 @@
-Return-Path: <linux-rtc+bounces-2208-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2209-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B28CE9A013C
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 08:18:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 517DF9A01AA
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 08:43:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 359B71F2560A
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 06:18:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75C3C1C232CC
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 06:43:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D8518C002;
-	Wed, 16 Oct 2024 06:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3CED192D9D;
+	Wed, 16 Oct 2024 06:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Ql3/3EKL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAu+fXzN"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8421E60B8A;
-	Wed, 16 Oct 2024 06:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CBB190073;
+	Wed, 16 Oct 2024 06:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729059512; cv=none; b=fk/o6nc+jnP9lzmrma73N2YZwTdTQy+mzLq0Sjn9N+bBshbV3RHxXAIqm2T1CI5/rsm+VLorMcLjlgf3YItv1m9eJve092KBIreE/Nijb9rzj4b/NgGe2r0Kj+p9LFrMGaxYYMeQOkA3kb0wutscR4FP3+Z5iqnbKFHrhXMeT4w=
+	t=1729060960; cv=none; b=ZDvH58sAaMz7BM5ejm7e22aGXcXF+cp2hOZdBZ483lawOo0Iuy3qUF+Pgcyiy91N8cqMp6Nib0tLWhC+2p1dUo0mSIylfsovTSdbDFCEMCmvjpanndGJ+HeYgrskrnXGKuXuGt4JTS/YyJYlw4rYIjeCXSllVqziDME4eO0E2e8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729059512; c=relaxed/simple;
-	bh=bSxrVPFY6MismMybOJ6RhJCmurNcqH/DWP1dgigiEHI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=m04gKTYk9iXYkefYF/yioKHJmzC0aa4s8XHRmvSVrJVT2QBo0wgxeqVTSXATS+PvlSLWNT5J+XyIIW63ax6RVpSTBfyz7Yo2DEP9ExQ7gO9UH1phKFCMeoBIuNW6LPsVA8g+aG7unfw/DX6aFwp1GhGi5WG1CE0dOBhGwOay4EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Ql3/3EKL; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:From:Subject:
-	Content-Type; bh=Mu1GgstFkcfNzb/x965Hebrdlwn3qU7b65xoHduhzVo=;
-	b=Ql3/3EKL68tVJDKiB75nrdeyT0L3hmgZMnoVnyMH/qQ4oUG0jEBxhdsLR4jNWt
-	fNRfr4SBcDLn8ruBiAS1cBHyHe5y/xuEWylfsM7mBij6Bj+nh2dYK0jp8m+Vq4eC
-	fd+g8PHScYbliG8x4f/0i3IBlmp6jCeMmjgigQmCaMb+Y=
-Received: from [10.42.116.195] (unknown [111.48.58.10])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3_yebWg9noEm+BQ--.2090S2;
-	Wed, 16 Oct 2024 14:18:05 +0800 (CST)
-Message-ID: <1a7545e2-23b3-cba3-6b11-fb8a19f91773@163.com>
-Date: Wed, 16 Oct 2024 14:18:03 +0800
+	s=arc-20240116; t=1729060960; c=relaxed/simple;
+	bh=SodGRJK6SdKaiOHwTixQxzX5Vp7/ZcsL2J0q86kEjOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kQlrTwcp/But2+MMiTIkfImRhPSz6fiShgK0rX0z7+7Q2e3fjErk2XO6EFas8cFnvMu4C1AVOhylkFl0tuNBLr/wBOmOZYmKTuh+gqVv5ohJfR5KCo2sJZVY9mz/yenXzaTZN4uUcEDtqurHEnITNdLzmfzysNAiAnPzIFRb0G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAu+fXzN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409FBC4CEC5;
+	Wed, 16 Oct 2024 06:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729060960;
+	bh=SodGRJK6SdKaiOHwTixQxzX5Vp7/ZcsL2J0q86kEjOI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nAu+fXzNo/4J58eTjlJvWwgg1LcCUch4gsRi8eWWo/QqieaARhDEenGBptNjRK8Q7
+	 UF3UrHHl3i+LHFpZQU/Qd1o70QDQWnhZKzJjXqK7wzbDHHfEIzm4U+vlpYEENNUlFF
+	 B+N8rdbfYB7Jo+WbeLMS3Vs0pDk3MrwAicDUopeF1g8BEARKKEK1lBcNhaz0nxgsEN
+	 cUC4m7oF+Erk0LYna+3hHsGztpzlVvCVnVIBchRkLIEarllmNfRXAxNE7cg5uLGHHC
+	 WU53Rta3jJDDSFHQh2ufZASF3kkkF5Uy8v/gH5zrv0ciCDJYIE82JNzwqsBw8CvjZm
+	 bYyDiGLwm0ZAQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t0xk6-000000004nI-36Dv;
+	Wed, 16 Oct 2024 08:42:46 +0200
+Date: Wed, 16 Oct 2024 08:42:46 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Jonathan Marek <jonathan@marek.ca>
+Cc: linux-arm-msm@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/5] rtc: pm8xxx: implement qcom,no-alarm flag for
+ non-HLOS owned alarm
+Message-ID: <Zw9gZkLPMB9ZBQlh@hovoldconsulting.com>
+References: <20241015004945.3676-1-jonathan@marek.ca>
+ <20241015004945.3676-2-jonathan@marek.ca>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
- huanglei <huanglei@kylinos.cn>
-From: huanglei <huanglei814@163.com>
-Subject: HTML message rejected: Re: [PATCH] rtc: add prefix modalias for rtc
- modules
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_yebWg9noEm+BQ--.2090S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGw1xJw15KryfuF4fCry8Krg_yoW5Aw48pr
-	W5GF1furyUKr1Iqa1xXw1YvF4Y9w13Kw4UJF1rJ3sIv3Z3Z3ZrArn7tFW5ZFy7Xrn3Xa1a
-	gws8Ar15CF95Za7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j0YL9UUUUU=
-X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbi7hp69mcPTcHBPwACsg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241015004945.3676-2-jonathan@marek.ca>
 
-Thank you for your reply.
+On Mon, Oct 14, 2024 at 08:47:26PM -0400, Jonathan Marek wrote:
+> Qualcomm x1e80100 firmware sets the ownership of the RTC alarm to ADSP.
+> Thus writing to RTC alarm registers and receiving alarm interrupts is not
+> possible.
+> 
+> Add a qcom,no-alarm flag to support RTC on this platform.
 
-However, Most other drivers have already set MODULE_ALIAS,  such as 
-rtc-efi.c have set MODULE_ALIAS("platform:rtc-efi");
+An alternative may be to drop the alarm interrupt from DT and use that
+as an indicator.
 
-So I think this is necessary. If loaded automatically is required, 
-sometimes it is necessary to match through this alias.
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> ---
+>  drivers/rtc/rtc-pm8xxx.c | 44 +++++++++++++++++++++++++++-------------
+>  1 file changed, 30 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+> index c32fba550c8e0..1e78939625622 100644
+> --- a/drivers/rtc/rtc-pm8xxx.c
+> +++ b/drivers/rtc/rtc-pm8xxx.c
+> @@ -61,6 +61,7 @@ struct pm8xxx_rtc {
+>  	struct rtc_device *rtc;
+>  	struct regmap *regmap;
+>  	bool allow_set_time;
+> +	bool no_alarm;
 
-MODULE_ALIAS adds some more info for the userspace programs. In 
-/lib/modules/VERSION/modules.alias you can see the aliases that were 
-parsed from the modules.
+How about inverting this one and naming it has_alarm or similar to avoid
+the double negation in your conditionals (!no_alarm)?
 
-In this case running  'modprobe spi:rtc-ds1302' would insert the ds1302 
-module.
+>  	int alarm_irq;
+>  	const struct pm8xxx_rtc_regs *regs;
+>  	struct device *dev;
+> @@ -473,9 +474,14 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+>  	if (!rtc_dd->regmap)
+>  		return -ENXIO;
+>  
+> -	rtc_dd->alarm_irq = platform_get_irq(pdev, 0);
+> -	if (rtc_dd->alarm_irq < 0)
+> -		return -ENXIO;
+> +	rtc_dd->no_alarm = of_property_read_bool(pdev->dev.of_node,
+> +						 "qcom,no-alarm");
+> +
 
-Now , you can see the difference between applying this patch and not 
-applying it.
+Stray newline.
 
-This is not applying this patch,  part of  the modules.alias related to 
-rtc_ds1302/ds1347 rtc：
+> +	if (!rtc_dd->no_alarm) {
+> +		rtc_dd->alarm_irq = platform_get_irq(pdev, 0);
+> +		if (rtc_dd->alarm_irq < 0)
+> +			return -ENXIO;
+> +	}
+>  
+>  	rtc_dd->allow_set_time = of_property_read_bool(pdev->dev.of_node,
+>  						      "allow-set-time");
+> @@ -503,7 +509,8 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, rtc_dd);
+>  
+> -	device_init_wakeup(&pdev->dev, 1);
+> +	if (!rtc_dd->no_alarm)
+> +		device_init_wakeup(&pdev->dev, 1);
+>  
+>  	rtc_dd->rtc = devm_rtc_allocate_device(&pdev->dev);
+>  	if (IS_ERR(rtc_dd->rtc))
+> @@ -512,27 +519,36 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+>  	rtc_dd->rtc->ops = &pm8xxx_rtc_ops;
+>  	rtc_dd->rtc->range_max = U32_MAX;
+>  
+> -	rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->alarm_irq,
+> -					  pm8xxx_alarm_trigger,
+> -					  IRQF_TRIGGER_RISING,
+> -					  "pm8xxx_rtc_alarm", rtc_dd);
+> -	if (rc < 0)
+> -		return rc;
+> +	if (!rtc_dd->no_alarm) {
+> +		rc = devm_request_any_context_irq(&pdev->dev, rtc_dd->alarm_irq,
+> +						  pm8xxx_alarm_trigger,
+> +						  IRQF_TRIGGER_RISING,
+> +						  "pm8xxx_rtc_alarm", rtc_dd);
+> +		if (rc < 0)
+> +			return rc;
+> +	}
+>  
+>  	rc = devm_rtc_register_device(rtc_dd->rtc);
+>  	if (rc)
+>  		return rc;
+>  
+> -	rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->alarm_irq);
+> -	if (rc)
+> -		return rc;
+> +	if (!rtc_dd->no_alarm) {
+> +		rc = dev_pm_set_wake_irq(&pdev->dev, rtc_dd->alarm_irq);
+> +		if (rc)
+> +			return rc;
+> +	} else {
+> +		clear_bit(RTC_FEATURE_ALARM, rtc_dd->rtc->features);
 
-alias platform:rtc-ds1286 rtc_ds1286
-alias spi:rtc-ds1305 rtc_ds1305
-alias spi:rtc-ds1390 rtc_ds1390
-alias platform:ds1511 rtc_ds1511
-alias platform:rtc-ds1553 rtc_ds1553
-alias platform:rtc-ds1685 rtc_ds1685
-alias platform:rtc-ds1742 rtc_ds1742
-alias platform:ds2404 rtc_ds2404
-alias platform:rtc-efi rtc_efi
+I assume that you should be clearing the feature bit before registering
+the RTC.
 
-And this is applying this patch,  part of  the modules.alias related to 
-rtc_ds1302/ds1347 rtc：
+> +	}
+>  
+>  	return 0;
+>  }
 
-alias platform:rtc-ds1286 rtc_ds1286
-alias spi:rtc-ds1302 rtc_ds1302
-alias spi:rtc-ds1305 rtc_ds1305
-alias spi:ds1347 rtc_ds1347
-alias spi:rtc-ds1390 rtc_ds1390
-alias platform:ds1511 rtc_ds1511
-alias platform:rtc-ds1553 rtc_ds1553
-alias platform:rtc-ds1685 rtc_ds1685
-alias platform:rtc-ds1742 rtc_ds1742
-alias platform:ds2404 rtc_ds2404
-alias platform:rtc-efi rtc_efi
-
-So, if not applying this patch,  use modprobe rtc-ds1302/ds1347 may be 
-not  to load automatically.
-
-Therefore, it is strongly recommended applying this patch.
-
-Best regards,
-
-
-在 2024/10/15 15:52, Krzysztof Kozlowski 写道:
- > On 15/10/2024 04:43, huanglei814 wrote:
- >> From: huanglei <huanglei@kylinos.cn>
- >>
- >> When these rtc drivers is built as a module, To wire it up to udev,
- >> and let the module be loaded automatically, we need to export these
- >> alias from the modules.
- >>
- >> Signed-off-by: huanglei <huanglei@kylinos.cn>
- >> ---
- >>  drivers/rtc/rtc-ds1302.c | 1 +
- >>  drivers/rtc/rtc-ds1307.c | 1 +
- >>  drivers/rtc/rtc-ds1343.c | 1 +
- >>  drivers/rtc/rtc-ds1347.c | 1 +
- >>  drivers/rtc/rtc-ds1374.c | 1 +
- >>  drivers/rtc/rtc-ds1672.c | 1 +
- >>  6 files changed, 6 insertions(+)
- >>
- >> diff --git a/drivers/rtc/rtc-ds1302.c b/drivers/rtc/rtc-ds1302.c
- >> index ecc7d0307932..cc82f8e6326b 100644
- >> --- a/drivers/rtc/rtc-ds1302.c
- >> +++ b/drivers/rtc/rtc-ds1302.c
- >> @@ -211,3 +211,4 @@ module_spi_driver(ds1302_driver);
- >>  MODULE_DESCRIPTION("Dallas DS1302 RTC driver");
- >>  MODULE_AUTHOR("Paul Mundt, David McCullough");
- >>  MODULE_LICENSE("GPL v2");
- >> +MODULE_ALIAS("spi:rtc-ds1302");
- >
- > NAK. That's neither correct, nor necessary. Driver has proper tables and
- > is loaded automatically in correct setup. I assume your setup is just
- > incorrect, but without description tricky to say how.
- >
- > Best regards,
- > Krzysztof
-
+Johan
 
