@@ -1,93 +1,127 @@
-Return-Path: <linux-rtc+bounces-2210-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2211-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 169D79A01B4
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 08:47:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E82F59A0359
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 09:58:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD17E28A102
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 06:46:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8AD6286502
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2024 07:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369D4192582;
-	Wed, 16 Oct 2024 06:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F70F1CBA1B;
+	Wed, 16 Oct 2024 07:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7W8i7lq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fE1nfrPW"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0864D18C32E;
-	Wed, 16 Oct 2024 06:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2168F189F3F;
+	Wed, 16 Oct 2024 07:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729061213; cv=none; b=iuvonM8vrVJ2vUPUYT4c23uogDyjhmN++4CYwv/9odaGWthSxF4TRrUdzw402hNqma/KJ6OVklpEvekC0u8aQ8Y1txlXECZ58VuaGsg4C1N/FcSgUTjNZHe/lUhj/kJt4EElD8mrXlwLlIo+7GAla2P0Wtf/Zs9aIYLICH0cYGg=
+	t=1729065499; cv=none; b=Fv08HjI1GUYpEaxSy2LECth8nogkuMOV02AEhSSqc6gg7JM+Mdqlsf9pONuXNFVjWmJkgt89fUHjtIFEQ9fOC6kAq3Z3FTw51ObQFmeotIBj1yHT09X3v3KtS1yxEzPDgWxBZmgEpPT+ud9WVznGSnx2edak+pVHKI1FBw9DkpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729061213; c=relaxed/simple;
-	bh=LhhWC4uC9QB7LvY8dRYyCu3Pa/978BzoqrmHiVLvubI=;
+	s=arc-20240116; t=1729065499; c=relaxed/simple;
+	bh=nsM60+cNuES1C+fqTbnc5ooJ0hP520KLGK9VFBCBDGI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=exdD7YLPFIbpYYI2szzo2mfoeuw0Xxf+SoiSCvcEDBOjVr4j3KK/W5pLWCzvjP/v9zvuvGzr2UC4O37Oarkg5iTrG6RWV8TUw1VS3YRHBXaBLUMsVRr+arbQkBbHNSPoEDw1XpL9/Qfv5gojO5yIex7IzX/uUmZxTuS67XtzYKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7W8i7lq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9163AC4CEC5;
-	Wed, 16 Oct 2024 06:46:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=drXepBJETda9u3LJedyxC6BqtTvNmAfhsSYOSPsjxAK99fQvg5ZNPqHEFYCgQ7XQe2Am7dcjou/AhHc/WrkaQLi5ShW4r/EQxpLckZ7YmVrsL2+ybbsSVeCx20UJGACV3TN+p7O4eDXe6V5E32Hw/VK8Kek8OGpjbIrvddYRheo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fE1nfrPW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D67C4CEC5;
+	Wed, 16 Oct 2024 07:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729061212;
-	bh=LhhWC4uC9QB7LvY8dRYyCu3Pa/978BzoqrmHiVLvubI=;
+	s=k20201202; t=1729065498;
+	bh=nsM60+cNuES1C+fqTbnc5ooJ0hP520KLGK9VFBCBDGI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k7W8i7lqmeLc+eutLnFZPrARTvu050odiI/x0RRvQZvYLZxKyf8SRyHgmBGiy1Qso
-	 ZHd2JyN8woka69FlqSRwbY0u1n8Gj4b88LOw+daIcu6INplXgLbgdwzfkicbzz2OA0
-	 zJdvXveC1N0EzUZzfUuOBgMok6MdMyqm6y5Ee/ClIWDP808Q5J/6GUmXIg34Cg3eXG
-	 yc6UjRDCAZsTL3ihqGxCkB4IpYJAEf2V7DRE+CCigtXipbjmeLnQlxYXUw0i2pJ7XP
-	 Go5aSqA8cWpvwU2fgf6I1z3nGxNsgK03LCfFijUFR4wwvSx6P+8pff2WJPcbJxWRdm
-	 D/Oqa03yyz3Vw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1t0xoB-000000004sC-0eKw;
-	Wed, 16 Oct 2024 08:46:59 +0200
-Date: Wed, 16 Oct 2024 08:46:59 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Jonathan Marek <jonathan@marek.ca>
-Cc: linux-arm-msm@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	b=fE1nfrPWvmps83biOQkLKuOrEbyoX9F+oYZZR4MyCkhnTWXLfurI4YDDnEgp3i07b
+	 VRYqDkPXIU+qUtKDWJ717mNrRjaZqikw3+etM/jDuz+SlyxnvznHnDKrAlDX0CzJ7e
+	 fINBIZ+D9Zp09Ppusrp8Fb0ZqNgnLr3Jdt9Q8ncBHGtElLWB9ESeQ5b5BDNqyqrPHs
+	 CtV1sq/qM1ERfGyqIll+x8X3NR+ZGI4q/LTpO0Q+uyL0JEmPhyTYdi0Xyt3NDfgwb3
+	 N7NtwUeILsWm6XGFTmTz4KTjWwUil3aV5cQPTDvmG6RV280Yh47SXf5mfG97vA2mxx
+	 vkzZ51zg7DMLg==
+Date: Wed, 16 Oct 2024 08:58:08 +0100
+From: Lee Jones <lee@kernel.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Macpaul Lin <macpaul.lin@mediatek.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Satya Priya <quic_c_skakit@quicinc.com>,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/5] dt-bindings: rtc: qcom-pm8xxx: document
- qcom,no-alarm flag
-Message-ID: <Zw9hY-v6s0SXyjri@hovoldconsulting.com>
-References: <20241015004945.3676-1-jonathan@marek.ca>
- <20241015004945.3676-3-jonathan@marek.ca>
+	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+	netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Bear Wang <bear.wang@mediatek.com>,
+	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
+	Chris-qj chen <chris-qj.chen@mediatek.com>,
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v8 3/3] dt-bindings: mfd: mediatek: mt6397: Convert to DT
+ schema format
+Message-ID: <20241016075808.GM8348@google.com>
+References: <20241001104145.24054-1-macpaul.lin@mediatek.com>
+ <20241001104145.24054-3-macpaul.lin@mediatek.com>
+ <5nvshurbpmjkqysphfrfxhekq3c6od6a2uqai4rfxns64mdvf7@ftjvgjnivr3k>
+ <20241009155222.GB637580@google.com>
+ <vb324yv7s7yew6m74lfvdv6wnuo6e4rxtiu2q7okypttw46ox2@lgfdkie6o3t2>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241015004945.3676-3-jonathan@marek.ca>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <vb324yv7s7yew6m74lfvdv6wnuo6e4rxtiu2q7okypttw46ox2@lgfdkie6o3t2>
 
-On Mon, Oct 14, 2024 at 08:47:27PM -0400, Jonathan Marek wrote:
-> Qualcomm x1e80100 firmware sets the ownership of the RTC alarm to ADSP.
-> Thus writing to RTC alarm registers and receiving alarm interrupts is not
-> possible.
+On Tue, 15 Oct 2024, Sebastian Reichel wrote:
+
+> Hi,
 > 
-> Add a qcom,no-alarm flag to support RTC on this platform.
+> On Wed, Oct 09, 2024 at 04:52:22PM +0100, Lee Jones wrote:
+> > On Wed, 02 Oct 2024, Krzysztof Kozlowski wrote:
+> > 
+> > > On Tue, Oct 01, 2024 at 06:41:45PM +0800, Macpaul Lin wrote:
+> > > > Convert the mfd: mediatek: mt6397 binding to DT schema format.
+> > > > 
+> > > > MT6323, MT6358, and MT6397 are PMIC devices with multiple function
+> > > > subdevices. They share a common PMIC design but have variations in
+> > > > subdevice combinations.
+> > > > 
+> > > > Key updates in this conversion:
+> > > > 
+> > > > 1. RTC:
+> > > >    - Convert rtc-mt6397.txt and merge into parent MT6397 PMIC DT schema.
+> > > 
+> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > Everyone okay with me taking this without a pull-request?
+> 
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Could dropping the alarm interrupt be an alternative to another vendor
-property? Some existing RTC drivers use this.
+Thanks Sebastian.
 
-It also seems like having a dedicated compatible for this platform is
-warranted, and would also suffice to determine when the alarm registers
-are writable.
+I have a bunch of things that depend on this, so I'm going to whip it in.
 
-Note that the binding update should go before the driver patch in the
-series.
-
-Johan
+-- 
+Lee Jones [李琼斯]
 
