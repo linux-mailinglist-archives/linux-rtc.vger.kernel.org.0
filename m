@@ -1,152 +1,175 @@
-Return-Path: <linux-rtc+bounces-2250-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2251-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 302249A4C61
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 10:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9814C9A4CAF
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 11:44:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4DDA282650
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 08:50:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FC1E2850A6
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 09:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 382231E1048;
-	Sat, 19 Oct 2024 08:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911BD1DF744;
+	Sat, 19 Oct 2024 09:44:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="BDMnWk26"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bv7kXMeQ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE6F1E0E18
-	for <linux-rtc@vger.kernel.org>; Sat, 19 Oct 2024 08:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BCA1CCB38;
+	Sat, 19 Oct 2024 09:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729327696; cv=none; b=RF/D9sAsP27Hnh46wzqIv3wG/x5C140M15Bn5gKuFRQSYdOT5Kn1y1NrABrZXbqg83/Vai9zcIbXEVYtcIuuTzXyECw2e6o/pniY0swn/rmKzx4FCy4OwQetJcGM4NzpyC7ON6cEN455BwDV7k0LWpTw1hSYcsCZLvFWBHkscco=
+	t=1729331075; cv=none; b=lx71SvCsIJLav7GrP/cGRYce0K51/Zso/aPAtUxTyth2iquCCt+wWFUYYGQfwFdSo0jVsm5BL8NXOVSZ6GvPAgGcoomFbc+hJYJYw9ml1lGPnD3yZZSFjCLeQ/lH1dGvQym6WUGF9wxqLfWsu2mDgzm/FErhtogNHcFgWDNQlPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729327696; c=relaxed/simple;
-	bh=8GAcD1p4qmOxAT6LKl7/yGsIxlJCeks3lmvdsRJmH8U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OFAteH70gJOnSChm2htm2mmX0vDtNP3j030864CEfMhFPlMsJt0si/KqgFyxolwuIYxtvsqIetxgSI/IfC4d7xfHq0Kxv+6So4kRLtO3i2Org03P7kJCV44GNy7E0EKl13162ldJP71Vr4RiajxDhuHGgd/WThxw/K4+MiRw7fA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=BDMnWk26; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-37d47b38336so2028159f8f.3
-        for <linux-rtc@vger.kernel.org>; Sat, 19 Oct 2024 01:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1729327692; x=1729932492; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iR9u43Hyk1vIKlajLYqnwdEXv51OaTqN1pUoQT3Fdw0=;
-        b=BDMnWk26U1NXmigmt9PPdQJsjydfhPNLC20W/rjKSc0fdXeT9HE4BoXu7dRPs2i4MD
-         188C70Jx0VaAn8l/X0tc8qti3Ws3KxYeifODbCtRR85A23/AO5etkJKMbrDRSh+Ec8yJ
-         8TmbGHAd+iKqXTIR5GMRPWcMbRLxZT09JBUAQiFeH6PH0MBlhTPW7u9ZSXi/5MKNI65c
-         n/eKzY5oPCD0FqIXpGm3fRwnbAD0YiTkMvq3AdbAYkDFOrYgm8L1dUIaKpdTJJTtny9h
-         rRMHpaR6bVo1flmmo2xiDMhlwSkN5UkMPWLbhOHKD2BG3VDOlUiqphVfvcZKHnw0eUqp
-         93wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729327692; x=1729932492;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iR9u43Hyk1vIKlajLYqnwdEXv51OaTqN1pUoQT3Fdw0=;
-        b=O3PJJDLdVAik/sorzTHwRJgwJt9Gw1/+8fd77myulLdEPq6LKwJxMLoqKJ1VMzUaJi
-         B/2BNDR01hN2hryZ7lr9XeUsEdZXAzIZkp1+ggl8M4SIaCl4py8eFp7ehBBYRbe3dkF4
-         TsGOgXKh0SzJth6lQUo+B6zhtkAJ1nRmUO+LWABNyVx23j+B9IAtTe9ChgCZTfF49wFB
-         2V4rkzM8Pi2jKuZ8LSN6rj3awyfOXa/ZxkpChTJnTfrXpckJVrnAXtlJRMfs0b+ONGRk
-         q/34cyuvyE+6VNx8fnVPDHb67+oEQ9GTSS16ykxwReTVIYWEDkedZC8vBGUdslRlqM5Q
-         LhLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVD0e28R+Op/bvl8Eewcvi041FE8Gn8aGuUUm4gfQlTTIN/2qZvYKLDDB9nRFvIWaSetS25w5jLprE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaC1maxME7xzCur3frKadzQIS8TChhaWhUdWIhDJvDbx7pqJpg
-	FmlKpBrsRXReLyTlFIpAcp963euF2KXeaUd44hm4V99J6lzoBgMVEt91a1KaNpo=
-X-Google-Smtp-Source: AGHT+IHsNssw3nPyESTNLOiP+9Mlv4+US3nWRprCJSeU2x+CacNFKb3J8zoQ9J/1GgCM0O9zmVhHzQ==
-X-Received: by 2002:a5d:61ce:0:b0:37c:c5be:1121 with SMTP id ffacd0b85a97d-37eab4d1227mr3498805f8f.9.1729327692261;
-        Sat, 19 Oct 2024 01:48:12 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.23])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ecf0eccbasm3898731f8f.81.2024.10.19.01.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 01:48:11 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	alexandre.belloni@bootlin.com,
-	magnus.damm@gmail.com,
-	p.zabel@pengutronix.de
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
+	s=arc-20240116; t=1729331075; c=relaxed/simple;
+	bh=QX8/nemducOmQswsWe9Bi0VvgQBgVJdn0IlaRkFtIso=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OGeqI5XU247u338RNYW5OpfTVsWVgBsIARx5NFzya18BfS41i8vf+2pIsDdLr4WEQMOmbgs9d14tOceroh1eCzq7M4UdQhVYD3dPKVmlHt/C9cNGC3K/z76E00cYItChoPPLypmMS4JKhdIJmSvWSjOMF6UpQwcR85uObBpTSPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bv7kXMeQ; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729331072; x=1760867072;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QX8/nemducOmQswsWe9Bi0VvgQBgVJdn0IlaRkFtIso=;
+  b=Bv7kXMeQ1DdRsmA/9yU37SJnXJaGjggZJWTWPzV4DIKX37h0/bzblXCf
+   7KPUpXeZ+9mRJGUP9jYDPxgmxm379UufK8/ev61KUkb25djdBO1X2HxqN
+   xXso/lvUwLgvHBPcZjq/TlAPW8XbJGSOrb7oGT4kCDOPG/jhOkBwy7MDx
+   WxW9fsPGBBRznLKdGc75pi3+nFJV0IAKOk67vYFvQdZsoht3UDp3kRcjQ
+   gdXgbAwWhnt/QftVV5Wx1HabrIyW3SKEvy3GCz+l8GtgRwz8GY92rdlzR
+   yQYZJSrTHyEvjQ0fkoO0jQNYlm02eOuWaTYzR1/uaDV+JRdOi3TY8G/bD
+   A==;
+X-CSE-ConnectionGUID: Wcyxw59WRemxv4Jp0D+EZg==
+X-CSE-MsgGUID: wL45fbQ+QZK8t3D8yueItg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="28995770"
+X-IronPort-AV: E=Sophos;i="6.11,215,1725346800"; 
+   d="scan'208";a="28995770"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 02:44:31 -0700
+X-CSE-ConnectionGUID: X6HaMBOMTZKR/RO4MH0ySw==
+X-CSE-MsgGUID: 7lKwWQgETyGgi6Hmw0eIxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,215,1725346800"; 
+   d="scan'208";a="79145233"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 19 Oct 2024 02:44:28 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t260X-000OsD-1w;
+	Sat, 19 Oct 2024 09:44:25 +0000
+Date: Sat, 19 Oct 2024 17:43:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v4 12/12] arm64: defconfig: Enable VBATTB clock and Renesas RTCA-3 flags
-Date: Sat, 19 Oct 2024 11:47:38 +0300
-Message-Id: <20241019084738.3370489-13-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20241019084738.3370489-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20241019084738.3370489-1-claudiu.beznea.uj@bp.renesas.com>
+	NXP S32 Linux Team <s32@nxp.com>,
+	Christophe Lizzi <clizzi@redhat.com>,
+	Alberto Ruiz <aruizrui@redhat.com>,
+	Enric Balletbo <eballetb@redhat.com>,
+	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
+	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
+	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+Subject: Re: [PATCH v2 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
+Message-ID: <202410191711.oc5s2ZYc-lkp@intel.com>
+References: <20241015105133.656360-3-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241015105133.656360-3-ciprianmarian.costea@oss.nxp.com>
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Hi Ciprian,
 
-Enable the Renesas VBATTB clock and RTCA-3 RTC drivers. These are
-available on the Renesas RZ/G3S SoC. VBATTB is the clock provider for
-the RTC counter.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on robh/for-next arm64/for-next/core linus/master v6.12-rc3 next-20241018]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Changes in v4:
-- squashed w/ patch "arm64: defconfig: Enable Renesas RTCA-3 flag" from v3
-- updated patch description
-- collected tags
+url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Costea/dt-bindings-rtc-add-schema-for-NXP-S32G2-S32G3-SoCs/20241015-185302
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20241015105133.656360-3-ciprianmarian.costea%40oss.nxp.com
+patch subject: [PATCH v2 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
+config: alpha-randconfig-r071-20241019 (https://download.01.org/0day-ci/archive/20241019/202410191711.oc5s2ZYc-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.3.0
 
-Changes in v3:
-- update patch title and description
-- dropped CONFIG_MFD_RENESAS_VBATTB
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410191711.oc5s2ZYc-lkp@intel.com/
 
-Changes in v2:
-- added CONFIG_MFD_RENESAS_VBATTB
-- added vendor name in the VBATTB clock flag
+smatch warnings:
+drivers/rtc/rtc-s32g.c:221 s32g_rtc_read_time() warn: unsigned 'sec' is never less than zero.
+drivers/rtc/rtc-s32g.c:221 s32g_rtc_read_time() warn: error code type promoted to positive: 'sec'
+drivers/rtc/rtc-s32g.c:239 s32g_rtc_read_alarm() warn: unsigned 'sec' is never less than zero.
+drivers/rtc/rtc-s32g.c:239 s32g_rtc_read_alarm() warn: error code type promoted to positive: 'sec'
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+vim +/sec +221 drivers/rtc/rtc-s32g.c
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8067bf051377..e3252e24bd4d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1216,6 +1216,7 @@ CONFIG_RTC_DRV_IMX_SC=m
- CONFIG_RTC_DRV_MT6397=m
- CONFIG_RTC_DRV_XGENE=y
- CONFIG_RTC_DRV_TI_K3=m
-+CONFIG_RTC_DRV_RENESAS_RTCA3=y
- CONFIG_DMADEVICES=y
- CONFIG_DMA_BCM2835=y
- CONFIG_DMA_SUN6I=m
-@@ -1362,6 +1363,7 @@ CONFIG_SM_VIDEOCC_8250=y
- CONFIG_QCOM_HFPLL=y
- CONFIG_CLK_GFM_LPASS_SM8250=m
- CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
-+CONFIG_CLK_RENESAS_VBATTB=y
- CONFIG_HWSPINLOCK=y
- CONFIG_HWSPINLOCK_QCOM=y
- CONFIG_TEGRA186_TIMER=y
+   210	
+   211	static int s32g_rtc_read_time(struct device *dev,
+   212				      struct rtc_time *tm)
+   213	{
+   214		struct rtc_priv *priv = dev_get_drvdata(dev);
+   215		u64 sec;
+   216	
+   217		if (!tm)
+   218			return -EINVAL;
+   219	
+   220		sec = s32g_rtc_get_time_or_alrm(priv, RTCCNT_OFFSET);
+ > 221		if (sec < 0)
+   222			return -EINVAL;
+   223	
+   224		rtc_time64_to_tm(sec, tm);
+   225	
+   226		return 0;
+   227	}
+   228	
+   229	static int s32g_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+   230	{
+   231		struct rtc_priv *priv = dev_get_drvdata(dev);
+   232		u32 rtcc, sec_left;
+   233		u64 sec;
+   234	
+   235		if (!alrm)
+   236			return -EINVAL;
+   237	
+   238		sec = s32g_rtc_get_time_or_alrm(priv, RTCVAL_OFFSET);
+ > 239		if (sec < 0)
+   240			return -EINVAL;
+   241	
+   242		rtc_time64_to_tm(sec, &alrm->time);
+   243	
+   244		rtcc = ioread32(priv->rtc_base + RTCC_OFFSET);
+   245		alrm->enabled = sec && (rtcc & RTCC_RTCIE);
+   246	
+   247		alrm->pending = 0;
+   248		if (alrm->enabled && !get_time_left(dev, priv, &sec_left))
+   249			alrm->pending = !!sec_left;
+   250	
+   251		return 0;
+   252	}
+   253	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
