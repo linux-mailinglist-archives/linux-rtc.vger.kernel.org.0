@@ -1,150 +1,156 @@
-Return-Path: <linux-rtc+bounces-2254-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2255-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3A9E9A4E88
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 16:12:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FEC99A4FB2
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 18:16:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59B6B28768C
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 14:12:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E393F1F24004
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 16:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DE340C03;
-	Sat, 19 Oct 2024 14:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6B518BB8E;
+	Sat, 19 Oct 2024 16:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MfSkb7o3"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="tnvDm/Br"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EB52207A;
-	Sat, 19 Oct 2024 14:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282E5186607
+	for <linux-rtc@vger.kernel.org>; Sat, 19 Oct 2024 16:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729347160; cv=none; b=UMm5i+6apdRRPYCFy41vH+E1lmUjRoZkDKmDmQ3dQ0Y4F60Xm4D7lbnkjS6GyyYb0BX+QPQty+exkZog4alIxaIfB2BK6qFupllXJsPb0dQU8Gp3vUFVvQ7XKvvbBnLRxVKkHADH/ZDt5C/pnKtI+85CRq0noFIC/r6tYjfKSdU=
+	t=1729354582; cv=none; b=QEcp/LRT+SOWpTp0rvBFcITzoWOd+Gc9uZtqoRPA8U8w0vq6LT0vZKRBhgrceog4xRTqEPemJOTGlgIAsGQUfwMBKfdqlIeQh4YKIxcT3zdip+k9bxZ/SabH706ozXaMJB7LNuBeDtqwOOBdTR53yKzjwutIP1Fuqshs3ELv9VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729347160; c=relaxed/simple;
-	bh=ZrHmr5VaECy8UuvZjqQ6voSNPqYS2zNatLG+hRePEVY=;
+	s=arc-20240116; t=1729354582; c=relaxed/simple;
+	bh=StuBSN/GRyNQc/pG0x5/xQFTvBZGWqHm+6Jr33Ss7V8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GXhjQ69TtoHOlUttpejv1Q5npRY8gG/+0U7k4DqQMUoHyBsoVgxqMc+tFu+0B0wnBcqdUlSgPMkyFOnhjF3SXWSC1tS7JyRbbl6TNJYQ1ayF07XXxwrYx/d1yKjzCKoi9JbLEyfJ1VQjSNn/zrdo9YNrx/CLBA7W+Nrwpo5ErZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MfSkb7o3; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729347159; x=1760883159;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZrHmr5VaECy8UuvZjqQ6voSNPqYS2zNatLG+hRePEVY=;
-  b=MfSkb7o3kJ60c90kz+h8zChXJPDXB8xYe4VNX2Cg/c7uZqO7z/m9qUtr
-   FIHFLN0Vw5LluXbujvTot7VM8CCxsQnJufwl/n7VA0NyiOkcThbhVn1jK
-   U94ApDP4TPxlf1r3JO21YPcLwWpi36nw50A4niHclnbAuKu2qi3SaaSuA
-   7U72LmXM2Om4OkwhkTUVqujYOedeOoth/+Xv+alHvB9Y0hf5Dt17gn6nz
-   oWVYfvvvw9b14GTDY2oWjtEHnWOnW/LVox52aQCrh/TaAFj1xok2DZ2S+
-   zSf+8FeIuR5MKMHbBu4LV4k9+5MRAwfvFiZVtzyM9Hyb5RpPCCQaw2pMh
-   w==;
-X-CSE-ConnectionGUID: ordxXbAnSSOZ9FSZJgp7DA==
-X-CSE-MsgGUID: P+t0i6GzRKiSERMCl77Tyw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="16487351"
-X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="16487351"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 07:12:38 -0700
-X-CSE-ConnectionGUID: VHCoxef/St+94kG9sdfBiQ==
-X-CSE-MsgGUID: jMPDadBJSN+1E4RqjaIKOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="102423448"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 19 Oct 2024 07:12:33 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t2ABz-000P3P-36;
-	Sat, 19 Oct 2024 14:12:31 +0000
-Date: Sat, 19 Oct 2024 22:12:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Christophe Lizzi <clizzi@redhat.com>,
-	Alberto Ruiz <aruizrui@redhat.com>,
-	Enric Balletbo <eballetb@redhat.com>,
-	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
-	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
-	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
-Subject: Re: [PATCH v2 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-Message-ID: <202410192150.qZi3WkG1-lkp@intel.com>
-References: <20241015105133.656360-3-ciprianmarian.costea@oss.nxp.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eFUgBnDciNxvIsBm8e06tizk4Mr4FBn7TXNbx+X+pfK7SCElOkUGgwVoMPqfN6hDnjKuIeBPcUpgZximt74Woxq8cHlBWDUAJAn5vDV6bg2GdtLJRvYm00IsaNX/7PWDnUGj7S/aZiQaHtlmMyPHfmq/Ato+aTGLSFf6xnzz81U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=tnvDm/Br; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a99f646ff1bso377960266b.2
+        for <linux-rtc@vger.kernel.org>; Sat, 19 Oct 2024 09:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729354578; x=1729959378; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wMKGahwoszcg3v581bmcW1DmO8H5y+Y8QgEXy/B2rl8=;
+        b=tnvDm/Bruu8Oh/3mm3eZA4UdtC5HLDYaxMTt0ube4IRwM3mIsXBWdNoDIY1TUy/1Rj
+         DhDhqCPBHxeOsSnMbFyLhk9jW776dZJMpU5QaUeqLO8m9NIwos6TpuIaikBFoZF5Nc5u
+         Eb1l81T0tkb2TJppiQCKV8IaQxhdGzwdYmaDMfl0wbm3lltLpp65vJuek8Vku38a0dgt
+         NEPGRqM+DEYJ/2Na0K4NtASaCtfIsE1oGb/2CQbgRYBAr43GkKoaEueG8/cejd2DmzGP
+         PcLy5Uey7LfVdodhRLJrDA5xQ7yjWH+3bD8cAdQVglw41aFQ4O8WUGCpVQOedFTAeUuK
+         smEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729354578; x=1729959378;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wMKGahwoszcg3v581bmcW1DmO8H5y+Y8QgEXy/B2rl8=;
+        b=fnCjcVnXQQdiVMpIYZPxhKpxvt8m+/OD+T8s5xAqkSPJsvltuEADrnfDPc+Y89cRY2
+         0ATHAk93aRWFtiT1gbI4ILK3F7AiBhtNcOfiasIbUbi8yBc7pu0ldmKi0pOkz4PXb9mt
+         /hpQeU3BmJkB9rxidQzWesPiE1/V85BfVE+2h7WnRXS7lrs57c9WJF2scyVHj/nAAh4x
+         3KuerfSO3tH+p5MYXJmQR3et6DsUneOgAQL5yK2C13/pMftzZRcmRu3kPa7hJdpY0uzA
+         Ow/oDAZyHr8dnDB0o0xkQ8snAz76/uayRp8w82gagP9qUOwnPXEmQpFYD65svxRDypuF
+         /q7w==
+X-Forwarded-Encrypted: i=1; AJvYcCW2MpqJE6SJBp7QI+uSERLIELa1DrY9zFBLqEZ9NAMtWaQhlM2BlcVq/fGQufjjvYhOX0LWDyYBIyY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSr0N5t7IOfLgEyrylzes3mZIjLEqbz1Nf885wZLjOKPh2pDrG
+	pzScA5VyNIV/Bs5Fqto+RyE83RYE38PWi7t3D/Ozk20SVtkv8H7P3alWIOEcmxw=
+X-Google-Smtp-Source: AGHT+IGmvPoyNXRtNONcUztTuPoBpcDMSxWfpc8rl3an9FxYAtZFBmtHaZx/ixcLWiSk9mG9RLLQzg==
+X-Received: by 2002:a17:907:1c1e:b0:a99:4162:4e42 with SMTP id a640c23a62f3a-a9a69baad40mr460125866b.37.1729354578283;
+        Sat, 19 Oct 2024 09:16:18 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:677d:cc5a:24af:d1a1])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68a8e758sm226723966b.31.2024.10.19.09.16.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2024 09:16:17 -0700 (PDT)
+Date: Sat, 19 Oct 2024 18:16:15 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	alexandre.belloni@bootlin.com, magnus.damm@gmail.com, p.zabel@pengutronix.de, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v4 07/12] rtc: renesas-rtca3: Add driver for RTCA-3
+ available on Renesas RZ/G3S SoC
+Message-ID: <c5r5yfiujywad4g37lrnqqhojroxcite3uavy7fbytxpdeskio@istcpft4v4z6>
+References: <20241019084738.3370489-1-claudiu.beznea.uj@bp.renesas.com>
+ <20241019084738.3370489-8-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zus3as7bpkuwpgmb"
 Content-Disposition: inline
-In-Reply-To: <20241015105133.656360-3-ciprianmarian.costea@oss.nxp.com>
-
-Hi Ciprian,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next arm64/for-next/core linus/master v6.12-rc3 next-20241018]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Costea/dt-bindings-rtc-add-schema-for-NXP-S32G2-S32G3-SoCs/20241015-185302
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20241015105133.656360-3-ciprianmarian.costea%40oss.nxp.com
-patch subject: [PATCH v2 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-config: powerpc-randconfig-001-20241019 (https://download.01.org/0day-ci/archive/20241019/202410192150.qZi3WkG1-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410192150.qZi3WkG1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410192150.qZi3WkG1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `s32g_rtc_get_time_or_alrm':
->> drivers/rtc/rtc-s32g.c:105:(.text+0x1a0): undefined reference to `__udivdi3'
-   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `get_time_left':
-   drivers/rtc/rtc-s32g.c:105:(.text+0x6a8): undefined reference to `__udivdi3'
-   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `sec_to_rtcval':
-   drivers/rtc/rtc-s32g.c:105:(.text+0xbfc): undefined reference to `__udivdi3'
-   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `rtc_clk_src_switch':
-   drivers/rtc/rtc-s32g.c:387:(.text+0x1630): undefined reference to `__udivdi3'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [y]:
-   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+In-Reply-To: <20241019084738.3370489-8-claudiu.beznea.uj@bp.renesas.com>
 
 
-vim +105 drivers/rtc/rtc-s32g.c
+--zus3as7bpkuwpgmb
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 07/12] rtc: renesas-rtca3: Add driver for RTCA-3
+ available on Renesas RZ/G3S SoC
+MIME-Version: 1.0
 
-   102	
-   103	static u64 cycles_to_sec(u64 hz, u64 cycles)
-   104	{
- > 105		return cycles / hz;
-   106	}
-   107	
+Hello,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Sat, Oct 19, 2024 at 11:47:33AM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>=20
+> The RTC IP (RTCA-3) available on the Renesas RZ/G3S SoC has calendar count
+> mode and binary count mode (selectable though RCR2.CNTMD) capabilities,
+> alarm capabilities, clock error correction capabilities. It can generate
+> alarm, period, carry interrupts.
+>=20
+> Add a driver for RTCA-3 IP. The driver implements calendar count mode (as
+> the conversion b/w RTC and system time is simpler, done with bcd2bin(),
+> bin2bcd()), read and set time, read and set alarm, read and set
+> an offset.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+
+I don't know how picky Alexandre is, but there is no S-o-b line for the
+patch sender.
+
+> +static struct platform_driver rtca3_platform_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "rtc-rtca3",
+> +		.pm =3D pm_ptr(&rtca3_pm_ops),
+> +		.of_match_table =3D rtca3_of_match,
+> +	},
+> +	.probe =3D rtca3_probe,
+> +	.remove_new =3D rtca3_remove,
+> +};
+
+Please use .remove here. You just need to drop "_new". See
+https://lore.kernel.org/linux-rtc/20241007205803.444994-6-u.kleine-koenig@b=
+aylibre.com/=20
+
+Best regards
+Uwe
+
+--zus3as7bpkuwpgmb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmcT20wACgkQj4D7WH0S
+/k5sigf/WQisuypfB38zNIkAPJJO+gsAp1o4h/CXa8Bp4Iqsyn0kSttNjSqE1cCL
+jpuyFgQYDDBS3xR8uy5+odIWCuOPtQUyFly3rXmcHRM0O5a7/owHYNI+cjUwvtDu
+u9mgP061ri2zKSrKvhLPrmyfbRmMH4QL6Ny2UDflVWM8eC8wGAi6Qs4d1hqFNqT9
+Rhb6CVu9m7GKTJi663dDZMvg4FovYzZ7t391xeP7N/G7bqrp0PPRotSoXYPn9ahr
+xFRTolIhA46CJDKzS5FjLcdUOcfMYNXdfHqkMnIH18fV0WBR0KfpNFjHe//M/+FR
+puerjp/PPQ8x3IJwlbuwb28tmEq/Tw==
+=0EYG
+-----END PGP SIGNATURE-----
+
+--zus3as7bpkuwpgmb--
 
