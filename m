@@ -1,68 +1,68 @@
-Return-Path: <linux-rtc+bounces-2253-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2254-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B4029A4CE8
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 12:36:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3A9E9A4E88
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 16:12:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90BF41C211FE
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 10:36:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59B6B28768C
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 14:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7DC1DF749;
-	Sat, 19 Oct 2024 10:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DE340C03;
+	Sat, 19 Oct 2024 14:12:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kEF1cgSz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MfSkb7o3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A537D1DE4FE;
-	Sat, 19 Oct 2024 10:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EB52207A;
+	Sat, 19 Oct 2024 14:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729334195; cv=none; b=eVoM8E/5SMCfel3V3F9becXf2+Nwv25ZZwMVFyLkSGxTNWUu+JiNXctZ1tpd5yumXV/jgHJFJRJn8s6bR01JOc2OxZVhwS+0lR82Q3g/q4K/GY2230tJRnysmy4JbetandvfpO4WmtJtfGaOwKumDGvJkbtnGh8H+GIPU56sRYs=
+	t=1729347160; cv=none; b=UMm5i+6apdRRPYCFy41vH+E1lmUjRoZkDKmDmQ3dQ0Y4F60Xm4D7lbnkjS6GyyYb0BX+QPQty+exkZog4alIxaIfB2BK6qFupllXJsPb0dQU8Gp3vUFVvQ7XKvvbBnLRxVKkHADH/ZDt5C/pnKtI+85CRq0noFIC/r6tYjfKSdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729334195; c=relaxed/simple;
-	bh=UipNdPw5pGNY1kN1FE/U/T/fYmGN6H1910arigY7NCc=;
+	s=arc-20240116; t=1729347160; c=relaxed/simple;
+	bh=ZrHmr5VaECy8UuvZjqQ6voSNPqYS2zNatLG+hRePEVY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zpjxa4nAeyx6epCdijnj8Xe+y+XOHymStmszrXqFRMogqe+wo6md0bXV7gZ4r3CISQ+sHzzlBCEvFS70xq+NDBiXJDYZi/483ODtoIgTHRFjQpviOoO4pYO5Ap9Ciyb1DbYQ7/KSal538LkyDsC6UImbvqO9cr9WAuZu3l3edpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kEF1cgSz; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=GXhjQ69TtoHOlUttpejv1Q5npRY8gG/+0U7k4DqQMUoHyBsoVgxqMc+tFu+0B0wnBcqdUlSgPMkyFOnhjF3SXWSC1tS7JyRbbl6TNJYQ1ayF07XXxwrYx/d1yKjzCKoi9JbLEyfJ1VQjSNn/zrdo9YNrx/CLBA7W+Nrwpo5ErZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MfSkb7o3; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729334194; x=1760870194;
+  t=1729347159; x=1760883159;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=UipNdPw5pGNY1kN1FE/U/T/fYmGN6H1910arigY7NCc=;
-  b=kEF1cgSztPOJgUlFGi/c0dCq/Bthh0Gf051ciyQ23+eGK8suReOOTrAO
-   55i2L4CL0TWBOBkfb9yD1yJhWMOsnhoLS1PNU9FyiBndPB/DsNetYdZJ9
-   dNfkC4nqE4XHvOz4s6VO88eOm8kG+IZv+2NxjAJle6lzb7EeVWet8aUfA
-   RpDDawBTn5dpSVJ6yUfQKy379jrR93BmG89gOgg+5i7yG12YG/6Yq+89l
-   S+qVIvyATrSHBlVq1PiHpZdNhB7wVotBDzVKH1J6674BnWzVn0jqb/pBm
-   f1wgWMumoLMD0DJMtubCN3PXxA9Z7PXoKkt7ZG9tCDyasI7nX6pdHd6og
-   A==;
-X-CSE-ConnectionGUID: iuahNjVbTNSVgcp8BhOWjQ==
-X-CSE-MsgGUID: O3TndJdEQRu1th6agrp+cQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="39491155"
+  bh=ZrHmr5VaECy8UuvZjqQ6voSNPqYS2zNatLG+hRePEVY=;
+  b=MfSkb7o3kJ60c90kz+h8zChXJPDXB8xYe4VNX2Cg/c7uZqO7z/m9qUtr
+   FIHFLN0Vw5LluXbujvTot7VM8CCxsQnJufwl/n7VA0NyiOkcThbhVn1jK
+   U94ApDP4TPxlf1r3JO21YPcLwWpi36nw50A4niHclnbAuKu2qi3SaaSuA
+   7U72LmXM2Om4OkwhkTUVqujYOedeOoth/+Xv+alHvB9Y0hf5Dt17gn6nz
+   oWVYfvvvw9b14GTDY2oWjtEHnWOnW/LVox52aQCrh/TaAFj1xok2DZ2S+
+   zSf+8FeIuR5MKMHbBu4LV4k9+5MRAwfvFiZVtzyM9Hyb5RpPCCQaw2pMh
+   w==;
+X-CSE-ConnectionGUID: ordxXbAnSSOZ9FSZJgp7DA==
+X-CSE-MsgGUID: P+t0i6GzRKiSERMCl77Tyw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="16487351"
 X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="39491155"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 03:36:33 -0700
-X-CSE-ConnectionGUID: 4Hsu7CY1Q3yNdZHnqQIOzg==
-X-CSE-MsgGUID: zGKS7FqpR1iuq7oKnwQgYA==
+   d="scan'208";a="16487351"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 07:12:38 -0700
+X-CSE-ConnectionGUID: VHCoxef/St+94kG9sdfBiQ==
+X-CSE-MsgGUID: jMPDadBJSN+1E4RqjaIKOw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="79902047"
+   d="scan'208";a="102423448"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 19 Oct 2024 03:36:29 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 19 Oct 2024 07:12:33 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t26os-000Otn-1o;
-	Sat, 19 Oct 2024 10:36:26 +0000
-Date: Sat, 19 Oct 2024 18:36:05 +0800
+	id 1t2ABz-000P3P-36;
+	Sat, 19 Oct 2024 14:12:31 +0000
+Date: Sat, 19 Oct 2024 22:12:02 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -82,7 +82,7 @@ Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
 	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
 	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
 Subject: Re: [PATCH v2 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-Message-ID: <202410191710.kHHObl1i-lkp@intel.com>
+Message-ID: <202410192150.qZi3WkG1-lkp@intel.com>
 References: <20241015105133.656360-3-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -108,21 +108,41 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Costea/dt-binding
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
 patch link:    https://lore.kernel.org/r/20241015105133.656360-3-ciprianmarian.costea%40oss.nxp.com
 patch subject: [PATCH v2 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-config: arm-randconfig-r123-20241018 (https://download.01.org/0day-ci/archive/20241019/202410191710.kHHObl1i-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.1.0
-reproduce: (https://download.01.org/0day-ci/archive/20241019/202410191710.kHHObl1i-lkp@intel.com/reproduce)
+config: powerpc-randconfig-001-20241019 (https://download.01.org/0day-ci/archive/20241019/202410192150.qZi3WkG1-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410192150.qZi3WkG1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410191710.kHHObl1i-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410192150.qZi3WkG1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   arm-linux-gnueabi-ld: drivers/rtc/rtc-s32g.o: in function `cycles_to_sec':
->> rtc-s32g.c:(.text.cycles_to_sec+0x60): undefined reference to `__aeabi_uldivmod'
-   arm-linux-gnueabi-ld: drivers/rtc/rtc-s32g.o: in function `rtc_clk_src_switch':
-   rtc-s32g.c:(.text.rtc_clk_src_switch+0x110): undefined reference to `__aeabi_uldivmod'
+   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `s32g_rtc_get_time_or_alrm':
+>> drivers/rtc/rtc-s32g.c:105:(.text+0x1a0): undefined reference to `__udivdi3'
+   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `get_time_left':
+   drivers/rtc/rtc-s32g.c:105:(.text+0x6a8): undefined reference to `__udivdi3'
+   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `sec_to_rtcval':
+   drivers/rtc/rtc-s32g.c:105:(.text+0xbfc): undefined reference to `__udivdi3'
+   powerpc-linux-ld: drivers/rtc/rtc-s32g.o: in function `rtc_clk_src_switch':
+   drivers/rtc/rtc-s32g.c:387:(.text+0x1630): undefined reference to `__udivdi3'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+
+
+vim +105 drivers/rtc/rtc-s32g.c
+
+   102	
+   103	static u64 cycles_to_sec(u64 hz, u64 cycles)
+   104	{
+ > 105		return cycles / hz;
+   106	}
+   107	
 
 -- 
 0-DAY CI Kernel Test Service
