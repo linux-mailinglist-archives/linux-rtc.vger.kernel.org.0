@@ -1,208 +1,220 @@
-Return-Path: <linux-rtc+bounces-2237-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2238-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC1F99A42B6
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Oct 2024 17:42:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CF609A4C25
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 10:47:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 572F51F2213F
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Oct 2024 15:42:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12C80280A47
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2024 08:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385302022F4;
-	Fri, 18 Oct 2024 15:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C61E1DED50;
+	Sat, 19 Oct 2024 08:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FBnZGGCH"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qx/IXr3Z"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD6A1FF60E
-	for <linux-rtc@vger.kernel.org>; Fri, 18 Oct 2024 15:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B6A1DE3B1
+	for <linux-rtc@vger.kernel.org>; Sat, 19 Oct 2024 08:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729266145; cv=none; b=T9+GWZsXbAf8YYYeWNReO37nn+eSfCKUiHhBuwizQK+7+diyUQKlQAN/tndmjwAJ992ozY4/t48J6PAGecFAvhd6d+VnkD6NjpZTo6bKWiaTI/QXSjsYsJll5g4zaewJCo/u0yibcvJw+WX7mO2ejkj6+oL5zc6mW9EQx77k+rQ=
+	t=1729327674; cv=none; b=DgiuyZnDu3X+WErMjO7iQKGl3o9VAc5qJ2yN7m++J7lu7/e/PXsMSWU81I/taBHcHLHuMbTNZ8DQ0D+ZnMDfWXgpwfqY5e3qWvTNo2O/NVf61SGNMpPChVDaM51wJgLQJ0ytd4ZFJMrpF9mpRcet6XPchOUtfuxyJv7Ey/g+qCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729266145; c=relaxed/simple;
-	bh=0pk2DOGGbs1iYIDo8ie2yXiZL4Hp+H8zOHBUMKYTCM0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bwajezi/hq0Jdc1GkDpi8Uw+T8x285ijnkaPeNlpjWSU9gOq5HYuFgOfL5MoxdmUFMncvXQUHq7lTZfZF3eqsGzUgQGcnQMhuzSEWa+B8eAD2l9xIDpJ6a9C9kotrO8PD7wWEjE2lG/wV3sctZ3Xshj6j1gQjuvdCJe12AseYAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FBnZGGCH; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-83abcfb9f39so22301239f.1
-        for <linux-rtc@vger.kernel.org>; Fri, 18 Oct 2024 08:42:21 -0700 (PDT)
+	s=arc-20240116; t=1729327674; c=relaxed/simple;
+	bh=0humHk0h84GkfzG/89gXUvbWvKrJHsV+L/snou+PUOE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fPsgyHCZFiGxvxE1eJTarUbsX2zY0ogHVuDViGNWE/xgP67vhzH8hu0xKfJ2kNGvBFlno1gmqZiGgPNL1RFCM0l+l0jHYD+zX06axtmDRWERK9o2ygof1VNJYMdDtqAyEJjLmFhEFGlCdTTS0PCDz3Wh30qZEYA6fpv4JrORJVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qx/IXr3Z; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d495d217bso2688864f8f.0
+        for <linux-rtc@vger.kernel.org>; Sat, 19 Oct 2024 01:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729266141; x=1729870941; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C8VdO6KdJCH4AdSj2++rrFU9nxwKhshOvegF4lZMcqE=;
-        b=FBnZGGCHrja6gfvlKAzFjIibjwZcuvysGUD5DAwKUYFzBwQbLm3C5DcJ/m+zNKseVO
-         rERGGzKT3iKw4dGAkOP0sjPDTjrsNXDuMMQVYJFDVpewUe0BKxk5ZpwHiWw5ok6DKyx1
-         JY06wMfR6kq/31vxrTxl7Ndjr6HCLB/HG7ZMQ=
+        d=tuxon.dev; s=google; t=1729327670; x=1729932470; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WnMhDuCRqPR6NBJjRmLAtq7Ajsx92GN7wnYD8LuLv1U=;
+        b=qx/IXr3ZL01cyNVpLxPSryBuo7DqP1nLUe/jw25GVG7e6VNMYKE6xfZZv1p1Lo0PZN
+         qNd9JAp5spwXBEuL1Ab7Elj3XqXEQjP70Z1j0yg5sn4Qi2PTdHgm/pRZDJUwgSfI7mYt
+         fGEixfG0v/WLrPdM/5zlfkM5IMeM8EfPwCG/RMDSXnEz2cREuipEV829aY6z6+P3rOPZ
+         colUxyNsxxd5jGqJbEr2lnEESoealFcjiuxMuhEM4zzfulQJt7i68hO+ApSb9wjynoUB
+         bcGoPuFkC48y+5Lm0AoTVd6NBzFdFPzfwukpaNMtSxpDuWRSsdaNB3UUbc90/Xb2Ctla
+         Hq0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729266141; x=1729870941;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C8VdO6KdJCH4AdSj2++rrFU9nxwKhshOvegF4lZMcqE=;
-        b=BZ3wj2c0KXZnCMTnRdbuszVbV3DtJjPUUgMmrqfq5l7hqT0cwUFj8pGq6/uAhHRUYA
-         v09k1E8MVykqZreG9LgszYd5w8G/RSTFaD21DPDiKXQtqHxiSjWRdKv2DbwFlUBHYul5
-         f3gp5KZL+f+Q/IkS0hx1pptcAfMyAyKwU/IOn6fN1D8RQS7tBe+sVlsHTeV80h0f0fMU
-         yuLY2+klqV6GqaPA80Av1GXHotA70U9qJZzVtsXqux6RHbi7egLjy4IgoHHu4roYquaA
-         nKurlSca8qCzM+N7WEF934IMENsDtRKv4ZsOhUjzgGBBBpwHa1dhz3dRl//r8BmbuoHC
-         5nqA==
-X-Forwarded-Encrypted: i=1; AJvYcCX+gTd9nluRj22y1lUdDCg78lS7AA+opdG3gXftCI334zIHOFxD/lNr/1OUvXCQxw3dFF7H30ZNQwg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwdAHP3EBOu7mcQpq4K7EZlwrUv9C/8GdFe/uTVKTkGDUyhNZh
-	aWmNngeGFzmKcCflrOP85XiBcynjDVhk/vPWh1P0Fz4LDtTUG1FCmFLBcqH4gMA=
-X-Google-Smtp-Source: AGHT+IH4ogcODgSN39TA6PPVl/6vyDZ/seYFLpla/cknawLNdjkkyApJ+afbquxpiqPpJuNhwG9TGw==
-X-Received: by 2002:a05:6602:2999:b0:82c:da1e:4ae7 with SMTP id ca18e2360f4ac-83aaddda6f7mr430443939f.2.1729266140750;
-        Fri, 18 Oct 2024 08:42:20 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc10c4d6e8sm468697173.127.2024.10.18.08.42.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Oct 2024 08:42:20 -0700 (PDT)
-Message-ID: <a8e0dc0d-1d49-4287-a5c3-41bd4539a372@linuxfoundation.org>
-Date: Fri, 18 Oct 2024 09:42:19 -0600
+        d=1e100.net; s=20230601; t=1729327670; x=1729932470;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WnMhDuCRqPR6NBJjRmLAtq7Ajsx92GN7wnYD8LuLv1U=;
+        b=BkL/hRrU987869Mm9riKIDt4d7zNQOLjycexLFJqAWcuUISl9xHCO1FtVxPfg8gRuQ
+         jGyqn8OGLtwlbWYtNmqbNO0SbZD3v8Iv8Twn5xPt4igZs+IouiOS8nZKMdnupIbhHhQd
+         Oio/Z6uxv6hQPj7+nTKHX/T2vTnM/iHELxveyJo1wLD3LhFNKQejBemWAz60gu9lW43A
+         KMAqynsFp2muJ0XbF2qYPRNPdUzBrT9evh8jjkSBWanBSCQzL7uRHDJ4CFqb4uVOrTP2
+         FF18Q02M51ONxbcE4kB+FmCQ5fe4oR4Gc0koQjHwf/h+HMy4YD7zT+P5A+AxLGChpciM
+         iRmw==
+X-Forwarded-Encrypted: i=1; AJvYcCX0REg5KdQaahnuflHm67Dxl7L7fLdcBYnWlE6Oz1QLxiuahrfsCHDbHeK8aOlnQVBwsaw/DcYdlUY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjH8FD0Kc15e+8WnlgprIpEsgDPf9JHb5UKO8oxJPQe2crua7P
+	WKRnhLyohREJj23Tv4NrGekqW469L7Lqw4NHh5lN6fCSG0mjyQWOJeirnsjw/C4=
+X-Google-Smtp-Source: AGHT+IEuVFF3OlCZCByZkHkU1Kuoy8OhgDbN4ed7/j3Yg73Z4X21G1b1EaKoTBw4Z4czo/GauTVxJA==
+X-Received: by 2002:a5d:6252:0:b0:37d:511b:aec1 with SMTP id ffacd0b85a97d-37eab755935mr4597795f8f.45.1729327669730;
+        Sat, 19 Oct 2024 01:47:49 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.23])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ecf0eccbasm3898731f8f.81.2024.10.19.01.47.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2024 01:47:48 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: geert+renesas@glider.be,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	alexandre.belloni@bootlin.com,
+	magnus.damm@gmail.com,
+	p.zabel@pengutronix.de
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v4 00/12] Add RTC support for the Renesas RZ/G3S SoC
+Date: Sat, 19 Oct 2024 11:47:26 +0300
+Message-Id: <20241019084738.3370489-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] selftest: rtc: Add to check rtc alarm status for
- alarm related test
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Joseph Jang <jjang@nvidia.com>
-Cc: "shuah@kernel.org" <shuah@kernel.org>,
- "avagin@google.com" <avagin@google.com>,
- "amir73il@gmail.com" <amir73il@gmail.com>,
- "brauner@kernel.org" <brauner@kernel.org>, Matt Ochs <mochs@nvidia.com>,
- Koba Ko <kobak@nvidia.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240524013807.154338-1-jjang@nvidia.com>
- <20240524013807.154338-2-jjang@nvidia.com>
- <20240620193654d3cd1f05@mail.local>
- <c0db5bd6-8c6a-4017-911e-f3e01cd522ed@nvidia.com>
- <c900db54-d764-4389-ad9a-bc2be61eedd2@nvidia.com>
- <20241018082706d7b167ab@mail.local>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241018082706d7b167ab@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 10/18/24 02:27, Alexandre Belloni wrote:
-> On 18/10/2024 12:26:44+0800, Joseph Jang wrote:
->>
->>
->> On 2024/6/24 9:43 AM, Joseph Jang wrote:
->>>
->>>
->>> On 2024/6/21 3:36 AM, Alexandre Belloni wrote:
->>>> On 23/05/2024 18:38:06-0700, Joseph Jang wrote:
->>>>> In alarm_wkalm_set and alarm_wkalm_set_minute test, they use different
->>>>> ioctl (RTC_ALM_SET/RTC_WKALM_SET) for alarm feature detection. They will
->>>>> skip testing if RTC_ALM_SET/RTC_WKALM_SET ioctl returns an EINVAL error
->>>>> code. This design may miss detecting real problems when the
->>>>> efi.set_wakeup_time() return errors and then RTC_ALM_SET/RTC_WKALM_SET
->>>>> ioctl returns an EINVAL error code with RTC_FEATURE_ALARM enabled.
->>>>>
->>>>> In order to make rtctest more explicit and robust, we propose to use
->>>>> RTC_PARAM_GET ioctl interface to check rtc alarm feature state before
->>>>> running alarm related tests. If the kernel does not support RTC_PARAM_GET
->>>>> ioctl interface, we will fallback to check the error number of
->>>>> (RTC_ALM_SET/RTC_WKALM_SET) ioctl call for alarm feature detection.
->>>>>
->>>>> Requires commit 101ca8d05913b ("rtc: efi: Enable SET/GET WAKEUP services
->>>>> as optional")
->>>>>
->>>>> Reviewed-by: Koba Ko <kobak@nvidia.com>
->>>>> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
->>>>> Signed-off-by: Joseph Jang <jjang@nvidia.com>
->>>>> ---
->>>>>     tools/testing/selftests/rtc/Makefile  |  2 +-
->>>>>     tools/testing/selftests/rtc/rtctest.c | 64 +++++++++++++++++++++++++++
->>>>>     2 files changed, 65 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
->>>>> index 55198ecc04db..6e3a98fb24ba 100644
->>>>> --- a/tools/testing/selftests/rtc/Makefile
->>>>> +++ b/tools/testing/selftests/rtc/Makefile
->>>>> @@ -1,5 +1,5 @@
->>>>>     # SPDX-License-Identifier: GPL-2.0
->>>>> -CFLAGS += -O3 -Wl,-no-as-needed -Wall
->>>>> +CFLAGS += -O3 -Wl,-no-as-needed -Wall -I../../../../usr/include/
->>>>
->>>> Is this change actually needed?
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-I saw this and figured it is is still in review.
+Hi,
 
->>>
->>> If we didn't include "-I../../../../usr/include/" in rtctest Makefile,
->>> we may encounter build errors like the following because rtctest default
->>> look at the header file from /usr/include/linux/rtc.h which miss the
->>> definition of struct rtc_param, RTC_PARAM_FEATURES and RTC_PARAM_GET.
->>>
->>> rtctest.c: In function ‘get_rtc_alarm_state’:
->>> rtctest.c:94:15: error: variable ‘param’ has initializer but incomplete
->>> type
->>>       94 |        struct rtc_param param = { 0 };
->>>          |               ^~~~~~~~~
->>> rtctest.c:94:35: warning: excess elements in struct initializer
->>>       94 |        struct rtc_param param = { 0 };
->>>          |                                   ^
->>> rtctest.c:94:35: note: (near initialization for ‘param’)
->>> rtctest.c:94:25: error: storage size of ‘param’ isn’t known
->>>       94 |        struct rtc_param param = { 0 };
->>>          |                         ^~~~~
->>> rtctest.c:98:22: error: ‘RTC_PARAM_FEATURES’ undeclared (first use in
->>> this function)
->>>       98 |        param.param = RTC_PARAM_FEATURES;
->>>          |                      ^~~~~~~~~~~~~~~~~~
->>> rtctest.c:98:22: note: each undeclared identifier is reported only once
->>> for each function it appears in
->>> rtctest.c:100:23: error: ‘RTC_PARAM_GET’ undeclared (first use in this
->>> function); did you mean ‘RTC_ALM_SET’?
->>>      100 |        rc = ioctl(fd, RTC_PARAM_GET, &param);
->>>          |                       ^~~~~~~~~~~~~
->>>          |                       RTC_ALM_SET
->>>
->>> After adding "-I../../../../usr/include/", the rtctest will look at
->>> linux kernel source header files from
->>> <Linux root directory>/usr/include/linux/rtc.h to find the definition of
->>> struct rtc_param, RTC_PARAM_FEATURES and RTC_PARAM_GET and fix the
->>> rtctest build errors.
->>>
->>>
->>> Thank you,
->>> Joseph.
->>>
->>>   >
->> Hi Alexandre,
->>
->> Thank you for reviewing the kernel patch [PATCH 1/2].
->> We are still not sure if we could include linux headers files from kernel
->> source directory by the following change ?
->>
->> -CFLAGS += -O3 -Wl,-no-as-needed -Wall
->> +CFLAGS += -O3 -Wl,-no-as-needed -Wall -I../../../../usr/include/
+On the Renesas RZ/G3S SoC the RTC clock is provided by the VBATTB
+IP. A 32 KHz crystall oscillator could be connected to the VBATTB
+input pins. The logic to control this clock (and pass it to RTC)
+is inside the VBATTB IP. For this, the clk-vbattb driver was added
+(patches 03-05/12).
 
-You have to say $(top_srcdir)instead of hardcoding the path
-> 
-> I guess this is ok, I expected Shuah to take this path too.
-> 
->>
+Patches:
+- 01-02/12: updates with the power domain IDs
+- 03-05/12: add VBATTB support that provides the RTC clock
+- 06-07/12: add the RTC driver
+- 08-11/12: update the device trees with proper nodes to enable RTC
+-    12/12: enable proper config flags for RTC to work on RZ/G3S SoC
 
-Not as is. Need v2 for this with the above change.
+Merge strategy, if any:
+- clock patches (01-05/12) need to go though the same tree because of
+  patch 05/12 using the devm_clk_hw_register_gate_parent_hw() introduced
+  in patch 04/12
+- RTC patches (06-07/12) can go though RTC tree
+- DTS and defconfig patches can go though Renesas tree
 
-thanks,
--- Shuah
+Thank you,
+Claudiu Beznea
+
+Changes in v4:
+- added patches
+  "dt-bindings: clock: r9a08g045-cpg: Add power domain ID for RTC"
+  "clk: renesas: r9a08g045: Add power domain for RTC"
+- squashed the following patches from v3:
+  "Add clock IDs for the VBATTB controller"
+  "dt-bindings: clock: renesas,r9a08g045-vbattb: Document VBATTB"
+- fixed typos in commit description
+- moved assigned-clocks, assigned-clock-parents from the RTC
+  documentation to the VBATTB documentation; same adjustment has been
+  done on the device tree patches
+- renamed include/dt-bindings/clock/r9a08g045-vbattb.h to
+  include/dt-bindings/clock/renesas,r9a08g045-vbattb.h
+- used quartz-load-femtofarads
+- used RTC_TIMESTAMP_BEGIN_2000 and RTC_TIMESTAMP_BEGIN_2099 in the RTC
+  driver and added a comment in remove API to mention RTC cannot power
+  on the system
+- squashed defconfig patches
+- collected tags
+- per patch changes are listed in individual patches
+
+Changes in v3:
+- dropped patches "mfd: renesas-vbattb: Add a MFD driver for the Renesas
+  VBATTB IP"
+- added patches:
+-- dt-bindings: clock: r9a08g045-vbattb: Add clock IDs for
+   the VBATTB controller
+-- clk: linux/clk-provider.h: Add devm_clk_hw_register_gate_parent_hw()
+- moved Documentation/devicetree/bindings/mfd/renesas,r9a08g045-vbattb.yaml
+  to Documentation/devicetree/bindings/clock/renesas,r9a08g045-vbattb.yaml
+- addressed review comments
+- per patch changes are listed in individual patches
+
+Changes in v2:
+- dropped patch "clk: renesas: r9a08g045: Add clock, reset and power domain
+  support for the VBATTB IP" as it was already integrated
+- kept only a documentation file for both VBATT MFD and clock drivers as
+  suggested
+- addressed review comments
+- used cleanup.h lock helpers
+- update startup sequence for the RTC driver
+- switch to 24 hours mode on the RTC driver
+- fixed range for the RTC driver
+- added a generic compatible for the RTC driver as this will also be
+  used by RZ/V2H
+- used clkin/xin clock names for the VBATTB clock driver to determine
+  if bypass should be configured on registers instead of having
+  dedicated DT property
+- added mfd driver for VBATTB
+- updated Kconfig flag names to include vendor name
+- removed DT node labels from Documentation files
+- used items to describe the interrupts and clocks
+
+Claudiu Beznea (12):
+  dt-bindings: clock: r9a08g045-cpg: Add power domain ID for RTC
+  clk: renesas: r9a08g045: Add power domain for RTC
+  dt-bindings: clock: renesas,r9a08g045-vbattb: Document VBATTB
+  clk: linux/clk-provider.h: Add devm_clk_hw_register_gate_parent_hw()
+  clk: renesas: clk-vbattb: Add VBATTB clock driver
+  dt-bindings: rtc: renesas,rzg3s-rtc: Document the Renesas RTCA-3 IP
+  rtc: renesas-rtca3: Add driver for RTCA-3 available on Renesas RZ/G3S
+    SoC
+  arm64: dts: renesas: r9a08g045: Add VBATTB node
+  arm64: dts: renesas: r9a08g045: Add RTC node
+  arm64: dts: renesas: rzg3s-smarc-som: Enable VBATTB
+  arm64: dts: renesas: rzg3s-smarc-som: Enable RTC
+  arm64: defconfig: Enable VBATTB clock and Renesas RTCA-3 flags
+
+ .../clock/renesas,r9a08g045-vbattb.yaml       |  83 ++
+ .../bindings/rtc/renesas,rz-rtca3.yaml        |  83 ++
+ MAINTAINERS                                   |   8 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  35 +
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |  17 +
+ arch/arm64/configs/defconfig                  |   2 +
+ drivers/clk/renesas/Kconfig                   |   4 +
+ drivers/clk/renesas/Makefile                  |   1 +
+ drivers/clk/renesas/clk-vbattb.c              | 205 ++++
+ drivers/clk/renesas/r9a08g045-cpg.c           |   3 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-renesas-rtca3.c               | 899 ++++++++++++++++++
+ include/dt-bindings/clock/r9a08g045-cpg.h     |   1 +
+ .../clock/renesas,r9a08g045-vbattb.h          |  13 +
+ include/linux/clk-provider.h                  |  18 +
+ 16 files changed, 1383 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/renesas,r9a08g045-vbattb.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
+ create mode 100644 drivers/clk/renesas/clk-vbattb.c
+ create mode 100644 drivers/rtc/rtc-renesas-rtca3.c
+ create mode 100644 include/dt-bindings/clock/renesas,r9a08g045-vbattb.h
+
+-- 
+2.39.2
+
 
