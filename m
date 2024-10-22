@@ -1,62 +1,62 @@
-Return-Path: <linux-rtc+bounces-2264-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2265-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B4069A9BE3
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Oct 2024 10:02:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD04E9A9BE7
+	for <lists+linux-rtc@lfdr.de>; Tue, 22 Oct 2024 10:02:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E65CBB20EA3
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Oct 2024 08:02:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3F371C22734
+	for <lists+linux-rtc@lfdr.de>; Tue, 22 Oct 2024 08:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB7414B08C;
-	Tue, 22 Oct 2024 08:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BF0156F5F;
+	Tue, 22 Oct 2024 08:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b="mFrxkvfO"
+	dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b="z3Sk2+2W"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2092.outbound.protection.outlook.com [40.107.21.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0790D347C7;
-	Tue, 22 Oct 2024 08:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538D21547C4;
+	Tue, 22 Oct 2024 08:02:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.92
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729584132; cv=fail; b=pQ1YOwhNtENHAc3A5VCQcwpKfk4CYEOb+Mp1aFpuHeARkqbvFcIaGdvLNuTfhyFCoHEZ7Ywox1+4Zbp40pMpoRnRpUpNeVJaRypk2uDZ+Q7Xry6Y2TWpoylQ6+AqP0vG7SkdTMpHWtlOHI0rYqB8dVO3g9lDKBQuJzFSVDoZh4o=
+	t=1729584134; cv=fail; b=ZaBRtX/kbE7sWLz2b1Pot10bnxrv1msUhy6K1PmOeCm7B9J1JJxVAEcC7uGcywPK0JFe07S5ou0I7Z5eqdw5EayA8WsJQDP4C27PqjFKVzWULHDaO2TC5PiTHcGOQT3HjCbx3Rvzu2Hn5tYO3lHWxPxOxnmjL8MYeu+DgZr6+Yk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729584132; c=relaxed/simple;
-	bh=pYE+/IYjvuP5I8ipToclpnqwR0/K5p/MxWqSI8/E0CA=;
+	s=arc-20240116; t=1729584134; c=relaxed/simple;
+	bh=FuWHeEJksRVSZveOxXsR/3MoDNW1bvU6a4gHntO2eQc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GrnEPJimsuUg3KlQ9ywph1XTEmPj9GuWcWsNa32t5I4cEcbzY09G5Gy9jXL+cPNTNa75ZGs4+kMr7bhsW8UkxM85BE5iUtYNCmQQXTaLCUqSFvb7nEjmAyMEJINd5UTHu2Vyx1mFsFkUZ9QMtNY69ZDiUBiKSVjF/vG9RL4bLz0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com; spf=pass smtp.mailfrom=kunbus.com; dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b=mFrxkvfO; arc=fail smtp.client-ip=40.107.21.92
+	 Content-Type:MIME-Version; b=kOl8/9x61Vk2a0M6t465uQHwD9Oc1rRusVQqwe4CQM3s4ud8nNWMFbMPEh1a9VMDo6UudiP8YIn4NVTOQcFToL+LV8yQjej3N0OIHw4EuhheId/FrKLOEBxdtTBX7xglXTPyFrTWFLRz2iG9qWREUz1OOtk6wQZD6++c1sytIM8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com; spf=pass smtp.mailfrom=kunbus.com; dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b=z3Sk2+2W; arc=fail smtp.client-ip=40.107.21.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kunbus.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pDOK5ujaQ4XSmA31/L1KXTwNuHRsZcDC/SBrxChT0JR7mTBIzqFiaBwCP/ElXHs4dH8ecHA7u2REItLa87pl0mcmuoTzseheNyci56yTeIkuVMEaXJQwPgVcp9vHENhMkamqJx6NqxAJ1a32TcnYiSDHNnBrchHL/cJOkKZLa4OH3xbpT7+hil64t7VtG1sjy5UtLFOQTJ2jL6pUNK0G12LVWITBdWGEbKIkBw1AfOCqhTwoB026op5DrbSBepjQbchuTC6+6hOayH4CJyQDTYo4XjhO4vwyNzBBgLcptqoyG1dzZGoerKFd17+HDSM0kSXc3GRPacO3RXgzAK03Iw==
+ b=lequOJkvoUA31wdhQGNCanoZtw4mxC42bv940jtEyf6Jp+DnxLqMNHy0KkBnEnQCWA1Mpobf0LBjT+cyX2Px9jJZbmyeFKP2MV4Em4Pu9puZOcOHrTQWnsqUXsSPs/iTkJAiSNMhv6oFLAT4Ao7XlmhyH0L/VmCCDMrFRaXjb/bTeS4PjxvWAtaX9A46wcdaoEEsdyVZwR3t9ULZ1NLk/r1NVF6posu/15j6U8GIZGpqij/dTgt96LfEZaXLtFW8xR0TGYX7CcS91h18u2qHSqRUkzUs0rxcKnncu3pN7bv/JP0mvyv8YdMGUxIUrAqQ3f3MstacX5w6m6Kv2vYTSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dIJS5NIWvNPSjeP7mm8E59M7kl14n2nFcIHK1jC4SR0=;
- b=FLToXikVbui6zzKLP5o0rEOrpjk/zssdATlrZx55z9AjbTpnvEIm/pBZkAk9z/rXVz3XN/N9xz7KF4oG9SAtZsA9PbwjBF8Sc7Y+WowkGK9IL600YtLUBkXvzjnmYLCxdpdDeFcbyq2bXAscja9aFJkH8PSjwenQiwla5XlYusgDi+fjshPBnSMkrOVz9Ay+4CP1jEvpP5Q+c/mAler+2k4eoPVCCIzBIqTkTu7klYA2PSFj/itPles5jGDJbV86z7asdP7PTmfe1JMHbw68O83U5y20+XW+6W5OBZEvenwS2cYquw25wtIADjynZp71ZcvcwRD7Ska1xUW03ZQ8Zg==
+ bh=lXDv0RffGdWMYbbKEiHp0cR4svtT9Ts1IGNDgkKP2io=;
+ b=UnQmut3wnB8LEzjA5wGh1WZQqwSpLui6DOZ4FGTC7X9ZxSIMU2nkwfY08j8B+FKWuxw8rUXO2vhuxt3rE+GUrG6+DaOY04phku8tV52yRwgesx/LzHjxduIKq4ME/hMowEW4Zxz2b5FHlEgAXXIjDsOPVahEmOmJNYm2n8Ol8iRl0fFTtKiSk46LMj3SdLeU6yvmuqcKmyM/8dbSmvfTviEjgsmFuLRNJSyeDpmH82j6k66DYp07y5XWWmaktz8+VtcAb+sb1dX/0PSTFiBSPURsw9E/0jUO9OtJsY7qeKLs1s/vsPcxYOYgGz5DLZlhAOxYw1yN96cGOxHc5fngyg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
  dkim=pass header.d=kunbus.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dIJS5NIWvNPSjeP7mm8E59M7kl14n2nFcIHK1jC4SR0=;
- b=mFrxkvfOZDOZECYgY29yZSshqDCnIRW4tcUp/X8P8Ciy7b2leBpHiZkiB8uboMKuzyhTszK4VvC9dX9FcN3OrkGJljEjvBtNPLAFT8NxSfrp8tOByzMAZmV56wBGjHZMV/wLU6IaXVZbIdNfyB/sdZpnYHVjpxL1Z32ppYhgWF4=
+ bh=lXDv0RffGdWMYbbKEiHp0cR4svtT9Ts1IGNDgkKP2io=;
+ b=z3Sk2+2WNtf0k9g8cHELac/UkhgeREkTHrAD+C+kSaZG9i6XJychpaXy6XUkpLYYY7kvHI2pGPne+Xq4qjFPHWR8RwMjUjXsI/y4gneJxasSsBbiNfcZCdBksDPoA6swFF++EiN2CUTBd0n4WYWsl7Varb0pg7m9kGW4vwJYz9o=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=kunbus.com;
 Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:160::8)
  by AM0P193MB0497.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:16e::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Tue, 22 Oct
- 2024 08:02:06 +0000
+ 2024 08:02:08 +0000
 Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
  ([fe80::2398:d74:da85:f90]) by AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
  ([fe80::2398:d74:da85:f90%3]) with mapi id 15.20.8093.014; Tue, 22 Oct 2024
- 08:02:06 +0000
+ 08:02:08 +0000
 From: Philipp Rosenberger <p.rosenberger@kunbus.com>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Rob Herring <robh@kernel.org>,
@@ -67,9 +67,9 @@ To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-kernel@vger.kernel.org
 Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>,
 	Philipp Rosenberger <p.rosenberger@kunbus.com>
-Subject: [PATCH 1/2] dt-bindings: rtc: pcf2127: Add nxp,battery-switch-over property
-Date: Tue, 22 Oct 2024 10:01:20 +0200
-Message-Id: <20241022080121.1594744-2-p.rosenberger@kunbus.com>
+Subject: [PATCH 2/2] rtc: pcf2127: make battery switch-over configurable
+Date: Tue, 22 Oct 2024 10:01:21 +0200
+Message-Id: <20241022080121.1594744-3-p.rosenberger@kunbus.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241022080121.1594744-1-p.rosenberger@kunbus.com>
 References: <20241022080121.1594744-1-p.rosenberger@kunbus.com>
@@ -86,119 +86,192 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM0P193MB0738:EE_|AM0P193MB0497:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3ca3bde-02c0-4c06-49ff-08dcf26fd21e
+X-MS-Office365-Filtering-Correlation-Id: 73caae4b-2e2a-423c-144a-08dcf26fd399
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?5zvkdMJj1N06+/dSwMR9syvagkbo2bppiL1Ao0nVM2yDthONRdYDsAkossfF?=
- =?us-ascii?Q?IJ/y1tdTDMeB+G9xApsdN5jVQZ+Ci1iQSV1rgnaqo69uWDPbt6VQNhPnpqH5?=
- =?us-ascii?Q?TvaTK6Yn2iprTlAw9IYvHtAv0ZqblKz/896ni0xjKdz1vaRWLK3XnXJrUefz?=
- =?us-ascii?Q?nc6F0YcrEFqjFNl2ZBOdc+U4SIGGNhi0qD9/73jt1ttFdqHT1X+St36NOiZU?=
- =?us-ascii?Q?9Iax/DYBPXzmfAX12n8trSDiMETCt2IhNeXPPqpI2pDLDmrAna1lOxbxsMTk?=
- =?us-ascii?Q?E5iq2f8AwFtQrAyVRm85r6mds+8TVaXyNDdqwjPyS0bTi3zk/HbZgsEzEi8i?=
- =?us-ascii?Q?qv/XasCKp8oVHQiHypHgTkKgJvltU9ATjZJVQ3XDX7PQJ2nquVt3XA956v3w?=
- =?us-ascii?Q?flw4s5SsExIErP4ncJ74MW1MEdXl8YzHyCRxqJr4wc0vq9eGa0EHK3tiOBZ4?=
- =?us-ascii?Q?XX28Zh8oHEQprf2Y82LJ2Ni5RJKwwbqzUQHOckKTzFVdonZGRve1HVYydx0e?=
- =?us-ascii?Q?haP4jlhKqjqHFsMxFXJniuFh7AlhewLaVK9ldPVhl4KDOkaE5CqYSy62zHri?=
- =?us-ascii?Q?ZWnZDVYnbSNX4ToiU5fEMggJBiDIfRRzk+N+HQ2WUcse5gcrOcmc92zAuiJt?=
- =?us-ascii?Q?ISdVNiVIH1deYFQKV31aKQyr3+3JQAYno7QF+/OKMBj8rbWsQCme3Jx0C3+d?=
- =?us-ascii?Q?7VBf4vxr6fc8I5vx6CdT4knKtTRNxH/UwYdKAH8eQPyNpHU47qIfRSLhG61/?=
- =?us-ascii?Q?eDRg8QV+LuXqfbmmnS2W9O5lxKNxZjItPzBVhp4jAHud/dDRWG+2s6+SLU6T?=
- =?us-ascii?Q?g2XwVl5/LXsO1QpROHHIU3BEEHXMDC2fk7FTdoOaWLMMtomUjTz7IK/95Q5N?=
- =?us-ascii?Q?+cHG5YT0eP7qFQjZ4LT34ppoANkaY7FTxANXh5fGGXfi9ha059+liAfGqLrx?=
- =?us-ascii?Q?Kh77116GjMtkN0MAxB1MskbkFN6GRgNGqWKry4nWjd3Z2BqFNYO/YdXmiTL4?=
- =?us-ascii?Q?ppZPkafXmd5af/TjOu7i6SFMfANXd07VbGdiiTf2A31dOOZlT+kAtW6slshv?=
- =?us-ascii?Q?P7xx7ods86U4rGpMl6yFBLICs9F7g5/YJopvd+igTYiW4Uhd/lBFelvLFTiv?=
- =?us-ascii?Q?WMLcZCdqHnKzr/I+LCounE897flu/26R9RjeU49XUQKbOzLb7g7dnHKjSE2F?=
- =?us-ascii?Q?T3dEYqYEzu+aJPGV2qMViukPjEs9PnltXfJOT0gkmlRRrEGgIN5uSGXtt5xZ?=
- =?us-ascii?Q?v42fQ7/Y22qyotVL8lHT01gkc2cS0XXWVrtZxhfZjQyIN3kxLrOdeaVdn2qm?=
- =?us-ascii?Q?f0yebifOaJDvLfpHE4mcbguW+VI+P6rnQkvXNh1gJI4IMn53PnYQt08WE9ph?=
- =?us-ascii?Q?1USPUFw=3D?=
+	=?us-ascii?Q?QXaDShfisAKJfL4Q98gVrNc9T8gmeRHG6kYVzdzyNfQt/pPqb04wd5LDZy9K?=
+ =?us-ascii?Q?4HzFxpkSupUc8hKwri0OeIbYMechP0gMt8QAHOeuZGIGEPbXDUzt6pr2jlkW?=
+ =?us-ascii?Q?z66haB5bTWyfnFkGS+vja6u/o3s9qq+LuhTNbesJtu9kP/NWEbk93bssfbks?=
+ =?us-ascii?Q?YYYZ+ZnxXMl5nizXfD47TQ/MDVL+792ro5GrPt+o+c1lkohAaDnAe44gp94y?=
+ =?us-ascii?Q?iENX45yszo0AclHEec8E8iBoMGZkB4phXiva2rrCQNdE2tdcc7uLd/JA5ftu?=
+ =?us-ascii?Q?EDa//dHpGoPfBd+lAKDWCX6O9O4abGDBtsWGiFzC6tbxNcvoehi/Efh2KI8J?=
+ =?us-ascii?Q?RW2DVE8yhXHSVn/QZNn5Gs4NEyucuB4kt557TT+izmqyiBFLrfJTahth21cH?=
+ =?us-ascii?Q?BRQIYnOGTtulZ/4saFpNDesvjWXXY00PzvMnoNugmX1kLZbiT9iy4g0H3YjL?=
+ =?us-ascii?Q?QCdavCr5gWjxelTtIR/w2qHiysfqrGpnrSpBA8bEqB6UQ4l4ymM2TVi1Vb5o?=
+ =?us-ascii?Q?AiALqlSGphXk8WSJWeI1u4i/X66qpUIAB8wB4tbzhvGm/UAZSYOYHoAZIISE?=
+ =?us-ascii?Q?ZPm5+ZHEFi7ClBBvK6tVKq5IW8MfmZ3gEtkBOlQulX3Gu5PVyjAQRLnI3+mc?=
+ =?us-ascii?Q?BHQfPEx7NEKfbbWk7qPLXf37sILqty+c2Iopvfv7ZrKgALkIkOuwN6y6QH8X?=
+ =?us-ascii?Q?4HH8vOMNpx7FNQ1rPd+PAWx3KWprJVI1mNztTCRIQK9p52A9Ktklg1vfRq4w?=
+ =?us-ascii?Q?FRhKpf+uag4LiGMPFKCKuJ2Vh2+CTNBdPgN2YWU7TKf3rDDJqqU04rNaanqW?=
+ =?us-ascii?Q?Uu6EGQk5kKCMBok/Gcq0XnhXUI71ahcFjem1wh37U3jeK648XFsahTH4uz26?=
+ =?us-ascii?Q?SJKlOSW5MBUqwlpa0IrB6NGDQgQkAwlPPRhsYQHFIjgnyER2UBiH9liuLhO2?=
+ =?us-ascii?Q?te+gZoFTra8Sp+1GcDiifr7kK6cxaXQRqYN2MUysDYO6wHAoS7rBbnW494kl?=
+ =?us-ascii?Q?yY+8xgKJP1RlOh27K7WX9JuR6IWG++j1O6ffIWpsacS+DX0qPBImx55xCfJ0?=
+ =?us-ascii?Q?iVMLIgaAPItIo+Qh/GZYpF7w4LXGVNJLmMOgHilVPDtG8wI4ElxPh/XRfC14?=
+ =?us-ascii?Q?Cy0r5QoZu1YJOgoB8dohWAmT4FS+pvgzXjMhh5E0VYHoVKEZNiOR3vBtMWWY?=
+ =?us-ascii?Q?YJCu0DGlqupIGTiLCRhmWJ3Jr68lzdfqKKIZdA5KQNcyCxexDNdDXAFUM1pN?=
+ =?us-ascii?Q?fml5SZSBlrju+CyMsKCP7XrS4rt2F49f9J3RQVD3RmIQnItEr5lckZux/Sw4?=
+ =?us-ascii?Q?ILlxBi9jvw+vvTST4u6wdMSOSr33lEQMZvGSeFPFnPlSSmJXQp9ZCMmK4NxT?=
+ =?us-ascii?Q?kdxgj1I=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P193MB0738.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NOZ7VuzjoKPmgR2ynCgugYg7ZhAZ3tTeeEWNQI3FKbrguwKTqO5pZHIRmpc5?=
- =?us-ascii?Q?Lg6xQ9+KyKraCJkvsUIw+d2vTiHuE+H4ZDOALs5LWZlJ/Bf2grE0lFLy0mVg?=
- =?us-ascii?Q?/PkqRg+W4JJgtbvlxWw8KnBBTkNyZloZV+2RrnmU48GXA4YfBLPO0KjNATiK?=
- =?us-ascii?Q?95y5T3VviB/1m2XKXvEIb4ooKm51lVUpvM7eNf0nR4KGJYi+HItA6Mgk6pS/?=
- =?us-ascii?Q?OQ9P4inJ44etZ0C4FESaxPzvEwiKtfiV4lWanbr3sJrFm14yMfE5A3CUEG27?=
- =?us-ascii?Q?uhVoqmXh2SworI03fgBx+PRub22M2UocJtswsWYIWJg3E4eD3VBhJXUZYIaq?=
- =?us-ascii?Q?FBKTkYz814EktTm75v87DCoF+VlP2HmtYM34arigM/EtFVhfozlIDCJL1mSd?=
- =?us-ascii?Q?Si6HzDJ9A8bEiglMx9/PS4a4bRkflj4brrJgnCxiMLayNnXGX3Jz/LH25qYW?=
- =?us-ascii?Q?A1uvzwqpiJTDH3AL1yZaFAxXD+XapHLPJNwJRbAagAVEHra6Pu7nu5N2Q7pV?=
- =?us-ascii?Q?B9X8BnUgKoazwgb2II/0PMadUavWUWqUvDOkKk6PQpzw2mzXHdE/M4s0wshs?=
- =?us-ascii?Q?/xWo7GIpQPMOTypJHaVnXHur4372qBmFvg1tKY8KJHuOnSqAZX41P46n7WTh?=
- =?us-ascii?Q?NTPbfIRb6pokHzoOxiL5VMoiuxePLaBK/MNmynIEtjrAS4MapTCyGPcpykdj?=
- =?us-ascii?Q?ecCQ5Z2jaJPfCZwykOg2MxCoC2wYVnnhfQ9pcHmOQN9SZ5llMiy1glQIcJm2?=
- =?us-ascii?Q?b2c7PP1+Yn6j5HU9lPwJmtsgOukhsChgNMSQxbnnwhHAZ+yfaSixQlESwL/U?=
- =?us-ascii?Q?g+gwZmLkepdMzKLihG8en7AqZO35gz5LIOUnc97T1bGAoh/Lig3rCuSr4m0g?=
- =?us-ascii?Q?bDG4vMeMGOXPMRRiEA1eMH5gEXAICdoOLxBWF3kG9wx87jI6g7v1G1Lj8DE1?=
- =?us-ascii?Q?TIF6K42k+yjzennSc0RK63N76IazA3wI6AU/Xwiv073Yb1+/9FwAsOVklLtQ?=
- =?us-ascii?Q?VUr/qrEc5fi6rPJ9xkYKjNmOlotLRuBnxLaN5iY38IuiuXe1TnOjCvySwpsl?=
- =?us-ascii?Q?xVU03uCtDR51aVtPVm8zxjVeVmKx7XgtqfT0pgsz0uT0Hey44EqFSkKh2Ypd?=
- =?us-ascii?Q?XN99dk9gu+/GmfCUhE64Ua7ZPG+hQgvixiTwbUtwx8mnQpT5F20WmhnQRmnl?=
- =?us-ascii?Q?2tvc5IyPyu7dnJ3qBIK7uAE4uieGq6bnIf+oKZ1zraS1J1OfaYxww6HtJPeF?=
- =?us-ascii?Q?sWtoatz1ku3UrpTjhnyXunZtg6VXKv3KfZXhhp3dhtk6zZwDNYXZtHp3TSrJ?=
- =?us-ascii?Q?bGlNmMNMwKFUVxyN8DEcFTSKcUSg8VDbPDMGdobyYn7vWWUJ35V3hOKbUVvt?=
- =?us-ascii?Q?9DsO63jQKo883v3uiwF3D2IfgSRfUayFsm2Clta7Ql854diGgBp5Jforno4C?=
- =?us-ascii?Q?oazgmMi/OPrCE8E99/5kyDWdMuTO7Wa/yxTXwmCw9wVWFaHCZxq/OsQdjBAI?=
- =?us-ascii?Q?aiz5iqqsVXl0tktD9MLGcmYeiPTsQrUuasNqqAyo0iCkYsHmhUcaUQ9sYMX4?=
- =?us-ascii?Q?ZCmTtKupJNqZ2UwGqHi4YB4zkVcetD2ZedpupK6S1VXqQG7csOHREm+6GlZB?=
- =?us-ascii?Q?EQ=3D=3D?=
+	=?us-ascii?Q?9nBRHLpDeHSDnWh7anrTfZKlMXrhUwoiTqz32YoYNjAJNeifin2cuF+5oAuP?=
+ =?us-ascii?Q?+b8eeopTy96dNAudLnTVVm1h+uq191QWSUpk5vJSEK37I7qsazpix9HXhHU7?=
+ =?us-ascii?Q?wbV3sbQ1cGruIVMgO+J2GJ99svU81tFKTKvHwLFt0rbhb/hhXlwOdXgi7q78?=
+ =?us-ascii?Q?289iMvMKxpBcUgZwvalI9naJ0k8PrlF/eRd2Pa1molbW54oFNLG1R5D1CDFB?=
+ =?us-ascii?Q?q/6LZ/vWb277wtf9CUSVKN4fSEQvfzdV04OuolgMqseGMPGrcleiocP1BWM2?=
+ =?us-ascii?Q?8OLHcOVpkB2HzBRmENOlFxYAZILoeocVmJdjzUNx41NurDFjfv9EjGK3ZxeQ?=
+ =?us-ascii?Q?B/VYY/9CqNgsg+9zP7vEqnm8Vyk2s+ldmuhUNWH8Ad8S+4Ayj/yYJmAOXqxx?=
+ =?us-ascii?Q?kJgUduWbBjLj4/NRQCX99kca66w0IOQzt08d0SjGGHt2CQQKL+xXl98ePh1x?=
+ =?us-ascii?Q?WbARAiD34JT+rq4tg8hkVuvnSeIOz+8RDPKbGCHea48qeZLcDa0Vn+EVDol3?=
+ =?us-ascii?Q?4EFfLdA0Y3VgfnDuFiWn1FQf8HzMMzh8RRwdABvjkVuXDuu/6idasbFI3u5N?=
+ =?us-ascii?Q?By3ZHg4Nf2qGnQ0zTGZQzTdOx2uzwukowHruSEPyw1sRTzi8pwb4Rs1PC6DO?=
+ =?us-ascii?Q?o3mrBQb+NaDFZkyXLV8V5iTJuiD94xTEwqbeQgJUUf8DJbIRxmWJ3UTnz1ew?=
+ =?us-ascii?Q?hU58SYZWhLVpXGwFcgW3dqh5cyxj+JzBP90FJY3VEnQDBB2smDbjJi8CKZyh?=
+ =?us-ascii?Q?lp697IUK12nWPkYVbS4WjM4F/oPmYyXyzELpvjj7EuDrbXU9BcYX8bK45kmF?=
+ =?us-ascii?Q?BvJwKoG1v3HQ8N1Q8fX44Nxg8smoC439gmeucOMV8xPUYJj7V5/IKn4tVWpe?=
+ =?us-ascii?Q?xsdEH4yr7htC6REZjz3kD/BPGlJGyvuuQd5RcggQlx+5wOXo5JuwJUnNvBp+?=
+ =?us-ascii?Q?SLDRLaL6fbXGTlD9/lSdwOlYYq/dcoXFqwYSlHmwoJqlE8DgED8/4O3ZCgEf?=
+ =?us-ascii?Q?U2rS4wzan8mTLatlQRNtRvT0Ab2aDgRuz7aE4JGTDhYzziMpcHhTcMJzTbnQ?=
+ =?us-ascii?Q?OaZiK2nTRdVi3BJU1dkMUAw2qt5O9F28JehnatQDATkXZHnJzhqvpUpF1uWu?=
+ =?us-ascii?Q?LxynVXhTcCTXWOOq/4/AtJBXdLvzxnUGv1KmqQ3YcqDjLrV3OzX7wEXja1y4?=
+ =?us-ascii?Q?OQvK76mRJPY4p7RDWcIQElSBHY8av9eGjOmzSN6jzV1IwUTSmjXwR68dhMMu?=
+ =?us-ascii?Q?+eChk8RNkr2luPv4hv+2jEtMrvvXw0DhfQ41UMjJRAr/UBZg01cEPoxDl7cD?=
+ =?us-ascii?Q?B+sJMHsxOncuM0Z20RZJFvmT0VJJdoMuPqiMzD/muf29ojYlbe2Pz2mC3TLh?=
+ =?us-ascii?Q?zm9sPs2aMD5zAACfKFYou/0sic79sfGowyeArhAOGGhxqvy8nhot/rwY2OaN?=
+ =?us-ascii?Q?sTg3ixVFqhZZHTIawU7ySloWAxoxV+ITaxhubpJyzsaRVx1h/jfXasvXL1/k?=
+ =?us-ascii?Q?NWms+T8WY8UpKxG1Q+XHJY6UeD9pAItL6cUL+Ux8hvo2d3CarYfybCJzdCmd?=
+ =?us-ascii?Q?BGqz+TwnNuSbpmUR91jSpR0uFMkx/vrqeZ3kXo80L/LACPYp5VcTDZpZm5Dg?=
+ =?us-ascii?Q?dw=3D=3D?=
 X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3ca3bde-02c0-4c06-49ff-08dcf26fd21e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73caae4b-2e2a-423c-144a-08dcf26fd399
 X-MS-Exchange-CrossTenant-AuthSource: AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 08:02:06.1190
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 08:02:08.6090
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ODndw1vBsr99Ik65PEu3M4+ji8kmD6wudgK4oEEs5YCphds4QN3PkfHhXus3J5DMrzFtquwodzaIMEzyz9iSCMRVZuRLUtXcgVsdr640LFY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: GCTY5Po+NskI2ZGQKSPo0REBKMsylOnKSDKTQpckaX5HYRbvBZ22gxNZmztouWBbhXDakpA2VBZuGAfamayccNDvKRmj2J7PG4OYLsv/shQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P193MB0497
 
-The nxp,battery-switch-over property is used to control the switch-over,
-battery low detection and extra power fail detection functions.
+The battery switch-over function of the PCF2127, PCA2129 and PCF2129
+have the opposite default behavior as the PCF2131. If the PCF2131 is
+used as replacement for one of the others, the battery switch-over will
+be disabled.
 
-The PCF2131 has a different default value for the PWRMNG bits. It is set
-to 0x7: battery switch-over function is disabled, only one power supply
-(VDD); battery low detection function is disabled.
-This is the opposite of the default of the PCF2127/PCA2129 and PCF2129.
-With the nxp,battery-switch-over the behavior can be controlled through
-the device tree.
+Add nxp,battery-switch-over as an optional devicetree property to configure
+the battery switch-over, battery low detection and extra power fail
+detection functions.
+
+The property reflects the value of the PWRMNG bits of the Control_3
+register.
 
 Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
 ---
- Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/rtc/rtc-pcf2127.c | 61 +++++++++++++++++++++++++++++----------
+ 1 file changed, 46 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Docum=
-entation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-index 2d9fe5a75b06..5739c3e371e7 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-@@ -30,6 +30,16 @@ properties:
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 9c04c4e1a49c..812764b65b34 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -48,6 +48,7 @@
+ #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
+ #define PCF2127_BIT_CTRL3_BF                   BIT(3)
+ #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
++#define PCF2127_BIT_CTRL3_PWRMNG_MASK          (BIT(5) | BIT(6) | BIT(7))
+ /* Time and date registers */
+ #define PCF2127_REG_TIME_BASE          0x03
+ #define PCF2127_BIT_SC_OSF                     BIT(7)
+@@ -529,6 +530,49 @@ static int pcf2127_watchdog_init(struct device *dev, s=
+truct pcf2127 *pcf2127)
+        return devm_watchdog_register_device(dev, &pcf2127->wdd);
+ }
 
-   reset-source: true
-
-+  nxp,battery-switch-over:
-+    description:
-+      Battery and power related configuration. This property is used to se=
-t the
-+      PWRMNG bits of the Control_3 register to control the battery switch-=
-over,
-+      battery low detection and extra power fail detection functions.
-+      The actual supported functions depend on the device capabilities.
-+    $ref: /schemas/types.yaml#/definitions/uint8
-+    minimum: 0
-+    maximum: 7
++static int pcf2127_battery_init(struct device *dev, struct pcf2127 *pcf212=
+7)
++{
++       u8 val =3D 0xff;
++       int ret;
 +
- required:
-   - compatible
-   - reg
++       /*
++        * Disable battery low/switch-over timestamp and interrupts.
++        * Clear battery interrupt flags which can block new trigger events=
+.
++        * Note: This is the default chip behaviour but added to ensure
++        * correct tamper timestamp and interrupt function.
++        */
++       ret =3D regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
++                                PCF2127_BIT_CTRL3_BTSE |
++                                PCF2127_BIT_CTRL3_BIE |
++                                PCF2127_BIT_CTRL3_BLIE, 0);
++       if (ret) {
++               dev_err(dev, "%s: interrupt config (ctrl3) failed\n",
++                       __func__);
++               return ret;
++       }
++
++       ret =3D device_property_read_u8(dev, "nxp,battery-switch-over", &va=
+l);
++       if (ret < 0)
++               return 0;
++
++       if (val > 7) {
++               dev_warn(dev,
++                        "%s: ignoring invalid value for nxp,battery-switch=
+-over: %u\n",
++                        __func__, val);
++               return 0;
++       };
++       ret =3D regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
++                                PCF2127_BIT_CTRL3_PWRMNG_MASK, val << 5);
++       if (ret) {
++               dev_err(dev,
++                       "%s: battery switch-over config (ctrl3) failed\n",
++                       __func__);
++               return ret;
++       }
++
++       return 0;
++}
++
+ /* Alarm */
+ static int pcf2127_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *a=
+lrm)
+ {
+@@ -1224,22 +1268,9 @@ static int pcf2127_probe(struct device *dev, struct =
+regmap *regmap,
+        }
+
+        pcf2127_watchdog_init(dev, pcf2127);
+-
+-       /*
+-        * Disable battery low/switch-over timestamp and interrupts.
+-        * Clear battery interrupt flags which can block new trigger events=
+.
+-        * Note: This is the default chip behaviour but added to ensure
+-        * correct tamper timestamp and interrupt function.
+-        */
+-       ret =3D regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
+-                                PCF2127_BIT_CTRL3_BTSE |
+-                                PCF2127_BIT_CTRL3_BIE |
+-                                PCF2127_BIT_CTRL3_BLIE, 0);
+-       if (ret) {
+-               dev_err(dev, "%s: interrupt config (ctrl3) failed\n",
+-                       __func__);
++       ret =3D pcf2127_battery_init(dev, pcf2127);
++       if (ret < 0)
+                return ret;
+-       }
+
+        /*
+         * Enable timestamp functions 1 to 4.
 --
 2.39.5
 
