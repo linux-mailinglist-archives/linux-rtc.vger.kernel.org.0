@@ -1,116 +1,129 @@
-Return-Path: <linux-rtc+bounces-2273-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2274-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BC5F9ABFD2
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2024 09:08:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11B279AD567
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2024 22:16:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1AE70B20998
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2024 07:08:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40A031C215FB
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2024 20:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59557153BF8;
-	Wed, 23 Oct 2024 07:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB51A1E2610;
+	Wed, 23 Oct 2024 20:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXabRIzz"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f1DwpIO/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2553A8D0;
-	Wed, 23 Oct 2024 07:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C01F1A2C19
+	for <linux-rtc@vger.kernel.org>; Wed, 23 Oct 2024 20:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729667224; cv=none; b=hmObecpNgfEQ5GnaLzINyaRZesEwEn9ZjjrBnoEjEDo7AuovbAEOlj9LQuQ8VVaMaezsDIVneXGoC9J9T5GD66cPfTyOElp1lIucfctnCzJTbwctaAivDTqsbHLi9UX8E3CkgPlEzGYK+MCwQQGs3Rnzwy32ul7YRFg5uK+XJmI=
+	t=1729714577; cv=none; b=jG1UQJMIs1A+4l5hMNCyn0yjQnjYNikvwc23TYHctkADGwa77AWUalRE1kgeTa5kSnZysNFVURfKN+rm6kzy5eC1xmw6WZHUGk23aY6YzAi33Ux9mIOQ5KNc/A8X+s/6k+Z/WO9TDwLO0VKpV8jjtjapQo7zGeimtAI7lp+EZKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729667224; c=relaxed/simple;
-	bh=jZ6NwNmVZfV7ULD4jlOblJfA583fZK3j0KAMT/P6Wsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ecV2ZyODRCDshqvy4WHrRjjmW22Un0atr+Ut4aNXAQFIJkQnDyO81OY0OnSFwVgZWu8gSdhkIAs+GVwhMd+JqnqgAz5nmXwZ2LEQ0IgLZYZDsP78DRUojwjERK96y6+5TQBUjL+kcfSMIM5CR0X4gD7ye/Xtc2/0Dff4Ts3EVLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXabRIzz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B538C4CEC6;
-	Wed, 23 Oct 2024 07:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729667223;
-	bh=jZ6NwNmVZfV7ULD4jlOblJfA583fZK3j0KAMT/P6Wsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sXabRIzzRLc+Ren3SbDkbHSRKkIoGn/a/hcvUxLhcqv2bVV0cvr5fKWgaqaSTwY2c
-	 YSLOhKVImXQj4uIEJIRiko/yA2rBAc78Z83Bwe7NHz19QcP+ylhMc4JoVQd0IS1QLz
-	 DMr/NyzjR+UCdxs+b7Z7qIJMoThhbk3Ab4R2G3WfBEO6pZ3PVRGTaEsYYaPLn9gxvj
-	 hH0Fyo7hNc5iks8ZcefQh9BCElFr/XBsylyQZF+pKOQJNsxZwx898kpZsaJTo5fp84
-	 ttAS6KDcq7MGCy1dPYz58ROoC8LLYwbhvbt4EuwnbvwuN3ECSg/prw64CoDKC5mwRy
-	 6lm4m71YzvsHA==
-Date: Wed, 23 Oct 2024 09:06:59 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Philipp Rosenberger <p.rosenberger@kunbus.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: pcf2127: Add
- nxp,battery-switch-over property
-Message-ID: <sopwritiludrmxzupp3p62ngak3u7qekyam67qh23qnchjim4w@eft6y6kuuqbj>
-References: <20241022092855.1609427-1-p.rosenberger@kunbus.com>
- <20241022092855.1609427-2-p.rosenberger@kunbus.com>
- <20241022-radiator-blemish-3819dd4d94e0@spud>
+	s=arc-20240116; t=1729714577; c=relaxed/simple;
+	bh=t+pBwRES099gjbIXm7AKphItx7J8kvYpUlt7TQ7aHTQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J41ncCW1Frn2xCtbYTOdMHyX0IlGMWFHopn3lXtez6poAha3HTEW+mMOymjL73R3T54vHQuIk2DcI0/boCmT8uOX8+GKXcbfOJWOKpPhXzOUwY7C4wS1UsLzTD6wCQzdA5sLAGAp+RPd4vLQ7EjVPr2n+HRbjGh+oJD3PHUHtf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f1DwpIO/; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-83aad4a05eeso6593039f.1
+        for <linux-rtc@vger.kernel.org>; Wed, 23 Oct 2024 13:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1729714574; x=1730319374; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8kDCSZhRA7POBerNB1e7kbi71ZsjNfGfCME90BjKh8U=;
+        b=f1DwpIO/aOuuk/h5qA/YXkBI+HjnYIuH5SCbgaiXXzKGIlzvPT59WPMSoqf85kaCeD
+         gmFatEdohan57nZBqC74W9mRbKO+yGb20Rmt+UT8240/7Fj7pqQ5CG0xWgpf0ccKVrR7
+         sX39l8GcufjrYRI62+pSi4OTTwPXv6F+7HmN4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729714574; x=1730319374;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8kDCSZhRA7POBerNB1e7kbi71ZsjNfGfCME90BjKh8U=;
+        b=t2vJnTbU52u4e4XsXz8BGvAVQjQgQ0zK2tHMbs94Df/EZ3w2arJzP4B9wY9QAvhTVE
+         YsbiFwsvEw+2BZE3SdapqednJsCIa5DXZMetnjWkvYcocOhphZc/F32REKpAJk7pUlvT
+         tp0rvQKd3Ocbx5mT8uSI0bXKMaidviE7K3A5hliMD+ZAGb136OWPn8wRiC60/+u4sChn
+         Zl3vp7B1+1Q6Y8qg1SsfwHhLtJOYBsl0gljgk8L6MK8srbIvWsoY9hRaGfLkhqevQGFZ
+         u4MFKjM1FWpDmw0Q4AWtO8gb8syvodIASjlaNqKJOmQF5Dkjs/IOSkC71t+sKmzY3rbI
+         eeBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOXel0BNPqVzn9iEwQrsSYu64gGSrwQJgyVOLUFFsc0Afmrle7VAKz01EtwY4SHrJtWEKyCxk6YxY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0ZPxwnXjcJJGzdjTY7OeDB8a3iCk8eLbBhF5UBbbxh6tJq4Bw
+	O9fLwLFS/4jxg75zNEyWlvvHjLa3/YAh12WJzcFfazFojW+/CNbTZ2qbunvBMM8=
+X-Google-Smtp-Source: AGHT+IFxlWgPQhu1E+mBKyy2YSke5qTMx4jKDLlyDjXa5E0AFKuVNbwNPENGDajCm726+x5G05keqA==
+X-Received: by 2002:a05:6602:2c94:b0:82d:16fa:52dd with SMTP id ca18e2360f4ac-83af6192782mr301558139f.7.1729714574207;
+        Wed, 23 Oct 2024 13:16:14 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc2a65e512sm2226878173.156.2024.10.23.13.16.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Oct 2024 13:16:13 -0700 (PDT)
+Message-ID: <2b3052bb-1235-4785-a7bb-a993332b4d83@linuxfoundation.org>
+Date: Wed, 23 Oct 2024 14:16:12 -0600
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241022-radiator-blemish-3819dd4d94e0@spud>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] selftest: rtc: Add to check rtc alarm status for
+ alarm related test
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Joseph Jang <jjang@nvidia.com>
+Cc: shuah@kernel.org, avagin@google.com, amir73il@gmail.com,
+ brauner@kernel.org, mochs@nvidia.com, kobak@nvidia.com,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-tegra@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241021032213.1915224-1-jjang@nvidia.com>
+ <202410221601561f631bc7@mail.local>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <202410221601561f631bc7@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 22, 2024 at 05:35:55PM +0100, Conor Dooley wrote:
-> On Tue, Oct 22, 2024 at 11:28:54AM +0200, Philipp Rosenberger wrote:
-> > The nxp,battery-switch-over property is used to control the switch-over,
-> > battery low detection and extra power fail detection functions.
-> > 
-> > The PCF2131 has a different default value for the PWRMNG bits. It is set
-> > to 0x7: battery switch-over function is disabled, only one power supply
-> > (VDD); battery low detection function is disabled.
-> > This is the opposite of the default of the PCF2127/PCA2129 and PCF2129.
-> > With the nxp,battery-switch-over the behavior can be controlled through
-> > the device tree.
-> > 
-> > Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
-> > ---
-> >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > index 2d9fe5a75b06..5739c3e371e7 100644
-> > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > @@ -30,6 +30,16 @@ properties:
-> >  
-> >    reset-source: true
-> >  
-> > +  nxp,battery-switch-over:
-> > +    description:
-> > +      Battery and power related configuration. This property is used to set the
-> > +      PWRMNG bits of the Control_3 register to control the battery switch-over,
-> > +      battery low detection and extra power fail detection functions.
-> > +      The actual supported functions depend on the device capabilities.
-> > +    $ref: /schemas/types.yaml#/definitions/uint8
-> > +    minimum: 0
-> > +    maximum: 7
+On 10/22/24 10:01, Alexandre Belloni wrote:
+> On 20/10/2024 20:22:13-0700, Joseph Jang wrote:
+>> In alarm_wkalm_set and alarm_wkalm_set_minute test, they use different
+>> ioctl (RTC_ALM_SET/RTC_WKALM_SET) for alarm feature detection. They will
+>> skip testing if RTC_ALM_SET/RTC_WKALM_SET ioctl returns an EINVAL error
+>> code. This design may miss detecting real problems when the
+>> efi.set_wakeup_time() return errors and then RTC_ALM_SET/RTC_WKALM_SET
+>> ioctl returns an EINVAL error code with RTC_FEATURE_ALARM enabled.
+>>
+>> In order to make rtctest more explicit and robust, we propose to use
+>> RTC_PARAM_GET ioctl interface to check rtc alarm feature state before
+>> running alarm related tests. If the kernel does not support RTC_PARAM_GET
+>> ioctl interface, we will fallback to check the error number of
+>> (RTC_ALM_SET/RTC_WKALM_SET) ioctl call for alarm feature detection.
+>>
+>> Requires commit 101ca8d05913b ("rtc: efi: Enable SET/GET WAKEUP services
+>> as optional")
+>>
+>> Reviewed-by: Koba Ko <kobak@nvidia.com>
+>> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+>> Signed-off-by: Joseph Jang <jjang@nvidia.com>
 > 
-> Beyond the fact that I dislike register-content properties like this, where
-> it is not possible to grok the meaning by reading the property, what
-> even makes this suitable for DT in the first place? Reading the commit
-> message this sounds like software policy, and that different users of
-> the same board might want to configure these register bits in different
-> ways.
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> 
+>> ---
+>> Changes in v2:
+>> - Changed to use $(top_srcdir) instead of hardcoding the path.
+>>
 
-Especially that according to commit msg this is model specific, so
-compatible already defines different default value of this register.
+Thanks.
 
-Best regards,
-Krzysztof
+Applied to linux-kselftest next for Linux 6.13-rc1
+
+thanks,
+-- Shuah
 
 
