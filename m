@@ -1,147 +1,188 @@
-Return-Path: <linux-rtc+bounces-2276-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2277-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22EB89ADD82
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 09:25:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F5279ADF9D
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 11:00:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A03B8B20A29
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 07:25:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E77401F2186A
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 09:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1773918A956;
-	Thu, 24 Oct 2024 07:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C021B392E;
+	Thu, 24 Oct 2024 08:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhuBdO6W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XBPPVemd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE793166F14;
-	Thu, 24 Oct 2024 07:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12151B0F19;
+	Thu, 24 Oct 2024 08:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729754733; cv=none; b=jqemoUUHFp30JG0miFGa7CTA0sN2q27rX23IyllBNPkbOtps84Iarm87b/2jkHHVrga5+IE4VzThE7vZyWtPXEY1/fWmGloY9YRYVE//zJ7iHveiyRnskcxn7MU86qbCj2eyZkmCurg0NVKvcmD6W58be80o6iRjigIGCHvf3CM=
+	t=1729760384; cv=none; b=LGjn80SqkZSelJz8/LVpgWg2mO4VvgKW19v3bJ0zr/5RcN3Yq5XooVDHudFSvnGoCe5ngf4xiHYsTFGBZ0RvAnQgTgc0QGq9lCE7ivs/9kdScC7eD55ADiy+fGT7CX+ySKIMLuQshCuKCiE70d0Kmyfzwl0UDJ9+cG6RCMTmG8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729754733; c=relaxed/simple;
-	bh=o8n3RC4zsUYNU7G9RLPOn4IbDAFu4sTmJjNO/3ODR68=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TReCDspEf5snRZh5L03HCEOm8pBykO+lpb5BP37oLQFDGCIJ9q5W+/53vMLLbI6IKbLq99YcBXt5IBAqpMK0a3fBELQ52cOUoe8tqrMoFtIU6+EqP81JuGbLbnmJC/RYXwKvFJO/FfCQgKCX0FT0ppQHhbLJI6rAuWnwbRSBhqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhuBdO6W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730F5C4CEC7;
-	Thu, 24 Oct 2024 07:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729754732;
-	bh=o8n3RC4zsUYNU7G9RLPOn4IbDAFu4sTmJjNO/3ODR68=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GhuBdO6WR4Lk5uqTlPhH/VWcb4AqKq55eiMSoUy7iVptFAvPoER4Mpfmdrd3RMJmq
-	 BzK56HxGfjQ2lCjW6eeSDBuxcLglmBFUjL/iykDV75q7mAu7MS4WpDDLkPo1MC/aCM
-	 qRVAlWo7l/D9HOTA4lw+jBUsFLghcn1vdBBbiM19QjNOmwtc59UDqf9P64dbtv2Qlb
-	 NmZT2zO4ZNk8mGNafNGaWr5s8GezHYrn+ASSmOuwONoOyb2mzq2BfoVTX6TlnfG73y
-	 uoZeGF++FXxaH064ng+09oEDQBqw27JlYsJV5jLJbPe8prAq692GDIbj9B36HWjTZT
-	 JGUCW+L1yx/bA==
-Date: Thu, 24 Oct 2024 09:25:29 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Philipp Rosenberger <p.rosenberger@kunbus.com>
-Cc: Conor Dooley <conor@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: pcf2127: Add
- nxp,battery-switch-over property
-Message-ID: <pj3tgtsdsjsqqznxgzzmxrcozibqie6ubtythou7t23tfgde5w@t6nwxob4rjah>
-References: <20241022092855.1609427-1-p.rosenberger@kunbus.com>
- <20241022092855.1609427-2-p.rosenberger@kunbus.com>
- <20241022-radiator-blemish-3819dd4d94e0@spud>
- <36f46d44-8852-4988-9ff9-5b8bf49e2aa8@kunbus.com>
+	s=arc-20240116; t=1729760384; c=relaxed/simple;
+	bh=fWZRKKDMjH6AV4L2EpcN1Z+Dw912vE6hGK1NZIhh4cs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BMwhJTOGQrgKAcsap72WnPzHNtCV3yydqvdtzD0vjRbMMOKkA2Q73CB/QvfSdozXvhvLQie0Enr44kk8IrNr90wRRFJYS1Ys639KvmClLDczEe5JF6e7yqMaP4Or0HNOxuQxVnmi56N0FXjC5OTS6PLZlJDmTcGpbcBZEIWbCDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XBPPVemd; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20cbca51687so5384395ad.1;
+        Thu, 24 Oct 2024 01:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729760382; x=1730365182; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M0Y48yxp1xFIkBVIBLGxo7k5thlINaCSsNpWdPdeLiA=;
+        b=XBPPVemdcCZ6JXXDHrwJfyDRfjIJ4NtrlHhncJVteYaH8otcHa/tyqQMmvqiVNK1eO
+         bf0wadbdmE03/hAez0/5+GiKVT5Hw51t7vZzNgMhn4B6J7e8AcFLZ7U2tjsK7ZRWtNDd
+         6GurXdL6q8ciK2Psty3smiB/wp+NIlAEb9m3rmWVM83dmUfOGzz7TCdDjVYstA5XykIa
+         rvG2XAFQsBHiBWxQLJegm35fMIm2B5c7AAx1JlYscI0R/OanV00EgMsACxGSHAC24uqt
+         JDqmkIP0F1Uaq3SFuztA3KPRFPBzPA09+KQxLyiSxBCkcJQ43hg/CtrE8AP4vHmUM3MJ
+         yaWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729760382; x=1730365182;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M0Y48yxp1xFIkBVIBLGxo7k5thlINaCSsNpWdPdeLiA=;
+        b=P8Q7y2NMC8YPMoH6XUdtw3IeJC/CTNC3b48m7jofCO/lKfwHieCYIsPxy79Bfpqn9B
+         j/cNsCe7hJOREuL0K4XB92wJta6spDupe341eq1Mum8BBgcscuckuNdvARD/E5lUyLHM
+         U7ZU5obA9CB6GkJEoydsb8u4Kgwn14ivtN3uND1Mk/32a58jPWlxlps34e8AZmKeQThq
+         ijv07jRETqBb45lrbzotAdPB0TFMq86Kzc8eeHh33kwVu6kiWcgGFXQXCessWVJ8Eu+C
+         ONE+/lnHeIKpxvyUrcTOp18EimVPCeQyxgnDVIULF0Jx4qQ2wUxxL4nqt3fnFWQ4fMOP
+         TVgg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5q7zbIxMwV0vHLnMY0MVMn0s2gTs9TSu3ePcZ7tj2a+rp56qH5ogVOKeZhjD+EAs0r54DMVpbuc0Q@vger.kernel.org, AJvYcCUqsQV4miPOct+eW5McMrOy5ZpaHD96gBA9X9LSGnoTfHZ0N1Ke3bHXnIMjJfoZaUuiFWI74BcprIzy@vger.kernel.org, AJvYcCVKTKgTov2kcO8GScamM3u4n3136b3y07CbteI4/QGdBpunAXSLnLmQ8etKwQ/BIsF9e1Fywl7h@vger.kernel.org, AJvYcCW56tQ+M/Mfw0Ek8mFsiu7zm3FWx7D+wGoiOCzhBqkdGmf/v4g3dvqiee2SmRjHXCKDWoER56197Jc=@vger.kernel.org, AJvYcCWFYHB56j7nNxyggej1S8dQEFI3qCZLtc+wpPkB31S7QpOCGrRNs/NI/zIIQuEapG8PUDJZAvpLZAzg0mT5W+Q=@vger.kernel.org, AJvYcCXBl6a7K7vxQckXIT7eUA8mz1zxOfzqUEFlZGO32MAbp644fXaLXAS7uqtgyHTCs81xCyBaCTeDQ/tzw+o=@vger.kernel.org, AJvYcCXI4KgNVj0k0lmT8C8uq3Iy53H1aE47blRHIWL5hpA95RCGaRhQQqR7cd5jln8QFlkXUZj7u6SLfXf7@vger.kernel.org, AJvYcCXI6dVfI0pAuZuOV0bz8fWnzBqGErMfeNVhfLjWw2FgIb9J3EUsb8YMqxTTQlbkw7YCjrV/nk9+iSqE4A==@vger.kernel.org, AJvYcCXLHBB2xR0gSpcPEyiujFZg3xRlUNY/2hDUSel8hc3YwXN1Bvo1OKIIN/huuCD8qb99K/h1ZtFEUJli@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3MZN3RJLM6JMQlurq0KzxmPwmf3peyowlVtvBSbPXfBe3Wvcx
+	Zt/57HgZmcDNRCWp4tfrxgEjRaC9aMpCNPMVmYs3IMUexCcmlj8C
+X-Google-Smtp-Source: AGHT+IFwOHTmv7xybBTY9E1hOrVStUF7eEvo0pWRQYLqNOIKdK0keUMlla+cJjiazlWheUoWCc8y9w==
+X-Received: by 2002:a17:903:1cd:b0:205:6a9b:7e3e with SMTP id d9443c01a7336-20fab2da04dmr74934675ad.56.1729760381872;
+        Thu, 24 Oct 2024 01:59:41 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0f6e89sm68503615ad.277.2024.10.24.01.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 01:59:41 -0700 (PDT)
+From: Ming Yu <a0282524688@gmail.com>
+X-Google-Original-From: Ming Yu <tmyu0@nuvoton.com>
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	jic23@kernel.org,
+	lars@metafoo.de,
+	ukleinek@kernel.org,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
+Date: Thu, 24 Oct 2024 16:59:13 +0800
+Message-Id: <20241024085922.133071-1-tmyu0@nuvoton.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <36f46d44-8852-4988-9ff9-5b8bf49e2aa8@kunbus.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 24, 2024 at 09:11:04AM +0200, Philipp Rosenberger wrote:
-> On 22.10.24 18:35, Conor Dooley wrote:
-> > On Tue, Oct 22, 2024 at 11:28:54AM +0200, Philipp Rosenberger wrote:
-> > > The nxp,battery-switch-over property is used to control the switch-over,
-> > > battery low detection and extra power fail detection functions.
-> > > 
-> > > The PCF2131 has a different default value for the PWRMNG bits. It is set
-> > > to 0x7: battery switch-over function is disabled, only one power supply
-> > > (VDD); battery low detection function is disabled.
-> > > This is the opposite of the default of the PCF2127/PCA2129 and PCF2129.
-> > > With the nxp,battery-switch-over the behavior can be controlled through
-> > > the device tree.
-> > > 
-> > > Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
-> > > ---
-> > >   Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 10 ++++++++++
-> > >   1 file changed, 10 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > index 2d9fe5a75b06..5739c3e371e7 100644
-> > > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > @@ -30,6 +30,16 @@ properties:
-> > >     reset-source: true
-> > > +  nxp,battery-switch-over:
-> > > +    description:
-> > > +      Battery and power related configuration. This property is used to set the
-> > > +      PWRMNG bits of the Control_3 register to control the battery switch-over,
-> > > +      battery low detection and extra power fail detection functions.
-> > > +      The actual supported functions depend on the device capabilities.
-> > > +    $ref: /schemas/types.yaml#/definitions/uint8
-> > > +    minimum: 0
-> > > +    maximum: 7
-> > 
-> > Beyond the fact that I dislike register-content properties like this, where
-> > it is not possible to grok the meaning by reading the property, what
-> 
-> Yes, I'm not satisfied with this solution myself.
-> There are three different functions, which can be configured in the
-> register:
-> - battery switch-over mode: standard; direct; disabled
-> - battery low detection: enabled; disabled
-> - extra power fail detection: enabled; disabled
-> 
-> I'm not sure what a proper way is to implement this in the devicetree.
-> 
-> > even makes this suitable for DT in the first place? Reading the commit
-> > message this sounds like software policy, and that different users of
-> > the same board might want to configure these register bits in different
-> > ways.
-> 
-> It is less a software policy, but a configuration how the hardware is
-> implemented. If the device has no battery, it is possible to disable the
-> battery switch-over function. In this case the V_BAT must be connected to
-> ground.
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/9), GPIO driver(2/9), I2C Adapter driver(3/9), CANfd driver(4/9),
+WDT driver(5/9), HWMON driver(6/9), IIO driver(7/9), PWM driver(8/9),
+and RTC driver(9/9).
 
-monitored-battery property already tells you this.
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also register a handler function that will be called
+when the USB device receives its interrupt pipe.
 
-> If a battery is connected, the battery switchover will only work if the
-> battery switch-over function is in standard mode or direct switching mode.
-> Until now the driver has just ignored the PWRMNG bits. As the default was
-> battery switching in standard mode. Thus all use cases worked good enough.
-> Battery switching was working if a battery was connected. If no battery was
-> connected it did no real harm (the rtc may have used a tiny bit more power
-> then needed, I guess).
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
 
-Why driver cannot use standard mode always? Or other way?
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+                            Receive bulk-in pipe to read response packet
+                            Receive bulk-in pipe to read data packet
 
-> With the new PCF2131 the default has changed to battery switch-over
-> disabled. Now even with a battery attached, the rtc will lose time after a
-> power cycle.
-> I guess I should describe this better in the commit message.
+Ming Yu (9):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CAN support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  iio: adc: Add Nuvoton NCT6694 IIO support
+  pwm: Add Nuvoton NCT6694 PWM support
+  rtc: Add Nuvoton NCT6694 RTC support
 
-In any case this is pcf2131 related, right? So compatible implies it.
+ MAINTAINERS                      |  15 +
+ drivers/gpio/Kconfig             |  12 +
+ drivers/gpio/Makefile            |   1 +
+ drivers/gpio/gpio-nct6694.c      | 489 ++++++++++++++++++
+ drivers/hwmon/Kconfig            |  10 +
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/nct6694-hwmon.c    | 407 +++++++++++++++
+ drivers/i2c/busses/Kconfig       |  10 +
+ drivers/i2c/busses/Makefile      |   1 +
+ drivers/i2c/busses/i2c-nct6694.c | 166 ++++++
+ drivers/iio/adc/Kconfig          |  10 +
+ drivers/iio/adc/Makefile         |   1 +
+ drivers/iio/adc/nct6694_adc.c    | 616 ++++++++++++++++++++++
+ drivers/mfd/Kconfig              |  10 +
+ drivers/mfd/Makefile             |   2 +
+ drivers/mfd/nct6694.c            | 394 +++++++++++++++
+ drivers/net/can/Kconfig          |  10 +
+ drivers/net/can/Makefile         |   1 +
+ drivers/net/can/nct6694_canfd.c  | 843 +++++++++++++++++++++++++++++++
+ drivers/pwm/Kconfig              |  10 +
+ drivers/pwm/Makefile             |   1 +
+ drivers/pwm/pwm-nct6694.c        | 245 +++++++++
+ drivers/rtc/Kconfig              |  10 +
+ drivers/rtc/Makefile             |   1 +
+ drivers/rtc/rtc-nct6694.c        | 276 ++++++++++
+ drivers/watchdog/Kconfig         |  11 +
+ drivers/watchdog/Makefile        |   1 +
+ drivers/watchdog/nct6694_wdt.c   | 329 ++++++++++++
+ include/linux/mfd/nct6694.h      | 168 ++++++
+ 29 files changed, 4051 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/iio/adc/nct6694_adc.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/nct6694_canfd.c
+ create mode 100644 drivers/pwm/pwm-nct6694.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
 
-Best regards,
-Krzysztof
+-- 
+2.34.1
 
 
