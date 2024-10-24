@@ -1,147 +1,166 @@
-Return-Path: <linux-rtc+bounces-2297-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2298-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B17499AE8DF
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 16:31:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 600E69AE898
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 16:27:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1DFBB26B95
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 14:26:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8ABC1F211C3
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 14:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA63E2003CC;
-	Thu, 24 Oct 2024 14:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1981F76CE;
+	Thu, 24 Oct 2024 14:22:01 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E082003BE
-	for <linux-rtc@vger.kernel.org>; Thu, 24 Oct 2024 14:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70CC1E1A1D;
+	Thu, 24 Oct 2024 14:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729779657; cv=none; b=jCn9xj6Q8kDCLqUCLW4p3pfc7V6QXEYcuGPC9PlWJnI9C89bTSly6jDZrttV3EX0QZTzLMrEKyJtnwVGJNVqd/+s8uuK2dDNeFKwlke7ydr2T+pzxFjkwDnqA7aUgSAYrQKCbkqR0kjBZs6+s0AJB5bYzB9RqQpQm+qAj+wxifY=
+	t=1729779721; cv=none; b=ra3dLaLu1+VH2GYkzkbwXUxCLWJthOLxXYrQlC4ehH9bC6yxvldrhHjin49pGw1t+oDgFWHgy6N/ug5JABS05WOzEM8NJhNU9bXwZYild61MZxnpTWERpn/MNplafW+309Wm2ZWIKCR10WCAMYzcI+U+EQ2lnNRaJySAYxeF/kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729779657; c=relaxed/simple;
-	bh=CeH6d9jYHaUoXOEafD41IQtDoDuY9WGiGrn3lPFqJ9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SSgO8mvGkGr1spNtLkYg21XPBnUk5/SH0f/BcVotvl34UAF1Gthm24PexOQl5J5+vVYiCUOqb+UMxTPJzB/+jO1t3pA0Mv4pi+W3gFXipRxjgC0I6+HIL8VRWlXOwEvbV8X9PW4QHgVDr0GAp519W3dGcisbz9LpNiqs/3wBpGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3yhJ-000452-8g; Thu, 24 Oct 2024 16:20:21 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3yhI-000DEt-35;
-	Thu, 24 Oct 2024 16:20:20 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 8119C35DCED;
-	Thu, 24 Oct 2024 14:20:20 +0000 (UTC)
-Date: Thu, 24 Oct 2024 16:20:20 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-Message-ID: <20241024-cryptic-giga-mole-54e2b5-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-5-tmyu0@nuvoton.com>
- <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
+	s=arc-20240116; t=1729779721; c=relaxed/simple;
+	bh=dTe++PhNhr/w7Y1FSeBZrLg4nlZVU+dOWIBJpRGFMpk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f0lUHJP9M11x2aPsL83i6DGdl8c3VK5kjBdz6QQGC6K5o7aclxDRNL3HKI38+ZPDRlkDpYWrgjKQ5G3ioMif6wLtg3NpuAJtfHLWM5kfM/1rMQFm5EB5sED+gOaDQbxb9gf3FHOkVLuwdkU9pjS7YfMuz6+cXmpLlsWzCqQsZdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6e3b7b3e9acso8926527b3.1;
+        Thu, 24 Oct 2024 07:21:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729779718; x=1730384518;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FIClXhU0TI8fTpRc6FjEoGvpVZnc0ncz4HYCuUXs2hs=;
+        b=uvHr2ggtjAhDXfAF2t7C9x6v2V1DTFcjlXzYpTD5XQwb2Z6jIARHhfwcNZj4zoZ+cH
+         DPPwIWpz/C2TmVyjRYX8UYmufiiyWcFZIDEUL3wTI4l71rdBVS3OPrka7KrkT4bpMdwa
+         +oaIpmh6UXgmHahulfl8FCuNq9rvTKlOq6wS4OLtZU7F0D5JC1KW/M2xvzhnINVHl0+E
+         Zi8YF0L9Fstf9ZJoNX9s8pE4AzU0vL2N7Ruo0mcxwvEcYQaQLByxsBUNRlb7dXcnB861
+         fJM8qf+JsuHjxHUj98XKB4buyQdF9vygNA8Ki19mWMe/JP+7hDnG7tT+zw3a86X+sDzL
+         GPUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUCbUR3KbUHsY4cnjIRfPHMb7NQHYTLpMhahTPxw3RMiyB84IVVKQuRV8jxejOU80KIpSxNrbYS2mLs@vger.kernel.org, AJvYcCULWUQQaHymAtxSsO/TuFtsuah674DGHHJo2iUF/U7Tp/T9+18CZH+xyAXz9EqVLTSR0Nx+/XvrWX1b@vger.kernel.org, AJvYcCUe9AxTYFrwAZEQTl9LHGCcpOAuIm1gQkEzRdEendnxqqGq4JtHSaVe7DUi/E93UK+8CNKfwJVPN73WGITNOR+ebH0=@vger.kernel.org, AJvYcCVacr9yorKs+veBHPzd6A+0ywEXxiKbMVjieTB6uxPmV+E+ZqBTDptVL09O5xEBZhdEmno1Dcfr1iocQ6HK@vger.kernel.org, AJvYcCXOghO02Pi9W6jrkX1vG6K35NH2vwvoHmGNNUNIaTMRycl6/eRLNm4O1iwN14io/vHf5X8MZFrZm9LU@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGbyi56AZi5WsJx/aMQRnyf2p5+pxooRonhRo+E6oiFYN/rEMR
+	zORoLWdgUhzeH0bznnM41lsohCIkYQeD9gUcUZPDfb3N0awQHhwauWfrPGEj
+X-Google-Smtp-Source: AGHT+IFgkBRp253MH8+wUvM2K6BlhIKfnnKzGV0kN5e05ipaSS6jgoyOn3ghKFHF6pk3chrfGKzVGA==
+X-Received: by 2002:a05:690c:89:b0:6d9:90f3:1a79 with SMTP id 00721157ae682-6e7f0fa6c18mr73018387b3.32.1729779718354;
+        Thu, 24 Oct 2024 07:21:58 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e5f5ccb78asm19993777b3.88.2024.10.24.07.21.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Oct 2024 07:21:57 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6e377e4aea3so8655847b3.3;
+        Thu, 24 Oct 2024 07:21:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV4WA7z6y6pM7GafI0IPJxzkwmriDXNSQ1LowsmsekoOmUORBlWvg10GUX32Ul8ouYftyLLXr5ClZIe+n2QaVQHZa8=@vger.kernel.org, AJvYcCX0/eG5wMdIBnivcRiGcKgEyBe26Wv961wfJYubHQiZFMEfGdBOasbXVBdkCy/5W8gPUtHwyIZJ16LR@vger.kernel.org, AJvYcCX75FRPdIzv9Z80RVbSMq9NglmvQ4BZ3LP/bewIavsLkHksr1OnCbmuDA37klqIQ0JetOProdJbm+Rm@vger.kernel.org, AJvYcCXImp+0oa5Bm3pHhvmQ2BeBp0d2vXVx1D26bIdymUN613Fx7UYl2rhzeqipi5dfNpoNnsfvzSmcwRaL@vger.kernel.org, AJvYcCXkq2/OCC76hvXoClp6gSc0amY4jMwKdwWfgpY5NWgDsrzHrFyP2CjxyM48OA/f/gIMSF90y4CkpZGpYJ5Z@vger.kernel.org
+X-Received: by 2002:a05:690c:8a46:b0:6e3:2608:d5af with SMTP id
+ 00721157ae682-6e7f0e8bc99mr47613857b3.26.1729779716691; Thu, 24 Oct 2024
+ 07:21:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="umhghwnwqoavy3lt"
-Content-Disposition: inline
-In-Reply-To: <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-
-
---umhghwnwqoavy3lt
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <20241019084738.3370489-1-claudiu.beznea.uj@bp.renesas.com> <20241019084738.3370489-4-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20241019084738.3370489-4-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 24 Oct 2024 16:21:45 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXZeZQN4T1=wT=K4BCR_Wk02ZBaKVSC7WukC0UGseM12A@mail.gmail.com>
+Message-ID: <CAMuHMdXZeZQN4T1=wT=K4BCR_Wk02ZBaKVSC7WukC0UGseM12A@mail.gmail.com>
+Subject: Re: [PATCH v4 03/12] dt-bindings: clock: renesas,r9a08g045-vbattb:
+ Document VBATTB
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com, 
+	magnus.damm@gmail.com, p.zabel@pengutronix.de, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-MIME-Version: 1.0
 
-On 24.10.2024 16:17:52, Marc Kleine-Budde wrote:
-> On 24.10.2024 16:59:17, Ming Yu wrote:
-> > This driver supports Socket CANfd functionality for NCT6694 MFD
-> > device based on USB interface.
-> >=20
-> > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> > ---
-> >  MAINTAINERS                     |   1 +
-> >  drivers/net/can/Kconfig         |  10 +
-> >  drivers/net/can/Makefile        |   1 +
-> >  drivers/net/can/nct6694_canfd.c | 843 ++++++++++++++++++++++++++++++++
+On Sat, Oct 19, 2024 at 10:47=E2=80=AFAM Claudiu <claudiu.beznea@tuxon.dev>=
+ wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock for RTC,
+> the tamper detector and a small general usage memory of 128B.
+>
+> The VBATTB controller controls the clock for the RTC on the Renesas
+> RZ/G3S. The HW block diagram for the clock logic is as follows:
+>
+>            +----------+ XC   `\
+> RTXIN  --->|          |----->| \       +----+  VBATTCLK
+>            | 32K clock|      |  |----->|gate|----------->
+>            | osc      | XBYP |  |      +----+
+> RTXOUT --->|          |----->| /
+>            +----------+      ,/
+>
+> One could connect as input to this HW block either a crystal or
+> an external clock device.
+>
+> After discussions w/ Stephen Boyd the clock tree associated with this
+> hardware block was exported in Linux as:
+>
+> input-xtal
+>   xbyp
+>   xc
+>      mux
+>         vbattclk
+>
+> where:
+> - input-xtal is the input clock (connected to RTXIN, RTXOUT pins)
+> - xc, xbyp are mux inputs
+> - mux is the internal mux
+> - vbattclk is the gate clock that feeds in the end the RTC
+>
+> to allow selecting the input of the MUX though assigned-clock DT
+> properties, using the already existing clock drivers and avoid adding
+> other DT properties.
+>
+> This allows select the input of the mux based on the type of the
+> connected input clock:
+> - if the 32768 crystal is connected as input for the VBATTB,
+>   the input of the mux should be xc
+> - if an external clock device is connected as input for the VBATTB the
+>   input of the mux should be xbyp
+>
+> Add bindings for the VBATTB controller.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>
+> Changes in v4:
+> - squashed with patch "Add clock IDs for the VBATTB controller" from v3
+> - removed "oscillator" word from commit description
+> - added assigned-clocks, assigned-clock-parents to the documentation exam=
+ple
+> - used clock-controller for the node name
+> - used "quartz-load-femtofarads" property for the load capacitance
+> - renamed include/dt-bindings/clock/r9a08g045-vbattb.h to
+>   include/dt-bindings/clock/renesas,r9a08g045-vbattb.h
 
-|   CC [M]  drivers/net/can/nct6694_canfd.o
-| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_start=
-_xmit=E2=80=99:
-| drivers/net/can/nct6694_canfd.c:282:22: error: variable =E2=80=98echo_byt=
-e=E2=80=99 set but not used [-Werror=3Dunused-but-set-variable]
-|   282 |         unsigned int echo_byte;
-|       |                      ^~~~~~~~~
-| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_rx_wo=
-rk=E2=80=99:
-| drivers/net/can/nct6694_canfd.c:677:34: error: variable =E2=80=98stats=E2=
-=80=99 set but not used [-Werror=3Dunused-but-set-variable]
-|   677 |         struct net_device_stats *stats;
-|       |                                  ^~~~~
-| cc1: all warnings being treated as errors
+Thanks for the update!
 
-If compiling with C=3D1, sparse throws the following errors:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-| drivers/net/can/nct6694_canfd.c:417:14: warning: cast to restricted __le32
-| drivers/net/can/nct6694_canfd.c:750:9: warning: cast to restricted __le32
-| drivers/net/can/nct6694_canfd.c:777:32: warning: cast to restricted __le32
+Gr{oetje,eeting}s,
 
-Marc
+                        Geert
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---umhghwnwqoavy3lt
-Content-Type: application/pgp-signature; name="signature.asc"
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaV6EACgkQKDiiPnot
-vG+E+Qf8CIIlMRqAUgax6FgoXWP0LDl3JVfJSfoClGvwvTGIR6r0hAAYhY6YXdy9
-gUPusFE69CRe780ZIu4/gR45YWIRpof1exG4JAIoKbU/4Bdq/42x1BKSXifWPayo
-Rm/mm+HyVCjb7WTpopxM7ZCnZMks9xOUwl6A+/ShIRZA3pWBz8ll4yRCtTq1V6xy
-GMKhYsYP4mDY3YyD1+hUfLBmiBu2XvhnGksdoLRZHNMNKlNhZnpRSLeQew5EHSy1
-03BltphJ6YsdAgTfyR7AT4nTisdNyYl+IhnJq1+FSKsWxdHcelNMaM3JwlLrXMBO
-FbotT17CV8J3M14xFrwqL7cRROi57A==
-=lV4A
------END PGP SIGNATURE-----
-
---umhghwnwqoavy3lt--
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
