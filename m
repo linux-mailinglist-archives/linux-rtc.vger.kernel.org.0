@@ -1,169 +1,169 @@
-Return-Path: <linux-rtc+bounces-2309-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2310-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5550B9AEB73
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 18:07:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B60629AF3BD
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 22:37:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15CBB28483A
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 16:07:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75B01281DB3
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 20:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725731F76CE;
-	Thu, 24 Oct 2024 16:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B71C01B21AF;
+	Thu, 24 Oct 2024 20:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nonI6kIS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eq13Qqb1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B24139578;
-	Thu, 24 Oct 2024 16:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB09198A30;
+	Thu, 24 Oct 2024 20:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729786013; cv=none; b=lDrlsnqgRfJwczUDW+AnxO+99Bzc7Vtv8bbtWZVUV5f/QFVp9ufnOzI/A7lJi+1rgv4r7ZH+I3XC5XnMDRbKatJsWBtgS88F5Ba+CnTh1L3pHGERCd6mqqsWYeY9NIprA9CF+X3wTlaodIk3bmZCM1INt44tbOp5AnsZu1YcOdU=
+	t=1729802234; cv=none; b=XzO+ObICBFhFDj+aZKb2NIViAVEM6bAiRBmM+dx+mMGyloZNu5HmPjYXJlAC/rdPl966CmNX7ZBORDeDORQC6s5ng45a7sSjf0oHN+9rnAeq5uuYjeEhfZ/90fe0MiXQlSq1ceOd75m4ClMWM8btNxMSoCre5AYAUyGBB3pGyaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729786013; c=relaxed/simple;
-	bh=/kwiBkUdrwk/ft8X37mw8OAYaR+w559zlg+w6Nu5+Yw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aqp5+/Dlt/jXJMjcN2AGuqh9r8pPp/fpM/aROMXjE8iSyzGJLiZX6t0MDfc0S+p6ZIPc+6uXqN3paZCh6ufhyqWzF+qRulxZRd1mCBCY5/9xpr3mBRiEZ23pTBzAP49+XL+evjJ4h2BxdgMuxQ41mZsRU5UjaK7qj4hJH3pk7f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nonI6kIS; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1729802234; c=relaxed/simple;
+	bh=0WPYA3hPUFoNWZrUKuT9jq1loL+NRPd7BuN6YXBnJws=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rjIKgxeXswWwGIXAUJXS9j1KPLvG022RWINgmG1fk4kbfgxwBnbR4+ldr40WTwYmd8YVKthD1RDAL0mqrBhRcZOmMdVDvpG6Lzm4+3byxBZvCV42PULdvNkirLmF6EaPzGT4h/shLZEaVwVGabcpuxGgQTX8V3fwxl/RBgE4HqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eq13Qqb1; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20c714cd9c8so10330225ad.0;
-        Thu, 24 Oct 2024 09:06:51 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e983487a1so987408b3a.2;
+        Thu, 24 Oct 2024 13:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729786011; x=1730390811; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMpYMGB8pLXbWeaijOZtSy80NUgHC2RS6rF8BuCiCr0=;
-        b=nonI6kIS6pn3+C8nAn4mWFqxhLaUrTzJkuID9j4xUo6IzTxJLylJeUuc/OYioeoIHC
-         A2VNVbVVMX7DEA1oF0i1OmV4sEeOl9v3Lq8L+Dl75a2RqaNOy2bkt8m4fPyd0ah9qLJA
-         ZB4VpjFMc/YUeUy39hh+bkrHBZmjmVyOqJQ01aiXI+ytHnZZV3LPpXTCXfWYjhPpETeE
-         SPidtFfVrzCez2XUqVpw7p9f7QtohfdGLm8GzvQZNqzvkhbzT8l92gcmVQ1+nJa1NwnL
-         WXNGmKO8SvExzW2yhk7FeHze7Waw5Az99NiMg3LDyqrCZ5AWn9HB8gtgEyOVEU5areJ2
-         gmBw==
+        d=gmail.com; s=20230601; t=1729802232; x=1730407032; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/ws5hb3NYpojz7BHn3yE6WkBI/cHoGp7ZC/yjOfjPDs=;
+        b=eq13Qqb1C6ogpltQeoG5zoEx6cr9ZOEFtYb2BQxSFwvFKsI2XBbTOuXN31VszIesG0
+         L5ZPE3toM+WRsSyW6f6mohkB4xhuY4BemPMcHjB+Y1n3uMrxtbv5LwODAupkadk1fWdD
+         vXTrZG2EXMVGgbfzG9+LqoYkD3Mg4gF3oAtzEm05JBZvk4QJnzgjmre+J+/zXQRkhf+M
+         JybVpAE2mMmHEYeWEfTNTGqyVZzTpt26W7bk++GKYeTN8OUzEwpFxMwasdDKaBfAW4q4
+         EUHlqmMtO2piVwX6HwW0r2hOPJiJ1hZZ5zitLSH8ebd0tCuFrn5Q8nYnewPnsK7A7JAG
+         HTtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729786011; x=1730390811;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RMpYMGB8pLXbWeaijOZtSy80NUgHC2RS6rF8BuCiCr0=;
-        b=aRIlzxe6FZgX1TwE2ca86ptMlmlaqg6RZvZHBGLkYvUlH4X8UJK/E5uLYX5IpUlCag
-         Hw+jRJnCtXaBkTig10vNB3bqP5j0A3bqMMgdkKWwbLSUZfbm8LGcSNUP5L4TXqb/QJLz
-         enO13rk/xYyjCICFvuqqOFjNClNNxiKyqhTULZgN7XRIMeNubhGn8EPHIpgnMmzKm+dU
-         xKV5Se++Hdp9AWje0sJ5JSU1a85NKqn4qe03gWUL1kDZBwLosQyWVwt/ImgVv7kBUD2X
-         BYWN7xLHTddS81g72pRurD7aknUxNXt7mkQnY5mnACuGzad+ydk2NxjlNqQaJviS36LK
-         IcvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHeI+XNMNWUxjPJb9BBNSl/K3ChNyEz8vlMIGHC3Uae7nGPdr2K3tserNgucAtA71dsOGI4tQYI+I=@vger.kernel.org, AJvYcCVNPjDzmMR+M/bmGApuoZbvxsYlhWDNRCWMIEcB5UXJvIrwE6NcqzxaVSDSMWbcOoFmgSMOpOlgju6c@vger.kernel.org, AJvYcCVy219ZuJoBza1OTSteR86OIwVMh6jkJ52tQH05TGm9uWZc7v/t3xtWGey3jkADevhwweIuLGMKrxhOCg==@vger.kernel.org, AJvYcCW1QVbur8twbHD+mXpxb/mRnRMdQmiJ00TGhONVhomqCRgjqFT1ugQ7j2uUKwQni/yPfUzdRLMmNStr@vger.kernel.org, AJvYcCW4v6sfGOkp03uiq/s3WcWJPxuxAszIDTqQeCEKVX2w9avjldvWnY/ZH3CtlzyQkbpv75fYbm8J@vger.kernel.org, AJvYcCWB62CW1uTIbf1wPNVoQnutOOevdxdEFykD9vM6lROCeqCiZmhCGj2YGSjuAgJ+uyHlklTfH/LlOKfO@vger.kernel.org, AJvYcCWwu8+YKT1HurfZiIV+cGHwd7ZtUnckbB+Hn5x3N05a8BaXbNT8pZjWsPZVQTpSGRJ3S0aA2jeIzJwFuE8zFBo=@vger.kernel.org, AJvYcCX0hHn0La0OjwBOjXvlo9osZ/Qa7fCUy0AhCWFRWuoSg/YpLUapUDV6olDSlI3NfJxuzuLXqtDhhTLY/s4=@vger.kernel.org, AJvYcCXBHs4zfEzsLgIpw6P9w+Bmw8QvHWvLhKQkEQUn8j5tdtxIT0CFiU+OWWQS+HZsIeZFmgh9OTMpIZXx@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzihd3vDCKoB6N80ej+sq9qTMJygJLTL6Qrobgx26J+Nkvt3USo
-	/M4PDR4gGDOBcJDxZIr2QOFEzPoSXR2scp5Qcl1yME/TUyqayaLL
-X-Google-Smtp-Source: AGHT+IFVaoS0y1PnVxdLbIxOvUdsHIL8kzqzLHIcf0Zoa5OMyMBmDSTAU8jwn0PXfyPZekS3A5U/2w==
-X-Received: by 2002:a17:902:ea08:b0:20e:55b0:3607 with SMTP id d9443c01a7336-20fa9deaa86mr94235495ad.2.1729786010468;
-        Thu, 24 Oct 2024 09:06:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7eeecf1csm74256945ad.17.2024.10.24.09.06.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 09:06:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <daab0b5d-8877-46ce-8ffb-0602164be5ca@roeck-us.net>
-Date: Thu, 24 Oct 2024 09:06:46 -0700
+        d=1e100.net; s=20230601; t=1729802232; x=1730407032;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ws5hb3NYpojz7BHn3yE6WkBI/cHoGp7ZC/yjOfjPDs=;
+        b=Uvu5MD1vromfIuhQYR/XtOC32NBCghxUOKuxAbcM8HRG0zN8lCo7bElBIFWn/qchCk
+         Uj1eTOtTzT0+rRLzEb8195q72ohCPrg3gQUWItWzSvxUohFVedtKifuODEP6cV/6Ez4G
+         Bu7b7Lzf7QIf57nqdXzPuE+9/NyMOL7TomUk+/O0z+PqfRh8Mte9iOezv08LEvdQmhgN
+         73A7NG98HMo7GUKfYmrcrw/LJkhPminCSVVqtC8FR/ntjRvmhVEuq6t7RNy3yeCUzApf
+         nXlBjY/LXdQCuCqe5FbQxTTYjmaWQoggkb84DZSrYC0zafyPIEhbcbigtNbM5bjh7gt9
+         1NdA==
+X-Forwarded-Encrypted: i=1; AJvYcCV1KFhFOagXW+NvEE3VqRPaGC8S9ChuS24pUW453PW4loYewZFL27lIn7f/p6RufKWEpfwT8vpoRg+e@vger.kernel.org, AJvYcCV6XU9tSD9ixvmKSH5+Oxa6iVCaPrNNcoMUxIzl/Ue7ydavCvXGtuewCPhryR492GM16B2dSs45HVhBzew=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx84C3fpp0ir71kJ66MCah77fPhv2MOF0Q4LDtfXZmJ9qjEh7HQ
+	iabQq5fPiP/tJtMW80LDNdWcpU8noFgoWVQsMrRKiTUd4ZswG9P3
+X-Google-Smtp-Source: AGHT+IFORtNJUaKfLuN3Fb0l3U3aDlU+GFnyOOUfni3Q2WMjSJ8uOwSM0n+uMUFrEQ5k4hDLWibSlQ==
+X-Received: by 2002:a05:6a20:9f43:b0:1d9:22c1:1235 with SMTP id adf61e73a8af0-1d978b2c5a4mr9640759637.22.1729802231789;
+        Thu, 24 Oct 2024 13:37:11 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:a810:a864:e2e2:2651])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec1312d3dsm8645020b3a.17.2024.10.24.13.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 13:37:11 -0700 (PDT)
+Date: Thu, 24 Oct 2024 13:37:08 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Joy Chakraborty <joychakr@google.com>, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: cmos: avoid taking rtc_lock for extended period of time
+Message-ID: <Zxqv9KYnBdtnuqox@google.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 5/9] watchdog: Add Nuvoton NCT6694 WDT support
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
- jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org,
- alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-6-tmyu0@nuvoton.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241024085922.133071-6-tmyu0@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 10/24/24 01:59, Ming Yu wrote:
-> This driver supports Watchdog timer functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
-[ ... ]
+On my device reading entirety of /sys/devices/pnp0/00:03/cmos_nvram0/nvmem
+takes about 9 msec during which time interrupts are off on the CPU that
+does the read and the thread that performs the read can not be migrated
+or preempted by another higher priority thread (RT or not).
 
-> +
-> +static int nct6694_wdt_start(struct watchdog_device *wdev)
-> +{
-> +	struct nct6694_wdt_data *data = watchdog_get_drvdata(wdev);
-> +
-> +	pr_debug("%s: WDT(%d) Start\n", __func__, data->wdev_idx);
-> +
-> +	return 0;
-> +}
-> +
+Allow readers and writers be preempted by taking and releasing rtc_lock
+spinlock for each individual byte read or written rather than once per
+read/write request.
 
-That doesn't make sense. How is the watchdog started if not here ?
-Something is conceptually wrong.
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/rtc/rtc-cmos.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
-Guenter
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 35dca2accbb8..e8f2fe0d8560 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -645,18 +645,17 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
+ 	unsigned char *buf = val;
+ 
+ 	off += NVRAM_OFFSET;
+-	spin_lock_irq(&rtc_lock);
+-	for (; count; count--, off++) {
++	for (; count; count--, off++, buf++) {
++		guard(spinlock_irq)(&rtc_lock);
+ 		if (off < 128)
+-			*buf++ = CMOS_READ(off);
++			*buf = CMOS_READ(off);
+ 		else if (can_bank2)
+-			*buf++ = cmos_read_bank2(off);
++			*buf = cmos_read_bank2(off);
+ 		else
+-			break;
++			return -EIO;
+ 	}
+-	spin_unlock_irq(&rtc_lock);
+ 
+-	return count ? -EIO : 0;
++	return count;
+ }
+ 
+ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
+@@ -671,23 +670,23 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
+ 	 * NVRAM to update, updating checksums is also part of its job.
+ 	 */
+ 	off += NVRAM_OFFSET;
+-	spin_lock_irq(&rtc_lock);
+-	for (; count; count--, off++) {
++	for (; count; count--, off++, buf++) {
+ 		/* don't trash RTC registers */
+ 		if (off == cmos->day_alrm
+ 				|| off == cmos->mon_alrm
+ 				|| off == cmos->century)
+-			buf++;
+-		else if (off < 128)
+-			CMOS_WRITE(*buf++, off);
++			continue;
++
++		guard(spinlock_irq)(&rtc_lock);
++		if (off < 128)
++			CMOS_WRITE(*buf, off);
+ 		else if (can_bank2)
+-			cmos_write_bank2(*buf++, off);
++			cmos_write_bank2(*buf, off);
+ 		else
+-			break;
++			return -EIO;
+ 	}
+-	spin_unlock_irq(&rtc_lock);
+ 
+-	return count ? -EIO : 0;
++	return count;
+ }
+ 
+ /*----------------------------------------------------------------*/
+-- 
+2.47.0.163.g1226f6d8fa-goog
 
+
+-- 
+Dmitry
 
