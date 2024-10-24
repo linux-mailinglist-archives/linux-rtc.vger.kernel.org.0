@@ -1,31 +1,31 @@
-Return-Path: <linux-rtc+bounces-2293-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2294-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C79229AE492
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 14:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC5159AE877
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 16:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5400C1F220A5
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 12:14:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6265D1F228B7
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 14:25:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E0E1D517E;
-	Thu, 24 Oct 2024 12:13:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0EDA1FC7DE;
+	Thu, 24 Oct 2024 14:18:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20CE1D6DA1
-	for <linux-rtc@vger.kernel.org>; Thu, 24 Oct 2024 12:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88401FC7EC
+	for <linux-rtc@vger.kernel.org>; Thu, 24 Oct 2024 14:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729772007; cv=none; b=d5k3RsD6L+5FIvUu1PHUHbACHxyNJlRf0ntQ1vfufUFx9Co+HTItXVAA9yKL7oK3fi2e1eHG1EC6FIgyOlWt7RGd88wl9ZNwTORW4wZcNS3sHSd3Ro0LB8YyHCj14u9vMExZ7V1OItBtlhoREjZrLhZsjhdnmRi/+t9VC1IKC6Y=
+	t=1729779518; cv=none; b=ZjL8Ce4wYxHJsIxRFks7fDk0oQF456+0YUMNpNNEDy+ozH5lFxSxx4Vi69GIjjw/AbrbjXiOl9ck7//rQFc9gBKxG58DalCUFtz9LyGLy+JyDWy/fUKdXwuzPbAeU8FBiOJDVj8KIPm1hNne2LPrh90Vwzlmn7rQs4+pQ4Wjov4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729772007; c=relaxed/simple;
-	bh=757xfs4lzj57ukyiAsyKVVfqB5Ggr6DUtawVPHyIcbI=;
+	s=arc-20240116; t=1729779518; c=relaxed/simple;
+	bh=nr1BFMUqpOOZTknszusigTrqeLkm84oMDbFg8eVnqyE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jlcBKY1qKLBunZvz3sAPdfB6bfOGsfm5HYAFXLPdvhsY0fvT0j6imUGznqUGQQrscr/oV7Dn2VHYO0k1+1eByRah1VKz+S7a9tRXFp+ohQdwY1vIDhcWwyuYe10AZhHIGinhtv/gijIPVnSZmF5bvXWfX8oo70YZApR7yzFkGYk=
+	 Content-Type:Content-Disposition:In-Reply-To; b=rERutZIWxlJfhHK12C6B9xzybgZorZZTF0DSd4CA8jrZhX3E4fFi0UxZgJ1XI4w5tldC/kPsH2Fl9MuncZqQcDpJIx7asI2S+YcSEL8QxJLvftpfSQGLICW778ZiZBVfYEmVel2G5WgBlniDyS1FbkFDRx+tg3gjvGX2+LpGLJ4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,21 +33,21 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1t3whs-0006NN-0Q; Thu, 24 Oct 2024 14:12:48 +0200
+	id 1t3yex-0003ep-6Q; Thu, 24 Oct 2024 16:17:55 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1t3whp-000CBK-1a;
-	Thu, 24 Oct 2024 14:12:45 +0200
+	id 1t3yeu-000DEg-2T;
+	Thu, 24 Oct 2024 16:17:52 +0200
 Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 043E635DB21;
-	Thu, 24 Oct 2024 12:12:45 +0000 (UTC)
-Date: Thu, 24 Oct 2024 14:12:44 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 4E0EB35DCD7;
+	Thu, 24 Oct 2024 14:17:52 +0000 (UTC)
+Date: Thu, 24 Oct 2024 16:17:51 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Ming Yu <a0282524688@gmail.com>
 Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
@@ -60,7 +60,7 @@ Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
 	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
 	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
 Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-Message-ID: <20241024-majestic-chowchow-from-wonderland-096eb4-mkl@pengutronix.de>
+Message-ID: <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
 References: <20241024085922.133071-1-tmyu0@nuvoton.com>
  <20241024085922.133071-5-tmyu0@nuvoton.com>
 Precedence: bulk
@@ -70,7 +70,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6cwye7pcrjvlm26t"
+	protocol="application/pgp-signature"; boundary="gd3ti3yld7agool5"
 Content-Disposition: inline
 In-Reply-To: <20241024085922.133071-5-tmyu0@nuvoton.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -79,118 +79,55 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 
 
---6cwye7pcrjvlm26t
+--gd3ti3yld7agool5
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
 MIME-Version: 1.0
 
-Hello,
-
-thanks for your contribution. It seems to me that there is no proper
-TX-flow control and I have some questions.
-
 On 24.10.2024 16:59:17, Ming Yu wrote:
+> This driver supports Socket CANfd functionality for NCT6694 MFD
+> device based on USB interface.
+>=20
+> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> ---
+>  MAINTAINERS                     |   1 +
+>  drivers/net/can/Kconfig         |  10 +
+>  drivers/net/can/Makefile        |   1 +
+>  drivers/net/can/nct6694_canfd.c | 843 ++++++++++++++++++++++++++++++++
+
+FTBFS:
+
+| make[5]: *** No rule to make target 'drivers/net/can/nct6604_canfd.o', ne=
+eded by 'drivers/net/can/'.  Stop.
 
 [...]
 
-> +static netdev_tx_t nct6694_canfd_start_xmit(struct sk_buff *skb,
-> +					    struct net_device *ndev)
-> +{
-> +	struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> +	struct nct6694 *nct6694 =3D priv->nct6694;
-> +	struct canfd_frame *cf =3D (struct canfd_frame *)skb->data;
-> +	struct net_device_stats *stats =3D &ndev->stats;
-> +	int can_idx =3D priv->can_idx;
-> +	u32 txid =3D 0;
-> +	int i;
-> +	unsigned int echo_byte;
-> +	u8 data_buf[REQUEST_CAN_CMD10_LEN] =3D {0};
-> +
-> +	if (can_dropped_invalid_skb(ndev, skb))
-> +		return NETDEV_TX_OK;
-> +
-> +	/*
-> +	 * No check for NCT66794 because the TX bit is read-clear
-> +	 * and may be read-cleared by other function
-> +	 * Just check the result of tx command.
-> +	 */
+> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+> index a71db2cfe990..825c011aead5 100644
+> --- a/drivers/net/can/Makefile
+> +++ b/drivers/net/can/Makefile
+> @@ -28,6 +28,7 @@ obj-$(CONFIG_CAN_JANZ_ICAN3)	+=3D janz-ican3.o
+>  obj-$(CONFIG_CAN_KVASER_PCIEFD)	+=3D kvaser_pciefd.o
+>  obj-$(CONFIG_CAN_MSCAN)		+=3D mscan/
+>  obj-$(CONFIG_CAN_M_CAN)		+=3D m_can/
+> +obj-$(CONFIG_CAN_NCT6694)	+=3D nct6604_canfd.o
+                                   ^^^^^^^^^^^^^^^
+>  obj-$(CONFIG_CAN_PEAK_PCIEFD)	+=3D peak_canfd/
+>  obj-$(CONFIG_CAN_SJA1000)	+=3D sja1000/
+>  obj-$(CONFIG_CAN_SUN4I)		+=3D sun4i_can.o
+> diff --git a/drivers/net/can/nct6694_canfd.c b/drivers/net/can/nct6694_ca=
+nfd.c
+> new file mode 100644
+> index 000000000000..d873a9fd656d
+> --- /dev/null
+> +++ b/drivers/net/can/nct6694_canfd.c
+                        ^^^^^^^^^^^^^^^
 
-Where do you check the result of the TX command?
+This doesn't compile :(
 
-> +	/* Check if the TX buffer is full */
-
-Where's the check if the TX buffer is full?
-
-> +	netif_stop_queue(ndev);
-> +
-> +	if (can_idx =3D=3D 0)
-> +		data_buf[CAN_TAG_IDX] =3D CAN_TAG_CAN0;
-> +	else
-> +		data_buf[CAN_TAG_IDX] =3D CAN_TAG_CAN1;
-> +
-> +	if (cf->can_id & CAN_EFF_FLAG) {
-> +		txid =3D cf->can_id & CAN_EFF_MASK;
-> +		/*
-> +		 * In case the Extended ID frame is transmitted, the
-> +		 * standard and extended part of the ID are swapped
-> +		 * in the register, so swap them back to send the
-> +		 * correct ID.
-> +		 */
-> +		data_buf[CAN_FLAG_IDX] |=3D CAN_FLAG_EFF;
-> +	} else {
-> +		txid =3D cf->can_id & CAN_SFF_MASK;
-> +	}
-> +
-> +	set_buf32(&data_buf[CAN_ID_IDX], txid);
-> +
-> +	data_buf[CAN_DLC_IDX] =3D cf->len;
-> +
-> +	if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) && can_is_canfd_skb(skb)) {
-> +		data_buf[CAN_FLAG_IDX] |=3D CAN_FLAG_FD;
-> +		if (cf->flags & CANFD_BRS)
-> +			data_buf[CAN_FLAG_IDX] |=3D CAN_FLAG_BRS;
-> +	}
-> +
-> +	if (cf->can_id & CAN_RTR_FLAG)
-> +		data_buf[CAN_FLAG_IDX] |=3D CAN_FLAG_RTR;
-> +
-> +	/* set data to buf */
-> +	for (i =3D 0; i < cf->len; i++)
-> +		data_buf[CAN_DATA_IDX + i] =3D *(u8 *)(cf->data + i);
-> +
-> +	can_put_echo_skb(skb, ndev, 0, 0);
-> +
-> +	memcpy(priv->data_buf, data_buf, REQUEST_CAN_CMD10_LEN);
-> +	queue_work(nct6694->async_workqueue, &priv->tx_work);
-> +
-> +	stats->tx_bytes +=3D cf->len;
-> +	stats->tx_packets++;
-> +	echo_byte =3D can_get_echo_skb(ndev, 0, NULL);
-> +
-> +	netif_wake_queue(ndev);
-
-How do you make sure that the tx_work has finished?
-Once you wake the queue, the xmit function can be called again. If your
-tx_work has not finished, you'll overwrite the priv->data_buf.
-
-> +
-> +	return NETDEV_TX_OK;
-> +}
-> +
-> +static void nct6694_canfd_tx_work(struct work_struct *work)
-> +{
-> +	struct nct6694_canfd_priv *priv;
-> +
-> +	priv =3D container_of(work, struct nct6694_canfd_priv, tx_work);
-> +
-> +	nct6694_write_msg(priv->nct6694, REQUEST_CAN_MOD,
-> +			  REQUEST_CAN_CMD10_OFFSET(1),
-> +			  REQUEST_CAN_CMD10_LEN,
-> +			  priv->data_buf);
-> +}
-
+regards,
 Marc
 
 --=20
@@ -199,20 +136,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---6cwye7pcrjvlm26t
+--gd3ti3yld7agool5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaObkACgkQKDiiPnot
-vG+LQAgAhoMTmPVPW2b961itbbB9oiqWyTkhSh4BodeXFxnDPmkZXIOwf2jfKTkg
-U1rUoJ3PrsRcFjX7xP11xXV0jtNa/CKHpinjDL1P1ftYZEL3Sb3fGAEzT5tWA8ui
-d2AgBRmaEPXfJ4ru5nURHrt8t8XvQw2aVBMVWXQeOkYCGzjXKr1Zc1QMawCRzdCY
-FYppixW1eYbUkR4GC13th38n1p5eM5+AgUJqMipnj1ufTesWAiY1eAw3KFq+h8AW
-uiOqN5+4uRstPyaNzS/e0r8bfKk8s/KxNny0b14ACrO6aBWp9we9wSvC/SLxPJE7
-BgbbQ1zBu5RQVdURF4mPlfvt9z9NKA==
-=amjj
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaVwwACgkQKDiiPnot
+vG+eWQf/b18jVZRlBPO4peY++zek7fG2mvAETij44FJ1yoEkgaRkIs8jB3bsyp3g
+22pVm7/JdA27DOoyj2m9ptUut353vjv3XKSNsDvnfqaswliao/aivl+A7CENuu47
+JwoeiRDKZhYo+9XE5ljEch75VSvYBnYJJoBLWNuR9bA/ZqiYDjOpr24sErJFwH9T
+IhdgB1wBCe+VCzRIrJxTrzeIQ4bItA1D5ZHMugRhPQcS/qkk5zZeemv5OUiRkCCP
+kO3qZDX0zU+cuHyV+e3OlXS4Ebhad/Z0e7jr1N11Ses+gi/6kWCDTuv4p/wFTZXG
+8tbRDZS0/A/FLwF3XyY+rRJ5N/UwHA==
+=Zy3R
 -----END PGP SIGNATURE-----
 
---6cwye7pcrjvlm26t--
+--gd3ti3yld7agool5--
 
