@@ -1,57 +1,51 @@
-Return-Path: <linux-rtc+bounces-2290-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2291-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FEEA9AE1CE
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 11:59:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84CAF9AE2D1
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 12:42:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D90F4B21B9C
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 09:59:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BB26283C88
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 10:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 855721C4A0C;
-	Thu, 24 Oct 2024 09:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D521C4A2D;
+	Thu, 24 Oct 2024 10:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/jxCsBg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913121C3029
-	for <linux-rtc@vger.kernel.org>; Thu, 24 Oct 2024 09:58:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F7F1B6D1F;
+	Thu, 24 Oct 2024 10:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729763893; cv=none; b=LXW+Mh8aSmfSjSaAk858kekb2xok9j8ndBNG9X4B7IFcqmOuwROxdcPySfTRYiUc1syPV1gsjEdP+CK7iFvcHAFhAtK+QeWd6tjX5M1SAkV3gkjQEEheNag5BLIOLKyFF8WwuKClgkJhl0nzHlcgxJ8wD9xNLxEzxxVJJ8x4vgw=
+	t=1729766519; cv=none; b=VJ41T5/dPUEu8AztwgzqrbLdXgxrbTPmRIZ4/iiEom/OhFiFf4HIQ9AicanAakNAPXqF/Knk//j7r7oit3sTLyUPRqGkeIXfdEWETMWm7kiQmNHgENmcinmaE38NAb9BXnjuc6YStBo/4XiItFsYD1fXMNLInXC6EO2Lf4VxhbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729763893; c=relaxed/simple;
-	bh=hmNoUJOm+bj8veyYXhIGwnX5DtxzL9QZIj2btrckT60=;
+	s=arc-20240116; t=1729766519; c=relaxed/simple;
+	bh=CkOAGRd26mLI67dmD/BaQdzbXEOWA3GpFBs26vS3Fj8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BXLvagOaK4pFkDVuN9MZvjRWjBzjtmdontPV3vYxJUop98AFfh5gOfv4oOBJDOjcTvIzN8AtJj4XRCJr2LRl1yInPrisiHmgeVgdr1m8I/lcX3XVtA+yuN3Gajmqcih4+uEsOTzA+eQvQXrAWjrVn4DIA4juYDeDYaqjdaVIEVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3uax-0007SO-SI; Thu, 24 Oct 2024 11:57:31 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t3uaw-000B1Z-1s;
-	Thu, 24 Oct 2024 11:57:30 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 2999E35D971;
-	Thu, 24 Oct 2024 09:57:30 +0000 (UTC)
-Date: Thu, 24 Oct 2024 11:57:29 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HoNG4ogaSZmj5L8JVBYIeHGrhKiUek4JT0GA2p3hNjLKph2MdiL7pcFYdqmGLeJDlbUEMQRMQ4jiaXMiv+rgtrqYWyxEN4dh31TXTvItLXzEMcx1A4i3EoTqoxhQR8rq36+Pp8Afac5oib6dYGA6c//JVUTVX+FLbjCjMrvQ/3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/jxCsBg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6862DC4CEC7;
+	Thu, 24 Oct 2024 10:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729766519;
+	bh=CkOAGRd26mLI67dmD/BaQdzbXEOWA3GpFBs26vS3Fj8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J/jxCsBgDfMeAKjiuCwahGbBWnueVH7zNvbB1HbZAAC5BM6BjdVGigaXkQlXMTLDy
+	 hHL9/CJGBsyYHj+D42jZ3sxiJzakW+naQGpCb5fv5UjquXyr9oBQ+b/reIjswHlPAk
+	 lLPd7StIfrhrZlb78DiJwrvpSirqhtvPmr2J2olct9eTjv6POXFEuqDLTiP8lSVIun
+	 HKAIdfa2mpnNUv0IdaCmrr+1c3ngJjYxP0LhW2J5vO5cnukFqXXePteFYtawXvLe3L
+	 xlNLeRHzX/D4DR2txiWlsxL2rdp2Kg4kVUIpc++ymcWK0GYJq+8rqvNGLMp7SEXNom
+	 hHdapvf8rIQRg==
+Date: Thu, 24 Oct 2024 12:41:55 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
 To: Ming Yu <a0282524688@gmail.com>
 Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	brgl@bgdev.pl, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
 	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
 	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
 	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
@@ -59,88 +53,47 @@ Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
 	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
 	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20241024-ladybug-of-silent-holiness-498562-mkl@pengutronix.de>
+Subject: Re: [PATCH v1 3/9] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <linka6lz5zpnaf64vmunrn2ezqts5gp5rsbwiaffm4v2mtnqyg@npxgcksgizrn>
 References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-2-tmyu0@nuvoton.com>
+ <20241024085922.133071-4-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mngoatx2xdrr45s4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241024085922.133071-2-tmyu0@nuvoton.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+In-Reply-To: <20241024085922.133071-4-tmyu0@nuvoton.com>
 
+Hi Ming,
 
---mngoatx2xdrr45s4
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-MIME-Version: 1.0
+...
 
-On 24.10.2024 16:59:14, Ming Yu wrote:
-> +static int nct6694_usb_probe(struct usb_interface *iface,
-> +			     const struct usb_device_id *id)
+> +static int __init nct6694_init(void)
 > +{
-> +	struct usb_device *udev =3D interface_to_usbdev(iface);
-> +	struct device *dev =3D &udev->dev;
-> +	struct usb_host_interface *interface;
-> +	struct usb_endpoint_descriptor *int_endpoint;
-> +	struct nct6694 *nct6694;
-> +	int pipe, maxp, bulk_pipe;
-> +	int ret =3D EINVAL;
+> +	int err;
 > +
-> +	interface =3D iface->cur_altsetting;
-> +	/* Binding interface class : 0xFF */
-> +	if (interface->desc.bInterfaceClass !=3D USB_CLASS_VENDOR_SPEC ||
-> +	    interface->desc.bInterfaceSubClass !=3D 0x00 ||
-> +	    interface->desc.bInterfaceProtocol !=3D 0x00)
-> +		return -ENODEV;
-
-I think you can use USB_DEVICE_INFO() and remove this manual check
-
-https://elixir.bootlin.com/linux/v6.11.5/source/include/linux/usb.h#L1056
-
-[...]
-
+> +	err = platform_driver_register(&nct6694_i2c_driver);
+> +	if (!err) {
+> +		if (err)
+> +			platform_driver_unregister(&nct6694_i2c_driver);
+> +	}
 > +
-> +static const struct usb_device_id nct6694_ids[] =3D {
-> +	{ USB_DEVICE(NCT6694_VENDOR_ID, NCT6694_PRODUCT_ID)},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(usb, nct6694_ids);
+> +	return err;
+> +}
+> +subsys_initcall(nct6694_init);
+> +
+> +static void __exit nct6694_exit(void)
+> +{
+> +	platform_driver_unregister(&nct6694_i2c_driver);
+> +}
+> +module_exit(nct6694_exit);
 
-regards,
-Marc
+Have you thought about using auxiliary driver here?
+(auxiliary_bus.h)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---mngoatx2xdrr45s4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaGgcACgkQKDiiPnot
-vG8YiQf/bRkt59QCQTqv2A9MhX1wIK2oTcc9JJY7HruR3mItUAqf1X0TEFMjA+Qw
-M9K/3KtK3rWW4F9fE3yLNYHqiP/fnv20U5Cn027fKzg9YOvSlkgOdScDLashOG2k
-RQ/SG5iSXjlZ/1JYnx8HIOmUgsU29jFm7vdcyeeI1hUO2qrE0QBVqMLp/hG4DsTa
-kjqf/x0Hj57Vfgx08DRC+XNBrjhy6CCdvzr0be8DktMRz/uZVX5FFYrI0b240gWQ
-a3JvsvFdG19vPQGXj5eo4Oc03Y5lNmQuj3e0v0dwu2y5prM51p9lwd7MjiL3o9nn
-MuVo6YfRtzv/4M/EZCeqs+ocjpOSlA==
-=5R+0
------END PGP SIGNATURE-----
-
---mngoatx2xdrr45s4--
+Thanks,
+Andi
 
