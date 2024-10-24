@@ -1,139 +1,147 @@
-Return-Path: <linux-rtc+bounces-2296-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2297-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12E849AE883
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 16:25:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B17499AE8DF
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 16:31:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 436771C22DC5
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 14:25:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1DFBB26B95
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Oct 2024 14:26:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D6561FEFC3;
-	Thu, 24 Oct 2024 14:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA63E2003CC;
+	Thu, 24 Oct 2024 14:20:57 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08ED91FEFB3;
-	Thu, 24 Oct 2024 14:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E082003BE
+	for <linux-rtc@vger.kernel.org>; Thu, 24 Oct 2024 14:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729779590; cv=none; b=mlF6VOE/LgtezPUPBQoj6UXldBfh0KOvoifiXQhLWMKSAHReEZlH6HwaB0tYl+kBFQAbnpBk1p3plAXq7uVZ41MDWAILjQjhKfRik9n/EPYfs7P2D3snx39S+CNI6mm5yAuWEvW5XOhNc6FmOfk/xUnMEAuLfpCTVjA8Ldq1vws=
+	t=1729779657; cv=none; b=jCn9xj6Q8kDCLqUCLW4p3pfc7V6QXEYcuGPC9PlWJnI9C89bTSly6jDZrttV3EX0QZTzLMrEKyJtnwVGJNVqd/+s8uuK2dDNeFKwlke7ydr2T+pzxFjkwDnqA7aUgSAYrQKCbkqR0kjBZs6+s0AJB5bYzB9RqQpQm+qAj+wxifY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729779590; c=relaxed/simple;
-	bh=psEwkMwbd4ExW2XqThLjC/9nxsA5X0zMlzh220eFI4Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s5HA6icJKAYV0XcX+6OsFBJ3s/ztv8LzwIn+BAYvl+rNwlwD6eHJtNfSuKojs1+1Uv7nCBKo+96kSBFYFIiIzIvAXlhs+ngbj5R3irkLSB7asU86BdPnxLm9dvRB4xbQIFUe1OFzQgNSVYLS3U0kgVkj10teGfFPgtSz8Vnw3ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e2974743675so954316276.1;
-        Thu, 24 Oct 2024 07:19:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729779585; x=1730384385;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ECOF/H9PFUFioRUiy+IGZiwk0mnHr5Ag/WOy+Iwjhg=;
-        b=ke9QUrvYtPDq+n6WV2oOkq+IyPVbfsoBDCiF6JYjloyl8NUgtUH+PpiwaIOxzmAl/S
-         yPTXtWSXoUCwNq/C10h5B69fIPzmN/GZdKVPSgFFIWzejk4LIQazGeSlz10pecROGYFO
-         CUyCdNFXF8H9C1Vn3ynRfvbo1ji0S5ENQNDNC0GyyULbFHdREqK5z8/D6fwBLkqdO8FG
-         pZnauNE0fWJMnhbjSWZBrDdjs+wS00wPTMlUh9m9NSZ1zjSFm90gntlnRTCF3O2XE4Nn
-         bV3SAPCCqojjFtLnv/xUo4gr5KfxVE+3l277Ch7CyvtgdFREpcIqLSc3A9otwyLHYr4K
-         /m4w==
-X-Forwarded-Encrypted: i=1; AJvYcCU6/uvXKA6qj5U3dI4RB5jdTXEgsjaD8z0axvc1d8LNfQeNx4Jk+AxIZ2mc0R+2oVcpzKFpQNxqr0hz@vger.kernel.org, AJvYcCUwOHaLps7vzDgN5OPqFlh59M5LrKZlNwFsunc/jGiH8W/quegpZeYuH9o4i2KIVRKR3nmn3kyL76Sf@vger.kernel.org, AJvYcCVfE0PjdytUvKXTxQVPJvrXACt6kWZSTs8pB746ZqM/996W48e/PJiYSd9HaKcHDBykIpyfcP6dtsr9EoyWuVfB+EM=@vger.kernel.org, AJvYcCVp4UyUH0h5KpZh4BGksXE7ww2fBtkxiqCbXFuf3II4UUkU4i9dO17sUIbO6x1mf5+P8yQToBb/gdMnbAdl@vger.kernel.org, AJvYcCWqu3wVPVdJZf/QTb3XgVK/X7NWlYv+0rRZmhCshFSzJ+EnoDzbFmeryWOhSrJm4X3qcsH93l7Odxnh@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywp0ac8ihJ2/5oMEBEg88sLJ5uSrERRNlzR1xsJXpQiISdn8MW8
-	Slvbkr/qRv+7YeSdp87anmp+GtAxtFxSBXFu91rFUcaDGClDQkxG80gostXu
-X-Google-Smtp-Source: AGHT+IGXX1eprmzXImJ8jDGID8uyYc1HJ3gABYxOn9aWrg2Eo6yvmb4hhYt+nZiFCqEyAMA2nQBWkQ==
-X-Received: by 2002:a05:6902:2848:b0:e25:d900:a0f8 with SMTP id 3f1490d57ef6-e2e3a6d1bdcmr6137765276.43.1729779584859;
-        Thu, 24 Oct 2024 07:19:44 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e2bdcaebe18sm1876171276.40.2024.10.24.07.19.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 07:19:43 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6e3d97b8274so9490397b3.1;
-        Thu, 24 Oct 2024 07:19:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUBo9YheUZk1qSYe24e7mQpAa4xeGCNBPHGzozor/GeZ9B5ezDpF6laeF2jj3Yr8IOgyDKXKXCk4nAT@vger.kernel.org, AJvYcCUy3DNgDJ6bB+NuSnrwgV8JB5u0tqoeMsGtup9zmm+r7EiQrRb9pXGrbAbDXonVa9lnFME/foyhcshp2XY5@vger.kernel.org, AJvYcCWN3m5wSNlKnUT44L0zNCpHTSYFC8Cl4ukkngNuww8XLxa1QDWsHtN/woMHirovi2m7zH29jVxobQPd@vger.kernel.org, AJvYcCWitam319DOs57Oppb+LNoBlj6lZpRoh0Ybj2PuuiKSY1dit7g9HanHqKK1kGAQBKjII3c7qgBUwkp4@vger.kernel.org, AJvYcCWvp3gT7YooYyNq1B8UE1rAAmVsoh3MkHv1nba81b4CM1vPm4IjsbH9JrykMPMdc6jLgCFmUMCJFHozuYHtbPldWKY=@vger.kernel.org
-X-Received: by 2002:a05:690c:93:b0:6e5:a431:af41 with SMTP id
- 00721157ae682-6e7f0fdab91mr62498077b3.38.1729779583362; Thu, 24 Oct 2024
- 07:19:43 -0700 (PDT)
+	s=arc-20240116; t=1729779657; c=relaxed/simple;
+	bh=CeH6d9jYHaUoXOEafD41IQtDoDuY9WGiGrn3lPFqJ9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SSgO8mvGkGr1spNtLkYg21XPBnUk5/SH0f/BcVotvl34UAF1Gthm24PexOQl5J5+vVYiCUOqb+UMxTPJzB/+jO1t3pA0Mv4pi+W3gFXipRxjgC0I6+HIL8VRWlXOwEvbV8X9PW4QHgVDr0GAp519W3dGcisbz9LpNiqs/3wBpGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t3yhJ-000452-8g; Thu, 24 Oct 2024 16:20:21 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1t3yhI-000DEt-35;
+	Thu, 24 Oct 2024 16:20:20 +0200
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 8119C35DCED;
+	Thu, 24 Oct 2024 14:20:20 +0000 (UTC)
+Date: Thu, 24 Oct 2024 16:20:20 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
+Message-ID: <20241024-cryptic-giga-mole-54e2b5-mkl@pengutronix.de>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com>
+ <20241024085922.133071-5-tmyu0@nuvoton.com>
+ <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241019084738.3370489-1-claudiu.beznea.uj@bp.renesas.com> <20241019084738.3370489-3-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20241019084738.3370489-3-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 24 Oct 2024 16:19:31 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWgZ1_wJN-rcjy1V=DRcUgEXQp3Qh1ZUTiv1cF8ywi2VA@mail.gmail.com>
-Message-ID: <CAMuHMdWgZ1_wJN-rcjy1V=DRcUgEXQp3Qh1ZUTiv1cF8ywi2VA@mail.gmail.com>
-Subject: Re: [PATCH v4 02/12] clk: renesas: r9a08g045: Add power domain for RTC
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com, 
-	magnus.damm@gmail.com, p.zabel@pengutronix.de, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="umhghwnwqoavy3lt"
+Content-Disposition: inline
+In-Reply-To: <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+
+
+--umhghwnwqoavy3lt
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
+MIME-Version: 1.0
 
-Hi Claudiu,
+On 24.10.2024 16:17:52, Marc Kleine-Budde wrote:
+> On 24.10.2024 16:59:17, Ming Yu wrote:
+> > This driver supports Socket CANfd functionality for NCT6694 MFD
+> > device based on USB interface.
+> >=20
+> > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> > ---
+> >  MAINTAINERS                     |   1 +
+> >  drivers/net/can/Kconfig         |  10 +
+> >  drivers/net/can/Makefile        |   1 +
+> >  drivers/net/can/nct6694_canfd.c | 843 ++++++++++++++++++++++++++++++++
 
-On Sat, Oct 19, 2024 at 10:47=E2=80=AFAM Claudiu <claudiu.beznea@tuxon.dev>=
- wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> The RTC and VBATTB don't share the MSTOP control bit (but only the bus
-> clock and the reset signal). As the MSTOP control is modeled though power
-> domains add power domain support for the RTC device available on the
-> Renesas RZ/G3S SoC.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v4:
-> - none; this patch is new
+|   CC [M]  drivers/net/can/nct6694_canfd.o
+| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_start=
+_xmit=E2=80=99:
+| drivers/net/can/nct6694_canfd.c:282:22: error: variable =E2=80=98echo_byt=
+e=E2=80=99 set but not used [-Werror=3Dunused-but-set-variable]
+|   282 |         unsigned int echo_byte;
+|       |                      ^~~~~~~~~
+| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_rx_wo=
+rk=E2=80=99:
+| drivers/net/can/nct6694_canfd.c:677:34: error: variable =E2=80=98stats=E2=
+=80=99 set but not used [-Werror=3Dunused-but-set-variable]
+|   677 |         struct net_device_stats *stats;
+|       |                                  ^~~~~
+| cc1: all warnings being treated as errors
 
-Thanks for your patch!
+If compiling with C=3D1, sparse throws the following errors:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk for v6.13...
+| drivers/net/can/nct6694_canfd.c:417:14: warning: cast to restricted __le32
+| drivers/net/can/nct6694_canfd.c:750:9: warning: cast to restricted __le32
+| drivers/net/can/nct6694_canfd.c:777:32: warning: cast to restricted __le32
 
-> --- a/drivers/clk/renesas/r9a08g045-cpg.c
-> +++ b/drivers/clk/renesas/r9a08g045-cpg.c
-> @@ -304,6 +304,9 @@ static const struct rzg2l_cpg_pm_domain_init_data r9a=
-08g045_pm_domains[] =3D {
->         DEF_PD("vbat",          R9A08G045_PD_VBAT,
->                                 DEF_REG_CONF(CPG_BUS_MCPU3_MSTOP, BIT(8))=
-,
->                                 RZG2L_PD_F_ALWAYS_ON),
-> +       DEF_PD("rtc",           R9A08G045_PD_RTC,
-> +                               DEF_REG_CONF(CPG_BUS_MCPU3_MSTOP, BIT(7))=
-,
-> +                               RZG2L_PD_F_NONE),
+Marc
 
-... with s/RZG2L_PD_F_NONE/0/ due to "[PATCH v4 2/4] clk: renesas:
-rzg2l-cpg: Use GENPD_FLAG_* flags instead of local ones".
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
->  };
+--umhghwnwqoavy3lt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Gr{oetje,eeting}s,
+-----BEGIN PGP SIGNATURE-----
 
-                        Geert
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaV6EACgkQKDiiPnot
+vG+E+Qf8CIIlMRqAUgax6FgoXWP0LDl3JVfJSfoClGvwvTGIR6r0hAAYhY6YXdy9
+gUPusFE69CRe780ZIu4/gR45YWIRpof1exG4JAIoKbU/4Bdq/42x1BKSXifWPayo
+Rm/mm+HyVCjb7WTpopxM7ZCnZMks9xOUwl6A+/ShIRZA3pWBz8ll4yRCtTq1V6xy
+GMKhYsYP4mDY3YyD1+hUfLBmiBu2XvhnGksdoLRZHNMNKlNhZnpRSLeQew5EHSy1
+03BltphJ6YsdAgTfyR7AT4nTisdNyYl+IhnJq1+FSKsWxdHcelNMaM3JwlLrXMBO
+FbotT17CV8J3M14xFrwqL7cRROi57A==
+=lV4A
+-----END PGP SIGNATURE-----
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+--umhghwnwqoavy3lt--
 
