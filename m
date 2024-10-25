@@ -1,167 +1,107 @@
-Return-Path: <linux-rtc+bounces-2311-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2312-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06AD39AF98E
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 08:08:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0E569AFABC
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 09:12:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0348282A94
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 06:08:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E544B211DA
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 07:12:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC4D218DF97;
-	Fri, 25 Oct 2024 06:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230041B3942;
+	Fri, 25 Oct 2024 07:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="ADsETGi/"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="VwDx68tr"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44F918A6DF
-	for <linux-rtc@vger.kernel.org>; Fri, 25 Oct 2024 06:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064391B2197
+	for <linux-rtc@vger.kernel.org>; Fri, 25 Oct 2024 07:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729836503; cv=none; b=cehzPt3VHuwaDW/TcI0hULI8IvLTGZtxgJA/Kk6p9jBxEbUNKRjegS0CIix+1jo2ie0H2PcNIuuHFOUqF6YGVaVyrUKT7GWWRlRgVsoVorS+pE+vaFK9b8SBi+eIwR6iS+LvYAhodOExsML+mxfMc+fDO36U28fXW++bmfwXyi8=
+	t=1729840370; cv=none; b=ossxLOIGs19YMyTVqbq0qr0c2X3VOVJrqsE3cLi7nSTaaa3JMf6zOeBpKmNzuXu3pPTjchB7ZcfU1FOKFiVMK1ul9J/ExR2OjWZVsjF1aaYOrgku49JAiemOe+OOMHxuPn27ZM7G8XU307SjQB9rdxCD8XeBGzxwCGb6AWNJ8VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729836503; c=relaxed/simple;
-	bh=lWY1cYjWDT0FuJ3rKkJUgyvPJglMPy9xp12xFCSV+dc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=VKXex7AgmKTitxSchNEIEftLPLFDlZdoYCHHzgEm9YdxGnFkyLGJ1NlSE+whKFWLY7zJYNaN55s+JRoE0KSm/7vCWqSGU8AWDOQar8j62xnx83801s6dFvanJYmDBUdvQ7y9LJq4c1VVMI8lWTevdYi3EkoUcjyqpjtqL24+njo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b=ADsETGi/; arc=none smtp.client-ip=193.222.135.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
-Received: (wp-smtpd smtp.tlen.pl 15452 invoked from network); 25 Oct 2024 08:01:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1729836098; bh=NS9u9n+cTzjLwF5ONAS/jRv5numrk4hGVCqnQ6MLXjY=;
-          h=From:To:CC:Subject;
-          b=ADsETGi/PVztE9UrbE2ZbQ7ZRQ4jPPVd6oP8tmcExwnw8FRviz+zaNIKKg/AfCPkn
-           GEtV7De4iKF74ZJZOcP9HWoQf0NWNMH7cYFnrJ3drOFNCnr2/Sv7yK/+vMBrlvBVWE
-           3r1sMwc6y/QKkZ165EGzbZtmlFmWGf8o70XIXlFw=
-Received: from 188.146.252.129.mobile.internet.t-mobile.pl (HELO [127.0.0.1]) (mat.jonczyk@o2.pl@[188.146.252.129])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <dmitry.torokhov@gmail.com>; 25 Oct 2024 08:01:38 +0200
-Date: Fri, 25 Oct 2024 08:01:37 +0200
-From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC: Mario Limonciello <mario.limonciello@amd.com>,
- Dan Carpenter <dan.carpenter@linaro.org>,
- Joy Chakraborty <joychakr@google.com>, linux-rtc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_rtc=3A_cmos=3A_avoid_taking_?=
- =?US-ASCII?Q?rtc=5Flock_for_extended_period_of_time?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Zxqv9KYnBdtnuqox@google.com>
-References: <Zxqv9KYnBdtnuqox@google.com>
-Message-ID: <B8A0CC86-7C24-4154-B8F3-69CD6B6C94BD@o2.pl>
+	s=arc-20240116; t=1729840370; c=relaxed/simple;
+	bh=HC2Mbq8H1D35xf3SMfYvRoEmmrQoX8W7uq2ioXVudgE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ot2VgBzbJF+DGWe2+2wMlDRFpqS8wMQtLaQ/mBNwrqTIcSMXLx5eCfCypxehESseeZLn3rtR0yGlzwcwpk2jLxnLWHPvSKvJT3lrh3yTDTsZQhs4AYfyvTxuqbPYPn3W1kOv7i6MwWTximEMDuD7NLOqxZG+yhTl23rTc6xR4q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=VwDx68tr; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539e63c8678so1838500e87.0
+        for <linux-rtc@vger.kernel.org>; Fri, 25 Oct 2024 00:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1729840366; x=1730445166; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HC2Mbq8H1D35xf3SMfYvRoEmmrQoX8W7uq2ioXVudgE=;
+        b=VwDx68trJOHSsWQo9WUGnSEAmOFysRMKlJZscIBWsPaJtCO1t65rbNP0HAMjqdS4Jk
+         h6NPU4t327TVnN8dC6S0ypDA2c1Anl5ucr8MaqIY2mnc8QMxGo6NTbyF7e5+SMhE1cdn
+         BLXlc5wYPVFeeEcOElP9NWLhpGi9MN3Bl1bCJHT0Bzppmy6s+nSJprQ9LlCtq4aqMisF
+         kz0SS06afT6Xz9kHIH1wyj38ZPX6z7YtU3rFv6KdMNOG0P1O380HK8zy7oa9n6VLPOOB
+         R2/zv0jTcGfkzXDweDau9yeUmGBRStcyj105kGrJfpiCW1Lr4/D0P831SAmhjJBsRle/
+         eXug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729840366; x=1730445166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HC2Mbq8H1D35xf3SMfYvRoEmmrQoX8W7uq2ioXVudgE=;
+        b=j44fqvF6YITp9FnSvUqa46WTJPLLi7BERfyn5/7lGhhQFt9dd7hXCYRD0kSTo3qPDS
+         0yiksoFxvnYNe459C91QKFtxV5JLIXY0i/4fdTA4W+jvQ1s9htTUDjGZhw6qcAfGm9c/
+         NGesK2TTLI/WCUE4PuMUWR7VyLTODndatR1wSh5T8eYVaNbfBRGpdFe5rLX1D+bF3BPc
+         vQHkN+BhkqO/GF2F6IxESIx+MgSNjr5l4ALNpdp3D2GIx0jMv5BimcJpwk3kvqvdrdOg
+         O5KqPcT14RUMvxZziwEpDkqNpW/NNdYpPzVlFJEw4TI5aLK9fAzyGgM/B5b3wNPbHMy5
+         V78g==
+X-Forwarded-Encrypted: i=1; AJvYcCUQUCasFHCZmofJD/I/WLW6yWnJ0/kKREKEV87zSR6ZV9NG6kPzqhXTzP3DTtm/AKdII+jx3G/+fJ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5p1wZlcHM6MP47yRX0CmlUsq8G5sYoar87ud/s+KdcAknJDCk
+	HnYOncUHTIRE20sNGwZbkz2PH+OAGZiDP9fLX7wheunA4MAOggqI/W4T8zTv7b7j/aMM/Dqh0Sx
+	5bHuWTWVtJ5dlYbTu9G/Zcvvv9WbUsOL07srwBA==
+X-Google-Smtp-Source: AGHT+IG4ZkZxGF4NwcleHDZ3mgXgDSPpilfwYHN2H/azOjoznqSNOFszAT/+13NowS/a3VwELdmMHRhJSJW6LQ/W5NU=
+X-Received: by 2002:a05:6512:3185:b0:536:a533:c03a with SMTP id
+ 2adb3069b0e04-53b1a3069bfmr4629650e87.17.1729840365974; Fri, 25 Oct 2024
+ 00:12:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-3-tmyu0@nuvoton.com>
+ <CAMRc=Mc+SZN=EytxY=qA-qBEAY_F17GP-7FRE9oLojLbdUoPaQ@mail.gmail.com> <CAOoeyxUUOCSaDLK8=ox3hwDVu=Ej-ds4=FsS8F+9GfiE-8HYvg@mail.gmail.com>
+In-Reply-To: <CAOoeyxUUOCSaDLK8=ox3hwDVu=Ej-ds4=FsS8F+9GfiE-8HYvg@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Fri, 25 Oct 2024 09:12:34 +0200
+Message-ID: <CAMRc=Mcbs_Qtac-jPDU2BgT0WNy4PgCaGJT6H2i7SQAg+JfycA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/9] gpio: Add Nuvoton NCT6694 GPIO support
+To: =?UTF-8?B?5ri45a2Q5rCR?= <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, jic23@kernel.org, lars@metafoo.de, 
+	ukleinek@kernel.org, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-WP-MailID: ee1af7991353aaae12cf921c9846d82d
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [kQO0]                               
 
-Dnia 24 pa=C5=BAdziernika 2024 22:37:08 CEST, Dmitry Torokhov <dmitry=2Etor=
-okhov@gmail=2Ecom> napisa=C5=82/a:
->On my device reading entirety of /sys/devices/pnp0/00:03/cmos_nvram0/nvme=
-m
->takes about 9 msec during which time interrupts are off on the CPU that
->does the read and the thread that performs the read can not be migrated
->or preempted by another higher priority thread (RT or not)=2E
+On Fri, Oct 25, 2024 at 4:53=E2=80=AFAM =E6=B8=B8=E5=AD=90=E6=B0=91 <a02825=
+24688@gmail.com> wrote:
 >
->Allow readers and writers be preempted by taking and releasing rtc_lock
->spinlock for each individual byte read or written rather than once per
->read/write request=2E
-
-Hello,=20
-A nice idea!=20
-(sorry for any formatting problems, I'm on a train right now)=20
-
+> Dear Bart,
 >
->Signed-off-by: Dmitry Torokhov <dmitry=2Etorokhov@gmail=2Ecom>
->---
-> drivers/rtc/rtc-cmos=2Ec | 31 +++++++++++++++----------------
-> 1 file changed, 15 insertions(+), 16 deletions(-)
+> Thank you for your comments.
 >
->diff --git a/drivers/rtc/rtc-cmos=2Ec b/drivers/rtc/rtc-cmos=2Ec
->index 35dca2accbb8=2E=2Ee8f2fe0d8560 100644
->--- a/drivers/rtc/rtc-cmos=2Ec
->+++ b/drivers/rtc/rtc-cmos=2Ec
->@@ -645,18 +645,17 @@ static int cmos_nvram_read(void *priv, unsigned int=
- off, void *val,
-> 	unsigned char *buf =3D val;
->=20
-> 	off +=3D NVRAM_OFFSET;
->-	spin_lock_irq(&rtc_lock);
->-	for (; count; count--, off++) {
->+	for (; count; count--, off++, buf++) {
->+		guard(spinlock_irq)(&rtc_lock);
-> 		if (off < 128)
->-			*buf++ =3D CMOS_READ(off);
->+			*buf =3D CMOS_READ(off);
-> 		else if (can_bank2)
->-			*buf++ =3D cmos_read_bank2(off);
->+			*buf =3D cmos_read_bank2(off);
-> 		else
->-			break;
->+			return -EIO;
-> 	}
->-	spin_unlock_irq(&rtc_lock);
->=20
->-	return count ? -EIO : 0;
->+	return count;
 
-return 0;
+I'm not going to read HTML email. Please resend as plain text.
 
-when you are at it=2E=20
-
-> }
->=20
-> static int cmos_nvram_write(void *priv, unsigned int off, void *val,
->@@ -671,23 +670,23 @@ static int cmos_nvram_write(void *priv, unsigned in=
-t off, void *val,
-> 	 * NVRAM to update, updating checksums is also part of its job=2E
-> 	 */
-> 	off +=3D NVRAM_OFFSET;
->-	spin_lock_irq(&rtc_lock);
->-	for (; count; count--, off++) {
->+	for (; count; count--, off++, buf++) {
-> 		/* don't trash RTC registers */
-> 		if (off =3D=3D cmos->day_alrm
-> 				|| off =3D=3D cmos->mon_alrm
-> 				|| off =3D=3D cmos->century)
->-			buf++;
->-		else if (off < 128)
->-			CMOS_WRITE(*buf++, off);
->+			continue;
->+
->+		guard(spinlock_irq)(&rtc_lock);
->+		if (off < 128)
->+			CMOS_WRITE(*buf, off);
-> 		else if (can_bank2)
->-			cmos_write_bank2(*buf++, off);
->+			cmos_write_bank2(*buf, off);
-> 		else
->-			break;
->+			return -EIO;
-> 	}
->-	spin_unlock_irq(&rtc_lock);
->=20
->-	return count ? -EIO : 0;
->+	return count;
-
-return 0;
-
-> }
->=20
-> /*----------------------------------------------------------------*/
-
+Bart
 
