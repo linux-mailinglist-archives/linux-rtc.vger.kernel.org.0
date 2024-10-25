@@ -1,175 +1,148 @@
-Return-Path: <linux-rtc+bounces-2332-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2333-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F8BE9B08C3
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 17:45:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 734B89B0F89
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 22:08:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99D1D1F281C0
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 15:45:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F05B284396
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2024 20:07:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F05416849F;
-	Fri, 25 Oct 2024 15:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C2F20D51C;
+	Fri, 25 Oct 2024 20:07:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eKAN5jJl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jAToUZuu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FEA158219;
-	Fri, 25 Oct 2024 15:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A9720C320;
+	Fri, 25 Oct 2024 20:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729871057; cv=none; b=JdKlwIUsJT5A59wJ4AR/iOXtAWmCGoKQngo70XL+imHYVO7zeIYta/vlXC0xfrn0LNKI1ti0DF+ZHHxLV15cnhAGbXIX6yW4ObasvES/tonVx1bx35CP5SDOQO5GD+b7O9fIHXD57ahTjepADHGRFMG7NU2oArGVBYibY9mzWA0=
+	t=1729886875; cv=none; b=ngVvWuO/9pk6pBh413quBwv8Hctajj/zNluSAitlakp3ngMztKIovR1/u5bUJioUoDDe9NfQOkn5i386CM159AC3m5/s8j9M7Cv8W0ydbKZw3fZA8EKsdZdFu90M6wceJWde5fxCv2/77s4pb2vPEkf5kkII7UZEo5eCE25IqmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729871057; c=relaxed/simple;
-	bh=vn4L0Kssm4qHDv91ZX0qDxoa9pCjsHBUmi11Lv0rAEY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f5A4ENxXCUzmKMQvvxkL/ug9m3P4ZBJLEduKQTU5sWbS0ILG4+hxB7ytBWaEphLROHBlG4uSNyUJnn7QHhZZhb/tgOWjHBSN0r7OuNeBAi0G7nMcM5XvUuJaFkHeEiUCInfSTFTpvqZWxpMPMcY+DdyF5qEzTobEpUednJ2Xt7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eKAN5jJl; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1729886875; c=relaxed/simple;
+	bh=t/T+RWNAPe6H8pnuUQTA0Zy8kIKLXOB0BCKHvNE6EBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b6jGLQ0KSn/9j2PZ3wAF23laf0dPHWMye8XH8PZjaZjQr5EcwOUkOjSSIqV/d5opTdqGuDanZzcJT9YdtYL237QQvhZn54b74RtQ85dz/iSBmyVGYrPRhwhj9v6uebA7Aw7QfZGOnKFMmduSGAohMFIsfP+dpdaEcFolTIdWPOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jAToUZuu; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20c805a0753so21098445ad.0;
-        Fri, 25 Oct 2024 08:44:14 -0700 (PDT)
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7e9e38dd5f1so1825180a12.0;
+        Fri, 25 Oct 2024 13:07:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729871054; x=1730475854; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SN8DcWX/dROqTArXD5nH9xajfGXdWvMk5oxxXOT+XxU=;
-        b=eKAN5jJlqIG/9pVTTQUuzq9wsu6M/HmM/KbKtiBF5OpUALPDMOhn8YfCcQoO9cM+/0
-         j2ACBVj4+Va1vYhfh4DsKe6UjgzbayFOEUcS8iT2VmWiOfwxYSKthFSBlxQigZGP++Cf
-         9ifsXnyJCEAGVRs2ovLdVqK8m9AlDhGFg093mh3CzgkxETTonf6bia7Mb9FLJIu2ba1L
-         GeihZfrG+mFxKzkihRfa09fcgO57y8hVSqHZDBzm3Cm6SRpA2f8LBIWLYQfESJ7v6LAz
-         yoWTd2rwV2BIh9GE8Y5Xi/H8s5+zPWGhGFPKVqd9qgfxvvXM7kkOy21Dn2riFEzVruVP
-         3pCQ==
+        d=gmail.com; s=20230601; t=1729886873; x=1730491673; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5dbV1tRHLTLsqjiToTOQKfhYKZO1wGgI+G1vKgEe3SY=;
+        b=jAToUZuuleCXP86WlGd9jvFbEamv8wCLAClxcnzuCiMpAkSPkmfHnLNwmHGJTaDwpf
+         SbUW+TesDoP6B5OaKgdn19yscRI4oTU5hoPtsXGq7+bHZFAnGiN5ShEU2WItgGSzkhPC
+         E0+McGmn3jMV+lpWV0WhC5ZRo4HBHjYmsoB9OKRv5XgL0f/u1K6F0WTZsGNOTbcJkVic
+         k5oREv4Urbepod4xS7fSUmx6luMpMSfPl+CXFQW7jHPSn4XUqpimYusfi1ihCnTJu+lh
+         Fy4MnGTjPnCzQbvu+RTs3S0OFMr+n10uOuCEbM6tvz24JNgS3rUdqD3E7Pr0w1e5fW7+
+         bEJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729871054; x=1730475854;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SN8DcWX/dROqTArXD5nH9xajfGXdWvMk5oxxXOT+XxU=;
-        b=E23APc0XYcm+/debEqxXdnmVnnrEckVno0ZX7TyxhO1JB+3E+t064Adbg4U1Dj9YvZ
-         9fQtNyPuVmxNzIHRtTZu9I/Wy59St7MuvxxUZzLABaUBl9ssh0+sdqWTo5T0Og51m5pE
-         gjUVvVwBVVCb6cftjx7ET50zq4Z2cjZy7Zk69N2jTRScLM364fJDS9h/0gAOASU/Wljq
-         2alkZ9eAxevxgteHlD1To19EZDIKCsWYYlc2a6bASdtBmzWCvu0HiMFqva+1kjDdImAU
-         0QKMVkzGZOOPlpN+Rax4CQmSo26wNfQiM4fLOdeRSSWbaJu0nFVUT6T2aAGi/b0EZV1i
-         rAjg==
-X-Forwarded-Encrypted: i=1; AJvYcCUFWOz9N7ucZpdaoV6IuywkhcBGXy8c7KKh/tvXzhVGxqXm66GxcM4H8bj3+ogMxD8QGhXdYYfvbIU=@vger.kernel.org, AJvYcCUMh14mN4GYjQpPgX97Bt1s/P5PKf23KJHz/3/nCM/eWcJZIl6iOfTQC8UjRahnfX8ftgG4FYnBWefwzzr5@vger.kernel.org, AJvYcCUpk1fmZDAkb72U+nfmfiQpxku/TbjwY6CZbXnbuemRsqp5aaOlzITqVICggX9SsfpJw9sp1U7r02Ab@vger.kernel.org, AJvYcCUvxp7dnhpn9aDx0rwzvqI3sQOlQnoNaiANWCneoU5dAFtYhsytOx4xugUCL0UA6EwFY3111zh7@vger.kernel.org, AJvYcCVCxJ+XRZR6EQ0BLF3vEGah/gksdxilT4pXJE7B7xw8dYoctbrc87tL18SRuXKr/+NAkYwRhuhn6T5U@vger.kernel.org, AJvYcCVskDOMGAnA39rPr2zJ0ILMBVVTzIy1g3cmtClGQgkj3deXeQkx+N9ucjMUQsvKvZdMx5gmeqXKv4ai@vger.kernel.org, AJvYcCVznUGOYXdTV8gj7rt7oHcqADTYv68uBo/qXZS6dbcs79w482YyWEgkpseppaRbRUH3Y725cYDk7GUJaNs=@vger.kernel.org, AJvYcCWeh1amK8/z9mGNglE1ysuVQz4NdrPyBuIXv40fbywb1PTPZmPYvOh1CaJq1u7l3/GFFJTL8xdewjj+opuD0DU=@vger.kernel.org, AJvYcCX88ITaoM3RllEwTaauV7H1N78FG6smoCzL5sKxlxDsDXHfYjTPUqIFdUXuQ8y2s8LOFtpJbltaf4C37w==@vger.kernel.org, AJvYcCXs2TmkDtDG8RiNXXPvyAbHttVDL1u4
- ASluOqKm9nGHggjwix4jzRMBhcxqExnBLhNzeHEzG2E4wmfC@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNa2cgkmll2rMuBpVk6vTCMcudxkPUm7EYWiRknnV0wfar9pi4
-	QfEJZmZKUsoy55UUdxtX12TUWxbzfxtJsk1bRMr4XKJ7hJyZYL6y
-X-Google-Smtp-Source: AGHT+IE+7zMSTWMWl0WD/H7aqI4fO7bMiX7i3W2UCxfMlbQ/sZdV0uOKx4IL/fYIV7PAJP1kE+ECSA==
-X-Received: by 2002:a17:902:f549:b0:205:8bad:171c with SMTP id d9443c01a7336-20fb98f1e18mr74160475ad.12.1729871052720;
-        Fri, 25 Oct 2024 08:44:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc02e94csm10715745ad.198.2024.10.25.08.44.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Oct 2024 08:44:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <817d24e1-6fdd-4ce2-9408-eccc94134559@roeck-us.net>
-Date: Fri, 25 Oct 2024 08:44:08 -0700
+        d=1e100.net; s=20230601; t=1729886873; x=1730491673;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5dbV1tRHLTLsqjiToTOQKfhYKZO1wGgI+G1vKgEe3SY=;
+        b=J4X2YabkIsVNVm1PiecxGgF/1yRUY3ahWYu5nvY/l3QACO81dFGTvD7t2Iq4pjdWIF
+         0rzh2fh8BHrzvzXEr6346fybDmW7HcCK3s2TSqdiA0BrCDn+dw4ZqY1BZbxK9DuenYJm
+         U1VEH35JgX04lGpU+G89eGSWO4wOEIruEzvVWcfu1zg/4qni/969ht60sNGdnpOlcUhd
+         c1Ag7hYvzS5FOt15zih1T0LrP2hkztFe3W725ZlPlBVB30q4r9+UpWLKLu27Sfvon9eF
+         Gu7pCwwhF4qtBlWXJrvD50jibI2w2s/0kfoAfPSGuVmJrgTKUQFiu81Z3VToOEHxzZjA
+         UZqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUIE8kM37OdRjhHd9/wQbGS689POun9d7OKLTUnaM1JzROy9eUUd+tMKRaSBb/EhlllQh2wsDTUjsd3@vger.kernel.org, AJvYcCVOJvkU48T9q8kBKG1nVhohHezTJmGcfX+dJNTiw2phaByKlCyA4B8TAXgYOIsPgEAW0JNYDmMv9GDr3R8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5h6G+UZ+ULopAiiXw5QOxEM2o0GpPbqQwO+Cam+sVoqC/7p6f
+	p5POe9cJ0L9vVDo82uTpk7gCDAuGte5kqNVDt6lhJ2OPfy1OXNF8
+X-Google-Smtp-Source: AGHT+IFdKGls00wotX40vYtE1Br/ohES1FSPg7WRtCJRlvgyoFoUwwV+ohK0Qwdha1zaOh3BfBVm9Q==
+X-Received: by 2002:a05:6a20:2d23:b0:1d7:f7d:5ced with SMTP id adf61e73a8af0-1d9a84d1699mr505105637.37.1729886873069;
+        Fri, 25 Oct 2024 13:07:53 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:1691:2dbd:7c00:4e03])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7edc89f442bsm1472123a12.74.2024.10.25.13.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 13:07:52 -0700 (PDT)
+Date: Fri, 25 Oct 2024 13:07:50 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Joy Chakraborty <joychakr@google.com>, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: cmos: avoid taking rtc_lock for extended period of
+ time
+Message-ID: <Zxv6ltPBWfWs957R@google.com>
+References: <Zxqv9KYnBdtnuqox@google.com>
+ <B8A0CC86-7C24-4154-B8F3-69CD6B6C94BD@o2.pl>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 6/9] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>,
- tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- jdelvare@suse.com, jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org,
- alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-7-tmyu0@nuvoton.com>
- <CAH-L+nPGGhgDFge0Ov4rX_7vUyLN8uu51cks80=kt38h22N7zQ@mail.gmail.com>
- <62ea5a91-816f-4600-bfec-8f70798051db@roeck-us.net>
- <CAOoeyxX=A5o5PhxpniPwPgMCBv1VwMstt=wXCxHiGPF59gm5wQ@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CAOoeyxX=A5o5PhxpniPwPgMCBv1VwMstt=wXCxHiGPF59gm5wQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <B8A0CC86-7C24-4154-B8F3-69CD6B6C94BD@o2.pl>
 
-On 10/25/24 08:22, Ming Yu wrote:
-[ ... ]
-
->>>> +static int nct6694_fan_write(struct device *dev, u32 attr, int channel,
->>>> +                            long val)
->>>> +{
->>>> +       struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
->>>> +       unsigned char enable_buf[REQUEST_HWMON_CMD0_LEN] = {0};
->>> [Kalesh] Please try to maintain RCT order for variable declaration
->>
->> Ok, but that is already the case here ?
+On Fri, Oct 25, 2024 at 08:01:37AM +0200, Mateusz Jończyk wrote:
+> Dnia 24 października 2024 22:37:08 CEST, Dmitry Torokhov <dmitry.torokhov@gmail.com> napisał/a:
+> >On my device reading entirety of /sys/devices/pnp0/00:03/cmos_nvram0/nvmem
+> >takes about 9 msec during which time interrupts are off on the CPU that
+> >does the read and the thread that performs the read can not be migrated
+> >or preempted by another higher priority thread (RT or not).
+> >
+> >Allow readers and writers be preempted by taking and releasing rtc_lock
+> >spinlock for each individual byte read or written rather than once per
+> >read/write request.
 > 
-> [Ming] Is there anything that needs to be changed?
+> Hello, 
+> A nice idea! 
+> (sorry for any formatting problems, I'm on a train right now) 
 > 
+> >
+> >Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> >---
+> > drivers/rtc/rtc-cmos.c | 31 +++++++++++++++----------------
+> > 1 file changed, 15 insertions(+), 16 deletions(-)
+> >
+> >diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+> >index 35dca2accbb8..e8f2fe0d8560 100644
+> >--- a/drivers/rtc/rtc-cmos.c
+> >+++ b/drivers/rtc/rtc-cmos.c
+> >@@ -645,18 +645,17 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
+> > 	unsigned char *buf = val;
+> > 
+> > 	off += NVRAM_OFFSET;
+> >-	spin_lock_irq(&rtc_lock);
+> >-	for (; count; count--, off++) {
+> >+	for (; count; count--, off++, buf++) {
+> >+		guard(spinlock_irq)(&rtc_lock);
+> > 		if (off < 128)
+> >-			*buf++ = CMOS_READ(off);
+> >+			*buf = CMOS_READ(off);
+> > 		else if (can_bank2)
+> >-			*buf++ = cmos_read_bank2(off);
+> >+			*buf = cmos_read_bank2(off);
+> > 		else
+> >-			break;
+> >+			return -EIO;
+> > 	}
+> >-	spin_unlock_irq(&rtc_lock);
+> > 
+> >-	return count ? -EIO : 0;
+> >+	return count;
+> 
+> return 0;
 
-I don't think so, If two lines have the same length, the order is up
-to the developer to decide.
+Oh, yes, of course, thank you.
 
-Question though is if the buffer needs to be initialized. You should drop
-the initialization if it is not necessary. In that case the second line
-would be shorter anyway, and the order question would not arise.
-
-Thanks,
-Guenter
-
+-- 
+Dmitry
 
