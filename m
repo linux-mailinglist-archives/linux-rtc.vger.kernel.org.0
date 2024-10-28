@@ -1,237 +1,278 @@
-Return-Path: <linux-rtc+bounces-2351-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2352-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1381D9B32B4
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Oct 2024 15:08:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 304D59B3413
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Oct 2024 15:54:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6173DB23F4F
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Oct 2024 14:08:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4FB81F2273B
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Oct 2024 14:54:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA491DE4C6;
-	Mon, 28 Oct 2024 14:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BE1F1DE2B1;
+	Mon, 28 Oct 2024 14:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b="TMNjdtQ2"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2097.outbound.protection.outlook.com [40.107.20.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5991DE2B0
-	for <linux-rtc@vger.kernel.org>; Mon, 28 Oct 2024 14:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730124447; cv=none; b=AmghJnpq0On3g3JZ5dKvXgJdtUNsKyGRtwr8vpSbiyemRdw19HdryyBKpzaYmJspEZs8x+aaDcDaNRzQVDyJtCsNNzAXwCu0aAMtAKRlgg8pUVwedGrNXjVEVZeIcG0E6rCV5ymzKoWH9BCvNtkjyN6CfdqO9quAQomRDwM4OXA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730124447; c=relaxed/simple;
-	bh=cphWtKkhhPCR0SL0T9ODiGPD3s6cDdHQ8iEsC3GcO3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QX2pJT2wRy3R0g6SOJo5Q+2U+L77lE8UHxYC9JYc3FIwri8kNboJaLnDet8ToQF42BxWiA08ZOhxfan0wcdwn7xqMzMYiOompP3Zt66YgLem+SmwyYdtN8kFAJwIUW5eUbSL8Mtj9ZhCCDkAEr/n+pgH+dzv5cvQ1mfSwqQLrQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t5QOJ-0001De-10; Mon, 28 Oct 2024 15:06:43 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t5QOG-000rfn-1t;
-	Mon, 28 Oct 2024 15:06:40 +0100
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 174A6360944;
-	Mon, 28 Oct 2024 14:06:40 +0000 (UTC)
-Date: Mon, 28 Oct 2024 15:06:39 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-2-tmyu0@nuvoton.com>
- <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
- <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
- <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de>
- <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
- <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
- <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com>
- <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
- <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DD61DDA1B;
+	Mon, 28 Oct 2024 14:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.97
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730127293; cv=fail; b=iaaTK+ePwWkfEeDLB5U/mly+Zp2iCBdnkIinji1FRYAXMq/z+dztvg0AXJENIgwuLWU3s7cbTFcGiA4JUGAa2QItKG0EUbwU5j2BYHiU/2irTuYWjGQ4dJBeLqHxgON6kvtADYGn6QG1D3PZnrtp/OllD4TTWhN1dr+wa68L1tI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730127293; c=relaxed/simple;
+	bh=+tqpwiIu5qjdc8gQnBCY3PEUcf7rUA9+E3VS/z9dzIs=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZIKskl9hXTjfnhrzyMZhqC4RJnuWy+isaa79554OnX4FThkqTAo3PTdwiAdA40W3abHAt/aBK+uGbXOUb6NYivNlUR1uxCs5/Tr9GIUVo/yEr1xT/rOni2uR74ctHvnJtdWDYFVMfae4PaKuxHY8GrMB5srK1n4tJWGHBtREK+o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com; spf=pass smtp.mailfrom=kunbus.com; dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b=TMNjdtQ2; arc=fail smtp.client-ip=40.107.20.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kunbus.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ylOvvg2bAHsHp20zWuLzkV5lhf646M5PYR5gc1CPPMaeVQp4HviOvH+syT46xkReOuz424Y/NmkM3inVQOWtTP93YmH9nbxOwF9UgghSwxnlUS2SZZMKNvFfPjAMVxFGmZLLB1FrUO2TWTf0m7/TNJgpcV2pVF7iqcbDH3MwrS7qys2y8OgrRCYujYeQaM6NLjNOGsmCklpsu+Sh+n93+IB2vanuUnO6H7KReTd1+iQhp8fp9ZOQtViiwEtehOs6qOVraWSDsJEkNGT0RDnrA3+eHVD+BJk5HbRm505sDcbm6DNeqAjmzacYw1E0SSqT+00B/VNzpRLQX3Mo2DyrVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jmcCMJT6yLxVPwe1FvDRJ9vm8Yhc2Qfa5iILgBiv7go=;
+ b=Nu7N2FFSVfC92UcLqfufXBTbCd+/KZq4jPVrUi1ZixMMeHYkyetjk9CkekNIgL95pBSxrXRDhFMcKt5fEUMgLSgbR08nt5a2SQ5B1KcFufTevDm2FU/O3EZUM7kDOTE3jTm0TwcAOo4SNJD5SN9SFA5sxiQiJhqw2/LynPs5KW4VanQdtPHTdoYO1p2IFF8rUuuo8/LFKeLX6qc8IhAcfzStOskru3jx/v5j0xQ1mic6GGXXfpHEja/QH+H7PdKbgrkmpF/sPNPsVZhAZH08vp01ivwfVEl5+ldE+LFDS9C5dabfOqfiZ++TRPyaZXTNHzg3r3fv92+K5RGRKrQG+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
+ dkim=pass header.d=kunbus.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jmcCMJT6yLxVPwe1FvDRJ9vm8Yhc2Qfa5iILgBiv7go=;
+ b=TMNjdtQ27xAJ9Gh2dIRRYKPfYGBB39jdIY7w4ZUAylU95fesWlsz3SvSUyG5N3qCN1ON0yoXzu7P0aBoly1eV+ci6irfj8zib2pi9FjcRFxzDFCY5EFqsw+x/AY90uSK+WfmXyBmMjLFngvhGxP2XMTFvem3Oeu9VpckZUGKD0Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kunbus.com;
+Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:160::8)
+ by DBAP193MB0970.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:1cf::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.23; Mon, 28 Oct
+ 2024 14:54:45 +0000
+Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
+ ([fe80::2398:d74:da85:f90]) by AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
+ ([fe80::2398:d74:da85:f90%3]) with mapi id 15.20.8093.024; Mon, 28 Oct 2024
+ 14:54:45 +0000
+Message-ID: <b8c28db1-11b2-498d-a2d8-0302c7081251@kunbus.com>
+Date: Mon, 28 Oct 2024 15:54:43 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: pcf2127: Add
+ nxp,battery-switch-over property
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Conor Dooley <conor@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Lino Sanfilippo <l.sanfilippo@kunbus.com>
+References: <20241022092855.1609427-1-p.rosenberger@kunbus.com>
+ <20241022092855.1609427-2-p.rosenberger@kunbus.com>
+ <20241022-radiator-blemish-3819dd4d94e0@spud>
+ <36f46d44-8852-4988-9ff9-5b8bf49e2aa8@kunbus.com>
+ <pj3tgtsdsjsqqznxgzzmxrcozibqie6ubtythou7t23tfgde5w@t6nwxob4rjah>
+Content-Language: en-US
+From: Philipp Rosenberger <p.rosenberger@kunbus.com>
+In-Reply-To: <pj3tgtsdsjsqqznxgzzmxrcozibqie6ubtythou7t23tfgde5w@t6nwxob4rjah>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR4P281CA0003.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c8::14) To AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:160::8)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2vg3oknj3uphvbvf"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0P193MB0738:EE_|DBAP193MB0970:EE_
+X-MS-Office365-Filtering-Correlation-Id: ce604c3a-e02d-4706-81fa-08dcf7607627
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RVlwMjJlU1VPV1NBWmtZdGpPUWFZaUlSeExCSFczSEdsNUE0a1hKMVNtN0wv?=
+ =?utf-8?B?ZG9JNzZ4N2lTMlZMMFhCaU5GdkhqYjdENjBLME54TTdOc3ZCcUtKREFocXRH?=
+ =?utf-8?B?QUFYSUgrNGJEZy8wVXJ3NFNJdXQ2ckR3MW8rTC9QZzVrVXIxUWhIOXAwTmZO?=
+ =?utf-8?B?RGZHS09lY0owVVJTSGcrU05Tci9kN1RldWhWcGh4RzNBTlFDRm1uMm5ERERE?=
+ =?utf-8?B?WjBCaTBFYWF3T0dVMTRoUTgxUzlTejZNc0lxYXVRV1B2dVFXRG1YSENmU0ZS?=
+ =?utf-8?B?QmFxVDFSUkNzNTR6R0gxc2VxRG9BTE5QRWdXbk05WFZXUXdZa2hTdmFPanN5?=
+ =?utf-8?B?YkpxQTdvTnh2REZHblR3RlJobEpwTEgzMWowQzdoMnBuZmhMazg4TzNDMTNm?=
+ =?utf-8?B?YkRpWS96WUFjUm0rMnR4MlFPdlZOUFdycEdubExReWx5VUk5eUlUYUo2Z0NQ?=
+ =?utf-8?B?ODExa0tWL29aYUVCQitHZFNCa0dLLzFLbitkUm9IUTV2ZXI5aXpVbVBHeDgr?=
+ =?utf-8?B?UkxDemZEVEpYbk1tZEphVGhxUDByL1RoSEY3Ry85VnpQUEpxeEVsd2JobGdo?=
+ =?utf-8?B?dHQ0ajEwTmgzV21KTlA1RFJYQmZNUGtrbyt6c3Y3eTNaSjdMZFFEYXRJUVlm?=
+ =?utf-8?B?WWN2L3FRdjJqUHk3TXdRZFlsQ0d0TmdjZU0vbGNFdTNGTjcySWl4ckRVVTh4?=
+ =?utf-8?B?aEMxanA4WjU3ditNMzBTUVQ0YmFaUk8vcndrQURKV1dwU1hxV0x4RHJxZ21t?=
+ =?utf-8?B?RlEvUzU4SnpXenZFclprcll0em05YlhHZTF5Z2NKUTRGTk9RMjFQYS9LM253?=
+ =?utf-8?B?UFBBQUVMNk5WZGQyWGFUVHM3dUgybVdoRkdRSUlZNHU0bVhyYlBka3dDM0l0?=
+ =?utf-8?B?QVA0SFU0bUQxSDBTdHFUbDlZLzh0a1BGeUlybmd3VGhzM3ZIekJKVnp5N2ll?=
+ =?utf-8?B?SnZnR3VZWWJOblBNUm1QT00wTnlyWFVDbGZTZzE4Q0Rtd2dsVnFsa2hiY1pW?=
+ =?utf-8?B?aVVQcEtBNTlXY3RZcmQ2UnBacXg5VVRxdTBWVFN3ZE5rQ3k0VDBOMGxMeW9i?=
+ =?utf-8?B?Vk4vTy9IMXVrc1owbVZtc3dQbTNqU3pFc0FxOHNDNVY3Qms2ankrNTFnSmZX?=
+ =?utf-8?B?OGJyK3FRUG9ORFpSM2g1V2VHRHBwdHRrZkp3K0xaY1lZSW56SE1TRFJaVzlT?=
+ =?utf-8?B?VFk1T1d5bmx5MDJ1enpjVC9sU3RPVmZtVVJFNHQzUFY2VFFUSDdmeXFEZEZm?=
+ =?utf-8?B?Z0hGRVNRNkZWOGo0VVhSejVvQTlmUHIzbDVtakJpL255NjA3anZZVmhsSG9F?=
+ =?utf-8?B?VU9sK0p3dm90YXFBMFdlcWI0ZjEwdmR5UERLVXJxT0N3THRmdWlab21aU2NO?=
+ =?utf-8?B?aVkvU3NXYXQrLy84dzdINnRLS2RhdFFvRXdSdkg3b0ptYnNJTmo1UjQyc0lI?=
+ =?utf-8?B?M3c1T2NCc0JVNG1UUFNaTFNoZUtrdnpMbS9IM1g2UGdHOXN1eG1WUFNBQzdC?=
+ =?utf-8?B?UTZGYWFaL2UzR0JzdS9RYldLRGJTeVRnVk5VcS9XczFqTXVUTElpVHhlcVZQ?=
+ =?utf-8?B?TWI5eUp4TGY5K2NsUHE2ckxNaVQ0eHZOeW1xMkxBSE54RTNvTG95MEpJamRj?=
+ =?utf-8?B?OVBaZUJraDVrdStiZ0JRSVlZWnlmS1RseHRqVC82RDNQZnNmWU9GakJMQ3ZE?=
+ =?utf-8?B?R3BqaFRNR25mYXpJZ3AwZnhoZzZzeGhzdk1ycktYbGhsYXhTc0p0OWpjRGZN?=
+ =?utf-8?Q?RP41BPLdoNQ1R3qyaOSf7gyZN8DNbLTFD9xA/5w?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P193MB0738.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZU5vMXk2UlBrdlBncy9kMTJ4V2dvNUpmVjdTQzR6WUNHTDYyKy9xK1lnT1Vr?=
+ =?utf-8?B?NitRRGJ6bmZqVWVTVWhZTnNaNVlnQWVqY2VrL3dFYUlQSHdub1N5dkpzY3E5?=
+ =?utf-8?B?aFljTWFKZUxNRm9DVHpMS1ZpdS9BQ3JrMndGeEMvL3UybEN6aVllN2xURWFG?=
+ =?utf-8?B?Qy9jdVY5ZHhtNkY3dDJES3N1WHhqTllnTlpndVVPYlBmQ0Q2NjgwMWRuVDJm?=
+ =?utf-8?B?VkNNY1ZHOS9jNjFqKzNaWXJtT0NLRnBBb0pUMVk1SHVUbFRyOFhsVldNM1VC?=
+ =?utf-8?B?QTZhVzd3cFhpYlFOZmJKc2dWMFlVVm0zYjJHWUF5VS9vWlRva2NSVEhlSDU0?=
+ =?utf-8?B?VngxTVRJSTg5OWJKU2V3Yk5QMk9hRWdWV2h0c0tZbzBNb0VHZGE5eHBoRko4?=
+ =?utf-8?B?RGVNMFBwdmpCL2xveEExTVBrcE1KbER3T2FqMjNlLzVoWEF5aUVoN0NWNk01?=
+ =?utf-8?B?czR3V2s4MnhIemE3aUk2MFpZQTdpdHFVWlBDT1NvOTFUeitsVUpjOGkvbUlU?=
+ =?utf-8?B?dkR1MDlLY0laazlJMzNHRzZESFloNG1qaXpDbVp3Y2pDRUtEQ014dWM5QSs4?=
+ =?utf-8?B?TG41ejlxb3Y3Q3h4VG1qczVlOXZEV2RQZ3hlS2lOVlpra2dlcVdYUDlyTWUz?=
+ =?utf-8?B?a1ZxNHhva2JDZVUwZlBGMlNPM2hFUzEyTDRZZFQwK3FFRDV6c3hBdkV3cmFJ?=
+ =?utf-8?B?aHpWZ3RzSFExSHN4Lzl6WHNzZ3F3N1EwRGZjdUFHakNqWll6d2ZZUWw3Q21w?=
+ =?utf-8?B?L2ZZemw5cjc3UFBDeHRPMkN5NjVyYTBxRUdCVWkvYUtTZWZGRUxWaFhCSWFq?=
+ =?utf-8?B?WWx1Q2gwYWtFbldpM3haTnVhWUs2RVJHYk1lcXEzY1loODFWRmFtc2VIZHI0?=
+ =?utf-8?B?bXE5TndVMzZGSXM3bW8vUEwrcHVGL05aMGhTbW1sbjNqRjZldWpML3FtWHNK?=
+ =?utf-8?B?NzBxVU51T1QyTHZpNGthWHN5UTl2aTQrOHZGNWdCeExudURTaEJJVExURmdx?=
+ =?utf-8?B?TEtQeEF2ZWFWc1paNUFOUFprYXFCbHVzczdSMGJ2QXhOUnF5Tm1FUFBrYW9I?=
+ =?utf-8?B?KzZXQTloaDBCdTRieXhRY1VUazZmL3NzZnNtNlAyYk9MMzJqNWJZWVFCRng3?=
+ =?utf-8?B?MVNiV3NpZFI0cEUrR3dkSWxYU3JCSVgxamFsMjNDbG9EMHNEOXE0anNLdWtL?=
+ =?utf-8?B?c2tGcHZNcEUvVTBlMjVmeGlOcHk5NVRuejYzRlpIa0VlOEhYVDBsRnZ1VFZ6?=
+ =?utf-8?B?ZTI4dlkyWjVBQm9HUnpoZkgvenI2Z09ReHB1YjJaQWgzNEdYcFp0amNWSUZu?=
+ =?utf-8?B?QVF4WlBTNjdoRGxVU3MzR0luS25tczczNG5MRDVNVXlkV0tFMnIyelRuQXNW?=
+ =?utf-8?B?NHFWR1IwZUF4dE5jaGVKZWFmUDhORFd4RG9lRVhJTFdlaUpmVERCV2xtNkJw?=
+ =?utf-8?B?NEw3ZWltamlyR25Dd0hya3pDck80Q0FWaGdMNlM2b0lFZDAwVTRaM3hjaFVr?=
+ =?utf-8?B?S21hQk04dlFYN1grL0FNV3ZiQ0VPT2V6SlpSaVNLUkx6K09neVpJZmRSTFVa?=
+ =?utf-8?B?L2Y2dE1SNGlrckFlN1lHM1JoN1dZL3ZSNjd4eUlER3RRbTljV0NQVk9nT0hW?=
+ =?utf-8?B?U2VNZUxvUGg1NUh2RjFOOTIvWXZPdkZXWTU4OStxODBVWWRITUV3MlJkdDBX?=
+ =?utf-8?B?WDdpbStvRmZDYkMxeDFpcWQzOTd1QUI4a2ZueTVVaXdIdno0VVRqOVp0Z0ZZ?=
+ =?utf-8?B?b1YrODAzYnZvdlZhazQ4QkpidTdTUVMrU2tRNmtyNFJ5dUo1azVBMDI3LzA4?=
+ =?utf-8?B?dU84eGtIcllLWjRBUndXak90MHBHWUc5SVhEaDNKbWdBMGo3YzdjUkJPUnY5?=
+ =?utf-8?B?TEFDZkRiUURNbmpTdFVJVUNyek5Qa1M3Nzg3K2pHVTM1czJNUmIxN2ZTVkxk?=
+ =?utf-8?B?K0dQODJsUFdVMjhuelRRU2lISGM5U0tVRVVnRDZGSXhWbXZGMlVNeTlIbnNm?=
+ =?utf-8?B?ZS9nL3pkSDdwdXE2ZVZSMmdTOXpzM3krN3lvcmwvNTRKZC96Ny81V3Q5amdq?=
+ =?utf-8?B?c0NQZVpCVGFQUWZoZ1NJSXJwRHJpbkxmQWw4VnA5bkxtNWFueTNtbjVLS3NB?=
+ =?utf-8?B?ei9mZUJId2dPWEt5ZTQxOHF3d2hXUG05QjR1RHZLY2FTdWRLaWtLMjEvTkpI?=
+ =?utf-8?B?VXc9PQ==?=
+X-OriginatorOrg: kunbus.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce604c3a-e02d-4706-81fa-08dcf7607627
+X-MS-Exchange-CrossTenant-AuthSource: AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2024 14:54:45.2242
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RnnCjoqQkGBB8leYiVhj6ghyvjErlFNv6pvwhCoMGbr68SW1lU7Tj+pSQYmfk3SZ0KbtRHU+RF3bnH0lrdHutn9FBxRuLsBKVsbjMJaFxCc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAP193MB0970
 
+On 24.10.24 09:25, Krzysztof Kozlowski wrote:
+> On Thu, Oct 24, 2024 at 09:11:04AM +0200, Philipp Rosenberger wrote:
+>> On 22.10.24 18:35, Conor Dooley wrote:
+>>> On Tue, Oct 22, 2024 at 11:28:54AM +0200, Philipp Rosenberger wrote:
+>>>> The nxp,battery-switch-over property is used to control the switch-over,
+>>>> battery low detection and extra power fail detection functions.
+>>>>
+>>>> The PCF2131 has a different default value for the PWRMNG bits. It is set
+>>>> to 0x7: battery switch-over function is disabled, only one power supply
+>>>> (VDD); battery low detection function is disabled.
+>>>> This is the opposite of the default of the PCF2127/PCA2129 and PCF2129.
+>>>> With the nxp,battery-switch-over the behavior can be controlled through
+>>>> the device tree.
+>>>>
+>>>> Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
+>>>> ---
+>>>>    Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 10 ++++++++++
+>>>>    1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+>>>> index 2d9fe5a75b06..5739c3e371e7 100644
+>>>> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+>>>> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+>>>> @@ -30,6 +30,16 @@ properties:
+>>>>      reset-source: true
+>>>> +  nxp,battery-switch-over:
+>>>> +    description:
+>>>> +      Battery and power related configuration. This property is used to set the
+>>>> +      PWRMNG bits of the Control_3 register to control the battery switch-over,
+>>>> +      battery low detection and extra power fail detection functions.
+>>>> +      The actual supported functions depend on the device capabilities.
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint8
+>>>> +    minimum: 0
+>>>> +    maximum: 7
+>>>
+>>> Beyond the fact that I dislike register-content properties like this, where
+>>> it is not possible to grok the meaning by reading the property, what
+>>
+>> Yes, I'm not satisfied with this solution myself.
+>> There are three different functions, which can be configured in the
+>> register:
+>> - battery switch-over mode: standard; direct; disabled
+>> - battery low detection: enabled; disabled
+>> - extra power fail detection: enabled; disabled
+>>
+>> I'm not sure what a proper way is to implement this in the devicetree.
+>>
+>>> even makes this suitable for DT in the first place? Reading the commit
+>>> message this sounds like software policy, and that different users of
+>>> the same board might want to configure these register bits in different
+>>> ways.
+>>
+>> It is less a software policy, but a configuration how the hardware is
+>> implemented. If the device has no battery, it is possible to disable the
+>> battery switch-over function. In this case the V_BAT must be connected to
+>> ground.
+> 
+> monitored-battery property already tells you this.
 
---2vg3oknj3uphvbvf
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-MIME-Version: 1.0
+If I understand this correctly, the monitored-battery property is meant 
+for rechargeable batteries, not for a simple button cell to back up an RTC.
 
-On 28.10.2024 16:31:25, Ming Yu wrote:
-> > > > > > > > The Linux USB stack can receive bulk messages longer than t=
-he max packet size.
-> > > > > > >
-> > > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes f=
-or this MFD device.
-> > > > > > > The core will divide packet 256 bytes for high speed USB devi=
-ce, but
-> > > > > > > it is exceeds
-> > > > > > > the hardware limitation, so I am dividing it manually.
-> > > > > >
-> > > > > > You say the endpoint descriptor is correctly reporting it's max=
- packet
-> > > > > > size of 128, but the Linux USB will send packets of 256 bytes?
-> > > > >
-> > > > > [Ming] The endpoint descriptor is correctly reporting it's max pa=
-cket
-> > > > > size of 256, but the Linux USB may send more than 256 (max is 512)
-> > > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/host/=
-xhci-mem.c#L1446
-> > > >
-> > > > AFAIK according to the USB-2.0 spec the maximum packet size for
-> > > > high-speed bulk transfers is fixed set to 512 bytes. Does this mean=
- that
-> > > > your device is a non-compliant USB device?
-> > >
-> > > We will reduce the endpoint size of other interfaces to ensure that M=
-FD device
-> > > meets the USB2.0 spec. In other words, I will remove the code for man=
-ual
-> > > unpacking in the next patch.
-> >
-> > I was not talking about the driver, but your USB device. According to
-> > the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
-> > transfers. So your device must be able to handle 512 byte transfers or
-> > it's a non-compliant USB device.
->=20
-> I understand. Therefore, the USB device's firmware will be modified to su=
-pport
-> bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
+> 
+>> If a battery is connected, the battery switchover will only work if the
+>> battery switch-over function is in standard mode or direct switching mode.
+>> Until now the driver has just ignored the PWRMNG bits. As the default was
+>> battery switching in standard mode. Thus all use cases worked good enough.
+>> Battery switching was working if a battery was connected. If no battery was
+>> connected it did no real harm (the rtc may have used a tiny bit more power
+>> then needed, I guess).
+> 
+> Why driver cannot use standard mode always? Or other way?
 
-Then you don't need manual segmentation of bulk transfers anymore!
+This would overwrite any configuration set by a bootloader/firmware. For 
+the older chips (pre PCF2131) this was no problem. As the reset default, 
+was "battery switch-over in standard mode". The driver just left the 
+whole battery switch-over configuration untouched.
+If we decide to change the battery switch-over configuration 
+unconditionally, this could overwrite any third-party configuration.
 
-> > > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=
-=3D packet_len) {
-> > > > > > > > > +             if (len > nct6694->maxp)
-> > > > > > > > > +                     packet_len =3D nct6694->maxp;
-> > > > > > > > > +             else
-> > > > > > > > > +                     packet_len =3D len;
-> > > > > > > > > +
-> > > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(=
-udev, BULK_IN_ENDPOINT),
-> > > > > > > > > +                                nct6694->rx_buffer + nct=
-6694->maxp * i,
-> > > > > > > > > +                                packet_len, &rx_len, nct=
-6694->timeout);
-> > > > > > > > > +             if (ret)
-> > > > > > > > > +                     goto err;
-> > > > > > > > > +     }
-> > > > > > > > > +
-> > > > > > > > > +     for (i =3D 0; i < rd_len; i++)
-> > > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx];
-> > > > > > > >
-> > > > > > > > memcpy()?
-> > > > > > > >
-> > > > > > > > Or why don't you directly receive data into the provided bu=
-ffer? Copying
-> > > > > > > > of the data doesn't make it faster.
-> > > > > > > >
-> > > > > > > > On the other hand, receiving directly into the target buffe=
-r means the
-> > > > > > > > target buffer must not live on the stack.
-> > > > > > >
-> > > > > > > [Ming] Okay! I'll change it to memcpy().
-> > > > > >
-> > > > > > fine!
-> > > > > >
-> > > > > > > This is my perspective: the data is uniformly received by the=
- rx_bffer held
-> > > > > > > by the MFD device. does it need to be changed?
-> > > > > >
-> > > > > > My question is: Why do you first receive into the nct6694->rx_b=
-uffer and
-> > > > > > then memcpy() to the buffer provided by the caller, why don't y=
-ou
-> > > > > > directly receive into the memory provided by the caller?
-> > > > >
-> > > > > [Ming] Due to the bulk pipe maximum packet size limitation, I thi=
-nk consistently
-> > > > > using the MFD'd dynamically allocated buffer to submit URBs will =
-better
-> > > > > manage USB-related operations
-> > > >
-> > > > The non-compliant max packet size limitation is unrelated to the
-> > > > question which RX or TX buffer to use.
-> > >
-> > > I think these two USB functions can be easily called using the buffer
-> > > dynamically
-> > > allocated by the MFD. However, if they transfer data directly to the
-> > > target buffer,
-> > > they must ensure that it is not located on the stack.
-> >
-> > You have a high coupling between the MFD driver and the individual
-> > drivers anyways, so why not directly use the dynamically allocated
-> > buffer provided by the caller and get rid of the memcpy()?
->=20
-> Okay! I will provide a function to request and free buffer for child devi=
-ces,
-> and update the caller's variables to use these two functions in the next =
-patch.
+>> With the new PCF2131 the default has changed to battery switch-over
+>> disabled. Now even with a battery attached, the rtc will lose time after a
+>> power cycle.
+>> I guess I should describe this better in the commit message.
+> 
+> In any case this is pcf2131 related, right? So compatible implies it.
 
-I don't see a need to provide dedicated function to allocate and free
-the buffers. The caller can allocate them as part of their private data,
-or allocate them during probe().
+The reason, why this property is necessary for our devices is the new 
+PCF2131. But the function is not limited to this device.
 
-regards,
-Marc
+I’m considering simplifying this to just a property that informs the 
+driver that a backup battery is available. If the property is available, 
+the driver will enable the battery switch-over function; otherwise, it 
+will not touch the configuration.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---2vg3oknj3uphvbvf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcfmm0ACgkQKDiiPnot
-vG/OvQf+OF2IzP8yZ65Ke0Cq9hXkJZCpDCF4vKc3f2pLJQ/RjGNeubOY0v36mFwD
-5tZBs5Y7Md645uvjFh9VNg8YzW45+0dnzgzjGC28wj7hZpAW+yxnjNJ0zdpfBOPF
-pdwcIa8OLdqZ6exM1yGAyzV/en/klaL3oHu6RB8TmEMig/NQljdIF9nyslaqIAa4
-T1f+B7NmyH4nauAdBBhAOheqdJiO+eciscoFtxmOh4U5PQqGqR7VoBhkWrkx3JD1
-CqF6D9sNT+SP91/wuNPin6n85l/YDxSFkiKBG59p2do0l/vcwcWQ0denp4PT0dhk
-ZBpf0j8jPbNWS+ad8NpEyLE42beDRw==
-=o2YF
------END PGP SIGNATURE-----
-
---2vg3oknj3uphvbvf--
+Best regards,
+Philipp
 
