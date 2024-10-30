@@ -1,155 +1,138 @@
-Return-Path: <linux-rtc+bounces-2378-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2379-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45CAD9B60F4
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Oct 2024 12:03:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D33B59B659F
+	for <lists+linux-rtc@lfdr.de>; Wed, 30 Oct 2024 15:21:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F21B41F241B5
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Oct 2024 11:03:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93FA8281A1C
+	for <lists+linux-rtc@lfdr.de>; Wed, 30 Oct 2024 14:21:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2861E1EABCB;
-	Wed, 30 Oct 2024 11:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D3A1F12E8;
+	Wed, 30 Oct 2024 14:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="P9uLa7ec"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZRfhihB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DF21E907F
-	for <linux-rtc@vger.kernel.org>; Wed, 30 Oct 2024 11:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2A6C13C;
+	Wed, 30 Oct 2024 14:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730286118; cv=none; b=ZHLncDHjdR2lMbA3FYXeARDVdGy4/afeKE8Q7dKIo4WSHya2Wo7BF/U22WpkFgxCdzfePwzqNYs+rWX9UIpoJPlVM4uJVf0xbaUgDDyZqUpPWiS8On1mTp+5cWQd0GGmBhtrAjp8QGW2OIy0sf/EuvV+fh5Uhv2dXew02zWC1mI=
+	t=1730298084; cv=none; b=kKWRR/HOtxtFigYpTVFpyYti8tLbZOJzzwld3YH16mJXQMWEvDLskKg/Tip5OAeTk5Xu9RCGUZ2EW9F1NlORAKyEmVc/lcHJOkMG9Lh8LT2dffGHlmHyEbDmpxgDuNAock7jgDHwvRhpGCedj6PkG8nbIcTyIpjHIfe1QVXSz20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730286118; c=relaxed/simple;
-	bh=ITkAAPBuQN7qt/2aNfaGc9Z5M3Kkbo9w1OZJ+C50G0I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Z40qC3rIOcyuQocYuK2kQ1q1Jq57xp8xjvo75jV+hHrd/g0Weu5Z0bEMWiZK8wKUEQ1Jsc9ZHoPJJp2X8s5Z23XreHKOso5wEadih8+8318YobJK/723UNQrvMeAWhymtrA673PaPKUdD6g4Gm+2y3gbJiCH6zfZm28nO5zAuWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=P9uLa7ec; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43155afca99so4571265e9.1
-        for <linux-rtc@vger.kernel.org>; Wed, 30 Oct 2024 04:01:55 -0700 (PDT)
+	s=arc-20240116; t=1730298084; c=relaxed/simple;
+	bh=bgOvNyxM1biWcyfhRvIlKkBu8+hSrIZJM9KA7N8pO9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VpnRGxs1Bd97AwOUAi6nm3ZLdzf9ueXSxfg+ZWHkBKNe9305hQjxP7htb1/Tka3QGPJSVnDc3k4Tewz7qv8KCnS42PADGQ2g81g3Gkc5cN0HNC0xDuSLj3mAZxyoE0a8/9spWg6uKspRl8u3cu/YFNpZBUeXh5V09PMHUrbcT3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZRfhihB; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e290e857d56so6273141276.1;
+        Wed, 30 Oct 2024 07:21:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1730286114; x=1730890914; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1730298081; x=1730902881; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+rgH4N0XoiBaBn2DnREg2ur7KL1nWjEyXhZb98mz/Ng=;
-        b=P9uLa7ecQkPsoGz3RFrnra7DW5aBagtOIpPsbpt53gnQ9vVcGKyYW7z7M1bF8R93UH
-         e4+2dsOfUzaSBt6iZp9QqEtBzS5uX5o+CQ59fvcW3py37oE40wb19nbCcLhB5hCnPhCG
-         G+knFDa5uWzy5P0Pj7h/SVEXAg0N9/4BBk4WkYTImh+CsYwC/y2eZDqejaVziy5+AB1F
-         NtCn0vkwnKT7D6LUCa7g68/t+UIPjGsub0X+Tq4JG/kpfiZnzatJH7QVWtKh9MbhdEnQ
-         kjrzuk4eCAewgTEICLU0gLjv/3kBckHfxAnhDbeXEf4U/80vHbHf+liLAyLXQ3w0HyDQ
-         TcoQ==
+        bh=DHmWJLAn/9laEJxekdnxjm8UsDMhYqG1tJ/wt9SJ9OU=;
+        b=OZRfhihB1RSFRiQZIYCRpM+xQwtPAw8+ag3cxQPvjFlIsuEST4eQM5ctBi4SiY92fV
+         +TP5C3Ll7MM21/TOkewjYvrNtJmL9fvpDqBZwTuHDfhR3xifjcnzIjeA05uL3oRrJucR
+         hPi1LIsz2c4kkrYxMqFsAM39OQBsnLiZE+KmkT979UXT0MGTxJWFYUdrkGsaJQy6PhfS
+         gx+waNAI1UkQQ+axm6GWr23yhNTE7VfyV3wsbFyeYCHL7iq2Uhjds7VnPViiS0a1PTZh
+         QZiZp1YKdB7utIFkehqOLzGJQK1dBGFT867ThBTd7vw8cPHpwkLUjV3xFED1/CyB+9et
+         QqFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730286114; x=1730890914;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1730298081; x=1730902881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+rgH4N0XoiBaBn2DnREg2ur7KL1nWjEyXhZb98mz/Ng=;
-        b=q8wLrb8DypRYfkcGnYW7GeFHS4m4wvCS1jVe89E83WrnZ2G4GL4gTM3pBeAWs7n7pE
-         5d/085fCQ6aMo8rMU+whRQuS5BnuRKEPUNnf+MdbRfgso/AOEasWZB0G+C5oiX7K9g5R
-         0zIP7WsM/eag7Y18gfmM0RyK3raha5DGaQFtAhMtVuSImU4PNHDEpMFDyV3mNf5+HpRi
-         7fh5mt+S/S8ScllA0vBx8zrWdTRn7hX+avmg581gYLtOA2/vy45MHDvcnizXfhreMEhO
-         /Dlxu0EXdG1BYQykH5XLI9pNnsdjSYGssk3ARhLpfTgNHvsvnwjDcGXJmF1LHqwTtAuJ
-         AqWw==
-X-Forwarded-Encrypted: i=1; AJvYcCU2Lra1PW4+xLbts9L8lRdad03g6A2PTKYhii4XgSrRQRznRP/BO0SITeRQQFc2LPTpqShJ2pYnNZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+Tue6YbN1tkWG7uQItJdc1a6i7MaXV88LnXH8aE0GG5GnFl5p
-	fvgX/KqSNj7iU4dlJzZ3NpCwCf6rtpnAEVpzEzTxytWLQw9TGs8XBxdeyNAUE5E=
-X-Google-Smtp-Source: AGHT+IGfKyeSaef4KGaUGWI/IsN7D3+8OWnPlyJSqw8C74dZyJJbZrKCWAh3Eh0KnB9ZpF56LKeAYw==
-X-Received: by 2002:a05:600c:1c96:b0:431:55af:a220 with SMTP id 5b1f17b1804b1-431b5729f16mr45142475e9.12.1730286113827;
-        Wed, 30 Oct 2024 04:01:53 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.190])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431bd99edebsm17956935e9.45.2024.10.30.04.01.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 04:01:53 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	alexandre.belloni@bootlin.com,
-	magnus.damm@gmail.com,
-	p.zabel@pengutronix.de
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v5 10/10] arm64: defconfig: Enable VBATTB clock and Renesas RTCA-3 flags
-Date: Wed, 30 Oct 2024 13:01:20 +0200
-Message-Id: <20241030110120.332802-11-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
+        bh=DHmWJLAn/9laEJxekdnxjm8UsDMhYqG1tJ/wt9SJ9OU=;
+        b=mdbXyxq7IuG9D5H+iOEVZpH1wVM9wwV2+udq0Y8SyTZo5ngTgl/DlR1t9C5RPpc9bG
+         UVrnRIxhqfVMVRzoh0tcFtf3SlMXZGY+Y1uomu1tR7nE2vxEN/mkZ5THOSzS2Zl4wOry
+         N9Hja4wzJ8CwfGpNGg5m/lv53Wg1OSooizK9Y+S6x0gtjywlT0Q6EorsO3/uZqhiXhnE
+         dXAhssopgQARqpHQQPuwSKLjKxk7IG10tH4LlhEg+gFLEvbY063VXC1FMEinrySUoSyx
+         Cv/HQOz/hUmy9gMKnK6uj3DUZt2P9KEYwPTKnbhGXqqcy0+QETJQkcyjPiSTydAXSRyE
+         gxiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdmjxWA5HaRz9eOBWnJwBvbikO3ijEkjrT9S5vcJw3f7uWgT/VjfbKnBlZDaFMGKRFHh/EZVUHnI38ew==@vger.kernel.org, AJvYcCUyme4PEsCO+7fM+2oQ8C4KnVj9Djtbfi2L+c+26AIc8G3xqubTJlNdnS6W71cAalEpKJ7D5yw8PqEa@vger.kernel.org, AJvYcCV0BeRSyuKjNekrJ+pvjF4EHv6PE0rXNw682geKf0TgOyTxyvLy04v/PfdTZEC6sN9WUST6/awI+CR+@vger.kernel.org, AJvYcCVCE8FIzPk6Gp5GH7n3+W4KehWfmJVkd5w8nuQ9zkX6H5QSV5ZcAcXgcGcRb2rl6BP3od5dR5k8lGjc@vger.kernel.org, AJvYcCWHdGZnO1uoEI+8PcfYVqo8jP6kleNRvU0O6eh+M+k61/4EzZXMje8klVkWMXLfG00Wwyqiunf97L4=@vger.kernel.org, AJvYcCWxomMWOISYgN/oljYLCdEQNjBgk8MVClwWl8s+i+lsCpzKGyNeDziAN6BPWq0czFxNdsgJJUcPQrFCHOQkzbM=@vger.kernel.org, AJvYcCXD6NYzciX1DThfUJlygTHZ+YJwt4AHZnABpUiO4uPhk/lcm23t/mL46p4HdkUCPcSidfnEyWCZbIOewWiH@vger.kernel.org, AJvYcCXQMleB2sakRCeoVoau1nbftjjXuOaA4mlPflJQaTvUob9G0dDfJBPc/YgmJ1eZryo/GfJV+gbUBtnJ@vger.kernel.org, AJvYcCXc3wFUTw7chbWZvoRpspylZbazFRP7grt9Sn8q+M3YZXoCDIYrs3l6DBUIdTXgL9ppVTONKT/pO8Yo+2s=@vger.kernel.org, AJvYcCXg7lBdSrWD00Rqk5I7GpHJ1nnK
+ eWcJX5BoCezDuLQVUmGxYgAwG0WU+H9z74PG1lSaA5XBLSDf@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9taKdlZ7n38xhsxTiz4wWdpWcXnrUpOqZiApuF6kHv1GHps5C
+	2ePChBf+5KjTbxZjkHohBF5yNWmfxcc/54+Ys5845QClfU4T03Bu+b9uwGRYMpsZ7eDAo/19xNE
+	IxIBAKX2vkyXEmMykO1USuOtgygk=
+X-Google-Smtp-Source: AGHT+IGKheT7lugnX8JlgJMn7QT/nmS4FJcCiGvJE3Pk7raMagj1Ij4TOsIejWemk17tl9iiaN1879b2lAZo9ua6oSM=
+X-Received: by 2002:a05:6902:c10:b0:e24:a0da:f89c with SMTP id
+ 3f1490d57ef6-e3087b7c21bmr15483239276.30.1730298081498; Wed, 30 Oct 2024
+ 07:21:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024-eminent-dancing-narwhal-8f25dd-mkl@pengutronix.de>
+ <CAOoeyxV4K=jR+tofeQtsMB7+smuu+Ghas5Tqfx4JvhuVK8dXrA@mail.gmail.com>
+ <20241025-modest-hasty-angelfish-1e9193-mkl@pengutronix.de>
+ <CAOoeyxU9VwsM=mRZy5AtjH=V3iSGQxkKw18qL+yeUxkh1OVHgQ@mail.gmail.com> <20241030-industrious-sidewinder-of-strength-efbe4a-mkl@pengutronix.de>
+In-Reply-To: <20241030-industrious-sidewinder-of-strength-efbe4a-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 30 Oct 2024 22:21:07 +0800
+Message-ID: <CAOoeyxUiFoU6hdj96ih4x_rUCBSzSCQ+vvab45=woZ3wLhNE7g@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Hi Marc,
 
-Enable the Renesas VBATTB clock and RTCA-3 RTC drivers. These are
-available on the Renesas RZ/G3S SoC. VBATTB is the clock provider for
-the RTC counter.
+okay, I will implement it in the next patch,
+thank you very much!
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
+Best regards
+Ming
 
-Changes in v5:
-- none
-
-Changes in v4:
-- squashed w/ patch "arm64: defconfig: Enable Renesas RTCA-3 flag" from v3
-- updated patch description
-- collected tags
-
-Changes in v3:
-- update patch title and description
-- dropped CONFIG_MFD_RENESAS_VBATTB
-
-Changes in v2:
-- added CONFIG_MFD_RENESAS_VBATTB
-- added vendor name in the VBATTB clock flag
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0fad83642034..4f4fe8d9125c 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1222,6 +1222,7 @@ CONFIG_RTC_DRV_IMX_SC=m
- CONFIG_RTC_DRV_MT6397=m
- CONFIG_RTC_DRV_XGENE=y
- CONFIG_RTC_DRV_TI_K3=m
-+CONFIG_RTC_DRV_RENESAS_RTCA3=y
- CONFIG_DMADEVICES=y
- CONFIG_DMA_BCM2835=y
- CONFIG_DMA_SUN6I=m
-@@ -1371,6 +1372,7 @@ CONFIG_SM_VIDEOCC_8250=y
- CONFIG_QCOM_HFPLL=y
- CONFIG_CLK_GFM_LPASS_SM8250=m
- CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
-+CONFIG_CLK_RENESAS_VBATTB=y
- CONFIG_HWSPINLOCK=y
- CONFIG_HWSPINLOCK_QCOM=y
- CONFIG_TEGRA186_TIMER=y
--- 
-2.39.2
-
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8830=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:12=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On 30.10.2024 16:30:37, Ming Yu wrote:
+> > I am trying to register interrupt controller for the MFD deivce.
+> > I need to queue work to call handle_nested_irq() in the callback
+> > of the interrupt pipe, right?
+>
+> I think you can directly demux the IRQ from the interrupt endpoint
+> callback. But handle_nested_irq() only works from threaded IRQ context,
+> so you have to use something like generic_handle_domain_irq_safe().
+>
+> Have a look for how to setup the IRQ domain:
+>
+> | drivers/net/usb/lan78xx.c
+> | drivers/net/usb/smsc95xx.c
+>
+> But the IRQ demux in the lan78xx only handles the PHY IRQ. The ksz
+> driver does proper IRQ demux:
+>
+> | net/dsa/microchip/ksz_common.c
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
