@@ -1,47 +1,47 @@
-Return-Path: <linux-rtc+bounces-2386-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2387-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BC3A9B75AB
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 08:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69C0C9B75AF
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 08:48:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10A322827BC
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 07:48:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28E0528216E
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 07:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A86414D2BD;
-	Thu, 31 Oct 2024 07:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5091515382E;
+	Thu, 31 Oct 2024 07:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fQL2gxTo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+MBvecD"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1725084D0D;
-	Thu, 31 Oct 2024 07:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1920A1494D9;
+	Thu, 31 Oct 2024 07:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730360836; cv=none; b=AqljB2IyyvELdpb7ITrsXwaMyO/5rTnRLQdtAdfFRdhpvsRnsSUiCEk60h/Lm5zvrVmY6+OVqSEmfaTzMue4bjUaNhnGZaVjdVsSxnBAX4CFVZfz1McX+5XeRVE09kbCtziYzwnUnJ/X5S000Pjz4ndmZ/iOHUQ1IDmWvyf8wm4=
+	t=1730360885; cv=none; b=O8MCLx4ekLCYT+XTsRD880DsQfqZm0Tv817VtfaUhb55nqWZJWq1kX8/81y28U58hSNDhipgU+GReXX95919NhmKFGwNvbHiSPlbFR0mMbBOpY3KrrTp48r993+2Z4YmE3bW7gF0Ovtz20qe6VOs7jAzX4I4tzVDj8YYlbwgH2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730360836; c=relaxed/simple;
-	bh=+/mNFZoyqAhBMU/EtC0vUn4wU+EAjbWZapa9iLdQ8T8=;
+	s=arc-20240116; t=1730360885; c=relaxed/simple;
+	bh=xVfQPG7c9kz2nTYeQBPjigzco5tjWo7NDZm98MMLSNk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cgeVT9YZ4lWDFUcBU2hpYhQY29NNJXLFoqQaNWCzysSYK1f7d6JCGwtPeG7ZyRCzMZdTsLfm1pOFC3c46tfAs91jjQzS7zatSbx7taTqrMGsgJE6ILAEI/sSvGZGINIj2EayGLi37J6k6yzBafbz/ITvTjVmxiurcBI0GKA1osY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fQL2gxTo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6387C4CEC3;
-	Thu, 31 Oct 2024 07:47:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=e2yY6XoWnw085fb6EegV8AU6TKhrDzh2+Irk2KSgwE/YdZL/FfQfYALXLWp/u6lhBu1xnjYI3eukyMcxHHuf9nBE704ozUqeTVoh3Ovy+Ma7Qc3EWgb1FUw3cpRbpjG29lluizTb/IpavWUQSRp7U+b9aFdQktu74A9dvvDvnTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e+MBvecD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2353C4CEC3;
+	Thu, 31 Oct 2024 07:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730360835;
-	bh=+/mNFZoyqAhBMU/EtC0vUn4wU+EAjbWZapa9iLdQ8T8=;
+	s=k20201202; t=1730360884;
+	bh=xVfQPG7c9kz2nTYeQBPjigzco5tjWo7NDZm98MMLSNk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fQL2gxToMy+8NOIC7Gmp4FSHqzDYm0232ya07iuTjCBh1gDrN6cmaa4vf7JNs6OrD
-	 t81UJuDLafZDl3lqjPIrAUtaT6UgYG0IjYp2d5ZL8LJz9z8x8dxgvZece4qLy88xG/
-	 hhY4ey7Vcxxj2+pwoZktd1tzXW0cpT/MlbPZoydzrYTRdnPY2eEchErpSD/eZImKrV
-	 XPIKsC8vhFo7Me+fD5li8UD8EU5lTp+ZEcCcjStqvbQj9BLfgH1hizXVfjH0ay6DHa
-	 4z7cVOoztW+dFRSbPTWMARf8F5rZkEb2VdVe+e9PVvlrLz30vnUe3BM7B2FMBGjkTS
-	 hTk1xqst4Uahg==
-Date: Thu, 31 Oct 2024 08:47:11 +0100
+	b=e+MBvecD+FNfmK+aw5GkA3e30OejL8ZM3OYiPmWZ3pF4mJM2HJLFHXDYDY4iBnYkg
+	 LAH/qR22Ld4W1tqLKcw2/YPC2s1AVhElL4CjIyWaR1+52Fy/1zSoGGKs0ZxkyL8AAS
+	 Uh7jWbyN0uy8BHEK7l1vFZNtw6Y2i0A5xj3qU6K0tuBuGHFpMv9NhsQelcsGmTv0ps
+	 YdnI5t9aWT8NBrDs2FpVCVYUNcWGVPwhL8EMldtY9V8CcIK9w359aeL/nrQdh8GiRL
+	 VepR8v0WqozJaxqKJTgG8gKW8MC1Pw3kF1tibaQoIx2MPGudNRRW/2Rk8IsfL/oIbN
+	 jVtSa8QKKXY5g==
+Date: Thu, 31 Oct 2024 08:48:01 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Claudiu <claudiu.beznea@tuxon.dev>
 Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org, 
@@ -50,11 +50,11 @@ Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
 	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v5 10/10] arm64: defconfig: Enable VBATTB clock and
- Renesas RTCA-3 flags
-Message-ID: <6eekxqtmsyaiafhyvos22eyo2mmp747uj3dkuivtou3jjees3y@hj5mp4pahngr>
+Subject: Re: [PATCH v5 03/10] clk: renesas: clk-vbattb: Add VBATTB clock
+ driver
+Message-ID: <mg2ugyg65ke3tngzqyyixfkawf4iop4o373dc6fosy7bfydbe5@pm43dhkd7asu>
 References: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
- <20241030110120.332802-11-claudiu.beznea.uj@bp.renesas.com>
+ <20241030110120.332802-4-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -63,62 +63,136 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241030110120.332802-11-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20241030110120.332802-4-claudiu.beznea.uj@bp.renesas.com>
 
-On Wed, Oct 30, 2024 at 01:01:20PM +0200, Claudiu wrote:
+On Wed, Oct 30, 2024 at 01:01:13PM +0200, Claudiu wrote:
 > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> Enable the Renesas VBATTB clock and RTCA-3 RTC drivers. These are
-> available on the Renesas RZ/G3S SoC. VBATTB is the clock provider for
-> the RTC counter.
+> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock that is used
+> by the RTC. The input to the VBATTB could be a 32KHz crystal
+> or an external clock device.
+> 
+> The HW block diagram for the clock generator is as follows:
+> 
+>            +----------+ XC   `\
+> RTXIN  --->|          |----->| \       +----+  VBATTCLK
+>            | 32K clock|      |  |----->|gate|----------->
+>            | osc      | XBYP |  |      +----+
+> RTXOUT --->|          |----->| /
+>            +----------+      ,
+> 
+> After discussions w/ Stephen Boyd the clock tree associated with this
+> hardware block was exported in Linux as:
+> 
+> vbattb-xtal
+>    xbyp
+>    xc
+>       mux
+>          vbattbclk
+> 
+> where:
+> - input-xtal is the input clock (connected to RTXIN, RTXOUT pins)
+> - xc, xbyp are mux inputs
+> - mux is the internal mux
+> - vbattclk is the gate clock that feeds in the end the RTC
+> 
+> to allow selecting the input of the MUX though assigned-clock DT
+> properties, using the already existing clock drivers and avoid adding
+> other DT properties. If the crystal is connected on RTXIN,
+> RTXOUT pins the XC will be selected as mux input. If an external clock
+> device is connected on RTXIN, RTXOUT pins the XBYP will be selected as
+> mux input.
+> 
+> The load capacitance of the internal crystal can be configured
+> with renesas,vbattb-load-nanofarads DT property.
 > 
 > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > ---
 > 
 > Changes in v5:
-> - none
-> 
-> Changes in v4:
-> - squashed w/ patch "arm64: defconfig: Enable Renesas RTCA-3 flag" from v3
-> - updated patch description
 > - collected tags
 > 
+> Changes in v4:
+> - dropped oscillator from patch description
+> - s/on-board/internal in patch description
+> - updated dt-binding included file name in the driver as it has been
+>   renamed to include/dt-bindings/clock/renesas,r9a08g045-vbattb.h
+> - dropped the "_BIT" from driver macros
+> - used "quartz-load-femtofarads" dt property instead of adding a new one
+> - register the "vbattclk" as critical clock as this feeds the RTC counter
+>   logic and it needs to stay on from the moment the RTC is configured;
+>   along with it, added a comment to express this.
+> 
 > Changes in v3:
-> - update patch title and description
-> - dropped CONFIG_MFD_RENESAS_VBATTB
+> - updated patch description
+> - dropped dependency on MFD_RENESAS_VBATTB as now there is no
+>   driver built under this flag
+> - dropped include/clk.h
+> - added pm_runtime and reset control support
+> - updated register offsets
+> - registered 4 clocks: xc, xbyp, mux, vbattclk using generic
+>   clock drivers
+> - added MODULE_DEVICE_TABLE()
 > 
 > Changes in v2:
-> - added CONFIG_MFD_RENESAS_VBATTB
-> - added vendor name in the VBATTB clock flag
+> - updated patch description
+> - added vendor name in Kconfig flag
+> - used cleanup.h lock helpers
+> - dropped the MFD code
+> - updated registers offsets
+> - added vbattb_clk_update_bits() and used it where possible
+> - added vbattb_clk_need_bypass() to detect the bypass setup necessity
+> - changed the compatible and driver names
 > 
->  arch/arm64/configs/defconfig | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 0fad83642034..4f4fe8d9125c 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1222,6 +1222,7 @@ CONFIG_RTC_DRV_IMX_SC=m
->  CONFIG_RTC_DRV_MT6397=m
->  CONFIG_RTC_DRV_XGENE=y
->  CONFIG_RTC_DRV_TI_K3=m
-> +CONFIG_RTC_DRV_RENESAS_RTCA3=y
+>  drivers/clk/renesas/Kconfig      |   4 +
+>  drivers/clk/renesas/Makefile     |   1 +
+>  drivers/clk/renesas/clk-vbattb.c | 205 +++++++++++++++++++++++++++++++
+>  3 files changed, 210 insertions(+)
+>  create mode 100644 drivers/clk/renesas/clk-vbattb.c
+> 
+> diff --git a/drivers/clk/renesas/Kconfig b/drivers/clk/renesas/Kconfig
+> index 76791a1c50ac..4e835a3f1ab4 100644
+> --- a/drivers/clk/renesas/Kconfig
+> +++ b/drivers/clk/renesas/Kconfig
+> @@ -237,6 +237,10 @@ config CLK_RZV2H
+>  	bool "RZ/V2H(P) family clock support" if COMPILE_TEST
+>  	select RESET_CONTROLLER
+>  
+> +config CLK_RENESAS_VBATTB
+> +	bool "Renesas VBATTB clock controller"
 
-This should be module.
+tristate
 
->  CONFIG_DMADEVICES=y
->  CONFIG_DMA_BCM2835=y
->  CONFIG_DMA_SUN6I=m
-> @@ -1371,6 +1372,7 @@ CONFIG_SM_VIDEOCC_8250=y
->  CONFIG_QCOM_HFPLL=y
->  CONFIG_CLK_GFM_LPASS_SM8250=m
->  CONFIG_CLK_RCAR_USB2_CLOCK_SEL=y
-> +CONFIG_CLK_RENESAS_VBATTB=y
+> +	select RESET_CONTROLLER
+> +
 
-This as well.
+...
 
-Best regards,
-Krzysztof
+> +
+> +static const struct of_device_id vbattb_clk_match[] = {
+> +	{ .compatible = "renesas,r9a08g045-vbattb" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, vbattb_clk_match);
+> +
+> +static struct platform_driver vbattb_clk_driver = {
+> +	.driver		= {
+> +		.name	= "renesas-vbattb-clk",
+> +		.of_match_table = vbattb_clk_match,
+> +	},
+> +	.probe = vbattb_clk_probe,
+> +};
+> +module_platform_driver(vbattb_clk_driver);
 
+That's a module, isn't it?
+
+> +
+> +MODULE_DESCRIPTION("Renesas VBATTB Clock Driver");
+> +MODULE_AUTHOR("Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.39.2
+> 
 
