@@ -1,118 +1,98 @@
-Return-Path: <linux-rtc+bounces-2406-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2407-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 806019B83A3
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 20:51:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6B239B86E3
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 00:17:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB3DD1C20A0E
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 19:51:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A58B282836
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 23:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8091C1ACB;
-	Thu, 31 Oct 2024 19:51:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B0D1DFD81;
+	Thu, 31 Oct 2024 23:17:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="aEiNCdgS"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bn2fG+8+"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D5A28E8;
-	Thu, 31 Oct 2024 19:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41CC1CC8B7;
+	Thu, 31 Oct 2024 23:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730404262; cv=none; b=ZszVgp5jiZ6wWRwXOV0LI87n4+YS7QRKZ/C+VivgRyIlay7vg70OvA4VNLYbLm16zAyw5jK8YQZgB67wDWcRvfck4xsHyujbzFdlDv/6DMAwJXQ+24EhSPA0moCb+++K4kJO+cPPTlYxXqEeguH8DrWJzhrLWOf4sQZJo4c64q4=
+	t=1730416658; cv=none; b=DR/A2L1EedYNlL/eei+LkJuN/ifjJuLnbgphEvyfuikPuO13BI8/VOXK7dqxZlK2rgMqWFAWam0o9O5CIp0gwQyJLp/ytRhhfnsIM4kBMuqEhJ6y3FJs/s8dDzz4JGoMP3LL653XirTiIJYLRbGLv9uzGBoNPKwa/WndlMr1diI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730404262; c=relaxed/simple;
-	bh=cv0FscmjkwTSQP726Wzv1f83Fbbipq4xwof3g2hhpTI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=bL/VV/5aO2POk2HIaYUg0b6F/lxdAVdGPtfL/V9tyd+9lEfbaRM1bnQVOgvzm25qFd/SmUhztC3yZPy3nJVq/18NOCsMntQ7ESBU6GT8XumEtu490fW9fmTJ8JTs+izPXoV8IeaL85VVUazrQKCDHrG/+3/OpRN7tncnLiQ3OQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=aEiNCdgS; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1730404240; x=1731009040; i=markus.elfring@web.de;
-	bh=X1v04+9ti1vYqVbQdYptxRfNhaWQZMzRG+ZtM3H0vaQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=aEiNCdgSPEbrpSWpYozIWAYn8dmD4udFYE2kiJOoL+Fyu32NhSMO87/VJVv335E5
-	 IPNqoi740C7y3hDndfjKuq4t1HqEMwlIuStSCYhnqOrklIAdtQ2NWjxv2LyKycI1N
-	 +UI7dcQKWnE4/lF+WRXuuifuqUUCiBGKnsr3h0dxiFutMnAMpg6SFXqPe/ix2oN1j
-	 AmFfXr025UTrIQ9bJcRTMUVRhD+qu12G68eu2j+P10cs4VQM9h3bSd7OGnGEmw+b6
-	 y0+0uks2JbFYbTTy2P8cK+gNcZGGXTZG48YVksi3a/jTPDSOaut/APZ0cKpWYMUvE
-	 dstt6K5Z6R1EfY8OoQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MDdy7-1sy6LQ3od5-0075N1; Thu, 31
- Oct 2024 20:50:39 +0100
-Message-ID: <976d64da-d6e3-4bd9-af57-d475d9939410@web.de>
-Date: Thu, 31 Oct 2024 20:50:36 +0100
+	s=arc-20240116; t=1730416658; c=relaxed/simple;
+	bh=guKQZ269YoJkWNOHN8n+zpW1sLw/rcZPJRVDIFG7ssQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IcRUiFMJJrI9Onyh7j/raIVjbloR6cdzrFBSwhFT34ri8UarMq1XOSP45o9BuMjh9HlXPdH/iH5FyJ6f5QGCBD5ouBYb3eNbFIOKEtPQ0v3ykaMKgtX8HH8QED3sZXVYemQ2B+4LvYMhNebuuNgSVm6mgLF6fNFaaSdAp/b0eXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bn2fG+8+; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 038AE20002;
+	Thu, 31 Oct 2024 23:17:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730416650;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q2N3NKmH49hjRiqnrVgcxvKSV4bVv8lUQzTG26S2d3Y=;
+	b=bn2fG+8+pXP2OIG5T46ZntHVHumfx4xU2hVMnhQuJ0sX3uPBQlHbiUl8Tr+WHUjbwvYqPP
+	sx+mKsfBDuoCjVzFeyumLm7B+ttWP5/ZzPeTO9f1D3KWdkJ1RehsIGLwytozpfoGFnZZ8j
+	atWicNRrYbfkVY+jje2eoTo3oSby7g4dOgJnU6LBHvhPIm5awdpcj0Gl9c4erLIIj4VrK1
+	gQMvCk0NZ3DZ4+aE98JcxX5+5ws5Pju+ox4zxRNI62UNW/chM/4iKZPCBV+rjfO3M5UVAd
+	4qaWLxpxrLJY/c+Cx95/wPVuJbFtPjnCbrlpcCJwCS1k05muZTYVjEiST3utQg==
+Date: Fri, 1 Nov 2024 00:17:28 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	magnus.damm@gmail.com, p.zabel@pengutronix.de,
+	Claudiu <claudiu.beznea@tuxon.dev>
+Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: (subset) [PATCH v5 00/10] Add RTC support for the Renesas RZ/G3S
+ SoC
+Message-ID: <173041660392.2394403.11154347678487291985.b4-ty@bootlin.com>
+References: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Shunxi Zhang <ot_shunxi.zhang@mediatek.com>,
- linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rtc@vger.kernel.org, Alexandre Belloni
- <alexandre.belloni@bootlin.com>,
- Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20241031135807.31605-1-ot_shunxi.zhang@mediatek.com>
-Subject: Re: [PATCH] rtc: mediatek: Add mt6685 RTC driver
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20241031135807.31605-1-ot_shunxi.zhang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3XXl7nEu0N/vYBvK/LYU8FhLs2999+6RWvF5+VlfHVprQOcd8U7
- u1MrLMUA+zFDcw431/U5L0xOsphcjpk6OMGIfTfbEm78PzEfs/8oKiaK3Au687A9PL/4oc5
- ytKK28We0pq39sEmBSThDZ85zMh0Gf2SfDdlx8ii6IDkMSstlmBXTRA8Yt522uYJWa9Ps1F
- t/0+bR8LKaBe6BR0U5viw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:rfQbZlQQH60=;d02iIenzf35P94pc8brZadhJtjG
- fTcK9wg4yxhU5qgBQmkdpFcZrbQMBxpF/6U2hLILKo/ZmqeoPa0tsZZBmuwSZy0hbolTUU+h7
- +JXfHJDEmUKpYQyCdmnSQiU6YYzS4XK/UVf8Fvs2SYLjckViGsn9lYTVaSiO/6DXTRZBZroZI
- jokJ6xUb06/xNTWnu9IFW1vAi7iARfWvY/8foEaTUxk8QpbZn43L+rPgqwQPyCe8Bm169f35W
- PufN0DxGl+Sfpnq7wSepr2ppmyeoHn+2Y9UX0SPiJR/lb0pUIYQM9ERckV26tACS3hiBtcNCa
- RiHzr2X9eCznE6w+TvNEv2TCv5VZlVKqt6zWTEh6rfKmYGg695Q8jNO3wHBchPdUB2UWxQssk
- hzVlIMZCBkVmxJ0ilYBMwn4jGCWVW4Ywl6XAgLdnLRjn6DlwSxLxsdnmvfTc3KvrZFsoXlcZj
- o5WTHWJ/bBnIu7Ah1xL40O8tNaEgVl97hrsP8dxHQf+QtNDOADSym0ZdyWIfTYyUOd2w0v96z
- +pa4bRRWZ1/qsuDbqWqh+g/XjLjuINJetlyQ4Nz8z0uQlVXWigM7U8uH2ksFViOsqvkTFlt3V
- 3D92+g8cA4mllhjku2y2FcddWbMmyB0bVYI8S4mm2utGn10HgIhR4H8JWQxfaIIaULDzMOicv
- VEnVjO63mLkIb/J2A3JLGtS12q+43y2Ci0mIhsVeSQUOc0Aq31CS8bPhNtW3rzr3/Up9O7hIc
- Od395FdXsJYk9BELSllGYxdO06cH1h5UsnK6BHbQZAyeFpuxVgkicqpwj7LUHKYGo3EqM9Vy1
- PKoeNiolPGUy11LUnHh9ddOA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Please add a change description.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.12-rc5#n45
+On Wed, 30 Oct 2024 13:01:10 +0200, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> Hi,
+> 
+> On the Renesas RZ/G3S SoC the RTC clock is provided by the VBATTB
+> IP. A 32 KHz crystall oscillator could be connected to the VBATTB
+> input pins. The logic to control this clock (and pass it to RTC)
+> is inside the VBATTB IP. For this, the clk-vbattb driver was added
+> (patches 01-03/12).
+> 
+> [...]
 
+Applied, thanks!
 
-=E2=80=A6
-> +++ b/drivers/rtc/rtc-mt6685.c
-> @@ -0,0 +1,1456 @@
-=E2=80=A6
-> +static void power_on_mclk(struct mt6685_rtc *rtc)
-> +{
-> +	mutex_lock(&rtc->clk_lock);
-=E2=80=A6
-> +	mdelay(1);
-> +	mutex_unlock(&rtc->clk_lock);
-> +}
-=E2=80=A6
+[04/10] dt-bindings: rtc: renesas,rzg3s-rtc: Document the Renesas RTCA-3 IP
+        https://git.kernel.org/abelloni/c/71c61a45c951
+[05/10] rtc: renesas-rtca3: Add driver for RTCA-3 available on Renesas RZ/G3S SoC
+        https://git.kernel.org/abelloni/c/d4488377609e
 
-Under which circumstances would you become interested to apply a statement
-like =E2=80=9Cguard(mutex)(&rtc->clk_lock);=E2=80=9D?
-https://elixir.bootlin.com/linux/v6.12-rc5/source/include/linux/mutex.h#L2=
-01
+Best regards,
 
-Regards,
-Markus
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
