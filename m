@@ -1,63 +1,61 @@
-Return-Path: <linux-rtc+bounces-2407-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2408-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6B239B86E3
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 00:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E5369B86FF
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 00:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A58B282836
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 23:17:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BD74281E8D
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 23:19:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B0D1DFD81;
-	Thu, 31 Oct 2024 23:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01461E0DE5;
+	Thu, 31 Oct 2024 23:19:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bn2fG+8+"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DFj5fcrw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41CC1CC8B7;
-	Thu, 31 Oct 2024 23:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E3E1DFD81;
+	Thu, 31 Oct 2024 23:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730416658; cv=none; b=DR/A2L1EedYNlL/eei+LkJuN/ifjJuLnbgphEvyfuikPuO13BI8/VOXK7dqxZlK2rgMqWFAWam0o9O5CIp0gwQyJLp/ytRhhfnsIM4kBMuqEhJ6y3FJs/s8dDzz4JGoMP3LL653XirTiIJYLRbGLv9uzGBoNPKwa/WndlMr1diI=
+	t=1730416783; cv=none; b=qWY4wfHIjwoqnEXvTCSc0LpCm0gKLeTzupnbItytxLQD1nU9LrS8w/oHwIIyFDgvAdj4dKmDIzGdIC+IQUhr6Dl32G7fkCq6nhK5pnHvP7bA/ZS1xmwvtGPtCNH25cHvmPcX4J7wzSwEKeLOrLDgGOSOOfkG6AfIzBzJX0SY/II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730416658; c=relaxed/simple;
-	bh=guKQZ269YoJkWNOHN8n+zpW1sLw/rcZPJRVDIFG7ssQ=;
+	s=arc-20240116; t=1730416783; c=relaxed/simple;
+	bh=WbpxuzdF/aAPqb8D5YYBFYBBEyxXs9OMxENeJB48SX8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IcRUiFMJJrI9Onyh7j/raIVjbloR6cdzrFBSwhFT34ri8UarMq1XOSP45o9BuMjh9HlXPdH/iH5FyJ6f5QGCBD5ouBYb3eNbFIOKEtPQ0v3ykaMKgtX8HH8QED3sZXVYemQ2B+4LvYMhNebuuNgSVm6mgLF6fNFaaSdAp/b0eXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bn2fG+8+; arc=none smtp.client-ip=217.70.183.200
+	 Content-Type:Content-Disposition:In-Reply-To; b=oidEoFxq4AudwAMowKX1tFAQHEhiXXN+sQZ4+wCRLwKLBnp0zFMmq+yNpZ02m77A2eCl3u+U4J5wTyJHXKtZbni9HWVNAiV6JB3bW3Ugq2/fvnY9BiUrfGS1djdYqkqf5eoIt0M0eQF1wFGavEuugIAadkAcZiY0ebZnrsjFp7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DFj5fcrw; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 038AE20002;
-	Thu, 31 Oct 2024 23:17:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3CDC9240003;
+	Thu, 31 Oct 2024 23:19:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730416650;
+	t=1730416775;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Q2N3NKmH49hjRiqnrVgcxvKSV4bVv8lUQzTG26S2d3Y=;
-	b=bn2fG+8+pXP2OIG5T46ZntHVHumfx4xU2hVMnhQuJ0sX3uPBQlHbiUl8Tr+WHUjbwvYqPP
-	sx+mKsfBDuoCjVzFeyumLm7B+ttWP5/ZzPeTO9f1D3KWdkJ1RehsIGLwytozpfoGFnZZ8j
-	atWicNRrYbfkVY+jje2eoTo3oSby7g4dOgJnU6LBHvhPIm5awdpcj0Gl9c4erLIIj4VrK1
-	gQMvCk0NZ3DZ4+aE98JcxX5+5ws5Pju+ox4zxRNI62UNW/chM/4iKZPCBV+rjfO3M5UVAd
-	4qaWLxpxrLJY/c+Cx95/wPVuJbFtPjnCbrlpcCJwCS1k05muZTYVjEiST3utQg==
-Date: Fri, 1 Nov 2024 00:17:28 +0100
+	bh=5z9zdQZdn+zNttfWGlxZQQmSzPWLPgZ9wK42vO4Z99Y=;
+	b=DFj5fcrwWedEAv97V+okKIg8EgYTOTDolTk3Nvj3qmgfej6r//dHGAp0SqAdaP4rLmiKup
+	n0wJud8KS5kmN+K4zr4GM5rtYaAHz1pnJj2AFcFgUy8TgGJPTALCfU4XqaMoK67d8tMHCj
+	vIahM1qbouOV8XMXRQO0gJjtJxVae6Dc3r1baVTYglsmfhu0NZhOHSMu4+kMDRbM2aNFKl
+	tWBQpijuPUOHBVrn1yYm0EmI1wksDAz7+7XeBErO3wHAH4t21mlkejdibXAKXqRe95q4w5
+	Z1yYxqrug/BCDmEdft5zY6oVKu3Mw6oyIecHOXJ5C7/EqMKzPVTB+SwhytVjww==
+Date: Fri, 1 Nov 2024 00:19:34 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	magnus.damm@gmail.com, p.zabel@pengutronix.de,
-	Claudiu <claudiu.beznea@tuxon.dev>
-Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: (subset) [PATCH v5 00/10] Add RTC support for the Renesas RZ/G3S
- SoC
-Message-ID: <173041660392.2394403.11154347678487291985.b4-ty@bootlin.com>
-References: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Joy Chakraborty <joychakr@google.com>, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: cmos: avoid taking rtc_lock for extended period of
+ time
+Message-ID: <173041676668.2394637.4445020791361338594.b4-ty@bootlin.com>
+References: <Zxv8QWR21AV4ztC5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,28 +64,25 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <Zxv8QWR21AV4ztC5@google.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Wed, 30 Oct 2024 13:01:10 +0200, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Fri, 25 Oct 2024 13:14:57 -0700, Dmitry Torokhov wrote:
+> On my device reading entirety of /sys/devices/pnp0/00:03/cmos_nvram0/nvmem
+> takes about 9 msec during which time interrupts are off on the CPU that
+> does the read and the thread that performs the read can not be migrated
+> or preempted by another higher priority thread (RT or not).
 > 
-> Hi,
-> 
-> On the Renesas RZ/G3S SoC the RTC clock is provided by the VBATTB
-> IP. A 32 KHz crystall oscillator could be connected to the VBATTB
-> input pins. The logic to control this clock (and pass it to RTC)
-> is inside the VBATTB IP. For this, the clk-vbattb driver was added
-> (patches 01-03/12).
+> Allow readers and writers be preempted by taking and releasing rtc_lock
+> spinlock for each individual byte read or written rather than once per
+> read/write request.
 > 
 > [...]
 
 Applied, thanks!
 
-[04/10] dt-bindings: rtc: renesas,rzg3s-rtc: Document the Renesas RTCA-3 IP
-        https://git.kernel.org/abelloni/c/71c61a45c951
-[05/10] rtc: renesas-rtca3: Add driver for RTCA-3 available on Renesas RZ/G3S SoC
-        https://git.kernel.org/abelloni/c/d4488377609e
+[1/1] rtc: cmos: avoid taking rtc_lock for extended period of time
+      https://git.kernel.org/abelloni/c/0a6efab33eab
 
 Best regards,
 
