@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-2400-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2401-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A0989B7F80
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 17:00:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB809B7F9E
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 17:05:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D94FB2253F
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 16:00:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 264701F22F64
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 16:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 156E41A3BC8;
-	Thu, 31 Oct 2024 15:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE021A3BDE;
+	Thu, 31 Oct 2024 16:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q3o9REz0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GBad8XR9"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5641A3BC3;
-	Thu, 31 Oct 2024 15:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30D1136664;
+	Thu, 31 Oct 2024 16:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730390398; cv=none; b=GM8M+FpnrC4VpaiklCa4HBEYcg2OZt/l84cDZ0ZbKMMNfVGyRmn/x6baynLZFVMQXT84NaBrITA2yJSGpgGsSP6cuw5jZlMoTArh4mJsqBemWoMcWIpIrlqbCtYr8V0XIxFHe6KZDqno4InBNF7oeCnzC4Xszk7IDGFXpl75YvI=
+	t=1730390706; cv=none; b=ePrIeWuqMBVwEWtS2kRIpefT0+x6+zvshcREH7Dh/K98kDa7mFdwGLrZesRozMMcLRGhmhX6pvB0mCshILINMd76BOM+/gn1j2U33FzDH6ynJ4aSI+h45xRVQIAc6c4muDrpm+m4f6wSJO5WydDZJuKtRYfs/AVbhUVRbNwJnUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730390398; c=relaxed/simple;
-	bh=PVJ69+VzZA0A7TwShFi/wZHyC7DgXuM+wqrhNJWWCno=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mAF5wkOiRAi1c5K43snKpptJqZQj+K0m7D8pL8X2YiyP6HZxPj8C/2oEBIZZPUZ+6A58Ao1YEX7wW8rEjs527QaBDNWEZp/A4RHQXoZ554WrcRa4xqy2hYKa/ZeX0eFMYFB44HBda4EEQzfRGiKfI8ERfnnTghsHwWuIkTlG34M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q3o9REz0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B326C568D3;
-	Thu, 31 Oct 2024 15:59:53 +0000 (UTC)
+	s=arc-20240116; t=1730390706; c=relaxed/simple;
+	bh=XZEoXzA1M9g86+Qwwo2lTq21wWrFX0+0bgaivnD+Vng=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=YgFng75OIIMFClVc1el5g9wrzZxuec7NvPpPixXux2W1QTujOshnZWuC3Ngif29LxK/Bz2/F9Cuz1y2ilU3fEjhpEPdTfnOA51g/YLfNYnOL8fLLtW+FE5xsafreonwrN7Ont6nKxF2zavLRfsrbplyk7ph0T1G0GFLfT2sfdZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GBad8XR9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E234CC4FE02;
+	Thu, 31 Oct 2024 16:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730390397;
-	bh=PVJ69+VzZA0A7TwShFi/wZHyC7DgXuM+wqrhNJWWCno=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Q3o9REz0PSEjTRpKwf8KUPFJ/B/9COiGyLGXofMgg0cnK2l0Xl39PUY93Yosmz+K8
-	 i1dyFpUUDj4kDSvez2FMQkQSbzv9DBrwMO14XZMAnagvPVLYdy74AnpRJdmPJjApsK
-	 BhTjyoiKzu/Wip3bDmJb/R6ftnH4tBZU2PFUpd2RZqxTFf8O2OQ1OtgJ6bFclhQAZb
-	 +5ciuuP8NTWUAhJvsVA6HRn+lgIveBbBmYRgbQToLnjBWyXkli4C5Vt/PFq4VQcXYy
-	 Foz0i1igDPwT+asBK35taJ6oS9cyRni2mGXGgnUG3wL+gaeZgDceddqdHidkXkcmlu
-	 OD41LZbXT1LUA==
-Message-ID: <a71058d1-47dc-4609-96ab-342d7617e05a@kernel.org>
-Date: Thu, 31 Oct 2024 16:59:51 +0100
+	s=k20201202; t=1730390706;
+	bh=XZEoXzA1M9g86+Qwwo2lTq21wWrFX0+0bgaivnD+Vng=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=GBad8XR9wxry2CtvD64myDV8B/ncb+q4qPrDGre5P/JHWwfJRiz/FUkOuT9/PB8jN
+	 KnnutZYMXo5p9k9iS6MVnVPdt2kqGdxCBOq02nqCml/z4MBJt6Xk1GnLJ4g9y8wb9j
+	 sVI7ShjLxBrvnhb5i5PFmhYQbRNEABp1ICxmPNZk4q9en6HL37N+7S1jaSepThK3EX
+	 jq2oV3DjLb5jtXvOuaEhTY/3YjElOaZbXZth6QtjIZGZIxGF7Bp+ikwRoUv3DeOPQW
+	 jqTXSMtAH7eS2urygvYFp2WXgcV+kQKSVgKjois0FAWGZb5v9+nsWS39mMQdDMWI2J
+	 Z0BfkqIz7T5Ww==
+Message-ID: <754e12d4-6bfa-4417-afbf-8d1353ea3ade@kernel.org>
+Date: Thu, 31 Oct 2024 17:05:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -51,13 +51,14 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/1] rtc: mediatek: Add mt6685 RTC driver
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: shunxi zhang <ot_shunxi.zhang@mediatek.com>,
  alexandre.belloni@bootlin.com, matthias.bgg@gmail.com,
  angelogioacchino.delregno@collabora.com, lee@kernel.org
 Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
 References: <20241031135807.31605-1-ot_shunxi.zhang@mediatek.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <2ad5ebf6-fb64-4647-b9c9-c274e59fa49f@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -102,48 +103,38 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241031135807.31605-1-ot_shunxi.zhang@mediatek.com>
+In-Reply-To: <2ad5ebf6-fb64-4647-b9c9-c274e59fa49f@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 31/10/2024 14:58, shunxi zhang wrote:
-> From: Shunxi Zhang <ot_shunxi.zhang@mediatek.com>
+On 31/10/2024 16:58, Krzysztof Kozlowski wrote:
+>> +	regmap_write(rtc->regmap, RG_RTC_32K_CK_PDN_CLR, RG_RTC_32K_CK_PDN_MASK);
+>> +	regmap_write(rtc->regmap, RG_RTC_MCLK_PDN_CLR, RG_RTC_MCLK_PDN_MASK);
+>> +	counter++;
+>> +	mdelay(1);
+>> +	mutex_unlock(&rtc->clk_lock);
+>> +}
+>> +
+>> +static void power_down_mclk(struct mt6685_rtc *rtc)
+>> +{
+>> +	mutex_lock(&rtc->clk_lock);
+>> +	counter--;
+>> +	if (counter < 0) {
+>> +		//dump_stack();
+>> +		pr_info("mclk_counter[%d]\n", counter);
 > 
-> Signed-off-by: Shunxi Zhang <ot_shunxi.zhang@mediatek.com>
+> Oh man... So many wrong things. This applies to entire code:
+> 1. Drop dead code. All dead code.
+> 
+> 2. Do not use pr_xxx but dev_xxx
+> 
+> 3. Drop all such useless printks because your driver is supposed to be
+> silent.
+> 
+> 4. Implement proper clock handling instead of reimplementing it yourself
+> with some counters.
 
-...
-
-> +
-> +static const struct mtk_rtc_data mt6685_rtc_data = {
-> +	.wrtgr = RTC_WRTGR,
-> +	.hwid = HWID_MT6685,
-> +	.chip_version = MT6685_SERIES,
-> +	.spare_reg_fields = mt6685_spare_reg_fields,
-> +	.cali_reg_fields = mt6685_cali_reg_fields,
-> +	.single_read_write_is_supported = true,
-> +};
-> +
-> +static const struct of_device_id mt6685_rtc_of_match[] = {
-> +	{ .compatible = "mediatek,mt6685-rtc", .data = &mt6685_rtc_data },
-
-Please run scripts/checkpatch.pl and fix reported warnings. Then please
-run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
-Some warnings can be ignored, especially from --strict run, but the code
-here looks like it needs a fix. Feel free to get in touch if the warning
-is not clear.
-
-You did not even run basic tools... I doubt that this was ever built
-with W=1 and static checkers.
-
-But above warning about undocumented ABI is a NAK.
-
-Please run standard kernel tools for static analysis, like coccinelle,
-smatch and sparse, and fix reported warnings. Also please check for
-warnings when building with W=1. Most of these commands (checks or W=1
-build) can build specific targets, like some directory, to narrow the
-scope to only your code. The code here looks like it needs a fix. Feel
-free to get in touch if the warning is not clear.
-
+... clock handling or runtime PM, depending what this thing here really is.
 
 Best regards,
 Krzysztof
