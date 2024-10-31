@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-2395-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2396-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAB089B77D4
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 10:47:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 616509B77EF
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 10:51:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53E73B25E78
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 09:47:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F432287134
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Oct 2024 09:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54821197A72;
-	Thu, 31 Oct 2024 09:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3C51990AB;
+	Thu, 31 Oct 2024 09:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZstoKDK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TWYWDuyk"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FC2195FD5;
-	Thu, 31 Oct 2024 09:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0632A198E70;
+	Thu, 31 Oct 2024 09:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730368023; cv=none; b=uPQ1327qWHv6dAFnB8bC+ND3r8NYKr7BJvjDcDlNY9SR23NljFmXuFQ02Jb1e2qqatr5Rt9lhv+H6JrbZb/1bZ9Oo2RqCOCEij/6Y5Z2pLTxvYHk5T3NcQNqo7TSE6IFkvgKBkYlrD8ssmHAUR8fVqKThjmY/jp9HjBtQAljUvs=
+	t=1730368251; cv=none; b=pZvhKUIdX00JElAZBKRz01VgfpNhiftJenuuZ4yGCI05H62tim9Cknw7Y05b2T4Ok8cbd2CrCUzinwjL6yekVfdTc9vPCohNLxJklHFjCOqiO3YnUmYUtKzhO6vwOxe+G4/jIxPIPBZrN3n8R8XDQSO+ohxFbLPYv+mlkzqyKew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730368023; c=relaxed/simple;
-	bh=14EtJIhlpM+v+RMq+CVjwcw2wUF+OrDzYqWObG4FJgA=;
+	s=arc-20240116; t=1730368251; c=relaxed/simple;
+	bh=Vjh+3r/T5wXwLUhjDZ9Z5nnKZ/Su77T2fS+C3WYnF70=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ekVOS8BLeCj7xYlI+0FTH5zCthegVa6xWtFLC7kaxXtHnjVtWQrBaJQrOB1196fjxJ2n+FEnjV1t0yRNPyhmZXwTscuODZRw0sgwHuk8tlZt/vEz/LJBc8GEQ0w2MH3mIxIJI7GKpxzgQuplI/oUSpc8jss0kJxUY9atnKCIzYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZstoKDK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96918C4CEC3;
-	Thu, 31 Oct 2024 09:46:56 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=VAEGbRVSkehGEOdNuG1grWgQ+PTNZb04NQRjlPXTkDMVwHBFkGie7NK230SJGWlMVIiny/QceJfNb88C0N0FppI9gwcJRMvWQ8WZL1Wd//W0rLqao0Nw3oYxudYzvfJxKXhQgHOKxcodkCfzNobN2I2Y4loMvdotqXGBPjnwUJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TWYWDuyk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 543DBC4CEC3;
+	Thu, 31 Oct 2024 09:50:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730368022;
-	bh=14EtJIhlpM+v+RMq+CVjwcw2wUF+OrDzYqWObG4FJgA=;
+	s=k20201202; t=1730368250;
+	bh=Vjh+3r/T5wXwLUhjDZ9Z5nnKZ/Su77T2fS+C3WYnF70=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IZstoKDKKzDLkYiDEvMejvA8SBJXvf+X4vt8iaEs7uCcfiO+7jmy1JmLq968Mw7Xr
-	 AKxBtsb7S+SaG5vOHA3BcPPe28DT9DnSa+kXy1y1jTNJQAmL/dmZxNOFPPISUjJFm3
-	 fZt4y8xofetZ6LcQUXHS3bQZfL/jykiB/pN71RLo4T/nrdFdNIdadx72C59t6uThNt
-	 M72lj8bkg4UEJocBRQO3ryHkd/gkUlgfwmCozbzkda99Rn9jMVvv+qe1PMrecrKsvj
-	 OWKhAWOH12Pn05VbEuHeX3aw3OA5IgdIhiFvySXduI/bi+P3+pCFIB8m2yKKmg91px
-	 cfm2P2Wyc4RsA==
-Message-ID: <bcc49824-b350-45d0-af84-8458a28d5eef@kernel.org>
-Date: Thu, 31 Oct 2024 10:46:53 +0100
+	b=TWYWDuyk4z6lBKH9oDOionHLuqSbNreW5L9Fn8Q7kjcgu9rF2TdYi5Xe/4VrF+Aok
+	 8vwR9CUvm+x3i13zuMNlyaGeSMM6ZUQ6KZebggcTpH6oGAIsEFQJJF812JnOqP9Nq5
+	 S+U+LUuEQzkE6oMlrB9tXxPMO1jyXKb1Cn6/d7E6D1XQXv8ip6GgkZdEM9iMOvRXFC
+	 w88D6YLXcFd/5LMuJGzdxFGOPzD84TS6lgtRrz5CxxNyODY9+vzPTvj27l7rMILcn9
+	 RPOzcwOjrplsorMIQ9dtztEM/QjQu0qxE8Nmta23LMMrOX9PftCMRWuFrztfwDcaem
+	 OkDFfhZSzq+gA==
+Message-ID: <24e81091-e0f9-40c7-b781-10354b4a3ea2@kernel.org>
+Date: Thu, 31 Oct 2024 10:50:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,22 +50,26 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 03/10] clk: renesas: clk-vbattb: Add VBATTB clock
- driver
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com,
- magnus.damm@gmail.com, p.zabel@pengutronix.de,
- linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
- <20241030110120.332802-4-claudiu.beznea.uj@bp.renesas.com>
- <mg2ugyg65ke3tngzqyyixfkawf4iop4o373dc6fosy7bfydbe5@pm43dhkd7asu>
- <CAMuHMdUcw_UHAZRVGt=Tr0jv3NOPDibtPy1E-46Pq74YKFZxWg@mail.gmail.com>
- <ee94a802-97ec-4a9b-9ca4-5c14e0eba116@tuxon.dev>
+Subject: Re: [PATCH v2] dt-bindings: mfd: sprd,sc2731: convert to YAML
+To: Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
+References: <ZyExK01iprBHhGm6@standask-GA-A55M-S2HP>
+ <ki4wvjslncrngwpz7qukknzgdsjkxvrhitem7i5lof6ggyhu4e@tviovrd2wi77>
+ <ZyHjW86v9Y59-TJQ@standask-GA-A55M-S2HP>
+ <7db6431e-1892-463e-9c74-cd466ae3ca32@kernel.org>
+ <ZyHq4FJ0ubQVGREo@standask-GA-A55M-S2HP>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,82 +115,55 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <ee94a802-97ec-4a9b-9ca4-5c14e0eba116@tuxon.dev>
+In-Reply-To: <ZyHq4FJ0ubQVGREo@standask-GA-A55M-S2HP>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 31/10/2024 10:26, Claudiu Beznea wrote:
-> Hi, Geert, Krzysztof,
-> 
-> On 31.10.2024 10:43, Geert Uytterhoeven wrote:
->> Hi Krzysztof,
->>
->> On Thu, Oct 31, 2024 at 8:48 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>> On Wed, Oct 30, 2024 at 01:01:13PM +0200, Claudiu wrote:
->>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On 30/10/2024 09:14, Stanislav Jakubek wrote:
+> On Wed, Oct 30, 2024 at 08:48:25AM +0100, Krzysztof Kozlowski wrote:
+>> On 30/10/2024 08:42, Stanislav Jakubek wrote:
 >>>>
->>>> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock that is used
->>>> by the RTC. The input to the VBATTB could be a 32KHz crystal
->>>> or an external clock device.
+>>>>> +
+>>>>> +  '#address-cells':
+>>>>> +    const: 1
+>>>>> +
+>>>>> +  '#interrupt-cells':
+>>>>> +    const: 1
+>>>>> +
+>>>>> +  '#size-cells':
+>>>>> +    const: 0
+>>>>> +
+>>>>> +  regulators:
+>>>>> +    type: object
+>>>>> +    $ref: /schemas/regulator/sprd,sc2731-regulator.yaml#
+>>>>> +
+>>>>> +patternProperties:
+>>>>> +  "^adc@[0-9a-f]+$":
+>>>>> +    type: object
+>>>>> +    $ref: /schemas/iio/adc/sprd,sc2720-adc.yaml#
+>>>>> +
+>>>>> +  "^charger@[0-9a-f]+$":
+>>>>> +    type: object
+>>>>> +    $ref: /schemas/power/supply/sc2731-charger.yaml#
+>>>>> +
+>>>>> +  "^efuse@[0-9a-f]+$":
+>>>>> +    type: object
+>>>>> +    $ref: /schemas/nvmem/sprd,sc2731-efuse.yaml#
 >>>>
->>>> The HW block diagram for the clock generator is as follows:
->>>>
->>>>            +----------+ XC   `\
->>>> RTXIN  --->|          |----->| \       +----+  VBATTCLK
->>>>            | 32K clock|      |  |----->|gate|----------->
->>>>            | osc      | XBYP |  |      +----+
->>>> RTXOUT --->|          |----->| /
->>>>            +----------+      ,
->>>>
->>>> After discussions w/ Stephen Boyd the clock tree associated with this
->>>> hardware block was exported in Linux as:
->>>>
->>>> vbattb-xtal
->>>>    xbyp
->>>>    xc
->>>>       mux
->>>>          vbattbclk
->>>>
->>>> where:
->>>> - input-xtal is the input clock (connected to RTXIN, RTXOUT pins)
->>>> - xc, xbyp are mux inputs
->>>> - mux is the internal mux
->>>> - vbattclk is the gate clock that feeds in the end the RTC
->>>>
->>>> to allow selecting the input of the MUX though assigned-clock DT
->>>> properties, using the already existing clock drivers and avoid adding
->>>> other DT properties. If the crystal is connected on RTXIN,
->>>> RTXOUT pins the XC will be selected as mux input. If an external clock
->>>> device is connected on RTXIN, RTXOUT pins the XBYP will be selected as
->>>> mux input.
->>>>
->>>> The load capacitance of the internal crystal can be configured
->>>> with renesas,vbattb-load-nanofarads DT property.
->>>>
->>>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->>>> --- a/drivers/clk/renesas/Kconfig
->>>> +++ b/drivers/clk/renesas/Kconfig
->>>> @@ -237,6 +237,10 @@ config CLK_RZV2H
->>>>       bool "RZ/V2H(P) family clock support" if COMPILE_TEST
->>>>       select RESET_CONTROLLER
->>>>
->>>> +config CLK_RENESAS_VBATTB
->>>> +     bool "Renesas VBATTB clock controller"
+>>>> I don't think this was merged. You still have dependency.
 >>>
->>> tristate
+>>> This is in next-20241029, which this patch is based on.
 >>
->> Good point.
->> However, does it work as a module, or would that break the RTC?
+>> Try what I wrote below and see if this works...
 > 
-> On RZ/G3S the RTC counter needs the clock provided by VBATTB.
+> I assume you meant the MFD maintainers' tree here.
+> Yes, that tree doesn't have the nvmem patch this depends on.
 > 
-> I'll try with this as a module.
+> Would the approach with listing the compatibles and additionalProperties:
+> true be considered a temporary workaround?
 
-So it will defer, why would this be a problem? This does not look like
-critical core component, which would halt the system probe (and even
-then systems like Android put everything as modules).
+Not really, it's a correct approach. The node will be validated anyway
+by efuse/child schema.
 
 Best regards,
 Krzysztof
