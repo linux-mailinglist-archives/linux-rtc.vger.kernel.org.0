@@ -1,120 +1,190 @@
-Return-Path: <linux-rtc+bounces-2418-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2419-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 921559B8B1D
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 07:16:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 238019B8D53
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 09:53:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC7DEB21370
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 06:16:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47AAA1C21F0E
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 08:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5DCA14D70F;
-	Fri,  1 Nov 2024 06:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA46157A55;
+	Fri,  1 Nov 2024 08:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+7qA85W"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="TB+PxxVa"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F2E146D45;
-	Fri,  1 Nov 2024 06:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AD215687D
+	for <linux-rtc@vger.kernel.org>; Fri,  1 Nov 2024 08:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730441773; cv=none; b=ShHGNanyNGGjz6mUwOTVmrQz/nCmM+VlPcQGGSHiRQIii252XwBMTjYW+zkiBM2e/5rgM9W6zkhYG/TvgQDsn/i/d21VuE5cUtt93qXz95VhkWvdEZWd4ZROIvDHR/2p0JEuKdPWE/TjR1/k2+/GUubaRdBb4g/rrjtphjkKk7M=
+	t=1730451199; cv=none; b=cNLjst9+5dVPruGUPR5Iwl96B23AvKjc4P0rB6K5NHGEhaTLZdG6cG+isNlz3W1t44S476fVrtlTJ4kYZm2VFkaXcS2eAW6Y8oQZU493NL7TcmDOtvwYZKp9vndPa+1gZRAKvUyB0+ndptsMvyl+JvOiQwGio1xynoFCQqR3f84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730441773; c=relaxed/simple;
-	bh=a7gaRvcsFk7990BgLEMKrwpaq/uiRRcp9jkHGSR92BI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oEruR6D/7CDIPYiB2DoG3HdQ9ifmrWHIU0iuZmlSfWYhqIkE0m5TCO/mCSC5FD/lndsCo7Uz+TipyiFAXrmwwuVzSMKadCk6QcjEIaWSNDMnKbUa3odDfljKmcFTwLZjRnmD3VItzfhHntS24N7IrKjl1I9MKXTtGsk+1RIs3VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+7qA85W; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e290554afb4so1869905276.0;
-        Thu, 31 Oct 2024 23:16:11 -0700 (PDT)
+	s=arc-20240116; t=1730451199; c=relaxed/simple;
+	bh=kstV2gF0zr5kBHLp1ywmO2z5iBJT5icL+Gz+lQBY48o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KlizY+od+sh+njflSVcE87fAtXg9hxOjjlA3FqY7cR6rQC/CAbu25oL6+d4k+Eb9kvnhjeUAjtKR1WSnabUMAYg2MtEyLN3sS/qCtX/OTBCUF6EI1eqL6UI4XuKuUQMvrrf5gQsXgN8m5QHettXtHGaz8BIVeqkvsrdKj2h8nFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=TB+PxxVa; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a86e9db75b9so238546866b.1
+        for <linux-rtc@vger.kernel.org>; Fri, 01 Nov 2024 01:53:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730441771; x=1731046571; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a7gaRvcsFk7990BgLEMKrwpaq/uiRRcp9jkHGSR92BI=;
-        b=T+7qA85WAX5jK3hEFj9YDnQSf/giHGB/mf5YmJ17lXrCocKr2fNxlF5ZaACob2xq++
-         vKXgJKLtqn4m+Z2HK0s8qT9LiYWkSUeKhbkocSo9UehL7mFQdwb93whltSRRmwFtEMGG
-         1EW+UCfRQTFCyUgeU7Sz2CNxckms5NxsQ1su8KmzoyvoDK+smsacjnxuFIsjJvOmsZx8
-         EhWmhWufbkcO+k4vbL2QyHV7ZiBmoFPyZUZnpYTqcvG9xlrnbplJqYR7O/0vdX5UoIW5
-         ByFDrbC75N5WoNpllUNN65X3MT1yHO+e+fewyS6R2BAmj5eRG7VtfuGNOp8raXp/l01R
-         aSJQ==
+        d=tuxon.dev; s=google; t=1730451195; x=1731055995; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n/lzYU0FpFCkrz0oZB5hrlorKli7TkTBu5tvutCnhvA=;
+        b=TB+PxxVaG3g9uidZOe+9BsacVZTjeOgDM3qyml0cXwNvuZeZvjkrZkX46szS0bJI7+
+         JlvTk/vQrtt9Pdga2TyDGUlXNRJoYcVDQ7A78RRymSuxLXOc5Ep/wcM8spFZkKnyMj3X
+         fz0J71IYv+PVdvljBv4tkdWkWZDbCWSOsnByMyJsZwvQemy7lEZnjFBNuxnu9VdZPEqO
+         a37RZsMZrLA3D6cVG9IAukHBeOIWI+SED/XfLcIgUo0MNNkrbJG+HCdf20oYqxS1fD54
+         MByGixlGRD1atfKD9qAxi5/66U4UvdTd2ngVjRFvcEq9RzXv1jht20puqmnWegLI9IlC
+         8yqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730441771; x=1731046571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a7gaRvcsFk7990BgLEMKrwpaq/uiRRcp9jkHGSR92BI=;
-        b=rwgpvDQmVzvoa32jE9YgOzKYyO0e0F3LgJfjsmZs4XIdsSdIyo5FKfyOn52nYLNzmo
-         H7ZU7B0l5iGtbeaszfN0GXMS8E64ioU/hTVFv/kxM5uf2Yn8Us+TOcWeYw/x2LYWLUw9
-         M7MAWZrPUmOzyoqhINMViVsk+mcruXHZGmXZCObI+XSRJw8cak2h1Qo7sHTwD6zoWHxA
-         6SkQa8CD9qvf55ZXlT2dCa3NM1wh1a3ESZNVtnWGtmbALMHNOj0PhdOvv/eh3tIRyIwb
-         9KMBSED7ZQc73AwjFnWJO3v/ubjemPNcW0pRaiqha96pc+Y38z9rFMpSyObGiKBIeQO8
-         QY/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU1sMvc3n/ZuPv66+ba5gQLh3/+kq/CtTJUC2/03bFtuwe/60UsvMmiTEUxT8OGqm+38q0NYRxh@vger.kernel.org, AJvYcCUCx95UwCIr5ZCWKNsJfH3pePJ0Ez+WzRNFoe0dli+BiOHgpsS3UYaAhT7zaOr0/qzdj1/+SM86xWp1X6I=@vger.kernel.org, AJvYcCULzWCz/It5QbJHQoBotEIUNjUQApi9UGnXdtc/vSsBQq/r3AWmBMhvb4kBoEOYkL9iy/xIVAbLgepe@vger.kernel.org, AJvYcCUQikgN4lUAwAwDH61LL9ljCGSbQav7Fm3qMKT65jPzCfVvxDk0xvRxkAWf8S3G+6nV4+svMdEstHrmv2+A@vger.kernel.org, AJvYcCUfZ9Ele1myXUTjJzI497aGDEjUd3CjCSsvyGRfCJcgRRhxMPj60yMbV7ISl8d62TF3wnzbb294Ydbikm7ndLw=@vger.kernel.org, AJvYcCV+kSvEzuZA059Q3P034Jq4xxnIGVpNNgeae3fsUEDzZczDw/evvN841xXb3yzZG+UtXkaQ5CertIhN@vger.kernel.org, AJvYcCVkWK2yK3iRZgVYM9ljtyuCHh2jxURWzH1LH6xK44YYE6bkhMWC+fMVUDPv9Q7tt7Wxf0IbO7rzx/aT@vger.kernel.org, AJvYcCWj1AyzL1G3J8WbSEAu/P3LzgxKaCrc69osF6ruZTJ00g9wonElOFVOl6pBH1Sw3GazlyJomIylUE7h8Q==@vger.kernel.org, AJvYcCWpokYfRiebrKDWDlArpTZtIIjbfjIW/NpkGeb5hNFNjR4jGVsrI3D4lg1jaMLtDwJjyVE/q9xmCqn9@vger.kernel.org, AJvYcCXHvN8ES3MqGfIK1EyFM1LvYpdoiusl
- Bbbt44kkUho9nc3GeRx3CGYkXuB3SyM3RTZgUL/Ip2B+VG8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6dF5STPBTz6pPDByyLKINCuy0Y/ow7jcshE+6wQgzFhOWd6Dx
-	5+pxncY3En+N/e8/D8r/bWZ0q95TB8Uh73d9MbqPGPirlHpdOaFkbACZDlKfIT8saoLNodgdf4C
-	jHcGCGjLz0dwY4lJzJjde6fuJfq4=
-X-Google-Smtp-Source: AGHT+IFqMKdP/PNKGwnzDQJmnqEp+I7YNFa7RnoAoYOmar2xUzZgcR5eeFveEUZVqb1Er5ED63rd6vgk5E5KJ56d+nU=
-X-Received: by 2002:a05:6902:33c7:b0:e30:e0ab:8eed with SMTP id
- 3f1490d57ef6-e30e5a3e0eemr5326265276.17.1730441770787; Thu, 31 Oct 2024
- 23:16:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730451195; x=1731055995;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/lzYU0FpFCkrz0oZB5hrlorKli7TkTBu5tvutCnhvA=;
+        b=F9H6zo/79FLQ3P6UYc9sZesjJtrbBA4rQEeOM9XoChdWsGFBBeQBsMx/XRziRZoRPC
+         k8odViYHEhQEBp8KpO1u3Mahda26RavNgvhKswK5m3LvoG5NWQ3iI/Eg8IM4piChi+13
+         NVn7WVsU6r6dRtYVyR1mYWJdL9VhH8rp8JKhIFNuAQiuT+k4cegkWFSAKpZwSXGQXKau
+         XdZl/ZgPlLWfG6nsxvbzw5v2aXQc52kGklQhtUTOGe3RpJLYJKTG73gx2rdg7NTQh7qD
+         MxhOUlBP/IZOCJwd5kyRvVx6EXZBdevhYHdiZdQRR38fkhAuT5TXtYQKrKFmINqdMw8r
+         1UKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVE9/0b5siZlMlUY3EmG0HPDuMYYn4ViqVrBWIgyZPHuPzftVbz6NgRHN45/T9jsqHBKJyt/qm90xg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3UNaKarpFNCF+iVhNiOkoOqYB2UIqEQULv/g4O2TVZ0pIPxAj
+	wvZQw1QpF9EvYS3pZhsCyWXmmwF06NQJ+cxjTl0qkBRRYd/VyyxDzOGG58omBOs=
+X-Google-Smtp-Source: AGHT+IEj3KxbXi2bqvHFQc5tuBqv3rzxtxnuw/COMIJuYYxNFOMzNrLwH0maLO3jY5NZdwEHAAxYkw==
+X-Received: by 2002:a17:906:c113:b0:a9a:533b:56e3 with SMTP id a640c23a62f3a-a9e5092a4b5mr640607366b.26.1730451195054;
+        Fri, 01 Nov 2024 01:53:15 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.190])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e564e96a9sm156826066b.97.2024.11.01.01.53.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Nov 2024 01:53:14 -0700 (PDT)
+Message-ID: <fa63898a-33f2-44ad-88ae-bd125e48b71e@tuxon.dev>
+Date: Fri, 1 Nov 2024 10:53:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-3-tmyu0@nuvoton.com>
- <CAMRc=Mc+SZN=EytxY=qA-qBEAY_F17GP-7FRE9oLojLbdUoPaQ@mail.gmail.com>
- <CAOoeyxW4=+5-QMcd_wgncFC9jgx_1Zf1Tq8RTnBvVqZ1JcUBQg@mail.gmail.com>
- <CAMRc=MexqwSCDrsBS0mK0fo_MCwngAH9XVgjRuDQjw0TVUBmPw@mail.gmail.com>
- <CAOoeyxXRrDuKJRMb3O2h3BF1vC=pwNN3DKfnEN9LnA+jiBCTQg@mail.gmail.com> <CAMRc=Me+R_i1WxFGeVe-MRREGn1YJvUon73A4FHDOPgs8wVaCg@mail.gmail.com>
-In-Reply-To: <CAMRc=Me+R_i1WxFGeVe-MRREGn1YJvUon73A4FHDOPgs8wVaCg@mail.gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 1 Nov 2024 14:15:59 +0800
-Message-ID: <CAOoeyxWo5CjJooM1nG_0Z4ZMaWmcDtt=ysRC5Z6JnpZ7cTcL7A@mail.gmail.com>
-Subject: Re: [PATCH v1 2/9] gpio: Add Nuvoton NCT6694 GPIO support
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, jic23@kernel.org, lars@metafoo.de, 
-	ukleinek@kernel.org, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 03/10] clk: renesas: clk-vbattb: Add VBATTB clock
+ driver
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com,
+ magnus.damm@gmail.com, p.zabel@pengutronix.de,
+ linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
+ <20241030110120.332802-4-claudiu.beznea.uj@bp.renesas.com>
+ <mg2ugyg65ke3tngzqyyixfkawf4iop4o373dc6fosy7bfydbe5@pm43dhkd7asu>
+ <CAMuHMdUcw_UHAZRVGt=Tr0jv3NOPDibtPy1E-46Pq74YKFZxWg@mail.gmail.com>
+ <ee94a802-97ec-4a9b-9ca4-5c14e0eba116@tuxon.dev>
+ <bcc49824-b350-45d0-af84-8458a28d5eef@kernel.org>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <bcc49824-b350-45d0-af84-8458a28d5eef@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Bartosz Golaszewski <brgl@bgdev.pl> =E6=96=BC 2024=E5=B9=B410=E6=9C=8831=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=883:32=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> > > No for line names - as this is a dynamic USB expander, I'd suggest to
-> > > have them in the driver and assign to gc->names.
-> >
-> > Could I create an array to map each of the GPIO pins?
-> >
->
-> Please trim the quoted email to only the relevant parts.
->
-> I'm not sure what you mean by that. There's a field in struct
-> gpio_chip which you can use to set the line names from the driver
-> code.
->
 
-Understood, thank you very much.
 
-Best regards
-Ming
+On 31.10.2024 11:46, Krzysztof Kozlowski wrote:
+> On 31/10/2024 10:26, Claudiu Beznea wrote:
+>> Hi, Geert, Krzysztof,
+>>
+>> On 31.10.2024 10:43, Geert Uytterhoeven wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On Thu, Oct 31, 2024 at 8:48 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>>> On Wed, Oct 30, 2024 at 01:01:13PM +0200, Claudiu wrote:
+>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>
+>>>>> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock that is used
+>>>>> by the RTC. The input to the VBATTB could be a 32KHz crystal
+>>>>> or an external clock device.
+>>>>>
+>>>>> The HW block diagram for the clock generator is as follows:
+>>>>>
+>>>>>            +----------+ XC   `\
+>>>>> RTXIN  --->|          |----->| \       +----+  VBATTCLK
+>>>>>            | 32K clock|      |  |----->|gate|----------->
+>>>>>            | osc      | XBYP |  |      +----+
+>>>>> RTXOUT --->|          |----->| /
+>>>>>            +----------+      ,
+>>>>>
+>>>>> After discussions w/ Stephen Boyd the clock tree associated with this
+>>>>> hardware block was exported in Linux as:
+>>>>>
+>>>>> vbattb-xtal
+>>>>>    xbyp
+>>>>>    xc
+>>>>>       mux
+>>>>>          vbattbclk
+>>>>>
+>>>>> where:
+>>>>> - input-xtal is the input clock (connected to RTXIN, RTXOUT pins)
+>>>>> - xc, xbyp are mux inputs
+>>>>> - mux is the internal mux
+>>>>> - vbattclk is the gate clock that feeds in the end the RTC
+>>>>>
+>>>>> to allow selecting the input of the MUX though assigned-clock DT
+>>>>> properties, using the already existing clock drivers and avoid adding
+>>>>> other DT properties. If the crystal is connected on RTXIN,
+>>>>> RTXOUT pins the XC will be selected as mux input. If an external clock
+>>>>> device is connected on RTXIN, RTXOUT pins the XBYP will be selected as
+>>>>> mux input.
+>>>>>
+>>>>> The load capacitance of the internal crystal can be configured
+>>>>> with renesas,vbattb-load-nanofarads DT property.
+>>>>>
+>>>>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>
+>>>>> --- a/drivers/clk/renesas/Kconfig
+>>>>> +++ b/drivers/clk/renesas/Kconfig
+>>>>> @@ -237,6 +237,10 @@ config CLK_RZV2H
+>>>>>       bool "RZ/V2H(P) family clock support" if COMPILE_TEST
+>>>>>       select RESET_CONTROLLER
+>>>>>
+>>>>> +config CLK_RENESAS_VBATTB
+>>>>> +     bool "Renesas VBATTB clock controller"
+>>>>
+>>>> tristate
+>>>
+>>> Good point.
+>>> However, does it work as a module, or would that break the RTC?
+>>
+>> On RZ/G3S the RTC counter needs the clock provided by VBATTB.
+>>
+>> I'll try with this as a module.
+> 
+> So it will defer, why would this be a problem? This does not look like
+
+No problems with it. I wrongly phrased it. That being said, I'll set
+CLK_RENESAS_VBATTB as module along with RTC and do the proper adjustments
+in drivers/clk/renesas/Kconfig.
+
+Thank you,
+Claudiu
+
+
+> critical core component, which would halt the system probe (and even
+> then systems like Android put everything as modules).
+> 
+> Best regards,
+> Krzysztof
+> 
 
