@@ -1,74 +1,55 @@
-Return-Path: <linux-rtc+bounces-2419-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2420-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 238019B8D53
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 09:53:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A4F9B8DCA
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 10:24:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47AAA1C21F0E
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 08:53:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D68612860D9
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 09:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA46157A55;
-	Fri,  1 Nov 2024 08:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F6B15852F;
+	Fri,  1 Nov 2024 09:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="TB+PxxVa"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="E1obOpST"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AD215687D
-	for <linux-rtc@vger.kernel.org>; Fri,  1 Nov 2024 08:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB512156220;
+	Fri,  1 Nov 2024 09:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730451199; cv=none; b=cNLjst9+5dVPruGUPR5Iwl96B23AvKjc4P0rB6K5NHGEhaTLZdG6cG+isNlz3W1t44S476fVrtlTJ4kYZm2VFkaXcS2eAW6Y8oQZU493NL7TcmDOtvwYZKp9vndPa+1gZRAKvUyB0+ndptsMvyl+JvOiQwGio1xynoFCQqR3f84=
+	t=1730453078; cv=none; b=sLk0F2OIfmtJTJkuKHh+EgiWw2jCo53Uf7ZSEkvSQ9GIbnWLvUMRlbdsXO9HTad78rpSYJAo4TuvZ5/eyQsut8gcAPQCmWjjX9UY6Fd9UDrHXrNXMigU4vEeWHO6dK6rx9SSuGydnQW7slq56tILEoLGnJlKnAPZC+datBpt4cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730451199; c=relaxed/simple;
-	bh=kstV2gF0zr5kBHLp1ywmO2z5iBJT5icL+Gz+lQBY48o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KlizY+od+sh+njflSVcE87fAtXg9hxOjjlA3FqY7cR6rQC/CAbu25oL6+d4k+Eb9kvnhjeUAjtKR1WSnabUMAYg2MtEyLN3sS/qCtX/OTBCUF6EI1eqL6UI4XuKuUQMvrrf5gQsXgN8m5QHettXtHGaz8BIVeqkvsrdKj2h8nFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=TB+PxxVa; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a86e9db75b9so238546866b.1
-        for <linux-rtc@vger.kernel.org>; Fri, 01 Nov 2024 01:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1730451195; x=1731055995; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n/lzYU0FpFCkrz0oZB5hrlorKli7TkTBu5tvutCnhvA=;
-        b=TB+PxxVaG3g9uidZOe+9BsacVZTjeOgDM3qyml0cXwNvuZeZvjkrZkX46szS0bJI7+
-         JlvTk/vQrtt9Pdga2TyDGUlXNRJoYcVDQ7A78RRymSuxLXOc5Ep/wcM8spFZkKnyMj3X
-         fz0J71IYv+PVdvljBv4tkdWkWZDbCWSOsnByMyJsZwvQemy7lEZnjFBNuxnu9VdZPEqO
-         a37RZsMZrLA3D6cVG9IAukHBeOIWI+SED/XfLcIgUo0MNNkrbJG+HCdf20oYqxS1fD54
-         MByGixlGRD1atfKD9qAxi5/66U4UvdTd2ngVjRFvcEq9RzXv1jht20puqmnWegLI9IlC
-         8yqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730451195; x=1731055995;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n/lzYU0FpFCkrz0oZB5hrlorKli7TkTBu5tvutCnhvA=;
-        b=F9H6zo/79FLQ3P6UYc9sZesjJtrbBA4rQEeOM9XoChdWsGFBBeQBsMx/XRziRZoRPC
-         k8odViYHEhQEBp8KpO1u3Mahda26RavNgvhKswK5m3LvoG5NWQ3iI/Eg8IM4piChi+13
-         NVn7WVsU6r6dRtYVyR1mYWJdL9VhH8rp8JKhIFNuAQiuT+k4cegkWFSAKpZwSXGQXKau
-         XdZl/ZgPlLWfG6nsxvbzw5v2aXQc52kGklQhtUTOGe3RpJLYJKTG73gx2rdg7NTQh7qD
-         MxhOUlBP/IZOCJwd5kyRvVx6EXZBdevhYHdiZdQRR38fkhAuT5TXtYQKrKFmINqdMw8r
-         1UKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVE9/0b5siZlMlUY3EmG0HPDuMYYn4ViqVrBWIgyZPHuPzftVbz6NgRHN45/T9jsqHBKJyt/qm90xg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3UNaKarpFNCF+iVhNiOkoOqYB2UIqEQULv/g4O2TVZ0pIPxAj
-	wvZQw1QpF9EvYS3pZhsCyWXmmwF06NQJ+cxjTl0qkBRRYd/VyyxDzOGG58omBOs=
-X-Google-Smtp-Source: AGHT+IEj3KxbXi2bqvHFQc5tuBqv3rzxtxnuw/COMIJuYYxNFOMzNrLwH0maLO3jY5NZdwEHAAxYkw==
-X-Received: by 2002:a17:906:c113:b0:a9a:533b:56e3 with SMTP id a640c23a62f3a-a9e5092a4b5mr640607366b.26.1730451195054;
-        Fri, 01 Nov 2024 01:53:15 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.190])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e564e96a9sm156826066b.97.2024.11.01.01.53.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Nov 2024 01:53:14 -0700 (PDT)
-Message-ID: <fa63898a-33f2-44ad-88ae-bd125e48b71e@tuxon.dev>
-Date: Fri, 1 Nov 2024 10:53:12 +0200
+	s=arc-20240116; t=1730453078; c=relaxed/simple;
+	bh=uqcYVKNJ/6xy8np7sEEi91+9doYOyD3x1ty9nISwXmg=;
+	h=Message-ID:Date:MIME-Version:Subject:References:From:To:Cc:
+	 In-Reply-To:Content-Type; b=BqCyYLQqKypkdIpkhsSrQi8glgEDvDKgqkzEVmMbsNzQis2GzDHmsznEf/XFW3IbYWlMlyL2YISiqls0abCR097uG4e0Gx1YK9byY4fhSHWTCXFYdpdWAKu3cIPvizpJGevEQ3RSsFAcSxgdTKS/ltRiWbUPSJFiZZ635G68G9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=E1obOpST; arc=none smtp.client-ip=80.12.242.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id 6nkgtkAk1e9TB6nkgto0N8; Fri, 01 Nov 2024 10:15:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1730452532;
+	bh=tNM5Z7wC0Hy8iSQfrM+16FEpDBVMI2P+7p22mCHlKmI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To;
+	b=E1obOpSTnroH0+bBlgKK8phjigBdrvecKBIC/+WPdIsln2iR2L23v9MCWEFBTCdmt
+	 UZSBz14hqXFki2hk7rhfCFoHoWwVFutfjdNHJYjQh5zK4uYyQgHKzGhodP64M2fkGM
+	 wzJkJSHMucVgG4lQ0MqpKlIFZkmAVmhLZdJpPEYBZTHjzfYXQ2iNvRQI4DL106CGZ3
+	 jtuBq30JrRg+75/tIQ/UyiIXxoMNEefX5jQMG9H+TM6bH3nwGM4I4u/k5MmWVXxT/x
+	 M1VAguiVWwnGsIt6vYXDiBLamSfi7GV/hWdDSthpprcLdh6ItDBv4vp8y1va3m1uZR
+	 2/EsBYaCShfew==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Fri, 01 Nov 2024 10:15:32 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <7eaaa765-d6ed-4afb-8ea3-35bec91c667e@wanadoo.fr>
+Date: Fri, 1 Nov 2024 10:15:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -76,115 +57,287 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 03/10] clk: renesas: clk-vbattb: Add VBATTB clock
- driver
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com,
- magnus.damm@gmail.com, p.zabel@pengutronix.de,
- linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+Subject: Re: [PATCH RESEND v4 2/3] rtc: support for the Amlogic on-chip RTC
+References: <20241101-rtc-v4-0-14e1ed486ed8@amlogic.com>
+ <20241101-rtc-v4-2-14e1ed486ed8@amlogic.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20241030110120.332802-1-claudiu.beznea.uj@bp.renesas.com>
- <20241030110120.332802-4-claudiu.beznea.uj@bp.renesas.com>
- <mg2ugyg65ke3tngzqyyixfkawf4iop4o373dc6fosy7bfydbe5@pm43dhkd7asu>
- <CAMuHMdUcw_UHAZRVGt=Tr0jv3NOPDibtPy1E-46Pq74YKFZxWg@mail.gmail.com>
- <ee94a802-97ec-4a9b-9ca4-5c14e0eba116@tuxon.dev>
- <bcc49824-b350-45d0-af84-8458a28d5eef@kernel.org>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <bcc49824-b350-45d0-af84-8458a28d5eef@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+ Xianwei Zhao <xianwei.zhao@amlogic.com>,
+ Yiting Deng <yiting.deng@amlogic.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+In-Reply-To: <20241101-rtc-v4-2-14e1ed486ed8@amlogic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-
-
-On 31.10.2024 11:46, Krzysztof Kozlowski wrote:
-> On 31/10/2024 10:26, Claudiu Beznea wrote:
->> Hi, Geert, Krzysztof,
->>
->> On 31.10.2024 10:43, Geert Uytterhoeven wrote:
->>> Hi Krzysztof,
->>>
->>> On Thu, Oct 31, 2024 at 8:48 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>>> On Wed, Oct 30, 2024 at 01:01:13PM +0200, Claudiu wrote:
->>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>
->>>>> The VBATTB IP of the Renesas RZ/G3S SoC controls the clock that is used
->>>>> by the RTC. The input to the VBATTB could be a 32KHz crystal
->>>>> or an external clock device.
->>>>>
->>>>> The HW block diagram for the clock generator is as follows:
->>>>>
->>>>>            +----------+ XC   `\
->>>>> RTXIN  --->|          |----->| \       +----+  VBATTCLK
->>>>>            | 32K clock|      |  |----->|gate|----------->
->>>>>            | osc      | XBYP |  |      +----+
->>>>> RTXOUT --->|          |----->| /
->>>>>            +----------+      ,
->>>>>
->>>>> After discussions w/ Stephen Boyd the clock tree associated with this
->>>>> hardware block was exported in Linux as:
->>>>>
->>>>> vbattb-xtal
->>>>>    xbyp
->>>>>    xc
->>>>>       mux
->>>>>          vbattbclk
->>>>>
->>>>> where:
->>>>> - input-xtal is the input clock (connected to RTXIN, RTXOUT pins)
->>>>> - xc, xbyp are mux inputs
->>>>> - mux is the internal mux
->>>>> - vbattclk is the gate clock that feeds in the end the RTC
->>>>>
->>>>> to allow selecting the input of the MUX though assigned-clock DT
->>>>> properties, using the already existing clock drivers and avoid adding
->>>>> other DT properties. If the crystal is connected on RTXIN,
->>>>> RTXOUT pins the XC will be selected as mux input. If an external clock
->>>>> device is connected on RTXIN, RTXOUT pins the XBYP will be selected as
->>>>> mux input.
->>>>>
->>>>> The load capacitance of the internal crystal can be configured
->>>>> with renesas,vbattb-load-nanofarads DT property.
->>>>>
->>>>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>
->>>>> --- a/drivers/clk/renesas/Kconfig
->>>>> +++ b/drivers/clk/renesas/Kconfig
->>>>> @@ -237,6 +237,10 @@ config CLK_RZV2H
->>>>>       bool "RZ/V2H(P) family clock support" if COMPILE_TEST
->>>>>       select RESET_CONTROLLER
->>>>>
->>>>> +config CLK_RENESAS_VBATTB
->>>>> +     bool "Renesas VBATTB clock controller"
->>>>
->>>> tristate
->>>
->>> Good point.
->>> However, does it work as a module, or would that break the RTC?
->>
->> On RZ/G3S the RTC counter needs the clock provided by VBATTB.
->>
->> I'll try with this as a module.
+Le 01/11/2024 à 03:06, Xianwei Zhao via B4 Relay a écrit :
+> From: Yiting Deng <yiting.deng-LpR1jeaWuhtBDgjK7y7TUQ@public.gmane.org>
 > 
-> So it will defer, why would this be a problem? This does not look like
-
-No problems with it. I wrongly phrased it. That being said, I'll set
-CLK_RENESAS_VBATTB as module along with RTC and do the proper adjustments
-in drivers/clk/renesas/Kconfig.
-
-Thank you,
-Claudiu
-
-
-> critical core component, which would halt the system probe (and even
-> then systems like Android put everything as modules).
+> This is the third amlogic driver. The RTC hardware of A4 SoC is different
+> from the previous one. This RTC hardware includes a timing function and
+> an alarm function. But the existing has only timing function, alarm
+> function is using the system clock to implement a virtual alarm. Add
+> the RTC driver to support it.
 > 
-> Best regards,
-> Krzysztof
-> 
+> Signed-off-by: Yiting Deng <yiting.deng-LpR1jeaWuhtBDgjK7y7TUQ@public.gmane.org>
+> Signed-off-by: Xianwei Zhao <xianwei.zhao-LpR1jeaWuhtBDgjK7y7TUQ@public.gmane.org>
+
+...
+
+> diff --git a/drivers/rtc/rtc-amlogic-a4.c b/drivers/rtc/rtc-amlogic-a4.c
+> new file mode 100644
+> index 000000000000..decd74df225c
+> --- /dev/null
+> +++ b/drivers/rtc/rtc-amlogic-a4.c
+> @@ -0,0 +1,473 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR MIT)
+> +/*
+> + * Copyright (C) 2024 Amlogic, Inc. All rights reserved
+> + * Author: Yiting Deng <yiting.deng-LpR1jeaWuhtBDgjK7y7TUQ@public.gmane.org>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/rtc.h>
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/time64.h>
+> +#include <linux/delay.h>
+
+Nitpick: sometimes, alphabetical order is preferred.
+
+> +
+> +/* rtc oscillator rate */
+> +#define OSC_32K			(32768)
+> +#define OSC_24M			(24000000)
+
+Nitpick: maybe these () could be removed to ease reading?
+
+> +
+> +#define RTC_CTRL		(0x0 << 2)		/* Control RTC */
+> +#define RTC_ALRM0_EN		BIT(0)
+> +#define RTC_OSC_SEL		BIT(8)
+> +#define RTC_ENABLE		BIT(12)
+
+...
+
+> +static int aml_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev);
+> +	u32 time_sec;
+> +
+> +	/* if RTC disabled, first enable it */
+> +	if (!rtc->rtc_enabled) {
+> +		regmap_write_bits(rtc->map, RTC_CTRL, RTC_ENABLE, RTC_ENABLE);
+> +		usleep_range(100, 200);
+> +		rtc->rtc_enabled = regmap_test_bits(rtc->map, RTC_CTRL, RTC_ENABLE);
+
+Should we have something like:
+
+		if (!rtc->rtc_enabled) {
+			dev_err(dev, "<something>");
+			return -EINVAL;
+		}
+
+if enabling fails?
+
+> +	}
+> +
+> +	time_sec = rtc_tm_to_time64(tm);
+> +	if (rtc->config->gray_stored)
+> +		time_sec = binary_to_gray(time_sec);
+> +	regmap_write(rtc->map, RTC_COUNTER_REG, time_sec);
+> +	dev_dbg(dev, "%s: set time = %us\n", __func__, time_sec);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aml_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev);
+> +	time64_t alarm_sec = 0;
+
+Nitpick: No need to init.
+
+> +
+> +	/* if RTC disabled, set alarm failed */
+> +	if (!rtc->rtc_enabled) {
+> +		dev_err(dev, "RTC disabled, set alarm failed\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	regmap_update_bits(rtc->map, RTC_CTRL,
+> +			   RTC_ALRM0_EN, RTC_ALRM0_EN);
+> +	regmap_update_bits(rtc->map, RTC_INT_MASK,
+> +			   RTC_ALRM0_IRQ_MSK, 0);
+> +
+> +	alarm_sec = rtc_tm_to_time64(&alarm->time);
+> +	if (rtc->config->gray_stored)
+> +		alarm_sec = binary_to_gray(alarm_sec);
+> +	regmap_write(rtc->map, RTC_ALARM0_REG, alarm_sec);
+> +
+> +	dev_dbg(dev, "%s: alarm->enabled=%d alarm_set=%llds\n", __func__,
+> +		alarm->enabled, alarm_sec);
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static int aml_rtc_read_offset(struct device *dev, long *offset)
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(dev);
+> +	u32 reg_val;
+> +	long val;
+> +	int sign, match_counter, enable;
+> +
+> +	/* if RTC disabled, read offset failed */
+> +	if (!rtc->rtc_enabled) {
+> +		dev_err(dev, "RTC disabled, read offset failed\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	regmap_read(rtc->map, RTC_SEC_ADJUST_REG, &reg_val);
+> +	enable = FIELD_GET(RTC_ADJ_VALID, reg_val);
+> +	if (!enable) {
+> +		val = 0;
+
+Nitpick: If val was initialised above, you could save 2 lines of code here.
+
+> +	} else {
+> +		sign = FIELD_GET(RTC_SEC_ADJUST_CTRL, reg_val);
+> +		match_counter = FIELD_GET(RTC_MATCH_COUNTER, reg_val);
+> +		val = 1000000000 / (match_counter + 1);
+> +		if (sign == RTC_SWALLOW_SECOND)
+> +			val = -val;
+> +	}
+> +	*offset = val;
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static int aml_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct aml_rtc_data *rtc;
+
+Nitpick: defining:
+	struct device *dev = &pdev->dev;
+
+would simplify code bellow.
+
+> +	void __iomem *base;
+> +	int ret = 0;
+> +
+> +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> +	if (!rtc)
+> +		return -ENOMEM;
+> +
+> +	rtc->config = of_device_get_match_data(&pdev->dev);
+> +	if (!rtc->config)
+> +		return -ENODEV;
+> +
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(base), "resource ioremap failed\n");
+> +
+> +	rtc->map = devm_regmap_init_mmio(&pdev->dev, base, &aml_rtc_regmap_config);
+> +	if (IS_ERR(rtc->map))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->map), "regmap init failed\n");
+> +
+> +	rtc->irq = platform_get_irq(pdev, 0);
+> +	if (rtc->irq < 0)
+> +		return rtc->irq;
+> +
+> +	rtc->rtc_clk = devm_clk_get(&pdev->dev, "osc");
+> +	if (IS_ERR(rtc->rtc_clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->rtc_clk),
+> +				     "failed to find rtc clock\n");
+> +	if (clk_get_rate(rtc->rtc_clk) != OSC_32K && clk_get_rate(rtc->rtc_clk) != OSC_24M)
+> +		return dev_err_probe(&pdev->dev, -EINVAL, "Invalid clock configuration\n");
+> +
+> +	rtc->sys_clk = devm_clk_get(&pdev->dev, "sys");
+
+Maybe devm_clk_get_enabled() to simplify code below and the .remove() 
+function?
+
+> +	if (IS_ERR(rtc->sys_clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->sys_clk),
+> +				     "failed to get rtc sys clk\n");
+> +	ret = clk_prepare_enable(rtc->sys_clk);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to enable clk!\n");
+> +
+> +	aml_rtc_init(rtc);
+> +
+> +	device_init_wakeup(&pdev->dev, 1);
+> +	platform_set_drvdata(pdev, rtc);
+> +
+> +	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(rtc->rtc_dev)) {
+> +		ret = PTR_ERR(rtc->rtc_dev);
+> +		goto err_clk;
+> +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev, rtc->irq, aml_rtc_handler,
+> +			       IRQF_ONESHOT, "aml-rtc alarm", rtc);
+> +	if (ret) {
+> +		dev_err_probe(&pdev->dev, ret, "IRQ%d request failed, ret = %d\n",
+> +			      rtc->irq, ret);
+> +		goto err_clk;
+> +	}
+> +
+> +	rtc->rtc_dev->ops = &aml_rtc_ops;
+> +	rtc->rtc_dev->range_min = 0;
+> +	rtc->rtc_dev->range_max = U32_MAX;
+> +
+> +	ret = devm_rtc_register_device(rtc->rtc_dev);
+> +	if (ret) {
+> +		dev_err_probe(&pdev->dev, ret, "Failed to register RTC device: %d\n", ret);
+> +		goto err_clk;
+> +	}
+> +
+> +	return 0;
+> +err_clk:
+> +	clk_disable_unprepare(rtc->sys_clk);
+
+Should device_init_wakeup(..., 0) be called here?
+(as in the remove function)
+
+> +
+> +	return ret;
+> +}
+
+...
+
+> +static SIMPLE_DEV_PM_OPS(aml_rtc_pm_ops,
+> +			 aml_rtc_suspend, aml_rtc_resume);
+> +
+> +static int aml_rtc_remove(struct platform_device *pdev)
+
+Should'nt it return void?
+Compilation fails with latest -next.
+
+> +{
+> +	struct aml_rtc_data *rtc = dev_get_drvdata(&pdev->dev);
+> +
+> +	/* disable RTC */
+> +	regmap_write_bits(rtc->map, RTC_CTRL, RTC_ENABLE, 0);
+> +	clk_disable_unprepare(rtc->sys_clk);
+> +	device_init_wakeup(&pdev->dev, 0);
+> +
+> +	return 0;
+> +}
+
+...
+
+CJ
+
 
