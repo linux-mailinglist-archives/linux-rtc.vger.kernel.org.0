@@ -1,129 +1,121 @@
-Return-Path: <linux-rtc+bounces-2410-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2411-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF8A99B88CA
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 02:45:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D8289B890B
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 03:07:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 265941C21A75
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 01:45:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2183428302D
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Nov 2024 02:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5ADF12BF02;
-	Fri,  1 Nov 2024 01:44:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A0913AA31;
+	Fri,  1 Nov 2024 02:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZInS9aJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uJsTUGGd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFD383CC1;
-	Fri,  1 Nov 2024 01:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866DD126BF9;
+	Fri,  1 Nov 2024 02:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730425463; cv=none; b=Js5rS9Fuh//ch5Z5G8x81vgy2Wi1W98sR3Ze47AdlYVNOoIYmDfpKGarXFcsyV9YtSnZzz59G1znx46UqSPRzgX9jidO4NzR+RCigiIsl1mekF73KcHPoKQuxWD/0zbiVq29uZbTKq6Dt6B8wEUEVkwocSQDJnFwJlmgufZ++vk=
+	t=1730426819; cv=none; b=oVI2xBMDUzCwAzfQvW/LxvTTw/JjpOIsgHkhQ5KIPDakhMGadTY5ebiWdO8LLwSiVAcfBgvCzlx1Q6cGTWA60AZLCq9Yji4yfiNtGe5qp4o8kIXewEtiDLACGqQESbRSD7rvc3twZ8h5iqHDkVK1HlhQ9OaCr/WJOfc+sJQhnRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730425463; c=relaxed/simple;
-	bh=szAhQGFkG/EkKlR/UIr5w2khUSd3/LQQIfpepEXaFGI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HttUaRf2sJqYW1FO/KqkRQHEkHf78OiDv7+ugWMMkO2dstmjnyV5j1EeXEvid0EIkrLPmSN2vOzM8pl4BWJTwNjkshXVbWcCXCr5d4mAd3sE0lViA4vp5wIFkzyc1qqLgAEV+BFssx/h/Mg4OiNpgWD+2yC+FiEDKQJKwpYVE54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZInS9aJ; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e291cbbf05bso1563459276.2;
-        Thu, 31 Oct 2024 18:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730425457; x=1731030257; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DC+LuRUPcxT9PORM0hQQfRilr8yvtpO96Lfj230+w40=;
-        b=SZInS9aJgXCP/5dgwECdKgtSHhyLwJs72hMogZYk8r5mV3pujhYXFNqViDuCjgFadf
-         wyXcE/RC66HpYoqna+DUvs/4RrVQy0FgUp3A4eZv/KaJmoqBfE+6Pj8eSjsfjebKUjwI
-         F2oZeHjBWKhd7VIHja4/6QgoTwJTxxY3vF7QVu24sE2UFbPlwvC0Kcx9gkuft7X2lhvF
-         PDMZuk0u9G4Ao/vF964ItbBrpszIktgCb/5mQNQlUprAGKgTo9C0ZRv6LXqSbAOgOrWj
-         D1RkLhDsMgmIMAi83wstKKim0Afxexmzp/soB6xgjVThDo/+FjjDSPYalzYAn7CSNnly
-         8G3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730425457; x=1731030257;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DC+LuRUPcxT9PORM0hQQfRilr8yvtpO96Lfj230+w40=;
-        b=CmtKQB12A7Belk5lMadl+tQrI5Yn4IXXcWJQ4MHaZntYvRr3KGZAtvtc2wbc27yt6b
-         kupHzgyWVe3ooQozFiAmwkAngsMSjBw4LmgkjKIlOYvJ96g221i69ZQmmfRMF7IZacns
-         RjAJEYcliFsU73bmwtL4lWmJgLgv0tl/oMFQ3nxzrvZvmjT167k8OSh2BvNh2g0gYA/q
-         yQrEOjiR3YKTuRpVuPe6qTlYQUU2MFBnK078t9XulwmL2n5i/atvKBX7us6k4DJghxTD
-         mBnE9KopehpKXzRapTsNHh9FbBgFDHS4LtQvJtc80VT+e5E08s3wA02jVagHUvPFNWxU
-         s1tg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGj1CCChNRl63ld6TpnXG/Oa+c8alqhKP7qVSu3BGsUuKs3XDsxTa6bfAto1cag2Iss1UT5b3CtItaBdal@vger.kernel.org, AJvYcCUJu4TKIqz6GToauEKWwRHqv9opuL25magurLCxKSVTfbuj/sKCE3oxvI2Yan0gvNkeZP6se8vslofCVw==@vger.kernel.org, AJvYcCUT4Pwz71uWwa7B0eTJP3WAk08r2TrF8feSH2zPLhioRk611nDXF2yKqwYWledONru3Lml4kZg+F8Qf@vger.kernel.org, AJvYcCUk+g9DtaOdoxTU4rpeJn6r727PeUxZANag8ennRhbL5hzd5uD2LASujHk54Su17DGiBFyXJLMpTqaI6zg=@vger.kernel.org, AJvYcCV8og7I3e00pe5M2kKqIZkL/0hYt7104rEqtjcLThcC0ovfVBA5+d8qvzV7odTnmwT0kmzX+nkAjlsE@vger.kernel.org, AJvYcCVfTNm2thZIWcO2bk/8Po6g6u+Cys43NIiV3oevZMLaBhKge60axFfb5x5qG54u3RjRuk/XocgyPDE=@vger.kernel.org, AJvYcCWdtS+KKghmGD/V2RTJIyqyYvOgrV853g3Vr0c6cZfMOrXN0b96jOWFgSxjgGLneP8MmlDi5dJoN7Rj@vger.kernel.org, AJvYcCX7RY3ICl/gXACT25wVgMKcu+2eUHXy4+16ExTwBim65qt3jsA5twqdeeGgDCAQUFOYGuHdPEQfxx92@vger.kernel.org, AJvYcCXtsPQR8eYy0sj+RyJU0pZv9rl7UDKolPhiZ5mJoe+o7k9px3PzrUud3gQpX21PjVub7WpXxPujrKgMGXLWqMs=@vger.kernel.org, AJvYcCXyBjMzvi2nSHCd0e7Dcynb9SeC
- ARxUFhsgERSwZJ+/8FqeDWYPRXZzkUM7lzmdp9rb6f5T6EMW@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVJSSZfLwYDF8kOThI4NhnXIfFUIse0H4TZulEItGOInpnT1Qh
-	Myq0CkguxRFfRyKH78s/d7uNF0cSUmn9UHWypQKprFvo9egB3UsIZW64HUQa6P9VibdhW3l0luT
-	dYTMbWECK8ZvTAeaj2qZZHMHxH9E=
-X-Google-Smtp-Source: AGHT+IG9FANvNfzOWFakcqI9k6DkZ1PgSjsTX0lBUX57Oga19FBFGDCpY0tL5mAhGGCovl5a16zXw3Pcdsnl+hJRh0M=
-X-Received: by 2002:a05:6902:2504:b0:e2b:d610:9d59 with SMTP id
- 3f1490d57ef6-e30e5b2491amr5145627276.43.1730425457068; Thu, 31 Oct 2024
- 18:44:17 -0700 (PDT)
+	s=arc-20240116; t=1730426819; c=relaxed/simple;
+	bh=g8Fx5TTJzV1MuTCeRPULLGaYpS2ORG7ZcWbYMH2W/Ds=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MJqfRykfPnBg37w5v83s96DEyMuyGkusvEOcl+ejKam/vB6gmCRC8TXJn+kHaZ2QPoYDCchY0eMo7m7XISvqesTADlzAKo2cCYs8H8JSPVxY5UgEiZEACbxuzMSVxEGBdnTiUjVnxf5NjKvkWSe3Uo2EJIikyUY0B3zcb5bC8bQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uJsTUGGd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B9A7C4CEC3;
+	Fri,  1 Nov 2024 02:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730426819;
+	bh=g8Fx5TTJzV1MuTCeRPULLGaYpS2ORG7ZcWbYMH2W/Ds=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=uJsTUGGdvGAFC/ue1WVQ4iFaOP8LD/iC9zBiDnAebPj2s7DQngOzI+E1Lfj4CePUL
+	 WI3AM3m7u5aL2liENGaCjlCDR0BmYoY8Is/mbSx09xf0PJU5TgVu+KLqYFbxtx0wsr
+	 EGhsTEC31Hz6pldqSszc9IsmBO4+CJCxeSoCC9YJ4fip96vnWHw018w3X423mZrE9T
+	 WME4NAtz+c5smY8xmknveYHW5E+oWJdbhxN4iRAfUKmtIeJeXPdv+x1WEGPYewkdtS
+	 FUUjQvwqxUIaV0WT3GGQioK24lGmUv5OPUWTe+e1NxpuQa5XeFvVjGUwcDaWhI/MV+
+	 DPDVeGr8OWkLA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11EC2E67496;
+	Fri,  1 Nov 2024 02:06:59 +0000 (UTC)
+From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Subject: [PATCH RESEND v4 0/3] support for amlogic rtc
+Date: Fri, 01 Nov 2024 10:06:46 +0800
+Message-Id: <20241101-rtc-v4-0-14e1ed486ed8@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-5-tmyu0@nuvoton.com>
- <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de> <20241024-cryptic-giga-mole-54e2b5-mkl@pengutronix.de>
-In-Reply-To: <20241024-cryptic-giga-mole-54e2b5-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 1 Nov 2024 09:44:05 +0800
-Message-ID: <CAOoeyxU6d=tgW-=mYG4Aw=SORyXLPgfipYYcwVhv8s=0O--7Sw@mail.gmail.com>
-Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+To: Yiting Deng <yiting.deng@amlogic.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730426817; l=1589;
+ i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
+ bh=g8Fx5TTJzV1MuTCeRPULLGaYpS2ORG7ZcWbYMH2W/Ds=;
+ b=L6jDG5I4ppkE3/ogU72kAKSdhg5iKkHL41Adh5bjA13FwGiJHkGApvFLyAI1c0QSHcSAC3jyG
+ 9nLMw4aoC9yA7LyDm5A4LO/vPzO/bt3+O4KOC8nDVwyRaPKvcPsoS2c
+X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
+ pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
+X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
+ auth_id=107
+X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Reply-To: xianwei.zhao@amlogic.com
 
-> |   CC [M]  drivers/net/can/nct6694_canfd.o
-> | drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_sta=
-rt_xmit=E2=80=99:
-> | drivers/net/can/nct6694_canfd.c:282:22: error: variable =E2=80=98echo_b=
-yte=E2=80=99 set but not used [-Werror=3Dunused-but-set-variable]
-> |   282 |         unsigned int echo_byte;
-> |       |                      ^~~~~~~~~
-> | drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_rx_=
-work=E2=80=99:
-> | drivers/net/can/nct6694_canfd.c:677:34: error: variable =E2=80=98stats=
-=E2=80=99 set but not used [-Werror=3Dunused-but-set-variable]
-> |   677 |         struct net_device_stats *stats;
-> |       |                                  ^~~~~
-> | cc1: all warnings being treated as errors
->
-> If compiling with C=3D1, sparse throws the following errors:
->
-> | drivers/net/can/nct6694_canfd.c:417:14: warning: cast to restricted __l=
-e32
-> | drivers/net/can/nct6694_canfd.c:750:9: warning: cast to restricted __le=
-32
-> | drivers/net/can/nct6694_canfd.c:777:32: warning: cast to restricted __l=
-e32
->
-> Marc
->
+Add rtc driver and bindigns for the amlogic A4(A113L2) and A5(A113X2) SoCs.
 
-Okay! I will delete these unnecessary variables and correct the error in
-the next patch.
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+Changes in v4:
+- Keep the same order as as in properties.
+- Link to v3: https://lore.kernel.org/r/20240910-rtc-v3-0-1fa077a69a20@amlogic.com
 
-Thanks,
-Ming
+Changes in v3:
+- Perfect the binding description and rename binding.
+- Using dev_err_probe function correctly, and modify commit message.
+- Change placement about MAINTAINERS.
+- Link to v2: https://lore.kernel.org/r/20240903-rtc-v2-0-05da5755b8d9@amlogic.com
+
+Changes in v2:
+- Modify bindings clock name and perfect the example.
+- Fix some bug in driver, and use dev_err_probe instead of dev_err in probe process.
+- Use RTC API to handle calibration.
+- Remove unused func and rename driver file name.
+- Link to v1: https://lore.kernel.org/r/20240823-rtc-v1-0-6f70381da283@amlogic.com
+
+---
+Yiting Deng (3):
+      dt-bindings: rtc: Add Amlogic A4 and A5 RTC
+      rtc: support for the Amlogic on-chip RTC
+      MAINTAINERS: Add an entry for Amlogic RTC driver
+
+ .../devicetree/bindings/rtc/amlogic,a4-rtc.yaml    |  63 +++
+ MAINTAINERS                                        |   8 +
+ drivers/rtc/Kconfig                                |  12 +
+ drivers/rtc/Makefile                               |   1 +
+ drivers/rtc/rtc-amlogic-a4.c                       | 473 +++++++++++++++++++++
+ 5 files changed, 557 insertions(+)
+---
+base-commit: 658b3fec5fc0ef3c016c4a7eedac1a5f3b8c0151
+change-id: 20240823-rtc-127cd8192a13
+
+Best regards,
+-- 
+Xianwei Zhao <xianwei.zhao@amlogic.com>
+
+
 
