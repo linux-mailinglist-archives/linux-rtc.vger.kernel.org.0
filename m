@@ -1,178 +1,78 @@
-Return-Path: <linux-rtc+bounces-2445-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2446-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346459BAE7D
-	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 09:49:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 300789BB7AE
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 15:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1682284486
-	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 08:48:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C065A1F24272
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 14:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865001AAE27;
-	Mon,  4 Nov 2024 08:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="arkw82XE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C350178CDE;
+	Mon,  4 Nov 2024 14:25:50 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A0B1AA7BE;
-	Mon,  4 Nov 2024 08:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C6C4C62E;
+	Mon,  4 Nov 2024 14:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730710135; cv=none; b=Ur74W9pmczwgVi2SApsb/xarucIB7/8J/+oeKz4gW5BQGB1OHLzG2eMOk4w0QlnZDvxfEl/6zRf0BwqjzXJp7zFFY/GfjdQZd1XvPUBwD1y+we+Rv/brLZjV7IEXba3GFhebJvRSpVRbAJ8H6hUZKoF2I/8FldLPFf1yvyDsf9g=
+	t=1730730350; cv=none; b=XY+WlD2zejNJ/wwLvRqrPujPMhglvhUlGY4Rbu4R3ZrfKgME2Q2ryGxpra4cdYeoMSx0VNitPI6TGMbpiWyC/JM2Jjdd5LkvCFMfKfd8ro5kbcWgFKgHS5yeRCjjup+HDHbzL/vBAyHqEGa5IUeG4GoOgpkQbpYaSPqazrHVm8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730710135; c=relaxed/simple;
-	bh=5+i72FmZ741eQj/KKoKDxRcngb3xinsXBjALXLspk8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eZosqDKmurhGYI7Co3nmxI9l6w88aG5YvISjl/iB2U225QvsFsxGarAyT3P9S4OqljQiaYgyt+soO05e6vlWlIpR3+0eXeWZd3ZrHtYAAl8qIml3FQozz+N2DeNYSCHD88h5UVoF/lyNY0kbBqDEOmsaPhCFLpKRhzJb4/oqMqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=arkw82XE; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5cedea84d77so382036a12.1;
-        Mon, 04 Nov 2024 00:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730710132; x=1731314932; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ZZ+0RjkzenRGrYKXv3Grrd59Lbf3Pn66/QGdrg4mvE=;
-        b=arkw82XEU85j/VEAMfUyq29hPO4qx8mqs6zT/faDy7jpFz9XeNBEbvzfcRNFMP4YKD
-         J6eLGiU11eGsrzwF9BWpsqJMoVhSlxedK+Df5ew70JuSriwpV7h/GymitSdw8Q/Zg01K
-         SpExxsAwJixam4OOfyGkuAHa0zQxdkzGj8WN7jZ3JRSW0jP0597rpHlmlKHuEB9OroIu
-         4OMKdNQYbOqpwFqkXk+s3rodyPuvszmFfnWnHjuqO1MNk0KtaDimEDkrKdzCzP/DiEVw
-         FYvIKMphqSOkPT5KwQKj1ywC9j18Qxn5aV8aUGCjDV6xUtURDCQx51skSbKmeNBhIc3G
-         KmnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730710132; x=1731314932;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ZZ+0RjkzenRGrYKXv3Grrd59Lbf3Pn66/QGdrg4mvE=;
-        b=NYt9nLzi6UCqGcA+abFCy3h55X1Z0Hrrxi94OrB2v4RKCyHBKCbhGYhaWb6K0VdRjS
-         +O44HTlei2PuPM9gvCQXKIDoF8KDdphL7B5X38YjBPalpphDFR456ZeOhY/IlJ3rmInO
-         ZoRdBYV2DRUQT8GfxenZw9NvNVn/AmgagD03e6WQ3Zc0RvCH0/yrQY7E3UU6HjfeOVyB
-         NXv8Q5Gk8hMFAEaxK79RtqUcqEDw/J0dn/qFpvWaGudQfSIRwl/VEui3iKMprY+8s3L7
-         iTAzILk3b2ELOLWSd9SWYzPu2ba10Ftlvr4DNuxeDRPpayUgOJ5g9FX2rl5L017wZlIx
-         LWng==
-X-Forwarded-Encrypted: i=1; AJvYcCUq8R7+k4sTI8388AVzyRud1w3P9bdOf0wFksvmYF0e6raIkd5BTluo4NcX+XaYsXVvV1mtKbuLajI=@vger.kernel.org, AJvYcCW9ozONZvKOPIx4trJ15bk1dV68MG6xFJN7uHPhhhm8c4d8i/8PPU887i0Qoeke+FZlg+rg9HGj2PuSBkR7@vger.kernel.org, AJvYcCWA1jF/GOC1fCAdTEm/e38/qTfms1C4/x8QqfGsZqaR7I9OQbVCSKMsDbyH0qxtg6D6AKzvTO9ooG0bqA==@vger.kernel.org, AJvYcCWnKIZmLudQPNh93zreF04wNJB3mNCcV7EdvzItixKOxSVsTy9huy5AieE8ySDI564qQRaMTsmkhA6U@vger.kernel.org, AJvYcCWxS/LyHlmb6OY72QaxmW8ItTfr195jopys/sNBqoFJ6V58VmL9nzkVfa14EJggdI1AhDFfk3XZvpU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPZqZIu96MWf1NGpB0aovczcP3UqVC1l4kmRZ1CBC66uv9BbTP
-	WTizYsSDlcfvDKv8ae4JrYf2UTWf0YpKq01oM4s9dUGZLHN3DoaR
-X-Google-Smtp-Source: AGHT+IGpRKouQd21becr4NL7JTcNVTWUEzIT1ATcrtRapmmpmOnf8sfq9N/NkZy3dwUV4Zteb6HUlw==
-X-Received: by 2002:a05:6402:274b:b0:5ce:df46:70f4 with SMTP id 4fb4d7f45d1cf-5cedf467240mr505986a12.36.1730710131795;
-        Mon, 04 Nov 2024 00:48:51 -0800 (PST)
-Received: from standask-GA-A55M-S2HP (lu-nat-113-247.ehs.sk. [188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ceac76fb46sm3957953a12.26.2024.11.04.00.48.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 00:48:51 -0800 (PST)
-Date: Mon, 4 Nov 2024 09:48:49 +0100
-From: Stanislav Jakubek <stano.jakubek@gmail.com>
-To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: [PATCH v3 2/2] dt-bindings: mfd: sprd,sc2731: reference
- sprd,sc2731-efuse bindings
-Message-ID: <cd8cc95b59c31418b174bba521dd2599a7929fda.1730709384.git.stano.jakubek@gmail.com>
-References: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
+	s=arc-20240116; t=1730730350; c=relaxed/simple;
+	bh=z0y+HaDyaSIYhvh+RIMunRAMXQMC7d3KvGn6esiCkpk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gRR4samDV6vpILHc3uLXfXSIRv+jBQvYCT1WLdSdfFWYm9iYCbeoTTmlyhGvjgcJKn0tv7LG10hekWrG5gDP0U6ko85EDjcMj/m6c6rmLH1W67Ke+x6CMfNzU0YNlA6SNoWSOapVZa94uS5d22XHt4iGJ2/T7v+7xjfSQkyinYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
+Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
+	by Atcsqr.andestech.com with ESMTPS id 4A4EPXwM062393
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+	Mon, 4 Nov 2024 22:25:33 +0800 (+08)
+	(envelope-from cl634@andestech.com)
+Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
+ (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 4 Nov
+ 2024 22:25:33 +0800
+From: CL Wang <cl634@andestech.com>
+To: <cl634@andestech.com>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <tim609@andestech.com>
+Subject: [PATCH V3 0/1] rtc: atcrtc100: Add andes atcrtc100 RTC driver
+Date: Mon, 4 Nov 2024 22:25:20 +0800
+Message-ID: <20241104142521.1100437-1-cl634@andestech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
+ ATCPCS34.andestech.com (10.0.1.134)
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:Atcsqr.andestech.com 4A4EPXwM062393
 
-Directly reference the sc2731-efuse bindings to simplify the schema.
-Remove the duplicate example from the efuse bindings.
+The atcrtc100 module includes a real time counter with alarm.
+Add a RTC driver for this function.
 
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
----
-Changes in V3:
-- new patch due to a missing dependency in the MFD tree 
+CL Wang (1):
+  rtc: atcrtc100: Add driver for atcrtc100 RTC
 
-Link to V2: https://lore.kernel.org/lkml/ZyExK01iprBHhGm6@standask-GA-A55M-S2HP/
-Link to V1: https://lore.kernel.org/lkml/Zr3X1RoQs7ElTnlJ@standask-GA-A55M-S2HP/
+ MAINTAINERS                 |   5 +
+ drivers/rtc/Kconfig         |  15 ++
+ drivers/rtc/Makefile        |   1 +
+ drivers/rtc/rtc-atcrtc100.c | 479 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 500 insertions(+)
+ create mode 100644 drivers/rtc/rtc-atcrtc100.c
 
- .../devicetree/bindings/mfd/sprd,sc2731.yaml  | 10 +------
- .../bindings/nvmem/sprd,sc2731-efuse.yaml     | 29 -------------------
- 2 files changed, 1 insertion(+), 38 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml b/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-index 8beec7e8e4c6..bd5f2504b44b 100644
---- a/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-+++ b/Documentation/devicetree/bindings/mfd/sprd,sc2731.yaml
-@@ -67,15 +67,7 @@ patternProperties:
- 
-   "^efuse@[0-9a-f]+$":
-     type: object
--    additionalProperties: true
--    properties:
--      compatible:
--        enum:
--          - sprd,sc2720-efuse
--          - sprd,sc2721-efuse
--          - sprd,sc2723-efuse
--          - sprd,sc2730-efuse
--          - sprd,sc2731-efuse
-+    $ref: /schemas/nvmem/sprd,sc2731-efuse.yaml#
- 
-   "^fuel-gauge@[0-9a-f]+$":
-     type: object
-diff --git a/Documentation/devicetree/bindings/nvmem/sprd,sc2731-efuse.yaml b/Documentation/devicetree/bindings/nvmem/sprd,sc2731-efuse.yaml
-index dc25fe3d1841..8672bde24a9b 100644
---- a/Documentation/devicetree/bindings/nvmem/sprd,sc2731-efuse.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/sprd,sc2731-efuse.yaml
-@@ -36,33 +36,4 @@ allOf:
-   - $ref: nvmem-deprecated-cells.yaml#
- 
- unevaluatedProperties: false
--
--examples:
--  - |
--    pmic {
--      #address-cells = <1>;
--      #size-cells = <0>;
--
--      efuse@380 {
--        compatible = "sprd,sc2731-efuse";
--        reg = <0x380>;
--        hwlocks = <&hwlock 12>;
--        #address-cells = <1>;
--        #size-cells = <1>;
--
--        /* Data cells */
--        fgu_calib: calib@6 {
--          reg = <0x6 0x2>;
--          bits = <0 9>;
--        };
--
--        adc_big_scale: calib@24 {
--          reg = <0x24 0x2>;
--        };
--
--        adc_small_scale: calib@26 {
--          reg = <0x26 0x2>;
--        };
--      };
--    };
- ...
 -- 
-2.43.0
+2.34.1
 
 
