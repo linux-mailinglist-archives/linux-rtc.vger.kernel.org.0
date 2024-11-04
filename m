@@ -1,141 +1,147 @@
-Return-Path: <linux-rtc+bounces-2449-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2450-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC2FC9BB824
-	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 15:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C1D9BB83C
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 15:47:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A1811C24F12
-	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 14:41:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54AC81C2152C
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2024 14:47:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2061B6D1C;
-	Mon,  4 Nov 2024 14:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCAA913BC2F;
+	Mon,  4 Nov 2024 14:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoP3CJiR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153721BD4E4;
-	Mon,  4 Nov 2024 14:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C0C469D;
+	Mon,  4 Nov 2024 14:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730731291; cv=none; b=nR1vy8J+rOt1Qtp3ZJDeUG3aipwNATx/8Jxl0ob0Vny39fkfjmzzn3aq1vnnTcQvWx36xRli0y/rAXD4Y3b9ua19ogAGTurWkCBpyKoVy5SLRWwUA8A7Bk3UQiz8+YPfV935grppOPmf2CSImavvMbQGDzm2fP3eG6HbJw5ThVU=
+	t=1730731670; cv=none; b=WhnQz1dHHtPYZBeTay7PuN5ysKd/2qLESI57AsAERIniz+KiRDCrZkec49DLv9cWaQcef+JJnqWZohPDusBPTCDPhgoV+YfF/fKnYs2cGH0HPZXvRy9M/Xgo/B5aZJdRQ7/2DUpuYklIhXA1fw4ub8pBuMlTQE/6zASg0dkbhnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730731291; c=relaxed/simple;
-	bh=lNpGmzLd+GCWWCdmZz3c1IKeP/MN8Qj/Rg03I3d6iNs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YOjbc1OynGokxXaH3IYcQ7nzd2ICcFsvfLCusBZaB/g5UPYzsz7SEANEyQdIU3dkNY9XZ2pJfxV4k7P8JyoH2W+0L7ruWpdSH3PhZqttf3ZY5IKfmx9NXVhryoIpeft4IF6w1s1UfqWqp4M/xtWUatJWLfnkHwC1mGq3BfjwAGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 4A4Ef79l068328
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Mon, 4 Nov 2024 22:41:07 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
- (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 4 Nov
- 2024 22:41:07 +0800
-From: CL Wang <cl634@andestech.com>
-To: <cl634@andestech.com>, <alexandre.belloni@bootlin.com>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <tim609@andestech.com>
-Subject: [PATCH V3 1/1] dt-bindings: rtc: add atcrtc100 Real Time Clock
-Date: Mon, 4 Nov 2024 22:40:53 +0800
-Message-ID: <20241104144053.1136083-2-cl634@andestech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241104144053.1136083-1-cl634@andestech.com>
-References: <20241104144053.1136083-1-cl634@andestech.com>
+	s=arc-20240116; t=1730731670; c=relaxed/simple;
+	bh=yBRdLox7AR0lnzJVu3rczk/oOYlCS1i7p7v3fwiSzNI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jOeMQBtmfNMkIaoy3tyahOiuRngGWdqexfPs4afdXP4bK8Ebhwn0Lk1HNBjzSUZUSam5oKDLhFF9olrtUYLmMh2qqFceZYqsn1ROZCEzq+JjrE8B/+Awb2CB+lqzMAwql2QfP1chScKb7SrVCK6ow2MmFukztuiYBT9l2oJudZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eoP3CJiR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C8DC4CECE;
+	Mon,  4 Nov 2024 14:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730731670;
+	bh=yBRdLox7AR0lnzJVu3rczk/oOYlCS1i7p7v3fwiSzNI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eoP3CJiRJre0lLOiN9ocFcaEgpyn2QnYpjW0xyT4ldSFzrh8jlHncPPO5uT5mRHTB
+	 0KvdZIoBiPoItnJTovC+Vmk6Crh6EIH7fhOIXY6J9JvWpKwMH1cOeysMRbovbA4/fl
+	 qLIEZN/rq4ONNV/s/630gnU/SsZlg6uZpmW2S1tWaz7aJaoF1e5NS2MsQg4HvpFZys
+	 5IhYIA4+ZttvDQjWLbd4YcLun3pHNNymBYploM1eQHLtlPqJsZxGOcNfO85NJrQYdr
+	 gcYfeTJcS178oG5khefu/KRAMNCzRANuXClEqsZ6bwBlfPYNGZEYA0CHRmrCpYgn2n
+	 oPT/Lt1UEnOBA==
+Message-ID: <b01d04d8-56a1-4e16-a8d0-d31895198f95@kernel.org>
+Date: Mon, 4 Nov 2024 15:47:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 4A4Ef79l068328
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/1] dt-bindings: rtc: add atcrtc100 Real Time Clock
+To: CL Wang <cl634@andestech.com>, alexandre.belloni@bootlin.com,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: tim609@andestech.com
+References: <20241104144053.1136083-1-cl634@andestech.com>
+ <20241104144053.1136083-2-cl634@andestech.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241104144053.1136083-2-cl634@andestech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Document devicetree bindings for the Andes atcrtc100 Real Time Clock.
+On 04/11/2024 15:40, CL Wang wrote:
+> Document devicetree bindings for the Andes atcrtc100 Real Time Clock.
+> 
+> Signed-off-by: CL Wang <cl634@andestech.com>
+> ---
 
-Signed-off-by: CL Wang <cl634@andestech.com>
----
- .../bindings/rtc/andestech,atcrtc100.yaml     | 44 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 45 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/andestech,atcrtc100.yaml
+What changed? Explain in details.
 
-diff --git a/Documentation/devicetree/bindings/rtc/andestech,atcrtc100.yaml b/Documentation/devicetree/bindings/rtc/andestech,atcrtc100.yaml
-new file mode 100644
-index 000000000000..cf99cff76734
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/andestech,atcrtc100.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/andestech,atcrtc100.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Andes ATCRTC100 Real-Time Clock
-+
-+maintainers:
-+  - CL Wang <cl634@andestech.com>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - andestech,atcrtc100
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: Periodic timekeeping interrupt
-+      - description: RTC alarm interrupt
-+
-+  wakeup-source: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    rtc@f0300000 {
-+        compatible = "andestech,atcrtc100";
-+        reg = <0xf0300000 0x100>;
-+        interrupts = <1>, <2>;
-+        wakeup-source;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 10342c0fa599..372d7ea53c98 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3357,6 +3357,7 @@ F:	include/linux/mfd/atc260x/*
- ATCRTC100 RTC DRIVER
- M:	CL Wang <cl634@andestech.com>
- S:	Supported
-+F:	Documentation/devicetree/bindings/rtc/andestech,atcrtc100.yaml
- F:	drivers/rtc/rtc-atcrtc100.c
- 
- ATHEROS 71XX/9XXX GPIO DRIVER
--- 
-2.34.1
+In the future, please provide changelog under '---' or in cover letter.
+
+Where is the driver? Why this is sent separately?
+
+>  .../bindings/rtc/andestech,atcrtc100.yaml     | 44 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/andestech,atcrtc100.yaml
+> 
+
+...
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 10342c0fa599..372d7ea53c98 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3357,6 +3357,7 @@ F:	include/linux/mfd/atc260x/*
+>  ATCRTC100 RTC DRIVER
+>  M:	CL Wang <cl634@andestech.com>
+>  S:	Supported
+> +F:	Documentation/devicetree/bindings/rtc/andestech,atcrtc100.yaml
+>  F:	drivers/rtc/rtc-atcrtc100.c
+
+There is no such file.
+
+
+Best regards,
+Krzysztof
 
 
