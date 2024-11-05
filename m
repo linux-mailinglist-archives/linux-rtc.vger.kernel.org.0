@@ -1,103 +1,111 @@
-Return-Path: <linux-rtc+bounces-2460-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2461-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 049439BC553
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2024 07:21:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA5F69BCF14
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2024 15:22:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC9F228303E
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2024 06:21:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C11321C2329D
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2024 14:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877B41CACEF;
-	Tue,  5 Nov 2024 06:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDFgIUEv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B49E1D8DE2;
+	Tue,  5 Nov 2024 14:21:33 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37D61DFE8;
-	Tue,  5 Nov 2024 06:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D34A1D6DB9;
+	Tue,  5 Nov 2024 14:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730787681; cv=none; b=ih3smCWuWoEbV6VlCEHO1c82ZcsLepxipfN7S03Jfuj4sO7bQNClp3cmS9pVz+zDvIpqvYNP7ZArMMp46rdwVqRnUFBI3mcwyiQTpIqTXrjAT/e6/q6iF0KyoAORF2Qsq3wcBaVohSv5/6ucUj/p+mg01i/oyuv2rrhlOqe8RDU=
+	t=1730816493; cv=none; b=O5kf6K6uLxjO/r8unn1yJbYeVYTtkgXNZ1v3+1FNSPSd0pwiC9YiTzdJtQDI/5pbzvs1SlQKve9ge0AXZ1IY17LzsHiLQxw0Z5RdFcCzzaoRXKaMS0sjcjHqbGVtFLjc1CVng/g+/JZj6HY9Omy2CZc7mKty9El9WhchGFcl0qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730787681; c=relaxed/simple;
-	bh=kk8dszoqp8PqiEkZB9fm5YAoTt8ToqdKlYqHvKHmOa0=;
+	s=arc-20240116; t=1730816493; c=relaxed/simple;
+	bh=HnchU3TAxMiEnb4LqA1IIZSHQ3nPshfnOq2ODMOQWR8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IlJS7697aGpqVaEpgQd8jHgV0+YIKxO5wflOiHia7UFc2Hl1LUJkb5pB+ldLjNI4O6bbvH6X6jzxgOA7Vcd6hkQ3dI3Jh87RzPlUPvyzJSIbvx/wk0rnGKfKQnce0EW8LOlhYdbgGoWhyJmbgz67Wx+0NgyU6reS25ArGlqzh3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDFgIUEv; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=WAPAT70NZ+EnLVy5wMQCDvmQ1mDbjc8tVNe3doiQ0CdqLjNLJKmW5QJKe/q2t0TePmBMP+6C3ShHQ0hUbJWd2ZZaHhPSqBsP1cizT9An7WMp/twy0h7+i1BnxjnMOB6Jxmtxxz04mX75NC/ynJTDY0oQ9yQSoGEzGwsIsWWJqww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e2e340218daso5050854276.0;
-        Mon, 04 Nov 2024 22:21:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730787678; x=1731392478; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
-        b=UDFgIUEvoXQ0tOWsfZzd1cNcMKWGiquULIjrzIFwCHnkVplP2eDnjXVmcLVPlfFDMe
-         KQ6qiRkSrjpLMaEM6Byr4D4Q2bh5ZZbxkXwis3FWGZWaJ8jG/tIDSX3TVXVswvjx26rw
-         6IB/Ur+rmXACuoIxpa8QuGq6C6/ttJ04ATeGt9gdGLMKL8eML3RnLH3shH47tzEEwqcq
-         sFct5hre/HVGudfOOMnvwuXZK1Cic4ONXk+3hWAL29PQJge7sBYozlLuDpWFsMuTFD2e
-         i0D9I/9rlxwZOqEQjMM+kOhdhCbv9w9CFHJsohW36p/zQxnT0bHUjSUEgG9pMXv0moqZ
-         iA1g==
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e29687f4cc6so4342250276.2;
+        Tue, 05 Nov 2024 06:21:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730787678; x=1731392478;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
-        b=FtCWOynGII977DVSQlLV7a4hsKaGZpfuH/i01hoEb8OLqcsBqlQtwY/lu6W4Bzr3x/
-         N/f2vO6LVxKTSsl4rDbHcGYbMbijOeIAlPvjRB7CYzUM5QD3ORt7067Byus4mDDNEyQt
-         S6Fs7soDKuWK/HLQbriF0yDF3fdol3YqGj5l7lx3CammjhHRiDcQigBr6Y6Z587oLmg+
-         wGZvcKXa9mMnTQm5cbJ6Oee2TbZgx0DK4gVR+ue6x7aTHtQSVXLvfQegTuFxrggFv/7l
-         A8yZT19UAYmwHvlEMpWTH4DSaECgCP41sX3Jzci6m5eddsVJaIKKPcTAIqvAcuhJRIrt
-         dpsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUi/RTmww2fBBEhsWqJ9/KHrrITWMZpj5STIQw5d9k+Ra/jL6dbQdMsEa9LQdmhUwZbHhNPuVGq598=@vger.kernel.org, AJvYcCVEMTymjrGQlbPG6Js2UUFRG1IKGf6bB1OcUm7yKQ62B8rGvZmIvkRCQxVgwYcE/dqKYCIC1L9Keg4112E=@vger.kernel.org, AJvYcCVI/7mIgZg+iIDJO74Jp/dytKeSqMLQvWNkkHClT7dcXc5ucMJpdschNYUSGFdF0c7PBIj1AbYr/L+gGJ04aHA=@vger.kernel.org, AJvYcCVQ9jkFV2yot1V4G0v7SmjTDxV1ezvqpoPZBjprZuGJJGy9Eg7uBIB+zb7Nc7dKRo0qokRR+GX71sRi@vger.kernel.org, AJvYcCVV2bUUeRfQaEnzYcTJbqP3pkZe95JvP4Dxs4qbst2psN0Iv4a0+nxczqm0sX+TL3wKmq23LZ7BqX9Ym8gY@vger.kernel.org, AJvYcCVrcpzf0qWH+i9h0n4UyAoYiN2ZMJL8QAkL8dKCirEXu9xXQHFDCCwlMDkGEbpuaeBEC/0Z7XwExPLsYQ==@vger.kernel.org, AJvYcCW5uOgORflXjroIlWko1DsoP3ZEf0u7Sjrzj0MnCMc6hRTHVxIlv2v28IPGMYukfQDsZW0tBzs9Epxk@vger.kernel.org, AJvYcCWDeBrSTQObBrgZSLyQwPtZgM2+iQYA3di0r2Zl6blPG7D5E1s6hn8KiU2an3+P/2330sjEg8Zf@vger.kernel.org, AJvYcCWcFjTndcE21ow7Scl64CaeiJgtoDLmZzmd38/JFDoTzBlMeksMZktDy0fvzmJzet7ht1HngbJ5x/wJ@vger.kernel.org, AJvYcCWrEZCgWtO8USER3+roGYiOPHQ9BYlc
- wEYOntV+6fYSQYOvzN/14gEZ75o8HLe14OjKuIcq1S330o2B@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWHGP4ZAPPfIcq23xAHxbqPgWVbn9m11d/au4Dyj9nnlXVY1id
-	CKBvSYr6Rwq65vvv6t6JDqgncMsxdoDPj29Nk5gPCRbyc2IXgdfOtiqgQ3BD9AzuuEV74L++Lsr
-	B+XnmiQu99yBFqErlyAoOeLrRHiA=
-X-Google-Smtp-Source: AGHT+IHa9Wl6kaZMC2Iqh+PZ97OJD2htTC9UI9oFXhLn0ebZGsBU/q2UeprWViXbP5D6nHQs3LLDaTs6iEW2fsyU8bY=
-X-Received: by 2002:a05:6902:15c4:b0:e29:24c:1d82 with SMTP id
- 3f1490d57ef6-e30e5b576e7mr16882810276.38.1730787677760; Mon, 04 Nov 2024
- 22:21:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1730816489; x=1731421289;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WQTogThULkTABxgO4qxQ15BGSdteC82xf8/FCwRDyos=;
+        b=Jwy0mEKCUpjWdK9+ZI9/NqM9gOCRBRAyDTqS4A752Dasep0YBF61q1ZAXuvuFi7yDj
+         WHitm/9wlqaLxGw3RiAVZS4dWbiGDVZbUrTc6xAgjrwlAff6cGOMq37gsqxSVCGmiwaj
+         ZDTWMzSdvvDnmatb97SpbLppJygJ40mIzHYXSTAXpv/PYUHNh8Lamo/Wz6b+IWy1I5b/
+         twafWUeqrvHaFjSkSl5Eu/IpE0k+epMGsV4LX5p0CCY1vpa97C2teqWgP28YDUVbjFI6
+         KiWSpzZhwQjWsJ8s8OeJQtyLXJtfaWBHwiZuiqbL1pjj8wN2+MkDji4D5sePcSv2QPkb
+         N6Zw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAu+evPH0LjaqDbT0/2S+QBsRJcBcwFvOy41RCTzStIJfsnXzUU5ssTG1gNJU44rHtADWa0tntFG04GXw=@vger.kernel.org, AJvYcCXuPIIJLBgtRUD8iiWzfJ3YAUaYYF/wTe7yQhGHyUgaZbQ08NC018SMp+TQi1/tBZBP0NRR8bhCW0TY@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNdFquFfodAhGK6H7fMSBDa0DID4XRzz3liXe2Oaqkkx9TzdtA
+	+GAYs8mIfdDOtWcypRYMse/RXNRrBKq1LB5mILpV4Lg0DnASe4CFyMR9unhb
+X-Google-Smtp-Source: AGHT+IEvSPfGP+sDAxrvN2d7XxFWVf9kLZDc6tHx4FzmN81o/2xNW40FPrk/bLyYCTYTlmHqPi+cBw==
+X-Received: by 2002:a05:6902:33c8:b0:e30:c614:5c40 with SMTP id 3f1490d57ef6-e330254f899mr12484735276.2.1730816489236;
+        Tue, 05 Nov 2024 06:21:29 -0800 (PST)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e30e8a95711sm2402853276.34.2024.11.05.06.21.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Nov 2024 06:21:28 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6ea50585bf2so57881097b3.3;
+        Tue, 05 Nov 2024 06:21:28 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUbKVYp2Gna/m1G5X1qoPX6FLxLdkC2fJUnp8wypA/GBb8/xATQI3qeKPUhnNXuW5p+qCr2Cu+DsiUH@vger.kernel.org, AJvYcCVg5rmANgaqqR9wqpow98FbUXUN4whC1aF8nL19u3lv9MEUDxiheQQVis7D207IqyW0Vj93oHJ/Gc0ng2M=@vger.kernel.org
+X-Received: by 2002:a05:690c:d1c:b0:6dd:c474:9cd8 with SMTP id
+ 00721157ae682-6ea64af0eecmr155730677b3.18.1730816488050; Tue, 05 Nov 2024
+ 06:21:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-8-tmyu0@nuvoton.com>
- <20241026154113.66fe0324@jic23-huawei>
-In-Reply-To: <20241026154113.66fe0324@jic23-huawei>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Tue, 5 Nov 2024 14:21:06 +0800
-Message-ID: <CAOoeyxXmOE5R03Gof9zXS_E+32AFaY-miPN7jNZU+2GGX+nsKQ@mail.gmail.com>
-Subject: Re: [PATCH v1 7/9] iio: adc: Add Nuvoton NCT6694 IIO support
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
+References: <cover.1728377511.git.fthain@linux-m68k.org> <a912689ee714d35c13f4a5fe05df58c662a6dc8d.1728377511.git.fthain@linux-m68k.org>
+In-Reply-To: <a912689ee714d35c13f4a5fe05df58c662a6dc8d.1728377511.git.fthain@linux-m68k.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 5 Nov 2024 15:21:15 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU8_RL9y3o24_jhPJuYb+5RP+PpBKbD7Ndn9fg7EYH_Hw@mail.gmail.com>
+Message-ID: <CAMuHMdU8_RL9y3o24_jhPJuYb+5RP+PpBKbD7Ndn9fg7EYH_Hw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] m68k: mvme147, mvme16x: Adopt rtc-m48t59 platform driver
+To: Finn Thain <fthain@linux-m68k.org>
+Cc: Daniel Palmer <daniel@0x0f.com>, Michael Pavone <pavone@retrodev.com>, 
+	linux-m68k@lists.linux-m68k.org, linux-rtc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Dear Jonathan,
+On Tue, Oct 8, 2024 at 10:55=E2=80=AFAM Finn Thain <fthain@linux-m68k.org> =
+wrote:
+> Both mvme147 and mvme16x platforms have their own RTC driver
+> implementations that duplicate functionality provided by the rtc-m48t59
+> driver. Adopt the rtc-m48t59 driver and remove the other ones.
+>
+> Tested-by: Daniel Palmer <daniel@0x0f.com>
+> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+> ---
+> This patch depends upon the m48t59 driver changes in the preceding patch.
+>
+> Changed since v1:
+>  - Initialize yy_offset in struct m48t59_plat_data.
 
-Thank you for your comments,
-I will make changes based on the part you mentioned in the  future.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
+Gr{oetje,eeting}s,
 
-Best regards
-Ming
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
