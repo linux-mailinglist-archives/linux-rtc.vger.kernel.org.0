@@ -1,123 +1,113 @@
-Return-Path: <linux-rtc+bounces-2465-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2466-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19A0F9BDF86
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Nov 2024 08:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 256929BE1C6
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Nov 2024 10:08:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BD1A1C22E16
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Nov 2024 07:39:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5709B1C21206
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Nov 2024 09:07:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE0D1CEAA2;
-	Wed,  6 Nov 2024 07:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAAE91DA0E3;
+	Wed,  6 Nov 2024 09:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rzZbmJRB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318761CC8A3;
-	Wed,  6 Nov 2024 07:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6733F1D9682;
+	Wed,  6 Nov 2024 09:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730878753; cv=none; b=j0s0e8B0BNbPbbsS3MLPi1CBxugWkyMvLoxdbMdoKseh7g284TIYFlFSEs4XOKzt5vA3LHLy1gRFufRpxj25epf/m+9zPdcApcIJnmUkk0wqnlMLaBVZshlV+U8ShdCGVW/aeEazTx60HHvYA1N8k2/gnyS+dQ5uJotauyJTLDs=
+	t=1730883869; cv=none; b=UmR+LXV6XmOi8+t3QbKbJTFhwdqhhfuvTC2v42oj0Z1QieIZvA0SMZ0cykTvJWn2ap/3Klg/HEWyMYjbkK6BrSpbURpYo1Lhk9bjnrO9DjU6HOaHQ3Ef1N1NDdOMJp1O23AswyofmUm0fQeeb4zPrGpPCjoEUD/g6w701EulRPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730878753; c=relaxed/simple;
-	bh=xuGsBAC66f1EIxXNWuG80EHUZdUuteWHvpgrFCrIJA8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=onBWw9z/S1KAyKGJOWWXW5ewtzwa9IPpcLh1IB1ZW3UzpzddzE9jS+TNG4jxitq216InWBStL99CJK6t7yjPffQYSyX4RUOvWRSRe7x6D20OsiotXkMI60aSogbYvz/nL13QWgLId3nGiqWSXgfqIv6kgg0TkDeVWJOBXwPuJVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6e5b7cd1ef5so53611657b3.1;
-        Tue, 05 Nov 2024 23:39:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730878748; x=1731483548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D/r6tXnUuPwmcrOqEYQI7dbDs3qpnado9Q9kI0QYsBk=;
-        b=saWZrtXo/IVtk8l2hmgOdErdlmwYmpGxebdp6YDHU0J8qighpx57xWkUaWMfXJU8md
-         kGALbUx+ra1fakVebLopftX0avacVK8AGyRggut4gGHdTbGdQYUUVV2ZB0jBzTJBscxK
-         QAGVSRdi3gttNbj0cdRq+mpijgoUVQ+q/sQEJuqz+ZFCvKEMBy7gjES8DTDs/cPQFRMG
-         vTCnHpvnkxLrUYwo3Nqq1sqSrRyqavr6eJ++YZoMsIDVw2VjW+q5SuuUa4HOMSRnMRNJ
-         Gn+SwevlP2R/Nu/mS6Try92dsSMTSwLAtYoES7S4TPUmXVjrLmvHFaRXqF6c4FyDE482
-         38NA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8/Lf7w4m+1lrv6M1rQzCB9To+fWxj/xr4MGpkXwjaTKy7PEEMia7Vj1RcFGlVULP7O8jvolYIzYfr@vger.kernel.org, AJvYcCVCgJ5ruXp0EDWC64kG7UmlbUoCK+HtuqkXt0Z/GPuWSnmfe4f+0Zn8QND+Cf5cbyBjL3GzjZ9sQTlclGxi@vger.kernel.org, AJvYcCWJr24n4JD9JM+xmGMkp4MZjLFkJBmmRvUXU0hwyWdlHS9BuK0642pyNaVI/tPDxfqqUABUVE8MTzYN@vger.kernel.org, AJvYcCWP01+btG/8im2Ez5NBSgJ7jCCOLmR8LLVT1Nbz/2Ijza1nDFzSSOaMR0RP6ynsqo9QZFSmYO3mc2ZPUYA9ssHQ//k=@vger.kernel.org, AJvYcCXVvJRTwofHp0UIFGDlDf2wP58/7+eDIdhtecnOJqpU2Lf2NZDut/OJheCgQcu3QXuhahykv0g3KDT1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yznv0/L9DSfGXjLhkKMynFCvUOiPVuh1/2PREWqo7AAyOuhpcUj
-	IOUaLyo2vQstBxm8C9upY+gJjbA9NfEvBBIWaQYvNlnk6zjiNgAWsnGG1yHY
-X-Google-Smtp-Source: AGHT+IEovY+LJyyVFTjFLxLllDEH8pLPXCouaJ2LPCnBD3qiWglf/tevhpIzch95sfSHIdli7RVeQA==
-X-Received: by 2002:a05:690c:3509:b0:6e5:b2de:8585 with SMTP id 00721157ae682-6e9d8982819mr414480857b3.21.1730878748552;
-        Tue, 05 Nov 2024 23:39:08 -0800 (PST)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ea7beaae0dsm19104977b3.48.2024.11.05.23.39.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Nov 2024 23:39:06 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6e5b7cd1ef5so53611227b3.1;
-        Tue, 05 Nov 2024 23:39:06 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUmXkEXMzg4RSiOG6DgzsW0UfT5cXm43aQdvFbEQRDMqk9u0NWA+Tg2HJjzjKdnnWhWGHeLAoudAVtkFumOwoFR0OU=@vger.kernel.org, AJvYcCV8kE7OhtN0SlUDxJnVL5TgYlNcIqqZBU3224La69B+5aXtxujoNdsp4PxULARkXh2wo+bpomXWKdZ3@vger.kernel.org, AJvYcCVTvrTDEeAPt4QIBbUIFxP5/kccEXKYT3x7aUlWF+nQ48bSqpE2QOahaPrgUAKod+8cQQWXGRbCmVepAZmr@vger.kernel.org, AJvYcCW8Hg+oOVZXZu7vowCANAvtFxWLpBWhmF4K9ogtJxDaYeyIY1+TuXLbvWXEpL5MNE6lLhmnm8DfWIkb@vger.kernel.org, AJvYcCX+Ryzrhlz9+zrOI9d7Be1yba+RczSbOWFjioDCda+BkEMQGF5F66xIH5goVkUl2Di1T2bEgqX53YsU@vger.kernel.org
-X-Received: by 2002:a05:690c:6211:b0:6e3:28ec:1a7f with SMTP id
- 00721157ae682-6e9d8995185mr433595127b3.23.1730878746661; Tue, 05 Nov 2024
- 23:39:06 -0800 (PST)
+	s=arc-20240116; t=1730883869; c=relaxed/simple;
+	bh=14LiskvmrAxH19seuwybTIAIS03TefkfmGN9gcOpSRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nfJtm0fClXrs3/Mv01jPeZT2UnMeoHOBx+aQwLnkYohn0HIaUP7anMxOJvUCvv6i3w5HtqUXwq1/XqRhIjb4nZVpGTYFWcdpOSCp57Vz3WxY76gzAl4HprAuRTgpzEfBQehxm15P0CwLdBaB5QgaoMeNt+tmkAIfwdz+OW9zsCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rzZbmJRB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C73AC4CECD;
+	Wed,  6 Nov 2024 09:04:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730883868;
+	bh=14LiskvmrAxH19seuwybTIAIS03TefkfmGN9gcOpSRw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rzZbmJRBcqbgXgYaBOLVAb4F+VwDv1meTvq6TBFHewgm2Ax2UD6+6FrJ27eIReMxq
+	 dlSxKDl9FhR1If78kCtPjRT8X04YZ4mc+vsUMJTFQvx9z7sFQM7iRIWFqSWsMA9D9C
+	 PTcjuo95TRk7WNj+zsBA7zZ57j8ADRpnNa0bkD/nhnJYwMDXNA4QXXL5TeA72xxPmh
+	 jcUnBoFNOlTLbL0owGm38XvpbioneVAYp3+uyVpOc3cxlPhrbS6Whb0wNzEdlH/5kX
+	 eWfIgZWKRTZuJakpBUP6XnyPlxyvK+vYRG7gAt+a3wLBNY1xBXgyCB3wjNxdQr+jxM
+	 q7WniXc2AkyJQ==
+Date: Wed, 6 Nov 2024 09:04:22 +0000
+From: Lee Jones <lee@kernel.org>
+To: Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: sprd,sc2731: convert to YAML
+Message-ID: <20241106090422.GK1807686@google.com>
+References: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241101095720.2247815-1-claudiu.beznea.uj@bp.renesas.com>
- <20241101095720.2247815-3-claudiu.beznea.uj@bp.renesas.com> <8aa04e346f65bc4fcb0efc47a4f0550a.sboyd@kernel.org>
-In-Reply-To: <8aa04e346f65bc4fcb0efc47a4f0550a.sboyd@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 6 Nov 2024 08:38:55 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVH3CK7Fvfj-jis5Ja+oOFcXN4ntRDfz3Pf9ZJrfFMk+A@mail.gmail.com>
-Message-ID: <CAMuHMdVH3CK7Fvfj-jis5Ja+oOFcXN4ntRDfz3Pf9ZJrfFMk+A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/9] clk: linux/clk-provider.h: Add devm_clk_hw_register_gate_parent_hw()
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Claudiu <claudiu.beznea@tuxon.dev>, alexandre.belloni@bootlin.com, 
-	conor+dt@kernel.org, geert+renesas@glider.be, krzk+dt@kernel.org, 
-	magnus.damm@gmail.com, mturquette@baylibre.com, p.zabel@pengutronix.de, 
-	robh@kernel.org, linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
 
-Hi Stephen,
+On Mon, 04 Nov 2024, Stanislav Jakubek wrote:
 
-On Wed, Nov 6, 2024 at 12:26=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wro=
-te:
-> Quoting Claudiu (2024-11-01 02:57:13)
-> > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >
-> > Add devm_clk_hw_register_gate_parent_hw() macro to allow registering
-> > devres managed gate clocks providing struct clk_hw object as parent.
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Acked-by: Stephen Boyd <sboyd@kernel.org>
-> > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> > ---
->
-> Please fix the subject line to not have linux/clk-provider.h because
-> it's redundant.
+> Convert the Spreadtrum SC27xx PMIC bindings to DT schema. Adjust the
+> filename to match the compatible of the only in-tree user, SC2731.
+> Change #interrupt-cells value to 1, as according to [1] that is the
+> correct value.
+> Move partial examples of child nodes in the child node schemas to this new
+> MFD schema to have one complete example.
+> 
+> [1] https://lore.kernel.org/lkml/b6a32917d1e231277d240a4084bebb6ad91247e3.1550060544.git.baolin.wang@linaro.org/
+> 
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
+> Changes in V3:
+> - remove $ref to nvmem/sc2731-efuse and list the compatibles with
+>   additionalProperties: true (Krzysztof)
+> 
+> Changes in V2:
+> - rebase on next-20241029
+> - drop partial examples in child node schemas, move them here (Rob)
+> 
+> Link to V2: https://lore.kernel.org/lkml/ZyExK01iprBHhGm6@standask-GA-A55M-S2HP/
+> Link to V1: https://lore.kernel.org/lkml/Zr3X1RoQs7ElTnlJ@standask-GA-A55M-S2HP/
+> 
+>  .../bindings/iio/adc/sprd,sc2720-adc.yaml     |  17 --
+>  .../bindings/leds/sprd,sc2731-bltc.yaml       |  31 ---
+>  .../devicetree/bindings/mfd/sprd,sc2731.yaml  | 252 ++++++++++++++++++
+>  .../bindings/mfd/sprd,sc27xx-pmic.txt         |  40 ---
+>  .../bindings/power/supply/sc2731-charger.yaml |  21 +-
+>  .../bindings/power/supply/sc27xx-fg.yaml      |  38 +--
+>  .../regulator/sprd,sc2731-regulator.yaml      |  21 --
+>  .../bindings/rtc/sprd,sc2731-rtc.yaml         |  16 --
 
-OK, I will amend, and respin the PR.
+Is everyone happy with me merging this through MFD?
 
-BTW, I had noticed it too, but since you had Acked the patch, I
-decided not to change it while applying.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+-- 
+Lee Jones [李琼斯]
 
