@@ -1,103 +1,175 @@
-Return-Path: <linux-rtc+bounces-2468-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2469-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EEA89C0A94
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Nov 2024 16:58:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A619C14D9
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Nov 2024 04:49:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAF541F239B6
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Nov 2024 15:58:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88EBCB222B9
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Nov 2024 03:49:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E818215F69;
-	Thu,  7 Nov 2024 15:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35D819E83C;
+	Fri,  8 Nov 2024 03:49:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F5R1QBds"
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="E+ALW2Mn"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74BF2144C6;
-	Thu,  7 Nov 2024 15:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from classfun.cn (unknown [129.204.178.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 724A88F54;
+	Fri,  8 Nov 2024 03:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730995090; cv=none; b=ocHlcs4IyWxWzCgtj/eQ0hpzS23QNqfRmeRAxVs0Ip0Jy5VEUjzEtj9ehfa1Og0cZTmu2cZ6TNb83T2hBSmmNZZvNYtnrkz98DuMKUf3eIuN5wbdFLBGNqb/Dm/ooch26ayVw6opOZkjSd49iIyuoVK/Qp75fNEr5buASltRjTo=
+	t=1731037755; cv=none; b=gvaLsWNhShKBwQL/oxCFpJIPAOuNDIYRChr7BoXc+hX/w/vQwnErWkgrE++BVE2wU7axPnXKk5946oLlKiaQLfnagxjEMLz7uu1fTg2KTVS7OWiZzqALaVKQSVMaojYnhDOuI9cBFZ74wgdv6Lno42J0shjtHaFfzf9K1EuzTZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730995090; c=relaxed/simple;
-	bh=plneM+1V2CG3gd7U8Ad6Sjsx9i7GasALEPDMYwfBw2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aZX2n9sA+q2sSHnkSghewge1XrLfkshVSSbIYDmbpGV7qcqFSAwQ4JBl1Jqfkv7lQZO9+VDiUS9DVhW64u/OY7voJ7wqAFk4xUEsfXDFAxtWhn+exxeCRHVfOx748yYzfUA5exBBr63ZSJEJ4ibqRTb++97FOxYnX3iYWb5cJjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F5R1QBds; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57078C4CECC;
-	Thu,  7 Nov 2024 15:58:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730995088;
-	bh=plneM+1V2CG3gd7U8Ad6Sjsx9i7GasALEPDMYwfBw2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F5R1QBdsymTWTWsOmTxNzAz3SHFGp+ZoOIcA+gQNUHQXTT46U6KOhwYkmJX/nyGdA
-	 RsDJzh6ge3p/9ha6GZ6FnNIMbhLqo/81pKaZ/9lfJ/UVQn2tu6YAE4c79azgUDkWnE
-	 awBVFCYLIuYNHW6ccZkVS+xPl6v4dhxMdJT40Hcw0UZKdmU0lu8BHfi3eiB0t1DWlk
-	 8ItD4zHQWL8dK7TAXMF6vI+Ft8h1/DUoylQglUZsJJH4fLdhygiLVFgzSA0X4J1Gek
-	 q/BXdj/tXrHU06j4e6Pi3vLvcjgjPjD8qxK6arlpBBW63SSJVa1b/IFTDVtTFsnlls
-	 79RiiTYuW83BA==
-Date: Thu, 7 Nov 2024 09:58:06 -0600
-From: Rob Herring <robh@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Stanislav Jakubek <stano.jakubek@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: mfd: sprd,sc2731: reference
- sprd,sc2731-efuse bindings
-Message-ID: <20241107155806.GA2774753-robh@kernel.org>
-References: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
- <cd8cc95b59c31418b174bba521dd2599a7929fda.1730709384.git.stano.jakubek@gmail.com>
- <20241106090509.GL1807686@google.com>
+	s=arc-20240116; t=1731037755; c=relaxed/simple;
+	bh=MXe6IYQzEOrzfZcmjrcC+xeinHkhz6G2TN1/BMXAynw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H0gg32oJrdu4jzrfONHZRE1fp2rUPOf/U6xJeW9r2o37DnkOj9qjNB82xLkRVk3HWex3JVFxyp+WbAjPdDhd2k2vjWIcSYWNjj1rk2rAgB5qjnKSmor3xGJUbzHzM1va1WNAPo/YIgBwJkRHlvmgwTS/MFlXcME09fJLlCsXa3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=E+ALW2Mn; arc=none smtp.client-ip=129.204.178.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
+Received: from [192.168.0.160] (unknown [120.32.101.155])
+	(Authenticated sender: bigfoot)
+	by classfun.cn (Postfix) with ESMTPSA id 2CD777892D;
+	Fri,  8 Nov 2024 11:49:04 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 2CD777892D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
+	s=default; t=1731037750;
+	bh=3B/wDt2bOqNsA638987AnsCuaRwFSHdyN6e3dd6uRWs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=E+ALW2MnvftkIzO17VOsGIQg22QbPsXe9/be2g7Px6bhaYtwj8TYvzBsOxmMG9qxZ
+	 TaZetswj/qwGv/3WW0NWlFX5iLYKHNEgI9fru2ysjzYR5Ehb05WjLXS6Ve1oIADmei
+	 eoZTqSBOtrKCyPPAWju58G0dTUgIIQ8za1/rhogE=
+Message-ID: <6e748aa6-de2c-4a90-b07f-7a9d3e441d19@classfun.cn>
+Date: Fri, 8 Nov 2024 11:48:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241106090509.GL1807686@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7/9] leds: add Photonicat PMU LED driver
+To: Lee Jones <lee@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Sebastian Reichel <sre@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
+ Chukun Pan <amadeus@jmu.edu.cn>, Junhao Xie <bigfoot@classfun.cn>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
+ <20240906093630.2428329-8-bigfoot@classfun.cn>
+ <20241002153536.GG7504@google.com>
+Content-Language: en-US
+From: Junhao Xie <bigfoot@classfun.cn>
+In-Reply-To: <20241002153536.GG7504@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 06, 2024 at 09:05:09AM +0000, Lee Jones wrote:
-> On Mon, 04 Nov 2024, Stanislav Jakubek wrote:
+On 2024/10/2 23:35, Lee Jones wrote:
+> On Fri, 06 Sep 2024, Junhao Xie wrote:
 > 
-> > Directly reference the sc2731-efuse bindings to simplify the schema.
-> > Remove the duplicate example from the efuse bindings.
-> > 
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> > Changes in V3:
-> > - new patch due to a missing dependency in the MFD tree 
-> > 
-> > Link to V2: https://lore.kernel.org/lkml/ZyExK01iprBHhGm6@standask-GA-A55M-S2HP/
-> > Link to V1: https://lore.kernel.org/lkml/Zr3X1RoQs7ElTnlJ@standask-GA-A55M-S2HP/
-> > 
-> >  .../devicetree/bindings/mfd/sprd,sc2731.yaml  | 10 +------
-> >  .../bindings/nvmem/sprd,sc2731-efuse.yaml     | 29 -------------------
+>> Photonicat has a network status LED that can be controlled by system.
+>> The LED status can be set through command 0x19.
+[...]
+>> +config LEDS_PHOTONICAT_PMU
+>> +	tristate "LED Support for Photonicat PMU"
+>> +	depends on LEDS_CLASS
+>> +	depends on MFD_PHOTONICAT_PMU
+>> +	help
+>> +	  Photonicat has a network status LED that can be controlled by system,
 > 
-> Srini, you happy for this to go in via MFD?
+> "the system"
+> 
+>> +	  this option enables support for LEDs connected to the Photonicat PMU.
+[...]
+>> +++ b/drivers/leds/leds-photonicat.c
+>> @@ -0,0 +1,75 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
+>> + */
+>> +
+>> +#include <linux/mfd/photonicat-pmu.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/leds.h>
+> 
+> Alphabetical.
+> 
+>> +struct pcat_leds {
+>> +	struct device *dev;
+> 
+> Where is this used?
 
-Can you? AIUI, you don't have nvmem/sprd,sc2731-efuse.yaml in your tree.
+I used it to print logs, but now it doesn't, I will remove it.
 
-So take patch 1 now and this one will have to go next cycle.
+> 
+>> +	struct pcat_pmu *pmu;
+> 
+> Why do you need to store this?
+> 
+> Can't you get this at the call-site by:
+> 
+>   dev_get_drvdata(cdev->dev->parent)
 
-Rob
+Yes, I will change it.
+
+>> +	struct led_classdev cdev;
+>> +};
+[...]
+>> +static int pcat_leds_probe(struct platform_device *pdev)
+>> +{
+>> +	int ret;
+> 
+> Small sized variables at the bottom please.
+> 
+>> +	struct device *dev = &pdev->dev;
+>> +	struct pcat_leds *leds;
+>> +	const char *label;
+>> +
+>> +	leds = devm_kzalloc(dev, sizeof(*leds), GFP_KERNEL);
+>> +	if (!leds)
+>> +		return -ENOMEM;
+>> +
+>> +	leds->dev = dev;
+> 
+> Where is this used?
+> 
+>> +	leds->pmu = dev_get_drvdata(dev->parent);
+>> +	platform_set_drvdata(pdev, leds);
+> 
+> Where do you platform_get_drvdata()
+> 
+>> +	ret = of_property_read_string(dev->of_node, "label", &label);
+[...]
+>> +static const struct of_device_id pcat_leds_dt_ids[] = {
+>> +	{ .compatible = "ariaboard,photonicat-pmu-leds", },
+> 
+> How many LEDs are there?
+
+Photonicat has three LEDs:
+ - system operation status indicator
+ - charging status indicator
+ - network status indicator
+and currently only one LED (network status indicator) can be controlled.
+
+>> +	{ /* sentinel */ }
+>> +};
+[...]
+>> -- 
+>> 2.46.0
+
+Thanks for your review, I will fix all problems in next version!
+
+Best regards,
+Junhao
 
