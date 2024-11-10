@@ -1,85 +1,85 @@
-Return-Path: <linux-rtc+bounces-2483-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2482-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 812529C34FB
-	for <lists+linux-rtc@lfdr.de>; Sun, 10 Nov 2024 23:06:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 044139C34FA
+	for <lists+linux-rtc@lfdr.de>; Sun, 10 Nov 2024 23:06:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B32E91C20BC1
-	for <lists+linux-rtc@lfdr.de>; Sun, 10 Nov 2024 22:06:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF8E51F21458
+	for <lists+linux-rtc@lfdr.de>; Sun, 10 Nov 2024 22:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2F171581E5;
-	Sun, 10 Nov 2024 22:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84153157487;
+	Sun, 10 Nov 2024 22:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Sfo4Pljn"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CVBsWRHZ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B108D15749A
-	for <linux-rtc@vger.kernel.org>; Sun, 10 Nov 2024 22:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94BB450EE
+	for <linux-rtc@vger.kernel.org>; Sun, 10 Nov 2024 22:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731276392; cv=none; b=dP0nYqqoaD1MobsLsOKYsrC6G6f99Aldn/Jm++JhPzdWgF9mybYwVE+hyqesYaHQewU0nZr2HXA2L8UEnbaZyzukQ+6bZTZXyZRQgnlqaWm3s/02NsPmOkM5xRzjXNPIosdaHtXbupi3VJVAt87DyD4LFVwloawK9Xy1IpmWEh4=
+	t=1731276384; cv=none; b=rgi/acYOybLFszLdUpuNvqPjwMYtleo7Pw7iG1wPAUXSWFx7T1Yl8e78s/Ru6GyKmvRwC+LEFDggEIfMB+2O1d1k1ZCiHlqohjSCFAH59SmoS5QUBuEY4QesaseKHfRU4rIfsd69wMwFE9qM4KjK70yZNdNoJgNea2VADotmbgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731276392; c=relaxed/simple;
-	bh=15oQAKuPz0WmNrTe2CjfiB+Zr1UKINPI3S9UmNI762Y=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o3qfUkOanyB6Fh+l17dUhpfrcfJ2BeKNO/t/tzB1A5PyCgind6+VZ0KtwmxdZ1Wd/Qa1i8uIoBxULtTlRTcP9xkvDucYatRUJ2kmXOUlCieQ/AAHI0V0chJNHZkpHqEKmFVLGrvsUX7c5wIL6ZFWVh7l13uazd7zz67kh63zNOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Sfo4Pljn; arc=none smtp.client-ip=217.70.178.240
+	s=arc-20240116; t=1731276384; c=relaxed/simple;
+	bh=jtjVj7uEVkTPuyl0/UBjs82HBG/dxnpUk936HbGnmfo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MjCQFun9S9EHL8YK6mIlwVFv31UeqpchZSvg8LcvfPNTxWtydkmGcJwxfdHD1wGJg/brTnW2PgM8kGXZUSQetKBLHYBl0IGETPauyDNA19UzvH3yBgPwwxFMCNp3bpz+rYH06+qDkCSrYuP8NG3FkWzd2l2BWLH2DoflmFJxHi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CVBsWRHZ; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay7-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::227])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 94CBCC10A6
-	for <linux-rtc@vger.kernel.org>; Sun, 10 Nov 2024 22:06:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4138D20003;
-	Sun, 10 Nov 2024 22:06:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DFC2A1BF203;
+	Sun, 10 Nov 2024 22:06:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1731276374;
+	t=1731276381;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zUdaOedIQ8kUg4x9LzwEvFzayNO8i4Q73skUB7XP6nE=;
-	b=Sfo4PljnlqS27SB2PJ9FfKpI2ZiaRbV7otawTkMzyTbtUY0PINozJKZmopnIPKCfOG3uJz
-	yR+6J3euujKK8ebiqYr/Zz1QKLrLAx/J+ow4JaMbuxZqIrd4L6+Ai1HRgqQ6RKV67yBTY6
-	iekNdnPSR4PFWY5YWrT/oEHfbWZPd6GC8teEQpfUMxwYiQ8HOr2B4MW9MvH+cWXm71rAVU
-	ZBeIFS3uZHqJgVgVS6q8YXxlRlcRyM1dUk3AT8eVI386TEiEJhRj1mss9YMBf49xmzIXYi
-	Zv2w58JkepakbW5A0GHD1nfNudjb1jZZ18C9hEBagpCyGRc1P41YNBhmEeb7zg==
-Date: Sun, 10 Nov 2024 23:06:11 +0100
+	bh=bQz1lihayK/eUgdbYXt5xn8yjeP46uSwZN1igxYJxl4=;
+	b=CVBsWRHZuQKkvgmi11xzcwP7SONMMPU3mNNOGv+n8eIRt28c5YquPdrCek6AxHgy6FMUK4
+	YT8eXthh5ZAAkdwSH0hOapxcQZSamThEZWkQCfrrocJHYgC6iXLybQgqaYXDFVx44qZIGO
+	AoEkRTlsnYlh4SpwGPHG17y+NVMgJh2yW8KJir7JLxhR6g/0JULqjU5FOpTKCeRdwDwTqx
+	16mc12zGCo/rUoWxVwpPO4YqdzjQcaiVI4Y+RU7TCko7+Ymm0vkllZcc6tC0CY/tRGKzLK
+	4w9l/VsUsMxXOIibdE8q9nep1zq69nY7XWfi9NoqT21Dafvehx/+PJRBsV33mA==
+Date: Sun, 10 Nov 2024 23:06:20 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: patrice.chotard@foss.st.com, lee@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	Jinjie Ruan <ruanjinjie@huawei.com>
-Subject: Re: [PATCH] rtc: st-lpc: Use IRQF_NO_AUTOEN flag in request_irq()
-Message-ID: <173127618343.3020900.8341724701726838297.b4-ty@bootlin.com>
-References: <20240912033727.3013951-1-ruanjinjie@huawei.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: Switch back to struct platform_driver::remove()
+Message-ID: <173127618342.3020900.5275304849577747153.b4-ty@bootlin.com>
+References: <20241007205803.444994-6-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240912033727.3013951-1-ruanjinjie@huawei.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241007205803.444994-6-u.kleine-koenig@baylibre.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Thu, 12 Sep 2024 11:37:27 +0800, Jinjie Ruan wrote:
-> If request_irq() fails in st_rtc_probe(), there is no need to enable
-> the irq, and if it succeeds, disable_irq() after request_irq() still has
-> a time gap in which interrupts can come.
+On Mon, 07 Oct 2024 22:58:03 +0200, Uwe Kleine-König wrote:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
 > 
-> request_irq() with IRQF_NO_AUTOEN flag will disable IRQ auto-enable when
-> request IRQ.
+> Convert all platform drivers below drivers/rtc to use .remove(), with
+> the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] rtc: st-lpc: Use IRQF_NO_AUTOEN flag in request_irq()
-      https://git.kernel.org/abelloni/c/b6cd7adec0cf
+[1/1] rtc: Switch back to struct platform_driver::remove()
+      https://git.kernel.org/abelloni/c/e5eab1aeae76
 
 Best regards,
 
