@@ -1,114 +1,105 @@
-Return-Path: <linux-rtc+bounces-2477-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2478-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 475609C2E3D
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Nov 2024 16:30:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ABE89C34EA
+	for <lists+linux-rtc@lfdr.de>; Sun, 10 Nov 2024 23:03:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 014E32823F0
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Nov 2024 15:30:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B4812816D2
+	for <lists+linux-rtc@lfdr.de>; Sun, 10 Nov 2024 22:03:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05D719AD78;
-	Sat,  9 Nov 2024 15:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459D0156F55;
+	Sun, 10 Nov 2024 22:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Obk2G2Xv"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Rns4DMup"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6473C2233B;
-	Sat,  9 Nov 2024 15:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7451C28E;
+	Sun, 10 Nov 2024 22:03:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731166233; cv=none; b=Tl+lqFOQfBPGZ6TomAeBTQ5GPkL8UYguJqUGtVh78mCxEv6EgJEQ/zGTYpvuWSCKyg5RK7fpJIS7M6GuHCyhy82z4FHmFy05nRw1gGmcfNlWCH0UxHbSdYblJOV93zIB7bvV4mNc6TiJ+bEvo9hODcySwjHLvRg5K/wd7Mouedc=
+	t=1731276213; cv=none; b=qqkvVbFpWxhM9blFq/Oq++uDaneagLHBhtcWDfAwUxoJngTmjGMuCQyT0hbh79S7u6K+y4RJCbaUAGP5GxQOkke3x+8pGgxHK4WgYxhsJOb8SoEK7RK8FgRldznNBM91eeK1yYBCCyG5fgdIC01KN5XJy6SwOrH3LMvlIF3Q/Ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731166233; c=relaxed/simple;
-	bh=roFrbOlCT/sdsb/tZqBh3bDN6GPUXZ4uT1VhJyLd4xY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p42BEJdmw8VAlbYmP2ILG3jmzeDy+25t5f1T3QYFiSOawEPsvkPfmTNwoaQzs2/3WUfW67udpQpvqenM1hAVJYcSV2ej4Tu9Nb9Hdl2Gvo6EPiWHwVRck5W69KQcknED9RPkiCEhXj5laqnQ02HJR7rR+yilD17Fb9et5NFxLTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Obk2G2Xv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0C9C4CED5;
-	Sat,  9 Nov 2024 15:30:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731166232;
-	bh=roFrbOlCT/sdsb/tZqBh3bDN6GPUXZ4uT1VhJyLd4xY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Obk2G2XvDl+JhN7ezrwoa9gB9DYov1d4F4JJCcVdhq0BRmvJmpsBBpohcptgqWffz
-	 ZFCYNsdT+fMT9YVilzxrJ+DH7kPfjwwWHQghrDqOss/KrMsCECNfgNy3Ub1tUwRMfF
-	 dbP511TBFsOLo8ENotJJbhQyGSXL/oH+AunZpTKwauCKp8rti1Gd2gTK1RdvFp2AvY
-	 t8WtUf40AThvZCJ0CsnUvJzVguOedpbwsGpcfmM/K4LdL6eivg3YxEFDfODu3NiJNA
-	 Gzxr9xh1QPZ6CdniS9tJVB66w7mZnNpIhbuUrt9tx9MoZoNn9R81WPIGZfyl9rXVkD
-	 d6+YTgDk7FJ3A==
-Date: Sat, 9 Nov 2024 15:30:22 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Stanislav Jakubek <stano.jakubek@gmail.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>, Srinivas
- Kandagatla <srinivas.kandagatla@linaro.org>, Sebastian Reichel
- <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
- <broonie@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
- devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: sprd,sc2731: convert to YAML
-Message-ID: <20241109153022.4af7b433@jic23-huawei>
-In-Reply-To: <20241106090422.GK1807686@google.com>
-References: <efd200c3b5b75405e4e450d064b026f10ae2f8e0.1730709384.git.stano.jakubek@gmail.com>
-	<20241106090422.GK1807686@google.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1731276213; c=relaxed/simple;
+	bh=pqRqI2jmd4AdLey0jMIMasD26E9RLTsTefIdt/wcjcE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sztv+PjMvrOLmiYjai+x21UfeIEJSRmdvTGdqyZN7i3VeOd6fE0tGVU6qD2hblgNh5Hl1JW0tAE8Kt664XA0WHyAnO2kEkDDDEiDt74ez5IczyoLnquFzcxlk1kF4hVZOKuO8J8ncJPZQibqeUn5poYZhIF+Rs4t+Truyv0YOVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Rns4DMup; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9A4CD1BF203;
+	Sun, 10 Nov 2024 22:03:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731276202;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tWhowCiinxkZBttCctlBPj85PTRboz8ciP7T5QcNJGg=;
+	b=Rns4DMup/Zg21qWpZWnrWdvk/k/iS1yuTfyx8O6WuFMftNitR70TSv0nRHj6tNs1fFFWhC
+	/sGF/1oGoxN3wpuaLDfgF09JP2jVeGZdEsNzQe3rzGi1EMtUFKLfEHNRWhPREMmRLhllnB
+	d/dZEML6MBGCgf5AIL6xnW6vsMuKZ98vunLD/YqDn2Xlve649nLQckxAR1TblmaC4ELHf9
+	/d518Q8nYmR26zqqe+PGcjD0u75eiQl88Wve8BytkaQqEbtDUx4VwFqiHsYNjZTJegizlo
+	LnyPdwLYtEhbgLSRNwiYqHu4x1tbc/0hx0l9KunlyhNHr5JwtfCCR4rdAlw/AA==
+Date: Sun, 10 Nov 2024 23:03:20 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	magnus.damm@gmail.com, p.zabel@pengutronix.de,
+	Claudiu <claudiu.beznea@tuxon.dev>
+Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: (subset) [PATCH v6 4/9] rtc: renesas-rtca3: Fix compilation
+ error on RISC-V
+Message-ID: <173127618341.3020900.11768591767157204558.b4-ty@bootlin.com>
+References: <20241101095720.2247815-1-claudiu.beznea.uj@bp.renesas.com>
+ <20241101095720.2247815-5-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241101095720.2247815-5-claudiu.beznea.uj@bp.renesas.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Wed, 6 Nov 2024 09:04:22 +0000
-Lee Jones <lee@kernel.org> wrote:
-
-> On Mon, 04 Nov 2024, Stanislav Jakubek wrote:
+On Fri, 01 Nov 2024 11:57:15 +0200, Claudiu wrote:
+> Fix the following compilation errors when building the RTCA3 for RISCV:
 > 
-> > Convert the Spreadtrum SC27xx PMIC bindings to DT schema. Adjust the
-> > filename to match the compatible of the only in-tree user, SC2731.
-> > Change #interrupt-cells value to 1, as according to [1] that is the
-> > correct value.
-> > Move partial examples of child nodes in the child node schemas to this new
-> > MFD schema to have one complete example.
-> > 
-> > [1] https://lore.kernel.org/lkml/b6a32917d1e231277d240a4084bebb6ad91247e3.1550060544.git.baolin.wang@linaro.org/
-> > 
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> > Changes in V3:
-> > - remove $ref to nvmem/sc2731-efuse and list the compatibles with
-> >   additionalProperties: true (Krzysztof)
-> > 
-> > Changes in V2:
-> > - rebase on next-20241029
-> > - drop partial examples in child node schemas, move them here (Rob)
-> > 
-> > Link to V2: https://lore.kernel.org/lkml/ZyExK01iprBHhGm6@standask-GA-A55M-S2HP/
-> > Link to V1: https://lore.kernel.org/lkml/Zr3X1RoQs7ElTnlJ@standask-GA-A55M-S2HP/
-> > 
-> >  .../bindings/iio/adc/sprd,sc2720-adc.yaml     |  17 --
-> >  .../bindings/leds/sprd,sc2731-bltc.yaml       |  31 ---
-> >  .../devicetree/bindings/mfd/sprd,sc2731.yaml  | 252 ++++++++++++++++++
-> >  .../bindings/mfd/sprd,sc27xx-pmic.txt         |  40 ---
-> >  .../bindings/power/supply/sc2731-charger.yaml |  21 +-
-> >  .../bindings/power/supply/sc27xx-fg.yaml      |  38 +--
-> >  .../regulator/sprd,sc2731-regulator.yaml      |  21 --
-> >  .../bindings/rtc/sprd,sc2731-rtc.yaml         |  16 --  
+> ../drivers/rtc/rtc-renesas-rtca3.c:270:23: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>   270 |         tm->tm_sec = bcd2bin(FIELD_GET(RTCA3_RSECCNT_SEC, sec));
+>       |                              ^
+> ../drivers/rtc/rtc-renesas-rtca3.c:369:23: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>   369 |         tm->tm_sec = bcd2bin(FIELD_GET(RTCA3_RSECAR_SEC, sec));
+>       |                              ^
+> ../drivers/rtc/rtc-renesas-rtca3.c:476:11: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>   476 |         cycles = FIELD_GET(RTCA3_RADJ_ADJ, radj);
+>       |                  ^
+> ../drivers/rtc/rtc-renesas-rtca3.c:523:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>   523 |         radj = FIELD_PREP(RTCA3_RADJ_ADJ, abs(cycles));
+>       |                ^
+> ../drivers/rtc/rtc-renesas-rtca3.c:658:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>   658 |         val = FIELD_PREP(RTCA3_RCR1_PES, RTCA3_RCR1_PES_1_64_SEC);
+>       |               ^
 > 
-> Is everyone happy with me merging this through MFD?
-> 
-Sure for IIO bit.
+> [...]
 
+Applied, thanks!
 
+[4/9] rtc: renesas-rtca3: Fix compilation error on RISC-V
+      https://git.kernel.org/abelloni/c/8f315a5c7376
+
+Best regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
