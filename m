@@ -1,56 +1,61 @@
-Return-Path: <linux-rtc+bounces-2516-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2517-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14EB29C48BE
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Nov 2024 23:05:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EBB49C4872
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Nov 2024 22:48:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1DC6B29EAF
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Nov 2024 21:15:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 081D81F22A70
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Nov 2024 21:48:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115CB19D09F;
-	Mon, 11 Nov 2024 21:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DC71B07AE;
+	Mon, 11 Nov 2024 21:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="krU2bcpK"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ORgrNDsA"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B000165F1D;
-	Mon, 11 Nov 2024 21:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AD038F83;
+	Mon, 11 Nov 2024 21:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731359736; cv=none; b=Cavsgkz6dyDmOipXfPnhCkVZ0cSajrs2/SPSwRuCZX05omR2pGq/GJ8jdHMwvjxT5UmgzoV6fX0gT/7p0tvNmjRu2V+EmN+ijQVkv+L2KkOoC+dKsv6Pfqc/sKC6PQa2fJ08YrhfPr1LkIMNythxvXDQrhU3XDYgS3xYECOmj/Y=
+	t=1731361679; cv=none; b=GEwyzeVv4jKwOa+/qjxfDhOYjVFXGXnWJRKe717Ms8gWx2wy3PmDSc3Q3aaJ9BGRLSrVKkeF/H3RUqPVFX7wH7qp7XYeBaH62FViWcq/iWwqmFuwYEmT+mIqGUuNZxv7715wPchU5lmBZUJMZwvbjZWIGCuSg0cZxYbxhZlROqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731359736; c=relaxed/simple;
-	bh=3HkoC7qF3wi+INF8yzbmJK6OkoL9iD18zgwWERBqtwA=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UiTm3qer1mL/gBUWgdzHYPUL9FyJtzvdo0ib+JMKqs5Eb3q29hwqhAnj0R7qDxo4p5ZUF1HA7YsoG8J+UwZO4JCpNtuTn8gGYiv/iKYSQOewQ8nhGRMzWzRMpAKuo46YNY/uTgBCESIu9MlBxb4JZFkecVWtAtCrhefW4A7YN0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=krU2bcpK; arc=none smtp.client-ip=217.70.183.200
+	s=arc-20240116; t=1731361679; c=relaxed/simple;
+	bh=BSBxAtTcGQpXnmN5PIotiHJ3HpTUs4yvl5mk0Ne2Zpc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KfbGNBexRdljwxzufNSGnkeQqpRroc2K5uoejaJERkKmcgjNOl1Z64NaXrIY5TNZLorMxLNauB11e5vt1ty4UXf+NsOv59xzgTXxf56KDi9nkpPk88e8jGDr5VDT2u9HqnougnBpvcWHHmPNMP06lVLs8aPhYR5YGrjtIsddZFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ORgrNDsA; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5CC8820002;
-	Mon, 11 Nov 2024 21:15:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 30A8640006;
+	Mon, 11 Nov 2024 21:47:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1731359731;
+	t=1731361674;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=95CCffuoHf23gj6Rngk0fanHvAdGlkB8KQvC7LGpDE0=;
-	b=krU2bcpK1xBJfd7LyNURDYSWO6WPhJi0cVyyTS2+/+OMTuXO3eFJq4h1edORPg2fxV+EH7
-	irDJXvs1hWfEKMm/2YGar5ICfTqg15fFExQaswBBDBloQ2mmdfjrT7JpOOspQEaBr/DKC6
-	B/y8mE4k6jBpd2RnNH9hoV4ofPIWywjBJ1NAi7nDVuoVkXpuc16ozqQuNUyVoF5ps07vet
-	+te/6F2EpA3Frfmm6A9Qg6mM8nvDd+UlpmMtEkAg1LemNWIsj0xOD+Jme+Lf+XAuGL/TsW
-	7QFLD7ikonUu8oApNx+kSiXBJEjao2ZrBtVcafLP/1dEyoXUwIP/WiYKVW5ZZw==
-Date: Mon, 11 Nov 2024 22:15:28 +0100
+	bh=g2b4scH3PheFozFLPBiOdBcm1frxxscZgJklXEJTI+E=;
+	b=ORgrNDsApFJAXIlghO7ADZBZShp2JPVY1Y2q72fERJMhFQQ0H0WGk/ugUaRe4z0Rhcti6v
+	gg5YRX3ujHhU5Z0GU/nnqnjIfyjakgMolvoxkLQbBpqDQAOjhPozKghR+zYY/eMYPox8Br
+	8fOs23Vdb8h+h6rODi8IvccP+ILAeBso/HRis3257iSqm4GrGmw8/sbDKHr90Q8rh30Vh4
+	9U7+5osF9YvsVOp05UXXo0fUzcvcAzTiqkuFBuEmMdB2vGBqSdVH2qb+lO2LqGKek1mG9p
+	HenFUlRYr5aGhwth98wy7TjGlEhvw2m4UzpHLQsn8FAEKuqqMifoxaZTuf9I2Q==
+Date: Mon, 11 Nov 2024 22:47:51 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: Re: [PATCH 0/2] rtc: pcf8563: Switch to regmap APIs
-Message-ID: <173135970735.3306948.8954999784918802505.b4-ty@bootlin.com>
-References: <20241010084949.3351182-1-iwamatsu@nigauri.org>
+To: Yiting Deng <yiting.deng@amlogic.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v5 0/3] support for amlogic rtc
+Message-ID: <173136163495.3310623.12434068921554307587.b4-ty@bootlin.com>
+References: <20241108-rtc-v5-0-0194727c778b@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -59,27 +64,22 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241010084949.3351182-1-iwamatsu@nigauri.org>
+In-Reply-To: <20241108-rtc-v5-0-0194727c778b@amlogic.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Thu, 10 Oct 2024 17:49:47 +0900, Nobuhiro Iwamatsu wrote:
-> This patch series switches the RTC pcf8563 driver from
-> i2c_transfer methods to regmap APIs.
+On Fri, 08 Nov 2024 13:54:40 +0800, Xianwei Zhao wrote:
+> Add rtc driver and bindigns for the amlogic A4(A113L2) and A5(A113X2) SoCs.
 > 
-> This series was tested with PCF8563 chip.
 > 
-> Nobuhiro Iwamatsu (2):
->   rtc: pcf8563: Sort headers alphabetically
->   rtc: pcf8563: Switch to regmap
-> 
-> [...]
 
 Applied, thanks!
 
-[1/2] rtc: pcf8563: Sort headers alphabetically
-      https://git.kernel.org/abelloni/c/b263d7c10212
-[2/2] rtc: pcf8563: Switch to regmap
-      https://git.kernel.org/abelloni/c/00f1bb9b8486
+[1/3] dt-bindings: rtc: Add Amlogic A4 and A5 RTC
+      https://git.kernel.org/abelloni/c/12defbf1429c
+[2/3] rtc: support for the Amlogic on-chip RTC
+      https://git.kernel.org/abelloni/c/db26c3d6eb01
+[3/3] MAINTAINERS: Add an entry for Amlogic RTC driver
+      https://git.kernel.org/abelloni/c/cf6f2ddfd039
 
 Best regards,
 
