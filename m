@@ -1,95 +1,64 @@
-Return-Path: <linux-rtc+bounces-2549-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2550-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6625B9C6B08
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Nov 2024 09:55:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DECC9C6B14
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Nov 2024 10:00:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C8E286145
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Nov 2024 08:55:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E993281DD6
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Nov 2024 09:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8FAB18CC08;
-	Wed, 13 Nov 2024 08:54:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D25B18A6A0;
+	Wed, 13 Nov 2024 09:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b="CbhkbCUx"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="O+cSYTJp"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9A218CBFF
-	for <linux-rtc@vger.kernel.org>; Wed, 13 Nov 2024 08:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57A318A937;
+	Wed, 13 Nov 2024 09:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731488080; cv=none; b=fGz8cEqWb+pPXXS6KluFD+vZx/MudxXkD9fMpka56bk9ZmCmYLcWQ7EUredfRwDr5YyshPJeEEoh3CWns09HXipXLZMecNMEYX4xSxOb9FtNEJdrgPzZvNidFIC2CV7OrtHbPqSQqyIE9FlXaal0AqN+FwXjcESRH0nIE60ahrE=
+	t=1731488420; cv=none; b=dl1ZwWFnU4hzuL19BUMl72tfCI4qSv16F/1SjlSjy9mauyyC0tImSiIxFFEHdMr0Zx0SxtV6tgKrCjtSsN8BTW/5xRagjC9OaHzcTKdOTOaVW1+wuoE+7LP84Cs/hJ933xUAWyaY8AYhuB6ygoLBRmkRnm15HGNjDFMVUSdKk74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731488080; c=relaxed/simple;
-	bh=EKXsanBSlktV8j6BmaKsiXKrUF4+8qHGiv//AccUDB8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Na6ogOhynwmMI7HCP4cZ3v+INLsr3npJhSBUbODstoqngZOj2ZJxjCF1fvBUiKUZnr/ADwgUqwlKHxt0sWFoni8+UD04ktT5BeiprhV1kn2mlqqLPzyNzLQCd3PXESUEETvd6oIMGrcIvK4btPPptrMD1SimYGlyR7lidslYr2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org; spf=none smtp.mailfrom=nigauri.org; dkim=pass (2048-bit key) header.d=nigauri-org.20230601.gappssmtp.com header.i=@nigauri-org.20230601.gappssmtp.com header.b=CbhkbCUx; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nigauri.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nigauri.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7206304f93aso5979081b3a.0
-        for <linux-rtc@vger.kernel.org>; Wed, 13 Nov 2024 00:54:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20230601.gappssmtp.com; s=20230601; t=1731488079; x=1732092879; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gEgoAjBfgzailS1tISV2BNkAznvBP4wgjOEuQVpA80w=;
-        b=CbhkbCUx1w66GDKDlzYJT5jYmJnabKxH/v+5L/f9LohHwSZTSiMovs+qSCwXREBmdS
-         gR/eccTX3QsW6/K5QlcC4dBA/DoFAnwyf1VNLvbfTS4WY09JouJA/HlI33M1fchmXlzy
-         Nmwkf+L5sgN0X5JFy2WI502dzb3Jo9bHOoFAD43VuvZqgbRbUAg4w5bMm05AEMxJl4Lg
-         iEDZokxN4c7fRpAVzTZ2u6CJf2OoJLCbIMABAaf34Ci6e6trJlqTyz4HZwvQc2JuS3Nd
-         EmHYjwcBlWGwKdDSmQtTwMgMBb9QQ4wfBtHwnrF2ZhT74G7xhbfpI6KlPYKeDY9Hnff5
-         C8bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731488079; x=1732092879;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gEgoAjBfgzailS1tISV2BNkAznvBP4wgjOEuQVpA80w=;
-        b=AqjE/1JufJcr+i/FGRciShlJD0bgy1hAU7AOnOM7zlirNmz7nMc1zHUL0fovlayM8Y
-         +dPWPRmjfuPo4MaLOkNiCxoOpXP5RA77KDhFYaeyca9TOpuMGyv3BCIIJP91d1WPAYjv
-         yajkpTQlfYMtLRnQ+NwxGrJynl7wROM9pC8rg1XsMAM8k5Bs3xmdlFkW4IfUxyv4EcKc
-         l+W1BIZ1Ij6cdwAsk/IM8Q2JI7j93pRUo9qUBVhp0FLl1fYeTKk2s6YDbYMZdw+BKy+7
-         A3M4GrH/XzjhO6mulWouSC45fPDi15ASJCqzgoLHHppVEyQBfH/IFhL0rzRQwkuhwWqk
-         X5iw==
-X-Gm-Message-State: AOJu0Yw301vLPYFd34veuyntv27CJva/t3ImAOjzbX+xtUDwltN54okP
-	uzXgtaY6EPDaRi5vyHhch/qL0qqaG8oLTpTiqysDNJjwT7n/wY3RpKZK2/UH5LNql+RCqxYnEg=
-	=
-X-Google-Smtp-Source: AGHT+IFuU4Y92FgMstRU7nXxKESV9IJYwrxKQT0+60u3aaUl5uG63Ptgsvg/YBluwzd5Pns5l3wnfQ==
-X-Received: by 2002:a05:6a00:114f:b0:71e:b8:1930 with SMTP id d2e1a72fcca58-72413380e98mr26240502b3a.16.1731488078719;
-        Wed, 13 Nov 2024 00:54:38 -0800 (PST)
-Received: from localhost ([2405:6581:5360:1800:a83:68dd:5f1c:4ed9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7245fe8e286sm317379b3a.16.2024.11.13.00.54.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 00:54:38 -0800 (PST)
-From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-To: linux-rtc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
+	s=arc-20240116; t=1731488420; c=relaxed/simple;
+	bh=w+kbwyCcsp4OkwGLeTAr8r+rxqSs6z8mgmGHDMrLs7o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JZ/YdKaYgshmJf0MOxRLolSBhZMJaTuZ0zltOU0NVssUWYAPg5pr5vF9/+xNc3D27tyB1LbccdITXi21Pudks4HBzhGL30PMgK/u7UHLfL0JMusZ7ducc0nwOm1lDf3fg4y3fGepR1kTCOaC4cdiMidJRR/LwbQVNt2FALCompQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=O+cSYTJp; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 06D74E0003;
+	Wed, 13 Nov 2024 09:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731488409;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E9njZBTIcLfCJhjDXkZM9IcrPjxMe5ftrTxBl5Q+hx0=;
+	b=O+cSYTJpFtM59gEG2fZwS7Kx64rVoZIN/fz8XtKBOJzQMqYjJSxrv3pcM2VZGX9E6YcSvZ
+	emU0OCIPrY7gwusoiN5YBL8JKFiJTvlkli3Fcfl+C94ok0g8Z5vUk5GBG6Yh3vT862KnTe
+	khUuzcc3GVP6/AD3nJ3ou7nvae/zV6+/lOjftJvSkrurn5Hb3nc5VreqnsInfcFSmCBoGp
+	uUGl00j3aNMkHIWhD6Yz67oaGJ4L0W1COTCmsnsm9elzfh4hyrq8S80sOC9i70V4mX6nuQ
+	CHhL3lJv0mOL3HsldCGmhi94uYX+s7oSLUy0kAKdPRb5QsuBmTQPsFUicTpPIw==
+Date: Wed, 13 Nov 2024 10:00:06 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Cc: linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>
-Cc: linux-amlogic@lists.infradead.org,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+	Olof Johansson <olof@lixom.net>, linux-amlogic@lists.infradead.org,
 	Neil Armstrong <neil.armstrong@linaro.org>,
 	Kevin Hilman <khilman@baylibre.com>,
 	Jerome Brunet <jbrunet@baylibre.com>,
 	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	linux-kernel@vger.kernel.org,
-	Heiko Stuebner <heiko@sntech.de>,
-	Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: [PATCH 5/5] dt-bindings: rtc: hym8563: Remove hym8563 binding
-Date: Wed, 13 Nov 2024 17:53:55 +0900
-Message-ID: <20241113085355.1972607-6-iwamatsu@nigauri.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241113085355.1972607-1-iwamatsu@nigauri.org>
+	linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH 0/5] Merge RTC Haoyu HYM8563 into RTC PCF8563
+Message-ID: <2024111309000615fd9fbd@mail.local>
 References: <20241113085355.1972607-1-iwamatsu@nigauri.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -97,80 +66,47 @@ List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241113085355.1972607-1-iwamatsu@nigauri.org>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-The hym8563 binding has been merged to pcf8563.
-Remove hym8563 binding file.
+On 13/11/2024 17:53:50+0900, Nobuhiro Iwamatsu wrote:
+> RTC Haoyu HYM8563 has the same hardware structure as RTC PCF8563, and
+> operates with the same device driver. Therefore, since we do not need
+> two drivers with the same function, this merges HYM8563 into PCF8563.
+> 
 
-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
----
- .../bindings/rtc/haoyu,hym8563.yaml           | 56 -------------------
- 1 file changed, 56 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
+I've seen that but last I checked both drivers are not functionally
+identical so this is not that simple.
 
-diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-deleted file mode 100644
-index 0b9f39ef0edc39..00000000000000
---- a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-+++ /dev/null
-@@ -1,56 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/rtc/haoyu,hym8563.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Haoyu Microelectronics HYM8563 RTC
--
--maintainers:
--  - Alexandre Belloni <alexandre.belloni@bootlin.com>
--
--properties:
--  compatible:
--    const: haoyu,hym8563
--
--  reg:
--    maxItems: 1
--
--  interrupts:
--    maxItems: 1
--
--  "#clock-cells":
--    const: 0
--
--  clock-output-names:
--    description: From common clock binding to override the default output clock name.
--    maxItems: 1
--
--  wakeup-source:
--    description: Enables wake up of host system on alarm.
--
--allOf:
--  - $ref: rtc.yaml
--
--unevaluatedProperties: false
--
--required:
--  - compatible
--  - reg
--  - "#clock-cells"
--
--examples:
--  - |
--    #include <dt-bindings/interrupt-controller/irq.h>
--
--    i2c {
--        #address-cells = <1>;
--        #size-cells = <0>;
--
--        rtc@51 {
--            compatible = "haoyu,hym8563";
--            reg = <0x51>;
--            interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
--            #clock-cells = <0>;
--        };
--    };
+> This series was tested with PCF8563 and HYM8563 on khadas vim3 board.
+> 
+> Nobuhiro Iwamatsu (5):
+>   ARM: multi_v7_defconfig: Add RTC PCF8563 support
+>   rtc: pcf8563: Add support Haoyu HYM8563
+>   dt-bindings: rtc: pcf8563: Add Haoyu HYM8563 compatibility
+>   rtc: Remove HYM8563 RTC driver
+>   dt-bindings: rtc: hym8563: Remove hym8563 binding
+> 
+>  .../bindings/rtc/haoyu,hym8563.yaml           |  56 --
+>  .../devicetree/bindings/rtc/nxp,pcf8563.yaml  |  18 +-
+>  arch/arm/configs/multi_v7_defconfig           |   2 +-
+>  arch/arm64/configs/defconfig                  |   1 -
+>  drivers/rtc/Kconfig                           |  11 -
+>  drivers/rtc/Makefile                          |   1 -
+>  drivers/rtc/rtc-hym8563.c                     | 587 ------------------
+>  drivers/rtc/rtc-pcf8563.c                     |   2 +
+>  8 files changed, 17 insertions(+), 661 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
+>  delete mode 100644 drivers/rtc/rtc-hym8563.c
+> 
+> -- 
+> 2.45.2
+> 
+
 -- 
-2.45.2
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
