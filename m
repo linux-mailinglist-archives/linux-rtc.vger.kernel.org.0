@@ -1,59 +1,61 @@
-Return-Path: <linux-rtc+bounces-2573-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2574-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A35B59D0FAB
-	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 12:28:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC69D9D0F9D
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 12:26:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77E0CB2571E
-	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 11:12:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15DB0B2A8EC
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 11:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBC11194C8D;
-	Mon, 18 Nov 2024 11:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB388198A0D;
+	Mon, 18 Nov 2024 11:12:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GiH2xuyY"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Hs6gpyhY"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D60196C67;
-	Mon, 18 Nov 2024 11:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBB7198A01;
+	Mon, 18 Nov 2024 11:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731928335; cv=none; b=l/qTfhvt4yZtf/dsvUflwW5KbRtmpg1q+SOf114pylHXX6t2irxmOLj+IIrUq1dsVPraTKsEYpToDamTEN+mvR03+pWzibeU9yzKaws/bW50Ldjmku9iWnxcCCgTxtrafmFtOO14ZfNAf+UcYiqQhHkv1EMojsOr3c0mgr2MulI=
+	t=1731928367; cv=none; b=tCu14KCWzKheJt4kIQud1UlJjofzYAR39pb8cII1KLDpP3xLD5ygSwGRQtjSnfdeNVqpQs2xrr2+8d8D81vnD8NovEAX/bNChSPhoyPv9blrbWObX7wBR9Z8j/FbC9sN0h6kdh4W6zyWlyrZv/Kp0Ajik9bKZJEjf3lOtkGBjOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731928335; c=relaxed/simple;
-	bh=nZWt5D/nYLH9D3AVFY+WYyG47RIfin4SWeo/dHY5Jd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BHTrXnoZLoekEakz62q75p86UdLgrB1FKd6nTCO56VGo9Dv0RmUas3CW1vZFiHX92BVqpgb3ms1xW9+ByEmhSTOvIJRJcFpO4PelptJsO2AuzCUmswiUpE80pQ8HQ5B9s1wUTLR/ywC/hNOkoDVlzndXfRnH12Jbr5eeTHSOd3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GiH2xuyY; arc=none smtp.client-ip=217.70.183.199
+	s=arc-20240116; t=1731928367; c=relaxed/simple;
+	bh=r3+TnaMBYDIL91epO5/2SarRsn95qrkddIU6Vic90g8=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mgg1z/RT/4NRaJVi/3AvARtLb0BL7ayTykZ95V9e539YuAuwLQmmEwSi5InP5ddyCA84c5G2oIiELTSI6lRBAu+BhvqYWllIdwvO8hncFx/VGf4SNCxx0AcNRzafl8rqIlE2X8kLrCDedrN8tiY/Mp80h3rVUjirJGVkW5bhKfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Hs6gpyhY; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 63FA3FF807;
-	Mon, 18 Nov 2024 11:12:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7EB7124000C;
+	Mon, 18 Nov 2024 11:12:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1731928331;
+	t=1731928364;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=s2J/oLGaxpU+f1e4cOMmvrSsZLgYaeU8Grzz4u1OMcs=;
-	b=GiH2xuyYOMgtpy21Cc68edmUefBxzE0kGgZWoCTeE/eIaNA5ZMiYnCbf3HqFavJ1UORR1a
-	cjOUWvzYG8QHDqSDOGl+O7lxjP9hg3gLAnQzV8kbX60ULRjyNvsdulHhm5+RGGu7F8Boce
-	wgmDm6EsOCKwCgzb0KI5Ek3s3OXMBRaA5frJbJh35aTRbHOJDy0iAACfZkLIGXIPr/SAAQ
-	9nrpywhk7IVzYr2EmGHdZZfxzarnYwtgQpuCRIG7RzgeNryAhrZWwgO67i6UHViHPugqUJ
-	wrF1s/VeJ+P/IZIeYovY8TTrJiYTDjuVHr0gleoD2gkk4DWt963ydywUZpuS6g==
-Date: Mon, 18 Nov 2024 12:12:11 +0100
+	bh=/tshPBb25NT3wRUZuZ1WxJ6nCXgGL1C9dONS6Lxxy+c=;
+	b=Hs6gpyhYgQPkRPCLrblBOsJS0brsLnLTzrd9WXxaQYn5brfX2rqjko7t3bjcvksqGAtumK
+	c9j7Ft+nrP2Oz2wxsreBGLB01GR6wAkAfac17GBv7PkbWbX4pw98/gFIOksxJZq3jixyQt
+	gG/3UrRNSxQ/t3YAmOO4wy2cfuEIyFjldElLQ5U+nm90VmiZQbFo/F3qeK0jLURZ51Y109
+	xybBqZKLEhTiIf603qGoFhJeG1ws07zEg1AvOk2vKDr+RhZQZ5Cylkz/W2fytOrVOQmOhs
+	k+3e1mKQ9xGlOl0twyUFKoealCFmGecW09E8kFsSpCnmmGH8suMf8zdfmzS/GQ==
+Date: Mon, 18 Nov 2024 12:12:43 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-renesas-soc@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Michel Pollet <buserror@gmail.com>,
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-renesas-soc@vger.kernel.org,
+	Michel Pollet <michel.pollet@bp.renesas.com>,
 	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] rtc: rzn1: update Michel's email
-Message-ID: <173192830951.23080.18159980251324825341.b4-ty@bootlin.com>
-References: <20241114193450.13982-1-wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH] rtc: rzn1: fix BCD to rtc_time conversion errors
+Message-ID: <2024111811124370f0da32@mail.local>
+References: <20241113113032.27409-1-wsa+renesas@sang-engineering.com>
+ <87o72gnvbu.fsf@bootlin.com>
+ <ZzsJQO80dmhce_Mp@ninjato>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,20 +64,30 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241114193450.13982-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <ZzsJQO80dmhce_Mp@ninjato>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Thu, 14 Nov 2024 20:34:50 +0100, Wolfram Sang wrote:
-> The Renesas address bounces, use the alternative one.
+On 18/11/2024 10:30:40+0100, Wolfram Sang wrote:
+> On Fri, Nov 15, 2024 at 08:36:05PM +0100, Miquel Raynal wrote:
+> > Hello Wolfram,
+> > 
+> > On 13/11/2024 at 12:30:32 +01, Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
+> > 
+> > > tm_mon describes months from 0 to 11, but the register contains BCD from
+> > > 1 to 12. tm_year contains years since 1900, but the BCD contains 20XX.
+> > > Apply the offsets when converting these numbers.
+> > >
+> > > Fixes: deeb4b5393e1 ("rtc: rzn1: Add new RTC driver")
+> > 
+> > Should probably be Cc'd to stable?
+> > 
+> > Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > 
+> Thanks, Alexandre do you want me to resend CCing stable?
 > 
 
-Applied, thanks!
+No, this is fine, I believe it is going to be picked up anyway.
 
-[1/1] rtc: rzn1: update Michel's email
-      https://git.kernel.org/abelloni/c/1f7a0c648344
-
-Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
