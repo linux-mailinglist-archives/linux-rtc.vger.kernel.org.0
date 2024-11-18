@@ -1,62 +1,61 @@
-Return-Path: <linux-rtc+bounces-2575-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2576-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AAB99D1209
-	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 14:36:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FD799D1272
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 14:48:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D520A2841B5
-	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 13:36:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66AEA285958
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2024 13:48:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A58A1AA1FD;
-	Mon, 18 Nov 2024 13:32:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5E5192B79;
+	Mon, 18 Nov 2024 13:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eTNRq3PV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gti0D6R6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9484E19E993;
-	Mon, 18 Nov 2024 13:32:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEB541C77;
+	Mon, 18 Nov 2024 13:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731936755; cv=none; b=aeY2EGfTxorQD0P+1CsbcIpF9stJjj9RgF7dYTr7Hg1qFhiZo2NtzyesE7qRrpNCX1YoXdqOR/QXVX8a58u3n6YL8PUKi4GXdT+qcDDEXzRwSBf+UJxPVjG65J8/I1XGS/d3GeWkVN7PD31e9Ie+PtuTJTVpueEV6xDiudeOJPk=
+	t=1731937725; cv=none; b=gMfh8+8ITUZSUcx7z5+RcPRakvYYMOFljF2a8J2Ggy2rnz2Quqqrv71LWqEXv7wLJ62I84nQbntzR2gP0OsZFEEJFb6rdOw0YV+UOCg5RA3bGOKbLNjxwRbWXZaFMtHU7Lqdt8OluDRu1fXeAr5k4vTpQnE5LyZaCmcLKL138Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731936755; c=relaxed/simple;
-	bh=C42YKE7jZahESTSJ5tD6AEtOflxAnn+VErruvV9Zsqg=;
+	s=arc-20240116; t=1731937725; c=relaxed/simple;
+	bh=WKTUs0IhED2ktSdRkiUNwb2ooYdSYFJzD/OZEuRtdUg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eynPlTqrxqXTY4k/zKCBm7IDb8UyCe3ip11GpEnpI/MjeknooyG+nmd2pQ49F79wgQdQ5GjtpzlcsLAMWNPKULq2anbt5jEhsY8LEFL8LQRRfDxKT558yWs1mOO+nK3FND339Rp2sGWWl9BfbY3T9H8xIpBF/yExWZa6q4xJQdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eTNRq3PV; arc=none smtp.client-ip=217.70.183.194
+	 Content-Type:Content-Disposition:In-Reply-To; b=GevyLf+pj1K1aRe0XnXJ0NNe8icIGFrqp/MjFSgKOFwB7npL2gHZMCLVI7WUvYzwBymGI4kIuVc4Xk4LmqIAc/RBfQbg/fDtaHIQSmP8QI6wLLVatud9QsOODBUjhKrwhkj7wU0ILtisWaxl9fM+7awMFd8+sAUcFCDvDg9Wo+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gti0D6R6; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 43F7B40006;
-	Mon, 18 Nov 2024 13:32:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F35D120008;
+	Mon, 18 Nov 2024 13:48:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1731936750;
+	t=1731937716;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cu1ZpBnBIa3rUTwNq4XU3fAcyXszxvoc+KpdBTQ6I4M=;
-	b=eTNRq3PVhFrW3t3LNfqp6uEL4rq1pVsh5cP5qMDByhu4PgW9OGDZTddGjlOk3gqHg22OIW
-	cF13AsJF2E9e7jC+fnPRWE9ujGgru+gEz4ePRCJUFj1KKtvMW2uptFjueTDzWFr5Ozf5/M
-	hQlnF67gVu2EX4GRnf3yWIIAfZmz5oMgsv+K1u0uLdprTWhrI0D/F/si8bR6cyeJi2z2LS
-	KwRcRdzd1QIQNBbVaYwLBqGu5gFuEbRqsootDeQQsK2npHDGGfRaSCFt7pan8yoBKewKP+
-	jdESmdKmJMWVEI+B4WyWJNwtfzY13Nuri43ZzW+r+MyyPpkRHHdgX0u4J4lyCg==
-Date: Mon, 18 Nov 2024 14:32:29 +0100
+	bh=5KedvWKey5BPekgZ33QSyGqNhec7IAEYxlEO+HyVNno=;
+	b=gti0D6R6RJzfhukjTit9/jNRZNer8Wc4I47CfHEBwOOA123LT7sGMvinzRVJauSjPR+RCb
+	1XWl7zuKskAltxCHTnjiqJiBhqF34CzOMoTL+eZxi51LOQddbV0u2djRZAdPXsJJe6gRzB
+	QWWjmwv0WOa3JIIv1I4ikRTzlYuxcf8/68j5qB0ABpAPiFkkZCbaPOhw2z4EJBZ6G0pBDN
+	q/HTMvmAJN5YM4jssLf4ekSJ3IUS64p9f5vMJ5rXFQhBPcVwQTCgn6gxlxk/2sXaF1nZFo
+	PRARuM8G0jSjRzv9BAbytPIk11jloDG0Rv608QXUzs0WLxZR6Nbr5Z4+kd7TLQ==
+Date: Mon, 18 Nov 2024 14:48:35 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Finn Thain <fthain@linux-m68k.org>
-Cc: Daniel Palmer <daniel@0x0f.com>, Michael Pavone <pavone@retrodev.com>,
-	linux-m68k@lists.linux-m68k.org, linux-rtc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 1/2] rtc: m48t59: Use platform_data struct
- for year offset value
-Message-ID: <173193673970.37302.12055966881506116157.b4-ty@bootlin.com>
-References: <cover.1731450735.git.fthain@linux-m68k.org>
- <665c3526184a8d0c4a6373297d8e7d9a12591d8b.1731450735.git.fthain@linux-m68k.org>
+To: linux-kernel@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: (subset) [PATCH 13/15] rtc: brcmstb-waketimer: don't include
+ 'pm_wakeup.h' directly
+Message-ID: <173193770578.39194.10840695643775625403.b4-ty@bootlin.com>
+References: <20241118072917.3853-1-wsa+renesas@sang-engineering.com>
+ <20241118072917.3853-14-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -65,19 +64,20 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <665c3526184a8d0c4a6373297d8e7d9a12591d8b.1731450735.git.fthain@linux-m68k.org>
+In-Reply-To: <20241118072917.3853-14-wsa+renesas@sang-engineering.com>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Wed, 13 Nov 2024 09:32:15 +1100, Finn Thain wrote:
-> Instead of hard-coded values and ifdefs, store the year offset in the
-> platform_data struct.
+On Mon, 18 Nov 2024 08:29:12 +0100, Wolfram Sang wrote:
+> The header clearly states that it does not want to be included directly,
+> only via 'device.h'. 'platform_device.h' works equally well. Remove the
+> direct inclusion.
 > 
 > 
 
 Applied, thanks!
 
-[1/2] rtc: m48t59: Use platform_data struct for year offset value
-      https://git.kernel.org/abelloni/c/a06e4a93067c
+[13/15] rtc: brcmstb-waketimer: don't include 'pm_wakeup.h' directly
+        https://git.kernel.org/abelloni/c/5b42edefd733
 
 Best regards,
 
