@@ -1,64 +1,57 @@
-Return-Path: <linux-rtc+bounces-2603-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2604-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C3A49D5D0E
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2024 11:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBB169D5D1A
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2024 11:15:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFAC2B26F16
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2024 10:11:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A669B21C67
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2024 10:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3EC81DE4FB;
-	Fri, 22 Nov 2024 10:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7881DE2C0;
+	Fri, 22 Nov 2024 10:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YvPCOshk"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eQenMALL"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04161DE4CE;
-	Fri, 22 Nov 2024 10:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BB7B67F
+	for <linux-rtc@vger.kernel.org>; Fri, 22 Nov 2024 10:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732270238; cv=none; b=vEre2BpeHeu4AqXbQXVHzAQooclTO06VG2jFw+jt3a7ii5B7dQ655IYwZJSdDyf/1SkvlkC0XfquTRsPS6N1XRBpWBRnOIpN6ZQcjRa60/WxTznLnvyaf1tMSpWlPjmHCC/nlRgqc/ZreuJqfRPtTKMv2FuAAGMfywut0y6xht4=
+	t=1732270503; cv=none; b=ENQEZ+xIYwNDIVXGf9zxXNUQBeN2tXtZuKcmmkOmAKc6NxBVK4uDv/DTtsgqcteIEhU5Are/S2H1xa4zlsZ9k2szTc3w1TtncNwGtd3Vg7TCxttpNK+0Pn/vnYgf/CApfbnJRXgddiUEFUpVjbl/l2ytEgZEN9UcxAo3cj7Z6KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732270238; c=relaxed/simple;
-	bh=BFy5SRGzFxcUg9C7k/DpxOdFgMegtRxmNa2Re/g2530=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QxZS8UmmApP4E/k75JGA3Q+3xKzSDpf7xi4MygQa7o6ogCNtD+DaJcD3GkjDAzNbO4CXy1mo6aREdnQ7zfFJ/RSwo3fY/ng3b8b5pYJoIX9aFivs7/NqayQpGn/zSESDiNkidAEitZOGRYEAcmDVKbrEbNx9IAa8UMf7ryeCpQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YvPCOshk; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B8B4BFF805;
-	Fri, 22 Nov 2024 10:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1732270235;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Txhc81JR3Ln31TqfibV4BYhT9m2u2q+xnDTcm3jWFd0=;
-	b=YvPCOshkM0KqR19Nq32N9Eksxfysw+o/DMfcY2jVfobV2AIYzpucbpxom8wzvF6ezIK6zl
-	tJJ8xLeCrxRWJBmTyWsCMnsM7fj+pN2rUew2sr+X4QNq2KDM2jKa4QEPw+0zhT9StUozem
-	YWDuSumJnXG6SESXAYFJ6D1p1DrPzC7CXBVy/OAF1YXWruCZjIxqkkCcnT2VRJW7u3S+In
-	PzvHPM8hsUhv20eqFYiKMgsZHwLoo79AsshvB0hvKog2D6Cz4WSww9j5GbJdl61kdU5293
-	THbz+87rpEcUsieDQ4smLPnSBbNe9i2SHtF/4yGaKrqWAPgT/spsJqlvgoO9mA==
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Artem Panfilov <panfilov.artyom@gmail.com>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	s=arc-20240116; t=1732270503; c=relaxed/simple;
+	bh=SBxuV8+Q6BOyKXUVycK0CM6I8k7Z8Z1M9Y1t10ziPAo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EGWyviZIHeVYkfJIi9oMT0WghjJBCv8kTf4EcgGJNtNt41+dqYMHhhL0ntr/9puYuMmJ3LyFbFExUIGhRLbWXPLQlNcpKTOj+I3BYhy56xEH/f3PuC353yF+uSgBEU5Ai0j/1qdAijQgMIGjMYkkqshjtKjwWJyww4Wv06MVDcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eQenMALL; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=v45bDVdc8fZdmH
+	TQYl6QPRKA213XAaSIKP2BT2g9Lbo=; b=eQenMALL03//ZhS1Kqb3JI4RB0JNa3
+	SyY+7y/VvM6FApjRrbkp8flLHxRV4RibwaIgNJb98hy4o2zNfi29JoOd0QbEmSpI
+	zaYSWx1o9/QW0HQO3qSDBiQh3WrsfxzI4XBfGraKTLkl/z0ZvvGT1p5brnXPcXG+
+	5dXCuCbOaHUB18PjvgHY8uCYdnFb0isomcRVOty5jZ9LEnT65JmVupzoH2BpMq6a
+	vL4PpULLLkvYrvYJOJtDkxJKo+b1JjzHnGL+Uo7IrQ43/aCH5YO9CkGld798oKNi
+	IRrUSxKqh1ZdqTTuqKXO4VbS8QEDcFilJzPo5QBTin+eD25G7dR/KESg==
+Received: (qmail 1554989 invoked from network); 22 Nov 2024 11:14:50 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Nov 2024 11:14:50 +0100
+X-UD-Smtp-Session: l3s3148p1@zJgyp30npocujntT
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
-	thomas.petazzoni@bootlin.com
-Subject: [PATCH 2/2] rtc: ab-eoz9: don't fail temperature reads on undervoltage notification
-Date: Fri, 22 Nov 2024 11:10:30 +0100
-Message-ID: <20241122101031.68916-3-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241122101031.68916-1-maxime.chevallier@bootlin.com>
-References: <20241122101031.68916-1-maxime.chevallier@bootlin.com>
+	Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [RFC PATCH 0/2] rtc: rzn1: simplify driver
+Date: Fri, 22 Nov 2024 11:14:46 +0100
+Message-Id: <20241122101448.4374-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,42 +59,23 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: maxime.chevallier@bootlin.com
 
-The undervoltage flags reported by the RTC are useful to know if the
-time and date are reliable after a reboot. Although the threshold VLOW1
-indicates that the thermometer has been shutdown and time compensation
-is off, it doesn't mean that the temperature readout is currently
-impossible.
+Here are two patches to simplify the driver for RZ/N1D. They seem to
+work well on my test board. I am still new to this subsystem, so I mark
+the patches as RFC because my tests might have missed something.
+Feedback from the maintainers would be much appreciated.
 
-As the system is running, the RTC voltage is now fully established and
-we can read the temperature.
+Thanks and happy hacking!
 
-Fixes: 67075b63cce2 ("rtc: add AB-RTCMC-32.768kHz-EOZ9 RTC support")
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
- drivers/rtc/rtc-ab-eoz9.c | 7 -------
- 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/rtc/rtc-ab-eoz9.c b/drivers/rtc/rtc-ab-eoz9.c
-index 85853da258d2..52914bb3e5e1 100644
---- a/drivers/rtc/rtc-ab-eoz9.c
-+++ b/drivers/rtc/rtc-ab-eoz9.c
-@@ -396,13 +396,6 @@ static int abeoz9z3_temp_read(struct device *dev,
- 	if (ret < 0)
- 		return ret;
- 
--	if ((val & ABEOZ9_REG_CTRL_STATUS_V1F) ||
--	    (val & ABEOZ9_REG_CTRL_STATUS_V2F)) {
--		dev_err(dev,
--			"thermometer might be disabled due to low voltage\n");
--		return -EINVAL;
--	}
--
- 	switch (attr) {
- 	case hwmon_temp_input:
- 		ret = regmap_read(regmap, ABEOZ9_REG_REG_TEMP, &val);
+Wolfram Sang (2):
+  rtc: rzn1: drop superfluous wday calculation
+  rtc: rzn1: reduce register access
+
+ drivers/rtc/rtc-rzn1.c | 86 +++++++++++++++---------------------------
+ 1 file changed, 31 insertions(+), 55 deletions(-)
+
 -- 
-2.47.0
+2.39.2
 
 
