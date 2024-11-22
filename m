@@ -1,84 +1,59 @@
-Return-Path: <linux-rtc+bounces-2612-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2613-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C1D59D663D
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 Nov 2024 00:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49CC19D6652
+	for <lists+linux-rtc@lfdr.de>; Sat, 23 Nov 2024 00:26:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 189E116145D
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2024 23:10:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB435160E34
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2024 23:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF441AF0A1;
-	Fri, 22 Nov 2024 23:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A477E18C920;
+	Fri, 22 Nov 2024 23:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PtxtB+0L"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SyTwMv7X"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A24A189BBA;
-	Fri, 22 Nov 2024 23:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA22515B554;
+	Fri, 22 Nov 2024 23:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732317038; cv=none; b=o4l11n/hopOLhDSqFcVsrL/s+oZpiTelDI1BNb93mGb0htSRaotis8IomefVTbcQZp6ltqxowtHcfOmtOx+bG40kblR//+0fnmlbCJ9P8/Yg84l8kSryRzRjSt4XZGiON7yIBHeeIEAiFF+uIn+SATDZTQpnH57l/snSF371wyM=
+	t=1732317991; cv=none; b=Qfspv+OrFgpeAAER7KjIgwILez1v97TLAPlmrcrjmDlD98WRCgAqR824ot/9+A9DMFXwKppHpzcCbY/lhAwzc4q3+CDgCehJcX4YqKAfyRJmeI256EkW9aKbrTs0207it5XZqBeQC7bBIahPZAUsPP6psdtzCzdKWI0EWJC4ubY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732317038; c=relaxed/simple;
-	bh=rg4KHNnnEeVTWVIVzYwlcPs/NM4nUdpeTimePX7r2nY=;
+	s=arc-20240116; t=1732317991; c=relaxed/simple;
+	bh=tsH0Y1i1GfFUs1dwVu1RafwWthN/30G4THVaeZFudgQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rJPw/kmwfUrCXb3sOIcp7VzDSzDC20HjQXGqjWneQ8xjtN1+0spTf6xdDcI1e7jZJ538waWzfv67V5LSka1qS7OEFNUGWDAfBSnk6OJy0fHYfnEQe51lePee5g/qnTf/P6T6d482GTw63ljfuFyyZ+TaesROau/EBcQSqmdzoNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PtxtB+0L; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732317038; x=1763853038;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rg4KHNnnEeVTWVIVzYwlcPs/NM4nUdpeTimePX7r2nY=;
-  b=PtxtB+0L+e6oHfXKWxguG7vLA7ElAPQvfxnSkdbEOmg52QX7noFvXit3
-   vCLBFGDHNDM78q13jIt1ZdPmNgrlG6Bq7vZNpOsXXOjt2tz1pRqmhBlFW
-   L6GFiQhCc6KAIM6ef2GL5dVcZ4Nm6ZxXoLr5SwvGKWW2TVdAkP/60IYMY
-   wuxoCHVKdjwZwZOsSV0olTvhExAwIHFVKOROVdxfwPaIOEjTsPU70zzDx
-   h425rVkGdi7at3JF/C9EOJlixc9K23GTyrWePf23vfhZDM1LNjGOY9TwF
-   VY27eHrGAmHmRMAxn6vLa0LbRE+uWTaWwjNUi7vqIl6w/45TlEctmmb2I
-   A==;
-X-CSE-ConnectionGUID: zzOyAFecSKeZclkqaaTgIg==
-X-CSE-MsgGUID: YDdPoVk/RNyOhoHA+Ym10Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="32228175"
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="32228175"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 15:10:37 -0800
-X-CSE-ConnectionGUID: nyI02MZhRs+DyRbiVgIqBQ==
-X-CSE-MsgGUID: ppn41E5DQyqo46xwD3yX1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="91063475"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 22 Nov 2024 15:10:30 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEcnE-0004H1-2W;
-	Fri, 22 Nov 2024 23:10:28 +0000
-Date: Sat, 23 Nov 2024 07:10:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org,
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=qhlPkLR+ejJZq8qLKWXLsBMp3N78zusOrMCxphY9gqEuyIh5FyIxa/7+OaygKai0K87ha5eY7+Fq/G6RNxK2uICiUvMYY/G7oV2tUmfx91SidvQhB5LfT7pzA3CmMS9rMG6bF4OY5POyclg9+rknVkQrTXsINFCTFFAa1ULZpTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SyTwMv7X; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 90F04E0002;
+	Fri, 22 Nov 2024 23:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732317985;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CA0q0r6k2ZZrL6TZtDraAfb4jVOuEuy4SPMw+Zrwo8o=;
+	b=SyTwMv7XJutP+XxYx0rEWSP2zPeXic+XhE8QK7i+uk5suTH18SvdQ31DXF195RGnW3bTtC
+	/Yq/mZZKY7FApbgtkS9JcnEcMlgoe0CJi66Aik+5JzLMiFPJBTHQ2xGhgLmOHzjnPRVTer
+	jD3ZpivbSbuZQ25dOvn6HtIptdu8jD2RyXjHIrty/wqCTno1/4SLFwyrxtb41uavumt7uq
+	KaDNR5eD+wEaK4V9ER81zqepzl67H0QW9NZIweVOou9ucqWyljGiiN1j48Fsxun8ucwYPu
+	ueC+wzuVKknbB2lpwbXO/bKPsqwXgJIxF81oPyq6T1Wtud5YZnYPyB9YJjVzng==
+Date: Sat, 23 Nov 2024 00:26:25 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
 	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-Message-ID: <202411230620.ncqamorB-lkp@intel.com>
-References: <20241121064046.3724726-7-tmyu0@nuvoton.com>
+Subject: Re: [RFC PATCH 1/2] rtc: rzn1: drop superfluous wday calculation
+Message-ID: <20241122232625c5adab8e@mail.local>
+References: <20241122101448.4374-1-wsa+renesas@sang-engineering.com>
+ <20241122101448.4374-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -87,121 +62,70 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241121064046.3724726-7-tmyu0@nuvoton.com>
+In-Reply-To: <20241122101448.4374-2-wsa+renesas@sang-engineering.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hi Ming,
+On 22/11/2024 11:14:47+0100, Wolfram Sang wrote:
+> The week register simply counts from 0 to 6 where the numbers do not
+> even represent a specific weekday. So we can adopt 'tm_wday' numbering
+> of the RTC core without converting it.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/rtc/rtc-rzn1.c | 15 ---------------
+>  1 file changed, 15 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+> index b0ea2847e982..4ae6e349faa0 100644
+> --- a/drivers/rtc/rtc-rzn1.c
+> +++ b/drivers/rtc/rtc-rzn1.c
+> @@ -75,19 +75,6 @@ static void rzn1_rtc_get_time_snapshot(struct rzn1_rtc *rtc, struct rtc_time *tm
+>  	tm->tm_year = readl(rtc->base + RZN1_RTC_YEARC);
+>  }
+>  
+> -static unsigned int rzn1_rtc_tm_to_wday(struct rtc_time *tm)
+> -{
+> -	time64_t time;
+> -	unsigned int days;
+> -	u32 secs;
+> -
+> -	time = rtc_tm_to_time64(tm);
+> -	days = div_s64_rem(time, 86400, &secs);
+> -
+> -	/* day of the week, 1970-01-01 was a Thursday */
+> -	return (days + 4) % 7;
+> -}
+> -
+>  static int rzn1_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  {
+>  	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
+> @@ -109,7 +96,6 @@ static int rzn1_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  	tm->tm_sec = bcd2bin(tm->tm_sec);
+>  	tm->tm_min = bcd2bin(tm->tm_min);
+>  	tm->tm_hour = bcd2bin(tm->tm_hour);
+> -	tm->tm_wday = bcd2bin(tm->tm_wday);
 
-kernel test robot noticed the following build errors:
+With this, you're not even using wday anymore. This is fine as there are
+probably no userspace users of the value but the commit message claims
+it is now using it without conversion.
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.12 next-20241122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Yu/mfd-Add-core-driver-for-Nuvoton-NCT6694/20241121-155723
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241121064046.3724726-7-tmyu0%40nuvoton.com
-patch subject: [PATCH v2 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-config: hexagon-randconfig-r131-20241122 (https://download.01.org/0day-ci/archive/20241123/202411230620.ncqamorB-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20241123/202411230620.ncqamorB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411230620.ncqamorB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/nct6694-hwmon.c:263:15: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   frac_part = FIELD_GET(NCT6694_LSB_REG_MASK, data->xmit_buf[1]);
-                               ^
->> drivers/hwmon/nct6694-hwmon.c:508:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                          FIELD_PREP(NCT6694_TIN_HYST_MASK, temp_hyst);
-                          ^
-   2 errors generated.
-
-
-vim +/FIELD_GET +263 drivers/hwmon/nct6694-hwmon.c
-
-   238	
-   239	static int nct6694_temp_read(struct device *dev, u32 attr, int channel,
-   240				     long *val)
-   241	{
-   242		struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
-   243		unsigned char temp_en, temp_hyst;
-   244		int ret, int_part, frac_part;
-   245		signed char temp_max;
-   246	
-   247		guard(mutex)(&data->lock);
-   248	
-   249		switch (attr) {
-   250		case hwmon_temp_enable:
-   251			temp_en = data->hwmon_en[NCT6694_TIN_EN(channel / 8)];
-   252			*val = temp_en & BIT(channel % 8) ? 1 : 0;
-   253	
-   254			return 0;
-   255		case hwmon_temp_input:
-   256			ret = nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
-   257					       NCT6694_TIN_IDX(channel), 2,
-   258					       data->xmit_buf);
-   259			if (ret)
-   260				return ret;
-   261	
-   262			int_part = sign_extend32(data->xmit_buf[0], 7);
- > 263			frac_part = FIELD_GET(NCT6694_LSB_REG_MASK, data->xmit_buf[1]);
-   264			if (int_part < 0)
-   265				*val = (int_part + 1) * 1000 - (8 - frac_part) * 125;
-   266			else
-   267				*val = int_part * 1000 + frac_part * 125;
-   268	
-   269			return 0;
-   270		case hwmon_temp_max:
-   271			ret = nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD,
-   272					       NCT6694_HWMON_CMD2_OFFSET,
-   273					       NCT6694_HWMON_CMD2_LEN,
-   274					       data->xmit_buf);
-   275			if (ret)
-   276				return ret;
-   277	
-   278			*val = temp_from_reg(data->xmit_buf[NCT6694_TIN_HL(channel)]);
-   279	
-   280			return 0;
-   281		case hwmon_temp_max_hyst:
-   282			ret = nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD,
-   283					       NCT6694_HWMON_CMD2_OFFSET,
-   284					       NCT6694_HWMON_CMD2_LEN,
-   285					       data->xmit_buf);
-   286			if (ret)
-   287				return ret;
-   288	
-   289			temp_max = (signed char)data->xmit_buf[NCT6694_TIN_HL(channel)];
-   290			temp_hyst = FIELD_GET(NCT6694_TIN_HYST_MASK,
-   291					      data->xmit_buf[NCT6694_TIN_HYST(channel)]);
-   292			if (temp_max < 0)
-   293				*val = temp_from_reg(temp_max + temp_hyst);
-   294			else
-   295				*val = temp_from_reg(temp_max - temp_hyst);
-   296	
-   297			return 0;
-   298		case hwmon_temp_max_alarm:
-   299			ret = nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
-   300					       NCT6694_TIN_STS(channel / 8), 1,
-   301						   data->xmit_buf);
-   302			if (ret)
-   303				return ret;
-   304	
-   305			*val = !!(data->xmit_buf[0] & BIT(channel % 8));
-   306	
-   307			return 0;
-   308		default:
-   309			return -EOPNOTSUPP;
-   310		}
-   311	}
-   312	
+>  	tm->tm_mday = bcd2bin(tm->tm_mday);
+>  	tm->tm_mon = bcd2bin(tm->tm_mon) - 1;
+>  	tm->tm_year = bcd2bin(tm->tm_year) + 100;
+> @@ -126,7 +112,6 @@ static int rzn1_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>  	tm->tm_sec = bin2bcd(tm->tm_sec);
+>  	tm->tm_min = bin2bcd(tm->tm_min);
+>  	tm->tm_hour = bin2bcd(tm->tm_hour);
+> -	tm->tm_wday = bin2bcd(rzn1_rtc_tm_to_wday(tm));
+>  	tm->tm_mday = bin2bcd(tm->tm_mday);
+>  	tm->tm_mon = bin2bcd(tm->tm_mon + 1);
+>  	tm->tm_year = bin2bcd(tm->tm_year - 100);
+> -- 
+> 2.39.2
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
