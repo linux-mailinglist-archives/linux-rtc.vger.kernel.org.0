@@ -1,261 +1,336 @@
-Return-Path: <linux-rtc+bounces-2635-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2636-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586CC9DA79D
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Nov 2024 13:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B28E79DA826
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Nov 2024 13:58:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2425B298C0
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Nov 2024 12:02:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85082B211CA
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Nov 2024 12:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56DC1FA279;
-	Wed, 27 Nov 2024 12:01:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2111FCD04;
+	Wed, 27 Nov 2024 12:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="j8Qb3E4W"
+	dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b="C4+zW4yF"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2070.outbound.protection.outlook.com [40.107.20.70])
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2091.outbound.protection.outlook.com [40.107.21.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1947E1FA262;
-	Wed, 27 Nov 2024 12:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316AE4315D;
+	Wed, 27 Nov 2024 12:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.91
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732708912; cv=fail; b=HHfs3rvvW/Sii8zrDJx4NYeNorfM4+uOaFs5n/ijRuZ+EH4sEkC6G9RVVdTxfI9dqLpmpMBkmo6v3nZtsVsaBQDWAB1heP3NTD+E8YcvJVOktPSH02l70CmX4Je4z1AbHd1/RvfkCrXIgxod4l5jBj9qtma77D6O8IYX6iOLZQU=
+	t=1732712293; cv=fail; b=tmmIi1o0MIK2ZclrjXriI9f5z2vfrxq4aUb4kUiNi9isyWmX5tvUH0NYTwgrcnW37DykYGXwc1woR+GUrsWXaxIaXPC6S/kLr3dRmC7xdt/f+17pwEJT9tDgnsutjjmdbn4p5jP9NG51t52kiPjBQwi9B6MEauPpB3UCyn8oN2A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732708912; c=relaxed/simple;
-	bh=PL7N25CQEsCtHt5EtS+8PWjmJL6dPAsOcFGvdEBLc/E=;
+	s=arc-20240116; t=1732712293; c=relaxed/simple;
+	bh=Csyub6NFECGEV9C0z7QDU8CaOlcL/3wmzb3UWQfMm+A=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=GUiRueaoM/0QLSFREJXPKK7TgGN4+zOng93/ijrLX66c0fXbjzWBNO7IAs7vfM35Aw7A/TrBjd+xeJ4lMh/N2+x81GHDA4XbTYttMmAJ4aCo6Bc92N2N83n/w7658Y5zxku84TsvWEiIJJhp3mFbyfuYjWOz6SK513kbSX98zo0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=j8Qb3E4W; arc=fail smtp.client-ip=40.107.20.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+	 Content-Type:MIME-Version; b=XDFz4tUHviMRYdXEUOmwGvnpOwfVSJfQKObtP8PUw3eJAuf/y1XjsCct1val8HvkY9hzdQgKI3o/zXFP4XMnq4w19HNaoZHwvfUr5ZxrrsMv4MExLBQVH0uF6KZnSRgeHcayCGsMa3BgnGYWJLn2MQOkV5g/2Fy8II2yIpccWSM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com; spf=pass smtp.mailfrom=kunbus.com; dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b=C4+zW4yF; arc=fail smtp.client-ip=40.107.21.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kunbus.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fFF04/3KUQjUY04Ot6oeo+hKXWIeplZQxlm8r7NX8DzOnv/KmBP54fJGYY73XWiZsZpdxWf7dZcDxNl13hl4ZZadvgDC1dDAPGzbl7GDjobi5ax83mzMF7IpsQ4lmu1xxAhMeV2UKIW/7WDyeqHECXqFjVeXpSqonoPEwUDLMs1kiot7hJpyfXS1t13CX0K8bpA30TjoteaPCP0ADkfM1rtAMk5RqNxs952qAAFf8pbHmkERzEmIay2ew9NY4ZuU+fyeaexD3KoDxK0S2+Zyo+DvWCKkseHnl/8zoNnr5Hb7qkfpvpYI+5rYuJWaM//tw7rBrnEkzNOqut/mDJ7TWg==
+ b=L5sZsURHDgdjVzgKLqk4vt6dFa1SGIQ2qtb4EybWouFa1vZuYSXzZFpzrIiGB5zFxz+x5pdFbVgCzvsEuO3SpT5yzgy1yLbITD/AgOji3bsdFYk3/2gy5Bq6F7c7cjPdw+G4vbiyeX/xwtrRghl9jRAaOrwtNDkIlw4Mnp/CVtbWsjm1OGwo15EdxcF8AgSsguXF0LkXUa9DPUwS1A3ZMgIkyWKcushYsevdD32ue/qDq8hUS+mDWZO+V85ppYnvr1Rm9ktTwryebFhMFBEGHbvLYSRB2RLV5mENiNOGF+/B23WshqcFkx3OHAijTrJMvW0BB4MBtOe6qoRi7CGyNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ofc7E9xbxB+HL3oucpJz74FXoYulQl+sLVvvgMN1Deg=;
- b=k+4uEqbo89MejLxAFawCqzze+diOIlLmmfADWDgzoN8mZRYA2lCBXxcUeZFoTYC4auRm+n70BtM0OWqCCLa1G99J0uiDUypEJ4RJKJYfa3qGP4QVVfrX/jXjXeCSCJLZdPOZXXk3nKJHcxgAUuXuPfQbcKeWKo+U9DxuycCUcYwuJKegAYLAPPTuw0iDAS9ws0aJV/JUnr+webDeK/RCx/KiP7Ker4veE36o268Jcmng90aJDs5pXT6ur+z+YbEVuMCM2me/R4o9K0hB321bBnFP0X1UN4He+GlrZASG48Tvkxi8czd9x5LfFkK0sUH0gUn2K76RfIzq43GiPBbt6Q==
+ bh=ignPMACOq9scZ5QOhBDbso7PUV/n/d7FjRLlzhmyUNw=;
+ b=xR+mjNjF+GtG98sCSiTXSDaf0nyPQd6GSf9rwGzWPD8nHskJ6e/COZhpFR7+9WYQLCgII+xkykXxwkdDdfVC1xes5tDxJ6E+3cbp2TuvZ2iXuyZtFL/FNs8s2K6pmbPjviooBB6DHXcxyOA2ayvtPxCAjs0LLK1VQelapEUkdy7hElgpBU5+g8U0zHLZzZdMFhuOpGOsM8AIxsVQgLiSB1tdykIgK+9nfayXYIX7yQ76udJXA8PNtsMtIdkv79JWuslHu8d+0GasGNcTz7tIjOGrN+6nORQ1tA2RDjPm2aoni79kOPmA8AzYBUdaxQ0I/m3dFa0zqvRaH/qIklTa0A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
+ smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
+ dkim=pass header.d=kunbus.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ofc7E9xbxB+HL3oucpJz74FXoYulQl+sLVvvgMN1Deg=;
- b=j8Qb3E4WT2xwaIL5ZdCw2eG1BAT0vETgLDsmdGfCamrKnF72VC0BQLxPxJgLlcvTChaG6T1wcvRzN7Tmwxek0C7UDH7SJ4YvWtYuyTlzk0ldHFyPp4/vbNy3qggLZL/H2CwIUj1g9mHMKE0ynL8yl+rpCIcqAKfdNxDQuhXrtvx6xschz2ruAsJQlj70hUlE7POVv1M2/qMzCtRtOZ6ikjuPZqGC8pL6G2cYPhY0Q2tMlHIXCGh+lejohmx2Lpzep445RNgd+97SYpig9I4KQe7k+Hym9aFm5VNAARa1EGJjQLsDTrif/4IEL62j7ybE5Erk2ETzDklvO3bAKvKuag==
+ bh=ignPMACOq9scZ5QOhBDbso7PUV/n/d7FjRLlzhmyUNw=;
+ b=C4+zW4yFd+12UqBPQJR4/yhMeCIO8jLNbAbeFaJytNqCFtKxI8lLBaYtap2K2JscDtkjVpBM1mLzGK3EAseJoJjBLOsqsF4ksA1SCl2npXtDRxhd+gXQyYJIu/1wFCjMnCnXytVQO8KxS+bHWvZ2Dcm3LmcNncGU/v7+au6kwYE=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9251.eurprd04.prod.outlook.com (2603:10a6:10:352::15)
- by DU4PR04MB11079.eurprd04.prod.outlook.com (2603:10a6:10:589::10) with
+ header.d=none;dmarc=none action=none header.from=kunbus.com;
+Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:160::8)
+ by PAXP193MB2361.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:22f::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.21; Wed, 27 Nov
- 2024 12:01:46 +0000
-Received: from DU0PR04MB9251.eurprd04.prod.outlook.com
- ([fe80::708f:69ee:15df:6ebd]) by DU0PR04MB9251.eurprd04.prod.outlook.com
- ([fe80::708f:69ee:15df:6ebd%6]) with mapi id 15.20.8207.010; Wed, 27 Nov 2024
- 12:01:46 +0000
-Message-ID: <a089bbb7-a378-47a7-bb83-a38c8d2f47e2@oss.nxp.com>
-Date: Wed, 27 Nov 2024 14:01:15 +0200
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.13; Wed, 27 Nov
+ 2024 12:58:07 +0000
+Received: from AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
+ ([fe80::2398:d74:da85:f90]) by AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
+ ([fe80::2398:d74:da85:f90%2]) with mapi id 15.20.8182.019; Wed, 27 Nov 2024
+ 12:58:07 +0000
+Message-ID: <b1271a91-a2f6-4f06-9b3d-c8b32bd6bf2c@kunbus.com>
+Date: Wed, 27 Nov 2024 13:58:06 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/4] dt-bindings: rtc: add schema for NXP S32G2/S32G3
- SoCs
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- imx@lists.linux.dev, NXP S32 Linux <s32@nxp.com>,
- Christophe Lizzi <clizzi@redhat.com>, Alberto Ruiz <aruizrui@redhat.com>,
- Enric Balletbo <eballetb@redhat.com>,
- Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>,
- Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>
-References: <20241126114940.421143-1-ciprianmarian.costea@oss.nxp.com>
- <20241126114940.421143-2-ciprianmarian.costea@oss.nxp.com>
- <0c4f7e62-bf9e-4e4f-8493-db1e56773f38@kernel.org>
+Subject: Re: [PATCH v3 0/2] rtc: pcf2127: make battery switch-over
+ configurable
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+ =?UTF-8?Q?Thomas_B=C3=B6hler?= <t.boehler@kunbus.com>,
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>
+References: <20241111154144.163604-1-p.rosenberger@kunbus.com>
+ <20241114085153e4e23a7f@mail.local>
 Content-Language: en-US
-From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
-In-Reply-To: <0c4f7e62-bf9e-4e4f-8493-db1e56773f38@kernel.org>
+From: Philipp Rosenberger <p.rosenberger@kunbus.com>
+In-Reply-To: <20241114085153e4e23a7f@mail.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4P189CA0021.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5db::12) To DU0PR04MB9251.eurprd04.prod.outlook.com
- (2603:10a6:10:352::15)
+X-ClientProxiedBy: FR4P281CA0256.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:e8::19) To AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:160::8)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9251:EE_|DU4PR04MB11079:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8111747f-5f2e-470d-9653-08dd0edb4422
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-TrafficTypeDiagnostic: AM0P193MB0738:EE_|PAXP193MB2361:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8874814-565c-4480-3c5c-08dd0ee32367
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?M2UzZFh6UTU3ZCtaYm9Ecml5Zm91TzBycmtoellDUnlxMmcwNi9QM01MOVov?=
- =?utf-8?B?NG52SU9aZGpUMHBlOG8zeUVCbi9lOVpwZGhONlBmMU1jaGIrR1hBTld3Ni8x?=
- =?utf-8?B?Q2YrOGhKMExqMWFDeGZmVENYU1RRcHFlQzBmdDZobUdHN1ZmSDJkS0pzYXhL?=
- =?utf-8?B?NUVsQ2IxMlY3OXFuZ3B6QWdYNHRmcWtxQ2o5dG1GN1Z6VHFJUVpQTzlJalhQ?=
- =?utf-8?B?ekpLUXRkaTZ1MlAzUnBmNmVKQlRDTDlaSHk5QkRSVzE2cWs2M3dud2RPZjlJ?=
- =?utf-8?B?ZjJpMmVjUmgwTlRqcW52cGNwTzcxNXJyN1FOMGZYZUxGUVYxa3d5WStUTG5n?=
- =?utf-8?B?SEJrbDVVSktVMlhHNmV5Mm9LQWswKytVM1NYUE15WUU1b2d1Sy8wYnRCMzhS?=
- =?utf-8?B?Y3gvck1DMkVLTHVzaXVVRmxSM1ZEVzNmTHhOQm03dC9kcHBRcDNCUCt6SnZZ?=
- =?utf-8?B?OUp5MHhkekVGZTZaMkNRU0VUUUV4cy8rK0QwaDdNSUpuWE85K3hNbnN2T0RX?=
- =?utf-8?B?U29HdDFhajNFYlVBUmUxWjBUVVJyRitDcHN6VG54YTQ1VENoOVh4K3FGTFJE?=
- =?utf-8?B?Y3R6M1hZek9ZekRCVCtjTmM2Ui96Y1lnM3FLR2RuTlJqMGEyYktJMUYwMHRV?=
- =?utf-8?B?NzdaNDFrMUhKREdHVXY2anlNTHlhT1QwWmhlblNYYWZWVmYzRDVzTUhqd0NP?=
- =?utf-8?B?TzMrQmljWWlVeFRhdFZUODFXVmQwWGJXTmVsNERhd1hqbnd1bXYxUWF6RVFU?=
- =?utf-8?B?cFFaaEhGVk41REF5aW1yb0FiTUdwU1ZQREJidHZ2OUpLbWJVWW5zU2E4dmN1?=
- =?utf-8?B?M0xCeDcyNDVzakRhK3VzZ0J5UHFNbFdBNFZFblZRMFpvRG1BZ005b20rbG9h?=
- =?utf-8?B?M2RpaStFS2c0U3RoNU44M1lockUyaGJ4M241cHA3eTBTYnJzbm1BR01hVEZC?=
- =?utf-8?B?TXJueUlZL2dONG9SSTZ2dUgrVmhuOHdpUnh6YXp4TjFGVUl0QkdKdk1zd2JJ?=
- =?utf-8?B?Wkg4Sk8yV1FKcXlxRWlkNEtzbHdSUnE2WE4yZ2hrcXdPTDdaY05SVFRBQm5x?=
- =?utf-8?B?T05oQjAxUmczN1gvTVdBYUEzd1VuNUM1bzVHN3g1dGxIeFQyUDdYMHJxQ2Jz?=
- =?utf-8?B?RDBiUG02YURTTmxlNll4TXhoNjlJdWYwV3Ewa1AyTjdhbXZQUGlBaW50dW1a?=
- =?utf-8?B?aSs0cHh6M0oyNUpHKzd3bXBVZDExUGRmVGhXczc3Q2FDRkVXaW9KYnlHNFpq?=
- =?utf-8?B?L042d1RpRDRNRjh2aHNNek1DMUFxSXlQajhQVFJBTEVlRTF4WThZMDkrZlRv?=
- =?utf-8?B?eVkyazZ6N2hGN2F1NzZoVjZoR2RBcmcwby9xYTNhWGN1S0NHQ3p0NU90eEJT?=
- =?utf-8?B?Q0pzZEVUMG5ieVl0YmlpUlF1dzIzcFJRS3BBZituN0Y2NTFlM0VPYll5VjF2?=
- =?utf-8?B?RDl0T0lCQ1VPNDNFOFpJYU1BQmtBbFV4VE1BN1hBdmhOUUdiTHVhKzVuck1L?=
- =?utf-8?B?WDRQcldKSFBmRlNXNjBKOWtXdDNBbU50OFZzVkJmWDhyUzlQNFkxcFFVOUFv?=
- =?utf-8?B?YkpwTkY2ajRrWndkYUFyeVFHTHVCbitUSE9EbHc0YkJlYlFLQUNjSUJSZ3Fo?=
- =?utf-8?B?cXQ4cFR1ZjhxN1E0RkFCUVYwcndmMUNLWVFnblB3cVhqTFFUcTZ2Q3FrVHAz?=
- =?utf-8?B?Q0VyMlQyanJqTHZpTk1Ob0Z2N1pJRWYxYVRYbjYzcmF4cGl5WmZmR0dlaE9o?=
- =?utf-8?B?WU5Ua0VybWpCVDhHWDdBbDBkMmVPUmYxTGhsOWFORk9NSFpDVHZid1lISkNH?=
- =?utf-8?B?bHNXV3N4S2ZNN056aSsyZz09?=
+	=?utf-8?B?K0JlSG5JSVFXOHcxaDNURkxUdnJrYkxDNGxMcUxqbzhuUTJ1Z2tUNjdLeGNp?=
+ =?utf-8?B?YUFPSERJVkhRVXo4VHRvbnZvck1ZZWpkaFFvRG1iMGNpdlZxeWxRYTZrU1pS?=
+ =?utf-8?B?OXVieFBmTW1XODE3ZGhmZ2UwRVI5MnNaZVpvOUd1UTQ1bHkzQ0FXdXh4Wk1W?=
+ =?utf-8?B?UGgwbXVvMmNYT0pMNXFzYUd5SGoyeXhtNkdCbzFUMkNIQ1NLQ3FBTUoydnJZ?=
+ =?utf-8?B?TmxQY1FDM1NhWmU1UkZuUU5UL054ZTBSZXNVZVUyUUQ1djZsV294SXZmYnpv?=
+ =?utf-8?B?eElrOGFnMjN4dTI2b0FIODBsWmc3bGhFOHkyQVhiZmNQeHVpV1JFTFA0a1ls?=
+ =?utf-8?B?TlJTMGZkSGh5MHNKT1d5eXlubjBXV3BxUTd4S1plV1BuZnFqczBHeDZick9y?=
+ =?utf-8?B?bFQvczVTajRQTTltUlAzRzZ6Y0svUlNKekR4WWlnbnZ1WTRPYy8vQitEOG1Z?=
+ =?utf-8?B?T0daU3B6MDBvclFsZjlkUXNSV2pkOFJWSkFpRmxJRnNlV0lyRC9oWmVUQ2J6?=
+ =?utf-8?B?YW5sZmZiTWFUWEpkK0pEQkNoM0dXVnRVRkN4V0dlVDQ2ekNKbXRZYk0vb1hi?=
+ =?utf-8?B?NmV1VmJjSEkvYW43OXZaSjZLdlFlZXRNQi9XSnlUanNUVDhyaDZpL3BFSTdk?=
+ =?utf-8?B?V0FnbzhHNG5RVzFwV3FrM2NKcGJDbE5oemt0WEo1eUF6MzNFaGVqZisrM2g5?=
+ =?utf-8?B?UDRVVENqY00rU1U3TWx4MWl6NXR1cGNid1JwcmNkd0NXbUVuMHZkMkJFL3dr?=
+ =?utf-8?B?WmNFWEJrcmxkNXlNWDVBTHBRWm45TzF5WGN4bE96L3U4eGdXcHA0YXRVd0Qv?=
+ =?utf-8?B?cklROC9JZC9qQTZnQ3pyT2lWZ3pvNUxmcmJrdjRSTEdpeVhPWUMvaXJpSEJj?=
+ =?utf-8?B?bGh6c1h4L1FTU0xyUEsyV2NwQ09neU5oTlFGcmsxa21JUmpZbnF3QkFtenpI?=
+ =?utf-8?B?MElOOG1teDR5MUpxWUVDUDQxSldTTkZ0WkFJN0VjbERZUEg2RnVEdExNODJx?=
+ =?utf-8?B?czIzVUJTMjZFcSt4NTBKaVMvdDQ4Tzd3UThycGxsMXVDdU85Syt3eWJhakkr?=
+ =?utf-8?B?S1ZFei8zNVl0TTNhTTVpWWlycTI1YkxFQTJ3aWM0TDR2ZFowckp2Zy9xLzdS?=
+ =?utf-8?B?ZjlDTGUxME1sRDlaRzJITkxrWUg1RU5XZWczWGNzd2VUZEdhSGJsTTViZTZ0?=
+ =?utf-8?B?V0dwRkdzNmhmdW56SnBIeHdna1lmbWVUUi9VbitrL2dwZXBMbkVZNFE2WHFU?=
+ =?utf-8?B?OTlGeHVIb2RZcnV4elpJZmw0d0JPUjByRUNEMi9xNFd4cWZSdkQzbkFDdFBH?=
+ =?utf-8?B?QXFKdUsxYlNqTHpOVjhTaDIzdFYvYWJ0ak9WYTRuVHZ6aWZMQkl2aDJGUGhj?=
+ =?utf-8?B?NW9jZlp2R3pSazk5OUJrZ3JCODVqSWxvUGx2NTdRUmNGcHZFUXpreG1BcG5w?=
+ =?utf-8?B?eHNtZmNTMUluUVJiUjhBRW42dXhKanl1WE9wQzh6UENiQkNUU3ZFMGROd0JY?=
+ =?utf-8?B?UXBFK1FRWWs2dVF4bXVURWdCMExmMHlCRDJ4bVdjSGFkM2RSUXBHdlRKdzVU?=
+ =?utf-8?B?cTBaRXdGSjlHQ1lYQkQrNFB3Yi9rem4zblZ1c00vRUZHeVlEekxkaHNWNy9J?=
+ =?utf-8?B?VldkY28vVmNBQzd0RUVjM2xIakw4UmVHbm5CdDFsRW1mcnVtaEdlTmlwQW8w?=
+ =?utf-8?B?azRuQUpkM3M3OUFoM3J5QUtncC8rMm5VVUl3ZEFwTHhPRXE2MlFPSFZETStT?=
+ =?utf-8?Q?aJVlp0eWhgGI1o1Sws=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9251.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P193MB0738.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WHZkdmp2OHQrWUs0RHEvZG9OKzhIMmhGSTQrcmtMVjRDMVR0OXlDS01ja3pC?=
- =?utf-8?B?TTlPVTNEbWE5cGJlaXhqeVFUVzhHUDRWcS9FYVh1L1NFMHVxbGF1MjV0aGhK?=
- =?utf-8?B?NGRiS3I1T3gxNDdCTjlmSitFU08xaHkyNzMrR1JjMkw0eS9PMGRtWEdsbjRH?=
- =?utf-8?B?Znk2TFB2ckhKV1RlNktlTTlCU1hSeTJkRWtid05hVlpRckpnNmNMUzZqMHFr?=
- =?utf-8?B?WEFIdUZ2anE0enNTdEZQNFVjNFFBcW9IcW94Sk9Sd2RvRm9mSThhclFQZnBo?=
- =?utf-8?B?clVYQ3I0VHBMVmtpeWJNaHoySHN2aHFZOEdFRzhQTmhqZUVOV2NuaXV4OWpN?=
- =?utf-8?B?NGtJajhuL3Mxd3NhSE9icy9WeDFMQnJmY1NGd1ZSUXdWdjJlanpRTTVibDN6?=
- =?utf-8?B?Ull6NVpnUVFWa3gxa3QvRjc2bnZzbU0vOE5vWHBCd1RScmVPVE1RRHRuUG1m?=
- =?utf-8?B?bFRHS1lmbXpaamdWKzR4L2NIcnAwdndmL1ZOOHFSdVNhYkxlTnZ3L0tGa3kr?=
- =?utf-8?B?QXFuTlVaK0FURUhzWkVlS2RzblNyem9iYlh5cXRabk16TVhkQlRmQ2JuNXlL?=
- =?utf-8?B?NllRUGxtYTV4NGNLTy9TK05Vc1JLZUEwVkRGUWwraXBKU3V6bkM0SUcvaFRv?=
- =?utf-8?B?dkw4TXhNWlR0NEQ3SW91NUxXdzIyaEdoM00rL3pnbkZRVUxmVXVHR1d5S3Jk?=
- =?utf-8?B?VHBsY0NQZHZOK2RFV0UwYWtCWlBoT2dpalVycUxvMkxEOTZHSjNEVTNlajN2?=
- =?utf-8?B?SG5RNktLUEc2cVF6YmJGNVNPb1FOdkx6aks1ak1GTTBJLzA0dDdHdlBFVVYw?=
- =?utf-8?B?SlZsdjdhUmJjczVUcnlFSGx1VkNmaFFuOXJWbGdIQWx3Vk5zdWExY0Q3K0xw?=
- =?utf-8?B?QW5hR1FvQnZSTW55VEtSSkhYOXhpWDlnZWQyNkZkNnFKbS85Q3E2dzlqQml6?=
- =?utf-8?B?L3BncVZNT2pMRjF1dll4R1VnU1U4bjQrOHo2Y21MWS9taWJVcTlRbEl1MXRF?=
- =?utf-8?B?eXAweFpUT0p1NGNGTEEwY1NDSmZjVVkyYng2WVlhcWM4c0RDTCt1OUZXaDIv?=
- =?utf-8?B?ekhqTlVDKzZOYkR2SWhPUE5UdzFIbDR6YkpwcFpJeit1VEtNWGFxUExUQjBu?=
- =?utf-8?B?VWsxNDkvRkEyK3JaUkxrS2JUa2UraDkwaFVITTQxM056RVpScE44djkyYi9h?=
- =?utf-8?B?dVhyVjUzNThFYkNFNnh2eURTS3RtWUdFclJYQkhqQ0xnU1BnajRpVEd6SHdi?=
- =?utf-8?B?dTZSYzJ4VFlnK2gyRE9LQ0Evd3hTVGZiRFdVcVdqeGZ6NVdVRnpjQ1ZsQ2NV?=
- =?utf-8?B?VUZrbnFHQUJKWi9ZS3laMFJJOHIyVHJIa1d2Uml2dFRxZzRTZkxWM2dpNGUr?=
- =?utf-8?B?VDRBZHVmemVERXBUNk9HNmRrMmZ0Y0dTeVAxLzhVVVEwK3BRRUoxa0FtMVFv?=
- =?utf-8?B?cHVFVjd3a0dOWWQxMXdWMFdXL2VJcGxvREF3OHFmbnhHT1BxQ01vTlhvS3dp?=
- =?utf-8?B?SHNIZWxEMUdEdFdEbzZ3dUJ3VlBMNmloZXR6L3J4Zy95aVpWTmhqd2Q0RTln?=
- =?utf-8?B?VGR2V1VETFowelA0OHgrb2hKczNUS21yeXZaUkpwcCtUc20rMVY0bzZkVVJj?=
- =?utf-8?B?TFI1R3pjM2xGSTltdzhDMGZKTjZZWTVQL2hLSjRxemZvUmltdG92RlV2eWJK?=
- =?utf-8?B?WllJdlA1c0FMS21FSFIxL3Nwdk9SdEFIVjA3OFFoTzRKbTdXd3FaNDBLMG42?=
- =?utf-8?B?VEViRld2V3VDMUs0ekg5cmFMVk02Tmk3VXdVcUVrdHhDK3hDWE1XQU1hR093?=
- =?utf-8?B?b1IyMlZoSWdHNkV2NEExYU8vM2tmNi8zd2tTRlRNNXlGL1pyazFQV2JiU3py?=
- =?utf-8?B?NW00eFdlZFVQdjdmYUdaM3VnWDlRRVp6c2YzNGR5WlZwSTJBME1FdkY5UlBR?=
- =?utf-8?B?Q0sxSmlVM25JTDNNWGQvNXlCbzU5UTNUL3c5VDhjWGg5REJqY09xVXpabDYz?=
- =?utf-8?B?ZEtoZ0tmSzRrZEU1Mk50ZTZ0Z2w0QklMVEdFZUgxL2RUMFVwMksyRWlRSXVh?=
- =?utf-8?B?a1h1bnRHbk9od3QrclBVOVlmenVhRWtPR3JCUWhINkxHWTQxeUpTNFEvZDJz?=
- =?utf-8?B?MnJSNEVjb2dQRGpMN1A4SDdFeDh0SjhyM3NoZTVubXg3UTMzSXFjd0VNc3ha?=
- =?utf-8?Q?zC0pOzMunry7l5459CQHcLk=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8111747f-5f2e-470d-9653-08dd0edb4422
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9251.eurprd04.prod.outlook.com
+	=?utf-8?B?b0wrNk03cGxqakgvWVhYWXJSRGQrTW9HRUorSE82THVRbm5KUlM1TnJkbVVS?=
+ =?utf-8?B?VVIyMjJEblFiOUlYS25RVjFTRmRCS2Y0ZllWeUhQNmY2RFB0TDYyVzY3c0Fa?=
+ =?utf-8?B?a3NITHR2WXMzWHVlZXhoNTVhemhNVW1tOUt1dCtVOEMwMU83TTJ3VHk0d25N?=
+ =?utf-8?B?Nm1lMElqNzd5ZFFIV1l2eElSNHp1dFZZVHkyWDUwUUVuQkpYRncyRUxTY1N5?=
+ =?utf-8?B?RUJQWFZCYWc1c0dVOXZhcHRwVHROS3pIb3IxUDA3aElJSFZjcUhsTzZ4VDFE?=
+ =?utf-8?B?Y1FkM1VRMldFeEFOd045SmVoZjlyTjZQL3J2Nm5kY1dmcDhLdG0xVm51TW0x?=
+ =?utf-8?B?eDhXZWRsTWJodTFGblhNaWpjZFpRaFh1MkxaRTBjMWpkZm1nRnlVbFVHL0po?=
+ =?utf-8?B?SERlUHZRc2tZcXNaUCthRG9wbFg3UmFOdi93a2J6M01zUzFseC95NFJQQlhJ?=
+ =?utf-8?B?WkhMamlmZGZOeTBBcEFETEdNWXFLa09rN2N4QTdOeFlneXk5dEpRMUpQSkta?=
+ =?utf-8?B?cjk5T1Q3T3l6U0RIOHdMNTFiMm1nTXc4aHlGRXhyV05Bc1B3WWoyelQ3aDNw?=
+ =?utf-8?B?VXl1RGpxSXhRN1h0dDVLVTc5T3lWRlErVDdkeTE4SWRkeEpvYVRGR2hxeEkr?=
+ =?utf-8?B?dk5IVk9IVll2eGZJbzMrV3crZm5wZUlkaGdZUUIyY0lhcUZYbTdnQ2hRcWN6?=
+ =?utf-8?B?dkdDTGhMM1FBaHZ0aEFUQnlmWUNUOEE3L29oaXE1amJnVFNleDJ1T2JKcmhT?=
+ =?utf-8?B?d010eDNoYVdYMjVkRHZyZFBMTEd4OWd6VTRCOUlYRGVkYXVmUloxVnJnQVI3?=
+ =?utf-8?B?WTVSS0p2RTFFN1dObEpqTlB4WThuUE5wWkNUMGF4bHdFYmVLMGZhekZlb0VT?=
+ =?utf-8?B?eU1oNzJKT3dtWkJ4M1FjejNJbzVCWWE4aUlrQXhjTDlsdElmbGhUcFFPb2d1?=
+ =?utf-8?B?bTFQY2dNZXZIVXdoc25DOUNna1dqemY1aCtGaEJIdnlLQjZaTnEzNE5UWE5P?=
+ =?utf-8?B?YzZWRGY3UFphZTB2ekVpVGVzcmR0M0Y3NVpHSkIrclVaSGcySWlvU2g4eUVx?=
+ =?utf-8?B?SDBhMkd2eCtNbzJ2OTEveU8yWXFvV1ZCY0pqc09GaDhLMlJCVnQ4c3FxREo5?=
+ =?utf-8?B?YmczcWhWTW1TeCttU1o1YU1Ccm9kRnM0OExab1hycWJ3cWxaVXpGQ0JsclNR?=
+ =?utf-8?B?aER0enZiZnphSVB1anZoOGtaV3pvRm1ObGdhNnFSUFN0WVZmZXczV2x0ZGl4?=
+ =?utf-8?B?TTBncWdJbXdIK3BHMnorNkhIK040ZkxIMlBNeWNHV1ZoQTRMWmdaaHNsbGxU?=
+ =?utf-8?B?TmhzRHZJaVF4TzRtQ0gvZnFvcVpuUncwdnNFNWozajVIaGF3NHZvREErSnN4?=
+ =?utf-8?B?Z1Q4cFRWNnROMUVYTlNING01US9KUmx0SzAwK2RkRW9CSFNVMGE5aXFNQTZ4?=
+ =?utf-8?B?YVZhWTZsN0NncVR1ZTFPblRSYkVWTTllb1JYVVJCaG55VlFVR2dEVzlxNnBN?=
+ =?utf-8?B?S3FjbXh6Z3VSajJ4RTFNNnVmRXlKamRYQVBWN0JjSkM1b1FGMWZGcldoZVV2?=
+ =?utf-8?B?VWZVdG44ays0U3VXdzNOVnN1MzNXUFdCRElEYmIvYnM1VHJDTW5Ra3Y3SE5Z?=
+ =?utf-8?B?Z2tkNG9tNXRyT25TNTJOa1d6a29pNk51eTUzajNZK0JJNUdPaEZJcllHNTYx?=
+ =?utf-8?B?eDhzamlidXBIWkRkQ1lxUWY4M25PR0hnYnFiei91ZmhwNnl0S3llRVRpTXVl?=
+ =?utf-8?B?TU96MkdDMlhhT0tHZndPVzBHSUNBbVdzN05GRTY2TDBBZmtmYUkyQU1sVmNs?=
+ =?utf-8?B?YWF3N2lRalpEcDJCcDFXUm1RNTFrQXFtZ0xhZFg0dkJabitKVjJjV1lka2dq?=
+ =?utf-8?B?eER4OEVYOXU3akNoazlkU2c5aVIwU3Awb3Rwcm1nbUozbWR2MTcvcytCc2w4?=
+ =?utf-8?B?bXdDb3paUE5DMmxDajRYd1VRcENReE8zRm1lNk1OZ2E1MlpxUWFjbXR5TXc1?=
+ =?utf-8?B?dUVLSDVMVHFDV04xUDBZaUJYL2RIb0dGRWRaSEVDS0d3OWVIZGlPSnpzUkE4?=
+ =?utf-8?B?Qi9XZ2tEbXZSVjYvdkZkbncxZXNuYTkyWnVaMDN3WW53N3BTU2ZtZjkybis5?=
+ =?utf-8?B?SW1NMWEvU0dMREVhblU5M2F4T2dscXNOUGdHTWs3alNOckxZUGR5MnJtUkpo?=
+ =?utf-8?B?dXc9PQ==?=
+X-OriginatorOrg: kunbus.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8874814-565c-4480-3c5c-08dd0ee32367
+X-MS-Exchange-CrossTenant-AuthSource: AM0P193MB0738.EURP193.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2024 12:01:46.4473
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2024 12:58:07.3682
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bPPK/PD7cXKIqZ2SSRIT2YAIr1ZhbqRAv4e6lBTSPSn3dRqNq70RpPaq2sBs+1CXZUvPfKkqmaZ1yVcvg7KIMugEgFrwfCaxZ5xfr2JP7AI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB11079
+X-MS-Exchange-CrossTenant-UserPrincipalName: WW/XALK6VWhIPUM6GkjQzNYJ/TzVOeE8NZHB7gVOqvwDI6JhXaPBILsdl7kCqkbgdBPalvfzluzaOvlCLAPhWpLs+YgCZPJamaNQs6Qoivc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXP193MB2361
 
-On 11/26/2024 9:08 PM, Krzysztof Kozlowski wrote:
-> On 26/11/2024 12:49, Ciprian Costea wrote:
->> +
->> +title: NXP S32G2/S32G3 Real Time Clock (RTC)
->> +
->> +maintainers:
->> +  - Bogdan Hamciuc <bogdan.hamciuc@nxp.com>
->> +  - Ciprian Marian Costea <ciprianmarian.costea@nxp.com>
->> +
->> +description:
->> +  RTC hardware module present on S32G2/S32G3 SoCs is used as a wakeup source.
->> +  It is not kept alive during system reset and it is not battery-powered.
+Hi,
+
+On 14.11.24 09:51, Alexandre Belloni wrote:
+> Hello,
 > 
-> Does this mean that this is not a standard RTC thus standard RTC schema
-> does not apply?
+> This has been discussed multiple times in the past, we can't have a DT
+> property for this as we need to be able to change it at runtime. There
+> is already a userspace interface to do this.
 > 
+> Below is my current patch for this that has been tested on pcf2127. I
+> didn't send it yet because we are losing information when switching from
+> standard or direct mode to disabled because when BSM is disabled, there
+> is no configuration where battery low detection function is enabled so
+> going from disabled to standard or direct will keep BLD disabled.
 
-Hello Krzysztof,
+Sorry for my late response. I've tested the patch on our hardware. and 
+this would solve our problem. I understand, that it is not ideal, that 
+information is lost when switching modes. But I can't figure a way how 
+to avoid this.
 
-I would say the standard RTC schema does apply but indeed you bring up a 
-valid point in the fact that I forgot to reference 'rtc.yaml' schema.
-I will fix this in V6, by adding:
+Thank you and best regards,
+Philipp
 
-allOf:
-   - $ref: rtc.yaml#
-
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - enum:
->> +          - nxp,s32g2-rtc
->> +      - items:
->> +          - const: nxp,s32g3-rtc
->> +          - const: nxp,s32g2-rtc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: ipg clock drives the access to the RTC iomapped registers
->> +      - description: Clock source for the RTC module. Can be selected between
->> +          4 different clock sources using an integrated hardware mux.
->> +          On S32G2/S32G3 SoCs, 'source0' is the SIRC clock (~32KHz) and it is
->> +          available during standby and runtime. 'source1' is reserved and cannot
 > 
-> I am not sure what are the benefits of allowing to choose a clock which
-> cannot be used. I think source1 should be dropped.
+> 8<--------------------------------------------------------------------
 > 
-
-The current RTC support targets S32G2/S32G3 SoCs where 'source1' clock 
-source cannot be used. The reasoning for allowing to choose it is that 
-on future SoCs from S32 family the same RTC module may be integrated and 
-'source1' may become available.
-
->> +          be used. 'source2' is the FIRC clock and it is only available during
->> +          runtime providing a better resolution (~48MHz). 'source3' is an external
->> +          RTC clock source which can be additionally added in hardware.
->> +
->> +  clock-names:
->> +    items:
->> +      - const: ipg
->> +      - enum: [ source0, source1, source2, source3 ]
->> +
-> Best regards,
-> Krzysztof
-
-Best Regards,
-Ciprian
+>  From 7db70b33c3939a0ebe147c32f406b34a2f5f1be8 Mon Sep 17 00:00:00 2001
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Date: Sat, 24 Feb 2024 19:58:20 +0100
+> Subject: [PATCH] rtc: pcf2127: add BSM support
+> 
+> The pcf2127 encodes BSM, BLD and power fail detection in the same set of
+> bits so it is necessary to do some calculation when changing BSM to keep
+> the rest of the configuration as-is. However, when BSM is disabled, there
+> is no configuration with BLD enabled so this will be lost when coming back
+> to a mode with BSM enabled.
+> 
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+>   drivers/rtc/rtc-pcf2127.c | 81 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 81 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index 9c04c4e1a49c..a7f73192d53d 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -48,6 +48,7 @@
+>   #define PCF2127_BIT_CTRL3_BLF                  BIT(2)
+>   #define PCF2127_BIT_CTRL3_BF                   BIT(3)
+>   #define PCF2127_BIT_CTRL3_BTSE                 BIT(4)
+> +#define PCF2127_CTRL3_PM                       GENMASK(7, 5)
+>   /* Time and date registers */
+>   #define PCF2127_REG_TIME_BASE          0x03
+>   #define PCF2127_BIT_SC_OSF                     BIT(7)
+> @@ -331,6 +332,84 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>          return 0;
+>   }
+> 
+> +static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
+> +{
+> +       struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> +       u32 value;
+> +       int ret;
+> +
+> +       switch (param->param) {
+> +       case RTC_PARAM_BACKUP_SWITCH_MODE:
+> +               ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               value = FIELD_GET(PCF2127_CTRL3_PM, value);
+> +
+> +               if (value < 0x3)
+> +                       param->uvalue = RTC_BSM_LEVEL;
+> +               else if (value < 0x6)
+> +                       param->uvalue = RTC_BSM_DIRECT;
+> +               else
+> +                       param->uvalue = RTC_BSM_DISABLED;
+> +
+> +               break;
+> +
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int pcf2127_param_set(struct device *dev, struct rtc_param *param)
+> +{
+> +       struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> +       u8 mode = 0;
+> +       u32 value;
+> +       int ret;
+> +
+> +       switch (param->param) {
+> +       case RTC_PARAM_BACKUP_SWITCH_MODE:
+> +               ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               value = FIELD_GET(PCF2127_CTRL3_PM, value);
+> +
+> +               if (value > 5)
+> +                       value -= 5;
+> +               else if (value > 2)
+> +                       value -= 3;
+> +
+> +               switch (param->uvalue) {
+> +               case RTC_BSM_LEVEL:
+> +                       break;
+> +               case RTC_BSM_DIRECT:
+> +                       mode = 3;
+> +                       break;
+> +               case RTC_BSM_DISABLED:
+> +                       if (value == 0)
+> +                               value = 1;
+> +                       mode = 5;
+> +                       break;
+> +               default:
+> +                       return -EINVAL;
+> +               }
+> +
+> +               return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
+> +                                         PCF2127_CTRL3_PM,
+> +                                         FIELD_PREP(PCF2127_CTRL3_PM, mode + value));
+> +
+> +               break;
+> +
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>   static int pcf2127_rtc_ioctl(struct device *dev,
+>                                  unsigned int cmd, unsigned long arg)
+>   {
+> @@ -741,6 +820,8 @@ static const struct rtc_class_ops pcf2127_rtc_ops = {
+>          .read_alarm       = pcf2127_rtc_read_alarm,
+>          .set_alarm        = pcf2127_rtc_set_alarm,
+>          .alarm_irq_enable = pcf2127_rtc_alarm_irq_enable,
+> +       .param_get        = pcf2127_param_get,
+> +       .param_set        = pcf2127_param_set,
+>   };
+> 
+>   /* sysfs interface */
+> --
+> 2.47.0
+> 
+> 
+> 
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
 
