@@ -1,159 +1,139 @@
-Return-Path: <linux-rtc+bounces-2643-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2644-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A3E49DBD49
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Nov 2024 22:18:42 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7A6A164A9C
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Nov 2024 21:18:38 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8F1B1C461F;
-	Thu, 28 Nov 2024 21:18:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lgxVwZu0"
-X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A789B9DC1D6
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Nov 2024 10:58:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3E41494A5;
-	Thu, 28 Nov 2024 21:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DDD1280A6A
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Nov 2024 09:58:04 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E4618871F;
+	Fri, 29 Nov 2024 09:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S+K4O+HP"
+X-Original-To: linux-rtc@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC071865E5;
+	Fri, 29 Nov 2024 09:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732828713; cv=none; b=WyQV56es7dxYCifL8Fts0oODbk0dP3voI0/it6LmyRvzdTQahrSIWdpYeqkOztd4AzQELbH0aIRFfswbxn+crCcHehlj0cJPEnd54lvI+1V8Tg5j+RcWP7TJ1xiH3CEIdTh4KU/K6N0Mcj3F9UpydcxezY2Lq7hEgsO2MCdsCY0=
+	t=1732874282; cv=none; b=e19ZITxP80st3Iloq9xdBGGyeYVme48KjWFsG4rcDO69FRoida/vtqmDO9sMfVWo1/4861DXtmUj8h7n02KbC591lCfYrkbGJXRs7nQah1WcPWlioDRqA80xedSYWsazJ0BK9D6WfeYNMSEuBcoxjJ2jlodZ2YShLbgEFfQTJg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732828713; c=relaxed/simple;
-	bh=GO+N933rH1qIyupawKjaT9KoZU7mSDCkyHjVeWZvROM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ANklCECXi+IO/9YYzjSBr7Q6cgmhmyvGMJGNQ6oKRHyRemCAUCvwaPxvwCXNhPR80mo1gnxNJuu6KAEoDV2zUg7bebW/qI/xmPdTb2zFxV53wZ/DlClo/UHZIyWW965s8rFDnqj1xqam/v4aEOdNXCb9e+i2qsu8p6GcGsmJR8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lgxVwZu0; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732828712; x=1764364712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GO+N933rH1qIyupawKjaT9KoZU7mSDCkyHjVeWZvROM=;
-  b=lgxVwZu0BUL1e/nBmweLLqxteAD6eo4uwuynWtQLDtq9L5UvpxkR8qIC
-   kikYcSD707QSu70pXKp5XWrqulAeC4HmJ87kSNRZ//LvE7Heh8428cmCa
-   YbHmsV3OL0xbyOfzkAnl1J4XwrwzYaX68NoW00EbElUH7sKalFHS5uUnG
-   Q4+pP83xTyfMZDUsf/eDwFECnn81x7sJFe+J8mI4KTZE4Z97T595J2d4m
-   0Yk1OUFgGown8AGDAPxaD1dYEk7EZ3PqH6kAjHjx2IkFKmRL9QZgpySla
-   k3G3DjY6wPCVoytpUqqvtCJfsBEa6VveAeIhfOgALnAGThWaTqn0+cg3P
-   g==;
-X-CSE-ConnectionGUID: QiHZTL4PRLqfpooooUKsZQ==
-X-CSE-MsgGUID: UkaLzTQQRr2gVUgodU8A+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11270"; a="36999186"
-X-IronPort-AV: E=Sophos;i="6.12,193,1728975600"; 
-   d="scan'208";a="36999186"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 13:18:30 -0800
-X-CSE-ConnectionGUID: yuXQn1uPTdemmEhda96acg==
-X-CSE-MsgGUID: 9FrGQozmT5m6JkP2rMIpxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,193,1728975600"; 
-   d="scan'208";a="129819816"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 28 Nov 2024 13:18:26 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tGlu3-000A3b-1H;
-	Thu, 28 Nov 2024 21:18:23 +0000
-Date: Fri, 29 Nov 2024 05:18:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	NXP S32 Linux <s32@nxp.com>, Christophe Lizzi <clizzi@redhat.com>,
-	Alberto Ruiz <aruizrui@redhat.com>,
-	Enric Balletbo <eballetb@redhat.com>,
-	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
-	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
-	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
-Subject: Re: [PATCH v5 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-Message-ID: <202411290700.vbqI1pTY-lkp@intel.com>
-References: <20241126114940.421143-3-ciprianmarian.costea@oss.nxp.com>
+	s=arc-20240116; t=1732874282; c=relaxed/simple;
+	bh=1hDbGfUA23ougGXXcYk+JyKRByc2HiBrBs3Qlvj72oo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pHoh2Urm2Yz+v5pidw0q6JHzBx0s6I3zOZxwxNMRSdolZHgTb+vM/eHOnoSdlkW/EmxkLWMBlyTJKPGZx6mBkJvBfEUoyBRO0v8AZQ1abIKqsuXqWC6cPsk4ooIWtQftu1dodSUEnIiyK6jWs/5ult/rP8ZbewMUA7zle3c8orI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S+K4O+HP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0405C4CED3;
+	Fri, 29 Nov 2024 09:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732874281;
+	bh=1hDbGfUA23ougGXXcYk+JyKRByc2HiBrBs3Qlvj72oo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=S+K4O+HP1s/SOyDC2ZaronkJTlXMeh+hei9/UDdAxMKNVRc+w6Pa1aw8Wy/DJU1La
+	 h4gsxSkfjjHuE0XXYfO6gFNUrCspcr+HTbPhdSP3Y9+RrnGRSnW4CuzZVta1CwZYmX
+	 ppOLZYX5ErLP7rIzLKzKTuvY1HH5BVYfec6Ex0H4mdezvnIgoJYlIdWgqzaqgb8hey
+	 O/pE9VO4WFda/D1SwRz7D2YJw1JY/Ged/UQVd8iy1pgkjWlSSu9suevByjn6LBpNCs
+	 9xn7zPdTsLfS1hnpgk4O5hB2/f9rlKDXqyCBNrzdWyn15J/MpBb5nMO7NQz+0WWobH
+	 invGq3vz+janw==
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa52a5641f8so215526966b.3;
+        Fri, 29 Nov 2024 01:58:01 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUIGJgE1O6T9j1RTVOsfcHbTQj0m8Gkm8EPOcUl/Kc74O6vWOZYbaw5btM8SNdmJc3/brOPae+ngF/q@vger.kernel.org, AJvYcCVYre6f+e6ajmPnyDXrVvg0kajUEOJhvvBtG1pSKwpaFGEOUB2TKcqpfRH0GM6whFQL6eLA0mc2wT/EIqI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznKymqE8+2siblTody7xYE7WzysUyMknEwWr3Rmnk4gErtHEqC
+	tdiyDmOwqbmQ5FJjlsynJ0oDHQ4ZPf4EXpTer0OlmEpyWlVj8sIRFVbUZfav9+FvA5ROD5QxAn5
+	83bqwlF5VWn57hx/wrOCgcO/4ZSI=
+X-Google-Smtp-Source: AGHT+IEDszHNASRg00jYgRLxlywJhuAd9svadYgJOxs6e8sVD3iACRRDC1RVnQFlbOIIyEy7xCtsiG/ayUapIS8OKWE=
+X-Received: by 2002:a17:906:3cb2:b0:aa5:2a41:d2c8 with SMTP id
+ a640c23a62f3a-aa58103c784mr800573466b.38.1732874280276; Fri, 29 Nov 2024
+ 01:58:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241126114940.421143-3-ciprianmarian.costea@oss.nxp.com>
+References: <20241128070227.1071352-1-wangming01@loongson.cn>
+In-Reply-To: <20241128070227.1071352-1-wangming01@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Fri, 29 Nov 2024 17:57:48 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4rrQ5v85TXSF-oFAxSxFgvvXR+O2YmDhOPhCcwuOzVuA@mail.gmail.com>
+Message-ID: <CAAhV-H4rrQ5v85TXSF-oFAxSxFgvvXR+O2YmDhOPhCcwuOzVuA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: loongson: clear TOY_MATCH0_REG in loongson_rtc_isr
+To: Ming Wang <wangming01@loongson.cn>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Keguang Zhang <keguang.zhang@gmail.com>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, WANG Xuerui <git@xen0n.name>, 
+	Binbin Zhou <zhoubinbin@loongson.cn>, linux-rtc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, gaojuxin@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ciprian,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Thu, Nov 28, 2024 at 3:02=E2=80=AFPM Ming Wang <wangming01@loongson.cn> =
+wrote:
+>
+> The TOY_MATCH0_REG should be cleared to 0 in the RTC interrupt handler,
+> otherwise the interrupt cannot be cleared, which will cause the
+> loongson_rtc_isr to be triggered multiple times.
+Function names usually use () postfixes, e.g., loongson_rtc_isr() and
+loongson_rtc_handler().
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on arm64/for-next/core linus/master v6.12]
-[cannot apply to abelloni/rtc-next next-20241128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> The previous code cleared TOY_MATCH0_REG in the loongson_rtc_handler,
+> which is an ACPI interrupt. This did not prevent loongson_rtc_isr
+> from being triggered multiple times.
+>
+> This commit moves the clearing of TOY_MATCH0_REG to the loongson_rtc_isr
+> to ensure that the interrupt is properly cleared.
+>
+> Fixes: 1b733a9ebc3d ("rtc: Add rtc driver for the Loongson family chips")
+> Signed-off-by: Ming Wang <wangming01@loongson.cn>
+> ---
+>  drivers/rtc/rtc-loongson.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
+> index e8ffc1ab90b0..0aa30095978b 100644
+> --- a/drivers/rtc/rtc-loongson.c
+> +++ b/drivers/rtc/rtc-loongson.c
+> @@ -114,6 +114,12 @@ static irqreturn_t loongson_rtc_isr(int irq, void *i=
+d)
+>         struct loongson_rtc_priv *priv =3D (struct loongson_rtc_priv *)id=
+;
+>
+>         rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+> +
+> +       /*
+> +        * The TOY_MATCH0_REG should be cleared 0 here,
+> +        * otherwise the interrupt cannot be cleared.
+> +        */
+> +       regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
+There is usually a blank line before the return statement.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Costea/dt-bindings-rtc-add-schema-for-NXP-S32G2-S32G3-SoCs/20241128-100010
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20241126114940.421143-3-ciprianmarian.costea%40oss.nxp.com
-patch subject: [PATCH v5 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20241129/202411290700.vbqI1pTY-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241129/202411290700.vbqI1pTY-lkp@intel.com/reproduce)
+Huacai
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411290700.vbqI1pTY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/rtc/rtc-s32g.c:109: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Convert a number of seconds to a value suitable for RTCVAL in our clock's
-
-
-vim +109 drivers/rtc/rtc-s32g.c
-
-   107	
-   108	/**
- > 109	 * Convert a number of seconds to a value suitable for RTCVAL in our clock's
-   110	 * current configuration.
-   111	 * @rtcval: The value to go into RTCVAL[RTCVAL]
-   112	 * Returns: 0 for success, -EINVAL if @seconds push the counter past the
-   113	 *          32bit register range
-   114	 */
-   115	static int sec_to_rtcval(const struct rtc_priv *priv,
-   116				 unsigned long seconds, u32 *rtcval)
-   117	{
-   118		u32 delta_cnt;
-   119	
-   120		if (!seconds || seconds > cycles_to_sec(priv->rtc_hz, RTCCNT_MAX_VAL))
-   121			return -EINVAL;
-   122	
-   123		/*
-   124		 * RTCCNT is read-only; we must return a value relative to the
-   125		 * current value of the counter (and hope we don't linger around
-   126		 * too much before we get to enable the interrupt)
-   127		 */
-   128		delta_cnt = seconds * priv->rtc_hz;
-   129		*rtcval = delta_cnt + ioread32(priv->rtc_base + RTCCNT_OFFSET);
-   130	
-   131		return 0;
-   132	}
-   133	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>         return IRQ_HANDLED;
+>  }
+>
+> @@ -131,11 +137,7 @@ static u32 loongson_rtc_handler(void *id)
+>         writel(RTC_STS, priv->pm_base + PM1_STS_REG);
+>         spin_unlock(&priv->lock);
+>
+> -       /*
+> -        * The TOY_MATCH0_REG should be cleared 0 here,
+> -        * otherwise the interrupt cannot be cleared.
+> -        */
+> -       return regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
+> +       return ACPI_INTERRUPT_HANDLED;
+>  }
+>
+>  static int loongson_rtc_set_enabled(struct device *dev)
+> --
+> 2.43.0
+>
 
