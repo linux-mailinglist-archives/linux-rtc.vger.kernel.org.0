@@ -1,149 +1,168 @@
-Return-Path: <linux-rtc+bounces-2650-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2651-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 026B79DF897
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Dec 2024 02:36:43 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7274F9DF965
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Dec 2024 04:10:37 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB16416282F
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Dec 2024 01:36:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3C73B20A80
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Dec 2024 03:10:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 833828489;
-	Mon,  2 Dec 2024 01:36:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F94A22098;
+	Mon,  2 Dec 2024 03:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1WIp2GF"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81012257D;
-	Mon,  2 Dec 2024 01:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75D13BBC5;
+	Mon,  2 Dec 2024 03:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733103401; cv=none; b=CzRkwx6ICrZmjGVd2SArjDXctQVkLJWMCE30OeUnPby1NTQQHjVyNTDoVPqcou/B7D/7OUy+YRvBYmlie8wsj7xk7lvLOQLpzuxsgHHWnCGZVasmsCzV/9AKcHVMkrliKtIP0faoirpNQc5rpd27ZrU+Spm/0+S8GpaNeNK1vUs=
+	t=1733109030; cv=none; b=S2HsfbrrY6x2chDBu9gKYDIRrs5m/iwL6+wESRrUsAp/UfcAGEpfNqb9mrwcUIrA7fd8hPQaQ41fwS8Pq6+ofSViXqYdPjCfhun/Aa7jxjsVaIUDiTIfKY7NWCf1d4mGiIO3l7MfKYY6GTqPrkEU2Mw0xp1qyRr+n4/C0maVSNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733103401; c=relaxed/simple;
-	bh=c9lFTBjWNgZ2MZLTwftw7igkltMPc+HByBbGiHhDA+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ljPVEW3Bd/mvf4uSRnHpHTZpE+yE8OgTH2CVYGkLPPW4TJL9aynYuMRfyZ8h5p2LoKHuLb7Iv/sSSVKe1AK9yHrduuzop45dxedFe3hYTwkLDD4gN8J1StKurUo2AMXZSwiIhOvXutzWXEE/3p9azhW5sNWr+WSAT0YpTY6jQF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [111.207.111.194])
-	by gateway (Coremail) with SMTP id _____8Cx764aD01n9S1OAA--.47630S3;
-	Mon, 02 Dec 2024 09:36:26 +0800 (CST)
-Received: from [10.180.13.127] (unknown [111.207.111.194])
-	by front1 (Coremail) with SMTP id qMiowMBxKMEYD01nCGRxAA--.9518S2;
-	Mon, 02 Dec 2024 09:36:25 +0800 (CST)
-Message-ID: <0a7a0508-4303-4ddf-bcd6-8c00e8fcc255@loongson.cn>
-Date: Mon, 2 Dec 2024 09:36:24 +0800
+	s=arc-20240116; t=1733109030; c=relaxed/simple;
+	bh=WuABBIyxWxGIuUEf7tH0nMpTsOTuudUyomaRKdl+1gE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iwumKmbdrzzBgE0xlPgIVtt611cSR8hrenTTCN3v6hZW3u9CX2J8E5zuu4TjQ7BI0XIUmKBV8Z12sdPYfl+HJ1xQX6mpan9t86vErBC7eepSidRjXR6E8+EfsyP5jqbPG9eBjo+9QtHOuhcAv4vgQ4iou5XsleOiTk0dZ/yHzl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1WIp2GF; arc=none smtp.client-ip=209.85.218.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-a9f1c590ecdso632648366b.1;
+        Sun, 01 Dec 2024 19:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733109026; x=1733713826; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vvNts54nLaDXzoCuC3uPZxLQcEjNcHmmH7slyQInUPc=;
+        b=G1WIp2GFxR/6i9gaDbUhljSgBumE9xXsDt9TpVplmPSVTiUhB7G2bQDt2+DtTpqHEP
+         6MxgbDhGCDjU3en4NJKVKdsZ6ytiPYkEpM0agnunQ02MFKzRXjKxQo/OvyPTgffrqNEa
+         agnbP8imXj9AfgeBXLhJeRjnfWPShajoFHMBOrZdz4j9uLnhiKOiDAWo7zYGxE6JZbws
+         roOrAM1OrCNmABN9sfPlttRMdIiFd6jfhaDcttwbSSVGb/DGUsUlSiUM6+6K9WqjQxO/
+         ZiPtseWSz0HMzKMNyPC9uccE9UXHII02Nak3e6Nk6qDrmzUF4SWxj63q3W/kDk76AInU
+         zRUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733109026; x=1733713826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vvNts54nLaDXzoCuC3uPZxLQcEjNcHmmH7slyQInUPc=;
+        b=LQS/kgQYoRfGP+aSNtglUKA1yV3uhtg2MLPNU8BNSlz5F0rm60E8zrFOSZB2pkITY7
+         kXcAtN9LSd6X4s4u6BO8R2A8Owvhow/t1Bo/QAoi99xRRM8J3Jt8F85TZoswKR2+TSxO
+         ZgHP2hz0l8rQYKKqZMAJCE2k1Thrq0Y5Zj67oYb2aOZAQaxy8e0U/zrpluy+oJMzEv98
+         fTNkP9/jm5wkRVtHinz6rfTH2mYkDxHCLTkVw2uBabpTt7FwZH3zPGKqdhITPcrbvPwt
+         Tfes6k3Zoanf4VwFGstHXEENaB+nAEMylVD4OHQUCKD3tQ4WWbvMJvfriF9pGX9bTWiX
+         yMPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUv1NJbpYcbK4qw/PW7GEIYgp/l5n2lRSnNdWS1L1d9lP0lMa+DWB4uWXySExyObXTieaLQjdvmtl4h@vger.kernel.org, AJvYcCW2rSHQGodh49wq5lAvCy1HueZKFHN+tkdam8PpBy3yK8uxM4vx7cp1+JxGB8zt6VtiGyYM/6k414gxcLk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysEfgrf17bc3uZD0wse6pnwf78Y1FLzxpvDmqxUh69q95rngEM
+	KtL1SuPTHDe++/FjZofs6Lx9trVcVTK8fZcmwb3gL9SEuL+tUhplktsJrugqnD1IqOX8DE7aWzA
+	kSNVMBSZ1JWsgyrWL/vzVJJHEfrM=
+X-Gm-Gg: ASbGncvRIfC9tAMFFhMQSkjSaS3CSHP0m2a/FUIAMCm8lLy1aYegNk0A/sO41Ht0im7
+	2w9m+PVWCseRGmgsOQdeHp6xiRu+lVr0=
+X-Google-Smtp-Source: AGHT+IFokNj0CJ0WKzOxvAtyNcOJBhZbXE20GUIOYjMchjecdIHpvcirTRT1ZnbDUrAGgwd0EJuKmLUH5klgrSXVfrs=
+X-Received: by 2002:a17:906:18b2:b0:aa4:f520:41b6 with SMTP id
+ a640c23a62f3a-aa580f4c8a6mr1903686366b.30.1733109025811; Sun, 01 Dec 2024
+ 19:10:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rtc: loongson: clear TOY_MATCH0_REG in loongson_rtc_isr
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Keguang Zhang <keguang.zhang@gmail.com>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, WANG Xuerui <git@xen0n.name>,
- Binbin Zhou <zhoubinbin@loongson.cn>, linux-rtc@vger.kernel.org,
- linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, gaojuxin@loongson.cn
-References: <20241128070227.1071352-1-wangming01@loongson.cn>
- <CAAhV-H4rrQ5v85TXSF-oFAxSxFgvvXR+O2YmDhOPhCcwuOzVuA@mail.gmail.com>
-Content-Language: en-US
-From: Ming Wang <wangming01@loongson.cn>
-In-Reply-To: <CAAhV-H4rrQ5v85TXSF-oFAxSxFgvvXR+O2YmDhOPhCcwuOzVuA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMBxKMEYD01nCGRxAA--.9518S2
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/1tbiAQETEmdM5r8B1QAAsn
-X-Coremail-Antispam: 1Uk129KBj93XoWxJryrurWrKw43Zw4UGF1Dtwc_yoW8tw18pr
-	Waka1DuFsYgr4UCas3X3y5Wr4avrWfJryDuF4xK34F93ZrA3W5XF1FgFyUJrZ7ur95AF4Y
-	q3y8KFW3uF1qk3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6x
-	kI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
-	6r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64
-	vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
-	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrx
-	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
-	6r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
-	CI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j8L0nUUUUU
-	=
+References: <20241011043153.3788112-1-leonylgao@gmail.com> <173136306889.3322178.5149197946199507685.b4-ty@bootlin.com>
+ <CAJxhyqC9hYo3E=J--EYN9uYQc6_q67X4F5DSgpMFzsWrFcbw4Q@mail.gmail.com> <20241129232038ad3be3ae@mail.local>
+In-Reply-To: <20241129232038ad3be3ae@mail.local>
+From: Yongliang Gao <leonylgao@gmail.com>
+Date: Mon, 2 Dec 2024 11:10:14 +0800
+Message-ID: <CAJxhyqCGYeYQZfBSD41xFHDE2uqFsn0-9vUcYsa=1zGcSyPAzQ@mail.gmail.com>
+Subject: Re: [PATCH] rtc: check if __rtc_read_time was successful in rtc_timer_do_work()
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: john.stultz@linaro.org, linux-rtc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Yongliang Gao <leonylgao@tencent.com>, 
+	Jingqun Li <jingqunli@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi, huacai
+On Sat, Nov 30, 2024 at 7:20=E2=80=AFAM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 20/11/2024 22:17:34+0800, =E9=AB=98=E6=B0=B8=E8=89=AF wrote:
+> > Hi Alexandre Belloni,
+> >
+> > I've noticed that the post-failure process for __rtc_read_time requires
+> > careful handling.
+> > 1. Need to call pm_relax.
+>
+> I had a look when taking your patch and I'm not convinced calling
+> pm_relax is necessary.
 
-On 2024/11/29 17:57, Huacai Chen wrote:
-> Hi,
-> 
-> On Thu, Nov 28, 2024 at 3:02 PM Ming Wang <wangming01@loongson.cn> wrote:
->>
->> The TOY_MATCH0_REG should be cleared to 0 in the RTC interrupt handler,
->> otherwise the interrupt cannot be cleared, which will cause the
->> loongson_rtc_isr to be triggered multiple times.
-> Function names usually use () postfixes, e.g., loongson_rtc_isr() and
-> loongson_rtc_handler().
-> 
-OK, I will fix it in the next version.
->>
->> The previous code cleared TOY_MATCH0_REG in the loongson_rtc_handler,
->> which is an ACPI interrupt. This did not prevent loongson_rtc_isr
->> from being triggered multiple times.
->>
->> This commit moves the clearing of TOY_MATCH0_REG to the loongson_rtc_isr
->> to ensure that the interrupt is properly cleared.
->>
->> Fixes: 1b733a9ebc3d ("rtc: Add rtc driver for the Loongson family chips")
->> Signed-off-by: Ming Wang <wangming01@loongson.cn>
->> ---
->>   drivers/rtc/rtc-loongson.c | 12 +++++++-----
->>   1 file changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
->> index e8ffc1ab90b0..0aa30095978b 100644
->> --- a/drivers/rtc/rtc-loongson.c
->> +++ b/drivers/rtc/rtc-loongson.c
->> @@ -114,6 +114,12 @@ static irqreturn_t loongson_rtc_isr(int irq, void *id)
->>          struct loongson_rtc_priv *priv = (struct loongson_rtc_priv *)id;
->>
->>          rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
->> +
->> +       /*
->> +        * The TOY_MATCH0_REG should be cleared 0 here,
->> +        * otherwise the interrupt cannot be cleared.
->> +        */
->> +       regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
-> There is usually a blank line before the return statement.
-> 
-> Huacai
-OK, I will fix it in the next version.
+Before all the code of schedule_work(&rtc->irqwork),
+pm_stay_awake(rtc->dev.parent) is called. There are the following 4
+functions:
+ - rtc_set_time
+ - rtc_update_irq
+ - rtc_timer_enqueue
+ - rtc_timer_remove
+At the end of the normal processing flow of the rtc_timer_do_work
+function, pm_relax(rtc->dev.parent) is called.
+So, if it fails here, pm_relax(rtc->dev.parent) should be called, right?
 
-Thanks,
-Ming
-> 
->>          return IRQ_HANDLED;
->>   }
->>
->> @@ -131,11 +137,7 @@ static u32 loongson_rtc_handler(void *id)
->>          writel(RTC_STS, priv->pm_base + PM1_STS_REG);
->>          spin_unlock(&priv->lock);
->>
->> -       /*
->> -        * The TOY_MATCH0_REG should be cleared 0 here,
->> -        * otherwise the interrupt cannot be cleared.
->> -        */
->> -       return regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
->> +       return ACPI_INTERRUPT_HANDLED;
->>   }
->>
->>   static int loongson_rtc_set_enabled(struct device *dev)
->> --
->> 2.43.0
->>
+>
+> > 2. Potentially need to set the alarm to ensure subsequent interrupts ca=
+n
+> > process the
+> >     expired timer? Could you give me some advice?
+>
+> Same thing, if you are not able to read the current time, setting the
+> next alarm is going to fail anyway.
 
+OK, I won't set the next alarm if it fails here. Thanks.
+
+>
+> > Should I continue to submit a fix patch or create a v2 version of the p=
+atch?
+> >
+> > Best Regards,
+> > Yongliang Gao
+> >
+> > Alexandre Belloni <alexandre.belloni@bootlin.com> =E4=BA=8E2024=E5=B9=
+=B411=E6=9C=8812=E6=97=A5=E5=91=A8=E4=BA=8C 06:11=E5=86=99=E9=81=93=EF=BC=
+=9A
+> >
+> > > On Fri, 11 Oct 2024 12:31:53 +0800, Yongliang Gao wrote:
+> > > > If the __rtc_read_time call fails,, the struct rtc_time tm; may con=
+tain
+> > > > uninitialized data, or an illegal date/time read from the RTC hardw=
+are.
+> > > >
+> > > > When calling rtc_tm_to_ktime later, the result may be a very large =
+value
+> > > > (possibly KTIME_MAX). If there are periodic timers in rtc->timerque=
+ue,
+> > > > they will continually expire, may causing kernel softlockup.
+> > > >
+> > > > [...]
+> > >
+> > > Applied, thanks!
+> > >
+> > > [1/1] rtc: check if __rtc_read_time was successful in rtc_timer_do_wo=
+rk()
+> > >       https://git.kernel.org/abelloni/c/e8ba8a2bc4f6
+> > >
+> > > Best regards,
+> > >
+> > > --
+> > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
+> > >
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
