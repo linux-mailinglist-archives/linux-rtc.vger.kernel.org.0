@@ -1,46 +1,46 @@
-Return-Path: <linux-rtc+bounces-2666-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2667-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0C539E49EA
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2024 00:48:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F7B29E4A0D
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2024 00:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2D14164377
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Dec 2024 23:46:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BD8E1882B18
+	for <lists+linux-rtc@lfdr.de>; Wed,  4 Dec 2024 23:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10E121171E;
-	Wed,  4 Dec 2024 23:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BA9214A93;
+	Wed,  4 Dec 2024 23:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JwWLVfg6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tDu0L5KP"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9301B211719;
-	Wed,  4 Dec 2024 23:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898A220D51C;
+	Wed,  4 Dec 2024 23:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733355324; cv=none; b=jjRfxeN2MdbAiVS1N0OIzLuUbqSi3Jmf6xv5oe1FFvPFbjPMqXGsNP3nNT6Uf6U7/Kxl7v/ouG6aTy5ijzMA2KEb28KWvkgg3h7DcP0RRUN52H1nx3CGJkefsqY+k3CacjANP0rNc58YCTqiIwfd2o1Bc/DoLiKuxFU7e/M6vu0=
+	t=1733355347; cv=none; b=EiIx+cJ0PxGxSlGyCgfoOvJTC4T9U32IQPrcUpoSy/tlzgVMbNDvCrAeBjRCjYrUY8YwUvZTcPULsrOSrLvDxdjvHqk17JCrC4NBZYRTz0mB3M3jBm/KlslZMhlkQSCjQHS5paM9j+ENdfkjURowXYytB6X3KFXlxjsFTwI8nA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733355324; c=relaxed/simple;
+	s=arc-20240116; t=1733355347; c=relaxed/simple;
 	bh=bD/RNP/wZcE8mx//XWXRtjbINcRDinSfXo0ShkmlNoc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Hv6OtR9VfKKdsk/MOdcAC9H6cw4gfna+bcILyaV029l4qt/eZlG6l6TPIgLzj4MXxqrF5nuFDakbqXjt19kF+EvFpG7mBPM7q53/KU28M6dQLvfIlcj76J52AIfs61ZAvV34hNMMkAzHIEUhPqfi2jcj6/BnJraSu2IDNxIkVLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JwWLVfg6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 481CEC4CED2;
-	Wed,  4 Dec 2024 23:35:23 +0000 (UTC)
+	 MIME-Version:Content-Type; b=jNn+64teJgfO0+7CIzwlXGjguYdSnp/PpKWzHq7lGeNjFY0EWeWG70Z0JHvgKY/ePO4DT9jkRleBbFWzmdBW4Zhfs3CG5WO75OhwHM3qEzUC+4edR/xedwIlhvvv8brHAGVD/G7M3Dz0PlNTcUkJTn+KkpjF9CTZs5+HMhXNDvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tDu0L5KP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34EF1C4CECD;
+	Wed,  4 Dec 2024 23:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733355324;
+	s=k20201202; t=1733355347;
 	bh=bD/RNP/wZcE8mx//XWXRtjbINcRDinSfXo0ShkmlNoc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JwWLVfg6C3oAsjvKxaXiesQomr99L95uqIEEcGe9lxoMR1tezPhdpLt45Fgrv4t1N
-	 LpRwvm1hH1WhnWMQx0jy2tpsgwkSv5BsbNFjZRWdV5OAG1mTaVi2dUmS34cNujWUFR
-	 KXrgeK0jtqPHXuDfL/JRj/5RpyZiBdvI2Eo6Fl0iU3FXYrRv68ya4uKgVYW50izU7L
-	 TQz2/fa+CLadoBMxHSg2y3iiTD5VEy+CGqAcfKkyp4t1RE+LGxRluKWJlE6breGO3j
-	 0tkMbsPhO8wF8yAS45DuFCoKLHl0oTNJ1/f6S92z9DjgBK4JPmMaq+Dg04lTuV2F4N
-	 zI3xKCzOnWazQ==
+	b=tDu0L5KPwsfInIDjZAq4B5cQGkB/+5lxtqZMFGhV9jFdDGdLdJ5pKanGWTz6tnNJB
+	 rCQsemsMmdmOpOoyHwJiRQ2K/pLUhC6pk59CF9rdmhrJe6MiTUTF9A5MKIu5W05TzE
+	 fkSpG2IUnjghly4MRgHSR4RMZwjWCrGsgnY7Yk4nSE5j4S5E5t5BNQXFhHyLOqh98D
+	 suWPam2TsndkGIdzHQpSQjHx8nTX2cR+NHD14AthKFU1WTos1xk8JHh1u9wYJ3w7fs
+	 A92t6u2bnQTxHqvQrAfexgun/Cy0HgIHlWWOQUTAX/DkfFx7sQf/APMegYsdwc5Ei5
+	 3vV6WnijVRzeA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.11 2/7] rtc: cmos: avoid taking rtc_lock for extended period of time
-Date: Wed,  4 Dec 2024 17:23:44 -0500
-Message-ID: <20241204222402.2249702-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 2/6] rtc: cmos: avoid taking rtc_lock for extended period of time
+Date: Wed,  4 Dec 2024 17:24:11 -0500
+Message-ID: <20241204222425.2250046-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204222402.2249702-1-sashal@kernel.org>
-References: <20241204222402.2249702-1-sashal@kernel.org>
+In-Reply-To: <20241204222425.2250046-1-sashal@kernel.org>
+References: <20241204222425.2250046-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -64,7 +64,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11.10
+X-stable-base: Linux 6.6.63
 Content-Transfer-Encoding: 8bit
 
 From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
