@@ -1,122 +1,157 @@
-Return-Path: <linux-rtc+bounces-2664-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2665-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 360FB9E352C
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Dec 2024 09:25:16 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 940859E49E0
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2024 00:47:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7416BB2789F
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Dec 2024 08:09:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4871418818FE
+	for <lists+linux-rtc@lfdr.de>; Wed,  4 Dec 2024 23:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2622818C03B;
-	Wed,  4 Dec 2024 08:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD9D20A5EA;
+	Wed,  4 Dec 2024 23:34:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="SSt9Ck6r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVheEnCc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0463F1714B3;
-	Wed,  4 Dec 2024 08:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.30.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B6320766E;
+	Wed,  4 Dec 2024 23:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733299774; cv=none; b=NFXLQq0hjymgrcVXrN8FVoDTZCY3EO6yg0I3hjF5UgVWXQ89coptTC0Whb69Bn+/87EyR06/ktCe44+8nxp6aRk+9Mk/JvY9/k9r84tAmcXkKv5ks74NJ160XqluoEMTF7jpFXGf5cpNe6+LI/KB48lt0YhmdOkd962ZMB61jqU=
+	t=1733355297; cv=none; b=Aghe1mUflD70uQwNPSWKE3zLHel0eiiuNeCWCtRro6HY5IscG38B4G7VQOXiwlesepM4Jd+/VnMawLHnePxLmKRw6knfL7aBia9Ix8YuVKgD/Zpx52Q0RJKBmQ0shFGjZevbsJ95s4+nbCGABxBL6HeTUmuIHmOZjs2LA/lLz7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733299774; c=relaxed/simple;
-	bh=+FW2eXT1WDvAA3ouamIbr2wH+2ChUGr+wp8mCetrjfE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=GM6bDfw/CQgyy/yPRG8nmxUwI8+ynVimNDHPezeiLevg/6/6BPRfjqcae7wExpF/WQjHQ/4PHYpWo8jjOGImkG6roMvarJLpq3ah+sxwze5Fg1e8mqjWqqFb8GH2Dfe+nwuyG46ztcQPjtq+tSfUqJJ0hT/QmKkukSO9Pmi1myU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=SSt9Ck6r; arc=none smtp.client-ip=188.40.30.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=geanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-	s=default2211; h=Content-Type:MIME-Version:Message-ID:Date:References:
-	In-Reply-To:Subject:Cc:To:From:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=YadcVfReBs2XK7Wp6qew5wyT/6xKrDqXPFq+/V2+s1M=; b=SSt9Ck6rXSe3GL44TdtuQwfFD5
-	QJsGr8JSdRzsTF11jrSZ/UX61yTgUff3ext3xzkyh+LZMZ5MBhTlNpWdfkWT/NOC24SMpI4ywpuwO
-	4rSS5zFJqF1Os+KQcc8JiDmVk02TBUo6YpXDWIGv4Gu+3glOfM2x4tN0wxOrSaleU/Als43WjQwvP
-	NLXQV6Mb/fu1k4WNKUIR7LxiLWx7fHyagZ5Qf2bWnSldxv+35sUbHr6U9sgyvgVF8K1elPJGQkNZF
-	6uBpGGttksW6JfgwZhuHhxC7yGtUl+FRsbiS+suuWv4mkrgRMLqOeYNR+jzVfPwo6aAYEF3UuwZTw
-	IUEQIyag==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <esben@geanix.com>)
-	id 1tIkRk-00067Y-46; Wed, 04 Dec 2024 09:09:20 +0100
-Received: from [185.17.218.86] (helo=localhost)
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <esben@geanix.com>)
-	id 1tIkRj-0002A9-2K;
-	Wed, 04 Dec 2024 09:09:19 +0100
-From: Esben Haabendal <esben@geanix.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-arm-kernel@lists.infradead.org,  stable@vger.kernel.org,  Patrice
- Chotard <patrice.chotard@foss.st.com>
-Subject: Re: [PATCH 0/6] rtc: Fix problems with missing UIE irqs
-In-Reply-To: <20241203-rtc-uie-irq-fixes-v1-0-01286ecd9f3f@geanix.com> (Esben
-	Haabendal's message of "Tue, 03 Dec 2024 11:45:30 +0100")
-References: <20241203-rtc-uie-irq-fixes-v1-0-01286ecd9f3f@geanix.com>
-Date: Wed, 04 Dec 2024 09:09:19 +0100
-Message-ID: <87cyi798eo.fsf@geanix.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1733355297; c=relaxed/simple;
+	bh=bD/RNP/wZcE8mx//XWXRtjbINcRDinSfXo0ShkmlNoc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pT2eKSpYPBAk15QbHEIEmRtCYVcv1qequrLe/oxYjl9Yd35mMfM41x/cuAHN/TlAURC/NmzVK9MKPigxklZUzk6Oo1mQz34rf6eTYmsBP+MFRo1zun1jG94cuhN4r6tqGUmQtPb6m+7hQ3EOtLeZRy1CFw0zw6IC8gw99RGnQiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVheEnCc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E82DC4CED2;
+	Wed,  4 Dec 2024 23:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733355296;
+	bh=bD/RNP/wZcE8mx//XWXRtjbINcRDinSfXo0ShkmlNoc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nVheEnCcqJGFqXnQcY9PvDbgcF+my3KSNBQF8Jl8W4Kt0ZoTFcSu6Q6qB5PnFbl/i
+	 qi1Pi6bKXEizCxKir2X9RV8hGJe43U4WKGpBom6S21e0dinMYozhcAo0a06RrImrt5
+	 K+3XonMqwqw2D9uIKIlPDu/Ef3rTxwuDRSZ5P4+Y/GKmWzzSVkW1k3ExLN4DHQ/TMr
+	 37eD5rZYhwYXi+84r3XN24m1Sy3xwxvxjmNsxnXJ+vSood6ENK6JRslu2Hhr1gL/5h
+	 q8eGNMRS1xqFydKM8JJCA+S9ft9aHYxvu5XUrH+m0eV+x7R9+1lNd5MKqoT0FrZDWa
+	 bz3Iu4DroZghQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	=?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 2/8] rtc: cmos: avoid taking rtc_lock for extended period of time
+Date: Wed,  4 Dec 2024 17:23:18 -0500
+Message-ID: <20241204222334.2249307-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241204222334.2249307-1-sashal@kernel.org>
+References: <20241204222334.2249307-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Authenticated-Sender: esben@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27476/Tue Dec  3 10:52:11 2024)
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.1
+Content-Transfer-Encoding: 8bit
 
-Esben Haabendal <esben@geanix.com> writes:
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-> This fixes a couple of different problems, that can cause RTC (alarm)
-> irqs to be missing when generating UIE interrupts.
->
-> The first commit fixes a long-standing problem, which has been
-> documented in a comment since 2010. This fixes a race that could cause
-> UIE irqs to stop being generated, which was easily reproduced by
-> timing the use of RTC_UIE_ON ioctl with the seconds tick in the RTC.
->
-> The last commit ensures that RTC (alarm) irqs are enabled whenever
-> RTC_UIE_ON ioctl is used.
->
-> The driver specific commits avoids kernel warnings about unbalanced
-> enable_irq/disable_irq, which gets triggered on first RTC_UIE_ON with
-> the last commit. Before this series, the same warning should be seen
-> on initial RTC_AIE_ON with those drivers.
+[ Upstream commit 0a6efab33eab4e973db26d9f90c3e97a7a82e399 ]
 
-I don't have access to hardware using cpcap, st-lpc or tps6586x rtc
-drivers, so I have not been able to test those 3 patches.
+On my device reading entirety of /sys/devices/pnp0/00:03/cmos_nvram0/nvmem
+takes about 9 msec during which time interrupts are off on the CPU that
+does the read and the thread that performs the read can not be migrated
+or preempted by another higher priority thread (RT or not).
 
-/Esben
+Allow readers and writers be preempted by taking and releasing rtc_lock
+spinlock for each individual byte read or written rather than once per
+read/write request.
 
-> Signed-off-by: Esben Haabendal <esben@geanix.com>
-> ---
-> Esben Haabendal (6):
->       rtc: interface: Fix long-standing race when setting alarm
->       rtc: isl12022: Fix initial enable_irq/disable_irq balance
->       rtc: cpcap: Fix initial enable_irq/disable_irq balance
->       rtc: st-lpc: Fix initial enable_irq/disable_irq balance
->       rtc: tps6586x: Fix initial enable_irq/disable_irq balance
->       rtc: interface: Ensure alarm irq is enabled when UIE is enabled
->
->  drivers/rtc/interface.c    | 27 +++++++++++++++++++++++++++
->  drivers/rtc/rtc-cpcap.c    |  1 +
->  drivers/rtc/rtc-isl12022.c |  1 +
->  drivers/rtc/rtc-st-lpc.c   |  1 +
->  drivers/rtc/rtc-tps6586x.c |  1 +
->  5 files changed, 31 insertions(+)
-> ---
-> base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
-> change-id: 20241203-rtc-uie-irq-fixes-f2838782d0f8
->
-> Best regards,
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Link: https://lore.kernel.org/r/Zxv8QWR21AV4ztC5@google.com
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/rtc/rtc-cmos.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 35dca2accbb8d..5849d2970bba4 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -645,18 +645,17 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
+ 	unsigned char *buf = val;
+ 
+ 	off += NVRAM_OFFSET;
+-	spin_lock_irq(&rtc_lock);
+-	for (; count; count--, off++) {
++	for (; count; count--, off++, buf++) {
++		guard(spinlock_irq)(&rtc_lock);
+ 		if (off < 128)
+-			*buf++ = CMOS_READ(off);
++			*buf = CMOS_READ(off);
+ 		else if (can_bank2)
+-			*buf++ = cmos_read_bank2(off);
++			*buf = cmos_read_bank2(off);
+ 		else
+-			break;
++			return -EIO;
+ 	}
+-	spin_unlock_irq(&rtc_lock);
+ 
+-	return count ? -EIO : 0;
++	return 0;
+ }
+ 
+ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
+@@ -671,23 +670,23 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
+ 	 * NVRAM to update, updating checksums is also part of its job.
+ 	 */
+ 	off += NVRAM_OFFSET;
+-	spin_lock_irq(&rtc_lock);
+-	for (; count; count--, off++) {
++	for (; count; count--, off++, buf++) {
+ 		/* don't trash RTC registers */
+ 		if (off == cmos->day_alrm
+ 				|| off == cmos->mon_alrm
+ 				|| off == cmos->century)
+-			buf++;
+-		else if (off < 128)
+-			CMOS_WRITE(*buf++, off);
++			continue;
++
++		guard(spinlock_irq)(&rtc_lock);
++		if (off < 128)
++			CMOS_WRITE(*buf, off);
+ 		else if (can_bank2)
+-			cmos_write_bank2(*buf++, off);
++			cmos_write_bank2(*buf, off);
+ 		else
+-			break;
++			return -EIO;
+ 	}
+-	spin_unlock_irq(&rtc_lock);
+ 
+-	return count ? -EIO : 0;
++	return 0;
+ }
+ 
+ /*----------------------------------------------------------------*/
+-- 
+2.43.0
+
 
