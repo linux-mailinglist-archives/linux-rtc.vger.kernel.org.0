@@ -1,156 +1,129 @@
-Return-Path: <linux-rtc+bounces-2668-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2669-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAD9B9E4A03
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2024 00:49:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 263C29E5439
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2024 12:43:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BCA028C82D
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Dec 2024 23:49:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5C702834C7
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2024 11:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D632225782;
-	Wed,  4 Dec 2024 23:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z1OmDpHD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4CE220B816;
+	Thu,  5 Dec 2024 11:43:15 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8FD215F73;
-	Wed,  4 Dec 2024 23:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853EC209691;
+	Thu,  5 Dec 2024 11:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733355366; cv=none; b=edpKC5G9v5o16PyKdu9Khw1Y4Tofz4+LunvxljBdFwkQK8lGJ9o5ThcDDkqBcSIxauYuyvTUecUnAdWheIYXQ6dJfwRZq24w+diWTESHNf8w08HUX8NGN1mauBRG5daJe0iu0R8mwOeGR8hEWZSht2c+3LwAIj+HpZsWta0MUIw=
+	t=1733398995; cv=none; b=PZoTds1UyU0XwmbxHAZUJijeWsFawYfTPeAKx67WrotVC6ehEnPoCsv4cALO7XwZb5MtCTACFbnqGxYtYGxUQxmLpqLfgQ6vdmEr1xYeo/2hROEPKBitKp5pi9yM+GkUqN++M8txwfmjFcII1qMXAWNfAMGK7kL23o4g8AelgPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733355366; c=relaxed/simple;
-	bh=4CDcnZ1VSNENRhki7AXY4PqO+Rl1qVnKdD6EHA5I00s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mPsIxwl4qPg9DFeNkte2J1VxzpFF0gbYAWzL74TH6AIzTqXtD0rmRI20U5yk5ENxYSi20uhU6geZIVdOBdUbtfR7VntGquWO0xzV4Bd0mGaQSh3FckeksZqgcvXIEvhASnGZ8k5o1qYvIBV9nwlHb7JmVcfeIQG0E1RxN9EUKNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z1OmDpHD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D365C4CED2;
-	Wed,  4 Dec 2024 23:36:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733355365;
-	bh=4CDcnZ1VSNENRhki7AXY4PqO+Rl1qVnKdD6EHA5I00s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z1OmDpHDqSLAnrVswR33eNIs1I/nk7zg9w1vmgLJ/Fr579RJMyLXISolcHtyF9aao
-	 yn1xhJVfCxAmABBwK+8lsSYBhxvE5V+VCq4nnDumMQFdzgxaAPLcSltyZWdHnALITj
-	 Le7Ko/f9j2IdxyfftCMs0aQwWLEo1/EWHgDJ8B+Y+LtmbCl55ElLyLczLua2wU1xsj
-	 TGFS9cpcJ70gnReya21ks/x10rkBcf4oTuhJryV2/TFQRaSBRaXXglp3L0hXT751CY
-	 7tNTe2CZXooqJcgqX9l+2iXQB9+h2TxsrVhpkue0fAFTVCgf5OMkYUvTERXuqZFiZ7
-	 QLIADbswJarDw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	=?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 2/4] rtc: cmos: avoid taking rtc_lock for extended period of time
-Date: Wed,  4 Dec 2024 17:24:34 -0500
-Message-ID: <20241204222444.2250332-2-sashal@kernel.org>
+	s=arc-20240116; t=1733398995; c=relaxed/simple;
+	bh=KtQLCMZ7iHyVdozQv7fcFaIpAl5CUnSrYVHp95gFZf4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=frFbDqLg8E+lpJyQQNLUmAcWZJ2Kzu4+sPU59k/rOAKcyLXOAvr9bfXl74t+RBGoFouWhghNnbJppYBZY1w0g8disExTmTVRvQKf9Y1HBpMHwxS3rcOZu0A1J3FYSx0Ul+BbrBFoYwQtejxaidAqOfWq5NYhRUUb4+w8/RpvZt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.180.135.20])
+	by gateway (Coremail) with SMTP id _____8CxTOLNkVFnGoVRAA--.26374S3;
+	Thu, 05 Dec 2024 19:43:09 +0800 (CST)
+Received: from ubuntu.. (unknown [10.180.135.20])
+	by front1 (Coremail) with SMTP id qMiowMAxbODLkVFnFeR2AA--.40380S2;
+	Thu, 05 Dec 2024 19:43:08 +0800 (CST)
+From: Ming Wang <wangming01@loongson.cn>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	WANG Xuerui <git@xen0n.name>,
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lixuefeng@loongson.cn,
+	gaojuxin@loongson.cn
+Subject: [PATCH v2] rtc: loongson: clear TOY_MATCH0_REG in loongson_rtc_isr()
+Date: Thu,  5 Dec 2024 19:43:07 +0800
+Message-ID: <20241205114307.1891418-1-wangming01@loongson.cn>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204222444.2250332-1-sashal@kernel.org>
-References: <20241204222444.2250332-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.119
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAxbODLkVFnFeR2AA--.40380S2
+X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/1tbiAQECEmdQ2z8OfwAAsy
+X-Coremail-Antispam: 1Uk129KBj93XoW7uF43tFyxZF1xGw47JF13Awc_yoW8Cryxpr
+	W3C3WDursYvr48Cas5Jay8WrWay393Jr9ruF4xK3yF93Z8Aa4UXF4FgFyUJrWDur95AFWY
+	q3yUCFW5u3WqkwbCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57
+	IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE
+	14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2
+	IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r
+	43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxV
+	WUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j8
+	8n5UUUUU=
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+The TOY_MATCH0_REG should be cleared to 0 in the RTC interrupt handler,
+otherwise the interrupt cannot be cleared, which will cause the
+loongson_rtc_isr() to be triggered multiple times.
 
-[ Upstream commit 0a6efab33eab4e973db26d9f90c3e97a7a82e399 ]
+The previous code cleared TOY_MATCH0_REG in the loongson_rtc_handler(),
+which is an ACPI interrupt. This did not prevent loongson_rtc_isr()
+from being triggered multiple times.
 
-On my device reading entirety of /sys/devices/pnp0/00:03/cmos_nvram0/nvmem
-takes about 9 msec during which time interrupts are off on the CPU that
-does the read and the thread that performs the read can not be migrated
-or preempted by another higher priority thread (RT or not).
+This commit moves the clearing of TOY_MATCH0_REG to the
+loongson_rtc_isr() to ensure that the interrupt is properly cleared.
 
-Allow readers and writers be preempted by taking and releasing rtc_lock
-spinlock for each individual byte read or written rather than once per
-read/write request.
-
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Link: https://lore.kernel.org/r/Zxv8QWR21AV4ztC5@google.com
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 1b733a9ebc3d ("rtc: Add rtc driver for the Loongson family chips")
+Signed-off-by: Ming Wang <wangming01@loongson.cn>
 ---
- drivers/rtc/rtc-cmos.c | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+v1 -> v2: Fix commit message function name format and add missing blank line.
+---
+ drivers/rtc/rtc-loongson.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 542568cd72b32..5f43773900d18 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -645,18 +645,17 @@ static int cmos_nvram_read(void *priv, unsigned int off, void *val,
- 	unsigned char *buf = val;
+diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
+index e8ffc1ab90b0..90e9d97a86b4 100644
+--- a/drivers/rtc/rtc-loongson.c
++++ b/drivers/rtc/rtc-loongson.c
+@@ -114,6 +114,13 @@ static irqreturn_t loongson_rtc_isr(int irq, void *id)
+ 	struct loongson_rtc_priv *priv = (struct loongson_rtc_priv *)id;
  
- 	off += NVRAM_OFFSET;
--	spin_lock_irq(&rtc_lock);
--	for (; count; count--, off++) {
-+	for (; count; count--, off++, buf++) {
-+		guard(spinlock_irq)(&rtc_lock);
- 		if (off < 128)
--			*buf++ = CMOS_READ(off);
-+			*buf = CMOS_READ(off);
- 		else if (can_bank2)
--			*buf++ = cmos_read_bank2(off);
-+			*buf = cmos_read_bank2(off);
- 		else
--			break;
-+			return -EIO;
- 	}
--	spin_unlock_irq(&rtc_lock);
- 
--	return count ? -EIO : 0;
-+	return 0;
- }
- 
- static int cmos_nvram_write(void *priv, unsigned int off, void *val,
-@@ -671,23 +670,23 @@ static int cmos_nvram_write(void *priv, unsigned int off, void *val,
- 	 * NVRAM to update, updating checksums is also part of its job.
- 	 */
- 	off += NVRAM_OFFSET;
--	spin_lock_irq(&rtc_lock);
--	for (; count; count--, off++) {
-+	for (; count; count--, off++, buf++) {
- 		/* don't trash RTC registers */
- 		if (off == cmos->day_alrm
- 				|| off == cmos->mon_alrm
- 				|| off == cmos->century)
--			buf++;
--		else if (off < 128)
--			CMOS_WRITE(*buf++, off);
-+			continue;
+ 	rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
 +
-+		guard(spinlock_irq)(&rtc_lock);
-+		if (off < 128)
-+			CMOS_WRITE(*buf, off);
- 		else if (can_bank2)
--			cmos_write_bank2(*buf++, off);
-+			cmos_write_bank2(*buf, off);
- 		else
--			break;
-+			return -EIO;
- 	}
--	spin_unlock_irq(&rtc_lock);
- 
--	return count ? -EIO : 0;
-+	return 0;
++	/*
++	 * The TOY_MATCH0_REG should be cleared 0 here,
++	 * otherwise the interrupt cannot be cleared.
++	 */
++	regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
++
+ 	return IRQ_HANDLED;
  }
  
- /*----------------------------------------------------------------*/
+@@ -131,11 +138,7 @@ static u32 loongson_rtc_handler(void *id)
+ 	writel(RTC_STS, priv->pm_base + PM1_STS_REG);
+ 	spin_unlock(&priv->lock);
+ 
+-	/*
+-	 * The TOY_MATCH0_REG should be cleared 0 here,
+-	 * otherwise the interrupt cannot be cleared.
+-	 */
+-	return regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
++	return ACPI_INTERRUPT_HANDLED;
+ }
+ 
+ static int loongson_rtc_set_enabled(struct device *dev)
 -- 
 2.43.0
 
