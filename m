@@ -1,248 +1,132 @@
-Return-Path: <linux-rtc+bounces-2678-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2679-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C56A09E6E72
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Dec 2024 13:42:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEF269E7B95
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Dec 2024 23:21:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80D3D2811F6
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Dec 2024 12:42:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66895283B72
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Dec 2024 22:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF222036F8;
-	Fri,  6 Dec 2024 12:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F1119ABC6;
+	Fri,  6 Dec 2024 22:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="M/b16wYy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="krqYvCyz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3swPhqB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A042036E8;
-	Fri,  6 Dec 2024 12:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C0122C6C1;
+	Fri,  6 Dec 2024 22:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733488941; cv=none; b=kxX3GpQwwVFlu9dgjpefYJ0VbWm4NL/39Lt0IkURKbV8F43ZGyFTyq8YDEmNBvjGyywTe7fDUzhwls2yOkIL7twiYnObfvAX6jP0I2uJ1/fuz0EueUu38Eo4yAOeKriFIZ6anWbAA/b7jr4QyrXcbf2fGIosrWaEvne/NBDWYHw=
+	t=1733523694; cv=none; b=DoU2rCCllcMFoyWza2wcLLp4PPMPSiXWyxqH3GTZByZoVEjgFjJrUhgODFesD4ZGa1HgbVN7s9/jAAyJ+hlR+VlsHON6JpHAHYzNwEVrMUtI2+RBbW89/wBW+Rl8i8oXNA8ioVfuvQsefCiMc8p8mgWMy40zmt35fmp+Ezi4qqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733488941; c=relaxed/simple;
-	bh=GJltY0XaxhiQu4LqgEHvaPBbhgHvEa0EFruFh0UnWUQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pRc2wkydLEgWVPzIFZ+h1ocKrJgqsY086g7NX1kWKLoD11KO06/QOALfNiFlYmaCRNGWG4M+t0I4F+7c6NV4urT6mTynXf14k7H1viUnPsJ4Gg/OsqmlX3Xa/CHbhOFKk/JLbsXdhRQeCx6bPvv0KM/Vb6TWv7vseBRqxwOhhSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=M/b16wYy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=krqYvCyz; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 98A93138341A;
-	Fri,  6 Dec 2024 07:42:18 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 06 Dec 2024 07:42:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1733488938;
-	 x=1733575338; bh=x1weric6zZmvWu4UV+Y5UDAgbXws/QOCE+rGDxo8gCY=; b=
-	M/b16wYyYsnI/s8XYS0cMZC8l+m9jwXwyywWsyiEWOWa0+Jz4tq4vDCXWJ58vqPn
-	Vj94uvNy2rLl0aNRjNxb+j9KBBXworFDKOxIhbONkQiHaVd6UPMPmnwazlfRsb7I
-	NgIyMxAqogq979jABuzZNVx6e/9kq+qfyg3DWAkYCW9hcm2SrForMIgL0A1680/E
-	l0MOrf8y/n2eL9qUCHOM+NEQIb4pJIhz6NgRVKBhTt9dZvUOmaj26RktFrFzrsQh
-	Js+9NlpzSSxXExqYUcIgBo5LHMYGD6jMQXt+Q4p6y49jR70SnmDckvWihcmJJWR4
-	fnH22kBK+mFE/dOmO/ko9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1733488938; x=
-	1733575338; bh=x1weric6zZmvWu4UV+Y5UDAgbXws/QOCE+rGDxo8gCY=; b=k
-	rqYvCyzVsmqaVOL2a9aaKizIgC/m4E/j7AtIF1/n2oQv47Pl15qFrk9Qnn/ouLG3
-	ftQ3nZhLzU8k8A5XpuAXNNFlc7gznVQj0g05sBzRcjmasl+wKrthMJ7OHTb4JjWI
-	4iaREQUesEzHwPjvBLsfnVboaFtKeKFOJFfshYXpOp1W7sTeYuZDLlE94o7l3D2C
-	upZe0+2wJkYD/9/cMR7TyBynV4gx7R5FK478nAapoVO1RdlltGZSPqgv6lhwQQq/
-	MFBs+0kCohmF2r8Q7Q8C6HhBEk4NTV0KBLK7AnLeip2/eNfcRvq24nEedSKM60bF
-	21YXndFSpZBbY/sxmWTFQ==
-X-ME-Sender: <xms:KvFSZ2HbZGPxrZSFzkMVsDotGkhONQaT36soRaG_Cpa0LGi_UQCFkQ>
-    <xme:KvFSZ3WqbJIGm_jQVqkiQSsJFTb7je053okl5c_bGlMivKj7lJLzUM6jgm0__TFwx
-    xg9hzCnrBz5QcPXhiI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrieelgdegvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
-    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
-    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredttden
-    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
-    gvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffg
-    vedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedukedp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrsh
-    esrghrmhdrtghomhdprhgtphhtthhopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegs
-    ohhothhlihhnrdgtohhmpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdr
-    ihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehimhigsehlihhsthhsrdhlihhnuh
-    igrdguvghvpdhrtghpthhtohepghhhvghnnhgrughirdhprhhotghophgtihhutgesnhig
-    phdrtghomh
-X-ME-Proxy: <xmx:KvFSZwIKpoqhOjksPy-RYhRsmbn8ptH_bJsu9Rc4YN3vWJRDjB-03Q>
-    <xmx:KvFSZwF7a3DMGk_xUV242igARosECCfwipB6tzrDV_-qQABKP5y4mw>
-    <xmx:KvFSZ8UJdu3h0eX0zSrDmA7ZxNPg7vMTjISiOU2Ikx9bhRp_J4kYaA>
-    <xmx:KvFSZzPDi4DXTMFC1WwyPq8Dr53SgjhJxRSmudaA_NZqhe3uors_4w>
-    <xmx:KvFSZyb2_1RniotkMjpKiRsqm6trs0jAS7Lu4xPTIGzGdCg0sL7wHrPr>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0E2D42220072; Fri,  6 Dec 2024 07:42:17 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1733523694; c=relaxed/simple;
+	bh=mhky964TRWNzFbAiRFdB5HACfgN5R0L+tLJI3tPPRw8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aoIteihppe80tDKw73X6TRXqR8mzinX3nDZpP1Y+GCcW82JgazY53+knndssWYii+Kw1fuT1HwT/Q/uvmbNphEoRDonOj50Zhs78FxCKv55ghfvANm0YYYa65R3oWgzkvGO43zQg1MNfCSBw+PNBii+eBEh29YmnMm5keKglVNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3swPhqB; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-46695478d03so37239911cf.1;
+        Fri, 06 Dec 2024 14:21:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733523692; x=1734128492; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SZhhTP8F6A8wEtYSRjTN5029eKdbjNe9HQjo/7xvSE4=;
+        b=h3swPhqBvlj3cMaIAcRfx11GKHP+UbqsAZTnaT5iiEhTIZRrJmKu9dOZU80T0AGoX1
+         /agIf7DKAducNipQ4+F4rcOU3oDje2mMQe8lp14My4yrHuFh86vjWpypysOfrbkAuiS6
+         JboLRZlHikJvJkeqNsPXRQqFO8stNnS6vFJU5/gFXrpTf5/2aULKModoVlsvWM2FRH2I
+         IY3GeH2l3f0ksCBOuT266JekZuKmcyYgQVjRX4mVCKiATc4cnnE6V7/lgb5Jb3IPqgnG
+         BOVuJppbtPnxaS9swiwDOxcJbaH3tRz/KfcN+SM3H0L140uxGIPGXc4hJPmXpA19rRRt
+         okIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733523692; x=1734128492;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SZhhTP8F6A8wEtYSRjTN5029eKdbjNe9HQjo/7xvSE4=;
+        b=Sp+xBmFwaWaTeDcWAk0HqVIMoDZAi8iSJgxyBF1FCB8l4YBrIfMVCbaBprhttNRM3R
+         RI7WkZX1i8jkAbV9UTtWsTzRckZqryyjqcThGCKxS4m/Oaam5p9XylHR3jfm0erpmXbW
+         zgeEcOgXXaenelSQMEgDSxyZt5f/6rGkCFf5G8UBWNSLB6p1Eah/vtktgNtoq+2Cplym
+         F00v63jPYWO3km8ZFR6u8u7XX+0M9aKti8J2i1TcZrYty+eE88SHl43efVSg0qoTnbIQ
+         XcLn/z5rtOrKrO3n1yhPJ0499TXzQuHGrxM/eRrv1z/TYz2IFcGF2Z89+cR2OzMbzRTi
+         E52w==
+X-Forwarded-Encrypted: i=1; AJvYcCWoVtYdVOwyRLFUbRuavEoqR29fiN6aEMGDgiuJXuoImHHfSxxHrmzPUj87MKz8psZf0TE2bZB9aMbX9Bw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwG+M0o67jxy6dpRrMss38ymTkzGS229mJ7DyUJ1+Ir63PcuWqa
+	xih1Y5/A3CDrfZI4p7q0GOqhgmFaamFNsveVrGD0NWvoOXiD95e/6FtfNBTX
+X-Gm-Gg: ASbGnctsawzyI6QWBpMs/vfdyUueg6Gx3bT1nQCZPg6E+FOmo+gqOhTjZCkjpIwe5mD
+	0k/gyw9O+Cscdti5jCEztGVrJtbQRWX+MU15PIs1TzA6L6O7gNeLnli9QnOHS3QRAAJeiLZHOFI
+	xIVxlxUAzbf6jLISD/wGvvqM6tBPNInLz4dZWg23+s+jbzhRFMvXhMxMMl/oWAq9V3I2245PvRa
+	LjkCX5zVvOEhYcMkZYdwPor7w1ib3Wsii/cQeLG3hYXam/feDfjXN9BQH28Xg==
+X-Google-Smtp-Source: AGHT+IGAKWFMT+I1wbmUOwVQpQGCERs5Xc7gz6oYPba9oF39Og5PrK1c20U2AJEQWpqDryidztUmpA==
+X-Received: by 2002:ac8:584e:0:b0:466:9018:c91f with SMTP id d75a77b69052e-46734c9e97amr78931621cf.1.1733523692059;
+        Fri, 06 Dec 2024 14:21:32 -0800 (PST)
+Received: from localhost.localdomain ([128.10.127.250])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467296d0e3esm25566171cf.33.2024.12.06.14.21.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 14:21:30 -0800 (PST)
+From: Mingwei Zheng <zmw12306@gmail.com>
+To: alexandre.belloni@bootlin.com,
+	gxt@mprc.pku.edu.cn,
+	linus.walleij@linaro.org,
+	haojian.zhuang@gmail.com,
+	broonie@opensource.wolfsonmicro.com,
+	akpm@linux-foundation.org
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mingwei Zheng <zmw12306@gmail.com>,
+	Jiasheng Jiang <jiashengjiangcool@gmail.com>
+Subject: [PATCH] rtc: Add check for clk_enable()
+Date: Fri,  6 Dec 2024 17:24:52 -0500
+Message-Id: <20241206222452.3479786-1-zmw12306@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 06 Dec 2024 13:41:55 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ciprian Costea" <ciprianmarian.costea@oss.nxp.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- "NXP S32 Linux Team" <s32@nxp.com>, imx@lists.linux.dev,
- "Christophe Lizzi" <clizzi@redhat.com>, "Alberto Ruiz" <aruizrui@redhat.com>,
- "Enric Balletbo" <eballetb@redhat.com>,
- "Bogdan Hamciuc" <bogdan.hamciuc@nxp.com>,
- "Ghennadi Procopciuc" <Ghennadi.Procopciuc@nxp.com>
-Message-Id: <94cba886-86cb-41f1-96ee-501623add7db@app.fastmail.com>
-In-Reply-To: <6f4a0be8-4def-4066-9b44-d43059b7a90d@oss.nxp.com>
-References: <20241206070955.1503412-1-ciprianmarian.costea@oss.nxp.com>
- <20241206070955.1503412-3-ciprianmarian.costea@oss.nxp.com>
- <2005af5d-bdb7-4675-8f0e-82cb817801af@app.fastmail.com>
- <6f4a0be8-4def-4066-9b44-d43059b7a90d@oss.nxp.com>
-Subject: Re: [PATCH v6 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 6, 2024, at 13:05, Ciprian Marian Costea wrote:
-> On 12/6/2024 10:04 AM, Arnd Bergmann wrote:
->> 
->> However, the range of the register value is only 32 bits,
->> which means there is no need to ever divide it by a 64-bit
->> number, and with the 32kHz clock in the binding example,
->> you only have about 37 hours worth of range here.
->> 
->
-> I am not sure what is the suggestion here. To cast 'cycles' variable to 
-> 32-bit ?
-> If yes, indeed 'div_u64' converts 'cycles' (the divisor) to 32-bit so I 
-> agree it should be u32 instead of u64.
-> If not, I would prefer to keep using a 64-by-32 division and avoid 
-> casting 'hz' to 32-bit.
+Add check for the return value of clk_enable() to catch the potential
+error.
 
-The confusing bit here is that the extra function just serves to
-the dividend 'cycles' from 32-bit to 64-bit, and then calling
-div_u64() implicitly casts the dividend 'hz' from 64-bit to
-32-bit, so you definitely get a 32-by-32 division already
-if the function is inlined properly.
+Fixes: 0c4eae66591a ("rtc: convert drivers/rtc/* to use module_platform_driver()")
+Signed-off-by: Mingwei Zheng <zmw12306@gmail.com>
+Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
+---
+ drivers/rtc/rtc-spear.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I think storing 'rtc_hz' as a u32 variable and adding a range
-check when filling it would help, mainly to save the next reader
-from having to understand what is going on.
+diff --git a/drivers/rtc/rtc-spear.c b/drivers/rtc/rtc-spear.c
+index 26eed927f8b3..064d46b2f16e 100644
+--- a/drivers/rtc/rtc-spear.c
++++ b/drivers/rtc/rtc-spear.c
+@@ -437,7 +437,7 @@ static int spear_rtc_resume(struct device *dev)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct spear_rtc_config *config = platform_get_drvdata(pdev);
+-	int irq;
++	int irq, ret;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 
+@@ -447,7 +447,9 @@ static int spear_rtc_resume(struct device *dev)
+ 			config->irq_wake = 0;
+ 		}
+ 	} else {
+-		clk_enable(config->clk);
++		ret = clk_enable(config->clk);
++		if (ret)
++			return ret;
+ 		spear_rtc_enable_interrupt(config);
+ 	}
+ 
+-- 
+2.34.1
 
->> It would appear that this makes the rtc unsuitable for
->> storing absolute time across reboots, and only serve during
->> runtime, which is a limitation you should probably document.
->> 
->
-> Actually there is the option to use DIV512 and/or DIV32 hardware 
-> divisors for the RTC clock. The driver uses a DIV512 divisor by default 
-> in order to achieve higher RTC count ranges (by achieving a smaller RTC 
-> freq). Therefore, the 37 hours become 37 * 512 => ~ 2 years.
-
-Ah, makes sense. Can you add comments in an appropriate place in
-the code about this?
-
-> However, the rtc limitation of not being persistent during reboot 
-> remains, due to hardware RTC module registers present of NXP S32G2/S32G3 
-> SoCs being reset during system reboot. On the other hand, during system 
-> suspend, the RTC module will keep counting if a clock source is available.
->
-> Currently, this limittion is documented as follows:
-> "RTC tracks clock time during system suspend. It can be a wakeup source 
-> for the S32G2/S32G3 SoC based boards.
->
-> The RTC module from S32G2/S32G3 is not battery-powered and it is not 
-> kept alive during system reset."
-
-My bad, I really should not have skipped the patch
-description ;-)
-
->> If 'counter' wraps every 37 hours, this will inevitably fail,
->> right? E.g. if priv->base.cycles was already at a large
->> 32-bit number, even reading it shortly later will produce
->> a small value after the wraparound.
->> 
->> Using something like time_before() should address this,
->> but I think you may need a custom version that works on
->> 32-bit numbers.
->> 
->
-> This is correct. Would the following change be acceptable ?
->
-> -       if (counter < priv->base.cycles)
-> -               return -EINVAL;
-> -
-> -       counter -= priv->base.cycles;
-> +       if (counter < priv->base.cycles) {
-> +               /* A rollover on RTCCTN has occurred */
-> +               counter += RTCCNT_MAX_VAL - priv->base.cycles;
-> +               priv->base.cycles = 0;
-> +       } else {
-> +               counter -= priv->base.cycles;
-> +       }
-
-This is the same as just removing the error handling and
-relying on unsigned integer overflow semantics.
-
-The usual check we do in time_before()/time_after instead
-checks if the elapsed time is less than half the available
-range:
-
-#define time_after(a,b)         \
-        (typecheck(unsigned long, a) && \
-         typecheck(unsigned long, b) && \
-         ((long)((b) - (a)) < 0))
-
->>> +static int s32g_rtc_resume(struct device *dev)
->>> +{
->>> +     struct rtc_priv *priv = dev_get_drvdata(dev);
->>> +     int ret;
->>> +
->>> +     if (!device_may_wakeup(dev))
->>> +             return 0;
->>> +
->>> +     /* Disable wake-up interrupts */
->>> +     s32g_enable_api_irq(dev, 0);
->>> +
->>> +     ret = rtc_clk_src_setup(priv);
->>> +     if (ret)
->>> +             return ret;
->>> +
->>> +     /*
->>> +      * Now RTCCNT has just been reset, and is out of sync with priv->base;
->>> +      * reapply the saved time settings.
->>> +      */
->>> +     return s32g_rtc_set_time(dev, &priv->base.tm);
->>> +}
->> 
->> This also fails if the system has been suspended for more than
->> 37 hours, right?
->
-> Actually, the system would not go into suspend (returning with error) if 
-> the alarm setting passes the 32-bit / clk_freq range.
-> The check is added in 'sec_to_rtcval' which is called from the suspend 
-> routine.
-
-Who sets that alarm though? Are you relying on custom userspace
-for this, or is that something that the kernel already does
-that I'm missing?
-
-       Arnd
 
