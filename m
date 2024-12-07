@@ -1,122 +1,136 @@
-Return-Path: <linux-rtc+bounces-2680-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2681-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57DAB9E7E10
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Dec 2024 04:05:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 749609E7F43
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 Dec 2024 09:59:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B857316C8D9
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Dec 2024 03:05:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41F5C1882236
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 Dec 2024 08:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A731BC2A;
-	Sat,  7 Dec 2024 03:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A44513D89D;
+	Sat,  7 Dec 2024 08:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="ks6iFPej"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/xyDkYe"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15F117591
-	for <linux-rtc@vger.kernel.org>; Sat,  7 Dec 2024 03:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1BB82C7E;
+	Sat,  7 Dec 2024 08:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733540716; cv=none; b=A72V4MAzFM+HCubag+FvXbF8Ru/nJyBfsTNJcaxwr/HHZswWPg8OYpgmcAW3OiPDllc/r+RCtf9tmyCEn1P/vuXjhZdsO9tVPCAkgtF2xYFpIWIgbP2f0FMGzmODuJdFp/3KwEH/4f3+CY484qpS6WwiKZA2K3fLC7kD58aYqYU=
+	t=1733561935; cv=none; b=EltPDnGReQ6rRkW0sFvwdhgRQB7bNXzV0IrskPcVv4oucIqAwvxL4vUCelssZIclE7uMhXYXLaoBxmY2FHJoklA/ghYBwl5CsB3NpUq5JzkmQAe/RIw+Dt2AkczD666oo5yv3e8Oo/4vrpnHXpADiUNdXLRe7Z84wyxxx+rILO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733540716; c=relaxed/simple;
-	bh=zry/xyyuKsLiEaV4kxSppIuCZf+tKByjHETgrAAv/BQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AZiJwdGtk2EDde6QaRhnL8NIKM6NiUkn24VSorODxOJcp0rgFGRqJu4pcIGb9iuONSJCRqqVG/LDrSgJ/CL3Mb5m74sit6QufU5gkkkIek5O2DrOYXjjTGaunOf6goTRAsEHGJwfk13EncUxqZ7Q+DbcT3R3JP4cIJvczYBCG7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=ks6iFPej; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7ee11ff7210so2380049a12.1
-        for <linux-rtc@vger.kernel.org>; Fri, 06 Dec 2024 19:05:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1733540713; x=1734145513; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9a7tozT1hqWu1U3Su6d82HW1h0orX4TLcEoiBFT8vd0=;
-        b=ks6iFPejmc2pWWXCj+CYxURayEP8rO3l9Z+A95jd2H8JmPuWyrfnzzu8Tt8GXriYGh
-         QYvRgcaPNfOAdwbwzRCwDKc/fweI5DHYkpuNJJ2ndvqS6lh3+ShFb0pAL+H55hQAYIz4
-         9QQoxxwaiuuUHt8vAk2tlDMjb1IQn3Vqgs7qiHWS127qEzApOapE3XDjJOadljYPQiUr
-         gwUJifN2XlAXcrJIwZxZwfOWlmLmpS3Iq2xAIytI8PjQzkftTftvW8yiTWfGv3noG4/5
-         a7HamMb5gPkWY674wxZdKEICpTwbMO3+u7h8tFBHbjT2uZOpf9ag8eN8S7NjO05s45HN
-         RSHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733540713; x=1734145513;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9a7tozT1hqWu1U3Su6d82HW1h0orX4TLcEoiBFT8vd0=;
-        b=mX92MoB+XWP7H1thCjOzBNM/RKiBlruxyOD9MrnySP9YlIp7WyacvJGXVmGsrY+juA
-         J2v5Adfa//liqnZGt0DcdRXJSTnflcVeKmeQQZD+RzLL1/tnpiRdroBZ1+eh3U4eLX9c
-         L8xbQdG4WXiAMrZMftcll2lW+vLrYRtxWb9Pkt3WRlwqy0QpAwQ2HTVmqzBqA1rxf/Ii
-         5S+rjbLnu0si8w5ai6vPkEan9t0Sgm27ibyYofm9c8GLxIN3XRjCN/dCWhEO9Ftly+o8
-         kjzAyo5R7SHOPbGibOa6H0QHACts5B7YCl6chZCDJpUmEdiUBhOVR/KQlypzbAIF+eFI
-         SEPw==
-X-Gm-Message-State: AOJu0YwNIWUq9JvoUlotMvpElgGXJNzMU5yDLNJ3QM8L3L9W1ZETHl2J
-	YkVNLJgZFIIaf7MeSL3IF3PliZURLKmUroDwjUdhzDl+XD5lbAB4nnwyZIwe0MI6vJb5zeEVx2h
-	OvcqY+w==
-X-Gm-Gg: ASbGncvxlGUAPXuO1Cmg5d5DtdM5kTkH4aNcDGwNL2FmvXu/+CpYC4WhUL58GVfnA9l
-	IDo/kzyB/xsR5ZOAzkgmhwKbmU7NZoduBnf2jEP+PUDHMsPxBadrZJuMLcAYE0ftjdlFrMv0oz1
-	BnCzE7gX0DQnjw1zmGFXcMQG1Gm7SatCMRUHJ1aW4uJfMvFsfTQozWpzdNeP6q49pI56khqmKM7
-	3Xn3+szIaVDvpjKABds1r/i6Dfr/INT+s9us7tvEiFbdqPxgCZvtfQ/RkpclefIKiqu6lZF0bkm
-	hfnh5cJRc50DDiZiIMos2JjCyWxtw2UCap4z
-X-Google-Smtp-Source: AGHT+IGUKDXAzPt2TaUjv+RGEvFUupawMWIe2CMM6ej9VcPJEi9WxQr5Y1NzNL2nau943qXW9b6VLA==
-X-Received: by 2002:a05:6a20:a104:b0:1e0:dc7b:4ef6 with SMTP id adf61e73a8af0-1e1870c8387mr8728282637.21.1733540712940;
-        Fri, 06 Dec 2024 19:05:12 -0800 (PST)
-Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd1568e94fsm3276928a12.4.2024.12.06.19.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2024 19:05:12 -0800 (PST)
-From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-To: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org,
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Subject: [PATCH] rtc: rtc-as3722: disable wakeup on error path of .probe()
-Date: Sat,  7 Dec 2024 12:05:07 +0900
-Message-Id: <20241207030507.1181048-1-joe@pf.is.s.u-tokyo.ac.jp>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1733561935; c=relaxed/simple;
+	bh=CbfyyJMoHWuUmJ99TbtFahf95hfhbR9G+s3+jsfdbRU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GD7geE+o1YicVR5YiMgGPbtr9UjDuiNgfu0E3kSQ5Pmo0GlZZN5BbcOakpmDBeDFE4XWG2VmggiOi0ZH/4/O/e+RMipe7LSD7qVsT+9+4pipk3tQkKJw3u4OiwLMMY0rubEWNw80qzXn0fzspZZ4ZN7S2iLtKrrAM9H7Tb7i3Z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/xyDkYe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF06C4CEE3;
+	Sat,  7 Dec 2024 08:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733561934;
+	bh=CbfyyJMoHWuUmJ99TbtFahf95hfhbR9G+s3+jsfdbRU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=F/xyDkYeq5KyZ7A/fHdGmpxNbg78iC7W9im/EKoG+aQbitXxV2O83isOjplD/L5Wb
+	 DvCtCOzPq73gLu9TQKRqgo2XDKZPST5uhn4ZGsQCUfqvF4m3R57e1ahyd9meeGCDXp
+	 DS2GFZ71LIevPgsz07f/t0B/d5u2GqTsSi2TaP11ov4ZZAJK5fPDdJ+1xOkw53RaYE
+	 Pa/cVXe6HfzCjaWaVp167el/fuIQEiKaiJHe9FajJzkFh6QrZ5kZEof3I3EiERStnb
+	 xjPypw/z80MJ2MQcyIeYEjFsjkjvhpwy8cTTmw8D0waowrmPmlX4rpH75qi6wBKRFH
+	 cU2x4y9fSG+Mw==
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aa62f0cb198so318113366b.2;
+        Sat, 07 Dec 2024 00:58:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUA9QDu/+dDtdd4VfvWBbBATYhJ2ZEm3p/1Sc2/dKENpJGx2JLhf5HvEsmKuJXfCeJJSnaamL8pYmRZVtE=@vger.kernel.org, AJvYcCWWhv1OGolN4zvA230PQzfV/aFHawdlF7sYb8fHJ/5/BmQmIYOwF/clPG6wHko/T84VU2NADSJ177Dj@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx47He7pD/9H4oORB0z1BTG6ImVp6ya8noXLSf58GmZFT9Al38n
+	1km7Px4iRUYKca7zLctOs/afZNEl7u0D6BLjA29KT3IpbLs3X0W/CizOXDD8EQ7ix1z7aigtwo1
+	tdm9Pnum5JD8lpOazejXl1GT8jrM=
+X-Google-Smtp-Source: AGHT+IEv1AWReTZ5Xlw0WY0CbfDwUkiT2YzQ/An/+llmTeLIq6HAECdh/u8A/wjwSWXJdJF9rVqTdtgnqf64w+3oDz4=
+X-Received: by 2002:a17:906:9d2:b0:aa6:4181:9d04 with SMTP id
+ a640c23a62f3a-aa64181a14cmr315227566b.56.1733561933235; Sat, 07 Dec 2024
+ 00:58:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241205114307.1891418-1-wangming01@loongson.cn>
+In-Reply-To: <20241205114307.1891418-1-wangming01@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 7 Dec 2024 16:58:41 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4VpAF7OjAbbBqoJh7kXyoq_NV_dtkSCOAPBCsH247stw@mail.gmail.com>
+Message-ID: <CAAhV-H4VpAF7OjAbbBqoJh7kXyoq_NV_dtkSCOAPBCsH247stw@mail.gmail.com>
+Subject: Re: [PATCH v2] rtc: loongson: clear TOY_MATCH0_REG in loongson_rtc_isr()
+To: Ming Wang <wangming01@loongson.cn>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Keguang Zhang <keguang.zhang@gmail.com>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, WANG Xuerui <git@xen0n.name>, 
+	Binbin Zhou <zhoubinbin@loongson.cn>, linux-rtc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, gaojuxin@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Current implementation of as3722_rtc_probe() leaves wakeup enabled on
-the error path of .probe(), which results in a memory leak. Fix it by
-adding device_init_wakeup(&pdev->dev, false) calls.
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
-Fixes: b45062619840 ("drivers/rtc/rtc-as3722: add RTC driver")
-Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
----
- drivers/rtc/rtc-as3722.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/rtc/rtc-as3722.c b/drivers/rtc/rtc-as3722.c
-index 0f21af27f4cf..558829e17643 100644
---- a/drivers/rtc/rtc-as3722.c
-+++ b/drivers/rtc/rtc-as3722.c
-@@ -194,6 +194,7 @@ static int as3722_rtc_probe(struct platform_device *pdev)
- 	if (IS_ERR(as3722_rtc->rtc)) {
- 		ret = PTR_ERR(as3722_rtc->rtc);
- 		dev_err(&pdev->dev, "RTC register failed: %d\n", ret);
-+		device_init_wakeup(&pdev->dev, false);
- 		return ret;
- 	}
- 
-@@ -206,6 +207,7 @@ static int as3722_rtc_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ %d: %d\n",
- 				as3722_rtc->alarm_irq, ret);
-+		device_init_wakeup(&pdev->dev, false);
- 		return ret;
- 	}
- 	disable_irq(as3722_rtc->alarm_irq);
--- 
-2.34.1
-
+On Thu, Dec 5, 2024 at 7:43=E2=80=AFPM Ming Wang <wangming01@loongson.cn> w=
+rote:
+>
+> The TOY_MATCH0_REG should be cleared to 0 in the RTC interrupt handler,
+> otherwise the interrupt cannot be cleared, which will cause the
+> loongson_rtc_isr() to be triggered multiple times.
+>
+> The previous code cleared TOY_MATCH0_REG in the loongson_rtc_handler(),
+> which is an ACPI interrupt. This did not prevent loongson_rtc_isr()
+> from being triggered multiple times.
+>
+> This commit moves the clearing of TOY_MATCH0_REG to the
+> loongson_rtc_isr() to ensure that the interrupt is properly cleared.
+>
+> Fixes: 1b733a9ebc3d ("rtc: Add rtc driver for the Loongson family chips")
+> Signed-off-by: Ming Wang <wangming01@loongson.cn>
+> ---
+> v1 -> v2: Fix commit message function name format and add missing blank l=
+ine.
+> ---
+>  drivers/rtc/rtc-loongson.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
+> index e8ffc1ab90b0..90e9d97a86b4 100644
+> --- a/drivers/rtc/rtc-loongson.c
+> +++ b/drivers/rtc/rtc-loongson.c
+> @@ -114,6 +114,13 @@ static irqreturn_t loongson_rtc_isr(int irq, void *i=
+d)
+>         struct loongson_rtc_priv *priv =3D (struct loongson_rtc_priv *)id=
+;
+>
+>         rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+> +
+> +       /*
+> +        * The TOY_MATCH0_REG should be cleared 0 here,
+> +        * otherwise the interrupt cannot be cleared.
+> +        */
+> +       regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
+> +
+>         return IRQ_HANDLED;
+>  }
+>
+> @@ -131,11 +138,7 @@ static u32 loongson_rtc_handler(void *id)
+>         writel(RTC_STS, priv->pm_base + PM1_STS_REG);
+>         spin_unlock(&priv->lock);
+>
+> -       /*
+> -        * The TOY_MATCH0_REG should be cleared 0 here,
+> -        * otherwise the interrupt cannot be cleared.
+> -        */
+> -       return regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
+> +       return ACPI_INTERRUPT_HANDLED;
+>  }
+>
+>  static int loongson_rtc_set_enabled(struct device *dev)
+> --
+> 2.43.0
+>
 
