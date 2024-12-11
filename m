@@ -1,120 +1,124 @@
-Return-Path: <linux-rtc+bounces-2707-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2708-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8286C9ECB93
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2024 12:52:17 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62EFB9ECC11
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2024 13:29:39 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FB291886762
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2024 11:52:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FB422815A4
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2024 12:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD408211A2A;
-	Wed, 11 Dec 2024 11:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0BC225A56;
+	Wed, 11 Dec 2024 12:29:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MBFT7lJ9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ekav7q+u"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07181238E27;
-	Wed, 11 Dec 2024 11:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B3F2210EE
+	for <linux-rtc@vger.kernel.org>; Wed, 11 Dec 2024 12:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733917931; cv=none; b=IqU6BEogddM+eHCiG6UAPUXqpl2B8IMWwXRaftJ3bk8U3DU2gdZloM84NVzp/LDjby9JBbtamcf/01tMgsqUv3JAH+LW1FiRuT8bFG+sBpVQzMSDGp/Mtk5OI56qXClWSjY7jtZO/I9fbwcNlu3U04/wZJzfvDLPbzPBf/h3FNU=
+	t=1733920174; cv=none; b=BMApSIqiD+SGJb8I+HNQae0esxRewraucYyLPHoYCaaNTl8yWFzYHdlsZ34eVjnLQQ9tABSfKtvGhj/HlW2L6dPgmeGYOAgNqs2s/xHxDv67SZI/7cgzrG/bbC53yaAENdObrkMmzXuQGAocPtl9GffhK1M3t2gwfi+XItxrXaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733917931; c=relaxed/simple;
-	bh=0dlKlBt2wGpwYPj5+vwahTBlNNvq1UobXTkcxTlVIpQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h9fWc07Gasb1FN/iS3Hov+vq7kzkjcMbQBsJgtH5CGIPrheGbYho0MIfDmImKYbWU6fCES1Odozv2kmvOdyPM4hqzDAp5GrtNE6H2gUO5NHyGgSb0yqN4tp/1/q1ryeFUOUsZMv6X5XGe0VXpC7EkINO45JTE9tkCY9ozMgE9+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MBFT7lJ9; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-aa6aad76beeso223102966b.2;
-        Wed, 11 Dec 2024 03:52:09 -0800 (PST)
+	s=arc-20240116; t=1733920174; c=relaxed/simple;
+	bh=YEw/IRYYRv/+z+aIG9Q+90G+HCvcHBe1Et0PZYVkGhc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fAELGyt3+j/MZ2+PY2SgXZIzd34yHD8T+PZYSKV7Lu0ldFDc4XdFTappRWalm02mtaFWu3SV9ciQLfjch78ssoM4G9FZVW7IaxtnGkZzsUFaLvbe1EItWuMa4MRFHFxAcel35QwuacdBuUcDz1E0bRG8cZDEEw444XU6JLdWBzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ekav7q+u; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-434a2033562so57680565e9.1
+        for <linux-rtc@vger.kernel.org>; Wed, 11 Dec 2024 04:29:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733917928; x=1734522728; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D6KHi7ydBN8vl76m68JaMlwxX56xm0y0S8GMkLZ6SAI=;
-        b=MBFT7lJ9rMzSQKXaQGpWaaJF87M6NiqZMHN1W4zF/ALB4cGUrVg1RNbdWIjC00EWRZ
-         oiXVslU+KZCH0Uc/KOlrjtdblXhoZTWO2x17++rqy83IJT4Wu2rfjVdLxUonjAVSGt55
-         QAikuyfPl2CV/0LyjfxnwTMilMIBxbEfSvZBY5SyB1BFL4LbLeR24z0set3egMlP+P/f
-         yUdyqowOYm6DZErm36uNA9lQXReTJM/HVFl20JNrEVFE6FBqZUst4YbscdrL4Qm0IRap
-         IbNbRVRVbKHyYQhcDagrlzFnda65H9ix2mqWztGBl1EeqEyY7ltsCpzp/pTeViUmUfeS
-         mYSg==
+        d=linaro.org; s=google; t=1733920171; x=1734524971; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4q1I1Yh84bKu8NCVCn6hfhSIWeIgmZ50vGMDpFsxBHQ=;
+        b=Ekav7q+ufLl3fuWLREiCJGSstwg9iN8bF+06/HnGxcpTnMBpy9xC0dBe0vDwyJ50bi
+         dfuPuscO4nO2AOynyAp3BKRJHhcKGtTCBPPvKDqEWPbMGp0NxpfXxWHZXsC/nDHckkIa
+         APyp35geaWmbms2cJB/UKitcdDzHkhwr+jaEWO/sct6ZRUdhqspqEv15sEenALsvJcEG
+         xkYvG6qaivMMZmH20EVyojtAf2CA9AK3Vv2xhnVDFR/ZweJMjt4/2mRFb4RqJ2laEqIn
+         hzjjFUoRoKa1PAVNqtate1hO9jf9Xcbeg/RSpfqFdHCmvfh2Z8GY7U5ghhKyIWENz3AQ
+         JjsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733917928; x=1734522728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D6KHi7ydBN8vl76m68JaMlwxX56xm0y0S8GMkLZ6SAI=;
-        b=gS3bqa8XYAvwAaQCtjYTypMtmpRTH07HSzQf9fKOSSXByhVosO7gLCQ1oQ/739U0S/
-         5c3RHdgtWr7ikgOHzXk684CUHkSc5HeRKx8YCxTvJj4LQc1O4Mzm4bOh745XcUD4a8yh
-         cfRiYjdSgHtWidI/JXPq80mWbmghnLq1FYgMktTpJrAjKtLG+HzLE7cpMLN+u9q6H+pD
-         E3z0XaY7zcU2zQnlQr7S83sSGuJz6Ux+i8t+4D4at43fCXjJ1VS4Rityt5zAEW2IfREu
-         2OY4puU7wYhJwvT8l35x+kk2zIslGpZ+B9PPCth2Uxhwlwpqfj547kYaf20aUx8+Z+6D
-         41qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU77ij+oMZ7QhrmKWuxbfRkfLYG4yyO4YA6NvjWfWZ/80dSW3LNcGKoQvQo22x9X+gTnvPmQiYNpHlCHTfC6Cg=@vger.kernel.org, AJvYcCURlKMqwZiM1XTJbYET6iO1aRirYrx9GGKUVcnbYyNXibyeTGBLG96a9Ph/k4AB/WtOBFStRFhHlkE9@vger.kernel.org, AJvYcCWOcTw0NVOqazg+HL2QpjdklspxkvduAi1sRB3lRqaYoiFkRvRiHGvtiKFz2K1KK20of+Pr98btNvvxim9x@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrUl91+hfYtM8vosvr65QDwnH45y+sd+HILUHHBTYcZNmrGXk5
-	ofLg3QrUbLT8brwBd5qJmppG81T7kGvgkk70bQhNjokcRaX2xNNsd12ykSN3hjFf9fVsYVIo/5W
-	HhyNU6DEDiVu1GSQZZdnTJVIL47U=
-X-Gm-Gg: ASbGnctMiRJ8WQ9jaVoZpU+A4dRpU8Fo3Qudgk+Jw1/I7Dt4eCyXdW0K3iA81LuTYT5
-	DEsUC2l/tn8fMotH9r3/i0AOHdbhmQA/ltWM=
-X-Google-Smtp-Source: AGHT+IGc0NsLP01gNrHKgvwWOHLAEVzBmt5PljTMTQythHC5r4nU9NU6QHSBAku8yajx+eFmzTgyzefxM+/JiYFh0ew=
-X-Received: by 2002:a17:906:cca:b0:aa6:6d2b:cbe2 with SMTP id
- a640c23a62f3a-aa6b1192f69mr227823466b.16.1733917928112; Wed, 11 Dec 2024
- 03:52:08 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733920171; x=1734524971;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4q1I1Yh84bKu8NCVCn6hfhSIWeIgmZ50vGMDpFsxBHQ=;
+        b=p5oWVSx32AAnY5Rxyct7Oi53kDA2LqnTca9beLWabSZ2t0L5TvAnJDpsrMiYpAT3Qu
+         tIj7e8eUu71WGA61LhKc0BS1czgVdimWcu413/BxxP+5HJ0Xmf2DjGuK72dlbRUKYmO/
+         tWzF5BMMCm//aSPA3nX8MgccDGVColB3IBJaQVEhvL74yoT78cdAxI4byzq6HEHbuNdz
+         d2X0zHH1jNWYqQZFxMcTlcTnI14wO721+22WnFojbsbcaMwTRmC/D24oMrsJP5NDd6ju
+         s72OGDbu0gE4FlXRqUVUcqNbCMsG19ZcDz7MX/I8bD1N0EtxUBsRP6b/duGqB3w9rVHj
+         FaeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVsBs4p7OMxNbHf3CJIUFQKPE5rwTjGi/Sz7nFIpLKfOUxJAuoNL+gjOPNuwBOlbnpBeMi2ye+SsT4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxm5YsEe37NePg0gZleIQUSHgbsCNUdPxZqCwkAS8j5kEEW0r6N
+	abxFnsyy5Rt0hFptX6M2d+n8zO20FCJ0w28rXXQ3wigEz0oFF4L7KXXIGoXCOPI=
+X-Gm-Gg: ASbGnctv71jhElkV9QNEtBtE8I9ylUO69uP+1XV6e5AlL14gmkxAWW2z3NRw6mWaf8b
+	hZo+DbWS/flNDR7AZwDUr4I5COgXW139XhzbLjkxR4P67ju8sk/MF1NiGaYjPrW2murhhyvgSPL
+	aQ3DnxpZwnpvUi0A4a9DWoqcvQbfpPaicFCos50jz17ZqKG8MH3ry2/Ulm9PfnLwgzl4ZvHHGYv
+	oGpI+WW4pioWYxUSxinWSrqIxOxvomgDWXf+kiCFzA+y6my3Mj5krR8R34=
+X-Google-Smtp-Source: AGHT+IE0TgsU6/73zikWtGl+XcC9OJmbSxFiscCQo7i68052biLcQRUNTqXnT2vH4aEJK/3SFna9UA==
+X-Received: by 2002:a5d:64e6:0:b0:386:424e:32d5 with SMTP id ffacd0b85a97d-3864ce556f4mr2228673f8f.14.1733920171168;
+        Wed, 11 Dec 2024 04:29:31 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4361d541eccsm20564675e9.10.2024.12.11.04.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2024 04:29:30 -0800 (PST)
+Date: Wed, 11 Dec 2024 15:29:27 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Esteban Blanc <eblanc@baylibre.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] rtc: tps6594: Fix integer overflow on 32bit systems
+Message-ID: <e434930a-f30d-427f-9cc6-41562a31d8dc@stanley.mountain>
+References: <1074175e-5ecb-4e3d-b721-347d794caa90@stanley.mountain>
+ <CAHp75VfssNnd9zvNu+N9xc74RO+qBPC_qhF5ed_G8p5HJ8LWvw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1074175e-5ecb-4e3d-b721-347d794caa90@stanley.mountain>
-In-Reply-To: <1074175e-5ecb-4e3d-b721-347d794caa90@stanley.mountain>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 11 Dec 2024 13:51:31 +0200
-Message-ID: <CAHp75VfssNnd9zvNu+N9xc74RO+qBPC_qhF5ed_G8p5HJ8LWvw@mail.gmail.com>
-Subject: Re: [PATCH] rtc: tps6594: Fix integer overflow on 32bit systems
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Esteban Blanc <eblanc@baylibre.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VfssNnd9zvNu+N9xc74RO+qBPC_qhF5ed_G8p5HJ8LWvw@mail.gmail.com>
 
-On Wed, Dec 11, 2024 at 11:32=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
-o.org> wrote:
->
-> The problem is this multiply in tps6594_rtc_set_offset()
->
->         tmp =3D offset * TICKS_PER_HOUR;
->
-> The "tmp" variable is an s64 but "offset" is a long in the
-> (-277774)-277774 range.  On 32bit systems a long can hold numbers up to
-> approximately two billion.  The number of TICKS_PER_HOUR is really large,
-> (32768 * 3600) or roughly a hundred million.  When you start multiplying
-> by a hundred million it doesn't take long to overflow the two billion
-> mark.
->
-> Probably the safest way to fix this is to change the type of
-> TICKS_PER_HOUR to long long because it's such a large number.
+On Wed, Dec 11, 2024 at 01:51:31PM +0200, Andy Shevchenko wrote:
+> On Wed, Dec 11, 2024 at 11:32 AM Dan Carpenter <dan.carpenter@linaro.org> wrote:
+> >
+> > The problem is this multiply in tps6594_rtc_set_offset()
+> >
+> >         tmp = offset * TICKS_PER_HOUR;
+> >
+> > The "tmp" variable is an s64 but "offset" is a long in the
+> > (-277774)-277774 range.  On 32bit systems a long can hold numbers up to
+> > approximately two billion.  The number of TICKS_PER_HOUR is really large,
+> > (32768 * 3600) or roughly a hundred million.  When you start multiplying
+> > by a hundred million it doesn't take long to overflow the two billion
+> > mark.
+> >
+> > Probably the safest way to fix this is to change the type of
+> > TICKS_PER_HOUR to long long because it's such a large number.
+> 
+> ...
+> 
+> > -#define TICKS_PER_HOUR (32768 * 3600)
+> > +#define TICKS_PER_HOUR (32768 * 3600LL)
+> 
+> Hmm... And why signed?
 
-...
+It needs to be signed for negatives.  That's deliberate.
 
-> -#define TICKS_PER_HOUR (32768 * 3600)
-> +#define TICKS_PER_HOUR (32768 * 3600LL)
-
-Hmm... And why signed?
-
-Wondering, do we deserve to have something like
-#define SEC_PER_HOUR 3600UL
-somewhere in the headers, if not already exists?
-
---=20
-With Best Regards,
-Andy Shevchenko
+regards,
+dan carpenter
 
