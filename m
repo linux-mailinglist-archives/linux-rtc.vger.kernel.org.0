@@ -1,148 +1,147 @@
-Return-Path: <linux-rtc+bounces-2712-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2713-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDBA19EDDC0
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2024 03:50:21 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A04029EDEE6
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2024 06:28:07 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41FB01886C9D
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2024 02:50:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E017A283BB5
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2024 05:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A607BAEC;
-	Thu, 12 Dec 2024 02:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0EA517BB16;
+	Thu, 12 Dec 2024 05:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="m5QiI0ON"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHDfh5SJ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8330F9E4
-	for <linux-rtc@vger.kernel.org>; Thu, 12 Dec 2024 02:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038D816DC28;
+	Thu, 12 Dec 2024 05:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733971815; cv=none; b=PIAHogCRhDrkFIzmRXAt7nCGFY7FCwUdE/3XvhzKTYWHPjRwzJjMrMjPH2zAw6v2dlGQZqyujda4qPdIEFYrUh2ZLJUAeaQ3EjrbzLB6k3gI3RC+jkgwZh0duH0+xFy9qlAuwgsDc6BsK927IPDr+VWMZuBVpRq8/p7hiF3dASY=
+	t=1733981280; cv=none; b=d5BupylUznLUZ20PEwr6M/yRDeKZv1Lkxr1WcZcakM0PlRkVb4EPyrBHMfTxukQS4zo41CtrFEggXBkHfYFltrYN42Te280ImB+Mb/ZwRTzDEOCxEe2c6pLXP/l84QTEO4Z2d7HK4+ekdUbydHoY/gz8cU3orFpLer0KvaanyxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733971815; c=relaxed/simple;
-	bh=Z1sqO5X4Wb3JEMjq+zOK8eCmOJkY1iR3JBvj7GLLtvw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dyebX6IRnmte5tgIDn5q7fvwLVxW2/DvIgIT864pMnHKMSdXOBR1I7P/m8qwVfAZr2KyxvtyhfrGbMTgJhc8C3eXoyCZrKN/bN6jBpxbDaSc8RlEiLQ0bREmqwXA3Cx+Mphpk4bIAszg3JWLHua987k3BMmaXAQwMN+C7H/2foI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=m5QiI0ON; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-725dbdf380aso112966b3a.3
-        for <linux-rtc@vger.kernel.org>; Wed, 11 Dec 2024 18:50:13 -0800 (PST)
+	s=arc-20240116; t=1733981280; c=relaxed/simple;
+	bh=qp0i5w/u39t3jbXhVMeRQCOlDTJ4v3kQ6Qs1em2ybJ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZBmB1prfHkn6FB1SEt6NYyxFZ63Gg+U0TJuZNJCEf149wMG+69DAYyActd2BuL9YOSDKt/3XIEWkjq3CurfDl21P0YyGDAxxdhz5iWHYNkjNDTJFsAKrpN0L4LKIg4zUSyPgKMc2Wg1h3u78M5GbfeCoa1Fn/tQAN/WbJSz2ZRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mHDfh5SJ; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6ef8028fe9fso1834257b3.2;
+        Wed, 11 Dec 2024 21:27:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1733971813; x=1734576613; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b8APxKXLKctaXm70KhSAaA/pi2FaHoREWAPfJpAhNLU=;
-        b=m5QiI0ONYpr5Y4lDumB9ZZp4c0zHrn6GHckPcbNzDjgl2XyXvP2GJix/NP58Rrhlp6
-         DuoHfaGj5dcN0CIQt4CVtzCezI6SLT70H362Kmbz2vADpsMBk/D1QMc6N7Uk2K3RtF7U
-         RHGbK3zXkZ0ZbLhS4Fh2DrFoJXNoeN+hZ6RoJWC67SlQDRvQfbylRAX42h2OqKvCYwvR
-         3qb1ZcylGN7xZRQNAfriukLIvBhmyLi/L8dD4cAxSVn6DsJIxZUMSHcx8v+uToOkvnAE
-         xPJDBTxZRiZM7oKEXAK9rP8bvqcpqzGy5fQzHzjhRVSjbPxDktY8kTyvEWB2wU8Yrerc
-         tWBQ==
+        d=gmail.com; s=20230601; t=1733981278; x=1734586078; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=mHDfh5SJQP+HIePXtVlkvBf2FRCtretS6vVkF4QOvrzmUM9gXKatBDWKpq8xJNTrrc
+         fxbsr28Ln0iInO1oQDlJ09JPNw5vkaYjsOdVl1rhXh1krqa3Ombz+G12VHPt/FeV4qBS
+         opas9J3A+gVVCMCT1+9NJ9hvm4m93B7Efb2ed20mTYaELI38zQIES7eepmUdbiPGyhIA
+         An23NXM972ctVGXGIafTW0rZu8tvESOfRGF2pK0Z4xbaPgspKCTtAY0Mg0eatiFZ2uHu
+         vPNQ8+d8LE+r2nNsCsPD7sAU7tZd7kLuMVcSseiSuzcGcTb4lsy/qnTZhpfqLCjb7Vsa
+         xojw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733971813; x=1734576613;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b8APxKXLKctaXm70KhSAaA/pi2FaHoREWAPfJpAhNLU=;
-        b=lN6RMfKz+zcyLi8q5WIvcK+BsvpCQVnMa3amnLPJRRsksckz1V+5bT2IevUxuOSGcQ
-         OUAzBwsgVjc++ZjeLZMK7/VofV/YTAaqAfVe9Ga+1dyBDkkvkwPtzcK1K5gKYkAOCZ7M
-         sxqA3GPg6mKcqy6Lh8mLIiAUwAeS8Rng8INdTxxK7XCBSr1JtIvEu+RWIT1ra/CBaqXt
-         ZKkr12hQnSu+J+L84ybs4Otun4rXVTO6t4pf9eu5s+vzH6gsDN5RGPb0zZb2b3XzHCyi
-         DyKSRwVOlqiTz6n0u7+/fZ57/14HICAOJQkHRpg6fz5BYghGX2W4qONRi6L8AjnoGW1C
-         xVWw==
-X-Gm-Message-State: AOJu0YzmOQBIRCXkrvM5jmSAmnKrBVVvVWmpABr7SXGaFX2JKWdkKcbc
-	lh2X+SLEpE+BV/wmCiV0AZ8gortQy49XsT7WPAgzxzZbjFAb/f+QYAvtLDHBEoI=
-X-Gm-Gg: ASbGncu2D+PQXbVlwo37EvEQxABZF/McGSP5mm8aVJDAoqgVRRw9n0UVMbQtthdys1e
-	C/AkvijeFO0G26cjxNbEjduJxwU4bf3EicGS1t8aoDwawZfsGR3iZoWaITRw0R97P+AYdBrVugx
-	yUhiRWznONqfaYk4Ek5TlRH32OxgBDjuzmxw408aQhVeHuSm4x9YVwGbjwRVVwrv3n86/rkG3G+
-	s1QJAIc0rLYgc5t7RKurQ5jf0eojdIzPJao+JIe6+qz7qTpQ6em7+QvbKeP/fAQK8XY/YP0VuQH
-	TDqh7PWV5UyIFFcOYXfh6wTiCj3DCa7nFS386VRfnTg=
-X-Google-Smtp-Source: AGHT+IEPj3g+IHGBib9C89hYCp6AHvONJJgYfJfr260wOIPyA14sIyiwA/7PojOd6E+ncMN4N7jngw==
-X-Received: by 2002:a05:6a20:2d12:b0:1e0:9cc2:84b1 with SMTP id adf61e73a8af0-1e1cebc5847mr2465830637.30.1733971813024;
-        Wed, 11 Dec 2024 18:50:13 -0800 (PST)
-Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd5592e21fsm4901574a12.83.2024.12.11.18.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2024 18:50:12 -0800 (PST)
-From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-To: alexandre.belloni@bootlin.com,
-	florian.fainelli@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com
-Cc: linux-rtc@vger.kernel.org,
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Subject: [PATCH] rtc: brcmstb-waketimer: disable wakeup in .remove() and in the error path of .probe()
-Date: Thu, 12 Dec 2024 11:50:07 +0900
-Message-Id: <20241212025007.3472182-1-joe@pf.is.s.u-tokyo.ac.jp>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1733981278; x=1734586078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=MhchKkJ6AFALxTi8dEdQh5LqzuA1dNxIW66wImlZei2Y9appkDIE63BXd8VP99irhM
+         8D4GFkKHWFQVf9hANJSwOQ5R0oK0Z5/hvSVqB9Gd2PixZQ3p6gBEHh4dIQphNeRdjY08
+         Eox1bk4Wqx8kSd005uU0xTAw9H98Uh3lAqr+KMteece/Nwqqp/W1WiihylWKoaiYGjSc
+         5UU7F80gOUxReSPmtx9qakTW2wLG/Bw6OU1mzOMUNkFiWKzWseK2a4zdfeWVKQWfeWUZ
+         Lu8NN+z1X8GyA0f4Zrvf//yxGfFSvtRYkMaBqsTxOubE6I7SQ5FsWDKZ0EFa485D8Rdn
+         E7DQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3RnsTOJijdK+9GGDlO0fJQB8SmvaxIXanpwg+kZcj6959XZa8UkO2aezo+DnmjaQWEQKN4p8ZrCp25k5n@vger.kernel.org, AJvYcCUJkIv0zvdY38ma9IJm810eTixMY2RfUX7ULm6MBnWB0PwTKitDrx81Nqq9S8WZQ9jgDd9v94HRMwo=@vger.kernel.org, AJvYcCUbhLHoPHK19WtURQ34faZrPMRbcwjA0UHbqpiKTxEYY5mXvfASARFdms14AhwY8Ny+V/7iPy4UAzuktWs1iLU=@vger.kernel.org, AJvYcCUfMWOlpQCYeeKZRAUuB1TgIGikSo5LE1BfZp98W1qrx6anwsKCGsFYC5cAi2K2SUlFHDy8vFtnANdkpz4=@vger.kernel.org, AJvYcCUzWJl07K2EpOlF+vVJGCcQEEolKF0KZZmEs8DjV/MNDUzvOH6Ed2l6S3sy1kFOYQJQrUGr+9giD2Ta@vger.kernel.org, AJvYcCX3Z5D/p1iCpfIQx/2elza+/Wi0y4+TmU+eUgzSrY7G36R0jM2dKln4k0eQRSHraU4G4yXp0/JhtGNGXw==@vger.kernel.org, AJvYcCXm+zHuWwEo3eX3JIZRZyCZXTs0y1qjixscBuXC4eqLgZTFkiwHkf4p1RPHRrovUCjzezEm7C8H8dQb@vger.kernel.org, AJvYcCXr5YixUF63Jf3WjDg2TUu8ELQkaIRhrWUdXfW8fvRozSGSBApRG0nL+oo9jwagNQsX3qx9i0Qh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOQraaoPhxpySDDNf4lLt0a+MKupDzmoSRkI/lTTsJRmIqJAIL
+	nRgCMmfI50tdgFSjUqzXxRci0xuZdPbsKRac0qgNMsgmMNhyqx2fnnXKPiGnKWk3hYuiyRC5sEP
+	eERfs/FQFWh9UJC28J94n/aEmyBs=
+X-Gm-Gg: ASbGncvsgnEwA5EGm8LflYi2gufq8ko55BRGJDcF/j78TgZlV3BXtfLbjKd22HgWqVL
+	paNh5ONWMtJIi9WDqu0ZqpPGaaPuPElu0ncHEffYlCLgQ+lKDJFkcnGBFN0eSCy6LvztB2Ro=
+X-Google-Smtp-Source: AGHT+IFdrPaTPZ9GejJx+R+k192Po7wThLXGiNtYgpHneGtofpZWdqMlRAawKJACPdSwzsCirltSWXVY1xz5qEDY38E=
+X-Received: by 2002:a05:690c:7249:b0:6ef:6a91:4965 with SMTP id
+ 00721157ae682-6f19e861030mr21004747b3.37.1733981277626; Wed, 11 Dec 2024
+ 21:27:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-2-tmyu0@nuvoton.com>
+ <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+In-Reply-To: <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 12 Dec 2024 13:27:46 +0800
+Message-ID: <CAOoeyxVAbf45g-PGiDiUkZoBrSq6mRvAwHdoC6OCjEUYAUS=Lw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Current code leaves the device's wakeup enabled in .remove() and in the
-error path of .probe(), which results in a memory leak. Therefore, add
-the device_init_wakeup(dev, false) call.
+Dear Krzysztof,
 
-This bug was found by an experimental static analysis tool that I am
-developing.
+Thank you for your comments,
 
-Fixes: 2cd98b22c144 ("rtc: brcmstb-waketimer: non-functional code changes")
-Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
----
- drivers/rtc/rtc-brcmstb-waketimer.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2024=E5=B9=B412=E6=9C=8810=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:38=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> > +
+> > +     dev_set_drvdata(dev, nct6694);
+> > +     usb_set_intfdata(iface, nct6694);
+> > +
+> > +     ret =3D mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6=
+694_dev));
+> > +     if (ret)
+> > +             goto err_mfd;
+> > +
+> > +     dev_info(dev, "Probed device: (%04X:%04X)\n", id->idVendor, id->i=
+dProduct);
+>
+> Drop. Duplicating existing messages and interfaces. Your driver is
+> supposed to be silent on success.
+>
 
-diff --git a/drivers/rtc/rtc-brcmstb-waketimer.c b/drivers/rtc/rtc-brcmstb-waketimer.c
-index fb47c32ab5ff..1bdfec94c693 100644
---- a/drivers/rtc/rtc-brcmstb-waketimer.c
-+++ b/drivers/rtc/rtc-brcmstb-waketimer.c
-@@ -298,15 +298,17 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- 	device_init_wakeup(dev, true);
- 
- 	ret = platform_get_irq(pdev, 0);
--	if (ret < 0)
--		return -ENODEV;
-+	if (ret < 0) {
-+		ret = -ENODEV;
-+		goto err_disable_wakeup;
-+	}
- 	timer->wake_irq = (unsigned int)ret;
- 
- 	timer->clk = devm_clk_get(dev, NULL);
- 	if (!IS_ERR(timer->clk)) {
- 		ret = clk_prepare_enable(timer->clk);
- 		if (ret)
--			return ret;
-+			goto err_disable_wakeup;
- 		timer->rate = clk_get_rate(timer->clk);
- 		if (!timer->rate)
- 			timer->rate = BRCMSTB_WKTMR_DEFAULT_FREQ;
-@@ -351,6 +353,8 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
- err_clk:
- 	clk_disable_unprepare(timer->clk);
- 
-+err_disable_wakeup:
-+	device_init_wakeup(dev, false);
- 	return ret;
- }
- 
-@@ -360,6 +364,7 @@ static void brcmstb_waketmr_remove(struct platform_device *pdev)
- 
- 	unregister_reboot_notifier(&timer->reboot_notifier);
- 	clk_disable_unprepare(timer->clk);
-+	device_init_wakeup(&pdev->dev, false);
- }
- 
- #ifdef CONFIG_PM_SLEEP
--- 
-2.34.1
+Okay, I will drop it in v4.
 
+> > +     return 0;
+> > +
+> > +err_mfd:
+> > +     usb_kill_urb(nct6694->int_in_urb);
+> > +err_urb:
+> > +     usb_free_urb(nct6694->int_in_urb);
+> > +     return dev_err_probe(dev, ret, "Probe failed\n");
+>
+> No, this should go to individual call causing errors so this will be
+> informative. Above is not informative at all and kernel already reports
+> this, so drop.
+>
+
+Okay, I will drop it in v4.
+
+> > +}
+> > +
+> > +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> > +{
+> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
+> > +     struct nct6694 *nct6694 =3D usb_get_intfdata(iface);
+>
+
+Best regards,
+Ming
 
