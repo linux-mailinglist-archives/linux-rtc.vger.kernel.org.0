@@ -1,232 +1,143 @@
-Return-Path: <linux-rtc+bounces-2710-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2711-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 269259ED275
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2024 17:45:17 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A66A09EDD3B
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2024 02:51:34 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F28C2895ED
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2024 16:45:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CB251889A68
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2024 01:51:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BAB1DE3A4;
-	Wed, 11 Dec 2024 16:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB73A52F71;
+	Thu, 12 Dec 2024 01:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="PPUMdDom"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="wmwh54/G"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B137748A;
-	Wed, 11 Dec 2024 16:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D8AB640
+	for <linux-rtc@vger.kernel.org>; Thu, 12 Dec 2024 01:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733935502; cv=none; b=dMtLBq8MmJdCXGN8jdJazFjtv3JcsxoQPSBNTIB1tuEOJuuA9vknfnuj2aLygZqb3Ga8Xu9XcZvXruJKtZAK0kjZDh1lv4WK2LxMhEbObrc3Bptj+pMrUXKFgdM2fz7e9uFQV9JSZsjscBbXHic+a4jqRF4RVVZWbkjieMu9dPY=
+	t=1733968289; cv=none; b=gw8VHrGV0z/tRcDP3sSGjwFtivM7DKhnl8ED7gHbPIti2eFADcovHke7ihCEN5BeZQEzQ6eCYrA1jHCCsqpRUQUUQ0xZV1Ga1AQWX7H37flbsD9dbhXBILJtAGzc4QscDf4f8EC3mlBDyXHXCpSOFHXOheKzelUOveVgQq2G7FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733935502; c=relaxed/simple;
-	bh=sAP+tRgUhnql6R7R3db5IeDRYeDczl/yF1C3ExMaCgo=;
-	h=Message-ID:Date:MIME-Version:Subject:References:From:To:Cc:
-	 In-Reply-To:Content-Type; b=W4IeUBTY161sOdil/mKA1TplFeRTG9YMn52GVOLTjn+HuUMkfWn1gD0p4bP+mMkFuvps9t9Rr2I6twRom3zt8GgvhebxwKtX9xDYLyxJlNEM68HjKloUep2WPKbtu3wM7t+vvNuFhO+pMMFqWPid8IGwul3ZeHt6J17NEFmGHu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=PPUMdDom; arc=none smtp.client-ip=80.12.242.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id LPpQth5h4Q2aZLPpRtbPgg; Wed, 11 Dec 2024 17:44:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1733935495;
-	bh=SVQEOuIW0eCozjA9frw8qm4f/i4aTd4kf39LBuuYa5M=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To;
-	b=PPUMdDomNKLrzttqf/svHMgQjR+ic9Q4Ke8v4qJ8yx6CY73kKOm+Zl+mmQI7I323t
-	 5kgRkaExDDAXYCv1CBX9cSjpb3A1BoCbk+4ORMSP7XAksYZ+s9yVHnUKcgTJfptZmO
-	 gXRJI3qXgAJvvC7YFRPYn12+Xyyn1AuJj2xiOiroxwoli11iKs4Ujg1q/hr2AtMnD0
-	 Hd6sjCRAQBAlcdJ+aEKdirs6A3xlcuoUAR06okRqUVgQsscXVOSdxxrqoNWNtKA7zh
-	 cH5GiyDFROkKXRYq9AA/Ekfx+H9FeI4gDHcC+1QpOnCo0i4Wxf455VgKzWh+7/KwdQ
-	 m4INFOLUkmOkw==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Wed, 11 Dec 2024 17:44:55 +0100
-X-ME-IP: 90.11.132.44
-Message-ID: <47f720f8-90d7-4444-bfde-fb76ec2a2f0f@wanadoo.fr>
-Date: Wed, 11 Dec 2024 17:44:48 +0100
+	s=arc-20240116; t=1733968289; c=relaxed/simple;
+	bh=gAd+ryXMnIDEgJnrQdtxMNe/h69Xqf1dnTSyAJ5bwxc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ap40BsNiVjhGd/lVfiOtrMFTokuHu/QVlTBHiJQ5OFJyZIW/VL1P0R2WSRgNg5IIQJRo8+z+R7dWi+SKAkdwBfbpGs2/tJOFy5Q9Kvvie7+Zw4n/k8cKG9gg7yKuUHNOKoKykJDzYitdfQFkRbc4x1RKMy7/UZ8oG5r7pgkr8Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=wmwh54/G; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21145812538so954295ad.0
+        for <linux-rtc@vger.kernel.org>; Wed, 11 Dec 2024 17:51:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1733968286; x=1734573086; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q3qkUiNozTIqJ5yExQrCYKlQjf8C1JpfRIhYE+1Bejc=;
+        b=wmwh54/Gy5SSO3z949iI9JPpuStci0yRmCOa1HA/VRzVq8fs6q3Fv2rWXFK2DgtmtV
+         ePZgGqKM45/F+MHMn9R72AXyo1jKSadjMMuEcAg9OFjYYszll03aZSmm2eL2i4Zi3RBt
+         ukbqG87u0kcm6bfzP/N8tUZGwHDgqLUq+S/KxUJFsEDPDy31xRYgI0RF0fj7B5RSBJd/
+         wcvYG6YMz04n68g77tLeTwgl+c5+rRQUd/QJ3FoNOsQA0LOoUgRgiVsgO60clS/od4Qx
+         ool0f0K+uHgWiqHRDqv3nBk3UpLQ9zkaEXFNii0f41SBECTd+866CgJ9WrggVyKDQiCj
+         nNLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733968286; x=1734573086;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q3qkUiNozTIqJ5yExQrCYKlQjf8C1JpfRIhYE+1Bejc=;
+        b=qAhW9ct8MqfcMNkPJwwoZ/BcpSeBxB6MWm438X1oy7KAmb3N4/GY+CS74soorU3Uqn
+         Jhuv8riz/z/sOaEbsgqgajSiqOi9yQ0NMMwT68fJjzi9li+EIyVG2O187RLOOZ8avUIX
+         RqwZINcRBag0u5CywaPyWEJ+7QfUt6tvXlIKgXgA9yRohB02ixxHtBtZTqOlBYLmsc9G
+         Hgzri8CeCMn2kDYmKUhU6TGld/10oSC6wTwHvMI3r4Tx4uM5i2iYMxm6WwQE4vnGPdLe
+         ue5Si5zWlQfw5QljqaxCpCAz6NwaIxWMnBeEl17WFtin6TvmEZwdXY224IFWMMEJfmvo
+         luOw==
+X-Gm-Message-State: AOJu0YzKV3LYr7xIsMd9/x6QvI+nzvTap/gdQbo2wX6KyqzEV1fgY1XW
+	KjbbfAl14nNazv0ln6WkaNtFJPAHey47m8TMqoy6dyvr5jKyW+lNh1dFgMTBJR0X/D66G2P8sl/
+	DwP8mOA==
+X-Gm-Gg: ASbGncuBWSw1GMG8sEUZ/1fNJ/YFhhumEjODg3NxXsVu0jZTRtRv1dnC0EdSlNn/33o
+	/ViKJJdLzCwqz24VB6zZT1MCxqOo2K1I5OhXDp+vA03VtcIr8hKhoDnGcLBommc4/2g3USHFJ9B
+	WmbvrI7gAVkzlUlyrjpnX3EoiuxLfiF7I1F/fxgxo+//LUBWhVtSAi18liatqJcp8wXnUORg0Ax
+	CaHEcxQcs9LLL/ANJS2DlYAxToiBPP3BpaYEiRnybq54lxXwk/wubOczs+WSKbBhIb2XaH0iZHf
+	dHBru6VMhNPM0QeWR6VaVWp+E40gG+1456SDV/MXjFU=
+X-Google-Smtp-Source: AGHT+IFZqjJ1sOGkaf87z+u/tjf0IlDyzVIS2EHVnL8Tv0a+yUXrcDYE9kWr3kaXUlaa+4tqpGlOFw==
+X-Received: by 2002:a17:902:f682:b0:216:57a6:28b5 with SMTP id d9443c01a7336-2178af05a5fmr26096455ad.56.1733968286559;
+        Wed, 11 Dec 2024 17:51:26 -0800 (PST)
+Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21615dba950sm96364395ad.11.2024.12.11.17.51.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2024 17:51:25 -0800 (PST)
+From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+To: mazziesaccount@gmail.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Subject: [PATCH] rtc: bd70528: disable wakeup in the error path of .probe()
+Date: Thu, 12 Dec 2024 10:51:21 +0900
+Message-Id: <20241212015121.3410941-1-joe@pf.is.s.u-tokyo.ac.jp>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
- <20241210104524.2466586-2-tmyu0@nuvoton.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, tmyu0@nuvoton.com,
- lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
- andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com
-In-Reply-To: <20241210104524.2466586-2-tmyu0@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 10/12/2024 à 11:45, Ming Yu a écrit :
-> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> PWM, and RTC.
-> 
-> This driver implements USB device functionality and shares the
-> chip's peripherals as a child device.
-> 
-> Each child device can use the USB functions nct6694_read_msg()
-> and nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
+Current code leaves the device's wakeup enabled in the error path of
+.probe(), which results in a memory leak. Therefore, add the
+device_init_wakeup(&device->dev, false) calls before returning an error.
 
-...
+This bug was found by an experimental static analysis tool that I am
+developing.
 
-> +int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
-> +		     u16 length, void *buf)
-> +{
-> +	struct nct6694_cmd_header *cmd_header = nct6694->cmd_header;
-> +	struct nct6694_response_header *response_header = nct6694->response_header;
-> +	struct usb_device *udev = nct6694->udev;
-> +	int tx_len, rx_len, ret;
-> +
-> +	guard(mutex)(&nct6694->access_lock);
+Fixes: 32a4a4ebf768 ("rtc: bd70528: Initial support for ROHM bd70528 RTC")
+Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+---
+ drivers/rtc/rtc-bd70528.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Nitpick: This could be moved a few lines below, should it still comply 
-with your coding style.
-
-> +
-> +	/* Send command packet to USB device */
-> +	cmd_header->mod = mod;
-> +	cmd_header->cmd = offset & 0xFF;
-> +	cmd_header->sel = (offset >> 8) & 0xFF;
-> +	cmd_header->hctrl = NCT6694_HCTRL_GET;
-> +	cmd_header->len = length;
-> +
-> +	ret = usb_bulk_msg(udev, usb_sndbulkpipe(udev, NCT6694_BULK_OUT_EP),
-> +			   cmd_header, NCT6694_CMD_PACKET_SZ, &tx_len,
-> +			   nct6694->timeout);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Receive response packet from USB device */
-> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP),
-> +			   response_header, NCT6694_CMD_PACKET_SZ, &rx_len,
-> +			   nct6694->timeout);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = usb_bulk_msg(udev, usb_rcvbulkpipe(udev, NCT6694_BULK_IN_EP),
-> +			   buf, NCT6694_MAX_PACKET_SZ, &rx_len, nct6694->timeout);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return nct6694_response_err_handling(nct6694, response_header->sts);
-> +}
-> +EXPORT_SYMBOL(nct6694_read_msg);
-> +
-> +int nct6694_write_msg(struct nct6694 *nct6694, u8 mod, u16 offset,
-> +		      u16 length, void *buf)
-> +{
-> +	struct nct6694_cmd_header *cmd_header = nct6694->cmd_header;
-> +	struct nct6694_response_header *response_header = nct6694->response_header;
-> +	struct usb_device *udev = nct6694->udev;
-> +	int tx_len, rx_len, ret;
-> +
-> +	guard(mutex)(&nct6694->access_lock);
-
-Nitpick: This could be moved a few lines below, should it still comply 
-with your coding style.
-
-> +
-> +	/* Send command packet to USB device  */
-
-Nitpick: double space before */
-
-> +	cmd_header->mod = mod;
-> +	cmd_header->cmd = offset & 0xFF;
-> +	cmd_header->sel = (offset >> 8) & 0xFF;
-> +	cmd_header->hctrl = NCT6694_HCTRL_SET;
-> +	cmd_header->len = length;
-
-...
-
-> +static struct irq_chip nct6694_irq_chip = {
-
-const?
-
-> +	.name = "nct6694-irq",
-> +	.flags = IRQCHIP_SKIP_SET_WAKE,
-> +	.irq_bus_lock = nct6694_irq_lock,
-> +	.irq_bus_sync_unlock = nct6694_irq_sync_unlock,
-> +	.irq_enable = nct6694_irq_enable,
-> +	.irq_disable = nct6694_irq_disable,
-> +};
-
-...
-
-> +static int nct6694_usb_probe(struct usb_interface *iface,
-> +			     const struct usb_device_id *id)
-> +{
-> +	struct usb_device *udev = interface_to_usbdev(iface);
-> +	struct device *dev = &udev->dev;
-> +	struct usb_host_interface *interface;
-> +	struct usb_endpoint_descriptor *int_endpoint;
-> +	struct nct6694 *nct6694;
-> +	struct nct6694_cmd_header *cmd_header;
-> +	struct nct6694_response_header *response_header;
-> +	int pipe, maxp;
-> +	int ret;
-> +
-> +	interface = iface->cur_altsetting;
-> +
-> +	int_endpoint = &interface->endpoint[0].desc;
-> +	if (!usb_endpoint_is_int_in(int_endpoint))
-> +		return -ENODEV;
-> +
-> +	nct6694 = devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
-> +	if (!nct6694)
-> +		return -ENOMEM;
-> +
-> +	pipe = usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
-> +	maxp = usb_maxpacket(udev, pipe);
-> +
-> +	cmd_header = devm_kzalloc(dev, sizeof(*cmd_header),
-> +				  GFP_KERNEL);
-> +	if (!cmd_header)
-> +		return -ENOMEM;
-> +
-> +	response_header = devm_kzalloc(dev, sizeof(*response_header),
-> +				       GFP_KERNEL);
-> +	if (!response_header)
-> +		return -ENOMEM;
-> +
-> +	nct6694->int_buffer = devm_kcalloc(dev, NCT6694_MAX_PACKET_SZ,
-> +					   sizeof(unsigned char), GFP_KERNEL);
-
-Why for cmd_header and response_header we use a temp variable, while 
-here we update directly nct6694->int_buffer?
-
-It would save a few LoC do remove this temp var.
-
-> +	if (!nct6694->int_buffer)
-> +		return -ENOMEM;
-> +
-> +	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!nct6694->int_in_urb)
-> +		return -ENOMEM;
-
-...
-
-CJ
+diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
+index 954ac4ef53e8..50059f7ba6d0 100644
+--- a/drivers/rtc/rtc-bd70528.c
++++ b/drivers/rtc/rtc-bd70528.c
+@@ -312,12 +312,12 @@ static int bd70528_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	device_set_wakeup_capable(&pdev->dev, true);
+-	device_wakeup_enable(&pdev->dev);
++	device_init_wakeup(&pdev->dev, true);
+ 
+ 	rtc = devm_rtc_allocate_device(&pdev->dev);
+ 	if (IS_ERR(rtc)) {
+ 		dev_err(&pdev->dev, "RTC device creation failed\n");
++		device_init_wakeup(&pdev->dev, false);
+ 		return PTR_ERR(rtc);
+ 	}
+ 
+@@ -328,10 +328,15 @@ static int bd70528_probe(struct platform_device *pdev)
+ 	/* Request alarm IRQ prior to registerig the RTC */
+ 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL, &alm_hndlr,
+ 					IRQF_ONESHOT, "bd70528-rtc", rtc);
+-	if (ret)
++	if (ret) {
++		device_init_wakeup(&pdev->dev, false);
+ 		return ret;
++	}
+ 
+-	return devm_rtc_register_device(rtc);
++	ret = devm_rtc_register_device(rtc);
++	if (ret)
++		device_init_wakeup(&pdev->dev, false);
++	return ret;
+ }
+ 
+ static const struct platform_device_id bd718x7_rtc_id[] = {
+-- 
+2.34.1
 
 
