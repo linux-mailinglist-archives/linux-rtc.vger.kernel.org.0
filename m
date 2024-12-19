@@ -1,64 +1,64 @@
-Return-Path: <linux-rtc+bounces-2746-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2747-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B12A69F85B2
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Dec 2024 21:19:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DBC19F85AD
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Dec 2024 21:18:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5175D1895760
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Dec 2024 20:16:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42E8616947B
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Dec 2024 20:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75FF31FDE1E;
-	Thu, 19 Dec 2024 20:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1140D1BD9CB;
+	Thu, 19 Dec 2024 20:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="W6rRbuCI"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Nc5eU8t0"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C1B1D7E5B;
-	Thu, 19 Dec 2024 20:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFC71BBBC6;
+	Thu, 19 Dec 2024 20:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734639189; cv=none; b=XKvdSahYtmwnCL8RzocB6tMf5gbYtCAid7HPIIucmNykDxUpwoQ55w2OEGSm7rtfukrdPDj/LJ+AlNST9AV4VCWrlH6q35fBrqbOrvlVQ5c3qCfK4/WM6c8U3SFEgapZc9yKbw0oyzcFqfhHTyMDHLVdKoBKDG4JgMkzYx9qNZM=
+	t=1734639206; cv=none; b=N9meJTwFceOOCqJ2YX8QyQx/SyMPJ56pXEqawd+hE0jH43+sD8D8+lzCMJJHYLQELHll0Dje9Fp9LygBscmWSqA/MDAkghq3pbgfX0PcoFnR6qcJynD9/5bpSuiHPM6UZP33h/vPy/BVZHdTj4fbsOpoSslXUBDSX5Y3vpP1HBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734639189; c=relaxed/simple;
-	bh=ffadjFuptzavA4x1XRZBnwlWGfIivXPmY+7Vdzj1+jQ=;
+	s=arc-20240116; t=1734639206; c=relaxed/simple;
+	bh=KILg/YgGPRQDntgjFA+gJNJpBxmhv5TOA+PuCiZltLE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xh2+HJNr8wvj7Lxuqb+HZZMFK30eQL3L6F7/rs4iKsroCISoBoZDorth+MNgskgmzcev4unLgp/DIfd0BHr2bDfZ/I20fJOxUCa7IloRcewtW7FC44T3+H9TmUjxWxOXK8qIrRPs5ir20Z5EHxMsMmydnNEtnc3mee78XHizzT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=W6rRbuCI; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=Z0dTMAp28Vik/Pik3m61p9Qnq5kxwrKnzMIUV/U1fw3C2YoaqxbI/C/h9KayzF1r2hcguHqTpbZbi6ieopNpqZc9e6itaU8Ec/hV3LHH+ySFa9RTObar3dPhcu5GzSGKjH2Q1aPvC6bJDzf55dez9dWE6EKQ8R0WGFMHwUXQ2Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Nc5eU8t0; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJ9hbev032504;
-	Thu, 19 Dec 2024 20:12:38 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJBdvAK027995;
+	Thu, 19 Dec 2024 20:12:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	6nEFG6JbGGrmnRr4nM0LGtWNLmMHKBPX0i8ytFxClA0=; b=W6rRbuCISXFBwSZp
-	Yj+WeN1yDRlB2uDF9e7oPM4I1w4NhzHaS6qmAFLD3GXqCc2iJS16eT6jmhIpPXI7
-	7pil3nrmUNAuSWeaSHonC/8Y0ggQFOP7h/nQ7uH9mTHPidXKDKuzkTN0brnvPMWQ
-	/WxIUfGhlPbjaXb7xGXFWT13FQnAmtdt8PD9S1kG/6WU+3rww0rpFPg0uWfCTF44
-	hVt9Z8w8rBOdmc/NepL6xuKaiqvyrTRpr/I0XItXo80k1+dGprolsqb4spMa1BFd
-	jTsFjkJz37aR4yXELlL47x6/FIRwn3xJHnslbak0lAIM5lQ3Dj72e1XI1w7HmCDr
-	UfviNw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43mh3y9k44-1
+	IAk9Cf5VUkn+KRKGa7W1KxM97gh562ZEF/VoKAmm3Fc=; b=Nc5eU8t0X8jv24br
+	fwFkNy2VjalZv+VXrxSAf9myI/cSUVXQipwynUgyij+7jjM9vF8GAWjhcj7+Yfn7
+	hAQGcYzd9vQT7pkgLeuRwM9xSKyzLcFQiJSyOP+NYIv7hyTOfJNhp8d3/nnviAWL
+	8/8zEs9yiXFObdxs/6+G5surEpyVE6h2ejOkcTIdt+FmcDg2lx3f1dns5fK9y+rb
+	lq3PwtjbOuxkcmXS8P+Kk8iSXdxipBH1fpJncFt+qrXfoCQfJp78sCBKnzqcLaDN
+	YrErC7R0niU7MGVr24UFAZg6r7ua4emxJ+xgjIFknxAYMFOnB4s7R4egd8IfL6Jj
+	it7LxQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43mjtesapx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 20:12:38 +0000 (GMT)
+	Thu, 19 Dec 2024 20:12:53 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BJKCbPU023685
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BJKCqgg003344
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 20:12:37 GMT
+	Thu, 19 Dec 2024 20:12:52 GMT
 Received: from PHILBER.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 19 Dec
- 2024 12:12:32 -0800
+ 2024 12:12:48 -0800
 From: Peter Hilber <quic_philber@quicinc.com>
 To: <linux-kernel@vger.kernel.org>, <virtualization@lists.linux.dev>,
-        <virtio-dev@lists.linux.dev>
+        <virtio-dev@lists.linux.dev>, <linux-rtc@vger.kernel.org>
 CC: Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri
 	<quic_svaddagi@quicinc.com>,
@@ -68,7 +68,6 @@ CC: Trilok Soni <quic_tsoni@quicinc.com>,
         "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>,
         =?UTF-8?q?Eugenio=20P=C3=A9rez?=
 	<eperezma@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
         David Woodhouse <dwmw2@infradead.org>,
         "Ridoux,
  Julien" <ridouxj@amazon.com>, Marc Zyngier <maz@kernel.org>,
@@ -77,11 +76,10 @@ CC: Trilok Soni <quic_tsoni@quicinc.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
         Parav Pandit
-	<parav@nvidia.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>
-Subject: [RFC PATCH v4 1/4] virtio_rtc: Add module and driver core
-Date: Thu, 19 Dec 2024 21:11:07 +0100
-Message-ID: <20241219201118.2233-2-quic_philber@quicinc.com>
+	<parav@nvidia.com>
+Subject: [RFC PATCH v4 4/4] virtio_rtc: Add RTC class driver
+Date: Thu, 19 Dec 2024 21:11:10 +0100
+Message-ID: <20241219201118.2233-5-quic_philber@quicinc.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241219201118.2233-1-quic_philber@quicinc.com>
 References: <20241219201118.2233-1-quic_philber@quicinc.com>
@@ -97,31 +95,53 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 34TcZCTzjJG_I65-VBzOPTom3AkylgBE
-X-Proofpoint-GUID: 34TcZCTzjJG_I65-VBzOPTom3AkylgBE
+X-Proofpoint-GUID: LU778hdKXBQMtVYPtLdXZmavz7YKIG3Z
+X-Proofpoint-ORIG-GUID: LU778hdKXBQMtVYPtLdXZmavz7YKIG3Z
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- clxscore=1011 adultscore=0 malwarescore=0 bulkscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2411120000 definitions=main-2412190160
 
-Add the virtio_rtc module and driver core. The virtio_rtc module implements
-a driver compatible with the proposed Virtio RTC device specification.
-The Virtio RTC (Real Time Clock) device provides information about current
-time. The device can provide different clocks, e.g. for the UTC or TAI time
-standards, or for physical time elapsed since some past epoch. The driver
-can read the clocks with simple or more accurate methods.
+Expose the virtio-rtc UTC-like clock as an RTC clock to userspace - if it
+is present, and if it does not step on leap seconds. The RTC class enables
+the virtio-rtc device to resume the system from sleep states on RTC alarm.
 
-Implement the core, which interacts with the Virtio RTC device. Apart from
-this, the core does not expose functionality outside of the virtio_rtc
-module. A follow-up patch will expose PTP clocks.
+Support RTC alarm if the virtio-rtc alarm feature is present. The
+virtio-rtc device signals an alarm by marking an alarmq buffer as used.
 
-Provide synchronous messaging, which is enough for the expected time
-synchronization use cases through PTP clocks (similar to ptp_kvm) or RTC
-Class driver.
+Peculiarities
+-------------
+
+A virtio-rtc clock is a bit special for an RTC clock in that
+
+- the clock may step (also backwards) autonomously at any time and
+
+- the device, and its notification mechanism, will be reset during boot or
+  resume from sleep.
+
+The virtio-rtc device avoids that the driver might miss an alarm. The
+device signals an alarm whenever the clock has reached or passed the alarm
+time, and also when the device is reset (on boot or resume from sleep), if
+the alarm time is in the past.
+
+Open Issue
+----------
+
+The CLOCK_BOOTTIME_ALARM will use the RTC clock to wake up from sleep, and
+implicitly assumes that no RTC clock steps will occur during sleep. The RTC
+class driver does not know whether the current alarm is a real-time alarm
+or a boot-time alarm.
+
+Perhaps this might be handled by the driver also setting a virtio-rtc
+monotonic alarm (which uses a clock similar to CLOCK_BOOTTIME_ALARM). The
+virtio-rtc monotonic alarm would just be used to wake up in case it was a
+CLOCK_BOOTTIME_ALARM alarm.
+
+Otherwise, the behavior should not differ from other RTC class drivers.
 
 Signed-off-by: Peter Hilber <quic_philber@quicinc.com>
 ---
@@ -129,703 +149,573 @@ Signed-off-by: Peter Hilber <quic_philber@quicinc.com>
 Notes:
     v4:
     
-    - Update Virtio interface to spec v6.
+    - Do not create RTC class device for clocks which may step on leap seconds
+      (Alexandre Belloni).
     
-    - Distinguish UTC-like clocks by handling of leap seconds (spec v6).
+    - Clear RTC class feature bit instead of defining reduced ops
+      (Alexandre Belloni).
     
-    - Remove unnecessary memory barriers.
+    - Use macros for 64-bit divisions.
     
-    - Cosmetic improvements.
+    - Remove unnecessary memory barrier.
+    
+    - Cosmetic changes.
     
     v3:
     
-    - merge readq and controlq into a single requestq (spec v3)
-    
-    - don't guard cross-timestamping with feature bit (spec v3)
-    
-    - pad message headers to 64 bits (spec v3)
-    
-    - reduce clock id to 16 bits (spec v3)
-    
-    - change Virtio status codes (spec v3)
-    
-    - use 'VIRTIO_RTC_REQ_' prefix for request messages (spec v3)
+    Added.
 
- MAINTAINERS                          |   7 +
- drivers/virtio/Kconfig               |  13 +
- drivers/virtio/Makefile              |   2 +
- drivers/virtio/virtio_rtc_driver.c   | 767 +++++++++++++++++++++++++++
- drivers/virtio/virtio_rtc_internal.h |  24 +
- include/uapi/linux/virtio_rtc.h      | 201 +++++++
- 6 files changed, 1014 insertions(+)
- create mode 100644 drivers/virtio/virtio_rtc_driver.c
- create mode 100644 drivers/virtio/virtio_rtc_internal.h
- create mode 100644 include/uapi/linux/virtio_rtc.h
+ drivers/virtio/Kconfig               |  22 +-
+ drivers/virtio/Makefile              |   1 +
+ drivers/virtio/virtio_rtc_class.c    | 268 +++++++++++++++
+ drivers/virtio/virtio_rtc_driver.c   | 482 ++++++++++++++++++++++++++-
+ drivers/virtio/virtio_rtc_internal.h |  52 +++
+ include/uapi/linux/virtio_rtc.h      |  85 +++++
+ 6 files changed, 905 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/virtio/virtio_rtc_class.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c67f868ea1c9..71bb2661a7bf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -25040,6 +25040,13 @@ S:	Maintained
- F:	drivers/nvdimm/nd_virtio.c
- F:	drivers/nvdimm/virtio_pmem.c
- 
-+VIRTIO RTC DRIVER
-+M:	Peter Hilber <quic_philber@quicinc.com>
-+L:	virtualization@lists.linux.dev
-+S:	Maintained
-+F:	drivers/virtio/virtio_rtc_*
-+F:	include/uapi/linux/virtio_rtc.h
-+
- VIRTIO SOUND DRIVER
- M:	Anton Yakovlev <anton.yakovlev@opensynergy.com>
- M:	"Michael S. Tsirkin" <mst@redhat.com>
 diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-index 2eb747311bfd..83bcb06acb6c 100644
+index 3d8b366c0625..6db5235a7693 100644
 --- a/drivers/virtio/Kconfig
 +++ b/drivers/virtio/Kconfig
-@@ -188,4 +188,17 @@ config VIRTIO_DEBUG
+@@ -195,7 +195,8 @@ config VIRTIO_RTC
+ 	help
+ 	 This driver provides current time from a Virtio RTC device. The driver
+ 	 provides the time through one or more clocks. The Virtio RTC PTP
+-	 clocks must be enabled to expose the clocks to userspace.
++	 clocks and/or the Real Time Clock driver for Virtio RTC must be
++	 enabled to expose the clocks to userspace.
  
- 	  If unsure, say N.
+ 	 To compile this code as a module, choose M here: the module will be
+ 	 called virtio_rtc.
+@@ -204,8 +205,8 @@ config VIRTIO_RTC
  
-+config VIRTIO_RTC
-+	tristate "Virtio RTC driver"
-+	depends on VIRTIO
-+	depends on PTP_1588_CLOCK_OPTIONAL
+ if VIRTIO_RTC
+ 
+-comment "WARNING: Consider enabling VIRTIO_RTC_PTP."
+-	depends on !VIRTIO_RTC_PTP
++comment "WARNING: Consider enabling VIRTIO_RTC_PTP and/or VIRTIO_RTC_CLASS."
++	depends on !VIRTIO_RTC_PTP && !VIRTIO_RTC_CLASS
+ 
+ comment "Enable PTP_1588_CLOCK in order to enable VIRTIO_RTC_PTP."
+ 	depends on PTP_1588_CLOCK=n
+@@ -234,6 +235,21 @@ config VIRTIO_RTC_ARM
+ 
+ 	 If unsure, say Y.
+ 
++comment "Enable RTC_CLASS in order to enable VIRTIO_RTC_CLASS."
++	depends on RTC_CLASS=n
++
++config VIRTIO_RTC_CLASS
++	bool "Real Time Clock driver for Virtio RTC"
++	default y
++	depends on RTC_CLASS
 +	help
-+	 This driver provides current time from a Virtio RTC device. The driver
-+	 provides the time through one or more clocks.
++	 This exposes the Virtio RTC UTC-like clock as a Linux Real Time Clock.
++	 It only has an effect if the Virtio RTC device has a UTC-like clock
++	 which smears leap seconds to avoid steps. The Real Time Clock is
++	 read-only, and may support setting an alarm.
 +
-+	 To compile this code as a module, choose M here: the module will be
-+	 called virtio_rtc.
++	 If unsure, say Y.
 +
-+	 If unsure, say M.
-+
+ endif # VIRTIO_RTC
+ 
  endif # VIRTIO_MENU
 diff --git a/drivers/virtio/Makefile b/drivers/virtio/Makefile
-index 58b2b0489fc9..c41c4c0f9264 100644
+index dbd77f124ba9..eefcfe90d6b8 100644
 --- a/drivers/virtio/Makefile
 +++ b/drivers/virtio/Makefile
-@@ -14,3 +14,5 @@ obj-$(CONFIG_VIRTIO_VDPA) += virtio_vdpa.o
- obj-$(CONFIG_VIRTIO_MEM) += virtio_mem.o
- obj-$(CONFIG_VIRTIO_DMA_SHARED_BUFFER) += virtio_dma_buf.o
- obj-$(CONFIG_VIRTIO_DEBUG) += virtio_debug.o
-+obj-$(CONFIG_VIRTIO_RTC) += virtio_rtc.o
-+virtio_rtc-y := virtio_rtc_driver.o
-diff --git a/drivers/virtio/virtio_rtc_driver.c b/drivers/virtio/virtio_rtc_driver.c
+@@ -18,3 +18,4 @@ obj-$(CONFIG_VIRTIO_RTC) += virtio_rtc.o
+ virtio_rtc-y := virtio_rtc_driver.o
+ virtio_rtc-$(CONFIG_VIRTIO_RTC_PTP) += virtio_rtc_ptp.o
+ virtio_rtc-$(CONFIG_VIRTIO_RTC_ARM) += virtio_rtc_arm.o
++virtio_rtc-$(CONFIG_VIRTIO_RTC_CLASS) += virtio_rtc_class.o
+diff --git a/drivers/virtio/virtio_rtc_class.c b/drivers/virtio/virtio_rtc_class.c
 new file mode 100644
-index 000000000000..b2abf01d1534
+index 000000000000..e4a48eafad16
 --- /dev/null
-+++ b/drivers/virtio/virtio_rtc_driver.c
-@@ -0,0 +1,767 @@
++++ b/drivers/virtio/virtio_rtc_class.c
+@@ -0,0 +1,268 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * virtio_rtc driver core
++ * virtio_rtc RTC class driver
 + *
-+ * Copyright (C) 2022-2024 OpenSynergy GmbH
++ * Copyright (C) 2023 OpenSynergy GmbH
 + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
 +
-+#include <linux/completion.h>
-+#include <linux/virtio.h>
-+#include <linux/virtio_ids.h>
-+#include <linux/virtio_config.h>
-+#include <linux/module.h>
++#include <linux/math64.h>
++#include <linux/overflow.h>
++#include <linux/rtc.h>
++#include <linux/time64.h>
 +
 +#include <uapi/linux/virtio_rtc.h>
 +
 +#include "virtio_rtc_internal.h"
 +
-+/* virtqueue order */
-+enum {
-+	VIORTC_REQUESTQ,
-+	VIORTC_MAX_NR_QUEUES,
-+};
-+
 +/**
-+ * struct viortc_vq - virtqueue abstraction
-+ * @vq: virtqueue
-+ * @lock: protects access to vq
++ * struct viortc_class - RTC class wrapper
++ * @viortc: virtio_rtc device data
++ * @rtc: RTC device
++ * @vio_clk_id: virtio_rtc clock id
++ * @stopped: Whether RTC ops are disallowed. Access protected by rtc_lock().
 + */
-+struct viortc_vq {
-+	struct virtqueue *vq;
-+	spinlock_t lock;
-+};
-+
-+/**
-+ * struct viortc_dev - virtio_rtc device data
-+ * @vdev: virtio device
-+ * @vqs: virtqueues
-+ * @num_clocks: # of virtio_rtc clocks
-+ */
-+struct viortc_dev {
-+	struct virtio_device *vdev;
-+	struct viortc_vq vqs[VIORTC_MAX_NR_QUEUES];
-+	u16 num_clocks;
-+};
-+
-+/**
-+ * struct viortc_msg - Message requested by driver, responded by device.
-+ * @viortc: device data
-+ * @req: request buffer
-+ * @resp: response buffer
-+ * @responded: vqueue callback signals response reception
-+ * @refcnt: Message reference count, message and buffers will be deallocated
-+ *	    once 0. refcnt is decremented in the vqueue callback and in the
-+ *	    thread waiting on the responded completion.
-+ *          If a message response wait function times out, the message will be
-+ *          freed upon late reception (refcnt will reach 0 in the callback), or
-+ *          device removal.
-+ * @req_size: size of request in bytes
-+ * @resp_cap: maximum size of response in bytes
-+ * @resp_actual_size: actual size of response
-+ */
-+struct viortc_msg {
++struct viortc_class {
 +	struct viortc_dev *viortc;
-+	void *req;
-+	void *resp;
-+	struct completion responded;
-+	refcount_t refcnt;
-+	unsigned int req_size;
-+	unsigned int resp_cap;
-+	unsigned int resp_actual_size;
++	struct rtc_device *rtc;
++	u16 vio_clk_id;
++	bool stopped;
 +};
 +
 +/**
-+ * viortc_msg_init() - Allocate and initialize requestq message.
-+ * @viortc: device data
-+ * @msg_type: virtio_rtc message type
-+ * @req_size: size of request buffer to be allocated
-+ * @resp_cap: size of response buffer to be allocated
++ * viortc_class_get_locked() - get RTC class wrapper, if ops allowed
++ * @dev: virtio device
 + *
-+ * Initializes the message refcnt to 2. The refcnt will be decremented once in
-+ * the virtqueue callback, and once in the thread waiting on the message (on
-+ * completion or timeout).
++ * Gets the RTC class wrapper from the virtio device, if it is available and
++ * ops are allowed.
 + *
-+ * Context: Process context.
-+ * Return: non-NULL on success.
++ * Context: Caller must hold rtc_lock().
++ * Return: RTC class wrapper if available and ops allowed, ERR_PTR otherwise.
 + */
-+static struct viortc_msg *viortc_msg_init(struct viortc_dev *viortc,
-+					  u16 msg_type, unsigned int req_size,
-+					  unsigned int resp_cap)
++static struct viortc_class *viortc_class_get_locked(struct device *dev)
 +{
-+	struct viortc_msg *msg;
-+	struct device *dev = &viortc->vdev->dev;
-+	struct virtio_rtc_req_head *req_head;
++	struct viortc_class *viortc_class;
 +
-+	msg = devm_kzalloc(dev, sizeof(*msg), GFP_KERNEL);
-+	if (!msg)
-+		return NULL;
++	viortc_class = viortc_class_from_dev(dev);
++	if (IS_ERR(viortc_class))
++		return viortc_class;
 +
-+	init_completion(&msg->responded);
++	if (viortc_class->stopped)
++		return ERR_PTR(-EBUSY);
 +
-+	msg->req = devm_kzalloc(dev, req_size, GFP_KERNEL);
-+	if (!msg->req)
-+		goto err_free_msg;
-+
-+	req_head = msg->req;
-+
-+	msg->resp = devm_kzalloc(dev, resp_cap, GFP_KERNEL);
-+	if (!msg->resp)
-+		goto err_free_msg_req;
-+
-+	msg->viortc = viortc;
-+	msg->req_size = req_size;
-+	msg->resp_cap = resp_cap;
-+
-+	refcount_set(&msg->refcnt, 2);
-+
-+	req_head->msg_type = virtio_cpu_to_le(msg_type, req_head->msg_type);
-+
-+	return msg;
-+
-+err_free_msg_req:
-+	devm_kfree(dev, msg->req);
-+
-+err_free_msg:
-+	devm_kfree(dev, msg);
-+
-+	return NULL;
++	return viortc_class;
 +}
 +
 +/**
-+ * viortc_msg_release() - Decrement message refcnt, potentially free message.
-+ * @msg: message requested by driver
++ * viortc_class_read_time() - RTC class op read_time
++ * @dev: virtio device
++ * @tm: read time
++ *
++ * Context: Process context.
++ * Return: Zero on success, negative error code otherwise.
++ */
++static int viortc_class_read_time(struct device *dev, struct rtc_time *tm)
++{
++	struct viortc_class *viortc_class;
++	time64_t sec;
++	int ret;
++	u64 ns;
++
++	viortc_class = viortc_class_get_locked(dev);
++	if (IS_ERR(viortc_class))
++		return PTR_ERR(viortc_class);
++
++	ret = viortc_read(viortc_class->viortc, viortc_class->vio_clk_id, &ns);
++	if (ret)
++		return ret;
++
++	sec = div_u64(ns, NSEC_PER_SEC);
++
++	rtc_time64_to_tm(sec, tm);
++
++	return 0;
++}
++
++/**
++ * viortc_class_read_alarm() - RTC class op read_alarm
++ * @dev: virtio device
++ * @alrm: alarm read out
++ *
++ * Context: Process context.
++ * Return: Zero on success, negative error code otherwise.
++ */
++static int viortc_class_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct viortc_class *viortc_class;
++	time64_t alarm_time_sec;
++	u64 alarm_time_ns;
++	bool enabled;
++	int ret;
++
++	viortc_class = viortc_class_get_locked(dev);
++	if (IS_ERR(viortc_class))
++		return PTR_ERR(viortc_class);
++
++	ret = viortc_read_alarm(viortc_class->viortc, viortc_class->vio_clk_id,
++				&alarm_time_ns, &enabled);
++	if (ret)
++		return ret;
++
++	alarm_time_sec = div_u64(alarm_time_ns, NSEC_PER_SEC);
++	rtc_time64_to_tm(alarm_time_sec, &alrm->time);
++
++	alrm->enabled = enabled;
++
++	return 0;
++}
++
++/**
++ * viortc_class_set_alarm() - RTC class op set_alarm
++ * @dev: virtio device
++ * @alrm: alarm to set
++ *
++ * Context: Process context.
++ * Return: Zero on success, negative error code otherwise.
++ */
++static int viortc_class_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
++{
++	struct viortc_class *viortc_class;
++	time64_t alarm_time_sec;
++	u64 alarm_time_ns;
++
++	viortc_class = viortc_class_get_locked(dev);
++	if (IS_ERR(viortc_class))
++		return PTR_ERR(viortc_class);
++
++	alarm_time_sec = rtc_tm_to_time64(&alrm->time);
++
++	if (alarm_time_sec < 0)
++		return -EINVAL;
++
++	if (check_mul_overflow((u64)alarm_time_sec, (u64)NSEC_PER_SEC,
++			       &alarm_time_ns))
++		return -EINVAL;
++
++	return viortc_set_alarm(viortc_class->viortc, viortc_class->vio_clk_id,
++				alarm_time_ns, alrm->enabled);
++}
++
++/**
++ * viortc_class_alarm_irq_enable() - RTC class op alarm_irq_enable
++ * @dev: virtio device
++ * @enabled: enable or disable alarm IRQ
++ *
++ * Context: Process context.
++ * Return: Zero on success, negative error code otherwise.
++ */
++static int viortc_class_alarm_irq_enable(struct device *dev,
++					 unsigned int enabled)
++{
++	struct viortc_class *viortc_class;
++
++	viortc_class = viortc_class_get_locked(dev);
++	if (IS_ERR(viortc_class))
++		return PTR_ERR(viortc_class);
++
++	return viortc_set_alarm_enabled(viortc_class->viortc,
++					viortc_class->vio_clk_id, enabled);
++}
++
++static const struct rtc_class_ops viortc_class_ops = {
++	.read_time = viortc_class_read_time,
++	.read_alarm = viortc_class_read_alarm,
++	.set_alarm = viortc_class_set_alarm,
++	.alarm_irq_enable = viortc_class_alarm_irq_enable,
++};
++
++/**
++ * viortc_class_alarm() - propagate alarm notification as alarm interrupt
++ * @viortc_class: RTC class wrapper
++ * @vio_clk_id: virtio_rtc clock id
 + *
 + * Context: Any context.
 + */
-+static void viortc_msg_release(struct viortc_msg *msg)
++void viortc_class_alarm(struct viortc_class *viortc_class, u16 vio_clk_id)
 +{
-+	if (refcount_dec_and_test(&msg->refcnt)) {
-+		struct device *dev = &msg->viortc->vdev->dev;
++	if (WARN_ONCE(
++		    !viortc_class,
++		    "virtio_rtc: unexpected alarm, no RTC class device available\n"))
++		return;
 +
-+		devm_kfree(dev, msg->req);
-+		devm_kfree(dev, msg->resp);
-+		devm_kfree(dev, msg);
++	if (vio_clk_id != viortc_class->vio_clk_id) {
++		dev_err_ratelimited(&viortc_class->rtc->dev,
++				    "%s: unexpected clock id %d != %d\n",
++				    __func__, vio_clk_id,
++				    viortc_class->vio_clk_id);
++		return;
 +	}
++
++	rtc_update_irq(viortc_class->rtc, 1, RTC_AF | RTC_IRQF);
 +}
 +
 +/**
-+ * viortc_do_cb() - generic virtqueue callback logic
-+ * @vq: virtqueue
-+ * @handle_buf: function to process a used buffer
++ * viortc_class_stop() - disallow RTC class ops
++ * @viortc_class: RTC class wrapper
 + *
-+ * Context: virtqueue callback, typically interrupt. Takes and releases vq lock.
++ * Context: Process context. Caller must NOT hold rtc_lock().
 + */
-+static void viortc_do_cb(struct virtqueue *vq,
-+			 void (*handle_buf)(void *token, unsigned int len,
-+					    struct virtqueue *vq,
-+					    struct viortc_vq *viortc_vq,
-+					    struct viortc_dev *viortc))
++void viortc_class_stop(struct viortc_class *viortc_class)
 +{
-+	struct viortc_dev *viortc = vq->vdev->priv;
-+	struct viortc_vq *viortc_vq;
-+	bool cb_enabled = true;
-+	unsigned long flags;
-+	unsigned int len;
-+	void *token;
++	rtc_lock(viortc_class->rtc);
 +
-+	viortc_vq = &viortc->vqs[vq->index];
++	viortc_class->stopped = true;
 +
-+	for (;;) {
-+		spin_lock_irqsave(&viortc_vq->lock, flags);
-+
-+		if (cb_enabled) {
-+			virtqueue_disable_cb(vq);
-+			cb_enabled = false;
-+		}
-+
-+		token = virtqueue_get_buf(vq, &len);
-+		if (!token) {
-+			if (virtqueue_enable_cb(vq)) {
-+				spin_unlock_irqrestore(&viortc_vq->lock, flags);
-+				return;
-+			}
-+			cb_enabled = true;
-+		}
-+
-+		spin_unlock_irqrestore(&viortc_vq->lock, flags);
-+
-+		if (token)
-+			handle_buf(token, len, vq, viortc_vq, viortc);
-+	}
++	rtc_unlock(viortc_class->rtc);
 +}
 +
 +/**
-+ * viortc_requestq_hdlr() - process a requestq used buffer
++ * viortc_class_register() - register RTC class device
++ * @viortc_class: RTC class wrapper
++ *
++ * Context: Process context.
++ * Return: Zero on success, negative error code otherwise.
++ */
++int viortc_class_register(struct viortc_class *viortc_class)
++{
++	return devm_rtc_register_device(viortc_class->rtc);
++}
++
++/**
++ * viortc_class_init() - init RTC class wrapper and device
++ * @viortc: device data
++ * @vio_clk_id: virtio_rtc clock id
++ * @have_alarm: have alarm feature
++ * @parent_dev: virtio device
++ *
++ * Context: Process context.
++ * Return: RTC class wrapper on success, ERR_PTR otherwise.
++ */
++struct viortc_class *viortc_class_init(struct viortc_dev *viortc,
++				       u16 vio_clk_id, bool have_alarm,
++				       struct device *parent_dev)
++{
++	struct viortc_class *viortc_class;
++	struct rtc_device *rtc;
++
++	viortc_class =
++		devm_kzalloc(parent_dev, sizeof(*viortc_class), GFP_KERNEL);
++	if (!viortc_class)
++		return ERR_PTR(-ENOMEM);
++
++	viortc_class->viortc = viortc;
++
++	rtc = devm_rtc_allocate_device(parent_dev);
++	if (IS_ERR(rtc))
++		return ERR_CAST(rtc);
++
++	viortc_class->rtc = rtc;
++
++	if (!have_alarm)
++		clear_bit(RTC_FEATURE_ALARM, rtc->features);
++	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
++
++	rtc->ops = &viortc_class_ops;
++	rtc->range_max = div_u64(U64_MAX, NSEC_PER_SEC);
++
++	return viortc_class;
++}
+diff --git a/drivers/virtio/virtio_rtc_driver.c b/drivers/virtio/virtio_rtc_driver.c
+index 83f975d9a6ae..f8b890afc528 100644
+--- a/drivers/virtio/virtio_rtc_driver.c
++++ b/drivers/virtio/virtio_rtc_driver.c
+@@ -10,15 +10,20 @@
+ #include <linux/virtio.h>
+ #include <linux/virtio_ids.h>
+ #include <linux/virtio_config.h>
++#include <linux/device.h>
+ #include <linux/module.h>
++#include <linux/pm.h>
+ 
+ #include <uapi/linux/virtio_rtc.h>
+ 
+ #include "virtio_rtc_internal.h"
+ 
++#define VIORTC_ALARMQ_BUF_CAP sizeof(union virtio_rtc_notif_alarmq)
++
+ /* virtqueue order */
+ enum {
+ 	VIORTC_REQUESTQ,
++	VIORTC_ALARMQ,
+ 	VIORTC_MAX_NR_QUEUES,
+ };
+ 
+@@ -35,17 +40,23 @@ struct viortc_vq {
+ /**
+  * struct viortc_dev - virtio_rtc device data
+  * @vdev: virtio device
++ * @viortc_class: RTC class wrapper for UTC-like clock, NULL if not available
+  * @vqs: virtqueues
+  * @clocks_to_unregister: Clock references, which are only used during device
+  *                        removal.
+  *			  For other uses, there would be a race between device
+  *			  creation and setting the pointers here.
++ * @alarmq_bufs: alarmq buffers list
++ * @num_alarmq_bufs: # of alarmq buffers
+  * @num_clocks: # of virtio_rtc clocks
+  */
+ struct viortc_dev {
+ 	struct virtio_device *vdev;
++	struct viortc_class *viortc_class;
+ 	struct viortc_vq vqs[VIORTC_MAX_NR_QUEUES];
+ 	struct viortc_ptp_clock **clocks_to_unregister;
++	void **alarmq_bufs;
++	unsigned int num_alarmq_bufs;
+ 	u16 num_clocks;
+ };
+ 
+@@ -76,6 +87,60 @@ struct viortc_msg {
+ 	unsigned int resp_actual_size;
+ };
+ 
++/**
++ * viortc_class_from_dev() - Get RTC class object from virtio device.
++ * @dev: virtio device
++ *
++ * Context: Any context.
++ * Return: RTC class object if available, ERR_PTR otherwise.
++ */
++struct viortc_class *viortc_class_from_dev(struct device *dev)
++{
++	struct virtio_device *vdev;
++	struct viortc_dev *viortc;
++
++	vdev = container_of(dev, typeof(*vdev), dev);
++	viortc = vdev->priv;
++
++	return viortc->viortc_class ?: ERR_PTR(-ENODEV);
++}
++
++/**
++ * viortc_alarms_supported() - Whether device and driver support alarms.
++ * @vdev: virtio device
++ *
++ * NB: Device and driver may not support alarms for the same clocks.
++ *
++ * Context: Any context.
++ * Return: True if both device and driver can support alarms.
++ */
++static bool viortc_alarms_supported(struct virtio_device *vdev)
++{
++	return IS_ENABLED(CONFIG_VIRTIO_RTC_CLASS) &&
++	       virtio_has_feature(vdev, VIRTIO_RTC_F_ALARM);
++}
++
++/**
++ * viortc_feed_vq() - Make a device write-only buffer available.
++ * @viortc: device data
++ * @vq: notification virtqueue
++ * @buf: buffer
++ * @buf_len: buffer capacity in bytes
++ * @data: token, identifying buffer
++ *
++ * Context: Caller must prevent concurrent access to vq.
++ * Return: Zero on success, negative error code otherwise.
++ */
++static int viortc_feed_vq(struct viortc_dev *viortc, struct virtqueue *vq,
++			  void *buf, unsigned int buf_len, void *data)
++{
++	struct scatterlist sg;
++
++	sg_init_one(&sg, buf, buf_len);
++
++	return virtqueue_add_inbuf(vq, &sg, 1, data, GFP_ATOMIC);
++}
++
+ /**
+  * viortc_msg_init() - Allocate and initialize requestq message.
+  * @viortc: device data
+@@ -238,6 +303,81 @@ static void viortc_cb_requestq(struct virtqueue *vq)
+ 	viortc_do_cb(vq, viortc_requestq_hdlr);
+ }
+ 
++/**
++ * viortc_alarmq_hdlr() - process an alarmq used buffer
 + * @token: token identifying the buffer
 + * @len: bytes written by device
 + * @vq: virtqueue
 + * @viortc_vq: device specific data for virtqueue
 + * @viortc: device data
 + *
-+ * Signals completion for each received message.
++ * Processes a VIRTIO_RTC_NOTIF_ALARM notification by calling the RTC class
++ * driver. Makes the buffer available again.
 + *
 + * Context: virtqueue callback
 + */
-+static void viortc_requestq_hdlr(void *token, unsigned int len,
-+				 struct virtqueue *vq,
-+				 struct viortc_vq *viortc_vq,
-+				 struct viortc_dev *viortc)
++static void viortc_alarmq_hdlr(void *token, unsigned int len,
++			       struct virtqueue *vq,
++			       struct viortc_vq *viortc_vq,
++			       struct viortc_dev *viortc)
 +{
-+	struct viortc_msg *msg = token;
-+
-+	msg->resp_actual_size = len;
-+
-+	/*
-+	 * completion waiter must see our msg metadata, but complete() does not
-+	 * guarantee a memory barrier
-+	 */
-+	smp_wmb();
-+
-+	complete(&msg->responded);
-+	viortc_msg_release(msg);
-+}
-+
-+/**
-+ * viortc_cb_requestq() - callback for requestq
-+ * @vq: virtqueue
-+ *
-+ * Context: virtqueue callback
-+ */
-+static void viortc_cb_requestq(struct virtqueue *vq)
-+{
-+	viortc_do_cb(vq, viortc_requestq_hdlr);
-+}
-+
-+/**
-+ * viortc_get_resp_errno() - converts virtio_rtc errnos to system errnos
-+ * @resp_head: message response header
-+ *
-+ * Return: negative system errno, or 0
-+ */
-+static int viortc_get_resp_errno(struct virtio_rtc_resp_head *resp_head)
-+{
-+	switch (virtio_le_to_cpu(resp_head->status)) {
-+	case VIRTIO_RTC_S_OK:
-+		return 0;
-+	case VIRTIO_RTC_S_EOPNOTSUPP:
-+		return -EOPNOTSUPP;
-+	case VIRTIO_RTC_S_EINVAL:
-+		return -EINVAL;
-+	case VIRTIO_RTC_S_ENODEV:
-+		return -ENODEV;
-+	case VIRTIO_RTC_S_EIO:
-+	default:
-+		return -EIO;
-+	}
-+}
-+
-+/**
-+ * viortc_msg_xfer() - send message request, wait until message response
-+ * @vq: virtqueue
-+ * @msg: message with driver request
-+ * @timeout_jiffies: message response timeout, 0 for no timeout
-+ *
-+ * Context: Process context. Takes and releases vq.lock. May sleep.
-+ * Return: Zero on success, negative error code otherwise.
-+ */
-+static int viortc_msg_xfer(struct viortc_vq *vq, struct viortc_msg *msg,
-+			   unsigned long timeout_jiffies)
-+{
-+	int ret;
++	struct virtio_rtc_notif_alarm *notif = token;
++	struct virtio_rtc_notif_head *head = token;
 +	unsigned long flags;
-+	struct scatterlist out_sg[1];
-+	struct scatterlist in_sg[1];
-+	struct scatterlist *sgs[2] = { out_sg, in_sg };
++	u16 clock_id;
 +	bool notify;
 +
-+	sg_init_one(out_sg, msg->req, msg->req_size);
-+	sg_init_one(in_sg, msg->resp, msg->resp_cap);
-+
-+	spin_lock_irqsave(&vq->lock, flags);
-+
-+	ret = virtqueue_add_sgs(vq->vq, sgs, 1, 1, msg, GFP_ATOMIC);
-+	if (ret) {
-+		spin_unlock_irqrestore(&vq->lock, flags);
-+		/*
-+		 * Release in place of the response callback, which will never
-+		 * come.
-+		 */
-+		viortc_msg_release(msg);
-+		return ret;
++	if (len < sizeof(*head)) {
++		dev_err_ratelimited(
++			&viortc->vdev->dev,
++			"%s: ignoring notification with short header\n",
++			__func__);
++		goto feed_vq;
 +	}
 +
-+	notify = virtqueue_kick_prepare(vq->vq);
++	if (virtio_le_to_cpu(head->msg_type) != VIRTIO_RTC_NOTIF_ALARM) {
++		dev_err_ratelimited(&viortc->vdev->dev,
++				    "%s: unknown notification type\n",
++				    __func__);
++		goto feed_vq;
++	}
 +
-+	spin_unlock_irqrestore(&vq->lock, flags);
++	if (len < sizeof(*notif)) {
++		dev_err_ratelimited(&viortc->vdev->dev,
++				    "%s: alarm notification too small\n",
++				    __func__);
++		goto feed_vq;
++	}
++
++	clock_id = virtio_le_to_cpu(notif->clock_id);
++
++	viortc_class_alarm(viortc->viortc_class, clock_id);
++
++feed_vq:
++	spin_lock_irqsave(&viortc_vq->lock, flags);
++
++	WARN_ON(viortc_feed_vq(viortc, vq, notif, VIORTC_ALARMQ_BUF_CAP,
++			       token));
++
++	notify = virtqueue_kick_prepare(vq);
++
++	spin_unlock_irqrestore(&viortc_vq->lock, flags);
 +
 +	if (notify)
-+		virtqueue_notify(vq->vq);
-+
-+	if (timeout_jiffies) {
-+		long timeout_ret;
-+
-+		timeout_ret = wait_for_completion_interruptible_timeout(
-+			&msg->responded, timeout_jiffies);
-+
-+		if (!timeout_ret)
-+			return -ETIMEDOUT;
-+		else if (timeout_ret < 0)
-+			return (int)timeout_ret;
-+	} else {
-+		ret = wait_for_completion_interruptible(&msg->responded);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/*
-+	 * Ensure we can read message metadata written in the virtqueue
-+	 * callback.
-+	 */
-+	smp_rmb();
-+
-+	/*
-+	 * There is not yet a case where returning a short message would make
-+	 * sense, so consider any deviation an error.
-+	 */
-+	if (msg->resp_actual_size != msg->resp_cap)
-+		return -EINVAL;
-+
-+	return viortc_get_resp_errno(msg->resp);
++		virtqueue_notify(vq);
 +}
 +
-+/*
-+ * common message handle macros for messages of different types
-+ */
-+
 +/**
-+ * VIORTC_DECLARE_MSG_HDL_ONSTACK() - declare message handle on stack
-+ * @hdl: message handle name
-+ * @msg_id: message type id
-+ * @msg_req: message request type
-+ * @msg_resp: message response type
-+ */
-+#define VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, msg_id, msg_req, msg_resp)       \
-+	struct {                                                             \
-+		struct viortc_msg *msg;                                      \
-+		msg_req *req;                                                \
-+		msg_resp *resp;                                              \
-+		unsigned int req_size;                                       \
-+		unsigned int resp_cap;                                       \
-+		u16 msg_type;                                                \
-+	} hdl = {                                                            \
-+		NULL, NULL, NULL, sizeof(msg_req), sizeof(msg_resp), msg_id, \
-+	}
-+
-+/**
-+ * VIORTC_MSG() - extract message from message handle
-+ * @hdl: message handle
++ * viortc_cb_alarmq() - callback for alarmq
++ * @vq: virtqueue
 + *
-+ * Return: struct viortc_msg
++ * Context: virtqueue callback
 + */
-+#define VIORTC_MSG(hdl) ((hdl).msg)
++static void viortc_cb_alarmq(struct virtqueue *vq)
++{
++	viortc_do_cb(vq, viortc_alarmq_hdlr);
++}
 +
+ /**
+  * viortc_get_resp_errno() - converts virtio_rtc errnos to system errnos
+  * @resp_head: message response header
+@@ -638,10 +778,192 @@ int viortc_cross_cap(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
+ 	return ret;
+ }
+ 
 +/**
-+ * VIORTC_MSG_INIT() - initialize message handle
-+ * @hdl: message handle
-+ * @viortc: device data (struct viortc_dev *)
-+ *
-+ * Context: Process context.
-+ * Return: 0 on success, -ENOMEM otherwise.
-+ */
-+#define VIORTC_MSG_INIT(hdl, viortc)                                         \
-+	({                                                                   \
-+		typeof(hdl) *_hdl = &(hdl);                                  \
-+									     \
-+		_hdl->msg = viortc_msg_init((viortc), _hdl->msg_type,        \
-+					    _hdl->req_size, _hdl->resp_cap); \
-+		if (_hdl->msg) {                                             \
-+			_hdl->req = _hdl->msg->req;                          \
-+			_hdl->resp = _hdl->msg->resp;                        \
-+		}                                                            \
-+		_hdl->msg ? 0 : -ENOMEM;                                     \
-+	})
-+
-+/**
-+ * VIORTC_MSG_WRITE() - write a request message field
-+ * @hdl: message handle
-+ * @dest_member: request message field name
-+ * @src_ptr: pointer to data of compatible type
-+ *
-+ * Writes the field in little-endian format.
-+ */
-+#define VIORTC_MSG_WRITE(hdl, dest_member, src_ptr)                         \
-+	do {                                                                \
-+		typeof(hdl) _hdl = (hdl);                                   \
-+		typeof(src_ptr) _src_ptr = (src_ptr);                       \
-+									    \
-+		/* Sanity check: must match the member's type */            \
-+		typecheck(typeof(_hdl.req->dest_member), *_src_ptr);        \
-+									    \
-+		_hdl.req->dest_member =                                     \
-+			virtio_cpu_to_le(*_src_ptr, _hdl.req->dest_member); \
-+	} while (0)
-+
-+/**
-+ * VIORTC_MSG_READ() - read from a response message field
-+ * @hdl: message handle
-+ * @src_member: response message field name
-+ * @dest_ptr: pointer to data of compatible type
-+ *
-+ * Converts from little-endian format and writes to dest_ptr.
-+ */
-+#define VIORTC_MSG_READ(hdl, src_member, dest_ptr)                     \
-+	do {                                                           \
-+		typeof(dest_ptr) _dest_ptr = (dest_ptr);               \
-+								       \
-+		/* Sanity check: must match the member's type */       \
-+		typecheck(typeof((hdl).resp->src_member), *_dest_ptr); \
-+								       \
-+		*_dest_ptr = virtio_le_to_cpu((hdl).resp->src_member); \
-+	} while (0)
-+
-+/*
-+ * read requests
-+ */
-+
-+/** timeout for clock readings, where timeouts are considered non-fatal */
-+#define VIORTC_MSG_READ_TIMEOUT (msecs_to_jiffies(60 * 1000))
-+
-+/**
-+ * viortc_read() - VIRTIO_RTC_REQ_READ wrapper
++ * viortc_read_alarm() - VIRTIO_RTC_REQ_READ_ALARM wrapper
 + * @viortc: device data
 + * @vio_clk_id: virtio_rtc clock id
-+ * @reading: clock reading [ns]
++ * @alarm_time: alarm time in ns
++ * @enabled: whether alarm is enabled
 + *
 + * Context: Process context.
 + * Return: Zero on success, negative error code otherwise.
 + */
-+int viortc_read(struct viortc_dev *viortc, u16 vio_clk_id, u64 *reading)
++int viortc_read_alarm(struct viortc_dev *viortc, u16 vio_clk_id,
++		      u64 *alarm_time, bool *enabled)
 +{
-+	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_READ,
-+				       struct virtio_rtc_req_read,
-+				       struct virtio_rtc_resp_read);
-+	int ret;
-+
-+	ret = VIORTC_MSG_INIT(hdl, viortc);
-+	if (ret)
-+		return ret;
-+
-+	VIORTC_MSG_WRITE(hdl, clock_id, &vio_clk_id);
-+
-+	ret = viortc_msg_xfer(&viortc->vqs[VIORTC_REQUESTQ], VIORTC_MSG(hdl),
-+			      VIORTC_MSG_READ_TIMEOUT);
-+	if (ret) {
-+		dev_dbg(&viortc->vdev->dev, "%s: xfer returned %d\n", __func__,
-+			ret);
-+		goto out_release;
-+	}
-+
-+	VIORTC_MSG_READ(hdl, clock_reading, reading);
-+
-+out_release:
-+	viortc_msg_release(VIORTC_MSG(hdl));
-+
-+	return ret;
-+}
-+
-+/**
-+ * viortc_read_cross() - VIRTIO_RTC_REQ_READ_CROSS wrapper
-+ * @viortc: device data
-+ * @vio_clk_id: virtio_rtc clock id
-+ * @hw_counter: virtio_rtc HW counter type
-+ * @reading: clock reading [ns]
-+ * @cycles: HW counter cycles during clock reading
-+ *
-+ * Context: Process context.
-+ * Return: Zero on success, negative error code otherwise.
-+ */
-+int viortc_read_cross(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
-+		      u64 *reading, u64 *cycles)
-+{
-+	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_READ_CROSS,
-+				       struct virtio_rtc_req_read_cross,
-+				       struct virtio_rtc_resp_read_cross);
-+	int ret;
-+
-+	ret = VIORTC_MSG_INIT(hdl, viortc);
-+	if (ret)
-+		return ret;
-+
-+	VIORTC_MSG_WRITE(hdl, clock_id, &vio_clk_id);
-+	VIORTC_MSG_WRITE(hdl, hw_counter, &hw_counter);
-+
-+	ret = viortc_msg_xfer(&viortc->vqs[VIORTC_REQUESTQ], VIORTC_MSG(hdl),
-+			      VIORTC_MSG_READ_TIMEOUT);
-+	if (ret) {
-+		dev_dbg(&viortc->vdev->dev, "%s: xfer returned %d\n", __func__,
-+			ret);
-+		goto out_release;
-+	}
-+
-+	VIORTC_MSG_READ(hdl, clock_reading, reading);
-+	VIORTC_MSG_READ(hdl, counter_cycles, cycles);
-+
-+out_release:
-+	viortc_msg_release(VIORTC_MSG(hdl));
-+
-+	return ret;
-+}
-+
-+/*
-+ * control requests
-+ */
-+
-+/**
-+ * viortc_cfg() - VIRTIO_RTC_REQ_CFG wrapper
-+ * @viortc: device data
-+ * @num_clocks: # of virtio_rtc clocks
-+ *
-+ * Context: Process context.
-+ * Return: Zero on success, negative error code otherwise.
-+ */
-+static int viortc_cfg(struct viortc_dev *viortc, u16 *num_clocks)
-+{
-+	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_CFG,
-+				       struct virtio_rtc_req_cfg,
-+				       struct virtio_rtc_resp_cfg);
-+	int ret;
-+
-+	ret = VIORTC_MSG_INIT(hdl, viortc);
-+	if (ret)
-+		return ret;
-+
-+	ret = viortc_msg_xfer(&viortc->vqs[VIORTC_REQUESTQ], VIORTC_MSG(hdl),
-+			      0);
-+	if (ret) {
-+		dev_dbg(&viortc->vdev->dev, "%s: xfer returned %d\n", __func__,
-+			ret);
-+		goto out_release;
-+	}
-+
-+	VIORTC_MSG_READ(hdl, num_clocks, num_clocks);
-+
-+out_release:
-+	viortc_msg_release(VIORTC_MSG(hdl));
-+
-+	return ret;
-+}
-+
-+/**
-+ * viortc_clock_cap() - VIRTIO_RTC_REQ_CLOCK_CAP wrapper
-+ * @viortc: device data
-+ * @vio_clk_id: virtio_rtc clock id
-+ * @type: virtio_rtc clock type
-+ * @leap_second_smearing: virtio_rtc smearing variant
-+ * @flags: struct virtio_rtc_resp_clock_cap.flags
-+ *
-+ * Context: Process context.
-+ * Return: Zero on success, negative error code otherwise.
-+ */
-+static int viortc_clock_cap(struct viortc_dev *viortc, u16 vio_clk_id, u8 *type,
-+			    u8 *leap_second_smearing, u8 *flags)
-+{
-+	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_CLOCK_CAP,
-+				       struct virtio_rtc_req_clock_cap,
-+				       struct virtio_rtc_resp_clock_cap);
-+	int ret;
-+
-+	ret = VIORTC_MSG_INIT(hdl, viortc);
-+	if (ret)
-+		return ret;
-+
-+	VIORTC_MSG_WRITE(hdl, clock_id, &vio_clk_id);
-+
-+	ret = viortc_msg_xfer(&viortc->vqs[VIORTC_REQUESTQ], VIORTC_MSG(hdl),
-+			      0);
-+	if (ret) {
-+		dev_dbg(&viortc->vdev->dev, "%s: xfer returned %d\n", __func__,
-+			ret);
-+		goto out_release;
-+	}
-+
-+	VIORTC_MSG_READ(hdl, type, type);
-+	VIORTC_MSG_READ(hdl, leap_second_smearing, leap_second_smearing);
-+	VIORTC_MSG_READ(hdl, flags, flags);
-+
-+out_release:
-+	viortc_msg_release(VIORTC_MSG(hdl));
-+
-+	return ret;
-+}
-+
-+/**
-+ * viortc_cross_cap() - VIRTIO_RTC_REQ_CROSS_CAP wrapper
-+ * @viortc: device data
-+ * @vio_clk_id: virtio_rtc clock id
-+ * @hw_counter: virtio_rtc HW counter type
-+ * @supported: xtstamping is supported for the vio_clk_id/hw_counter pair
-+ *
-+ * Context: Process context.
-+ * Return: Zero on success, negative error code otherwise.
-+ */
-+int viortc_cross_cap(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
-+		     bool *supported)
-+{
-+	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_CROSS_CAP,
-+				       struct virtio_rtc_req_cross_cap,
-+				       struct virtio_rtc_resp_cross_cap);
++	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_READ_ALARM,
++				       struct virtio_rtc_req_read_alarm,
++				       struct virtio_rtc_resp_read_alarm);
 +	u8 flags;
 +	int ret;
 +
@@ -834,7 +724,6 @@ index 000000000000..b2abf01d1534
 +		return ret;
 +
 +	VIORTC_MSG_WRITE(hdl, clock_id, &vio_clk_id);
-+	VIORTC_MSG_WRITE(hdl, hw_counter, &hw_counter);
 +
 +	ret = viortc_msg_xfer(&viortc->vqs[VIORTC_REQUESTQ], VIORTC_MSG(hdl),
 +			      0);
@@ -844,8 +733,10 @@ index 000000000000..b2abf01d1534
 +		goto out_release;
 +	}
 +
++	VIORTC_MSG_READ(hdl, alarm_time, alarm_time);
 +	VIORTC_MSG_READ(hdl, flags, &flags);
-+	*supported = !!(flags & VIRTIO_RTC_FLAG_CROSS_CAP);
++
++	*enabled = !!(flags & VIRTIO_RTC_FLAG_ALARM_ENABLED);
 +
 +out_release:
 +	viortc_msg_release(VIORTC_MSG(hdl));
@@ -853,375 +744,601 @@ index 000000000000..b2abf01d1534
 +	return ret;
 +}
 +
-+/*
-+ * init, deinit
-+ */
-+
 +/**
-+ * viortc_clocks_init() - init local representations of virtio_rtc clocks
++ * viortc_set_alarm() - VIRTIO_RTC_REQ_SET_ALARM wrapper
 + * @viortc: device data
++ * @vio_clk_id: virtio_rtc clock id
++ * @alarm_time: alarm time in ns
++ * @alarm_enable: enable or disable alarm
 + *
 + * Context: Process context.
 + * Return: Zero on success, negative error code otherwise.
 + */
-+static int viortc_clocks_init(struct viortc_dev *viortc)
++int viortc_set_alarm(struct viortc_dev *viortc, u16 vio_clk_id, u64 alarm_time,
++		     bool alarm_enable)
 +{
++	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_SET_ALARM,
++				       struct virtio_rtc_req_set_alarm,
++				       struct virtio_rtc_resp_set_alarm);
++	u8 flags = 0;
 +	int ret;
-+	u16 num_clocks;
 +
-+	ret = viortc_cfg(viortc, &num_clocks);
++	ret = VIORTC_MSG_INIT(hdl, viortc);
 +	if (ret)
 +		return ret;
 +
-+	if (num_clocks < 1) {
-+		dev_err(&viortc->vdev->dev, "device reported 0 clocks\n");
-+		return -ENODEV;
++	if (alarm_enable)
++		flags |= VIRTIO_RTC_FLAG_ALARM_ENABLED;
++
++	VIORTC_MSG_WRITE(hdl, clock_id, &vio_clk_id);
++	VIORTC_MSG_WRITE(hdl, alarm_time, &alarm_time);
++	VIORTC_MSG_WRITE(hdl, flags, &flags);
++
++	ret = viortc_msg_xfer(&viortc->vqs[VIORTC_REQUESTQ], VIORTC_MSG(hdl),
++			      0);
++	if (ret) {
++		dev_dbg(&viortc->vdev->dev, "%s: xfer returned %d\n", __func__,
++			ret);
++		goto out_release;
 +	}
 +
-+	viortc->num_clocks = num_clocks;
-+
-+	/* In the future, PTP clocks will be initialized here. */
-+	(void)viortc_clock_cap;
++out_release:
++	viortc_msg_release(VIORTC_MSG(hdl));
 +
 +	return ret;
 +}
 +
 +/**
-+ * viortc_init_vqs() - init virtqueues
++ * viortc_set_alarm_enabled() - VIRTIO_RTC_REQ_SET_ALARM_ENABLED wrapper
 + * @viortc: device data
-+ *
-+ * Inits virtqueues and associated data.
++ * @vio_clk_id: virtio_rtc clock id
++ * @alarm_enable: enable or disable alarm
 + *
 + * Context: Process context.
 + * Return: Zero on success, negative error code otherwise.
 + */
-+static int viortc_init_vqs(struct viortc_dev *viortc)
++int viortc_set_alarm_enabled(struct viortc_dev *viortc, u16 vio_clk_id,
++			     bool alarm_enable)
 +{
++	VIORTC_DECLARE_MSG_HDL_ONSTACK(
++		hdl, VIRTIO_RTC_REQ_SET_ALARM_ENABLED,
++		struct virtio_rtc_req_set_alarm_enabled,
++		struct virtio_rtc_resp_set_alarm_enabled);
++	u8 flags = 0;
 +	int ret;
-+	struct virtio_device *vdev = viortc->vdev;
-+	struct virtqueue_info vqs_info[] = {
-+		{ "requestq", viortc_cb_requestq },
-+	};
-+	struct virtqueue *vqs[VIORTC_MAX_NR_QUEUES];
-+	int nr_queues;
 +
-+	nr_queues = VIORTC_REQUESTQ + 1;
-+
-+	ret = virtio_find_vqs(vdev, nr_queues, vqs, vqs_info, NULL);
++	ret = VIORTC_MSG_INIT(hdl, viortc);
 +	if (ret)
 +		return ret;
 +
-+	viortc->vqs[VIORTC_REQUESTQ].vq = vqs[VIORTC_REQUESTQ];
-+	spin_lock_init(&viortc->vqs[VIORTC_REQUESTQ].lock);
++	if (alarm_enable)
++		flags |= VIRTIO_RTC_FLAG_ALARM_ENABLED;
++
++	VIORTC_MSG_WRITE(hdl, clock_id, &vio_clk_id);
++	VIORTC_MSG_WRITE(hdl, flags, &flags);
++
++	ret = viortc_msg_xfer(&viortc->vqs[VIORTC_REQUESTQ], VIORTC_MSG(hdl),
++			      0);
++	if (ret) {
++		dev_dbg(&viortc->vdev->dev, "%s: xfer returned %d\n", __func__,
++			ret);
++		goto out_release;
++	}
++
++out_release:
++	viortc_msg_release(VIORTC_MSG(hdl));
++
++	return ret;
++}
++
+ /*
+  * init, deinit
+  */
+ 
++/**
++ * viortc_init_rtc_class_clock() - init and register a RTC class device
++ * @viortc: device data
++ * @vio_clk_id: virtio_rtc clock id
++ * @clock_type: virtio_rtc clock type
++ * @flags: struct virtio_rtc_resp_clock_cap.flags
++ *
++ * The clock must be a UTC-like clock.
++ *
++ * Context: Process context.
++ * Return: Positive if registered, zero if not supported by configuration,
++ *         negative error code otherwise.
++ */
++static int viortc_init_rtc_class_clock(struct viortc_dev *viortc,
++				       u16 vio_clk_id, u8 clock_type, u8 flags)
++{
++	struct virtio_device *vdev = viortc->vdev;
++	struct viortc_class *viortc_class;
++	struct device *dev = &vdev->dev;
++	bool have_alarm;
++
++	if (clock_type != VIRTIO_RTC_CLOCK_UTC_SMEARED) {
++		dev_info(
++			dev,
++			"not creating RTC class device for clock %d, which may step on leap seconds\n",
++			vio_clk_id);
++		return 0;
++	}
++
++	if (viortc->viortc_class) {
++		dev_warn_once(
++			dev,
++			"multiple UTC-like clocks are present, but creating only one RTC class device\n");
++		return 0;
++	}
++
++	have_alarm = viortc_alarms_supported(vdev) &&
++		     !!(flags & VIRTIO_RTC_FLAG_ALARM_CAP);
++
++	viortc_class = viortc_class_init(viortc, vio_clk_id, have_alarm, dev);
++	if (IS_ERR(viortc_class))
++		return PTR_ERR(viortc_class);
++
++	viortc->viortc_class = viortc_class;
++
++	if (have_alarm)
++		device_init_wakeup(dev, true);
++
++	return viortc_class_register(viortc_class) ?: 1;
++}
++
+ /**
+  * viortc_init_ptp_clock() - init and register PTP clock
+  * @viortc: device data
+@@ -697,6 +1019,18 @@ static int viortc_init_clock(struct viortc_dev *viortc, u16 vio_clk_id)
+ 	if (ret)
+ 		return ret;
+ 
++	if (IS_ENABLED(CONFIG_VIRTIO_RTC_CLASS) &&
++	    (clock_type == VIRTIO_RTC_CLOCK_UTC ||
++	     clock_type == VIRTIO_RTC_CLOCK_UTC_SMEARED ||
++	     clock_type == VIRTIO_RTC_CLOCK_UTC_MAYBE_SMEARED)) {
++		ret = viortc_init_rtc_class_clock(viortc, vio_clk_id,
++						  clock_type, flags);
++		if (ret < 0)
++			return ret;
++		if (ret > 0)
++			is_exposed = true;
++	}
++
+ 	if (IS_ENABLED(CONFIG_VIRTIO_RTC_PTP)) {
+ 		ret = viortc_init_ptp_clock(viortc, vio_clk_id, clock_type,
+ 					    leap_second_smearing);
+@@ -716,7 +1050,7 @@ static int viortc_init_clock(struct viortc_dev *viortc, u16 vio_clk_id)
+ }
+ 
+ /**
+- * viortc_clocks_exit() - unregister PHCs
++ * viortc_clocks_exit() - unregister PHCs, stop RTC ops
+  * @viortc: device data
+  */
+ static void viortc_clocks_exit(struct viortc_dev *viortc)
+@@ -734,6 +1068,9 @@ static void viortc_clocks_exit(struct viortc_dev *viortc)
+ 
+ 		WARN_ON(viortc_ptp_unregister(vio_ptp, &viortc->vdev->dev));
+ 	}
++
++	if (viortc->viortc_class)
++		viortc_class_stop(viortc->viortc_class);
+ }
+ 
+ /**
+@@ -780,6 +1117,74 @@ static int viortc_clocks_init(struct viortc_dev *viortc)
+ 	return ret;
+ }
+ 
++/**
++ * viortc_populate_vq() - populate alarmq with device-writable buffers
++ * @viortc: device data
++ * @vq: virtqueue
++ * @buf_cap: device-writable buffer size in bytes
++ *
++ * Populates the alarmq with pre-allocated buffers.
++ *
++ * The caller is responsible for kicking the device.
++ *
++ * Context: Process context.
++ * Return: Zero on success, negative error code otherwise.
++ */
++static int viortc_populate_vq(struct viortc_dev *viortc, struct virtqueue *vq,
++			      u32 buf_cap)
++{
++	unsigned int num_elems, i;
++	void *buf;
++	int ret;
++
++	num_elems = viortc->num_alarmq_bufs;
++
++	for (i = 0; i < num_elems; i++) {
++		buf = viortc->alarmq_bufs[i];
++
++		ret = viortc_feed_vq(viortc, vq, buf, buf_cap, buf);
++		if (ret)
++			return ret;
++	}
 +
 +	return 0;
 +}
 +
 +/**
-+ * viortc_probe() - probe a virtio_rtc virtio device
-+ * @vdev: virtio device
++ * viortc_alloc_vq_bufs() - allocate alarmq buffers
++ * @viortc: device data
++ * @num_elems: # of buffers
++ * @buf_cap: per-buffer device-writable bytes
 + *
 + * Context: Process context.
 + * Return: Zero on success, negative error code otherwise.
 + */
-+static int viortc_probe(struct virtio_device *vdev)
++static int viortc_alloc_vq_bufs(struct viortc_dev *viortc,
++				unsigned int num_elems, u32 buf_cap)
 +{
-+	struct viortc_dev *viortc;
-+	int ret;
++	struct device *dev = &viortc->vdev->dev;
++	void **buf_list;
++	unsigned int i;
++	void *buf;
 +
-+	viortc = devm_kzalloc(&vdev->dev, sizeof(*viortc), GFP_KERNEL);
-+	if (!viortc)
++	buf_list = devm_kcalloc(dev, num_elems, sizeof(*buf_list), GFP_KERNEL);
++	if (!buf_list)
 +		return -ENOMEM;
 +
-+	vdev->priv = viortc;
-+	viortc->vdev = vdev;
++	viortc->alarmq_bufs = buf_list;
++	viortc->num_alarmq_bufs = num_elems;
++
++	for (i = 0; i < num_elems; i++) {
++		buf = devm_kzalloc(dev, buf_cap, GFP_KERNEL);
++		if (!buf)
++			return -ENOMEM;
++
++		buf_list[i] = buf;
++	}
++
++	return 0;
++}
++
+ /**
+  * viortc_init_vqs() - init virtqueues
+  * @viortc: device data
+@@ -795,11 +1200,19 @@ static int viortc_init_vqs(struct viortc_dev *viortc)
+ 	struct virtio_device *vdev = viortc->vdev;
+ 	struct virtqueue_info vqs_info[] = {
+ 		{ "requestq", viortc_cb_requestq },
++		{ "alarmq", viortc_cb_alarmq },
+ 	};
+ 	struct virtqueue *vqs[VIORTC_MAX_NR_QUEUES];
++	unsigned int num_elems;
++	bool have_alarms;
+ 	int nr_queues;
+ 
+-	nr_queues = VIORTC_REQUESTQ + 1;
++	have_alarms = viortc_alarms_supported(vdev);
++
++	if (have_alarms)
++		nr_queues = VIORTC_ALARMQ + 1;
++	else
++		nr_queues = VIORTC_REQUESTQ + 1;
+ 
+ 	ret = virtio_find_vqs(vdev, nr_queues, vqs, vqs_info, NULL);
+ 	if (ret)
+@@ -808,6 +1221,25 @@ static int viortc_init_vqs(struct viortc_dev *viortc)
+ 	viortc->vqs[VIORTC_REQUESTQ].vq = vqs[VIORTC_REQUESTQ];
+ 	spin_lock_init(&viortc->vqs[VIORTC_REQUESTQ].lock);
+ 
++	if (have_alarms) {
++		viortc->vqs[VIORTC_ALARMQ].vq = vqs[VIORTC_ALARMQ];
++		spin_lock_init(&viortc->vqs[VIORTC_ALARMQ].lock);
++
++		num_elems = virtqueue_get_vring_size(vqs[VIORTC_ALARMQ]);
++		if (num_elems == 0)
++			return -ENOSPC;
++
++		if (!viortc->alarmq_bufs) {
++			ret = viortc_alloc_vq_bufs(viortc, num_elems,
++						   VIORTC_ALARMQ_BUF_CAP);
++			if (ret)
++				return ret;
++		} else {
++			viortc->num_alarmq_bufs =
++				min(num_elems, viortc->num_alarmq_bufs);
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -820,6 +1252,7 @@ static int viortc_init_vqs(struct viortc_dev *viortc)
+  */
+ static int viortc_probe(struct virtio_device *vdev)
+ {
++	struct virtqueue *alarm_vq;
+ 	struct viortc_dev *viortc;
+ 	int ret;
+ 
+@@ -840,6 +1273,20 @@ static int viortc_probe(struct virtio_device *vdev)
+ 	if (ret)
+ 		goto err_reset_vdev;
+ 
++	if (viortc_alarms_supported(vdev)) {
++		alarm_vq = viortc->vqs[VIORTC_ALARMQ].vq;
++
++		ret = viortc_populate_vq(viortc, alarm_vq,
++					 VIORTC_ALARMQ_BUF_CAP);
++		if (ret)
++			goto err_reset_vdev;
++
++		if (!virtqueue_kick(alarm_vq)) {
++			ret = -EIO;
++			goto err_reset_vdev;
++		}
++	}
++
+ 	return 0;
+ 
+ err_reset_vdev:
+@@ -863,6 +1310,33 @@ static void viortc_remove(struct virtio_device *vdev)
+ 	vdev->config->del_vqs(vdev);
+ }
+ 
++static int viortc_freeze(struct virtio_device *dev)
++{
++	return 0;
++}
++
++static int viortc_restore(struct virtio_device *dev)
++{
++	struct viortc_dev *viortc = dev->priv;
++	int ret;
 +
 +	ret = viortc_init_vqs(viortc);
 +	if (ret)
 +		return ret;
 +
-+	virtio_device_ready(vdev);
-+
-+	ret = viortc_clocks_init(viortc);
-+	if (ret)
-+		goto err_reset_vdev;
-+
-+	return 0;
-+
-+err_reset_vdev:
-+	virtio_reset_device(vdev);
-+	vdev->config->del_vqs(vdev);
++	if (viortc_alarms_supported(dev))
++		ret = viortc_populate_vq(viortc, viortc->vqs[VIORTC_ALARMQ].vq,
++					 VIORTC_ALARMQ_BUF_CAP);
 +
 +	return ret;
 +}
 +
-+/**
-+ * viortc_remove() - remove a virtio_rtc virtio device
-+ * @vdev: virtio device
-+ */
-+static void viortc_remove(struct virtio_device *vdev)
-+{
-+	/* In the future, PTP clocks will be deinitialized here. */
++static unsigned int features[] = {
++#if IS_ENABLED(CONFIG_VIRTIO_RTC_CLASS)
++	VIRTIO_RTC_F_ALARM,
++#endif
++};
 +
-+	virtio_reset_device(vdev);
-+	vdev->config->del_vqs(vdev);
+ static struct virtio_device_id id_table[] = {
+ 	{ VIRTIO_ID_CLOCK, VIRTIO_DEV_ANY_ID },
+ 	{ 0 },
+@@ -871,9 +1345,13 @@ MODULE_DEVICE_TABLE(virtio, id_table);
+ 
+ static struct virtio_driver virtio_rtc_drv = {
+ 	.driver.name = KBUILD_MODNAME,
++	.feature_table = features,
++	.feature_table_size = ARRAY_SIZE(features),
+ 	.id_table = id_table,
+ 	.probe = viortc_probe,
+ 	.remove = viortc_remove,
++	.freeze = pm_sleep_ptr(viortc_freeze),
++	.restore = pm_sleep_ptr(viortc_restore),
+ };
+ 
+ module_virtio_driver(virtio_rtc_drv);
+diff --git a/drivers/virtio/virtio_rtc_internal.h b/drivers/virtio/virtio_rtc_internal.h
+index 785356e488a8..e7f865259afd 100644
+--- a/drivers/virtio/virtio_rtc_internal.h
++++ b/drivers/virtio/virtio_rtc_internal.h
+@@ -9,6 +9,8 @@
+ #ifndef _VIRTIO_RTC_INTERNAL_H_
+ #define _VIRTIO_RTC_INTERNAL_H_
+ 
++#include <linux/device.h>
++#include <linux/err.h>
+ #include <linux/types.h>
+ #include <linux/ptp_clock_kernel.h>
+ 
+@@ -21,6 +23,16 @@ int viortc_read_cross(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
+ 		      u64 *reading, u64 *cycles);
+ int viortc_cross_cap(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
+ 		     bool *supported);
++int viortc_read_alarm(struct viortc_dev *viortc, u16 vio_clk_id,
++		      u64 *alarm_time, bool *enabled);
++int viortc_set_alarm(struct viortc_dev *viortc, u16 vio_clk_id, u64 alarm_time,
++		     bool alarm_enable);
++int viortc_set_alarm_enabled(struct viortc_dev *viortc, u16 vio_clk_id,
++			     bool alarm_enable);
++
++struct viortc_class;
++
++struct viortc_class *viortc_class_from_dev(struct device *dev);
+ 
+ /* PTP IFs */
+ 
+@@ -67,4 +79,44 @@ static inline int viortc_ptp_unregister(struct viortc_ptp_clock *vio_ptp,
+  */
+ int viortc_hw_xtstamp_params(u8 *hw_counter, enum clocksource_ids *cs_id);
+ 
++/* RTC class IFs */
++
++#if IS_ENABLED(CONFIG_VIRTIO_RTC_CLASS)
++
++void viortc_class_alarm(struct viortc_class *viortc_class, u16 vio_clk_id);
++
++void viortc_class_stop(struct viortc_class *viortc_class);
++
++int viortc_class_register(struct viortc_class *viortc_class);
++
++struct viortc_class *viortc_class_init(struct viortc_dev *viortc,
++				       u16 vio_clk_id, bool have_alarm,
++				       struct device *parent_dev);
++
++#else /* CONFIG_VIRTIO_RTC_CLASS */
++
++static inline void viortc_class_alarm(struct viortc_class *viortc_class,
++				      u16 vio_clk_id)
++{
 +}
 +
-+static struct virtio_device_id id_table[] = {
-+	{ VIRTIO_ID_CLOCK, VIRTIO_DEV_ANY_ID },
-+	{ 0 },
-+};
-+MODULE_DEVICE_TABLE(virtio, id_table);
++static inline void viortc_class_stop(struct viortc_class *viortc_class)
++{
++}
 +
-+static struct virtio_driver virtio_rtc_drv = {
-+	.driver.name = KBUILD_MODNAME,
-+	.id_table = id_table,
-+	.probe = viortc_probe,
-+	.remove = viortc_remove,
-+};
++static inline int viortc_class_register(struct viortc_class *viortc_class)
++{
++	return -ENODEV;
++}
 +
-+module_virtio_driver(virtio_rtc_drv);
++static inline struct viortc_class *viortc_class_init(struct viortc_dev *viortc,
++						     u16 vio_clk_id,
++						     bool have_alarm,
++						     struct device *parent_dev)
++{
++	return ERR_PTR(-ENODEV);
++}
 +
-+MODULE_DESCRIPTION("Virtio RTC driver");
-+MODULE_AUTHOR("Qualcomm Innovation Center, Inc.");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/virtio/virtio_rtc_internal.h b/drivers/virtio/virtio_rtc_internal.h
-new file mode 100644
-index 000000000000..9c249c15b68f
---- /dev/null
-+++ b/drivers/virtio/virtio_rtc_internal.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * virtio_rtc internal interfaces
-+ *
-+ * Copyright (C) 2022-2023 OpenSynergy GmbH
-+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
++#endif /* CONFIG_VIRTIO_RTC_CLASS */
 +
-+#ifndef _VIRTIO_RTC_INTERNAL_H_
-+#define _VIRTIO_RTC_INTERNAL_H_
-+
-+#include <linux/types.h>
-+
-+/* driver core IFs */
-+
-+struct viortc_dev;
-+
-+int viortc_read(struct viortc_dev *viortc, u16 vio_clk_id, u64 *reading);
-+int viortc_read_cross(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
-+		      u64 *reading, u64 *cycles);
-+int viortc_cross_cap(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
-+		     bool *supported);
-+
-+#endif /* _VIRTIO_RTC_INTERNAL_H_ */
+ #endif /* _VIRTIO_RTC_INTERNAL_H_ */
 diff --git a/include/uapi/linux/virtio_rtc.h b/include/uapi/linux/virtio_rtc.h
-new file mode 100644
-index 000000000000..8fb04846b397
---- /dev/null
+index 8fb04846b397..f19895b36dd3 100644
+--- a/include/uapi/linux/virtio_rtc.h
 +++ b/include/uapi/linux/virtio_rtc.h
-@@ -0,0 +1,201 @@
-+/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR BSD-3-Clause) */
-+/*
-+ * Copyright (C) 2022-2024 OpenSynergy GmbH
-+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
+@@ -9,6 +9,9 @@
+ 
+ #include <linux/types.h>
+ 
++/* alarm feature */
++#define VIRTIO_RTC_F_ALARM	0
 +
-+#ifndef _LINUX_VIRTIO_RTC_H
-+#define _LINUX_VIRTIO_RTC_H
+ /* read request message types */
+ 
+ #define VIRTIO_RTC_REQ_READ			0x0001
+@@ -19,6 +22,13 @@
+ #define VIRTIO_RTC_REQ_CFG			0x1000
+ #define VIRTIO_RTC_REQ_CLOCK_CAP		0x1001
+ #define VIRTIO_RTC_REQ_CROSS_CAP		0x1002
++#define VIRTIO_RTC_REQ_READ_ALARM		0x1003
++#define VIRTIO_RTC_REQ_SET_ALARM		0x1004
++#define VIRTIO_RTC_REQ_SET_ALARM_ENABLED	0x1005
 +
-+#include <linux/types.h>
++/* alarmq message types */
 +
-+/* read request message types */
-+
-+#define VIRTIO_RTC_REQ_READ			0x0001
-+#define VIRTIO_RTC_REQ_READ_CROSS		0x0002
-+
-+/* control request message types */
-+
-+#define VIRTIO_RTC_REQ_CFG			0x1000
-+#define VIRTIO_RTC_REQ_CLOCK_CAP		0x1001
-+#define VIRTIO_RTC_REQ_CROSS_CAP		0x1002
-+
-+/* Message headers */
-+
-+/** common request header */
-+struct virtio_rtc_req_head {
++#define VIRTIO_RTC_NOTIF_ALARM			0x2000
+ 
+ /* Message headers */
+ 
+@@ -39,6 +49,12 @@ struct virtio_rtc_resp_head {
+ 	__u8 reserved[7];
+ };
+ 
++/** common notification header */
++struct virtio_rtc_notif_head {
 +	__le16 msg_type;
 +	__u8 reserved[6];
 +};
 +
-+/** common response header */
-+struct virtio_rtc_resp_head {
-+#define VIRTIO_RTC_S_OK			0
-+#define VIRTIO_RTC_S_EOPNOTSUPP		2
-+#define VIRTIO_RTC_S_ENODEV		3
-+#define VIRTIO_RTC_S_EINVAL		4
-+#define VIRTIO_RTC_S_EIO		5
-+	__u8 status;
-+	__u8 reserved[7];
-+};
+ /* read requests */
+ 
+ /* VIRTIO_RTC_REQ_READ message */
+@@ -160,6 +176,7 @@ struct virtio_rtc_resp_clock_cap {
+ #define VIRTIO_RTC_FLAG_LEAP_CAP		(1 << 0)
+ #define VIRTIO_RTC_FLAG_TAI_OFFSET_CAP		(1 << 1)
+ #define VIRTIO_RTC_FLAG_SMEAR_OFFSET_CAP	(1 << 2)
++#define VIRTIO_RTC_FLAG_ALARM_CAP		(1 << 3)
+ 	__u8 flags;
+ 	__u8 reserved[5];
+ };
+@@ -180,6 +197,53 @@ struct virtio_rtc_resp_cross_cap {
+ 	__u8 reserved[7];
+ };
+ 
++/* VIRTIO_RTC_REQ_READ_ALARM message */
 +
-+/* read requests */
-+
-+/* VIRTIO_RTC_REQ_READ message */
-+
-+struct virtio_rtc_req_read {
++struct virtio_rtc_req_read_alarm {
 +	struct virtio_rtc_req_head head;
 +	__le16 clock_id;
 +	__u8 reserved[6];
 +};
 +
-+struct virtio_rtc_resp_read {
++struct virtio_rtc_resp_read_alarm {
 +	struct virtio_rtc_resp_head head;
-+	__le64 clock_reading;
-+};
-+
-+/* VIRTIO_RTC_REQ_READ_CROSS message */
-+
-+struct virtio_rtc_leap_info {
-+	__le32 smear_offset_nsec;
-+	__le16 tai_offset_sec;
-+#define VIRTIO_RTC_LEAP_NONE		0x00
-+#define VIRTIO_RTC_LEAP_PRE_POS		0x01
-+#define VIRTIO_RTC_LEAP_PRE_NEG		0x02
-+#define VIRTIO_RTC_LEAP_POS		0x03
-+#define VIRTIO_RTC_LEAP_POST_POS	0x04
-+#define VIRTIO_RTC_LEAP_POST_NEG	0x05
-+#define VIRTIO_RTC_LEAP_SMEAR_PRE_POS	0x16
-+#define VIRTIO_RTC_LEAP_SMEAR_PRE_NEG	0x17
-+#define VIRTIO_RTC_LEAP_SMEAR_POS	0x38
-+#define VIRTIO_RTC_LEAP_SMEAR_NEG	0x39
-+#define VIRTIO_RTC_LEAP_SMEAR_POST_POS	0x1A
-+#define VIRTIO_RTC_LEAP_SMEAR_POST_NEG	0x1B
-+/* common bits in above */
-+#define VIRTIO_RTC_LEAP_SMEAR_NEAR	0x10
-+#define VIRTIO_RTC_LEAP_SMEAR_NOW	0x20
-+	__u8 leap;
-+#define VIRTIO_RTC_FLAG_LEAP_VALID		(1 << 0)
-+#define VIRTIO_RTC_FLAG_TAI_OFFSET_VALID	(1 << 1)
-+#define VIRTIO_RTC_FLAG_SMEAR_OFFSET_VALID	(1 << 2)
-+	__u8 flags;
-+};
-+
-+struct virtio_rtc_perf {
-+	__le64 freq_esterror;
-+	__le64 freq_maxerror;
-+	__le64 time_esterror;
-+	__le64 time_maxerror;
-+#define VIRTIO_RTC_FLAG_FREQ_ESTERROR_VALID	(1 << 3)
-+#define VIRTIO_RTC_FLAG_FREQ_MAXERROR_VALID	(1 << 4)
-+#define VIRTIO_RTC_FLAG_TIME_ESTERROR_VALID	(1 << 5)
-+#define VIRTIO_RTC_FLAG_TIME_MAXERROR_VALID	(1 << 6)
-+	__u8 flags;
-+#define VIRTIO_RTC_STATUS_UNKNOWN		0
-+#define VIRTIO_RTC_STATUS_INITIALIZING		1
-+#define VIRTIO_RTC_STATUS_SYNCHRONIZED		2
-+#define VIRTIO_RTC_STATUS_FREERUNNING		3
-+#define VIRTIO_RTC_STATUS_UNRELIABLE		4
-+	__u8 clock_status;
-+	__u8 reserved[6];
-+};
-+
-+struct virtio_rtc_req_read_cross {
-+	struct virtio_rtc_req_head head;
-+	__le16 clock_id;
-+/* Arm Generic Timer Counter-timer Virtual Count Register (CNTVCT_EL0) */
-+#define VIRTIO_RTC_COUNTER_ARM_VCT	0
-+/* x86 Time-Stamp Counter */
-+#define VIRTIO_RTC_COUNTER_X86_TSC	1
-+/* Invalid */
-+#define VIRTIO_RTC_COUNTER_INVALID	0xFF
-+	__u8 hw_counter;
-+	__u8 reserved[5];
-+};
-+
-+struct virtio_rtc_resp_read_cross {
-+	struct virtio_rtc_resp_head head;
-+	__le64 clock_reading;
-+	__le64 counter_cycles;
-+	struct virtio_rtc_leap_info leap_info;
-+	struct virtio_rtc_perf perf;
-+};
-+
-+/* control requests */
-+
-+/* VIRTIO_RTC_REQ_CFG message */
-+
-+struct virtio_rtc_req_cfg {
-+	struct virtio_rtc_req_head head;
-+	/* no request params */
-+};
-+
-+struct virtio_rtc_resp_cfg {
-+	struct virtio_rtc_resp_head head;
-+	/** # of clocks -> clock ids < num_clocks are valid */
-+	__le16 num_clocks;
-+	__u8 reserved[6];
-+};
-+
-+/* VIRTIO_RTC_REQ_CLOCK_CAP message */
-+
-+struct virtio_rtc_req_clock_cap {
-+	struct virtio_rtc_req_head head;
-+	__le16 clock_id;
-+	__u8 reserved[6];
-+};
-+
-+struct virtio_rtc_resp_clock_cap {
-+	struct virtio_rtc_resp_head head;
-+#define VIRTIO_RTC_CLOCK_UTC			0
-+#define VIRTIO_RTC_CLOCK_TAI			1
-+#define VIRTIO_RTC_CLOCK_MONOTONIC		2
-+#define VIRTIO_RTC_CLOCK_UTC_SMEARED		3
-+#define VIRTIO_RTC_CLOCK_UTC_MAYBE_SMEARED	4
-+	__u8 type;
-+#define VIRTIO_RTC_SMEAR_UNSPECIFIED	0
-+#define VIRTIO_RTC_SMEAR_NOON_LINEAR	1
-+#define VIRTIO_RTC_SMEAR_UTC_SLS	2
-+	__u8 leap_second_smearing;
-+#define VIRTIO_RTC_FLAG_LEAP_CAP		(1 << 0)
-+#define VIRTIO_RTC_FLAG_TAI_OFFSET_CAP		(1 << 1)
-+#define VIRTIO_RTC_FLAG_SMEAR_OFFSET_CAP	(1 << 2)
-+	__u8 flags;
-+	__u8 reserved[5];
-+};
-+
-+/* VIRTIO_RTC_REQ_CROSS_CAP message */
-+
-+struct virtio_rtc_req_cross_cap {
-+	struct virtio_rtc_req_head head;
-+	__le16 clock_id;
-+	__u8 hw_counter;
-+	__u8 reserved[5];
-+};
-+
-+struct virtio_rtc_resp_cross_cap {
-+	struct virtio_rtc_resp_head head;
-+#define VIRTIO_RTC_FLAG_CROSS_CAP	(1 << 0)
++	__le64 alarm_time;
++#define VIRTIO_RTC_FLAG_ALARM_ENABLED	(1 << 0)
 +	__u8 flags;
 +	__u8 reserved[7];
 +};
 +
-+/** Union of request types for requestq */
-+union virtio_rtc_req_requestq {
-+	struct virtio_rtc_req_read read;
-+	struct virtio_rtc_req_read_cross read_cross;
-+	struct virtio_rtc_req_cfg cfg;
-+	struct virtio_rtc_req_clock_cap clock_cap;
-+	struct virtio_rtc_req_cross_cap cross_cap;
++/* VIRTIO_RTC_REQ_SET_ALARM message */
++
++struct virtio_rtc_req_set_alarm {
++	struct virtio_rtc_req_head head;
++	__le64 alarm_time;
++	__le16 clock_id;
++	/* flag VIRTIO_RTC_ALARM_ENABLED */
++	__u8 flags;
++	__u8 reserved[5];
 +};
 +
-+/** Union of response types for requestq */
-+union virtio_rtc_resp_requestq {
-+	struct virtio_rtc_resp_read read;
-+	struct virtio_rtc_resp_read_cross read_cross;
-+	struct virtio_rtc_resp_cfg cfg;
-+	struct virtio_rtc_resp_clock_cap clock_cap;
-+	struct virtio_rtc_resp_cross_cap cross_cap;
++struct virtio_rtc_resp_set_alarm {
++	struct virtio_rtc_resp_head head;
++	/* no response params */
 +};
 +
-+#endif /* _LINUX_VIRTIO_RTC_H */
++/* VIRTIO_RTC_REQ_SET_ALARM_ENABLED message */
++
++struct virtio_rtc_req_set_alarm_enabled {
++	struct virtio_rtc_req_head head;
++	__le16 clock_id;
++	/* flag VIRTIO_RTC_ALARM_ENABLED */
++	__u8 flags;
++	__u8 reserved[5];
++};
++
++struct virtio_rtc_resp_set_alarm_enabled {
++	struct virtio_rtc_resp_head head;
++	/* no response params */
++};
++
+ /** Union of request types for requestq */
+ union virtio_rtc_req_requestq {
+ 	struct virtio_rtc_req_read read;
+@@ -187,6 +251,9 @@ union virtio_rtc_req_requestq {
+ 	struct virtio_rtc_req_cfg cfg;
+ 	struct virtio_rtc_req_clock_cap clock_cap;
+ 	struct virtio_rtc_req_cross_cap cross_cap;
++	struct virtio_rtc_req_read_alarm read_alarm;
++	struct virtio_rtc_req_set_alarm set_alarm;
++	struct virtio_rtc_req_set_alarm_enabled set_alarm_enabled;
+ };
+ 
+ /** Union of response types for requestq */
+@@ -196,6 +263,24 @@ union virtio_rtc_resp_requestq {
+ 	struct virtio_rtc_resp_cfg cfg;
+ 	struct virtio_rtc_resp_clock_cap clock_cap;
+ 	struct virtio_rtc_resp_cross_cap cross_cap;
++	struct virtio_rtc_resp_read_alarm read_alarm;
++	struct virtio_rtc_resp_set_alarm set_alarm;
++	struct virtio_rtc_resp_set_alarm_enabled set_alarm_enabled;
++};
++
++/* alarmq notifications */
++
++/* VIRTIO_RTC_NOTIF_ALARM notification */
++
++struct virtio_rtc_notif_alarm {
++	struct virtio_rtc_notif_head head;
++	__le16 clock_id;
++	__u8 reserved[6];
++};
++
++/** Union of notification types for alarmq */
++union virtio_rtc_notif_alarmq {
++	struct virtio_rtc_notif_alarm alarm;
+ };
+ 
+ #endif /* _LINUX_VIRTIO_RTC_H */
 -- 
 2.43.0
 
