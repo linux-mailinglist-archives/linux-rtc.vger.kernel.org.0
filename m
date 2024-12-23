@@ -1,141 +1,133 @@
-Return-Path: <linux-rtc+bounces-2757-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2758-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7D479FABA8
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2024 09:51:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A2859FABCB
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2024 10:04:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36A1916557B
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2024 08:51:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 771F81629E1
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2024 09:04:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46B219048A;
-	Mon, 23 Dec 2024 08:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EAC191F69;
+	Mon, 23 Dec 2024 09:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KVakzAoy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JT4PRoe3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E433A13C9A3;
-	Mon, 23 Dec 2024 08:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D41118950A;
+	Mon, 23 Dec 2024 09:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734943882; cv=none; b=WMIBb2Kr8ovbR5/S4U4jk1Y/z10y/ucMZvGES0S+UtsElsdxCvYXoBeJB1fFSxIeJIJtxaRYeHB6qitPq03kWMZe4TMniw9hnlvmhLAi5CyIwQsfBYZ+fM9YG1NQsu/rvgoVTJq5cpMXeBRqC7lUNNkXhu3dcIf/KfXmDNU7dDM=
+	t=1734944653; cv=none; b=HII0dfkku5i169n12RgIBu0U+eDr+CXdF3A6rylOyXxeimti7mBi5ILsLVeAcYcHlJK+EoRM8ZY5AvIBC8fuPzIaijB3rmFQNZqR3+6fLyQ6xZd4xG1uGrZ1NkBL5GkR6KxKs8Lc3La/ltIZ8E+2I/SEFk/ihdbwzB80tloBRwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734943882; c=relaxed/simple;
-	bh=DcT/xkQ3IoJNvF11Fezz34EsjMI79O5iPKyEyT3NujA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vp4Dnzm7tOD6hbTcU/YOAa7S7RRD78rLRVs49rUL5J0XPIp2wdbUS/vgDu1d2iM9qKBCWX2usapVJ+5LQgbwVfULIpqpAAkJSDn8s0XwGK5TgGxmSx0Fo553mrIwf1IFJOM1xayMZSRLF1SpMH9qmpLRiXpVwLwqeSoEd5v3wZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KVakzAoy; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734943881; x=1766479881;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DcT/xkQ3IoJNvF11Fezz34EsjMI79O5iPKyEyT3NujA=;
-  b=KVakzAoykSMysnmk8Ib6RAoUIErp6GWtwYwXgdJYgAPSYIzuCq409Knt
-   +qTO+UwzjFWGNq4+Xg/YlxlFdGl/SF6qFJuquxUvzl2gALqKhazrxIwHU
-   n0AMtHgWKmucmOG4ZzPKLVjI9C2dTuK3LyX+vjxetRFy+2Zpb+WhK3cEk
-   NTS3J6/Y72q69rAUY7wZ4S9KT51Un+UwrZiKxcp0fAd9V7yXYXRCbGHAW
-   iJGLTReJsTVkX9rQx/rswdLveyEkeWlFkyohWt+R37/BsxmGapTo+XT36
-   DHajUwgFgWmG1oSJCvqdGkr97RgalEFC22FX3P5WLeqOOEfxMJOiZvUFR
-   Q==;
-X-CSE-ConnectionGUID: GvxPQSKMRn2E7Ofly+Q6lA==
-X-CSE-MsgGUID: ARRUvifIQrGL/O5Z97VvgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11294"; a="52930391"
-X-IronPort-AV: E=Sophos;i="6.12,256,1728975600"; 
-   d="scan'208";a="52930391"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 00:51:20 -0800
-X-CSE-ConnectionGUID: xjMRZDu7T7qfWLO9TBpfsA==
-X-CSE-MsgGUID: d81oGSVRRnWt40DbGLYnZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="136466477"
-Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 23 Dec 2024 00:51:17 -0800
-Received: from kbuild by a46f226878e0 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tPe9i-0003V1-2c;
-	Mon, 23 Dec 2024 08:51:14 +0000
-Date: Mon, 23 Dec 2024 16:50:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: PavithraUdayakumar-adi via B4 Relay <devnull+pavithra.u.analog.com@kernel.org>,
-	Antoniu Miclaus <antoniu.miclaus@analog.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	PavithraUdayakumar-adi <pavithra.u@analog.com>
-Subject: Re: [PATCH 2/2] rtc:max31335: Add driver support for max31331
-Message-ID: <202412231656.5cWrGcHu-lkp@intel.com>
-References: <20241223-max31331-driver-support-v1-2-f9499bd598f5@analog.com>
+	s=arc-20240116; t=1734944653; c=relaxed/simple;
+	bh=O8wD3Um4Rq87PZuK0ffEziOikVzIFxJc41GKBYfZ2lk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yee6UFVpYa9CXhHxH1MRFLfdWVdMOcT5ZHfRDURy6KeJhRorqQro4lHS+PYQMgmLHlwLbU07Rf1qvCT+TG6ISwgi3HfpX5TrZvtHkv1DXiV3rR3YduEFim4OUxNSZD8b19T5ToZ9nGONzDsL59lF2OT8/L6Byl6X32DlRApC+PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JT4PRoe3; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6f14626c5d3so29760707b3.3;
+        Mon, 23 Dec 2024 01:04:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734944650; x=1735549450; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EOCdczfcwfJolwdEhCyR3CLTmdjr+EsD/xGAKqAgJ1M=;
+        b=JT4PRoe3fB4sNS4YBjs+8/7OPTkgVB/EOz7PlqoWUJHgYdJQePxsw67lJbWiDXYDcg
+         2tZhoN5xyBmWS3F1wblp7maQmIUxjXVz2s8qxwCHwu9f8PEeqhgDUsEqWJJcMUJVFKLq
+         cpC9L3DhFkqNc++Ck9m04Y2NpbbK7QvudbRxIuXsGGVJuWOXHpAffWb+NrS9BZVGeqN+
+         oW+Y9XtITr9ko7LIoFDVImYW57evIbbCJJjebFSapEjb7oewEMVQ3fjtecOSdsnMqRFt
+         dn0k4HcUAkhX+rq+cN/aC9J92MbUZh6+KdzR1/Dbt8bE6/JyuTYXmYKrLZPRC2Z55eAs
+         ZnuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734944650; x=1735549450;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EOCdczfcwfJolwdEhCyR3CLTmdjr+EsD/xGAKqAgJ1M=;
+        b=Cs8i7dTpgknMuVeGn26fK3uAVvSgoqs39blAykhA5fYFBQMenrWTD+R0LI/gHNta+T
+         AGN1U15+FLaREeE1A4jxTXIbgFxxK9zQa8qQI8FfquZzVMGu1liOKZ79x7jOH0JTl2Pf
+         cHeCROGHceyK+dta/xny4ccUWmTQL39mVOHffEpp7rnwROM0sADwBRHPjCYKyPtYf0j6
+         AuEB429ebQ2RjgN9H8UsplCsnlt8UKLa3wiMALt+bdEG/Ww3rLtOxYGuQ++tJASH717F
+         VBxKGq2g3GyOzOAm4gF5m32hukFvjrQvKHnPc6VtJ2SmhCZdKCFOPNdhWuRYEyXWJaMG
+         2DPw==
+X-Forwarded-Encrypted: i=1; AJvYcCVW21ezjtsCMWaeUWOFIZaCf9pIySl6bokKfOO5K+w5GaEgOeRRtMNaVE0csMwWIrNCXN8n1UZTx4a6w/P0oqc=@vger.kernel.org, AJvYcCVr17Q6K485o1FTpTkMn+7yAxdHFDFLB2SMfDX3BnFQCZ6t3W9i9m9qQ9hLEtkA3fHH0demf9Zzp8Y=@vger.kernel.org, AJvYcCWNIDL1Or4FpQYJA9PLVacVj7EAJ+jvHR5tf5VfLrc9PYlatFe2Zhwspsw0rFzbU5aLzu9a5vUD@vger.kernel.org, AJvYcCWefqVck0XzNDm2Y401HsAuqLk2sRw0HVF64QpdN5KN1JPo31tbj7MzpkUz/4fcTajrPYK68Vh2UhsO@vger.kernel.org, AJvYcCWzsDG0qKQz9IHLxgBWfDacQ2XHx5b+pKifLsmcEOx/Ln5FS/Gr5b+lxLx1HcVfyjSP+KhybyekxRme8Ocl@vger.kernel.org, AJvYcCX6ErLCpJ7n51tv1GYOzhaoZEYOaDsMT1fEDbkaZdg3QH6TpyLC2jllCnzLuTzAOmL6JSm5VsSTMT4b@vger.kernel.org, AJvYcCXT8ckoClgjOdgAFTwluENnA2EMPz21UpTX+nE9qoMip+LzRa1uHNCrqkwt31dpjyjxyiYbTR3KvThnwQ==@vger.kernel.org, AJvYcCXYy7Zik8dv/SKIeEAJz6MNILPVT2WJZJIExzef99kHbHktdyoQ1QtkHECW416949gufuaQO1vyz3FG18c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlYDNYefFvxMLgFWCbGqQ2ZqBuxzDq7W7QDk14vmh9BP360qpq
+	SzNisZw9uDD1XTR9llRAYjrVm1GNGN8g67XrzvEe2APmn8aLIcIP6O2xtspu/2uzUUDa7Xx64GN
+	M2PCbc97HSRcMtZTqIn+EN56NcoQ=
+X-Gm-Gg: ASbGncvEzLBBRucU/cCFgpSC0SVWoI/xjVyetQ5Vs69A0EFqOCMoSOGXzMTO7Jik7F7
+	wkVfP/2W9auCyuMc8I4PCTZapT4AjC6V4tENS
+X-Google-Smtp-Source: AGHT+IH1fXad8EYFQA3WsDzmPg95cKrz6BrK2rvk0KyyoplTQma9CQVJLaWIzpfvkl9CDADHkPTuV/FAXZOpGY2ZGl4=
+X-Received: by 2002:a05:690c:6213:b0:6f2:773b:dfab with SMTP id
+ 00721157ae682-6f3f81474d8mr92637987b3.22.1734944650429; Mon, 23 Dec 2024
+ 01:04:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241223-max31331-driver-support-v1-2-f9499bd598f5@analog.com>
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-5-tmyu0@nuvoton.com>
+ <20241211-taupe-leech-of-respect-4c325a-mkl@pengutronix.de> <CAOoeyxUj8EBWNr0Pi8O3+Tua=gBRWRmQQe4WbwwE=gq3CGO+4w@mail.gmail.com>
+In-Reply-To: <CAOoeyxUj8EBWNr0Pi8O3+Tua=gBRWRmQQe4WbwwE=gq3CGO+4w@mail.gmail.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Mon, 23 Dec 2024 17:03:59 +0800
+Message-ID: <CAOoeyxWOD8=zosrHzhamG6RfFW=MzxEAa1hYXe1zXD1kBLkgrA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] can: Add Nuvoton NCT6694 CAN support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi PavithraUdayakumar-adi,
+Hi Marc,
 
-kernel test robot noticed the following build errors:
+> > > +struct nct6694_can_priv {
+> > > +     struct can_priv can;    /* must be the first member */
+> > > +     struct net_device *ndev;
+> > > +     struct nct6694 *nct6694;
+> > > +     struct mutex lock;
+> >
+> > What does lock protect?
+> >
+>
+> The lock is used to protect tx_buf and rx_buf for each CAN device.
+>
+> > > +     struct sk_buff *tx_skb;
+> > > +     struct workqueue_struct *wq;
+> > > +     struct work_struct tx_work;
+> > > +     unsigned char *tx_buf;
+> > void *
+> > > +     unsigned char *rx_buf;
+> > void *
+> > > +     unsigned char can_idx;
+> > > +     bool tx_busy;
+> >
+> > IMHO it makes no sense to have tx_skb and tx_busy
+> >
+>
+> Okay! I will revisit these to evaluate whether they are still necessary.
+>
+> > > +};
+> > > +
 
-[auto build test ERROR on 4bbf9020becbfd8fc2c3da790855b7042fad455b]
+I think there needs to be a tx_skb to record the skb passed by
+start_xmit(), otherwise it can't handle the can_frame in tx_work. If
+this is not necessary, could you please explain?
+In addition, the tx flow is based on the implementation in
+https://elixir.bootlin.com/linux/v6.12.6/source/drivers/net/can/spi/mcp251x.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/PavithraUdayakumar-adi-via-B4-Relay/dtbindings-rtc-max31335-Add-max31331-support/20241223-142214
-base:   4bbf9020becbfd8fc2c3da790855b7042fad455b
-patch link:    https://lore.kernel.org/r/20241223-max31331-driver-support-v1-2-f9499bd598f5%40analog.com
-patch subject: [PATCH 2/2] rtc:max31335: Add driver support for max31331
-config: arc-randconfig-002-20241223 (https://download.01.org/0day-ci/archive/20241223/202412231656.5cWrGcHu-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241223/202412231656.5cWrGcHu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412231656.5cWrGcHu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/rtc/rtc-max31335.c:11:10: fatal error: asm-generic/unaligned.h: No such file or directory
-      11 | #include <asm-generic/unaligned.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +11 drivers/rtc/rtc-max31335.c
-
-  > 11	#include <asm-generic/unaligned.h>
-    12	#include <linux/bcd.h>
-    13	#include <linux/bitfield.h>
-    14	#include <linux/bitops.h>
-    15	#include <linux/clk.h>
-    16	#include <linux/clk-provider.h>
-    17	#include <linux/hwmon.h>
-    18	#include <linux/i2c.h>
-    19	#include <linux/interrupt.h>
-    20	#include <linux/kernel.h>
-    21	#include <linux/module.h>
-    22	#include <linux/of_device.h>
-    23	#include <linux/regmap.h>
-    24	#include <linux/rtc.h>
-    25	#include <linux/util_macros.h>
-    26	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Ming
 
