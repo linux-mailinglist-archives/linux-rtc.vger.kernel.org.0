@@ -1,90 +1,91 @@
-Return-Path: <linux-rtc+bounces-2749-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2750-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093899F9270
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Dec 2024 13:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8C449FA912
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2024 02:51:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06FEC189304E
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Dec 2024 12:46:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F731188593A
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2024 01:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3AB42046B6;
-	Fri, 20 Dec 2024 12:45:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50575EEC5;
+	Mon, 23 Dec 2024 01:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eonzgd44"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+TWeHzS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F045D7D07D
-	for <linux-rtc@vger.kernel.org>; Fri, 20 Dec 2024 12:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B266C23D7;
+	Mon, 23 Dec 2024 01:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734698754; cv=none; b=m0rgY2rwWDNnCY6q+YK8Owec+k5KEQFyuWwoSif/3P2Lu7nzI+9/BsjfAISCN/DwtjTLqUn4Pxie6Mf3HhxzfvBbRzu/no63eXw+1epQgUGoOPMe+W4DGZSH4rElO2dtqWP3mqaSC6591z5zm+gLCB0CSMb5Qc/kmO7rWN80e7o=
+	t=1734918670; cv=none; b=BBFoqiA2aYlwAqt1NPRGiwRO+ZSEWsYv26cLIDxwwsIDQBkL9PvRNoEH8PysFhSMe56aU/v3WIiiaS3a74jC1HrD3GvmYXwAnn5HRS1WqqUwxvJ+9z+93UFEk1q5uNmFhj+v0Cni1WmNjGK/0qLEDGTU3r2k5SXIU62vwmeBjyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734698754; c=relaxed/simple;
-	bh=eIvJgkvy6HRuXmDaqsB7MX3E+E+alDS9//+kZ9m0t6Q=;
+	s=arc-20240116; t=1734918670; c=relaxed/simple;
+	bh=Ueo1SkvfgIF6RG7Tayj9JKXB2Ay6IMh4xY7wb58eVDM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f9qk6Qceo8qEHStZeLhRva6GHwe9MiwEANDzVaLw30ZvQ8Q7Gu2wKUQ7SRZFzpxw2WhYg9z8LNbQHQD7PRD3uwACy8Fx7S/6UrS0CchaFfRn5+oRlkqQfrcF3Lkb+Ijo+GQF2eZmy39Kq/5mZ55h6wadN52kw/GAfO4PGiNryiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eonzgd44; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53df80eeeedso1842439e87.2
-        for <linux-rtc@vger.kernel.org>; Fri, 20 Dec 2024 04:45:52 -0800 (PST)
+	 To:Cc:Content-Type; b=DX4GULvkMEFh/9ytL9HgEtdPPZ20IVbAXOn2WTesFJGpJvhOYNJI5nEVZVAgOTZPOJuV80PlrlA0ON3mpVTNo6EtpTYT+hQcsSN5jGs1lyqrj3KsCBEWanbDI5hji4LOwf1d6ywsCXMRutn9erStoN/ucMCbFm0qJuZfGEbX/2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+TWeHzS; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6f29aa612fbso26253017b3.0;
+        Sun, 22 Dec 2024 17:51:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734698751; x=1735303551; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734918668; x=1735523468; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q+v+f0F+ggXM/pkSaGIpemMgLpckgFL+0mqDxCkmiPc=;
-        b=eonzgd44hq3ryZG4G65d3usc9iXHmng4QZBz+h6huIRQtPiVzd8RqWpA+IvNyM+afe
-         YSWw9pW+g9evbv7WQDtxPQL1j4xjpZvknXtudiwsU6vptgsEq5T45djbDMx9oq08Z5Pb
-         wHpiDNUwSNMr2BRGWYATXXMgeuXmIYcaq8l8MWI7JKjIuyAS3BHXB4u2TJMn1nGUaFrS
-         DkeTwG3ALTAeLR+y2oWzvNSO6XeFlCYbWXxthmz21GuYLFIN5Rthn2jPyzdNlQfyi1AK
-         3Lz6v5eEoF+S0jKzSXWxiUSGNiDGB4I5CH1bDAQzsNjwuup9MQmUM2QI5e7yELEGw6fY
-         rXnQ==
+        bh=llHDEsm2+HQacxAs8QUDGLwaO/ynmYbcHeL3fhay3CI=;
+        b=e+TWeHzSoogZdLRVw7IDeSohJpjFekyiqjkrG8f5mZ3pQE0Lqs9q0nQKevXKcuE4r+
+         qk3CYmJTEC8lIkkol7N2KmPxijp+msc7WiIpqX/Rm7K5iwwBIUP4LuvHYZjEKd99hMTC
+         /kePwoULwTFlhr2PNRZStAqhdufFqcN6883rut4FXmwUwjxign10fpQxk4cVPicF00C1
+         RPr/yVUN7NGlE6bmftVNqReT6mB42bUYZIdqa+N24OAGacKQdQWvrqiRmYSM/OYrp4PM
+         Ij2Tqc2dpQSPKRs9pHpP41Og/QnxTp9/3OmDInCvbajWqW4XCmUeiMxsoB5TZQfUeN2Q
+         BUEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734698751; x=1735303551;
+        d=1e100.net; s=20230601; t=1734918668; x=1735523468;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q+v+f0F+ggXM/pkSaGIpemMgLpckgFL+0mqDxCkmiPc=;
-        b=tgIz0DR4w7lEdTEUP6+NNAJBKrP4yuwxQEaSMJ3puZOxOspBX1mmtdFGUYrDxPbXkm
-         bqktBTEksiNbn97gEia3GBM+rQxqebaxjDXeIYsEhbyhXxK/wEoWe44OE7YkAuttwamR
-         ynmnufBexJB3REexTwHrG5ObFaNR1AOYJ5c0C6+VWESVuBslfzCzi9WMvePGIMLDhDlY
-         l87ZSbfOl4WGROV4vN6/UsH8z4IuGJHHL0GCb1Z3wys8bYpXz+fVzkqdHgQMSUqpK1XX
-         A6v9hpAQVGdlq3NVlzQMYn/BSqkz3MZ6awRixoAvILrWl/Byiau7JjOXGQVHDpcl0aeF
-         N6Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCWY2TckPETjba5Qy3JjbhZpEirPpWSR/tosUlkX+k57tIUoL5Vxjg+0unn/txdj+mL6nm910b2IE7A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN/B6DGCqtTwlpu40oVRhKTE6Ks3dK4G8F/AQFMyFY0hsgNF5h
-	ekNdB6IwW7Be6acZYD9Pdq2hfBOQjo07e+CnvXZQXlpFalhOgVJw42p2104tI5s3sGOeOjZIBGF
-	+U5Rdp6WNrZWwyEVg4su3ugGWE+Cgl4A5eiAXjw==
-X-Gm-Gg: ASbGncsNdpYVHU/axMQBbarZdSMRec1W9IBW6PcjVefjUlqcQgaI4ix/VwsZcwnTv7M
-	/NFzwKD2jvT0DFrbutUpb08LEKHx7SCFtvLkJNQ==
-X-Google-Smtp-Source: AGHT+IFQLxoTvDBhmmMtrluimmMG49UjGriPLeDS3/xO9K0D1RUiifqIPS/6LdImELHSoCVS/nonG7W60F+gutNSGmY=
-X-Received: by 2002:a05:6512:3f25:b0:540:1be6:f15f with SMTP id
- 2adb3069b0e04-542294aceebmr908589e87.0.1734698751140; Fri, 20 Dec 2024
- 04:45:51 -0800 (PST)
+        bh=llHDEsm2+HQacxAs8QUDGLwaO/ynmYbcHeL3fhay3CI=;
+        b=uQrxuumue5WELiTyC+FiEO+ZT7lV4OwpfyXyjcF0fZ/i6Zp7icQCPuqHEjyKi6ebHv
+         nANlS5Mb+D+5LYCdSky/2Jo+0v/ZTMXAlBcxGxShDw6NCH+1bZWDDA8gvebUqF64r0vo
+         P/+ys08NA9OzG1wX4XrDvA3ZmyE7MUmm3OMofYFBDh77oTmjWMS6haHA6DT1jrHu5uwI
+         pGtmMdwegIX6zAtQBiHZnQ5nDr0Gmlt8NY/TZ9qNMfpEzQK8g0Izefl9DRCynX5z9raX
+         BdVobj7+0En7j8PymG70Zc6UD1myx+H5/3f/65eblhPjnSmPGBPcLMWA5wL340DOnO2z
+         FVqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU4FFvIYDPVG0Mrcot9LHwNslot8YAlxbLM40w8FqtRHNn82n06YcxA6lZ16YA8ryLTDkURlc2hKs21sJoC4t4=@vger.kernel.org, AJvYcCU9K8CeYcP9jHc9HjglFskU8ab90I92quYhD+irz7pmLWXUDm9GOcTO5OarCC4Wkg7VSFBSu2GlvXM=@vger.kernel.org, AJvYcCVRVQKSNNNRRC/koAUnUa+5lU1CRucjooQlwTVpJ1s9YCiv3K8j/wwdeL/l95WEjWzqOJJ3F4sg@vger.kernel.org, AJvYcCVkBeVkCublCZ2nW1DgewcW6QeLKNHe7bTiXzfMS3lSahbToIRhT33NKUrnVdOY2oPw4HqmKrACvrg97kQ=@vger.kernel.org, AJvYcCVmjKF0kp79wYrxnsm76Bh0Fejhjw/PaUSw9kCw9rWngWBQSg7v1LYEBOy67a78OSeSWNr5yyi+FZsD@vger.kernel.org, AJvYcCVsCWIaNzilrsqX0KF06QxFTUSyu5MC630a2fkDfnYSGksBOdeieLpQWPjot2MDvNDuypfC7o/3npPHFdBH@vger.kernel.org, AJvYcCW8+uOON/MvHROcGdUknBG4bU7lPbHuVcymMVs7iOcoM5NajLMV6iBYZQ7V+6sv+uRpi6QJnJHrvw3t@vger.kernel.org, AJvYcCWcHIs5REuYFllCjr6I4JNEqpu5wcXvW1tA1r0pz14/+vBqLNTdKOzyQUcipDatP0FEW8H99EEttw/+0A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnGYWeI2yESsLEifncFS7v0LU7zOAsWphhpOJBPWmRBcxe1iVr
+	JonyETn3SXDxlySaa1imBFrHdMG0Z1vmDzyYYNsDLWGzd4/uoMqC5jBsM5aTB7jHlnVUuAk3cbf
+	oBtjUrcuDgs1k+SwqIL7X5N+B7hM=
+X-Gm-Gg: ASbGnctEDZRrbvg/rlXIU0ILaguKZ/z9C93znyILwL1CTBWsLt8S4AsjSZ0bWV76isg
+	tP6cT92wxfpyJGB9sn9L+4cmOB9HyCS8ahXx9
+X-Google-Smtp-Source: AGHT+IHNEPgUnyOUOLJNYmuWZzb+A9VZ8DHSgD5LFG69R5fcYpoa/i4kczMgAE3xSasrhbjfGxzaLMqjTmL1iCVGthQ=
+X-Received: by 2002:a05:690c:640b:b0:6ef:8296:359d with SMTP id
+ 00721157ae682-6f3f813cc98mr75276497b3.22.1734918667598; Sun, 22 Dec 2024
+ 17:51:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-2-tmyu0@nuvoton.com>
-In-Reply-To: <20241210104524.2466586-2-tmyu0@nuvoton.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 20 Dec 2024 13:45:39 +0100
-Message-ID: <CACRpkdZh4hCvBN=7beFEgm-mmdwSTW1fd8OZhQO3kr6Cy7P=dA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-8-tmyu0@nuvoton.com>
+ <202412161041586ed7c0ff@mail.local>
+In-Reply-To: <202412161041586ed7c0ff@mail.local>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Mon, 23 Dec 2024 09:50:56 +0800
+Message-ID: <CAOoeyxUOZSA++uprMZ+4rbjb1zuyPUi6728Cx8sudRaizqSwnA@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] rtc: Add Nuvoton NCT6694 RTC support
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, linux-kernel@vger.kernel.org, 
 	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
 	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
 	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
@@ -92,49 +93,64 @@ Cc: tmyu0@nuvoton.com, lee@kernel.org, brgl@bgdev.pl, andi.shyti@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ming,
+Dear Alexandre,
 
-thanks for your patch!
+Thank you for your comments,
 
-On Tue, Dec 10, 2024 at 11:45=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wr=
-ote:
-
-> The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> PWM, and RTC.
+Alexandre Belloni <alexandre.belloni@bootlin.com> =E6=96=BC 2024=E5=B9=B412=
+=E6=9C=8816=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:42=E5=AF=AB=E9=
+=81=93=EF=BC=9A
 >
-> This driver implements USB device functionality and shares the
-> chip's peripherals as a child device.
+> On 10/12/2024 18:45:24+0800, Ming Yu wrote:
+> > +static int nct6694_rtc_probe(struct platform_device *pdev)
+> > +{
+> > +     struct nct6694_rtc_data *data;
+> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
+> > +     int ret, irq;
+> > +
+> > +     irq =3D irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
+> > +     if (!irq)
+> > +             return -EINVAL;
+> > +
+> > +     data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +
+> > +     data->xmit_buf =3D devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ=
+,
+> > +                                   sizeof(unsigned char), GFP_KERNEL);
+> > +     if (!data->xmit_buf)
+> > +             return -ENOMEM;
+> > +
+> > +     data->rtc =3D devm_rtc_allocate_device(&pdev->dev);
+> > +     if (IS_ERR(data->rtc))
+> > +             return PTR_ERR(data->rtc);
+> > +
+> > +     data->nct6694 =3D nct6694;
+> > +     data->rtc->ops =3D &nct6694_rtc_ops;
+> > +     data->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
+> > +     data->rtc->range_max =3D RTC_TIMESTAMP_END_2099;
+> > +
+> > +     mutex_init(&data->lock);
 >
-> Each child device can use the USB functions nct6694_read_msg()
-> and nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
+> You should use rtc_lock/rtc_unlock instead of having your own lock. The
+> core will take and release the lock appropriately before calling the
+> rtc_ops so you only have to do it in the irq handler.
 >
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-(...)
-> +       while (*int_status) {
-> +               int irq =3D __ffs(*int_status);
-> +
-> +               if (*int_status & (1 << irq))
-> +                       generic_handle_irq_safe(irq_find_mapping(nct6694-=
->domain, irq));
-> +
-> +               *int_status &=3D ~(1 << irq);
 
-What about doing what you do in the GPIO driver and
-#include <linux/bits.h>
+Understood. I will make the modifications in the next patch.
 
-And search and replace "(1 << irq)" with BIT(irq)?
+> > +
+> > +     device_set_wakeup_capable(&pdev->dev, 1);
+>
+> This will cause a memory leak later on, see the discussion here:
+>
+> https://lore.kernel.org/linux-rtc/a88475b6-08bf-4c7c-ad63-efd1f29307e3@pf=
+.is.s.u-tokyo.ac.jp/T/#mf51fdce6036efa3ea12fe75bd5126d4ac0c6813e
+>
 
-PS the main reason we do this is because
+Okay! I will drop it and add device_init_wakeup() in the next patch.
 
-int a =3D (1 << 31);
-
-becomes a negative number on 32bit machines, and
-can lead to confusing side effects. BIT() always work
-on unsigned.
-
-Yours,
-Linus Walleij
+Best regards,
+Ming
 
