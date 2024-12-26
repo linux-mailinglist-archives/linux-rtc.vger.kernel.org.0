@@ -1,257 +1,135 @@
-Return-Path: <linux-rtc+bounces-2762-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2763-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F05B09FC77F
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Dec 2024 03:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 521449FC811
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Dec 2024 06:08:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8086E162939
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Dec 2024 02:06:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E402D162718
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Dec 2024 05:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C106B249F9;
-	Thu, 26 Dec 2024 02:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992E114D2A7;
+	Thu, 26 Dec 2024 05:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YqZTAdf4"
+	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="ptsMgJ2H"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1554D629;
-	Thu, 26 Dec 2024 02:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF44A7711F
+	for <linux-rtc@vger.kernel.org>; Thu, 26 Dec 2024 05:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735178796; cv=none; b=EqZzVuzhB1tpg14iW2cJPWiQGc0eLN3CwxMfqfY0QxAFCQKx3QbGgVQ0CMp/pquzFK2yzNsDd5yu5+8CO51p3kB73urNXTXEkPfNBZSDoIzgvYW32sDeja+0nwaFdBMczIsQK6jnmKxbBqsU6+M1gtMVbrx4dMVbtlMaoqEISgY=
+	t=1735189716; cv=none; b=bZh8Hy1fwi2+nQKVNI41GtWAl/5hLjXMfHrjUyqv6NvUZRnXcE+v5Xv9KRiUrCaSccS/u/j8ShdytqXkBUiUmUq7pnSxIL70//haIxfbPBvGQigDrLFo5+dNvLUQgO5jI1jokuZtzhTRK3IAKghCxoM+fSDekaPkRZnOHsLt5Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735178796; c=relaxed/simple;
-	bh=tazDpeDzYCN18LgkWbAGK/OqE3YfuiHFsDYSZh+HAyw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uRDhY9dHx7sJ6jtC0nuJaTvc9H92K/gMpHpA9zsyTuiEzlcgrZOvTlhGbpI8bQM9a95TWaCVvliNBwnMn23032bkDYOlEsSg2CxU92u/lc2ZelxZrzKFhKhzoaMP8I3AxNnOD1H+filzn0musWtcq2LzxN80uEnymURi0r5AZSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YqZTAdf4; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e399e904940so5506358276.2;
-        Wed, 25 Dec 2024 18:06:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735178793; x=1735783593; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gkCBHoqavQ55PZKZXnXOlnXv7rNiEnW2J8MOTpYz9yQ=;
-        b=YqZTAdf4q8aiDJ61Kt+tLoR07nu33+VAYNNhXsQ4KzkX+QKFZqkn2nDlCKo8xGuJUz
-         CjpeR/Mk7jE0RxsXD2I7nYn0s7NWSgBMVNtnfTCKkV8UKFhqKKjffYQ7iKDhGSQDg3+Z
-         spKYfJjtDb52aZqNGIvvFYCJAzW+uUZJHL9r7eNAid9MyogPayDlDUse3zFaUKyq16ow
-         IbvXhDOB+ou02ETZy+XpvinGB2rfrJa2MRHvlxPRMxHWV/amZkJ+eVfcTiBo3Tgx7BK7
-         OO7Q/rwk78hFAqOZ/+OicaskDQwC+TdrkX5gK/Wk+1e/BvDi9VsGe0PB4a0kvIL07Z5A
-         bJlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735178793; x=1735783593;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gkCBHoqavQ55PZKZXnXOlnXv7rNiEnW2J8MOTpYz9yQ=;
-        b=Uk2shAfroW2z6158ba7RXJrUnntoStBRYXPvD+M9EV1NP3vTdKsQCGIMGo9sw+8X/6
-         RH8yaghBW/G5JSqQgUgf+fFSLeEeghZbXE07qd37MbBrsANiSxyq7i+HccS26AIBDzai
-         u99Ugj+LSWVsPgeAEk8h1aZ5fOsBURQBXMmJ8Y/9R+2AZFixDH8esGXydCCgQZ/yA6OQ
-         U311SrLNm3ZKOtAy05v4Tb/ju3EHBSENFH7zkYonh8kNVqSKOdKvW/V3Vl5h+2CGoSIT
-         qMR5ViqKs70N3aGmuBznQ7kO5iDdsxQXUm4QEPc4oBTzYyA513GcX9Ij1S353S5n6sNH
-         FQ9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ1jAccQKs5fNlRfymUyuQYLWpBwom9YyfjJR/1CJoHWYj/ElULq8QIQz92pcFPEp3tT3CZEAVXDE=@vger.kernel.org, AJvYcCVOxJKAKn07Z4l6fgdmCpMpd1mzWg5DranHXUWMbsHK7wWlo8nWfDxh10rVl/0P+Inhjgx6uqsI@vger.kernel.org, AJvYcCVRvMaLJHqkkd/0tz4iC5AyMMF97thYlsMMB4aIEuKM9v1xtilFchwgyzQsVm313OnsaB9njn2sj8G2@vger.kernel.org, AJvYcCVdPRtrL2oXZL2n7rlhdgBasLh3+IoK1UO8UFXjxAaChCS/Y0eAPKL/uuUdFUvDHS22tANVjmN607Q5DRX5ES0=@vger.kernel.org, AJvYcCVitAwcDsZN6dIo8mfAaUlvhBy1mbbHJxCpa+QXyn0iADYDL1yOwacSs7tryQtZ47zhI637zSSiroNapg==@vger.kernel.org, AJvYcCVprShn/44q0VvQ/cWa9rIc7GuNmjX8MURbwW/XQ53oMtsMbCejLbUMKBKMUHGzT+34e3lTVuJajpFRKBmJ@vger.kernel.org, AJvYcCWbYI6Oc3FY/Jw503yjkSp0gNH+TFuJ1nqRjtieu4MgrTIeebc4almkWhEEqwtbuANNYeH4QXtHn5Tq3mk=@vger.kernel.org, AJvYcCWjvI1EYu2mPXYDh1cuxf7d/ovRatz+oYohaIhcKms7PWZIVG5gqDe2XY3uMfdv8GDuNyl33euwa6kX@vger.kernel.org
-X-Gm-Message-State: AOJu0YydimtZeuAeWg7TPJEJNqovsNDdOKLQa0vkLiJRPdRpv2EGeZZg
-	PDLls15lRifu7gVkL1D4z3p7jpkGsTqwl7EdVcd0gx4a2Wr0G05UOGkX1xOrjZknw8oBQv97Wt1
-	4BfsQmPB258IUSi00UaBw884yqs8=
-X-Gm-Gg: ASbGncswhYBciIvPfehlV/zPWzsqhJjdKc8dlrcabkvAp75Pi15AO6/GLDH/uOL9jUA
-	VuByeclPnLLSzIXOJFtBWV2gxLSWaBOHoPVt4pGrydfNJiPgBIdDrEiQny5z1IeXRY3AVE0Q/
-X-Google-Smtp-Source: AGHT+IG5V9kgN4KFR2d/Ij736vONLybGw6IwUqTpy3TNfYr9s117zUMMGcR4U1TgSaPWAXXtzBYE3DNwyLaFV3J2yEY=
-X-Received: by 2002:a05:690c:6ac3:b0:6ef:4ba4:eca8 with SMTP id
- 00721157ae682-6f3f7f3fa78mr164105067b3.0.1735178793196; Wed, 25 Dec 2024
- 18:06:33 -0800 (PST)
+	s=arc-20240116; t=1735189716; c=relaxed/simple;
+	bh=3pqWiSOia8Cc3ev7ia/z6zK39Ju/1V3A0Lfr4mMekmk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JHvkgx8SNbfEfbyxTwJ5xh53xjLwjIaXz9UOv4+FU6vwrJCPYy8zfzinO19SUHbUMMvOeLlrE7oJvAbPurpyhzGfGt3E1UmRVRGWz9osz+0522bNXDIDJf69iYcf/nJNeZhXOJaL/lZsAJ6DbkO7vq5EIhi4K7N26oaF3arh78k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=ptsMgJ2H; arc=none smtp.client-ip=91.218.175.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
+	s=key1; t=1735189711;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1+Pw0Duk2ffkzOZeLZ/8MRbYDhOihMi4oOjlzS/3yps=;
+	b=ptsMgJ2H46eD27TfaBfqI+4cUOz5vLA6QzK/27mp8ADqFsZ1CmUslrIWbwKt3H932VxT28
+	nDTIQTyD7SxYjuA/ll7SgJQUWXkitKKx30BvmlAhWnCv+iGu4eQc8unN2ChI1NQVi2BWfh
+	uTHNc2e3Ezvd+JHJeVb/XSwIcxMQPhXR16MaK1umzxtDAUDgtz3kuZIpVWJ/fqFd+ZYur5
+	83RMZiPrCdSHsFlajpnAqfBrUKCsYGkr3Lj0uk5kgyCs3XKLyblKce8dqyoCXMJtRjgsVm
+	1SPx6owqt5PeQmpOTNlFXBis5hwywfH2i8iwNYnf28S7Jg2DOoiM9/J7fcOTUQ==
+From: Val Packett <val@packett.cool>
+To: 
+Cc: Val Packett <val@packett.cool>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sen Chu <sen.chu@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>,
+	Lee Jones <lee@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Eddie Huang <eddie.huang@mediatek.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Fabien Parent <parent.f@gmail.com>,
+	Yassine Oudjana <y.oudjana@protonmail.com>,
+	Chen Zhong <chen.zhong@mediatek.com>,
+	linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH 0/9] mt6397: Add support for the MT6392 PMIC
+Date: Thu, 26 Dec 2024 01:58:00 -0300
+Message-ID: <20241226050205.30241-1-val@packett.cool>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-4-tmyu0@nuvoton.com>
- <qe7rucm65tixgnlendfdlr6iemrvs2ecun7odlbl3csofj7qjj@sl6vypb66awz>
-In-Reply-To: <qe7rucm65tixgnlendfdlr6iemrvs2ecun7odlbl3csofj7qjj@sl6vypb66awz>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 26 Dec 2024 10:06:22 +0800
-Message-ID: <CAOoeyxX475tHNqoejX=DcY2ow2+rPc=_qXuX0O5AGumLPFoQGA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/7] i2c: Add Nuvoton NCT6694 I2C support
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Dear Andi,
+The MediaTek MT6392 PMIC is usually found on devices powered by
+the MT8516/MT8167 SoC, and is yet another MT6397 variant.
 
-Thank you for your comments,
+This series is mostly based around patches submitted a couple
+years ago by Fabien Parent and not merged, and includes extra
+cleanups, fixes, and a new dtsi file similar to ones that exist
+for other PMICs.
 
-Andi Shyti <andi.shyti@kernel.org> =E6=96=BC 2024=E5=B9=B412=E6=9C=8826=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=888:43=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> > +#include <linux/i2c.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/mfd/nct6694.h>
-> > +#include <linux/module.h>
-> > +#include <linux/platform_device.h>
-> > +
-> > +/* Host interface */
->
-> What does it mean "Host interface"?
->
-> > +#define NCT6694_I2C_MOD              0x03
-> > +
-> > +/* Message Channel*/
-> > +/* Command 00h */
->
-> This comments are meaningless, either make them clearer or remove
-> them.
->
-> > +#define NCT6694_I2C_CMD0_OFFSET      0x0000  /* OFFSET =3D SEL|CMD */
->
-> I find this comment quite meaningless. Can you please make it
-> clearer?
->
+This series only enables three functions: regulators, keys, and RTC.
+All that was tested on a lenovo,tb7304f tablet (basic DTS coming
+right after this, promise).
 
-I have already updated these structures and comments following
-suggestions from other reviewers, and I plan to include the changes in
-the next patch submission.
+Fabien Parent (5):
+  dt-bindings: mfd: mt6397: Add bindings for MT6392 PMIC
+  dt-bindings: regulator: add support for MT6392
+  dt-bindings: input: mtk-pmic-keys: add MT6392 binding definition
+  mfd: mt6397: Add support for MT6392 pmic
+  regulator: mt6392: Add support for MT6392 regulator
 
-> > +#define NCT6694_I2C_CMD0_LEN 0x90
-> > +
-> > +enum i2c_baudrate {
-> > +     I2C_BR_25K =3D 0,
-> > +     I2C_BR_50K,
-> > +     I2C_BR_100K,
-> > +     I2C_BR_200K,
-> > +     I2C_BR_400K,
-> > +     I2C_BR_800K,
-> > +     I2C_BR_1M
-> > +};
-> > +
-> > +struct __packed nct6694_i2c_cmd0 {
-> > +     u8 port;
-> > +     u8 br;
-> > +     u8 addr;
-> > +     u8 w_cnt;
-> > +     u8 r_cnt;
-> > +     u8 rsv[11];
-> > +     u8 write_data[0x40];
-> > +     u8 read_data[0x40];
-> > +};
-> > +
-> > +struct nct6694_i2c_data {
-> > +     struct nct6694 *nct6694;
-> > +     struct i2c_adapter adapter;
-> > +     unsigned char *xmit_buf;
->
-> why isn't this a nct6694_i2c_cmd0 type?
->
+Val Packett (4):
+  soc: mediatek: mtk-pmic-wrap: add compatible for MT6392 PMIC
+  input: keyboard: mtk-pmic-keys: add MT6392 support
+  rtc: mt6397: add compatible for MT6392 PMIC
+  arm64: dts: mt6392: add mt6392 PMIC dtsi
 
-Fix it in v4.
+ .../bindings/input/mediatek,pmic-keys.yaml    |   1 +
+ .../bindings/mfd/mediatek,mt6397.yaml         |   3 +
+ arch/arm64/boot/dts/mediatek/mt6392.dtsi      | 232 +++++++++
+ drivers/input/keyboard/mtk-pmic-keys.c        |  15 +
+ drivers/mfd/mt6397-core.c                     |  43 ++
+ drivers/mfd/mt6397-irq.c                      |   8 +
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/mt6392-regulator.c          | 484 +++++++++++++++++
+ drivers/rtc/rtc-mt6397.c                      |   1 +
+ drivers/soc/mediatek/mtk-pmic-wrap.c          |   1 +
+ include/linux/mfd/mt6392/core.h               |  42 ++
+ include/linux/mfd/mt6392/registers.h          | 487 ++++++++++++++++++
+ include/linux/mfd/mt6397/core.h               |   1 +
+ include/linux/regulator/mt6392-regulator.h    |  40 ++
+ 15 files changed, 1368 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt6392.dtsi
+ create mode 100644 drivers/regulator/mt6392-regulator.c
+ create mode 100644 include/linux/mfd/mt6392/core.h
+ create mode 100644 include/linux/mfd/mt6392/registers.h
+ create mode 100644 include/linux/regulator/mt6392-regulator.h
 
-> > +     unsigned char port;
-> > +     unsigned char br;
-> > +};
-> > +
-> > +static int nct6694_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs=
-, int num)
-> > +{
-> > +     struct nct6694_i2c_data *data =3D adap->algo_data;
-> > +     struct nct6694_i2c_cmd0 *cmd =3D (struct nct6694_i2c_cmd0 *)data-=
->xmit_buf;
-> > +     int ret, i;
-> > +
-> > +     for (i =3D 0; i < num ; i++) {
-> > +             struct i2c_msg *msg_temp =3D &msgs[i];
-> > +
-> > +             memset(data->xmit_buf, 0, sizeof(struct nct6694_i2c_cmd0)=
-);
-> > +
-> > +             if (msg_temp->len > 64)
-> > +                     return -EPROTO;
-> > +             cmd->port =3D data->port;
-> > +             cmd->br =3D data->br;
-> > +             cmd->addr =3D i2c_8bit_addr_from_msg(msg_temp);
-> > +             if (msg_temp->flags & I2C_M_RD) {
-> > +                     cmd->r_cnt =3D msg_temp->len;
-> > +                     ret =3D nct6694_write_msg(data->nct6694, NCT6694_=
-I2C_MOD,
-> > +                                             NCT6694_I2C_CMD0_OFFSET,
-> > +                                             NCT6694_I2C_CMD0_LEN,
-> > +                                             cmd);
-> > +                     if (ret < 0)
-> > +                             return 0;
->
-> why not return ret?
->
+-- 
+2.47.1
 
-Fix it in v4.
-
-> > +
-> > +                     memcpy(msg_temp->buf, cmd->read_data, msg_temp->l=
-en);
-> > +             } else {
-> > +                     cmd->w_cnt =3D msg_temp->len;
-> > +                     memcpy(cmd->write_data, msg_temp->buf, msg_temp->=
-len);
-> > +                     ret =3D nct6694_write_msg(data->nct6694, NCT6694_=
-I2C_MOD,
-> > +                                             NCT6694_I2C_CMD0_OFFSET,
-> > +                                             NCT6694_I2C_CMD0_LEN,
-> > +                                             cmd);
-> > +                     if (ret < 0)
-> > +                             return 0;
-> > +             }
-> > +     }
-> > +
-> > +     return num;
-> > +}
-> > +
-> > +static u32 nct6694_func(struct i2c_adapter *adapter)
-> > +{
-> > +     return (I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL);
->
-> parenthesis are not needed.
->
-
-Fix it in v4.
-
-> > +}
->
-> ...
->
-> > +static struct platform_driver nct6694_i2c_driver =3D {
-> > +     .driver =3D {
-> > +             .name   =3D "nct6694-i2c",
-> > +     },
-> > +     .probe          =3D nct6694_i2c_probe,
-> > +     .remove         =3D nct6694_i2c_remove,
-> > +};
-> > +
-> > +module_platform_driver(nct6694_i2c_driver);
->
-> what I meant in v1 is to try using module_auxiliary_driver().
-> Check, e.g., i2c-ljca.c or i2c-keba.c.
->
-
-I think the NCT6694  is an MCU-based device, and the current
-implementation is as an MFD driver. Are you suggesting it should
-instead be implemented as an auxiliary device driver? If so, would
-that mean all related drivers need to be revised accordingly?
-
-Best regards,
-Ming
 
