@@ -1,144 +1,222 @@
-Return-Path: <linux-rtc+bounces-2775-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2776-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 042C69FCC89
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Dec 2024 18:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 65AF49FD2A7
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Dec 2024 10:57:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 666CE1882FA1
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Dec 2024 17:55:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFE26188396F
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Dec 2024 09:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A40913DB9F;
-	Thu, 26 Dec 2024 17:55:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA53156677;
+	Fri, 27 Dec 2024 09:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="datw33aG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQclhQ7i"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6FA13B780
-	for <linux-rtc@vger.kernel.org>; Thu, 26 Dec 2024 17:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914A3482EF;
+	Fri, 27 Dec 2024 09:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735235713; cv=none; b=E8UxQ+50fnzcdZX/IBAS14y4NTX9zsoOKv734nZcfd8nLqeCvwNWS/jUypfntKJfrKxtaR8bxhKsl4+WrWo1fSiFoHOWTHWzKFRRbaMhG9of9gXKW+G28/GPtx3H5GJeeOMmerxFtPXULQeDLQ/CsuGUWA4Lyh5Hp0T+q5jeFrM=
+	t=1735293468; cv=none; b=J29ghebFFRQrSyHWHOo1nwA8UTowx/uv+sEznSjHXJ2iRMgpclh0p5X1Z0utKb+Ruk/wCwR3VczZEdZIP0e1oEguZ4aVD5H6ps32oRMhVW5WkfeOzXNp6aPWhcxcpUg8DxNlbkxPsZbDOXW1Be6HZDRYnlb4gSztWLh7EiZk7Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735235713; c=relaxed/simple;
-	bh=+QqVgKQ5ytGKIdeLFnkhcF1lukk7spDT5dvTw39KYxg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Ehpx30OkWVF7bVUfPB3pWwtBdP+9yRT404ijeEnLUNppvxBSO2TPRdnMsKDZMrWXMlyqPE8mlyUGp7X4yCii3NnSk86PraqRL63Yt2Tk1bPt641AfcL8+PfjvOn/1OFFAjU9GKH2q57OfHSyqELPSDzp6ieexGz6Iq0J/0gvzx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=datw33aG; arc=none smtp.client-ip=193.222.135.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
-Received: (wp-smtpd smtp.tlen.pl 7401 invoked from network); 26 Dec 2024 18:48:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
-          t=1735235307; bh=+QqVgKQ5ytGKIdeLFnkhcF1lukk7spDT5dvTw39KYxg=;
-          h=From:Subject:To:Cc;
-          b=datw33aG92aEjZ7My+dT7iMHcUJ4jg/Zk9O4eDG8BfE8M5uspesm7v4mlrjCGMp03
-           QLq/gqGbbPDeohByLu5HAbPhvbXxPEbhYibGOBS/i5y7gO2G7ViYrGiXKmqOqHQyTK
-           YcLPkp08voGTmOZVYPK0Tct5a4Ldh7iU2W8ek/lJtvZtXB+XQlYDVPw5Wt+lQLIrXy
-           wtzfVoIr2KxYvNhlcmx9s/n9hIhCBMY/Sj1VUOIjJVFteDJe1zd23Vu3NDmJUIcj3H
-           or65yWsYIVnLiESqef+fA2CBVKPwNrGTyT7ujyeyM/EEULj4BD0XOaabL5KcmvR0ZW
-           YP69M0+R/cFsw==
-Received: from apn-78-30-73-185.dynamic.gprs.plus.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[78.30.73.185])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <chris.bainbridge@gmail.com>; 26 Dec 2024 18:48:27 +0100
-Message-ID: <463fbc29-b41f-4d2d-a869-108114000cdb@o2.pl>
-Date: Thu, 26 Dec 2024 18:48:25 +0100
+	s=arc-20240116; t=1735293468; c=relaxed/simple;
+	bh=oQ8zPcgjAYCtu8aCCr473SaZxWRFCenBaHw8L4UCImA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rv1uwkaHNgzhObu9XKPXCKemrsTUvD6FZ0KVMsmhTj9AYGTFQG9HOmSe3463qRJAVqZZiSLQy2Mi1MQAHAYgytnPsQO4uJ1dARPnL+q5bZGc6mOIK0TNVgH8TVM2XoqqxopPipwAncdGv2LDGS3dhS1TuDIyXC9nINs+wyWqKAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQclhQ7i; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ef714374c0so7314436a91.0;
+        Fri, 27 Dec 2024 01:57:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735293466; x=1735898266; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E61b0CQfQJpOWoe/QUwMSbRUTPIEuAgZxxE/14WHMCY=;
+        b=kQclhQ7i+SjF7pYEqzov6mJNk9xYabuWsk06lW/p95Hu1rGAFeuRwHZZSP6a5vL4pr
+         l0DPo/tCG9SxdXEleX43sVrNMUr8A6K6AuLBzozkoEj0fkcbsu0osDQzeKDqA8qXUHk+
+         02CC8PF5GvdrGpCnrRlR5k737CufqqjOhqqjGs3ym20SU6LjFWTVuV/Nqp2k6+rGXM/s
+         NtFCltd9hg1Gqzu5wFA5nVkq2uA2MbGpssF29DDxuLcHxnBT4n2vIpRHPkKr8jFiBuDz
+         MLoQmuSPmu7C4Gs7m9wPCj1LqjAmV/L61ZkOQT2hB9D7ME+st4Z+iav5UBSBZtZugODE
+         eqUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735293466; x=1735898266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E61b0CQfQJpOWoe/QUwMSbRUTPIEuAgZxxE/14WHMCY=;
+        b=UznF1Ta32qDRXjyR/z6oehCAV1ztqX/tDOwzSJVCBkNziNFIlPw8vay6ekYRkiDtiy
+         INTSsflBuzKgzi2CW5DcDQj69JduqFphFDMq0Q8WLatuUdMGfCRmJdrxV3/L9FCxWn/N
+         fweAWq/ev75U/TVDQjBB1SrcgqbC9yAt3Yy3h+4kQ5oqqADmwsYUmCtjepKSDQaolCF/
+         S3bJ6ow9+EHodEkWSVuZP7o+gzo56+W7zdl7hlqFyfnUsG1giFlfe7iWvh9d244XrJT+
+         vi5xeuhDqi5aPQ626m3PFcS9P5obv9Xm1SlnMRAvoqv6Cny1TjZlY8Vegf5e25rr44Ds
+         HhPg==
+X-Forwarded-Encrypted: i=1; AJvYcCVrYKgpBGOJdHxBP3EOmC7a3O3E19B2nef8Ias1mkgA94fYvuwSVW4RExbtoGXA9dO0pyPJsFnkr9TsFUE=@vger.kernel.org, AJvYcCW5b7ZZramQ5JM1qqZjmcgpVaAv9gjmlTQDP2HgH/SVQjkuQXWf1qv3hBsAiRKQ2ByWfLz15DCLNgc=@vger.kernel.org, AJvYcCW8qxS7IQz8j4hCF7/1Pwq8V3brqFEp9a+664Ukur9Z87Ph8xTdM0EdhSMbhsQTqD/ItszQM+kY@vger.kernel.org, AJvYcCWPwJZS26Qvl+Xspgb3scF1AK6LtM/Zmy7IsErS8EnGlH/ZyguanbpUL9LK8W71VL2Jgl+UTRgpICym@vger.kernel.org, AJvYcCXKw6h6RmZUPxgux0ZohjmbvL4fbfCvX3C261nGUfAnbCOZIRXJkfA46PJz3WMASFJ2OZ3pF7eJ70qnbf05zCI=@vger.kernel.org, AJvYcCXSZiqAk89mS2Nl4egayfkPvZkMgAtCux+De3esouC8RoAQthWedR8yvTj0JtYCkBVKrGSRc6e6MLKy@vger.kernel.org, AJvYcCXUmh/WZmjYPzsYy+CDPy+tMH6ec0lUdJxfnCpmQnLRteXoHmiuDdcvt/cwgivd1t/EqCA1pbFL3ArsDQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YysZBap6HAuFXuITEvJI8/T/2gMtMVTsefjiHxvPskac2L4fsKh
+	hYym7zyyyeNh40BxgqYY4XqwNZy4naVkgPg1makeZpz3I0nUR5yn
+X-Gm-Gg: ASbGnctCmoorbTe0ovhLALPB4M02wyLBj38t/M2rKczGXPCEeYSfSsvOhx9SV/pkzEw
+	1m8N5c8iEHt62Jm9jXbh+pM1ORo14AziXSRBokSYd2LqOeIww2Lhh+EpA/0Wjps4/7T9+q74Mhw
+	jcnZAd3sgtseNWX2WPpvEg0clOTappttAldfescpQxleH7TuP6dFcPw9117M+QtteW06yCJodml
+	p6Og+ftiwG54LoE67DpIOXIpfWJnxs4BRVEfPb4FKcVyOL471h36AHWOZkIfx2MpsFMhrGoNhh7
+	Mli9AVJWUZPErX4i9TON9pLO
+X-Google-Smtp-Source: AGHT+IG25VBuVyNEsjj0ruD0xAOoFQVrnR9gRNTql3ILiys1KjxdfmFcTBW3jd60qhrZpc7MLTd+5Q==
+X-Received: by 2002:a17:90b:5251:b0:2f2:a90e:74ef with SMTP id 98e67ed59e1d1-2f44353f0b2mr45145356a91.1.1735293465820;
+        Fri, 27 Dec 2024 01:57:45 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f51a0sm131581135ad.187.2024.12.27.01.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Dec 2024 01:57:45 -0800 (PST)
+From: Ming Yu <a0282524688@gmail.com>
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v4 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Fri, 27 Dec 2024 17:57:20 +0800
+Message-Id: <20241227095727.2401257-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: Re: BUG: Invalid wait context at: mc146818_avoid_UIP tick_freeze
-To: Chris Bainbridge <chris.bainbridge@gmail.com>, linux-rtc@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>, alexandre.belloni@bootlin.com,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <CAP-bSRZ0CWyZZsMtx046YV8L28LhY0fson2g4EqcwRAVN1Jk+Q@mail.gmail.com>
-Content-Language: en-GB
-Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
- 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
- TANkZ3QqXNX2
-In-Reply-To: <CAP-bSRZ0CWyZZsMtx046YV8L28LhY0fson2g4EqcwRAVN1Jk+Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 07a382bdc21da3b83d4606e65fc10ad4
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [oZMk]                               
 
-W dniu 1.12.2024 o 18:05, Chris Bainbridge pisze:
-> This splat happens on suspend/resume on a HP laptop. It doesn't appear
-> to be a recent regression, as a bisect only leads to 560af5dc839e
-> ("lockdep: Enable PROVE_RAW_LOCK_NESTING with PROVE_LOCKING.") - so
-> most likely the issue has been around for a while, but a recent kernel
-> build with lockdep enabled will now show it.
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-Hello,
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-Thank you for this bug report.
+The following introduces the custom-define USB transactions:
+        nct6694_read_msg - Send bulk-out pipe to write request packet
+                           Receive bulk-in pipe to read response packet
+                           Receive bulk-in pipe to read data packet
 
-The cause is that timekeeping_suspend takes a raw spinlock called "tick_freeze_lock". With this lock taken, this function indirectly calls mc146818_avoid_UIP, which takes a normal spinlockcalled
-"rtc_lock".
+        nct6694_write_msg - Send bulk-out pipe to write request packet
+                            Send bulk-out pipe to write data packet
+                            Receive bulk-in pipe to read response packet
+                            Receive bulk-in pipe to read data packet
 
-It is not permissible to take a normal spinlock while holding a raw spinlock due to issues on PREEMPT_RT kernels:
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
 
-https://docs.kernel.org/locking/locktypes.html#raw-spinlock-t-on-rt
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
 
-From what I can see, this has been so for a very long time. I was able to trigger the bug on Linux 6.1.0 with CONFIG_PROVE_RAW_LOCK_NESTING enabled.
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
 
-A solution to the problem would be to turn the rtc_lock into a raw spinlock. This requires that the critical section (during which the lock is held) is small. Reading full time from the RTC requires
-in one critical section over 10 CMOS_READ invocations, writing full time - around 15 CMOS_READ/CMOS_WRITE invocations. This cannot really be broken down AFAIK - I hope that the critical section would
-be small enough.
 
-The rtc_lock is used on 7 architectures (mips, sparc64, powerpc, alpha, x86, arm, m68k/atari), so this will require a bit of work. I'll try and see what I'll be able to do.
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CAN support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
 
-Greetings & merry Christmas,
+ MAINTAINERS                      |  13 +
+ drivers/gpio/Kconfig             |  12 +
+ drivers/gpio/Makefile            |   1 +
+ drivers/gpio/gpio-nct6694.c      | 462 +++++++++++++++++
+ drivers/hwmon/Kconfig            |  10 +
+ drivers/hwmon/Makefile           |   1 +
+ drivers/hwmon/nct6694-hwmon.c    | 851 +++++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig       |  10 +
+ drivers/i2c/busses/Makefile      |   1 +
+ drivers/i2c/busses/i2c-nct6694.c | 156 ++++++
+ drivers/mfd/Kconfig              |  10 +
+ drivers/mfd/Makefile             |   2 +
+ drivers/mfd/nct6694.c            | 394 ++++++++++++++
+ drivers/net/can/Kconfig          |  10 +
+ drivers/net/can/Makefile         |   1 +
+ drivers/net/can/nct6694_canfd.c  | 826 ++++++++++++++++++++++++++++++
+ drivers/rtc/Kconfig              |  10 +
+ drivers/rtc/Makefile             |   1 +
+ drivers/rtc/rtc-nct6694.c        | 263 ++++++++++
+ drivers/watchdog/Kconfig         |  11 +
+ drivers/watchdog/Makefile        |   1 +
+ drivers/watchdog/nct6694_wdt.c   | 281 ++++++++++
+ include/linux/mfd/nct6694.h      | 142 ++++++
+ 23 files changed, 3469 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
 
-Mateusz
+-- 
+2.34.1
 
 
