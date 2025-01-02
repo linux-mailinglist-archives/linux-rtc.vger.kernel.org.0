@@ -1,109 +1,401 @@
-Return-Path: <linux-rtc+bounces-2811-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2812-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E2A9FE7AE
-	for <lists+linux-rtc@lfdr.de>; Mon, 30 Dec 2024 16:39:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 627F19FF63A
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jan 2025 06:25:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A9D63A2451
-	for <lists+linux-rtc@lfdr.de>; Mon, 30 Dec 2024 15:39:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 417633A254A
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jan 2025 05:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C462C1AAA22;
-	Mon, 30 Dec 2024 15:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF7C418E35D;
+	Thu,  2 Jan 2025 05:25:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XuvWJtEE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QKaTAGMo"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4FE154BE4;
-	Mon, 30 Dec 2024 15:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2177518C932;
+	Thu,  2 Jan 2025 05:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735573183; cv=none; b=VbjHB7Dv4TRSJ1xvmA5Tt3yuUEta96ZVwi1ZpjGCxjcdA1GiM6b6j/CVyvgBIQjELceRVxzKm/ULQ9UO9y8+cqJonVniR7Bk8bzo65/LmyWo1WFEo6vcxLJAZcWlsX6G7Z1IE29nm24ofgVB8TkO0699JW7pikr3jcMzTYXD5ok=
+	t=1735795540; cv=none; b=faQaCFko8wa1kSJao2GSXvGXk1t9oRZArILeYkE1FiZHgDbqO5agtWXdHfew53cWXEq5E2VJmK48Lae3oBh81t2Cb3vMR7C7b+EnBm3BpZkqEuOxf1aozkAL5UIxUeTpQdmOT72H9gI8bjrIoMNaFpJcqXGSBOuNzb1fjw/zarw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735573183; c=relaxed/simple;
-	bh=z95nvnR0IBfFZgmgFKAM139dJRdkSORpd/LIl6jgSDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TjqIVPNLZJwkbM9ku79OKmpRmhZAOeAbx+tqIyaYUJ/2ABgd9UC3MvTnl56VigNtJgptVwcyVOCX7PNVJm60IH/BxImazUCMJsLg9YT+t897c/wrjhWQphuq8lg0/6cUjlxtVX71/4ROs+8uwSnMuk4EArywgrq2K6MTYNy4yes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XuvWJtEE; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C90E1C0002;
-	Mon, 30 Dec 2024 15:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735573178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hA6CvsCmERwL792aXpdy/ULlGDIdsXDMPmDFIsJtA6E=;
-	b=XuvWJtEE0++XLT3rjMf9QjyWRB1g9h7vnqPO7uWmXBjocxq+NoCycynxsGKJmKQlDfH9Yx
-	1ilV8yt4k+8YgHIF9ToR+BZ6BTDhk/q1w37IAJYbJAodKEVUuzdeulTaOIoA4s6Z0ihmw4
-	sRkOi7lOxe30lAVxPMk+2ArnorH0JvtorS92rVthXDsL9+DWX64KZpPNsoWqSinnlfxDDt
-	4HmfgAvft3IdMa9U+q2i5XrPI3/K2KZkpmRnHOGIkX76XWqBB6uHPxiSToobxC2KNkZh08
-	vAGwy1jwSp7IWTxgauhY3nNw40B+bqmn6IeJSMURelKCAGbwdErgEnq2vtXnMQ==
-Date: Mon, 30 Dec 2024 16:39:36 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Message-ID: <2024123015393681ee26a3@mail.local>
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-8-a0282524688@gmail.com>
+	s=arc-20240116; t=1735795540; c=relaxed/simple;
+	bh=Q//K6I4nzjNGxPD97emwJD2ctUE9Xa4kN8p9z0uID4w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m7lgOPSC0TzI7VyJAP7Qg3/qfN4lOYZ1UDU7uL8NtWl0GHS+FdfU6wpElo2PgaJs1iQQgnun7tKyjWEiJmKo8Nsaha2whxd/rH+zw1gF4BBhuoqJQvK+rU2HfbFCwBeJcDeoHWF08FDunBojcrmFOzS3l9AAf4fypM78hR52RQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QKaTAGMo; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e39f43344c5so13619437276.1;
+        Wed, 01 Jan 2025 21:25:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735795538; x=1736400338; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZhBBFXFHI0KOxJH7yHdQXw7rf9jQtRYxyRgMxQ8lPqg=;
+        b=QKaTAGMowVIwqrpu/3UlscpUBpVhBVf12z9SPIhdbY2AVnNa2BCCoWQDDUypMrFh4b
+         zchI/zqBbZh+zmZcm5qF+RaAS4GdezKQCelTM4eqQa4Z7oSE2F/A9ltNbQC8qljERxSI
+         Su79iAHLT7Ww442ps0qKH2sdNsCns538ymYGWfZVb/zwFiyHs4kyN++vzsPw7bghssFh
+         Xf9iX8S8CBBKsxLBmAzdxoQJofafpfDXxire75xHfZDJYognAEz7SWW/XOJWX7zPYUyJ
+         B4CQlXiJGtLkDa4q30KB7njVAfagi9iPZWx4FfyiXa86zpICan8iMoCu+S07uQEWKKFe
+         sKxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735795538; x=1736400338;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZhBBFXFHI0KOxJH7yHdQXw7rf9jQtRYxyRgMxQ8lPqg=;
+        b=vVVrlxquVPksmfv9zN0J5UdH7h3stKOha4bU01ipbL63qv4P4jSkl4e/kQXvRD1dUX
+         kJoAjpOp46pi2ob81V0+MQ2vQDbU5IZGbsrLK37i5qDmwbOP5Q9z4qamLV7DUxa3azum
+         VewbE/JOXXB+jnFluHqY0ra0g3lFs7n/LikFyr1DdXfthoiSvr9qKr4leWpX+WqUKVZ8
+         UKWunOcuM0WCvA/6asQmVTl/CxzhFdbRRO0qX7Q8wHe5NWhyBKiG4bcdV3fUtpCR5W6I
+         aDN/mboJBBGk8UMXwkg+0ph595Vhbqa2eTudUU11l+1zJfe5En7oL8Atf+tmu3DQgg3e
+         6H4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUCdkoxBeRLhE5tKmssaSAdgI8c71sD4Sda5ay8igGCRWkHXaK6QKkp0VP3x4iRMHrjYe+6U16XV9RZKg==@vger.kernel.org, AJvYcCULxBdhuVMZERRIHS+1rsUSffXmI7SA3+6iOnFalNc1cKicK2iy8H2W+71d/lb6CpvFIGmlSOdgnqVW@vger.kernel.org, AJvYcCVh6TpRfmLBrHvV4kT0gRa6R7+ojc+jLWuXsnoyPgqkRrUFeaQrdFyqE3Zc9JYj4KJdSnRpTZbCpg/W@vger.kernel.org, AJvYcCVk9Kx3TjauuQwTJ6R8Ym2plrSTHphzTz6ms2fFYuePr92jH+ix0S212BNIbsPFu0B8qCpDHHwWkMM=@vger.kernel.org, AJvYcCWc43sM2/al97YNfJE7saH/1BdkUG5+t2t4CBwKvnf11lc1zJkuDrSt1KjXuHiC9XvgupD76V0X1XISJ81sAlA=@vger.kernel.org, AJvYcCWsXWNxJx1IPs06UuOrIQNs7AW6i7I2j9XuwxCWLNbeZm+qANXbY88qivoUR2Qo410qtK0w1IP8@vger.kernel.org, AJvYcCXiCB2r3k1Cy/Ot6z0u8aT9eyj88N1PKlpwxbS33jddYLkwz+4/iGZ5YmyXnKT777CuoE4To7y9SvJU458=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlL+I1i0k6ndsHj72e4PMDIasRJaYQs7YlVZlVZPEysJS7pMh8
+	T44bl+M9liGle65kX8Tmn9RQqtWnTNZ+rIBBztohLSvvpy73vN7XgrCjv6q2h6QltjxqTH0LbSF
+	dahTEzx/LrkLfCa6WfRE3rwGmJgM=
+X-Gm-Gg: ASbGncuYnHH1hA80ApkBAtRPkyhUNseHoWMuoUIQ/0XdXpD6IRSMlYA+fl0cl0Q6NQP
+	PCGT9sdHbX+5Ot8TFo5N4VWb/E0UQe8h/9YXV/mZLT5R2pEOmqjZA9sZYZxDgBDtVHUc6yMfd
+X-Google-Smtp-Source: AGHT+IHyaJPa9I6OK/q4UXT+geYapq2hPHXI5a5QZlIeSO9e/MEMKuiOWPqbgXQhPr74iHp0oMtLA4AFUQqi4/IZ2H8=
+X-Received: by 2002:a05:690c:6a83:b0:6ee:66d2:e738 with SMTP id
+ 00721157ae682-6f3f80cda17mr371878997b3.2.1735795537923; Wed, 01 Jan 2025
+ 21:25:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241227095727.2401257-8-a0282524688@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+References: <20241227095727.2401257-1-a0282524688@gmail.com>
+ <20241227095727.2401257-5-a0282524688@gmail.com> <a25ea362-142f-4e27-8194-787d9829f607@wanadoo.fr>
+In-Reply-To: <a25ea362-142f-4e27-8194-787d9829f607@wanadoo.fr>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 2 Jan 2025 13:25:27 +0800
+Message-ID: <CAOoeyxW7=mLCcthVcQKnf7ikxEdQ09SzmOT5puD-AuhgpRHLkQ@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] can: Add Nuvoton NCT6694 CAN support
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 27/12/2024 17:57:27+0800, Ming Yu wrote:
-> +	ret = devm_rtc_register_device(data->rtc);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to register rtc\n");
+Dear Vincent,
 
-There is no error path where the error is silent in
-devm_rtc_register_device, the message is unnecessary .
+Thank you for your comments,
 
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver nct6694_rtc_driver = {
-> +	.driver = {
-> +		.name	= "nct6694-rtc",
-> +	},
-> +	.probe		= nct6694_rtc_probe,
-> +};
-> +
-> +module_platform_driver(nct6694_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:nct6694-rtc");
-> -- 
-> 2.34.1
-> 
+Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2024=E5=B9=B412=E6=
+=9C=8827=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8811:59=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+>
+> > +
+> > +struct __packed nct6694_can_event_channel {
+> > +     u8 err;
+> > +     u8 status;
+> > +     u8 tx_evt;
+> > +     u8 rx_evt;
+> > +     u8 rec;
+> > +     u8 tec;
+> > +     u8 reserved[2];
+> > +};
+> > +
+> > +struct __packed nct6694_can_event {
+> > +     struct nct6694_can_event_channel evt_ch[2];
+> > +};
+>
+> Remove this intermediate struct...
+>
+> > +struct __packed nct6694_can_frame {
+> > +     u8 tag;
+> > +     u8 flag;
+> > +     u8 reserved;
+> > +     u8 length;
+> > +     __le32 id;
+> > +     u8 data[64];
+> > +};
+> > +
+> > +union nct6694_can_tx {
+> > +     struct nct6694_can_frame frame;
+> > +     struct nct6694_can_setting setting;
+> > +};
+> > +
+> > +union nct6694_can_rx {
+> > +     struct nct6694_can_event event;
+>
+> ... and instead, dircectly declare the array here:
+>
+>         struct nct6694_can_event event[2];
+>
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Okay! Fix it in v5.
+
+> > +     struct nct6694_can_frame frame;
+> > +     struct nct6694_can_information info;
+> > +};
+> > +
+> > +struct nct6694_can_priv {
+> > +     struct can_priv can;    /* must be the first member */
+> > +     struct can_rx_offload offload;
+> > +     struct net_device *ndev;
+> > +     struct nct6694 *nct6694;
+> > +     struct mutex lock;
+> > +     struct sk_buff *tx_skb;
+> > +     struct workqueue_struct *wq;
+> > +     struct work_struct tx_work;
+> > +     union nct6694_can_tx *tx;
+> > +     union nct6694_can_rx *rx;
+> > +     unsigned char can_idx;
+> > +     bool tx_busy;
+>
+> tx_busy is only set when the network queue is stopped, right? Isn't it
+> possible to use netif_tx_queue_stopped() instead of tx_busy?
+>
+
+Yes, I'll make the modification in v5.
+
+> > +};
+> > +
+...
+> > +static void nct6694_can_handle_state_change(struct net_device *ndev,
+> > +                                         u8 status)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +     enum can_state new_state =3D priv->can.state;
+> > +     enum can_state rx_state, tx_state;
+> > +     struct can_berr_counter bec;
+> > +     struct can_frame *cf;
+> > +     struct sk_buff *skb;
+> > +
+> > +     nct6694_can_get_berr_counter(ndev, &bec);
+> > +     can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
+> > +
+> > +     if (status & NCT6694_CAN_EVT_STS_BUS_OFF)
+> > +             new_state =3D CAN_STATE_BUS_OFF;
+> > +     else if (status & NCT6694_CAN_EVT_STS_ERROR_PASSIVE)
+> > +             new_state =3D CAN_STATE_ERROR_PASSIVE;
+> > +     else if (status & NCT6694_CAN_EVT_STS_WARNING)
+> > +             new_state =3D CAN_STATE_ERROR_WARNING;
+
+The procedure for handling state changes is incorrect. I'll fix it in
+the next patch.
+(e.g.)
+switch (status) {
+case NCT6694_CAN_EVT_STS_BUS_OFF):
+    new_state =3D CAN_STATE_BUS_OFFF;
+    break;
+...
+}
+
+> > +
+> > +     /* state hasn't changed */
+> > +     if (new_state =3D=3D priv->can.state)
+> > +             return;
+> > +
+> > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > +
+> > +     tx_state =3D bec.txerr >=3D bec.rxerr ? new_state : 0;
+> > +     rx_state =3D bec.txerr <=3D bec.rxerr ? new_state : 0;
+> > +     can_change_state(ndev, cf, tx_state, rx_state);
+> > +
+> > +     if (new_state =3D=3D CAN_STATE_BUS_OFF) {
+> > +             can_bus_off(ndev);
+> > +     } else if (skb) {
+> > +             cf->can_id |=3D CAN_ERR_CNT;
+> > +             cf->data[6] =3D bec.txerr;
+> > +             cf->data[7] =3D bec.rxerr;
+> > +     }
+> > +
+> > +     nct6694_can_rx_offload(&priv->offload, skb);
+> > +}
+> > +
+> > +static void nct6694_handle_bus_err(struct net_device *ndev, u8 bus_err=
+)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +     struct can_frame *cf;
+> > +     struct sk_buff *skb;
+> > +
+> > +     if (bus_err =3D=3D NCT6694_CAN_EVT_ERR_NO_ERROR)
+> > +             return;
+> > +
+> > +     priv->can.can_stats.bus_error++;
+> > +
+> > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > +     if (skb)
+> > +             cf->can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
+> > +
+> > +     switch (bus_err) {
+> > +     case NCT6694_CAN_EVT_ERR_CRC_ERROR:
+> > +             netdev_dbg(ndev, "CRC error\n");
+> > +             ndev->stats.rx_errors++;
+> > +             if (skb)
+> > +                     cf->data[3] |=3D CAN_ERR_PROT_LOC_CRC_SEQ;
+> > +             break;
+> > +
+> > +     case NCT6694_CAN_EVT_ERR_STUFF_ERROR:
+> > +             netdev_dbg(ndev, "Stuff error\n");
+> > +             ndev->stats.rx_errors++;
+> > +             if (skb)
+> > +                     cf->data[2] |=3D CAN_ERR_PROT_STUFF;
+> > +             break;
+> > +
+> > +     case NCT6694_CAN_EVT_ERR_ACK_ERROR:
+> > +             netdev_dbg(ndev, "Ack error\n");
+> > +             ndev->stats.tx_errors++;
+> > +             if (skb) {
+> > +                     cf->can_id |=3D CAN_ERR_ACK;
+> > +                     cf->data[2] |=3D CAN_ERR_PROT_TX;
+> > +             }
+> > +             break;
+> > +
+> > +     case NCT6694_CAN_EVT_ERR_FORM_ERROR:
+> > +             netdev_dbg(ndev, "Form error\n");
+> > +             ndev->stats.rx_errors++;
+> > +             if (skb)
+> > +                     cf->data[2] |=3D CAN_ERR_PROT_FORM;
+> > +             break;
+> > +
+> > +     case NCT6694_CAN_EVT_ERR_BIT_ERROR:
+> > +             netdev_dbg(ndev, "Bit error\n");
+> > +             ndev->stats.tx_errors++;
+> > +             if (skb)
+> > +                     cf->data[2] |=3D CAN_ERR_PROT_TX | CAN_ERR_PROT_B=
+IT;
+> > +             break;
+> > +
+> > +     default:
+> > +             break;
+> > +     }
+>
+> Aren't you missing something here? You are populating a can frame but
+> you are returning without using it.
+>
+
+Sorry for forgetting to process rx offload function, I'll add
+nct6694_can_rx_offload() here in the v5.
+
+> > +}
+> > +
+...
+> > +static void nct6694_can_tx(struct net_device *ndev)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +     struct nct6694_can_frame *frame =3D &priv->tx->frame;
+> > +     struct net_device_stats *stats =3D &ndev->stats;
+> > +     struct sk_buff *skb =3D priv->tx_skb;
+> > +     struct canfd_frame *cfd;
+> > +     struct can_frame *cf;
+> > +     u32 txid;
+> > +     int err;
+> > +
+> > +     memset(frame, 0, sizeof(*frame));
+> > +
+> > +     if (priv->can_idx =3D=3D 0)
+> > +             frame->tag =3D NCT6694_CAN_FRAME_TAG_CAN0;
+> > +     else
+> > +             frame->tag =3D NCT6694_CAN_FRAME_TAG_CAN1;
+> > +
+> > +     if (can_is_canfd_skb(skb)) {
+> > +             cfd =3D (struct canfd_frame *)priv->tx_skb->data;
+> > +
+> > +             if (cfd->flags & CANFD_BRS)
+> > +                     frame->flag |=3D NCT6694_CAN_FRAME_FLAG_BRS;
+> > +
+> > +             if (cfd->can_id & CAN_EFF_FLAG) {
+> > +                     txid =3D cfd->can_id & CAN_EFF_MASK;
+> > +                     frame->flag |=3D NCT6694_CAN_FRAME_FLAG_EFF;
+> > +             } else {
+> > +                     txid =3D cfd->can_id & CAN_SFF_MASK;
+> > +             }
+> > +             frame->flag |=3D NCT6694_CAN_FRAME_FLAG_FD;
+> > +             frame->id =3D cpu_to_le32(txid);
+> > +             frame->length =3D cfd->len;
+> > +
+> > +             memcpy(frame->data, cfd->data, cfd->len);
+> > +     } else {
+> > +             cf =3D (struct can_frame *)priv->tx_skb->data;
+> > +
+> > +             if (cf->can_id & CAN_RTR_FLAG)
+> > +                     frame->flag |=3D NCT6694_CAN_FRAME_FLAG_RTR;
+> > +
+> > +             if (cf->can_id & CAN_EFF_FLAG) {
+> > +                     txid =3D cf->can_id & CAN_EFF_MASK;
+> > +                     frame->flag |=3D NCT6694_CAN_FRAME_FLAG_EFF;
+> > +             } else {
+> > +                     txid =3D cf->can_id & CAN_SFF_MASK;
+> > +             }
+> > +             frame->id =3D cpu_to_le32(txid);
+> > +             frame->length =3D cf->len;
+> > +
+> > +             memcpy(frame->data, cf->data, cf->len);
+>
+> Don't copy the payload if the frame is a remote frame.
+>
+
+Fix it in the v5.
+
+> > +             }
+>         ^^^^^^^^
+>
+> Bad indentation. Did you run script/checkpatch.pl before sending?
+>
+
+I already ran the script, but I'm not sure why it didn't report this error.
+I'll fix it in the next patch.
+
+> > +     err =3D nct6694_write_msg(priv->nct6694, NCT6694_CAN_MOD,
+> > +                             NCT6694_CAN_DELIVER(1),
+> > +                             sizeof(*frame),
+> > +                             frame);
+> > +     if (err) {
+> > +             netdev_err(ndev, "%s: Tx FIFO full!\n", __func__);
+> > +             can_free_echo_skb(ndev, 0, NULL);
+> > +             stats->tx_dropped++;
+> > +             stats->tx_errors++;
+> > +             netif_wake_queue(ndev);
+> > +     }
+> > +}
+> > +
+...
+> > +static int nct6694_can_set_mode(struct net_device *ndev, enum can_mode=
+ mode)
+> > +{
+> > +     switch (mode) {
+> > +     case CAN_MODE_START:
+> > +             nct6694_can_clean(ndev);
+> > +             nct6694_can_start(ndev);
+> > +             netif_wake_queue(ndev);
+> > +             break;
+>
+> Nitpick: here, directly return 0...
+>
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     return 0;
+>
+> ... and then remove that line.
+>
+
+Fix it in v5.
+
+> > +}
+> > +
+
+Best regards,
+Ming
 
