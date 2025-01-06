@@ -1,137 +1,225 @@
-Return-Path: <linux-rtc+bounces-2843-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2844-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EC31A02531
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jan 2025 13:21:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62AAFA02722
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jan 2025 14:51:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93B347A1D1E
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jan 2025 12:21:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 245523A2544
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jan 2025 13:51:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9711DDA17;
-	Mon,  6 Jan 2025 12:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 650A21DE3D6;
+	Mon,  6 Jan 2025 13:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZwMNEPa0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HONbxsFL"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881D81DB362;
-	Mon,  6 Jan 2025 12:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F06C1DE3AD;
+	Mon,  6 Jan 2025 13:51:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736166091; cv=none; b=ogW5MlwzZxipaTHSyaPJ2dHSnS0/K7xq6y0jkgjKKG6yikAJOdllBAKUgOClJqlwSAP/A+f5aQj6hMHEB6A7h+XwWWvI1ixOLdzkW95IlKo5VV8DCr0f+U+p50wjcR6LxU6sOznIT0DKBHwUTuvzsuiMCzQ5jPUJjXI+mMQKkoY=
+	t=1736171502; cv=none; b=uOZXOsZYC0PvR5Lyv1WVzAXnGvkooHBTWMlPxFBPXYygj902qvg5kfH9XiWywmzML1Bc72cTQeL06G/rYSZ5IOsNUQj9ZPCurS1UbLJk/ZEJaCFcb/r6Y5Lpm4j79CIKV3mUX190u1RSN7qHI+HrKBWfTUouyxltzujuwqw4BEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736166091; c=relaxed/simple;
-	bh=4E7mcN3x1OnhH9luhDmZGNISKS/71TLxvluP4MAlcQ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IAsRdE7oRslHVm73p7mvmcF5gxVyfLYJdGhWNG9Q1JVGaP8bEpUFflOs0Rj09b7wX9w+9pAwwKq5/h537156F7gyee+cxLKMBdPbJZRgXOg3vETnsIf4T4MW+2v7nUhg/Q04L9Q16mhk8ViDf+kWyAsuwLqDSG2hyCK/8BgPhww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZwMNEPa0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7EDC4CED2;
-	Mon,  6 Jan 2025 12:21:22 +0000 (UTC)
+	s=arc-20240116; t=1736171502; c=relaxed/simple;
+	bh=9cbt6uU2Bhth2rTU/9lUv7C/QAINveDuqpZQMALpw+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VrRoM64VB5T8qkE/lD8MrfJLWEe66cJQVF97lHrBfU3UNZZnsgGy8FaeM2tD/6fkGRylsY322lMH+wXVnaoF6oJa//+n2Pcx5gM4c4FvZ/82kOtQWtZove49o7Rb+plWpyPUuduBvdrfP2vnI8P9VdRjPWcGeVSoJPuS/h7zhZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HONbxsFL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A32C4CED2;
+	Mon,  6 Jan 2025 13:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736166091;
-	bh=4E7mcN3x1OnhH9luhDmZGNISKS/71TLxvluP4MAlcQ0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZwMNEPa0WxzIpMUyRCA1Nx0TRbiI3JlRuNAge/vnFqf50YQK0C5DHPNz1kh1iDdhb
-	 PI6Ku0gYKOXOhrPn23eBYBLPWYIrat+3TJCLyiRNX0cbnRal/lyQYDJAdmjtbhH0Id
-	 sVw7DXUrfwtxnwxJQ5B8K+JAh2NyImEll6f+I3SPgHQefNo1xQdwD9LxijcjrTNLIu
-	 Mz8eUvF2JRRJcBu4EDf6umEspeuwvMMmWwtQ88R7RuF9kPwZYh6y0m0rYuQKQSZ4u7
-	 qRrIJom16M4NRM+TQIJOLaP2v5ExrUDjeYK5kw9JD5OwxX0u+liVh+YMhPxJJw4K1F
-	 m9d5xZj3NewwA==
-Message-ID: <4e5bcdfa-069c-460d-8e43-8661883f5065@kernel.org>
-Date: Mon, 6 Jan 2025 13:21:19 +0100
+	s=k20201202; t=1736171501;
+	bh=9cbt6uU2Bhth2rTU/9lUv7C/QAINveDuqpZQMALpw+o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HONbxsFLg/rhfQfPY2XNAUUtkgHHd6FQY39p9qrZSghgbXCDIHpTLJqkq5R0q5BAW
+	 m+Hxrhb9F537eMYWWN/4KpfS9KF8exdp1aWF+rChMnol8B7QoLJpbk7gNIEM1QYVXg
+	 RLFp9LQpHC+a8nmb53XBLs0B36Nf1L4LFRmUAOzKVMW3CT8WYz61Lx8bRG7BGYjn8P
+	 cdMsqtUbkCtnN7coiCzRvsWIBB5Blhm9PduSo92v2M7dzkY9ei999anlNp+wvMCn/y
+	 AoB1Kk6NkT4NBvfQTnRAshYW1dbfaWVPDEjkTC8EKi45VjIdU4TJUA02FulbQztRgl
+	 XdulCvFxpTNvA==
+Date: Mon, 6 Jan 2025 13:51:35 +0000
+From: Simon Horman <horms@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v4 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <20250106135135.GN4068@kernel.org>
+References: <20241227095727.2401257-1-a0282524688@gmail.com>
+ <20241227095727.2401257-7-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/9] dt-bindings: input: mtk-pmic-keys: add MT6392 binding
- definition
-To: Val Packett <val@packett.cool>
-Cc: Fabien Parent <parent.f@gmail.com>, Rob Herring <robh@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>,
- Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
- Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Eddie Huang <eddie.huang@mediatek.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Yassine Oudjana <y.oudjana@protonmail.com>,
- Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org
-References: <20241226050205.30241-1-val@packett.cool>
- <20241226050205.30241-4-val@packett.cool>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241226050205.30241-4-val@packett.cool>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241227095727.2401257-7-a0282524688@gmail.com>
 
-On 26/12/2024 05:58, Val Packett wrote:
-> From: Fabien Parent <parent.f@gmail.com>
+On Fri, Dec 27, 2024 at 05:57:26PM +0800, Ming Yu wrote:
+> This driver supports Hardware monitor functionality for NCT6694 MFD
+> device based on USB interface.
 > 
-> Add the binding documentation of the mtk-pmic-keys for the MT6392 PMICs.
-> 
-> Signed-off-by: Fabien Parent <parent.f@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-I don't think this happened. The tag added here at v6 was never received.
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
 
-What's more, that's v6 or v7 or vN, so keep proper versioning and
-changelog, including lore links to the old patchset.
+...
 
-Best regards,
-Krzysztof
+> diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+
+...
+
+> +struct __packed nct6694_hwmon_alarm {
+> +	u8 smi_ctrl;
+> +	u8 reserved1[15];
+> +	struct {
+> +		u8 hl;
+> +		u8 ll;
+> +	} vin_limit[16];
+> +	struct {
+> +		u8 hyst;
+> +		s8 hl;
+> +	} tin_cfg[32];
+> +	__be16 fin_ll[10];
+> +	u8 reserved2[4];
+> +};
+
+...
+
+> +union nct6694_hwmon_rpt {
+> +	u8 vin;
+> +	struct {
+> +		u8 msb;
+> +		u8 lsb;
+> +	} tin;
+> +	__be16 fin;
+> +	u8 pwm;
+> +	u8 status;
+> +};
+> +
+> +union nct6694_hwmon_msg {
+> +	struct nct6694_hwmon_control hwmon_ctrl;
+> +	struct nct6694_hwmon_alarm hwmon_alarm;
+> +	struct nct6694_pwm_control pwm_ctrl;
+> +};
+> +
+> +struct nct6694_hwmon_data {
+> +	struct nct6694 *nct6694;
+> +	struct mutex lock;
+> +	struct nct6694_hwmon_control hwmon_en;
+> +	union nct6694_hwmon_rpt *rpt;
+> +	union nct6694_hwmon_msg *msg;
+> +};
+
+...
+
+> +static int nct6694_pwm_read(struct device *dev, u32 attr, int channel,
+> +			    long *val)
+> +{
+> +	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
+> +	unsigned char pwm_en;
+> +	int ret;
+> +
+> +	guard(mutex)(&data->lock);
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_enable:
+> +		pwm_en = data->hwmon_en.pwm_en[channel / 8];
+> +		*val = !!(pwm_en & BIT(channel % 8));
+> +
+> +		return 0;
+> +	case hwmon_pwm_input:
+> +		ret = nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
+> +				       NCT6694_PWM_IDX(channel),
+> +				       sizeof(data->rpt->fin),
+> +				       &data->rpt->fin);
+> +		if (ret)
+> +			return ret;
+> +
+> +		*val = data->rpt->fin;
+
+Hi Ming Yu,
+
+*val is host byte order, but fin is big endian.
+Elsewhere in this patch this seems to be handled using,
+which looks correct to me:
+
+		*val = be16_to_cpu(data->rpt->fin);
+
+Flagged by Sparse.
+
+> +
+> +		return 0;
+> +	case hwmon_pwm_freq:
+> +		*val = NCT6694_FREQ_FROM_REG(data->hwmon_en.pwm_freq[channel]);
+> +
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+
+...
+
+> +static int nct6694_fan_write(struct device *dev, u32 attr, int channel,
+> +			     long val)
+> +{
+> +	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	guard(mutex)(&data->lock);
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_enable:
+> +		if (val == 0)
+> +			data->hwmon_en.fin_en[channel / 8] &= ~BIT(channel % 8);
+> +		else if (val == 1)
+> +			data->hwmon_en.fin_en[channel / 8] |= BIT(channel % 8);
+> +		else
+> +			return -EINVAL;
+> +
+> +		return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD,
+> +					 NCT6694_HWMON_CONTROL,
+> +					 sizeof(data->msg->hwmon_ctrl),
+> +					 &data->hwmon_en);
+> +	case hwmon_fan_min:
+> +		ret = nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD,
+> +				       NCT6694_HWMON_ALARM,
+> +				       sizeof(data->msg->hwmon_alarm),
+> +				       &data->msg->hwmon_alarm);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = clamp_val(val, 1, 65535);
+> +		data->msg->hwmon_alarm.fin_ll[channel] = (u16)cpu_to_be16(val);
+
+cpu_to_be16() returns a 16bit big endian value.
+And, AFAIKT, the type of data->msg->hwmon_alarm.fin_ll[channel] is __be16.
+
+So the cast above seems both unnecessary and misleading.
+
+Also flagged by Sparse,
+
+> +
+> +		return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD,
+> +					 NCT6694_HWMON_ALARM,
+> +					 sizeof(data->msg->hwmon_alarm),
+> +					 &data->msg->hwmon_alarm);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+
+...
 
