@@ -1,185 +1,133 @@
-Return-Path: <linux-rtc+bounces-2853-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2855-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF8D4A077F7
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 14:44:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69003A07BFC
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 16:30:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 548011888470
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 13:44:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EB393A4562
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 15:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C767021B905;
-	Thu,  9 Jan 2025 13:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C684621D008;
+	Thu,  9 Jan 2025 15:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OTmkiHF7"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="RLVAkFfN"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE09218EB4;
-	Thu,  9 Jan 2025 13:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9101821CFE2
+	for <linux-rtc@vger.kernel.org>; Thu,  9 Jan 2025 15:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736430183; cv=none; b=gq1KswMkomIWmRWSinK9QB3uNy2iNw9p7IdcavvIEyRMg67FYaUoeUiokMKdzSCIfOga/yTa/scQ8bKtX0+A9ikIOL8lmyctVyylo09suIvP+io08V+viSzCRkXz5Xyq278/zRmVs8RnJyt8nGZMLcQuGqnu92b+rJ2+Cf2NZK8=
+	t=1736436608; cv=none; b=KTztuys6cG0H0f+M9+3K/ekOOHoRFVkMCFuuHOO8uUuHNcpkd5aYS5sHFwuUP6HStj3/K/mJK3v1ScplKGopuGD9UYaAXYA1LsZshV5vtNQbel0njIRnaPfo33im+hzwbOMlCrGbwleK7RwYMBPJooe7DMDnz9VOegVIa0ZnrN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736430183; c=relaxed/simple;
-	bh=JFYC6zdgps1GvGNzbNKeygbGZOosR+W3XQIINDfxbWo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Aj9GGr0X3T7lVHJjQ9HpnNuNfwEDn3Cs1xSMWnchW0TtyHWC7Rf/ezCKMR7jMs5f/KmvCcMjT9AbaD/IF/lnYgLTtTEzb82aoWH5XuwmYhcQ8b3rkE+WhQi5WzKJPn9tM2T0U743hPe1d4HXxEOxKiE23ZsPYYLMGoD3yDaz+9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OTmkiHF7; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E0448C0005;
-	Thu,  9 Jan 2025 13:42:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736430178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ptD9AvTYctt7SXIIS+M37918BnCnHCUacBd34xC0oFU=;
-	b=OTmkiHF7JWz6TISr9zfMIKkWWS7UxM6GMqkjtK/QehhbwjtFmTUwKan7GbLQd77bDV/hiH
-	tZjFzKBfPYyLcZoVVu8UeMyae7scRAlwuorPIVhJ1/4szLHsZF73Uj8Vcm/kpaoT/AacXf
-	3hPqkO4qa3cqimGi0k7V+1sDL8WWDDuTjYf1uKeCVPq/P1iW+9LLgS4JUpESST/Qkp9ENM
-	gPZj6NIl7Gd2lVfneJ4VpIwqQkzFEEn/Pj+b10ysGpyPOA65PAkIH3S3IudF+pDOLzX1YJ
-	xxCb8G3JK4/WqZNrJ8CaR2kIdx9klbxOy0iRR6quJMsHRG73TbIJEOBLPr1GzA==
-From: alexandre.belloni@bootlin.com
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: pcf2127: add BSM support
-Date: Thu,  9 Jan 2025 14:42:53 +0100
-Message-ID: <20250109134253.827796-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1736436608; c=relaxed/simple;
+	bh=pi3L0TZNyW+gb4rA9VnMXp8LC2gcMzm0O2i5QO+sp+g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Dgsjk1mAr/ojWX4ZMXnWFAwEEPfG0SbDhwtNvhX4kFRYsve4gKAWZk1upK85L3NpgwpeEhAjeRipPJhSeaTHMvC3CQjyB194hv+6256Lpy0C6LspNv8PDd5oiicEOY2SobBGxJT+oRQEjDGh+8scGm9h/YUZmyECYXJh+1Wkjws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=RLVAkFfN; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4361b6f9faeso7122895e9.1
+        for <linux-rtc@vger.kernel.org>; Thu, 09 Jan 2025 07:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1736436603; x=1737041403; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ui++7fz34GKZbY8fJxrOyiw8TD3D7+pRtsyH410bGL4=;
+        b=RLVAkFfNTPRzjdkxOTo+qrWrdrDHCpilcYK8MXahsZsrejw9eOSlx2OTSO4unDxg3c
+         wEhxrdf0JG16IO4jDnPwGPEbkG9et06wsVM8w5nAQCeKUBzA0XVMbV1jIzj7vInPVEWs
+         qGIriMDivxHRopU4f+hJSGTKSs0MQcKYpQATVgJHo4i1csWFXredb5RJZo/uSPh2v192
+         IbddFOluILEEfajeibna/fGXPUGaVVAIZURljNcIcv+JCI+qrf5jXvbnt3iKG3Mn/mVa
+         i10I6ypMsbvhzYXlp2f7H6UeKliyem7QhEFXeY0Ee+KwUbRNg2vZtlHIconzU9D0oEEc
+         Tpzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736436603; x=1737041403;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ui++7fz34GKZbY8fJxrOyiw8TD3D7+pRtsyH410bGL4=;
+        b=EunrMZKz3PAZMWbRUhnq4OJvt140xJeqga2JA2i1OmRDhn+Eq+AnBDbfx9OZIf7X1r
+         d0cSFl+esBKjTN2tyG1rCMw105Zz9x6GOf+n0pfe7EHUags36kau+rHv2bDZgVt1lq1Y
+         OsbpIUBzJoWHTH5EbBkd7Lp8lArIn+zYpPf5PRqwEX1+MK91DS1zQjF/wmcIMjkDcxMK
+         WfZ47YO8kw2K8OzAjFR8LICR3g0NlkV2vZx/bauY7ZYqqUbOhZc+Xrlpmu9rpefig6Nw
+         eYNv+QuWa3MOm9eaDFKyKBaxQrx60kUnbQ5YaCK0UH8MfiSdqz484IjkbrcOMZa5+8IJ
+         ANCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPPLQVQB8F6Cf20V/fI0IN/fylB/Ma2fiWWIEWCyVHFC76YakbAUNPZR2y/395H4YU9NUL6q0S1v4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxu3LaZ15jpyJOqz/fzHkwaZmbrE44MZqf869HWpECuUzuyAiak
+	jPUnKbmtAEVw6dvyKoIolqX4DEMp6lONoOKDD4oiBPPcrNlPCTIFltFqIQqfFuQ=
+X-Gm-Gg: ASbGnctp52d6bze916Ev/24FCZY51NbYPg5JuginKGUnWWmZZZjVDRcY6jwotuY7noA
+	riA+gnm8CQx318AbUzHcbcUCwnsH5tO1nr6w3swiNFO1bzJCX7OXkPieBb2lQevDB93Y77nEYeQ
+	ytpT83GgrBfwIIceluUpG6aPXL4YRHl9cAu+euPvatI7KND1mRN05JGe3dE/3mI7/kUQ+2EAJQU
+	axamEYGjSPAawzGiSyGhl5kDVXsEeJxNRWtDLnW/wOmK2gmT2xkvfBWM/w=
+X-Google-Smtp-Source: AGHT+IESEIosHxIgZW6pfGN37jB+1SZ6af3hY/XwSnu7UbwNBffzVz+YXNgg1d15dRMaOLI3zib2aw==
+X-Received: by 2002:a05:600c:4e43:b0:434:fddf:5c06 with SMTP id 5b1f17b1804b1-436e9d686f3mr23854545e9.1.1736436602912;
+        Thu, 09 Jan 2025 07:30:02 -0800 (PST)
+Received: from [127.0.1.1] ([2a01:e0a:5ee:79d0:125:358f:ea05:210e])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-436e2df3610sm58307805e9.20.2025.01.09.07.30.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2025 07:30:02 -0800 (PST)
+From: Alexandre Mergnat <amergnat@baylibre.com>
+Subject: [PATCH 0/2] Enable RTC for the MT6357
+Date: Thu, 09 Jan 2025 16:29:50 +0100
+Message-Id: <20250109-enable-rtc-v1-0-e8223bf55bb8@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAG7rf2cC/x2NQQqDMBAAvyJ77koSG6H9SvGwiZu6IGnZiAji3
+ 40eh2GYHQqrcIF3s4PyKkV+uYJ9NBAnyl9GGSuDM84ba17ImcLMqEvE4FJ6dp6SGz3UIFBhDEo
+ 5Tley9q3tUGN/ub9yku0efYbjOAEoLT/8eAAAAA==
+To: Eddie Huang <eddie.huang@mediatek.com>, 
+ Sean Wang <sean.wang@mediatek.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=606; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=pi3L0TZNyW+gb4rA9VnMXp8LC2gcMzm0O2i5QO+sp+g=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBnf+t5/shO0hxQN8k02k2mkITZ69XbCGjT/miBkOuz
+ GtM49VCJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZ3/reQAKCRArRkmdfjHURZp5D/
+ 0TaKWE8eyl/vEG7RaHLANL42Ymep1Hwe4a6NebC/W2NvNncoYaOY94DhnlFGHfg+2F7F2JJRVKxunq
+ P12s2mr8NtBdYMPGdC2vAjzQ36YhUFIAHY4Tnxji6aW3UNvLKyF84vy2AGJhkx6nMKCNd0RPGkJiWl
+ nqjkrKekSzCZwdDMS68tKAj+w2Y6YcUGV7LDuN0SdCmMMY8JWkseOOtYhAHqw0NcnYF6VayA886LoQ
+ Q+Gw+tsP2CaXVOL3tyfywmrolG9ufPcsA4mpZTZBKCYf+zgfDfzB4AZ1s5P3on8rZhz1hnlltPT2yN
+ NVcngc8oe9rEYaxXlFCx8vCwJYCh9OOBaCyd5b+H1ptFQZzbMS20MnAer0cF+F69x69cadrfqoTv01
+ i5JwxVO1kercx1a8A4DM18shkyhzUV01fOl+lpmCZ869cVnhNiQ5BBhifI6aq70CqCunidVO1CMQsu
+ sLlW1gKWZveod4lkQcy/449bn6mjzw+wgNhfjFc+8PqfcHJbqhd7NqskaQGEVClfPAxSELllcUp0vl
+ yiYiPqzZWKfybXWt3JkCAuaMhfxnSYPieu2Ib9IAV2BjhwIOWOOeZfEIMe8n6ta7/RIT5kPFBI7GWS
+ 6LG1rSv2KDsQ8b67cSa5b/5zd8NTVfJwu8nNyQ3EVVHGX01oRs9+yuWkPLhA==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+MT6357 PMIC's RTC use can use the MT6397 drivers with the MT6358 data.
+Also, since kernel 6.6, a regression has been observed. The changes
+responsible for the regression have been reverted.
 
-The pcf2127 encodes BSM, BLD and power fail detection in the same set of
-bits so it is necessary to do some calculation when changing BSM to keep
-the rest of the configuration as-is. However, when BSM is disabled, there
-is no configuration with BLD enabled so this will be lost when coming back
-to a mode with BSM enabled.
-
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- drivers/rtc/rtc-pcf2127.c | 81 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+Alexandre Mergnat (2):
+      rtc: mt6359: add mt6357 support
+      rtc: mt6359: fix year issue
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 9c04c4e1a49c..a7f73192d53d 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -48,6 +48,7 @@
- #define PCF2127_BIT_CTRL3_BLF			BIT(2)
- #define PCF2127_BIT_CTRL3_BF			BIT(3)
- #define PCF2127_BIT_CTRL3_BTSE			BIT(4)
-+#define PCF2127_CTRL3_PM			GENMASK(7, 5)
- /* Time and date registers */
- #define PCF2127_REG_TIME_BASE		0x03
- #define PCF2127_BIT_SC_OSF			BIT(7)
-@@ -331,6 +332,84 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	return 0;
- }
- 
-+static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	u32 value;
-+	int ret;
-+
-+	switch (param->param) {
-+	case RTC_PARAM_BACKUP_SWITCH_MODE:
-+		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+		if (ret < 0)
-+			return ret;
-+
-+		value = FIELD_GET(PCF2127_CTRL3_PM, value);
-+
-+		if (value < 0x3)
-+			param->uvalue = RTC_BSM_LEVEL;
-+		else if (value < 0x6)
-+			param->uvalue = RTC_BSM_DIRECT;
-+		else
-+			param->uvalue = RTC_BSM_DISABLED;
-+
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int pcf2127_param_set(struct device *dev, struct rtc_param *param)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	u8 mode = 0;
-+	u32 value;
-+	int ret;
-+
-+	switch (param->param) {
-+	case RTC_PARAM_BACKUP_SWITCH_MODE:
-+		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+		if (ret < 0)
-+			return ret;
-+
-+		value = FIELD_GET(PCF2127_CTRL3_PM, value);
-+
-+		if (value > 5)
-+			value -= 5;
-+		else if (value > 2)
-+			value -= 3;
-+
-+		switch (param->uvalue) {
-+		case RTC_BSM_LEVEL:
-+			break;
-+		case RTC_BSM_DIRECT:
-+			mode = 3;
-+			break;
-+		case RTC_BSM_DISABLED:
-+			if (value == 0)
-+				value = 1;
-+			mode = 5;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+
-+		return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+					  PCF2127_CTRL3_PM,
-+					  FIELD_PREP(PCF2127_CTRL3_PM, mode + value));
-+
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int pcf2127_rtc_ioctl(struct device *dev,
- 				unsigned int cmd, unsigned long arg)
- {
-@@ -741,6 +820,8 @@ static const struct rtc_class_ops pcf2127_rtc_ops = {
- 	.read_alarm       = pcf2127_rtc_read_alarm,
- 	.set_alarm        = pcf2127_rtc_set_alarm,
- 	.alarm_irq_enable = pcf2127_rtc_alarm_irq_enable,
-+	.param_get        = pcf2127_param_get,
-+	.param_set        = pcf2127_param_set,
- };
- 
- /* sysfs interface */
+ drivers/rtc/rtc-mt6397.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+---
+base-commit: 9d89551994a430b50c4fffcb1e617a057fa76e20
+change-id: 20250109-enable-rtc-b2ff435af2d5
+
+Best regards,
 -- 
-2.47.1
+Alexandre Mergnat <amergnat@baylibre.com>
 
 
