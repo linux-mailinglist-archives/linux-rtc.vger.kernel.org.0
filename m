@@ -1,64 +1,60 @@
-Return-Path: <linux-rtc+bounces-2857-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2858-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1897A07C54
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 16:47:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE629A07EC2
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 18:28:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6613162208
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 15:47:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD82E3A2250
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jan 2025 17:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46D34221DA3;
-	Thu,  9 Jan 2025 15:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D739218FC9F;
+	Thu,  9 Jan 2025 17:28:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jYyL7GkI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GA3oKBxz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2355421E088;
-	Thu,  9 Jan 2025 15:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A94194147
+	for <linux-rtc@vger.kernel.org>; Thu,  9 Jan 2025 17:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736437604; cv=none; b=hBCZpYSP97QS4BCGe8R7sgf6RH/7Q2aFTgXsFTbmGhF+MwTC+QK/SLq732qnuYtuySaNTv7pJXCERquBhtp90kcXND663rVcKuNbr9vBVyi5sQjGGhoSHNGM3b6tCorvw601bFVsa3sIEo42tmn0F8YvPqU4t24RI5dH6RjhIGo=
+	t=1736443683; cv=none; b=QkEBv18cdjE8Rgw3yDX2PXZldyww5qRs/QIU7Nc2e5s5eE4oVuGSwza/LdlEVuMaGTKuzkun7gfYEeA0y1KuN/+Vun4TDCWGoHu0X6QDAysymxS4kn/DQxiXgdZNSoWlyZy7Lp5Me2ttQncH2i1VZomzlqVgEIpX53y2V4RHgE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736437604; c=relaxed/simple;
-	bh=duog635ltKLC+mOlcEn76pG00nsiqiGmKvr4U1jb154=;
+	s=arc-20240116; t=1736443683; c=relaxed/simple;
+	bh=WRLccj4m47eAWrzeGFvMtkhV0q/l/rlUk0rIvXyDxx8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YdSzrlAzrZ7AeWN+B4/nwqvFvJqFZj0qwfZYNXktcIXWY/Lxcv+WCnx45TlV9ugHIqFjwO1jaUFfGYgwM/tUKpeDWcYY7tYNAk9weGuGkdO4M8TfzYS5vYpGG6yGQPlTT4JC92o48M3FXb7d46QkqkMAYZJ7+5kzcRqdA7DEZC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jYyL7GkI; arc=none smtp.client-ip=217.70.183.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=JnznZLFacakxv3przs8E0g3YLliNlTl1otQsdAO6NG37Z+01TO4Z3EsIiZ9cTnHqpPwlrFhW4kHpe8aPqH59cSkc2AmSJwHpygmRphvz0a15Fhfu+SX3DCcQ6IJXNYJA+R6d/I5c2Ul5Z7uDbAaP4BdDRiTvjxhb2KenowBv5aA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GA3oKBxz; arc=none smtp.client-ip=217.70.183.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A5D091BF206;
-	Thu,  9 Jan 2025 15:46:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51DC4C0007;
+	Thu,  9 Jan 2025 17:27:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736437599;
+	t=1736443678;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qcUXFptebfMrvGhDxe7112Zqb3/zYWm85RNBPbS8bvY=;
-	b=jYyL7GkIne9oYb8FfybPUDkwzY0fOSPguU5OcA0GaTE7DAglUSKrm2ReCMMqXhdhwrsVAy
-	KvktXwI+fOv6k6wxomXnn42zUPVNEgewwfXgQZlUbCAQ49Lbh88w3BQzvl8INX8Z51zEni
-	v7+njmfFUctYEwS4KY3e3nFSeUAO6JcJu/4csGT0dmGZtwW82+iVg5XOrxnPrIruCp1xGS
-	MZ58xCxKFtfkq3sWLgmrkIL1O0sBwGgdltStFiw7fIG1WSKGnT7Z3c3LS+bPnaIL3Hb0ym
-	Zy1U+tdEEzP8SGCd1/d3/AxOChMUB2QjtBAJwmGIL/HSOZvaLa9HAP62R6ykEA==
-Date: Thu, 9 Jan 2025 16:46:38 +0100
+	bh=9LnVr4bxrvtoXoEOBMXGA2ni36HYL7NPNwzBYEkZTL8=;
+	b=GA3oKBxzwyfIoCO1TYSsL+nmnU+grFvxGwgS92PmehDXAo1r9lDjO8QPJ1vlrNfVlhGzAb
+	tCuDyS6bAuSHgFeq5LrG4w1Hm10hipPyT0/OCwLSNODaLuzlfh12uPNfU+mhAf5V+jzldf
+	UOCGDgzquSxyI4uQF9GCA8VILc4zoKoxKy/jaiq4tZgM/gB2OqMI6bisNQdk2GIaYF2b/F
+	VN/EsOzUlzcEHALtbpEQ1K95VPKziU/B6k7pvlb3Diqz1jYk7+J/YtFAY2vqWqwUMtW8hW
+	00VFHHCeXeb1uAE77PpHBKpj/QcKR4qIO2V9mF213dz1aSBJLlNPk3NvoRFC0A==
+Date: Thu, 9 Jan 2025 18:27:57 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Alexandre Mergnat <amergnat@baylibre.com>
-Cc: Eddie Huang <eddie.huang@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>,
+To: Viresh Kumar <vireshk@kernel.org>,
+	Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] rtc: mt6359: fix year issue
-Message-ID: <202501091546387cff95fd@mail.local>
-References: <20250109-enable-rtc-v1-0-e8223bf55bb8@baylibre.com>
- <20250109-enable-rtc-v1-2-e8223bf55bb8@baylibre.com>
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: RTC_DRV_SPEAR should not default to y when
+ compile-testing
+Message-ID: <173644288927.1016566.1170628492518027690.b4-ty@bootlin.com>
+References: <7b8eefe3b0150101ba01c3ea55e45aa3134059ba.1733243007.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -67,80 +63,21 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250109-enable-rtc-v1-2-e8223bf55bb8@baylibre.com>
+In-Reply-To: <7b8eefe3b0150101ba01c3ea55e45aa3134059ba.1733243007.git.geert+renesas@glider.be>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 09/01/2025 16:29:52+0100, Alexandre Mergnat wrote:
-> Removing the RTC_MIN_YEAR_OFFSET addition and subtraction has
-> introduced a regression.
+On Tue, 03 Dec 2024 17:25:05 +0100, Geert Uytterhoeven wrote:
+> Merely enabling compile-testing should not enable additional
+> functionality.
 > 
-> ~# hwclock -r --verbose
-> hwclock from util-linux 2.37.4
-> System Time: 1262312013.143552
-> Trying to open: /dev/rtc0
-> Using the rtc interface to the clock.
-> Assuming hardware clock is kept in UTC time.
-> Waiting for clock tick...
-> hwclock: select() to /dev/rtc0 to wait for clock tick timed out
-> ...synchronization failed
-> 
-> Bring back the RTC_MIN_YEAR_OFFSET to fix the RTC.
 > 
 
-NAK, you'd have to investigate a bit more, I want to get rid of the
-RTC_MIN_YEAR_OFFSET insanity.
+Applied, thanks!
 
-> Fixes: 34bbdc12d04e ("rtc: mt6359: Add RTC hardware range and add support for start-year")
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->  drivers/rtc/rtc-mt6397.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-> index 55e75712edd4..9930b6bdb6ca 100644
-> --- a/drivers/rtc/rtc-mt6397.c
-> +++ b/drivers/rtc/rtc-mt6397.c
-> @@ -96,6 +96,12 @@ static int mtk_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  			goto exit;
->  	} while (sec < tm->tm_sec);
->  
-> +	/* HW register use 7 bits to store year data, minus
-> +	 * RTC_MIN_YEAR_OFFSET before write year data to register, and plus
-> +	 * RTC_MIN_YEAR_OFFSET back after read year from register
-> +	 */
-> +	tm->tm_year += RTC_MIN_YEAR_OFFSET;
-> +
->  	/* HW register start mon/wday from one, but tm_mon/tm_wday start from zero. */
->  	tm->tm_mon--;
->  	tm->tm_wday--;
-> @@ -110,6 +116,7 @@ static int mtk_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  	int ret;
->  	u16 data[RTC_OFFSET_COUNT];
->  
-> +	tm->tm_year -= RTC_MIN_YEAR_OFFSET;
->  	tm->tm_mon++;
->  	tm->tm_wday++;
->  
-> @@ -167,6 +174,7 @@ static int mtk_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
->  	tm->tm_mon = data[RTC_OFFSET_MTH] & RTC_AL_MTH_MASK;
->  	tm->tm_year = data[RTC_OFFSET_YEAR] & RTC_AL_YEA_MASK;
->  
-> +	tm->tm_year += RTC_MIN_YEAR_OFFSET;
->  	tm->tm_mon--;
->  
->  	return 0;
-> @@ -182,6 +190,7 @@ static int mtk_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
->  	int ret;
->  	u16 data[RTC_OFFSET_COUNT];
->  
-> +	tm->tm_year -= RTC_MIN_YEAR_OFFSET;
->  	tm->tm_mon++;
->  
->  	mutex_lock(&rtc->lock);
-> 
-> -- 
-> 2.25.1
-> 
+[1/1] rtc: RTC_DRV_SPEAR should not default to y when compile-testing
+      https://git.kernel.org/abelloni/c/7158c61afdcf
+
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
