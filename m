@@ -1,61 +1,61 @@
-Return-Path: <linux-rtc+bounces-2866-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2867-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10716A0883C
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Jan 2025 07:18:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B356BA0883D
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Jan 2025 07:18:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAF9D3AA3A2
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Jan 2025 06:16:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C2713AB210
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Jan 2025 06:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8053E208983;
-	Fri, 10 Jan 2025 06:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1AC209F26;
+	Fri, 10 Jan 2025 06:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="mPV1wWcg"
+	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="FKC2rPmH"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2083.outbound.protection.outlook.com [40.107.105.83])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2076.outbound.protection.outlook.com [40.107.105.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFB42063ED;
-	Fri, 10 Jan 2025 06:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B641209679;
+	Fri, 10 Jan 2025 06:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736489722; cv=fail; b=OFOmjvLs2x2j4TdoVFJyX2ImoM9nSgEpNiE+TqdcJOhOozd83WSJlvVmd0s2ianV79+ex+YkN1rhec5EgCcuBYw/J85fXGP/UhQM3tH0XPnef2sdVzTNatHRPTKT1BXwNBbG5heB0hrbzSMa81hsuxr4+5gpB+HdABvUrYDDMyg=
+	t=1736489729; cv=fail; b=hHnzRkcaGqCucuVowuJ3OGTdRsepw1tFb3G9kux36zbf2Ej9tNOkeZ602G02EJX4pYeOp9AuB7IoDyMBtrpDVaFRUGfoEQPIR79hUaIwI3Gz8WwF0eOMPrKBISgBHX4/rmW8LPMg3k6RuqEfyG/Lw7CPV0ZHlEvwjNFCnvrCm7M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736489722; c=relaxed/simple;
-	bh=PIlGMSr+hB3fJvkHklHlCRcKNbg/7/vdkCH98qZR6wQ=;
+	s=arc-20240116; t=1736489729; c=relaxed/simple;
+	bh=4YppXkRpntjW4JMKuXrhjQZu2fW+g0VoGsw1fmzaiNk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OjkaU5XGA/pUdoDP7J+D1l2CRc0sF7IqhUmXGYD0sOI2K1oFCPGSWAu683ZOgNbXm86Rupykf1P46OVUjN0RTCHo1FioRt/KbsFD111fThzXw83I448otHJWlDPSMA/G2IiNUOncAy2L9174gnlq4B6VHqE5MFBb/iPoptoRPP0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=pass smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=mPV1wWcg; arc=fail smtp.client-ip=40.107.105.83
+	 Content-Type:MIME-Version; b=CDS40F1Ve5BQtL+LNl+cq4wPSU97pIU4o71R9Jww36fT4LZEdeA2SXWEPIO5cvx5iaLABFx9kx/NPdP0RwzeuahvGFIc0hmj3Sdsd4fxK8r0MfPcavCMUzcKRXW/VjDS5YXhCLZFO3BFU1ujvGlbb4qHkM9dgcdv/N9Ko6p799o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=pass smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=FKC2rPmH; arc=fail smtp.client-ip=40.107.105.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ytuxOAaPi0ovigMTVi8x+R5vKCPus0nX/MCgZ7UuQ6EM2BB68G41Ca3nYgk9YB9mkVayil2nEPm27YZ1HoSIPnOxfCJlaZ7YHxHp50EK9yXWpIiwqtOUCs7opXKeXktcAvB0fbO/LiRxtq3ymTZWWMo/jq9g6lhoyNWD+gcwWOTFCFFX+fhI5zExsjjUaaBI08t5gtt9C11vF+ySNzzc0nxH9Ra64Ddop2vkTmraL4u6dJm+bXzU+1K1P9Tx57+1wz2yXioMPi8fn9bZBV9pH8suX2GxNk3c4Amszl24wkkWG2fRotmZFmrqzrwspkC8qxKCTWuiJ+5cxH9Z2PjJcg==
+ b=nL7a/a6JTbu5g3hRFD8UP/jVSREj2BpUUWmJ0xdZmemAHcGPLJq2pvKrbS9DEO25mPqbOpIxJCif94EnnzpdwEF9JmsKItOnHzvEWopFJLQM7A5NEn7ZB4SY95i6PN6Jorxn2S8ZeMxXFobb9M2B5q1nU1WrfOqkugOlzZgGvzlYt9QRKyi6LS9GZJoQNEL2otsfCq/7AY+KrWilkzWw+LC9j80mFtXuq5BjhYKPWxpdZe4INkpisEBBHpOTmTdQSFPznOvaLl4x/5NNNSHHhVw53rZBqG8IuKNUVmodbFeDBV9Ie6YG5FRK26CvdAAGD16SKMZ99XEerjb022gRgw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TMxXhYba6ChG6oij5zrh0g/M7iYOxFM8s1C2Eiztkso=;
- b=dJzxAK1OXtTODDOYC9IJtW35mGwW9pA0TYoIQ3x51bhnM4WrNnlc0AU2/3qLOH/MfdWjynma9Sem9uRuZfIEyuxgVjpmQ6mb601P8IPbOq+hepc1R8oGvOJFBQpG/AWiYGsRJFq0WJS9FYDOOunKfTrYQCjPz8GKGoRvJ3+gnLUxQyNpV1dOfFVpuGA9+9ibWbCModki7+OluELumZbYC2nGLxFanJCppjBfxx35IiD6MuGSK2oWuGmODytHIPZu1Ob89v2FNQ+AmeABZGsyrguFNUgg27+f2/HF0pyZYazehFh/KQowdaxOWR5qSgoxN8YYGkGPqion46FGChgVkg==
+ bh=QtPRXhrh9ZkdqmHGA9gf8siy0eikgrGnI2MefmBXuhs=;
+ b=j/tJAiMDb4LX0e+f3fcEARoZ+6N3aSlRb1djZNl5V8E20sISRx2PsZaAaOTqXuLouomE3/CESi3Pi/FzFg5Sm82CFjmPQVXMIVGEhikwvvNYYXR5FEacgwmzHFIW03EwrcBug6XnLIwkMl5jwuYUNdKzwY7PpL7NGTShiUSEL6zKiOUAg8flabp5twBXEIQHWy3seek2XRIf/S+ON27ecjCVia/d0koDTcWMI/1m5VU5VjSCRL6B4M94d/mnPcQ2DqShbuIIxgSdgHIFA4a3Emvu2PXC9S+HR60/b2mxN27AsjjIIkHqm5zVnr+MM3zUl8i3siYRgZQ6pfn9VzJg9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
  header.d=mt.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TMxXhYba6ChG6oij5zrh0g/M7iYOxFM8s1C2Eiztkso=;
- b=mPV1wWcglUsXF+DKjlVxsF/yLi2pPEUTSzP0U8VdHReGiLVbI+ywTr0K/rQgzzfnsFm0GzueD7c4I3/VRG2Wkt8UbcHLIHXbhlOckoY8pQlj9M7N+uROvbZugJSRw6KhNfZ0THHckCImtlOOutD6DHiAs6im5yBp9eNScmYN5iHHWOoyrnEnuW7U9xWG3Y2u1qNEomdNGVliTs6nItGBuJwwhIDZCaHf35Ngv66D7x1sI0cYxsquQuUe5T4uXUGRI0YyGGQsomF0XuoUktaBoGjwqcahndducikCPrSUls888kxBJeXnoub0QRBv8/2Djf+9YhDmGvu9ro8xJ/0CaA==
+ bh=QtPRXhrh9ZkdqmHGA9gf8siy0eikgrGnI2MefmBXuhs=;
+ b=FKC2rPmHCYPEJEBLfBFG0DjeMtmPuduQDTn4xOW/wdky8g6Jan4tZttODvDp+uuBlvxyVV105N2CKnREhRzvh07bSV+liu7lzgY3vQX4TrUKbjjcPJw0UcgoIG8SMEVGfyzqzxua7BAX5BV/ZulsA4T9CVQDYda7c7ETcTN8eUNitMw7y3RSXbGOQr5morXfW3+Gg9zZrHmI2jnYibfaCVFn1tE4d7alMAmvUsGI5NmUWa5l60kbXA5K9fesK+trocPAhGIJsoZ/19VmkL+Ed12+oyVDD7ASr/Y4Vbos3VnPzkaZz2NlJjYPlyGVNydz+At8JjhVUtdHXckNgJay+Q==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=mt.com;
 Received: from DBBPR03MB5399.eurprd03.prod.outlook.com (2603:10a6:10:f5::22)
  by AS8PR03MB6776.eurprd03.prod.outlook.com (2603:10a6:20b:29c::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.13; Fri, 10 Jan
- 2025 06:15:14 +0000
+ 2025 06:15:25 +0000
 Received: from DBBPR03MB5399.eurprd03.prod.outlook.com
  ([fe80::2fec:64f5:1893:f53a]) by DBBPR03MB5399.eurprd03.prod.outlook.com
  ([fe80::2fec:64f5:1893:f53a%3]) with mapi id 15.20.8335.011; Fri, 10 Jan 2025
- 06:15:14 +0000
+ 06:15:25 +0000
 From: Markus Burri <markus.burri@mt.com>
 To: linux-kernel@vger.kernel.org
 Cc: Markus Burri <markus.burri@mt.com>,
@@ -67,16 +67,16 @@ Cc: Markus Burri <markus.burri@mt.com>,
 	linux-rtc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Manuel Traut <manuel.traut@mt.com>
-Subject: [PATCH v1 6/7] rtc-rv8803: make tamper function configurable via sysfs
-Date: Fri, 10 Jan 2025 07:14:00 +0100
-Message-Id: <20250110061401.358371-7-markus.burri@mt.com>
+Subject: [PATCH v1 7/7] rtc-rv8803: extend sysfs to read ts-event and buffer status
+Date: Fri, 10 Jan 2025 07:14:01 +0100
+Message-Id: <20250110061401.358371-8-markus.burri@mt.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250110061401.358371-1-markus.burri@mt.com>
 References: <20250110061401.358371-1-markus.burri@mt.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: ZR2P278CA0020.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:46::6) To DBBPR03MB5399.eurprd03.prod.outlook.com
+X-ClientProxiedBy: ZR0P278CA0211.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:6a::24) To DBBPR03MB5399.eurprd03.prod.outlook.com
  (2603:10a6:10:f5::22)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -86,382 +86,185 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DBBPR03MB5399:EE_|AS8PR03MB6776:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9186c7a6-475b-4e0d-e88f-08dd313e25b8
+X-MS-Office365-Filtering-Correlation-Id: cc9078ba-0e65-4a3b-4ef7-08dd313e2bf6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|52116014|1800799024|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?5luGVM8Wr3bxu+/APRaTOFlT0g0aXgEzq8X9t8KlOBPikFZlCUhJAdTY7wIO?=
- =?us-ascii?Q?BJQSBKd+wynB022WYt3zj0NsfDL/vYf29gMS5lLZR52JMW7Ed4JNl4AuYemW?=
- =?us-ascii?Q?5o+4B1saVHqKvBmp36O04DXc3b6EZHgO5ML0zI0KeUnRdEP3nJzcbqgxZZ87?=
- =?us-ascii?Q?v9IAv8lpdKmzyb/J8mKi/+OSpDQRWAWiFKBUtiK4nqU1hui71EWUTiQ0raYn?=
- =?us-ascii?Q?pnEruonzB5QnPw55aqM0MxIk/dw35rv9utUa4idMzWt6RkNugLYrpJU1+tAO?=
- =?us-ascii?Q?Wa/JUq2guNzBzKPMSadIxf0gir1fj5X4YkEwNqsZ7PH237bPA4Ohzg0K6yMr?=
- =?us-ascii?Q?Y109gSlNeXvtB+wU9pRojHPDT/gZzCLLjt+KY6JrgT5ZmvwEGDOKjyUklKN5?=
- =?us-ascii?Q?jqE10BPI0wAr/9X/N1/Bafwh/VZ5sYhrCciQ4vn5Q+wnT/zDl2R8dN5FDZHx?=
- =?us-ascii?Q?HkHitrbMFfOuZDWDaeJ6NlmvggBgh5w/DwqJh92vfDH/Jtx9UhYk1Y0rJhBE?=
- =?us-ascii?Q?b/WD6Dl3DYIh4k9b3kOLMpgXzQw+UStCFlzqCDPzsyl87vdNEgOQcOHTJyjA?=
- =?us-ascii?Q?DhmRcrOA3KWZF/qqTO1adWT+rkyARUXPNBqtTTZJTqVefPEz9XEA78COpbtq?=
- =?us-ascii?Q?h1Hm6a3MWuItbB33orH83KoEXzV5iidE9ZoOp2yOqceuW9MFtdhqQEeXFMrV?=
- =?us-ascii?Q?XkUOOwhFXhHn/MOQhOMhdJ5G1ayXy65s0KMngEbSwVEuMW0rqtUlCrCTCIUS?=
- =?us-ascii?Q?FJWJi5mIOOUMVAWItkiEKewM3cCkJKyQiS2yK7nYXda24lNEnh/c5TXpqwCp?=
- =?us-ascii?Q?AaI4JzU8YCnk2CWn97KImS2BffESP0//qYiDcu5CvHiw7eGLRw1tkm2ZmW71?=
- =?us-ascii?Q?dm85y8+/UAv6JGwJGWNAAu8svifL+quWSApg2woxkC2BcXoPa6r9ccvmJKNC?=
- =?us-ascii?Q?UkxXPwgEo7YDSZHSSLHUDOtLOb9bfKVF8wJ9YEkQIX2MY7TDxZz/7GqXWDVw?=
- =?us-ascii?Q?IMologvOZkX920wy4mpp6ItVDbSaNBiG7eNGkvAGz7Kbw2GDhVWYByIMJ9Cp?=
- =?us-ascii?Q?tExN++oyz8REgg49lF2WQISwNMedyE4NFgtkLR8KGZHIiqVaN605bk34dtaE?=
- =?us-ascii?Q?HV3ltaEbY4pbbrLscSAzAVMwkrsKwPk9IXhoAzIMCJrTtGy/onjCkAzJ52b7?=
- =?us-ascii?Q?7wBsC2B2HuVA/agDD+3s0NwDMHTCVcaJJQ2G7TAimfl9kEt59bassK+xn1JA?=
- =?us-ascii?Q?3H1KSb5gMYA+DLHWrE6ysscTlAo5TjBXurdcgoYKupqlA1QdMfdc7iCA+3aR?=
- =?us-ascii?Q?WNjnU4ORf4LRmAGIettkxTmAxeNdZf2NxXNNMiUtlcF/S4iBSQ5Sia4NQdNY?=
- =?us-ascii?Q?xbyn/0yziSEv02wl42VdMx2qf3RcOkgv9r+nnMh7EljZAfaLdXAL/QDCGhPC?=
- =?us-ascii?Q?AlbFkkT9cN3yYFffchDjNgw3jC3+9aH1?=
+	=?us-ascii?Q?h8owUpSy8xI8uDrxIOYS9ne0jkj9/Jfm6eWlzuqPVXmM6DAL+Gls7c47jLgf?=
+ =?us-ascii?Q?Zsf7zbYewsiA0iOA5/1I80t/R/Zgf0xCiFtSb9k+GS62jd+4AVwGtE+Po9Ks?=
+ =?us-ascii?Q?RYWpqMfmea6eatNUVMHIxC57mqP0cweJpGi3f/J6cHcGE+sZN4Tkf7rnwc2x?=
+ =?us-ascii?Q?5c/WQvrRB9zZ9ZRRfbZouMMMZLN9RzmEcQDDzMdFhV6xWVJgmOs5um2GF7w6?=
+ =?us-ascii?Q?PM1+MzJ7fjP23gZvhISOKvmbG4sLmD7U2D+KqOghXMgn999y1+oEIzTMqaFA?=
+ =?us-ascii?Q?5szrdbT7HCzVXrzmemEJnAvWP19aVehu4S6riD53VDsUp1bd/IYzQCcO5xaM?=
+ =?us-ascii?Q?zn9X9MtNmj09OHNDZbSDRdM8AINlB5aiqcGIEIALThZeu6/KImpgHpkHHr0j?=
+ =?us-ascii?Q?r8UQFZw9Rqfmj2ciq/uzMR1CWqwFyhgT9mX/GYG7Ghc5j9zXTMk7S50ptqQJ?=
+ =?us-ascii?Q?soDb5/EtcEM9kIn21iU8aresiT0iEmKXd/Rvs9z6X/2XLzh3KSDpGWiBB5BM?=
+ =?us-ascii?Q?tY+DjygZW5+1Q2p2OlBl0K2jxpJTeB7R28Gz4Ixgj09xOPMMjioyXG6IPHgq?=
+ =?us-ascii?Q?nvYp50KopwEUa2E8iRHPsiIKXym16ihP2SJXNvcfsTTi/RxtYMr7TmpURtDk?=
+ =?us-ascii?Q?rOrFZpwz3Jhtu7Z1FkjkGER9eNkIo2e9lFJcECR8EMXTp/y2s3ZevoLUQOEb?=
+ =?us-ascii?Q?U1+T4ImCM6n3MGumitS4F8rgjItM/+2QJOUMOkKzW1DmzUddNDyXChSnqdkM?=
+ =?us-ascii?Q?BmEqHZWcJTiFgW3//pfki99cEeA597Y7xXAdBSAc81BnlC5dbLkXOqJAZFGy?=
+ =?us-ascii?Q?5u7Iby74dJIr54yDcW/ibpPUFl3dj5Hb8XJMvCpN8Tztb1V9mQ4lZXR/L8tz?=
+ =?us-ascii?Q?WD/p3z6XE8BnXgF+fDHRU63HHmEu6sjG5uj3AcWd9Spd4IOHlxGQFeV8LFhl?=
+ =?us-ascii?Q?JRoYwgI4Me7GKk/xR9pASc/6uN+e3zWNA/zR6DlGkfBfjOwFTFCif/LY3lq4?=
+ =?us-ascii?Q?QtV5QUHetaEFtYGN0J9/iT3wxCzmOosbWMtqNX5WEp9hcYXSTbZQmKeMEr33?=
+ =?us-ascii?Q?qJLMHvieQKcW+/kEbd62wZctJTZbgcAxVgRiho2K6T6RwYAziDuqYXdCj1iP?=
+ =?us-ascii?Q?jN7syMfh9yZ+JYy+xwDbeC+B1yUrZGcxQqzMLL4K6bWZAvT2ektui83Yupgi?=
+ =?us-ascii?Q?dvHl2lwcAEVDztQO/kFsKDVisXhg1vzmUHA2u3ohf2wbMnpfNXj2rhyhLiwt?=
+ =?us-ascii?Q?KOoVvM95PFNNRxNWI8UqO9gPcCsc7TtC+hatW6Pmb1LBd9FapMUVzkQFSrRr?=
+ =?us-ascii?Q?Mv/SxRO9X/emozyeVOoY486PKvs/kOjFmdfKQeKJ2NtdEHD0ojsuC5qAEdyp?=
+ =?us-ascii?Q?rLDZjduq3JihuvdthGca0DfgYvGcUjmWWBXT/2cr6WawoxKhW3kUq2WG1y64?=
+ =?us-ascii?Q?Eku/A+S/c7h8T008Z6NLZzb2c/wc1BgW?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR03MB5399.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?lOjTpy3UzlfFvyzYlgeirR7RwIvEEJNeK0/fA6OICqh8FTDPIw8eVym0+jME?=
- =?us-ascii?Q?3a2VKIWjZxBX5auOh+wG45jP+mDsasJxBHxOY7iGq1IcO4UnqCTUOShPiyg5?=
- =?us-ascii?Q?Qe2c0kvVoJpS7eQIXpIT+zNq+//1StB+HQvrk/ftk90jFCyLP6TMLcazz+0R?=
- =?us-ascii?Q?k6muV7U8BXDCjzklfbG4Vf+Qo5aF+kKb808cfDxizR1eboDUu3T+KENx9Bya?=
- =?us-ascii?Q?HwicK9KoRhLbB7DtDhbAx6smVKfDkLjh5OAJ9QHC2X1t72YRT8dG9gpNYPsZ?=
- =?us-ascii?Q?fF0713k/lq/X5t5qIXQXBf33QqO5OAglyy12H9GoURoSXlaMOR1T9/0zUxOd?=
- =?us-ascii?Q?Hlw7UtAeYobG+16IgERERJ4nKBq6N8dxQJnVUU5r8ncdleAu//9VT/LgMYTt?=
- =?us-ascii?Q?pVCcPWB9h2XPRf7dJe8AJJ6eFCo+Raf13jq2iqR7IMcSGPimygRZARlL4rli?=
- =?us-ascii?Q?Gx/rOUxVqdfP5wYC8rGgCCKSRBfvAZRuEyVdOMeve5EcCk49jGD4N0BoI4Ho?=
- =?us-ascii?Q?07osahZcwBOqlatPJJHm71QEnh0m58nV0x4Dov/fNLkP29Y0oPucBlbkPavX?=
- =?us-ascii?Q?xoI9W1ZNVhUtBXbny+HgNQuZBU6iJ+hWK7GvmQsKG+79zTZzrXFw5Gv70tUx?=
- =?us-ascii?Q?7FG/FS8wD9eWYdIsc009YVGL4mOxsfsrPWemMxFBxkCiaqbpwVdobvtpi3xv?=
- =?us-ascii?Q?xePILLVaHfZKDWYDiQzc17K/ZVJzvP9mAd1WsiqfyUrXpoWIa9k6PrPs4Cor?=
- =?us-ascii?Q?wvxET9kjIIuEGqBnzzco4viQkQqlVncWMxy3eCKfjKQX83aqqWNZeDBYdDSy?=
- =?us-ascii?Q?HFb6iUtu3M4RC50aCWefmb49qTaphVZHGxN/hjBE6vFmJfMkqIOYYqCkLrqg?=
- =?us-ascii?Q?ROXNOLDejGmOwefwsXk6GWckfii+1aY6s5EJZgQQvjTeCdoHOe/8GH097qI4?=
- =?us-ascii?Q?QKYoECeu1an8oa+FSo5B7vNKt6CJbILs/TjB1K0OqNR+wrr8hKO1zRT6a0vQ?=
- =?us-ascii?Q?Mfnkgqh8P9MV6hA4wkY5ThxWz+lUW3sKN3Pon+Z0E52Rry16ot72/2Dxr6/z?=
- =?us-ascii?Q?unFI4J0l4EBtE4LOW3b3HGcJEPBiYhhnitByI2s2lon2DLQcetMzRG2vbXRz?=
- =?us-ascii?Q?yN3gRHftVsBZia6TXTTeETECj5xMqVS5PzIBZgJZdM4SaOGCJFPLp9CO51Zl?=
- =?us-ascii?Q?8lWUL4Ya2hw1oghd6NR7YtP4B6syFk7UlXTxkiA3dj1dgxuOVqHVw/8jvvin?=
- =?us-ascii?Q?+Cx7f1V1xKS1RciqmezRdOZVncYF1YNOnDkoyAxwvAn+A3FXMccL7Khsh7g6?=
- =?us-ascii?Q?tQv+RlOTB84yJpgtCxNXm1Sjap8oJSWSm+oTLikoMn6czfHO+lrq98KD7HKO?=
- =?us-ascii?Q?QXBfEF8MhJCY1UmdSnWA3WXUp6U9RLZEuSRlAkOls8ur0rF0v4QRaB/GAYRt?=
- =?us-ascii?Q?H6qjZ+1SfgxsXbM5jRKKq2g/ai2b9v6gyK8RbYYXljud8yR4lrCGBK3wLjNY?=
- =?us-ascii?Q?JDXhhaBTOTwg+gEhSmDEO2OAfOExcXUvJlUESDGmZMBhfBrd3iEmrlJ0WNnQ?=
- =?us-ascii?Q?xSTs3WyUYOOJjp73C356e0kbLatW6iDm9I0G6bhk?=
+	=?us-ascii?Q?tg4gRHa/ykxOohn94Qcq1n0PgaWQDktyJfcCEDefHYEnaN3Lbs/3heyQ1z67?=
+ =?us-ascii?Q?jt6CuMMAbAVGPgLdkISRaMCq5zqUrPsH49CkTag4fC3NnmwU1fWseGfyIGkf?=
+ =?us-ascii?Q?ol1JgIIOpIdFKjql2X+6oo9xg8bAI8h4vCzhv1e/Kbb6PY+VymwZfcBNt6ZK?=
+ =?us-ascii?Q?USpG3ZOnW17pl2VYySuGGo9wjeE96fk+Ihp90McYqsxAFTjbxDr0Z/Ve7n5S?=
+ =?us-ascii?Q?eehE1sb3SjF6x1BHHk1fNBn0U3cpp7B2ALRNvUM1tX1nFK2Snu84mnnCQJiH?=
+ =?us-ascii?Q?i9VRj5T+7BjVSlg2e4WnFc56aTfBGwPn+OOWZKwA/nPE6ttet2VneLZXCCOy?=
+ =?us-ascii?Q?sGdlawf6DqMs3DWCCDzyOpaJTkTiAHW1AzmraL6EdkpuFYqiTCu1J3YZoYee?=
+ =?us-ascii?Q?NOgf7GVlur/vNxlLJ3f2rEfil9lWGe7cKy4fW8vnGLrNIQZEWCSfcGXbBhov?=
+ =?us-ascii?Q?NdVXv0Ax0p6Edp2NBX50ZpqaA2e1nnGFByHIVpZVbP4qHwzvehC0zg45drrq?=
+ =?us-ascii?Q?BSeyStfXCAaSvj2pogX7T5dM01OE2XvqW1D7DA+Nn5r+FPnQUPRJ7ICCsiCm?=
+ =?us-ascii?Q?QakoM4yizcST+nn1svWHXBV/4XOVt3WNa5JS5/EcJR+47bjiMtCcdSUixeyf?=
+ =?us-ascii?Q?ZgBrVZZACX3b/VbGeZ+OphBa2tGs3tCtnqvXnJS+gVZpHEiybEZrX5bHHoyb?=
+ =?us-ascii?Q?kTAv7Gcs0tkzs2jWytExMevhSnAghWUrqGlF0F2YCI3DatDRG0k97tsKTXCN?=
+ =?us-ascii?Q?yhpfcgxUxewhZxjppy8+Yq01Jve+1SYsd7Bk7YBqf6pxVnaTAP06B2I/elOB?=
+ =?us-ascii?Q?sThDKMFzCD68OcardseHtSvjgMraJxerN5FQdHmmdutZsXf5K/RU9nKwnQY5?=
+ =?us-ascii?Q?m8haO8alLenoatRgkJpXFE5uWGJir+M/7882zrw2hyTQUrvZERotrQbNteyt?=
+ =?us-ascii?Q?sSSQGAaXYH/U09RrndKF23UPzXtxNqgmYPtUB1PXxFwxlNgUOQtsk/bwfHMP?=
+ =?us-ascii?Q?ssdonTPyQUrwNH0GkGKgULt1jOeRWHJoMhFmfVK8kRe2hCfzn+HUwRR2f0VR?=
+ =?us-ascii?Q?UnzZRUcJGVSlEYgOaBePXrnua2c3UmCNV10aXGwItOYKMT8eefCWPF0ekyUG?=
+ =?us-ascii?Q?0Ls+p8DJucN9uBSrxwGEF8VtC7raBbpKBtpJGzQvyeZ5hjjQJbIQVHh/TSGp?=
+ =?us-ascii?Q?tgR7QOuvA10cO73v8WqPwJvSgrDRBztYekhpOIIn3zp5FW9AA1SDfS0EpxaR?=
+ =?us-ascii?Q?z0rM/81oJ52R8a+B4EbxdbOnjI8b5A+cFuDpX+iCQsnaTGaSMUrXol+QCSO8?=
+ =?us-ascii?Q?TkmeUDyndt5WxqZ1DpKr94qJrUWCWKPtmJ1+IuEJnG7rDJKk+Py2Fvz94SCn?=
+ =?us-ascii?Q?Qa/TyoifojNoR6jgy94xu4/137GoNUI2gR7kN8rDbCVRmDaZpFnG5bPX9Lqc?=
+ =?us-ascii?Q?RXklqCZ+prcsV8bt2Wy3TLfozP3HxHXmv2v23Y1jrdCKh1QIG7/YvI0+D9Mh?=
+ =?us-ascii?Q?0o80ZSVc1p/hE7KZh1HBcxkJ38IdKIdSrpPnddNR4XQdBbB7lqj0Xry4TTmw?=
+ =?us-ascii?Q?H587rMKvdH49tJO/YkM0Qs0Wz7hrTWi/11g9NpU/?=
 X-OriginatorOrg: mt.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9186c7a6-475b-4e0d-e88f-08dd313e25b8
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc9078ba-0e65-4a3b-4ef7-08dd313e2bf6
 X-MS-Exchange-CrossTenant-AuthSource: DBBPR03MB5399.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2025 06:15:14.8344
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2025 06:15:25.2761
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q4iqfW7mPNqhulFLLF8JuPxYrwR+fZtXvmaB5dB/VZA+PbyjZ17zdqsk3W/+neWAu/0F5Oek/FhfpKfYWKXvRA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: phwvWUedK/rdh0TBs8l+tvXldyRxoGe2qgXQ3W3I5d1jfF4LznEpxI8qwSAPubo0pbhiccMK1ouvoCdA0wHncg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB6776
 
-Make the following settings via sysfs configurable:
-  - For the input pins: input resistor, trigger edge, de-jitter filter.
-  - For the buffer: overwrite or inhibit mode for the FIFO.
+Add sysfs functionality to read the status and configuration.
+The functions provide the number of stored timestamp events, the current
+EVIN pin configuration and the enabled/disabled status.
 
 Signed-off-by: Markus Burri <markus.burri@mt.com>
 
 ---
- drivers/rtc/rtc-rv8803.c | 262 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 262 insertions(+)
+ drivers/rtc/rtc-rv8803.c | 73 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
 diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-index c479cc7..cc8aa53 100644
+index cc8aa53..5d31604 100644
 --- a/drivers/rtc/rtc-rv8803.c
 +++ b/drivers/rtc/rtc-rv8803.c
-@@ -681,6 +681,31 @@ static int rv8803_nvram_read(void *priv, unsigned int offset,
- 	return 0;
- }
- 
-+static int cfg2val(const struct cfg_val_txt *cfg, const char *text, u8 *value)
-+{
-+	if (!value)
-+		return -EINVAL;
-+
-+	do {
-+		if (strcasecmp(cfg->txt, text) == 0) {
-+			*value = cfg->val;
-+			return 0;
-+		}
-+	} while (++cfg && cfg->txt);
-+
-+	return -EINVAL;
-+}
-+
-+static char *cfg2txt(const struct cfg_val_txt *cfg, u8 value)
-+{
-+	do {
-+		if (cfg->val == value)
-+			return cfg->txt;
-+	} while (++cfg && cfg->txt);
-+
-+	return NULL;
-+}
-+
- static int rv8803_ts_event_write_evin(int evin, struct rv8803_data *rv8803, int pullup_down,
- 				      int trigger, int filter)
- {
-@@ -719,6 +744,31 @@ static int rv8803_ts_event_write_evin(int evin, struct rv8803_data *rv8803, int
- 	return 0;
- }
- 
-+static int rv8803_ts_event_read_evin(int evin, struct rv8803_data *rv8803,
-+				     int *pullup_down, int *trigger, int *filter)
-+
-+{
-+	int ret;
-+	struct i2c_client *client = rv8803->client;
-+
-+	/* get EVENTx pull-up edge trigger */
-+	ret = rv8803_read_reg(client, evin_cfg_reg[evin]);
-+	if (ret < 0)
-+		return ret;
-+
-+	*pullup_down = FIELD_GET(RX8901_EVENTx_CFG_PUPD, ret);
-+	*trigger = FIELD_GET(RX8901_EVENTx_CFG_POL, ret);
-+
-+	/* get EVENTx noise filter */
-+	ret = rv8803_read_reg(client, evin_flt_reg[evin]);
-+	if (ret < 0)
-+		return ret;
-+
-+	*filter = ret;
-+
-+	return 0;
-+}
-+
- static ssize_t enable_store(struct device *dev, struct device_attribute *attr, const char *buf,
- 			    size_t count)
- {
-@@ -968,14 +1018,226 @@ static ssize_t trigger_store(struct device *dev, struct device_attribute *attr,
+@@ -1218,6 +1218,77 @@ static ssize_t cfg_buf_store(struct device *dev, struct device_attribute *attr,
  	return count;
  }
  
-+static ssize_t cfg_evin_available_show(struct device *dev, struct device_attribute *attr, char *buf)
++static ssize_t status_show(struct device *dev, struct device_attribute *attr,
++			   char *buf)
 +{
++	int evin_en, evin_cfg, evin_flt, buf1_cfg, buf1_stat, buf_ovwf;
 +	int i;
 +	int offset = 0;
++	u8 ev_pullupdown[NO_OF_EVIN];
++	u8 ev_trigger[NO_OF_EVIN];
++	int ev_filter[NO_OF_EVIN];
 +
-+	offset += sprintf(buf + offset, "pull-resistor:\n");
-+
-+	for (i = 0; pull_resistor_txt[i].txt; ++i)
-+		if (!pull_resistor_txt[i].hide)
-+			offset += sprintf(buf + offset, "  %s\n", cfg2txt(pull_resistor_txt, i));
-+	offset += sprintf(buf + offset, "\n");
-+
-+	offset += sprintf(buf + offset, "trigger:\n");
-+	for (i = 0; trigger_txt[i].txt; ++i)
-+		if (!trigger_txt[i].hide)
-+			offset += sprintf(buf + offset, "  %s\n", cfg2txt(trigger_txt, i));
-+	offset += sprintf(buf + offset, "\n");
-+
-+	offset += sprintf(buf + offset, "filter [ms]:\n");
-+	for (i = 0; i <= EVIN_FILTER_MAX; ++i)
-+		if (i != 1)
-+			offset += sprintf(buf + offset, "  %d\n", EVIN_FILTER_FACTOR * i);
-+
-+	return offset;
-+}
-+
-+static ssize_t cfg_evin_show(struct device *dev, int event, char *buf)
-+{
-+	int err;
-+	struct rv8803_data *rv8803 = dev_get_drvdata(dev->parent);
-+
-+	int pullup_down;
-+	int trigger;
-+	int filter;
-+
-+	--event;
-+	if (event >= NO_OF_EVIN)
-+		return -ENOENT;
-+
-+	guard(mutex)(&rv8803->flags_lock);
-+	err = rv8803_ts_event_read_evin(event, rv8803,
-+					&pullup_down, &trigger, &filter);
-+	if (err)
-+		return err;
-+
-+	return sprintf(buf, "pull-resistor=%s, trigger=%s, filter=%dms\n",
-+		       cfg2txt(pull_resistor_txt, pullup_down),
-+		       cfg2txt(trigger_txt, trigger),
-+		       EVIN_FILTER_FACTOR * filter);
-+}
-+
-+static ssize_t cfg_evin1_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return cfg_evin_show(dev, 1, buf);
-+}
-+
-+static ssize_t cfg_evin2_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return cfg_evin_show(dev, 2, buf);
-+}
-+
-+static ssize_t cfg_evin3_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return cfg_evin_show(dev, 3, buf);
-+}
-+
-+static ssize_t cfg_evin_store(struct device *dev, int event, const char *buf, size_t count)
-+{
-+	int err;
-+	struct rv8803_data *rv8803 = dev_get_drvdata(dev->parent);
-+
-+	char *buf_cpy;
-+	char *token;
-+	const char *startptr;
-+	int pullup_down = -1;
-+	int trigger = -1;
-+	int filter = -1;
-+	u8 v;
-+
-+	--event;
-+	if (event >= NO_OF_EVIN)
-+		return -ENOENT;
-+
-+	buf_cpy = kmalloc(count + 1, GFP_KERNEL);
-+	if (!buf_cpy)
-+		return -ENOMEM;
-+
-+	strscpy(buf_cpy, buf, count);
-+	token = buf_cpy;
-+	while ((startptr = strsep(&token, " ,\n"))) {
-+		if (strstr(startptr, "pull-resistor=") == startptr)
-+			if (cfg2val(pull_resistor_txt, strchr(startptr, '=') + 1, &v) == 0)
-+				pullup_down = v;
-+		if (strstr(startptr, "trigger=") == startptr)
-+			if (cfg2val(trigger_txt, strchr(startptr, '=') + 1, &v) == 0)
-+				trigger = v;
-+		if (strstr(startptr, "filter=") == startptr)
-+			filter = strtoul(strchr(startptr, '=') + 1, NULL, 0) / EVIN_FILTER_FACTOR;
-+	}
-+
-+	kfree(buf_cpy);
-+
-+	guard(mutex)(&rv8803->flags_lock);
-+	err = rv8803_ts_event_write_evin(event, rv8803, pullup_down, trigger, filter);
-+	if (err)
-+		return err;
-+
-+	return count;
-+}
-+
-+static ssize_t cfg_evin1_store(struct device *dev, struct device_attribute *attr, const char *buf,
-+			       size_t count)
-+{
-+	return cfg_evin_store(dev, 1, buf, count);
-+}
-+
-+static ssize_t cfg_evin2_store(struct device *dev, struct device_attribute *attr, const char *buf,
-+			       size_t count)
-+{
-+	return cfg_evin_store(dev, 2, buf, count);
-+}
-+
-+static ssize_t cfg_evin3_store(struct device *dev, struct device_attribute *attr, const char *buf,
-+			       size_t count)
-+{
-+	return cfg_evin_store(dev, 3, buf, count);
-+}
-+
-+static ssize_t cfg_buf_available_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	int i;
-+	int offset = 0;
-+
-+	offset += sprintf(buf + offset, "mode:\n");
-+	for (i = 0; buffer_mode_txt[i].txt; ++i)
-+		if (!buffer_mode_txt[i].hide)
-+			offset += sprintf(buf + offset, "  %s\n", cfg2txt(buffer_mode_txt, i));
-+
-+	return offset;
-+}
-+
-+static ssize_t cfg_buf_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	int ret;
 +	struct i2c_client *client = to_i2c_client(dev->parent);
 +	struct rv8803_data *rv8803 = dev_get_drvdata(dev->parent);
 +
 +	guard(mutex)(&rv8803->flags_lock);
 +
-+	ret = rv8803_read_reg(client, RX8901_BUF1_CFG1);
-+	if (ret < 0)
-+		return ret;
++	evin_en = rv8803_read_reg(client, RX8901_EVIN_EN);
++	if (evin_en < 0)
++		return evin_en;
 +
-+	return sprintf(buf, "mode:%s\n",
-+		       cfg2txt(buffer_mode_txt, FIELD_GET(BIT(6), ret)));
-+}
++	for (i = 0; i < NO_OF_EVIN; ++i) {
++		evin_cfg = rv8803_read_reg(client, evin_cfg_reg[i]);
++		evin_flt = rv8803_read_reg(client, evin_flt_reg[i]);
++		if (evin_cfg < 0 || evin_flt < 0)
++			return -EIO;
 +
-+static ssize_t cfg_buf_store(struct device *dev, struct device_attribute *attr, const char *buf,
-+			     size_t count)
-+{
-+	int ret;
-+	char *buf_cpy;
-+	char *token;
-+	char *startptr;
-+	int mode = -1;
-+	u8 v;
-+
-+	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct rv8803_data *rv8803 = dev_get_drvdata(dev->parent);
-+
-+	buf_cpy = kmalloc(count + 1, GFP_KERNEL);
-+	if (!buf_cpy)
-+		return -ENOMEM;
-+
-+	strscpy(buf_cpy, buf, count);
-+	token = buf_cpy;
-+	while ((startptr = strsep(&token, " ,\n"))) {
-+		if (strstr(startptr, "mode:") == startptr)
-+			if (cfg2val(buffer_mode_txt, strchr(startptr, ':') + 1, &v) == 0)
-+				mode = v;
++		ev_pullupdown[i] = FIELD_GET(RX8901_EVENTx_CFG_PUPD, evin_cfg);
++		ev_trigger[i] = FIELD_GET(RX8901_EVENTx_CFG_POL, evin_cfg);
++		ev_filter[i] = EVIN_FILTER_FACTOR * evin_flt;
 +	}
 +
-+	kfree(buf_cpy);
++	offset += sprintf(buf + offset, "Mode: %s\n\n",
++			  FIELD_GET(BIT(6), evin_en) ? "direct" : "fifo");
++	offset += sprintf(buf + offset, "Event config:\n");
++	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "", "EVIN1", "EVIN2", "EVIN3");
++	offset += sprintf(buf + offset, "  %-13s  %-7ld %-7ld %-7ld\n", "Enable",
++			  FIELD_GET(BIT(0), evin_en), FIELD_GET(BIT(1), evin_en),
++			  FIELD_GET(BIT(2), evin_en));
++	offset += sprintf(buf + offset, "  %-13s  %-7ld %-7ld %-7ld\n", "Capture",
++			  FIELD_GET(BIT(3), evin_en), FIELD_GET(BIT(4), evin_en),
++			  FIELD_GET(BIT(5), evin_en));
 +
-+	if (mode != -1) {
-+		guard(mutex)(&rv8803->flags_lock);
++	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "Pull-resistor",
++			  cfg2txt(pull_resistor_txt, ev_pullupdown[0]),
++			  cfg2txt(pull_resistor_txt, ev_pullupdown[1]),
++			  cfg2txt(pull_resistor_txt, ev_pullupdown[2]));
++	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "Edge",
++			  cfg2txt(trigger_txt, ev_trigger[0]),
++			  cfg2txt(trigger_txt, ev_trigger[1]),
++			  cfg2txt(trigger_txt, ev_trigger[2]));
++	offset += sprintf(buf + offset, "  %-13s  %-7d %-7d %-7d\n\n", "Filter [ms]",
++			  ev_filter[0], ev_filter[1], ev_filter[2]);
 +
-+		ret = rv8803_read_reg(client, RX8901_BUF1_CFG1);
-+		if (ret < 0)
-+			return ret;
++	buf1_cfg = rv8803_read_reg(client, RX8901_BUF1_CFG1);
++	buf1_stat = rv8803_read_reg(client, RX8901_BUF1_STAT);
++	buf_ovwf = rv8803_read_reg(client, RX8901_BUF_OVWF);
++	if (buf1_stat < 0 || buf1_stat < 0 || buf_ovwf < 0)
++		return -EIO;
 +
-+		ret &= ~BIT(6);
-+		ret |= FIELD_PREP(BIT(6), mode);
-+		ret = rv8803_write_reg(client, RX8901_BUF1_CFG1, ret);
-+		if (ret < 0)
-+			return ret;
-+	}
-+	return count;
++	offset += sprintf(buf + offset, "Buffer config:\n");
++	offset += sprintf(buf + offset, "  %-13s  %-10s\n", "Mode",
++			  (FIELD_GET(BIT(6), buf1_cfg) ? "overwrite" : "inhibit"));
++	offset += sprintf(buf + offset, "  %-13s  %-10s\n", "Status",
++			  (FIELD_GET(BIT(7), buf1_stat) ? "full" : "free"));
++	offset += sprintf(buf + offset,  "  %-13s  %-10ld\n", "Overrun",
++			  (FIELD_GET(BIT(4), buf_ovwf)));
++	offset += sprintf(buf + offset,  "  %-13s  %-10ld\n", "No of data",
++			  (FIELD_GET(GENMASK(5, 0), buf1_stat)));
++
++	return offset;
 +}
 +
  static DEVICE_ATTR_WO(enable);
  static DEVICE_ATTR_RO(read);
  static DEVICE_ATTR_WO(trigger);
-+static DEVICE_ATTR_RO(cfg_evin_available);
-+static DEVICE_ATTR_RO(cfg_buf_available);
-+static DEVICE_ATTR_RW(cfg_evin1);
-+static DEVICE_ATTR_RW(cfg_evin2);
-+static DEVICE_ATTR_RW(cfg_evin3);
-+static DEVICE_ATTR_RW(cfg_buf);
+@@ -1227,6 +1298,7 @@ static DEVICE_ATTR_RW(cfg_evin1);
+ static DEVICE_ATTR_RW(cfg_evin2);
+ static DEVICE_ATTR_RW(cfg_evin3);
+ static DEVICE_ATTR_RW(cfg_buf);
++static DEVICE_ATTR_RO(status);
  
  static struct attribute *rv8803_rtc_event_attrs[] = {
  	&dev_attr_enable.attr,
- 	&dev_attr_read.attr,
- 	&dev_attr_trigger.attr,
-+	&dev_attr_cfg_evin_available.attr,
-+	&dev_attr_cfg_buf_available.attr,
-+	&dev_attr_cfg_evin1.attr,
-+	&dev_attr_cfg_evin2.attr,
-+	&dev_attr_cfg_evin3.attr,
-+	&dev_attr_cfg_buf.attr,
+@@ -1238,6 +1310,7 @@ static struct attribute *rv8803_rtc_event_attrs[] = {
+ 	&dev_attr_cfg_evin2.attr,
+ 	&dev_attr_cfg_evin3.attr,
+ 	&dev_attr_cfg_buf.attr,
++	&dev_attr_status.attr,
  	NULL
  };
  
