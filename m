@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-2880-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2881-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7152DA0A2BD
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Jan 2025 11:27:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13543A0A2C0
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Jan 2025 11:28:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 716243AA2C0
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Jan 2025 10:27:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FAC73AA2D0
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Jan 2025 10:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A287190055;
-	Sat, 11 Jan 2025 10:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C203190059;
+	Sat, 11 Jan 2025 10:28:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukfRGAPg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="phALukLf"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B05A18FDDF;
-	Sat, 11 Jan 2025 10:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC5718FDDF;
+	Sat, 11 Jan 2025 10:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736591223; cv=none; b=llV4yXF5TrSqhHVMRb1RC5j1RdIc0rtrHR552QyMho1AHbwqsKWnPh0OZ8cYDfoq3vRUt9zf5R7UF2zbH/NW09v024X1edn9YEyWXBiCjB/WXljnWG4L6HKpK61uzVtv44O95BU/LtEUCi1d3Sv45LhJi0vbhnnAdNvtToAor+k=
+	t=1736591293; cv=none; b=Oz8z+RoL9lE1FQMXrDPbfYKnfQ/bkvY/G4bjpX4LZQKuoBZkLpue4SaBsPUTYjlxepPaJVHMtFGjHFZN68Y+FZNqCIWugDQ+Mi1fm9d5dI1TGh+9kC/AH1q/Jl/mw6sERmgFsp47hWxn23QxiRnEcoBZgCjCWJpNLitKBXPcqrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736591223; c=relaxed/simple;
-	bh=80YNWaHwJeN8wEuiEDeC9yi+3NbtgWfVsrPhPVic8Ac=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=r9Ou3zoibdCk1N11R+bwA9Z7D5nSu1TRomJNcS8P/wqWmFTggI9+tLeDSkZK1OhWkhoswXgHv7HT9xUpdIP1vhPRzZQC36N49wDXOsKlhKBP9mIHaIc8MLl2dO8yt2uM/JIfE7j/RhGFlwSNEOXPIEWA/W+JXW9j935mrMcfEMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukfRGAPg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E10C4CED2;
-	Sat, 11 Jan 2025 10:26:59 +0000 (UTC)
+	s=arc-20240116; t=1736591293; c=relaxed/simple;
+	bh=h+keZptGZlPN9gyvmszLjanGcCO9kaWF5GuVZGsukzg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TyylnaDuM3nGGVFUDgSwj7i9R8/587VKYfv5ITzaYJyHHZPMB1jKHVYKdteMmkMvg0g48kMs/tOfgSf1cdDH9CuEfvTM9x1LCVo9e4EknnqpgnoZlI4+8NfLhsG/7nhYzJiuQCdC+4eX23lbhr/AMoUmmk88yz+p7Q19FZp9H4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=phALukLf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CF3C4CED2;
+	Sat, 11 Jan 2025 10:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736591222;
-	bh=80YNWaHwJeN8wEuiEDeC9yi+3NbtgWfVsrPhPVic8Ac=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=ukfRGAPgfQIx8rkt1taPHrG3lKccQc44ccoacLhvVyk2LenjxgGhvUuypQmEfySIt
-	 lk7k9cZnNS94mwhRk9jM1WBaOq0Ye5wg4OacOk+jTCihMe/U5nuDtV4BL9v0BZVM9R
-	 DG67vNwdpBHKRror8vZecIH3jD0fi2Y17CFjQSoHFPGve1KYKgrdj1BLUc3/k/e6Tr
-	 SI25JNURZkANy+lgHuCiQL+cYYEwTCMoi1aBaS0DOzLGz6mAlc2I/ydqaGc66WxZBq
-	 7MnepoDaiRFv//CdlhfiLgzyenm3BHjv4iADe2J0uZSAxqgIejxjjhqToWhMg3Dvph
-	 wm6ywElPxyT4A==
-Message-ID: <9b304c60-3858-4146-b9b1-dad7f0d19d62@kernel.org>
-Date: Sat, 11 Jan 2025 11:26:58 +0100
+	s=k20201202; t=1736591292;
+	bh=h+keZptGZlPN9gyvmszLjanGcCO9kaWF5GuVZGsukzg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=phALukLfhuDcvRlymOkKk/9mSnnAxhGyymc4+JmtkhFEqoL3iVfSHWFWYnOcmhBWm
+	 vS+c2Ll5t7uVCnFZdDmBiLbqeXYQHPewGRnadlA6DPr3UbU6h7Knj5y/EQXHN1VZZ1
+	 NtXa+E6/mFiasDPkFn8O4/VEYotYmpEywb2yao8tWJZ8tQOOmutl2b0zTyguaaHjE9
+	 ZQ7fEd+jXv4KdtSIiE/yoVcHx2Wec3o2mMnEnZEBa5mqFcDbZVNqToHmH3bwS9ONWd
+	 ojHR+Ex4Zz1Njbju8CKkoQwuT8Sgd0lZDNltfkRHJAJpG1S/CF1peMGbEeiYVV1nBU
+	 JNUd/MHQEIpbg==
+Message-ID: <241de28d-623d-4409-b1eb-9f48ec8b5252@kernel.org>
+Date: Sat, 11 Jan 2025 11:28:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,18 +50,17 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/7] dt-bindings: rtc: add new type for epson,rx8901
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Markus Burri <markus.burri@mt.com>
-Cc: linux-kernel@vger.kernel.org,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
+Subject: Re: [PATCH v1 6/7] rtc-rv8803: make tamper function configurable via
+ sysfs
+To: Markus Burri <markus.burri@mt.com>, linux-kernel@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Marek Vasut <marex@denx.de>,
  linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  Manuel Traut <manuel.traut@mt.com>
 References: <20250110061401.358371-1-markus.burri@mt.com>
- <20250110061401.358371-2-markus.burri@mt.com>
- <f3fcdxudnvelodokliir3dreg3vqze3ds2aixuasljkl43wir5@evbfwgmxich3>
+ <20250110061401.358371-7-markus.burri@mt.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -106,42 +105,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <f3fcdxudnvelodokliir3dreg3vqze3ds2aixuasljkl43wir5@evbfwgmxich3>
+In-Reply-To: <20250110061401.358371-7-markus.burri@mt.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/01/2025 11:20, Krzysztof Kozlowski wrote:
-> On Fri, Jan 10, 2025 at 07:13:55AM +0100, Markus Burri wrote:
->> Add new compatibility string for the epson rx8901 chip.
->> The chip has input pins for tamper detection.
->> This patch add a new compatibility string for this type. This is
-> 
-> Please do not use "This commit/patch/change", but imperative mood. See
-> longer explanation here:
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
->> needed to enable the functionality for this type of chip.
->>
->> The compatibility string is defined in the driver but not documented
->> in dt-bindings.
->>
->> The patch also add compatibility string for epson,rx8803.
->> The type is supported by the driver but not documented.
-> 
-> All four sentences keep repeating the same, so just:
-> 
-> "Document compatibles for RX8901 and RX8803, which are already used by
-> the driver."
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 10/01/2025 07:14, Markus Burri wrote:
+>  static int rv8803_ts_event_write_evin(int evin, struct rv8803_data *rv8803, int pullup_down,
+>  				      int trigger, int filter)
+>  {
+> @@ -719,6 +744,31 @@ static int rv8803_ts_event_write_evin(int evin, struct rv8803_data *rv8803, int
+>  	return 0;
+>  }
+>  
+> +static int rv8803_ts_event_read_evin(int evin, struct rv8803_data *rv8803,
+> +				     int *pullup_down, int *trigger, int *filter)
+> +
+> +{
+> +	int ret;
+> +	struct i2c_client *client = rv8803->client;
+> +
+> +	/* get EVENTx pull-up edge trigger */
+> +	ret = rv8803_read_reg(client, evin_cfg_reg[evin]);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*pullup_down = FIELD_GET(RX8901_EVENTx_CFG_PUPD, ret);
+> +	*trigger = FIELD_GET(RX8901_EVENTx_CFG_POL, ret);
 
-I see only one was undocumented, so:
-
-"Document compatibles for:
- - RX8803: already used by the driver
- - RX8901: new device supporting also tamper detection and pinctrl ."
-
-And then you need proper pinctrl bindings :/
+No. pinctrl is not done via sysfs, please do not re-invent existing
+APIs. You must use proper pinctrl subsystem for this.
 
 Best regards,
 Krzysztof
