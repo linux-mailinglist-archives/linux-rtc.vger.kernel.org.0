@@ -1,149 +1,163 @@
-Return-Path: <linux-rtc+bounces-2882-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2883-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 843FDA0A56C
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Jan 2025 19:54:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF679A0A73D
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jan 2025 05:52:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 722711886FB5
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Jan 2025 18:54:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E6453A77BD
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jan 2025 04:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A366C1BBBE3;
-	Sat, 11 Jan 2025 18:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4128C54652;
+	Sun, 12 Jan 2025 04:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="td7IxrC9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UHuGyLwW"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3A818C018
-	for <linux-rtc@vger.kernel.org>; Sat, 11 Jan 2025 18:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6066E14F90;
+	Sun, 12 Jan 2025 04:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736621650; cv=none; b=kTDrWAe/FswgOewJKBCVVAhSfNg9voxDkpGHteQo6oa2MbOnP9Z6t8Rz5GQqW7Dv8r0sysYJ1tDy/ZNB9P5vbOcbEqkaQzfgdeHN06ZFbUmhWboC9J/30xQd/x3ZetGZiExYEydchNiT4d43YKrbyyk44Ptj8hVddezxzmorBxA=
+	t=1736657573; cv=none; b=qukc6brXWnQsM94ahL54JhrOeJ3OBBRDhBFCVPd2LuS2/YTySP1dHjKae7nClFCUgxb/eTD9JFjfPaUemYHBqjM531J+SorEkQoGP1JRHFrvhVRhrk0MEYz8RAljPrhKsDvSMej48fhLPmfezPTfvhD4Z1bHCwyWpttWE9BZwBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736621650; c=relaxed/simple;
-	bh=6USYYxzCgpUPcC909zd3sk8QnGJ9duS/rrtwG4L4ZOQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NU4YK9x62/6PBphk59+yrrRVTLml5YeeWKANlXO7IuRpPNDTNbghrqlgwTHMs6maoJFXd26WwNc+Y0euiCh/DjJWDvI5OCaFuAOJ65At2agJGR5oHF0p+DIOqzABxIgp7XQKLEWcoE5MlRs5MI0t7PtnA4B1AzLpR9+iQp6I4PI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=td7IxrC9; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-434f398a171so2881925e9.2
-        for <linux-rtc@vger.kernel.org>; Sat, 11 Jan 2025 10:54:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736621647; x=1737226447; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xPRSMg1Y79bflHzzHnMnAqsVQxqcpqEauFJNoySqrOM=;
-        b=td7IxrC9BBKW2wO3vLtBUt/3rNinttb7NCvQi1TTRly8GxRS4k5M2GvZKMtxeCCnv9
-         AcQx3YGIK7B5RB2wCiGYyf02vD5fh6y+ciaWRwVGYkU/Gis1HhfX3cCGhwGRmOKz6gZL
-         H9fr0Jqx67V5CLZxGCEfZC7GXA/MeENxgHA3Wa7uJqSjcqsg8VsBvjNSwRqVlkp0HKnI
-         84fCLSSWV4BnDfxN+4TD/C9wL5N6HCm6lp1DSII68P6hUv7uqU3CoyyFE24B333Mn507
-         HBHsvYhBN8SdfaYJSFXZOzPkNPPVvp+VP33HX5m5sDhFFCeAB8Ao3s5yPAjoaWYT2x2X
-         QEPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736621647; x=1737226447;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xPRSMg1Y79bflHzzHnMnAqsVQxqcpqEauFJNoySqrOM=;
-        b=aZ7Ee9pMlERgwj6SVmN2rVSwiCWnZxHqqAsqfOT3WSF6sA4dMEi8Xvpl+GVBuZNDQ7
-         va+/COixnut8vYmcVizxSXkfCH+XH01VP/zVV1d851ibfBub9vyyFRcvKExJElZga85Y
-         CpuzWk7ZOPphKZoK7Vk5YengAJoJW8q3ZnpSehjauSMe6Z1ZkqEsRGAtVSl2UJNh6cqt
-         GlSuBKZ118ys2HEP6mO+PzuhNZutBGB5F/IOrYHSJGX5zT0uw2KEc4pK/i4YLjHHAAUe
-         6v372M2XScTjuKklEOJ9BsVG9h36Or4EvelwHG3O5ZGrA/Hp1Bd8bilv0tks5AQmyZNK
-         /kjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW24jvVCnUPRJj6S+wM4qMVlFuWHBvOK1F/lHN8+mK6dGHQHQxc4JJImywRCrX4ZHyzLq5SEbN4y0A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxukjixVN+DNgVTDNNahs1IQ7xXnpZu3SfjtfU0Ih9M2pR7e+1s
-	wLPFYnb8pMdrTUE0INclqhmRLzLjQLeFUIDEpbSWC9xQrOOCYTLx+LSz91Q57+U=
-X-Gm-Gg: ASbGncsUmn3pmakkHgiobg0iwVBHbFGiP4rdEPTiEjwnuZPqvHk8hj9yne0wuEo8PzS
-	Gy4UtucbqdrSntaD1rHAK44AdNrbYMB56Ve6V3HgQbmzIA5BKDUGFjuxOqi+iOYVZ1724OmLT0F
-	senInGbfy87uVHztaAs8/sOtpzEVpPN5Yo3ibHcv3uZBnKrnoSORgwfUNfKFyFm3NyivHwqpMyN
-	AXCgtnCOvEBZQmsDRv4mMVwgQwqPyl7KmTyL8WdcxkEyvkK6FyV5zBKkJdtAXHOvtGE2gY=
-X-Google-Smtp-Source: AGHT+IGKMCNZ9lSIpKE90rRk19Kureh0VeUXVKcP8mbMQG8DavWdzbFmeA+Vz1ozm2bjDyjv4IITPQ==
-X-Received: by 2002:adf:e3c4:0:b0:38a:888c:6785 with SMTP id ffacd0b85a97d-38a888c69bcmr4077895f8f.6.1736621647135;
-        Sat, 11 Jan 2025 10:54:07 -0800 (PST)
-Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a9fcb7a11sm2315556f8f.75.2025.01.11.10.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jan 2025 10:54:06 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-rtc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] rtc: stm32: Use syscon_regmap_lookup_by_phandle_args
-Date: Sat, 11 Jan 2025 19:54:05 +0100
-Message-ID: <20250111185405.183824-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1736657573; c=relaxed/simple;
+	bh=S6Vbj3DnhAGTqEs4fvOLiBBt0ILIKGbKIuliWiD1C8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aYGSZHOeKq6SUevXB1Yc9mL3OsZ7MISsH9Ul+VtAi1UZod4PBGUO2PW+gMImwhi0ZeY7ONgEcKo8GCWqTSz1gohDfbwAiJfB/iPqbbtDAPMrG78tb280xlWl1CuNAnRmEl6RIra+0zDjgQOHakrzf39abTELHuIEYKqhrTwqy0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UHuGyLwW; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736657572; x=1768193572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S6Vbj3DnhAGTqEs4fvOLiBBt0ILIKGbKIuliWiD1C8U=;
+  b=UHuGyLwW8MNaLk1FncMISP0J3GmZl/P46gjpb38D8h+//N4+Z4263iuf
+   KdXL5k+Ayoe3QsP1bRmo+lirXXvMcmhl0OfZiph1QUrhWL33zh0zstzTa
+   gssXZ/mfQaNe95mxwM/B0XGiXtzY3lPoE70+C1cyvBmoMfItpDBIY+jsL
+   WiaENIM8rtdt/D3B0f+6yFIbmxVAk1lNtsBLcFg0HXoJVV/YvA1CDDPcf
+   DFPspgf3dbmudh7UZJqCEuDqkhKlUHW0rnuChJ2NbfeLf5IAzrTvuQcz0
+   CM1FrxZvo2N9PZgYsNH/xGLFfT7eswQGfhT0JjQ8b54nx/IsFJA5yPdr0
+   Q==;
+X-CSE-ConnectionGUID: tlZcMIWFSGyCk/huH+Pndg==
+X-CSE-MsgGUID: +mqgwE+lSkyPovp6NQ3wYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="37069765"
+X-IronPort-AV: E=Sophos;i="6.12,308,1728975600"; 
+   d="scan'208";a="37069765"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 20:52:51 -0800
+X-CSE-ConnectionGUID: Dl/XJOA0TV6JyRP/TiuxRw==
+X-CSE-MsgGUID: 4MNUk4+CQbeSz57zZtVYBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="104974837"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 11 Jan 2025 20:52:47 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tWpxt-000LaQ-0r;
+	Sun, 12 Jan 2025 04:52:45 +0000
+Date: Sun, 12 Jan 2025 12:52:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Markus Burri <markus.burri@mt.com>, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Markus Burri <markus.burri@mt.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Marek Vasut <marex@denx.de>,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	Manuel Traut <manuel.traut@mt.com>
+Subject: Re: [PATCH v1 3/7] rtc-rv8803: add register definitions for rv8901
+ tamper detection
+Message-ID: <202501121203.Kw9SnPYP-lkp@intel.com>
+References: <20250110061401.358371-4-markus.burri@mt.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250110061401.358371-4-markus.burri@mt.com>
 
-Use syscon_regmap_lookup_by_phandle_args() which is a wrapper over
-syscon_regmap_lookup_by_phandle() combined with getting the syscon
-argument.  Except simpler code this annotates within one line that given
-phandle has arguments, so grepping for code would be easier.
+Hi Markus,
 
-There is also no real benefit in printing errors on missing syscon
-argument, because this is done just too late: runtime check on
-static/build-time data.  Dtschema and Devicetree bindings offer the
-static/build-time check for this already.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/rtc/rtc-stm32.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on robh/for-next linus/master v6.13-rc6 next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 9f1a019ec8af..a0564d443569 100644
---- a/drivers/rtc/rtc-stm32.c
-+++ b/drivers/rtc/rtc-stm32.c
-@@ -1074,26 +1074,18 @@ static int stm32_rtc_probe(struct platform_device *pdev)
- 	regs = &rtc->data->regs;
- 
- 	if (rtc->data->need_dbp) {
--		rtc->dbp = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
--							   "st,syscfg");
-+		unsigned int args[2];
-+
-+		rtc->dbp = syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
-+								"st,syscfg",
-+								2, args);
- 		if (IS_ERR(rtc->dbp)) {
- 			dev_err(&pdev->dev, "no st,syscfg\n");
- 			return PTR_ERR(rtc->dbp);
- 		}
- 
--		ret = of_property_read_u32_index(pdev->dev.of_node, "st,syscfg",
--						 1, &rtc->dbp_reg);
--		if (ret) {
--			dev_err(&pdev->dev, "can't read DBP register offset\n");
--			return ret;
--		}
--
--		ret = of_property_read_u32_index(pdev->dev.of_node, "st,syscfg",
--						 2, &rtc->dbp_mask);
--		if (ret) {
--			dev_err(&pdev->dev, "can't read DBP register mask\n");
--			return ret;
--		}
-+		rtc->dbp_reg = args[0];
-+		rtc->dbp_mask = args[1];
- 	}
- 
- 	if (!rtc->data->has_pclk) {
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Burri/dt-bindings-rtc-add-new-type-for-epson-rx8901/20250110-141934
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20250110061401.358371-4-markus.burri%40mt.com
+patch subject: [PATCH v1 3/7] rtc-rv8803: add register definitions for rv8901 tamper detection
+config: m68k-randconfig-r122-20250111 (https://download.01.org/0day-ci/archive/20250112/202501121203.Kw9SnPYP-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 14.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20250112/202501121203.Kw9SnPYP-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501121203.Kw9SnPYP-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/rtc/rtc-rv8803.c:141:26: sparse: sparse: symbol 'pull_resistor_txt' was not declared. Should it be static?
+>> drivers/rtc/rtc-rv8803.c:153:26: sparse: sparse: symbol 'trigger_txt' was not declared. Should it be static?
+>> drivers/rtc/rtc-rv8803.c:161:26: sparse: sparse: symbol 'buffer_mode_txt' was not declared. Should it be static?
+>> drivers/rtc/rtc-rv8803.c:167:26: sparse: sparse: symbol 'trg_status_txt' was not declared. Should it be static?
+
+vim +/pull_resistor_txt +141 drivers/rtc/rtc-rv8803.c
+
+   140	
+ > 141	const struct cfg_val_txt pull_resistor_txt[] = {
+   142		{ "no", no },
+   143		{ "PU/500k", pull_up_500k },
+   144		{ "PU/1M", pull_up_1M },
+   145		{ "PU/10M", pull_up_10M },
+   146		{ "PD/500k", pull_down_500k },
+   147		{ "no", 0b101, 1 },
+   148		{ "no", 0b110, 1 },
+   149		{ "no", 0b111, 1 },
+   150		{ NULL }
+   151	};
+   152	
+ > 153	const struct cfg_val_txt trigger_txt[] = {
+   154		{ "falling", falling_edge },
+   155		{ "rising", rising_edge },
+   156		{ "both", both_edges },
+   157		{ "both", 0b11, 1 },
+   158		{ NULL }
+   159	};
+   160	
+ > 161	const struct cfg_val_txt buffer_mode_txt[] = {
+   162		{ "inhibit", inhibit },
+   163		{ "overwrite", overwrite },
+   164		{ NULL }
+   165	};
+   166	
+ > 167	const struct cfg_val_txt trg_status_txt[] = {
+   168		{ "EVIN1", BIT(5) },
+   169		{ "EVIN2", BIT(6) },
+   170		{ "EVIN3", BIT(7) },
+   171		{ "CMD", BIT(4) },
+   172		{ "VBATL", BIT(3) },
+   173		{ "VTMPL", BIT(2) },
+   174		{ "VDDL", BIT(1) },
+   175		{ "OSCSTP", BIT(0) },
+   176		{ NULL }
+   177	};
+   178	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
