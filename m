@@ -1,64 +1,62 @@
-Return-Path: <linux-rtc+bounces-2888-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2889-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0017A0ACAB
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 00:35:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77FC1A0ACAD
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 00:40:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 398597A1D95
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jan 2025 23:35:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D5817A01CA
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jan 2025 23:40:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69DF31C2317;
-	Sun, 12 Jan 2025 23:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1131C2317;
+	Sun, 12 Jan 2025 23:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Oham5EBT"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BoAaLfK9"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40F2154C0D;
-	Sun, 12 Jan 2025 23:35:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05096154C0D;
+	Sun, 12 Jan 2025 23:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736724943; cv=none; b=PNHVPBS9wjPW+xDxftkGhb1QkKFs2EHOd7SM+W4KS+bGJqqOgbAt4ap+OHYI6fHJopaatCDGLVzC3DydiHU7mN45NEtawnlaLhWTa4MPrgYwYPgPszpcBrcSQ+KD/Chqu8s0WcdDjIwQPBEvHYvit3HfX1RmtD2Mnr1cGBJcCl8=
+	t=1736725213; cv=none; b=Xak3c2uV1VtbeA5ZjBbi7vVUF3YyhWOtEtXZ14ygLDIwlzXD/q68TNq1dtGQLcv6UU7tMWSzg9dDciQkj/+ynIcilFJoNhpGHZ8fknl/3XDG2pNarhnLm7l4Go17UXei5Cp2zBnsVQr+8d/mRccVAFa+S/7ODsM4Qg4VGvyfrdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736724943; c=relaxed/simple;
-	bh=HcsC9tXf4TL6Zkki/ome21MbUBFM1SZ3hoO3K1qADng=;
+	s=arc-20240116; t=1736725213; c=relaxed/simple;
+	bh=Mq7atc1hwDk4E1VmiDdknyuPsj2f3PqV9aGWGsyF/mk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZrIZe/MP15ijoKVhA+jPKiBH1lH9hnMd1SldBYwk7hdMU6Knrz5/zOr2p9Li8m/vpjyexQrAfcXdDWj8uO3wYp5TWr8BycRrXfah9yOPC5CrQ5MOWSmKHEgMURSJSMcFWb+7ax4aQ4VMjk9CtQ65pbqtR73YClDUaCpeDFY3NA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Oham5EBT; arc=none smtp.client-ip=217.70.183.200
+	 Content-Type:Content-Disposition:In-Reply-To; b=eDcS4HvYR+io/ybbAD/n1F93CBs+7J1MOECMLMnuvgKT1nFNVfz/ErtkPWErlVlTCSE9SkvfeM/dgBJbdFy1bTF+YboEyfPe8+HgP5x76RHhT7ADTsGHeIi0olSlauD8/A+0444DeyYFOfqU3Bd2foBt+JIEVlaEBpUCr4qFuU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BoAaLfK9; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 93E1A20002;
-	Sun, 12 Jan 2025 23:35:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 43D0B1C0002;
+	Sun, 12 Jan 2025 23:40:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736724939;
+	t=1736725203;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=a87+Qa+zFOoCG7+eaGG+I3SphmFr1f5RzL18ViMCxI8=;
-	b=Oham5EBTt7vPNzjgpxWjVCtS1ngOB2nz1SbiLNi11j340AYwlrNonb389GXCux2EVnvTgD
-	L7Qgmu1hUyB78SWi6bGIotiz3hjNjgB2lJZTJfx3SLWDDTsj4EP2CsI2WYNHaVWRm+m2RC
-	G62zcHyS2TooCtc9jgvY4gO2mVYolggNhybM3MibbFjtj+lR0fl2V0nx1CVOglGF44Feb9
-	9AZ0/2UvuDPb5ZozqsNkeTD+jtk5VtzEkmsc7aeV3aQzeLLD58eoudrqBXt+yY7k7DEQxo
-	XT2viNI/KcNdWLb5QDGiRyj/WQ5+0BDQOaTeqzByi+TpnyWCuSsZVIrIto3+Bw==
-Date: Mon, 13 Jan 2025 00:35:38 +0100
+	bh=YL2oZKU7n0uUlLHGOVq154PVrhK1qxhApkmk4APiOz0=;
+	b=BoAaLfK9at5Ot+H3bpzSSFn+Cv8kt6Y20jlUFTKQS9nIvJ6jEEI3wgiO4r2feJd3TZiuhg
+	S/KtswvbujifFr797gjNSt74ejAXRdz68wFT5WElsk1jmUG4DGITB//cWqmCgjtBwnkVCT
+	Aa7imfMv5BDO8+2IhJwOsmu2nVs471cJZcxwz/Y7qdkJGScRe3szOE6CdD0coawI5p8qwm
+	HMZD8WuEGX/nbDFfD0AVsOMxhYfZvnqKEOC6NUQhUpfN2rFxDFeVw82wrllIZm7EOgoCy0
+	+27Vjg/bb5A1Wz8+tp/8So909HQGqZVdhSrpw48SJC93S2IrHqbvjhlaBPISaA==
+Date: Mon, 13 Jan 2025 00:40:01 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Jonathan Marek <jonathan@marek.ca>
-Cc: linux-arm-msm@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Satya Priya <quic_c_skakit@quicinc.com>
-Subject: Re: [PATCH v3 0/5] x1e80100 RTC support
-Message-ID: <202501122335384a545895@mail.local>
-References: <20241015004945.3676-1-jonathan@marek.ca>
+To: Keguang Zhang <keguang.zhang@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, WANG Xuerui <git@xen0n.name>,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Ming Wang <wangming01@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lixuefeng@loongson.cn,
+	gaojuxin@loongson.cn
+Subject: Re: [PATCH v2] rtc: loongson: clear TOY_MATCH0_REG in
+ loongson_rtc_isr()
+Message-ID: <173672519435.1488553.1230962968393276759.b4-ty@bootlin.com>
+References: <20241205114307.1891418-1-wangming01@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -67,40 +65,26 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015004945.3676-1-jonathan@marek.ca>
+In-Reply-To: <20241205114307.1891418-1-wangming01@loongson.cn>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello,
+On Thu, 05 Dec 2024 19:43:07 +0800, Ming Wang wrote:
+> The TOY_MATCH0_REG should be cleared to 0 in the RTC interrupt handler,
+> otherwise the interrupt cannot be cleared, which will cause the
+> loongson_rtc_isr() to be triggered multiple times.
+> 
+> The previous code cleared TOY_MATCH0_REG in the loongson_rtc_handler(),
+> which is an ACPI interrupt. This did not prevent loongson_rtc_isr()
+> from being triggered multiple times.
+> 
+> [...]
 
-Did I miss v4 of this series?
+Applied, thanks!
 
-On 14/10/2024 20:47:25-0400, Jonathan Marek wrote:
-> x1e80100 needs a workaround because the RTC alarm is not owned by HLOS.
-> It also needs the same offset workaround as sc8280xp/etc.
-> 
-> v2: remove duplicated ops and use RTC_FEATURE_ALARM instead
-> v3:
->  - renamed flag to qcom,no-alarm
->  - don't remove alarm registers/interrupt from dts
-> 
-> Jonathan Marek (5):
->   rtc: pm8xxx: implement qcom,no-alarm flag for non-HLOS owned alarm
->   dt-bindings: rtc: qcom-pm8xxx: document qcom,no-alarm flag
->   arm64: dts: qcom: x1e80100-pmics: enable RTC
->   arm64: dts: qcom: x1e80100-crd: add rtc offset to set rtc time
->   arm64: dts: qcom: x1e78100-t14s: add rtc offset to set rtc time
-> 
->  .../bindings/rtc/qcom-pm8xxx-rtc.yaml         |  5 +++
->  .../qcom/x1e78100-lenovo-thinkpad-t14s.dts    | 11 +++++
->  arch/arm64/boot/dts/qcom/x1e80100-crd.dts     | 11 +++++
->  arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi  |  3 +-
->  drivers/rtc/rtc-pm8xxx.c                      | 44 +++++++++++++------
->  5 files changed, 58 insertions(+), 16 deletions(-)
-> 
-> -- 
-> 2.45.1
-> 
-> 
+[1/1] rtc: loongson: clear TOY_MATCH0_REG in loongson_rtc_isr()
+      https://git.kernel.org/abelloni/c/09471d8f5b39
+
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
