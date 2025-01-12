@@ -1,59 +1,59 @@
-Return-Path: <linux-rtc+bounces-2886-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2887-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2911A0ACA4
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 00:26:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71206A0ACA6
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 00:27:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C9337A19A1
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jan 2025 23:26:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 536243A1C15
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jan 2025 23:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48251C2DB4;
-	Sun, 12 Jan 2025 23:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AF1A1C2DC8;
+	Sun, 12 Jan 2025 23:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l9zqgjsu"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aq3k2qui"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FA91B6D06;
-	Sun, 12 Jan 2025 23:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB67A1B6D06;
+	Sun, 12 Jan 2025 23:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736724372; cv=none; b=rSBkcfctgaSBs81CZ6Va8naHZSLAwNk5yYEESGEN5JIWdknsoETU7sT13xNG5/cSwPina9QmLOGmwOpcq3nEz1la6EmReTT8KTVNnjugNRHuK4+OArV9/4UOXigwanKQWwQYNOStvW5zBnBpmCSVt4G7fDzaLIxiABkTdMgtpW0=
+	t=1736724434; cv=none; b=BUEFnN6oLda9n1AS+8BdcYXUzc6UsCBITVNFmJHuVHIa5OQv5YKulkbE9P+E4noKe8ctZxsCiHohmRiULLZ7fwfQWzvdEYanKvHl096wTXNNdZQxntSQiBj1IYjaZW65IHetRQftgl0ubTebjgDayMpS/B8M0RBH2af1kv1gzFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736724372; c=relaxed/simple;
-	bh=YIyihKSlz1Tq0MnM5QkkFfK69inyp55AtBNQLVfo2s4=;
+	s=arc-20240116; t=1736724434; c=relaxed/simple;
+	bh=DtRAJ53E4ulo6PXcSHMN1q2kaBdDciNO18dIZ72yLXk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JXrx7exv8TzMF8ykbksMCm4bMISdpxyUHgox54eV+iVZFff516wSB1Qc32SsJ5B+huBX8R1zRKStmcB99Et2qHmg48M33j8jjelhwiwN0/gHboCoO2ZDG9TvOx8JoPMqb2HyBulRd8TXyAvAQrh3/PC89TbsSpkY6w8ua0jjEJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l9zqgjsu; arc=none smtp.client-ip=217.70.183.195
+	 Content-Type:Content-Disposition:In-Reply-To; b=DPKSUO8TF35dn1PkvTpYSG0rtou1cWot+3ScKNm320k9g3Zfpdo+O/Mm1O8uLYDqIc+7dP4U/RF5hn8D3oejYW/7CuOaQVpxgLT1MRWUgK2PTTyR+MHj0oqvziXUx+p0v/Z9QaM9x3PJnarbdLYXyMcY0gPX9xZYYTCGtH1fKyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aq3k2qui; arc=none smtp.client-ip=217.70.183.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E2D2A60003;
-	Sun, 12 Jan 2025 23:26:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C84CBC0003;
+	Sun, 12 Jan 2025 23:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736724361;
+	t=1736724430;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+lLYRo3DNIZmMYeBzFzR0NMOOPvi33hx/jJ/CzRJLGA=;
-	b=l9zqgjsuBmb9jf71l29XRBtS6p8c0k56i5vZme7WkgCHZH0QuPvSO15JgjayT0oNHdsosL
-	z8LgtRFGi7D1ElVo5zc8UBEEdC91rjtbjPG5bSQK3rZy+Xa5S6f5ZRDnfikyRJlRAB7zDA
-	0yX3idMIESJupWnxW7lc6Da5Y+sHGPdAAXFVOZ2pVLSAu9PRP7OYNXhnd4guigMW5TCuFr
-	Gh6MRQks7LVpDxwzVuyXYKsrD8MwhwCKzgj2DfxahNnF+jYHyvwP0Aclt4PkgB25Wn1pny
-	KX7GIvdSi34Gd8TUhkixW4dVW1zrf6eyOa/kjmroIp1wbIXAY4/AB6LDAHoCTw==
-Date: Mon, 13 Jan 2025 00:26:00 +0100
+	bh=OM+NmPO93xj/JGpeWUjtX1zIgKVpCLo9mjIHddcUyG4=;
+	b=aq3k2quiykqzenCLX0ElgxLE1gcLRfF0RwkVROiIhWGzbNF5PM+FyaV0T4AjiJIl+UEYAG
+	7i8LN7qsQxvboBl599L7IQLNUUdaZ0SzqLVcauN62k3XDkpO8cUm0TV0ciZeZJLTpTjK4X
+	q5dOlzO/ktQnWHEpeM0H5tLbBkmohMTOZvSP66rgHvBrUEjls6qdBdRb8IzDZbY1DXpxXX
+	dYJATQqHSp714l+LetNSXPMu291l+BaIKDaGtGanxvhKi/tKL/07kdbxepdxEna+WhXzaD
+	Tx9HaghiD5xtemRNn/SnerlV/QkZuPZ6338+nobie9jcv2C3Qyp21bI6yhM9fg==
+Date: Mon, 13 Jan 2025 00:27:09 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux@treblig.org
-Cc: bp@alien8.de, mingo@redhat.com, tglx@linutronix.de,
-	dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-	linux-rtc@vger.kernel.org, arnd@arndb.de,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: Remove hpet_rtc_dropped_irq()
-Message-ID: <20250112232600ca0c0fd4@mail.local>
-References: <20241215022356.181625-1-linux@treblig.org>
+To: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@pengutronix.de, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH] rtc: pcf85063: fix potential OOB write in PCF85063 NVMEM
+ read
+Message-ID: <173672442028.1487900.17913987088323810689.b4-ty@bootlin.com>
+References: <20241218-rtc-pcf85063-stack-corruption-v1-1-12fd0ee0f046@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,77 +62,25 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241215022356.181625-1-linux@treblig.org>
+In-Reply-To: <20241218-rtc-pcf85063-stack-corruption-v1-1-12fd0ee0f046@pengutronix.de>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Dear x86 maintainers,
+On Wed, 18 Dec 2024 20:34:58 +0100, Ahmad Fatoum wrote:
+> The nvmem interface supports variable buffer sizes, while the regmap
+> interface operates with fixed-size storage. If an nvmem client uses a
+> buffer size less than 4 bytes, regmap_read will write out of bounds
+> as it expects the buffer to point at an unsigned int.
+> 
+> Fix this by using an intermediary unsigned int to hold the value.
+> 
+> [...]
 
-On 15/12/2024 02:23:56+0000, linux@treblig.org wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> 
-> hpet_rtc_dropped_irq() has been unused since
-> commit f52ef24be21a ("rtc/alpha: remove legacy rtc driver")
-> 
-> Remove it in rtc, and x86 hpet code.
-> 
+Applied, thanks!
 
-I'm willing t take this patch, can I get an ack?
+[1/1] rtc: pcf85063: fix potential OOB write in PCF85063 NVMEM read
+      https://git.kernel.org/abelloni/c/3ab8c5ed4f84
 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> ---
->  arch/x86/include/asm/hpet.h | 1 -
->  arch/x86/kernel/hpet.c      | 6 ------
->  drivers/rtc/rtc-cmos.c      | 5 -----
->  3 files changed, 12 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/hpet.h b/arch/x86/include/asm/hpet.h
-> index ab9f3dd87c80..ab0c78855ecb 100644
-> --- a/arch/x86/include/asm/hpet.h
-> +++ b/arch/x86/include/asm/hpet.h
-> @@ -84,7 +84,6 @@ extern int hpet_set_rtc_irq_bit(unsigned long bit_mask);
->  extern int hpet_set_alarm_time(unsigned char hrs, unsigned char min,
->  			       unsigned char sec);
->  extern int hpet_set_periodic_freq(unsigned long freq);
-> -extern int hpet_rtc_dropped_irq(void);
->  extern int hpet_rtc_timer_init(void);
->  extern irqreturn_t hpet_rtc_interrupt(int irq, void *dev_id);
->  extern int hpet_register_irq_handler(rtc_irq_handler handler);
-> diff --git a/arch/x86/kernel/hpet.c b/arch/x86/kernel/hpet.c
-> index c96ae8fee95e..7e21018a0e04 100644
-> --- a/arch/x86/kernel/hpet.c
-> +++ b/arch/x86/kernel/hpet.c
-> @@ -1392,12 +1392,6 @@ int hpet_set_periodic_freq(unsigned long freq)
->  }
->  EXPORT_SYMBOL_GPL(hpet_set_periodic_freq);
->  
-> -int hpet_rtc_dropped_irq(void)
-> -{
-> -	return is_hpet_enabled();
-> -}
-> -EXPORT_SYMBOL_GPL(hpet_rtc_dropped_irq);
-> -
->  static void hpet_rtc_timer_reinit(void)
->  {
->  	unsigned int delta;
-> diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-> index 78f2ce12c75a..9c8ce7510c56 100644
-> --- a/drivers/rtc/rtc-cmos.c
-> +++ b/drivers/rtc/rtc-cmos.c
-> @@ -151,11 +151,6 @@ static inline int hpet_set_periodic_freq(unsigned long freq)
->  	return 0;
->  }
->  
-> -static inline int hpet_rtc_dropped_irq(void)
-> -{
-> -	return 0;
-> -}
-> -
->  static inline int hpet_rtc_timer_init(void)
->  {
->  	return 0;
-> -- 
-> 2.47.1
-> 
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
