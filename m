@@ -1,58 +1,59 @@
-Return-Path: <linux-rtc+bounces-2892-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2893-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AFF2A0B136
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 09:35:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D611A0B138
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 09:35:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 566C71881C56
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 08:35:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BAD43A64AF
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2025 08:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24CDA233D9E;
-	Mon, 13 Jan 2025 08:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133272343AF;
+	Mon, 13 Jan 2025 08:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="imDm6zXc"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NwDC8x5I"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43AF3233D98;
-	Mon, 13 Jan 2025 08:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B47233D9C;
+	Mon, 13 Jan 2025 08:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736757318; cv=none; b=hzMIw5UDttRpZJnNVZ/acWZTF7Ocjs4ziEqx6I7sABJqIOluBGTwHumpq3IIJuXKNLL4HE351RaDeH7xRRzc5X43S5yGK5IKnge7IYtrLX1wjTbo8xwSplKqLLB9xjDQHKr5/wj+eK7AjOnTT+8JFgY0zncmwgoTazPJvEfqb/Q=
+	t=1736757323; cv=none; b=VyXItmphHmtwQX8ClhNdzWd4ZvAOUFdBYFeqEif+teCqGoHvtYBEKVRQF6HIP3/GZJUUmoKqO/iCy+5QSsKl3NtNIxB+VHqblmpBX6oiEXmXU77LT3NsIBEC8LY1pPSrKKFWv95Retrf2nsZETY1Em8S2EBSgprEAWVBlBosOkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736757318; c=relaxed/simple;
-	bh=/w4cGWEdvtF1jTVRXD4TLqnRhH1cGPm/56RjSTYR5J8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HWI4jctNAJfCUj3GTdooYMU2F23pkDE58fpjN8t15A9VewJIsA657t6DbDwH45WsWJ6Gd3yqOvBzvbIAe+4wB2qi4X9N7J6uoJfY5RXzeaS8/aU+lGvJ8J+Qj+ae2pkUp+6FTmcB2xBUi2hXw/waCuD7GoBAYy6TgcZ0REN2ZMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=imDm6zXc; arc=none smtp.client-ip=217.70.183.195
+	s=arc-20240116; t=1736757323; c=relaxed/simple;
+	bh=Z4ATUBSjgWAkswFF1sKiKLZiNcUATxjG6Ijca/M7e70=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XcI4SKLNMW8IbWJtJr9gYcOBjii+dP67+tEM+VvW39vzh2H8Vz2xhJBSuxHBUa751TR4cCt+qbnc3lOPCC66ZNPZgyfVFqdbMIJpMWRHvaz+IWSf+bzWyMmVZa8I03I4ScK25xRp0PXA7IvO1eKUgjYvDQA3cZKKwH8M05/rqEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NwDC8x5I; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E3A5760007;
-	Mon, 13 Jan 2025 08:35:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EBF7A1C0009;
+	Mon, 13 Jan 2025 08:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736757312;
+	t=1736757319;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=IWmQ8MiO5uYzUdLoRcFdPB79dMwYGmi5sgzBTCSL1xw=;
-	b=imDm6zXcGeyK8CdpOD6BaZf7kxmdzcJeNpnUoDjsv0XgjwCt6nLR5C6B9LOQ/46cv6PW+G
-	9YoI6J5RH2eNTS2tNQgNzoGcm0eCeY94qocuqWVTeIexXsjbSin87Q1M5NWT7gnh7HuQXV
-	VeyJ6BNHMO8PeXBcZo/mRNuGRZdWs9qv1+0+iOnu5OAOS1eis9eYRQkwg39oaFaAKUcjrV
-	XGPe9qeYctouHHziW8rD184O3Tl74imxb+ub99PEHwAAf10MgdzX0lLyTv8dO32EirGKC3
-	TosGQbuxezNDN30qL+oGO+oTxiWH8Q2HiHQjIv/xC0uLQ030z5xy3LC+wOGPaA==
-Date: Mon, 13 Jan 2025 09:35:11 +0100
+	bh=2M/xnJphBUzCcjZlLtKi3iA13j5DEXJ9BhN7BnaNhrk=;
+	b=NwDC8x5ICmGvURqTj97rfvXYBQ216mS20T8xfQvMwMsToJeZtQ4coiFoqyeL5H3io1wULa
+	yt2j8pq1retjB4JIx43HldsiClXWAruCWuJ2HqEu2jE1g6BfsWmfFSY6d7rpuYCsURqtde
+	k2DvJk0gCa1IuX6tVEVkF9Jzty/dJr1e7Y33FNc5ClzdrvdKppQ0NzDUhC4v0OdHI7ReUD
+	E4gFY0O0A7qDaWmTePOU7o2EHUtTz7J0HTjnqYGrGGGclPhSNF1tnbIzLHkFqP7NUr4Nd9
+	W1oxdb9YLEsxRruqWMR2crGBMvib3k8Td/FJX3HCTbhW2pIzDB0SG8/XXGvtdQ==
+Date: Mon, 13 Jan 2025 09:35:18 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH] dt-bindings: rtc: mxc: Document fsl,imx31-rtc
-Message-ID: <173675730309.1496086.6217131350465680601.b4-ty@bootlin.com>
-References: <20250112134027.1013213-1-festevam@gmail.com>
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] rtc: stm32: Use syscon_regmap_lookup_by_phandle_args
+Message-ID: <173675730307.1496086.4868139037996576854.b4-ty@bootlin.com>
+References: <20250111185405.183824-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -61,24 +62,26 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250112134027.1013213-1-festevam@gmail.com>
+In-Reply-To: <20250111185405.183824-1-krzysztof.kozlowski@linaro.org>
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Sun, 12 Jan 2025 10:40:27 -0300, Fabio Estevam wrote:
-> imx31.dtsi uses the following RTC compatible:
+On Sat, 11 Jan 2025 19:54:05 +0100, Krzysztof Kozlowski wrote:
+> Use syscon_regmap_lookup_by_phandle_args() which is a wrapper over
+> syscon_regmap_lookup_by_phandle() combined with getting the syscon
+> argument.  Except simpler code this annotates within one line that given
+> phandle has arguments, so grepping for code would be easier.
 > 
-> compatible = "fsl,imx31-rtc", "fsl,imx21-rtc";
-> 
-> Document 'fsl,imx31-rtc' to fix the following dt-schema warning:
-> 
-> 'fsl,imx31-rtc' is not one of ['fsl,imx1-rtc', 'fsl,imx21-rtc']
+> There is also no real benefit in printing errors on missing syscon
+> argument, because this is done just too late: runtime check on
+> static/build-time data.  Dtschema and Devicetree bindings offer the
+> static/build-time check for this already.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] dt-bindings: rtc: mxc: Document fsl,imx31-rtc
-      https://git.kernel.org/abelloni/c/6758bd0692e2
+[1/1] rtc: stm32: Use syscon_regmap_lookup_by_phandle_args
+      https://git.kernel.org/abelloni/c/3f76ba88c3fd
 
 Best regards,
 
