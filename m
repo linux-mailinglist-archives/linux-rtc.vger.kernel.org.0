@@ -1,172 +1,427 @@
-Return-Path: <linux-rtc+bounces-2912-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2913-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98543A111CE
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 21:20:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 817AAA11223
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 21:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17EF57A1E02
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 20:20:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89F81188B0F4
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 20:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F2720A5CA;
-	Tue, 14 Jan 2025 20:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3015920B80A;
+	Tue, 14 Jan 2025 20:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JD22uIFW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="biR0JEF4"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0919A1FBCA6;
-	Tue, 14 Jan 2025 20:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA12420C464
+	for <linux-rtc@vger.kernel.org>; Tue, 14 Jan 2025 20:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886036; cv=none; b=o1X9t9eafnFyF79a8eZrrGqAm4b+yOaXnBwKCLp9zeumb0AspAfGg80/+p0lLIDkWH1NX+C94doJPjEt9H7pZx1oU25qa93itst6P09Y1U1S05s/ifFliCbKHjY7lpU64kx+X7PmYrzZICtzqujtViERx42rv1LrBOU7sFkgTxQ=
+	t=1736886992; cv=none; b=g0hsqC7uegaTEaMsKLCHCFhf7tyl0wCnhpooJgexsqrUyE+u9kKSo/viGRmZuQosalNORMJz5cL8AIy3E7/Z+cdUr1izqjR9ZQ1pzxSM5WDPgVR4PzwVL5b7NHYI/XfGL+zEOmz7DjliSCJPh7M3fRHushuymb1nZgGk54nffVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736886036; c=relaxed/simple;
-	bh=I9Ekx6aq/CtvmHlK2JuDkCREj16AUwVV0szqwfvn2B8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GyiJYDTX4/dXl8zzAhasxnQrVBBo7uY/BI5tvyDPDtUBcmfYIoEO2mIBdG6UBgP+SrT0GCHOK+KIrkR6RhVNHnZ0aHw5UizlhhwfB5BKcxVa4A9j9/WoHBNcv1uEe6Gp3aCa0yZ8io/aGoAVJRjecCoGU1wPX7Mk3uV3xQ3p+tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JD22uIFW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C88C4CEEC;
-	Tue, 14 Jan 2025 20:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736886035;
-	bh=I9Ekx6aq/CtvmHlK2JuDkCREj16AUwVV0szqwfvn2B8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JD22uIFW+fdCoYLcYeIsO2Txr02Nmv6PaD3vP9xJM7UUTueYcu0+ONzHQG06vXduq
-	 lkoMo+Ps9CQCr69LMbVC2r9TQ2pbJeuo+AKkJiGA41O1f7iirwWhLVUxRW/AUz8kuH
-	 jZpbpAJaemRr7wa9BNXuP5WR85oNMonECKjO4soOFO0HIZB1U6fpR0kVfbKf6g947P
-	 Y0CUnLeoKueHwxpK6IgZ0MpvJ1xE8c/iapkJ0dgX+jM1tRAv2LScMM/ZaftTdnfnDI
-	 dd1+xdcog1URclurHKunuZhxCOkXFYMDTm+uoXHKvSb/xOSY6nu/t6ezK5/fcoCUEJ
-	 DvZGIPiGaAZsg==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3eb6b16f1a0so1745342b6e.3;
-        Tue, 14 Jan 2025 12:20:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU+hJgJttCSCeihAO2+vZgyWlrJWiCTKbLYmjpXoOOdPK2iXMoCkH8RLXc80NV7kmD2HRq9T2xUs5EkelFx@vger.kernel.org, AJvYcCUI9chl7JoRlANikNKO8UpTbWd4K0uyXJ2fZYQ0MZ6XZwsw+//N4Hfc+/7/wrDSaroD4FBwh4EJ7c3Upijm@vger.kernel.org, AJvYcCX8KEAO08VaDHLFVoI9yKwBCNJ4ZQ5unF0I1aYAfI5TTQnOJmtWEJD4GoZ256Galk61nZXAwETzagw=@vger.kernel.org, AJvYcCXbpV/LYFYtV1HuWqT2qBJGeQ+1TfNG1iOt9FhTiU2lGS8TUw2gzBlaZqPCOIAf3AaIomN7p8pClj3+PU8=@vger.kernel.org, AJvYcCXi8fvBj/DjbwZOD2M7b6ihGaxlR5f1NuAyVpm+rnHmdFh6ycTmYvf1/W9cpdMirkBE8sHr3AFmpASF@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEuqBJK8vi5PWkFnhSnJF9Js9wAPdzHqQrDkYabPVvBMPigQos
-	0r3XTZP2iI8ykAcFONBWeHmBuCMMY3hJ7dwoWAJgTWVqwLzAAms/KJvYxgi7FT8ps31gqNHlssX
-	PLV+BxmDQQqOaaURxUZANMINexNM=
-X-Google-Smtp-Source: AGHT+IHBdFDv09GmJQAPh9/RI61yRA+OUJBTYVfB4ZAfwslXJG+AQnvyEewTo5F7++0A17YOZNGuMRHAq8Q+xsm4lZ0=
-X-Received: by 2002:a05:6808:198d:b0:3eb:615a:ece5 with SMTP id
- 5614622812f47-3ef2ec54eedmr15212295b6e.15.1736886034615; Tue, 14 Jan 2025
- 12:20:34 -0800 (PST)
+	s=arc-20240116; t=1736886992; c=relaxed/simple;
+	bh=+FdAt+z1xAYLIMV6nT+KP7RkmVpp5RJIbbDyhP2bsNM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I1wFhuPJdjZAgTKaaBeYsz0zwQF1uN9CCizrMTktI4Hoi2+jFdI6mOUl3tw2LwA3QN5t2Kfz2PZfaINGLwc3IoroLQO9n7jYLRJmMLd7IZR/F6WjtnRt4ZPPXCC0tUTBklbdm99WO7R45NN3QQmpiWJ+XBwfKK87icLDLSWu+Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=biR0JEF4; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43616bf3358so7514565e9.3
+        for <linux-rtc@vger.kernel.org>; Tue, 14 Jan 2025 12:36:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736886987; x=1737491787; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/U9E38Yq0RbsKRmPfymuMsLZemc21T6r6c/BM5thOn8=;
+        b=biR0JEF4SaeFMLZ2BnnjyaRQc6JrTyT318nblzig563Zt6PENMxni9SeDgrPhRw5pv
+         dEY3mWybZYDSR20G6d5womVbXXF7bYbCqyOYaOMJ8P5XiPvHJsMRFZeMTgafLiY7VXmu
+         HQXoq6IT8q+pV63qxjg0nbJ81nrKToExO67k0OmWTfWdZS18iTLx69+5xf+IZd71WDHZ
+         U3M5kaexEbXTVv6asnDYxWTKRD0RFDilSD5dM0zjIkRuPGfdRblFSk3Oc7zn012UKYcU
+         5EFAXE1HHRGs7y+8+wpxH8rCTQcIeIN/sg0K4NEHti22HzMDoTCQOL44byU2TjIcnQja
+         maZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736886987; x=1737491787;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/U9E38Yq0RbsKRmPfymuMsLZemc21T6r6c/BM5thOn8=;
+        b=wbG+z39/1W1vfzn2INuOI0V2/rIGtJ1ucBLm91vB4geTx7OAOec6W7dMd9QzZbaxs4
+         5pLmxOhlF5TgDOaFisGNiG+UzuHET2tSKa3m0qsqwNW3WdNvjFBrVLiJt3ozfDOYMoc5
+         P04RRvzVSmP0wZpaCo5YLLoj6zDRSWAGYzFvCWLWv23tWGnPiquGeSSV3jiJ5VtJdYJW
+         fqwm1Mucfo0qemRVjPzz3PPUariEbfVJNehd23YoY/b4vnmUekr+Iu8KQFTHtRyrFogi
+         n9glSqk7Si+LbvZjTa3NvAVN8enO4DWvoG40Lj2/lvooOj01nshSFjgv4ctG8GkihIGt
+         uF7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWF6QWEUTQfb7pdEbxWNCvJokXTEKUsTb7oZXRM7HFIAHfs1CnZqQoPBwihT6eP6UUUlPg61aFUA0Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynciNTa/lYqv0DZFA3op2gOxHMR/PkYSAqOwAA5+CzltzwW+bh
+	bRBGrmpg60eTPbK9vl1y+G23xyydseW3TKB8E1JSJ+/JEJ+ILoxFs0zV2iUGZzw=
+X-Gm-Gg: ASbGnctDdkM4fRZYc556JB4HwZfFdSdghpaC4bgWJY5QWuN/PwZZFSJCfNEvWJqLgq3
+	Ik9Iy/H9Kn3WO/SHaVsB8UKUjKVEuZrTFpaCViyCqcun3OcA3nH3RkuQtY6fbbk8ZD9QEwruyPA
+	aGAWhggXykyBiRxH1t+sU6FdgKs+b2qzoBOTLsoTz0IAgXbVqRPgzcyXxDiKfTae6CMsbUTZh9K
+	CXUYaSuk32ZzBcT0cnuuifKhSK/Fygf2+vhthiPAIit8YVV6By+8YD89lZ33EGGxdCy1qY=
+X-Google-Smtp-Source: AGHT+IHg3w8EMpYt7LtaYqc3wAUCEGmoqRwXRltHnQR4piUaIUNbFN6feV+vosMmYhZXMPXP0I845g==
+X-Received: by 2002:a05:600c:4455:b0:434:f9c1:a5b1 with SMTP id 5b1f17b1804b1-436e269968amr98702715e9.3.1736886987112;
+        Tue, 14 Jan 2025 12:36:27 -0800 (PST)
+Received: from krzk-bin.. ([178.197.223.165])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bddbf50a2sm5346578f8f.43.2025.01.14.12.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 12:36:26 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Joshua Kinard <kumba@gentoo.org>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] rtc: Use str_enable_disable-like helpers
+Date: Tue, 14 Jan 2025 21:36:23 +0100
+Message-ID: <20250114203623.1013555-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250103-wake_irq-v2-0-e3aeff5e9966@nxp.com> <20250103-wake_irq-v2-1-e3aeff5e9966@nxp.com>
-In-Reply-To: <20250103-wake_irq-v2-1-e3aeff5e9966@nxp.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 14 Jan 2025 21:20:22 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hj7wUU3f_j5QH3fNUFKokaXr0octaP2M1Ho_L_BspoUA@mail.gmail.com>
-X-Gm-Features: AbW1kvZ2IsMpRpq9v9cu6FjARLwcHzjMVAJFZcTXGy5umUj9Q22VPlrSsSvyjVE
-Message-ID: <CAJZ5v0hj7wUU3f_j5QH3fNUFKokaXr0octaP2M1Ho_L_BspoUA@mail.gmail.com>
-Subject: Re: [PATCH v2 01/12] PM: sleep: wakeirq: Introduce device-managed
- variant of dev_pm_set_wake_irq
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Conor Dooley <conor.dooley@microchip.com>, Daire McNamara <daire.mcnamara@microchip.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 3, 2025 at 9:42=E2=80=AFAM Peng Fan (OSS) <peng.fan@oss.nxp.com=
-> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> Add device-managed variant of dev_pm_set_wake_irq which automatically
-> clear the wake irq on device destruction to simplify error handling
-> and resource management in drivers.
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/base/power/wakeirq.c | 26 ++++++++++++++++++++++++++
->  include/linux/pm_wakeirq.h   |  6 ++++++
->  2 files changed, 32 insertions(+)
->
-> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-> index 5a5a9e978e85f3fc9d89cb7d43527dc1dd42a9b1..8aa28c08b2891f3af49017536=
-2cc1a759069bd50 100644
-> --- a/drivers/base/power/wakeirq.c
-> +++ b/drivers/base/power/wakeirq.c
-> @@ -103,6 +103,32 @@ void dev_pm_clear_wake_irq(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_clear_wake_irq);
->
-> +static void devm_pm_clear_wake_irq(void *dev)
-> +{
-> +       dev_pm_clear_wake_irq(dev);
-> +}
-> +
-> +/**
-> + * devm_pm_set_wake_irq - device-managed variant of dev_pm_set_wake_irq
-> + * @dev: Device entry
-> + * @irq: Device IO interrupt
-> + *
-> + *
-> + * Attach a device IO interrupt as a wake IRQ, same with dev_pm_set_wake=
-_irq,
-> + * but the device will be auto clear wake capability on driver detach.
-> + */
-> +int devm_pm_set_wake_irq(struct device *dev, int irq)
-> +{
-> +       int ret;
-> +
-> +       ret =3D dev_pm_set_wake_irq(dev, irq);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return devm_add_action_or_reset(dev, devm_pm_clear_wake_irq, dev)=
-;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_set_wake_irq);
-> +
->  /**
->   * handle_threaded_wake_irq - Handler for dedicated wake-up interrupts
->   * @irq: Device specific dedicated wake-up interrupt
-> diff --git a/include/linux/pm_wakeirq.h b/include/linux/pm_wakeirq.h
-> index d9642c6cf85211af603ce39e280a5b4de6617ee5..25b63ed51b765c2c6919f2596=
-68a12675330835e 100644
-> --- a/include/linux/pm_wakeirq.h
-> +++ b/include/linux/pm_wakeirq.h
-> @@ -10,6 +10,7 @@ extern int dev_pm_set_wake_irq(struct device *dev, int =
-irq);
->  extern int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq);
->  extern int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int=
- irq);
->  extern void dev_pm_clear_wake_irq(struct device *dev);
-> +extern int devm_pm_set_wake_irq(struct device *dev, int irq);
->
->  #else  /* !CONFIG_PM */
->
-> @@ -32,5 +33,10 @@ static inline void dev_pm_clear_wake_irq(struct device=
- *dev)
->  {
->  }
->
-> +static inline int devm_pm_set_wake_irq(struct device *dev, int irq)
-> +{
-> +       return 0;
-> +}
-> +
->  #endif /* CONFIG_PM */
->  #endif /* _LINUX_PM_WAKEIRQ_H */
->
-> --
+Replace ternary (condition ? "enable" : "disable") syntax with helpers
+from string_choices.h because:
+1. Simple function call with one argument is easier to read.  Ternary
+   operator has three arguments and with wrapping might lead to quite
+   long code.
+2. Is slightly shorter thus also easier to read.
+3. It brings uniformity in the text - same string.
+4. Allows deduping by the linker, which results in a smaller binary
+   file.
 
-I can apply this patch for 6.14, but the rest of the series will need
-to be picked up by the respective driver maintainers.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/rtc/proc.c         | 9 +++++----
+ drivers/rtc/rtc-at91sam9.c | 3 ++-
+ drivers/rtc/rtc-cmos.c     | 9 +++++----
+ drivers/rtc/rtc-ds1286.c   | 7 ++++---
+ drivers/rtc/rtc-ds1685.c   | 9 +++++----
+ drivers/rtc/rtc-efi.c      | 5 +++--
+ drivers/rtc/rtc-max8997.c  | 5 +++--
+ drivers/rtc/rtc-mc13xxx.c  | 3 ++-
+ drivers/rtc/rtc-mcp795.c   | 3 ++-
+ drivers/rtc/rtc-pic32.c    | 3 ++-
+ drivers/rtc/rtc-pxa.c      | 5 +++--
+ drivers/rtc/rtc-sh.c       | 5 +++--
+ 12 files changed, 39 insertions(+), 27 deletions(-)
 
-I hope this works for you?
+diff --git a/drivers/rtc/proc.c b/drivers/rtc/proc.c
+index cbcdbb19d848..19576ce89f6c 100644
+--- a/drivers/rtc/proc.c
++++ b/drivers/rtc/proc.c
+@@ -12,6 +12,7 @@
+ #include <linux/rtc.h>
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
++#include <linux/string_choices.h>
+ 
+ #include "rtc-core.h"
+ 
+@@ -57,13 +58,13 @@ static int rtc_proc_show(struct seq_file *seq, void *offset)
+ 		seq_printf(seq, "alrm_time\t: %ptRt\n", &alrm.time);
+ 		seq_printf(seq, "alrm_date\t: %ptRd\n", &alrm.time);
+ 		seq_printf(seq, "alarm_IRQ\t: %s\n",
+-			   alrm.enabled ? "yes" : "no");
++			   str_yes_no(alrm.enabled));
+ 		seq_printf(seq, "alrm_pending\t: %s\n",
+-			   alrm.pending ? "yes" : "no");
++			   str_yes_no(alrm.pending));
+ 		seq_printf(seq, "update IRQ enabled\t: %s\n",
+-			   (rtc->uie_rtctimer.enabled) ? "yes" : "no");
++			   str_yes_no(rtc->uie_rtctimer.enabled));
+ 		seq_printf(seq, "periodic IRQ enabled\t: %s\n",
+-			   (rtc->pie_enabled) ? "yes" : "no");
++			   str_yes_no(rtc->pie_enabled));
+ 		seq_printf(seq, "periodic IRQ frequency\t: %d\n",
+ 			   rtc->irq_freq);
+ 		seq_printf(seq, "max user IRQ frequency\t: %d\n",
+diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
+index 15b21da2788f..030ae2241a4a 100644
+--- a/drivers/rtc/rtc-at91sam9.c
++++ b/drivers/rtc/rtc-at91sam9.c
+@@ -20,6 +20,7 @@
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ #include <linux/suspend.h>
++#include <linux/string_choices.h>
+ #include <linux/time.h>
+ 
+ /*
+@@ -252,7 +253,7 @@ static int at91_rtc_proc(struct device *dev, struct seq_file *seq)
+ 	u32 mr = rtt_readl(rtc, MR);
+ 
+ 	seq_printf(seq, "update_IRQ\t: %s\n",
+-		   (mr & AT91_RTT_RTTINCIEN) ? "yes" : "no");
++		   str_yes_no(mr & AT91_RTT_RTTINCIEN));
+ 	return 0;
+ }
+ 
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 78f2ce12c75a..1f556cdd778f 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -32,6 +32,7 @@
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/spinlock.h>
++#include <linux/string_choices.h>
+ #include <linux/platform_device.h>
+ #include <linux/log2.h>
+ #include <linux/pm.h>
+@@ -604,12 +605,12 @@ static int cmos_procfs(struct device *dev, struct seq_file *seq)
+ 		   "DST_enable\t: %s\n"
+ 		   "periodic_freq\t: %d\n"
+ 		   "batt_status\t: %s\n",
+-		   (rtc_control & RTC_PIE) ? "yes" : "no",
+-		   (rtc_control & RTC_UIE) ? "yes" : "no",
+-		   use_hpet_alarm() ? "yes" : "no",
++		   str_yes_no(rtc_control & RTC_PIE),
++		   str_yes_no(rtc_control & RTC_UIE),
++		   str_yes_no(use_hpet_alarm()),
+ 		   // (rtc_control & RTC_SQWE) ? "yes" : "no",
+ 		   (rtc_control & RTC_DM_BINARY) ? "no" : "yes",
+-		   (rtc_control & RTC_DST_EN) ? "yes" : "no",
++		   str_yes_no(rtc_control & RTC_DST_EN),
+ 		   cmos->rtc->irq_freq,
+ 		   (valid & RTC_VRT) ? "okay" : "dead");
+ 
+diff --git a/drivers/rtc/rtc-ds1286.c b/drivers/rtc/rtc-ds1286.c
+index 7acf849d4902..32fff586d3ec 100644
+--- a/drivers/rtc/rtc-ds1286.c
++++ b/drivers/rtc/rtc-ds1286.c
+@@ -13,6 +13,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/bcd.h>
+ #include <linux/rtc/ds1286.h>
++#include <linux/string_choices.h>
+ #include <linux/io.h>
+ #include <linux/slab.h>
+ 
+@@ -133,12 +134,12 @@ static int ds1286_proc(struct device *dev, struct seq_file *seq)
+ 		   "interrupt_mode\t: %s\n"
+ 		   "INTB_mode\t: %s_active\n"
+ 		   "interrupt_pins\t: %s\n",
+-		   (cmd & RTC_TDF) ? "yes" : "no",
+-		   (cmd & RTC_WAF) ? "yes" : "no",
++		   str_yes_no(cmd & RTC_TDF),
++		   str_yes_no(cmd & RTC_WAF),
+ 		   (cmd & RTC_TDM) ? "disabled" : "enabled",
+ 		   (cmd & RTC_WAM) ? "disabled" : "enabled",
+ 		   (cmd & RTC_PU_LVL) ? "pulse" : "level",
+-		   (cmd & RTC_IBH_LO) ? "low" : "high",
++		   str_low_high(cmd & RTC_IBH_LO),
+ 		   (cmd & RTC_IPSW) ? "unswapped" : "swapped");
+ 	return 0;
+ }
+diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
+index 38e25f63597a..25ee2d96bf76 100644
+--- a/drivers/rtc/rtc-ds1685.c
++++ b/drivers/rtc/rtc-ds1685.c
+@@ -21,6 +21,7 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/rtc.h>
++#include <linux/string_choices.h>
+ #include <linux/workqueue.h>
+ 
+ #include <linux/rtc/ds1685.h>
+@@ -802,14 +803,14 @@ ds1685_rtc_proc(struct device *dev, struct seq_file *seq)
+ 	   "SQW Freq\t: %s\n"
+ 	   "Serial #\t: %8phC\n",
+ 	   model,
+-	   ((ctrla & RTC_CTRL_A_DV1) ? "enabled" : "disabled"),
++	   str_enabled_disabled(ctrla & RTC_CTRL_A_DV1),
+ 	   ((ctrlb & RTC_CTRL_B_2412) ? "24-hour" : "12-hour"),
+-	   ((ctrlb & RTC_CTRL_B_DSE) ? "enabled" : "disabled"),
++	   str_enabled_disabled(ctrlb & RTC_CTRL_B_DSE),
+ 	   ((ctrlb & RTC_CTRL_B_DM) ? "binary" : "BCD"),
+ 	   ((ctrld & RTC_CTRL_D_VRT) ? "ok" : "exhausted or n/a"),
+ 	   ((ctrl4a & RTC_CTRL_4A_VRT2) ? "ok" : "exhausted or n/a"),
+-	   ((ctrlb & RTC_CTRL_B_UIE) ? "yes" : "no"),
+-	   ((ctrlb & RTC_CTRL_B_PIE) ? "yes" : "no"),
++	   str_yes_no(ctrlb & RTC_CTRL_B_UIE),
++	   str_yes_no(ctrlb & RTC_CTRL_B_PIE),
+ 	   (!(ctrl4b & RTC_CTRL_4B_E32K) ?
+ 	    ds1685_rtc_pirq_rate[(ctrla & RTC_CTRL_A_RS_MASK)] : "none"),
+ 	   (!((ctrl4b & RTC_CTRL_4B_E32K)) ?
+diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
+index fa8bf82df948..fd4bc2d715da 100644
+--- a/drivers/rtc/rtc-efi.c
++++ b/drivers/rtc/rtc-efi.c
+@@ -16,6 +16,7 @@
+ #include <linux/time.h>
+ #include <linux/platform_device.h>
+ #include <linux/rtc.h>
++#include <linux/string_choices.h>
+ #include <linux/efi.h>
+ 
+ #define EFI_ISDST (EFI_TIME_ADJUST_DAYLIGHT|EFI_TIME_IN_DAYLIGHT)
+@@ -224,8 +225,8 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
+ 			   alm.hour, alm.minute, alm.second, alm.nanosecond,
+ 			   alm.year, alm.month, alm.day,
+ 			   alm.daylight,
+-			   enabled == 1 ? "yes" : "no",
+-			   pending == 1 ? "yes" : "no");
++			   str_yes_no(enabled == 1),
++			   str_yes_no(pending == 1));
+ 
+ 		if (alm.timezone == EFI_UNSPECIFIED_TIMEZONE)
+ 			seq_puts(seq, "Timezone\t: unspecified\n");
+diff --git a/drivers/rtc/rtc-max8997.c b/drivers/rtc/rtc-max8997.c
+index 20e50d9fdf88..0b094b8f9bb9 100644
+--- a/drivers/rtc/rtc-max8997.c
++++ b/drivers/rtc/rtc-max8997.c
+@@ -9,6 +9,7 @@
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/rtc.h>
+ #include <linux/delay.h>
+ #include <linux/mutex.h>
+@@ -379,7 +380,7 @@ static void max8997_rtc_enable_wtsr(struct max8997_rtc_info *info, bool enable)
+ 	mask = WTSR_EN_MASK | WTSRT_MASK;
+ 
+ 	dev_info(info->dev, "%s: %s WTSR\n", __func__,
+-			enable ? "enable" : "disable");
++		 str_enable_disable(enable));
+ 
+ 	ret = max8997_update_reg(info->rtc, MAX8997_RTC_WTSR_SMPL, val, mask);
+ 	if (ret < 0) {
+@@ -407,7 +408,7 @@ static void max8997_rtc_enable_smpl(struct max8997_rtc_info *info, bool enable)
+ 	mask = SMPL_EN_MASK | SMPLT_MASK;
+ 
+ 	dev_info(info->dev, "%s: %s SMPL\n", __func__,
+-			enable ? "enable" : "disable");
++		 str_enable_disable(enable));
+ 
+ 	ret = max8997_update_reg(info->rtc, MAX8997_RTC_WTSR_SMPL, val, mask);
+ 	if (ret < 0) {
+diff --git a/drivers/rtc/rtc-mc13xxx.c b/drivers/rtc/rtc-mc13xxx.c
+index e7b87130e624..fd874baa08ab 100644
+--- a/drivers/rtc/rtc-mc13xxx.c
++++ b/drivers/rtc/rtc-mc13xxx.c
+@@ -12,6 +12,7 @@
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/rtc.h>
+ 
+ #define DRIVER_NAME "mc13xxx-rtc"
+@@ -214,7 +215,7 @@ static int mc13xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 
+ 	s1970 = rtc_tm_to_time64(&alarm->time);
+ 
+-	dev_dbg(dev, "%s: %s %lld\n", __func__, alarm->enabled ? "on" : "off",
++	dev_dbg(dev, "%s: %s %lld\n", __func__, str_on_off(alarm->enabled),
+ 			(long long)s1970);
+ 
+ 	ret = mc13xxx_rtc_irq_enable_unlocked(dev, alarm->enabled,
+diff --git a/drivers/rtc/rtc-mcp795.c b/drivers/rtc/rtc-mcp795.c
+index e12f0f806ec4..4a55d7e91d08 100644
+--- a/drivers/rtc/rtc-mcp795.c
++++ b/drivers/rtc/rtc-mcp795.c
+@@ -15,6 +15,7 @@
+ #include <linux/device.h>
+ #include <linux/printk.h>
+ #include <linux/spi/spi.h>
++#include <linux/string_choices.h>
+ #include <linux/rtc.h>
+ #include <linux/of.h>
+ #include <linux/bcd.h>
+@@ -161,7 +162,7 @@ static int mcp795_update_alarm(struct device *dev, bool enable)
+ {
+ 	int ret;
+ 
+-	dev_dbg(dev, "%s alarm\n", enable ? "Enable" : "Disable");
++	dev_dbg(dev, "%s alarm\n", str_enable_disable(enable));
+ 
+ 	if (enable) {
+ 		/* clear ALM0IF (Alarm 0 Interrupt Flag) bit */
+diff --git a/drivers/rtc/rtc-pic32.c b/drivers/rtc/rtc-pic32.c
+index bed3c27e665f..256e7e5e7fd6 100644
+--- a/drivers/rtc/rtc-pic32.c
++++ b/drivers/rtc/rtc-pic32.c
+@@ -14,6 +14,7 @@
+ #include <linux/slab.h>
+ #include <linux/clk.h>
+ #include <linux/rtc.h>
++#include <linux/string_choices.h>
+ #include <linux/bcd.h>
+ 
+ #include <asm/mach-pic32/pic32.h>
+@@ -247,7 +248,7 @@ static int pic32_rtc_proc(struct device *dev, struct seq_file *seq)
+ 
+ 	repeat = readw(base + PIC32_RTCALRM);
+ 	repeat &= PIC32_RTCALRM_ARPT;
+-	seq_printf(seq, "periodic_IRQ\t: %s\n", repeat  ? "yes" : "no");
++	seq_printf(seq, "periodic_IRQ\t: %s\n", str_yes_no(repeat));
+ 
+ 	clk_disable(pdata->clk);
+ 	return 0;
+diff --git a/drivers/rtc/rtc-pxa.c b/drivers/rtc/rtc-pxa.c
+index 34d8545c8e15..ff8f0387d023 100644
+--- a/drivers/rtc/rtc-pxa.c
++++ b/drivers/rtc/rtc-pxa.c
+@@ -13,6 +13,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/of.h>
+ 
+ #include "rtc-sa1100.h"
+@@ -282,9 +283,9 @@ static int pxa_rtc_proc(struct device *dev, struct seq_file *seq)
+ 
+ 	seq_printf(seq, "trim/divider\t: 0x%08x\n", rtc_readl(pxa_rtc, RTTR));
+ 	seq_printf(seq, "update_IRQ\t: %s\n",
+-		   (rtc_readl(pxa_rtc, RTSR) & RTSR_HZE) ? "yes" : "no");
++		   str_yes_no(rtc_readl(pxa_rtc, RTSR) & RTSR_HZE));
+ 	seq_printf(seq, "periodic_IRQ\t: %s\n",
+-		   (rtc_readl(pxa_rtc, RTSR) & RTSR_PIALE) ? "yes" : "no");
++		   str_yes_no(rtc_readl(pxa_rtc, RTSR) & RTSR_PIALE));
+ 	seq_printf(seq, "periodic_freq\t: %u\n", rtc_readl(pxa_rtc, PIAR));
+ 
+ 	return 0;
+diff --git a/drivers/rtc/rtc-sh.c b/drivers/rtc/rtc-sh.c
+index a5df521876ba..8073421217fa 100644
+--- a/drivers/rtc/rtc-sh.c
++++ b/drivers/rtc/rtc-sh.c
+@@ -21,6 +21,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/interrupt.h>
+ #include <linux/spinlock.h>
++#include <linux/string_choices.h>
+ #include <linux/io.h>
+ #include <linux/log2.h>
+ #include <linux/clk.h>
+@@ -237,11 +238,11 @@ static int sh_rtc_proc(struct device *dev, struct seq_file *seq)
+ 	unsigned int tmp;
+ 
+ 	tmp = readb(rtc->regbase + RCR1);
+-	seq_printf(seq, "carry_IRQ\t: %s\n", (tmp & RCR1_CIE) ? "yes" : "no");
++	seq_printf(seq, "carry_IRQ\t: %s\n", str_yes_no(tmp & RCR1_CIE));
+ 
+ 	tmp = readb(rtc->regbase + RCR2);
+ 	seq_printf(seq, "periodic_IRQ\t: %s\n",
+-		   (tmp & RCR2_PESMASK) ? "yes" : "no");
++		   str_yes_no(tmp & RCR2_PESMASK));
+ 
+ 	return 0;
+ }
+-- 
+2.43.0
+
 
