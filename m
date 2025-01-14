@@ -1,173 +1,109 @@
-Return-Path: <linux-rtc+bounces-2908-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2909-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93C49A104AC
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 11:53:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4BCDA10640
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 13:12:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 933E81888A38
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 10:53:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D144D160ACD
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jan 2025 12:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF6C22DC38;
-	Tue, 14 Jan 2025 10:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EBBA236EBD;
+	Tue, 14 Jan 2025 12:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iDFd4VGC"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="f68S+rd2"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E555229604;
-	Tue, 14 Jan 2025 10:53:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51D4236EAF
+	for <linux-rtc@vger.kernel.org>; Tue, 14 Jan 2025 12:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736851998; cv=none; b=CoAM0XJNAA1bR2ShUqtILHD57lA4/kZ1eclO6VNrfRQfGu5HXqogbDk3d3TvhMbw/MDJot6dx7SMKfCUsYA4Af+00Ya+hVyGvI2NuyjaF+KxPgKVGp+bfJKEnH31yQlr1SdqSbb7IKnrbo1G1T28PFk2/ByJlg0eqEUnBJ+CuPc=
+	t=1736856742; cv=none; b=ZeQp4SlRbQT1T2h07HrAPMVmCaZPQYIJUMWiXdZxYHZrJ9z+OhWUS9hjtJCWtCx0SdXlzztiqd1oWQvNEBNlcbyziJfKsWhrZY45RZcrRmNPEGxwBZt3esJkGc4+cdJm+7ZNqjAsZi8xEFXV1Xx+6LbMQjJ/d8pQ6nakWc4NcOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736851998; c=relaxed/simple;
-	bh=VFBTkgvf44it03ebVdBglu18EVaUx1do0GtbExZwx4U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mNMWxiKHnyaONqWQJpmXqWJswz8FYx+fwXt8jmFdd7ssRIx9Ultk+cROhh3L40OYj0PyA/0Xwk6qpuSF36XOtzFrXWoelG0nBOoqNa98YwdRnSAi7iE+VdjIDUpZydMiSaruk6OL3iAczCSX246GICxAGyFxenq7WWloaZZ5fD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iDFd4VGC; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1736851993;
-	bh=VFBTkgvf44it03ebVdBglu18EVaUx1do0GtbExZwx4U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iDFd4VGCE5hZVZcE9/t6wovrVgJmwqegOxRghxqZTJpSB6vfyw+q0+HJvVg7zeZhY
-	 5/iYq1kVtMcg5RFmGSwAlyKyG5YIrdY4bvO1d0wxW3LGeKunPvStLONg3+Oc3grqnt
-	 yzKFSB8km/RuDvhV02jzlTJTRLdL+/7QCSSA7xZ8sMkIdffd/VgRF9lzhGdmc4Km4e
-	 6Nh/1ME5t0ouwDlVcbD4HhUyu46oHBYOcFK3I8J4uJbeG67FkhHQYw0x3CDT1KJksT
-	 jT/12vJZRkkM1gUmPQgS8j5YXkY8uMf9SHcJXC0Mn7uyJRT1CWY2CY+pcEBMXoQDS+
-	 VYDXKmupSmVCQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B832717E0DB7;
-	Tue, 14 Jan 2025 11:53:12 +0100 (CET)
-Message-ID: <49b100ae-9b81-404d-b64c-93c60baa859f@collabora.com>
-Date: Tue, 14 Jan 2025 11:53:12 +0100
+	s=arc-20240116; t=1736856742; c=relaxed/simple;
+	bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=h8m/AbsVH/PU9WkYVjC02NjZi6MqNuh1fx/NxUr+zRtgsXxspSRaAHM/Xa5vuYvcF8Qm1u0qRytiZAP+/cqh4iVO8ueUmNSnjpJgvt5RIWSfZXQ4fC9hoqEGmgsJWGJJfkbLArvpeYEBbkoL4W47CwqKKAKoYYeOlgOJGdxKpog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=f68S+rd2; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-30229d5b229so45750531fa.0
+        for <linux-rtc@vger.kernel.org>; Tue, 14 Jan 2025 04:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1736856739; x=1737461539; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
+        b=f68S+rd2H2M+mTqpHL+RyKBn+6j9nrOVdFgEMefWySkKUAzP9y9mjuA6H0Ro66sBjM
+         FCXYXkG4Lcg5tb8jEqGt4CbD58xensbZNXE5Pbmq2LtOZIbez4+69aj4vauoxAXkTgTy
+         z6B1BSnHVTcPJ0q4kbHbJBN2xST9NIbHGqmkpCC8t6cBjS2olv3XycARQFl/Uo5WlRvV
+         FOnoRwUGqxCx91jKhvi0O0oPFHQpTZZWyz5B0CLpORzWhxOfMr1B283BdubODqySHg2+
+         tyzPDiJH777Ux4/Ar26YyhGNMjmIVyK5aJX69sAKH+0KRzFgg9irk2ishhA11kwkgKIR
+         GidQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736856739; x=1737461539;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
+        b=KqrSi1Gd39/R0gtBVFtIjP2TUQdSiAOc8sPtR+ayb1NovfgocT3eLMpq876hB3YB7r
+         OJZWVuO8kKuhyFGq0DpbnyYPe58yI8455CVjKCgvjaT4NBhTJHbqmNlr22UV2F8VntKe
+         0+81bParAw2a3Lb+mJm6Kdf/AAKxo/YqDlCp3nq0OSPrMgD7g5s+0rKP8BIAdp/7SfGV
+         l/GqOutv0AMPQ2LTikFtgB7TdlQKMSEa9S8km8o74sQG63cg0WsWi4tfYK6qu/wEYn3U
+         Dowe49Y37Qw8kQmnOAtMPiGJ7Cf97bkJsQ+gHzKVflW1QPF+CliQRYE5yNEZdmMd+mPd
+         rjGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWsg8svS3l7I9C1WjDL9Ed+WR53FfPNmX8jJUjatJuwQ+ChansfiCLTklUPuZeN7zwAvoPAmrRn1m4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTrI3VpQa+mHub1IlouDwr4djpGloV/Nu0dSauCmOAG4FEX8S7
+	BpXknp9cnaZyCFLc2GalkZDIRtc/KdcmUAFnoORydQsQZdXfcr88PVmCW4plTYffBA8s/dX17Ib
+	qb2/0dhKYp3ECVD7KyV1r6BZ9jVlAXIyyMzoncg==
+X-Gm-Gg: ASbGncv8Q9Xu/pqOfKy+wJ0W1bxmzxtNdnitXRs5MDnws0K3qAXwIB8PW8dsXScflyF
+	HE28Z0e2vBA1IR0fDVdQe33AzZ43IxBifWToECW90pflSuivtksAjwH//syKse5YOymBj4w==
+X-Google-Smtp-Source: AGHT+IENAzQOWIqeBcjNLCeAWZHXeOZ644Mso77ytYMGJJwc3A78vETSt+TEx++AZVkXjYF397/HELxPeWd4tKYdKto=
+X-Received: by 2002:a2e:a587:0:b0:300:3a15:8f2a with SMTP id
+ 38308e7fff4ca-305f459aaddmr69824011fa.2.1736856738634; Tue, 14 Jan 2025
+ 04:12:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] rtc: mt6359: fix year issue
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Alexandre Mergnat <amergnat@baylibre.com>
-Cc: Eddie Huang <eddie.huang@mediatek.com>, Sean Wang
- <sean.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- Macpaul Lin <macpaul.lin@mediatek.com>,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250109-enable-rtc-v1-0-e8223bf55bb8@baylibre.com>
- <20250109-enable-rtc-v1-2-e8223bf55bb8@baylibre.com>
- <202501091546387cff95fd@mail.local>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <202501091546387cff95fd@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250114033010.2445925-1-a0282524688@gmail.com> <20250114033010.2445925-3-a0282524688@gmail.com>
+In-Reply-To: <20250114033010.2445925-3-a0282524688@gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 14 Jan 2025 13:12:07 +0100
+X-Gm-Features: AbW1kvZqlT9ZQof5_cPsRoDpTSEUzbcfgE_gPvPzrdmIRQZ45w8iL14wP2FIYK8
+Message-ID: <CAMRc=MeEye9i2Z=Y8bHt2ruCS6JJRxmGiLvAUt6E7BJ2K4wosg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/7] gpio: Add Nuvoton NCT6694 GPIO support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il 09/01/25 16:46, Alexandre Belloni ha scritto:
-> On 09/01/2025 16:29:52+0100, Alexandre Mergnat wrote:
->> Removing the RTC_MIN_YEAR_OFFSET addition and subtraction has
->> introduced a regression.
->>
->> ~# hwclock -r --verbose
->> hwclock from util-linux 2.37.4
->> System Time: 1262312013.143552
->> Trying to open: /dev/rtc0
->> Using the rtc interface to the clock.
->> Assuming hardware clock is kept in UTC time.
->> Waiting for clock tick...
->> hwclock: select() to /dev/rtc0 to wait for clock tick timed out
->> ...synchronization failed
->>
->> Bring back the RTC_MIN_YEAR_OFFSET to fix the RTC.
->>
-> 
-> NAK, you'd have to investigate a bit more, I want to get rid of the
-> RTC_MIN_YEAR_OFFSET insanity.
-> 
+On Tue, Jan 14, 2025 at 4:30=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wro=
+te:
+>
+> This driver supports GPIO and IRQ functionality for NCT6694 MFD
+> device based on USB interface.
+>
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> ---
 
-If literally all currently supported MediaTek PMICs RTC are working fine (and
-it's not just one), but the one that is introduced here has issues, clearly
-the problem is *not* about the min_year_offset not being there, I'd say!
+Please pick up review tags when resending.
 
-Btw:
-"hwclock: select() to /dev/rtc0 to wait for clock tick timed out"
-...is the WRTGR write failing? :-)
-
-And no, Alexandre M, don't trust the regmap_read_poll_timeout() to return an
-error, I'm not sure that the CBUSY gets set to zero for *literally all* failures...
-
-In particular.... some RTCs are *locked* and need to be *unlocked*, and in that
-case I'm not sure if the write just goes through but gets ignored or if CBUSY
-stays set.
-
-Anyway, check the RTC_PROT register for the unlocking mechanism :-)
-
-Cheers,
-Angelo
-
->> Fixes: 34bbdc12d04e ("rtc: mt6359: Add RTC hardware range and add support for start-year")
->> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
->> ---
->>   drivers/rtc/rtc-mt6397.c | 9 +++++++++
->>   1 file changed, 9 insertions(+)
->>
->> diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
->> index 55e75712edd4..9930b6bdb6ca 100644
->> --- a/drivers/rtc/rtc-mt6397.c
->> +++ b/drivers/rtc/rtc-mt6397.c
->> @@ -96,6 +96,12 @@ static int mtk_rtc_read_time(struct device *dev, struct rtc_time *tm)
->>   			goto exit;
->>   	} while (sec < tm->tm_sec);
->>   
->> +	/* HW register use 7 bits to store year data, minus
->> +	 * RTC_MIN_YEAR_OFFSET before write year data to register, and plus
->> +	 * RTC_MIN_YEAR_OFFSET back after read year from register
->> +	 */
->> +	tm->tm_year += RTC_MIN_YEAR_OFFSET;
->> +
->>   	/* HW register start mon/wday from one, but tm_mon/tm_wday start from zero. */
->>   	tm->tm_mon--;
->>   	tm->tm_wday--;
->> @@ -110,6 +116,7 @@ static int mtk_rtc_set_time(struct device *dev, struct rtc_time *tm)
->>   	int ret;
->>   	u16 data[RTC_OFFSET_COUNT];
->>   
->> +	tm->tm_year -= RTC_MIN_YEAR_OFFSET;
->>   	tm->tm_mon++;
->>   	tm->tm_wday++;
->>   
->> @@ -167,6 +174,7 @@ static int mtk_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
->>   	tm->tm_mon = data[RTC_OFFSET_MTH] & RTC_AL_MTH_MASK;
->>   	tm->tm_year = data[RTC_OFFSET_YEAR] & RTC_AL_YEA_MASK;
->>   
->> +	tm->tm_year += RTC_MIN_YEAR_OFFSET;
->>   	tm->tm_mon--;
->>   
->>   	return 0;
->> @@ -182,6 +190,7 @@ static int mtk_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
->>   	int ret;
->>   	u16 data[RTC_OFFSET_COUNT];
->>   
->> +	tm->tm_year -= RTC_MIN_YEAR_OFFSET;
->>   	tm->tm_mon++;
->>   
->>   	mutex_lock(&rtc->lock);
->>
->> -- 
->> 2.25.1
->>
-> 
-
-
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
