@@ -1,213 +1,182 @@
-Return-Path: <linux-rtc+bounces-2928-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2929-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B4FCA13319
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2025 07:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 824F5A13323
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2025 07:35:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 363FB1679FF
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2025 06:28:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97C72167815
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2025 06:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846A218FDD5;
-	Thu, 16 Jan 2025 06:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11A518C937;
+	Thu, 16 Jan 2025 06:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b="R/PsdC9O"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FhYcbo2/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F39DA94A
-	for <linux-rtc@vger.kernel.org>; Thu, 16 Jan 2025 06:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A3024A7E8;
+	Thu, 16 Jan 2025 06:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737008883; cv=none; b=aFygZGrouidXb5Jpy5H9pFA3hOseF4JI3KWn2fFtnF1BxPpsCOIukyEzEG+PbjIyqp0bKPwBO+NU3/fje5wuRFLxuAgGIUFx7/NzEGnBgBQ5BcOsfUDqRnY7X3JLAVu5nGT9KTurQg2/gVTVu0ysClvWXbLN3QM9sC38PNJLfKc=
+	t=1737009294; cv=none; b=FPseENzbTnfZ9aTGihYUaNzWxGnpw0TKf3iqQPqzoQ6qwI0APwrkwbQ3ccG8ZViTx8zrMz9pB+i1y6onVqkt9ZzYML/MXsofDbG5CXK7mfiSS7cxBQiwx+LSaXOLFW7lFh35G0F3eFuCu1Q/QyAj2HWdGwR88cCqA/SkUiS6O5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737008883; c=relaxed/simple;
-	bh=gENyl4RBC/HtCkZ1XrUSfrzYKshvc7ZLfer/r/UoJLM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RJGMc+J8JBjDPKclpC3VrPRZduvfpAyfmWox/KmqF0O3hxUBGCZRVyUPE8E0aUVZ3TGj6ix1oToGTMd52M4dJ04BvntUuwuRHI2hauGiVYC32YfbDDNbmEM7Oj8xRQkhY7Q8LiT1o6OOTv4Up89IDVwyScOYlH8aeYxqIjW2+10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com; spf=pass smtp.mailfrom=mvista.com; dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b=R/PsdC9O; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mvista.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2163dc5155fso8516425ad.0
-        for <linux-rtc@vger.kernel.org>; Wed, 15 Jan 2025 22:28:00 -0800 (PST)
+	s=arc-20240116; t=1737009294; c=relaxed/simple;
+	bh=c4bb3EMGsgMUrTeDTt/1IawO6xWVcbipTrw2VtmyAng=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MPSSwH4W1U7Z4ir91fKJDY8D5scjvJlG0uSI0hSbh0PI446VQFTpmUZNcnhwmM4nXPULb1DiSnOHXZ81C6iocGG899kkiq2jZlBEthjEme4xGizqRBw3pF3vdoP7T9ppEGsh5VnCBjmgQqJeoKlyLz5aGoaqscY2SCE9D6eVeQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FhYcbo2/; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e54bd61e793so1095830276.2;
+        Wed, 15 Jan 2025 22:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mvista.com; s=google; t=1737008880; x=1737613680; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A+2UIEDT3CO7Oxn8DnlQgRLozGnyF/sPg3vvYuseF88=;
-        b=R/PsdC9OG8EpCKwq9UezLiq9YYVdh0JdQeFef1G/bO3yKKPCcqSD4QbmeievGuQ9yO
-         EGUDbSaSQyllZKr4dwQ0BNFoC8S+1h8cYadBxyoUEfKf5SBdaKI3Ijgdqje6TR881LYz
-         07GLk6P3+RVBiI0qT282wCabDLcstTf54wW/w=
+        d=gmail.com; s=20230601; t=1737009292; x=1737614092; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hUMl2lV37NeEyUYQ+8hv4yRX1yZLm9fZeIJWVyQAT9A=;
+        b=FhYcbo2/BMbsjW7hmwyRbRc+edN+6c80zj7EVm+qPUuaziTQtJGz/jgbavNrg9qbXf
+         5Ku3U6+qStP21J2qr0DSG4hi7VkoLpAC3uY7Fi/A2NzdiE8xSF9IBuLxZ3prYQdj5a+R
+         QIy0f03tEBWLn1HEgQrQI+reAFruvukm5ryCXTsN4+qACkbPwAjkitxxHibjzGPmKBeC
+         hJiGSTGWaQDO4qgYIxKBi94Uy1YTPP//KM+OcQLrS7LlnpjP977+Jqd7xPzZJbLK8WzN
+         BYyvkSqZw69E6Ndu5YWe9gBm7uYs25yvkEHBiG4CUIg8yJ25B8IoB4C45rqEdBELo91a
+         TKEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737008880; x=1737613680;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A+2UIEDT3CO7Oxn8DnlQgRLozGnyF/sPg3vvYuseF88=;
-        b=MOYOlFEw4Yi2M6lNYgxgBPCTKOpfLpBgiyw+dxwn1PO8CDjQiDRz7SgLDUDgvHRPTM
-         Ue5Cc7LhaAmZ95X+W0uQUjJ6LPM9kk9lqPDoVxtkqkoL9DYCf9mtyVHE8wsAAOy2P80D
-         Q4+JxgUaZb4EFWXUH8HuPh0zCI6MF00rrheoWY3OIyHKZC+7+hP4TS8CEd8sPZQKv4nF
-         DplxuWZEyl+flbZxMaQGK9n82q3v69pkBlIuFoCu1vzGItXb38JxU0G9d6vb2bJWCxhq
-         dvHyV8t1wOUIwIlYbX34KMqyJC/fKyyhoNBOU/Dja6mTJS+vsKCpUOqMWHii25WCZ7zx
-         2knQ==
-X-Gm-Message-State: AOJu0YzB5S2fGhEgf6XEAbZvB5jhWczc6x2myAX5G5YPkMjkk3cjtIc7
-	mxT+3x9OTNkpxetwtXRasdn0qHDdVOTgPfBcreROp/emCB2TaNfLDrTUaZkbSp8=
-X-Gm-Gg: ASbGncs8Tf537QUB+sSaJCNdEZMUIq8UIIdqL6B5+VqP+5e1bXQLGwa3TZP9mZF1Yjl
-	T7hvtublqqeVgpcgdYebVN7ZzU8qI2O/Cx0CRj45wdNxbx4Jjv1NK2GzEXpFXAzZF60fmdEAAue
-	5HDgnu4B/0kQjQVlgWJYIPDLzR2pZbQ+nkuG7bUTYoubQqwM8k/vLCi8hh9LJB3+Td3IYhHpBlM
-	IOZ/+tork4vBsn8MhcWFtBMcTDZHKXDus5Hksnd/HpwI5raTBdm29OHLaqgQ6JdS204mDM=
-X-Google-Smtp-Source: AGHT+IGO/JXiAhRonPkK9sTBTPdq8t5RFLLGxRujNl37rlmT8Jb1TVOWPwvmYKAup6OxMtNOrxywvg==
-X-Received: by 2002:a17:903:94d:b0:216:4dfe:3ebd with SMTP id d9443c01a7336-21a83fe4616mr481207695ad.50.1737008879633;
-        Wed, 15 Jan 2025 22:27:59 -0800 (PST)
-Received: from niyas-desktop.mvista.com ([182.74.28.237])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f10f86bsm90874535ad.36.2025.01.15.22.27.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 22:27:59 -0800 (PST)
-From: nmydeen@mvista.com
-To: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	cminyard@mvista.com,
-	"A. Niyas Ahamed Mydeen" <nmydeen@mvista.com>
-Subject: [PATCH] rtc-m41t62: kickstart ocillator upon failure
-Date: Thu, 16 Jan 2025 11:56:41 +0530
-Message-Id: <20250116062641.366679-1-nmydeen@mvista.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1737009292; x=1737614092;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hUMl2lV37NeEyUYQ+8hv4yRX1yZLm9fZeIJWVyQAT9A=;
+        b=NW0sY/CS6nzXrNicZg7T6Q2wsVWEISOADkywNqOl3WBuzm1PoTahXRZ0Dps25op8ou
+         eHD1UiB1cTHdnGeU8McFXDoBteDS0hrHCRdEfAFExwMGfCTAPJCzYJ4Q/5GJfdcHJCw1
+         emr15p0Ij/RjExyW7rhtJ9ye2YJiu/LwUvEBrXsawiWELYbkk9th47CWklWaA+GEGz0w
+         ftdxvFrjAEm6KBXG1ye3bb0HOB0wFWmpIYLGqbRqv0/7+dipaSoQBwUoIqgmFFSaELnd
+         495dgMOtzGE3ZOGO3Im/mqORobF+ZHY4n1gWUu6lvplOaJr/TKjprIdgTLMEa07pkdEY
+         K9jA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCQt2kY1urPyRk/h9tN70EUmBq7HYgpNY3lr5R6W+HLKlowYou3RrfvMDKgL02rHxyvVmPNLgqsGNG@vger.kernel.org, AJvYcCUEZsIHdopj7ddkKiKANjCKry2fv6NmmNEkW3nvvRfsT5uVEOF5gL1ZqOmkca1TjsOlPvMvRmEvPtwl@vger.kernel.org, AJvYcCUosTDjI7JCMZWoq+SPv0o1iRtZEmudsbp1ciylKAwa6S8TFnv9ePfIlvrK1ztVuH9JO65KHjQKrAiK@vger.kernel.org, AJvYcCUq0GBEvra3eaRi/vl2xbsLHK7dEDH5Tdw/QeuyC4iIpArzWWe2kIMDysgWFmkOAvVqvhI6wQK2ZqU=@vger.kernel.org, AJvYcCVCiVUNKukvLrhziF0x8PGJJSo9aEfbRxhQF8Nbhvr/sbZDoCuVih4830cqT8TKg/l/hjShAWEdRr0JAw==@vger.kernel.org, AJvYcCWEFNsrcwhFSVz+Mt26vlcLljmhnpLUT9OMeL/7YfZhIm1rgtz5y9V8MGICQcUGav9YTMXkIb4B@vger.kernel.org, AJvYcCWOx8hin3A5cMdedhNkFj/BrNdBHHNXRiSXw4pve0adFrradrnTtM8RC9jX4dm9WNfXxllPAVl3+rTjIbP7Qbo=@vger.kernel.org, AJvYcCXFL62vzL6qVxVzQntc5yJbzL5VXBuxysQzbHUs1YxWRqT/z1dIGTZebZgd8i+ft1K8vXivM8GOE0YFIj0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo5kdDOdklx4LobLPhpxK8sHYyircAL0JFMdI6AmqXwRzJ86YY
+	qBmclXnxFSBtu4b8tU963WFTXQSm+zuJIc3auMAA5p/kkRrx2h4NHQlEgqD6W9k96jovi2qqe4C
+	i5pmgl1xqbu9A7GzS0NDin0Z7wj8=
+X-Gm-Gg: ASbGnctD8yoHXYqv8thkC4s6CRPB5tznyMNj9eKye+kThTNcLJQloh79iXWsj9PJIfy
+	SJOsgRExrNBKcQN98pFsk5CFC9/oNIfJS1npyRfVWb2qFvUxAQJFbP1/K0iqE5l5MLphjNgr8
+X-Google-Smtp-Source: AGHT+IEBjbrPYm9uZ4tkDJz8bKIImgmSbE3fPZUiZeCgys3yex7NZywUBcf/cb/InNa/yBzsGp+ThfaTGo+an3nLKdc=
+X-Received: by 2002:a05:6902:f84:b0:e38:8a2e:e3bc with SMTP id
+ 3f1490d57ef6-e54fca4021cmr25184463276.5.1737009291859; Wed, 15 Jan 2025
+ 22:34:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250114033010.2445925-1-a0282524688@gmail.com>
+ <20250114033010.2445925-5-a0282524688@gmail.com> <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
+In-Reply-To: <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 16 Jan 2025 14:34:40 +0800
+X-Gm-Features: AbW1kvYJI-ZlyxfzNTVWRJivNQwAAI1rVA1G13z7pWoyr3_f28bZHldijS45J6Y
+Message-ID: <CAOoeyxVK=iBmj3BDX=D8a9=GFBkE158jbq3Rnq-RuoA5HxMi7g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, 
+	lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: "A. Niyas Ahamed Mydeen" <nmydeen@mvista.com>
+Hi Vincent,
 
-The ocillator on the m41t62 (and other chips of this type) needs
-a kickstart upon a failure; the RTC read routine will notice the
-oscillator failure and fail reads.  This is added in the RTC write
-routine; this allows the system to know that the time in the RTC
-is accurate.  This is following the procedure described in section
-3.11 of  "https://www.st.com/resource/en/datasheet/m41t62.pdf"
+I will remove priv->tx_skb in the next patch, but it seems that
+can_flush_echo_skb() has not been EXPORT_SYMBOL_GPL().
 
-Signed-off-by: A. Niyas Ahamed Mydeen <nmydeen@mvista.com>
-Reviewed-by: Corey Minyard <cminyard@mvista.com>
----
- drivers/rtc/rtc-m41t80.c | 70 ++++++++++++++++++++++++++++------------
- 1 file changed, 49 insertions(+), 21 deletions(-)
+I would like to know if nct6694_can_clean() requires modification.
 
-diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-index 1f58ae8b151e..77c21c91bae3 100644
---- a/drivers/rtc/rtc-m41t80.c
-+++ b/drivers/rtc/rtc-m41t80.c
-@@ -22,6 +22,7 @@
- #include <linux/slab.h>
- #include <linux/mutex.h>
- #include <linux/string.h>
-+#include <linux/delay.h>
- #ifdef CONFIG_RTC_DRV_M41T80_WDT
- #include <linux/fs.h>
- #include <linux/ioctl.h>
-@@ -204,7 +205,7 @@ static int m41t80_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 		return flags;
- 
- 	if (flags & M41T80_FLAGS_OF) {
--		dev_err(&client->dev, "Oscillator failure, data is invalid.\n");
-+		dev_err(&client->dev, "Oscillator failure, time may not be accurate, write time to RTC to fix it.\n");
- 		return -EINVAL;
- 	}
- 
-@@ -227,21 +228,60 @@ static int m41t80_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	return 0;
- }
- 
--static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *in_tm)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct m41t80_data *clientdata = i2c_get_clientdata(client);
-+	struct rtc_time tm = *in_tm;
- 	unsigned char buf[8];
- 	int err, flags;
-+	time64_t time = 0;
- 
-+	flags = i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-+	if (flags < 0)
-+		return flags;
-+	if (flags & M41T80_FLAGS_OF) {
-+		/* OF cannot be immediately reset: oscillator has to be restarted. */
-+		dev_warn(&client->dev, "OF bit is still set, kickstarting clock.\n");
-+		err = i2c_smbus_write_byte_data(client, M41T80_REG_SEC, M41T80_SEC_ST);
-+		if (err < 0) {
-+			dev_err(&client->dev, "Can't set ST bit\n");
-+			return err;
-+		}
-+		err = i2c_smbus_write_byte_data(client, M41T80_REG_SEC,
-+						    flags & ~M41T80_SEC_ST);
-+		if (err < 0) {
-+			dev_err(&client->dev, "Can't clear ST bit\n");
-+			return err;
-+		}
-+		/* oscillator must run for 4sec before we attempt to reset OF bit */
-+		msleep(4000);
-+		/* Clear the OF bit of Flags Register */
-+		err = i2c_smbus_write_byte_data(client, M41T80_REG_FLAGS,
-+					flags & ~M41T80_FLAGS_OF);
-+		if (err < 0) {
-+			dev_err(&client->dev, "Unable to write flags register\n");
-+			return err;
-+		}
-+		flags = i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-+		if (flags < 0)
-+			return flags;
-+		else if (flags & M41T80_FLAGS_OF) {
-+			dev_err(&client->dev, "Can't clear the OF bit check battery\n");
-+			return err;
-+		}
-+		/* add 4sec of oscillator stablize time otherwise we are behind 4sec */
-+		time = rtc_tm_to_time64(&tm);
-+		rtc_time64_to_tm(time+4, &tm);
-+	}
- 	buf[M41T80_REG_SSEC] = 0;
--	buf[M41T80_REG_SEC] = bin2bcd(tm->tm_sec);
--	buf[M41T80_REG_MIN] = bin2bcd(tm->tm_min);
--	buf[M41T80_REG_HOUR] = bin2bcd(tm->tm_hour);
--	buf[M41T80_REG_DAY] = bin2bcd(tm->tm_mday);
--	buf[M41T80_REG_MON] = bin2bcd(tm->tm_mon + 1);
--	buf[M41T80_REG_YEAR] = bin2bcd(tm->tm_year - 100);
--	buf[M41T80_REG_WDAY] = tm->tm_wday;
-+	buf[M41T80_REG_SEC] = bin2bcd(tm.tm_sec);
-+	buf[M41T80_REG_MIN] = bin2bcd(tm.tm_min);
-+	buf[M41T80_REG_HOUR] = bin2bcd(tm.tm_hour);
-+	buf[M41T80_REG_DAY] = bin2bcd(tm.tm_mday);
-+	buf[M41T80_REG_MON] = bin2bcd(tm.tm_mon + 1);
-+	buf[M41T80_REG_YEAR] = bin2bcd(tm.tm_year - 100);
-+	buf[M41T80_REG_WDAY] = tm.tm_wday;
- 
- 	/* If the square wave output is controlled in the weekday register */
- 	if (clientdata->features & M41T80_FEATURE_SQ_ALT) {
-@@ -261,18 +301,6 @@ static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 		return err;
- 	}
- 
--	/* Clear the OF bit of Flags Register */
--	flags = i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
--	if (flags < 0)
--		return flags;
--
--	err = i2c_smbus_write_byte_data(client, M41T80_REG_FLAGS,
--					flags & ~M41T80_FLAGS_OF);
--	if (err < 0) {
--		dev_err(&client->dev, "Unable to write flags register\n");
--		return err;
--	}
--
- 	return err;
- }
- 
--- 
-2.34.1
+Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B41=E6=9C=
+=8816=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:45=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+> > +static void nct6694_can_clean(struct net_device *ndev)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +
+> > +     if (priv->tx_skb || netif_queue_stopped(ndev))
+> > +             ndev->stats.tx_errors++;
+> > +     dev_kfree_skb(priv->tx_skb);
+>
+> Use:
+>
+>         can_flush_echo_skb(ndev);
+>
+> (related to the following comments).
+>
+> > +     priv->tx_skb =3D NULL;
+> > +}
+>
+> (...)
+>
+> > +static void nct6694_can_tx_work(struct work_struct *work)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D container_of(work,
+> > +                                                  struct nct6694_can_p=
+riv,
+> > +                                                  tx_work);
+> > +     struct net_device *ndev =3D priv->ndev;
+> > +
+> > +     guard(mutex)(&priv->lock);
+> > +
+> > +     if (priv->tx_skb) {
+> > +             if (priv->can.state =3D=3D CAN_STATE_BUS_OFF) {
+>
+> Just stop the queue when the can bus is off so that you do not have do
+> check the bus status each time a frame is sent.
+>
+> > +                     nct6694_can_clean(ndev);
+> > +             } else {
+> > +                     nct6694_can_tx(ndev);
+> > +                     can_put_echo_skb(priv->tx_skb, ndev, 0, 0);
+> > +                     priv->tx_skb =3D NULL;
+> > +             }
+> > +     }
+> > +}
+> > +
+> > +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+> > +                                       struct net_device *ndev)
+> > +{
+> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +
+> > +     if (can_dev_dropped_skb(ndev, skb))
+> > +             return NETDEV_TX_OK;
+> > +
+> > +     if (priv->tx_skb) {
+> > +             netdev_err(ndev, "hard_xmit called while tx busy\n");
+> > +             return NETDEV_TX_BUSY;
+> > +     }
+> > +
+> > +     netif_stop_queue(ndev);
+> > +     priv->tx_skb =3D skb;
+>
+> Here, you can directly do:
+>
+>         can_put_echo_skb(skb, ndev, 0, 0);
+>
+> The skb remains accessible under priv->can.echo_skb[0]. With this, you
+> can remove the priv->tx_skb field.
+>
+> > +     queue_work(priv->wq, &priv->tx_work);
+> > +
+> > +     return NETDEV_TX_OK;
+> > +}
+>
 
+Thanks,
+Ming
 
