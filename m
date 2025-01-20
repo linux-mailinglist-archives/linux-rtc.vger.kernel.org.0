@@ -1,57 +1,57 @@
-Return-Path: <linux-rtc+bounces-2966-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2967-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF93DA1728B
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 19:08:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8874AA17295
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 19:12:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1B377A2126
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 18:08:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F24B7A248B
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 18:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDD51EE013;
-	Mon, 20 Jan 2025 18:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E211EE02E;
+	Mon, 20 Jan 2025 18:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="lZNI/+Ul"
+	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="mxJXUwlC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740F9186E58;
-	Mon, 20 Jan 2025 18:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D5D1E9B25;
+	Mon, 20 Jan 2025 18:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737396510; cv=none; b=m8XsbK9ehG1cKTnZIPSgICJl+dLoJW78q+U9+7jO68c9xLpW/DfcRR46VBeFf0oIgJTGccFnJKGbCBHh0IeBGHMMw57owx4aZqs52Qi+t46VqEKH73DjvJwdpPq7/4Hb/vnIy01Hs0zKoS2zMCdSDqWTUi/2IZkypKy9E4U/CPQ=
+	t=1737396739; cv=none; b=d7n4wUaeTw/ekiwUTaiPs2v4JNwgKFabROGF6Z7G9XebJu6wuu1K6kp4M2H9NRD9Xsh8+i9KsksdBw66qopiG9e2jAIM91BmpmLRidAD0PH5y6tPH74PNC9pYSPPvHUmgz2+ZKGWnHQuZGCZ9A9yms2agjhpR7c+0eT2foIFiRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737396510; c=relaxed/simple;
-	bh=pB6jznMG0ovYaYW0CBLRUZ0Ehep+P+37cwCpLX/hslo=;
+	s=arc-20240116; t=1737396739; c=relaxed/simple;
+	bh=owJKCle4OqQVn6FlWGAYuamsFy32fdIeVO7S6JSibvc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PlTLmMZ+R62s6PV+GQNoGP4xv9xX7EAP63CgpafyITlbSJJf/qbX8+//vJMaIgM/3ikEhGYTj9BnKV5unYFjZqLkuymuc0aUp7zupwV1uBkQddrS4Qa3ticgu4j4osL87IHg18sokHM4YWJIvBkUHwyIBc0w/TgNrvoGWnJCZ/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=lZNI/+Ul; arc=none smtp.client-ip=212.227.126.134
+	 In-Reply-To:Content-Type; b=a1+58M67LSq2ACPJ0L2QdXkJSZtJut/h/MFxqOKi0PnHWA26ZVLlLW+QPBE/4jnM71G7PJS+aHplITeCa+ZbF2pKVvQRW3AQQGQJDaDLXByhkTZEjfRMxuvYYUDZC5E3Zems40LyYoA7PAF42SkSNERNwbYkFnbQb8bCg+nGO7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=mxJXUwlC; arc=none smtp.client-ip=212.227.126.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=oldschoolsolutions.biz; s=s1-ionos; t=1737396495; x=1738001295;
+	d=oldschoolsolutions.biz; s=s1-ionos; t=1737396727; x=1738001527;
 	i=jens.glathe@oldschoolsolutions.biz;
-	bh=CKWFzIyoZoHN+IebNnLgynWS9gdYeIcO+wqNlnB7ML4=;
+	bh=YEP8Ka7Kbfimz7RVhloCaYpKFMYx1Qs5MiA+dYWzwaU=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=lZNI/+UlnMIu1nzuK3kKqa0N72gV+Kaxpl3/JpumvwsCL8gViyKmzFdTJeGSmmjF
-	 V47V4zX1ReSWjUcoZ+z8cBQcZFqlfN07z6069Sb8Ii8IoYSCNT0RCuEZ+KJt98Fxm
-	 BAPbYKWHYMyTPedJLZdd+lFLzQE5IZktUuEdE4eV49fteWp9UQhPMYCPHCxXFxgIS
-	 /KiTl30PXxoAO+33/22Oy2/JkcjoTaklgbURCTKE2Hjio8KjWr1I2F3ibVsL75n+v
-	 Eqamjwpy7eW624GZY9qqTyvYOltRZmPaLTa8Le6sWPh4BbQ5KuSA/Vs+R+AYbpYn0
-	 5WBX6QIdDC1S3kI4Tw==
+	b=mxJXUwlCl4hVcV3R7GQeflKD331aupkxDo4OveXOWuN5Ts+IDH1iyA43rHjFO3KC
+	 xN3zg1hEIcWSleNFzkKEx8US+Fa8MeU60znpKfJhZbp4UuSbyzOvCP93uhBjt3YeH
+	 dzAtSY1j6dRnGxANgPPgaa6a1CmHbwbMnWJqXQ7BbkPkUElLC++3qh3ZhN/5PAuVY
+	 TBmvPhVqPWPs5jBg0mNPyMN9Bmuf0EZ4OdwURJra5qBz86y9FLKZtwllIkaslqfsI
+	 TXA3AZ+iOzv9oZXCtDec/K3hqDmY5UeVeCeaXT7+Zbp1MB9e42GeYFgxD9yEI2oRy
+	 uwWvab40ziev5Fq9hQ==
 X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
 Received: from [192.168.0.152] ([91.64.229.215]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1Mxlio-1tIooj1dPy-0129oR; Mon, 20 Jan 2025 19:08:15 +0100
-Message-ID: <0abde047-7f9b-470b-8b16-74e6230a541b@oldschoolsolutions.biz>
-Date: Mon, 20 Jan 2025 19:08:14 +0100
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MvKTJ-1tIXnL3EJ7-014a1f; Mon, 20 Jan 2025 19:12:06 +0100
+Message-ID: <d6ff6f2e-9280-4fd0-af4c-f50b35652800@oldschoolsolutions.biz>
+Date: Mon, 20 Jan 2025 19:12:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -59,8 +59,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] arm64: dts: qcom: sc8280xp-x13s: switch to uefi rtc
- offset
+Subject: Re: [PATCH 7/7] arm64: dts: qcom: x1e80100: enable rtc
 To: Johan Hovold <johan+linaro@kernel.org>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>,
  Bjorn Andersson <andersson@kernel.org>
@@ -70,34 +69,34 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250120144152.11949-1-johan+linaro@kernel.org>
- <20250120144152.11949-7-johan+linaro@kernel.org>
+ <20250120144152.11949-8-johan+linaro@kernel.org>
 Content-Language: en-US
 From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <20250120144152.11949-7-johan+linaro@kernel.org>
+In-Reply-To: <20250120144152.11949-8-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jlX3qOxhisU1giQRAaE/kOYQOTcwb0mFPk195YinYjqD58psWzl
- IvgGMZyIF8A22SDxENrMjsqLjDjbq2WEQUJIkNYvgL+bSHKsfVzC4Jazpp0+sv6uWrBUJik
- EGazRmHjkegAfj34sl+CGXBCeqEAPqYAxFH7DslVorA6L9TyjH1uiQXVPH1Itekh6qysk/+
- NPSy6V0gVTNNWjtYTIzfA==
+X-Provags-ID: V03:K1:1TfkxTgRZJn+MQWuwHQRQSzb/l+QOzHh9WKEkNqAYxUT7C4xgXb
+ tvhokOvPJkAu8Dt2DyNGgj2NInP8qhM0ZZSUJh/JLI+0AMpaT/2S9HifqtUESV5pzYpwnP6
+ cxcopN5qFNH1P+cgPITShMGDXF0LgwmM39RcDD5pATxUG19MAlCYnkYt9g6zh7M32Z4ehdG
+ CGlXdEZUEaDBMkBhyqC0g==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:mPcmZq2eW1Q=;Xs+hBq8FcvdE5YFUvAp5/361Z3u
- HcB1P6hxZgYXVVyISklKLT0Vb14Gvzxxs4oWTsmPZz94DnWbCbfZ69hFxLofSP0DqbXOuJb61
- BNQasC/8eZR9HAqdYQf8w5fpmZxIeXzILWaYlSOysjldGFo7FiMThSpfNompA/5vnVEq9KJvU
- S8RhDJuLPkk06FlCNE3yLTl+1ZcOGn7q6yxXf/qZnYwVKLwoE/tKBQZfFVtJ7zjpuyR0KgJcC
- dPRoPz4t9OunNvy0LwMDcS2jF+WLp/JfRjlKtC+enRXLENCDJSmfsA7PO23OoLm41xFcJlWXX
- LqwtYT+yIM7BVBeFwlOHr62nRU0evtCfC+hqyQHMl71G6/fkl8uUOA30mihGDiNx3cXcYqmnD
- nyklSdd8jVF8EfMJZ1YKbA+R/EkDyUDjO91s7yW+6Db3RG2wMLIUk+TaUvOh5MYsBvcJZjVGO
- jSnSFKTVdCsWzsvu+Z17oj+iQKSjtixd9YoOMLCNtqezMf12IIxCFUuL5aeEpDftkI6i2iT/1
- V0OlKmaxWvuaZyEd1vket3VnMQBl21XXWlyTligUgWgvgE68Y01z4xtUsxJnn3QHHZKaolrOC
- +FeKOMWJTL0erWTEBII/SPcSnAFqC/17+ojA6FNEuN68ER+IMXLYnVrVH67FE4ZxVeZSaafdS
- X+rVVef/IzT9O1VyTGH8N6nCBTDhrTyTKpYcQJ8DlEFnU24GXe/4i7EAzbPhyMdsbhin5pOHW
- uDG0jW8T/eiWiE/5YqokJkoU3GSj0GCWmQnBIabv5vcLaNf8w4fK4shbXypSkVdGamfOF5XQs
- qMFQE1lg4MAP0JW4bCyPaAEFd/a7Pmm8sqK3sazsGdoSb+qLhgW2F5eGtVtUS3xsfaQewLqd5
- 4bCLJukWpi7NsL7rexW8p7J7acYhe/a3MLJCJW1yaU/2XixVJt6DKv7BJu8WyLE6qM8K8NDuK
- e29wSpFaetMvV/WoxMDoDRWmii7gwKO0gxj2wBX/AeNkoo9tO9YuzXla8X4MlCSqoTtg+0F2M
- JtI6yKpFBd0f6AG8Qa3rRUehJrZ2cMHSWifXrURCFvL3ua9Xr/KN0U1KRQb8Kze0OoC/ltggl
- 1vOz6mDgKzvyapPnaziXfl6L+5nsC7k9umZIIaXwM+HQVOC006+xKRDxQBHcoDRVQrPDNUDAs
+UI-OutboundReport: notjunk:1;M01:P0:ThfM0vLkFqA=;HQpAAXiCT3WmRqoafFGYLUyBxyM
+ ltBIrG987qqQkxyNJhLreKYwmn9XRWs1JDQE49KxpsiNRP5t1ZGkOKUrasueSSWaiElkVVoCy
+ QcrlnsWEo9ji1ZevFw0PlAP85b0qW2/uqUhB5bd9qAV78ydu/gMgFcx6YcGw1noYsGNGHzXC2
+ rtPtYIy6LbnkBAyxtySgKSpEPM0M+6qTNQaFMqB4JtrbXyhQU6iKtBuZMGJFEnbXqTsu0YSfk
+ zUP33JTs+R1VnKhrM2RigBA7XCB+j0ljPYGZvXO7k944FwUWrtgXZZE9omM4x9Os8AJjmCQ33
+ kbDuJL+4/XyWUlo9h9NBtrnjX4eP0Rx3O+Ot57Z5G+P8goMSxNlSLsII6Hv9Q34zZOJZmx1J6
+ 21Pb5Fi04Df2qgEzvWFz0HA8rP82Qj3u4Cx+KRJGGCHR+LeDf9GYJkFthg5pAcvmYMe6C9Sdj
+ p/72bKr+UinS23B17JZG6arOFhNPcCrlp52MGVH3YOe5weBe8WzCCglLVbwd/+f14Ghn+E9us
+ mYYfz1K8aRCA5sdvemh1jJc+it+Afk91gNz623jhV5BsEk7ikFzOJ+sp3XTy9pm0cRnP/aiG5
+ +b6i1MzySvJMFtt1RSczdgExrEEuJIYPXjoQZDvzCkLlwtPspCqHlaeBVg2ShJzvZ89GxWTRZ
+ OJmRp3Ub9rGE9XSkDkEWknAkwz118hkAq0ITR3PW+jVJ3HYusAVoFk5CGLK7m9jYHM8S7JIuP
+ uHzTr9idP2FgpbDD7rFeshfZBPxgNjOJ6KcQTQNTUAPntQgd3WxHVytYRJq+aatp+lET1NgwA
+ g7u+lrpKYNijdT78A+ZCmwypGvih6c0tfrSDCF2D5CeZxoOb/VNl3a7pGO3Oyu0iQOgPO9qIg
+ 806B50eyj9yXU53Ln3J2fW4U3X4tYz3OBhnk1C+RwiYuacdXt1WU3pylEqdz3xxa/2oR9M5oF
+ cCn+rTkh268ssaCSJTM3Auumjk6BGEQJ7o9I55kcVbzwZCo2wMwpUZycqIJ6cZ8DMKidoHsO3
+ t8TZcsfZc7JW4omL8bmMefPovtKc9NxkpSgRO1xslqz9yXW9Hsi431X0ZFVt8tx6DNl5Rf7n7
+ 94N0qc7Aq8dFUB+MLEaGWofkKMWvEaJBoXxDtf+qfkg0+EsGAunlPk+eJBg3m2JZ0Qy4IY9/A
  =
 
 Hi Johan,
@@ -108,55 +107,47 @@ On 20.01.25 15:41, Johan Hovold wrote:
 > needs be stored in some machine-specific non-volatile memory, which a
 > driver can take into account.
 >
-> Switch to using the Qualcomm specific UEFI variable that is used by the
-> UEFI firmware (and Windows) to store the RTC offset.
+> On X1E based Windows on Arm machines the offset is stored in a Qualcomm
+> specific UEFI variable.
 >
-> This specifically means that the RTC time will be synchronised between
-> the UEFI firmware setup (or UEFI shell), Windows and Linux.
+> Unlike on previous platforms the alarm registers are also unaccessible
+> on X1E as they are owned by the ADSP.
 >
-> Note however that Windows stores the RTC time in local time by default,
-> while Linux typically uses UTC (i.e. as on X86).
+> Assume all X1E machines use similar firmware and enable the RTC in the
+> PMIC dtsi for now.
 >
+> Based on a patch by Jonathan Marek. [1]
+>
+> Link: https://lore.kernel.org/r/20241015004945.3676-4-jonathan@marek.ca =
+# [1]
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts   | 11 +----------
->   1 file changed, 1 insertion(+), 10 deletions(-)
+>   arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts =
-b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index 38d911992475..66c39765225f 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -1090,20 +1090,11 @@ &pmk8280_pon_resin {
->   };
+> diff --git a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi b/arch/arm64/b=
+oot/dts/qcom/x1e80100-pmics.dtsi
+> index 5b54ee79f048..051fb3a304b9 100644
+> --- a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
+> @@ -223,8 +223,8 @@ pmk8550_rtc: rtc@6100 {
+>   			reg =3D <0x6100>, <0x6200>;
+>   			reg-names =3D "rtc", "alarm";
+>   			interrupts =3D <0x0 0x62 0x1 IRQ_TYPE_EDGE_RISING>;
+> -			/* Not yet sure what blocks access */
+> -			status =3D "reserved";
+> +			qcom,no-alarm; /* alarm owned by ADSP */
+> +			qcom,uefi-rtc-info;
+>   		};
 >
->   &pmk8280_rtc {
-> -	nvmem-cells =3D <&rtc_offset>;
-> -	nvmem-cell-names =3D "offset";
-> +	qcom,uefi-rtc-info;
->
->   	status =3D "okay";
->   };
->
-> -&pmk8280_sdam_6 {
-> -	status =3D "okay";
-> -
-> -	rtc_offset: rtc-offset@bc {
-> -		reg =3D <0xbc 0x4>;
-> -	};
-> -};
-> -
->   &pmk8280_vadc {
->   	channel@144 {
->   		reg =3D <PM8350_ADC7_AMUX_THM1_100K_PU(1)>;
+>   		pmk8550_sdam_2: nvram@7100 {
 
-Nice. I have it running on my X13s now, looks to work fine. Also ported
-to Windows Dev Kit 2023, patch will follow soon after testing it. Thanks!
+works nicely on SnapDragon Dev Kit X1E001DE. Thank you!
 
 Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
 
 with best regards
 
-Jens
+Jens Glathe
 
 
