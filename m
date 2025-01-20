@@ -1,49 +1,49 @@
-Return-Path: <linux-rtc+bounces-2953-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2959-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27883A16E94
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 15:43:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16C31A16E9F
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 15:43:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 138567A149E
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 14:42:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA0041644E0
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 14:43:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C7F1E3DE6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4C01E47DA;
 	Mon, 20 Jan 2025 14:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Le4/dz2l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="njpLeZIF"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081371E3DD0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4B81E47A9;
 	Mon, 20 Jan 2025 14:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737384168; cv=none; b=mNlZUk2RgDcdDwfpNgkaUZQXx1yXctA9xt3dXtos5mNgr7pUGrBXJ5BWyGWTKZD89Lkoa26FdfT/GKmKgB2jzSgHfiInsjt0VTM8ISXezAOhl1Kw2OrFLRpK5EMjxIcip/niNWFaqKhb7AKjOpxm7DFOZ5+bCawikTO3w8oNNNo=
+	t=1737384168; cv=none; b=aD6p0JAymuWgejJs7Ab+wf/9i3NFUcVKEWRV4oVOQeDL4b6NTcXM67Ib9gvJB67PAgLjRm3RIC5quIQ7fLUNuSym0RHZxyMWvFqjl8WXpMC85q1O6FROL1LVrFkrdKc42/JqSWOwFZEPFzrW6JMKL6Pu/ChSo3POPGDtL/KVJKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737384168; c=relaxed/simple;
-	bh=cCCt1z+IEVRiJ6ejCa09m6Lrq4Wa209py8lnf/4l9FA=;
+	bh=g5B8wRzRuC7nVNYrPG6OJobEDMTyTs0Bs77db0cnHP0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o1RMHk2Y+ID/raI2WjhrXqj5XtXxLIukrJoWG3pbQC3aGCRx/pKKXrlAV5BJena+aAxCawCJjoeGEzNActv2bsqNLoJ1AhsD/HXS3hJMyh8eJ8DDK0LWmDJkmSpb7cTjGn9tGDv7rk7XdsTtWlrUMBoXMyqPjcspSC4qp6gSzzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Le4/dz2l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7628C4CEEE;
+	 MIME-Version; b=jJaz6L0186dji1ze+vUGjfSBqLqMo0adGmxmHRIwd44jd1viEdy1MtPRbn10j5vFz/FW2HDwdvhlxBtP83VQIpq9e1HjEXy6hA+VDHEI2I1nmCPCh8cdGz/ZcH35ptdjOZFQciqQhuda0jV234TbKkMvjRWWHNjfhyrs9tZ6wHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=njpLeZIF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8362C4CEEF;
 	Mon, 20 Jan 2025 14:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1737384167;
-	bh=cCCt1z+IEVRiJ6ejCa09m6Lrq4Wa209py8lnf/4l9FA=;
+	bh=g5B8wRzRuC7nVNYrPG6OJobEDMTyTs0Bs77db0cnHP0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Le4/dz2lKiWMpjyEdkCBAkbWxKiYkfgM7DKUMerpT3NDXHZPzf17MgFWLwwlUJACa
-	 uLDjqRETRIEsiMXV6QezyXrGesjhl+Os3d+RQui2zTae0BgP+v1fDqRVxRMi/pUZlW
-	 NuxdrN3nhilGdMW+TBBwwuPCFFAl/HH5lrzl1VNSeTp2TTdjiBihC9RtOL2A1ULKyC
-	 PbAPy+QkQNpVzNAjwSbzZ5SOSoT3ZPv2y45j83vX3pyNx5LLwKwmadZny9d54qoBTR
-	 BqjofOdiBkkqslTAQxVaKT7AwaYYYHfZkhcLc4x7IEGJ/7m+CCTVO3YC5+CwHUDzPQ
-	 vBnlvWdZCo/oA==
+	b=njpLeZIF07oARHvgJqP5MnDDJBOPXMlJyzQdQsqnQaqQQSkqYJk/cGLqSyq+NSaKs
+	 WUG/RO1YgX40wJ/NZWsXe0U/E8FDTBxO7p1ZuiDY3t0GFdoCXz90MNQ76oemWhUEvj
+	 3kgCCFHcHmMG3psXbw83fcQnq44dd8i++fg6QUezKzmZGkS6pro9axfDlI0cmrA9D6
+	 2vH5SEbXeeOCWtf8RVSqT7tazmLDytuEZB7N+iRUN7DwUCwv5WU7Ze1Va3CufzRWkJ
+	 q1D6Q7DZTedegahgNKwyL1s0Uo7K+n/ozY7nJSPDbvOHPks43Kw7dMpvOkhtixNmGt
+	 O5K5jjBve0dJw==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan+linaro@kernel.org>)
-	id 1tZszL-0000000037y-1AVS;
+	id 1tZszL-00000000380-1V5x;
 	Mon, 20 Jan 2025 15:42:51 +0100
 From: Johan Hovold <johan+linaro@kernel.org>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -58,9 +58,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 1/7] dt-bindings: rtc: qcom-pm8xxx: add uefi-variable offset
-Date: Mon, 20 Jan 2025 15:41:46 +0100
-Message-ID: <20250120144152.11949-2-johan+linaro@kernel.org>
+Subject: [PATCH 2/7] dt-bindings: rtc: qcom-pm8xxx: document qcom,no-alarm flag
+Date: Mon, 20 Jan 2025 15:41:47 +0100
+Message-ID: <20250120144152.11949-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250120144152.11949-1-johan+linaro@kernel.org>
 References: <20250120144152.11949-1-johan+linaro@kernel.org>
@@ -72,44 +72,38 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On many Qualcomm platforms the PMIC RTC control and time registers are
-read-only so that the RTC time can not be updated. Instead an offset
-needs be stored in some machine-specific non-volatile memory, which a
-driver can take into account.
+From: Jonathan Marek <jonathan@marek.ca>
 
-Add a 'qcom,uefi-rtc-info' boolean flag which indicates that the RTC
-offset is stored in a Qualcomm specific UEFI variable so that the RTC
-time can be updated on such platforms.
+Qualcomm x1e80100 firmware sets the ownership of the RTC alarm to ADSP.
+Thus writing to RTC alarm registers and receiving alarm interrupts is not
+possible.
 
-The UEFI variable is
+Add a qcom,no-alarm flag to support RTC on this platform.
 
-	882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
-
-and holds a 12-byte structure where the first four bytes is a GPS time
-offset in little-endian byte order.
-
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Link: https://lore.kernel.org/r/20241015004945.3676-3-jonathan@marek.ca
+[ johan: move vendor property; use boolean; reword description ]
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-index d274bb7a534b..cdc56dfbfac3 100644
+index cdc56dfbfac3..7497dc3ac5b2 100644
 --- a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
 +++ b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-@@ -50,6 +50,12 @@ properties:
+@@ -50,6 +50,11 @@ properties:
      items:
        - const: offset
  
-+  qcom,uefi-rtc-info:
++  qcom,no-alarm:
 +    type: boolean
 +    description:
-+      RTC offset is stored as a four-byte GPS time offset in a 12-byte UEFI
-+      variable 882f8c2b-9646-435f-8de5-f208ff80c1bd-RTCInfo
++      RTC alarm is not owned by the OS
 +
-   wakeup-source: true
- 
- required:
+   qcom,uefi-rtc-info:
+     type: boolean
+     description:
 -- 
 2.45.2
 
