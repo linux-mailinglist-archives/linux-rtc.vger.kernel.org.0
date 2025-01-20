@@ -1,67 +1,55 @@
-Return-Path: <linux-rtc+bounces-2961-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2962-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AC1BA16ED2
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 15:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D8C2A16F06
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 16:10:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03134169D29
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 14:51:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5E631690F9
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 15:10:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3712E1E6DCF;
-	Mon, 20 Jan 2025 14:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODAIjziA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE38B1E5706;
+	Mon, 20 Jan 2025 15:10:31 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F0C1E5738;
-	Mon, 20 Jan 2025 14:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44AE41B4F02;
+	Mon, 20 Jan 2025 15:10:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737384684; cv=none; b=jjI1Zm8BwK7I1GA76hZ7F7/J3Eh1FHZWxk5vgJ11kb+hByWvYdFInThtv7N1bydty8YH0mGQSXOt5wQO5ji7hKt7AtHyzB5c8YM9i87/OuPkvNhb6MxCC04tlXawSq6ztEbJyhQAS65AUEckOWm7cf6NebPOqzAKXsSMdBHyY8U=
+	t=1737385831; cv=none; b=mxK9nNWR0GdCSk7/27aZj86XfStvmEL4KkPe5MswcgvYeGS79eBLSrV75zwWESq4liDKe7XOd4OovbMMk261YTVxE9WxcdtgLE9HDmeXPkxmmPMX4ZThVeNlbfG8SKCsqwylSvndQqb6AE1+qUIE0zG6LRQcZPx/Jr2E5mkGsLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737384684; c=relaxed/simple;
-	bh=Cq9uXnbecisUvPYlPRYj++5pXhuwoHDwBi8w9Ktnumk=;
+	s=arc-20240116; t=1737385831; c=relaxed/simple;
+	bh=HpB/fIzVUcvaIsiu9s+bGtiYWWfrkvQsr8XXsYop6mY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JXX8+c1FEwFcULpU/4Gsk5Lt+2uQznkm4xsUxZdLoxUBFoDAVl278ARYdYGLYo0nrTxXSF8nTqXtQs3LKn/zQEJfrs6xCqxRxIDKAqrmORW1u30jYOBz4vZv+DSSLBG5srlDDy2bSS3ZH+ZlNRckWNoNKq5bXpsUM3eBVT600es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODAIjziA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B6FEC4CEDD;
-	Mon, 20 Jan 2025 14:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737384683;
-	bh=Cq9uXnbecisUvPYlPRYj++5pXhuwoHDwBi8w9Ktnumk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ODAIjziAkQ8NZFgb91Ky1bkIO3YNrM3AWcFRQgGtb2r9njL7W9vrtdiO3k7qn1Apr
-	 64QX6A7YjlG0uToR4QoyvgKiyck/UElWHCTttOg4SjcN8wCZcEpWBczXUr7BpKBF6U
-	 j3s2SEZ/gzh1bEHxoQI/mqHzeZnx9cEpF0gEfYBFq5CPHGyrX04GNcqDZPKqurq15/
-	 cPPw6MSUoI0e4HsXvKJMEtQNi0kejTWoCSNuPh/KMcwhH/H8EB1EvsZZWOloImqAKk
-	 zM2LX3NgzZBglaQakMsAum37L4IymOCkK974rRiO0jDvofrB8Sl8qenLS5mdthn6RC
-	 3h9IcBTsn9Arg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tZt7f-000000003H3-1LWA;
-	Mon, 20 Jan 2025 15:51:27 +0100
-Date: Mon, 20 Jan 2025 15:51:27 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Marek <jonathan@marek.ca>
-Cc: linux-arm-msm@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Shii5m2/q1Z935o7wykg0p7pQwL5IiTqURuv1jt0VHb1QOWFUM05FCsqBIAPbJi44wyRJGo2jnZhAW/OBXUh3SJG3P6/RZOcO4ZTulpahAIPMrvaQWMWVRuF8h6qgeQ0h7PQts/vXKKnMusDOxyD3/xM+NT+ZYUU940j7ovD/Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F28EB1063;
+	Mon, 20 Jan 2025 07:10:57 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 59F7D3F740;
+	Mon, 20 Jan 2025 07:10:27 -0800 (PST)
+Date: Mon, 20 Jan 2025 15:10:24 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Johan Hovold <johan+linaro@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Bjorn Andersson <andersson@kernel.org>,
 	Rob Herring <robh@kernel.org>,
-	Satya Priya <quic_c_skakit@quicinc.com>
-Subject: Re: [PATCH v3 0/5] x1e80100 RTC support
-Message-ID: <Z45i7zOsATLzCxYf@hovoldconsulting.com>
-References: <20241015004945.3676-1-jonathan@marek.ca>
- <202501122335384a545895@mail.local>
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/7] rtc: pm8xxx: add support for uefi offset
+Message-ID: <Z45nYEfq2IPsrRy7@bogus>
+References: <20250120144152.11949-1-johan+linaro@kernel.org>
+ <20250120144152.11949-4-johan+linaro@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -70,45 +58,23 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202501122335384a545895@mail.local>
+In-Reply-To: <20250120144152.11949-4-johan+linaro@kernel.org>
 
-Hi Alexandre and Jonathan,
+On Mon, Jan 20, 2025 at 03:41:48PM +0100, Johan Hovold wrote:
+> On many Qualcomm platforms the PMIC RTC control and time registers are
+> read-only so that the RTC time can not be updated. Instead an offset
+> needs be stored in some machine-specific non-volatile memory, which the
+> driver can take into account.
+> 
+> Add support for storing a 32-bit offset from the GPS time epoch in a
+> UEFI variable so that the RTC time can be set on such platforms.
+>
 
-On Mon, Jan 13, 2025 at 12:35:38AM +0100, Alexandre Belloni wrote:
-> Did I miss v4 of this series?
+Why can't the UEFI runtime services be used here ?
+In short, why is drivers/rtc/rtc-efi.c not working or no attempts are
+made to check if that works just fine ?
 
-We are still waiting for Qualcomm to provide a free and safe-to-use
-allocation for the RTC offset in the PMIC.
-
-I got tired of reminding the Qualcomm folks about this and instead
-revived my patches for using the UEFI variable that the firmware (and
-Windows) use for the offset.
-
-I included Jonathan's v3 series after making the changes that we
-discussed here (and a few more).
-
-The result is here:
-
-	https://lore.kernel.org/lkml/20250120144152.11949-1-johan+linaro@kernel.org/
-
-and should allow us to enable the RTC on X1E today (and also avoids
-running into the same SDAM allocation issue for the next platform).
-
-> On 14/10/2024 20:47:25-0400, Jonathan Marek wrote:
-> > x1e80100 needs a workaround because the RTC alarm is not owned by HLOS.
-> > It also needs the same offset workaround as sc8280xp/etc.
-> > 
-> > v2: remove duplicated ops and use RTC_FEATURE_ALARM instead
-> > v3:
-> >  - renamed flag to qcom,no-alarm
-> >  - don't remove alarm registers/interrupt from dts
-> > 
-> > Jonathan Marek (5):
-> >   rtc: pm8xxx: implement qcom,no-alarm flag for non-HLOS owned alarm
-> >   dt-bindings: rtc: qcom-pm8xxx: document qcom,no-alarm flag
-> >   arm64: dts: qcom: x1e80100-pmics: enable RTC
-> >   arm64: dts: qcom: x1e80100-crd: add rtc offset to set rtc time
-> >   arm64: dts: qcom: x1e78100-t14s: add rtc offset to set rtc time
-
-Johan
+-- 
+Regards,
+Sudeep
 
