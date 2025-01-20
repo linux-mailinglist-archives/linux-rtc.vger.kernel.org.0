@@ -1,153 +1,193 @@
-Return-Path: <linux-rtc+bounces-2967-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2968-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8874AA17295
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 19:12:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74502A1740A
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 22:19:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F24B7A248B
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 18:12:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9B6C3A711E
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2025 21:19:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E211EE02E;
-	Mon, 20 Jan 2025 18:12:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65BB11F03ED;
+	Mon, 20 Jan 2025 21:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b="mxJXUwlC"
+	dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b="L0ji2OCp"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D5D1E9B25;
-	Mon, 20 Jan 2025 18:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA5919A28D
+	for <linux-rtc@vger.kernel.org>; Mon, 20 Jan 2025 21:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737396739; cv=none; b=d7n4wUaeTw/ekiwUTaiPs2v4JNwgKFabROGF6Z7G9XebJu6wuu1K6kp4M2H9NRD9Xsh8+i9KsksdBw66qopiG9e2jAIM91BmpmLRidAD0PH5y6tPH74PNC9pYSPPvHUmgz2+ZKGWnHQuZGCZ9A9yms2agjhpR7c+0eT2foIFiRE=
+	t=1737407988; cv=none; b=VNnbHkWdU5km2T0Xo+vMf636EsDQym3OiYvWXdsR8vCUzkd4YS0+LLXmLKyab5bwUCtPc/yz6AlSrbzrhGV9zlXD9Jli3/5Uln0Jh3wqLQsoQnWKcuvLNs0BsKjxs4buMtgro811vtrURnTygtOk6Y+frGkdwWSsG8lXdwsp6Js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737396739; c=relaxed/simple;
-	bh=owJKCle4OqQVn6FlWGAYuamsFy32fdIeVO7S6JSibvc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a1+58M67LSq2ACPJ0L2QdXkJSZtJut/h/MFxqOKi0PnHWA26ZVLlLW+QPBE/4jnM71G7PJS+aHplITeCa+ZbF2pKVvQRW3AQQGQJDaDLXByhkTZEjfRMxuvYYUDZC5E3Zems40LyYoA7PAF42SkSNERNwbYkFnbQb8bCg+nGO7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz; spf=pass smtp.mailfrom=oldschoolsolutions.biz; dkim=pass (2048-bit key) header.d=oldschoolsolutions.biz header.i=jens.glathe@oldschoolsolutions.biz header.b=mxJXUwlC; arc=none smtp.client-ip=212.227.126.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oldschoolsolutions.biz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oldschoolsolutions.biz
+	s=arc-20240116; t=1737407988; c=relaxed/simple;
+	bh=Vh0uo3++5QP3EBzz/t2XwqmWwVWPTuEQ5w6IKvetKck=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i/fE+IqAR+l9D5cOl0/McMV2Fcy46+GGSbAzajOqKYPJ5zso2iMRX/rhMbglqIs6fLXQrtyWKniELXULLt5o9D47VsLsk6IRbZVePUxRXVkTN3t5Dj9AvnXrqvXkb0q+gf8ad2B5JCLB5oGn7rB0EHHI6UZ0obeny2H4mA8axQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org; spf=pass smtp.mailfrom=kali.org; dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b=L0ji2OCp; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kali.org
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5d0d32cd31aso7400634a12.0
+        for <linux-rtc@vger.kernel.org>; Mon, 20 Jan 2025 13:19:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=oldschoolsolutions.biz; s=s1-ionos; t=1737396727; x=1738001527;
-	i=jens.glathe@oldschoolsolutions.biz;
-	bh=YEP8Ka7Kbfimz7RVhloCaYpKFMYx1Qs5MiA+dYWzwaU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=mxJXUwlCl4hVcV3R7GQeflKD331aupkxDo4OveXOWuN5Ts+IDH1iyA43rHjFO3KC
-	 xN3zg1hEIcWSleNFzkKEx8US+Fa8MeU60znpKfJhZbp4UuSbyzOvCP93uhBjt3YeH
-	 dzAtSY1j6dRnGxANgPPgaa6a1CmHbwbMnWJqXQ7BbkPkUElLC++3qh3ZhN/5PAuVY
-	 TBmvPhVqPWPs5jBg0mNPyMN9Bmuf0EZ4OdwURJra5qBz86y9FLKZtwllIkaslqfsI
-	 TXA3AZ+iOzv9oZXCtDec/K3hqDmY5UeVeCeaXT7+Zbp1MB9e42GeYFgxD9yEI2oRy
-	 uwWvab40ziev5Fq9hQ==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from [192.168.0.152] ([91.64.229.215]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MvKTJ-1tIXnL3EJ7-014a1f; Mon, 20 Jan 2025 19:12:06 +0100
-Message-ID: <d6ff6f2e-9280-4fd0-af4c-f50b35652800@oldschoolsolutions.biz>
-Date: Mon, 20 Jan 2025 19:12:05 +0100
+        d=kali.org; s=google; t=1737407985; x=1738012785; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xA6291ZXdac8vRUCwssYg9YOrgMEuOkZxM4d7CqIjqE=;
+        b=L0ji2OCpt0f1r6G+IwtimIkYl38IyG76XLQdF1OHl1ns9RhiM0ti2ShsRBmmwF7WiA
+         HqBN9B/yyIperqmwYaylYPUIrDpFxLRt/mLfojzejRT7lz81etH5fQtbCa7Cty1mis9u
+         jV7KS7Tt2qR6va5XLc2FTH7k9L792Au/9Fvo57yMqJapisBzWUBHc4lpiMA+nA3HYPjS
+         DdtRtGf4Slj65XYhiyIOf3VJgYuZykTVW2tZYLmgUVZ8nBz9d0MCjWFR+Vx5y27tEvsR
+         BWgkUIlS/ZmqTt5Mg3re/EDGxdjYNkcTmoqYAhwxOu3CPYFkANskTQlU+vaPuADV3xjs
+         A/+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737407985; x=1738012785;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xA6291ZXdac8vRUCwssYg9YOrgMEuOkZxM4d7CqIjqE=;
+        b=AjaggUzbJikGO57Iq9NvdOVrzTPZutY4dgAh0zj4rutMAvHailbN1r8NrOw1Gu2lPG
+         C5dt4lyYhaSuBSJzPPpJ1xfS6mRw9A0FpJzdMw+nNuTvThL/JOpTpQaRmyySrpGRAd3/
+         82M57J8ko9OT8G7IO1d79oy8EU4edLo6POOlN3WbX2h+623323SZEySX1Tky+kFkfFBS
+         XU49fyles0SZUZVoOs1hAmuWO/datrIysRBFls8fQRozAR57HaRs+ChTE+OwDR5+raNw
+         B2mgMlhMBG2PavO3Bb5T3ULOynamxx5KJiUMR6TdtWUDUKSDPZq82RIuuUxq+Aavu0I9
+         X0RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtD93XqkG89bg66m4fvOBkyZmKAzLbVm8MFdY0jc+5sYYrbDJV0HndWhi+TuhKwjd0IBzGrei2dmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqKPQhxjH4oyBT9o1AzrG9V1TIO+6pHyYl3FPWp6dUTXXur5OL
+	Sl4JCPl2SlQH1uoVxyaV5sim7ixtGwbG1V1aomA0xOyTFJPWX13EUjXb9CDbhxJ7K5GX1l7SuwC
+	o/lQyGwUgoEn48pKY6EChfy9UYAwMnI1hHxJwJ09AsY4SCdbLE0Y=
+X-Gm-Gg: ASbGncugXKkhmm10Imhp6H9q30SRiczoYYHsEDJOzc0wo7zQfzcJnPSGfP7pAhttW5I
+	4npQ65X2+x690y67pAeDHOemlHI5dnzvei9eylpIQrvxpQRQGewdR
+X-Google-Smtp-Source: AGHT+IHc0RPbhZfwtvndyJ4zIg+YQ8UVHDIXIsBwLqHby4Ix3W/JRyz4+JjwjPuaa8KZKDLV2B9ECoKwhLlQY9BPU3U=
+X-Received: by 2002:a05:6402:5246:b0:5d9:ad1:dafc with SMTP id
+ 4fb4d7f45d1cf-5db7db073f1mr33624336a12.25.1737407984546; Mon, 20 Jan 2025
+ 13:19:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/7] arm64: dts: qcom: x1e80100: enable rtc
-To: Johan Hovold <johan+linaro@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Bjorn Andersson <andersson@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
- Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
- linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
 References: <20250120144152.11949-1-johan+linaro@kernel.org>
- <20250120144152.11949-8-johan+linaro@kernel.org>
-Content-Language: en-US
-From: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-In-Reply-To: <20250120144152.11949-8-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20250120144152.11949-1-johan+linaro@kernel.org>
+From: Steev Klimaszewski <steev@kali.org>
+Date: Mon, 20 Jan 2025 15:19:33 -0600
+X-Gm-Features: AbW1kvY5jMIUKN1EO4Z8z1FKCHGpDSW9Rthw8kq1Lxb5fCHphJX04MTxERkZW2Y
+Message-ID: <CAKXuJqhttfPg7JV_n85bb5v6VKye0F4rYTfWdDYMowdgo83oug@mail.gmail.com>
+Subject: Re: [PATCH 0/7] arm64: dts: qcom: x1e80100: enable rtc
+To: Johan Hovold <johan+linaro@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Jonathan Marek <jonathan@marek.ca>, 
+	linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1TfkxTgRZJn+MQWuwHQRQSzb/l+QOzHh9WKEkNqAYxUT7C4xgXb
- tvhokOvPJkAu8Dt2DyNGgj2NInP8qhM0ZZSUJh/JLI+0AMpaT/2S9HifqtUESV5pzYpwnP6
- cxcopN5qFNH1P+cgPITShMGDXF0LgwmM39RcDD5pATxUG19MAlCYnkYt9g6zh7M32Z4ehdG
- CGlXdEZUEaDBMkBhyqC0g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ThfM0vLkFqA=;HQpAAXiCT3WmRqoafFGYLUyBxyM
- ltBIrG987qqQkxyNJhLreKYwmn9XRWs1JDQE49KxpsiNRP5t1ZGkOKUrasueSSWaiElkVVoCy
- QcrlnsWEo9ji1ZevFw0PlAP85b0qW2/uqUhB5bd9qAV78ydu/gMgFcx6YcGw1noYsGNGHzXC2
- rtPtYIy6LbnkBAyxtySgKSpEPM0M+6qTNQaFMqB4JtrbXyhQU6iKtBuZMGJFEnbXqTsu0YSfk
- zUP33JTs+R1VnKhrM2RigBA7XCB+j0ljPYGZvXO7k944FwUWrtgXZZE9omM4x9Os8AJjmCQ33
- kbDuJL+4/XyWUlo9h9NBtrnjX4eP0Rx3O+Ot57Z5G+P8goMSxNlSLsII6Hv9Q34zZOJZmx1J6
- 21Pb5Fi04Df2qgEzvWFz0HA8rP82Qj3u4Cx+KRJGGCHR+LeDf9GYJkFthg5pAcvmYMe6C9Sdj
- p/72bKr+UinS23B17JZG6arOFhNPcCrlp52MGVH3YOe5weBe8WzCCglLVbwd/+f14Ghn+E9us
- mYYfz1K8aRCA5sdvemh1jJc+it+Afk91gNz623jhV5BsEk7ikFzOJ+sp3XTy9pm0cRnP/aiG5
- +b6i1MzySvJMFtt1RSczdgExrEEuJIYPXjoQZDvzCkLlwtPspCqHlaeBVg2ShJzvZ89GxWTRZ
- OJmRp3Ub9rGE9XSkDkEWknAkwz118hkAq0ITR3PW+jVJ3HYusAVoFk5CGLK7m9jYHM8S7JIuP
- uHzTr9idP2FgpbDD7rFeshfZBPxgNjOJ6KcQTQNTUAPntQgd3WxHVytYRJq+aatp+lET1NgwA
- g7u+lrpKYNijdT78A+ZCmwypGvih6c0tfrSDCF2D5CeZxoOb/VNl3a7pGO3Oyu0iQOgPO9qIg
- 806B50eyj9yXU53Ln3J2fW4U3X4tYz3OBhnk1C+RwiYuacdXt1WU3pylEqdz3xxa/2oR9M5oF
- cCn+rTkh268ssaCSJTM3Auumjk6BGEQJ7o9I55kcVbzwZCo2wMwpUZycqIJ6cZ8DMKidoHsO3
- t8TZcsfZc7JW4omL8bmMefPovtKc9NxkpSgRO1xslqz9yXW9Hsi431X0ZFVt8tx6DNl5Rf7n7
- 94N0qc7Aq8dFUB+MLEaGWofkKMWvEaJBoXxDtf+qfkg0+EsGAunlPk+eJBg3m2JZ0Qy4IY9/A
- =
 
 Hi Johan,
 
-On 20.01.25 15:41, Johan Hovold wrote:
-> On many Qualcomm platforms the PMIC RTC control and time registers are
-> read-only so that the RTC time can not be updated. Instead an offset
-> needs be stored in some machine-specific non-volatile memory, which a
-> driver can take into account.
+On Mon, Jan 20, 2025 at 8:43=E2=80=AFAM Johan Hovold <johan+linaro@kernel.o=
+rg> wrote:
 >
-> On X1E based Windows on Arm machines the offset is stored in a Qualcomm
-> specific UEFI variable.
+> This series adds support for utilising the UEFI firmware RTC offset to
+> the Qualcomm PMIC RTC driver and uses that to enable the RTC on all X
+> Elite machines.
 >
-> Unlike on previous platforms the alarm registers are also unaccessible
-> on X1E as they are owned by the ADSP.
+> Included is also a patch to switch the Lenovo ThinkPad X13s over to
+> using the UEFI offset.
 >
-> Assume all X1E machines use similar firmware and enable the RTC in the
-> PMIC dtsi for now.
+> The RTCs in many Qualcomm devices are effectively broken due to the time
+> registers being read-only. Instead some other non-volatile memory can be
+> used to store an offset which a driver can take into account. On Windows
+> on Arm laptops, the UEFI firmware (and Windows) use a UEFI variable for
+> storing such an offset.
 >
-> Based on a patch by Jonathan Marek. [1]
+> When RTC support for the X13s was added two years ago we did not yet
+> have UEFI variable support for these machines in mainline and there were
+> also some concerns regarding flash wear. [1] As not all Qualcomm
+> platforms have UEFI firmware anyway, we instead opted to use a PMIC
+> scratch register for storing the offset. [2]
 >
-> Link: https://lore.kernel.org/r/20241015004945.3676-4-jonathan@marek.ca =
-# [1]
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> On the UEFI machines in question this is however arguable not correct
+> as it means that the RTC time can differ between the UEFI firmware (and
+> Windows) and Linux.
 >
-> diff --git a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi b/arch/arm64/b=
-oot/dts/qcom/x1e80100-pmics.dtsi
-> index 5b54ee79f048..051fb3a304b9 100644
-> --- a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
-> @@ -223,8 +223,8 @@ pmk8550_rtc: rtc@6100 {
->   			reg =3D <0x6100>, <0x6200>;
->   			reg-names =3D "rtc", "alarm";
->   			interrupts =3D <0x0 0x62 0x1 IRQ_TYPE_EDGE_RISING>;
-> -			/* Not yet sure what blocks access */
-> -			status =3D "reserved";
-> +			qcom,no-alarm; /* alarm owned by ADSP */
-> +			qcom,uefi-rtc-info;
->   		};
+> Now that the (reverse engineered) UEFI variable implementation has been
+> merged and thoroughly tested, let's switch to using that to store the
+> RTC offset also on Linux. The flash wear concerns can be mitigated by
+> deferring writes due to clock drift until shutdown.
 >
->   		pmk8550_sdam_2: nvram@7100 {
+> Note that this also avoids having to wait for months for Qualcomm to
+> provide a free PMIC SDAM scratch register for X1E and future platforms,
+> and specifically allows us to enable the RTC on X1E laptops today.
+>
+> Rob had some concerns about adding a DT property for indicating that a
+> machine uses UEFI for storing the offset and suggested that the driver
+> should probe for this instead. Unfortunately, this is easier said than
+> done given that UEFI variable support itself is probed for and may not
+> be available until after the RTC driver probes.
+>
+> Hopefully this all goes away (for future platforms) once Qualcomm fix
+> their UEFI implementation so that the UEFI time (and variable) services
+> can be used directly.
+>
+> Johan
+>
+>
+> Changes since UEFI offset RFC [1]:
+>  - clarify that UEFI variable format is not arbitrary (Alexandre)
+>  - add missing use_uefi kernel doc
+>  - use dev_dbg() instead of dev_err() (Alexandre)
+>  - rename epoch define RTC_TIMESTAMP_EPOCH_GPS (Alexandre)
+>  - mitigate flash wear by deferring writes due to clock drift until
+>    shutdown
+>
+> Changes since Jonathan's X1E series v3 [3]:
+>  - tweak qcom,no-alarm binding update (and drop Krystzof's Reviewed-by ta=
+g)
+>  - drop no-alarm flag and restructure probe() to clear feature flag befor=
+e
+>    registering RTC
+>  - use UEFI variable offset on X1E
+>
+> [1] https://lore.kernel.org/lkml/20230126142057.25715-1-johan+linaro@kern=
+el.org/
+> [2] https://lore.kernel.org/lkml/20230202155448.6715-1-johan+linaro@kerne=
+l.org/
+> [3] https://lore.kernel.org/lkml/20241015004945.3676-1-jonathan@marek.ca/
+>
+>
+> Johan Hovold (5):
+>   dt-bindings: rtc: qcom-pm8xxx: add uefi-variable offset
+>   rtc: pm8xxx: add support for uefi offset
+>   rtc: pm8xxx: mitigate flash wear
+>   arm64: dts: qcom: sc8280xp-x13s: switch to uefi rtc offset
+>   arm64: dts: qcom: x1e80100: enable rtc
+>
+> Jonathan Marek (2):
+>   dt-bindings: rtc: qcom-pm8xxx: document qcom,no-alarm flag
+>   rtc: pm8xxx: implement qcom,no-alarm flag for non-HLOS owned alarm
+>
+>  .../bindings/rtc/qcom-pm8xxx-rtc.yaml         |  11 +
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |  11 +-
+>  arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi  |   4 +-
+>  drivers/rtc/rtc-pm8xxx.c                      | 194 +++++++++++++++---
+>  include/linux/rtc.h                           |   1 +
+>  5 files changed, 185 insertions(+), 36 deletions(-)
+>
+> --
+> 2.45.2
+>
+>
 
-works nicely on SnapDragon Dev Kit X1E001DE. Thank you!
+Tested this on the Thinkpad X13s, as well as booting it into Windows
+and verifying that it has the correct clock both ways, which it does.
+Thank you!
 
-Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-
-with best regards
-
-Jens Glathe
-
+Tested-by: Steev Klimaszewski <steev@kali.org>
 
