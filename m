@@ -1,93 +1,151 @@
-Return-Path: <linux-rtc+bounces-2996-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2997-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88EFFA17B04
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 11:07:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A9F3A17DB5
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 13:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D82D7A49C4
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 10:07:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA5A27A1CED
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 12:19:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9409F1E7C16;
-	Tue, 21 Jan 2025 10:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5287D1F1317;
+	Tue, 21 Jan 2025 12:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsFfJO1e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jGxs+pk9"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6350A1E0DCF;
-	Tue, 21 Jan 2025 10:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509481D554;
+	Tue, 21 Jan 2025 12:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737454049; cv=none; b=dp3c5AkOVWD4vGS2UbS/zAohbII3TMpNC6OGQv4BDvPCi7C2dAHDKh4yUauKeiSivISRmOkNUYkwmS8Ioj18gyij+J83ZM2KQs3C6z+hQgiSe7JAgQ9or1I1Y93jkFbJ5v09udgasK0pCERKCQ8cCsmFqZvCDnAq2994NPphXx4=
+	t=1737461956; cv=none; b=pD9/Bz4aysIW6XPHWwPDLywyoGJV3eq5N+T1okE+SwAF8wih78lS5bLWwhw4wTATcl5i3iFJPFmvL9aDQi4rKp/0/UUdNM2fwCI1xTrkMKtHpngj5cXX/50dPdE/tFqHwKjZRosVIxAh9MIOJX8sW2iZ0Lf65JJuowl6GAlrp/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737454049; c=relaxed/simple;
-	bh=8h5oqgodori/zlYAZT+1BLm24JpkoQ/d2YWvLyyz9Fg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AXJXK/a/7+ufSWeenl8fcYWOqlLvhTa0Pq8xJI+t4clOkkqCJLTIzwDHtvm9Z/1Q4N1W9FzOEosFK7rnKlLaGvfUcwJ9lszswoh3IayCVZeaNvBpUb5oyEFoUzinXVFtQLaEJrkdtfEWchp/VJZ185P8dHPZ8R6iwmifpTdznYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsFfJO1e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44C9C4CEDF;
-	Tue, 21 Jan 2025 10:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737454048;
-	bh=8h5oqgodori/zlYAZT+1BLm24JpkoQ/d2YWvLyyz9Fg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JsFfJO1eIPsO4uxZSHpbii2fMYAg8cFzENomjYRCTu4FpP0l4QWyeafYyGTn0IWCR
-	 uWMJUyk5s1YO3j9hz06V0msZ44A6VWqRiQUz4bTagk/sOiuYk6hQW6nz4h7p30z5rs
-	 hE0F/IWrwdY0ntCOZdWylfXzcNU/vqLlcOvAHNo7ZcSA8J3lYpl/gL66/g46ItQvFy
-	 qWFlfsoWxYt/U+fQ4V7amY2Hm5AeOXVRN+8ceoVVkqxocDisLH6EGpnPswSsyYtlGf
-	 u1kh34lAElnYAtUpmGu9hLXmPtYlklDZx9tav9hqXiZCINVShlBxsm2lSNq8RO54a1
-	 gZpe0mjkreAmg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1taBAS-000000008GH-34Ce;
-	Tue, 21 Jan 2025 11:07:32 +0100
-Date: Tue, 21 Jan 2025 11:07:32 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Joel Stanley <joel@jms.id.au>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] arm64: dts: qcom: x1e80100: enable rtc
-Message-ID: <Z49x5ElsDn3Fnovj@hovoldconsulting.com>
-References: <20250120144152.11949-1-johan+linaro@kernel.org>
- <CACPK8XftgBDoy1echN7VKx9Te0o37PvdqCUiJN7YGpkdK-3fJQ@mail.gmail.com>
+	s=arc-20240116; t=1737461956; c=relaxed/simple;
+	bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=BIIoOnl1eOC7ze4x3NvELKOI0fgC8Rfysu5NS59XiOXKMNNhQ5x2SMP7J6H4XcPeeTBXKQBbMcXSJqXbWNnFRX82Pm0FezWVeTVNW8uUhe0mskhev+TdOhG4oaVUKoS5d0okybGAkBkeWcQIYGLb50txEHCarEuPQg34GaWGfWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jGxs+pk9; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737461955; x=1768997955;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
+  b=jGxs+pk9Czd0TRSNFjT4SUeyymLccvvh0CKFcZHTdxZu97ZOO1kuWSOt
+   AmMxmV1CkWT3bNQPwNK1urxn53nI2FgN1zRwLJzi6NvzQDTXhpHl5aCZe
+   NUgo70btqPNZRNXjm5pqN09cHG2dFWZNyD5dBzXDlJx9eljNM2DozFwoe
+   CGYYqfkGuVXIoV3I2oPcY02w3X19LVhuAc5tw5TaxsOxFLKK/w0CBOjZP
+   nepX2xsI3RgPQtOTPd7mf7L/mmD4YTpWjslB3NWtts/Fh8cLTeSUImhKR
+   G/xP9bJvkr1/ZieQ5dOOrJurQE0NARn9nbcbL4PThwy/o07sohsC4Feba
+   Q==;
+X-CSE-ConnectionGUID: Ndw0UAZJQg+MRYZ3bRbGDQ==
+X-CSE-MsgGUID: kNelo3TwQaCvORPfdvV2+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11321"; a="38115461"
+X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
+   d="scan'208";a="38115461"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:14 -0800
+X-CSE-ConnectionGUID: gH3zVvHuQEysE1CEtIUNmw==
+X-CSE-MsgGUID: XYxDmMaMQhuYGVua7yV6Ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
+   d="scan'208";a="111790831"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.188])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:00 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 21 Jan 2025 14:18:56 +0200 (EET)
+To: Huisong Li <lihuisong@huawei.com>
+cc: linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+    arm-scmi@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
+    linux-rtc@vger.kernel.org, oss-drivers@corigine.com, 
+    linux-rdma@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+    linuxarm@huawei.com, linux@roeck-us.net, jdelvare@suse.com, 
+    kernel@maidavale.org, pauk.denis@gmail.com, james@equiv.tech, 
+    sudeep.holla@arm.com, cristian.marussi@arm.com, matt@ranostay.sg, 
+    mchehab@kernel.org, irusskikh@marvell.com, andrew+netdev@lunn.ch, 
+    davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+    pabeni@redhat.com, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, 
+    louis.peens@corigine.com, hkallweit1@gmail.com, linux@armlinux.org.uk, 
+    kabel@kernel.org, W_Armin@gmx.de, Hans de Goede <hdegoede@redhat.com>, 
+    alexandre.belloni@bootlin.com, krzk@kernel.org, 
+    jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, 
+    zhenglifeng1@huawei.com, liuyonglong@huawei.com
+Subject: Re: [PATCH v1 19/21] platform/x86: dell-ddv: Fix the type of 'config'
+ in struct hwmon_channel_info to u64
+In-Reply-To: <20250121064519.18974-20-lihuisong@huawei.com>
+Message-ID: <844c5097-eeb7-7275-7558-83ca4e5ee4b2@linux.intel.com>
+References: <20250121064519.18974-1-lihuisong@huawei.com> <20250121064519.18974-20-lihuisong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACPK8XftgBDoy1echN7VKx9Te0o37PvdqCUiJN7YGpkdK-3fJQ@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, Jan 21, 2025 at 02:18:21PM +1030, Joel Stanley wrote:
-> On Tue, 21 Jan 2025 at 01:14, Johan Hovold <johan+linaro@kernel.org> wrote:
-> >
-> > This series adds support for utilising the UEFI firmware RTC offset to
-> > the Qualcomm PMIC RTC driver and uses that to enable the RTC on all X
-> > Elite machines.
-> 
-> Looks good on a Surface Laptop 7 / romulus:
-> 
-> Tested-by: Joel Stanley <joel@jms.id.au>
-> 
-> [    0.407844] rtc-pm8xxx c42d000.spmi:pmic@0:rtc@6100: registered as rtc0
-> [    0.407876] rtc-pm8xxx c42d000.spmi:pmic@0:rtc@6100: setting system
-> clock to 2025-01-21T03:34:06 UTC (1737430446)
+On Tue, 21 Jan 2025, Huisong Li wrote:
 
-Thanks for testing.
+> The type of 'config' in struct hwmon_channel_info has been fixed to u64.
+> Modify the related code in driver to avoid compiling failure.
 
-Johan
+Does this mean that after applying part of your series but not yet this 
+patch, compile would fail? If so, it's unacceptable. At no point in a 
+patch series are you allowed to cause a compile failure because it hinders 
+'git bisect' that is an important troubleshooting tool.
+
+So you might have to combine changes to drivers and API if you make an 
+API change that breaks driver build until driver too is changed. Note that 
+it will impact a lot how quickly your patches can be accepted as much 
+higher level of coordination is usually required if your patch is touching 
+things all over the place, but it cannot be avoided at times. And 
+requirement of doing minimal change only will be much much higher in such 
+a large scale change.
+
+--
+ i.
+
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index e75cd6e1efe6..efb2278aabb9 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -86,7 +86,7 @@ struct thermal_sensor_entry {
+>  
+>  struct combined_channel_info {
+>  	struct hwmon_channel_info info;
+> -	u32 config[];
+> +	u64 config[];
+>  };
+>  
+>  struct combined_chip_info {
+> @@ -500,7 +500,7 @@ static const struct hwmon_ops dell_wmi_ddv_ops = {
+>  
+>  static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
+>  							      enum hwmon_sensor_types type,
+> -							      u32 config)
+> +							      u64 config)
+>  {
+>  	struct combined_channel_info *cinfo;
+>  	int i;
+> @@ -543,7 +543,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
+>  							    struct dell_wmi_ddv_sensors *sensors,
+>  							    size_t entry_size,
+>  							    enum hwmon_sensor_types type,
+> -							    u32 config)
+> +							    u64 config)
+>  {
+>  	struct hwmon_channel_info *info;
+>  	int ret;
+> 
 
