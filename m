@@ -1,212 +1,246 @@
-Return-Path: <linux-rtc+bounces-2998-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2999-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96198A17F74
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 15:14:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A420DA17FDA
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 15:32:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35399188B991
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 14:14:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6BE3169905
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 14:32:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC191F37CC;
-	Tue, 21 Jan 2025 14:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 079C71F37B2;
+	Tue, 21 Jan 2025 14:32:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="MDqCQlCd"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="NE0ncwFw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013024.outbound.protection.outlook.com [40.107.159.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BF963CF;
-	Tue, 21 Jan 2025 14:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737468847; cv=none; b=ORDG0PW8gwePHGL8Xe9WS42oJbPC+uN54/pqJH2/rPOVl4ekXF3mG48D1wrP9TjorADL7UccRXnGu/VVYKo74L8CIULPUv7qwVfAJk0n4cLBUuigukbmrvnISYXgNHf3sapwQ1QplzjG2hVSWxf3FBftsv9PZ1Y4/euRl6YzGbc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737468847; c=relaxed/simple;
-	bh=uSXhQE1lWmVNXDRGO1SbE3SwNrRV91qgBAmOvH5wijc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qx7Cs/SLAAfrU3ZjLVMcwGpZAjRqKFZ7yBTQOBnLbsCjlSXtk1II6m+HfzJ0Vixz97YROX/6SAJOx17yNN8cNqY5VO/UcbVWRwdrVhfsxGdUVBZdzSf4x3auxNCQy9E1TwAZmwQisjWKFGkfvF0wwb7bfoCr1uCkbr3ucRN2pgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=MDqCQlCd; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1737468762; x=1738073562; i=w_armin@gmx.de;
-	bh=x9XPqJuiHeFmslhn9JxO368mOzb+Ow/0VyVvRzkFXq8=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=MDqCQlCdqWzm/hmvYobAfB9qMdYiVG/+SV6HE44ptNrMa7fPH89+BSunDp0VnhCg
-	 ueUZwkDISyhqV3kRR+IEGINYM971J8nibhiOxQQz6Ts87WEmrboCx5Q0+qWy9WZCc
-	 +4fCtS2fvLdlo1L89qZ0UbQOz9i9eesXLPYz6hQVsD1oBZfO6ZNifyvd2bfVQiJWg
-	 /XsZ6buKUeKSUOGlXwYjRBlUMIw8haxFvg/icclaK5eeG1h6XRlKWQwjPkA0GBQri
-	 qgEK12MEpnWiluunyzlmRFvTRFsFhVeq1FcVd3PN2Lio4Ky6HLSHgUEcYsiSEutF1
-	 E/9WC/CLr/7V/rn87g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([93.202.253.70]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M72sP-1taWdZ1wwp-00Gegp; Tue, 21
- Jan 2025 15:12:42 +0100
-Message-ID: <03b138e9-688f-4ebc-bd01-3d54fd20e525@gmx.de>
-Date: Tue, 21 Jan 2025 15:12:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3441F1508;
+	Tue, 21 Jan 2025 14:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737469920; cv=fail; b=WunIRWrTiJYeYaEZhe9l0lr992llCv8+CgenRI+TlD9gZF63630yAiDE8XGFDS0WvcrkcdbqMNbp//DHFjkpyn7Nk/920tdz9ay4czgHWPPQy8DBWPEOMjS+IbWM9ndaLWltA2hd0gOtPJbPKGYXVNlk6XWnzYbm6J8jJOQGetQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737469920; c=relaxed/simple;
+	bh=L8ciXzfwCfO8v/yyi9Q2svIL7nwkR3X3qzgSGlbDYZE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=b0YRAM1v5ri2TWUT7yJ8SjErgh1JwkTS1gdbr+UoJ/eNbfKQtnmHWRaHlChSjuTygl9UWWKsZccfJ0g9lRKyl7iexIX/9wVhW3P1uf8/LSn1g9hyCCBcPJ4R6uZ0epqUCUWQLo+ZVwXTQI0clJwnCZPXE5iLKkzaSl7+FnfNBhE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=NE0ncwFw; arc=fail smtp.client-ip=40.107.159.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Un5ohnZtbpKHhTLCJSSW961xrfBPFd1lwXVX/IUtaDSvmJB2e1sIrwNDXfU8T1TdFkq1+LwYrEQVzhMaqxDOLzbz8zle9jMTkiVExE+UqutPwbsivPK9yaREtM2aJHSk7tIzLcir71l8yQ35bHijZkIM4V915C8Eiic8KOcOBNi8sOee4XGvz7bRxWIcv28ZozsfWvrhx7vKRx7ISYGNc5UA8HMPvK/vNGp7Yzuxd0dSCLShr7YkVaqLGNPaUe/IisTzhmOa4oFqo+GTECFdLgFjdQfVF0J+w9NWKZA+9/yHHaoMOdLLyfMyjbFzEBdnE8oFH5m6YOzuzYTALSuWKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qPpN1nMz8ypNY7Uvp2UVwET0jVW8zavGqE0/d00IijA=;
+ b=b2xiVd//OVC2pBNvdKzYdxAiTHSdZBHGzHP8I31iNeagb/sXvfPYi7NlkAU6o7LCGQ9Ec1Rr5TLB9ZXhwVH/dakTtNT7KgJaEzEg3WBAuho/FjlDMH0OxJCyU1CQ6Khi4VOJz9adEdKl2XwTpeIQAzc9V6hSlVUAHkDTd43WrO/juSZeDGiGHyvCKueN8VUXGw7sld67r9AaEn4+c8dpxr3cc8d3mq2FuFzFgOsJOG+wzntmoU8fRA6Bj3LcSgcQASSN0eLVxNELKtQR6h19SVesgjgLVQIxfuv89tW4vBLYazUiI+dFQgA1Mmf6b9TBKTB3u1bdJHLe0Twlmadf/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qPpN1nMz8ypNY7Uvp2UVwET0jVW8zavGqE0/d00IijA=;
+ b=NE0ncwFwwq3egvbUphkr0gUR+SLKn+aPREkagMpOQb5EqTquI43ws2pxcDYCEL3EN7jWg4IBO0YB6nAdbA00pZzKBYDyqnLtPBYcRWqe/ZjPKox6tu8ZBuMLS0N9shKNYmWq3vV6mMFSJq6VJDIHQLH/RefFlgKPnU9rTlWfLDk8thPIlWUwY80UGcA+AHECZKh2CVeeMjt4QK1MBJGfDHxPaYTCq2QjVZjg4AIGqmcoSXocyrskvhyXmspLEbaOj21IA4xcpCpLpl4juxkClPzFfOkXGAy85sPqqhXTTwoeTUxdd8+wUWlf/cf/eHGU7w5Zehwq+xTgSlpKP3LmWw==
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by AM9PR04MB8748.eurprd04.prod.outlook.com (2603:10a6:20b:409::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.22; Tue, 21 Jan
+ 2025 14:31:55 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%5]) with mapi id 15.20.8356.020; Tue, 21 Jan 2025
+ 14:31:55 +0000
+From: Peng Fan <peng.fan@nxp.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, "Peng Fan (OSS)"
+	<peng.fan@oss.nxp.com>, Sudeep Holla <sudeep.holla@arm.com>,
+	"cristian.marussi@arm.com" <cristian.marussi@arm.com>
+CC: Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi
+	<cristian.marussi@arm.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, "arm-scmi@vger.kernel.org"
+	<arm-scmi@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "imx@lists.linux.dev"
+	<imx@lists.linux.dev>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-rtc@vger.kernel.org"
+	<linux-rtc@vger.kernel.org>
+Subject: RE: [PATCH 0/4] rtc/scmi: Support multiple RTCs
+Thread-Topic: [PATCH 0/4] rtc/scmi: Support multiple RTCs
+Thread-Index: AQHbauK0WlkpRT4hXUuysPkoc9lMC7MfdE+AgAHSTTA=
+Date: Tue, 21 Jan 2025 14:31:55 +0000
+Message-ID:
+ <PAXPR04MB8459968DFDE5979802CC034A88E62@PAXPR04MB8459.eurprd04.prod.outlook.com>
+References: <20250120-rtc-v1-0-08c50830bac9@nxp.com>
+ <20250120102117538ef59b@mail.local>
+In-Reply-To: <20250120102117538ef59b@mail.local>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|AM9PR04MB8748:EE_
+x-ms-office365-filtering-correlation-id: 449442e3-0efe-4a48-e8f2-08dd3a285ae8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|366016|376014|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?UZRCam2LvSvSQl1TfxsvoyZ/QOP0VVJSpZ0wQ4m5Ru4oOVkGy49QVDdvc+Ff?=
+ =?us-ascii?Q?zC2K6V5Ez865N30XZDolu3spAt0Pg+pkm02JMUJtkY7FkHoWSCjddFUsBFvr?=
+ =?us-ascii?Q?wl4nrKfFJLz+apszZwSCPc00P5oFaLXUvQyNuLeDXXXeEE4I9IbYNS+/glN/?=
+ =?us-ascii?Q?q4/ssM6nvCgxfDwe6JQcxorjp92n0GnjVMFMzF4OpZoyKepmqc4ZKBjna9iK?=
+ =?us-ascii?Q?Ra0PEeqX56FxGanuma8SPEOXUQolJSKSBy4V+VYJ9GYsgiVWYa3LI7tMS6qe?=
+ =?us-ascii?Q?JhUYWQqD07HdetmL91BzefTH5wbY5IKWIZvm0rK4HdQUQrvJkZermcUKIAWH?=
+ =?us-ascii?Q?5jJBR1qNuAeSptd19KiHXa3KfMPA+BvDVI0GdyghMSwaClS3Jc0jRco7JguO?=
+ =?us-ascii?Q?KtvXc8QzfCEkzItxDMNLNP4uS5mVud3bHjStLI3IotDxX7x9+H27qNyXW7bO?=
+ =?us-ascii?Q?8bqdXN2R/PSxe/u3kjoEtRBB63hrxLiSePn3WnkP6rA/rcZpccCDJG13RTfZ?=
+ =?us-ascii?Q?uIHpewtKFGyqNfLBLuMX2+1SmsDkG715ws4Ycl5jWZGHY+1ogrfMYGqwa6Tj?=
+ =?us-ascii?Q?Dyc7qsZO/RHz1DgYnMAWlbHOnl/ZPVu/9bUeRtZZtAcmA8izVFeHVB0k6sQe?=
+ =?us-ascii?Q?rIiT4glgsua5STm8bvU/KkTSmOzZvEozOUWHKfN7i/mv4TMzVgSBSfIxqQT+?=
+ =?us-ascii?Q?zfERaw30PsXWxgFrF6WQNWKWpPbNPEFrVgM5xTjeYmnTEva/oQ9uKjCQdVfd?=
+ =?us-ascii?Q?KA/BC883u06ppmaxmFxbtTJbJy7XAwjgh2JAeFJBOdC1WlkSovGVYC9oBLxK?=
+ =?us-ascii?Q?Nu1GJ11L4RUmyBDvMDHylF6etK78iu2xUdtZTXPECWpw2DJE1g1fmKvtDihG?=
+ =?us-ascii?Q?ZhXt2YFDvwX363qaQvFf4YjuQ3aQssQk8f45pn81ftise1D+uwtfb2dvHJ8e?=
+ =?us-ascii?Q?B2ZzW9kBp0GUNKONt4abFPDELl3yT9keFBOG/H1GhgWlXk0oKY9F+Z45vH8f?=
+ =?us-ascii?Q?iDitlwUAb+ruwC9pbFFVDHVsumDdeqYysYDzrzOg8IyjdCP6nrt4E8eoioQC?=
+ =?us-ascii?Q?HLlFAWBLyVCSfbnc916+rLNHFOqM65rCDvQqohFExgDjGKXEPnWqP1oEGXsh?=
+ =?us-ascii?Q?zHLzcZxjSUukM5/WwElPYAxzLu3Lxc4UCwQaggkJYg/yR5tZxkCQymDmSmU/?=
+ =?us-ascii?Q?C66QYqrYBFiZQ8o9nE1OGLQ4BIbU2yiz5N2KLUdljZ33I6Ek1OnnYLPpgYBY?=
+ =?us-ascii?Q?b/aP5hIFWN+KPImTwqRuq2Dlou2VOg0FTn9U3p2nwm3opXR3H136YHtaPggk?=
+ =?us-ascii?Q?PSCbbBoC85U6UoCuoMfyJmauL+GtBgR/JWzNgCosi6tl57hh7nTkp/QBcvNi?=
+ =?us-ascii?Q?0D9VYXhxQ4fTRbeMwmj7G0C3Hh3B?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?KBc3+bgtxxK+2KZbQgcFsFNvfsr4/HqdN/jh9fH46bkMn5LlCavVALScSrPt?=
+ =?us-ascii?Q?ACF4UGTBTTecaKdG2M9/6wHTWsZVcbeZ5Ib14eKlSdkuH5EJv3MBLX4eNlwd?=
+ =?us-ascii?Q?JclJtUcY4EN5HbJJ32o/BKsOgBxOHzCNN+DI3iE62UTOE9L+mW3y0acApamU?=
+ =?us-ascii?Q?/mEMnlVrv7AYSJmUfKfXC8tQytgOD2G2dQaTUmJ/WfY3C9GQML9v9aqef5TX?=
+ =?us-ascii?Q?FtVDv8+9NykbWtQL1BWhvj2VHWQ1TzS6tl9x6rL7SGMtlEBisXmWpst+43Fs?=
+ =?us-ascii?Q?zjQ7hsCtov9E8w2NwjZEqHPQatrVpp7e0El1DmXvzqO94l/Q314YN1Meb9jf?=
+ =?us-ascii?Q?u2hXiTLqnk+ulnRA2HcdExcEEsn2KfYekgC3z3wYia4CiDE7WMKVLRFTUmSW?=
+ =?us-ascii?Q?/0zOojuUN+e9jEExD0DvyCve6fEJQA9wPYIsHjK2g8yORYLsIRfpYan3TdEj?=
+ =?us-ascii?Q?5cZeY2VE1uhaPs/xcaY9Yi4LufoHas/Cz5qDhAwBHwIm5r7viuU6YLdVYVWN?=
+ =?us-ascii?Q?11KyZ4gOH3OAWzEL3oPwn4QbT7c3w38dDDCFA3g+CnTH0Bvs2+w2bZpGpRAo?=
+ =?us-ascii?Q?k147epViyIataZcZmkj42xmOEPn16oQzwsG3evTGkh2U3LC5+CFvzzA9D/Gi?=
+ =?us-ascii?Q?8n1/0SN/C31xUIgp6TvuaIRri2SL6gli91cxAXYk91OoPDtrQVMlvUcnKOQX?=
+ =?us-ascii?Q?H4V7tSQ4G+w6X1iIjIgOkW03zUycHmzXt8EsfsisEaoPPC4JvZQpgAPQ3TjJ?=
+ =?us-ascii?Q?ixnXMVanDQJZmIU7CYHkJO7SGJijSkpl7vQaMI9PPrFiZmMnWqucHXqRUcFT?=
+ =?us-ascii?Q?tlySnvhBsU9tWb8dpZuLtHgEwdBIxSJvAW5RxW+cJVI2wX0ZoHZXYUTZAahO?=
+ =?us-ascii?Q?H/IZaxIrefOZfq5DS3dvZFZt26pSzU0yw3bm8N0SEbOBEPt006YoOhIxubFc?=
+ =?us-ascii?Q?Cba1rK0ZtRGiPQ4lYqnsienfzDZwiaNoR6MxsOnxDfvz2mgCspNpRQpfNFNZ?=
+ =?us-ascii?Q?53VeadJg/NHdt8P/oq/u2AGKLDZDlBK7t+CsEIP5XSbJbV0UZsIoyRBnj6eP?=
+ =?us-ascii?Q?EZPNyTo7Y5/ty1G0jsEuU/3tG98OMXVDAoaKmaxXNKQF0Zn81NL2V1IKo3ll?=
+ =?us-ascii?Q?Adn5CPa+EXXLfoEhDxeEw50d79c9krdZJ/g0WljMMu31Bj60yHUbXytCbMu1?=
+ =?us-ascii?Q?JORoDJy8OxC1ob8TYWNFdMjhRF3Xv20iQhvMjd7xGC4MVq4UhhsaXoZhdH1b?=
+ =?us-ascii?Q?2alhjbh4FJ+yL1wXiR6oe+nFfZIV1OPzcKs0Ce/JLD9RRKWKVKdS2LuQAGyp?=
+ =?us-ascii?Q?rjotlWdkOVyRfFJl+czXKjAeZP/ZzVSka6W4mD26EgmwPq4w0dhW5wGXfzFG?=
+ =?us-ascii?Q?2+A4UXFnOnH1r4leSoTzwUD1TWLa3UFBNJDSPSvrM1Nz+B615pKT5XpzxBnP?=
+ =?us-ascii?Q?GGSuFDSw8AgmBsy1SF9bX4Sw+mvFmXVNMggmmeBjbfUeNOqsPB1SFYlU19PK?=
+ =?us-ascii?Q?fdFEgLI3t9TY7bO6hponD0cAtaqm1KEe6dlQ+Kcn3UKulXITJeHSDmnOYGZM?=
+ =?us-ascii?Q?uSZIgon1BlX6xQei1io=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 00/21] hwmon: Fix the type of 'config' in struct
- hwmon_channel_info to u64
-To: Huisong Li <lihuisong@huawei.com>, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, arm-scmi@vger.kernel.org,
- netdev@vger.kernel.org, linux-rtc@vger.kernel.org, oss-drivers@corigine.com,
- linux-rdma@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linuxarm@huawei.com, linux@roeck-us.net, jdelvare@suse.com,
- kernel@maidavale.org, pauk.denis@gmail.com, james@equiv.tech,
- sudeep.holla@arm.com, cristian.marussi@arm.com, matt@ranostay.sg,
- mchehab@kernel.org, irusskikh@marvell.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com,
- louis.peens@corigine.com, hkallweit1@gmail.com, linux@armlinux.org.uk,
- kabel@kernel.org, hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
- alexandre.belloni@bootlin.com, krzk@kernel.org, jonathan.cameron@huawei.com,
- zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, liuyonglong@huawei.com
-References: <20250121064519.18974-1-lihuisong@huawei.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20250121064519.18974-1-lihuisong@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:7/G4V4KAu+etM0B4X0zIj2cDFjln5bReWl7v+Totq/edMUjLLWH
- zFxOxapMoT9n+dnxkeWM2B7x42rqhWIweUhJVly4GKBKa6ntyoArNQMzhbAoj4MypZHxKRZ
- MZ7sYbMHuTiMO5RIoulxNqBUkyxCBvXKK6z4e1cszmQPsyyCxDDCT4ORExJtlnvH3VRF5o4
- uIZg7LKg/5IPk3gEfBLIA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:MdsFvjde5OI=;8iUQeccSnXW5OExW3MOjjqo608U
- UuPKnTXIMhIjDOxJ+WxeghaG1nPUqAsDE/BjwU/Mysu3bnhhYioKopErLT2SfiADnTSdcyaqf
- lVQOMw22z304wvfrsk43KmXoKdq/BwVuE0Zz8wYAP+Yb3pYas/gTSMdNDVzJVzONiC72ubmgV
- IUXLJquxGfcmg9WV8Dp4azyvMXAFT3YEwDdR52oNEL+4lJOhqf4V/8sjK8clPyVYAn3DryMR/
- 5bHa64QNwxLIQJQbuvJM2sF99WqJaoiHMrlyeMAH2V9ul68wbmAHoH+kRwFtHc4mlfe7elHJu
- CGPi+z/yyIg0zPbkf5ydl5/9lXXWd5z6+eg/AhkfiuNM9qoIehuUxC0lbsszsNl58M2soUhRn
- kDP94KQnM931rMnb2rWaIqfZ/Jqx3MXZuo1GCVO0753AiPtblQnoDwa8xTBvuqfEYLLn/j/Hw
- clp4La2uS3Q6ZTDxKWg8hYrAU3NI7pGq9MBnieyvZZkZHxi37YOLOSDBxbmP0xWXMcQjZLh5B
- 8HbxeuJq9ZwF+GNreUQaJ6uxYjm+1Me+d5uQq2vU1KZ4hiS4eAxHDZxagO00YnQ8jhrA4A58c
- hW0GuK0qcEUIdvMIoNeJzdaHG8Wquu2PU38Gi174EJcYFbc+hCYa6fzomkm3BoRSFINHtucBR
- iZSVXByjDliubDqy7S+7veGcCIHiKFVK+SXIaKFuKfpL+sfq1UPMRN4bWkGCx/gnvHhSPeuYb
- JFUNwaiwTbrp4RQLNx4yX14GVD+6BIO/41XrYbZR9Xsl4uQw1WlULfIYwXvfQufGdir/+WNO0
- SHU6jGxsIkJchVwfTKCaaQCsjjLrdDaCmwI+X1aBJFWWoUPb8cMGRkU7NPOmxc5VNrwsk4Z5n
- PvbVA218nKmUBTd/uiZ64RN+UuLpT1azGjWkuBz2afSuOUp4OYOXJ9yZkUQMXf/uTrIUt/01c
- 2NzAGMd/GxrqlibB4O2KU4SArZzSsJUeKsNqPCWjmx3fp7DCEMRkXy/EpNfujE6YInjG+Uqh6
- s66ljRjsyPKRO96kwxCe+B/t6Q9iAjpYB9K07Rpigzh6hS78z0aSvk6Y7Svkml2x5QmYwH1Fh
- CDPfE/CkYFrBjBHC/e2fnGPqYtZ4J05oC+xVpnLH0dXGjaNw02cZYwLSU2P06ikk55MO5xkXz
- sASz0ETR5PmRBRcDYspQgn9PkWEZN6Qtu07Rzupwncw==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 449442e3-0efe-4a48-e8f2-08dd3a285ae8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2025 14:31:55.4347
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wfduWQIgwKgtro3mIHW58u8GqoqC5f0xiM/H24mKpMFrtPk/LdK3VJv9AN8mRNablq56ubNa2BtM/N9bVnhlcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8748
 
-Am 21.01.25 um 07:44 schrieb Huisong Li:
+Hi Alexandre
 
-> The hwmon_device_register() is deprecated. When I try to repace it with
-> hwmon_device_register_with_info() for acpi_power_meter driver, I found that
-> the power channel attribute in linux/hwmon.h have to extend and is more
-> than 32 after this replacement.
->
-> However, the maximum number of hwmon channel attributes is 32 which is
-> limited by current hwmon codes. This is not good to add new channel
-> attribute for some hwmon sensor type and support more channel attribute.
->
-> This series are aimed to do this. And also make sure that acpi_power_meter
-> driver can successfully replace the deprecated hwmon_device_register()
-> later.
+> Subject: Re: [PATCH 0/4] rtc/scmi: Support multiple RTCs
+>=20
+> Hello,
+>=20
+> On 20/01/2025 10:25:32+0800, Peng Fan (OSS) wrote:
+> > i.MX95 System Manager(SM) BBM protocol exports two RTCs for EVK
+> board.
+> > one RTC is SoC internal RTC, the other is board RTC.
+> >
+> > The current driver only use the 1st RTC. With this patchset, both RTCs
+> > could be used in Linux. To achieve this:
+> >
+> > 1. Support more event sources for BBM protocol 2. Add bbm_info
+> hook to
+> > let users could query the number of RTCs 3. Introduce
+> > devm_rtc_allocate_device_priv to support setting rtc device
+> >    private information
+> > 4. Update rtc-imx-sm-bbm.c to register both RTCs
+> >
+>=20
+> I'm sorry but no, you have to register two RTCs like any other system
+> would do.
 
-Hi,
+It is the i.MX SCMI Protocol exports two RTCs using one protocol.
 
-what kind of new power attributes do you want to add to the hwmon API?
+Two RTC devices are created, but share one parent device.
 
-AFAIK the acpi-power-meter driver supports the following attributes:
-
-	power1_accuracy			-> HWMON_P_ACCURACY
-	power1_cap_min			-> HWMON_P_CAP_MIN
-	power1_cap_max			-> HWMON_P_CAP_MAX
-	power1_cap_hyst			-> HWMON_P_CAP_HYST
-	power1_cap			-> HWMON_P_CAP
-	power1_average			-> HWMON_P_AVERAGE
-	power1_average_min		-> HWMON_P_AVERAGE_MIN
-	power1_average_max		-> HWMON_P_AVERAGE_MAX
-	power1_average_interval		-> HWMON_P_AVERAGE_INTERVAL
-	power1_average_interval_min	-> HWMON_P_AVERAGE_INTERVAL_MIN
-	power1_average_interval_max	-> HWMON_P_AVERAGE_INTERVAL_MAX
-	power1_alarm			-> HWMON_P_ALARM
-	power1_model_number
-	power1_oem_info
-	power1_serial_number
-	power1_is_battery
-	name				-> handled by hwmon core
-
-The remaining attributes are in my opinion not generic enough to add them to the generic
-hwmon power attributes. I think you should implement them as a attribute_group which can
-be passed to hwmon_device_register_with_info() using the "extra_groups" parameter.
+Do you mean each RTC device should have a unique parent device?
 
 Thanks,
-Armin Wolf
+Peng.
 
->
-> Huisong Li (21):
->    hwmon: Fix the type of 'config' in struct hwmon_channel_info to u64
->    media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
->    net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
->    net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
->    net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
->    net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
->    rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
->    rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
->    w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
->    net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
->    hwmon: (asus_wmi_sensors) Fix type of 'config' in struct
->      hwmon_channel_info to u64
->    hwmon: (hp-wmi-sensors) Fix type of 'config' in struct
->      hwmon_channel_info to u64
->    hwmon: (mr75203) Fix the type of 'config' in struct hwmon_channel_info
->      to u64
->    hwmon: (pwm-fan) Fix the type of 'config' in struct hwmon_channel_info
->      to u64
->    hwmon: (scmi-hwmon) Fix the type of 'config' in struct
->      hwmon_channel_info to u64
->    hwmon: (tmp401) Fix the type of 'config' in struct hwmon_channel_info
->      to u64
->    hwmon: (tmp421) Fix the type of 'config' in struct hwmon_channel_info
->      to u64
->    net/mlx5: Fix the type of 'config' in struct hwmon_channel_info to u64
->    platform/x86: dell-ddv: Fix the type of 'config' in struct
->      hwmon_channel_info to u64
->    hwmon: (asus-ec-sensors) Fix the type of 'config' in struct
->      hwmon_channel_info to u64
->    hwmon: (lm90) Fix the type of 'config' in struct hwmon_channel_info to
->      u64
->
->   drivers/hwmon/asus-ec-sensors.c               |   6 +-
->   drivers/hwmon/asus_wmi_sensors.c              |   8 +-
->   drivers/hwmon/hp-wmi-sensors.c                |   6 +-
->   drivers/hwmon/hwmon.c                         |   4 +-
->   drivers/hwmon/lm90.c                          |   4 +-
->   drivers/hwmon/mr75203.c                       |   6 +-
->   drivers/hwmon/pwm-fan.c                       |   4 +-
->   drivers/hwmon/scmi-hwmon.c                    |   6 +-
->   drivers/hwmon/tmp401.c                        |   4 +-
->   drivers/hwmon/tmp421.c                        |   2 +-
->   drivers/media/i2c/video-i2c.c                 |  12 +-
->   .../ethernet/aquantia/atlantic/aq_drvinfo.c   |  14 +-
->   .../net/ethernet/mellanox/mlx5/core/hwmon.c   |   8 +-
->   .../net/ethernet/netronome/nfp/nfp_hwmon.c    |  40 +--
->   drivers/net/phy/aquantia/aquantia_hwmon.c     |  32 +-
->   drivers/net/phy/marvell.c                     |  24 +-
->   drivers/net/phy/marvell10g.c                  |  24 +-
->   drivers/platform/x86/dell/dell-wmi-ddv.c      |   6 +-
->   drivers/rtc/rtc-ab-eoz9.c                     |  24 +-
->   drivers/rtc/rtc-ds3232.c                      |  24 +-
->   drivers/w1/slaves/w1_therm.c                  |  12 +-
->   include/linux/hwmon.h                         | 300 +++++++++---------
->   22 files changed, 205 insertions(+), 365 deletions(-)
->
+
+
+
+>=20
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> > Peng Fan (4):
+> >       firmware: arm_scmi: imx: Support more event sources
+> >       firmware: arm_scmi: imx: Introduce bbm_info hook
+> >       rtc: Introduce devm_rtc_allocate_device_priv
+> >       rtc: imx-sm-bbm: Support multiple RTCs
+> >
+> >  drivers/firmware/arm_scmi/vendors/imx/imx-sm-bbm.c | 33
+> ++++++++++-
+> >  drivers/rtc/class.c                                |  9 ++-
+> >  drivers/rtc/dev.c                                  |  8 ++-
+> >  drivers/rtc/interface.c                            | 16 ++---
+> >  drivers/rtc/proc.c                                 |  2 +-
+> >  drivers/rtc/rtc-imx-sm-bbm.c                       | 69 ++++++++++++++=
+-------
+> -
+> >  include/linux/rtc.h                                |  2 +
+> >  include/linux/scmi_imx_protocol.h                  |  2 +
+> >  8 files changed, 100 insertions(+), 41 deletions(-)
+> > ---
+> > base-commit: e7bb221a638962d487231ac45a6699fb9bb8f9fa
+> > change-id: 20250116-rtc-3834e01786a8
+> >
+> > Best regards,
+> > --
+> > Peng Fan <peng.fan@nxp.com>
+> >
+>=20
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F
+> bootlin.com%2F&data=3D05%7C02%7Cpeng.fan%40nxp.com%7C7b5c28
+> 0a03ee47dea25f08dd393c2e53%7C686ea1d3bc2b4c6fa92cd99c5c30
+> 1635%7C0%7C0%7C638729652821885462%7CUnknown%7CTWFpbG
+> Zsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXa
+> W4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata
+> =3DxL23vC4m%2BtiTN8eNs8QptUHgfo%2FuHEUcEewGMdeYWYo%3D&r
+> eserved=3D0
 
