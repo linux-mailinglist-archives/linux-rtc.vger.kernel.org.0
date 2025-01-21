@@ -1,151 +1,212 @@
-Return-Path: <linux-rtc+bounces-2997-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2998-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A9F3A17DB5
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 13:19:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96198A17F74
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 15:14:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA5A27A1CED
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 12:19:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35399188B991
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 14:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5287D1F1317;
-	Tue, 21 Jan 2025 12:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC191F37CC;
+	Tue, 21 Jan 2025 14:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jGxs+pk9"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="MDqCQlCd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509481D554;
-	Tue, 21 Jan 2025 12:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BF963CF;
+	Tue, 21 Jan 2025 14:14:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737461956; cv=none; b=pD9/Bz4aysIW6XPHWwPDLywyoGJV3eq5N+T1okE+SwAF8wih78lS5bLWwhw4wTATcl5i3iFJPFmvL9aDQi4rKp/0/UUdNM2fwCI1xTrkMKtHpngj5cXX/50dPdE/tFqHwKjZRosVIxAh9MIOJX8sW2iZ0Lf65JJuowl6GAlrp/8=
+	t=1737468847; cv=none; b=ORDG0PW8gwePHGL8Xe9WS42oJbPC+uN54/pqJH2/rPOVl4ekXF3mG48D1wrP9TjorADL7UccRXnGu/VVYKo74L8CIULPUv7qwVfAJk0n4cLBUuigukbmrvnISYXgNHf3sapwQ1QplzjG2hVSWxf3FBftsv9PZ1Y4/euRl6YzGbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737461956; c=relaxed/simple;
-	bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=BIIoOnl1eOC7ze4x3NvELKOI0fgC8Rfysu5NS59XiOXKMNNhQ5x2SMP7J6H4XcPeeTBXKQBbMcXSJqXbWNnFRX82Pm0FezWVeTVNW8uUhe0mskhev+TdOhG4oaVUKoS5d0okybGAkBkeWcQIYGLb50txEHCarEuPQg34GaWGfWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jGxs+pk9; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737461955; x=1768997955;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=sPesZWYC0ulEJj/gesJPmVOOyLfPgsGZKiiMssRCLcU=;
-  b=jGxs+pk9Czd0TRSNFjT4SUeyymLccvvh0CKFcZHTdxZu97ZOO1kuWSOt
-   AmMxmV1CkWT3bNQPwNK1urxn53nI2FgN1zRwLJzi6NvzQDTXhpHl5aCZe
-   NUgo70btqPNZRNXjm5pqN09cHG2dFWZNyD5dBzXDlJx9eljNM2DozFwoe
-   CGYYqfkGuVXIoV3I2oPcY02w3X19LVhuAc5tw5TaxsOxFLKK/w0CBOjZP
-   nepX2xsI3RgPQtOTPd7mf7L/mmD4YTpWjslB3NWtts/Fh8cLTeSUImhKR
-   G/xP9bJvkr1/ZieQ5dOOrJurQE0NARn9nbcbL4PThwy/o07sohsC4Feba
-   Q==;
-X-CSE-ConnectionGUID: Ndw0UAZJQg+MRYZ3bRbGDQ==
-X-CSE-MsgGUID: kNelo3TwQaCvORPfdvV2+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11321"; a="38115461"
-X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
-   d="scan'208";a="38115461"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:14 -0800
-X-CSE-ConnectionGUID: gH3zVvHuQEysE1CEtIUNmw==
-X-CSE-MsgGUID: XYxDmMaMQhuYGVua7yV6Ig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
-   d="scan'208";a="111790831"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.188])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 04:19:00 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 21 Jan 2025 14:18:56 +0200 (EET)
-To: Huisong Li <lihuisong@huawei.com>
-cc: linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    arm-scmi@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
-    linux-rtc@vger.kernel.org, oss-drivers@corigine.com, 
-    linux-rdma@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-    linuxarm@huawei.com, linux@roeck-us.net, jdelvare@suse.com, 
-    kernel@maidavale.org, pauk.denis@gmail.com, james@equiv.tech, 
-    sudeep.holla@arm.com, cristian.marussi@arm.com, matt@ranostay.sg, 
-    mchehab@kernel.org, irusskikh@marvell.com, andrew+netdev@lunn.ch, 
-    davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-    pabeni@redhat.com, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, 
-    louis.peens@corigine.com, hkallweit1@gmail.com, linux@armlinux.org.uk, 
-    kabel@kernel.org, W_Armin@gmx.de, Hans de Goede <hdegoede@redhat.com>, 
-    alexandre.belloni@bootlin.com, krzk@kernel.org, 
-    jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, 
-    zhenglifeng1@huawei.com, liuyonglong@huawei.com
-Subject: Re: [PATCH v1 19/21] platform/x86: dell-ddv: Fix the type of 'config'
- in struct hwmon_channel_info to u64
-In-Reply-To: <20250121064519.18974-20-lihuisong@huawei.com>
-Message-ID: <844c5097-eeb7-7275-7558-83ca4e5ee4b2@linux.intel.com>
-References: <20250121064519.18974-1-lihuisong@huawei.com> <20250121064519.18974-20-lihuisong@huawei.com>
+	s=arc-20240116; t=1737468847; c=relaxed/simple;
+	bh=uSXhQE1lWmVNXDRGO1SbE3SwNrRV91qgBAmOvH5wijc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Qx7Cs/SLAAfrU3ZjLVMcwGpZAjRqKFZ7yBTQOBnLbsCjlSXtk1II6m+HfzJ0Vixz97YROX/6SAJOx17yNN8cNqY5VO/UcbVWRwdrVhfsxGdUVBZdzSf4x3auxNCQy9E1TwAZmwQisjWKFGkfvF0wwb7bfoCr1uCkbr3ucRN2pgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=MDqCQlCd; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1737468762; x=1738073562; i=w_armin@gmx.de;
+	bh=x9XPqJuiHeFmslhn9JxO368mOzb+Ow/0VyVvRzkFXq8=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=MDqCQlCdqWzm/hmvYobAfB9qMdYiVG/+SV6HE44ptNrMa7fPH89+BSunDp0VnhCg
+	 ueUZwkDISyhqV3kRR+IEGINYM971J8nibhiOxQQz6Ts87WEmrboCx5Q0+qWy9WZCc
+	 +4fCtS2fvLdlo1L89qZ0UbQOz9i9eesXLPYz6hQVsD1oBZfO6ZNifyvd2bfVQiJWg
+	 /XsZ6buKUeKSUOGlXwYjRBlUMIw8haxFvg/icclaK5eeG1h6XRlKWQwjPkA0GBQri
+	 qgEK12MEpnWiluunyzlmRFvTRFsFhVeq1FcVd3PN2Lio4Ky6HLSHgUEcYsiSEutF1
+	 E/9WC/CLr/7V/rn87g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.69] ([93.202.253.70]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M72sP-1taWdZ1wwp-00Gegp; Tue, 21
+ Jan 2025 15:12:42 +0100
+Message-ID: <03b138e9-688f-4ebc-bd01-3d54fd20e525@gmx.de>
+Date: Tue, 21 Jan 2025 15:12:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 00/21] hwmon: Fix the type of 'config' in struct
+ hwmon_channel_info to u64
+To: Huisong Li <lihuisong@huawei.com>, linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, arm-scmi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-rtc@vger.kernel.org, oss-drivers@corigine.com,
+ linux-rdma@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linuxarm@huawei.com, linux@roeck-us.net, jdelvare@suse.com,
+ kernel@maidavale.org, pauk.denis@gmail.com, james@equiv.tech,
+ sudeep.holla@arm.com, cristian.marussi@arm.com, matt@ranostay.sg,
+ mchehab@kernel.org, irusskikh@marvell.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com,
+ louis.peens@corigine.com, hkallweit1@gmail.com, linux@armlinux.org.uk,
+ kabel@kernel.org, hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
+ alexandre.belloni@bootlin.com, krzk@kernel.org, jonathan.cameron@huawei.com,
+ zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, liuyonglong@huawei.com
+References: <20250121064519.18974-1-lihuisong@huawei.com>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20250121064519.18974-1-lihuisong@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:7/G4V4KAu+etM0B4X0zIj2cDFjln5bReWl7v+Totq/edMUjLLWH
+ zFxOxapMoT9n+dnxkeWM2B7x42rqhWIweUhJVly4GKBKa6ntyoArNQMzhbAoj4MypZHxKRZ
+ MZ7sYbMHuTiMO5RIoulxNqBUkyxCBvXKK6z4e1cszmQPsyyCxDDCT4ORExJtlnvH3VRF5o4
+ uIZg7LKg/5IPk3gEfBLIA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:MdsFvjde5OI=;8iUQeccSnXW5OExW3MOjjqo608U
+ UuPKnTXIMhIjDOxJ+WxeghaG1nPUqAsDE/BjwU/Mysu3bnhhYioKopErLT2SfiADnTSdcyaqf
+ lVQOMw22z304wvfrsk43KmXoKdq/BwVuE0Zz8wYAP+Yb3pYas/gTSMdNDVzJVzONiC72ubmgV
+ IUXLJquxGfcmg9WV8Dp4azyvMXAFT3YEwDdR52oNEL+4lJOhqf4V/8sjK8clPyVYAn3DryMR/
+ 5bHa64QNwxLIQJQbuvJM2sF99WqJaoiHMrlyeMAH2V9ul68wbmAHoH+kRwFtHc4mlfe7elHJu
+ CGPi+z/yyIg0zPbkf5ydl5/9lXXWd5z6+eg/AhkfiuNM9qoIehuUxC0lbsszsNl58M2soUhRn
+ kDP94KQnM931rMnb2rWaIqfZ/Jqx3MXZuo1GCVO0753AiPtblQnoDwa8xTBvuqfEYLLn/j/Hw
+ clp4La2uS3Q6ZTDxKWg8hYrAU3NI7pGq9MBnieyvZZkZHxi37YOLOSDBxbmP0xWXMcQjZLh5B
+ 8HbxeuJq9ZwF+GNreUQaJ6uxYjm+1Me+d5uQq2vU1KZ4hiS4eAxHDZxagO00YnQ8jhrA4A58c
+ hW0GuK0qcEUIdvMIoNeJzdaHG8Wquu2PU38Gi174EJcYFbc+hCYa6fzomkm3BoRSFINHtucBR
+ iZSVXByjDliubDqy7S+7veGcCIHiKFVK+SXIaKFuKfpL+sfq1UPMRN4bWkGCx/gnvHhSPeuYb
+ JFUNwaiwTbrp4RQLNx4yX14GVD+6BIO/41XrYbZR9Xsl4uQw1WlULfIYwXvfQufGdir/+WNO0
+ SHU6jGxsIkJchVwfTKCaaQCsjjLrdDaCmwI+X1aBJFWWoUPb8cMGRkU7NPOmxc5VNrwsk4Z5n
+ PvbVA218nKmUBTd/uiZ64RN+UuLpT1azGjWkuBz2afSuOUp4OYOXJ9yZkUQMXf/uTrIUt/01c
+ 2NzAGMd/GxrqlibB4O2KU4SArZzSsJUeKsNqPCWjmx3fp7DCEMRkXy/EpNfujE6YInjG+Uqh6
+ s66ljRjsyPKRO96kwxCe+B/t6Q9iAjpYB9K07Rpigzh6hS78z0aSvk6Y7Svkml2x5QmYwH1Fh
+ CDPfE/CkYFrBjBHC/e2fnGPqYtZ4J05oC+xVpnLH0dXGjaNw02cZYwLSU2P06ikk55MO5xkXz
+ sASz0ETR5PmRBRcDYspQgn9PkWEZN6Qtu07Rzupwncw==
 
-On Tue, 21 Jan 2025, Huisong Li wrote:
+Am 21.01.25 um 07:44 schrieb Huisong Li:
 
-> The type of 'config' in struct hwmon_channel_info has been fixed to u64.
-> Modify the related code in driver to avoid compiling failure.
+> The hwmon_device_register() is deprecated. When I try to repace it with
+> hwmon_device_register_with_info() for acpi_power_meter driver, I found that
+> the power channel attribute in linux/hwmon.h have to extend and is more
+> than 32 after this replacement.
+>
+> However, the maximum number of hwmon channel attributes is 32 which is
+> limited by current hwmon codes. This is not good to add new channel
+> attribute for some hwmon sensor type and support more channel attribute.
+>
+> This series are aimed to do this. And also make sure that acpi_power_meter
+> driver can successfully replace the deprecated hwmon_device_register()
+> later.
 
-Does this mean that after applying part of your series but not yet this 
-patch, compile would fail? If so, it's unacceptable. At no point in a 
-patch series are you allowed to cause a compile failure because it hinders 
-'git bisect' that is an important troubleshooting tool.
+Hi,
 
-So you might have to combine changes to drivers and API if you make an 
-API change that breaks driver build until driver too is changed. Note that 
-it will impact a lot how quickly your patches can be accepted as much 
-higher level of coordination is usually required if your patch is touching 
-things all over the place, but it cannot be avoided at times. And 
-requirement of doing minimal change only will be much much higher in such 
-a large scale change.
+what kind of new power attributes do you want to add to the hwmon API?
 
---
- i.
+AFAIK the acpi-power-meter driver supports the following attributes:
 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index e75cd6e1efe6..efb2278aabb9 100644
-> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -86,7 +86,7 @@ struct thermal_sensor_entry {
->  
->  struct combined_channel_info {
->  	struct hwmon_channel_info info;
-> -	u32 config[];
-> +	u64 config[];
->  };
->  
->  struct combined_chip_info {
-> @@ -500,7 +500,7 @@ static const struct hwmon_ops dell_wmi_ddv_ops = {
->  
->  static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
->  							      enum hwmon_sensor_types type,
-> -							      u32 config)
-> +							      u64 config)
->  {
->  	struct combined_channel_info *cinfo;
->  	int i;
-> @@ -543,7 +543,7 @@ static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *w
->  							    struct dell_wmi_ddv_sensors *sensors,
->  							    size_t entry_size,
->  							    enum hwmon_sensor_types type,
-> -							    u32 config)
-> +							    u64 config)
->  {
->  	struct hwmon_channel_info *info;
->  	int ret;
-> 
+	power1_accuracy			-> HWMON_P_ACCURACY
+	power1_cap_min			-> HWMON_P_CAP_MIN
+	power1_cap_max			-> HWMON_P_CAP_MAX
+	power1_cap_hyst			-> HWMON_P_CAP_HYST
+	power1_cap			-> HWMON_P_CAP
+	power1_average			-> HWMON_P_AVERAGE
+	power1_average_min		-> HWMON_P_AVERAGE_MIN
+	power1_average_max		-> HWMON_P_AVERAGE_MAX
+	power1_average_interval		-> HWMON_P_AVERAGE_INTERVAL
+	power1_average_interval_min	-> HWMON_P_AVERAGE_INTERVAL_MIN
+	power1_average_interval_max	-> HWMON_P_AVERAGE_INTERVAL_MAX
+	power1_alarm			-> HWMON_P_ALARM
+	power1_model_number
+	power1_oem_info
+	power1_serial_number
+	power1_is_battery
+	name				-> handled by hwmon core
+
+The remaining attributes are in my opinion not generic enough to add them to the generic
+hwmon power attributes. I think you should implement them as a attribute_group which can
+be passed to hwmon_device_register_with_info() using the "extra_groups" parameter.
+
+Thanks,
+Armin Wolf
+
+>
+> Huisong Li (21):
+>    hwmon: Fix the type of 'config' in struct hwmon_channel_info to u64
+>    media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
+>    net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>    net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
+>    net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
+>    net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
+>    rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+>    rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
+>    w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
+>    net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>    hwmon: (asus_wmi_sensors) Fix type of 'config' in struct
+>      hwmon_channel_info to u64
+>    hwmon: (hp-wmi-sensors) Fix type of 'config' in struct
+>      hwmon_channel_info to u64
+>    hwmon: (mr75203) Fix the type of 'config' in struct hwmon_channel_info
+>      to u64
+>    hwmon: (pwm-fan) Fix the type of 'config' in struct hwmon_channel_info
+>      to u64
+>    hwmon: (scmi-hwmon) Fix the type of 'config' in struct
+>      hwmon_channel_info to u64
+>    hwmon: (tmp401) Fix the type of 'config' in struct hwmon_channel_info
+>      to u64
+>    hwmon: (tmp421) Fix the type of 'config' in struct hwmon_channel_info
+>      to u64
+>    net/mlx5: Fix the type of 'config' in struct hwmon_channel_info to u64
+>    platform/x86: dell-ddv: Fix the type of 'config' in struct
+>      hwmon_channel_info to u64
+>    hwmon: (asus-ec-sensors) Fix the type of 'config' in struct
+>      hwmon_channel_info to u64
+>    hwmon: (lm90) Fix the type of 'config' in struct hwmon_channel_info to
+>      u64
+>
+>   drivers/hwmon/asus-ec-sensors.c               |   6 +-
+>   drivers/hwmon/asus_wmi_sensors.c              |   8 +-
+>   drivers/hwmon/hp-wmi-sensors.c                |   6 +-
+>   drivers/hwmon/hwmon.c                         |   4 +-
+>   drivers/hwmon/lm90.c                          |   4 +-
+>   drivers/hwmon/mr75203.c                       |   6 +-
+>   drivers/hwmon/pwm-fan.c                       |   4 +-
+>   drivers/hwmon/scmi-hwmon.c                    |   6 +-
+>   drivers/hwmon/tmp401.c                        |   4 +-
+>   drivers/hwmon/tmp421.c                        |   2 +-
+>   drivers/media/i2c/video-i2c.c                 |  12 +-
+>   .../ethernet/aquantia/atlantic/aq_drvinfo.c   |  14 +-
+>   .../net/ethernet/mellanox/mlx5/core/hwmon.c   |   8 +-
+>   .../net/ethernet/netronome/nfp/nfp_hwmon.c    |  40 +--
+>   drivers/net/phy/aquantia/aquantia_hwmon.c     |  32 +-
+>   drivers/net/phy/marvell.c                     |  24 +-
+>   drivers/net/phy/marvell10g.c                  |  24 +-
+>   drivers/platform/x86/dell/dell-wmi-ddv.c      |   6 +-
+>   drivers/rtc/rtc-ab-eoz9.c                     |  24 +-
+>   drivers/rtc/rtc-ds3232.c                      |  24 +-
+>   drivers/w1/slaves/w1_therm.c                  |  12 +-
+>   include/linux/hwmon.h                         | 300 +++++++++---------
+>   22 files changed, 205 insertions(+), 365 deletions(-)
+>
 
