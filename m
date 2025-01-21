@@ -1,104 +1,151 @@
-Return-Path: <linux-rtc+bounces-2969-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-2971-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74551A1765E
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 04:48:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85AC3A177A5
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 07:58:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF70D16A600
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 03:48:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEA88166437
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Jan 2025 06:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E991741D2;
-	Tue, 21 Jan 2025 03:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="TUbCz3hi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFEF41B4127;
+	Tue, 21 Jan 2025 06:57:31 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC4D3208;
-	Tue, 21 Jan 2025 03:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A341B21A8;
+	Tue, 21 Jan 2025 06:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737431319; cv=none; b=JxcWJHV8/gM2Md/5tNVy5kc8q4T48q+4WUJoUKnubCCLAIbWYRIXRYeadTRpwipNtdq231l63nXizE7SPIbkoPE/fKLz+5o9iJ+S5WcmfGW+oWpw6IswDvnwgVSSGua89ypmaQpU1dNg+WtCn5Z3HdEsvfLwx6u9J5v824/o0I8=
+	t=1737442651; cv=none; b=lQOgf7Q54d3hsXwoUwjeAB8Ol3+kiPJCuOgPk9sybrGe1hs5xnAX3GQQdfja09lt5c+kUV8FL18ONGtnhiWjosr24QHdFKfLcqxJGvdKqyAREUP6nvjUHsK+HG2yZJw/bp4fKVG5HOIb9VY4LOvsOMJo+EmOYWO6r/9UiGWUly0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737431319; c=relaxed/simple;
-	bh=nXeR4WCU1+fTpqluUqiiZxteQYC3c2jVgdFHmwxlQ5c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UkLqWnvg9uGoeftqwvGqAUyYvx9SJ30PFsI0crY7EJH+XmeMIde0QjYqxa+4WVWOAgM2DI1VyKxwzkoSLE7XtUFDtoUM3GI4MPGV4R0rOtQhk0wZpUw4Hqw0RNQy/rqdAvBrjnHiFqGBUEEtG9BezH9HhPx0eQEb0mdp94A3cFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au; spf=pass smtp.mailfrom=gmail.com; dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b=TUbCz3hi; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d9f0a6ad83so1333357a12.2;
-        Mon, 20 Jan 2025 19:48:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1737431314; x=1738036114; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aB6kMUwc3sdr22D03Cs6X1hTCEIAljfWSL5/SAqjcnA=;
-        b=TUbCz3hiLKG9I4iGJ2bY8KTOAzHaiSE2L+Vno7ZMT7uYodbRcDPQrdHrhNUXM5MfMB
-         R68RMhBHJQYI6bLhMT5Cg4+ZuMSblCFKDL4ZQfeVr4b0QZ9uUvKThWLOUtUnoCOmlme6
-         k8/+DKtdgJLx0uI8/rBAweoXTA1lU+qb4uhqE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737431314; x=1738036114;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aB6kMUwc3sdr22D03Cs6X1hTCEIAljfWSL5/SAqjcnA=;
-        b=jduK6lBD+UEfnqFgXMXCm4ixbmlZTz5J3U/afxLzWNq9rV28egM7K0nIEDa5T1EjqJ
-         jT3VKjqP6eYV3Le9fg1lkWw6PMrkaCTHye11lmYRmelGcjZiDRHpSU6ljz9hkxwTs2WO
-         vUYDYdoPIOBLkitzx4RceSjDxl2rtquTFDPdo354COn3zKkDQsFaSWzj45eNV/7Mfz9E
-         ZPk9QTgYkjbpkjOIibw8cCW+UCdYeNdnmV1eBsM6Uw/Co76sjLEdZjYHaLTYox1BZ6lu
-         ieSSh8Dz5vjc9Qm481OLfIz0pSWjKP7/xnOBR2TQHTNRgghpBtYwoFW+GppNNTIR7d39
-         aMRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUM4P8lls07R+SavYTRSu1zu4MDT8L1WJtehQC3dCEB+pdK+hZJnnER8+eWIfqK3oo0ioPmOvmIVOUD@vger.kernel.org, AJvYcCUljR44e0qf1ZQl1CTolnHde1ETgwYbgDZqxYjXfh/cvuU7yasgvLzRiKrMzd5WOAHxRB759v3O3jMIzwZ0@vger.kernel.org, AJvYcCXKmyZ05JRMtB4jNzezTeOg9zOZRMTOAI4tWhNOiCUf/Y+/sAJFk/yLncVWvem/LkielKlVEhntDAa8sof14A==@vger.kernel.org, AJvYcCXXR9qvtJSO4pZ+K6Z0TRDDMAm5AXo64LbKUGhMbRdZpW8ENAUPIhajY7+liWZ8UIEbgWDXD5gvdDP5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpZAa/ivtEiQ4BhC0u55Qy1GdI+s2YOFGK64pVeob13YNcyovq
-	5Ny7i1ZERgzmC8Cy0Brvz17EvKFzOmFWm7oC55w0jGyPXuRwRx1icD3kk9N7XC4TMY/sWkfJmYa
-	li1Yr+eNPIYMubfM/x1AnWYfH4d4=
-X-Gm-Gg: ASbGncvzzg+rzXKzZ8HaNLQT4nwQ0NrvTtMQbt8ndCMrWT6p7fZNzN0zF4iRT8mc+GB
-	6mPNgclTS7EVYxslAbiRWL6FLnhenZDVw6v7EHI7FzNxg0Rx3bQuZ
-X-Google-Smtp-Source: AGHT+IEioTHynGNYPsBVBnXk2SJD7rsah+5RbvpgkTjY5HEFTlzZP30VOKUh54KqdkWiyoFZdCv9DfqyjzNkT2br8Ag=
-X-Received: by 2002:a17:907:94cc:b0:aa6:85a4:31f8 with SMTP id
- a640c23a62f3a-ab38b32ad1fmr1332346666b.33.1737431313488; Mon, 20 Jan 2025
- 19:48:33 -0800 (PST)
+	s=arc-20240116; t=1737442651; c=relaxed/simple;
+	bh=pLDYZI2ORguKTw/14TF5fTg2eqigu3oKV9kYu2UT8Ik=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=chKx4ZjRBbnLV9oBkfY0xu0arBX9k/7NQS/J057H0L3xz4WnfuEFCDuwRcuFo6jFE2Gk+RKjc5kSW5ySG/NHbzq4zrzKDliQ0EwYHpMlEfYl9Lf6h9StL1BlkWORJN6yxEFRGmrT+YqMwApZzg08c1MMwNzEojFiWSflz7LbjzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YcdGq1MdBzbp8C;
+	Tue, 21 Jan 2025 14:54:11 +0800 (CST)
+Received: from dggemv703-chm.china.huawei.com (unknown [10.3.19.46])
+	by mail.maildlp.com (Postfix) with ESMTPS id D21421800D1;
+	Tue, 21 Jan 2025 14:57:19 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 21 Jan 2025 14:57:19 +0800
+Received: from localhost.localdomain (10.28.79.22) by
+ kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 21 Jan 2025 14:57:17 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <linux-hwmon@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <arm-scmi@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+	<oss-drivers@corigine.com>, <linux-rdma@vger.kernel.org>,
+	<platform-driver-x86@vger.kernel.org>, <linuxarm@huawei.com>,
+	<linux@roeck-us.net>, <jdelvare@suse.com>, <kernel@maidavale.org>,
+	<pauk.denis@gmail.com>, <james@equiv.tech>, <sudeep.holla@arm.com>,
+	<cristian.marussi@arm.com>, <matt@ranostay.sg>, <mchehab@kernel.org>,
+	<irusskikh@marvell.com>, <andrew+netdev@lunn.ch>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<saeedm@nvidia.com>, <leon@kernel.org>, <tariqt@nvidia.com>,
+	<louis.peens@corigine.com>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+	<kabel@kernel.org>, <W_Armin@gmx.de>, <hdegoede@redhat.com>,
+	<ilpo.jarvinen@linux.intel.com>, <alexandre.belloni@bootlin.com>,
+	<krzk@kernel.org>, <jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<zhenglifeng1@huawei.com>, <liuyonglong@huawei.com>, <lihuisong@huawei.com>
+Subject: [PATCH v1 00/21] hwmon: Fix the type of 'config' in struct hwmon_channel_info to u64
+Date: Tue, 21 Jan 2025 14:44:58 +0800
+Message-ID: <20250121064519.18974-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.22.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250120144152.11949-1-johan+linaro@kernel.org>
-In-Reply-To: <20250120144152.11949-1-johan+linaro@kernel.org>
-From: Joel Stanley <joel@jms.id.au>
-Date: Tue, 21 Jan 2025 14:18:21 +1030
-X-Gm-Features: AbW1kvZyewKuudLcQbNpI1AM_h2bKq-qxMhskJ_sh8Oo0pf4MbyF0KncgPdAk_Q
-Message-ID: <CACPK8XftgBDoy1echN7VKx9Te0o37PvdqCUiJN7YGpkdK-3fJQ@mail.gmail.com>
-Subject: Re: [PATCH 0/7] arm64: dts: qcom: x1e80100: enable rtc
-To: Johan Hovold <johan+linaro@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Jonathan Marek <jonathan@marek.ca>, 
-	linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-On Tue, 21 Jan 2025 at 01:14, Johan Hovold <johan+linaro@kernel.org> wrote:
->
-> This series adds support for utilising the UEFI firmware RTC offset to
-> the Qualcomm PMIC RTC driver and uses that to enable the RTC on all X
-> Elite machines.
+The hwmon_device_register() is deprecated. When I try to repace it with
+hwmon_device_register_with_info() for acpi_power_meter driver, I found that
+the power channel attribute in linux/hwmon.h have to extend and is more
+than 32 after this replacement.
 
-Looks good on a Surface Laptop 7 / romulus:
+However, the maximum number of hwmon channel attributes is 32 which is
+limited by current hwmon codes. This is not good to add new channel
+attribute for some hwmon sensor type and support more channel attribute.
 
-Tested-by: Joel Stanley <joel@jms.id.au>
+This series are aimed to do this. And also make sure that acpi_power_meter
+driver can successfully replace the deprecated hwmon_device_register()
+later.
 
-[    0.407844] rtc-pm8xxx c42d000.spmi:pmic@0:rtc@6100: registered as rtc0
-[    0.407876] rtc-pm8xxx c42d000.spmi:pmic@0:rtc@6100: setting system
-clock to 2025-01-21T03:34:06 UTC (1737430446)
+Huisong Li (21):
+  hwmon: Fix the type of 'config' in struct hwmon_channel_info to u64
+  media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
+  net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+  net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
+  net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
+  net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
+  rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+  rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
+  w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
+  net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+  hwmon: (asus_wmi_sensors) Fix type of 'config' in struct
+    hwmon_channel_info to u64
+  hwmon: (hp-wmi-sensors) Fix type of 'config' in struct
+    hwmon_channel_info to u64
+  hwmon: (mr75203) Fix the type of 'config' in struct hwmon_channel_info
+    to u64
+  hwmon: (pwm-fan) Fix the type of 'config' in struct hwmon_channel_info
+    to u64
+  hwmon: (scmi-hwmon) Fix the type of 'config' in struct
+    hwmon_channel_info to u64
+  hwmon: (tmp401) Fix the type of 'config' in struct hwmon_channel_info
+    to u64
+  hwmon: (tmp421) Fix the type of 'config' in struct hwmon_channel_info
+    to u64
+  net/mlx5: Fix the type of 'config' in struct hwmon_channel_info to u64
+  platform/x86: dell-ddv: Fix the type of 'config' in struct
+    hwmon_channel_info to u64
+  hwmon: (asus-ec-sensors) Fix the type of 'config' in struct
+    hwmon_channel_info to u64
+  hwmon: (lm90) Fix the type of 'config' in struct hwmon_channel_info to
+    u64
 
-Cheers,
+ drivers/hwmon/asus-ec-sensors.c               |   6 +-
+ drivers/hwmon/asus_wmi_sensors.c              |   8 +-
+ drivers/hwmon/hp-wmi-sensors.c                |   6 +-
+ drivers/hwmon/hwmon.c                         |   4 +-
+ drivers/hwmon/lm90.c                          |   4 +-
+ drivers/hwmon/mr75203.c                       |   6 +-
+ drivers/hwmon/pwm-fan.c                       |   4 +-
+ drivers/hwmon/scmi-hwmon.c                    |   6 +-
+ drivers/hwmon/tmp401.c                        |   4 +-
+ drivers/hwmon/tmp421.c                        |   2 +-
+ drivers/media/i2c/video-i2c.c                 |  12 +-
+ .../ethernet/aquantia/atlantic/aq_drvinfo.c   |  14 +-
+ .../net/ethernet/mellanox/mlx5/core/hwmon.c   |   8 +-
+ .../net/ethernet/netronome/nfp/nfp_hwmon.c    |  40 +--
+ drivers/net/phy/aquantia/aquantia_hwmon.c     |  32 +-
+ drivers/net/phy/marvell.c                     |  24 +-
+ drivers/net/phy/marvell10g.c                  |  24 +-
+ drivers/platform/x86/dell/dell-wmi-ddv.c      |   6 +-
+ drivers/rtc/rtc-ab-eoz9.c                     |  24 +-
+ drivers/rtc/rtc-ds3232.c                      |  24 +-
+ drivers/w1/slaves/w1_therm.c                  |  12 +-
+ include/linux/hwmon.h                         | 300 +++++++++---------
+ 22 files changed, 205 insertions(+), 365 deletions(-)
 
-Joel
+-- 
+2.22.0
+
 
