@@ -1,68 +1,63 @@
-Return-Path: <linux-rtc+bounces-3040-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3041-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB1BBA1B792
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 15:07:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F259A1B86C
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 16:08:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0E7716BBD9
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 14:07:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E1D318864CE
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 15:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6588D78F23;
-	Fri, 24 Jan 2025 14:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B23F14D708;
+	Fri, 24 Jan 2025 15:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PISFTcUW"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="G2LQHAdd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D1E13C807;
-	Fri, 24 Jan 2025 14:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828C113AD20;
+	Fri, 24 Jan 2025 15:08:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737727642; cv=none; b=OKCVpM3ZwFiZrhnYqsm5k/z8LTLmoBFkMVPdIZmBD5FYe9GHXJDxKhlUOMLc0lD4qBWHf8oQ6Jqq5uccm8EACqlgtk+wpbSLZGnWrxt0f2+KXqXAMgH7zp8Pa7VdiI3YizhYxw14zIpZra3xKI1dRMt49UCaWvZZ1my6TRT+9dg=
+	t=1737731311; cv=none; b=tpBZtrdZCgrwFBLKUk4LapXn8PWeFWp7UWRqNkdDu7BdmvS8wotDSmBY87C5P82Wr73W2oiKFC/OqEI31NleorEtoSe5JHNHuf6TKObWR9h1yoMxHJ9LjPfG4sBPUE+KQ6CVjzQw5Pv3sq+sdPp9Suv4PQhglfQNwNu6TiwwIR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737727642; c=relaxed/simple;
-	bh=wxYCuWnJt+GTJlbMqLQWecdmDxpr7pUhECUTtYJ6/I4=;
+	s=arc-20240116; t=1737731311; c=relaxed/simple;
+	bh=KBG7NvkrmDHzWIwYHLwwtjFTPnw67LMnsgYP2Mj5OaM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u6O+99HpzrhKMD7y2eJv1G+jongOB9wOHN6s0wCPb80DakExM5U7bQYJuqT3cL7V+nQhpV/6y9DIVc+qyPsOS3tBbfVOGfAsuvVZSz4oSlj2hHAaoUkaHCqfkAIyzJB0iPJvqGd/ECfTwjSjzqj/8JzFsQjgJIa+DD3s6zqP+mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PISFTcUW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD29C4CED2;
-	Fri, 24 Jan 2025 14:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737727642;
-	bh=wxYCuWnJt+GTJlbMqLQWecdmDxpr7pUhECUTtYJ6/I4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PISFTcUWLvH42s6xDtcILB0SJDo54dASpkJMzyqUkbw02Kfn4T82hLkn5yVmnRWIe
-	 jSSkeJJ7eAycnUYlzmWZtxbGlp1j2n4aIqSH47D8a+0pvhsK/e5ai6nBrNiW9ldIJT
-	 Wod4ZZOxW1RRxyln3aXqDQ9OhED9cBzP2D/rEDTOgkwgQtLbDzhGGju9D7SIa6uLUn
-	 ngDf/JkzLnSSlANTlti3zWW5kFMVOl/7EobN01Ey3tt4vDDG3irnxFwi6H2paYhoKd
-	 aSyHaL8AIPzGdg3OLxxWmbZB3aQ9JRnb/D5t1Pjn16WJ3n3XgCZux30yS9zMFLsMBv
-	 phX0uqev/tF3Q==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tbKLI-000000007bb-3rDQ;
-	Fri, 24 Jan 2025 15:07:28 +0100
-Date: Fri, 24 Jan 2025 15:07:28 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Tobias Heider <tobias.heider@canonical.com>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] rtc: pm8xxx: add support for uefi offset
-Message-ID: <Z5OeoMUAVmhxElwA@hovoldconsulting.com>
-References: <20250120144152.11949-1-johan+linaro@kernel.org>
- <20250120144152.11949-4-johan+linaro@kernel.org>
- <wkkhlpgqf7vdtsmxqdt6izysj7nmbemmzf3lkclbg5oewn3xz5@oybsmken7s4h>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LUG3rsdYpEK/fMJdNF5TdPFnHm/qzQtZdyRrpDZ07DS+g9GuUVZ8dmoiUuk7neUssaEtj8+uG+ZUGctxK96L2M181QWK7aMr0T4UE1HaRYSLo/3Mhrv3xP/R9hLBPhvXUG/Hr5n0jGZMiqa8II8AlcLN6uCbV3t19c4x/vxv/FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=G2LQHAdd; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=nVBOwRrha/HOYVrDV5FfdeEFWbkGNsH7Lsvt6kqlsmE=; b=G2LQHAddDFAQLaaIfrLsB6OWE4
+	c4oRQBGXhLDVDyfvumPioriRkpc5HvcTzO8kxUe24T/CTy1aNUncus9esnL6Bj4tLJB+yIN/nTM3v
+	tQbJO9nsh7lpv0FyN/t5WPByyBQrkqZhxVg7hdeULGpCIrhqfEC9+jFrKTz1FqOWlTXw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tbLIE-007ckI-DP; Fri, 24 Jan 2025 16:08:22 +0100
+Date: Fri, 24 Jan 2025 16:08:22 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Huisong Li <lihuisong@huawei.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, netdev@vger.kernel.org,
+	linux-rtc@vger.kernel.org, oss-drivers@corigine.com,
+	matt@ranostay.sg, mchehab@kernel.org, irusskikh@marvell.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, louis.peens@corigine.com,
+	hkallweit1@gmail.com, linux@armlinux.org.uk, kabel@kernel.org,
+	alexandre.belloni@bootlin.com, krzk@kernel.org,
+	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com,
+	liuyonglong@huawei.com
+Subject: Re: [PATCH v1 0/9] Use HWMON_CHANNEL_INFO macro to simplify code
+Message-ID: <fca9ca93-16e4-44db-8fbb-90bc6af952e7@lunn.ch>
+References: <20250124022635.16647-1-lihuisong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -71,30 +66,33 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <wkkhlpgqf7vdtsmxqdt6izysj7nmbemmzf3lkclbg5oewn3xz5@oybsmken7s4h>
+In-Reply-To: <20250124022635.16647-1-lihuisong@huawei.com>
 
-On Fri, Jan 24, 2025 at 01:56:56PM +0100, Tobias Heider wrote:
-> On Mon, Jan 20, 2025 at 03:41:48PM GMT, Johan Hovold wrote:
-> > On many Qualcomm platforms the PMIC RTC control and time registers are
-> > read-only so that the RTC time can not be updated. Instead an offset
-> > needs be stored in some machine-specific non-volatile memory, which the
-> > driver can take into account.
-> > 
-> > Add support for storing a 32-bit offset from the GPS time epoch in a
-> > UEFI variable so that the RTC time can be set on such platforms.
+On Fri, Jan 24, 2025 at 10:26:26AM +0800, Huisong Li wrote:
+> The HWMON_CHANNEL_INFO macro is provided by hwmon.h and used widely by many
+> other drivers. This series use HWMON_CHANNEL_INFO macro to simplify code.
+> 
+> Huisong Li (9):
+>   media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
+>   net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>   net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
+>   net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
+>   net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
+>   rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+>   rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
+>   w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
+>   net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
 
-> Thanks for the great work Johan, seems to work nicely here!
+Please split these patches per subsystem. Maintainers generally have
+scripts to accept patches, and those scripts don't work when there are
+patches for other Maintainers mixed in. So you need 4 patchsets,
+media, net, rtc and w1.
 
-Thanks for testing.
+I would also like to see the HWMON Maintainers opinion on these. A
+patchset containing these have already been NACKed once. These patches
+do however look like valid cleanups. But are they just so you can do
+something bad in your vendor tree, which will never make it to
+mainline?
 
-> I think you might need to add MODULE_IMPORT_NS(EFIVAR) for the efivar_*
-> API calls you added.
-
-It's already there (inside the ifdef):
-
-> > +#ifdef CONFIG_EFI
-> > +
-> > +MODULE_IMPORT_NS("EFIVAR");
-
-Johan
+	Andrew
 
