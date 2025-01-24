@@ -1,44 +1,44 @@
-Return-Path: <linux-rtc+bounces-3036-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3032-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EDE7A1AEB6
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 03:41:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B85C6A1AEA3
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 03:39:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E32C816DEFD
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 02:40:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84EFD16D3A5
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2025 02:39:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2C91DC9AB;
-	Fri, 24 Jan 2025 02:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927D21D935A;
+	Fri, 24 Jan 2025 02:38:45 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B820D1DB157;
-	Fri, 24 Jan 2025 02:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B29C1D6DA5;
+	Fri, 24 Jan 2025 02:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737686330; cv=none; b=QSKdZhWi2XmhFBQLF5UrzOW4knyP1uDJQUS9ZH4OLNQvVNJWrgfl5r/8oS9Gc1Gb0lTcWxUcz8biQCa6HsiwqM77wx0n+uSYrWUGfUaFqouSXw9KaAlLATvM+jyz4Za5xrelqakUFh+v8TY7+OmEoN5fTeG9VYWkc52Sc/TyeDU=
+	t=1737686325; cv=none; b=cw3bnqU9X/3DSUMxgZZGF/UGmD83uKapF94cVQ+G1tVXa1El8mXnNIAiscJOZtHFK1JnSxx3eH1tLYvA/wG1tW5o9zWF0/M1z/vopIFVohRLqCQgOLKIJcQcYHSbHWz6NpY3zCeYI82NOFO84BlOO9gXfFszNTj6MZk0nYTJWT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737686330; c=relaxed/simple;
-	bh=xKblWWGxTE5azXr82EvnLeeQK5P/EFTNCVtLQSBacDk=;
+	s=arc-20240116; t=1737686325; c=relaxed/simple;
+	bh=26KYzChB3hECJWOSy+Gbb0c0qlL5k0uZ8wlfZh/AObY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L9YLcz8mX35Uzghl4O1QcxPKR7scj5tm77r4jPzQ68rO6yU0+SYfvFGZJpx4cQXCEN4j4aIWXX8pdYzZAlKmWWPcqLMOroe3K4KmTgPZ/EHVWMs4U98+6E7iv+g7bEhRJ8f/IaFFtQbtpWIo/lh7IKERW170aM+c7vXYJUIyvrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	 MIME-Version:Content-Type; b=MOGTLY7Y+ieg0qdAd4LGn4lvvYGT1X4MP/dcc6tOTa3sBolkuq+kLx5Mx9W+jgM8/TY1Soxed495g0zRMv6vESls/0XROX5RxBClphLeJa/PYjOJaAKy8UI5a6dipilSd53Mi6gIyDSU6ZThtJ+kfXTc8UeFrHq1tyOaGjwdft0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YfMNw4mtKzkXJc;
-	Fri, 24 Jan 2025 10:35:28 +0800 (CST)
-Received: from dggemv703-chm.china.huawei.com (unknown [10.3.19.46])
-	by mail.maildlp.com (Postfix) with ESMTPS id 611971800D5;
-	Fri, 24 Jan 2025 10:38:40 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4YfMNl0nVhz1V5P9;
+	Fri, 24 Jan 2025 10:35:19 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0C26F180216;
+	Fri, 24 Jan 2025 10:38:41 +0800 (CST)
 Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 24 Jan 2025 10:38:40 +0800
+ 15.2.1544.11; Fri, 24 Jan 2025 10:38:40 +0800
 Received: from localhost.localdomain (10.28.79.22) by
  kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -54,9 +54,9 @@ CC: <oss-drivers@corigine.com>, <matt@ranostay.sg>, <mchehab@kernel.org>,
 	<kabel@kernel.org>, <alexandre.belloni@bootlin.com>, <krzk@kernel.org>,
 	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>,
 	<liuyonglong@huawei.com>, <lihuisong@huawei.com>
-Subject: [PATCH v1 5/9] net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
-Date: Fri, 24 Jan 2025 10:26:31 +0800
-Message-ID: <20250124022635.16647-6-lihuisong@huawei.com>
+Subject: [PATCH v1 6/9] rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+Date: Fri, 24 Jan 2025 10:26:32 +0800
+Message-ID: <20250124022635.16647-7-lihuisong@huawei.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20250124022635.16647-1-lihuisong@huawei.com>
 References: <20250124022635.16647-1-lihuisong@huawei.com>
@@ -75,43 +75,43 @@ Use HWMON_CHANNEL_INFO macro to simplify code.
 
 Signed-off-by: Huisong Li <lihuisong@huawei.com>
 ---
- drivers/net/phy/marvell10g.c | 24 ++----------------------
+ drivers/rtc/rtc-ab-eoz9.c | 24 ++----------------------
  1 file changed, 2 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/net/phy/marvell10g.c b/drivers/net/phy/marvell10g.c
-index 623bdb8466b8..5354c8895163 100644
---- a/drivers/net/phy/marvell10g.c
-+++ b/drivers/net/phy/marvell10g.c
-@@ -230,29 +230,9 @@ static const struct hwmon_ops mv3310_hwmon_ops = {
- 	.read = mv3310_hwmon_read,
- };
+diff --git a/drivers/rtc/rtc-ab-eoz9.c b/drivers/rtc/rtc-ab-eoz9.c
+index d2b60487d462..de002f7a39bf 100644
+--- a/drivers/rtc/rtc-ab-eoz9.c
++++ b/drivers/rtc/rtc-ab-eoz9.c
+@@ -426,29 +426,9 @@ static umode_t abeoz9_is_visible(const void *data,
+ 	}
+ }
  
--static u32 mv3310_hwmon_chip_config[] = {
--	HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL,
--	0,
+-static const u32 abeoz9_chip_config[] = {
+-	HWMON_C_REGISTER_TZ,
+-	0
 -};
 -
--static const struct hwmon_channel_info mv3310_hwmon_chip = {
+-static const struct hwmon_channel_info abeoz9_chip = {
 -	.type = hwmon_chip,
--	.config = mv3310_hwmon_chip_config,
+-	.config = abeoz9_chip_config,
 -};
 -
--static u32 mv3310_hwmon_temp_config[] = {
--	HWMON_T_INPUT,
--	0,
+-static const u32 abeoz9_temp_config[] = {
+-	HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN,
+-	0
 -};
 -
--static const struct hwmon_channel_info mv3310_hwmon_temp = {
+-static const struct hwmon_channel_info abeoz9_temp = {
 -	.type = hwmon_temp,
--	.config = mv3310_hwmon_temp_config,
+-	.config = abeoz9_temp_config,
 -};
 -
- static const struct hwmon_channel_info * const mv3310_hwmon_info[] = {
--	&mv3310_hwmon_chip,
--	&mv3310_hwmon_temp,
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
- 	NULL,
+ static const struct hwmon_channel_info * const abeoz9_info[] = {
+-	&abeoz9_chip,
+-	&abeoz9_temp,
++	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN),
+ 	NULL
  };
  
 -- 
