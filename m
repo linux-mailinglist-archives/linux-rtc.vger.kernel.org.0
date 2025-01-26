@@ -1,117 +1,179 @@
-Return-Path: <linux-rtc+bounces-3044-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3045-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BB5FA1C4F7
-	for <lists+linux-rtc@lfdr.de>; Sat, 25 Jan 2025 19:46:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5BD3A1C6AE
+	for <lists+linux-rtc@lfdr.de>; Sun, 26 Jan 2025 08:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C73B118887FB
-	for <lists+linux-rtc@lfdr.de>; Sat, 25 Jan 2025 18:46:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 271983A70C3
+	for <lists+linux-rtc@lfdr.de>; Sun, 26 Jan 2025 07:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7A88633F;
-	Sat, 25 Jan 2025 18:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA53E136E3F;
+	Sun, 26 Jan 2025 07:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZzJY5dQ"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="DNlKtnZz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-17.smtpout.orange.fr [193.252.22.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837667083D;
-	Sat, 25 Jan 2025 18:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EC27081C;
+	Sun, 26 Jan 2025 07:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737830779; cv=none; b=Grq+ViMMj4f0aAzVkfZGiL1WDzpXm0gQNOEp9QZvJXvMdsJ8TpD4QAnoEb3/NXmiRv9a441bgaVtuQ1zLPTZMq0rgmVRsPgl3K3Ch9VTxh8Q1x21ZdGbqAXX7PYx0/ojNuvwvw0mTpWu/6JOnbB/sVKtKz5tskafV+2WG/OskMI=
+	t=1737877462; cv=none; b=Dwre2BufOyE7djhG++X3UpT0oWe2I+1mg9Q9krgScC1BATsmYMTpNRTYmpf82Tzf+k5pHyL9oa3Bz04bC0QgMaxoKZDhcp1sbQ+LgMG1vQn2wqBuwfJvzn77hdy6wlZ1gVz2XEYgYbSMo3dytyimWYabbQVjIgL9o5dkB+NtIGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737830779; c=relaxed/simple;
-	bh=H8QwGyV0uR+W7rIUL6aSwdgYBF4gwlvwp7RqlTEl5fE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=onh959ivlAcpKd74Ka5fOBQ/WcsiA7PIRvPdAPXZfD6Qe6NaGwLK8EZdvZikuXddUIcK9besfHsDoa6ixXHyRii/Q6/sEf0uDFjOPAmWH3e37gb0IVbOXDWNXLH/CuCAxLPpWKNfnoe2fRR2N3M92s71PjBo729OBgQA1INNgYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZzJY5dQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD7FFC4CED6;
-	Sat, 25 Jan 2025 18:46:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737830779;
-	bh=H8QwGyV0uR+W7rIUL6aSwdgYBF4gwlvwp7RqlTEl5fE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tZzJY5dQYZBNtN69P02xWQLG0SlpQfLphrFx1Qa/zehiCeiSIiyB5h2aR8ZRoiXj2
-	 BjqoVfmiNC54kC1V/xbDHpvRS74QGU+zwaMHxP+qidhWejw1XBK4hf+dOx4QwtFNeC
-	 zRIVMjiiNnyUsfKgDJ3xm3RiLnzxnLCls6LQU4LCz3rYXYemBz2ruIAnuUy0JvvjGC
-	 xDwdDwtwpmpURF0WNBDf/DyaKmUtifhXdaV/Rvz/RA5qscAz0vQzQ6CBgTz8H2+aeC
-	 6MT9EC/upOd2PTCLuvzMTFN8aB+k7rBZnH/TW/ycVKsP678VrSM7p0CcfGWBPtX5BO
-	 VYBDu+Vpi0r/w==
-Received: by venus (Postfix, from userid 1000)
-	id B59D318389A; Sat, 25 Jan 2025 19:46:16 +0100 (CET)
-Date: Sat, 25 Jan 2025 19:46:16 +0100
-From: Sebastian Reichel <sre@kernel.org>
-To: Johan Hovold <johan+linaro@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Jonathan Marek <jonathan@marek.ca>, 
-	linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] arm64: dts: qcom: x1e80100: enable rtc
-Message-ID: <lxmbrjscksvvq63o4w2vehiubuseajyu4ruqxpb3mcvrebekc5@vzwhpg5j2p2o>
-References: <20250120144152.11949-1-johan+linaro@kernel.org>
+	s=arc-20240116; t=1737877462; c=relaxed/simple;
+	bh=1OVy6Lem4f1Vg/Yf9kU/VmQgIy/Z0Q8dDr+dpKSJSKg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u3H6QnYuWaGvbU/9VrIIrga1UCEN/PUk+yRFyc4NFbmfOZ45zODvyDklnnAlNEEBEOKfwqmGM9GE1q63EVSbGzEsdBR1hvXIfFUY1Zp8+0vGde18nOpN3pomK5Qt3VOzhFJESxv7lQPgpSo8Qkxv79QZLh82+V6wT6acAFVjyVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=DNlKtnZz; arc=none smtp.client-ip=193.252.22.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id bxIBttXPnw9eWbxIGtuSz9; Sun, 26 Jan 2025 08:43:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1737877389;
+	bh=iJFajcXa1FrZHaKdnu3kC7HPgn0SCPMstJG73iEZNgE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=DNlKtnZzphkCOkjZUQfGGdua4csAoe5hF/0CLWiAIvUTWbmpSWiW4bFUjqvmzeuFD
+	 Bc7NI7bMhmjnJj1ita3Z5XZg6qFwyYm9G9TjFQWSwbTnFzdx2j8YEwScgx31gsyJMx
+	 UmpUJGgImMFHFi5sGCh8+3swkUYYsIFEzV+sZB/BEomzfwDugfTkxI+Z+TwlXezFAx
+	 jcdsL+7b/674caqylux5c+13LDCzJG7FZDsdu7KVTnGScdKWaHv+nq1m0dT4X7ZJJu
+	 ooG5N/dHYMiDCLItUcvzu2QuerjO8AdqIDh5o2NLXWClg/aCxHS7dtfslGZH5Ll/g7
+	 YZwXSHTL5TapA==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 26 Jan 2025 08:43:09 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <c1cbb337-9ca5-4071-b05a-a97ab451f358@wanadoo.fr>
+Date: Sun, 26 Jan 2025 16:42:50 +0900
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="twmgl5q7xfyqqjth"
-Content-Disposition: inline
-In-Reply-To: <20250120144152.11949-1-johan+linaro@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+ linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250123091115.2079802-1-a0282524688@gmail.com>
+ <20250123091115.2079802-7-a0282524688@gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250123091115.2079802-7-a0282524688@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 23/01/2025 at 18:11, Ming Yu wrote:
+> This driver supports Hardware monitor functionality for NCT6694 MFD
+> device based on USB interface.
+> 
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> ---
 
---twmgl5q7xfyqqjth
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/7] arm64: dts: qcom: x1e80100: enable rtc
-MIME-Version: 1.0
+(...)
 
-Hi,
+> +static int nct6694_temp_write(struct device *dev, u32 attr, int channel,
+> +			      long val)
+> +{
+> +	struct nct6694_hwmon_data *data = dev_get_drvdata(dev);
+> +	struct nct6694_cmd_header cmd_hd;
+> +	unsigned char temp_hyst;
+> +	signed char temp_max;
+> +	int ret;
+> +
+> +	guard(mutex)(&data->lock);
+> +
+> +	switch (attr) {
+> +	case hwmon_temp_enable:
+> +		if (val == 0)
+> +			data->hwmon_en.tin_en[channel / 8] &= ~BIT(channel % 8);
+> +		else if (val == 1)
+> +			data->hwmon_en.tin_en[channel / 8] |= BIT(channel % 8);
+> +		else
+> +			return -EINVAL;
+> +
+> +		cmd_hd = (struct nct6694_cmd_header) {
+> +			.mod = NCT6694_HWMON_MOD,
+> +			.cmd = NCT6694_HWMON_CONTROL,
+> +			.sel = NCT6694_HWMON_CONTROL_SEL,
+> +			.len = cpu_to_le16(sizeof(data->hwmon_en))
+> +		};
+> +
+> +		return nct6694_write_msg(data->nct6694, &cmd_hd,
+> +					 &data->hwmon_en);
+> +	case hwmon_temp_max:
+> +		cmd_hd = (struct nct6694_cmd_header) {
+> +			.mod = NCT6694_HWMON_MOD,
+> +			.cmd = NCT6694_HWMON_ALARM,
+> +			.sel = NCT6694_HWMON_ALARM_SEL,
+> +			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
+> +		};
+> +		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
+> +				       &data->msg->hwmon_alarm);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = clamp_val(val, -127000, 127000);
+> +		data->msg->hwmon_alarm.tin_cfg[channel].hl = temp_to_reg(val);
+> +
+> +		return nct6694_write_msg(data->nct6694, &cmd_hd,
+> +					 &data->msg->hwmon_alarm);
+> +	case hwmon_temp_max_hyst:
+> +		cmd_hd = (struct nct6694_cmd_header) {
+> +			.mod = NCT6694_HWMON_MOD,
+> +			.cmd = NCT6694_HWMON_ALARM,
+> +			.sel = NCT6694_HWMON_ALARM_SEL,
+> +			.len = cpu_to_le16(sizeof(data->msg->hwmon_alarm))
+> +		};
+> +		ret = nct6694_read_msg(data->nct6694, &cmd_hd,
+> +				       &data->msg->hwmon_alarm);
+> +
+> +		val = clamp_val(val, -127000, 127000);
+> +		temp_max = data->msg->hwmon_alarm.tin_cfg[channel].hl;
+> +		temp_hyst = temp_max - temp_to_reg(val);
+> +		temp_hyst = clamp_val(temp_hyst, 0, 7);
 
-On Mon, Jan 20, 2025 at 03:41:45PM +0100, Johan Hovold wrote:
-> This series adds support for utilising the UEFI firmware RTC offset to
-> the Qualcomm PMIC RTC driver and uses that to enable the RTC on all X
-> Elite machines.
->=20
-> Included is also a patch to switch the Lenovo ThinkPad X13s over to
-> using the UEFI offset.
+temp_hyst is unsigned. It can not be smaller than zero. No need for
+clamp(), using min here is sufficient.
 
-I've been using this series for the last few days and it seems to
-work well.
+> +		data->msg->hwmon_alarm.tin_cfg[channel].hyst =
+> +			(data->msg->hwmon_alarm.tin_cfg[channel].hyst & ~NCT6694_TIN_HYST_MASK) |
+> +			FIELD_PREP(NCT6694_TIN_HYST_MASK, temp_hyst);
+> +
+> +		return nct6694_write_msg(data->nct6694, &cmd_hd,
+> +					 &data->msg->hwmon_alarm);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
 
-Tested-by: Sebastian Reichel <sre@kernel.org> # Lenovo T14s Gen6
+(...)
 
-Greetings,
+Yours sincerely,
+Vincent Mailhol
 
--- Sebastian
-
---twmgl5q7xfyqqjth
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmeVMXAACgkQ2O7X88g7
-+po3sQ/+K8NMmf84/+Ka/THBmL37nNwGSk9jkKIM1pbfE2VE4+iucxmCcptX9uxo
-W3SDUosI80ZvSZv0BuUJZqE9ON7GVR14pMVcx8LxCvyQ0oYzRu8ti4T/0rCCO0Uo
-23Ku8afn1PhXpuwssHRiPoHX9atJ+0MUKKmjNYq01xstoqZcv7EUFoFMRwMbwdH7
-H/RQ6I7rQcsmkPN3M0yUiOL1dtR5CvhfgDvkCnBMy5e+hOXXrNy7Xku5C96SdCoN
-KMVTxtCuYyzxBK8CztyP9ycJ6Oy8abiN/WDvD/XyXEAWQdmx5pdPBgU744DdD6rK
-0K2eTT9Lfid9m2A3jN3EIghTPXx5PlmkoITyvNXMJn5b0S1iyl5sdWpzb7Ombh7d
-AmwXtk3Y05fxv1vEsMVkywEa4kmDuwlBamEGLFy8KfnEwYr/53L2nL+3+ugkHLnk
-yzP3HiaJarz9pLhzG3U59XXuCKGkcOdyoexP+BJuyKKWykOAvnfk3smnNKeTRJpH
-a+WoI/o/A5yOiSzirE+Mj6suuo5DKclQy0NgrozWP5nfNu4lUbM7wnJzZLPV6q2T
-V5rdOQUaCMfw3oZghVv7nRVQ+ojbPBXZYWjXfMVIHgGNqu9n9jZ2o+fGqYUd3rj5
-SYtKNutlLQ0tn2/zYrBDoQQmUwwxrnmhiSGzMpfrm9lnzErLQMI=
-=ukGj
------END PGP SIGNATURE-----
-
---twmgl5q7xfyqqjth--
 
