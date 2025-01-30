@@ -1,128 +1,192 @@
-Return-Path: <linux-rtc+bounces-3056-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3070-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9664A23301
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Jan 2025 18:36:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 216FDA23762
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Jan 2025 23:49:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36A8D1887533
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Jan 2025 17:36:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70D987A3615
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Jan 2025 22:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3007A1F0E2E;
-	Thu, 30 Jan 2025 17:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12851B85F6;
+	Thu, 30 Jan 2025 22:49:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Z99odr8B"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KtLlEttG"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EE51F03D0;
-	Thu, 30 Jan 2025 17:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7886B1B4156;
+	Thu, 30 Jan 2025 22:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738258557; cv=none; b=Rg+gLaLODN+fIrJsFHDaCCsaiBgn2GKA7y8ySv2C7LW4QOCBd7RVf0Q52eMrTX93hEEKKsv0mIdr4u0k8EPgMKpKP56bn0Jm6S0g4TLixTFqttAMLiarkKdA23ANzrAJn3ziPg6EdrNc7VWkqgUBLdY5mvWsnHJmapoZoXuCb6E=
+	t=1738277344; cv=none; b=M6LwKS6FP4HewD2LSQZPu8LFxaenqtLSejj0L5Qlz9u4IXDWToHZ9+fknsKBb3N06AlV8Cb4xmZKEDbeu5c+NFVUPoH9zf8fXFyGX4YELWcyOJJFJOB3pfiZILC0dM3pE/iGZvY8OZGydVZIT2vyRWywpPxNUaA2iyFBOvVhI4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738258557; c=relaxed/simple;
-	bh=unETEqL21PPGjcJ+5ThZ5Xx9TlKma2kepF5jLOEMdPY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XTvqIQbQtVQoR231Tska7O/P9ZTEZd7WRvZPnQC2fi3HRxRlDIwFRM2fRouo0COxlJJNqGO8RQShz6NCwhM75QWSkE//WZ5TIiE3+3ruWo1Lc/3lR7xElB7wvRRmfsL/CJABK4RGEQdLz3omAnA5WgTcGJmvzXd+N9osV2OqDAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Z99odr8B; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1738258555; x=1769794555;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=unETEqL21PPGjcJ+5ThZ5Xx9TlKma2kepF5jLOEMdPY=;
-  b=Z99odr8BRIhRjsbEiHmTs+6NWd557LmtFWcKsu6Use50C0wrStqm45eQ
-   QHvvF9V45CtxyRBBSIYc+r69b6kWYJZWHSM2KVWm0rsYqn+Qe5FWeMwGm
-   TCYw+Il9GR77iUY0lW5AQyA6lJKyBKf3l3+2gT9tgcf0Qlgzh0R4R5ztl
-   WVZ35nB9Pat0yTdKI6hOCYfXM77fwpHiouFvy7vBQNKtLBVWuoh11dpLH
-   39BQCqu+XiadZqY3pN86lMvauAY7ETQyyymoM2XvOqug7+KTve/ADdcBd
-   z8yw4E1WNQPVwBde1kF//+LtqGdY0SW1KqeQ0qa/efIV5h9a1YD0LIW88
-   Q==;
-X-CSE-ConnectionGUID: X8noN3xrSZmPEckyVo5bzw==
-X-CSE-MsgGUID: OxtnvTyxSmKbP44RM9+2HQ==
-X-IronPort-AV: E=Sophos;i="6.13,246,1732604400"; 
-   d="scan'208";a="204622975"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jan 2025 10:35:46 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 30 Jan 2025 10:35:42 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Thu, 30 Jan 2025 10:35:42 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <lee@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <claudiu.beznea@tuxon.dev>, <sre@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<p.zabel@pengutronix.de>, <linux@armlinux.org.uk>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-rtc@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH 16/16] ARM: dts: microchip: add shutdown controller and rtt timer
-Date: Thu, 30 Jan 2025 10:33:56 -0700
-Message-ID: <f003d5cb209fbda0064cc593bedecd7bff46c86f.1738257860.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1738257860.git.Ryan.Wanner@microchip.com>
-References: <cover.1738257860.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1738277344; c=relaxed/simple;
+	bh=y3DtLDw7Fov4fOJ6ND5PD8PeXk2JLeqOrsUzrcl0dcE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qltWg2lgXqfIfnNK5B/AGVdaQ1VJAcrMM1Jt0UgMgFHW4sdlGVCURl7gOiHXM9zFHWC6onbZiKEzlGQuGxR/SxmfOrWDZyEKcBS6qJtUkJF5fU/Trxq8A6h3ivl31jK0zkNh4GyHl04X9FxEwwptIaldePJv1kFLHXyDTsZpMlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KtLlEttG; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6291A431ED;
+	Thu, 30 Jan 2025 22:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1738277337;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=+650bWZwiHQei056z9vqCqJNFXx6z6AXBlkRR/M/OeE=;
+	b=KtLlEttGXxCwoIQq7vM+Dk7kluJqMVQzMjn780Zc5zms6Jax94tH6ngWb1IpHJMMT0UH7p
+	RPf95lYurcIgQYv0K2iqrcl7fe/zPUOcT57hG+4NlZZaIwGZzb+YGnGzW3PeVHzhtpj8iZ
+	cqvUDUXjl+kgTE8nuoJwMyglW1uAmvkV6Vl2hgf6gyz81HL9ny6MA0oaJVg7RBigQh3EZj
+	QGPHDSEhxYA1KkP5JWKqUg84EWF7BwFs6szxhpZQ/oVezlOzFBKeNu+6cUIBfvZXbuAnYI
+	FwZo7jDMpw/7W3payHFHg0/N3g7KB/LepwmJcNjA3ObXcXX9j9prH8FwZEvOSA==
+Date: Thu, 30 Jan 2025 23:48:56 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 6.14
+Message-ID: <2025013022485633b00737@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejtdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfggtggusehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfegfefhtdehgffgkedtfeelkedugefgtdeugeegffdvkeefjefhkefhffetvdeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlr
+ dhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+Hello Linus,
 
-Add shutdown controller and rtt timer to support shutdown and wake up.
+Here is the RTC subsystem pull request for 6.14. Not much this cycle,
+there are multiple small fixes. I took the last patch a bit late but
+this has been tested independently by two other developers.
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- .../boot/dts/microchip/at91-sama7d65_curiosity.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
-diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-index 0f86360fb733a..d1d0b06fbfc43 100644
---- a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-+++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-@@ -77,6 +77,11 @@ pinctrl_uart6_default: uart6-default {
- 	};
- };
- 
-+&rtt {
-+	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-+	status = "disabled";
-+};
-+
- &sdmmc1 {
- 	bus-width = <4>;
- 	pinctrl-names = "default";
-@@ -84,6 +89,15 @@ &sdmmc1 {
- 	status = "okay";
- };
- 
-+&shdwc {
-+	debounce-delay-us = <976>;
-+	status = "okay";
-+
-+	input@0 {
-+		reg = <0>;
-+	};
-+};
-+
- &slow_xtal {
- 	clock-frequency = <32768>;
- };
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.14
+
+for you to fetch changes up to 97274527e8dc709bbb4c7cb44279a12d085da9ef:
+
+  rtc: pcf2127: add BSM support (2025-01-29 00:42:29 +0100)
+
+----------------------------------------------------------------
+RTC for 6.13
+
+Subsystem:
+ - use boolean values with device_init_wakeup()
+
+Drivers:
+ - pcf2127: add BSM support
+ - pcf85063: fix possible out of bound write
+
+----------------------------------------------------------------
+Alexandre Belloni (1):
+      rtc: pcf2127: add BSM support
+
+Dan Carpenter (1):
+      rtc: tps6594: Fix integer overflow on 32bit systems
+
+Dr. David Alan Gilbert (1):
+      rtc: Remove hpet_rtc_dropped_irq()
+
+Fabio Estevam (1):
+      dt-bindings: rtc: mxc: Document fsl,imx31-rtc
+
+Geert Uytterhoeven (1):
+      rtc: RTC_DRV_SPEAR should not default to y when compile-testing
+
+Krzysztof Kozlowski (1):
+      rtc: stm32: Use syscon_regmap_lookup_by_phandle_args
+
+Michal Simek (1):
+      rtc: zynqmp: Fix optional clock name property
+
+Ming Wang (1):
+      rtc: loongson: clear TOY_MATCH0_REG in loongson_rtc_isr()
+
+Oleksij Rempel (1):
+      rtc: pcf85063: fix potential OOB write in PCF85063 NVMEM read
+
+Wolfram Sang (1):
+      rtc: use boolean values with device_init_wakeup()
+
+ Documentation/devicetree/bindings/rtc/rtc-mxc.yaml | 10 ++-
+ arch/x86/include/asm/hpet.h                        |  1 -
+ arch/x86/kernel/hpet.c                             |  6 --
+ drivers/rtc/Kconfig                                |  2 +-
+ drivers/rtc/rtc-88pm80x.c                          |  2 +-
+ drivers/rtc/rtc-88pm860x.c                         |  2 +-
+ drivers/rtc/rtc-amlogic-a4.c                       |  6 +-
+ drivers/rtc/rtc-armada38x.c                        |  2 +-
+ drivers/rtc/rtc-as3722.c                           |  2 +-
+ drivers/rtc/rtc-at91rm9200.c                       |  2 +-
+ drivers/rtc/rtc-at91sam9.c                         |  2 +-
+ drivers/rtc/rtc-cadence.c                          |  2 +-
+ drivers/rtc/rtc-cmos.c                             |  7 +-
+ drivers/rtc/rtc-cpcap.c                            |  2 +-
+ drivers/rtc/rtc-cros-ec.c                          |  2 +-
+ drivers/rtc/rtc-da9055.c                           |  2 +-
+ drivers/rtc/rtc-ds3232.c                           |  2 +-
+ drivers/rtc/rtc-isl1208.c                          |  2 +-
+ drivers/rtc/rtc-jz4740.c                           |  2 +-
+ drivers/rtc/rtc-loongson.c                         | 17 +++--
+ drivers/rtc/rtc-lp8788.c                           |  2 +-
+ drivers/rtc/rtc-lpc32xx.c                          |  2 +-
+ drivers/rtc/rtc-max77686.c                         |  2 +-
+ drivers/rtc/rtc-max8925.c                          |  2 +-
+ drivers/rtc/rtc-max8997.c                          |  2 +-
+ drivers/rtc/rtc-meson-vrtc.c                       |  2 +-
+ drivers/rtc/rtc-mpc5121.c                          |  2 +-
+ drivers/rtc/rtc-mt6397.c                           |  2 +-
+ drivers/rtc/rtc-mv.c                               |  4 +-
+ drivers/rtc/rtc-mxc.c                              |  2 +-
+ drivers/rtc/rtc-mxc_v2.c                           |  2 +-
+ drivers/rtc/rtc-omap.c                             |  2 +-
+ drivers/rtc/rtc-palmas.c                           |  2 +-
+ drivers/rtc/rtc-pcf2127.c                          | 82 ++++++++++++++++++++++
+ drivers/rtc/rtc-pcf85063.c                         | 11 ++-
+ drivers/rtc/rtc-pic32.c                            |  2 +-
+ drivers/rtc/rtc-pm8xxx.c                           |  2 +-
+ drivers/rtc/rtc-pxa.c                              |  2 +-
+ drivers/rtc/rtc-rc5t583.c                          |  2 +-
+ drivers/rtc/rtc-rc5t619.c                          |  2 +-
+ drivers/rtc/rtc-renesas-rtca3.c                    |  2 +-
+ drivers/rtc/rtc-rk808.c                            |  2 +-
+ drivers/rtc/rtc-s3c.c                              |  2 +-
+ drivers/rtc/rtc-s5m.c                              |  2 +-
+ drivers/rtc/rtc-sa1100.c                           |  2 +-
+ drivers/rtc/rtc-sc27xx.c                           |  4 +-
+ drivers/rtc/rtc-sh.c                               |  2 +-
+ drivers/rtc/rtc-spear.c                            |  4 +-
+ drivers/rtc/rtc-stm32.c                            | 22 ++----
+ drivers/rtc/rtc-sun6i.c                            |  2 +-
+ drivers/rtc/rtc-sunplus.c                          |  4 +-
+ drivers/rtc/rtc-tegra.c                            |  2 +-
+ drivers/rtc/rtc-test.c                             |  2 +-
+ drivers/rtc/rtc-tps6586x.c                         |  2 +-
+ drivers/rtc/rtc-tps65910.c                         |  2 +-
+ drivers/rtc/rtc-tps6594.c                          |  2 +-
+ drivers/rtc/rtc-twl.c                              |  2 +-
+ drivers/rtc/rtc-wm831x.c                           |  2 +-
+ drivers/rtc/rtc-wm8350.c                           |  2 +-
+ drivers/rtc/rtc-xgene.c                            |  4 +-
+ drivers/rtc/rtc-zynqmp.c                           |  8 +--
+ 61 files changed, 180 insertions(+), 102 deletions(-)
+
 -- 
-2.43.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
