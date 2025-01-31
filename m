@@ -1,472 +1,131 @@
-Return-Path: <linux-rtc+bounces-3080-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3083-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F7F4A23D45
-	for <lists+linux-rtc@lfdr.de>; Fri, 31 Jan 2025 12:46:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 353D0A23EF9
+	for <lists+linux-rtc@lfdr.de>; Fri, 31 Jan 2025 15:06:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CF5618837CC
-	for <lists+linux-rtc@lfdr.de>; Fri, 31 Jan 2025 11:46:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B41201889FF5
+	for <lists+linux-rtc@lfdr.de>; Fri, 31 Jan 2025 14:06:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614921C07C4;
-	Fri, 31 Jan 2025 11:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A1F1CAA8F;
+	Fri, 31 Jan 2025 14:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYcEqviC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HKGYPxDn"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1D22AD11;
-	Fri, 31 Jan 2025 11:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD0E1C8FD6;
+	Fri, 31 Jan 2025 14:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738323979; cv=none; b=ST9dH7h6YTXY8XIoTJycAGakblPpWrCYJek/YYh8M8j5Gmp6CZPdbrHUt3cRwHA6zNj4jnxoRIlT+lCqtkNUPi16UGxlBtZ48lVlUV5SF2/pxbN14gl3WI3RfzGz2+PpN3aHHmLIZUf0eqfZO1R0zT6Dl58l5+hZbag6GafVsNs=
+	t=1738332384; cv=none; b=tNDRbpkO0OroWmjFQ9+ZczTdV18exHAoS0o3ZiYhjzFahpZL2Njm0TLhOTfNuYCsp9UvXyOx5b+FZlptH8UPLpt09ehKSfi+CYNRG5ffQ1sEUcz4kPrJoAOQZt5DCNFFzTgHqBXWHKoSVGmT8d/hjrwHK9zGljk06TWrMKDL8L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738323979; c=relaxed/simple;
-	bh=HKotTF9Hfu06Aq3zzigEqgO5A23ICuHhxxdELQosKn4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pivD98diugBaKD0IpO4ZA8QQ9oXjd3ncqncL0B0dXqCnsxxpN3fNFG9XWCURcF4xVtglitwQuuv/ipfIXrboGij0LLPTkzKhbXJ/Ztt/wuglzzs7GgMX+pkP953/r8zeXaNhnAh7O6LnrWuAIc6PpiiSC0JyaF1b+C4EiGf+Z48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYcEqviC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EC510C4CEE1;
-	Fri, 31 Jan 2025 11:46:18 +0000 (UTC)
+	s=arc-20240116; t=1738332384; c=relaxed/simple;
+	bh=ZVhc9GGXKoDQwUkZU4ee1bEKLANnQbGOQhzv7lz5wAw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QW7s2QGgxhFRsQgQu/QGB8odqRmw6OGDEnnAVC8nlnbACfnnFHBTBIgU6mCnMTHtsfgsBOOUbcDFF7tiYg7glItCwHYgelTT2C3fk7HZ22YXHWMM3TdfrikcySBlAzfQZoiYua8gTCkZKERegoXen3gG6SNroADJQURjOxsWz54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HKGYPxDn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EF7C4CED3;
+	Fri, 31 Jan 2025 14:06:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738323979;
-	bh=HKotTF9Hfu06Aq3zzigEqgO5A23ICuHhxxdELQosKn4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=uYcEqviC2MOimI9WzefGevfu6JE4FY1txHXrkhmpaATMUhVy3QN0b0ytzk461+/31
-	 m0KmXOJkQgHP4Yln/IVnoRuIqb5ezf6r/esOakEEUbn23ZG7rQBx/YkZOASOLzgOW7
-	 gQ8HB+VCHiQA53soanxDWPaU+whJ+v43mMmMCWZyHs2PQOmZ0HHN9lhwgVyAXZKBYZ
-	 u/CcqXVl7N8V94NlRY++4lIYPa7o2vcDqzRtmeRY7j5PdyIg7Z2BBCljXe9qjnFL7A
-	 hXiCt+fYx27NFDW1Jy6Ldt7AFfcNZCsaGhkrn3/C1g0o0MFeNlK/34t2z1MIqkREC5
-	 m+BQ30/xZxqzQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCCC1C02193;
-	Fri, 31 Jan 2025 11:46:18 +0000 (UTC)
-From: PavithraUdayakumar-adi via B4 Relay <devnull+pavithra.u.analog.com@kernel.org>
-Date: Fri, 31 Jan 2025 17:22:15 +0530
-Subject: [PATCH v5 2/2] rtc: max31335: Add driver support for max31331
+	s=k20201202; t=1738332383;
+	bh=ZVhc9GGXKoDQwUkZU4ee1bEKLANnQbGOQhzv7lz5wAw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HKGYPxDnXDLJPJPZZ9C8p84dtk6AYNrIFH2W3cTj/UU4yIdeyTM2uOE+Kfj/BzEI9
+	 LIqGNecyXLlRc+agKNwUuiiZyqcCaSEkRjHyzpsDI6BiQ6PyVAd54sgfsJfHtkGMhB
+	 nRdJxv0yguLjaLTQIabbtXt3h4x1nXr6Q9/k/lWxT/0/sNzICvAqReKIYyR/DqCLa4
+	 xBsl76QO+/soPSKBNWluf9bSq0IPMeoQmXZGlQo9zR5a4wYbD/YpoheVDaZ2se72we
+	 oTSuEyFyoOOAi0A2YDxTeBVQj0Gl0iapItSlzB/JsftkZYRr2PHRrBBSQmb70mCl1F
+	 df/4dHplOiZxA==
+Message-ID: <cc03cfcc-dc00-490c-857a-5da0ae0de811@kernel.org>
+Date: Fri, 31 Jan 2025 15:06:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250131-add_support_max31331_fix_7-v1-2-d29d5de3d562@analog.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] dt-bindings: rtc: max31335: Add max31331 support
+To: pavithra.u@analog.com, Antoniu Miclaus <antoniu.miclaus@analog.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <noname.nuno@gmail.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
 References: <20250131-add_support_max31331_fix_7-v1-0-d29d5de3d562@analog.com>
-In-Reply-To: <20250131-add_support_max31331_fix_7-v1-0-d29d5de3d562@analog.com>
-To: Antoniu Miclaus <antoniu.miclaus@analog.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
- Guenter Roeck <linux@roeck-us.net>, 
- =?utf-8?q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- PavithraUdayakumar-adi <pavithra.u@analog.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1738324342; l=12419;
- i=pavithra.u@analog.com; s=20241220; h=from:subject:message-id;
- bh=1stnG/N6HE8QaQ6joNd5xgD+z3/Jmq/go1M+BD9Kck8=;
- b=xvz3jnrVPnyPmXLGHXqSMmp0q7xttlc/+eVRkM0i4G/82M6Ei9h5O6JGrolC9gSn4ZJMm14fS
- S3V/bh61cvRDB5HpKIX0kr+TBuKmOOk/2avz3NT+8kWrzOlcRohoQb0
-X-Developer-Key: i=pavithra.u@analog.com; a=ed25519;
- pk=RIhZrdpg71GEnmwm1eNn95TYUMDJOKVsFd37Fv8xf1U=
-X-Endpoint-Received: by B4 Relay for pavithra.u@analog.com/20241220 with
- auth_id=303
-X-Original-From: PavithraUdayakumar-adi <pavithra.u@analog.com>
-Reply-To: pavithra.u@analog.com
+ <20250131-add_support_max31331_fix_7-v1-1-d29d5de3d562@analog.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250131-add_support_max31331_fix_7-v1-1-d29d5de3d562@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: PavithraUdayakumar-adi <pavithra.u@analog.com>
-
-MAX31331 is an ultra-low-power, I2C Real-Time Clock RTC.
-
-Signed-off-by: PavithraUdayakumar-adi <pavithra.u@analog.com>
----
- drivers/rtc/rtc-max31335.c | 165 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 122 insertions(+), 43 deletions(-)
-
-diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
-index 3fbcf5f6b92ffd4581e9c4dbc87ec848867522dc..a7bb37aaab9e6e315db70bc6bc0dbaa553fdecfa 100644
---- a/drivers/rtc/rtc-max31335.c
-+++ b/drivers/rtc/rtc-max31335.c
-@@ -184,31 +184,91 @@
- #define MAX31335_RAM_SIZE			32
- #define MAX31335_TIME_SIZE			0x07
- 
-+/* MAX31331 Register Map */
-+#define MAX31331_RTC_CONFIG2			0x04
-+
- #define clk_hw_to_max31335(_hw) container_of(_hw, struct max31335_data, clkout)
- 
-+/* Supported Maxim RTC */
-+enum max_rtc_ids {
-+	ID_MAX31331,
-+	ID_MAX31335,
-+	MAX_RTC_ID_NR
-+};
-+
-+struct chip_desc {
-+	u8 sec_reg;
-+	u8 alarm1_sec_reg;
-+
-+	u8 int_en_reg;
-+	u8 int_status_reg;
-+
-+	u8 ram_reg;
-+	u8 ram_size;
-+
-+	u8 temp_reg;
-+
-+	u8 trickle_reg;
-+
-+	u8 clkout_reg;
-+
-+	enum max_rtc_ids id;
-+};
-+
- struct max31335_data {
- 	struct regmap *regmap;
- 	struct rtc_device *rtc;
- 	struct clk_hw clkout;
-+	struct clk *clkin;
-+	const struct chip_desc *chip;
-+	int irq;
- };
- 
- static const int max31335_clkout_freq[] = { 1, 64, 1024, 32768 };
- 
-+static const struct chip_desc chip[MAX_RTC_ID_NR] = {
-+	[ID_MAX31331] = {
-+		.id = ID_MAX31331,
-+		.int_en_reg = 0x01,
-+		.int_status_reg = 0x00,
-+		.sec_reg = 0x08,
-+		.alarm1_sec_reg = 0x0F,
-+		.ram_reg = 0x20,
-+		.ram_size = 32,
-+		.trickle_reg = 0x1B,
-+		.clkout_reg = 0x04,
-+	},
-+	[ID_MAX31335] = {
-+		.id = ID_MAX31335,
-+		.int_en_reg = 0x01,
-+		.int_status_reg = 0x00,
-+		.sec_reg = 0x0A,
-+		.alarm1_sec_reg = 0x11,
-+		.ram_reg = 0x40,
-+		.ram_size = 32,
-+		.temp_reg = 0x35,
-+		.trickle_reg = 0x1D,
-+		.clkout_reg = 0x06,
-+	},
-+};
-+
- static const u16 max31335_trickle_resistors[] = {3000, 6000, 11000};
- 
- static bool max31335_volatile_reg(struct device *dev, unsigned int reg)
- {
-+	struct max31335_data *max31335 = dev_get_drvdata(dev);
-+	const struct chip_desc *chip = max31335->chip;
-+
- 	/* time keeping registers */
--	if (reg >= MAX31335_SECONDS &&
--	    reg < MAX31335_SECONDS + MAX31335_TIME_SIZE)
-+	if (reg >= chip->sec_reg && reg < chip->sec_reg + MAX31335_TIME_SIZE)
- 		return true;
- 
- 	/* interrupt status register */
--	if (reg == MAX31335_STATUS1)
-+	if (reg == chip->int_status_reg)
- 		return true;
- 
--	/* temperature registers */
--	if (reg == MAX31335_TEMP_DATA_MSB || reg == MAX31335_TEMP_DATA_LSB)
-+	/* temperature registers if valid */
-+	if (chip->temp_reg && (reg == chip->temp_reg || reg == chip->temp_reg + 1))
- 		return true;
- 
- 	return false;
-@@ -227,7 +287,7 @@ static int max31335_read_time(struct device *dev, struct rtc_time *tm)
- 	u8 date[7];
- 	int ret;
- 
--	ret = regmap_bulk_read(max31335->regmap, MAX31335_SECONDS, date,
-+	ret = regmap_bulk_read(max31335->regmap, max31335->chip->sec_reg, date,
- 			       sizeof(date));
- 	if (ret)
- 		return ret;
-@@ -262,7 +322,7 @@ static int max31335_set_time(struct device *dev, struct rtc_time *tm)
- 	if (tm->tm_year >= 200)
- 		date[5] |= FIELD_PREP(MAX31335_MONTH_CENTURY, 1);
- 
--	return regmap_bulk_write(max31335->regmap, MAX31335_SECONDS, date,
-+	return regmap_bulk_write(max31335->regmap, max31335->chip->sec_reg, date,
- 				 sizeof(date));
- }
- 
-@@ -273,7 +333,7 @@ static int max31335_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	struct rtc_time time;
- 	u8 regs[6];
- 
--	ret = regmap_bulk_read(max31335->regmap, MAX31335_ALM1_SEC, regs,
-+	ret = regmap_bulk_read(max31335->regmap, max31335->chip->alarm1_sec_reg, regs,
- 			       sizeof(regs));
- 	if (ret)
- 		return ret;
-@@ -292,11 +352,11 @@ static int max31335_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	if (time.tm_year >= 200)
- 		alrm->time.tm_year += 100;
- 
--	ret = regmap_read(max31335->regmap, MAX31335_INT_EN1, &ctrl);
-+	ret = regmap_read(max31335->regmap, max31335->chip->int_en_reg, &ctrl);
- 	if (ret)
- 		return ret;
- 
--	ret = regmap_read(max31335->regmap, MAX31335_STATUS1, &status);
-+	ret = regmap_read(max31335->regmap, max31335->chip->int_status_reg, &status);
- 	if (ret)
- 		return ret;
- 
-@@ -320,18 +380,18 @@ static int max31335_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	regs[4] = bin2bcd(alrm->time.tm_mon + 1);
- 	regs[5] = bin2bcd(alrm->time.tm_year % 100);
- 
--	ret = regmap_bulk_write(max31335->regmap, MAX31335_ALM1_SEC,
-+	ret = regmap_bulk_write(max31335->regmap, max31335->chip->alarm1_sec_reg,
- 				regs, sizeof(regs));
- 	if (ret)
- 		return ret;
- 
- 	reg = FIELD_PREP(MAX31335_INT_EN1_A1IE, alrm->enabled);
--	ret = regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-+	ret = regmap_update_bits(max31335->regmap, max31335->chip->int_en_reg,
- 				 MAX31335_INT_EN1_A1IE, reg);
- 	if (ret)
- 		return ret;
- 
--	ret = regmap_update_bits(max31335->regmap, MAX31335_STATUS1,
-+	ret = regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
- 				 MAX31335_STATUS1_A1F, 0);
- 
- 	return 0;
-@@ -341,23 +401,33 @@ static int max31335_alarm_irq_enable(struct device *dev, unsigned int enabled)
- {
- 	struct max31335_data *max31335 = dev_get_drvdata(dev);
- 
--	return regmap_update_bits(max31335->regmap, MAX31335_INT_EN1,
-+	return regmap_update_bits(max31335->regmap, max31335->chip->int_en_reg,
- 				  MAX31335_INT_EN1_A1IE, enabled);
- }
- 
- static irqreturn_t max31335_handle_irq(int irq, void *dev_id)
- {
- 	struct max31335_data *max31335 = dev_id;
--	bool status;
--	int ret;
-+	struct mutex *lock = &max31335->rtc->ops_lock;
-+	int ret, status;
- 
--	ret = regmap_update_bits_check(max31335->regmap, MAX31335_STATUS1,
--				       MAX31335_STATUS1_A1F, 0, &status);
-+	mutex_lock(lock);
-+
-+	ret = regmap_read(max31335->regmap, max31335->chip->int_status_reg, &status);
- 	if (ret)
--		return IRQ_HANDLED;
-+		goto exit;
-+
-+	if (FIELD_GET(MAX31335_STATUS1_A1F, status)) {
-+		ret = regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
-+					 MAX31335_STATUS1_A1F, 0);
-+		if (ret)
-+			goto exit;
- 
--	if (status)
- 		rtc_update_irq(max31335->rtc, 1, RTC_AF | RTC_IRQF);
-+	}
-+
-+exit:
-+	mutex_unlock(lock);
- 
- 	return IRQ_HANDLED;
- }
-@@ -404,7 +474,7 @@ static int max31335_trickle_charger_setup(struct device *dev,
- 
- 	i = i + trickle_cfg;
- 
--	return regmap_write(max31335->regmap, MAX31335_TRICKLE_REG,
-+	return regmap_write(max31335->regmap, max31335->chip->trickle_reg,
- 			    FIELD_PREP(MAX31335_TRICKLE_REG_TRICKLE, i) |
- 			    FIELD_PREP(MAX31335_TRICKLE_REG_EN_TRICKLE,
- 				       chargeable));
-@@ -418,7 +488,7 @@ static unsigned long max31335_clkout_recalc_rate(struct clk_hw *hw,
- 	unsigned int reg;
- 	int ret;
- 
--	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
-+	ret = regmap_read(max31335->regmap, max31335->chip->clkout_reg, &reg);
- 	if (ret)
- 		return 0;
- 
-@@ -449,23 +519,23 @@ static int max31335_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
- 			     ARRAY_SIZE(max31335_clkout_freq));
- 	freq_mask = __roundup_pow_of_two(ARRAY_SIZE(max31335_clkout_freq)) - 1;
- 
--	return regmap_update_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
--				  freq_mask, index);
-+	return regmap_update_bits(max31335->regmap, max31335->chip->clkout_reg,
-+				 freq_mask, index);
- }
- 
- static int max31335_clkout_enable(struct clk_hw *hw)
- {
- 	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
- 
--	return regmap_set_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
--			       MAX31335_RTC_CONFIG2_ENCLKO);
-+	return regmap_set_bits(max31335->regmap, max31335->chip->clkout_reg,
-+			      MAX31335_RTC_CONFIG2_ENCLKO);
- }
- 
- static void max31335_clkout_disable(struct clk_hw *hw)
- {
- 	struct max31335_data *max31335 = clk_hw_to_max31335(hw);
- 
--	regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
-+	regmap_clear_bits(max31335->regmap, max31335->chip->clkout_reg,
- 			  MAX31335_RTC_CONFIG2_ENCLKO);
- }
- 
-@@ -475,7 +545,7 @@ static int max31335_clkout_is_enabled(struct clk_hw *hw)
- 	unsigned int reg;
- 	int ret;
- 
--	ret = regmap_read(max31335->regmap, MAX31335_RTC_CONFIG2, &reg);
-+	ret = regmap_read(max31335->regmap, max31335->chip->clkout_reg, &reg);
- 	if (ret)
- 		return ret;
- 
-@@ -500,7 +570,7 @@ static int max31335_nvmem_reg_read(void *priv, unsigned int offset,
- 				   void *val, size_t bytes)
- {
- 	struct max31335_data *max31335 = priv;
--	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
-+	unsigned int reg = max31335->chip->ram_reg + offset;
- 
- 	return regmap_bulk_read(max31335->regmap, reg, val, bytes);
- }
-@@ -509,7 +579,7 @@ static int max31335_nvmem_reg_write(void *priv, unsigned int offset,
- 				    void *val, size_t bytes)
- {
- 	struct max31335_data *max31335 = priv;
--	unsigned int reg = MAX31335_TS0_SEC_1_128 + offset;
-+	unsigned int reg = max31335->chip->ram_reg + offset;
- 
- 	return regmap_bulk_write(max31335->regmap, reg, val, bytes);
- }
-@@ -533,7 +603,7 @@ static int max31335_read_temp(struct device *dev, enum hwmon_sensor_types type,
- 	if (type != hwmon_temp || attr != hwmon_temp_input)
- 		return -EOPNOTSUPP;
- 
--	ret = regmap_bulk_read(max31335->regmap, MAX31335_TEMP_DATA_MSB,
-+	ret = regmap_bulk_read(max31335->regmap, max31335->chip->temp_reg,
- 			       reg, 2);
- 	if (ret)
- 		return ret;
-@@ -577,8 +647,8 @@ static int max31335_clkout_register(struct device *dev)
- 	int ret;
- 
- 	if (!device_property_present(dev, "#clock-cells"))
--		return regmap_clear_bits(max31335->regmap, MAX31335_RTC_CONFIG2,
--					 MAX31335_RTC_CONFIG2_ENCLKO);
-+		return regmap_clear_bits(max31335->regmap, max31335->chip->clkout_reg,
-+				  MAX31335_RTC_CONFIG2_ENCLKO);
- 
- 	max31335->clkout.init = &max31335_clk_init;
- 
-@@ -605,6 +675,7 @@ static int max31335_probe(struct i2c_client *client)
- #if IS_REACHABLE(HWMON)
- 	struct device *hwmon;
- #endif
-+	const struct chip_desc *match;
- 	int ret;
- 
- 	max31335 = devm_kzalloc(&client->dev, sizeof(*max31335), GFP_KERNEL);
-@@ -616,7 +687,10 @@ static int max31335_probe(struct i2c_client *client)
- 		return PTR_ERR(max31335->regmap);
- 
- 	i2c_set_clientdata(client, max31335);
--
-+	match = i2c_get_match_data(client);
-+	if (!match)
-+		return -ENODEV;
-+	max31335->chip = match;
- 	max31335->rtc = devm_rtc_allocate_device(&client->dev);
- 	if (IS_ERR(max31335->rtc))
- 		return PTR_ERR(max31335->rtc);
-@@ -639,6 +713,8 @@ static int max31335_probe(struct i2c_client *client)
- 			dev_warn(&client->dev,
- 				 "unable to request IRQ, alarm max31335 disabled\n");
- 			client->irq = 0;
-+		} else {
-+			max31335->irq = client->irq;
- 		}
- 	}
- 
-@@ -652,13 +728,13 @@ static int max31335_probe(struct i2c_client *client)
- 				     "cannot register rtc nvmem\n");
- 
- #if IS_REACHABLE(HWMON)
--	hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name,
--						     max31335,
--						     &max31335_chip_info,
--						     NULL);
--	if (IS_ERR(hwmon))
--		return dev_err_probe(&client->dev, PTR_ERR(hwmon),
--				     "cannot register hwmon device\n");
-+	if (max31335->chip->temp_reg) {
-+		hwmon = devm_hwmon_device_register_with_info(&client->dev, client->name, max31335,
-+							     &max31335_chip_info, NULL);
-+		if (IS_ERR(hwmon))
-+			return dev_err_probe(&client->dev, PTR_ERR(hwmon),
-+					     "cannot register hwmon device\n");
-+	}
- #endif
- 
- 	ret = max31335_trickle_charger_setup(&client->dev, max31335);
-@@ -669,14 +745,16 @@ static int max31335_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id max31335_id[] = {
--	{ "max31335" },
-+	{ "max31331", (kernel_ulong_t)&chip[ID_MAX31331] },
-+	{ "max31335", (kernel_ulong_t)&chip[ID_MAX31335] },
- 	{ }
- };
- 
- MODULE_DEVICE_TABLE(i2c, max31335_id);
- 
- static const struct of_device_id max31335_of_match[] = {
--	{ .compatible = "adi,max31335" },
-+	{ .compatible = "adi,max31331", .data = &chip[ID_MAX31331] },
-+	{ .compatible = "adi,max31335", .data = &chip[ID_MAX31335] },
- 	{ }
- };
- 
-@@ -693,5 +771,6 @@ static struct i2c_driver max31335_driver = {
- module_i2c_driver(max31335_driver);
- 
- MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com>");
-+MODULE_AUTHOR("Saket Kumar Purwar <Saket.Kumarpurwar@analog.com>");
- MODULE_DESCRIPTION("MAX31335 RTC driver");
- MODULE_LICENSE("GPL");
-
--- 
-2.25.1
+On 31/01/2025 12:52, PavithraUdayakumar-adi via B4 Relay wrote:
+> From: PavithraUdayakumar-adi <pavithra.u@analog.com>
+> 
+> Added DT compatible string for MAX31331.
 
 
+In the future, instead of just removing details, correct them, so say
+that these are not compatible because of this and that.
+
+> 
+> Signed-off-by: PavithraUdayakumar-adi <pavithra.u@analog.com>
+> ---
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
