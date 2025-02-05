@@ -1,311 +1,225 @@
-Return-Path: <linux-rtc+bounces-3091-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3092-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35635A270B2
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Feb 2025 12:55:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C343A28070
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Feb 2025 01:59:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B27AF3A448D
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Feb 2025 11:54:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9C05188806A
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Feb 2025 00:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D4920CCF0;
-	Tue,  4 Feb 2025 11:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06A15FDA7;
+	Wed,  5 Feb 2025 00:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b="UUEXmua9"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="CMZlDmrh"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011047.outbound.protection.outlook.com [52.101.70.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C43020B80B
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Feb 2025 11:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738670097; cv=none; b=Lipbrx7ipexVdHotHwGdz+PoxXz3ote+OZ21eUN8k+1UJqjoUXpBW+gOYNP/gefvpyIdHRR+Lhs0fywnuojJFpIwnN4Yqf9CfJP8//wHNTLHOsKE+Y8jh1enDIzr3rN5bh4Igyk2BJBGTJT71vBCrMsOVR/VNbm/4uY9dtS/fHE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738670097; c=relaxed/simple;
-	bh=gN8uLsdzeSsXSL7kpsAZMwgBCfr8q4BlE+QuWDtkcyE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PLsLiP1WFUkt36tFNdU1h1CfdeaSZoLCj67XvgCoaacSV6J/i++uAAvwyTyIvogo3VJm7+yMlRTtjG9VokGPhljWT9e7QnjwWQU3ewgQr/LxC6vuVDW3yuOUimhdWDARivMNZMSIxB1vU+wOZhvtD0eVW03foi852b8F+tVMjrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com; spf=pass smtp.mailfrom=mvista.com; dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b=UUEXmua9; arc=none smtp.client-ip=209.85.160.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mvista.com
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-2b7f9158b97so35796fac.2
-        for <linux-rtc@vger.kernel.org>; Tue, 04 Feb 2025 03:54:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mvista.com; s=google; t=1738670094; x=1739274894; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1L0BL/nrOB6bJoIutGy5QWRMc/IyHgOeg0ezRUYTs1Q=;
-        b=UUEXmua9PPR3w+Nc4fb8/gOpyrKKoYetXFiX5omFmYMgMZMqsX0kR2guaOlNosZYcQ
-         97+/BEhFdKOqc+apDKH8lsEh4ZFTZEsviofrkMN8Jg3cTMwGRpWcP92EFHUStsvMiJWC
-         WZCOkm/YNZ+JavYCvelJCIqotwAFcDR553a1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738670094; x=1739274894;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1L0BL/nrOB6bJoIutGy5QWRMc/IyHgOeg0ezRUYTs1Q=;
-        b=veZ8L3xiMQReXEKKM+6vOVy1ARePIgv9hMGoOzduLddR9T6pG8h0gHICsWs5bCi9yO
-         jXYH/i6D4MwOhR9kC4EC4AVdQPRF276OknBSoKhfZx0d8OKZ7Iz2k0sLq1gLiSjl8QZ5
-         fXlaaukq81yLkgif2cZXqdnkgbVbowo0jiRgMKdMgPPtPKqXQhILpjmx3MtZC4cpykmn
-         7y/GVQMO4EpheRgP5fIPVMCn82/LASXKuwGadSMo2aXHPcDQQQLEC15sRhzeCND3YL4Y
-         y2U2hs5VjkHRRROqxl5xnxVpol2oGL7HZfrFWckW9M6zGnNwWZPDIe6sBDZ2vm2YVace
-         rxtQ==
-X-Gm-Message-State: AOJu0YyWnk/DRKhnBAlyg4shXxKkY0RtFzoYUCvu8p1xbGaRyeczE/5S
-	/Jq7H72cYIIR2wizm0wD8wCFdnadzeEoMPb53tLhOQmIkr/i1aIlUel5yHrsLe6SXHQI46U0oun
-	i
-X-Gm-Gg: ASbGncuckh3qd1XYY5XlYJk4+/8HjpUUTRz+wkbQEJQOGphAcBJoCfp6phsfnbDpPBd
-	jSXJxfz3pdbp/s4y5YMZDC7jwSd5LvMOQl5UkOpCRC8OPdg8kaxKBdHtyUX0r/hZw9saa5HOuUI
-	mv+f1NmHs9GUBxKsrPZcZKITSERamOdYpcLRGaN84eHLrkl/5TiU6UbvAku/v2VZ9rcC5OCWrUY
-	ToO2p2tieFx9uGoikqneky1Xe8RDJEJb+311LXgU7i7TJJzr/cwtpJ1JEh6K2RmJ24STGH8AtYT
-	8fphZX6TVjGj62Suo+AUUg==
-X-Google-Smtp-Source: AGHT+IHFiKlP3BxWP1ApNivVAqnzXxNvo/2u3jufuFz2PjTqZ/0Df3DXs6WWfU9qmN1LyjjDe7nhpQ==
-X-Received: by 2002:a05:6870:7d09:b0:29e:290f:7aea with SMTP id 586e51a60fabf-2b32f2e93c7mr16657612fac.34.1738670093598;
-        Tue, 04 Feb 2025 03:54:53 -0800 (PST)
-Received: from mail.minyard.net ([2001:470:b8f6:1b:ec53:8290:86a1:aa7c])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2b3566690f6sm3918860fac.49.2025.02.04.03.54.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 03:54:51 -0800 (PST)
-Date: Tue, 4 Feb 2025 05:54:49 -0600
-From: Corey Minyard <cminyard@mvista.com>
-To: Alexander Bigga <ab@mycable.de>, alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	nmydeen@mvista.com
-Subject: Re: [PATCH] rtc-m41t62: kickstart ocillator upon failure
-Message-ID: <Z6IACQ8fx-EuooD9@mail.minyard.net>
-Reply-To: cminyard@mvista.com
-References: <20250116062641.366679-1-nmydeen@mvista.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92FA2F43;
+	Wed,  5 Feb 2025 00:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738717155; cv=fail; b=Y3zMsziYPRWmciNV0/giKo8IfXJLEW/P7GcUnXkOFKjRuriMZNzbfvlQ6RTaE65Z0uW9dxrpknWMH9lN+MoEZo5bpPjodCfvwo53M57XROUpcxU6xzYcyHJr5K5uvm1W2JsA6HQ+X2itZP34SmBqo7oah5e7UNVl0a1+kZgctgM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738717155; c=relaxed/simple;
+	bh=pP+512FswvEkhUvYgW6pJ6UUMbdRWOKWIYksnsa3uUs=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=sM8CF0e0uud2YiflM2PU0rNgXz6LJ4i8TRjCH3urrH2qqw0+bqF4xq+ErDJdFEamvAjIaeTeJRG4ymyJVXvnwlwb7PU0iY+xs9AoO+/KLoGTd3p6IsXU/4SUu67EcBOwCvSB6B2NFljJkFFPXxV9aWQcgAiDZ9NhLbnMi0Jsu2Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=CMZlDmrh; arc=fail smtp.client-ip=52.101.70.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MjZLtcH85MxSng69exd0dfsXC17pTEf5MQlO5K3pky7/lmVu0Trv3+SijmJWZlkVvf26wTv0P3s4qk3pcns2p0mFh9FRnwJjyUkuK7W3YtYw3bgfYKms9Cgw1seYiZUXEakCVOIrv6s0EGvFF4LrMyEC+SwG71ix/XJ0wCzcAYrn3FqZnZUSlBGt+v+Z5OG4oXwYHY9Yc/gh5V4dGRAbMljIhUWts7pXthgP5m7n9IuJiJAsXe4W4s5Q6TxqQXCePqbjdEvlecn8/mWC0o7N30PGB+vbynsoWBMemJ7bfkJa+v306TA/8rEwSnegPB/pN01bW6LqnDPfe/O3m70Vfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EeDiUl6IeEIVLemONuYP1oSqQR1pIWcp1WTKF7bD7XE=;
+ b=BTfA8TgIgZs1oB1HcEB3RKc6gEqg7iXDJQqcPCPy13/1cL0m0SXSH1eGqs75sos+NbkDk4svwBi9i5nwzFIOcY+f5Z4e6TIj93DdBfAHdqBwRjUxT8/9qRXhvuCm1QIEa40DO1QULULFFc7FXumsdDOmO5CsnGba0MayhOWfVCz0HFpMOhpjQ/OCqhJAzyrPwBQ8UF5LXLUKhTmTLfFZnGHrJVbnGY2la5Xiu9mQtdMi+dC53hiJ7cBFUfydndEQI3dkoG2p1kwsLoSsK6F+SsBGnxLyi8+ANzKTQ95SCYBblFT+3Eh0xGHwyK3DOa4O4y7ej3LLr27pBie/88FBIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EeDiUl6IeEIVLemONuYP1oSqQR1pIWcp1WTKF7bD7XE=;
+ b=CMZlDmrhoifm/ZDqAdbeAgWmtbZOvnfGt6AKK0MZcSSR/TDb6ZOX+94gSgA6cMUcuSJu0GKfoqzooIei4f3ymzGp3q8sLm62pmdLeeYcdkDWMe8Zv+fg2Gz/LCCk4WTgStXa7EEzDivMvJISd4Z2lJDxbAKLSld40+MONGS+imuyWWswrI75CGbXJQzZXjUBV7IGaUqBXIjfhHgHqRxFiwfZehoQGyvjX4+k0+fz1/XntAxxFzjXQoKlycDDnWx+zlZYoH2WS3m0d5nWjoRkrpCmb1HbP7EOiyqnh7hiF83QcYOAQQBve8bOvhCLr2PQ++jYQMdWqlRh2cquCxUJ1Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by VI2PR04MB10713.eurprd04.prod.outlook.com (2603:10a6:800:275::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.26; Wed, 5 Feb
+ 2025 00:59:10 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%3]) with mapi id 15.20.8398.025; Wed, 5 Feb 2025
+ 00:59:09 +0000
+From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Subject: [PATCH 0/7] rtc: Use devm_pm_set_wake_irq to simplify code
+Date: Wed, 05 Feb 2025 08:58:18 +0800
+Message-Id: <20250205-rtc-cleanup-v1-0-66165678e089@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKq3omcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDIwNT3aKSZN3knNTEvNIC3RTjFBOj5NQk4xQjCyWgjoKi1LTMCrBp0bG
+ 1tQAfhjmRXQAAAA==
+X-Change-ID: 20250205-rtc-cleanup-d3d42ceb3d28
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Daire McNamara <daire.mcnamara@microchip.com>
+Cc: linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ Peng Fan <peng.fan@nxp.com>, Antonio Borneo <antonio.borneo@foss.st.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1738717111; l=1285;
+ i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
+ bh=pP+512FswvEkhUvYgW6pJ6UUMbdRWOKWIYksnsa3uUs=;
+ b=+W7fD9ICdwZ5wZUvU82MMMvZi6KEtqNkni2NT6mG9YQFa4tO4wzeqCDfXbSZzfq880kJIl8iy
+ UWx0f5MvPDTDHpOTkxHHIuQVUeBKLQzJtg3r1EhgBkqLLqExdIoj85A
+X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
+ pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
+X-ClientProxiedBy: SI2P153CA0034.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:190::17) To PAXPR04MB8459.eurprd04.prod.outlook.com
+ (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-	micalg=sha-256; boundary="ziNpAt5qh7l7+s0D"
-Content-Disposition: inline
-In-Reply-To: <20250116062641.366679-1-nmydeen@mvista.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|VI2PR04MB10713:EE_
+X-MS-Office365-Filtering-Correlation-Id: bfe177b3-3703-403f-3e97-08dd45804c36
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|52116014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?c2N0SERVcHNZaGV2Nm5oOUp5eXpsZEJreW9tbUJ6UHdQWTlabmhUdUg5dlpB?=
+ =?utf-8?B?cGpKVFhkSVhYNTVwUGY1ZjF3Um8rNzZNWGhYbU8vaXpZYXRCOThuMERDVjVl?=
+ =?utf-8?B?OGFZZW9lbWsyM0g5dk4zeXpiTWRZZWRONCt3RkNqMkxBRVZSdHFqN0YwdFJo?=
+ =?utf-8?B?REdwd1FHWTBhNDQyZkg4L20zQkZ4K0dwaTY1RmdLcjVVNjM0WGtNZGVXd3VQ?=
+ =?utf-8?B?VTFQSkpjWHJ6MmV5SjZIenZ3Q1lxUzd6bEQ3aWcwdnZOZ1M4YzA2SEtmQk9F?=
+ =?utf-8?B?dm9RVTlocm9GMUdCbG1CYUVUcFBPNFUyWHp2NGh5b3dVZFUwTUFJbk9uNXFj?=
+ =?utf-8?B?M3E5MzBsM3Z1emlNa1ZWT2dmWmFteDJlTEZMY1UrTzVRYWUzL1F5czdwTk5Z?=
+ =?utf-8?B?c3Z2U0RsMTVUU3VyMTRtZzg3Qk9zZSsyaC9leXA2TW42dGZTOVE4aVp1Wnlt?=
+ =?utf-8?B?R2hDdHdEcDYwbDVJV3ZwVEJ4RTZjdVVITXVGYVhjcmE3T2VGbHhQZTUyK0RZ?=
+ =?utf-8?B?L1gyUDRLM29saStHWmpjOWZLSTFOTUtqYjZubU5MU3ZGYW5wZnZWV1R6UTBI?=
+ =?utf-8?B?QTlZcjhSeFN0TFRxUDFuWXRCQVpPYVJxRXhvNFpYR0pvU2JpQTdWS1dRY0hN?=
+ =?utf-8?B?M3NERllEYll4TlhIb1paY1NxeHVYTnYyaW1ZS3NTK1UwbVJUMzZzOWxMUmNT?=
+ =?utf-8?B?aVdYWWhWVnhTUWJxNm53T29GVjJIb0VLUENQaWpxLzc1d3g2Zy9sejlhRVZS?=
+ =?utf-8?B?bkpYQmJiTE9KWUJZODM5eUc5SFREZlBidm1RVlBIMEdsbmQxSFIxWWRnbHpU?=
+ =?utf-8?B?cS8vSTZFRWF1S2p4ZEpDaElRU1NEaGRmOGJ2bTZSN0ZJT3pxVTJFRW9Lc2NN?=
+ =?utf-8?B?U1hSSG51VzAvVXQrRHI5RENlVXNvcFd0RmRnT2dwbHhHQ1A3S2l1aVJNS2Rr?=
+ =?utf-8?B?MmRhdnV2RU16V2Q1eGk4N1ZNWERSdEpvVFhrZHVXU3VhK1VDMHhDOFl6OWQz?=
+ =?utf-8?B?Uysxbzd4S0FuWUcyZy8rWEtFM2J1WUpYYk1RL1ErU0dUY1NuSE0vSTh6UHpO?=
+ =?utf-8?B?WGFGcFQzZEs4ZVBaeTF2TmZ2eUwwOXlENjRqc0JaUzVVWU1pVm5zU2tqL29o?=
+ =?utf-8?B?a3l0MlBDZy9tVFVoRTJ4di9nUjJQWUJTNjEyM1IyTWx1cWdWVUF0Um9DNXc4?=
+ =?utf-8?B?VzJ6ODlXemNCc0s5V3l6R2NKUTJwZDZCZHJVdmd0UEI3eXpHcUw2ZVptOXVJ?=
+ =?utf-8?B?dmpjSThPM1FpOG9pM0JCZDBlSGpNM09zNVg2SzV4TkVDVzBGeWxvL1YwRUkv?=
+ =?utf-8?B?WlcwRTBWeTR1TGRBWUU1aklyU2VaWEZSOVJGSk1wVDJpb25nL1BkY1d0SXBK?=
+ =?utf-8?B?NHlMbTVITDN1dVdNRHZqRjRkWWdwN1RrblZCa2M1dmwvMHhRUWt4VjFrRkhP?=
+ =?utf-8?B?RXMzZTNaVTF0VDNwUXJFYmlIUHI5VVp1bXZ4cHd6WGpOT3dlblJBL0pNcjhj?=
+ =?utf-8?B?UllGTmtGZWg1MTRZUE9SWHYxZFQ3ejlFWnpQL3R0V1IxWjNYdlJPc2NsTVh3?=
+ =?utf-8?B?MjN2Yy9STmhCeHdRNm9HdTMxTWhMR09HRUJSTkNUT3R3R2dGVXRobVZESlZ4?=
+ =?utf-8?B?M1IxWm1KUnlCMjJMekYzaVNmTmZZNUlpVWlOZ1Z3Ui9ESTlTcUlnQURpLzdU?=
+ =?utf-8?B?OTFrRHJDYkZLQmJienBqZ1p0T0xxaHZYNkV1NU1rM29kRGlSWmV3SUhTMTEv?=
+ =?utf-8?B?dUkwUG5wdC9JWlI5bXVwV1FIQmFuSHBoVkNFZVppSjVIZFZ6VUVHWWpwTTRK?=
+ =?utf-8?B?bGNkVFhLYVFNWXR2SHhHbzBESlZuV3dCbm9GMGloNWdDTzlHM1V4V2xWdXI3?=
+ =?utf-8?B?SVMxQ3hEbTljSkFabHg4a29VdEk4TGpLbGMxQy9hWG5ST3c9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OUhnRTd1eFFiRWZSc2dUT3YzcWVkVWRDQVhLanQ1bjlQQkF3RklXZ0dzSUdO?=
+ =?utf-8?B?b3JzRGg3WWZjWnhoR0VmS3hFaGRMSS9WZVBGbHVDNVRnaTdlLytjbUxrZVox?=
+ =?utf-8?B?VUFWay91dDU2ZXpDYlR3Ynl4TGl0dnAxcUFuZXcvZVRCNTRWS1NPMENOdDly?=
+ =?utf-8?B?OTg4OHdKUlJGdDljN3k1b00vbGZiZGFTUm5xRzhYMGc4eDJnOU1waENDN2Nu?=
+ =?utf-8?B?MFlEUmFoVVkxMXkzUUVDSjJOQ0RaMlFvSno3VDlwRU5VeGR2MTdqRmlKWXY0?=
+ =?utf-8?B?eHRNSHE1T0ZXT1AzZzI4aWc1Mzlhbm9HMTQyMUVyd2lMUFQwVWF5ZVp3dm1Z?=
+ =?utf-8?B?aDRwUkZnOERrelVYa2p6ellJRU1XMjJzczJPT050cW9NYlVKaTRsb25QSEpR?=
+ =?utf-8?B?b3hRcktpa3RxVDViQ1pqRVZQT2U4N3AyTGEwc0JhbHFPUnZFenR1SmhYaVlp?=
+ =?utf-8?B?SlN3Z0N3SXRjL0MxdjBQY3VhR0ZXblNmN1prVU8rc1RXaFV0YXFaS0lXR3NM?=
+ =?utf-8?B?dUVtTWpvWUhtQjRYRitDSGJBRm01VXZKM0VaOEZudkJmNWpGTmxzRXgzUDFQ?=
+ =?utf-8?B?TTM4V205L1lVQVRmb1RCTXJzTmZvNjliUktnMllJRml1d0ZxUU5pU2JSUFp3?=
+ =?utf-8?B?a3pNN3hhZ1BHYkNmZXdaL0dtWFNHM09Zb1ZSYXgzajJmb09TOVJsV24zSGR1?=
+ =?utf-8?B?Qmp0TFhWNG1pVzFhTENlKzVSVDd0V2d2cWRRVmJlYStIcjZNT3FhRFYvZ3Jr?=
+ =?utf-8?B?ZFp3LytuK2lKTFBCOXQwNDhQM21YT2dac0RiTVF5QllzMDFmRzN4S1NqY2ZL?=
+ =?utf-8?B?QllvNXh5VFUrQVFjZUltbXB6VnIzVlFDNWIvTnBYa1BuVko1L1NvZ0dsVXpz?=
+ =?utf-8?B?ZTNJbkJNL1BITmxicXNJdGlIUURLdFR6YjVLalBJM3dsVitwMGdlNDg2c0Yw?=
+ =?utf-8?B?TnBxVXpBT1dtV3FNL3Y5TVRzWlZYNExRVnphcE45U2RCbU9DOVIvbDRKRXJU?=
+ =?utf-8?B?cEhocXVSazdqM1hoS2NCSEdjRW8zVEFPWlBaOUMwdURNcFdTOHdVVk5wSFlq?=
+ =?utf-8?B?R2FMMHRySEFLdGJsazhabTZuNWR3aTJzandCUlZlR2VTSGE1K3ZDTXpBNkRz?=
+ =?utf-8?B?ODNhQUJIVFZEaWNXTnF4RXY1MHFoa2xNb2xtdnUwTGl2UURjR3N6MHdybVVw?=
+ =?utf-8?B?YTAxaU5PQU0rWWZYWkhsZXkwS0xFaXp4NEx5SmtFZzZKM2E5ajhzY3hrb1lC?=
+ =?utf-8?B?d3lNWjRmL05UOU1MaU1COUk1TzN4NXBIMzJ1T2VXQlVsRk4ycWJXcTR2ajU4?=
+ =?utf-8?B?Uk5nOXh3SGJDdlRhSXFnU3F4NmNFb1R0dmlDWEtTV1E0OFJPS2Qya3d5NEVF?=
+ =?utf-8?B?YXhmOFNKU3NvUncwMEZOWGNGSVRxN2lESks5eFBab3NtaGNMRUgwclZDVkVG?=
+ =?utf-8?B?WGVQUVVWaDEreVAzb0JkT1RKeGVQZGpSMis2VVBpWmJYMVV2NU81VW1vSVM2?=
+ =?utf-8?B?QUJiNzdodk9MZzVyL0cwWXo5MjVjRXNDM3AwZG5LK0ErZTVrQ3A0cU95VkhD?=
+ =?utf-8?B?RmJBWHNDSHI0YUxLbVp2eEl1RzEzMFNSdUNZOE0rL2ZmUnhRaWh2bGVFTFBz?=
+ =?utf-8?B?cndFb05Mb2N0SjhpSEpDYU9DR2JsUHpHbHhVODgvTHBTdmlsZzNoRVZldXhF?=
+ =?utf-8?B?K2JZZEk1S1VoTUVRendtTWF1NjRaMjdTbUREc3hjSXhPc3hld2F5OHN5dmdj?=
+ =?utf-8?B?QUVsNEE2NFQ2VFI4bHJ1cGFySE9kYUxNMWFxWitlaDhSdzk4bDNKTnRLQU04?=
+ =?utf-8?B?UWVtTmtRSXNGVGszWm5xZ2gvWTFrZVF0a2x1SzRLNTBEM0xWZUxTMERjWGNG?=
+ =?utf-8?B?RUpUTy9GU1dmaVNNSDhrZEsvdTA4Z1RNRDBVdklLR0FsOGdIY0lTZE5BeG9h?=
+ =?utf-8?B?N1lXc1hoWXZhNjZRK3BScm1xb1BnWk9wYlJBRnVaUGp5cUJSRS9Ubzhic2M2?=
+ =?utf-8?B?UE50cnhsaERsOC9QV3lTa250dHQvU0JPb3hqNkRkRUxtajZ3QTN6MzQ2WEVB?=
+ =?utf-8?B?dWZvNWdhUU5FM3l6SHlDVURnYTlBdFl6SlhHejFXVFdKeDl2eDRiYVd1ckFp?=
+ =?utf-8?Q?FYDQ/rIAdjYp5xScnHJ7YC3U8?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfe177b3-3703-403f-3e97-08dd45804c36
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2025 00:59:09.5409
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ztluzq+0mSGtA4BT4cZRRKI6QhFS0r8uz2Ik368vRc1nf8+3yDWrWDLO9QqmLiIk6+AyawpFywxiySEFKmCPOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10713
 
+This is a pick-up of patch 6-12 from patchset [1]
 
---ziNpAt5qh7l7+s0D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since devm_pm_set_wake_irq is in 6.14, so resend the rtc parts.
 
-Adding Alexander
+R-b tags from Linus Walleij and Antonio Borneo are still kept.
 
-On Thu, Jan 16, 2025 at 11:56:41AM +0530, nmydeen@mvista.com wrote:
-> From: "A. Niyas Ahamed Mydeen" <nmydeen@mvista.com>
->=20
-> The ocillator on the m41t62 (and other chips of this type) needs
-> a kickstart upon a failure; the RTC read routine will notice the
-> oscillator failure and fail reads.  This is added in the RTC write
-> routine; this allows the system to know that the time in the RTC
-> is accurate.  This is following the procedure described in section
-> 3.11 of  "https://www.st.com/resource/en/datasheet/m41t62.pdf"
+[1] https://lore.kernel.org/all/CAJZ5v0jb=0c5m=FeA-W-aG30H4706Ay_xCHTsiC1S-7MuGxqTQ@mail.gmail.com/#r
 
-Any comments on this?  I just saw that Alexander wasn't on the email,
-not sure if they are still involved.
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+Peng Fan (7):
+      rtc: stm32: Use resource managed API to simplify code
+      rtc: nxp-bbnsm: Use resource managed API to simplify code
+      rtc: ds1343: Use devm_pm_set_wake_irq
+      rtc: pm8xxx: Use devm_pm_set_wake_irq
+      rtc: ab8500: Use resource managed API to simplify code
+      rtc: mpfs: Use devm_pm_set_wake_irq
+      rtc: pl031: Use resource managed API to simplify code
 
--corey
+ drivers/rtc/rtc-ab8500.c    | 11 ++---------
+ drivers/rtc/rtc-ds1343.c    |  8 +-------
+ drivers/rtc/rtc-mpfs.c      |  8 +-------
+ drivers/rtc/rtc-nxp-bbnsm.c | 29 +++++++++--------------------
+ drivers/rtc/rtc-pl031.c     |  6 ++----
+ drivers/rtc/rtc-pm8xxx.c    | 12 +-----------
+ drivers/rtc/rtc-stm32.c     | 10 ++--------
+ 7 files changed, 18 insertions(+), 66 deletions(-)
+---
+base-commit: 40b8e93e17bff4a4e0cc129e04f9fdf5daa5397e
+change-id: 20250205-rtc-cleanup-d3d42ceb3d28
 
->=20
-> Signed-off-by: A. Niyas Ahamed Mydeen <nmydeen@mvista.com>
-> Reviewed-by: Corey Minyard <cminyard@mvista.com>
-> ---
->  drivers/rtc/rtc-m41t80.c | 70 ++++++++++++++++++++++++++++------------
->  1 file changed, 49 insertions(+), 21 deletions(-)
->=20
-> diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-> index 1f58ae8b151e..77c21c91bae3 100644
-> --- a/drivers/rtc/rtc-m41t80.c
-> +++ b/drivers/rtc/rtc-m41t80.c
-> @@ -22,6 +22,7 @@
->  #include <linux/slab.h>
->  #include <linux/mutex.h>
->  #include <linux/string.h>
-> +#include <linux/delay.h>
->  #ifdef CONFIG_RTC_DRV_M41T80_WDT
->  #include <linux/fs.h>
->  #include <linux/ioctl.h>
-> @@ -204,7 +205,7 @@ static int m41t80_rtc_read_time(struct device *dev, s=
-truct rtc_time *tm)
->  		return flags;
-> =20
->  	if (flags & M41T80_FLAGS_OF) {
-> -		dev_err(&client->dev, "Oscillator failure, data is invalid.\n");
-> +		dev_err(&client->dev, "Oscillator failure, time may not be accurate, w=
-rite time to RTC to fix it.\n");
->  		return -EINVAL;
->  	}
-> =20
-> @@ -227,21 +228,60 @@ static int m41t80_rtc_read_time(struct device *dev,=
- struct rtc_time *tm)
->  	return 0;
->  }
-> =20
-> -static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *in_t=
-m)
->  {
->  	struct i2c_client *client =3D to_i2c_client(dev);
->  	struct m41t80_data *clientdata =3D i2c_get_clientdata(client);
-> +	struct rtc_time tm =3D *in_tm;
->  	unsigned char buf[8];
->  	int err, flags;
-> +	time64_t time =3D 0;
-> =20
-> +	flags =3D i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-> +	if (flags < 0)
-> +		return flags;
-> +	if (flags & M41T80_FLAGS_OF) {
-> +		/* OF cannot be immediately reset: oscillator has to be restarted. */
-> +		dev_warn(&client->dev, "OF bit is still set, kickstarting clock.\n");
-> +		err =3D i2c_smbus_write_byte_data(client, M41T80_REG_SEC, M41T80_SEC_S=
-T);
-> +		if (err < 0) {
-> +			dev_err(&client->dev, "Can't set ST bit\n");
-> +			return err;
-> +		}
-> +		err =3D i2c_smbus_write_byte_data(client, M41T80_REG_SEC,
-> +						    flags & ~M41T80_SEC_ST);
-> +		if (err < 0) {
-> +			dev_err(&client->dev, "Can't clear ST bit\n");
-> +			return err;
-> +		}
-> +		/* oscillator must run for 4sec before we attempt to reset OF bit */
-> +		msleep(4000);
-> +		/* Clear the OF bit of Flags Register */
-> +		err =3D i2c_smbus_write_byte_data(client, M41T80_REG_FLAGS,
-> +					flags & ~M41T80_FLAGS_OF);
-> +		if (err < 0) {
-> +			dev_err(&client->dev, "Unable to write flags register\n");
-> +			return err;
-> +		}
-> +		flags =3D i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-> +		if (flags < 0)
-> +			return flags;
-> +		else if (flags & M41T80_FLAGS_OF) {
-> +			dev_err(&client->dev, "Can't clear the OF bit check battery\n");
-> +			return err;
-> +		}
-> +		/* add 4sec of oscillator stablize time otherwise we are behind 4sec */
-> +		time =3D rtc_tm_to_time64(&tm);
-> +		rtc_time64_to_tm(time+4, &tm);
-> +	}
->  	buf[M41T80_REG_SSEC] =3D 0;
-> -	buf[M41T80_REG_SEC] =3D bin2bcd(tm->tm_sec);
-> -	buf[M41T80_REG_MIN] =3D bin2bcd(tm->tm_min);
-> -	buf[M41T80_REG_HOUR] =3D bin2bcd(tm->tm_hour);
-> -	buf[M41T80_REG_DAY] =3D bin2bcd(tm->tm_mday);
-> -	buf[M41T80_REG_MON] =3D bin2bcd(tm->tm_mon + 1);
-> -	buf[M41T80_REG_YEAR] =3D bin2bcd(tm->tm_year - 100);
-> -	buf[M41T80_REG_WDAY] =3D tm->tm_wday;
-> +	buf[M41T80_REG_SEC] =3D bin2bcd(tm.tm_sec);
-> +	buf[M41T80_REG_MIN] =3D bin2bcd(tm.tm_min);
-> +	buf[M41T80_REG_HOUR] =3D bin2bcd(tm.tm_hour);
-> +	buf[M41T80_REG_DAY] =3D bin2bcd(tm.tm_mday);
-> +	buf[M41T80_REG_MON] =3D bin2bcd(tm.tm_mon + 1);
-> +	buf[M41T80_REG_YEAR] =3D bin2bcd(tm.tm_year - 100);
-> +	buf[M41T80_REG_WDAY] =3D tm.tm_wday;
-> =20
->  	/* If the square wave output is controlled in the weekday register */
->  	if (clientdata->features & M41T80_FEATURE_SQ_ALT) {
-> @@ -261,18 +301,6 @@ static int m41t80_rtc_set_time(struct device *dev, s=
-truct rtc_time *tm)
->  		return err;
->  	}
-> =20
-> -	/* Clear the OF bit of Flags Register */
-> -	flags =3D i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-> -	if (flags < 0)
-> -		return flags;
-> -
-> -	err =3D i2c_smbus_write_byte_data(client, M41T80_REG_FLAGS,
-> -					flags & ~M41T80_FLAGS_OF);
-> -	if (err < 0) {
-> -		dev_err(&client->dev, "Unable to write flags register\n");
-> -		return err;
-> -	}
-> -
->  	return err;
->  }
-> =20
-> --=20
-> 2.34.1
->=20
+Best regards,
+-- 
+Peng Fan <peng.fan@nxp.com>
 
---ziNpAt5qh7l7+s0D
-Content-Type: application/x-pkcs7-signature
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIINIQYJKoZIhvcNAQcCoIINEjCCDQ4CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0B
-BwGgggpVMIIFXzCCBEegAwIBAgIQD/rh8xorQzw9muFtZDtYizANBgkqhkiG9w0BAQsFADBl
-MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGln
-aWNlcnQuY29tMSQwIgYDVQQDExtEaWdpQ2VydCBBc3N1cmVkIElEIFJvb3QgRzIwHhcNMTkw
-OTIzMTIyNTMyWhcNMzQwOTIzMTIyNTMyWjBqMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGln
-aUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSkwJwYDVQQDEyBEaWdpQ2Vy
-dCBBc3N1cmVkIElEIENsaWVudCBDQSBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
-ggEBAOqxRa06rLwKBvrDb/qQ8RtXfeKA9o0A42oZbLF4GYr4Xdt9JE8r3PJRIOUZD1U3mEln
-4S/aZoS54Q+5Ecs3q2GGT/Z82VeAPLeGvJoT0LS5t/zXeUcbMuDFWgyj33kiesnuusnOWvpI
-SoxN+oBH4oo0+oUiHI65mMjMAlb93x6sabh9kKvHQvHC4x2u7wYv5+NXjnbOhJS/1NjGq+ug
-LMXeldFMz0O5qFIDpn3aQGU0htyJQ2SZyxEqlUrgunsrYj9wgfW7XuhAi2j0y5d9oMT0SuVe
-KFFnQhTEk5B3fq+OBOW0AU2JdW1r929UtRbAr8RpLt05WI2G2RNVVlHYaU0CAwEAAaOCAgQw
-ggIAMB0GA1UdDgQWBBSlYiBQ3LtbV5etI4814lRsqX75TjAfBgNVHSMEGDAWgBTOw0q5mVXy
-uNtgv6l+vVa1lzan1jAOBgNVHQ8BAf8EBAMCAYYwTAYDVR0lBEUwQwYIKwYBBQUHAwIGCCsG
-AQUFBwMEBgorBgEEAYI3CgMEBgorBgEEAYI3FAICBgorBgEEAYI3CgMMBgkqhkiG9y8BAQUw
-EgYDVR0TAQH/BAgwBgEB/wIBADA0BggrBgEFBQcBAQQoMCYwJAYIKwYBBQUHMAGGGGh0dHA6
-Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBFBgNVHR8EPjA8MDqgOKA2hjRodHRwOi8vY3JsMy5kaWdp
-Y2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURSb290RzIuY3JsMIHOBgNVHSAEgcYwgcMwgcAG
-BFUdIAAwgbcwKAYIKwYBBQUHAgEWHGh0dHBzOi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwgYoG
-CCsGAQUFBwICMH4MfEFueSB1c2Ugb2YgdGhpcyBDZXJ0aWZpY2F0ZSBjb25zdGl0dXRlcyBh
-Y2NlcHRhbmNlIG9mIHRoZSBSZWx5aW5nIFBhcnR5IEFncmVlbWVudCBsb2NhdGVkIGF0IGh0
-dHBzOi8vd3d3LmRpZ2ljZXJ0LmNvbS9ycGEtdWEwDQYJKoZIhvcNAQELBQADggEBAHZrbCQC
-o3MAIqR0kekGYrC70EAGRDRq11COufNEXhcpv3YH6BMhUoVinPPNgfo5HPrZAFrLK/KPXYdJ
-dgkASGsINabAfY2ljUaJwKlpIewwjS6KuGEn59MgidaAUPh6lbetIoRsLhCqCzAnX1aL99fj
-CMf4NMWLUC8TqotnnrKNuw4JSjx4fcQs+U5T1bbgnyDx+8ybONuIEDvinHdKDu2VjoECzez2
-y/1IVTPlh57zBfjHJQFqLWzHdou8M+ucdJtr2swXII6s3nkq4pfEn7KnbzMS9quFSuyOGILc
-g/3qVwaHNLM5R+8nB5gPI5+u5Uh56w1i+9Ds1pjYAiTHdeUwggTuMIID1qADAgECAhAImztE
-U4o9odkEsuVgiJc8MA0GCSqGSIb3DQEBCwUAMGoxCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxE
-aWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xKTAnBgNVBAMTIERpZ2lD
-ZXJ0IEFzc3VyZWQgSUQgQ2xpZW50IENBIEcyMB4XDTI0MDUwMzAwMDAwMFoXDTI2MDUwNjIz
-NTk1OVowQjEcMBoGA1UEAwwTY21pbnlhcmRAbXZpc3RhLmNvbTEiMCAGCSqGSIb3DQEJARYT
-Y21pbnlhcmRAbXZpc3RhLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJm1
-ZE9brEiQnF7EKiV+aYzHyqPFJ+z1wwdJ4wvNiwUCgXJejBxFj04Z7A62Yx6Sp59vfjbo05eA
-IOyaLOFp3vbMBQAe8Qe4XrFv7wPcKZxwS+sgCuBvNs4NVGKYGjiKZW8WPq9ZcEl5BM8BLMrl
-rchAUHJJcMdcEJUsed6rIB//EtnGOe74/vR1Tz3sN1WzC1Wa9COvcbLgVvWC/o4WysUfC9+f
-9/5JzAiib7U7S/iRigkmEahibZgYKB7y6F1v9hxUwHxfa7GtJ8cv6LtRcPLhAO86GgXMfpgq
-k3fxzQu8uwACpINbmQNLcRzg6mHFDYRK3mFp4puUnHO5EUJ8RgUCAwEAAaOCAbYwggGyMB8G
-A1UdIwQYMBaAFKViIFDcu1tXl60jjzXiVGypfvlOMB0GA1UdDgQWBBQiHrUOKuj1vJe3OXAz
-gOP5Qbl2FTAeBgNVHREEFzAVgRNjbWlueWFyZEBtdmlzdGEuY29tMBQGA1UdIAQNMAswCQYH
-Z4EMAQUBATAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwME
-MIGLBgNVHR8EgYMwgYAwPqA8oDqGOGh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2Vy
-dEFzc3VyZWRJRENsaWVudENBRzIuY3JsMD6gPKA6hjhodHRwOi8vY3JsNC5kaWdpY2VydC5j
-b20vRGlnaUNlcnRBc3N1cmVkSURDbGllbnRDQUcyLmNybDB9BggrBgEFBQcBAQRxMG8wJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBHBggrBgEFBQcwAoY7aHR0cDov
-L2NhY2VydHMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0QXNzdXJlZElEQ2xpZW50Q0FHMi5jcnQw
-DQYJKoZIhvcNAQELBQADggEBADkBdRyx41eUGmsYXBXt3WCsYeDr26rJL7lbx2PvqaZyRCJm
-J9CN2TljF0YHsXSPU+un1RfUlYz+PtcNFIqNuSf3N5fGU0bEpSzXozd/nZ32yWFLkd5CzYyN
-F1xrpbyP2a87jKM0uqEHXZFl7NPiAfEchjFCddciHTOXjN66L+kJ/ZsOoNJLG8yFN401EGew
-Nk8z/hJjWqR7DG0/YWn9h7jQ5SmqkqyhLwTO9s6KoByacWuKpKWSc/DaOuWmROlROrOA1hD8
-0sKqC6jGeLxNpiYzSwBy8qKF0weZdhcHUeO1HOm1csrvWl1UghnlR7SLir3bb5LiesTVvSuR
-Q3aDywAxggKQMIICjAIBATB+MGoxCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJ
-bmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xKTAnBgNVBAMTIERpZ2lDZXJ0IEFzc3Vy
-ZWQgSUQgQ2xpZW50IENBIEcyAhAImztEU4o9odkEsuVgiJc8MA0GCWCGSAFlAwQCAQUAoIHk
-MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI1MDIwNDExNTQ0
-OVowLwYJKoZIhvcNAQkEMSIEIN4MXWdfSrsHdzw/BjozyzNEvlqxci0qjIppNGbuDv5BMHkG
-CSqGSIb3DQEJDzFsMGowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIw
-CgYIKoZIhvcNAwcwDgYIKoZIhvcNAwICAgCAMA0GCCqGSIb3DQMCAgFAMAcGBSsOAwIHMA0G
-CCqGSIb3DQMCAgEoMA0GCSqGSIb3DQEBAQUABIIBADS9OVeUgy3rRkeKDmr+AGO5WZ3P0rzX
-M4k/RaAJa8fxz6dKjA2pFQL14TKLJJzvd46Fn++Xz56t5PKPQ+U+T5AqCfhcuoj4M3FFa1Kk
-HQZK1aoIiYoQaDwqgYXVeRuI2gMDpLDs/Iy7PcFulzmCtj3VhweiWdFgUhwegsN/XbEFj1ju
-oznDyy0J7+ZrWwurbCpcf6gsgI+m2yw1KSFZJVuQxnbPq/ZDcCo3Vv36xfuSivLowf5P3bWa
-YAneM3l0ZjMtX1R5eL8Y6IC4qtdkV/1PPfmkuWR75DjdnKUuVqBvnzvNMpBNc7+FJvS8CixR
-AilEoBIQ5buTXyYHpiayhxI=
-
---ziNpAt5qh7l7+s0D--
 
