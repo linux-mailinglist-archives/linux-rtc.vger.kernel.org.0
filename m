@@ -1,359 +1,143 @@
-Return-Path: <linux-rtc+bounces-3134-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3135-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20217A2F42E
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 17:51:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19D3BA2FB8E
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 22:14:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6024162E90
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 16:51:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7C413A4FB9
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 21:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E7524F5A1;
-	Mon, 10 Feb 2025 16:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C3124C670;
+	Mon, 10 Feb 2025 21:14:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CV4kd5Hy"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ZCmQHn16"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A7624BD14;
-	Mon, 10 Feb 2025 16:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BDF264634;
+	Mon, 10 Feb 2025 21:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739206281; cv=none; b=AnEgZ8rqBmtzPYl98IkLZtmoOKMvZoVNmZ4UarrgCKUZZHvqVc6L2UdBEeCVGQn7O3J83fGkIAtkmtQp1K2L4Easa3K4QOzlhV74d0jtQc15ATbP87hgHUHECxHANIxMKl55+BcgurnZHp/TL8Bc5Pw9ovDZ74qcIcWdytUVQvY=
+	t=1739222051; cv=none; b=ZYqmni5xE64Ak46QzhBjtqV97nKyykBbuOSMBCzvWLvV20V1Msdj2bA/6udMx2zkiwkZXff2h/WAnNHKhE4aTIbP79yqTREavt7tLvqzL8Dy0gbDQMiox2nkQcA+XB+8Af1TkVbTjcu840o2KmOL30IzVBenXf+iKQCHt6I1Jcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739206281; c=relaxed/simple;
-	bh=U2vjziE5GMYK6ByV+mMd6XOjSQjKurIySf6gTUHivws=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PC/mMezImWVSZd9rIWB2VR+JDI3EIl0CD84WuaJvt5SrPidmu8vVRkovSTX0EBnK0Nr9z6/fjxOgtaSgXkCKlastQIZf9c3do+XP4kqfmhu0s+UCIlx0QS2W0gKnylrRuLPernaO3gNm7w0ByvH17L/IxAVs+xjhCczQxg+pHg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CV4kd5Hy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2216C4CEFB;
-	Mon, 10 Feb 2025 16:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739206281;
-	bh=U2vjziE5GMYK6ByV+mMd6XOjSQjKurIySf6gTUHivws=;
-	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-	b=CV4kd5HyY99FFRw4Ycx+q2mq0AlX+Gn0a0Fd11V0dPzAFGOrRW82W913gaDL2yCIU
-	 fow19XuE3anLwm4AK0bGZVa0/SP15/ET0iRfjrUbm1sh6OSD9kV3Vfksl/HTJVp6Tg
-	 JwZ3+BvouBGe/N4hjqcl/BBhYrMGU7VL9IZY1Avr4cDF9BIx3jwoghwlL/MI5vVDSo
-	 bRakNDR9WC0ptgiva6vRa/7r7s8MctEf33cUYsuMghwfLXsrITacUvzIEbHFWkLd6N
-	 uEaTUNuK7Zmj3TUHD3v5p6ilKLdGUoOGtytx4JBtVlQQnPtq6CIcgGDlxbo6UZFHUL
-	 sYFBp8ll9SH7w==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30795988ebeso46289151fa.3;
-        Mon, 10 Feb 2025 08:51:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV9dFrk0/Oi7mxCNoy2E3vhsIX96vjQz5BhYLKRwZAITUuQorMb4V0RYp9P33gpUMbk4jZl/6CQ+7w=@vger.kernel.org, AJvYcCVUTtuS5+1Z7r/drUv7RQZnpcZE+xRcJGciKuoxbRUWQuGUU1sNP7OR3IT8LVy4PkYJW20WVpbljA7EFvo=@vger.kernel.org, AJvYcCVXUhh0BpUX+5neD/jf8IDzAkEu4G1NA9Ks512wcSS3Ie3759NDnfc2yMxLR80I1p7018WYjhBuJoDv@vger.kernel.org, AJvYcCVrOPJvd6p39VCuWiciCJdPqI2JwuY4X6J6/djLRXuTd9DkSq5nFZwam/Bog0KbUQGAeIYR7uifrFjJ@vger.kernel.org, AJvYcCXLcw2J/L6CNuFpNvKYZI7U7di6KZcqnFduTQS6ZUwBFLJSp2KnoaWfvQyFU6xiZPJbTA4KIA8Iqs+4pMlt@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4IACsddk3yPqYa4kyvPIjwHqN64E+buY9TDPQ1uAcEj7LelgG
-	/hH2JrDbx9CyI0Whr3n/GT3DYpuKmNvnDYjdWDJitHby7zMfHP4tnTu6reHpsjJ5TyxjOY0U78b
-	xPQw4tiP6v3NhpRvwYUkUTNRKpEI=
-X-Google-Smtp-Source: AGHT+IG5t025yFQgv5+IxDx2jt/zCEdWoaia7+P9FBemxbZfy7NIWzyqdgtOgMR7KudhZEJun+VV7TSIGjzCCgMPaoc=
-X-Received: by 2002:a05:651c:2129:b0:308:f01f:1829 with SMTP id
- 38308e7fff4ca-308f01f1f54mr12808581fa.6.1739206279007; Mon, 10 Feb 2025
- 08:51:19 -0800 (PST)
+	s=arc-20240116; t=1739222051; c=relaxed/simple;
+	bh=41SDJqeOvWQc658it1sXNAN/P9R8aH989E9RDDpERWg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=T1LcTcSuh6goaA8x579E50AGBYEEA8fYAnC7jUnYQu1P8kpIdNgTFZ3WNxtInfgYx620EzI+j8GnnwAZf8pZd/V4hRI5BLwxtaOh250f8ZkqAHMGnnTnWOMQqOKZmBuxcMYkTXFlvqr4rLe/8FzmkGd1LKSvVXkOZVnKBC9AsNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ZCmQHn16; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1739222050; x=1770758050;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=41SDJqeOvWQc658it1sXNAN/P9R8aH989E9RDDpERWg=;
+  b=ZCmQHn16m31iF71sVc6PQZAecx16XZUnV/CDxsZygYvk7X1TNb+LYobl
+   /4xX4leDmaNW8YI0qMeHAVu7HZSfRIK8r6k4jWe4Rd9NGdccnl02fNzIc
+   fyeTpWJd+SfFgtvsrgvLLkuHr6+T/qDOj5TSJOz/fkdCFXrCUMHwdPInX
+   Q6xxrNMsW2+CBqsra5I2DxXG4k3hRe/HMl4w2t/Th/s+IS7QQon6/nd+f
+   xd/3/HFzZ/A9522yZORgTeGNqbcc3fIRNZzI2tOfurIDlfx+TCvNlZjLB
+   yeX+1jlF8cX/5ZKcHZyEpnJUmfGkh97cH7SFkNEveTFK2PS3WykdK4C1Z
+   A==;
+X-CSE-ConnectionGUID: AYqW9AG9RbOJ2Xf8Pt97Yw==
+X-CSE-MsgGUID: 0K7I9XjESoy6ucluOHAdrA==
+X-IronPort-AV: E=Sophos;i="6.13,275,1732604400"; 
+   d="scan'208";a="205027961"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2025 14:14:03 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 10 Feb 2025 14:13:45 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Mon, 10 Feb 2025 14:13:45 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <lee@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <claudiu.beznea@tuxon.dev>, <sre@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<p.zabel@pengutronix.de>
+CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>, "Ryan
+ Wanner" <Ryan.Wanner@microchip.com>
+Subject: [PATCH v2 00/15] Enable Power Modes Support for SAMA7D65 SoC
+Date: Mon, 10 Feb 2025 14:13:00 -0700
+Message-ID: <cover.1739221064.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241226050205.30241-1-val@packett.cool> <20241226050205.30241-10-val@packett.cool>
-In-Reply-To: <20241226050205.30241-10-val@packett.cool>
-Reply-To: wens@kernel.org
-From: Chen-Yu Tsai <wens@kernel.org>
-Date: Tue, 11 Feb 2025 00:51:06 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64VhJ0KDiqfFdEG9s__uuVHCN2kss+KHi-ta8WDmG0KKA@mail.gmail.com>
-X-Gm-Features: AWEUYZknWIa5-CPGuL8BqnhcoaA-Kfslk_4yIvAua3sKJhdR6f_EU04T4LA0r7U
-Message-ID: <CAGb2v64VhJ0KDiqfFdEG9s__uuVHCN2kss+KHi-ta8WDmG0KKA@mail.gmail.com>
-Subject: Re: [PATCH 9/9] arm64: dts: mt6392: add mt6392 PMIC dtsi
-To: Val Packett <val@packett.cool>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
-	Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Eddie Huang <eddie.huang@mediatek.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>, Fabien Parent <parent.f@gmail.com>, 
-	Yassine Oudjana <y.oudjana@protonmail.com>, Chen Zhong <chen.zhong@mediatek.com>, 
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Thu, Dec 26, 2024 at 1:21=E2=80=AFPM Val Packett <val@packett.cool> wrot=
-e:
->
-> Add the dts to be included by all boards using the MT6392 PMIC.
->
-> Signed-off-by: Val Packett <val@packett.cool>
-> ---
->  arch/arm64/boot/dts/mediatek/mt6392.dtsi | 232 +++++++++++++++++++++++
->  1 file changed, 232 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt6392.dtsi
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt6392.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt6392.dtsi
-> new file mode 100644
-> index 0000000000000..a7c65dbb043c1
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt6392.dtsi
-> @@ -0,0 +1,232 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2019 MediaTek Inc.
-> + * Copyright (c) 2024 Val Packett <val@packett.cool>
-> + */
-> +
-> +#include <dt-bindings/input/input.h>
-> +
-> +&pwrap {
-> +       pmic: mt6392 {
-> +               compatible =3D "mediatek,mt6392";
-> +               interrupt-controller;
-> +               #interrupt-cells =3D <2>;
-> +
-> +               regulators {
-> +                       compatible =3D "mediatek,mt6392-regulator";
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-While listed in the binding, this doesn't actually do anything in
-the driver.
+This patch set adds support for low power modes for the SAMA7D65 SoC and
+the required components and changes for low power modes.
 
-> +                       mt6392_vproc_reg: buck_vproc {
+The series includes changes in the asm code to account for the addtional
+clocks that are in this SoC.
 
-Could we get rid of the "buck_" and "ldo_" prefixes?
+The Device tree additions are to enable all the components needed to
+keep the SoC in low power mode.
 
-> +                               regulator-name =3D "buck_vproc";
-> +                               regulator-min-microvolt =3D <700000>;
-> +                               regulator-max-microvolt =3D <1350000>;
+There are some DTB check warnings but that is due to the dt-binding not
+in the correct .yaml file format.
 
-PMIC ranges are already implied by the compatible string and regulator
-node name. No need to repeat them.
+Changes v1 -> v2:
+- Add missing compatible for ddr3phy, it is now in both syscon sets.
+- Fix alphabetical ordering for sama7d65.
+- Remove the incorrect reorganizing patch.
+- Remove sama7g5-rtt as a compatible for sama7d65-rtt and add
+  sama7d65-rtt as a compatible wake up source in the pm driver.
 
-> +                               regulator-ramp-delay =3D <12500>;
+Li Bin (1):
+  ARM: at91: pm: fix at91_suspend_finish for ZQ calibration
 
-This probably belongs in the driver?
+Ryan Wanner (14):
+  dt-bindings: mfd: syscon: add microchip,sama7d65-ddr3phy
+  dt-bindings: mfd: syscon: add microchip,sama7d65-sfrbu
+  dt-bindings: sram: Add microchip,sama7d65-sram
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: Add
+    microchip,sama7d65-shdwc
+  dt-bindings: reset: atmel,at91sam9260-reset: add
+    microchip,sama7d65-rstc
+  dt-bindings: rtc: at91rm9200: add microchip,sama7d65-rtc
+  dt-bindings: at91rm9260-rtt: add microchip,sama7d65-rtt
+  ARM: at91: Add PM support to sama7d65
+  ARM: at91: pm: add DT compatible support for sama7d65
+  ARM: at91: PM: Add Backup mode for SAMA7D65
+  ARM: at91: pm: Enable ULP0 for SAMA7D65
+  power: reset: at91-sama5d2_shdwc: Add sama7d65 PMC
+  ARM: dts: microchip: sama7d65: Add Reset and Shutdown and PM support
+  ARM: dts: microchip: add shutdown controller and rtt timer
 
-Comments apply to all the regulator sub-nodes.
+ .../devicetree/bindings/mfd/syscon.yaml       |  3 +
+ .../power/reset/atmel,sama5d2-shdwc.yaml      |  5 +
+ .../reset/atmel,at91sam9260-reset.yaml        |  5 +
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |  3 +
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |  3 +
+ .../devicetree/bindings/sram/sram.yaml        |  1 +
+ .../dts/microchip/at91-sama7d65_curiosity.dts | 14 +++
+ arch/arm/boot/dts/microchip/sama7d65.dtsi     | 77 +++++++++++++++
+ arch/arm/mach-at91/Kconfig                    |  1 +
+ arch/arm/mach-at91/pm.c                       | 54 ++++++++---
+ arch/arm/mach-at91/pm.h                       |  1 +
+ arch/arm/mach-at91/pm_data-offsets.c          |  2 +
+ arch/arm/mach-at91/pm_suspend.S               | 97 +++++++++++++++++--
+ drivers/power/reset/at91-sama5d2_shdwc.c      |  1 +
+ 14 files changed, 245 insertions(+), 22 deletions(-)
 
-ChenYu
+-- 
+2.43.0
 
-
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vsys_reg: buck_vsys {
-> +                               regulator-name =3D "buck_vsys";
-> +                               regulator-min-microvolt =3D <1400000>;
-> +                               regulator-max-microvolt =3D <2987500>;
-> +                               regulator-ramp-delay =3D <25000>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vcore_reg: buck_vcore {
-> +                               regulator-name =3D "buck_vcore";
-> +                               regulator-min-microvolt =3D <700000>;
-> +                               regulator-max-microvolt =3D <1350000>;
-> +                               regulator-ramp-delay =3D <12500>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vxo22_reg: ldo_vxo22 {
-> +                               regulator-name =3D "ldo_vxo22";
-> +                               regulator-min-microvolt =3D <2200000>;
-> +                               regulator-max-microvolt =3D <2200000>;
-> +                               regulator-enable-ramp-delay =3D <110>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vaud22_reg: ldo_vaud22 {
-> +                               regulator-name =3D "ldo_vaud22";
-> +                               regulator-min-microvolt =3D <1800000>;
-> +                               regulator-max-microvolt =3D <2200000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vcama_reg: ldo_vcama {
-> +                               regulator-name =3D "ldo_vcama";
-> +                               regulator-min-microvolt =3D <2800000>;
-> +                               regulator-max-microvolt =3D <2800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vaud28_reg: ldo_vaud28 {
-> +                               regulator-name =3D "ldo_vaud28";
-> +                               regulator-min-microvolt =3D <2800000>;
-> +                               regulator-max-microvolt =3D <2800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vadc18_reg: ldo_vadc18 {
-> +                               regulator-name =3D "ldo_vadc18";
-> +                               regulator-min-microvolt =3D <1800000>;
-> +                               regulator-max-microvolt =3D <1800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vcn35_reg: ldo_vcn35 {
-> +                               regulator-name =3D "ldo_vcn35";
-> +                               regulator-min-microvolt =3D <3300000>;
-> +                               regulator-max-microvolt =3D <3600000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vio28_reg: ldo_vio28 {
-> +                               regulator-name =3D "ldo_vio28";
-> +                               regulator-min-microvolt =3D <2800000>;
-> +                               regulator-max-microvolt =3D <2800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vusb_reg: ldo_vusb {
-> +                               regulator-name =3D "ldo_vusb";
-> +                               regulator-min-microvolt =3D <3300000>;
-> +                               regulator-max-microvolt =3D <3300000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vmc_reg: ldo_vmc {
-> +                               regulator-name =3D "ldo_vmc";
-> +                               regulator-min-microvolt =3D <1800000>;
-> +                               regulator-max-microvolt =3D <3300000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vmch_reg: ldo_vmch {
-> +                               regulator-name =3D "ldo_vmch";
-> +                               regulator-min-microvolt =3D <3000000>;
-> +                               regulator-max-microvolt =3D <3300000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vemc3v3_reg: ldo_vemc3v3 {
-> +                               regulator-name =3D "ldo_vemc3v3";
-> +                               regulator-min-microvolt =3D <3000000>;
-> +                               regulator-max-microvolt =3D <3300000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vgp1_reg: ldo_vgp1 {
-> +                               regulator-name =3D "ldo_vgp1";
-> +                               regulator-min-microvolt =3D <1200000>;
-> +                               regulator-max-microvolt =3D <3300000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vgp2_reg: ldo_vgp2 {
-> +                               regulator-name =3D "ldo_vgp2";
-> +                               regulator-min-microvolt =3D <1200000>;
-> +                               regulator-max-microvolt =3D <3300000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vcn18_reg: ldo_vcn18 {
-> +                               regulator-name =3D "ldo_vcn18";
-> +                               regulator-min-microvolt =3D <1800000>;
-> +                               regulator-max-microvolt =3D <1800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vcamaf_reg: ldo_vcamaf {
-> +                               regulator-name =3D "ldo_vcamaf";
-> +                               regulator-min-microvolt =3D <1200000>;
-> +                               regulator-max-microvolt =3D <3300000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vm_reg: ldo_vm {
-> +                               regulator-name =3D "ldo_vm";
-> +                               regulator-min-microvolt =3D <1240000>;
-> +                               regulator-max-microvolt =3D <1390000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vio18_reg: ldo_vio18 {
-> +                               regulator-name =3D "ldo_vio18";
-> +                               regulator-min-microvolt =3D <1800000>;
-> +                               regulator-max-microvolt =3D <1800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vcamd_reg: ldo_vcamd {
-> +                               regulator-name =3D "ldo_vcamd";
-> +                               regulator-min-microvolt =3D <1200000>;
-> +                               regulator-max-microvolt =3D <1800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vcamio_reg: ldo_vcamio {
-> +                               regulator-name =3D "ldo_vcamio";
-> +                               regulator-min-microvolt =3D <1800000>;
-> +                               regulator-max-microvolt =3D <1800000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +
-> +                       mt6392_vm25_reg: ldo_vm25 {
-> +                               regulator-name =3D "ldo_vm25";
-> +                               regulator-min-microvolt =3D <2500000>;
-> +                               regulator-max-microvolt =3D <2500000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                               regulator-always-on;
-> +                               regulator-boot-on;
-> +                       };
-> +
-> +                       mt6392_vefuse_reg: ldo_vefuse {
-> +                               regulator-name =3D "ldo_vefuse";
-> +                               regulator-min-microvolt =3D <1800000>;
-> +                               regulator-max-microvolt =3D <2000000>;
-> +                               regulator-enable-ramp-delay =3D <264>;
-> +                       };
-> +               };
-> +
-> +               rtc {
-> +                       compatible =3D "mediatek,mt6392-rtc";
-> +               };
-> +
-> +               keys {
-> +                       compatible =3D "mediatek,mt6392-keys";
-> +
-> +                       key-power {
-> +                               linux,keycodes =3D <KEY_POWER>;
-> +                               wakeup-source;
-> +                       };
-> +
-> +                       key-home {
-> +                               linux,keycodes =3D <KEY_HOME>;
-> +                               wakeup-source;
-> +                       };
-> +               };
-> +       };
-> +};
-> --
-> 2.47.1
->
->
 
