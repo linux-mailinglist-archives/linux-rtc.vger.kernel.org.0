@@ -1,113 +1,91 @@
-Return-Path: <linux-rtc+bounces-3130-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3133-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F1E9A2E3D5
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 06:58:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3ECCA2F3BF
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 17:37:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 724493A7F59
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 05:58:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BE091885E94
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Feb 2025 16:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03526189906;
-	Mon, 10 Feb 2025 05:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B80B1F4629;
+	Mon, 10 Feb 2025 16:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="epcN3QYS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E8417ADF8;
-	Mon, 10 Feb 2025 05:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209202580D6;
+	Mon, 10 Feb 2025 16:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739167091; cv=none; b=E3vj0MJ62eT1NzJS3u0Nsi792v+nTtf7xoUyI48X7vdBxyPjduH6/UmRaScnAzFQa+fJhvSOidj2Kun634Cc7e5flstWafx6Uots3RmfZ9KxlLiBlctP+ubyWbnOJEIhJirAZcf1chjwPMHmMbadbrMJgIWTV9GAqaenhcdgU4k=
+	t=1739205425; cv=none; b=ZdKhL02tpCyZRy09VvRSfnt3Z6qYPqawmGFP8zk/femEvKJxQaPvXqAuhNreCK9Nq8e+ls5Yjw82AuTmY8poVbR81C6/G0R9M3XH1opyhMeOMUASBZymguz8siyRLa4kglmddNKfam0NaDGOaAzd2fuYvsMI9qYxOULAU9LPRY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739167091; c=relaxed/simple;
-	bh=ab/y7cXj9QgjxXLU8g2+XSI1lA7YeSRH875MKtzI1Vs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nZOgk4DikXK9yjC6oSA/YF47E2+pOLHIg2QXUF4JDhD69l2LpBq88VBe5Fqz56Txbd6cXAfo2h1rOBELnry9VFJcQZD8vS21rJJ3Fqpc4ki5rMM/KB5vchOpgN7Pwsuz+Mnfxng6yKKf2TMhW/ncdW8rpiAdYxB5QTbpRijCHhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Yrv0V0TfLz1ltZW;
-	Mon, 10 Feb 2025 13:54:18 +0800 (CST)
-Received: from dggemv703-chm.china.huawei.com (unknown [10.3.19.46])
-	by mail.maildlp.com (Postfix) with ESMTPS id EDF0014022F;
-	Mon, 10 Feb 2025 13:58:00 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 10 Feb 2025 13:58:00 +0800
-Received: from localhost.localdomain (10.28.79.22) by
- kwepemn100009.china.huawei.com (7.202.194.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 10 Feb 2025 13:58:00 +0800
-From: Huisong Li <lihuisong@huawei.com>
-To: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <alexandre.belloni@bootlin.com>, <zhanjie9@hisilicon.com>,
-	<zhenglifeng1@huawei.com>, <liuyonglong@huawei.com>, <lihuisong@huawei.com>
-Subject: [PATCH v2 2/2] rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
-Date: Mon, 10 Feb 2025 13:45:46 +0800
-Message-ID: <20250210054546.10785-3-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20250210054546.10785-1-lihuisong@huawei.com>
-References: <20250210054546.10785-1-lihuisong@huawei.com>
+	s=arc-20240116; t=1739205425; c=relaxed/simple;
+	bh=pfpzmuq24TwF+06dco5as3bO4qJhodsYwsIa1AqMl8Q=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Zg9rFP1Sqk6rHUSDxCwavtMIvS7CRO7OTnkEiJxzJd9jbey6qXg4IxiwQlGxfoPAQnbvb3ugVFT0i1cMcU/nhaX2p7DJGahV48rCize1kKdZ/L2VNJTn4f9/xx6FSygNAVGiytyFL4xXBXrL7EZKw4Ye1EJO7yxJsEnHVPF3WTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=epcN3QYS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAD7C4CED1;
+	Mon, 10 Feb 2025 16:36:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739205424;
+	bh=pfpzmuq24TwF+06dco5as3bO4qJhodsYwsIa1AqMl8Q=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=epcN3QYSWuIIIk/Db2P8XQu5Ddu1B8GmBhUxdkPEutuOrxxm03ixaHdmL1nN/8OEX
+	 y2wTb9kXguPvZ6dfwKkkgcqPW57+ZApqinbEsUSF6OLgUdqXHtV4ZHU8zffXA+HnUn
+	 mEUAgM1Nyd1RbIKM4HEHV8+TZiLR4SKVDCjn/vtpXmf7Mfs/Mt1eBdt/bHxZix2Ofp
+	 PYEeOa8eB+D8kmLs59wxxJNbwm5OIthMBpdmAMKj1VsfWBib2KBDYoLI5+1wbPvjEh
+	 fHE0/nVh975H4xkkPJJDqoyXC6PIH0mMhODGZ/Qs6iEkhhShEmXocsOJNmB9e7rZxn
+	 1bD/BqEd4jSig==
+From: Lee Jones <lee@kernel.org>
+To: Val Packett <val@packett.cool>
+Cc: Fabien Parent <parent.f@gmail.com>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>, 
+ Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
+ Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Eddie Huang <eddie.huang@mediatek.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
+ Yassine Oudjana <y.oudjana@protonmail.com>, 
+ Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org
+In-Reply-To: <20241226050205.30241-5-val@packett.cool>
+References: <20241226050205.30241-1-val@packett.cool>
+ <20241226050205.30241-5-val@packett.cool>
+Subject: Re: (subset) [PATCH 4/9] mfd: mt6397: Add support for MT6392 pmic
+Message-Id: <173920541986.1887800.1972669785800121190.b4-ty@kernel.org>
+Date: Mon, 10 Feb 2025 16:36:59 +0000
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+X-Mailer: b4 0.13.0
 
-Use HWMON_CHANNEL_INFO macro to simplify code.
+On Thu, 26 Dec 2024 01:58:04 -0300, Val Packett wrote:
+> Update the MT6397 MFD driver to support the MT6392 PMIC.
+> 
+> 
 
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- drivers/rtc/rtc-ds3232.c | 24 ++----------------------
- 1 file changed, 2 insertions(+), 22 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/rtc/rtc-ds3232.c b/drivers/rtc/rtc-ds3232.c
-index 19c09c418746..18f35823b4b5 100644
---- a/drivers/rtc/rtc-ds3232.c
-+++ b/drivers/rtc/rtc-ds3232.c
-@@ -339,29 +339,9 @@ static int ds3232_hwmon_read(struct device *dev,
- 	return err;
- }
- 
--static u32 ds3232_hwmon_chip_config[] = {
--	HWMON_C_REGISTER_TZ,
--	0
--};
--
--static const struct hwmon_channel_info ds3232_hwmon_chip = {
--	.type = hwmon_chip,
--	.config = ds3232_hwmon_chip_config,
--};
--
--static u32 ds3232_hwmon_temp_config[] = {
--	HWMON_T_INPUT,
--	0
--};
--
--static const struct hwmon_channel_info ds3232_hwmon_temp = {
--	.type = hwmon_temp,
--	.config = ds3232_hwmon_temp_config,
--};
--
- static const struct hwmon_channel_info * const ds3232_hwmon_info[] = {
--	&ds3232_hwmon_chip,
--	&ds3232_hwmon_temp,
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
- 	NULL
- };
- 
--- 
-2.22.0
+[4/9] mfd: mt6397: Add support for MT6392 pmic
+      commit: 896b1eb4ca771b37ea50feb4d90a78dd4e9cb388
+
+--
+Lee Jones [李琼斯]
 
 
