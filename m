@@ -1,419 +1,133 @@
-Return-Path: <linux-rtc+bounces-3158-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3159-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDA46A319B8
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 00:47:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A997A31BDE
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 03:20:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6BF53A83F2
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Feb 2025 23:47:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3339316831E
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 02:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B0F26A0AE;
-	Tue, 11 Feb 2025 23:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1D2189F43;
+	Wed, 12 Feb 2025 02:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a5lVe+HU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MoCH0xs4"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9265926A0A3;
-	Tue, 11 Feb 2025 23:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5894B78F4E;
+	Wed, 12 Feb 2025 02:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739317633; cv=none; b=Av6Huw5djMiEHcT8hmaUyV3ExOlaHrCut1F4YT+ucT+iznqOH+W6caqBFpm1JvG2DAJKzNd5PCkHJmonVvJ4vSNfQWoeMQySvSupPR/w+kGggwMohGW4cKNAudW/75RVPJ1GzUaa7HbQ/g4P3dn0UtOcG9KGzNUaXTfqmtySX9U=
+	t=1739326839; cv=none; b=rDo0wjM14EvB+N2uuFAEXdM+GPWT07RgUkKx9AavsVs+u61ueWWcbw/r8pK3Sg4xR8esJkcbXFLlqnflVEUZrIrDGkm6lqF4Q19GYRhqqMRBxo5pvtYWiyKhFVBqjqdyzBKr482tG4Q0tJ2ZaDovN/j10PjU+mSY2+qLhPhvbi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739317633; c=relaxed/simple;
-	bh=LHHTUGJZo0Wyr1bAC1NbIJTWvVpqp2n5mqdPWyzf8zw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ebGUjFIz+b84omWtXgU17mQ5irb/TIM0NQ1KmaX+oqQBq80kd6GODfUPgiB8NX0RdMq76Dd+wCBMdpRyYlGPe0X+TENiW4FIMu9P7+D0ckV13HyZ4d4t7HodS1v2U4eMFed27BPtpgWhQjuLtbZOzZjukxM85NNSAGltkwHhwBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a5lVe+HU; arc=none smtp.client-ip=209.85.218.48
+	s=arc-20240116; t=1739326839; c=relaxed/simple;
+	bh=BGF4WgRFYes+wXFKDiff8lSB4cxf0V4m7cSG+sh0234=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K154mY3x0vTwNDNl5/IQdCsw5vK/95r++ZuMLnt3Wg7eSbLkz0bYsDA3Q//leYdmzniLoufDIDGeAg9JbwDzFtZuGKTRf230WNg7WPSj0GWTbTyTZvGX5sskWVllFLu0lsHReRJlStE71J67yS7aRA6jmpjRWOeuwspXHaS3YTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MoCH0xs4; arc=none smtp.client-ip=209.85.128.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ab7d58aa674so290907866b.0;
-        Tue, 11 Feb 2025 15:47:11 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6f9b8291c49so37446507b3.1;
+        Tue, 11 Feb 2025 18:20:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739317630; x=1739922430; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7cc/bmhw46t99D9MCXz5PtDHnb3kGfZJPYW+IvIGz4c=;
-        b=a5lVe+HUkHGn6RtEsS+AmDUv0GTaWtPL9URECSQVdr4/vrAMwkgSahZt4OOZ2GrQFD
-         mnvwYG7/vk0dK9TrtQSidDrcvJKaI2gkk70mF7SI5N5396HJmKH8dX/rmPGZGVuOKL7g
-         B8URXQkn+6PiqwB3VLlhvdLodSwTSQmFOuNIBJNhaaOMHqs0EIASlmPPcbR5PC3OUfOM
-         UM628hUP09ZYBIR4J6Bd9VgmPULHUaQIG6c9ew95vGnwpTfrmh1Pk5p/uDzM8K1LpoE+
-         vflVsqNzfLWDPcWqNpjtwkXdxrJhMvvPJDedhNThT1MFu9wKTr1BI4nbHbk4Wl++1K2u
-         6gMg==
+        d=gmail.com; s=20230601; t=1739326837; x=1739931637; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGF4WgRFYes+wXFKDiff8lSB4cxf0V4m7cSG+sh0234=;
+        b=MoCH0xs47Oufjn9oslv7MF59r/clAlbm/A38hhpc5XBd9klopVBnmDKOi7szex/0c+
+         e3zvOf8G9auXKVjjrZxDvXk3TRjkeDpH3+ECT5z3imEOzK2I8orFX0W0Pms6iO8EzFm/
+         paHha4KTNNdCPqmlKj/N677cmRbIdeWQrRSs+XVWb3b5vTGALIFEwsELdKOwMTjGex9U
+         sVv3t1KNyHOqgYinWdebs2oaO7vjr3rQDmX2qAT72CvZLsutjIOmjth3HNNElySR/IP7
+         SVm++FZUF4wyOJVto3G42jGbTOb+My0ug9/GN2F2nTExMHKNKjWyCW9iRoUgtGBlU3J/
+         mk0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739317630; x=1739922430;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7cc/bmhw46t99D9MCXz5PtDHnb3kGfZJPYW+IvIGz4c=;
-        b=t4WqufURWHJhI9Xz1J2HlELLeemmIZ2R+wmgYvvN5fYVTzcWSbygLGdmXIJie3sACj
-         hkLm9YJmIh99/FusUTdoxBEcxJhIBygvt3nGA4zmzownXKdrk3bkUZqjYx/bdbMBeSXK
-         ay2QNO8csP+ypN8ZOodfqJtq1tpGGiXzrctgK3/NeGdqlouljE7CPLvmku9nNH0RwFDz
-         Nk/X2HHoxy3ztZ7EheHfLZdBso0cjl2N/w6ltWDy1HzHo5eH+tzpIkuco1sYl0K8jqHf
-         bbS+hxmKtuDNdELklY8mYW4D4A5JB5UO7wMw4/SW4SK8VJrv39d+4wSSLp1oPgvK7fVs
-         Pw+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWC2lVtH+1entoeg/li9xf+rlLpbVulJFJlgPkUYWAR0e1kuTr6hRwji/MmGrZEw6GGBxwiiGpN/nqi@vger.kernel.org, AJvYcCWGI6oDI3xseUXnIK81p2kb08J5TUTYQmmDg4BFZJaEZdGvMdPvXYruprfh/WQGJkJgARW9O4uT9A/y@vger.kernel.org, AJvYcCXGS4ubwky6Lo/NtoFGNbPPD9Uj74rSkdqMMnw2AoO5nKj1A4pPno0RUCQtHJLga5GvrYlhvflCRhziPdxl@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy05AmA16egt4QBpn6MK9G5NxWRwxY8LEwZDr26jD6KejUVS6+1
-	NkfWDjMf2vhnTAkn4qZqpfNHvvxwvlhCjgDL1XmjKs6O1NbdBtkI
-X-Gm-Gg: ASbGncuaL5zKUc8ApMtVvVCYf9/U6t3yEeG3qq57YXxOu/aRrjtgmokgVLlWHJtaXbE
-	oNHqcuOZGeEBnVVyAiUraeNrYI6X/KAQeXz2ao2dp2LdLTgJAqOJqRdfTOuPHMLCdmDiqVLYOlK
-	PizNyT9ND+JOnwEg4Dpuf99+e5HS1ZxyywQrC5vkPJmm1H8P6I0pjSa8xqdUg0K9N19t9yUrYUH
-	lUoRsMwVZ3rJRFcCv8vg1QTIm6ZxOb3nzXMAH49OXf35DeAq/H7Ad6dE2n5H2fS9M9HhBKg4YbZ
-	mDAlonIw1LFSfTF2Jnkt6KNP7JCD6bKn
-X-Google-Smtp-Source: AGHT+IGRgxa28yONVo9R4TtNIsLXQnXM9lhkBde8vdOO8gAZtxIxGySQslZtp6sZGTHBN3cW9q3ucw==
-X-Received: by 2002:a17:907:7254:b0:ab3:9923:ef4e with SMTP id a640c23a62f3a-ab7f33c1813mr57735866b.22.1739317629587;
-        Tue, 11 Feb 2025 15:47:09 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7b35b0d2csm624684566b.122.2025.02.11.15.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 15:47:09 -0800 (PST)
-Message-ID: <15a4d019ede6ad8be56832a3b215dfc6ce029bc2.camel@gmail.com>
-Subject: Re: [PATCH v9 2/2] rtc: sophgo: add rtc support for Sophgo CV1800
- SoC
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, alexandre.belloni@bootlin.com, 
-	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	unicorn_wang@outlook.com, inochiama@outlook.com, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu
-Cc: dlan@gentoo.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, 	linux-riscv@lists.infradead.org,
- linux-rtc@vger.kernel.org
-Date: Wed, 12 Feb 2025 00:47:05 +0100
-In-Reply-To: <20240428060848.706573-3-qiujingbao.dlmu@gmail.com>
-References: <20240428060848.706573-1-qiujingbao.dlmu@gmail.com>
-	 <20240428060848.706573-3-qiujingbao.dlmu@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+        d=1e100.net; s=20230601; t=1739326837; x=1739931637;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BGF4WgRFYes+wXFKDiff8lSB4cxf0V4m7cSG+sh0234=;
+        b=Vmce9+IvquEaC3gRTyou0OD8QwgAdmpOFE8VH8yVFpErZmiJSWy9tQ3yeZwWfGE1Kw
+         zrDlygOyN1xjYeyiSD0rr2g5cZz5TNje/UHD8yEoZCsiClP6caUFezG8fZY8mQBAvOCm
+         HKOGNMv//prVP63rLW5MdFN2stwnFAy6P7CPLiHqCQJwDKml3TvD3NA8US3FlgkmOAub
+         Z7OmwfrKfwJJK6Aeptha/nCxpY81PhocIewjOuDBluaufB0UDAXV9IaM+5RcRiF0Wrin
+         YvTNumXBKANRh9WycFmyO48XpCv5x+s3jK+wrs9rqSJb9tPGbIWcGRl3pEWoWMqkHBZ8
+         LyVw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3/RfjS8j4hO+tj/utkMXvhi8D51kOKyn6kxDTGfsIwJaXHdH0tpFX4zaf4VTGj0tSpbmyGX/tkqFCHwDANAU=@vger.kernel.org, AJvYcCUCS8qPEJiFXH8gUZaenfpHBUBvncH23prSEr/ppzCLGQKI9DK0NE2XqjuGukHlj9vwW1YqpkxUaJv9@vger.kernel.org, AJvYcCUhlJ1j3DZvJvRybAMWJ6qh1vjI1pxF5v+8Vtzf1c6H0cns6NuoVYdvWnO9PYK6B4o7K+bIhbfC4cE=@vger.kernel.org, AJvYcCVGZQfdreBJDj/zl/Kzf42VXic1IAorRmkK1yrTw4np3ujFjI5oy6ccBr9xAPXtRdMCkBhlMrSmLnrxPQ==@vger.kernel.org, AJvYcCW8cERn8w1aRtCbl4jtTam7Z7yBRyS94ZJOHnzj0ef/I511ED5L4S1F91uysqyeKOrn9+IQnmwrW0f2@vger.kernel.org, AJvYcCWJrh00gxBxBJMaxyhNSaiP3q1OlKXt3FLgzugsJJHUIkg00gtuHtxTH4yljrzEU6VAK6ICOX/GBaooaX3b@vger.kernel.org, AJvYcCWoloS8fg3dSEXyJOq9SZM9mWhJgUMhDNEI6y6mdMVF31gelqt7CniLtOkjg6FMQDi9dhtRZxiWS2TqQXQ=@vger.kernel.org, AJvYcCWtLSP9qRTt0OYqk6Gi4fGavkSPgIQk2ID3AdklMQAYFeiGGT/dGv6v2mGKehWoYtbHeMPUm8Dr@vger.kernel.org, AJvYcCXO7MotSiF0Bsb2goPvVuxF8f6CBJOU32cxpkB3u97zOkelaVQd5WsnyrNDXrl50p1MjnD08oJUje6T@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVSMJqCNkrbzyHMEaTQHB1rVYpe48Wzk5KklgR2vtVZVvV7OIj
+	RWjztbiNChd++deA0N1CiqisoYevGSzk3e/MIMuDV6Nw9BsyGnwuRsXwi5alNJMzgElBfxaz/cG
+	OBX0hRWnEGtS+/by+nlQ7SHvl8+lnFg==
+X-Gm-Gg: ASbGncu/lHuLWlgRLhtRokGP0QSzvFo7QYBpk9D3dK/9JQLgB6w8f3OwuhnUORkgX4C
+	5GqaPq+kOtFDolD4NgTm52JwNTmfW6fSRzC5VlqI7cnK0v9+A43+PUPP54wU6PToNlJb75YVOMs
+	KUYFalNkfQL0iuxB7hFiYA5j4919gtjLU=
+X-Google-Smtp-Source: AGHT+IF+oFBT4/eJC7fxrqCxEqFTUuytLV8FG9XSBDtcVlHz7Ohthj7nFqSBcKDND+KZxt4lh4ibh6h6TvJDsK+a7jk=
+X-Received: by 2002:a05:690c:6811:b0:6f9:8845:cfbf with SMTP id
+ 00721157ae682-6fb1f1e638emr16843557b3.22.1739326837122; Tue, 11 Feb 2025
+ 18:20:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-2-a0282524688@gmail.com> <1ee664ec-f912-467e-aedb-81208987ea2a@wanadoo.fr>
+In-Reply-To: <1ee664ec-f912-467e-aedb-81208987ea2a@wanadoo.fr>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 12 Feb 2025 10:20:26 +0800
+X-Gm-Features: AWEUYZk7swZO7fFhHB97EG7zyv5Dg2IiX0RdzYvso9G14rlwE4a_llIRTcKsa5A
+Message-ID: <CAOoeyxVUN9A3gKB_vMH_d2gzRSznF_DVifJ3ie7BgKhZU+P6Pg@mail.gmail.com>
+Subject: Re: [PATCH v7 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for you patch Jingbao!
+Dear Christophe,
 
-On Sun, 2024-04-28 at 14:08 +0800, Jingbao Qiu wrote:
-> Implement the RTC driver for CV1800, which able to provide time alarm.
->=20
-> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+Thank you for reviewing,
 
-I've tried time read/set on SG2000 SoC (Milk-V Duo Module 01 EVB), however
-the time set remains unchanged. Milk-V Duo Module 01 schematics shows
-32768Hz oscillator present.
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=
+=E6=9C=888=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=882:37=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> Le 07/02/2025 =C3=A0 08:44, Ming Yu a =C3=A9crit :
+> > The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> > 6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> > PWM, and RTC.
+> >
+> > This driver implements USB device functionality and shares the
+> > chip's peripherals as a child device.
+> >
+> > Each child device can use the USB functions nct6694_read_msg()
+> > and nct6694_write_msg() to issue a command. They can also request
+> > interrupt that will be called when the USB device receives its
+> > interrupt pipe.
+>
+> ...
+>
+> > +static struct irq_chip nct6694_irq_chip =3D {
+>
+> This could be const.
+>
+> (I'm working on a serie that should constify struct irq_chip, so this
+> one would already be done)
+>
+Okay, I will fix it in the next patch.
 
-What HW have you tested the driver on? Do you have an idea what could be
-the problem on SG2000?
 
-> ---
-> =C2=A0drivers/rtc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 10 ++
-> =C2=A0drivers/rtc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0drivers/rtc/rtc-cv1800.c | 240 ++++++++++++++++++++++++++++++++++++=
-+++
-> =C2=A03 files changed, 251 insertions(+)
-> =C2=A0create mode 100644 drivers/rtc/rtc-cv1800.c
->=20
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 2a95b05982ad..b7746ca22b94 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1138,6 +1138,16 @@ config RTC_DRV_DS2404
-> =C2=A0	=C2=A0 This driver can also be built as a module. If so, the modul=
-e
-> =C2=A0	=C2=A0 will be called rtc-ds2404.
-> =C2=A0
-> +config RTC_DRV_CV1800
-> +	tristate "Sophgo CV1800 RTC"
-> +	depends on ARCH_SOPHGO || COMPILE_TEST
-> +	help
-> +	=C2=A0 If you say yes here you get support the RTC driver
-> +	=C2=A0 for Sophgo CV1800 chip.
-> +
-> +	=C2=A0 This driver can also be built as a module.If so, the
-> +	=C2=A0 module will be called rtc-cv1800.
-> +
-> =C2=A0config RTC_DRV_DA9052
-> =C2=A0	tristate "Dialog DA9052/DA9053 RTC"
-> =C2=A0	depends on PMIC_DA9052
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 3004e372f25f..a0861c0f3c89 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -42,6 +42,7 @@ obj-$(CONFIG_RTC_DRV_CADENCE)	+=3D rtc-cadence.o
-> =C2=A0obj-$(CONFIG_RTC_DRV_CMOS)	+=3D rtc-cmos.o
-> =C2=A0obj-$(CONFIG_RTC_DRV_CPCAP)	+=3D rtc-cpcap.o
-> =C2=A0obj-$(CONFIG_RTC_DRV_CROS_EC)	+=3D rtc-cros-ec.o
-> +obj-$(CONFIG_RTC_DRV_CV1800)	+=3D rtc-cv1800.o
-> =C2=A0obj-$(CONFIG_RTC_DRV_DA9052)	+=3D rtc-da9052.o
-> =C2=A0obj-$(CONFIG_RTC_DRV_DA9055)	+=3D rtc-da9055.o
-> =C2=A0obj-$(CONFIG_RTC_DRV_DA9063)	+=3D rtc-da9063.o
-> diff --git a/drivers/rtc/rtc-cv1800.c b/drivers/rtc/rtc-cv1800.c
-> new file mode 100644
-> index 000000000000..f975b169077a
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-cv1800.c
-> @@ -0,0 +1,240 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * rtc-cv1800.c: RTC driver for Sophgo cv1800 RTC
-> + *
-> + * Author: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/irq.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/rtc.h>
-> +
-> +#define CTRL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x08
-> +#define ANA_CALIB=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 0x1000
-> +#define SEC_PULSE_GEN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 0x1004
-> +#define ALARM_TIME=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 0x1008
-> +#define ALARM_ENABLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 0x100C
-> +#define SET_SEC_CNTR_VAL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x1010
-> +#define SET_SEC_CNTR_TRIG=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x1014
-> +#define SEC_CNTR_VAL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 0x1018
-> +
-> +/*
-> + * When in VDDBKUP domain, this MACRO register
-> + * does not power down
-> + */
-> +#define MACRO_RO_T=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 0x14A8
-> +#define MACRO_RG_SET_T=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=
-x1498
-> +
-> +#define CTRL_MODE_MASK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 B=
-IT(10)
-> +#define CTRL_MODE_OSC32K=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x00UL
-> +#define ALARM_ENABLE_MASK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT(0)
-> +#define SET_SEC_CNTR_VAL_INIT=C2=A0 GENMASK(29, 28)
-> +#define SEC_PULSE_SEL_INNER=C2=A0=C2=A0=C2=A0 BIT(31)
-> +#define SEC_PULSE_GEN_SEL_MASK GENMASK(30, 0)
-> +#define CALIB_SEL_FTUNE_MASK=C2=A0=C2=A0 GENMASK(30, 0)
-> +#define CALIB_SEL_FTUNE_INNER=C2=A0 0x00UL
-> +
-> +struct cv1800_rtc_priv {
-> +	struct rtc_device *rtc_dev;
-> +	struct regmap *rtc_map;
-> +	struct clk *clk;
-> +	int irq;
-> +};
-> +
-> +static const struct regmap_config cv1800_rtc_regmap_config =3D {
-> +	.reg_bits =3D 32,
-> +	.val_bits =3D 32,
-> +	.reg_stride =3D 4,
-> +};
-> +
-> +static int cv1800_rtc_alarm_irq_enable(struct device *dev, unsigned int =
-enabled)
-> +{
-> +	struct cv1800_rtc_priv *info =3D dev_get_drvdata(dev);
-> +
-> +	regmap_write(info->rtc_map, ALARM_ENABLE, enabled);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cv1800_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *a=
-lrm)
-> +{
-> +	struct cv1800_rtc_priv *info =3D dev_get_drvdata(dev);
-> +	unsigned long alarm_time;
-> +
-> +	alarm_time =3D rtc_tm_to_time64(&alrm->time);
-> +
-> +	cv1800_rtc_alarm_irq_enable(dev, 0);
-> +
-> +	regmap_write(info->rtc_map, ALARM_TIME, alarm_time);
-> +
-> +	cv1800_rtc_alarm_irq_enable(dev, alrm->enabled);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cv1800_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *=
-alarm)
-> +{
-> +	struct cv1800_rtc_priv *info =3D dev_get_drvdata(dev);
-> +	u32 enabled;
-> +	u32 time;
-> +
-> +	regmap_read(info->rtc_map, ALARM_ENABLE, &enabled);
-> +
-> +	alarm->enabled =3D enabled & ALARM_ENABLE_MASK;
-> +
-> +	regmap_read(info->rtc_map, ALARM_TIME, &time);
-> +
-> +	rtc_time64_to_tm(time, &alarm->time);
-> +
-> +	return 0;
-> +}
-> +
-> +static void rtc_enable_sec_counter(struct cv1800_rtc_priv *info)
-> +{
-> +	u32 sec_ro_t;
-> +	u32 sec;
-> +
-> +	/* select inner sec pulse */
-> +	regmap_update_bits(info->rtc_map, SEC_PULSE_GEN,
-> +			=C2=A0=C2=A0 (u32)(~SEC_PULSE_GEN_SEL_MASK),
-> +			=C2=A0=C2=A0 (u32)(~SEC_PULSE_SEL_INNER));
-> +
-> +	regmap_update_bits(info->rtc_map, ANA_CALIB,
-> +			=C2=A0=C2=A0 (u32)(~CALIB_SEL_FTUNE_MASK),
-> +			=C2=A0=C2=A0 CALIB_SEL_FTUNE_INNER);
-> +
-> +	sec =3D SET_SEC_CNTR_VAL_INIT;
-> +
-> +	/* load from MACRO register */
-> +	regmap_read(info->rtc_map, MACRO_RO_T, &sec_ro_t);
-> +	if (sec_ro_t > (SET_SEC_CNTR_VAL_INIT))
-> +		sec =3D sec_ro_t;
-> +
-> +	regmap_write(info->rtc_map, SET_SEC_CNTR_VAL, sec);
-> +	regmap_write(info->rtc_map, SET_SEC_CNTR_TRIG, 1);
-> +}
-> +
-> +static int cv1800_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct cv1800_rtc_priv *info =3D dev_get_drvdata(dev);
-> +	u32 sec;
-> +
-> +	regmap_read(info->rtc_map, SEC_CNTR_VAL, &sec);
-> +
-> +	rtc_time64_to_tm(sec, tm);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cv1800_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct cv1800_rtc_priv *info =3D dev_get_drvdata(dev);
-> +	unsigned long sec;
-> +
-> +	sec =3D rtc_tm_to_time64(tm);
-> +
-> +	regmap_write(info->rtc_map, SET_SEC_CNTR_VAL, sec);
-> +	regmap_write(info->rtc_map, SET_SEC_CNTR_TRIG, 1);
-> +
-> +	regmap_write(info->rtc_map, MACRO_RG_SET_T, sec);
-> +
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t cv1800_rtc_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct cv1800_rtc_priv *info =3D dev_id;
-> +
-> +	rtc_update_irq(info->rtc_dev, 1, RTC_IRQF | RTC_AF);
-> +
-> +	regmap_write(info->rtc_map, ALARM_ENABLE, 0);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static const struct rtc_class_ops cv1800_rtc_ops =3D {
-> +	.read_time =3D cv1800_rtc_read_time,
-> +	.set_time =3D cv1800_rtc_set_time,
-> +	.read_alarm =3D cv1800_rtc_read_alarm,
-> +	.set_alarm =3D cv1800_rtc_set_alarm,
-> +	.alarm_irq_enable =3D cv1800_rtc_alarm_irq_enable,
-> +};
-> +
-> +static int cv1800_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct cv1800_rtc_priv *rtc;
-> +	u32 ctrl_val;
-> +	void __iomem *base;
-> +	int ret;
-> +
-> +	rtc =3D devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-> +	if (!rtc)
-> +		return -ENOMEM;
-> +
-> +	base =3D devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	rtc->rtc_map =3D devm_regmap_init_mmio(&pdev->dev, base,
-> +					=C2=A0=C2=A0=C2=A0=C2=A0 &cv1800_rtc_regmap_config);
-> +	if (IS_ERR(rtc->rtc_map))
-> +		return PTR_ERR(rtc->rtc_map);
-> +
-> +	rtc->irq =3D platform_get_irq(pdev, 0);
-> +	if (rtc->irq < 0)
-> +		return rtc->irq;
-> +
-> +	rtc->clk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-> +	if (IS_ERR(rtc->clk))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk),
-> +				=C2=A0=C2=A0=C2=A0=C2=A0 "clk not found\n");
-> +
-> +	platform_set_drvdata(pdev, rtc);
-> +
-> +	device_init_wakeup(&pdev->dev, 1);
-> +
-> +	rtc->rtc_dev =3D devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(rtc->rtc_dev))
-> +		return PTR_ERR(rtc->rtc_dev);
-> +
-> +	rtc->rtc_dev->ops =3D &cv1800_rtc_ops;
-> +	rtc->rtc_dev->range_max =3D U32_MAX;
-> +
-> +	ret =3D devm_request_irq(&pdev->dev, rtc->irq, cv1800_rtc_irq_handler,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 IRQF_TRIGGER_HIGH, "rtc alarm", =
-rtc);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				=C2=A0=C2=A0=C2=A0=C2=A0 "cannot register interrupt handler\n");
-> +
-> +	regmap_read(rtc->rtc_map, CTRL, &ctrl_val);
-> +	ctrl_val &=3D CTRL_MODE_MASK;
-> +
-> +	if (ctrl_val =3D=3D CTRL_MODE_OSC32K)
-> +		rtc_enable_sec_counter(rtc);
-> +
-> +	return devm_rtc_register_device(rtc->rtc_dev);
-> +}
-> +
-> +static const struct of_device_id cv1800_dt_ids[] =3D {
-> +	{ .compatible =3D "sophgo,cv1800-rtc" },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, cv1800_dt_ids);
-> +
-> +static struct platform_driver cv1800_rtc_driver =3D {
-> +	.driver =3D {
-> +		.name =3D "sophgo-cv1800-rtc",
-> +		.of_match_table =3D cv1800_dt_ids,
-> +	},
-> +	.probe =3D cv1800_rtc_probe,
-> +};
-> +
-> +module_platform_driver(cv1800_rtc_driver);
-> +MODULE_AUTHOR("Jingbao Qiu");
-> +MODULE_DESCRIPTION("Sophgo cv1800 RTC Driver");
-> +MODULE_LICENSE("GPL");
-
---=20
-Alexander Sverdlin.
-
+Best regards,
+Ming
 
