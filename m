@@ -1,130 +1,110 @@
-Return-Path: <linux-rtc+bounces-3173-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3174-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8045A320D2
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 09:21:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7056A323C0
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 11:44:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 809597A3663
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 08:20:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51E55188BCEC
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 10:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D14A2054E9;
-	Wed, 12 Feb 2025 08:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="KfE7zELY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10650209F31;
+	Wed, 12 Feb 2025 10:43:33 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B548204F62
-	for <linux-rtc@vger.kernel.org>; Wed, 12 Feb 2025 08:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD22209F24;
+	Wed, 12 Feb 2025 10:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739348460; cv=none; b=dLmWq20+jGJ0UTefqiXMkicPmKRN9HKoaAJqJrb3eECGI2Ox+t2M+KL4o/z/HA5t8+NqJNFAbpIh2pfNamFRRmyfTkA1LCQUGI2scLZm142zBnGBJ7pOsbfQmDiZnq1F98lLvfrR9noBFsmbtPA5PeSfkKTtWNHT1y3sdzb0ypA=
+	t=1739357012; cv=none; b=fGWwXuWG584YCbucGJxIx10j6QWerV+8lG4buwmU2a0n5FKnFhMF1X4Se1PBpho70OuXTeT2CkeVF0TsJRh1ar6eDSV2EQWMiIYItlOFa/lzjgm0B7XfnDe+2tyYcAKhSca5lBMzU7qvYwfc3HucsT51y4H0ib1+XfWHe5w3WB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739348460; c=relaxed/simple;
-	bh=dt7mTqxVDPujGC4i5+vhi/iVi9M3QFBPfFhyk83MMVQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kAO5/0L0Qy7RQ6IrWaEJ4iZQUsh2r3YJKSfLb4WMSQUwbtFSGBwwgP7/KWGQ27PnvTQKWhzQE4zqlOeaJ3zRPV6LCjeNhpApgd0Nc1QJP0MIhchNSPF+Hi8VDYsPkQEt/0+B017W7mGp+XKi8+3/5jn3ZG3FiguU7kutoxRcJEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=KfE7zELY; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5dccaaca646so1156568a12.0
-        for <linux-rtc@vger.kernel.org>; Wed, 12 Feb 2025 00:20:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1739348457; x=1739953257; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g4plJ+TLmBGf/WTNjrm+6CqwSfdP84ackQKWHmK37yA=;
-        b=KfE7zELY8cAmBe51AHM1HrNOoJihbDOwQawROKv1uJ7PFGYVyJWyA1mKTr+hjFpppA
-         AdIfkNR3kmAXfuCLXUzOzoM39mt6OdD8jPGAzNfjWUX3NTKQqXYodU0d4H5qWdBWFziP
-         fjkPAXi0IcljiWZ4Gti6HYdA83K4h/FZidtF5y9iyIc20fkSI/6/hTn/5m52YHNIoAAS
-         lkMQkj7YHIHJ4fSKOBiYPC/p8GZGwhBDhL7u2KQA0IzdedoF9WXihJRf8HT3kBL3OXGm
-         KzWuedUNFlW3YIKH46co/5DqZT1kbH5pS1qjbNEbxXwTC546qIJdq/5kGSRChRNzWwjb
-         h+mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739348457; x=1739953257;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4plJ+TLmBGf/WTNjrm+6CqwSfdP84ackQKWHmK37yA=;
-        b=m7Uc3Dg2lR+IiNS8bgf720QAQ1Oxcz1AKLqfEkoYIjRIdzwm1fmVuKWSFvbisHVqEf
-         MTFhyGykC5FNLyXT1+QhQw6ho4ecwcinI6SW8YrSLMibdmlNLhtmknagTa9M/4Hor5xN
-         +YGeZ3RnXETrSOy+fbLa2bzneYDHxO4Gafz5v5sH4wliCa0RkZVIOwHGyWZQOuIdvvGx
-         Fyg8hgMl/5dnXoTC0elvjnmBHWo8KyvEu2Ua3NjTkgs0pvf3cubTUXpK3K7nOrbxli43
-         wL75cY29LwoeLRxeYMntpT9frcsf0SyHQN14fNpydZNZPHGYaKR7aoQKEswe4QeDC9x6
-         GUoA==
-X-Forwarded-Encrypted: i=1; AJvYcCWMRf0DyHjkwK8nxkTBbC7WX6Eo+I6UbFmZC7yvgNu8EvrTQa4Xw6t6L6LvA9QIFUH8Aeve8sGSfYo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIyadrxxTwxOPAlEgQltQ1P+5ipXmlWjvc1umtPaWN7/gxKFDG
-	noyQa3kGEo3Vy+nRbcOYjLLKgWgeQnnTbtM37YA2x3DZwD8ycEgn/oyvjxJgSFg=
-X-Gm-Gg: ASbGncvE35eGGidex4cqno5YW9vQlE+teHfzGYeYCcVZiBXv+qyuq84jlp18oKKU7Ry
-	cYCI5inPiMa66GKqxkEP536okrkjhX/jL1tUs3isY9GOKY8pHboCDa8eagLsEQlCXD7LHf8V2NG
-	opKD+ZBjMtqKE8SSlaR3sjqOW0MZqgMksuzDZaTbKM/JFIw8Ksnj7jJhZqtAfrBRRxsbhQjXwUa
-	++H++/aVMxiQzLQP6dABJhh+sNsh+wwIMIRR1l+KUewJeZ7Ty8aQE73eg5ooTfyp0vw/tUu04H8
-	6WQK1RjE2Ax/K8fVT5EOS0pO
-X-Google-Smtp-Source: AGHT+IGHgQnz97yzWagUt64UI9llWg0kGJkKPM/iEqy5L+liOX9Mj9QGFUHTzEDBGabzYNsN0XqmLg==
-X-Received: by 2002:a05:6402:2084:b0:5db:68bd:ab78 with SMTP id 4fb4d7f45d1cf-5deae0ea210mr1791667a12.10.1739348457023;
-        Wed, 12 Feb 2025 00:20:57 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.173])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de4fe72207sm9052128a12.38.2025.02.12.00.20.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2025 00:20:55 -0800 (PST)
-Message-ID: <82b072df-57b2-4668-9439-1a6c89788268@tuxon.dev>
-Date: Wed, 12 Feb 2025 10:20:54 +0200
+	s=arc-20240116; t=1739357012; c=relaxed/simple;
+	bh=HCfswIkRUWqCkSlxznTAVF1bVVQxdphLqoiOwibUgSo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sU8+1/vUc0cBbSdBfURtBCVut5yPAWmDKmQMTHay4Kc+SPr71xSWEndhyivDqmFj0tY3ed/1/GGB3CFkTFvoK/Vqb3JRX5V/0ftG347pw8y2KN5xvxrJtIfUmH7n1AN8ZIEVyqbEVu9XUrwLg59+dhsQnavpZslyw6qtPvjBGLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C94312FC;
+	Wed, 12 Feb 2025 02:43:51 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE7B23F6A8;
+	Wed, 12 Feb 2025 02:43:27 -0800 (PST)
+Date: Wed, 12 Feb 2025 10:43:24 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Peng Fan <peng.fan@oss.nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	"cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
+Subject: Re: [PATCH 0/4] rtc/scmi: Support multiple RTCs
+Message-ID: <Z6x7TBSjBFBxGo77@bogus>
+References: <20250120-rtc-v1-0-08c50830bac9@nxp.com>
+ <20250120102117538ef59b@mail.local>
+ <PAXPR04MB8459968DFDE5979802CC034A88E62@PAXPR04MB8459.eurprd04.prod.outlook.com>
+ <Z6uCCeG2d395ZGDS@bogus>
+ <20250212063532.GB15796@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 13/15] power: reset: at91-sama5d2_shdwc: Add sama7d65
- PMC
-To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
- p.zabel@pengutronix.de
-Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
- <e3bde200e4b8efe69656f1ecc9e8e7c5c6f631a5.1739221064.git.Ryan.Wanner@microchip.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <e3bde200e4b8efe69656f1ecc9e8e7c5c6f631a5.1739221064.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250212063532.GB15796@localhost.localdomain>
 
-
-
-On 10.02.2025 23:13, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+On Wed, Feb 12, 2025 at 02:35:32PM +0800, Peng Fan wrote:
+> On Tue, Feb 11, 2025 at 04:59:53PM +0000, Sudeep Holla wrote:
+> >On Tue, Jan 21, 2025 at 02:31:55PM +0000, Peng Fan wrote:
+> >> 
+> >> It is the i.MX SCMI Protocol exports two RTCs using one protocol.
+> >> 
+> >> Two RTC devices are created, but share one parent device.
+> >> 
+> >> Do you mean each RTC device should have a unique parent device?
+> >>
+> >
+> >Can you point where is this check for unique parent ? I am not so familiar
+> >with RTC but I couldn't find myself with quick search.
 > 
-> Add sama7d65-pmc compatible string to the list of valid PMC IDs.
+> The RTC ops takes the rtc parent as input parameter
+> https://elixir.bootlin.com/linux/v6.13.2/source/drivers/rtc/interface.c#L94
+> "err = rtc->ops->read_time(rtc->dev.parent, tm);"
 > 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  drivers/power/reset/at91-sama5d2_shdwc.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
-> index edb0df86aff45..0cb7fe9f25a07 100644
-> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
-> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-> @@ -326,6 +326,7 @@ static const struct of_device_id at91_pmc_ids[] = {
->  	{ .compatible = "atmel,sama5d2-pmc" },
->  	{ .compatible = "microchip,sam9x60-pmc" },
->  	{ .compatible = "microchip,sama7g5-pmc" },
-> +	{ .compatible = "microchip,sama7d65-pmc" },
+> So in the rtc device driver, there is no way to know which rtc it is just
+> from the parent device.
+>
 
-This does not apply cleanly on top of v6.14-rc1. The conflict is on sam9x7
-compatible which is missing from this diff.
+If that is the expectation, you could create a platform or normal device
+per instance of RTC on your platform and slap them as parent device.
 
->  	{ /* Sentinel. */ }
->  };
->  
+IIUC on any pure DT based system, a device node exists per RTC and hence
+platform device associated with it. And the RTC devices are created with
+parent pointing to unique platform device.
 
+> However i.MX SCMI BBM exports two RTCs(id: 0, id: 1), so to make it work for
+> current RTC framework, we could only pick one RTC and pass the id to BBM
+> server side.
+>
+> I am not sure whether Alexandre wanna me to update the code following each
+> parent could only support one RTC or else.
+>
+
+I assume something like my suggestion above.
+
+--
+Regards,
+Sudeep
 
