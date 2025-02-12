@@ -1,79 +1,79 @@
-Return-Path: <linux-rtc+bounces-3169-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3170-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C288A320BF
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 09:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D6EA4A320C3
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 09:18:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50AE87A24FB
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 08:16:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4AFB7A29B0
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Feb 2025 08:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9EF204C3B;
-	Wed, 12 Feb 2025 08:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06503204F6B;
+	Wed, 12 Feb 2025 08:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="hMOJ2RoM"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="I1308Cii"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2381E9B3B
-	for <linux-rtc@vger.kernel.org>; Wed, 12 Feb 2025 08:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491261F9F64
+	for <linux-rtc@vger.kernel.org>; Wed, 12 Feb 2025 08:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739348258; cv=none; b=h1uDrVskA+e5iCjuKcKrCI2at5gjPkd/yFdlrL4CGvIcUSWcm+Dm4OnNrn2rCxvy/iWX07wBMwjMm/qqojSy8kTfl9MwuzsdByb0388FX7FjymutLItWBzhCVWOZ/MXMSvjUTz4y2QTzQpea3slxaaRhgrMLwQAqK+mQAwkxJdI=
+	t=1739348304; cv=none; b=I/OVeuigCbXK28+WdrwyFwXhBZW81WhSNkgN7fTOs3ffS22TNsrEW93oRzy6b0/1KacqeUE/wP7GfAdsto80h2Ki6MXRrzK/rhzHNpRkhylhuTwZ3scihLnIWFbzmsv1Dl12zjdHBGpRaoiHHjRcxpC4idx9n4gPYIA9T+ksNL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739348258; c=relaxed/simple;
-	bh=02CCZl7slFJBM7+CvoMMp8JDrE/5IxKvqidgK1BFCyo=;
+	s=arc-20240116; t=1739348304; c=relaxed/simple;
+	bh=pe1GAinqTXmMtWLyQJVPYf2smmZnVgMAETxekYxmBgg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uCeoCuRMtftTnWZLKxs0OIrUliqgecTCmyTn1crr6eOrCoX5X6/0Ve8gxij9uk+ZfS+NdKsI/irG5XpWvAm+jimqjJLmWflH+pbvcMRO9MZxlOw13V8Rmoulw+dOM4NxPKtxQ8/oRpT/BNgy7Omx8T/OAA8l6FAB59hQvolHYP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=hMOJ2RoM; arc=none smtp.client-ip=209.85.218.43
+	 In-Reply-To:Content-Type; b=jqkxTMstsuVwdeqVh+AaI7ddviBoEhJ3DZHPPMFEMcuqiWCEAQiMPKlVnE3FeJFo/62gjgiL/q4soRqHysvlQnaaLvKMbNi11rpk8JQosQ247JKMMOqbF4cpEegMSXjr/emcpIcQFnHeLdiGwF9kiZvs39Z1WVPEKrSYPtvi79E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=I1308Cii; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab2b29dfc65so984486066b.1
-        for <linux-rtc@vger.kernel.org>; Wed, 12 Feb 2025 00:17:36 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5de4a8b4f86so7776116a12.2
+        for <linux-rtc@vger.kernel.org>; Wed, 12 Feb 2025 00:18:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1739348255; x=1739953055; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1739348301; x=1739953101; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eOol5WNPvENS3vdMhBYm0QLh74/mNhfhqG7fppgba9k=;
-        b=hMOJ2RoMBuQemaOI05YGiIDlAsbwxLdTnwKywI8AAZZf890QKt/ahq4OVDMhjo+Wq0
-         gkD+B6bWAr4bnfY2s5XiRW0MOHhYVbmvvgbJjW2m1ne1AL2iZ+NoxKjXNVCjMYqCDroT
-         K2bPJTyae/MnWb2FS5vBfbzc6mxgaPBSe4elodiplJRWsrajZm8tGwK99XIcRUlHJkEe
-         CLokPnXn9dxpfcGxUkLnNHLhq9nRfBc1v6JSQHPF595CTbiovLEB8b3VEcVMWes7P6aS
-         m/ls+uC0xAlkrU6LMmh9p0xSE7kak70X5Yl9sQAm5unPyptW3aBJRVoc6pjbIRgMT6Mf
-         KqvA==
+        bh=DUWX2C7v/npw1BHngSXdIYBv3kYifI6qQFt5lUSdhNY=;
+        b=I1308CiiauivOZLl7wCUkbBwv7xmfnxCfMYEpciY7ws78/QoPsGiuedOVhZKHM4z3Z
+         a7jtLEXUVLYTVALfyY9TIpf25LEuMUukYwBiA0AmH2zvynLgi0RYaTYjs2WjJpc34vEH
+         alBObgjsd7OEBJ+oRAVL13NoSByqWeE3Ph9oDWDF5cqnZPfvPErq0NoSwHOdWXMSTj9p
+         gmTQ7IWvJ4yn688PXLni2RK0gjsRVQ2QT8bQ9nqoLfoN4wEk30EBLTCYkv/Xdw/7+okB
+         VIt3eZfW9UZ5DdQkCd4pBZCUz2qy+3nm65w3mqMYiISyvy8FPE//5IOvdI20DxAnNbkd
+         VjFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739348255; x=1739953055;
+        d=1e100.net; s=20230601; t=1739348301; x=1739953101;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOol5WNPvENS3vdMhBYm0QLh74/mNhfhqG7fppgba9k=;
-        b=O/6kqNlx6JHAnlU619uP7UdenMaEyXWtcoJ8Rm35V+/i7NRUBhVdEgreR7YqPrHRZI
-         5TEp9vRPm2/jasJGHBg2yIvmREqNAZrronQFGTU0pgFTHHLiwBFeII2e34Yd8eFopvQM
-         BboUfAAUbco7O7gclk7oCGaK511iW1Y7W5qMAetWSahU32WuPZGKawssGXr9lkv+u9ya
-         oziTPX+qQyDeFwqHHhgFvnqY38LVxtWX0j+EbnIJR72IyOqnhxpPlhgZoQd2pCjGb5MW
-         3cuM7Y6DqToW0qOpI3mZT4j6Ly9IoMSOoTsT+Qcj335kNJK22uT/UGcSDeGWC4u6+z2O
-         CR+A==
-X-Forwarded-Encrypted: i=1; AJvYcCWOrF8FpKurRfztFJIJ1d41TW4EsOWsoIJZKMt2GLAsrtHyzs8yTQaU/cFeujeL3hjqiFIQ609IVSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8Am8Wf3QE89t1GAHQtl/GjVhzrlePpDnWs5iN5YeUz39a/SpV
-	NjsImmQa/m0ORQp2eQRemlC65/MDPVtBsw1/70CyAhWvKcAW8NdtoINxihEPMVU=
-X-Gm-Gg: ASbGncvUDeFNvbagBw4znB2nd6NgLimeVqkaorBeXbnY6PQz0VUL2soKuOKDhicDxlR
-	b6P/nU0gcl5AuymnT3j+Mwm3SyYLjYPCtltd/kBnbis8ejAJZNn1iD9uH46Bl1hebmb/854nCPf
-	DOmhHBIAvImEd+yznI108NN3RelOXbPlvDkSjJ06Jp1A8NmB0Ee4BH+ZoAT3PFtPF8g3RT+dX49
-	xySzZeQcHbEcrnmXC/YMahK7+t7aqKMv3E/Zz4KutAmXEz7e4rbwuDquusObxZ2xpR8bpTcEA2b
-	TUXkxOlYzHfatJiiGkd8LkYQ
-X-Google-Smtp-Source: AGHT+IFErQwXqSNpK/6FrEzXPnkJQuSUwq8b4aWjOCfP5LHsMYbCFirtlFlujhvTW/ijh8+yT3EyjA==
-X-Received: by 2002:a17:907:60d0:b0:ab7:c3c9:2ab1 with SMTP id a640c23a62f3a-ab7f34ab9a0mr174668266b.50.1739348254554;
-        Wed, 12 Feb 2025 00:17:34 -0800 (PST)
+        bh=DUWX2C7v/npw1BHngSXdIYBv3kYifI6qQFt5lUSdhNY=;
+        b=lVOhXT0FfTlLM+Hkpy/z3uPvLv5IPSknJ8KJ7oHJZdls9F7Y1qxk9bU4w7/DQz9wHd
+         CHraHgTUOMkmHXszgcxMu4dNt4vd1I07RlURgQ8mXsD6RcPN9nDP0YltzwZFB0wYp3i7
+         jperwrvHe0QDba7TFk2Ql7vC7nypPiVThHeTI8GouVpXUs/NoywZ/jgldQEQofgScjew
+         JvI8TPOEbr5VvyRn26AdURM61CNYZS5e89yvFCZHUiKuFs2OnVfulDIY4ghoFufVMm7E
+         aPH4klK+5de1Nj84ghgbNJTmyrxfvDNCkCIz4+btvAbNLsh0Aep1X/9nqZvOlpNhDLbT
+         Sxpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVKpF9o3WiCskPF40WNGX3YfvyvfWb6F21mSbdj++ifOtMQXVtXbgfxdd+7d0px5Pxer7LzzOW7ACc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEWn5L1zZxqb+09EL6VcUkIpLCnIscLdLhLzv2bJICOQSuarla
+	7nXBhqRODnejEwXW1/jqLI9KmLvpNFi5vg8x0oigoAdlvODmUCPtK0otJeCxLSw=
+X-Gm-Gg: ASbGncvV3IJ3Hpd9weO9Twz2mAViKRvDUFCzGdackxyOlDcfYdjMKNh8bg2/IrV22Bb
+	6VQhs3p0bQwGGiCoovxsycir7k9MMItiTsIKeaRGKCTlTf6KzYcTljvmuM+jlaDHoRcgZXvZ7DF
+	k+HoaTE9vaDoEP/kpYqzkrSzMcYTZTUftq0ROfdAglnji2DpydXxnlYWFBtmM3+POE7Eu3vJT1w
+	YjTlofsJe7pde+B3JPnrzJmcYaydwS9taQ32W+MDdZMsZLtV1VfByKvxiU3B8xasJIjbNg83vgi
+	g13Zt4rYfK9Dx22Y5Cnm5Zh0
+X-Google-Smtp-Source: AGHT+IEwjSS+zOVDgDiChTpc71avmO2oV3vQhPuCatbzyoXLnyMKNa1d3LFoa9iHYB9Jc1QHZRsUnw==
+X-Received: by 2002:a05:6402:1ed6:b0:5dc:8fcb:b224 with SMTP id 4fb4d7f45d1cf-5deadd829cbmr1660137a12.8.1739348301352;
+        Wed, 12 Feb 2025 00:18:21 -0800 (PST)
 Received: from [192.168.50.4] ([82.78.167.173])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7b4724caesm694239866b.145.2025.02.12.00.17.32
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de5a2fc79esm8071036a12.10.2025.02.12.00.18.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2025 00:17:34 -0800 (PST)
-Message-ID: <8ad7636f-af6d-417f-8801-66530ff67c1f@tuxon.dev>
-Date: Wed, 12 Feb 2025 10:17:32 +0200
+        Wed, 12 Feb 2025 00:18:20 -0800 (PST)
+Message-ID: <9baea17b-fb8e-48a5-b12f-7eebee406ee6@tuxon.dev>
+Date: Wed, 12 Feb 2025 10:18:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -81,107 +81,51 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/15] ARM: at91: pm: fix at91_suspend_finish for ZQ
- calibration
+Subject: Re: [PATCH v2 07/15] dt-bindings: at91rm9260-rtt: add
+ microchip,sama7d65-rtt
 To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
  nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
  p.zabel@pengutronix.de
 Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
- Li Bin <bin.li@microchip.com>,
- Durai Manickam KR <durai.manickamkr@microchip.com>,
- Andrei Simion <andrei.simion@microchip.com>
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
- <4e685b1f1828b006cb60aa6b66239f2c0966501a.1739221064.git.Ryan.Wanner@microchip.com>
+ <b437898b518910a2f94f7d827608db35e82c5828.1739221064.git.Ryan.Wanner@microchip.com>
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Content-Language: en-US
-In-Reply-To: <4e685b1f1828b006cb60aa6b66239f2c0966501a.1739221064.git.Ryan.Wanner@microchip.com>
+In-Reply-To: <b437898b518910a2f94f7d827608db35e82c5828.1739221064.git.Ryan.Wanner@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi, Ryan,
+
 
 On 10.02.2025 23:13, Ryan.Wanner@microchip.com wrote:
-> From: Li Bin <bin.li@microchip.com>
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> For sama7g5 and sama7d65 backup mode, we encountered a "ZQ calibrate error"
-> during recalibrating the impedance in BootStrap.
-> We found that the impedance value saved in at91_suspend_finish() before
-> the DDR entered self-refresh mode did not match the resistor values. The
-> ZDATA field in the DDR3PHY_ZQ0CR0 register uses a modified gray code to
-> select the different impedance setting.
-> But these gray code are incorrect, a workaournd from design team fixed the
-> bug in the calibration logic. The ZDATA contains four independent impedance
-> elements, but the algorithm combined the four elements into one. The elements
-> were fixed using properly shifted offsets.
+> Add SAMA7D65 RTT compatible to DT bindings documentation.
 > 
-> Signed-off-by: Li Bin <bin.li@microchip.com>
-> [nicolas.ferre@microchip.com: fix indentation and combine 2 patches]
-> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Tested-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> Tested-by: Durai Manickam KR <durai.manickamkr@microchip.com>
-> Tested-by: Andrei Simion <andrei.simion@microchip.com>
-
-Missing your SoB tag.
-
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 > ---
->  arch/arm/mach-at91/pm.c | 21 +++++++++++----------
->  1 file changed, 11 insertions(+), 10 deletions(-)
+>  .../devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml         | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-> index 05a1547642b60..6c3e6aa22606f 100644
-> --- a/arch/arm/mach-at91/pm.c
-> +++ b/arch/arm/mach-at91/pm.c
-> @@ -545,11 +545,12 @@ extern u32 at91_pm_suspend_in_sram_sz;
->  
->  static int at91_suspend_finish(unsigned long val)
->  {
-> -	unsigned char modified_gray_code[] = {
-> -		0x00, 0x01, 0x02, 0x03, 0x06, 0x07, 0x04, 0x05, 0x0c, 0x0d,
-> -		0x0e, 0x0f, 0x0a, 0x0b, 0x08, 0x09, 0x18, 0x19, 0x1a, 0x1b,
-> -		0x1e, 0x1f, 0x1c, 0x1d, 0x14, 0x15, 0x16, 0x17, 0x12, 0x13,
-> -		0x10, 0x11,
-> +	/* SYNOPSYS workaround to fix a bug in the calibration logic */
-> +	unsigned char modified_fix_code[] = {
-> +		0x00, 0x01, 0x01, 0x06, 0x07, 0x0c, 0x06, 0x07, 0x0b, 0x18,
-> +		0x0a, 0x0b, 0x0c, 0x0d, 0x0d, 0x0a, 0x13, 0x13, 0x12, 0x13,
-> +		0x14, 0x15, 0x15, 0x12, 0x18, 0x19, 0x19, 0x1e, 0x1f, 0x14,
-> +		0x1e, 0x1f,
->  	};
->  	unsigned int tmp, index;
->  	int i;
-> @@ -560,25 +561,25 @@ static int at91_suspend_finish(unsigned long val)
->  		 * restore the ZQ0SR0 with the value saved here. But the
->  		 * calibration is buggy and restoring some values from ZQ0SR0
->  		 * is forbidden and risky thus we need to provide processed
-> -		 * values for these (modified gray code values).
-> +		 * values for these.
->  		 */
->  		tmp = readl(soc_pm.data.ramc_phy + DDR3PHY_ZQ0SR0);
->  
->  		/* Store pull-down output impedance select. */
->  		index = (tmp >> DDR3PHY_ZQ0SR0_PDO_OFF) & 0x1f;
-> -		soc_pm.bu->ddr_phy_calibration[0] = modified_gray_code[index];
-> +		soc_pm.bu->ddr_phy_calibration[0] = modified_fix_code[index] << DDR3PHY_ZQ0SR0_PDO_OFF;
->  
->  		/* Store pull-up output impedance select. */
->  		index = (tmp >> DDR3PHY_ZQ0SR0_PUO_OFF) & 0x1f;
-> -		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-> +		soc_pm.bu->ddr_phy_calibration[0] |= modified_fix_code[index] << DDR3PHY_ZQ0SR0_PUO_OFF;
->  
->  		/* Store pull-down on-die termination impedance select. */
->  		index = (tmp >> DDR3PHY_ZQ0SR0_PDODT_OFF) & 0x1f;
-> -		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-> +		soc_pm.bu->ddr_phy_calibration[0] |= modified_fix_code[index] << DDR3PHY_ZQ0SR0_PDODT_OFF;
->  
->  		/* Store pull-up on-die termination impedance select. */
->  		index = (tmp >> DDR3PHY_ZQ0SRO_PUODT_OFF) & 0x1f;
-> -		soc_pm.bu->ddr_phy_calibration[0] |= modified_gray_code[index];
-> +		soc_pm.bu->ddr_phy_calibration[0] |= modified_fix_code[index] << DDR3PHY_ZQ0SRO_PUODT_OFF;
->  
->  		/*
->  		 * The 1st 8 words of memory might get corrupted in the process
+> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> index a7f6c1d1a08ab..48a2e013a6b24 100644
+> --- a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> @@ -23,6 +23,9 @@ properties:
+>                - microchip,sam9x60-rtt
+>                - microchip,sam9x7-rtt
+>            - const: atmel,at91sam9260-rtt
+> +      - items:
+> +          - const: microchip,sama7d65-rtt
+
+Can't this be added in the above enum?
+
+> +          - const: atmel,at91sam9260-rtt
+>        - items:
+>            - const: microchip,sama7g5-rtt
+>            - const: microchip,sam9x60-rtt
 
 
