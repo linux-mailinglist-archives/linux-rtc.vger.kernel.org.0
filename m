@@ -1,120 +1,165 @@
-Return-Path: <linux-rtc+bounces-3191-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3192-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B3FAA34F62
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Feb 2025 21:30:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63DACA35003
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Feb 2025 21:58:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C270E3ACB49
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Feb 2025 20:30:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 031C9188B692
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Feb 2025 20:58:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322702661A4;
-	Thu, 13 Feb 2025 20:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106C1266B59;
+	Thu, 13 Feb 2025 20:58:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFRcPhLy"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="b67JlGuC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E5A245B1B;
-	Thu, 13 Feb 2025 20:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348F128A2C0;
+	Thu, 13 Feb 2025 20:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739478610; cv=none; b=Hqhai9n+EIeGtSmedPHKpBtAZeAAAxYaL1Gt4ZYuo5m7tq0Y28JatyWQv7XeSPOneb1LtKXHb2bwyU3ASbjpCq5eBu6U6hp1/gd/+MnvTq9qL9TYwKKGwIg/IScnl6KGwnR0dDE32DRrNPfQFtCuPKw68+WORi6pemyMaE6/VLI=
+	t=1739480306; cv=none; b=MI8DaH3HfIVEfDTCwRjpIJUY90uppBryBt8dpwrqRskm05Nx3Z7as/xXk3qQGbwXCL675KObPraYCRE7AAcZ55J33xqyaCU/hFv11xnYsQCf+rrQMGdR69mPtXGyLkAUdXQ9Lw/qkMxq6dwTva61TbBmLTxm0AjjePi/m78eW48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739478610; c=relaxed/simple;
-	bh=uyWlRmXMXeDRjKN/QUZuzNs4AKAFWK4bYiZ6ygpiavw=;
+	s=arc-20240116; t=1739480306; c=relaxed/simple;
+	bh=DMvs0zGdbiCX/sjLoR9VNsU3LUegWEBDqfY9b6mUYj8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GaLeOOEwqIujP0meYkPxEFqtpffCVfVpGsbxeluy7LWKj/ZekJBxbQgWfRCfXwyLP/S3WEnMyPfWdUd3oJxtLR33xHfsOCCC+Wrj0LreR+DXyHfD6TGwzOSLrIyZ+DAa7t9IuKQDlLMwO8vhYcfw5RS5mLveBQhkBHYNT4h6ldk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFRcPhLy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0AC9C4CED1;
-	Thu, 13 Feb 2025 20:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739478609;
-	bh=uyWlRmXMXeDRjKN/QUZuzNs4AKAFWK4bYiZ6ygpiavw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AFRcPhLyZikC9/6PqjY8KJrAgqbk0gOkYLwYjOSsJen/HfJFjW61itYcER1NPRrJf
-	 eAx/eaUN9USWPphz671vKhfECtHB/bPOgxqkS1RcJ77quZdGdPI8yRIo3ZGeiVQirM
-	 hTw7VVo2ybfj/xwwLw4nhb4MZA3O6LYtWTxSY8IG8sO+U3oJx6FpzvwXcOe+JmlWoc
-	 h8dXoATZ2dQrMsnSKFjFLtO0btzFLfiOB2eLF1QIA1U6J8LIY5+XQcqwMLYbE8o17T
-	 XIwaezxQdCnBVJ6AiEYUOcHjsB5VC/+yBrQOfEP9Ka3EC41IIOsq08zxT/NI873UTj
-	 jN+a9yU6C8Oqw==
-Date: Thu, 13 Feb 2025 20:30:04 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, claudiu.beznea@tuxon.dev,
-	sre@kernel.org, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, p.zabel@pengutronix.de,
-	linux@armlinux.org.uk, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 02/15] dt-bindings: mfd: syscon: add
- microchip,sama7d65-sfrbu
-Message-ID: <20250213-shrouded-carnage-65e11cff5bb4@spud>
-References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
- <4cac19e32295c708d72b9fc6ba342b5c961fb6c3.1739221064.git.Ryan.Wanner@microchip.com>
- <20250211-therapeutic-futuristic-parakeet-204cae@krzk-bin>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tO5nxjrPLxN+nSvuyiMnACqc5e4xnMezVhfnPj+THfKPQzdSYXnV0Q5k2+MKQobhXAcHFPeX/FWjF67mYChjcYpF9mXKICfLKI0LijI2BCUxgMt2yN5wms8ChkZz3nKnyyys/Pi0wsBvUrRtbTeM9Kw7a8uef+LVbClKmMD2Ufc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=b67JlGuC; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 26DE544300;
+	Thu, 13 Feb 2025 20:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1739480301;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LWJiM1NFkSJ0D7UA78bKmM5hHyORgZQGH37a4foanvg=;
+	b=b67JlGuCv3yJdSsndGs/nZkpiGYuhphZ7pGjGTTiU7QbULpqySbNoRzg6g/b9mZ1plFOF9
+	iiSZCrQdbFnpB39cmPO+F25DJft8U343DgI8Rp5buSMRtiJDyv+2Cxd/XgYqn2cWjJPgFJ
+	cbbmdxOCqfxm5uFQGc0r3of/Jxg+b7/k7I4Ow5NUa+dwlGGHRRsAyC22uq4bYsXrPeoPk7
+	GLv4a9o2UjkuisxIFWbePEjQt90HCmYnc3Ov9dMhxNc7QrgjvzUcIJx5DdO4N4xq6ixznu
+	mMacCfwcvgU1jVo/6m5aRFthKxWbyrTIFO4XJxPXHv6rOrPYV65LnXxpLlMbzQ==
+Date: Thu, 13 Feb 2025 21:58:18 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
+	Jingbao Qiu <qiujingbao.dlmu@gmail.com>,
+	Inochi Amaoto <inochiama@gmail.com>, robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	unicorn_wang@outlook.com, inochiama@outlook.com,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	dlan@gentoo.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/2] rtc: sophgo: add rtc support for Sophgo CV1800
+ SoC
+Message-ID: <20250213205818f14edd30@mail.local>
+References: <20250213184622.2099324-1-alexander.sverdlin@gmail.com>
+ <20250213184622.2099324-3-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="HXlCXwCYNYh2B+qP"
-Content-Disposition: inline
-In-Reply-To: <20250211-therapeutic-futuristic-parakeet-204cae@krzk-bin>
-
-
---HXlCXwCYNYh2B+qP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250213184622.2099324-3-alexander.sverdlin@gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegjeejlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegieduueethefhkeegjeevfefhiedujeeuhffgleejgfejgeekueejuefgheeggfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduiedprhgtphhtthhopegrlhgvgigrnhguvghrrdhsvhgvrhgulhhinhesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhor
+ hhgpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehqihhujhhinhhgsggrohdrughlmhhusehgmhgrihhlrdgtohhmpdhrtghpthhtohepihhnohgthhhirghmrgesghhmrghilhdrtghomhdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriiihshiithhofhdrkhhoiihlohifshhkihdoughtsehlihhnrghrohdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhg
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, Feb 11, 2025 at 09:14:05AM +0100, Krzysztof Kozlowski wrote:
-> On Mon, Feb 10, 2025 at 02:13:02PM -0700, Ryan.Wanner@microchip.com wrote:
-> > From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> >=20
-> > Add SAMA7D65 SFRBU compatible string to DT bindings documentation
-> >=20
-> > Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Docume=
-ntation/devicetree/bindings/mfd/syscon.yaml
-> > index 51d896c88dafa..727292ffe092e 100644
-> > --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-> > +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> > @@ -91,6 +91,7 @@ select:
-> >            - microchip,mpfs-sysreg-scb
-> >            - microchip,sam9x60-sfr
-> >            - microchip,sama7d65-ddr3phy
-> > +          - microchip,sama7d65-sfrbu
->=20
-> You got comment on #1 of your v1, so if you make exactly the same
-> mistake in other patches then fix it there as well.
->=20
-> Apply v1 Rob's comments to all your patches.
+On 13/02/2025 19:46:15+0100, Alexander Sverdlin wrote:
+> +static int cv1800_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct cv1800_rtc_priv *rtc;
+> +	u32 ctrl_val;
+> +	void __iomem *base;
+> +	int ret;
+> +
+> +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> +	if (!rtc)
+> +		return -ENOMEM;
+> +
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	rtc->rtc_map = devm_regmap_init_mmio(&pdev->dev, base,
+> +					     &cv1800_rtc_regmap_config);
+> +	if (IS_ERR(rtc->rtc_map))
+> +		return PTR_ERR(rtc->rtc_map);
+> +
+> +	rtc->irq = platform_get_irq(pdev, 0);
+> +	if (rtc->irq < 0)
+> +		return rtc->irq;
+> +
+> +	rtc->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+> +	if (IS_ERR(rtc->clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk),
+> +				     "clk not found\n");
+> +
+> +	platform_set_drvdata(pdev, rtc);
+> +
+> +	device_init_wakeup(&pdev->dev, 1);
+> +
+> +	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(rtc->rtc_dev))
+> +		return PTR_ERR(rtc->rtc_dev);
+> +
+> +	rtc->rtc_dev->ops = &cv1800_rtc_ops;
+> +	rtc->rtc_dev->range_max = U32_MAX;
+> +
+> +	ret = devm_request_irq(&pdev->dev, rtc->irq, cv1800_rtc_irq_handler,
+> +			       IRQF_TRIGGER_HIGH, "rtc alarm", rtc);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "cannot register interrupt handler\n");
+> +
+> +	rtc_enable_sec_counter(rtc);
 
-Actually, this patch v1 did put it in both lists, but here it got
-dropped from the second list:
-https://lore.kernel.org/all/20250130233431.GB1868322-robh@kernel.org/
+Really, this must be avoided, this loses precious information and
+changing it later will break users. What must be done is to check
+whether the RTC is started in .read_time if this is not the case, return
+-EINVAL instead of an invalid date/time.
+The RTC must be started once the time is set for the first time. This
+ensures we can detect when the time is invalid.
 
---HXlCXwCYNYh2B+qP
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+> +
+> +	return devm_rtc_register_device(rtc->rtc_dev);
+> +}
+> +
+> +static const struct of_device_id cv1800_dt_ids[] = {
+> +	{ .compatible = "sophgo,cv1800-rtc" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, cv1800_dt_ids);
+> +
+> +static struct platform_driver cv1800_rtc_driver = {
+> +	.driver = {
+> +		.name = "sophgo-cv1800-rtc",
+> +		.of_match_table = cv1800_dt_ids,
+> +	},
+> +	.probe = cv1800_rtc_probe,
+> +};
+> +
+> +module_platform_driver(cv1800_rtc_driver);
+> +MODULE_AUTHOR("Jingbao Qiu");
+> +MODULE_DESCRIPTION("Sophgo cv1800 RTC Driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.48.1
+> 
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ65WTAAKCRB4tDGHoIJi
-0kVRAQDXcFGQWxRkf6rUQyT1YQd5ec+0uVx8aLWtL0v8PANMVAD/dw9OVEVJxTSD
-cWfK2bjdj7nz/WVP88GLvUJRr54Wmgo=
-=110u
------END PGP SIGNATURE-----
-
---HXlCXwCYNYh2B+qP--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
