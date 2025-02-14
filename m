@@ -1,94 +1,122 @@
-Return-Path: <linux-rtc+bounces-3204-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3205-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC0DFA358E3
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2025 09:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8CA3A3597F
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2025 09:57:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6454188FB1E
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2025 08:28:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77BF11892B41
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2025 08:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E807F22259B;
-	Fri, 14 Feb 2025 08:28:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CEE922A4E8;
+	Fri, 14 Feb 2025 08:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhNhiMYj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O8x9V//2"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7366205AB8;
-	Fri, 14 Feb 2025 08:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF3B22A4C1;
+	Fri, 14 Feb 2025 08:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739521722; cv=none; b=No1AwPiIt6vlDp3aHD+gNhTrXto4N2VMqup0egvNwm/AcpRlb6aHhduxTELykAp3ULH3kL7JVnvE8ZeENMCWXyIMP2FJWc8rSTrVZFMAPNO8ZC0OgYveJKzZ98YANszEW8Vnd0qx3fZEvx1wiP/6cZpMRzzqaXqu1/3xHY2V/go=
+	t=1739523407; cv=none; b=kiHUqWrnpm29Oj6oJT2/xZo0uoXsyFUp1EAYkEIbfkgSG9rQtKcY8D1YlXdi53KFDwYd0FVu7xDaC9WWd6lQoGQhb0ZmHbD5hmLQ2aAwQd5pq1VSUe/puNh6kPLuiplkFOlTV9bSp1KCjv6Ul4V0LspLjDnls8ySedyXvgLUKDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739521722; c=relaxed/simple;
-	bh=KO+4oZsMAUFcx91vxIuqec0dnxFJQO0eihmeoC5Sj+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tE7xKmcK9CqoyQFbrOuVlWZnG+BEDWfg+zdT3upGTgNtM0H0jlnz1/b6MTLQbrvFQSSlXDVKtx2voSdNV/SdqHrBvZ8DEj46xDhngH/rUvfHXUe5rhfsqOuBHwSrShuOPOJsk06IkIAukvL/q0yL7yvUKYF4SRUw+OXlYzc2ShU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhNhiMYj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72D8C4CED1;
-	Fri, 14 Feb 2025 08:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739521721;
-	bh=KO+4oZsMAUFcx91vxIuqec0dnxFJQO0eihmeoC5Sj+Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fhNhiMYjLtTSSkKiSa4nhwRRYrn+y3P1wEKQwnh0HC8J5BzL4Sb7t3DTsTvsoqg4K
-	 evX/K1/pDmhNbzY5Wq2rk55M/3BU3U4nutfxSmljEe7CcvXbCpe5sE8DPeTQ68F07L
-	 tN/GST8oeKidnjTIRU6gSQ54g5Ywsij3NUQB8WaoRS0u3+NVxdGGpI07IzRCRDlbDx
-	 kBUaf8ZJlTHFLmWiI0JtcbCHkdm+aMWUWPkP/iUoir2LaJe58/M2o8SSihSH9VP2DU
-	 8Z35Ek3cwBOaZAFcFDgrFO7ibpKEmOMq2JyNz/mh55fKdjoQnSHJBTxRki83hHNaIU
-	 CNet6dc/8XU1g==
-Date: Fri, 14 Feb 2025 09:28:32 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Ryan.Wanner@microchip.com
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, claudiu.beznea@tuxon.dev, sre@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, p.zabel@pengutronix.de, 
-	linux@armlinux.org.uk, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 07/15] dt-bindings: at91rm9260-rtt: add
- microchip,sama7d65-rtt
-Message-ID: <20250214-wondrous-strong-shellfish-77f07f@krzk-bin>
-References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
- <b437898b518910a2f94f7d827608db35e82c5828.1739221064.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1739523407; c=relaxed/simple;
+	bh=9Kqb/+zQgoNRtarVFNZ+/aOPm1SAV4qBUOpuNnZj7rQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YVwHD21OUuE0Jg/xZUff1u0GXnM8mHPkhjAYVtkwSyM9UF9YT6qYhic3X6zkKaZZmJeGC3jsTMlxINphJwjlsmHLBfyNx4p+/YYsF76dPTAJlZODe5qR/wO11pBtwtr1MNDY2KFcJ1wiZiITGWegbNBwX8tJA3EkyLi7B7oban8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O8x9V//2; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5dec996069aso3106559a12.2;
+        Fri, 14 Feb 2025 00:56:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739523403; x=1740128203; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9Kqb/+zQgoNRtarVFNZ+/aOPm1SAV4qBUOpuNnZj7rQ=;
+        b=O8x9V//2OH85h1TSVAliq1gO/g2ipvvn5G/YMMP46u5FlmlbiQ8JpoLIwyum4OxLyv
+         tAbPg1X1FD6A5SMfD2j1IiYh8X87kjfd72FucyMU4M9FGJN3+bXI/EieT1IwkIPR2Ffj
+         fzsEUvPllv0uwmuQdbnG67XdWCX2jQhrcVl+89gzoaFmPuhSZuwJMvQc3vsH1Rf6K04V
+         vwPAEP4PncyvkYy72jOP0AjI4JAtp0hfB/eYF73SWIbDb5TN8y50topjXZ/zg1+3/fFy
+         NdnbUGi++58n2dR/yKf6KKoWVr2NX+x6JWmyMXCcMsauNkKZ5sPz9wJPfg8IusJsz/ex
+         +pEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739523403; x=1740128203;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9Kqb/+zQgoNRtarVFNZ+/aOPm1SAV4qBUOpuNnZj7rQ=;
+        b=YppGSt86dTsTdS0yfX/HLLk8x2SJon4ZgKqtgzWug5Cji3ekI8e5JLdHeldigscGYR
+         Pu389xQvNeJPAd7ZZJtMFXJwvkbu4Wy6omKyNC1gOEytuJVEmRa6M/R3aaa2nGdiE8iI
+         6TG0EJkz8j02yHPcWJyEdQF+fpiQf1CehOQXOLsbNXYmfdVE/aa39VfeWlshnRXDSC/3
+         hB9ROkJUd3tYNDBkdfa2+dtWTFuvpJO3d+G0xxciqAu5zhV4/7/ZI7VaGar4qg7UvwmS
+         r/YNF0ksoR/9JFxygtbi6l2ElA8DC6OwMHz3EwQGA3XoeiDA9giSQDZUDwfYplHlmhrS
+         aD8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUUnkuToil7LB0eSzW2VwZb/ZTASyz5r6XCwL0Ww2yScnTZbhqbJZsdiJ0QVZJkW2GXZJKQufQxjDSK@vger.kernel.org, AJvYcCWD1bGdta2AapDNRPt1wc++R48joC8hjaHRecEwHUhGaO0NfBFrFHRHolzJgW9NbfLwoeiqEGfOzo9/0LJf@vger.kernel.org, AJvYcCXjxYhQpfh9BIAl/fK81zrZzyBgAYNB/kC9Ca+pFFFb83STx3Yo4U2RopUSnU78ErYlodYV8dAqAx03@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+ZBn5V0IaUkas39190N/iJI648cUuvloBf/U103Pc2HB5YLsV
+	lPze1aRBzoCB6iIUKn1nkKdKuFaRhdTAPoqhyHPmlRqSFEW44Bcd
+X-Gm-Gg: ASbGncsGiPUkDRj6A9+wqz2KLQ2m0f71d5inBqszFBrNEmu151l4ggFGRBoT4L/0VpZ
+	IGGn9oC6i6MLj/ndvCgXTYyYGzaMqfgnL1NMOjYQrDT/K03x4eoaoIDbFik6tb4NT6sM6QzR+6I
+	qxV9QesBB6k3tyu5HXNLIbGQcAxhwirYNGYn89z4GlWMJwUNGHvP/UCQtuS6jskrMcGRiN2WCCO
+	v/knLo+vb1E7EeExeJR0g2unEbC0ojtNEtATC0Nb8t1goz1Hv+CBDVw5736m3kyf/CEcUv3fw5Q
+	zRduiENZ+CmZc80KUfu7taywWR1YdLnr
+X-Google-Smtp-Source: AGHT+IFqEbwHxaFeljzu0PfuAtp7udbO/8qKtjBqtLZxQcoPfau33bDY4QxP+vf7C1LVwNKwMMolgQ==
+X-Received: by 2002:a05:6402:26d6:b0:5dc:81b3:5e1a with SMTP id 4fb4d7f45d1cf-5deadd7b9aamr10094012a12.7.1739523403214;
+        Fri, 14 Feb 2025 00:56:43 -0800 (PST)
+Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece271223sm2612848a12.59.2025.02.14.00.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2025 00:56:42 -0800 (PST)
+Message-ID: <40a548db804c6c8eb72494de17bee6210b8a7a85.camel@gmail.com>
+Subject: Re: [PATCH v11 0/3] riscv: rtc: sophgo: add rtc support for CV1800
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: Chen Wang <unicorn_wang@outlook.com>
+Cc: Inochi Amaoto <inochiama@gmail.com>, inochiama@outlook.com, 
+	linux-kernel@vger.kernel.org, Jingbao Qiu <qiujingbao.dlmu@gmail.com>, 
+	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-rtc@vger.kernel.org
+Date: Fri, 14 Feb 2025 09:56:40 +0100
+In-Reply-To: <BMXPR01MB24405F0CDCBDAF054888BB41FEFE2@BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM>
+References: <20250213215655.2311793-1-alexander.sverdlin@gmail.com>
+	 <BMXPR01MB24405F0CDCBDAF054888BB41FEFE2@BMXPR01MB2440.INDPRD01.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b437898b518910a2f94f7d827608db35e82c5828.1739221064.git.Ryan.Wanner@microchip.com>
 
-On Mon, Feb 10, 2025 at 02:13:07PM -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Add SAMA7D65 RTT compatible to DT bindings documentation.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  .../devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml         | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> index a7f6c1d1a08ab..48a2e013a6b24 100644
-> --- a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> @@ -23,6 +23,9 @@ properties:
->                - microchip,sam9x60-rtt
->                - microchip,sam9x7-rtt
->            - const: atmel,at91sam9260-rtt
-> +      - items:
-> +          - const: microchip,sama7d65-rtt
+Hi Chen!
 
-I don't think you tried to even read this binding before extending :/.
-Look earlier - there is an entry with enum for this.
+On Fri, 2025-02-14 at 08:31 +0800, Chen Wang wrote:
+> First of all, thank you for re-picking up this orphan patchset.
+>=20
+> We recently created a mailing list for sophgo (sophgo@lists.linux.dev),=
+=20
+> and we would appreciate it if you send a copy of any sophgo-related=20
+> patches to the mailist in the future.
 
-Best regards,
-Krzysztof
+Does it make sense to add the address to the MAINTAINERS file?
+Or has a corresponding patch been already posted?
+
+> You can see https://github.com/sophgo/linux/wiki=C2=A0for more details ab=
+out=20
+> this mailist, and we are keeping track of the status of upstreaming=20
+> sophgo products through this wiki. We have updated the status of some of=
+=20
+> the patches you are working on, please help double check.
+
+Looks good to me, thanks!
+
+--=20
+Alexander Sverdlin.
 
 
