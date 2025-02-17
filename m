@@ -1,159 +1,136 @@
-Return-Path: <linux-rtc+bounces-3213-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3216-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 176B7A37EA0
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Feb 2025 10:33:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D82EAA38332
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Feb 2025 13:41:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E2BA169AF0
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Feb 2025 09:33:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD5CE1884D71
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Feb 2025 12:41:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44BDC216395;
-	Mon, 17 Feb 2025 09:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E0021B190;
+	Mon, 17 Feb 2025 12:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qgo4L2Ww"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sh6F76jQ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7639E216393;
-	Mon, 17 Feb 2025 09:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C06218842;
+	Mon, 17 Feb 2025 12:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739784711; cv=none; b=MwK6VIy5yNuJNGacxck3q4wrVGblDUQSCHBnpd8Zyo3Hf3uVj+MRor/JFiCeLV9DgL+arVOTJBDBVe2qCeUqWDsb4KCwDEt3J6ctZQI8ioyfrqtPsaNNymTCZ4oA4PHCi9Dvsmzdc95gaeExTSFjCaUdkz4fw6WeNqW8NQgyAgw=
+	t=1739796104; cv=none; b=MdtWt8lVSrLbmMm5LZK4rRPimUAk4BaI5sVPn1NCTOs+NQZmziYIr31C3D/FZb9Z9/aG71fMYyJroHgNCTE+vXno6zX5D9k6qxF+xf/49yy6wM0uRRaoWzo12w9PIVVry0NHUeor48DfX1gXrbVkWe8LMDatchnzbnz1acRU+aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739784711; c=relaxed/simple;
-	bh=qwwfQspqK1CIaepn5O3N48Xj/62KJzh4txop3uOMjDc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=chTNivSwqLwR5/3x6ZH7tX7xwhMAQ40YfO0l4amueTiViafZ5OtscfJML6KzWX/ev561uTV//4/filAo6gLLB1lssDAYFBr/QlaOD3Fm/kRqtd4BXtJr2OOkxt7gnDN8AA0nt2lAlI6n7wy9Trxyb77009LSjYfNX4sJfMSHags=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qgo4L2Ww; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-aaf900cc7fbso615422566b.3;
-        Mon, 17 Feb 2025 01:31:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739784708; x=1740389508; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qwwfQspqK1CIaepn5O3N48Xj/62KJzh4txop3uOMjDc=;
-        b=Qgo4L2WwhX7vWcVUGZ1DzQicBwRJuBsoC+tuYs9WiR8y/KBF6byNaAUgx38YNqo3FX
-         dNNVrd+ivRzKttSSN1hsikdg2tGuZH+ZWMhmXZcT/4K4gRUk2RJYZUHxcyMfPxJrMiPy
-         EamgI6VG9CkcK4S4uShN2u1Dn160vBo+kE4mu7oSnPrvGvEm+X3s7A+TtzjbPWT41cm+
-         vYXwkXY71eiX6pxKJkJO2N4EsPjig3pAKVPe9ORWoVftJGB1x5955pSO/Cr2ZYar+Vyp
-         tSJDFvffLQBp0k4+AgIjf3/p6KAMqaT8EkpYFYVsTs4DU/Ygw+0und4dbMzrXb6wtFlv
-         SArQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739784708; x=1740389508;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qwwfQspqK1CIaepn5O3N48Xj/62KJzh4txop3uOMjDc=;
-        b=U4Q6Nlfy2lEKwHf6N1mWoPZzd4Qpz9suWifVoTIiMRvdWh5nuC9s299LyhqWOJJ83d
-         PEh+qf0y0cnUVCdV0cJ4/EjoJ/t1Jpn8q1MA6AdmwrjqepRlNNNl6omwNfrTA+aUXBFt
-         vqV6AgXR6CXprVK2jeAGDt78lYrMn2Mvc+8TBVv3EyrXVi1c5omqInPJ8YNzzdEJNtG9
-         rRaoldBJ8bT332SniBd61lwv5ELhunORcBc55FQj0nwJNj0N0NMne11ZuZw8wjTe+UAF
-         ltI+Z8Hah/2ObD1NuTycFJDB6MQ4lGD1flGIlO586FImEAxvJImrA0RflPvbWPM7Rx4g
-         IBnw==
-X-Forwarded-Encrypted: i=1; AJvYcCUz3+BJOhKwf9gYyE2u9OOHNKx+DiPZyAuje2Ihk+Ms3M1e/T36UttMNFa4HdU3msVQagMceLWpuxqB@vger.kernel.org, AJvYcCVKkQpBeOgIGD8mJApjiEpg1A6jrlRIwYeoq6uoL+PrRnvGOHb4nJAINYD03rzSocjahd0F3l2m2c68@vger.kernel.org, AJvYcCVwzKVHenWfxSeV1xqOAE/F7dQudMUvlj4A79MiUthe47qRlmjkctaNu59Fv8ixUL5z8Fv5koLRBmbO+jYr@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO96En12Dtl7AiffaYNE0V0tFN8nY3rDKCBA0szY+lKafXUNPM
-	Alz8H7g9fC6WrvjnwdR3pt4R+D6opiPCnYe4ZSPDrNBcJ4Q+I19N
-X-Gm-Gg: ASbGnctlQk9jGzvtD+dAKCjv4f6VyxFBVW/65zjFJdT7Ts7n4xTpR2YObmoJwbuAhET
-	YNOr3nKjXc5DpzbbQ9mPbj+axXxUP+uHQBHdntplKswo/AAmOHZ4X2gys2XxYjLX/CYDQjpZvsi
-	TFCnfeojGiTcD2vH6UjQL4I9USSEYZXtUYh6GV3HYBeFO1G6ku4ai7e5MGpXUGgZL1LZABT50U+
-	8PzFnCsvFVZHgAlE1qwOEDCrIjuDUhgLissIuat7b4GQMlOhkaifimMvWfJZxX/iU7QorKLQS2i
-	oHPSW/KY4oZbH1C14zM9zYUhUO88X3RE
-X-Google-Smtp-Source: AGHT+IF19rIOBPRe3FreKmfKhGzofepgR2PC8/BYqtWn5SXsysFWGgg87ztwsvGb53f3Baqru+RpWg==
-X-Received: by 2002:a17:907:3d8e:b0:ab7:4641:a72d with SMTP id a640c23a62f3a-abb70de28admr913177666b.51.1739784707261;
-        Mon, 17 Feb 2025 01:31:47 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abba64fbabfsm75995966b.172.2025.02.17.01.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 01:31:46 -0800 (PST)
-Message-ID: <3ba76f2162841ab91ef823315e7ce4b5b7526984.camel@gmail.com>
-Subject: Re: [PATCH v11 1/3] dt-bindings: rtc: sophgo: add RTC support for
- Sophgo CV1800 series SoC
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Chen Wang <unicorn_wang@outlook.com>, Jingbao Qiu
-	 <qiujingbao.dlmu@gmail.com>
-Cc: Inochi Amaoto <inochiama@gmail.com>, alexandre.belloni@bootlin.com, 
-	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	inochiama@outlook.com, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, dlan@gentoo.org, linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- devicetree@vger.kernel.org, 	linux-riscv@lists.infradead.org,
- linux-rtc@vger.kernel.org
-Date: Mon, 17 Feb 2025 10:31:43 +0100
-In-Reply-To: <MA0PR01MB567164E6BE03750F2200CBDBFEFB2@MA0PR01MB5671.INDPRD01.PROD.OUTLOOK.COM>
-References: <20250213215655.2311793-1-alexander.sverdlin@gmail.com>
-	 <20250213215655.2311793-2-alexander.sverdlin@gmail.com>
-	 <MA0PR01MB567164E6BE03750F2200CBDBFEFB2@MA0PR01MB5671.INDPRD01.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1739796104; c=relaxed/simple;
+	bh=PTSy1ip0l95HNNQQE+rcttEDB0KFrDuEV+630qcL2IM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HllivKs3RILMTCPI7X5Yusz0cgoahYHBVjsN2KaOlMOgbeBGA06TboQbel35i22A4Q1PGeSO5Z+kquyW/bwvC9QgYmEligKxYK4Ge+IwL0hwfVmtsUq8ifbK3d6BBi24ymWqpT7n9lKbCjmAHtieENHODidw3F2YFpc5GyfWM3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sh6F76jQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 339C3C4CED1;
+	Mon, 17 Feb 2025 12:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739796104;
+	bh=PTSy1ip0l95HNNQQE+rcttEDB0KFrDuEV+630qcL2IM=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Sh6F76jQz7E1gO+yNlIQ6DDxuf9whY05qkY8fjCPWO99FgrecMh6KarVSka6B12wH
+	 +GwAWRa5NycHMmHv6b5spvRBGtT8lZKi9udOaoIfOyUDILIjAx4DaOdVWGtAYpGK8R
+	 BUOZmT2Ho0P3cvvTS3gYuS016ENmSmYg4cGDS9gwrK7XcryJGRTZFSYbd9c161BTS8
+	 h2ZUkAIkjIR9E7tjMGL5lOhqDkgELJ9zu5w5ry8VqsZ6CCHVPJ0KEs+uIvPsH8I6Nt
+	 DY6uxXbE3cUgn9QGv0J88tzpti6r/z7KH+LRgRNt1m2yA56kI+qCuN72bdFDcAlCK0
+	 PinA5vLFGvihQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E95C021A9;
+	Mon, 17 Feb 2025 12:41:44 +0000 (UTC)
+From: PavithraUdayakumar-adi via B4 Relay <devnull+pavithra.u.analog.com@kernel.org>
+Subject: [PATCH RESEND v5 0/2] Add support for MAX31331 RTC
+Date: Mon, 17 Feb 2025 18:17:15 +0530
+Message-Id: <20250217-add_support_max31331_fix_8-v1-0-16ebcfc02336@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANMvs2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDI0Nz3cSUlPji0oKC/KKS+NzECmNDY2PD+LTMingL3UTLxDQTc4MU0+R
+ EYyWgAQVFqUAJsOHRSkGuwa5+LgplpkqxtbUAZvihj3cAAAA=
+X-Change-ID: 20250217-add_support_max31331_fix_8-a9af470d5ca3
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+ PavithraUdayakumar-adi <pavithra.u@analog.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739796453; l=1888;
+ i=pavithra.u@analog.com; s=20241220; h=from:subject:message-id;
+ bh=PTSy1ip0l95HNNQQE+rcttEDB0KFrDuEV+630qcL2IM=;
+ b=GEPLWHzuMBYTO6EresIlfpo7HAopxkDf6L5smseqo1eSfTDrJKoO9S/ltULxyNfxkr6IJzyks
+ x2FXYLOP0zYDemNc9ckp+qoqoj65TD4aTngiFvOU/ZoI1tVIusTxSaY
+X-Developer-Key: i=pavithra.u@analog.com; a=ed25519;
+ pk=RIhZrdpg71GEnmwm1eNn95TYUMDJOKVsFd37Fv8xf1U=
+X-Endpoint-Received: by B4 Relay for pavithra.u@analog.com/20241220 with
+ auth_id=303
+X-Original-From: PavithraUdayakumar-adi <pavithra.u@analog.com>
+Reply-To: pavithra.u@analog.com
 
-Hi Chen!
+This patch series introduces support for the Maxim MAX31331 RTC.
+It includes:
 
-On Mon, 2025-02-17 at 17:26 +0800, Chen Wang wrote:
-> > Add RTC devicetree binding for Sophgo CV1800 SoC.
-> >=20
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> > ---
-> > =C2=A0=C2=A0 .../bindings/rtc/sophgo,cv1800-rtc.yaml=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 53 +++++++++++++++++++
-> > =C2=A0=C2=A0 1 file changed, 53 insertions(+)
-> > =C2=A0=C2=A0 create mode 100644 Documentation/devicetree/bindings/rtc/s=
-ophgo,cv1800-rtc.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/rtc/sophgo,cv1800-rtc.ya=
-ml b/Documentation/devicetree/bindings/rtc/sophgo,cv1800-rtc.yaml
-> > new file mode 100644
-> > index 000000000000..b36b51a69166
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/sophgo,cv1800-rtc.yaml
-> > @@ -0,0 +1,53 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/sophgo,cv1800-rtc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Real Time Clock of the Sophgo CV1800 SoC
-> > +
-> > +description:
-> > +=C2=A0 Real Time Clock (RTC) is an independently powered module
-> > +=C2=A0 within the chip, which includes a 32KHz oscillator and a
-> > +=C2=A0 Power On Reset/POR submodule. It can be used for time display
-> > +=C2=A0 and timed alarm generation. In addition, the hardware state
-> > +=C2=A0 machine provides triggering and timing control for chip
-> > +=C2=A0 power on, off, and reset.
-> > +
-> > +maintainers:
-> > +=C2=A0 - Jingbao Qiu <qiujingbao.dlmu@gmail.com>
->=20
-> I guess Jingbao will not take this role. If he doesn't raise any=20
-> objections, please just change this.
->=20
-> Jingbao, do you have any comment on this?
+1. Device Tree bindings documentation for MAX31331.
+2. The driver implementation for the MAX31331 RTC.
 
-New version will look rather like this:
-https://lore.kernel.org/linux-devicetree/20250216180924.2506416-1-alexander=
-.sverdlin@gmail.com/
+---
+Resend v5:
+- [PATCH RESEND v5 2/2]: Added id as a member of struct chip_desc in v4 [Nuno Sa], the patch requires a review. 
+- Rebase v6.14-rc3                                    
+- Link to v5: https://lore.kernel.org/r/20250131-add_support_max31331_fix_7-v1-0-d29d5de3d562@analog.com
 
-But I'll be happy to take you suggestion and replace my name in the
-new version with someone more afiliated with Sophgo ;-)
+Changes in v5:
+- Removed the commit description stating max31331 and max31335 are compatible.
+- Rebase v6.13
+- Link to v4: https://lore.kernel.org/all/20250119-add_support_max31331_fix_5-v1-0-73f7be59f022@analog.com/
+---
+Changes in v4:
+- Reverted the I2C address change for MAX31335 RTC (0x69) and removed it from the property register;
+  will include it in a separate fix.
+- Added id as a member of struct chip_desc [Nuno Sa]
+- Rebase on v6.13-rc7
+- Link to v3: https://lore.kernel.org/all/20250109-add_support_max31331_fix_3-v1-0-a74fac29bf49@analog.com/
+---
+Changes in v3:
+- Added missing spaces in driver code
+- Removed binding for checking address
+- Rebase on v6.13-rc6
+- Link to v2: https://lore.kernel.org/all/20250103-add_support_max31331_fix-v1-0-8ff3c7a81734@analog.com/
+---
 
---=20
-Alexander Sverdlin.
+Signed-off-by: PavithraUdayakumar-adi <pavithra.u@analog.com>
+
+---
+PavithraUdayakumar-adi (2):
+      dt-bindings: rtc: max31335: Add max31331 support
+      rtc: max31335: Add driver support for max31331
+
+ .../devicetree/bindings/rtc/adi,max31335.yaml      |   4 +-
+ drivers/rtc/rtc-max31335.c                         | 165 +++++++++++++++------
+ 2 files changed, 125 insertions(+), 44 deletions(-)
+---
+base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
+change-id: 20250217-add_support_max31331_fix_8-a9af470d5ca3
+
+Best regards,
+-- 
+PavithraUdayakumar-adi <pavithra.u@analog.com>
+
 
 
