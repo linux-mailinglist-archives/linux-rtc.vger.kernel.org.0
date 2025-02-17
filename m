@@ -1,141 +1,508 @@
-Return-Path: <linux-rtc+bounces-3210-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3211-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3701DA368B1
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2025 23:47:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BCD1A37BFD
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Feb 2025 08:19:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE8DB3A8AF3
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2025 22:46:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A831188AFC1
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Feb 2025 07:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0FC1FC7F8;
-	Fri, 14 Feb 2025 22:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BAC1953AD;
+	Mon, 17 Feb 2025 07:18:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ty/nb6T+"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="TLWOv/Ae"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D4A1519B5;
-	Fri, 14 Feb 2025 22:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620D1188CAE
+	for <linux-rtc@vger.kernel.org>; Mon, 17 Feb 2025 07:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739573210; cv=none; b=WsoyIFFADfKmRbuaIibssYWiBGfy0ms+AyrHnW9Hnn5Apia/xY7P8AoGz2cKZ3Pr12Eusz0/fz8w11htl8Kl9PEGW5SN+LBR8qITE7gJpo7I9Dg8JUqsY6n9SjElYTw7O0SldYbgDuBVvC9pDGHckTE1Gb3Dpo8qB6b7mys7Fs8=
+	t=1739776731; cv=none; b=ksbQQHio+1VlZGDMgshe9mM3c/yefaPhZNyBH+zjWw7Jvwp0IMMnmHCF28K5fnVF0ds002tuIywpwc8MOx7gCRkNJ+1PeWdTMNQkOvvFnT/8c+vIze9qs9oPe1EDuma4SMSfc24pZquRQyBA00mWQcjhd/U/SyDaTZT458m/dNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739573210; c=relaxed/simple;
-	bh=vjcT0Vyex3C2dC9HqHDwhlorjag/egfPVMpz7+hJdc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZAu04NK75DbIWfqt28pEPZP7Dhz1GVO6/BMiGTHiH7AMMyIlPVn7njv96raKAhnGMV3y5wlfCXPEXfvyN+Vbc9F5U6UzTqlee0Rwc0nAVmr5+OrLJvkr+JFjtRS4zV3efSQh9Q8Mpt/LhKn1HS78y4wEdVqE6jTb/db3Kastbiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ty/nb6T+; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6dcdf23b4edso22759146d6.0;
-        Fri, 14 Feb 2025 14:46:48 -0800 (PST)
+	s=arc-20240116; t=1739776731; c=relaxed/simple;
+	bh=ZERFbvlcliKUz//n2IXk+/urawfGylEo3zt0m1W5F/c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M6UjVjsEp0uFmQcYzA0I1Hl8n/oauNwVaJ36GBULvfNsGEn6FOmgkM4+pmsLgPYd+TL2QhJL+a9Pw1gknBMr8XYQVoR7QCga6LgNppVnp1z0Kqu+cWr7aVc8vBw56RoCx/mUugRxNNuqXIm91hjdtaTd5N9XAwPQ+F3LIyl3C3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=TLWOv/Ae; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5de38c3d2acso6337328a12.1
+        for <linux-rtc@vger.kernel.org>; Sun, 16 Feb 2025 23:18:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739573208; x=1740178008; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QzS8d5DDLmgZezqT2Ij0pTgVW3KTLdNDnJ7HtnIABGs=;
-        b=Ty/nb6T+RKfp37W5YIGwEosREjp+C9ERCEF7njjffyV5iJAAO5yaRXI7+Ebd/V9ImT
-         +PxE4mAQV5ho8KokYjStonxbaxV9F6iY3DfdcAUMvL81OuGKFVk+OkWI0GEvxUfa1P6l
-         3o87NvTvGyE14535OP1UfRkQ/U8z38LIKqmTuuvz2wJQl+hRHCeWil/NQ+tySyoxZcyQ
-         lcM8eeGXhcE+Au+XxB5a72IZOGk1eRhLBL3yOvp1gY5vQNrgiPAavcfgIslOEnof3p6y
-         vDVKszwMxF7TT2e8TPgJpQ3gJSY+oSXd6mpztRydumZpgAlGhgESYL8NgWvsfPY7xuGl
-         Uu7g==
+        d=tuxon.dev; s=google; t=1739776726; x=1740381526; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v25VmnSqYqj8M3Jcj4xEeFG2OqH96nULrB9jJ3rOS7k=;
+        b=TLWOv/AehjzXt3y2K2fhchf0A8JnSIgvOw4OAvQ/PrFjcQ6mzGzYCy1ZO25ecG24mu
+         cQelsHHXLZIDbMREjWsOoCV81qBg5UE34xtAcRANZQUHqyxSW7Ub3P7YsY4m3vWXHmGZ
+         K/dLBCMVFeChtf8CZ5UO088ANceJPkEV/BDmdMi5cO6AhAL1lJBV1AKXKcMFOlQUFLXc
+         jzTEuH1mNCm3Wk3ChYR+gPFlsR1K+0jkh7JCdSRKxDT5tWtvRC3G+dPsFj60TJQn0kdb
+         s61hN1hkBI4GfrujSKsXwKW8y5X8BzdMrXlP9dl9Kjc4zvTh/C39J0NlkEeX4Z6cyCox
+         qZQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739573208; x=1740178008;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1739776726; x=1740381526;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzS8d5DDLmgZezqT2Ij0pTgVW3KTLdNDnJ7HtnIABGs=;
-        b=CSfPZ28tGnme87j3nH9DUNa2+w6l6g537g8fqdlxEugp0wy4cfyXjEutS/h1hDjS+3
-         s588SwsUQoYtr7GngMMCWn8U+PuiPCFuaQhulB24HqDx6qgfy3t26UFNA/qszYzGUKDd
-         veuRb5wFCZZ7VgGDM6hiGf1Aa8F2CzX4EvgC/EB3niJdmYKf5bvKMnSdQGByuzgIZaZH
-         dCgs7cIhuaeOPtb/YUv8w0+Sahu2oCGzsO1/UtXYlPzCKNj94w9wIpKb7Ra4EoPBTf2J
-         LZyvLQbBD517afMJfU7yDLQWz5Cdm55SDzCIr7JeREPiu5GA2qRRgkl2N0BrKH9fL6J+
-         PAJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlAjdwmITLYB6E8/lZ1fsTIrkZvO/5G3aWAOb9Ly4u5gtyAoiYhI7jMjKvXkV400Ya9y24DxvPTg0tjKka@vger.kernel.org, AJvYcCUzb73dd7ttDuKKStjAmzl8rsbLQZzO1Zb5Ck+Zp6GO3w9z0jDCOKYIZQTs2xN97deyU8gV4eRXbWkU@vger.kernel.org, AJvYcCWz43Up6zk0QS8lkKK0BOYQatEXQX+RWguMweO5OkgidDT9CNFJ4hG1e39q+jP862dfQoqSSIFCMUbw@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQduBxqIMQysDFCwgQzsQQ2qyY0RafetTtLkmwI2Q73aPM33GO
-	o0Esp4hggqaiBhgKdCAnzIx+xqBF7Ixrz1vnXCRJa13Tnw8HHwET
-X-Gm-Gg: ASbGncufpZ7oBh6nGLzVHWLOjyGtX0Yjho36aGLoKyCX03phd7eI/8TO9Yz9MPouwVH
-	5kVMt5PrUIaOcOdL/SBgl1HDS8hc3UhVZ8PudMi74OmCQGc7mrg0G3DEsCpdHgIAj0KzHxM+6HY
-	XCYl0UxBEOdBqluPpA/9NBY/OxOSY++HE+6JBxoIrREufLwGDybed186JrFFybnPZ/C0E3evJ+I
-	apleR6uQDsHHp9gUJFin2etxdElFItzJOJEmDnxq70bMnGl8NtTb7f2PTXGmYR7oHs=
-X-Google-Smtp-Source: AGHT+IHrfxO8rmBQBLUcjsYSsdpJHDyVL3wH/IflhNcUGb5EOUcTe+mYC/NamiViqeorO+aQjcRI5A==
-X-Received: by 2002:a05:6214:300e:b0:6e6:6bd8:3a82 with SMTP id 6a1803df08f44-6e66cd10d91mr13805796d6.42.1739573207607;
-        Fri, 14 Feb 2025 14:46:47 -0800 (PST)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6e65d785c1fsm25862706d6.35.2025.02.14.14.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2025 14:46:46 -0800 (PST)
-Date: Sat, 15 Feb 2025 06:46:38 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	Inochi Amaoto <inochiama@gmail.com>, devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-rtc@vger.kernel.org
-Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, alexandre.belloni@bootlin.com, 
-	robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	unicorn_wang@outlook.com, inochiama@outlook.com, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, dlan@gentoo.org, 
-	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v11 1/3] dt-bindings: rtc: sophgo: add RTC support for
- Sophgo CV1800 series SoC
-Message-ID: <s3fsc6cp2a7qx5qgo6akneh7l3a5aknzmtzpsq7lvdaleqaupa@6sqgfn4q7olq>
-References: <20250213215655.2311793-1-alexander.sverdlin@gmail.com>
- <20250213215655.2311793-2-alexander.sverdlin@gmail.com>
- <t6z6rikut2him5m57b6xubbguw3llczp4i6d5frcpuhlqihf2d@booethzadxsq>
- <964a016b944b459a9a914abac539350769323259.camel@gmail.com>
+        bh=v25VmnSqYqj8M3Jcj4xEeFG2OqH96nULrB9jJ3rOS7k=;
+        b=Kd3HAt9s2yR2xbtj2Jns2uc8vG5CcsLtbORA6V2AOST17tRV/yquMhHNYwFv+eigT2
+         hyFgCvojtNa6xilHWiZFNXZDg7j48u4T6IOEeaPcfPB4nlAP9F98o4a/YWe1jDPUe2MQ
+         ytXNEftapy291n3Y/v4HcTld4WnAYHEMI2F1Lmd+CjEX8x629jnYDU4bf3lh2jIyn/bU
+         Wz7c0t0epB6yF2j9Q6xiR50U1Ni3E95QGfzz5oc7SsSFsVhUdwm16wkVEzLt4vzPknEK
+         etsDqxQy3TeGDpFTl9aolRjiIGJZp7dqDKaGAJKjkvgdE4R0MGvYZEwwNxdsJiyeQoQO
+         wTyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGQohoOeECZ6HgUMTyfBQpE5X53YtMcu2LRaALtD+KpId/g+uDIQofw7zkhVSzpYaN3Dtpu/BPVho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweqjRDZUPSDAE829DGJ2uexj7q5HrYGyhtD77JYTnVXL1pTPxp
+	I/JkQypyeYygNe/mtXkG3Bij4PDYc1epMIfXGX47m2Zv/qovf7JkvuKAGG/bmNo=
+X-Gm-Gg: ASbGnctTm/IvC1TlwuLhP9se/n/sd0GSylHMLvhY6hogB0ckujIZlYRd6DUarf/Hdap
+	1WUFAh3Mo64yE7GNgjXRmrdGUWWN5Dret8vT6KFel2Q4YGdpUjoH8c4KOAC9Tip+boGbfmidmQ4
+	06F+QFaGd7dAYRl/0gqnI8TuhzsLwmhXj0vFPVA0GFuG+CQM4pFsWIq94vz1fE5Jx5K8GTfoWht
+	VmouVo3jn4e9RAagBPXkuA6yf8r00vuJ4AiPB7hM5WrLrkgobhqPR7a3eqzDT0Lqh63ZojS2t5C
+	qMpA3iJ8FIIGuCzzeKK2Kow=
+X-Google-Smtp-Source: AGHT+IF1/c910bLyP5ZGsW8SMD1Us/Tiqwk8Gd/bi0zx7ghNldlF31bI+7fijFr2TMBGRt4mEJHTzg==
+X-Received: by 2002:a05:6402:430b:b0:5db:f423:19c5 with SMTP id 4fb4d7f45d1cf-5e036055c4cmr8283539a12.5.1739776725480;
+        Sun, 16 Feb 2025 23:18:45 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.25])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece1d00d9sm6777672a12.32.2025.02.16.23.18.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Feb 2025 23:18:44 -0800 (PST)
+Message-ID: <b3de47a4-614c-4650-a866-5718b2e2b50a@tuxon.dev>
+Date: Mon, 17 Feb 2025 09:18:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <964a016b944b459a9a914abac539350769323259.camel@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 12/15] ARM: at91: pm: Enable ULP0 for SAMA7D65
+To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+ Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+ p.zabel@pengutronix.de
+Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
+ <a00b193df9e0cb95d144a249b12f1b13188d1ab7.1739221064.git.Ryan.Wanner@microchip.com>
+ <32ad3a1a-c6b6-4db1-8e80-8b5f951055a8@tuxon.dev>
+ <5c6910ce-b0e4-47e6-9c9b-f0093d34f4a6@microchip.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <5c6910ce-b0e4-47e6-9c9b-f0093d34f4a6@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 14, 2025 at 12:09:37PM +0100, Alexander Sverdlin wrote:
-> Hi Inochi,
+Hi, Ryan,
+
+On 14.02.2025 20:09, Ryan.Wanner@microchip.com wrote:
+> On 2/13/25 01:20, Claudiu Beznea wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> Hi, Ryan,
+>>
+>>
+>> On 10.02.2025 23:13, Ryan.Wanner@microchip.com wrote:
+>>> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+>>>
+>>> New clocks are saved to enable ULP0 for SAMA7D65 because this SoC has a
+>>> total of 10 main clocks that need to be saved for ULP0 mode.
+>>
+>> Isn't 9 the total number of MCKs that are handled in the last/first phase
+>> of suspend/resume?
+> Yes I was including 10 to match the indexing in the mck_count variable.
+> Since bgt instruction was suggested I will correct this to reflect the
+> true behavior of the change.
+>>
+>> Also, the state of MCKs are saved/restored for ULP0 and ULP1 as well.
+>>
+>>>
+>>> Add mck_count member to at91_pm_data, this will be used to determine
+>>> how many mcks need to be saved. In the mck_count member will also make
+>>> sure that no unnecessary clock settings are written during
+>>> mck_ps_restore.
+>>>
+>>> Add SHDWC to ULP0 mapping to clear the SHDWC status after exiting low
+>>> power modes.
+>>
+>> Can you explain why this clear need to be done? The commit message should
+>> answer to the "what?" and "why?" questions.
+>>
+>>>
+>>> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+>>> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+>>> ---
+>>>  arch/arm/mach-at91/pm.c              | 19 +++++-
+>>>  arch/arm/mach-at91/pm.h              |  1 +
+>>>  arch/arm/mach-at91/pm_data-offsets.c |  2 +
+>>>  arch/arm/mach-at91/pm_suspend.S      | 97 ++++++++++++++++++++++++++--
+>>>  4 files changed, 110 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
+>>> index 55cab31ce1ecb..50bada544eede 100644
+>>> --- a/arch/arm/mach-at91/pm.c
+>>> +++ b/arch/arm/mach-at91/pm.c
+>>> @@ -1337,6 +1337,7 @@ struct pmc_info {
+>>>       unsigned long uhp_udp_mask;
+>>>       unsigned long mckr;
+>>>       unsigned long version;
+>>> +     unsigned long mck_count;>  };
+>>>
+>>>  static const struct pmc_info pmc_infos[] __initconst = {
+>>> @@ -1344,30 +1345,42 @@ static const struct pmc_info pmc_infos[] __initconst = {
+>>>               .uhp_udp_mask = AT91RM9200_PMC_UHP | AT91RM9200_PMC_UDP,
+>>>               .mckr = 0x30,
+>>>               .version = AT91_PMC_V1,
+>>> +             .mck_count = 1,
+>>
+>> As this member is used only for SAMA7 SoCs I would drop it here and above
+>> (where initialized with 1).
+>>
+>>>       },
+>>>
+>>>       {
+>>>               .uhp_udp_mask = AT91SAM926x_PMC_UHP | AT91SAM926x_PMC_UDP,
+>>>               .mckr = 0x30,
+>>>               .version = AT91_PMC_V1,
+>>> +             .mck_count = 1,
+>>>       },
+>>>       {
+>>>               .uhp_udp_mask = AT91SAM926x_PMC_UHP,
+>>>               .mckr = 0x30,
+>>>               .version = AT91_PMC_V1,
+>>> +             .mck_count = 1,
+>>>       },
+>>>       {       .uhp_udp_mask = 0,
+>>>               .mckr = 0x30,
+>>>               .version = AT91_PMC_V1,
+>>> +             .mck_count = 1,
+>>>       },
+>>>       {
+>>>               .uhp_udp_mask = AT91SAM926x_PMC_UHP | AT91SAM926x_PMC_UDP,
+>>>               .mckr = 0x28,
+>>>               .version = AT91_PMC_V2,
+>>> +             .mck_count = 1,
+>>>       },
+>>>       {
+>>>               .mckr = 0x28,
+>>>               .version = AT91_PMC_V2,
+>>> +             .mck_count = 5,
+>>
+>> I'm not sure mck_count is a good name when used like proposed in this
+>> patch. We know that only 4 MCKs need to be handled for SAMA7G5 and 9 for
+>> SAMA7D65.
+>>
+>> Maybe, better change it here to 4 (.mck_count = 4) and to 9 above
+>> (.mck_count = 9) and adjust properly the assembly macros (see below)? What
+>> do you think?
 > 
-> On Fri, 2025-02-14 at 17:40 +0800, Inochi Amaoto wrote:
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > > +
-> > > +    rtc@5025000 {
-> > > +        compatible = "sophgo,cv1800-rtc";
-> > > +        reg = <0x5025000 0x2000>;
-> > > +        interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
-> > > +        clocks = <&osc>;
-> > > +    };
-> > > -- 
-> > 
-> > Just for curiosity, Do you leave a way to implement the
-> > 8051 subsys, since its registers are in rtc. (You can
-> > check the chapter "8051 subsystem" of the SG2002, which
-> > can be found at https://github.com/sophgo/sophgo-doc).
+> Yes I think this is better and cleaner to read. Should this mck_count
+> match the pmc_mck_count variable name? Or should this be more
+> descriptive or would mcks be sufficient.
+
+mck_count/mcks should be enough. These will be anyway in the context of
+pmc_info.
+
+>>
+>>> +     },
+>>> +     {
+>>> +             .uhp_udp_mask = AT91SAM926x_PMC_UHP,
+>>> +             .mckr = 0x28,
+>>> +             .version = AT91_PMC_V2,
+>>> +             .mck_count = 10,
+>>>       },
+>>>
+>>>  };
+>>> @@ -1386,7 +1399,7 @@ static const struct of_device_id atmel_pmc_ids[] __initconst = {
+>>>       { .compatible = "atmel,sama5d2-pmc", .data = &pmc_infos[1] },
+>>>       { .compatible = "microchip,sam9x60-pmc", .data = &pmc_infos[4] },
+>>>       { .compatible = "microchip,sam9x7-pmc", .data = &pmc_infos[4] },
+>>> -     { .compatible = "microchip,sama7d65-pmc", .data = &pmc_infos[4] },
+>>> +     { .compatible = "microchip,sama7d65-pmc", .data = &pmc_infos[6] },
+>>>       { .compatible = "microchip,sama7g5-pmc", .data = &pmc_infos[5] },
+>>>       { /* sentinel */ },
+>>>  };
+>>> @@ -1457,6 +1470,7 @@ static void __init at91_pm_init(void (*pm_idle)(void))
+>>>       soc_pm.data.uhp_udp_mask = pmc->uhp_udp_mask;
+>>>       soc_pm.data.pmc_mckr_offset = pmc->mckr;
+>>>       soc_pm.data.pmc_version = pmc->version;
+>>> +     soc_pm.data.pmc_mck_count = pmc->mck_count;
+>>>
+>>>       if (pm_idle)
+>>>               arm_pm_idle = pm_idle;
+>>> @@ -1659,7 +1673,8 @@ void __init sama7_pm_init(void)
+>>>               AT91_PM_STANDBY, AT91_PM_ULP0, AT91_PM_ULP1, AT91_PM_BACKUP,
+>>>       };
+>>>       static const u32 iomaps[] __initconst = {
+>>> -             [AT91_PM_ULP0]          = AT91_PM_IOMAP(SFRBU),
+>>> +             [AT91_PM_ULP0]          = AT91_PM_IOMAP(SFRBU) |
+>>> +                                       AT91_PM_IOMAP(SHDWC),
+>>
+>> In theory, as the wakeup sources can also resumes the system from standby
+>> (WFI), the shdwc should be mapped for standby, too. Unless I'm wrong and
+>> the wakeup sources covered by the SHDWC_SR register don't apply to standby
+>> (WFI).
+> The device can wake up from an RTT or RTC alarm event on both the
+> standby power mode and the ULP0 power mode, since the RTT/RTC are
+> included in the SHDWC_SR I think it is safe to have this.
+> If I understand what you are asking correctly.
+
+I was asking if the SHDWC should also be mapped for standby like:
+
+        static const u32 iomaps[] __initconst = {
+
+                [AT91_PM_STANDBY]       = AT91_PM_IOMAP(SHDWC) |
+
+                [AT91_PM_ULP0]          = AT91_PM_IOMAP(SFRBU) |
+
+                                          AT91_PM_IOMAP(SHDWC),
+
+                [AT91_PM_ULP1]          = AT91_PM_IOMAP(SFRBU) |
+
+                                          AT91_PM_IOMAP(SHDWC) |
+
+                                          AT91_PM_IOMAP(ETHC),
+
+                [AT91_PM_BACKUP]        = AT91_PM_IOMAP(SFRBU) |
+
+                                          AT91_PM_IOMAP(SHDWC),
+
+        };
+
+
+
+>>
+>>
+>>>               [AT91_PM_ULP1]          = AT91_PM_IOMAP(SFRBU) |
+>>>                                         AT91_PM_IOMAP(SHDWC) |
+>>>                                         AT91_PM_IOMAP(ETHC),
+>>> diff --git a/arch/arm/mach-at91/pm.h b/arch/arm/mach-at91/pm.h
+>>> index 53bdc9000e447..ccde9c8728c27 100644
+>>> --- a/arch/arm/mach-at91/pm.h
+>>> +++ b/arch/arm/mach-at91/pm.h
+>>> @@ -39,6 +39,7 @@ struct at91_pm_data {
+>>>       unsigned int suspend_mode;
+>>>       unsigned int pmc_mckr_offset;
+>>>       unsigned int pmc_version;
+>>> +     unsigned int pmc_mck_count;
+>>>  };
+>>>  #endif
+>>>
+>>> diff --git a/arch/arm/mach-at91/pm_data-offsets.c b/arch/arm/mach-at91/pm_data-offsets.c
+>>> index 40bd4e8fe40a5..59a4838038381 100644
+>>> --- a/arch/arm/mach-at91/pm_data-offsets.c
+>>> +++ b/arch/arm/mach-at91/pm_data-offsets.c
+>>> @@ -18,6 +18,8 @@ int main(void)
+>>>                                                pmc_mckr_offset));
+>>>       DEFINE(PM_DATA_PMC_VERSION,     offsetof(struct at91_pm_data,
+>>>                                                pmc_version));
+>>> +     DEFINE(PM_DATA_PMC_MCK_COUNT,   offsetof(struct at91_pm_data,
+>>> +                                              pmc_mck_count));
+>>>
+>>>       return 0;
+>>>  }
+>>> diff --git a/arch/arm/mach-at91/pm_suspend.S b/arch/arm/mach-at91/pm_suspend.S
+>>> index e5869cca5e791..2bbcbb26adb28 100644
+>>> --- a/arch/arm/mach-at91/pm_suspend.S
+>>> +++ b/arch/arm/mach-at91/pm_suspend.S
+>>> @@ -814,17 +814,19 @@ sr_dis_exit:
+>>>  .endm
+>>>
+>>>  /**
+>>> - * at91_mckx_ps_enable:      save MCK1..4 settings and switch it to main clock
+>>> + * at91_mckx_ps_enable:      save MCK settings and switch it to main clock
+>>>   *
+>>> - * Side effects: overwrites tmp1, tmp2
+>>> + * Side effects: overwrites tmp1, tmp2, tmp3
+>>>   */
+>>>  .macro at91_mckx_ps_enable
+>>>  #ifdef CONFIG_SOC_SAMA7
+>>>       ldr     pmc, .pmc_base
+>>> +     ldr     tmp3, .mck_count
+>>>
+>>> -     /* There are 4 MCKs we need to handle: MCK1..4 */
+>>> +     /* Start at MCK1 and go until MCK_count */
+>>
+>> s/MCK_count/mck_count to align with the mck_count above.
+>>
+>>>       mov     tmp1, #1
+>>> -e_loop:      cmp     tmp1, #5
+>>> +e_loop:
+>>> +     cmp     tmp1, tmp3
+>>>       beq     e_done
+>>
+>> If providing mck_count = 4 (for SAMA7G5) and mck_count = 9 (for SAMA7D65)
+>> you can change this to:
+>>
+>>         bqt     e_done
+>>
+>>>
+>>>       /* Write MCK ID to retrieve the settings. */
+>>> @@ -850,7 +852,37 @@ e_save_mck3:
+>>>       b       e_ps
+>>>
+>>>  e_save_mck4:
+>>> +     cmp     tmp1, #4
+>>> +     bne     e_save_mck5
+>>>       str     tmp2, .saved_mck4
+>>> +     b       e_ps
+>>> +
+>>> +e_save_mck5:
+>>> +     cmp     tmp1, #5
+>>> +     bne     e_save_mck6
+>>> +     str     tmp2, .saved_mck5
+>>> +     b       e_ps
+>>> +
+>>> +e_save_mck6:
+>>> +     cmp     tmp1, #6
+>>> +     bne     e_save_mck7
+>>> +     str     tmp2, .saved_mck6
+>>> +     b       e_ps
+>>> +
+>>> +e_save_mck7:
+>>> +     cmp     tmp1, #7
+>>> +     bne     e_save_mck8
+>>> +     str     tmp2, .saved_mck7
+>>> +     b       e_ps
+>>> +
+>>> +e_save_mck8:
+>>> +     cmp     tmp1, #8
+>>> +     bne     e_save_mck9
+>>> +     str     tmp2, .saved_mck8
+>>> +     b       e_ps
+>>> +
+>>> +e_save_mck9:
+>>> +     str     tmp2, .saved_mck9
+>>>
+>>>  e_ps:
+>>>       /* Use CSS=MAINCK and DIV=1. */
+>>> @@ -870,17 +902,19 @@ e_done:
+>>>  .endm
+>>>
+>>>  /**
+>>> - * at91_mckx_ps_restore: restore MCK1..4 settings
+>>> + * at91_mckx_ps_restore: restore MCKx settings
+>>
+>> s/MCKx/MCK to align with the description from at91_mckx_ps_enable
+>>
+>>>   *
+>>>   * Side effects: overwrites tmp1, tmp2
+>>>   */
+>>>  .macro at91_mckx_ps_restore
+>>>  #ifdef CONFIG_SOC_SAMA7
+>>>       ldr     pmc, .pmc_base
+>>> +     ldr     tmp2, .mck_count
+>>>
+>>> -     /* There are 4 MCKs we need to handle: MCK1..4 */
+>>> +     /* Start from MCK1 and go up to MCK_count */
+>>>       mov     tmp1, #1
+>>> -r_loop:      cmp     tmp1, #5
+>>> +r_loop:
+>>> +     cmp     tmp1, tmp2
+>>>       beq     r_done
+>>
+>> Same here:
+>>         bgt     r_done
+>>
+>> should be enough if providing mck_count = 4 or 9
+>>
+>>>
+>>>  r_save_mck1:
+>>> @@ -902,7 +936,37 @@ r_save_mck3:
+>>>       b       r_ps
+>>>
+>>>  r_save_mck4:
+>>> +     cmp     tmp1, #4
+>>> +     bne     r_save_mck5
+>>>       ldr     tmp2, .saved_mck4
+>>> +     b       r_ps
+>>> +
+>>> +r_save_mck5:
+>>> +     cmp     tmp1, #5
+>>> +     bne     r_save_mck6
+>>> +     ldr     tmp2, .saved_mck5
+>>> +     b       r_ps
+>>> +
+>>> +r_save_mck6:
+>>> +     cmp     tmp1, #6
+>>> +     bne     r_save_mck7
+>>> +     ldr     tmp2, .saved_mck6
+>>> +     b       r_ps
+>>> +
+>>> +r_save_mck7:
+>>> +     cmp     tmp1, #7
+>>> +     bne     r_save_mck8
+>>> +     ldr     tmp2, .saved_mck7
+>>> +     b       r_ps
+>>> +
+>>> +r_save_mck8:
+>>> +     cmp     tmp1, #8
+>>> +     bne     r_save_mck9
+>>> +     ldr     tmp2, .saved_mck8
+>>> +     b       r_ps
+>>> +
+>>> +r_save_mck9:
+>>> +     ldr     tmp2, .saved_mck9
+>>>
+>>>  r_ps:
+>>>       /* Write MCK ID to retrieve the settings. */
+>>> @@ -921,6 +985,7 @@ r_ps:
+>>>       wait_mckrdy tmp1
+>>>
+>>>       add     tmp1, tmp1, #1
+>>> +     ldr     tmp2, .mck_count
+>>
+>> Or you can add tmp4 for this
+>>
+>>>       b       r_loop
+>>>  r_done:
+>>>  #endif
+>>> @@ -1045,6 +1110,10 @@ ENTRY(at91_pm_suspend_in_sram)
+>>>       str     tmp1, .memtype
+>>>       ldr     tmp1, [r0, #PM_DATA_MODE]
+>>>       str     tmp1, .pm_mode
+>>> +#ifdef CONFIG_SOC_SAMA7
+>>> +     ldr     tmp1, [r0, #PM_DATA_PMC_MCK_COUNT]
+>>> +     str     tmp1, .mck_count
+>>> +#endif
+>>>
+>>>       /*
+>>>        * ldrne below are here to preload their address in the TLB as access
+>>> @@ -1132,6 +1201,10 @@ ENDPROC(at91_pm_suspend_in_sram)
+>>>       .word 0
+>>>  .pmc_version:
+>>>       .word 0
+>>> +#ifdef CONFIG_SOC_SAMA7
+>>> +.mck_count:
+>>> +     .word 0
+>>> +#endif
+>>>  .saved_mckr:
+>>>       .word 0
+>>>  .saved_pllar:
+>>> @@ -1155,6 +1228,16 @@ ENDPROC(at91_pm_suspend_in_sram)
+>>>       .word 0
+>>>  .saved_mck4:
+>>>       .word 0
+>>> +.saved_mck5:
+>>> +     .word 0
+>>> +.saved_mck6:
+>>> +     .word 0
+>>> +.saved_mck7:
+>>> +     .word 0
+>>> +.saved_mck8:
+>>> +     .word 0
+>>> +.saved_mck9:
+>>> +     .word 0
+>>>  #endif
+>>>
+>>>  ENTRY(at91_pm_suspend_in_sram_sz)
+>>
 > 
-> well, I suppose, you know the answer, according to how this has been modelled
-> within this series, all the functionality could only be added on top of RTC
-> driver. 
 
-I don't think it is a good idea to add everything in the RTC driver.
-I prefer to separate them to sub devices if possible, so we can
-make full use of all the framework provided.
-
-> Do you think it's time to re-design it as compatible = "syscon", "simple-mfd"
-> with children nodes for RTC and reboot?
-> 
-
-Yes, but you should submit the 8051 and reboot device early, and
-change your binding with the right compatible. It is not allowd to
-change compatible after the binding is determined.
-
-Regards,
-Inochi
 
