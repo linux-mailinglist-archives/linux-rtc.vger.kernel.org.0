@@ -1,344 +1,336 @@
-Return-Path: <linux-rtc+bounces-3240-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3241-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E4A4A3C518
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 17:35:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B40BA3C8EA
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 20:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8996B165086
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 16:33:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C33013AFCFE
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 19:33:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C977C1F8F09;
-	Wed, 19 Feb 2025 16:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F4D822B58A;
+	Wed, 19 Feb 2025 19:34:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="jYptpt4X"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Hd2IIzP2"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013017.outbound.protection.outlook.com [40.107.159.17])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AC21991A9;
-	Wed, 19 Feb 2025 16:33:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739982826; cv=fail; b=FLFt5lixMDFf6XYkD7voKAIFauP5SEdJRmO1IOq20VsDMGiIgv7kEkSa+9pBXcHkdtsDZC0ruqrjN24VM1cTBXyzzYird4DEHxkSa+dESR5YuW1GDqoUt6/9aCow23BUQ6qyVw7QvkELwnCc4sWrODS6ny0T3luth96MmJJ8MXI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739982826; c=relaxed/simple;
-	bh=Tmg5RFPbifcu5+kB5deOUwJqPQl1kgcUBBP+30B5ohY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Qnz8BxEsE55h7rSfEMw3UQj9PpoBiyGlsrIED6Kic26Kq9DIOIKLBko+6vjv1OTkxUoWHviYnIjD02YzbnXEXs41eOJmwQMfcsYqmRwH8XD0A2ymIruw9DMWGGRXcTY9TfLANqaYCCKaUMqMfY1+COj782PMNNMh9yzlPKQx6h8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=pass smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=jYptpt4X; arc=fail smtp.client-ip=40.107.159.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LVJuoYKDFriI8PKWuR7XVQf8px9PNDh/K6DhXjcWf4P8wVLXRmH5A1vzihNPWxGdEhvPFNCQuTibmpUlpoi/Zep2HJ2kA63NDKuOSuxnJcG1PPLZyh38QlngympE+Ltsa6O3ubkHbn9TE/zcyJZLr5ooGdJ88ruJSp7onyXZQ8DI3EGWdzlfd05PjgUuTFkq2TrqvTc+byj+ATaw0+hSUaA7wBC39byYApApdIFAjR1wLIRSwW1z6ZDwfu+YVJg/4NzIbRtnt0u0eLofIqdflOaxPWMxya3DyfveD5dDXA0Yp98zy63H+P0o926Dd0QnQbrCBjYYiNjL7tCObm7DhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cSlRbCsrZ2gOo7r4QqXxfusn9AwdssKtb1nMiqBDQZ4=;
- b=R4kMTU4/i5JRcDXAvOIHMhxk51JabN2SBd7c7SwNPkAvVRYx0o7Nb3FC62FvOtnvW1lZD/USIp/UAfa4b+gx/8y57LOpu6mBSrinfl+fQYORVNme1RJHPHKq069FaeQWO9Mcdowi8gvY/fkYMglyW565U+ttReRt99A6qQ3mCKJVzPA6piQBBEBo8LfkQxe75tB3N9eZ/PeBVFztGHPpfL0P9ApOW46sKknV6EZ105/3em0CTLDvu83XvOgBv9lz6gYR2NQQae5ekFC8q4bMnO0IXQ5GD6/9Rom0RBzgAFiHWRZBi1INvn4zHJQXZrYOXq9pYfopXlE3Vvl2Fr6gLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
- header.d=mt.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cSlRbCsrZ2gOo7r4QqXxfusn9AwdssKtb1nMiqBDQZ4=;
- b=jYptpt4X79HHWeq/F2MzuyJ52pyvHxj+UPc8Mf8mzGltsTeN3cd5rB1q5Ip2C0KmWt9tNZsp+8BnnOFXyLlY6uNoF99BSapSz7q7kBMRcWz/r88tShVxDpKcndW3no9ovvaSkNTg+pLaEE2KzeTYk6q2PJn7N7qVf0Vsy8Ua3gsxCD2kBCrS/0XiCsdhb8t9GqPVsBD7HWxZBc8BJaKh0JsPTnguHREKvCJK30ohLv2WmI+1+Fc23MwE9NqNj9k/KcuM/BsL2kmCRpsKgUVCvt/EjL8j+3CTqqL0388MTu6zEhY0IggzCVsb/VJHxEIjYvK+vX6Qd8Sd/NOq2FZ+ow==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mt.com;
-Received: from AS8PR03MB6775.eurprd03.prod.outlook.com (2603:10a6:20b:29d::16)
- by VI2PR03MB10860.eurprd03.prod.outlook.com (2603:10a6:800:279::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.17; Wed, 19 Feb
- 2025 16:33:41 +0000
-Received: from AS8PR03MB6775.eurprd03.prod.outlook.com
- ([fe80::8a03:2bdb:89c5:32e8]) by AS8PR03MB6775.eurprd03.prod.outlook.com
- ([fe80::8a03:2bdb:89c5:32e8%4]) with mapi id 15.20.8466.015; Wed, 19 Feb 2025
- 16:33:41 +0000
-Date: Wed, 19 Feb 2025 17:33:35 +0100
-From: Manuel Traut <manuel.traut@mt.com>
-To: Markus Burri <markus.burri@mt.com>
-Cc: linux-kernel@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] rtc-rv8803: extend sysfs to read status
-Message-ID: <Z7YH3_DqUkdU9mwW@mt.com>
-References: <20250116131532.471040-1-markus.burri@mt.com>
- <20250116131532.471040-6-markus.burri@mt.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250116131532.471040-6-markus.burri@mt.com>
-X-ClientProxiedBy: CH0PR04CA0038.namprd04.prod.outlook.com
- (2603:10b6:610:77::13) To AS8PR03MB6775.eurprd03.prod.outlook.com
- (2603:10a6:20b:29d::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908C222AE7E;
+	Wed, 19 Feb 2025 19:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739993645; cv=none; b=elpjPiEVCSQYx5OBT8hA3udSBdS2QQd8hSYGoEBLzx5sQgPPz5WkuHIIU4yE+EnbKxhFraTaRUN7/oK6ulq2T4RLnG95PpJ2TPu0SVi3lO2hre1/dRrQn+M2gYnuKwhYuwbhdx/1o7deFVm6Aymsegkl8giQiK5SvrRnCtffqEg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739993645; c=relaxed/simple;
+	bh=teNRojGpOLNz5H/L6slazlSb8pZFQ/tNepdoY32xkYc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OezkWmLYUH2zJVl9E9gGlTjSQhrpSQ5hb4mTy5NI6hBgjXSxLqZY5ZeQ8yLtQZt57WjYVGn8I595pFZ4NzZ1RmjGjwhwKCP/KpymIYJ/tMNkzzKCZNVDsKuv/fVwQumQTmDNjP7vA6lrmaYHma9B7qtATcITqozafL5m6/d65/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Hd2IIzP2; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51JG6nh0026862;
+	Wed, 19 Feb 2025 19:33:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=ucERdosz3meDNO5pP8Ssls
+	dhIEqWUsTqCQuLLvq3r+c=; b=Hd2IIzP28GaXzyMBhOcQJsD6lRP8Dy83wI0fur
+	HcMCuqD4BFo60UqHZ1+ER5AS0eJzk4K+ABl2UV0hNbpANKTyPVZr88nr/twcpQ8t
+	paGo1embi7VDk2ihnSeb3tDzmz/QaesNj8BuiM4GkuPW0RS0UX1tvdUlpu2GWBJu
+	gS8oWWpDmv5GsP+xcy0pjaHp7syWF7H1NhYZQGYQ0BlyMqkdXxEoFbzo7z/pC3Ql
+	O5FYFTKUoRbyE/fC+W0DpBI7btoilj84zs0Yu1zyZ97kvMrM8BTiuIUxYn43oZpz
+	O/ywcNnzSP0NAS7+b8i000lzLR3HF5wiG9SOdueZ6whRpnqA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy0kscx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Feb 2025 19:33:35 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51JJXZlD023787
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Feb 2025 19:33:35 GMT
+Received: from PHILBER.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 19 Feb
+ 2025 11:33:29 -0800
+From: Peter Hilber <quic_philber@quicinc.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>
+CC: Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri
+	<quic_svaddagi@quicinc.com>,
+        Peter Hilber <quic_philber@quicinc.com>,
+        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+        Richard Cochran
+	<richardcochran@gmail.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <virtualization@lists.linux.dev>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Ridoux, Julien" <ridouxj@amazon.com>, Marc Zyngier <maz@kernel.org>,
+        "Mark
+ Rutland" <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Parav Pandit
+	<parav@nvidia.com>,
+        Matias Ezequiel Vara Larsen <mvaralar@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, <virtio-dev@lists.linux.dev>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>
+Subject: [PATCH v5 0/4] Add virtio_rtc module
+Date: Wed, 19 Feb 2025 20:32:55 +0100
+Message-ID: <20250219193306.1045-1-quic_philber@quicinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR03MB6775:EE_|VI2PR03MB10860:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ef95498-967b-4bf0-f6fd-08dd51032bb8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vO0UsG+SsV+EI8G6m2Ll+JRXjNW6L9XcbIt7V7k4PLXPFfVOlVOfJScc6uCv?=
- =?us-ascii?Q?t3moVPvFZZ8RRV0apmhYqsr+ZDPbRZaDJWO8xdabKQm11N4eSPEesLMl+1Zz?=
- =?us-ascii?Q?6QezfNK0iXDWCM2c6McUubgdtQ0Mku3DeasObozZrtUd0dACtz9pf/YGU4bv?=
- =?us-ascii?Q?ILCaNC2Lp62cggOkGHZ+z9hl01VzQAZrHqvExrFu91xgamaQZblNeKuPypQH?=
- =?us-ascii?Q?H5q6k91O86zyb7BlvhDPDWxNDnlURWhUzAZieqsZRKHi9/MwYMmZJ0Dr/+Ld?=
- =?us-ascii?Q?Uz5D+qdc2m7jmKPFmj50uabaUWHvJQy0eBrSxwtkZqlnElPuyyWDQwYVeCc0?=
- =?us-ascii?Q?V0IzyuHpV50unopHubk6UurdjSPpTXTUAboTo5aA0W7mOqxyssAudilmgiYj?=
- =?us-ascii?Q?h40L8syjFOCOf/dnPZG+jZuFbuqb2xIAfwBmkU/xILDy/gTu867UyOIi9NSB?=
- =?us-ascii?Q?IXfSoCeKWRxCE5/zs0BONn8KZZAX63GtwqdMSyr38yjtmapwnt2P7GUK7pMU?=
- =?us-ascii?Q?4ZXnrdrJVmx1FDqCu6RAncxLB8Txxu2O6ndvgGE8+3Ta9NnWs2CZOXLFoNVH?=
- =?us-ascii?Q?Ua20wPCdV1tJ3Y5y5xAYU65fSLgA8R6ILInFiX5OmtxtZGnNfozWtiWrp0Vd?=
- =?us-ascii?Q?YWhO08Pzbj+KEH14lIoC6IDlD2HkG+E7mMsHTbk/K4FJRQ1XXaL3t/pZ5V15?=
- =?us-ascii?Q?16BFelVvd6ACzzkhVvFxb+FuZiL3AUW3rTE8EaGCWyEnU6m7hTyvHxOJlV4L?=
- =?us-ascii?Q?fQopMfGlCFTLnqy+44YgIigdIufzVJruU3F+8qzlw3GAK5LRJjqU8w3bZ46r?=
- =?us-ascii?Q?IxSzoIJ24uOUQonsKu6JcfRp9b+cGUlKgkTztVSyBJ95C1p/lzq+4oKw1Cy0?=
- =?us-ascii?Q?CMnrqoVDHk/n/HBeLTVt70WdH6prQqifUBXmoK9A/lHXJUmB+Fx9RzOChv9z?=
- =?us-ascii?Q?+M7Q2joY23nUaoPperROWmSDK2BanYUrxpIwHdat/ZRqXE05GjpEagqLqno8?=
- =?us-ascii?Q?h0mdKgopUcJSMXlIakx1nEimrrLv26TZ/BqkBV5fRkiGd35MtNrjFWZAQkWk?=
- =?us-ascii?Q?AwiZ4BtxUkD8bDVfOlxrdQKFCtFPBQqVzO9XvCHeSHgTzzeDI0TrDgVARSez?=
- =?us-ascii?Q?pYLlybYibrNiszz7bhKR7SAJuZ6MfuX/LtgPk6Dzxhx6lBNzWw4RhxhueUZB?=
- =?us-ascii?Q?K73JFqLSoqu3NwtYjc3C8sUyBdnfr1UdCgrQTc5lUq/tT9Qn/vK0hNtaySVu?=
- =?us-ascii?Q?ztnfXJHhldh4FW64jc3wcUbJprQB29DOnXAcJdeLN+A+LerhE0XPTo+SGcZo?=
- =?us-ascii?Q?CFd3Qu/IfMWclKLi3Ys4ZVhmg0uQuR2D9LUKAVgYQVuiMCQPNpf2y9aqmdLE?=
- =?us-ascii?Q?bPIaPa2bIZtrrjSykZjNcHuB6yQayByw+bjn667Xu6NNVruLP2Eh0pX2HNni?=
- =?us-ascii?Q?1SNjQimPCnncnbTnUSZumlJo3Eflcktg?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB6775.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?sFl/3b9Dqy7RRFIEUclyiVgLPiMjDOdIBCjtvnvHxKhaocy5eHAv1BNd4ty/?=
- =?us-ascii?Q?eLdk3fZyTjxftt+j3X3/jxwDBSyrtD0k/rZDdw/beu9/Wi1WHqUXBOhvPy2W?=
- =?us-ascii?Q?bOOXe52fpNJdSs6n5ABkph6zV8bgu+fW8zoOTUDQs8NniIQ5GHczOMyA7ZVW?=
- =?us-ascii?Q?DMKB7tWvViY3xMnYt3rAgzidxr8ZoA0gw6dNhZgpjfWSNRQgIeJC4/Gctk+i?=
- =?us-ascii?Q?H520E5TL+ugaxMSz/8dmYiZFJDmQd4OwRWG2RnAyY/Zrnl/a2BewQsB6Erlh?=
- =?us-ascii?Q?OmgCFpK/R2t8RZDY7l2LV/oWzS94YpxqODVObIeIS7ciO4phimwUzPNmoJsi?=
- =?us-ascii?Q?53qc0DJZIDfgYrXwMuUDVoHlxiVPX0LG8JRiHOOYmJaWuXwns3xDA/L+2Yy9?=
- =?us-ascii?Q?o1Q3FS/OKijI8x5hqFNlgijoPvVGit7thV5Ln8j8RGWPBnYhTXf/87B497yA?=
- =?us-ascii?Q?iSSOV5N3uRmf3JcT/q47/aNkS6JpG7reE7ZRtJ3d4KyrdXUjUJ5HTw0a+TGs?=
- =?us-ascii?Q?Xsk4gzsiplz0uQigGPXH8Yk/4p8GWnu1uQldjTZ/GpPQtYTvemZXkKNAacgB?=
- =?us-ascii?Q?W994JKMAKCOsAtCOsG+KwFjE0b990CohHyH2N1a26LjCmQ2R0M+rpytLroq0?=
- =?us-ascii?Q?oUUBEnUpVgWM6kEqTM92LI88xFpdODusrKMsdstwpFJm3JZpEeRM6IStm+JF?=
- =?us-ascii?Q?4pWl1UPFKUH30iDTWnDnOt0zWFahJnq5kh9WVVHytTcGq8YmkVCtJQIu/3kf?=
- =?us-ascii?Q?Q+MzaxrSylQOXNc7jPHdkg/5+tYrojwxa7jhlJ/wAAvp9jDbEeaPdwBpghfB?=
- =?us-ascii?Q?giUiDCKTCd4X3RECrFMLEVkFJCjyvo0SxQR7P8zqZJ5gzbB8j/JMv0eMCEGB?=
- =?us-ascii?Q?amUVsUNPmUl5zz+gLqpbPIMcLNbLZHv0oh15hkFuO+Uk/02g3s12V75QuUFc?=
- =?us-ascii?Q?ZyyOXvGImg08JLer5UL2QBlxxV0vYurYtCxbovm58wdo4j7G0tsuUsIQYMdw?=
- =?us-ascii?Q?8PLfItCtZFDDJsW1EJ1xBvN33VIVr2YbjOZblxjifcQxfeIMIsNgmFz3Anx4?=
- =?us-ascii?Q?mBk/eFs+c8qunIP3y9xlVFOAoMQhxXcaz+0peletTWxHjTG8FGFCTbCxn8aJ?=
- =?us-ascii?Q?OnFxtDx4f6GgC30u8ItwKiaa77L7cKmAlavgBb0mEwChJP327Vm3UGeQSTo9?=
- =?us-ascii?Q?ltMnIUp2bTu++hmuXN+hhwGPR3lqAtNk/iGIrulwUoNAJdthXkouGcKOiyXt?=
- =?us-ascii?Q?hFtTqoxpyqpWRty0W/DqrZUmQuhYR/lWnCbmmjYPa6A+NtOqSl1mNmtu+j2L?=
- =?us-ascii?Q?e/Zns46R1Kb5NwiDSwMVr8oecvXO8EUgA/9A9WwEyeP3JWtLGAECkEieamKH?=
- =?us-ascii?Q?E0wiF2oR3lMhWRkWX/z3JqZ9ekCrl3GNGwxuon5ieC3QK53+gJM7cg2wcGW/?=
- =?us-ascii?Q?sBrh8dfVnui/TnEvKziyHXxgzTMNwQdCJ7moKGPbpiBn+/hOETGMPjS1Je3R?=
- =?us-ascii?Q?B0a1J552+Xme5yvI0xTNO0lGfFtlqFHGfHVQapz+xLSlbegA1z0Un2UKoRXF?=
- =?us-ascii?Q?FQ70j/qYARL5c1RNataF2F+zcu0WUv1TqdKq1ewj?=
-X-OriginatorOrg: mt.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ef95498-967b-4bf0-f6fd-08dd51032bb8
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB6775.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 16:33:41.8036
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7SrL4HiBtIbJMiGkfzJIyBFCvEnNAW/O3NVq8Zm+20Hr00vqlPkXxDxQV7ZgR0r5iQZGhXnGkH39NKIcvLKuBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR03MB10860
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: RiMU8GsxwEQleUbPouAVE_-8jFDYWcbh
+X-Proofpoint-ORIG-GUID: RiMU8GsxwEQleUbPouAVE_-8jFDYWcbh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-19_08,2025-02-19_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502190151
 
-On Thu, Jan 16, 2025 at 02:15:32PM +0100, Markus Burri wrote:
-> Add sysfs functionality to read the status and configuration.
-> The functions provide the number of stored timestamp events, the current
-> EVIN pin configuration and the enabled/disabled status.
-> 
-> Signed-off-by: Markus Burri <markus.burri@mt.com>
-Reviewed-by: Manuel Traut <manuel.traut@mt.com>
+This series implements a driver for a virtio-rtc device conforming to spec
+proposal v7 [1]. It includes a PTP clock driver and an RTC class driver
+with alarm.
 
-> ---
->  .../ABI/testing/sysfs-class-rtc-tamper        |   8 ++
->  drivers/rtc/rtc-rv8803.c                      | 106 ++++++++++++++++++
->  2 files changed, 114 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-rtc-tamper b/Documentation/ABI/testing/sysfs-class-rtc-tamper
-> index 2fd6578a6..b3aa73c81 100644
-> --- a/Documentation/ABI/testing/sysfs-class-rtc-tamper
-> +++ b/Documentation/ABI/testing/sysfs-class-rtc-tamper
-> @@ -26,3 +26,11 @@ KernelVersion:	6.13
->  Contact:	Markus Burri <markus.burri@mt.com>
->  Description:	(WO) Attribute to trigger an internal timestamp event
->  		Write a '1' to trigger an internal event and store a timestamp.
-> +
-> +What:		/sys/class/rtc/rtcX/tamper/status
-> +Date:		January 2025
-> +KernelVersion:	6.13
-> +Contact:	Markus Burri <markus.burri@mt.com>
-> +Description:	(RO) Attribute to read configuration and status for EVINx and buffer.
-> +		Provide the number of stored timestamp events, the current EVIN pin configuration
-> +		and the enabled/disabled status.
-> diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-> index ca3a19162..350cd92d6 100644
-> --- a/drivers/rtc/rtc-rv8803.c
-> +++ b/drivers/rtc/rtc-rv8803.c
-> @@ -84,8 +84,11 @@
->  
->  #define RX8901_EVNT_INTF		0x47
->  
-> +#define RX8901_BUF_OVWF			0x4F
-> +
->  #define NO_OF_EVIN			3
->  
-> +#define EVIN_FILTER_FACTOR		125
->  #define EVIN_FILTER_MAX			40
->  
->  enum rv8803_type {
-> @@ -116,6 +119,26 @@ struct cfg_val_txt {
->  	bool hide;
->  };
->  
-> +static const struct cfg_val_txt pull_resistor_txt[] = {
-> +	{ "no", no },
-> +	{ "PU/500k", pull_up_500k },
-> +	{ "PU/1M", pull_up_1M },
-> +	{ "PU/10M", pull_up_10M },
-> +	{ "PD/500k", pull_down_500k },
-> +	{ "no", 0b101, 1 },
-> +	{ "no", 0b110, 1 },
-> +	{ "no", 0b111, 1 },
-> +	{ NULL }
-> +};
-> +
-> +static const struct cfg_val_txt trigger_txt[] = {
-> +	{ "falling", falling_edge },
-> +	{ "rising", rising_edge },
-> +	{ "both", both_edges },
-> +	{ "both", 0b11, 1 },
-> +	{ NULL }
-> +};
-> +
->  static const struct cfg_val_txt trg_status_txt[] = {
->  	{ "EVIN1", BIT(5) },
->  	{ "EVIN2", BIT(6) },
-> @@ -632,6 +655,16 @@ static int rv8803_nvram_read(void *priv, unsigned int offset,
->  	return 0;
->  }
->  
-> +static char *cfg2txt(const struct cfg_val_txt *cfg, u8 value)
-> +{
-> +	do {
-> +		if (cfg->val == value)
-> +			return cfg->txt;
-> +	} while (++cfg && cfg->txt);
-> +
-> +	return NULL;
+v5 updates
+==========
 
-Maybe return a more human readable string here?
+Important changes compared to the previous driver series [3] are:
 
-> +}
-> +
->  static int rv8803_ts_event_write_evin(int evin, struct rv8803_data *rv8803,
->  				      enum evin_pull_resistor pullup_down,
->  				      enum evin_trigger trigger, int filter)
-> @@ -935,14 +968,87 @@ static ssize_t trigger_store(struct device *dev, struct device_attribute *attr,
->  	return count;
->  }
->  
-> +static ssize_t status_show(struct device *dev, struct device_attribute *attr,
-> +			   char *buf)
-> +{
-> +	int evin_en, evin_cfg, evin_flt, buf1_cfg, buf1_stat, buf_ovwf;
+- Update to spec proposal v7 [1].
 
-> +	int i;
-> +	int offset = 0;
-> +	u8 ev_pullupdown[NO_OF_EVIN];
-> +	u8 ev_trigger[NO_OF_EVIN];
-> +	int ev_filter[NO_OF_EVIN];
-> +
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct rv8803_data *rv8803 = dev_get_drvdata(dev->parent);
-> +
-> +	scoped_guard(mutex, &rv8803->flags_lock) {
-> +		evin_en = rv8803_read_reg(client, RX8901_EVIN_EN);
-> +		if (evin_en < 0)
-> +			return evin_en;
-> +
-> +		for (i = 0; i < NO_OF_EVIN; ++i) {
-> +			evin_cfg = rv8803_read_reg(client, evin_cfg_regs[i]);
-> +			evin_flt = rv8803_read_reg(client, evin_flt_regs[i]);
-> +			if (evin_cfg < 0 || evin_flt < 0)
-> +				return -EIO;
-> +
-> +			ev_pullupdown[i] = FIELD_GET(RX8901_EVENTx_CFG_PUPD, evin_cfg);
-> +			ev_trigger[i] = FIELD_GET(RX8901_EVENTx_CFG_POL, evin_cfg);
-> +			ev_filter[i] = EVIN_FILTER_FACTOR * evin_flt;
-> +		}
-> +
-> +		buf1_cfg = rv8803_read_reg(client, RX8901_BUF1_CFG1);
-> +		buf1_stat = rv8803_read_reg(client, RX8901_BUF1_STAT);
-> +		buf_ovwf = rv8803_read_reg(client, RX8901_BUF_OVWF);
-> +		if (buf1_stat < 0 || buf1_stat < 0 || buf_ovwf < 0)
-> +			return -EIO;
-> +	}
-> +
-> +	offset += sprintf(buf + offset, "Mode: %s\n\n",
-> +			  FIELD_GET(BIT(6), evin_en) ? "direct" : "fifo");
-> +	offset += sprintf(buf + offset, "Event config:\n");
-> +	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "", "EVIN1", "EVIN2", "EVIN3");
-> +	offset += sprintf(buf + offset, "  %-13s  %-7ld %-7ld %-7ld\n", "Enable",
-> +			  FIELD_GET(BIT(0), evin_en), FIELD_GET(BIT(1), evin_en),
-> +			  FIELD_GET(BIT(2), evin_en));
-> +	offset += sprintf(buf + offset, "  %-13s  %-7ld %-7ld %-7ld\n", "Capture",
-> +			  FIELD_GET(BIT(3), evin_en), FIELD_GET(BIT(4), evin_en),
-> +			  FIELD_GET(BIT(5), evin_en));
-> +
-> +	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "Pull-resistor",
-> +			  cfg2txt(pull_resistor_txt, ev_pullupdown[0]),
-> +			  cfg2txt(pull_resistor_txt, ev_pullupdown[1]),
-> +			  cfg2txt(pull_resistor_txt, ev_pullupdown[2]));
-> +	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "Edge",
-> +			  cfg2txt(trigger_txt, ev_trigger[0]),
-> +			  cfg2txt(trigger_txt, ev_trigger[1]),
-> +			  cfg2txt(trigger_txt, ev_trigger[2]));
-> +	offset += sprintf(buf + offset, "  %-13s  %-7d %-7d %-7d\n\n", "Filter [ms]",
-> +			  ev_filter[0], ev_filter[1], ev_filter[2]);
-> +
-> +	offset += sprintf(buf + offset, "Buffer config:\n");
-> +	offset += sprintf(buf + offset, "  %-13s  %-10s\n", "Mode",
-> +			  (FIELD_GET(BIT(6), buf1_cfg) ? "overwrite" : "inhibit"));
-> +	offset += sprintf(buf + offset, "  %-13s  %-10s\n", "Status",
-> +			  (FIELD_GET(BIT(7), buf1_stat) ? "full" : "free"));
-> +	offset += sprintf(buf + offset,  "  %-13s  %-10ld\n", "Overrun",
-> +			  (FIELD_GET(BIT(4), buf_ovwf)));
-> +	offset += sprintf(buf + offset,  "  %-13s  %-10ld\n", "No of data",
-> +			  (FIELD_GET(GENMASK(5, 0), buf1_stat)));
-> +
-> +	return offset;
-> +}
-> +
->  static DEVICE_ATTR_WO(enable);
->  static DEVICE_ATTR_RO(read);
->  static DEVICE_ATTR_WO(trigger);
-> +static DEVICE_ATTR_RO(status);
->  
->  static struct attribute *rv8803_rtc_event_attrs[] = {
->  	&dev_attr_enable.attr,
->  	&dev_attr_read.attr,
->  	&dev_attr_trigger.attr,
-> +	&dev_attr_status.attr,
->  	NULL
->  };
->  
-> -- 
-> 2.39.5
-> 
+- Fix multiple initialization related bugs.
+
+- Drop the RFC tag, since no major outstanding issues are apparent.
+
+Overview
+========
+
+This patch series adds the virtio_rtc module, and related bugfixes. The
+virtio_rtc module implements a driver compatible with the proposed Virtio
+RTC device specification [1]. The Virtio RTC (Real Time Clock) device
+provides information about current time. The device can provide different
+clocks, e.g. for the UTC or TAI time standards, or for physical time
+elapsed since some past epoch. The driver can read the clocks with simple
+or more accurate methods. Optionally, the driver can set an alarm.
+
+For the Virtio RTC device, there is currently a proprietary implementation,
+which has been used for testing.
+
+PTP clock interface
+===================
+
+virtio_rtc exposes clocks as PTP clocks to userspace, similar to ptp_kvm.
+If both the Virtio RTC device and this driver have special support for the
+current clocksource, time synchronization programs can use
+cross-timestamping using ioctl PTP_SYS_OFFSET_PRECISE2 aka
+PTP_SYS_OFFSET_PRECISE. Similar to ptp_kvm, system time synchronization
+with single-digit ns precision is possible with a quiescent reference clock
+(from the Virtio RTC device). This works even when the Virtio device
+response is slow compared to ptp_kvm hypercalls.
+
+The following illustrates a test using PTP_SYS_OFFSET_PRECISE, with
+interspersed strace log and chrony [2] refclocks log, on arm64. In the
+example, chrony tracks a virtio_rtc PTP clock ("PHCV", /dev/ptp0). The raw
+offset between the virtio_rtc clock and CLOCK_REALTIME is 0 to 1 ns. At the
+device side, the Virtio RTC device artificially delays both the clock read
+request, and the response, by 50 ms. Cross-timestamp interpolation still
+works with this delay. chrony also monitors a ptp_kvm clock ("PHCK",
+/dev/ptp3) for comparison, which yields a similar offset.
+
+	ioctl(5</dev/ptp3>, PTP_SYS_OFFSET_PRECISE, 0xffffe86691c8) = 0 <0.000329>
+	===============================================================================
+	   Date (UTC) Time         Refid  DP L P  Raw offset   Cooked offset      Disp.
+	===============================================================================
+	2023-06-29 18:49:55.595742 PHCK    0 N 0  1.000000e-09  8.717931e-10  5.500e-08
+	2023-06-29 18:49:55.595742 PHCK    - N -       -        8.717931e-10  5.500e-08
+	ioctl(6</dev/ptp0>, PTP_SYS_OFFSET_PRECISE, 0xffffe86691c8) = 0 <0.101545>
+	2023-06-29 18:49:56.147766 PHCV    0 N 0  1.000000e-09  8.801870e-10  5.500e-08
+	2023-06-29 18:49:56.147766 PHCV    - N -       -        8.801870e-10  5.500e-08
+	ioctl(5</dev/ptp3>, PTP_SYS_OFFSET_PRECISE, 0xffffe86691c8) = 0 <0.000195>
+	2023-06-29 18:49:56.202446 PHCK    0 N 0  1.000000e-09  7.364180e-10  5.500e-08
+	2023-06-29 18:49:56.202446 PHCK    - N -       -        7.364180e-10  5.500e-08
+	ioctl(6</dev/ptp0>, PTP_SYS_OFFSET_PRECISE, 0xffffe86691c8) = 0 <0.101484>
+	2023-06-29 18:49:56.754641 PHCV    0 N 0  0.000000e+00 -2.617368e-10  5.500e-08
+	2023-06-29 18:49:56.754641 PHCV    - N -       -       -2.617368e-10  5.500e-08
+	ioctl(5</dev/ptp3>, PTP_SYS_OFFSET_PRECISE, 0xffffe86691c8) = 0 <0.000270>
+	2023-06-29 18:49:56.809282 PHCK    0 N 0  1.000000e-09  7.779321e-10  5.500e-08
+	2023-06-29 18:49:56.809282 PHCK    - N -       -        7.779321e-10  5.500e-08
+	ioctl(6</dev/ptp0>, PTP_SYS_OFFSET_PRECISE, 0xffffe86691c8) = 0 <0.101510>
+	2023-06-29 18:49:57.361376 PHCV    0 N 0  0.000000e+00 -2.198794e-10  5.500e-08
+	2023-06-29 18:49:57.361376 PHCV    - N -       -       -2.198794e-10  5.500e-08
+
+This patch series only adds special support for the Arm Generic Timer
+clocksource. At the driver side, it should be easy to support more
+clocksources.
+
+Fallback PTP clock interface
+----------------------------
+
+Without special support for the current clocksource, time synchronization
+programs can still use ioctl PTP_SYS_OFFSET_EXTENDED2 aka
+PTP_SYS_OFFSET_EXTENDED. In this case, precision will generally be worse
+and will depend on the Virtio device response characteristics.
+
+The following illustrates a test using PTP_SYS_OFFSET_EXTENDED, with
+interspersed strace log and chrony refclocks log, on x86-64 (with `ts'
+values omitted):
+
+	ioctl(5, PTP_SYS_OFFSET_EXTENDED, {n_samples=10, ts=OMITTED}) = 0
+	===============================================================================
+	   Date (UTC) Time         Refid  DP L P  Raw offset   Cooked offset      Disp.
+	===============================================================================
+	2023-06-28 14:11:26.697782 PHCV    0 N 0  3.318200e-05  3.450891e-05  4.611e-06
+	2023-06-28 14:11:26.697782 PHCV    - N -       -        3.450891e-05  4.611e-06
+	ioctl(5, PTP_SYS_OFFSET_EXTENDED, {n_samples=10, ts=OMITTED}) = 0
+	2023-06-28 14:11:27.208763 PHCV    0 N 0 -3.792800e-05 -4.023965e-05  4.611e-06
+	2023-06-28 14:11:27.208763 PHCV    - N -       -       -4.023965e-05  4.611e-06
+	ioctl(5, PTP_SYS_OFFSET_EXTENDED, {n_samples=10, ts=OMITTED}) = 0
+	2023-06-28 14:11:27.722818 PHCV    0 N 0 -3.328600e-05 -3.134404e-05  4.611e-06
+	2023-06-28 14:11:27.722818 PHCV    - N -       -       -3.134404e-05  4.611e-06
+	ioctl(5, PTP_SYS_OFFSET_EXTENDED, {n_samples=10, ts=OMITTED}) = 0
+	2023-06-28 14:11:28.233572 PHCV    0 N 0 -4.966900e-05 -4.584331e-05  4.611e-06
+	2023-06-28 14:11:28.233572 PHCV    - N -       -       -4.584331e-05  4.611e-06
+	ioctl(5, PTP_SYS_OFFSET_EXTENDED, {n_samples=10, ts=OMITTED}) = 0
+	2023-06-28 14:11:28.742737 PHCV    0 N 0  4.902700e-05  5.361388e-05  4.611e-06
+	2023-06-28 14:11:28.742737 PHCV    - N -       -        5.361388e-05  4.611e-06
+
+PTP clock setup
+---------------
+
+The following udev rule can be used to get a symlink /dev/ptp_virtio to the
+UTC clock:
+
+	SUBSYSTEM=="ptp", ATTR{clock_name}=="Virtio PTP type 0, variant 0", SYMLINK += "ptp_virtio"
+
+The following chrony configuration directive can then be added in
+/etc/chrony/chrony.conf to synchronize to the Virtio UTC clock:
+
+	refclock PHC /dev/ptp_virtio refid PHCV poll -1 dpoll -1
+
+RTC interface
+=============
+
+This patch series adds virtio_rtc as a generic Virtio driver, including
+both a PTP clock driver and an RTC class driver.
+
+Feedback is greatly appreciated.
+
+[1] https://lore.kernel.org/virtio-comment/20250123101616.664-1-quic_philber@quicinc.com/
+[2] https://chrony.tuxfamily.org/
+[3] https://lore.kernel.org/lkml/20241219201118.2233-1-quic_philber@quicinc.com/
+
+Changelog
+=========
+
+v5:
+
+- Update to virtio-rtc spec v7, essentially removing definitions.
+
+- Fix multiple bugs after readying device during probe and restore.
+
+- Actually initialize Virtio clock id for RTC class device.
+
+- Add freeze/restore ops already in first patch.
+
+- Minor changes:
+
+  - Use new APIs devm_device_init_wakeup(), secs_to_jiffies().
+
+  - Fix style issues.
+
+  - Improve logging types and clarity.
+
+  - Drop unnecessary memory barrier pair.
+
+  - Return error status from device, whenever available.
+
+v4:
+
+- Update Virtio interface to spec v6.
+
+- Distinguish UTC-like clocks by handling of leap seconds (spec v6).
+
+- Do not create RTC class device for clocks which may step on leap seconds
+  (Alexandre Belloni).
+
+- Clear RTC class feature bit instead of defining reduced ops
+  (Alexandre Belloni).
+
+- For PTP clock name, always use numeric clock type, and numeric variant.
+
+- Use macros for 64-bit divisions.
+
+- Remove unnecessary memory barriers.
+
+- Cosmetic improvements.
+
+- Drop upstreamed timekeeping bugfixes from series.
+
+v3:
+
+- Update to conform to virtio spec RFC v3 (no significant behavioral
+  changes).
+
+- Add RTC class driver with alarm according to virtio spec RFC v3.
+
+- For cross-timestamp corner case fix, switch back to v1 style closed
+  interval test (Thomas Gleixner).
+
+v2:
+
+- Depend on patch series "treewide: Use clocksource id for
+  get_device_system_crosststamp()" to avoid requiring a clocksource pointer
+  with get_device_system_crosststamp().
+
+- Assume Arm Generic Timer will use CP15 virtual counter. Drop
+  arm_arch_timer helper functions (Marc Zyngier).
+
+- Improve cross-timestamp fixes problem description and implementation
+  (John Stultz).
+
+
+Peter Hilber (4):
+  virtio_rtc: Add module and driver core
+  virtio_rtc: Add PTP clocks
+  virtio_rtc: Add Arm Generic Timer cross-timestamping
+  virtio_rtc: Add RTC class driver
+
+ MAINTAINERS                          |    7 +
+ drivers/virtio/Kconfig               |   64 ++
+ drivers/virtio/Makefile              |    5 +
+ drivers/virtio/virtio_rtc_arm.c      |   23 +
+ drivers/virtio/virtio_rtc_class.c    |  262 +++++
+ drivers/virtio/virtio_rtc_driver.c   | 1404 ++++++++++++++++++++++++++
+ drivers/virtio/virtio_rtc_internal.h |  122 +++
+ drivers/virtio/virtio_rtc_ptp.c      |  347 +++++++
+ include/uapi/linux/virtio_rtc.h      |  237 +++++
+ 9 files changed, 2471 insertions(+)
+ create mode 100644 drivers/virtio/virtio_rtc_arm.c
+ create mode 100644 drivers/virtio/virtio_rtc_class.c
+ create mode 100644 drivers/virtio/virtio_rtc_driver.c
+ create mode 100644 drivers/virtio/virtio_rtc_internal.h
+ create mode 100644 drivers/virtio/virtio_rtc_ptp.c
+ create mode 100644 include/uapi/linux/virtio_rtc.h
+
+
+base-commit: 8936cec5cb6e27649b86fabf383d7ce4113bba49
+-- 
+2.43.0
+
 
