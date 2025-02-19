@@ -1,49 +1,49 @@
-Return-Path: <linux-rtc+bounces-3233-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3234-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 198E7A3C05D
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 14:46:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEC18A3C06C
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 14:48:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9121A3AD26C
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 13:43:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C3CC16DE9E
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Feb 2025 13:43:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC111EEA31;
-	Wed, 19 Feb 2025 13:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D6E1F239B;
+	Wed, 19 Feb 2025 13:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V8cTVUV0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MWJzavO3"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E07C1E7C23;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3541F130C;
 	Wed, 19 Feb 2025 13:43:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739972597; cv=none; b=pHWn0Igwh28VwxrciecMBZCf5JeHbk+SsB9JrK1LDBpp85AXlVHQAXU7izixGELHUeq/+S/QVZcapSzuuJxf8Kk4uq9Ad3Dcwq6WfL1Fw1UMarbVXYN0suPCcfSwO3BkPSUerYYJfyTQuB1ubzrbhKcjSc/qu01WflbM1XG9AIc=
+	t=1739972598; cv=none; b=h/vwF6V6paUu0iYTzwAiPNfzm8hAaLICzi4/XXjFEb9pRuuW7l0CVRHBuxLt0xt6vxl96hjTD4n8BsCg3p4ZhOS7jp+oc/rIPLFGWC7li6A30XAKUVUG1EQOzEJv9eOnbE4x4NG6eBA94kqEfUps/72fCC5MnbjuLjxg7Tom4jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739972597; c=relaxed/simple;
-	bh=nwsj4CidURS/EZrbUuMzdATKYlm1Szt4afCfuzWKh8w=;
+	s=arc-20240116; t=1739972598; c=relaxed/simple;
+	bh=TXZhVpYKgO10ZCx7g7qCUdIYO/DTpFUKjvq9lXUUZqU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uq8gkrTlwam+qOowwopUPYvHtaBjILzQuHSFBcQg5LyijcFIbE9Xla3LiXkUode9qsJ/dDzugBXS85H6uGDDtvQyyM4+kSAfoLWFzn8+lQeGk7zkg6sJGFQjnWfvawMPz7tp2SP8wWNCdE5hMwxmp2CTEkvbsV304CQQbFeeQTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V8cTVUV0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6BBDC4CEFB;
-	Wed, 19 Feb 2025 13:43:16 +0000 (UTC)
+	 MIME-Version; b=pWz2bUF9WjHQU2DCJWcdlwKErrLQJ7Zt8fu7EbCww2d/Hc4kpkYq+HZ/JIukZOG2PeIL44OA4EKH7DmHhSFj4grDXAt08WaptAbnAq/TbW7XG7zqHYtSMlXf8e/GmNC1YGmNtckjyX6W2pzWnX79dWkqFQQeGX01Mme1hWj/a/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MWJzavO3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A66C4CED1;
+	Wed, 19 Feb 2025 13:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739972596;
-	bh=nwsj4CidURS/EZrbUuMzdATKYlm1Szt4afCfuzWKh8w=;
+	s=k20201202; t=1739972597;
+	bh=TXZhVpYKgO10ZCx7g7qCUdIYO/DTpFUKjvq9lXUUZqU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V8cTVUV0A08OVk8hDrK05zy8mj/oVhFOTq0CCgvqhwMDk7yPJ0QlNezVMSOEnCEkO
-	 I0ta7hG34cnQfg9JlepjjfeDwY6AUXAJLE16UjOpUzk3HFFnVP/zrr6O3KdLDekxve
-	 WDRHiVPjfway0x3VMOK79NErelGvGIv0vYe5YM+NWHUxNil4VB6rbs78ZPJaFo/bTD
-	 JJitjEAvW0/eaeREhFB8y3OJHtSZ1PqG+we58IqK0ItT6Egoh/jH8IBXp2mzmSscZD
-	 8BptSCq6ln6QoXvdMhtlSUnyTF5L8YeQOzwJkIlMb+qArM6/xzUcbfTZOPymSAGbij
-	 xMmuRLsetkDmg==
+	b=MWJzavO3+oOZWuEasl4/8m7aTr+4LSnSIQf8z+3NXVJXF2Cy+R+djX/U0geUS7IOs
+	 uErfK+ehMpkYMVCnwyxyRidrMlGf8274ow7wKalpUIaNqa/JniqayV3u9jgIUA3e2f
+	 IAgV0cocm1vbv/+8zve4N3F9NfwJQJmUHp4HicJnrsPnncVLsjo6AvoRzCu7kpMI7D
+	 cjIgRLP5goqNQ6K6H08f54Eapb4xretT71O+E14b0ibRDi4EfOu/IE8AZNph19WO6O
+	 EIvy6NIO0UOgKuz1qiAS9SOy0DImXfw1bhic6PiZpCIHdsvQ/c4erKCsFZBrneZ5o3
+	 U/8cA5suQOq9g==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan+linaro@kernel.org>)
-	id 1tkkMI-0000000086h-1ex3;
+	id 1tkkMI-0000000086k-26QM;
 	Wed, 19 Feb 2025 14:43:26 +0100
 From: Johan Hovold <johan+linaro@kernel.org>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -65,9 +65,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	Johan Hovold <johan+linaro@kernel.org>,
 	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: [PATCH v2 5/6] arm64: dts: qcom: sc8280xp-x13s: switch to uefi rtc offset
-Date: Wed, 19 Feb 2025 14:41:17 +0100
-Message-ID: <20250219134118.31017-6-johan+linaro@kernel.org>
+Subject: [PATCH v2 6/6] arm64: dts: qcom: x1e80100: enable rtc
+Date: Wed, 19 Feb 2025 14:41:18 +0100
+Message-ID: <20250219134118.31017-7-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.45.3
 In-Reply-To: <20250219134118.31017-1-johan+linaro@kernel.org>
 References: <20250219134118.31017-1-johan+linaro@kernel.org>
@@ -84,46 +84,41 @@ read-only so that the RTC time can not be updated. Instead an offset
 needs be stored in some machine-specific non-volatile memory, which a
 driver can take into account.
 
-Switch to using the Qualcomm specific UEFI variable that is used by the
-UEFI firmware (and Windows) to store the RTC offset.
+On X1E based Windows on Arm machines the offset is stored in a Qualcomm
+specific UEFI variable.
 
-This specifically means that the RTC time will be synchronised between
-the UEFI firmware setup (or UEFI shell), Windows and Linux.
+Unlike on previous platforms the alarm registers are also unaccessible
+on X1E as they are owned by the ADSP.
 
-Note however that Windows stores the RTC time in local time by default,
-while Linux typically uses UTC (i.e. as on X86).
+Assume all X1E machines use similar firmware and enable the RTC in the
+PMIC dtsi for now.
 
+Based on a patch by Jonathan Marek. [1]
+
+Link: https://lore.kernel.org/r/20241015004945.3676-4-jonathan@marek.ca # [1]
 Tested-by: Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-Tested-by: Steev Klimaszewski <steev@kali.org>
+Tested-by: Joel Stanley <joel@jms.id.au>
+Tested-by: Sebastian Reichel <sre@kernel.org> # Lenovo T14s Gen6
 Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- .../boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts   | 11 -----------
- 1 file changed, 11 deletions(-)
+ arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index 38d911992475..8000254f4db5 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -1090,18 +1090,7 @@ &pmk8280_pon_resin {
- };
+diff --git a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
+index d7a2a2b8fc6c..a59aa8e7642d 100644
+--- a/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
++++ b/arch/arm64/boot/dts/qcom/x1e80100-pmics.dtsi
+@@ -223,8 +223,7 @@ pmk8550_rtc: rtc@6100 {
+ 			reg = <0x6100>, <0x6200>;
+ 			reg-names = "rtc", "alarm";
+ 			interrupts = <0x0 0x62 0x1 IRQ_TYPE_EDGE_RISING>;
+-			/* Not yet sure what blocks access */
+-			status = "reserved";
++			qcom,no-alarm; /* alarm owned by ADSP */
+ 		};
  
- &pmk8280_rtc {
--	nvmem-cells = <&rtc_offset>;
--	nvmem-cell-names = "offset";
--
--	status = "okay";
--};
--
--&pmk8280_sdam_6 {
- 	status = "okay";
--
--	rtc_offset: rtc-offset@bc {
--		reg = <0xbc 0x4>;
--	};
- };
- 
- &pmk8280_vadc {
+ 		pmk8550_sdam_2: nvram@7100 {
 -- 
 2.45.3
 
