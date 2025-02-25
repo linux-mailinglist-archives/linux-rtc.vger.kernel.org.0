@@ -1,138 +1,104 @@
-Return-Path: <linux-rtc+bounces-3270-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3271-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A98EA44866
-	for <lists+linux-rtc@lfdr.de>; Tue, 25 Feb 2025 18:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EAC3A44900
+	for <lists+linux-rtc@lfdr.de>; Tue, 25 Feb 2025 18:54:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF948178E2F
-	for <lists+linux-rtc@lfdr.de>; Tue, 25 Feb 2025 17:31:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4C93179057
+	for <lists+linux-rtc@lfdr.de>; Tue, 25 Feb 2025 17:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559C1213E77;
-	Tue, 25 Feb 2025 17:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7F6199FD0;
+	Tue, 25 Feb 2025 17:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mf7pqCu8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFzZAOVB"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF38213E71;
-	Tue, 25 Feb 2025 17:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C800156F3A;
+	Tue, 25 Feb 2025 17:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740504403; cv=none; b=JEr9cuXnwAZsBqjEgWLUN7/WdY6M1HLBOUcZ+cOA6a0dbl7SCkWF7AoaspIaf+EU1GIsbekyZdcDpVqMIF8gi3ytgZTrS/DAThdRMYNXB+ZcX1+zDLYOs80M2BUq1900hQD0YSVmMWS+MQmBY+dxRhuiJsRUghQ/qxAMrqw/Z70=
+	t=1740505964; cv=none; b=U5vV1bU1/RuLWM5npAFhQyYm2D+i87AL6dafSrY3cRrU7cZ+QupPUoPx20cwH91/ZB9xxTDEiqR1Fhc5QnzS/9WpNkgHXNoJHumBU699NjmmGL2kkYGOO80h4vz8wYuluRTg80aUovS6EAG/Y+YrVF5iIqOdtoMWoulTPwiHcW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740504403; c=relaxed/simple;
-	bh=0mztrH3ytGxlCbS6Ryva8g8RQSt6fulem72n6/yyelk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o3fvvl/hUJ/Xv/Hd9cZFEPRYGvyhQsxaz6SHP4Enx51uRrID/AUXZRs71VP8shbWbSoKX7ah0PnkZfLkTt4iHxKXIXbWQr4dIVvOkx3kzR81VkPPBTO9+Ko1FuyvblBm/qDxipIfnjC5tuublrMjJz9ENumooWitAhOrsNbv6UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mf7pqCu8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2051C4CEE7;
-	Tue, 25 Feb 2025 17:26:39 +0000 (UTC)
+	s=arc-20240116; t=1740505964; c=relaxed/simple;
+	bh=w0EkbHkGHBYElQYWfADsG+yNVibDYgCQClR6E5omnNM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dX4ge9Nv3YjZ5MlHKJPbE0pfy97sk82ZTT9xUFIy16041r8lE38v9q9kXetDa/ZTmwIjVgY5Zkd4VTN9A6k/5oCLcCh2zKE0Zgg/GUTE3N63QWHd7I+D98eZdlViX3vTJSFgsvURxa2pv8Qbl6R8nXod7rf7aC+xQ9bNTGl0Nek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFzZAOVB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59DBBC4CEE7;
+	Tue, 25 Feb 2025 17:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740504401;
-	bh=0mztrH3ytGxlCbS6Ryva8g8RQSt6fulem72n6/yyelk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Mf7pqCu8ujIyWTjfssZdVeY8oUBPHb/Y5nGLp9FNzNlsytUKHlNRwiOey++gq1HBs
-	 J6qEM/rfg5K4Mz1M+EafdGUFPiUslqbs4LEtEPIRn5bX/7SEUZx1rtNumqPzX6eeeJ
-	 2t6hD0sQlErGbWEXltpCW/XY1CYTgcXc/GGCm22iZLraBwtpVBJFlLXj2DwojzQYZ7
-	 QPX62ZPR8Ornom1n5tAXqALNzupDt5DPYfvCP68L7hXgQoq9vp8aijxAMfWySTT2fb
-	 g979PK9/Yx0E9Ni2fHC8cs5bh6Ai/QlHS1Xkv8djsKYH/xBGzQ+OfVAhJu/fK9wDbq
-	 1qPaMQJTfK7BA==
-Message-ID: <171c5e1c-5526-4846-aa50-fe2d49fb7f7f@kernel.org>
-Date: Tue, 25 Feb 2025 18:26:36 +0100
+	s=k20201202; t=1740505964;
+	bh=w0EkbHkGHBYElQYWfADsG+yNVibDYgCQClR6E5omnNM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VFzZAOVB1a78DBjHDtOtuMrJTGr8jVuKit5KqKgfyh/fX73Y6Is0do1MFFrz+Jemp
+	 Lbhlg7xS6yHIZaTOWiszvYatZeN/iv+ogT1Za46h/vkopmjCPLm5TwsWwEC80+Kt07
+	 A2YDXuIPr6QRVYzYIUlUVeZADuuoe/qm/7R47h6ErvqrkGpSsmCqggvlOE/uz7f8zz
+	 peh/7+xGpi7QJ/r4uV9nNEC+HJHbHk6OThzJxJrC/S4+QyoUX2cChMnnIOXLrUZe49
+	 1NjBsFrGwjtJxyM4ounylZapEAZfSXeiQ/IIMS6S+yDeBzA19sVB5M3X7cEVJvyy5p
+	 eYbjFj/YbZxNg==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e04064af07so9230833a12.0;
+        Tue, 25 Feb 2025 09:52:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV8eYc5sR/gFaVIk+9oCiwZ3Gs3qQIhSbmZN3cXW3pNlpRxJmRikGhspPyuCSgZjcqsOA4R+hFdmKJD@vger.kernel.org, AJvYcCVVP2runIw3YrhzgGEasoPeD1tnjJ5SpIJxaP3OmoNyMCqQMKe/1BO+UktAYMGKuRc9BYrsMvonFygk6Hg=@vger.kernel.org, AJvYcCVqsuHg5mqRDKfhS+VvfRxozmLs+Ovq4GkW5Az3bWZZAfkMNVLgnW/uV+m+x7AKUrBaJBiT69wcVLQ2+ki8@vger.kernel.org, AJvYcCWX+almcJFNsA4PquVXwmpJUqsPiMvAcLd7VUAKizYuFYioAiAkGBkzs+w67COdun0bAMXbVo/tO8p6@vger.kernel.org, AJvYcCXc1HEujqh8hCzedc+KPpz1BAyCcQdgGyVTxnilKsoJ2DEfhf2nY1UuofG/1Io823t4pJdp9epB4LE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy++dwbSqQS47iDgUqmAc2EWhfeiDq8jQUpvKYZAJ4oEH1mHKw5
+	TW/tWpulKoHKvXceA6MiwgjdLl2YXnostCDlN2uuNcJuUI9x4ZyXHc2SpeySqImuWORASxNp0i1
+	8jJHPoIE/l+k+6oLOAHOhf+XIdA==
+X-Google-Smtp-Source: AGHT+IF6yxHJA3YSV+Mc7KCSIMedD8jUXEbB4xXTDLc0/UNGPOBcZs5+0oQlFOlVb1ificfP0x+i/oVnnr4HgeYGyas=
+X-Received: by 2002:a05:6402:440b:b0:5de:aa54:dc30 with SMTP id
+ 4fb4d7f45d1cf-5e444481387mr4585735a12.5.1740505962886; Tue, 25 Feb 2025
+ 09:52:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rtc: fsl-ftm: remove incorrect ACPI_PTR annotation
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250225163427.4168570-1-arnd@kernel.org>
- <db184d51-db88-4f90-bf6b-dd92d3089eb3@kernel.org>
- <20250225171623302b7862@mail.local>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250225171623302b7862@mail.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20241226050205.30241-1-val@packett.cool> <20241226050205.30241-5-val@packett.cool>
+ <173920541986.1887800.1972669785800121190.b4-ty@kernel.org>
+In-Reply-To: <173920541986.1887800.1972669785800121190.b4-ty@kernel.org>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 25 Feb 2025 11:52:31 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+PPYeFxr=utwZLemUVCzk5iabtMckOJmNy1-LO39cqeQ@mail.gmail.com>
+X-Gm-Features: AQ5f1Jq1Iz82X3jYxZcNLZTXQB24STg7TFTfP3ZcCT_Tig0_TFrubDNC8pk8KUg
+Message-ID: <CAL_Jsq+PPYeFxr=utwZLemUVCzk5iabtMckOJmNy1-LO39cqeQ@mail.gmail.com>
+Subject: Re: (subset) [PATCH 4/9] mfd: mt6397: Add support for MT6392 pmic
+To: Lee Jones <lee@kernel.org>
+Cc: Val Packett <val@packett.cool>, Fabien Parent <parent.f@gmail.com>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>, 
+	Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Eddie Huang <eddie.huang@mediatek.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>, Yassine Oudjana <y.oudjana@protonmail.com>, 
+	Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25/02/2025 18:16, Alexandre Belloni wrote:
-> On 25/02/2025 18:12:10+0100, Krzysztof Kozlowski wrote:
->> On 25/02/2025 17:34, Arnd Bergmann wrote:
->>> From: Arnd Bergmann <arnd@arndb.de>
->>>
->>> Building with W=1 shows a warning about ftm_imx_acpi_ids being unused when
->>> CONFIG_ACPI is disabled:
->>>
->>> drivers/rtc/rtc-fsl-ftm-alarm.c:312:36: error: unused variable 'ftm_imx_acpi_ids' [-Werror,-Wunused-const-variable]
->>>
->>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->>
->> I already sent a fix for this few days ago:
->>
->> https://lore.kernel.org/all/20250222114146.162835-1-krzysztof.kozlowski@linaro.org/
->>
-> 
-> But wouldn't Arnd's one be better?
+On Mon, Feb 10, 2025 at 10:37=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
+>
+> On Thu, 26 Dec 2024 01:58:04 -0300, Val Packett wrote:
+> > Update the MT6397 MFD driver to support the MT6392 PMIC.
+> >
+> >
+>
+> Applied, thanks!
+>
+> [4/9] mfd: mt6397: Add support for MT6392 pmic
+>       commit: 896b1eb4ca771b37ea50feb4d90a78dd4e9cb388
 
-ACPI table can be here entirely dropped and driver will match via
-PRP0001, so I think ACPI_PTR makes sense.
+This should be dropped. Missing the sender's S-o-b and the rest of the
+series has issues still.
 
-But if you have arguments for keeping both, sure... There was no
-response to my trivial patch and multiple people will be wasting same
-time on the same issue. So just apply whichever of these, before third
-person wastes more time on that warning.
 
-Best regards,
-Krzysztof
+Rob
 
