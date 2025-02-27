@@ -1,171 +1,136 @@
-Return-Path: <linux-rtc+bounces-3282-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3287-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF81A48003
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 14:54:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA6CA4816D
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 15:35:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82C1117CDF0
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 13:47:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1422919C3356
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 14:20:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02946231C9C;
-	Thu, 27 Feb 2025 13:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="gX8Dsmg7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67086237168;
+	Thu, 27 Feb 2025 14:18:35 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4C7233158
-	for <linux-rtc@vger.kernel.org>; Thu, 27 Feb 2025 13:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AC32356B5
+	for <linux-rtc@vger.kernel.org>; Thu, 27 Feb 2025 14:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740663821; cv=none; b=Msv+/BpUw5uhJhFrs5MTiuvzXL+h6Ow4B+uBcaxRhP46PT91tibcNcYIZ0i5VXV93j0kgHcIg2YnOL+KQJrx9od9E+R9H3pWp8O96CEe+/uOrp6JBZK4o1G9XW5cf9cLoktrPPB3kfdnkC71kfBXD4jxcVxeNnkllNtoo7Jqzmo=
+	t=1740665915; cv=none; b=GIPkb4fqC1U/eaB7eTisX2OTfDrCiFaUINVkC+q7owR/pwt/I180IhEBuYMRrAEFpy9RKBtJCu+drL8FTYA/A4Pr26WxWWxGYnXQyEC23jKkS5Eh01ZuCa6Usf7gCiiN5/2PnmIaarStL5nT5v2fjXxUJN2merChAFm5aobMJrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740663821; c=relaxed/simple;
-	bh=U01MmYcykOio02hH5Iam3dBQe4D52OjWeMXxSQipVgo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i+lMvMwczWdXqe+kHbO5lwa5aG9WgR9gqQjMdX5thNXWX09L+cy4AxfusR7utE22xYUHWRtWjdRWsVlAzONFQm/d/V3SPH1dcDdnrP2Og/rUeiuIoi0Ury9HQvGBtl4EMPMbydc4KehdWNjKUT7MmoB+9kZFVmiLXg5PuvKCBRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=gX8Dsmg7; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=bEUxNHlKC6W56Uy15CrG0xWxKg+OIhIXHlA/sYPS2xg=; b=gX8Dsm
-	g7ff2qBjAFU6KtfC1vwxELAR6mPvG0kqlWe93qDPtsjYioa0lcaSS5VXuChukvoC
-	KuQAkoLLE395tUJ3pl+2vLgHRMmB00Jq6fl4m0Soc0GYVQBZQgNfPLLfTIQqNugO
-	7m/MOBrivr9COST35uauBFVkFqxE0yet3HpFczsb8HAN6N+GXYSJeJbZhh12/V+H
-	DyqZnAw0Qp+gsEbXdP2AdmjH8dihaeIux/ZJzRyfsnavtppZrqgA+2/qvs9cVADh
-	TKN1gDIFdTp/77iLV9OhS2mxDv+L1BztYZdR0tXj2JoE4K57Fhp039EazDK6Rsev
-	yx1iUfSXHzqwQmrw==
-Received: (qmail 962485 invoked from network); 27 Feb 2025 14:43:37 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Feb 2025 14:43:37 +0100
-X-UD-Smtp-Session: l3s3148p1@mil44B8vbDVtKPD9
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH 8/8] rtc: sh: minor fixes to adhere to coding style
-Date: Thu, 27 Feb 2025 14:43:03 +0100
-Message-ID: <20250227134256.9167-18-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250227134256.9167-10-wsa+renesas@sang-engineering.com>
-References: <20250227134256.9167-10-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1740665915; c=relaxed/simple;
+	bh=LxGqDDciDNPai+yMXfQ6y3up7TsSxsnZOwf8EJYTN8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DpSle8bG8rm3x9JEoaDRz3In7DxdsntTrmOyENIvdXFXKrM0LCDathVLEC95YvtbhsnpIN3hBYsN9b9olc90OhEWvk8xEyBBNrQuNWI5zGwIepMIJRRyxs+pTeVN/sO2+xH5j/1+dFiQU4NjpF9dlxA7db2zj9+GgMbXJZ3SlBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnehz-0003GQ-MD; Thu, 27 Feb 2025 15:17:51 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnehw-0038i4-0Z;
+	Thu, 27 Feb 2025 15:17:48 +0100
+Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id C00033CD6A6;
+	Thu, 27 Feb 2025 14:17:47 +0000 (UTC)
+Date: Thu, 27 Feb 2025 15:17:47 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Ming Yu <a0282524688@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250227-gregarious-garrulous-echidna-ca7975-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="i5nv6d7na7xl5d3b"
+Content-Disposition: inline
+In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 
-Use the BIT macro, use curly braces for else-blocks, don't split strings
-over multiple lines, annotate the lock, update copyright.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/rtc/rtc-sh.c | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+--i5nv6d7na7xl5d3b
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-diff --git a/drivers/rtc/rtc-sh.c b/drivers/rtc/rtc-sh.c
-index 3bafb2a0659d..f15ef3aa82a0 100644
---- a/drivers/rtc/rtc-sh.c
-+++ b/drivers/rtc/rtc-sh.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2006 - 2009  Paul Mundt
-  * Copyright (C) 2006  Jamie Lenehan
-  * Copyright (C) 2008  Angelo Castello
-+ * Copyright (C) 2025  Wolfram Sang, Renesas Electronics Corporation
-  *
-  * Based on the old arch/sh/kernel/cpu/rtc.c by:
-  *
-@@ -31,7 +32,7 @@
- /* Default values for RZ/A RTC */
- #define rtc_reg_size		sizeof(u16)
- #define RTC_BIT_INVERTED        0	/* no chip bugs */
--#define RTC_CAP_4_DIGIT_YEAR    (1 << 0)
-+#define RTC_CAP_4_DIGIT_YEAR    BIT(0)
- #define RTC_DEF_CAPABILITIES    RTC_CAP_4_DIGIT_YEAR
- #endif
- 
-@@ -70,26 +71,26 @@
-  */
- 
- /* ALARM Bits - or with BCD encoded value */
--#define AR_ENB		0x80	/* Enable for alarm cmp   */
-+#define AR_ENB		BIT(7)	/* Enable for alarm cmp   */
- 
- /* RCR1 Bits */
--#define RCR1_CF		0x80	/* Carry Flag             */
--#define RCR1_CIE	0x10	/* Carry Interrupt Enable */
--#define RCR1_AIE	0x08	/* Alarm Interrupt Enable */
--#define RCR1_AF		0x01	/* Alarm Flag             */
-+#define RCR1_CF		BIT(7)	/* Carry Flag             */
-+#define RCR1_CIE	BIT(4)	/* Carry Interrupt Enable */
-+#define RCR1_AIE	BIT(3)	/* Alarm Interrupt Enable */
-+#define RCR1_AF		BIT(0)	/* Alarm Flag             */
- 
- /* RCR2 Bits */
--#define RCR2_RTCEN	0x08	/* ENable RTC              */
--#define RCR2_ADJ	0x04	/* ADJustment (30-second)  */
--#define RCR2_RESET	0x02	/* Reset bit               */
--#define RCR2_START	0x01	/* Start bit               */
-+#define RCR2_RTCEN	BIT(3)	/* ENable RTC              */
-+#define RCR2_ADJ	BIT(2)	/* ADJustment (30-second)  */
-+#define RCR2_RESET	BIT(1)	/* Reset bit               */
-+#define RCR2_START	BIT(0)	/* Start bit               */
- 
- struct sh_rtc {
- 	void __iomem		*regbase;
- 	int			alarm_irq;
- 	struct clk		*clk;
- 	struct rtc_device	*rtc_dev;
--	spinlock_t		lock;
-+	spinlock_t		lock;		/* protecting register access */
- 	unsigned long		capabilities;	/* See asm/rtc.h for cap bits */
- };
- 
-@@ -183,10 +184,8 @@ static int sh_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 		tm->tm_sec--;
- #endif
- 
--	dev_dbg(dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
--		"mday=%d, mon=%d, year=%d, wday=%d\n",
--		__func__,
--		tm->tm_sec, tm->tm_min, tm->tm_hour,
-+	dev_dbg(dev, "%s: tm is secs=%d, mins=%d, hours=%d, mday=%d, mon=%d, year=%d, wday=%d\n",
-+		__func__, tm->tm_sec, tm->tm_min, tm->tm_hour,
- 		tm->tm_mday, tm->tm_mon + 1, tm->tm_year, tm->tm_wday);
- 
- 	return 0;
-@@ -373,8 +372,9 @@ static int __init sh_rtc_probe(struct platform_device *pdev)
- 			clk_id = 0;
- 
- 		snprintf(clk_name, sizeof(clk_name), "rtc%d", clk_id);
--	} else
-+	} else {
- 		snprintf(clk_name, sizeof(clk_name), "fck");
-+	}
- 
- 	rtc->clk = devm_clk_get(&pdev->dev, clk_name);
- 	if (IS_ERR(rtc->clk)) {
-@@ -501,8 +501,8 @@ static struct platform_driver sh_rtc_platform_driver __refdata = {
- module_platform_driver_probe(sh_rtc_platform_driver, sh_rtc_probe);
- 
- MODULE_DESCRIPTION("SuperH on-chip RTC driver");
--MODULE_AUTHOR("Paul Mundt <lethal@linux-sh.org>, "
--	      "Jamie Lenehan <lenehan@twibble.org>, "
--	      "Angelo Castello <angelo.castello@st.com>");
-+MODULE_AUTHOR("Paul Mundt <lethal@linux-sh.org>");
-+MODULE_AUTHOR("Jamie Lenehan <lenehan@twibble.org>");
-+MODULE_AUTHOR("Angelo Castello <angelo.castello@st.com>");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("platform:" DRV_NAME);
--- 
-2.45.2
+On 27.02.2025 11:08:50, Vincent Mailhol wrote:
+> > +static int nct6694_can_stop(struct net_device *ndev)
+> > +{
+> > +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +
+> > +	priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
+>=20
+> Hmmm, when Marc asked you to put the device in listen only mode, I think
+> he meant that you set it on the device side (i.e. flag
+> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
+> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
+> interface. So you should not change that flag.
 
+ACK
+
+> But before that, did you check the datasheet? Don't you have a device
+> flag to actually turn the device off (e.g. sleep mode)?
+
+Please test that the ifup -> ifdown -> ifup sequence works properly,
+even on a busy bus and on a bus without with a 2nd CAN station that is
+sending and you are the only receiver.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--i5nv6d7na7xl5d3b
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfAdAgACgkQDHRl3/mQ
+kZxjHQf/cl+NPaGA6wNUTa68Le8AS6tbcg6UkzWcAd8AS8/6CWkgPeebGEbmzKvl
+iENWrgc7mfiuy346ubOPufojybeeXMdOHLiwDPEkVgZegMycqUnS+2F/mTCm50fR
+vf9mETJuODrqvL4I265jS9Z+SUA/R/pzTcs0pQItMSzfUwGJ5nv9JQS8mv3MOQhM
+zOqyOMX1bv3+0Ov9ZTpjaV2JoOmTqpDFIYuN2DyqGl+NlJfZyHCp/Z8UJ7MyQykL
+Nzk53OPw0yb1MC6RT8m5ijRnpiVzfV5Et+2/FEXSW0aE/SXBRailPfDqdEmxXFnf
+f4DOoo4Z+H6xhf0L7EUZ1HcmpU+ckA==
+=2o2X
+-----END PGP SIGNATURE-----
+
+--i5nv6d7na7xl5d3b--
 
