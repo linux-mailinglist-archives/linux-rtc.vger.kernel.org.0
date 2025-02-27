@@ -1,53 +1,53 @@
-Return-Path: <linux-rtc+bounces-3308-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3309-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2648BA483F5
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 16:59:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B67EA483F8
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 17:00:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDD041734AB
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 15:58:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E02A7A83D3
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 15:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F9B26FDAB;
-	Thu, 27 Feb 2025 15:53:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1A72702D7;
+	Thu, 27 Feb 2025 15:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="cj6NaJ/0"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="GHono95o"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D67926F465;
-	Thu, 27 Feb 2025 15:53:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F2126FA77;
+	Thu, 27 Feb 2025 15:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740671594; cv=none; b=VhDhC2vGviJhi+7/flx22jxa/t/goCwM7XC1s98SFZAmiZH6ebhMzXK9MsYpkOXP4UxH780TBdzV2zdPI8wyrFWc2ARTuSVlSx94a7nO/ec8064NWw8tQPI+qs8nRz4dsHd4NHEb4voDjG/b0QdotdYWLUxIIyMLWzv46a6gI80=
+	t=1740671595; cv=none; b=NY8aYQRJbKpeSwWzERHXxld/FWEGbHuBZguRiu94Zy9ohMMf7ALEdfC+s8TxOy6fpGJtWrkclLLZLCJwh7eqfdxFWejexOYSqmtmYXRl8GOvPTeU1x/S+gKWcgTkEyhzfBj0vtb73xSpRG8371ibrkdMYYUXXwsjuFi+KvA1gs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740671594; c=relaxed/simple;
-	bh=xTx5wh3DLWkZDyZ37nnm/R93yMNnkrcFvkblSIgFki4=;
+	s=arc-20240116; t=1740671595; c=relaxed/simple;
+	bh=cp3KlP5kz8uShLGylSzqchQUQS7t4AEaR6YGK7e5dDw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DnqeBLA+z8J0mz9SY+ikFEBOXtKZjqkSCiUAV+G/uZ2ehEHdT5IhYQ1uRIhQkpmFoixizNsV/ygqLNH3eE4+CHsGNY7ERK0uA8L+EnHgl7U9wqz/q+kvZJJoqrDB9VKsKs8Efc+z/a3z/IOniwmKSmFXjNsB1kd7uLf6JVClLRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=cj6NaJ/0; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=NEm0VZ5MVq7u/l/1bzceQiBhBdiYSJ+f5ti81WYThYVaP9UUEt9GN6DtAPLKf49Yjk9ocEsmY4XLCtXCcF2OGAp8/+aQfuTMvBatMDEAe4ha1fZtNKbuQqGL/uvjSVnY3lAXoTt9Op3ZE5HOqhTcI7RSWqi8VftJCeYqMzh/TnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=GHono95o; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1740671593; x=1772207593;
+  t=1740671594; x=1772207594;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xTx5wh3DLWkZDyZ37nnm/R93yMNnkrcFvkblSIgFki4=;
-  b=cj6NaJ/0LCIoHwGdgtlJ8MWYx+6KLiqhPilhCWEFDSUe3q4vHRdxaOBq
-   u4eXni8tUHBtFP3SCTjRooc0aVremHH2bdVG3TuH5d2Xvd9fOaMTYLXz2
-   VpxWw0YIDC2x8Yk0P3/xXCBBQbLEdbj4199I0UsJs448vKoJfgghqfIRr
-   NgL56OcK8CHeuxu4qb71SWcWIiw3IHj/aRu/rquH4T+19csd3Hvi3a2pr
-   Wc94lh0AWmhNKecKh8goKFeWCQkLamglqco8ZcMKIxL1O5u3ykGC900eb
-   DGtOvCa/9YWdGkwA4XMHKvfQfwP99TXRuUUktKpk/RJYPVOMNKUmCl8Sl
-   g==;
+  bh=cp3KlP5kz8uShLGylSzqchQUQS7t4AEaR6YGK7e5dDw=;
+  b=GHono95oKgFdg+QERy6LNIHuFIEi+UTB4v8ZEFys8gl2+2V1QA6pASVO
+   +JLLGgoKa9PKN4IOs5jW+qqgHG2PwquhcxvPNXy0XpBoUeRGhTDwwbP9C
+   ymniWpm+0EKR3HjruK+TgGVk53TNFwuHxlzhMo/fWWo2UW8TbmwmmBcrZ
+   h9ecBdNku5jqhM2KTBrHCtucKfNn06LqYZQ+gj98sCqP3spem7/YxJF1S
+   tBihSsKIztD+ThyCzumwvfoOp50vyT6cYBb9ohewB6j1+Ch3Re1zgyIJH
+   7Ywyky1dRPx+3Fu3oWkmfXB+0wb0vrf7BS5q20M+C92jqXkJeNzIbOB0X
+   w==;
 X-CSE-ConnectionGUID: xBkIAngZQVSwQhIMCQbtUA==
-X-CSE-MsgGUID: VfNqJMEyRMeS0YCa5htHdg==
+X-CSE-MsgGUID: dQw/PgHsT4ugpCXfq8lnRQ==
 X-IronPort-AV: E=Sophos;i="6.13,320,1732604400"; 
-   d="scan'208";a="38638185"
+   d="scan'208";a="38638186"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Feb 2025 08:53:00 -0700
@@ -67,9 +67,9 @@ CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>, "Ryan
  Wanner" <Ryan.Wanner@microchip.com>
-Subject: [PATCH v3 20/21] ARM: dts: microchip: sama7d65: Enable shutdown controller
-Date: Thu, 27 Feb 2025 08:52:07 -0700
-Message-ID: <c31c40eb388b2fc0ad6ee17ed2e23bcd04e8e1c8.1740671156.git.Ryan.Wanner@microchip.com>
+Subject: [PATCH v3 21/21] ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
+Date: Thu, 27 Feb 2025 08:52:08 -0700
+Message-ID: <f00b44b41ff12948d33adc4987983d7d6619759d.1740671156.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1740671156.git.Ryan.Wanner@microchip.com>
 References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
@@ -84,33 +84,28 @@ Content-Type: text/plain
 
 From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Enable shutdown controller to support shutdown and wake up.
+Add RTT timer with backup register for SAMA7D65_Curiosity board.
 
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 ---
- arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-index 93a1b0684eb9..30fdc4f55a3b 100644
+index 30fdc4f55a3b..3105fe1766c3 100644
 --- a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
 +++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-@@ -148,6 +148,15 @@ &sdmmc1 {
- 	status = "okay";
+@@ -141,6 +141,10 @@ pinctrl_uart6_default: uart6-default {
+ 	};
  };
  
-+&shdwc {
-+	debounce-delay-us = <976>;
-+	status = "okay";
-+
-+	input@0 {
-+		reg = <0>;
-+	};
++&rtt {
++	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
 +};
 +
- &slow_xtal {
- 	clock-frequency = <32768>;
- };
+ &sdmmc1 {
+ 	bus-width = <4>;
+ 	pinctrl-names = "default";
 -- 
 2.43.0
 
