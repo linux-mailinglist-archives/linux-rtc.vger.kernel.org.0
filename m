@@ -1,57 +1,57 @@
-Return-Path: <linux-rtc+bounces-3280-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3283-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56788A47FC8
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 14:47:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5CCFA47FE1
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 14:49:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D21B7A5EF2
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 13:46:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 213693A8E24
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2025 13:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9D3233145;
-	Thu, 27 Feb 2025 13:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139C3233155;
+	Thu, 27 Feb 2025 13:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WRpLOFVr"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="jxij3+A6"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580FC22FDE6
-	for <linux-rtc@vger.kernel.org>; Thu, 27 Feb 2025 13:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA96E23237F
+	for <linux-rtc@vger.kernel.org>; Thu, 27 Feb 2025 13:43:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740663821; cv=none; b=DYt1CRRZ2tqSQSO1dGXZkw3y3h0r0AHPWcOrSRSDFRA3nmOpau1ZQqZAk04tr/s+PIapiiw7910u+qyIhTRedFPpEiU5x0NA6TLaKaBVtYcT+haj4nN1gUthH3pFtYQ9jSf7M3LvU381GcKrLEQJ4eFQefy/MKxXragoB8KioUc=
+	t=1740663822; cv=none; b=OiB11525tf7jVtS78AYgX1d9EfLpCKcQar4yPDDtfC27Lv6Aqq28lCWWYjAp8jZD67AUd6yV8eZgoQUz3lw+DWfXlsmVTflozsJS1jTe60z57uY8bS4aozPwT4uVKLSx6bATG/CqblhuOIvhdDFu5+F0NYs4URT5q4Ppn3gqqoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740663821; c=relaxed/simple;
-	bh=ebuycd53Uuy9ErE8bBFYSIEQ+sv4g0fNhgwDIe8DZt8=;
+	s=arc-20240116; t=1740663822; c=relaxed/simple;
+	bh=mlEOI5HRHdA0r+khPOFstglI4Q0KaINDuTiOi53x7fQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XjesGipbxrGNofnplwbgkqUbvx/4UY+U6dYZXXeFxLeYwvqrlex3jzfvjhBQI3G4fOYQpqglHmSU3qzUBz2U+LXhtHq66YLt+Ia6ebkkPfsnZtaQY9fk1HUwIeus2wre5x/yUXpuVShR8w5lv1gfn/blYOjm3LHSR+nl0ACBmzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WRpLOFVr; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=ejgqWjSIgLzLe57azDIUTpAopYXnwQSglM6AbU/iACZIf6jevb+RU1+MZqwlr62FJKtaHHBp90S5/5yqwZ3sE2aE5wOEXzsiiprIRERt3J7PYJMGDa9lEKxHL9vtNYXahxQz6+iOKSJsWu9or57CPCzPsr8Adz5y95DK5XLc6JU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=jxij3+A6; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=par3vHelOry1lwwazqkFXO3/p86mskpoGl7kGns0BBw=; b=WRpLOF
-	VruUNZz5ZiwT1lFEgdjlusD4x8/M6dk/btoPgewBqj/FUXQ9y1XsFlSSoYdS2ZaZ
-	Ds6wAsRf0TP1NGYS/AEzbJpCxxdaGToO1E3mOWYQ1nVCKgXCLtXhqaGtFLhqQlaN
-	F0J2qTZ966yETC2MfsywcL0hKBZ1iMwcvMroBlwKdYiBMTYD6YpDZgt74HDT+1DJ
-	Oh7C+G7UVbrWNVs/CFiXb62V201KHNWlDiF0a50gkLgPdd+oJv0YdLbGf0w5f4JD
-	1afSa+em+Z99pQE2kcM8lyOieaaI0BMuebQcwu7zRHSgmhN6fLZu6bmRS5tTvM3B
-	24rG2qjpV/+l6/6A==
-Received: (qmail 962402 invoked from network); 27 Feb 2025 14:43:33 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Feb 2025 14:43:33 +0100
-X-UD-Smtp-Session: l3s3148p1@7EVE4B8vqHFtKPD9
+	 s=k1; bh=fEqcBkTeEAbMdoXRszSD0T9cx6kWOcSndq0YAOBoylM=; b=jxij3+
+	A6lNj42B54P5b19/sPw5604x+0VeWf+ql7iMw7/KqR7xqhbOnAceyYCh3qke4OT6
+	r9ywDNqgF5uSL7SSrJZe6psKrYZAaShFbUk8u77QjDW700auftS1HMy6PdYWKatQ
+	PAFXgYA2zV7f9jLRrMoT1GJryItfbY22OIMDPmsS+iFw9RYIgUB7V11Upo3hP14v
+	xwPBAzmVYnOv96dMpCaLlW36AQ6WH0fD1WKP96tP7LyslGTtyfKaKExdz1pHzgFn
+	I3Sm95js8lbZ/EuIVaiwF0Lv9vitVivlSnkwumN7gYIVedKYWz8S0GGm3rphrnpq
+	NWuFNdlhdcy/lfDg==
+Received: (qmail 962427 invoked from network); 27 Feb 2025 14:43:34 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Feb 2025 14:43:34 +0100
+X-UD-Smtp-Session: l3s3148p1@/AxV4B8vjGFtKPD9
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH 5/8] rtc: sh: simplify irq setup after refactoring
-Date: Thu, 27 Feb 2025 14:43:00 +0100
-Message-ID: <20250227134256.9167-15-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 6/8] rtc: sh: remove useless wrapper function
+Date: Thu, 27 Feb 2025 14:43:01 +0100
+Message-ID: <20250227134256.9167-16-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250227134256.9167-10-wsa+renesas@sang-engineering.com>
 References: <20250227134256.9167-10-wsa+renesas@sang-engineering.com>
@@ -63,166 +63,47 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We only need the alarm_irq handler. That means we can remove everything
-related to periodic_irq and carry_irq. Also, the shared handler can go
-since we only we need the alarm interrupt in any case.
+The wrapper to enable interrupts is so thin that we can use it directly.
+Also gets rid of an 'inline' which doesn't make sense here.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/rtc/rtc-sh.c | 83 +++++++++-----------------------------------
- 1 file changed, 17 insertions(+), 66 deletions(-)
+ drivers/rtc/rtc-sh.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/rtc/rtc-sh.c b/drivers/rtc/rtc-sh.c
-index e80d4ae979c9..bf49dbd09cab 100644
+index bf49dbd09cab..033bdfc83e42 100644
 --- a/drivers/rtc/rtc-sh.c
 +++ b/drivers/rtc/rtc-sh.c
-@@ -89,18 +89,19 @@ struct sh_rtc {
- 	unsigned long		regsize;
- 	struct resource		*res;
- 	int			alarm_irq;
--	int			periodic_irq;
--	int			carry_irq;
- 	struct clk		*clk;
- 	struct rtc_device	*rtc_dev;
- 	spinlock_t		lock;
- 	unsigned long		capabilities;	/* See asm/rtc.h for cap bits */
- };
- 
--static int __sh_rtc_alarm(struct sh_rtc *rtc)
-+static irqreturn_t sh_rtc_alarm(int irq, void *dev_id)
- {
-+	struct sh_rtc *rtc = dev_id;
- 	unsigned int tmp, pending;
- 
-+	spin_lock(&rtc->lock);
-+
- 	tmp = readb(rtc->regbase + RCR1);
- 	pending = tmp & RCR1_AF;
- 	tmp &= ~(RCR1_AF | RCR1_AIE);
-@@ -109,31 +110,9 @@ static int __sh_rtc_alarm(struct sh_rtc *rtc)
- 	if (pending)
- 		rtc_update_irq(rtc->rtc_dev, 1, RTC_AF | RTC_IRQF);
- 
--	return pending;
--}
--
--static irqreturn_t sh_rtc_alarm(int irq, void *dev_id)
--{
--	struct sh_rtc *rtc = dev_id;
--	int ret;
--
--	spin_lock(&rtc->lock);
--	ret = __sh_rtc_alarm(rtc);
--	spin_unlock(&rtc->lock);
--
--	return IRQ_RETVAL(ret);
--}
--
--static irqreturn_t sh_rtc_shared(int irq, void *dev_id)
--{
--	struct sh_rtc *rtc = dev_id;
--	int ret;
--
--	spin_lock(&rtc->lock);
--	ret = __sh_rtc_alarm(rtc);
- 	spin_unlock(&rtc->lock);
- 
--	return IRQ_RETVAL(ret);
-+	return IRQ_RETVAL(pending);
+@@ -115,7 +115,7 @@ static irqreturn_t sh_rtc_alarm(int irq, void *dev_id)
+ 	return IRQ_RETVAL(pending);
  }
  
- static inline void sh_rtc_setaie(struct device *dev, unsigned int enable)
-@@ -364,22 +343,16 @@ static int __init sh_rtc_probe(struct platform_device *pdev)
- 
- 	spin_lock_init(&rtc->lock);
- 
--	/* get periodic/carry/alarm irqs */
- 	ret = platform_get_irq(pdev, 0);
- 	if (unlikely(ret <= 0)) {
- 		dev_err(&pdev->dev, "No IRQ resource\n");
- 		return -ENOENT;
- 	}
- 
--	if (!pdev->dev.of_node) {
--		rtc->periodic_irq = ret;
--		rtc->carry_irq = platform_get_irq(pdev, 1);
-+	if (!pdev->dev.of_node)
- 		rtc->alarm_irq = platform_get_irq(pdev, 2);
--	} else {
-+	else
- 		rtc->alarm_irq = ret;
--		rtc->periodic_irq = platform_get_irq(pdev, 1);
--		rtc->carry_irq = platform_get_irq(pdev, 2);
--	}
- 
- 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
- 	if (!res)
-@@ -442,25 +415,11 @@ static int __init sh_rtc_probe(struct platform_device *pdev)
- 	}
- #endif
- 
--	if (rtc->carry_irq <= 0) {
--		/* register shared periodic/carry/alarm irq */
--		ret = devm_request_irq(&pdev->dev, rtc->periodic_irq,
--				sh_rtc_shared, 0, "sh-rtc", rtc);
--		if (unlikely(ret)) {
--			dev_err(&pdev->dev,
--				"request IRQ failed with %d, IRQ %d\n", ret,
--				rtc->periodic_irq);
--			goto err_unmap;
--		}
--	} else {
--		ret = devm_request_irq(&pdev->dev, rtc->alarm_irq,
--				sh_rtc_alarm, 0, "sh-rtc alarm", rtc);
--		if (unlikely(ret)) {
--			dev_err(&pdev->dev,
--				"request alarm IRQ failed with %d, IRQ %d\n",
--				ret, rtc->alarm_irq);
--			goto err_unmap;
--		}
-+	ret = devm_request_irq(&pdev->dev, rtc->alarm_irq, sh_rtc_alarm, 0, "sh-rtc", rtc);
-+	if (ret) {
-+		dev_err(&pdev->dev, "request alarm IRQ failed with %d, IRQ %d\n",
-+			ret, rtc->alarm_irq);
-+		goto err_unmap;
- 	}
- 
- 	platform_set_drvdata(pdev, rtc);
-@@ -503,30 +462,22 @@ static void __exit sh_rtc_remove(struct platform_device *pdev)
- 	clk_disable(rtc->clk);
- }
- 
--static void sh_rtc_set_irq_wake(struct device *dev, int enabled)
-+static int __maybe_unused sh_rtc_suspend(struct device *dev)
+-static inline void sh_rtc_setaie(struct device *dev, unsigned int enable)
++static int sh_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
  {
  	struct sh_rtc *rtc = dev_get_drvdata(dev);
+ 	unsigned int tmp;
+@@ -132,11 +132,7 @@ static inline void sh_rtc_setaie(struct device *dev, unsigned int enable)
+ 	writeb(tmp, rtc->regbase + RCR1);
  
--	irq_set_irq_wake(rtc->periodic_irq, enabled);
--
--	if (rtc->carry_irq > 0) {
--		irq_set_irq_wake(rtc->carry_irq, enabled);
--		irq_set_irq_wake(rtc->alarm_irq, enabled);
--	}
+ 	spin_unlock_irq(&rtc->lock);
 -}
--
--static int __maybe_unused sh_rtc_suspend(struct device *dev)
--{
- 	if (device_may_wakeup(dev))
--		sh_rtc_set_irq_wake(dev, 1);
-+		irq_set_irq_wake(rtc->alarm_irq, 1);
  
+-static int sh_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+-{
+-	sh_rtc_setaie(dev, enabled);
  	return 0;
  }
  
- static int __maybe_unused sh_rtc_resume(struct device *dev)
+@@ -457,7 +453,7 @@ static void __exit sh_rtc_remove(struct platform_device *pdev)
  {
-+	struct sh_rtc *rtc = dev_get_drvdata(dev);
-+
- 	if (device_may_wakeup(dev))
--		sh_rtc_set_irq_wake(dev, 0);
-+		irq_set_irq_wake(rtc->alarm_irq, 0);
+ 	struct sh_rtc *rtc = platform_get_drvdata(pdev);
  
- 	return 0;
+-	sh_rtc_setaie(&pdev->dev, 0);
++	sh_rtc_alarm_irq_enable(&pdev->dev, 0);
+ 
+ 	clk_disable(rtc->clk);
  }
 -- 
 2.45.2
