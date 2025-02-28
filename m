@@ -1,143 +1,172 @@
-Return-Path: <linux-rtc+bounces-3321-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3322-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8A3DA498BE
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Feb 2025 13:06:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E633A49B46
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Feb 2025 15:07:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99CB6168425
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Feb 2025 12:06:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D2E91748B6
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Feb 2025 14:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33F7926A1A5;
-	Fri, 28 Feb 2025 12:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7177C26E160;
+	Fri, 28 Feb 2025 14:07:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="NEWcRiId"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Krie4Osc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2AC25DD1F;
-	Fri, 28 Feb 2025 12:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA9025F984
+	for <linux-rtc@vger.kernel.org>; Fri, 28 Feb 2025 14:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740744368; cv=none; b=DCpUMS5ZqYTJCKpgz+vKmVieU7xl9wx2O56Qc00pxLtx2BGCSSV2qizo1WST77bHGWtINe7tFEdhswuaf71sNRBuc7z8809IpLbHdHAzB9Me5CdRQ8/vEXMIPboTmnn9hmeZZRqq9THBbZTRnP+e+0l/vaG2OIAeNpA9/eUw3Hc=
+	t=1740751645; cv=none; b=DB0J1z0TBFNxZM4RsWqFqRrEPPyDnsb++kxygS7I7W5g51WSwpfp3QMUfnbLKvoCF8C6mZGIKSC4+oEyPwAe/14Z4tr+E6HuCc2CtEP6SSE+GzBzrpOtAHkKXf1Ny1CHa2/2ccNiC4ZWXgrsVprtXZycEufz2M2l8VfBauUfsAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740744368; c=relaxed/simple;
-	bh=vjrFCSFkFDUoYvXeLkML1Pi5eNOA5Upz4StAF9CujbM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VHxTiWsqGLykoj9HazgI6oCAklsRy/xpJLfTsEIjjIQLmy4S743mPtnApsFifhLyiBra848hZ/yey8bLeEZvFMUjMI056v5/XJ6xlBiUh6vrqDhH8ElQO62gVxVHWFQ9fGmflrrHLUSYVruvWUpXBvPjdIZTYBQK6fwlpuwBZgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=NEWcRiId; arc=none smtp.client-ip=178.60.130.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=vcftivxhuNL7EZgR4bopDnaiJhWUWXb/o3lnz2PgoJk=; b=NEWcRiIdSE6aiCAiUGqb7TAZpW
-	1ltGKJMjg347KdnBEAF8j5GOZ8nurdthlGEfNStgBQPWpWb4xf0LAGAcECPZ6G9Oi1JbWQX8SqOP/
-	uUA+GktLBcDkywUjud8eLbVrRAlzdR+qHNjkaOSao5tf0n2tUm6EG9/JImjZ2OM/ZrHQXi2TJt0OX
-	SyXnHB51Go31S2MLRNUfJh3oqnCzAKOAa2pRX91hEQZ97E7x0BMlzuKOi6R4TRK/EGBG8PRMr+ggW
-	kk/jznJc+hhs+AhVoS1orGei0pRO96Yo8HrW6MNFzHI0CV/HS7bg97VTs+37wJsANaqjj+dL7Ka53
-	4UiXXsuw==;
-Received: from [179.125.94.240] (helo=quatroqueijos)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1tnz7m-002182-AB; Fri, 28 Feb 2025 13:05:56 +0100
-Date: Fri, 28 Feb 2025 09:05:48 -0300
-From: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org, kernel-dev@igalia.com
-Subject: Re: [PATCH 2/2] m68k: rtc: dp8570a: make it a proper RTC class driver
-Message-ID: <Z8GmnLgCndvht-th@quatroqueijos>
-References: <20250226-m68k-rtc-v1-0-404641ec62e6@igalia.com>
- <20250226-m68k-rtc-v1-2-404641ec62e6@igalia.com>
- <CAMuHMdW_13wOxD0Q0PVCUXBwC9y8iKXTcwH=m5tvX856S9ZU1w@mail.gmail.com>
+	s=arc-20240116; t=1740751645; c=relaxed/simple;
+	bh=D6dkdQq4iA5tj9KDLaYBN/k9ZLQ40l8wYqCnUHgdGG0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KF3jU3u/5SF6mJVa6LEYtTQQWy7mcoUq/mmjezawu+z4J/pvhydtUYxv/uNfKhJX/jrGkq11wE+A1agQhJqFmpZBZ1lNKwVzBTNtb6LJAVdIvBx5O6FLiXhBz601mt6K3t2twxleXPurJ/FoQOsXUEybIq1JutpF9UdlKVEUV4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Krie4Osc; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5dec817f453so3274418a12.2
+        for <linux-rtc@vger.kernel.org>; Fri, 28 Feb 2025 06:07:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740751642; x=1741356442; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhLZqgcaujiFhw9G1dCH5p0FiLmGyvslkaMt4uwl9Do=;
+        b=Krie4Osc0DNEinlUAyFTqNzopM5rxbSDXSx+7/YIPnjHeGkHfJbBSUjo5mkF1GKs4q
+         mIrLqoS2F1GPTgXE54L9i6ipSA6qu45Gv9Gj/Jd5dt9ragEQW6UOGl4Cxge2DF6kbgnO
+         GEd/s4zk+TUhPxnvMcjBFvEuok4LJx77ZKCXFieXx3nkrw1uiu3AnSEIUmzN37Sd4E2K
+         3L9qQIZY4xgnsISUYWuiKGDEyBTxjJEvgyRlJ+0CpB99LzLqq4iCOaMyUjaqL+OyjQE/
+         IFHVKBpQaQce3fOlqgVaoZI4DddaF1r6ZwiFzNyrWLy4L+0ZYllhH3UXHyok3o4tJpNF
+         TQEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740751642; x=1741356442;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xhLZqgcaujiFhw9G1dCH5p0FiLmGyvslkaMt4uwl9Do=;
+        b=F4BSAPrL4qR5PM7q2TMvzUUGzXWwBa8L6ijryDM7Ts4N8K5CCbgVbVQDRXflGf7kfy
+         4UuVJHpFZxkIvFggc2ULUTjzTxUTChdk5yChri+8FvUAvis3lE6uEQSbBTaeAYo3WOUQ
+         UHxC3KghTJDGqRJlmB2TJIRu86DUyjufFGzWoi0jxkDVW9kZxDsWt0ir+viCmL8XAUPY
+         SNQ06bysqoXgA7xihTXE/OVyu5aF71z/735qnRwd6X7K9uHSOclyF2+9Aq9lL7rMXpf1
+         BboAqOHcJAJyWgb1sVFmavxrZoRaf22QxEPxOVdIPMLzVXL88cAJvvvPiG/+HjD5tTdh
+         6Jxw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9CTu2R5AKPSU3pDGFKsHRUM5B7IUoha/dcvfhKcaWN20OycgXmOE5Atr6gG/4iZeLXhx0hXU4xYY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZRlmUVI5ZSXtXKzbf/U8DYxz/qLJh4VrUvKftxbVm5lObOb4w
+	9HXmHgsO8cAvFREjpKhmXMA1wI7Mp2Cc/6c63PHfoqm/IljjOuV5YQDQpJEA0vvPdik/iYu+68E
+	Zj4o=
+X-Gm-Gg: ASbGncv8tFJcxGieoIMDaH8iPsy4PSiv/sNU35kK0qRBsGeQX2Zuq8pYtyp44umKlR/
+	B+dTQYu5v7BEYFTKfiODspzhxo+RXQUq5H6g/7opjzz3azOxdajubiQ4WpDFK7+ZsjO291FdYok
+	Of9pHcBPPoGgJQnZWQ/Ezj1Xv/M75slVJTfJ7mvo/vyIHmh01qhugMZ2BVfc/4Mq+Fk7m1c4WIz
+	FTcgjCyIQZcD52VHcZNtw33Q7lZT59f5ffPUErgDkP8J5P1cDF42WSnI7Njf0dZELgkvq51jpUK
+	tDZwz79NItKhZmX4tybPy72wtZIObKPfEd++1+DHomtEZ6jC1IsTYslSTg7xMER/pGfMDYUDyAc
+	Nazp9hbdwcQ==
+X-Google-Smtp-Source: AGHT+IHP7pUAJMVQB1Guj47dyI47K7YXQj82SFh5z5QQxgHATc6r4NQ1/TjLpJM/Ncf+/B2eBWDZ7w==
+X-Received: by 2002:a05:6402:5242:b0:5e4:cfb0:f667 with SMTP id 4fb4d7f45d1cf-5e4d6b691d6mr2481074a12.21.1740751641613;
+        Fri, 28 Feb 2025 06:07:21 -0800 (PST)
+Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c3fb51f9sm2550839a12.55.2025.02.28.06.07.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Feb 2025 06:07:21 -0800 (PST)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Subject: [PATCH 00/18] a few rtc driver cleanups
+Date: Fri, 28 Feb 2025 14:07:13 +0000
+Message-Id: <20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdW_13wOxD0Q0PVCUXBwC9y8iKXTcwH=m5tvX856S9ZU1w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABHDwWcC/x3MQQqAIBBA0avIrBN0SoiuEi3MphoIE60IxLsnL
+ d/i/wyJIlOCQWSI9HDi01foRoDbrd9I8lINqNAoxF7Gy0l3kPV3SFKjU7PR2JLtoCYh0srvvxu
+ nUj6cRcJTXgAAAA==
+X-Change-ID: 20250228-rtc-cleanups-12c0b5123ea4
+To: Chanwoo Choi <cw00.choi@samsung.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ Hans Ulli Kroll <ulli.kroll@googlemail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>, 
+ Dianlong Li <long17.cool@163.com>
+Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-aspeed@lists.ozlabs.org, linux-amlogic@lists.infradead.org, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+X-Mailer: b4 0.14.2
 
-On Thu, Feb 27, 2025 at 12:05:26PM +0100, Geert Uytterhoeven wrote:
-> Hi Thadeu,
-> 
-> On Wed, 26 Feb 2025 at 13:27, Thadeu Lima de Souza Cascardo
-> <cascardo@igalia.com> wrote:
-> > In the past, each rtc implementation had to rewrite the same ioctls in
-> > order to be compatible. But since 2006, a common RTC interface has been
-> > introduced. Use it for the last user of RTC_MINOR.
-> >
-> > Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-> 
-> Thanks for your patch!
-> 
-> > --- a/arch/m68k/bvme6000/rtc.c
-> > +++ b/arch/m68k/bvme6000/rtc.c
-> 
-> >
-> >  static int __init rtc_DP8570A_init(void)
-> >  {
-> > +       struct platform_device *pdev;
-> > +
-> >         if (!MACH_IS_BVME6000)
-> >                 return -ENODEV;
-> >
-> >         pr_info("DP8570A Real Time Clock Driver v%s\n", RTC_VERSION);
-> > -       return misc_register(&rtc_dev);
-> > +
-> > +       pdev = platform_device_register_data(NULL, "rtc-generic", -1,
-> > +                                            &dp8570a_rtc_ops,
-> > +                                            sizeof(dp8570a_rtc_ops));
-> 
-> Doesn't this conflict with the creation of the same device in rtc_init()[1]?
-> 
+Hi,
 
-I didn't look too deep and just assumed that this would be one of those
-cases where this was set for machines other than BVME6000.
+While looking at RTC, I noticed that various drivers are keeping
+pointers to data that they're not using themselves throughout their
+lifetime.
 
-Ah, right, that is because of this check around it.
+So I took the liberty to drop these pointers and this series is the
+result.
 
-#if defined(CONFIG_M68KCLASSIC) || defined(CONFIG_SUN3).
+The last two patches also convert two drivers to using dev_err_probe(),
+as I looked slightly closer into those two. They don't exactly fit the
+general subject of removal of unneeded pointers, but I wanted to share
+them anyway, since they're ready.
 
-But CONFIG_M68KCLASSIC is set for BVME6000.
+All of this was compile-tested only.
 
-On the other hand, mach_hwclk is accessing the same registers as the rtc.c
-code, so they are redundant. One thing that is missing is
-local_irq_save/local_irq_restore around it. I can add that and remove
-rtc.c, which would make more sense here.
+Cheers,
+Andre'
 
-Thanks.
-Cascardo.
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
+---
+André Draszik (18):
+      rtc: max77686: drop needless struct max77686_rtc_info::rtc member
+      rtc: s5m: drop needless struct s5m_rtc_info::i2c member
+      rtc: aspeed: drop needless struct aspeed_rtc::rtc_dev member
+      rtc: ds2404: drop needless struct ds2404::rtc member
+      rtc: ep93xx: drop needless struct ep93xx_rtc::rtc member
+      rtc: ftrtc010: drop needless struct ftrtc010_rtc::rtc_dev member
+      rtc: m48t86: drop needless struct m48t86_rtc_info::rtc member
+      rtc: meson: drop needless struct meson_rtc::rtc member
+      rtc: meson-vrtc: drop needless struct meson_vrtc_data::rtc member
+      rtc: pl030: drop needless struct pl030_rtc::rtc member
+      rtc: rx8581: drop needless struct rx8581::rtc member
+      rtc: s35390a: drop needless struct s35390a::rtc member
+      rtc: sd2405al: drop needless struct sd2405al::rtc member
+      rtc: sd3078: drop needless struct sd3078::rtc member
+      rtc: rx8581: drop needless struct rx8581
+      rtc: sd3078: drop needless struct sd3078
+      rtc: max77686: use dev_err_probe() where appropriate
+      rtc: s5m: convert to dev_err_probe() where appropriate
 
-> On BVME6000, mach_hwclk is set:
-> 
->     arch/m68k/bvme6000/config.c:    mach_hwclk           = bvme6000_hwclk;
-> 
-> > +
-> > +       return PTR_ERR_OR_ZERO(pdev);
-> >  }
-> >  module_init(rtc_DP8570A_init);
-> 
-> [1] https://elixir.bootlin.com/linux/v6.13.4/source/arch/m68k/kernel/time.c#L144
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+ drivers/rtc/rtc-aspeed.c     | 16 ++++-----
+ drivers/rtc/rtc-ds2404.c     | 14 ++++----
+ drivers/rtc/rtc-ep93xx.c     | 16 ++++-----
+ drivers/rtc/rtc-ftrtc010.c   | 17 +++++----
+ drivers/rtc/rtc-m48t86.c     | 14 ++++----
+ drivers/rtc/rtc-max77686.c   | 37 +++++++++----------
+ drivers/rtc/rtc-meson-vrtc.c | 12 +++----
+ drivers/rtc/rtc-meson.c      | 16 ++++-----
+ drivers/rtc/rtc-pl030.c      | 14 ++++----
+ drivers/rtc/rtc-rx8581.c     | 85 +++++++++++++++++++-------------------------
+ drivers/rtc/rtc-s35390a.c    | 22 ++++++------
+ drivers/rtc/rtc-s5m.c        | 58 +++++++++++++-----------------
+ drivers/rtc/rtc-sd2405al.c   | 16 ++++-----
+ drivers/rtc/rtc-sd3078.c     | 71 +++++++++++++++---------------------
+ 14 files changed, 183 insertions(+), 225 deletions(-)
+---
+base-commit: 0226d0ce98a477937ed295fb7df4cc30b46fc304
+change-id: 20250228-rtc-cleanups-12c0b5123ea4
+
+Best regards,
+-- 
+André Draszik <andre.draszik@linaro.org>
+
 
