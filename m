@@ -1,114 +1,166 @@
-Return-Path: <linux-rtc+bounces-3353-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3354-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4943EA4AD43
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 19:12:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B03EA4ADD3
+	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 21:37:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04A573AFA6B
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 18:12:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 634B37A3157
+	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 20:36:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966BD1E5B76;
-	Sat,  1 Mar 2025 18:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73071E5B97;
+	Sat,  1 Mar 2025 20:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Rk9EL8sJ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="j0W8ax/u"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B849D1E570D
-	for <linux-rtc@vger.kernel.org>; Sat,  1 Mar 2025 18:12:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EE1182D7;
+	Sat,  1 Mar 2025 20:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740852759; cv=none; b=CjR3X0BQ4dERLiQk7srtT11ai3GyF7u8s97QX6c21PLH4TSD+W4kWfti828afvza7yZQaZ8yWiz8eas5D8N986jBK/gkOj0Xpq4lyujV7NZJtMX06yt4vIwkySp60itiZKfLitqElV14NGXyXQijv0Qjm8amNGnkyZakS8mUJRU=
+	t=1740861434; cv=none; b=MRRC/JLqTWAxj9SJDDmv1VaQFHov0QWhPe+Yg9kv1dKSL4DAb+Kk7lGBjZwEeiPG77lmXoQsgST01EwqEEEaKq8VPICLPUHbVtIhlinjtM2yV4vvMn4NWbQA0yrjHBtLmWsNzKQ6g5mt0HZglAyYT7S/KJJQQN/FB1/h3zpmCv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740852759; c=relaxed/simple;
-	bh=hO09TeiGW32giSrF/zFbXkUU8toE5ieO9mC6ZpO9u5A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BsRWFEflkdsQQJg75ezmw40pPGUTzNW7HmahojwBkRaTJfP2Z3omekI9okXMltXdcKVL8hD48PFJV0aLdKhbb1zH9mJJ+PL9yRQFlCXrPaIINZrF5bLaRT8V9Owdx2uJYLWnHNeMbOBGusMz8zutUByUNXF/veBnUkXBwVrow1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Rk9EL8sJ; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5495888f12eso1074575e87.0
-        for <linux-rtc@vger.kernel.org>; Sat, 01 Mar 2025 10:12:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740852756; x=1741457556; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hO09TeiGW32giSrF/zFbXkUU8toE5ieO9mC6ZpO9u5A=;
-        b=Rk9EL8sJWfHphK8pAqqnLFiAHzMVDeMtVes6WZAjupVQUUWkh8pLEV6O3AfNeOj+a7
-         BIDGekmxSLeB44mR1+0XEj6z9xNy2BD5nTLkPwB6bDV8Ek7ZkIo3ABM2yn2+4jd8sgzD
-         PQMkjHFloi2MEa0e38WFpdpnSGBNBw3UNyGnQ/DfhdC5vKlVqkN+xi0W38qsCztb2kqh
-         9hsQLsqovLDqMe2zvzGIHENJssBR6AdYu0/v3b1wRjD00ok6joz9gWPtfZZizW84yuhm
-         eZ0hbvy2VHt4BsvJk/pBt1DlNe8nvE9TeIN+an+ivHIGtt1AcNkHmj6Ss+h1+khbb35H
-         1AoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740852756; x=1741457556;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hO09TeiGW32giSrF/zFbXkUU8toE5ieO9mC6ZpO9u5A=;
-        b=c4l/oEUfWAUUEYNfyjTU5aUrKcHLqRVJDHwf+bygnOrtuq0JqpGU+Vy3sPOlBP8AiO
-         nQ3UdWRirmXYL0KV1c7y3DHNmBoc7TM0KWC6KbrJzpskk45wdp1XnoHIYcwMYR1ZP6NC
-         HML7RRmOXtHGsRc4I6xJPGSum0HSAKJ1vL8tx10AQ6WqAJMZHoxMhGOkas+cYmtPKrfj
-         I54gTZ70CZKWcIBY0CKu4hnVIRW/I0asAmM1E4QJVS5Aj1SzE9jXyaRvR/Gu4jT4tokQ
-         bzAppqLegXChVRO6gVOf3ty3N/ugBnCCNJCErhY7YPRGKQEnUn3X0b9pVkveguPzcC8j
-         Z3cA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtSboZHHOn+Gj7M5li3tLrgSwJ+HjN7OQmqKYxamKxk9zqq24FIf4lBqdsASEN+4X5VGIMWO0gJvo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrdDJLjrXMv1F5ktqwcShEkAVuM513ZMTGDL0yPvlZiiJzP1fQ
-	CjX2E/XbvejHdEa54ULvQo1y+x+Au+3v4fQb0OryRBhi4PvTyh637X8Z+T32D6zb79ok+nA5DxN
-	R9C9lkunK2iXgpAjiUR7unknTVfA2WRMbzM2SbA==
-X-Gm-Gg: ASbGncsXHoy+z6KP2SRIFMFjl/Hbb4mPCDzc534baX6+3117CoJ+gz/eyZR08gYr8w/
-	Ft3syceo6lBCCo9033JVp1zfNAMxD4jITyHGSEbd48oBN6LtgC8CfxrDXYWqmfDp2X9cPYjkrD3
-	9muJD215TaocDCJ0ZLVIKNvfUxFA==
-X-Google-Smtp-Source: AGHT+IEwNP6JAG/ImVlBbFKSPeJyF+kN1wgYSyFdUn518Azn4ly4yqI8vygkNmnNaNRO/2W3XMFUQZ4MRvI6PuiQBfo=
-X-Received: by 2002:a05:6512:2391:b0:548:f3f5:b26a with SMTP id
- 2adb3069b0e04-5494c38bc42mr3507636e87.50.1740852755828; Sat, 01 Mar 2025
- 10:12:35 -0800 (PST)
+	s=arc-20240116; t=1740861434; c=relaxed/simple;
+	bh=bS075K6RDLoIA2kHkCsy0JdsUrdTU7jF2LvyzphOjsA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s7u0ZDJOAvo3IE1FnSrzxq3Oy6DR2t/ZL2iALZxqIFwcu30JlsFDKZNRu6teK8OOK+PhslePKP4vlTmdU8FKPJoSSckmz6QHb8XUXt8dkRs7zASbK5ROaKaOIu6wH0k5wz8A+FUDpE2JHHvI+8akNTYPgnfVvDzLJ46waFy2Ips=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=j0W8ax/u; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C9EDE20453;
+	Sat,  1 Mar 2025 20:36:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1740861424;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3Acc0tGYBakmOPZLGuJmU2rnhFl+Tc281npjtzbe/74=;
+	b=j0W8ax/uRquO/giWNgJhf4H4p4dxfIxzFW6MO4OZsXaQhJo+e7YlrfmfwuwO8z8CykjSQD
+	0U7Afy7/Ba2WJ6ueUqpasO3bhRsmWK8p1CSKWQJLxASlHZTVaGb200Xak05pxb0hXPgbBk
+	sT9SJIRG4qLHlanaDO5mFlJjeg4NV4xNVcAt6A5IcLajDdg4v3tw1PgIh8R9k5YlEQBuhG
+	dfXSaVruN9RLuzUSlpcs4F7JA1n4iAXoEgtPn0uxly/CwiwCzgGYpZ/+vFDZKpgSjsOMi0
+	+ATKulcM1AzPZZmNwSQMXP1nZ5IL536rUVUy1TzC5EytwvQM/AGNSzQr14PTEA==
+Date: Sat, 1 Mar 2025 21:36:58 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	=?iso-8859-1?Q?T=F3th_J=E1nos?= <gomba007@gmail.com>,
+	Dianlong Li <long17.cool@163.com>, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 00/18] a few rtc driver cleanups
+Message-ID: <20250301203658839d5482@mail.local>
+References: <20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org> <20250228-rtc-cleanups-v1-6-b44cec078481@linaro.org>
-In-Reply-To: <20250228-rtc-cleanups-v1-6-b44cec078481@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sat, 1 Mar 2025 19:12:25 +0100
-X-Gm-Features: AQ5f1JrMxHjOeiAFu01e9_js8hUt6QETaY6N275XhvcjrnB0bEBgE0astCzSAEQ
-Message-ID: <CACRpkdaWjTiqSUj59YiQZ1jsJWzHZPMo3xS6n4_JwdAW6B_Kfg@mail.gmail.com>
-Subject: Re: [PATCH 06/18] rtc: ftrtc010: drop needless struct
- ftrtc010_rtc::rtc_dev member
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Hans Ulli Kroll <ulli.kroll@googlemail.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, =?UTF-8?B?VMOzdGggSsOhbm9z?= <gomba007@gmail.com>, 
-	Dianlong Li <long17.cool@163.com>, linux-kernel@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-amlogic@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelgedvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveduvefhvdehlefgieelfeetudeugfehgfeugfekleejueefueettdffueetiedvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeejjedrudehtddrvdegiedrvdduheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeejjedrudehtddrvdegiedrvdduhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudelpdhrtghpthhtoheprghnughrvgdrughrrghsiihikheslhhinhgrrhhordhorhhgpdhrtghpthhtoheptgiftddtrdgthhhoihesshgrmhhsuhhnghdrtghomhdprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhovghlsehjmhhsrdhiugdrrghupdhrtghpthhtoheprghnu
+ ghrvgifsegtohguvggtohhnshhtrhhutghtrdgtohhmrdgruhdprhgtphhtthhopehulhhlihdrkhhrohhllhesghhoohhglhgvmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhushdrfigrlhhlvghijheslhhinhgrrhhordhorhhgpdhrtghpthhtohepnhgvihhlrdgrrhhmshhtrhhonhhgsehlihhnrghrohdrohhrgh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Fri, Feb 28, 2025 at 3:07=E2=80=AFPM Andr=C3=A9 Draszik <andre.draszik@l=
-inaro.org> wrote:
+On 28/02/2025 14:07:13+0000, André Draszik wrote:
+> Hi,
+> 
+> While looking at RTC, I noticed that various drivers are keeping
+> pointers to data that they're not using themselves throughout their
+> lifetime.
+> 
+> So I took the liberty to drop these pointers and this series is the
+> result.
+> 
+> The last two patches also convert two drivers to using dev_err_probe(),
+> as I looked slightly closer into those two. They don't exactly fit the
+> general subject of removal of unneeded pointers, but I wanted to share
+> them anyway, since they're ready.
+> 
+> All of this was compile-tested only.
+> 
+> Cheers,
+> Andre'
+> 
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> ---
+> André Draszik (18):
+>       rtc: max77686: drop needless struct max77686_rtc_info::rtc member
+>       rtc: s5m: drop needless struct s5m_rtc_info::i2c member
+>       rtc: aspeed: drop needless struct aspeed_rtc::rtc_dev member
+>       rtc: ds2404: drop needless struct ds2404::rtc member
+>       rtc: ep93xx: drop needless struct ep93xx_rtc::rtc member
+>       rtc: ftrtc010: drop needless struct ftrtc010_rtc::rtc_dev member
+>       rtc: m48t86: drop needless struct m48t86_rtc_info::rtc member
+>       rtc: meson: drop needless struct meson_rtc::rtc member
+>       rtc: meson-vrtc: drop needless struct meson_vrtc_data::rtc member
+>       rtc: pl030: drop needless struct pl030_rtc::rtc member
+>       rtc: rx8581: drop needless struct rx8581::rtc member
+>       rtc: s35390a: drop needless struct s35390a::rtc member
+>       rtc: sd2405al: drop needless struct sd2405al::rtc member
+>       rtc: sd3078: drop needless struct sd3078::rtc member
 
-> The memory pointed to by the ::rtc_dev member is managed via devres,
-> and no code in this driver uses it past _probe().
->
-> We can drop it from the structure and just use a local temporary
-> variable, reducing runtime memory consumption by a few bytes.
->
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+My main concern with this is that as soon as we introduce irq support,
+we are going to need the rtc pointer back in the struct. But I guess
+that most of them are old enough to say that nobody is interested in irq
+support.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>       rtc: rx8581: drop needless struct rx8581
+>       rtc: sd3078: drop needless struct sd3078
 
-Yours,
-Linus Walleij
+I guess you could squash those two with the previous ones touching the
+respective drivers because you are the one removing the last remaining
+struct member.
+
+>       rtc: max77686: use dev_err_probe() where appropriate
+>       rtc: s5m: convert to dev_err_probe() where appropriate
+> 
+>  drivers/rtc/rtc-aspeed.c     | 16 ++++-----
+>  drivers/rtc/rtc-ds2404.c     | 14 ++++----
+>  drivers/rtc/rtc-ep93xx.c     | 16 ++++-----
+>  drivers/rtc/rtc-ftrtc010.c   | 17 +++++----
+>  drivers/rtc/rtc-m48t86.c     | 14 ++++----
+>  drivers/rtc/rtc-max77686.c   | 37 +++++++++----------
+>  drivers/rtc/rtc-meson-vrtc.c | 12 +++----
+>  drivers/rtc/rtc-meson.c      | 16 ++++-----
+>  drivers/rtc/rtc-pl030.c      | 14 ++++----
+>  drivers/rtc/rtc-rx8581.c     | 85 +++++++++++++++++++-------------------------
+>  drivers/rtc/rtc-s35390a.c    | 22 ++++++------
+>  drivers/rtc/rtc-s5m.c        | 58 +++++++++++++-----------------
+>  drivers/rtc/rtc-sd2405al.c   | 16 ++++-----
+>  drivers/rtc/rtc-sd3078.c     | 71 +++++++++++++++---------------------
+>  14 files changed, 183 insertions(+), 225 deletions(-)
+> ---
+> base-commit: 0226d0ce98a477937ed295fb7df4cc30b46fc304
+> change-id: 20250228-rtc-cleanups-12c0b5123ea4
+> 
+> Best regards,
+> -- 
+> André Draszik <andre.draszik@linaro.org>
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
