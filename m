@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3349-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3350-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6018AA4AB26
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 14:18:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62B8AA4AB29
+	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 14:19:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12A761891C92
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 13:19:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 775ED16D4D8
+	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 13:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4F31DED58;
-	Sat,  1 Mar 2025 13:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4CA1DED72;
+	Sat,  1 Mar 2025 13:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fkgx4kJW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qMHrvaEO"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1C3249F9;
-	Sat,  1 Mar 2025 13:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BAE249F9;
+	Sat,  1 Mar 2025 13:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740835127; cv=none; b=EiqMX0/ZrikCP2aN6X3xaMjx53q3BXqw7IxM6Sl5DlVKXZtGIwGFhm+reVL5JZWJzH3ZOiYaK+B9xZZHDokUbv7w0Vzj/6SVUy+j2okwHe2UBnwZE/7Ymgf3Brag4nrvta24Kac/x6pzO0f1OOSv0xas5ZcOFL8yOvdexYUviiw=
+	t=1740835186; cv=none; b=Pw3G0Wa0F2fdDYUIGrzxT2GDW8j4LxItuumRrPCtdx61X7E6pbtmg76vVzO9V0jnjNkpR711GJ5LRJWPsJt9IPmScaWdaGQyiDP3rDw7csHM4avpNqBHaOYaZuL7y/0mCyXmgokW45428+vWxKtfpsAmo5qS4WUoaqqvou2r9No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740835127; c=relaxed/simple;
-	bh=lyJ2V25Qg+A5GIPSVs2EsZT71onWrcPKfIl7hdeTGQo=;
+	s=arc-20240116; t=1740835186; c=relaxed/simple;
+	bh=q3Pps1JqWekoYzJLc3BnskzmORQHX3a6nTesaP3DU9U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DNHt0XnYoF0DhPdoB2QXq/3FWhPZEIev5CY+UHmsOZdeyp8K5i3pyips1GCoqFxgxN4+xoWSK+tQsWdhS5eWeU4+RFUl6Ro8w/BdnBnL7gGByaJY1XWITRmipuNWSGnk8rfXU3ugmuBwJTLorCmVQIwfTeMeWsQfYJGQGuBUPFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fkgx4kJW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7385C4CEDD;
-	Sat,  1 Mar 2025 13:18:40 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=gOVzZMTwSj4dqff6FIzYDGm+cPKD32UpOJfnz8VMzyrKdSMILmoA5gEF2lzEfHIIGiMD6s4OpaNoXO35dqyYYb5CCUivhr/hBtuQYsDJ3j7b9iiP1t40b1etIn5jNHF94UsNLKq1ZdnJonYVfe/cmfSN2UuCABL5ByZ/WkjF6x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qMHrvaEO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A3D9C4CEDD;
+	Sat,  1 Mar 2025 13:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740835127;
-	bh=lyJ2V25Qg+A5GIPSVs2EsZT71onWrcPKfIl7hdeTGQo=;
+	s=k20201202; t=1740835186;
+	bh=q3Pps1JqWekoYzJLc3BnskzmORQHX3a6nTesaP3DU9U=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Fkgx4kJWGmo4PgVzF6bPTiyzw0rLC3l0oDCJZ9UxXQn5JWUDuSeMxWLiaeBJii/EN
-	 moj82CzBXQPAC9rmdupdwDyviVo7qP0ZuR/GKqaWp/5xNdYrhoGx4+2dNNas3nEqLG
-	 hA5Y1AJuoi3DCOphDpKA7lh6BT/pLQis1mpOdIiyfQGhdKvhW240imTuw59feUUu3y
-	 dw7XX0BYEHCxcbsVWruk81eQUk6bDzvbCouO3aXIMEuXpUZX8zy4FOtsHyvcRtjzOg
-	 xo1qxrJNIImqxnDUuw/Fq3+XBNJWMQDX4kuCTVY3pDgW7LGiGdGsDv1q+CdAuVz9Wl
-	 5HI8J348J21cg==
-Message-ID: <87877293-a6e2-4c36-8932-9e6357a0385b@kernel.org>
-Date: Sat, 1 Mar 2025 14:18:37 +0100
+	b=qMHrvaEOxGfim3FVWrzhplnji6ptU9tvEyKdSc0GHzniu3W7HjJPCCuMOw9GJZcJm
+	 krf4bpsCsmkPoEmYgaQwfBnVjrejc1/ANuppIjItG/cUVErfLHhRYtsu6PPv2hIxnP
+	 lmk7bcI57rCeOs59JSNIZkksLBFOl8upjm3A54ZV8lx+bhGJcLLDjkHHWUcLKL9YqF
+	 CUutk8/UwCB0DsiPU6uDlC/aD9mijEbjlUW6cJ7yaxToXuN20rgDeRntguClGVPXPG
+	 dkaCdwX79bp6f4xZAsUQjXjM1wVk/g2Sw7XQSK0vnJk4SKixKXjXTGj4KWDy4T3lje
+	 ZWTgLV+4zt30w==
+Message-ID: <d11ddca7-2569-431e-b34c-74739832f7f4@kernel.org>
+Date: Sat, 1 Mar 2025 14:19:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 17/18] rtc: max77686: use dev_err_probe() where
+Subject: Re: [PATCH 18/18] rtc: s5m: convert to dev_err_probe() where
  appropriate
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Chanwoo Choi <cw00.choi@samsung.com>,
@@ -67,7 +67,7 @@ Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-aspeed@lists.ozlabs.org, linux-amlogic@lists.infradead.org
 References: <20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org>
- <20250228-rtc-cleanups-v1-17-b44cec078481@linaro.org>
+ <20250228-rtc-cleanups-v1-18-b44cec078481@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,7 +113,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250228-rtc-cleanups-v1-17-b44cec078481@linaro.org>
+In-Reply-To: <20250228-rtc-cleanups-v1-18-b44cec078481@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -123,8 +123,8 @@ On 28/02/2025 15:07, André Draszik wrote:
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 > ---
->  drivers/rtc/rtc-max77686.c | 29 ++++++++++++-----------------
->  1 file changed, 12 insertions(+), 17 deletions(-)
+>  drivers/rtc/rtc-s5m.c | 50 +++++++++++++++++++++------------------------
+
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
