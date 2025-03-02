@@ -1,166 +1,273 @@
-Return-Path: <linux-rtc+bounces-3354-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3355-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B03EA4ADD3
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 21:37:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49AC4A4B487
+	for <lists+linux-rtc@lfdr.de>; Sun,  2 Mar 2025 20:52:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 634B37A3157
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Mar 2025 20:36:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AB9C188EA4E
+	for <lists+linux-rtc@lfdr.de>; Sun,  2 Mar 2025 19:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73071E5B97;
-	Sat,  1 Mar 2025 20:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4841EB9ED;
+	Sun,  2 Mar 2025 19:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="j0W8ax/u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gyNXI1CP"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EE1182D7;
-	Sat,  1 Mar 2025 20:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68F08821;
+	Sun,  2 Mar 2025 19:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740861434; cv=none; b=MRRC/JLqTWAxj9SJDDmv1VaQFHov0QWhPe+Yg9kv1dKSL4DAb+Kk7lGBjZwEeiPG77lmXoQsgST01EwqEEEaKq8VPICLPUHbVtIhlinjtM2yV4vvMn4NWbQA0yrjHBtLmWsNzKQ6g5mt0HZglAyYT7S/KJJQQN/FB1/h3zpmCv0=
+	t=1740945143; cv=none; b=E8IkmnibiRG/DlnqvuCowTTwqd3W1cnoj61P/hbIBVUjFDvFx3pOP/QZGFiqBvzEcApQzt0QXIngdjpwOwSzJZFfVzTuXF2XuIb7HdVnfbn7qFOgZAQGyZP/Ef5QrHaI+K7df95Od7ytwmJhoemTgTn+KhT7f59Vx+DCCnBbGAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740861434; c=relaxed/simple;
-	bh=bS075K6RDLoIA2kHkCsy0JdsUrdTU7jF2LvyzphOjsA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s7u0ZDJOAvo3IE1FnSrzxq3Oy6DR2t/ZL2iALZxqIFwcu30JlsFDKZNRu6teK8OOK+PhslePKP4vlTmdU8FKPJoSSckmz6QHb8XUXt8dkRs7zASbK5ROaKaOIu6wH0k5wz8A+FUDpE2JHHvI+8akNTYPgnfVvDzLJ46waFy2Ips=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=j0W8ax/u; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C9EDE20453;
-	Sat,  1 Mar 2025 20:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740861424;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3Acc0tGYBakmOPZLGuJmU2rnhFl+Tc281npjtzbe/74=;
-	b=j0W8ax/uRquO/giWNgJhf4H4p4dxfIxzFW6MO4OZsXaQhJo+e7YlrfmfwuwO8z8CykjSQD
-	0U7Afy7/Ba2WJ6ueUqpasO3bhRsmWK8p1CSKWQJLxASlHZTVaGb200Xak05pxb0hXPgbBk
-	sT9SJIRG4qLHlanaDO5mFlJjeg4NV4xNVcAt6A5IcLajDdg4v3tw1PgIh8R9k5YlEQBuhG
-	dfXSaVruN9RLuzUSlpcs4F7JA1n4iAXoEgtPn0uxly/CwiwCzgGYpZ/+vFDZKpgSjsOMi0
-	+ATKulcM1AzPZZmNwSQMXP1nZ5IL536rUVUy1TzC5EytwvQM/AGNSzQr14PTEA==
-Date: Sat, 1 Mar 2025 21:36:58 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	=?iso-8859-1?Q?T=F3th_J=E1nos?= <gomba007@gmail.com>,
-	Dianlong Li <long17.cool@163.com>, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH 00/18] a few rtc driver cleanups
-Message-ID: <20250301203658839d5482@mail.local>
-References: <20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org>
+	s=arc-20240116; t=1740945143; c=relaxed/simple;
+	bh=SUMryhbX0X9cF0USX1ziBqd4yeFj5ZOMJW6fQP26vYg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QyzTnHmw2BVtc8OMRV8/GuCRu9NWKANh9JcGUDyAvMS4cc8DtJMFBqwGMLufngcapFlcnp+b1fqXdLn/xGYyNn2AoQ8nl5Y2Lpv/tVSgiPzt41ESK4d3DoBmqsLJhqw7epugqgxX/HKsGGM3l6Lb3KWtbCp09x0QBZDLGsKklRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gyNXI1CP; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5e4c0c12bccso6642413a12.1;
+        Sun, 02 Mar 2025 11:52:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740945140; x=1741549940; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fYP8t9F2eM7G3LZt0fHBklDkCmd8trcuPA/HoTpu2pc=;
+        b=gyNXI1CPCV9gqvH7TD2w3qPxIq3lg0jRJnsy1WzBIAbfXKHu0SUG4e8BBBoAiKyTYE
+         jFsjdnY62dvXO/tpiZhK7PDnBMlv54axCqRAlldYMSkNqwsD3dQkkHGtcfF0zPMDMVq0
+         6B2PttnLm6NPiiq+vBtv69JYK1eLad7G+98IpIxq9VUbhKSfoZZdWknzrAl9OBAvacBu
+         3E/akTcenV5T8MizkXi+h6tW3/TJnEUcUO0uf/20TMw1zsO9Tq9ldWwGgWY1Lwu0ytsy
+         5fzO2HwDnj71/aFjY7VqNPbNIKHnBCHA2FIrzBFZsnkahyTA+pjdV7JY6EQmrw62atO0
+         FEbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740945140; x=1741549940;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fYP8t9F2eM7G3LZt0fHBklDkCmd8trcuPA/HoTpu2pc=;
+        b=vb29tCXuY8JcZD+vMwiwKXmeDAHoLeyxG/wkZhX3xWR7SLHaJZ+O6ICdW/YZ/zGdZX
+         LpkkgG3FS1R+Kcj2i5MNSiaTLwTZf1AoRvmHMZn3WcGq0rMjap5GbzQrXcSAAvGgekm/
+         HtrE4eFjz6WmG7FNYQS9qF8qu5ixI888cEDQTFoG41qv32w7iFx1t/0134JM3swjDuBi
+         l9c+c7YQTrQFRZAb8s4QmWBdQy3tMjguWq6V8Smcnrv1TPNJgxJzG/dBFSeDX8EUOa98
+         BauJy7a2+B76pKLcWDrG9lshVmxa24Nsan+Pp6R3mDwrjI9KlKJYmwl4ATrEtrXIt6S6
+         0N4g==
+X-Forwarded-Encrypted: i=1; AJvYcCVCSXoUKKERu7lbuI/N6lj4HVT2zuFO0HVRdJHr/t2sbnbDvlMKZ077kHlZcEbj19kr7P/Edbtrc/icwcQ=@vger.kernel.org, AJvYcCWGxiUX8xWF558h6tTkayEmuv2yUZuMA8VnBpYmMVLBSL5b69CiAtZikLWVPNHAEPmj/sTlnfIiHPHA@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGtN3CwwPFlNLu/j4kDg+OioUowIaddmZXpPke8q25KGWMda6v
+	rgIpxZ1xrTXEyQTzPsCngEcqUrZxWGlN54wMxzo9LySjRpqHduuE/dg3hypn
+X-Gm-Gg: ASbGncsuWduSjpm51qWgFAxuPPPpIMsVZbhDsejosnwwG361zglL5icOlMaRPPSCfCR
+	RKhuGmKIq2a6oMQ1f65PwJIkS711I9DhewzPKAJPu2zQTdsGtyedKl7C+/ib9xJWltIJf2Wszko
+	p9zEaioaEA1TmBH9cgt0dJ9T8wA2q1AnMl8AdbwmDarXXYF8L8fLPm7sZb0+iRBmHuZDrLGTcj3
+	XnQr451vzG4v3QTspZlIqN2MJbQhaLAeIGmgBTTb7A2JOJcWfCmtqt3TGZn2sXSc0Hoo2XFXHWk
+	E4PtxC6jUTZh9LIy8mKLSFSGAe/Bsj96hixvmF3qtq0qmXEOvnjnTlV6pA==
+X-Google-Smtp-Source: AGHT+IHxK+9x3N2RoBOpHXrRdxjUeE8wFstYk1+WdPhSYJmBzIWPQk2M+kfSD+vWEG2gL6GzseXg5w==
+X-Received: by 2002:a05:6402:2113:b0:5de:dfd0:9d20 with SMTP id 4fb4d7f45d1cf-5e4d6b6ea41mr11133730a12.24.1740945139838;
+        Sun, 02 Mar 2025 11:52:19 -0800 (PST)
+Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c43a5acdsm5809705a12.77.2025.03.02.11.52.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Mar 2025 11:52:19 -0800 (PST)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-rtc@vger.kernel.org
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	dlan@gentoo.org,
+	linux-kernel@vger.kernel.org,
+	Jingbao Qiu <qiujingbao.dlmu@gmail.com>,
+	Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	sophgo@lists.linux.dev
+Subject: [PATCH v12 0/3] riscv: rtc: sophgo: add rtc support for CV1800
+Date: Sun,  2 Mar 2025 20:51:53 +0100
+Message-ID: <20250302195205.3183174-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelgedvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveduvefhvdehlefgieelfeetudeugfehgfeugfekleejueefueettdffueetiedvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeejjedrudehtddrvdegiedrvdduheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeejjedrudehtddrvdegiedrvdduhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudelpdhrtghpthhtoheprghnughrvgdrughrrghsiihikheslhhinhgrrhhordhorhhgpdhrtghpthhtoheptgiftddtrdgthhhoihesshgrmhhsuhhnghdrtghomhdprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhovghlsehjmhhsrdhiugdrrghupdhrtghpthhtoheprghnu
- ghrvgifsegtohguvggtohhnshhtrhhutghtrdgtohhmrdgruhdprhgtphhtthhopehulhhlihdrkhhrohhllhesghhoohhglhgvmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhushdrfigrlhhlvghijheslhhinhgrrhhordhorhhgpdhrtghpthhtohepnhgvihhlrdgrrhhmshhtrhhonhhgsehlihhnrghrohdrohhrgh
-X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 28/02/2025 14:07:13+0000, André Draszik wrote:
-> Hi,
-> 
-> While looking at RTC, I noticed that various drivers are keeping
-> pointers to data that they're not using themselves throughout their
-> lifetime.
-> 
-> So I took the liberty to drop these pointers and this series is the
-> result.
-> 
-> The last two patches also convert two drivers to using dev_err_probe(),
-> as I looked slightly closer into those two. They don't exactly fit the
-> general subject of removal of unneeded pointers, but I wanted to share
-> them anyway, since they're ready.
-> 
-> All of this was compile-tested only.
-> 
-> Cheers,
-> Andre'
-> 
-> Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> ---
-> André Draszik (18):
->       rtc: max77686: drop needless struct max77686_rtc_info::rtc member
->       rtc: s5m: drop needless struct s5m_rtc_info::i2c member
->       rtc: aspeed: drop needless struct aspeed_rtc::rtc_dev member
->       rtc: ds2404: drop needless struct ds2404::rtc member
->       rtc: ep93xx: drop needless struct ep93xx_rtc::rtc member
->       rtc: ftrtc010: drop needless struct ftrtc010_rtc::rtc_dev member
->       rtc: m48t86: drop needless struct m48t86_rtc_info::rtc member
->       rtc: meson: drop needless struct meson_rtc::rtc member
->       rtc: meson-vrtc: drop needless struct meson_vrtc_data::rtc member
->       rtc: pl030: drop needless struct pl030_rtc::rtc member
->       rtc: rx8581: drop needless struct rx8581::rtc member
->       rtc: s35390a: drop needless struct s35390a::rtc member
->       rtc: sd2405al: drop needless struct sd2405al::rtc member
->       rtc: sd3078: drop needless struct sd3078::rtc member
+Real Time Clock (RTC) is an independently powered module within the chip,
+which includes a 32KHz oscillator and a Power On Reset/POR submodule. It
+can be used for time display and timed alarm generation.
 
-My main concern with this is that as soon as we introduce irq support,
-we are going to need the rtc pointer back in the struct. But I guess
-that most of them are old enough to say that nobody is interested in irq
-support.
+This series aims to provide complete DT bindings, but the drivers are only
+focusing on RTC implementation. Possible Power Management and remoteproc
+can be implemented later (hence the RTC driver is using syscon, because
+MMIO space is really interleaved among different functions).
 
->       rtc: rx8581: drop needless struct rx8581
->       rtc: sd3078: drop needless struct sd3078
+Series is tested on Milk-V Duo Module 01 EVB (SG2000 SoC).
 
-I guess you could squash those two with the previous ones touching the
-respective drivers because you are the one removing the last remaining
-struct member.
+Changes since v11:
+- dropped restart handling (will be implemented in PSCI)
+- split RTC driver into MFD stub and a platform RTC driver
+- dropped Reviewed-by: Krzysztof Kozlowski from bindings, they've got a
+  rework
+- changed bindings maintainer from Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+  to sophgo@lists.linux.dev
+- added link to TRM into bindings description
+- bindings: mentioned 8051 core in the description
+- bindings are now MFD, not RTC
+- bindings: added "syscon" compatible
+- bindings: added "interrupt-names", "clock-names" (because of added
+  PM/remoteproc)
+- bindings: main compatible "sophgo,cv1800-rtc" -> "sophgo,cv1800b-rtc"
+- new patch "mfd: sophgo: cv1800: rtcsys: New driver (handling RTC only)"
+- added both MFD and RTC drivers into MAINTAINERS file (N: K: entries
+  didn't apply)
+- RTC: depends on cv1800-rtcsys MFD driver
+- RTC: use syscon for regmap
+- RTC: get named clock from parent MFD
+Changes since v10:
+- only start RTC on set_time;
+Changes since v9:
+- further simplified bitmask macros;
+- unconditional RTC start (rtc_enable_sec_counter()), otherwise
+didn't start on SG2000;
+- dropped ANA_CALIB modification (has been forgotten in v8 with
+the drop of SW calibration to switch to HW calibration);
+- successfully tested on SG2000;
 
->       rtc: max77686: use dev_err_probe() where appropriate
->       rtc: s5m: convert to dev_err_probe() where appropriate
-> 
->  drivers/rtc/rtc-aspeed.c     | 16 ++++-----
->  drivers/rtc/rtc-ds2404.c     | 14 ++++----
->  drivers/rtc/rtc-ep93xx.c     | 16 ++++-----
->  drivers/rtc/rtc-ftrtc010.c   | 17 +++++----
->  drivers/rtc/rtc-m48t86.c     | 14 ++++----
->  drivers/rtc/rtc-max77686.c   | 37 +++++++++----------
->  drivers/rtc/rtc-meson-vrtc.c | 12 +++----
->  drivers/rtc/rtc-meson.c      | 16 ++++-----
->  drivers/rtc/rtc-pl030.c      | 14 ++++----
->  drivers/rtc/rtc-rx8581.c     | 85 +++++++++++++++++++-------------------------
->  drivers/rtc/rtc-s35390a.c    | 22 ++++++------
->  drivers/rtc/rtc-s5m.c        | 58 +++++++++++++-----------------
->  drivers/rtc/rtc-sd2405al.c   | 16 ++++-----
->  drivers/rtc/rtc-sd3078.c     | 71 +++++++++++++++---------------------
->  14 files changed, 183 insertions(+), 225 deletions(-)
-> ---
-> base-commit: 0226d0ce98a477937ed295fb7df4cc30b46fc304
-> change-id: 20250228-rtc-cleanups-12c0b5123ea4
-> 
-> Best regards,
-> -- 
-> André Draszik <andre.draszik@linaro.org>
-> 
+Changes since v10:
+- only start RTC on set_time;
+- add machine restart handler (as separate patch 3/3);
+
+Changes since v9:
+- picked up orphaned series;
+- further simplified bitmask macros;
+- unconditional RTC start (rtc_enable_sec_counter());
+- dropped ANA_CALIB modification;
+- successfully tested on SG2000;
+
+v9: https://lore.kernel.org/linux-riscv/20240428060848.706573-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v8:
+- delete unused macros
+- using 0/1 instead of the DISABLE/ENABLE macro
+- pass in the correct pointer when applying for IRQ
+- convert the incoming pointer into an appropriate
+  structure pointer in the irq handler
+
+v8: https://lore.kernel.org/all/20240204044143.415915-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v7:
+- pass checkpatch.pl --strict
+- using u32 replace uint32
+- using devm_kzalloc(*) replace
+  devm_kzalloc(sizeof())
+- sort header files alphabetically
+- delete unnecessary header files
+- fix wrap error
+- drop dependent description
+- using hardware automatic calibration replace
+  software calibration. see documentation 197 page
+
+v7: https://lore.kernel.org/all/20240122080500.2621-1-qiujingbao.dlmu@gmail.com/
+documentation: https://github.com/milkv-duo/duo-files/blob/main/duo/datasheet/CV1800B-CV1801B-Preliminary-Datasheet-full-en.pdf
+
+Changes since v6:
+- completely delete POR dt node
+- remove syscon tag
+- use devm_regmap_init_mmio() replace
+  syscon_node_to_regmap
+
+v6: https://lore.kernel.org/all/20240115160600.5444-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v5:
+- remove unnecessary lock
+- fix cv1800_rtc_alarm_irq_enable()
+- remove duplicate checks
+- using alrm->enabled instead of unconditionally
+  enabling
+- remove disable alarms on probe
+- using rtc_update_irq() replace mess of alarm
+- remove leak clk
+- useing devm_rtc_allocate_device() and
+  devm_rtc_register_device() instead old way
+- add judgment for rtc_enable_sec_counter()
+- add POR nodes in DTS. This POR device shares
+  the register region with the RTC device
+
+v5: https://lore.kernel.org/all/20240108072253.30183-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v4:
+- remove POR dt-bindings because it empty
+- remove MFD dt-bindings because SoC does
+  not have MFDs
+- add syscon attribute to share registers
+  with POR
+
+v4: https://lore.kernel.org/all/20231229090643.116575-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v3:
+- temporarily not submitting RTC driver code
+  waiting for communication with IC designer
+- add MFD dt-bindings
+- add POR dt-bindings
+
+v3: https://lore.kernel.org/all/20231226100431.331616-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v2:
+- add mfd support for CV1800
+- add rtc to mfd
+- using regmap replace iomap
+- merge register address in dts
+
+v2: https://lore.kernel.org/lkml/20231217110952.78784-1-qiujingbao.dlmu@gmail.com/
+
+Changes since v1
+- fix duplicate names in subject
+- using RTC replace RTC controller
+- improve the properties of dt-bindings
+- using `unevaluatedProperties` replace `additionalProperties`
+- dt-bindings passed the test
+- using `devm_platform_ioremap_resource()` replace
+  `platform_get_resource()` and `devm_ioremap_resource()`
+- fix random order of the code
+- fix wrong wrapping of the `devm_request_irq()` and map the flag with dts
+- using devm_clk_get_enabled replace `devm_clk_get()` and
+  `clk_prepare_enable()`
+- fix return style
+- add rtc clock calibration function
+- use spinlock when write register on read/set time
+
+v1: https://lore.kernel.org/lkml/20231121094642.2973795-1-qiujingbao.dlmu@gmail.com/
+
+Alexander Sverdlin (1):
+  mfd: sophgo: cv1800: rtcsys: New driver (handling RTC only)
+
+Jingbao Qiu (2):
+  dt-bindings: mfd: sophgo: add RTC support for Sophgo CV1800 series SoC
+  rtc: sophgo: add rtc support for Sophgo CV1800 SoC
+
+ .../bindings/mfd/sophgo,cv1800b-rtc.yaml      |  86 +++++++
+ MAINTAINERS                                   |   2 +
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/cv1800-rtcsys.c                   |  66 ++++++
+ drivers/rtc/Kconfig                           |  12 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-cv1800.c                      | 218 ++++++++++++++++++
+ 8 files changed, 400 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/sophgo,cv1800b-rtc.yaml
+ create mode 100644 drivers/mfd/cv1800-rtcsys.c
+ create mode 100644 drivers/rtc/rtc-cv1800.c
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.48.1
+
 
