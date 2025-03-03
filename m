@@ -1,128 +1,126 @@
-Return-Path: <linux-rtc+bounces-3382-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3384-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29504A4E24C
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 16:06:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC694A4E2A2
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 16:15:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 049A4882A68
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 14:50:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9541C189C10B
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 15:08:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DABD25D528;
-	Tue,  4 Mar 2025 14:49:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2EA527E1B1;
+	Tue,  4 Mar 2025 15:02:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Lhp5eRfD"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Ev0Dv9xg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
+Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235F0253F27
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 14:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35117204F6E
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 15:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741099744; cv=pass; b=jsOs5i1FqMDlD9OcsKuHOPS3TCCnHtkUVUy4bQURIrUp5nhIX5O3VNSe6hc9H7b2oE2+Vn6WM2aQPP9bq2YRo7nTZEuQ+wQ5NL9iqYR6FsTh+KgueRGAnveLcZlOJ+UX3GfHeARi78wuaDbNIqRSBJTjkW5XzGJFX4NwiCAuMlc=
+	t=1741100561; cv=pass; b=C26nJvhjewKcOomsAmdnvFi7jDbaV9Mdxufeb0lDYz+L9ve0dRevoLDiifWWh3PXUgVfQPRV+0wwt6lZ+dTlke5aJkNFy6SZ5OXYYSM4gTH3Z4kGvUUpifpHWeUJdBJoEFBvB1f1gOp+bJuEDmbrrv3gvAJg9VSqZR26n1jyOVY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741099744; c=relaxed/simple;
-	bh=lJXPyymC+Bn7eNg7QGwNenIBMEiR5kuGsl3f2E+vwL0=;
+	s=arc-20240116; t=1741100561; c=relaxed/simple;
+	bh=Str9/Z4T7boxdmYNKfUCQAYMERdj9MmqoKnoOftbpzQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BhYCWhkA7oq4EHfHFeKK9ue8kPZpYEkRsfCVXZ+RBo28b8PX5tNXiCTod2z3DXKT3hdsE9Xs8u5pmhV79MJKdcVUFgyCpVmLbaroV9dKWcZKzm2ghUvcYhQ3A58MgF4V2eVh3Jzxf27jZkTgYBCn8ekSabh7wa3ESMiXTdNMgwU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Lhp5eRfD; arc=none smtp.client-ip=209.85.218.50; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; arc=pass smtp.client-ip=160.75.25.116
+	 In-Reply-To:Content-Type; b=NiHS/c6HGrN7G9MuHifUfut78C/K6oV1zzFWfQwgEuhSfuNCOjURpHHerpC5rQ5RHexNOqJJ+CTT3g8hazTB2MAloZkSx61JQc/YH0D4krmg3PMtN7zPl1e92wsGi8kmfcNxvPEEXu/MIaDhXk8DO9JmNXJ5F8Mv75qQlfTZH6U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Ev0Dv9xg; arc=none smtp.client-ip=209.85.208.42; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; arc=pass smtp.client-ip=160.75.25.117
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 571CC40D91AE
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:49:00 +0300 (+03)
+	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 81BC340CFBB5
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 18:02:38 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=tuxon.dev header.i=@tuxon.dev header.a=rsa-sha256 header.s=google header.b=Lhp5eRfD
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dmS1LWWzFxdp
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:46:32 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6f522bw2zFy8b
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 18:00:54 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id BF7A84275B; Tue,  4 Mar 2025 17:46:23 +0300 (+03)
+	id D4F684272A; Tue,  4 Mar 2025 18:00:48 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Lhp5eRfD
-X-Envelope-From: <linux-kernel+bounces-541152-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Ev0Dv9xg
+X-Envelope-From: <linux-kernel+bounces-541157-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Lhp5eRfD
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Ev0Dv9xg
 Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 31B8E41E7E
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:41:51 +0300 (+03)
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id 8A9463063EFC
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:27:59 +0300 (+03)
+	by le2 (Postfix) with ESMTP id 487EA42322
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:29:36 +0300 (+03)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id 25DC43064C16
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:29:36 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB561170538
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:27:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E031F1892C33
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C418E1EFF82;
-	Mon,  3 Mar 2025 08:26:58 +0000 (UTC)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7E71EFF8D;
+	Mon,  3 Mar 2025 08:28:48 +0000 (UTC)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF351EF080
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 08:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E072F1EF0AB
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 08:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740990416; cv=none; b=Loi89mZW+QwI5tuuXMaymVOUQUI003TD7SC8NqJabTxEOVHUG5ISvka62ZXKbbKdMyHL/VVzAwJoFhNvykOk7gni40Kl5SRuHu6lYGwsqBUuwy2gmDF5dtBQMb/rXc9sHjWeOTBs9P/cSIiRAH/VbAvYhBdVHnmXS3fKXpy6Nrg=
+	t=1740990525; cv=none; b=h2yucTcDoMzjoUGXChJe20MjkpB6+quwHqOb7sRzqEslg6tYQOPB0lLpDkutmRMuP5s2r+fOXmqGRE1Lrv1/iwNdUZMFl3zW0wMNtYksjxYuwKY6X3k3GKsXZKMw9AS4YY9OJ+caQGBGooLRM14n4Jo+oESRVgKOGxI2iXCvzEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740990416; c=relaxed/simple;
-	bh=lJXPyymC+Bn7eNg7QGwNenIBMEiR5kuGsl3f2E+vwL0=;
+	s=arc-20240116; t=1740990525; c=relaxed/simple;
+	bh=Str9/Z4T7boxdmYNKfUCQAYMERdj9MmqoKnoOftbpzQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=plrUPafLcqoGPWCE9PlCaAgfUR8xLrBZjXVaizpV2fABwpoJwxYJHvPH+aQnDBU8f9ALFsFrCa81ae+5StX2r0GsuGXczeR97jYgQ5JT2URtdO2YRS6TxETcluLQ3a8WIzyFuiEW7wuGKBG9O54hojruBsAiW/RvOqRns6CLNzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Lhp5eRfD; arc=none smtp.client-ip=209.85.218.50
+	 In-Reply-To:Content-Type; b=CkCbEnaJRF2pcz7bf/lu2Rb0Aah7wsjSHQt/MkjiydOAOscv3av/AWqz+gnzAzQDEzx9hEEeEJdGXTfsVNFuo9l7CmwyPXOr5vYPtzVF7Nlk15AoP6zy48yz/umRGg30YMX02mV6NIZmShvy3Tz8qlpqa8p6d/LWMMwBo9g1km4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Ev0Dv9xg; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aaedd529ba1so480810866b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 00:26:53 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e53b3fa7daso1571059a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 00:28:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1740990412; x=1741595212; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1740990521; x=1741595321; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BD0ged1tbWk7V8+0mBgsPRbGV+NS/Ji1P1tciZQV6bE=;
-        b=Lhp5eRfDH8wGcAYGfwM89OO+e8ZKEvJ8G30YTmuWKwp3UwHrBWUElxio4311xTFaJZ
-         dfibFmO7LQnho+Rwu8SoiCWi3y0BcDd8CQwttwW4XbP1kRxVEeFw7VkauJymrzUupTY2
-         ayMGbkBrgQL/puxu8MZne/R5KP6Dj3CuMceUAXWke2RtcXJMDl64/OBDylZpKTZNK1kG
-         IXaKee8r5vtGMxUEICWpLi6VGe6FaJbuSVnCDrjpxKlzJqx1skg27aC0NvK1Rwplz8jl
-         OkPgh4AkdndEYYAwrB0H4j2k2TFAS63K0KqhSygfYsVH5yAG8bMDPDMo2r1aoZRtWDji
-         2+Hg==
+        bh=GH41p+03OT08ssRRmEqg+Cy0Qf0zi6uiF2rijzbkmOc=;
+        b=Ev0Dv9xgqBw7wW32FiSRZEU4FnONDvAlKj2KFKPd0crVicIZbCB6JN3ZMVexMZX9cJ
+         ULTqrQXBVSyv8FtYXsbFlL2B4Rqdbjdx+JE1/5D0/ZkEkMJdpBaTyRrp4zG/aHCazaVc
+         4J/2QPge4kYNQUbyql8ewpJwvHe//wvgdBPuABXFAuAgVSr5yspF+kvXLb3LosRi3Z7p
+         gpTjcrBCXHwQKQX3lrVeubWvfR8bXrc18GhaDOUcHKRFL8QYDCcKAhdYDZSMI1pjvXRS
+         ON8pFYCEuw+LuKH7zuGde2Uu248vEs5xEobLxXHX97l5qS+C1fpuwIUNt9mJyzMqPnd2
+         ECFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740990412; x=1741595212;
+        d=1e100.net; s=20230601; t=1740990521; x=1741595321;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BD0ged1tbWk7V8+0mBgsPRbGV+NS/Ji1P1tciZQV6bE=;
-        b=kVNraAHHl/7jSdtvPxt2NIOYqbFWtKA9LmwmPdzKqW1X9C0Z8nPiiftG0Kx1rJzerD
-         Yq8rzsQ33Hh4DYhPm0exIXw3lk+8P/5MT35ydQOyhRXW9UStNYNTJTCcagVwI0Cs2P1V
-         i3qtGanadpMXjJ7dmVV2sWl51SB1gs7JQGJVRSfyd9COZqbe0+HQIUVZs45KoPUBNw9c
-         9ZwsL75jQdRhbcL3Y9MrNixMTLRjqUfqFrfYLzL1wnDEICHv1llJRXP7Fdw/BQ/poVGO
-         lpLmzRyVCxhcixVMdmC6Ur21697fNmilWNy0Y1n37ZBBJxjBSdeJhbZBX6h55UZpBeAN
-         09bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYvbFVwuk+ITtM61QMdXfA3waFhrVgzn9XNkJXEm+bAkn4AiefUhV5+P6pBSHvWbkOtDak3SmSCzvgjks=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6iZEg/TS2Nl+3hyIa240ucxTR8SypbItv4XLFHdwJ5BAvEQ7B
-	FBn1DjDni0oTIFPdHdva6PHSfJQsRbK8rlJqsKWa8PRBSfrB2xE99A5iZiQKJTk=
-X-Gm-Gg: ASbGncuqqJDDHODaZtfItej0RcGm6iYsAq27dUGQsLYj4PMn3PIghiqJiUBhY5XIlyF
-	W5Z6c6ioR1e2x2ctMt6ai5ws931v+hIvjxKWHK6PLiu+hEVLdNVKp8vamu1ZCXcoA8xMXrSA4gL
-	5qszZmw7SOPCiamcJnHOR96hDj5pAeUT5eAEp4PjVWtCRq6IOfwo/z5JDLC4RGnGSzhhpnKpYJP
-	tDyJglYev+XTkrRp46+feWdzBSRmg+bHkQLM0TobxcdZqoDoVfG7JusIY5rBnGKIbdS9YLKM+fG
-	QZs85HK047qPHnDLF5FVa+n9472b3tpfq/7Bqth22w2bV5SZgirLKw==
-X-Google-Smtp-Source: AGHT+IFB0ef71YNR9dJGXCO7UqAzxgYbd67xW8P9JXXgL21idOk1dW4h3KG6K2wPSXyAzJ2F6c4cew==
-X-Received: by 2002:a05:6402:2692:b0:5d0:bf5e:eb8 with SMTP id 4fb4d7f45d1cf-5e4d6b4baabmr28693051a12.23.1740990412164;
-        Mon, 03 Mar 2025 00:26:52 -0800 (PST)
+        bh=GH41p+03OT08ssRRmEqg+Cy0Qf0zi6uiF2rijzbkmOc=;
+        b=M7Lm0+oFRfMa2JBq6soRCbiZ/veWfNjVZ2U8SEDsvUtl1TbmATFVSsvnqye50BHY96
+         Lm/KvwnCbDZ2n13e8B5DWBs0nkDtzorXgDYUjH82mV3G3zLhoDbM6KqODGLz4R1VEhUs
+         dwWKkurtayuFzwMbLye1a9UKd8+pHQeDNXRsqNeEJx6mBJo2VEYv9t4skgOTmEIb2nj8
+         9W2SX4WbepEGP41CUYSIsiLJWFjyTBXq7O7FoMCmMLW3/jly7wsz0YcK5SbRqX9YHC8K
+         wvSEfMHq//66oxyqa/GLHjWu2PAcc99y/spVJ9Im3eqIXFC0v/AKr4/wECl/CZte8EAf
+         mUSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX4JVsq6yyBMX92PwAZBI3Q0yqNHUz13FnhV7kAVn8MK0ZXG0qgPsyysvT3BeREbLjyjy7zXAyHMmdIewk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhH18cQUsKmwIfohxzp66LTvkio7TAfD2XHbNuxH4uHHFzrpjI
+	wNQoAWWXmvH+ehgTCP+bOFnpZiPAt8hIk9n0gvqeSkEVmUSQv+VhAfTbEYAJEYQ=
+X-Gm-Gg: ASbGncuKSRrkaPRDvPe7uyK7dzxIrXYexl/y3DPQOyE2nr9DKZobV+wlqzAA8ztxYef
+	RmGwEyngsSFoq4mJS301C8JwvlLMWnm+JLPfJ3y9iyq3f6YCBRPB8NMnPKDPyS+SMcQeVbtKn98
+	dwv4gz09Js9rTrIwRbVLOVVePqJ+Rbh7J9wV9/eWrIdcOSAkDis34R+Qz1trBom5MqeXHkWpj2z
+	VxuChK/bIxOmxURmmxdEhv52rUmeXb13IjAkdTl9ZT+Nm5qPCLVChlBSJYbd3q+l5EbOQAwDyc3
+	x9QZokVs83/OJLeBiXOm5Q/YN4IStXKUKbLr6QDsoafR1EBCnSdDhw==
+X-Google-Smtp-Source: AGHT+IFLKelVEVi00flzE2lHP3gHCMr7kj+GRjh+qndXBWCgYVC+cKiDJx3z7MTtqx+Mlq9hmZIcoQ==
+X-Received: by 2002:a05:6402:34c2:b0:5e0:8937:6ef2 with SMTP id 4fb4d7f45d1cf-5e4d6af1104mr11411025a12.8.1740990519662;
+        Mon, 03 Mar 2025 00:28:39 -0800 (PST)
 Received: from [192.168.50.4] ([82.78.167.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c6ee491sm776723966b.103.2025.03.03.00.26.50
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c3bb632esm6491336a12.36.2025.03.03.00.28.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 00:26:51 -0800 (PST)
-Message-ID: <f03946a8-24bc-4a1a-8d06-d5652a4db34f@tuxon.dev>
-Date: Mon, 3 Mar 2025 10:26:49 +0200
+        Mon, 03 Mar 2025 00:28:39 -0800 (PST)
+Message-ID: <3bdac1bc-b84f-43b0-86be-b9d9b18be25f@tuxon.dev>
+Date: Mon, 3 Mar 2025 10:28:36 +0200
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -131,7 +129,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/21] ARM: at91: Add PM support to sama7d65
+Subject: Re: [PATCH v3 14/21] ARM: dts: microchip: sama7d65: Add SRAM and DRAM
+ components support
 To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
  nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
@@ -140,47 +139,94 @@ Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
- <f4634d70f1e7002db059f2cc892fbbbfe1a95dac.1740671156.git.Ryan.Wanner@microchip.com>
+ <ab4002faa1b672023ffc97bf91755720508c275e.1740671156.git.Ryan.Wanner@microchip.com>
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Content-Language: en-US
-In-Reply-To: <f4634d70f1e7002db059f2cc892fbbbfe1a95dac.1740671156.git.Ryan.Wanner@microchip.com>
+In-Reply-To: <ab4002faa1b672023ffc97bf91755720508c275e.1740671156.git.Ryan.Wanner@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6dmS1LWWzFxdp
+X-ITU-Libra-ESVA-ID: 4Z6f522bw2zFy8b
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741704475.83798@LKxbXXtZ3SFVpSFZijd5hQ
+X-ITU-Libra-ESVA-Watermark: 1741705276.16602@nkasxLIhEqL4g/l/XL8IMw
 X-ITU-MailScanner-SpamCheck: not spam
 
 Hi, Ryan,
 
-On 27.02.2025 17:51, Ryan.Wanner@microchip.com wrote:
+On 27.02.2025 17:52, Ryan.Wanner@microchip.com wrote:
 > From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Add PM support to SAMA7D65 SoC.
+> Add SRAM, secumod, UDDRC, and DDR3phy to enable support for low power modes.
 > 
 > Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 > ---
->  arch/arm/mach-at91/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi | 35 +++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 > 
-> diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
-> index 04bd91c72521..f3ff1220c0fb 100644
-> --- a/arch/arm/mach-at91/Kconfig
-> +++ b/arch/arm/mach-at91/Kconfig
-> @@ -65,6 +65,7 @@ config SOC_SAMA7D65
->  	select HAVE_AT91_SAM9X60_PLL
->  	select HAVE_AT91_USB_CLK
->  	select HAVE_AT91_UTMI
-> +	select PM_OPP
+> diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> index 92a5347e35b5..c10cc3558efd 100644
+> --- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> @@ -47,12 +47,37 @@ slow_xtal: clock-slowxtal {
+>  		};
+>  	};
+>  
+> +	ns_sram: sram@100000 {
+> +		compatible = "mmio-sram";
+> +		reg = <0x100000 0x20000>;
+> +		ranges;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +	};
+> +
+>  	soc {
+>  		compatible = "simple-bus";
+>  		ranges;
+>  		#address-cells = <1>;
+>  		#size-cells = <1>;
+>  
+> +		securam: sram@e0000800 {
+> +			compatible = "microchip,sama7d65-securam", "atmel,sama5d2-securam", "mmio-sram";
+> +			reg = <0xe0000800 0x4000>;
+> +			ranges = <0 0xe0000800 0x4000>;
+> +			clocks = <&pmc PMC_TYPE_PERIPHERAL 17>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			no-memory-wc;
+> +		};
+> +
+> +		secumod: secumod@e0004000 {
+> +			compatible = "microchip,sama7d65-secumod", "atmel,sama5d2-secumod", "syscon";
 
-This is for OPP not PM support. For this series this should not be needed.
+microchip,sama7d65-secumod is undocumented. I'll postpone this until a
+documentation a patch will be posted.
 
-
->  	select SOC_SAMA7
->  	help
->  	  Select this if you are using one of Microchip's SAMA7D65 family SoC.
+> +			reg = <0xe0004000 0x4000>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +		};
+> +
+>  		pioa: pinctrl@e0014000 {
+>  			compatible = "microchip,sama7d65-pinctrl", "microchip,sama7g5-pinctrl";
+>  			reg = <0xe0014000 0x800>;
+> @@ -190,6 +215,16 @@ i2c10: i2c@600 {
+>  			};
+>  		};
+>  
+> +		uddrc: uddrc@e3800000 {
+> +			compatible = "microchip,sama7d65-uddrc", "microchip,sama7g5-uddrc";
+> +			reg = <0xe3800000 0x4000>;
+> +		};
+> +
+> +		ddr3phy: ddr3phy@e3804000 {
+> +			compatible = "microchip,sama7d65-ddr3phy", "microchip,sama7g5-ddr3phy";
+> +			reg = <0xe3804000 0x1000>;
+> +		};
+> +
+>  		gic: interrupt-controller@e8c11000 {
+>  			compatible = "arm,cortex-a7-gic";
+>  			reg = <0xe8c11000 0x1000>,
 
 
 
