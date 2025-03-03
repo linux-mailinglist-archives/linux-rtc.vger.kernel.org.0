@@ -1,412 +1,210 @@
-Return-Path: <linux-rtc+bounces-3358-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3359-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49D43A4B491
-	for <lists+linux-rtc@lfdr.de>; Sun,  2 Mar 2025 20:52:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D518A4B809
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Mar 2025 07:57:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47B3A7A5572
-	for <lists+linux-rtc@lfdr.de>; Sun,  2 Mar 2025 19:51:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1834B3A3817
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Mar 2025 06:57:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF6B1EE7BC;
-	Sun,  2 Mar 2025 19:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D153B1E7C28;
+	Mon,  3 Mar 2025 06:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MWeviYg7"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="BzzjY7tY"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2044.outbound.protection.outlook.com [40.107.241.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B431EDA29;
-	Sun,  2 Mar 2025 19:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740945147; cv=none; b=HDrcUnfW0txMJ46XegNRJJy2+Js4XNXFSDp1REooMepyLZsxRbgjWDYNotb/PjLUEM5SrBvTqXUKn5cv2b4bpoY3eq9CXKturiKEwf+F11fcozNOej8DW7M0DLHYW5ie1xvy9bqpmpKk3TY9v7es1MsQwFVZKGCnen7hS8oFItE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740945147; c=relaxed/simple;
-	bh=B80PE1Vm4MvBM3NpDwi1bHwpSg2maEdXzFPTVdHk5dQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UJrEz19QvVHDwL+EHxuzsD9Jqc7jWVy3IF3KgP4edjLiSq9FqJ2FTjeDnnguiBRFBokJkzo/ro/QXPxLe65P3qPIeMs5TO+LEE6MhtZhlU4WNhCa+oqFqWuYHQ6fIfZR6xlIBOiR7lWVWpbEInKoEWt/aVCsSbD0QB5FhEshswE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MWeviYg7; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abf57138cfaso221451366b.1;
-        Sun, 02 Mar 2025 11:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740945144; x=1741549944; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=geqIJH4ZbhDfifYmudp+lR9EwCjUFtE9Nbs9m0I7Hhw=;
-        b=MWeviYg7Lf0jDKVtwyucGbEYv7o8tItnFpF/qcK8KbT+5n276PC104ZwvCqhCHqqSp
-         S0e0PjICWzDh2dgvIB8n/LAUtTgo2oW0DB046tUAjcFXpMBy+7rKib0PipO1l6WsZKBn
-         l18gf3FwafpNBGjYnp/gqU2CWMJ6supADxq/Wbly0yjwwppk8T1aBB0COfu57Oj+EHe+
-         QE3O7ouoa64ww97oDFWEyPYRA4CQ5HO0VnNt7BxVKa270VWeqHu3eYRsMOj5GP+7mKKD
-         vXbefOOc5Iq7dZvhrZTdYnKINdEoM7upO2EwrVP6WyJmw/y7Wy74S/Ln27eukOhBiHqV
-         F63w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740945144; x=1741549944;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=geqIJH4ZbhDfifYmudp+lR9EwCjUFtE9Nbs9m0I7Hhw=;
-        b=CKPJ16lbHW/8JOG4fa9rF0P+yktYO9xZr/XyjWpqk7ts9D15o3mvbHlMwelzqL5d9y
-         Sh5Qp7Q1Bnyjed8eXyEXo9pfkvQ+g1yk1uYWcmu9HwnJkf3Q48mKQv/RXzhYrYUtNg6U
-         w63gfT3qXhDsS7Lfcd2WdRGBz/Dln8i0XcXFjDiLrky8O9hvsNb7SNtslW8N6etK1jeu
-         5d1jehvk4MooNCGymCdhrlfCjgSNsavBwcFwFGOqx2okm5FF5XpLFhTdoVZcISg3ketC
-         jQDAPjghI83cHzFNYVHEspbw5ftY/7ZCL5ZHfPqrH0BF2wZ1EHhNvbFBWbGoXhc0fn8Y
-         FPgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU0dbcWDd59YQu+R3c+ZR3oVrM0sDtyIZ8wtglvDnmj1n0mJinvcO1J6EfqLLxgWJTu7RbEAJtxjGGC@vger.kernel.org, AJvYcCXSowxxk4PLlytgAF/06zAqrHQkdu4sbJgVN7Db+pBcnB71vO25giAN5fRHRAIlyszkngS/WrNkBeM0NBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjkPOH5e748IWHMM1p8PoEmjZsI6EtTwBCAZqNRFqu0XnuiQlZ
-	nGIbv2e81YdDcTmABAKdUmSS5DXV6MLaAj3FlO8mVcRy5W8bP0Mpe1bjzsu3
-X-Gm-Gg: ASbGncto9s65718wIpkN20uZCBWPcjnJY0lhBqatad6tKhuhmjJW5/VWQeTeL/Fojwk
-	yETvs2pZEKXm0GCXiSET2SxNXF6HIryHi5vrXsGCsMSpZaQ+MbacmGCAjPG/wUZ2UoNaw4T0MTD
-	x1NtWptWUZanAu845NU6DPZ0MGwdS0TlfzOjJae+S246sDa8vt5z0VEwJRFhKOhzS0NHVCy2r1Y
-	MB2GcpCKJpaRrql7Z7cWW43BVmnN3xNeNLDnIjuAd2GMDXtOg1Hmbajas+Tk8odCuHVlKrq2Vmo
-	tcIEmz3LtzbmnRIWeO/ZbMSFIxrAtwa4oK3Ca8y/yXgHkBDtHd2lO8SVLg==
-X-Google-Smtp-Source: AGHT+IEVQi87WpvJPE+ITZKW4KN8LE8ET2pDw7bFNwsDi7FEYME4D4Cx72dGVTss6isDxSYXAcgHKA==
-X-Received: by 2002:a17:907:9620:b0:abe:f8c0:c1ab with SMTP id a640c23a62f3a-abf265d3be4mr1399615466b.46.1740945143564;
-        Sun, 02 Mar 2025 11:52:23 -0800 (PST)
-Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c43a5acdsm5809705a12.77.2025.03.02.11.52.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 11:52:23 -0800 (PST)
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-rtc@vger.kernel.org
-Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	dlan@gentoo.org,
-	linux-kernel@vger.kernel.org,
-	Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	sophgo@lists.linux.dev,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Subject: [PATCH v12 3/3] rtc: sophgo: add rtc support for Sophgo CV1800 SoC
-Date: Sun,  2 Mar 2025 20:51:56 +0100
-Message-ID: <20250302195205.3183174-4-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250302195205.3183174-1-alexander.sverdlin@gmail.com>
-References: <20250302195205.3183174-1-alexander.sverdlin@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE751E9B25;
+	Mon,  3 Mar 2025 06:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740984985; cv=fail; b=rdjCOnCgOrguQV7OTjyFOkjxjZQrmFfGYTUgRNfe6+VExnVHs34nPLj/Cxz9OqgUrnrjYAATEdsU3AT9zrXE3jSaYCwXf4sE6i0rkbcsKKZp+Lc1e78ogn4VLDy1eWIgVXMcxloID6drGMR9rf7zvdoBgg3KYcHX7dMdKo72uwo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740984985; c=relaxed/simple;
+	bh=GjKpRlO9ZruKCKaczDjDVedR4ziKQFQr76RdmTdZlD0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=aCf5Pz2OFPEPh8Vuisqe1a8O7R4TEsMtZzdIx+LQZx5g1nKulWGpC+v+9OqY0QpeZCnfwh5lw3WpEnXOdMkc5kRau/0BauX9gHfYNUTPqiNScCzQCxsQnWimGIhMJ1mL4orQGjR2lVsa4yAMzl5CaJYsVjP1D+uB7o+fGsXPX6s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=BzzjY7tY; arc=fail smtp.client-ip=40.107.241.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wQ96K5hyBRQItgvHGr4H+uYVBU+7CUKmH1n/NMvQ7yYigpIv08sFyZkQsRXJiYXtRYjDBH20I8FGxiQJSlPbZAVy7bEQss90LQG8MKjISHlX8uElLTBnU+cskBEmsChH0u9Zcs4cWpwIp7EbRtpMrPAl5C69744NjFBgdpwD464K6sFMuQMuq+fl6A1IHT5n9pYxQyVAvYEDRynMrP6MycSasYmnhSy8jGuoRhN6BY+m6S4KnPNjpbkrgLcPSj5xe4hxAiZX20vo4DcMXOWXkZRnZFM5zG+UcJGx2WfnVR9K/+CXx36cIX66K+JCYJ0gtoB5lg92OIxWn2Fjms+Gag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tr5f5w3AYFWB1KA92eYhq721F+bNiSc5a2LP9QrZU0c=;
+ b=id7e1UI2ForsQewATOxFb/KMqfRD0kehNHZEStgMc0rAPqugUf0vyJgo4Zegt3wPDTAkIUIhrH1PIJZw0DH5quhNjxBoijPcirBTEORtt2L8qIvnCcC8byx9VQ/6+JOuZ+ar54S3Se7aZqcPxBQzplSdsnjs2qkhQ/LBsjU/0WfSyuWR3HuYbglckzxs+uahXP0NqZF9HWenAAv97CZ0herataL7QjU2G4p/boXuvAAzQWsd24Hoq2eoPlnNpZh32oIak+DLlTuMa+RJ1IYkrL2g518B87mRci9EUbMETPv7Vn9fuy7ldem0liR9D7EZR99ERWZAN8FhzM764opM7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tr5f5w3AYFWB1KA92eYhq721F+bNiSc5a2LP9QrZU0c=;
+ b=BzzjY7tYYozptuZSjyRLvGy7PMQyMBDVeDRFMSFNExZFAfQvRW7nH8Qdwqol/DL8uz326Omy5IGz5ScWOZbYWJtJoJrATztM6e0xIspOBYtJuBPLIzHdipA3zmzjiqd97XYhFG0gGx5EHwwuUQP0v3Xwn8RT1zR7/q+Cdc4KfYiY3FdYrFWVrkMc2EcG+YN3Thc7Pzatv3SZm01Ppue3SuIU2ULe/dV8/GzHjU4njuG/+/SVr8M8JBVHpR2JKzs17pYWT+QF3cx9XN6AN/Q5rGpX5tc1+OhUO055jU7j1ojqCu9kL0iUY8ZDqmnb3vgLTX6Tk/WJjrLq+3t17supGQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by AM9PR04MB8553.eurprd04.prod.outlook.com (2603:10a6:20b:434::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.18; Mon, 3 Mar
+ 2025 06:56:19 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.8489.025; Mon, 3 Mar 2025
+ 06:56:19 +0000
+Date: Mon, 3 Mar 2025 16:03:40 +0800
+From: Peng Fan <peng.fan@oss.nxp.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>
+Cc: linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Peng Fan <peng.fan@nxp.com>,
+	Antonio Borneo <antonio.borneo@foss.st.com>
+Subject: Re: [PATCH 0/7] rtc: Use devm_pm_set_wake_irq to simplify code
+Message-ID: <20250303080340.GA29084@nxa18884-linux>
+References: <20250205-rtc-cleanup-v1-0-66165678e089@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250205-rtc-cleanup-v1-0-66165678e089@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: SG2PR04CA0162.apcprd04.prod.outlook.com (2603:1096:4::24)
+ To PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|AM9PR04MB8553:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a2fde9c-0510-43fe-4922-08dd5a20802e
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|7416014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?pDM6Edhw8dWV3W4LTfL3PKrM2SClqmtmyCubW3QLwUnUmLIAXjxlpRTvzSVF?=
+ =?us-ascii?Q?YYnAmGo43X+VfZEXDQWMzG0kFvryJR3bXCHZ3EluXkO46csAUl9i/2YAU6zF?=
+ =?us-ascii?Q?en07oSQwiea9XD+kPwVFdYAzwI3aomGdyQJIuROOT0RV5XSgZv6vxCvAvsNP?=
+ =?us-ascii?Q?exV6f7+WzJCFrkhWiMGnJ1d/ix6SOAEZb1j4N/ltPOBc362YAcYp/XSPA/cI?=
+ =?us-ascii?Q?i79xlFZxVbwjtRIZWrJnSnpEfd/g8ICgJd/JYo/ByV+XV0sZSPljOT/42OcE?=
+ =?us-ascii?Q?Wif5HGevGlJoV1J4TapTLd4CKZOcJfvZkIdlzcKz+EQQOe7G7HGL6fjELSqY?=
+ =?us-ascii?Q?WlLiP306JoJ63m/JXePMb2AO9jRs2CpJrebVCfECkCtw77LCbARX4nJwz8v7?=
+ =?us-ascii?Q?bZYy9f+48pdB0lNESbW407TwJEO9N5Pjd3sh4YwZwN8wWGMxNlb86xH7vvWv?=
+ =?us-ascii?Q?efsK2CinybllZjRUXlwUJPLw4kDYADvOkq7AI0kiTn+sixEOLXlX/t+GbHLV?=
+ =?us-ascii?Q?8xHLa9NrUriLK4wYU7bfpHcv8u67mvIL66wcPn42eF1EZs+HwS18loq2Sj4X?=
+ =?us-ascii?Q?i7IqX8lFmhcIXBufGYIrJsAPCMhDc5W9WltnKrMOJyTcRo0VQAZBLCYvsf/a?=
+ =?us-ascii?Q?DdNo43JHh2WYC8CzCWtZ9xKH1uEI0k5XVSB+0/KkE8VwOme7j/DBQzWU9viw?=
+ =?us-ascii?Q?T5y0legdL7JXWNK0MUWe8iVsSrcASHzC8TFtdLOBMueVJ1UWO8pBvwxcAs7c?=
+ =?us-ascii?Q?PqtvvkbqTpp/ZVTAB9Col93wUazO/pVl3jdzQvLul5b9guq7iznzqbPbo0dj?=
+ =?us-ascii?Q?CmxosQKml0rg9+1Q1oiCcf1Z2IG/1vYP39y4AJNQboVlj9xyTywvke9gImN/?=
+ =?us-ascii?Q?pFUdFc6K1WB3V0Ie253q/QjegdhUy28Jb6A1kwsHQ9kkohvpL+6bwrjYmTHa?=
+ =?us-ascii?Q?bXTuNyuLZrrfPxj4WFYocC08QEVLy3/HsvZhAMreul0+PbhUWD4OJObO7PJk?=
+ =?us-ascii?Q?YKHtmsIzwDEAv2Jgnxf2JrWsUmcVTDCjBKJmIo1RxoSzWW0qxRfCG9Zrp7Eh?=
+ =?us-ascii?Q?pEFHeBQGbliZhEGRwCzwJUludSpTaNJtGidqLx7NTctaaCkfejrsdBBwOxFL?=
+ =?us-ascii?Q?4uTBgYGDHqF4kTClAFOXuaVUQ6Sc7tUPsBOAxn1fvkmQooLIYOrw4Fakiu2z?=
+ =?us-ascii?Q?iV/cUipzZ6+RgX22mf3Y9pDiClkGc3NdjeBGcb6eii+z6f5dgyXfdIPuH/f6?=
+ =?us-ascii?Q?PnnJULGkXKRM0gBq3Qq2pHKHSHofS8l8GL7OuOBbnQW+Kd8a0wg9LVjWgrf4?=
+ =?us-ascii?Q?Pjy+bEfJmlNKhQGCdZdHleOY/t2OzYDtUA2qow4p6h1bXttqINcNCeCkiB6v?=
+ =?us-ascii?Q?CKRIWhwIs+laNjvTWpispD8bjEr+uz2KgDhTr10J3xpICVzn0A=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(7416014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?kLxzXTX7yUvpSVTz+pjmVoOkJUwnIlAiAOxy5F3eLZzNmFQal05YxyWiKZ+Z?=
+ =?us-ascii?Q?gMVOrgu4nVB4tGiaPTsB9VHUg9xs89KfL/Fb8ctyccOcLU11/5WNRLu2VXCS?=
+ =?us-ascii?Q?WlfnZx/vX6iyKelNXqvzbSedJ63hEdaLuRG29wlgX9/XDK6bsxmRI1i+rKhC?=
+ =?us-ascii?Q?EiJ1BFE7ymlY7DrAPYUS0zv3UrGphHEirBqSBhDmit0l3HvwL1xNm1P/GV9a?=
+ =?us-ascii?Q?DD8rIjZeBRI2lO2CvGj6+h7V5aeZn3Fyx4wczR3eESuyh+U6z2sekvnavlaQ?=
+ =?us-ascii?Q?dDDBCSTN9E6zPg/ea/wBqaZuwsTiwzcMzmEspU9dtkuhUJUhlEtKx3N+9z69?=
+ =?us-ascii?Q?lM/wvwihpNMxTTfu6zWo81AjHDbEF7zGEUigRbNS22KwIMjusAr4wIn4ynSn?=
+ =?us-ascii?Q?IdgVcUWAZX8wxBWPmPxD60X1rSANnnW0jpa4INAN0Yg8R9tErfPTLKA3cXhv?=
+ =?us-ascii?Q?aOESNRFrHsf5HqBX2ca62HVD4zrC5F0WWUX/3VaP0Wu8/5Meo+vcYvuJsZRb?=
+ =?us-ascii?Q?RmD6LbXCf3Ju4xBgjvT9RHdr+HOjYubgjoBH/iy9TqaAH9HVfFgFXWlGR4TJ?=
+ =?us-ascii?Q?lfwRA+FQhUuCsDYbkFgCzC5OzjFdb+WrYXSm1Lg7ACnlBdi9Op7ynfSwVljZ?=
+ =?us-ascii?Q?WOnGpx9wa8Swu8LloIQ8/LexNhl/0HTVqz6oAOwUieVG2J2BBJ8i/v8M/HGX?=
+ =?us-ascii?Q?wr1rSoa/HkOcANCMoriWiNiwot2HpU/4oz/YPb8QAEc5LQ1i6TkTzcQ8NQP8?=
+ =?us-ascii?Q?zeZXN+cGEhCT4EvrrApe9A/xMKYIg4ALwYDNIkjZ4ur92bx9Rm6vb386Dwxc?=
+ =?us-ascii?Q?gyJB5Aqkejac7mGiAqLT+XQ7DurvU1mr2/RpmeEi0uwZTRCFbPud6+Et1K6H?=
+ =?us-ascii?Q?UfpSQPLISY4BAEhqTyY2EXEj46F0H7syaPKSK0z58oM71ykmtc5mHnpqwF4V?=
+ =?us-ascii?Q?Pa4Oa+XD6HwrgTP9W6SqFDtqOiYfRbm8GhTYLk4gE3MEg2qBR0trhNbTtZ+k?=
+ =?us-ascii?Q?Oz25ly3pUk5L1VTx5bIFFsx/NQc0hRgI3109oPUNkCgQl1XJFEfhiLBbvpP6?=
+ =?us-ascii?Q?9+52TD8aA2DRoHzb81h+xJQYpKYjwCZYydKjLqVyiIDHKui9NEJVmr6ynHTb?=
+ =?us-ascii?Q?FbF3rlnvPRvBtZtO61y+E+WVVySvDOHHB6p0q1im41GkmbDwbSS/a5b+cVJy?=
+ =?us-ascii?Q?wmRh000QVakWP9m5wfpaMMjM+7oHRTMEnoXwBm54ILJDj8+NQGyJEHA3Rngd?=
+ =?us-ascii?Q?9qZn9h/aVRfesvTjjuMRfaHRqwYTLQ/mVOSjwZHbeluetXgTNEXep1x+BSig?=
+ =?us-ascii?Q?6EyMvG8phfBe46WUl2czo8J5E4lzYhD/XDfeGi1eSqykOqa0dKoZ6YFR1KDo?=
+ =?us-ascii?Q?ij56lI/wdiQpQtK/C+Edeb/yC6fLlmuNGBD6t0vpXaGB6g2Fg1/VJYy62oV5?=
+ =?us-ascii?Q?Y1/qwMUWYqK4t7BjG+2+oArP4phoiRJCDGZ/OFa7ZDwPeqcf6/dNjcmaP1R0?=
+ =?us-ascii?Q?B8QaAicGQcbKCb2Kui4F3kONsrUI5K4m5hL5GUTnlsyvSZm6nQ8eeRXJcb9g?=
+ =?us-ascii?Q?q3K9Yq/CabNd9JYbAxr4D+oBiVBE9HUE2yQU2Smj?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a2fde9c-0510-43fe-4922-08dd5a20802e
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2025 06:56:19.5285
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Aj5aiX2iABejezd2+UYZai4FKsqcSAf51czNQQ60KBbY+KwvrRQ0SGJXRmDYai0syW6+6F1yDb6xct3DvbPZJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8553
 
-From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+Hi Alexandre,
 
-Implement the RTC driver for CV1800, which able to provide time alarm.
+On Wed, Feb 05, 2025 at 08:58:18AM +0800, Peng Fan (OSS) wrote:
+>This is a pick-up of patch 6-12 from patchset [1]
+>
+Do you have time to give a look on this patchset?
 
-Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
-v12:
-- added MAINTAINERS entry
-- depends on cv1800-rtcsys MFD driver
-- use syscon for regmap
-- get named clock from parent MFD
-- corresponding platform device is expected to be instantiated by MFD stub
-Changes since v10:
-- only start RTC on set_time;
-Changes since v9:
-- further simplified bitmask macros;
-- unconditional RTC start (rtc_enable_sec_counter()), otherwise
-didn't start on SG2000;
-- dropped ANA_CALIB modification (has been forgotten in v8 with
-the drop of SW calibration to switch to HW calibration);
-- successfully tested on SG2000;
+Thanks,
+Peng
 
- MAINTAINERS              |   1 +
- drivers/rtc/Kconfig      |  12 +++
- drivers/rtc/Makefile     |   1 +
- drivers/rtc/rtc-cv1800.c | 218 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 232 insertions(+)
- create mode 100644 drivers/rtc/rtc-cv1800.c
+>Since devm_pm_set_wake_irq is in 6.14, so resend the rtc parts.
+>
+>R-b tags from Linus Walleij and Antonio Borneo are still kept.
+>
+>[1] https://lore.kernel.org/all/CAJZ5v0jb=0c5m=FeA-W-aG30H4706Ay_xCHTsiC1S-7MuGxqTQ@mail.gmail.com/#r
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 446156998380..d4e0569da602 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22186,6 +22186,7 @@ M:	Inochi Amaoto <inochiama@outlook.com>
- T:	git https://github.com/sophgo/linux.git
- S:	Maintained
- F:	drivers/mfd/cv1800-rtcsys.c
-+F:	drivers/rtc/rtc-cv1800.c
- N:	sophgo
- K:	sophgo
- 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 0bbbf778ecfa..9da247ec4084 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1395,6 +1395,18 @@ config RTC_DRV_ASM9260
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-asm9260.
- 
-+config RTC_DRV_CV1800
-+	tristate "Sophgo CV1800 RTC"
-+	depends on MFD_CV1800_RTCSYS || COMPILE_TEST
-+	select MFD_SYSCON
-+	select REGMAP
-+	help
-+	  If you say yes here you get support the RTC driver for Sophgo CV1800
-+	  series SoC.
-+
-+	  This driver can also be built as a module. If so, the module will be
-+	  called rtc-cv1800.
-+
- config RTC_DRV_DIGICOLOR
- 	tristate "Conexant Digicolor RTC"
- 	depends on ARCH_DIGICOLOR || COMPILE_TEST
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 489b4ab07068..621b30a33dda 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -44,6 +44,7 @@ obj-$(CONFIG_RTC_DRV_CADENCE)	+= rtc-cadence.o
- obj-$(CONFIG_RTC_DRV_CMOS)	+= rtc-cmos.o
- obj-$(CONFIG_RTC_DRV_CPCAP)	+= rtc-cpcap.o
- obj-$(CONFIG_RTC_DRV_CROS_EC)	+= rtc-cros-ec.o
-+obj-$(CONFIG_RTC_DRV_CV1800)	+= rtc-cv1800.o
- obj-$(CONFIG_RTC_DRV_DA9052)	+= rtc-da9052.o
- obj-$(CONFIG_RTC_DRV_DA9055)	+= rtc-da9055.o
- obj-$(CONFIG_RTC_DRV_DA9063)	+= rtc-da9063.o
-diff --git a/drivers/rtc/rtc-cv1800.c b/drivers/rtc/rtc-cv1800.c
-new file mode 100644
-index 000000000000..18bc542bbdb8
---- /dev/null
-+++ b/drivers/rtc/rtc-cv1800.c
-@@ -0,0 +1,218 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * rtc-cv1800.c: RTC driver for Sophgo cv1800 RTC
-+ *
-+ * Author: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/rtc.h>
-+
-+#define SEC_PULSE_GEN          0x1004
-+#define ALARM_TIME             0x1008
-+#define ALARM_ENABLE           0x100C
-+#define SET_SEC_CNTR_VAL       0x1010
-+#define SET_SEC_CNTR_TRIG      0x1014
-+#define SEC_CNTR_VAL           0x1018
-+
-+/*
-+ * When in VDDBKUP domain, this MACRO register
-+ * does not power down
-+ */
-+#define MACRO_RO_T             0x14A8
-+#define MACRO_RG_SET_T         0x1498
-+
-+#define ALARM_ENABLE_MASK      BIT(0)
-+#define SEL_SEC_PULSE          BIT(31)
-+
-+struct cv1800_rtc_priv {
-+	struct rtc_device *rtc_dev;
-+	struct regmap *rtc_map;
-+	struct clk *clk;
-+	int irq;
-+};
-+
-+static bool cv1800_rtc_enabled(struct device *dev)
-+{
-+	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
-+	u32 reg;
-+
-+	regmap_read(info->rtc_map, SEC_PULSE_GEN, &reg);
-+
-+	return (reg & SEL_SEC_PULSE) == 0;
-+}
-+
-+static void cv1800_rtc_enable(struct device *dev)
-+{
-+	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
-+
-+	/* Sec pulse generated internally */
-+	regmap_update_bits(info->rtc_map, SEC_PULSE_GEN, SEL_SEC_PULSE, 0);
-+}
-+
-+static int cv1800_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
-+
-+	regmap_write(info->rtc_map, ALARM_ENABLE, enabled);
-+
-+	return 0;
-+}
-+
-+static int cv1800_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
-+	unsigned long alarm_time;
-+
-+	alarm_time = rtc_tm_to_time64(&alrm->time);
-+
-+	cv1800_rtc_alarm_irq_enable(dev, 0);
-+
-+	regmap_write(info->rtc_map, ALARM_TIME, alarm_time);
-+
-+	cv1800_rtc_alarm_irq_enable(dev, alrm->enabled);
-+
-+	return 0;
-+}
-+
-+static int cv1800_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
-+{
-+	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
-+	u32 enabled;
-+	u32 time;
-+
-+	if (!cv1800_rtc_enabled(dev)) {
-+		alarm->enabled = 0;
-+		return 0;
-+	}
-+
-+	regmap_read(info->rtc_map, ALARM_ENABLE, &enabled);
-+
-+	alarm->enabled = enabled & ALARM_ENABLE_MASK;
-+
-+	regmap_read(info->rtc_map, ALARM_TIME, &time);
-+
-+	rtc_time64_to_tm(time, &alarm->time);
-+
-+	return 0;
-+}
-+
-+static int cv1800_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
-+	u32 sec;
-+
-+	if (!cv1800_rtc_enabled(dev))
-+		return -EINVAL;
-+
-+	regmap_read(info->rtc_map, SEC_CNTR_VAL, &sec);
-+
-+	rtc_time64_to_tm(sec, tm);
-+
-+	return 0;
-+}
-+
-+static int cv1800_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
-+	unsigned long sec;
-+
-+	sec = rtc_tm_to_time64(tm);
-+
-+	regmap_write(info->rtc_map, SET_SEC_CNTR_VAL, sec);
-+	regmap_write(info->rtc_map, SET_SEC_CNTR_TRIG, 1);
-+
-+	regmap_write(info->rtc_map, MACRO_RG_SET_T, sec);
-+
-+	cv1800_rtc_enable(dev);
-+
-+	return 0;
-+}
-+
-+static irqreturn_t cv1800_rtc_irq_handler(int irq, void *dev_id)
-+{
-+	struct cv1800_rtc_priv *info = dev_id;
-+
-+	rtc_update_irq(info->rtc_dev, 1, RTC_IRQF | RTC_AF);
-+
-+	regmap_write(info->rtc_map, ALARM_ENABLE, 0);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static const struct rtc_class_ops cv1800_rtc_ops = {
-+	.read_time = cv1800_rtc_read_time,
-+	.set_time = cv1800_rtc_set_time,
-+	.read_alarm = cv1800_rtc_read_alarm,
-+	.set_alarm = cv1800_rtc_set_alarm,
-+	.alarm_irq_enable = cv1800_rtc_alarm_irq_enable,
-+};
-+
-+static int cv1800_rtc_probe(struct platform_device *pdev)
-+{
-+	struct cv1800_rtc_priv *rtc;
-+	int ret;
-+
-+	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-+	if (!rtc)
-+		return -ENOMEM;
-+
-+	rtc->rtc_map = device_node_to_regmap(pdev->dev.parent->of_node);
-+	if (IS_ERR(rtc->rtc_map))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->rtc_map),
-+				     "cannot get parent regmap\n");
-+
-+	rtc->irq = platform_get_irq(pdev, 0);
-+	if (rtc->irq < 0)
-+		return rtc->irq;
-+
-+	rtc->clk = devm_clk_get_enabled(pdev->dev.parent, "rtc");
-+	if (IS_ERR(rtc->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk),
-+				     "rtc clk not found\n");
-+
-+	platform_set_drvdata(pdev, rtc);
-+
-+	device_init_wakeup(&pdev->dev, 1);
-+
-+	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(rtc->rtc_dev))
-+		return PTR_ERR(rtc->rtc_dev);
-+
-+	rtc->rtc_dev->ops = &cv1800_rtc_ops;
-+	rtc->rtc_dev->range_max = U32_MAX;
-+
-+	ret = devm_request_irq(&pdev->dev, rtc->irq, cv1800_rtc_irq_handler,
-+			       IRQF_TRIGGER_HIGH, "rtc alarm", rtc);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "cannot register interrupt handler\n");
-+
-+	return devm_rtc_register_device(rtc->rtc_dev);
-+}
-+
-+static const struct platform_device_id cv1800_rtc_id[] = {
-+	{ .name = "cv1800-rtc" },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(platform, cv1800_rtc_id);
-+
-+static struct platform_driver cv1800_rtc_driver = {
-+	.driver = {
-+		.name = "sophgo-cv1800-rtc",
-+	},
-+	.probe = cv1800_rtc_probe,
-+	.id_table = cv1800_rtc_id,
-+};
-+
-+module_platform_driver(cv1800_rtc_driver);
-+MODULE_AUTHOR("Jingbao Qiu");
-+MODULE_DESCRIPTION("Sophgo cv1800 RTC Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.48.1
 
+>
+>Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>---
+>Peng Fan (7):
+>      rtc: stm32: Use resource managed API to simplify code
+>      rtc: nxp-bbnsm: Use resource managed API to simplify code
+>      rtc: ds1343: Use devm_pm_set_wake_irq
+>      rtc: pm8xxx: Use devm_pm_set_wake_irq
+>      rtc: ab8500: Use resource managed API to simplify code
+>      rtc: mpfs: Use devm_pm_set_wake_irq
+>      rtc: pl031: Use resource managed API to simplify code
+>
+> drivers/rtc/rtc-ab8500.c    | 11 ++---------
+> drivers/rtc/rtc-ds1343.c    |  8 +-------
+> drivers/rtc/rtc-mpfs.c      |  8 +-------
+> drivers/rtc/rtc-nxp-bbnsm.c | 29 +++++++++--------------------
+> drivers/rtc/rtc-pl031.c     |  6 ++----
+> drivers/rtc/rtc-pm8xxx.c    | 12 +-----------
+> drivers/rtc/rtc-stm32.c     | 10 ++--------
+> 7 files changed, 18 insertions(+), 66 deletions(-)
+>---
+>base-commit: 40b8e93e17bff4a4e0cc129e04f9fdf5daa5397e
+>change-id: 20250205-rtc-cleanup-d3d42ceb3d28
+>
+>Best regards,
+>-- 
+>Peng Fan <peng.fan@nxp.com>
+>
 
