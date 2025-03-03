@@ -1,230 +1,206 @@
-Return-Path: <linux-rtc+bounces-3383-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3404-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88C40A4E2D2
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 16:19:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 860E3A4EB70
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 19:26:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E89188090E
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 15:05:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97F6E17EA83
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 18:21:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C68266B77;
-	Tue,  4 Mar 2025 15:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB1F0209F57;
+	Tue,  4 Mar 2025 18:08:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="q9xvxPu2"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Y0D+xgHV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2082.outbound.protection.outlook.com [40.107.243.82])
+Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1741FFC70
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 15:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27686ADD
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 18:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741100420; cv=fail; b=sLlsSV5gDIco5dzPV0X7Septw5eF6Zn6hRRShA/A93NI36jy5HFPKXvvFjYA+7psg0/2aSFMp+0uyUE1gAe7P5oQ/vNHLvlHARZp6fVNmtmO0VUoQ1/YCAItNKxkUszqQtka8MCXGq3+l4kzaUgYwToySpZWNtkh3uHvsHcEOoY=
+	t=1741111709; cv=pass; b=l0ShmaBGIxIRrdnvBHok85AjCq1plxyxUS230i5cbdnsitYDhXmwpvSTJQaMGnG3xO8jKh7DALI9KYBSu5Kr31VYYGADUwtymJP6545yRMN96dXQT2iRUU4Q6UAllL878wcXChk3fbH57y5kJRoXRi9acX892XY6idrE48SMIIM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741100420; c=relaxed/simple;
-	bh=ixT5AOET3fAWri5WkccIxLXehFhzCudG4LWQ9dMG8zA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=nzF4xTMYWQ+u1+NMNa7HhRX5qTdjVXBpNALm7D5lwE2gwT2lsLLNFLn/idDfK42/LDbvQNd45lMW7ZUG/A+yp+6Rmxq3ZndAXolxnHAsuejs7dMV/eZyW+jYoPKIwsOVICkQfoYTWFZ0yqSSbeS1QYQcPeZw4KOCz0TcjysZgYc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=q9xvxPu2; arc=fail smtp.client-ip=40.107.243.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KJotL6fhZYJZVxhHvtn4ZdYvHyKuBoi+r2/RXEwjsixmaHegLxFli4JL1QDAknk3RRIHQArFui5/g/gGrg5SveNZOYGt83cdix2JAhJaSZS68FgeM4wyR1vHiPb6IHkBEfNmgoUx6CW3YRtVr361UOhE0TP0Jc5msrfJzuYtapByEviQ/a5jb/EVpjbNX5RPN+UbVw0+JuYW5PZeNSZJ19v8XvQN9Cw3oLdYVyXW+Ci1H2zdhFe/IdRt5Ut+zRHPSLfmDin/dyFSH/RpR9OeanJrfjPcA9Pb7Q3uWu1ayX9TvukvP1qZDng6FoNXM4gqqDugaXOPYh0luDX528eliA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hsV1nhPd5vZ8gEQy1qpZhM7SvoOObaQ9mH8IxTvyKrY=;
- b=sxs9DBS/oRnbJpTeJtxydAozOwB60MVMRnKGRHVICUBdOQ2MCd7iZDoXB6vUcVevmxHihpKa9LtWZx2J2PIaCFurAFZ15dDxUme4uvZDKT46sZ5Tk8PawRyFLwdZnkA/129k/Z5GSi2jTDaXNdw7+IrQ0h3sfvPpExh54Msb7WY68jNDMaK4uVr8k+jYxjEfab3KPjwJejyhSRWSiEY37Ml/H+qI2vE9Yu0eR3ax+skNtz4h2b66AuyUAPDJ2ZudUoYzhE6aNnoCV74ttF5tzeXogIBVK1wyYc+NXXR0bo5TynOM026dcppv80dUkCx7w6nVu0jiBWbBU11Rie0d5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hsV1nhPd5vZ8gEQy1qpZhM7SvoOObaQ9mH8IxTvyKrY=;
- b=q9xvxPu2iWRwzHgHASChxFHNv+ucB081Ots2KBtovtnzp4fCjQgVjpoiHKfYOYZwBnGZrdp7f19UAG83WSrokLBVhg8f1q6m3BNcsDmOtv5i5IA7XGdixrb2IygSORLZjMIIqrdhrySOda5eENS03v/TEp5kNlyo+S6yON818lQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CY5PR12MB6598.namprd12.prod.outlook.com (2603:10b6:930:42::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.29; Tue, 4 Mar
- 2025 15:00:14 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8489.025; Tue, 4 Mar 2025
- 15:00:14 +0000
-Message-ID: <759f4d7e-de8a-4d04-a6b4-e138c02167f9@amd.com>
-Date: Tue, 4 Mar 2025 09:00:13 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: LTP rtc01 RTC alarm test fails
-To: samasth.norway.ananda@oracle.com, rafael.j.wysocki@intel.com,
- alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org
-References: <dc4c018c-77f0-4cd1-81c8-929f40e6162f@oracle.com>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <dc4c018c-77f0-4cd1-81c8-929f40e6162f@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA9PR13CA0116.namprd13.prod.outlook.com
- (2603:10b6:806:24::31) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	s=arc-20240116; t=1741111709; c=relaxed/simple;
+	bh=qoPtDOyTcjwvCpBRIB3CYa8gwUoF4qiW66mIwy/6yyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D5k8uSx+SIdcoVy83SU6c/9e8s7KdmdKCAPicBAbBGD1sp200H+VBO4vPhyMiiKpLvxgGkbkume0AF1E+gK191bR8nPWR1dsIdWWjZSBbGj5LaF9sQ0iEUXwY96IliSXbxjNQ7Eg9QIjN0ZwCm3g46w3txJUKtZiqDF+x037YmY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Y0D+xgHV; arc=none smtp.client-ip=209.85.208.42; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; arc=pass smtp.client-ip=160.75.25.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 196C9408B642
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 21:08:26 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key, unprotected) header.d=tuxon.dev header.i=@tuxon.dev header.a=rsa-sha256 header.s=google header.b=Y0D+xgHV
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6g6l5cvZzG1Vb
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 18:47:27 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id 9035742727; Tue,  4 Mar 2025 18:47:22 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Y0D+xgHV
+X-Envelope-From: <linux-kernel+bounces-541158-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Y0D+xgHV
+Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
+	by le2 (Postfix) with ESMTP id 93A7542671
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:29:48 +0300 (+03)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id 6E8EE3064C1E
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:29:48 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D39F8188C186
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:29:37 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95971F03F3;
+	Mon,  3 Mar 2025 08:28:56 +0000 (UTC)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502D51EFF92
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 08:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740990534; cv=none; b=tU8/YJIvdLhnyBlPi7i5UtdqZXEFDMuwieUKQwiTnpk0L8hjZ3PEQ8zoOUXpg4sDrS03nY2xh84ZV91tjaot97TU0TLV6LcDxFu1STdwz/Mzdm+IndDkcoJTUywTlw7ah3fqDbZb/LFfpgf9+1BR2NI6FFkJx0oPbFCSxhNwMK4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740990534; c=relaxed/simple;
+	bh=qoPtDOyTcjwvCpBRIB3CYa8gwUoF4qiW66mIwy/6yyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nyk0xFql6LHwZiEF00P25V0byLS01ZGDP7CQ2gs2wRYNSa5Q0VZt/WYz2+76fMCXcAkYjhtqdSVOlzP/krVrWXcWYdVsuiDz2eA6CkHDL3W0MDz7jMl0rBygVIK+YTV4mj3N7gvGFEAR/CuPhv6TPU8tg+2wU5U/iGPUozGDGD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Y0D+xgHV; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e5050d19e9so4468381a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 00:28:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1740990531; x=1741595331; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bZbWYCAiGLdzl+1azDhHiS3T7Iql29Bgd9JnV0VCloE=;
+        b=Y0D+xgHVb2dK950l7vfoJF+Q6AOpJ/BByNSkcJY1OeeAJ0bBsd0BbgqkEKc4ur86dE
+         cYT2Af+Oof9FyLF+kr7NyyjPgH92ZRzOhzcD17audsET7nH7KJpmLZDPGNVUg6xMru+S
+         m0d6qwbBSbbUqnyROX61/FqmtvkCPJ7EkU5NWqZM+XalCsBAmP1JpJ4+sDwZE6kNO3zg
+         hepJTyg9y2a0W8bhFKgOgJTdPdBfP+3be1ugGyqQhpziUZdLoiMc0ni69l5oTs+W0K5n
+         Zll+GnRHvnlNZ4Bo6eW4sDVFApZeLIK16KPQyUXFP8MO+QSBthiMmZRhMRBr1TncDUXd
+         FGIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740990531; x=1741595331;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bZbWYCAiGLdzl+1azDhHiS3T7Iql29Bgd9JnV0VCloE=;
+        b=aBbnBfzcsyFwJisN3U8MB0KIo+mLpdnJopTFdK8jOeNt4/Yfq4BUPEF2Sjs9Uj7Q6u
+         GCStkO8apScpBTI+7Uy5DNGXcNQkVsdvxUERkzVHpg6N2Hh5j96MhxFpI+Ke+Shs1N9w
+         ET2BQjF+llXjupWZ6/kJtD7WglFofKEIGvzrfwoANOdubMwKA40lo2DZyR6Nusr3qMWs
+         z84TmVPAwpfvVEAqebUuo3h1ixEZdeCP4NlyqtbZrJhwzLk/EA+47sqaLxrCLN86DdIq
+         v6ddlIyMfne50fj09FImI4dLvO5B86steXosWXimI1532Tqh/nlo3ofLZuorLcjbGXEQ
+         0+dw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9C8QcijkhGg+iUI6AWiEVmqY6DUVZ5NQd/06DKAjSYe11ifI4M6Zd2HWIe8VFPc6xKGCLOaqLFDVCvVY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQOtpzZ6GXtimIvAxkka5/mLzwHpQbh55Fd2bEs8HyHfhTviES
+	ufsoOLpMap4swaaewPk7Pw54cXUhQrxfnsOutU5asuEz1IgGib9GFV5M/qPIWP4=
+X-Gm-Gg: ASbGnctuAuPQ2ICqDJD7ExCdJF3tZtVlW/nRCq+XaECF+e3dvItsV+i3O3K9KLAK/3d
+	jxM5QjtAdrjkn49an2DZgGCxdC8hcqFfC0PQMRNrOD/5A79LzbYmMH2Az2/jWbnfh/oTv2NIuTR
+	ri1ETzc2T3AuJVk3bcCIXkL5kpKb6FitHztd4Nq5AZsnU4ynv5Rf5UaApfwzP/WPvPJip7S30O3
+	h4TZy9PAp+G5UVbM2MXgOaNlCYrpgaLCEECMPX83M097CwRN64ps9Y+t0ryB3Q+h6T2D9jhEI2o
+	CcTKiXRTOL8Ton5jK3Npku/mFk5UOo4jEYR0CVX18M9RLWY4aL2SLg==
+X-Google-Smtp-Source: AGHT+IFrYJnOfLSyyyjojYRmFnfLxPLsWEHLU4GBBp6Ea3g+RJ8CQj9vhxA16WLLX0u0LSDAoCw01Q==
+X-Received: by 2002:a17:907:7ea5:b0:ab8:c215:fd27 with SMTP id a640c23a62f3a-abf25fa8e4fmr1364497766b.14.1740990529665;
+        Mon, 03 Mar 2025 00:28:49 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.138])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf17fa4a4asm733337966b.92.2025.03.03.00.28.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Mar 2025 00:28:49 -0800 (PST)
+Message-ID: <430f1dae-0123-4d4a-81c9-b3c1d9df285d@tuxon.dev>
+Date: Mon, 3 Mar 2025 10:28:47 +0200
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CY5PR12MB6598:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7f977e2f-145e-4c7b-4bb5-08dd5b2d4479
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?anBESjNJdWxnampra3VuZDNOMHp3dEF4ODduTUNjTEdjcFBmekhjbExsVk85?=
- =?utf-8?B?aGtoRFU0aDg3N0doS2IwY0dKM1djTGIrUzFHWUJqUUlLb3d0Sy9aS3NqcjRG?=
- =?utf-8?B?MVg5OGljYWdtdEZ2ZXBOQWtMTDBRZXgxZ056Q2hlRFZnQ1VBcE1PZVEvd1M0?=
- =?utf-8?B?VlJaZ3RlMVA4MUs4a1Ewamhiam9aaVAvRUNiUVAzVmZJVXVhQkRpcTFldFN0?=
- =?utf-8?B?cTFuc3VlRTZGRU1HcC9jOTRzY3U1TG5IYU9iN014Q2FyTE01L3Uzb1h5NlNQ?=
- =?utf-8?B?bVc4MVZ0Z0I4L1JjTk5HVXFNWTNvZHplVitMWklxMi9NZHd1VjVmdnJrSjZt?=
- =?utf-8?B?bmIyU3FkTXl2NFZjT3l1amZmck90L084VUg0cWFSU21SN0VZZThrVVdSN0pr?=
- =?utf-8?B?ZjZiYk4xL0pubHRjRDlZZWdnNE94eUFjY29Db0F5YzFocnVhV1oxMFNsR1VG?=
- =?utf-8?B?MnNSN1ByRU9UZ3FmaVpBRysrWnJxL1FsZXpvZlFTMzkrbzNwWW5qaDc0Mlkw?=
- =?utf-8?B?YVA1allxazBWRW9OYUNCZzRScGtxcjdnYVU1akVWWXl6Z2tFT1M3MWpBV1Vx?=
- =?utf-8?B?SHcwUzI3Y0llblVBTEZyVE5ua0pvUTFzR3liTnlqeXNuS2VaSlNtV1pkUVIz?=
- =?utf-8?B?Vk5zQlhZd2I4WnFrZW40U251UHNtZHdyVmM4aFdUc0NIdXZRRTYxUEo4UlJy?=
- =?utf-8?B?emYzSFliVTFiaGdaMXZIcUUxYzBvZnJIZUw1ZFh4d0FaZ3VTUG5YcWFUNTVv?=
- =?utf-8?B?UVBqY21mb2Q3WE1vMjNwRVhXOWdhTUphOWNxMkF5d1dVWkNrTGFpYlV3aXpm?=
- =?utf-8?B?eXRyMDRyMWpRaDQ3aTV5djhaSGZoaWJRWitrWUFFb2g4aTNraXB5aUZsL3k1?=
- =?utf-8?B?ODBWRWs3TTMxK1lvaWorZE5teitCN1hkY0dONkJvVUg2N1lvd0hSTEdVNHZH?=
- =?utf-8?B?YUVtaDYvakRQUnluNU5sNTJYUEh0eWVRV3BIUjRqcDFuKzlhdWJqL3pLZ1Jz?=
- =?utf-8?B?b2Y1K09RTEd5SGh5enE4bk5aWlZ0aUhnSm1HM3gxNXpNZjVpUHBZblpiYmFB?=
- =?utf-8?B?THRmKzRScGducTNhdUNIb09zQy9CUXlTSXlMRGwvWTFScHJXVC9PY0MycTBk?=
- =?utf-8?B?d1BmMjhJTCtnNzFjT1lrbnZ4cFFjN0hXVDhYSjFoN08wY3JrUHdmTDVJTFBS?=
- =?utf-8?B?Mm1DdElIcDU1YklJSlZldjJqVERqWSsvZUJ5L0N1VXJQaUNwYXQ1TUJ3alND?=
- =?utf-8?B?dmxUM3laaGFHSzNTckxDMUJ4MjB6eEtzL2ZmUHNQY3oyN3hNOVh1WHN1cmI3?=
- =?utf-8?B?TS9SZUdibEhvbWd4R3V5RlIwRjdUbnZMQkpIZ1B4MnJPV0hsM2FsL0drM09m?=
- =?utf-8?B?VmpkV0dkZnVVN1ZXaExNK1d3dGJPaXkyU0pyYlhkL2hsdmYyUi9ESm5DOWRt?=
- =?utf-8?B?bjhIWnhFakpoUTVNTy9rK0lRdjB2dC9xNEJwUFJMZWNIOE9DeGkvRDRRWjZ6?=
- =?utf-8?B?VkU1dkk3ckh5NGw3Yms0ZmIxQlQ0cU1sT0hoZXMxY0hzK1lCMmllSnl4Tkpi?=
- =?utf-8?B?MU5BR2w0WnZGOXhxRzZPTkp6SzRacU45eWlnUWtjMlJZSTdGMjBFK0ZZRnBo?=
- =?utf-8?B?RHJxNkZWcmxxeUF0WXpqYTNzc1VQU3l3RE8yR0cvSHU2UzBJTVhVNzN1d21R?=
- =?utf-8?B?Z1dsZHFpVU5iWDZzS0JHNUtLVHBkSG1sYldtNUZ3WHI0amxNYkE5M0RFTHZr?=
- =?utf-8?B?K2oyMzBxVW55Qk85YWhGSEtPRjJvaE1MVHlkYWVlMC9IOFN1dEhWejg0bVU5?=
- =?utf-8?B?RGUyLzBaODZUd1RJTDhxR0dKK3BMbFlFUDVhUDZ1dE1JdFhocDFaWDRoSnFq?=
- =?utf-8?Q?DS2GL+KT2pdHL?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RGprUjR2c3pvZ05oME9yQVhHTVlhSU5vMXVUOEgrajhGeGJVZ1Y3UmxUazFp?=
- =?utf-8?B?amZiN01MTGRmbEkydEZ1bkZKK1BTYlhEZ0JhZ1pvREdCNkphMjdwYXY3aUs2?=
- =?utf-8?B?elI4M1M0WkUzQWEvdXVGczZwaUxBTlBSZXlEdmxML3FYcGZtdThuZ2o3bWRl?=
- =?utf-8?B?LzdobS9xSHIxNFhkZk1FYWE0Nll1SWpESmxkcDNaWEdNQlhDemNiODVqeG1H?=
- =?utf-8?B?R3NkTVJEWHgxVlhsNE1aaHE1ekFTY2NKMDJsUW8wcE5HTHhZUHJwdUs0SG1W?=
- =?utf-8?B?QlBENXZodGxRN05Qa014TVFPdmlhcU1JOVZMNytieUZaVi9qVjR3bGl0WWV2?=
- =?utf-8?B?UHJUSUwwT3RZNW5EOWRiTi9mNlQ5NHpsdFZnc01mSHhZTGxidHk3MlpPRXc3?=
- =?utf-8?B?cmlmcS9aVUZuSG9HSUhjRExGVnBzMVVMa000aCtYbDRZeUh5bGVyaVpiNzFC?=
- =?utf-8?B?b1hOMWNsUGRHZGkrbkF1Si9TeEttb1FycmlQYkZyeGpOdDBDTVdVenFLVVFZ?=
- =?utf-8?B?Sy9vRkNjSkZPTWZ0bk0yR1dnQ0dLMlNha1NCelVoWTNHNW8rbVBPcFhwMGFG?=
- =?utf-8?B?UXZIZU1MSmN1cXhlYXliTW1DS2J2WnpPOTNIUktjRmh5cW5vUzBsU3NtaHVR?=
- =?utf-8?B?TTdQSXZTeTllbzFRZXZWd0tGMTlGUHorb1pQVXg3Q3NlWWZmZTdQSWwycmUw?=
- =?utf-8?B?K1IvbWRIZjhXU2plMU9GL0IwVTRucGNaOVE3dnNKb1V6U3UyZE9jS1RNY3g1?=
- =?utf-8?B?Y2s2UGU3SDN2M2UzR3hlTHlCd3Qya0dxNTlmd2QwU2FyUkZKTzJ4dWR1ZXUv?=
- =?utf-8?B?SXVNWTJDOHlleTJQUVhkQ1YvMk1SUWZFeFlrOEMvWHRHTDVoTDRkZTFtaE5K?=
- =?utf-8?B?Z1lUYkJ6UVJQaUhFMEV4dVo5VndHTHZmZ3ZyaWJtdE5CZWFZWnE5RmtJZlZD?=
- =?utf-8?B?RWl0cmtCYUMwK0F4TU1pMVF5WTNiM012TW5ud3NaZi9BQU9wb3RZYld2Rmxj?=
- =?utf-8?B?WklmMXMzUEF0akNxY1JXdWZ1UkMvcU1paXVYaEswYXhFRmJTZ0dvRUx2ZUFv?=
- =?utf-8?B?VGFuWnNTMVl6dkRjM0VlTTVqbmFGdDZRZHAwM0lSSU5UT3hQQ01tSldFTjVO?=
- =?utf-8?B?M3NTQS9GTVY3Ky80Uyt2VFJEcC9vaFdqcGw5RVBYZHhpS0pSV290U0RNNjhF?=
- =?utf-8?B?Ti9KRjhNY2dvRTl4SHdQTGYyZEVhMzYwM1dsRloraHI2aUg2RkxxM2FpNDJU?=
- =?utf-8?B?bS9pMDl0M3JBVjZNalkrYTd6TWFxSml3cHlGQXlsc0xOV25qcS9xKy9FeDJH?=
- =?utf-8?B?eWNKeXVNaWhoTWpoQkRUUTFUaUsydlEzWFFaT1Z0Vm1YWmIyVlRLM3Q0SGFh?=
- =?utf-8?B?WExkRExmc05kZnZ3OU82dUN3SVBMdXErK2NmTVdZS0lQMUlnOUZIVFBpejdU?=
- =?utf-8?B?Zkl3eWZOdi9KRFhqZVFHSUtndUltZUZQT3ZDTXRoa3ViTmYzNGdQaG5iVU92?=
- =?utf-8?B?ZzJHUnlGZUluTWQya3ROMlFDTTRzZDREbUJyTWxSN2xlZTZIVlQ2MnhDNzdv?=
- =?utf-8?B?a3BFTFovSk93czVYUEFwS3c2YjlkaTJDVW9wMTlJY0NicDFBUVdWSktMMFc1?=
- =?utf-8?B?eVhXajl2dytIU2dWdHpud1BpNjczdGZaWUwvWUxsTml5TE5UWC8vMUtjZnhW?=
- =?utf-8?B?L2xqbXkzc1NpTGdoaDVRRUFLUmw4Tll4aU9maDkzWDRKUklrK25zQ3R6dE16?=
- =?utf-8?B?V3lYcjB2cThVT25kOWt2dGt4Lzh0SmQ2dFI3MTBVMWRML3daM0dya1FTTGZS?=
- =?utf-8?B?VWJacHlmeVg5bmNwT25BaFVBK0dQUEJGWjdJMXNBWWgxNERiSHRsL2xWMFNB?=
- =?utf-8?B?RWhVUkdDRDdud1ZUSTdVYnRLS1I1QUVPTlppaXVnOGcwMlA3VW9RM09PNUJH?=
- =?utf-8?B?U2ltRFNpQUdnRXlTbGo2cm9SYktyNGdjYnU4VzIyU0dwQ2hwSjd4Z2RCZk9n?=
- =?utf-8?B?dmtzaVRmUWtJaFFhN1FqdFY4WFNhdWY5K0ZYUXVjVG04dlpabUltcEZlbjdh?=
- =?utf-8?B?UXY2S3NONEVTRE9BVjBqTjdvb3RZWERyVmFUOTAxcitScW5OVVhGcFFERmsx?=
- =?utf-8?Q?+IAli4/WT/V2dkQjdAa666kFj?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f977e2f-145e-4c7b-4bb5-08dd5b2d4479
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2025 15:00:13.9512
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7AbKtOUF+vuqGJ+InlkD7FVQ3Dfh/sSpBHdSCgk3BuesuAYRonyvtEYjaCcwW9EAoHjb/Ug72MUDZ63hO39WUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6598
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 17/21] ARM: dts: microchip: sama7d65: Add RTT and GPBR
+ Support for sama7d65 SoC
+To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ p.zabel@pengutronix.de
+Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
+ <6a1c058edee3fe1459dcb3a93a0a789a9ffff5f3.1740671156.git.Ryan.Wanner@microchip.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <6a1c058edee3fe1459dcb3a93a0a789a9ffff5f3.1740671156.git.Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6g6l5cvZzG1Vb
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741716393.0258@IucdmUjZt+61jYnYeam6Xg
+X-ITU-MailScanner-SpamCheck: not spam
 
-On 3/3/2025 17:48, samasth.norway.ananda@oracle.com wrote:
-> Hi,
-> 
-> 
-> We recently observed that the LTP rtc01 RTC alarm test fails on intel 
-> based VM's. This seems to be observed after the commit
-> 6492fed7d8c95f53b0b804ef541324d924d95d41 - ("rtc: rtc-cmos: Do not check 
-> ACPI_FADT_LOW_POWER_S0")
-> 
-> I noticed that the use_acpi_alarm was set to "N" before the commit, now 
-> it is set as "Y"
-> 
-> # cat /sys/module/rtc_cmos/parameters/use_acpi_alarm
-> Y
-> 
-> #./runltp -d /tmpdir  -s rtc01
-> 
-> <<<test_output>>>
-> incrementing stop
-> rtc01       0  TINFO  :  RTC READ TEST:
-> rtc01       1  TPASS  :  RTC READ TEST Passed
-> rtc01       0  TINFO  :  Current RTC date/time is 3-3-2025, 21:02:20.
-> rtc01       0  TINFO  :  RTC ALARM TEST :
-> rtc01       0  TINFO  :  Alarm time set to 21:02:25.
-> rtc01       0  TINFO  :  Waiting 5 seconds for the alarm...
-> rtc01       2  TFAIL  :  rtc01.c:151: Timed out waiting for the alarm
-> rtc01       0  TINFO  :  RTC UPDATE INTERRUPTS TEST :
-> rtc01       0  TINFO  :  Waiting for  5 update interrupts...
-> rtc01       3  TFAIL  :  rtc01.c:208: Timed out waiting for the update 
-> interrupt
-> rtc01       0  TINFO  :  RTC Tests Done!
-> 
-> 
-> I believe that the hypervisor may not fully support ACPI or may 
-> implement it differently than physical hardware. ACPI wake-up events may 
-> not be properly supported or may be emulated differently in the VM, 
-> causing alarms to not trigger correctly or time out.
-> 
-> On AMD all instances the use_acpi_alarm is set to "N" so no issue seen.
-> On intel Bare metal instances the use_acpi_alarm is set to "Y" but no 
-> issue seen.
-> But, on intel VM's the use_acpi_alarm is set to "Y" and the issue is seen.
-> 
-> I even check with
-> # acpidump > acpidump.txt
-> # grep "FADT" acpidump.txt
-> 
-> no output from above saying that ACPI_FADT_LOW_POWER_S0 is not set.
-> 
-> Is it possible to know we can address this issue? Should we make changes 
-> in the LTP test itself? or in the kernel?
+Hi, Ryan,
 
-I'm a bit surprised it didn't also affect AMD; but maybe that's because 
-of the specific date of the "BIOS" for the VM.
+On 27.02.2025 17:52, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> Add RTT support for SAMA7D65 SoC. The GPBR is added so the SoC is able
+> to store the RTT time data.
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> index b0a676623100..aadeea132289 100644
+> --- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> @@ -120,6 +120,13 @@ shdwc: poweroff@e001d200 {
+>  			status = "disabled";
+>  		};
+>  
+> +		rtt: rtc@e001d300 {
+> +			compatible = "microchip,sama7d65-rtt", "atmel,at91sam9260-rtt";
+> +			reg = <0xe001d300 0x30>;
+> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk32k 0>;
+> +		};
+> +
+>  		clk32k: clock-controller@e001d500 {
+>  			compatible = "microchip,sama7d65-sckc", "microchip,sam9x60-sckc";
+>  			reg = <0xe001d500 0x4>;
+> @@ -132,6 +139,11 @@ chipid@e0020000 {
+>  			reg = <0xe0020000 0x8>;
+>  		};
+>  
+> +		gpbr: gpbr@e001d700 {
+> +			compatible = "microchip,sama7d65-gpbr", "syscon";
 
-To me this sounds like a hypervisor bug though.  Could you add a 
-condition to detect this hypervisor and exclude it (and also report it 
-to the vendor for the hypervisor "BIOS")?
+This is not documented. I'll postpone this until a documentation patch will
+be posted.
+
+> +			reg = <0xe001d700 0x48>;
+> +		};
+> +
+>  		dma2: dma-controller@e1200000 {
+>  			compatible = "microchip,sama7d65-dma", "microchip,sama7g5-dma";
+>  			reg = <0xe1200000 0x1000>;
+
+
 
