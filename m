@@ -1,128 +1,113 @@
-Return-Path: <linux-rtc+bounces-3403-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3385-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C2C1A4EA69
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 19:04:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6EECA4E83D
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 18:17:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F91D189D24B
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 17:58:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A17F17ABE0F
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 17:12:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6540290BDF;
-	Tue,  4 Mar 2025 17:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320DC204692;
+	Tue,  4 Mar 2025 16:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="jWlMsxws"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="nai7Wcce"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B84250C16
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCE329C324
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 16:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741109856; cv=pass; b=ng+0k/gAgM3PxpbzYqW3wsGPYcuU8vF2YOtcYT4bTs9og1eHw2wPx4gv9MysCVCdNB0DOqA0kRGD+xSAy9ZhkqYWMjsSGKxXS6EFiCv39ZxoRbnymhM5nCsYevmsLzMA9cGdulBxHyGmSOqonWG2PSqGsKN83ieaH0+1YQd9fGI=
+	t=1741107075; cv=fail; b=ffeDGDar3FhYfTrAQyKOshGzEbW6UNNw9nj8Aq2+5z81yd7fAs4iWp2FKYYVst4tELOLxQNbAEfhX8bXf9qz0O7xxHKqwuymFdBs3CTXCKbGWPHQZFuqaDM2ZmM1YS+9ebIKlbhOUNkULzdTpNY+CPZdvLrdA05/yYHjbBrZQoA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741109856; c=relaxed/simple;
-	bh=ZQkQ0v+LVOjnnddsmiqkVeGvaIQ78BApCBN3whw0Bh8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lVjtF1xgPyKbz8baei+EPNxyzJ/WXc5KPfsdGu5OWqOkjbcmWwjlMOlt3QXlGbbMghdTyKutwHgS2BGIF3DyQ8txrLziB7uEv335N3GlYo8aDYcmfi/llzmw13xWL1c6CbGiwrdlD1DmTANo841nmaxrZxOkt9+p+6jfPkte+CM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=jWlMsxws; arc=none smtp.client-ip=209.85.218.44; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; arc=pass smtp.client-ip=160.75.25.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+	s=arc-20240116; t=1741107075; c=relaxed/simple;
+	bh=YMx7qLuWP6vg/7a5/BEOE9nZt/RJpQmS9nMIn5RykNc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pWUvaFyBE/b0znYMqylt5/6+cPghC6/3ECyVLocj8FV27Js/+yNNbsi3/MqP0T8R0qhBwPjZjsGwfdPb+ucTIsSXBp6qCSvyXUK2h0q/n2UlUpAwuhMRJdifNfIV7krsYZgOQ3QVYq6hhnGhRT4YVeodT48hfdlP7zo3vwZXs64=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=ispras.ru; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce reason="signature verification failed"; arc=none smtp.client-ip=83.149.199.84; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; arc=fail smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=ispras.ru
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (unknown [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 9050040CEC97
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 20:37:32 +0300 (+03)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 318E44089284
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 19:51:10 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=tuxon.dev header.i=@tuxon.dev header.a=rsa-sha256 header.s=google header.b=jWlMsxws
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=ispras.ru header.i=@ispras.ru header.a=rsa-sha256 header.s=default header.b=nai7Wcce
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fvS0XPJzG0fr
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 18:37:40 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dhC15pHzFxDy
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:42:51 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 342AF4272C; Tue,  4 Mar 2025 18:37:27 +0300 (+03)
+	id AC2EC41898; Tue,  4 Mar 2025 17:42:41 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=jWlMsxws
-X-Envelope-From: <linux-kernel+bounces-541169-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce
+X-Envelope-From: <linux-kernel+bounces-541868-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=jWlMsxws
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce
 Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id 83B6142B07
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:37:56 +0300 (+03)
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 4D5F62DCF6
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:37:56 +0300 (+03)
+	by le2 (Postfix) with ESMTP id 2C04442195
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:03:31 +0300 (+03)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 6DA442DCE1
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:03:30 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4152A188CF0D
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:38:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 800A77A5B0D
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:02:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB991EF0A9;
-	Mon,  3 Mar 2025 08:37:40 +0000 (UTC)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340FE2139C4;
+	Mon,  3 Mar 2025 14:02:59 +0000 (UTC)
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6CA1EB19D
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 08:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0BF1F4167;
+	Mon,  3 Mar 2025 14:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740991057; cv=none; b=fTv6MtNAndX9eWP1LDxhkeEEmRJlu8l+1D728psM1oIaY1lhxALFth8A1c2zbBeSEKAcjniEJDJWvopEQaaks/nWQigD9VZ3F/y5jWUQZR5eofGBPchagUuCDENoUMB0/fbciPGGl+1E5rROXNVDv2tpNqddGHmuhboPxo8Qv2A=
+	t=1741010576; cv=none; b=ocSCzbdzChZFOjmwAzWMUEbbIJvE76tKUKqNp4ssxEiOGIemvQ/CeEBqIPVUIypx/VP7zMOUXxeiN3LVNAo+Qx9iZ82Mo8dI6IQ63VZ6P5al8qedhl+3kQShBFRF843DlRwAoHjklQ4cBDFfCVfb+5xyU2csXteWmMJbY6fmo04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740991057; c=relaxed/simple;
-	bh=ZQkQ0v+LVOjnnddsmiqkVeGvaIQ78BApCBN3whw0Bh8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BIdxHfuTEM8wMCwK8Q3RleBiPEJ20wgBuYukV+hUYqKJ9obh+Z0x+MMDMLiy/DK2WGOrKN5/NzVBNhI3uU/jgG/gK5tWBZP15kmPHJFiFXDXdeXTRH4wed+jaObTXgMx1RGwrxjlTBY/sQV7asuWk4HENQQarKAkXVoc7wXE6pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=jWlMsxws; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-abf5358984bso254592766b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 00:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1740991053; x=1741595853; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rHzoEXcX3rRgSypgjLl/rpTLfRP49fuHATm+VBKv9lY=;
-        b=jWlMsxwsUDdonJkhTqhHJvmcLaMy1EI8DH1KqPBmYNwOKGbMDZ0YzFUW211ZNRN/bt
-         VSR8XGrNGFpqhlB61NnOUGuH5wSamTWUCcYHbn+BA9TVfRRq4w/SZ4RFddi6W+q9vMBg
-         UyJhH7g1QmdARr7zNXFgwNjp3qI6DvwVxvQnFREZ3joNm2wGQlRq1vIXAwKetKcuVmrI
-         lsZxcOBW0kBCWxm9nbJM7LqpQZGZLDhco/wUt7so4WCsUMNO90+K9483EhLNDdCQ88FO
-         fZ4QIiMjYS9ntnC60o6Db2zG79kWCai7wKYxwG4Ilq7xfAlVwwtZLZMTvadCRpl4gEiC
-         aY3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740991053; x=1741595853;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rHzoEXcX3rRgSypgjLl/rpTLfRP49fuHATm+VBKv9lY=;
-        b=qsV/NcEQBkfpANlMRIRVv8Eqh4Of4qTtO0gB6yCc5Q8pNzW7e7Q7SG10HrnAIt0XwN
-         1/W5FHudmNx/wWWYSGIdwTItToWWnmcZWj8wdZcDt5NJKCm3thwtJuklIEvBVuWdZ5PD
-         +80oaL1FvJlHenXh4gKuHxxvYkn/h8tJNiQbjcLXFxjRyl2qYNr7J+4r4stVgapwFbIk
-         UFAfd8oI+/NZ9FeArIvTkexHhx/9p0fuqWE3DD9uBRfP8WyP46tpegmMwyCQ7X31zPyH
-         GWS19yTdk/B+gxlPpjSduvq84FBnrzQS8JMvAglC1SskMwgZbPTvJ8cFNCoyqqfNZQ0r
-         CFWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTvZilf/CfUiR1gtIhJedNuDTofQ5tDFhaQGikTk7DoAFQnfKo1GV88JW6wZLaWdV8QtRdwBPiuMK3GD8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzOApEQNRZLKYjrpufDYqb38lTCV1EoS3xCvVxrRR5iUZsCdyz
-	Pfgp+cmKAwYOrFk3/vES3OhO/vWTE/D6D0EzqdIuUvURyxARRJBIhFw5xhQlhTA=
-X-Gm-Gg: ASbGncvWTY/MZf5MFAl4Xo2eXx2KYV/W7MFw/Zh2U2Y4CazX0hK8D+N/mdyHSEaaRBO
-	StGzKGy1U1rkbyGiKHZinoniLGvCavAMt6OR94xTPXtnTYpvNEbDjD6hyljOSK5ghH7T3+yh4dv
-	3RXzgk1mq5FYW2XT6KSsZuHg70/h2gd0zRhxKDzclptd/baCpo7ezrLvjpjVwPty7AoDLzA0+WF
-	5kQNnMzqopDNQhruC3X9baM10rqbO35xFqqg82CBbgOw/4rl2s7rRMGY3zaBoi7ZVkHK0ZDVM1a
-	6yRMiqI6CGdBzYfAFWUgTtbkzKZuemsZNAOe0vC8BczxVOkADfPfCrsg
-X-Google-Smtp-Source: AGHT+IEu4SCH3E4lm5pHLGphX1D/WhBV+YCMGBhWUNyZogIyLMScbPiRPIx0Mz9hoI+7dm2HVL+OtA==
-X-Received: by 2002:a17:907:97cf:b0:abf:38a:6498 with SMTP id a640c23a62f3a-abf26708c88mr1540344766b.55.1740991053091;
-        Mon, 03 Mar 2025 00:37:33 -0800 (PST)
-Received: from [192.168.50.159] ([82.78.167.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c0dc601sm780828466b.68.2025.03.03.00.37.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 00:37:32 -0800 (PST)
-Message-ID: <81354810-14e6-4840-9e50-52bdd0e63b95@tuxon.dev>
-Date: Mon, 3 Mar 2025 10:37:33 +0200
+	s=arc-20240116; t=1741010576; c=relaxed/simple;
+	bh=un//m18e0EyZu6pJVZ/eIwmeKA7wLXFC7L5MaYP//fo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dqG/N64ukZ7Mt8pQsyOjVoMm6sPa7UzB7BwfL2HiVUZaJ0CSJwOJHPmACnAIZpx1aul4TirJugN2bGd2WiY9OYIW2v3xCBcOyk4IA9VQffa7A8/zcxu/zqbqQXHN4fEo/MR1XiLQEkk+H16A0BBhCqMIYy3NrZ8mGZ/tZZ4LY/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
+Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
+	by mail.ispras.ru (Postfix) with ESMTPSA id 02E6340CE182;
+	Mon,  3 Mar 2025 14:02:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 02E6340CE182
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1741010564;
+	bh=vqgSkFlCQVJ4CaUUmVwPWsAun4vxgHbAxdBt/2bRvcU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=nai7WcceMGUZcGUxKsLVw+ByZ0zB426L99V6BXimgqOYhZ0gpVanAUZ6qjH6bN2NQ
+	 JPdn355SI9GJztXnYg9j9JJcOl8euBD3CbkJPzwu8husGgSvIqsokUvUxf07nI7x8M
+	 QOwFvGitGwy4NiKVWp8R2jIDFXoYzmRY26HJDwZA=
+From: Vitalii Mordan <mordan@ispras.ru>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Vitalii Mordan <mordan@ispras.ru>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Johan Hovold <johan@kernel.org>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>,
+	lvc-project@linuxtesting.org
+Subject: [PATCH] rtc: at91sam9: fix call balance of rtc->sclk handling routines
+Date: Mon,  3 Mar 2025 17:02:29 +0300
+Message-Id: <20250303140229.642959-1-mordan@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -130,97 +115,111 @@ List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/21] ARM: at91: pm: add DT compatible support for
- sama7d65
-To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
- p.zabel@pengutronix.de
-Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
- <06b64869f2de4b499835d153411ba30512409168.1740671156.git.Ryan.Wanner@microchip.com>
-Content-Language: en-US
-From: "claudiu beznea (tuxon)" <claudiu.beznea@tuxon.dev>
-In-Reply-To: <06b64869f2de4b499835d153411ba30512409168.1740671156.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6fvS0XPJzG0fr
+X-ITU-Libra-ESVA-ID: 4Z6dhC15pHzFxDy
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741714531.69503@nkH7f2EHRUWKD4FuHSkPmA
+X-ITU-Libra-ESVA-Watermark: 1741711743.89575@R6qlUkythFR9ILaBGHUmow
 X-ITU-MailScanner-SpamCheck: not spam
 
+If rtc->sclk was enabled in at91_rtc_probe(), it must be disabled in
+all error paths to ensure proper cleanup. However, if
+devm_rtc_register_device() returns an error in at91_rtc_probe(), the
+rtc->sclk clock will not be disabled.
 
+Use the devm_clk_get_enabled() helper function to ensure proper call
+balance for rtc->sclk.
 
-On 2/27/25 17:51, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Add support for SAMA7D65 new compatible strings in pm.c file for wakeup source
-> IDs and PMC.
-> This is the first bits of PM for this new SoC. PM depends on other patches.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> [nicolas.ferre@microchip.com: split patch and address only the pm.c changes]
-> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> ---
->   arch/arm/mach-at91/pm.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-> index 6c3e6aa22606..39644703244d 100644
-> --- a/arch/arm/mach-at91/pm.c
-> +++ b/arch/arm/mach-at91/pm.c
-> @@ -222,13 +222,16 @@ static const struct of_device_id sam9x60_ws_ids[] = {
->   	{ /* sentinel */ }
->   };
->   
-> -static const struct of_device_id sama7g5_ws_ids[] = {
-> +static const struct of_device_id sama7_ws_ids[] = {
-> +	{ .compatible = "microchip,sama7d65-rtc",	.data = &ws_info[1] },
->   	{ .compatible = "microchip,sama7g5-rtc",	.data = &ws_info[1] },
->   	{ .compatible = "microchip,sama7g5-ohci",	.data = &ws_info[2] },
->   	{ .compatible = "usb-ohci",			.data = &ws_info[2] },
->   	{ .compatible = "atmel,at91sam9g45-ehci",	.data = &ws_info[2] },
->   	{ .compatible = "usb-ehci",			.data = &ws_info[2] },
-> +	{ .compatible = "microchip,sama7d65-sdhci",	.data = &ws_info[3] },
->   	{ .compatible = "microchip,sama7g5-sdhci",	.data = &ws_info[3] },
-> +	{ .compatible = "microchip,sama7d65-rtt",	.data = &ws_info[4] },
->   	{ .compatible = "microchip,sama7g5-rtt",	.data = &ws_info[4] },
->   	{ /* sentinel */ }
->   };
-> @@ -1379,6 +1382,7 @@ static const struct of_device_id atmel_pmc_ids[] __initconst = {
->   	{ .compatible = "atmel,sama5d2-pmc", .data = &pmc_infos[1] },
->   	{ .compatible = "microchip,sam9x60-pmc", .data = &pmc_infos[4] },
->   	{ .compatible = "microchip,sam9x7-pmc", .data = &pmc_infos[4] },
-> +	{ .compatible = "microchip,sama7d65-pmc", .data = &pmc_infos[4] },
+Found by Linux Verification Center (linuxtesting.org) with Klever.
 
-According to the chapter 42.18.3. PMC System Clock Status Register at [1] there 
-is no AT91SAM926x_PMC_UDP for SAMA7D65 (which you are dropping in the next 
-patch). This patch would have to reflect what the documentation say instead of 
-fixing it in patch 12/21.
+Fixes: a975f47f6e9a ("rtc: at91sam9: use clk API instead of relying on AT=
+91_SLOW_CLOCK")
+Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+---
+ drivers/rtc/rtc-at91sam9.c | 28 +++++++---------------------
+ 1 file changed, 7 insertions(+), 21 deletions(-)
 
-Thank you,
-Claudiu
-
-[1] 
-https://ww1.microchip.com/downloads/aemDocuments/documents/MPU32/ProductDocuments/DataSheets/SAMA7D6-Series-Data-Sheet-DS60001851.pdf
-
->   	{ .compatible = "microchip,sama7g5-pmc", .data = &pmc_infos[5] },
->   	{ /* sentinel */ },
->   };
-> @@ -1672,7 +1676,7 @@ void __init sama7_pm_init(void)
->   	at91_pm_modes_init(iomaps, ARRAY_SIZE(iomaps));
->   	at91_pm_init(NULL);
->   
-> -	soc_pm.ws_ids = sama7g5_ws_ids;
-> +	soc_pm.ws_ids = sama7_ws_ids;
->   	soc_pm.config_pmc_ws = at91_sam9x60_config_pmc_ws;
->   
->   	soc_pm.sfrbu_regs.pswbu.key = (0x4BD20C << 8);
+diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
+index 38991cca5930..f4b7cf37397f 100644
+--- a/drivers/rtc/rtc-at91sam9.c
++++ b/drivers/rtc/rtc-at91sam9.c
+@@ -375,21 +375,16 @@ static int at91_rtc_probe(struct platform_device *p=
+dev)
+ 		return -ENOMEM;
+ 	}
+=20
+-	rtc->sclk =3D devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(rtc->sclk))
++	rtc->sclk =3D devm_clk_get_enabled(&pdev->dev, NULL);
++	if (IS_ERR(rtc->sclk)) {
++		dev_err(&pdev->dev, "Could not get and enable slow clock\n");
+ 		return PTR_ERR(rtc->sclk);
+-
+-	ret =3D clk_prepare_enable(rtc->sclk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "Could not enable slow clock\n");
+-		return ret;
+ 	}
+=20
+ 	sclk_rate =3D clk_get_rate(rtc->sclk);
+ 	if (!sclk_rate || sclk_rate > AT91_RTT_RTPRES) {
+ 		dev_err(&pdev->dev, "Invalid slow clock rate\n");
+-		ret =3D -EINVAL;
+-		goto err_clk;
++		return -EINVAL;
+ 	}
+=20
+ 	mr =3D rtt_readl(rtc, MR);
+@@ -405,10 +400,8 @@ static int at91_rtc_probe(struct platform_device *pd=
+ev)
+ 	rtt_writel(rtc, MR, mr);
+=20
+ 	rtc->rtcdev =3D devm_rtc_allocate_device(&pdev->dev);
+-	if (IS_ERR(rtc->rtcdev)) {
+-		ret =3D PTR_ERR(rtc->rtcdev);
+-		goto err_clk;
+-	}
++	if (IS_ERR(rtc->rtcdev))
++		return PTR_ERR(rtc->rtcdev);
+=20
+ 	rtc->rtcdev->ops =3D &at91_rtc_ops;
+ 	rtc->rtcdev->range_max =3D U32_MAX;
+@@ -419,7 +412,7 @@ static int at91_rtc_probe(struct platform_device *pde=
+v)
+ 			       dev_name(&rtc->rtcdev->dev), rtc);
+ 	if (ret) {
+ 		dev_dbg(&pdev->dev, "can't share IRQ %d?\n", rtc->irq);
+-		goto err_clk;
++		return ret;
+ 	}
+=20
+ 	/* NOTE:  sam9260 rev A silicon has a ROM bug which resets the
+@@ -433,11 +426,6 @@ static int at91_rtc_probe(struct platform_device *pd=
+ev)
+ 			 dev_name(&rtc->rtcdev->dev));
+=20
+ 	return devm_rtc_register_device(rtc->rtcdev);
+-
+-err_clk:
+-	clk_disable_unprepare(rtc->sclk);
+-
+-	return ret;
+ }
+=20
+ /*
+@@ -450,8 +438,6 @@ static void at91_rtc_remove(struct platform_device *p=
+dev)
+=20
+ 	/* disable all interrupts */
+ 	rtt_writel(rtc, MR, mr & ~(AT91_RTT_ALMIEN | AT91_RTT_RTTINCIEN));
+-
+-	clk_disable_unprepare(rtc->sclk);
+ }
+=20
+ static void at91_rtc_shutdown(struct platform_device *pdev)
+--=20
+2.25.1
 
 
 
