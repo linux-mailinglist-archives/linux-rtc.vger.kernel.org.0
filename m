@@ -1,79 +1,79 @@
-Return-Path: <linux-rtc+bounces-3364-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3365-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E95E7A4B985
-	for <lists+linux-rtc@lfdr.de>; Mon,  3 Mar 2025 09:38:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DA2BA4B988
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Mar 2025 09:38:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD5E53A8FA3
-	for <lists+linux-rtc@lfdr.de>; Mon,  3 Mar 2025 08:37:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54D6F7A4529
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Mar 2025 08:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C97E1EE006;
-	Mon,  3 Mar 2025 08:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6FC1EDA37;
+	Mon,  3 Mar 2025 08:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="GTwMmdPn"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="dggZQvV3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293C6645
-	for <linux-rtc@vger.kernel.org>; Mon,  3 Mar 2025 08:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0996A1D63FF
+	for <linux-rtc@vger.kernel.org>; Mon,  3 Mar 2025 08:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740991067; cv=none; b=o7f1/06+bfMF/RwV3cTsGUmBMWIu1ZAXFVtBLsHCwuZeFepNQoKFCltLCY/XIXUIk/0iE/LD3Cj3WTSxW+n5JbS0+YIQnDM1v2L6scN8mGmfkOr3oODOhQ053pkyOxBY8ZtpGm8QN/0h8TDf2VvlUUWGVmG9haobgy/JJ1ruaCo=
+	t=1740991101; cv=none; b=X4aVxgTKBJVGlP35AZ/KVsssLVencI1I0XIOahArJvqMX8Myarn9zn6XOsVqUtviBvUmZEELwT+UGEyMsn0jnja5hc06+frU6PelezKN6rb3aGWwTrAV2sYlvzx2GmNY5jsPxQ3TZ01/6diA178NTXtSg+NWQLOwUOfTg2b5xIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740991067; c=relaxed/simple;
-	bh=RK+QYQOjVVok1aZddoO9G5Ba4alVGQm4Od6mXZJOVrI=;
+	s=arc-20240116; t=1740991101; c=relaxed/simple;
+	bh=j0Zg6zDwqBJl9XRcUP62Tk9aOlk8S3geXSs4RyGKrkk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UJxFRBJpwnyI0Q2fu/2tk5GRQnl7XGP9lcYsMhldraIGLDxsIZY2Fc9Ok8yivuHAsaRHBBqi4tdj2x8o2bZ2r9RUIMDMP+lMJlv8sai3GdVKGcmwbON7QzZ1HI2sSgtYDPcYGHq3SC0wj0S2TxwrK3Z9OshQVmCJjz4Qrwfumhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=GTwMmdPn; arc=none smtp.client-ip=209.85.218.54
+	 In-Reply-To:Content-Type; b=IHhaqv7j33xaLjn3XF39AJPYBXPnrSK7KtBTliKxzmfJkdv3Si12/MM/5/oI5zf/1yz8P3c1JAiRhv3QPnzMPItZ8u2U4p9eHpqLcjXRcgrJHsBQHPhDismMqGgF5TItiilV2ToVY1t2duukrifUZcb5G6Y35dalzFEpK01fYzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=dggZQvV3; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aaecf50578eso790469466b.2
-        for <linux-rtc@vger.kernel.org>; Mon, 03 Mar 2025 00:37:44 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e51e3274f1so3211981a12.0
+        for <linux-rtc@vger.kernel.org>; Mon, 03 Mar 2025 00:38:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1740991063; x=1741595863; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1740991098; x=1741595898; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=088gCiVsmCpfljLz/WNF5os3OZWs6Dr62hIApojY3d8=;
-        b=GTwMmdPnOt4JdMYnuZd0BMPrJfhOGVMFGyaIt30eGyGKH88mrDBAzuCfb/8W5gXcoy
-         Fi0uy9lBo5b+sX6jQwzO/TDHvHWK+HQ1iD2HimnqoKKc3X9eeKxHTqBk7fAMzKMe7ITd
-         GNspcevs36/PtIIe/M4DnImUflW+aYnaeFBZ2YhmvcrpsGZFM7rNmzpGAJqBJ1tfWeC+
-         L/h+qu3fKXDM9nLcrDaz281esofKd3ZoO1E+e7XW9UMkROxWf0HeLO8RKiKKWwvyXNf7
-         K8v7lThakNbJ8u5gSwcEum02YRFL0CJc2ABSIZROxqE9G47oFCC9y5epW7El/7yx/rIP
-         TR6w==
+        bh=YQk2xNROAbUunePjjPQL+I4XS/ltDuWUPTvnmWm1qXc=;
+        b=dggZQvV3pT2mlupd9scXXjjeaKW6dnYwVRpyX5bXi8C+fazQrFgxcKRaZ1GP7EsV3R
+         QAcgVrrVwjWjo/ouhwB5xK2n7kwTsTx1yANfZxNTv4kSz2J/31NABhpYoejrS/iGl0e1
+         PVf/N+2SLCyZ6USM+yqxZ1vvDNwkeZf2TscMZqnbgB+ZBIQ4SpHAF4lVMQizEhRLBvCT
+         NUFDZiXW1CxdS4YSavSW58fpDUGvqHZeB3ONrHgnW6xFrkHVbU3O/TKB6KYozc0nfouz
+         mcaHGK4c2HAbG08jlAwoiL8Wbze+zDmkFvvriQCQVSRZZzS45vTfK3owwOBtjenpSful
+         Hxgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740991063; x=1741595863;
+        d=1e100.net; s=20230601; t=1740991098; x=1741595898;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=088gCiVsmCpfljLz/WNF5os3OZWs6Dr62hIApojY3d8=;
-        b=U04x68x6XudT6z1vlYp0ehi0ZsL08rCsVtwZn+5oRuknyGRvimLKlIavfGQ3FXTXl8
-         DjPYniE1bIdbcorA4AZ1vEEi9LLZ6HirOaxCPN45p5MGKzPb82Og5WwgPQSJk/FUc5cE
-         qdbuTRKKx8Ej2Wa3QZGDsttAqW1+5Fy66xGk8ykPghp9xR5Iuq1g5ssg6RUUm2ZEdbQV
-         BPd4ffPejRQVcnodTg1D1PUfLuA5Tmly3+QitdyKOjHw4E+DgBa5MF8Q/P37eEM/7y6u
-         U6imA2QFED91p49Z7GMKh4eP8pKCZgsql7zsfXZuac0W4r40EB0sCZ75Vy7XX8BgfYtp
-         Eatw==
-X-Forwarded-Encrypted: i=1; AJvYcCWMnxB8MHNhTmfHLxWRU570IikXFraQUMz3LmDJiwXPXiPgE73+VDaXL4Zw2G8ngCDKixkNsfYNs38=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqxuKoY7kjRWPyNoA4F4ewTkbrdiYLhY7hRc4i1ClMZdgWwewk
-	uyEQnIWzQulXzNTyFq3rCVGZUSJfMs514G29JcosC+6VwwSQRyCYRLclsPu0A0s=
-X-Gm-Gg: ASbGncvdb5GYzaLClfrseUaRE9UivvKto4RYsPZs+PwiytLwfLEl8yULLLy+7WxAUY8
-	y+mjOVttRgnxkR24NKH6dXocwBCfIFcIVw4M7hdqflw7PGUft9hdRpo3dp5reEwMLS2DJOrjzfo
-	SgrxrEJi33fQBPLjN2FXJYmPRooTXvHj0BpuAD20uKkYkOieBLzT7KI3tBde8KPQsfYTdz7/731
-	x8Rg7hP4uinMDJVk4YnAdDAKkU3ZWjj7yvSUcZ1FFB5IknKkMRDjrgt4PLv/z21os3J96RwtHhs
-	thVaGwV6HangVePaVjzcDbYh+th1oFHm2njO4I2omPvnLAerj0zkqbyy
-X-Google-Smtp-Source: AGHT+IG+mwXTx4eDAQj8AAOugFy3UaMktA3JlzKQWx74RnnVc1/k+KU8S1qfjCYJPEbQsqpxnNFduw==
-X-Received: by 2002:a17:906:6a28:b0:abf:749f:f719 with SMTP id a640c23a62f3a-abf749ffc45mr408409866b.7.1740991063333;
-        Mon, 03 Mar 2025 00:37:43 -0800 (PST)
+        bh=YQk2xNROAbUunePjjPQL+I4XS/ltDuWUPTvnmWm1qXc=;
+        b=O0dMu1JMquIyIXBqPEh3iiY/knPEsYh7QJO+D9SMrcje9BfsQdbtx9d+ffVu3q994g
+         +zFejNwvbqYO57TGiBjKzSru6vw9Mo+XUTSUWkmg9d3o5ipeWUuQfd+OkgekF4NzsSi+
+         dsUrrQbFBJAm1aoO8FHPzItsXMK8XzrNqN0cXl4tX42kHI7CAj4435MTInWQVuxP/kmS
+         Glehgj2nf1klmQ5Fh+iL3eD1PaavY3t/FPNMOiegofIoQgvd1yN582Lcli02hCyTExCE
+         nSseEeSKYqn4n8mcD7I6JcBjkK44rNdDmjCEHtk+kmV9IvjMZILFETVy7Lq62pDWcIR1
+         fA6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVx4+YFdwE73mkvLYCXKPwJw8N9DIlrEif6c3Mt8/cGc65ZLig4fOAIKrvFhMGy/pBNG69E3TuiYXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTNgWVHJXSwgHaX7vfI9Y/Tc93UNuzsr6pDlnAj0IFkc7vswJy
+	3SLiLqHIYqrRAtwvIbev0H8S8RU4VYhAg/MT/7zDG83Km+02X6teRYoiikNO83M=
+X-Gm-Gg: ASbGncth9tEK2m5yts+OCceFqkN6bXJAKkFHSSZOnT8fEM3J8JG6tHxYNxsdmpn2Ct0
+	NdL1VbDfYTiqi0flzQm5MN+ErWjdpECOSbc1EcLgNhXJY+vCft50MP8XpOy0ZJbjbAtsat4pH2Q
+	HopGDOYx+ZyTwUjRamyCDLSfC0GII6o1aUvY8G5Jd8Wb1pLA5WibliAQY7L4psZY7ytrGdYmLRW
+	lhBXymrBJU1rt5V1zEj2Pn5JULNgsvZ+6bmdUmKL8XvDs/w9Eb/t7S6L5i4QRjAE94/E5tLhrcZ
+	jr5okdJWTFGt+sCfrhpVp9wK3RBzTq/aj8q17TTi6q2CVcZ474fQ4Dm0
+X-Google-Smtp-Source: AGHT+IFVwVDJq2GzOlT/TEj1tNqLe6aqacbfxkkGcxDDEFi9TNJRnV4PSA6nZiqQzltKffqId4/sKg==
+X-Received: by 2002:a17:906:7308:b0:ac1:df33:25b9 with SMTP id a640c23a62f3a-ac1df33268amr85643966b.40.1740991098316;
+        Mon, 03 Mar 2025 00:38:18 -0800 (PST)
 Received: from [192.168.50.159] ([82.78.167.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf19aca8a0sm730375166b.178.2025.03.03.00.37.42
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf1aec8164sm718325666b.172.2025.03.03.00.38.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 00:37:42 -0800 (PST)
-Message-ID: <45713e88-57af-43c7-bf0b-4583383b10dc@tuxon.dev>
-Date: Mon, 3 Mar 2025 10:37:43 +0200
+        Mon, 03 Mar 2025 00:38:17 -0800 (PST)
+Message-ID: <6d762706-27b5-4b0b-bcab-ae96a831c03a@tuxon.dev>
+Date: Mon, 3 Mar 2025 10:38:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -81,7 +81,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 11/21] ARM: at91: PM: Add Backup mode for SAMA7D65
+Subject: Re: [PATCH v3 17/21] ARM: dts: microchip: sama7d65: Add RTT and GPBR
+ Support for sama7d65 SoC
 To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
  nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
@@ -90,66 +91,58 @@ Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
- <3a1f59af1ac9322b0203694b535d5d13120a31eb.1740671156.git.Ryan.Wanner@microchip.com>
+ <6a1c058edee3fe1459dcb3a93a0a789a9ffff5f3.1740671156.git.Ryan.Wanner@microchip.com>
 Content-Language: en-US
 From: "claudiu beznea (tuxon)" <claudiu.beznea@tuxon.dev>
-In-Reply-To: <3a1f59af1ac9322b0203694b535d5d13120a31eb.1740671156.git.Ryan.Wanner@microchip.com>
+In-Reply-To: <6a1c058edee3fe1459dcb3a93a0a789a9ffff5f3.1740671156.git.Ryan.Wanner@microchip.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 2/27/25 17:51, Ryan.Wanner@microchip.com wrote:
+On 2/27/25 17:52, Ryan.Wanner@microchip.com wrote:
 > From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Add config check that enables Backup mode for SAMA7D65 SoC.
-> 
-> Add SHDWC_SR read to clear the status bits once finished exiting backup
-> mode. This is only for SAMA7D65 SoCs. The SHDWC status register
-> needs to be cleared after exiting backup mode to clear the wake up pin
-> status.
+> Add RTT support for SAMA7D65 SoC. The GPBR is added so the SoC is able
+> to store the RTT time data.
 > 
 > Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 > ---
->   arch/arm/mach-at91/pm.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
+>   arch/arm/boot/dts/microchip/sama7d65.dtsi | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 > 
-> diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-> index 39644703244d..d82a507bc8da 100644
-> --- a/arch/arm/mach-at91/pm.c
-> +++ b/arch/arm/mach-at91/pm.c
-> @@ -647,6 +647,11 @@ static void at91_pm_suspend(suspend_state_t state)
->   		at91_suspend_sram_fn = fncpy(at91_suspend_sram_fn,
->   					     &at91_pm_suspend_in_sram,
->   					     at91_pm_suspend_in_sram_sz);
+> diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> index b0a676623100..aadeea132289 100644
+> --- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> @@ -120,6 +120,13 @@ shdwc: poweroff@e001d200 {
+>   			status = "disabled";
+>   		};
+>   
+> +		rtt: rtc@e001d300 {
+> +			compatible = "microchip,sama7d65-rtt", "atmel,at91sam9260-rtt";
+> +			reg = <0xe001d300 0x30>;
+> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk32k 0>;
+> +		};
 > +
-> +		if (IS_ENABLED(CONFIG_SOC_SAMA7D65))
-> +			/* SHDWC.SR */
-> +			readl(soc_pm.data.shdwc + 0x08);
-> +
->   	} else {
->   		at91_suspend_finish(0);
->   	}
-> @@ -707,6 +712,7 @@ static int at91_pm_enter(suspend_state_t state)
->   static void at91_pm_end(void)
->   {
->   	at91_pm_config_ws(soc_pm.data.mode, false);
-> +
+>   		clk32k: clock-controller@e001d500 {
+>   			compatible = "microchip,sama7d65-sckc", "microchip,sam9x60-sckc";
+>   			reg = <0xe001d500 0x4>;
+> @@ -132,6 +139,11 @@ chipid@e0020000 {
+>   			reg = <0xe0020000 0x8>;
+>   		};
+>   
+> +		gpbr: gpbr@e001d700 {
+> +			compatible = "microchip,sama7d65-gpbr", "syscon";
+> +			reg = <0xe001d700 0x48>;
+> +		};
 
-Not needed. I'll drop it while applying.
+This node should be before chipid one to have them sorted by node address.
 
->   }
->   
->   
-> @@ -1065,7 +1071,8 @@ static int __init at91_pm_backup_init(void)
->   	int ret = -ENODEV, located = 0;
->   
->   	if (!IS_ENABLED(CONFIG_SOC_SAMA5D2) &&
-> -	    !IS_ENABLED(CONFIG_SOC_SAMA7G5))
-> +	    !IS_ENABLED(CONFIG_SOC_SAMA7G5) &&
-> +	    !IS_ENABLED(CONFIG_SOC_SAMA7D65))
->   		return -EPERM;
->   
->   	if (!at91_is_pm_mode_active(AT91_PM_BACKUP))
+> +
+>   		dma2: dma-controller@e1200000 {
+>   			compatible = "microchip,sama7d65-dma", "microchip,sama7g5-dma";
+>   			reg = <0xe1200000 0x1000>;
 
 
