@@ -1,225 +1,179 @@
-Return-Path: <linux-rtc+bounces-3385-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3386-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6EECA4E83D
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 18:17:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37EF9A4E913
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 18:35:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A17F17ABE0F
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 17:12:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDDF7189E22A
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 17:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320DC204692;
-	Tue,  4 Mar 2025 16:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CF128D067;
+	Tue,  4 Mar 2025 17:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="nai7Wcce"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ITXiACx8"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCE329C324
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 16:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107075; cv=fail; b=ffeDGDar3FhYfTrAQyKOshGzEbW6UNNw9nj8Aq2+5z81yd7fAs4iWp2FKYYVst4tELOLxQNbAEfhX8bXf9qz0O7xxHKqwuymFdBs3CTXCKbGWPHQZFuqaDM2ZmM1YS+9ebIKlbhOUNkULzdTpNY+CPZdvLrdA05/yYHjbBrZQoA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741107075; c=relaxed/simple;
-	bh=YMx7qLuWP6vg/7a5/BEOE9nZt/RJpQmS9nMIn5RykNc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pWUvaFyBE/b0znYMqylt5/6+cPghC6/3ECyVLocj8FV27Js/+yNNbsi3/MqP0T8R0qhBwPjZjsGwfdPb+ucTIsSXBp6qCSvyXUK2h0q/n2UlUpAwuhMRJdifNfIV7krsYZgOQ3QVYq6hhnGhRT4YVeodT48hfdlP7zo3vwZXs64=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=ispras.ru; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce reason="signature verification failed"; arc=none smtp.client-ip=83.149.199.84; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; arc=fail smtp.client-ip=160.75.25.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (unknown [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 318E44089284
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 19:51:10 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=ispras.ru header.i=@ispras.ru header.a=rsa-sha256 header.s=default header.b=nai7Wcce
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dhC15pHzFxDy
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:42:51 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id AC2EC41898; Tue,  4 Mar 2025 17:42:41 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce
-X-Envelope-From: <linux-kernel+bounces-541868-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id 2C04442195
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:03:31 +0300 (+03)
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 6DA442DCE1
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:03:30 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 800A77A5B0D
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:02:19 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340FE2139C4;
-	Mon,  3 Mar 2025 14:02:59 +0000 (UTC)
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0BF1F4167;
-	Mon,  3 Mar 2025 14:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368DE283C9D
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741010576; cv=none; b=ocSCzbdzChZFOjmwAzWMUEbbIJvE76tKUKqNp4ssxEiOGIemvQ/CeEBqIPVUIypx/VP7zMOUXxeiN3LVNAo+Qx9iZ82Mo8dI6IQ63VZ6P5al8qedhl+3kQShBFRF843DlRwAoHjklQ4cBDFfCVfb+5xyU2csXteWmMJbY6fmo04=
+	t=1741107935; cv=none; b=ruC4MF6hTrtF6MSXo1jnyMJibseF3sIsbq+PQuImUXPtv+Vh7S4K5YcyeKzoz3GitZgsLpuPNSOGlUb/rCzM9wnMeqxeDNUaW5WfRN4lK68KT7ftTTuBHSEkXp0evUjPa56dkE9hX+9yh/1ZMDPLSaOmATQ8vq6fKEIhmi0Wfb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741010576; c=relaxed/simple;
-	bh=un//m18e0EyZu6pJVZ/eIwmeKA7wLXFC7L5MaYP//fo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dqG/N64ukZ7Mt8pQsyOjVoMm6sPa7UzB7BwfL2HiVUZaJ0CSJwOJHPmACnAIZpx1aul4TirJugN2bGd2WiY9OYIW2v3xCBcOyk4IA9VQffa7A8/zcxu/zqbqQXHN4fEo/MR1XiLQEkk+H16A0BBhCqMIYy3NrZ8mGZ/tZZ4LY/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=nai7Wcce; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
-	by mail.ispras.ru (Postfix) with ESMTPSA id 02E6340CE182;
-	Mon,  3 Mar 2025 14:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 02E6340CE182
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1741010564;
-	bh=vqgSkFlCQVJ4CaUUmVwPWsAun4vxgHbAxdBt/2bRvcU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=nai7WcceMGUZcGUxKsLVw+ByZ0zB426L99V6BXimgqOYhZ0gpVanAUZ6qjH6bN2NQ
-	 JPdn355SI9GJztXnYg9j9JJcOl8euBD3CbkJPzwu8husGgSvIqsokUvUxf07nI7x8M
-	 QOwFvGitGwy4NiKVWp8R2jIDFXoYzmRY26HJDwZA=
-From: Vitalii Mordan <mordan@ispras.ru>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Vitalii Mordan <mordan@ispras.ru>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Johan Hovold <johan@kernel.org>,
-	Boris Brezillon <bbrezillon@kernel.org>,
-	linux-rtc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Fedor Pchelkin <pchelkin@ispras.ru>,
-	Alexey Khoroshilov <khoroshilov@ispras.ru>,
-	Vadim Mutilin <mutilin@ispras.ru>,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] rtc: at91sam9: fix call balance of rtc->sclk handling routines
-Date: Mon,  3 Mar 2025 17:02:29 +0300
-Message-Id: <20250303140229.642959-1-mordan@ispras.ru>
-X-Mailer: git-send-email 2.25.1
-Precedence: bulk
+	s=arc-20240116; t=1741107935; c=relaxed/simple;
+	bh=vgbHVbyAdNxxqlJ49fGdNGtTt3OgYs9o/Lygu1bq/OA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=secvoP/Hf6ccGzfTn/ZyKoV7P3OkXRUyL5J+ZJWJbLihMfqcVk37iDfap3Kqu6sLKDFxfiMmZ+kWUfqreqFK8QhJMSJzu3WCQfqZe8kR6x5kviG22QUp3hPBHvLhWJyfB/tZ4lSBcy6KAHbnBYl1TvGy/esPxNesDuZWBvP8QkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ITXiACx8; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e4cbade42aso8923747a12.1
+        for <linux-rtc@vger.kernel.org>; Tue, 04 Mar 2025 09:05:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741107931; x=1741712731; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VwGP1hOkgqyt7cuslt+mBb5Pi8swKaj/YmncchBevCs=;
+        b=ITXiACx82elRORdzNYn4xfGKOF8bz9O7LelV8yR1/wQagJY55lumDQGs7DfJxlfeBJ
+         QRsAgNJFETKetYw4CRXwLuw+y1OYuXGkXpgCxTiteJXimBvUkOI76Kd0VMDbjz+2a5FY
+         hVoh102w72cV+7xNsTs/XPc0vFoqUw1tGENmju171aNoLJ4A5k2S6qIe8IB2A3ADyipv
+         Bxg+I4ydJ9ShuXV5XFpoDnHJvMLMwZJiXE7ln4Hv1jM0UDbE0ts/J+2TAL6CwMXiKr5D
+         b0ydZxjgUobsM1PoeWdFZqVB8xWNGJhCmgrEzfLqYGk2eG6RrK71mb4cFz5ZB67AyWWF
+         gfsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741107931; x=1741712731;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VwGP1hOkgqyt7cuslt+mBb5Pi8swKaj/YmncchBevCs=;
+        b=GW4ouyEiIEc99e4mBzomOIuOk0zlsdLj2Vec4Dm0+ZxMZC0oamdH/3kjlNBqn17Esu
+         enbROdMOtS0seGkGnlZ56PHIN+a2C8Hpw/0tDu5Bj4Bc0NAmujLQzjMg9/d32xju88nP
+         1GTjR/AH8jt3Mwo35IpmJju9slH1vdD6ej7ZoZj96HZQbXYEWDM3A1FkAUK5EXfXprKT
+         XonzyMEpbV5p2SJgUBa/epk1xrZ8sBQunWB8di7X78uf09QVIh4zhe8Q5E1jr4x4uMWK
+         xwRoBxtDifeMIoRZrnOT/+svBlGovCV/tR8P/hM8Ns4MYAk2ZbjjsQQR50mT4BWJKh0J
+         gGaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTK471ZvrUBLd+/Aa5LE2/sB28vFWElqyP07lmtAnxiCW7Ju+rOEdJINLQa4yA11+B808HIi87IN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycThOHvadbJ3Q8lWX7NoZodz6V/Hfr9CI3J7kqy227ux16Whxn
+	FllStxr+mkhEwNUm65bWyCfT8j0o/pgRH4qRuFb0Us+a9x6HlMp0DHjwYQ1B54Y=
+X-Gm-Gg: ASbGnct+yiP0hAqb6HL0YK0a5jyuvtGrlVIh5Jws58u26Rr0R6vOO9evzezoQlyZuS6
+	qvHFbJvSYk4w2bY5g3c8/PSoSFk7xxtFK4RfvuyFAkUvlE53oMuTlfHt+jmSOe5OtQHRlqu+se1
+	EmzXeGbZzLcnOuPPuHpgfxF7IvBzORr49Z4uM9kgHBUgHbNHST49j3Q6T4s9ANMCaDwRf9wI97r
+	ZMwZpDl+/9ZB/K2GbITD9h7Bgf+vkKSwsg3Fp2q9I/KwoWgsK7clRzYPJiSbR4RsfaWYpdMl+OB
+	pDPrtPNAyv32W9/5ImyOwscxG/OolQX/8pkcbwsKx7r5mMCMJeCv1Y1SYwamxvjleXJBgmGAItV
+	EE6jv1S+UZcBmare9pEQhFhfznJ0h
+X-Google-Smtp-Source: AGHT+IG1qDKc0hst2zevKKhfPXC0MrEb14O70/5mMsp5hFfaUprLxoI4xNFXRR1d5hlR/z34qhDcpw==
+X-Received: by 2002:a17:907:da0:b0:abf:23a7:fc6 with SMTP id a640c23a62f3a-ac1f1185263mr365511466b.16.1741107931351;
+        Tue, 04 Mar 2025 09:05:31 -0800 (PST)
+Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Mar 2025 09:05:30 -0800 (PST)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Subject: [PATCH v2 00/16] a few rtc driver cleanups
+Date: Tue, 04 Mar 2025 17:05:28 +0000
+Message-Id: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6dhC15pHzFxDy
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741711743.89575@R6qlUkythFR9ILaBGHUmow
-X-ITU-MailScanner-SpamCheck: not spam
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANgyx2cC/3XMQQrCMBCF4auUWRtJxhSDK+9Rukjj2A6UpExqU
+ Urubuze5f/gfTtkEqYMt2YHoY0zp1gDTw2EyceRFD9qA2psNaJTsgYVZvLxtWRlMOihNXghb6F
+ eFqEnvw+u62tPnNckn0PfzG/9A21GaTVYGyjoq7PO3GeOXtI5yQh9KeULAj75TakAAAA=
+X-Change-ID: 20250228-rtc-cleanups-12c0b5123ea4
+To: Chanwoo Choi <cw00.choi@samsung.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ Hans Ulli Kroll <ulli.kroll@googlemail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>, 
+ Dianlong Li <long17.cool@163.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-aspeed@lists.ozlabs.org, linux-amlogic@lists.infradead.org, 
+ llvm@lists.linux.dev, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
 
-If rtc->sclk was enabled in at91_rtc_probe(), it must be disabled in
-all error paths to ensure proper cleanup. However, if
-devm_rtc_register_device() returns an error in at91_rtc_probe(), the
-rtc->sclk clock will not be disabled.
+Hi,
 
-Use the devm_clk_get_enabled() helper function to ensure proper call
-balance for rtc->sclk.
+While looking at RTC, I noticed that various drivers are keeping
+pointers to data that they're not using themselves throughout their
+lifetime.
 
-Found by Linux Verification Center (linuxtesting.org) with Klever.
+So I took the liberty to drop these pointers and this series is the
+result.
 
-Fixes: a975f47f6e9a ("rtc: at91sam9: use clk API instead of relying on AT=
-91_SLOW_CLOCK")
-Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+The last two patches also convert two drivers to using dev_err_probe(),
+as I looked slightly closer into those two. They don't exactly fit the
+general subject of removal of unneeded pointers, but I wanted to share
+them anyway, since they're ready.
+
+Drivers other than s5m were compile-tested only.
+
+Cheers,
+Andre'
+
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- drivers/rtc/rtc-at91sam9.c | 28 +++++++---------------------
- 1 file changed, 7 insertions(+), 21 deletions(-)
+Changes in v2:
+- s5m: fix arguments to devm_i2c_new_dummy_device()
+- merge two rx8581 & sd3078 patches into one each (Alexandre)
+- Link to v1: https://lore.kernel.org/r/20250228-rtc-cleanups-v1-0-b44cec078481@linaro.org
 
-diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
-index 38991cca5930..f4b7cf37397f 100644
---- a/drivers/rtc/rtc-at91sam9.c
-+++ b/drivers/rtc/rtc-at91sam9.c
-@@ -375,21 +375,16 @@ static int at91_rtc_probe(struct platform_device *p=
-dev)
- 		return -ENOMEM;
- 	}
-=20
--	rtc->sclk =3D devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(rtc->sclk))
-+	rtc->sclk =3D devm_clk_get_enabled(&pdev->dev, NULL);
-+	if (IS_ERR(rtc->sclk)) {
-+		dev_err(&pdev->dev, "Could not get and enable slow clock\n");
- 		return PTR_ERR(rtc->sclk);
--
--	ret =3D clk_prepare_enable(rtc->sclk);
--	if (ret) {
--		dev_err(&pdev->dev, "Could not enable slow clock\n");
--		return ret;
- 	}
-=20
- 	sclk_rate =3D clk_get_rate(rtc->sclk);
- 	if (!sclk_rate || sclk_rate > AT91_RTT_RTPRES) {
- 		dev_err(&pdev->dev, "Invalid slow clock rate\n");
--		ret =3D -EINVAL;
--		goto err_clk;
-+		return -EINVAL;
- 	}
-=20
- 	mr =3D rtt_readl(rtc, MR);
-@@ -405,10 +400,8 @@ static int at91_rtc_probe(struct platform_device *pd=
-ev)
- 	rtt_writel(rtc, MR, mr);
-=20
- 	rtc->rtcdev =3D devm_rtc_allocate_device(&pdev->dev);
--	if (IS_ERR(rtc->rtcdev)) {
--		ret =3D PTR_ERR(rtc->rtcdev);
--		goto err_clk;
--	}
-+	if (IS_ERR(rtc->rtcdev))
-+		return PTR_ERR(rtc->rtcdev);
-=20
- 	rtc->rtcdev->ops =3D &at91_rtc_ops;
- 	rtc->rtcdev->range_max =3D U32_MAX;
-@@ -419,7 +412,7 @@ static int at91_rtc_probe(struct platform_device *pde=
-v)
- 			       dev_name(&rtc->rtcdev->dev), rtc);
- 	if (ret) {
- 		dev_dbg(&pdev->dev, "can't share IRQ %d?\n", rtc->irq);
--		goto err_clk;
-+		return ret;
- 	}
-=20
- 	/* NOTE:  sam9260 rev A silicon has a ROM bug which resets the
-@@ -433,11 +426,6 @@ static int at91_rtc_probe(struct platform_device *pd=
-ev)
- 			 dev_name(&rtc->rtcdev->dev));
-=20
- 	return devm_rtc_register_device(rtc->rtcdev);
--
--err_clk:
--	clk_disable_unprepare(rtc->sclk);
--
--	return ret;
- }
-=20
- /*
-@@ -450,8 +438,6 @@ static void at91_rtc_remove(struct platform_device *p=
-dev)
-=20
- 	/* disable all interrupts */
- 	rtt_writel(rtc, MR, mr & ~(AT91_RTT_ALMIEN | AT91_RTT_RTTINCIEN));
--
--	clk_disable_unprepare(rtc->sclk);
- }
-=20
- static void at91_rtc_shutdown(struct platform_device *pdev)
---=20
-2.25.1
+---
+André Draszik (16):
+      rtc: max77686: drop needless struct max77686_rtc_info::rtc member
+      rtc: s5m: drop needless struct s5m_rtc_info::i2c member
+      rtc: aspeed: drop needless struct aspeed_rtc::rtc_dev member
+      rtc: ds2404: drop needless struct ds2404::rtc member
+      rtc: ep93xx: drop needless struct ep93xx_rtc::rtc member
+      rtc: ftrtc010: drop needless struct ftrtc010_rtc::rtc_dev member
+      rtc: m48t86: drop needless struct m48t86_rtc_info::rtc member
+      rtc: meson: drop needless struct meson_rtc::rtc member
+      rtc: meson-vrtc: drop needless struct meson_vrtc_data::rtc member
+      rtc: pl030: drop needless struct pl030_rtc::rtc member
+      rtc: rx8581: drop needless struct rx8581
+      rtc: s35390a: drop needless struct s35390a::rtc member
+      rtc: sd2405al: drop needless struct sd2405al::rtc member
+      rtc: sd3078: drop needless struct sd3078
+      rtc: max77686: use dev_err_probe() where appropriate
+      rtc: s5m: convert to dev_err_probe() where appropriate
 
+ drivers/rtc/rtc-aspeed.c     | 16 ++++-----
+ drivers/rtc/rtc-ds2404.c     | 14 ++++----
+ drivers/rtc/rtc-ep93xx.c     | 16 ++++-----
+ drivers/rtc/rtc-ftrtc010.c   | 17 +++++----
+ drivers/rtc/rtc-m48t86.c     | 14 ++++----
+ drivers/rtc/rtc-max77686.c   | 37 +++++++++----------
+ drivers/rtc/rtc-meson-vrtc.c | 12 +++----
+ drivers/rtc/rtc-meson.c      | 16 ++++-----
+ drivers/rtc/rtc-pl030.c      | 14 ++++----
+ drivers/rtc/rtc-rx8581.c     | 85 +++++++++++++++++++-------------------------
+ drivers/rtc/rtc-s35390a.c    | 22 ++++++------
+ drivers/rtc/rtc-s5m.c        | 58 +++++++++++++-----------------
+ drivers/rtc/rtc-sd2405al.c   | 16 ++++-----
+ drivers/rtc/rtc-sd3078.c     | 71 +++++++++++++++---------------------
+ 14 files changed, 183 insertions(+), 225 deletions(-)
+---
+base-commit: 0226d0ce98a477937ed295fb7df4cc30b46fc304
+change-id: 20250228-rtc-cleanups-12c0b5123ea4
+
+Best regards,
+-- 
+André Draszik <andre.draszik@linaro.org>
 
 
