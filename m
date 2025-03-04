@@ -1,81 +1,81 @@
-Return-Path: <linux-rtc+bounces-3389-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3390-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEC54A4E8E1
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 18:32:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13265A4E9C2
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 18:48:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 865517A7217
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 17:29:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCAA68C0B0F
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Mar 2025 17:29:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BDFC28FFC5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5AB28FFD0;
 	Tue,  4 Mar 2025 17:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bgPOHsqR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zgH5+x53"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C0D28D06E
-	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:05:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832AA28D0AF
+	for <linux-rtc@vger.kernel.org>; Tue,  4 Mar 2025 17:05:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107938; cv=none; b=S+TW026LhWRQtM1nhE2NW6dvTnQQqIxp+P/l6Gzyl3pHwVRp/BIIDpKsxKGPR/3hMNwfnYWyTZgCzn1KTq5+rif3os5YX6IZk3/2YW533bsEnKdsRznPoWdkd9ZM9cMbxVqRiyavC1hpM46rQeqOpopECWoE04vnunz3kwnAXp8=
+	t=1741107939; cv=none; b=XPcbiyIcvA733uJh3S+75BzJKTd6gJ2Fn9IplQRJaUkV1LRnC7VHr/apUn0mf9NDi4pK5pcmAIiZL/MOHYDssmQwKp8pp5RGvTbE1XJxuyWnO6k07VOww8+WsM0zSjIJERZEFYK+JDeipYra+Z9NQJgFdG2KpAy9+q5ienwbyFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741107938; c=relaxed/simple;
-	bh=ako7uKkoy0pcKOqw3JaomEgmXiZMMPwkguXI68dLj6c=;
+	s=arc-20240116; t=1741107939; c=relaxed/simple;
+	bh=bdvX1BNhSG2fpjHo2VIxHhZrYGN28llP3/MopMlEtfo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=piU4q9HhVuTUY/Cnmtu+ySsBNdFoRMq3lGalnIGn7HtA5ua4oWUSpV9Aotuwq9rITy8r4SOEHeLABfsG19zBKWus8ldgRv6/VZEQJ6wX9uZN7PojL3sV5sTSGJJGT5ijXMtdm+47yGfaABeg4z3x2USpStxniL63xCfJT+poRqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bgPOHsqR; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:To:Cc; b=XWccDVrDlsSOvnIqRkcsksaOEnGhdOyeTeb5guFv4VAKgYDua8sykOGCMOJA6MfQ9Bajt/+NXH7kSYE9L8kfJ87FPOzw+jIHbvfxgQxhULHeOWoCyOqwrFIzsF5NJ5nIGbXef3jjgvB6BzFDG7vw1DPECr8u18jJRJKR9qPsgB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zgH5+x53; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e04cb346eeso10157414a12.2
-        for <linux-rtc@vger.kernel.org>; Tue, 04 Mar 2025 09:05:35 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-abf4cebb04dso643804066b.0
+        for <linux-rtc@vger.kernel.org>; Tue, 04 Mar 2025 09:05:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1741107934; x=1741712734; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PnUvUu9cMY/Mxw4Q1sllPthcln3NtgGY7cjKJANyPvk=;
-        b=bgPOHsqRQxEF2wX44C1FeYmeboblVNTv4TRe0zTDsWDyWKxbYq4M0KU4YMxFBKkZvh
-         AVpwTrTIA8prX++JKc1bK1LzaGP0VaiwOK41bYz5yYmUNxKMgfPkaVr6IiUW4qRrPzzm
-         hRwtkBuQMPcWiTrRUD7x7Ov5vef6tyuGjTqSJQ7t0ofbReduJp0qJLEHjNrIkarf9QC+
-         +xVaMmW53ODzxCKWIe+BaQL0B/191VL87RFNcUANzzpIsUn0w6BatW0ZWD5k81gMGfe1
-         k7sws2WpIkGrenpZA0Ghaknwn2TYt7slPg7pKzUHMefnnXa1UIrnh+jAU4LGH9/WGYzh
-         V8Bg==
+        bh=D0DbxfKxGvd2WW4HNIqxG+j4XJyJfuCMmLSYkWj7Rsc=;
+        b=zgH5+x53GgY567EAqrqQQRqhEWpQo4fbGGD9KCWkD13ACPz0pLbH0oILvZkJP/nOZy
+         3YVf4fEp8SBgheguN4RmtUYH+sS+Dput4mpcyDGPR/mkh08N+fdLLuiKbJHIDLHxQMcJ
+         JuWy8ukcyWnUriTTB0ZlqmmSWiU9bPn88QAqT+Vnnfdg8cdZWm0ZSH8VXxVCLUuQ5M58
+         KVR1eVChRiJZNLjExmO+1aDTcBvfKiVJsVyz/zn1vJlCzqafEFVPUkbjByDTx1dXDbp6
+         hE9aZNR5sxcQRuzbjNlVfad39mh04vBdFVRdPYhfYhrkHbCiETHwOOYzquwiqDsRykp7
+         4JHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1741107934; x=1741712734;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PnUvUu9cMY/Mxw4Q1sllPthcln3NtgGY7cjKJANyPvk=;
-        b=ngyaELypWCvYpjFZ6IZuhCp/YXlmgTrCIUuYm/mRIaRfqnsn+Tv5rW4GVgNjS0/A+d
-         N0WABP6bb1QlLD1OGyk3yZkcbudi6ovQUMMtTgjlCLbLgQS5G9tcUd8yXgJ6Z/yX2gnF
-         A+WLxvTaCgo7j19fnAEcXbHWxDexvvj6czyFbhYNTbTY1ToLe4GFNawGnkvAhkBimIz2
-         9sybdR0ndKwyPajZMCCOQsJ93w1nC7U5AbZNPPo44gUfe1mw9XJgKqCvMs1VdfXgZJAx
-         6hUeOxZMBC+jUTBLuZf5gBBRLFFKg2/EgqMbVcTHzKgcCfcAaCSfs/LZdEWS9Xj4ehKA
-         MV0A==
-X-Forwarded-Encrypted: i=1; AJvYcCVJx1YQmxpJyJ7ntwYuVZEKEjbZ0Grt35r8niEpDCZE9n45vSXkfLvq60IhxXcRCoEhbzrWhWhzl3Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0O081hhq2qXIbqAvqkfhgI6fLOE4bTGYUMxAhrnFkt9kahTFl
-	WXdN18toKb4MiVnDUtzp2UIFG76z1O++B+EfDiBjS3jfjrR3Bc3O0aQeNa45Ggk=
-X-Gm-Gg: ASbGncvrm3wob73QVkUfHKPIYGfs3bncJhCCD5A/4mEqxHga5iEurdxjZbSJGOmoMtB
-	f9D6Z9a+WM4CsCfBtNmBIoGnKl7MEXVDzXmk7z2w9cr7YkJI/GbGypTMPAyc739d8ZDss6VMqgc
-	xt0kW54rTDhehw1VK+hqj6B5x5mpwLalOb8nFzKflC/wTB3zKaaRy8n+gL6PIp1o0GOGl8TcWVM
-	IU8BwHWBBfxEj/fVSu0sPSY7wWxlwf+cLhonSy/9xC/eC5pQwciuyB+mrACplImzli2djImWrv/
-	TfPbVJcyI2w/UlQawZrRVXPbL6wo4FEu5jNeFR79B15aCdcU/PnfbtZLCnAmD4bQC0Dk4Jv0fb7
-	0wI8zc1cIjbiLXqJEOs5+erMCI8lE
-X-Google-Smtp-Source: AGHT+IH7IWkH6sGgCqXOqo1X+qUMKDFtMNOejwKoQaGxlKvxwXw1Icl3WBZaF1ebexseFdyLVEv5Qg==
-X-Received: by 2002:a05:6402:847:b0:5e4:cd5c:50f6 with SMTP id 4fb4d7f45d1cf-5e4d6afaf1dmr21403911a12.18.1741107933866;
-        Tue, 04 Mar 2025 09:05:33 -0800 (PST)
+        bh=D0DbxfKxGvd2WW4HNIqxG+j4XJyJfuCMmLSYkWj7Rsc=;
+        b=de0UXSZP85zxCWG9zA5AP2xBKG6/lQJKxHm85cpKT40/axaUylR01TILVRIcB2c3ly
+         bEHw5bZH3SqW1EPj+jhKuF0tmi9kzW4DzztpK7Y2IjKO7cMXi2IS8ySsjFc30/zGghQ4
+         ErfaRXypXvophqhIS4F7GMUXwzZqU9eunQK1u8pTcUv6aFqiYSxrp5MJgfZE3iXDttDX
+         fqDHSYWU09Mu6/IN323os1Hhfm7zcTs7Gk50yn71yPfWvYfDJrDFR267GBptqUpQ4szr
+         eur+uQPEfink649edDZn3T50oiIRsaaQ8ZMQ8V07iOM1yV0ypr5LrJoWvmngn/4SdyLY
+         0TsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXkvnOAWgGjUAm1XrC+PejUudS8OaMfd3t+CNK2qIZGcyOYMpnU6SD0gKKnofib5GihteXztp4511s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyddFYsy4SxN6jyYPVlaVlGtJvdCU4sLviYZT+1M6quxykXHIQW
+	g29u9c6Ln59lUffwTQYOtJxNQCrySUqhb1HST4UT4N5xLQZaJ3TcyRozi4rLqWI=
+X-Gm-Gg: ASbGnct3jQvXs4ET8+QjN6ZYq3I4G+1Z/7tPwdx/nHpUpTnn4AltHCtJalSVRLl7Vx/
+	n2iArLxHtGB35Ba0oC+lDmyixc0X/L2u51lOtDN6BAfspq2TRcVNZh/7KE7mkv66bvx/zJsdsg0
+	qApL6Pii0fkZXqZJYI3DnY5Gu+WHJ8vyqZZv1rv2eT/0hO3BwuwN8QnyDQ0SLS+hKZ0SPn6hTn1
+	3GSbX0KI2cNsDvRxDPWrnaca1EW62jshwTqJ+qkUNvgZDqy1BUjJV03K/Hzvmcvb0PRRMbwoDkr
+	dlQrWsBt3OB9Df3B4bMGStjzLqrjfgNstHCDgRar0YV1nXSTKzQm0NQohil1kEBc8ZWZqda2HtE
+	6eXXzOv5v9h+IBb9FvbDYlbZdq9p3
+X-Google-Smtp-Source: AGHT+IGsdjvAcycMp31oFEdsdwWFqJQmXbxtDBoL5DRz6SC3HgSNRmbkL1ZXNDzmFm2b5aF1OyYNnA==
+X-Received: by 2002:a17:906:c150:b0:abf:4a62:6e5b with SMTP id a640c23a62f3a-ac1f0e60023mr427555766b.5.1741107934486;
+        Tue, 04 Mar 2025 09:05:34 -0800 (PST)
 Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
         by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 09:05:33 -0800 (PST)
+        Tue, 04 Mar 2025 09:05:34 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 04 Mar 2025 17:05:32 +0000
-Subject: [PATCH v2 04/16] rtc: ds2404: drop needless struct ds2404::rtc
+Date: Tue, 04 Mar 2025 17:05:33 +0000
+Subject: [PATCH v2 05/16] rtc: ep93xx: drop needless struct ep93xx_rtc::rtc
  member
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-rtc-cleanups-v2-4-d4689a71668c@linaro.org>
+Message-Id: <20250304-rtc-cleanups-v2-5-d4689a71668c@linaro.org>
 References: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 In-Reply-To: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 To: Chanwoo Choi <cw00.choi@samsung.com>, 
@@ -116,56 +116,55 @@ variable, reducing runtime memory consumption by a few bytes.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- drivers/rtc/rtc-ds2404.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/rtc/rtc-ep93xx.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/rtc/rtc-ds2404.c b/drivers/rtc/rtc-ds2404.c
-index 3231fd9f61da49bdaf00e46486fc34836094ee78..217694eca36c3432a8db3b874374e347eeb802d9 100644
---- a/drivers/rtc/rtc-ds2404.c
-+++ b/drivers/rtc/rtc-ds2404.c
-@@ -31,7 +31,6 @@ struct ds2404 {
- 	struct gpio_desc *rst_gpiod;
- 	struct gpio_desc *clk_gpiod;
- 	struct gpio_desc *dq_gpiod;
+diff --git a/drivers/rtc/rtc-ep93xx.c b/drivers/rtc/rtc-ep93xx.c
+index 1fdd20d01560ef4fae2b996cf366b4f812329225..dcdcdd06f30d1ff6d0939f6bcad2c17c03c5a65e 100644
+--- a/drivers/rtc/rtc-ep93xx.c
++++ b/drivers/rtc/rtc-ep93xx.c
+@@ -28,7 +28,6 @@
+ 
+ struct ep93xx_rtc {
+ 	void __iomem	*mmio_base;
 -	struct rtc_device *rtc;
  };
  
- static int ds2404_gpio_map(struct ds2404 *chip, struct platform_device *pdev)
-@@ -182,6 +181,7 @@ static const struct rtc_class_ops ds2404_rtc_ops = {
- static int rtc_probe(struct platform_device *pdev)
+ static int ep93xx_rtc_get_swcomp(struct device *dev, unsigned short *preload,
+@@ -123,6 +122,7 @@ static const struct attribute_group ep93xx_rtc_sysfs_files = {
+ static int ep93xx_rtc_probe(struct platform_device *pdev)
  {
- 	struct ds2404 *chip;
+ 	struct ep93xx_rtc *ep93xx_rtc;
 +	struct rtc_device *rtc;
- 	int retval = -EBUSY;
+ 	int err;
  
- 	chip = devm_kzalloc(&pdev->dev, sizeof(struct ds2404), GFP_KERNEL);
-@@ -190,9 +190,9 @@ static int rtc_probe(struct platform_device *pdev)
+ 	ep93xx_rtc = devm_kzalloc(&pdev->dev, sizeof(*ep93xx_rtc), GFP_KERNEL);
+@@ -135,18 +135,18 @@ static int ep93xx_rtc_probe(struct platform_device *pdev)
  
- 	chip->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, ep93xx_rtc);
  
--	chip->rtc = devm_rtc_allocate_device(&pdev->dev);
--	if (IS_ERR(chip->rtc))
--		return PTR_ERR(chip->rtc);
+-	ep93xx_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
+-	if (IS_ERR(ep93xx_rtc->rtc))
+-		return PTR_ERR(ep93xx_rtc->rtc);
 +	rtc = devm_rtc_allocate_device(&pdev->dev);
 +	if (IS_ERR(rtc))
 +		return PTR_ERR(rtc);
  
- 	retval = ds2404_gpio_map(chip, pdev);
- 	if (retval)
-@@ -200,10 +200,10 @@ static int rtc_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, chip);
- 
--	chip->rtc->ops = &ds2404_rtc_ops;
--	chip->rtc->range_max = U32_MAX;
-+	rtc->ops = &ds2404_rtc_ops;
+-	ep93xx_rtc->rtc->ops = &ep93xx_rtc_ops;
+-	ep93xx_rtc->rtc->range_max = U32_MAX;
++	rtc->ops = &ep93xx_rtc_ops;
 +	rtc->range_max = U32_MAX;
  
--	retval = devm_rtc_register_device(chip->rtc);
-+	retval = devm_rtc_register_device(rtc);
- 	if (retval)
- 		return retval;
+-	err = rtc_add_group(ep93xx_rtc->rtc, &ep93xx_rtc_sysfs_files);
++	err = rtc_add_group(rtc, &ep93xx_rtc_sysfs_files);
+ 	if (err)
+ 		return err;
  
+-	return devm_rtc_register_device(ep93xx_rtc->rtc);
++	return devm_rtc_register_device(rtc);
+ }
+ 
+ static const struct of_device_id ep93xx_rtc_of_ids[] = {
 
 -- 
 2.48.1.711.g2feabab25a-goog
