@@ -1,90 +1,58 @@
-Return-Path: <linux-rtc+bounces-3411-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3412-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 523B8A50C98
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 21:34:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DEDCA50E54
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 23:06:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 878CD3AC9C5
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 20:33:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B674D7A2FD4
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 22:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AB025333B;
-	Wed,  5 Mar 2025 20:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D8C42661A1;
+	Wed,  5 Mar 2025 22:06:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="igia4iXS"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EMeCvD2w"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABE01DD543;
-	Wed,  5 Mar 2025 20:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFDB2E3373;
+	Wed,  5 Mar 2025 22:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741206846; cv=none; b=cvWqgWnU4V2B4qJNEWw0/g2LoJsy+ajORO8e2W1YtTwE5/MPTt3SbvPFypNRjpl7ck2zhhRv8zsB33ebELbRl+ysHSe7eZup+wrRbyqfYaC452MHK94a2TnzZqobfAFwjCaZ5grKZcTuD5EthLOEoc66eT1Nu4FsD0jlFoEytGE=
+	t=1741212381; cv=none; b=Ow60Nwjxes+sexDovUwoYkv82JXGOrjErV0eLK9gpNObpgvuHmqDFbzmmNC9qsZ9h4JiE4XKBhsvzQWmwf0MkmXuCJthGoLn44GYA1oRoop24TWbvLY0eYZtUwlhpRorvhdPLj7Ms1pd5GjhpzFnZoTfJkt3ZHZQDRMIzXxu4N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741206846; c=relaxed/simple;
-	bh=pnPnl0Y7Hh2+wMBdn/c6Xp+d9j2XPjWTAzEbuMwtIyQ=;
+	s=arc-20240116; t=1741212381; c=relaxed/simple;
+	bh=q9EXI6Pgompm/W6eQinVy1GNbMHg7R4F7kMhQcftXvo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gtu5Ou6zkfEYYmUbca9eyCli2+fi8gdQos4qwGND62JBAQHxMGS2k8jPVSTJ+mO+xsjflrQV0fhkzigfWsILoEkD/RnA2/mO0pQ6v+h4Obp4+yKxnycK8XusdM8NIoHLIT4edZp90maNh+gU7JBfGFCn6JRrJHwDx+40aUaiCII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=igia4iXS; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741206845; x=1772742845;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pnPnl0Y7Hh2+wMBdn/c6Xp+d9j2XPjWTAzEbuMwtIyQ=;
-  b=igia4iXSqZGIbtTSOY0NkIClzEnwgQj7JFwUAFNJLheINK3BoJpsOk3e
-   xeUsF1d/UH8I+1fW5GuTZnywDkSkKQj/09Q9Jd57GYSg1CRGzgDkTAiC3
-   l7JovSu5jzFTp7O1Vf9Kt9x35Gn7VFB3i1GUxLEiDeJ6rQ+YxdrWhGllU
-   IWzK6ROOWCJImTuDwLjOVQd0kF1nVq67ClI+Q7SUNfDMFeBb1ncrP1C/g
-   vOdXdOHcpEVkaY4QWWFjdf9Jch6aw7YVOJ73zrdMHaQwceuwrgY7u+Lf0
-   1WJpGurzC4j8ZeAuRDOutfjQxhKwQFtAiaqLCxVQvt/zIhzR17444pgdj
-   w==;
-X-CSE-ConnectionGUID: Dzb+0mNSQHSgipPxEnKt2A==
-X-CSE-MsgGUID: PQ/vQzIkQ9i4zpxYDrpRDg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42390886"
-X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
-   d="scan'208";a="42390886"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 12:34:04 -0800
-X-CSE-ConnectionGUID: UwSLidiaRdeam5BscguJxg==
-X-CSE-MsgGUID: 6jagxbcLR+29I2UWtemHFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118723547"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 05 Mar 2025 12:33:59 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tpvRE-000MB4-2T;
-	Wed, 05 Mar 2025 20:33:56 +0000
-Date: Thu, 6 Mar 2025 04:33:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ugab1Drnz8fZAI+FAdbMhywdJ5XWqNv5tDS3Fl7+MWhLIs0yhnGpeYU5XbxTWGHAMWFhrKfI6HuNTN3wVcvOfRDjvFZpT5YFL7MkGYJ4auRSUfporScHZ0m0+Yrr1BP9DGseRRCVVpV2Xej8LWYwSShjxJrBnsh/MPa/jwouwoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EMeCvD2w; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D832442A5;
+	Wed,  5 Mar 2025 22:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1741212376;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yEkg7dUbUd4gw9KUHkYnnXttXqIaC85A6vQzxpX1J28=;
+	b=EMeCvD2wVP+08ZFXKqOK8Mw5Oh+Hf7dMmzn+r+h0KYo04oEPe6JxxqDUGLg/MxkKbw2nYg
+	mHBmAJCBcdXCbAnxHWju0tzgCCSRdc4feYYsIMZ2VQsjDLOE2wgzzsxZgR22pZVLcNzvTW
+	JhmbKRfvFciXmNX/NAbSjXoOcmE6fbMtrwViW9dybP1vqWcrWPKYdPFefjg14fzJ2wxdqv
+	3vJKdpyaYLrOqKUN26hC+xVK4Gcmg+UYMHGoFKLC+bmHm407+emUP82t63d6+CRVdsEzmy
+	aBKyo6lNa7POnHmXc7OOjyazZ7Vu9+XhgVkOhL4UnDIOva/HW5W+Q9csZs6tyg==
+Date: Wed, 5 Mar 2025 23:06:15 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
 	linux-rtc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Inochi Amaoto <inochiama@gmail.com>, dlan@gentoo.org,
-	linux-kernel@vger.kernel.org,
-	Jingbao Qiu <qiujingbao.dlmu@gmail.com>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	sophgo@lists.linux.dev
-Subject: Re: [PATCH v12 2/3] mfd: sophgo: cv1800: rtcsys: New driver
- (handling RTC only)
-Message-ID: <202503060435.1c1akI1Q-lkp@intel.com>
-References: <20250302195205.3183174-3-alexander.sverdlin@gmail.com>
+Subject: Re: [PATCH v2] rtc: rzn1: implement one-second accuracy for alarms
+Message-ID: <2025030522061502555577@mail.local>
+References: <20250305101038.9933-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -93,47 +61,258 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250302195205.3183174-3-alexander.sverdlin@gmail.com>
+In-Reply-To: <20250305101038.9933-2-wsa+renesas@sang-engineering.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdehleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeeiudeuteehhfekgeejveefhfeiudejuefhgfeljefgjeegkeeujeeugfehgefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeejjedrudehtddrvdegiedrvdduheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeejjedrudehtddrvdegiedrvdduhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdprhgtp
+ hhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hi Alexander,
+Hello,
 
-kernel test robot noticed the following build warnings:
+On 05/03/2025 11:08:16+0100, Wolfram Sang wrote:
+> The hardware alarm only supports one-minute accuracy which is coarse and
+> disables UIE usage. Use the 1-second interrupt to achieve per-second
+> accuracy. It is activated once we hit the per-minute alarm. The new
+> feature is optional. When there is no 1-second interrupt, old behaviour
+> with per-minute accuracy is used as before. With this feature, all tests
+> of 'rtctest' are successfully passed.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Tested with the Renesas RZ/N1D board. Besides 'rtctest', I did some
+> manual testing with 'rtc' on top trying to stresstest corner cases.
+> 
+> Looking forward to comments. AFAICS, this is the first driver trying to
+> overcome the per-minute limitation using 1-second interrupts.
+> 
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.14-rc5 next-20250305]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+What I'm really wondering about is the use case. What is expected here?
+I guess that would be so you could go back to sleep between each 1s
+interrupt? Does this actually happen and does it actually save any power
+versus waking up early and waiting for the timer to actually elapse?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Sverdlin/dt-bindings-mfd-sophgo-add-RTC-support-for-Sophgo-CV1800-series-SoC/20250303-035433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20250302195205.3183174-3-alexander.sverdlin%40gmail.com
-patch subject: [PATCH v12 2/3] mfd: sophgo: cv1800: rtcsys: New driver (handling RTC only)
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250306/202503060435.1c1akI1Q-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503060435.1c1akI1Q-lkp@intel.com/reproduce)
+> Change since v1:
+> * consider 1s interrupt when setting the alarm->enabled flag
+> 
+> drivers/rtc/rtc-rzn1.c | 108 ++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 91 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+> index cb220807d925..eeb9612a666f 100644
+> --- a/drivers/rtc/rtc-rzn1.c
+> +++ b/drivers/rtc/rtc-rzn1.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/rtc.h>
+> +#include <linux/spinlock.h>
+>  
+>  #define RZN1_RTC_CTL0 0x00
+>  #define   RZN1_RTC_CTL0_SLSB_SUBU 0
+> @@ -27,6 +28,7 @@
+>  #define   RZN1_RTC_CTL0_CE BIT(7)
+>  
+>  #define RZN1_RTC_CTL1 0x04
+> +#define   RZN1_RTC_CTL1_1SE BIT(3)
+>  #define   RZN1_RTC_CTL1_ALME BIT(4)
+>  
+>  #define RZN1_RTC_CTL2 0x08
+> @@ -58,6 +60,13 @@
+>  struct rzn1_rtc {
+>  	struct rtc_device *rtcdev;
+>  	void __iomem *base;
+> +	/*
+> +	 * Protects access to RZN1_RTC_CTL1 reg. rtc_lock with threaded_irqs
+> +	 * would introduce race conditions when switching interrupts because
+> +	 * of potential sleeps
+> +	 */
+> +	spinlock_t ctl1_access_lock;
+> +	struct rtc_time tm_alarm;
+>  };
+>  
+>  static void rzn1_rtc_get_time_snapshot(struct rzn1_rtc *rtc, struct rtc_time *tm)
+> @@ -135,8 +144,38 @@ static int rzn1_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>  static irqreturn_t rzn1_rtc_alarm_irq(int irq, void *dev_id)
+>  {
+>  	struct rzn1_rtc *rtc = dev_id;
+> +	u32 ctl1, set_irq_bits = 0;
+> +
+> +	if (rtc->tm_alarm.tm_sec == 0)
+> +		rtc_update_irq(rtc->rtcdev, 1, RTC_AF | RTC_IRQF);
+> +	else
+> +		/* Switch to 1s interrupts */
+> +		set_irq_bits = RZN1_RTC_CTL1_1SE;
+>  
+> -	rtc_update_irq(rtc->rtcdev, 1, RTC_AF | RTC_IRQF);
+> +	guard(spinlock)(&rtc->ctl1_access_lock);
+> +
+> +	ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
+> +	ctl1 &= ~RZN1_RTC_CTL1_ALME;
+> +	ctl1 |= set_irq_bits;
+> +	writel(ctl1, rtc->base + RZN1_RTC_CTL1);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t rzn1_rtc_1s_irq(int irq, void *dev_id)
+> +{
+> +	struct rzn1_rtc *rtc = dev_id;
+> +	u32 ctl1;
+> +
+> +	if (readl(rtc->base + RZN1_RTC_SECC) == bin2bcd(rtc->tm_alarm.tm_sec)) {
+> +		guard(spinlock)(&rtc->ctl1_access_lock);
+> +
+> +		ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
+> +		ctl1 &= ~RZN1_RTC_CTL1_1SE;
+> +		writel(ctl1, rtc->base + RZN1_RTC_CTL1);
+> +
+> +		rtc_update_irq(rtc->rtcdev, 1, RTC_AF | RTC_IRQF);
+> +	}
+>  
+>  	return IRQ_HANDLED;
+>  }
+> @@ -144,14 +183,38 @@ static irqreturn_t rzn1_rtc_alarm_irq(int irq, void *dev_id)
+>  static int rzn1_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
+>  {
+>  	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
+> -	u32 ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
+> +	struct rtc_time *tm = &rtc->tm_alarm, tm_now;
+> +	u32 ctl1;
+> +	int ret;
+>  
+> -	if (enable)
+> -		ctl1 |= RZN1_RTC_CTL1_ALME;
+> -	else
+> -		ctl1 &= ~RZN1_RTC_CTL1_ALME;
+> +	guard(spinlock_irqsave)(&rtc->ctl1_access_lock);
+>  
+> -	writel(ctl1, rtc->base + RZN1_RTC_CTL1);
+> +	ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
+> +
+> +	if (enable) {
+> +		/*
+> +		 * Use alarm interrupt if alarm time is at least a minute away
+> +		 * or less than a minute but in the next minute. Otherwise use
+> +		 * 1 second interrupt to wait for the proper second
+> +		 */
+> +		do {
+> +			ctl1 &= ~(RZN1_RTC_CTL1_ALME | RZN1_RTC_CTL1_1SE);
+> +
+> +			ret = rzn1_rtc_read_time(dev, &tm_now);
+> +			if (ret)
+> +				return ret;
+> +
+> +			if (rtc_tm_sub(tm, &tm_now) > 59 || tm->tm_min != tm_now.tm_min)
+> +				ctl1 |= RZN1_RTC_CTL1_ALME;
+> +			else
+> +				ctl1 |= RZN1_RTC_CTL1_1SE;
+> +
+> +			writel(ctl1, rtc->base + RZN1_RTC_CTL1);
+> +		} while (readl(rtc->base + RZN1_RTC_SECC) != bin2bcd(tm_now.tm_sec));
+> +	} else {
+> +		ctl1 &= ~(RZN1_RTC_CTL1_ALME | RZN1_RTC_CTL1_1SE);
+> +		writel(ctl1, rtc->base + RZN1_RTC_CTL1);
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -185,7 +248,7 @@ static int rzn1_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+>  	}
+>  
+>  	ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
+> -	alrm->enabled = !!(ctl1 & RZN1_RTC_CTL1_ALME);
+> +	alrm->enabled = !!(ctl1 & (RZN1_RTC_CTL1_ALME | RZN1_RTC_CTL1_1SE));
+>  
+>  	return 0;
+>  }
+> @@ -216,6 +279,8 @@ static int rzn1_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+>  	writel(bin2bcd(tm->tm_hour), rtc->base + RZN1_RTC_ALH);
+>  	writel(BIT(wday), rtc->base + RZN1_RTC_ALW);
+>  
+> +	rtc->tm_alarm = alrm->time;
+> +
+>  	rzn1_rtc_alarm_irq_enable(dev, alrm->enabled);
+>  
+>  	return 0;
+> @@ -304,7 +369,7 @@ static const struct rtc_class_ops rzn1_rtc_ops = {
+>  static int rzn1_rtc_probe(struct platform_device *pdev)
+>  {
+>  	struct rzn1_rtc *rtc;
+> -	int alarm_irq;
+> +	int irq;
+>  	int ret;
+>  
+>  	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> @@ -317,9 +382,9 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+>  	if (IS_ERR(rtc->base))
+>  		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
+>  
+> -	alarm_irq = platform_get_irq(pdev, 0);
+> -	if (alarm_irq < 0)
+> -		return alarm_irq;
+> +	irq = platform_get_irq_byname(pdev, "alarm");
+> +	if (irq < 0)
+> +		return irq;
+>  
+>  	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
+>  	if (IS_ERR(rtc->rtcdev))
+> @@ -329,8 +394,6 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+>  	rtc->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
+>  	rtc->rtcdev->alarm_offset_max = 7 * 86400;
+>  	rtc->rtcdev->ops = &rzn1_rtc_ops;
+> -	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->rtcdev->features);
+> -	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->rtcdev->features);
+>  
+>  	ret = devm_pm_runtime_enable(&pdev->dev);
+>  	if (ret < 0)
+> @@ -349,13 +412,24 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+>  	/* Disable all interrupts */
+>  	writel(0, rtc->base + RZN1_RTC_CTL1);
+>  
+> -	ret = devm_request_irq(&pdev->dev, alarm_irq, rzn1_rtc_alarm_irq, 0,
+> -			       dev_name(&pdev->dev), rtc);
+> +	spin_lock_init(&rtc->ctl1_access_lock);
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq, rzn1_rtc_alarm_irq, 0, "RZN1 RTC Alarm", rtc);
+>  	if (ret) {
+> -		dev_err(&pdev->dev, "RTC timer interrupt not available\n");
+> +		dev_err(&pdev->dev, "RTC alarm interrupt not available\n");
+>  		goto dis_runtime_pm;
+>  	}
+>  
+> +	irq = platform_get_irq_byname_optional(pdev, "pps");
+> +	if (irq >= 0)
+> +		ret = devm_request_irq(&pdev->dev, irq, rzn1_rtc_1s_irq, 0, "RZN1 RTC 1s", rtc);
+> +
+> +	if (irq < 0 || ret) {
+> +		set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->rtcdev->features);
+> +		clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->rtcdev->features);
+> +		dev_warn(&pdev->dev, "RTC pps interrupt not available. Alarm has only minute accuracy\n");
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503060435.1c1akI1Q-lkp@intel.com/
+Is this message really necessary? I remember someone giving a talk about
+how we should avoid adding countless strings to the kernel ;)
 
-All warnings (new ones prefixed by >>):
+I'm on holidays and didn't reply to your previous email. The way to
+support UIE while keeping the alarm at 1 minute resolution would be to
+look at which timer is enabled.
 
->> drivers/mfd/cv1800-rtcsys.c:30:30: warning: unused variable 'cv1800_rtcsys_rtc_subdev' [-Wunused-const-variable]
-      30 | static const struct mfd_cell cv1800_rtcsys_rtc_subdev =
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+The rv8803 driver does:
 
+	if (alrm->enabled) {
+		if (rv8803->rtc->uie_rtctimer.enabled)
+			rv8803->ctrl |= RV8803_CTRL_UIE;
+		if (rv8803->rtc->aie_timer.enabled)
+			rv8803->ctrl |= RV8803_CTRL_AIE;
 
-vim +/cv1800_rtcsys_rtc_subdev +30 drivers/mfd/cv1800-rtcsys.c
+https://elixir.bootlin.com/linux/v6.13.5/source/drivers/rtc/rtc-rv8803.c#L439
 
-    29	
-  > 30	static const struct mfd_cell cv1800_rtcsys_rtc_subdev =
-    31		MFD_CELL_NAME("cv1800-rtc");
-    32	
+Like I said, this is a bit convoluted but there are only a few cases so
+I didn't bother hiding this behind a proper API.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
