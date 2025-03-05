@@ -1,56 +1,56 @@
-Return-Path: <linux-rtc+bounces-3406-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3407-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2444A4F931
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 09:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 305B9A4FB57
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 11:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7640F3AB66F
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 08:52:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F86F3A7216
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Mar 2025 10:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3D61FDA73;
-	Wed,  5 Mar 2025 08:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC9B2063DE;
+	Wed,  5 Mar 2025 10:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="V4ROWFPN"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="aNKcWg4x"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8311FDA6A
-	for <linux-rtc@vger.kernel.org>; Wed,  5 Mar 2025 08:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275BB1F1913
+	for <linux-rtc@vger.kernel.org>; Wed,  5 Mar 2025 10:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741164732; cv=none; b=dE6jmDO9PlG9X5n+qx9tr+7OqTLUce3Fuglwd9va0bj9q2ZWaPlx7GenCOiAuIBXQtqchdBxRUqRmNkNct5CyG9OjWrH6WAeI+DiCpZlV88RIncIe7KxAnGoxdNusJG9R/SgpImxzpimeInMghReJfqyOs8SE59oHFuo5wDB2+s=
+	t=1741169450; cv=none; b=bISWVMXafo/Fbx0cJeauwaHzUxxmB+IUxIJt1Y/1nv7uJCrmPEmSnV4UQyDZWY+9TsKbfw/3KH6W334kN3sfm1h5Mth6AtIZSM0HnU2VqRWhhI0psWGEYopBmQk8gNZizcpuP2KoVJpkgPHpbEtb9iBAvgx9oB7slKDjMcLSYJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741164732; c=relaxed/simple;
-	bh=8Qo2SQfdNxOhDAXKgSBcQjW1hFzqY35m9S/flozymjY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P17YUVCfBYorwopau50P28szBATD/6lAF+viWgiulpKnK59hShMc7BozduzkLTdmNqWVHAhNgjwX1rjyFYaev+HZpqpoCrhkipJZQEWZTAlHLdnflmkac3JYC661ajDFrg+nLs3g6HlQxWGMmc+dpZVcDaXxvjPCHSr+gF6n8sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=V4ROWFPN; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1741169450; c=relaxed/simple;
+	bh=/IY+SY2bKTFZ1BbceT9CLou7zwZuDASXClnyccCwtpQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pceucNpk28ERMdr1FiJTcy3ux8QmPza5ZC4nqMFG0fn6jiUDPJX3VpD6AOg1rkt8WXcCEgIa5qYlmXgaEndDsJK0EM48olcjtUpr9YW/vza+MfV//KliYTYUQS/hAaC1gDPIYKpSbnFcB7zkRcXXKeQow9pSYEmCpThfNw/u3uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=aNKcWg4x; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=EHkb/8HWXUe3Fu
-	vAzqLqjC7LTgd//jEOcrDgyrW2Stc=; b=V4ROWFPNdmsHVA5BcDbGKoGWOsp6VF
-	tRCjj/kcRsQgVU3G3c5mCk0eBZJCmvVFadN0QoxgZnfqgurgdUG6Uc/N3ENm8j7W
-	m5dMHPTH3vD+fGuNwivZNHZH69YRNhprWqhB/6xuPaYTipLQTMJdvN7nlMNwdRRU
-	k64MKVgycGzNGVcRyn41jJF0mB/d3Y3ZU0V1sUbwOt3klmC3ZTirGQ9aQGxeNmu7
-	L3hGDPtOOkAl4fZeS7ZqIitKxW2VlI6o+Y8sFNBZ+VPn5AQdCDBqp3tz0RsJMS96
-	S+3ZxFzn1F7RgzbqxG0xRuw5AyNwCo55OcCltTGnJSXC66biPrKaWXVg==
-Received: (qmail 2863125 invoked from network); 5 Mar 2025 09:51:59 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Mar 2025 09:51:59 +0100
-X-UD-Smtp-Session: l3s3148p1@xQKTgJQvdNYgAwDPXylhAB+mKiir6bOV
+	:mime-version:content-transfer-encoding; s=k1; bh=3kCcOBRlXC/cIa
+	RPUnep/oFdUu2qzW5jLGvJ5qW1msQ=; b=aNKcWg4xdYVdP9lvfgtQC9LhnnyKMX
+	xf0kPX91CQ9SSPjGGH6s5BFmukkmPfQRB8DvlZxXCLfVhLE/Hb0QxtOL1q+IyAmx
+	OuyRH2vRXKfysyFSPVDrQjRtWRjp/7bFtHbSWMUdmHJhSltBvAuhzDM4aP/dhAmq
+	fKR8Dv9VU0MCa45dvpIZDsacKmNR/ZWrXuOGLjAC52TPl0VJar5IA3zNJ2oWwPTP
+	uaMzyq9cFVxY8uyop3GBVYnLMUcsUtdrQ+qfsg08Qt2IfafNrp2FnecX5C1C3eak
+	uNAuS+Ev3bVF8wi+zclE5DR9mzOW40bBMxpt2g7PEEarWLjJqfHUblYw==
+Received: (qmail 2890386 invoked from network); 5 Mar 2025 11:10:41 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Mar 2025 11:10:41 +0100
+X-UD-Smtp-Session: l3s3148p1@xMgEmpUvGJkgAwDPXylhAB+mKiir6bOV
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: rzn1: implement one-second accuracy for alarms
-Date: Wed,  5 Mar 2025 09:47:37 +0100
-Message-ID: <20250305085155.6520-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2] rtc: rzn1: implement one-second accuracy for alarms
+Date: Wed,  5 Mar 2025 11:08:16 +0100
+Message-ID: <20250305101038.9933-2-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -76,11 +76,14 @@ manual testing with 'rtc' on top trying to stresstest corner cases.
 Looking forward to comments. AFAICS, this is the first driver trying to
 overcome the per-minute limitation using 1-second interrupts.
 
- drivers/rtc/rtc-rzn1.c | 106 ++++++++++++++++++++++++++++++++++-------
- 1 file changed, 90 insertions(+), 16 deletions(-)
+Change since v1:
+* consider 1s interrupt when setting the alarm->enabled flag
+
+drivers/rtc/rtc-rzn1.c | 108 ++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 91 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index cb220807d925..bc3c948c3d2f 100644
+index cb220807d925..eeb9612a666f 100644
 --- a/drivers/rtc/rtc-rzn1.c
 +++ b/drivers/rtc/rtc-rzn1.c
 @@ -19,6 +19,7 @@
@@ -195,6 +198,15 @@ index cb220807d925..bc3c948c3d2f 100644
 +		ctl1 &= ~(RZN1_RTC_CTL1_ALME | RZN1_RTC_CTL1_1SE);
 +		writel(ctl1, rtc->base + RZN1_RTC_CTL1);
 +	}
+ 
+ 	return 0;
+ }
+@@ -185,7 +248,7 @@ static int rzn1_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	}
+ 
+ 	ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
+-	alrm->enabled = !!(ctl1 & RZN1_RTC_CTL1_ALME);
++	alrm->enabled = !!(ctl1 & (RZN1_RTC_CTL1_ALME | RZN1_RTC_CTL1_1SE));
  
  	return 0;
  }
