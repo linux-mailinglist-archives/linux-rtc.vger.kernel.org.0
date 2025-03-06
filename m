@@ -1,138 +1,106 @@
-Return-Path: <linux-rtc+bounces-3416-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3417-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF98FA54214
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Mar 2025 06:30:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAB6AA545FD
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Mar 2025 10:12:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDF0F3ADEF8
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Mar 2025 05:30:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A8DC7A2534
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Mar 2025 09:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2D119AD8C;
-	Thu,  6 Mar 2025 05:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B495A2080E8;
+	Thu,  6 Mar 2025 09:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QfMQ39WD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="muKwXhUH"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2E98172A;
-	Thu,  6 Mar 2025 05:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE152080C5
+	for <linux-rtc@vger.kernel.org>; Thu,  6 Mar 2025 09:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741239043; cv=none; b=XAn9mZvH9QJS2WRUAcfRbEVeXxpol39jNQj3OsnR04XUGfDFkLV29+1MfKIjU7BfFd/Ohu+l/tVR5n8Axue+WEwUorpiCCprheU9oPD7J8n5CtqJhk0KtjKmoUuMNGzU9Z1EIGO+0dnjaaFozxsJfNRS9RISCURU9bbiV7bdKx4=
+	t=1741252357; cv=none; b=cXOxqj6maW8kCqm5fppNoP2hwC78leTU2nPTVViRw4Ha1vrKi1w+ot+4AisVAw7jy1VhGXyVjcVoQH3aC3BiXn4sjcNhkz/G6bq4Eb3W1QpeBDrGUxcVEF3kjhBsqCNfju15ozaFvyeHop3oWFdlW0IeJRvyZowOr0ShZ+8zTXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741239043; c=relaxed/simple;
-	bh=21iO/G2bQw9K65JrUOqRRdhPgZGB06xxok6XVDEcObw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nc+df1CshBbfQuVwLWlbkvo1/K7jcaQGW+GxpylX77+ihQZKHM2VespxfHl4w+M9Lj3pFnppWL54RQG4AaF1brwm6CR94Vfimh7em2Ear1b6DDVRdbhIi6Mpxv3NX20W3u41ua9yl+FNOtLIjZperlIA6jd8Tj5RZnrgbx4t3GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QfMQ39WD; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741239041; x=1772775041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=21iO/G2bQw9K65JrUOqRRdhPgZGB06xxok6XVDEcObw=;
-  b=QfMQ39WD5a8McPhxNMScQqh2EjquCC4+mOvHz477tLbSuxJnF9ip8jyu
-   wo+PzYmnZuPCC0xY3w9nQhbfl3DdCqTRxyMOJQ5FYDNeWk1rHhQOiEeC7
-   Wvk5aZrCEVTlFOEDkRC6juXKxGoG7HXBniALuoQMnTZQZ6plCBMFDh3Vr
-   MpbA7cWE1GJxVgZUdoXc40iQYdCvfW1Ew8I5b6S/V+qp07g1iv/NygYNv
-   UmPyDXBcN7fy4nvkF539u61+8D5XH7cxFzs9yyy+FvgzX7ENtlRE8z0/q
-   vjnV5Qm+gmxxlcg6CqNgrr97rm3nMuxMnkmERGn6o9HDvGSeCUTejftvq
-   A==;
-X-CSE-ConnectionGUID: Bwx920g8Q76UIYJvJY+8fw==
-X-CSE-MsgGUID: OPpfwte5TGGtEVoYW5Dtrg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42258846"
-X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
-   d="scan'208";a="42258846"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 21:30:40 -0800
-X-CSE-ConnectionGUID: FOt1b/HPS/Kk/o/pTnuQsA==
-X-CSE-MsgGUID: F1Uayh3pT8GmKmLuuh1/nw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
-   d="scan'208";a="119602412"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 05 Mar 2025 21:30:37 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tq3oX-000MaE-2x;
-	Thu, 06 Mar 2025 05:30:33 +0000
-Date: Thu, 6 Mar 2025 13:29:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-rtc@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Inochi Amaoto <inochiama@gmail.com>, dlan@gentoo.org,
-	linux-kernel@vger.kernel.org,
-	Jingbao Qiu <qiujingbao.dlmu@gmail.com>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	sophgo@lists.linux.dev
-Subject: Re: [PATCH v12 2/3] mfd: sophgo: cv1800: rtcsys: New driver
- (handling RTC only)
-Message-ID: <202503061309.yjpOnrMo-lkp@intel.com>
-References: <20250302195205.3183174-3-alexander.sverdlin@gmail.com>
+	s=arc-20240116; t=1741252357; c=relaxed/simple;
+	bh=GqmM445nk83WSKAnQchwc4aFd3IVUazkzTOEDmZ6Zms=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M7XFwEB6TaQ8AH6x9zY3t3XbbgSAv31gS7tn9TOqna3M1U5KdkMBs4LgMubR6m8zEwdJEySPeE4JJbugq/9b3qPc2If1YNqmDaXaQiWs/sOrFoGloclf/Vj5EdMO0FNk30gLoTRREHmXRSquSVL5Tu3LaJc9hstO3Czu9WykNWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=muKwXhUH; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-30b83290b7bso5014271fa.1
+        for <linux-rtc@vger.kernel.org>; Thu, 06 Mar 2025 01:12:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741252354; x=1741857154; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GqmM445nk83WSKAnQchwc4aFd3IVUazkzTOEDmZ6Zms=;
+        b=muKwXhUHzOOGfyheW/y2AMH2JSDH155PgxsNHIAFFK+1mP/Rcrn7r2y1Bj2QyFc3Fa
+         ePoMcQWYCrTMGDtulRTk8BzAeyKinZI0a66Cq4woa0BW+JIZw4tDEQlQUxzKCRHrwyLG
+         I0iQenQwxl6Ly8Bf9PK3nXHCpkZSdnb4RArmcmQsM6e90yjFkuzHspWiMfzcffmiOitY
+         jrbeyXyTlq+1SEl2E8B6ELOgshiSy4wWA0vMM8PxI4is4DpNs+LFdWbSkJGxzluyTYRA
+         LP005WtIz3ILy0yvdgg6nQjywUk+eTh30EwP11pY6SYMXER0L0hsfOfP/3Ln06BrHISD
+         T6Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741252354; x=1741857154;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GqmM445nk83WSKAnQchwc4aFd3IVUazkzTOEDmZ6Zms=;
+        b=upSktfZtYNkZVPms7bwFDuBfmMGutAZ5lppw3ll8uLX8YH4TWdx36ri9cTg7Mkzcau
+         mrcfymdPQiJYIQx4gBZcODcv4iM/Q/9QE7YOJLIxMDD+8dgNPsjwIOOythLY7Hq1gvCZ
+         FRz6lKMjQREtFYAl/QRYWf5uAh4Mfiv+Hf3JeW+5SpBqfTvfokEZ8S85uDm9RGIVk2TL
+         PFnksdoUKTkgEmLeb5C4BRQRZoILMvLhMU1AfH7ualvqxHME4YJXfQ9s9T5NCbNijjOm
+         DQbl025kRjJXhSuYuOamrobavsxBG2unNlUVkbwRcnW4Wokxqon7WJBkaBNCupHV5+UH
+         R3RA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7cIaQ0aLnqRMF5Z0IJTphII47XHxUy8tejVMR1JMq4gHsaC8+9b/WMBAnsjgg2WB+BIWIggHx+5Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQ0wstZPGZKcjqqJT4rSf67ZsOziD/RBm3lN3c0/GA18wPUnU9
+	tqoGErtVp+FdBzTOF4jOMtQ3zzXYnV7Sy2TPIHiazQrGW2+TPWjV+dSe85xuGNity1q10ou/Ah3
+	r3mhqiurwUKF/WqkcoJ1y7Zx9J0QkZK/li+JxxVZ61Y1tlKQS
+X-Gm-Gg: ASbGncv80WHdneElnyxFjJnUlnlg3zP074IMv3q5gRxoCuzHMIe6HIhuu2dxD7rT4Jf
+	VYkbko3aXAP7/mQ3Wgt7PeluHM8SPRZ7ZFt1Xx/+TH5s8S2GI3yCJ+JCIDkVOMXwuzk4flPTGMI
+	628yf4UYOyJ2yIH2Lro+pPLfQbgg==
+X-Google-Smtp-Source: AGHT+IHJbjr7n6MNFdoyJ5OcRjeliVrB+L/QnglEfbXH7bLR2SWadB2qjeLyT4uRMCDJc2UAADFOOmMVPfRkheSpHCU=
+X-Received: by 2002:a2e:b8c9:0:b0:308:efa4:d277 with SMTP id
+ 38308e7fff4ca-30bd7a507f6mr21783241fa.15.1741252353675; Thu, 06 Mar 2025
+ 01:12:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250302195205.3183174-3-alexander.sverdlin@gmail.com>
+References: <20250305221659.1153495-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20250305221659.1153495-1-alexandre.belloni@bootlin.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 6 Mar 2025 10:12:22 +0100
+X-Gm-Features: AQ5f1JqQwmuBLuVbVlZaXchGO6-cZ55N78DkfVd4KCTXsG2vg1w72ORT3ZwrFbs
+Message-ID: <CACRpkdZKbEXEabB+4uYvbBRXfFR_Jk-hHVtrZYD+cpKXgcMsnA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: pl031: document struct pl031_vendor_data members
+To: alexandre.belloni@bootlin.com
+Cc: kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexander,
+On Wed, Mar 5, 2025 at 11:17=E2=80=AFPM <alexandre.belloni@bootlin.com> wro=
+te:
 
-kernel test robot noticed the following build warnings:
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>
+> Document the range related members of struct pl031_vendor_data.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202503011015.SYvdddTc-lkp@i=
+ntel.com/
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.14-rc5 next-20250305]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Sverdlin/dt-bindings-mfd-sophgo-add-RTC-support-for-Sophgo-CV1800-series-SoC/20250303-035433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20250302195205.3183174-3-alexander.sverdlin%40gmail.com
-patch subject: [PATCH v12 2/3] mfd: sophgo: cv1800: rtcsys: New driver (handling RTC only)
-config: sh-allyesconfig (https://download.01.org/0day-ci/archive/20250306/202503061309.yjpOnrMo-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503061309.yjpOnrMo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503061309.yjpOnrMo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mfd/cv1800-rtcsys.c:30:30: warning: 'cv1800_rtcsys_rtc_subdev' defined but not used [-Wunused-const-variable=]
-      30 | static const struct mfd_cell cv1800_rtcsys_rtc_subdev =
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/cv1800_rtcsys_rtc_subdev +30 drivers/mfd/cv1800-rtcsys.c
-
-    29	
-  > 30	static const struct mfd_cell cv1800_rtcsys_rtc_subdev =
-    31		MFD_CELL_NAME("cv1800-rtc");
-    32	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yours,
+Linus Walleij
 
