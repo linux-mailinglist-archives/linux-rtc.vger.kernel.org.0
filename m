@@ -1,149 +1,79 @@
-Return-Path: <linux-rtc+bounces-3424-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3425-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0CDEA570AA
-	for <lists+linux-rtc@lfdr.de>; Fri,  7 Mar 2025 19:38:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99326A576F8
+	for <lists+linux-rtc@lfdr.de>; Sat,  8 Mar 2025 01:38:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5323B1893AB9
-	for <lists+linux-rtc@lfdr.de>; Fri,  7 Mar 2025 18:38:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D42B3175B32
+	for <lists+linux-rtc@lfdr.de>; Sat,  8 Mar 2025 00:38:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC64224061B;
-	Fri,  7 Mar 2025 18:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VKjeM+T2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA9FC133;
+	Sat,  8 Mar 2025 00:38:19 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02519219E98;
-	Fri,  7 Mar 2025 18:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F73610D;
+	Sat,  8 Mar 2025 00:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741372703; cv=none; b=Kst/lghA8zPw36l27BKQhIDk/v5cCU7VVrdXRehwLrlq3LHbCbn9p/HgE/2BTqH8X+rehnYXwqfqVvYjZ+aG5Q0Eiw4qv1BH2Zy2mkLfiu80AF/LPbhek8S5WKlCa3ezhsZouN57ucy9mVUYhHGIJ6rL7BEcEmb2AbSTmNV0dAA=
+	t=1741394299; cv=none; b=AJCPggN69BAFtAvrUxjq2jz8TXRH66FnrqciEtivTS/P9b9CZTH4QPkbz+bdO6zG5m/0AOHsJETllaPLl2ntUqAoXvMnC1sXOwwvnO1WkeWXCx4Vs5dSRde6kSsssVByTcUKORmsmIvGR5upiEW3b5vAgQUyeTLQH+LY2zT9TzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741372703; c=relaxed/simple;
-	bh=P1VXMPHeZZlmztuvDdaFxiTD3O/avPFmB1pPHBShE2s=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HCzBWrdnuhWUxwEN9aRrf8+iDutCqqT8xcCYLIvuD9/drjobWMRfBrTzj50+9OFb9F/rRdjla72z7zx8rDE1z1Lll8iGhr3wseB6TA+XxUIQdlMMAWME/Cq0SG7VMCARAOpi++Rl1cfZCQCvdtgykaEd9knlLNXBhdogefm0FqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VKjeM+T2; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BBE1C44527;
-	Fri,  7 Mar 2025 18:38:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741372699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2EMx0nNPXT57V1592jE/LVrbUGwVjGH9CmLQ4l8VPko=;
-	b=VKjeM+T2k10gppVhl/WzoNQsZwuh67lNjI+ijY2iXzkVDiTZIyqOVY6q7R9Z4IlPgCKWDB
-	B0tJKkcKvsUp04CJZiNuuaBsBRMkvKjKL0dufER4cSzep7wobAPM265cJan133lMnjoewt
-	7sQhNpfmMzESz210ZjSXNVDmmVl61AAL5l9bkAT3TFcSs17W47P3P1XN3zUSskEXLddvm6
-	Il0Q1Ozoss2u5pgthiFSknV+Zzm0dMR2xqZyh6KhwLprDz6USTI9gbkx0kA7v8ZZdmtmdC
-	ll4+xxDpUTIG67PGk4IxyMMvkL3SQu+icuRLBJlE4FHBKA4wQLp8FjVKstAMbg==
-Date: Fri, 7 Mar 2025 19:38:17 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: rzn1: implement one-second accuracy for alarms
-Message-ID: <20250307183817b7747a66@mail.local>
-References: <20250305101038.9933-2-wsa+renesas@sang-engineering.com>
- <2025030522061502555577@mail.local>
- <Z8qYM2-LQPgIe2JE@shikoro>
+	s=arc-20240116; t=1741394299; c=relaxed/simple;
+	bh=vfx7HO2g27rlhV7940SyGS/6OHtEGzFKl8i02EZ/QjU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FwU12hCt66TCg8OFQ4GHPlFxuWFcD+SO0NPazEMG5N9VEnfLpyf1DSK9oL/xqyE6EfxkjUJsBuMCUtJz+M84DQ8q1bbr1Ysw529Zz3VfeCcPTyd97NW6rJLgJ3sDY+eh3kbo6j6LagZIk03jA8wM2BdgofyRmmY+nh684aIZ6IE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A010C4CEE3;
+	Sat,  8 Mar 2025 00:38:18 +0000 (UTC)
+Received: by venus (Postfix, from userid 1000)
+	id 83CB6180B9A; Sat, 08 Mar 2025 01:38:16 +0100 (CET)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+ conor+dt@kernel.org, claudiu.beznea@tuxon.dev, sre@kernel.org, 
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ p.zabel@pengutronix.de, Ryan.Wanner@microchip.com
+Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+In-Reply-To: <cover.1740671156.git.Ryan.Wanner@microchip.com>
+References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
+Subject: Re: (subset) [PATCH v3 00/21] Enable Power Modes Support for
+ SAMA7D65 SoC
+Message-Id: <174139429652.169744.15334502728005076193.b4-ty@collabora.com>
+Date: Sat, 08 Mar 2025 01:38:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z8qYM2-LQPgIe2JE@shikoro>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduuddugedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedtledttdduueejffekfffhffetkedtgedutdevgeelkeeukedujeevfeejudekheenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepjeejrdduhedtrddvgeeirddvudehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepjeejrdduhedtrddvgeeirddvudehpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhrtghpt
- hhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-On 07/03/2025 07:55:33+0100, Wolfram Sang wrote:
-> Hi Alexandre,
+
+On Thu, 27 Feb 2025 08:51:47 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> thank you for replying even though you are on holidays.
+> This patch set adds support for low power modes for the SAMA7D65 SoC and
+> the required components and changes for low power modes.
 > 
-> > What I'm really wondering about is the use case. What is expected here?
-> > I guess that would be so you could go back to sleep between each 1s
-> > interrupt? Does this actually happen and does it actually save any power
-> > versus waking up early and waiting for the timer to actually elapse?
+> The series includes changes in the asm code to account for the addtional
+> clocks that are in this SoC.
 > 
-> There is no specific use case and it is not about saving power. My
-> customer wants this IP core fully supported. And it seemed strange that
-> UIE is not supported even though there is an 1s interrupt. The primary
-> intention was to support that. And my digging in the RTC subsystem made
-> me think this is all handled via the regular alarm timerqueue. So, I
-> added second granularity to the alarms so the timerqueue can be used for
-> UIE. Giving the alarms a higher resolution was a neat side effect. What
-> is wrong about that? Are wakeups from deep sleep states the only use
-> case for RTC alarms? Can it not be that some other tool just wants an
-> interrupt at some second? I assumed so, but actually, I dunno.
+> [...]
 
-There is nothing wrong with your approach, I'm fine with the complexity
-if you are ok with it. I don't think any application would use RTC
-alarms as timers. The main use cases for RTCs are:
+Applied, thanks!
 
- - set the initial system time, for this UIE is actually important to be
-   able to set the time with some accuracy.
- - wake up the system from any sleep mode, usually th sleep will be
-   fairly long and waking up early because of the minute resolution is
-   fine as the system will then wait for the actual timer to elapse this
-   timer being based on the system time instead of the RTC time.
+[13/21] power: reset: at91-sama5d2_shdwc: Add sama7d65 PMC
+        commit: 2fc78cd0a3c3013543e5f540eff61e9696138f83
 
-
-> 
-> > > +		dev_warn(&pdev->dev, "RTC pps interrupt not available. Alarm has only minute accuracy\n");
-> > 
-> > Is this message really necessary? I remember someone giving a talk about
-> > how we should avoid adding countless strings to the kernel ;)
-> 
-> Can be argued.
-> 
-> > I'm on holidays and didn't reply to your previous email. The way to
-> > support UIE while keeping the alarm at 1 minute resolution would be to
-> > look at which timer is enabled.
-> > 
-> > The rv8803 driver does:
-> > 
-> > 	if (alrm->enabled) {
-> > 		if (rv8803->rtc->uie_rtctimer.enabled)
-> > 			rv8803->ctrl |= RV8803_CTRL_UIE;
-> > 		if (rv8803->rtc->aie_timer.enabled)
-> > 			rv8803->ctrl |= RV8803_CTRL_AIE;
-> 
-> I totally believe you it works, but I am still not entirely sure why. I
-> have no problems following the code until rtc_timer_enqueue(). After
-> then, I see __rtc_set_alarm() being used again. Does it work because the
-> actual alarm time is set but basically discarded for UIE? And the next
-> interrupt is just used to be the right one, matching either UIE or
-> regular alarm depending what is next in the timerqueue? So, basically
-> the flags RTC_UF and RTC_AF are not really used anymore? I don't find
-> specific RTC_UF handling in the core?
-
-Yes, you followed the code correctly, I have a series that is removing
-RTC_UF that I didn't send yet.
-
-Again I'm fine with the patch as is, I just wanted to point out that the
-complexity may not be needed.
-
-Regards,
-Alexandre Belloni
-
-
+Best regards,
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
 
