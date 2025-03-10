@@ -1,179 +1,145 @@
-Return-Path: <linux-rtc+bounces-3441-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3442-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EFB6A58B96
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Mar 2025 06:16:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC375A58C20
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Mar 2025 07:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 664A23AB392
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Mar 2025 05:16:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 980203AA4F3
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Mar 2025 06:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351201B87D1;
-	Mon, 10 Mar 2025 05:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRJe2w5/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C501CCB4B;
+	Mon, 10 Mar 2025 06:39:00 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37982F28;
-	Mon, 10 Mar 2025 05:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CE11C5D7E;
+	Mon, 10 Mar 2025 06:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741583786; cv=none; b=ZbkMm+zReT7RgMnmt5VA7EVo4t4GiTA9cCPP8QZOiYpkmulqo4Hj8nmQu+dUAYVVBoKsIpEc2FgaFdWSZ+OiFAMNwzbAq+nXeUHhGfQkbxwjo2ZfjNPoVUucWvx2x+r2iwK6d+ex0CpAyANuaBCNzRDNMUZiwUfN2pWTBwoymNM=
+	t=1741588740; cv=none; b=VPJlGHB/rvySPbUo0H5RqdgZzG8NRI0DnnBSLuFcl+QuuwzMve+rDGLWFYBZGyQmUsT9GTTWsBk39aWoaTuAP7/NILpcACvevj4joZgzfj4dvZHkNmzqYl4vG9zULCep8/xrYrHcd//GNpTOnLoB/ehzQk0YpKMQc9SRQwpVgFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741583786; c=relaxed/simple;
-	bh=AMhI7JRcMqjYWK719rUTDjCl39e1BBUhYoi4R6FJmos=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dR3MM/21y/sj6tsProdOEIEO9oQGxj3x9z2iFdiWdi/wDluwRvinsoOeQjU26Zl5RuNZnxUmox46d3ntyRQsqbCVPiXrsy8bgbJYczb1Q9C/Br7pC8E8x7cxN/1HGZ0hfrRy5nMrAoZDWCxSQfyT7ayYTrJ4FaeBhJlirQelMpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRJe2w5/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A227C4CEE5;
-	Mon, 10 Mar 2025 05:16:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741583785;
-	bh=AMhI7JRcMqjYWK719rUTDjCl39e1BBUhYoi4R6FJmos=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CRJe2w5/5Z/oIMxOkoZFBRvGujAkiKLCH6vOzH4SY2F1ktwmiWucg2VIZKD+3qF3t
-	 YB3cWptJGvHBU7RcYqX+J858AHK+Xx3EJZWyzl+OrVSj6Z/8mGIAr6WpQ16KQPXnr/
-	 vFNGT8bfv83CiGulOnAn2xwDSdQ9RZxqLnYkqH6FT+DzoNPfBLT+IujJ3/bVGiVj/K
-	 lBJKWR1kT1VmkTwZviCRQmLzm4+0XIFEsOJCss8EbVilz43FPmZJT3g0cdaFQeQRPQ
-	 ee2s/5Jqx5BKHVIje+a4N1ECqiWzJJqHxKys9yGuvflLUeGUKH0/h6ozTqXYhx/crs
-	 ahZg/Eo6rVnLg==
-Date: Mon, 10 Mar 2025 15:46:26 +1030
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>
-Cc: linux-rtc@vger.kernel.org, chrome-platform@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [RFC] rtc: Avoid a couple of -Wflex-array-member-not-at-end warnings
-Message-ID: <Z851qvkycepdNlBd@kspp>
+	s=arc-20240116; t=1741588740; c=relaxed/simple;
+	bh=tZOgiknuCCubhajeAM4Mx79q2OJ2RkOqlALyn/E/1EA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RuDo8qnl460Qe0grNeJLZZyx8qA/JJOJufNWlaWlIe7vGDI+7Ffo6eOMuC7EZPNfeHDMiW1SP0Gp5E5Bc+Y0VmlZcNC2u9wB/XbNuwGkAVqc9i3Hy0CxVY4ipz6fOSmebWqtJ/VMs507cJ+pbJt2gUjA0I24MdP5ir0MM2QM6D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 89F082020FC;
+	Mon, 10 Mar 2025 07:38:51 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3DED12020EC;
+	Mon, 10 Mar 2025 07:38:51 +0100 (CET)
+Received: from lsv03305.swis.in-blr01.nxp.com (lsv03305.swis.in-blr01.nxp.com [92.120.147.118])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id B9B241800081;
+	Mon, 10 Mar 2025 14:38:49 +0800 (+08)
+From: Pankit Garg <pankit.garg@nxp.com>
+To: linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	conor+dt@kernel.org,
+	robh@kernel.org,
+	alexandre.belloni@bootlin.com
+Cc: vikash.bansal@nxp.com,
+	priyanka.jain@nxp.com,
+	daniel.aguirre@nxp.com,
+	shashank.rebbapragada@nxp.com,
+	aman.kumarpandey@nxp.com,
+	Pankit Garg <pankit.garg@nxp.com>
+Subject: [PATCH 1/2] dt-bindings: rtc: Add pcf85053a support
+Date: Mon, 10 Mar 2025 12:08:45 +0530
+Message-Id: <20250310063846.1867615-1-pankit.garg@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-Hi all,
+Add device tree bindings for NXP PCF85053a RTC chip.
 
-As part of the efforts to globally enable -Wflex-array-member-not-at-end,
-I'm currently trying to fix the following warnings:
+Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
+---
+ .../bindings/rtc/nxp,pcf85053a.yaml           | 44 +++++++++++++++++++
+ MAINTAINERS                                   |  6 +++
+ 2 files changed, 50 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
 
-drivers/rtc/rtc-cros-ec.c:62:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-drivers/rtc/rtc-cros-ec.c:40:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-
-The issue is that `struct cros_ec_command` is a flexible structure (which
-means that it contains a flexible-array member), and there is an object
-of this type (msg) declared within another structure but at the end.
-
-It seems that the following patch would suffice, as long as the flex-array
-member in `struct cros_ec_command` is not expected to be accessed and
-overlap with `struct ec_response_rtc data` in a "controlled manner":
-
-diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-index 865c2e82c7a5..7e9bbab47e4c 100644
---- a/drivers/rtc/rtc-cros-ec.c
-+++ b/drivers/rtc/rtc-cros-ec.c
-@@ -37,8 +37,8 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
- {
-        int ret;
-        struct {
--               struct cros_ec_command msg;
-                struct ec_response_rtc data;
-+               struct cros_ec_command msg;
-        } __packed msg;
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
+new file mode 100644
+index 000000000000..177afbe128d4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
+@@ -0,0 +1,44 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2025 NXP
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/nxp,pcf85053a.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PCF85053A Real Time Clock
++
++allOf:
++  - $ref: rtc.yaml#
++
++maintainers:
++  - Pankit Garg <pankit.garg@nxp.com>
++
++properties:
++  compatible:
++    enum:
++      - nxp,pcf85053a
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@6f {
++          compatible = "nxp,pcf85053a";
++          reg = <0x6f>;
++        };
++      };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8e0736dc2ee0..21a05e169564 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17158,6 +17158,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/sound/nxp,tfa989x.yaml
+ F:	sound/soc/codecs/tfa989x.c
  
-        memset(&msg, 0, sizeof(msg));
-@@ -59,8 +59,8 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
- {
-        int ret;
-        struct {
--               struct cros_ec_command msg;
-                struct ec_response_rtc data;
-+               struct cros_ec_command msg;
-        } __packed msg;
- 
-        memset(&msg, 0, sizeof(msg));
++NXP RTC PCF85053A DRIVER
++M:	Pankit Garg<pankit.garg@nxp.com>
++L:	linux-kernel@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/rtc/nxp,pcf85053a.yaml
++
+ NZXT-KRAKEN2 HARDWARE MONITORING DRIVER
+ M:	Jonas Malaco <jonas@protocubo.io>
+ L:	linux-hwmon@vger.kernel.org
+-- 
+2.25.1
 
-Otherwise, we probably need to use struct_group_tagged() as follows:
-
-diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-index 865c2e82c7a5..6dc815bdbcd9 100644
---- a/drivers/rtc/rtc-cros-ec.c
-+++ b/drivers/rtc/rtc-cros-ec.c
-@@ -37,7 +37,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
- {
-        int ret;
-        struct {
--               struct cros_ec_command msg;
-+               struct cros_ec_command_hdr msg;
-                struct ec_response_rtc data;
-        } __packed msg;
- 
-@@ -45,7 +45,10 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
-        msg.msg.command = command;
-        msg.msg.insize = sizeof(msg.data);
- 
--       ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-+       ret = cros_ec_cmd_xfer_status(cros_ec,
-+                                     container_of(&msg.msg,
-+                                                  struct cros_ec_command,
-+                                                  __hdr));
-        if (ret < 0)
-                return ret;
- 
-@@ -59,7 +62,7 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
- {
-        int ret;
-        struct {
--               struct cros_ec_command msg;
-+               struct cros_ec_command_hdr msg;
-                struct ec_response_rtc data;
-        } __packed msg;
- 
-@@ -68,7 +71,10 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
-        msg.msg.outsize = sizeof(msg.data);
-        msg.data.time = param;
- 
--       ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-+       ret = cros_ec_cmd_xfer_status(cros_ec,
-+                                     container_of(&msg.msg,
-+                                                  struct cros_ec_command,
-+                                                  __hdr));
-        if (ret < 0)
-                return ret;
-        return 0;
-diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-index 3ec24f445c29..2a638c8c5ec2 100644
---- a/include/linux/platform_data/cros_ec_proto.h
-+++ b/include/linux/platform_data/cros_ec_proto.h
-@@ -80,11 +80,13 @@ enum {
-  * @data: Where to put the incoming data from EC and outgoing data to EC.
-  */
- struct cros_ec_command {
--       uint32_t version;
--       uint32_t command;
--       uint32_t outsize;
--       uint32_t insize;
--       uint32_t result;
-+       struct_group_tagged(cros_ec_command_hdr, __hdr,
-+               uint32_t version;
-+               uint32_t command;
-+               uint32_t outsize;
-+               uint32_t insize;
-+               uint32_t result;
-+       );
-        uint8_t data[];
- };
-
-What do you think?
-
-Thanks!
---
-Gustavo
 
