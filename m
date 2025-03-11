@@ -1,95 +1,108 @@
-Return-Path: <linux-rtc+bounces-3465-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3466-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4CD0A5C358
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Mar 2025 15:12:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E81E7A5D07E
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Mar 2025 21:12:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21D2016BB3C
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Mar 2025 14:12:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C4A03A9644
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Mar 2025 20:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59CE825B678;
-	Tue, 11 Mar 2025 14:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FEF526462A;
+	Tue, 11 Mar 2025 20:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DM14bhxs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjZifLhP"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF1F1D63E2;
-	Tue, 11 Mar 2025 14:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCA1217719;
+	Tue, 11 Mar 2025 20:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741702316; cv=none; b=go6BCxbBQP3RDkqvaLJFPIyI8tzJ1eq0dOzHdNofxwfsJkdaTsd4ubl+71fanYuda0c8eQsCSapgIBtUanHNQnvV+gRjvtFqLrxzJbr+NdVi0jsIRwyLpGZ73M1MBiSzI3BY3Lm4MwUgns6gn8UPABvDhhfGSmgCCQa4jAOKgmk=
+	t=1741723941; cv=none; b=D74qqKGSPeV+zc5ZG6v3S2Z7k/5XAIjLPHpwepn1GLPqvVTTJHWa4gZqUnUtWjwNs7RJWyr7jeGlcq4QucG6LCnv4Sn9iMTSVSY4GN6XHwfnYwF8C5w9rDpQyDskluXU2i0yGs3ZJRtGhEAIYdEXnVD2dE85fSaFIGuNtHhzhDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741702316; c=relaxed/simple;
-	bh=bfaMTGHPhk1ROPPWz+lvzVxAVt/RKbL3UwHoErVij2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ICClnqHvDT0MKEUc7fPi1RRIB+liugPuCVMEG7j1zobDpwtY80Fusb1mHhfroek+NjSyvbjfEcGUb19IvAVQsumy6WHeniiJ0WEwmvrDDxXmzErYjolAbrAhg0gXMF1uOpwpS+EPR2/Em/kMHGRVtfOhQ1ekcVrKh90tsWTHJTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DM14bhxs; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0CC294327D;
-	Tue, 11 Mar 2025 14:11:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741702305;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VnD0/j7A5kLTdouB7koNfwd2+FVajSUDEgPjLiIZJUA=;
-	b=DM14bhxsvPKrP393J6w0wlGT9PI+ovv2AdPQXmeBvSmzDDaNp9er8zik5E8q450BP4/NCi
-	u8O7vrz94sxxkF1lkoV487xeCPRS+ZgfzP4OZnZsCGXdO0NI79fSymZAV/RHk5Oco8iSoL
-	3IE9sqTJwLHfsKpgZKSNEMxSuCuYcLL6gRbuhgIrUP16BsXyBzkRe25AK/IcqnSrFUAPD0
-	3B7g/gHAyOX/Wr1Owiu/eX2NtFtuPQwmda5LRhsgXUdEY6zRoqeLqj47MPvbRI5Qeg7i23
-	gNVVYF9i+/94dsGZHhW0swBa1d3wvgX/IFAc9RGDhioHE2sOBXYPY2UfTffbmw==
-Date: Tue, 11 Mar 2025 15:11:42 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH] rtc: renesas-rtca3: Disable interrupts only if the RTC
- is enabled
-Message-ID: <174170229131.122687.7673769665221505854.b4-ty@bootlin.com>
-References: <20250205095519.2031742-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1741723941; c=relaxed/simple;
+	bh=3+OnOIdluvq4El08WnHUY5Y/kcwnOu3x4aGLqAkuCrs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=mJi6Ph36P4CRqkih9JaByc5rcMhPy+ZXiNQJTNA1bO0aRcMPj6Pqn/Tm96p5pq0eqj9js6ovGDw+p7HYRoHeOtK7IrtcDn9ic2+UCCXs0omxwKNCd3gIDRMJjPLguQg2wr2nz0amzxq0s9G+7lSCVEaIYpObqB+o/dmZGT0tBAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjZifLhP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47A7C4CEE9;
+	Tue, 11 Mar 2025 20:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741723941;
+	bh=3+OnOIdluvq4El08WnHUY5Y/kcwnOu3x4aGLqAkuCrs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=gjZifLhPPGXcer1ZAWIyK1S2tH/lt04SIftXSYzZKGfP4lXtZMsmn0Eayh4HpB96b
+	 9/WqmOe6ugZVmY0LQ5SSZW9kBXMR2lxu5SNeNjoFIMide30s/REq6ZNBAcdJlrVORp
+	 he21oJCRdGMpi/X6dYz0x6Og1QgILShA9Vtz4Zfqdtms9SIwKr6HEFsbEAuMctd6Sf
+	 BS0G/1eyAkCusG9Gt/HbcO5zM24U61hX4ZUeBvWsFP2u4HRO5jy6CgLN+tuJGbunvQ
+	 dvSLNH9QnttCUnXihzQwUAmxtSH/2kN0drCOaMIev3rf7vlKgSyJqUbc/XYZSod+Vo
+	 HijI7bZDk9tuQ==
+From: Mark Brown <broonie@kernel.org>
+To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com, 
+ sre@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com, 
+ danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de, 
+ linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de, 
+ linux@treblig.org
+Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250309193612.251929-1-linux@treblig.org>
+References: <20250309193612.251929-1-linux@treblig.org>
+Subject: Re: (subset) [PATCH 0/9] Remove pcf50633
+Message-Id: <174172393659.371198.1480937233663952854.b4-ty@kernel.org>
+Date: Tue, 11 Mar 2025 20:12:16 +0000
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250205095519.2031742-1-claudiu.beznea.uj@bp.renesas.com>
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddvgeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeefhfffkeejueehveeuveejvdelveejteduffehuedtffdufeejudffuedvtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppeekledrvddtjedrudejuddrjeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrddvtdejrddujedurdejhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopegtlhgruhguihhurdgsvgiinhgvrgesthhugihonhdruggvvhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesv
- hhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegtlhgruhguihhurdgsvgiinhgvrgdruhhjsegsphdrrhgvnhgvshgrshdrtghomh
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-On Wed, 05 Feb 2025 11:55:19 +0200, Claudiu wrote:
-> If the RTC is not enabled and the code attempts to disable the interrupt,
-> the readb_poll_timeout_atomic() function in the
-> rtca3_alarm_irq_set_helper() may timeout, leading to probe failures.
-> This issue is reproducible on some devices because the initial values of
-> the PIE and AIE bits in the RCR1 register are undefined.
+On Sun, 09 Mar 2025 19:36:03 +0000, linux@treblig.org wrote:
+> The pcf50633 was used as part of the OpenMoko devices but
+> the support for its main chip was recently removed in:
+> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
 > 
-> To prevent probe failures in this scenario, disable RTC interrupts only
-> when the RTC is actually enabled.
+> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> 
+> Remove it.
 > 
 > [...]
 
-Applied, thanks!
+Applied to
 
-[1/1] rtc: renesas-rtca3: Disable interrupts only if the RTC is enabled
-      https://git.kernel.org/abelloni/c/27b2fcbd6b98
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-Best regards,
+Thanks!
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[6/9] regulator: pcf50633-regulator: Remove
+      commit: 248bc01138b11ff3af38c3b4a39cb8db7aae6eb6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
