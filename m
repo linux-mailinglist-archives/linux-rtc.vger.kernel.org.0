@@ -1,106 +1,97 @@
-Return-Path: <linux-rtc+bounces-3473-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3474-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48092A5D9EE
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Mar 2025 10:54:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6800A5DA12
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Mar 2025 11:01:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 366FD1887D1F
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Mar 2025 09:54:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34446175142
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Mar 2025 10:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD3E23C387;
-	Wed, 12 Mar 2025 09:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E167323C380;
+	Wed, 12 Mar 2025 10:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="IFYzrHnB"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="a9GDKI7D"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7027923C8B5
-	for <linux-rtc@vger.kernel.org>; Wed, 12 Mar 2025 09:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B507522E3FF
+	for <linux-rtc@vger.kernel.org>; Wed, 12 Mar 2025 10:01:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741773223; cv=none; b=Ax+FqCA16lbKROfwa5W6Cbr+naQDF+CXdPl9W2mBB5KxHNa5GSOQCDn19rMHnL/NKhhsTC9WXpeqIkrrLDNaWseizdbeRizDAjSiqFL07Bm/IcDhhZyIUgQspJQRFaRMyjEytZz5wD0ek+0BLXbTp5LqWjLRNmXZ2xhbNIKAkD4=
+	t=1741773673; cv=none; b=GPYfITGkpBRD+05wp7hUCr9vlzYkdy07NMEx0Xw1jdsceRd4Ov84GYiazFioBhgavhXLR9EwvXPmMjkSwpdf2YXKmFFESYOblvNDmV885FVUciUo8gSYIvh2RwhIp0UmBCFWS/gfi4fa4C93mgjh7IRqFRCfytHXcOLqE2EAyyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741773223; c=relaxed/simple;
-	bh=WXy2KRZCyDwgEKZSCXZfwQVedMGzpR6Ewjja+R1oj2Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aUcC61GKRKo5YZkigCCE0VuGQWRFIIdVYQvzTdYozv8WVO48Bhkr4LQ6IL8ciy5DbceOg4akbgGE46H0RaBJVugA0RUilla6LXMzE7ISoqwW6Y4fxDx6Sm+9RSaXoAFJykGIDYXdRm1JEfk7pyJXimHA/s/5Tg9kP+NWxNT95Ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=IFYzrHnB; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1741773673; c=relaxed/simple;
+	bh=t9TLKwxeb5RhRXY+BGNp+kk3/V3Ki/trQFFuDfFILkM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D1leP2mNKCSfYuB/JfuVwbGFvdAub6jtJq0Q7gZPqrC3Nlu82HqqdLNaZTN7Y3d0FiXDAy0G8slTK+85Z1XpvPiqJyCJ6GwMDeCOoQG7ILES///N5vyzqWy7BlcOOye6YXZybybtenaMhWGi0LRYmpnJDlauSj6FfhVxP1ELrOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=a9GDKI7D; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=mBuf
-	/GB9tlOiPdvBX0DohdD0AsbQ31adZJ3po7WyTzg=; b=IFYzrHnBu+yGW0vWdmr/
-	zl7xvJsLqZ8FM/5UJXSDScfcml1obIp0TMVM4cQRIyXuvhq5M0A416T1jR6xCygu
-	D+oOpfK4FgvNN/swL0M/LPJGerb/LVxypK9+FfYyqidYcuM0UlPKHABRAXoY/6cl
-	49xQ13a57rJdvtuw7N4/CUf8jzwI41yXYLU8S3j+YeBBve2AkTc8CJYlESfbclJ7
-	+ZxEzkhue62zNKr7QWCCrkJm0KXLu02rAiVn4vL2C9RVD5X8aci2/y8ONI33VzuU
-	wscOLBKjxcehJY3hGwGxXJYb2JUy8kPzfETA7A9EuBaHpYV2ZVS28qo36w3E9zRM
-	gw==
-Received: (qmail 1181837 invoked from network); 12 Mar 2025 10:53:36 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Mar 2025 10:53:36 +0100
-X-UD-Smtp-Session: l3s3148p1@rKfZLSIwrI0gAwDPXwyXABj42nrU+gpI
-Date: Wed, 12 Mar 2025 10:53:36 +0100
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=5Pb+XCGv8YBP4o
+	i4XlOtiB5Od1w6is+KaxtRCZyLdMQ=; b=a9GDKI7DUcRHk2jkK3XnqPskEtpm+H
+	R6diIe0xmALSnT9yBhYik92OdGwsfx/rkgu0SF/ZF4KVS4Xlj7mfGY0TCzzlnYo6
+	CAmUyNCXIkoGn8etTanZRA/Rw0n7HLXAyNBAtg9yuaXHJtpBVC7PZTfhNPQQWxPQ
+	HrdlCSIVnJL9wg0hr46xZWxpdWC2Rrx4UU8F4VQ2SY81uhmlSwAWfIwOH7vBJHS7
+	QU5hLOnxv7nmjXix0im2iT8MU/4Hc3t0ZuV4pp1nEluYwoi9wCL+HA2hWpRHp1vn
+	qJgOTRoxjcrBCACGK9UHMISpxfj7XxKtTL6z+C3PqfHEHB5ZV4UJRRJA==
+Received: (qmail 1184308 invoked from network); 12 Mar 2025 11:01:08 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Mar 2025 11:01:08 +0100
+X-UD-Smtp-Session: l3s3148p1@SprHSCIwkr0gAwDPXwyXABj42nrU+gpI
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] rtc: rzn1: clear interrupts on remove
-Message-ID: <Z9FZoOuTGnlTr-mX@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-renesas-soc@vger.kernel.org,
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-rtc@vger.kernel.org
-References: <20250312075226.22022-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2] rtc: rzn1: clear interrupts on remove
+Date: Wed, 12 Mar 2025 11:00:00 +0100
+Message-ID: <20250312100105.36767-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="p5xpyOTby/Vyet3u"
-Content-Disposition: inline
-In-Reply-To: <20250312075226.22022-2-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
 
+It is good practice to clear running interrupts before removing the
+driver. This is not really a bugfix because on current systems RuntimePM
+will disable the module clock, so interrupts won't be initiated. The
+dependency on that behaviour is subtle, though. Better be self-contained
+and clean up when removing.
 
---p5xpyOTby/Vyet3u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
+Change since v1: fix build failure by adding the 'rtc' variable. Build
+and tested on Renesas RZ/N1D.
 
-> +	/* Disable all interrupts */
-> +	writel(0, rtc->base + RZN1_RTC_CTL1);
+ drivers/rtc/rtc-rzn1.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Embarassing. It doesn't even compile. I checked the wrong branch :(
-Really sorry for the noise!
+diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+index eeb9612a666f..3c2861983ff1 100644
+--- a/drivers/rtc/rtc-rzn1.c
++++ b/drivers/rtc/rtc-rzn1.c
+@@ -444,6 +444,11 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+ 
+ static void rzn1_rtc_remove(struct platform_device *pdev)
+ {
++	struct rzn1_rtc *rtc = platform_get_drvdata(pdev);
++
++	/* Disable all interrupts */
++	writel(0, rtc->base + RZN1_RTC_CTL1);
++
+ 	pm_runtime_put(&pdev->dev);
+ }
+ 
+-- 
+2.47.2
 
-
---p5xpyOTby/Vyet3u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfRWZwACgkQFA3kzBSg
-KbZtAQ/+OEDksJSDfNTDot9pDzHFUUP73a2t9kgxr9oE/FPQhSdxA5Pnj3JJNQTk
-E67uwLkpxh9HqTDeww8xRQuVhWEcoIE4w7OoI7zQkKCNlJDJLI1zed28R9e7ELX8
-smhs59gQfEoPxRZphNyyUDu1cVNvCtjRPRsrTXFo69qXt8cONcatrUMyT2NR/uqn
-qBlX+e53ohij7OaarZhJRo/KQlk2BRL+/tNHxKOXBQsysqPwu8BK+pAQxO7ax2aQ
-7t71yXqv5uL6AcAiIhP41CKGtN3WaJDdqewPI+3cKiVXZuCtFZX8A18Na1gzMgto
-JjdrVO2Mj/espL+g8tIOADKnMh9OUp3E1MuH35wTddxnQj1p62EnugfX1vUA4exP
-Afk1xNJb9meNhFVyaiRmIMbx/U0AhQe3FjH4iOdNtz2wjp1mVuwlSvZhNc9GlH0K
-XiCcB43576/j+06X7oeBmnSUOwpWQITfXKkYrtBeSdA0Kpb5peZ3Dc6teQRA3e9u
-STsdDskZD6AuicwnFIcLUTmZF+ZDxqtdvCzv+2gotjCCiybmLD3Xwx7BYsSTWS2G
-YnD+U5x5huwe68n3gkA9hwKKpNQze4aEdX5/tVdUjvfNyBg2FW4LbGbJXipDA4Q2
-XbHvbGweG7Yym3+PRLVTRenhqK3I391tKsvVtp1jzP9XMAfMbMU=
-=Erg9
------END PGP SIGNATURE-----
-
---p5xpyOTby/Vyet3u--
 
