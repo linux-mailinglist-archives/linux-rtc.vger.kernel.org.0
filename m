@@ -1,58 +1,60 @@
-Return-Path: <linux-rtc+bounces-3476-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3478-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 100BEA5F0C6
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 11:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 34E9CA5F0CF
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 11:26:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06E117A8A1D
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 10:25:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35E0F7A8E7D
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 10:25:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7273266184;
-	Thu, 13 Mar 2025 10:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD79264630;
+	Thu, 13 Mar 2025 10:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Y/9Eob90"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="PhAJrBRf"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C885224EF69
-	for <linux-rtc@vger.kernel.org>; Thu, 13 Mar 2025 10:25:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEBD265610
+	for <linux-rtc@vger.kernel.org>; Thu, 13 Mar 2025 10:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741861558; cv=none; b=L+Jf0aM23lykmsnxvd8QqAch/Ida/7Gh8x28FUnKuB/AtKNeL0mNjkZ9+//ruRXbxDb4zO0uCsrEbDZ/KLF9+G3bO8zEO4LWDnPFqP43FBBrGu8LlzTW4J/r6Srgh2hjjhPvFHICoVTkzifZlscteYSTSrqHhY9+F/tAvB6KjrQ=
+	t=1741861562; cv=none; b=Wg71HgobpKLaGUh0q6grqnW6BhM2gVc7SgRCQoTQs9Md+io2ODWBdtb8adJeIbDqtfXizfI9czFhLlh+gHo8NEBQkFB0eQ1oa3I01eyZd+dpN2vLMNb++WFTNzP9wFXAV8eaFB0Mx1ovx2NNN6NTg+Vxowd8JsacS8LDqwKwJQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741861558; c=relaxed/simple;
-	bh=BcuejLNefAxncuo6S8vSmQ9BBKT6ZKvurpXfyud+PnY=;
+	s=arc-20240116; t=1741861562; c=relaxed/simple;
+	bh=McZ+EMZ3bjWtIgMnSUyKoo8I/VqksNlhlxbwxYA3n8k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HsDg2Rr9sFQZ1EU6LImBhOpY5XMOruK2Uf2MgGdUDbwJYqz8tJjCiEzPgePr7lJyFXOtOsYgAJZW/gofZ6j/ieY+KnPWOQIaTpUXwidggEZrSk4bKqEoyK1SCb9hOUUexVdqb/bEDxSCROc7Tk3CWfqsqfps6mX54iTR8do2pbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Y/9Eob90; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=M1vQBKfjUh0PbA6WhK8qo5ksY/ofXdvvqMYavC5xkqMqZI9axjD6wfAzlTOEfOldKRcwEkMGI6LRRxTmbZCxsd9gyj7bajNbLrUT+Ke4Fxa1M6SGLORswyf3oY3OLW1rVV5soD0UStr4vaD3s1QOo4493fQD6kGh11L46njAr3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=PhAJrBRf; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=xKR4pR20ZB/9h07gFzI4J+aXKVLxDR3NCiKjedWj45w=; b=Y/9Eob
-	90c3U12GljrlZ64Xgic/faFuI5YuY8DJ39+C42INtg7NeQr7nWhBle8p3EsnniD+
-	P+2WdFaEujkwokQfrulE8FBBC9wTTiBtzjav/U9AUtg9jzoLAwoxYXELZoH3tAW6
-	k6qBEeN4TGziHDmPeQOcTb1Ii3xdNa17JAIE/o8QtEY178NRidJqXjS6NIuPV9t+
-	hbxVapvUSFdLhBe9bcdYl8fENR0c4LHT6DKvaJE8eFWC2krKbPj/pUeju2fjWA+A
-	JaJcuV9t1dJ093S98s5VKTefmHfbp2a9Oh5QxfV/qeINbKBilcKU28MW26+4BaC0
-	KdY8dmDXC67/1ByQ==
-Received: (qmail 1574789 invoked from network); 13 Mar 2025 11:25:54 +0100
+	 s=k1; bh=ocs7d9nu5dnZ3q1oxJblUpnhIWUAcaYe5A9CXraTIG0=; b=PhAJrB
+	RfMB0yNpCD4F7cR34KsOKv4vVfV8Egc1R/w3WEIcx1mCvjtLIF+QBCkfTFpMWQSS
+	NtGXmAf2AvV6RcAHtncZxXHOXcSNRZz97zioecNfMEIC1/cgrQ2HVB0/M4Bw8Q+k
+	3CksI6+ATaHYXv5Sx4Zx3dhqA3blAwe4jvqfagcoyyAVFNdpxISgPhD2ofsKElhw
+	/LS2WEmAjcRFOW1hywqJ2LTuLaGF6ajWFVnMH93vKtOoXfcwMICXJFYekTXHarpE
+	jN9iuj//ap5FoUY69OB+ukEuLnezjrI4BlSyCiSSZ+nlEU1Uf/8vPYPr2K1YBtsc
+	bUVp1uVjSS7W0CrQ==
+Received: (qmail 1574818 invoked from network); 13 Mar 2025 11:25:54 +0100
 Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Mar 2025 11:25:54 +0100
-X-UD-Smtp-Session: l3s3148p1@4jgrvzYwOr0gAwDPXyTHAJp038nK7dx+
+X-UD-Smtp-Session: l3s3148p1@LhY3vzYwMqQgAwDPXyTHAJp038nK7dx+
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
 	linux-rtc@vger.kernel.org
-Subject: [RFC PATCH 3/4] rtc: rzn1: support input frequencies other than 32768Hz
-Date: Thu, 13 Mar 2025 11:25:44 +0100
-Message-ID: <20250313102546.27335-4-wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH 4/4] WIP rtc: rzn1: add driver support for R-Car Gen5
+Date: Thu, 13 Mar 2025 11:25:45 +0100
+Message-ID: <20250313102546.27335-5-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250313102546.27335-1-wsa+renesas@sang-engineering.com>
 References: <20250313102546.27335-1-wsa+renesas@sang-engineering.com>
@@ -64,107 +66,95 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When using the SCMP mode instead of SUBU, this RTC can also support
-other input frequencies than 32768Hz. Also, upcoming SoCs will only
-support SCMP.
+This is not for upstream yet. This is a prototype how R-Car Gen5 can be
+integrated into this driver. Bindings need to be updated so that they
+enforce two input clocks. This patch is only for discussion.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Not-yet-signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/rtc/rtc-rzn1.c | 43 ++++++++++++++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 10 deletions(-)
+ drivers/rtc/rtc-rzn1.c | 32 +++++++++++++++++++++++++++++---
+ 1 file changed, 29 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index e3733534d409..f8c9308817ae 100644
+index f8c9308817ae..313e70070904 100644
 --- a/drivers/rtc/rtc-rzn1.c
 +++ b/drivers/rtc/rtc-rzn1.c
-@@ -12,6 +12,7 @@
-  */
- 
- #include <linux/bcd.h>
-+#include <linux/clk.h>
- #include <linux/init.h>
+@@ -17,6 +17,7 @@
  #include <linux/iopoll.h>
  #include <linux/module.h>
-@@ -22,7 +23,6 @@
- #include <linux/spinlock.h>
- 
- #define RZN1_RTC_CTL0 0x00
--#define   RZN1_RTC_CTL0_SLSB_SUBU 0
- #define   RZN1_RTC_CTL0_SLSB_SCMP BIT(4)
- #define   RZN1_RTC_CTL0_AMPM BIT(5)
- #define   RZN1_RTC_CTL0_CE BIT(7)
-@@ -49,6 +49,8 @@
- #define   RZN1_RTC_SUBU_DEV BIT(7)
- #define   RZN1_RTC_SUBU_DECR BIT(6)
- 
-+#define RZN1_RTC_SCMP 0x3c
-+
- #define RZN1_RTC_ALM 0x40
- #define RZN1_RTC_ALH 0x44
- #define RZN1_RTC_ALW 0x48
-@@ -356,19 +358,20 @@ static int rzn1_rtc_set_offset(struct device *dev, long offset)
- 	return 0;
- }
- 
--static const struct rtc_class_ops rzn1_rtc_ops = {
-+static struct rtc_class_ops rzn1_rtc_ops = {
- 	.read_time = rzn1_rtc_read_time,
- 	.set_time = rzn1_rtc_set_time,
- 	.read_alarm = rzn1_rtc_read_alarm,
- 	.set_alarm = rzn1_rtc_set_alarm,
- 	.alarm_irq_enable = rzn1_rtc_alarm_irq_enable,
--	.read_offset = rzn1_rtc_read_offset,
--	.set_offset = rzn1_rtc_set_offset,
+ #include <linux/mod_devicetable.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/rtc.h>
+@@ -71,6 +72,10 @@ struct rzn1_rtc {
+ 	struct rtc_time tm_alarm;
  };
  
++struct rzn1_rtc_conf {
++	unsigned int force_scmp:1;
++};
++
+ static void rzn1_rtc_get_time_snapshot(struct rzn1_rtc *rtc, struct rtc_time *tm)
+ {
+ 	u32 val;
+@@ -369,6 +374,7 @@ static struct rtc_class_ops rzn1_rtc_ops = {
  static int rzn1_rtc_probe(struct platform_device *pdev)
  {
  	struct rzn1_rtc *rtc;
-+	struct clk *xtal;
-+	unsigned long rate;
-+	u32 use_scmp = 0;
- 	int irq;
- 	int ret;
- 
-@@ -402,12 +405,32 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
++	const struct rzn1_rtc_conf *config;
+ 	struct clk *xtal;
+ 	unsigned long rate;
+ 	u32 use_scmp = 0;
+@@ -405,7 +411,12 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
  	if (ret < 0)
  		return ret;
  
--	/*
--	 * Ensure the clock counter is enabled.
--	 * Set 24-hour mode and possible oscillator offset compensation in SUBU mode.
--	 */
--	writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | RZN1_RTC_CTL0_SLSB_SUBU,
--	       rtc->base + RZN1_RTC_CTL0);
-+	/* Only switch to scmp if we have an xtal clock with a valid rate and != 32768 */
-+	xtal = devm_clk_get_optional(&pdev->dev, "xtal");
-+	if (IS_ERR(xtal)) {
-+		ret = PTR_ERR(xtal);
-+		goto dis_runtime_pm;
-+	} else if (xtal) {
-+		rate = clk_get_rate(xtal);
+-	/* Only switch to scmp if we have an xtal clock with a valid rate and != 32768 */
++	config = of_device_get_match_data(&pdev->dev);
 +
-+		if (rate < 32000 || rate > BIT(22)) {
-+			ret = -EOPNOTSUPP;
++	/*
++	 * Only switch to scmp if we have an xtal clock with a valid rate plus
++	 * either not equal to 32768 or if it is forced in the config
++	 */
+ 	xtal = devm_clk_get_optional(&pdev->dev, "xtal");
+ 	if (IS_ERR(xtal)) {
+ 		ret = PTR_ERR(xtal);
+@@ -418,8 +429,14 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+ 			goto dis_runtime_pm;
+ 		}
+ 
+-		if (rate != 32768)
++		if (rate != 32768 || config->force_scmp)
+ 			use_scmp = RZN1_RTC_CTL0_SLSB_SCMP;
++	} else {
++		/* We need xtal if force_scmp is set */
++		if (config->force_scmp) {
++			ret = -ENOENT;
 +			goto dis_runtime_pm;
 +		}
-+
-+		if (rate != 32768)
-+			use_scmp = RZN1_RTC_CTL0_SLSB_SCMP;
-+	}
-+
-+	if (use_scmp) {
-+		writel(rate - 1, rtc->base + RZN1_RTC_SCMP);
-+	} else {
-+		rzn1_rtc_ops.read_offset = rzn1_rtc_read_offset;
-+		rzn1_rtc_ops.set_offset = rzn1_rtc_set_offset;
-+	}
-+
-+	/* Ensure clock counter is enabled. Set 24-hour mode and SUBU or SCMP mode */
-+	writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | use_scmp, rtc->base + RZN1_RTC_CTL0);
+ 	}
  
- 	/* Disable all interrupts */
- 	writel(0, rtc->base + RZN1_RTC_CTL1);
+ 	if (use_scmp) {
+@@ -474,8 +491,17 @@ static void rzn1_rtc_remove(struct platform_device *pdev)
+ 	pm_runtime_put(&pdev->dev);
+ }
+ 
++static const struct rzn1_rtc_conf rzn1_rtc_conf = {
++	.force_scmp = 0,
++};
++
++static const struct rzn1_rtc_conf rzn1_rtc_conf_gen5 = {
++	.force_scmp = 1,
++};
++
+ static const struct of_device_id rzn1_rtc_of_match[] = {
+-	{ .compatible	= "renesas,rzn1-rtc" },
++	{ .compatible = "renesas,rzn1-rtc", .data = &rzn1_rtc_conf },
++	{ .compatible = "renesas,rcar-gen5-rtc", .data = &rzn1_rtc_conf_gen5 },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, rzn1_rtc_of_match);
 -- 
 2.47.2
 
