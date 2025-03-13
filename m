@@ -1,56 +1,62 @@
-Return-Path: <linux-rtc+bounces-3474-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3477-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6800A5DA12
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Mar 2025 11:01:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5292EA5F0D0
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 11:26:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34446175142
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Mar 2025 10:01:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7462B1894C56
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 10:26:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E167323C380;
-	Wed, 12 Mar 2025 10:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C1126618A;
+	Thu, 13 Mar 2025 10:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="a9GDKI7D"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="GFOoTSlj"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B507522E3FF
-	for <linux-rtc@vger.kernel.org>; Wed, 12 Mar 2025 10:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5893226563B
+	for <linux-rtc@vger.kernel.org>; Thu, 13 Mar 2025 10:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741773673; cv=none; b=GPYfITGkpBRD+05wp7hUCr9vlzYkdy07NMEx0Xw1jdsceRd4Ov84GYiazFioBhgavhXLR9EwvXPmMjkSwpdf2YXKmFFESYOblvNDmV885FVUciUo8gSYIvh2RwhIp0UmBCFWS/gfi4fa4C93mgjh7IRqFRCfytHXcOLqE2EAyyk=
+	t=1741861559; cv=none; b=Jql+JEYmgbsEEDy7IcbtOJrSNtU1P7LJbaRT6pzYr85OHbqOxTiSaJknTYNFF6UDMTNM7nr5PmKCivmBdduSKwxXzmLWltrqI4ITZG8pLXa/n4ZWsB0AX/oxbRE7EE6ZRtryi8puIU4jARopTYJbZ3cg1XB9zmo9fZLNIM1JQn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741773673; c=relaxed/simple;
-	bh=t9TLKwxeb5RhRXY+BGNp+kk3/V3Ki/trQFFuDfFILkM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D1leP2mNKCSfYuB/JfuVwbGFvdAub6jtJq0Q7gZPqrC3Nlu82HqqdLNaZTN7Y3d0FiXDAy0G8slTK+85Z1XpvPiqJyCJ6GwMDeCOoQG7ILES///N5vyzqWy7BlcOOye6YXZybybtenaMhWGi0LRYmpnJDlauSj6FfhVxP1ELrOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=a9GDKI7D; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1741861559; c=relaxed/simple;
+	bh=q2m71A/1Uu6Oz7dpB+yBv0X1S4e23idzdzzCe5OxYjA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jveqSLz4GiBCpiISJXDudrUUUdSfZlvmV127dWya3kXMWSnBgjubkAeFSRuDiMBUsMLsboQmIKYrcHlELoEgvbW7RoeX2haC2DIMBhU0Et3P4TrdkrBcz7IXUTNKeIzTRsPWkYYAX6VnuFjupHIiQRLbNMY1fvj32oYenWfe5zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=GFOoTSlj; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=5Pb+XCGv8YBP4o
-	i4XlOtiB5Od1w6is+KaxtRCZyLdMQ=; b=a9GDKI7DUcRHk2jkK3XnqPskEtpm+H
-	R6diIe0xmALSnT9yBhYik92OdGwsfx/rkgu0SF/ZF4KVS4Xlj7mfGY0TCzzlnYo6
-	CAmUyNCXIkoGn8etTanZRA/Rw0n7HLXAyNBAtg9yuaXHJtpBVC7PZTfhNPQQWxPQ
-	HrdlCSIVnJL9wg0hr46xZWxpdWC2Rrx4UU8F4VQ2SY81uhmlSwAWfIwOH7vBJHS7
-	QU5hLOnxv7nmjXix0im2iT8MU/4Hc3t0ZuV4pp1nEluYwoi9wCL+HA2hWpRHp1vn
-	qJgOTRoxjcrBCACGK9UHMISpxfj7XxKtTL6z+C3PqfHEHB5ZV4UJRRJA==
-Received: (qmail 1184308 invoked from network); 12 Mar 2025 11:01:08 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Mar 2025 11:01:08 +0100
-X-UD-Smtp-Session: l3s3148p1@SprHSCIwkr0gAwDPXwyXABj42nrU+gpI
+	:mime-version:content-transfer-encoding; s=k1; bh=zfbfFlb1FrJYUq
+	kYysP5yx37Y76BzqPK+ZyoKRd+J/Q=; b=GFOoTSljYy+mILOJx/97gvFhi3H7Ii
+	O98pcFRuDO/4+/CxuvKKk7ZArLflqYNUb5wXsgz8ngbo/egsdUI9ttYZjse4Auuq
+	xB4btRQumAYVJqagNA9J0+Dq7ps8zC58qe1GOYw3oJ5p8okqQlSI34DKVXzNirD0
+	m4KWN4CAUMBKHXaJB8Z2gPE1EBv1qkCZS0kd6BGidolcCqMDyZ5Xjnl/2ib5vQCx
+	iIJqWcFp0TFDwK8FaSc9j7H86KCbeShVlDr9mJ4uBYYaKX3TpuLuP0z8UA5gvc7O
+	SPYmFkweyJUMznq8UXq6T9jdGpSBNt9lYx9sMvrbnFQ9fKeRH5+55QJQ==
+Received: (qmail 1574638 invoked from network); 13 Mar 2025 11:25:51 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Mar 2025 11:25:51 +0100
+X-UD-Smtp-Session: l3s3148p1@BjICvzYwGL0gAwDPXyTHAJp038nK7dx+
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH v2] rtc: rzn1: clear interrupts on remove
-Date: Wed, 12 Mar 2025 11:00:00 +0100
-Message-ID: <20250312100105.36767-2-wsa+renesas@sang-engineering.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-rtc@vger.kernel.org,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Rob Herring <robh@kernel.org>
+Subject: [RFC PATCH 0/4] rtc: rzn1: support XTAL clk and SCMP method
+Date: Thu, 13 Mar 2025 11:25:41 +0100
+Message-ID: <20250313102546.27335-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -60,37 +66,38 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It is good practice to clear running interrupts before removing the
-driver. This is not really a bugfix because on current systems RuntimePM
-will disable the module clock, so interrupts won't be initiated. The
-dependency on that behaviour is subtle, though. Better be self-contained
-and clean up when removing.
+So far, the code and the binding for the RZ/N1D RTC assumed an input
+clock of 32768Hz, so it was not explicitly described. It makes sense to
+do this, though. For one reason, clocks with other frequencies might be
+used which this RTC supports via the SCMP counting method. Also, the
+upcoming R-Car Gen5 have only the SCMP method described, so we need to
+use it there.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+This series is for collecting comments about the approach. I am aware
+that the DTS changes no to go in separately from the code changes. And
+the last patch will be updated and resent once I have tested these
+patches on hardware. That might take a while but I'd like the
+preparational patches to go in earlier. They are benefitial for N1D,
+after all.
 
-Change since v1: fix build failure by adding the 'rtc' variable. Build
-and tested on Renesas RZ/N1D.
+The series has been tested on a Renesas RZ/N1D board with hacked
+devicetree values.
 
- drivers/rtc/rtc-rzn1.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Looking forward to comments.
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index eeb9612a666f..3c2861983ff1 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -444,6 +444,11 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 
- static void rzn1_rtc_remove(struct platform_device *pdev)
- {
-+	struct rzn1_rtc *rtc = platform_get_drvdata(pdev);
-+
-+	/* Disable all interrupts */
-+	writel(0, rtc->base + RZN1_RTC_CTL1);
-+
- 	pm_runtime_put(&pdev->dev);
- }
- 
+
+Wolfram Sang (4):
+  dt-bindings: rtc: rzn1: add optional second clock
+  ARM: dts: renesas: r9a06g032: add second clock input to RTC
+  rtc: rzn1: support input frequencies other than 32768Hz
+  WIP rtc: rzn1: add driver support for R-Car Gen5
+
+ .../bindings/rtc/renesas,rzn1-rtc.yaml        |  8 ++-
+ .../dts/renesas/r9a06g032-rzn1d400-db.dts     |  4 ++
+ arch/arm/boot/dts/renesas/r9a06g032.dtsi      |  4 +-
+ drivers/rtc/rtc-rzn1.c                        | 67 ++++++++++++++++---
+ 4 files changed, 70 insertions(+), 13 deletions(-)
+
 -- 
 2.47.2
 
