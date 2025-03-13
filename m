@@ -1,161 +1,113 @@
-Return-Path: <linux-rtc+bounces-3478-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3479-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34E9CA5F0CF
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 11:26:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA5A6A5F254
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 12:29:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35E0F7A8E7D
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 10:25:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C0663BE143
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Mar 2025 11:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD79264630;
-	Thu, 13 Mar 2025 10:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E032661A0;
+	Thu, 13 Mar 2025 11:29:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="PhAJrBRf"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="L0hloW59"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEBD265610
-	for <linux-rtc@vger.kernel.org>; Thu, 13 Mar 2025 10:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C96E265618
+	for <linux-rtc@vger.kernel.org>; Thu, 13 Mar 2025 11:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741861562; cv=none; b=Wg71HgobpKLaGUh0q6grqnW6BhM2gVc7SgRCQoTQs9Md+io2ODWBdtb8adJeIbDqtfXizfI9czFhLlh+gHo8NEBQkFB0eQ1oa3I01eyZd+dpN2vLMNb++WFTNzP9wFXAV8eaFB0Mx1ovx2NNN6NTg+Vxowd8JsacS8LDqwKwJQ4=
+	t=1741865369; cv=none; b=jTf2wL2/qZp3Xy7XlNtrWVqZ79sAX7z3y9NU6k2QIrI575BIk2M13Xgv0Rne6MpbFxaas3/yU8bVPZ6U8hxu8++FK0kmQbuCrkBq941lI2va8q3Y1WppuO1al/8F9ug9aKBiAEEriIXqbwazZY8XJ+1CvkYtd/GYsMDVb81Wh8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741861562; c=relaxed/simple;
-	bh=McZ+EMZ3bjWtIgMnSUyKoo8I/VqksNlhlxbwxYA3n8k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M1vQBKfjUh0PbA6WhK8qo5ksY/ofXdvvqMYavC5xkqMqZI9axjD6wfAzlTOEfOldKRcwEkMGI6LRRxTmbZCxsd9gyj7bajNbLrUT+Ke4Fxa1M6SGLORswyf3oY3OLW1rVV5soD0UStr4vaD3s1QOo4493fQD6kGh11L46njAr3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=PhAJrBRf; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1741865369; c=relaxed/simple;
+	bh=MGUtEw5urHC7X6ip2aosmPLjXiGu86dQGn5fUk7vJ4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QD84snxAL2lRanYaVII1+GRIT2jNupksYPPftY0KwOrHfhA42JGyL6//vboZYVDlg2J5riuyBI2VBFCKj19+BUkGtM6v7Cvuq7wgLQXOZI9SKQPVlHQbxDTvnoJPiw2TU11BOvQJFiyZrg0hNW4/Urd0nQPRkjcliY+xeUAW9hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=L0hloW59; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=ocs7d9nu5dnZ3q1oxJblUpnhIWUAcaYe5A9CXraTIG0=; b=PhAJrB
-	RfMB0yNpCD4F7cR34KsOKv4vVfV8Egc1R/w3WEIcx1mCvjtLIF+QBCkfTFpMWQSS
-	NtGXmAf2AvV6RcAHtncZxXHOXcSNRZz97zioecNfMEIC1/cgrQ2HVB0/M4Bw8Q+k
-	3CksI6+ATaHYXv5Sx4Zx3dhqA3blAwe4jvqfagcoyyAVFNdpxISgPhD2ofsKElhw
-	/LS2WEmAjcRFOW1hywqJ2LTuLaGF6ajWFVnMH93vKtOoXfcwMICXJFYekTXHarpE
-	jN9iuj//ap5FoUY69OB+ukEuLnezjrI4BlSyCiSSZ+nlEU1Uf/8vPYPr2K1YBtsc
-	bUVp1uVjSS7W0CrQ==
-Received: (qmail 1574818 invoked from network); 13 Mar 2025 11:25:54 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Mar 2025 11:25:54 +0100
-X-UD-Smtp-Session: l3s3148p1@LhY3vzYwMqQgAwDPXyTHAJp038nK7dx+
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=D7DF
+	vmNLysh9Nv9Y83NP5pi5yTZ69dnE86jveurgivo=; b=L0hloW596bN9RaV6bLhq
+	Nneoh/B9miPDrqm3JXCjaMXyJHfCv3PESNXEEE+HyhaMtv5/dYRVQxeoNH0jARwo
+	lsZ6V2krPpq3+sB+dfJUBbEMs8H2Q/m9FI/RSdA+s/8gtw35ZM0K6Ks4i0XyfL+x
+	NDk863yhIYbkw3PMx6WMSFVTldYO3GTemzhTnh0F3OYIzDfGad2WGh1o2SdsolEd
+	sS7g1wGuXxpCwxDzMIjrxPDoHPCTYYMHeYQIME4NA/SCJg61E/cxwz60/tjBLREq
+	p0/KWAob0LDNFoty7U6BbXHtvLXTUjXpDEmOiyhdZdgqC7mTl80emsAHCKKIlH3w
+	HQ==
+Received: (qmail 1595055 invoked from network); 13 Mar 2025 12:29:22 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Mar 2025 12:29:22 +0100
+X-UD-Smtp-Session: l3s3148p1@IUwlojcwmo4gAwDPXyTHAJp038nK7dx+
+Date: Thu, 13 Mar 2025 12:29:21 +0100
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: Re: [RFC PATCH 3/4] rtc: rzn1: support input frequencies other than
+ 32768Hz
+Message-ID: <Z9LBkftPH5w7do6j@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-renesas-soc@vger.kernel.org,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
 	linux-rtc@vger.kernel.org
-Subject: [RFC PATCH 4/4] WIP rtc: rzn1: add driver support for R-Car Gen5
-Date: Thu, 13 Mar 2025 11:25:45 +0100
-Message-ID: <20250313102546.27335-5-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250313102546.27335-1-wsa+renesas@sang-engineering.com>
 References: <20250313102546.27335-1-wsa+renesas@sang-engineering.com>
+ <20250313102546.27335-4-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Gu60bkU84sahAluW"
+Content-Disposition: inline
+In-Reply-To: <20250313102546.27335-4-wsa+renesas@sang-engineering.com>
 
-This is not for upstream yet. This is a prototype how R-Car Gen5 can be
-integrated into this driver. Bindings need to be updated so that they
-enforce two input clocks. This patch is only for discussion.
 
-Not-yet-signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/rtc/rtc-rzn1.c | 32 +++++++++++++++++++++++++++++---
- 1 file changed, 29 insertions(+), 3 deletions(-)
+--Gu60bkU84sahAluW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index f8c9308817ae..313e70070904 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -17,6 +17,7 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/rtc.h>
-@@ -71,6 +72,10 @@ struct rzn1_rtc {
- 	struct rtc_time tm_alarm;
- };
- 
-+struct rzn1_rtc_conf {
-+	unsigned int force_scmp:1;
-+};
-+
- static void rzn1_rtc_get_time_snapshot(struct rzn1_rtc *rtc, struct rtc_time *tm)
- {
- 	u32 val;
-@@ -369,6 +374,7 @@ static struct rtc_class_ops rzn1_rtc_ops = {
- static int rzn1_rtc_probe(struct platform_device *pdev)
- {
- 	struct rzn1_rtc *rtc;
-+	const struct rzn1_rtc_conf *config;
- 	struct clk *xtal;
- 	unsigned long rate;
- 	u32 use_scmp = 0;
-@@ -405,7 +411,12 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
- 
--	/* Only switch to scmp if we have an xtal clock with a valid rate and != 32768 */
-+	config = of_device_get_match_data(&pdev->dev);
-+
-+	/*
-+	 * Only switch to scmp if we have an xtal clock with a valid rate plus
-+	 * either not equal to 32768 or if it is forced in the config
-+	 */
- 	xtal = devm_clk_get_optional(&pdev->dev, "xtal");
- 	if (IS_ERR(xtal)) {
- 		ret = PTR_ERR(xtal);
-@@ -418,8 +429,14 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 			goto dis_runtime_pm;
- 		}
- 
--		if (rate != 32768)
-+		if (rate != 32768 || config->force_scmp)
- 			use_scmp = RZN1_RTC_CTL0_SLSB_SCMP;
-+	} else {
-+		/* We need xtal if force_scmp is set */
-+		if (config->force_scmp) {
-+			ret = -ENOENT;
-+			goto dis_runtime_pm;
-+		}
- 	}
- 
- 	if (use_scmp) {
-@@ -474,8 +491,17 @@ static void rzn1_rtc_remove(struct platform_device *pdev)
- 	pm_runtime_put(&pdev->dev);
- }
- 
-+static const struct rzn1_rtc_conf rzn1_rtc_conf = {
-+	.force_scmp = 0,
-+};
-+
-+static const struct rzn1_rtc_conf rzn1_rtc_conf_gen5 = {
-+	.force_scmp = 1,
-+};
-+
- static const struct of_device_id rzn1_rtc_of_match[] = {
--	{ .compatible	= "renesas,rzn1-rtc" },
-+	{ .compatible = "renesas,rzn1-rtc", .data = &rzn1_rtc_conf },
-+	{ .compatible = "renesas,rcar-gen5-rtc", .data = &rzn1_rtc_conf_gen5 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rzn1_rtc_of_match);
--- 
-2.47.2
 
+> +		if (rate != 32768)
+> +			use_scmp = RZN1_RTC_CTL0_SLSB_SCMP;
+> +	}
+> +
+> +	if (use_scmp) {
+> +		writel(rate - 1, rtc->base + RZN1_RTC_SCMP);
+
+We need to stop the RTC before writing to this register and setting the
+RZN1_RTC_CTL0_SLSB_SCMP bit. I will include this in the next version.
+Does not affect the big picture for these changes, though.
+
+
+--Gu60bkU84sahAluW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfSwY4ACgkQFA3kzBSg
+KbagPQ/+K761nkSCX94ojDB67Tt+45SrLtsXQQPvBG9NFGESeif5+93bvygsUBxg
+pBjWUWXZhSGK5uDluSfmudnzBbQQndFj33TA5YMSbnlN5kLFg6evxb9zgam5zcYE
+b/1MRrj5aPjVOQ7gLST2KjcJ+83smgla6LPpU1r/weGLOLqfr21obWv1qegBErFA
+RA643tWAHEqpa2x/sTA3Lwx1k5Rq5oURtXfMGRZHKpsDmv74jwNkHPGJnzyox6iM
+KH2t38gcfHGhrAd+WrPOljBwlbjgIAl1AuTf+jo0YNqo1PB/HkcqEoHUTm/woaBR
++9yH3ItipuICH6v6r6fqBVpb5JuO3bX1mGa8zQZG3z7bSwEXmXoRPpxYTU8WsOT9
+QkQY85q44tsLJVYGIAEIr8wM5LVkvDrKgI10kIplUq9Pl4AgHgKYRDGKTlODbKPe
+53cHSCOfdMDgNE6dw/bK9GVR7aHfNbB26IQHJKPjHQjOztks2IjTUBPzMGx+YAcm
+BP2OXmcEnlFhQSHgA9NcxBNZZx3vS5RTA731eA/ITlXlooC4Y7lVTy6I2tjKFr5N
+CBvOlxXSRbfMQeterc3xhW6moiyj24E0FpvWvPImT8VJtshTXd2z81oubOFrYp8N
+iJ496z1pC2CzLbqq9FC88joVzpayOL4N9UdZQ7qc8gbiBk4k6TE=
+=p8a8
+-----END PGP SIGNATURE-----
+
+--Gu60bkU84sahAluW--
 
