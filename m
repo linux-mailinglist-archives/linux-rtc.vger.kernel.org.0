@@ -1,119 +1,81 @@
-Return-Path: <linux-rtc+bounces-3489-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3490-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89283A60BC1
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 09:34:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C4E0A60BF1
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 09:41:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67157188ADC1
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 08:34:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E3AF1896FC8
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 08:41:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767BE1DAC81;
-	Fri, 14 Mar 2025 08:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4591C84BC;
+	Fri, 14 Mar 2025 08:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="wzlQM/r4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ppII+Vh3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF471AA1FF
-	for <linux-rtc@vger.kernel.org>; Fri, 14 Mar 2025 08:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3FB1953A2;
+	Fri, 14 Mar 2025 08:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741941215; cv=none; b=klZZNOsiThPwTOG4FAmGaqfFp26t+Du8PFmxpmTJBbXJnnHaQoKKQ7gcCN9el52r+uZ7AKBzuFDOjgLqnxtx/9tCVdBo1wGjOAB/243u75Bh6m0rSoRrPDVJOrVv6IsNyqMXXHsKhWIli3y1zQTRPNfRmflDUyckwsJthIqOBNQ=
+	t=1741941670; cv=none; b=DoyRcVFbnQ4A/jN/TL4a6MR6IIwfF06RB09q9nP1VmxMgU+PzbZpXlJB5N4FaWBx/ilH5nyQGcjdWN4++DMdyzeHhYtPl5skMvtitzeeAGRoGWYZrVJQx6is76yv1Yq1cgX68MJujHfjTFSGY91yb07WQXrJAN5A/zeiTaXWfco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741941215; c=relaxed/simple;
-	bh=MGJdDMkD6/gz2VLWUBnuEe0WVufidACgUTjTQja/X6Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lxVwpPO1VMq1p8c56fNjGiMNDiI36C8bkIMuc+yKoCLkKd2Ur+UhRi+/EvHNKfOPjf3NlGgz0pBlYbJ5qN+/RoCuybkQ8qQdQ7XL4ubVjNlbdQzb06JOvUiN6gNzV+iOlxlk4g7P/dAgbKabcVEYGERYOUCzRG6rZ4KgiZ2Irc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=wzlQM/r4; arc=none smtp.client-ip=44.202.169.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
-Received: from eig-obgw-6005a.ext.cloudfilter.net ([10.0.30.201])
-	by cmsmtp with ESMTPS
-	id sx9Qt9HukzZPat0Tvtgxxd; Fri, 14 Mar 2025 08:33:27 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id t0TttUZJZvt5Yt0TttrLNt; Fri, 14 Mar 2025 08:33:25 +0000
-X-Authority-Analysis: v=2.4 cv=c9JgQg9l c=1 sm=1 tr=0 ts=67d3e9d5
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=6Vi/Wpy7sgpXGMLew8oZcg==:17
- a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
- a=dkecWN29NwlNYE_-JqQA:9 a=QEXdDO2ut3YA:10 a=Xt_RvD8W3m28Mn_h3AK8:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=l62YLbyLOHyKJhy5MddIlMXG8M11WTu9emmcANot26w=; b=wzlQM/r4FXzRdifNBt+SsYjSBo
-	V+3YuS5TdLG2Jmflg3MsnHzZ+3Ywa/mQ7hgfv75zMfPNWQyLMZrnRgNERRiPgkzkEoMhWmBZrQYqF
-	8EV+RMpT9sQJcmDms++y3rQbCjb06HpFwyJuew4QXmDup4sp9P5YWf3Xk5+UqHApF46gofIM1g0HS
-	1U0+y8uA2k7jCJnmU/bHXpc7EsZBQo/jxznUM6xJlRaKo8Ii6HKfEXICnEwZbScv5s8E/pUH0WM5z
-	rU4v4Gs3N2WukFOGP5ZcTy02xeK1TbwXm1W6TkcjmuBIvIHu3eS7Iwz35D13VDE5ub5GFWgxoMCO9
-	JFrqoI5w==;
-Received: from [45.124.203.140] (port=53657 helo=[192.168.0.159])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.98.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1tt0Tr-000000045Ms-2aDv;
-	Fri, 14 Mar 2025 03:33:24 -0500
-Message-ID: <5cb4bca3-da10-4434-a90d-f752d8f1ab1c@embeddedor.com>
-Date: Fri, 14 Mar 2025 19:03:13 +1030
+	s=arc-20240116; t=1741941670; c=relaxed/simple;
+	bh=mA2n2r88FjBXxm6Nj4z+GrSjmJVmL/AW/BggpOMvC30=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SjO0AqkDWRfiCaroaSVIDm3/No237UZUB/DYI3RoKBfL4J3HpRa7PgQlOg+YmdaFDoO4Er/XHpIfgAyf9x27miwm2s2eAMmHbeutYk0icisTTso+IH3IQZXPfELv0WtmpM+t2HdNJUeIeqRBeSpBizXvF5GHw5ZpHIJFt8itXio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ppII+Vh3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE6CC4CEE3;
+	Fri, 14 Mar 2025 08:41:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741941669;
+	bh=mA2n2r88FjBXxm6Nj4z+GrSjmJVmL/AW/BggpOMvC30=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ppII+Vh3YT5m5l2d0pCDeXAi5aNCRjPCPdC/HZKCn73+tC3JquGWwETN0+38UXMdp
+	 OSvU9xAQSAo5ZjfanLabvTK/NAzEemkCTeyBxkdjNE/tsp3U9Hswq/HtFGB7PLCDha
+	 S3D/Fo49vvcYrqITjtyOI6HuYL5h7tpO33kNF5p+JnnI34Vz2Z27oKSpOUWT7KeQ8r
+	 3oK8PVMxVE+BAxdqEbdCB1fp9w7GZg03JRm1kO0rDpvD7pA0BtB5ApFxhdr5noJEoK
+	 hTmC5QM0NrFn6CKG7Vo0IaYLpQ1sBbX7CseUR8JEVUt3jaMgusn47biIbV/S93Ng2Z
+	 CzmzVlT7pfUxQ==
+Date: Fri, 14 Mar 2025 09:41:06 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] dt-bindings: rtc: rzn1: add optional second clock
+Message-ID: <20250314-sexy-impartial-raccoon-7e8dca@krzk-bin>
+References: <20250313102546.27335-1-wsa+renesas@sang-engineering.com>
+ <20250313102546.27335-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] rtc: Avoid a couple of
- -Wflex-array-member-not-at-end warnings
-To: Tzung-Bi Shih <tzungbi@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- linux-rtc@vger.kernel.org, chrome-platform@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <Z9N8BsVJF-s6Hcvd@kspp> <Z9PmC4lExxDMusf3@google.com>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <Z9PmC4lExxDMusf3@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 45.124.203.140
-X-Source-L: No
-X-Exim-ID: 1tt0Tr-000000045Ms-2aDv
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.159]) [45.124.203.140]:53657
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 4
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfB8eeyV4wwWtCc7wNoGntSreG2S2qLh8Z1dGt2TqBvpR0CUVncobOl+X6cJArUB0DkDO6BZZ9DISePC9yICxD5xbq0BdlDyWghzk/zVifQZ5KC/iVc6i
- 81rcr7xjBjE3VlGvhpXo2b49YmK/SpUROKVAhtcGfTZUYb8oabdUAwTD3vplo1DPrzTlBfPz+BHJjAB75NkSuPW1rfQfrLona+M=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250313102546.27335-2-wsa+renesas@sang-engineering.com>
 
+On Thu, Mar 13, 2025 at 11:25:42AM +0100, Wolfram Sang wrote:
+> The external crystal can be a second clock input. It is needed for the
+> SCMP counting method which allows using crystals different than 32768Hz.
+> It is also needed for an upcoming SoC which only supports the SCMP
+> method.
+>
 
-> Same here, how about:
-> 
-> ((struct ec_response_rtc *)msg->data)->time = param;
+Probably the binding was incomplete and you always had external crystal
+connected. I assume you want to keep old DTS, so it is fine for me:
 
-Yeah, let's go with that then :)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-https://lore.kernel.org/linux-hardening/Z9PpPg06OK8ghNvm@kspp/
-
-Thanks!
---
-Gustavo
+Best regards,
+Krzysztof
 
 
