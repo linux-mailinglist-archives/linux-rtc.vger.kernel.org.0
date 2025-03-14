@@ -1,154 +1,114 @@
-Return-Path: <linux-rtc+bounces-3494-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3495-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E41A4A60D86
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 10:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4057AA60ED7
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 11:28:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31BF446087F
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 09:39:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DBED17135C
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 10:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8281EEA30;
-	Fri, 14 Mar 2025 09:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48A91F4630;
+	Fri, 14 Mar 2025 10:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNlCXaC6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jq0KWvbC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F90E1DF261;
-	Fri, 14 Mar 2025 09:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFAE1F418C
+	for <linux-rtc@vger.kernel.org>; Fri, 14 Mar 2025 10:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741945163; cv=none; b=jS7NHnBCYwQUHcySNopBKlQEvwSd4yau+unWk4Q0H/kzR7r/s/Uf5T/57M3yjxITCZz0v7ShdaDejWQCfSor9gjH4SxhvcqysaAmeG2GHaEMRF/yZGXNzW2dHlJ9/sRwgLDDV5NS2ZjwcpuZWzuU1NXG88B5KScQOe+veVNDip0=
+	t=1741948098; cv=none; b=BKs7PJ0byQe1l/GTeWLtvNdlQh3B9vX5iPgHnEOm+aNBYeMCP8W5OAV3ggJ5RZVLMUGT7XoOLfQPZK069nftF/RuUb7sUSCExcg+AyqqWP479tIpyyQpxtdOeJRDTQ47/f+62P9JW6v0rmZX2eTvl+QK2VrsHPY5mQCnG/CVjvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741945163; c=relaxed/simple;
-	bh=5QVN7CNT/TzWa0C8un5ji1yuhk1EE722SrLc52k/u0E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cs9YM7cGseoN74yDiGpba6uA9L7K8LIgypTbFWLTD4eAd2T9Se3erx3nwzjPXgsKqaSrtGdEOMZWIJmXJm3yvkLFjrK4wAtPQ6yCFtWfRoSApVWVHIOsOZr9yvNgdKU8Q+bNhp0CfAXF1vRVwlzZiyr/jT3Zp87J1DNnetKvnyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNlCXaC6; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7c07b65efeeso162829485a.2;
-        Fri, 14 Mar 2025 02:39:19 -0700 (PDT)
+	s=arc-20240116; t=1741948098; c=relaxed/simple;
+	bh=7lhUJ6eiiWP9IJ/FYhzjbXh+LAJRJWyTLSUXs2Uq9+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LgpR2VibCnXYRI678X827BktMxsJGspsc6jiiprQait1E/1G4dqA/aOqGkZumYuSAjq2C4PpJzMFq/qIT2TDMFpfJJ+vR9GF6wmehgP1Stem8S4AJROwQLatKezfmBDYCQ9PC11t+PDm5oAzfgFm6WSjtlNrXclP7F3BnH8J2g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jq0KWvbC; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-549967c72bcso2192238e87.3
+        for <linux-rtc@vger.kernel.org>; Fri, 14 Mar 2025 03:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741945159; x=1742549959; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pfevu07Vpa7hwgRCobCYOrdydWkG3wRjRYWAplZ0bYE=;
-        b=NNlCXaC6Rbhfv1W6iGf+/ggL60Mw1QQlz0fcmTy30hViZiHe5Fhn8oq/G6FzISUg3N
-         jneHDYOYa0Pe/M21EofXUcKpndmcW4ISLmwMOHORmNHj0sN8HGrdHXQTKKw4IMelgCIW
-         Q2EqGLpHkxgEjS+Ej397hAADP2RJqzewb3YT08J8xH4PQq15AYFeJyzoI4DENWRvLxQo
-         tqknMrM1m8K3bAD4xSE1RksaLXlLLtvqvrZFFxAAMQCchIdE2Lh53Qt+Y9qNin3lvaH2
-         wshoaz5aeMdBTWGhkDRF85+sMofOcrkV2xevXDAtnd7beQde1VkndNmR1ibhLuPqp3GU
-         DJlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741945159; x=1742549959;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1741948093; x=1742552893; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pfevu07Vpa7hwgRCobCYOrdydWkG3wRjRYWAplZ0bYE=;
-        b=t6shEwBalt3kG4eWbYEnm8HkYovOZ86waFNIC4co1wuHN4VHORdhyoW5iBd9B+Dc+7
-         wU88+XkD0SggHmzxJ5CkkfQ4W3XhvNZpodo9DnJUZMfqeVNrsMyFDQWYN8mdArwIPrzZ
-         XGgV8kqMG8w42Qe0Rj/IYq9q7yFMLsF/lnxzXvxMSUM7WhWB3Nx32oI4KgRUVLMFW3mH
-         xrW8z2JbMTou/TSYK69I5zOVrTIKY4GaD0sIQHDt2wTTspQLxLclxbsz0wvkvLdyxC10
-         4N4suEXUzOH5xb7RmE0wHVVtg7tttuq1iommV6wJ+6BY5QRECUJ+rmiIdfoaLr8a/WeD
-         NFKA==
-X-Forwarded-Encrypted: i=1; AJvYcCVrQWEBHEnr4aRb19QNub9GzhJlmcZyTB0hltJ92ljKI+glcLUnL0wb5ZPQD0zdG4oM/eBDtzrQmU45@vger.kernel.org, AJvYcCWlbNYbJyabFedQwpwLxCRQzps4vTige+uUF/u2gTC6fSUbj/jc3A6BLJBsgIqQRhUfchyEzzvoji3N@vger.kernel.org
-X-Gm-Message-State: AOJu0YweAaJGxpV+X8WvVkTHpbDW6POBOw2DdHqwYTqIEYK1h3ZHFzlm
-	Yguwv5eOLoNbIFbPjdqX3WbQEG8LPdqPmy+NFtcWCBlurZ9+Rp+q
-X-Gm-Gg: ASbGncuAxfJXeDRX1KN03JHeWvbAgTytooRLL8xIIb9XNzG2CJCxhFUllC3nRcAWjhW
-	0tW3lKxZnTsVoeNr1GBEVyng9mqWT61wBy9svLrkx6s4cXGaK2nooySIo13bPDEb0a2dEsFz6G/
-	Lr9oaLrANMgnr0jZ9rXPVo4Kh3tifbw1QT+tSSzHIB/G798DYIVcDrrbr/g+saezS0uYZghUZlj
-	d9URsJKYUpAhdS0cwAGgn7XB3qdaHOWjTXN078O3DYelFQmoHiEidlxqcE5XsZxgkT4JIIZaq4P
-	HB7/CCgUDllDvhNF3WUD
-X-Google-Smtp-Source: AGHT+IEvr/9zZBoMHVrdiXspi/YS5RCN+/h43b7k2lH9T05dCKjUpdrZxmZoQRHlNmQ78IiJMl6eJg==
-X-Received: by 2002:a05:620a:4386:b0:7c3:d5c6:d34f with SMTP id af79cd13be357-7c57c80ef9dmr226283585a.32.1741945159129;
-        Fri, 14 Mar 2025 02:39:19 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c573c9c6f3sm225051585a.63.2025.03.14.02.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 02:39:18 -0700 (PDT)
-Date: Fri, 14 Mar 2025 17:39:06 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	Inochi Amaoto <inochiama@gmail.com>, sophgo@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 2/3] soc: sophgo: cv1800: rtcsys: New driver
- (handling RTC only)
-Message-ID: <r7uyz4hvwxqzl7jv2wo5dll4pckkk4as5zbtc3w3aszpk652ps@nlmadkaorght>
-References: <20250309202629.3516822-1-alexander.sverdlin@gmail.com>
- <20250309202629.3516822-3-alexander.sverdlin@gmail.com>
- <fuc5zzq3izowktmafrhy5vkjddydxg5673ggr64ukh7v5knjmi@r6xozjxcw7r2>
- <2d1995d39ac050eeb7cec4183ebdb307e520a7c7.camel@gmail.com>
+        bh=7lhUJ6eiiWP9IJ/FYhzjbXh+LAJRJWyTLSUXs2Uq9+Y=;
+        b=Jq0KWvbC+RGapBxE/79RV0BIeD9VvGdw1Fpe1TB3FQiE3Mx7M1ug74I43skmk/ysed
+         pW0eyKCVeuPLLFbAr8/7rZaVq+ypvWIqqp98ONbAm/K0er06k802QP0sKmwApc01jN5E
+         LJkRPCM7GjMxbAZVdkkbB+WFpnQ3yeovdkzSGgBhRM8hxbnIqo7S1fIfuHXiO9Srwm6f
+         0krXnLDsipucb1cr4hOpq8EflJ5+JkQWavCGVohox/GL31nKFJGEb3tY1JskSboySuXw
+         evvwW11mE8FMNJVAwglnLWQuelsD1w2tLYtm1nHAHAZQlQ3gbq3yJ1khhhuBRD+qlb/f
+         Bh5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741948093; x=1742552893;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7lhUJ6eiiWP9IJ/FYhzjbXh+LAJRJWyTLSUXs2Uq9+Y=;
+        b=u7SdDzs04UwQHQnd4Q/RwukofcHuZTi197tfaWIQV9oUfnG/wrERmjQHqzVO0pt6Ku
+         A1Eb+RLSPBa50wiRgK/7eOW7iGFc5tf3b+8QIlCaZjqr7b+6Ps6TtYGFhhyqfLvaDZbD
+         Hp4jn34eCY5klDQbEpu69lf3BAZN1uGvD390qq0i7cfG/pJeFz6ZLnMXIBdgfunQ/3/B
+         2qx0KMLSYHrykTJAwrVOq6OrNZs7X87zJxgPLFjGBGxYNA2wjgO6BSjiitM7aq9aFyJY
+         0zBhAVnvNEkSA3vGNvHylFy9bKV+r5ndbQi9LPADKtUnY+MAWz+ez8ALBVnjJj94hjPz
+         MB0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXgQofbUFAw01TkvXB1sJGEC6cRAmbfnFovj1Gsq4TFQbiMmZRbMUO/AGoUzuXBXqToWtI7zFv161Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9WkqFRyUtR8DVwQB9f+SnFpvQjP1TUoszzEH5ZMzejp6+yWXQ
+	t3GQBqVWxv0xtyVJjl+sF3ZLzH/BSWaMyTE5+3dlU69KNgfiSv+JP7QoX6xjg9bImFuC4hdah7E
+	L7ARGp6ZFq/C8q5pohWlLbSoj+nUw3R4FQNAuag==
+X-Gm-Gg: ASbGnctUXMu1ffPFrlw7GftyMdfUuJZ9sFsjgfOsaCOz6+bpXaPBUtMH9xOwUMhCpcd
+	kgNfDmgL9QcI2/Oc9lVcDtrdl9F+r22jaZQQhbYaOGVzm1zMKVaVUlp8+6ylxXN1YfLGzhG5VBz
+	1cz4Q5PXfJC++37rA6ByA8TS0=
+X-Google-Smtp-Source: AGHT+IEn/Zc2evX7ABWKYXK/Rs9IfMZdPR9tSjfOKy1a8kRLZcgdXcqx09hfLow4+l9JiJIqttYJQGRGb5b/H78iKJ8=
+X-Received: by 2002:a05:6512:3087:b0:549:7330:6a5a with SMTP id
+ 2adb3069b0e04-549c3913d63mr621103e87.23.1741948093287; Fri, 14 Mar 2025
+ 03:28:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2d1995d39ac050eeb7cec4183ebdb307e520a7c7.camel@gmail.com>
+References: <20250309193612.251929-1-linux@treblig.org> <20250309193612.251929-5-linux@treblig.org>
+In-Reply-To: <20250309193612.251929-5-linux@treblig.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 14 Mar 2025 11:28:02 +0100
+X-Gm-Features: AQ5f1Jo6nSq2AFqXUDepXvu8J8Xduf-drgRoP8FzPPUsiMaA2xVOQZlsv65trtc
+Message-ID: <CACRpkdY2oZtu4vtTwHRMFxaoYWu3B5bfPN==thz=BT2F6BHQQw@mail.gmail.com>
+Subject: Re: [PATCH 4/9] mfd: pcF50633-gpio: Remove
+To: linux@treblig.org
+Cc: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com, sre@kernel.org, 
+	lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com, 
+	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de, brgl@bgdev.pl, 
+	tsbogend@alpha.franken.de, linux-mips@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-fbdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 14, 2025 at 10:31:09AM +0100, Alexander Sverdlin wrote:
-> Hi Inochi!
-> 
-> On Fri, 2025-03-14 at 08:51 +0800, Inochi Amaoto wrote:
-> > On Sun, Mar 09, 2025 at 09:26:24PM +0100, Alexander Sverdlin wrote:
-> > > Add driver for Sophgo CV1800 series SoC RTC subsystem. The RTC module
-> > > comprises a 32kHz oscillator, Power-on-Reset (PoR) sub-module, HW state
-> > > machine to control chip power-on, power-off and reset. Furthermore, the
-> > > 8051 subsystem is located within RTCSYS including associated SRAM block.
-> > > 
-> > > This patch only populates RTC sub-device.
-> > > 
-> 
-> ...
-> 
-> > > +++ b/drivers/soc/sophgo/cv1800-rtcsys.c
-> > > @@ -0,0 +1,63 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Driver for Sophgo CV1800 series SoC RTC subsystem
-> > > + *
-> > > + * The RTC module comprises a 32kHz oscillator, Power-on-Reset (PoR) sub-module,
-> > > + * HW state machine to control chip power-on, power-off and reset. Furthermore,
-> > > + * the 8051 subsystem is located within RTCSYS including associated SRAM block.
-> > > + *
-> > > + * Copyright (C) 2025 Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> > > + *
-> > > + */
-> > > +
-> > > +#include <linux/mfd/core.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/property.h>
-> > > +
-> > > +static struct resource cv1800_rtcsys_irq_resources[] = {
-> > > +	DEFINE_RES_IRQ_NAMED(0, "alarm"),
-> > > +};
-> > > +
-> > > +static const struct mfd_cell cv1800_rtcsys_subdev[] = {
-> > > +	{
-> > 
-> > > +		.name = "cv1800-rtc",
-> > 
-> > Make this a specifc one, like "sophgo,cv1800b-rtc"
-> 
-> Could it be that you mixed up device instance name and "compatible"?
-> 
-> Please refer to all other MFD cells with `grep -C3 -R -F "struct mfd_cell"`
-> either in drivers/soc or in drivers/mfd, there are no vendor prefixes in the
-> names.
-> 
+On Sun, Mar 9, 2025 at 8:36=E2=80=AFPM <linux@treblig.org> wrote:
 
-Yeah, I misunderstand this, but at least please specific name as 
-"cv1800b-rtc". This is more accuracy.
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+>
+> The pcf50633 was used as part of the OpenMoko devices but
+> the support for its main chip was recently removed in:
+> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+>
+> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+>
+> Remove it.
+>
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
-Regards,
-Inochi
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
 
