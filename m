@@ -1,127 +1,80 @@
-Return-Path: <linux-rtc+bounces-3491-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3492-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2E28A60C4A
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 09:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 13556A60C61
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 09:58:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EAA83A694C
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 08:54:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 252083BCDDD
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Mar 2025 08:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE46E1D7985;
-	Fri, 14 Mar 2025 08:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A341DC9B3;
+	Fri, 14 Mar 2025 08:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ksC6KD/V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oH2SDzvC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFFC1D5149
-	for <linux-rtc@vger.kernel.org>; Fri, 14 Mar 2025 08:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F661DAC81;
+	Fri, 14 Mar 2025 08:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741942496; cv=none; b=E1oQTgy5bwZEV/eWJhl9YWL+90ruG5RdBIbLcrfAAEs/7WfmmxRXSATDEQU7kv/z9rlqRXqa7LX8nLGWa2/gkhwsadGbmo4QqFykaTrl9n7/sU2aB8wqTylYLmKUk6Mni9FnuNTLRCYrAMPnleD/bbzvEOolE7hlEMFoA30BQag=
+	t=1741942699; cv=none; b=pe8FeN2QqPLwem7mczTiD6yEJqbvcrRbobFpJ6GVojsQ+baBNZ9Plszl74gRniXakna7DfuQ47pn+KWpMAK+ntjEl6BI6Xkc7SItWw2fGrdS9QNJL/IiMW4TgsDMWeVigmKDVWJIP2QKo7u9FFhspbdgZLvplkOlF4+e0v0B7+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741942496; c=relaxed/simple;
-	bh=MBz1bcRKfsFEVJsDtb3kn690F8mE3rVuQqKJeipJAEc=;
+	s=arc-20240116; t=1741942699; c=relaxed/simple;
+	bh=3mIJSm06YxRGhx1k9fxKkWTTiVXafceuKeP4nRH10+4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M7FwiJtIAgjzz0knMH3lQLlDUD/DsPV+yISKju0DJAYeuRb1J2vLpVxKAVnFjIC4NeZuAtFkbH+aXXVBpZjNx1hTBhla7kQksepEfmqB+66wxmdGUghulp21ACcILzdbST19VNI9fkVj1YcMvbZl90ehPAkXf0fKLs6jTQvPiTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ksC6KD/V; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=MBz1
-	bcRKfsFEVJsDtb3kn690F8mE3rVuQqKJeipJAEc=; b=ksC6KD/VkEHRZFqHmU7/
-	HiIQ65LBcco5B4+8gxSCukRWK7/d8AumXeVRAWCEhcvB5ewC6zZw3p84kYwYZpvJ
-	e2RL9S28tWWEJ9LMEorOPy2txc4vpOwp1i+bl4tupBr3u6orlou6ScuG9zjTqUwd
-	uNwK6uXl7TmXf5IiD+pI1dz8xs5+1SjOmfp1kKDFb2a+bP7vwgl6503BrZ1zOJhZ
-	U/OqEvqfb3F1kwmgd43f8SIDC/Ro3+PXTECwS+ts82HuFO72Hz54tt/aYZzEV0l7
-	WTFmSOFxHSUaGjIEF1v0mH382mkGLVIi+h9SRa+g7r3BPa0vkaMd/Dl1M/sEiGqa
-	cQ==
-Received: (qmail 1937771 invoked from network); 14 Mar 2025 09:54:43 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Mar 2025 09:54:43 +0100
-X-UD-Smtp-Session: l3s3148p1@YZnvlkkwBIUgAwDPXyTHAJp038nK7dx+
-Date: Fri, 14 Mar 2025 09:54:43 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] dt-bindings: rtc: rzn1: add optional second clock
-Message-ID: <Z9Pu0_niK4XOThvE@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org
-References: <20250313102546.27335-1-wsa+renesas@sang-engineering.com>
- <20250313102546.27335-2-wsa+renesas@sang-engineering.com>
- <20250314-sexy-impartial-raccoon-7e8dca@krzk-bin>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sAxYWYiSuNLK2HMcxk9XKQ+QVrwdaS4PfBGhUVDMg2P6F5l5yOUvm5vzdK1Fq+PoLnn/7yKVyXxPBMlkj/jQhZ/m6/SpdBCb/KoJ5c98JuLAywQH9xR/xLAYTnWYnBMNvIUgalR8+6lAQ4+70bDmPYD3S4fEwyxpFmbwmRWyAU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oH2SDzvC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB311C4CEE5;
+	Fri, 14 Mar 2025 08:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741942699;
+	bh=3mIJSm06YxRGhx1k9fxKkWTTiVXafceuKeP4nRH10+4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oH2SDzvCb26vKBz2jjfDjEUORM/o+zOTu6tdhyp2vSOjmgsv1qaxoUK7CS94utsQf
+	 JDCMZ/2B0RfV9xsoHBETGGm+zCYJERnQZR823z6kpr7y/KlWGUV/qz8UOO4SBxLVsa
+	 XTWQSG2O3c0TD8Pj9G1Tsg44usnZ8wCw+u+R5WhNP18ATlj/+UnHsm8YOo2ehhHjxX
+	 P/3PYzxh8cMHRp9lCClxBKjZODLeridLCryg2lqcr54L+3krFA1ETC2gNRRe11Sr48
+	 6MrSDiET9u0Zz9h1uc795xDyjcNm8GWiTAy+xJ+ZIaNbEd2QbakO06MvoArx2Y6Bbq
+	 1emc8fnLp+pQw==
+Date: Fri, 14 Mar 2025 08:58:15 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>, linux-rtc@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2][next] rtc: Avoid a couple of
+ -Wflex-array-member-not-at-end warnings
+Message-ID: <Z9Pvp4i4Mm4vAXSA@google.com>
+References: <Z9PpPg06OK8ghNvm@kspp>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mVr91rY3i28z2UsX"
-Content-Disposition: inline
-In-Reply-To: <20250314-sexy-impartial-raccoon-7e8dca@krzk-bin>
-
-
---mVr91rY3i28z2UsX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Z9PpPg06OK8ghNvm@kspp>
 
+On Fri, Mar 14, 2025 at 07:00:54PM +1030, Gustavo A. R. Silva wrote:
+> Use the `DEFINE_RAW_FLEX()` helper for an on-stack definition of
+> a flexible structure where the size of the flexible-array member
+> is known at compile-time, and refactor the rest of the code,
+> accordingly.
+> 
+> So, with these changes, fix the following warning:
+> 
+> drivers/rtc/rtc-cros-ec.c:62:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
+> drivers/rtc/rtc-cros-ec.c:40:40: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-> Probably the binding was incomplete and you always had external crystal
-> connected. I assume you want to keep old DTS, so it is fine for me:
-
-The documentation explicitly mentions how to wire clock lines if you are
-not using the RTC and have no oscillator. But yeah, then the RTC DT node
-should be disabled.
-
-And yes, I want to be backwards compatible.
-
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Thanks!
-
-
---mVr91rY3i28z2UsX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfT7s8ACgkQFA3kzBSg
-KbZ54g/9E/ss/oMZht39U/AUfGSpSbVG23K5eKs5d9YgpRYWT17YIt8GexSIHkzm
-LZDvDUdzZdhaw/m7C6Nwoxpcx3GkeY3H035uSHrk6thY3T8f4wnK6wh0W53PTBS/
-Nn+qmdkFYd7y7vIXDzBzx4xdub1W+KgtHI9lhirwm9YyyuLgbp47vbZlT/PTiInx
-oV709O0V2ST7J+5g7rtJ6SZNA9fw5AY5OlomQLc0gkt51/9Zj5R2HApEtxyJE0bC
-DSeHLtriUzmR/cMp3nOPlThZa9CwF2zNbUkj+mWoX+/pMkCMJwZD4ufs0Ec5stN8
-uP1czuT5KNMnCKpwv8pRyl/n1w9je4CiVSJLHbw7POYYei0iZfYLSevDXRXVWi2R
-tRurHrkkItd5/PEY9eYAQsl/aiDGvyZtked7E1pRugW4TFeOxuFoxgxa+IMNEASX
-GQ03aBdEIHMkIwWlrrbsDZr4SnLwiLETy/Lfxb2YobBBqNqa+P2y9ROvg2mUzNGw
-nSv+qJmsTCs/TOzJohkbeLK5dRuB/+veVXjassrQx1yqWGPsyL6w01vomgPIFiFj
-JYeaT6TViE/1j1c6MeOPk5Qy6GL0SQ0HySATyQPAKyruE8K8WbMBmEM9DCSivyeK
-QApvCtA5KS8FozFNnCSgzG3fg/235CAg59hQN3ClwX8JzagijiA=
-=yk/n
------END PGP SIGNATURE-----
-
---mVr91rY3i28z2UsX--
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
