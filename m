@@ -1,100 +1,98 @@
-Return-Path: <linux-rtc+bounces-3531-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3532-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3A5AA65397
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 15:31:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D34A65452
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 15:51:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1ECC1664ED
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 14:29:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBCEB169E53
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 14:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F86241688;
-	Mon, 17 Mar 2025 14:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB2C24500E;
+	Mon, 17 Mar 2025 14:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FP5BRayl"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D0824110F;
-	Mon, 17 Mar 2025 14:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFB6238162;
+	Mon, 17 Mar 2025 14:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742221744; cv=none; b=oNTtCvFD3hGZhsW+TvFRLOu+WY2qSe6pJBfrGrFeiUmTxEox9eeZJ+2y3S8BJHrJ2/+H9u3mcgqlA0XWpa7k2EIrxV+/HT3uPV9S5A2jbWeC/o7M3UNU86VqS8L1j1V+jY5aJwwUhUE9sec2Iu9P/6aXTOd0Wu8b2r2CSnfoyR8=
+	t=1742223069; cv=none; b=ng8kPw7jA32j0HkAJn1sa5Kw3U8KIFvVwfIbae28yrNzHGgrgWvjHvnsfF+PJ+9+M71jiSkxxaMLnuxFC3IL6NsJ4NmPLrkrrA6zXygF42Z07X0/PMCplEhX4cVzNkhLq4nzq71S2UESry2jgA/4gpd1aalyy74TZP/TAlSZcHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742221744; c=relaxed/simple;
-	bh=dzgbwvDxYKxyBzxSvxhiBD6og4kkmAH+ymh2ORT+zoU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dC59diCoLT8Q+yy/wVxbEugibpXB4ooJr1X1/2v3ciEbuLZ+WTDcXgdc8UmIeJ2unNx23Tsti2MZY/4JpGtmmoidKrlmj6fd6ZApXN6HhkJj1INPmEBEyFAf80j48NKKgsZNYLkrW0KqAvalAv7ig0aSOnrXtiUE8uIizQGVQx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 749A913D5;
-	Mon, 17 Mar 2025 07:29:11 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA8E13F63F;
-	Mon, 17 Mar 2025 07:28:58 -0700 (PDT)
-Date: Mon, 17 Mar 2025 14:28:56 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	linux-crypto@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	linux-efi@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Takashi Iwai <tiwai@suse.com>, linux-sound@vger.kernel.org,
-	Andrew Lunn <andrew@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-	Borislav Petkov <bp@alien8.de>, linux-acpi@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH 0/9] drivers: Transition to the faux device interface
-Message-ID: <Z9gxqGHS3igb5wOq@bogus>
-References: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
- <2025031705-scouting-scolding-8ff7@gregkh>
+	s=arc-20240116; t=1742223069; c=relaxed/simple;
+	bh=Ei0Jo7GbHU+6on5aqWGAf/sd939nMlfrbpwJvZ+8jbs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=I7ZmN+7U/T/z7bL1d0Au9iD1cIBjiiVNEZ7akHrrotMrfThgxeWxBqAue3Ac+TJGIwfA054lrRua/f10X4tPFV+QeYODSKed0Y7fNW50TJh6BA2VE6LkyHK1P/K5DhjHzla0cIW+qUFE8190ALKjbICYRjkrvt0mUzuoUiI2IyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FP5BRayl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BB1C4CEEF;
+	Mon, 17 Mar 2025 14:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742223068;
+	bh=Ei0Jo7GbHU+6on5aqWGAf/sd939nMlfrbpwJvZ+8jbs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FP5BRaylpuMtaVF8ETJpc2PPX6jd3d2scnLFJf/Vvdzjjmqq2U4NhVaMKi5VWCh2J
+	 cIM+yCUpfSZiowNCXp2W9Te6+F6JDm18/HFL5ITh+xvya9E4ptNlCUXCHZ+BM1S0Kk
+	 PiDoAsUgdMR2HX1wSEjbQuk2qw8AOQD3MBV4d5BPKZ9a6Ep0vrGLmf4Y+Rv6K7xdEz
+	 MqzUDWQqm0wr8itnhix9aCp8qJDZDwAY36nsmOFsj861mbfuRw1J1nzfND6bVM9Srw
+	 O8+bwE00mWbiLuriy/wT1qUEdbY3pr5HuYFP9BQVX5Iijgz4nF2H7LyPc541YJ2kcG
+	 mRu81Pk9Kaa2A==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Johan Hovold <johan+linaro@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
+	Joel Stanley <joel@jms.id.au>,
+	Sebastian Reichel <sre@kernel.org>,
+	Steev Klimaszewski <steev@kali.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/6] arm64: dts: qcom: x1e80100: enable rtc
+Date: Mon, 17 Mar 2025 09:51:05 -0500
+Message-ID: <174222306290.1985242.16292518573036609373.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250219134118.31017-1-johan+linaro@kernel.org>
+References: <20250219134118.31017-1-johan+linaro@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025031705-scouting-scolding-8ff7@gregkh>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 17, 2025 at 02:01:55PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Mar 17, 2025 at 10:13:12AM +0000, Sudeep Holla wrote:
-> > Recently when debugging why one of the scmi platform device was not
-> > showing up under /sys/devices/platform/firmware:scmi instead was
-> > appearing directly under /sys/devices/platform, I noticed the new
-> > faux interface /sys/devices/faux.
-> > 
-> > Looking through the discussion and the background, I got excited and
-> > took the opportunity to clear all the platform devices under
-> > /sys/devices/platform on the Arm Juno/FVP platforms that are really
-> > faux devices. Only the platform devices created for the device nodes
-> > from the DT remain under /sys/devices/platform after these changes.
-> > 
-> > All the patches are independent of each other.
+
+On Wed, 19 Feb 2025 14:41:12 +0100, Johan Hovold wrote:
+> This series adds support for utilising the UEFI firmware RTC offset to
+> the Qualcomm PMIC RTC driver and uses that to enable the RTC on all X
+> Elite machines.
 > 
-> That's great, but you need to send these all independently to each
-> subsystem as needed.  Having it all in one series doesn't work for any
-> of the maintainers of any of the subsystems.
+> Included is also a patch to switch the Lenovo ThinkPad X13s over to
+> using the UEFI offset.
 > 
+> [...]
 
-Sure I can do that. I initially had idea of creating a macro that made
-all of them depend on the macro but later dropped as I wanted to check
-if that is good or a bad idea. I just asked you in the thread 2/9.
+Applied, thanks!
 
-> And I'm glad to see this work happening, thanks for doing that!
-> 
+[5/6] arm64: dts: qcom: sc8280xp-x13s: switch to uefi rtc offset
+      commit: 409803681a55e061f5ea6be82f05f14c0b9c707e
+[6/6] arm64: dts: qcom: x1e80100: enable rtc
+      commit: b53c2c23d3c2e50473c0be17a392d4b03a296b52
 
-Thanks for adding faux interface!
-
+Best regards,
 -- 
-Regards,
-Sudeep
+Bjorn Andersson <andersson@kernel.org>
 
