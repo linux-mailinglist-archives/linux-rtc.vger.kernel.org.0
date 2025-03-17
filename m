@@ -1,64 +1,63 @@
-Return-Path: <linux-rtc+bounces-3538-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3539-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14C3AA6610C
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 22:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 797C4A66181
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 23:24:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49149189DBF5
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 21:56:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC2A31886AF2
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 22:25:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E2CB20469E;
-	Mon, 17 Mar 2025 21:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05D2E204F63;
+	Mon, 17 Mar 2025 22:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LlHMBRN4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eBXgsaMS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FEF1FDE2E;
-	Mon, 17 Mar 2025 21:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303D81F869E;
+	Mon, 17 Mar 2025 22:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742248579; cv=none; b=rr2SqkIKuoJrxAsKYaJ5ywOdPMu7uZOxPaFG9QOoPDD1IQ7N2KTE+Sl4725FS9BAChMXUumhUEwYeP2cyNNL2F/aEHksuhTKXG9cMIq9Uj7Xp7AjGYu0MiOOJu2A4WJuYC8XBgLmv1aPzyhOdyrrAkpM4QMGEdMt4r9RB4HKfSQ=
+	t=1742250282; cv=none; b=ilVhZHaQtTdzpbWC9CA+5LtUMYH4SAW7vvRCyYCIjIOzfyQcHoXjgYV+IkssTh00WSMnTLFpkQp9ow9nnPGD1Ccd8b6LWQKGNT2rdw7XEwjtLEw+9mAOVAIppr0HK797dPIFj7ieNL14n+ZNymb66tIpQteysV1U62haZripA08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742248579; c=relaxed/simple;
-	bh=inAtUwWXZw6O+qaTrGoLKXAeQwhcqR+I5Hy9wJp/Kto=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4ZNDGGRu0FZ+XYp3LWRT29proHaolmhUoOewzEQ3p3e5w+5YEvZ70nlaxQFt7s8EQRN/UTOe9GUQjkZO+JhkF/IDLkn7PfrMQKRHLRf2/5xusmKvGsnOZAzzdBEehpPq3WYuJiUSru90X4XvokO33X/1Fasy9cqJ7iF5Fmng0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LlHMBRN4; arc=none smtp.client-ip=217.70.183.195
+	s=arc-20240116; t=1742250282; c=relaxed/simple;
+	bh=l5Rupot/LMVZlcsfabiGNdgECH3hJKhybWRxZsRFbL4=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NAXCm56dro5bLMgSREicc1SrGzgQ23xClirpRcvypq4sKNLqZQNwvRntbuYNkaySQ4dBMma0XVDnVGO99TmRvesSdFwF9Prp/45PGVXY9/05qapSBHqZyvK+jl8/75OqP1p5oIIB6SV7DSvjlphqyk9K3MXX/lkKUEaIZ3K8D+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eBXgsaMS; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FEF32057C;
-	Mon, 17 Mar 2025 21:56:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DA654439B;
+	Mon, 17 Mar 2025 22:24:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742248573;
+	t=1742250278;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2+2T3UFKZNQqzYcppRSeRT40EIToHYWw5aJ/ZTMJlsg=;
-	b=LlHMBRN4dd1wr3rT/5fl9FvLjlU9W0MrimdfbNvbBLmagR523h+WFWVHELxVrwnr0AfKe8
-	ukIUFAYhDvBj14lILUTc8VuKNOeQFbdP6N31lMeCB4rgKBTFhfnLu0UNK4UEiV9x4b2J8z
-	FODZFbe0VD3kW/Fe0/x/2OSWKJSok7HbxuwLO8aX/OGP+sQ/57sLDj0U2NSAMytvG4ozlw
-	MMAkehhE4kvQHPoYD4sXllnsp7IqWM5rJSm1tESA9G0kq76sLK5m0A7HTknvrio+tWCebf
-	VYStkCnS/CxnZo0zorWUmQgBwRrEVqrP+mCb+1lDaJ9mNFAIaeVZHXYdaDnfdQ==
-Date: Mon, 17 Mar 2025 22:56:12 +0100
+	bh=M2STKYUhOmDt07N+wZvQQRmRKAJf5qqOn7zGtjiE31E=;
+	b=eBXgsaMSEKG5aQdFIyE/wR84CpGzJwcMd3Colat6o4xcVM1gW2ZYCsiMdWuwWUqexYCZY+
+	tXFw3R9+h0T87wD2FAOXZT4DbglKLQs8q0841+ZkNjXqpsVdyX7nlWBfqOMp1ZK9gnKgKt
+	HTtu9tibJu4LfdsfZJCgsgnamapdlYlymZOanzQDXvYThRYymNkoi2+dQPjc/C7oKRDLA3
+	0hCyuq9eYNmO/8bQr0F+x0MmMC3Q13JCNtB4i1kX1vmgp6BuJc73MuQgRv9XgCASKEX8p6
+	Oy3ujEd7UdY5BSS7240rPQygGKn+D9cENpOjrhgd3dTsMYui7rTHtLueUBBRHg==
+Date: Mon, 17 Mar 2025 23:24:37 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
-	sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de,
-	linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de,
-	linux@treblig.org
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 2/9] rtc: pcf50633: Remove
-Message-ID: <174224855863.1587763.1321316355670597238.b4-ty@bootlin.com>
-References: <20250311014959.743322-1-linux@treblig.org>
- <20250311014959.743322-3-linux@treblig.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: rzn1: implement one-second accuracy for alarms
+Message-ID: <20250317222437f14a32f0@mail.local>
+References: <20250305101038.9933-2-wsa+renesas@sang-engineering.com>
+ <2025030522061502555577@mail.local>
+ <Z8qYM2-LQPgIe2JE@shikoro>
+ <20250307183817b7747a66@mail.local>
+ <Z86f-tvJ42ui9Esv@shikoro>
+ <Z86rueNSSps2foF9@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -67,30 +66,43 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250311014959.743322-3-linux@treblig.org>
+In-Reply-To: <Z86rueNSSps2foF9@shikoro>
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugedtieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeefhfffkeejueehveeuveejvdelveejteduffehuedtffdufeejudffuedvtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddupdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegumhhithhrhidrthhorhhokhhhohhvsehgmhgrihhlrdgtohhmpdhrtghpt
- hhtohepshhrvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhgihhrugifohhougesghhmrghilhdrtghomhdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjihhnghhoohhhrghnudesghhmrghilhdrtghomh
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugedtjeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedutdfgheetveetvdetleelfeffkefhtdfhleegfeeuleegueeugefgheehledvgeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehlihhnuhigqdhrvghnvghsrghsqdhso
+ hgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, 11 Mar 2025 01:49:52 +0000, linux@treblig.org wrote:
-> The pcf50633 was used as part of the OpenMoko devices but
-> the support for its main chip was recently removed in:
-> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+On 10/03/2025 10:07:05+0100, Wolfram Sang wrote:
+> Hi Alexandre,
 > 
-> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> On Mon, Mar 10, 2025 at 09:16:58AM +0100, Wolfram Sang wrote:
+> > 
+> > > Yes, you followed the code correctly, I have a series that is removing
+> > > RTC_UF that I didn't send yet.
+> > 
+> > Please CC me when you send this. I am interested.
 > 
-> Remove it.
+> Do you also have a series pending simplifying handling of
+> 'max_user_freq'? AFAICS this is totally HW independent now, meaning we
+> can just deal with the constant max value in the core and remove messing
+> with with it in the drivers. If you don't have such a series, I am
+> willing to work on this.
 > 
-> [...]
 
-Applied, thanks!
+Yes, I have something I worked on a few years ago now. I was wondering
+about the proper default policy which is 64 Hz right now and which max
+value we should allow, this is 4096Hz but we have one RTC setting 8192.
 
-[2/9] rtc: pcf50633: Remove
-      https://git.kernel.org/abelloni/c/0a243de9d009
+I don't this it matters too much because there seem to be very few
+userspace programs using RTC_IRQP_SET and RTC_PIE_ON, muse, tutka,
+twclock, tvtime and mplayer. They are all either very old or this is an
+optional feature with a better replacement.
 
-Best regards,
+While I'm reviewing all your other series, do you mind having a look at
+https://lore.kernel.org/all/20250205173918.600037-1-herve.codina@bootlin.com/
+It has been submitted a while ago now.
+
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
