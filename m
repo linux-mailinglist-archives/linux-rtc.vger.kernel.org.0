@@ -1,98 +1,88 @@
-Return-Path: <linux-rtc+bounces-3532-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3533-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82D34A65452
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 15:51:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B92A6582F
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 17:34:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBCEB169E53
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 14:51:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 415FD3B5F87
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 16:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB2C24500E;
-	Mon, 17 Mar 2025 14:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414891A00D1;
+	Mon, 17 Mar 2025 16:34:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FP5BRayl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sI7c89dq"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFB6238162;
-	Mon, 17 Mar 2025 14:51:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1A619E968;
+	Mon, 17 Mar 2025 16:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742223069; cv=none; b=ng8kPw7jA32j0HkAJn1sa5Kw3U8KIFvVwfIbae28yrNzHGgrgWvjHvnsfF+PJ+9+M71jiSkxxaMLnuxFC3IL6NsJ4NmPLrkrrA6zXygF42Z07X0/PMCplEhX4cVzNkhLq4nzq71S2UESry2jgA/4gpd1aalyy74TZP/TAlSZcHQ=
+	t=1742229288; cv=none; b=b7fc7fVz8QYY2EdJ3OeKJr1KsVltsjLMcU8Y1bFTgeDqcorCZx0Se7lxUftZKAb3C04CEHfwCrBF8TejLyr8kLYnmF3zFWMyEYLjkqii+99Hu3+WEzFI6rqVr8UDmvtbSjLDpo0YymxtXk4HzuJW9aYzadWZmY0euQyzpIknDYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742223069; c=relaxed/simple;
-	bh=Ei0Jo7GbHU+6on5aqWGAf/sd939nMlfrbpwJvZ+8jbs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I7ZmN+7U/T/z7bL1d0Au9iD1cIBjiiVNEZ7akHrrotMrfThgxeWxBqAue3Ac+TJGIwfA054lrRua/f10X4tPFV+QeYODSKed0Y7fNW50TJh6BA2VE6LkyHK1P/K5DhjHzla0cIW+qUFE8190ALKjbICYRjkrvt0mUzuoUiI2IyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FP5BRayl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BB1C4CEEF;
-	Mon, 17 Mar 2025 14:51:07 +0000 (UTC)
+	s=arc-20240116; t=1742229288; c=relaxed/simple;
+	bh=qspb2BJvd/G4/SNA2uJmUEBlswLyBrDoy8bN1fSYA2U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hj63TNu/o6ZG855WDNt0eg947hcutLEiZ+e7WqiHq938mYyD+J0BKRSeDhLNdAb1ucopx6Gezlbi3uINeb4d9dWdHDt8X3KQ8GY0EhJapvSRRKUtQoZvdFPKLavOFgGEHiQ000NMe42uptOlvU00c+B49psvT2JJaZC1pvHE3Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sI7c89dq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486DEC4CEEC;
+	Mon, 17 Mar 2025 16:34:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742223068;
-	bh=Ei0Jo7GbHU+6on5aqWGAf/sd939nMlfrbpwJvZ+8jbs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FP5BRaylpuMtaVF8ETJpc2PPX6jd3d2scnLFJf/Vvdzjjmqq2U4NhVaMKi5VWCh2J
-	 cIM+yCUpfSZiowNCXp2W9Te6+F6JDm18/HFL5ITh+xvya9E4ptNlCUXCHZ+BM1S0Kk
-	 PiDoAsUgdMR2HX1wSEjbQuk2qw8AOQD3MBV4d5BPKZ9a6Ep0vrGLmf4Y+Rv6K7xdEz
-	 MqzUDWQqm0wr8itnhix9aCp8qJDZDwAY36nsmOFsj861mbfuRw1J1nzfND6bVM9Srw
-	 O8+bwE00mWbiLuriy/wT1qUEdbY3pr5HuYFP9BQVX5Iijgz4nF2H7LyPc541YJ2kcG
-	 mRu81Pk9Kaa2A==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Johan Hovold <johan+linaro@kernel.org>
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Jonathan Marek <jonathan@marek.ca>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Jens Glathe <jens.glathe@oldschoolsolutions.biz>,
-	Joel Stanley <joel@jms.id.au>,
-	Sebastian Reichel <sre@kernel.org>,
-	Steev Klimaszewski <steev@kali.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/6] arm64: dts: qcom: x1e80100: enable rtc
-Date: Mon, 17 Mar 2025 09:51:05 -0500
-Message-ID: <174222306290.1985242.16292518573036609373.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250219134118.31017-1-johan+linaro@kernel.org>
-References: <20250219134118.31017-1-johan+linaro@kernel.org>
+	s=k20201202; t=1742229287;
+	bh=qspb2BJvd/G4/SNA2uJmUEBlswLyBrDoy8bN1fSYA2U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sI7c89dqF2FkQHAHT5V9IvUN1zyNlIPsSoiJU4JvxvXLgQdJEdb8MpPp+pC0nMzb1
+	 WdQmfgcXilKwzPoWzJ0ZroEFRkaQDiz9ez/niHqc0hlStumy1VcWabzJPMa6+UqIZb
+	 CSsRHPWPBZAyhTxRx/c5pCDvpzuaSEKAJKFZ20qkHVoL/MLJAqCDeAzJr99Elret08
+	 yufgiHcK7x3LADr+qSymLZliXOt/S8wPPmsQOFpKc6qwFjw48XmEH9eWtdtExbRYBA
+	 Pyh5ok409IPvLW5sez49qL4CilOzwVSUsXkDWiRrTMJcZ8nORkfkvQYtu5HEPT2l3i
+	 BE9qcX/T+EtIA==
+Date: Mon, 17 Mar 2025 11:34:46 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: linux-rtc@vger.kernel.org, conor+dt@kernel.org,
+	devicetree@vger.kernel.org, alexandre.belloni@bootlin.com,
+	krzk+dt@kernel.org, Fabio Estevam <festevam@denx.de>
+Subject: Re: [PATCH v2] dt-bindings: rtc: pcf2127: Reference
+ spi-peripheral-props.yaml
+Message-ID: <174222928500.182990.13018649757541617435.robh@kernel.org>
+References: <20250317120356.2195670-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250317120356.2195670-1-festevam@gmail.com>
 
 
-On Wed, 19 Feb 2025 14:41:12 +0100, Johan Hovold wrote:
-> This series adds support for utilising the UEFI firmware RTC offset to
-> the Qualcomm PMIC RTC driver and uses that to enable the RTC on all X
-> Elite machines.
+On Mon, 17 Mar 2025 09:03:56 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <festevam@denx.de>
 > 
-> Included is also a patch to switch the Lenovo ThinkPad X13s over to
-> using the UEFI offset.
+> PCF2127 is an SPI device, thus its binding should reference
+> spi-peripheral-props.yaml.
 > 
-> [...]
+> Add a reference to spi-peripheral-props.yaml to fix the following
+> dt-schema warning:
+> 
+> imx7d-flex-concentrator.dtb: rtc@0: 'spi-max-frequency' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Fabio Estevam <festevam@denx.de>
+> ---
+> Changes since v2:
+> - Specify that the dt-schema error comes from imx7d-flex-concentrator.dtb.
+> - Write a more concise commit log.
+> 
+>  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-Applied, thanks!
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-[5/6] arm64: dts: qcom: sc8280xp-x13s: switch to uefi rtc offset
-      commit: 409803681a55e061f5ea6be82f05f14c0b9c707e
-[6/6] arm64: dts: qcom: x1e80100: enable rtc
-      commit: b53c2c23d3c2e50473c0be17a392d4b03a296b52
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
 
