@@ -1,58 +1,50 @@
-Return-Path: <linux-rtc+bounces-3528-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3529-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C3FDA6514A
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 14:36:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D35CDA6523E
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 15:04:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4A10176C16
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 13:35:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BF501894294
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 14:04:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D327324166A;
-	Mon, 17 Mar 2025 13:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DQssZf42"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3426923A9BE;
+	Mon, 17 Mar 2025 14:04:14 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64C4156230;
-	Mon, 17 Mar 2025 13:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75A5F14F9F4;
+	Mon, 17 Mar 2025 14:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742218487; cv=none; b=OGKzYf4yjf3ktF7Cg6HvoQ/mxKPWpaRc9/IYEmsAKjbDAV0juwh8x5zR92+V/CP1MqUyiqF51DB785oKLL3SjH0ZrkbTCp0gNbY+0PivMxh22FVIUFOOvC47SY3JNMU4jovQobpu9Iu5f3BbREQhn+fiD1HYL3TiREdsJgjnipg=
+	t=1742220254; cv=none; b=pM98Ssv5tkITPK3X1MgSLKr79NDMoob8eYGk5rXOSTxHtm13eoyWBTwCSnxkD7/1+zDVormPT82drqLS5uQjSXyfXXIoLKRk8I8lpyuNl57Yz/Dk6fgI80EbWbUgxv3FJiBEDagh6WofC/qYz1dYxGcVgfycltlkoRDkQaY8QgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742218487; c=relaxed/simple;
-	bh=CgszdGGeicl8iIr17lfG9jPPwh40ujTfjKZ3ZY6yZvQ=;
+	s=arc-20240116; t=1742220254; c=relaxed/simple;
+	bh=rCOF7+2sbxkUxGez3jb20hbtG3fg3N+Iwqx48ey03RI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g51j6yvOLJbMv0DpE1m97UIFy+RoJLQQNZ8g6pHnPiBE2rE2yrZAq6N5iDCi9YE7lwrZvDqjqG4of4urypQPe29DtsjGLjQiAxkGo8QzG0j2KS/c73MmniZVKoOybpzq9pJZ5MeVsbjbs0iSM3Zl/C5Enzas23iFlzye41QFiqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DQssZf42; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EE8D9443EE;
-	Mon, 17 Mar 2025 13:34:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742218483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=p089Kuapj5i1IJvwDJhMGH1sE+tEgq9pwXD682PKXmE=;
-	b=DQssZf42rNNnb0k6b/qOWY+9eSOCtnoOA+mK0Aaxe0aRB6lc8SBYVe2RZe8CtSp2uxEiID
-	SjI6taDZn1UGTrlrp8b2w2ka+evxeNSi1rGDMN31JSg3y58w3cpObfjQpuW48jvBD4GbAz
-	UFeM6Lk5PBSbnoZshfRIAy5eXhq2jJkfysqQowb5wgwOrrYi7R9IvVcWN9XLZWIF1JvG2G
-	END9hBUYkjpR3di6C6lwva7EkmTRTXxMAHkJvttmyVxT3OJA4Skw9JZvx2t1VnBR++vN5k
-	r5KPkk3CtOsidzazo1X5UrKtqml5DZq9jDn+lDDe1dblx7sjoAYWRcPovpoVLw==
-Date: Mon, 17 Mar 2025 14:34:42 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>, linux-arm-msm@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pm8xxx: switch to devm_device_init_wakeup
-Message-ID: <20250317133442c86d4728@mail.local>
-References: <20250317111312.1518349-1-alexandre.belloni@bootlin.com>
- <Z9gOT5WBaGkBZjl9@hovoldconsulting.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mh+ntxRAEN658vWrJ2aagcOxckeO9mz5bJxvQNKGD8cWN8VN8/etGn/sP94vPY2zd0u9vdXJ87g+ifi98Kwas8AFQJkCMK3kk/unDe5kx4Gvd8qEDhylppAOVvJQ52iOXeaBsI1zdLvOgTlrGjxxGL3mQqZDZdp9iSrBDqv2Xbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49F4E13D5;
+	Mon, 17 Mar 2025 07:04:20 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BE083F63F;
+	Mon, 17 Mar 2025 07:04:09 -0700 (PDT)
+Date: Mon, 17 Mar 2025 14:04:07 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Sudeep Holla <sudeep.holla@arm.com>, linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org
+Subject: Re: [PATCH 4/9] rtc: efi: Transition to the faux device interface
+Message-ID: <Z9gr11GUYPWxPMSc@bogus>
+References: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
+ <20250317-plat2faux_dev-v1-4-5fe67c085ad5@arm.com>
+ <2025031755-simile-landside-e719@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -61,62 +53,41 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z9gOT5WBaGkBZjl9@hovoldconsulting.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddufeelieehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeeiudeuteehhfekgeejveefhfeiudejuefhgfeljefgjeegkeeujeeugfehgefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehjohhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhhrghnodhlihhnrghroheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqm
- hhsmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <2025031755-simile-landside-e719@gregkh>
 
-On 17/03/2025 12:58:07+0100, Johan Hovold wrote:
-> On Mon, Mar 17, 2025 at 12:13:11PM +0100, alexandre.belloni@bootlin.com wrote:
-> > From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Mon, Mar 17, 2025 at 02:07:00PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Mar 17, 2025 at 10:13:16AM +0000, Sudeep Holla wrote:
+> > The EFI RTC driver does not require the creation of a platform device.
+> > Originally, this approach was chosen for simplicity when the driver was
+> > first implemented.
 > > 
-> > Switch to devm_device_init_wakeup to avoid a possible memory leak as wakeup
-> > is never disabled.
-> 
-> You should probably mention that this was due to a bad merge. The
-> no-alarm patch moved the previous call to device_init_wakeup() into the
-> conditional, but you had switched it to use devres so we ended up with
-> two calls when you applied the patch.
-> 
-> Unless you want to and can rebase your tree.
-> 
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > With the introduction of the lightweight faux device interface, we now
+> > have a more appropriate alternative. Migrate the driver to utilize the
+> > faux bus, given that the platform device it previously created was not
+> > a real one anyway. This will simplify the code, reducing its footprint
+> > while maintaining functionality.
+> > 
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: linux-rtc@vger.kernel.org
+> > Cc: linux-efi@vger.kernel.org
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 > > ---
-> >  drivers/rtc/rtc-pm8xxx.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  drivers/firmware/efi/efi.c |  3 ---
+> >  drivers/rtc/rtc-efi.c      | 31 ++++++++++++++++++++++---------
+> >  2 files changed, 22 insertions(+), 12 deletions(-)
 > > 
-> > diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-> > index c6241a0c26e9..70cbac76147b 100644
-> > --- a/drivers/rtc/rtc-pm8xxx.c
-> > +++ b/drivers/rtc/rtc-pm8xxx.c
-> > @@ -647,7 +647,7 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
-> >  		if (rc)
-> >  			return rc;
-> >  
-> > -		device_init_wakeup(&pdev->dev, true);
-> > +		devm_device_init_wakeup(&pdev->dev);
-> 
-> So you need to remove the call to devm_device_init_wakeup() above as
-> well (after platform_set_drvdata()) which the no-alarm patch moved here.
-> 
-> With that fixed:
-> 
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 
-Right, I fixed my merge instead, thanks!
+[...]
 
+> > -MODULE_ALIAS("platform:rtc-efi");
+> > +MODULE_ALIAS("faux:rtc-efi");
 > 
-> >  	} else {
-> >  		clear_bit(RTC_FEATURE_ALARM, rtc_dd->rtc->features);
-> >  	}
-> 
-> Johan
-> 
+> No alias please.
+
+Thanks for the review, will drop all the alias.
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Sudeep
 
