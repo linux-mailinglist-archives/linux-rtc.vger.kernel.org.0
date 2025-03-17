@@ -1,88 +1,118 @@
-Return-Path: <linux-rtc+bounces-3533-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3534-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49B92A6582F
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 17:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19238A65C0D
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 19:10:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 415FD3B5F87
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 16:34:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 087308808B1
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 18:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414891A00D1;
-	Mon, 17 Mar 2025 16:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89F3D1DD0D5;
+	Mon, 17 Mar 2025 18:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sI7c89dq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VO/hjj+n"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1A619E968;
-	Mon, 17 Mar 2025 16:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DD51D934D;
+	Mon, 17 Mar 2025 18:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742229288; cv=none; b=b7fc7fVz8QYY2EdJ3OeKJr1KsVltsjLMcU8Y1bFTgeDqcorCZx0Se7lxUftZKAb3C04CEHfwCrBF8TejLyr8kLYnmF3zFWMyEYLjkqii+99Hu3+WEzFI6rqVr8UDmvtbSjLDpo0YymxtXk4HzuJW9aYzadWZmY0euQyzpIknDYM=
+	t=1742235037; cv=none; b=XAIvzORlao7sqDcLZvBBb5W2Fc6yXLR+oIeMHJ7LMz1pVwWWSBJSLiuzEMtVBIbHGOjskEbQy9PA/1tRhRSi58CLapXIjGaRN6X9Pdw+SzU/Off5rxn1fUv2niKrh1rjcWzj32IMaLF9YijptK6NIUDKOade1JX7lZncjEg0NXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742229288; c=relaxed/simple;
-	bh=qspb2BJvd/G4/SNA2uJmUEBlswLyBrDoy8bN1fSYA2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hj63TNu/o6ZG855WDNt0eg947hcutLEiZ+e7WqiHq938mYyD+J0BKRSeDhLNdAb1ucopx6Gezlbi3uINeb4d9dWdHDt8X3KQ8GY0EhJapvSRRKUtQoZvdFPKLavOFgGEHiQ000NMe42uptOlvU00c+B49psvT2JJaZC1pvHE3Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sI7c89dq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486DEC4CEEC;
-	Mon, 17 Mar 2025 16:34:47 +0000 (UTC)
+	s=arc-20240116; t=1742235037; c=relaxed/simple;
+	bh=rT/AyEOiClBtwowhaMQK+QvAwVnXhSvSxxr11FPQ6g0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=VeKe04v7KO6f6l3madu+aisfSCMYgyXSeZjFdrVsJaeCqb9Valj3yDgb9jgNvfkLCTuQ0uCRb3C6L5JYCrQ+m9wRXVxRbWT4DM+fJjOvbCt/XHEV0shD2h182qb+FJS6lBC+KE0lWktAN172ZDtGrY8V0Fobznkh/BlSB+4jsA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VO/hjj+n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86BB6C4CEEE;
+	Mon, 17 Mar 2025 18:10:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742229287;
-	bh=qspb2BJvd/G4/SNA2uJmUEBlswLyBrDoy8bN1fSYA2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sI7c89dqF2FkQHAHT5V9IvUN1zyNlIPsSoiJU4JvxvXLgQdJEdb8MpPp+pC0nMzb1
-	 WdQmfgcXilKwzPoWzJ0ZroEFRkaQDiz9ez/niHqc0hlStumy1VcWabzJPMa6+UqIZb
-	 CSsRHPWPBZAyhTxRx/c5pCDvpzuaSEKAJKFZ20qkHVoL/MLJAqCDeAzJr99Elret08
-	 yufgiHcK7x3LADr+qSymLZliXOt/S8wPPmsQOFpKc6qwFjw48XmEH9eWtdtExbRYBA
-	 Pyh5ok409IPvLW5sez49qL4CilOzwVSUsXkDWiRrTMJcZ8nORkfkvQYtu5HEPT2l3i
-	 BE9qcX/T+EtIA==
-Date: Mon, 17 Mar 2025 11:34:46 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: linux-rtc@vger.kernel.org, conor+dt@kernel.org,
-	devicetree@vger.kernel.org, alexandre.belloni@bootlin.com,
-	krzk+dt@kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH v2] dt-bindings: rtc: pcf2127: Reference
- spi-peripheral-props.yaml
-Message-ID: <174222928500.182990.13018649757541617435.robh@kernel.org>
-References: <20250317120356.2195670-1-festevam@gmail.com>
+	s=k20201202; t=1742235036;
+	bh=rT/AyEOiClBtwowhaMQK+QvAwVnXhSvSxxr11FPQ6g0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=VO/hjj+nb6Rych/h1Jvx8FICFB3n61x1Pk8D87e0n7pDkIvkOkfSqeglQ6GY71SWx
+	 Jmv34hUKjnd+oRKmrRA3bofcMKIwoY/2tOQAkomHwToncXHPrBS85G1PYnkMoeFeWO
+	 8cdo2H2WtTHfMBMLTpMuDzqXFbQFyx1h9HBpVCE5mLzuYKn6mHg/8gnsWkXP4TGiDY
+	 i6kEN9lQWZ1sHIa9flCOnnxUcIE6SU2zN2eZ8mxHyhYAiw9IFtpPk+Q+UkuJzxpPfy
+	 31bqNbgz/6l2FU7yeTkcwlQMukLa6aBkGNbxVDZM7kePp0Vg+icmrtHaJZ+DZclldS
+	 evoIgTA498v3g==
+From: Mark Brown <broonie@kernel.org>
+To: linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+ Andre Przywara <andre.przywara@arm.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Jeff Johnson <jeff.johnson@oss.qualcomm.com>, linux-crypto@vger.kernel.org, 
+ Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ linux-rtc@vger.kernel.org, Takashi Iwai <tiwai@suse.com>, 
+ linux-sound@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org, 
+ Borislav Petkov <bp@alien8.de>, linux-acpi@vger.kernel.org, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+In-Reply-To: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
+References: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
+Subject: Re: (subset) [PATCH 0/9] drivers: Transition to the faux device
+ interface
+Message-Id: <174223503227.270320.5733466951381625938.b4-ty@kernel.org>
+Date: Mon, 17 Mar 2025 18:10:32 +0000
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250317120356.2195670-1-festevam@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
+On Mon, 17 Mar 2025 10:13:12 +0000, Sudeep Holla wrote:
+> Recently when debugging why one of the scmi platform device was not
+> showing up under /sys/devices/platform/firmware:scmi instead was
+> appearing directly under /sys/devices/platform, I noticed the new
+> faux interface /sys/devices/faux.
+> 
+> Looking through the discussion and the background, I got excited and
+> took the opportunity to clear all the platform devices under
+> /sys/devices/platform on the Arm Juno/FVP platforms that are really
+> faux devices. Only the platform devices created for the device nodes
+> from the DT remain under /sys/devices/platform after these changes.
+> 
+> [...]
 
-On Mon, 17 Mar 2025 09:03:56 -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
-> 
-> PCF2127 is an SPI device, thus its binding should reference
-> spi-peripheral-props.yaml.
-> 
-> Add a reference to spi-peripheral-props.yaml to fix the following
-> dt-schema warning:
-> 
-> imx7d-flex-concentrator.dtb: rtc@0: 'spi-max-frequency' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
-> ---
-> Changes since v2:
-> - Specify that the dt-schema error comes from imx7d-flex-concentrator.dtb.
-> - Write a more concise commit log.
-> 
->  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+Applied to
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[6/9] ASoC: soc-utils: Transition to the faux device interface
+      commit: 18abb3797f1ceca97a705aa1c14cbec5c6fcab79
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
