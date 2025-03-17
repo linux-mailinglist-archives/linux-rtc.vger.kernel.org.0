@@ -1,41 +1,41 @@
-Return-Path: <linux-rtc+bounces-3516-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3517-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B95D1A64918
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 11:13:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A57C6A64927
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 11:15:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18E7816D0C3
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 10:13:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B87A81890903
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 10:14:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F1F1991BB;
-	Mon, 17 Mar 2025 10:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C5F23716E;
+	Mon, 17 Mar 2025 10:13:59 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24C322257F;
-	Mon, 17 Mar 2025 10:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA4F2356DF;
+	Mon, 17 Mar 2025 10:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742206434; cv=none; b=sVqPf1uq/1G2DjJ+WAiI5W+Hha/aHzDlzUIX6W7E9doOGNPYn2gE1gZR9+gxM3HbQ1yMdHJ1uBfMJibLs/lqe4fuflvfdenKIDmltnxpeLrNrQkOc2IUfd9juQoQ5ucra3iB+nDuXiH3DBvYWwM2wQRSWamOHd/OtqMi6GJSJR4=
+	t=1742206439; cv=none; b=hE2jOi+2GFgb3HJHpitOYhlLo28YtS2NXI+guWFzxvXahpXKAcG6+IdOVEl7fg7qlyxXLwRFvQNwpCLNdU7CgExBGpgImzzOo6h74y/U8/KBBzvHjvfyxbjlAb6KlaH7ONEJThndKOLLgS1le9jQ49/s3S0pqDTlGvjCVfpyZIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742206434; c=relaxed/simple;
-	bh=/Q8Aa9fYv9wbyrx2wObs4CMSJP+hTNYqKzlwyrJhFsM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YN9l0KVFSyecyFL1B7mn2mSxeHeYsdL4XmU6fNVw+mPMuJ9yisgVUGw9yhOg2QXbOZryB/AFq8d1x0POIy9Bw6uk1TEW1L1I4GiHbKMTglIDfGL588XAaIDPqjYkUitMiqHnXCZBuDQafn3RA8RO+FH+naSqTiTUHp37qxmPyfk=
+	s=arc-20240116; t=1742206439; c=relaxed/simple;
+	bh=8+Snn7+zAHJ8zARLouJiCc2WV16JKNpnlg5grt9kebU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=kJVAVn2V9o3ZWRDJrtg32JyGN6C86gVWSOjh2Ht9AYzTbM6gFPe1JyIo7pGelBMR0JQtySqd20BVJaEtcDNZMn1s8kV7PteZWFFIpV61BtIHLOmDk4yp/E5YaNvTzPttphDy0K+RaWXqfq7VvxyZNUnvQLgxlFCt0SBrTGJGpGk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3E2813D5;
-	Mon, 17 Mar 2025 03:14:00 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 349AA2573;
+	Mon, 17 Mar 2025 03:14:06 -0700 (PDT)
 Received: from e133711.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B7D03F673;
-	Mon, 17 Mar 2025 03:13:47 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D8063F673;
+	Mon, 17 Mar 2025 03:13:55 -0700 (PDT)
 From: Sudeep Holla <sudeep.holla@arm.com>
-Subject: [PATCH 0/9] drivers: Transition to the faux device interface
-Date: Mon, 17 Mar 2025 10:13:12 +0000
-Message-Id: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
+Date: Mon, 17 Mar 2025 10:13:16 +0000
+Subject: [PATCH 4/9] rtc: efi: Transition to the faux device interface
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -44,88 +44,135 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALv112cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDY0NT3YKcxBKjtMTSiviU1DJdi2QjiyRj06RUS7NEJaCegqLUtMwKsHn
- RsbW1AJ+HYAdfAAAA
-X-Change-ID: 20250315-plat2faux_dev-8c28b35be96a
+Message-Id: <20250317-plat2faux_dev-v1-4-5fe67c085ad5@arm.com>
+References: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
+In-Reply-To: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
 To: linux-kernel@vger.kernel.org
 Cc: Sudeep Holla <sudeep.holla@arm.com>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
- Andre Przywara <andre.przywara@arm.com>, 
- Herbert Xu <herbert@gondor.apana.org.au>, 
- Jeff Johnson <jeff.johnson@oss.qualcomm.com>, linux-crypto@vger.kernel.org, 
- Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, 
+ Ard Biesheuvel <ardb@kernel.org>, 
  Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
- Takashi Iwai <tiwai@suse.com>, linux-sound@vger.kernel.org, 
- Andrew Lunn <andrew@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
- netdev@vger.kernel.org, Borislav Petkov <bp@alien8.de>, 
- linux-acpi@vger.kernel.org, Jonathan Cameron <Jonathan.Cameron@huawei.com>
+ linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2229; i=sudeep.holla@arm.com;
- h=from:subject:message-id; bh=/Q8Aa9fYv9wbyrx2wObs4CMSJP+hTNYqKzlwyrJhFsM=;
- b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn1/XaXg/cczfp9LKToTU0Xvg1jjtICG+G14QuE
- jF8HdVkidyJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9f12gAKCRAAQbq8MX7i
- mL+sEACUOKVk2OIBxRBYI5oleTH4ttn1o568PHz46upYDllAy68d3qhxx0E4xnIdB60mEjQBzDu
- pZD62v90A+KDS4L4tmUprsU7NWILTGj7z8ga03muX133xHYBl3IBUvax/9o/+bum82neHCv1Pba
- d8H+us51UfUHU9RNZlv0RBm5VVa/c8Uw1HgXOr5pKwbjSb8e3qQCqNIHDnZlch9Nieifbsr/76z
- gG6mbYz1uW4/b7QLjmoUjKSeUxVj+2GPLep8+YRtNuA1S4RPJK5HAWWzuehomacfsXjmB58nG+q
- RnT2Myy8yJNRXSJ2M4hQ4q0xSovkDs1Fs3BsAWVhnk34koAzgflqjj2nSvvviGN1NfHBDbkbsIn
- ICmtLUmPDj6wh+Iuh95Z7TR2a2bxv4ZcvOdEjiSE3ePYG3mtX71NIGCtGLT/U+heYKLFl80Q288
- NDDOuKCfChTKQnT1TO4A3iHJBUcm2GH5eQfKisbIr0fGMwWJmzfkkbw/JRUDDgsPLZf+gg4zpbg
- YuDDMuht91nrSsN6M3frGjU78FZxQBTizKPNnlYBi9rEhb+sN0amzbmmQHOiOLtx/CWe71UQuQu
- xZRpzua8GypLhrf83niYHYJRoY3H6cihvbNg4Yh/mS87pjun48IYIRWWPRW8PyPsuDd+Zfow2uU
- 2BgXIq8hNqRm+cw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3403; i=sudeep.holla@arm.com;
+ h=from:subject:message-id; bh=8+Snn7+zAHJ8zARLouJiCc2WV16JKNpnlg5grt9kebU=;
+ b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn1/XbWKka2eLGn0AP84f7vbJzDApSPEweWIXpC
+ dS+fIQgsEKJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9f12wAKCRAAQbq8MX7i
+ mO3dEACvzO7b+JVHI/fiE0cRm+TCy2p/QMeIQsv1qkebgzoF+oQDVwE+SYoUpP9Ak9t1g+eTtLp
+ VhaKNJNEWVoqhHNQMzh7YEvdDZ5EQu1lx9O/HzD1QhZQfncraXmaVYcm+7nZxWvVwJC8NdGwlpP
+ 5fSwTL6J0+NLaqDtmowAieW20iINeQe+Y2Xb9SdIz3jSVafmS901t9p6P29jhiU32tPPKIfw0ME
+ fDyRmR42G+PdCIRh1Pu2JjpQ+K9dns+4FNqqqbtDiPfSofVdf5ONaKNmeFO/X+V0OwJUF+Jlytm
+ ipDbQbtnffrWoDl1GBpwfm5qssISe1/8KM+IpIdi5p6S4WFkyWgI5imA/RuuBHjPOdfm4L86T3+
+ 3DmuX/Vpp7VNwAhbS/4d+7baJDyco/qzSrP/XnM4xYkU8VsIAhRdZKLjmUmzy1wSrChHobMwhkp
+ 7VFP8aBU9NpgtZNDDUzblhJxUogeiK8iaC9pkKFT9Fn0JO+W/vcfN3TogXypR2KpqCq4Xq6AkWF
+ TK/c+6edL5l4ViBE8jZ9VN2JoL2CgA3a1n83VsTcGxfijbiZrozA4yTbYb1dI18pSWKNYK0dtQk
+ 6kplRF84wGuo6XWGtZQfiA7yFblCjKU9CbxUhyFvHOQoXsm4D9RDSI80oRaZYrjIzbVQ2lkbEf1
+ MSBnA4QOyWhKa7w==
 X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
  fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
 
-Recently when debugging why one of the scmi platform device was not
-showing up under /sys/devices/platform/firmware:scmi instead was
-appearing directly under /sys/devices/platform, I noticed the new
-faux interface /sys/devices/faux.
+The EFI RTC driver does not require the creation of a platform device.
+Originally, this approach was chosen for simplicity when the driver was
+first implemented.
 
-Looking through the discussion and the background, I got excited and
-took the opportunity to clear all the platform devices under
-/sys/devices/platform on the Arm Juno/FVP platforms that are really
-faux devices. Only the platform devices created for the device nodes
-from the DT remain under /sys/devices/platform after these changes.
+With the introduction of the lightweight faux device interface, we now
+have a more appropriate alternative. Migrate the driver to utilize the
+faux bus, given that the platform device it previously created was not
+a real one anyway. This will simplify the code, reducing its footprint
+while maintaining functionality.
 
-All the patches are independent of each other.
-
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-efi@vger.kernel.org
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
-Greg Kroah-Hartman (1):
-      regulator: dummy: convert to use the faux device interface
+ drivers/firmware/efi/efi.c |  3 ---
+ drivers/rtc/rtc-efi.c      | 31 ++++++++++++++++++++++---------
+ 2 files changed, 22 insertions(+), 12 deletions(-)
 
-Sudeep Holla (8):
-      cpuidle: psci: Transition to the faux device interface
-      hwrng: arm-smccc-trng - transition to the faux device interface
-      efi: Remove redundant creation of the "efivars" platform device
-      rtc: efi: Transition to the faux device interface
-      virt: efi_secret: Transition to the faux device interface
-      ASoC: soc-utils: Transition to the faux device interface
-      net: phy: fixed_phy: transition to the faux device interface
-      ACPI: APEI: EINJ: Transition to the faux device interface
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index eec173cb1f398d3b4f28b42c917e50e1728dc277..18deb2d212ce6944927f5e3a9a40bb6754e7ffa9 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -427,9 +427,6 @@ static int __init efisubsys_init(void)
+ 		}
+ 	}
+ 
+-	if (efi_rt_services_supported(EFI_RT_SUPPORTED_TIME_SERVICES))
+-		platform_device_register_simple("rtc-efi", 0, NULL, 0);
+-
+ 	/* We register the efi directory at /sys/firmware/efi */
+ 	efi_kobj = kobject_create_and_add("efi", firmware_kobj);
+ 	if (!efi_kobj) {
+diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
+index fa8bf82df9488e7d1c23c058b4a3032dde74bc6e..3d21a470e8ff9777c5eeb991f3aa9170f6351930 100644
+--- a/drivers/rtc/rtc-efi.c
++++ b/drivers/rtc/rtc-efi.c
+@@ -14,7 +14,7 @@
+ #include <linux/module.h>
+ #include <linux/stringify.h>
+ #include <linux/time.h>
+-#include <linux/platform_device.h>
++#include <linux/device/faux.h>
+ #include <linux/rtc.h>
+ #include <linux/efi.h>
+ 
+@@ -254,7 +254,7 @@ static const struct rtc_class_ops efi_rtc_ops = {
+ 	.proc		= efi_procfs,
+ };
+ 
+-static int __init efi_rtc_probe(struct platform_device *dev)
++static int __init efi_rtc_probe(struct faux_device *dev)
+ {
+ 	struct rtc_device *rtc;
+ 	efi_time_t eft;
+@@ -268,7 +268,7 @@ static int __init efi_rtc_probe(struct platform_device *dev)
+ 	if (IS_ERR(rtc))
+ 		return PTR_ERR(rtc);
+ 
+-	platform_set_drvdata(dev, rtc);
++	faux_device_set_drvdata(dev, rtc);
+ 
+ 	rtc->ops = &efi_rtc_ops;
+ 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
+@@ -282,15 +282,28 @@ static int __init efi_rtc_probe(struct platform_device *dev)
+ 	return devm_rtc_register_device(rtc);
+ }
+ 
+-static struct platform_driver efi_rtc_driver = {
+-	.driver = {
+-		.name = "rtc-efi",
+-	},
++static struct faux_device_ops efi_rtc_fdev_ops = {
++	.probe = efi_rtc_probe,
+ };
+ 
+-module_platform_driver_probe(efi_rtc_driver, efi_rtc_probe);
++static int __init rtc_efi_init(void)
++{
++	struct faux_device *fdev;
++
++	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_TIME_SERVICES))
++		return 0;
++
++	fdev = faux_device_create("rtc-efi", NULL, &efi_rtc_fdev_ops);
++	if (!fdev) {
++		pr_err("rtc-efi: could not create the device\n");
++		return -ENODEV;
++	}
++
++	return 0;
++}
++device_initcall(rtc_efi_init);
+ 
+ MODULE_AUTHOR("dann frazier <dannf@dannf.org>");
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("EFI RTC driver");
+-MODULE_ALIAS("platform:rtc-efi");
++MODULE_ALIAS("faux:rtc-efi");
 
- drivers/acpi/apei/einj-core.c             | 32 +++++++++---------------
- drivers/char/hw_random/arm_smccc_trng.c   | 40 +++++++++++++++++++++---------
- drivers/cpuidle/cpuidle-psci.c            | 26 +++++++-------------
- drivers/firmware/efi/efi.c                | 10 --------
- drivers/firmware/smccc/smccc.c            | 21 ----------------
- drivers/net/phy/fixed_phy.c               | 16 ++++++------
- drivers/regulator/dummy.c                 | 37 +++++++---------------------
- drivers/rtc/rtc-efi.c                     | 31 ++++++++++++++++-------
- drivers/virt/coco/efi_secret/efi_secret.c | 41 ++++++++++++++++++-------------
- sound/soc/soc-utils.c                     | 34 +++++++++----------------
- 10 files changed, 124 insertions(+), 164 deletions(-)
----
-base-commit: 80e54e84911a923c40d7bee33a34c1b4be148d7a
-change-id: 20250315-plat2faux_dev-8c28b35be96a
 -- 
-Regards,
-Sudeep
+2.34.1
 
 
