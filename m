@@ -1,178 +1,207 @@
-Return-Path: <linux-rtc+bounces-3517-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3524-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A57C6A64927
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 11:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07F53A64DD7
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 13:05:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B87A81890903
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 10:14:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F24281898172
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Mar 2025 12:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C5F23716E;
-	Mon, 17 Mar 2025 10:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18F6623A58D;
+	Mon, 17 Mar 2025 12:02:09 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA4F2356DF;
-	Mon, 17 Mar 2025 10:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D0D23E23D
+	for <linux-rtc@vger.kernel.org>; Mon, 17 Mar 2025 12:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742206439; cv=none; b=hE2jOi+2GFgb3HJHpitOYhlLo28YtS2NXI+guWFzxvXahpXKAcG6+IdOVEl7fg7qlyxXLwRFvQNwpCLNdU7CgExBGpgImzzOo6h74y/U8/KBBzvHjvfyxbjlAb6KlaH7ONEJThndKOLLgS1le9jQ49/s3S0pqDTlGvjCVfpyZIc=
+	t=1742212929; cv=none; b=cAJsQdtzXKMCuyaneDnM9Q7vR2Y4+hJYqcxbKy73TwKzpZ7U/7eaMXhqU2fwA+x1ouR21vIA1sHD1jekz4PotzT6ed3w02v2OmxSqwDSKqHrRD4SI37Jxh8as+AnstYwVEObgXgnCF1KrzW+2d3gvaKdT8+v6PJmQd/K3oB19qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742206439; c=relaxed/simple;
-	bh=8+Snn7+zAHJ8zARLouJiCc2WV16JKNpnlg5grt9kebU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kJVAVn2V9o3ZWRDJrtg32JyGN6C86gVWSOjh2Ht9AYzTbM6gFPe1JyIo7pGelBMR0JQtySqd20BVJaEtcDNZMn1s8kV7PteZWFFIpV61BtIHLOmDk4yp/E5YaNvTzPttphDy0K+RaWXqfq7VvxyZNUnvQLgxlFCt0SBrTGJGpGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 349AA2573;
-	Mon, 17 Mar 2025 03:14:06 -0700 (PDT)
-Received: from e133711.arm.com (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D8063F673;
-	Mon, 17 Mar 2025 03:13:55 -0700 (PDT)
-From: Sudeep Holla <sudeep.holla@arm.com>
-Date: Mon, 17 Mar 2025 10:13:16 +0000
-Subject: [PATCH 4/9] rtc: efi: Transition to the faux device interface
+	s=arc-20240116; t=1742212929; c=relaxed/simple;
+	bh=PlMEiEJDam59+aty2oFc2pESN+enaEybP02730+FEq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=exzXaFePjoRBcbIVYOmT/WcUslrSi2kb9mX5yLUMAXj/lzuloVnAi6Y7RSas062fRtKDqL/a/Rsl2/nyUVN54PdKChfaS03Mi1fyJkCyHbH7sLonuBTIcQ/WOjSpDqrVcMkOhwXvLnUJvU9sQINA19SDhjZFMfmFyiBk66Vvz4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tu99w-00020y-0U; Mon, 17 Mar 2025 13:01:32 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tu99t-000EuM-0g;
+	Mon, 17 Mar 2025 13:01:29 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id A87EC3DE480;
+	Mon, 17 Mar 2025 10:41:48 +0000 (UTC)
+Date: Mon, 17 Mar 2025 11:41:48 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250317-plat2faux_dev-v1-4-5fe67c085ad5@arm.com>
-References: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
-In-Reply-To: <20250317-plat2faux_dev-v1-0-5fe67c085ad5@arm.com>
-To: linux-kernel@vger.kernel.org
-Cc: Sudeep Holla <sudeep.holla@arm.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Ard Biesheuvel <ardb@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3403; i=sudeep.holla@arm.com;
- h=from:subject:message-id; bh=8+Snn7+zAHJ8zARLouJiCc2WV16JKNpnlg5grt9kebU=;
- b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBn1/XbWKka2eLGn0AP84f7vbJzDApSPEweWIXpC
- dS+fIQgsEKJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZ9f12wAKCRAAQbq8MX7i
- mO3dEACvzO7b+JVHI/fiE0cRm+TCy2p/QMeIQsv1qkebgzoF+oQDVwE+SYoUpP9Ak9t1g+eTtLp
- VhaKNJNEWVoqhHNQMzh7YEvdDZ5EQu1lx9O/HzD1QhZQfncraXmaVYcm+7nZxWvVwJC8NdGwlpP
- 5fSwTL6J0+NLaqDtmowAieW20iINeQe+Y2Xb9SdIz3jSVafmS901t9p6P29jhiU32tPPKIfw0ME
- fDyRmR42G+PdCIRh1Pu2JjpQ+K9dns+4FNqqqbtDiPfSofVdf5ONaKNmeFO/X+V0OwJUF+Jlytm
- ipDbQbtnffrWoDl1GBpwfm5qssISe1/8KM+IpIdi5p6S4WFkyWgI5imA/RuuBHjPOdfm4L86T3+
- 3DmuX/Vpp7VNwAhbS/4d+7baJDyco/qzSrP/XnM4xYkU8VsIAhRdZKLjmUmzy1wSrChHobMwhkp
- 7VFP8aBU9NpgtZNDDUzblhJxUogeiK8iaC9pkKFT9Fn0JO+W/vcfN3TogXypR2KpqCq4Xq6AkWF
- TK/c+6edL5l4ViBE8jZ9VN2JoL2CgA3a1n83VsTcGxfijbiZrozA4yTbYb1dI18pSWKNYK0dtQk
- 6kplRF84wGuo6XWGtZQfiA7yFblCjKU9CbxUhyFvHOQoXsm4D9RDSI80oRaZYrjIzbVQ2lkbEf1
- MSBnA4QOyWhKa7w==
-X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
- fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vzg54m2aeg5i4qkb"
+Content-Disposition: inline
+In-Reply-To: <20250225081644.3524915-5-a0282524688@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 
-The EFI RTC driver does not require the creation of a platform device.
-Originally, this approach was chosen for simplicity when the driver was
-first implemented.
 
-With the introduction of the lightweight faux device interface, we now
-have a more appropriate alternative. Migrate the driver to utilize the
-faux bus, given that the platform device it previously created was not
-a real one anyway. This will simplify the code, reducing its footprint
-while maintaining functionality.
+--vzg54m2aeg5i4qkb
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-efi@vger.kernel.org
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/firmware/efi/efi.c |  3 ---
- drivers/rtc/rtc-efi.c      | 31 ++++++++++++++++++++++---------
- 2 files changed, 22 insertions(+), 12 deletions(-)
+On 25.02.2025 16:16:41, Ming Yu wrote:
+[...]
 
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index eec173cb1f398d3b4f28b42c917e50e1728dc277..18deb2d212ce6944927f5e3a9a40bb6754e7ffa9 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -427,9 +427,6 @@ static int __init efisubsys_init(void)
- 		}
- 	}
- 
--	if (efi_rt_services_supported(EFI_RT_SUPPORTED_TIME_SERVICES))
--		platform_device_register_simple("rtc-efi", 0, NULL, 0);
--
- 	/* We register the efi directory at /sys/firmware/efi */
- 	efi_kobj = kobject_create_and_add("efi", firmware_kobj);
- 	if (!efi_kobj) {
-diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
-index fa8bf82df9488e7d1c23c058b4a3032dde74bc6e..3d21a470e8ff9777c5eeb991f3aa9170f6351930 100644
---- a/drivers/rtc/rtc-efi.c
-+++ b/drivers/rtc/rtc-efi.c
-@@ -14,7 +14,7 @@
- #include <linux/module.h>
- #include <linux/stringify.h>
- #include <linux/time.h>
--#include <linux/platform_device.h>
-+#include <linux/device/faux.h>
- #include <linux/rtc.h>
- #include <linux/efi.h>
- 
-@@ -254,7 +254,7 @@ static const struct rtc_class_ops efi_rtc_ops = {
- 	.proc		= efi_procfs,
- };
- 
--static int __init efi_rtc_probe(struct platform_device *dev)
-+static int __init efi_rtc_probe(struct faux_device *dev)
- {
- 	struct rtc_device *rtc;
- 	efi_time_t eft;
-@@ -268,7 +268,7 @@ static int __init efi_rtc_probe(struct platform_device *dev)
- 	if (IS_ERR(rtc))
- 		return PTR_ERR(rtc);
- 
--	platform_set_drvdata(dev, rtc);
-+	faux_device_set_drvdata(dev, rtc);
- 
- 	rtc->ops = &efi_rtc_ops;
- 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
-@@ -282,15 +282,28 @@ static int __init efi_rtc_probe(struct platform_device *dev)
- 	return devm_rtc_register_device(rtc);
- }
- 
--static struct platform_driver efi_rtc_driver = {
--	.driver = {
--		.name = "rtc-efi",
--	},
-+static struct faux_device_ops efi_rtc_fdev_ops = {
-+	.probe = efi_rtc_probe,
- };
- 
--module_platform_driver_probe(efi_rtc_driver, efi_rtc_probe);
-+static int __init rtc_efi_init(void)
-+{
-+	struct faux_device *fdev;
-+
-+	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_TIME_SERVICES))
-+		return 0;
-+
-+	fdev = faux_device_create("rtc-efi", NULL, &efi_rtc_fdev_ops);
-+	if (!fdev) {
-+		pr_err("rtc-efi: could not create the device\n");
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+device_initcall(rtc_efi_init);
- 
- MODULE_AUTHOR("dann frazier <dannf@dannf.org>");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("EFI RTC driver");
--MODULE_ALIAS("platform:rtc-efi");
-+MODULE_ALIAS("faux:rtc-efi");
+> diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nc=
+t6694_canfd.c
+> new file mode 100644
+> index 000000000000..d97fce5cdf32
+> --- /dev/null
+> +++ b/drivers/net/can/usb/nct6694_canfd.c
 
--- 
-2.34.1
+[...]
 
+> +static const struct can_bittiming_const nct6694_can_bittiming_nominal_co=
+nst =3D {
+> +	.name =3D DRVNAME,
+> +	.tseg1_min =3D 2,
+> +	.tseg1_max =3D 256,
+> +	.tseg2_min =3D 2,
+> +	.tseg2_max =3D 128,
+> +	.sjw_max =3D 128,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 511,
+> +	.brp_inc =3D 1,
+> +};
+> +
+> +static const struct can_bittiming_const nct6694_can_bittiming_data_const=
+ =3D {
+> +	.name =3D DRVNAME,
+> +	.tseg1_min =3D 1,
+> +	.tseg1_max =3D 32,
+> +	.tseg2_min =3D 1,
+> +	.tseg2_max =3D 16,
+> +	.sjw_max =3D 16,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 31,
+> +	.brp_inc =3D 1,
+> +};
+
+[...]
+
+> +static int nct6694_can_start(struct net_device *ndev)
+> +{
+> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> +	const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> +	const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> +	struct nct6694_can_setting *setting __free(kfree) =3D NULL;
+> +	const struct nct6694_cmd_header cmd_hd =3D {
+> +		.mod =3D NCT6694_CAN_MOD,
+> +		.cmd =3D NCT6694_CAN_SETTING,
+> +		.sel =3D ndev->dev_port,
+> +		.len =3D cpu_to_le16(sizeof(*setting))
+> +	};
+> +	int ret;
+> +
+> +	setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> +	if (!setting)
+> +		return -ENOMEM;
+> +
+> +	setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> +	setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+
+I just noticed one thing that needs clarification/documentation.
+
+You have nct6694_can_bittiming_nominal_const and
+nct6694_can_bittiming_data_const, but only pass the bit rates to your
+device.
+
+Do the bit timing const really reflect the HW limitations of your
+device?
+
+Are you sure your device uses the same algorithm as the kernel and
+calculates the same bit timing parameters as the kernel, so that the
+values given to the user space reflects the bit timing parameter chosen
+by your device?
+
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_MON);
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_NISO);
+> +
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+> +		setting->ctrl1 |=3D cpu_to_le16(NCT6694_CAN_SETTING_CTRL1_LBCK);
+> +
+> +	ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
+> +	if (ret)
+> +		return ret;
+> +
+> +	priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
+> +
+> +	return 0;
+> +}
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--vzg54m2aeg5i4qkb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfX/GkACgkQDHRl3/mQ
+kZzJDgf8DgOIcr0MWwz7wlhWys5Fxw4Vtn5MszTN3NLbf2p+jPRy/TQKbi3A7p+B
+PZFdTyo+sYOdG9csQChfdGGqWEA5cd6vIMYmIbUO1401s5U+bYudq1+h68pyfOhf
+XOKXDxnSWXlzFLw2vu2SsZ3M4svT1cU0S6NRSxPx/o4QuFfsG7KLFqwdMK+MEc8P
+CcqcJKo47KwOEcWuQm/eTq4LQFvmmKz8/6PCcrY2P99PQ9bqTkoiC7R+KMONa1p3
+f2/q875xuTHckepTB7slLcXA9K7ikoT7T865z4jHsZt5ClD3+L/j5pSa82E1kcxN
+nv4xvBHXTSmzW8wtGa6VrUWOif5cYg==
+=GQzc
+-----END PGP SIGNATURE-----
+
+--vzg54m2aeg5i4qkb--
 
