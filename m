@@ -1,186 +1,89 @@
-Return-Path: <linux-rtc+bounces-3556-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3557-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CA62A68A8E
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 12:05:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AA5EA69CF6
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Mar 2025 00:58:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC0613BF9D0
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 11:03:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8D434626DD
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 23:58:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F818253F17;
-	Wed, 19 Mar 2025 11:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA7922488E;
+	Wed, 19 Mar 2025 23:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Xwz3EoJd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEs3QJCh"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EED251797
-	for <linux-rtc@vger.kernel.org>; Wed, 19 Mar 2025 11:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4034F1DE3A9;
+	Wed, 19 Mar 2025 23:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742382198; cv=none; b=f4iw2fYExqcLjZmdjSLU0nFWYQafSeLHUVGPRhJDjlLth0iyYrUD4svlGtLu6dygoC4p48K7kMfC+JCdI/mh8I2ojCEti+6sxA743i58BABfatG4DFcIQwhaRKRYNPrv5N4tibSMFqwfbNsPQe4LZNtMeorj5GV+av8vlYhGmI8=
+	t=1742428693; cv=none; b=Ndoj6luz0+1V47TvDMU8A9SAhUnYbgXrpXC19oLWh9GppfgWp5VrRNgheaQhZuf9tOGi9jxFAa0HPGJisqeDTLXSGpHJztfgCo67nL91WwwLMYVyOuGNLFCUUZn781S2EEPaxJ6NWN+Mi7BgGsMtAJIE5RKenp32LrKBodwB+bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742382198; c=relaxed/simple;
-	bh=EGM2FZP7Zhcbi4zhfO5tysAJCQT95PnyWXQiDUAksIE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=seLevxYwXKSyyJ8JkggNO61kZ8Tc1BSEgrVQwO72M2C0r+1ZeyIrwtPx6V7cLpt+3pU45ilJu75Avf496ZK43mLu1N7wyY0Zl4+hjQOzBCn9kk+O71zczyajoiwIM4IA5YNAar12ptA789Y1yvDienghShSl7EhLV3wxW7rVQ6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Xwz3EoJd; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=756xis8oO3h/yTcbaLuD6IPizh01Kfz9ozXiWofJ6TE=; b=Xwz3Eo
-	Jdt8PrjfzO/ErFbHpGeNG8xrSPTDfs9J1h0EFLZ0rj/Q34gzbGa06yOAQ2e9V6AW
-	Ioiyx/gMjTMslCueFtaX7/FNsAFEf19S5e/FsjJB0ervXyRPM+7FI7GS5cPiU253
-	jZrAXJnRS2O6RURNe95rzVsAM3Cwy0AOPD8YBXXLR1LF+9ZDf+xzGxeEeJOqyG0M
-	IeZdlYQn/ZcPZYGqmCOCIuZO0ViPoIoYZL+NOkNWTnQRY7lVB9oFVJoPZyJj3jfA
-	UxHBGllTRSKGTJ0Zusw8vqEFb4wYL1fn/zFoFmXP/I8gLiOZLMvfAIow7Q6NZyVl
-	2mP0HWZxlC2i1U+w==
-Received: (qmail 81885 invoked from network); 19 Mar 2025 12:03:14 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Mar 2025 12:03:14 +0100
-X-UD-Smtp-Session: l3s3148p1@8Ry4968wBL0gAwDPXyTHAJp038nK7dx+
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH 3/3] rtc: rzn1: support input frequencies other than 32768Hz
-Date: Wed, 19 Mar 2025 12:03:04 +0100
-Message-ID: <20250319110305.19687-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
-References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1742428693; c=relaxed/simple;
+	bh=ZZKfA84RzRDEAliz95nfjz5QwDog7cyZVSrWYTw/zI8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nXLJj2x84gKvXdTOhljDJhSM5yr7bzeu76svY0Y1Q2dmiB6q9DJqFoC+K5wFpieUB20t80s0PX4Cg8cnWTxkCn76rYVsxjdcbCoXQQ32Ps/0IjVz5w39AWPna44nrdh4cPP9c1i4c+fEM439NUGZozmDZtzA808PA8yManRo5D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEs3QJCh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458ACC4CEE4;
+	Wed, 19 Mar 2025 23:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742428692;
+	bh=ZZKfA84RzRDEAliz95nfjz5QwDog7cyZVSrWYTw/zI8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aEs3QJChJFcdnPOHTauCmOrZ6IULAT7ZHAPKR4zUQKWpU4fVfq9xjjqMYvsI+BjnY
+	 tGhOwI9ScxsMy66k/+abaRY04I7+m9j1tjEdH9fAhcXCSi4LivrGhOBfVFXXTzlwMI
+	 p6De/RCvhON6CzIS0tGTyTbJuvO/FmRVGYyS9qC2+lu2dN/kngG4jI+E5IYPUo5gkM
+	 HheOzDF+CuZXuwayiJHFY7XfsiLvcbIecQPzGP0Uq9g85V4ym5K4eDIuM35vhUNiP3
+	 c/51O56HdxpGl/vDaGjSfPHxwvJ+8zacziTn2x/482i+A/8y3atJDVk6Ur1lsSqNve
+	 C0gP39TapTPrQ==
+Date: Thu, 20 Mar 2025 00:58:09 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 3/7] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <jpaqx2z5io2bvtluexnzrkz4zcvea7qqgpa6bdhm4yzby2rjgb@izncuolmv7tl>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-4-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225081644.3524915-4-a0282524688@gmail.com>
 
-When using the SCMP mode instead of SUBU, this RTC can also support
-other input frequencies than 32768Hz. Also, upcoming SoCs will only
-support SCMP.
+Hi Ming,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/rtc/rtc-rzn1.c | 51 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 38 insertions(+), 13 deletions(-)
+...
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index 7777df1e3426..47ab62d5380e 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -12,6 +12,7 @@
-  */
- 
- #include <linux/bcd.h>
-+#include <linux/clk.h>
- #include <linux/init.h>
- #include <linux/iopoll.h>
- #include <linux/module.h>
-@@ -22,7 +23,6 @@
- #include <linux/spinlock.h>
- 
- #define RZN1_RTC_CTL0 0x00
--#define   RZN1_RTC_CTL0_SLSB_SUBU 0
- #define   RZN1_RTC_CTL0_SLSB_SCMP BIT(4)
- #define   RZN1_RTC_CTL0_AMPM BIT(5)
- #define   RZN1_RTC_CTL0_CEST BIT(6)
-@@ -50,6 +50,8 @@
- #define   RZN1_RTC_SUBU_DEV BIT(7)
- #define   RZN1_RTC_SUBU_DECR BIT(6)
- 
-+#define RZN1_RTC_SCMP 0x3c
-+
- #define RZN1_RTC_ALM 0x40
- #define RZN1_RTC_ALH 0x44
- #define RZN1_RTC_ALW 0x48
-@@ -357,22 +359,21 @@ static int rzn1_rtc_set_offset(struct device *dev, long offset)
- 	return 0;
- }
- 
--static const struct rtc_class_ops rzn1_rtc_ops = {
-+static struct rtc_class_ops rzn1_rtc_ops = {
- 	.read_time = rzn1_rtc_read_time,
- 	.set_time = rzn1_rtc_set_time,
- 	.read_alarm = rzn1_rtc_read_alarm,
- 	.set_alarm = rzn1_rtc_set_alarm,
- 	.alarm_irq_enable = rzn1_rtc_alarm_irq_enable,
--	.read_offset = rzn1_rtc_read_offset,
--	.set_offset = rzn1_rtc_set_offset,
- };
- 
- static int rzn1_rtc_probe(struct platform_device *pdev)
- {
- 	struct rzn1_rtc *rtc;
--	u32 val;
--	int irq;
--	int ret;
-+	u32 val, use_scmp = 0;
-+	struct clk *xtal;
-+	unsigned long rate;
-+	int irq, ret;
- 
- 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
- 	if (!rtc)
-@@ -404,10 +405,24 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
- 
--	/*
--	 * Ensure the clock counter is enabled.
--	 * Set 24-hour mode and possible oscillator offset compensation in SUBU mode.
--	 */
-+	/* Only switch to scmp if we have an xtal clock with a valid rate and != 32768 */
-+	xtal = devm_clk_get_optional(&pdev->dev, "xtal");
-+	if (IS_ERR(xtal)) {
-+		ret = PTR_ERR(xtal);
-+		goto dis_runtime_pm;
-+	} else if (xtal) {
-+		rate = clk_get_rate(xtal);
-+
-+		if (rate < 32000 || rate > BIT(22)) {
-+			ret = -EOPNOTSUPP;
-+			goto dis_runtime_pm;
-+		}
-+
-+		if (rate != 32768)
-+			use_scmp = RZN1_RTC_CTL0_SLSB_SCMP;
-+	}
-+
-+	/* Disable controller during SUBU/SCMP setup */
- 	val = readl(rtc->base + RZN1_RTC_CTL0) & ~RZN1_RTC_CTL0_CE;
- 	writel(val, rtc->base + RZN1_RTC_CTL0);
- 	/* Wait 2-4 32k clock cycles for the disabled controller */
-@@ -416,8 +431,18 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto dis_runtime_pm;
- 
--	writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | RZN1_RTC_CTL0_SLSB_SUBU,
--	       rtc->base + RZN1_RTC_CTL0);
-+	/* Set desired modes leaving the controller disabled */
-+	writel(RZN1_RTC_CTL0_AMPM | use_scmp, rtc->base + RZN1_RTC_CTL0);
-+
-+	if (use_scmp) {
-+		writel(rate - 1, rtc->base + RZN1_RTC_SCMP);
-+	} else {
-+		rzn1_rtc_ops.read_offset = rzn1_rtc_read_offset;
-+		rzn1_rtc_ops.set_offset = rzn1_rtc_set_offset;
-+	}
-+
-+	/* Enable controller finally */
-+	writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | use_scmp, rtc->base + RZN1_RTC_CTL0);
- 
- 	/* Disable all interrupts */
- 	writel(0, rtc->base + RZN1_RTC_CTL1);
--- 
-2.47.2
+> +enum i2c_baudrate {
+> +	I2C_BR_25K = 0,
+> +	I2C_BR_50K,
+> +	I2C_BR_100K,
+> +	I2C_BR_200K,
+> +	I2C_BR_400K,
+> +	I2C_BR_800K,
+> +	I2C_BR_1M
+> +};
 
+do we need all these frequencies? I don't see them use anywhere.
+
+Besides, can you please use a proper prefix? I2C_BR_* prefix
+doesn't belong to this driver.
+
+Andi
 
