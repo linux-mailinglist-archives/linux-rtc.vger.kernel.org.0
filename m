@@ -1,114 +1,129 @@
-Return-Path: <linux-rtc+bounces-3551-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3552-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9517A681A8
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 01:43:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8EDFA6861D
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 08:47:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E570C7A87F0
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 00:42:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6569A1B62733
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 07:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9455D477;
-	Wed, 19 Mar 2025 00:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED5620E024;
+	Wed, 19 Mar 2025 07:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dn/s68Pq"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Woc8bzi1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F92A920;
-	Wed, 19 Mar 2025 00:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F821F0989
+	for <linux-rtc@vger.kernel.org>; Wed, 19 Mar 2025 07:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742345006; cv=none; b=l7MD7IuxprY4xiEQLKlyIPAq3Fr2uuxD+yr1y7N6O4JrO2lfVqKIDdssdPD7JTihqNK6szT6vigTRQbS6GtrEaV7H2pdUPPPHZUsid5lRo6Mp5zVhhs5rdeGCI0yGB/t8v7r6rSW/8CVlab9w/EsNDeSVnP3w10HRBaB2414cnw=
+	t=1742370314; cv=none; b=UgukHptJzHpxHgUFf8KKi537+wtPr+b0g6RnVl6U6CZFlJHFl5aHCtarXUifvCMETYxjgCwR2wp/bUorYoi/ZcuTddrNfLZsfPAE5d/9NplwuzQuMXOR/JXbNOBECdmue8pdRshMCWyb4ZE6tzK2uMeFCfUkQ/Vo9vaIknOVumo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742345006; c=relaxed/simple;
-	bh=mHKnTpGJypIO/KKXW/RqTAv+6izqdI2BaKla/V7o8yA=;
+	s=arc-20240116; t=1742370314; c=relaxed/simple;
+	bh=Zylv9Pe93ouSZKjjC8dPfUV6KeeGwVHjdraQ+EyfSp0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TDTeEg+8l+HSSg6+H0kKTCKY7tfHQCEF2WWsYKpKHl4URcVZcyGU84FA1bn7nB3O4uyjPrhNSUoYnmJ8qD86ZP3cEnjs40dDNWlvEA6VkgTYb0qPs1j8lcWbRG8rVqg8Ehce5F35Fa+tOBQNIomGlpkkSg7ydx4zqhyl95gggaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dn/s68Pq; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c0a159ded2so860028785a.0;
-        Tue, 18 Mar 2025 17:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742345003; x=1742949803; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=109SVVi2V1KBVdBOfvc5rq7XvmKU466K1UBa3pW9LEk=;
-        b=Dn/s68Pqf2sw5369+DlRudVuE+DLprgGqnk/oFj/uFkNR7Tizom/zh3fX55X2lVgKx
-         IOFdFJMeRBoHFh9MpMBTEelnVfN4BC8Yq4+H0WKWIqeSTpi0vqzSEMSxWsod39y8Wj+i
-         ieQFpPz9IFA9mCBnEVW1ykaMtseY77+WKUe3ZlfM8sE30PcgD9zolWk2rSSyA6DJzvhO
-         /9wYcDVUCazOigCq0N1daBJu2X1HXpzUF2ro8ljU2ttJXfMoman61eUmk1WDGTAATO4G
-         xcPf8c7NWh1rotVeUq0Q1M3H+7KmgV8H+Qk/1Gke0rH71UrBkE3xORKyWmsUVnXX8iy/
-         YR8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742345003; x=1742949803;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=109SVVi2V1KBVdBOfvc5rq7XvmKU466K1UBa3pW9LEk=;
-        b=Ek+0TojvIXt3zIoRERaEEfROYyFOT6yl5xoCEeWjJ5JBLgSCn2d1zlrc+Uiv1Wuvwd
-         vlRKWkG51hbjN+4Gf6re45JvQuRgtkr9uGQ0puCLbLVssxDppKoATDVbBjVVFomqXYjs
-         TZMs+hWFYA7R4d3ZrG6eYtcXH3A004EcbzQ+WI5xs+lYpUFqSoxRbaoG6ATWseOMt2kq
-         y5AY85SOcgBf9ZAb1wxwyl10KTNdeE5NFZ2ToRNX2R4T1dGigPrOTck8N9El6MGhVNZ5
-         eLEPZjpHVv8FEJjAgJf7SkRYtDiZWSDLzCq1YhrgLP03mgqRSxw0iJj3GXg9Ixevxx+f
-         DE9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUJxvhSHdsbkZAHT/DVFk8RNQ7v3Bt4csG1FFN3aNDMvwVYOtXgD05o8VSLbP7z8BSLaMvSkFbFXsLS@vger.kernel.org, AJvYcCVh8enDCQ4wRF65/WfKgE9vX1LEC0M3eDtBWoIzC1El/D1LIWhuSyGRh2GDecocAwcy7KQbZNUTttGipDQH@vger.kernel.org, AJvYcCX8eXLQiJkrmMJGGGsL86+RHt7OYWuT8rjtrUYj6K7sGOX69v1zd2lkYW+0NXkVfekqIUToIicyEs34@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDfZ5mTdvAK2HnsvlXt+pm8tdf0Rbo0FGXVnKT4vmGoDUcWCam
-	/e5i8ZZpdBRv6XFlopck1usqXtW05/oNluIUqr6wCEI4hPp7lb+Y
-X-Gm-Gg: ASbGncskYjcnVD+qe2yI3TyhlVJPVG7yEiZEA5kVchaqJXqAn2Z0N6x4zSV5bCSY5IH
-	AiQi8hFhw+EcEob6E9XOT3DxzKM7uM6JilMAyhDUZmYR/5NuWhqdUU9toPks9XPT+/MyB0gNDkG
-	8O1fmIGH2gVFpJ0GmW7wguWYcUnE7XgezbaTeN83T8dnk6EQ18+K/bOsyR0OuS7WbxtzbNCGu39
-	L14ORiB5F3pWm17kq5bO7g6DpolXZNnpiFwh5+kabHpqqco95Wltv7VQSQU4wz+3WVXrxH8prbJ
-	0084u8hkmz3RWpqON5Qg7t2NpVLzu+o=
-X-Google-Smtp-Source: AGHT+IGwPTO0H8oXf2WqT8+evCV+nYPdjITljtORgdkuJm4CD//Y9BewHl+yb7Q89eQYYTTDlZYDdw==
-X-Received: by 2002:a05:620a:2a06:b0:7c5:9a6c:b7d3 with SMTP id af79cd13be357-7c5a845e479mr97122385a.37.1742345003657;
-        Tue, 18 Mar 2025 17:43:23 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c573d72ceesm786534085a.66.2025.03.18.17.43.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Mar 2025 17:43:23 -0700 (PDT)
-Date: Wed, 19 Mar 2025 08:43:07 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Chen Wang <unicorn_wang@outlook.com>, 
-	Inochi Amaoto <inochiama@gmail.com>
-Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Yangyu Chen <cyy@cyyself.name>, 
-	linux-kernel@vger.kernel.org, Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	sophgo@lists.linux.dev, devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v14 3/3] rtc: sophgo: add rtc support for Sophgo CV1800
- SoC
-Message-ID: <gztsdu5p4tzt7emlwiuc3z74f4tfgkclcyrl324prqzp6dqhhf@ezrdmmhvf2nm>
-References: <20250315224921.3627852-1-alexander.sverdlin@gmail.com>
- <20250315224921.3627852-4-alexander.sverdlin@gmail.com>
- <PN0PR01MB103935B34205CB22313838F34FED92@PN0PR01MB10393.INDPRD01.PROD.OUTLOOK.COM>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kIhAdxfJgpKMuUfV0n3kb6rmUTyIvzgAVIsxFWlS26AWJ9nk2bte7PE6Cd+cJOtdhfC1GkhOhpfd19ezQ4HHvS54bP2n5dxpkoA/UjdHB+QVztBR/0eKwLhEjBRhKoiXKH36SJzEUuWkSbTUxQyDqw/yUDQYFT7FA9nzuWJlphg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Woc8bzi1; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=L5Pc
+	7ScohVtj6EGcpdPQ7hR+8NtpEik7zfLqi0yNSBw=; b=Woc8bzi1W4hFdEvFENEx
+	i2sS4RNtMKc2Z0Zax91Zie/n9y0lEJ1OYyxry9Y7HYkOyubta4+DOBNAuZV/kXJT
+	aHWvQGYiJNBX0Dx6AxYrd3cYSZQx4ojewk/aR83UXFgKfiJfJdIXPGpDqQi7/Bur
+	sNbqF+eriYDEoVvnTXojzNuKvnFuqEk9A9d6Ug7ML8g+4bwrrk34sFlTXbdZMN8Y
+	nzfaHJSh6gbTaphCsuNHq9z3pquvpeVvcxJkWSUKkUHBEfREvs+8TbEMm9IyetwK
+	7CrhLGft/g+ZJ0jNobfPLvWdEsa+fznZCe5yORaSqW7DcmRPTqBxYarpWUfRq4W2
+	VQ==
+Received: (qmail 10110 invoked from network); 19 Mar 2025 08:45:02 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Mar 2025 08:45:02 +0100
+X-UD-Smtp-Session: l3s3148p1@D0roMq0wbOkgAwDPXyTHAJp038nK7dx+
+Date: Wed, 19 Mar 2025 08:45:01 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: rzn1: implement one-second accuracy for alarms
+Message-ID: <Z9p1_S3FQDeZmiIo@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-rtc@vger.kernel.org
+References: <20250305101038.9933-2-wsa+renesas@sang-engineering.com>
+ <2025030522061502555577@mail.local>
+ <Z8qYM2-LQPgIe2JE@shikoro>
+ <20250307183817b7747a66@mail.local>
+ <Z86f-tvJ42ui9Esv@shikoro>
+ <Z86rueNSSps2foF9@shikoro>
+ <20250317222437f14a32f0@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jY3mAlnLOCcRGPOk"
+Content-Disposition: inline
+In-Reply-To: <20250317222437f14a32f0@mail.local>
+
+
+--jY3mAlnLOCcRGPOk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PN0PR01MB103935B34205CB22313838F34FED92@PN0PR01MB10393.INDPRD01.PROD.OUTLOOK.COM>
 
-On Wed, Mar 19, 2025 at 08:31:11AM +0800, Chen Wang wrote:
-> Hi, Inochi,
-> 
-> I see Alexander add "drivers/rtc/rtc-cv1800.c" in "SOPHGO DEVICETREES and
-> DRIVERS" of MAINTAINERS, would you like to take this?
-> 
-> Regards,
-> 
-> Chen
-> 
+Hi Alexandre,
 
-If it is not covered by our entry. It is fine for me to take it.
+> I don't this it matters too much because there seem to be very few
+> userspace programs using RTC_IRQP_SET and RTC_PIE_ON, muse, tutka,
+> twclock, tvtime and mplayer. They are all either very old or this is an
+> optional feature with a better replacement.
 
-Regards,
-Inochi
+Well, this list of users is definitely useful, but my main motivation is
+an easier to understand RTC subsystem. I just came this way where I
+spent some time trying to understand a complexity only to find out it is
+outdated and largely not used anymore. It could be simplified. Also,
+less code to maintain.
+
+> While I'm reviewing all your other series, do you mind having a look at
+> https://lore.kernel.org/all/20250205173918.600037-1-herve.codina@bootlin.com/
+> It has been submitted a while ago now.
+
+Sure thing. Once I am done with my RTC task, I will have more time for
+I2C again \o/
+
+Happy hacking,
+
+   Wolfram
+
+
+--jY3mAlnLOCcRGPOk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfadfoACgkQFA3kzBSg
+KbZWHA/+PPG+a2LivGfOTBZnJzEHRXBixfLC7239UoPzW/Vl0z6s1MwRn3B+Ao1h
+cg+N6LAqNIDghW2kL2/sWWx+dHAXxLjvzN7SSF1rtCRoeO57MV+AR741kQtnc1vM
+GNLURAQgo5jGHhPeKLec3AEqr5PGpAvPDSq7f2wP9DnUO0im0LpdWFdnzstul/nc
+CEfI+CZQbmfhGqYvQxMcKYibDy1e8LBXTQf3Aa/WNL2ovkOfxXNt89pJmvZhOEF0
+AATcvKJ/4hB4O3O0WT1ihFQeinz4HHAKU2zFYWMByuEgsZJJDpICafFGZWiV5/2K
+xCUfNmRlgAK2yuzbRP+VK2mddd/V15ybxb5eNlSGOK/uunMHPabVZeBDhnJ8ggUv
+WsXRarnHgJ75Gnptb1ebGgI+NCPkpx0zA9zapu45B+SAwwQd5gzmhEJwikyA+teY
+haWaXOHKNeA88e38VTfyncjgBHo6zKI0H+Zh1vjW0tS3EHF7kysFdaJMYfwQCkCV
++POCrMUQTopCe9zOZ1xmWL3yr5qbpBZlEQeZPYAIadcwmR4qrsPxR1F4+xWDmQWX
+LS59DUYZkHlyMngBVv6+o3zJirrrOTOsDTsolMXsyaMp1mz08xDaW788GL5fkQtL
+t5znkSpyhWOYH1tTN8duboWTA6iUbCWXQungPOPU2KEFBXZ03yg=
+=1Zpm
+-----END PGP SIGNATURE-----
+
+--jY3mAlnLOCcRGPOk--
 
