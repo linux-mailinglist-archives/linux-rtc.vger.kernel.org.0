@@ -1,129 +1,104 @@
-Return-Path: <linux-rtc+bounces-3552-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3553-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8EDFA6861D
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 08:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8637A68A82
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 12:04:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6569A1B62733
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 07:46:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD48E188C1D4
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Mar 2025 11:03:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED5620E024;
-	Wed, 19 Mar 2025 07:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF98A29;
+	Wed, 19 Mar 2025 11:03:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Woc8bzi1"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="KAi18jMW"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F821F0989
-	for <linux-rtc@vger.kernel.org>; Wed, 19 Mar 2025 07:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DAC2AEED
+	for <linux-rtc@vger.kernel.org>; Wed, 19 Mar 2025 11:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742370314; cv=none; b=UgukHptJzHpxHgUFf8KKi537+wtPr+b0g6RnVl6U6CZFlJHFl5aHCtarXUifvCMETYxjgCwR2wp/bUorYoi/ZcuTddrNfLZsfPAE5d/9NplwuzQuMXOR/JXbNOBECdmue8pdRshMCWyb4ZE6tzK2uMeFCfUkQ/Vo9vaIknOVumo=
+	t=1742382196; cv=none; b=amMJYk3Y7HYbAfXcfXDNsimb3L5g8VwK2Zsq3y2M988jUYxYsUQcSpS3jbBN9HnE3+oeD3+vogNEjSNzcLEreG5kOj1I8n/z6rAUUOweeUGFxXKus+tpWaNn3HDQATW8pvHF3+UM+Y8Xzq8Othjwta4gv4uPjIpFUHOakQlfyd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742370314; c=relaxed/simple;
-	bh=Zylv9Pe93ouSZKjjC8dPfUV6KeeGwVHjdraQ+EyfSp0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kIhAdxfJgpKMuUfV0n3kb6rmUTyIvzgAVIsxFWlS26AWJ9nk2bte7PE6Cd+cJOtdhfC1GkhOhpfd19ezQ4HHvS54bP2n5dxpkoA/UjdHB+QVztBR/0eKwLhEjBRhKoiXKH36SJzEUuWkSbTUxQyDqw/yUDQYFT7FA9nzuWJlphg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Woc8bzi1; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1742382196; c=relaxed/simple;
+	bh=S0NdtVpZHj4pWU+kptP8sJXiB1JXW4x9nTNLj1wM0dc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ulBXx7xLtRzWxbyK2Igdi8B1wiwa2hZKyJjOM2ZacQxqGAMkeNjtT/3jeJP2uU0LP/g3rrlRJKJZdsysPJDo60QSZpIiKiugik3Sni0FGf9/rHJhGRJ4Ux0UqeK8Z/FDLvpvDEYbFdCecUJWe5vAGXkYfRFgPFbmficdbR60vuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=KAi18jMW; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=L5Pc
-	7ScohVtj6EGcpdPQ7hR+8NtpEik7zfLqi0yNSBw=; b=Woc8bzi1W4hFdEvFENEx
-	i2sS4RNtMKc2Z0Zax91Zie/n9y0lEJ1OYyxry9Y7HYkOyubta4+DOBNAuZV/kXJT
-	aHWvQGYiJNBX0Dx6AxYrd3cYSZQx4ojewk/aR83UXFgKfiJfJdIXPGpDqQi7/Bur
-	sNbqF+eriYDEoVvnTXojzNuKvnFuqEk9A9d6Ug7ML8g+4bwrrk34sFlTXbdZMN8Y
-	nzfaHJSh6gbTaphCsuNHq9z3pquvpeVvcxJkWSUKkUHBEfREvs+8TbEMm9IyetwK
-	7CrhLGft/g+ZJ0jNobfPLvWdEsa+fznZCe5yORaSqW7DcmRPTqBxYarpWUfRq4W2
-	VQ==
-Received: (qmail 10110 invoked from network); 19 Mar 2025 08:45:02 +0100
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Mar 2025 08:45:02 +0100
-X-UD-Smtp-Session: l3s3148p1@D0roMq0wbOkgAwDPXyTHAJp038nK7dx+
-Date: Wed, 19 Mar 2025 08:45:01 +0100
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=P9e5eoXbJY/fdh
+	DICQHdVELnRavwSH2SOD4mWamxVJ8=; b=KAi18jMW9nB3DZc+8aFkK+mU7W5Q40
+	Rrv+USEnWIpCT5cbNaBiHL5+7X3Zf13fR51b7IEKf5oZHE4hsFjlsrtwo7dymGSl
+	1Qx4WsgWu8y0jRrq0OptdXicr4KP8Xx+K5hqrj7LYP77q4szhZZWK3qm/7kd/Jjn
+	fGvi9Wavz9pHKz95K9JtFwT0lRsTMYT1j3GW+7llcS1UDiIW7nXmCQv6StcXMNcE
+	fdkheh2frOS1qjEBUb28fn3LxNN96M83griUB92y5cefX3RXxRx61oVEXa180g4c
+	o87FMXc51oq3jRruI0vmEXUUyQ5FPLhKSi5fqCpva+CfVpd/PS1sUxCQ==
+Received: (qmail 81744 invoked from network); 19 Mar 2025 12:03:11 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Mar 2025 12:03:11 +0100
+X-UD-Smtp-Session: l3s3148p1@q4aS968w7rwgAwDPXyTHAJp038nK7dx+
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: rzn1: implement one-second accuracy for alarms
-Message-ID: <Z9p1_S3FQDeZmiIo@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-renesas-soc@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-rtc@vger.kernel.org,
+	Magnus Damm <magnus.damm@gmail.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-rtc@vger.kernel.org
-References: <20250305101038.9933-2-wsa+renesas@sang-engineering.com>
- <2025030522061502555577@mail.local>
- <Z8qYM2-LQPgIe2JE@shikoro>
- <20250307183817b7747a66@mail.local>
- <Z86f-tvJ42ui9Esv@shikoro>
- <Z86rueNSSps2foF9@shikoro>
- <20250317222437f14a32f0@mail.local>
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH 0/3] rtc: rzn1: support XTAL clk and SCMP method
+Date: Wed, 19 Mar 2025 12:03:01 +0100
+Message-ID: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jY3mAlnLOCcRGPOk"
-Content-Disposition: inline
-In-Reply-To: <20250317222437f14a32f0@mail.local>
+Content-Transfer-Encoding: 8bit
+
+So far, the code and the binding for the RZ/N1D RTC assumed an input
+clock of 32768Hz, so it was not explicitly described. It makes sense to
+do this, though. For one reason, clocks with other frequencies might be
+used. This RTC supports that via the SCMP counting method. The other
+reason is, the upcoming R-Car Gen5 has only the SCMP method described,
+so we need to use it there later.
+
+This series lets the driver handle the optional "xtal" clock and switch
+to the SCMP method if suitable. It has been tested on a Renesas RZ/N1D
+board with hacked devicetree values.
+
+A branch with updated DTs can be found here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/n1d/rtc
+
+Looking forward to comments!
 
 
---jY3mAlnLOCcRGPOk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Changes since RFC:
+* add binding tag from Krzysztof (Thanks!)
+* new patch to disable controller before initially modifying CTL0
+* cosmetic changes
 
-Hi Alexandre,
+Wolfram Sang (3):
+  dt-bindings: rtc: rzn1: add optional second clock
+  rtc: rzn1: Disable controller before initialization
+  rtc: rzn1: support input frequencies other than 32768Hz
 
-> I don't this it matters too much because there seem to be very few
-> userspace programs using RTC_IRQP_SET and RTC_PIE_ON, muse, tutka,
-> twclock, tvtime and mplayer. They are all either very old or this is an
-> optional feature with a better replacement.
+ .../bindings/rtc/renesas,rzn1-rtc.yaml        |  8 ++-
+ drivers/rtc/rtc-rzn1.c                        | 59 +++++++++++++++----
+ 2 files changed, 53 insertions(+), 14 deletions(-)
 
-Well, this list of users is definitely useful, but my main motivation is
-an easier to understand RTC subsystem. I just came this way where I
-spent some time trying to understand a complexity only to find out it is
-outdated and largely not used anymore. It could be simplified. Also,
-less code to maintain.
+-- 
+2.47.2
 
-> While I'm reviewing all your other series, do you mind having a look at
-> https://lore.kernel.org/all/20250205173918.600037-1-herve.codina@bootlin.com/
-> It has been submitted a while ago now.
-
-Sure thing. Once I am done with my RTC task, I will have more time for
-I2C again \o/
-
-Happy hacking,
-
-   Wolfram
-
-
---jY3mAlnLOCcRGPOk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmfadfoACgkQFA3kzBSg
-KbZWHA/+PPG+a2LivGfOTBZnJzEHRXBixfLC7239UoPzW/Vl0z6s1MwRn3B+Ao1h
-cg+N6LAqNIDghW2kL2/sWWx+dHAXxLjvzN7SSF1rtCRoeO57MV+AR741kQtnc1vM
-GNLURAQgo5jGHhPeKLec3AEqr5PGpAvPDSq7f2wP9DnUO0im0LpdWFdnzstul/nc
-CEfI+CZQbmfhGqYvQxMcKYibDy1e8LBXTQf3Aa/WNL2ovkOfxXNt89pJmvZhOEF0
-AATcvKJ/4hB4O3O0WT1ihFQeinz4HHAKU2zFYWMByuEgsZJJDpICafFGZWiV5/2K
-xCUfNmRlgAK2yuzbRP+VK2mddd/V15ybxb5eNlSGOK/uunMHPabVZeBDhnJ8ggUv
-WsXRarnHgJ75Gnptb1ebGgI+NCPkpx0zA9zapu45B+SAwwQd5gzmhEJwikyA+teY
-haWaXOHKNeA88e38VTfyncjgBHo6zKI0H+Zh1vjW0tS3EHF7kysFdaJMYfwQCkCV
-+POCrMUQTopCe9zOZ1xmWL3yr5qbpBZlEQeZPYAIadcwmR4qrsPxR1F4+xWDmQWX
-LS59DUYZkHlyMngBVv6+o3zJirrrOTOsDTsolMXsyaMp1mz08xDaW788GL5fkQtL
-t5znkSpyhWOYH1tTN8duboWTA6iUbCWXQungPOPU2KEFBXZ03yg=
-=1Zpm
------END PGP SIGNATURE-----
-
---jY3mAlnLOCcRGPOk--
 
