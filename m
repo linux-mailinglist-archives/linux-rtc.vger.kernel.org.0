@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3613-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3614-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4060DA710F5
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:03:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3568A71103
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:05:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8EEA16D340
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:03:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 859E63BA699
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:03:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49F4619539F;
-	Wed, 26 Mar 2025 07:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC9D1993B7;
+	Wed, 26 Mar 2025 07:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfzrFpVU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCmGgKtM"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A83B2AF0A;
-	Wed, 26 Mar 2025 07:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB011917D0;
+	Wed, 26 Mar 2025 07:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742972598; cv=none; b=gEaMTfE3HAFLtmWmv8csfgUwwA8qkdO1JEFNURcxNgPFHGBOuIT6Vs2BQlA3iZLcgfzdqfD2ABDimKicwOJTIm+NNV4sWh+BERcRSMntpgFXmdDOmR4rZsrlhnTkkyStI81tWXXNL8r3VC9eG3TcZyTVn37vexK98kfzw6DOmYY=
+	t=1742972627; cv=none; b=Xug1zIDt+lm7b2wJ+NhqQToo89gmu9MjNsV9fDXGAtBYgKHa65LLZuA5mnOC9wQlR3sn120B7agkdRPTZ/oI+xvvkyKYmnoJ39KrbmvHq5NjdHZX/7wyvQ3bpux+J0ZzedZnQW4c+59rc7l9U4HzsMF/0WofXwB4F0H9Rx13nl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742972598; c=relaxed/simple;
-	bh=/fi76B5UtUwuwMA1yexCDk8ZTpcHFFnF0aLg1Y/cQUg=;
+	s=arc-20240116; t=1742972627; c=relaxed/simple;
+	bh=WGgTNa6Pao5SljVdBPwwi6Xy+prHURx250FppzDiWHY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TSpbATYWLad9E1zUPWuy+h/jtG1GCNsBFSdvUcDfZNnfCPzkm8ffObaGluYI4ER4RsgiKr3O9ZLNbWiXkYVN0wZQqAt3kIJQcVPW2X9lXFUEGF1uMemljKX3oExfJWy0EQKS/jxHLwcqBqUkn+dcMctBRTKu5ruYGMtwJ7C01ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfzrFpVU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2FBC4CEE2;
-	Wed, 26 Mar 2025 07:03:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=dcPXQlSDiz5RH0spqOJH8E6MjcgChSi357q6XTQ8wyMr7kUs6dVrZ1tUlEf8KAoS5g2ARcjMXzD4CvlwjHimFmQmgyEVniXnOhtI0xPf3vwIvnzbnlCnilT+V/tsUtEmR82XqZzk7bhnrn/yTP+XDXW8vHzOcEUVIttYbqfqNwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCmGgKtM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C99C4CEE2;
+	Wed, 26 Mar 2025 07:03:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742972596;
-	bh=/fi76B5UtUwuwMA1yexCDk8ZTpcHFFnF0aLg1Y/cQUg=;
+	s=k20201202; t=1742972626;
+	bh=WGgTNa6Pao5SljVdBPwwi6Xy+prHURx250FppzDiWHY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GfzrFpVUxkChqlw79NMqvwzC4dVc5hJYOr/oeX7CD4pEWYqs8qVivKvvANfKrbtz3
-	 6XiA0M/wWJ8T8c/F1zEIu+NIKBY2X5FfYJJjVxfF4opH44do+Wn0zzg/I/HQDymLBB
-	 5JCo47b22IFmtyyGdY48HWCkhMNZS+2x8sNT68J8Uf8R77M/roVZNg6jXRDztl397Q
-	 319AZfKFr6K5lJBS20WN/Y0uBDDdUi9VKk557hJevSnaplWTGA8vRX53Uygdh8RsGc
-	 bPo/eqQAKrPwL0FO5L/ZZFiB45FuiRzVD5x8fu65ECgLQqm479w/sFgZNcFgTIx2/V
-	 ojcwzAZo5nPQw==
-Message-ID: <f1e24507-7cf3-4e0d-8989-05ef3aaa2708@kernel.org>
-Date: Wed, 26 Mar 2025 08:03:04 +0100
+	b=LCmGgKtMAQO05QTwNgdqFybTRgNgblUR/3RLd1RgUprzygel2xG2qRj/mOKMua0Jp
+	 1mNsKRtMOMLkAhWKallj7baxc9QntWCX2lrh5CrOBW9D27VqiUf/y2u18fdS87Fcdd
+	 YMJVOnHWsrdgzp9dElxgAlXd5CutXOFWAwfnZoBcsuKWo5V32fKxa/4XXST2Jw8nNz
+	 9/IuadZJz1wm4E1JnsFHDu1iV6WoGh9kgepEJQnSCedBgWa0c5HMy49o4eVlbJ1zF3
+	 bWT9MpYSJpLptsj17oOjd3kEnOsGBXI2bCs82rfTFdbqWIYMpwQcgmmex1waLUYqpU
+	 j8uMv85MbRjRQ==
+Message-ID: <342184cb-1943-4fcf-b1be-e5d59cd02258@kernel.org>
+Date: Wed, 26 Mar 2025 08:03:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/34] firmware: exynos-acpm: export
- devm_acpm_get_by_phandle()
+Subject: Re: [PATCH 04/34] mfd: sec: drop non-existing forward declarations
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,9 +67,9 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-3-d08943702707@linaro.org>
-Content-Language: en-US
+ <20250323-s2mpg10-v1-4-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -114,32 +113,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-3-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-4-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/03/2025 23:39, André Draszik wrote:
-> The upcoming Samsung S2MPG10 PMIC driver will need this symbol to
-> communicate with the IC.
+> sec_irq_resume() was removed in commit 6445b84abf91 ("mfd: Add s2mps11
+> irq driver") and sec_irq_exit() in commit 3dc6f4aaafbe ("mfd: sec: Use
+> devm_mfd_add_devices and devm_regmap_add_irq_chip") while the
+> prototypes were left. They should be removed.
 > 
-> Export it.
+> Do so.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 > ---
->  drivers/firmware/samsung/exynos-acpm.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/firmware/samsung/exynos-acpm.c b/drivers/firmware/samsung/exynos-acpm.c
-> index a85b2dbdd9f0d7b1f327f54a0a283e4f32587a98..7525bee4c6715edb964fc770ac9d8b3dd2be2172 100644
-> --- a/drivers/firmware/samsung/exynos-acpm.c
-> +++ b/drivers/firmware/samsung/exynos-acpm.c
-> @@ -741,6 +741,7 @@ const struct acpm_handle *devm_acpm_get_by_phandle(struct device *dev,
->  
->  	return handle;
->  }
-> +EXPORT_SYMBOL_GPL(devm_acpm_get_by_phandle);
+>  include/linux/mfd/samsung/core.h | 2 --
+>  1 file changed, 2 deletions(-)
 
-If binding changes to parent-child relationship, this might not be needed.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
