@@ -1,111 +1,174 @@
-Return-Path: <linux-rtc+bounces-3643-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3644-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF3CFA71AC8
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 16:39:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39707A71D3E
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 18:37:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2D8618926D0
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 15:38:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50BC27A32DD
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 17:35:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1321C1FBC8B;
-	Wed, 26 Mar 2025 15:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="dHRwYjUI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2309823C8D0;
+	Wed, 26 Mar 2025 17:36:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9231F891C;
-	Wed, 26 Mar 2025 15:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFB721931F
+	for <linux-rtc@vger.kernel.org>; Wed, 26 Mar 2025 17:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743003405; cv=none; b=ja4KcBl35AJV9SRm3PC3UQHIB5CPQqjZfoP0zQ+rsvGst9w70zJ/v8iaqePhC0zZbw2QL6u3GUMKmFIEr8xdOtXQaxEeJlkGd+jNNKKYAgVl2Zl3Sntg+L9vE6+968ywG0ievm7hGoU3fOh6plUX4W45SWN8gR2Grz/BRfI/55Y=
+	t=1743010598; cv=none; b=ogayMCGOE8PQlSs2xJGs/+GDkqL3UVcCUsABL4ilNRMULqJ4n519ldwM4gtSYH3eDqKZTshk4MndOOMGZ7RAdjdb9VwbSnNreKJIIqqx3y7Q2p3qxrBxJIb+V0AaX1bisWGnID6G+3I4cKqoLj/g4q0r3ONyTOnS4PXYU8OolT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743003405; c=relaxed/simple;
-	bh=cp3KlP5kz8uShLGylSzqchQUQS7t4AEaR6YGK7e5dDw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bWdbxrEugj/QmEECjRjhJArkyXWdksVYRWic6nC5JkMyOyY01ihQHvo6b+TelxiO+RomQuob3dn8oHLBb0OyCoXsg1o3jLHLpX0U4iKyIAuxWWyvg1wboARwsMXujw/EuLJvcgcmAkJkuWi0b1bzxWONYhSpwc+9v/eJjRZ5ZX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=dHRwYjUI; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1743003403; x=1774539403;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cp3KlP5kz8uShLGylSzqchQUQS7t4AEaR6YGK7e5dDw=;
-  b=dHRwYjUIxI4EQ8n9z1Oxj7oDFkEQndeCH6g04XRifCjB4FMabvGJ1cGt
-   Y9X0DeIpGwbj0MKMEpxcIgqDsVANvu0zVA6T0tpox6//k4K+CfJJDOmzX
-   sTWXAmMP3rn3WHBUp6LfMO4Uv/MIcReuNat2p8czPe8brsFYDu5s26vVC
-   HyZz4RtmJxBpVx0F3qkhKFwxGPoNAPj+zYA19JwaTwlG5DXsH1QRKJIrT
-   uWuRxDWBgHtfmh65KpU5grOchln+ZOU2ybss51060Y8+8urvIFZzibCC4
-   fPsm9mjxoQK1+67XtKwvucBqntT2dscuNOZYQxxYsngR7GByiOIWntcJ9
-   g==;
-X-CSE-ConnectionGUID: NRxSiTFnT3ucBnaYj7CaZg==
-X-CSE-MsgGUID: yVJD9QDcSWChedzT1e/Itg==
-X-IronPort-AV: E=Sophos;i="6.14,278,1736838000"; 
-   d="scan'208";a="44096117"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Mar 2025 08:36:33 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 26 Mar 2025 08:35:52 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.44 via Frontend Transport; Wed, 26 Mar 2025 08:35:52 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <lee@kernel.org>, <sre@kernel.org>,
-	<p.zabel@pengutronix.de>
-CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-rtc@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH v4 11/11] ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
-Date: Wed, 26 Mar 2025 08:35:44 -0700
-Message-ID: <314561e3237b84d3764bd1dc9967f852ee452c30.1742936082.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1742936082.git.Ryan.Wanner@microchip.com>
-References: <cover.1742936082.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1743010598; c=relaxed/simple;
+	bh=1VrlRkek0WqK4HdrG8gRnbeBPzHFXN/BnW7I901OUcI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tFKM7PFy67ogl1M5CNrcIXjjBc/au/oKmexkzabCd/hHBxXIHFiytIx8zyPU1qT1qBbZ/I/FAZX8ibfpzKmKpuBFF9yAsPEem5RudJehoD22UY6o4SU98RwV+Colsu/BGPXalDH381SuyYB6AdBY/jFfwMTDhSoZ8BTcehvfdRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txUfR-0000ck-SV; Wed, 26 Mar 2025 18:35:53 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1txUfO-001nHx-0b;
+	Wed, 26 Mar 2025 18:35:50 +0100
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id B6C7C3E7719;
+	Wed, 26 Mar 2025 17:35:49 +0000 (UTC)
+Date: Wed, 26 Mar 2025 18:35:47 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250326-utopian-mega-scallop-5f6899-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <20250317-outrageous-helpful-agama-39476f-mkl@pengutronix.de>
+ <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3fo4gps22dugmrwp"
+Content-Disposition: inline
+In-Reply-To: <CAOoeyxVF9baa8UKJKWcbTLzvMo3Ma=GRCbdnBSoGOw0Lk5j4sA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Add RTT timer with backup register for SAMA7D65_Curiosity board.
+--3fo4gps22dugmrwp
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+On 26.03.2025 10:37:11, Ming Yu wrote:
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B43=E6=9C=881=
+7=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=888:01=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> > > +static int nct6694_can_start(struct net_device *ndev)
+> > > +{
+> > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> > > +     struct nct6694_can_setting *setting __free(kfree) =3D NULL;
+> > > +     const struct nct6694_cmd_header cmd_hd =3D {
+> > > +             .mod =3D NCT6694_CAN_MOD,
+> > > +             .cmd =3D NCT6694_CAN_SETTING,
+> > > +             .sel =3D ndev->dev_port,
+> > > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > > +     };
+> > > +     int ret;
+> > > +
+> > > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> > > +     if (!setting)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> > > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+> >
+> > I just noticed one thing that needs clarification/documentation.
+> >
+> > You have nct6694_can_bittiming_nominal_const and
+> > nct6694_can_bittiming_data_const, but only pass the bit rates to your
+> > device.
+> >
+> > Do the bit timing const really reflect the HW limitations of your
+> > device?
+> >
+> > Are you sure your device uses the same algorithm as the kernel and
+> > calculates the same bit timing parameters as the kernel, so that the
+> > values given to the user space reflects the bit timing parameter chosen
+> > by your device?
+> >
+>=20
+> Originally, I only intended to provide NBR and DBR for user
+> configuration. In the next patch, I will add code to configure
+> NBTP(Nominal Bit Timing Prescaler) and DBTP(Data Bit Timing Prescaler)
+> based on the setting of nct6694_can_bittiming_nominal_const and
+> nct6694_can_bittiming_data_const.
 
-diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-index 30fdc4f55a3b..3105fe1766c3 100644
---- a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-+++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-@@ -141,6 +141,10 @@ pinctrl_uart6_default: uart6-default {
- 	};
- };
- 
-+&rtt {
-+	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-+};
-+
- &sdmmc1 {
- 	bus-width = <4>;
- 	pinctrl-names = "default";
--- 
-2.43.0
+Sounds good, but this doesn't answer my questions:
 
+You have nct6694_can_bittiming_nominal_const and
+nct6694_can_bittiming_data_const, but only pass the bit rates and the
+prescaler to your device.
+
+Do the bit timing const really reflect the HW limitations of your
+device?
+
+Are you sure your device uses the same algorithm as the kernel and
+calculates the same bit timing parameters as the kernel, so that the
+values given to the user space reflects the bit timing parameter chosen
+by your device?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--3fo4gps22dugmrwp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfkOvEACgkQDHRl3/mQ
+kZzpHQgAgGRAJKZUC90pxD/IpTMDutPBbTPEyhq69hM419fjym5rJ4HxuM6meZHF
+MCGE5zEy8fsC05K8QdtwmiAmvaGYg8b/Ky/4MTwj0R5AjFqfWFghJJ5hrypphQzB
+ZKiyvcnkIAxTgkEZlMg9MBQf+OdN5Q3Z/nHLPvfk0OHrsz44UqxPAfWuMI6HWoaN
+RTSbxLxlKoAWEDTzmyT6YAyehq42fVSdsC+FK82lQmloaAkq7dkQAUmaJn1pTEHL
++ea6VayK34n+e3kzz2OkTDrOIvJwDSdX0lMrIT9A97ju+hgzdQSY839BL5xOvDEe
+9TFcEhv92TjknvV5PdmFfiwnNLDNHg==
+=T1kB
+-----END PGP SIGNATURE-----
+
+--3fo4gps22dugmrwp--
 
