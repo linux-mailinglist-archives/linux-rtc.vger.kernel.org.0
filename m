@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3625-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3626-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A81DA71164
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:28:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49BEAA7116E
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:30:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E5523AB36C
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:28:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 915B6188939F
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2480619D884;
-	Wed, 26 Mar 2025 07:28:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BC719D892;
+	Wed, 26 Mar 2025 07:29:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eX4kP/4p"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9LAQRfd"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB92D198E6F;
-	Wed, 26 Mar 2025 07:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04FAD2E3361;
+	Wed, 26 Mar 2025 07:29:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742974128; cv=none; b=BOMdLopaOhT4iDDLZ+h6DuoS6gIXeD+Q7N20VOth1Xwn74cit437lBJTeJrUig6N6Gd1P4liVf0QfdEAYnrRo5QDCYN37jztByCq0rsR4B+vON13w6X7PxB1qpCQuTWYNv8fgzYjaeuQQ54nhNCvH49Vc3mPDSORwRcnHU4UQkQ=
+	t=1742974174; cv=none; b=dR0CS0TSC/9m9X78M4RZKQ/KMygWMnvbtGmJAHwPV4bDjls0cdY6vXUTGKBW6UfE08GzWHXc0/fh9qzMbOp/I4nTHGyjIXqe+UpBOY3Fyg8+U9e86Q7zLrk7zcQWfCzd5LfSQ3I6X2QQL114DOo7zXkxqcjRxzK8d58fB5LvjD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742974128; c=relaxed/simple;
-	bh=iAuFANLunmhmcETucong3/qkBaLsbLIIh3af0TrbsqA=;
+	s=arc-20240116; t=1742974174; c=relaxed/simple;
+	bh=sSAYOt4oOEs05VG0Azcz9ADOJWD935RnsQzzpkBB8hs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LYZi0CiKcbF9cn8YKIlBek66pvX3rSTKG16y2Kbw9iiWmmM87hTBZy7Evfptq6lDWuh4S0h1786qBDCZz5EJYLDAkgEDMHMZjJ5BL2Q7kfC6jKnjKUfEsYNF9JQy6NSiB1yVnGxTB6JxclBQSU4IkDD8N0A93J+yTrZrEl3VHoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eX4kP/4p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F1BC4CEE2;
-	Wed, 26 Mar 2025 07:28:38 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=k+QKUx51DhUqsXBkaZGNpa72TDX9y4bfA3DS57UrH1OYCk9Hsc80CpXLu3KlDJPO49gqC5qfEihUn7bU8pKSI+ngqNTT47Wsk8Xy29VSmDdBbJ8UTEcIx52VL7q+IZCdwnFHY6Y4Qj57eezMhN6p2q0Oalx0OircHKJaUU/wnRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9LAQRfd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6799C4CEEE;
+	Wed, 26 Mar 2025 07:29:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742974127;
-	bh=iAuFANLunmhmcETucong3/qkBaLsbLIIh3af0TrbsqA=;
+	s=k20201202; t=1742974173;
+	bh=sSAYOt4oOEs05VG0Azcz9ADOJWD935RnsQzzpkBB8hs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eX4kP/4pCiUNiSvBVEDIYv2WU4K1DfNBKUW7NLfH6DxofHeaqJLEFc+LFj0ZP7RdV
-	 /o00PKDl9iyDCbQmwsl1x57iiR/teQc3oqcvVoO+UBoohKoO3dt2L+az+rovPfdBtp
-	 ufkO5JAiOpm5uz+3lttbpBBxHk+qy/dEb7wyVQAVil8gqB6I2SNWVkokmVDRbkEfUx
-	 ucv4oFKA5jQmds+tZu/sWDuUGsFqTLuKy7llQy7olFkOp9E7bMduihyqEovh1n8Ust
-	 Wbvg3geWH0f2yDQJU/B3ZaBib6XRgFWb+vOjpUJJtFaFErBYGB76vLEdjP5YXqYHVp
-	 4cotzdXXAVlaw==
-Message-ID: <68496580-8d63-4f11-8754-7b7b16d147b0@kernel.org>
-Date: Wed, 26 Mar 2025 08:28:35 +0100
+	b=M9LAQRfdx9zqk9XRIcjWhwxMDDaZ010DRUrJMjCdUW9eRJ2h+AKx+qzL1VXpSKj64
+	 uzSijs3Z2MltoFNobanxEwkM31WG6s46W6g+mtPkLCQebHJCTDuU8HAgDfx1CFaSkJ
+	 sQ7nBdIVhLISE9DbNqTFD6jDw8iXJm+vR5ucfhe3K2/yMexXzZEgnWMEpXVdA3cyVE
+	 OxpLrG2BlkGOo9hHPWcW4qYECuQzMgq3JS8ZWXIwqLPwmPQuzcuzMPeAY6dYEEK3co
+	 Bw/gFutionvHh07WdCKJefBy/psSoN9/LE+CeFfPaOLt1bpDYDUEPZ0+yvF8dPc9T+
+	 +bhn74javsZSQ==
+Message-ID: <06f2a1e4-0bcc-4046-89cd-1170bebdd217@kernel.org>
+Date: Wed, 26 Mar 2025 08:29:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 18/34] mfd: sec: s2dos05: doesn't support interrupts (it
- seems)
+Subject: Re: [PATCH 19/34] mfd: sec: don't ignore errors from sec_irq_init()
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,7 +67,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-18-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-19-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,31 +113,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-18-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-19-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/03/2025 23:39, André Draszik wrote:
-> The commit bf231e5febcf ("mfd: sec-core: Add support for the Samsung
-> s2dos05") adding s2dos05 support didn't add anything related to IRQ
-> support, so I assume this works without IRQs.
-> 
-> Rather than printing a warning message in sec_irq_init() due to the
-> missing IRQ number, or returning an error due to a missing irq chip
-> regmap, just return early explicitly.
-> 
-> This will become particularly important once errors from sec_irq_init()
-> aren't ignored anymore in an upcoming patch and helps the reader of
-> this code while reasoning about what the intention might be here.
+> sec_irq_init() can fail, we shouldn't continue and ignore the error in
+> that case, but actually error out.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 > ---
->  drivers/mfd/sec-irq.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-
-I am pretty sure s2dos05 wanted interrupts, but that's on them.
+>  drivers/mfd/sec-common.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+That's a big patchset, I finished here. I will go over the rest some
+other day or when you send v2.
 
 Best regards,
 Krzysztof
