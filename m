@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3622-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3623-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C733AA71146
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:23:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A590A71152
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:24:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62508174900
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:23:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17EA61883B60
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DF919D886;
-	Wed, 26 Mar 2025 07:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1373C19C55E;
+	Wed, 26 Mar 2025 07:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r6Ib7FJu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OCUF72Ct"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EDF42069;
-	Wed, 26 Mar 2025 07:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D314F170A37;
+	Wed, 26 Mar 2025 07:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742973787; cv=none; b=px1wCrifjRQ6aM7i/Ora4XzDjOvGpoK0XMyqbRbuHrNskwMg1Dirb2IkEn/UTjaXvQ6T+eOtVNo6LRvFWTF1kB2Nqd2b3qchJ+84QV+ZVMB0eEcwvmwhqggckmYl0wpCYGJH3njt03gz6oDjj3EUA//x8hDUmaJ63khXII6Whx0=
+	t=1742973883; cv=none; b=dsrohPkZU0nJQRrKmayTafdhKi46/RQ9Z43gOigpUxNS5mWOUHD+fIcFXiHyN6hnj9kTNfgzqEIYjT2DJNrDBROPS822/SF3nV0w24km5di/DhUlAuWt025LTAi24MyxWx6bF0TfVE9IwbZuntrivr/1ednP7lf56G9JETtI+Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742973787; c=relaxed/simple;
-	bh=6YYFYtjsWtXOaM2Q6Jcc8YNOzkMzmfxZ7Zy6XLOb9nI=;
+	s=arc-20240116; t=1742973883; c=relaxed/simple;
+	bh=vBPa+PfaBJFraxGm6Tyeais+n0mMhPTmkO+23plxVc0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YcP8U9Y5ThjlftPIiP6ES0vTu6+2RKVin448r1/SoMlUiKoJPxqFtXvEof8q5iUKWS/E2z7qoJGegfbSs6ADYzjvMhVCvKeTlIvRj3uWihoAB1pfp3uqJjSmti/YuL0G9jrEzs979IFUCf13uuGAeIcn1jjZOMJqqLsEido+V+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r6Ib7FJu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D33C4CEE9;
-	Wed, 26 Mar 2025 07:22:57 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Qf0oJyxWv0cCh6OP07u/08I9likKomwhepCjl/KOsKirMM2gEIlffo7/2Jm97urrAaHuRUfP2GF7bBoLGQtXnPY36WUe9QT5rt64alKUUMTYV1u/bA5bB3+Yk9yy5DG1WERME4Har+1UmFV/6LLYEvf1GB4bxU/UDC0lBDqhWHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OCUF72Ct; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E11C4CEE2;
+	Wed, 26 Mar 2025 07:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742973786;
-	bh=6YYFYtjsWtXOaM2Q6Jcc8YNOzkMzmfxZ7Zy6XLOb9nI=;
+	s=k20201202; t=1742973882;
+	bh=vBPa+PfaBJFraxGm6Tyeais+n0mMhPTmkO+23plxVc0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=r6Ib7FJu56h4SjoGGeNCbU/MDwtfuH42DSESAEQsPHQ5TYUBfoE0nevA5MRFk7rHc
-	 FqnLhH3rvfB2EZSp/AlkhJyzb7JZKPD7fyNVxiA24s66WgHBco+Er6PN4ofkiZmVkx
-	 dU0poETTab1GZMJVF91x6HoSS253b+pEA3kKSyvX4SLh96CFohKbTxxeI/yu2IDugY
-	 ogmptjMPd3jvNL8Fl/x/s6zmYM33BE/7chYmiruE+17Z1Y/Ftip30kECqNKMPMoRnk
-	 pXNW2b8uTbUTsUobMwmRrpuudz90ZbFsX1WdysqIEHIS7PzQGKmfolP01qdzyAh7HZ
-	 Zl/U/Hg9Cvq7g==
-Message-ID: <25eb9c47-96ba-4037-b320-af16e0226f4c@kernel.org>
-Date: Wed, 26 Mar 2025 08:22:55 +0100
+	b=OCUF72CtvPwfx71JJtUeh03uXsprTiSyoLugGtZvZ5aOtnyDn1x1YsLDviOIb18Kb
+	 arynQfObXWinc10CrTpLLb/ptcCaebKzlm/std/+SA7IW4EdBtfxoWo5x2C6YxyGn8
+	 LemycJ3x8pE9yMz0mqeQLcP0dntDFf72oPQguQ6N7a7N/wzHR+s97p3sUtlf1NIy5d
+	 OZ09SAw5T/B37HUlyDEVQmtLV0JHCvkWxjYX3qG3J3QEb7mIBv1u6HjJ1HxM+3lKo5
+	 Wrt1D8AOgMX3F80EuMgFP4lWiqISGOXrzLMQbzb1fvHCC9WMRtXhNIJRJ0L9A+Cpee
+	 C98r+xVJZa3cA==
+Message-ID: <e3dee29a-dcee-40b5-8bf4-22a6a8a7993a@kernel.org>
+Date: Wed, 26 Mar 2025 08:24:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/34] mfd: sec: add support for S2MPG10 PMIC
+Subject: Re: [PATCH 15/34] mfd: sec: use dev_err_probe() where appropriate
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -67,7 +67,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-12-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-15-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,29 +113,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-12-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-15-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/03/2025 23:39, André Draszik wrote:
-> Add support for Samsung's S2MPG10 PMIC, which is a Power Management IC
-> for mobile applications with buck converters, various LDOs, power
-> meters, RTC, clock outputs, and additional GPIOs interfaces.
+> dev_err_probe() exists to simplify code and harmonise error messages,
+> there's no reason not to use it here.
 > 
-> Contrary to existing Samsung S2M series PMICs supported, communication
-> is not via I2C, but via the Samsung ACPM firmware.
-> 
-> This commit adds the core driver.
+> While at it, harmonise some error messages.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> 
-> ---
-> Checkpatch suggests to update MAINTAINERS, but the new file is covered
-> already due to using a wildcard.
-> ---
+Maybe such cleanups should be before you start moving the code and
+splitting modules into i2c/core/acpm.
 
-I did a quick look and seems fine, but I suspect small rework when PMIC
-becames child of ACPM, so full review later.
+Anyway:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
