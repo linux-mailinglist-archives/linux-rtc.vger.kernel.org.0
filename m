@@ -1,130 +1,157 @@
-Return-Path: <linux-rtc+bounces-3631-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3632-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C121DA713F3
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 10:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD757A71A82
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 16:36:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DF421896721
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 09:43:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB111188BA14
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 15:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6E71A0B08;
-	Wed, 26 Mar 2025 09:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2373D1F3B98;
+	Wed, 26 Mar 2025 15:36:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zqjeVpyr"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="JQ8i3ak+"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5BC1A9B49
-	for <linux-rtc@vger.kernel.org>; Wed, 26 Mar 2025 09:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5EA1624D2;
+	Wed, 26 Mar 2025 15:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742982171; cv=none; b=uvauQoZ4Kh9Ny71YPX8G7PSk/5qgciIxJ6s/8T54mxpKhyUYEbCplWsKd9tYwdmL8MikJGV2ymajmGqDbMukz3T77k+rLgTyAdN4wOxyBJfUTISFg2a1q18RaL7vtLVf3wZpmqYGW/H3sU5rAWi5zmRdSupFRO0lO27l6ExpzoE=
+	t=1743003397; cv=none; b=nxMZXK96dHNbWjPVArwU/8C+UmPR8+5mZKmKOvffokvcO2XTquXP4hrQPCgbVlRutJdhiDRLRKbzdpV/a0CG6f3tjtILMjP7YxAdZgpFj5C9Um0ZH3WSQti2hK0RPPdfWYGMaIG9rzd7lM/oWPCKxCbzMdtIMgp7s2vzrykyo1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742982171; c=relaxed/simple;
-	bh=oK9w0PHHeYSQoiTSBw6ii01fBfUomipWqhc0pGmOdEs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SFGcBCG2m9xKrlwIB4mmDIkL+ZQzcIwK1z1uXqqGdX1SX10j68zuwr/JZnfRnwyyCg9ekR0X4UVBMKxqHzkpz9zoYEPHHdIo19JARYQCEx/a5jpn6AJ3Pvhe5M3/qkH0eM57/SooussaPwodA3OkSC5IECOnpU1hkpZXAxTicY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zqjeVpyr; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-390f5f48eafso3630730f8f.0
-        for <linux-rtc@vger.kernel.org>; Wed, 26 Mar 2025 02:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742982167; x=1743586967; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oK9w0PHHeYSQoiTSBw6ii01fBfUomipWqhc0pGmOdEs=;
-        b=zqjeVpyrhgQ/NXGty1PgUN3b8mwx56PVRJzxDHl4Ock4WqFoi73/XTjZ0yMA2yGROM
-         nJHE7xet4YKfMUS4U1/t8DktJHik+cttkZ+x3CZzDXWd2wzIB/JlvsvevgJMj6NMoCrV
-         GVw1nag1t9U5b6r2H18ZqB3HquVxcwr6sO3qS0gdw3kL+Vd/4v0fR23qVSZERRq/hjDr
-         YFMsw4ULzqT4HhK/pRkwhtPYJW881jF+5yaeABRjneatqdKAq/TVWfSYTCgfDL7TaI0i
-         2l0uPOn+yEea31cxsVGhvUoO2GhphEGl9wqrQ07X5p+fTdiJxmjar+h3MHwXGb2S76+C
-         nfRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742982167; x=1743586967;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oK9w0PHHeYSQoiTSBw6ii01fBfUomipWqhc0pGmOdEs=;
-        b=IdAGkJYi+Iu9T8YoyHsuQynuxWUSniJeDMGYJvehZIWWI1NLQFXg4Ss0jWCQI7vEHo
-         ylB+5J5cheYoqQ+zbtJ8MyIM97Tm39hQw+oQFwRbqZ1hubqiVnJm8fwBqgnjHwC8VUQY
-         +N8FcysrzQCuPOyTsHa3EDpWCQR8y6GT50XAfA2CQ02SAK7RVaICpFngPPhRakQT/ayQ
-         2Yye1UPBNRFU7veOonZov400AfHbQwZDu6QN4Lw4mrum9Y6l4wKYUKMt7qW85WgOwanP
-         QbNs6kqypf4nR4yDaL1T/xXX7kdrLcr4jEpps8mUFHOlcMqXqfUd/9ncMfqyhS7I8rfP
-         uQpA==
-X-Forwarded-Encrypted: i=1; AJvYcCW7ORq6Ls4wQYgX92enmB03LFexj0yi2N09+55xr0x21/1fS9TX5KGCxx4kKcNG+I8SsSc2LfkxIP8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQB15EqOK3aFZkSkPT7JnS75zHRDKh7AwwksBc2hT8gJNBoE05
-	AA8wVw9o+XdN1Qm3jkcz/SpMzfDx6U09K3ZSt3bxLvROHz87LYqVotVUfBzYOr8=
-X-Gm-Gg: ASbGncs0IwkLvx93Leek01jD3s7FYLS7I8G4SHnYYKE5UzA9FmZwdcQR/8wHoDzbJX6
-	CluSwM7F0ngJ6mj3tgo1qV3xusOGpgVnR3IWAXA0t9zoI0hfiio5Ebclw30D9akpElVs+FIhOQw
-	UhHcas+vPIp3noz7lTtsScZ+PdtEv+tvNl59Qz+jqfdOXpdpWCX/mCKp6x5XF48UuyKe1jdhGCi
-	7POR/5HMOxDmiDPofWoxq9pg01/cdK1Edti2cNOrEwS73r18uxIO5yLyFqcjTRBGMtARhCpO8ah
-	ox89AJNX3LvPeyj/YT3xBr8iUSMrQ7PQxlGYPghjTlOU4R6zzA==
-X-Google-Smtp-Source: AGHT+IFPYFB/K6M208ce6TYKpgzYD2gbxBVrga6S1jcpfDNM/sLdTcLlHMBJoMx/mLpGmNEqFLCYBQ==
-X-Received: by 2002:a5d:64a2:0:b0:391:2c0c:1270 with SMTP id ffacd0b85a97d-3997f8ed9d4mr17888571f8f.1.1742982166969;
-        Wed, 26 Mar 2025 02:42:46 -0700 (PDT)
-Received: from [10.1.1.109] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f995778sm16406564f8f.11.2025.03.26.02.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Mar 2025 02:42:45 -0700 (PDT)
-Message-ID: <53e7fd763da3748dbc7a5205b4f93cdf9476aded.camel@linaro.org>
-Subject: Re: [PATCH 15/34] mfd: sec: use dev_err_probe() where appropriate
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, Rob
- Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Sylwester
- Nawrocki	 <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Alim Akhtar	 <alim.akhtar@samsung.com>, Michael Turquette
- <mturquette@baylibre.com>,  Stephen Boyd <sboyd@kernel.org>, Russell King
- <linux@armlinux.org.uk>, Catalin Marinas	 <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Alexandre Belloni	 <alexandre.belloni@bootlin.com>
-Cc: Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus
-	 <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, 
-	kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rtc@vger.kernel.org
-Date: Wed, 26 Mar 2025 09:42:44 +0000
-In-Reply-To: <e3dee29a-dcee-40b5-8bf4-22a6a8a7993a@kernel.org>
-References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
-	 <20250323-s2mpg10-v1-15-d08943702707@linaro.org>
-	 <e3dee29a-dcee-40b5-8bf4-22a6a8a7993a@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.53.2-1 
+	s=arc-20240116; t=1743003397; c=relaxed/simple;
+	bh=336TRgbLvYKh+AeFJ4NUZBlcZovnPjauRJIcAFMcWLk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=K4dfBoRdKfIcIQfWV1qedaMIN+iY6kn/NLqJB5BC311rfnr/ENqWMtraZzjfjh+ouwjnK9MhTgnlQW9B58PabwnvaxO1nqbvqmnr9hPU75sbHw+rU/RCyhRWvmCVYiTyE5CltnCOBDuKuFVdOzjM37rMl96TT0hB9mrePKNxKew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=JQ8i3ak+; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1743003395; x=1774539395;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=336TRgbLvYKh+AeFJ4NUZBlcZovnPjauRJIcAFMcWLk=;
+  b=JQ8i3ak+4gVP4OzSIn5VlUhsnT2/uKPCpk4t0F8j/bpVm9rkN85pdMUW
+   av3cTkLiKkwucsxxuoJx3YLXVxzfUFBv1RywJE3BUxJHeZndrMcDOIxhb
+   O15P5guDWHS2Z87fHC2HI4vJyZWm66sA5d7kC3/MGFXJQmnQhYljiHuit
+   mkGUFuR6xliw+aG/s1j+F+9J+jZnLMVl/5hhw7d8CqG+/6b9nJV8sNTyc
+   SOL85VJM0tIJMkr6G+9N3TmO6hZWRO5/LwQASrJFAg9J96DQ6wljvN++d
+   tUIh2AVZbojL9vFjEgohelHZ4O74whOIEEMLfa/8rWU0O31ju4K8NjkCd
+   Q==;
+X-CSE-ConnectionGUID: NRxSiTFnT3ucBnaYj7CaZg==
+X-CSE-MsgGUID: vHwFJPuuR/W4/UZnO2jmAw==
+X-IronPort-AV: E=Sophos;i="6.14,278,1736838000"; 
+   d="scan'208";a="44096094"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Mar 2025 08:36:28 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Wed, 26 Mar 2025 08:35:50 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.44 via Frontend Transport; Wed, 26 Mar 2025 08:35:50 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <lee@kernel.org>, <sre@kernel.org>,
+	<p.zabel@pengutronix.de>
+CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH v4 00/11] Enable Power Modes Support for SAMA7D65 SoC
+Date: Wed, 26 Mar 2025 08:35:33 -0700
+Message-ID: <cover.1742936082.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Wed, 2025-03-26 at 08:24 +0100, Krzysztof Kozlowski wrote:
-> On 23/03/2025 23:39, Andr=C3=A9 Draszik wrote:
-> > dev_err_probe() exists to simplify code and harmonise error messages,
-> > there's no reason not to use it here.
-> >=20
-> > While at it, harmonise some error messages.
-> >=20
-> > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
-> Maybe such cleanups should be before you start moving the code and
-> splitting modules into i2c/core/acpm.
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Sure, I can re-order them. I didn't want the new PMIC to depend on
-all that cleanup, as I believe that had been previous feedback (but
-maybe I misremember :-), and also to avoid the new PMIC being blocked
-on potentially contentious earlier cleanup patches, if any.
+This patch set adds support for low power modes for the SAMA7D65 SoC and
+the required components and changes for low power modes.
 
+The series includes changes in the asm code to account for the addtional
+clocks that are in this SoC.
 
-> Anyway:
->=20
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The Device tree additions are to enable all the components needed to
+keep the SoC in low power mode.
 
-Thanks!
-Andre'
+There are some DTB check warnings but that is due to the dt-binding not
+in the correct .yaml file format.
+
+Changes v1 -> v2:
+- Add missing compatible for ddr3phy, it is now in both syscon sets.
+- Fix alphabetical ordering for sama7d65.
+- Remove the incorrect reorganizing patch.
+- Remove sama7g5-rtt as a compatible for sama7d65-rtt and add
+  sama7d65-rtt as a compatible wake up source in the pm driver.
+
+Changes from v2 -> v3:
+- Correct mistake in v2 sfrbu dt-binding patch.
+- Correct incorrect dt-binding addition and formatting for rtc and rtt bindings.
+- Add missing SoB tag.
+- Cleaned up commit message for Backup mode to describe SHDWC is status
+  register is cleared for this SoC.
+- Cleaned up variable naming and usage for mcks. Changed the mcks number
+  to the correct number of clocks needed to be saved and corrected the
+  ASM code accordingly.
+- Removed the SHDWC from ULP0 wake-up source as it is not configured as
+  a valid wake-up source for ULP0.
+- Separated all the DTSI and DTS changes into individual patches.
+
+Changes from v3 -> v4:
+- Add sama7d65-gpbr to the dt-binding.
+- Converted the sama5d2-secumod binding into yaml format.
+- Add sama7d65-secumod to the new dt binding.
+- Collect and remove applied and accpeted pathces from the set.
+
+v1) https://lore.kernel.org/linux-arm-kernel/cover.1738257860.git.Ryan.Wanner@microchip.com/
+v2) https://lore.kernel.org/linux-arm-kernel/cover.1739221064.git.Ryan.Wanner@microchip.com/
+v3) https://lore.kernel.org/linux-arm-kernel/cover.1740671156.git.Ryan.Wanner@microchip.com/T/#m576233e7af84d68559afb286884c2b9294e7bc1d 
+
+Ryan Wanner (11):
+  dt-bindings: sram: Add microchip,sama7d65-sram
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: Add
+    microchip,sama7d65-shdwc
+  dt-bindings: reset: atmel,at91sam9260-reset: add
+    microchip,sama7d65-rstc
+  dt-bindings: rtc: at91rm9200: add microchip,sama7d65-rtc
+  dt-bindings: at91rm9260-rtt: add microchip,sama7d65-rtt
+  dt-bindings: mfd: atmel: Add microchip,sama7d65-gpbr
+  dt-bindings: mfd: syscon: atmel,sama5d2-secumod: convert to yaml
+  dt-bindings: mfd: syscon: add microchip,sama7d65-secumod
+  ARM: dts: microchip: sama7d65: Add SRAM and DRAM components support
+  ARM: dts: microchip: sama7d65: Add RTT and GPBR Support for sama7d65
+    SoC
+  ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
+
+ .../bindings/arm/atmel,sama5d2-secumod.yaml   | 49 +++++++++++++++++++
+ .../devicetree/bindings/arm/atmel-sysregs.txt | 25 ----------
+ .../bindings/mfd/atmel,at91sam9260-gpbr.yaml  |  1 +
+ .../power/reset/atmel,sama5d2-shdwc.yaml      |  5 ++
+ .../reset/atmel,at91sam9260-reset.yaml        |  3 ++
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |  4 +-
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |  1 +
+ .../devicetree/bindings/sram/sram.yaml        |  1 +
+ .../dts/microchip/at91-sama7d65_curiosity.dts |  4 ++
+ arch/arm/boot/dts/microchip/sama7d65.dtsi     | 47 ++++++++++++++++++
+ 10 files changed, 114 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/atmel,sama5d2-secumod.yaml
+
+-- 
+2.43.0
 
 
