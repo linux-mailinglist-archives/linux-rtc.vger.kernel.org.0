@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3616-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3617-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18D81A7110B
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:06:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0320A71110
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:07:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B6CF7A6629
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:05:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ECE9170CA5
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:07:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F02219755B;
-	Wed, 26 Mar 2025 07:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999E419924D;
+	Wed, 26 Mar 2025 07:07:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZ1SStT4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FAdnDQzt"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF52D2AF0A;
-	Wed, 26 Mar 2025 07:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6465819755B;
+	Wed, 26 Mar 2025 07:07:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742972776; cv=none; b=KY1yb8iVcD/J/aSkAXaQ31AqcBGjbREzncu0BBfu4GUCbmSkOtqscKzhI4zTTP+OLCkwSyTOLVWYnEil9gnqEDqZfXyZheLzKl+z5OqJoBMM5IBjLKIuB0R7dkuBea+9k3+ecBeAtJiKvVguZeOm82QoyCQLf+robh/gjpFtOos=
+	t=1742972821; cv=none; b=lsWexe/VkfGi0nF3NwbBVt7i7CfXfHYSq9Aa89LfitBLQQMSL+TStyvfNG89OCuk+N5TQQXjNW25uHpF0K6XXYHqID1PsMP1crRqdN6h8B7EM+hi75GGhN7qXw4HLUw4el7bt0G3y9K5zEEB57LcLL1UjBhahcONkYsx00dlzEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742972776; c=relaxed/simple;
-	bh=y5ZL2NkvMiXZc4EUBjH27cSIyJItHG6f0AS5/17uehQ=;
+	s=arc-20240116; t=1742972821; c=relaxed/simple;
+	bh=DQSksbNd3/Q+zlJhSPULUC+Oc8sDej4F0+fpwmMZY5A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C4djs67OsPW5Zps+e5aEUemQEMeEsR/tkQVf2CcEDWu4sDcPm+bWPXnot6JO+UQf39RmaP7oGskYP/Z1hTYool/R5EB1CTwY1hEaE/Rf+AfaLarhtvOoHhp+dzhI0tllF2IM8uld9OCdOeg9lDB5ZDAluY1Th+f9aLkB/c6v1JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZ1SStT4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A90C4CEE2;
-	Wed, 26 Mar 2025 07:06:06 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=gbFgEwrW4PUNsEvXws4v9lzhT0ugj5cDbDjrZZtRYScl4jEGcMM6DLpUW3QtFVAT9LC0AIvuk7/UkvfQJZMj7moS6QITSePchaVzmGPBybzB8l2Sni+AR7wB61BRZCBI1BaYTwDb+U0tjOhJB+dxwxBQDjCkSYvttzT0YR9ofcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FAdnDQzt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1333EC4CEE2;
+	Wed, 26 Mar 2025 07:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742972775;
-	bh=y5ZL2NkvMiXZc4EUBjH27cSIyJItHG6f0AS5/17uehQ=;
+	s=k20201202; t=1742972821;
+	bh=DQSksbNd3/Q+zlJhSPULUC+Oc8sDej4F0+fpwmMZY5A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OZ1SStT4b/I7CevnR0TUZukUTRRlTxzmh9WiNghS6rs2qP4zRuqtDZT2KuFjf8VUq
-	 VECdCuTnQYtM7sKAkXZbjOBpwiR0Z+mkjQIG7QAU1+IKq7I6RDofOxHEfXLf4GWvKh
-	 ifQNV9aDMauQIABw0cRWHe0VuxkvHyY8gdJLz6TRfh6g1E1CbJsZ/2rkvr/BGhFRkP
-	 qSQSDYD/viR3dvHz6MQr15is0egbQf1uh92Ru13oNgUDVn4j7DwaZYrl7kQhLs2AeZ
-	 k5Qs/1P91KeOP8WkByEc/8fOtVW8m8STAtwnp0E7k1MqqT05j9eGckLVxRAUkeEUr4
-	 ZKoxVo1In44Ew==
-Message-ID: <e91b214f-3198-403a-be61-fcfe5645be61@kernel.org>
-Date: Wed, 26 Mar 2025 08:06:03 +0100
+	b=FAdnDQztQFuGxvzDnWpD143+KfMigy4Qxwucp80zqMNK5oer+yZm4SFxjX6IyP7dZ
+	 fLKHcvBbleyNWKKGkf9b8tOfI9MEakpcW3jJvTzTi2FqyZjjyowzTy+9sTHcfJuyCS
+	 sv9xcVXAErpDw6CilKm12Y8D3jzqbrWX36xmMtQFM0RUNeFXQKRWKm/WPFYS1KrwtR
+	 Qkpqb2ZLLsKILNZy6O34mEQuhg/kS0cbPmCcnQNqySunJvyDBHN+jDcZH9z+EY7Djf
+	 njtyTCiPbGyTfa14sPHm6mDRByFrxf5B2cw/q2zLQ0vaqWaCpk2MVAsB58ao5f99xh
+	 kzG7XZB64lxiw==
+Message-ID: <dff94c54-2bb8-4eea-b8bf-deacd6197007@kernel.org>
+Date: Wed, 26 Mar 2025 08:06:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/34] mfd: sec: fix open parenthesis alignment
- (of_property_read_bool)
+Subject: Re: [PATCH 09/34] mfd: sec: slightly rework runtime platform data
+ allocation
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,7 +68,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-8-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-9-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,7 +114,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-8-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-9-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -124,34 +124,19 @@ On 23/03/2025 23:39, André Draszik wrote:
 > (move) all I2C-specific driver code into its own kernel module, and
 > create a (common) core transport-agnostic kernel module.
 > 
-> That move of code would highlight some unexpected alignment which
-> checkpatch would complain about. To avoid that, address the error now,
-> before the split, to keep the amount of unrelated changes to a minimum
-> when actually doing the split.
+> Transport drivers will have to do device tree parsing, and the core
+> driver will allocate its own additional memory as needed.
+> 
+> In preparation for that change, separate out runtime platform data
+> allocation from device tree parsing.
+> 
+> Having this change will create less churn in the upcoming split of the
+> transport-specific parts.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> ---
->  drivers/mfd/sec-core.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/mfd/sec-core.c b/drivers/mfd/sec-core.c
-> index 83693686567df61b5e09f7129dc6b01d69156ff3..b931f66f366571d93ce59c301265fe1c9550b37d 100644
-> --- a/drivers/mfd/sec-core.c
-> +++ b/drivers/mfd/sec-core.c
-> @@ -276,10 +276,12 @@ sec_pmic_i2c_parse_dt_pdata(struct device *dev)
->  	if (!pd)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	pd->manual_poweroff = of_property_read_bool(dev->of_node,
-> -						"samsung,s2mps11-acokb-ground");
-> -	pd->disable_wrstbi = of_property_read_bool(dev->of_node,
-> -						"samsung,s2mps11-wrstbi-ground");
-> +	pd->manual_poweroff =
-> +		of_property_read_bool(dev->of_node,
-> +				      "samsung,s2mps11-acokb-ground");
 
-I don't think this code more readable. The continued line should be
-re-aligned.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
