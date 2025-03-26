@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3623-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3624-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A590A71152
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:24:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AC57A7115D
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:27:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17EA61883B60
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:25:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC69E165A6F
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1373C19C55E;
-	Wed, 26 Mar 2025 07:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEB419CC05;
+	Wed, 26 Mar 2025 07:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OCUF72Ct"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mQ6R2H5R"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D314F170A37;
-	Wed, 26 Mar 2025 07:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34AF2E3361;
+	Wed, 26 Mar 2025 07:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742973883; cv=none; b=dsrohPkZU0nJQRrKmayTafdhKi46/RQ9Z43gOigpUxNS5mWOUHD+fIcFXiHyN6hnj9kTNfgzqEIYjT2DJNrDBROPS822/SF3nV0w24km5di/DhUlAuWt025LTAi24MyxWx6bF0TfVE9IwbZuntrivr/1ednP7lf56G9JETtI+Is=
+	t=1742974072; cv=none; b=ieZ7Pi0+q8t7T8SXvMtnlWsCrCJP2UlA5UDCQJgK3GQWwj1NEJ2TdN5Fb5o1nrCzQtfleX+5teZ461OFy/JJfjt7ud+k1VHdRu8QmFr4P6Ga6sPhe1ONyekPtFmdk545+Gmau3TgHyO1bQ5TufXupCtogiJc6DSYzsATUcm6eyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742973883; c=relaxed/simple;
-	bh=vBPa+PfaBJFraxGm6Tyeais+n0mMhPTmkO+23plxVc0=;
+	s=arc-20240116; t=1742974072; c=relaxed/simple;
+	bh=4L6O5vWMe19NsMKIgFl5zY9mQkMQ9bNd9WXnG7IJLP8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qf0oJyxWv0cCh6OP07u/08I9likKomwhepCjl/KOsKirMM2gEIlffo7/2Jm97urrAaHuRUfP2GF7bBoLGQtXnPY36WUe9QT5rt64alKUUMTYV1u/bA5bB3+Yk9yy5DG1WERME4Har+1UmFV/6LLYEvf1GB4bxU/UDC0lBDqhWHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OCUF72Ct; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E11C4CEE2;
-	Wed, 26 Mar 2025 07:24:32 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=DlwKlV2RUfnfBFEBL/eZUHijbebFp1Fvpm1zZ9vaccbKjarxOjVksr+PS9OlFzeNhqFAPN9LHY6k+ZipOXezPx2P5gdG9MSBrFy1tmW/ufSxzzN7REhc4boZExPMdf11WPe3yp39JCaqjzUo7rdcmt5DMJZwduGcrg+DdKM+f5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mQ6R2H5R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09D9C4CEE2;
+	Wed, 26 Mar 2025 07:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742973882;
-	bh=vBPa+PfaBJFraxGm6Tyeais+n0mMhPTmkO+23plxVc0=;
+	s=k20201202; t=1742974072;
+	bh=4L6O5vWMe19NsMKIgFl5zY9mQkMQ9bNd9WXnG7IJLP8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OCUF72CtvPwfx71JJtUeh03uXsprTiSyoLugGtZvZ5aOtnyDn1x1YsLDviOIb18Kb
-	 arynQfObXWinc10CrTpLLb/ptcCaebKzlm/std/+SA7IW4EdBtfxoWo5x2C6YxyGn8
-	 LemycJ3x8pE9yMz0mqeQLcP0dntDFf72oPQguQ6N7a7N/wzHR+s97p3sUtlf1NIy5d
-	 OZ09SAw5T/B37HUlyDEVQmtLV0JHCvkWxjYX3qG3J3QEb7mIBv1u6HjJ1HxM+3lKo5
-	 Wrt1D8AOgMX3F80EuMgFP4lWiqISGOXrzLMQbzb1fvHCC9WMRtXhNIJRJ0L9A+Cpee
-	 C98r+xVJZa3cA==
-Message-ID: <e3dee29a-dcee-40b5-8bf4-22a6a8a7993a@kernel.org>
-Date: Wed, 26 Mar 2025 08:24:29 +0100
+	b=mQ6R2H5R95ZeFueZHxdOU+2a+D18JdANexcqH4x7vXGSaXyNX2LSIDOIVVhB68lnD
+	 QusPlA6fD2uEl6PpNxKod5+JOd+Q7zWhoTserC3WTuu2OWaSLqR7K9Qm+zMK9CX0gx
+	 kql9+AXbOQBnAiWKskPC8PBNZB0tmfUDpxXYnoALuvdJKDWgCmFbXPIrHhNRKf4HvT
+	 0WuV0Cj633puSg18j0HQle1iEaSbGRtO8VFnoDEOPZxJ9FVNZarHR/L9t5iek/z7oj
+	 jW2A8bdTrCYitTGJzl9f7r2Enk3CGzlCNsatpNwGSgcn3rBU51uPb0Cm5bm4ZeqIIo
+	 evpEJPBv0GJ7g==
+Message-ID: <60b2341d-4277-42ce-8682-9f41efd50f32@kernel.org>
+Date: Wed, 26 Mar 2025 08:27:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 15/34] mfd: sec: use dev_err_probe() where appropriate
+Subject: Re: [PATCH 17/34] mfd: sec: drop generic regmap config
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -67,7 +67,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-15-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-17-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,23 +113,32 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-15-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-17-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/03/2025 23:39, André Draszik wrote:
-> dev_err_probe() exists to simplify code and harmonise error messages,
-> there's no reason not to use it here.
+> When support for PMICs without compatibles was removed in
+> commit f736d2c0caa8 ("mfd: sec: Remove PMICs without compatibles"),
+> sec_regmap_config effectively became an orphan, because S5M8763X was
+> the only user left of it before removal, using the default: case of the
+> switch statement.
 > 
-> While at it, harmonise some error messages.
+> Subsequently, the accidental new users have been updated, so
+> sec_regmap_config is an orphan again, and can and should be removed
+> from the code. Doing so will also ensure future additions to support
+> new devices in this driver don't forget to add a regmap config.
+> 
+> Drop this fallback regmap config.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-Maybe such cleanups should be before you start moving the code and
-splitting modules into i2c/core/acpm.
+> ---
 
-Anyway:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Please squash it with previous patch. Logically you want to get rid of
+default regmap config - that's the change you are making. Your previous
+patch - adding regmap_configs for these variants - makes no sense on its
+own, because they were using the same regmap config already - the
+default one.
 
 Best regards,
 Krzysztof
