@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3615-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3616-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2087DA71105
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:05:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18D81A7110B
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:06:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 458CD3B6373
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:04:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B6CF7A6629
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37FC197A76;
-	Wed, 26 Mar 2025 07:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F02219755B;
+	Wed, 26 Mar 2025 07:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILOc0YmL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZ1SStT4"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23A22AF0A;
-	Wed, 26 Mar 2025 07:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF52D2AF0A;
+	Wed, 26 Mar 2025 07:06:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742972678; cv=none; b=sYiDK+lGx6ZwpOtDOkOnSC6vnW133Vv9p9r42YDVsixfHDlX6P5FHciVMGn/pKsQVqYnvu/lMKOFmqlq34pqp6bUageGJjvXlHHuriJ1Id6bf9WSifTnTUs3g3YH0bveZ0w7I8UeiM0wWMkU9SJ/p8S3B3sJedx2F17aqLu5HwQ=
+	t=1742972776; cv=none; b=KY1yb8iVcD/J/aSkAXaQ31AqcBGjbREzncu0BBfu4GUCbmSkOtqscKzhI4zTTP+OLCkwSyTOLVWYnEil9gnqEDqZfXyZheLzKl+z5OqJoBMM5IBjLKIuB0R7dkuBea+9k3+ecBeAtJiKvVguZeOm82QoyCQLf+robh/gjpFtOos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742972678; c=relaxed/simple;
-	bh=H0hAgv2dinYgXS1a0/TZMvvY6z6fWOXveHrCP7S3UJw=;
+	s=arc-20240116; t=1742972776; c=relaxed/simple;
+	bh=y5ZL2NkvMiXZc4EUBjH27cSIyJItHG6f0AS5/17uehQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vkp6gT/SAIaUaEo08C6grGYUKNPNUXNoQT9xDWBWImygaQ2NaoFMsUGPe97sCqB8FSyqOsrC8iyArWtxNnvanB8pezP5E7glsUjLN66RzPXyeMzycmYYvmyEMoP0U+VPbyRvE48CSD21NBHQNzObtzyt9SQDQywDiJdB0ndJenc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILOc0YmL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83789C4CEE2;
-	Wed, 26 Mar 2025 07:04:29 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=C4djs67OsPW5Zps+e5aEUemQEMeEsR/tkQVf2CcEDWu4sDcPm+bWPXnot6JO+UQf39RmaP7oGskYP/Z1hTYool/R5EB1CTwY1hEaE/Rf+AfaLarhtvOoHhp+dzhI0tllF2IM8uld9OCdOeg9lDB5ZDAluY1Th+f9aLkB/c6v1JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZ1SStT4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A90C4CEE2;
+	Wed, 26 Mar 2025 07:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742972678;
-	bh=H0hAgv2dinYgXS1a0/TZMvvY6z6fWOXveHrCP7S3UJw=;
+	s=k20201202; t=1742972775;
+	bh=y5ZL2NkvMiXZc4EUBjH27cSIyJItHG6f0AS5/17uehQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ILOc0YmLKOIvk4BRcl79Bv+qKI5Vigz7Bz5KWoEzATa5wBkEUuRNH2as7dWqDgmFT
-	 niJuiYc50bFRmh+wS46Uezu1dfbyZP4CIlAezK0eOE4Y8jgD59NiUrnqRP86xh3/LT
-	 AXGecM4vco6Wv6vxkMEXBXliscLH0X7LMnn1nrC5w3ImZOLt08Hl75P+wDLsKWnLTA
-	 RF69Bw4pTpmovMzm8UQ+iH84VdleF42IH0ixwkyfCkNbcXqYMQVMKQNRbhewk3lchJ
-	 1xqvtXZRwXAsw1xKA7VGpVBaQkM5vop+aDw0A2Q0juk1YQWbPHAl8TpmTrx+o8Zg1N
-	 8jbqCPwLebtwQ==
-Message-ID: <627a0335-4ceb-4107-a4d7-78308c9ee217@kernel.org>
-Date: Wed, 26 Mar 2025 08:04:27 +0100
+	b=OZ1SStT4b/I7CevnR0TUZukUTRRlTxzmh9WiNghS6rs2qP4zRuqtDZT2KuFjf8VUq
+	 VECdCuTnQYtM7sKAkXZbjOBpwiR0Z+mkjQIG7QAU1+IKq7I6RDofOxHEfXLf4GWvKh
+	 ifQNV9aDMauQIABw0cRWHe0VuxkvHyY8gdJLz6TRfh6g1E1CbJsZ/2rkvr/BGhFRkP
+	 qSQSDYD/viR3dvHz6MQr15is0egbQf1uh92Ru13oNgUDVn4j7DwaZYrl7kQhLs2AeZ
+	 k5Qs/1P91KeOP8WkByEc/8fOtVW8m8STAtwnp0E7k1MqqT05j9eGckLVxRAUkeEUr4
+	 ZKoxVo1In44Ew==
+Message-ID: <e91b214f-3198-403a-be61-fcfe5645be61@kernel.org>
+Date: Wed, 26 Mar 2025 08:06:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/34] mfd: sec: move private internal API to internal
- header
+Subject: Re: [PATCH 08/34] mfd: sec: fix open parenthesis alignment
+ (of_property_read_bool)
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,7 +68,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-7-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-8-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,24 +114,44 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-7-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-8-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/03/2025 23:39, André Draszik wrote:
-> sec_irq_init() is an internal API for the core driver, and doesn't
-> belong into the public header.
+> As a preparation for adding support for Samsung's S2MPG10, which is
+> connected via SPEEDY / ACPM rather than I2C, we're going to split out
+> (move) all I2C-specific driver code into its own kernel module, and
+> create a (common) core transport-agnostic kernel module.
 > 
-> Due to an upcoming split of the driver into a core and i2c driver,
-> we'll also be adding more internal APIs, which again shouldn't be in
-> the public header.
-> 
-> Move it into a new internal include.
+> That move of code would highlight some unexpected alignment which
+> checkpatch would complain about. To avoid that, address the error now,
+> before the split, to keep the amount of unrelated changes to a minimum
+> when actually doing the split.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
 > ---
+>  drivers/mfd/sec-core.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/mfd/sec-core.c b/drivers/mfd/sec-core.c
+> index 83693686567df61b5e09f7129dc6b01d69156ff3..b931f66f366571d93ce59c301265fe1c9550b37d 100644
+> --- a/drivers/mfd/sec-core.c
+> +++ b/drivers/mfd/sec-core.c
+> @@ -276,10 +276,12 @@ sec_pmic_i2c_parse_dt_pdata(struct device *dev)
+>  	if (!pd)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	pd->manual_poweroff = of_property_read_bool(dev->of_node,
+> -						"samsung,s2mps11-acokb-ground");
+> -	pd->disable_wrstbi = of_property_read_bool(dev->of_node,
+> -						"samsung,s2mps11-wrstbi-ground");
+> +	pd->manual_poweroff =
+> +		of_property_read_bool(dev->of_node,
+> +				      "samsung,s2mps11-acokb-ground");
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I don't think this code more readable. The continued line should be
+re-aligned.
 
 Best regards,
 Krzysztof
