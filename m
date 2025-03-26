@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3620-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3621-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 679B2A71137
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:22:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51073A71140
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:22:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41A8F1896247
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:22:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E036B174603
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:22:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2812199EAF;
-	Wed, 26 Mar 2025 07:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03BF819FA93;
+	Wed, 26 Mar 2025 07:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eNvUaRf7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H9WbIFc7"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8778842069;
-	Wed, 26 Mar 2025 07:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C399C19E99E;
+	Wed, 26 Mar 2025 07:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742973738; cv=none; b=SRKM8pGRUfp35+s4DsX/u+/u7yuBIObnsiGQf4Y4Fn0ptnh1faEvGqrnie/Cd0jINlAzMbLaoES3BAq3Od3D3scBABnsL2RgXbnNGESyhY5CLgyn4BvHa25w4K+GG89OI3ABgarsdWbSWLilz/CfFKAxV0GifT5oqfb8yNfwCBo=
+	t=1742973746; cv=none; b=kZcGVoHmCF1HcY8i6OfpzzGPxBoA0+1/TVuH885pVQ3EqcSQBhjH/d53eclG0AB8ECTkuNbsWhGZG24PqHh+Usku3Yb2huz3+r7HHZEu8eZ6slYUg945hFQgnjIxHjr7gCzmt/zw6hqNHPXYea7wGSVmSB0u0NhAmtmfiIg68Ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742973738; c=relaxed/simple;
-	bh=HZFgVVhOB0KsBzRUopCtdPMyvfeGgA3jzblRuvQ6lvo=;
+	s=arc-20240116; t=1742973746; c=relaxed/simple;
+	bh=3FVu++ACO5iLB7mLMJ3UP5egk6lWRT7jlsPK4mNFA4U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BewgSX2rj+8eB/t7XZRRzjr7lHpwpVjsiI+9K27bn4ml+GmX5n1fo4hSQaMvi+nWf7wsomuPO4Zeq+dghzr934/6DyGsIbi9J3oKsEknUvc28V9U8zi1GU09Wve7VF8yJfKVX3Dt6Vdu9XfP4lJBtrnyySJtFyFwcY5lE9FYj60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eNvUaRf7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62051C4CEE2;
-	Wed, 26 Mar 2025 07:22:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=LmalhqJcp/mzLfyYZJFxJkNlHod202rg3u1mnvVo8iQE9p//aXD9adjnuMobh9GM6B/yZCYJ5Wqly3A2XoUHZfQUrBcjtbNsXcljTm8l0jfqhnivO5k58L81faiX38WEYV4Pi0c4RhQ5zEGp4ASdQTIMreTLNQ03BVXTlg7teRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H9WbIFc7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105E0C4CEE9;
+	Wed, 26 Mar 2025 07:22:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742973734;
-	bh=HZFgVVhOB0KsBzRUopCtdPMyvfeGgA3jzblRuvQ6lvo=;
+	s=k20201202; t=1742973746;
+	bh=3FVu++ACO5iLB7mLMJ3UP5egk6lWRT7jlsPK4mNFA4U=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eNvUaRf70xCrqQsDGWgOlEVT43drKQhg/+5ON60uUncPJf1bD3Nir63qxm28auAiF
-	 7NrXzQn/25vg3D3VtfiI/e7FD6aPjNsfoPvLiS7Zx7jUcNOMDwNRXGEYLrUfuofxPL
-	 h1J5XAeon+VCOOuGR8BwGnEKid/xEftBZ9hspvQh4trafehX63PTMH2NJ1+pc7DGhC
-	 betn7lBK4iSsEEC+WHtwSxq5oBi803NewNPBPaqtvw6YwVb2lMOh+1fnNC3aBV/uqd
-	 +za3vtwAnmaAMdKyuhZN6ULvMGWJVPRmlQcKr3UJfyjCcBq1/88F1Q9V6B3D5KoeE4
-	 NUINpeyKKDWfw==
-Message-ID: <6bd3c029-807b-457c-8ada-2d895a96bc84@kernel.org>
-Date: Wed, 26 Mar 2025 08:22:02 +0100
+	b=H9WbIFc7erv7Of89dLswcex/NrlhJLnC1nQuO96n7P9ffqX0yHjEarM7ZZAYX+YeJ
+	 PhtCeeZPbZfWOyFz/6Y+RBOz9BjWeroQFUx+C3a1uyAEPglxEXi2mBZsBTsajutQfK
+	 Pzp1/cIBI89t5LYbKK6WEHIscZp/44ehLrZ4m/l9PPndBEHXpvHO03KEmVyC5aiNaS
+	 lKzmTzO0b13M/ms1fmG006FQ0FeOOw14rQi1c7B+vMjETkVo2hcWA/Z7XRMs/Zy3Sk
+	 FyoZlVXMQXMXcg0jzFoTuqgfs5+VEgnl0G5qH80B9TQFxXNHiCcX7Xfy3A8+mF+okO
+	 wG7A6lXkj4ZPQ==
+Message-ID: <ac259b12-4fa1-4dd1-8a58-a24faa0bf619@kernel.org>
+Date: Wed, 26 Mar 2025 08:22:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/34] mfd: sec: merge separate core and irq modules
+Subject: Re: [PATCH 14/34] mfd: sec: sort struct of_device_id entries and the
+ device type switch
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -67,7 +68,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-13-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-14-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,33 +114,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-13-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-14-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/03/2025 23:39, André Draszik wrote:
-> There is no reason to have these two kernel modules separate. Having
-> them merged into one kernel module also slightly reduces memory
-> consumption and module load times a little.
-> 
-> mapped size (lsmod):
->          before:             after:
->     sec_core   20480    sec_core   24576
->     sec_irq    16384
->     ----------------
->     total      36864
-> 
-> Section sizes (size -A):
->          before:             after:
->     sec_core    6780    sec_core   13239
->     sec_irq     8046
->     ----------------
->     Total      14826
+> Sort struct of_device_id entries and the device type switch in _probe()
+> alphabetically, which makes it easier to find the right place where to
+> insert new entries in the future.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> 
 > ---
-
+>  drivers/mfd/sec-i2c.c | 18 +++++++++---------
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
