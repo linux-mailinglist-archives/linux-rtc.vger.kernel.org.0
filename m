@@ -1,150 +1,146 @@
-Return-Path: <linux-rtc+bounces-3612-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3613-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB2F4A70F39
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 03:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4060DA710F5
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:03:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76E8A170B7E
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 02:53:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8EEA16D340
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61ECD1519A3;
-	Wed, 26 Mar 2025 02:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49F4619539F;
+	Wed, 26 Mar 2025 07:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwoA4H+y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfzrFpVU"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBFFEEC3;
-	Wed, 26 Mar 2025 02:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A83B2AF0A;
+	Wed, 26 Mar 2025 07:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742957589; cv=none; b=cisu7RmgZ/WBNW2IhKaCXce3KCJAqd1CsZjt6Y9St3HoRFUwi6Ok762PRTWLKtk+ptKFuHSLOvD/MEG/rCUuWNXqGXnbenaGihv/PbiK7knmGe/lrRs7c/RI8ZNcG6KgKuUmXcXM0MCcAW383C/XeQcTec3fL1VtlvbsYPs0GAE=
+	t=1742972598; cv=none; b=gEaMTfE3HAFLtmWmv8csfgUwwA8qkdO1JEFNURcxNgPFHGBOuIT6Vs2BQlA3iZLcgfzdqfD2ABDimKicwOJTIm+NNV4sWh+BERcRSMntpgFXmdDOmR4rZsrlhnTkkyStI81tWXXNL8r3VC9eG3TcZyTVn37vexK98kfzw6DOmYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742957589; c=relaxed/simple;
-	bh=tR0hpiSjFO/WspQVHGVT8zUQ9voaGhpKDs6/znEN4Yk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uOmWWwCRrJPB1ez2EhqQGRPCGJ3hC98u7cnxduuYqQgrqT06I3AdG74bIg8BnBHt05UrVZ4qppZFwH40wx9k6YXsZpR1HHm4K9scmjtrwhUFDlv7TsAcWJnsj1pkm/sSE5+ezLHIH6XMWzYZyj3HIIn0JS1Y9By+88PmCPHsWKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwoA4H+y; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6fecfae554bso54802517b3.0;
-        Tue, 25 Mar 2025 19:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742957586; x=1743562386; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fRVOk3+qVIByxfoFBHmyldpu57c1EQEApVPRpT4+B7I=;
-        b=OwoA4H+y9QtFLr/UPxpxX8uSphf1BuR5upEdkf3m4sitIyWWd3b+AhxsL/wPpH1f7D
-         ulTD0Fc2mfcqNGONcLpLsbSkdAg6KvepuyHOvJ+DN+wDpbsZ4XSBbKLtsLuAimSOplhK
-         78ICAfVyCwz8303RS3A3hmxn3tvzvfKTaZj2Mri1FZviCznK8S1JzFhVczSjXZrbHrMJ
-         4+Wh7Cmjy8fYl5q1pf+2e4U3HCDaS5RiLYpS5UVb0jZd841TW3bFYLpcADwgbqFQTtAP
-         IbHgfm6ZZpIJjK6cxIIAsz8GQoqfJyW5/4WixLKTcT7/YNiShlEuef3J4HpOVQ4SGGHg
-         gcBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742957586; x=1743562386;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fRVOk3+qVIByxfoFBHmyldpu57c1EQEApVPRpT4+B7I=;
-        b=qi1b1HGcGL0qblM0I2l811M6ZCbeVLDkP3WH+0aCKU/G48JBkwo3Ob8cra6Z+FxS4S
-         hP/R6+p/LzcJIA8+6x1LevrkQvin+355R83E09p6V/Q7Z/8ZK7brrO46CxSeO2kHhSkm
-         Qwbg3MPBBeON5ntYZVmIkTk33ai+p50Y0AMauTH94A9eRLp9JMb2Yj5FJuU2swlI9lTE
-         6SDWLvxUf/OPcLZlCO5JVdo0vk03RRwJQZxQO8Gj97UF1mO0fXKfzVBz+CqNcmmHP5e/
-         fEEvhtk8kWBTYzfBF/Amyci6T+aRsPYDZRRVqa6XxDYji+4Rg61zwPpBN3JZwNQrwS47
-         JHPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUU/EFzSWGimenfJn/RCFCemPUSviJCxjpspLKhqk0rLCu8Gxw5+SdoMsPYKenP7r40UIQh2LNb8ShP@vger.kernel.org, AJvYcCUblOWL728ecvO4pqguuQo5Z3CsUuC9wcHcYPt4K7AAUbfhaJKCIFCbd5c0nxqCyWUYTCFafBeHjkxTtQ==@vger.kernel.org, AJvYcCUwETAayMPQst9+/HvousaxpvRH007ySznxBCOSjK5WL8tPGV7LgCGrIemueBHKjQAzCvP0qxOto6o=@vger.kernel.org, AJvYcCVc1vbPdsps0JNVQ8OfWFgGzv0T8BhhSUQzlYBbebHddq5yeE4kEPjLS3LRx2/GW2pLNBnxdZtLgTSgVgnr@vger.kernel.org, AJvYcCVsE71xkfTpIBkaMCBmutrvz4cAbUtfpaGj/ueEdeSBuGyL1fR37y8QgHjclwhqOMfy68VU8OUI4W8kBo0=@vger.kernel.org, AJvYcCW1RWrM9JDBaxazvfawaonn681JbuMqtMlnYl1FQDIbxmWgAH6liKOIQfh16rfiAaoP/8ba/lDhec0vKqTsFBo=@vger.kernel.org, AJvYcCWA3tZ/MWfMc+brJ3YzwaUlVTy4eJWrUV6dpesHhTA9eMQlMQC6bll9kAUzb3maMwp1bmQv7noi@vger.kernel.org, AJvYcCX+nVozsYRLyHOdFxRVIBtlKt7c769s9QuAzbc1nnT4SF/F38KFYNiKawmAbicKkXRc9G+4s6GsWJSl@vger.kernel.org, AJvYcCXVUjduQ49oRrjF3+EQPwabdnlbuUfjy6YPeh37+H8OGRziDTmCwQnfVjGhZuWc1GeuDybRlDRmR6Z3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyccvm+edfmFmb12tlWXec36Ug52+c5LI8PUN/A8Urwt9jAtvlM
-	rofwd0ixbdvL2E5gl0z3qKmu8ykJRHejqnl2CcqrM/PHOivodDdg3ZlKsavIEn7rKxNcW9Aw/1K
-	9Y/5aKYvT1rs+LXnPtV+bsjWQ2Fc=
-X-Gm-Gg: ASbGncsFGJonJXSXzMnTgpE7Llfzy/pFyhT2rOZKqpM4NnnHxMegHi2JMy/lQK4HU/1
-	Zqy4Bx2zQgNOC/J51vE7tPh0WBIHvEcthq9RYnSf0O2cugSk/Ej34dJIcyDW8IaojPIqi9mQCVY
-	aHMQLbX9MZ2n60yUdaeJ0oaV3u35VbJfAAtTq+17RavsRAecgjs3t5/CLjaJIv
-X-Google-Smtp-Source: AGHT+IGFmM/43LiglnO1PLksaWD1bA8yVyyua4atAOI0toysfW72PAufjGsdZP3qrneDzJlMRZpR/DRSuqkw2K1SlX0=
-X-Received: by 2002:a05:690c:6c85:b0:6fd:33a5:59a with SMTP id
- 00721157ae682-700bac6b12cmr265622027b3.18.1742957586397; Tue, 25 Mar 2025
- 19:53:06 -0700 (PDT)
+	s=arc-20240116; t=1742972598; c=relaxed/simple;
+	bh=/fi76B5UtUwuwMA1yexCDk8ZTpcHFFnF0aLg1Y/cQUg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TSpbATYWLad9E1zUPWuy+h/jtG1GCNsBFSdvUcDfZNnfCPzkm8ffObaGluYI4ER4RsgiKr3O9ZLNbWiXkYVN0wZQqAt3kIJQcVPW2X9lXFUEGF1uMemljKX3oExfJWy0EQKS/jxHLwcqBqUkn+dcMctBRTKu5ruYGMtwJ7C01ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfzrFpVU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2FBC4CEE2;
+	Wed, 26 Mar 2025 07:03:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742972596;
+	bh=/fi76B5UtUwuwMA1yexCDk8ZTpcHFFnF0aLg1Y/cQUg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GfzrFpVUxkChqlw79NMqvwzC4dVc5hJYOr/oeX7CD4pEWYqs8qVivKvvANfKrbtz3
+	 6XiA0M/wWJ8T8c/F1zEIu+NIKBY2X5FfYJJjVxfF4opH44do+Wn0zzg/I/HQDymLBB
+	 5JCo47b22IFmtyyGdY48HWCkhMNZS+2x8sNT68J8Uf8R77M/roVZNg6jXRDztl397Q
+	 319AZfKFr6K5lJBS20WN/Y0uBDDdUi9VKk557hJevSnaplWTGA8vRX53Uygdh8RsGc
+	 bPo/eqQAKrPwL0FO5L/ZZFiB45FuiRzVD5x8fu65ECgLQqm479w/sFgZNcFgTIx2/V
+	 ojcwzAZo5nPQw==
+Message-ID: <f1e24507-7cf3-4e0d-8989-05ef3aaa2708@kernel.org>
+Date: Wed, 26 Mar 2025 08:03:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com> <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com> <20250320145042.GS3890718@google.com>
-In-Reply-To: <20250320145042.GS3890718@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 26 Mar 2025 10:52:54 +0800
-X-Gm-Features: AQ5f1Jr-qehcBUjCHKAC9Ig86kbnYpN20BwJHFrPhGUZx482dDzZ5qYruqNjkmE
-Message-ID: <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/34] firmware: exynos-acpm: export
+ devm_acpm_get_by_phandle()
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-3-d08943702707@linaro.org>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250323-s2mpg10-v1-3-d08943702707@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B43=E6=9C=8820=E6=97=A5 =E9=
-=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:50=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > >
-> > > IDs are usually given in base-10.
-> > >
-> >
-> > Fix it in v9.
-> >
-> > > Why are you manually adding the device IDs?
-> > >
-> > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > >
-> >
-> > I need to manage these IDs to ensure that child devices can be
-> > properly utilized within their respective modules.
->
-> How?  Please explain.
->
-> This numbering looks sequential and arbitrary.
->
-> What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
->
+On 23/03/2025 23:39, André Draszik wrote:
+> The upcoming Samsung S2MPG10 PMIC driver will need this symbol to
+> communicate with the IC.
+> 
+> Export it.
+> 
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> ---
+>  drivers/firmware/samsung/exynos-acpm.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/firmware/samsung/exynos-acpm.c b/drivers/firmware/samsung/exynos-acpm.c
+> index a85b2dbdd9f0d7b1f327f54a0a283e4f32587a98..7525bee4c6715edb964fc770ac9d8b3dd2be2172 100644
+> --- a/drivers/firmware/samsung/exynos-acpm.c
+> +++ b/drivers/firmware/samsung/exynos-acpm.c
+> @@ -741,6 +741,7 @@ const struct acpm_handle *devm_acpm_get_by_phandle(struct device *dev,
+>  
+>  	return handle;
+>  }
+> +EXPORT_SYMBOL_GPL(devm_acpm_get_by_phandle);
 
-As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-but I need fixed IDs.
-For example, the GPIO driver relies on these IDs to determine the
-group, allowing the firmware to identify which GPIO group to operate
-on through the API.
+If binding changes to parent-child relationship, this might not be needed.
 
-> >
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x2),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x3),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x4),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x5),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x6),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x7),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x8),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x9),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xA),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xB),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xC),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xD),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xE),
-> > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0xF),
-
-
-Thanks,
-Ming
+Best regards,
+Krzysztof
 
