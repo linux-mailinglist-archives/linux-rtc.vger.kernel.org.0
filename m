@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3619-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3620-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7448CA7112D
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:16:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 679B2A71137
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 08:22:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B6F63B84CF
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:16:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41A8F1896247
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Mar 2025 07:22:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1E7192D9D;
-	Wed, 26 Mar 2025 07:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2812199EAF;
+	Wed, 26 Mar 2025 07:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SiM/K+MY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eNvUaRf7"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D862A33F9;
-	Wed, 26 Mar 2025 07:16:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8778842069;
+	Wed, 26 Mar 2025 07:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742973385; cv=none; b=lIut6HPZ+5LdnTpN5/QEIBlZQkKgVy55iidXpUiJeGjTKwfw/QKdW8VQLnRZPFbUvvR4GVDqeS+ZM8rVukFgIf6qMnHw12dga2llM/IYsYGbyv15FqZIhnC50jSuS/BWLxnt1ZEQ5wtqmV9F29Ha7ag51/x/TXX6m8X/S+MIj4c=
+	t=1742973738; cv=none; b=SRKM8pGRUfp35+s4DsX/u+/u7yuBIObnsiGQf4Y4Fn0ptnh1faEvGqrnie/Cd0jINlAzMbLaoES3BAq3Od3D3scBABnsL2RgXbnNGESyhY5CLgyn4BvHa25w4K+GG89OI3ABgarsdWbSWLilz/CfFKAxV0GifT5oqfb8yNfwCBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742973385; c=relaxed/simple;
-	bh=+ewMMo/IRoCGx4xjn+HDjRp0hvPMRyGs8cHwt+8dVnI=;
+	s=arc-20240116; t=1742973738; c=relaxed/simple;
+	bh=HZFgVVhOB0KsBzRUopCtdPMyvfeGgA3jzblRuvQ6lvo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qPbKU4XzasrU8Lt12h+8dk9LcdPltGWLqtsywoiqDFRcQTPvDIH67vBKETlP3gGbOH3Cw14ciHnujyIhakTEeoAew+7yWhRnZ61uPHC8HMKtozBVkXOfFUzOUNEgTmUwvTjAiUw6OJgimyswCvZcdcB+Ba0CkKmTwFCpbAxzR5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SiM/K+MY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B19AC4CEE2;
-	Wed, 26 Mar 2025 07:16:15 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=BewgSX2rj+8eB/t7XZRRzjr7lHpwpVjsiI+9K27bn4ml+GmX5n1fo4hSQaMvi+nWf7wsomuPO4Zeq+dghzr934/6DyGsIbi9J3oKsEknUvc28V9U8zi1GU09Wve7VF8yJfKVX3Dt6Vdu9XfP4lJBtrnyySJtFyFwcY5lE9FYj60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eNvUaRf7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62051C4CEE2;
+	Wed, 26 Mar 2025 07:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742973384;
-	bh=+ewMMo/IRoCGx4xjn+HDjRp0hvPMRyGs8cHwt+8dVnI=;
+	s=k20201202; t=1742973734;
+	bh=HZFgVVhOB0KsBzRUopCtdPMyvfeGgA3jzblRuvQ6lvo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SiM/K+MY+w+aS+dpTaviuUXsQZdjFiFU/mYCMBJOFdAA2unZ6WbK2vF++2zBXfJ+n
-	 etYDTSHlfiiN9RzRDeH7HNfAGPvIYMe+BBbkz6DtvbqH8vS1qA86F9zEahZ3gqDIyL
-	 NjCsC3OpbZJ+32aCnmMJd7LeidTyiQC4aYMHOpSfHWYO0pJz8H6MWGlWpahmVw0hYq
-	 fnI5kFW472t/F2PvrU/Dsn3QM1mi1h6lg92gFwDBmXCv06r2nbNF/gxcrjdki5nEdb
-	 sbptbr/FPnn8s/O4iXuqZkRZCEUmSY4TsDtFkUsQNUTRgqzlPTZ1nXNXRTuI9o3GQR
-	 Bbg2vnMmIVRtg==
-Message-ID: <b733eff2-171e-4ab6-8546-565d87d5ba84@kernel.org>
-Date: Wed, 26 Mar 2025 08:16:12 +0100
+	b=eNvUaRf70xCrqQsDGWgOlEVT43drKQhg/+5ON60uUncPJf1bD3Nir63qxm28auAiF
+	 7NrXzQn/25vg3D3VtfiI/e7FD6aPjNsfoPvLiS7Zx7jUcNOMDwNRXGEYLrUfuofxPL
+	 h1J5XAeon+VCOOuGR8BwGnEKid/xEftBZ9hspvQh4trafehX63PTMH2NJ1+pc7DGhC
+	 betn7lBK4iSsEEC+WHtwSxq5oBi803NewNPBPaqtvw6YwVb2lMOh+1fnNC3aBV/uqd
+	 +za3vtwAnmaAMdKyuhZN6ULvMGWJVPRmlQcKr3UJfyjCcBq1/88F1Q9V6B3D5KoeE4
+	 NUINpeyKKDWfw==
+Message-ID: <6bd3c029-807b-457c-8ada-2d895a96bc84@kernel.org>
+Date: Wed, 26 Mar 2025 08:22:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/34] defconfigs: rename CONFIG_MFD_SEC_CORE to
- CONFIG_MFD_SEC_I2C
+Subject: Re: [PATCH 13/34] mfd: sec: merge separate core and irq modules
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,7 +67,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
- <20250323-s2mpg10-v1-11-d08943702707@linaro.org>
+ <20250323-s2mpg10-v1-13-d08943702707@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,24 +113,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250323-s2mpg10-v1-11-d08943702707@linaro.org>
+In-Reply-To: <20250323-s2mpg10-v1-13-d08943702707@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 23/03/2025 23:39, André Draszik wrote:
-> We are adding support for Samsung PMICs that aren't using I2C and
-> therefore had to rename the Kconfig symbol.
+> There is no reason to have these two kernel modules separate. Having
+> them merged into one kernel module also slightly reduces memory
+> consumption and module load times a little.
+> 
+> mapped size (lsmod):
+>          before:             after:
+>     sec_core   20480    sec_core   24576
+>     sec_irq    16384
+>     ----------------
+>     total      36864
+> 
+> Section sizes (size -A):
+>          before:             after:
+>     sec_core    6780    sec_core   13239
+>     sec_irq     8046
+>     ----------------
+>     Total      14826
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> 
 > ---
->  arch/arm/configs/exynos_defconfig   | 2 +-
->  arch/arm/configs/multi_v7_defconfig | 2 +-
->  arch/arm/configs/pxa_defconfig      | 2 +-
->  arch/arm64/configs/defconfig        | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-defconfigs go separate tree, so this must not be in the middle of the
-patchset. Bisectability, as for defconfig, is anyway broken in previous
-change, so no benefit of putting this in the middle anyway.
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
