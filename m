@@ -1,137 +1,250 @@
-Return-Path: <linux-rtc+bounces-3666-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3667-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C8E3A74613
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 10:12:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E009AA74ACF
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 14:40:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 825003B75DE
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 09:12:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CF501B62B2E
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 13:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC43E21421B;
-	Fri, 28 Mar 2025 09:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346D349620;
+	Fri, 28 Mar 2025 13:30:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pLFYjRd1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1AD213E66
-	for <linux-rtc@vger.kernel.org>; Fri, 28 Mar 2025 09:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC7F192D87
+	for <linux-rtc@vger.kernel.org>; Fri, 28 Mar 2025 13:30:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743153116; cv=none; b=pfHG2eiZ4g7yQfYvhVu9hl5O2KwDrOZZSHON+aZ2je7yIlVnZLCnoHVORX4tMScBUEOhNY1J7DRvayM21+iuVYuSHCTDM17Ux5XUTXWQ9VBx6PDZFRv45kJ4Jg6rmheDIVdc263NyIeixnmgFOVFa3lmwtmxCFJXyhfBsY0kII0=
+	t=1743168657; cv=none; b=VEY/WbY1q4BR9wg0lnyhCndPtDh1OBYXDP3P2dzcUSB5n98uczk711GXoEXr5kexmKzt7DL2GGgmFuP4i5avZZciiS9PzeY53GgYEgjFkPOyQ/3NI3BCt6bXfK/1Tdfb0hwbexpb355kq4//1P0hpOKoOlsSUDx62lqhJaWQl9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743153116; c=relaxed/simple;
-	bh=pbIVsVcuNi+0DDbMVyNw26SOB82vpubAP8F0r7NBXg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=coBXXbXxVw8gF9Upv4935jSnJDoB0OogmvU4iSSeNpGK0Y5+DAqhPvr9fueLRyMdT91D15BJ1UzMzQPR7x1daEnXTmnv8IBZ4LluPUTloMD+1EP87H8qB1Oa9BeOJJzXE71XYMPRhJXudweem4KB6Fen7B9hdULKtGvarTOXzuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty5kJ-0005uZ-G0; Fri, 28 Mar 2025 10:11:23 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1ty5kG-0024gm-2N;
-	Fri, 28 Mar 2025 10:11:20 +0100
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 5804A3E86D3;
-	Fri, 28 Mar 2025 09:11:20 +0000 (UTC)
-Date: Fri, 28 Mar 2025 10:11:19 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250328-gentle-dangerous-raptor-2b66fa-mkl@pengutronix.de>
-References: <20250227-spicy-grebe-of-dignity-68c847-mkl@pengutronix.de>
- <CAOoeyxWSsy0Q0Y7iJE8-DZM5Yvcdto8mncFkM8X4BvVMEgfUiQ@mail.gmail.com>
- <20250317-cuttlefish-of-simple-champagne-ee666c-mkl@pengutronix.de>
- <CAOoeyxXSC3rjeB0g5BtHKvKy-Y9Dszd5X9WuHeBeH1bk39d_Eg@mail.gmail.com>
- <20250326-inventive-lavender-carp-1efca5-mkl@pengutronix.de>
- <CAOoeyxXw1x2HVXQYzxc1OuGimn7XPfCjj-aB=jAAfw733b_9OQ@mail.gmail.com>
- <20250327-awesome-mutant-cuscus-0f0314-mkl@pengutronix.de>
- <CAOoeyxWa5sB+YS6W=oG7xUeizXxigkdw3b=7w9aGftCWzWsw2A@mail.gmail.com>
- <20250328-smart-thundering-asp-2536b0-mkl@pengutronix.de>
- <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
+	s=arc-20240116; t=1743168657; c=relaxed/simple;
+	bh=ej4rCGaeftxK2JXTOtoIQ9rhKbtDvQSJvMSbi3kIDdc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iDL7PVXwdXYqzPPMGYHPDisLlXD8P9VjSDCZTiD0tQequ12mINqSd8NFN2WNrdYfCjEJNwjAmkYaDFJBRk6o9GRbJ/tNz2Ezm8p/SZzFwh4jFnFge10AGbaCksq+U+eISSgfpgmif0956NVKYVQI7mJrglSSOeO17/yjy5RaTk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pLFYjRd1; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ac2bfcd2a70so280383566b.0
+        for <linux-rtc@vger.kernel.org>; Fri, 28 Mar 2025 06:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1743168653; x=1743773453; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZRvLbiHiKLkWNaqlgJsovX/nYtjDcjC8MqvumdDWmcw=;
+        b=pLFYjRd1jeH8a30Ico34ct7vhyh8RSJ+fWxUF6uUaOMu40FQe8c2cYA+to4rM54mWL
+         LQNPjgy5nQpxSd4orBv/Tli3Il/rXxv/9/t0wzUJThtHia8gom2XNbbAGv36BQPQ8SRN
+         pt7Juo4RYjCgiccGMhEWIRq0KMETJYz9zQx2ccyRiWj9kLfT8Z2NegxSJnuaMDoyEav0
+         eoX9AHXMoacZxgWsjUwd0CXlczOmKVucy0xHoA43bDLKvK/PTBJLlsDGufH4R0kyZxWO
+         BOFr5lBQ3cGJdJ4yW1EGCCpndpFJS2FuyiDGdm7I7cKAoR/qOSQdt+aB8CcB0Wv9+Fat
+         qmWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743168653; x=1743773453;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZRvLbiHiKLkWNaqlgJsovX/nYtjDcjC8MqvumdDWmcw=;
+        b=Emzw5syDE3wBG1kNi08AcI+bU9DCHDQQNxQNvLdiVKMvhFRPa6sBWHp9Bx45DQwnLM
+         +50tFTeM8XJLDcerx1VZApGgImqF4kws5v4BrhGKnnCmiMNVA60jj5UXEhH3P47Cw/qq
+         N+JdBpGCpu+rsT89cA/xXJQqQ4RBLTroO+i7FoPfqvWYOimdX06ZJ3RPxeI84gpm7/HL
+         PUtijIcTTcaSGmxRIZFkq4PWdzPimew3iJG6AhmxLUjkxB/YbEMVTK3AyC5+uyWX0DSU
+         uo3yAymbl0g3sPVEFXlvzymshmSBPwaIrCXcA0SC/VWYvvwt2x8SfpKBjxc7E+e1eADu
+         qRIA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsyxLong03CzUhm1dJSikCBe0ZEBxxGZQoSMj8Nino+279rp3qyGl69/xuyoOEkRGWaHdoqoleTLw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7srahvEJphgFECkvivRSD037VWzFSeaHr66c4LBYf0vWBE0QZ
+	XXVNJUHZCjvnJUb2xwgEyn9bdSdCQkZZaqL3RHHN1gkAA3WATvgZa+O0eQFn4X8=
+X-Gm-Gg: ASbGncvEJlrjGWrvQ+ijxHFE24z758aEqCU0Kr2Zbn+XihxGRAfzW3uSgxcHKwLjqA8
+	CELfYQv1IuR0z7HaR7MAWiNHsFMtxudWdO/I+JJk51rgFCPhLXdI0DL5jY7xgyPuFnYZeukzBzf
+	O56z5Yzicxy/bWQnqBT7Y7aVbcvOvNr4WjyM5dUVD1wNgB1aPp8ZlSZEjag4v0Rkarh/P2Sm3aq
+	qarQ+uR8nCl6DSYzO+mkva0X47G8tt73muAmcTcSikVTi/44yoUipTTXXFX4lybzCGxxKkPhwnQ
+	HpU3HEcssgubZAVbnYXOukbdiQZwPdwlMUgZ1X0evDE3pLFkL42IaZ9FtYfloIWZkWV3fRBJdXD
+	nXn6IhWP4q+YsvNJynj7qEgy9Tfxz
+X-Google-Smtp-Source: AGHT+IH1+pjt98yfLPdlHXhG5zwY12ogF7yk18zqK8eCDj7Jf469dISQ7xCv0AXw/+mBhRrdep/+WA==
+X-Received: by 2002:a17:907:1c07:b0:ac6:ba91:ca4d with SMTP id a640c23a62f3a-ac6faf04aafmr667626866b.31.1743168652788;
+        Fri, 28 Mar 2025 06:30:52 -0700 (PDT)
+Received: from puffmais.c.googlers.com (8.239.204.35.bc.googleusercontent.com. [35.204.239.8])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc17e01f7sm1355284a12.79.2025.03.28.06.30.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Mar 2025 06:30:52 -0700 (PDT)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Subject: [PATCH v2 00/32] Samsung S2MPG10 PMIC MFD-based drivers
+Date: Fri, 28 Mar 2025 13:28:46 +0000
+Message-Id: <20250328-s2mpg10-v2-0-b54dee33fb6b@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tzr33nw7euhn5lwq"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxWy7n32iD03sr+8jPwf5OpHaCe_itkRnzOQK8GC32A9+A@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAA+k5mcC/z3MQQrCMBCF4auUWRuZTFqirryHdFHNNB3QpiQSl
+ JK7Gwu6/B+Pb4XEUTjBqVkhcpYkYa5BuwZu0zB7VuJqAyF1aEirRI/Fa1Q8dk7z1RlsDdT3Enm
+ U1yZd+tqTpGeI7w3O+rv+DPM3slaoHB6OrbFIFu35LvMQwz5ED30p5QPJmoiqnwAAAA==
+X-Change-ID: 20250321-s2mpg10-ef5d1ebd3043
+To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
 
+This series adds initial support for the Samsung S2MPG10 PMIC using the
+MFD framework. This is a PMIC for mobile applications and is used on
+the Google Pixel 6 and 6 Pro (oriole / raven).
 
---tzr33nw7euhn5lwq
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+*** dependency note ***
 
-On 28.03.2025 16:57:46, Ming Yu wrote:
-> > > > Does your device support CAN-CC only mode?
-> > >
-> > > It can dynamically switch between CAN-CC and CAN-FD mode when
-> > > trasmitting or receiving, depending on whether the nct6694_can_frame
-> > > passs the flag with NCT6694_CAN_FRAME_FLAG_FD.
-> >
-> > Ok, but what about the receive path? Does the device support CAN-CC only
-> > mode? Will it throw an error, if it receives a CAN-FD frame?
->=20
-> No, it can receive both CAN-CC and CAN-FD frames, if the hardware
-> receives a CAN-FD frame, the firmware will set the
-> NCT6694_CAN_FRAME_FLAG_FD flag.
+To compile, this depends on the Samsung ACPM driver in Linux next with
+the following additional patches:
+https://lore.kernel.org/all/20250321-acpm-atomic-v1-0-fb887bde7e61@linaro.org/
+https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linaro.org/
+https://lore.kernel.org/all/20250327-acpm-children-v1-0-0afe15ee2ff7@linaro.org/
 
-Ok, then set the CAN-FD ctrl mode static.
+*** dependency note end ***
 
-regards,
-Marc
++++ Kconfig update +++
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+There is a Kconfig symbol update in this series, because the existing
+Samsung S2M driver has been split into core and transport (I2C & ACPM)
+parts. CONFIG_MFD_SEC_CORE is now truly a core driver, and
+the I2C code that was part of it is now enabled via CONFIG_MFD_SEC_I2C.
 
---tzr33nw7euhn5lwq
-Content-Type: application/pgp-signature; name="signature.asc"
+This was necessary because unlike the other S2M PMICs, S2MPG10 doesn't
+talk via I2C, but via the Samsung ACPM firmware.
 
------BEGIN PGP SIGNATURE-----
++++ Kconfig update end +++
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfmZ7UACgkQDHRl3/mQ
-kZwYtQf/c7cT0KfIOS3YnlbxRmDPcKbxtcH25rhCTmL7CvrAnktrR9i0DzB+7vkt
-BwE/PZmyu3XSHeCbvfd/Di0Zddu9NxXyFTe32yXpA3s7uV0UFwWEyi7y20ZT19aL
-r5PeInCTNFIQG88kHekGt/bAO+afweWxvb+iphZpcLZj3PGQlE24S0SSgUqo0tHZ
-oqTgFKC4v/YvEV2qmLQ5966R+L/7cKSRf5QlJfQl/v0pfk+IJ+QuhQhcG4YjQOVQ
-NFBM2ncTGmQWGFeKqJiB5IuvhInT2DukqwaChLbEaqhPFS9PmRvb+YXGxTnd4b4H
-Iob/zMnIE/RmFXwHANoSF/2Sely55Q==
-=2tPP
------END PGP SIGNATURE-----
+This series must be applied in-order, due to interdependencies of some
+of the patches. There are also various cleanup patches to the S2M
+drivers. I've kept them ordered as:
+  * DT bindings (patches 1 ... 3)
+  * s2m mfd prep for adding S2MPG10 support (patches 4 ... 7)
+  * split S2M mfd driver into s2m-core and s2m-i2c, including the
+    kconfig symbol update (patch 8)
+  * S2MPG10 core driver (patch 9)
+  * s2m mfd driver cleanup patches (patches 10 ... 23)
+  * S2MPG10 clock driver (patch 24)
+  * s2m RTC prep for adding S2MPG10 (patch 25 ... 26)
+  * S2MPG10 RTC driver (patch 27)
+  * s2m RTC cleanup patches (patches 28 ... 31)
 
---tzr33nw7euhn5lwq--
+I realise these are many, but since some prep-work was required to be
+able to add S2MPG anyway, I wanted to get the cleanup patches in as
+well :-) Let me know if I should postpone them to a later date instead.
+
+The S2MPG10 includes buck converters, various LDOs, power meters, RTC,
+clock outputs, and additional GPIOs interfaces.
+
+This series adds support in the top-level device driver, and for the
+RTC and clock. Importantly, having the RTC driver allows to do a proper
+reset of the system. Drivers or driver updates for the other components
+will be added in future patches.
+
+This will need a DT update for Oriole / Raven to enable this device. I
+will send that out separately.
+
+Cheers,
+Andre'
+
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
+---
+Changes in v2:
+- Rob:
+  - make PMIC node a child of ACPM, and all related changes (binding,
+    driver)
+- Krzysztof:
+  - merge defconfig updates into patch changing the symbols (patch 8)
+  - split MODULE_AUTHOR update into a separate patch
+  - better alignment fix (patch 11)
+  - merge two s2dos05/s2mpu05 related patches into one (patch 14)
+- myself:
+  - keep PMIC DT parsing in core, not in transport driver
+  - several updates in sec-acpm.c, see separate entries in patch 9
+  - fix typo in patch 17
+  - collect tags
+- Link to v1: https://lore.kernel.org/r/20250323-s2mpg10-v1-0-d08943702707@linaro.org
+
+---
+André Draszik (32):
+      dt-bindings: mfd: samsung,s2mps11: add s2mpg10
+      dt-bindings: clock: samsung,s2mps11: add s2mpg10
+      dt-bindings: firmware: google,gs101-acpm-ipc: add PMIC child node
+      mfd: sec: drop non-existing forward declarations
+      mfd: sec: sort includes alphabetically
+      mfd: sec: update includes to add missing and remove superfluous ones
+      mfd: sec: move private internal API to internal header
+      mfd: sec: split into core and transport (i2c) drivers
+      mfd: sec: add support for S2MPG10 PMIC
+      mfd: sec: merge separate core and irq modules
+      mfd: sec: fix open parenthesis alignment (multiple)
+      mfd: sec: sort struct of_device_id entries and the device type switch
+      mfd: sec: use dev_err_probe() where appropriate
+      mfd: sec: s2dos05/s2mpu05: use explicit regmap config and drop default
+      mfd: sec: s2dos05: doesn't support interrupts (it seems)
+      mfd: sec: don't ignore errors from sec_irq_init()
+      mfd: sec: rework platform data and regmap instantiating
+      mfd: sec: change device_type to int
+      mfd: sec: don't compare against NULL / 0 for errors, use !
+      mfd: sec: use sizeof(*var), not sizeof(struct type_of_var)
+      mfd: sec: convert to using MFD_CELL macros
+      mfd: sec: convert to using REGMAP_IRQ_REG() macros
+      mfd: sec: add myself as module author
+      clk: s2mps11: add support for S2MPG10 PMIC clock
+      rtc: s5m: cache value of platform_get_device_id() during probe
+      rtc: s5m: prepare for external regmap
+      rtc: s5m: add support for S2MPG10 RTC
+      rtc: s5m: fix a typo: peding -> pending
+      rtc: s5m: switch to devm_device_init_wakeup
+      rtc: s5m: replace regmap_update_bits with regmap_clear/set_bits
+      rtc: s5m: replace open-coded read/modify/write registers with regmap helpers
+      MAINTAINERS: add myself as reviewer for Samsung S2M MFD
+
+ .../devicetree/bindings/clock/samsung,s2mps11.yaml |   1 +
+ .../bindings/firmware/google,gs101-acpm-ipc.yaml   |  17 +
+ .../devicetree/bindings/mfd/samsung,s2mps11.yaml   |  28 +-
+ MAINTAINERS                                        |   3 +-
+ arch/arm/configs/exynos_defconfig                  |   2 +-
+ arch/arm/configs/multi_v7_defconfig                |   2 +-
+ arch/arm/configs/pxa_defconfig                     |   2 +-
+ arch/arm64/configs/defconfig                       |   2 +-
+ drivers/clk/clk-s2mps11.c                          |   8 +
+ drivers/mfd/Kconfig                                |  35 +-
+ drivers/mfd/Makefile                               |   5 +-
+ drivers/mfd/sec-acpm.c                             | 460 ++++++++++++++++++++
+ drivers/mfd/sec-common.c                           | 301 +++++++++++++
+ drivers/mfd/sec-core.c                             | 481 ---------------------
+ drivers/mfd/sec-core.h                             |  23 +
+ drivers/mfd/sec-i2c.c                              | 239 ++++++++++
+ drivers/mfd/sec-irq.c                              | 460 +++++++-------------
+ drivers/rtc/rtc-s5m.c                              | 197 ++++++---
+ include/linux/mfd/samsung/core.h                   |   7 +-
+ include/linux/mfd/samsung/irq.h                    | 103 +++++
+ include/linux/mfd/samsung/rtc.h                    |  37 ++
+ include/linux/mfd/samsung/s2mpg10.h                | 454 +++++++++++++++++++
+ 22 files changed, 2002 insertions(+), 865 deletions(-)
+---
+base-commit: f58dd835f82a5dda6c9d3895ee6f15016431fb1f
+change-id: 20250321-s2mpg10-ef5d1ebd3043
+
+Best regards,
+-- 
+André Draszik <andre.draszik@linaro.org>
+
 
