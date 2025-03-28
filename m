@@ -1,464 +1,96 @@
-Return-Path: <linux-rtc+bounces-3663-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3664-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A747A74504
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 09:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96910A7451D
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 09:11:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 197F917B9C8
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 08:07:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BBAA1789CA
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 08:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE00212D8D;
-	Fri, 28 Mar 2025 08:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704B0212FA7;
+	Fri, 28 Mar 2025 08:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YXwzmuS5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cbJhLYTV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F667212B2D
-	for <linux-rtc@vger.kernel.org>; Fri, 28 Mar 2025 08:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3748E212D8D;
+	Fri, 28 Mar 2025 08:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743149229; cv=none; b=XuPvbA+pDMjEv58Ub+BxlthBqUzUGGtRoOLw5s5FEhk2fSzs/7L3C9ktJ8Z7B8kYZKISsDyICN8xKOrRnWw1YDEE1nG3Q3UqwbiHLvCE+Xcs3WZlKD8YNALr4gp0/+KncWcJoLb+2tvmMu8upcryddAZ0YHtCbMV60itw92oVx4=
+	t=1743149479; cv=none; b=QaT6SEvQiK1Svqj8SFWwnRxqVPZTJAQgn5sbFWVpbAuMMhVhvpYiottO9WJ9AIXDSmF82GnfiPFzGd2pWbodbRRERdVovMZVPMZ1f4Rd20Zczdo9pqWeAncJqj12aykNG6LAWjlv1Zl7P288SzhyXZM3ZXj9+k7OxK3JM4/P/qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743149229; c=relaxed/simple;
-	bh=pzmeymFh+f0nDzTrvf2OzaNV+qpt0rpuRQAwHM39zv4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q0kelMuxFMW2+LYZjGr4oJdDuiQiwxBzWQj0kLbDgV+XoSp8R5zSzFKwm+48MjyoQ4ooCBchCx1VXnFoMx7XJvVqwduoWtLid1ZT16IZVy1FfcATNqmbMWY5Eg1lJjPaXQ9Vrwhyh613nGUPbetZ+R1DCoYk5Em2y2GFzncAxGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YXwzmuS5; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6e8f254b875so15995796d6.1
-        for <linux-rtc@vger.kernel.org>; Fri, 28 Mar 2025 01:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743149226; x=1743754026; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJg20DklhWwmw178d8RmelQ8eqDyaDbWPEv/YlBS3eQ=;
-        b=YXwzmuS517NMCi6FFo0xHzLwqB6PfN/k1QodnI8iLL5SkPqs6Q9hP90hOCLKStLxQr
-         vjPrkBJgCUNtC7PAgkmzg6XvlSw3YK1Bfloa81q3obeJgXoyHMIzR10nnph6Ap99hzCn
-         KXkl5aQ5StZ7BdcFQyj5BWyKcsEvcM1j//rOgLWLomnYf+qwf1ptZ7NZFoEG/lQeDf4Y
-         zAcTuTxHZcpS/K4scsr8bAKiR0nUXdiUBjcoPDpkV+Q1c9FOKGFmW6BwgQ1ZED+pML/H
-         Lq7o8YcyCR4yREptxSKqAa38PWwKm/qRAUAjO8oPThtDkrzY63m5jhV8lTmzQz1+K29L
-         sIoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743149226; x=1743754026;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RJg20DklhWwmw178d8RmelQ8eqDyaDbWPEv/YlBS3eQ=;
-        b=Vp1VDJHwORYa0SHERIzvUouQv6emxQDT+/LqxRTZs3qv8KvNGjlhcuo82HTDog2k2G
-         JVPjG+zlXoipxz/DveAw0AgRUoPyywUnelhwlZu5ILd1CIX9EH/awTAihjo88AMcPMKO
-         ODW6gzCJqtLqlmTDhlf4ehczABmw6PmJhJM8DUaZf6J41n7Ke5UYfoQFRH+qkhA51ZXN
-         nofsmZ7sbgGgd63NxW++G9Q9xE6z5lPMYKMaKENBJWlc/tUmGqxSfXqD7Jfv4td5cSEY
-         bSjjUfNSOaYGPZeUKCdY9yuSmVq8X2PsKoQSAY4UF9Dcny44W9BoAK3ID/OsE7EtkZTg
-         jSxw==
-X-Forwarded-Encrypted: i=1; AJvYcCVPNQuZk4V8egCNFGdjMz0D6aZlw+BALudIeydgQslRykQTr+CC+KB0ViyTiy2YgFP1QoKbZEo8BV8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVWZpXJcMx18F0IOnQ0LRKr1edy/uK33134wK6bnEortNKui1H
-	o+fnwoNumbwjxI9OAB/Ktm3qG3jV0FEQ4qmfGwjky31AIj3cYE6/f2y4xTi8IHeZ2RDAiCjgL6x
-	Nq2OHE/HtjvFnXWL0lyL61jFhGqrjqxUsYIE6
-X-Gm-Gg: ASbGnctxwvh3iV3ZnGVnwiX11mhN98DT+j/yhbD2Cx0ZoJvTOrXbkb72EZEUafOaKVh
-	1rOlvgAtREeEp8hZQyyXtCan1ULLBVrwre/nm30tjZASUjFV4k973cO1I7EuYn8fCoT4G8IgVCs
-	GFd5Vhjo/1jgrFVlrK03P192G+ltD7Txz1uqBkWg==
-X-Google-Smtp-Source: AGHT+IGzUIk/v4ngoHdg/Z6l+1SFfpDik4JMUXQN0rKpviOsqy0lYMG15bjYEY2aKIZJgqol2xEiIx8lx2010LrD9QA=
-X-Received: by 2002:a05:6214:c63:b0:6e8:f464:c9a0 with SMTP id
- 6a1803df08f44-6ed238a860emr95218916d6.13.1743149225867; Fri, 28 Mar 2025
- 01:07:05 -0700 (PDT)
+	s=arc-20240116; t=1743149479; c=relaxed/simple;
+	bh=ZNaYWFv07hnLmJ9t204CNI9QvNiZyS05eYgMuawmNeo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h2owv1pV1FSOu/iPN+E1c4d3z7hyk/kpyXvcJKeRrxHehCRR4HooUGjeFxwe4sKdNA/1SWbZi9s0Vhwv8GKbdGzcyo8HVyNKH13ae6fMXAynkLYGCeZLtjt8OOyyNL8tkL6MaB0A195WoWfa5QKMmqxXVCTfqBHaS/n9vVsJ9s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cbJhLYTV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7847FC4CEE4;
+	Fri, 28 Mar 2025 08:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743149477;
+	bh=ZNaYWFv07hnLmJ9t204CNI9QvNiZyS05eYgMuawmNeo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cbJhLYTVmN2DzSXg+9Z1Zap5RcmMrU/7n3IWA4E2scR1NMRk7ZW/g4uLcU21mqg/T
+	 5uNDMh1P4nFMyKPtZwd5jCSBIlaaioCsDWkJ777fb+EeA4LTKjxljxkK0XkmMXKFya
+	 xHUg/PtG+nzvRwWYfsyH4ZbU5JiQQN7PP0Y2AftAxAqUhE+i/A/gITOhsN7NmHXFvY
+	 U5+thN5A0+8XBxHhKEKxn4ToYmz9mc0aiXBJ+hqgZUMAcX2CZSgU9adBik2KpuPQWZ
+	 6M5gtVw2FoW4ujodcMx25nHUHf0T9XQV4msE2ySyJKE3jbevu0eoPChvE/CigTGJ7s
+	 YyQwnTPbJX4Ww==
+Date: Fri, 28 Mar 2025 08:11:10 +0000
+From: Lee Jones <lee@kernel.org>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
+	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 00/34] Samsung S2MPG10 PMIC MFD-based drivers
+Message-ID: <20250328081110.GA585744@google.com>
+References: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <49d57ab512c47f01d6c374d533f1752871ea4246.1743091573.git.geert@linux-m68k.org>
-In-Reply-To: <49d57ab512c47f01d6c374d533f1752871ea4246.1743091573.git.geert@linux-m68k.org>
-From: David Gow <davidgow@google.com>
-Date: Fri, 28 Mar 2025 16:06:52 +0800
-X-Gm-Features: AQ5f1Jr3hZn89B9ROY2nPLdEcgv9EW_VI3KKZ2dFFxe1Po-FS7WLFRntzSls0Z4
-Message-ID: <CABVgOSmxsXEyLVyhhffhXUXf3-QnGmZurXaRhpiK8w894mrwzg@mail.gmail.com>
-Subject: Re: [PATCH/RFC] kunit/rtc: Add real support for very slow tests
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-rtc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000007111c00631628ed5"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250323-s2mpg10-v1-0-d08943702707@linaro.org>
 
---0000000000007111c00631628ed5
-Content-Type: text/plain; charset="UTF-8"
+On Sun, 23 Mar 2025, André Draszik wrote:
 
-Hi Geert,
+> This series adds initial support for the Samsung S2MPG10 PMIC using the
+> MFD framework. This is a PMIC for mobile applications and is used on
+> the Google Pixel 6 and 6 Pro (oriole / raven).
+> 
+> *** dependency note ***
+> 
+> This depends on the Samsung ACPM driver in Linux next, and runtime
+> depends on some fixes for it:
+> https://lore.kernel.org/all/20250321-acpm-atomic-v1-0-fb887bde7e61@linaro.org/
+> https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linaro.org/
 
-Thanks for sending this out: I think this raises some good questions
-about exactly how to handle long running tests (particularly on
-older/slower hardware).
+FTR, I have no intention of reviewing this until Krzysztof's review
+comments have been satisfied.
 
-I've put a few notes below, but, tl;dr: I think these are all good
-changes, even if there's more we can do to better scale to slower
-hardware.
-
-On Fri, 28 Mar 2025 at 00:07, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> When running rtc_lib_test ("lib_test" before my "[PATCH] rtc: Rename
-> lib_test to rtc_lib_test") on m68k/ARAnyM:
->
->     KTAP version 1
->     1..1
->         KTAP version 1
->         # Subtest: rtc_lib_test_cases
->         # module: rtc_lib_test
->         1..2
->         # rtc_time64_to_tm_test_date_range_1000: Test should be marked slow (runtime: 3.222371420s)
->         ok 1 rtc_time64_to_tm_test_date_range_1000
->         # rtc_time64_to_tm_test_date_range_160000: try timed out
->         # rtc_time64_to_tm_test_date_range_160000: test case timed out
->         # rtc_time64_to_tm_test_date_range_160000.speed: slow
->         not ok 2 rtc_time64_to_tm_test_date_range_160000
->     # rtc_lib_test_cases: pass:1 fail:1 skip:0 total:2
->     # Totals: pass:1 fail:1 skip:0 total:2
->     not ok 1 rtc_lib_test_cases
->
-> Commit 02c2d0c2a84172c3 ("kunit: Add speed attribute") added the notion
-> of "very slow" tests, but this is further unused and unhandled.
->
-> Hence:
->   1. Introduce KUNIT_CASE_VERY_SLOW(),
-
-Thanks -- I think we want this regardless.
-
->   2. Increase timeout by ten; ideally this should only be done for very
->      slow tests, but I couldn't find how to access kunit_case.attr.case
->      from kunit_try_catch_run(),
-
-
-My feeling for tests generally is:
-- Normal: effectively instant on modern hardware, O(seconds) on
-ancient hardware.
-- Slow: takes O(seconds) to run on modern hardware, O(minutes)..O(10s
-of minutes) on ancient hardware.
-- Very slow: O(minutes) or higher on modern hardware, infeasible on
-ancient hardware.
-
-Obviously the definition of "modern" and "ancient" hardware here is
-pretty arbitrary: I'm using "modern, high-end x86" ~4GHz as my
-"modern" example, and "66MHz 486" as my "ancient" one, but things like
-emulation or embedded systems fit in-between.
-
-Ultimately, I think the timeout probably needs to be configurable on a
-per-machine basis more than a per-test one, but having a 10x
-multiplier (or even a 100x multiplier) for very slow tests would also
-work for me.
-
-I quickly tried hacking together something to pass through the
-attribute and implement this. Diff (probably mangled by gmail) below:
----
-diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
-index 7c966a1adbd3..24a29622068b 100644
---- a/include/kunit/try-catch.h
-+++ b/include/kunit/try-catch.h
-@@ -50,6 +50,13 @@ struct kunit_try_catch {
-       void *context;
-};
-
-+struct kunit_try_catch_context {
-+       struct kunit *test;
-+       struct kunit_suite *suite;
-+       struct kunit_case *test_case;
-+};
-+
-+
-void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context);
-
-void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 146d1b48a096..79d12c0c2d25 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -420,12 +420,6 @@ static void kunit_run_case_cleanup(struct kunit *test,
-       kunit_case_internal_cleanup(test);
-}
-
--struct kunit_try_catch_context {
--       struct kunit *test;
--       struct kunit_suite *suite;
--       struct kunit_case *test_case;
--};
--
-static void kunit_try_run_case(void *data)
-{
-       struct kunit_try_catch_context *ctx = data;
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 92099c67bb21..5f62e393d422 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -34,30 +34,15 @@ static int kunit_generic_run_threadfn_adapter(void *data)
-       return 0;
-}
-
--static unsigned long kunit_test_timeout(void)
-+static unsigned long kunit_test_timeout(struct kunit_try_catch *try_catch)
-{
--       /*
--        * TODO(brendanhiggins@google.com): We should probably have some type of
--        * variable timeout here. The only question is what that timeout value
--        * should be.
--        *
--        * The intention has always been, at some point, to be able to label
--        * tests with some type of size bucket (unit/small, integration/medium,
--        * large/system/end-to-end, etc), where each size bucket would get a
--        * default timeout value kind of like what Bazel does:
--        * https://docs.bazel.build/versions/master/be/common-definitions.html#test.size
--        * There is still some debate to be had on exactly how we do this. (For
--        * one, we probably want to have some sort of test runner level
--        * timeout.)
--        *
--        * For more background on this topic, see:
--        * https://mike-bland.com/2011/11/01/small-medium-large.html
--        *
--        * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
--        * the task will be killed and an oops generated.
--        */
--       // FIXME times ten for KUNIT_SPEED_VERY_SLOW?
--       return 10 * 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
-+       struct kunit_try_catch_context *ctx = (struct
-kunit_try_catch_context *)try_catch->context;
-+       struct kunit_case *test_case = ctx->test_case;
-+       unsigned long base_timeout = 300 *
-msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
-+       /* VERY_SLOW tests get 10 times the time to execute (50 minutes). */
-+       unsigned long multiplier = (test_case->attr.speed ==
-KUNIT_SPEED_VERY_SLOW) ? 10 : 1;
-+
-+       return multiplier * base_timeout;
-}
-
-void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-@@ -87,7 +72,7 @@ void kunit_try_catch_run(struct kunit_try_catch
-*try_catch, void *context)
-       wake_up_process(task_struct);
-
-       time_remaining = wait_for_completion_timeout(task_done,
--                                                    kunit_test_timeout());
-+
-kunit_test_timeout(try_catch));
-       if (time_remaining == 0) {
-               try_catch->try_result = -ETIMEDOUT;
-               kthread_stop(task_struct);
-
----
-
-I'll get around to extending this to allow the "base timeout" to be
-configurable as a command-line option, too, if this seems like a good
-way to go.
-
->   3. Mark rtc_time64_to_tm_test_date_range_1000 slow,
->   4. Mark rtc_time64_to_tm_test_date_range_160000 very slow.
-
-Hmm... these are definitely fast enough on my "modern" machine that
-they probably only warrant "slow", not "very slow". But given they're
-definitely causing problems on older machines, I'm happy to go with
-marking the large ones very slow. (I've been waiting for them for
-about 45 minutes so far on my 486.)
-
-Do the time tests in kernel/time/time_test.c also need to be marked
-very slow, or does that run much faster on your setup?
-
-
->
-> Afterwards:
->
->     KTAP version 1
->     1..1
->         KTAP version 1
->         # Subtest: rtc_lib_test_cases
->         # module: rtc_lib_test
->         1..2
->         # rtc_time64_to_tm_test_date_range_1000.speed: slow
->         ok 1 rtc_time64_to_tm_test_date_range_1000
->         # rtc_time64_to_tm_test_date_range_160000.speed: very_slow
->         ok 2 rtc_time64_to_tm_test_date_range_160000
->     # rtc_lib_test_cases: pass:2 fail:0 skip:0 total:2
->     # Totals: pass:2 fail:0 skip:0 total:2
->     ok 1 rtc_lib_test_cases
->
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-
-Is this causing you enough strife that you want it in as-is, straight
-away, or would you be happy with it being split up and polished a bit
-first -- particularly around supporting the more configurable timeout,
-and shifting the test changes into separate patches? (I'm happy to do
-that for you if you don't want to dig around in the somewhat messy
-KUnit try-catch stuff any further.)
-
-Does anyone else (particularly anyone involved with the rtc tests)
-have thoughts?
-
-Cheers,
--- David
-
->  drivers/rtc/rtc_lib_test.c |  4 ++--
->  include/kunit/test.h       | 11 +++++++++++
->  lib/kunit/try-catch.c      |  3 ++-
->  3 files changed, 15 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/rtc/rtc_lib_test.c b/drivers/rtc/rtc_lib_test.c
-> index c30c759662e39b48..fd3210e39d37dbc6 100644
-> --- a/drivers/rtc/rtc_lib_test.c
-> +++ b/drivers/rtc/rtc_lib_test.c
-> @@ -85,8 +85,8 @@ static void rtc_time64_to_tm_test_date_range_1000(struct kunit *test)
->  }
->
->  static struct kunit_case rtc_lib_test_cases[] = {
-> -       KUNIT_CASE(rtc_time64_to_tm_test_date_range_1000),
-> -       KUNIT_CASE_SLOW(rtc_time64_to_tm_test_date_range_160000),
-> +       KUNIT_CASE_SLOW(rtc_time64_to_tm_test_date_range_1000),
-> +       KUNIT_CASE_VERY_SLOW(rtc_time64_to_tm_test_date_range_160000),
->         {}
->  };
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 9b773406e01f3c43..4e3c1cae5b41466e 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -183,6 +183,17 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
->                 { .run_case = test_name, .name = #test_name,    \
->                   .attr.speed = KUNIT_SPEED_SLOW, .module_name = KBUILD_MODNAME}
->
-> +/**
-> + * KUNIT_CASE_VERY_SLOW - A helper for creating a &struct kunit_case
-> + * with the very slow attribute
-> + *
-> + * @test_name: a reference to a test case function.
-> + */
-> +
-> +#define KUNIT_CASE_VERY_SLOW(test_name)                        \
-> +               { .run_case = test_name, .name = #test_name,    \
-> +                 .attr.speed = KUNIT_SPEED_VERY_SLOW, .module_name = KBUILD_MODNAME}
-> +
->  /**
->   * KUNIT_CASE_PARAM - A helper for creation a parameterized &struct kunit_case
->   *
-> diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-> index 6bbe0025b0790bd2..92099c67bb21d0a4 100644
-> --- a/lib/kunit/try-catch.c
-> +++ b/lib/kunit/try-catch.c
-> @@ -56,7 +56,8 @@ static unsigned long kunit_test_timeout(void)
->          * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
->          * the task will be killed and an oops generated.
->          */
-> -       return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
-> +       // FIXME times ten for KUNIT_SPEED_VERY_SLOW?
-> +       return 10 * 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
->  }
->
->  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-> --
-> 2.43.0
->
-
---0000000000007111c00631628ed5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-YE9NAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHgsCGkO2Hex
-N6ybc+GeQEb6790qMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQAs
-exV05yVDmPhHRqOq9lAbfWOUvEf8zydxabZUHna6bayb83jD2eb9nMGGEprfuNBRmFg35sgF1TyN
-+ieuQakvQYmY8tzK49hhHa2Y3qhGCTqYTHO3ypHvhHsZiGbL0gmdgB9P8ssVIws//34ae99GUOxo
-XKTxPwwsQ5Arq42besv3/HXAW+4nRAT8d3ht5ZWCHc5rjL/vdGzu7PaYo3u0da69AZ8Sh4Gf5yoc
-QANr2ZkMrxXbLmSmnRvbkQrzlZp2YbTFnczx46429D6q75/FNFOL1vAjxtRAPzkyACvW0eKvchza
-TMvvD3IWERLlcBL5yXpENc3rI8/wVjqgAWYxlFg1b/4b/TCgYe2MZC0rx4Uh3zTIbmPNiHdN6QZ9
-oDiYzWUcqWZ5jCO4bMKNlVJXeCvdANLHuhcC8FONj5VzNgYXs6gWkp9/Wt6XnQPX4dF4JBa8JdL/
-cT46RJIzoiJHEx/8syO5FparZHIKbkunoq6niPsRaQUGeqWc56H4Z1sQXuBJN9fhqkIkG0Ywfrwt
-uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
-PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgzByQRcYnaQenoVp6PPSPaSERQfUC
-Y2kvpHb3/e42Fq0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MzI4MDgwNzA2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAENVM3tz7uK7WnnOPenb8ndbSNXfYUw+dlmCZg0o588AL5TItjC8+DQOpjjc3Ffkd
-p6Ru68g15xjTr8fM+MDpPmeTApSBiIAVb8tCUtRBEZTvfbceKhwK8zKZtfW0/RV6CeCxgA9s5GM/
-HUce3WieuT88uVbtGuKvw+ifmBf7OhDfjfCeF+0ZIxyTHE7Ti+qDMAZxr+B4Z8GCpGITuhsYAkbm
-+GEfhMp40fWsm7+e5QReajIccOXJCP1K98KQbrDWdyTSveoE/xQ10SIn/UJrkav5zNTP1/0mMGT4
-qjyYKXqkCGIakGinJYdVAymM8UVD13SAcpQQv0gEfuwRdBfaPg==
---0000000000007111c00631628ed5--
+-- 
+Lee Jones [李琼斯]
 
