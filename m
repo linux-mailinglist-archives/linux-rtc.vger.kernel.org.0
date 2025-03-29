@@ -1,186 +1,137 @@
-Return-Path: <linux-rtc+bounces-3701-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3702-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D08AA74DF1
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 16:38:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 362E2A756A9
+	for <lists+linux-rtc@lfdr.de>; Sat, 29 Mar 2025 15:30:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EABF188BCE9
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Mar 2025 15:38:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2DD916F1AF
+	for <lists+linux-rtc@lfdr.de>; Sat, 29 Mar 2025 14:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C3901C5D7F;
-	Fri, 28 Mar 2025 15:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 207761D6194;
+	Sat, 29 Mar 2025 14:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EexcGqKT"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1ED1531E3;
-	Fri, 28 Mar 2025 15:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30E11B424F;
+	Sat, 29 Mar 2025 14:30:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743176282; cv=none; b=Mpt7rY94QrjfJHRNnwSHf1jOizSiXxgpz+Qm25fdy3HyhJH2hg31DGZld/EPFoSbGc9tdeyqS2ntvQZZDYGGD6GgeAuyOILK8c3H8HtcO98RHgP6eRnKCa+3J8AFiDmhJ+xCEUfcPgTmSKmDz9Nqne0/mr2JkzwO7EpuaJwPQME=
+	t=1743258615; cv=none; b=FNZXmnLT7nWHdszd2TJdHjWTisdRUWEn3cdCgmz5wGnsf++Ypejbeb6fsB1c1tMNwSFG9JvY1fD1ramWldMO2pP55slVRdmEip2Lav2R/pQOQgY88u839uU+gHk9RZCsgRnaPyfDTP/iMNMF/Z2cyjcEJGJXTDa52zYPzKOOUcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743176282; c=relaxed/simple;
-	bh=UcNKyQdwHXZwzLrvGqjuWP36gZizPpwlcMooawquYRU=;
+	s=arc-20240116; t=1743258615; c=relaxed/simple;
+	bh=w0oCwzhaxAnRCzRQ9/YRYIOxKZmZRzvgSTK++PeHVpE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XD2uXvSpsXLOPhq0gD+k/G6WNwPqAJgQbQ3SF7Q57mvOPw8rHr7r6u81nmfDh9w1LoCxIWYL3gyiUeGDfV2BUx/vZ7TZZqEmLF7odaiq9832OcGG9sMuCiQdZ2ag+7v/u9Z4GiGvUCvvVRhCiLqC11gPMRBNQ4bUa4TPP135Kpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=JgSToVaFduaMnxis9b08Rqg6VJHy7g+5cHaBipWAIoIFJnCUqB+yPs1hZqQGkz+RKfUg1Q3zuSD5oJ80XUB/yRalnnScyDwhArbXASBSwU5Jbpgb6DFPvLP3aVoSsMXqkyXzemWYho2VPO8WUqaaRQb+3d7NFaWjpZMqyB4d0+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EexcGqKT; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-86d69774081so1075608241.0;
-        Fri, 28 Mar 2025 08:38:00 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-300fefb8e06so5003885a91.0;
+        Sat, 29 Mar 2025 07:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743258613; x=1743863413; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+xQzPizb+4q7++3drew8nzj42HkGLzBNjvrLjUAd15k=;
+        b=EexcGqKTceZ0JBAdt9qPEmmchZwwYFPgYUfYq3Y0ZXmwd/09WhysuqbOMPwO/IdFRI
+         1gCvrD+Lvs0LTmEzd3BK8G4Liy5s3WFU96uEDM3mXH8Jc4RPueo0utCGq7T0I+pGYu7Q
+         YmdL/0WSzEp8KjGlQ/NjKIwC6w7/AHYhbVP7Xsue08te1kDGdbI/HjHui5uEXFJ4LTw4
+         9/6cAzGc7DM/I/jaaljqhEc2RwZ/ipmViOZa5OR6v4ODFk381JX1IjT7y76VMoKejAZP
+         KxG4JBkpf03wTeksg8j8jOnI3woxx5pYBRjkWjnVIGmSovJLyO3Uh06zFWQzY+kmtkm7
+         ET6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743176278; x=1743781078;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X+hTA5gOZExHtFsvcSKQUzkbBBEeTeN/78qhx8fvRH0=;
-        b=Dw/DUgaeVGjLox1zJ56/xduysOiKJ/ZJMYnzGyNPwcyR9uqT2JFDz5d4S5Sf1Yqm5N
-         Nm+nNO5FfUm+XZC7TFbGcwxdMBYnKo1kGpPlJUsjLQEgnQHGWFs3HIch51z3t1X8Cu1F
-         rTyy9m7uBOtYQezVkWI8r+Q/BrKjMZcxa/lmcS+8St5466ovOXmC+k8Ci1Pgff9PWmPn
-         vFtnsMSnx+18S/h9xsrW2SloU6MzUyMmxJ1PYuzPOO+TdNvEK2OiRDwvLj1jfKosaC+m
-         CsywZBW8/Wcip0AmOgKzOEK50Vr1LGV+7JmpxeIHwFRlgBJcIIPfOTSX2HYqaft49MGM
-         iKLw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9SbVZ4XTHymst05Dk8UyGYHaWPC8z7/OEwfne2gGjSZttp9VJDEXp6dziOL0Y5vJuR1wUaNlfX9zeg0c=@vger.kernel.org, AJvYcCUSu50qpwwaq+JGr4WGrwNs7iIUqqW4NWsWCoXT4zvMYEzpuY7fzbtMMgtcEjI+tdoiKm0q/0Jgragn@vger.kernel.org, AJvYcCUW01HfsyzdER5LJdfygvb9kd9HOBmKL0RpYML/ykq4DyPRKPXQmvRBpciEAuU0Txb0XyQiMUs6m9N4GrhCePM5@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPj5RrXsFNdtaKeY81Vsu9hFYBIhVk62m7BAJkeK/vPyg7fLLm
-	jTxVqKi3qSICUTPNsvq+Z1chivK1yzqFky+Qrnk0e9wV+hCaXPwe9bYHf2TP
-X-Gm-Gg: ASbGncuyCz9YmeGx7iSNUE7SP5IO+YQCCF6HWdBD2PxeQmd+xSUPr6JNLaOq2be3cH2
-	w4eGH5I1P8DIAtGz/JfuD+sL1zz9y7SmiVwwZlZKg2WnCkVZC1aJCdU2gIxIrVD7sepac/a0XYg
-	sVAFOeKUI3gv4xiHpcAFzCBOR6yWVmBS1yGFKDdTbdt2d+gNw+rI/A45rqvc6UgyALAF7NfOBR4
-	vYoe8syoaJSfleqGjNdqwrmLdQ5KjLGH4bqoZYAcX2HyamInZQRsB984KLxrmMkIjl/oZHg1lC5
-	3xW0dyib6rW7tZjxAXyyiXIz0x71bMC31y9hJpeb0KvdKCavLe+Vuh07fOxAZwTIH1kF/2wlHy7
-	XKfqHQRM=
-X-Google-Smtp-Source: AGHT+IGWQ/+pGuEMGLmbInLrpsQt2Li5HeX1nK0ejO9lsjeLZRWycyvfAb9Spzj4ZkeMdAFXL/V4bQ==
-X-Received: by 2002:a05:6102:4a81:b0:4bb:c4ff:5cb9 with SMTP id ada2fe7eead31-4c586fa8f21mr8161166137.15.1743176277910;
-        Fri, 28 Mar 2025 08:37:57 -0700 (PDT)
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-871a33890aesm400827241.21.2025.03.28.08.37.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Mar 2025 08:37:57 -0700 (PDT)
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86d3805a551so1084644241.3;
-        Fri, 28 Mar 2025 08:37:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUIdEYSHgLjR8WvfjEAT/JCBygYJpZZLGiKovNUbvJiTelB9o4Y47V8PIcujZRf0Jhi9zR8t4z89EQZ@vger.kernel.org, AJvYcCVG1nEm0YYu6gdqflEa6O+ybn1k2hIRF+xwmpbcjtHtg1L2STLYaWwm3OyrQoff60FKcT+LQiN8aDOGnnDfMbGc@vger.kernel.org, AJvYcCXjcztviAeRfQmdGzsIUWY9/YBrhe9dI9RbRNuu2vmc3K4Kawf8PGxD7resd3DRjojYXA2TwPjlp3sauV8=@vger.kernel.org
-X-Received: by 2002:a05:6102:41a8:b0:4c3:64be:5983 with SMTP id
- ada2fe7eead31-4c5870a1bbemr7986803137.25.1743176277027; Fri, 28 Mar 2025
- 08:37:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743258613; x=1743863413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+xQzPizb+4q7++3drew8nzj42HkGLzBNjvrLjUAd15k=;
+        b=vlWJLVDzKpjSsxwZHb0yGX4bSQFF4uuY5m36bH2wVNa8+AGBP8qJKYV2Tj9LQ4jRDk
+         adn+C7aYIOdoMqQ/5o471D1xZBVkdUfnnw8etC5Yd+sdgNJyuV5ux357PaUgIpQvq35C
+         rGK/chMzsUwv4IhCaCzoQX7GiKqMb9bXbO8zq484FU9Br0ozIy+qRGy9VHGS0y1Js6MU
+         hreHqu8sseJd+4jUARw0iI0FVMP5BC/mFJ3XVcvbb5XyiL76Jz5B8UNZfMjASLBLbKKA
+         COEbPTNQH/NgVumREmJNIrf7O7nm5mRpRQ23EJw2TTFLWC7PvJ6Ws48f6nfKInaJiLYd
+         FIXw==
+X-Forwarded-Encrypted: i=1; AJvYcCXBNbYVk5KXv8dE1F/vMb/Bu4UBlmz+2pQ1XhE8Qg75Io0odHfabGYE3mubFRHp4ei6uyBF6eol3LrJ8+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqZ6OVOqtBuxKiQIgB6VT2eTyOEM2Gz27hPzHRs2BsslRi1Tay
+	rgaTu3qnri7fFYE2rwuwS8gVx4bKZYMwWcLt96/35W/Jf0uPkIVFSz7bXxyxlA68+Esy6uI4uYl
+	P6vgk0xxb4LIXu+S/kl2UCE5YsfKG9A==
+X-Gm-Gg: ASbGncvA0k0UYFHXINK//XgAwNuu/N8CPA6DAARmQLrnQWKksZtFQo3RjlZ9XTxl39Q
+	p+7WISs5ccxz4poPCc+lfBuiFZXjKO8/0uKTH4FPg8iC2P7SbdU6JZIclMOCE5T7tc4RR1lKUU4
+	xovPcS0qnkTbZkIEg53mrqCsNqgsAREdqfje3GiQ==
+X-Google-Smtp-Source: AGHT+IEZeGNvIgGgECDw9rUtEaQ1M5ojjZ6MTiTNno3W2R5+/BaqqCGv4o8c/FIay7eczCuG3dQAzb8XomY0bhRqn6A=
+X-Received: by 2002:a17:90b:2801:b0:305:2d27:7ba5 with SMTP id
+ 98e67ed59e1d1-30531f7bf94mr4126927a91.6.1743258612675; Sat, 29 Mar 2025
+ 07:30:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <49d57ab512c47f01d6c374d533f1752871ea4246.1743091573.git.geert@linux-m68k.org>
- <CABVgOSmxsXEyLVyhhffhXUXf3-QnGmZurXaRhpiK8w894mrwzg@mail.gmail.com>
-In-Reply-To: <CABVgOSmxsXEyLVyhhffhXUXf3-QnGmZurXaRhpiK8w894mrwzg@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 28 Mar 2025 16:37:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUqPQmX6KdtRK-mTuXmeGpzWNmbKoH9nEk54m60n-8aVg@mail.gmail.com>
-X-Gm-Features: AQ5f1JroZEXUFnQSoskkMkDDJZaCuceDi-ZRhLKDbJHM-LThH2bv_zYDNSxSJO4
-Message-ID: <CAMuHMdUqPQmX6KdtRK-mTuXmeGpzWNmbKoH9nEk54m60n-8aVg@mail.gmail.com>
-Subject: Re: [PATCH/RFC] kunit/rtc: Add real support for very slow tests
-To: David Gow <davidgow@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-rtc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20250317183349.346399-1-bharadwaj.raju777@gmail.com> <2025031721511050987ca2@mail.local>
+In-Reply-To: <2025031721511050987ca2@mail.local>
+From: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
+Date: Sat, 29 Mar 2025 19:59:46 +0530
+X-Gm-Features: AQ5f1Jrz_QSXKF34LaUrfOrHihalyXOcyYry5aS2gclqre26Jed_H26IChjSkAk
+Message-ID: <CAPZ5DTHKSzg6UV0bT5U9Xet7jL1c__n+GgfYz-38GybGzerYNQ@mail.gmail.com>
+Subject: Re: [PATCH] rtc: fix use of uninit struct in rtc_read_alarm_internal
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kernel-mentees@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
-
-On Fri, 28 Mar 2025 at 09:07, David Gow <davidgow@google.com> wrote:
-> Thanks for sending this out: I think this raises some good questions
-> about exactly how to handle long running tests (particularly on
-> older/slower hardware).
+On Tue, Mar 18, 2025 at 3:21=E2=80=AFAM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
 >
-> I've put a few notes below, but, tl;dr: I think these are all good
-> changes, even if there's more we can do to better scale to slower
-> hardware.
+> On 18/03/2025 00:03:43+0530, Bharadwaj Raju wrote:
+> > The trace call invokes rtc_tm_to_time64 on a
+> > potentially uninitialized alarm->time. Move the
+> > trace call to the path where we do successfully
+> > initialize and read that struct.
+> >
+> > This fixes a KMSAN warning.
+> >
+> > Fixes: 29a1f599c0cc ("rtc: Add tracepoints for RTC system")
+> >
+> > Signed-off-by: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
+> > ---
+> >  drivers/rtc/interface.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+> > index aaf76406cd7d..82ba33bf478b 100644
+> > --- a/drivers/rtc/interface.c
+> > +++ b/drivers/rtc/interface.c
+> > @@ -201,11 +201,12 @@ static int rtc_read_alarm_internal(struct rtc_dev=
+ice *rtc,
+> >               alarm->time.tm_yday =3D -1;
+> >               alarm->time.tm_isdst =3D -1;
+> >               err =3D rtc->ops->read_alarm(rtc->dev.parent, alarm);
+> > +             if (!err)
+> > +                     trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->tim=
+e), err);
+> >       }
+> >
+> >       mutex_unlock(&rtc->ops_lock);
+> >
+> > -     trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
 >
-> On Fri, 28 Mar 2025 at 00:07, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >   2. Increase timeout by ten; ideally this should only be done for very
-> >      slow tests, but I couldn't find how to access kunit_case.attr.case
-> >      from kunit_try_catch_run(),
+> This removes the tracepoint when there is an error, rendering it les
+> useful.
 >
+> Also, as discussed about a year ago, alarm-time being uninitialized is
+> not actually an issue as mktime64 can handle whatever is the input so
+> this will never cause any problem so this isn't really a fix.
 >
-> My feeling for tests generally is:
-> - Normal: effectively instant on modern hardware, O(seconds) on
-> ancient hardware.
-> - Slow: takes O(seconds) to run on modern hardware, O(minutes)..O(10s
-> of minutes) on ancient hardware.
-> - Very slow: O(minutes) or higher on modern hardware, infeasible on
-> ancient hardware.
->
-> Obviously the definition of "modern" and "ancient" hardware here is
-> pretty arbitrary: I'm using "modern, high-end x86" ~4GHz as my
-> "modern" example, and "66MHz 486" as my "ancient" one, but things like
-> emulation or embedded systems fit in-between.
->
-> Ultimately, I think the timeout probably needs to be configurable on a
-> per-machine basis more than a per-test one, but having a 10x
-> multiplier (or even a 100x multiplier) for very slow tests would also
-> work for me.
+> I suggest the following:
 
-Yes, adapting automatically to the speed of the target maachine
-would be nice, but non-trivial.
-
-> I quickly tried hacking together something to pass through the
-> attribute and implement this. Diff (probably mangled by gmail) below:
-
-[...]
-
-Thanks!
-
-> I'll get around to extending this to allow the "base timeout" to be
-> configurable as a command-line option, too, if this seems like a good
-> way to go.
->
-> >   3. Mark rtc_time64_to_tm_test_date_range_1000 slow,
-> >   4. Mark rtc_time64_to_tm_test_date_range_160000 very slow.
->
-> Hmm... these are definitely fast enough on my "modern" machine that
-> they probably only warrant "slow", not "very slow". But given they're
-> definitely causing problems on older machines, I'm happy to go with
-> marking the large ones very slow. (I've been waiting for them for
-> about 45 minutes so far on my 486.)
->
-> Do the time tests in kernel/time/time_test.c also need to be marked
-> very slow, or does that run much faster on your setup?
-
-Hmm, I did run time_test (insmod took (+7 minutes), but I don't
-seem to have pass/fail output. Will rerun...
-
-Indeed:
-
-    # time64_to_tm_test_date_range.speed: slow
-
-Another test that wanted to be marked as slow was:
-
-    # kunit_platform_device_add_twice_fails_test: Test should be
-marked slow (runtime: 30.788248702s)
-
-I will rerun all, as it seems I have lost some logs...
-
-> Is this causing you enough strife that you want it in as-is, straight
-> away, or would you be happy with it being split up and polished a bit
-> first -- particularly around supporting the more configurable timeout,
-> and shifting the test changes into separate patches? (I'm happy to do
-> that for you if you don't want to dig around in the somewhat messy
-> KUnit try-catch stuff any further.)
-
-This is definitely not something urgent for me.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks for reviewing. Would you like me to make a second version of
+the patch with this suggestion?
 
