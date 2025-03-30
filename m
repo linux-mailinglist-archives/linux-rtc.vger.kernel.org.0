@@ -1,137 +1,150 @@
-Return-Path: <linux-rtc+bounces-3702-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3703-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 362E2A756A9
-	for <lists+linux-rtc@lfdr.de>; Sat, 29 Mar 2025 15:30:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D974A759D2
+	for <lists+linux-rtc@lfdr.de>; Sun, 30 Mar 2025 13:32:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2DD916F1AF
-	for <lists+linux-rtc@lfdr.de>; Sat, 29 Mar 2025 14:30:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F28F97A4815
+	for <lists+linux-rtc@lfdr.de>; Sun, 30 Mar 2025 11:31:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 207761D6194;
-	Sat, 29 Mar 2025 14:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 524D513B59B;
+	Sun, 30 Mar 2025 11:32:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EexcGqKT"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="QyNYAcWQ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30E11B424F;
-	Sat, 29 Mar 2025 14:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A05954782;
+	Sun, 30 Mar 2025 11:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743258615; cv=none; b=FNZXmnLT7nWHdszd2TJdHjWTisdRUWEn3cdCgmz5wGnsf++Ypejbeb6fsB1c1tMNwSFG9JvY1fD1ramWldMO2pP55slVRdmEip2Lav2R/pQOQgY88u839uU+gHk9RZCsgRnaPyfDTP/iMNMF/Z2cyjcEJGJXTDa52zYPzKOOUcg=
+	t=1743334345; cv=none; b=Z0xTTVSMfqQJ+Y8njkoyLBzGF15njC6nkkKSUQZfglSCawpbZSfwU/k1PdXyorf/MFkab9UO3n8js6n4dJySI1VRpAEy9jMWYOoFOPCNkqR1/Le6Byk31i1EU1C3dqp7Zj4/56Klnp06MDx4Q1LT0DVyjNR8DvicuSBsOksgMeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743258615; c=relaxed/simple;
-	bh=w0oCwzhaxAnRCzRQ9/YRYIOxKZmZRzvgSTK++PeHVpE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JgSToVaFduaMnxis9b08Rqg6VJHy7g+5cHaBipWAIoIFJnCUqB+yPs1hZqQGkz+RKfUg1Q3zuSD5oJ80XUB/yRalnnScyDwhArbXASBSwU5Jbpgb6DFPvLP3aVoSsMXqkyXzemWYho2VPO8WUqaaRQb+3d7NFaWjpZMqyB4d0+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EexcGqKT; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-300fefb8e06so5003885a91.0;
-        Sat, 29 Mar 2025 07:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743258613; x=1743863413; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+xQzPizb+4q7++3drew8nzj42HkGLzBNjvrLjUAd15k=;
-        b=EexcGqKTceZ0JBAdt9qPEmmchZwwYFPgYUfYq3Y0ZXmwd/09WhysuqbOMPwO/IdFRI
-         1gCvrD+Lvs0LTmEzd3BK8G4Liy5s3WFU96uEDM3mXH8Jc4RPueo0utCGq7T0I+pGYu7Q
-         YmdL/0WSzEp8KjGlQ/NjKIwC6w7/AHYhbVP7Xsue08te1kDGdbI/HjHui5uEXFJ4LTw4
-         9/6cAzGc7DM/I/jaaljqhEc2RwZ/ipmViOZa5OR6v4ODFk381JX1IjT7y76VMoKejAZP
-         KxG4JBkpf03wTeksg8j8jOnI3woxx5pYBRjkWjnVIGmSovJLyO3Uh06zFWQzY+kmtkm7
-         ET6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743258613; x=1743863413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+xQzPizb+4q7++3drew8nzj42HkGLzBNjvrLjUAd15k=;
-        b=vlWJLVDzKpjSsxwZHb0yGX4bSQFF4uuY5m36bH2wVNa8+AGBP8qJKYV2Tj9LQ4jRDk
-         adn+C7aYIOdoMqQ/5o471D1xZBVkdUfnnw8etC5Yd+sdgNJyuV5ux357PaUgIpQvq35C
-         rGK/chMzsUwv4IhCaCzoQX7GiKqMb9bXbO8zq484FU9Br0ozIy+qRGy9VHGS0y1Js6MU
-         hreHqu8sseJd+4jUARw0iI0FVMP5BC/mFJ3XVcvbb5XyiL76Jz5B8UNZfMjASLBLbKKA
-         COEbPTNQH/NgVumREmJNIrf7O7nm5mRpRQ23EJw2TTFLWC7PvJ6Ws48f6nfKInaJiLYd
-         FIXw==
-X-Forwarded-Encrypted: i=1; AJvYcCXBNbYVk5KXv8dE1F/vMb/Bu4UBlmz+2pQ1XhE8Qg75Io0odHfabGYE3mubFRHp4ei6uyBF6eol3LrJ8+4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqZ6OVOqtBuxKiQIgB6VT2eTyOEM2Gz27hPzHRs2BsslRi1Tay
-	rgaTu3qnri7fFYE2rwuwS8gVx4bKZYMwWcLt96/35W/Jf0uPkIVFSz7bXxyxlA68+Esy6uI4uYl
-	P6vgk0xxb4LIXu+S/kl2UCE5YsfKG9A==
-X-Gm-Gg: ASbGncvA0k0UYFHXINK//XgAwNuu/N8CPA6DAARmQLrnQWKksZtFQo3RjlZ9XTxl39Q
-	p+7WISs5ccxz4poPCc+lfBuiFZXjKO8/0uKTH4FPg8iC2P7SbdU6JZIclMOCE5T7tc4RR1lKUU4
-	xovPcS0qnkTbZkIEg53mrqCsNqgsAREdqfje3GiQ==
-X-Google-Smtp-Source: AGHT+IEZeGNvIgGgECDw9rUtEaQ1M5ojjZ6MTiTNno3W2R5+/BaqqCGv4o8c/FIay7eczCuG3dQAzb8XomY0bhRqn6A=
-X-Received: by 2002:a17:90b:2801:b0:305:2d27:7ba5 with SMTP id
- 98e67ed59e1d1-30531f7bf94mr4126927a91.6.1743258612675; Sat, 29 Mar 2025
- 07:30:12 -0700 (PDT)
+	s=arc-20240116; t=1743334345; c=relaxed/simple;
+	bh=L89VDzDrxjUhtKlbRVWhy2rTq1h8P2KBxfsXrj4WPM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=R/Q2SexnGdswKI7Z9bXXWgmms4PnCaJx6NNue4RJg2Jh2ostIY+JlFM5entY2y/7tXTx/gRQeL5yoWR/tPm7W8ca1VppV0jjgejK7oaOsvrU4U5DUqpzbtCozSBsSsA8Xvd5iHQPOMi/LcJCN2qv2Kir7TlZxJ2ZdgYY45lD7DM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=QyNYAcWQ; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id C6D3640E020E;
+	Sun, 30 Mar 2025 11:32:19 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 64dYyB4S8r8Q; Sun, 30 Mar 2025 11:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1743334336; bh=zzWAbLzjfGn0pgAQKhEY2KweSGBfucXGWiRU7SLAA0E=;
+	h=Date:From:To:Cc:Subject:From;
+	b=QyNYAcWQQ4zEdVJcijr+GMLuXimxE4X6SzYsgpW+0mmePO8fnGfnLete+aXQj7tQ4
+	 gfPsK+QHk/4g5En3ac4BpUv9yuzoSnB2DWZKmjYTVUx8CnyO6kgoGV8snogqvLU7WD
+	 ISgmVEJcmXpOjnEVhOO3y4xyMzwfWB0JY3h+TqNxsHvDPTidxTLzexWd1aHx4pI1QT
+	 Z3u+yRtEzilwZRbbApEAPPhWrIi1Qwgog6DxkDFm7J7IGJ1uNaYEyCC+7X6p8n9mYq
+	 ZfsQtl27cLlgbpUbjOaYwwIUJ9JUxHU6YPrNX/adICudIkPRdasMDwiLMr2WCUZv/U
+	 BqCqJIQfrYLBN7RexQez8JfucWalamR801bADa+FT5xxShdY9ZQJmVWTEyg9n0uk/B
+	 AtMZF5MFgtNlT0iVNPEGpC1xkpwr97I/crasF5qHnr47Ow52zBmyNBPKhkeEDmg0xc
+	 Cr3SEBHibASIMI4uupGZJmSKyKyET23s2a6cj5YvGjoUJqw9mwPoacqwThRL6seky1
+	 0Vfd/xaN2/03KAqXBVFJCMO11jI7e3zGaZRKWhiZixkzR3jB6yw4tPvdpWAbh3jEu9
+	 p/00ScY9xZtknVxTMzcNTDlTvM34WtCayzSNbY5ze24LQgsotiuygCGS9uKnczMfgA
+	 OJQerB4ndYWr10vuIpu7SQqk=
+Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E579240E016E;
+	Sun, 30 Mar 2025 11:32:08 +0000 (UTC)
+Date: Sun, 30 Mar 2025 13:32:02 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: linux-rtc@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc: lkml <linux-kernel@vger.kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [ BUG: Invalid wait context ] rtc_lock at: mc146818_avoid_UIP
+Message-ID: <20250330113202.GAZ-krsjAnurOlTcp-@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317183349.346399-1-bharadwaj.raju777@gmail.com> <2025031721511050987ca2@mail.local>
-In-Reply-To: <2025031721511050987ca2@mail.local>
-From: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
-Date: Sat, 29 Mar 2025 19:59:46 +0530
-X-Gm-Features: AQ5f1Jrz_QSXKF34LaUrfOrHihalyXOcyYry5aS2gclqre26Jed_H26IChjSkAk
-Message-ID: <CAPZ5DTHKSzg6UV0bT5U9Xet7jL1c__n+GgfYz-38GybGzerYNQ@mail.gmail.com>
-Subject: Re: [PATCH] rtc: fix use of uninit struct in rtc_read_alarm_internal
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kernel-mentees@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-On Tue, Mar 18, 2025 at 3:21=E2=80=AFAM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 18/03/2025 00:03:43+0530, Bharadwaj Raju wrote:
-> > The trace call invokes rtc_tm_to_time64 on a
-> > potentially uninitialized alarm->time. Move the
-> > trace call to the path where we do successfully
-> > initialize and read that struct.
-> >
-> > This fixes a KMSAN warning.
-> >
-> > Fixes: 29a1f599c0cc ("rtc: Add tracepoints for RTC system")
-> >
-> > Signed-off-by: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
-> > ---
-> >  drivers/rtc/interface.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> > index aaf76406cd7d..82ba33bf478b 100644
-> > --- a/drivers/rtc/interface.c
-> > +++ b/drivers/rtc/interface.c
-> > @@ -201,11 +201,12 @@ static int rtc_read_alarm_internal(struct rtc_dev=
-ice *rtc,
-> >               alarm->time.tm_yday =3D -1;
-> >               alarm->time.tm_isdst =3D -1;
-> >               err =3D rtc->ops->read_alarm(rtc->dev.parent, alarm);
-> > +             if (!err)
-> > +                     trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->tim=
-e), err);
-> >       }
-> >
-> >       mutex_unlock(&rtc->ops_lock);
-> >
-> > -     trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
->
-> This removes the tracepoint when there is an error, rendering it les
-> useful.
->
-> Also, as discussed about a year ago, alarm-time being uninitialized is
-> not actually an issue as mktime64 can handle whatever is the input so
-> this will never cause any problem so this isn't really a fix.
->
-> I suggest the following:
+So,
 
-Thanks for reviewing. Would you like me to make a second version of
-the patch with this suggestion?
+while playing with suspend to RAM, I got this lockdep splat below.
+
+Poking around I found:
+
+ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
+
+which is doing this funky taking and dropping the rtc_lock and I guess that's
+inherited from ye olde times.
+
+I "fixed" it so lockdeup doesn't warn by converting rtc_lock to a raw spinlock
+but this is definitely not the right fix so let me bounce it off to the folks
+on Cc who might have a better idea perhaps...
+
+Thx.
+
+[   95.916425] 
+[   95.917942] =============================
+[   95.921970] [ BUG: Invalid wait context ]
+[   95.925993] 6.14.0-rc7+ #1 Not tainted
+[   95.929762] -----------------------------
+[   95.933784] swapper/7/0 is trying to lock:
+[   95.937898] ffffffff8284ad18 (rtc_lock){....}-{3:3}, at: mc146818_avoid_UIP+0x36/0x120
+[   95.945854] other info that might help us debug this:
+[   95.950925] context-{5:5}
+[   95.953559] 1 lock held by swapper/7/0:
+[   95.957409]  #0: ffffffff8299d2f8 (tick_freeze_lock){....}-{2:2}, at: tick_freeze+0x12/0x110
+[   95.965884] stack backtrace:
+[   95.968779] CPU: 7 UID: 0 PID: 0 Comm: swapper/7 Not tainted 6.14.0-rc7+ #1 PREEMPT(voluntary) 
+[   95.968785] Hardware name: Supermicro Super Server/H12SSL-i, BIOS 2.5 09/08/2022
+[   95.968787] Call Trace:
+[   95.968790]  <TASK>
+[   95.968793]  dump_stack_lvl+0x68/0x90
+[   95.968802]  __lock_acquire+0xe96/0x2210
+[   95.968811]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   95.968816]  ? __lock_acquire+0x45d/0x2210
+[   95.968825]  lock_acquire+0xd8/0x300
+[   95.968829]  ? mc146818_avoid_UIP+0x36/0x120
+[   95.968836]  ? lock_acquire+0xd8/0x300
+[   95.968842]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   95.968850]  ? __pfx_mc146818_get_time_callback+0x10/0x10
+[   95.968854]  _raw_spin_lock_irqsave+0x47/0x70
+[   95.968860]  ? mc146818_avoid_UIP+0x36/0x120
+[   95.968865]  mc146818_avoid_UIP+0x36/0x120
+[   95.968874]  mc146818_get_time+0x39/0x110
+[   95.968883]  mach_get_cmos_time+0x2d/0x70
+[   95.968890]  ? srso_alias_return_thunk+0x5/0xfbef5
+[   95.968894]  ? find_held_lock+0x2b/0x80
+[   95.968900]  ? ktime_get+0x1a/0xe0
+[   95.968908]  timekeeping_suspend+0x28/0x420
+[   95.968918]  tick_freeze+0x7e/0x110
+[   95.968923]  enter_s2idle_proper+0x21/0x120
+[   95.968930]  cpuidle_enter_s2idle+0x65/0x90
+[   95.968937]  do_idle+0x237/0x260
+[   95.968947]  cpu_startup_entry+0x25/0x30
+[   95.968952]  start_secondary+0x11c/0x140
+[   95.968960]  common_startup_64+0x13e/0x141
+[   95.968980]  </TASK>
+
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
