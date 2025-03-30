@@ -1,52 +1,52 @@
-Return-Path: <linux-rtc+bounces-3704-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3705-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A129A75A16
-	for <lists+linux-rtc@lfdr.de>; Sun, 30 Mar 2025 14:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68FEEA75A18
+	for <lists+linux-rtc@lfdr.de>; Sun, 30 Mar 2025 14:39:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2CC2188B174
-	for <lists+linux-rtc@lfdr.de>; Sun, 30 Mar 2025 12:31:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 673F7188B3FC
+	for <lists+linux-rtc@lfdr.de>; Sun, 30 Mar 2025 12:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 380A51C9DC6;
-	Sun, 30 Mar 2025 12:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D121CAA87;
+	Sun, 30 Mar 2025 12:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="QzN4sqc/"
+	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="mLS6Ec1u"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDEC189919
-	for <linux-rtc@vger.kernel.org>; Sun, 30 Mar 2025 12:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECCA1C69D
+	for <linux-rtc@vger.kernel.org>; Sun, 30 Mar 2025 12:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743337884; cv=none; b=Lu8ej9cHfXGtbpTAE77NRe8EwiLgIxeLec7qSw0nF2lZIWy+R7tqJIkGfcyl1BeiNrx5/tyqem8ZleCQI3ZukebAlmEKufEtkveKFTGz2mk61t/xIuBEGqP49ll7GyZylWw0x5bKXGkkVQlB2WK+yTn9rrYCPzdwwO6zcajXqZs=
+	t=1743338345; cv=none; b=UHtp/4iwuToZAIb1vk7bFxYFntMjAL3ePAnE9/Rlgai0aBSSV8OJhJG9fXzxooIqit0eX1Np9xfECQpvj20QGM2Yt+Ow1/n9DK8oQLcr/mlmGW09MjEIcOheQEZStUu1MBFgz9Wxdw8NAh4IIUHnyrdPuva58ETFq84NDMy3HpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743337884; c=relaxed/simple;
-	bh=/rHCJf+H/jrX9p/5rBcSy4Uwf6w+SeFwEG7jAr3quGw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ID3iS4d2bWZgbmKaUTps+sh4Iw2gmuGFC62etBT/CpBbsQh6HacWq/MRbysMCVId4PKKPP2o9G/x5eZJrSh8vm2qZzv6BED9y0FeyQoqulW1DEE7tox9aWtcvlUYDNwKj19xRIGi1QCyKnlmdLS8731inn+SKLxfhidAg47vGJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=QzN4sqc/; arc=none smtp.client-ip=193.222.135.158
+	s=arc-20240116; t=1743338345; c=relaxed/simple;
+	bh=gClqjCZh9Kz32bL1aBMjsKWarsotUp4on4WdUJPJcfA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=oklMDMo05HH6wFWRNK27ZNv9gPOLcvMiiZFIGIk3fGbZU3fYrAmJL5RRYg+mDkoUjijLOjiJbdUhJ5si+ooFeGHs6zaKOHf/BlOiHmnhugXb2G5G+sNWSladsag8Ld7Ppvt5UrkE3G4x8lz6uog8iv/CS5IFRbfRIQm8sDGNFXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=mLS6Ec1u; arc=none smtp.client-ip=193.222.135.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
-Received: (wp-smtpd smtp.tlen.pl 45464 invoked from network); 30 Mar 2025 14:24:38 +0200
+Received: (wp-smtpd smtp.tlen.pl 28174 invoked from network); 30 Mar 2025 14:32:22 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
-          t=1743337478; bh=REhcB2mZS7tKDoofE4+e/4NAUzzcPKvy/9MhJDFWxvU=;
-          h=Subject:To:Cc:From;
-          b=QzN4sqc/a77KvB6WCbtfM10m84ppIPeFGm8c8hhGBWu8w3R4eQEN6iRw5pmyV5R9Z
-           /DXF7JJpdCtMzuLLDnowwXep/fOuBgyHpQW91Y1MDUy5MJ7D2jwr247lU97fLuzBtP
-           JqbFjSf3hNQ6BtZ44RNJAIUPxuMB11LnPKYnY3Qk808vkPobqi58gThBkW3yce4dKl
-           OZcogMz6BVj4nhMYVoX2cZsd5XgKCrdL2UDU/wC+Oa5FQx+V3SByYsOMpPJlcJoLNu
-           aGLaKVwn2dn27sF55SpsAd2z3aXVEfmGVY3caVrVuG6BQe3hFkv05rd6es8DBksaMr
-           fLyNhOOdTg7uA==
+          t=1743337942; bh=hoCDv68febeR3bUGtjvSv+eDR1SEWH0jExpg2Z6Cov4=;
+          h=Subject:From:To:Cc;
+          b=mLS6Ec1uk8rIFTMYwjjvGYZR8RStuGEi2maXF8ekp6qLZ9ZsOHTPfzd63jMvrrV/i
+           kCfrN7WLikqrWWSqqXDjhPlfkfr7gSypTRZNylP5tFagamydYkas/YtNU4bFqc8pSh
+           3La2pExpoxy/4mAPdOTFEqtEzrS/hXjxJwdEA6rWFru5NDtl+jzs+MqtsSn7UH/0E3
+           BF2gDXBaCBTvjqikjym9CjklqyC9BIvhVj95/cu4QE86d88pMVk5aqzcu2SpT2thYW
+           WXHJLuN4Fl0sAxdsFvSiOir3TT5m5kiYCVw7bkEkeICrGhSsm8K3W7YfLUQ4e8o4RP
+           NSFm828n9Q0CA==
 Received: from apn-78-30-75-194.dynamic.gprs.plus.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[78.30.75.194])
           (envelope-sender <mat.jonczyk@o2.pl>)
           by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <bp@alien8.de>; 30 Mar 2025 14:24:38 +0200
-Message-ID: <947b1ceb-77a3-439b-bb7b-6eba38e12cb3@o2.pl>
-Date: Sun, 30 Mar 2025 14:23:47 +0200
+          for <bp@alien8.de>; 30 Mar 2025 14:32:22 +0200
+Message-ID: <45cee3c7-e1b2-4058-bc81-c6eb5935fad0@o2.pl>
+Date: Sun, 30 Mar 2025 14:32:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -55,6 +55,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [ BUG: Invalid wait context ] rtc_lock at: mc146818_avoid_UIP
+From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 To: Borislav Petkov <bp@alien8.de>, linux-rtc@vger.kernel.org,
  Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc: lkml <linux-kernel@vger.kernel.org>,
@@ -62,8 +63,8 @@ Cc: lkml <linux-kernel@vger.kernel.org>,
  Frederic Weisbecker <frederic@kernel.org>,
  Thomas Gleixner <tglx@linutronix.de>
 References: <20250330113202.GAZ-krsjAnurOlTcp-@fat_crate.local>
+ <947b1ceb-77a3-439b-bb7b-6eba38e12cb3@o2.pl>
 Content-Language: en-GB, pl
-From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
  xsFNBFqMDyQBEAC2VYhOvwXdcGfmMs9amNUFjGFgLixeS2C1uYwaC3tYqjgDQNo/qDoPh52f
  ExoTMJRqx48qvvY/i6iwia7wOTBxbYCBDqGYxDudjtL41ko8AmbGOSkxJww5X/2ZAtFjUJxO
@@ -107,73 +108,86 @@ Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
  0nI2LedLnIMUWwLRT4EvdYzsbP6im/7FXps15jaBOreobCaWTWtKtwD2LNI0l9LU9/RF+4Ac
  gwYu1CerMmdFbSo8ZdnaXlbEHinySUPqKmLHmPgDfxKNhfRDm1jJcGATkHCP80Fww8Ihl8aS
  TANkZ3QqXNX2
-In-Reply-To: <20250330113202.GAZ-krsjAnurOlTcp-@fat_crate.local>
+In-Reply-To: <947b1ceb-77a3-439b-bb7b-6eba38e12cb3@o2.pl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 8be777aa6b28230075e5f412c274339f
+X-WP-MailID: e47304061ecc448764be7d6522469e98
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [AWN0]                               
+X-WP-SPAM: NO 0000000 [obM0]                               
 
-W dniu 30.03.2025 o 13:32, Borislav Petkov pisze:
-> So,
+W dniu 30.03.2025 o 14:23, Mateusz Jończyk pisze:
+> W dniu 30.03.2025 o 13:32, Borislav Petkov pisze:
+>> So,
+>>
+>> while playing with suspend to RAM, I got this lockdep splat below.
+>>
+>> Poking around I found:
+>>
+>> ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
+>>
+>> which is doing this funky taking and dropping the rtc_lock and I 
+>> guess that's
+>> inherited from ye olde times.
+>>
+>> I "fixed" it so lockdeup doesn't warn by converting rtc_lock to a raw 
+>> spinlock
+>> but this is definitely not the right fix so let me bounce it off to 
+>> the folks
+>> on Cc who might have a better idea perhaps...
+>>
+>> Thx.
 >
-> while playing with suspend to RAM, I got this lockdep splat below.
+> Hello,
 >
-> Poking around I found:
+> This problem has been reported before, see
 >
-> ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
+> https://lore.kernel.org/all/463fbc29-b41f-4d2d-a869-108114000cdb@o2.pl/
 >
-> which is doing this funky taking and dropping the rtc_lock and I guess that's
-> inherited from ye olde times.
+> I started work on converting rtc_lock to a raw spinlock, but got stuck 
+> mostly to a lack
+> of time etc. Only did some MIPS patches (unpublished).
 >
-> I "fixed" it so lockdeup doesn't warn by converting rtc_lock to a raw spinlock
-> but this is definitely not the right fix so let me bounce it off to the folks
-> on Cc who might have a better idea perhaps...
+> The problem is that timekeeping_suspend() takes a raw spinlock called 
+> "tk_core.lock".
+> With this lock taken, this function indirectly calls 
+> mc146818_avoid_UIP(), which takes
+> a normal spinlock called "rtc_lock". It is necessary to take the 
+> rtc_lock while accessing
+> the RTC: the RTC access cycle consists of writing to an index register 
+> and then accessing
+> the data register. If something else touches the index register in the 
+> middle, we get garbage.
 >
-> Thx.
+> During a RTC tick, the RTC date/time registers are in an unspecified 
+> state - roughly during this
+> time the UIP (Update In Progress) bit in an RTC register A is set. 
+> This is handled by
+> mc146818_avoid_UIP(). This function takes and releases the rtc_lock 
+> multiple times,
+> in order not to hold it for too long a time (while sleeping).
 
-Hello,
+I meant "while waiting / while calling udelay()". mc146818_avoid_UIP() 
+does not sleep.
 
-This problem has been reported before, see
+> But the rtc_lock does need to be taken anyway.
+>
+> So the solutions would be:
+>
+> 1. Change the rtc_lock to a raw spinlock.
+>
+> 2. Change the tick_freeze_lock to a normal spinlock (if possible).
+>
+> 3. Possibly rewrite mc146818_avoid_UIP to avoid taking the rtc_lock if 
+> the tick_freeze_lock is held (likely ugly).
+>
+> 4. Maybe something else I haven't thought about.
+>
+> Thanks,
+>
+> Mateusz
 
-https://lore.kernel.org/all/463fbc29-b41f-4d2d-a869-108114000cdb@o2.pl/
-
-I started work on converting rtc_lock to a raw spinlock, but got stuck 
-mostly to a lack
-of time etc. Only did some MIPS patches (unpublished).
-
-The problem is that timekeeping_suspend() takes a raw spinlock called 
-"tk_core.lock".
-With this lock taken, this function indirectly calls 
-mc146818_avoid_UIP(), which takes
-a normal spinlock called "rtc_lock". It is necessary to take the 
-rtc_lock while accessing
-the RTC: the RTC access cycle consists of writing to an index register 
-and then accessing
-the data register. If something else touches the index register in the 
-middle, we get garbage.
-
-During a RTC tick, the RTC date/time registers are in an unspecified 
-state - roughly during this
-time the UIP (Update In Progress) bit in an RTC register A is set. This 
-is handled by
-mc146818_avoid_UIP(). This function takes and releases the rtc_lock 
-multiple times,
-in order not to hold it for too long a time (while sleeping).
-But the rtc_lock does need to be taken anyway.
-
-So the solutions would be:
-
-1. Change the rtc_lock to a raw spinlock.
-
-2. Change the tick_freeze_lock to a normal spinlock (if possible).
-
-3. Possibly rewrite mc146818_avoid_UIP to avoid taking the rtc_lock if 
-the tick_freeze_lock is held (likely ugly).
-
-4. Maybe something else I haven't thought about.
-
-Thanks,
+Greetings,
 
 Mateusz
+
 
