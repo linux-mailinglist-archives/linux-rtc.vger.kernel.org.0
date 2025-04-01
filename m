@@ -1,57 +1,58 @@
-Return-Path: <linux-rtc+bounces-3711-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3712-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DE34A7772A
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 11:05:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 676D8A777C1
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 11:29:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 476163A7D89
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 09:04:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92694188085A
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 09:29:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3DD61EB5CA;
-	Tue,  1 Apr 2025 09:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 274291EEA32;
+	Tue,  1 Apr 2025 09:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IlQp4/q8"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XCi+bjs0"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C981E378C;
-	Tue,  1 Apr 2025 09:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD9F1E8329;
+	Tue,  1 Apr 2025 09:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743498305; cv=none; b=C1gwEpSQPgeLB7wdwHAQU1ZrfrAmm5uBEJlfa10rFtSqgU4JTlPAU9u5GLFxADDLy1L3dVuQ3a1MEmrjGbvz85hm6iDbVZQt9gxAJGf9U7hgJ9BS4VSpI+8Kbr1cZYKjxz3dLVv+wCO6R6ggAZMV1jWZHXtWIwgca71I11YVuQE=
+	t=1743499764; cv=none; b=H5JPboLPLM+7oGx/V02be5pqqd0nhWzIplq2lODUR8l5KB1vZMc2M6rkepKoNEWSZoFvMPUKGOqZM9RYc4P/DDlPvrVWhKbHzdBUbdsrBew8zScZZ6vYnA9IZDcgGlCC4lMYN8VByzPxGRNYUyNhwlJdq0z8Anr2JzM/VHJllXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743498305; c=relaxed/simple;
-	bh=ozmt19GvbEEBobaOV8eXtfFF+gY55KKZwRmKk1gIpUw=;
+	s=arc-20240116; t=1743499764; c=relaxed/simple;
+	bh=Qj/or2Q04KTYGRZ5J888CDL0Vg3escwFqeWvt4Cko3E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jydrkSfgqagDxU43hgb8+wk2PD4MUDUSEmO/VeqgA+/WkofMY3OHo8p5ZLVhdWBwxnmHzVznr7niQtowDbEGEhIM6yqZJ+ytaz3xoZ2NV6COrjmpAQs7g+yL09w42d2gXBdd+3aoj4t2eG3kpb2aaSQTW0RbefPv+TMSJ8OlYLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IlQp4/q8; arc=none smtp.client-ip=217.70.183.195
+	 Content-Type:Content-Disposition:In-Reply-To; b=scHdFJgULbqS5J4IwTXfjRiesMfwp7hQtwQmo66JxrJ72ZQcsizE6lncZOrAg3Nn/dPgbfYCIoLLlnhB/3pySHxRt8Br1JfkKo1aahd6dojZYxLcrUrHtuu8oJPU2yubXnVh2aRo2/HL3781fL05Zqszc8DHBitYM9OJafq9juE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XCi+bjs0; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D80BC20486;
-	Tue,  1 Apr 2025 09:04:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 232E4432BB;
+	Tue,  1 Apr 2025 09:29:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1743498295;
+	t=1743499759;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=d9pmeIEW/9O7W8wmb+t+48ls33PS37BbHr+WoLvC2sc=;
-	b=IlQp4/q8FMW2heV5Lrg35Gw7Qinca5/2aXgPmemfGuYOt5c//gVcTjPS+Yh4ZToHmWekY+
-	qUge8KnuBtzIcMESBfwwl6parBYZQCalvJq1HfvB4dkjKHnvY3epgo5m8vG8HCyy2PmG/J
-	7bnzgkd6puFzLtEgv//qkZHMPzYBAZiJNXKPWUHhFjWpA6+S6dCcNlN1nbWKHY/6pwosIE
-	oGW0sZhB5KJZjGqp/CcPGZHP77FLf/BOiRP+/VQ4K5UT99pqsjsQKSj0kLyclOCiS+EaH8
-	jY7BoX9tiSFLLWwMayTIjuH8D7qdwgvzbGyNpq1YvvKdtAlwvE0m871/Wk8lTQ==
-Date: Tue, 1 Apr 2025 11:04:54 +0200
+	bh=avzwe/WKgAbUoML1SJxa9bofRpw84w3MBJ+tnYJfR3Y=;
+	b=XCi+bjs0BWxvuQ40hNsMrAQ85Ad65NPwcxwG/ImqODzd8CfpgLywYRKK7TVpCQfYqSGuXy
+	ptosRr39u5zx0BuyhH8a6717ubXjDgZ5aDaShR4PsCC50diZoQTcPDqEq7jBGNa17f1AjW
+	kuyWd0WiPzFQW+DYAmUN3vxmZCyGT3BlE4NLApFa07v0NDPskVCd2RJ2DFNBDNsKfK78/4
+	Sr94ZiooaR1b7dtBBvBzzOKqGrOKZaQo0l6ELK/5CWPJmiB2dUdMHoIl96aQDhC+LwD/MA
+	APvYi83h/+Zbmbx81WFCCOYQQCz9Yn8P3p7UgmDZ9CvDzlqaOCcC1PJvMTfuHQ==
+Date: Tue, 1 Apr 2025 11:29:18 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: nmydeen@mvista.com
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	cminyard@mvista.com
-Subject: Re: [PATCH] rtc-m41t62: kickstart ocillator upon failure
-Message-ID: <20250401090454fb0ccf16@mail.local>
-References: <20250116062641.366679-1-nmydeen@mvista.com>
+To: linux-rtc@vger.kernel.org,
+	"A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc: Lukas Stockmann <lukas.stockmann@siemens.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: pcf85063: do a SW reset if POR failed
+Message-ID: <174349973787.1865724.9911990020381072512.b4-ty@bootlin.com>
+References: <20250120093451.30778-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -60,156 +61,32 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250116062641.366679-1-nmydeen@mvista.com>
+In-Reply-To: <20250120093451.30778-1-alexander.sverdlin@siemens.com>
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedvfeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeefleehkeehvedvfedvudeigffhfffftdfhffdtlefhjeehvedtvedttefffedvffenucffohhmrghinhepshhtrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehnmhihuggvvghnsehmvhhishhtrgdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvg
- hgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghmihhnhigrrhgusehmvhhishhtrgdrtghomh
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedvgeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieejfefhffekjeeuheevueevjedvleevjeetudffheeutdffudefjeduffeuvddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhgvgigrnhguvghrrdhsvhgvrhgulhhin
+ hesshhivghmvghnshdrtghomhdprhgtphhtthhopehluhhkrghsrdhsthhotghkmhgrnhhnsehsihgvmhgvnhhsrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello,
-
-On 16/01/2025 11:56:41+0530, nmydeen@mvista.com wrote:
-> From: "A. Niyas Ahamed Mydeen" <nmydeen@mvista.com>
+On Mon, 20 Jan 2025 10:34:49 +0100, A. Sverdlin wrote:
+> Power-on Reset has a documented issue in PCF85063, refer to its datasheet,
+> section "Software reset":
 > 
-> The ocillator on the m41t62 (and other chips of this type) needs
-> a kickstart upon a failure; the RTC read routine will notice the
-> oscillator failure and fail reads.  This is added in the RTC write
-> routine; this allows the system to know that the time in the RTC
-> is accurate.  This is following the procedure described in section
-> 3.11 of  "https://www.st.com/resource/en/datasheet/m41t62.pdf"
+> "There is a low probability that some devices will have corruption of the
+> registers after the automatic power-on reset if the device is powered up
+> with a residual VDD level. It is required that the VDD starts at zero volts
+> at power up or upon power cycling to ensure that there is no corruption of
+> the registers. If this is not possible, a reset must be initiated after
+> power-up (i.e. when power is stable) with the software reset command"
 > 
-> Signed-off-by: A. Niyas Ahamed Mydeen <nmydeen@mvista.com>
-> Reviewed-by: Corey Minyard <cminyard@mvista.com>
-> ---
->  drivers/rtc/rtc-m41t80.c | 70 ++++++++++++++++++++++++++++------------
->  1 file changed, 49 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-> index 1f58ae8b151e..77c21c91bae3 100644
-> --- a/drivers/rtc/rtc-m41t80.c
-> +++ b/drivers/rtc/rtc-m41t80.c
-> @@ -22,6 +22,7 @@
->  #include <linux/slab.h>
->  #include <linux/mutex.h>
->  #include <linux/string.h>
-> +#include <linux/delay.h>
->  #ifdef CONFIG_RTC_DRV_M41T80_WDT
->  #include <linux/fs.h>
->  #include <linux/ioctl.h>
-> @@ -204,7 +205,7 @@ static int m41t80_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  		return flags;
->  
->  	if (flags & M41T80_FLAGS_OF) {
-> -		dev_err(&client->dev, "Oscillator failure, data is invalid.\n");
-> +		dev_err(&client->dev, "Oscillator failure, time may not be accurate, write time to RTC to fix it.\n");
->  		return -EINVAL;
->  	}
->  
-> @@ -227,21 +228,60 @@ static int m41t80_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  	return 0;
->  }
->  
-> -static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *in_tm)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
->  	struct m41t80_data *clientdata = i2c_get_clientdata(client);
-> +	struct rtc_time tm = *in_tm;
->  	unsigned char buf[8];
->  	int err, flags;
-> +	time64_t time = 0;
->  
-> +	flags = i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-> +	if (flags < 0)
-> +		return flags;
-> +	if (flags & M41T80_FLAGS_OF) {
-> +		/* OF cannot be immediately reset: oscillator has to be restarted. */
-> +		dev_warn(&client->dev, "OF bit is still set, kickstarting clock.\n");
-> +		err = i2c_smbus_write_byte_data(client, M41T80_REG_SEC, M41T80_SEC_ST);
-> +		if (err < 0) {
-> +			dev_err(&client->dev, "Can't set ST bit\n");
+> [...]
 
-This is super verbose, please use dev_dbg or drop the dev_errs. The only
-user action after a failure would be to restart the operation anyway.
+Applied, thanks!
 
-> +			return err;
-> +		}
-> +		err = i2c_smbus_write_byte_data(client, M41T80_REG_SEC,
-> +						    flags & ~M41T80_SEC_ST);
-> +		if (err < 0) {
-> +			dev_err(&client->dev, "Can't clear ST bit\n");
-> +			return err;
-> +		}
-> +		/* oscillator must run for 4sec before we attempt to reset OF bit */
-> +		msleep(4000);
-> +		/* Clear the OF bit of Flags Register */
-> +		err = i2c_smbus_write_byte_data(client, M41T80_REG_FLAGS,
-> +					flags & ~M41T80_FLAGS_OF);
+[1/1] rtc: pcf85063: do a SW reset if POR failed
+      https://git.kernel.org/abelloni/c/2b7cbd98495f
 
-checkpatch --strict complains about some style issues, please fix those.
-
-> +		if (err < 0) {
-> +			dev_err(&client->dev, "Unable to write flags register\n");
-> +			return err;
-> +		}
-> +		flags = i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-> +		if (flags < 0)
-> +			return flags;
-> +		else if (flags & M41T80_FLAGS_OF) {
-> +			dev_err(&client->dev, "Can't clear the OF bit check battery\n");
-> +			return err;
-> +		}
-> +		/* add 4sec of oscillator stablize time otherwise we are behind 4sec */
-> +		time = rtc_tm_to_time64(&tm);
-> +		rtc_time64_to_tm(time+4, &tm);
-> +	}
-
-The main issue is that now, you have cleared OF so if any read/write to
-the RTC fails, you would return from the function without having set the
-time. So when OF is set, you should first add the 4s, then set the time,
-then kickstart the RTC.
-
->  	buf[M41T80_REG_SSEC] = 0;
-> -	buf[M41T80_REG_SEC] = bin2bcd(tm->tm_sec);
-> -	buf[M41T80_REG_MIN] = bin2bcd(tm->tm_min);
-> -	buf[M41T80_REG_HOUR] = bin2bcd(tm->tm_hour);
-> -	buf[M41T80_REG_DAY] = bin2bcd(tm->tm_mday);
-> -	buf[M41T80_REG_MON] = bin2bcd(tm->tm_mon + 1);
-> -	buf[M41T80_REG_YEAR] = bin2bcd(tm->tm_year - 100);
-> -	buf[M41T80_REG_WDAY] = tm->tm_wday;
-> +	buf[M41T80_REG_SEC] = bin2bcd(tm.tm_sec);
-> +	buf[M41T80_REG_MIN] = bin2bcd(tm.tm_min);
-> +	buf[M41T80_REG_HOUR] = bin2bcd(tm.tm_hour);
-> +	buf[M41T80_REG_DAY] = bin2bcd(tm.tm_mday);
-> +	buf[M41T80_REG_MON] = bin2bcd(tm.tm_mon + 1);
-> +	buf[M41T80_REG_YEAR] = bin2bcd(tm.tm_year - 100);
-> +	buf[M41T80_REG_WDAY] = tm.tm_wday;
->  
->  	/* If the square wave output is controlled in the weekday register */
->  	if (clientdata->features & M41T80_FEATURE_SQ_ALT) {
-> @@ -261,18 +301,6 @@ static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  		return err;
->  	}
->  
-> -	/* Clear the OF bit of Flags Register */
-> -	flags = i2c_smbus_read_byte_data(client, M41T80_REG_FLAGS);
-> -	if (flags < 0)
-> -		return flags;
-> -
-> -	err = i2c_smbus_write_byte_data(client, M41T80_REG_FLAGS,
-> -					flags & ~M41T80_FLAGS_OF);
-> -	if (err < 0) {
-> -		dev_err(&client->dev, "Unable to write flags register\n");
-> -		return err;
-> -	}
-> -
->  	return err;
->  }
->  
-> -- 
-> 2.34.1
-> 
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
