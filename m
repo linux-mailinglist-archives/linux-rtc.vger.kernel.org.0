@@ -1,259 +1,142 @@
-Return-Path: <linux-rtc+bounces-3714-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3715-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5B81A77A7C
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 14:16:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74BB3A77B01
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 14:30:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55A96166366
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 12:16:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DDB6188F5DC
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Apr 2025 12:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D67DD202C34;
-	Tue,  1 Apr 2025 12:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93410202F95;
+	Tue,  1 Apr 2025 12:29:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="BI8ZYVDD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1WHpXJe"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D4342A94;
-	Tue,  1 Apr 2025 12:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC9C20126C;
+	Tue,  1 Apr 2025 12:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743509762; cv=none; b=PbAexvRjWaP294M8e5iP1m0UeZixMQ02UV/awGxX2BHcXaQn+qiw3Df0qgODfKH5bWVx0TJN96hz5vXBjfegyQkZjf17YBSuSEkFOjr7+Gy3z9WOz9tOyV3Ypdlf9Nmx9UH2JrdbEPrZYCjRMg9SNvwJCthkslsoZCYLS2K4r1Y=
+	t=1743510580; cv=none; b=JNjQ9hENYqvKy04sZejwzsgE1erXWHF6a5g7sGT7TOhaJYRfHvBq9cES3lOWrmuMoy2SMQtUIfOsnviyyZ+DNfMS6DpqPqGwsB4h34qswwNh01955k5uT/7kw0unMRrVLt8ZmSfQIH+1Y/8cIaqfaeWnIXAZPLAcPbOH5Hnne74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743509762; c=relaxed/simple;
-	bh=tJ/nY5DmjGkUEyUIKawES06pKMf+xtUebkpWoQY+V7E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ubZD3U+Pb8lMhg2FAWOWsZ+3oYsQWb3x+ckuo+y4yfh/RszD2l4Q3oClKXJVIOXTjC6T/26K6PCjKKMbnAqNlLGLyqOM/c/LPBAXjp5TNvGK98eikKWxSu6RaQpE09idcr9whdT64ai46dfQW/ytZ5ewBKpSsF0T1Lcgtz+H2B0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=BI8ZYVDD; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=cpHa3hRcyYE+oveSMpWWau+9FeOL1orHAEbMAeTSCY0=; b=BI8ZYVDD+A/bplQt
-	Lxzx6WknmOncFAkzbg2GZCQjMX0EAq3hUE9F4Aes1QlpQGYc2jv803aIWQnkSeu1SB4HcnYScO+yg
-	vxZPEWAte1PAaam76hgaooRGKH/oYX6y6tnP4nfGIO/WmayF48Jf/Y+bbe+FDkYOV0L7ozJaO7fF4
-	cxqDUiRvIoIGCHx3CjyqPfvSEXQ/zYYbs4d642O+Op3BWzlkgU8N8wRfC0Bt6yr30AMrT3jketCEJ
-	sRmONLJWJkJ+tiAsl0gyRjWasE+3VPQ2kYY994EuQop1SvJlb/h7dGwe9C/0e3Ijd/HG6FuSc006A
-	tJHj4XYIBZWId1R7kw==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1tzZpw-008Jmf-0j;
-	Tue, 01 Apr 2025 11:31:20 +0000
-Date: Tue, 1 Apr 2025 11:31:20 +0000
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
-To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
-	sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-	alexandre.belloni@bootlin.com, danielt@kernel.org,
-	jingoohan1@gmail.com, deller@gmx.de, linus.walleij@linaro.org,
-	brgl@bgdev.pl, tsbogend@alpha.franken.de
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/9] Input: pcf50633-input - Remove
-Message-ID: <Z-vOiJ9tdovS-Guq@gallifrey>
-References: <20250311014959.743322-1-linux@treblig.org>
- <20250311014959.743322-5-linux@treblig.org>
+	s=arc-20240116; t=1743510580; c=relaxed/simple;
+	bh=c19//HNrqEQBqZ67n+APOuFQ7dukVDXVxLfv/BFk4EU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gnWCOwySlYVK+NZx65v5kVlMMI96eOwPZObZVr+SIRHTEc3hiaPqbrCg7OGdIw1dWFQdjgkgr2F+tgzFIHnqG+xty9kvQEwWpPU1UwRVBrRh2E5LhXqSdJSx5n0wwMZ8iO/d5lyB8qbBCgT0MGDDze9nlbuIhJ3V/RscdvEteKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F1WHpXJe; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c5a88b34a6so529775885a.3;
+        Tue, 01 Apr 2025 05:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743510578; x=1744115378; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OWng5/2s6GWs8zHreVaEDSeKr8dlawpVVjY3ffnQIK0=;
+        b=F1WHpXJeKGZU8gVdrX7VenIraLa3c/4HaUZ40bnWHWnLWken5sVvLcQw8ETuV507Sn
+         HWNns6FgRHGTbGK4BUyNd9cg+VILGb6j3D+Fn0g+MFzOU/t7qMfIJ/efBRIAM9JoMRbn
+         mP31jK7U1sm4exRJY7rZ7eVp8PwlECAPyE+eKGDaE6ndGgGG+r0IQG6EyVS9RUNxpXDH
+         cnDOOUs6bqYjz03F6lgrxiBCeSnr57kMZhsd2gnX9F3Ep3jL5w7qTN35kpnSOazdNN3g
+         Tet3ME1IeSMBinkQn8mBZMEPuRdSSF5rmsfO/D7FKPYDmjtAqoiYuHoV2kVJ7j4MBhrB
+         LkCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743510578; x=1744115378;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OWng5/2s6GWs8zHreVaEDSeKr8dlawpVVjY3ffnQIK0=;
+        b=al2F1s1BBC4u8H9sMJItz1KA8JLsedpc0h3hZgArySGhaapreUO1fo8oqK4UlooC9C
+         1wQ1eDtIVFx0KVoCREU+OQ8zt6iKu+cnuIb/mtLWNtQIvfuWM9iE4Cx+yZEiUPJD8KHs
+         3beGjLV40Tk+NtmeDixGdI9i2yMJXzvUd/ysn/iA5TXWjIjukEuQ6fT8/65XvP4dc/mD
+         nFis2a9sV3Ctdr1uwOvUqrTcpTat/9vcdN+mOh3w2klu2RVPOnFy2N1FK7VCtNAxynNT
+         pzWTEXSYYCGU3pU3ulS4BhBWqDWZastAVP30fkEAGIm5i8WY2ab6Z0UlDPOnxuHaLH/1
+         +cug==
+X-Forwarded-Encrypted: i=1; AJvYcCUvqLXe3M+JH7KwsR7tLJq4SG9A9k+kQ1hgyTm0jO6FRwcVJ5GDrKyZwPlskbEPyt/6ooWQCTRzoic5vXh+lCw3@vger.kernel.org, AJvYcCWscFSewkUPYZhnsGP1KxxLKGBHZYXHzC91lEkPNgI95990MVN4Z2k9t7RgkAZZdnrKnCChwcH6iLsljqs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUzA9A07ibNRTxIhD7g96K+1E41WwOP5i9VFJmFblzRuDi+3Mo
+	oaSfqZkcSkdKvimiVnfurDL4wYMIGWZVbXUGIcieTFk8FaUO72OP
+X-Gm-Gg: ASbGnct8drkiS51g10Icc4FIfY2uWKT08JbVNq7NdJaU8VQlF9p2+LPs5eLr2mp4Z25
+	U66c/BO9qp/km+vQxLFTR2jn2nObWBM3Pq5jujfkoUdvVRH4XfHABIxP5CHFC/PDiwB5P7NwSAQ
+	yLBopOFa6F0IEhTdI/gjmRqu1uihWHDBnLco9drKPvJK+nnwVIfVW6zVblgepLTIUEhrYHmNYVX
+	bQ3w3PmO3yyCop6iNjx0t5YtRDrsQ/JM2YyovmxiKfoIFGfxxINVJWg4wGZplbHrznSIWddS4ms
+	j0JDKqMifjIvfDB1YBOYiCLHQN5xsZ4qGbp7jqTKYoAVdjLoBb/Iuf/l
+X-Google-Smtp-Source: AGHT+IHO67d4bD9vKGuF4OOCneEyWlZIzB22Vg0XjvWyrehUow9WWekmGrZtRTC/IR+uMs+D7SKBeg==
+X-Received: by 2002:a05:620a:2405:b0:7c5:65ab:4ff2 with SMTP id af79cd13be357-7c69087cef7mr1548316185a.46.1743510577694;
+        Tue, 01 Apr 2025 05:29:37 -0700 (PDT)
+Received: from ownia.localdomain ([156.226.172.226])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5f7764c7fsm648646385a.84.2025.04.01.05.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 05:29:37 -0700 (PDT)
+From: Weizhao Ouyang <o451686892@gmail.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-rtc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Weizhao Ouyang <o451686892@gmail.com>
+Subject: [PATCH] selftest: rtc: skip alarm test if RTC is minute resolution
+Date: Tue,  1 Apr 2025 20:29:23 +0800
+Message-ID: <20250401122923.10848-1-o451686892@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20250311014959.743322-5-linux@treblig.org>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
-X-Uptime: 11:28:53 up 327 days, 22:42,  1 user,  load average: 0.00, 0.00,
- 0.00
-User-Agent: Mutt/2.2.12 (2023-09-09)
+Content-Transfer-Encoding: 8bit
 
-* linux@treblig.org (linux@treblig.org) wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> 
-> The pcf50633 was used as part of the OpenMoko devices but
-> the support for its main chip was recently removed in:
-> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
-> 
-> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
-> 
-> Remove it.
-> 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+Skip second resolution alarm test if RTC is minute resolution.
 
-Has anyone got this input patch lined up?
-I think most of the other parts are there; the rtc I see in next.
-Then once those go there is a core.h that needs nuking.
+Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
+---
+ tools/testing/selftests/rtc/rtctest.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Dave
-
-> ---
->  drivers/input/misc/Kconfig          |   7 --
->  drivers/input/misc/Makefile         |   1 -
->  drivers/input/misc/pcf50633-input.c | 113 ----------------------------
->  3 files changed, 121 deletions(-)
->  delete mode 100644 drivers/input/misc/pcf50633-input.c
-> 
-> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-> index 13d135257e06..62819144bd8c 100644
-> --- a/drivers/input/misc/Kconfig
-> +++ b/drivers/input/misc/Kconfig
-> @@ -584,13 +584,6 @@ config INPUT_PALMAS_PWRBUTTON
->  	  To compile this driver as a module, choose M here. The module will
->  	  be called palmas_pwrbutton.
->  
-> -config INPUT_PCF50633_PMU
-> -	tristate "PCF50633 PMU events"
-> -	depends on MFD_PCF50633
-> -	help
-> -	 Say Y to include support for delivering  PMU events via  input
-> -	 layer on NXP PCF50633.
-> -
->  config INPUT_PCF8574
->  	tristate "PCF8574 Keypad input device"
->  	depends on I2C
-> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-> index 6d91804d0a6f..d468c8140b93 100644
-> --- a/drivers/input/misc/Makefile
-> +++ b/drivers/input/misc/Makefile
-> @@ -59,7 +59,6 @@ obj-$(CONFIG_INPUT_MC13783_PWRBUTTON)	+= mc13783-pwrbutton.o
->  obj-$(CONFIG_INPUT_MMA8450)		+= mma8450.o
->  obj-$(CONFIG_INPUT_PALMAS_PWRBUTTON)	+= palmas-pwrbutton.o
->  obj-$(CONFIG_INPUT_PCAP)		+= pcap_keys.o
-> -obj-$(CONFIG_INPUT_PCF50633_PMU)	+= pcf50633-input.o
->  obj-$(CONFIG_INPUT_PCF8574)		+= pcf8574_keypad.o
->  obj-$(CONFIG_INPUT_PCSPKR)		+= pcspkr.o
->  obj-$(CONFIG_INPUT_PM8941_PWRKEY)	+= pm8941-pwrkey.o
-> diff --git a/drivers/input/misc/pcf50633-input.c b/drivers/input/misc/pcf50633-input.c
-> deleted file mode 100644
-> index 6d046e236ba6..000000000000
-> --- a/drivers/input/misc/pcf50633-input.c
-> +++ /dev/null
-> @@ -1,113 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-or-later
-> -/* NXP PCF50633 Input Driver
-> - *
-> - * (C) 2006-2008 by Openmoko, Inc.
-> - * Author: Balaji Rao <balajirrao@openmoko.org>
-> - * All rights reserved.
-> - *
-> - * Broken down from monstrous PCF50633 driver mainly by
-> - * Harald Welte, Andy Green and Werner Almesberger
-> - */
-> -
-> -#include <linux/kernel.h>
-> -#include <linux/module.h>
-> -#include <linux/device.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/input.h>
-> -#include <linux/slab.h>
-> -
-> -#include <linux/mfd/pcf50633/core.h>
-> -
-> -#define PCF50633_OOCSTAT_ONKEY	0x01
-> -#define PCF50633_REG_OOCSTAT	0x12
-> -#define PCF50633_REG_OOCMODE	0x10
-> -
-> -struct pcf50633_input {
-> -	struct pcf50633 *pcf;
-> -	struct input_dev *input_dev;
-> -};
-> -
-> -static void
-> -pcf50633_input_irq(int irq, void *data)
-> -{
-> -	struct pcf50633_input *input;
-> -	int onkey_released;
-> -
-> -	input = data;
-> -
-> -	/* We report only one event depending on the key press status */
-> -	onkey_released = pcf50633_reg_read(input->pcf, PCF50633_REG_OOCSTAT)
-> -						& PCF50633_OOCSTAT_ONKEY;
-> -
-> -	if (irq == PCF50633_IRQ_ONKEYF && !onkey_released)
-> -		input_report_key(input->input_dev, KEY_POWER, 1);
-> -	else if (irq == PCF50633_IRQ_ONKEYR && onkey_released)
-> -		input_report_key(input->input_dev, KEY_POWER, 0);
-> -
-> -	input_sync(input->input_dev);
-> -}
-> -
-> -static int pcf50633_input_probe(struct platform_device *pdev)
-> -{
-> -	struct pcf50633_input *input;
-> -	struct input_dev *input_dev;
-> -	int ret;
-> -
-> -
-> -	input = kzalloc(sizeof(*input), GFP_KERNEL);
-> -	if (!input)
-> -		return -ENOMEM;
-> -
-> -	input_dev = input_allocate_device();
-> -	if (!input_dev) {
-> -		kfree(input);
-> -		return -ENOMEM;
-> -	}
-> -
-> -	platform_set_drvdata(pdev, input);
-> -	input->pcf = dev_to_pcf50633(pdev->dev.parent);
-> -	input->input_dev = input_dev;
-> -
-> -	input_dev->name = "PCF50633 PMU events";
-> -	input_dev->id.bustype = BUS_I2C;
-> -	input_dev->evbit[0] = BIT(EV_KEY) | BIT(EV_PWR);
-> -	set_bit(KEY_POWER, input_dev->keybit);
-> -
-> -	ret = input_register_device(input_dev);
-> -	if (ret) {
-> -		input_free_device(input_dev);
-> -		kfree(input);
-> -		return ret;
-> -	}
-> -	pcf50633_register_irq(input->pcf, PCF50633_IRQ_ONKEYR,
-> -				pcf50633_input_irq, input);
-> -	pcf50633_register_irq(input->pcf, PCF50633_IRQ_ONKEYF,
-> -				pcf50633_input_irq, input);
-> -
-> -	return 0;
-> -}
-> -
-> -static void pcf50633_input_remove(struct platform_device *pdev)
-> -{
-> -	struct pcf50633_input *input  = platform_get_drvdata(pdev);
-> -
-> -	pcf50633_free_irq(input->pcf, PCF50633_IRQ_ONKEYR);
-> -	pcf50633_free_irq(input->pcf, PCF50633_IRQ_ONKEYF);
-> -
-> -	input_unregister_device(input->input_dev);
-> -	kfree(input);
-> -}
-> -
-> -static struct platform_driver pcf50633_input_driver = {
-> -	.driver = {
-> -		.name = "pcf50633-input",
-> -	},
-> -	.probe = pcf50633_input_probe,
-> -	.remove = pcf50633_input_remove,
-> -};
-> -module_platform_driver(pcf50633_input_driver);
-> -
-> -MODULE_AUTHOR("Balaji Rao <balajirrao@openmoko.org>");
-> -MODULE_DESCRIPTION("PCF50633 input driver");
-> -MODULE_LICENSE("GPL");
-> -MODULE_ALIAS("platform:pcf50633-input");
-> -- 
-> 2.48.1
-> 
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index e103097d0b5b..b8d196f1c5f6 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -28,6 +28,7 @@ static char *rtc_file = "/dev/rtc0";
+ enum rtc_alarm_state {
+ 	RTC_ALARM_UNKNOWN,
+ 	RTC_ALARM_ENABLED,
++	RTC_ALARM_MINUTE,
+ 	RTC_ALARM_DISABLED,
+ };
+ 
+@@ -100,6 +101,9 @@ static enum rtc_alarm_state get_rtc_alarm_state(int fd)
+ 	if (rc < 0)
+ 		return RTC_ALARM_UNKNOWN;
+ 
++	if (param.uvalue & _BITUL(RTC_FEATURE_ALARM_RES_MINUTE))
++		return RTC_ALARM_MINUTE;
++
+ 	if ((param.uvalue & _BITUL(RTC_FEATURE_ALARM)) == 0)
+ 		return RTC_ALARM_DISABLED;
+ 
+@@ -230,6 +234,8 @@ TEST_F(rtc, alarm_alm_set) {
+ 	alarm_state = get_rtc_alarm_state(self->fd);
+ 	if (alarm_state == RTC_ALARM_DISABLED)
+ 		SKIP(return, "Skipping test since alarms are not supported.");
++	if (alarm_state == RTC_ALARM_MINUTE)
++		SKIP(return, "Skipping test since alarms have minute resolution.");
+ 
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+ 	ASSERT_NE(-1, rc);
+@@ -298,6 +304,8 @@ TEST_F(rtc, alarm_wkalm_set) {
+ 	alarm_state = get_rtc_alarm_state(self->fd);
+ 	if (alarm_state == RTC_ALARM_DISABLED)
+ 		SKIP(return, "Skipping test since alarms are not supported.");
++	if (alarm_state == RTC_ALARM_MINUTE)
++		SKIP(return, "Skipping test since alarms have minute resolution.");
+ 
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+ 	ASSERT_NE(-1, rc);
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+2.45.2
+
 
