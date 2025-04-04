@@ -1,47 +1,47 @@
-Return-Path: <linux-rtc+bounces-3781-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3782-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AA79A7B9FB
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 11:30:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 249B5A7BA08
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 11:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7FB57A8A47
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 09:29:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B67E6189C153
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 09:34:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32A51A5BBB;
-	Fri,  4 Apr 2025 09:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD121ABEAC;
+	Fri,  4 Apr 2025 09:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KSY37JVe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9MtoQrI"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1782E62B8;
-	Fri,  4 Apr 2025 09:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249CB16132F;
+	Fri,  4 Apr 2025 09:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743759042; cv=none; b=reVXMM+HXVP1Nnu+hG4PckABWw7zVU6gpmkZuQl3xntnyb9hNZbQLql98ejOVgjDvLJV6lh5Mh4D9HlRKbyDaN1BZb/ht9QKKes/Jlrgmjjbu3Ljdlw8effn8pDLXra1K9ORFa1/7rERhCmVUhN7VQqBhPjqDdDkoI/OZ5QmlMo=
+	t=1743759281; cv=none; b=Hj3lwSo+F+OGC4YJjHfw2Vf4HydczP4/aQ3WEFAbx0DKMvEEf0iZgfdZtEeGNzUTBvBYcvnF6gHTSqI/mHbO9xDUjEGXhlf6zGWqZJtmhPTDDg6qnXMH9Vb2ZW6ZrdU/Ns+23hUVvnPyp5wI5ND+yy6ukNujCJflNAgbzygYquI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743759042; c=relaxed/simple;
-	bh=nJrNlBkQnuThOsj6kBsx3+iq0NbYhsHpNmbL85Jx8Ws=;
+	s=arc-20240116; t=1743759281; c=relaxed/simple;
+	bh=n0DVXYKk8hiZe5RfNnARym5BTewBVaBxsH/5mlip/ik=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EisoLDIWzZCqFTKqUbLH0CT4bhRKrz/1gGYNOxm4MDrZLJ73Id0iq5ZIFRv7Afr9Xd1AhHPvsISqNwXS9twRN3BvI2Iv1SzAD2F0UZ/1+Fmgt8vqNePWNSQ8mF/WjMeaOPDm1cmjTVTwLh7+vXTLx6tcXuvRG3Edvd+sFh6QRrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KSY37JVe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5338C4CEDD;
-	Fri,  4 Apr 2025 09:30:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAh+Xwk6zJFDMxyfcEwd2M8fYcV682cpZhUhK2il32imHhA1GNV6TjEAjAaF5T1cOPuR9sOpcawFpvogpdsunuRO7cTVFIV31rhq3DG1jvfKe1hGLi2KFJnFuoRSvaNnvXQhx6kpTuKrpJWVkW/b3pXNgoUvCtczOog8+aqqxhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9MtoQrI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31422C4CEE5;
+	Fri,  4 Apr 2025 09:34:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743759042;
-	bh=nJrNlBkQnuThOsj6kBsx3+iq0NbYhsHpNmbL85Jx8Ws=;
+	s=k20201202; t=1743759280;
+	bh=n0DVXYKk8hiZe5RfNnARym5BTewBVaBxsH/5mlip/ik=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KSY37JVeP/zQpypBtXQaaCMZje8YFlYL3lR9+GbS2ME4hCi/elUvVS/zn2MC7clKu
-	 P1v21m/mBhALNaaLIL7jxa4cRT/wcxFiJOELsTdtiBUu3LtaHKdF+LGYzxF43WL9l/
-	 3GCPruR1a4BM/E1l46zXm5KLDVMk0Bq79CQp6DDhCqZP8LM9qO1EBnd4bb6RV0hAcf
-	 s4AiJMjHg2XM3jT1B9OrvHU6z/GDg9poEyDdWWm/9WOuP6dX6ngyFTytBAeeMMfqmh
-	 Rw5N13xBnyXvaYld2XzaCoYorbEVbB7Ap7KcazFOQ2/LvFT8WdPoRYtVgTMI2941nH
-	 x3WApBX7IDJGw==
-Date: Fri, 4 Apr 2025 10:30:35 +0100
+	b=d9MtoQrIT/Zn9pYbxRaCfVq9RrDir4kWKIFZQM17jaDiUtXizwIwDAb0+SzveV7Oz
+	 uypNUT5s6r8mDEUZEu3bb8QHKrHFF3JJFD2fTe1X/Faudp1NqluPMNjwUon/SPc7hz
+	 mAp91vJyLx+ZceZCCIzr6ukASR27nslWKnfRXax1NJu5K9k+FkfYOAkoIuGQneKO8Z
+	 YmdYgaQBTeqFFiaq0psUl3RF2B02Vnh8ytPVZocWkpckIm2aZ6tYTq5Kar38bnoDmg
+	 XL749/d5k9frjLLDWjhCfAOTKFYMEmLkJQBegWm40iGonmHeyVW4hxSJmxF/3kScem
+	 s9Wh8W2Tg5vBw==
+Date: Fri, 4 Apr 2025 10:34:33 +0100
 From: Lee Jones <lee@kernel.org>
 To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -62,9 +62,11 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 00/32] Samsung S2MPG10 PMIC MFD-based drivers
-Message-ID: <20250404093035.GD43241@google.com>
+Subject: Re: [PATCH v3 15/32] mfd: sec: s2dos05: doesn't support interrupts
+ (it seems)
+Message-ID: <20250404093433.GE43241@google.com>
 References: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
+ <20250403-s2mpg10-v3-15-b542b3505e68@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -74,24 +76,72 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
+In-Reply-To: <20250403-s2mpg10-v3-15-b542b3505e68@linaro.org>
 
-On Thu, 03 Apr 2025, André Draszik wrote:
+Patch is fine, but the subject line should be more assertive.
 
-> This series adds initial support for the Samsung S2MPG10 PMIC using the
-> MFD framework. This is a PMIC for mobile applications and is used on
-> the Google Pixel 6 and 6 Pro (oriole / raven).
+Also, there is seldom any need for sub-sentences in ()'s in them.
 
-When you resubmit these, please note that MFD subjects take the form:
+IOW, drop the "(it seems)" part.
 
-  mfd: <file>: Succinct change description starting with an uppercase char
-
-As seen with:
-
-  $ git log --oneline -- drivers/mfd
-
-I don't mind changing one or two when they come in, but I'm not prepared
-to manually change 20-odd.  That gets tiresome real quick.  =:-)
+> The commit bf231e5febcf ("mfd: sec-core: Add support for the Samsung
+> s2dos05") adding s2dos05 support didn't add anything related to IRQ
+> support, so I assume this works without IRQs.
+> 
+> Rather than printing a warning message in sec_irq_init() due to the
+> missing IRQ number, or returning an error due to a missing irq chip
+> regmap, just return early explicitly.
+> 
+> This will become particularly important once errors from sec_irq_init()
+> aren't ignored anymore in an upcoming patch and helps the reader of
+> this code while reasoning about what the intention might be here.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> ---
+>  drivers/mfd/sec-irq.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mfd/sec-irq.c b/drivers/mfd/sec-irq.c
+> index 9f0173c48b0c8186a2cdc1d2179db081ef2e09c4..79a3b33441fa5ab48b4b233eb8d89b4c20c142ed 100644
+> --- a/drivers/mfd/sec-irq.c
+> +++ b/drivers/mfd/sec-irq.c
+> @@ -452,16 +452,12 @@ int sec_irq_init(struct sec_pmic_dev *sec_pmic)
+>  	int type = sec_pmic->device_type;
+>  	const struct regmap_irq_chip *sec_irq_chip;
+>  
+> -	if (!sec_pmic->irq) {
+> -		dev_warn(sec_pmic->dev,
+> -			 "No interrupt specified, no interrupts\n");
+> -		return 0;
+> -	}
+> -
+>  	switch (type) {
+>  	case S5M8767X:
+>  		sec_irq_chip = &s5m8767_irq_chip;
+>  		break;
+> +	case S2DOS05:
+> +		return 0;
+>  	case S2MPA01:
+>  		sec_irq_chip = &s2mps14_irq_chip;
+>  		break;
+> @@ -492,6 +488,12 @@ int sec_irq_init(struct sec_pmic_dev *sec_pmic)
+>  				     sec_pmic->device_type);
+>  	}
+>  
+> +	if (!sec_pmic->irq) {
+> +		dev_warn(sec_pmic->dev,
+> +			 "No interrupt specified, no interrupts\n");
+> +		return 0;
+> +	}
+> +
+>  	ret = devm_regmap_add_irq_chip(sec_pmic->dev, sec_pmic->regmap_pmic,
+>  				       sec_pmic->irq, IRQF_ONESHOT,
+>  				       0, sec_irq_chip, &sec_pmic->irq_data);
+> 
+> -- 
+> 2.49.0.472.ge94155a9ec-goog
+> 
 
 -- 
 Lee Jones [李琼斯]
