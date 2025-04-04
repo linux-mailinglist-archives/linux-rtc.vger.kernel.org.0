@@ -1,95 +1,126 @@
-Return-Path: <linux-rtc+bounces-3771-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3772-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFFA6A7B7AB
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 08:16:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4076A7B7B0
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 08:17:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2E573B480E
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 06:16:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 326747A6C63
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Apr 2025 06:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91B9617A2EF;
-	Fri,  4 Apr 2025 06:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE98156C63;
+	Fri,  4 Apr 2025 06:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JXTGGt/A";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KYoXsi/J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OvzoC6dq"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB03B2E62B3;
-	Fri,  4 Apr 2025 06:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E8C2E62D4;
+	Fri,  4 Apr 2025 06:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743747398; cv=none; b=JELmtMFPrCBJiLHuy4qoqWjDrpcsh7wuNGwbBZTyVOehB7/AdSBLU6/+BsqnJHUfOTQwqoeWLY/1MQv0eFC1fYGXrErVWQhzpr6rJ9RIJm/82Vipaamtws6RY3jz40PY/tCTMl5/tAmDS0mSVmTM9MFyiilw+Dpi0epN+z2ssRg=
+	t=1743747445; cv=none; b=K9YxU3etUbgkQCvD3rGcE+O/eNnQZeLqLsleIeX32wdDU13GUvXHCvbaNAI9E+Rx0s8byBYlad9Hc2Kxvh1Sf+tAq6PVGEkoekOxIWIaBmsdG5fpFGntXP83yan47yZB8mljhaXXha4nc118T4np15C9XeHl67jeGDSfUwuLK1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743747398; c=relaxed/simple;
-	bh=FSC45CH9kZ6jyRdaczYa359on3/LgDjGUYpiNSWuqzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uiYlO66FJSLJQ25uT/G/nwIn88PoGCpHDCJkbF2Rb21jMAkUExuGFk+eTAcWGwRMlau+XykD57pThP8Y7mc2xUxi4fbVR2LWJi2TJ2hXxVDD0UJvdaFnNQ/hV91g3VV+lbFFRKHiEujh9Zy8C/nwlJZROffG644Ap4rmWqpgLks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JXTGGt/A; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=KYoXsi/J; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 4 Apr 2025 08:16:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1743747394;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f4d2GP1neMFeV/511iAeJ7s35t/7pb8Ppd1YrdAQVDU=;
-	b=JXTGGt/A5Vqxn3o4i/eviNUX0j87m5vSY/kbMdkQm0XCh9wixkaRS+gIL5w6GwM0Ofh7pk
-	2SFkpFGrWtdwao0VPK3WuLraZsqCsGduFJEFqs0I+/lPJ5eY4ZLSXr9UGBr/ZJ6yW4QY3X
-	ScKWbT1/hUepSkdqkFAeK10mSr1xeh4YtCInYaSd0jqejRI+i6OnPJXATUepn9Juk709Hs
-	/9y/wy0ynESRQRuGoAA7kXZgph8hfJMAU5Bk+vbFdQ9EzYTD1opYxK01lscEDEChY4zpCg
-	bss97+o+42U9RE14Pbmg6maOiCfKDwq1vKCVmpGy7IVVV4O8yGirysNON8oHvg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1743747394;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f4d2GP1neMFeV/511iAeJ7s35t/7pb8Ppd1YrdAQVDU=;
-	b=KYoXsi/JwIc+jcZN5QTpSUlwi6kYeuJEIm6KlS8pcVMPaqcOZV+sBmwHumasyaiNPtspsk
-	djGaFE5sQ94fcdCw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>, linux-rtc@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-	lkml <linux-kernel@vger.kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [ BUG: Invalid wait context ] rtc_lock at: mc146818_avoid_UIP
-Message-ID: <20250404061632.Ftb8UoHV@linutronix.de>
-References: <20250330113202.GAZ-krsjAnurOlTcp-@fat_crate.local>
- <87sempv17b.ffs@tglx>
- <20250403135031.giGKVTEO@linutronix.de>
- <20250403193659.hhUTgJLH@linutronix.de>
- <87r029uh3j.ffs@tglx>
+	s=arc-20240116; t=1743747445; c=relaxed/simple;
+	bh=zzuIoIHMmboa56JX2clz3G2WJCX1g9JFwev72MAeTDU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sj7xA+89jDEFpYmB2cKMOlt7Ex208cYToQhaECXjAhsAbM7ZdduNcEm8Qrq4uVBVth9Ho+nNPnVwoJVXDmlMo3E3o9IQZDBBOF7owTYoD2P151y80s3pKz3UQCiva+QYirBflZlONCzjUQ8zkGOBr9zwjt1mtEP3P21Lh11fzUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OvzoC6dq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA084C4CEE9;
+	Fri,  4 Apr 2025 06:17:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743747444;
+	bh=zzuIoIHMmboa56JX2clz3G2WJCX1g9JFwev72MAeTDU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OvzoC6dqqE/7J7Uqq1TsdbtKi+Wqhb1nEqTLFdGHJXKabmUrvtQEsBazV3ZwM9Dpf
+	 kYA+uBGwiC/nkJ3SPQLKz65cSUPla9vaD2msoJg6tsLiV1VPY4wRY131572PrcVsAA
+	 4uJ6UZyYyXqp+CrHVtEsn7KMiCz+dvxyocKbcJW5ZsZdHcN1XAOScHmqraf3S2Jh98
+	 s3aeiGR/RCntwrxrB83czJ3rbjKuGT5UF9h36Y1lWxYUO4lOlfLZwU9Syz4dNrSDRd
+	 dPUy7mlKuFMtUh9mj7s4VrhAtYQgPQEVhUArlrLEINkf05Vxy/ciEf+KzL/MOANVu6
+	 3b3nN4Pl+CmgQ==
+Message-ID: <c4a80c1f-56a0-4cdf-afbd-cb2c13cc0b8b@kernel.org>
+Date: Fri, 4 Apr 2025 08:17:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87r029uh3j.ffs@tglx>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 3/4] arm64: defconfig: add S32G RTC module support
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ NXP S32 Linux <s32@nxp.com>, imx@lists.linux.dev,
+ Christophe Lizzi <clizzi@redhat.com>, Alberto Ruiz <aruizrui@redhat.com>,
+ Enric Balletbo <eballetb@redhat.com>, Eric Chanudet <echanude@redhat.com>
+References: <20250403103346.3064895-1-ciprianmarian.costea@oss.nxp.com>
+ <20250403103346.3064895-4-ciprianmarian.costea@oss.nxp.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250403103346.3064895-4-ciprianmarian.costea@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2025-04-03 22:26:24 [+0200], Thomas Gleixner wrote:
-> > it is just
-> > | WARNING: CPU: 0 PID: 1007 at kernel/time/timekeeping.c:1858 timekeeping_suspend+0x3b/0x330
+On 03/04/2025 12:33, Ciprian Costea wrote:
+> From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 > 
-> Which kernel version is that? I don't see a warning in timekeeping_suspend()
+> The RTC hardware module present on S32G based SoCs tracks clock time
+> during system suspend and it is used as a wakeup source on S32G2/S32G3
+> architecture.
+Which boards are using it? I don't see any DTS (nowhere), so I do not
+see single reason for this patch.
 
-I added a WARN_ON(1) to the top of timekeeping_suspend() to compare my
-call chain with Borislav's.
-
-> Thanks,
-> 
->         tglx
-
-Sebastian
+Best regards,
+Krzysztof
 
