@@ -1,79 +1,79 @@
-Return-Path: <linux-rtc+bounces-3791-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3792-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 888D8A7C968
-	for <lists+linux-rtc@lfdr.de>; Sat,  5 Apr 2025 15:45:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EA77A7C970
+	for <lists+linux-rtc@lfdr.de>; Sat,  5 Apr 2025 15:50:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 062601884140
-	for <lists+linux-rtc@lfdr.de>; Sat,  5 Apr 2025 13:45:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10D683BAEEF
+	for <lists+linux-rtc@lfdr.de>; Sat,  5 Apr 2025 13:49:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D9241E9917;
-	Sat,  5 Apr 2025 13:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5581F03DA;
+	Sat,  5 Apr 2025 13:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q3YKwXA3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TOTdj5Iu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BFA2C9D
-	for <linux-rtc@vger.kernel.org>; Sat,  5 Apr 2025 13:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D8B1EF368
+	for <linux-rtc@vger.kernel.org>; Sat,  5 Apr 2025 13:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743860744; cv=none; b=Nj9hdXSK5cw+ft6iH5AmEMnmvk3OPqy4s9oqZBGGJRT2Dcos1h8JbK8EK8jgH4ubFwr8pqrMtvvFocjppeaI3a0tkIOoJgmdAjO44XuEQsQbouXretNDd4UtoKSCwKJy9kSt8qGfcLI5DRZ8jFoO5Xt5r1FY2LGiQJHqQkKDtaA=
+	t=1743861002; cv=none; b=ru7p5s9wFxtAxXyr+q0rJityLcolsTXvgyy1i0x1ZwIuw7USVqNDW0QxdpS5DWHolyCYiXTC/2MVcY9ErQ9ClZ4Gxx2rRTB6/ld6ISc5Cpwwi1qYv5b7HK1AyKasvQxIS2xIEkIWa2cJpvebQDU8z3Vz6peHyqZDL7hxLNSg5lU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743860744; c=relaxed/simple;
-	bh=EsTBeulLpNgdTBepVvvBFd58E6zfqSCfffzBCv2HDaM=;
+	s=arc-20240116; t=1743861002; c=relaxed/simple;
+	bh=+aUz9xevIHtQ5HcguqoQTB6cntYV4+ru80uxVrIvvK0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=k3HB/ujLSFHZTflJK8SDlQDIqIThbMwcS1MLmWe/RTKQfGZzH6HO1Lj+Mi3CD3F9iFrNaTMcHbqMxJUFDEnsbYX10SgxI7eBD1HB33c4MS5kNmpNXHpg93mBexa9qzezl46KoLlJCGI5LAawDraatVqYR8BotPdiiy+b2PSY5fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q3YKwXA3; arc=none smtp.client-ip=209.85.221.45
+	 Content-Type:MIME-Version; b=dfp5MJ6ATAS49PW1CyU6H0jyiN5iAY2UHHCRfAo44QBo6pEHfEOQhA3hHiq4FRKDjm5u25oJ/7Khu7rzAzanp8ci4Rz1AO3SNeId7mPDR3qnaTHRbK8rr4sgKMYbWNhmQGEqh2F+v8zn88+DrVRmv6+OWsFpKbGOb1ZMfp8YSJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TOTdj5Iu; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-39ac56756f6so2409325f8f.2
-        for <linux-rtc@vger.kernel.org>; Sat, 05 Apr 2025 06:45:41 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cf034d4abso31685125e9.3
+        for <linux-rtc@vger.kernel.org>; Sat, 05 Apr 2025 06:50:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743860740; x=1744465540; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1743860999; x=1744465799; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=LL3Fsx5eUxzUjpXw1rSTcpeo7oV1xwNF/0+QoaOG4Ac=;
-        b=q3YKwXA3tlVtUZYN4H/pUMFarbIA8SQ8VpyWzdqucSVn2DuFZZIHKFibfmubD7/w+I
-         9XFne3N3ZuPsCRE8oxpBQId3bbnU3ndXQxCXEOw1P5xcrvyAh4wudAs3pZlBr85yinId
-         +Bw0bVFRq11DjiBkEvMwNPyQ9o5uapuH0cktyGJvm9B/w0XqPV6NFDgLXiUb3JgcpbM9
-         07oEEk2yq5VL+OAZojTS103lZpXpEb4Wx0bfhpaj801Nq8icRMp0ERh51DpLky5GAGoB
-         0JsfvUJO+YPOtIrudO3Iu7F3wnJ/6maMS8sME9kj5taXUKp/BXW//npb1Hf+UGQW6wP1
-         LRIQ==
+        bh=+aUz9xevIHtQ5HcguqoQTB6cntYV4+ru80uxVrIvvK0=;
+        b=TOTdj5IuSNrPV2Vr7vPxTkVcu7vcFvoXtbQTTX6oVDF97u3cUaojL7CzU9Wtx5K603
+         5ToOZnLPG+iLubjPooHjtMCDrmOn4aZD9SOkHzKlTfrgX3rumvYs21VfhSk3E94jlZ4x
+         aXewctMBVKSyLEb2GF+VXVNcG0Li26u1X0AAW6S2fsSaPVlYvhMB9hqXDoyjEZayrmp3
+         7iEMLIyH5l6aNnF7syChCInkgjfCOG0KpKsMuYE2zlOYyETtHqbm8tPodgcwa6uplHtV
+         2raoAEdPas7uCMsuD5kJk1jyOnqTFFtDNU0Jjyu5faqTks/D6H6a2zANSUuYBRBpBImg
+         szNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743860740; x=1744465540;
+        d=1e100.net; s=20230601; t=1743860999; x=1744465799;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LL3Fsx5eUxzUjpXw1rSTcpeo7oV1xwNF/0+QoaOG4Ac=;
-        b=dXQlV/VqkeRk9kUFJtgAuQybf5G1DOhakUpmxDcdi7XbZu87a7QWxQ7yoQo9kDDHBC
-         /iHR5xZlyV7ucP2szHCN1zr0dHmpSW6brHypMu0uQy7w82FHD7vS4A72zu3UIFP3xAZW
-         MR5dYigNr5ZnQm5AfMcCRh/kteKzktyMiyBCXAA7Dx5lz0ST16MeAHQ757LF1QT7BbXu
-         BdZYGpt1OgqhhjecYguoqArLs2PeR9Nhf90GXFQSG2IWGRvsBYULtIvLaenxvbRAj/mv
-         Y5g9K7tbbbtGvC0yXHQ+NcDEwH9bgQUzDcdnBkP4ccvip4/Y8M4sFM+oK8G4blj2xq5i
-         w8Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCWskaKu2IQt+XBUvT3hEOuJnuIL60QNSQAmzOX0R5SDRirlFlDKFnKrjKtIkGQ086uTlwjG+BvhFx0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyFnCtecen5p/KWmwpnCszsLmzmBpureTaNmHU+TuUzU7IXzjZ
-	wiavfJB1yolG8HdWDfmUtswkSXclsyhe2ZqEthrVIW49WHkauZrln7dACSv0vsY=
-X-Gm-Gg: ASbGncuhQCKOFYeURrhL1DDZdL7Zmf8PZEN0cQScjmLXVjXukeFfvc0JS6xDHsPnMx1
-	3hadnB+67rTo1lVgnT6vGeBexVzN6wxScfSBr/vrApuQwlQZulcjnwD3wBp4GaFwM4ZIfHG5lxK
-	CmCd3Fyfmb3aUmxx5VyAZ51jH9sE++43XqQ979DWvEpP7Klk4QTyaMJB/tbKTKkSUsTsIMrsyxD
-	mcAZylt/nOE2mAZb+u7+GubFRXzACeXtL1ChO+sSOahkNnBLvm57CsxF1y5RB20SCf3DFkXl1QF
-	a4QbfhT2wQ8W/faEOTjsJXwsoE3zC1D7V3FOyTpyCLMxCwGv
-X-Google-Smtp-Source: AGHT+IFIrE80vYu3YH4Ih/F6/gPGXeytXrp/n0l7rEzhE9ST0HxKzD27qJymP07gALKPmymTgWitJQ==
-X-Received: by 2002:a05:6000:2410:b0:391:2e7:67ff with SMTP id ffacd0b85a97d-39cb36b2972mr5950841f8f.10.1743860740427;
-        Sat, 05 Apr 2025 06:45:40 -0700 (PDT)
+        bh=+aUz9xevIHtQ5HcguqoQTB6cntYV4+ru80uxVrIvvK0=;
+        b=sm5UsV03/yI6PJU0+zdl/QHWhQzJzUbxaJHTeO5K0dui7Jir2TsKwR3LFeWyXDtd87
+         JxOwmQl/4WjPQiTVHnr40eIBQL/9rl9ByOQ8cYjJdt4LOtdyk+ZeNpxplIJbBsagYoB8
+         gIa9PaPwCcSvq29L0DTYJZ1fd6laVODDEpASwrgn2q5mioRdTaXIPzob23iK26bVWFzg
+         1CNowM/ldEUGCGFr9Y6xLWyvERvbGPjfwetquMnWwNJYElpX+KD7xjDaxhMWjcR+Vmai
+         WEylnNqAJO7HcpJHdA2k93CIkwCwk5ucFeW+O6xkAv7zfMH/aBl2pFhxnqgAbSSbz51M
+         5IJw==
+X-Forwarded-Encrypted: i=1; AJvYcCXUkDB4IywDNBSI2GCp6Z5xnPO/5uaQtThYZwjCI0epa0DkhOUOhK2RK1l634HGuozp108uSA2CC3g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4LsT83i9oiqTrWXV0VhfPuBQ7lN+8pUDzu+eyc8/CfNmvuXJV
+	ssctIcu/Ov+eTtscLz5ied34fZtg+M9J2RmksONN4E1nDTL3Ktn3OS5lex/bpU8=
+X-Gm-Gg: ASbGncv3GyrfCYVlv5bkFZHKfw1alwZ5Zx6F1nTRn17OiWUJZSTJpuW+GwYGv78MCWD
+	tD3S+6Bw+UCKELkoBlex3ofjKlm8cBBbFUH3BO8Stmj3c0DLUEG1WeVKA9MqreFA9HiOTUBOG14
+	itwYQ+8YN8/ryfXdk11tAgoCcOMKqhRVpU4b3SNUQBppJ2AoLnXdO4Mc/R2yezSh9HnbP04Vh7q
+	FP7C1T88X+zkHmamkCzA+HbQdXJj0iqS1421wLyPewizglrgIYqVaGQ6wfbkVxulN7TcIT0xIYK
+	59WfdnErD6qFtJcPgjRKgdMKMSaNCaj9rRTNCGtbdhmaRsIj
+X-Google-Smtp-Source: AGHT+IGEMTPUEjKXv72J87fcLD9Q/jwVNzAqgI5y+bsn5JH5gR2xHN4lAAplyWAjbnnOZ73qIK0SCQ==
+X-Received: by 2002:a05:600c:4754:b0:43c:eec7:eab7 with SMTP id 5b1f17b1804b1-43ee0640054mr27782485e9.11.1743860999041;
+        Sat, 05 Apr 2025 06:49:59 -0700 (PDT)
 Received: from draszik.lan ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c30096ed7sm6770756f8f.8.2025.04.05.06.45.38
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c30226f2bsm7018626f8f.96.2025.04.05.06.49.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Apr 2025 06:45:40 -0700 (PDT)
-Message-ID: <932d245b63abbcb96611715e8b234138087d84db.camel@linaro.org>
-Subject: Re: [PATCH v3 10/32] mfd: sec: merge separate core and irq modules
+        Sat, 05 Apr 2025 06:49:58 -0700 (PDT)
+Message-ID: <3d688dbd2f88ce8db854f6972ce9105202ed4c06.camel@linaro.org>
+Subject: Re: [PATCH v3 23/32] mfd: sec: add myself as module author
 From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
 To: Lee Jones <lee@kernel.org>
 Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -88,13 +88,12 @@ Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
  <willmcvicker@google.com>, kernel-team@android.com, 
 	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, Krzysztof
- Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Sat, 05 Apr 2025 14:45:40 +0100
-In-Reply-To: <20250404092131.GB43241@google.com>
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Date: Sat, 05 Apr 2025 14:49:59 +0100
+In-Reply-To: <20250404094229.GF43241@google.com>
 References: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
-	 <20250403-s2mpg10-v3-10-b542b3505e68@linaro.org>
-	 <20250404092131.GB43241@google.com>
+	 <20250403-s2mpg10-v3-23-b542b3505e68@linaro.org>
+	 <20250404094229.GF43241@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.54.2-1 
@@ -105,70 +104,52 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, 2025-04-04 at 10:21 +0100, Lee Jones wrote:
+On Fri, 2025-04-04 at 10:42 +0100, Lee Jones wrote:
 > On Thu, 03 Apr 2025, Andr=C3=A9 Draszik wrote:
 >=20
-> > There is no reason to have these two kernel modules separate. Having
-> > them merged into one kernel module also slightly reduces memory
-> > consumption and module load times a little.
-> >=20
-> > mapped size (lsmod):
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 before:=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 after:
-> > =C2=A0=C2=A0=C2=A0 sec_core=C2=A0=C2=A0 20480=C2=A0=C2=A0=C2=A0 sec_cor=
-e=C2=A0=C2=A0 24576
-> > =C2=A0=C2=A0=C2=A0 sec_irq=C2=A0=C2=A0=C2=A0 16384
-> > =C2=A0=C2=A0=C2=A0 ----------------
-> > =C2=A0=C2=A0=C2=A0 total=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 36864
-> >=20
-> > Section sizes (size -A):
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 before:=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 after:
-> > =C2=A0=C2=A0=C2=A0 sec_core=C2=A0=C2=A0=C2=A0 6780=C2=A0=C2=A0=C2=A0 se=
-c_core=C2=A0=C2=A0 13239
-> > =C2=A0=C2=A0=C2=A0 sec_irq=C2=A0=C2=A0=C2=A0=C2=A0 8046
-> > =C2=A0=C2=A0=C2=A0 ----------------
-> > =C2=A0=C2=A0=C2=A0 Total=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 14826
-> >=20
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Add myself as module author, so people know whom to complain to about
+> > after the recent updates :-)
+>=20
+> Full-stop.
+>=20
+> Smiley faces might be okay on the list, but not sure we want them in
+> commit messages.
+
+OK.
+
+>=20
 > > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 > > ---
-> > Checkpatch suggests to update MAINTAINERS, but the new file is covered
-> > already due to using a wildcard.
-> > ---
-> > =C2=A0drivers/mfd/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- | 3 ++-
-> > =C2=A0drivers/mfd/{sec-core.c =3D> sec-common.c} | 2 ++
->=20
-> Okay, but why the name change?
-
-Because I wanted to keep sec-core.ko. But with kbuild, you can't generate
-sec-core.ko from sec-core.c and additional files. Either just one file,
-sec-core.c, or multiple files none of which may be called sec-core.c
-
->=20
-> > =C2=A0drivers/mfd/sec-irq.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | =
-9 ---------
-> > =C2=A03 files changed, 4 insertions(+), 10 deletions(-)
+> > =C2=A0drivers/mfd/sec-common.c | 1 +
+> > =C2=A0drivers/mfd/sec-i2c.c=C2=A0=C2=A0=C2=A0 | 1 +
+> > =C2=A02 files changed, 2 insertions(+)
 > >=20
-> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > index b617782eca436e34084a9cd24c309801c5680390..8f315298b32a2a9ee114ed5=
-e49e760bd8f930aee 100644
-> > --- a/drivers/mfd/Makefile
-> > +++ b/drivers/mfd/Makefile
-> > @@ -228,7 +228,8 @@ obj-$(CONFIG_MFD_RK8XX)		+=3D rk8xx-core.o
-> > =C2=A0obj-$(CONFIG_MFD_RK8XX_I2C)	+=3D rk8xx-i2c.o
-> > =C2=A0obj-$(CONFIG_MFD_RK8XX_SPI)	+=3D rk8xx-spi.o
-> > =C2=A0obj-$(CONFIG_MFD_RN5T618)	+=3D rn5t618.o
-> > -obj-$(CONFIG_MFD_SEC_CORE)	+=3D sec-core.o sec-irq.o
-> > +sec-core-objs			:=3D sec-common.o sec-irq.o
-> > +obj-$(CONFIG_MFD_SEC_CORE)	+=3D sec-core.o
+> > diff --git a/drivers/mfd/sec-common.c b/drivers/mfd/sec-common.c
+> > index 448300ab547c10d81f9f2b2798d54c8a03c714d8..05658f05cb857a784c7d01b=
+1cf25de4870e1a95e 100644
+> > --- a/drivers/mfd/sec-common.c
+> > +++ b/drivers/mfd/sec-common.c
+> > @@ -293,6 +293,7 @@ static int sec_pmic_resume(struct device *dev)
+> > =C2=A0DEFINE_SIMPLE_DEV_PM_OPS(sec_pmic_pm_ops, sec_pmic_suspend, sec_p=
+mic_resume);
+> > =C2=A0EXPORT_SYMBOL_GPL(sec_pmic_pm_ops);
+> > =C2=A0
+> > +MODULE_AUTHOR("Andr=C3=A9 Draszik <andre.draszik@linaro.org>");
+>=20
+> Might be more polite to put yourself at the bottom.
+>=20
+> Not sure these are ordered alphabetically on purpose.
 
-Unless I'm missing some trick.
+Yes, I wanted to keep the alphabetical order (by first name), no ill intent=
+ion
+here. Will do.
 
 Cheers,
-Andre'
+A.
+
+>=20
+> > =C2=A0MODULE_AUTHOR("Chanwoo Choi <cw00.choi@samsung.com>");
+> > =C2=A0MODULE_AUTHOR("Krzysztof Kozlowski <krzk@kernel.org>");
+> > =C2=A0MODULE_AUTHOR("Sangbeom Kim <sbkim73@samsung.com>");
 
 
