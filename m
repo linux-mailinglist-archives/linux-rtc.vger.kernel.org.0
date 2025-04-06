@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3797-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3798-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 408D8A7CF6D
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:17:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69E45A7CF72
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFBE13AEE10
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:16:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29521188C2C0
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B6E19993D;
-	Sun,  6 Apr 2025 18:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8192B199FA4;
+	Sun,  6 Apr 2025 18:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VhzpqgVS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kn0c3uQA"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685AA13C8EA;
-	Sun,  6 Apr 2025 18:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBA21CA81;
+	Sun,  6 Apr 2025 18:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743963425; cv=none; b=mUuY9Ngyg2ZO06tgJHQxNunvN0FNz1ahC9cX2ruXGMSkpSiK9U4YXx7OCHIopcj3TuWj7OrxlxA6n9lytXu/nJwbD133uXQpIB2c6WSO4ep51ZMFJ3gYwlzwZpJ2Sy1yKdXwfg9Yz+XZRWWk8p7eg39DIc0J+oEkKUtahpFEFt8=
+	t=1743963552; cv=none; b=Y+7mf1KH0McGLJXsV6WuM+f5XFXiu8AuWD454nis+iQb8KtjkYCTjbDw++fELoUWn/xQIawRAoyF/HP+CKnam/t16c5P/QNRlyoyaDPWqX3eXjwaG4wacuwcPo9y/nwnmDcLsEXdV3J8822OcFQHRqeLKTTvYPHPXCr4tFeQ12Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743963425; c=relaxed/simple;
-	bh=Wra5R8sbQq427kqgIZ2pUVfCSxPeBe3+2UldP0GqSUM=;
+	s=arc-20240116; t=1743963552; c=relaxed/simple;
+	bh=AEpqL+llri6g/xIAnkl8OAXLCQJOzdN39r87UUqAR60=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RSayF7Q/VZaA3E+zHiY+zUppr1dFsmBkSJ3xUke8LS/MTYcAPe0JqdwsZud19EBFB9r9pOV+m8EdCTSogIYf6DJf2rWq02uQq0JMG6CGdBscKJIVZCRjXfXQSOdu9ymC29mH/YHivH5niX42omoPzAG/v2P67aubZR3fh9ZC7G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VhzpqgVS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB5AC4CEE3;
-	Sun,  6 Apr 2025 18:16:59 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=a5p0fdnaAASE6jsv0e8VuXoXa+hWP5/ylV+AJCD3xw0JzMkUBwGoYwDjsWW0xQ4T56yN+tBEMVWmpuLk+Xntq45MfHMgHg+RVDURag047lup78b+Y/0ib4Ik98NDPJH9odo/Q9PHIvtZJ1HAHT5CPItE1W39HWwtyyX9VIJQomA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kn0c3uQA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A62C4CEE3;
+	Sun,  6 Apr 2025 18:19:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743963424;
-	bh=Wra5R8sbQq427kqgIZ2pUVfCSxPeBe3+2UldP0GqSUM=;
+	s=k20201202; t=1743963550;
+	bh=AEpqL+llri6g/xIAnkl8OAXLCQJOzdN39r87UUqAR60=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VhzpqgVSiWpFwnDkSXDngTIDjelYErBKvYDclTfHx9QVsjevu8qRJ9XRobNxAbc36
-	 UplcUpA/qZHJU3WmUPgqd0N7l2WehiFuwsTuiMYyo3nxDAJaFNVZ9enPwI1m9a+VD8
-	 xq2Gq8QI4nZOtWLmBvxmgHGhGJbc9yA8ZUEaM+PgNbgiKRm0ZcnK8Y5qVVPHQ7F1mx
-	 YK4JOWMJ/t0RByG7E7FbBgtiPfoEOOuAlqmuwS2a+CafW4eG1jtA+FwUF/Dcg76P9l
-	 vHx2unCMdNaFQ6hPiMFDYwLsmcUCFtHrQWPSRxnU9ZPE3r3ZDH2/uGVJGan/twEpzE
-	 HyZ0JJ+IrRLzw==
-Message-ID: <9f4f51b2-79fb-4c8f-894e-a5f69c10c36f@kernel.org>
-Date: Sun, 6 Apr 2025 20:16:57 +0200
+	b=Kn0c3uQAIDBy6f8+VUKauiWb1+uOkINeDFNkmrp/YyOSKx4M0BXu/6I6sP9lQl3H7
+	 iRGV13NTdpZVcV443pHputl4PHdlFpFHH5BXnUOivon9DxbBrDuOKiScxkPE474Zuz
+	 f8nVXkAF1wyFzrLbv8ptDrbAJ986h7ZuMmal8C1CDENKH0281KLQ+Pw5h/PU7p2BAC
+	 hYo60I+k0F2irYP1jOX/m/Gc3a/3+WlwJdnXZAYRyX6sjxUHwjiNvIfuksGAt/90fL
+	 kjCYUFNeq3JsFOv2IEpn5FwKAHCoE3ME2+1pJMUy3YVdx0wWGvjxQCB6ltQLjwyeXz
+	 Oid0/skSYThpw==
+Message-ID: <346760fe-0595-4821-a5b4-0acfe4fc86cb@kernel.org>
+Date: Sun, 6 Apr 2025 20:19:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/32] mfd: sec: split into core and transport (i2c)
- drivers
+Subject: Re: [PATCH v3 14/32] mfd: sec: s2dos05/s2mpu05: use explicit regmap
+ config and drop default
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,7 +68,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
- <20250403-s2mpg10-v3-8-b542b3505e68@linaro.org>
+ <20250403-s2mpg10-v3-14-b542b3505e68@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,26 +114,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250403-s2mpg10-v3-8-b542b3505e68@linaro.org>
+In-Reply-To: <20250403-s2mpg10-v3-14-b542b3505e68@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 03/04/2025 10:59, André Draszik wrote:
-> As a preparation for adding support for Samsung's S2MPG10, which is
-> connected via SPEEDY / ACPM rather than I2C, split out (move) all
-> I2C-specific driver code into its own kernel module, sec-i2c, and
-> make the existing sec-core module be just the transport-agnostic core
-> driver kernel module.
+> When support for PMICs without compatibles was removed in
+> commit f736d2c0caa8 ("mfd: sec: Remove PMICs without compatibles"),
+> sec_regmap_config effectively became an orphan, because S5M8763X was
+> the only user left of it before removal, using the default: case of the
+> switch statement.
 > 
-> At the same time, update all defconfigs that reference the old kconfig
-> symbol name.
-> 
-> While at it, also update file header comments and module description(s)
-> to drop references to 'mfd', and update comments to be C-style, not
-> C++.
-> 
-> Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> 
+> When s2dos05 and s2mpu05 support was added in commit bf231e5febcf
+> ("mfd: sec-core: Add support for the Samsung s2dos05") and commit
+> ed33479b7beb ("mfd: sec: Add support for S2MPU05 PMIC"), they ended up
+> using that orphaned regmap_config in a non-obvious way due to the
+> default: case of the device type switch matching statement taking
+> effect again.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
