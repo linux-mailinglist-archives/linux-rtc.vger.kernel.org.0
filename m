@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3799-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3800-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CAF9A7CF7B
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:22:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB6D0A7CF8C
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E14F3188C6EC
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:22:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5241165689
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 981E319CC02;
-	Sun,  6 Apr 2025 18:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 370BA1A841C;
+	Sun,  6 Apr 2025 18:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+dl7Ude"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O5lowjIn"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4ED1CA81;
-	Sun,  6 Apr 2025 18:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015CA1A5BBC;
+	Sun,  6 Apr 2025 18:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743963735; cv=none; b=AjFCfqDPunRSo4Z1CfylYuyz7lv7y+5Td+xpzoKuAUIq4GSeHxHm5/0b0VdHu5phMuUDqNsQ6J9BJTN1NI5QdlUA9xXWQIEFC2+DqNkqEYs30O0LFi8QKqD1fUUWO7cB0srOnor/SgdK2zpvhmtePd2xOuz+tyr2ROduUWk9Xks=
+	t=1743964103; cv=none; b=sz+Q5SiTY1BIgX4QzEQMJn3/K7hxwdu1Wo8pUGEHZG4FGDlOns7zr9uSV5wrW38gpPaX1caGFjXro5RP00pFCNoAHgiY8fzEuNaNXRaI4Dqc1SLP6P5eXqLgKUE9IaTPuDIWHD7mPuKEiO/y0wRSLM9BVj3H4AE4z98X9n+dadY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743963735; c=relaxed/simple;
-	bh=g2RETw/Z4oprQEQecoLsQYOib0vL9w+4xAUlZqp5lSg=;
+	s=arc-20240116; t=1743964103; c=relaxed/simple;
+	bh=o3lo5mNQt20q7ZgKNeztTSYc3XExMVZ1QPahOdl5f+w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lf9LyOHAJWjIPgZ/ZG5aXXgAdkOaK43scqyz2Y+9cHkS0Shk+jDWyc0VbCU6L5wanFXaUGqGioynC259I7+0jSgbUW0lP3DyVaKfap42D2oGjhf9X9LpHBtsLSECpyDaz7hhU5NZSKFCYkzKIEFZsHAuCouHLHTQo0Okz6zXPFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+dl7Ude; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFB0C4CEE3;
-	Sun,  6 Apr 2025 18:22:09 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=KO+SkaFu3EVi/FXlBjsXXW6Tyx2yA+82/5Thzz+8vQz0KWPYCgEgvXhuiZK7e5SqRJvq1cur3QDUBEwoHMU+q0KZBEQRPGbe/cKt1UUjqqVL3+hR1Mfm78/19ZmiQECyCcjgAmCWHxbWS0Fqlsx6PIcLr4yhGMOAOJZ002BArIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O5lowjIn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49987C4CEE3;
+	Sun,  6 Apr 2025 18:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743963734;
-	bh=g2RETw/Z4oprQEQecoLsQYOib0vL9w+4xAUlZqp5lSg=;
+	s=k20201202; t=1743964102;
+	bh=o3lo5mNQt20q7ZgKNeztTSYc3XExMVZ1QPahOdl5f+w=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=V+dl7Udemgbo0GBnmy06bawFgYyaMF/GMgvalYuTCkdbTPkqSt/SGX98lZn3QeeFo
-	 q9vlk8lTyD8r0m9KYYwuQvXuu8Mmv0v0cet/5B6sqAqN/3CPbdTv+IYHycmujY7iIp
-	 ZQjnKWE3ki1SPSPyvMYfxbh7dYILC4Wnyu1sM0hiN5dENLAE+ahBGu63nGHETZbju9
-	 R1xHi2cwTiJvtSCUmGrX7Gj4lmnXkb0O91rqenFIowywc3dPvQaw/kZ9K795ruJLLE
-	 1CxSqILC2tX63droV/SiEoJRy6KoebiuCiei+E53MkoU5kzTI81rKgqwDhyUIrQn2z
-	 vh8war2ShlBaQ==
-Message-ID: <3b00b19b-729c-48f9-b069-124272778ac0@kernel.org>
-Date: Sun, 6 Apr 2025 20:22:07 +0200
+	b=O5lowjInlQXQ4IvmD2Av4AnagzVNL9s+iRvbQpUVjwYFx28mypXakWBtXrul84Mhw
+	 8svNwT9BXhn1diiAUzRYUgqsdcB2v7nv3/Fthbw6Jesgk3jVP87xj6EE/pQZgjl8Q/
+	 YSO2bUOhv/XQcBDZPyHbtvDQfZpz1WoTaw5ilhXw0B/EmSIFi3YFCJ/rn5MmzHWpAJ
+	 gpCSJsVWBtQuwFdYYEiLdlkll8zQjoWtqjz7BStQW2aXNE+IzSMbrO36HCJ31npbDr
+	 vW6iIONA2eRlft7v67Uf0uu0GB/ddT81sk6M4YF0LQ/c1qAZCkb27VGrm2+oB9HBGy
+	 9HNS+8qoklOlA==
+Message-ID: <8537da10-a5c4-440e-90b0-64982ce83a75@kernel.org>
+Date: Sun, 6 Apr 2025 20:28:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 17/32] mfd: sec: rework platform data and regmap
- instantiating
+Subject: Re: [PATCH v3 24/32] clk: s2mps11: add support for S2MPG10 PMIC clock
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,7 +67,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
- <20250403-s2mpg10-v3-17-b542b3505e68@linaro.org>
+ <20250403-s2mpg10-v3-24-b542b3505e68@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,19 +113,18 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250403-s2mpg10-v3-17-b542b3505e68@linaro.org>
+In-Reply-To: <20250403-s2mpg10-v3-24-b542b3505e68@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 03/04/2025 10:59, André Draszik wrote:
-> Instead of a large open-coded switch statement, just add both regmap
-> config and device type to the OF match data. This allows us to have all
-> related information in one place, and avoids a long switch() statement.
+> Add support for Samsung's S2MPG10 PMIC clock, which is similar to the
+> existing PMIC clocks supported by this driver.
 > 
+> S2MPG10 has three clock outputs @ 32kHz: AP, peri1 and peri2.
+> 
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> 
-> ---
-> v2: fix typo in platform data for "samsung,s2mps14-pmic"
 > ---
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
