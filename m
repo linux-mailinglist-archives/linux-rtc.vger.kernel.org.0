@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3795-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3796-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED3E8A7CF5F
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:14:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88B19A7CF63
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:15:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF82616E2A7
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:14:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61FF616E87F
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7F8186294;
-	Sun,  6 Apr 2025 18:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A17319ABAC;
+	Sun,  6 Apr 2025 18:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhbBmwjf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gC1OP7Sa"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32F2C8CE;
-	Sun,  6 Apr 2025 18:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8D813C8EA;
+	Sun,  6 Apr 2025 18:15:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743963262; cv=none; b=ZPWVaWxotmG4IARfch3Y6Mkmkr7B0PDgnOUjtTDJx8Sg2qiyD0SFK2aPbHbMxbvAnMSNxzKVNE3XeAqyFJd8gGafn2turkk1MM914jo2j0UuCWUvsam5PFZgFe2XOtC3ctzpqfRJ9W/XduTcmzgeetN3pxwlpNF3YLkBc17NwTw=
+	t=1743963311; cv=none; b=XMzkdxYJqJgbBkLu0Sk2091xGW4iajJsCCOLF/RdBMlCGa6oSCfosISsBfF7gQLFGxEGGVFuMhEDq6Sj4gEoXMzd699r6pn9DtLikKV1ZiVhK6xWoIo1Ec/P0wBQUpoTBXBQCfk/9jVTjwp9cMXXQp7K9PJtSolzkoKVcQ9vQII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743963262; c=relaxed/simple;
-	bh=kqgb/u7hwCpsg1gF7Akwy1ectvg3NU7wvnTRIu0kXyU=;
+	s=arc-20240116; t=1743963311; c=relaxed/simple;
+	bh=5Rtzo+1DwDDMcsayvKa5fCMut+rwhJwi8sUI2YOJQjo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L1ROqdkLYcHnriqwSuP/VYkthyTFSIubR2dKoCNr0ztysrHF4jrKH88O7CX/NBWq/D667/BWMq+gYV5EbShdv7y2RLOcN8Ca+lQjO5n2aXFJ88n/khYpiAPfv6O5CLIAnAmv6TVo+9iltl3d37D4Zeujf0tTl0HeonH4FAgkFsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhbBmwjf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E58F9C4CEE3;
-	Sun,  6 Apr 2025 18:14:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=F7AT2LOxzo3icLaN+7X2gHquQxsYazR918ejZAh7owQBXG726IYqNue0ggGmaQn/EWr40/EclxozPDcE8eCGKakTGkDILSfy/VKNWnvVqG4fJsFxClLAUyvY0b5mEwazrMq0g500qv61hW+sG63z5jlUO25B2VLuJ4O83CjScHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gC1OP7Sa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F90FC4CEE3;
+	Sun,  6 Apr 2025 18:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743963262;
-	bh=kqgb/u7hwCpsg1gF7Akwy1ectvg3NU7wvnTRIu0kXyU=;
+	s=k20201202; t=1743963310;
+	bh=5Rtzo+1DwDDMcsayvKa5fCMut+rwhJwi8sUI2YOJQjo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BhbBmwjf//VRbwcN8qgI71+IKmyvb1aNNbsR9+3oR+vwd9ntvS7cMXbhYJF4s/cdU
-	 UQ9EYPNt++r85uSE8JAy3PVtWnb7R7a2K5UeTOSqRMnjQBn7k1J/+LrjSy97gS2E1m
-	 JvP31fimvWVlZXfxyhDYj+6GqThpSyaVy384Ur3N+6INNo0IJUsN8xHNlF2qaIDBPU
-	 KIl1NdZ4JFXLx33GTcXOWxyfmCTAw3xOO0N3pnFsnRnEoVjZAMPIhU2oTd77OUXbH+
-	 iJmOGEx5PKnl7iyqZWaRbzGnMBog05MpmY2pVH+a+sKkAQwNdHmUEa90ZlzkN9zyB1
-	 k5p9w1gXlU8Mg==
-Message-ID: <1ff1a5b5-72b7-44bc-8a70-7281cb58785c@kernel.org>
-Date: Sun, 6 Apr 2025 20:14:14 +0200
+	b=gC1OP7SayDXGW3cgGArqj8RTUMjYFAH+WAIBcmKEcvVw56DkXvLBCEJ4L3hQCTxTw
+	 aihrMQ5wLZ4UpnVUVGvGzKqU5iqgDB2g73h3DjgXzDs8cOVYjq439Ma5Dv5E12Mh3X
+	 TcocEie7wDaPnVDZ4p2Gp8prwqiHpBLwUoNKZFY/c2kIBTItj9bbhwCUgvdpy94gE9
+	 vUFj0M9HGX/fD0j9LiUSic+iANxEWk1w8PeTP/yyJDQX1IKRngEgex8pWzNlhbRkzX
+	 7VIRKA7n+VUSdgX1aD8xlQ2idCNHWt4mhYxNycIiNHvxDnlUl659kdAUls/NqxgS2h
+	 Q/rgltBWYGIJA==
+Message-ID: <89e279dd-79e8-44ed-834a-3cefe87a11e4@kernel.org>
+Date: Sun, 6 Apr 2025 20:15:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/32] mfd: sec: sort includes alphabetically
+Subject: Re: [PATCH v3 06/32] mfd: sec: update includes to add missing and
+ remove superfluous ones
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -67,7 +68,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
- <20250403-s2mpg10-v3-5-b542b3505e68@linaro.org>
+ <20250403-s2mpg10-v3-6-b542b3505e68@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,16 +114,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250403-s2mpg10-v3-5-b542b3505e68@linaro.org>
+In-Reply-To: <20250403-s2mpg10-v3-6-b542b3505e68@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 03/04/2025 10:58, André Draszik wrote:
-> Sorting headers alphabetically helps locating duplicates, and makes it
-> easier to figure out where to insert new headers.
+> This driver misses to include some of the respective headers of some of
+> the APIs used. It also includes headers that aren't needed (e.g. due to
+> previous driver rework where includes weren't updated).
+> 
+> It is good practice to directly include all headers used, which avoids
+> implicit dependencies and spurious build breakage if someone rearranged
+> headers, as this could cause the implicit includes to be dropped.
+> 
+> Include the relevant headers explicitly and drop superfluous ones.
 > 
 > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> ---
+
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
