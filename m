@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-3798-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3799-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69E45A7CF72
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:19:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CAF9A7CF7B
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29521188C2C0
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:19:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E14F3188C6EC
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8192B199FA4;
-	Sun,  6 Apr 2025 18:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 981E319CC02;
+	Sun,  6 Apr 2025 18:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kn0c3uQA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+dl7Ude"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBA21CA81;
-	Sun,  6 Apr 2025 18:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4ED1CA81;
+	Sun,  6 Apr 2025 18:22:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743963552; cv=none; b=Y+7mf1KH0McGLJXsV6WuM+f5XFXiu8AuWD454nis+iQb8KtjkYCTjbDw++fELoUWn/xQIawRAoyF/HP+CKnam/t16c5P/QNRlyoyaDPWqX3eXjwaG4wacuwcPo9y/nwnmDcLsEXdV3J8822OcFQHRqeLKTTvYPHPXCr4tFeQ12Q=
+	t=1743963735; cv=none; b=AjFCfqDPunRSo4Z1CfylYuyz7lv7y+5Td+xpzoKuAUIq4GSeHxHm5/0b0VdHu5phMuUDqNsQ6J9BJTN1NI5QdlUA9xXWQIEFC2+DqNkqEYs30O0LFi8QKqD1fUUWO7cB0srOnor/SgdK2zpvhmtePd2xOuz+tyr2ROduUWk9Xks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743963552; c=relaxed/simple;
-	bh=AEpqL+llri6g/xIAnkl8OAXLCQJOzdN39r87UUqAR60=;
+	s=arc-20240116; t=1743963735; c=relaxed/simple;
+	bh=g2RETw/Z4oprQEQecoLsQYOib0vL9w+4xAUlZqp5lSg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a5p0fdnaAASE6jsv0e8VuXoXa+hWP5/ylV+AJCD3xw0JzMkUBwGoYwDjsWW0xQ4T56yN+tBEMVWmpuLk+Xntq45MfHMgHg+RVDURag047lup78b+Y/0ib4Ik98NDPJH9odo/Q9PHIvtZJ1HAHT5CPItE1W39HWwtyyX9VIJQomA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kn0c3uQA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A62C4CEE3;
-	Sun,  6 Apr 2025 18:19:05 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lf9LyOHAJWjIPgZ/ZG5aXXgAdkOaK43scqyz2Y+9cHkS0Shk+jDWyc0VbCU6L5wanFXaUGqGioynC259I7+0jSgbUW0lP3DyVaKfap42D2oGjhf9X9LpHBtsLSECpyDaz7hhU5NZSKFCYkzKIEFZsHAuCouHLHTQo0Okz6zXPFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+dl7Ude; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFB0C4CEE3;
+	Sun,  6 Apr 2025 18:22:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743963550;
-	bh=AEpqL+llri6g/xIAnkl8OAXLCQJOzdN39r87UUqAR60=;
+	s=k20201202; t=1743963734;
+	bh=g2RETw/Z4oprQEQecoLsQYOib0vL9w+4xAUlZqp5lSg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Kn0c3uQAIDBy6f8+VUKauiWb1+uOkINeDFNkmrp/YyOSKx4M0BXu/6I6sP9lQl3H7
-	 iRGV13NTdpZVcV443pHputl4PHdlFpFHH5BXnUOivon9DxbBrDuOKiScxkPE474Zuz
-	 f8nVXkAF1wyFzrLbv8ptDrbAJ986h7ZuMmal8C1CDENKH0281KLQ+Pw5h/PU7p2BAC
-	 hYo60I+k0F2irYP1jOX/m/Gc3a/3+WlwJdnXZAYRyX6sjxUHwjiNvIfuksGAt/90fL
-	 kjCYUFNeq3JsFOv2IEpn5FwKAHCoE3ME2+1pJMUy3YVdx0wWGvjxQCB6ltQLjwyeXz
-	 Oid0/skSYThpw==
-Message-ID: <346760fe-0595-4821-a5b4-0acfe4fc86cb@kernel.org>
-Date: Sun, 6 Apr 2025 20:19:03 +0200
+	b=V+dl7Udemgbo0GBnmy06bawFgYyaMF/GMgvalYuTCkdbTPkqSt/SGX98lZn3QeeFo
+	 q9vlk8lTyD8r0m9KYYwuQvXuu8Mmv0v0cet/5B6sqAqN/3CPbdTv+IYHycmujY7iIp
+	 ZQjnKWE3ki1SPSPyvMYfxbh7dYILC4Wnyu1sM0hiN5dENLAE+ahBGu63nGHETZbju9
+	 R1xHi2cwTiJvtSCUmGrX7Gj4lmnXkb0O91rqenFIowywc3dPvQaw/kZ9K795ruJLLE
+	 1CxSqILC2tX63droV/SiEoJRy6KoebiuCiei+E53MkoU5kzTI81rKgqwDhyUIrQn2z
+	 vh8war2ShlBaQ==
+Message-ID: <3b00b19b-729c-48f9-b069-124272778ac0@kernel.org>
+Date: Sun, 6 Apr 2025 20:22:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 14/32] mfd: sec: s2dos05/s2mpu05: use explicit regmap
- config and drop default
+Subject: Re: [PATCH v3 17/32] mfd: sec: rework platform data and regmap
+ instantiating
 To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>,
@@ -68,7 +68,7 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
 References: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
- <20250403-s2mpg10-v3-14-b542b3505e68@linaro.org>
+ <20250403-s2mpg10-v3-17-b542b3505e68@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,23 +114,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250403-s2mpg10-v3-14-b542b3505e68@linaro.org>
+In-Reply-To: <20250403-s2mpg10-v3-17-b542b3505e68@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 03/04/2025 10:59, André Draszik wrote:
-> When support for PMICs without compatibles was removed in
-> commit f736d2c0caa8 ("mfd: sec: Remove PMICs without compatibles"),
-> sec_regmap_config effectively became an orphan, because S5M8763X was
-> the only user left of it before removal, using the default: case of the
-> switch statement.
+> Instead of a large open-coded switch statement, just add both regmap
+> config and device type to the OF match data. This allows us to have all
+> related information in one place, and avoids a long switch() statement.
 > 
-> When s2dos05 and s2mpu05 support was added in commit bf231e5febcf
-> ("mfd: sec-core: Add support for the Samsung s2dos05") and commit
-> ed33479b7beb ("mfd: sec: Add support for S2MPU05 PMIC"), they ended up
-> using that orphaned regmap_config in a non-obvious way due to the
-> default: case of the device type switch matching statement taking
-> effect again.
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> 
+> ---
+> v2: fix typo in platform data for "samsung,s2mps14-pmic"
+> ---
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
