@@ -1,142 +1,115 @@
-Return-Path: <linux-rtc+bounces-3818-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3819-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50F1AA7EBB1
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 20:58:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE64BA7EDA5
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 21:42:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9FDA17E7C3
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 18:51:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E5241882D45
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 19:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4773B27C86B;
-	Mon,  7 Apr 2025 18:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7A5A20A5CA;
+	Mon,  7 Apr 2025 19:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LNgzrvxf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A6kbxtP+"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E51A27C84B;
-	Mon,  7 Apr 2025 18:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167ED1EE032;
+	Mon,  7 Apr 2025 19:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744049884; cv=none; b=rLkJGlhuVHTjKIep2/fzMC+FIlMT8X9k51kSEsv2XyVr3aoCgH05rIivYrWh2r4uIVNp8EqCpHxdKutEQagJ/gnpqDwLRncjI1lDOzhGqxVpMjhf4jbWcVT6zlBHl6++PJuOMkLWXb0XM+50vQUSn8itA9GxSxElT84FUKwRb/8=
+	t=1744054576; cv=none; b=o8ukBejdG2IN7LEwO3ll+/5QrdbfvA/70qcYrSl5K5HR4se56ZS3UR6I8xDXx1pIzVZxfouLJ32vBqobG9FCPkQx4TqTN1Yo1J23VuRtITvu8buAnIwd86t4Nk/jGlJPLFdwZzXr/RdUMq5U4mplBe4vEnBT21Vdf8BhqqeQJSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744049884; c=relaxed/simple;
-	bh=BcrprjYx4NDsHAhlJTiL+KxgPwmFVz/6ErbVEKo/jAI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IWzr1sX19lVrjfhEsR4SNmR69K7IDe8bnqsIy0RsT7rKZILkorb8O9jjIov4eseoCraeIVEYpVee17Gu/brUdww6Pz0l1HowA8sYLFiUayIkgsGRozkrFvBdUzk7NvdIQYIyAvNAXsNrbSfIIhAZ7jMKzGDYuHl2uWWAy/8y5BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LNgzrvxf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF57EC4CEE7;
-	Mon,  7 Apr 2025 18:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744049881;
-	bh=BcrprjYx4NDsHAhlJTiL+KxgPwmFVz/6ErbVEKo/jAI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LNgzrvxfmufJDZOQgoW+gBNF7oVUyIOjOyfVee5jNKZvu/4BOQ/7fE+V23ccpehcf
-	 jg9eXBO77tVixON2IedkX46dYRpIqqeCfN37DKdq0TPSt1fEFOx/n/z3DZ5pMTKKz5
-	 sbc7TVrfugnZwNryY8NVNZXN+jutjn4GawLFb88EzVyp4C8oRFc8Cw7uy/eq8a5Ihg
-	 0p9HvAwypXC8kyY0W34OO7LmWVa3B5K6pNTvVcty3rgpWKLgpLe1W6SpoHQXgw8krL
-	 VB8jWNzSOj4miHDEXdNv3l4gQ77KoKoJvi1xZey/weh0ILsCX8ctOWBKilbkHdN6Xs
-	 xJcU0lsEFRgxw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Lukas Stockmann <lukas.stockmann@siemens.com>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 5/5] rtc: pcf85063: do a SW reset if POR failed
-Date: Mon,  7 Apr 2025 14:17:48 -0400
-Message-Id: <20250407181749.3184538-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250407181749.3184538-1-sashal@kernel.org>
-References: <20250407181749.3184538-1-sashal@kernel.org>
+	s=arc-20240116; t=1744054576; c=relaxed/simple;
+	bh=PGf+PWygfURYG7GELKR04VgN7oq/1lb4aDx/b8mtoUs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AcZGVdMuwyagjLSWhFUWJuptlXw5fLVwpZJ/Ntk7QdGhDwuCyZrkybqIwa+ztJ9OCTaKdRZBMIv3y0Fv0OHjy/dczoRBOcfiPhDNAZLFiCLMwy0HJ2snWoKsmCN3yq89N74KtIbpJHIcIPwCGwlX07yDC3kcAxX0ZRelVzVPMPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A6kbxtP+; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-39c0dfad22aso2909792f8f.2;
+        Mon, 07 Apr 2025 12:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744054573; x=1744659373; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+DDC/XmzkR1FazY57usHSDMiJGUj4mKYyQHoSta36HE=;
+        b=A6kbxtP+kVxrZw4q/plb70zqyC0Vj+gakrstGq60PUTWSkuB/Ea8UxtUmF9rfaeplP
+         H0xlf9R38v9FH8bgG1heak6BDN5bFXqz53gasB7X5ompFucCiBnkY4IUqw8Z/CBNakbH
+         A4U/it+2fXBSm+A0XUOuQZdHCjD9y3zZHEaOoEy9EKJ/IG+0dSmLK1nZC+/l0I5HPpAW
+         dszy3T95BS/a3DCrKUKAdUNdPdSWodaSTgf5/9dOSJsWsJYt8lLHqLDzc/RQTZlbbLNZ
+         yiwBccD9/n5YHfVk9o9SMQdjRNa070KYLK00k2XIkML32wkEUAm9I5xsNHojo/6vZ7Cz
+         FFtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744054573; x=1744659373;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+DDC/XmzkR1FazY57usHSDMiJGUj4mKYyQHoSta36HE=;
+        b=KOhrxIaUj29/374tHl6WyT8/vqRPBkr6CsHQxV/o6cR9gzFEyGnTJZfTf2ypIaw0U2
+         +To7O0HDDwsB8eOQh1MvXX3gV6DTfa0FsOG8lTjLnKUfvdTbb4WwZEa62D3+HvvcV931
+         h05CpEaGm52y+3rKsAQwfKEvaJFAF6I9n5oDVY6tE3gO6dZ9d4R2xNhnwySNSLGOQ03j
+         0bFY48lcl5o4xNKkKVIEpltlB/xBCvJTGFLFefjV2PrNc9pe1ZnLFbS1wXJYRzuymqMh
+         WZXbhRpw/G5I9UuSxS0U4kHY6MCsnLZXluwsx/9qrywZmkrOoItuAtZsDwCzM+druAuu
+         KjyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUs8MR9UEjH69wEexbx8tuNnHUbMfag72Mf65PvhsQH0s8MtpqSFslwj+USxoRZ9rJNAzx+DomlgqVLQ2Ho@vger.kernel.org, AJvYcCWGLsOBVfFHapBOLSuIYYvgNNXo5ppS6codu9JGKunz1lnVSErOnB1cxGOB1n1ceaUd2Ua8ZM+RvCnd@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywc3asQTFuUa6Yub6QbkncCx+qTnnVObgZAWqkJF8r2sXgxlbRd
+	FUDiPGI2T04PfsM2IbE+kf5Ypx83dho7g7WZPeSpZO5sDFUZWlbCmakvGzQj7CQ=
+X-Gm-Gg: ASbGncuZ+hretPRw8LTr0qyk1gKAfKK85m4VBnsmZGiR41FBqn8io+0bbcxa0p10mVh
+	vcR1ww9Jazyy+mbsljnkzxbsBiZ1NNIOf9WrheZ+9sXZckFBFS9DztmAraBCjH7mvl4RunXJ2dd
+	ZsdEFVGXYPbLqkxvuBwk6pKpmwIwOiDw4AihGoJ/P1KqoQnEv4p42g88Yoi564SGBRGY2lz6CUf
+	0XHEskPQncVqLgSwjw7sitg6T/wj67nemc06n3l7+n1htARB/fF6SpFDTeyNqF80an7hixtxLiX
+	DybxdSUqkeCrzsuYim3EOgcI5AbDOCP9QnqgqroSM0rSmwqylGt1DOWXTHkfdzA=
+X-Google-Smtp-Source: AGHT+IHByGiSgfmuVXdJ546MLKCDXJvNioFQ6536g04viX5iJMCPi++65BUkewJThbWYuB8YyzQsbg==
+X-Received: by 2002:a05:6000:420b:b0:397:8ef9:9963 with SMTP id ffacd0b85a97d-39cba97f7e0mr10468870f8f.55.1744054573160;
+        Mon, 07 Apr 2025 12:36:13 -0700 (PDT)
+Received: from localhost.localdomain ([37.162.191.164])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c3020d62fsm13122812f8f.79.2025.04.07.12.36.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Apr 2025 12:36:12 -0700 (PDT)
+From: Antoni Pokusinski <apokusinski01@gmail.com>
+To: alexandre.belloni@bootlin.com,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	robh@kernel.org,
+	alexander.stein@ew.tq-group.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Antoni Pokusinski <apokusinski01@gmail.com>
+Subject: [PATCH 0/3] add support for RV8063 SPI rtc
+Date: Mon,  7 Apr 2025 21:35:18 +0200
+Message-Id: <20250407193521.634807-1-apokusinski01@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.133
 Content-Transfer-Encoding: 8bit
 
-From: Lukas Stockmann <lukas.stockmann@siemens.com>
+This patch series adds support for the Microcrystal RV8063 real time
+clock module with SPI interface. This device is very similar to RV8263
+(which however uses I2C), so I decided to extend the existing driver instead 
+of creating a new one.
 
-[ Upstream commit 2b7cbd98495f6ee4cd6422fe77828a19e9edf87f ]
+RV8063 datasheet: https://www.microcrystal.com/fileadmin/Media/Products/RTC/App.Manual/RV-8063-C7_App-Manual.pdf
 
-Power-on Reset has a documented issue in PCF85063, refer to its datasheet,
-section "Software reset":
+Antoni Pokusinski (3):
+  rtc: pcf85063: create pcf85063_i2c_probe
+  rtc: pcf85063: add support for RV8063
+  dt-bindings: rtc: add binding for RV8063
 
-"There is a low probability that some devices will have corruption of the
-registers after the automatic power-on reset if the device is powered up
-with a residual VDD level. It is required that the VDD starts at zero volts
-at power up or upon power cycling to ensure that there is no corruption of
-the registers. If this is not possible, a reset must be initiated after
-power-up (i.e. when power is stable) with the software reset command"
+ .../devicetree/bindings/rtc/nxp,pcf85063.yaml |  33 +++-
+ drivers/rtc/Kconfig                           |  21 ++-
+ drivers/rtc/rtc-pcf85063.c                    | 169 +++++++++++++++---
+ 3 files changed, 186 insertions(+), 37 deletions(-)
 
-Trigger SW reset if there is an indication that POR has failed.
-
-Link: https://www.nxp.com/docs/en/data-sheet/PCF85063A.pdf
-Signed-off-by: Lukas Stockmann <lukas.stockmann@siemens.com>
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Link: https://lore.kernel.org/r/20250120093451.30778-1-alexander.sverdlin@siemens.com
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/rtc/rtc-pcf85063.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-index 6ffdc10b32d32..4a29b44e75e6a 100644
---- a/drivers/rtc/rtc-pcf85063.c
-+++ b/drivers/rtc/rtc-pcf85063.c
-@@ -35,6 +35,7 @@
- #define PCF85063_REG_CTRL1_CAP_SEL	BIT(0)
- #define PCF85063_REG_CTRL1_STOP		BIT(5)
- #define PCF85063_REG_CTRL1_EXT_TEST	BIT(7)
-+#define PCF85063_REG_CTRL1_SWR		0x58
- 
- #define PCF85063_REG_CTRL2		0x01
- #define PCF85063_CTRL2_AF		BIT(6)
-@@ -606,7 +607,7 @@ static int pcf85063_probe(struct i2c_client *client)
- 
- 	i2c_set_clientdata(client, pcf85063);
- 
--	err = regmap_read(pcf85063->regmap, PCF85063_REG_CTRL1, &tmp);
-+	err = regmap_read(pcf85063->regmap, PCF85063_REG_SC, &tmp);
- 	if (err) {
- 		dev_err(&client->dev, "RTC chip is not present\n");
- 		return err;
-@@ -616,6 +617,22 @@ static int pcf85063_probe(struct i2c_client *client)
- 	if (IS_ERR(pcf85063->rtc))
- 		return PTR_ERR(pcf85063->rtc);
- 
-+	/*
-+	 * If a Power loss is detected, SW reset the device.
-+	 * From PCF85063A datasheet:
-+	 * There is a low probability that some devices will have corruption
-+	 * of the registers after the automatic power-on reset...
-+	 */
-+	if (tmp & PCF85063_REG_SC_OS) {
-+		dev_warn(&client->dev,
-+			 "POR issue detected, sending a SW reset\n");
-+		err = regmap_write(pcf85063->regmap, PCF85063_REG_CTRL1,
-+				   PCF85063_REG_CTRL1_SWR);
-+		if (err < 0)
-+			dev_warn(&client->dev,
-+				 "SW reset failed, trying to continue\n");
-+	}
-+
- 	err = pcf85063_load_capacitance(pcf85063, client->dev.of_node,
- 					config->force_cap_7000 ? 7000 : 0);
- 	if (err < 0)
 -- 
-2.39.5
+2.25.1
 
 
