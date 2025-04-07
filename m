@@ -1,165 +1,143 @@
-Return-Path: <linux-rtc+bounces-3808-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3809-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9D0FA7D21F
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 04:26:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC989A7D389
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 07:30:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86CA716A2AA
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 02:26:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 964CA16750B
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 05:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D88212FBE;
-	Mon,  7 Apr 2025 02:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC44D223329;
+	Mon,  7 Apr 2025 05:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="klJ2q2hU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWFSaq41"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D2414AA9;
-	Mon,  7 Apr 2025 02:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31750223316;
+	Mon,  7 Apr 2025 05:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743992772; cv=none; b=Avw+X5duHJNop5wHi/fxNZYmSZsyT/pXBWwC9FTeqKwTGSHpZ9XIWXU/QcocY7pO1xddyirohfno/2kd02NqzEBqtyu1dfv2MwhWccgbSBf7rH6IONTcTw4RUjiTsjdNChTpprT26wXBtaougbX7gV7XJ6oPz7oQk+Qs8kkmFi4=
+	t=1744003789; cv=none; b=hA9DRUMZ8PntPyYkaVXMYqmXveX6/WKFQtp70uSc2zRZ39VX7Q5ea7jGJeXmV9vJdTEguK5a+Y//WAPgNvzOCU9kSOGNwFBHNGmlxEqHSGQBm5+F5ieDC3C0k5D9kneQtO9oTW5xFFwi5OfSmynSy8Z/osngJ88AtQs4ywXwtKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743992772; c=relaxed/simple;
-	bh=qqs+LE0eRz1+HvRjfisMIFt6Lj6/g1vAXELmv46RSi4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nt/UT1plSi62tnPUhtD5mfYwdlQ9dViZRArM7AUwAcw1yvC6pOuXrUkjg5U+ZD3q5e63/wzaeSJeXJMNkyPBVgPmVLwPwbu7YhGYMFJTLn0Lt+5iWKlLr0hS93HXX80ME/bj6eJUbRKmyFL487qKz3l6HRamrxPyfigyAU1ZXkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=klJ2q2hU; arc=none smtp.client-ip=209.85.128.182
+	s=arc-20240116; t=1744003789; c=relaxed/simple;
+	bh=szrAoqEt82D4YY9cVh8krkVtpKKBpZVN7JekLX3bw/s=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PQuHZrPY1Tz7Q6i2GocQGS2SmIWa4l5PqJEhAd0ShT65hkBaZ7j6veCgVO5gMB4CvJVGlb9fu9DJV66fNYL6r6snw5cyvVDTEgenBaGOuO2xJqwg+8sID/ByNC4R5S326cJHzm47RrbJl90VUf5FEymCA9RvT86FISbNlUJ8pD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWFSaq41; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6febf391132so35008187b3.1;
-        Sun, 06 Apr 2025 19:26:10 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cf58eea0fso19693235e9.0;
+        Sun, 06 Apr 2025 22:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743992769; x=1744597569; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=debS+VRslkmHys5XV5kL/p+TQCO24vSGvmW5DmRp9r4=;
-        b=klJ2q2hU5QK0BhrCPmtHpVURfrT3364cLANBbD1NoggF58lwGZ7V/qLNCtxEOiTjA6
-         DSSic105zW7f34EANeRuZ452rbLPCI6zUYXIjuuJE+PoesQABHl2m/BO96sO+8oZR2qZ
-         ob8oKFhU/AxYTiQqSHa8zYflUVLK2esMw/xCV1+so+pygeR7mGVbQoNvvhAk+dLZh8Kq
-         6AQe/kxuzqwKf0suTzbOJ6ff9o/Yyb2ksPEAsWUA2Xvq74z61Olvtw2nES5TC52+TOUp
-         1eUw8lpCwoVsjenYS6XYBYkg4Es577WzCNsqsFGxES5/2Y9ifFLZDu/ss1sD+FehfejV
-         visA==
+        d=gmail.com; s=20230601; t=1744003786; x=1744608586; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=szrAoqEt82D4YY9cVh8krkVtpKKBpZVN7JekLX3bw/s=;
+        b=JWFSaq41BPEEoLeE4Etnk92IdMcTcb1m+pd6jUF8SKh844DbAdW11nqlN/cjSBSjls
+         GH6tqRFD/EslTQxxriMPsBN9dlgwx72FhKxeo8SAXTbuCyQqWFyZNKeCETucdNuMO/QJ
+         sbbk60rchOS+wUgJulmB1Qk8lFouNyS2OR2JHXeuFrBI3LMYBLy4wyZuL40W64vTxZEr
+         SHy5EcjbGsFcNhSxe9wejXUnP/3XxRlQSrIF4B2UTIvh6g3iZzTRyWaUkEJc91jsLgFZ
+         r9JnfH7gMrByUV6zQBz8NCJ/ae8iE2gxPc7WdB3ASyXOLeoy43kEssjpF19ghvnsZw1A
+         hAwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743992769; x=1744597569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=debS+VRslkmHys5XV5kL/p+TQCO24vSGvmW5DmRp9r4=;
-        b=WtwRZeFpNqTwQIJWf/qLEwLKcK2lOGv7qZVLoksE8mw3aLH7UyvPa51Co7er1gnv2F
-         JLvJAgU/jdG0C++3j/daALV/KOPRt22msNLTQ55zmJbrzWanrJgD/OKQCa9L95i3avHH
-         LLSpLfqDnomeBEDtooy/zXIHfFkYemTncq5LLwgLN2txBZJD8wS1dG5QJ//rhYm8/Qww
-         z7K+cYJZ3R1bC5J/YTliBiTnPJVM4GQRTZJAlVpttv12rXXnURNqQp+ePRx6I8Xe+N1q
-         xhdLHAvLVSLxotlki3MtlBSJnn73EthBPTuT2x0hUvTDjEaupwNFXJlf2/VnP30s7W7I
-         tqWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFaNkJXnxj7tkrHPvzm+iFffUJ7QMxkqXZWLuVSalt2OYx/EOm7RTJGKXWlHmC2q1cEvE8q5L3lsbM@vger.kernel.org, AJvYcCUPQiX/SyYLbOq3G2FoOzlJNY8YYkN+iAH7tuitd37I7bw0Upoitt/yUlnO0PisdvDb4g3kypj/8ttJtiwq@vger.kernel.org, AJvYcCUfh5WMlcb4kkJumy8aaXYQQEwejMYJmisobrld8Bpkl+LzIynG3rLtO5hue87/p52Y6DsCOBpKaCkWgZVLD/4=@vger.kernel.org, AJvYcCVE4f6AlsF932Ssa59QX+4x2kuvCfZq1DIkm4Mw065UcrLuHaBr2wDHYj6Va3X/yZk+DB0k8eRZAq3S@vger.kernel.org, AJvYcCVK+gadp8QAPJ+71sPw+uTzElx2dCJ5jnfF6/oeGZcxFRY8gHr3YtpFkyHM28ETCwu8jtnxFHU7I0NVkw==@vger.kernel.org, AJvYcCVKHqH3b01JAjrbEE02F663UFePU3XkAc7WZWeaZG0eBGVXktLgxYzAKtcbd9O13CS5lN9ktNM8tl8=@vger.kernel.org, AJvYcCWJgEqxzZfn3Zd4wUYc35YDricmRlQG3bsnWLMlQAgAN2Jb9csQH4VPY1sYvMrBtkQ5IIoJs8SM@vger.kernel.org, AJvYcCX/S4t4Ghktu+gZv3ALEc6NMC2TPeFGEdEGx9bVIWXG9CjCAIDeonNkzG/RXxDRj5crJrGddF7XhzBB@vger.kernel.org, AJvYcCXCzRN+p8rU/G7+yv84RwX8CQLpwbTLx1hGdwx5greFtJ/mOzm4rLM0J21qPi6XjF/4qCVegODP1Yt2VqU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC51YS6iW3EVd87P9gX0kGMRMH8sNjNWpUGG2c7yXlqjqmoY2k
-	plyN/MXILVSvC/aB8ZC1iFywSF06vv4e0fzX/32s9TfMwJBSSRBjc5jFFuJgYM5drVg2K1rMLwX
-	5sdbq6R0Ays0BMVZlvbCbsB68yFI=
-X-Gm-Gg: ASbGncu9A5PtZTY7SOOQ0IasZmO80XfQAqRRP01tBlIfcp9ewMUt3oASUCxjrWYDdFV
-	x+gaF/+h6szxX/VuoZGYtXPcML473+PA9o3kv41XI+bsssKyn1CMWBoFsyiitDJllSHZ25kePM2
-	Y7E/dlMnJ6FQ2FjojfEg9jefTKzx05EgycxGAMdn72sFuvr3Hk6CCPFl+5gplkXU1XfDtJMHw=
-X-Google-Smtp-Source: AGHT+IGquV6j7kjxSU5DDbl56LJUWg84NJlvktHpwJEewJUQrkBdAn2Dp3qCJNnObG7k37I2GpH8CM6noQcYsBFXMjQ=
-X-Received: by 2002:a05:690c:670f:b0:6fd:a226:fb76 with SMTP id
- 00721157ae682-703e31407ddmr182228257b3.14.1743992769361; Sun, 06 Apr 2025
- 19:26:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744003786; x=1744608586;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=szrAoqEt82D4YY9cVh8krkVtpKKBpZVN7JekLX3bw/s=;
+        b=JmgJh6bhL6Pz2sOQpo740mJENqNKfKqyY7YWLjg9tA5K5uQ8D/okTZf3D12FIXEUo7
+         fDvIJX9MI7W1BwM8NZBCBwMmuqJL2ihu3e+CfRAq0dM6cDqe//yfoIYVYwnywiBgDStv
+         SvahkU/Hnyx1jtr+uVd0sGuEIahU6KHuDkz3O0Cgqi90e1/JUJ6pUiyPKfWVkejOkc7Y
+         hYfeil+BLHwp1cOa+iLAqaeRe3ncd808bo6oiIt9mXGLLfLMhN8vSMGrF8KeYOwaAGw8
+         rRZqr6nU871m5a8MEnOs33nYCGT7naslvPPZ8DneAS6bcY4H8/5oh0RuCJPsfZcWidtm
+         36ow==
+X-Forwarded-Encrypted: i=1; AJvYcCUMmldiCWjlb7s9+nTNsmWFHkHQbVMZJH+jSck6K9GNBFBJ5UqWiDcdeCf4VD4YEiuyO2BddYoP61UPyNnm@vger.kernel.org, AJvYcCVBZNc7mI9Wj9gZgdWbgEqMBOEQOquY8nhKHmkSKWP29425MQO0fz1HVF1iPwa762De7Sn++GWPG43U@vger.kernel.org, AJvYcCVQz4rQTJJuyY+yUsoh7X2ILaZk9a0bvoBikPl37aGZsyspcA5hy1oCBF16pNz2WX0J1jua+G2O6Ryr@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgxboXwBVBNWh6WG//Wq9mHCq8eluubQvKg/SybnWd2iad8E93
+	Ky0K/qMr4FKeErBMv/jbnntIsLi8L9HAL7KpktsmlndQjmIIyckv
+X-Gm-Gg: ASbGncuYPttANqyEnZOMc1f3ZtQgtWQZ+wUqAhJGm7camac6U4FfRfZ60gJa4ZXXN1l
+	U+5orNpj/3Z6nviILjdpLqY71pA039vDvNoPdEqnGMwLgr0LWWsuS0sKvkZZHgc7p9oXSg0qs1v
+	34wpzxypY0p80W+wWVWh4sxV1SF9EderACzbqQTthgVXt85NKr6v3EcgIp4V8UcLHWVRHhKPWaQ
+	PV8sx8rkZuCSuVeSR9u7r/HYUyhXSmvjqDFpRkucluk0auy90fKfftmnFFhY2tBGNX6n46rKAut
+	f5hb/lu6wZx3rcd99uiAvHHMJZlfW/3Y9h6aHa1cEwBnynsjOsxKMrdYUUGEHuDYHY8AVQls
+X-Google-Smtp-Source: AGHT+IHyYNhRU8C385EoBm8RN50B/CpRlG+TT3vGlC2HR7S1QlciSOoOspWYsQeEQA1twwUro0TK+Q==
+X-Received: by 2002:a05:600c:5494:b0:43c:fbba:41ba with SMTP id 5b1f17b1804b1-43ecfa04a99mr74679725e9.28.1744003786226;
+        Sun, 06 Apr 2025 22:29:46 -0700 (PDT)
+Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec169b8a3sm121113105e9.19.2025.04.06.22.29.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Apr 2025 22:29:45 -0700 (PDT)
+Message-ID: <a691fe4864debf7592010bc892066beb439c1740.camel@gmail.com>
+Subject: Re: [PATCH v13 1/3] dt-bindings: soc: sophgo: add RTC support for
+ Sophgo CV1800 series
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: Inochi Amaoto <inochiama@gmail.com>, sophgo@lists.linux.dev, 
+	devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Chen Wang	 <unicorn_wang@outlook.com>, Alexandre
+ Belloni <alexandre.belloni@bootlin.com>,  Arnd Bergmann	 <arnd@arndb.de>,
+ Yangyu Chen <cyy@cyyself.name>, linux-kernel@vger.kernel.org
+Date: Mon, 07 Apr 2025 07:29:37 +0200
+In-Reply-To: <vxjtdvy5vxhmqldgvt4mgeuor36gdjriiai7y3rej3tevuwisa@wpupxzhvc3tt>
+References: <20250309202629.3516822-1-alexander.sverdlin@gmail.com>
+	 <20250309202629.3516822-2-alexander.sverdlin@gmail.com>
+	 <vxjtdvy5vxhmqldgvt4mgeuor36gdjriiai7y3rej3tevuwisa@wpupxzhvc3tt>
+Autocrypt: addr=alexander.sverdlin@gmail.com; prefer-encrypt=mutual;
+ keydata=mQINBGWpGj8BEACy09IxfduHTzAdqKkf3SmGIHIEquHWHIXqgVIoZo/ufP8mIpsWYwFKP
+ 9gsCvVvNNugtK8YPN92lbHol35nfZiXLIp16ASRQXYFtBjXj4GAVjUPjaTkQbcedIgD2nEZ/HQSio
+ hfnUSS0YmxI0UUJmZFulwQZil6OmPVbbQoda8/In5h/wNRo6y5vJreRhsjqcP5LckLRov3t+jabUz
+ n0/1twHNO0SnI508dXenEhQcBX7Wns+JfwRqO8jxBK1P3DntW+n0OJ8DkjSMJjm0zk9JtY28WK332
+ Vpq8smZxNDNCfs1YtRMzfEEZKRvxsSMzTxri/cw7VXJa7m138LlyPBkXizjAKqad/Mrthx4ambsWu
+ RXyjklYOBYqMEAdlZNLPQnhnIICFwkJ/lnLE8Ek6Dh0NYl1HpsOyvu1ii7VPEXHLMGTKFmFmWtrmC
+ UrHIBrAvStMJ2jIRhEyCGDpf6f5dfKNOb3GWRtX36326TDOa2eXWqaTQEPKWRSUwhC3f3j/C/o/vj
+ 6bDHQ8ZsNcKYxwtSoh+elHT5xtHOMvPBP6gavgZRDnH6wBSHWnXYxyOmZPKr2NuhMwhEyhpvkEq5z
+ W6Z/hp5POzZ74GNkIKB5/FpETobgoV/XB2HMnlIUAJE2RYRYwvbgIkKTJxFD4FIIP2DVt/7cT/8ry
+ 5Nhe2fouscuDQARAQABtDFBbGV4YW5kZXIgU3ZlcmRsaW4gPGFsZXhhbmRlci5zdmVyZGxpbkBnbW
+ FpbC5jb20+iQJUBBMBCAA+FiEEYDtVWuq7d7K0J3aR+5lQra83LKgFAmWpGj8CGwMFCQPCZwAFCwk
+ IBwIGFQoJCAsCBBYCAwECHgECF4AACgkQ+5lQra83LKjUHA/+KlP0no2WRK1co+2yi0Jz2kbSY61Z
+ oX+RqbLqkCoo1UxsU/MddscgjKOfggNASZ1l//jUkx39smTBONmxcauTtY4bB4Q9X8Djk+XO1M9iw
+ Gb7feCbnIuRHyvI3qygC+k3XgLIJScui3/yEL0aikd5U4F6nkKyQiPQk7ihKWKyBQXQ+tXS06mUH4
+ p0O5BYvxijW32Z9esVB15OB8vUcx2bsdjogEuNc0uwOGMHsVIsW4qupoHRHPc1865uAqzv9vW3a2/
+ GOG6IpBFjmXqg7Wy9zwVjSJFMvVxu2xs3RCdpS99aMrfA2na1vjC5A7gNFnr+/N2vtMBP0d0ESfd/
+ 54zSglu3FW0TIOIz7qkrWQKwiennfUun/mAvCynCrKpCpUMkEgeQw1rHCWpSfnJ6TPG0UfQGNUFyz
+ zmBheQRSEksaepfCtqwCxtjF19JZ6yapLi/lQt7YBjwxIPkZRHJNelPkK/bs6yeRJul90+X6UAJst
+ Wh4mC7HzVvmopJoCxbInS4+L6qlefdjqhB6NYw9Q5GsRmTKalaqJoW1/kXopeGExCY4r1FP5ZoLHF
+ s0xNbycpD2tp/GnI8GlYCIzQED3TNab7IkWP2otXnWAnF8CrqhglBbYnp8oCkgBPatYftO4dWFP3Y
+ LVWE0EtoWLLrmiWzHkbWc8YKpWAiFX8OhUJLKtA=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com> <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
- <20250320145042.GS3890718@google.com> <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
- <20250404142115.GC278642@google.com>
-In-Reply-To: <20250404142115.GC278642@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 7 Apr 2025 10:25:58 +0800
-X-Gm-Features: ATxdqUEJhGHgxl-DlDPMkzogxSTRCsyaw-VHC_dALxuK6Y_oivsfK0lqdUug0TA
-Message-ID: <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B44=E6=9C=884=E6=97=A5 =E9=
-=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:21=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> > ...
-> > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > > > >
-> > > > > IDs are usually given in base-10.
-> > > > >
-> > > >
-> > > > Fix it in v9.
-> > > >
-> > > > > Why are you manually adding the device IDs?
-> > > > >
-> > > > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > > > >
-> > > >
-> > > > I need to manage these IDs to ensure that child devices can be
-> > > > properly utilized within their respective modules.
-> > >
-> > > How?  Please explain.
-> > >
-> > > This numbering looks sequential and arbitrary.
-> > >
-> > > What does PLATFORM_DEVID_AUTO do differently such that it is not usef=
-ul?
-> > >
-> >
-> > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-> > but I need fixed IDs.
-> > For example, the GPIO driver relies on these IDs to determine the
-> > group, allowing the firmware to identify which GPIO group to operate
-> > on through the API.
->
-> PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you've
-> done here.  These lines do not have any differentiating attributes, so
-> either way we are not allocating specific IDs to specific pieces of the
-> H/W.  I still do not understand why you need to allocate them manually.
->
+Hi Inochi!
 
-I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
-MFD_CELL_NAME(), like this:
+On Mon, 2025-04-07 at 09:09 +0800, Inochi Amaoto wrote:
+> > Add RTC devicetree binding for Sophgo CV1800 series SoC. The device is
+> > called RTC, but contains control registers of other HW blocks in its
+> > address space, most notably of Power-on-Reset (PoR) module, DW8051 IP
+> > (MCU core), accompanying SRAM, hence putting it in SoC subsystem.
+> >=20
+>=20
+> I think this is a mfd device, so why not moving this into mfd subsystem?
 
-static const struct mfd_cell nct6694_dev[] =3D {
-    MFD_CELL_NAME("nct6694-gpio"),
-    MFD_CELL_NAME("nct6694-gpio"),
-    ......
-    MFD_CELL_NAME("nct6694-gpio"),
-    MFD_CELL_NAME("nct6694-i2c"),
-    MFD_CELL_NAME("nct6694-i2c"),
-    ......
-    MFD_CELL_NAME("nct6694-i2c"),
-    ......
-};
+MFD is by far the most tricky subsystem to get into [1] ;-)
+SOC looks much more realistic [2]
 
-For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
-i2c-nct6694.c is 17~22. Does this mean each driver should
-independently handle its dynamically assigned IDs?
-Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
-and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
-you think this approach is appropriate in my case?
+[1] https://lore.kernel.org/all/20250306003211.GA8350@google.com/
+[2] https://lore.kernel.org/all/20250303-loud-mauve-coyote-1eefbb@krzk-bin/
 
+--=20
+Alexander Sverdlin.
 
-Thanks,
-Ming
 
