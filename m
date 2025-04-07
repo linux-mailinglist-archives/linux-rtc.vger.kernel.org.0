@@ -1,131 +1,111 @@
-Return-Path: <linux-rtc+bounces-3806-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3807-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A27A7CFB5
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 20:35:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 581B4A7D19D
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 03:11:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DDCC7A2B83
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Apr 2025 18:34:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FFF23AF539
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Apr 2025 01:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEB2189B9D;
-	Sun,  6 Apr 2025 18:35:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966091B0402;
+	Mon,  7 Apr 2025 01:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lwVimBnD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j+iUWVe6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B3051C5A;
-	Sun,  6 Apr 2025 18:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82BC12CDAE;
+	Mon,  7 Apr 2025 01:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743964551; cv=none; b=c/Xkwqa/qNlsNzGWZSU2lKxSLyaV7izuWTeMFpTtkTJ6iK5ZcJZ5P+JrN9m0XmPCE27dHqDhYxhgNoSiv6OkcuxNfFQzZ93jhJXDxufKlt5Ji5zQGsTkjHJOpZQ84hBUch746i2GvXtijo41flp48IJD4S78KRFPXGAqwuXjMwk=
+	t=1743988178; cv=none; b=jXCo6pden7wv8EfW9VdPV94Lov8KJxcoo14s+QVwOze4mNq4w8GGd3hFoQSYpfKAsxaGlcxvZ2H3OKR6vTcj6uaROLe+ipQqyX2qgLfDcq+TGq4Z8FXbaWib1uw3Lbf9QFOoEz4duCLWI6T19LzF7ZUXCfSyGnrqQ3nBIrgqNm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743964551; c=relaxed/simple;
-	bh=rrw6C9PxD3dEvPohcjb1eyJDWWnjgkEsQK+28Yte3ck=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QS7h4BidAPagOYD/TlbIgNMS8hcEcX4XX5Fzx+Av/qk/WS6E3Xp10xLUl6glTjNuU+3LdBZRZ6RGZK13MrnzaMtHBwPAw0tnq/CZx14l9r6362naBBwSLZLHBZO7nQ7cbLP82LrZqdA3qWpLf19/VlQNVggMpDy0dc3V/WYi7AA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lwVimBnD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4CFC4CEE3;
-	Sun,  6 Apr 2025 18:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743964551;
-	bh=rrw6C9PxD3dEvPohcjb1eyJDWWnjgkEsQK+28Yte3ck=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lwVimBnDyzmabhTpR2luPs9LR0LS7Q2uJKf615xRwIpGJpSbPBVlZ4bDfalaROpFE
-	 B634jly0rS3iBPNm/lcpTTI4QqcayvPJ/FpSCkbDEAANk2vYL53LAZlRvcVRbWCEPE
-	 9spcEK4p0G58SMzNCp+KCSuoMR/cXYlT1/1AtJp0sBl+a0basDfQT/Z5UK8ds7yZib
-	 kOw+nDJtoro4T4PA2h9omS3cYOGYY0GTMWdQvRMyGsXLDAWjrO9rOt8JgnTzcZuTFl
-	 y0bMR5Jyer4fOL/qPNP1BafmRQ7F8fPtLpt0HH2pYj5aCeehTarh8NhUTqg3SCCI8Z
-	 t8uS/iCeRPLSA==
-Message-ID: <453f4691-d581-4187-be34-f0b004a856ba@kernel.org>
-Date: Sun, 6 Apr 2025 20:35:44 +0200
+	s=arc-20240116; t=1743988178; c=relaxed/simple;
+	bh=qFpJkpO6DX3BTQg+eiAtTfhhkQ3s3RXSaTPwP48oVPk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HZIYO7Fqe4143OO8fxq5tDoFFkc34SGbmWOS3EFvloLAmrn8Y7cW0k5wQu+reUf8zcotLk5go1DPPGsa2z83ZJxvEfBkkTwKipSk4QqsIo5u8O/9PsyRm3XqYF/zFGp/LSDfmdArDREsCxiw3XF9pd23cvKyAzvkTtcJsSOOVxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j+iUWVe6; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-477282401b3so40455931cf.1;
+        Sun, 06 Apr 2025 18:09:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743988176; x=1744592976; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTaxpP+0BisXpBWkHEPT5jUCMTocLUlCjk3pVjz+dsA=;
+        b=j+iUWVe6j7LFZ3xU6i1TU9QcGtmD2hG6RuMJqwFBoi0TMGvskZcqxoKRpejFEZ4ey1
+         Z0EHc7QaPhcm/Pn8Qch0plbG3PKkbvZ+TxcrvvvkqwgQ19TCfFecbW3qBVie6Iy7NY/W
+         k0pM+70aYfdoDZKN0RM64X/9V3yu7D3p3hN5bfy5lwwlMIFeoQfVgC3uzmogtSQgrF2h
+         Dq/omhczqYBqnCt1PpE2tmG3vxxhDRRsU/8igSNcEWb1qmUUnWIMc6Zsq4bAS4gBQEgw
+         ILuocmjZLJd8rYCotY97maeNtqehqSrnnYpVlEqiB1xI3Ll+YoFrpyOHvHOsu+oDCOUk
+         oWYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743988176; x=1744592976;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTaxpP+0BisXpBWkHEPT5jUCMTocLUlCjk3pVjz+dsA=;
+        b=leTqD/yO094z6s3dhQwkyTMJGjKcWmAltqxPdgLYSUEFzu9dBQ6xD63g/pGQDawOK0
+         9WpUIoHLviYUvkkApUoI9K+9qFjG8ZAbxvhfzIs0ZcGoQr98WxlqNPMv0sFpNqjkiXb4
+         V9SaBR00NlMGPQ4xahm/Fqo3YvJcGW4QZFRrcP9UAIc3GtXyNaPEDL2ItPSNCLEZx6+l
+         0S0Fxk2yuErCwjFgM7RZQerMMAKeWAb0KyFnLuX081uL8A62ggKjr1ynO6YoAzGXCn/S
+         GCdKNkLtDBPUb3NWVWLw7oV/50q8BF4Wq+FLFmfjh/ERYa6wcwU0+Q44Mt2IUswI9kxl
+         jDlw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1Au7voQnh3QBqZYO9ZqJlhe+0/2wiJfLPXENtaRH1mm/kdtxVsprAWDr3i830n1ICDyNnXGcR5yseXcND@vger.kernel.org, AJvYcCVYJwf62ldAtiqAQlL4ut3+YCB2m68wtroMRly0KDGzJtSoRm46PXFyhti1V18LTVY73npM958efpWU@vger.kernel.org, AJvYcCVanqDUqr325+OidOPFR4dOHsYy2KwaUiqNxLb4D+x92wXcA6Lm+bV5aioG0bXYP6eySwsqlNtccKbu@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY1tyNdptXfucPFAaVzGQFpI2k9d+f57ohotw4WeLZVF30jhmJ
+	4eWnvC1nHyFdkqpFT1N/iBl1cW4OzFkRnIXOZsoR1WrB1OwKkw1k
+X-Gm-Gg: ASbGncuQ56QWn6cwZlB3GDB9R8zA8w7BEVs0ZzX2bBMxe6MR7QHCxF7vwamd6cyZzRU
+	J6pLpXQhgTMX2j2CWtHQsqS1IFm5TmURnQnvrCTS5fDDlL/cb2kmJgQ4m9QQ8M8L6P6g9Vq1v31
+	3JYjPXIF8RF2D8Be3dDd7QmwXsXrjnhcgqEOU6RwgadOyiINrtaJwbF9kPSeZOgxkDnIP3P9bu+
+	1z+ALOoLA01bcy4PMoRtQEmgs/vU0+5r/gOV7hB4AkTivWIJpGDLuHv3PI5LlpEa5NStigPfB3Z
+	sMaG8mJ+vjMkA65g2PiY
+X-Google-Smtp-Source: AGHT+IEmKlIM4zH7lzG9UIKklSuD+qJQ6td8rm/OkZNC5rmvxg8J4PmWcLtB3/5GZa2BN0aYjGS/Gg==
+X-Received: by 2002:a05:622a:180a:b0:476:80ce:a61f with SMTP id d75a77b69052e-479310eacfcmr110677731cf.39.1743988175814;
+        Sun, 06 Apr 2025 18:09:35 -0700 (PDT)
+Received: from localhost ([2001:da8:7001:11::cb])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4791b1444d2sm53175581cf.76.2025.04.06.18.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Apr 2025 18:09:35 -0700 (PDT)
+Date: Mon, 7 Apr 2025 09:09:01 +0800
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
+	sophgo@lists.linux.dev, devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Yangyu Chen <cyy@cyyself.name>, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 1/3] dt-bindings: soc: sophgo: add RTC support for
+ Sophgo CV1800 series
+Message-ID: <vxjtdvy5vxhmqldgvt4mgeuor36gdjriiai7y3rej3tevuwisa@wpupxzhvc3tt>
+References: <20250309202629.3516822-1-alexander.sverdlin@gmail.com>
+ <20250309202629.3516822-2-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 30/32] rtc: s5m: replace regmap_update_bits with
- regmap_clear/set_bits
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
- linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-References: <20250403-s2mpg10-v3-0-b542b3505e68@linaro.org>
- <20250403-s2mpg10-v3-30-b542b3505e68@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250403-s2mpg10-v3-30-b542b3505e68@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250309202629.3516822-2-alexander.sverdlin@gmail.com>
 
-On 03/04/2025 10:59, André Draszik wrote:
-> The regmap_clear_bits() and regmap_set_bits() helper macros state the
-> intention a bit more obviously.
+On Sun, Mar 09, 2025 at 09:26:23PM +0100, Alexander Sverdlin wrote:
+> From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 > 
-> Use those.
+> Add RTC devicetree binding for Sophgo CV1800 series SoC. The device is
+> called RTC, but contains control registers of other HW blocks in its
+> address space, most notably of Power-on-Reset (PoR) module, DW8051 IP
+> (MCU core), accompanying SRAM, hence putting it in SoC subsystem.
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I think this is a mfd device, so why not moving this into mfd subsystem?
 
-Best regards,
-Krzysztof
+Regards,
+Inochi
 
