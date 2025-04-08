@@ -1,116 +1,93 @@
-Return-Path: <linux-rtc+bounces-3829-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3830-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E10AA80DF8
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 16:29:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C4FEA80ECB
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 16:48:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0C964E4C35
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 14:27:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57C543BB003
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 14:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05271E1A3F;
-	Tue,  8 Apr 2025 14:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FF41DF728;
+	Tue,  8 Apr 2025 14:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XgaCSp3l"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jEKgs8sd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6468722333A;
-	Tue,  8 Apr 2025 14:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC23D1DE3A9;
+	Tue,  8 Apr 2025 14:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744122401; cv=none; b=q8jTNaBBiQkELW0LpH1ESxz6gVA5zZmqEpFaTez9qW+Ms+RbNHe7Nuq6rmd6VBdUZlrRaL5eBzZASkgtvOdONCuy8YmJGdCJ6NTUJsb2H9+FbQVjXVRxQKi/LJOTlO6WEFTqhwkzTOMYhTA+AfeQxAM4r7nK6/Bv1hLQmXwRnkc=
+	t=1744123331; cv=none; b=hw25EIQMhJKEYW7040VJI0CpJZND59PazwtWnQBXgWG8JxF5lA5F02OIATvVmBNN7JEqq8PkTrD6+gh0Q1ehOCdXRTMCCzndYJ7y5r7vEFTz7cIhvgl0FAvJDZEV80hg9LEACtV/z9tekIOjczFnbyhoz89sZEwXg1AFy1vSMMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744122401; c=relaxed/simple;
-	bh=CxvlJ7GeKXcjWy+yJR/D0xskEpTINjozfoR3L3+CxCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D9HfTdtrg6OZPapeEQuR5xQuryGPRPfnYopjg57y/PILRGn2j12KqGbl2QpwvwgfeQhaOt8ZqKbLIgweOO5anCf7OPTcqY3iV264pCVuHRbzTMBq6lBkZ2j80Szh0v4m38RXv1a5UOkD5Wmd05q7BnOEtlALKhzZYpUnjDdL39Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XgaCSp3l; arc=none smtp.client-ip=217.70.183.193
+	s=arc-20240116; t=1744123331; c=relaxed/simple;
+	bh=9ImBzIZtqGsJ1SHaUVZ01p2SwfBctJtqfs9D1vh30+k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eW03V/UzL+HXzjLF79q/RfvcAdp//mYPlXRfTWrIiE3uAwt0/jeNvEBgcuFIKfBt097V1oFXEhG1r7AmIm5MuR10bEJD0p2ZMykj3yRr/dxCy6I1Wti4RB/O8s8pmi8LZAGNrQ7T6npxX7lEaQkUFX3rdifYFPATnhweuWmWvv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jEKgs8sd; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7004C44307;
-	Tue,  8 Apr 2025 14:26:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E1020442C3;
+	Tue,  8 Apr 2025 14:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744122397;
+	t=1744123328;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cqLwiEm7D3yyHj0siVsICNmKccrtQmlNqBdEAkGQBz0=;
-	b=XgaCSp3lj2MyPBS8nUrrBDgHCwiAx9szrF0oqT4DuyvxD0BxhTzN21GvkWfQdEp43DW7YF
-	BwX1yE72fl9DlbCUAoKlbcBtDuPVv2QYr14IbEDQKEn9di8p/jAmweUoiDFir1xoGG/B5W
-	f4SylLBR47Qr/RHIsoULxHUhYOqNhhuJ1lbyPNh45CKms9Z25aAfkwSyNuP2PGqDkyesCE
-	YWkWaEWYOTAbZv4nfsA4p1FJTh+EkH1YSHoAh3DJpjKAQfx6kNS3QDqVR7xI7TfJ0+79qy
-	vukqHV8pUwCAE9r49Gfbc3WNj5MbcSvPRrIKdxmPkY5ZiALZv0dCCZVzwssDKQ==
-Date: Tue, 8 Apr 2025 16:26:36 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: rzn1: clear interrupts on remove
-Message-ID: <20250408142636821de253@mail.local>
-References: <20250312100105.36767-2-wsa+renesas@sang-engineering.com>
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iULc9f9XDkhckPow9uXWfLJLBIlhOd96cLfxtQCU/7k=;
+	b=jEKgs8sdKKpEVq8+rB9cOuVLko8jabUBt44MMm/m+LfV4xYeG/G7YfG3lgFUiTy0ZeVGN2
+	4Q0KFzA6NvA9fKG0djDNzoyeIPOe2IWzeUmKmM8DJWfy7IUNmAymDmmxDfTl17JvEZS927
+	kr+8echwkdXE/iqXFMgMC3Rux3qd/vOZ7dwS3818bw7RdNoeFU8sjMMTWUKepHnhOlbpR2
+	XWySaTqFiKUNQ0bhNay59MzwVm2LvbVTY7PKJBr31TOmG5YjXeo6CQbMvZ4z+sCI5xvteX
+	B/nu8hkXtDgexD714/tAvcrA8blQbFUHApSaOQP7MmVOpG6NqTuu9kyzFTrvGQ==
+From: alexandre.belloni@bootlin.com
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: interface: silence KMSAN warning
+Date: Tue,  8 Apr 2025 16:42:03 +0200
+Message-ID: <20250408144203.3869821-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250312100105.36767-2-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeffeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeeiudeuteehhfekgeejveefhfeiudejuefhgfeljefgjeegkeeujeeugfehgefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvr
- hdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Score: -85
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeffeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmnecuggftrfgrthhtvghrnhepgedtffeugeeftedtfffhiedtjeefieeuveelffetledvueeludeggedtjefgveevnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemrggutdefmeegfheltgemfeefjehfmehffeefugdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkv
+ ghrnhgvlhdrohhrgh
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 12/03/2025 11:00:00+0100, Wolfram Sang wrote:
-> It is good practice to clear running interrupts before removing the
-> driver. This is not really a bugfix because on current systems RuntimePM
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-This is not completely true, most of the drivers would leave the
-interrupt enabled after removing the driver because it can still
-power on a device.
+KMSAN complains that alarm->time can be used uninitialized. Pass 0 to
+trace_rtc_read_alarm in case it has not been set.
 
-> will disable the module clock, so interrupts won't be initiated. The
-> dependency on that behaviour is subtle, though. Better be self-contained
-> and clean up when removing.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Change since v1: fix build failure by adding the 'rtc' variable. Build
-> and tested on Renesas RZ/N1D.
-> 
->  drivers/rtc/rtc-rzn1.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> index eeb9612a666f..3c2861983ff1 100644
-> --- a/drivers/rtc/rtc-rzn1.c
-> +++ b/drivers/rtc/rtc-rzn1.c
-> @@ -444,6 +444,11 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
->  
->  static void rzn1_rtc_remove(struct platform_device *pdev)
->  {
-> +	struct rzn1_rtc *rtc = platform_get_drvdata(pdev);
-> +
-> +	/* Disable all interrupts */
-> +	writel(0, rtc->base + RZN1_RTC_CTL1);
-> +
->  	pm_runtime_put(&pdev->dev);
->  }
->  
-> -- 
-> 2.47.2
-> 
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/interface.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index aaf76406cd7d..dc741ba29fa3 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -205,7 +205,7 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
+ 
+ 	mutex_unlock(&rtc->ops_lock);
+ 
+-	trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
++	trace_rtc_read_alarm(err?0:rtc_tm_to_time64(&alarm->time), err);
+ 	return err;
+ }
+ 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.48.1
+
 
