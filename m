@@ -1,126 +1,94 @@
-Return-Path: <linux-rtc+bounces-3832-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3833-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0D34A80ED7
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 16:50:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DE5FA80EC2
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 16:48:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C2E8880A55
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 14:44:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B81417B971
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Apr 2025 14:45:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 465FB1DEFEC;
-	Tue,  8 Apr 2025 14:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B5CB1E2858;
+	Tue,  8 Apr 2025 14:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jfQl1bWj"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eU9Evarw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344AE18E75A;
-	Tue,  8 Apr 2025 14:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0A1152532;
+	Tue,  8 Apr 2025 14:45:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744123492; cv=none; b=G0GHA5+YJPbbqhitC7u1ayDSYl05Wjx3oTfyBuGgtCJUBc/gpTjyUgU/0gjCLL14s79F08S5fyBkT+au66zLgxOIsC52qAbvpLLt7CZeqAZeBH5yp3kTpR7GCeYt8xYr9mQhLiswvLIsxmj6MMjyHvffsXDeUTReKrWAk3fTav8=
+	t=1744123536; cv=none; b=hw/s/MHAhHuJzlw4ObcxzIUP1RrCd9getMXDIVJd0GsVWMrMMHMXomxCJqdHYmCXaM6SrPfGBtkzzDcEi8UxNxONMaUwUocln7celNDEBignsY6j6rJX3YzsQIBfx+2NXtshw3wmcAp9CYvcVzpQbBl3ybymoNnTsQLAxifFoF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744123492; c=relaxed/simple;
-	bh=uE7S/ykKBA+F4uBfxgSOxwKaFbesP06UyxIwdr8A5fQ=;
+	s=arc-20240116; t=1744123536; c=relaxed/simple;
+	bh=irNlBo1IryRAe63MAHnAMbf6FqWMhnjsTarLwK/Bi/I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k/EwDY9AeUeSZloAdCLnZSa9olj7ouMrnCB4RU0twJRmN8cy894PIQQ4DvrnlVB72kmmlnjKPR9lYjLqdXhagNR6DO/Qk3zsFIn7FoSdbsnP89bq2n9JeHpACqSUCquxt56FgYR6NxZrf4QtYcGyCNskQDZB2XB/wTF25r7thik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jfQl1bWj; arc=none smtp.client-ip=217.70.183.200
+	 Content-Type:Content-Disposition:In-Reply-To; b=CNynEtlOtHNz9hh5ZT4NlaJy6O4rmLWG1SMw7ZajXuHtMVamKpDsqUTaUSaVQ1hwyDpCZ/Rt5denQG+lk156B1Dx5OoqA6NqZ7l14CRjXq5XCwW+SU7xJUm9hlPGKLmSwKtqHlgdMg+lGMeVJ2oSv+KGj54m+75411QegPOO1PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eU9Evarw; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 78A6844346;
-	Tue,  8 Apr 2025 14:44:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 109EC44341;
+	Tue,  8 Apr 2025 14:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744123488;
+	t=1744123532;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5nmvsBSW6ruA3VHmjOYi5BlHpcx0V3rnt1Hh0gBhaoY=;
-	b=jfQl1bWjU3Gm3/ktsT+5L3jBi0rAZgoz2/Ir10OsHBfr4PCEAQ1zOah9y23oo1As98/PN5
-	PD7ykcVKYZ+1ZwrpKVckfRLH2ar4VSKk4ldgFPbjp0WDP0jrVbGEdMiDrFhe4LqJTO2aYL
-	Y1BMpIi61UM9b9Js8kngkQw5ntyjOBVZQ4q3MfAJ0BoEK5rMS8yqKwe3biXTrjKHCUGVrd
-	mta0bGDaQ+VddqgV+2IClT02l+LEaXUQ6vYRfPahis1blqQ3p/YN0ulqvsWRjIwii3CXt6
-	gGRZTZQbJVrb3x6ExcLU0Zi7o1OLLZpE33RFo+SJCF42KRob4OS6hKkxTkReVw==
-Date: Tue, 8 Apr 2025 16:44:48 +0200
+	bh=U7VTXtzY8zJJywqc76L9MeA0ZKx5Ng26dSN8EWcxsZU=;
+	b=eU9EvarwQjr3999mkmhDsMhEeE2HwnCjWKg3d5E/JQdFwM+TznkG6xUDJCesMr0S+XwN0s
+	GkkXlVzZjzE+yqVTTv3pEJz1msyLzBUrtgxbzQd8D8B2f/N3k8XlWy3RdHewjIkU6Tov4V
+	Ly9JIHoWXgdV6xWjx5tcHdXEdolSMGw/sCqkAGgXT/0tYLlNzj8UClyzaxhvYqCGPVnlzk
+	A9lXzsO8hZWONu+lGZVFA+n91Mfacs0WoHcvKbY0cuxfjlbjMICiIpETeoukzP2qnP8BMG
+	JRZko8li35U2T8TKPHjXwVel5MYRXjapL7bfLeXXWHf/u1aoEWdMYQiKCD8ytQ==
+Date: Tue, 8 Apr 2025 16:45:31 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
-Cc: linux-rtc@vger.kernel.org, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
-Subject: Re: [PATCH] rtc: fix use of uninit struct in rtc_read_alarm_internal
-Message-ID: <2025040814444859857143@mail.local>
-References: <20250317183349.346399-1-bharadwaj.raju777@gmail.com>
- <2025031721511050987ca2@mail.local>
- <CAPZ5DTHKSzg6UV0bT5U9Xet7jL1c__n+GgfYz-38GybGzerYNQ@mail.gmail.com>
+To: linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ard Biesheuvel <ardb@kernel.org>, linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 4/8] rtc: efi: Transition to the faux device
+ interface
+Message-ID: <174412352089.3870554.10940173443800637826.b4-ty@bootlin.com>
+References: <20250318-plat2faux_dev-v2-0-e6cc73f78478@arm.com>
+ <20250318-plat2faux_dev-v2-4-e6cc73f78478@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPZ5DTHKSzg6UV0bT5U9Xet7jL1c__n+GgfYz-38GybGzerYNQ@mail.gmail.com>
+In-Reply-To: <20250318-plat2faux_dev-v2-4-e6cc73f78478@arm.com>
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeffeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefgheeuieeikefhgfdvhfehiedvhffgjeetfffgtefhudfgtefffeevledtleejteenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepsghhrghrrggufigrjhdrrhgrjhhujeejjeesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgp
- dhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlqdhmvghnthgvvghssehlihhsthhsrdhlihhnuhigrdguvghv
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeffeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieejfefhffekjeeuheevueevjedvleevjeetudffheeutdffudefjeduffeuvddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmegrugdtfeemgehflegtmeeffeejfhemfheffegupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhuuggvvghprdhhohhllhgrsegrr
+ hhmrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprghruggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqvghfihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Hello,
-
-On 29/03/2025 19:59:46+0530, Bharadwaj Raju wrote:
-> On Tue, Mar 18, 2025 at 3:21 AM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> >
-> > On 18/03/2025 00:03:43+0530, Bharadwaj Raju wrote:
-> > > The trace call invokes rtc_tm_to_time64 on a
-> > > potentially uninitialized alarm->time. Move the
-> > > trace call to the path where we do successfully
-> > > initialize and read that struct.
-> > >
-> > > This fixes a KMSAN warning.
-> > >
-> > > Fixes: 29a1f599c0cc ("rtc: Add tracepoints for RTC system")
-> > >
-> > > Signed-off-by: Bharadwaj Raju <bharadwaj.raju777@gmail.com>
-> > > ---
-> > >  drivers/rtc/interface.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> > > index aaf76406cd7d..82ba33bf478b 100644
-> > > --- a/drivers/rtc/interface.c
-> > > +++ b/drivers/rtc/interface.c
-> > > @@ -201,11 +201,12 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
-> > >               alarm->time.tm_yday = -1;
-> > >               alarm->time.tm_isdst = -1;
-> > >               err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
-> > > +             if (!err)
-> > > +                     trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
-> > >       }
-> > >
-> > >       mutex_unlock(&rtc->ops_lock);
-> > >
-> > > -     trace_rtc_read_alarm(rtc_tm_to_time64(&alarm->time), err);
-> >
-> > This removes the tracepoint when there is an error, rendering it les
-> > useful.
-> >
-> > Also, as discussed about a year ago, alarm-time being uninitialized is
-> > not actually an issue as mktime64 can handle whatever is the input so
-> > this will never cause any problem so this isn't really a fix.
-> >
-> > I suggest the following:
+On Tue, 18 Mar 2025 17:01:42 +0000, Sudeep Holla wrote:
+> The EFI RTC driver does not require the creation of a platform device.
+> Originally, this approach was chosen for simplicity when the driver was
+> first implemented.
 > 
-> Thanks for reviewing. Would you like me to make a second version of
-> the patch with this suggestion?
+> With the introduction of the lightweight faux device interface, we now
+> have a more appropriate alternative. Migrate the driver to utilize the
+> faux bus, given that the platform device it previously created was not
+> a real one anyway. This will simplify the code, reducing its footprint
+> while maintaining functionality.
+> 
+> [...]
 
-I've sent my patch now.
+Applied, thanks!
+
+[4/8] rtc: efi: Transition to the faux device interface
+      https://git.kernel.org/abelloni/c/89a378d01e7e
+
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
