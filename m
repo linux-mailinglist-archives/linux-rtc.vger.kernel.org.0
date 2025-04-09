@@ -1,184 +1,156 @@
-Return-Path: <linux-rtc+bounces-3855-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3856-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4708EA82D4E
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Apr 2025 19:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C079AA83030
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Apr 2025 21:14:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42FA94656A8
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Apr 2025 17:10:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32A78164A87
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Apr 2025 19:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E03270ED9;
-	Wed,  9 Apr 2025 17:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42A1278152;
+	Wed,  9 Apr 2025 19:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NC7VN3bz"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AmWc/8xB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E4F276032;
-	Wed,  9 Apr 2025 17:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4D827781A;
+	Wed,  9 Apr 2025 19:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744218595; cv=none; b=svr/dVjE7M07i+z7xiLRaS4L8ydGNS0JJ21t6AxMwZ9aRAB60IO1rlcpfRj0qVvOJzTtgITdDYg94LkXde9FPBQU1Nu+FY3c8TTShyOvnUt0T8twh25GDRYcutVhgmYu6kCNOB0gYrGxA5a3f1usDEF89C4UJYKFblR65B2hM3E=
+	t=1744226023; cv=none; b=bvfaeoGFGj7H7jmDh2BZC4GW1QcqR3/J605WYGRJcxXsQ/hzJspstEC7742l6YM02fiC90FBjjQfJtYFtxnLaOxR3P3EccKNLptnrRGfXb0Rqs0Wi38oFItUCZKkpBZX0Doo8Rjd0SF9sCz6Da49OH7kLjq2BSiin+Vw+E/WCSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744218595; c=relaxed/simple;
-	bh=nStIjfSZeL0zt9W7+iaa9CoiY9nOZsfvqJhLH6Sl5g4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mZM8NHJQs/74mtJmVFe3E0BtyTJFWwnnJCE7f6G76ynI1TH+SedGrXOistWtMIgl26ySiFKTYewn/7OwQNLFh5C2mYuw/hV+ODlE5SbpEmUp1uFm9LwR70iZmJaycKsyEE2snMKuJ7om6p/HesulBdJmWoBZCHKFdiYw8oURvsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NC7VN3bz; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e5deb6482cso1891287a12.1;
-        Wed, 09 Apr 2025 10:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744218592; x=1744823392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hSPr9sZkytyi6HYm3brTb7NWt25n9J2i6nUGBqwMRe0=;
-        b=NC7VN3bzwAwEuapSebs+vi8FU4As75Mzqlww2K6XFsUrUV9nwF0MRdPALpHvLudX1l
-         uV1tE8w0UHgmWrarbY0yiBJDe5G52NpuRN8TkRCu+utak232l0pdlF6L7J7zwhT8lF/q
-         /k2yipMfMSOUsmyOLXxiFdyj3qRY2mGAp5JEgd/jWx1uhyRsem7XOl4tprbR/QkO6AfS
-         zA+Crs+LQCCRtYMUrnTTFmD6Vb9njcz84REBR4al7l0qM1hxkXvYrnpdqPqlSShbhxfV
-         ooPI2k8HHUWYvFP0gn1JkzOFCp4r3FtFgSbuZUko0wN8es9nnxdjaxd5T6z2iuEfIohl
-         gASA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744218592; x=1744823392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hSPr9sZkytyi6HYm3brTb7NWt25n9J2i6nUGBqwMRe0=;
-        b=c9RYmW32/Du1/6FgLE4Ce/7Zj0CJVq1443+0qHa34inFZzROv3vpzOhrxpc2vLAbpT
-         c1WfE/5zTUX7Gc97IsrzugxR3taMFGSBy0K2OLlY6QRNUWFdELHRy7HRjGSUlCEO94/u
-         uA32lvnbBNWiE5/mDIuiKYvVUxTEf/BZNLu/dnu37I+53h6Nj74f7jNKtQMTuVtP0Glb
-         CFITfwt4hpBDSnpY8dzT6DNO4FqPO9K5i83d34BXnB5Elay0/j0Xzd7ftsIXbnVM2GtV
-         //+aAnyD+m6QfTR4c1UZPcqNdAsE2awLWVF51QmvBjmJFD647YUQ1BM170eiGSDU4caf
-         FGAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVvAU2i0ckr/qvtfG8s3BljnrVWXTcnN7KxegbQxeEtRBWnoBH9PucDXpVgXD2SrTk+uMxWUTfLXZPcPcAM@vger.kernel.org, AJvYcCXXKiA9FRkTekthQ6mmKGIZtEJ/NvGuUo7igH6YVDjvwwH0tsCNkMRY9zTzqMlIRkpMw1pIXWhggCCh@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywywo2Pe9DnaWwl0z1j7QBHog+G8Ms1wEiqHlegbiYKdtJ2oGNh
-	yozpBhGpUgyTlc4jOrxZbsEuZ0LrNWArZPIrRcTgSV74Y5jTcXPX
-X-Gm-Gg: ASbGncv6PLmPV6p6zIkrVwKFPSr5jwaot99xo9pKUg21Ira1YwJYS4TncDLtralgMe/
-	V2p/kRo2UAVirUs4m+MyaTrOL3EN4Mln9ZwGSKTWmBfnDJ8L3V2VnkXOCQo7fnL+m+plrJ4s7uH
-	cVyegabXIqk7lEwDQiCTulEv8rnBw/355hxGjOyNm3ZiyGa+ERIw8ogWXRdgig5X7Bl6Sa4iBQn
-	GngUl0Z5kKz9SMW5cdDlUdoE8nwG9kueKR0lOPxk3rTZKarcvY7f1TtUgy+hBrTmaa+enkgxKSK
-	6Uca44IFvHIQow+Zi4x5XivZTrkSxdvvDEh8YR0Cwr4ozQJPYLFZS+iLxw==
-X-Google-Smtp-Source: AGHT+IH+YqAH5P1C3rfvoj+3ijZp9a9WOznX8fS4UF+0NYL6MxuzKlq1D64zrOEIFuEz9UbRr2NnoQ==
-X-Received: by 2002:a17:907:94d1:b0:ac3:ed4d:c9a1 with SMTP id a640c23a62f3a-acab6322c91mr30685866b.17.1744218591828;
-        Wed, 09 Apr 2025 10:09:51 -0700 (PDT)
-Received: from localhost.localdomain ([78.209.27.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1be913asm122151166b.47.2025.04.09.10.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 10:09:50 -0700 (PDT)
-From: Antoni Pokusinski <apokusinski01@gmail.com>
-To: alexandre.belloni@bootlin.com,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	robh@kernel.org,
-	alexander.stein@ew.tq-group.com
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Antoni Pokusinski <apokusinski01@gmail.com>
-Subject: [PATCH v2 3/3] dt-bindings: rtc: pcf85063: add binding for RV8063
-Date: Wed,  9 Apr 2025 19:09:16 +0200
-Message-Id: <20250409170916.47224-4-apokusinski01@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250409170916.47224-1-apokusinski01@gmail.com>
-References: <20250409170916.47224-1-apokusinski01@gmail.com>
+	s=arc-20240116; t=1744226023; c=relaxed/simple;
+	bh=bII1RpD7ypSXY5zMoPYZb6959z8htAPPjAzhqYdTo/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=llPXJMuSk4WRbQwlHTb69KBzHOFXX5mAJIDw6cGA6mVeYlLEwVJlweNdKQpjMacEq3cgLC4HX/E8NJZ/I3fqhLhV8ZxLSX7qOtG4zKCqeVr1nDmD63FdX/W3OKU6xJjgz6riChnk533jNW0CxamNTE4i5sxu/r2kD13tL1cRQBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=AmWc/8xB; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=pBCktiJTF9ueOit2Y8l4DE7XAAKAGJ58t0d/eWAXUGM=; b=AmWc/8xBAGnnECdlqIW9iVhNNM
+	HeNPscZWzE1EH0e6+sdXsLXkKwXxcQlliua6O4B+8tbEosd8zRtgPABxpACWabsRlL2AhVumY8k3v
+	VGaeXfuz5yLvKlJ7VqRPPvMNwn6Q1PwxlR3p7RxF8AgnAYQ4uhGkqRdpg2bdlN8vF0slGcH5ywvAq
+	ylezD+WnpXoXR7cEPeqPrqA4gkvkLcM7hEpu9FumuAev3/XgHy7D13E5p7yBC5qIkzclgJ0CWpYDK
+	lbjNiXcY9QlFH3G+rQ3Q7Pze68dz4Ohu/Wntrdh333DnnTr/5MU505oanGJcByd0jq9FZ0qqmVuSo
+	j/GMKxpw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1u2arc-00000008fgp-3V4J;
+	Wed, 09 Apr 2025 19:13:33 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 67ACF3003FF; Wed,  9 Apr 2025 21:13:32 +0200 (CEST)
+Date: Wed, 9 Apr 2025 21:13:32 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
+	linux-rtc@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	lkml <linux-kernel@vger.kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Chris Bainbridge <chris.bainbridge@gmail.com>
+Subject: Re: [PATCH] timekeeping: Add a lockdep override in tick_freeze().
+Message-ID: <20250409191332.GR9833@noisy.programming.kicks-ass.net>
+References: <20250330113202.GAZ-krsjAnurOlTcp-@fat_crate.local>
+ <87sempv17b.ffs@tglx>
+ <20250403135031.giGKVTEO@linutronix.de>
+ <20250403193659.hhUTgJLH@linutronix.de>
+ <87r029uh3j.ffs@tglx>
+ <20250404133429.pnAzf-eF@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250404133429.pnAzf-eF@linutronix.de>
 
-Microcrystal RV8063 is a real-time clock module with SPI interface.
+On Fri, Apr 04, 2025 at 03:34:29PM +0200, Sebastian Andrzej Siewior wrote:
+> tick_freeze() acquires a raw_spinlock_t (tick_freeze_lock). Later in the
+> callchain (timekeeping_suspend() -> mc146818_avoid_UIP()) the RTC driver
+> can acquire a spinlock_t which becomes a sleeping lock on PREEMPT_RT.
+> Lockdep complains about this lock nesting.
+> 
+> Add a lockdep override for this special case and a comment explaining
+> why it is okay.
+> 
+> Reported-by: Borislav Petkov <bp@alien8.de>
+> Closes: https://lore.kernel.org/all/20250330113202.GAZ-krsjAnurOlTcp-@fat_crate.local/
+> Reported-by: Chris Bainbridge <chris.bainbridge@gmail.com>
+> Closes: https://lore.kernel.org/all/CAP-bSRZ0CWyZZsMtx046YV8L28LhY0fson2g4EqcwRAVN1Jk+Q@mail.gmail.com/
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
----
- .../devicetree/bindings/rtc/nxp,pcf85063.yaml | 33 ++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+This is of course horrible :-) But yes, probably the best one can do
+given how things are.
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
-index 2f892f8640d1..cb31c7619d66 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
-@@ -12,6 +12,7 @@ maintainers:
- properties:
-   compatible:
-     enum:
-+      - microcrystal,rv8063
-       - microcrystal,rv8263
-       - nxp,pcf85063
-       - nxp,pcf85063a
-@@ -44,7 +45,12 @@ properties:
- 
-   wakeup-source: true
- 
-+  spi-cs-high: true
-+
-+  spi-3wire: true
-+
- allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-   - $ref: rtc.yaml#
-   - if:
-       properties:
-@@ -52,6 +58,7 @@ allOf:
-           contains:
-             enum:
-               - microcrystal,rv8263
-+              - microcrystal,rv8063
-     then:
-       properties:
-         quartz-load-femtofarads: false
-@@ -65,12 +72,23 @@ allOf:
-       properties:
-         quartz-load-femtofarads:
-           const: 7000
-+  - if:
-+      properties:
-+        compatible:
-+          not:
-+            contains:
-+              enum:
-+                - microcrystal,rv8063
-+    then:
-+      properties:
-+        spi-cs-high: false
-+        spi-3wire: false
- 
- required:
-   - compatible
-   - reg
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
-@@ -90,3 +108,16 @@ examples:
-           };
-         };
-       };
-+
-+  - |
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@0 {
-+          compatible = "microcrystal,rv8063";
-+          reg = <0>;
-+          spi-cs-high;
-+          spi-3wire;
-+        };
-+    };
--- 
-2.25.1
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
+> ---
+>  kernel/time/tick-common.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
+> index a47bcf71defcf..8fd8e2ee09fa1 100644
+> --- a/kernel/time/tick-common.c
+> +++ b/kernel/time/tick-common.c
+> @@ -509,6 +509,7 @@ void tick_resume(void)
+>  
+>  #ifdef CONFIG_SUSPEND
+>  static DEFINE_RAW_SPINLOCK(tick_freeze_lock);
+> +static DEFINE_WAIT_OVERRIDE_MAP(tick_freeze_map, LD_WAIT_SLEEP);
+>  static unsigned int tick_freeze_depth;
+>  
+>  /**
+> @@ -528,9 +529,20 @@ void tick_freeze(void)
+>  	if (tick_freeze_depth == num_online_cpus()) {
+>  		trace_suspend_resume(TPS("timekeeping_freeze"),
+>  				     smp_processor_id(), true);
+> +		/*
+> +		 * All other CPUs have their interrupts disabled and are
+> +		 * suspended to idle. Other tasks have been frozen so there is
+> +		 * no scheduling happening. This means that there is no
+> +		 * concurrency in the system at this point. Therefore it is okay
+> +		 * to acquire a sleeping lock on PREEMPT_RT, such as spinlock_t,
+> +		 * because the lock can not be acquired and can not block.
+> +		 * Inform lockdep about the situation.
+> +		 */
+> +		lock_map_acquire_try(&tick_freeze_map);
+>  		system_state = SYSTEM_SUSPEND;
+>  		sched_clock_suspend();
+>  		timekeeping_suspend();
+> +		lock_map_release(&tick_freeze_map);
+>  	} else {
+>  		tick_suspend_local();
+>  	}
+> @@ -552,8 +564,16 @@ void tick_unfreeze(void)
+>  	raw_spin_lock(&tick_freeze_lock);
+>  
+>  	if (tick_freeze_depth == num_online_cpus()) {
+> +		/*
+> +		 * Similar to tick_freeze(). On resumption the first CPU may
+> +		 * acquire uncontended sleeping locks while other CPUs block on
+> +		 * tick_freeze_lock.
+> +		 */
+> +		lock_map_acquire_try(&tick_freeze_map);
+>  		timekeeping_resume();
+>  		sched_clock_resume();
+> +		lock_map_release(&tick_freeze_map);
+> +
+>  		system_state = SYSTEM_RUNNING;
+>  		trace_suspend_resume(TPS("timekeeping_freeze"),
+>  				     smp_processor_id(), false);
+> -- 
+> 2.49.0
+> 
 
