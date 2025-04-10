@@ -1,150 +1,122 @@
-Return-Path: <linux-rtc+bounces-3913-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3914-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1D27A847F6
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 17:33:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539BAA84DEF
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 22:10:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7041D9C1363
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 15:29:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E591175463
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 20:10:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1EDB1E9904;
-	Thu, 10 Apr 2025 15:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E4A29008C;
+	Thu, 10 Apr 2025 20:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="gWkvThOp"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4164C1E7C07;
-	Thu, 10 Apr 2025 15:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E80928FFCD
+	for <linux-rtc@vger.kernel.org>; Thu, 10 Apr 2025 20:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744298997; cv=none; b=qfY8nMM1mIZDNyEC9kt1dur632egSYwI3kioZTJtV0ImBXOjs8QxfuOtK5TMZEyUxxukP8qcx1fD9vJPldapYfbn0TXgEt3uZ3l9k/W5rP7nuRRGfkxMaHd0iBc3OsqB8gPbkdKgmlxKPikn6gfGccVNXEEKXoG+v4S9P2RePew=
+	t=1744315797; cv=none; b=upJ+f/9TmCQSHf2bssymg/LArcrWywPnfyUixtlxEC6v1MyQ6M8EuLiUN+h8k/e4OlS/RgwwKYUrsbjpttrx7oNQXMn8y2a4HnfcrK1sAOCL/kVo/wceZmSroaG4d3no6LgPwTyj4RIE4IuUsi4JbfQOyz2pw+8Oo6WZLmZBqzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744298997; c=relaxed/simple;
-	bh=t0Mif6/7jrARJAzTJd8cjsXPJPwf1vz0BxqcSCiAf+U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MDe50psX59fxsILAUBLaSjOv1jmXsKt+PB5uZptF+RSvPfpLSft2d/CkJ4QZS+x1L4fFxlbpaU7GdLH5y7vEbKpnQq+k/tkeDS673truYkC7iKcI5OxpMt7WV9kIMomJwFSr13oo3ZUNkmfi1eUP/Ju8cuElORk0Lp2blTk0/XY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-5240b014f47so446871e0c.1;
-        Thu, 10 Apr 2025 08:29:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744298993; x=1744903793;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C5uoak4KgDwpySYhPUfBLmZgj6oRVvh6K3p/SpYWnHQ=;
-        b=OYwyuU/lH4UZgAts+6L4KP3jWIG99Y+YnM3s1lYOOvzcERslPi7DLY/7MfgGXkUHOx
-         jhevk1+xaXqSoTsBie+BzjGHwlCjd0hpW4Skf2rMUE3YAYBHYWrWlk0efryS0PnwKWw9
-         T0rENs+++xxF8wBZSgFsjN82bl2mIqwJi5eaOGUOtVyYlvrwOYwxrpeG/AdMpSprtMLH
-         Piw8cjICHZdCdZmmcp/6H3mKQAK2/1KfGlT/ntLt8P8iL9qmxqMhhDeKusEtLhu6ky8x
-         hdO3lcWooTyGc5URMCo8SuiMaSCJng3/8UOQ+1b+oBGk15vBKZjXtpdx3MO9NH12X++O
-         5frA==
-X-Forwarded-Encrypted: i=1; AJvYcCXaBaUIIf9w8g8PfcBKw+gCqxOnM/4iWC8gXP7I65q+uM0mRA+Z0CSHZ1Jr24KyaZv2YvUviv3hyeI0@vger.kernel.org, AJvYcCXtn3Il6mBLxZKBY9oF5RIvUQFotFqvRvXUXezkoSMYx5+86iD2VWtpU3Pcr02yPLLSDDcr87GZQk/Q@vger.kernel.org
-X-Gm-Message-State: AOJu0YykgJG5bZfZ2AaqFNryp495OVAa4IqdAHPG5SHqKOKukqzIZq87
-	oidKnSStusFanN7ByZQr6FY4+Ag2gxPVxSo8PAbex4+XBHSx43iDsNm5a4hu/e0=
-X-Gm-Gg: ASbGncv52BzbInwUCYp+EzRBPqlT+38nNQAqG/UOjtJDj3Du8/bBFHn4+DVNpYKZpDQ
-	YoA80g3/makH9lhkU7e/wXYeeDrQO/JKffmya1Y5jHLOO9srELiRbC8wHGzCts9WD8tPdsd0fyO
-	ZJjBViQuWoT/Z5Z2HpnAvQ6wSxSV8jZy/tuMnXYc6tidpTnzSTb1FSMCad++IfHKgAGQYK+M/S1
-	UBOmFo7QO2KIO2QucD71sNEWrbTFb+z5n8deR+RKyc4Q4lK1rPAutMtAfRlkWEABoGgHHxR3HZa
-	gTcW1xdx/3cfMSp55s7mpEDAVy42/Oi9temTeq/83tp6VASN8NSxe6joWiIKzzvFE5Ji8RoICO4
-	RMBlfK8Y7+hiOag==
-X-Google-Smtp-Source: AGHT+IGqHVeLlKvSbEcawa8ZI4Huv7iwoikfl2/AxJOadf4mUZ4n0ueYjuiRKFZg5bAOJyyzZeswMA==
-X-Received: by 2002:a05:6122:3291:b0:50b:e9a5:cd7b with SMTP id 71dfb90a1353d-527b509a141mr2686692e0c.9.1744298993599;
-        Thu, 10 Apr 2025 08:29:53 -0700 (PDT)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-527abd74563sm694062e0c.11.2025.04.10.08.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 08:29:53 -0700 (PDT)
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-86feb84877aso378399241.3;
-        Thu, 10 Apr 2025 08:29:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXS4yDOZrWa8ZdTCi7p/Y+YdWnvIoT6BbZ5+zcfDtmCTtLMjtUacAE/3TfBF7y6/qmdTybkI2wR+5v@vger.kernel.org, AJvYcCWGzrCzo9aUyEUmRWlZ3J4ZNtb3FWPU4U/yPSpHfdK7LhfpY0kINHHJsq2ReHCvn+X36IfyTzSB5Qda@vger.kernel.org
-X-Received: by 2002:a05:6102:2913:b0:4b9:bd00:454b with SMTP id
- ada2fe7eead31-4c9d34ce554mr2984239137.13.1744298992996; Thu, 10 Apr 2025
- 08:29:52 -0700 (PDT)
+	s=arc-20240116; t=1744315797; c=relaxed/simple;
+	bh=h8wlyUpnMilelDf0MSwmG3Ypk4mPF+vctxE+BOpjYyE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N2OyniTlPzbzgn6x0iZ58M/Px3wbFng8iVRBhXd/jmEUL57ldueYAJ0TRwW6BCl4/L5KRwxy8iq3WxJBKmnQVM00BI36Lx4Ot0OOH29hKYc59yrhhlSPe+k/FYPkma9cgpCH487gMI0D3IVaksGxfxtia86EOOCNKczzZopmuoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=gWkvThOp; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=uR+k
+	qY1inr1FvPVOE59aSXV+PqIZdZ46XUVFoISVmkc=; b=gWkvThOpY1dAOKiwAiG+
+	WxO43l2yOkkrzaQDr0G8lyj/2F3LIH6IrU1ux4U+1izkC/h3gr+/p+dbwF+I2cHO
+	IOvlNEmULV9qBAPonBb116ntV9ZtMzSWR7l0EakLi5fcpn2nLG6UWuwi0lIN5hb3
+	97BK7+H1U8kgFEmOsWZtyByyuvk7HggP8I8cevbuAHUi2bgZ1Uo5qbik/tcsPol+
+	gTlNLNr5PAKGsbSlszqxHY8Ca0Jq4rCERNHHESnYC3vvWl/9bkEgizMQtfWck4Uz
+	96bT8St2j8EbWqt/MG2+H4XBa7SXWOKrLgDrkzHQ/+WmJlTE2jz0tY+Gce6Yr9WT
+	6g==
+Received: (qmail 1029286 invoked from network); 10 Apr 2025 22:09:52 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 10 Apr 2025 22:09:52 +0200
+X-UD-Smtp-Session: l3s3148p1@hl8lK3IyttQujnsS
+Date: Thu, 10 Apr 2025 22:09:51 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 3/3] rtc: rzn1: support input frequencies other than
+ 32768Hz
+Message-ID: <Z_glj1NS6yRHHkyR@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-renesas-soc@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org
+References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
+ <20250319110305.19687-4-wsa+renesas@sang-engineering.com>
+ <CAMuHMdXMPnJ9b_5gZ4SwCAeuHUTr3y92+d94X=os5HaYis1CTw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
- <20250319110305.19687-2-wsa+renesas@sang-engineering.com> <CAMuHMdUiNYXVzK7hSmgqZ65gq0bJyGkfJU0=u+q5K=Sb8EY3ug@mail.gmail.com>
-In-Reply-To: <CAMuHMdUiNYXVzK7hSmgqZ65gq0bJyGkfJU0=u+q5K=Sb8EY3ug@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 10 Apr 2025 17:29:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXU7wYfzNmvBO4ibUPGUA6xV_4gQxe4DtuKcr-kqXGB1w@mail.gmail.com>
-X-Gm-Features: ATxdqUE4NJthuLLAbt6CnnpzXhYm8WKTzrqhnE-HQDwytbUdF1U-6SU_drprnX8
-Message-ID: <CAMuHMdXU7wYfzNmvBO4ibUPGUA6xV_4gQxe4DtuKcr-kqXGB1w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc: rzn1: add optional second clock
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="daA1QyHoiuWpkhz0"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXMPnJ9b_5gZ4SwCAeuHUTr3y92+d94X=os5HaYis1CTw@mail.gmail.com>
 
-Hi Wolfram,
 
-On Thu, 10 Apr 2025 at 17:08, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Wed, 19 Mar 2025 at 12:03, Wolfram Sang
-> <wsa+renesas@sang-engineering.com> wrote:
-> > The external crystal can be a second clock input. It is needed for the
-> > SCMP counting method which allows using crystals different than 32768Hz.
-> > It is also needed for an upcoming SoC which only supports the SCMP
-> > method.
-> >
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> Thanks for your patch!
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> > --- a/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-> > +++ b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-> > @@ -33,10 +33,14 @@ properties:
-> >        - const: pps
-> >
-> >    clocks:
-> > -    maxItems: 1
-> > +    minItems: 1
-> > +    maxItems: 2
-> >
-> >    clock-names:
-> > -    const: hclk
-> > +    minItems: 1
-> > +    items:
-> > +      - const: hclk
-> > +      - const: xtal
->
-> Shouldn't the second clock become required? Or do you plan to make
-> that change after all upstream DTS files have been updated?
+--daA1QyHoiuWpkhz0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Upon second thought: this xtal clock is documented to be the "rtc"
-input to the RZ/N1 system controller[1], so it looks like the original
-idea was to obtain it through the system controller.  Unfortunately
-the clock driver[2] does not use the rtc input clock, nor provides it
-to consumers.
 
-So either we fix that, or we go with your solution...
+> > +               if (rate < 32000 || rate > BIT(22)) {
+>=20
+> Perhaps
+>=20
+>     #define RTCA0SCMP_MIN    32000
+>     #define RTCA0SCMP_MASK    GEN_MASK(21. 0)
+>=20
+> and
+>=20
+>     if (rate < RTCA0SCMP_MIN || rate > FIELD_MAX(RTCA0SCMP_MASK) + 1)
+>=20
+> ?
 
-[1] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml#L32
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/clk/renesas/r9a06g032-clocks.c
+You really think this is more readable than the original code? I am
+really tired of bike-shedding so I don't care much, but I do wonder...
 
-Gr{oetje,eeting}s,
 
-                        Geert
+--daA1QyHoiuWpkhz0
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmf4JY8ACgkQFA3kzBSg
+KbZ0Ug//W8lz8AU9inglXnYUwQv+1ngHBKbPj/YNapViFHw9vYupil6y84cDKslv
+bxKG4oYjXtVyVW9DXK3Fjj3m+BAIrvy86nK2mhFRaCs++DnUWulrNCzm6Rl/s80z
+3bKib5IVra7sdVv2A6M/9Zt/RIEArqUC9rBCxfuk37wf/mByz4bDXCP1Wl8iAQaS
+mBuxu3vKxVZ4uGxsxeTWl1shnF884sEhq5y3RVcueyRP3zYsRdJIwY3mb4X6Xmql
+BmXBJVEVzU9xHmKC1P+qYpaZx+7QGxpuF4w4fj7u7c+r5mOQQhHhxH5Jz/saR2JZ
+GSyb1gJo738eBPHjzdqRJB5ot7xHqmF7YG3D8pM9FDkFNw9H1h77LNg6p01QezJz
+dzGQYmLjXY7LrtYybsjaueZeZhN+zG+ja0X3Isn2UUhj15byVui8/Q0N4jkYkltq
+04XKGtoggib6aFvHB0YEb+Gtm0OBTyL6WpdIWZrc0iXXOVGRDt1nSjefFCviGLf7
+HQ/PhKXrwOpCc1pUthtb4NkjDToKdrPiuZWpvHNQUExbOPU3rWdhOxhpAPdZGZVt
+51Ja53DOT/BAKgs4jEzNghmyC4O9JK44Y0+FD1N9MHVD5ndHZG2bVWVjJ22gF5+G
+huQOYbmoFe4SM4Yb4Tvxh0JCQzoSQcH0iQCF8PxBasodOIwlBJg=
+=0yN7
+-----END PGP SIGNATURE-----
+
+--daA1QyHoiuWpkhz0--
 
