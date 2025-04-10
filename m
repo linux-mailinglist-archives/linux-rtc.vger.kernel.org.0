@@ -1,90 +1,90 @@
-Return-Path: <linux-rtc+bounces-3892-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3893-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A5CA83893
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 07:45:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 204FDA83895
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 07:45:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8BC43B6357
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 05:45:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 115F4464FAA
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 05:45:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48291F1311;
-	Thu, 10 Apr 2025 05:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCFF1FC0FA;
+	Thu, 10 Apr 2025 05:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cIhiZ0FB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gs3J41OR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FC216F858;
-	Thu, 10 Apr 2025 05:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1215A1F0E56;
+	Thu, 10 Apr 2025 05:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744263919; cv=none; b=eyCd4fIS5wnFtGtJJtq7I6H4KPN7X+tUfkyGxLBbXik0wMOLrkySFPQ6HWZBrTDlVA7/k+8pQlFnWfzLsHi3q7oH4ILx2lEuDuHLr4LNXw3Ymvd4u2TBhfC+mwZg4iS6N8kqK2NWZYKe7htLbpHi6DizBGwySDycxUX0Vov7FvA=
+	t=1744263941; cv=none; b=tDrwJRJjYZ3IBv67VN8cn33DtFve7NhiQxd6MVffqLr0yz59J7jeypZo2sPa2A1+6527GwQkyscG/FeHup3A7jFG7O8U1h3ejeK1C+tBTs62rCxYLD7uIx2Rz0MbaLU9PXE0/mSfA9GPT697JTfoDNklJtBWPZ0Afv1k8ty2HoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744263919; c=relaxed/simple;
-	bh=hyhQWbvvY6aZDWGecgECnU2XiZensqO8oW8ktfacXz8=;
+	s=arc-20240116; t=1744263941; c=relaxed/simple;
+	bh=jHaEtzQVLOQhENDlIGBE0r9XR/xjh2shXjUrdPBQg3g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H0BSfaMn8C72+PVZXTo5F9zZgx+JfnE2Y7clrIIJ0XAK2PAqnk+Aphe/nwrecLvVhd3wNtommRm9xCEc/3UYFwMmx/IlCP5wqVBEge+yUkW+qVWPQXZaHwGuwUYYNx7VojJ7i20SwOQhA1abPT2KqnBgcp6eCLeOCCKbN8rmda4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cIhiZ0FB; arc=none smtp.client-ip=209.85.222.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=ijH2JInAnYguR4Bt3d5MG4nSdVzFN2LiAFVUY8TUl4FIq5MHbobsfBjHcivfRcUXPuxEx0Y3zPRdB+VtWmHN6oLRGitZRuQRs2EnQib9hNE9Ud0R0NiFuQE/WjJAbSgRcmL0dzsFKYnoNbvnKZ+wAB8DvEzDOX283miU/E4pGdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gs3J41OR; arc=none smtp.client-ip=209.85.160.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c55b53a459so51732585a.3;
-        Wed, 09 Apr 2025 22:45:17 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4774193fdffso5935011cf.1;
+        Wed, 09 Apr 2025 22:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744263917; x=1744868717; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744263939; x=1744868739; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QnBvkHnjo38Z4sQgkh/340/KUHasIb+bKgEKZsCRewM=;
-        b=cIhiZ0FBDuuEzVlyNGF4g9QCiZZkuJvKV6NuzXL4hDcpI4Il212RupqzdHy7Trc6Wf
-         Bgm4RJaOOlyU6twJ7+aR+M9Q04r7yBoCohkpAZyCcKQmEbMB+vUvAxmHUjUZh946GHiV
-         A/wN6BYU2CLpJ0qJSheFpaBu4DZCZZi5yzZbustATiulB3Xabqzwe3qsqQkCJQBgtL63
-         2B6itbeyHpMq6IlZn8zzbao6VpTB7b7CoKQuKHsZ8Q7DmDkr+mhckU3z/1PcBQ7zNweh
-         qoQBeCoJeRkW2H+ptJTX4nNneJf+1x7gASZhki3G5F72LShbNJlKkmAO6ciW7Oh4vJLF
-         06VA==
+        bh=1dSDpt8yORaoTmILVfEV+qWHE1Kt5hrousefB2rwiP0=;
+        b=gs3J41ORDR8+BTEgRIulOkeTb9Y3d/tqzyCBY4g2aQa4qQiZE634aVCaFBk6uTyDZU
+         oKL1SP8+9Lo8mqd8nSZvvLwFFygguNCCmrAjEQO3Z9726gEBizvm6lZXabURE6XRL8xw
+         rGBVAtgmdvhQHewjWBqdwNoprOjfMBgPHyOytqwmxgKzEicpmofv0HQwZzid9W/pazvl
+         hqonELlWus+smoL07Hib91UVAtz3PDdjyBEGA4jE8mxwgYHpgTHBxqXp/FaTVTU1q9NI
+         dNSnuKJtvzJCw6Ee9bq0n9b5x5A/PFJtiFoCvQw+IjjuXed/mzw1mYkfoFmJwDWeeOAb
+         rDDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744263917; x=1744868717;
+        d=1e100.net; s=20230601; t=1744263939; x=1744868739;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QnBvkHnjo38Z4sQgkh/340/KUHasIb+bKgEKZsCRewM=;
-        b=Lchb0KqiSFHPNRI8dRzXT1XgoUCNFFjk3YtMhChs06qTLV6GA9h+jQxQ6OnsmJNFoh
-         2iNNOPh8SN6yUId68hr0JL9LA+aXThEIa9NbKNoukKI/nW4k+jWBmMUWAWhvnAOfY7iK
-         rM+HLMYVtqq4HlRphjy8KnEUokWc2O9/q4m6XnFnLthQd/l2pPvN0wfhd1bvRkSj2qFo
-         3bHbu2HnOLpk7jwlhgp449MlI76kckhyfo+DQSXM1yIafqQbGD3x1IMWPD/Ys9uYbhSt
-         T1XTdClIII3xoC95xulKmvBMmmAbSpO5Nr5CsGe7h/RxA9sEcBfNiUHufTaoA6C7oAZQ
-         Vthg==
-X-Forwarded-Encrypted: i=1; AJvYcCUrDKFhKe9DMz1eW+9Li/5/rFEpqlh3Z8oBpXY7BJs0VByAtgva0t2WXb+o2Hl0YX5Dtjwy3wrLB48D@vger.kernel.org, AJvYcCV63mOJnNGjahFVeCIimPcDBUNsE9+EJ5Rmyvi0IcHo+NLY+vZCHiOkAsZhotjVS2PEGkpYUrs1MEF0xjNx@vger.kernel.org, AJvYcCXakDuoDVb+kzQ4M/B90vCAYOHX1gIki+VekL9/5HdxjvXeZB4N7gZ2PSDsryQeNn8NdbeZDEgY9+gv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvcLqiQt4oO+bXSO9qfWqHyclzF2s7o+UWUTlRBrMqT/zkVY+1
-	i+AQ1sQMG9SBApKjWPRP0sQNLPnRqh0LWq9PdWcHD7wBlG3JHm60
-X-Gm-Gg: ASbGncvI+/DrQb51CwDpf8X6ifCHOL+ubUY75NHsXHeEXD9blx0qNRChPT6Sv250N0D
-	5AN/FOr/JcttTUOHneVqQ8sFD+Py98pRPzRdJJkgXsHN9eAbUzDhxByHacrj8VqMj31AC/Oo8eu
-	cO/M8/KGu5TPmcc3gI4zg7i3rU7a3sApD5ngTjSWsUMmCHXO5OCGUMDTtATN6TglviZBL52U6LK
-	jmv6zP5bZHOoN9aMoiBV4k/9qyPgAANNG5oWYU1IOa3KkFQYV+2cfXrlwGQxIj2YD4Jgfuapt3G
-	OJt47YdjdqrxYC2lkqXTYSwYwlE=
-X-Google-Smtp-Source: AGHT+IHNoZEz5x3zmUQjybBNrxVpd4osnT2kTmBT1dz8XQJi1JxSOi4Yd2pHHUYeeBMJWuCz+52zyw==
-X-Received: by 2002:a05:620a:4154:b0:7c5:a424:1f67 with SMTP id af79cd13be357-7c7a816d0f6mr119973585a.29.1744263916967;
-        Wed, 09 Apr 2025 22:45:16 -0700 (PDT)
+        bh=1dSDpt8yORaoTmILVfEV+qWHE1Kt5hrousefB2rwiP0=;
+        b=EbOVQc+1Gx4cFYwSDr1+gHGuRijio5Opa1bdhqwk9My/9KOw4UZeQdOZqvNzNYNjdC
+         afS6Air+0BAFiPG0v4upBYcVSnOJUE/n8D6uMvbx1Wdm3dsdQHsB3wQetiLstvTxqlZo
+         wrhcbGmc2WrD+4YTWCI+ouQziT6Qy8J2FkIVHCYcx+cql7vEZZNZn7Mb4nwjqrB+aJEp
+         e7cEfq56FD66VIkbylLYTwtyB6Q13AOEslPCA5dL+icOHn09INqDnitHaRG+oMGCvXWI
+         WLqnJ3yMcCDoDNOE04KvSqxyKV4FOsChmn3Z5K8T7vfCRDSqw0sFpmAoabYENo/m8GOQ
+         6P6A==
+X-Forwarded-Encrypted: i=1; AJvYcCUQrQ0wpTRgam+miJzhEs1HfwfcMv7TYbpKYL4GIagPc2PMAe0QkNSO8SBV2hBNc5W20wnAp9FsT9nJeT6/@vger.kernel.org, AJvYcCVKeXWE0kkmPZYi3R5K8GiPtUNHgFuDJ/zknhkWS4egfLeMAOIb8KFAsnzZ4sasoRPsJanYDDK0g14u@vger.kernel.org, AJvYcCVnCiOqG0aulxDRXyxdFDKyFY/bZYuJ3pmXwSfHIfe/xbCX3DgnmWKUKZb0X3cNZbO4BdzcbNYQ3LBP@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRUBOCn1l9ZZBc1oMh4MwUwBMnXTCwLMh6enJihHmv9Aim+Gyi
+	De6VetXD9tlcUhNEZhfPsJlpbhXGeNTJ12QuKd2MkKwSWPPt2E5Q
+X-Gm-Gg: ASbGnctyIAcMOPmzdGxY2GHOtLkYh/vmIGYHuMhlDkSfRFGojIDp6awi/3iOApqWf84
+	XJ7ndWYwkZd/4gUFOQ5NNJu+YKvq/nxQMz7+sbiK9o/zwM2Err3k/t84XLvDWyTLJNMH7utzIoj
+	idGyzNwAw8dSNA2GycqdZfosmzfNkvo1XHg/23u7a1LOxOLhlLHSFW2KnMUdPQk7ypS5nh9EiXA
+	+o0pW2PRHTa8/onf1zmQVeJVxFCL22w/P6tcZTukfFTi0iWgkKewAE6mL4R2OEPhL3v8bx8JwOP
+	H1svvK52E9jNC7h+do0Zi0b2g/E=
+X-Google-Smtp-Source: AGHT+IHWpkW6hRR/DBsksx6ZJqR4lJbOCUW1b2317akbtc9j0rn0qJX08BWWlLDmViJytQmHCxBIVg==
+X-Received: by 2002:ad4:5f4f:0:b0:6e8:f17e:e00d with SMTP id 6a1803df08f44-6f0e5aa6ce8mr23639886d6.14.1744263938704;
+        Wed, 09 Apr 2025 22:45:38 -0700 (PDT)
 Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c7a8a106easm38536485a.113.2025.04.09.22.45.16
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f0de95fdd1sm16451946d6.18.2025.04.09.22.45.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 22:45:16 -0700 (PDT)
-Date: Thu, 10 Apr 2025 13:44:38 +0800
+        Wed, 09 Apr 2025 22:45:38 -0700 (PDT)
+Date: Thu, 10 Apr 2025 13:45:00 +0800
 From: Inochi Amaoto <inochiama@gmail.com>
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
 	sophgo@lists.linux.dev, devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>, 
+Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Jingbao Qiu <qiujingbao.dlmu@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Yangyu Chen <cyy@cyyself.name>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v14 2/3] soc: sophgo: cv1800: rtcsys: New driver
- (handling RTC only)
-Message-ID: <aczljpyu56po7xkhqjjelatfw5l6bpqskvd3jnl4muy4pt3rjj@5q6imbmcqng2>
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Yangyu Chen <cyy@cyyself.name>, 
+	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v14 1/3] dt-bindings: soc: sophgo: add RTC support for
+ Sophgo CV1800 series
+Message-ID: <3m3amtjnqcrice2tfxw2ky7f65u574yi7crmcg7j7q3tnkk3zp@k7a5alzdbffb>
 References: <20250315224921.3627852-1-alexander.sverdlin@gmail.com>
- <20250315224921.3627852-3-alexander.sverdlin@gmail.com>
+ <20250315224921.3627852-2-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -93,42 +93,42 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250315224921.3627852-3-alexander.sverdlin@gmail.com>
+In-Reply-To: <20250315224921.3627852-2-alexander.sverdlin@gmail.com>
 
-On Sat, Mar 15, 2025 at 11:49:13PM +0100, Alexander Sverdlin wrote:
-> Add driver for Sophgo CV1800 series SoC RTC subsystem. The RTC module
-> comprises a 32kHz oscillator, Power-on-Reset (PoR) sub-module, HW state
-> machine to control chip power-on, power-off and reset. Furthermore, the
-> 8051 subsystem is located within RTCSYS including associated SRAM block.
+On Sat, Mar 15, 2025 at 11:49:12PM +0100, Alexander Sverdlin wrote:
+> From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 > 
-> This patch only populates RTC sub-device.
+> Add RTC devicetree binding for Sophgo CV1800 series SoC. The device is
+> called RTC, but contains control registers of other HW blocks in its
+> address space, most notably of Power-on-Reset (PoR) module, DW8051 IP
+> (MCU core), accompanying SRAM, hence putting it in SoC subsystem.
 > 
+> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
 > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 > Changelog:
 > v14:
-> - Dropped MAINTAINERS F: entry in favour of the existing N: entry
-> - mfd_cell name "cv1800-rtc" -> "cv1800b-rtc"
-> - Removed Cvitek brand from Kconfig
-> - Not built by default if COMPILE_TEST
+> - no changes
 > v13:
-> - Moved the driver from MFD into SOC subsystem
-> - Dropped unused "cv1800_rtcsys_rtc_subdev"
+> - Moved bindings from MFD into SOC subsystem
+> 
 > v12:
-> - new patch
+> - maintainer Jingbao Qiu <qiujingbao.dlmu@gmail.com> -> sophgo@lists.linux.dev
+> - dropped Reviewed-by: Krzysztof Kozlowski
+> - link to TRM
+> - mentioned 8051 core in the description
+> - binding is now MFD, not RTC
+> - added "syscon" compatible
+> - added "interrupt-names", "clock-names" (because of added PM/remoteproc)
+> - main compatible "sophgo,cv1800-rtc" -> "sophgo,cv1800b-rtc"
 > 
->  drivers/soc/Kconfig                |  1 +
->  drivers/soc/Makefile               |  1 +
->  drivers/soc/sophgo/Kconfig         | 23 ++++++++++++
->  drivers/soc/sophgo/Makefile        |  3 ++
->  drivers/soc/sophgo/cv1800-rtcsys.c | 63 ++++++++++++++++++++++++++++++
->  6 files changed, 93 insertions(+)
->  create mode 100644 drivers/soc/sophgo/Kconfig
->  create mode 100644 drivers/soc/sophgo/Makefile
->  create mode 100644 drivers/soc/sophgo/cv1800-rtcsys.c
-> 
+>  .../soc/sophgo/sophgo,cv1800b-rtc.yaml        | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/sophgo/sophgo,cv1800b-rtc.yaml
 
 LGTM.
 
 Reviewed-by: Inochi Amaoto <inochiama@gmail.com>
+
 
