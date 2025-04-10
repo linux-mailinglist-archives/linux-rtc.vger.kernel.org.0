@@ -1,151 +1,203 @@
-Return-Path: <linux-rtc+bounces-3903-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3904-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25313A83CCA
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 10:26:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CA13A83CCC
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 10:26:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 348437B4355
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 08:22:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BBFA4A041C
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 08:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CBE20B7FE;
-	Thu, 10 Apr 2025 08:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21EF1EF371;
+	Thu, 10 Apr 2025 08:25:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHqX2mW9"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="tJqviDXC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2051.outbound.protection.outlook.com [40.107.241.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2591F03F8;
-	Thu, 10 Apr 2025 08:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744273301; cv=none; b=Me5k3mf7j6UjOFKwb45FB0FSEaiYEo0gJwWAlbRLsQzqlxlFYu4sbZn9rJh1oWtrkskbcXGaJqEsB6rkVXS0zPoPDYkAfd23dOU5I7DFA/DpkCTDQ4gSyV0p+RL0FSgP5FGTsNmsh2d4pNgKBJiwLAdKy6OYThrTmobRExA9ywk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744273301; c=relaxed/simple;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E05KcU0ClR4Rp3XZkTldFE7FhkEP2zLeXhUusgQe4IO6UaN+ys90uyQGG/z+sk1xxa/7zC0ljRhYmsiz4IjHJZDGsfnkAeq3Tro0AhEPrKQh/IoTXXO267T79U00+doSZ2WsYOMR4tSbbDnS+Vdmy8EBNyC69/9/cInYg0fp2MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHqX2mW9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64388C4CEDD;
-	Thu, 10 Apr 2025 08:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744273299;
-	bh=oE27GsIInnvywdfxX0MmCMRtS+md3d+J5Fr+8BysSMQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CHqX2mW9Zjwnt70+e0Tz0XPrkqHOtRGF/P69tBC+UmJYQMsTed3SOZ6EedJfZQjJf
-	 w5WM/9bt71oA38jm3o63EOmToJHx3UbTjhrYeefhAbILWJAiS4q2QYJCpHJKwlNh/k
-	 9vLO59VSIZvsqYux6o1BoYYbkm+yBbt0SRVK1BiBAJNOmgZqDhlqn5ZETEFunMsnt/
-	 hy8+o0EY1K8T63ZQA9+4sGRhftCcM4NfBud/wrw7vfKy1IL/gwad2OjFwt/ot38+uO
-	 bkvkWMHcrxxDykCGGY9OBhCTC4GGOUT1ZZpem2HTqfbnsdf3mdhSFb8qkstBZH9WhH
-	 JvucG4tU7jseg==
-Date: Thu, 10 Apr 2025 09:21:32 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250410082132.GP372032@google.com>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-2-a0282524688@gmail.com>
- <20250307011542.GE8350@google.com>
- <CAOoeyxUgiTqtSksfHopEDhZHwNkUq9+d-ojo8ma3PX2dosuwyQ@mail.gmail.com>
- <20250320145042.GS3890718@google.com>
- <CAOoeyxXZmrzBSNRdRx9vK84m5Z5y8T_A+wY98vVrPUZ7f4w4iw@mail.gmail.com>
- <20250404142115.GC278642@google.com>
- <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42E51E1A17;
+	Thu, 10 Apr 2025 08:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744273558; cv=fail; b=WixD60A0sLGFgGyWz7aVDHhWXb0bTCjnUe9JTIB3lkURTh4zcxOYXQe7QzjaLPxlUzaAQguWP/F3vt2hLZsl9xzKRMpRr05DvuSWwjU7LCyExn6JyVZEOsiOYUDgbd2tz4dfOnpevqZnnOrFwgL2NhMQihiA7YtTmnDfas/MG/c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744273558; c=relaxed/simple;
+	bh=56qw+AopLib9l444c3Qzs2ZFJYx/MgmTi+xWMkJs7v8=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=uf9l0mCLWr/sLba6xVE7B15dkghZySbNiP+TU6nngXpgJ+a4WpRslmighR4Z2Hrff71YwQQ2aYLrf6dumLrNcidvxzA3thEEITBEHBRi9YHtkKmQxaDhPBSXzJaUXg56eE1Og3OSDfcMRZSq1GbaSShwEMNkjc0iDR8Y5pO7gJQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=tJqviDXC; arc=fail smtp.client-ip=40.107.241.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=re8Ao/ycf38cSPKOQ8I4w/E687clkmxM1i7UGEsCGxRI7pi+MtTxzOiy7ZHhhVTQMd7btN96iCNPtv2m+clug8CYtF+VOxmF9djpAV5FpqD1Gx2K4hINfJapUcIg1N95YpD+gJAIsiSOYcZMCmhBKu36Og/0E+teVKaeuj+pdb5mr1MOpm9xqzoU/r875X8CiN3BL+NvvDH8fNfHNL1h9cVvtiCRa0WEyBQ6jeE61xJEQPZ2yii4PyR2gs6euQ9xGML0wjwHk+T2V45KCAwnke1Gk8o6/KaPc2FolOkxGket+/P7niP56Y7oCpYX7OfnRVaqsOXqf3ydTp9soU49qQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iaC1iQuCESkvIhFX7i5ofXv4q4VE0vK3BZ+DnGFmoHA=;
+ b=qymrZCKjB+4BKIImWV6swJBOCTGqbhY/mWZ7uc3e7zdx/gUESjtPAPRUJmzaYcFAXMaivP9K3vhccqMz2YQEK+ugTq8LMdTNEw/zv63YX1jgzDbp+O2TAWq0Zvj89Q6vnAVWlatlPeRenG9sASOK7y/tV+sq3rwinRgcfLVHFZZdKguiVdzK0sinThdBZTOifPfeVibuteLoHKqh0xoTM+wJQt7Vcothk1u5GKIOiUQfPELHWQOe0vMi7eyyspw2Lom2ZtXJY+7KYd3DR6CqFptN5ddjLa02hYJ7AWM74bGzZ8TUbYBngwV/grj0sJNTUPh0iNxFKyVO5jbCEj2yPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iaC1iQuCESkvIhFX7i5ofXv4q4VE0vK3BZ+DnGFmoHA=;
+ b=tJqviDXCHoMrKHypZ1nE2ZZj5eWioWKzaCBg7MWBJkjrnzKk31VUaqmZe0qUKcdWYn2Pj99Pl6YMz0UOu34wNs4+TOYqNBHvK5Kj4PhKEXziH+QOX7SWTKMmVeHezOs77X+sZqi+9QUB7LNexTVyOv5N267j2K50eYqB/rknrJPXtBjMXPQayPWO0LLVpKRDtZ8mbzPI7VAOr+2XQvWzt0wH8//VxI5ksVU78axK+Yf8gzx0EhFYP2d9J/ZEeLZCDX+fI6wYHnQCE+qtbKEcGN5XEdhDUqZt6MjsUlMVsyC1pLTkwcxWuDQSv93kfjwcsvLq1BbhVhWukYXgaoOmAw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9251.eurprd04.prod.outlook.com (2603:10a6:10:352::15)
+ by AM9PR04MB8858.eurprd04.prod.outlook.com (2603:10a6:20b:409::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.23; Thu, 10 Apr
+ 2025 08:25:52 +0000
+Received: from DU0PR04MB9251.eurprd04.prod.outlook.com
+ ([fe80::708f:69ee:15df:6ebd]) by DU0PR04MB9251.eurprd04.prod.outlook.com
+ ([fe80::708f:69ee:15df:6ebd%4]) with mapi id 15.20.8606.033; Thu, 10 Apr 2025
+ 08:25:52 +0000
+From: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	s32@nxp.com,
+	imx@lists.linux.dev,
+	Christophe Lizzi <clizzi@redhat.com>,
+	Alberto Ruiz <aruizrui@redhat.com>,
+	Enric Balletbo <eballetb@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+Subject: [PATCH 0/2] enable PCF85063 RTC support for S32G274A-RDB2 and S32G399A-RDB3 boards
+Date: Thu, 10 Apr 2025 11:25:46 +0300
+Message-ID: <20250410082548.3821228-1-ciprianmarian.costea@oss.nxp.com>
+X-Mailer: git-send-email 2.45.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR02CA0218.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28f::25) To DU0PR04MB9251.eurprd04.prod.outlook.com
+ (2603:10a6:10:352::15)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVVgHGkH5ajQT0NGNPv7FmVPLzuZtGjCiF7mRRto70aAg@mail.gmail.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9251:EE_|AM9PR04MB8858:EE_
+X-MS-Office365-Filtering-Correlation-Id: 78a505d6-4ae9-4a78-edb9-08dd78094e12
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Rm9HUkVxbFFYSFg5dGRDYkwwUGpTZ3RLbUdSYnBGVzMyOS9KVXpPcElONWNp?=
+ =?utf-8?B?SEJlQ1BBSlp1Wngyb3l6ejdsZktvU296SUVrMjdiaUhXem1NazFjN0NsU2Vt?=
+ =?utf-8?B?TTNOdVNOSlN2TCtxVzJ5UVVRYWg0SDhmQXp6dSt2YW9USGMzVGIzOVJCM3Bj?=
+ =?utf-8?B?UTcxU0k2b0NpNEpUV29mM3cwRjdXY01ERVBGKytOMDYyM01FTEFEZFQyMDBB?=
+ =?utf-8?B?RjdIL1dvenM0ZzlOWWovbCtaSWxweXFuNURzUHV1OVN1Wm1DR0I1RmJHVHJU?=
+ =?utf-8?B?T2VjLzZmZGRqM1E0QXRnT0tZajl2bVh6Wk9MZklHaGJxNDRrZm84OS93RDdk?=
+ =?utf-8?B?dFh6eW5WVkx3NWJyOE56RExuVVg2cUV1WkN1cnJkd0xDd0NIak5QeGFGelBi?=
+ =?utf-8?B?dGlOL1BlYytCbFFNNkRDTVNmRFM3ME9ZVjJpcXVzK1R2QTVhNlFTY1FuQjBt?=
+ =?utf-8?B?cExDVWRnSDh6U1Rjem5PUnh5NWtUMlR4TTZwZG1abUZyUVloeEd5dGlzWjJz?=
+ =?utf-8?B?K3JPRDBTbkUzZTVjRnBCU2VjRE9La0pCcHZ3ajk5TXFKZDZiRkUxaGsyMnNz?=
+ =?utf-8?B?Y1BjSitCZHpvOUZ4QVRrcENJM0NGeEMyendiTENJSWhpNk8vUk56TmxuRWJJ?=
+ =?utf-8?B?Ti9qTWxnY0NPbjIxaGI3cXFFN0R1SjBVOXovQ0hLNWZXaHZOWmllYnVlcnMw?=
+ =?utf-8?B?K3N6MlRLVHpMbXVhaXh2cnlNMTlzTENQd0REK0p1S3JHUHQ1bTF3NDlYRVpl?=
+ =?utf-8?B?TGYyT0ZCNXNMbXlNQzF0dnlmcEd6TW45dDREMG9aRDBVYlJ0TDNVbXRpUUFE?=
+ =?utf-8?B?RW9yalJiNmF6L3JGektXSHlTTG1vTHhLRGR3dWJ3RUQxUE02VFNlK1RLT05M?=
+ =?utf-8?B?bkpvbUY2UVA3ZWNVUFB1YzRwTko1ejJZcVM3M1VYem1Cdy9CelN4UnFmMFZt?=
+ =?utf-8?B?T1NpZzNhSFZDQUxRZmNhcVZFeGVyU0tmbEFpdnF1cTdjbDZuMFFTZFk2M25P?=
+ =?utf-8?B?OCthcnhJZTgzZC9jWlJHYTVuNTBhWmxKclArWERWL2pNVklXdE95bjB3RU1P?=
+ =?utf-8?B?elJFT09RMWNwRkwraDVnUmJ2L3Z4clUrQW9jTFgxSDZ0SS9KM3kxOTg3U0Jx?=
+ =?utf-8?B?MDZVckdNVzhHdG5sUVNUcFAvMmRFNzBtQjBYUlo5aGYvT0RFb1AzeHpSYzQ0?=
+ =?utf-8?B?TUZUQTEzcmpxOUQyVGZBbysyRktyRGY0MDdKb0p4MlZSRG93Z1VFSDJLWXd6?=
+ =?utf-8?B?VFVNTkZ1UVhwMk5FbTM1aXNiM2ptVkpjV3RlWXhqMXRLMUNKUmZDMHNPRE4z?=
+ =?utf-8?B?N2hQM0ZDZ1VRencwMWtwOU5nZzYwK2ZWM3lwN3kzQ3pXL0IxQWNwRzM0VlRZ?=
+ =?utf-8?B?SGUyUVg3UmhNUDNDdDdxK215MHNPb1kwU1E1eW5yTkFZaVdSSnZVU2F6VXRD?=
+ =?utf-8?B?NGFQdGlHc3hIMDYvbGxLaEdOakphZ3dZRXJWdVhDYlFXYUpMdUIzTHZlQUVk?=
+ =?utf-8?B?S3ZTWFV4SU9iNmM1UE5nd1R4M0tGVGJxNE5RVjFnd0h0eUs2a3pVOHVENnZJ?=
+ =?utf-8?B?L0l1RDlqKzM4aGIwNG5EaExOcW0rWHlyMkRjZkxUaVkwandOejF3RElsYWxj?=
+ =?utf-8?B?OVFCY2gycmNpK2R3VlZZaERNOHVRckFqUURNcTdObDhNa3hsR0N5UDk2RUo4?=
+ =?utf-8?B?dUlWUnBRZEFxKzlLQldGUmtXZHJVNmlXOTEyMG9lK0F4YlBZUzRtYlhVYjBZ?=
+ =?utf-8?B?N0xMWjdVNWJDZjA0K2d3RmlYMm8wRllpOTNOUE04S1JLSy8wdTJHa1F0anFv?=
+ =?utf-8?B?ZjdDQldBV1ZrYnRmNklWNGlWMkovRk9UVktJVXR2cGxTTVBLNHE1VlljQ3pk?=
+ =?utf-8?Q?LhURkdQAythT+?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9251.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aENFWUtYWllJejhyaWNFUVV3V2p4ZmQ4QVgyMktLL3gwdEd2b1Z4RUM3Rm5z?=
+ =?utf-8?B?ZDgyVU9kcklPK3RjVTNlZkc4djJoWVNwYWhlV2E3ZTJwNUIwUEIvY3dUcnZx?=
+ =?utf-8?B?UjVFV2VXVHBYTmtpMkpZN1Zwem1PY3JKVnM2TGtJOFdBMmpLUlFFNk41TlhI?=
+ =?utf-8?B?Tm1lRTM0b3JldVpCRHpITTZxQ1dTWGRKaUlaZkU4dTFxYXFIQklSc09QSlVM?=
+ =?utf-8?B?WDFMOUFmUTE3NnZGRzRTVE9waHVyR0w3U08rNUpBV3B2b3NLOUFuYVJYdjNt?=
+ =?utf-8?B?bkxScFhPdEwxR2lnQ0pXYmpEZEc0enJOdHZMZ05hTG0yLy93ZWdZMEswbTA0?=
+ =?utf-8?B?QUNjc1F0K0JGYnhzMXExc0hweG9xeDhlaW9yTkFrK2JNbG1DZkRGbGVMd2ZF?=
+ =?utf-8?B?cjRmMzdhUnUweUpsdVhQQ002OURIdUZ6MzhvMmNXU1VJNmR6OTY5aDYvKzhy?=
+ =?utf-8?B?L0NEVERsaXlGczgrZ1FVWXpDQmhpbC9wSVQzS2tZRkRFKyswcTBIZWo5S2Nu?=
+ =?utf-8?B?cjY5Vy94Z0NEb2poa1hvUlRIRXhqN1h2aXYzOE9FVHMvTWhlWFNEbVYzUlFi?=
+ =?utf-8?B?YXRuWWZPeVBwcFRQYjlDSE1GQ1dyNTk3ck03SjIvV0RnOGFwZm91dHVnd2R1?=
+ =?utf-8?B?aWx4NnBiNy9NeTdKV1VCVjFrYTFSSnpFZStUTGFibUExcnY3MFVUOE1oNmxs?=
+ =?utf-8?B?Zyt2SWVHZmJqaVMwMCs4eVN3Rm1nZXBtbzhaZFRuY2dxMktKMGZKY09mRXFK?=
+ =?utf-8?B?SFkyMUdSRnc0czV3QXFxZGlLU01Gb1ArbkdxZDdsc29Nc1BjQjZNK0NmU3F1?=
+ =?utf-8?B?YzJKNEJ4dTJhU1BOdytNVlpGYWgyWk9LNElibzhWZEZwaFdkMzVzVVgvN21U?=
+ =?utf-8?B?MFdCM3Y5WkxTTjlvNzBrZFc1RVc3OWh5WkVwQ1hRZm92eEpSM1NBQ1orZVNy?=
+ =?utf-8?B?Wkdmcmd0blVBanVQYzNnS3M4czdBaVlYVUt0bDNMazM4a0pxMWZzdGVYRHBJ?=
+ =?utf-8?B?SnZjdU9FWjNhaHVseU1jR0VaMmtCWTRCelBGZnA4bFNxTjFQWWZPaTkxaVVm?=
+ =?utf-8?B?V3lRRnl2NmQ0aXBlWWxVeGltZld5SmRUdnNKMVdNUE93OVFNRnBvMm50WHlF?=
+ =?utf-8?B?U2lkVEgxTzdQZjE5UGFwWW5OTkc3d0srbXp1QXFVYTNHdkkwTVFjV2lXbldm?=
+ =?utf-8?B?MllaNnc3dHd6aUppMkpSRElGc2FWWEF5ZDFpclErMU1zOXlLTkl3cnZsZU5P?=
+ =?utf-8?B?Y3h3eEQzbm5TZUpiM016aVRoT2xycnlnc2RMekt1R3BPbXg4enJlRStDTmlU?=
+ =?utf-8?B?SzZteHMxN3FlMmp5N2FPbEtVeUZOSEY5VTNlUTNiTzJSV3VaMEFNWE55NC9E?=
+ =?utf-8?B?RXNjaHlFRGpMS2lzUmJacFJ6akRJbjFhS1lmQUhzOUc2dHZmbWJpTTA5ZzRP?=
+ =?utf-8?B?a1RKQmxqTkN3aDBFYlAybzl4dnVyazdJYXo2V3VsNVZqaXFSRnNVcXFpRlNo?=
+ =?utf-8?B?ZXF3L3NmbXducDNWR05Kc1FzK1pHR0QxRFhZWFFJcXNWL3pTelhYeXhvVTcv?=
+ =?utf-8?B?WGhDZEZnT1FvUTBQQ0JLbzFRaGR3ajFsbVRxRys5bkpubzYycEpxZ1lrRVZH?=
+ =?utf-8?B?VTJlQW10YktxWE1LcEsvOUcrNVRPdzVEWnhWY0ZwZ1VrZVNpZ1FZcnliQ3N6?=
+ =?utf-8?B?UGszNzlRRWxxWG9scTJZRVlBeE4rM1M4RGN5WlZtelFXSjNaQ1Y5OGlvU1dB?=
+ =?utf-8?B?UVVlUldZaEJRcTN2TGNheUN2cG5LbFI1UEdCMCtFbDZna0JydUdUcDhRK3lI?=
+ =?utf-8?B?OHc2QVRUVTRqbUozN0svMDJieE00U0krVmU3M1VEV3dNbkI5WDZSWVd3SEFj?=
+ =?utf-8?B?SEdWRUVNOG1BWHo2YlNzRTJpdEJvcmFRWXliR3Iydi9MS1RyRWlNMUk4V24w?=
+ =?utf-8?B?UjRESmQxNkZXeVhORm5JWlZtNlFWVDhZZjA0alVuZEJxNjRQZ3ZGMUNYTUY2?=
+ =?utf-8?B?dGNuSFMxa1lWaDVsbEFuME1TWHd1Wkk0ODR4R1B0aGpFNHN5SVg1N2tlTFZH?=
+ =?utf-8?B?RUppQUVmR0l6aGdVbmFDK3hnN0drWlZqbVk0ajdzTkRaWHFyOERZNkFJQXpv?=
+ =?utf-8?B?V0ozMVVESHVBeDduNVJ3WnFXZE0wNkZKWkc0UWNkN2hjK2czMDJmVzJOeXpz?=
+ =?utf-8?B?U2c9PQ==?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78a505d6-4ae9-4a78-edb9-08dd78094e12
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9251.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2025 08:25:52.0129
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CDwHnbaJLPE3ZWnGZ5JceG65nJN+MzKYyA54J/uPY40dnpzVaYO9/+kQgwZuup/7D7vPJVGmeRjG65oD4N/EG82ehZzqPey/ZB32KtpfOH4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8858
 
-On Mon, 07 Apr 2025, Ming Yu wrote:
+From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
 
-> Lee Jones <lee@kernel.org> 於 2025年4月4日 週五 下午10:21寫道：
-> >
-> > > ...
-> > > > > > > +     MFD_CELL_BASIC("gpio-nct6694", NULL, NULL, 0, 0x1),
-> > > > > >
-> > > > > > IDs are usually given in base-10.
-> > > > > >
-> > > > >
-> > > > > Fix it in v9.
-> > > > >
-> > > > > > Why are you manually adding the device IDs?
-> > > > > >
-> > > > > > PLATFORM_DEVID_AUTO doesn't work for you?
-> > > > > >
-> > > > >
-> > > > > I need to manage these IDs to ensure that child devices can be
-> > > > > properly utilized within their respective modules.
-> > > >
-> > > > How?  Please explain.
-> > > >
-> > > > This numbering looks sequential and arbitrary.
-> > > >
-> > > > What does PLATFORM_DEVID_AUTO do differently such that it is not useful?
-> > > >
-> > >
-> > > As far as I know, PLATFORM_DEVID_AUTO assigns dynamic IDs to devices,
-> > > but I need fixed IDs.
-> > > For example, the GPIO driver relies on these IDs to determine the
-> > > group, allowing the firmware to identify which GPIO group to operate
-> > > on through the API.
-> >
-> > PLATFORM_DEVID_AUTO will allocate IDs 0 through 16, the same as you've
-> > done here.  These lines do not have any differentiating attributes, so
-> > either way we are not allocating specific IDs to specific pieces of the
-> > H/W.  I still do not understand why you need to allocate them manually.
-> >
-> 
-> I'm using PLATFORM_DEVID_AUTO to allocate child device IDs with
-> MFD_CELL_NAME(), like this:
-> 
-> static const struct mfd_cell nct6694_dev[] = {
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-gpio"),
->     ......
->     MFD_CELL_NAME("nct6694-gpio"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
->     MFD_CELL_NAME("nct6694-i2c"),
->     ......
-> };
-> 
-> For example, the device IDs retrieved in gpio-nct6694.c is 1~16, and
-> i2c-nct6694.c is 17~22. Does this mean each driver should
-> independently handle its dynamically assigned IDs?
-> Additionally, I originally referred to cgbc-core.c with i2c-cgbc.c,
-> and ab8500-core.c with pwm-ab8500.c for associating child devices. Do
-> you think this approach is appropriate in my case?
+This patch series handles PCF85063 RTC support for boards which do not
+have the PCF85063 RTC battery backed.
 
-Yes, if you _need_ the ranges to start from 0, then you will have to
-call mfd_add_devices() separately on those ranges.  Otherwise one range
-will follow directly on to another range.
+In this case, the PCF85063 RTC oscillator is manually started during
+startup.
 
-But wait, you're using mfd_add_hotplug_devices(), which means you are
-using PLATFORM_DEVID_AUTO.  So your .id values that you've added are
-being ignored anyway.  Thus, if you have tested that this works, you
-don't need them anyway, right?
+Ciprian Marian Costea (2):
+  dt-bindings: rtc: nxp,pcf85063: add 'no-battery' property
+  rtc: pcf85063: handle stopped oscillator at startup
+
+ Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml | 5 +++++
+ drivers/rtc/rtc-pcf85063.c                              | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
 -- 
-Lee Jones [李琼斯]
+2.45.2
+
 
