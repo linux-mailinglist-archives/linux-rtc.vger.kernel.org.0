@@ -1,56 +1,65 @@
-Return-Path: <linux-rtc+bounces-3899-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3900-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C1EA83B06
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 09:26:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44222A83BB7
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 09:53:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B4537B2803
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 07:25:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAE334A1940
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 07:52:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF28621B196;
-	Thu, 10 Apr 2025 07:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBD61E1A17;
+	Thu, 10 Apr 2025 07:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EHLwIe/8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GyUJJgDL"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B203220B819;
-	Thu, 10 Apr 2025 07:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F79146A68;
+	Thu, 10 Apr 2025 07:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744269801; cv=none; b=f6p4GB3b0fwYIFXGhQJYufMccdyLPcOcnmJzeDuiy9/Mq5lBLrDpVcFkp1WrU/901GjCefAGxsXme5qK5+AqIW0+GQ5/OrdLojF8nwjO8/Wi6Q/D6TsP3TToaodr0zQXwFpscY5iQljizuDsQCWBv8w3eHuEk+/LpMztSJGp59s=
+	t=1744271553; cv=none; b=bKrLbsRs6yVkeOAOp6BcfBxVYpJeUgmQhv1EP0fRlPLbFUsoJ3XatxKD6EA9sIyuPC5arWSlR8Tl+zm/mPD/Lw6HI4szoe0ULbARbFpoyqDRqw+iPXLtwougLluEYyVh/IcuxOBx1gWtS0Cfh6jM0T86Qnca3kiTfyLQI7tIQYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744269801; c=relaxed/simple;
-	bh=pgPaGfdMAcLGht6GtgzTu7mpWhBpyFIPuLeMl1fltug=;
+	s=arc-20240116; t=1744271553; c=relaxed/simple;
+	bh=1XNMYSjNtDMPaGEg8puYUqkJwzBZdMcsPGo17LVKcuI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tl+5LRamAqRUZrfET9GXi3mxZWD+6bOHoBeGnwCcMVc6wjwRHk10dG+MCmxeQ86GlW+BH+/umzodwTCnW5xYCoU/CSn1IKa7UskWGXz+QskmbmkxxWSUocypvGBlBiYHCC419/g8F3WulmYQ80FgCKrs3Cg2zxczKZcXlgU1sa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EHLwIe/8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF78C4CEDD;
-	Thu, 10 Apr 2025 07:23:20 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=SvmUDc+zQ3zIgrxlPJ84dyJlMgMff+DrpbVkBq52etw2tcUlgN4QN38agTxuWtF7ZRVoR2VcOJFrqJ8vmai4Hv2N8aJ6+qi3Hh/GDNiZjO/fDu/n6A4cxGbZIhRJ0Du5lQAUpuMlAkjmTgeELFwwZa7EXMnUWv0WsobYqUYnBe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GyUJJgDL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF13C4CEDD;
+	Thu, 10 Apr 2025 07:52:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744269801;
-	bh=pgPaGfdMAcLGht6GtgzTu7mpWhBpyFIPuLeMl1fltug=;
+	s=k20201202; t=1744271553;
+	bh=1XNMYSjNtDMPaGEg8puYUqkJwzBZdMcsPGo17LVKcuI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EHLwIe/8o7C43t3oFomCRXYTP5PnnDIjMva4j6gHEd4HpvZKZJXBczjkv3nuHmpYS
-	 V5leEjkS7hTyA1/jeRaVpj+oGT/OerV0Z4oZyzz19Bk051vdCDjFX2wcMvCryyg8Df
-	 3M0FHHZbyQCE9nFkbgKwh5cJ9TyHX0me19edDZyM1gduL134vIGesliZoeOSLOHNpX
-	 se2xwQtnhicpnAEsFJ19PCiZ0/nuQRQOLktdxf/kS36rR//1E0Tm1wQP8hI5URclmR
-	 Qm7HyLBNuiWP8GZ6/3/Y57jKoqnmI8tfRYAFe1LlRl4mkP4gVh0yj+fAdvCjQEo85/
-	 89o2nINIlqH8g==
-Date: Thu, 10 Apr 2025 09:23:18 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Antoni Pokusinski <apokusinski01@gmail.com>
-Cc: alexandre.belloni@bootlin.com, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	robh@kernel.org, alexander.stein@ew.tq-group.com, linux-rtc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: rtc: pcf85063: add binding for RV8063
-Message-ID: <20250410-enchanted-uber-finch-c60afb@shite>
-References: <20250409170916.47224-1-apokusinski01@gmail.com>
- <20250409170916.47224-4-apokusinski01@gmail.com>
+	b=GyUJJgDL2xfMcVj0cHpaIVWlpJvxeDCh+PBYbJj9mg6S8m1jopy7tU9iFTcd0kpoB
+	 awZjniVSXFyclgj5ny9eaZAzRoe92BSeESF/PVxrc8GwD29XMZao1/EpoJprSM2GEe
+	 gpRALW5M8o9XrSB6XL+HaLHHfBhAmLajT1L6cRJABZd/M2alUPLoUFYMloZLv7Sn+h
+	 SEMFJBa8hXl1uipXDTRghCnrD3Gd0nwvDyu10HjztcjUMgIjthziySa4aW72I4b+ZL
+	 JZ/qxfXHGGhOpn7N8WG2iOOh0jvHKY301qupDrzcq+Ge/09byfzRymqVhcOSbBcDBN
+	 D1t0zT8wpfVow==
+Date: Thu, 10 Apr 2025 08:52:25 +0100
+From: Lee Jones <lee@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: a0282524688@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v9 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250410075225.GL372032@google.com>
+References: <20250409082752.3697532-1-tmyu0@nuvoton.com>
+ <20250409082752.3697532-2-tmyu0@nuvoton.com>
+ <11d2541e-580b-4060-ad92-ed721e98793e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -59,97 +68,44 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250409170916.47224-4-apokusinski01@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <11d2541e-580b-4060-ad92-ed721e98793e@kernel.org>
 
-On Wed, Apr 09, 2025 at 07:09:16PM GMT, Antoni Pokusinski wrote:
-> Microcrystal RV8063 is a real-time clock module with SPI interface.
+On Thu, 10 Apr 2025, Krzysztof Kozlowski wrote:
+
+> On 09/04/2025 10:27, a0282524688@gmail.com wrote:
+> > +
+> > +static int nct6694_response_err_handling(struct nct6694 *nct6694,
+> > +					 unsigned char err_status)
+> > +{
+> > +	switch (err_status) {
+> > +	case NCT6694_NO_ERROR:
+> > +		return 0;
+> > +	case NCT6694_NOT_SUPPORT_ERROR:
+> > +		dev_err(nct6694->dev, "Command is not supported!\n");
+> > +		break;
+> > +	case NCT6694_NO_RESPONSE_ERROR:
+> > +		dev_warn(nct6694->dev, "Command received no response!\n");
+> > +		break;
+> > +	case NCT6694_TIMEOUT_ERROR:
+> > +		dev_warn(nct6694->dev, "Command timed out!\n");
+> > +		break;
+> > +	case NCT6694_PENDING:
+> > +		dev_err(nct6694->dev, "Command is pending!\n");
+> > +		break;
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return -EIO;
+> > +}
+> > +
 > 
-> Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
-> ---
->  .../devicetree/bindings/rtc/nxp,pcf85063.yaml | 33 ++++++++++++++++++-
->  1 file changed, 32 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
-> index 2f892f8640d1..cb31c7619d66 100644
-> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
-> @@ -12,6 +12,7 @@ maintainers:
->  properties:
->    compatible:
->      enum:
-> +      - microcrystal,rv8063
+> Missing Kconfig. Exported functions are supposed to have it.
+          -------
 
-Bindings are before the users, so this cannot be patch 3/3.
+KernelDoc
 
->        - microcrystal,rv8263
->        - nxp,pcf85063
->        - nxp,pcf85063a
-> @@ -44,7 +45,12 @@ properties:
->  
->    wakeup-source: true
->  
-> +  spi-cs-high: true
-> +
-> +  spi-3wire: true
-> +
->  allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
->    - $ref: rtc.yaml#
->    - if:
->        properties:
-> @@ -52,6 +58,7 @@ allOf:
->            contains:
->              enum:
->                - microcrystal,rv8263
-> +              - microcrystal,rv8063
-
-Keep the order.
-
->      then:
->        properties:
->          quartz-load-femtofarads: false
-> @@ -65,12 +72,23 @@ allOf:
->        properties:
->          quartz-load-femtofarads:
->            const: 7000
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          not:
-> +            contains:
-> +              enum:
-> +                - microcrystal,rv8063
-> +    then:
-> +      properties:
-> +        spi-cs-high: false
-> +        spi-3wire: false
->  
->  required:
->    - compatible
->    - reg
->  
-> -additionalProperties: false
-> +unevaluatedProperties: false
->  
->  examples:
->    - |
-> @@ -90,3 +108,16 @@ examples:
->            };
->          };
->        };
-> +
-> +  - |
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        rtc@0 {
-> +          compatible = "microcrystal,rv8063";
-
-Messed indentation. Look at rest of the examples here and use the same
-indentation.
-
-Best regards,
-Krzysztof
-
+-- 
+Lee Jones [李琼斯]
 
