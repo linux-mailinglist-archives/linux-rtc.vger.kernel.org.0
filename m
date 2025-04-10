@@ -1,135 +1,149 @@
-Return-Path: <linux-rtc+bounces-3911-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3912-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 643FAA8476F
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 17:12:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CBF6A84797
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 17:18:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3EB39A45E7
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 15:08:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49E0F178896
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 15:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB881E5B70;
-	Thu, 10 Apr 2025 15:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F6E1E1A16;
+	Thu, 10 Apr 2025 15:18:13 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F2784039;
-	Thu, 10 Apr 2025 15:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8638714884C;
+	Thu, 10 Apr 2025 15:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744297704; cv=none; b=ONSIMxQEeXcDyhNOLzZoI/8IRuZj7rJHbZC0MxeG4LzaVygsVogDQHauHXfBZJptxXQ6g29IQVd+Wvf0i7ndZX/QH75XIImROoNTPzpoVF2rUPy2J3neOOFexwO4Z1hAfm5jK372b0IW0mA7juKRNNhpFQ1D7bUaxxgorxKeBYk=
+	t=1744298293; cv=none; b=BnyE6rZaCuRQfXhQa40ocPeUKsPg5U4cKyvH6u+5hGu0P+/9aAkzHaCpgsviHJxnoiW8DyCbGeK6Sec1cnbroXarxa+0eAkaUFEas2LxUJt4WzOsug4rwO0xBBLiryWh1y+Y+2gneam/DEQcgIqcGySysuRAwHPcAgUZ8fElhWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744297704; c=relaxed/simple;
-	bh=CqchYWT2D/NC0O3I7WLGcTVNEMhTZnkBuN8MRa6K7CA=;
+	s=arc-20240116; t=1744298293; c=relaxed/simple;
+	bh=8rnwDyXBmuoXpcNcTExrnIR9+neRo7+CtWvJs/v9X6g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OoBmOALC8UjAtaUJiy4B8rOwWdkl/psXlnQI1GJfrqNPm5VhJD0BPGtusNqlMdlaRzWBK8g+hrO5c25/iN4m1wJm315Hp1+57bn/vAKX0hY/BRYKY97dzwd4DMmhj2ZHdwxs+EiR2lxGlpR/Pgmrl/bn2jWuzLfqXxkPKzYOxns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.171
+	 To:Cc:Content-Type; b=UvLcpMTaKVRXFC/tn3vyD/saXVGqqFaw0MopPwMYfm9H3N6vVcL/hIEWGtw5HvMIlnyZElHI2uKyPLRM9rdGLj7gzqfJAt0EeljqpV11YoD0DOMrkyzP4V2Tg7G+mePQ6BxvSo6WhPS7ysMC9vJUIdj6Yr80cP8tks5WdFP1PwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c5c815f8efso92109485a.2;
-        Thu, 10 Apr 2025 08:08:22 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4772f48f516so19593521cf.1;
+        Thu, 10 Apr 2025 08:18:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744297700; x=1744902500;
+        d=1e100.net; s=20230601; t=1744298290; x=1744903090;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8tzgiYMuNjRPr/NnukPcEQeYPbDzA6/5QMvPOZ9yhVQ=;
-        b=FDdZrTYn+dmveX4m4ZBtDbjbIq3hZgfNjEwxfekm6bClE8v9m5um0BKaePfUHOk/vS
-         vccDwfv9r/Pr9pG9VfhtEwIgGOEueGs+euBf/3RoXqSjJSGD0ygYmZuoeSG28XbgpTJA
-         hCTE37pR5hhFQaYLbWS/EQUFQGGtrR5s6GeipvAQbPN2OUgr/DJYmhLbrZLfO3TCuZT7
-         kM6bJGPVCKvyomqBRSQUNOhFmRgxVWCXQec8mGAgKXsQlIeltBEW5n+b+74LnrXRhPGS
-         LoM6E3x0DMRCERJkcNgG01i9hHKYYrVgx9XBvhkajN9FvK06su2aV4G9dPVOxqm9giac
-         MiTw==
-X-Forwarded-Encrypted: i=1; AJvYcCVABqxAqhtpleF4SHsNypvGkWgtVj/hAYNlVMGRlHwyrnv4A493SX0eQVCvQ5TvOnMuTKS0IIEVeFRb@vger.kernel.org, AJvYcCWYNkj0QUvMg+4jM880qBP0nIQEKV+WUOjAEEl6WVe/6TycagSIZLvkH++D1XYvExFjX5L7WHRvKCLF@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBMxLmxzOp242XJ1oa8Ca/7DC4akepoBLgjjcb/p71YslGDwGH
-	7GLXK/9kJmuxUekNbap59IkvPUyh0vaKuCPr4eOqbumKeHpIXRqPH8dXPe6fxDA=
-X-Gm-Gg: ASbGnctV0BXZOUngh4HBpbqRum6UVTmDVZTbddrz4uLhZ5YAOmEEtRtGTZMb0dfKmCC
-	CQFHJPJetj9/xus6/OTBH+1A2w1J9vzOnkBGDkE1PxIAIVraDRxpEhOi0nWmQ09mSr7q3OmAb9B
-	gHA1BCXF9/1z/YgzG33jqF+9/9HHG6fV48MI9z1P+obhpGkHRroEKP/WDFNxalamKUlKfcrIbv1
-	l8T+Pabr7S/7LPWcqNlGUm5YvPlqOaHslKboSKGHrFGcwxGJQLFywczfSDVHZ6oT1woALGrCruA
-	womsXS0Fi2Jn75PgavjQBZvSRoEVO4eXcZJnhevOhmU5ObvNO4KUhQYxIpuY1zMmyJhnRtCWrut
-	pa+RXln75VZCGpFl6VA==
-X-Google-Smtp-Source: AGHT+IGGn6ysaFg80s/SeK1sajpfm8mg4onYrR90us4A41+WzSsY9V8KcBf384704IZwkQVDgbdJxQ==
-X-Received: by 2002:a05:620a:2451:b0:7c5:49b7:237a with SMTP id af79cd13be357-7c7a815f699mr308664285a.19.1744297700063;
-        Thu, 10 Apr 2025 08:08:20 -0700 (PDT)
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com. [209.85.222.172])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a8a0dc9fsm99105285a.96.2025.04.10.08.08.19
+        bh=cE+ZNNwn35q6sEirTxJ6ITtGz6eW3uJTMf9z7a5BBT0=;
+        b=DgydAxQpGM+PTh2ReEmLbs1NixK/q2mDe6xd41+3cSjK/a/5j4JUMMMs2i5Lmbh2hF
+         XOnCMKtD1YfOXSJs9xoLsbMYgZHgDeuQiPnVWkCQaqgsT36z+piCuhJW0TNPEt+NsWxz
+         zUaNGiLCdpWkwg1bDSAKz47Mut7t9Fd4p32T2QM4lk4FF+BZCiuAzBQ2rfMVQWE4yBP+
+         C0mV4izV9i6pqvuWVjBrndxBXPemVbUuf9S7BkpKXmywS1gNBc/4Gbk94h4hfmcyIIZg
+         Er6wp7wgOI4XrDTC5dshjNTo0/jdm7g4bj6VdsAU4ceD7KAPS2MJGf3PQF1umapkpztE
+         PDxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW4OS5bgW0IROuCy0xAcL0+qT412qeEKPryw+b/HKOfyGUc/B+ME1XohHgJpYVk64M9iR87hL62LK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxu1LlR9enr8IgCaMSpoU/cumxU/kQVEjktYWQhC1+MSjXkZmt6
+	cZaqg3/FV370XI2ZtIjKlh9XyL3UjaeHcZ2cZkal5vgkB0i8HpIHfY9+G16R6VA=
+X-Gm-Gg: ASbGnctZ07aKISDBFEXSeYvd0FMzjr01ErGJcMxnpvFAIvTkYEmlpoD5sYuOzIWwgYo
+	cshugHrGcRpN9VjJOTUyetGe04f0upFXsbccQgfcOzj9IDluu9FsD0rA+1F9KE9RUs40TfeQxmi
+	Clodlt84okEJj2p6oJyJBGBUMgaYlfTW8u6KMn5jGnYpwol+dchgw136zpOUssAuAOzOtZmJQ4q
+	nJ9+OfBz8aGLizyk5hqh7cJP2PFpokMiauNpTrxnwU38t84u71PdByzX415dMM8xRDkhX3MmdV+
+	Mtiz6O0kHxeT0l0YLayD1KPix+f2Nu2sWEOs5aGNIGcszDWzcrxQXZluyO9CYuMlxJI1DyJsPDW
+	I06L9wKM=
+X-Google-Smtp-Source: AGHT+IGMxiEDkU42OKu8yQquMx0C9NVeCoFNrd3ouuXMD97Dmn+jJGO4ivwl+60BmBK9k/9ytcgGJw==
+X-Received: by 2002:ac8:5891:0:b0:471:9e02:365e with SMTP id d75a77b69052e-4796d08756fmr46235621cf.8.1744298290054;
+        Thu, 10 Apr 2025 08:18:10 -0700 (PDT)
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com. [209.85.222.170])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4796eb163e4sm10176381cf.31.2025.04.10.08.18.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 08:08:19 -0700 (PDT)
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c55b53a459so105358285a.3;
-        Thu, 10 Apr 2025 08:08:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU+CLK/NVkJFqSogLuEETWxT0IIv0FMbjZKTUsjsMi/gZk4i2h0A7lf9RtlRtqdUPKGbkLO8t6eOiX2@vger.kernel.org, AJvYcCVp8S8N5Cv2H4jmSva+Znib89X0+NZx0IDElnhsRJvLF90L/MxvausRP5FL7reQ/6qjpjONEd1HwU6a@vger.kernel.org
-X-Received: by 2002:a05:620a:4608:b0:7c7:766d:9b00 with SMTP id
- af79cd13be357-7c7a81b14bfmr435816785a.36.1744297699130; Thu, 10 Apr 2025
- 08:08:19 -0700 (PDT)
+        Thu, 10 Apr 2025 08:18:09 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c592764e24so98117885a.0;
+        Thu, 10 Apr 2025 08:18:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX0zZNv2HLAcJWgDwCyh+YYziMhrAt/pxV5H+42JumiYO3G5lPVPt8tXev6XngEtmcvH0j+K27hqMk=@vger.kernel.org
+X-Received: by 2002:a05:620a:280e:b0:7c5:6b46:e1f6 with SMTP id
+ af79cd13be357-7c7a764cb2cmr490762285a.1.1744298289676; Thu, 10 Apr 2025
+ 08:18:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com> <20250319110305.19687-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20250319110305.19687-2-wsa+renesas@sang-engineering.com>
+References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com> <20250319110305.19687-4-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20250319110305.19687-4-wsa+renesas@sang-engineering.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 10 Apr 2025 17:08:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUiNYXVzK7hSmgqZ65gq0bJyGkfJU0=u+q5K=Sb8EY3ug@mail.gmail.com>
-X-Gm-Features: ATxdqUFYgBaM3UsFkmEqOJyJhgysWeLZKq1MqLUlKFkzHJ4ql8L3X-9v3xfrwGw
-Message-ID: <CAMuHMdUiNYXVzK7hSmgqZ65gq0bJyGkfJU0=u+q5K=Sb8EY3ug@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc: rzn1: add optional second clock
+Date: Thu, 10 Apr 2025 17:17:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXMPnJ9b_5gZ4SwCAeuHUTr3y92+d94X=os5HaYis1CTw@mail.gmail.com>
+X-Gm-Features: ATxdqUECxGDGeGAKYde71Ob1sRH_YXk5Fi5VnTcBMX1P716KbYu6RCYQy0QIZTg
+Message-ID: <CAMuHMdXMPnJ9b_5gZ4SwCAeuHUTr3y92+d94X=os5HaYis1CTw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rtc: rzn1: support input frequencies other than 32768Hz
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: linux-renesas-soc@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
+	Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 Hi Wolfram,
 
-On Wed, 19 Mar 2025 at 12:03, Wolfram Sang
+On Wed, 19 Mar 2025 at 12:04, Wolfram Sang
 <wsa+renesas@sang-engineering.com> wrote:
-> The external crystal can be a second clock input. It is needed for the
-> SCMP counting method which allows using crystals different than 32768Hz.
-> It is also needed for an upcoming SoC which only supports the SCMP
-> method.
+> When using the SCMP mode instead of SUBU, this RTC can also support
+> other input frequencies than 32768Hz. Also, upcoming SoCs will only
+> support SCMP.
 >
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Thanks for your patch!
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> --- a/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-> @@ -33,10 +33,14 @@ properties:
->        - const: pps
->
->    clocks:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->
->    clock-names:
-> -    const: hclk
-> +    minItems: 1
-> +    items:
-> +      - const: hclk
-> +      - const: xtal
+Suggestions for improvement below...
 
-Shouldn't the second clock become required? Or do you plan to make
-that change after all upstream DTS files have been updated?
-
-This is orthogonal to the driver considering it optional to maintain
-compatibility with old DTBs.
-
+> --- a/drivers/rtc/rtc-rzn1.c
+> +++ b/drivers/rtc/rtc-rzn1.c
+> @@ -404,10 +405,24 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+>         if (ret < 0)
+>                 return ret;
 >
->    power-domains:
->      maxItems: 1
+> -       /*
+> -        * Ensure the clock counter is enabled.
+> -        * Set 24-hour mode and possible oscillator offset compensation in SUBU mode.
+> -        */
+> +       /* Only switch to scmp if we have an xtal clock with a valid rate and != 32768 */
+> +       xtal = devm_clk_get_optional(&pdev->dev, "xtal");
+> +       if (IS_ERR(xtal)) {
+> +               ret = PTR_ERR(xtal);
+> +               goto dis_runtime_pm;
+> +       } else if (xtal) {
+> +               rate = clk_get_rate(xtal);
+> +
+> +               if (rate < 32000 || rate > BIT(22)) {
+
+Perhaps
+
+    #define RTCA0SCMP_MIN    32000
+    #define RTCA0SCMP_MASK    GEN_MASK(21. 0)
+
+and
+
+    if (rate < RTCA0SCMP_MIN || rate > FIELD_MAX(RTCA0SCMP_MASK) + 1)
+
+?
+
+> +                       ret = -EOPNOTSUPP;
+> +                       goto dis_runtime_pm;
+> +               }
+> +
+> +               if (rate != 32768)
+> +                       use_scmp = RZN1_RTC_CTL0_SLSB_SCMP;
+> +       }
+> +
+> +       /* Disable controller during SUBU/SCMP setup */
+>         val = readl(rtc->base + RZN1_RTC_CTL0) & ~RZN1_RTC_CTL0_CE;
+>         writel(val, rtc->base + RZN1_RTC_CTL0);
+>         /* Wait 2-4 32k clock cycles for the disabled controller */
 
 Gr{oetje,eeting}s,
 
