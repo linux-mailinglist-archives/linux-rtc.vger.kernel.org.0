@@ -1,134 +1,235 @@
-Return-Path: <linux-rtc+bounces-3893-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3895-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 204FDA83895
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 07:45:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B293A838E5
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 08:05:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 115F4464FAA
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 05:45:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E93828C1306
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Apr 2025 06:05:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCFF1FC0FA;
-	Thu, 10 Apr 2025 05:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gs3J41OR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72BEB202C53;
+	Thu, 10 Apr 2025 06:05:17 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1215A1F0E56;
-	Thu, 10 Apr 2025 05:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A65202989
+	for <linux-rtc@vger.kernel.org>; Thu, 10 Apr 2025 06:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744263941; cv=none; b=tDrwJRJjYZ3IBv67VN8cn33DtFve7NhiQxd6MVffqLr0yz59J7jeypZo2sPa2A1+6527GwQkyscG/FeHup3A7jFG7O8U1h3ejeK1C+tBTs62rCxYLD7uIx2Rz0MbaLU9PXE0/mSfA9GPT697JTfoDNklJtBWPZ0Afv1k8ty2HoQ=
+	t=1744265117; cv=none; b=ODolrhDU3fbq6zKbKZiW6HAii0SryXBR5+1eogZk7ldzutEPMbxcoVIUaT0ToK8N0YgtZ46Lv+A+IQAjn+MFQkO4eWAV0niVr1P0VX46mBeTEfsl8F45UqDH3ry19qVDmSY7+XlgsOzFcQlEkzylz0hyK60PbdjtGQ6JzkYtNnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744263941; c=relaxed/simple;
-	bh=jHaEtzQVLOQhENDlIGBE0r9XR/xjh2shXjUrdPBQg3g=;
+	s=arc-20240116; t=1744265117; c=relaxed/simple;
+	bh=q/kBApj8o1DODVLckuFXHWT1k9Qcxm273pF1C9ox4ro=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ijH2JInAnYguR4Bt3d5MG4nSdVzFN2LiAFVUY8TUl4FIq5MHbobsfBjHcivfRcUXPuxEx0Y3zPRdB+VtWmHN6oLRGitZRuQRs2EnQib9hNE9Ud0R0NiFuQE/WjJAbSgRcmL0dzsFKYnoNbvnKZ+wAB8DvEzDOX283miU/E4pGdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gs3J41OR; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4774193fdffso5935011cf.1;
-        Wed, 09 Apr 2025 22:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744263939; x=1744868739; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1dSDpt8yORaoTmILVfEV+qWHE1Kt5hrousefB2rwiP0=;
-        b=gs3J41ORDR8+BTEgRIulOkeTb9Y3d/tqzyCBY4g2aQa4qQiZE634aVCaFBk6uTyDZU
-         oKL1SP8+9Lo8mqd8nSZvvLwFFygguNCCmrAjEQO3Z9726gEBizvm6lZXabURE6XRL8xw
-         rGBVAtgmdvhQHewjWBqdwNoprOjfMBgPHyOytqwmxgKzEicpmofv0HQwZzid9W/pazvl
-         hqonELlWus+smoL07Hib91UVAtz3PDdjyBEGA4jE8mxwgYHpgTHBxqXp/FaTVTU1q9NI
-         dNSnuKJtvzJCw6Ee9bq0n9b5x5A/PFJtiFoCvQw+IjjuXed/mzw1mYkfoFmJwDWeeOAb
-         rDDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744263939; x=1744868739;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1dSDpt8yORaoTmILVfEV+qWHE1Kt5hrousefB2rwiP0=;
-        b=EbOVQc+1Gx4cFYwSDr1+gHGuRijio5Opa1bdhqwk9My/9KOw4UZeQdOZqvNzNYNjdC
-         afS6Air+0BAFiPG0v4upBYcVSnOJUE/n8D6uMvbx1Wdm3dsdQHsB3wQetiLstvTxqlZo
-         wrhcbGmc2WrD+4YTWCI+ouQziT6Qy8J2FkIVHCYcx+cql7vEZZNZn7Mb4nwjqrB+aJEp
-         e7cEfq56FD66VIkbylLYTwtyB6Q13AOEslPCA5dL+icOHn09INqDnitHaRG+oMGCvXWI
-         WLqnJ3yMcCDoDNOE04KvSqxyKV4FOsChmn3Z5K8T7vfCRDSqw0sFpmAoabYENo/m8GOQ
-         6P6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUQrQ0wpTRgam+miJzhEs1HfwfcMv7TYbpKYL4GIagPc2PMAe0QkNSO8SBV2hBNc5W20wnAp9FsT9nJeT6/@vger.kernel.org, AJvYcCVKeXWE0kkmPZYi3R5K8GiPtUNHgFuDJ/zknhkWS4egfLeMAOIb8KFAsnzZ4sasoRPsJanYDDK0g14u@vger.kernel.org, AJvYcCVnCiOqG0aulxDRXyxdFDKyFY/bZYuJ3pmXwSfHIfe/xbCX3DgnmWKUKZb0X3cNZbO4BdzcbNYQ3LBP@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRUBOCn1l9ZZBc1oMh4MwUwBMnXTCwLMh6enJihHmv9Aim+Gyi
-	De6VetXD9tlcUhNEZhfPsJlpbhXGeNTJ12QuKd2MkKwSWPPt2E5Q
-X-Gm-Gg: ASbGnctyIAcMOPmzdGxY2GHOtLkYh/vmIGYHuMhlDkSfRFGojIDp6awi/3iOApqWf84
-	XJ7ndWYwkZd/4gUFOQ5NNJu+YKvq/nxQMz7+sbiK9o/zwM2Err3k/t84XLvDWyTLJNMH7utzIoj
-	idGyzNwAw8dSNA2GycqdZfosmzfNkvo1XHg/23u7a1LOxOLhlLHSFW2KnMUdPQk7ypS5nh9EiXA
-	+o0pW2PRHTa8/onf1zmQVeJVxFCL22w/P6tcZTukfFTi0iWgkKewAE6mL4R2OEPhL3v8bx8JwOP
-	H1svvK52E9jNC7h+do0Zi0b2g/E=
-X-Google-Smtp-Source: AGHT+IHWpkW6hRR/DBsksx6ZJqR4lJbOCUW1b2317akbtc9j0rn0qJX08BWWlLDmViJytQmHCxBIVg==
-X-Received: by 2002:ad4:5f4f:0:b0:6e8:f17e:e00d with SMTP id 6a1803df08f44-6f0e5aa6ce8mr23639886d6.14.1744263938704;
-        Wed, 09 Apr 2025 22:45:38 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f0de95fdd1sm16451946d6.18.2025.04.09.22.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 22:45:38 -0700 (PDT)
-Date: Thu, 10 Apr 2025 13:45:00 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	sophgo@lists.linux.dev, devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
-Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Yangyu Chen <cyy@cyyself.name>, 
-	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v14 1/3] dt-bindings: soc: sophgo: add RTC support for
- Sophgo CV1800 series
-Message-ID: <3m3amtjnqcrice2tfxw2ky7f65u574yi7crmcg7j7q3tnkk3zp@k7a5alzdbffb>
-References: <20250315224921.3627852-1-alexander.sverdlin@gmail.com>
- <20250315224921.3627852-2-alexander.sverdlin@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X3ynubRk8N4v106Yjw8h8l8hrfCgORGzMttDYI30+TifAj1PjVj+jqldYZOXivp/lOqnEC2z+8nGCQLQsLhSQJ2LmaX7ZULEGrAivb71laqVk2XhyAKjyz47OGi1IN2AHTBSyMqfiR+CMQtsP2/5tP9RrG7L4rDlEkibGmy09KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1u2l1d-0004XD-C7; Thu, 10 Apr 2025 08:04:33 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1u2l1Z-004Dlj-2z;
+	Thu, 10 Apr 2025 08:04:29 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 75A153F4AE6;
+	Thu, 10 Apr 2025 06:04:29 +0000 (UTC)
+Date: Thu, 10 Apr 2025 08:04:26 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250410-artichoke-swan-of-abracadabra-33c1dc-mkl@pengutronix.de>
+References: <20250409082752.3697532-1-tmyu0@nuvoton.com>
+ <20250409082752.3697532-5-tmyu0@nuvoton.com>
+ <20250409-cooperative-elastic-pillbug-672a03-mkl@pengutronix.de>
+ <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6ebpqmmsutfol6xr"
 Content-Disposition: inline
-In-Reply-To: <20250315224921.3627852-2-alexander.sverdlin@gmail.com>
+In-Reply-To: <CAOoeyxULns52vAwzsLoXB+BwT+CN+VGBwqrg61pjKJH8bTD5bw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 
-On Sat, Mar 15, 2025 at 11:49:12PM +0100, Alexander Sverdlin wrote:
-> From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> 
-> Add RTC devicetree binding for Sophgo CV1800 series SoC. The device is
-> called RTC, but contains control registers of other HW blocks in its
-> address space, most notably of Power-on-Reset (PoR) module, DW8051 IP
-> (MCU core), accompanying SRAM, hence putting it in SoC subsystem.
-> 
-> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Changelog:
-> v14:
-> - no changes
-> v13:
-> - Moved bindings from MFD into SOC subsystem
-> 
-> v12:
-> - maintainer Jingbao Qiu <qiujingbao.dlmu@gmail.com> -> sophgo@lists.linux.dev
-> - dropped Reviewed-by: Krzysztof Kozlowski
-> - link to TRM
-> - mentioned 8051 core in the description
-> - binding is now MFD, not RTC
-> - added "syscon" compatible
-> - added "interrupt-names", "clock-names" (because of added PM/remoteproc)
-> - main compatible "sophgo,cv1800-rtc" -> "sophgo,cv1800b-rtc"
-> 
->  .../soc/sophgo/sophgo,cv1800b-rtc.yaml        | 86 +++++++++++++++++++
->  1 file changed, 86 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/sophgo/sophgo,cv1800b-rtc.yaml
 
-LGTM.
+--6ebpqmmsutfol6xr
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v9 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-Reviewed-by: Inochi Amaoto <inochiama@gmail.com>
+On 10.04.2025 10:40:34, Ming Yu wrote:
+> Dear Marc,
+>=20
+> Thank you for reviewing.
+>=20
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B44=E6=9C=889=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:21=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> ...
+> > > +static void nct6694_canfd_handle_state_change(struct net_device *nde=
+v, u8 status)
+> > > +{
+> > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > > +     enum can_state new_state, rx_state, tx_state;
+> > > +     struct can_berr_counter bec;
+> > > +     struct can_frame *cf;
+> > > +     struct sk_buff *skb;
+> > > +
+> > > +     nct6694_canfd_get_berr_counter(ndev, &bec);
+> > > +     can_state_get_by_berr_counter(ndev, &bec, &tx_state, &rx_state);
+> > > +
+> > > +     new_state =3D max(tx_state, rx_state);
+> > > +
+> > > +     /* state hasn't changed */
+> > > +     if (new_state =3D=3D priv->can.state)
+> > > +             return;
+> > > +
+> > > +     skb =3D alloc_can_err_skb(ndev, &cf);
+> > > +
+> > > +     can_change_state(ndev, cf, tx_state, rx_state);
+> > > +
+> > > +     if (new_state =3D=3D CAN_STATE_BUS_OFF) {
+> > > +             can_bus_off(ndev);
+> >
+> > What does your device do when it goes into bus off? Does it recover its=
+elf?
+> >
+>=20
+> No, the device does not support automatic bus-off recovery. It
+> requires an explicit CAN Setting and Initialization(CMD0) command to
+> re-initialize the controller after entering bus-off state.
 
+Ok
+
+[...]
+
+> > > +static int nct6694_canfd_start(struct net_device *ndev)
+> > > +{
+> > > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
+> > > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
+> > > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
+> > > +     struct nct6694_canfd_setting *setting __free(kfree) =3D NULL;
+> > > +     const struct nct6694_cmd_header cmd_hd =3D {
+> > > +             .mod =3D NCT6694_CANFD_MOD,
+> > > +             .cmd =3D NCT6694_CANFD_SETTING,
+> > > +             .sel =3D ndev->dev_port,
+> > > +             .len =3D cpu_to_le16(sizeof(*setting))
+> > > +     };
+> > > +     int ret;
+> > > +
+> > > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
+> > > +     if (!setting)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     setting->nbr =3D cpu_to_le32(n_bt->bitrate);
+> > > +     setting->dbr =3D cpu_to_le32(d_bt->bitrate);
+> > > +
+> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
+TRL1_MON);
+> > > +
+> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
+TRL1_NISO);
+> > > +
+> > > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+> > > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_C=
+TRL1_LBCK);
+> > > +
+> > > +     setting->nbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_=
+NBTP_NSJW,
+> > > +                                            n_bt->sjw - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NBRP,
+> > > +                                            n_bt->brp - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NTSEG2,
+> > > +                                            n_bt->phase_seg2 - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NB=
+TP_NTSEG1,
+> > > +                                            n_bt->prop_seg + n_bt->p=
+hase_seg1 - 1));
+> > > +
+> > > +     setting->dbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_=
+DBTP_DSJW,
+> > > +                                            d_bt->sjw - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DBRP,
+> > > +                                            d_bt->brp - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DTSEG2,
+> > > +                                            d_bt->phase_seg2 - 1) |
+> > > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DB=
+TP_DTSEG1,
+> > > +                                            d_bt->prop_seg + d_bt->p=
+hase_seg1 - 1));
+> >
+> > What does your device do, if you set the bitrates _and_ the bit timing
+> > parameters? They are redundant.
+>=20
+> The firmware calculates the default bit timing parameters when it
+> receives the bitrates, and then overwrites them if it later receives
+> explicit bit timing parameters.
+>=20
+> To avoid confusion and ensure consistent behavior, I will remove the
+> bitrate setting logic in next patch. Instead, the bit timing will be
+> determined solely based on the provided bit timing parameters.
+
+Sounds good.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--6ebpqmmsutfol6xr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmf3X2cACgkQDHRl3/mQ
+kZy+Bwf/cD7PcXTrBFCGsudbvqhERiXg3j4fGxKlZVoNrTxY13w0WWxCpMBfL9lZ
+k+VJ+pxjPqL64WK5QAAem80jd8Pc+BqG+jdZIMEfTfYXvArLqzvnlfC16d6OoKmS
+cZCI+XAbNQMFCkOSLNa3tS6jA5/rwlsy+mV7CMLeOphSUl+sTbW2PlIiPJIQQXzG
+9Y1kcIlI1HLOTj2ilQ/8xgx+cNGh561Erou4H0fnNyoi4nuvlNcglfNm/m4B2DiQ
+oybJYK34/vHSiz361rkyU32z6TNcW5PaR7FwDGM/pMScYdQOnZSgOhuIBrl71etT
+/MLF7/H4MWskq7PZ97+8f+THFvhH2g==
+=67Py
+-----END PGP SIGNATURE-----
+
+--6ebpqmmsutfol6xr--
 
