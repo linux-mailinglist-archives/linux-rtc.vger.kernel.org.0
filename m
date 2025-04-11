@@ -1,120 +1,191 @@
-Return-Path: <linux-rtc+bounces-3924-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3925-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28A30A85470
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 08:42:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3D55A85530
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 09:14:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84CC97B332C
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 06:40:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D1AF1899A10
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 07:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C9127D771;
-	Fri, 11 Apr 2025 06:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780C028369E;
+	Fri, 11 Apr 2025 07:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="V7PLRj2K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IyHmTNLo"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5C727D76F
-	for <linux-rtc@vger.kernel.org>; Fri, 11 Apr 2025 06:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B133E27EC71;
+	Fri, 11 Apr 2025 07:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744353593; cv=none; b=YfInTUAeJW/fl2m9zUBNGD7VZA2P7w8WicvXgRw+XHkwYr0WOJxuoBSc3cfVNXzNp1LS+N5INL2d6UCblntMjqJlmPjWIX/pVtPimHBqvjfiSiecaj0QyU/oCKBe/j7pUD0FjwCqp1UxkEY6Djmuio+unVL/k+W9Q0guEBdxLsM=
+	t=1744355532; cv=none; b=FiQjKKVntTMWIpPDF2EQsD3t4lemDCT5PNKJuQG4armhi1nhuPJUyJO9r9mgrcH5zTuQI6bE6bXX3YE634ZG49MN7r03W7f1AFqzfhIe611nPEizadKkNmbORS2zmEkY8/8adzvONEaIF3VEjb1um+x4zo5mGkn/Ho9+shNXNNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744353593; c=relaxed/simple;
-	bh=a+AohPDuVFBXRNXWVXywQSJ6AZk5v5TDrGaX93hsK8w=;
+	s=arc-20240116; t=1744355532; c=relaxed/simple;
+	bh=gdrhVumeTce66VFXx6iutWVlsPAzxQz8fQdDaFP5jWA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QDWdKBvMpep1GoB3QfcNfJBfePx37PpfjhFw/5xU1/pRCh337crjC9zt2Zl9dbMzi/bB8577Tespa+HssxFqP5bCl1xOFpWJGwTXvs0DdRFxnj4Juk5W6nBEb0BR171lMShMXLsPwwxvo161uYqzl79FKGcy9BSe2Pgz/O7PlC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=V7PLRj2K; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=jZvC
-	qSyauVFDk+WvKGVgeVTjq7RSbZrL7rWhpDiwGuY=; b=V7PLRj2K53bDQxQRat+W
-	29yyZtTZ8dYviSzCs2xgBOA7CFHrMYRa6e13TIDpipjXjwtIexR46qN89aWJTXYO
-	1D4DoXLhJ6WVymSPRcnblXszLME8SDgEVAYUXJZOL2WrphKppPQyXKFtY3xeEXAp
-	XYOf90owy7njO1YtlIEV/NiY7F6MZVEhiQNFCf8CJA3kw5Q57fBV1SUfLjLxrVyD
-	WOIhFsB/Q0QeD3T+zs0AxCbQjtoc19E8Itn1qmxhxedpnLuSTONGGzB5GSy0U30c
-	D27NPAMUYN9AvQ4laSIqPWAZxhmyiGG9EAhI/fDVdiLveGOXwJX3rjNk9+6cptPl
-	GA==
-Received: (qmail 1169761 invoked from network); 11 Apr 2025 08:39:49 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Apr 2025 08:39:49 +0200
-X-UD-Smtp-Session: l3s3148p1@wFQN+HoyFO0gAwDPXyfYALbiJ46yNPq3
-Date: Fri, 11 Apr 2025 08:39:49 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 3/3] rtc: rzn1: support input frequencies other than
- 32768Hz
-Message-ID: <Z_i5NZjB5aSV1BmX@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	linux-renesas-soc@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
- <20250319110305.19687-4-wsa+renesas@sang-engineering.com>
- <CAMuHMdXMPnJ9b_5gZ4SwCAeuHUTr3y92+d94X=os5HaYis1CTw@mail.gmail.com>
- <Z_glj1NS6yRHHkyR@shikoro>
- <CAMuHMdVnu3+4Gkca0nTp7nWFSX7RjXe_GRG5PKDShC-WdpMSqw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=S3GmwvIn9nR46qvZuZsrZCB3c3qCtjTmgNpcuzw+0ls172OqEyxlS1NOcS999uabVBPvfDhD50r+1BmFeiNQM9KV5mn3DesV8YIOLJBEUc/3BLyLYLdRUsB7CccXtEd7IylCHyJ+4DVAxREA5TRxNovAU5lZsAWOWLaIRcyjLDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IyHmTNLo; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3912fdddf8fso1902901f8f.1;
+        Fri, 11 Apr 2025 00:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744355529; x=1744960329; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C7XvJyaIebd7Gra2hTpcbnV/bUDd+9pSKlR1cZwTqv0=;
+        b=IyHmTNLoBC4j0+ImOWqtepfDX4KtI8CMjKQJTLImV5cKXShaVheX92tKj91iquLe1k
+         wfAUPSV0/dNKCaSGBhVqIvTnKV3WUsU0K5drw9pnqwck0dPgNLQIadHLf76ulhT+Rf4r
+         q/JP+8JDbjcDlLfcAakZSb88xNrKGbEQ6ZYbF3LJfz/6+NvvckYuJz59CWv967VmkBW6
+         OSBNUqk/QojzD2y5+pwtvfd8msBbsnKswkVZQu6c65tC/JF2nTCg+NaHx719Cm0OVyzr
+         9BsuUmbhoGyoJlw0y3HFb5mbB8kvtIR3LAncI5MYTM+W1vadkOQHSTB/sX91oFZzt++A
+         mhWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744355529; x=1744960329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C7XvJyaIebd7Gra2hTpcbnV/bUDd+9pSKlR1cZwTqv0=;
+        b=jeWad6Kdu2Jzvybay8c1A+fTvq/gfrHhkGZBZ9PTT/+RY12YD7P01vc/nuAOL/n7sW
+         7MIltEkvuwkCNic/Wbel+kWajwioAXwhpaUwhz694sZgbaVObn8YtGUHxOwdPsfSRVbH
+         orVIl4grAyrfIuY1wl2go/4MbGkasH22hYaudiBBHPx0mAeTDbLrA/+Qc7mW3/NRy+B9
+         +j6blEdIFYYcudBA4ke2jBXRkArNKh7LTr6boJ+iBLmtMuSTvu8cdrMvr2CpqhRVnnc6
+         Nar8nyyrs0h33xEqnv3xlyqfSXOwHM3Dcwuy+GOlwsHzZ4IA9Zldj9JK6I2S5oAoPPh0
+         N4uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ9MSG++QRi6pfPuOrZlqbaN4f68X3bF/a9L446q5X1NYy5uRDOPaEiMFa7oOmrlxleuOQ2nBZyUgEPdCG@vger.kernel.org, AJvYcCVnpypBNZiMBmb5F6b2OkRi4usaeZAlWZtALsAHhQbB5Xwi1jbcgG2+Eb34hIFLtfZBv4y/1U8IjlT6@vger.kernel.org, AJvYcCW1YRUb4higcStLV9rv08FITgKU6P7V+fjWBgNLA+wjunogXEFW4glCKc+8vUTS65JfBAW+Dmvn8eUA@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHtgVwHhyTPHeXexpjO9VAXFQ1Uti7XPXoanaDVLlfGMZngLxx
+	1Zmh8DlqIkz+45+u5ldaYyFJaYPTwvkpHn/yCpklHKZPZr60K8nDyAvrDP3HfPXx8w==
+X-Gm-Gg: ASbGncu2KUzcXVj1ODQnCYLaUEFHxRsFqj9Ccspv/lKqdSWRr5UJGjRlHL7g5iGkl6h
+	akxuawhTEIK/gScaCl9mvsh+8GNh4iUiAwsZT/bbGLPVbaBjppHvOAUw1sA75zEhzKDXKNc/4pK
+	+QY9QBYuQWUoAGS0gH6bvd/DOhVbggWX9NffAd0N6jThHoVtJaK2DQg8j+L3L24AsCgZO5vaDWB
+	Fw3XYiv1VEtET2EJuU0hdVK1HSSzkJnpxAIJ6ZhKdBM8rBKjL2I7lXsHIOjQrVtAMBR0vnR7u7k
+	pgfANh5ApPCWAYUmp0m5/mBj4nlNIKGGRZ4e1F9Gc3QGVeSQtnb1YZw7KFLNiKnaSLQMdxpPWur
+	ag1af2GjvAQ==
+X-Google-Smtp-Source: AGHT+IHl/LN8pzBCnYdaddscA9zS4QyZ1eGKpY2s4nEo1vuy8PrG4l6gk9J2fhiJN5HFEaJ7977gNA==
+X-Received: by 2002:a5d:648d:0:b0:391:65c:1b05 with SMTP id ffacd0b85a97d-39e6e48d03dmr1267790f8f.11.1744355528773;
+        Fri, 11 Apr 2025 00:12:08 -0700 (PDT)
+Received: from antoni-VivoBook-ASUSLaptop-X512FAY-K512FA ([37.161.217.206])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf4456fdsm1104793f8f.86.2025.04.11.00.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Apr 2025 00:12:08 -0700 (PDT)
+Date: Fri, 11 Apr 2025 09:11:50 +0200
+From: Antoni Pokusinski <apokusinski01@gmail.com>
+To: Rob Herring <robh@kernel.org>
+Cc: alexandre.belloni@bootlin.com, krzk+dt@kernel.org, conor+dt@kernel.org,
+	alexander.stein@ew.tq-group.com, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/3] dt-bindings: rtc: add binding for RV8063
+Message-ID: <20250411071118.6fwnmpsgm46oejeb@antoni-VivoBook-ASUSLaptop-X512FAY-K512FA>
+References: <20250407193521.634807-1-apokusinski01@gmail.com>
+ <20250407193521.634807-4-apokusinski01@gmail.com>
+ <20250410211351.GA1076944-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XDEbE26sXCNHepG0"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVnu3+4Gkca0nTp7nWFSX7RjXe_GRG5PKDShC-WdpMSqw@mail.gmail.com>
-
-
---XDEbE26sXCNHepG0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250410211351.GA1076944-robh@kernel.org>
 
+On Thu, Apr 10, 2025 at 04:13:51PM -0500, Rob Herring wrote:
+> On Mon, Apr 07, 2025 at 09:35:21PM +0200, Antoni Pokusinski wrote:
+> > Microcrystal RV8063 is a real-time clock module with SPI interface.
+> > 
+> > Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
+> > ---
+> >  .../devicetree/bindings/rtc/nxp,pcf85063.yaml | 33 ++++++++++++++++++-
+> >  1 file changed, 32 insertions(+), 1 deletion(-)
+> 
+> Bindings come before users (driver).
+> 
+Fixed in v3 already.
 
-> > >     if (rate < RTCA0SCMP_MIN || rate > FIELD_MAX(RTCA0SCMP_MASK) + 1)
-> > >
-> > > ?
-> >
-> > You really think this is more readable than the original code? I am
-> > really tired of bike-shedding so I don't care much, but I do wonder...
->=20
-> I don't mind the literal 32000, but the "> BIT(22)" looks rather
-> obscure, IMO.
+Kind regards,
+Antoni
 
-Really? Ok, then it is up to what Alexandre prefers, I guess...
-
-
---XDEbE26sXCNHepG0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmf4uTUACgkQFA3kzBSg
-KbYclA//XFDfKF/Y9OZoL81Iuc638k/je1Bd/t4uXjsRlZ6kh2aqL1XNpHYNUYg2
-3SfsQR9DVkpumaoHbTVX8fJV++FT7nXt7UadQwn5V1SCauqlV541rlOjbtZ5jWd0
-+CzRe0KjvbI3/vb5OaoXx9GTqaWZMOU9881b3xoPREB3HwkXLSbISsf7QBSmVKCT
-PUgi2jRxjBgkl1Tq2J7tWa/MqB9GBZ92+TFrk05IIBWEJKj8Sy6XSI8nqwzwdhrk
-UNJs/bmMZp9sPIYi64us/SpUybGyOCL9AsJyZFW7EcRVOCFaFdSg29yFzEAtaFL7
-184bNlzXnDY1Fh8PmJHheKhPxmd7LIfYsxeKaZdPa3FH3R0nA1zgoYqtRcIFZ410
-9J8MFfn7+O+KjHQ4dMmbH/ZL2w2qqQ98beJI1uMdDT5Ny1HHGjrQEB1HvJbdTV1/
-Zgfwwtv2QJa3u5k4mVHE7u6DM22XyOu0IJaWz0osFPQoAuNAJCw0wwY6wxTs+JOq
-K4knYRdqYd68ymObYKQ/ekw+zR1ZSZgCITplyvWZV+YJrMKCj6IXag7XG1IibQfS
-iXzXzgoOGtLrJZD/UDdC72WzasMPkTV2NEKPLa6UtxBqg0ieh1JL7d8ZxthBuufv
-7zoSE/E4H+zMT0OVd/iPwkc748IZinlwCrzcyjyFi7QC+Q70Ty8=
-=Rd/R
------END PGP SIGNATURE-----
-
---XDEbE26sXCNHepG0--
+> > 
+> > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
+> > index 2f892f8640d1..cb31c7619d66 100644
+> > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
+> > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
+> > @@ -12,6 +12,7 @@ maintainers:
+> >  properties:
+> >    compatible:
+> >      enum:
+> > +      - microcrystal,rv8063
+> >        - microcrystal,rv8263
+> >        - nxp,pcf85063
+> >        - nxp,pcf85063a
+> > @@ -44,7 +45,12 @@ properties:
+> >  
+> >    wakeup-source: true
+> >  
+> > +  spi-cs-high: true
+> > +
+> > +  spi-3wire: true
+> > +
+> >  allOf:
+> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> >    - $ref: rtc.yaml#
+> >    - if:
+> >        properties:
+> > @@ -52,6 +58,7 @@ allOf:
+> >            contains:
+> >              enum:
+> >                - microcrystal,rv8263
+> > +              - microcrystal,rv8063
+> >      then:
+> >        properties:
+> >          quartz-load-femtofarads: false
+> > @@ -65,12 +72,23 @@ allOf:
+> >        properties:
+> >          quartz-load-femtofarads:
+> >            const: 7000
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          not:
+> > +            contains:
+> > +              enum:
+> > +                - microcrystal,rv8063
+> > +    then:
+> > +      properties:
+> > +        spi-cs-high: false
+> > +        spi-3wire: false
+> >  
+> >  required:
+> >    - compatible
+> >    - reg
+> >  
+> > -additionalProperties: false
+> > +unevaluatedProperties: false
+> >  
+> >  examples:
+> >    - |
+> > @@ -90,3 +108,16 @@ examples:
+> >            };
+> >          };
+> >        };
+> > +
+> > +  - |
+> > +    spi {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        rtc@0 {
+> > +          compatible = "microcrystal,rv8063";
+> > +          reg = <0>;
+> > +          spi-cs-high;
+> > +          spi-3wire;
+> > +        };
+> > +    };
+> > -- 
+> > 2.25.1
+> > 
 
