@@ -1,137 +1,127 @@
-Return-Path: <linux-rtc+bounces-3922-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3923-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46CCFA8540B
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 08:21:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EC03A8546E
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 08:41:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68CEC9A0732
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 06:20:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02D209C14E1
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Apr 2025 06:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5925D26FD98;
-	Fri, 11 Apr 2025 06:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4ED1EA7C6;
+	Fri, 11 Apr 2025 06:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="EZyMv8uv"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F072F367;
-	Fri, 11 Apr 2025 06:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDBF281370
+	for <linux-rtc@vger.kernel.org>; Fri, 11 Apr 2025 06:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744352465; cv=none; b=l47tQFB3vu0yM649uKLM+bG7Bhjj7LzSX18DGH/8g/Sjm4WY2D5xNuVC5e4HEv91s+dUKFP6+Z0JESXRsMLtw4emm6e1MXuguQQWj7z26p0BuePSlxzLnQZ7hCwWnWF3ZJIjkAKipDs5vgneAnGsOlc2g54OGbbHJd+yO3gj1dA=
+	t=1744353529; cv=none; b=DxNbfF3u1Kr+wbMus3/mxEXX0+cj2DxXCueEiK4ZgklMyBFldoKFJEEbfsMUc4U0h20XtAFfVn4LA+OeFELYeToXpmaFZVuZlnnCS1E7P6eTQZb6UpSiccTTt1VPdnuUWdzk5efIRT5G9fC/3Me+KNbX3wFctWRqnlZ3gf9LgyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744352465; c=relaxed/simple;
-	bh=FWhiu0xqA9OYifZoA/NPGAqtkja4BRU1eG8qYYNmh1k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IKpQcqQoPI05lUjm/EXrGEh2RJtF4ol12+OvjO404iGJUgH6FQvP5aQkaopxH+G0cg0ih7A6dx+2Hn0GHtkq/1YyQcdb+N3bvsvgwa5wAk3PjsfkzDPL0ORiN2mnv7Q5OieekMsL0RCUvZNZ93irvZXKXB3RYxDzq5g5ExT+Sgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-ac2dfdf3c38so308976166b.3;
-        Thu, 10 Apr 2025 23:21:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744352458; x=1744957258;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=09okPA/16lZG9/1yQlKv4fYdfrNELjKqXE2ran1r2PE=;
-        b=BFRoJjvuW+zQJjv9L65UoOg+bC7EIFYJgRcdnHNmC2o47wknG5beiMdkqWMYHSFhDP
-         +ZDfGOrfWPUHe8Bmo5VkFDleec1tCuVF5ouvoFtL/uBnmSt4nRFWTYqDt+mUMwHQ5Vva
-         NVGJl/87Iq+k3RnQlIdPsLA+6ixInj50wIMxqe91cliEa1liuhs6bFTHT+jzfMnqlISB
-         AaW4Er2qFP3yg81AbXB88SXmeJD9Iy7H9CKwaX3mpFqiYkZwZVcjifPCf4YkOiwVgjV+
-         Xx1GxgvPnAMG4JRPyslbhXYX7LUkfgeFq04Q6iR5PYDncjRYLtzYu4LTAxngZgSdQX3O
-         YH5g==
-X-Forwarded-Encrypted: i=1; AJvYcCU+pBwIupNjxIOcpdRPQhtpgjmuCircAD26X3bnk36JAfPv3x5ZbTic8jpNpXgacgOgexl8ytK2ghV8@vger.kernel.org, AJvYcCVKdXrvA3DFnsDw8ds3u7V8GK8indEg8jibWyuN+gq9O4dCvLwdQ6sPv/ENmIfACLLWIJwsEq58c6Ns@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8/GX7VcsvuCpzcW43bShKLwYw1bczFVUYOHX1IlB4WXCsOjeA
-	GopNJhaTGMtK4vH0lA3JdutZN2o0hTluvxqh8GjK3dR+rt+sJIRflDC2pExSr64=
-X-Gm-Gg: ASbGncuZgxyVIn/YZlgDve/1LdKxLiPVYexb+Fu3rQCBWkeAIASNH3MoHWnfkdm2Dm8
-	K9huuWmTq7fUskksgMJGHDEhWjBk0mtCNATkDvetFEWB4CO61hbvJ3Wb7qrrYNxIy+MB/+f09On
-	QNphvgzgCNOkoEs0Geqzm5ynJJFMaWbVoD1SOvjclJClkzDzuyu5ob+LeypuRmdyFXj7E2Mx+i5
-	g26sJZGflKxOFnIs/11pWcXyRCQodx7jsnkyid8LGCssCTaRR3DkhJ5BtJyi5lEktnhglcYj9NX
-	RicQR5lcOY8FmYUr838h2FLbS8FL5Qa5Wrx7R/TRpFZo6+G8ejakxbSY2WcNLdrJBiFRTCI1VtV
-	E+Lo=
-X-Google-Smtp-Source: AGHT+IGMqBpKhwConu5gLcAO3nInccU//dN5OhEmg0xccDMoGpuZdgteyMO+JMSVf59QmQKAECMf6w==
-X-Received: by 2002:a17:906:c14b:b0:ac7:c7cd:ac39 with SMTP id a640c23a62f3a-acad34a1aa8mr114691866b.24.1744352456270;
-        Thu, 10 Apr 2025 23:20:56 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1ce711fsm384192066b.169.2025.04.10.23.20.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 23:20:55 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5eb5ecf3217so2951180a12.3;
-        Thu, 10 Apr 2025 23:20:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW5MdeZRviH9zPHDtmrYfpcLucwBuEnCs1Nw5+H5PH5yXWdWg3dsZsB4ue2MjOL4FoGQEbCO0QSdDMB@vger.kernel.org, AJvYcCXrTQgJ+LehT2O0IvD3mAWX6CCUpkc+MZWm28NXWSBVTKe36mGqERxKr/f4VSdbSlatNRPrmJZxttvO@vger.kernel.org
-X-Received: by 2002:a17:907:70d:b0:aca:c7c6:b218 with SMTP id
- a640c23a62f3a-acad3456e8bmr132327866b.1.1744352455305; Thu, 10 Apr 2025
- 23:20:55 -0700 (PDT)
+	s=arc-20240116; t=1744353529; c=relaxed/simple;
+	bh=/r3e6ANnplQZb34XqIp+ha7TLfJpSOt+PW0RsUwC/AU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7daAQVIe8qBLVCclnSN3qQ/pVvkXi1WJLtfe2b5vpN1KKVTNUw37F0UdZ+vTAP00EmO8dWQ0MsyrG5jeAnr4iEgS0/54jjpVak6XuDZFbNNp1jgmyRucxKbtaPrtEqksgKcsrTykv9dHkZ0ivTm0/7lU8pYYj9lYNWQn1np/dA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=EZyMv8uv; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=/r3e
+	6ANnplQZb34XqIp+ha7TLfJpSOt+PW0RsUwC/AU=; b=EZyMv8uvZMwwIM2edgWQ
+	+IIq5zxZo838XmXuznjdIx7M+ga6uA69GhOBjV8m0nuyPeEBfyW+rPw/4er9TxZI
+	kOqCbrZuHYsi5LwlqgyvWdXfu9YeTLkHX3IGOeMjOSJmtQHoMtt6XS61Sji9WmTO
+	v/B3Zsum9l+g+iNeqKweTR/eM2Mg8pK1IrFdVz5vFEf3rWCIPDCuiallX5TW08vO
+	3TYPLHTGrCI2Dk1t9+khHsCjvRo5ELnDYXQlwooG54rLgMQ7LhiRZ4Qq7oGXPHM1
+	K4Aq5I/Pca8OCXTHDDGPuMOGIusoJrWo2nkBV4+8byfw5gPzV9lw+fx0MWaI2RR4
+	Jw==
+Received: (qmail 1169367 invoked from network); 11 Apr 2025 08:38:39 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Apr 2025 08:38:39 +0200
+X-UD-Smtp-Session: l3s3148p1@L3Pd83oypp4gAwDPXyfYALbiJ46yNPq3
+Date: Fri, 11 Apr 2025 08:38:38 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: rtc: rzn1: add optional second clock
+Message-ID: <Z_i47pkkUayLm22v@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-renesas-soc@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org
+References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
+ <20250319110305.19687-2-wsa+renesas@sang-engineering.com>
+ <CAMuHMdUiNYXVzK7hSmgqZ65gq0bJyGkfJU0=u+q5K=Sb8EY3ug@mail.gmail.com>
+ <CAMuHMdXU7wYfzNmvBO4ibUPGUA6xV_4gQxe4DtuKcr-kqXGB1w@mail.gmail.com>
+ <Z_gozhmIeQiPScKK@shikoro>
+ <CAMuHMdURcyViCd8EhhAZQjgx3vfBWBAmhNahwA8qoa_G5tPm1Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250319110305.19687-1-wsa+renesas@sang-engineering.com>
- <20250319110305.19687-2-wsa+renesas@sang-engineering.com> <CAMuHMdUiNYXVzK7hSmgqZ65gq0bJyGkfJU0=u+q5K=Sb8EY3ug@mail.gmail.com>
- <CAMuHMdXU7wYfzNmvBO4ibUPGUA6xV_4gQxe4DtuKcr-kqXGB1w@mail.gmail.com> <Z_gozhmIeQiPScKK@shikoro>
-In-Reply-To: <Z_gozhmIeQiPScKK@shikoro>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 11 Apr 2025 08:20:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdURcyViCd8EhhAZQjgx3vfBWBAmhNahwA8qoa_G5tPm1Q@mail.gmail.com>
-X-Gm-Features: ATxdqUG4WfCOX5hWwg7WsV5UZCkSdio1lHcVOLJ0PadEh7HSuKb-wznsWZD0RWU
-Message-ID: <CAMuHMdURcyViCd8EhhAZQjgx3vfBWBAmhNahwA8qoa_G5tPm1Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc: rzn1: add optional second clock
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8zvd0hdnVmtpJ5ER"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdURcyViCd8EhhAZQjgx3vfBWBAmhNahwA8qoa_G5tPm1Q@mail.gmail.com>
 
-Hi Wolfram,
 
-On Thu, 10 Apr 2025 at 22:23, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > > >    clock-names:
-> > > > -    const: hclk
-> > > > +    minItems: 1
-> > > > +    items:
-> > > > +      - const: hclk
-> > > > +      - const: xtal
-> > >
-> > > Shouldn't the second clock become required? Or do you plan to make
-> > > that change after all upstream DTS files have been updated?
->
-> True, we should make the second clock a requirement from now on.
->
-> > Upon second thought: this xtal clock is documented to be the "rtc"
-> > input to the RZ/N1 system controller[1], so it looks like the original
-> > idea was to obtain it through the system controller.  Unfortunately
-> > the clock driver[2] does not use the rtc input clock, nor provides it
-> > to consumers.
->
-> So, it would basically be a pass-through? I don't see any register in
-> SYSCTRL handling the external RTC clock.
+--8zvd0hdnVmtpJ5ER
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I assume you are right, I didn't study RZ/N1D in detail.
 
-> > So either we fix that, or we go with your solution...
->
-> If it is a pass-through, I wonder what it would gain us, but I can do
-> that if there are reasons for it.
+> > If it is a pass-through, I wonder what it would gain us, but I can do
+> > that if there are reasons for it.
+>=20
+> Let's go for your solution.
 
-Let's go for your solution.
+Thanks!
 
-Gr{oetje,eeting}s,
 
-                        Geert
+--8zvd0hdnVmtpJ5ER
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmf4uOsACgkQFA3kzBSg
+KbbI+Q/+IUkTDtv+Mt/GR1mhW8Ia4ETN4ZgvsLOPhEPaIfOvvk5++Mv851LAAjo8
+XoDBKM+GLf86ElEZ9rFKCo25ubun+o3Hnf7EE34KnEUcjl8MTu25fPE9H8GzuOcn
+LsaEJt8R0WIMv4pV5Ft6Jt1DZ372hE/XpnVPNIcY5XpsbK8M2T2+TVK4Q1CY9+n/
+yMe9iStXcIvltEgwypgINYNl81Wgk9oFA+G2rbKXHzHnACfCccavD/Q4H9KC22ab
+R9PF+rI10kf58ic/hE69af8xu0C0jySYnind5s6aZH0pSbgXTPKZ/FUgWzv4axC5
+lIpAUYbhQ+x/aLW38dY9Q9iG+Noxk01jljPQxMLu8Xnp4tzoRMZr8nxxHQOcrqt7
+gqA9ln+kqLHVrCzDnE4MhNteE06hFdDspo3ztlUbIm8pnInhyD8Fi7U54NCy9GR1
+07Bbr24TOxIcVRpCMsG7ZO+0Xq9tLlyMOV9WtJQiYgAi/OCaYlHcBnXZVDBJAirs
+Hs9QD7OCWsAY6smYMXDF6B3wRLPjv9ud2U5m47GKCaclTw3NhH5FZ2PQZMy9eoBp
+Ec5VR+dau5t/31GOB+ElpGiS9VyxTB1tdQc1dY3EiGhFdkNDmLqVpKHynGs0zTwg
+/43efUt20Jr1On4+iFHlJ5Ro3h6wRA+rXddfQTO8S4rlb3szq30=
+=14ML
+-----END PGP SIGNATURE-----
+
+--8zvd0hdnVmtpJ5ER--
 
