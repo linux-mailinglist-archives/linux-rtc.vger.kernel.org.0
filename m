@@ -1,77 +1,77 @@
-Return-Path: <linux-rtc+bounces-3942-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3943-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45578A87212
-	for <lists+linux-rtc@lfdr.de>; Sun, 13 Apr 2025 15:09:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA2B2A87215
+	for <lists+linux-rtc@lfdr.de>; Sun, 13 Apr 2025 15:09:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDFD61703B9
-	for <lists+linux-rtc@lfdr.de>; Sun, 13 Apr 2025 13:09:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 980941895733
+	for <lists+linux-rtc@lfdr.de>; Sun, 13 Apr 2025 13:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D811AF0CE;
-	Sun, 13 Apr 2025 13:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E241C9DE5;
+	Sun, 13 Apr 2025 13:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fVVw7Vo2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TKQOqFIE"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269611C8613;
-	Sun, 13 Apr 2025 13:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13381D6187;
+	Sun, 13 Apr 2025 13:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744549739; cv=none; b=j5EVTuuHQRvjE9+aV6pjrnZ8z7bVK2zApT8/mIh5cphPMzrNeHahixfykcdznomXGmMNaPgkolN0qXWr9LYdlXiPChz5dkz2Qa9t8MxXAbUJc7HKsyrABrhMWYd8biLya7MeXwHDZkbDLuSaF86nqacvAT7/vVZsnGiR7Ns4Gf4=
+	t=1744549745; cv=none; b=Y4jfSYeuliC7OtehbMc/IGbY688rfHb9tWtcRf2JH+9jcAv6knVk0pBD6Er0Ku/d4lOxtjebM8KfQMjsPrUVutd/ItO9LyEJ8XOqusd2eQuZ5P96xA1uJeBg/YQ+xuUux6mOGzlxTH0fZ7ip1UUa3ysUyxjEvEPM5+RFCuuCoUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744549739; c=relaxed/simple;
-	bh=jwsoeajWLSOPJcvIZix/A6b+favE2I6KfWiuZwzI3kE=;
+	s=arc-20240116; t=1744549745; c=relaxed/simple;
+	bh=Qiv6epzPmbfHWOUJeoZ8ik0G7oKn1YrCqMbxsEEf+CY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cJHGi/TDSpwZ/GF7e4mU9QDLw1FFX7KaZOvXQ/Eo500QceCpWrQk+n0umelE6Sj6B0AwoaL7RW1DxgdlWDeSaN1L/IYBR3PEqbbLzYpELjS8nxbenR1fodu/CgHyLKlmm5uVESUWVnY3YgpM8KSU/ZRohVyb2rS17gfKBJaB3to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fVVw7Vo2; arc=none smtp.client-ip=209.85.221.50
+	 MIME-Version:Content-Type; b=Mah90fGsrFlZLS/lrlIdfxBEPs98Slxf7LNLUo10lijaM5QL67Uo9P6Bx5YEiO8ruejL2XPce8lLZfkEkQDZJzBMLIo0nwNUDJ0Fabq+zlq2p/AKlpRiQmWWxHG+/Vo/FAh5M95YK8WjvOOIopwpp5zW0k3elOO2jKfNdj26EA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TKQOqFIE; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-39c266c1389so2306742f8f.1;
-        Sun, 13 Apr 2025 06:08:56 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-39c14016868so3112657f8f.1;
+        Sun, 13 Apr 2025 06:09:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744549735; x=1745154535; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744549742; x=1745154542; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EL5d6O3loKPdrSygpYmikEvuM6mYmpkHUhAOsZ8Nu3Q=;
-        b=fVVw7Vo2q4NBoeALSXHTCISUNGbyfy55x4k/e6YgMpPHiAY2Rl2bO0F4NHL7K2635K
-         PMGyVXMuGBQXiown6r3FNKkYK+JxVBI8/GzUV5tWA+1tZ2xD6VMv2KHfmGG79AJwX6Uq
-         5k/2/weHOfAD7JBkEWLtNUaZujlHutIw2y//V4Bd9kHvv2reGugz5A7Nuy/EWpLo54Ps
-         /dhYngBy4CRikCL0uhrYAs+pSuFgjmzeUy32qK9CjtGz/imWJcc4YdAgqSLGOGhhAcQs
-         /msJPPEuw6OZS4PkAfrjFBJJmFa5hJyCAClENIm8ywlJphyJNfMpTatQaJmfWYfRmsiK
-         bhxA==
+        bh=sBzonJ/RuSJVQf99llUENRykfQliSdPD+jdNDXviB4k=;
+        b=TKQOqFIEFuMvSJsMn5iYkVCmLpTLGPP+5V0fiM8pogBzxRsC7te0vDOGMLd0akVbDi
+         sPPxKTWwQp8rymdyUDhvnMYBNQxFqQqbsPCj7tU5MgOPJYr90XG4xDSrcZc2/AoOJLAu
+         Z3ww9DbUIrLhsdITC4Yzvm1e/yalSv+jcdnFnBc6pn3Cv8yPP3ZXJs3C9KsclZuEYnbh
+         xSr7E3/y2ITSho9/5TAocSWWETU/ltJr0IYey4P7lVppS3IApq/6Mtik+EdMJX6IjMh5
+         y8uJPr46VR9HBTWqH6O+zVJR0yePCGVKwhSG5Ks9DYrYSjc3BM+texHVFXueT7Ek3Rac
+         TLmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744549735; x=1745154535;
+        d=1e100.net; s=20230601; t=1744549742; x=1745154542;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EL5d6O3loKPdrSygpYmikEvuM6mYmpkHUhAOsZ8Nu3Q=;
-        b=Io0/HbzhMH1PCNYM4DChIQROk0oJrVJNiQVu3HmfAwdb3Ow/kJBF+KSM5alXwZ09lW
-         55TMY5Zrua0VflZKl98GfrSz9VRdJoipiKXld5Y3CqjIypl4k79uddOFpQnnuyXn+kRI
-         35tZktQ6f7qUSFmrExtyzt0O96y5D+ofICJgyQr6MNJHewS+TePZL8E1YYZdcA2qmtKg
-         XFIWgZ0wfQSm6MSoSDmikmyv0+lrgRbeg2+FopYNbKrzN4vZ8osYwqOpi4VdXFu//gu8
-         t8FcR/ZGO2EBlBvFEMbbN7/rq3ravPK8io2yMMpOAw+f68ntNqiir77rErtk20N+tR1z
-         xnYA==
-X-Forwarded-Encrypted: i=1; AJvYcCVRiUqrg3f9DeT8ZC4WoQ2piYRuhgoRSzwfzoChT2pEBuRnSIt90pMUqpoCkB0KFdMJ8d5gOE0lZXx5@vger.kernel.org, AJvYcCXkF2Mxa4SugLkXG3WZWjM3B37N5NzZs4CBOPPEQ3+hpVqPQZVYk54fKPkhzUsK8UsMar7O1vQm5KYKoBmK@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBo7bwicF0lYPZ9nJRCQpJhO9mC1lRDmDI7UIc2X4kdZ6xTOqV
-	+usZajjR5d6aUPH0UBELY2Sx20zBQG/d+CQp2g07zILf0TewMceb
-X-Gm-Gg: ASbGncvDbcwz5Cc/c4t+Tj3VAjuXadOkQmOty4rvBkOu83LklzuJWeYY3Fhdu8WvcTl
-	Nbql8IPDGG8nN4/hnVXJYmF4AFIJjQmfDww9fySXKjJ3NbWA59oQefCcDseNAIABR4mdI3W0v3t
-	StskgTCmz8bf6mPQ8z8k5lmJByYPC198g/BvF+GlvomU/VYAhwfP0spuzX5adQcI0Wyjba5ZMC+
-	HJrQlJRiLhhzXyCzmcabn7n64HDM3nnX5yfgvWZk+pEQ7lBT0kDIlXPEDfurK1vqVPG6RYCoq+F
-	OZLyUKh3fmK6SZSSyxIjTRj0W/jztTUQYEsCir3qOBiNyNktIlu5JpSnLZtEbYBCLEntKg==
-X-Google-Smtp-Source: AGHT+IFQnl9V89hhf1rVdX4kwhRk8gWLs1q/eD2u6rfvW8HiavhuqnMCHXUDeIH/RsjbSxnMag3V1A==
-X-Received: by 2002:a5d:64ae:0:b0:39c:2688:6904 with SMTP id ffacd0b85a97d-39eaaec7e3dmr6320046f8f.39.1744549735163;
-        Sun, 13 Apr 2025 06:08:55 -0700 (PDT)
+        bh=sBzonJ/RuSJVQf99llUENRykfQliSdPD+jdNDXviB4k=;
+        b=UdaGX05qhkTv8qeACILr+T8aFbSA5fhiYV6iZWOu4bQC56W7zDzNft7GY6Y6WVe17G
+         VZ1NjlBpy1qRkuZMAa1ZyD/TGu02rH/Vec2XyMPWdk57BhTLWxvkrb6CsQdQi4iMTHJB
+         4pTPBGQrq6yVDrn0OU6AMsapgbd+3SNp8n3lGWin8ROJZ5w6ir5esKOIwUGkPF20riQK
+         YPJ34k2e+3Uc+FREiI1X2NqtLC+riCbfrKE71w73HetpSJIg3RJ2+4Yz/56Ja91qowSc
+         ZSC0KD6JGZkBsl7ZtOCKuzy2e/4Bw+CSTC+AMkmSAFwV+TZhQTqKakB5C0FfgBUwUmiq
+         wdkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXT2HubiZnwwyO3n+lK94ZSGErMDwx3oHbyKIu2X4EsXsy01ILGie3iTAnjOV71+AtN3+dDpeiSkNob6bL@vger.kernel.org, AJvYcCXd/qbUVdy2x+PICYff8kf9gJW+o0iKRFe4UENY6tAncGgeC2kx44PRe+w2YgnfI7nW5kenNjbvLq0B@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu1Z2tml7P/MvoxK7k0FboyDOzuzewWGgqHid8NrERTdhDD3cj
+	EZFSCLOZiMzeOT4M3bZieAPSK8NDWLNSU0MSHN8h05eCPLA/s6Jq
+X-Gm-Gg: ASbGncuOyOnhq3GalGjo8eblHNlQ0mJj/1prNlA+s9WGGG/0hA3FKCW6jhCz8xojKRm
+	MeRJY1IDQz4galJXl8I6DiVow92ZYxoYUpGY/KwwhFcFaj8jkZUf82wnVDtXxYZDpyxat80J+jc
+	JYUNnubRKbl9Rq7BY7qCR9mN78r05+GkxTcVu9shMZp2sxrTvgC3pC+HheAaiAC9n0E30aXg2kQ
+	BssBnlaSf+PSzYtpkjo21SDgMzkQ/9mCf9GRIZ4B6zPA7NDbgKwZo2LyN+bExMaoAW2ieMR+PWQ
+	as49h9sEzC1GBLTQ5UxSd8edL5iUp5N2B/cdioFVvNeYZ6rIE1k9LooPOJICbcr7FbqFSA==
+X-Google-Smtp-Source: AGHT+IHBram3DuDjE0NvKBJYc4QQx8tGnUCX6OGw+TWpFkl9g/so1Pv3ghZKm+XqfEfKGH1lsHretg==
+X-Received: by 2002:a05:6000:401f:b0:391:1458:2233 with SMTP id ffacd0b85a97d-39ea51ee473mr7830729f8f.11.1744549741819;
+        Sun, 13 Apr 2025 06:09:01 -0700 (PDT)
 Received: from localhost.localdomain ([37.161.110.238])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf445737sm7739348f8f.88.2025.04.13.06.08.52
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf445737sm7739348f8f.88.2025.04.13.06.08.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Apr 2025 06:08:54 -0700 (PDT)
+        Sun, 13 Apr 2025 06:09:01 -0700 (PDT)
 From: Antoni Pokusinski <apokusinski01@gmail.com>
 To: alexandre.belloni@bootlin.com,
 	krzk+dt@kernel.org,
@@ -82,9 +82,9 @@ Cc: linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Antoni Pokusinski <apokusinski01@gmail.com>
-Subject: [PATCH v4 2/3] rtc: pcf85063: create pcf85063_i2c_probe
-Date: Sun, 13 Apr 2025 15:07:54 +0200
-Message-Id: <20250413130755.159373-3-apokusinski01@gmail.com>
+Subject: [PATCH v4 3/3] rtc: pcf85063: add support for RV8063
+Date: Sun, 13 Apr 2025 15:07:55 +0200
+Message-Id: <20250413130755.159373-4-apokusinski01@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250413130755.159373-1-apokusinski01@gmail.com>
 References: <20250413130755.159373-1-apokusinski01@gmail.com>
@@ -97,200 +97,180 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Move the i2c-specific code from pcf85063_probe to the newly created
-function.
-
-This is a preparation for introducing the support for RV8063 real-time
-clock with SPI interface.
+Microcrystal RV8063 is a real-time clock with SPI interface. Its
+functionality is very similar to the RV8263 rtc.
 
 Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
 ---
- drivers/rtc/rtc-pcf85063.c | 97 +++++++++++++++++++++++++++-----------
- 1 file changed, 70 insertions(+), 27 deletions(-)
+ drivers/rtc/Kconfig        | 21 +++++----
+ drivers/rtc/rtc-pcf85063.c | 87 +++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 98 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 838bdc138ffe..1b9be96faa13 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -483,15 +483,6 @@ config RTC_DRV_PCF8523
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-pcf8523.
+ 
+-config RTC_DRV_PCF85063
+-	tristate "NXP PCF85063"
+-	select REGMAP_I2C
+-	help
+-	  If you say yes here you get support for the PCF85063 RTC chip
+-
+-	  This driver can also be built as a module. If so, the module
+-	  will be called rtc-pcf85063.
+-
+ config RTC_DRV_PCF85363
+ 	tristate "NXP PCF85363"
+ 	select REGMAP_I2C
+@@ -971,6 +962,18 @@ config RTC_DRV_PCF2127
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-pcf2127.
+ 
++config RTC_DRV_PCF85063
++	tristate "NXP PCF85063"
++	depends on RTC_I2C_AND_SPI
++	select REGMAP_I2C if I2C
++	select REGMAP_SPI if SPI_MASTER
++	help
++	  If you say yes here you get support for the PCF85063 and RV8063
++	  RTC chips.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called rtc-pcf85063.
++
+ config RTC_DRV_RV3029C2
+ 	tristate "Micro Crystal RV3029/3049"
+ 	depends on RTC_I2C_AND_SPI
 diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-index 4fa5c4ecdd5a..03dfc58f4cd7 100644
+index 03dfc58f4cd7..d9b67b959d18 100644
 --- a/drivers/rtc/rtc-pcf85063.c
 +++ b/drivers/rtc/rtc-pcf85063.c
-@@ -559,12 +559,12 @@ static const struct pcf85063_config config_rv8263 = {
+@@ -17,6 +17,7 @@
+ #include <linux/of.h>
+ #include <linux/pm_wakeirq.h>
+ #include <linux/regmap.h>
++#include <linux/spi/spi.h>
+ 
+ /*
+  * Information for this driver was pulled from the following datasheets.
+@@ -29,6 +30,9 @@
+  *
+  *  https://www.microcrystal.com/fileadmin/Media/Products/RTC/App.Manual/RV-8263-C7_App-Manual.pdf
+  *  RV8263 -- Rev. 1.0 — January 2019
++ *
++ *  https://www.microcrystal.com/fileadmin/Media/Products/RTC/App.Manual/RV-8063-C7_App-Manual.pdf
++ *  RV8063 -- Rev. 1.1 - October 2018
+  */
+ 
+ #define PCF85063_REG_CTRL1		0x00 /* status */
+@@ -559,6 +563,18 @@ static const struct pcf85063_config config_rv8263 = {
  	.force_cap_7000 = 1,
  };
  
--static int pcf85063_probe(struct i2c_client *client)
-+static int pcf85063_probe(struct device *dev, struct regmap *regmap, int irq,
-+			  const struct pcf85063_config *config)
- {
- 	struct pcf85063 *pcf85063;
- 	unsigned int tmp;
- 	int err;
--	const struct pcf85063_config *config;
- 	struct nvmem_config nvmem_cfg = {
- 		.name = "pcf85063_nvram",
- 		.reg_read = pcf85063_nvmem_read,
-@@ -573,28 +573,22 @@ static int pcf85063_probe(struct i2c_client *client)
- 		.size = 1,
- 	};
- 
--	dev_dbg(&client->dev, "%s\n", __func__);
-+	dev_dbg(dev, "%s\n", __func__);
- 
--	pcf85063 = devm_kzalloc(&client->dev, sizeof(struct pcf85063),
-+	pcf85063 = devm_kzalloc(dev, sizeof(struct pcf85063),
- 				GFP_KERNEL);
- 	if (!pcf85063)
- 		return -ENOMEM;
- 
--	config = i2c_get_match_data(client);
--	if (!config)
--		return -ENODEV;
--
--	pcf85063->regmap = devm_regmap_init_i2c(client, &config->regmap);
--	if (IS_ERR(pcf85063->regmap))
--		return PTR_ERR(pcf85063->regmap);
-+	pcf85063->regmap = regmap;
- 
--	i2c_set_clientdata(client, pcf85063);
-+	dev_set_drvdata(dev, pcf85063);
- 
- 	err = regmap_read(pcf85063->regmap, PCF85063_REG_SC, &tmp);
- 	if (err)
--		return dev_err_probe(&client->dev, err, "RTC chip is not present\n");
-+		return dev_err_probe(dev, err, "RTC chip is not present\n");
- 
--	pcf85063->rtc = devm_rtc_allocate_device(&client->dev);
-+	pcf85063->rtc = devm_rtc_allocate_device(dev);
- 	if (IS_ERR(pcf85063->rtc))
- 		return PTR_ERR(pcf85063->rtc);
- 
-@@ -605,19 +599,17 @@ static int pcf85063_probe(struct i2c_client *client)
- 	 * of the registers after the automatic power-on reset...
- 	 */
- 	if (tmp & PCF85063_REG_SC_OS) {
--		dev_warn(&client->dev,
--			 "POR issue detected, sending a SW reset\n");
-+		dev_warn(dev, "POR issue detected, sending a SW reset\n");
- 		err = regmap_write(pcf85063->regmap, PCF85063_REG_CTRL1,
- 				   PCF85063_REG_CTRL1_SWR);
- 		if (err < 0)
--			dev_warn(&client->dev,
--				 "SW reset failed, trying to continue\n");
-+			dev_warn(dev, "SW reset failed, trying to continue\n");
- 	}
- 
--	err = pcf85063_load_capacitance(pcf85063, client->dev.of_node,
-+	err = pcf85063_load_capacitance(pcf85063, dev->of_node,
- 					config->force_cap_7000 ? 7000 : 0);
- 	if (err < 0)
--		dev_warn(&client->dev, "failed to set xtal load capacitance: %d",
-+		dev_warn(dev, "failed to set xtal load capacitance: %d",
- 			 err);
- 
- 	pcf85063->rtc->ops = &pcf85063_rtc_ops;
-@@ -627,13 +619,13 @@ static int pcf85063_probe(struct i2c_client *client)
- 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf85063->rtc->features);
- 	clear_bit(RTC_FEATURE_ALARM, pcf85063->rtc->features);
- 
--	if (config->has_alarms && client->irq > 0) {
-+	if (config->has_alarms && irq > 0) {
- 		unsigned long irqflags = IRQF_TRIGGER_LOW;
- 
--		if (dev_fwnode(&client->dev))
-+		if (dev_fwnode(dev))
- 			irqflags = 0;
- 
--		err = devm_request_threaded_irq(&client->dev, client->irq,
-+		err = devm_request_threaded_irq(dev, irq,
- 						NULL, pcf85063_rtc_handle_irq,
- 						irqflags | IRQF_ONESHOT,
- 						"pcf85063", pcf85063);
-@@ -642,8 +634,8 @@ static int pcf85063_probe(struct i2c_client *client)
- 				 "unable to request IRQ, alarms disabled\n");
- 		} else {
- 			set_bit(RTC_FEATURE_ALARM, pcf85063->rtc->features);
--			device_init_wakeup(&client->dev, true);
--			err = dev_pm_set_wake_irq(&client->dev, client->irq);
-+			device_init_wakeup(dev, true);
-+			err = dev_pm_set_wake_irq(dev, irq);
- 			if (err)
- 				dev_err(&pcf85063->rtc->dev,
- 					"failed to enable irq wake\n");
-@@ -661,6 +653,8 @@ static int pcf85063_probe(struct i2c_client *client)
- 	return devm_rtc_register_device(pcf85063->rtc);
- }
- 
-+#if IS_ENABLED(CONFIG_I2C)
++static const struct pcf85063_config config_rv8063 = {
++	.regmap = {
++		.reg_bits = 8,
++		.val_bits = 8,
++		.max_register = 0x11,
++		.read_flag_mask = BIT(7) | BIT(5),
++		.write_flag_mask = BIT(5),
++	},
++	.has_alarms = 1,
++	.force_cap_7000 = 1,
++};
 +
- static const struct i2c_device_id pcf85063_ids[] = {
- 	{ "pca85073a", .driver_data = (kernel_ulong_t)&config_pcf85063a },
- 	{ "pcf85063", .driver_data = (kernel_ulong_t)&config_pcf85063 },
-@@ -683,16 +677,65 @@ static const struct of_device_id pcf85063_of_match[] = {
- MODULE_DEVICE_TABLE(of, pcf85063_of_match);
- #endif
+ static int pcf85063_probe(struct device *dev, struct regmap *regmap, int irq,
+ 			  const struct pcf85063_config *config)
+ {
+@@ -725,14 +741,83 @@ static void pcf85063_unregister_driver(void)
  
-+static int pcf85063_i2c_probe(struct i2c_client *client)
+ #endif /* IS_ENABLED(CONFIG_I2C) */
+ 
++#if IS_ENABLED(CONFIG_SPI_MASTER)
++
++static const struct spi_device_id rv8063_id[] = {
++	{ "rv8063" },
++	{}
++};
++MODULE_DEVICE_TABLE(spi, rv8063_id);
++
++static const struct of_device_id rv8063_of_match[] = {
++	{ .compatible = "microcrystal,rv8063" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, rv8063_of_match);
++
++static int rv8063_probe(struct spi_device *spi)
 +{
-+	const struct pcf85063_config *config;
++	const struct pcf85063_config *config = &config_rv8063;
 +	struct regmap *regmap;
 +
-+	config = i2c_get_match_data(client);
-+	if (!config)
-+		return -ENODEV;
-+
-+	regmap = devm_regmap_init_i2c(client, &config->regmap);
++	regmap = devm_regmap_init_spi(spi, &config->regmap);
 +	if (IS_ERR(regmap))
 +		return PTR_ERR(regmap);
 +
-+	return pcf85063_probe(&client->dev, regmap, client->irq, config);
++	return pcf85063_probe(&spi->dev, regmap, spi->irq, config);
 +}
 +
- static struct i2c_driver pcf85063_driver = {
- 	.driver		= {
- 		.name	= "rtc-pcf85063",
- 		.of_match_table = of_match_ptr(pcf85063_of_match),
- 	},
--	.probe		= pcf85063_probe,
-+	.probe		= pcf85063_i2c_probe,
- 	.id_table	= pcf85063_ids,
- };
- 
--module_i2c_driver(pcf85063_driver);
-+static int pcf85063_register_driver(void)
++static struct spi_driver rv8063_driver = {
++	.driver         = {
++		.name   = "rv8063",
++		.of_match_table = rv8063_of_match,
++	},
++	.probe          = rv8063_probe,
++	.id_table	= rv8063_id,
++};
++
++static int __init rv8063_register_driver(void)
 +{
-+	return i2c_add_driver(&pcf85063_driver);
++	return spi_register_driver(&rv8063_driver);
 +}
 +
-+static void pcf85063_unregister_driver(void)
++static void __exit rv8063_unregister_driver(void)
 +{
-+	i2c_del_driver(&pcf85063_driver);
++	spi_unregister_driver(&rv8063_driver);
 +}
 +
 +#else
 +
-+static int pcf85063_register_driver(void)
++static int __init rv8063_register_driver(void)
 +{
 +	return 0;
 +}
 +
-+static void pcf85063_unregister_driver(void)
++static void __exit rv8063_unregister_driver(void)
 +{
 +}
 +
-+#endif /* IS_ENABLED(CONFIG_I2C) */
++#endif /* IS_ENABLED(CONFIG_SPI_MASTER) */
 +
-+static int __init pcf85063_init(void)
-+{
-+	return pcf85063_register_driver();
-+}
-+module_init(pcf85063_init);
+ static int __init pcf85063_init(void)
+ {
+-	return pcf85063_register_driver();
++	int ret;
 +
-+static void __exit pcf85063_exit(void)
-+{
-+	pcf85063_unregister_driver();
-+}
-+module_exit(pcf85063_exit);
++	ret = pcf85063_register_driver();
++	if (ret)
++		return ret;
++
++	ret = rv8063_register_driver();
++	if (ret)
++		pcf85063_unregister_driver();
++
++	return ret;
+ }
+ module_init(pcf85063_init);
  
- MODULE_AUTHOR("Søren Andersen <san@rosetechnology.dk>");
- MODULE_DESCRIPTION("PCF85063 RTC driver");
+ static void __exit pcf85063_exit(void)
+ {
++	rv8063_unregister_driver();
+ 	pcf85063_unregister_driver();
+ }
+ module_exit(pcf85063_exit);
 -- 
 2.25.1
 
