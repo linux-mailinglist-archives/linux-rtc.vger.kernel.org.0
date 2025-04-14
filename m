@@ -1,205 +1,163 @@
-Return-Path: <linux-rtc+bounces-3948-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3949-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71E90A88DD4
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Apr 2025 23:34:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6312FA88DEB
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Apr 2025 23:42:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AEDB3B3DD1
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Apr 2025 21:34:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E4677A882D
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Apr 2025 21:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 896901EB1B5;
-	Mon, 14 Apr 2025 21:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB321F37B8;
+	Mon, 14 Apr 2025 21:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="QjcMKmZ3"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="iIpB0zL6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278541DB548
-	for <linux-rtc@vger.kernel.org>; Mon, 14 Apr 2025 21:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D8F1CAA6D;
+	Mon, 14 Apr 2025 21:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744666495; cv=none; b=NrJbP6fjbH1nHfUD/Jud3iv5Ljwux0eIKM+KP4UdhbMY0i167eRj/0cY/xEEp5X62Rtm0EUjksocaI649D1D5KGA5aprDixvzU/kfu1ll3Qggs9D2Q6f5rcYKTbHmuoA0/x6Gw4cMg4UjEmEwy1MmwCGTP+BuAI8xx01zh7ysp4=
+	t=1744666923; cv=none; b=Y/vXHSCxSc1x7nVdQB/sJXbjidI91dOdu/J2Xz4rlldp5BmS8aVEOeLzeOGJdrRGLoDJmjLwFxLH1SqSTV9hrGPwdjry14S8sQ3ygkmFvG1xTYif0jl+GXt64dLHjum9zaKY10D9m7EIGKjzCBBBnB9148Xj1K07kfDRmF+Mqpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744666495; c=relaxed/simple;
-	bh=crIMSumShIOAq9dEq0E0IScyY+k844YcG8x54zymQH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hLkLn0AEI7gUWhPA2G7itej3ytyyee2k9TLjzrggU3a+9pZGEX04T73w15mgj46ojvkrqRuowDEUpvwmA3Zyx9T9HI3Qa2QedHPMGGnPrFkEPKHntqqRUJrS9Nrcnyy0iIxmhLzfLaovOWl3Kc8toWorwTAvZv+JG0l/VNCYJFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=QjcMKmZ3; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e5e0caa151so8401264a12.0
-        for <linux-rtc@vger.kernel.org>; Mon, 14 Apr 2025 14:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1744666491; x=1745271291; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S7BZi7HnKfbbt9TH74oPDg7WDBebYy2OSaVokgDUUbg=;
-        b=QjcMKmZ3sB+CZb8dglnfrWX5ZQt9MkpMzOmNXvQzJ6PzWyF6KDTYA8vdbR69dPchy+
-         pLsUG2ZN3oVJy4AhTBytaoj7DSPbexDZ2QTHcppe/7l2L+NUKgUGlDWAKxLmzPojZYRK
-         /6SMx8e1C+AKOzeDeVcOgU1k571O33HMZanv4DrzX1drHqiCQKkUbZ/VBH+cyZH5UtNU
-         dUZC2zTLUHliRFmU2ZB2TqSVoL1GhATUbAzCBFJw/h6pgZ+pPneMIgQqTktWRP+e0HZu
-         0g5674z0g4nWyPKe0LigJL88k4PtV8DuLN6WL1kVxANritEezi1GnAkM86JMT9WsjW4Z
-         wz4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744666491; x=1745271291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S7BZi7HnKfbbt9TH74oPDg7WDBebYy2OSaVokgDUUbg=;
-        b=NsKIxU/Bn0dK2XSu1MDYZvw1CUBxBzVv4JKwzMXWvDrZq9K8mFD8OHilkMtraCEsfj
-         LvztBOFQYDh5mk/IlG80ykQ6erChEtTU67E/1O2xv58dWLMSuciiucJ5HTqj/M/v+XSq
-         3EkUP2DRI8MPPZqUOOP4OnHqaT2JaZteO/m5GRhFDgJP4hPS+HWon2KaGRo2/Zvebsyl
-         WDQ/na9iv8OEpmxkmUCphH8KKYyISN10/TwpEBOL1SBBkbaru03x1BTfen0H7/KVIK11
-         ddTrxt8Iu+8EXW9/C0YvF7g28UHzHvMXhCYB4biUzzFbHH1sYR3U7oMT3h3DQoaogbUZ
-         yxBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgzGZxgOQ8OCHO31tnk7NvadkxebW1hQa2I+Of2PqdsxZ1EzR7A+5DLtc3DvL4pFAZhNH2YeRBmkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzs45K5yAiQT0QFmqapGzt3KzKt9N8x87pBY+Fgq9DIT40XTK+j
-	S5DoB16s6pLL0Md2p2Py9ZXqLq2XUhWqW8TL34o/TE+fJt/1HE6Scn0Z53vS9m8=
-X-Gm-Gg: ASbGncvytKVci4Xw/qnORAUZtDSfvVxQnQiKNHQLTytrC1133f2k8qx9K/Nv/tL9ggk
-	8opaQsSzDNue3/Rc1MU47nSMZV49gOinlxOdG4snjVBa35WzdXICnKtfHQhZHb4CtdLGkhIVc3V
-	oGvwCHCP0yMFyVkAdHXU5l2VCynxph7zt1T1fdSf0/OBcDJMquBQGLm8ehzZC1PCejmbXsGOoY2
-	pL2HUuolQJHZm8nv1pvXAD1k6dvk4R0AZX8e04KlUz/PAjqCd+dQfFW20+jTyu+M0rMqoTidugh
-	44JhPDAg2gAzkWHL2+pReimIYMvrOhOQ6EP0TCscacLfqA==
-X-Google-Smtp-Source: AGHT+IG/kDZsmoxinyBq4n/Im69g3ys9L3BT2wiv3DJKobRUo+Jzgfnpx2t+FVw18cLid5H4hJIEjA==
-X-Received: by 2002:a05:6402:1ec9:b0:5f3:8171:a4e2 with SMTP id 4fb4d7f45d1cf-5f38171a75amr12298487a12.18.1744666491385;
-        Mon, 14 Apr 2025 14:34:51 -0700 (PDT)
-Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-5f36f506425sm5554281a12.53.2025.04.14.14.34.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Apr 2025 14:34:50 -0700 (PDT)
-Date: Mon, 14 Apr 2025 23:34:48 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Alexandre Mergnat <amergnat@baylibre.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Eddie Huang <eddie.huang@mediatek.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] rtc: mt6397: Remove start time parameters
-Message-ID: <vpf4apahhpovhrqje4i647nldszen2pglbm5fdmar7bsyg7uao@3ymuod45ftlj>
-References: <20250109-enable-rtc-v3-0-f003e8144419@baylibre.com>
- <20250109-enable-rtc-v3-4-f003e8144419@baylibre.com>
- <20250411133609a1295543@mail.local>
- <202504111339359e840246@mail.local>
- <968001f7-96d1-4ad5-8c36-28cac5dc30f1@collabora.com>
- <97cfeafe-7044-4f06-b2e6-e4a158419473@baylibre.com>
+	s=arc-20240116; t=1744666923; c=relaxed/simple;
+	bh=tLt2eP72kLFIOGeY1xWW7M7uOV9URzcP5sXZZ5GRu38=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pM1jZLKfI1EVqaV7gOO+xnB9Jf81WJNdyPuER5FBdyVGIUK6vzzmXrGStKS6N8i9u1TO58DrAH9mHSo9Z9ivZOBdJFgpQxFu85gvlbi6XkzQPKtNOwYhYNzrPfVewzyBCBT0dOTp2AGzipcNk9jM0wxgMSeLwTo7ZfsZNwKgBFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=iIpB0zL6; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1744666921; x=1776202921;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tLt2eP72kLFIOGeY1xWW7M7uOV9URzcP5sXZZ5GRu38=;
+  b=iIpB0zL6XlV4gaiF/FjqRuntcSvesXqA0XN4maYaEMFM3rAWaqqr/MzH
+   7TIs/B0JpmmdfSgKwsr0s4E6bXJnDydI/K5DlyED8hE/PaXaOjq/tmeKJ
+   HQqJ+6rnov5DJAY3PzzLQRbF8ba1CSk1za60G9yu+k/DwP4FS2WWRp4jc
+   URuCqeqrF0SUPoPmu+yE6tR4LqMmczO2bdu/M6Yyx6Qg+voWmxJoHtJkv
+   VBZO1LxTj+pmmB5zaIKReb2i+OlJwsCyTIScf+XI8s1rgDGA6rG1axFm2
+   RebhIYUlvESljA5Wl3YwpHfjs/qyI0g9Qd/ZzESQeF8sw2WJU7SLnhWJl
+   g==;
+X-CSE-ConnectionGUID: jf75aQsXSneWELgtntpGWQ==
+X-CSE-MsgGUID: nFPUg5ewTjG1kq33dFZTtQ==
+X-IronPort-AV: E=Sophos;i="6.15,212,1739862000"; 
+   d="scan'208";a="40006664"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Apr 2025 14:41:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Mon, 14 Apr 2025 14:41:04 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.44 via Frontend Transport; Mon, 14 Apr 2025 14:41:04 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <lee@kernel.org>, <sre@kernel.org>,
+	<p.zabel@pengutronix.de>
+CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH v5 00/11] Enable Power Modes Support for SAMA7D65 SoC
+Date: Mon, 14 Apr 2025 14:41:17 -0700
+Message-ID: <cover.1744666011.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xgxword5effrvsfi"
-Content-Disposition: inline
-In-Reply-To: <97cfeafe-7044-4f06-b2e6-e4a158419473@baylibre.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
---xgxword5effrvsfi
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 4/5] rtc: mt6397: Remove start time parameters
-MIME-Version: 1.0
+This patch set adds support for low power modes for the SAMA7D65 SoC and
+the required components and changes for low power modes.
 
-Hello Alex,
+The series includes changes in the asm code to account for the addtional
+clocks that are in this SoC.
 
-On Mon, Apr 14, 2025 at 03:56:11PM +0200, Alexandre Mergnat wrote:
-> On 14/04/2025 13:09, AngeloGioacchino Del Regno wrote:
-> > Il 11/04/25 15:39, Alexandre Belloni ha scritto:
-> > > On 11/04/2025 15:36:12+0200, Alexandre Belloni wrote:
-> > > > On 11/04/2025 14:35:57+0200, Alexandre Mergnat wrote:
-> > > > > diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-> > > > > index 692c00ff544b2..d47626d47602f 100644
-> > > > > --- a/drivers/rtc/rtc-mt6397.c
-> > > > > +++ b/drivers/rtc/rtc-mt6397.c
-> > > > > @@ -291,8 +291,6 @@ static int mtk_rtc_probe(struct platform_devi=
-ce *pdev)
-> > > > > =A0=A0=A0=A0=A0 rtc->rtc_dev->ops =3D &mtk_rtc_ops;
-> > > > > =A0=A0=A0=A0=A0 rtc->rtc_dev->range_min =3D RTC_TIMESTAMP_BEGIN_1=
-900;
-> > > > > =A0=A0=A0=A0=A0 rtc->rtc_dev->range_max =3D mktime64(2027, 12, 31=
-, 23, 59, 59);
-> > > > > -=A0=A0=A0 rtc->rtc_dev->start_secs =3D mktime64(1968, 1, 2, 0, 0=
-, 0);
-> > > > > -=A0=A0=A0 rtc->rtc_dev->set_start_time =3D true;
-> > > >=20
-> > > > This is going to break the time for people upgrading their kernel, =
-you
-> > > > are unfortunately stuck with this.
-> > >=20
-> > > To be clear, the breakage will happen when upgrading the kernel but n=
-ot
-> > > the device tree with 5/5
-> >
-> > Yes, you're stuck with this. Devicetree has to be retrocompatible.
-> >=20
-> > Besides, this start_secs is what gets used by default, and the start-ye=
-ar
-> > devicetree property should take precedence and effectively override the
-> > start_secs default.
-> >=20
-> > Just keep it there.... :-)
+The Device tree additions are to enable all the components needed to
+keep the SoC in low power mode.
 
-It would work to keep setting start_secs but allow overwriting that
-value in the device tree. But see below.
-=20
-> When you boot your board for the first time, is the date January 2nd 1968=
- ?
-> If not, that mean it is used as a finetune offset year.
-> IMHO, mktime64(1968, 1, 2, 0, 0, 0) is a workaround for the rtc framework
-> issue we try to solve in this serie because start_secs is negative (1968 <
-> 1970). Now framework handle the negative value properly, even if you keep
-> mktime64(1968, 1, 2, 0, 0, 0) , the device time will change. I prefer to
-> notify you.  :)
+There are some DTB check warnings but that is due to the dt-binding not
+in the correct .yaml file format.
 
-I don't understand everything you wrote here, but as far as I see it,
-rtc_time64_to_tm() not being able to handle dates before 1970 is the
-main issue here. This is of course only relevant, because your hardware
-occasionally contains such a date. The technically right fix is to
-extend rtc_time64_to_tm() to work for dates >=3D 1900-01-01. (An
-alternative would be to assume that a hardware read returning a date
-before 1970 is invalid. If you refuse to write dates before 1970 that
-should give a consistent behaviour. But the original approach is the
-nicer one.)
+Changes v1 -> v2:
+- Add missing compatible for ddr3phy, it is now in both syscon sets.
+- Fix alphabetical ordering for sama7d65.
+- Remove the incorrect reorganizing patch.
+- Remove sama7g5-rtt as a compatible for sama7d65-rtt and add
+  sama7d65-rtt as a compatible wake up source in the pm driver.
 
-> TBH, it's hard to follow the logic, so I've a question:
-> If I push in my V4 a framework fix that drivers using year < 1970 will ne=
-ed
-> to have a new start_secs or start-year value to stay aligned with there
-> previous value, do you will accept it ?
+Changes from v2 -> v3:
+- Correct mistake in v2 sfrbu dt-binding patch.
+- Correct incorrect dt-binding addition and formatting for rtc and rtt bindings.
+- Add missing SoB tag.
+- Cleaned up commit message for Backup mode to describe SHDWC is status
+  register is cleared for this SoC.
+- Cleaned up variable naming and usage for mcks. Changed the mcks number
+  to the correct number of clocks needed to be saved and corrected the
+  ASM code accordingly.
+- Removed the SHDWC from ULP0 wake-up source as it is not configured as
+  a valid wake-up source for ULP0.
+- Separated all the DTSI and DTS changes into individual patches.
 
-Doesn't the need to shift the start year simply goes away once
-rtc_time64_to_tm() is fixed for negative time values?
+Changes from v3 -> v4:
+- Add sama7d65-gpbr to the dt-binding.
+- Converted the sama5d2-secumod binding into yaml format.
+- Add sama7d65-secumod to the new dt binding.
+- Collect and remove applied and accpeted pathces from the set.
 
-So I would expect that going forward with just patches #1 and #2 should
-result in a fixed driver regarding the breakage you're seeing. (I'm
-unsure about patch #3, I'll address that in a reply to the respective
-mail.)
+Changes from v4 -> v5:
+- Use generic naming for dt-binding yaml example.
+- Adjust DTSI SECUMOD node to match generic naming.
+- Collect Acked and Reviewed tags. 
 
-Best regards
-Uwe
+v1) https://lore.kernel.org/linux-arm-kernel/cover.1738257860.git.Ryan.Wanner@microchip.com/
+v2) https://lore.kernel.org/linux-arm-kernel/cover.1739221064.git.Ryan.Wanner@microchip.com/
+v3) https://lore.kernel.org/linux-arm-kernel/cover.1740671156.git.Ryan.Wanner@microchip.com/T/#m576233e7af84d68559afb286884c2b9294e7bc1d 
+v4) https://lore.kernel.org/linux-arm-kernel/cover.1742936082.git.Ryan.Wanner@microchip.com/
 
---xgxword5effrvsfi
-Content-Type: application/pgp-signature; name="signature.asc"
+Ryan Wanner (11):
+  dt-bindings: sram: Add microchip,sama7d65-sram
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: Add
+    microchip,sama7d65-shdwc
+  dt-bindings: reset: atmel,at91sam9260-reset: add
+    microchip,sama7d65-rstc
+  dt-bindings: rtc: at91rm9200: add microchip,sama7d65-rtc
+  dt-bindings: at91rm9260-rtt: add microchip,sama7d65-rtt
+  dt-bindings: mfd: atmel: Add microchip,sama7d65-gpbr
+  dt-bindings: mfd: syscon: atmel,sama5d2-secumod: convert to yaml
+  dt-bindings: mfd: syscon: add microchip,sama7d65-secumod
+  ARM: dts: microchip: sama7d65: Add SRAM and DRAM components support
+  ARM: dts: microchip: sama7d65: Add RTT and GPBR Support for sama7d65
+    SoC
+  ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
 
------BEGIN PGP SIGNATURE-----
+ .../bindings/arm/atmel,sama5d2-secumod.yaml   | 49 +++++++++++++++++++
+ .../devicetree/bindings/arm/atmel-sysregs.txt | 25 ----------
+ .../bindings/mfd/atmel,at91sam9260-gpbr.yaml  |  1 +
+ .../power/reset/atmel,sama5d2-shdwc.yaml      |  5 ++
+ .../reset/atmel,at91sam9260-reset.yaml        |  3 ++
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |  4 +-
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |  1 +
+ .../devicetree/bindings/sram/sram.yaml        |  1 +
+ .../dts/microchip/at91-sama7d65_curiosity.dts |  4 ++
+ arch/arm/boot/dts/microchip/sama7d65.dtsi     | 47 ++++++++++++++++++
+ 10 files changed, 114 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/atmel,sama5d2-secumod.yaml
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmf9f3UACgkQj4D7WH0S
-/k6kAwgAn7QiSrVS5Jy5qEwJYxUOj7XozPsN8Zq0zgKKYBqm8IWz+mS1nyNSrfl5
-oZQooSYT9XLLkgxOZJjHUV47P8G3ClP+nR+PvatZa7ukJTHU32GEOWNEtAd1NZ6k
-EbH7z1BFqU+zXbNp4lCwS4bXpp0JH3j4r727u/UD5rg1yrO7HACF+VoNUYKpcKuw
-aEVAFy51VngHisOufxAY3JYnQMtwhLN03t1UpwWrm/dhcukyWsBQGgJHs3cQMK0r
-JJhVftzvihK98K3vv94fjlc8tr51LJIl8HVqMSZkVp/C9QwkaFHUy9bV9UGWqhQO
-wBdR79PYhwox2zLOU50JR6euQ/yhFw==
-=Kl2H
------END PGP SIGNATURE-----
+-- 
+2.43.0
 
---xgxword5effrvsfi--
 
