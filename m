@@ -1,149 +1,268 @@
-Return-Path: <linux-rtc+bounces-3961-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3962-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 845B0A88EA8
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Apr 2025 00:00:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F7F1A88F21
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Apr 2025 00:30:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B73B8189BA06
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Apr 2025 22:00:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57677189B8CA
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Apr 2025 22:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221D91F3BB6;
-	Mon, 14 Apr 2025 21:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D881F7075;
+	Mon, 14 Apr 2025 22:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A9surNlw"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gdjcp/WI"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044C51BE23F;
-	Mon, 14 Apr 2025 21:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474A01C5496
+	for <linux-rtc@vger.kernel.org>; Mon, 14 Apr 2025 22:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744667894; cv=none; b=ofFkNUd2E0jnkiPCGVWZogS+TBGychzyERxqaLa2Ro2Hi5dg2f3/jQ7Sb2Sh/zvNJz4Sg8HoaLzWuJPQEJOCiQgr+MqYdOlVy/MySB0faP/zMHjH9mkq1X4A9YDP4IB13nFt/7eWp3o4RTpL+7qx4IR4OHAtjKWiULVbCy/bAuE=
+	t=1744669833; cv=none; b=ZVATzEb/NTSPcKm20JOgmyBSP/qZGJDKv6t+pggF/Wb1s89GRxbDzfM8jcJzlwej+wtJMKdO2sL7ZAyu5h4M/Y4JEateTZ9EXDwsF3CWWfrRmXi4ED3xf7VhF/jInMornGeteJT9N556JI/FeZaFOzKGos91szF8oMcHF2Izbes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744667894; c=relaxed/simple;
-	bh=RHUquyOtqABkuvgbGR7rh7/n9TrlEFwyuSBpSmEkwaY=;
+	s=arc-20240116; t=1744669833; c=relaxed/simple;
+	bh=qQBx3gwR7BoGNGR16e3u+TKdmh6EonNUcNYeazUzxLk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ohS1+GSoinKKrF7i3iWeb/l7Lq/mOA6+eYfM1TZFuqqJ+dzB0KpHYyISwYWAn5Bj8HB5D6zU5hLzOh4UYmncE3avAs1eJ8ofdJ3M97pNsh9+vYdMU1bSkoAMjN2FiMCMSMHpUlKYeu16VxfEgiW7kcTOWEP10KNAObA5mcUfU/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A9surNlw; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9E1AF41CFD;
-	Mon, 14 Apr 2025 21:58:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744667888;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mKkSHxlGKWwLAVWzC2ngK+QD6aN8k+ksqhaW6x0BrfQ=;
-	b=A9surNlwNl1Sh8hothZthwuoJ54i2YTw7bQLtr8+Bn2tspofyF/qkhK7uqKMIdV58CI4YW
-	L3CJt5cceI3qZa6lPgOGcIJgqLBaTKTz/wMVv8n2ajk5j3knnabov2GzGWKZ3mJ1OHs6Df
-	XIMZocbJFiJu+GW/cy6AFBEc0nmpxTcN+rT9Z4tHDaw1sAttHD29ZYzyGtU+iK9qCMFqAG
-	95ohkEw3+zhdwt2Eiu41rsBqlGhvc5tgSHOMDTlXcXF3uFKGXV7O0m0T5iyQQ6BZHcprwP
-	jNdRXL+pab7xYClw6jJU1NJx5kblCxghvSzsL9aEkXYWfEGjf1Z4Qpz8b6KnLA==
-Date: Mon, 14 Apr 2025 23:58:07 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Alexandre Mergnat <amergnat@baylibre.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Eddie Huang <eddie.huang@mediatek.com>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=fShVu5D1uDbpY9e7FwnyV5Ez+bSJjxe+If0UXohZ7Gt/8BH9P2oNYyh9Z17yOm5tQBYPmxP44Pv0RAQ8pigcdV4gAIuks8mt739yrUFzr1PQ99+CXvu1jt6wgz2hHM39UvFx/CdGY7dtkFTH7B/31tRnISwufko4cy+dB7eRyUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gdjcp/WI; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e61da95244so8363965a12.2
+        for <linux-rtc@vger.kernel.org>; Mon, 14 Apr 2025 15:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1744669827; x=1745274627; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oJUU5/KwFR6EBw6HmiWZSj5H1CAAPNYinIfo2az6p00=;
+        b=gdjcp/WIV3gt+SboT9sxx8vm8OeWUKH211hGSr3SnDH+5634HqmHDUT4hlhTd8qH3r
+         JwRUSbhY6q1isNOfIP7BxqvqEl9LzDCcR8qo3QZ+LCFqmAkAkpMwjsGbwjUNaVhiTDPL
+         SZt8g9K0lXbcoVq7hokJCE11toyptL3t8bqaZjlMc9N97r+uQequ1EmQ9eVAQjI9oJrO
+         nYPNHWkb3WR4EIVZIekc2xsPnbWtIOuHW+4aNemm4abwfUE4fYWtrBmv0oabLOOGFaF6
+         R6lioOq4JHra8OShcXbldbeTl5jHPJWxWk9ePVk+xGxOxSbd25ltfF4zwb7G0ranjUw4
+         X1uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744669827; x=1745274627;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oJUU5/KwFR6EBw6HmiWZSj5H1CAAPNYinIfo2az6p00=;
+        b=i0nWjBTjfAmXCajbyPLEuhUhe+Fq8/tQKRvju+H6zE1EZqC+cWGwEbqythqD4jekJU
+         4jO55zy8EMbamwkzadGykr2cuzV0XeStlKQmqZSfc0P4lOngnI2CQ91upwkN8aYkyEVl
+         OQ1GdqcQiIeVbDLfRAqd1WhqmAmmYCmgpxI/xcyqhELDWl1lGOyab0i17cDEP3ZyWLqU
+         e0uGDHtQgAnl+bI2zKJ8d+K/1FJb4coVoJP9scGBYPW6aDsFSRbphKN5cDJbBrJ+XdVa
+         1k6NYvKsuBGPFd+yNvmxyB1YyGpccQhDG92t7Y7LRV8PsegdITcagP+6eZKwf28o+9hB
+         /F4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVqlY+Y+OJLlB8Ld9ihKUiBPwLpDX1morXt2rGZxlEo2sed6QokQUbB3eFJJiw4QLuQdMmyLXVOhWs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7TgZKmWrDFoiIzPLqE+zL3lV9pDZolM5ySW5AuI2C0Kmf+H4p
+	SAoOMFwYUg/tMkoYv+KN86trLe4UGB1WET+6aVkKaP+C2IJtofjSL9XtpRZGMUY=
+X-Gm-Gg: ASbGnct35gBvoCADmbUDg9lEpNBuDBF938xMa0CjvnOON9trs8i4Dz0dvDu4UJ3C2r4
+	u2xk4I7yqGxHIVxodUM26JZ4FGTlKQRvGSQHjVFpBXgR7p/MjO2OyLbGYKCuVlgMWYY0CVtyzp3
+	Yq+FPr+5SRE1QqdJEnnfSBQyEUEUR/6INJ6r6J6vzaKhqjQkWvYjn+vJQ6J2uIxACLlmaIXlzHI
+	P6bM1DllMClsQ2FFftS0hU0gfZ2QWcWKx2WYBbh7oDXEaSf1K4tTggQN2cOa+PNgbuAnbXj61LT
+	5m9l23wwFNQ8MFvj0AEAOdK0ZPibSmG30ivugGHtXZ78+w==
+X-Google-Smtp-Source: AGHT+IHZhK+qYZqSi1SpL+1u6PEyVqPY3kj7P/rJwDZYHQs5W9C/B5usPcBT3HSPzMoZrr6flIoa1w==
+X-Received: by 2002:a05:6402:3214:b0:5f4:370d:96c4 with SMTP id 4fb4d7f45d1cf-5f4370d9b5amr5203042a12.0.1744669827520;
+        Mon, 14 Apr 2025 15:30:27 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-5f36ee54d84sm5746425a12.8.2025.04.14.15.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Apr 2025 15:30:26 -0700 (PDT)
+Date: Tue, 15 Apr 2025 00:30:25 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Alexandre Mergnat <amergnat@baylibre.com>
+Cc: Eddie Huang <eddie.huang@mediatek.com>, 
+	Sean Wang <sean.wang@mediatek.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] rtc: mt6397: Remove start time parameters
-Message-ID: <20250414215807b1b6b008@mail.local>
+Subject: Re: [PATCH v3 3/5] rtc: Fix the RTC time comparison issues adding
+ cast
+Message-ID: <erttkpna2hzg7zuddzlocaou2wqcwmgcxfhldwdt55yleie6dm@nfg374fv66fq>
 References: <20250109-enable-rtc-v3-0-f003e8144419@baylibre.com>
- <20250109-enable-rtc-v3-4-f003e8144419@baylibre.com>
- <20250411133609a1295543@mail.local>
- <202504111339359e840246@mail.local>
- <968001f7-96d1-4ad5-8c36-28cac5dc30f1@collabora.com>
- <97cfeafe-7044-4f06-b2e6-e4a158419473@baylibre.com>
- <vpf4apahhpovhrqje4i647nldszen2pglbm5fdmar7bsyg7uao@3ymuod45ftlj>
+ <20250109-enable-rtc-v3-3-f003e8144419@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tsmmcnqrrufeyjni"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <vpf4apahhpovhrqje4i647nldszen2pglbm5fdmar7bsyg7uao@3ymuod45ftlj>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdduieelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeevudevhfdvheelgfeileefteduuefghefguefgkeeljeeufeeutedtffeuteeivdenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedugedprhgtphhtthhopehurdhklhgvihhnvgdqkhhovghnihhgsegsrgihlhhisghrvgdrtghomhdprhgtphhtthhopegrmhgvrhhgnhgrthessggrhihlihgsrhgvrdgtohhmpdhrtghpthhto
- heprghnghgvlhhoghhiohgrtggthhhinhhordguvghlrhgvghhnohestgholhhlrggsohhrrgdrtghomhdprhgtphhtthhopegvugguihgvrdhhuhgrnhhgsehmvgguihgrthgvkhdrtghomhdprhgtphhtthhopehsvggrnhdrfigrnhhgsehmvgguihgrthgvkhdrtghomhdprhgtphhtthhopehmrghtthhhihgrshdrsghgghesghhmrghilhdrtghomhdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <20250109-enable-rtc-v3-3-f003e8144419@baylibre.com>
 
-On 14/04/2025 23:34:48+0200, Uwe Kleine-König wrote:
-> > > Yes, you're stuck with this. Devicetree has to be retrocompatible.
-> > > 
-> > > Besides, this start_secs is what gets used by default, and the start-year
-> > > devicetree property should take precedence and effectively override the
-> > > start_secs default.
-> > > 
-> > > Just keep it there.... :-)
-> 
-> It would work to keep setting start_secs but allow overwriting that
-> value in the device tree. But see below.
->  
 
-This is already the case.
+--tsmmcnqrrufeyjni
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 3/5] rtc: Fix the RTC time comparison issues adding
+ cast
+MIME-Version: 1.0
 
-> > When you boot your board for the first time, is the date January 2nd 1968 ?
-> > If not, that mean it is used as a finetune offset year.
-> > IMHO, mktime64(1968, 1, 2, 0, 0, 0) is a workaround for the rtc framework
-> > issue we try to solve in this serie because start_secs is negative (1968 <
-> > 1970). Now framework handle the negative value properly, even if you keep
-> > mktime64(1968, 1, 2, 0, 0, 0) , the device time will change. I prefer to
-> > notify you.  :)
-> 
-> I don't understand everything you wrote here, but as far as I see it,
-> rtc_time64_to_tm() not being able to handle dates before 1970 is the
-> main issue here. This is of course only relevant, because your hardware
-> occasionally contains such a date. The technically right fix is to
-> extend rtc_time64_to_tm() to work for dates >= 1900-01-01. (An
-> alternative would be to assume that a hardware read returning a date
-> before 1970 is invalid. If you refuse to write dates before 1970 that
-> should give a consistent behaviour. But the original approach is the
-> nicer one.)
-> 
+Hello Alex,
 
-Yes, the assumption is that dates before 1970 are definitively invalid.
-I still believe we live in a world were the time doesn't go back ;)
+On Fri, Apr 11, 2025 at 02:35:56PM +0200, Alexandre Mergnat wrote:
+> The RTC subsystem was experiencing comparison issues between signed and
+> unsigned time values. When comparing time64_t variables (signed) with
+> potentially unsigned range values, incorrect results could occur leading
+> to runtime errors.
+>=20
+> Adds explicit type casts to time64_t for critical RTC time comparisons
+> in both class.c and interface.c files. The changes ensure proper
+> handling of negative time values during range validation and offset
+> calculations, particularly when dealing with timestamps before 1970.
+>=20
+> The previous implementation might incorrectly interpret negative values
+> as extremely large positive values, causing unexpected behavior in the
+> RTC hardware abstraction logic.
+>=20
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  drivers/rtc/class.c     | 6 +++---
+>  drivers/rtc/interface.c | 8 ++++----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+> index e31fa0ad127e9..1ee3f609f92ea 100644
+> --- a/drivers/rtc/class.c
+> +++ b/drivers/rtc/class.c
+> @@ -282,7 +282,7 @@ static void rtc_device_get_offset(struct rtc_device *=
+rtc)
+>  	 * then we can not expand the RTC range by adding or subtracting one
+>  	 * offset.
+>  	 */
+> -	if (rtc->range_min =3D=3D rtc->range_max)
+> +	if (rtc->range_min =3D=3D (time64_t)rtc->range_max)
+>  		return;
 
-Android *was* the only OS requiring to be able to set 01/01/1970. This
-changed after they realized that some hardware is not able to do that.
+For which values of range_min and range_max does this change result in a
+different semantic?
 
-> > TBH, it's hard to follow the logic, so I've a question:
-> > If I push in my V4 a framework fix that drivers using year < 1970 will need
-> > to have a new start_secs or start-year value to stay aligned with there
-> > previous value, do you will accept it ?
-> 
-> Doesn't the need to shift the start year simply goes away once
-> rtc_time64_to_tm() is fixed for negative time values?
-> 
-> So I would expect that going forward with just patches #1 and #2 should
-> result in a fixed driver regarding the breakage you're seeing. (I'm
-> unsure about patch #3, I'll address that in a reply to the respective
-> mail.)
-> 
+Trying to answer that question myself I wrote two functions:
 
-This is also what I think but I don't think I'm going to allow the
-rtc_valid_tm() change. It shouldn't matter as the check should always
-happen after offsetting/windowing.
+	#include <stdint.h>
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+	int compare_unsigned(uint64_t a, int64_t b)
+	{
+		return a =3D=3D b;
+	}
+
+	int compare_signed(uint64_t a, int64_t b)
+	{
+		return (int64_t)a =3D=3D b;
+	}
+
+When I compile this (with gcc -Os) the assembly for both functions is
+the same (tested for x86_64 and arm32).
+
+>  	ret =3D device_property_read_u32(rtc->dev.parent, "start-year",
+> @@ -299,7 +299,7 @@ static void rtc_device_get_offset(struct rtc_device *=
+rtc)
+>  	if (!rtc->set_start_time)
+>  		return;
+> =20
+> -	range_secs =3D rtc->range_max - rtc->range_min + 1;
+> +	range_secs =3D (time64_t)rtc->range_max - rtc->range_min + 1;
+
+In the case where no overflow (or underflow) happens, the result is the
+same, isn't it? If there is an overflow, the unsigned variant is
+probably the better choice because overflow for signed variables is
+undefined behaviour (UB).
+
+Respective demo program looks as follows:
+
+	#include <stdint.h>
+
+	int test_unsigned(uint64_t a)
+	{
+		return a + 3 > a;
+	}
+
+	int test_signed(int64_t a)
+	{
+		return a + 3 > a;
+	}
+
+Using again `gcc -Os`, the signed variant is compiled to a function that
+returns true unconditionally while the unsigned one implements the
+expected semantic.
+
+>  	/*
+>  	 * If the start_secs is larger than the maximum seconds (rtc->range_max)
+> @@ -327,7 +327,7 @@ static void rtc_device_get_offset(struct rtc_device *=
+rtc)
+>  	 *
+>  	 * Otherwise the offset seconds should be 0.
+>  	 */
+> -	if (rtc->start_secs > rtc->range_max ||
+
+The original comparison uses unsigned semantics. With start_secs signed
+and range_max unsigned, this might become true if start_secs is less
+than 0.
+
+> +	if (rtc->start_secs > (time64_t)rtc->range_max ||
+
+This new comparison has a similar problem: If range_max is bigger than
+INT64_MAX, its value interpreted as signed 64bit integer might be a
+negative number and so this comparison might become true unexpectedly.
+
+So even if UB doesn't play a role here (I'm not sure), it's not clear to
+me why you consider the issue of the unsigned comparison worse than the
+signed one.
+
+If this is indeed beneficial, it needs a better explanation than "When
+comparing time64_t variables (signed) with potentially unsigned range
+values, incorrect results could occur leading to runtime errors.".
+
+Maybe you have to replace
+
+	rtc->start_secs > rtc->range_max
+
+by:
+
+	rtc->start_secs >=3D 0 && rtc->start_secs > rtc->range_max
+
+instead?
+
+>  	    rtc->start_secs + range_secs - 1 < rtc->range_min)
+>  		rtc->offset_secs =3D rtc->start_secs - rtc->range_min;
+>  	else if (rtc->start_secs > rtc->range_min)
+
+I didn't check the other hunks.
+
+All in all I would suggest to split this series in two:
+
+ - Adding support for mt6357 in the rtc-mt6359 driver
+ - Fixing overflow issues in the rtc core
+
+Given that I don't understand the intend of this patch, I cannot say if
+it should be included in the 2nd series, or if this is yet another
+standalone topic.
+
+Best regards
+Uwe
+
+--tsmmcnqrrufeyjni
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmf9jH4ACgkQj4D7WH0S
+/k51FwgAsL7mzjW04I3FbsimeTdILk9y1+3zCv9FAZYVpWnaNgF1Ug6wloE92sfC
+A6VZrP7eNxWVQ9EcrpIqph4n6AnLEukD2eY9MeSndzqnJJQWJuJ06aafMX7DvkJh
+lvvXOn6lX1VI0gjX/pYu4ayTiJ2iBLyXJXM5Pk1E2raJJfF1r5cuRJPXPk0HNwgL
+pHIOgpIQKEO1OxYFY8Q7W/af63h/ZmqvQadBh4gPEpDGDKvHG5DgA3G2BMAhqiDX
+fvNL/hqBmRa8FC7e274ACveXF00oTDU5uGP/ezWx+U5J2K5wIb3kBzd1BDhIaNFS
+oOLoIX9qnbCZ1GOtLtXWLAkT7Wjm4A==
+=bJIL
+-----END PGP SIGNATURE-----
+
+--tsmmcnqrrufeyjni--
 
