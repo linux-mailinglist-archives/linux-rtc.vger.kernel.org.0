@@ -1,254 +1,190 @@
-Return-Path: <linux-rtc+bounces-3964-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3965-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FB9A8A38D
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Apr 2025 18:02:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED7A1A8A510
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Apr 2025 19:11:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 584A13BA459
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Apr 2025 16:02:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B9A93B59F8
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Apr 2025 17:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A231D1A724C;
-	Tue, 15 Apr 2025 16:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A672192E4;
+	Tue, 15 Apr 2025 17:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aANLp776"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IP85qR6b"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2258F5E;
-	Tue, 15 Apr 2025 16:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0426021883C;
+	Tue, 15 Apr 2025 17:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744732940; cv=none; b=t0t5vTqfNAy4eOrJ+LZiqStyGqp7z5fEzYjAIMVx9t441cCSU9sbc0awlsvXGEbC1l8Q/dtU2gTW1Fyci7CUAhfpcu181J6S1gQsNgNsFCiQZJsL0ZpAG0xznmmcvfAcfNPpkJTQimBSQwe++LsI97rmZnAWycmRnsXtcgqCrS4=
+	t=1744737103; cv=none; b=nPr4ym0IU8ZcC6xKY1y+s82e8tYApmyGOk087NyObep83yXl2pBOUdwgepjpQi0/Yog/m7NlmkMagnKhVWItjwjdZgaWFyJRU++D5TFIZRM2idtD+W9NrwyGvSBFjToMjNqj191t9jUJbdtvrP1TwHkG5gSb3cs7pF4IGswANx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744732940; c=relaxed/simple;
-	bh=7Rmh8vV6GpjW8tGOLmzMipD5iUxBweVFlC56ryJ2b3I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jvx2vWv49ptr+vthDshvcYaPY0YEz3NfZ4gtKQcKPCCC97UrPO2r9lVBAs2gEHpMaNqvzgY8ftg/N6eeYlRM9oVc/RsC0eaKv1Tiu6sWAQzBENrlGm/tpyvoR9fcyK/3wo9dfUBIGcT6jkCuUW6qAglQ35CwORchl/XQqiWuoUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aANLp776; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86DCFC4CEEB;
-	Tue, 15 Apr 2025 16:02:15 +0000 (UTC)
+	s=arc-20240116; t=1744737103; c=relaxed/simple;
+	bh=bX3HlicaR5g9IQkWktPKTPPgxg/GT1DUALZhUDDxksQ=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=lITVFEZ2hf1+gG/LdmHUayfmAdVz0cNa6svNDVw9/d1wYjwfz1MhRDNGzZqropcCDTQkBXddSZCC2m67MMvIk5KHnsm1rY2HjIjMXY3LaVcdU+5YWvB7eZTzWI8pVHu3vqBI2bocsRhS7h+AuoYJCnjlWJH1M+wWIJR7rsY7jts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IP85qR6b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4368AC4CEE9;
+	Tue, 15 Apr 2025 17:11:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744732939;
-	bh=7Rmh8vV6GpjW8tGOLmzMipD5iUxBweVFlC56ryJ2b3I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aANLp776GKPJr5pXAnfPCvusHmJYG8nzy62olk0fqthF3OToJIaIlkaCECG05ghZ8
-	 Un00ln3T/UclXpdbp+IwVgad5hUelMoCgjZ3JLblQuDGZosgZlH/w+UmFazy/FcEQe
-	 QKCKWF0mFzEG9r2zEcWuheOQPeBVknSgquyecaSIgfO+nu2Oopa/Afub5Z31RQXzl9
-	 SYCRm9kl1WT275bzi0f487LXy0Kb8n2F2RLBY9uAq23ZrZqlQDGdMNBpTkhr2yFx+T
-	 mO2GEdOLLSGBD0mgsJFep3vPLvT29DE/BOI1TWKCvdyOagM0TqAo+QPFE2K9xRtJLj
-	 HXdR/+0rgoqvQ==
-Date: Tue, 15 Apr 2025 17:02:12 +0100
-From: Lee Jones <lee@kernel.org>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
-	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 00/32] Samsung S2MPG10 PMIC MFD-based drivers
-Message-ID: <20250415160212.GA372032@google.com>
-References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
+	s=k20201202; t=1744737102;
+	bh=bX3HlicaR5g9IQkWktPKTPPgxg/GT1DUALZhUDDxksQ=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=IP85qR6bV4L3UG0faBuQ49erg90k/sWL9aUpz1KIaYIwzgy4fFx3RwsRnRgaMWE0m
+	 hGFVDqDUJjUwDDN7lCB7mrtF68mDZkkYqPvHojepnb3crZXbW9flRJkXBd/AMQ3ryB
+	 +GAdxi6ubLdQz/wmUsueTYvoug8FfiWLI1eOJdPivkyMRkD4PBeuz85+GbmWNXNNDL
+	 GjFUXg9DBkqstMFdkJ43UZ042/UPntgyRExtbXAg2IV6cfIP8MphsHu3tLR1RkN/y0
+	 7VTTlyFDtRLLXddVyvHjukOEZX9qTGZNHVSUbJS4x7LnHCvJt5X/69cM0dZwKgW0CY
+	 QAmSiHJQiWi0w==
+Date: Tue, 15 Apr 2025 12:11:40 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: p.zabel@pengutronix.de, claudiu.beznea@tuxon.dev, 
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ sre@kernel.org, linux-pm@vger.kernel.org, krzk+dt@kernel.org, 
+ lee@kernel.org, nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ conor+dt@kernel.org
+To: Ryan.Wanner@microchip.com
+In-Reply-To: <cover.1744666011.git.Ryan.Wanner@microchip.com>
+References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
+Message-Id: <174473699521.763781.11057126533938200198.robh@kernel.org>
+Subject: Re: [PATCH v5 00/11] Enable Power Modes Support for SAMA7D65 SoC
 
-On Wed, 09 Apr 2025, André Draszik wrote:
 
-> This series adds initial support for the Samsung S2MPG10 PMIC using the
-> MFD framework. This is a PMIC for mobile applications and is used on
-> the Google Pixel 6 and 6 Pro (oriole / raven).
+On Mon, 14 Apr 2025 14:41:17 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> *** dependency note ***
+> This patch set adds support for low power modes for the SAMA7D65 SoC and
+> the required components and changes for low power modes.
 > 
-> To compile, this depends on the Samsung ACPM driver in Linux next with
-> the following additional patches:
-> https://lore.kernel.org/all/20250324-acpm-atomic-v2-0-7d87746e1765@linaro.org/
-> https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linaro.org/
-> https://lore.kernel.org/all/20250327-acpm-children-v1-0-0afe15ee2ff7@linaro.org/
+> The series includes changes in the asm code to account for the addtional
+> clocks that are in this SoC.
 > 
-> *** dependency note end ***
+> The Device tree additions are to enable all the components needed to
+> keep the SoC in low power mode.
 > 
-> +++ Kconfig update +++
+> There are some DTB check warnings but that is due to the dt-binding not
+> in the correct .yaml file format.
 > 
-> There is a Kconfig symbol update in this series, because the existing
-> Samsung S2M driver has been split into core and transport (I2C & ACPM)
-> parts. CONFIG_MFD_SEC_CORE is now truly a core driver, and
-> the I2C code that was part of it is now enabled via CONFIG_MFD_SEC_I2C.
+> Changes v1 -> v2:
+> - Add missing compatible for ddr3phy, it is now in both syscon sets.
+> - Fix alphabetical ordering for sama7d65.
+> - Remove the incorrect reorganizing patch.
+> - Remove sama7g5-rtt as a compatible for sama7d65-rtt and add
+>   sama7d65-rtt as a compatible wake up source in the pm driver.
 > 
-> This was necessary because unlike the other S2M PMICs, S2MPG10 doesn't
-> talk via I2C, but via the Samsung ACPM firmware.
+> Changes from v2 -> v3:
+> - Correct mistake in v2 sfrbu dt-binding patch.
+> - Correct incorrect dt-binding addition and formatting for rtc and rtt bindings.
+> - Add missing SoB tag.
+> - Cleaned up commit message for Backup mode to describe SHDWC is status
+>   register is cleared for this SoC.
+> - Cleaned up variable naming and usage for mcks. Changed the mcks number
+>   to the correct number of clocks needed to be saved and corrected the
+>   ASM code accordingly.
+> - Removed the SHDWC from ULP0 wake-up source as it is not configured as
+>   a valid wake-up source for ULP0.
+> - Separated all the DTSI and DTS changes into individual patches.
 > 
-> +++ Kconfig update end +++
+> Changes from v3 -> v4:
+> - Add sama7d65-gpbr to the dt-binding.
+> - Converted the sama5d2-secumod binding into yaml format.
+> - Add sama7d65-secumod to the new dt binding.
+> - Collect and remove applied and accpeted pathces from the set.
 > 
-> This series must be applied in-order, due to interdependencies of some
-> of the patches. There are also various cleanup patches to the S2M
-> drivers. I've kept them ordered as:
->   * DT bindings (patches 1 ... 3)
->   * s2m mfd prep for adding S2MPG10 support (patches 4 ... 7)
->   * split S2M mfd driver into s2m-core and s2m-i2c, including the
->     kconfig symbol update (patch 8)
->   * S2MPG10 core driver (patch 9)
->   * s2m mfd driver cleanup patches (patches 10 ... 23)
->   * S2MPG10 clock driver (patch 24)
->   * s2m RTC prep for adding S2MPG10 (patch 25 ... 26)
->   * S2MPG10 RTC driver (patch 27)
->   * s2m RTC cleanup patches (patches 28 ... 31)
+> Changes from v4 -> v5:
+> - Use generic naming for dt-binding yaml example.
+> - Adjust DTSI SECUMOD node to match generic naming.
+> - Collect Acked and Reviewed tags.
 > 
-> I realise these are many, but since some prep-work was required to be
-> able to add S2MPG anyway, I wanted to get the cleanup patches in as
-> well :-) Let me know if I should postpone them to a later date instead.
+> v1) https://lore.kernel.org/linux-arm-kernel/cover.1738257860.git.Ryan.Wanner@microchip.com/
+> v2) https://lore.kernel.org/linux-arm-kernel/cover.1739221064.git.Ryan.Wanner@microchip.com/
+> v3) https://lore.kernel.org/linux-arm-kernel/cover.1740671156.git.Ryan.Wanner@microchip.com/T/#m576233e7af84d68559afb286884c2b9294e7bc1d
+> v4) https://lore.kernel.org/linux-arm-kernel/cover.1742936082.git.Ryan.Wanner@microchip.com/
 > 
-> The S2MPG10 includes buck converters, various LDOs, power meters, RTC,
-> clock outputs, and additional GPIOs interfaces.
+> Ryan Wanner (11):
+>   dt-bindings: sram: Add microchip,sama7d65-sram
+>   dt-bindings: power: reset: atmel,sama5d2-shdwc: Add
+>     microchip,sama7d65-shdwc
+>   dt-bindings: reset: atmel,at91sam9260-reset: add
+>     microchip,sama7d65-rstc
+>   dt-bindings: rtc: at91rm9200: add microchip,sama7d65-rtc
+>   dt-bindings: at91rm9260-rtt: add microchip,sama7d65-rtt
+>   dt-bindings: mfd: atmel: Add microchip,sama7d65-gpbr
+>   dt-bindings: mfd: syscon: atmel,sama5d2-secumod: convert to yaml
+>   dt-bindings: mfd: syscon: add microchip,sama7d65-secumod
+>   ARM: dts: microchip: sama7d65: Add SRAM and DRAM components support
+>   ARM: dts: microchip: sama7d65: Add RTT and GPBR Support for sama7d65
+>     SoC
+>   ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
 > 
-> This series adds support in the top-level device driver, and for the
-> RTC and clock. Importantly, having the RTC driver allows to do a proper
-> reset of the system. Drivers or driver updates for the other components
-> will be added in future patches.
+>  .../bindings/arm/atmel,sama5d2-secumod.yaml   | 49 +++++++++++++++++++
+>  .../devicetree/bindings/arm/atmel-sysregs.txt | 25 ----------
+>  .../bindings/mfd/atmel,at91sam9260-gpbr.yaml  |  1 +
+>  .../power/reset/atmel,sama5d2-shdwc.yaml      |  5 ++
+>  .../reset/atmel,at91sam9260-reset.yaml        |  3 ++
+>  .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |  4 +-
+>  .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |  1 +
+>  .../devicetree/bindings/sram/sram.yaml        |  1 +
+>  .../dts/microchip/at91-sama7d65_curiosity.dts |  4 ++
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi     | 47 ++++++++++++++++++
+>  10 files changed, 114 insertions(+), 26 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/atmel,sama5d2-secumod.yaml
 > 
-> This will need a DT update for Oriole / Raven to enable this device. I
-> will send that out separately.
+> --
+> 2.43.0
 > 
-> Cheers,
-> Andre'
 > 
-> Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> ---
-> Changes in v4:
-> - various updates to sec-acpm (patch 9, Lee)
-> - cache enum type in patch 25 (Krzysztof)
-> - collect tags
-> - Link to v3: https://lore.kernel.org/r/20250403-s2mpg10-v3-0-b542b3505e68@linaro.org
-> 
-> Changes in v3:
-> - Krzysztof:
->   - keep 'regulators' subnode required even for s2mpg10
->   - drop '$ref' and 'unevaluatedProperties' from pmic subnode, use
->     'additionalProperties' instead
->   - add some regulators to examples since s2mpg10 requires them as of
->     v3
-> - sec-acpm:
->   - use an enum for struct sec_acpm_bus_context::type
->   - consistent name space for all functions sec_pmic_acpm_... to be
->     similar to i2c and consistent in this file
-> - Link to v2: https://lore.kernel.org/r/20250328-s2mpg10-v2-0-b54dee33fb6b@linaro.org
-> 
-> Changes in v2:
-> - Rob:
->   - make PMIC node a child of ACPM, and all related changes (binding,
->     driver)
-> - Krzysztof:
->   - merge defconfig updates into patch changing the symbols (patch 8)
->   - split MODULE_AUTHOR update into a separate patch
->   - better alignment fix (patch 11)
->   - merge two s2dos05/s2mpu05 related patches into one (patch 14)
-> - myself:
->   - keep PMIC DT parsing in core, not in transport driver
->   - several updates in sec-acpm.c, see separate entries in patch 9
->   - fix typo in patch 17
->   - collect tags
-> - Link to v1: https://lore.kernel.org/r/20250323-s2mpg10-v1-0-d08943702707@linaro.org
-> 
-> ---
-> André Draszik (32):
->       dt-bindings: mfd: samsung,s2mps11: add s2mpg10
->       dt-bindings: clock: samsung,s2mps11: add s2mpg10
->       dt-bindings: firmware: google,gs101-acpm-ipc: add PMIC child node
->       mfd: sec-core: Drop non-existing forward declarations
->       mfd: sec: Sort includes alphabetically
->       mfd: sec: Update includes to add missing and remove superfluous ones
->       mfd: sec: Move private internal API to internal header
->       mfd: sec: Split into core and transport (i2c) drivers
->       mfd: sec: Add support for S2MPG10 PMIC
->       mfd: sec: Merge separate core and irq modules
->       mfd: sec-common: Fix multiple trivial whitespace issues
->       mfd: sec-i2c: Sort struct of_device_id entries and the device type switch
->       mfd: sec: Use dev_err_probe() where appropriate
->       mfd: sec-i2c: s2dos05/s2mpu05: Use explicit regmap config and drop default
->       mfd: sec-irq: s2dos05 doesn't support interrupts
->       mfd: sec-common: Don't ignore errors from sec_irq_init()
->       mfd: sec-i2c: Rework platform data and regmap instantiating
->       mfd: sec: Change device_type to int
->       mfd: sec: Don't compare against NULL / 0 for errors, use !
->       mfd: sec-common: Use sizeof(*var), not sizeof(struct type_of_var)
->       mfd: sec-common: Convert to using MFD_CELL macros
->       mfd: sec-irq: Convert to using REGMAP_IRQ_REG() macros
->       mfd: sec: Add myself as module author
->       clk: s2mps11: add support for S2MPG10 PMIC clock
->       rtc: s5m: cache device type during probe
->       rtc: s5m: prepare for external regmap
->       rtc: s5m: add support for S2MPG10 RTC
->       rtc: s5m: fix a typo: peding -> pending
->       rtc: s5m: switch to devm_device_init_wakeup
->       rtc: s5m: replace regmap_update_bits with regmap_clear/set_bits
->       rtc: s5m: replace open-coded read/modify/write registers with regmap helpers
->       MAINTAINERS: add myself as reviewer for Samsung S2M MFD
-> 
->  .../devicetree/bindings/clock/samsung,s2mps11.yaml |   1 +
->  .../bindings/firmware/google,gs101-acpm-ipc.yaml   |  35 ++
->  .../devicetree/bindings/mfd/samsung,s2mps11.yaml   |  26 +-
->  MAINTAINERS                                        |   3 +-
->  arch/arm/configs/exynos_defconfig                  |   2 +-
->  arch/arm/configs/multi_v7_defconfig                |   2 +-
->  arch/arm/configs/pxa_defconfig                     |   2 +-
->  arch/arm64/configs/defconfig                       |   2 +-
-
->  drivers/clk/clk-s2mps11.c                          |   8 +
-
->  drivers/mfd/Kconfig                                |  35 +-
->  drivers/mfd/Makefile                               |   5 +-
->  drivers/mfd/sec-acpm.c                             | 442 +++++++++++++++++++
->  drivers/mfd/sec-common.c                           | 301 +++++++++++++
->  drivers/mfd/sec-core.c                             | 481 ---------------------
->  drivers/mfd/sec-core.h                             |  23 +
->  drivers/mfd/sec-i2c.c                              | 239 ++++++++++
->  drivers/mfd/sec-irq.c                              | 460 +++++++-------------
-
->  drivers/rtc/rtc-s5m.c                              | 197 ++++++---
-
-MFD parts look okay to me now.
-
-With Acks from the Clk and RTC maintainers, I can merge all of the
-driver stuff together and submit a PR for others to pull from.
-
->  include/linux/mfd/samsung/core.h                   |   7 +-
->  include/linux/mfd/samsung/irq.h                    | 103 +++++
->  include/linux/mfd/samsung/rtc.h                    |  37 ++
->  include/linux/mfd/samsung/s2mpg10.h                | 454 +++++++++++++++++++
->  22 files changed, 2001 insertions(+), 864 deletions(-)
-> ---
-> base-commit: f58dd835f82a5dda6c9d3895ee6f15016431fb1f
-> change-id: 20250321-s2mpg10-ef5d1ebd3043
-> 
-> Best regards,
-> -- 
-> André Draszik <andre.draszik@linaro.org>
 > 
 
--- 
-Lee Jones [李琼斯]
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/v6.15-rc1-45-g43e9076a00b1 (best guess, 7/9 blobs matched)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/microchip/' for cover.1744666011.git.Ryan.Wanner@microchip.com:
+
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/uddrc@e3800000: failed to match any schema with compatible: ['microchip,sama7d65-uddrc', 'microchip,sama7g5-uddrc']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/uddrc@e3800000: failed to match any schema with compatible: ['microchip,sama7d65-uddrc', 'microchip,sama7g5-uddrc']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: ddr3phy@e3804000 (microchip,sama7d65-ddr3phy): compatible: ['microchip,sama7d65-ddr3phy', 'microchip,sama7g5-ddr3phy'] does not contain items matching the given schema
+	from schema $id: http://devicetree.org/schemas/mfd/syscon.yaml#
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: ddr3phy@e3804000 (microchip,sama7d65-ddr3phy): compatible:1: 'syscon' was expected
+	from schema $id: http://devicetree.org/schemas/mfd/syscon.yaml#
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: ddr3phy@e3804000 (microchip,sama7d65-ddr3phy): Unevaluated properties are not allowed ('compatible' was unexpected)
+	from schema $id: http://devicetree.org/schemas/mfd/syscon.yaml#
+
+
+
+
+
 
