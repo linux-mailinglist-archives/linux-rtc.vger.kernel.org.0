@@ -1,48 +1,49 @@
-Return-Path: <linux-rtc+bounces-3989-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3990-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A289BA98A5A
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Apr 2025 15:04:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12D10A98A5B
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Apr 2025 15:04:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3D1C3B6ED4
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Apr 2025 13:04:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 316973B7701
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Apr 2025 13:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F00A84D34;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2B085260;
 	Wed, 23 Apr 2025 13:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XdUq2DRh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqxZv2Ef"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680D852F88;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6804145BE3;
 	Wed, 23 Apr 2025 13:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745413453; cv=none; b=O9nw6p1zS3khvcckwH27e0TGizfkLke/QDkcLhOp8UuyiF0T5MCI1H12CsY+8IS4n1NmdZ4ki3C5I5ZGySEf7ql8pxvYiU2NukyrMd9W5+tT2kIEI30YThqLULgjzjvpHsz8EGjlyeDPZ1vfCoab4QKxDWEd/aLlx8jTl1eZOis=
+	t=1745413453; cv=none; b=DVxmNq0hQpz5dw49R01GM6zEBEumid712on6P+HJg9g9WnyXNjOHYfYoYZYSalo219+n1SWPLiCEiWbaQFf+2GqbkXYsiBY0odKlpz6Qu4yojvf84yPRJXqhiAkcqj3E+KP7J1HfmqeT/Vahuhq4WFm6JJbuxkhQYvkB4l94djQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745413453; c=relaxed/simple;
-	bh=6NOXLmtGIRXsKgoQuMPbFlY7gnc/c1uKEyPPW1IlV8Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zbr4+HwIsUvbeeBpNic+FS/mKTUF4y+L18XZHj+oppIEKi9jtuxdfZoD3H7ZOsBw1sTYXf19XjNHvyPlJKyyxYUZvzWy1j1ZHTjTE7pjt64n/FoNerGu/rbujnSV1dbxGDqn+Sw93114MZy25Gzkx+QVsnKI+ZcHxOYcbBae07A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XdUq2DRh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E50ACC4CEEC;
+	bh=aolTElc2asxbcGiU749FOSq36fzHZnwwMBiG+tiek3Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UrwGC+sY/56O/evBaXIxA1GwMreTB5ehQzbfOAor9wBbs47J1YTAwKkKVFJfbSsG/GH2BsuOG3cs2SP02VaAW6yODdhUXYiJG9RbcVQ5gO2763hUtf+fDa9bUiFZSmfVuN5LUN33VABLvmmOl3pFhCrthc5Qcx/jU1biLKmKkFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqxZv2Ef; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4F8C4CEEB;
 	Wed, 23 Apr 2025 13:04:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1745413452;
-	bh=6NOXLmtGIRXsKgoQuMPbFlY7gnc/c1uKEyPPW1IlV8Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XdUq2DRh1yUr01bxsEBLNEwF3YU88a7N7OQt1rEhA5wjlmD584dj8c6aYEvCwD00+
-	 RaatatuyY0s91vWMtxrTVcwhS7DA3US1KVBjUXVdxq2yAXodgD3v4uVuMag8rlr9F5
-	 h7hl2iOGp/ukKGdY4mIMn27uFiNusgYN2TbMoicFbuo0/pIPboRFVmZv0Ys/l2nrzd
-	 H6tH4vyDjKtYAasXgtLoiCnWGNx+6wd/rzYCJ1HLF8dT9UeEQgDdVzqpoKmToxQnEz
-	 e+9j9ZeLnP7rg5rQfdRSJ6fB5M0urGTyjqdBKNYx9zsT3nQBj5dYEcxoaumCHBe+17
-	 XfChq8Yb8WXXg==
+	bh=aolTElc2asxbcGiU749FOSq36fzHZnwwMBiG+tiek3Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gqxZv2EfN9+1OYcB41mV1mPzEJ/Z7hjD0as6JlMsuHZmR0sfamsuYUEfKb7ynPD7W
+	 pZFENstXYG2/e9Z3uzMX4jpeVkiKwZmuXpDfJtsn01/1JMG8+FMyq8uR5p++soICwF
+	 NpmkqmuvLXokBco0aFl0om9IINh6iKWCaDBQpN+rfhEfnIInrZqVbDN3QIi7bb1Xwf
+	 se/aU59dyajw3CLDan1lk8kVYvNfiyjxb/Oaw0A6S0H5d3vL7LjH/8bGsmOR8/TmO7
+	 TeDXWF8CPQiOQUZeSZ785oHr9lQVN1vJzsiUtHomHksFowMqHcaVNYVe5d93gBNpg9
+	 fO/1EDDzcVTpw==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan+linaro@kernel.org>)
-	id 1u7Zls-000000008AX-0Vp2;
+	id 1u7Zls-000000008AZ-0xOH;
 	Wed, 23 Apr 2025 15:04:12 +0200
 From: Johan Hovold <johan+linaro@kernel.org>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -55,10 +56,12 @@ Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
 	linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 0/7] rtc: drop unused module alias
-Date: Wed, 23 Apr 2025 15:03:11 +0200
-Message-ID: <20250423130318.31244-1-johan+linaro@kernel.org>
+Subject: [PATCH 1/7] rtc: at91rm9200: drop unused module alias
+Date: Wed, 23 Apr 2025 15:03:12 +0200
+Message-ID: <20250423130318.31244-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250423130318.31244-1-johan+linaro@kernel.org>
+References: <20250423130318.31244-1-johan+linaro@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -67,31 +70,24 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When working on the pm8xxx driver I noticed that it had a platform
-module alias while only supporting OF probe. This series drops it along
-with unused aliases in the other RTC drivers.
+The driver only support OF probe so drop the unused platform module
+alias.
 
-Johan
-
-
-Johan Hovold (7):
-  rtc: at91rm9200: drop unused module alias
-  rtc: cpcap: drop unused module alias
-  rtc: da9063: drop unused module alias
-  rtc: jz4740: drop unused module alias
-  rtc: pm8xxx: drop unused module alias
-  rtc: s3c: drop unused module alias
-  rtc: stm32: drop unused module alias
-
+Fixes: 288d9cf1764a ("rtc: at91rm9200: use of_device_get_match_data()")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
  drivers/rtc/rtc-at91rm9200.c | 1 -
- drivers/rtc/rtc-cpcap.c      | 1 -
- drivers/rtc/rtc-da9063.c     | 1 -
- drivers/rtc/rtc-jz4740.c     | 1 -
- drivers/rtc/rtc-pm8xxx.c     | 1 -
- drivers/rtc/rtc-s3c.c        | 1 -
- drivers/rtc/rtc-stm32.c      | 1 -
- 7 files changed, 7 deletions(-)
+ 1 file changed, 1 deletion(-)
 
+diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
+index f6b0102a843a..643734dbae33 100644
+--- a/drivers/rtc/rtc-at91rm9200.c
++++ b/drivers/rtc/rtc-at91rm9200.c
+@@ -654,4 +654,3 @@ module_platform_driver_probe(at91_rtc_driver, at91_rtc_probe);
+ MODULE_AUTHOR("Rick Bronson");
+ MODULE_DESCRIPTION("RTC driver for Atmel AT91RM9200");
+ MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:at91_rtc");
 -- 
 2.49.0
 
