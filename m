@@ -1,108 +1,142 @@
-Return-Path: <linux-rtc+bounces-3997-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-3998-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8BDDA9A9F0
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Apr 2025 12:20:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEE75A9B1CF
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Apr 2025 17:11:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B0B316AFC3
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Apr 2025 10:20:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1613D166B00
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Apr 2025 15:11:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7EB1204C2E;
-	Thu, 24 Apr 2025 10:20:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7C11A841C;
+	Thu, 24 Apr 2025 15:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="JvSR2w7t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JeY03B1T"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from aposti.net (aposti.net [89.234.176.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3525819F40B;
-	Thu, 24 Apr 2025 10:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6280117A30A;
+	Thu, 24 Apr 2025 15:11:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745490022; cv=none; b=jVaVYHZ3HnconBmV/5pGamud2VpTLlk4nYhI5iDgol/LNO14hRlIbvhrNUwyX507PHT8aBYMZuVYuYBD7J3itwIiPyB3MF4DWJKtjtt3kQu8gc6TtPZRGPy6xZIUUjglLnXSW8M5NYXgHoFp6bAVtUkolJiywdCtn3Uc/EwaVKs=
+	t=1745507490; cv=none; b=ptEEZF1vlvMgqcP9fxUsQ/9vXzB5u+VY5tsIsD5e3Vs1gLoBL+OsV9/OBSoJBDCdCj3icKZUBSB3QcWRR1zvBUxPJRoHasAWAYmzxkOJ/jzskfpmHc0IItBWyAbyDp14BAhc1B+kXFdzs5b6z6VS08Hq2VEgmmp41sgEbzsQnEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745490022; c=relaxed/simple;
-	bh=iRBOvEPQp0xpjzARc+Ce2T9xzyhYnjAoFFTZIi+L7EY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cUqZJS/56ZkXfNEk5nYIqg9LW0W4vHbS5N9MTPwXz4h1h+Yoyx8exL+oGvQzGQ5lE7n3Dp0LjLu6OQEZSnjVAsx+tHv9p1Cco3v8t5JIAcbmz6h5PoEqKlsKGD0Ii4dv5rVO6F+EFNpuXJ5HzKwvdcuZ4fCh0ORC+yoc3HOFx1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=JvSR2w7t; arc=none smtp.client-ip=89.234.176.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1745489600;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=iRBOvEPQp0xpjzARc+Ce2T9xzyhYnjAoFFTZIi+L7EY=;
-	b=JvSR2w7tExtylhEf/zsQNl60zLCBe9icAMA0eDkdcWJRUOih7tGcqxyTztFwWBYLyiBiHs
-	hSCsSNGYRzR7zWzhyy/ziIZ7Vc1qn0nz3/ySepQwFoumCKnvkqgPKnu9KUZ/AecaB/CShI
-	P/EOhu193xm4+esD8tWmtQrw/wR6nKA=
-Message-ID: <0c86e52bdc0a130bcf5fe152c062c2c6c07418c8.camel@crapouillou.net>
-Subject: Re: [PATCH 4/7] rtc: jz4740: drop unused module alias
-From: Paul Cercueil <paul@crapouillou.net>
-To: Johan Hovold <johan+linaro@kernel.org>, Alexandre Belloni
-	 <alexandre.belloni@bootlin.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea	
- <claudiu.beznea@tuxon.dev>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Sebastian Reichel
- <sre@kernel.org>, linux-rtc@vger.kernel.org, 	linux-kernel@vger.kernel.org
-Date: Thu, 24 Apr 2025 12:13:08 +0200
-In-Reply-To: <20250423130318.31244-5-johan+linaro@kernel.org>
-References: <20250423130318.31244-1-johan+linaro@kernel.org>
-	 <20250423130318.31244-5-johan+linaro@kernel.org>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRU=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1745507490; c=relaxed/simple;
+	bh=BaigLKgi67/CVqkot7IIPq3EJQR29/Gk6ouHiFoFK2E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=t7em4VqOqWJMMDrkoIwmtOiCrS95vyoHx+eV8OMZryDAxB/48k57mxsPhwq+t/MFIt+J9+NbKcCv/4bFK249boA0Xt/18iRKH6/bmeEfBIfmsDUEEri18NJLQiBBSZH28lrwy4+NGWRos2Fmc95thojWeO7vQCAFGyFUX5VGEBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JeY03B1T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C47DC4CEE3;
+	Thu, 24 Apr 2025 15:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745507489;
+	bh=BaigLKgi67/CVqkot7IIPq3EJQR29/Gk6ouHiFoFK2E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=JeY03B1TWTc8tOQ1C9dlZuITJhFQrFeGVy6Uq2qfuk5n5BKK63mEq4v+xjtxaRWwm
+	 zYcxzm6rZtgEKx13PKAxb8Ghk39ZIP6GxHp8/G5sZ7pN17imkZBppQIGSGVb40O0SG
+	 yiIqZlTvRgJY9XS9y1h9Vt7hy6vF62mGYsZm5Abm6tV39Q00uBoPzJBnG+QFOVej1d
+	 MmtRb4yZusQ+HbJBU32nPOqndEBs9V8I/WMWWw5SDCa3hyyb2krUmif/76l29o0P2y
+	 sgBpBGi/jn6iDifBnU/9PIGo5YS5Rwjb6pQrpxoeZ3KfRs8DqEg8/daA1h/IZgAfO6
+	 h05i4tAQoEupg==
+From: Lee Jones <lee@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
+References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
+Subject: Re: (subset) [PATCH v4 00/32] Samsung S2MPG10 PMIC MFD-based
+ drivers
+Message-Id: <174550748501.1452626.16896113997247650772.b4-ty@kernel.org>
+Date: Thu, 24 Apr 2025 16:11:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-510f9
 
-Hi Johan,
+On Wed, 09 Apr 2025 21:37:21 +0100, André Draszik wrote:
+> This series adds initial support for the Samsung S2MPG10 PMIC using the
+> MFD framework. This is a PMIC for mobile applications and is used on
+> the Google Pixel 6 and 6 Pro (oriole / raven).
+> 
+> *** dependency note ***
+> 
+> To compile, this depends on the Samsung ACPM driver in Linux next with
+> the following additional patches:
+> https://lore.kernel.org/all/20250324-acpm-atomic-v2-0-7d87746e1765@linaro.org/
+> https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linaro.org/
+> https://lore.kernel.org/all/20250327-acpm-children-v1-0-0afe15ee2ff7@linaro.org/
+> 
+> [...]
 
-Le mercredi 23 avril 2025 =C3=A0 15:03 +0200, Johan Hovold a =C3=A9crit=C2=
-=A0:
-> The driver only support OF probe so drop the unused platform module
-> alias.
->=20
-> Fixes: 24e1f2c9383e ("rtc: ingenic: Only support probing from
-> devicetree")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Applied, thanks!
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+[01/32] dt-bindings: mfd: samsung,s2mps11: add s2mpg10
+        commit: 702ac7e59d9bf018126d51a2a3c7708e35afd8b0
+[04/32] mfd: sec-core: Drop non-existing forward declarations
+        commit: faaad8c7fa7aca377cb0a2ec2b4a64c0bda6f451
+[05/32] mfd: sec: Sort includes alphabetically
+        commit: 3e18fe35ea16640b53e41e963fb50f8dbd80e004
+[06/32] mfd: sec: Update includes to add missing and remove superfluous ones
+        commit: e4f9f9942e80bc512da2a2ecacf294b603e6f4a8
+[07/32] mfd: sec: Move private internal API to internal header
+        commit: 60ab5a460717ebe8306535cce8a4abba4df99b3c
+[08/32] mfd: sec: Split into core and transport (i2c) drivers
+        commit: 286ee42bcd9b64bf13190769e705620e1d11efb6
+[09/32] mfd: sec: Add support for S2MPG10 PMIC
+        commit: e60189f7863bc47cbdccd8cca235cc159cb153c6
+[10/32] mfd: sec: Merge separate core and irq modules
+        commit: 494fb2908480664ea95c5bff26a174dcb8b072eb
+[11/32] mfd: sec-common: Fix multiple trivial whitespace issues
+        commit: ee5114413def30a79e1892eafe9194c06124e9dd
+[12/32] mfd: sec-i2c: Sort struct of_device_id entries and the device type switch
+        commit: 742d53cd4487792c2d70d5b5ccc8468a7c4bcc33
+[13/32] mfd: sec: Use dev_err_probe() where appropriate
+        commit: a745673725d2a63aef8c8c62b2496e345c5f3b78
+[14/32] mfd: sec-i2c: s2dos05/s2mpu05: Use explicit regmap config and drop default
+        commit: a0164e4ed50bf0cb05d2692a866276a11db0dfa4
+[15/32] mfd: sec-irq: s2dos05 doesn't support interrupts
+        commit: a5ee21c891befdf9b695f17222f246fda14ec580
+[16/32] mfd: sec-common: Don't ignore errors from sec_irq_init()
+        commit: 12933bcf7119ec1b75b8d43f17cb7ed4797aba21
+[17/32] mfd: sec-i2c: Rework platform data and regmap instantiating
+        commit: c206953656074edeabfdf44bbb2bdf89daf6bbe5
+[18/32] mfd: sec: Change device_type to int
+        commit: edd2e1784f620e1302b660e68578aa353253fa2b
+[19/32] mfd: sec: Don't compare against NULL / 0 for errors, use !
+        commit: 079b0fe8185c5a6995b3d3c80a6098f857702048
+[20/32] mfd: sec-common: Use sizeof(*var), not sizeof(struct type_of_var)
+        commit: df7abb6bbc6a75aa0b7829d39f1fe8499d9580c4
+[21/32] mfd: sec-common: Convert to using MFD_CELL macros
+        commit: d4bddf7d284d61331964d5e46405b7afe0e98bf6
+[22/32] mfd: sec-irq: Convert to using REGMAP_IRQ_REG() macros
+        commit: c0d96474f496db3fe286fe8ae2072c321205629e
+[23/32] mfd: sec: Add myself as module author
+        commit: d2bae7c2b23185a71a22f85079461f22143f9b64
+[32/32] MAINTAINERS: add myself as reviewer for Samsung S2M MFD
+        commit: 8a0542753218d260e23c77311cd909f7b38e6daa
 
-Cheers,
--Paul
+--
+Lee Jones [李琼斯]
 
-> ---
-> =C2=A0drivers/rtc/rtc-jz4740.c | 1 -
-> =C2=A01 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-> index 44bba356268c..11fce47be780 100644
-> --- a/drivers/rtc/rtc-jz4740.c
-> +++ b/drivers/rtc/rtc-jz4740.c
-> @@ -437,4 +437,3 @@ module_platform_driver(jz4740_rtc_driver);
-> =C2=A0MODULE_AUTHOR("Lars-Peter Clausen <lars@metafoo.de>");
-> =C2=A0MODULE_LICENSE("GPL");
-> =C2=A0MODULE_DESCRIPTION("RTC driver for the JZ4740 SoC\n");
-> -MODULE_ALIAS("platform:jz4740-rtc");
 
