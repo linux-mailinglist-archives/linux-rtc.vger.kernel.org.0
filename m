@@ -1,86 +1,147 @@
-Return-Path: <linux-rtc+bounces-3999-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4000-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A869FA9C6DA
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Apr 2025 13:15:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83CDBA9DB03
+	for <lists+linux-rtc@lfdr.de>; Sat, 26 Apr 2025 15:16:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAEF31BC2CE0
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Apr 2025 11:15:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D71C9467D27
+	for <lists+linux-rtc@lfdr.de>; Sat, 26 Apr 2025 13:16:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B575242D64;
-	Fri, 25 Apr 2025 11:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72381145B24;
+	Sat, 26 Apr 2025 13:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzfPp44h"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="j7abyu2H"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E21183CC3;
-	Fri, 25 Apr 2025 11:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7582AE8E
+	for <linux-rtc@vger.kernel.org>; Sat, 26 Apr 2025 13:16:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745579634; cv=none; b=P/xzN8flQ+1xwYUZxOvHfnRzrQyJKWMdpWo7ALqvWoDeL+XnJExRC9Q2vgxTW/kIoz0Dth3srfQMCgcAb346ocYBVYAaZH6K/AmW67lDPrq64AKGuZiRfVpzkPxOpifDtuHYnxcLkcxq2WvcQe8ZxzWYtQ7Z9qlh4+dos7ViqyU=
+	t=1745673409; cv=none; b=itJzbzsCDw5PBEQjMseKdQ68utRKxFIHP1j5uV+J1UsoU5/97mFyfaOczq48dQXo1uHNF5LQaBA320l6mnGgd9Ep0nF7G1yAt2iKbVlRiOYbLn+aVD2dnnaa8Y2NALYFQW5+w8dhNE65YeYlkWij0tWJZn1lS7vOslLrKnNIvBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745579634; c=relaxed/simple;
-	bh=Ezqd4VS2tdUP8uwDrS78FIFfjyaT1c46Eo4Ie3SLLAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jmXDvssfrCBJ67GUorV7XR5WaVsWEz7S/TH462lxmwgR9OaRPfiU6QhnHBfCUuMw133nsiof9McIggVcw7tp5i2rgA5YKPQwWLCr/t8l4+jrLFjf7DSs5z6ihONZlxaGD1SUrupdsZQlMtoD5JqdjuIjWISq+PIbrEaDO5TB3Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzfPp44h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF51C4CEE4;
-	Fri, 25 Apr 2025 11:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745579634;
-	bh=Ezqd4VS2tdUP8uwDrS78FIFfjyaT1c46Eo4Ie3SLLAw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nzfPp44hY80vim38LVUi0AJaVzHubxBfSYQh9zqjDYTgTQ+pEa7LzF82G6mkiZ0Wk
-	 gHP6U4AFnQML6cW+mEhJ5YqqMn0Ql+q158Onv6pmYnXPJyufAHAnCMj+AQ4Iz7ZihQ
-	 7HJSN9CKwHety5cLGSX4G5gxDwFP4BKNoBjPziAJDnUS4gstYvpoNjsXt+duZYlSnD
-	 QUWk2MAcn5wdWKjkbA4o+a7mkCSAcc+ZokZs6XaWQmth9mMMSKmeD6CysTl2obgbEN
-	 hSVcFqsPomfniiuL5nctH2FuCDX/zr7L7rxp8I9zhrcWMRkt9EvCnCb2uiI5oeUeS9
-	 0jkh3Aoavf8Yw==
-Date: Fri, 25 Apr 2025 13:13:49 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: a0282524688@gmail.com
-Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 3/7] i2c: Add Nuvoton NCT6694 I2C support
-Message-ID: <qalofwnbulbpzl7542l7756radnx5ks7pt6wsbsblyqayxcycl@rl4ety27l27t>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
- <20250423094058.1656204-4-tmyu0@nuvoton.com>
+	s=arc-20240116; t=1745673409; c=relaxed/simple;
+	bh=A2QesqpKFd5HugAJmo85A8ZYC0ForBZg6/ap+WMdLRU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IGtRnv02Sf3KspkS3fL6PhPrlRTXKSqa3G+ozSUjiPK35hHhgOUaQlDEHIRwn4cZ9Uh2w5gtlVeBr8J/9dtZikY3UJ7pRCwhBwdIN3YXZM0ABP28NufJGGVm0tYSFIc/bks46IS2zkr3/kpL8zgeMw431DgX8AZxlQeIxPwsMKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=j7abyu2H; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cfe63c592so32211505e9.2
+        for <linux-rtc@vger.kernel.org>; Sat, 26 Apr 2025 06:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1745673404; x=1746278204; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J407mJFXHjtMTMAmHlJN1cKIkBEdqNJvnzIbzWuD3a0=;
+        b=j7abyu2HrxbXpboRgy0NBBnlSfFX84wfbkU0qgv/XAs4UxiZ2YdxYex6i2VgG9vN3C
+         bAJc5fbkiaRNzDtThI7WVtEUbCYkcpklADzwsmu2bJUzpdy5c10EnnXlRq5+UnS44yuO
+         LTYQRTmsmEQcfl1mZIzXCcPAjXBw5hvKh+0DD6Bl5i53VWCawmFCOHzwy3oVHC9G16+m
+         Hw6p9XNbQFvUcWVA4ZBjb8cR8pfpE/Lkxfki0AhGNe5dyk29JsVR2abs8KZmSkmaKdD0
+         t5m/C2STAWpJVJM+eFISjOkq2GcYcaVQB+xwKMI4lFfm6UNYc3VCD1Baa6iL99Mx8/np
+         9w5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745673404; x=1746278204;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J407mJFXHjtMTMAmHlJN1cKIkBEdqNJvnzIbzWuD3a0=;
+        b=Ek/8rFJFIvFGPOIkgS/oUthCfaaAJXkyq+GrAol4tpjyudCTqocSn48ov/FQuIsaYx
+         zs/s9k2SXZVDnVv/0tfWQgwB6NtnygERgWWeSNQ+4VxI61tAUSnutMjEzkDTDgjWA0Pr
+         3Sso1RfrXx5lyaceKAPVG2AndV4w1gtQNWhy4ZwQZqY11K2BzuV0J9A5p231D/H++sPe
+         Dccj2mLiTcy/yqlyAn3v+GKbJzCEwfvL9ozISEuGD76h6ZO9bjblifkT79ku9TwW5B7Q
+         nKx0GwhklnuouPKHaqrEmqHW1EOyZJzFmIFAeq0Ceulrk5tTw90ugce2onPr7pj2rDdg
+         ML9w==
+X-Forwarded-Encrypted: i=1; AJvYcCVWSg6cY3Z0PDbeYFOPmHwyfl9iGIfQsN9wR3eujfMA+GvaMomNToDqKAkANJJpfyqvGrDGz5nC2Tg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWvo9tzMS5Cn2U8kmIinP8iT7EaUmVFWoQvZBRoRP2OiWLsg6f
+	1pfk77pY6g1j7CHiOuY0R8FB6FAUjGe08Wza6t5si4WOKmHJH5cfjfu5QcRlOTg=
+X-Gm-Gg: ASbGncumbEtJrVe/oExWO9AjvqQ3tKcIEfun6+ACpaRdN86pBim+FQxAF7O/xY0fSp2
+	JGz25T5S7QgvKW+FEtb09eHVqyKtWRYIa7N/Xg8Hl/9FAbUeJz7QsVcCLux08DTIX1sfya1pdWQ
+	wCuSzXrXA49E/+u4vBs7tdJ+qPDjIX3WCwxW/aZYmMGaPebHL+57+wWpuvRsWivQkq3nyLrJce6
+	8vbvcfE7lPnG9gplUT8RqqI4cHaECEUyV70hlc6mgFeCb64T1Whg90EvdwPLuyIjdc2xytFzgvp
+	8r4R6TVhL1TsTSlRbV6xhgNRmvKDypDy13wGm8OiENLDBhLyeA==
+X-Google-Smtp-Source: AGHT+IFEdPhvnEPF2IPYYIjIlVAxjiyxZPBsePtMycDc8OXoHjZ80eyhmbO/+g2anWdvGqYyjM32vw==
+X-Received: by 2002:a05:600c:3548:b0:43c:e8a5:87a with SMTP id 5b1f17b1804b1-440a65fe6ebmr57418595e9.16.1745673404131;
+        Sat, 26 Apr 2025 06:16:44 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.145])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e5e1c6sm5649133f8f.98.2025.04.26.06.16.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Apr 2025 06:16:43 -0700 (PDT)
+Message-ID: <79d1211f-6d4b-4f1f-8d94-3bb717025f05@tuxon.dev>
+Date: Sat, 26 Apr 2025 16:16:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250423094058.1656204-4-tmyu0@nuvoton.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 10/11] ARM: dts: microchip: sama7d65: Add RTT and GPBR
+ Support for sama7d65 SoC
+To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, lee@kernel.org, sre@kernel.org,
+ p.zabel@pengutronix.de
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rtc@vger.kernel.org
+References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
+ <e8868ef06102241b47883ba10edaed751831be6d.1744666011.git.Ryan.Wanner@microchip.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <e8868ef06102241b47883ba10edaed751831be6d.1744666011.git.Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi, Ryan,
 
-On Wed, Apr 23, 2025 at 05:40:54PM +0800, a0282524688@gmail.com wrote:
-> From: Ming Yu <tmyu0@nuvoton.com>
+On 15.04.2025 00:41, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> This driver supports I2C adapter functionality for NCT6694 MFD
-> device based on USB interface.
+> Add RTT support for SAMA7D65 SoC. The GPBR is added so the SoC is able
+> to store the RTT time data.
 > 
-> Each I2C controller uses the default baudrate of 100kHz, which
-> can be overridden via module parameters.
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> index 8439c6a9e9f2..bec70164a75c 100644
+> --- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> @@ -132,6 +132,13 @@ shdwc: poweroff@e001d200 {
+>  			status = "disabled";
+>  		};
+>  
+> +		rtt: rtc@e001d300 {
+> +			compatible = "microchip,sama7d65-rtt", "atmel,at91sam9260-rtt";
+> +			reg = <0xe001d300 0x30>;
+> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk32k 0>;
+> +		};
+> +
+>  		clk32k: clock-controller@e001d500 {
+>  			compatible = "microchip,sama7d65-sckc", "microchip,sam9x60-sckc";
+>  			reg = <0xe001d500 0x4>;
+> @@ -146,6 +153,11 @@ rtc: rtc@e001d800 {
+>  			clocks = <&clk32k 1>;
+>  		};
+>  
+> +		gpbr: syscon@e001d700 {
+> +			compatible = "microchip,sama7d65-gpbr", "syscon";
+> +			reg = <0xe001d700 0x48>;
+> +		};
+> +
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
+This should go before rtc node to keep the nodes sorted by their address.
+I'll adjust while applying.
 
-Thanks,
-Andi
+Thank you,
+Claudiu
 
