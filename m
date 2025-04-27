@@ -1,79 +1,79 @@
-Return-Path: <linux-rtc+bounces-4001-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4002-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B199EA9DB09
-	for <lists+linux-rtc@lfdr.de>; Sat, 26 Apr 2025 15:17:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9569A9E354
+	for <lists+linux-rtc@lfdr.de>; Sun, 27 Apr 2025 15:41:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B94A1928235
-	for <lists+linux-rtc@lfdr.de>; Sat, 26 Apr 2025 13:17:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEF6217C19A
+	for <lists+linux-rtc@lfdr.de>; Sun, 27 Apr 2025 13:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA0A152532;
-	Sat, 26 Apr 2025 13:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6E318FC92;
+	Sun, 27 Apr 2025 13:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="TxP7DoYb"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="FU5NM75h"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF948489
-	for <linux-rtc@vger.kernel.org>; Sat, 26 Apr 2025 13:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C5F1531DB
+	for <linux-rtc@vger.kernel.org>; Sun, 27 Apr 2025 13:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745673441; cv=none; b=eUcXzwFz5OdOq1GGJmHtAGnnLd7KCOMgYsn/uXhgBxW0cD1/CI5f1ONeSLQyjSFkrzd1JuSWIDvtxLmR5mDN/wSOs4L/AgeK2ftDnCEojjQ9ClBClfUxcWPfXxTMwhu2wzKHmu58zvrK7fLqQFKvTk+4KmRz/811Lt/FHjoLFMA=
+	t=1745761281; cv=none; b=K3R2XRWDUIv0ix7BzRBYjorr4YnA10cAuw3fmoF18Wq0UsuGIHBhQhIBf5kvfs1M7MW8f8mj7+IIZgY8+KXilrVWegt3AAxZqw8giB6uIAHUlw7FC2VMnMgcl0W7CbUtC5CqWFiUwZljKO5+PUlk+rVIT+hJk5Yeg8ibnzybclQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745673441; c=relaxed/simple;
-	bh=AgGgpgM0SKKcQMBvhiyb/+80AjEVOKjah4TFyo+HM+s=;
+	s=arc-20240116; t=1745761281; c=relaxed/simple;
+	bh=VnALKFAe0qO+P//pjggZT55wiJFa5E0L8cO8PSW+xlk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aXvT/Z+CThI6ThGMJ3hSyrvKiFV+tDtstUP2ozUp5I9c18oFAp/HiQcIMtwORKMtGxbsMMjxBWYB0QJv+T5M2c3bEtynP+DfpWgtEE0nUVKI+h/4pdrbT9XuKBgC4ZaEqMkT/3xn8kIvWIO9Bk2X8hDpe/v+XASH1pJEwEM6xZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=TxP7DoYb; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:Content-Type; b=qTtmzS4GSSXT/erCApAtQtY04BSpGvURyNAPKuBEZn/zdiyJM1KC9IbUgy1kpjbQXcD79XRuwpiSRUiZti/3SNPU4UDlFSm3+FfQjEoXx4fETrHyy9M3DWH+sXCeonNyhyx3jeloujyH4t0HRT/UPuUcamKRfla/lthWryWPbjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=FU5NM75h; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4394a0c65fcso30859625e9.1
-        for <linux-rtc@vger.kernel.org>; Sat, 26 Apr 2025 06:17:18 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5f6214f189bso7292621a12.2
+        for <linux-rtc@vger.kernel.org>; Sun, 27 Apr 2025 06:41:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1745673437; x=1746278237; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1745761277; x=1746366077; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CI5a7+0i1Z4ciPNBaeJ5FtbaB8j0UzTY2F+B8Sn8k24=;
-        b=TxP7DoYbHMNsax1kaxSFVaJ1zJNJW6mz1wdWGNvliVlKGRp9wJXbqWr4I0QLz6eM3c
-         Q68qOpn1nQQqM4N2fMt3NeZDMIrJnMzOna9aNbzfX1L68yMtvGs5vbQq4uQuOUQxIAFP
-         8HHb6aZ7lEk5ocWYTRrejo1dRWeGC4Ofa+AfQgS4bNgOwOhpttnMuZ+FhUIqaD6smaIF
-         vO0zTttGKLA3CXDwbpqfZwt4UL+bDF4Ok00dV47idrKJmlFEtGu097zXR4R4xfaeX3UA
-         dqiLRvAH45gB7WQghF/U4QdmlIwZ46NmHnGAE/H8hvbzMRTzr78SUD+5Oj9ALRY0eS+3
-         k8VQ==
+        bh=lgLsTHFUHPVY+MlDYOlPHI/6Yw7FnfxYmbCzXZmnW0Y=;
+        b=FU5NM75hacbjTf/WjGAOYbr9cn1stb2HOpic2Du6PWnwncKLp4aPXdkPF5KjMGhbrX
+         Gvr8s5MvTxKirq5OrANmVJVHWfPJF3pppY011xlYp8aaePN09xwPUpWERsnzZguHh/AE
+         QISf2GAd4yJheDVooxIwgFB9NEW5Qx+4zweppybxiqpLfVyVcHJzDHoR2RZ6x6nlTORK
+         sTXDO7JYfxh9j74YH/QOisoVzdfJtITcdcmRx4EzdSvVVWjJP3i4ZOP7R/ef8TMzIF/P
+         tfQmsFETVTgFd9T15EHe6wPw30596qui0O+H9Uyc3BBeV/TWzZh1e6xz6SM+iauBG2Ie
+         UXTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745673437; x=1746278237;
+        d=1e100.net; s=20230601; t=1745761277; x=1746366077;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CI5a7+0i1Z4ciPNBaeJ5FtbaB8j0UzTY2F+B8Sn8k24=;
-        b=Nywrksf1mKQriGqUubIumhSpeq1eKLisGuYAVrq0wl8konrkez5gdUG/UrYOSUUHxi
-         F6LnjTz1clYh3zzWr0NdhtqPPhDWuWBe1b7k9Mj2rJICxj+FXiqvwPPjkWxgUwi0Fdlq
-         gURzgAGbjVxBuV4YFq0bobsgKlmgmbXfzJB/47Ka/wnKTV5vmffCx21J9Gr4KZHZ50oH
-         ue7NiLEo+mqyScDTl7wqfwZBkvZ8WyUtg6EM4KMuV6NNV7ZYNI5VA2ddYwr+gAxH05A/
-         b4WKyWL7GDaixDsBS6fBpEiJw2HfptitbMM1WwTjgY9Zh2WewGcV9GmUgmM8lBoX4p8g
-         ZZAg==
-X-Forwarded-Encrypted: i=1; AJvYcCWzuZFOfd5jTbCWMaO5CDLCBCNGFO824uE3cHKRb+tM1L1UqCgsRv2K0ShtKbjVdrAKJwq5wDZa/ps=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB/MK/33DzuJYcx6blRxKK7USHfkc9cl/dvgbCs04IripgmN34
-	RSA7a8ASi4GCqKpUKiB6RPd4dKNlIxVmwZmnasi3ErXR7ItU9ZAFPT0VyjUqyKk=
-X-Gm-Gg: ASbGncvyAHIbUELZehEXUhCsLFFrJJlfTvgif4bMqpiMrIn3pdI85JC8ARiFv/TYeSH
-	sfKBSkn8k1/Hma856nDOxyyRYOxPb8x6LTKFb7mU2ia9WSDvwXeuUKr1Wm3KcBHYolCJgv06KqK
-	DnXVy3fqeL8g07sVPvgDjc8YXLbKR+L+crjF9niz//5EmEhYOi8El4XA7mkdLBigmoPqpLYVb2l
-	LDoEkf7uvvvWXv+TvZjPwcG4qgdKRlOyz9fsp1de5GPC+3EeVkORwvrCNexAXIbSZzGGOk4BiRo
-	01OItq5AQM0HFFxF+2K0yeoq55kcH7gCNrc1GXuu7dqIKSV1Sw==
-X-Google-Smtp-Source: AGHT+IHytqi0PRSnCZUd64Qp2/4XTNrGyd31YUwQgLulH0kGSHkkv9/ZhwEu+T7t1MGAzdiUaJUlRw==
-X-Received: by 2002:a05:600c:450c:b0:440:6a5f:c308 with SMTP id 5b1f17b1804b1-440ab79bd20mr22243255e9.13.1745673437040;
-        Sat, 26 Apr 2025 06:17:17 -0700 (PDT)
+        bh=lgLsTHFUHPVY+MlDYOlPHI/6Yw7FnfxYmbCzXZmnW0Y=;
+        b=VCw1Us5K0DjSWrZ4PJO8mE5FS5TzayYTg5QMJq40aoh05iVn6+8sd1+dMx42zIlD6Z
+         s0n0AJgKXxYT9ZgWQJkcUcyoQDWsgWqP+rZqtNEZvnISLiPfHN2RVkGnDphFxTNlyneA
+         2h1HBeSHALqiIBtkWKhsYN+nfHlkfF9o+7QWSY9XMDxJKJMw5u4UcZVDcbLwTQ1ryaq1
+         RXxxPm2BLtVMY3n6z2/ybxqqaW0GMaQYyWZEwQVUGJeelaMw//IhIw52spjJuBSbPFGW
+         v+hmb4rBkBRCA+ykB5RVvH5Nf3aIrrquFq186BJgldPXXvIXbk1wrhmbrTj1PNC0uB8z
+         sAjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbLliRzJ2xbVOMrm5MOz/fujKk65/RSvEMH0WRddW/JVzY+1fmeXUIwRF3BcdqYRAhDBiPdpDKamI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzC8id/hrcoKbGgpKi/8T9qSgVXNETn367HUH273fJrvjPcVc5a
+	/OK0SgbPk7bvt4/iiYi++jTWf9X2GFih16pw29i32LCChYqclnUQ3TIpnYOpMSI=
+X-Gm-Gg: ASbGncvcMbjK1vPhuvgkrE865hCbbRSN501yULTeR5LUB8+8TFUa23MT3GNDLvhrLiN
+	RScOvZPZvGM3UlkHXHaadXMU7bH1RhF4z7FNHP6PNifdau1F8aKN2EpGWPulkuFoikkrkOyc3vl
+	WmYsH1m22uR5zFVzx1AI06lpnx7PfPrsR1CoYN3Gd7duBlPAK9ThvOi9R+QDV7hsZ7wLNkjrQ2M
+	M2l/HE4rND0f7xos+8ZRBVXrgt38sEVLz/VP3EKIraB5Lcoi72NpZahu2D92AVh0NIRB9vTupda
+	XpPEHQPWJFANmD+ru0fIKZj1MrYslPRITNyBR09xFLQt60sRAasB3JZbsAOS
+X-Google-Smtp-Source: AGHT+IFjvYNUHCZ3dPrDRyEa/OPDZMNfSszUTn/p2tnOnx4im+io+5tXp8qpQenDsLlwqL9uw5wHmg==
+X-Received: by 2002:a05:6402:2691:b0:5e7:c773:ae35 with SMTP id 4fb4d7f45d1cf-5f722672b22mr7593685a12.5.1745761277306;
+        Sun, 27 Apr 2025 06:41:17 -0700 (PDT)
 Received: from [192.168.50.4] ([82.78.167.145])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4408d8d191bsm106573135e9.1.2025.04.26.06.17.15
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f7013ff570sm4139225a12.23.2025.04.27.06.41.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Apr 2025 06:17:16 -0700 (PDT)
-Message-ID: <b6736e74-7f90-437c-b44c-183a75401037@tuxon.dev>
-Date: Sat, 26 Apr 2025 16:17:15 +0300
+        Sun, 27 Apr 2025 06:41:15 -0700 (PDT)
+Message-ID: <86068277-5443-435d-b1cb-0d1a5731b331@tuxon.dev>
+Date: Sun, 27 Apr 2025 16:41:14 +0300
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -81,8 +81,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/11] ARM: dts: microchip: sama7d65: Add SRAM and DRAM
- components support
+Subject: Re: [PATCH v5 00/11] Enable Power Modes Support for SAMA7D65 SoC
 To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, nicolas.ferre@microchip.com,
  alexandre.belloni@bootlin.com, lee@kernel.org, sre@kernel.org,
@@ -91,70 +90,19 @@ Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-rtc@vger.kernel.org
 References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
- <354ecd628fdd292d2125570a6b10a93cbecb7706.1744666011.git.Ryan.Wanner@microchip.com>
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Content-Language: en-US
-In-Reply-To: <354ecd628fdd292d2125570a6b10a93cbecb7706.1744666011.git.Ryan.Wanner@microchip.com>
+In-Reply-To: <cover.1744666011.git.Ryan.Wanner@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi, Ryan,
+
 
 On 15.04.2025 00:41, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Add SRAM, secumod, UDDRC, and DDR3phy to enable support for low power modes.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  arch/arm/boot/dts/microchip/sama7d65.dtsi | 35 +++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-> index b6710ccd4c36..8439c6a9e9f2 100644
-> --- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
-> +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-> @@ -47,6 +47,14 @@ slow_xtal: clock-slowxtal {
->  		};
->  	};
->  
-> +	ns_sram: sram@100000 {
-> +		compatible = "mmio-sram";
-> +		reg = <0x100000 0x20000>;
-> +		ranges;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +	};
-> +
->  	soc {
->  		compatible = "simple-bus";
->  		ranges;
-> @@ -58,6 +66,23 @@ sfrbu: sfr@e0008000 {
->  			reg = <0xe0008000 0x20>;
->  		};
->  
-> +		securam: sram@e0000800 {
-> +			compatible = "microchip,sama7d65-securam", "atmel,sama5d2-securam", "mmio-sram";
-> +			reg = <0xe0000800 0x4000>;
-> +			ranges = <0 0xe0000800 0x4000>;
-> +			clocks = <&pmc PMC_TYPE_PERIPHERAL 17>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			no-memory-wc;
-> +		};
-> +
-> +		secumod: security-module@e0004000 {
-> +			compatible = "microchip,sama7d65-secumod", "atmel,sama5d2-secumod", "syscon";
-> +			reg = <0xe0004000 0x4000>;
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +		};
-> +
+>   ARM: dts: microchip: sama7d65: Add SRAM and DRAM components support
+>   ARM: dts: microchip: sama7d65: Add RTT and GPBR Support for sama7d65
+>     SoC
+>   ARM: dts: microchip: sama7d65: Add RTT timer to curiosity board
 
-These should have be before sfrbu for keeping nodes soted by their address.
-I'll adjust while applying.
-
-Thank you,
-Claudiu
-
+Applied to at91-dt, thanks!
 
