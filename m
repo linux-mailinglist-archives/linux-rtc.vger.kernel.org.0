@@ -1,82 +1,82 @@
-Return-Path: <linux-rtc+bounces-4006-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4009-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6961EA9ED8A
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 12:07:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3568A9ED8F
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 12:07:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5E9A170A91
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 10:07:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CFEC1892C81
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 10:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1FB625FA0E;
-	Mon, 28 Apr 2025 10:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D574B26157A;
+	Mon, 28 Apr 2025 10:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="r6g4TNBK"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="kYN4kj7y"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAA225F79E
-	for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 10:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE3E25F976
+	for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 10:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745834832; cv=none; b=OIBu/TNoG//PDQTBmsCbIRclP96Nfs099rXBZAMAaf5L62ErrinyFK5k+1yujUgELlL1KglXel6jZvEUF6kUZg2lo74ctpIjmnra2H46WZlsvZh9GnOkHRfbZTIWftDpawDoiTi6S1typusHyx2KPSK1/VD/1w7beeGufYbfDmk=
+	t=1745834833; cv=none; b=YbvLMRZsKmNzojwPZ6dqu9y+Sr2GtxC4LH622vepOcl4ystctKIJKNSpSctMThMikGAwvVLvaQ3rAHm70nMBoMM1Rt7mobURb3oTu+dCV3J1A6bere3MAqNG+ba160VOZH4rSm7V4i23uZ+F8YYHhrQUeW6H/CZ2+pL/lW1mWOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745834832; c=relaxed/simple;
-	bh=ayUhcmHaTDDwhww81m9WU4TmIhIrxin8sNOxt58dFLw=;
+	s=arc-20240116; t=1745834833; c=relaxed/simple;
+	bh=5BXD6w9a8/MMslajqLpys8wbsQV7bV7CuK0Yj8/oSpU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZGnHlhkG6y2CA4irNOGgcyjt9LjJLyX+AzDBboAIWJLhxYQxhOaf9AOBhzhY+ov5F2Q+gcnRVmpAQQr7FK00QKsDo4uRo7H01W+ndLc+k4+MUFcu6p6aYUPKnBEqwq0A1nFtBUXrLIdkbEvYpK8Jht3aqFTX5gVVpJsYWKiEnxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=r6g4TNBK; arc=none smtp.client-ip=209.85.221.45
+	 In-Reply-To:To:Cc; b=cXryIfEQFU0haTT9W+MOVNkEoulc3IgkMbTQfYD8lLWHzfJQoRdKJKcTDgP/o0M8WIME8nosU1P0XH7thg5WUIi0yAuYOWbTKFk3a0JnFDnSmMwbGdpkwSZJHLPu1hR1z9kZO3Ht3YwMQ9ukZJG/qDXpCLojIaHOysMB4ATjcLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=kYN4kj7y; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-39c0e0bc733so4274552f8f.1
-        for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 03:07:10 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-39c1ef4ae3aso2780607f8f.1
+        for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 03:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1745834829; x=1746439629; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1745834830; x=1746439630; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KlC4XgX6YMsadyvDt4P+GyPh7t4sW7KE0IQlVTJhz+U=;
-        b=r6g4TNBKISFuKB0wf+yWGoZIEMg/VJEC4rv+Tl7+SZU7dLA4wto7KrfinHzBCfsqL7
-         QBK+bOS3U+3TeQu/TfKZA8yv1LnbrwL2IUKjiRzqpx2xVdtUJJYzls6wt/KerNaytGf0
-         RNFGp1miAWZCxuA6VtlMgGKmgBZ5GYPhCe038w7XhS/OTRxsIXCvpB6L0SNj6Zosw3Fn
-         e4ABFOiiWYuiQott23AceOV3zij7XMrW5ZThQoxJunbtTAFZTS7klLBr29/+FjYa55Yk
-         /xS5bYniZPFrSrUqvrbVMlzkCZ3XvzE4rX/KG9pcBah4uAauKHuuXRe/WFCxM6JUXpjk
-         l7Zw==
+        bh=cF2oeErd2f8CMpAQYPghRdhYfeau0GOqbG/tEe7jF1E=;
+        b=kYN4kj7yQ8sDx58ANKKu/BoWRkE1r5Fsqikeg6zf/BBWPwdf1XNaE9/TGRKIcdUHw4
+         ecz61iuVD4hk1xu19v5DcyjeVJ1dtsOO0ICLlTadkFqgjepuDVAlGj1sC8Y0Bo7QWEPV
+         ZPbyXiComBHYSyvsXxU9dVG9o9hEkNcIKew7f8I18aWpFjuFQcl0daOupBUM7rQEiWIN
+         eDPbtim0w9PrG2OqDVXZmfRWHhvGstrkIsZ7qoZAWj3i8Dnal4NhO4kenpzKFiZtcCxn
+         QRVT6pbI+JM7W2Jy15a52Prm6LRBV60wLTE+AI/pjhWhZThBev5Pya9LjUIQqWWvp9d/
+         7KaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745834829; x=1746439629;
+        d=1e100.net; s=20230601; t=1745834830; x=1746439630;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KlC4XgX6YMsadyvDt4P+GyPh7t4sW7KE0IQlVTJhz+U=;
-        b=tM40+UNce7XDk1nt6a69/TONWc+XmU7jV5FvdvO9SftnYOyUJcFNWwLMN4xi1Np2Jb
-         umtjMSht4GbZIgsZPPDO9KtTBsw6oVTjJHJvJsP9Yx9zz10Vj6+S/1FqDSOpbZSnA/3G
-         1HbMq/ob2Lp4J0Ekp8kWxVVvn2o7G+U/HvTsFjVCTSPGBxzHV/gxbvjhfU+dJkeOrGMV
-         uV+TnDU982YukIbJtQhIKsbiMdiY8mf4WqJ78G+hYLlWLdG6IHkbyHK+Od/lRYQF3BS7
-         P7Qk8pndh86AJfHu3N7iec5BLbPg0pPo6kt9/foNzuV2l6uUC61F0e7FHhUBWtjhMVik
-         xpEg==
-X-Forwarded-Encrypted: i=1; AJvYcCXepQcL1QJTDS8SMPwiH5nxucIKrPzfEs23MdsxdNpkn2qXsBVW2qId3em+NHikskiWIqPgZr4fNDA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjCdeMnV5wNXfL+zQWry8siYBpsMyOdkArHEbrakjr5cjPR8XN
-	RE+PWYh9xsAKBpOSJQNk5EaNzpjoW4+UoyUZ/EtysDVQjtQkoI7vdG02LaBvj10=
-X-Gm-Gg: ASbGncu2BOcln2FXxM9wIlYuOP9uOFZr/pAh51DItLeDDKfqgPORcAQtj+mRVvB1Ty3
-	cnb/kE/eaSHVozkh36IBspP6Ossun3of9pwIHwbTfGPfDK2+bE+DsFSugIpOZ7b9+UuytFb8ALq
-	l6994nPzHtZMJMJHyKzCBUX/dsgTPwm8tVup/Jks0nnIHSZIoaYEcIm42JtV4BuslHmxa93QxET
-	W7W8MWAHaeuSsBPBSuAPzBCxR+fK7eswR0Y0pJndlgJm8MmGwjrsXc8hBGqrI4d+oblqHJROEg0
-	ki7FcKGNodbVQLjkpLfN8PZ9utW6bBXVWtTkMmmUbRTD7uHKYHK0zqmRbj7UCA8kdbuuHCwRS5P
-	x9vt+
-X-Google-Smtp-Source: AGHT+IEAqGRdEGoeVuHDiyinbhr2Ppalj3tD+HoFJFni3oTADsmywqY2MxcacwtDa7VxS8Ejbb0H+Q==
-X-Received: by 2002:a5d:5f4c:0:b0:39c:1429:fa57 with SMTP id ffacd0b85a97d-3a07aa5fe21mr5640555f8f.3.1745834829374;
-        Mon, 28 Apr 2025 03:07:09 -0700 (PDT)
+        bh=cF2oeErd2f8CMpAQYPghRdhYfeau0GOqbG/tEe7jF1E=;
+        b=m5mlZoWdDYas9Y4VfdG2hD006ttDNbFfB7n42Tklc7taOEs3fXY551Rhl9lubLbxlP
+         VQhVU88sjfrRgB/Dle317PTRcX55+rnAO2uZij/bXL4Tl78tZrZAneQIKbHnpxDEyWZx
+         XUzUb73masYzav3qj3rhQxg6VnJmrtYy2xk3hmnL3MW8FlDL+pihOmu2Csfz5qKi/uW5
+         Ii6Jd1DPtYLiXIV2haw5OUH60QudCxKJsIlPG7pB4TdF9ozO/qNeqmH+GJTQS28LhD5W
+         zYpATVXFZdYjGKtH1lYA0SOaKqFr1mb29w0/MvBVz6k7vzfyI4jk4s0wLidFQSRLAhVL
+         /FLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXEcNZID7I91JfAwPZj5f0TqaEnuy9Hh3w4yj7xpoQfONPTddnpU76Zp9BbB/eJr3vgGSEIgyE4HE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn/4+8Nqj+PmES+8T6lLV7Fv924k1/hk45eONV4ldZqFTpW0kd
+	/nt6mzZZAIjsqTOzBWdRme973PxuWgsvPnGhHynqxf3MNJHQ7Mhkffq87++hMio=
+X-Gm-Gg: ASbGncteZlpEzahAu0mRpEtznvobHxhO4O85B5+nU9ZHEIkFahqTktazOSt/zQksM0J
+	mLWU315NqhwSGkJzbnh1EmCM7ohhHsCxC1Nej25YCyzuqBUwR9i+EYWJKBcosqIudOsavCR1m4p
+	pUid44zYyhOV3Gzjjjnv/h3iyjAlEPsCcW35IB3IC+2fK9IfKpVqT4cG9FmvGjSlNXhB4MvGFd3
+	TVQ+xtjqYR8tI8wnFdyR1yyWIpyumJ8774BCmUC3kDQZeS9s17v/vmZF2qhmLHRTbNPXabNmSDU
+	ab3U84t3wpd5maCERRWosJ8Hr2oomoZoj6f+GHUmfTmGhB3lodzWG5Zjqgq1L0pxEGxjfg9vy8E
+	+nCuD
+X-Google-Smtp-Source: AGHT+IH4Pj+mbE1WOAoufjlp8rWav5+yAYMa+Zf5i/KTiT7A5shkzDX+Sqj9DrcK4mLxd/CD7GoucA==
+X-Received: by 2002:a05:6000:1aca:b0:38f:4ffd:c757 with SMTP id ffacd0b85a97d-3a074cdb983mr8433308f8f.2.1745834830173;
+        Mon, 28 Apr 2025 03:07:10 -0700 (PDT)
 Received: from [192.168.5.157] (88-127-185-231.subs.proxad.net. [88.127.185.231])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a073e5cb16sm10575403f8f.84.2025.04.28.03.07.08
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a073e5cb16sm10575403f8f.84.2025.04.28.03.07.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Apr 2025 03:07:08 -0700 (PDT)
+        Mon, 28 Apr 2025 03:07:09 -0700 (PDT)
 From: amergnat@baylibre.com
-Date: Mon, 28 Apr 2025 12:06:49 +0200
-Subject: [PATCH v4 3/5] rtc: test: Emit the seconds-since-1970 value
- instead of days-since-1970
+Date: Mon, 28 Apr 2025 12:06:50 +0200
+Subject: [PATCH v4 4/5] rtc: test: Also test time and wday outcome of
+ rtc_time64_to_tm()
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250428-enable-rtc-v4-3-2b2f7e3f9349@baylibre.com>
+Message-Id: <20250428-enable-rtc-v4-4-2b2f7e3f9349@baylibre.com>
 References: <20250428-enable-rtc-v4-0-2b2f7e3f9349@baylibre.com>
 In-Reply-To: <20250428-enable-rtc-v4-0-2b2f7e3f9349@baylibre.com>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
@@ -94,65 +94,87 @@ Cc: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
  linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Alexandre Mergnat <amergnat@baylibre.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1478; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=YkRXXHd+aLLdgJUBqxRycYFTuIReFwljKIM7TbkJxdM=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBoD1NJQNZkwy20BxUQyLS1XhyX4zVIefYo6C5zJ66y
- IdoAB5eJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCaA9TSQAKCRArRkmdfjHURcrREA
- CizUV7K5+sddTMzndN6oNrzfe0G8JvQ8gixpWC676Ps8MBabxC0qCb0e37JkHzuaYoUyq4Z3MAhMq5
- dyTTYR1Y7bITGITz5K8d2Bbtxme8UNCaZ4vMUS+FMvTBHfjp2GYh0i9VqCeYru+d+BCU5pBEuJaC2y
- CYPDvruoIQBQnHMp8x9D2UYvcutq2OHCmQv6V+EkuamRERiwB2F9ragXvJmkqBsZBoXHpASJ0fmQ1c
- b4arU0GDk019su7VQpl7uOion9JZx6vAZkHrufQz+70HgqoyDDJQ5vg6f8ly04PrFuurBGsBsENby0
- Cfb9NUWm2zG+KuFN7Ik4sWuPlg/6wFWA2eoimU2zaZ8ppxgW/yY/k6WGeEgtKN6oLRuL/1kEWAJ9u1
- eC/HNiCLpFviwSRCX3p7dT+1TbiV0ZDUcg3ruj+wZ4eRPtZ0JXPARSpkz2ANJTmh8qUlg5u1cwqRxM
- L013WSh1xVI9KQY7LAIh+hvnRGdFEJK1ATQwNE4hhPbk4pR0rTmVHWM/lGFezV5F1YRFKH7GEEse0i
- vp17stqKoS2NjHh9luc9T2QSZAZNWT2hHxRc1A2a44BNMZnuJzuDlnRzNwsguQJBbZ5tG+s8cTTpQB
- yiadTRJSSipdA4Nftngv4dkWicgvVkETGKgOXe1FLPYXL2BjXahVOc25duxA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2347; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=UnAXFwAglulxq3VvT2LxxQ07u2U9oUPKSME/LEhdx+s=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBoD1NKksIrx47qFXyIWVXw5aRilveyh1MSO+R8dQfi
+ BrMmvQCJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCaA9TSgAKCRArRkmdfjHURRRwD/
+ wKtNV3PpRHNxJhebj7jlb7eL+IGMmi1dGKIooOz9VS+K8GN+zM9bEJpER2HIB2OM9TglIGTazdVeN2
+ 6BEWLGbYds3KyCpZF1xDJpQejyTyDtcqqCvEhQlU0r299y697Jro2c2iyox13rRQPVNv+svKkZle8g
+ S9JnMo9j0db9MuqysB75Ad8D0gdeKVH8gMxTPmUywro7RGvP1+RDsjSs8VjffB0MkRIAxU8D0Sxnbe
+ 1dmI8YXIujhDA3U2fEd1p5jjwPr+8c6sbiIT3bwlYHw9PblpgAzLgGGggUkVL5/6YsKftbJLAT7EDS
+ hrBlm4ZtLLgCNnmN+PxanXNZjUixIK7C+1MzpyW2eA/6jBugk3s5vl88tnSBKjPz2+R+f10X09wKoo
+ bLxz8ZeUipNIREDzhGnnZ77lqK8V0ouSRQXAWTq90CEiO1j0scUoXXZjHSOcKSZAXR226bi+Q/6XiH
+ Pn0KSZmvR7g5HKVNwcWmZiQAwvkeA3LtnXjo+cjqhjpY2Lt6pALe6ClrRSst6oTRz/IhJidM+zfz20
+ xBaa79xWeW/z24TvHdIN6c/PtQrULj4kTu9TfxHliCvBm5UD4in7lfMDjysBAWIO4hmUGSYFAbBrqL
+ K0EOKOkjZmowe8/0wwyVthSD3SAaCrdpjTWYfIxm44YOEyNqUoah4Fzu6Dyw==
 X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
  fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 
 From: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 
-This is easier to handle because you can just consult date(1) to convert
-between a seconds-since-1970 value and a date string:
+To cover calculation of the time and wday in the rtc kunit test also check
+tm_hour, tm_min, tm_sec and tm_wday of the rtc_time calculated by
+rtc_time64_to_tm().
 
-	$ date --utc -d @3661
-	Thu Jan  1 01:01:01 AM UTC 1970
-
-	$ date -d "Jan 1 12:00:00 AM UTC 1900" +%s
-	-2208988800
-
-The intended side effect is that this prepares the test for dates before
-1970. The division of a negative value by 86400 doesn't result in the
-desired days-since-1970 value as e.g. secs=-82739 should map to days=-1.
+There are no surprises, the two tests making use of
+rtc_time64_to_tm_test_date_range() continue to succeed.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- drivers/rtc/lib_test.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/rtc/lib_test.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/rtc/lib_test.c b/drivers/rtc/lib_test.c
-index c30c759662e39b48e6fedd37073b656e0de1336b..c0faddc04c9bbcd421cbdc030c4a073056c6a9a6 100644
+index c0faddc04c9bbcd421cbdc030c4a073056c6a9a6..b1ac0701d42e5562b8eae5b191012c8b56a06902 100644
 --- a/drivers/rtc/lib_test.c
 +++ b/drivers/rtc/lib_test.c
-@@ -46,16 +46,13 @@ static void rtc_time64_to_tm_test_date_range(struct kunit *test, int years)
+@@ -6,8 +6,10 @@
+ /*
+  * Advance a date by one day.
+  */
+-static void advance_date(int *year, int *month, int *mday, int *yday)
++static void advance_date(int *year, int *month, int *mday, int *yday, int *wday)
+ {
++	*wday = (*wday + 1) % 7;
++
+ 	if (*mday != rtc_month_days(*month - 1, *year)) {
+ 		++*mday;
+ 		++*yday;
+@@ -43,23 +45,29 @@ static void rtc_time64_to_tm_test_date_range(struct kunit *test, int years)
+ 	int month	= 1;
+ 	int mday	= 1;
+ 	int yday	= 1;
++	int wday	= 4; /* Jan 1st 1970 was a Thursday */
  
  	struct rtc_time result;
  	time64_t secs;
--	s64 days;
++	const time64_t sec_offset = ((1 * 60) + 2) * 60 + 3;
  
  	for (secs = 0; secs <= total_secs; secs += 86400) {
  
- 		rtc_time64_to_tm(secs, &result);
+-		rtc_time64_to_tm(secs, &result);
++		rtc_time64_to_tm(secs + sec_offset, &result);
  
--		days = div_s64(secs, 86400);
--
- 		#define FAIL_MSG "%d/%02d/%02d (%2d) : %lld", \
--			year, month, mday, yday, days
-+			year, month, mday, yday, secs
+-		#define FAIL_MSG "%d/%02d/%02d (%2d) : %lld", \
+-			year, month, mday, yday, secs
++		#define FAIL_MSG "%d/%02d/%02d (%2d, %d) : %lld", \
++			year, month, mday, yday, wday, secs + sec_offset
  
  		KUNIT_ASSERT_EQ_MSG(test, year - 1900, result.tm_year, FAIL_MSG);
  		KUNIT_ASSERT_EQ_MSG(test, month - 1, result.tm_mon, FAIL_MSG);
+ 		KUNIT_ASSERT_EQ_MSG(test, mday, result.tm_mday, FAIL_MSG);
+ 		KUNIT_ASSERT_EQ_MSG(test, yday, result.tm_yday, FAIL_MSG);
++		KUNIT_ASSERT_EQ_MSG(test, 1, result.tm_hour, FAIL_MSG);
++		KUNIT_ASSERT_EQ_MSG(test, 2, result.tm_min, FAIL_MSG);
++		KUNIT_ASSERT_EQ_MSG(test, 3, result.tm_sec, FAIL_MSG);
++		KUNIT_ASSERT_EQ_MSG(test, wday, result.tm_wday, FAIL_MSG);
+ 
+-		advance_date(&year, &month, &mday, &yday);
++		advance_date(&year, &month, &mday, &yday, &wday);
+ 	}
+ }
+ 
 
 -- 
 2.25.1
