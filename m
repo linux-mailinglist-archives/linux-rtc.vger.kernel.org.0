@@ -1,99 +1,101 @@
-Return-Path: <linux-rtc+bounces-4016-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4017-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6BCAA9F7FF
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 20:04:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53CF5A9F854
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 20:18:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03D827AC6AE
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 18:03:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D95461882EE1
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Apr 2025 18:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B50E296151;
-	Mon, 28 Apr 2025 18:04:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A113A293476;
+	Mon, 28 Apr 2025 18:17:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Bs668uBa"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JdFXuMHC"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C25D2957A2
-	for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 18:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BAF426AA8C
+	for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 18:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745863440; cv=none; b=IB0mVp/iOPCQFCWwwSuaJ0H7V/CBSI8XFIqX4fi3c5mCNC7p+ba0UM9vJN0V5TLKK8VDy0aamrqwED+HSxnddLsdxebgbMmn89gxVRFWJkB027IzKYTq1IKbwhBA3P4OCi0fFf9Nk/0g7Yunnc0HqbLJhVZW7GNN+13gPW+cgIM=
+	t=1745864251; cv=none; b=fUx2Jrc9V5g98qOr4VWiwCgDiCFTb9neyp69cYfp9oVoBJSuQOiiWooH0Vk8UOkRqfTzLQXsygVbkuOdj47htOD954Vsu3JSmdDhzGNHU0h7aAArEl8vQVAOQkjyoMWF/pdfzrLS4F5HtVOsC0QUY2gpbbpVilyel+z0sgNHPEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745863440; c=relaxed/simple;
-	bh=2l8v5GoV84d39u4DAVXZu15z37k8q2ZY6Rdpku5UUCk=;
+	s=arc-20240116; t=1745864251; c=relaxed/simple;
+	bh=ihGPBiIAT0ONS82KUfYaHLC1u5yTJJn+nPz0lvfjuhM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NhAMJaN+L0Z0Ui3xjC5I1sTjhxh+lLPxyJLpMwDUtSCU2sb5NUInOWk9sFA+mAANX0E2fD0UAS17bQoyvUSVgFM036p3KqJTbm63MSlyHc4lTpCxJkHTfx8veU32Rdq8S1EbKNiqXPP6t+omBtAFtM+GS5FdRlxelU+M4uuSajQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Bs668uBa; arc=none smtp.client-ip=209.85.221.48
+	 Content-Type:MIME-Version; b=m5ejMePPUOSHReZ6Yd374mgah9YKkhAaXDKTuxq8oJTZG/2RQN3vc4FmX1fNNbNZOUxOPQXdplrtCJZUZaarsdqju7ukxYEpa00atIfMLAKT86OkegvVtqQ59rpzGwA3zBp0iGjSQb61/kF4opJf6JQ03CsL9b59XZL0gT1+83U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JdFXuMHC; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39ee651e419so2686609f8f.3
-        for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 11:03:58 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39c0dfad22aso3945041f8f.2
+        for <linux-rtc@vger.kernel.org>; Mon, 28 Apr 2025 11:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745863437; x=1746468237; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1745864248; x=1746469048; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=LhH2cWJiOFiPJwDHm1EMiooPrujkspMZlGWkH+fi+54=;
-        b=Bs668uBaSvY4P1JahQrbvlmfhR/SnCL81rC6Hp7aJ0v+O6Q/KFCeQeGa2SQ7+Pe8Lu
-         /F4OyEaeSoRUfDRJqlUL2pJcm2SbRwO9sLknWc3bUj1mrH1LtxuYR/IRnp6UgUtPvuzA
-         2oaPU69vccyRLup0su+yxXjXn5Ax6UN/rSGpZ4/7OTZCADCJ4Muee4JbPI8b2Ti3VCNs
-         KbkonCIZ/TEMc5QeaTKuaChAiR2a/nag+nfjHQuGYjQAQVMroXCoY0WnM8ZdA89Xaeix
-         jzkXh3uiHusV5J2aeoq+f1MXb0uftAaLHnsJGCYni969eExB3e5rI+cEYGxnstj2hLRt
-         Fafw==
+        bh=ihGPBiIAT0ONS82KUfYaHLC1u5yTJJn+nPz0lvfjuhM=;
+        b=JdFXuMHCU1DfzzNlVbXseTflawSNktC+c3O+DAd3A6fNw5qiG3rUXBGxiivKGsdFRX
+         +mJvKKr8yJis1EEC6XTs8GRlV5CW6ptjR7W3pa6KsXbGRhHfoMPnqLY1xFNG2f16a/ik
+         JehXBwILuNkJG91COcWhoEKjnsyXCL8wzZLpes9tRblhttTzoxeAcpujMLL4LLA5VwDP
+         BMj4+hOP+9roV3fy0lqRs6kgZbk+vKhsJQjFPxejQdrZU8h5pPb3hkRtAuVP7aTWTfKH
+         c2HmClC1g9AR0HxfiwbQv6xOcjuXSAJRNROOvH9ud7YrwF7zXQdt6QoEVDmr1vcdgyu2
+         n2oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745863437; x=1746468237;
+        d=1e100.net; s=20230601; t=1745864248; x=1746469048;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LhH2cWJiOFiPJwDHm1EMiooPrujkspMZlGWkH+fi+54=;
-        b=c8NYCFEEqFfNKpcNSwO5g94mWCLH2YH9fzuLDPrfifCiM4BHinLninZdDHpKP9UBD0
-         OuY1FzQ9BEuNSMsktiuHIIVfAZ68DRePQlMK544lC7CabHYIcv6nAp+ibo7Vfwq+jRI1
-         y1WHVnTnKOxyPTabSY6lNE1EkJiJKqOfr4N+GqJobxD9TkGzfM+6+F2WMNGsBCV78Rng
-         auuiW/8e8biEFSilZu28RFJU8p0HcSfWA0FR4Mo8cCMkrDZVPKLwEojWv38sBgrKgT8N
-         vMOXeMjbefAXLqgYMuGXr3Du1BnoIi2xrDQjmTllgvADKsbnWsLXN8HByrlN5Nkls6TM
-         Np6w==
-X-Forwarded-Encrypted: i=1; AJvYcCUG3XOH1VvmQYnUY90AyDtAiK3X0A7aSiJz5885nThtBnODraedwIz4WqrgV94RDa4APvEfHS0Uh8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx68eTMcyfwUI3VeRNbLY7uWjG/Uv4Bt4pm/BMB2pk/wA3C7gbL
-	00Sdu1O+Q081Y+vyN5hP2NL9+ij+6BvM9T7rzOl7PmoqAsjYjoPvGw1ti7dZfR8=
-X-Gm-Gg: ASbGncuf2UV2f8ztj5Hqppmjil51yBaYQiHnoh8ShxTqiEpB5zggehpqaPISaIVTh4h
-	8hdAbrt9ONZtSS8xhN97yYdKp+TI/KoXZefZpx+19LBsCJ6+cqaN0+ms6ylXrjgt5FwWKcWrbHa
-	52fs8xDxDr3R7kmapJHDUtdXklGMIs3Ete9H5GJJ5JTbBrr80djoSz22xJIWu0750JV/eVZm/rD
-	0BlvniXrYG3WwTU6c35zdmJ//FctqNpdXLXIED2kczNaP4R92WVF2iBlaxJ9O8HbE2beon0U7B/
-	wLrnrnT+atHK8E8mTX40Z6X9Mmn3rYybesdZTynDKUoh
-X-Google-Smtp-Source: AGHT+IFufjFxqWpK/DiwzoIhe+tnqis6Q5i4cTihbGu1kOEcV7a+TqrcCHr03xN9hBxN/HPNsngJAw==
-X-Received: by 2002:a05:6000:4282:b0:39a:c9c1:5453 with SMTP id ffacd0b85a97d-3a08a3c8a48mr205683f8f.49.1745863436775;
-        Mon, 28 Apr 2025 11:03:56 -0700 (PDT)
+        bh=ihGPBiIAT0ONS82KUfYaHLC1u5yTJJn+nPz0lvfjuhM=;
+        b=Eijbp0z4rUy6vsf97AFDBGkIDpFAsifMOPOT9CoaTbPEtSicAkJSpYu8OKJtNGc8F1
+         cSd1fE1ddJKBxnCuJuvLarAY57PX8Xb84tyiDV8pD8RsZdAbH+8pT8BKNSzEyT5iaIjL
+         A57fTZs7P9FtF+g5pE1fhgI8GPCwaNo0/BNrnBHNaT2fF+PEnFa3sCx68of26eYvN/Lt
+         SXojlw+C+qW3SDCV03E/ePs4z44lgEjHLHXNnKEtoll+4bKdma8NawGRjZN9XKAEN608
+         z2yE8xR5b6293GRJR9KT3WRZrPkAxGKsI4d6qYVRtm/830qhfpa1J5gwPukRdtgntsAX
+         GuKg==
+X-Forwarded-Encrypted: i=1; AJvYcCVbLyhXuoglDg9lWCMGTkzx8F7CrMDF8Xd41sqMm5vGekBamLD1531g6wuZSXuqVuHx+9NXzFyW8HQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIc9Yg6GPjqnnsJ5ZNRHtEte9lR/eRbNOsWcrdtanCwSohHW4r
+	9RKO0sJ2BIOsYtJ26WVzgyG4g/xzFxP7dwIOErNYDyGRRE4HJLIlFFMjueJzEyg=
+X-Gm-Gg: ASbGnctIbziYINEYe49GpI8TCDaWtUcvsNRP4EeovjpKlttPNKDAVEMStImk6bZ4HHf
+	ZGuLTY/t1S5S5KCPB1VE7Qz3dpqsAv7NRRpwEbIIziIWe4rMGU4SSEZMaKS0/R2A/WvJxnQzsRS
+	IDEosto1TVKD2uQ3muBEZ5AxyYkW9ksFcSrDvg9g2N90k4SLglX5Vu1NJASdiDG+lCTSbrnt8OB
+	AgVevB1L63HwsN48U0hQGhhVXTWEV4/YL3Vy89PMSUZo2ADeIk5EXVLBl/Yz9kokPXpGTT/G4qI
+	vpUNgCEF3FX4uUw+/oFwRr1CFugzvcEG0rjJIRnxElSAyaPtECSExac=
+X-Google-Smtp-Source: AGHT+IFizjQdKkSD/fIMemBtF85cPFPzy/Yw/Dq5QRP9W6htVYIl18G4A6sBNzjsAqVDMr/gP96C0g==
+X-Received: by 2002:a05:6000:250e:b0:391:3157:7717 with SMTP id ffacd0b85a97d-3a08a371630mr250630f8f.34.1745864247691;
+        Mon, 28 Apr 2025 11:17:27 -0700 (PDT)
 Received: from draszik.lan ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4409d29b9c4sm167552465e9.3.2025.04.28.11.03.55
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073ca497esm11718402f8f.24.2025.04.28.11.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Apr 2025 11:03:56 -0700 (PDT)
-Message-ID: <e12bac66ea9158e058e48521e6906cb04960e980.camel@linaro.org>
+        Mon, 28 Apr 2025 11:17:27 -0700 (PDT)
+Message-ID: <24314441936d97a1892474eacdbbd690612de265.camel@linaro.org>
 Subject: Re: [PATCH v4 00/32] Samsung S2MPG10 PMIC MFD-based drivers
 From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley	
- <conor+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo
- Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- Michael Turquette	 <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Russell King	 <linux@armlinux.org.uk>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon	 <will@kernel.org>, Alexandre
- Belloni <alexandre.belloni@bootlin.com>, Peter Griffin
- <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Will
- McVicker	 <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Date: Mon, 28 Apr 2025 19:03:54 +0100
-In-Reply-To: <20250410-dancing-free-peacock-536c24@shite>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Lee Jones
+	 <lee@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sylwester Nawrocki
+ <s.nawrocki@samsung.com>, Chanwoo Choi	 <cw00.choi@samsung.com>, Alim
+ Akhtar <alim.akhtar@samsung.com>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Russell King	
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon	 <will@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, Tudor
+ Ambarus	 <tudor.ambarus@linaro.org>, Will McVicker
+ <willmcvicker@google.com>, 	kernel-team@android.com,
+ linux-kernel@vger.kernel.org, 	linux-samsung-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, 	linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, 	linux-rtc@vger.kernel.org, Krzysztof
+ Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Mon, 28 Apr 2025 19:17:25 +0100
+In-Reply-To: <2025041715425693974c6d@mail.local>
 References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
-	 <20250410-dancing-free-peacock-536c24@shite>
+	 <20250415160212.GA372032@google.com> <2025041715425693974c6d@mail.local>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 User-Agent: Evolution 3.54.3-2+build1 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -102,67 +104,38 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Hi Krzysztof,
-
-On Thu, 2025-04-10 at 08:18 +0200, Krzysztof Kozlowski wrote:
-> On Wed, Apr 09, 2025 at 09:37:21PM GMT, Andr=C3=A9 Draszik wrote:
-> > This series adds initial support for the Samsung S2MPG10 PMIC using the
-> > MFD framework. This is a PMIC for mobile applications and is used on
-> > the Google Pixel 6 and 6 Pro (oriole / raven).
-> >=20
-> > *** dependency note ***
-> >=20
-> > To compile, this depends on the Samsung ACPM driver in Linux next with
->=20
-> Are you sure these are build time dependencies? Do not look like.
-
-Yes, there is a build time dependency on the ACPM driver (also
-mentioned in Kconfig). In particular the last series mentioned
-below (acpm-children) adds devm_acpm_get_by_node() which this
-driver needs.
-
->  Also,
-> if they are, the patchset will wait for quite some time.
-
-All the dependencies appear to have landed in linux-next as of
-writing this.
-
->=20
-> > the following additional patches:
-> > https://lore.kernel.org/all/20250324-acpm-atomic-v2-0-7d87746e1765@lina=
-ro.org/
-> > https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linar=
-o.org/
-> > https://lore.kernel.org/all/20250327-acpm-children-v1-0-0afe15ee2ff7@li=
-naro.org/
-> >=20
-> > *** dependency note end ***
-> >=20
-> > +++ Kconfig update +++
-> >=20
-> > There is a Kconfig symbol update in this series, because the existing
-> > Samsung S2M driver has been split into core and transport (I2C & ACPM)
-> > parts. CONFIG_MFD_SEC_CORE is now truly a core driver, and
-> > the I2C code that was part of it is now enabled via CONFIG_MFD_SEC_I2C.
-> >=20
-> > This was necessary because unlike the other S2M PMICs, S2MPG10 doesn't
-> > talk via I2C, but via the Samsung ACPM firmware.
-> >=20
-> > +++ Kconfig update end +++
-> >=20
-> > This series must be applied in-order, due to interdependencies of some
-> > of the patches. There are also various cleanup patches to the S2M
-> > drivers. I've kept them ordered as:
->=20
-> They should not depend... although actually not my trees, except the
-> firmware.
-
-The s2mpg10 core patch adds enums and register macros for the new
-PMIC, which the clk and rtc drivers then use, hence I'm calling out
-this dependency - they can not compile without the core patch in place.
-
-
-Cheers,
-Andre'
+SGkgQWxleGFuZHJlLAoKT24gVGh1LCAyMDI1LTA0LTE3IGF0IDE3OjQyICswMjAwLCBBbGV4YW5k
+cmUgQmVsbG9uaSB3cm90ZToKPiBPbiAxNS8wNC8yMDI1IDE3OjAyOjEyKzAxMDAsIExlZSBKb25l
+cyB3cm90ZToKPiA+ID4gwqBkcml2ZXJzL21mZC9LY29uZmlnwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDM1ICstCj4gPiA+
+IMKgZHJpdmVycy9tZmQvTWFrZWZpbGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgNSArLQo+ID4gPiDCoGRyaXZlcnMvbWZk
+L3NlYy1hY3BtLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB8IDQ0MiArKysrKysrKysrKysrKysrKysrCj4gPiA+IMKgZHJpdmVycy9tZmQv
+c2VjLWNvbW1vbi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCB8IDMwMSArKysrKysrKysrKysrCj4gPiA+IMKgZHJpdmVycy9tZmQvc2VjLWNvcmUu
+Y8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHwgNDgxIC0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ID4gPiDCoGRyaXZlcnMvbWZkL3NlYy1jb3Jl
+LmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCB8wqAgMjMgKwo+ID4gPiDCoGRyaXZlcnMvbWZkL3NlYy1pMmMuY8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAyMzkgKysrKysrKysr
+Kwo+ID4gPiDCoGRyaXZlcnMvbWZkL3NlYy1pcnEuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCA0NjAgKysrKysrKy0tLS0tLS0tLS0t
+LS0KPiA+IAo+ID4gPiDCoGRyaXZlcnMvcnRjL3J0Yy1zNW0uY8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAxOTcgKysrKysrLS0tCj4g
+PiAKPiA+IE1GRCBwYXJ0cyBsb29rIG9rYXkgdG8gbWUgbm93Lgo+ID4gCj4gPiBXaXRoIEFja3Mg
+ZnJvbSB0aGUgQ2xrIGFuZCBSVEMgbWFpbnRhaW5lcnMsIEkgY2FuIG1lcmdlIGFsbCBvZiB0aGUK
+PiA+IGRyaXZlciBzdHVmZiB0b2dldGhlciBhbmQgc3VibWl0IGEgUFIgZm9yIG90aGVycyB0byBw
+dWxsIGZyb20uCj4gPiAKPiAKPiBJIGRvbid0IHRoaW5rIHRoZSBSVEMgcGFydCBkZXBlbmRzIG9u
+IHRoZSBNRkQgb25lIHNvIEkgd2FzIGdvaW5nIHRvCj4gYXBwbHkgdGhlIHBhdGNoZXMgaW4gbXkg
+dHJlZSBpZiB0aGlzIGlzIGZpbmUgZm9yIGV2ZXJ5b25lLgoKUlRDIHBhdGNoIDI3IGRvZXMgZGVw
+ZW5kIG9uIHRoZSBzMm1wZzEwIG1mZCBjb3JlIGRyaXZlciAoZHVlIHRvCnVzaW5nIGVudW1zIGFu
+ZCBtYWNyb3MgaW50cm9kdWNlZCB0aGVyZSkuCgpQYXRjaGVzIDI1LiAyNiwgMjgsIDI5LCAzMCwg
+MzEgaW5kZWVkIGRvbid0IHN0cmljdGx5IGRlcGVuZCBvbiB0aGUKTUZEIGNoYW5nZXMuIFdpdGhv
+dXQgcGF0Y2ggMjcgaW4gcGxhY2UsIHBhdGNoZXMgMjUgJiAyNSB3aWxsCmRlZmluaXRlbHkgc3Rp
+bGwgYXBwbHksIGFuZCBwYXRjaGVzIDI4Kysgd2lsbCBwcm9iYWJseSBhcHBseS4KCklmIHlvdSB3
+YW50IHRvIHRha2UgdGhlbSwgSSBjYW4gdGhlbiByZWJhc2UgdGhpcyBzZXJpZXMgaWYgeW91IHRo
+aW5rCnRoYXQncyBiZXR0ZXIuCgpJJ2xsIGRvIHdoYXRldmVyIGlzIHByZWZlcnJlZCwganVzdCBs
+ZXQgbWUga25vdyA6LSkKCgpDaGVlcnMsCkFuZHJlJwoK
 
 
