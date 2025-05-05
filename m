@@ -1,58 +1,58 @@
-Return-Path: <linux-rtc+bounces-4039-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4040-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBD27AAB505
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 07:20:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CAA6AAB572
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 07:29:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69B9B188442F
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 05:16:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE0BB7B36F8
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 05:26:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7383A39E052;
-	Tue,  6 May 2025 00:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B627A349883;
+	Tue,  6 May 2025 00:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lo3jDAXd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNwXkr7j"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363C22F4192;
-	Mon,  5 May 2025 23:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9310F2F7C3E;
+	Mon,  5 May 2025 23:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486921; cv=none; b=e2DVjDYNTqYm3mMi4peFIxMWfS/pMediIcWtZ+qbjvFkyAtdGUZFBYIuFEwOpoi4Rv0BJBXYaXz8/STyLEJZPTeimmcfH/IWkgr2tQ/zciK4NE6998qQlbU8C6ptTX7OIZamglq+0A56p4QChV/pEmIGVnaY3N0PB1a08bcsnH4=
+	t=1746487172; cv=none; b=HDZabMem71YAZPukYAPvoyHwjXGswkgvuGP+m7f+4kTplyy4xDLtjNkY2vvCE0ZTNcGF6uccCC4nUEun3DbBg4xCnh82dSKfcFQJCzSJ7DCPehIWRp+3kChXytPFBsUnHh6vzK6O4KamhlBz7VktoubQTT25atKQnb1Dllx9wgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486921; c=relaxed/simple;
-	bh=RRUgPX0O/LV1tO5163H3IsNpYfSObehSHHW0CGMWlWk=;
+	s=arc-20240116; t=1746487172; c=relaxed/simple;
+	bh=HvmLGFahVqihGC7medF1+sWUmE6L9s+IAxnR2+uIxZw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=l+3WPiWjPxJgsr7zNznPi73w/16MKL3sKOiLtm6fMd5oWf5vJ4WNNx8XV6TbZp+9SYm+9bnwX92AQSJk18NBJfQVo6iToU1DpswKYQLfe7paJT8po+8JAy3s3cPPsToAUeJfWY0gO8GwBaP2YTVJy6zOZ8NGqPU9rBfHqCKeGlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lo3jDAXd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7968EC4CEE4;
-	Mon,  5 May 2025 23:15:19 +0000 (UTC)
+	 MIME-Version; b=WqUqcSQaz/XR/QabkEBgEFn73oX3vtyfFTSHwBajUVoiLtSUYXIlBrGcDKAE1ZeNfq4kJ1sFLcmBP+khyWIYeMbPMoB1sBeYwuR+M59ngY2nkQ+RbQ76rRgemrnARa07cGF61HjhVzBBPYveYrd2Z4M5D5vuNtiAmdkHpCw+/EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNwXkr7j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0CF8C4CEE4;
+	Mon,  5 May 2025 23:19:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486920;
-	bh=RRUgPX0O/LV1tO5163H3IsNpYfSObehSHHW0CGMWlWk=;
+	s=k20201202; t=1746487172;
+	bh=HvmLGFahVqihGC7medF1+sWUmE6L9s+IAxnR2+uIxZw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Lo3jDAXdAbE4xtGdyqBAv8EzuXFhMbrDNR9GQvFQQSonFYyp1SR6FZICzBysmDVlD
-	 HkClxVs3xw3bn/mxAfUIl9lv7x/Rp9HOYtzVp74sgy2pwSu4UxntPLyKaxbaBdD6NK
-	 rF01fxExfLxwiF22tvKP4hthhLVGp/5yha6SUmsuoLg/5N6rDpv3AZERTo5QhZIqMm
-	 40m4PJ/Lpk+50qdEz8Hr0uNv1VOIl1oz+QonbboARlm1yQNL+08ddriU9xHaSrLgfa
-	 MrVij4+oV3gdYyTL8QNOoLpWh5RtAf5VMtcZb4HiDWotlMzZvkzlnz5WNEx0giU9PT
-	 9QcbedySzBhpA==
+	b=hNwXkr7jW1QYV5OLG25y1C2Vp77cH2fbzDmgD2Vh8n7qjpWnMUnaixokKFLwsKQz9
+	 HrMDtCfm/G5Zuvszu2c+bzSs/+oDacfSPKgS5l8i97TzgQNeknikZJ1IUo82YMfuKi
+	 ZIEPeXpZimIcthHbd1JwCeA5IJoOdBalCJIYf11+SV7ZEOEAA1sJbcU0HHBXsiV+G3
+	 Zv+VtSzRwjNEAL/1uJQ/se0nwvIETCsfo0jtR2AdArS+gdIrIEHsC8soeK/f6E+yGH
+	 YO6tA7kBYfgvqLcH6SMppQrSVZwuqionMLJsof86qNkMiT+HvEFNwLtII4wkXnwX1w
+	 wwGxM/HjKyUCQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 059/153] rtc: ds1307: stop disabling alarms on probe
-Date: Mon,  5 May 2025 19:11:46 -0400
-Message-Id: <20250505231320.2695319-59-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 040/114] rtc: ds1307: stop disabling alarms on probe
+Date: Mon,  5 May 2025 19:17:03 -0400
+Message-Id: <20250505231817.2697367-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505231320.2695319-1-sashal@kernel.org>
-References: <20250505231320.2695319-1-sashal@kernel.org>
+In-Reply-To: <20250505231817.2697367-1-sashal@kernel.org>
+References: <20250505231817.2697367-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -61,7 +61,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.181
+X-stable-base: Linux 5.10.237
 Content-Transfer-Encoding: 8bit
 
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 336cb9aa5e336..d5a7a377e4a61 100644
+index 07a9cc91671b0..3a2401ce2ec9c 100644
 --- a/drivers/rtc/rtc-ds1307.c
 +++ b/drivers/rtc/rtc-ds1307.c
-@@ -1802,10 +1802,8 @@ static int ds1307_probe(struct i2c_client *client,
+@@ -1864,10 +1864,8 @@ static int ds1307_probe(struct i2c_client *client,
  		 * For some variants, be sure alarms can trigger when we're
  		 * running on Vbackup (BBSQI/BBSQW)
  		 */
