@@ -1,125 +1,130 @@
-Return-Path: <linux-rtc+bounces-4050-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4051-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9344AAC8A7
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 16:51:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47632AAC9FF
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 17:49:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16D221C438D5
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 14:51:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F1589827A0
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 15:49:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A561283151;
-	Tue,  6 May 2025 14:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AF3285406;
+	Tue,  6 May 2025 15:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fy8H/APi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kh8VxP8I"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6109D28313B;
-	Tue,  6 May 2025 14:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A002853FC;
+	Tue,  6 May 2025 15:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746543083; cv=none; b=ZWWytL71lDtpCC4eAArw70CdvnpzYxXls3/yt9h8BcAx0ZjToI/TPpcZlRc4T70ooRYWl8wO0YIMzsWgvJ6vprBCpswAO0W3o35ckZcnHC4j5e4NiyC4fG7WP/mR6/BmL6rsX6md4iY/5qzuXzNW1vUCP7kOtQCwN+XpBLrwk/0=
+	t=1746546527; cv=none; b=bnF3A2BRotCl6lE49MhSEyzR1J2TP5h4HO5ohZ/MAjD3BRnIyv0MlNwcO0rhMGw7jNfwKyXHGE6IqMZoE5JmxpN+5kjIoE3+y5WhWwwXOWaZAWedPY+phoU7xOyrpDuAzdVdZwPvPmmT4ayYkHBTZo0PQDAWGQhOYKIrJxsg16M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746543083; c=relaxed/simple;
-	bh=H1RU2TFta5qVhuP759fDl2byXWnRF3dMO2JmE8/xmu4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HZB9FDgPolO7Z6/Qv7qvF50FN5xa57xgV8henetcBCtoNCIS3tpiqaxvGOpj4c6Mr+uigfKxeIERUGcwtrZdaAmlfhPauNHGuNG4kUEW2lIi4ruldEsPRO93j1LLIwQiWkkac23HsNdi2aH/qyXCrb//3nnsU4bPb8vYyzXovTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fy8H/APi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1B8C4CEEF;
-	Tue,  6 May 2025 14:51:20 +0000 (UTC)
+	s=arc-20240116; t=1746546527; c=relaxed/simple;
+	bh=LL/6xDkSD1/0MDkC310YPOBF6wfTECaTbyABLCK9T+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oZlPnexL/f1fXt6Cq0TUWmITVvrwEpEJGAkXzFdp14GmF2Uw1H2+R6//G+JBxm2HTa4IgJbl1did53P7KFmdngLfZWVNW8E4zT7gJ6X7f+gu1vZv5aBZ995wgkj0jX0qfL9qRMJWs3zqpQIunDRNrd1CU8ZDlSy2wOf1+hp7DbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kh8VxP8I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41880C4CEEF;
+	Tue,  6 May 2025 15:48:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746543083;
-	bh=H1RU2TFta5qVhuP759fDl2byXWnRF3dMO2JmE8/xmu4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fy8H/APiiH3kr5ecCxBpDON0xhV1ZG+bEyQj19BqwvXK9fT0U9tK/jjsvM6orHAal
-	 3Nw1q9gYGNI//ZzCjxGRrVhCyLaHOOlomtYkpcwIR89JMpT8F3ptDGhIPDtvMvse+r
-	 kDNAg9y9UNDDF+/H3jA7YneEadzdZ0Nh7foRyn7tHkFQhIxC+BxOSpZqnGa8P3LKMg
-	 NzM02Zhd4Y5q/z+0wRL5aaVczASue7ytVOytgdr7I0eVGwQ8kyp6SyXsjITOzoYzWw
-	 hhX7WPmPBDTdio2xJemj8XSZ8+XpcKD4plUlqGzMj38bETmGPIaWgHPc0Ro+C0Mztm
-	 kStapH7Owpi5Q==
-Message-ID: <05cff759-34e3-4401-935e-ae7cce761aed@kernel.org>
-Date: Tue, 6 May 2025 16:51:18 +0200
+	s=k20201202; t=1746546526;
+	bh=LL/6xDkSD1/0MDkC310YPOBF6wfTECaTbyABLCK9T+U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kh8VxP8IEXeGucQwn2yR/zw3AkNxZRKOrFTRPRIXqjf7B2gPuaj/sdmZb2kiGDAVv
+	 dDZS5lPSYmHhEj5c/Kj4R0D7I+ghafukSsC6jy2vo5IQPilVohdtmHpU8EU8CejiB+
+	 MA/UllmPy6jp6tTyFs9QHoeSrqIomgHofPIbsHRDlEQ2jC763VQKgEsFa5ZKoCzivF
+	 EfHWYPVLAx5w96tsLUcB63ClB2RQTTUZ9jwwja1XnJyTlA15rH8TA0abGC2HcfrBWt
+	 EcK4XD+tIOEQKwOIMBapt2eZkUMcwfO4PjuzyQQ0chgQDw4B7R6tB5R6S1IR5sKXSf
+	 fKcbIuFE+sKxg==
+Date: Tue, 6 May 2025 16:48:42 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Pankit Garg <pankit.garg@nxp.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org,
+	alexandre.belloni@bootlin.com, vikash.bansal@nxp.com,
+	priyanka.jain@nxp.com, daniel.aguirre@nxp.com,
+	shashank.rebbapragada@nxp.com, aman.kumarpandey@nxp.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: Add pcf85053a support
+Message-ID: <20250506-durable-cryptic-24119a6e7dbd@spud>
+References: <20250506094815.3765598-1-pankit.garg@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/7] rtc: pm8xxx: drop unused module alias
-To: Johan Hovold <johan+linaro@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Paul Cercueil <paul@crapouillou.net>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Sebastian Reichel <sre@kernel.org>, linux-rtc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250423130318.31244-1-johan+linaro@kernel.org>
- <20250423130318.31244-6-johan+linaro@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250423130318.31244-6-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="0wR+eHOwNpTPI9SZ"
+Content-Disposition: inline
+In-Reply-To: <20250506094815.3765598-1-pankit.garg@nxp.com>
 
-On 23/04/2025 15:03, Johan Hovold wrote:
-> The driver only support OF probe so drop the unused platform module
-> alias.
-> 
-> Fixes: 5a418558cdae ("rtc: pm8xxx: add support for devicetree")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--0wR+eHOwNpTPI9SZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Tue, May 06, 2025 at 03:18:14PM +0530, Pankit Garg wrote:
+> Add device tree bindings for NXP PCF85053a RTC chip.
+>=20
+> Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
+> ---
+> V1 -> V2: Handled dt-bindings by trivial-rtc.yaml
+>=20
+> ---
+>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 ++
+>  MAINTAINERS                                            | 5 +++++
+>  2 files changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Doc=
+umentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> index 7330a7200831..47be7bbbfedd 100644
+> --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> @@ -65,6 +65,8 @@ properties:
+>        - microcrystal,rv8523
+>        # NXP LPC32xx SoC Real-time Clock
+>        - nxp,lpc3220-rtc
+> +      # NXP PCF85053A Real Time Clock Module with I2C-Bus
+> +      - nxp,pcf85053a
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+>        # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
+>        - ricoh,r2025sd
+>        # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0737dcb2e411..d39fc05c6454 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17782,6 +17782,11 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/sound/nxp,tfa989x.yaml
+>  F:	sound/soc/codecs/tfa989x.c
+> =20
+> +NXP RTC PCF85053A DRIVER
+> +M:	Pankit Garg<pankit.garg@nxp.com>
+> +L:	linux-kernel@vger.kernel.org
+> +S:	Maintained
+
+This looks like a hang-over from your v1 and should really be moved
+to the patch adding the driver.
+
+--0wR+eHOwNpTPI9SZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaBovWQAKCRB4tDGHoIJi
+0pdkAP4tBxS54yfsXjb3rDyc/HUOCio3MOBQ502NNNXZ2ICpywD/ab24a01++WLV
+TKm1JU5IlBvZuj88OsDFgFDjfPYxoQE=
+=IBZ6
+-----END PGP SIGNATURE-----
+
+--0wR+eHOwNpTPI9SZ--
 
