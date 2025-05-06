@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-4048-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4049-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39946AAC878
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 16:45:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1541AAC8A2
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 16:51:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 546D53BFD1C
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 14:45:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A1264A7C77
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 14:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C312280A4B;
-	Tue,  6 May 2025 14:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B056E28313A;
+	Tue,  6 May 2025 14:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMVGHhFd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tgw2mhJO"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4177E27876C;
-	Tue,  6 May 2025 14:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6A7255E37;
+	Tue,  6 May 2025 14:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746542748; cv=none; b=H4bDcFe1vEMDEvIDLSCh+cZZct3SlM1kyIH6DOLTYUdnpaNN5Ed30O1AM99CrivAoVPLDa0F038QKZia1EU17F0dkNuqkAddvEJWsSA7Rfy7czZDD/0ONpqJd+PWCqCzqxYzgZDnlkJmPcq9bVXi2j4QUS+ZM/v5dcgxqrZ9Izg=
+	t=1746543061; cv=none; b=CeC08Gwb+GEO4IDyCwU/7Dg00C8Ta3ypu4rDGYXYhm8snbCzOa/Q8Qp8vH4yOGZ0O9eZYI4T/ucy/+McHJVh4eP+HPsA9pn+26afZniskhIR+gyEo8t44hMcAV89FvaECok95IFrr/Lnf4tZhI6SHm+GT/Y/WzKu0JXgp8kFhPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746542748; c=relaxed/simple;
-	bh=9Dten2jpmliuKUicQjSbBM7Yzb9zJDE7w61qa8+P0gs=;
+	s=arc-20240116; t=1746543061; c=relaxed/simple;
+	bh=cumpEyocBP22ASPVlQL57Br0A3GsNXgMhLFzMRMftGY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PlP1d+VpvdbbG3qBRh48RsdzXZh85yVY3jPjUZt4TqAkORBiYeEcpJOQ6Rwj/M5JTQkuKYJ3mxisWJVsAlC18QxqaUdf8Wt3FiCLrBf3Bx+Qc3YRcIz0WUYkt5II6nm/OyvBDQ2vsVg1KXRD3EnBUpm6SxZsC7pziQOC1njcjMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMVGHhFd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1C2C4CEE4;
-	Tue,  6 May 2025 14:45:44 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=BoJ2nF7rcpf7Mm25pCfVAP4jG7zSKTI0xTE+HK2wQmNz072tGqesyDWsHj+QtVberoaKMnmJY6gm8aDU06HCdz6i/og34lIcoL+NEAtCIY/Kbk58pmfkpZklduJb12bDFRaN+L+8GvpVbJ4hqVniT4AJn2JKXAmG4X9MwRwgCXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tgw2mhJO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B188C4CEE4;
+	Tue,  6 May 2025 14:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746542747;
-	bh=9Dten2jpmliuKUicQjSbBM7Yzb9zJDE7w61qa8+P0gs=;
+	s=k20201202; t=1746543060;
+	bh=cumpEyocBP22ASPVlQL57Br0A3GsNXgMhLFzMRMftGY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tMVGHhFd7T98EUetpCWQDc9vyx6B+D4dlqIDmgWnhhlA9Z0s9zBrElQTwECs189IC
-	 ogX9k3XOtwT/dHAFYDUT8hi5lTTUZLu+dQjAc/JlAW/O/8BvgXkVrnmAFQb5iDhkux
-	 OmA92CmGhTHG14eIIm249DIQ/rw1KB20qyv1YDf48In8y/d3SLvNPPJsaa4/y2mwNZ
-	 XgPg70S67mCCW6SSigURVumnqIfCfphMpRxMnhSdjIpwxi0gtKFovfrFf9TysvskO4
-	 0siKgajbU2POHcqq73dNwiQYJ+SRQtBklpaOthL1M7IOomIjj49hMQKKOSmW7p2IbQ
-	 xExZhTwEZmojQ==
-Message-ID: <1c41c15f-c1de-4329-b671-78268f99431b@kernel.org>
-Date: Tue, 6 May 2025 16:45:43 +0200
+	b=tgw2mhJOI/fqb2m5qAhDFCuUk+QEw9kF/kUI98ISpkyIyEHD2rhEvCh3k3qdqZfch
+	 8xXdBcw93kTiXp/FFXXzOClDNJ36OoL0VN3IVxY5HESQlj3g41NM8fO0NpxOSYESan
+	 ETt+CLjOjZgvyH4o1K4xai06eq6o26tlfIXY+mPN7sTMkanoF+3BnDQYM67PIwaudh
+	 5bXUwXcuCZ9gwgP882apwVH1SOVFjy1nu93nqgRqzfjFo284bROAH/2sKODWBrJAfq
+	 eNxO6aMIjLj83foUZ6QsNOlZS7y+Uvt8BymjKPL6wJphWf1IxAg7SQ+TZDxfY+Iesa
+	 Pv5MZy1uzFzgQ==
+Message-ID: <fd0f7927-67ad-4d5e-9108-cf35eb95af1e@kernel.org>
+Date: Tue, 6 May 2025 16:50:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,11 +50,10 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] rtc: s3c: drop unused module alias
-To: Johan Hovold <johan@kernel.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
+Subject: Re: [PATCH 3/7] rtc: da9063: drop unused module alias
+To: Johan Hovold <johan+linaro@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
  Claudiu Beznea <claudiu.beznea@tuxon.dev>,
  Paul Cercueil <paul@crapouillou.net>,
  Maxime Coquelin <mcoquelin.stm32@gmail.com>,
@@ -62,9 +61,7 @@ Cc: Johan Hovold <johan+linaro@kernel.org>,
  Sebastian Reichel <sre@kernel.org>, linux-rtc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250423130318.31244-1-johan+linaro@kernel.org>
- <20250423130318.31244-7-johan+linaro@kernel.org>
- <193c2c8c-df64-43ab-84ef-5e981fc31469@kernel.org>
- <aBoeFUbBKsNoqyd7@hovoldconsulting.com>
+ <20250423130318.31244-4-johan+linaro@kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,44 +107,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <aBoeFUbBKsNoqyd7@hovoldconsulting.com>
+In-Reply-To: <20250423130318.31244-4-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 06/05/2025 16:35, Johan Hovold wrote:
-> On Tue, May 06, 2025 at 04:19:08PM +0200, Krzysztof Kozlowski wrote:
->> On 23/04/2025 15:03, Johan Hovold wrote:
->>> The driver only support OF probe so drop the unused platform module
->>> alias.
->>>
->>> Fixes: ae05c95074e0 ("rtc: s3c: add s3c_rtc_data structure to use variant data instead of s3c_cpu_type")
->>
->> I believe this is not correct, but instead commit dropping last platform
->> user, which I think was:
->>
->> Fixes: 0d297df03890 ("ARM: s3c: simplify platform code")
+On 23/04/2025 15:03, Johan Hovold wrote:
+> The driver only support OF probe so drop the unused platform module
+> alias.
 > 
-> No, as I write in the commit message, the driver only supports OF probe
-> since the commit I refer to. It fails with -EINVAL and the following
-> error logged:
-> 
-> 	failed getting s3c_rtc_data
-> 
-> for non-OF probe.
+> Fixes: 80ca3277bc7f ("rtc: da9063: Add DA9062 RTC capability to DA9063 RTC driver")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Haha, nice, so commit in 2014 nicely broke that platform's RTC.
-
-There is one more thing: back in 2013-2015, I don't remember exactly,
-the module loading/matching was not working with OF and you needed
-aliases for the actual bus - platform or I2C. IIRC, the bus - platform
-bus in this case - trigger uevent for module and then device match would
-be via OF.
-
-Anyway, this would be only for s3c2410 DT platform, because all others
-(newer) use different compatible thus there would be no s3c2410-rtc
-uevent for them.
-
-Well, does not matter much, just sharing.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
