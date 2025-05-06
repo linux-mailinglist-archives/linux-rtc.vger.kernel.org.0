@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-4044-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4045-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1749EAAC7B1
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 16:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18297AAC7C5
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 16:22:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18D8A1C041B8
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 14:19:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCC421C4234A
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 May 2025 14:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1350F28151F;
-	Tue,  6 May 2025 14:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17CFE2820AB;
+	Tue,  6 May 2025 14:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j9l1MkIS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JiZ8RbnF"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE02F281516;
-	Tue,  6 May 2025 14:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32B122D790;
+	Tue,  6 May 2025 14:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746541154; cv=none; b=cO7AL3P99P1vEBocsKxcAU7HVzOjFRlICNE1m5QX1C2ERGUn6vVbqVYeva0o6ATK6byCQkMxJ+asqyWoPTu3ZqLN0mX15opydRxK2HpUMS1MXrHm2DU6sKpbwz4ece775d0XORe2UlfcLDAHSNpa7hcScLQ9gu4g4R3v7VcG9D8=
+	t=1746541340; cv=none; b=WmctqSL7pFJNZNZmlboYItE9suHlWfczl0SiS0HXVsVAEIqDJ03z67NRQ6WgAn+V3pv8a53unJtB7lEnRB8Wk2KPzp2WLEUHiaYVS0Dc67GTV1jp2GaR9ZyILrqa/aDJwkpWnEQ58KrGlluO0iL/5Z0EhgWGPznAbRbgMlxOiE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746541154; c=relaxed/simple;
-	bh=YaUr46dEd+bklrmflnNwix3uO7WPd0eseILd5TNaO9s=;
+	s=arc-20240116; t=1746541340; c=relaxed/simple;
+	bh=VPm/wYRoC6zSM2m4OkbdSLi39uOT8wULA+OmzIXR2q4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mvo3okr+BFZbb6o5OEYToc7zuobk0axJX8zzQKmEOFQvTr5CNYBZn12tOSRZ5Xa/zAMtl1f1xEhAJMXaWRhgxBV8p4z5bHVGzrydCnMUHkObcOIHOjZ5PTTre7Ut5wZGgim4/di1fX+QeC9mvBmCplrM74w9XKn0ZtH9xIbBIoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j9l1MkIS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5447C4CEE4;
-	Tue,  6 May 2025 14:19:10 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Q3M0yEhFF4xIK0DUAmnWMUIFQqQGbrYAB4tDDAQ2D3+54+PlO1HJH+1egmPRm0p+6h+Q752OlZqP0wztjodqE2cYHQnAh+NGZECP8bjj+LoMypL83QuOamOEYxserYazadAz0lVd/yKqAem/Ly2eOtTNSw0nhxMjRKdHS9aBtkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JiZ8RbnF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F909C4CEE4;
+	Tue,  6 May 2025 14:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746541153;
-	bh=YaUr46dEd+bklrmflnNwix3uO7WPd0eseILd5TNaO9s=;
+	s=k20201202; t=1746541339;
+	bh=VPm/wYRoC6zSM2m4OkbdSLi39uOT8wULA+OmzIXR2q4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j9l1MkIS1uVHAPI3R5C80aLlSVvmtKLW3TuiOE1GgmqheQr08SkrZVFQ5NuKIJCVk
-	 R/RYBqlNYGu2jydPeGpCQdp6HrBeD5/QTfKaMWCr8WhlQnamwwJ636vM9kyxK1x7u3
-	 tU2HddN1wCHk/6a5v4bwEtDNQfydeMDuvy4Erc9QTVNz2evAeWdSyZcDkBo8uXfykK
-	 wSc9Vw1D+cOMdp8KT9CqfXdTEuvY0cmBlaJ7aq6s3w9Abp5LhQJuabLyCpm8PUO6kP
-	 NqU4wkoks0PKr/x0lE44jDX6o8vyFRi3EBTDhsdoXcE22QzWs/giqQhBs1x5gbn0mz
-	 LJ/YdXdN1ML9g==
-Message-ID: <193c2c8c-df64-43ab-84ef-5e981fc31469@kernel.org>
-Date: Tue, 6 May 2025 16:19:08 +0200
+	b=JiZ8RbnF+EF+cKndDovsnj7zC20z+rccuClgVjX+0KWs9tITm9qvXR7WnASyKq4tC
+	 8wli7QE4kTYCBncW44SDxYagZ+FEvONgBn7VHiaTsq9B/F9mzNn/RqjO5ZSqeRn8p1
+	 oteiwGbpQl3bOWwFIGLKuDBvN+uVgeijyCCwov2KlRECDyUdmM2TSqBRCDtG1HKORo
+	 rjGrk62rOIEclisLRbS92B8JRaHRnklVj7SCzuJeTVBjPfeYXvYgvl4H9psHJGAVLX
+	 4ol980sutJAfGnau0pYt8Lm/MdLdtJ3ZQvrjxk9vNHWBEu4dEeqNuvGYbh6bP1HAZC
+	 d1e0Nhsz8zrqg==
+Message-ID: <481af071-5902-42a8-afd9-3643119d6126@kernel.org>
+Date: Tue, 6 May 2025 16:22:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] rtc: s3c: drop unused module alias
+Subject: Re: [PATCH 1/7] rtc: at91rm9200: drop unused module alias
 To: Johan Hovold <johan+linaro@kernel.org>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -61,7 +61,7 @@ Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
  Sebastian Reichel <sre@kernel.org>, linux-rtc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250423130318.31244-1-johan+linaro@kernel.org>
- <20250423130318.31244-7-johan+linaro@kernel.org>
+ <20250423130318.31244-2-johan+linaro@kernel.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,7 +107,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250423130318.31244-7-johan+linaro@kernel.org>
+In-Reply-To: <20250423130318.31244-2-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -115,22 +115,8 @@ On 23/04/2025 15:03, Johan Hovold wrote:
 > The driver only support OF probe so drop the unused platform module
 > alias.
 > 
-> Fixes: ae05c95074e0 ("rtc: s3c: add s3c_rtc_data structure to use variant data instead of s3c_cpu_type")
-
-I believe this is not correct, but instead commit dropping last platform
-user, which I think was:
-
-Fixes: 0d297df03890 ("ARM: s3c: simplify platform code")
-
-
-Just like in other patches here, these are old drivers and even if they
-have OF matching method, they can be or they were modprobed via board files.
-
+> Fixes: 288d9cf1764a ("rtc: at91rm9200: use of_device_get_match_data()")
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-
-
-With the fixes tag fixed (to whatever commit dropping last platform user):
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
