@@ -1,148 +1,383 @@
-Return-Path: <linux-rtc+bounces-4067-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4068-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22F8BAAFECB
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 17:16:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 674DAAB05EE
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 May 2025 00:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9724816B696
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 15:14:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CF5D1BA14EA
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 22:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F16727F4E5;
-	Thu,  8 May 2025 15:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F5321FF3C;
+	Thu,  8 May 2025 22:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYodj+FP"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60662798F1
-	for <linux-rtc@vger.kernel.org>; Thu,  8 May 2025 15:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03D2224AF2;
+	Thu,  8 May 2025 22:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746716944; cv=none; b=l8nyQ1Ix1Z4+By7uxkXH0n2/cEk0tb9BoBFTHhRIdmqeCAa0CUSKtE9FvtZXJZcBPbrBYwFCVNBDGvsqy8l+jItxYnEr9v84doFzAJfEF/FDwkouODzpdfrp/MiiwAwNK8P2L7WeYJzxXY7G5q4AnL3FJXTsOVxNxhZ+u44QCgQ=
+	t=1746742944; cv=none; b=H90M6svubKjFUwRvA5gWQAYJCeefzw/PJPfzwU8C74jsXTVG0SeXI6QjzautOeKefeXiZPreXy2GEXOChp7Z1t4g9eEVb2bHZays41M7jG9n0vgLuyvQ9jpnGa0vKXALz3r5wBzjMSAeuILb0BqFeVI7scH5oFkZWdlsH1MGSmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746716944; c=relaxed/simple;
-	bh=EUta3aTRjT21bXtQrcK4rhz7dH2rAHVXhefracRyNDo=;
+	s=arc-20240116; t=1746742944; c=relaxed/simple;
+	bh=x8ncZbBnesK2pUhqAMnfU/mEnGXb8MQmhLNwSQevhuQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y4HP6J2+Ky3H+5mOMuQn49v/l3a6QVC3XWDVb1MPbdCzEmW72t6NzZnDchDBY68Z5ABpGoNkZh7PvECxdsTzcV1J83/PhZFQW+zC0nXS2Thy0uvQE77on292qUno49JoguYuYONB6MoDs9933pdpRj0v7QhvdNcn/LubyQC8TqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uD2rJ-0006ko-49; Thu, 08 May 2025 17:08:25 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1uD2rG-001kE3-0o;
-	Thu, 08 May 2025 17:08:22 +0200
-Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id CA5A940BC73;
-	Thu, 08 May 2025 15:08:21 +0000 (UTC)
-Date: Thu, 8 May 2025 17:08:15 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250508-prudent-festive-puffin-83f666-mkl@pengutronix.de>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
- <20250423094058.1656204-5-tmyu0@nuvoton.com>
- <20250503-fulmar-of-sexy-upgrade-1184a7-mkl@pengutronix.de>
- <CAOoeyxWbr6jfZjPvYFD+vHKMZ9CpM6SLt+2xo-4E-NnhGinfvg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CYU30+aK1/rPsJdIREjOyPwN4lD40k5KKM0Vc60tVBMF7WI6cA/7ZkRORsujutFTSOBnYzxwhL7GrIqe5ujGfDGej/qtWpRdrMoS5eWH3SzzReQt4E0ZWzIMdo6Kbk1m9EJLExroO54vTFWq6HSdvnJqI7RkqG46BesMYFxGIPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYodj+FP; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6f0c30a1ca3so18737806d6.1;
+        Thu, 08 May 2025 15:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746742942; x=1747347742; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fg3GK54oLt3wm9wAeXHbwjv1eDR1lDC2mM5d6wedhCA=;
+        b=lYodj+FPg6V1k6VGvIV88JL1Hu0Ld5CJVCcaYlC4a0MZZuL04/B+PEmJub4TFF+97H
+         7Cwqe+Tz6tt9yvGFQSg/6O5j9CjibkO5TYgYyUnv8NiQgldG7VdzIiTG3Ee410wdF2c5
+         zQyEYpC33kU/xyUzVQW9C2FMB0ovPDUZfDZZWHvMBfaTAlVbT3jDCLE23xwBArabw6kw
+         fyQqJ3s6qMV3oxVzyyNhLhxOND+B7ZCsSgJDA2u8FqqHYrxy6noDqiSNm0ePPuIUHu+U
+         jd7NcwpUF5VqW5Jr1dxRNVBa1AGszJrepsrk67pYe6TsKmbUzs5cfgufKlUfBVUT+Bj5
+         3WMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746742942; x=1747347742;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fg3GK54oLt3wm9wAeXHbwjv1eDR1lDC2mM5d6wedhCA=;
+        b=ZNbblpmGIIryobMzbVM4S7CbAcI86ImOjdcgBy3Hvfrm1LkU26JVA7RXYdmftVAz4U
+         cty9Vjuzwci+6XRHtTTR9LvVp0Es/VeIblXST0gaccBUNK5J64Sc0Z4EwHVpCXj9Mq7m
+         PrB2KrCCWS2bir3E+qmwx0JsoV1Y4KqADDn6Vgp0q6b96esSAs5hIE5h9cx7o/7gDmeZ
+         h9CLmrWFDW4aFZxUL/lgVveKS1oMhVwX6A+40OXgApXsZzqX4hwl7EEOhdoNt2YnZmPJ
+         DO7zICU9GeA5FOXBRhxqbNqkPMB5CgprnIx58SMOGqsuB8VziW+fOkJIbiHli+oxtRtE
+         49TA==
+X-Forwarded-Encrypted: i=1; AJvYcCVzWM9yBC2h3spUxfGbmWOCLUEiuVMiSEO0G/hWV3UT/EN4ra0vjUJwLDeZqZNaJP5a59xmgOgKttBj@vger.kernel.org, AJvYcCW+Iv3dDXNDO6xFfG9mmnB2YoZw6tWYkISr+KIQlDPflAUSgTFHS72KA4gzX2lWVBpw6YcuBjZyptCFv4E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0N7VxGmy31mkiEhHgcoycWtjohxCl/3LJLIMBlz/1nGJp1QFh
+	1pr43fvExi6q3b8FvJZA/LPCwMdlqzps00Pe3gEpZdz4+UV0hlHYT/9nOIM/
+X-Gm-Gg: ASbGnctVoF2KMunPlvPpNZRO39AU1z4RAUkFXBkTN3TX5hiw+YXsZaYj2up84h04Nrx
+	MXgB/6zhaIv2fAyqYvDK/B3Nf14R9CHkqVeo3KZ7TDODRU0Wc+KxQpVzJiIWSwQPfuiBhLm6P6c
+	uS7z54GJhcSIciWdmALBiXxWpq/argvkFVTkply8en+LHTbTfA1lCWseveWmTV3C932xKcK6E/v
+	lqiFb+adt1ctVEgHz4xRnNEocoavzYOZbN+rB6gh5SpWp5w9WX3N9gfb2QKbj0Da61RGE9b4nVC
+	7XIF02OYl9vQI7C4LWVBqpdejRA=
+X-Google-Smtp-Source: AGHT+IGPmKRd9i0agUYQ+31u6dVr+1AcCz/bSh5SwzVf+qyh1WTBCd3FwcBZCnD03Hf6e01yuwXv0Q==
+X-Received: by 2002:a05:6214:da5:b0:6f5:4079:3189 with SMTP id 6a1803df08f44-6f6e47b9beemr15826506d6.2.1746742941721;
+        Thu, 08 May 2025 15:22:21 -0700 (PDT)
+Received: from localhost ([2001:da8:7001:11::cb])
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f6e39f4821sm5210406d6.33.2025.05.08.15.22.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 May 2025 15:22:21 -0700 (PDT)
+Date: Fri, 9 May 2025 06:21:53 +0800
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
+	sophgo@lists.linux.dev, linux-rtc@vger.kernel.org
+Cc: Jingbao Qiu <qiujingbao.dlmu@gmail.com>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v15] rtc: sophgo: add rtc support for Sophgo CV1800 SoC
+Message-ID: <dm4l3wfcuygmuylz6uqn2g7wztg4tyrjbm24hqcpffjnpkwany@ib2nvjibq2wl>
+References: <20250507195626.502240-1-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fkxqes6nz57lm4hv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOoeyxWbr6jfZjPvYFD+vHKMZ9CpM6SLt+2xo-4E-NnhGinfvg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+In-Reply-To: <20250507195626.502240-1-alexander.sverdlin@gmail.com>
 
+On Wed, May 07, 2025 at 09:56:20PM +0200, Alexander Sverdlin wrote:
+> From: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+> 
+> Implement the RTC driver for CV1800, which able to provide time alarm.
+> 
+> Signed-off-by: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+> Changelog:
+> v15:
+> - the only patch in the series left
+> - dropped changes to MAINTAINERS file
+> v14:
+> - https://lore.kernel.org/lkml/gztsdu5p4tzt7emlwiuc3z74f4tfgkclcyrl324prqzp6dqhhf@ezrdmmhvf2nm/T/
+> - platform device name "cv1800-rtc" -> "cv1800b-rtc"
+> v13:
+> - Change in the Kconfig dependency caused by the move of the previous
+>   patch from MFD into SOC
+> v12:
+> - added MAINTAINERS entry
+> - depends on cv1800-rtcsys MFD driver
+> - use syscon for regmap
+> - get named clock from parent MFD
+> - corresponding platform device is expected to be instantiated by MFD stub
+> Changes since v10:
+> - only start RTC on set_time;
+> Changes since v9:
+> - further simplified bitmask macros;
+> - unconditional RTC start (rtc_enable_sec_counter()), otherwise
+> didn't start on SG2000;
+> - dropped ANA_CALIB modification (has been forgotten in v8 with
+> the drop of SW calibration to switch to HW calibration);
+> - successfully tested on SG2000;
+> 
+> 
+>  drivers/rtc/Kconfig      |  12 +++
+>  drivers/rtc/Makefile     |   1 +
+>  drivers/rtc/rtc-cv1800.c | 218 +++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 232 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-cv1800.c
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 0bbbf778ecfa..46593103db11 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -1395,6 +1395,18 @@ config RTC_DRV_ASM9260
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called rtc-asm9260.
+>  
+> +config RTC_DRV_CV1800
+> +	tristate "Sophgo CV1800 RTC"
+> +	depends on SOPHGO_CV1800_RTCSYS || COMPILE_TEST
+> +	select MFD_SYSCON
+> +	select REGMAP
+> +	help
+> +	  If you say yes here you get support the RTC driver for Sophgo CV1800
+> +	  series SoC.
+> +
+> +	  This driver can also be built as a module. If so, the module will be
+> +	  called rtc-cv1800.
+> +
+>  config RTC_DRV_DIGICOLOR
+>  	tristate "Conexant Digicolor RTC"
+>  	depends on ARCH_DIGICOLOR || COMPILE_TEST
+> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> index 489b4ab07068..621b30a33dda 100644
+> --- a/drivers/rtc/Makefile
+> +++ b/drivers/rtc/Makefile
+> @@ -44,6 +44,7 @@ obj-$(CONFIG_RTC_DRV_CADENCE)	+= rtc-cadence.o
+>  obj-$(CONFIG_RTC_DRV_CMOS)	+= rtc-cmos.o
+>  obj-$(CONFIG_RTC_DRV_CPCAP)	+= rtc-cpcap.o
+>  obj-$(CONFIG_RTC_DRV_CROS_EC)	+= rtc-cros-ec.o
+> +obj-$(CONFIG_RTC_DRV_CV1800)	+= rtc-cv1800.o
+>  obj-$(CONFIG_RTC_DRV_DA9052)	+= rtc-da9052.o
+>  obj-$(CONFIG_RTC_DRV_DA9055)	+= rtc-da9055.o
+>  obj-$(CONFIG_RTC_DRV_DA9063)	+= rtc-da9063.o
+> diff --git a/drivers/rtc/rtc-cv1800.c b/drivers/rtc/rtc-cv1800.c
+> new file mode 100644
+> index 000000000000..18bc542bbdb8
+> --- /dev/null
+> +++ b/drivers/rtc/rtc-cv1800.c
+> @@ -0,0 +1,218 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * rtc-cv1800.c: RTC driver for Sophgo cv1800 RTC
+> + *
+> + * Author: Jingbao Qiu <qiujingbao.dlmu@gmail.com>
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/irq.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/rtc.h>
+> +
+> +#define SEC_PULSE_GEN          0x1004
+> +#define ALARM_TIME             0x1008
+> +#define ALARM_ENABLE           0x100C
+> +#define SET_SEC_CNTR_VAL       0x1010
+> +#define SET_SEC_CNTR_TRIG      0x1014
+> +#define SEC_CNTR_VAL           0x1018
+> +
+> +/*
+> + * When in VDDBKUP domain, this MACRO register
+> + * does not power down
+> + */
+> +#define MACRO_RO_T             0x14A8
+> +#define MACRO_RG_SET_T         0x1498
+> +
+> +#define ALARM_ENABLE_MASK      BIT(0)
+> +#define SEL_SEC_PULSE          BIT(31)
+> +
+> +struct cv1800_rtc_priv {
+> +	struct rtc_device *rtc_dev;
+> +	struct regmap *rtc_map;
+> +	struct clk *clk;
+> +	int irq;
+> +};
+> +
+> +static bool cv1800_rtc_enabled(struct device *dev)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> +	u32 reg;
+> +
+> +	regmap_read(info->rtc_map, SEC_PULSE_GEN, &reg);
+> +
+> +	return (reg & SEL_SEC_PULSE) == 0;
+> +}
+> +
+> +static void cv1800_rtc_enable(struct device *dev)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> +
+> +	/* Sec pulse generated internally */
+> +	regmap_update_bits(info->rtc_map, SEC_PULSE_GEN, SEL_SEC_PULSE, 0);
+> +}
+> +
+> +static int cv1800_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> +
+> +	regmap_write(info->rtc_map, ALARM_ENABLE, enabled);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cv1800_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> +	unsigned long alarm_time;
+> +
+> +	alarm_time = rtc_tm_to_time64(&alrm->time);
+> +
+> +	cv1800_rtc_alarm_irq_enable(dev, 0);
+> +
+> +	regmap_write(info->rtc_map, ALARM_TIME, alarm_time);
+> +
+> +	cv1800_rtc_alarm_irq_enable(dev, alrm->enabled);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cv1800_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> +	u32 enabled;
+> +	u32 time;
+> +
+> +	if (!cv1800_rtc_enabled(dev)) {
+> +		alarm->enabled = 0;
+> +		return 0;
+> +	}
+> +
+> +	regmap_read(info->rtc_map, ALARM_ENABLE, &enabled);
+> +
+> +	alarm->enabled = enabled & ALARM_ENABLE_MASK;
+> +
+> +	regmap_read(info->rtc_map, ALARM_TIME, &time);
+> +
+> +	rtc_time64_to_tm(time, &alarm->time);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cv1800_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> +	u32 sec;
+> +
+> +	if (!cv1800_rtc_enabled(dev))
+> +		return -EINVAL;
+> +
+> +	regmap_read(info->rtc_map, SEC_CNTR_VAL, &sec);
+> +
+> +	rtc_time64_to_tm(sec, tm);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cv1800_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_get_drvdata(dev);
+> +	unsigned long sec;
+> +
+> +	sec = rtc_tm_to_time64(tm);
+> +
+> +	regmap_write(info->rtc_map, SET_SEC_CNTR_VAL, sec);
+> +	regmap_write(info->rtc_map, SET_SEC_CNTR_TRIG, 1);
+> +
+> +	regmap_write(info->rtc_map, MACRO_RG_SET_T, sec);
+> +
+> +	cv1800_rtc_enable(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t cv1800_rtc_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct cv1800_rtc_priv *info = dev_id;
+> +
+> +	rtc_update_irq(info->rtc_dev, 1, RTC_IRQF | RTC_AF);
+> +
+> +	regmap_write(info->rtc_map, ALARM_ENABLE, 0);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static const struct rtc_class_ops cv1800_rtc_ops = {
+> +	.read_time = cv1800_rtc_read_time,
+> +	.set_time = cv1800_rtc_set_time,
+> +	.read_alarm = cv1800_rtc_read_alarm,
+> +	.set_alarm = cv1800_rtc_set_alarm,
+> +	.alarm_irq_enable = cv1800_rtc_alarm_irq_enable,
+> +};
+> +
 
---fkxqes6nz57lm4hv
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+> +static int cv1800_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct cv1800_rtc_priv *rtc;
+> +	int ret;
+> +
+> +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> +	if (!rtc)
+> +		return -ENOMEM;
+> +
+> +	rtc->rtc_map = device_node_to_regmap(pdev->dev.parent->of_node);
+> +	if (IS_ERR(rtc->rtc_map))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->rtc_map),
+> +				     "cannot get parent regmap\n");
+> +
+> +	rtc->irq = platform_get_irq(pdev, 0);
+> +	if (rtc->irq < 0)
+> +		return rtc->irq;
+> +
+> +	rtc->clk = devm_clk_get_enabled(pdev->dev.parent, "rtc");
+> +	if (IS_ERR(rtc->clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk),
+> +				     "rtc clk not found\n");
+> +
+> +	platform_set_drvdata(pdev, rtc);
+> +
+> +	device_init_wakeup(&pdev->dev, 1);
+> +
+> +	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(rtc->rtc_dev))
+> +		return PTR_ERR(rtc->rtc_dev);
+> +
+> +	rtc->rtc_dev->ops = &cv1800_rtc_ops;
+> +	rtc->rtc_dev->range_max = U32_MAX;
+> +
+> +	ret = devm_request_irq(&pdev->dev, rtc->irq, cv1800_rtc_irq_handler,
+> +			       IRQF_TRIGGER_HIGH, "rtc alarm", rtc);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "cannot register interrupt handler\n");
+> +
+> +	return devm_rtc_register_device(rtc->rtc_dev);
+> +}
+> +
 
-On 08.05.2025 11:26:09, Ming Yu wrote:
-> > > This driver supports Socket CANFD functionality for NCT6694 MFD
-> > > device based on USB interface.
-> > >
-> > > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> >
-> > The destroy functions nct6694_canfd_close() and nct6694_canfd_remove()
-> > are not the exact inverse of their init functions. Se comments inline.
-> >
-> > Please fix and add:
-> >
-> > Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> > Feel free to mainline this patch as part of the series outside of the
-> > linux-can-next tree. Better ask the netdev maintainers for their OK, to=
-o.
-> >
-> > What about transceiver delay compensation for higher CAN-FD bitrates?
-> > How does you device handle these?
-> >
->=20
-> In the CAN CMD0's DBTP field, bit 23 is the TDC flag, I will add
-> support for enabling tdc, and firmware will automatically configure
-> tdco. Do you think this approach is appropriate?
+I wonder whether the rtc driver may need reset (maybe optional) for this?
+If so, please add it.
 
-Can you configure the TDC manually via USB?
-
-If the firmware does automatic TDCO configuration, does it take care of
-not enabling TCDO if the Data-BRP is > 2?
-
-BTW: What's the CAN clock of the device? I want to add it to the
-can-utils' bitrate calculation tool.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---fkxqes6nz57lm4hv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmgcyNwACgkQDHRl3/mQ
-kZzE7Af9FGhvmDVRrnQ/F4bSbWoG2NTq/f6c3fZSGEWA89N5tefMfjZvh7dlyYji
-VaHiukxhQV4tR1h1zXxI/eZ9VQA3NyE5dv4XDcTtPDQILQ03+/sEQOOCSoI8Nb+d
-1WJ6Wvj7apYZa6Qvl+s9K5JVrgaRiQOBFXeKIQYAqTaR0DpQ8nB0gYdClnRowTeB
-gTYVRD/j3fNoE6Cm2DTMs/rzDxp57S/RTZTWuqpbo6i39xQZnv4c6IX6kRHS51Lg
-pQQNi1JctlAO52n2YZnYbBVa3P6XM3f/qLDmL7PYzYFo4v5O19avY0wiuanBk+hK
-wllO7zAOx6+Zxj0ABxJ9edXuP0H61g==
-=EkV4
------END PGP SIGNATURE-----
-
---fkxqes6nz57lm4hv--
+Regards,
+Inochi
 
