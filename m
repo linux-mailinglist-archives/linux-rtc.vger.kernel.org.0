@@ -1,185 +1,281 @@
-Return-Path: <linux-rtc+bounces-4064-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4065-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38453AAF3F6
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 08:44:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7D83AAF415
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 08:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BD86980DC8
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 06:43:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 057CA3AE49E
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 06:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DD021ADC7;
-	Thu,  8 May 2025 06:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB61021CC57;
+	Thu,  8 May 2025 06:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IQMEo6hG"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E603621A44B;
-	Thu,  8 May 2025 06:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84B421CA14;
+	Thu,  8 May 2025 06:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746686626; cv=none; b=XD5w5iB3mmSPGv9DwSFXayrdFMTgmzG84TDH+7FvCPgRS7u0XUS5Du8I8A/QXLGoI0J3duAO068WPRIDFbHjf6DtCovE5gRCAV7y01q/p4KHeup7slVpMfFxFinWbB0e9WuzIaNiQJbmQTdhzMOYtOb/EYbE6ZsVkxh1SC6jMxY=
+	t=1746686925; cv=none; b=RnkLbSN9hUHp2wlHcgYt/DyODK4fT95HIj0tQ7cPx5ixr1R3TZi+sBJ0gtpMQmU3CietPXErNHL31XIdUG1uG7JJwXDBrgx12jV1FDPeDqq0JIWG7XBzBxfAXBVsqFlZsF19LHlpYvht9/RuFnvxsl3yHDoI8HAII4532Aqjf2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746686626; c=relaxed/simple;
-	bh=ALXW81uUrisfgcjtb0ouK01mwUo3Mqd/ZMmNS0XeX2U=;
-	h=Date:From:To:Cc:Subject:References:Mime-Version:Message-ID:
-	 Content-Type; b=gZobe1A5PhVNPheCtWBuUSkurStd2+MUvqqDHNTXn9mdA62q+uEpIV3EopTsazPaw+1jMm6xtqPLkMq4ar14OATDQng9WcjXxTUZ66VAQ13eLNbB4EbNWKn0WtkMzWn6pwglk0p3+dHo4CKsH6rOVkCAJyYQQsf8Z5BAWwU0Vcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.com.cn; spf=pass smtp.mailfrom=kylinos.com.cn; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.com.cn
-X-QQ-mid: esmtpsz18t1746686588t2685c14f
-X-QQ-Originating-IP: QnHYIOYg0Zm3iyQW04mhygOyD/ALwlNoRQFHJOpkG2g=
-Received: from DESKTOP-SUAVFFI ( [118.249.225.48])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 08 May 2025 14:43:05 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7358442712510008102
-EX-QQ-RecipientCnt: 13
-Date: Thu, 8 May 2025 14:43:37 +0800
-From: "liudalin@kylinos.com.cn" <liudalin@kylinos.com.cn>
-To: zhoubinbin <zhoubinbin@loongson.cn>, 
-	=?UTF-8?B?5YiY6L6+5p6X?= <liudalin@kylinsec.com.cn>, 
-	alexandre.belloni <alexandre.belloni@bootlin.com>, 
-	wangming01 <wangming01@loongson.cn>
-Cc: chenhuacai <chenhuacai@kernel.org>, 
-	gaojuxin <gaojuxin@loongson.cn>, 
-	git <git@xen0n.name>, 
-	jiaxun.yang <jiaxun.yang@flygoat.com>, 
-	keguang.zhang <keguang.zhang@gmail.com>, 
-	lixuefeng <lixuefeng@loongson.cn>, 
-	linux-rtc <linux-rtc@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	zhoubb.aaron <zhoubb.aaron@gmail.com>
-Subject: Re: Re: [PATCH] rtc: loongson: Add missing alarm notifications for ACPI RTC events
-References: <20250429062736.982039-1-liudalin@kylinsec.com.cn>, 
-	<2fa3740a-9181-40bf-9b1a-eeb6ffc6f23f@loongson.cn>
-X-Priority: 3
-X-GUID: D242E433-C5E1-45A1-886C-7C52DDA20DA9
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.21.453[cn]
+	s=arc-20240116; t=1746686925; c=relaxed/simple;
+	bh=YMrOzD3VyxiaoPpfqoCDnpxhDzrnythHPKhA1mCv52Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tSi2Zi9ZBOv6+Q750b13uwzxx0alF+7yUqoaJ4rvmW1tGmgC6tge5kpSCZrji2mI41S/ibVrc+MHotIhrGEdAiLBLVE6BmEuBfeOQW72etEsWR7JxCBX7xzuVTk2fvembmSHLivWgdHmghNVLXWO6nqwPNizWVQ/714bLQRJj6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IQMEo6hG; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac3b12e8518so122932666b.0;
+        Wed, 07 May 2025 23:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746686922; x=1747291722; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ao8mC0ekvjVOFywPGMkg1iNykeaz41R3uCCx81z58CE=;
+        b=IQMEo6hGo9mP7T2vc3pTYx47zQlSkwFQ6Tq12BA2SpftYRI34vOphkQSmlVp4tPiao
+         xI+AcotsM86GzMkqAl6IfC8ZlS/tzL2x58pEIlW5OKkzxzlbODlqzMmCgCeK4EjNWdbt
+         ltx0kxqcg1z+Aswd9FqiM0GroT2Ih+/h6NEA2auD4mFH3nzTLDr+C4GAJ4PAFodyp+44
+         RFjE53djeJh33EG7+fE0ankB6Gy23EbNdM5YOrRo7kVRcWam49EHC9gBoKYPYqeIcMKY
+         gTw1LHXnyEj4tdmm0K18OThAzv8jXtiRmrTPf36k4unTaH2xohweAL6KBagrpy1iWnnr
+         OtbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746686922; x=1747291722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ao8mC0ekvjVOFywPGMkg1iNykeaz41R3uCCx81z58CE=;
+        b=wSAPRFhAuCefnUzL4ZPU9JOMSlotJYGVMimUslUi2cuasWT3VxdSl9ZF/X79Cpkhpv
+         OI3kyeZpP/LAE5qDqn75yRWqFZzwTFRknodOvPIMTslDvCrbNNEj4I+7PFzJypKRDpAm
+         IqTMucGQV1eEIglfbT+SE4z1C6IEkArOGc5bm+7GMJbYJgfQJlDE2vCS9+EURZj4ZKr1
+         tZM6BtPj5leOVgndA9hk7UFFUh/Dq7Py1Nh2z8IGje0hDLxvGx173zaZXQrHr2Gk+u/9
+         Uq7RsGYntcCLkZmgQ0uIAE3ftvLB24ZmkkvFWUAA/XDv5qK07noldJY4Ph7bd3sVttwA
+         CbYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVDYvguODmveFCfGAEKjSiM/2V1jRibzjiyW8YWZ1DKrWXMsj0RO22ROeHBPiRy8aXml2G9H3skW53u@vger.kernel.org, AJvYcCWX5PgHX1icHbrzB3lCfcSN/tZyKvJ25lMh75MLVGN86ZwAVM2W4EypYf5GNBPxToBe5CZvxtfDSu0jIvo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkWrg0l7XUlVqYe01xmHVmtJwcrEI36YoyuTXBZVFR7OBET8ob
+	wcLu9UnswCvBryUuNnDc8qiTLGEKBPqlFzd8ROetXqG5D7GtfgQOCIvA53YvxzyGvS3fTfAXHNX
+	jFOvAQpZ7GB+2yqlZP61lZJIeym8=
+X-Gm-Gg: ASbGncu9OMPKiFobaFPL7NPM5UhQKzNr0rgoLngeyfMb5g4qti5nEmQw/bAStQnEiXy
+	H1QbpVLZyyYxzdGt93ihBNOks6i4iI4wM6oD1JNFJpFE2UUI0Xew8AtbPkYhyIQu3BpHko2L3vg
+	zDfNgEvCjJLGDyo2QNVRidolRCCagH/DWQaA==
+X-Google-Smtp-Source: AGHT+IGZkbzmd9kVO5qhPqdJ+ayM/ASir2y6ZnQGrwOuPLqKHTltqMdpDNUm3EvvBgGyljIQNkhGk4hR2LAgvesT+JY=
+X-Received: by 2002:a17:906:99c4:b0:ad2:a2c:cc1d with SMTP id
+ a640c23a62f3a-ad20a2ccebamr42689566b.2.1746686921891; Wed, 07 May 2025
+ 23:48:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <2F2C4ADAA7F0A3F4+2025050814433635296030@kylinos.com.cn>
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:kylinos.com.cn:qybglogicsvrgz:qybglogicsvrgz8a-0
-X-QQ-XMAILINFO: OR0QjYVUcDVNvOOaCbe6Nak+QFq9iNmlRzYuRMRStNVlOmN04L7SscBy
-	1IyUFLjX42PSAs7BCYmM6baXJac27KYSeEnui/TDP50Ob4QUQGrhXqoCT/dw2BOr1K7LaeG
-	3N6oDK2XmNn4TMV1CWTK07vCHO5lvaEHmOvQXixfeS6WFnGvp1ahPGnJLowr+ym7FGoJUsY
-	4m2T8d+9Rw0JFgqBXaiWR3et5WXwPkOijhrd89hYXwnMfYaONE44nMcVXVU7K7WPuuQzyEr
-	lBQZVEgAlqqacCscek3fqe1VOvlEXy8VJGaAjfgbTOLiZF/5Cyrpp8H2e/n4LpnkN771sXp
-	koZB6n0eYt81FWETU+fJSOHFmOv6Qhxj1CtqI2ICLKW9plmR9t62qq0ijSpeY9O1EdBJPvg
-	TcJvVdxwKwzwc3U9DZ8CK2ftOrv0z9Bif7nUcwuiUCLOlpG7bA0q+IW+fOaPiWwDyGNWh0G
-	6B5do/Zn3aFS7HkYEv9x/uPxaKRGk55XoByZZ+KPFqq1385bz2ogQ9aiy1+UVY5XNNpX6ZP
-	gPcxDA+gcPHFWfUn3RvrN+RQc627+eVbDj4B0feXrqe6tJrqdINT+U8OYP/2fWOfRVDS4Z6
-	OiUjzd9yCerSTyKhCkpGWrRaiq2z/2Xaag4lHIF7LX9WmqUq9Q+MFFDsUyaG9al6L2reg5g
-	UJntnNVtYERXSXSFviHlSCuBH3yBkR7cV9VJeXphtvAq2fqK6JkqBiyRXXd4AYGtXVY3ao0
-	+eBivdhChTN/PhWI0CVOnpTXDfDgcDGs1aic89j3nZ8FgmkQxkKPYPsENovPonEWXC51Ec2
-	R4hv/CWSKaEKXDeyvjAv4wjSYzEnETd0BDiqal+e5fAFykwLnwyCoEIiQwsrncsdpeXLfw3
-	7FW2tcAN3pfOeoyw5vBrTYCQAhydbGwc7w7qJgleqxkT/JfNrNIbxeJmTMX2LRPh0zKVurP
-	1hUjFxsdv5rCvEp42OH3hg6wIQEoH3kxFCAyL8U99uLILXrs6Y+nkERMOBablPlqzAEDUvy
-	grBfxlIwdYixKiomaUQbpKwiVCvm6ppAu+dlt7SyidfQuMfNtP+QjziOrQp/0=
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-X-QQ-RECHKSPAM: 0
+MIME-Version: 1.0
+References: <20250429062736.982039-1-liudalin@kylinsec.com.cn>
+ <2fa3740a-9181-40bf-9b1a-eeb6ffc6f23f@loongson.cn> <58BBF92742F0D0E1+2025050814202393211321@kylinos.com.cn>
+In-Reply-To: <58BBF92742F0D0E1+2025050814202393211321@kylinos.com.cn>
+From: Binbin Zhou <zhoubb.aaron@gmail.com>
+Date: Thu, 8 May 2025 14:48:27 +0800
+X-Gm-Features: ATxdqUFj9CwgwvS0tMOEYz0BHKMvdAHU6JmB6epS3RzSRFOPgayYDkdNO5Ea3bM
+Message-ID: <CAMpQs4KN_OBOi8XO0pcXXDEt-D2RrN8NUTVYQBOHRY89gufi=A@mail.gmail.com>
+Subject: Re: Re: [PATCH] rtc: loongson: Add missing alarm notifications for
+ ACPI RTC events
+To: "liudalin@kylinos.com.cn" <liudalin@kylinos.com.cn>
+Cc: zhoubinbin <zhoubinbin@loongson.cn>, =?UTF-8?B?5YiY6L6+5p6X?= <liudalin@kylinsec.com.cn>, 
+	"alexandre.belloni" <alexandre.belloni@bootlin.com>, wangming01 <wangming01@loongson.cn>, 
+	chenhuacai <chenhuacai@kernel.org>, gaojuxin <gaojuxin@loongson.cn>, git <git@xen0n.name>, 
+	"jiaxun.yang" <jiaxun.yang@flygoat.com>, "keguang.zhang" <keguang.zhang@gmail.com>, 
+	lixuefeng <lixuefeng@loongson.cn>, linux-rtc <linux-rtc@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGkgQmluYmluOgogICBUaGUgZGVzY3JpYmVkIGlzc3VlIGRvZXMgbm90IGhhcHBlbmVkICB3aXRo
-IG9yIHdpdGhvdXQgdGhlIHBhdGNoIGJ5IHRlc3QsIGFzIHRoZSBpbnRlcnJ1cHQgaXMgbWFuYWdl
-ZCBieSBhY3BpLiAKCiAgIFRoZSBkZXZpY2UgaW5mbyBhbmQgdGVzdCByZXN1bHQgYXJlIGFzIGZv
-bGxvd3MuCgoxLiBEZXZpY2UgaW5mbwpb57O757uf5pyq5r+A5rS7XVtyb290QG1haWwgdGVzdF0j
-IGRtaWRlY29kZSAtcQpCSU9TIEluZm9ybWF0aW9uCiAgICAgICAgVmVuZG9yOiBaRC1URUNICiAg
-ICAgICAgVmVyc2lvbjogVjA5CiAgICAgICAgUmVsZWFzZSBEYXRlOiAwNi8xNS8yMDIyCiAgICAg
-ICAgUk9NIFNpemU6IDggTUIKICAgICAgICBDaGFyYWN0ZXJpc3RpY3M6CiAgICAgICAgICAgICAg
-ICBQQ0kgaXMgc3VwcG9ydGVkCiAgICAgICAgICAgICAgICBCSU9TIGlzIHVwZ3JhZGVhYmxlCiAg
-ICAgICAgICAgICAgICBCSU9TIHNoYWRvd2luZyBpcyBhbGxvd2VkCiAgICAgICAgICAgICAgICBC
-b290IGZyb20gQ0QgaXMgc3VwcG9ydGVkCiAgICAgICAgICAgICAgICBTZWxlY3RhYmxlIGJvb3Qg
-aXMgc3VwcG9ydGVkCiAgICAgICAgICAgICAgICBCSU9TIFJPTSBpcyBzb2NrZXRlZAogICAgICAg
-ICAgICAgICAgU2VyaWFsIHNlcnZpY2VzIGFyZSBzdXBwb3J0ZWQgKGludCAxNGgpCiAgICAgICAg
-ICAgICAgICBVU0IgbGVnYWN5IGlzIHN1cHBvcnRlZAogICAgICAgICAgICAgICAgRnVuY3Rpb24g
-a2V5LWluaXRpYXRlZCBuZXR3b3JrIGJvb3QgaXMgc3VwcG9ydGVkCiAgICAgICAgICAgICAgICBV
-RUZJIGlzIHN1cHBvcnRlZAogICAgICAgIEJJT1MgUmV2aXNpb246IDQuMAogICAgICAgIEZpcm13
-YXJlIFJldmlzaW9uOiAwLjQKClN5c3RlbSBJbmZvcm1hdGlvbgogICAgICAgIE1hbnVmYWN0dXJl
-cjogR0VJVAogICAgICAgIFByb2R1Y3QgTmFtZTogVVQ2MDAwLUxCNQogICAgICAgIFZlcnNpb246
-IDEuMAogICAgICAgIFNlcmlhbCBOdW1iZXI6IFRCRCBieSBPRU0KICAgICAgICBVVUlEOiAwMDEx
-MjIzMy00NDU1LTY2NzctODg5OS1hYWJiY2NkZGVlZmYKICAgICAgICBXYWtlLXVwIFR5cGU6IFBv
-d2VyIFN3aXRjaAogICAgICAgIFNLVSBOdW1iZXI6IExvb25nc29uX1NLVQogICAgICAgIEZhbWls
-eTogVHlwZTFGYW1pbHkKCkJhc2UgQm9hcmQgSW5mb3JtYXRpb24KICAgICAgICBNYW51ZmFjdHVy
-ZXI6IEdFSVQKICAgICAgICBQcm9kdWN0IE5hbWU6IEdHLTNBNTAwMC0wMgogICAgICAgIFZlcnNp
-b246IDEuMAogICAgICAgIFNlcmlhbCBOdW1iZXI6IENoYXNzaXMgQm9hcmQgU2VyaWFsI1RvIEJl
-IEZpbGxlZCBCeSBPLkUuTQogICAgICAgIEFzc2V0IFRhZzogVHlwZTIgLSBCb2FyZCBBc3NldCBU
-YWcKICAgICAgICBGZWF0dXJlczoKICAgICAgICAgICAgICAgIEJvYXJkIGlzIGEgaG9zdGluZyBi
-b2FyZAogICAgICAgICAgICAgICAgQm9hcmQgaXMgcmVwbGFjZWFibGUKICAgICAgICBMb2NhdGlv
-biBJbiBDaGFzc2lzOiBUeXBlMiAtIEJvYXJkIENoYXNzaXMgTG9jYXRpb24KICAgICAgICBUeXBl
-OiBNb3RoZXJib2FyZAouLi4KCjIuIFRoZSBzeXN0ZW0gZXhoaWJpdHMgYSB0aW1lb3V0IGVycm9y
-IHdoZW4gd2FpdGluZyBmb3IgYWxhcm0gc2lnbmFsIHJlc3BvbnNlIHdpdGhvdXQgdGhlIHBhdGNo
-Lgpb57O757uf5pyq5r+A5rS7XVtyb290QG1haWwgdGVzdF0jIGNhdCAvcHJvYy9pbnRlcnJ1cHRz
-IHxncmVwIGFjcGkKMjE6ICAgICAgICAgIDMgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAg
-IDAgICBQQ0ggUElDICAgMSAgYWNwaQpb57O757uf5pyq5r+A5rS7XVtyb290QG1haWwgdGVzdF0j
-Clvns7vnu5/mnKrmv4DmtLtdW3Jvb3RAbWFpbCB0ZXN0XSMgLi9ydGMwMQpSVEMgUkVBRCBURVNU
-OgpSVEMgUkVBRCBURVNUIFBhc3NlZApDdXJyZW50IFJUQyBkYXRlL3RpbWUgaXMgOC01LTIwMjUs
-IDA1OjUwOjA1LgpSVEMgQUxBUk0gVEVTVCA6QWxhcm0gdGltZSBzZXQgdG8gMDU6NTA6MTAuCldh
-aXRpbmcgNSBzZWNvbmRzIGZvciB0aGUgYWxhcm0uLi4KVGltZWQgb3V0IHdhaXRpbmcgZm9yIHRo
-ZSBhbGFybQpSVEMgVVBEQVRFIElOVEVSUlVQVFMgVEVTVCA6ClJUQ19VSUVfT04gbm90IHN1cHBv
-cnRlZApSVEMgVGVzdHMgRG9uZSEKW+ezu+e7n+acqua/gOa0u11bcm9vdEBtYWlsIHRlc3RdIwpb
-57O757uf5pyq5r+A5rS7XVtyb290QG1haWwgdGVzdF0jIGNhdCAvcHJvYy9pbnRlcnJ1cHRzIHxn
-cmVwIGFjcGkKMjE6ICAgICAgICAgIDQgICAgICAgICAgMCAgICAgICAgICAwICAgICAgICAgIDAg
-ICBQQ0ggUElDICAgMSAgYWNwaQpb57O757uf5pyq5r+A5rS7XVtyb290QG1haWwgdGVzdF0jCgoz
-LiBUaGVyZSBpcyBubyBlcnJvciB3aXRoIHRoZSBwYXRjaCBhcHBsaWVkIGFuZCB0aGUgaW50ZXJy
-dXB0cyBhcmUgdHJpZ2dlcmVkIG9rClvns7vnu5/mnKrmv4DmtLtdW3Jvb3RAbWFpbCB0ZXN0XSMg
-Y2F0IC9wcm9jL2ludGVycnVwdHMgfGdyZXAgYWNwaQoyMTogICAgICAgICAgMCAgICAgICAgICAw
-ICAgICAgICAgIDAgICAgICAgICAgMCAgIFBDSCBQSUMgICAxICBhY3BpClvns7vnu5/mnKrmv4Dm
-tLtdW3Jvb3RAbWFpbCB0ZXN0XSMKW+ezu+e7n+acqua/gOa0u11bcm9vdEBtYWlsIHRlc3RdIyAu
-L3J0YzAxClJUQyBSRUFEIFRFU1Q6ClJUQyBSRUFEIFRFU1QgUGFzc2VkCkN1cnJlbnQgUlRDIGRh
-dGUvdGltZSBpcyA4LTUtMjAyNSwgMDY6MDk6MDMuClJUQyBBTEFSTSBURVNUIDpBbGFybSB0aW1l
-IHNldCB0byAwNjowOTowOC4KV2FpdGluZyA1IHNlY29uZHMgZm9yIHRoZSBhbGFybS4uLgpBbGFy
-bSByYW5nLgpSVEMgQUxBUk0gVEVTVCBQYXNzZWQKUlRDIFVQREFURSBJTlRFUlJVUFRTIFRFU1Qg
-OgpSVENfVUlFX09OIG5vdCBzdXBwb3J0ZWQKUlRDIFRlc3RzIERvbmUhClvns7vnu5/mnKrmv4Dm
-tLtdW3Jvb3RAbWFpbCB0ZXN0XSMKW+ezu+e7n+acqua/gOa0u11bcm9vdEBtYWlsIHRlc3RdIyBj
-YXQgL3Byb2MvaW50ZXJydXB0cyB8Z3JlcCBhY3BpCjIxOiAgICAgICAgICAxICAgICAgICAgIDAg
-ICAgICAgICAgMCAgICAgICAgICAwICAgUENIIFBJQyAgIDEgIGFjcGkKW+ezu+e7n+acqua/gOa0
-u11bcm9vdEBtYWlsIHRlc3RdIwoKCgoKCkZyb206wqBCaW5iaW4gWmhvdQoKCgpEYXRlOsKgMjAy
-NS0wNS0wOMKgMTE6MTIKCgoKVG86wqBMaXUgRGFsaW47IGFsZXhhbmRyZS5iZWxsb25pOyB3YW5n
-bWluZzAxCgoKCkNDOsKgY2hlbmh1YWNhaTsgZ2FvanV4aW47IGdpdDsgamlheHVuLnlhbmc7IGtl
-Z3Vhbmcuemhhbmc7IGxpeHVlZmVuZzsgbGludXgtcnRjOyBsaW51eC1rZXJuZWw7IHpob3ViYi5h
-YXJvbgoKCgpTdWJqZWN0OsKgUmU6IFtQQVRDSF0gcnRjOiBsb29uZ3NvbjogQWRkIG1pc3Npbmcg
-YWxhcm0gbm90aWZpY2F0aW9ucyBmb3IgQUNQSSBSVEMgZXZlbnRzCgoKCkhpIERhbGluOgoKCgrC
-oAoKCgpUaGFua3MgZm9yIHlvdXIgcGF0Y2guCgoKCsKgCgoKCk9uIDIwMjUvNC8yOSAxNDoyNywg
-TGl1IERhbGluIHdyb3RlOgoKCgo+IFdoZW4gYW4gYXBwbGljYXRpb24gc2V0cyBhbmQgZW5hYmxl
-cyBhbiBhbGFybSBvbiBMb29uZ3NvbiBSVEMgZGV2aWNlcywKCgoKPiB0aGUgYWxhcm0gbm90aWZp
-Y2F0aW9uIGZhaWxzIHRvIHByb3BhZ2F0ZSB0byB1c2Vyc3BhY2UgYmVjYXVzZSB0aGUKCgoKPiBB
-Q1BJIGV2ZW50IGhhbmRsZXIgb21pdHMgY2FsbGluZyBydGNfdXBkYXRlX2lycSgpLgoKCgo+CgoK
-Cj4gQXMgYSByZXN1bHQsIHByb2Nlc3NlcyB3YWl0aW5nIHZpYSBzZWxlY3QoKSBvciBwb2xsKCkg
-b24gUlRDIGRldmljZQoKCgo+IGZpbGVzIGZhaWwgdG8gcmVjZWl2ZSBhbGFybSBub3RpZmljYXRp
-b25zLgoKCgo+CgoKCj4gRml4ZXM6IDFiNzMzYTllYmMzZCAoInJ0YzogQWRkIHJ0YyBkcml2ZXIg
-Zm9yIHRoZSBMb29uZ3NvbiBmYW1pbHkgY2hpcHMiKQoKCgo+IFNpZ25lZC1vZmYtYnk6IExpdSBE
-YWxpbiA8bGl1ZGFsaW5Aa3lsaW5zZWMuY29tLmNuPgoKCgo+IC0tLQoKCgo+wqDCoCBkcml2ZXJz
-L3J0Yy9ydGMtbG9vbmdzb24uYyB8IDIgKysKCgoKPsKgwqAgMSBmaWxlIGNoYW5nZWQsIDIgaW5z
-ZXJ0aW9ucygrKQoKCgo+CgoKCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcnRjL3J0Yy1sb29uZ3Nv
-bi5jIGIvZHJpdmVycy9ydGMvcnRjLWxvb25nc29uLmMKCgoKPiBpbmRleCA5N2U1NjI1YzA2NGMu
-LjBjNTczZjE5OGY2MyAxMDA2NDQKCgoKPiAtLS0gYS9kcml2ZXJzL3J0Yy9ydGMtbG9vbmdzb24u
-YwoKCgo+ICsrKyBiL2RyaXZlcnMvcnRjL3J0Yy1sb29uZ3Nvbi5jCgoKCj4gQEAgLTEyOSw2ICsx
-MjksOCBAQCBzdGF0aWMgdTMyIGxvb25nc29uX3J0Y19oYW5kbGVyKHZvaWQgKmlkKQoKCgo+wqDC
-oCB7CgoKCj7CoMKgIHN0cnVjdCBsb29uZ3Nvbl9ydGNfcHJpdiAqcHJpdiA9IChzdHJ1Y3QgbG9v
-bmdzb25fcnRjX3ByaXYgKilpZDsKCgoKPsKgwqAKCgoKPiArIHJ0Y191cGRhdGVfaXJxKHByaXYt
-PnJ0Y2RldiwgMSwgUlRDX0FGIHwgUlRDX0lSUUYpOwoKCgo+ICsKCgoKV2hpbGUgdGVzdGluZyB0
-aGUgcGF0Y2gsIEkgbm90aWNlZCB0aGF0IGludGVycnVwdHMgYXJlIHRyaWdnZXJlZAoKCgptdWx0
-aXBsZSB0aW1lcyAoL3Byb2MvaW50ZXJydXB0KSwgbm90IHN1cmUgaWYgeW91IGhhdmUgdGhlIHNh
-bWUgaXNzdWUuCgoKCsKgCgoKCkkgdGhpbmsgd2UgbmVlZCBhIHNpbWlsYXIgb3BlcmF0aW9uIHRv
-IGxvb25nc29uX3J0Y19pc3IoKSB0byBjbGVhciB0aGUKCgoKaW50ZXJydXB0OgoKCgpyZWdtYXBf
-d3JpdGUocHJpdi0+cmVnbWFwLCBUT1lfTUFUQ0gwX1JFRywgMCk7CgoKCj7CoMKgIHNwaW5fbG9j
-aygmcHJpdi0+bG9jayk7CgoKCj7CoMKgIC8qIERpc2FibGUgUlRDIGFsYXJtIHdha2V1cCBhbmQg
-aW50ZXJydXB0ICovCgoKCj7CoMKgIHdyaXRlbChyZWFkbChwcml2LT5wbV9iYXNlICsgUE0xX0VO
-X1JFRykgJiB+UlRDX0VOLAoKCgpUaGFua3MuCgoKCkJpbmJpbgoKCgrCoAoKCgrCoAoKCgrCoAoK
-Cg==
+Hi:
+
+On Thu, May 8, 2025 at 2:20=E2=80=AFPM liudalin@kylinos.com.cn
+<liudalin@kylinos.com.cn> wrote:
+>
+> Hi Binbin:
+>    The described issue does not happened  with or without the patch by te=
+st, as the interrupt is managed by acpi.
+
+I see it.
+>
+> The device info and test result are as follows.
+>
+> 1. Device info
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]# dmidecod=
+e
+> # dmidecode 3.5
+> Getting SMBIOS data from sysfs.
+> SMBIOS 3.2.0 present.
+> Table at 0x90000000FD620000.
+>
+> Handle 0x0000, DMI type 0, 24 bytes
+> BIOS Information
+>         Vendor: ZD-TECH
+>         Version: V09
+>         Release Date: 06/15/2022
+>         ROM Size: 8 MB
+>         Characteristics:
+>                 PCI is supported
+>                 BIOS is upgradeable
+>                 BIOS shadowing is allowed
+>                 Boot from CD is supported
+>                 Selectable boot is supported
+>                 BIOS ROM is socketed
+>                 Serial services are supported (int 14h)
+>                 USB legacy is supported
+>                 Function key-initiated network boot is supported
+>                 UEFI is supported
+>         BIOS Revision: 4.0
+>         Firmware Revision: 0.4
+>
+> Handle 0x0001, DMI type 1, 27 bytes
+> System Information
+>         Manufacturer: GEIT
+>         Product Name: UT6000-LB5
+>         Version: 1.0
+>         Serial Number: TBD by OEM
+>         UUID: 00112233-4455-6677-8899-aabbccddeeff
+>         Wake-up Type: Power Switch
+>         SKU Number: Loongson_SKU
+>         Family: Type1Family
+>
+> Handle 0x0002, DMI type 2, 15 bytes
+> Base Board Information
+>         Manufacturer: GEIT
+>         Product Name: GG-3A5000-02
+
+My machine is also Loongosn-3A5000 + 7A2000, I think this should not affect=
+.
+
+>         Version: 1.0
+>         Serial Number: Chassis Board Serial#To Be Filled By O.E.M
+>         Asset Tag: Type2 - Board Asset Tag
+>         Features:
+>                 Board is a hosting board
+>                 Board is replaceable
+>         Location In Chassis: Type2 - Board Chassis Location
+>         Chassis Handle: 0xFFFF
+>         Type: Motherboard
+>         Contained Object Handles: 0
+>
+> 2. The system exhibits a timeout error when waiting for alarm signal resp=
+onse without the patch.
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]# cat /pro=
+c/interrupts |grep acpi
+>  21:          3          0          0          0   PCH PIC   1  acpi
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]#
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]# ./rtc01
+> RTC READ TEST:
+> RTC READ TEST Passed
+> Current RTC date/time is 8-5-2025, 05:50:05.
+> RTC ALARM TEST :Alarm time set to 05:50:10.
+> Waiting 5 seconds for the alarm...
+> Timed out waiting for the alarm
+> RTC UPDATE INTERRUPTS TEST :
+> RTC_UIE_ON not supported
+> RTC Tests Done!
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]#
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]# cat /pro=
+c/interrupts |grep acpi
+>  21:          4          0          0          0   PCH PIC   1  acpi
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]#
+>
+Please try continuous testing to see if you get different results.
+
+Here is my test code, it behaves fine on Loongson-2K1000, you can
+compare it with yours.
+https://gist.github.com/AaronDot/affafc0b861783aee128a76b34d45f55
+
+Also, your test code can be provided to me for testing.
+
+> 3. There is no error with the patch applied and the interrupts are trigge=
+red ok
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]# cat /pro=
+c/interrupts |grep acpi
+>  21:          0          0          0          0   PCH PIC   1  acpi
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]#
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]# ./rtc01
+> RTC READ TEST:
+> RTC READ TEST Passed
+> Current RTC date/time is 8-5-2025, 06:09:03.
+> RTC ALARM TEST :Alarm time set to 06:09:08.
+> Waiting 5 seconds for the alarm...
+> Alarm rang.
+> RTC ALARM TEST Passed
+> RTC UPDATE INTERRUPTS TEST :
+> RTC_UIE_ON not supported
+> RTC Tests Done!
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]#
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]# cat /pro=
+c/interrupts |grep acpi
+>  21:          1          0          0          0   PCH PIC   1  acpi
+> [=E7=B3=BB=E7=BB=9F=E6=9C=AA=E6=BF=80=E6=B4=BB][root@mail test]#
+>
+>
+> ________________________________
+> liudalin@kylinos.com.cn
+>
+>
+> From: Binbin Zhou
+> Date: 2025-05-08 11:12
+> To: Liu Dalin; alexandre.belloni; wangming01
+> CC: chenhuacai; gaojuxin; git; jiaxun.yang; keguang.zhang; lixuefeng; lin=
+ux-rtc; linux-kernel; zhoubb.aaron
+> Subject: Re: [PATCH] rtc: loongson: Add missing alarm notifications for A=
+CPI RTC events
+> Hi Dalin:
+>
+> Thanks for your patch.
+>
+> On 2025/4/29 14:27, Liu Dalin wrote:
+> > When an application sets and enables an alarm on Loongson RTC devices,
+> > the alarm notification fails to propagate to userspace because the
+> > ACPI event handler omits calling rtc_update_irq().
+> >
+> > As a result, processes waiting via select() or poll() on RTC device
+> > files fail to receive alarm notifications.
+> >
+> > Fixes: 1b733a9ebc3d ("rtc: Add rtc driver for the Loongson family chips=
+")
+> > Signed-off-by: Liu Dalin <liudalin@kylinsec.com.cn>
+> > ---
+> >   drivers/rtc/rtc-loongson.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
+> > index 97e5625c064c..0c573f198f63 100644
+> > --- a/drivers/rtc/rtc-loongson.c
+> > +++ b/drivers/rtc/rtc-loongson.c
+> > @@ -129,6 +129,8 @@ static u32 loongson_rtc_handler(void *id)
+> >   {
+> >   struct loongson_rtc_priv *priv =3D (struct loongson_rtc_priv *)id;
+> >
+> > + rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
+> > +
+> While testing the patch, I noticed that interrupts are triggered
+> multiple times (/proc/interrupt), not sure if you have the same issue.
+>
+> I think we need a similar operation to loongson_rtc_isr() to clear the
+> interrupt:
+> regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
+> >   spin_lock(&priv->lock);
+> >   /* Disable RTC alarm wakeup and interrupt */
+> >   writel(readl(priv->pm_base + PM1_EN_REG) & ~RTC_EN,
+> Thanks.
+> Binbin
+>
+>
+>
 
 
 
+--=20
+Thanks.
+Binbin
 
